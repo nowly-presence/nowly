@@ -1,10 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { Activity, Download, RadioTower, Users } from "lucide-react";
+import { Download, Users } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import type { ComponentType, FC, ReactElement } from "react";
 import type { HomeStats } from "@/hooks/use-home-stats";
 
-type StatKey = "total-users" | "active-users" | "active-presences" | "installed-presences";
+type StatKey = "total-users" | "installed-presences";
 
 type StatItem = {
   icon: ComponentType<{ className?: string }>
@@ -34,8 +34,6 @@ export const StatsSection: FC<Props> = ({ stats, isError }): ReactElement => {
 
   const items: StatItem[] = [
     { key: "total-users", icon: Users, value: stats?.totalUsers },
-    { key: "active-users", icon: Activity, value: stats?.activeUsers },
-    { key: "active-presences", icon: RadioTower, value: stats?.activePresenceCount },
     { key: "installed-presences", icon: Download, value: stats?.installedPresenceCount },
   ];
 
@@ -54,7 +52,7 @@ export const StatsSection: FC<Props> = ({ stats, isError }): ReactElement => {
           </p>
         </div>
 
-        <div className="grid min-w-0 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid min-w-0 gap-4 sm:grid-cols-2 max-w-lg">
           {items.map((item) => {
             const Icon = item.icon;
 
