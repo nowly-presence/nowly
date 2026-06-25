@@ -24,7 +24,7 @@ export const HostDownload: FC<Props> = ({ config, layout = "stack" }): ReactElem
     <div className={cn(
       "flex gap-2",
       layout === "inline"
-        ? "w-full flex-col sm:w-auto sm:flex-row sm:justify-end"
+        ? "flex-col"
         : "flex-col items-center"
     )}>
       {config.downloads.map((dl, i) => (
