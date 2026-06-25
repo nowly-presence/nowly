@@ -14,7 +14,6 @@ type StatItem = {
 
 type Props = {
   stats: HomeStats | null
-  isError: boolean
 };
 
 const StatValue: FC<{ value?: number; loading: boolean; formatter: Intl.NumberFormat }> = ({ value, loading, formatter }) => {
@@ -27,7 +26,7 @@ const StatValue: FC<{ value?: number; loading: boolean; formatter: Intl.NumberFo
   );
 };
 
-export const StatsSection: FC<Props> = ({ stats, isError }): ReactElement => {
+export const StatsSection: FC<Props> = ({ stats }): ReactElement => {
   const t = useTranslations("stats-section");
   const locale = useLocale();
   const numberFormatter = new Intl.NumberFormat(locale);
@@ -73,10 +72,6 @@ export const StatsSection: FC<Props> = ({ stats, isError }): ReactElement => {
             );
           })}
         </div>
-
-        <p className="mt-5 text-sm text-dim-foreground">
-          {isError ? t("unavailable") : t("footnote")}
-        </p>
       </div>
     </section>
   );

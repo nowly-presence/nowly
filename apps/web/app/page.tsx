@@ -50,7 +50,7 @@ const Page: FC = async (): Promise<ReactElement> => {
     <main>
       <HomeStructuredData />
       <HeroSection />
-      <StatsSection stats={stats} isError={stats === null} />
+      <StatsSection stats={stats} />
       <PresencesSection presences={presences} />
       <AdSection />
       <StepsSection />
