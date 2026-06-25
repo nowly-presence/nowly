@@ -4,7 +4,7 @@ date: 2026-06-25
 description: Correctif — suppression des fuites de variables d'environnement de développement dans le build production et simplification de la configuration API.
 ---
 
-`1.2.1` est une release de maintenance qui corrige un problème de build où des variables d'environnement de développement fuyaient dans l'artefact Chrome Web Store, et simplifie la surface de configuration de l'API.
+`1.2.1` est une release de maintenance qui corrige un problème de build où des variables d'environnement de développement fuyaient dans l'artefact Chrome Web Store, simplifie la surface de configuration de l'API, et nettoie les pages légales des références obsolètes aux commentaires et à l'OAuth Discord.
 
 <ReleaseTable
   headers={["Zone", "Ce qui change", "Pourquoi c'est utile"]}
@@ -13,5 +13,9 @@ description: Correctif — suppression des fuites de variables d'environnement d
     ["Environnement API", "Suppression des vars d'env `AWS_SESSION_TOKEN`, `AWS_SES_CONFIGURATION_SET`, `AWS_SES_BASE_URL`. Changement de la région par défaut `AWS_REGION` à `us-east-1`.", "Moins de vars d'env à configurer. Les valeurs par défaut du SDK suffisent."],
     ["Configuration email", "Les vars `SUPPORT_EMAIL_FROM` et `SUPPORT_EMAIL_REPLY_TO` sont maintenant des constantes.", "Plus besoin de les configurer — elles ne changent jamais entre environnements."],
     ["Fiabilité des tests", "Ajout de `test/setup.ts` pour fournir les vars d'env requises à tous les tests.", "Les tests passent sur CI sans fichier `.env`."],
+    ["Pages légales (en, fr, es)", "Suppression des sections « Avis et commentaires » des CGU. Suppression de la section « Données serveur — Authentification et valorations » de la politique de confidentialité. Suppression du cookie `nowly_oauth_state`. Retrait de Discord des services tiers.", "Le texte légal ne décrit plus des fonctionnalités inexistantes dans l'interface web."],
+    ["Sitemap & redirections", "Suppression des variantes `/{slug}-rich-presence` du sitemap. Ajout d'une redirection 301 vers `/{slug}-discord-rich-presence`.", "Évite le contenu dupliqué et redirige les anciennes URLs vers le chemin canonique."],
+    ["Dimensions d'images", "Ajout de `width` et `height` explicites sur le logo navbar (420×128) et les icônes CTA (16×16).", "Élimine le CLS causé par les images sans rapport d'aspect."],
+    ["Code splitting", "Chargement différé de `HighlightedText` (motion/react) via `next/dynamic` avec `ssr: false`.", "Supprime motion/react du bundle JS initial, réduisant le Total Blocking Time."],
   ]}
 />

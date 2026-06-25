@@ -1,6 +1,6 @@
 import { getNavigationItems } from "@/lib/docs/content";
 import { SITE_URL } from "@/lib/seo";
-import { buildPresenceRichPresencePath, buildPresenceSeoPath } from "@/lib/seo-presence";
+import { buildPresenceSeoPath } from "@/lib/seo-presence";
 import { clientEnv } from "@nowly/env/client";
 import type { MetadataRoute } from "next";
 
@@ -37,12 +37,6 @@ const fetchPresencePages = async (): Promise<MetadataRoute.Sitemap> => {
             lastModified,
             changeFrequency: "weekly" as const,
             priority: 0.95,
-          },
-          {
-            url: `${SITE_URL}${buildPresenceRichPresencePath(presence.slug)}`,
-            lastModified,
-            changeFrequency: "monthly" as const,
-            priority: 0.75,
           },
         ];
       });

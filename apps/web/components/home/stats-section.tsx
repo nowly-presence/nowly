@@ -1,10 +1,8 @@
-"use client";
-
 import { Skeleton } from "@/components/ui/skeleton";
-import { useHomeStats } from "@/hooks/use-home-stats";
 import { Activity, Download, RadioTower, Users } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import type { ComponentType, FC, ReactElement } from "react";
+import type { HomeStats } from "@/hooks/use-home-stats";
 
 type StatKey = "total-users" | "active-users" | "active-presences" | "installed-presences";
 
@@ -12,6 +10,11 @@ type StatItem = {
   icon: ComponentType<{ className?: string }>
   key: StatKey
   value?: number
+};
+
+type Props = {
+  stats: HomeStats | null
+  isError: boolean
 };
 
 const StatValue: FC<{ value?: number; loading: boolean; formatter: Intl.NumberFormat }> = ({ value, loading, formatter }) => {
@@ -24,11 +27,10 @@ const StatValue: FC<{ value?: number; loading: boolean; formatter: Intl.NumberFo
   );
 };
 
-export const StatsSection: FC = (): ReactElement => {
+export const StatsSection: FC<Props> = ({ stats, isError }): ReactElement => {
   const t = useTranslations("stats-section");
   const locale = useLocale();
   const numberFormatter = new Intl.NumberFormat(locale);
-  const { data: stats, isError, isLoading } = useHomeStats();
 
   const items: StatItem[] = [
     { key: "total-users", icon: Users, value: stats?.totalUsers },
@@ -65,7 +67,7 @@ export const StatsSection: FC = (): ReactElement => {
                 </div>
 
                 <div className="space-y-2">
-                  <StatValue value={item.value} loading={isLoading} formatter={numberFormatter} />
+                  <StatValue value={item.value} loading={!stats} formatter={numberFormatter} />
                   <h3 className="text-sm font-semibold text-foreground">{t(`items.${item.key}.label`)}</h3>
                   <p className="text-sm leading-6 text-muted-foreground">{t(`items.${item.key}.description`)}</p>
                 </div>

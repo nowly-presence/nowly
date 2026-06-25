@@ -335,7 +335,7 @@
     "title": "Privacy Policy",
     "description": "Learn how Nowly handles your data, what stays local, and what depends on your consent.",
     "last-updated": "Last updated: June 18, 2026.",
-    "intro": "Nowly is designed with privacy as a priority. Your Rich Presence activity is processed <strong>entirely locally</strong> on your machine — it never passes through our servers. Some optional features (reviews, analytics) involve server-side processing, described below.",
+    "intro": "Nowly is designed with privacy as a priority. Your Rich Presence activity is processed <strong>entirely locally</strong> on your machine — it never passes through our servers. Some optional features (analytics) involve server-side processing, described below.",
     "sections": [
       {
         "title": "General Operation",
@@ -354,10 +354,6 @@
         "body": "Nowly Host writes a log file to <code>%LOCALAPPDATA%\\NowlyClient\\nowly-host.log</code> containing timestamps and activity information sent to Discord. This file is stored locally, can be deleted at any time, and is <strong>never</strong> sent to our servers."
       },
       {
-        "title": "Server-Side Data — Authentication & Reviews",
-        "body": "When you log in with Discord to post a review on a presence, the following data is processed and stored on our servers:<ul><li><strong>Discord ID</strong> (discordId), username, and avatar — retrieved via the Discord API (scope \"identify\").</li><li><strong>Rating</strong> (1 to 5) and optional <strong>comment</strong> (up to 500 characters).</li><li>If you post <strong>anonymously</strong>, your Discord ID is replaced by an irreversible hash (HMAC-SHA256), making direct identification impossible.</li></ul>You can <strong>delete your review at any time</strong> from the presence page — this permanently removes the rating and comment from our database."
-      },
-      {
         "title": "Server-Side Data — Analytics (Opt-In)",
         "body": "The extension offers, during installation, the option to enable <strong>anonymous analytics</strong> (disabled by default). If enabled, the following is collected:<ul><li>An anonymous device ID (locally generated UUID, not linked to your identity).</li><li>Browser, OS, language, extension version, and Nowly Host version.</li><li>Installed presences and activity sessions (duration, platform).</li></ul>This data is used solely to improve the service and measure presence popularity. You can <strong>withdraw consent</strong> at any time from the extension settings — all data associated with your device ID will then be deleted."
       },
@@ -367,19 +363,19 @@
       },
       {
         "title": "Legal Basis for Processing (GDPR)",
-        "body": "In accordance with Article 6 of the GDPR, each processing activity relies on a legal basis:<ul><li><strong>Discord authentication</strong> (ID, username, avatar) — performance of a contract (Art. 6(1)(b)).</li><li><strong>Storage of reviews</strong> (rating, comment) — performance of a contract (Art. 6(1)(b)).</li><li><strong>Anonymous analytics</strong> — your consent, collected on an opt-in basis (Art. 6(1)(a)).</li><li><strong>Image proxy</strong> (third-party thumbnails) — legitimate interest (Art. 6(1)(f)).</li><li><strong><code>nowly_oauth_state</code> cookie</strong> (CSRF protection) — legitimate interest in security (Art. 6(1)(f)).</li><li><strong><code>locale</code> cookie</strong> (language preference) — legitimate interest (Art. 6(1)(f)).</li></ul>"
+        "body": "In accordance with Article 6 of the GDPR, each processing activity relies on a legal basis:<ul><li><strong>Anonymous analytics</strong> — your consent, collected on an opt-in basis (Art. 6(1)(a)).</li><li><strong>Image proxy</strong> (third-party thumbnails) — legitimate interest (Art. 6(1)(f)).</li><li><strong><code>locale</code> cookie</strong> (language preference) — legitimate interest (Art. 6(1)(f)).</li></ul>"
       },
       {
         "title": "Data Retention",
-        "body": "Your data is not kept longer than necessary:<ul><li><strong>Discord ID, rating and comment of a review</strong>: until you delete the review, or at most 3 years after your last activity.</li><li><strong>Published comments</strong>: until you explicitly delete them.</li><li><strong>Analytics events</strong>: automatically purged after 12 months.</li><li><strong>Authentication token (JWT)</strong>: 30 days.</li></ul>"
+        "body": "Your data is not kept longer than necessary:<ul><li><strong>Analytics events</strong>: automatically purged after 12 months.</li></ul>"
       },
       {
         "title": "Third-Party Services",
-        "body": "Nowly uses the following third-party services:<ul><li><strong>Railway</strong> (United States) — website, API, and PostgreSQL database hosting. Transfers to the United States are governed by the European Commission's <strong>Standard Contractual Clauses (SCCs)</strong>. <a href='https://railway.com/legal/privacy'>Railway Privacy Policy</a>.</li><li><strong>Cloudflare</strong> (United States) — static asset delivery (thumbnails, Nowly Host installer) via CDN. Transfers are governed by the <strong>Standard Contractual Clauses (SCCs)</strong> and the <strong>EU/UK–US Data Privacy Framework</strong>.</li><li><strong>Chrome Web Store / Google</strong> — browser extension distribution.</li><li><strong>Google AdSense</strong> — optional ad display on the website. Google may use cookies or similar technologies under its own rules and your consent choices.</li><li><strong>Ko-fi</strong> — optional donations. Nowly shares no personal data with Ko-fi.</li><li><strong>Discord</strong> — OAuth authentication (scope \"identify\") and local Rich Presence display.</li><li><strong>OpenAI</strong> — automatic changelog generation. Only PR titles and code diffs are sent — no user data.</li></ul>For advanced users, the extension allows configuring a <strong>custom API URL</strong> pointing to a self-hosted instance. In that case, your data is sent to the server you configured: this Privacy Policy does not apply to that server, over which Nowly has no control."
+        "body": "Nowly uses the following third-party services:<ul><li><strong>Railway</strong> (United States) — website, API, and PostgreSQL database hosting. Transfers to the United States are governed by the European Commission's <strong>Standard Contractual Clauses (SCCs)</strong>. <a href='https://railway.com/legal/privacy'>Railway Privacy Policy</a>.</li><li><strong>Cloudflare</strong> (United States) — static asset delivery (thumbnails, Nowly Host installer) via CDN. Transfers are governed by the <strong>Standard Contractual Clauses (SCCs)</strong> and the <strong>EU/UK–US Data Privacy Framework</strong>.</li><li><strong>Chrome Web Store / Google</strong> — browser extension distribution.</li><li><strong>Google AdSense</strong> — optional ad display on the website. Google may use cookies or similar technologies under its own rules and your consent choices.</li><li><strong>Ko-fi</strong> — optional donations. Nowly shares no personal data with Ko-fi.</li><li><strong>OpenAI</strong> — automatic changelog generation. Only PR titles and code diffs are sent — no user data.</li></ul>For advanced users, the extension allows configuring a <strong>custom API URL</strong> pointing to a self-hosted instance. In that case, your data is sent to the server you configured: this Privacy Policy does not apply to that server, over which Nowly has no control."
       },
       {
         "title": "Cookies",
-        "body": "The Nowly website uses <strong>strictly necessary</strong> cookies:<ul><li><code>nowly_oauth_state</code>: technical HttpOnly cookie, 10-minute lifetime, used for CSRF protection during Discord login.</li><li><code>locale</code>: language preference cookie, not shared with third parties.</li></ul>When ads are enabled, Google AdSense may also use cookies or similar technologies. See our <a href='/cookies'>Cookie Policy</a> for full details."
+        "body": "The Nowly website uses a <strong>strictly necessary</strong> cookie:<ul><li><code>locale</code>: language preference cookie, not shared with third parties.</li></ul>When ads are enabled, Google AdSense may also use cookies or similar technologies. See our <a href='/cookies'>Cookie Policy</a> for full details."
       },
       {
         "title": "Image Proxy",
@@ -391,7 +387,7 @@
       },
       {
         "title": "Your Rights (GDPR)",
-        "body": "Under the GDPR, you have the following rights:<ul><li><strong>Access</strong>: request what data we hold about you. The extension's <strong>developer mode</strong> also exposes an \"Analytics logs\" tab that displays the collected analytics events locally.</li><li><strong>Deletion</strong>: delete your reviews directly from the UI; disable analytics from the extension settings to erase device data.</li><li><strong>Objection</strong>: opt out of analytics at installation or disable them at any time.</li><li><strong>Portability</strong>: export all of your analytics data yourself in JSON format, in self-service, from the <a href='/consent'>consent management page</a>.</li></ul>To exercise these rights, contact us via the <a href='https://github.com/nowly-presence/nowly'>GitHub repository</a> or at the address listed in the <a href='/legal-notice'>Legal Notice</a>."
+        "body": "Under the GDPR, you have the following rights:<ul><li><strong>Access</strong>: request what data we hold about you. The extension's <strong>developer mode</strong> also exposes an \"Analytics logs\" tab that displays the collected analytics events locally.</li><li><strong>Deletion</strong>: disable analytics from the extension settings to erase device data.</li><li><strong>Objection</strong>: opt out of analytics at installation or disable them at any time.</li><li><strong>Portability</strong>: export all of your analytics data yourself in JSON format, in self-service, from the <a href='/consent'>consent management page</a>.</li></ul>To exercise these rights, contact us via the <a href='https://github.com/nowly-presence/nowly'>GitHub repository</a> or at the address listed in the <a href='/legal-notice'>Legal Notice</a>."
       },
       {
         "title": "Contact",
@@ -411,11 +407,11 @@
       },
       {
         "title": "Service Description",
-        "body": "Nowly is a <strong>free, open-source</strong> tool that detects media content in your browser and automatically updates your Discord status (Rich Presence) via local communication with the Discord client. The service consists of:<ul><li>A <strong>Chromium browser extension</strong> that detects and reports your activity.</li><li>A <strong>Nowly Host</strong> that acts as a gateway to Discord.</li><li>A <strong>website</strong> (library) for discovering and installing presences.</li><li>A <strong>developer SDK</strong> and tooling for creating custom presences.</li></ul>"
+        "body": "Nowly is a <strong>free, open-source</strong> tool that detects media content in your browser and automatically updates your Discord status (Rich Presence) via local communication with the Discord client. The service consists of:<ul><li>A <strong>Chromium browser extension</strong> that detects and reports your activity.</li><li>A <strong>Nowly Host</strong> that acts as a gateway to Discord.</li><li>A <strong>website</strong> for discovering and installing presences.</li><li>A <strong>developer SDK</strong> and tooling for creating custom presences.</li></ul>"
       },
       {
         "title": "Minimum Age",
-        "body": "The service is intended for users aged <strong>15 or older</strong>. If you are under 15, you must have obtained the express consent of your legal guardian before using the Discord login feature. Using the review feature (Discord login) also requires compliance with Discord's own terms of service, including their minimum age requirements in your country."
+        "body": "The service is intended for users aged <strong>15 or older</strong>."
       },
       {
         "title": "License",
@@ -423,11 +419,7 @@
       },
       {
         "title": "Responsible Use",
-        "body": "You agree to use Nowly in compliance with applicable laws and <a href='https://discord.com/terms'>Discord's Terms of Service</a>. You must <strong>not</strong>:<ul><li>Use Nowly to display illegal, hateful, defamatory, or rights-infringing content.</li><li>Post illegal content or third-party personal data in reviews.</li><li>Attempt to bypass the security mechanisms of the extension or Nowly Host.</li><li>Distribute modified, forged, or unsigned presences through the official infrastructure.</li><li>Use Nowly in a way that violates the terms of Discord or any platform you access.</li><li>Send abusive automated requests to the API.</li></ul><br/>If you configure a <strong>custom API URL</strong> (self-hosted instance), you are solely responsible for the third-party server you target. Nowly's <a href='/privacy'>Privacy Policy</a> does not apply to servers you host or configure yourself."
-      },
-      {
-        "title": "Reviews & Comments",
-        "body": "The library allows you, after logging in with Discord, to rate a presence (1–5) and optionally post a comment, including <strong>anonymously</strong>. You are solely responsible for the content you post. You can <strong>delete your review</strong> at any time from the relevant presence page. Nowly reserves the right to remove any review that is manifestly illegal or violates these terms."
+        "body": "You agree to use Nowly in compliance with applicable laws and <a href='https://discord.com/terms'>Discord's Terms of Service</a>. You must <strong>not</strong>:<ul><li>Use Nowly to display illegal, hateful, defamatory, or rights-infringing content.</li><li>Attempt to bypass the security mechanisms of the extension or Nowly Host.</li><li>Distribute modified, forged, or unsigned presences through the official infrastructure.</li><li>Use Nowly in a way that violates the terms of Discord or any platform you access.</li><li>Send abusive automated requests to the API.</li></ul><br/>If you configure a <strong>custom API URL</strong> (self-hosted instance), you are solely responsible for the third-party server you target. Nowly's <a href='/privacy'>Privacy Policy</a> does not apply to servers you host or configure yourself."
       },
       {
         "title": "Donations (Ko-fi)",
@@ -491,7 +483,7 @@
       },
       {
         "title": "Reporting Illegal Content",
-        "body": "In accordance with French law (LCEN art. 6), any manifestly illegal content (including in the library comments section) may be reported to <a href='mailto:{publisherEmail}'>{publisherEmail}</a>, specifying the date, description, URL and grounds for removal."
+        "body": "In accordance with French law (LCEN art. 6), any manifestly illegal content may be reported to <a href='mailto:{publisherEmail}'>{publisherEmail}</a>, specifying the date, description, URL and grounds for removal."
       },
       {
         "title": "Contact",
@@ -508,7 +500,7 @@
     "sections": [
       {
         "title": "Strictly Necessary Cookies",
-        "body": "These cookies are essential for the site to function and do not require your prior consent.<br/><br/><strong><code>nowly_oauth_state</code></strong><br/>Purpose: CSRF protection during Discord login (OAuth 2.0).<br/>Duration: 10 minutes maximum — automatically deleted after login.<br/>Type: HttpOnly, SameSite=Lax. Not accessible by JavaScript."
+        "body": "These cookies are essential for the site to function and do not require your prior consent."
       },
       {
         "title": "Preference Cookies",
@@ -524,7 +516,7 @@
       },
       {
         "title": "Managing & Deleting Cookies",
-        "body": "You can modify your browser settings at any time to block or delete cookies. Deleting the <code>locale</code> cookie will reset the language to the automatically detected value. Deleting the <code>nowly_oauth_state</code> cookie before Discord login completes will cause the authentication to fail."
+        "body": "You can modify your browser settings at any time to block or delete cookies. Deleting the <code>locale</code> cookie will reset the language to the automatically detected value."
       },
       {
         "title": "Contact",

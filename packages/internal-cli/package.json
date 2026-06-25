@@ -12,7 +12,6 @@
     "host:publish": "tsx --tsconfig tsconfig.json index.ts host:publish"
   },
   "dependencies": {
-    "@nowly/env": "workspace:*",
     "@nowly/websites": "workspace:*",
     "chalk": "^5.6.2",
     "commander": "^13.1.0",

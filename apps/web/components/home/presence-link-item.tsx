@@ -38,6 +38,8 @@ export const PresenceLinkItem: FC<Props> = ({ presence, locale }) => {
             <img
               src={ASSET_URL(presence.slug, "icon")}
               alt={presence.name}
+              width={32}
+              height={32}
               className="relative size-8 object-contain"
               loading="lazy"
             />

@@ -4,7 +4,7 @@ date: 2026-06-25
 description: Hotfix release — removes dev environment variable leaks from production build and simplifies API configuration.
 ---
 
-`1.2.1` is a maintenance release focused on fixing a production build issue where development environment variables were leaking into the Chrome Web Store artifact, and simplifying the API configuration surface by removing unnecessary environment variables.
+`1.2.1` is a maintenance release focused on fixing a production build issue where development environment variables were leaking into the Chrome Web Store artifact, simplifying the API configuration surface, and cleaning up legal pages to remove stale references to comments and Discord OAuth.
 
 <ReleaseTable
   headers={["Area", "What changed", "Why it matters"]}
@@ -13,5 +13,9 @@ description: Hotfix release — removes dev environment variable leaks from prod
     ["API environment", "Removed `AWS_SESSION_TOKEN`, `AWS_SES_CONFIGURATION_SET`, `AWS_SES_BASE_URL` env vars. Changed default `AWS_REGION` to `us-east-1`.", "Fewer required env vars to configure. The SDK defaults work without explicit values."],
     ["API email config", "Hardcoded `SUPPORT_EMAIL_FROM` and `SUPPORT_EMAIL_REPLY_TO` as constants instead of env vars.", "No need to configure these — they never change between environments."],
     ["Test reliability", "Added `test/setup.ts` to provide required env vars for all test files.", "Tests now pass on CI without a `.env` file."],
+    ["Legal pages (en, fr, es)", "Removed \"Reviews & Comments\" / \"Ratings & Reviews\" sections from TOS. Removed \"Server-Side Data — Authentication & Reviews\" from Privacy. Removed `nowly_oauth_state` cookie from Cookies page. Removed Discord from third-party services list.", "Legal text no longer describes features that don't exist in the web UI, reducing liability and user confusion."],
+    ["Sitemap & redirects", "Removed `/{slug}-rich-presence` URL variants from sitemap. Added 301 redirect from `/{slug}-rich-presence` to `/{slug}-discord-rich-presence`.", "Prevents duplicate content and forwards old URLs to the canonical path."],
+    ["Image dimensions", "Added explicit `width` and `height` to navbar logo (420×128) and CTA browser icons (16×16).", "Eliminates layout shift (CLS) from images without intrinsic aspect ratio."],
+    ["Code splitting", "Lazy-loaded `HighlightedText` component (motion/react) via `next/dynamic` with `ssr: false`.", "Removes motion/react from the initial JS bundle, reducing Total Blocking Time."],
   ]}
 />
