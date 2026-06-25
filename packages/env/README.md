@@ -35,10 +35,8 @@ Typed environment access for the Nowly monorepo.
 | `GITHUB_SPONSORS_WEBHOOK_SECRET` | No | - |
 | `AWS_ACCESS_KEY_ID` | No | - |
 | `AWS_SECRET_ACCESS_KEY` | No | - |
-| `AWS_REGION` | No | - |
-| `AWS_SESSION_TOKEN` | No | - |
-| `AWS_SES_CONFIGURATION_SET` | No | - |
-| `AWS_SES_BASE_URL` | No | - |
+| `AWS_REGION` | No | `us-east-1` |
+
 | `SUPPORT_EMAIL_FROM` | No | - |
 | `SUPPORT_EMAIL_REPLY_TO` | No | - |
 | `SUPPORT_REDEEM_URL` | No | - |
