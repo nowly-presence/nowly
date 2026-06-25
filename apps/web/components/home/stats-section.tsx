@@ -51,7 +51,7 @@ export const StatsSection: FC<Props> = ({ stats }): ReactElement => {
           </p>
         </div>
 
-        <div className="mx-auto grid min-w-0 gap-4 sm:grid-cols-2 max-w-lg">
+        <div className="mx-auto grid min-w-0 gap-4 grid-cols-1 max-w-md">
           {items.map((item) => {
             const Icon = item.icon;
 
