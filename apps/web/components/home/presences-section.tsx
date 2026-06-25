@@ -1,37 +1,22 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { usePresences } from "@/hooks/use-presences";
 import { ArrowRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
 import { PresenceItemMore, PresenceLinkItem } from "./presence-link-item";
+import type { Presence } from "@/lib/data/presences";
 
-const PresencesSectionSkeleton: FC = () => (
-  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-    {Array.from({ length: 6 }, (_, i) => (
-      <div key={i} className="rounded-lg border border-border bg-card p-5">
-        <div className="flex items-start gap-4">
-          <Skeleton className="size-12 rounded-lg" />
-          <div className="flex-1 space-y-2">
-            <Skeleton className="h-4 w-28" />
-            <Skeleton className="h-3 w-full" />
-            <Skeleton className="h-3 w-3/4" />
-          </div>
-        </div>
-      </div>
-    ))}
-  </div>
-);
+type Props = {
+  presences: Presence[]
+};
 
-export const PresencesSection: FC = (): ReactElement => {
+export const PresencesSection: FC<Props> = ({ presences }): ReactElement | null => {
   const t = useTranslations("platforms-section");
   const locale = useLocale();
-  const { data: presences, isLoading } = usePresences();
 
-  const available = presences?.filter((p) => p.status === "available") ?? [];
+  const available = presences.filter((p) => p.status === "available");
+
+  if (available.length === 0) return null;
 
   return (
     <section className="py-24 border-b border-border">
@@ -60,23 +45,19 @@ export const PresencesSection: FC = (): ReactElement => {
         </div>
 
         <div className="flex flex-col gap-12">
-          {isLoading && <PresencesSectionSkeleton />}
+          <div className="space-y-5">
+            <p className="text-sm text-dim-foreground">
+              {t("services-count", { count: available.length })}
+            </p>
 
-          {!isLoading && available.length > 0 && (
-            <div className="space-y-5">
-              <p className="text-sm text-dim-foreground">
-                {t("services-count", { count: available.length })}
-              </p>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {available.slice(0, 8).map((presence) => (
+                <PresenceLinkItem key={presence.slug} presence={presence} locale={locale} />
+              ))}
 
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {available.slice(0, 8).map((presence) => (
-                  <PresenceLinkItem key={presence.slug} presence={presence} locale={locale} />
-                ))}
-
-                {available.length > 8 && <PresenceItemMore count={available.length - 8} label={t("more-to-discover")} />}
-              </div>
+              {available.length > 8 && <PresenceItemMore count={available.length - 8} label={t("more-to-discover")} />}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </section>
