@@ -335,7 +335,7 @@
     "title": "Politique de confidentialité",
     "description": "Découvrez comment Nowly traite vos données, ce qui reste local et ce qui dépend de votre consentement.",
     "last-updated": "Dernière mise à jour : 18 juin 2026.",
-    "intro": "Nowly est conçu avec la confidentialité comme priorité. L'activité Rich Presence est traitée <strong>entièrement en local</strong> sur votre machine — elle ne transite jamais par nos serveurs. Certaines fonctionnalités optionnelles (avis, analytics) impliquent un traitement côté serveur, décrit ci-dessous.",
+    "intro": "Nowly est conçu avec la confidentialité comme priorité. L'activité Rich Presence est traitée <strong>entièrement en local</strong> sur votre machine — elle ne transite jamais par nos serveurs. Certaines fonctionnalités optionnelles (analytics) impliquent un traitement côté serveur, décrit ci-dessous.",
     "sections": [
       {
         "title": "Fonctionnement général",
@@ -354,10 +354,6 @@
         "body": "Nowly Host écrit un fichier de log local dans <code>%LOCALAPPDATA%\\\\NowlyClient\\\\nowly-host.log</code>, contenant des horodatages et des informations d'activité envoyées à Discord. Ce fichier reste sur votre appareil, peut être supprimé à tout moment et n'est <strong>jamais</strong> envoyé à nos serveurs."
       },
       {
-        "title": "Données traitées côté serveur — Authentification et avis",
-        "body": "Lorsque vous vous connectez avec Discord pour publier un avis sur une présence, les données suivantes sont traitées et stockées sur nos serveurs :<ul><li><strong>Identifiant Discord</strong> (discordId), pseudo et avatar — récupérés via l'API Discord (scope « identify »).</li><li><strong>Note</strong> (de 1 à 5) et <strong>commentaire</strong> (optionnel, jusqu'à 500 caractères).</li><li>Si vous publiez <strong>anonymement</strong>, votre identifiant Discord est remplacé par un hachage irréversible (HMAC-SHA256), rendant impossible toute identification directe.</li></ul>Votre avis peut être <strong>supprimé à tout moment</strong> depuis la fiche de la présence concernée, ce qui efface définitivement la note et le commentaire de notre base de données."
-      },
-      {
         "title": "Données traitées côté serveur — Analytics (opt-in)",
         "body": "L'extension vous propose, lors de l'installation, d'activer des <strong>analytics anonymes</strong> (désactivées par défaut). Si vous les activez, les informations suivantes sont collectées :<ul><li>Un identifiant d'appareil anonyme (UUID généré localement, sans lien avec votre identité).</li><li>Navigateur, système d'exploitation, langue, version de l'extension et de Nowly Host.</li><li>Présences installées et sessions d'activité (durée, plateforme).</li></ul>Ces données servent uniquement à améliorer le service et à mesurer la popularité des présences. Vous pouvez <strong>révoquer votre consentement</strong> à tout moment depuis les paramètres de l'extension : l'ensemble des données associées à votre identifiant d'appareil sera alors supprimé."
       },
@@ -367,19 +363,19 @@
       },
       {
         "title": "Base légale des traitements (RGPD)",
-        "body": "Conformément à l'article 6 du RGPD, chaque traitement repose sur une base juridique :<ul><li><strong>Authentification Discord</strong> (identifiant, pseudo, avatar) — exécution du contrat (art. 6 §1(b)).</li><li><strong>Stockage des avis</strong> (note, commentaire) — exécution du contrat (art. 6 §1(b)).</li><li><strong>Analytics anonymes</strong> — votre consentement, recueilli en opt-in (art. 6 §1(a)).</li><li><strong>Proxy d'images</strong> (miniatures de plateformes tierces) — intérêt légitime (art. 6 §1(f)).</li><li><strong>Cookie <code>nowly_oauth_state</code></strong> (protection CSRF) — intérêt légitime de sécurité (art. 6 §1(f)).</li><li><strong>Cookie <code>locale</code></strong> (préférence linguistique) — intérêt légitime (art. 6 §1(f)).</li></ul>"
+        "body": "Conformément à l'article 6 du RGPD, chaque traitement repose sur une base juridique :<ul><li><strong>Analytics anonymes</strong> — votre consentement, recueilli en opt-in (art. 6 §1(a)).</li><li><strong>Proxy d'images</strong> (miniatures de plateformes tierces) — intérêt légitime (art. 6 §1(f)).</li><li><strong>Cookie <code>locale</code></strong> (préférence linguistique) — intérêt légitime (art. 6 §1(f)).</li></ul>"
       },
       {
         "title": "Durées de conservation",
-        "body": "Vos données ne sont pas conservées plus longtemps que nécessaire :<ul><li><strong>Identifiant Discord, note et commentaire d'un avis</strong> : jusqu'à la suppression de l'avis par vos soins, ou au plus 3 ans après votre dernière activité.</li><li><strong>Commentaires publiés</strong> : jusqu'à leur suppression explicite par vos soins.</li><li><strong>Événements analytics</strong> : purge automatique au bout de 12 mois.</li><li><strong>Jeton d'authentification (JWT)</strong> : 30 jours.</li></ul>"
+        "body": "Vos données ne sont pas conservées plus longtemps que nécessaire :<ul><li><strong>Événements analytics</strong> : purge automatique au bout de 12 mois.</li></ul>"
       },
       {
         "title": "Services tiers",
-        "body": "Nowly utilise les services tiers suivants :<ul><li><strong>Railway</strong> (États-Unis) : hébergement du site web, de l'API et de la base de données PostgreSQL. Les transferts vers les États-Unis sont encadrés par les <strong>Clauses Contractuelles Types (CCT)</strong> de la Commission européenne. <a href='https://railway.com/legal/privacy'>Politique de confidentialité Railway</a>.</li><li><strong>Cloudflare</strong> (États-Unis) : distribution des ressources statiques (miniatures, installateur natif) via CDN. Les transferts sont encadrés par les <strong>Clauses Contractuelles Types (CCT)</strong> et le <strong>Data Privacy Framework UE/UK–États-Unis</strong>.</li><li><strong>Chrome Web Store / Google</strong> : distribution de l'extension navigateur.</li><li><strong>Google AdSense</strong> : affichage éventuel d'annonces sur le site. Google peut utiliser des cookies ou technologies similaires selon ses propres règles et vos choix de consentement.</li><li><strong>Ko-fi</strong> : dons facultatifs — Nowly ne partage aucune donnée personnelle avec Ko-fi.</li><li><strong>Discord</strong> : authentification OAuth (scope « identify ») et affichage Rich Presence via communication locale.</li><li><strong>OpenAI</strong> : génération automatique de notes de version. Seuls des titres de pull requests et des diffs de code sont transmis — aucune donnée utilisateur.</li></ul>L'extension permet, pour les utilisateurs avancés, de configurer une <strong>URL d'API personnalisée</strong> pointant vers une instance auto-hébergée. Dans ce cas, vos données sont envoyées au serveur que vous avez configuré : la présente politique de confidentialité ne s'applique pas à ce serveur, sur lequel Nowly n'exerce aucun contrôle."
+        "body": "Nowly utilise les services tiers suivants :<ul><li><strong>Railway</strong> (États-Unis) : hébergement du site web, de l'API et de la base de données PostgreSQL. Les transferts vers les États-Unis sont encadrés par les <strong>Clauses Contractuelles Types (CCT)</strong> de la Commission européenne. <a href='https://railway.com/legal/privacy'>Politique de confidentialité Railway</a>.</li><li><strong>Cloudflare</strong> (États-Unis) : distribution des ressources statiques (miniatures, installateur natif) via CDN. Les transferts sont encadrés par les <strong>Clauses Contractuelles Types (CCT)</strong> et le <strong>Data Privacy Framework UE/UK–États-Unis</strong>.</li><li><strong>Chrome Web Store / Google</strong> : distribution de l'extension navigateur.</li><li><strong>Google AdSense</strong> : affichage éventuel d'annonces sur le site. Google peut utiliser des cookies ou technologies similaires selon ses propres règles et vos choix de consentement.</li><li><strong>Ko-fi</strong> : dons facultatifs — Nowly ne partage aucune donnée personnelle avec Ko-fi.</li><li><strong>OpenAI</strong> : génération automatique de notes de version. Seuls des titres de pull requests et des diffs de code sont transmis — aucune donnée utilisateur.</li></ul>L'extension permet, pour les utilisateurs avancés, de configurer une <strong>URL d'API personnalisée</strong> pointant vers une instance auto-hébergée. Dans ce cas, vos données sont envoyées au serveur que vous avez configuré : la présente politique de confidentialité ne s'applique pas à ce serveur, sur lequel Nowly n'exerce aucun contrôle."
       },
       {
         "title": "Cookies",
-        "body": "Le site Nowly utilise des cookies <strong>strictement nécessaires</strong> :<ul><li><code>nowly_oauth_state</code> : cookie technique HttpOnly, durée de vie 10 minutes, utilisé pour la protection CSRF lors de la connexion Discord.</li><li><code>locale</code> : cookie de préférence linguistique, non partagé avec des tiers.</li></ul>Lorsque les annonces sont activées, Google AdSense peut également utiliser des cookies ou technologies similaires. Consultez notre <a href='/cookies'>Politique de cookies</a> pour plus de détails."
+        "body": "Le site Nowly utilise un cookie <strong>strictement nécessaire</strong> :<ul><li><code>locale</code> : cookie de préférence linguistique, non partagé avec des tiers.</li></ul>Lorsque les annonces sont activées, Google AdSense peut également utiliser des cookies ou technologies similaires. Consultez notre <a href='/cookies'>Politique de cookies</a> pour plus de détails."
       },
       {
         "title": "Proxy d'images",
@@ -391,7 +387,7 @@
       },
       {
         "title": "Vos droits (RGPD)",
-        "body": "Conformément au RGPD, vous disposez des droits suivants :<ul><li><strong>Accès</strong> : demandez les données vous concernant. Le <strong>mode développeur</strong> de l'extension donne en outre accès à un onglet « Analytics logs » qui affiche en local les événements analytics collectés.</li><li><strong>Suppression</strong> : supprimez vos avis depuis l'interface ; désactivez les analytics depuis l'extension pour effacer les données d'appareil.</li><li><strong>Opposition</strong> : refusez les analytics lors de l'installation ou désactivez-les à tout moment.</li><li><strong>Portabilité</strong> : exportez vous-même l'ensemble de vos données analytics au format JSON, en libre-service, depuis la page <a href='/consent'>de gestion du consentement</a>.</li></ul>Pour exercer ces droits, contactez-nous via le <a href='https://github.com/nowly-presence/nowly'>dépôt GitHub</a> ou à l'adresse indiquée dans les <a href='/legal-notice'>mentions légales</a>."
+        "body": "Conformément au RGPD, vous disposez des droits suivants :<ul><li><strong>Accès</strong> : demandez les données vous concernant. Le <strong>mode développeur</strong> de l'extension donne en outre accès à un onglet « Analytics logs » qui affiche en local les événements analytics collectés.</li><li><strong>Suppression</strong> : désactivez les analytics depuis l'extension pour effacer les données d'appareil.</li><li><strong>Opposition</strong> : refusez les analytics lors de l'installation ou désactivez-les à tout moment.</li><li><strong>Portabilité</strong> : exportez vous-même l'ensemble de vos données analytics au format JSON, en libre-service, depuis la page <a href='/consent'>de gestion du consentement</a>.</li></ul>Pour exercer ces droits, contactez-nous via le <a href='https://github.com/nowly-presence/nowly'>dépôt GitHub</a> ou à l'adresse indiquée dans les <a href='/legal-notice'>mentions légales</a>."
       },
       {
         "title": "Contact",
@@ -411,11 +407,11 @@
       },
       {
         "title": "Description du service",
-        "body": "Nowly est un outil <strong>open source et gratuit</strong> qui détecte les contenus multimédias dans votre navigateur et met automatiquement à jour votre statut Discord (Rich Presence) via une communication locale avec le client Discord. Le service comprend :<ul><li>Une <strong>extension Chromium</strong> qui détecte et transmet l'activité.</li><li>Une <strong>Nowly Host</strong> qui sert de passerelle vers Discord.</li><li>Un <strong>site web</strong> (bibliothèque) pour découvrir et installer des présences.</li><li>Un <strong>SDK développeur</strong> et des outils pour créer des présences personnalisées.</li></ul>"
+        "body": "Nowly est un outil <strong>open source et gratuit</strong> qui détecte les contenus multimédias dans votre navigateur et met automatiquement à jour votre statut Discord (Rich Presence) via une communication locale avec le client Discord. Le service comprend :<ul><li>Une <strong>extension Chromium</strong> qui détecte et transmet l'activité.</li><li>Une <strong>Nowly Host</strong> qui sert de passerelle vers Discord.</li><li>Un <strong>site web</strong> pour découvrir et installer des présences.</li><li>Un <strong>SDK développeur</strong> et des outils pour créer des présences personnalisées.</li></ul>"
       },
       {
         "title": "Âge minimum",
-        "body": "Le service est réservé aux personnes âgées d'au moins <strong>15 ans</strong>. Si vous avez moins de 15 ans, vous devez avoir obtenu le consentement exprès de votre représentant légal avant d'utiliser la fonctionnalité de connexion Discord. L'utilisation de la fonctionnalité d'avis (connexion via Discord) suppose en outre le respect des conditions d'utilisation de Discord, notamment l'âge minimum requis par Discord dans votre pays."
+        "body": "Le service est réservé aux personnes âgées d'au moins <strong>15 ans</strong>."
       },
       {
         "title": "Licence",
@@ -423,11 +419,7 @@
       },
       {
         "title": "Utilisation responsable",
-        "body": "Vous vous engagez à utiliser Nowly conformément aux lois applicables et aux <a href='https://discord.com/terms'>conditions d'utilisation de Discord</a>. Vous ne devez notamment <strong>pas</strong> :<ul><li>Utiliser Nowly pour afficher des contenus illicites, haineux, diffamatoires ou portant atteinte aux droits de tiers.</li><li>Publier, dans les avis, des propos illicites ou des données personnelles de tiers.</li><li>Tenter de contourner les mécanismes de sécurité de l'extension ou de Nowly Host.</li><li>Distribuer des présences modifiées, falsifiées ou non signées via l'infrastructure officielle.</li><li>Utiliser Nowly d'une manière contraire aux conditions des plateformes consultées ou de Discord.</li><li>Effectuer des requêtes automatisées abusives sur l'API.</li></ul><br/>Si vous configurez une <strong>URL d'API personnalisée</strong> (instance auto-hébergée), vous êtes seul responsable du serveur tiers ciblé. La <a href='/privacy'>Politique de confidentialité</a> de Nowly ne s'applique pas aux serveurs que vous hébergez ou configurez vous-même."
-      },
-      {
-        "title": "Avis et commentaires",
-        "body": "La bibliothèque permet, après connexion via Discord, de noter une présence (de 1 à 5) et de publier un commentaire, le cas échéant de manière <strong>anonyme</strong>. Vous êtes seul responsable des avis publiés. Vous pouvez <strong>supprimer votre avis</strong> à tout moment depuis la fiche de la présence concernée. Nowly se réserve le droit de retirer tout avis manifestement illicite ou contraire aux présentes conditions."
+        "body": "Vous vous engagez à utiliser Nowly conformément aux lois applicables et aux <a href='https://discord.com/terms'>conditions d'utilisation de Discord</a>. Vous ne devez notamment <strong>pas</strong> :<ul><li>Utiliser Nowly pour afficher des contenus illicites, haineux, diffamatoires ou portant atteinte aux droits de tiers.</li><li>Tenter de contourner les mécanismes de sécurité de l'extension ou de Nowly Host.</li><li>Distribuer des présences modifiées, falsifiées ou non signées via l'infrastructure officielle.</li><li>Utiliser Nowly d'une manière contraire aux conditions des plateformes consultées ou de Discord.</li><li>Effectuer des requêtes automatisées abusives sur l'API.</li></ul><br/>Si vous configurez une <strong>URL d'API personnalisée</strong> (instance auto-hébergée), vous êtes seul responsable du serveur tiers ciblé. La <a href='/privacy'>Politique de confidentialité</a> de Nowly ne s'applique pas aux serveurs que vous hébergez ou configurez vous-même."
       },
       {
         "title": "Dons (Ko-fi)",
@@ -491,7 +483,7 @@
       },
       {
         "title": "Signalement de contenus illicites",
-        "body": "Conformément à la loi française (LCEN art. 6), tout contenu manifestement illicite (y compris dans la section des commentaires de la bibliothèque) peut être signalé à <a href='mailto:{publisherEmail}'>{publisherEmail}</a>, en précisant la date, la description, l'URL et les motifs de signalement."
+        "body": "Conformément à la loi française (LCEN art. 6), tout contenu manifestement illicite peut être signalé à <a href='mailto:{publisherEmail}'>{publisherEmail}</a>, en précisant la date, la description, l'URL et les motifs de signalement."
       },
       {
         "title": "Contact",
@@ -508,7 +500,7 @@
     "sections": [
       {
         "title": "Cookies strictement nécessaires",
-        "body": "Ces cookies sont indispensables au fonctionnement du site et ne requièrent pas votre consentement préalable.<br/><br/><strong><code>nowly_oauth_state</code></strong><br/>Finalité : protection CSRF lors de la connexion Discord (OAuth 2.0).<br/>Durée : 10 minutes maximum — supprimé automatiquement après connexion.<br/>Type : HttpOnly, SameSite=Lax. Non accessible par JavaScript."
+        "body": "Ces cookies sont indispensables au fonctionnement du site et ne requièrent pas votre consentement préalable."
       },
       {
         "title": "Cookies de préférence",
@@ -524,7 +516,7 @@
       },
       {
         "title": "Gestion et suppression des cookies",
-        "body": "Vous pouvez modifier à tout moment les paramètres de votre navigateur pour bloquer ou supprimer les cookies. La suppression du cookie <code>locale</code> réinitialisera la langue à la valeur détectée automatiquement. La suppression du cookie <code>nowly_oauth_state</code> avant la fin de la connexion Discord entraînera un échec de l'authentification."
+        "body": "Vous pouvez modifier à tout moment les paramètres de votre navigateur pour bloquer ou supprimer les cookies. La suppression du cookie <code>locale</code> réinitialisera la langue à la valeur détectée automatiquement."
       },
       {
         "title": "Contact",
