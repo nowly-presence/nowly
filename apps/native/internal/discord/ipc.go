@@ -7,7 +7,9 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"os"
+	"path/filepath"
 	"runtime"
 	"time"
 
@@ -61,9 +63,9 @@ func (c *Client) Connect() error {
 	}
 
 	c.Close()
-	c.log("discord connect opening %s", ipcPath())
+	c.log("discord connect: scanning for discord-ipc socket")
 
-	conn, err := os.OpenFile(ipcPath(), os.O_RDWR, 0)
+	conn, err := dialIPC()
 	if err != nil {
 		c.log("discord connect open failed: %v", err)
 		return err
@@ -229,19 +231,42 @@ func (c *Client) log(format string, args ...any) {
 	c.logger.Printf(format, args...)
 }
 
-func ipcPath() string {
+// dialIPC connects to the Discord IPC endpoint. On Windows it is a named pipe
+// that opens as a file. On Unix it is a domain socket; Discord may expose it as
+// discord-ipc-0..9 (Stable/PTB/Canary, or a stale -0) under any of several temp
+// dirs, so scan every base/index and keep the first that connects.
+func dialIPC() (io.ReadWriteCloser, error) {
 	if runtime.GOOS == "windows" {
-		return `\\.\pipe\discord-ipc-0`
+		return os.OpenFile(`\\.\pipe\discord-ipc-0`, os.O_RDWR, 0)
 	}
 
-	base := os.Getenv("XDG_RUNTIME_DIR")
-	if base == "" {
-		base = os.Getenv("TMPDIR")
+	var lastErr error
+	for _, base := range ipcBases() {
+		for i := 0; i < 10; i++ {
+			conn, err := net.Dial("unix", filepath.Join(base, fmt.Sprintf("discord-ipc-%d", i)))
+			if err == nil {
+				return conn, nil
+			}
+			lastErr = err
+		}
 	}
-	if base == "" {
-		base = "/tmp"
+	if lastErr == nil {
+		lastErr = errors.New("no discord-ipc socket found")
 	}
-	return base + "/discord-ipc-0"
+	return nil, lastErr
+}
+
+// ipcBases returns Discord's candidate temp dirs in its own resolution order.
+// XDG_RUNTIME_DIR being set does not mean the socket lives there (common macOS
+// failure), so try all of them, not just the first that exists.
+func ipcBases() []string {
+	var bases []string
+	for _, k := range []string{"XDG_RUNTIME_DIR", "TMPDIR", "TMP", "TEMP"} {
+		if v := os.Getenv(k); v != "" {
+			bases = append(bases, v)
+		}
+	}
+	return append(bases, "/tmp")
 }
 
 func encode(op uint32, payload any) []byte {

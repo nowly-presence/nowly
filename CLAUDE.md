@@ -122,7 +122,7 @@ pnpm internal-cli host:publish # Publish native host binaries & installer to CDN
 ### Native Host (Go, apps/native/)
 - Native messaging host ID: prod `kmnlnfldimgneaopdihplkebobckcjpf`, dev `abbegmindbabanjcabnmcjmamaoffbam`
 - Messages: PING/PONG, SET_ACTIVITY/CLEAR_ACTIVITY, CONNECTED, OK/ERROR
-- Releasing: tag `host-vX.Y.Z` triggers GitHub Actions to compile all platforms, build Windows installer, and publish to Cloudflare R2
+- Releasing: tag `native-vX.Y.Z` triggers GitHub Actions to compile all platforms, build Windows installer, and publish to Cloudflare R2
 
 ## Presence SDK API (Global in Scripts)
 
@@ -178,7 +178,7 @@ pnpm presence:build   # Terminal 3 (optional, rebuild presences)
 
 ### Releasing a Native Host Update
 1. Update Go code in `apps/native/`
-2. `git tag host-v1.2.3 && git push origin host-v1.2.3`
+2. `git tag native-v1.2.3 && git push origin native-v1.2.3`
 3. GitHub Actions compiles, creates installer, publishes to R2, updates `latest.json`
 
 ## Tooling & Versions
@@ -196,4 +196,4 @@ pnpm presence:build   # Terminal 3 (optional, rebuild presences)
 - **lint.yml** — ESLint/TypeScript check on push to `stable`
 - **test-api.yml** — API vitest suite on push to `stable`
 - **test-websites.yml** — Websites package tests on push to `stable`
-- **host-release.yml** — Triggered by `host-vX.Y.Z` tag; builds Windows `.exe` + Linux `.tar.gz` on `windows-latest` and macOS `.dmg` on `macos-latest` in parallel, publishes all artifacts to CDN, creates GitHub release
+- **host-release.yml** — Triggered by `native-vX.Y.Z` tag; builds Windows `.exe` + Linux `.tar.gz` on `windows-latest` and macOS `.dmg` on `macos-latest` in parallel, publishes all artifacts to CDN, creates GitHub release

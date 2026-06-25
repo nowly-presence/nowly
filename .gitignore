@@ -19,6 +19,12 @@ old-native/
 # Extension signing key (keep secret!)
 extension-key.pem
 
+# macOS signing material (keep secret! never commit - use GitHub Secrets)
+*.p8
+*.p12
+*.cer
+*.certSigningRequest
+
 # Auto-generated extension source
 apps/extension/src/generated/*
 apps/extension/artifacts/

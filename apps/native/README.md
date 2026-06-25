@@ -127,11 +127,11 @@ This runs `scripts/release.sh` (or `release.ps1` on Windows) then `scripts/publi
 
 ### Host releases via git tags
 
-Push a tag named `host-vX.Y.Z`:
+Push a tag named `native-vX.Y.Z`:
 
 ```bash
-git tag host-v1.0.0
-git push origin host-v1.0.0
+git tag native-v1.0.0
+git push origin native-v1.0.0
 ```
 
 The `Host Release` GitHub Action then builds and publishes automatically.
