@@ -23,7 +23,7 @@ export const Navbar: FC = (): ReactElement => {
       <div className="mx-auto w-full max-w-300 min-w-0 px-6">
         <div className="flex min-w-0 items-center justify-between">
           <Link href="/" className="min-w-0 shrink-0 cursor-pointer select-none">
-            <img src="https://cdn.nowly.me/assets/app_title.png" alt="Nowly" className="h-8 w-auto" />
+            <img src="https://cdn.nowly.me/assets/app_title.png" alt="Nowly" width={420} height={128} className="h-8 w-auto" />
           </Link>
 
           {/* Mobile: hamburger menu */}

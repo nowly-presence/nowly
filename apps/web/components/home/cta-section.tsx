@@ -42,6 +42,8 @@ export const CtaSection: FC = (): ReactElement => {
                 <img
                   src="https://thesvg.org/icons/firefox/default.svg"
                   alt="Firefox"
+                  width={16}
+                  height={16}
                   className="w-4 h-4"
                 />
 
@@ -58,6 +60,8 @@ export const CtaSection: FC = (): ReactElement => {
                 <img
                   src="https://thesvg.org/icons/chromium/default.svg"
                   alt="Chromium"
+                  width={16}
+                  height={16}
                   className="w-4 h-4"
                 />
                 {t("platforms")}
