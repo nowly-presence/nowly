@@ -373,15 +373,6 @@ describe("Stats Routes", () => {
     expect(mockPresenceRepo.clearActiveDevicesForDevice).toHaveBeenCalledWith("device-123")
   })
 
-  it("POST /presences/:slug/installs is disabled because installs sync through devices", async () => {
-    const res = await app.inject({ method: "POST", url: "/presences/youtube/installs" })
-
-    expect(res.statusCode).toBe(410)
-    expect(JSON.parse(res.body)).toEqual({
-      error: "Presence install counters are synced by the extension via /devices/sync",
-    })
-    expect(mockPresenceRepo.incrementInstalls).not.toHaveBeenCalled()
-  })
 })
 
 describe("Image Proxy Routes", () => {

@@ -146,11 +146,6 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
     return { ok: true, removed: null }
   })
 
-  fastify.post<{ Params: { slug: string } }>("/:slug/installs", async (_request, reply) => {
-    return reply.status(410).send({
-      error: "Presence install counters are synced by the extension via /devices/sync",
-    })
-  })
 }
 
 export const register = async (app: FastifyInstance): Promise<void> => {

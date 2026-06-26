@@ -9,7 +9,6 @@ import { DevelopmentCard } from "../development-card";
 import { FeaturesCard } from "../features-card";
 import { HeaderCard } from "../header-card";
 import { InstallVersionsCard } from "../install-versions-card";
-// import { PresenceVersionUpdatesCard } from "../presence-version-updates-card";
 import { SettingsCard } from "../settings-card";
 import { SupportedUrlsCard } from "../supported-urls-card";
 type Props = {
@@ -20,7 +19,6 @@ type Props = {
   loading: boolean;
   onInstall: () => void;
   onUninstall: () => void;
-  onInstallVersion: (version: string) => void;
 };
 
 export const PresenceDetailContent: FC<Props> = ({
@@ -82,16 +80,6 @@ export const PresenceDetailContent: FC<Props> = ({
               : <SupportedUrlsCard urls={presence.supportedUrls} />}
 
             <InstallVersionsCard platform={presence} />
-
-            {/* TODO: Rework the version updates card before displaying it again. */}
-            {/* {presence.status !== "soon" ? (
-              <PresenceVersionUpdatesCard
-                presence={presence}
-                locale={locale}
-                installedVersion={installedVersion}
-                onInstallVersion={onInstallVersion}
-              />
-            ) : null} */}
           </div>
         </div>
       </div>

@@ -4,9 +4,11 @@ packages:
 
 allowBuilds:
   '@parcel/watcher': true
+  '@prisma/engines': true
   '@swc/core': true
   esbuild: true
-  sharp: set this to true or false
+  prisma: true
+  sharp: true
 
 onlyBuiltDependencies:
   - sharp

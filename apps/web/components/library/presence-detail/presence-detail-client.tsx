@@ -23,7 +23,6 @@ export const PresenceDetailClient: FC<Props> = ({ presence }): ReactElement => {
         loading={status.loading}
         onInstall={status.handleInstall}
         onUninstall={status.handleUninstallRequest}
-        onInstallVersion={status.requestInstallVersion}
       />
 
       <PresenceDetailDialogs
