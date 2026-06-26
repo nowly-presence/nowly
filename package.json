@@ -15,17 +15,11 @@
   "scripts": {
     "dev:api": "pnpm --filter @nowly/api dev",
     "dev:web": "pnpm --filter @nowly/web dev",
-    "build:websites": "pnpm --filter @nowly/websites build",
     "prisma:generate": "pnpm --filter @nowly/api prisma:generate",
     "start:api": "pnpm --filter @nowly/api start",
     "typecheck:api": "pnpm --filter @nowly/api typecheck",
     "build:extension": "pnpm --filter @nowly/extension build",
     "build:extension:dev": "pnpm --filter @nowly/extension build:dev",
-    "admin:push": "pnpm internal-cli push",
-    "admin": "pnpm internal-cli",
-    "internal-cli": "tsx --tsconfig packages/internal-cli/tsconfig.json packages/internal-cli/index.ts",
-    "admin:r2-sync": "pnpm internal-cli r2:sync",
-    "admin:host-publish": "pnpm internal-cli host:publish",
     "build:macos": "cd apps/native && bash scripts/macos-release.sh"
   }
 }
