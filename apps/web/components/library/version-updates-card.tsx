@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import type { Contributor } from "@/lib/data/presences";
 import { cn } from "@/lib/utils";
-import { DownloadIcon, GitBranchIcon, GithubIcon } from "lucide-react";
+import { DownloadIcon, GitBranchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { FC, ReactElement } from "react";
 import { useMemo, useState } from "react";
@@ -155,7 +155,7 @@ export const VersionUpdatesCard: FC<VersionUpdatesCardProps> = ({ currentVersion
                     rel="noopener noreferrer"
                     className="inline-flex min-w-0 items-center gap-1.5 text-sm font-medium text-foreground hover:text-accent"
                   >
-                    <GithubIcon className="size-3.5 shrink-0" />
+                    <GitHubIcon className="size-3.5 shrink-0" />
                     <span className="truncate">{selectedUpdate.author.name}</span>
                   </a>
                 ) : (
