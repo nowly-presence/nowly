@@ -28,20 +28,20 @@
     "@prisma/client": "^7.8.0",
     "@react-email/components": "^1.0.12",
     "@react-email/render": "^2.0.9",
-    "dotenv": "^17.4.2",
+    "dotenv": "catalog:",
     "fastify": "^5.8.5",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.22.0",
-    "react": "^19.2.7",
-    "zod": "^3.25.76"
+    "react": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^22.20.0",
-    "@types/react": "^19.2.17",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
     "prisma": "^7.8.0",
-    "tsx": "^4.22.4",
-    "typescript": "5.7.3",
-    "vitest": "^3.2.6"
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }
