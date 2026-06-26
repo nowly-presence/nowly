@@ -2,6 +2,7 @@
 import { minifyVersionBundlesOnR2, optimizeAssetsOnR2, uploadAllToR2, uploadHostReleaseToR2 } from "@nowly/websites/cli/r2"
 import { registerPush } from "@nowly/websites/cli/commands/push"
 import { logger } from "@nowly/websites/cli/logger"
+import { confirm, select } from "@nowly/websites/cli/prompts"
 import { existsSync } from "fs"
 import { resolve } from "path"
 import chalk from "chalk"
@@ -158,20 +159,54 @@ program
     }
   })
 
-async function main() {
+const showInteractive = async () => {
+  logger.newline()
+  logger.raw(chalk.cyan(chalk.bold("  ⚡ Nowly Admin CLI")))
+  logger.raw(chalk.dim(`  ${"─".repeat(40)}`))
+  logger.newline()
+
+  const action = await select("What would you like to do?", [
+    { name: "push" as any, message: "Build and push presence(s) to API" },
+    { name: "r2:sync" as any, message: "Upload presence assets to CDN" },
+    { name: "r2:minify-version-bundles" as any, message: "Minify historical versioned bundles on R2" },
+    { name: "r2:optimize-assets" as any, message: "Optimize image assets on R2" },
+    { name: "host:publish" as any, message: "Publish Nowly Host release" },
+    { name: "exit" as any, message: "Exit" },
+  ])
+
+  logger.newline()
+
+  switch (action) {
+    case "push":
+      await program.parseAsync(["push"], { from: "user" })
+      break
+    case "r2:sync":
+      await program.parseAsync(["r2:sync"], { from: "user" })
+      break
+    case "r2:minify-version-bundles":
+      await program.parseAsync(["r2:minify-version-bundles"], { from: "user" })
+      break
+    case "r2:optimize-assets":
+      await program.parseAsync(["r2:optimize-assets"], { from: "user" })
+      break
+    case "host:publish":
+      logger.info("Run: pnpm internal-cli host:publish --release-version <version> [options]")
+      logger.newline()
+      break
+    case "exit":
+      logger.info("Goodbye! 👋")
+      process.exit(0)
+  }
+
+  logger.newline()
+  const again = await confirm("Do something else?", true)
+  if (again) await showInteractive()
+  else logger.info("Goodbye! 👋")
+}
+
+const main = async () => {
   if (process.argv.length <= 2) {
-    logger.raw(chalk.cyan(chalk.bold("  ⚡ Nowly Admin CLI")))
-    logger.raw(chalk.dim(`  ${"─".repeat(40)}`))
-    logger.newline()
-    logger.info("Usage: pnpm internal-cli <command>")
-    logger.newline()
-    logger.raw(chalk.dim("  Commands:"))
-    logger.raw(chalk.dim("    push           Build and push presence(s) to API"))
-    logger.raw(chalk.dim("    r2:sync        Upload presence assets to CDN"))
-    logger.raw(chalk.dim("    r2:minify-version-bundles  Minify historical versioned bundles on R2"))
-    logger.raw(chalk.dim("    r2:optimize-assets  Optimize image assets on R2"))
-    logger.raw(chalk.dim("    host:publish   Publish Nowly Host release"))
-    logger.newline()
+    await showInteractive()
   } else {
     await program.parseAsync()
   }

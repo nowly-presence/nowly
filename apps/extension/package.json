@@ -1,7 +1,14 @@
 {
   "name": "@nowly/extension",
   "version": "1.2.2",
+  "author": {
+    "name": "Gaëtan H",
+    "url": "https://github.com/Steellgold"
+  },
   "license": "BUSL-1.1",
+  "contributors": [
+    { "name": "KiMi", "url": "https://github.com/q-kimi" }
+  ],
   "private": true,
   "type": "module",
   "scripts": {
