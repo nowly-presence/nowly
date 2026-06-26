@@ -12,7 +12,7 @@ const PUBLISHER = {
   name: "Anthony Lejeune",
   siren: "105 793 194",
   address: "7 rue d'Arras, 62450 Bapaume, France",
-  email: "contact@q-kimi.fr",
+  email: "contact@qkimi.fr",
   dataRegion: "EU West (Amsterdam, Netherlands)",
 };
 
