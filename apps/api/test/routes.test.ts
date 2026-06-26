@@ -1,7 +1,6 @@
 import { imageProxyRoutes } from "@/features/image-proxy/image-proxy.routes"
 import { presenceRoutes } from "@/features/presence/presence.routes"
 import cors from "@fastify/cors"
-import { getPresence } from "@nowly/websites"
 import Fastify from "fastify"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -46,22 +45,6 @@ const mockCrypto = vi.hoisted(() => ({
 }))
 
 vi.mock("@/shared/crypto.service", () => mockCrypto)
-
-vi.mock("@nowly/websites", () => ({
-  getPresence: vi.fn(() => undefined),
-  getRegistry: vi.fn(() => []),
-}))
-
-const mockFs = vi.hoisted(() => ({
-  existsSync: vi.fn(() => false),
-  readFileSync: vi.fn(),
-}))
-
-vi.mock("fs", () => mockFs)
-
-vi.mock("@/shared/paths", () => ({
-  PRESENCES_DIR: "C:\\presences",
-}))
 
 async function buildApp() {
   const app = Fastify()
@@ -170,7 +153,12 @@ describe("Presence Routes", () => {
   })
 
   it("GET /presences/:slug returns 200 with release data", async () => {
-    vi.mocked(getPresence).mockReturnValue({
+    const originalFetch = globalThis.fetch
+    globalThis.fetch = vi.fn(() =>
+      Promise.resolve({ ok: true, text: () => Promise.resolve("console.log('hello')") } as Response)
+    )
+
+    mockPresenceRepo.getPresenceMeta.mockResolvedValue({
       name: "YouTube",
       author: { name: "test" },
       category: "streaming",
@@ -180,9 +168,6 @@ describe("Presence Routes", () => {
       assets: { logo: "logo.png", icon: "icon.png", thumbnail: "thumbnail.jpg" },
       settings: {},
     })
-
-    mockFs.existsSync.mockReturnValue(true)
-    mockFs.readFileSync.mockReturnValue("console.log('hello')")
 
     mockPresenceRepo.getPresenceStats.mockResolvedValue({
       totalInstalls: 100, activeUsers: 10,
@@ -206,6 +191,8 @@ describe("Presence Routes", () => {
     expect(body.signature).toBe("signature-value")
     expect(body.totalInstalls).toBe(100)
     expect(body.activeUsers).toBe(10)
+
+    globalThis.fetch = originalFetch
   })
 
   it("GET /presences/:slug/versions returns version history", async () => {
