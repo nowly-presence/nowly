@@ -5,7 +5,7 @@
   "minimum_chrome_version": "120",
   "description": "__MSG_extensionDescription__",
   "default_locale": "fr",
-  "permissions": ["nativeMessaging", "storage", "tabs", "alarms", "userScripts", "sidePanel"],
+  "permissions": ["nativeMessaging", "storage", "alarms", "userScripts", "sidePanel"],
   "host_permissions": ["<all_urls>"],
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu2N7zaQk3HIXHgXyQsWUM5DjTVLue2O3jBxbvpNYsBzGd2liEc+OiinkMz3q33kZe95ApiBE8sTQ6mxP+5n21LUD17Pz1eQFYQrAuASRio/WFuOeqQRn4LNag1Z7iWyxXM0ztmNBadr8ra0x11Um/NjCrnfNPhP27gsTRz+2PO4X9ZRzD2efFrYa4fR28KIgqeYoGY/yIqUQIu8hM939+oKFHpDbPm7TbxMf7AzoS5Rcx+n7RG9eaMbUCHUJuEYlWUTqvIeThUgY0waQkq5BSe33XbvaZyWx3jyid1dok8QxYExt6lqX2jKB8xhgMLICjlbtvXh4tKTFNaWonS9ntQIDAQAB",
   "background": {
