@@ -1,3 +1,4 @@
 [submodule "packages/sdk"]
 	path = packages/sdk
 	url = https://github.com/nowly-presence/sdk.git
+	branch = stable
