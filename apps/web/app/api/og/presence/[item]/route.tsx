@@ -2,7 +2,7 @@ import { ASSET_URL } from "@/lib/assets";
 import { API_BASE_URL } from "@/lib/constants";
 import { metadataToPlatform } from "@/lib/data/presence-adapter";
 import type { Presence } from "@/lib/data/presences";
-import type { Metadata as PresenceMetadata } from "@nowly/websites";
+import type { Metadata as PresenceMetadata } from "@nowly/sdk/metadata";
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";

@@ -3,7 +3,7 @@
 import { API_BASE_URL } from "@/lib/constants";
 import type { Presence } from "@/lib/data/presences";
 import { metadataToPlatform } from "@/lib/data/presence-adapter";
-import type { Metadata } from "@nowly/websites";
+import type { Metadata } from "@nowly/sdk/metadata";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 const PRESENCES_KEY = ["presences"] as const;

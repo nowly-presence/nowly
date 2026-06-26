@@ -9,7 +9,7 @@ import { HomeStructuredData } from "@/components/seo/home-structured-data";
 import { API_BASE_URL } from "@/lib/constants";
 import { metadataToPlatform } from "@/lib/data/presence-adapter";
 import type { HomeStats } from "@/hooks/use-home-stats";
-import type { Metadata as PresenceMetadata } from "@nowly/websites";
+import type { Metadata as PresenceMetadata } from "@nowly/sdk/metadata";
 import { DEFAULT_SEO, createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import type { FC, ReactElement } from "react";

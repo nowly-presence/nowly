@@ -1,4 +1,4 @@
-import type { Metadata as PresenceMetadata } from "@nowly/websites";
+import type { Metadata as PresenceMetadata } from "@nowly/sdk/metadata";
 
 export interface PresenceRelease {
   slug: string

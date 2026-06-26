@@ -21,7 +21,7 @@
     "@nowly/env": "workspace:*",
     "@nowly/locales": "workspace:*",
     "@nowly/shared": "workspace:*",
-    "@nowly/websites": "workspace:*",
+    "@nowly/sdk": "workspace:*",
     "@opencoredev/email-sdk": "^0.6.2",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",

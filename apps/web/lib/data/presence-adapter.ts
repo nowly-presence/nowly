@@ -1,5 +1,5 @@
 import { FALLBACK_LOCALE } from "@nowly/locales";
-import type { Metadata } from "@nowly/websites/types";
+import type { Metadata } from "@nowly/sdk/metadata";
 import type { Contributor, Presence, PresenceCategory } from "./presences";
 import { CATEGORIES } from "./categories";
 
