@@ -32,5 +32,8 @@ catalog:
   typescript: 6.0.3
   vitest: ^4.1.9
 
+minimumReleaseAgeExclude:
+  - '@nowly/sdk@1.2.2'
+
 onlyBuiltDependencies:
   - sharp

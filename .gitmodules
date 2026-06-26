@@ -2,8 +2,3 @@
 	path = packages/sdk
 	url = https://github.com/nowly-presence/sdk.git
 	branch = stable
-
-[submodule "packages/cli"]
-	path = packages/cli
-	url = https://github.com/nowly-presence/cli.git
-	branch = stable
