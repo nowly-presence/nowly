@@ -30,7 +30,7 @@
     "dotenv": "catalog:",
     "enquirer": "^2.4.1",
     "esbuild": "catalog:",
-    "ora": "^8.2.0",
+    "ora": "^9.4.1",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"

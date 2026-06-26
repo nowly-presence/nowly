@@ -23,16 +23,17 @@
     "@nowly/shared": "workspace:*",
     "lucide-react": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:",
-    "vite": "^5.4.21"
+    "react-dom": "catalog:"
   },
   "devDependencies": {
+    "dotenv": "catalog:",
+    "vite": "^8.1.0",
     "@tailwindcss/postcss": "catalog:",
-    "@types/chrome": "^0.0.310",
+    "@types/chrome": "^0.2.0",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "@vitejs/plugin-react": "^4.7.0",
+    "@vitejs/plugin-react": "^6.0.3",
     "autoprefixer": "^10.5.2",
     "postcss": "catalog:",
     "tailwindcss": "catalog:",
