@@ -67,9 +67,6 @@ export const PresenceDetailContent: FC<Props> = ({
 
             <FeaturesCard platform={presence} locale={locale} />
 
-            {presence.settings && Object.keys(presence.settings).length > 0 && (
-              <SupportedUrlsCard urls={presence.supportedUrls} />
-            )}
           </div>
 
           <div className="space-y-4">
@@ -77,7 +74,9 @@ export const PresenceDetailContent: FC<Props> = ({
 
             {presence.settings && Object.keys(presence.settings).length > 0
               ? <SettingsCard platform={presence} />
-              : <SupportedUrlsCard urls={presence.supportedUrls} />}
+              : null}
+
+            <SupportedUrlsCard urls={presence.supportedUrls} />
 
             <InstallVersionsCard platform={presence} />
           </div>
