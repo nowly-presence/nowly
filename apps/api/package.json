@@ -7,7 +7,10 @@
   },
   "license": "BUSL-1.1",
   "contributors": [
-    { "name": "KiMi", "url": "https://github.com/q-kimi" }
+    {
+      "name": "KiMi",
+      "url": "https://github.com/q-kimi"
+    }
   ],
   "private": true,
   "type": "module",
@@ -29,7 +32,7 @@
     "@nowly/locales": "workspace:*",
     "@nowly/sdk": "workspace:*",
     "@nowly/shared": "workspace:*",
-    "@opencoredev/email-sdk": "^0.6.4",
+    "@opencoredev/email-sdk": "^0.6.5",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "dotenv": "catalog:",
