@@ -31,23 +31,23 @@
     "@nowly/env": "workspace:*",
     "@nowly/locales": "workspace:*",
     "@nowly/shared": "workspace:*",
-    "@tabler/icons-react": "catalog:",
-    "react": "catalog:",
-    "react-dom": "catalog:"
+    "@tabler/icons-react": "^3.44.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "catalog:",
+    "@tailwindcss/postcss": "^4.3.1",
     "@types/chrome": "^0.2.0",
-    "@types/node": "catalog:",
-    "@types/react": "catalog:",
-    "@types/react-dom": "catalog:",
+    "@types/node": "^26.0.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
     "autoprefixer": "^10.5.2",
-    "dotenv": "catalog:",
-    "postcss": "catalog:",
-    "tailwindcss": "catalog:",
-    "tsx": "catalog:",
-    "typescript": "catalog:",
+    "dotenv": "^17.4.2",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.1",
+    "tsx": "^4.22.4",
+    "typescript": "6.0.3",
     "vite": "^8.1.0"
   }
 }

@@ -21,9 +21,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "zod": "catalog:"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "typescript": "catalog:"
+    "typescript": "6.0.3"
   }
 }

@@ -36,22 +36,22 @@
     "@opencoredev/email-sdk": "^0.6.5",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
-    "dotenv": "catalog:",
+    "dotenv": "^17.4.2",
     "fastify": "^5.8.5",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.22.0",
-    "react": "catalog:",
+    "react": "^19.2.7",
     "react-email": "^6.6.5",
-    "zod": "catalog:"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "catalog:",
-    "@types/react": "catalog:",
+    "@types/node": "^26.0.1",
+    "@types/react": "^19.2.17",
     "prisma": "^7.8.0",
-    "tsx": "catalog:",
+    "tsx": "^4.22.4",
     "tsup": "^8.5.1",
-    "typescript": "catalog:",
-    "vitest": "catalog:"
+    "typescript": "6.0.3",
+    "vitest": "^4.1.9"
   }
 }

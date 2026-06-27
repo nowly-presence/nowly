@@ -24,12 +24,12 @@
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.11",
-    "dotenv": "catalog:",
-    "zod": "catalog:"
+    "dotenv": "^17.4.2",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
-    "typescript": "catalog:",
-    "vitest": "catalog:"
+    "@types/node": "^26.0.1",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.9"
   }
 }
