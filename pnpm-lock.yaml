@@ -293,6 +293,9 @@ importers:
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.5.0(jiti@2.7.0)(supports-color@5.5.0))
+      '@nowly/sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
       '@stylistic/eslint-plugin':
         specifier: ^5.10.0
         version: 5.10.0(eslint@10.5.0(jiti@2.7.0)(supports-color@5.5.0))

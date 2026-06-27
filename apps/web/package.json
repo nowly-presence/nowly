@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@nowly/sdk": "workspace:*",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@tailwindcss/postcss": "catalog:",
     "@types/node": "catalog:",
