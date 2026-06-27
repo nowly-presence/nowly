@@ -6,3 +6,11 @@
 	path = packages/presences
 	url = https://github.com/nowly-presence/presences.git
 	branch = stable
+[submodule "packages/cli"]
+	path = packages/cli
+	url = https://github.com/nowly-presence/cli.git
+	branch = stable
+[submodule "packages/internal-cli"]
+	path = packages/internal-cli
+	url = https://github.com/nowly-presence/internal-cli.git
+	branch = stable
