@@ -159,7 +159,9 @@
       "title": "Otra solicitud",
       "description": "Abre una issue libre si tu tema no encaja en los formularios guiados."
     },
-    "browseIssues": "Ver issues existentes"
+    "sectionPresences": "Presences",
+    "sectionTechnical": "Técnico",
+    "sectionCommunity": "Comunidad"
   },
   "support-redeem-page": {
     "badge": "Supporter",

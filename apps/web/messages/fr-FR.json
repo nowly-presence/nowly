@@ -159,7 +159,9 @@
       "title": "Autre demande",
       "description": "Ouvrez une issue libre si votre sujet ne rentre pas dans les formulaires proposés."
     },
-    "browseIssues": "Voir les issues existantes"
+    "sectionPresences": "Présences",
+    "sectionTechnical": "Technique",
+    "sectionCommunity": "Communauté"
   },
   "support-redeem-page": {
     "badge": "Supporter",

@@ -1,20 +1,14 @@
 import { DiscordIcon } from "@/components/icons";
 import { SupportCard, type SupportCardProps } from "@/components/support/support-card";
 import { SupportHero } from "@/components/support/support-hero";
-import { Button } from "@/components/ui/button";
 import {
-  DISCORD_INVITE_URL,
-  PROJECT_BROKEN_PRESENCE_URL,
-  PROJECT_BUG_REPORT_URL,
-  PROJECT_FEATURE_REQUEST_URL,
-  PROJECT_ISSUES_URL,
-  PROJECT_NEW_PRESENCE_URL
+  DISCORD_INVITE_URL, PROJECT_BROKEN_PRESENCE_URL, PROJECT_BUG_REPORT_URL,
+  PROJECT_FEATURE_REQUEST_URL, PROJECT_ISSUES_URL, PROJECT_NEW_PRESENCE_URL
 } from "@/lib/constants";
 import { createMetadata } from "@/lib/seo";
-import { Bug, ExternalLink, Lightbulb, MessageSquare, PlusCircle, Wrench } from "lucide-react";
+import { Bug, Lightbulb, MessageSquare, PlusCircle, Wrench } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
 import type { ReactElement, SVGProps } from "react";
 
 const DiscordSupportIcon = ({ className, ...props }: SVGProps<SVGSVGElement>): ReactElement => (
@@ -29,46 +23,66 @@ const generateMetadata = (): Metadata => {
   });
 };
 
+type Section = {
+  label: string
+  cards: SupportCardProps[]
+};
+
 const Page = async (): Promise<ReactElement> => {
   const t = await getTranslations("support-page");
 
-  const cards: SupportCardProps[] = [
+  const sections: Section[] = [
     {
-      title: t("discord.title"),
-      description: t("discord.description"),
-      href: DISCORD_INVITE_URL,
-      icon: DiscordSupportIcon,
-      tone: "discord",
+      label: t("sectionPresences"),
+      cards: [
+        {
+          title: t("brokenPresence.title"),
+          description: t("brokenPresence.description"),
+          href: PROJECT_BROKEN_PRESENCE_URL,
+          icon: Wrench,
+        },
+        {
+          title: t("newPresence.title"),
+          description: t("newPresence.description"),
+          href: PROJECT_NEW_PRESENCE_URL,
+          icon: PlusCircle,
+        },
+      ],
     },
     {
-      title: t("brokenPresence.title"),
-      description: t("brokenPresence.description"),
-      href: PROJECT_BROKEN_PRESENCE_URL,
-      icon: Wrench,
+      label: t("sectionTechnical"),
+      cards: [
+        {
+          title: t("bugReport.title"),
+          description: t("bugReport.description"),
+          href: PROJECT_BUG_REPORT_URL,
+          icon: Bug,
+        },
+        {
+          title: t("featureRequest.title"),
+          description: t("featureRequest.description"),
+          href: PROJECT_FEATURE_REQUEST_URL,
+          icon: Lightbulb,
+        },
+      ],
     },
     {
-      title: t("bugReport.title"),
-      description: t("bugReport.description"),
-      href: PROJECT_BUG_REPORT_URL,
-      icon: Bug,
-    },
-    {
-      title: t("newPresence.title"),
-      description: t("newPresence.description"),
-      href: PROJECT_NEW_PRESENCE_URL,
-      icon: PlusCircle,
-    },
-    {
-      title: t("featureRequest.title"),
-      description: t("featureRequest.description"),
-      href: PROJECT_FEATURE_REQUEST_URL,
-      icon: Lightbulb,
-    },
-    {
-      title: t("blankIssue.title"),
-      description: t("blankIssue.description"),
-      href: `${PROJECT_ISSUES_URL}/new`,
-      icon: MessageSquare,
+      label: t("sectionCommunity"),
+      cards: [
+        {
+          title: t("discord.title"),
+          description: t("discord.description"),
+          href: DISCORD_INVITE_URL,
+          icon: DiscordSupportIcon,
+          tone: "discord",
+        },
+        {
+          title: t("blankIssue.title"),
+          description: t("blankIssue.description"),
+          href: `${PROJECT_ISSUES_URL}/new`,
+          icon: MessageSquare,
+        },
+      ],
     },
   ];
 
@@ -80,20 +94,19 @@ const Page = async (): Promise<ReactElement> => {
         description={t("description")}
       />
 
-      <div className="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2">
-        {cards.map((card) => (
-          <SupportCard key={card.href} {...card} />
-        ))}
-      </div>
+      {sections.map((section) => (
+        <section key={section.label} className="mb-12 last:mb-0">
+          <h2 className="mb-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            {section.label}
+          </h2>
+          <div className="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2">
+            {section.cards.map((card) => (
+              <SupportCard key={card.href} {...card} />
+            ))}
+          </div>
+        </section>
+      ))}
 
-      <div className="mt-8 flex justify-center">
-        <Button asChild variant="ghost" size="sm">
-          <Link href={PROJECT_ISSUES_URL} target="_blank" rel="noopener noreferrer">
-            {t("browseIssues")}
-            <ExternalLink className="size-4" />
-          </Link>
-        </Button>
-      </div>
     </main>
   );
 };

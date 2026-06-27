@@ -3,15 +3,18 @@ import { Presence } from "./data/presences";
 
 export const API_BASE_URL = clientEnv.NEXT_PUBLIC_API_BASE_URL;
 
-export const PROJECT_NAME = "Nowly";
 export const PROJECT_REPOSITORY_URL = "https://github.com/nowly-presence/nowly";
-export const PROJECT_PRESENCES_SOURCE_URL = `${PROJECT_REPOSITORY_URL}/tree/stable/packages/websites/src`;
+export const PRESENCES_REPOSITORY_URL = "https://github.com/nowly-presence/presences";
+export const PROJECT_PRESENCES_SOURCE_URL = `${PRESENCES_REPOSITORY_URL}/tree/stable/src`;
+
 export const PROJECT_ISSUES_URL = `${PROJECT_REPOSITORY_URL}/issues`;
 export const PROJECT_BUG_REPORT_URL = `${PROJECT_ISSUES_URL}/new?template=bug_report.yml`;
-export const PROJECT_BROKEN_PRESENCE_URL = `${PROJECT_ISSUES_URL}/new?template=broken_presence.yml`;
-export const PROJECT_NEW_PRESENCE_URL = `${PROJECT_ISSUES_URL}/new?template=new_presence.yml`;
+export const PROJECT_BROKEN_PRESENCE_URL = `${PRESENCES_REPOSITORY_URL}/issues/new?template=broken_presence.yml`;
+export const PROJECT_NEW_PRESENCE_URL = `${PRESENCES_REPOSITORY_URL}/issues/new?template=new_presence.yml`;
 export const PROJECT_FEATURE_REQUEST_URL = `${PROJECT_ISSUES_URL}/new?template=feature_request.yml`;
+
 export const DISCORD_INVITE_URL = "https://discord.gg/MnZap7czgB";
+
 export const EXTENSION_ID = clientEnv.NEXT_PUBLIC_EXTENSION_ID;
 export const PROJECT_EXTENSION_DOWNLOAD_URL = `https://chromewebstore.google.com/detail/nowly/${EXTENSION_ID}`;
 export const PROJECT_EXTENSION_FILENAME = "Nowly-Extension.zip";

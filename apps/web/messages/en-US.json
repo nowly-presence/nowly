@@ -159,7 +159,9 @@
       "title": "Other request",
       "description": "Open a blank issue if your topic does not fit one of the guided forms."
     },
-    "browseIssues": "Browse existing issues"
+    "sectionPresences": "Presences",
+    "sectionTechnical": "Technical",
+    "sectionCommunity": "Community"
   },
   "support-redeem-page": {
     "badge": "Supporter",

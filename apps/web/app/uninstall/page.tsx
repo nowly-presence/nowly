@@ -2,7 +2,7 @@
 
 import { PageLayout } from "@/components/layout/page-layout";
 import { trackPublicAnalytics } from "@/lib/analytics-client";
-import { API_BASE_URL, PROJECT_NAME } from "@/lib/constants";
+import { API_BASE_URL } from "@/lib/constants";
 import { Check, LoaderCircle, Trash2, TriangleAlert } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -57,7 +57,7 @@ const UninstallPage = () => {
         </div>
 
         <h1 className="text-2xl font-semibold text-foreground">
-          {status === "done" ? "Cleanup completed" : `Uninstalling ${PROJECT_NAME}`}
+          {status === "done" ? "Cleanup completed" : `Uninstalling Nowly...`}
         </h1>
 
         <p className="mt-3 max-w-lg text-sm leading-6 text-muted-foreground">
