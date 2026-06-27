@@ -53,8 +53,8 @@ export const metadataToPlatform = (m: MetadataWithStats): Presence => {
     features: m.features?.[FALLBACK_LOCALE] ?? [],
     settings: m.settings ?? undefined,
     localized: {
-      description: m.description,
-      longDescription: m.longDescription,
+      description: m.description as Record<string, string>,
+      longDescription: m.longDescription as Record<string, string> | undefined,
       features: m.features,
     },
   };
