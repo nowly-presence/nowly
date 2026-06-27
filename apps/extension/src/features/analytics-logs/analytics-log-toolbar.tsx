@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { t } from "@/shared/i18n";
-import { Check, Copy, Trash2 } from "lucide-react";
+import { IconCheck, IconCopy, IconTrash } from "@tabler/icons-react";
 import type { FC } from "react";
 
 type Props = {
@@ -33,7 +33,7 @@ export const AnalyticsLogToolbar: FC<Props> = ({
         }`}
         title={t("analytics-logs-copy-title")}
       >
-        {copyConfirmed ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+        {copyConfirmed ? <IconCheck className="h-3.5 w-3.5" /> : <IconCopy className="h-3.5 w-3.5" />}
         {copyConfirmed ? t("analytics-logs-copied") : t("analytics-logs-copy-json")}
       </Button>
       <Button
@@ -47,7 +47,7 @@ export const AnalyticsLogToolbar: FC<Props> = ({
         }`}
         title={t("analytics-logs-clear-title")}
       >
-        {clearConfirmed ? <Check className="h-3.5 w-3.5" /> : <Trash2 className="h-3.5 w-3.5" />}
+        {clearConfirmed ? <IconCheck className="h-3.5 w-3.5" /> : <IconTrash className="h-3.5 w-3.5" />}
         {clearConfirmed ? t("analytics-logs-cleared") : t("analytics-logs-clear")}
       </Button>
     </div>

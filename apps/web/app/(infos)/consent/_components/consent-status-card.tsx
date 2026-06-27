@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, LoaderCircle } from "lucide-react";
+import { IconCheck, IconLoader2 } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import type { FC } from "react";
 
@@ -20,12 +20,12 @@ export const ConsentStatusCard: FC<Props> = ({ consentStatus, deviceId }) => {
 
       {consentStatus === "loading" ? (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <LoaderCircle className="h-4 w-4 animate-spin" />
+          <IconLoader2 className="h-4 w-4 animate-spin" />
           {t("loading")}
         </div>
       ) : consentStatus === "granted" ? (
         <div className="flex items-center gap-2 text-sm text-foreground">
-          <Check className="h-4 w-4 text-emerald-500" />
+          <IconCheck className="h-4 w-4 text-emerald-500" />
           {t("consent-granted")}
         </div>
       ) : consentStatus === "denied" ? (

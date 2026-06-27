@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { sendMessage } from "@/lib/messages";
 import { t } from "@/shared/i18n";
 import type { InstalledPresences } from "@/shared/types";
-import { Minus, Plus } from "lucide-react";
+import { IconMinus, IconPlus } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { useState } from "react";
 
@@ -59,7 +59,7 @@ export const SnoozeSheet: FC<Props> = ({ activeSlug, onClose, open, presences })
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card-2 text-foreground transition-colors hover:bg-card-hover"
             aria-label="Decrease duration"
           >
-            <Minus className="h-4 w-4" />
+            <IconMinus className="h-4 w-4" />
           </Button>
 
           <span className="min-w-18 text-center text-base font-semibold text-foreground tabular-nums">
@@ -73,7 +73,7 @@ export const SnoozeSheet: FC<Props> = ({ activeSlug, onClose, open, presences })
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card-2 text-foreground transition-colors hover:bg-card-hover"
             aria-label="Increase duration"
           >
-            <Plus className="h-4 w-4" />
+            <IconPlus className="h-4 w-4" />
           </Button>
         </div>
 

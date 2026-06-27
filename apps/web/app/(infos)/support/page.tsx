@@ -6,7 +6,7 @@ import {
   PROJECT_FEATURE_REQUEST_URL, PROJECT_ISSUES_URL, PROJECT_NEW_PRESENCE_URL
 } from "@/lib/constants";
 import { createMetadata } from "@/lib/seo";
-import { Bug, Lightbulb, MessageSquare, PlusCircle, Wrench } from "lucide-react";
+import { IconBug, IconBulb, IconMessage, IconCirclePlus, IconTool } from "@tabler/icons-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import type { ReactElement, SVGProps } from "react";
@@ -39,13 +39,13 @@ const Page = async (): Promise<ReactElement> => {
           title: t("brokenPresence.title"),
           description: t("brokenPresence.description"),
           href: PROJECT_BROKEN_PRESENCE_URL,
-          icon: Wrench,
+          icon: IconTool,
         },
         {
           title: t("newPresence.title"),
           description: t("newPresence.description"),
           href: PROJECT_NEW_PRESENCE_URL,
-          icon: PlusCircle,
+          icon: IconCirclePlus,
         },
       ],
     },
@@ -56,13 +56,13 @@ const Page = async (): Promise<ReactElement> => {
           title: t("bugReport.title"),
           description: t("bugReport.description"),
           href: PROJECT_BUG_REPORT_URL,
-          icon: Bug,
+          icon: IconBug,
         },
         {
           title: t("featureRequest.title"),
           description: t("featureRequest.description"),
           href: PROJECT_FEATURE_REQUEST_URL,
-          icon: Lightbulb,
+          icon: IconBulb,
         },
       ],
     },
@@ -80,7 +80,7 @@ const Page = async (): Promise<ReactElement> => {
           title: t("blankIssue.title"),
           description: t("blankIssue.description"),
           href: `${PROJECT_ISSUES_URL}/new`,
-          icon: MessageSquare,
+          icon: IconMessage,
         },
       ],
     },

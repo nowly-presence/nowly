@@ -3,7 +3,7 @@
 import type { FC, ReactNode } from "react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import { IconChevronDown, IconHelpCircle } from "@tabler/icons-react";
 
 type FaqItem = {
   question: string;
@@ -35,7 +35,7 @@ const FaqItemComponent: FC<FaqItemProps> = ({ item, isOpen, onToggle }) => {
         <span className="text-foreground group-hover:text-primary text-sm font-medium transition-colors">
           {item.question}
         </span>
-        <ChevronDown
+        <IconChevronDown
           className={cn(
             "text-muted-foreground group-hover:text-primary h-4 w-4 shrink-0 transition-all duration-200",
             isOpen && "rotate-180",
@@ -86,7 +86,7 @@ export const Faq: FC<FaqProps> = ({
       {title && (
         <div className="bg-muted/50 border-border/50 border-b px-4 py-3">
           <h3 className="text-foreground flex items-center gap-2 text-sm font-semibold">
-            <HelpCircle className="text-primary h-4 w-4" />
+            <IconHelpCircle className="text-primary h-4 w-4" />
             {title}
           </h3>
           {description && (

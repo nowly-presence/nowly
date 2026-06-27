@@ -1,8 +1,8 @@
-import { MonitorCheck, ShieldCheck, ServerOff } from "lucide-react";
+import { IconDeviceDesktopCheck, IconShieldCheck, IconServerOff } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import type { FC, ReactElement } from "react";
 
-const icons = [MonitorCheck, ShieldCheck, ServerOff] as const;
+const icons = [IconDeviceDesktopCheck, IconShieldCheck, IconServerOff] as const;
 
 export const HostTrust: FC = (): ReactElement => {
   const t = useTranslations("host-page");
@@ -27,7 +27,7 @@ export const HostTrust: FC = (): ReactElement => {
 
       <div className="grid gap-4 md:grid-cols-3">
         {items.map((item, index) => {
-          const Icon = icons[index] ?? ShieldCheck;
+          const Icon = icons[index] ?? IconShieldCheck;
 
           return (
             <article key={item.title} className="rounded-lg border border-border bg-card p-5">

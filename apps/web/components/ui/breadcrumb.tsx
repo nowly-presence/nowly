@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRightIcon, MoreHorizontalIcon } from "lucide-react";
+import { IconChevronRight, IconDots } from "@tabler/icons-react";
 import { Slot } from "radix-ui";
 import * as React from "react";
 
@@ -110,7 +110,7 @@ function BreadcrumbSeparator({
       )}
       {...props}
     >
-      {children ?? <ChevronRightIcon />}
+      {children ?? <IconChevronRight />}
     </li>
   );
 }
@@ -131,7 +131,7 @@ function BreadcrumbEllipsis({
       )}
       {...props}
     >
-      <MoreHorizontalIcon />
+      <IconDots />
       <span className="sr-only">More</span>
     </span>
   );

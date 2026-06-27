@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import { Check } from "lucide-react";
+import { IconCheck } from "@tabler/icons-react";
 import type { FC } from "react";
 
 type Props = {
@@ -22,6 +22,6 @@ export const Checkbox: FC<Props> = ({ ariaLabel, checked, id, onChange }): React
       checked ? "bg-accent" : "border border-border bg-card-2",
     )}
   >
-    {checked ? <Check className="h-3 w-3 stroke-3 text-white" /> : null}
+    {checked ? <IconCheck className="h-3 w-3 stroke-3 text-white" /> : null}
   </button>
 );

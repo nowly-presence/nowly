@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import { clientEnv } from "@nowly/env/client";
-import { ChevronDown, ExternalLink } from "lucide-react";
+import { IconChevronDown, IconExternalLink } from "@tabler/icons-react";
 import type { FC } from "react";
 
 type OpenInProps = {
@@ -34,7 +34,7 @@ export const OpenIn: FC<OpenInProps> = ({ slug, locale }) => {
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="sm">
           Open in
-          <ChevronDown className="size-4" />
+          <IconChevronDown className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-xl w-full" align="end">
@@ -46,7 +46,7 @@ export const OpenIn: FC<OpenInProps> = ({ slug, locale }) => {
           >
             {service.icon}
             <span>Open in {service.name}</span>
-            <ExternalLink className="text-muted-foreground ml-auto size-4" />
+            <IconExternalLink className="text-muted-foreground ml-auto size-4" />
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

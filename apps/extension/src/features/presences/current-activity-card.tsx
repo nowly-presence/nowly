@@ -3,7 +3,7 @@ import { getActivitySubtitle, getActivityTitle } from "@/lib/format";
 import { assetUrl } from "@/shared/api";
 import { t } from "@/shared/i18n";
 import type { CurrentActivity, InstalledPresences } from "@/shared/types";
-import { Disc3, Snowflake } from "lucide-react";
+import { IconDisc, IconSnowflake } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { useEffect, useState } from "react";
 import VinylAnimation from "@/features/presences/vinyl-animation";
@@ -144,7 +144,7 @@ export const CurrentActivityCard: FC<Props> = ({ activity, isLoading, presences 
           ) : presence ? (
             <img src={assetUrl(presence.metadata.slug, "icon")} alt="" className="h-8 w-8 object-contain" />
           ) : (
-            <Disc3 className="h-6 w-6 text-dim-foreground" />
+            <IconDisc className="h-6 w-6 text-dim-foreground" />
           )}
         </div>
 
@@ -153,7 +153,7 @@ export const CurrentActivityCard: FC<Props> = ({ activity, isLoading, presences 
           <p className="truncate text-xs text-muted-foreground">{subtitle}</p>
           {isSnoozed ? (
             <span className="mt-1 inline-flex items-center gap-1 rounded-md bg-card-2 px-1.5 py-0.5 text-[10px] text-muted-foreground">
-              <Snowflake className="h-3 w-3" />
+              <IconSnowflake className="h-3 w-3" />
               {t("snoozed")} {"\u00b7"} {snoozeRemaining}
             </span>
           ) : null}

@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { IconSearch } from "@tabler/icons-react";
 import type { FC } from "react";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
 
@@ -12,7 +12,7 @@ export const MarketplaceSearch: FC<Props> = ({ value, placeholder, onChange }) =
   <div className="relative mb-6">
     <InputGroup size="lg">
       <InputGroupAddon>
-        <Search className="size-5" />
+        <IconSearch className="size-5" />
       </InputGroupAddon>
 
       <InputGroupInput

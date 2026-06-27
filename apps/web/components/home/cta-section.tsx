@@ -3,7 +3,7 @@
 import { SponsorModal } from "@/components/l-ui/sponsor-modal";
 import { Button } from "@/components/ui/button";
 import { useBrowser } from "@/hooks/use-browser";
-import { CheckCircle, Download, Monitor, Shield } from "lucide-react";
+import { IconCircleCheck, IconDownload, IconDeviceDesktop, IconShield } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 
 import type { FC, ReactElement } from "react";
@@ -34,7 +34,7 @@ export const CtaSection: FC = (): ReactElement => {
             
             <div className="flex min-w-0 flex-wrap items-stretch justify-center gap-4">
               <Button onClick={handleDownload} variant="primary" size="lg">
-                <Download className="w-5 h-5" />
+                <IconDownload className="w-5 h-5" />
                 {browser ? t("download-for", { browser }) : t("download-desktop")}
               </Button>
 
@@ -68,12 +68,12 @@ export const CtaSection: FC = (): ReactElement => {
               </div>
 
               <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                <Shield className="w-4 h-4" />
+                <IconShield className="w-4 h-4" />
                 {t("open-source")}
               </div>
 
               <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                <CheckCircle className="w-4 h-4" />
+                <IconCircleCheck className="w-4 h-4" />
                 {t("free")}
               </div>
             </div>
@@ -84,7 +84,7 @@ export const CtaSection: FC = (): ReactElement => {
             <div className="absolute inset-0 bg-linear-to-b from-card to-surface opacity-30" />
             <div className="absolute inset-0 backdrop-blur-sm" />
             <div className="relative z-10 flex flex-col items-center justify-center px-8 py-24 text-center">
-              <Monitor className="w-16 h-16 text-accent mb-6" />
+              <IconDeviceDesktop className="w-16 h-16 text-accent mb-6" />
               <h2 className="text-2xl font-bold tracking-tight mb-3 text-foreground">
                 Version desktop uniquement
               </h2>

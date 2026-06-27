@@ -9,7 +9,7 @@ import { CATEGORIES } from "@/lib/data/categories";
 import { type PresenceCategory } from "@/lib/data/presences";
 import { ADSENSE_ENABLED } from "@/lib/constants";
 import { useAdStatus } from "@/providers/ad-status-provider";
-import { AlertCircle, ChevronLeft, ChevronRight, RefreshCcw } from "lucide-react";
+import { IconAlertCircle, IconChevronLeft, IconChevronRight, IconRefresh } from "@tabler/icons-react";
 import { useLocale, useTranslations } from "next-intl";
 import type { FC, ReactElement } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -181,7 +181,7 @@ export const MarketplaceClient: FC = (): ReactElement => {
                     className="p-1.5 rounded-lg hover:bg-accent/10 disabled:opacity-30 disabled:pointer-events-none transition-colors"
                     aria-label="Previous page"
                   >
-                    <ChevronLeft className="w-4 h-4" />
+                    <IconChevronLeft className="w-4 h-4" />
                   </button>
 
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -204,7 +204,7 @@ export const MarketplaceClient: FC = (): ReactElement => {
                     className="p-1.5 rounded-lg hover:bg-accent/10 disabled:opacity-30 disabled:pointer-events-none transition-colors"
                     aria-label="Next page"
                   >
-                    <ChevronRight className="w-4 h-4" />
+                    <IconChevronRight className="w-4 h-4" />
                   </button>
                 </>
               )}
@@ -216,13 +216,13 @@ export const MarketplaceClient: FC = (): ReactElement => {
 
         {isError && (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <AlertCircle className="w-10 h-10 text-destructive mb-4" />
+            <IconAlertCircle className="w-10 h-10 text-destructive mb-4" />
             <p className="text-muted-foreground mb-4">Failed to load platforms</p>
             <button
               onClick={() => refetch()}
               className="inline-flex items-center gap-2 text-sm text-accent hover:underline"
             >
-              <RefreshCcw className="w-4 h-4" />
+              <IconRefresh className="w-4 h-4" />
               Try again
             </button>
           </div>

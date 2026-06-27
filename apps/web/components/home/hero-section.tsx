@@ -3,7 +3,7 @@
 import { SponsorModal } from "@/components/l-ui/sponsor-modal";
 import { buttonVariants } from "@/components/ui/button";
 import HighlightedText from "@/components/ui/highlighted-text";
-import { ArrowRight } from "lucide-react";
+import { IconArrowRight } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
@@ -40,7 +40,7 @@ export const HeroSection: FC = (): ReactElement => {
               <div className="flex flex-wrap gap-3 mt-6">
                 <Link href="/library" className={buttonVariants({ variant: "primary", size: "md" })}>
                   {t("cta")}
-                  <ArrowRight className="h-4 w-4 ml-1" />
+                  <IconArrowRight className="h-4 w-4 ml-1" />
                 </Link>
               </div>
             </div>

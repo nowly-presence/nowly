@@ -2,7 +2,7 @@
 
 import { Dialog, DialogAction, DialogCancel, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogMedia, DialogTitle } from "@/components/ui/dialog";
 import type { Presence } from "@/lib/data/presences";
-import { Trash2, TriangleAlert } from "lucide-react";
+import { IconTrash, IconAlertTriangle } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import type { FC, ReactElement } from "react";
 
@@ -33,7 +33,7 @@ export const PresenceDetailDialogs: FC<Props> = ({
         <DialogContent variant="destructive">
           <DialogHeader>
             <DialogMedia>
-              <Trash2 className="h-5 w-5" />
+              <IconTrash className="h-5 w-5" />
             </DialogMedia>
 
             <DialogTitle>{t("uninstall-confirm-title")}</DialogTitle>
@@ -57,7 +57,7 @@ export const PresenceDetailDialogs: FC<Props> = ({
         <DialogContent>
           <DialogHeader>
             <DialogMedia>
-              <TriangleAlert className="h-5 w-5" />
+              <IconAlertTriangle className="h-5 w-5" />
             </DialogMedia>
 
             <DialogTitle>{t("downgrade-confirm-title")}</DialogTitle>

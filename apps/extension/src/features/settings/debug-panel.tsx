@@ -6,7 +6,7 @@ import type { NativeStatus } from "@/lib/messages";
 import { API_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
 import type { ExtensionSettings, PresenceDebug } from "@/shared/types";
-import { ChevronDown, RotateCcw, Terminal } from "lucide-react";
+import { IconChevronDown, IconRotateClockwise2, IconTerminal } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { useEffect, useState } from "react";
 
@@ -54,9 +54,9 @@ export const DebugPanel: FC<Props> = ({ debug, nativeStatus, onForceShowOnboardi
         onClick={() => setOpen((value) => !value)}
         className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-xs text-muted-foreground transition-colors hover:text-foreground"
       >
-        <Terminal className="h-3.5 w-3.5" />
+        <IconTerminal className="h-3.5 w-3.5" />
         <span className="min-w-0 flex-1 font-semibold text-foreground">{t("debug")}</span>
-        <ChevronDown className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+        <IconChevronDown className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
       </Button>
 
       {open && (
@@ -95,7 +95,7 @@ export const DebugPanel: FC<Props> = ({ debug, nativeStatus, onForceShowOnboardi
               }}
               className="inline-flex h-8 w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-card-2 px-2.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground"
             >
-              <RotateCcw className="h-3.5 w-3.5" />
+              <IconRotateClockwise2 className="h-3.5 w-3.5" />
               {t("developer-onboarding-reset-action")}
             </Button>
           </div>

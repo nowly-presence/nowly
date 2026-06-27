@@ -1,6 +1,6 @@
 import { createMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
-import { Code2, HeartHandshake, LockKeyhole, Sparkles } from "lucide-react";
+import { IconCode, IconHeartHandshake, IconLock, IconSparkles } from "@tabler/icons-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import type { FC, ReactElement } from "react";
@@ -22,10 +22,10 @@ const Page: FC = async (): Promise<ReactElement> => {
   }>;
 
   const cards = [
-    { ...sections[0], icon: Sparkles, className: "md:col-span-7", highlight: true },
-    { ...sections[1], icon: LockKeyhole, className: "md:col-span-5", highlight: false },
-    { ...sections[2], icon: HeartHandshake, className: "md:col-span-5", highlight: false },
-    { ...sections[3], icon: Code2, className: "md:col-span-7", highlight: true }
+    { ...sections[0], icon: IconSparkles, className: "md:col-span-7", highlight: true },
+    { ...sections[1], icon: IconLock, className: "md:col-span-5", highlight: false },
+    { ...sections[2], icon: IconHeartHandshake, className: "md:col-span-5", highlight: false },
+    { ...sections[3], icon: IconCode, className: "md:col-span-7", highlight: true }
   ];
 
   return (

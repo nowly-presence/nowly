@@ -2,7 +2,7 @@
 
 import { PageLayout } from "@/components/layout/page-layout";
 import { API_BASE_URL } from "@/lib/constants";
-import { TriangleAlert } from "lucide-react";
+import { IconAlertTriangle } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { ConsentStatusCard } from "./_components/consent-status-card";
@@ -109,7 +109,7 @@ const ConsentPage = () => {
 
         {showNoExtension ? (
           <section className="rounded-lg border border-border bg-card p-6 text-center">
-            <TriangleAlert className="mx-auto mb-3 h-8 w-8 text-warning" />
+            <IconAlertTriangle className="mx-auto mb-3 h-8 w-8 text-warning" />
             <p className="text-sm text-muted-foreground">{t("no-device")}</p>
           </section>
         ) : deviceId ? (

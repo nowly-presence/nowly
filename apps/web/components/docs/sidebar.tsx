@@ -3,7 +3,7 @@
 import { useSidebar } from "@/components/ui/sidebar-context";
 import type { DocNavigationItem } from "@/lib/docs/types";
 import { cn } from "@/lib/utils";
-import { X } from "lucide-react";
+import { IconX } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -78,7 +78,7 @@ export const AppSidebar: FC<AppSidebarProps> = ({ items }) => {
                 onClick={() => setMobileOpen(false)}
                 className="text-muted-foreground hover:text-foreground"
               >
-                <X size={20} />
+                <IconX size={20} />
               </button>
             </div>
             {sidebarContent}

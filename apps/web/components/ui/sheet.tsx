@@ -1,6 +1,6 @@
 "use client";
 
-import { XIcon } from "lucide-react";
+import { IconX } from "@tabler/icons-react";
 import { Dialog as SheetPrimitive } from "radix-ui";
 import * as React from "react";
 
@@ -105,7 +105,7 @@ function SheetContent({
               size="icon-sm"
               className="absolute right-4 top-4 text-muted-foreground"
             >
-              <XIcon />
+              <IconX />
               <span className="sr-only">Close</span>
             </Button>
           </SheetPrimitive.Close>

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { t } from "@/shared/i18n";
-import { Power, Trash2, X } from "lucide-react";
+import { IconPower, IconTrash, IconX } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 
 type Props = {
@@ -27,7 +27,7 @@ export const PresenceActions: FC<Props> = ({ enabled, onClose, onRemove, onToggl
       onClick={onToggle}
       className="flex h-8 items-center gap-1.5 rounded-lg border border-border bg-card-2 px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
     >
-      <Power className="h-4 w-4" />
+      <IconPower className="h-4 w-4" />
       {enabled ? t("disable") : t("enable")}
     </Button>
     <Button
@@ -38,7 +38,7 @@ export const PresenceActions: FC<Props> = ({ enabled, onClose, onRemove, onToggl
       onClick={onRemove}
       className="flex h-8 items-center gap-1.5 rounded-lg border border-border bg-card-2 px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:text-destructive"
     >
-      <Trash2 className="h-4 w-4" />
+      <IconTrash className="h-4 w-4" />
       {t("uninstall")}
     </Button>
     <Button
@@ -49,7 +49,7 @@ export const PresenceActions: FC<Props> = ({ enabled, onClose, onRemove, onToggl
       onClick={onClose}
       className="flex h-8 items-center gap-1.5 rounded-lg border border-border bg-card-2 px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
     >
-      <X className="h-4 w-4" />
+      <IconX className="h-4 w-4" />
       {t("close")}
     </Button>
   </div>

@@ -2,7 +2,7 @@ import { buildDiagnosticSnapshot, isHostChecking, YOUTUBE_TEST_URL } from "@/fea
 import { DiscordIcon } from "@/lib/icons";
 import { extensionDetailsUrl, openUrl, siteUrl } from "@/shared/browser-links";
 import { t } from "@/shared/i18n";
-import { BadgeInfo, BarChart3, ExternalLink, Lock, MonitorDown, Puzzle, ShoppingBag, Youtube } from "lucide-react";
+import { IconInfoCircle, IconChartBar, IconExternalLink, IconLock, IconDeviceDesktopDown, IconPuzzle2, IconShoppingBag, IconBrandYoutube } from "@tabler/icons-react";
 import { ActionButton } from "@/features/onboarding/action-button";
 import { AnalyticsChecklist } from "@/features/onboarding/analytics-checklist";
 import { LinkActionButton } from "@/features/onboarding/link-action-button";
@@ -39,9 +39,9 @@ export const useOnboardingSteps = ({
   const showHostActions = snapshot.userScriptsActive && !snapshot.hostDetected && hostStatus !== "loading";
 
   return [
-    { icon: Puzzle, status: "success", title: t("onboarding-step-extension-title"), message: t("onboarding-step-extension-success") },
+    { icon: IconPuzzle2, status: "success", title: t("onboarding-step-extension-title"), message: t("onboarding-step-extension-success") },
     {
-      icon: Lock,
+      icon: IconLock,
       status: snapshot.userScriptsActive ? "success" : "error",
       title: t("onboarding-step-user-scripts-title"),
       message: snapshot.userScriptsActive
@@ -61,13 +61,13 @@ export const useOnboardingSteps = ({
         ) : (
           <ActionButton primary onClick={() => openUrl(extensionDetailsUrl({ useFirefoxAddonsPage: true }))}>
             {t("onboarding-user-scripts-open-page")}
-            <ExternalLink className="h-4 w-4" />
+            <IconExternalLink className="h-4 w-4" />
           </ActionButton>
         )
       ) : undefined,
     },
     {
-      icon: MonitorDown,
+      icon: IconDeviceDesktopDown,
       status: snapshot.userScriptsActive ? hostStatus : "loading",
       title: t("onboarding-step-host-title"),
       message: snapshot.hostDetected
@@ -79,7 +79,7 @@ export const useOnboardingSteps = ({
         <div className="flex flex-wrap justify-center gap-2">
           <ActionButton primary onClick={() => openUrl(siteUrl("/host"))}>
             {t("diagnostic-install-host")}
-            <ExternalLink className="h-4 w-4" />
+            <IconExternalLink className="h-4 w-4" />
           </ActionButton>
           <ActionButton onClick={onConnectNative}>{t("diagnostic-check-connection")}</ActionButton>
         </div>
@@ -99,7 +99,7 @@ export const useOnboardingSteps = ({
       ) : undefined,
     },
     {
-      icon: ShoppingBag,
+      icon: IconShoppingBag,
       status: youtubeInstallStatus,
       title: t("onboarding-step-presence-title"),
       message: snapshot.youtubePresenceInstalled
@@ -110,12 +110,12 @@ export const useOnboardingSteps = ({
       actions: snapshot.discordConnected && !snapshot.youtubePresenceInstalled ? (
         <ActionButton primary onClick={() => openUrl(siteUrl("/library/youtube"))}>
           {t("diagnostic-install-youtube")}
-          <ExternalLink className="h-4 w-4" />
+          <IconExternalLink className="h-4 w-4" />
         </ActionButton>
       ) : undefined,
     },
     {
-      icon: Youtube,
+      icon: IconBrandYoutube,
       status: youtubeTestStatus,
       title: t("onboarding-step-youtube-title"),
       message: snapshot.youtubeActivityDetected
@@ -126,12 +126,12 @@ export const useOnboardingSteps = ({
       actions: snapshot.youtubePresenceInstalled && !snapshot.youtubeActivityDetected ? (
         <ActionButton primary onClick={() => openUrl(YOUTUBE_TEST_URL)}>
           {t("diagnostic-test-youtube")}
-          <ExternalLink className="h-4 w-4" />
+          <IconExternalLink className="h-4 w-4" />
         </ActionButton>
       ) : undefined,
     },
     {
-      icon: BarChart3,
+      icon: IconChartBar,
       status: snapshot.youtubeActivityDetected
         ? analyticsConsentDecided
           ? "success"
@@ -154,7 +154,7 @@ export const useOnboardingSteps = ({
               {t("onboarding-analytics-decline")}
             </QuietActionButton>
             <LinkActionButton onClick={() => openUrl(siteUrl("/data-collected"))}>
-              <BadgeInfo className="h-3.5 w-3.5" />
+              <IconInfoCircle className="h-3.5 w-3.5" />
               {t("onboarding-analytics-learn-more")}
             </LinkActionButton>
           </div>

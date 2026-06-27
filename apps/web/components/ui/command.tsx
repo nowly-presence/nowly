@@ -15,7 +15,7 @@ import {
   InputGroupAddon,
 } from "@/components/ui/input-group";
 import { cn } from "@/lib/utils";
-import { CheckIcon, SearchIcon } from "lucide-react";
+import { IconCheck, IconSearch } from "@tabler/icons-react";
 
 function Command({
   className,
@@ -78,7 +78,7 @@ function CommandInput({
         className="border-border bg-card-2"
       >
         <InputGroupAddon>
-          <SearchIcon className="size-4 text-muted-foreground" />
+          <IconSearch className="size-4 text-muted-foreground" />
         </InputGroupAddon>
 
         <CommandPrimitive.Input
@@ -195,7 +195,7 @@ function CommandItem({
     >
       {children}
 
-      <CheckIcon className="ml-auto opacity-0 group-data-[checked=true]/command-item:opacity-100" />
+      <IconCheck className="ml-auto opacity-0 group-data-[checked=true]/command-item:opacity-100" />
     </CommandPrimitive.Item>
   );
 }

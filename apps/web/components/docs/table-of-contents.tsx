@@ -2,7 +2,7 @@
 
 import type { TocItem } from "@/lib/docs/types";
 import { cn } from "@/lib/utils";
-import { ListTree, X } from "lucide-react";
+import { IconListTree, IconX } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type FC } from "react";
 
@@ -67,7 +67,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
         className="xl:hidden fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-accent text-background px-4 py-3 shadow-lg"
         aria-label={t("open-table-of-contents")}
       >
-        <ListTree size={18} />
+        <IconListTree size={18} />
         <span className="text-sm font-medium">{t("toc")}</span>
       </button>
 
@@ -87,7 +87,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
                 onClick={() => setMobileOpen(false)}
                 className="text-muted-foreground hover:text-foreground"
               >
-                <X size={20} />
+                <IconX size={20} />
               </button>
             </div>
             <ul className="space-y-2">

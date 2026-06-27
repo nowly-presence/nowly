@@ -1,4 +1,4 @@
-import { AlertCircle, AlertTriangle, Info } from "lucide-react";
+import { IconAlertCircle, IconAlertTriangle, IconInfoCircle } from "@tabler/icons-react";
 import type { FC, ReactNode } from "react";
 
 type CalloutType = "info" | "warning" | "error";
@@ -9,9 +9,9 @@ type CalloutProps = {
 };
 
 const icons: Record<CalloutType, ReactNode> = {
-  info: <Info size={18} className="shrink-0 mt-0.5 text-accent" />,
-  warning: <AlertTriangle size={18} className="shrink-0 mt-0.5 text-warning" />,
-  error: <AlertCircle size={18} className="shrink-0 mt-0.5 text-destructive" />,
+  info: <IconInfoCircle size={18} className="shrink-0 mt-0.5 text-accent" />,
+  warning: <IconAlertTriangle size={18} className="shrink-0 mt-0.5 text-warning" />,
+  error: <IconAlertCircle size={18} className="shrink-0 mt-0.5 text-destructive" />,
 };
 
 const borders: Record<CalloutType, string> = {

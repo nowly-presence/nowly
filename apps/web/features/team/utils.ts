@@ -1,5 +1,5 @@
 import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/icons";
-import { Globe, Mail } from "lucide-react";
+import { IconGlobe, IconMail } from "@tabler/icons-react";
 import type { FC, SVGProps } from "react";
 import type { GithubMember, GithubSocialAccount, SocialLink } from "./types";
 
@@ -39,7 +39,7 @@ export const getSocialIcon = (account: GithubSocialAccount): FC<SVGProps<SVGSVGE
   if (provider === "twitter" || provider === "x" || url.includes("x.com") || url.includes("twitter.com")) return XIcon;
   if (provider === "linkedin" || url.includes("linkedin.com")) return LinkedInIcon;
 
-  return Globe;
+  return IconGlobe;
 };
 
 export const getSocialLinks = (member: GithubMember, labels: { github: string }): SocialLink[] => {
@@ -55,7 +55,7 @@ export const getSocialLinks = (member: GithubMember, labels: { github: string })
     links.push({
       label: profile.email,
       href: `mailto:${profile.email}`,
-      icon: Mail,
+      icon: IconMail,
     });
   }
 
@@ -66,7 +66,7 @@ export const getSocialLinks = (member: GithubMember, labels: { github: string })
       links.push({
         label: getHostLabel(profile.blog),
         href,
-        icon: Globe,
+        icon: IconGlobe,
       });
       seen.add(href);
     }

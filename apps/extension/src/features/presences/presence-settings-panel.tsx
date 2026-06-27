@@ -6,7 +6,7 @@ import { Select } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { sendMessage } from "@/lib/messages";
 import { getLocale, t } from "@/shared/i18n";
-import { Settings, Trash2 } from "lucide-react";
+import { IconSettings, IconTrash } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -85,7 +85,7 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, onRemove, slug }
         onClick={() => setOpen(true)}
         className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
       >
-        <Settings className="h-4 w-4" />
+        <IconSettings className="h-4 w-4" />
       </Button>
 
       {open && (
@@ -172,7 +172,7 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, onRemove, slug }
                 onClick={onRemove}
                 className="flex w-full items-center justify-center gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/15"
               >
-                <Trash2 className="h-4 w-4" />
+                <IconTrash className="h-4 w-4" />
                 {t("uninstall")}
               </Button>
             </div>

@@ -13,7 +13,7 @@ allowBuilds:
 catalog:
   # apps
   dotenv: ^17.4.2
-  lucide-react: ^1.21.0
+  '@tabler/icons-react': ^3.44.0
   react: ^19.2.7
   react-dom: ^19.2.7
   zod: ^4.4.3

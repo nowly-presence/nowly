@@ -2,7 +2,7 @@
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AppleIcon, LinuxIcon, WindowsIcon } from "@/components/icons";
-import { ShieldCheck, ShieldX } from "lucide-react";
+import { IconShieldCheck, IconShieldX } from "@tabler/icons-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { usePlatform } from "@/hooks/use-platform";
 import { CDN_INSTALLER_BASE_URL, HOST_VERSION_URL } from "@/lib/constants";
@@ -113,7 +113,7 @@ export const HostContent: FC = (): ReactElement => {
 
         {activePlatform === "windows" && (
           <Alert variant="destructive">
-            <ShieldX />
+            <IconShieldX />
             <AlertTitle>{t("unsigned-title")}</AlertTitle>
             <AlertDescription>{t("unsigned-desc")}</AlertDescription>
           </Alert>
@@ -121,7 +121,7 @@ export const HostContent: FC = (): ReactElement => {
 
         {activePlatform === "macos" && (
           <Alert>
-            <ShieldCheck />
+            <IconShieldCheck />
             <AlertTitle>{t("signed-title")}</AlertTitle>
             <AlertDescription>{t("signed-desc")}</AlertDescription>
           </Alert>

@@ -3,7 +3,7 @@
 import { Spinner } from "@/components/ui/spinner";
 import { useOs } from "@/hooks/use-os";
 import { cn } from "@/lib/utils";
-import { Download, Trash2 } from "lucide-react";
+import { IconDownload, IconTrash } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import type { FC } from "react";
 
@@ -48,7 +48,7 @@ export const PresenceHeaderActions: FC<Props> = ({
                   : "bg-foreground text-background hover:bg-[#e4e4e7]",
             )}
           >
-            {loading ? <Spinner /> : <Download className="w-4 h-4" />}
+            {loading ? <Spinner /> : <IconDownload className="w-4 h-4" />}
             {loading ? t("installing") : needsUpdate ? t("update-action") : t("install-action")}
           </button>
         )}
@@ -58,7 +58,7 @@ export const PresenceHeaderActions: FC<Props> = ({
             onClick={onUninstall}
             className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-destructive/10 px-4 py-2 text-sm font-semibold text-destructive transition-all border border-destructive/20 hover:bg-destructive/20 sm:w-auto sm:py-1.5"
           >
-            <Trash2 className="w-4 h-4" />
+            <IconTrash className="w-4 h-4" />
             {t("uninstall-action")}
           </button>
         )}

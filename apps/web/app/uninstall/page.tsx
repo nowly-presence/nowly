@@ -3,7 +3,7 @@
 import { PageLayout } from "@/components/layout/page-layout";
 import { trackPublicAnalytics } from "@/lib/analytics-client";
 import { API_BASE_URL } from "@/lib/constants";
-import { Check, LoaderCircle, Trash2, TriangleAlert } from "lucide-react";
+import { IconCheck, IconLoader2, IconTrash, IconAlertTriangle } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -48,11 +48,11 @@ const UninstallPage = () => {
       <main className="mx-auto flex min-h-[60vh] w-full max-w-2xl flex-col items-center justify-center px-6 py-16 text-center">
         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-border bg-card">
           {status === "done" ? (
-            <Check className="h-6 w-6 text-emerald-500" />
+            <IconCheck className="h-6 w-6 text-emerald-500" />
           ) : status === "error" ? (
-            <TriangleAlert className="h-6 w-6 text-warning" />
+            <IconAlertTriangle className="h-6 w-6 text-warning" />
           ) : (
-            <LoaderCircle className="h-6 w-6 animate-spin text-muted-foreground" />
+            <IconLoader2 className="h-6 w-6 animate-spin text-muted-foreground" />
           )}
         </div>
 
@@ -72,7 +72,7 @@ const UninstallPage = () => {
           <section className="mt-8 w-full rounded-lg border border-border bg-card p-4 text-left">
             <div className="flex items-start gap-3">
               <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background">
-                <Trash2 className="h-4 w-4 text-muted-foreground" />
+                <IconTrash className="h-4 w-4 text-muted-foreground" />
               </div>
               <div className="min-w-0 flex-1">
                 <h2 className="text-sm font-semibold text-foreground">Usage data</h2>

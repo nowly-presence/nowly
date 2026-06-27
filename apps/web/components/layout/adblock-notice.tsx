@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useAdStatus } from "@/providers/ad-status-provider";
-import { BadgeInfo, X } from "lucide-react";
+import { IconInfoCircle, IconX } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type FC, type ReactElement } from "react";
 
@@ -122,7 +122,7 @@ export const AdblockNotice: FC<Props> = ({ enabled }): ReactElement | null => {
       <div className="flex items-start gap-3 p-4">
         <div className="flex min-w-0 flex-1 items-start gap-3">
           <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg border border-accent/20 bg-accent/10 text-accent">
-            <BadgeInfo className="size-4" />
+            <IconInfoCircle className="size-4" />
           </span>
 
           <div className="min-w-0">
@@ -142,7 +142,7 @@ export const AdblockNotice: FC<Props> = ({ enabled }): ReactElement | null => {
             canDismiss ? "opacity-40" : "pointer-events-none opacity-0"
           }`}
         >
-          <X className="size-4" />
+          <IconX className="size-4" />
         </Button>
       </div>
     </aside>

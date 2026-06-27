@@ -3,7 +3,7 @@
 import { AdSenseSlot } from "@/components/ads/adsense-slot";
 import { ADSENSE_CLIENT_ID, ADSENSE_ENABLED, LIBRARY_AD_SLOT } from "@/lib/constants";
 import { useAdStatus } from "@/providers/ad-status-provider";
-import { Megaphone } from "lucide-react";
+import { IconSpeakerphone } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import type { FC, ReactElement } from "react";
 
@@ -29,7 +29,7 @@ export const MarketplaceAdCard: FC = (): ReactElement | null => {
       <div className="p-5">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 overflow-hidden bg-accent/10 text-accent">
-            <Megaphone className="w-6 h-6" />
+            <IconSpeakerphone className="w-6 h-6" />
           </div>
 
           <div className="flex-1 min-w-0">

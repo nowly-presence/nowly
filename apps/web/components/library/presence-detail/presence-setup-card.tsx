@@ -3,7 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { PROJECT_EXTENSION_DOWNLOAD_URL } from "@/lib/constants";
 import type { Presence } from "@/lib/data/presences";
-import { ExternalLink } from "lucide-react";
+import { IconExternalLink } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import type { FC, ReactElement } from "react";
 import type { ExtensionDiagnostic } from "./extension-diagnostic";
@@ -45,7 +45,7 @@ export const PresenceSetupCard: FC<Props> = ({
           className="mt-3 inline-flex items-center gap-2 rounded-lg border border-border bg-card-2 px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-card-hover"
         >
           {t("extension-install-action")}
-          <ExternalLink className="size-4" />
+          <IconExternalLink className="size-4" />
         </a>
       </Card>
     );
@@ -74,7 +74,7 @@ export const PresenceSetupCard: FC<Props> = ({
           className="mt-3 inline-flex items-center gap-2 rounded-lg border border-success/20 bg-success/10 px-3 py-2 text-sm font-semibold text-success transition-colors hover:bg-success/20"
         >
           {isYoutube ? t("test-youtube-action") : t("open-supported-site-action")}
-          <ExternalLink className="size-4" />
+          <IconExternalLink className="size-4" />
         </a>
       </Card>
     );
@@ -102,7 +102,7 @@ export const PresenceSetupCard: FC<Props> = ({
             className="inline-flex items-center gap-2 rounded-lg border border-border bg-card-2 px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground"
           >
             {t("open-supported-site-action")}
-            <ExternalLink className="size-4" />
+            <IconExternalLink className="size-4" />
           </a>
         ) : null}
       </div>

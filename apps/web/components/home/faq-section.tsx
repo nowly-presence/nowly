@@ -2,7 +2,7 @@ import { DiscordIcon } from "@/components/icons";
 import { buttonVariants } from "@/components/ui/button";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { ArrowRight } from "lucide-react";
+import { IconArrowRight } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
@@ -34,7 +34,7 @@ export const FaqSection: FC = (): ReactElement => {
             <div className="flex flex-wrap gap-3 mt-8">
               <Link href="/faq" className={buttonVariants({ variant: "primary", size: "md" })}>
                 {t("faq-cta")}
-                <ArrowRight className="h-4 w-4" />
+                <IconArrowRight className="h-4 w-4" />
               </Link>
 
               <a

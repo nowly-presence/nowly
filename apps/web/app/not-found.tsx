@@ -1,7 +1,7 @@
 "use client";
 
 import { buttonVariants } from "@/components/ui/button";
-import { Frown, Home } from "lucide-react";
+import { IconMoodSad, IconHome } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { ReactElement } from "react";
@@ -13,7 +13,7 @@ const NotFound = (): ReactElement => {
     <div className="flex flex-1 items-center justify-center px-6">
       <div className="text-center max-w-sm">
         <div className="mb-8">
-          <Frown className="mx-auto h-12 w-12 text-muted-foreground" />
+          <IconMoodSad className="mx-auto h-12 w-12 text-muted-foreground" />
         </div>
 
         <h1 className="text-6xl font-extrabold tracking-tight mb-4">404</h1>
@@ -23,7 +23,7 @@ const NotFound = (): ReactElement => {
         </p>
 
         <Link href="/" className={buttonVariants({ variant: "primary", size: "md" })}>
-          <Home className="w-4 h-4" />
+          <IconHome className="w-4 h-4" />
           {t("back-to-home")}
         </Link>
       </div>

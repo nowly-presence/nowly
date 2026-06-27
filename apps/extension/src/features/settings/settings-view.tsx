@@ -9,7 +9,7 @@ import type { NativeStatus } from "@/lib/messages";
 import { WEB_BASE_URL } from "@/shared/constants";
 import { resolveLocale, t, type LocalePreference } from "@/shared/i18n";
 import type { ExtensionSettings, PresenceDebug } from "@/shared/types";
-import { ChevronDown, ExternalLink, RefreshCw } from "lucide-react";
+import { IconChevronDown, IconExternalLink, IconRefresh } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { useEffect, useState } from "react";
 import { DebugPanel } from "@/features/settings/debug-panel";
@@ -111,7 +111,7 @@ export const SettingsView: FC<Props> = ({
               className={`${hostUpdateActionClassName} border border-accent/20 bg-accent/10 text-accent hover:bg-accent/20`}
             >
               {t("host-download-update")}
-              <ExternalLink className="h-3.5 w-3.5" />
+              <IconExternalLink className="h-3.5 w-3.5" />
             </a>
             <Button
               variant="unstyled"
@@ -120,7 +120,7 @@ export const SettingsView: FC<Props> = ({
               disabled={isCheckingHostVersion}
               className={`${hostUpdateActionClassName} border border-border bg-card-2 text-muted-foreground hover:bg-card-hover hover:text-foreground disabled:cursor-not-allowed disabled:opacity-60`}
             >
-              <RefreshCw className={`h-3.5 w-3.5 ${isCheckingHostVersion ? "animate-spin" : ""}`} />
+              <IconRefresh className={`h-3.5 w-3.5 ${isCheckingHostVersion ? "animate-spin" : ""}`} />
               {t("host-check-update")}
             </Button>
           </div>
@@ -146,7 +146,7 @@ export const SettingsView: FC<Props> = ({
           <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-muted-foreground">
             <LocaleFlag locale={resolveLocale(localePreference)} />
           </div>
-          <ChevronDown className="pointer-events-none absolute inset-y-0 right-3 my-auto h-4 w-4 text-muted-foreground" />
+          <IconChevronDown className="pointer-events-none absolute inset-y-0 right-3 my-auto h-4 w-4 text-muted-foreground" />
         </div>
       </section>
 
@@ -205,7 +205,7 @@ export const SettingsView: FC<Props> = ({
           className="mt-3 inline-flex h-8 items-center gap-2 rounded-lg border border-border bg-card-2 px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground"
         >
           {t("data-management")}
-          <ExternalLink className="h-3.5 w-3.5" />
+          <IconExternalLink className="h-3.5 w-3.5" />
         </a>
       </section>
 

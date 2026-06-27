@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Check, Copy } from "lucide-react";
+import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { type FC, useCallback, useState } from "react";
 
 type CopyButtonProps = {
@@ -27,9 +27,9 @@ export const CopyButton: FC<CopyButtonProps> = ({ content, className }) => {
         "text-muted-foreground hover:text-foreground transition-colors",
         className,
       )}
-      aria-label={copied ? "Copied" : "Copy code"}
+      aria-label={copied ? "Copied" : "IconCopy code"}
     >
-      {copied ? <Check size={14} /> : <Copy size={14} />}
+      {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
     </button>
   );
 };

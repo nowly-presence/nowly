@@ -3,7 +3,7 @@
 import { Card, CardTitle } from "@/components/ui/card";
 import { getLocalizedFeatures } from "@/lib/data/localized";
 import type { Presence } from "@/lib/data/presences";
-import { CheckCircle } from "lucide-react";
+import { IconCircleCheck } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import type { FC, ReactElement } from "react";
 
@@ -21,7 +21,7 @@ export const FeaturesCard: FC<Props> = ({ platform, locale }): ReactElement => {
       <ul className="space-y-3">
         {getLocalizedFeatures(platform, locale).map((feature, index) => (
           <li key={index} className="flex items-center gap-3 text-muted-foreground">
-            <CheckCircle className="w-5 h-5 shrink-0" color={platform.iconColor} />
+            <IconCircleCheck className="w-5 h-5 shrink-0" color={platform.iconColor} />
             {feature}
           </li>
         ))}

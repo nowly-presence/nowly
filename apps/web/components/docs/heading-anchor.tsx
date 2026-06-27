@@ -1,6 +1,6 @@
 import { createHeadingId } from "@/lib/docs/types";
 import { cn } from "@/lib/utils";
-import { Link } from "lucide-react";
+import { IconLink } from "@tabler/icons-react";
 import type { FC, ReactNode } from "react";
 
 type HeadingAnchorProps = {
@@ -18,9 +18,9 @@ export const HeadingAnchor: FC<HeadingAnchorProps> = ({ as: Tag, id, children, c
       <a
         href={`#${anchorId}`}
         className="absolute -left-6 top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100"
-        aria-label={`Link to ${children}`}
+        aria-label={`IconLink to ${children}`}
       >
-        <Link size={16} className="text-muted-foreground" />
+        <IconLink size={16} className="text-muted-foreground" />
       </a>
       {children}
     </Tag>

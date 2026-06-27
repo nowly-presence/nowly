@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { IconX } from "@tabler/icons-react";
 import type { FC, ReactElement, ReactNode } from "react";
 import { useCallback, useEffect, useRef } from "react";
 
@@ -130,7 +130,7 @@ export const Sheet: FC<Props> = ({ children, onClose, open, position = "right", 
             aria-label="Close"
             className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
           >
-            <X className="h-4 w-4" />
+            <IconX className="h-4 w-4" />
           </Button>
         </div>
 

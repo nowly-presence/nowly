@@ -3,7 +3,7 @@
 import { KofiIcon } from "@/components/icons";
 import { Dialog, DialogCancel, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogMedia, DialogTitle } from "@/components/ui/dialog";
 import { PROJECT_EXTENSION_DOWNLOAD_URL } from "@/lib/constants";
-import { Coffee } from "lucide-react";
+import { IconCoffee } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 
 interface SponsorModalProps {
@@ -36,7 +36,7 @@ export function SponsorModal({ isOpen, onClose, downloadOnAction = false }: Spon
       <DialogContent variant="default">
         <DialogHeader>
           <DialogMedia>
-            <Coffee className="w-4 h-4" />
+            <IconCoffee className="w-4 h-4" />
           </DialogMedia>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>

@@ -3,7 +3,7 @@ import type { NativeStatus } from "@/lib/messages";
 import { extensionDetailsUrl, openUrl, siteUrl } from "@/shared/browser-links";
 import { t } from "@/shared/i18n";
 import type { CurrentActivity, InstalledPresences, UserScriptsStatus } from "@/shared/types";
-import { Clipboard, ExternalLink } from "lucide-react";
+import { IconClipboard, IconExternalLink } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { useMemo } from "react";
 import { buildDiagnosticSnapshot, isHostChecking, YOUTUBE_TEST_URL } from "@/features/diagnostics/diagnostic-status";
@@ -67,7 +67,7 @@ export const UserDiagnosticCard: FC<Props> = ({
           onClick={copySupportDiagnostic}
           className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg border border-border bg-card-2 px-2.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground"
         >
-          <Clipboard className="h-3.5 w-3.5" />
+          <IconClipboard className="h-3.5 w-3.5" />
           {copied ? t("support-diagnostic-copied") : t("support-diagnostic-copy")}
         </Button>
       </div>
@@ -88,7 +88,7 @@ export const UserDiagnosticCard: FC<Props> = ({
           action={!snapshot.userScriptsActive ? (
             <SmallAction onClick={() => openUrl(extensionDetailsUrl())}>
               {t("onboarding-user-scripts-open-page")}
-              <ExternalLink className="h-3 w-3" />
+              <IconExternalLink className="h-3 w-3" />
             </SmallAction>
           ) : undefined}
         />
@@ -105,7 +105,7 @@ export const UserDiagnosticCard: FC<Props> = ({
             <>
               <SmallAction onClick={() => openUrl(siteUrl("/host"))}>
                 {t("diagnostic-install-host")}
-                <ExternalLink className="h-3 w-3" />
+                <IconExternalLink className="h-3 w-3" />
               </SmallAction>
               <SmallAction onClick={onConnectNative}>{t("diagnostic-check-connection")}</SmallAction>
             </>
@@ -134,7 +134,7 @@ export const UserDiagnosticCard: FC<Props> = ({
           action={!snapshot.presenceInstalled ? (
             <SmallAction onClick={() => openUrl(siteUrl("/library/youtube"))}>
               {t("diagnostic-install-youtube")}
-              <ExternalLink className="h-3 w-3" />
+              <IconExternalLink className="h-3 w-3" />
             </SmallAction>
           ) : undefined}
         />
@@ -150,7 +150,7 @@ export const UserDiagnosticCard: FC<Props> = ({
           action={!snapshot.activityDetected ? (
             <SmallAction onClick={() => openUrl(youtubeInstalled ? YOUTUBE_TEST_URL : siteUrl("/library/youtube"))}>
               {youtubeInstalled ? t("diagnostic-test-youtube") : t("diagnostic-install-youtube")}
-              <ExternalLink className="h-3 w-3" />
+              <IconExternalLink className="h-3 w-3" />
             </SmallAction>
           ) : undefined}
         />

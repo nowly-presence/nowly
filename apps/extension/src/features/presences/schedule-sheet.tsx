@@ -5,7 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { sendMessage } from "@/lib/messages";
 import { t } from "@/shared/i18n";
 import type { ExtensionSettings, InstalledPresences } from "@/shared/types";
-import { Check, Clock, LoaderCircle } from "lucide-react";
+import { IconCheck, IconClock, IconLoader2 } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { useState } from "react";
 
@@ -75,7 +75,7 @@ export const ScheduleSheet: FC<Props> = ({ activeSlug, globalSchedule, onClose, 
 
         <div className="flex items-center justify-between rounded-lg border border-border bg-card-2 px-3 py-2">
           <div className="flex items-center gap-2">
-            <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+            <IconClock className="h-3.5 w-3.5 text-muted-foreground" />
             <span className="text-xs text-foreground">{t("schedule-time-range")}</span>
           </div>
           <Switch checked={useTimeRange} onChange={setUseTimeRange} ariaLabel="Toggle time range" />
@@ -114,9 +114,9 @@ export const ScheduleSheet: FC<Props> = ({ activeSlug, globalSchedule, onClose, 
           className="w-full rounded-lg border border-border bg-card-2 px-3 py-2 text-xs font-medium text-foreground transition-colors hover:bg-card-hover"
         >
           {saved === "saving" ? (
-            <LoaderCircle className="mx-auto h-4 w-4 animate-spin" />
+            <IconLoader2 className="mx-auto h-4 w-4 animate-spin" />
           ) : saved === "done" ? (
-            <Check className="mx-auto h-4 w-4" />
+            <IconCheck className="mx-auto h-4 w-4" />
           ) : (
             t("schedule")
           )}

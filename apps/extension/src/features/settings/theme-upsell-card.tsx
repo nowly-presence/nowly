@@ -1,4 +1,4 @@
-import { Palette } from "lucide-react";
+import { IconPalette } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { WEB_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
@@ -16,7 +16,7 @@ export const ThemeUpsellCard: FC = (): ReactElement => (
     className="group flex items-center gap-3 rounded-lg border border-border bg-card p-3 transition-colors hover:border-border-light hover:bg-card-hover"
   >
     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-card-2 text-foreground">
-      <Palette className="h-6 w-6" strokeWidth={2.2} />
+      <IconPalette className="h-6 w-6" strokeWidth={2.2} />
     </span>
 
     <span className="min-w-0 flex-1">

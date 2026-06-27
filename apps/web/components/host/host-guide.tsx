@@ -1,5 +1,5 @@
 import type { Platform } from "@/hooks/use-platform";
-import { AlertTriangle, LibraryBig } from "lucide-react";
+import { IconAlertTriangle, IconBooks } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
@@ -41,7 +41,7 @@ export const HostGuide: FC<Props> = ({ platform }): ReactElement => {
                   className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
                 >
                   {item.link.label}
-                  <LibraryBig className="size-4" />
+                  <IconBooks className="size-4" />
                 </Link>
               ) : null}
             </div>
@@ -51,7 +51,7 @@ export const HostGuide: FC<Props> = ({ platform }): ReactElement => {
 
       {platform === "windows" ? (
         <div className="mt-8 flex gap-3 rounded-xl border border-warning/30 bg-warning/10 p-4">
-          <AlertTriangle className="mt-0.5 size-5 shrink-0 text-warning" />
+          <IconAlertTriangle className="mt-0.5 size-5 shrink-0 text-warning" />
           <div>
             <h3 className="text-sm font-semibold text-foreground">{t("windows-protect-title")}</h3>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t("windows-protect-description")}</p>

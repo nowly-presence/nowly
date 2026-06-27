@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ExternalLink } from "lucide-react";
+import { IconExternalLink } from "@tabler/icons-react";
 import Link from "next/link";
 import type { FC, ReactElement, SVGProps } from "react";
 
@@ -36,7 +36,7 @@ export const SupportCard: FC<SupportCardProps> = ({
         >
           <Icon className="size-5" />
         </span>
-        <ExternalLink className="size-4 text-dim-foreground transition-colors group-hover:text-foreground" />
+        <IconExternalLink className="size-4 text-dim-foreground transition-colors group-hover:text-foreground" />
       </div>
 
       <h2 className="mb-2 wrap-break-word text-lg font-semibold text-foreground">{title}</h2>

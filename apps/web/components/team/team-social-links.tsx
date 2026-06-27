@@ -1,4 +1,4 @@
-import { ExternalLink } from "lucide-react";
+import { IconExternalLink } from "@tabler/icons-react";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
 import type { SocialLink } from "@/features/team/types";
@@ -26,7 +26,7 @@ export const TeamSocialLinks: FC<Props> = ({ links }): ReactElement => {
             </span>
 
             <span className="min-w-0 truncate">{link.label}</span>
-            <ExternalLink className="size-3.5 shrink-0 text-dim-foreground" />
+            <IconExternalLink className="size-3.5 shrink-0 text-dim-foreground" />
           </Link>
         );
       })}

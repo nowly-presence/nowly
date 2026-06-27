@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { t } from "@/shared/i18n";
 import type { SupporterStatus } from "@/shared/types";
-import { CheckCircle2, Copy } from "lucide-react";
+import { IconCircleCheckFilled, IconCopy } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { useState } from "react";
 
@@ -39,7 +39,7 @@ export const SupporterThankYouOverlay: FC<Props> = ({ status, onClose }): ReactE
 
           <div className="mt-5 rounded-lg border border-border bg-background/70 p-3 text-left">
             <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
-              <CheckCircle2 className="size-4 text-[#FEE961]" />
+              <IconCircleCheckFilled className="size-4 text-[#FEE961]" />
               {t("supporter-discord-title")}
             </div>
             <p className="mt-2 text-xs leading-5 text-muted-foreground">{t("supporter-discord-description")}</p>
@@ -50,7 +50,7 @@ export const SupporterThankYouOverlay: FC<Props> = ({ status, onClose }): ReactE
                 className="mt-3 flex w-full items-center justify-between gap-2 rounded-md border border-border bg-card-2 px-3 py-2 text-left font-mono text-[11px] text-foreground transition-colors hover:bg-card-hover"
               >
                 <span className="min-w-0 truncate">{deviceId}</span>
-                <Copy className="size-3.5 shrink-0 text-muted-foreground" />
+                <IconCopy className="size-3.5 shrink-0 text-muted-foreground" />
               </button>
             ) : null}
             <p className="mt-2 text-xs leading-5 text-dim-foreground">

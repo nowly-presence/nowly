@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import type { Contributor } from "@/lib/data/presences";
 import { cn } from "@/lib/utils";
-import { DownloadIcon, GitBranchIcon } from "lucide-react";
+import { IconDownload, IconGitBranch } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import type { FC, ReactElement } from "react";
 import { useMemo, useState } from "react";
@@ -110,7 +110,7 @@ export const VersionUpdatesCard: FC<VersionUpdatesCardProps> = ({ currentVersion
               disabled={isCurrentVersion || selectedUpdate.disabled}
               onClick={() => onInstallVersion(selectedUpdate.version)}
             >
-              <DownloadIcon className="size-4" />
+              <IconDownload className="size-4" />
               {selectedUpdate.ctaLabel ?? installLabel}
             </Button>
           </CardAction>
@@ -197,7 +197,7 @@ export const VersionUpdatesCard: FC<VersionUpdatesCardProps> = ({ currentVersion
           {releaseSourceUrl ? (
             <a href={releaseSourceUrl} target="_blank" rel="noopener noreferrer">
               <Badge variant="outline">
-                <GitBranchIcon className="size-3" />
+                <IconGitBranch className="size-3" />
                 {selectedUpdate.pr ?? selectedUpdate.commitSha?.slice(0, 7)}
               </Badge>
             </a>

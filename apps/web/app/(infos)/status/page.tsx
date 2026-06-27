@@ -2,7 +2,7 @@ import { StatusHistory } from "@/components/status/status-history";
 import { fetchStatusReport, ServiceStatus, statusBadgeClasses, StatusServiceId } from "@/features/status/status";
 import { createMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
-import { Activity, Database, Globe2, HardDriveDownload, LucideIcon } from "lucide-react";
+import { IconActivity, IconDatabase, IconGlobe, IconServer2, TablerIcon } from "@tabler/icons-react";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { ReactElement } from "react";
@@ -17,11 +17,11 @@ const generateMetadata = (): Metadata => {
 
 export { generateMetadata };
 
-const serviceIconMap: Record<StatusServiceId, LucideIcon> = {
-  website: Globe2,
-  api: Activity,
-  library: Database,
-  cdn: HardDriveDownload,
+const serviceIconMap: Record<StatusServiceId, TablerIcon> = {
+  website: IconGlobe,
+  api: IconActivity,
+  library: IconDatabase,
+  cdn: IconServer2,
 };
 
 function formatRelativeTime(locale: string, generatedAt: string): string {

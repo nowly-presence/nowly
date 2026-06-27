@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Users } from "lucide-react";
+import { IconMapPin, IconUsers } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { TeamSocialLinks } from "./team-social-links";
 import type { GithubProfile, SocialLink, TeamMember } from "@/features/team/types";
@@ -45,14 +45,14 @@ export const TeamMemberCard: FC<Props> = ({ member, profile, socials, labels }):
 
             {profile?.location ? (
               <p className="mt-1 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground md:text-sm">
-                <MapPin className="size-3.5 shrink-0" />
+                <IconMapPin className="size-3.5 shrink-0" />
                 <span className="truncate">{profile.location}</span>
               </p>
             ) : null}
 
             {profile ? (
               <p className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
-                <Users className="size-3.5 shrink-0" />
+                <IconUsers className="size-3.5 shrink-0" />
                 <span>{formatNumber(profile.followers)} {labels.followers}</span>
                 <span className="size-1 rounded-full bg-border shrink-0" />
                 <span>{formatNumber(profile.following)} {labels.following}</span>

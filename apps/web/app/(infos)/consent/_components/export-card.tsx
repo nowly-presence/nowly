@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { API_BASE_URL } from "@/lib/constants";
-import { Check, Download, LoaderCircle, TriangleAlert } from "lucide-react";
+import { IconCheck, IconDownload, IconLoader2, IconAlertTriangle } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useState, type FC } from "react";
 
@@ -51,21 +51,21 @@ export const ExportCard: FC<Props> = ({ deviceId, token }) => {
       <div className="flex items-center gap-3">
         <Button variant="secondary" size="sm" onClick={handleExport} disabled={status === "loading"}>
           {status === "loading" ? (
-            <LoaderCircle className="h-4 w-4 animate-spin" />
+            <IconLoader2 className="h-4 w-4 animate-spin" />
           ) : (
-            <Download className="h-4 w-4" />
+            <IconDownload className="h-4 w-4" />
           )}
           {status === "loading" ? t("loading") : t("export-button")}
         </Button>
         {status === "done" && (
           <span className="flex items-center gap-1 text-xs text-emerald-500">
-            <Check className="h-3 w-3" />
+            <IconCheck className="h-3 w-3" />
             {t("export-success")}
           </span>
         )}
         {status === "error" && (
           <span className="flex items-center gap-1 text-xs text-warning">
-            <TriangleAlert className="h-3 w-3" />
+            <IconAlertTriangle className="h-3 w-3" />
             {t("export-error")}
           </span>
         )}

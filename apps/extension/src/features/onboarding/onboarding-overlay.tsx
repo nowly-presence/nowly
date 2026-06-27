@@ -1,6 +1,6 @@
 import { Header } from "@/components/layout/header";
 import { t } from "@/shared/i18n";
-import { CheckCircle2 } from "lucide-react";
+import { IconCircleCheckFilled } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { useEffect, useRef, useState } from "react";
 import { LocalePicker } from "@/features/onboarding/locale-picker";
@@ -94,7 +94,7 @@ export const OnboardingOverlay: FC<OnboardingOverlayProps> = ({
       ? {
         actions: undefined,
         details: <p className="mt-2 text-xs leading-5 text-dim-foreground">{t("onboarding-ready-message")}</p>,
-        icon: CheckCircle2,
+        icon: IconCircleCheckFilled,
         status: "success",
         title: t("onboarding-ready-title"),
         message: t("onboarding-ready-countdown", { seconds: String(readyCountdown) }),

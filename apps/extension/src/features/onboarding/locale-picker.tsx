@@ -1,7 +1,7 @@
 import { LocaleFlag } from "@/components/shared/locale-flag";
 import { Select } from "@/components/ui/select";
 import { t, type LocalePreference } from "@/shared/i18n";
-import { ChevronDown } from "lucide-react";
+import { IconChevronDown } from "@tabler/icons-react";
 import { useMemo, type FC } from "react";
 import { marketplaceLocale } from "@/features/onboarding/onboarding.utils";
 
@@ -35,7 +35,7 @@ export const LocalePicker: FC<Props> = ({ localePreference, onLocaleChange }) =>
       <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center">
         <LocaleFlag locale={marketplaceLocale(localePreference)} />
       </div>
-      <ChevronDown className="pointer-events-none absolute inset-y-0 right-2 my-auto h-3 w-3 text-muted-foreground" />
+      <IconChevronDown className="pointer-events-none absolute inset-y-0 right-2 my-auto h-3 w-3 text-muted-foreground" />
     </div>
   );
 };

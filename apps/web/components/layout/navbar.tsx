@@ -4,7 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useBrowser } from "@/hooks/use-browser";
 import { cn } from "@/lib/utils";
-import { Download, Menu } from "lucide-react";
+import { IconDownload, IconMenu2 } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
@@ -35,7 +35,7 @@ export const Navbar: FC = (): ReactElement => {
                   className="inline-flex items-center justify-center rounded-lg p-2 text-muted-foreground hover:text-foreground hover:bg-card-hover transition-colors"
                   aria-label="Open menu"
                 >
-                  <Menu size={22} />
+                  <IconMenu2 size={22} />
                 </button>
               </SheetTrigger>
 
@@ -81,7 +81,7 @@ export const Navbar: FC = (): ReactElement => {
               href="/#download"
               className={buttonVariants({ size: "md", variant: "accent" })}
             >
-              <Download size={16} />
+              <IconDownload size={16} />
 
               <span className="hidden sm:inline">
                 {browser ? t("download-for", { browser }) : t("download-desktop")}

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useAdStatus } from "@/providers/ad-status-provider";
-import { CheckCircle2, KeyRound, Loader2, Puzzle, XCircle } from "lucide-react";
+import { IconCircleCheckFilled, IconKey, IconLoader2, IconPuzzle2, IconCircleX } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import { type FormEvent, type ReactElement, useEffect, useState } from "react";
 
@@ -118,7 +118,7 @@ export const RedeemSupportCard = (): ReactElement => {
     <Card className="mx-auto w-full max-w-xl">
       <CardHeader>
         <div className="mb-2 flex size-11 items-center justify-center rounded-lg border border-accent/20 bg-accent/10 text-accent">
-          <KeyRound className="size-5" />
+          <IconKey className="size-5" />
         </div>
         <CardTitle>{t("card-title")}</CardTitle>
         <CardDescription>{t("card-description")}</CardDescription>
@@ -141,7 +141,7 @@ export const RedeemSupportCard = (): ReactElement => {
             className="w-full"
             disabled={!extensionDetected || state.status === "submitting"}
           >
-            {state.status === "submitting" ? <Loader2 className="size-4 animate-spin" /> : <KeyRound className="size-4" />}
+            {state.status === "submitting" ? <IconLoader2 className="size-4 animate-spin" /> : <IconKey className="size-4" />}
             {state.status === "submitting" ? t("activating") : t("activate")}
           </Button>
         </form>
@@ -149,7 +149,7 @@ export const RedeemSupportCard = (): ReactElement => {
         {!extensionDetected && (
           <div className="mt-4 rounded-lg border border-border bg-card-2 p-4 text-sm leading-6 text-muted-foreground">
             <div className="mb-1 flex items-center gap-2 font-semibold text-foreground">
-              <Puzzle className="size-4 text-accent" />
+              <IconPuzzle2 className="size-4 text-accent" />
               {t("extension-missing-title")}
             </div>
             {t("extension-missing")}
@@ -159,7 +159,7 @@ export const RedeemSupportCard = (): ReactElement => {
         {state.status === "success" && (
           <div className="mt-4 rounded-lg border border-emerald-500/25 bg-emerald-500/10 p-4 text-sm leading-6 text-emerald-100">
             <div className="mb-1 flex items-center gap-2 font-semibold text-emerald-50">
-              <CheckCircle2 className="size-4" />
+              <IconCircleCheckFilled className="size-4" />
               {t("success-title")}
             </div>
             {t("success", {
@@ -172,7 +172,7 @@ export const RedeemSupportCard = (): ReactElement => {
         {state.status === "error" && (
           <div className="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm leading-6 text-destructive-foreground">
             <div className="mb-1 flex items-center gap-2 font-semibold">
-              <XCircle className="size-4" />
+              <IconCircleX className="size-4" />
               {t("error-title")}
             </div>
             {state.message}

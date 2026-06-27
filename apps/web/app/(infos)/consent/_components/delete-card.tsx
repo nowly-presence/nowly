@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { API_BASE_URL } from "@/lib/constants";
-import { Check, LoaderCircle, Trash2, TriangleAlert } from "lucide-react";
+import { IconCheck, IconLoader2, IconTrash, IconAlertTriangle } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useState, type FC } from "react";
 
@@ -59,9 +59,9 @@ export const DeleteCard: FC<Props> = ({ deviceId, token, onDeleted }) => {
           disabled={status === "loading" || status === "done"}
         >
           {status === "loading" ? (
-            <LoaderCircle className="h-4 w-4 animate-spin" />
+            <IconLoader2 className="h-4 w-4 animate-spin" />
           ) : (
-            <Trash2 className="h-4 w-4" />
+            <IconTrash className="h-4 w-4" />
           )}
           {status === "loading" ? t("loading") : t("delete-button")}
         </Button>
@@ -69,13 +69,13 @@ export const DeleteCard: FC<Props> = ({ deviceId, token, onDeleted }) => {
 
       {status === "done" && (
         <p className="mt-3 flex items-center gap-1 text-xs text-emerald-500">
-          <Check className="h-3 w-3" />
+          <IconCheck className="h-3 w-3" />
           {t("delete-success")}
         </p>
       )}
       {status === "error" && (
         <p className="mt-3 flex items-center gap-1 text-xs text-warning">
-          <TriangleAlert className="h-3 w-3" />
+          <IconAlertTriangle className="h-3 w-3" />
           {t("delete-error")}
         </p>
       )}

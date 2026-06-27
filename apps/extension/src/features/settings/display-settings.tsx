@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { t } from "@/shared/i18n";
 import type { ExtensionSettings, PresenceDisplayMode } from "@/shared/types";
-import { LayoutGrid, List } from "lucide-react";
+import { IconLayoutGrid, IconList } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 
 type Props = {
@@ -27,7 +27,7 @@ export const DisplaySettings: FC<Props> = ({ settings, onSettingsChange }): Reac
             : "border-border bg-card-2 text-muted-foreground hover:bg-card-hover hover:text-foreground"
         }`}
       >
-        <LayoutGrid className="h-4 w-4" />
+        <IconLayoutGrid className="h-4 w-4" />
         {t("display-category")}
       </Button>
       <Button
@@ -40,7 +40,7 @@ export const DisplaySettings: FC<Props> = ({ settings, onSettingsChange }): Reac
             : "border-border bg-card-2 text-muted-foreground hover:bg-card-hover hover:text-foreground"
         }`}
       >
-        <List className="h-4 w-4" />
+        <IconList className="h-4 w-4" />
         {t("display-alphabetical")}
       </Button>
     </div>

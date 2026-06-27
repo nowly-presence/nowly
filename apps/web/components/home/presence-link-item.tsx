@@ -1,7 +1,7 @@
 import { ASSET_URL } from "@/lib/assets";
 import { getLocalizedDescription } from "@/lib/data/localized";
 import type { Presence } from "@/lib/data/presences";
-import { ArrowUpRight, Download, Users } from "lucide-react";
+import { IconArrowUpRight, IconDownload, IconUsers } from "@tabler/icons-react";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
 
@@ -48,7 +48,7 @@ export const PresenceLinkItem: FC<Props> = ({ presence, locale }) => {
           <div className="min-w-0 flex-1">
             <div className="mb-1 flex items-center justify-between gap-3">
               <h3 className="truncate font-semibold text-foreground">{presence.name}</h3>
-              <ArrowUpRight className="size-4 shrink-0 text-dim-foreground transition-colors group-hover:text-foreground" />
+              <IconArrowUpRight className="size-4 shrink-0 text-dim-foreground transition-colors group-hover:text-foreground" />
             </div>
 
             <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">
@@ -59,12 +59,12 @@ export const PresenceLinkItem: FC<Props> = ({ presence, locale }) => {
 
         <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-dim-foreground">
           <span className="flex items-center gap-1.5">
-            <Download className="size-3.5" />
+            <IconDownload className="size-3.5" />
             {numberFormat.format(presence.totalInstalls)}
           </span>
 
           <span className="flex items-center gap-1.5">
-            <Users className="size-3.5" />
+            <IconUsers className="size-3.5" />
             {numberFormat.format(presence.activeUsers)}
           </span>
         </div>

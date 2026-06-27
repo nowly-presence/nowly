@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { IconArrowRight } from "@tabler/icons-react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
@@ -39,7 +39,7 @@ export const PresencesSection: FC<Props> = ({ presences }): ReactElement | null 
           <Button asChild variant="outline" size="md" className="w-fit">
             <Link href="/library">
               {t("library-cta")}
-              <ArrowRight className="size-4" />
+              <IconArrowRight className="size-4" />
             </Link>
           </Button>
         </div>

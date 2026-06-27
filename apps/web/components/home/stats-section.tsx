@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { Download, Users } from "lucide-react";
+import { IconDownload, IconUsers } from "@tabler/icons-react";
 import { useLocale, useTranslations } from "next-intl";
 import type { ComponentType, FC, ReactElement } from "react";
 import type { HomeStats } from "@/hooks/use-home-stats";
@@ -32,8 +32,8 @@ export const StatsSection: FC<Props> = ({ stats }): ReactElement => {
   const numberFormatter = new Intl.NumberFormat(locale);
 
   const items: StatItem[] = [
-    { key: "total-users", icon: Users, value: stats?.totalUsers },
-    { key: "installed-presences", icon: Download, value: stats?.installedPresenceCount },
+    { key: "total-users", icon: IconUsers, value: stats?.totalUsers },
+    { key: "installed-presences", icon: IconDownload, value: stats?.installedPresenceCount },
   ];
 
   return (

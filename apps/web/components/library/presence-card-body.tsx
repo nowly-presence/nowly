@@ -3,7 +3,7 @@
 import { ASSET_URL } from "@/lib/assets";
 import { getLocalizedDescription } from "@/lib/data/localized";
 import type { Presence } from "@/lib/data/presences";
-import { Download, Users } from "lucide-react";
+import { IconDownload, IconUsers } from "@tabler/icons-react";
 import type { FC } from "react";
 
 type Props = {
@@ -46,12 +46,12 @@ export const PresenceCardBody: FC<Props> = ({ presence, locale }) => {
 
       <div className="flex items-center gap-4 text-xs text-dim-foreground">
         <span className="flex items-center gap-1.5">
-          <Download className="size-3.5" />
+          <IconDownload className="size-3.5" />
           {numberFormat.format(presence.totalInstalls)}
         </span>
 
         <span className="flex items-center gap-1.5">
-          <Users className="size-3.5" />
+          <IconUsers className="size-3.5" />
           {numberFormat.format(presence.activeUsers)}
         </span>
       </div>

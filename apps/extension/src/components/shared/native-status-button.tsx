@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import type { NativeStatus } from "@/lib/messages";
 import { t } from "@/shared/i18n";
-import { RefreshCw, Wifi, WifiOff } from "lucide-react";
+import { IconRefresh, IconWifi, IconWifiOff } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 export const NativeStatusButton: FC<Props> = ({ nativeStatus, onConnect }): ReactElement => {
   const connected = Boolean(nativeStatus.connected || nativeStatus.discordConnected);
   const isConnecting = nativeStatus.status === "connecting";
-  const Icon = connected ? Wifi : WifiOff;
+  const Icon = connected ? IconWifi : IconWifiOff;
   const label = nativeStatus.discordConnected
     ? t("diagnostic-discord-connected-message")
     : connected
@@ -36,7 +36,7 @@ export const NativeStatusButton: FC<Props> = ({ nativeStatus, onConnect }): Reac
     >
       <Icon className={iconClass} />
       <span>{label}</span>
-      <RefreshCw className={`h-3.5 w-3.5 ${isConnecting ? "animate-spin" : "opacity-60 group-hover:opacity-100"}`} />
+      <IconRefresh className={`h-3.5 w-3.5 ${isConnecting ? "animate-spin" : "opacity-60 group-hover:opacity-100"}`} />
     </Button>
   );
 };

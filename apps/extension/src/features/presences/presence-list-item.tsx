@@ -3,7 +3,7 @@ import { Switch } from "@/components/ui/switch";
 import { assetUrl } from "@/shared/api";
 import { t } from "@/shared/i18n";
 import type { StoredPresence } from "@/shared/types";
-import { Calendar, ExternalLink } from "lucide-react";
+import { IconCalendar, IconExternalLink } from "@tabler/icons-react";
 import type { FC, MouseEvent, ReactElement } from "react";
 import { PresenceSettingsPanel } from "@/features/presences/presence-settings-panel";
 
@@ -51,7 +51,7 @@ export const PresenceListItem: FC<Props> = ({ onOpenMarketplace, onRemove, onSch
             className="inline-flex h-6 shrink-0 items-center gap-1 rounded-md border border-border bg-card-2 px-2 text-[11px] font-semibold text-foreground transition-colors hover:bg-card-hover"
           >
             {t("presence-update-action")}
-            <ExternalLink className="h-3 w-3" />
+            <IconExternalLink className="h-3 w-3" />
           </Button>
         </div>
       ) : null}
@@ -102,7 +102,7 @@ export const PresenceListItem: FC<Props> = ({ onOpenMarketplace, onRemove, onSch
               className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
               aria-label="Schedule"
             >
-              <Calendar className="h-4 w-4" />
+              <IconCalendar className="h-4 w-4" />
             </Button>
           ) : null}
 

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { t } from "@/shared/i18n";
-import { Calendar, RefreshCw, Snowflake, Sun, Wand2 } from "lucide-react";
+import { IconCalendar, IconRefresh, IconSnowflake, IconSun, IconWand } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { useRef } from "react";
 
@@ -39,7 +39,7 @@ export const ActionBar: FC<Props> = ({ activeSlug, backgroundAnimation, isChecki
           onClick={onUnsnoozeClick}
           className="inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
         >
-          <Sun className="h-3.5 w-3.5" />
+          <IconSun className="h-3.5 w-3.5" />
           {t("clear-snooze")}
         </Button>
       ) : (
@@ -51,7 +51,7 @@ export const ActionBar: FC<Props> = ({ activeSlug, backgroundAnimation, isChecki
           onClick={onSnoozeClick}
           className="inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground disabled:opacity-40 disabled:pointer-events-none"
         >
-          <Snowflake className="h-3.5 w-3.5" />
+          <IconSnowflake className="h-3.5 w-3.5" />
           {t("snooze")}
         </Button>
       )}
@@ -67,7 +67,7 @@ export const ActionBar: FC<Props> = ({ activeSlug, backgroundAnimation, isChecki
             onClick={onScheduleClick}
             className="inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
           >
-            <Calendar className="h-3.5 w-3.5" />
+            <IconCalendar className="h-3.5 w-3.5" />
             {t("schedule")}
           </Button>
         </>
@@ -84,7 +84,7 @@ export const ActionBar: FC<Props> = ({ activeSlug, backgroundAnimation, isChecki
         disabled={isCheckingUpdates}
         className="inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground disabled:opacity-50"
       >
-        <RefreshCw className={`h-3.5 w-3.5 ${isCheckingUpdates ? "animate-spin" : ""}`} />
+        <IconRefresh className={`h-3.5 w-3.5 ${isCheckingUpdates ? "animate-spin" : ""}`} />
         {t("check-updates")}
       </Button>
 
@@ -100,7 +100,7 @@ export const ActionBar: FC<Props> = ({ activeSlug, backgroundAnimation, isChecki
             : "text-muted-foreground hover:text-foreground"
         }`}
       >
-        <Wand2 className="h-3.5 w-3.5" />
+        <IconWand className="h-3.5 w-3.5" />
         {t("bg-animation")}
       </Button>
     </div>
