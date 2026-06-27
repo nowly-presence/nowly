@@ -4,275 +4,52 @@
 
 Open-source Discord Rich Presence for the modern web.
 
-Automatically display what you're watching, listening to, reading, or doing on Discord through a browser extension and a lightweight Nowly Host.
-
-[Features](#features) -
-[Architecture](#architecture) - 
-[Development](#development) -
-[Contributing](#contributing)
+Automatically display what you're watching, listening to, reading, or doing on Discord.
 
 </div>
 
 ---
 
-## What is Nowly?
+## About
 
 Nowly is an open-source alternative to PreMiD.
 
-It detects activity directly from supported websites, transforms it into a standardized presence format, and sends it to Discord through a local Nowly Host.
+It detects activity from supported websites and updates your Discord Rich Presence through a lightweight local host.
 
-The project is built around three independent layers:
-
-- Browser extension
-- Nowly Host (Local process)
-- Presence registry
-
-This separation keeps the system maintainable, scalable, and easy to contribute to.
+No activity data is sent to external servers.
 
 ---
 
-## Features
+## Repositories
 
-- Open-source
-- Discord Rich Presence
-- Chrome and __Firefox*__ support
-- Native Discord IPC integration
-- Presence marketplace and registry
-- Type-safe presence SDK
-- Automated presence validation
-- Asset management and image proxying
-- Public API
-- Modern monorepo architecture
-
-*__\* Firefox__ support is experimental and may not work as expected. The extension is currently only available on the Chrome Web Store.*
-
----
-
-## How It Works
-
-```txt
-┌──────────────────┐
-│ YouTube, Twitch  │
-│ Disney+, Netflix │
-│ ...              │
-└────────┬─────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Browser         │
-│ Extension       │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Nowly Host     │
-│ (Local Process) │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Discord Desktop │
-└─────────────────┘
-```
-
-The extension detects activity from websites.
-
-Website-specific presence scripts generate standardized activity payloads which are sent to a local Nowly Host. Nowly Host communicates with Discord through IPC and updates the user's Rich Presence.
-
-**No activity data is sent to any external server.** The extension and Nowly Host run entirely on the user's machine.
+| Repository | Description |
+|------------|-------------|
+| [`nowly`](https://github.com/nowly-presence/nowly) | Main project, website and ecosystem |
+| [`presences`](https://github.com/nowly-presence/presences) | Community-maintained website integrations |
+| [`sdk`](https://github.com/nowly-presence/sdk) | Type-safe SDK for building presences |
+| [`cli`](https://github.com/nowly-presence/cli) | Official CLI |
+| `internal-cli` | Internal release & publishing tools |
 
 ---
 
 ## Architecture
 
-```txt
-                            nowly monorepo
-
-  packages/websites                 apps/api                  apps/web
-  presence sources                  registry, assets,         public site,
-  metadata, assets, CLI             ratings, auth, status     docs, library
-          |                              |                         |
-          | pnpm presence build          | serves data             | reads API
-          v                              v                         v
-  +-------------------+         +-------------------+      +-------------------+
-  | built presences   |         | api.nowly.me      |      | nowly.me          |
-  +---------+---------+         +---------+---------+      +-------------------+
-            |
-            v
-  +-------------------+      native messaging      +-------------------+
-  | apps/extension    | -------------------------> | apps/native       |
-  | MV3 + side panel  |                            | Go host           |
-  +---------+---------+ <------------------------- +---------+---------+
-            |                                                |
-            v                                                v
-  +-------------------+                            +-------------------+
-  | target websites   |                            | Discord Desktop   |
-  +-------------------+                            +-------------------+
+```text
+Website -> Browser Extension
+             └──> Nowly Host -> Discord Desktop
 ```
 
 ---
 
-## Repository Structure
+## Getting Started
 
-```txt
-.
-├── apps
-│   ├── api
-│   ├── extension
-│   ├── native
-│   └── web
-│
-├── packages
-│   ├── env
-│   ├── internal-cli
-│   ├── locales
-│   ├── presence
-│   ├── shared
-│   └── websites
-│
-└── .github
-```
+Install the browser extension from the Chrome Web Store.
 
-| Package | Description |
-|----------|-------------|
-| `apps/api` | Fastify API, registry, assets, ratings, status |
-| `apps/extension` | Browser extension runtime |
-| `apps/native` | Native Discord bridge written in Go |
-| `apps/web` | Website, documentation, library |
-| `packages/presence` | Presence SDK and runtime types |
-| `packages/shared` | Shared schemas and utilities |
-| `packages/websites` | Presence registry and build system |
+Developers interested in creating presences should start here:
 
----
-
-## Requirements
-
-- Node.js 22+
-- pnpm 10+
-- Go 1.23+
-- Discord Desktop
-- PostgreSQL (API development)
-
----
-
-## Installation
-
-```bash
-pnpm install
-```
-
-Environment variables are fully typed through `@nowly/env`.
-
----
-
-## Development
-
-### Website
-
-```bash
-pnpm dev:web
-```
-
-### API
-
-```bash
-pnpm prisma:generate
-pnpm dev:api
-```
-
-### Presences
-
-```bash
-pnpm presence:build
-```
-
-### Extension
-
-```bash
-pnpm build:extension:dev
-```
-
-Load:
-
-```txt
-for Chrome: chrome://extensions
-for Firefox: about:debugging
-```
-
-Then import:
-
-```txt
-apps/extension/dist/[chrome|firefox]
-```
-
-## Nowly Host
-
-Nowly Host is responsible for communicating with Discord through IPC and receiving activity updates from the browser extension.
-
-```bash
-cd apps/native
-make build
-```
-
-> [!NOTE]
-> Unless you're developing Nowly Host itself, you do not need separate host installations for development and production builds.
->
-> The host downloaded from `https://nowly.me/host` works with Chrome development builds, Chrome production builds, Firefox development builds, and future Firefox production builds.
->
-> Native messaging authorization is based on the browser extension ID. When developing the extension, keep a fixed extension key so the generated extension ID remains stable. If the extension ID changes, Nowly Host will reject requests because the ID no longer matches the registered allowed extensions.
-
----
-
-## Creating a Presence
-
-Create a new presence:
-
-```bash
-pnpm presence init "Website Name"
-```
-
-Build:
-
-```bash
-pnpm presence build website-slug
-```
-
-Validate:
-
-```bash
-pnpm presence validate
-```
-
-Example structure:
-
-```txt
-packages/websites/src/Y/YouTube/
-├── metadata.json
-├── presence.ts
-└── assets
-    ├── icon.png
-    ├── logo.png
-    └── thumbnail.jpg
-```
-
----
-
-## Useful Commands
-
-```bash
-pnpm dev:web
-pnpm dev:api
-
-pnpm build:extension
-pnpm build:extension:dev
-
-pnpm presence
-pnpm presence:build
-pnpm presence:validate
-
-pnpm typecheck
-pnpm lint
-```
+- SDK → `nowly-presence/sdk`
+- CLI → `nowly-presence/cli`
+- Presences → `nowly-presence/presences`
 
 ---
 
@@ -280,37 +57,7 @@ pnpm lint
 
 Contributions are welcome.
 
-Before opening a pull request, run the checks related to the layer you modified:
-
-```bash
-pnpm lint
-pnpm typecheck
-```
-
-Extension:
-
-```bash
-pnpm --filter @nowly/extension lint
-```
-
-API:
-
-```bash
-pnpm --filter @nowly/api test
-```
-
-Presences:
-
-```bash
-pnpm presence validate
-```
-
-Nowly Host:
-
-```bash
-cd apps/native
-go test ./...
-```
+Please open issues and pull requests in the repository related to the component you're modifying.
 
 ---
 
@@ -357,4 +104,4 @@ Thank you to all of our supporters 💕
 
 ## License
 
-MIT
+[BUSL-1.1](./LICENSE)
