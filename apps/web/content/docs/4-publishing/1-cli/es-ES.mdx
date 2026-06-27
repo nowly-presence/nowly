@@ -3,18 +3,23 @@ title: CLI
 description: Usa la CLI de Nowly para crear, compilar, validar y probar presences localmente.
 ---
 
+The Nowly CLI is published as `@nowly/cli` on npm. Install it globally:
+```bash
+pnpm i -g @nowly/cli
+```
+
 ## Modo interactivo
 
 Ejecuta la CLI sin argumentos para abrir un menú interactivo:
 
 ```bash
-pnpm presence
+nowly
 ```
 
 ## Crear una presence
 
 ```bash
-pnpm presence init "Netflix"
+nowly init "Netflix"
 ```
 
 ## Compilar presences
@@ -22,13 +27,13 @@ pnpm presence init "Netflix"
 Compila todas las presences:
 
 ```bash
-pnpm presence build
+nowly build
 ```
 
 Compila una presence:
 
 ```bash
-pnpm presence build youtube
+nowly build youtube
 ```
 
 ## Probar una presence localmente
@@ -41,11 +46,11 @@ pnpm build:extension:dev
 
 Esto compila todas las presences y las empaqueta directamente en la extensión. Para probar después de cambios:
 
-1. Edita el código de la presence (ej. `packages/websites/src/Y/YouTube/presence.ts`)
+1. Edita el código de la presence (ej. `src/Y/YouTube/presence.ts`)
 2. Recompila solo la presence modificada y luego la extensión:
 
 ```bash
-pnpm presence build youtube
+nowly build youtube
 pnpm build:extension:dev
 ```
 
@@ -57,11 +62,11 @@ La extensión auto-instala las presences empaquetadas al iniciar. Sin servidor A
 ## Listar presences
 
 ```bash
-pnpm presence list
+nowly list
 ```
 
 ## Validar metadatos
 
 ```bash
-pnpm presence validate
+nowly validate
 ```

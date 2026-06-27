@@ -34,7 +34,7 @@ https://api.nowly.me/images-proxy/abc123...
 That URL directly returns the image bytes with the correct `Content-Type`. It is intended for `largeImageKey` or `smallImageKey`.
 
 ```ts filename="presence.ts"
-import { createCachedImageProxyUrl } from "@nowly/presence"
+import { createCachedImageProxyUrl } from "@nowly/sdk"
 
 const image = await createCachedImageProxyUrl("tiktok", imageUrl)
 
@@ -73,7 +73,7 @@ const getPoster = (video: HTMLVideoElement): string | undefined => {
 Then pass that URL through the helper before setting the activity:
 
 ```ts filename="presence.ts"
-import { createCachedImageProxyUrl } from "@nowly/presence"
+import { createCachedImageProxyUrl } from "@nowly/sdk"
 
 const poster = await createCachedImageProxyUrl("tiktok", getPoster(video))
 

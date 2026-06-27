@@ -8,7 +8,7 @@ description: Crea una nueva presence de Nowly con la CLI y envía tu primera act
 Usa la CLI de Nowly para generar una nueva presence:
 
 ```bash
-pnpm presence init "Ejemplo"
+nowly init "Ejemplo"
 ```
 
 La CLI crea los metadatos, un script de presence y los recursos requeridos.
@@ -18,10 +18,10 @@ La CLI crea los metadatos, un script de presence y los recursos requeridos.
 `Presence` y `Assets` son proporcionados por el runtime — consulta [Presence API](/docs/presence-development/presence-api) y [Assets](/docs/presence-development/assets).
 `document` es la API DOM estándar del navegador, disponible porque las presences se ejecutan como scripts de contenido en la extensión.
 
-Solo `PresenceType` (y otros helpers como `createMediaTimestamps`) deben importarse desde `@nowly/presence`.
+Solo `PresenceType` (y otros helpers como `createMediaTimestamps`) deben importarse desde `@nowly/sdk`.
 
 ```ts filename="presence.ts"
-import { PresenceType } from "@nowly/presence"
+import { PresenceType } from "@nowly/sdk"
 
 const presence = new Presence()
 
@@ -45,7 +45,7 @@ Cuando el usuario visita una URL coincidente, Nowly carga tu presence. La presen
 <Step title="Generar" description="Crea la carpeta de la presence, los metadatos y los recursos requeridos.">
 
 ```bash
-pnpm presence init "Ejemplo"
+nowly init "Ejemplo"
 ```
 
 </Step>
@@ -57,7 +57,7 @@ Edita `metadata.json` — consulta [Metadata](/docs/presence-development/metadat
 <Step title="Implementar" description="Escribe la lógica de la presence usando el SDK de Presence.">
 
 ```typescript filename="presence.ts"
-import { PresenceType } from "@nowly/presence"
+import { PresenceType } from "@nowly/sdk"
 
 const presence = new Presence()
 
@@ -74,14 +74,14 @@ presence.on("UpdateData", async () => {
 <Step title="Validar" description="Comprueba que la estructura de metadatos sea correcta y que los recursos estén en su lugar.">
 
 ```bash
-pnpm presence validate
+nowly validate
 ```
 
 </Step>
 <Step title="Compilar" description="Compila la presence en un paquete independiente.">
 
 ```bash
-pnpm presence build ejemplo
+nowly build ejemplo
 ```
 
 </Step>

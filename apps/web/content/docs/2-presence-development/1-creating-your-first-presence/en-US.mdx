@@ -8,7 +8,7 @@ description: Create a new Nowly presence with the CLI and send your first Discor
 Use the Nowly CLI to scaffold a new presence:
 
 ```bash
-pnpm presence init "Example"
+nowly init "Example"
 ```
 
 The CLI creates metadata, a presence script, and required assets.
@@ -18,10 +18,10 @@ The CLI creates metadata, a presence script, and required assets.
 `Presence` and `Assets` are provided by the runtime — see [Presence API](/docs/presence-development/presence-api) and [Assets](/docs/presence-development/assets).
 `document` is the standard browser DOM API, available because presences run as content scripts in the extension.
 
-Only `PresenceType` (and other helpers like `createMediaTimestamps`) must be imported from `@nowly/presence`.
+Only `PresenceType` (and other helpers like `createMediaTimestamps`) must be imported from `@nowly/sdk`.
 
 ```ts filename="presence.ts"
-import { PresenceType } from "@nowly/presence"
+import { PresenceType } from "@nowly/sdk"
 
 const presence = new Presence()
 
@@ -45,7 +45,7 @@ When the user visits a matching URL, Nowly loads your presence. The presence rea
 <Step title="Scaffold" description="Generate the presence folder, metadata, and required assets.">
 
 ```bash
-pnpm presence init "Example"
+nowly init "Example"
 ```
 
 </Step>
@@ -57,7 +57,7 @@ Edit `metadata.json` — see [Metadata](/docs/presence-development/metadata) for
 <Step title="Implement" description="Write the presence logic using the Presence SDK.">
 
 ```typescript filename="presence.ts"
-import { PresenceType } from "@nowly/presence"
+import { PresenceType } from "@nowly/sdk"
 
 const presence = new Presence()
 
@@ -74,14 +74,14 @@ presence.on("UpdateData", async () => {
 <Step title="Validate" description="Check that your metadata structure is correct and assets are in place.">
 
 ```bash
-pnpm presence validate
+nowly validate
 ```
 
 </Step>
 <Step title="Build" description="Compile the presence into a standalone bundle.">
 
 ```bash
-pnpm presence build example
+nowly build example
 ```
 
 </Step>

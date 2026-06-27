@@ -3,18 +3,23 @@ title: CLI
 description: Use the Nowly CLI to create, build, validate, and test presences locally.
 ---
 
+The Nowly CLI is published as `@nowly/cli` on npm. Install it globally:
+```bash
+pnpm i -g @nowly/cli
+```
+
 ## Interactive Mode
 
 Run the CLI without arguments to open an interactive menu:
 
 ```bash
-pnpm presence
+nowly
 ```
 
 ## Create a Presence
 
 ```bash
-pnpm presence init "Netflix"
+nowly init "Netflix"
 ```
 
 ## Build Presences
@@ -22,13 +27,13 @@ pnpm presence init "Netflix"
 Build every presence:
 
 ```bash
-pnpm presence build
+nowly build
 ```
 
 Build one presence:
 
 ```bash
-pnpm presence build youtube
+nowly build youtube
 ```
 
 ## Test a Presence Locally
@@ -41,11 +46,11 @@ pnpm build:extension:dev
 
 This builds all presences and bundles them directly into the extension. To test after changes:
 
-1. Edit the presence code (e.g., `packages/websites/src/Y/YouTube/presence.ts`)
+1. Edit the presence code (e.g., `src/Y/YouTube/presence.ts`)
 2. Rebuild only the changed presence then the extension:
 
 ```bash
-pnpm presence build youtube
+nowly build youtube
 pnpm build:extension:dev
 ```
 
@@ -57,11 +62,11 @@ The extension auto-installs bundled presences on startup. No API server, no inst
 ## List Presences
 
 ```bash
-pnpm presence list
+nowly list
 ```
 
 ## Validate Metadata
 
 ```bash
-pnpm presence validate
+nowly validate
 ```
