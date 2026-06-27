@@ -49,10 +49,6 @@ const runPnpmCommand = (command: string): void => {
   });
 };
 
-const cleanPresenceBuildCache = (): void => {
-  runPnpmCommand("pnpm presence:clean");
-};
-
 const runBuild = (browser: Browser): void => {
   runPnpmCommand(`pnpm --filter @nowly/extension build:${browser}`);
 };
@@ -85,8 +81,6 @@ const packageBrowser = (browser: Browser): void => {
   createZip(join(distRoot, browser), artifactPath);
   process.stdout.write(`Packaged ${browser}: ${relative(root, artifactPath)}\n`);
 };
-
-cleanPresenceBuildCache();
 
 for (const browser of selectedBrowsers) {
   packageBrowser(browser);
