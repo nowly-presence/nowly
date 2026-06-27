@@ -15,10 +15,10 @@ import {
   Img,
   Link,
   Preview,
+  render,
   Section,
   Text,
-} from "@react-email/components"
-import { render } from "@react-email/render"
+} from "react-email"
 import type { CSSProperties, ReactElement } from "react"
 
 const YELLOW = "#FEE961"

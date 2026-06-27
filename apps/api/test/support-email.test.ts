@@ -15,9 +15,13 @@ vi.mock("@opencoredev/email-sdk/ses", () => ({
   ses: sesMock,
 }))
 
-vi.mock("@react-email/render", () => ({
-  render: renderMock,
-}))
+vi.mock("react-email", async () => {
+  const actual = await vi.importActual("react-email")
+  return {
+    ...actual,
+    render: renderMock,
+  }
+})
 
 describe("supporter pass email", () => {
   beforeEach(() => {
