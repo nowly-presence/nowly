@@ -42,11 +42,6 @@ export type PresenceMetadata = {
   settings?: Record<string, unknown>;
   world?: "main" | "isolated";
   runAt?: "document_start" | "document_end" | "document_idle";
-  assets: {
-    logo: string;
-    icon: string;
-    thumbnail: string;
-  };
 };
 
 export type PresenceRelease = {
