@@ -10,6 +10,8 @@ allowBuilds:
   prisma: true
   sharp: true
 
+minimumReleaseAge: 0
+
 catalog:
   # apps
   dotenv: ^17.4.2
@@ -31,9 +33,6 @@ catalog:
   tsx: ^4.22.4
   typescript: 6.0.3
   vitest: ^4.1.9
-
-minimumReleaseAgeExclude:
-  - '@nowly/sdk@1.2.2'
 
 onlyBuiltDependencies:
   - sharp

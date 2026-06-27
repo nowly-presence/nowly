@@ -118,7 +118,7 @@ importers:
         version: 7.8.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@6.0.3)
       tsup:
         specifier: ^8.5.1
-        version: 8.5.1(@swc/core@1.15.43)(jiti@2.7.0)(postcss@8.5.15)(tsx@4.22.4)(typescript@6.0.3)(yaml@2.9.0)
+        version: 8.5.1(@swc/core@1.15.43)(jiti@2.7.0)(postcss@8.5.15)(supports-color@5.5.0)(tsx@4.22.4)(typescript@6.0.3)(yaml@2.9.0)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -436,6 +436,10 @@ importers:
         version: 4.4.3
 
   packages/presences:
+    dependencies:
+      '@nowly/sdk':
+        specifier: ^1.2.4
+        version: 1.2.4
     devDependencies:
       '@types/node':
         specifier: ^22.20.0
@@ -1495,6 +1499,9 @@ packages:
 
   '@nowly/sdk@1.2.2':
     resolution: {integrity: sha512-Nweqk8XNrDxU/4WNL4j1ks9wjvx7oxcazbZpv6gCdyCobAgt/idsbT10OAkB5xxStBqfhziiO5gHfYDcqQSbFw==}
+
+  '@nowly/sdk@1.2.4':
+    resolution: {integrity: sha512-Z+pLiJxo2A0NVc+jzEBiEYwH9vSbJ/ue22QPTXIdqQatxzEZ07RvNSFKZ8Uc4RkbOUcl+L5QEINrU3Hn4W/9pQ==}
 
   '@opencoredev/email-sdk@0.6.5':
     resolution: {integrity: sha512-CuEfbOSjjr4/bsCz7g/X7l7ha1D/QLq0Q4glX4CRsj0uUCnuhdBYRDXv6ffi9myaVx3afw3P8RzAnw+1++jLMg==}
@@ -6474,6 +6481,8 @@ snapshots:
 
   '@nowly/sdk@1.2.2': {}
 
+  '@nowly/sdk@1.2.4': {}
+
   '@opencoredev/email-sdk@0.6.5': {}
 
   '@oxc-project/types@0.137.0': {}
@@ -10556,6 +10565,35 @@ snapshots:
 
   tslib@2.8.1: {}
 
+  tsup@8.5.1(@swc/core@1.15.43)(jiti@2.7.0)(postcss@8.5.15)(supports-color@5.5.0)(tsx@4.22.4)(typescript@6.0.3)(yaml@2.9.0):
+    dependencies:
+      bundle-require: 5.1.0(esbuild@0.27.7)
+      cac: 6.7.14
+      chokidar: 4.0.3
+      consola: 3.4.2
+      debug: 4.4.3(supports-color@5.5.0)
+      esbuild: 0.27.7
+      fix-dts-default-cjs-exports: 1.0.1
+      joycon: 3.1.1
+      picocolors: 1.1.1
+      postcss-load-config: 6.0.1(jiti@2.7.0)(postcss@8.5.15)(tsx@4.22.4)(yaml@2.9.0)
+      resolve-from: 5.0.0
+      rollup: 4.62.2
+      source-map: 0.7.6
+      sucrase: 3.35.1
+      tinyexec: 0.3.2
+      tinyglobby: 0.2.17
+      tree-kill: 1.2.2
+    optionalDependencies:
+      '@swc/core': 1.15.43
+      postcss: 8.5.15
+      typescript: 6.0.3
+    transitivePeerDependencies:
+      - jiti
+      - supports-color
+      - tsx
+      - yaml
+
   tsup@8.5.1(@swc/core@1.15.43)(jiti@2.7.0)(postcss@8.5.15)(tsx@4.22.4)(typescript@5.9.3)(yaml@2.9.0):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.27.7)
@@ -10579,35 +10617,6 @@ snapshots:
       '@swc/core': 1.15.43
       postcss: 8.5.15
       typescript: 5.9.3
-    transitivePeerDependencies:
-      - jiti
-      - supports-color
-      - tsx
-      - yaml
-
-  tsup@8.5.1(@swc/core@1.15.43)(jiti@2.7.0)(postcss@8.5.15)(tsx@4.22.4)(typescript@6.0.3)(yaml@2.9.0):
-    dependencies:
-      bundle-require: 5.1.0(esbuild@0.27.7)
-      cac: 6.7.14
-      chokidar: 4.0.3
-      consola: 3.4.2
-      debug: 4.4.3(supports-color@5.5.0)
-      esbuild: 0.27.7
-      fix-dts-default-cjs-exports: 1.0.1
-      joycon: 3.1.1
-      picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@2.7.0)(postcss@8.5.15)(tsx@4.22.4)(yaml@2.9.0)
-      resolve-from: 5.0.0
-      rollup: 4.62.2
-      source-map: 0.7.6
-      sucrase: 3.35.1
-      tinyexec: 0.3.2
-      tinyglobby: 0.2.17
-      tree-kill: 1.2.2
-    optionalDependencies:
-      '@swc/core': 1.15.43
-      postcss: 8.5.15
-      typescript: 6.0.3
     transitivePeerDependencies:
       - jiti
       - supports-color
