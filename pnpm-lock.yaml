@@ -393,8 +393,8 @@ importers:
   packages/presences:
     dependencies:
       '@nowly/sdk':
-        specifier: ^0.99.2
-        version: 0.99.2
+        specifier: ^0.99.3
+        version: 0.99.3
     devDependencies:
       '@types/node':
         specifier: ^26.0.1
@@ -1311,6 +1311,9 @@ packages:
 
   '@nowly/sdk@0.99.2':
     resolution: {integrity: sha512-vfzYawgW3rTgIBC7HKuEXquwFuQJZilq0zuakuViScGMvAzj31dz3AI6EesPN/BNyg93b+jzjAK3VACvTvRtgA==}
+
+  '@nowly/sdk@0.99.3':
+    resolution: {integrity: sha512-axJuda8bvkCZSKEzwUXpq1U3sP0pE+si7KzFYoUEp6V6yq/kEmhCDmW3WFbAt/N688t8y5rUD0fivgJsDDYHcw==}
 
   '@opencoredev/email-sdk@0.6.5':
     resolution: {integrity: sha512-CuEfbOSjjr4/bsCz7g/X7l7ha1D/QLq0Q4glX4CRsj0uUCnuhdBYRDXv6ffi9myaVx3afw3P8RzAnw+1++jLMg==}
@@ -6224,6 +6227,8 @@ snapshots:
   '@nowly/sdk@0.99.0': {}
 
   '@nowly/sdk@0.99.2': {}
+
+  '@nowly/sdk@0.99.3': {}
 
   '@opencoredev/email-sdk@0.6.5': {}
 
