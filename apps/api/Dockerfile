@@ -16,6 +16,7 @@ ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
 
 RUN pnpm install --no-frozen-lockfile && \
+    pnpm --filter @nowly/sdk build && \
     pnpm --filter @nowly/api exec prisma generate && \
     pnpm --filter @nowly/api build
 

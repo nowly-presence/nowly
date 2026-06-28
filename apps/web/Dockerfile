@@ -13,6 +13,7 @@ RUN rm -rf packages/sdk && \
     rm -rf packages/cli packages/presences packages/internal-cli
 
 RUN pnpm install --no-frozen-lockfile && \
+    pnpm --filter @nowly/sdk build && \
     pnpm --filter @nowly/web build
 
 CMD ["pnpm", "--filter", "@nowly/web", "start"]
