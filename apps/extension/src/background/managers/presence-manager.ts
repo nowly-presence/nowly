@@ -1,4 +1,5 @@
 import { BUNDLED_PRESENCES } from "@/generated/bundled-presences";
+import type { BundledPresence } from "@/generated/bundled-presences";
 import type { PresenceRelease, StoredPresence } from "@/shared/types";
 import { handleClearActivity, removeActiveSlug } from "@/background/managers/activity-manager";
 import { addAnalyticsLog } from "@/background/analytics/analytics-log";
@@ -163,11 +164,50 @@ export const checkUpdates = async (): Promise<Record<string, string>> => {
 
 const isUnpackedBuild = (): boolean => !chrome.runtime.getManifest().update_url;
 
+const installDevPresences = async (presences: Record<string, StoredPresence>): Promise<string[]> => {
+  if (!isUnpackedBuild()) return []
+
+  try {
+    const res = await fetch(chrome.runtime.getURL("dev-presences.json"))
+    if (!res.ok) return []
+
+    const devPresences: BundledPresence[] = await res.json()
+    if (devPresences.length === 0) return []
+
+    const slugs: string[] = []
+
+    for (const dp of devPresences) {
+      const existing = presences[dp.slug]
+      if (existing?.release?.version && existing?.release?.version === dp.release.version) continue
+
+      presences[dp.slug] = {
+        metadata: dp.release.metadata,
+        release: dp.release,
+        enabled: true,
+        installedAt: existing?.installedAt ?? Date.now(),
+        updatedAt: Date.now(),
+      }
+      slugs.push(dp.slug)
+    }
+
+    return slugs
+  } catch {
+    return []
+  }
+}
+
 export const installBundledPresences = async (): Promise<void> => {
   if (!BUNDLED_PRESENCES?.length && !isUnpackedBuild()) return;
   const presences = await getPresences();
   const bundledSlugs = new Set(BUNDLED_PRESENCES.map((bp) => bp.slug));
   let changed = false;
+
+  const devSlugs = await installDevPresences(presences);
+  if (devSlugs.length > 0) {
+    for (const slug of devSlugs) bundledSlugs.add(slug);
+    for (const dp of BUNDLED_PRESENCES) bundledSlugs.add(dp.slug);
+    changed = true;
+  }
 
   if (isUnpackedBuild()) {
     for (const slug of Object.keys(presences)) {
