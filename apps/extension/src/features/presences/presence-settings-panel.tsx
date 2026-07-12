@@ -48,6 +48,7 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, onRemove, slug }
   const initialRef = useRef<Record<string, unknown> | null>(null);
 
   useEffect(() => {
+    if (!definitions) return;
     sendMessage<Record<string, Record<string, unknown>>>("GET_PRESENCE_SETTINGS")
       .then((all) => {
         const saved = all[slug] ?? {};
@@ -71,7 +72,7 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, onRemove, slug }
     void sendMessage("SET_PRESENCE_SETTINGS", { slug, partial: { [key]: value } });
   }, [slug]);
 
-  if (!loaded) return null;
+  if (!loaded || !definitions) return null;
 
   const settingKeys = Object.entries(definitions);
 
