@@ -1,12 +1,12 @@
 import { CDN_BASE_URL } from "@/shared/constants";
-import type { InstalledPresences, StoredPresence } from "@/shared/types";
+import type { ExtensionSettings, InstalledPresences, PresenceMetadata, StoredPresence } from "@/shared/types";
 import { addAnalyticsLog } from "@/background/analytics/analytics-log";
 import { trackAnalytics } from "@/background/analytics/analytics-tracker";
 import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { presenceInjector } from "@/background/runtime/presence-injection";
 import { createPresenceRuntime } from "@/background/runtime/presence-runtime";
 import { verifyPresenceRelease } from "@/background/services/release-security";
-import { getPresenceSettings, setDebug } from "@/background/services/storage";
+import { getPresenceSettings, getSettings, setDebug } from "@/background/services/storage";
 import { RegisteredUserScript, toMatchPatterns, userScriptId } from "@/background/runtime/user-scripts";
 
 export const unregisterPresenceScript = async (slug: string): Promise<void> => {
@@ -17,10 +17,19 @@ export const unregisterPresenceScript = async (slug: string): Promise<void> => {
   }
 };
 
-export const getPresenceRuntime = async (slug: string, name: string, bundle: string): Promise<string> => {
-  const allSettings = await getPresenceSettings();
+export const getPresenceStrings = (slug: string, metadata: PresenceMetadata, settings: ExtensionSettings): Record<string, string> => {
+  if (!metadata.locales) return {};
+  const configured = settings.presenceLanguage === "per-presence" || !settings.presenceLanguage
+    ? settings.presenceLanguages?.[slug] ?? "en-US"
+    : settings.presenceLanguage;
+  return metadata.locales[configured] ?? metadata.locales["en-US"] ?? {};
+};
+
+export const getPresenceRuntime = async (slug: string, metadata: PresenceMetadata, bundle: string): Promise<string> => {
+  const [allSettings, extensionSettings] = await Promise.all([getPresenceSettings(), getSettings()]);
   const presenceSettings = allSettings[slug] ?? {};
-  return createPresenceRuntime(slug, name, bundle, presenceSettings, getEffectiveApiUrl(), CDN_BASE_URL);
+  const strings = getPresenceStrings(slug, metadata, extensionSettings);
+  return createPresenceRuntime(slug, metadata.name, bundle, presenceSettings, strings, getEffectiveApiUrl(), CDN_BASE_URL);
 };
 
 export const registerPresenceScript = async (slug: string, presence: StoredPresence): Promise<{ ok: boolean; error?: string }> => {
@@ -36,7 +45,7 @@ export const registerPresenceScript = async (slug: string, presence: StoredPrese
   try {
     addAnalyticsLog("info", "presence", "register presence script", { slug, version: presence.release.version });
     await unregisterPresenceScript(slug);
-    const code = await getPresenceRuntime(slug, metadata.name, presence.release.bundle);
+    const code = await getPresenceRuntime(slug, metadata, presence.release.bundle);
 
     const script: RegisteredUserScript = {
       id: userScriptId(slug),

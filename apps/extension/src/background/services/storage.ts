@@ -15,6 +15,8 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   separateActivePresence: false,
   showPlayer: true,
   scheduleEnabled: false,
+  presenceLanguage: "per-presence",
+  presenceLanguages: {},
 };
 
 export const getPresences = (): Promise<InstalledPresences> =>

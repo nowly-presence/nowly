@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import type { NativeStatus } from "@/lib/messages";
 import { WEB_BASE_URL } from "@/shared/constants";
 import { resolveLocale, t, type LocalePreference } from "@/shared/i18n";
-import type { ExtensionSettings, PresenceDebug } from "@/shared/types";
+import type { ExtensionSettings, PresenceDebug, PresenceLanguageMode } from "@/shared/types";
 import { IconChevronDown, IconExternalLink, IconRefresh } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { useEffect, useState } from "react";
@@ -151,6 +151,22 @@ export const SettingsView: FC<Props> = ({
       </section>
 
       <DisplaySettings settings={settings} onSettingsChange={onSettingsChange} />
+
+      <section className="rounded-lg border border-border bg-card p-4">
+        <h2 className="mb-2 text-[11px] font-bold uppercase tracking-widest text-muted-foreground">{t("presence-language")}</h2>
+        <p className="mb-3 text-xs leading-5 text-muted-foreground">{t("presence-language-description")}</p>
+        <Select
+          unstyled
+          value={settings.presenceLanguage ?? "per-presence"}
+          onChange={(event) => onSettingsChange({ presenceLanguage: event.target.value as PresenceLanguageMode })}
+          className="h-10 w-full rounded-lg border border-border bg-card-2 px-3 text-sm text-foreground outline-none transition-colors focus:border-border-light"
+        >
+          <option value="per-presence">{t("presence-language-per-presence")}</option>
+          <option value="en-US">{t("locale-en")}</option>
+          <option value="fr-FR">{t("locale-fr")}</option>
+          <option value="es-ES">{t("locale-es")}</option>
+        </Select>
+      </section>
 
       {adFree ? (
         <ThemeSelector settings={settings} onSettingsChange={onSettingsChange} />

@@ -5,6 +5,7 @@ export const createPresenceRuntime = (
   name: string,
   bundle: string,
   settings: Record<string, unknown> = {},
+  strings: Record<string, string> = {},
   apiBaseUrl = "https://api.nowly.me",
   cdnBaseUrl?: string
 ): string => {
@@ -19,12 +20,26 @@ export const createPresenceRuntime = (
   const NOWLY_NAME = ${JSON.stringify(name)};
   const NOWLY_SOURCE = ${JSON.stringify(USER_SCRIPT_MESSAGE_SOURCE)};
   const NOWLY_SETTINGS = ${JSON.stringify(settings)};
+  const NOWLY_STRINGS = ${JSON.stringify(strings)};
   const NOWLY_ASSETS_BASE = ${JSON.stringify(assetsBase)};
   const listeners = new Map();
   const instances = [];
   const storage = new Map();
   // Mutable settings object: extension-injected values take priority, missing keys fall back to presence defaults
   const ctxSettings = Object.assign({}, NOWLY_SETTINGS);
+  const ctxStrings = Object.assign({}, NOWLY_STRINGS);
+  const localizeText = (value) => {
+    if (typeof value !== "string") return value;
+    const key = ({ Browsing: "browsing", Searching: "searching", Watching: "watching", Playing: "playing", Paused: "paused" })[value];
+    return key ? ctxStrings[key] ?? value : value;
+  };
+  const localizeActivity = (data) => ({
+    ...data,
+    details: localizeText(data.details),
+    state: localizeText(data.state),
+    largeImageText: localizeText(data.largeImageText),
+    smallImageText: localizeText(data.smallImageText),
+  });
 
   const post = (type, payload = {}) => {
     window.postMessage({
@@ -79,7 +94,7 @@ export const createPresenceRuntime = (
         return Promise.resolve();
       }
 
-      post("ACTIVITY_UPDATE", { activity: { name: NOWLY_NAME, ...data } });
+      post("ACTIVITY_UPDATE", { activity: { name: NOWLY_NAME, ...localizeActivity(data) } });
       return Promise.resolve();
     }
 
@@ -87,8 +102,14 @@ export const createPresenceRuntime = (
       post("CLEAR_ACTIVITY");
     }
 
-    getStrings(strings) {
-      return Promise.resolve(strings);
+    getStrings() {
+      return Promise.resolve(ctxStrings);
+    }
+
+    formatString(template, params = {}) {
+      return String(template).replace(/\{([^{}]+)\}/g, (match, key) =>
+        Object.prototype.hasOwnProperty.call(params, key) ? String(params[key]) : match
+      );
     }
 
     getSetting() {
@@ -113,7 +134,7 @@ export const createPresenceRuntime = (
 
   const ctx = {
     setActivity(data) {
-      post("ACTIVITY_UPDATE", { activity: { name: NOWLY_NAME, ...data } });
+      post("ACTIVITY_UPDATE", { activity: { name: NOWLY_NAME, ...localizeActivity(data) } });
     },
     clearActivity() {
       post("CLEAR_ACTIVITY");
@@ -168,6 +189,10 @@ export const createPresenceRuntime = (
       if (event.data?.type !== "SETTINGS_UPDATED") return;
       if (event.data?.slug !== NOWLY_SLUG) return;
       Object.assign(ctx.settings, event.data.settings);
+      if (event.data.strings) {
+        for (const key of Object.keys(ctxStrings)) delete ctxStrings[key];
+        Object.assign(ctxStrings, event.data.strings);
+      }
       tick();
     });
   } catch (error) {

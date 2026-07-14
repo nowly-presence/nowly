@@ -205,6 +205,7 @@ chrome.runtime.onMessage.addListener((message) => {
       type: "SETTINGS_UPDATED",
       slug: message.slug,
       settings: message.settings,
+      strings: message.strings,
     }, "*");
   }
 });
