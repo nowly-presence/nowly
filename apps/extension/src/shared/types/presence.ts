@@ -40,6 +40,7 @@ export type PresenceMetadata = {
   features?: Record<string, string[]>;
   version?: string | null;
   settings?: Record<string, unknown>;
+  locales?: Record<string, Record<string, string>>;
   world?: "main" | "isolated";
   runAt?: "document_start" | "document_end" | "document_idle";
 };

@@ -6,7 +6,7 @@ import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { getActiveDeviceId } from "@/background/services/device-sync";
 import { postNative, reconnectNative, refreshNativeStatus, restartNative } from "@/background/services/native";
 import { checkUpdates, installPresence, togglePresence, uninstallPresence } from "@/background/managers/presence-manager";
-import { registerPresenceScript } from "@/background/runtime/presence-scripts";
+import { getPresenceStrings, registerPresenceScript, syncPresenceScripts } from "@/background/runtime/presence-scripts";
 import { resetOnboardingForDev, updateSettings } from "@/background/managers/settings-manager";
 import { clearSnooze, dismissSupporterThankYou, getCurrentActivity, getDebug, getPresenceSettings, getPresences, getSettings, getSupporterStatus, setDebug, setPresenceSchedule, setPresenceSettings, setSupporterStatus, snoozePresence } from "@/background/services/storage";
 import { visiblePresences } from "@/background/runtime/user-scripts";
@@ -188,7 +188,25 @@ export const registerRuntimeMessageRouter = (): void => {
         return true;
 
       case "SET_SETTINGS":
-        updateSettings(message.payload as Partial<ExtensionSettings>).then((settings) => respond(sendResponse, settings));
+        updateSettings(message.payload as Partial<ExtensionSettings>).then(async (settings) => {
+          respond(sendResponse, settings);
+          const partial = message.payload as Partial<ExtensionSettings>;
+          if (!("presenceLanguage" in partial) && !("presenceLanguages" in partial)) return;
+          const presences = await getPresences();
+          const presenceSettings = await getPresenceSettings();
+          await syncPresenceScripts(presences);
+          const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+          if (!tab?.id) return;
+          for (const [slug, stored] of Object.entries(presences)) {
+            if (!stored.enabled || !stored.metadata.locales) continue;
+            chrome.tabs.sendMessage(tab.id, {
+              type: "PRESENCE_SETTINGS_UPDATED",
+              slug,
+              settings: presenceSettings[slug] ?? {},
+              strings: getPresenceStrings(slug, stored.metadata, settings),
+            }).catch(() => {});
+          }
+        });
         return true;
 
       case "GET_SUPPORTER_STATUS":

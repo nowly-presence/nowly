@@ -1,0 +1,46 @@
+---
+title: Presence Language Packs
+description: Add optional, typed translations for Discord activity text.
+---
+
+## A Separate Runtime System
+
+Presence language packs translate the text sent to Discord, such as “Watching a video” or “Browsing Figma”. They are separate from the supported locales used by metadata and setting labels.
+
+Language packs are optional. A presence without a `locales` directory keeps using inline TypeScript strings exactly as before.
+
+## File Structure
+
+A localized presence provides all three runtime dictionaries:
+
+\`\`\`text
+locales/
+├── en-US.json
+├── fr-FR.json
+└── es-ES.json
+\`\`\`
+
+Each file must be a flat JSON object with the same keys and string values. \`en-US.json\` is the reference dictionary and fallback. Builds reject invalid JSON, missing locales, unsupported files, non-string values, and mismatched keys.
+
+```json filename="locales/en-US.json"
+{ "watchingVideo": "Watching {title}" }
+```
+
+## Typed Autocomplete
+
+\`\`\`typescript
+import type enUS from "./locales/en-US.json"
+
+const locale = await presence.getStrings<typeof enUS>()
+const title = document.title
+
+await presence.setActivity({
+  details: presence.formatString(locale.watchingVideo, { title }),
+})
+\`\`\`
+
+The type-only import provides IDE autocomplete and rejects unknown keys without adding the JSON to the bundle. No type-generation command is needed.
+
+Dynamic values use `{name}` placeholders in JSON and `presence.formatString(template, params)` in the presence code.
+
+Users can select one activity language globally or choose a different language for each localized presence.

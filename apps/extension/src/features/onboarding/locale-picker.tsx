@@ -24,7 +24,7 @@ export const LocalePicker: FC<Props> = ({ localePreference, onLocaleChange }) =>
         unstyled
         value={localePreference}
         onChange={(event) => onLocaleChange(event.target.value as LocalePreference)}
-        className="h-8 appearance-none rounded-lg border border-border bg-card-2 pl-8 pr-7 text-xs text-foreground outline-none transition-colors hover:bg-card-hover focus:border-border-light"
+        className="h-8 appearance-none rounded-lg border border-border bg-card-2 pl-8 pr-8 text-xs text-foreground outline-none transition-colors hover:bg-card-hover focus:border-border-light"
       >
         {localeOptions.map((option) => (
           <option key={option.value} value={option.value}>
@@ -35,7 +35,7 @@ export const LocalePicker: FC<Props> = ({ localePreference, onLocaleChange }) =>
       <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center">
         <LocaleFlag locale={marketplaceLocale(localePreference)} />
       </div>
-      <IconChevronDown className="pointer-events-none absolute inset-y-0 right-2 my-auto h-3 w-3 text-muted-foreground" />
+      <IconChevronDown className="pointer-events-none absolute inset-y-0 right-3 my-auto h-3 w-3 text-muted-foreground" />
     </div>
   );
 };

@@ -108,6 +108,7 @@ export const PresenceListItem: FC<Props> = ({ onOpenMarketplace, onRemove, onSch
 
           <PresenceSettingsPanel
             definitions={(presence.metadata.settings ?? {}) as Record<string, unknown>}
+            locales={presence.metadata.locales}
             onRemove={() => onRemove(slug)}
             slug={slug}
           />

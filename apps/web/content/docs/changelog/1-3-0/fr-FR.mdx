@@ -1,0 +1,28 @@
+---
+title: 1.3.0
+date: 2026-07-14
+description: Packs de langues typés, choix global ou par présence des textes Discord, et versions stables 1.0 du SDK et de la CLI.
+---
+
+`1.3.0` introduit un système de localisation dédié aux textes d'activité Discord. Les développeurs peuvent fournir des dictionnaires JSON optionnels et typés, tandis que les utilisateurs choisissent une langue globale ou différente pour chaque présence localisée.
+
+<ReleaseTable
+  headers={["Zone", "Ce qui change", "Pourquoi c'est utile"]}
+  rows={[
+    ["Extension 1.3.0", "Ajout d'un réglage de langue des activités Discord avec modes globaux anglais, français et espagnol, ainsi qu'un mode par présence. Le sélecteur individuel apparaît uniquement pour les présences localisées.", "YouTube peut être affiché en français et Netflix en espagnol sans changer la langue de l'interface."],
+    ["Runtime", "Le runtime charge les dictionnaires signés, utilise en-US comme repli, actualise immédiatement les pages actives et conserve les anciennes présences sans packs.", "Un changement de langue ne nécessite ni réinstallation ni rechargement du site."],
+    ["SDK 1.0.0", "`presence.getStrings<T>()` retourne désormais un dictionnaire typé sans argument. Le type peut être déduit de `en-US.json` avec un import de type.", "VS Code propose les clés disponibles et signale les clés inconnues sans générer de fichiers TypeScript."],
+    ["CLI 1.0.0", "Le build et la validation détectent les packs optionnels, imposent les trois fichiers pris en charge, vérifient les dictionnaires plats et la parité des clés, puis copient les JSON dans les métadonnées générées.", "Les traductions invalides ou incomplètes échouent tôt avec une erreur précise."],
+    ["Pipeline de release", "La CLI interne publie les packs sur les chemins CDN courants et versionnés et les inclut dans les métadonnées signées. Les JSON versionnés utilisent un cache immutable.", "Les traductions bénéficient des mêmes garanties d'intégrité et de versionnement que les bundles."],
+    ["Bibliothèque de présences", "Toutes les présences actuelles fournissent des packs en-US, fr-FR et es-ES. Figma et YouTube utilisent l'API typée pour leurs textes principaux, et les états runtime communs sont localisés.", "Le catalogue existant bénéficie immédiatement du nouveau sélecteur de langue."],
+    ["Documentation", "La documentation des langues prises en charge reste séparée et un guide dédié aux packs a été ajouté en anglais, français et espagnol.", "La localisation des métadonnées et celle des textes Discord sont clairement distinguées."],
+  ]}
+/>
+
+## Compatibilité et correctifs
+
+- Les présences sans dossier `locales` restent compatibles et conservent leurs textes inline.
+- Les anciennes releases signées sans métadonnées de langues restent installables.
+- Les locales manquantes, JSON invalides, fichiers inconnus, valeurs non textuelles et clés divergentes sont rejetés.
+- Les choix globaux et individuels persistent dans le stockage de l'extension, y compris après le redémarrage du service worker.
+
