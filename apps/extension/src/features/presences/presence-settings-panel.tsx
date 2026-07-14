@@ -137,7 +137,7 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, locales, onRemov
                     unstyled
                     value={presenceLocale}
                     onChange={(event) => handleLanguageChange(event.target.value as PresenceLocale)}
-                    className="h-8 w-44 rounded-lg border border-border bg-card-2 py-1 pl-8 pr-8 text-sm text-foreground outline-none transition-colors focus:border-border-light"
+                    className="h-8 w-44 appearance-none rounded-lg border border-border bg-card-2 py-1 pl-8 pr-8 text-sm text-foreground outline-none transition-colors focus:border-border-light"
                   >
                     {Object.keys(locales ?? {}).map((locale) => (
                       <option key={locale} value={locale}>{localeLabel(locale)}</option>
