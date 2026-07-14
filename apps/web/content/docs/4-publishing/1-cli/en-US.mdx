@@ -38,26 +38,43 @@ nowly build youtube
 
 ## Test a Presence Locally
 
-Build the extension with your presences baked in (no server needed):
+If you only cloned the `presences` repository (the common case for contributors), use `nowly extension` to get a ready-to-load dev build without the full `nowly` monorepo:
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+This downloads the latest dev extension build from the CDN, bundles the presence(s) you list, and writes a `dev-presences.json` file into it. Then:
+
+1. Open `chrome://extensions`, enable **Developer mode**
+2. **Load unpacked** → select the generated `dist/extension-dev` folder
+3. The presence installs automatically — no API server, no install page, no Custom API URL needed
+
+After editing the presence, rebuild and rerun `nowly extension <slug>`, then reload the extension.
+
+To use a specific local extension build instead of the CDN one, pass `--from`:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+### If you have the full monorepo
+
+If you cloned `nowly` itself (with `presences` as a submodule), you can build the extension with every presence baked in directly:
 
 ```bash
 pnpm build:extension:dev
 ```
 
-This builds all presences and bundles them directly into the extension. To test after changes:
-
-1. Edit the presence code (e.g., `src/Y/YouTube/presence.ts`)
-2. Rebuild only the changed presence then the extension:
+Rebuild the changed presence then the extension after each change:
 
 ```bash
 nowly build youtube
 pnpm build:extension:dev
 ```
 
-3. Reload the extension at `chrome://extensions`
-4. The presence is already installed and ready to use
-
-The extension auto-installs bundled presences on startup. No API server, no install page, no Custom API URL needed.
+Reload at `chrome://extensions` — the presence is already installed and ready to use.
 
 ## List Presences
 

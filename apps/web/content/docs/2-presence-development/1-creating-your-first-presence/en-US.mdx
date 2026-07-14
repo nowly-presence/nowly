@@ -85,16 +85,18 @@ nowly build example
 ```
 
 </Step>
-<Step title="Bundle" description="Rebuild the extension with your presence baked in.">
+<Step title="Bundle" description="Get a dev extension build with your presence baked in.">
 
 ```bash
-pnpm build:extension:dev
+nowly extension example
 ```
+
+Downloads the latest dev extension build from the CDN and bundles `example` into it. See [CLI](/docs/publishing/cli#test-a-presence-locally) for the full monorepo alternative and the `--from` flag.
 
 </Step>
 <Step title="Reload" description="The presence is auto-installed as soon as the extension reloads.">
 
-Reload at `chrome://extensions`
+Load `dist/extension-dev` as an unpacked extension (or reload it) at `chrome://extensions`
 
 </Step>
 <Step title="Test" description="Open the target website — the presence activates automatically.">
