@@ -1,0 +1,28 @@
+---
+title: 1.3.0
+date: 2026-07-14
+description: Typed presence language packs, global and per-presence Discord activity language controls, and stable 1.0 SDK and CLI releases.
+---
+
+`1.3.0` introduces a dedicated localization system for Discord activity text. Presence authors can ship optional, typed JSON dictionaries while users choose one language globally or configure each localized presence independently.
+
+<ReleaseTable
+  headers={["Area", "What changed", "Why it matters"]}
+  rows={[
+    ["Extension 1.3.0", "Added a Discord activity language setting with global English, French, and Spanish modes plus a per-presence mode. Individual selectors only appear for localized presences.", "YouTube can display French text while Netflix uses Spanish, without changing the extension interface language."],
+    ["Runtime", "The presence runtime loads signed language dictionaries, falls back to en-US, updates active pages immediately, and keeps legacy presences without packs working unchanged.", "Language changes do not require reinstalling a presence or reloading its website."],
+    ["SDK 1.0.0", "`presence.getStrings<T>()` now returns a typed dictionary without an argument. Authors can infer T from `en-US.json` with a type-only import.", "VS Code autocompletes available keys and reports unknown keys without generated type files."],
+    ["CLI 1.0.0", "Build and validation automatically discover optional language packs, enforce the three supported files, validate flat string dictionaries and key parity, copy JSON files, and include them in generated metadata.", "Invalid or incomplete translations fail early with precise errors."],
+    ["Release pipeline", "The internal CLI publishes packs to current and versioned CDN paths and includes them in signed release metadata. Versioned JSON receives immutable caching.", "Translations receive the same integrity protection and versioning guarantees as presence bundles."],
+    ["Presence library", "All current presences now provide en-US, fr-FR, and es-ES packs. Figma and YouTube use the typed API for their main activity text, while shared runtime states are localized consistently.", "The existing catalog can participate in the new language selection immediately."],
+    ["Documentation", "Kept supported-locale documentation separate and added a dedicated Presence Language Packs guide in English, French, and Spanish.", "Metadata localization and Discord runtime translation are now clearly distinguished."],
+  ]}
+/>
+
+## Compatibility and fixes
+
+- Presences without a `locales` directory remain fully supported and keep their inline strings.
+- Older signed releases without language metadata remain installable.
+- Missing locales, invalid JSON, unknown files, non-string values, and mismatched keys are rejected during validation.
+- Global and per-presence choices persist in extension storage and survive service-worker restarts.
+

@@ -1,0 +1,28 @@
+---
+title: 1.3.0
+date: 2026-07-14
+description: Paquetes de idioma tipados, selección global o por presencia para textos de Discord y versiones estables 1.0 del SDK y la CLI.
+---
+
+`1.3.0` introduce un sistema de localización dedicado a los textos de actividad de Discord. Los desarrolladores pueden incluir diccionarios JSON opcionales y tipados, mientras los usuarios eligen un idioma global o diferente para cada presencia localizada.
+
+<ReleaseTable
+  headers={["Área", "Qué cambia", "Por qué importa"]}
+  rows={[
+    ["Extensión 1.3.0", "Nuevo ajuste de idioma de actividad con modos globales inglés, francés y español, además de un modo por presencia. El selector individual solo aparece en presencias localizadas.", "YouTube puede mostrarse en francés y Netflix en español sin cambiar el idioma de la interfaz."],
+    ["Runtime", "El runtime carga diccionarios firmados, usa en-US como alternativa, actualiza inmediatamente las páginas activas y mantiene las presencias antiguas sin paquetes.", "Cambiar de idioma no requiere reinstalar una presencia ni recargar su sitio."],
+    ["SDK 1.0.0", "`presence.getStrings<T>()` devuelve un diccionario tipado sin argumentos. El tipo se infiere desde `en-US.json` mediante una importación de tipo.", "VS Code autocompleta las claves y detecta claves desconocidas sin generar archivos TypeScript."],
+    ["CLI 1.0.0", "El build y la validación descubren paquetes opcionales, exigen los tres archivos compatibles, validan diccionarios planos y claves idénticas, copian los JSON y los incluyen en los metadatos.", "Las traducciones inválidas o incompletas fallan pronto con errores precisos."],
+    ["Pipeline de release", "La CLI interna publica los paquetes en rutas CDN actuales y versionadas y los incluye en metadatos firmados. Los JSON versionados usan caché inmutable.", "Las traducciones tienen las mismas garantías de integridad y versionado que los bundles."],
+    ["Biblioteca de presencias", "Todas las presencias actuales incluyen paquetes en-US, fr-FR y es-ES. Figma y YouTube usan la API tipada para sus textos principales y los estados comunes del runtime están localizados.", "El catálogo existente puede usar inmediatamente la nueva selección de idioma."],
+    ["Documentación", "La documentación de idiomas compatibles permanece separada y se añadió una guía de paquetes en inglés, francés y español.", "La localización de metadatos y la traducción runtime de Discord quedan claramente diferenciadas."],
+  ]}
+/>
+
+## Compatibilidad y correcciones
+
+- Las presencias sin carpeta `locales` siguen funcionando con sus textos inline.
+- Las releases firmadas antiguas sin metadatos de idioma siguen siendo compatibles.
+- Se rechazan locales ausentes, JSON inválido, archivos desconocidos, valores no textuales y claves diferentes.
+- Las selecciones globales e individuales persisten tras reiniciar el service worker.
+

@@ -15,7 +15,7 @@ description: Localize presence metadata, features, settings, and strings.
 
 ## Metadata Localization
 
-```json filename="metadata.json"
+\`\`\`json filename="metadata.json"
 {
   "description": {
     "en-US": "Watch and share videos.",
@@ -23,7 +23,7 @@ description: Localize presence metadata, features, settings, and strings.
     "es-ES": "Mira y comparte videos."
   }
 }
-```
+\`\`\`
 
 ## Settings Localization
 
@@ -31,7 +31,7 @@ Settings labels and descriptions use the same locale format.
 
 ## Runtime Strings
 
-Use `presence.getStrings` when runtime strings need to vary by locale.
+Discord activity text uses optional [presence language packs](/docs/advanced-topics/presence-language-packs), which are separate from metadata and settings localization.
 
 ## Keep Text Short
 

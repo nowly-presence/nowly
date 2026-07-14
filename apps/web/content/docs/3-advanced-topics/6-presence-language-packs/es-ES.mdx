@@ -1,0 +1,46 @@
+---
+title: Paquetes de idioma de presencias
+description: Añade traducciones opcionales y tipadas a los textos de actividad de Discord.
+---
+
+## Un sistema runtime independiente
+
+Los paquetes traducen los textos enviados a Discord, como «Viendo un vídeo» o «Navegando por Figma». Son independientes de los idiomas compatibles para metadatos y etiquetas de ajustes.
+
+Los paquetes son opcionales. Una presencia sin carpeta `locales` sigue usando sus textos TypeScript inline como antes.
+
+## Estructura de archivos
+
+Una presencia localizada incluye los tres diccionarios runtime:
+
+\`\`\`text
+locales/
+├── en-US.json
+├── fr-FR.json
+└── es-ES.json
+\`\`\`
+
+Cada archivo debe ser un objeto JSON plano con las mismas claves y solo valores de texto. \`en-US.json\` es la referencia y alternativa. El build rechaza JSON inválido, locales ausentes, archivos desconocidos, valores no textuales y claves diferentes.
+
+```json filename="locales/es-ES.json"
+{ "watchingVideo": "Viendo {title}" }
+```
+
+## Autocompletado tipado
+
+\`\`\`typescript
+import type enUS from "./locales/en-US.json"
+
+const locale = await presence.getStrings<typeof enUS>()
+const title = document.title
+
+await presence.setActivity({
+  details: presence.formatString(locale.watchingVideo, { title }),
+})
+\`\`\`
+
+La importación de tipo ofrece autocompletado en el IDE y rechaza claves desconocidas sin añadir el JSON al bundle. No hace falta generar tipos.
+
+Los valores dinámicos usan placeholders `{nombre}` en el JSON y `presence.formatString(template, params)` en el código.
+
+El usuario puede elegir un idioma de actividad global o uno diferente para cada presencia localizada.
