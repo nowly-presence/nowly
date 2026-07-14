@@ -23,7 +23,7 @@ const chromeIdToFirefoxUuid = (chromeId: string): string => {
 
 const BROWSER = (process.argv[2] ?? "chrome") as "chrome" | "firefox"
 const DIST = join(ROOT, "dist", BROWSER)
-const WEBSITES_PRESENCES = join(ROOT, "..", "..", "packages", "websites", "dist", "presences")
+const WEBSITES_PRESENCES = join(ROOT, "..", "..", "packages", "presences", "dist", "presences")
 const GENERATED_DIR = join(ROOT, "src", "generated")
 
 const webBaseUrl = process.env.VITE_WEB_BASE_URL ?? "https://nowly.me"
