@@ -1,3 +1,4 @@
+import { LocaleFlag } from "@/components/shared/locale-flag";
 import { Sheet } from "@/components/shared/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +7,8 @@ import { Select } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { sendMessage } from "@/lib/messages";
 import { getLocale, t } from "@/shared/i18n";
-import { IconSettings, IconTrash } from "@tabler/icons-react";
+import type { ExtensionSettings, PresenceLocale } from "@/shared/types";
+import { IconChevronDown, IconSettings, IconTrash } from "@tabler/icons-react";
 import type { FC, ReactElement } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -16,6 +18,17 @@ const localeKeyMap: Record<string, string> = {
   fr: "fr-FR",
   en: "en-US",
   es: "es-ES",
+};
+
+const localeLabelKeys: Record<string, string> = {
+  "en-US": "locale-en",
+  "fr-FR": "locale-fr",
+  "es-ES": "locale-es",
+};
+
+const localeLabel = (locale: string): string => {
+  const key = localeLabelKeys[locale];
+  return key ? t(key) : locale;
 };
 
 const resolveLocaleString = (value: unknown): string | undefined => {
@@ -30,6 +43,7 @@ const resolveLocaleString = (value: unknown): string | undefined => {
 
 type Props = {
   definitions: Record<string, unknown>;
+  locales?: Record<string, Record<string, string>>;
   onRemove?: () => void;
   slug: string;
 };
@@ -41,16 +55,19 @@ const inferType = (value: unknown): string => {
   return "unknown";
 };
 
-export const PresenceSettingsPanel: FC<Props> = ({ definitions, onRemove, slug }): ReactElement | null => {
+export const PresenceSettingsPanel: FC<Props> = ({ definitions, locales, onRemove, slug }): ReactElement | null => {
   const [values, setValues] = useState<Record<string, unknown>>({});
   const [loaded, setLoaded] = useState(false);
   const [open, setOpen] = useState(false);
+  const [extensionSettings, setExtensionSettings] = useState<ExtensionSettings | null>(null);
   const initialRef = useRef<Record<string, unknown> | null>(null);
 
   useEffect(() => {
     if (!definitions) return;
-    sendMessage<Record<string, Record<string, unknown>>>("GET_PRESENCE_SETTINGS")
-      .then((all) => {
+    Promise.all([
+      sendMessage<Record<string, Record<string, unknown>>>("GET_PRESENCE_SETTINGS"),
+      sendMessage<ExtensionSettings>("GET_SETTINGS"),
+    ]).then(([all, currentExtensionSettings]) => {
         const saved = all[slug] ?? {};
         const defaults: Record<string, unknown> = {};
         for (const [key, def] of Object.entries(definitions)) {
@@ -64,8 +81,19 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, onRemove, slug }
         setValues(merged);
         initialRef.current = merged;
         setLoaded(true);
+        setExtensionSettings(currentExtensionSettings);
       });
   }, [slug, definitions]);
+
+  useEffect(() => {
+    const onChanged = (changes: Record<string, chrome.storage.StorageChange>, area: string): void => {
+      if (area === "local" && changes.settings?.newValue) {
+        setExtensionSettings(changes.settings.newValue as ExtensionSettings);
+      }
+    };
+    chrome.storage.onChanged.addListener(onChanged);
+    return () => chrome.storage.onChanged.removeListener(onChanged);
+  }, []);
 
   const handleChange = useCallback((key: string, value: unknown): void => {
     setValues((prev) => ({ ...prev, [key]: value }));
@@ -75,6 +103,15 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, onRemove, slug }
   if (!loaded || !definitions) return null;
 
   const settingKeys = Object.entries(definitions);
+  const showLanguage = Boolean(locales && (extensionSettings?.presenceLanguage ?? "per-presence") === "per-presence");
+  const presenceLocale = extensionSettings?.presenceLanguages?.[slug] ?? "en-US";
+
+  const handleLanguageChange = (locale: PresenceLocale): void => {
+    if (!extensionSettings) return;
+    void sendMessage("SET_SETTINGS", {
+      presenceLanguages: { ...(extensionSettings.presenceLanguages ?? {}), [slug]: locale },
+    });
+  };
 
   return (
     <>
@@ -92,6 +129,27 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, onRemove, slug }
       {open && (
           <Sheet title={t("settings")} open={open} onClose={() => setOpen(false)} position="bottom">
           <div className="flex flex-col gap-4">
+            {showLanguage ? (
+              <div className="flex items-center justify-between gap-3">
+                <Label unstyled className="text-sm text-foreground">{t("presence-language")}</Label>
+                <div className="relative">
+                  <Select
+                    unstyled
+                    value={presenceLocale}
+                    onChange={(event) => handleLanguageChange(event.target.value as PresenceLocale)}
+                    className="h-8 w-44 rounded-lg border border-border bg-card-2 py-1 pl-8 pr-7 text-sm text-foreground outline-none transition-colors focus:border-border-light"
+                  >
+                    {Object.keys(locales ?? {}).map((locale) => (
+                      <option key={locale} value={locale}>{localeLabel(locale)}</option>
+                    ))}
+                  </Select>
+                  <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center text-muted-foreground">
+                    <LocaleFlag locale={presenceLocale} />
+                  </div>
+                  <IconChevronDown className="pointer-events-none absolute inset-y-0 right-2 my-auto h-3 w-3 text-muted-foreground" />
+                </div>
+              </div>
+            ) : null}
             {settingKeys.map(([key, def]) => {
               const defObj = typeof def === "object" && def !== null ? (def as SettingDefinition) : null;
               const type = defObj?.type ?? inferType(def);
