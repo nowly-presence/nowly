@@ -38,26 +38,43 @@ nowly build youtube
 
 ## Tester une presence localement
 
-Compilez l'extension avec vos presences intégrées (aucun serveur nécessaire)&nbsp;:
+Si tu n'as cloné que le repo `presences` (le cas le plus courant pour les contributeurs), utilise `nowly extension` pour obtenir un build de dev prêt à charger, sans avoir besoin du monorepo `nowly` complet&nbsp;:
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+Ceci télécharge le dernier build de dev de l'extension depuis le CDN, y empaquette la ou les presences listées, et écrit un fichier `dev-presences.json` dedans. Ensuite&nbsp;:
+
+1. Ouvre `chrome://extensions`, active le **mode développeur**
+2. **Charger l'extension non empaquetée** → sélectionne le dossier généré `dist/extension-dev`
+3. La presence s'installe automatiquement — pas de serveur API, pas de page d'installation, pas d'URL API personnalisée
+
+Après avoir modifié la presence, recompile-la puis relance `nowly extension <slug>`, et recharge l'extension.
+
+Pour utiliser un build local précis plutôt que celui du CDN, passe `--from`&nbsp;:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+### Si tu as le monorepo complet
+
+Si tu as cloné `nowly` lui-même (avec `presences` en submodule), tu peux compiler l'extension avec toutes les presences intégrées directement&nbsp;:
 
 ```bash
 pnpm build:extension:dev
 ```
 
-Ceci compile toutes les presences et les empaquette directement dans l'extension. Pour tester après des modifications&nbsp;:
-
-1. Modifiez le code de la presence (ex. `src/Y/YouTube/presence.ts`)
-2. Recompilez uniquement la presence modifiée puis l'extension&nbsp;:
+Recompile la presence modifiée puis l'extension après chaque changement&nbsp;:
 
 ```bash
 nowly build youtube
 pnpm build:extension:dev
 ```
 
-3. Rechargez l'extension dans `chrome://extensions`
-4. La presence est déjà installée et prête à l'emploi
-
-L'extension installe automatiquement les presences empaquetées au démarrage. Pas de serveur API, pas de page d'installation, pas d'URL API personnalisée.
+Recharge dans `chrome://extensions` — la presence est déjà installée et prête à l'emploi.
 
 ## Lister les presences
 

@@ -38,26 +38,43 @@ nowly build youtube
 
 ## Probar una presence localmente
 
-Compila la extensión con tus presences incluidas (sin necesidad de servidor):
+Si solo has clonado el repositorio `presences` (el caso más común para colaboradores), usa `nowly extension` para obtener una build de desarrollo lista para cargar, sin necesitar el monorepo `nowly` completo:
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+Esto descarga la última build de desarrollo de la extensión desde el CDN, empaqueta la(s) presence(s) indicadas, y escribe un archivo `dev-presences.json` dentro. Luego:
+
+1. Abre `chrome://extensions`, activa el **modo desarrollador**
+2. **Cargar extensión sin empaquetar** → selecciona la carpeta generada `dist/extension-dev`
+3. La presence se instala automáticamente — sin servidor API, sin página de instalación, sin URL de API personalizada
+
+Después de editar la presence, recompílala y vuelve a ejecutar `nowly extension <slug>`, y recarga la extensión.
+
+Para usar una build local específica en lugar de la del CDN, pasa `--from`:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+### Si tienes el monorepo completo
+
+Si has clonado `nowly` en sí (con `presences` como submódulo), puedes compilar la extensión con todas las presences incluidas directamente:
 
 ```bash
 pnpm build:extension:dev
 ```
 
-Esto compila todas las presences y las empaqueta directamente en la extensión. Para probar después de cambios:
-
-1. Edita el código de la presence (ej. `src/Y/YouTube/presence.ts`)
-2. Recompila solo la presence modificada y luego la extensión:
+Recompila la presence modificada y luego la extensión después de cada cambio:
 
 ```bash
 nowly build youtube
 pnpm build:extension:dev
 ```
 
-3. Recarga la extensión en `chrome://extensions`
-4. La presence ya está instalada y lista para usar
-
-La extensión auto-instala las presences empaquetadas al iniciar. Sin servidor API, sin página de instalación, sin URL de API personalizada.
+Recarga en `chrome://extensions` — la presence ya está instalada y lista para usar.
 
 ## Listar presences
 

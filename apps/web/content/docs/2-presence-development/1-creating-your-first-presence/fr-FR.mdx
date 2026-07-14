@@ -85,16 +85,18 @@ nowly build exemple
 ```
 
 </Step>
-<Step title="Empaqueter" description="Reconstruisez l'extension avec votre presence intégrée.">
+<Step title="Empaqueter" description="Obtenez un build de dev de l'extension avec votre presence intégrée.">
 
 ```bash
-pnpm build:extension:dev
+nowly extension exemple
 ```
+
+Télécharge le dernier build de dev de l'extension depuis le CDN et y empaquette `exemple`. Voir [CLI](/docs/publishing/cli#tester-une-presence-localement) pour l'alternative avec le monorepo complet et l'option `--from`.
 
 </Step>
 <Step title="Recharger" description="La presence est automatiquement installée dès que l'extension se recharge.">
 
-Rechargez dans `chrome://extensions`
+Chargez `dist/extension-dev` comme extension non empaquetée (ou rechargez-la) dans `chrome://extensions`
 
 </Step>
 <Step title="Tester" description="Ouvrez le site web cible — la presence s'active automatiquement.">
