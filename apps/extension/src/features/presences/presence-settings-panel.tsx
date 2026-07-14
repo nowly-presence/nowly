@@ -137,7 +137,7 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, locales, onRemov
                     unstyled
                     value={presenceLocale}
                     onChange={(event) => handleLanguageChange(event.target.value as PresenceLocale)}
-                    className="h-8 w-44 rounded-lg border border-border bg-card-2 py-1 pl-8 pr-7 text-sm text-foreground outline-none transition-colors focus:border-border-light"
+                    className="h-8 w-44 rounded-lg border border-border bg-card-2 py-1 pl-8 pr-8 text-sm text-foreground outline-none transition-colors focus:border-border-light"
                   >
                     {Object.keys(locales ?? {}).map((locale) => (
                       <option key={locale} value={locale}>{localeLabel(locale)}</option>
@@ -146,7 +146,7 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, locales, onRemov
                   <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center text-muted-foreground">
                     <LocaleFlag locale={presenceLocale} />
                   </div>
-                  <IconChevronDown className="pointer-events-none absolute inset-y-0 right-2 my-auto h-3 w-3 text-muted-foreground" />
+                  <IconChevronDown className="pointer-events-none absolute inset-y-0 right-3 my-auto h-3 w-3 text-muted-foreground" />
                 </div>
               </div>
             ) : null}
