@@ -1,19 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { t } from "@/shared/i18n";
-import { IconX } from "@tabler/icons-react";
+import { IconX } from "@/lib/tabler-icons";
 import type { FC, ReactElement, ReactNode } from "react";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useId, useRef } from "react";
+
+export const dialogPrimaryClassName =
+  "inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 text-sm font-semibold text-background transition-opacity hover:opacity-90 disabled:opacity-50";
+
+export const dialogSecondaryClassName =
+  "inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-border bg-card-2 px-4 text-sm font-medium text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground";
+
+export const dialogDangerClassName =
+  "inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-destructive/30 bg-destructive/5 px-4 text-sm font-semibold text-destructive transition-colors hover:bg-destructive/15";
 
 type Props = {
   children: ReactNode;
+  footer?: ReactNode;
   onClose: () => void;
   open: boolean;
+  subtitle?: string;
   title: string;
 };
 
-export const Dialog: FC<Props> = ({ children, onClose, open, title }): ReactElement | null => {
+export const Dialog: FC<Props> = ({ children, footer, onClose, open, subtitle, title }): ReactElement | null => {
   const panelRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const titleId = useId();
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
@@ -66,15 +78,13 @@ export const Dialog: FC<Props> = ({ children, onClose, open, title }): ReactElem
 
   if (!open) return null;
 
-  const id = "dialog-title";
-
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       onKeyDown={handleKeyDown}
       role="dialog"
       aria-modal="true"
-      aria-labelledby={id}
+      aria-labelledby={titleId}
     >
       <div
         className="absolute inset-0 bg-background/50 backdrop-blur-md before:pointer-events-none before:absolute before:inset-0 before:bg-accent/8 before:content-['']"
@@ -95,24 +105,33 @@ export const Dialog: FC<Props> = ({ children, onClose, open, title }): ReactElem
         className="relative z-10 flex max-h-[85vh] w-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl outline-none"
         style={{ animation: "dialog-enter 0.2s ease-out" }}
       >
-        <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
-          <h2 id={id} className="text-[11px] font-bold leading-none uppercase tracking-widest text-foreground">
-            {title}
-          </h2>
+        <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <h2 id={titleId} className="text-base font-semibold leading-5 text-foreground">
+              {title}
+            </h2>
+            {subtitle ? <p className="text-sm leading-5 text-muted-foreground">{subtitle}</p> : null}
+          </div>
           <Button
             variant="unstyled"
             size="none"
             onClick={onClose}
             aria-label={t("close")}
-            className="flex size-7 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
+            className="flex size-8 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
           >
             <IconX className="size-4" />
           </Button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
           {children}
         </div>
+
+        {footer ? (
+          <div className="flex flex-col gap-2 border-t border-border px-5 py-4">
+            {footer}
+          </div>
+        ) : null}
       </div>
     </div>
   );

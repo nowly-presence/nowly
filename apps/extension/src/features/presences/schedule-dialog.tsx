@@ -1,11 +1,11 @@
-import { Sheet } from "@/components/shared/sheet";
+import { Dialog, dialogPrimaryClassName } from "@/components/shared/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { sendMessage } from "@/lib/messages";
 import { t } from "@/shared/i18n";
 import type { ExtensionSettings, InstalledPresences } from "@/shared/types";
-import { IconCheck, IconClock, IconLoader2 } from "@tabler/icons-react";
+import { IconCheck, IconClock, IconLoader2 } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 import { useState } from "react";
 
@@ -19,7 +19,7 @@ type Props = {
 
 const dayKeys = ["day-sun", "day-mon", "day-tue", "day-wed", "day-thu", "day-fri", "day-sat"] as const;
 
-export const ScheduleSheet: FC<Props> = ({ activeSlug, globalSchedule, onClose, open, presences }): ReactElement | null => {
+export const ScheduleDialog: FC<Props> = ({ activeSlug, globalSchedule, onClose, open, presences }): ReactElement | null => {
   const presence = activeSlug ? presences[activeSlug] : null;
   const currentSchedule = activeSlug ? presence?.schedule : globalSchedule;
   const hasTimeRange = Boolean(currentSchedule?.start && currentSchedule?.end);
@@ -53,19 +53,35 @@ export const ScheduleSheet: FC<Props> = ({ activeSlug, globalSchedule, onClose, 
   };
 
   return (
-    <Sheet open={open} onClose={onClose} position="bottom" subtitle={t("schedule-description")} title={t("schedule")}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      subtitle={t("schedule-description")}
+      title={t("schedule")}
+      footer={(
+        <Button variant="unstyled" size="none" onClick={handleSave} className={dialogPrimaryClassName}>
+          {saved === "saving" ? (
+            <IconLoader2 className="size-4 animate-spin" />
+          ) : saved === "done" ? (
+            <IconCheck className="size-4" />
+          ) : (
+            t("save")
+          )}
+        </Button>
+      )}
+    >
       <div className="flex flex-col gap-4">
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2">
           {dayKeys.map((key, day) => (
             <Button
               key={day}
               variant="unstyled"
               size="none"
               onClick={() => toggleDay(day)}
-              className={`rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${
+              className={`rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
                 scheduleDays.includes(day)
-                  ? "border border-accent bg-card-2 text-foreground"
-                  : "border border-border bg-card-2 text-muted-foreground hover:bg-card-hover"
+                  ? "border border-accent bg-accent/10 text-accent"
+                  : "border border-border bg-card-2 text-muted-foreground hover:bg-card-hover hover:text-foreground"
               }`}
             >
               {t(key)}
@@ -73,55 +89,40 @@ export const ScheduleSheet: FC<Props> = ({ activeSlug, globalSchedule, onClose, 
           ))}
         </div>
 
-        <div className="flex items-center justify-between rounded-lg border border-border bg-card-2 px-3 py-2">
+        <div className="flex items-center justify-between rounded-xl border border-border bg-card-2 px-3 py-2.5">
           <div className="flex items-center gap-2">
-            <IconClock className="h-3.5 w-3.5 text-muted-foreground" />
-            <span className="text-xs text-foreground">{t("schedule-time-range")}</span>
+            <IconClock className="size-4 text-muted-foreground" />
+            <span className="text-sm text-foreground">{t("schedule-time-range")}</span>
           </div>
           <Switch checked={useTimeRange} onChange={setUseTimeRange} ariaLabel="Toggle time range" />
         </div>
 
         {useTimeRange ? (
           <div className="flex items-center gap-3">
-            <div className="flex flex-col gap-1">
-              <span className="text-[10px] text-dim-foreground">{t("start-time")}</span>
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <span className="text-xs text-muted-foreground">{t("start-time")}</span>
               <Input
                 unstyled
                 type="time"
                 value={scheduleStart}
                 onChange={(e) => setScheduleStart(e.target.value)}
-                className="h-8 rounded-lg border border-border bg-card-2 px-2 text-xs text-foreground outline-none transition-colors focus:border-border-light"
+                className="h-10 rounded-xl border border-border bg-card-2 px-3 text-sm text-foreground outline-none transition-colors focus:border-border-light"
               />
             </div>
 
-            <div className="flex flex-col gap-1">
-              <span className="text-[10px] text-dim-foreground">{t("end-time")}</span>
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <span className="text-xs text-muted-foreground">{t("end-time")}</span>
               <Input
                 unstyled
                 type="time"
                 value={scheduleEnd}
                 onChange={(e) => setScheduleEnd(e.target.value)}
-                className="h-8 rounded-lg border border-border bg-card-2 px-2 text-xs text-foreground outline-none transition-colors focus:border-border-light"
+                className="h-10 rounded-xl border border-border bg-card-2 px-3 text-sm text-foreground outline-none transition-colors focus:border-border-light"
               />
             </div>
           </div>
         ) : null}
-
-        <Button
-          variant="unstyled"
-          size="none"
-          onClick={handleSave}
-          className="w-full rounded-lg border border-border bg-card-2 px-3 py-2 text-xs font-medium text-foreground transition-colors hover:bg-card-hover"
-        >
-          {saved === "saving" ? (
-            <IconLoader2 className="mx-auto h-4 w-4 animate-spin" />
-          ) : saved === "done" ? (
-            <IconCheck className="mx-auto h-4 w-4" />
-          ) : (
-            t("schedule")
-          )}
-        </Button>
       </div>
-    </Sheet>
+    </Dialog>
   );
 };

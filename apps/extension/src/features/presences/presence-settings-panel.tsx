@@ -1,4 +1,4 @@
-import { Dialog } from "@/components/shared/dialog";
+import { Dialog, dialogDangerClassName } from "@/components/shared/dialog";
 import { LocaleFlag } from "@/components/shared/locale-flag";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { sendMessage } from "@/lib/messages";
 import { getLocale, t } from "@/shared/i18n";
 import type { ExtensionSettings, PresenceLocale } from "@/shared/types";
-import { IconChevronDown, IconSettings, IconTrash } from "@tabler/icons-react";
+import { IconChevronDown, IconSettings, IconTrash } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -121,13 +121,18 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, locales, onRemov
         aria-label={t("settings")}
         title={t("settings")}
         onClick={() => setOpen(true)}
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
+        className="flex size-8 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
       >
         <IconSettings className="h-4 w-4" />
       </Button>
 
       {open && (
-          <Dialog title={t("settings")} open={open} onClose={() => setOpen(false)}>
+          <Dialog title={t("settings")} open={open} onClose={() => setOpen(false)} footer={onRemove ? (
+            <Button variant="unstyled" size="none" onClick={onRemove} className={dialogDangerClassName}>
+              <IconTrash className="size-4" />
+              {t("uninstall")}
+            </Button>
+          ) : undefined}>
           <div className="flex flex-col gap-4">
             {showLanguage ? (
               <div className="flex items-center justify-between gap-3">
@@ -137,16 +142,16 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, locales, onRemov
                     unstyled
                     value={presenceLocale}
                     onChange={(event) => handleLanguageChange(event.target.value as PresenceLocale)}
-                    className="h-8 w-44 appearance-none rounded-lg border border-border bg-card-2 py-1 pl-8 pr-8 text-sm text-foreground outline-none transition-colors focus:border-border-light"
+                    className="h-10 w-44 appearance-none rounded-xl border border-border bg-card-2 py-1 pl-8 pr-8 text-sm text-foreground outline-none transition-colors focus:border-border-light"
                   >
                     {Object.keys(locales ?? {}).map((locale) => (
                       <option key={locale} value={locale}>{localeLabel(locale)}</option>
                     ))}
                   </Select>
-                  <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center text-muted-foreground">
+                  <div className="pointer-events-none absolute inset-y-0 left-2.5 flex items-center text-muted-foreground">
                     <LocaleFlag locale={presenceLocale} />
                   </div>
-                  <IconChevronDown className="pointer-events-none absolute inset-y-0 right-3 my-auto h-3 w-3 text-muted-foreground" />
+                  <IconChevronDown className="pointer-events-none absolute inset-y-0 right-3 my-auto size-4 text-muted-foreground" />
                 </div>
               </div>
             ) : null}
@@ -163,7 +168,7 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, locales, onRemov
 
               return (
                 <div key={key} className="flex items-center justify-between gap-3">
-                  <Label unstyled htmlFor={switchId} className="text-sm text-foreground cursor-pointer">{label}</Label>
+                  <Label unstyled htmlFor={switchId} className="cursor-pointer text-sm text-foreground">{label}</Label>
 
                   {type === "boolean" && (
                     <Switch
@@ -180,7 +185,7 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, locales, onRemov
                       value={String(value ?? "")}
                       placeholder={placeholder ?? ""}
                       onChange={(e) => handleChange(key, e.target.value)}
-                      className="h-8 w-44 rounded-lg border border-border bg-card-2 px-3 text-sm text-foreground outline-none transition-colors focus:border-border-light"
+                      className="h-10 w-44 rounded-xl border border-border bg-card-2 px-3 text-sm text-foreground outline-none transition-colors focus:border-border-light"
                     />
                   )}
 
@@ -189,7 +194,7 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, locales, onRemov
                       unstyled
                       value={String(value ?? "")}
                       onChange={(e) => handleChange(key, e.target.value)}
-                      className="h-8 w-44 rounded-lg border border-border bg-card-2 px-3 text-sm text-foreground outline-none transition-colors focus:border-border-light"
+                      className="h-10 w-44 rounded-xl border border-border bg-card-2 px-3 text-sm text-foreground outline-none transition-colors focus:border-border-light"
                     >
                     {(defObj?.options as Array<Record<string, unknown>> | undefined)?.map((opt) => {
                       const optValue = String(opt?.value ?? "");
@@ -215,27 +220,13 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, locales, onRemov
                         onChange={(e) => handleChange(key, Number(e.target.value))}
                         className="h-1 w-24 cursor-pointer accent-accent"
                       />
-                      <span className="w-6 text-right text-xs text-muted-foreground">{String(value ?? 0)}</span>
+                      <span className="w-8 text-right text-sm text-muted-foreground">{String(value ?? 0)}</span>
                     </div>
                   )}
                 </div>
               );
             })}
           </div>
-
-          {onRemove && (
-            <div className="mt-6">
-              <Button
-                variant="unstyled"
-                size="none"
-                onClick={onRemove}
-                className="flex w-full items-center justify-center gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/15"
-              >
-                <IconTrash className="h-4 w-4" />
-                {t("uninstall")}
-              </Button>
-            </div>
-          )}
         </Dialog>
       )}
     </>
