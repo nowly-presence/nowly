@@ -1,6 +1,6 @@
 import { WEB_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
-import { IconExternalLink } from "@tabler/icons-react";
+import { IconExternalLink } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 
 export const MarketplaceLink: FC = (): ReactElement => (

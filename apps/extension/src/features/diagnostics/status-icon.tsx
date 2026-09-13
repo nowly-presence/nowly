@@ -1,4 +1,4 @@
-import { IconCircleCheckFilled, IconLoader2, IconCircleX } from "@tabler/icons-react";
+import { IconCircleCheckFilled, IconLoader2, IconCircleX } from "@/lib/tabler-icons";
 import type { FC } from "react";
 
 export type RowStatus = "loading" | "success" | "error";
