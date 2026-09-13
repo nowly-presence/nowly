@@ -1,4 +1,3 @@
-import { CurrentActivityCard } from "@/features/presences/current-activity-card";
 import { PresenceList } from "@/features/presences/presence-list";
 import type { CurrentActivity, ExtensionSettings, InstalledPresences } from "@/shared/types";
 import type { FC, ReactElement } from "react";
@@ -11,7 +10,6 @@ type Props = {
   onRemove: (slug: string) => void;
   onSchedule: (slug: string) => void;
   onToggle: (slug: string, enabled: boolean) => void;
-  presences: InstalledPresences;
   settings: ExtensionSettings;
   updates: Record<string, string>;
 };
@@ -24,13 +22,10 @@ export const ActivityView: FC<Props> = ({
   onRemove,
   onSchedule,
   onToggle,
-  presences,
   settings,
   updates,
 }): ReactElement => (
-  <section className="flex min-h-0 flex-1 flex-col gap-3">
-    {settings.showPlayer ? <CurrentActivityCard activity={activity} isLoading={isLoading} presences={presences} /> : null}
-    <PresenceList
+  <PresenceList
       isLoading={isLoading}
       activeSlug={activity?.slug ?? null}
       displayMode={settings.presenceDisplayMode}
@@ -43,5 +38,4 @@ export const ActivityView: FC<Props> = ({
       showSchedule={settings.scheduleEnabled !== false}
       updates={updates}
     />
-  </section>
 );

@@ -1,10 +1,10 @@
 import { t } from "@/shared/i18n";
-import { IconPackage } from "@tabler/icons-react";
+import { IconPackage } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 import { MarketplaceLink } from "@/features/presences/marketplace-link";
 
 export const EmptyState: FC = (): ReactElement => (
-  <section className="rounded-lg border border-dashed border-border bg-card p-6 text-center">
+  <section className="rounded-xl border border-dashed border-border bg-card p-6 text-center">
     <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-lg bg-card-2 text-dim-foreground">
       <IconPackage className="h-5 w-5" />
     </div>

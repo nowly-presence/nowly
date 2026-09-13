@@ -3,7 +3,7 @@ import { Switch } from "@/components/ui/switch";
 import { assetUrl } from "@/shared/api";
 import { t } from "@/shared/i18n";
 import type { StoredPresence } from "@/shared/types";
-import { IconCalendar, IconExternalLink } from "@tabler/icons-react";
+import { IconCalendar, IconExternalLink } from "@/lib/tabler-icons";
 import type { FC, MouseEvent, ReactElement } from "react";
 import { PresenceSettingsPanel } from "@/features/presences/presence-settings-panel";
 
@@ -29,7 +29,7 @@ export const PresenceListItem: FC<Props> = ({ onOpenMarketplace, onRemove, onSch
   };
 
   return (
-    <article className="group relative overflow-hidden bg-card-2 transition-colors first:rounded-t-lg last:rounded-b-lg hover:bg-card-hover">
+    <article className="relative bg-card transition-colors first:rounded-t-xl last:rounded-b-xl hover:bg-card-hover">
       {visibleUpdate ? (
         <div className="flex h-8 items-center gap-2 border-b border-border bg-card px-1.5">
           <span className="inline-flex h-5 shrink-0 items-center rounded-md border border-accent/20 bg-accent/10 px-1.5 text-[10px] font-semibold tabular-nums text-accent">
@@ -55,9 +55,9 @@ export const PresenceListItem: FC<Props> = ({ onOpenMarketplace, onRemove, onSch
           </Button>
         </div>
       ) : null}
-      <div className="flex items-center gap-3 px-3 py-2.5">
+      <div className="flex items-center gap-3 px-3 py-3">
         <div
-          className={`flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg transition-all duration-300 ${
+          className={`flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl transition-all duration-300 ${
             !presence.enabled ? "opacity-60 saturate-0" : ""
           }`}
           style={{ backgroundColor: `${presence.metadata.color}20` }}
@@ -99,7 +99,7 @@ export const PresenceListItem: FC<Props> = ({ onOpenMarketplace, onRemove, onSch
                 event.stopPropagation();
                 onSchedule(slug);
               }}
-              className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
+              className="flex size-8 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
               aria-label="Schedule"
             >
               <IconCalendar className="h-4 w-4" />

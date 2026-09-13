@@ -21,7 +21,7 @@ export const PresenceListSection: FC<Props> = ({
   showSchedule,
   updates,
 }) => (
-  <div className="overflow-hidden rounded-lg border border-border bg-card">
+  <div className="overflow-hidden rounded-xl border border-border bg-card">
     {entries.map(([slug, presence]) => (
       <PresenceListItem
         key={slug}
