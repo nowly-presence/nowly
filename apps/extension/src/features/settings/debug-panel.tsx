@@ -6,7 +6,7 @@ import type { NativeStatus } from "@/lib/messages";
 import { API_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
 import type { ExtensionSettings, PresenceDebug } from "@/shared/types";
-import { IconChevronDown, IconRotateClockwise2, IconTerminal } from "@tabler/icons-react";
+import { IconChevronDown, IconRotateClockwise2, IconTerminal } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 import { useEffect, useState } from "react";
 
@@ -47,12 +47,12 @@ export const DebugPanel: FC<Props> = ({ debug, nativeStatus, onForceShowOnboardi
   };
 
   return (
-    <section className="mt-auto rounded-lg border border-border bg-card">
+    <section>
       <Button
         variant="unstyled"
         size="none"
         onClick={() => setOpen((value) => !value)}
-        className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-xs text-muted-foreground transition-colors hover:text-foreground"
+        className="flex w-full items-center gap-2 text-left text-xs text-muted-foreground transition-colors hover:text-foreground"
       >
         <IconTerminal className="h-3.5 w-3.5" />
         <span className="min-w-0 flex-1 font-semibold text-foreground">{t("debug")}</span>
@@ -60,7 +60,7 @@ export const DebugPanel: FC<Props> = ({ debug, nativeStatus, onForceShowOnboardi
       </Button>
 
       {open && (
-        <div className="border-t border-border px-3 py-2.5 text-[11px] leading-5 text-muted-foreground">
+        <div className="mt-3 border-t border-border pt-3 text-[11px] leading-5 text-muted-foreground">
           {debug ? (
             <p className="wrap-break-words">
               <span className="font-semibold text-foreground">{debug.stage}</span>

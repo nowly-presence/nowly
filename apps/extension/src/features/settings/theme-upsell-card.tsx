@@ -1,4 +1,4 @@
-import { IconPalette } from "@tabler/icons-react";
+import { IconPalette } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 import { WEB_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
@@ -13,7 +13,7 @@ export const ThemeUpsellCard: FC = (): ReactElement => (
     target="_blank"
     rel="noreferrer"
     aria-label={t("theme-upsell-title")}
-    className="group flex items-center gap-3 rounded-lg border border-border bg-card p-3 transition-colors hover:border-border-light hover:bg-card-hover"
+    className="group flex items-center gap-3 transition-colors"
   >
     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-card-2 text-foreground">
       <IconPalette className="h-6 w-6" strokeWidth={2.2} />
@@ -21,7 +21,7 @@ export const ThemeUpsellCard: FC = (): ReactElement => (
 
     <span className="min-w-0 flex-1">
       <span className="block text-xs font-semibold leading-4 text-foreground">{t("theme-upsell-title")}</span>
-      <span className="mt-0.5 block text-[11px] leading-4 text-muted-foreground">{t("theme-upsell-description")}</span>
+      <span className="mt-0.5 block text-xs leading-4 text-muted-foreground">{t("theme-upsell-description")}</span>
     </span>
 
     <span className="flex shrink-0 -space-x-1" aria-hidden="true">
