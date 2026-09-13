@@ -1,5 +1,5 @@
+import { Dialog } from "@/components/shared/dialog";
 import { LocaleFlag } from "@/components/shared/locale-flag";
-import { Sheet } from "@/components/shared/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,14 +20,14 @@ const localeKeyMap: Record<string, string> = {
   es: "es-ES",
 };
 
-const localeLabelKeys: Record<string, string> = {
+const localeLabelKeys = {
   "en-US": "locale-en",
   "fr-FR": "locale-fr",
   "es-ES": "locale-es",
-};
+} as const;
 
 const localeLabel = (locale: string): string => {
-  const key = localeLabelKeys[locale];
+  const key = localeLabelKeys[locale as keyof typeof localeLabelKeys];
   return key ? t(key) : locale;
 };
 
@@ -127,11 +127,11 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, locales, onRemov
       </Button>
 
       {open && (
-          <Sheet title={t("settings")} open={open} onClose={() => setOpen(false)} position="bottom">
+          <Dialog title={t("settings")} open={open} onClose={() => setOpen(false)}>
           <div className="flex flex-col gap-4">
             {showLanguage ? (
               <div className="flex items-center justify-between gap-3">
-                <Label unstyled className="text-sm text-foreground">{t("presence-language")}</Label>
+                <Label unstyled className="text-sm text-foreground">{t("presence-language-this")}</Label>
                 <div className="relative">
                   <Select
                     unstyled
@@ -236,7 +236,7 @@ export const PresenceSettingsPanel: FC<Props> = ({ definitions, locales, onRemov
               </Button>
             </div>
           )}
-        </Sheet>
+        </Dialog>
       )}
     </>
   );

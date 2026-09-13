@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { t } from "@/shared/i18n";
 import { IconX } from "@tabler/icons-react";
 import type { FC, ReactElement, ReactNode } from "react";
 import { useCallback, useEffect, useRef } from "react";
@@ -7,15 +8,12 @@ type Props = {
   children: ReactNode;
   onClose: () => void;
   open: boolean;
-  position?: "right" | "bottom";
-  subtitle?: string;
   title: string;
 };
 
-export const Sheet: FC<Props> = ({ children, onClose, open, position = "right", subtitle, title }): ReactElement | null => {
+export const Dialog: FC<Props> = ({ children, onClose, open, title }): ReactElement | null => {
   const panelRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
-  const isBottom = position === "bottom";
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
@@ -56,11 +54,9 @@ export const Sheet: FC<Props> = ({ children, onClose, open, position = "right", 
           event.preventDefault();
           last.focus();
         }
-      } else {
-        if (document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
-        }
+      } else if (document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     };
 
@@ -70,65 +66,47 @@ export const Sheet: FC<Props> = ({ children, onClose, open, position = "right", 
 
   if (!open) return null;
 
-  const id = "sheet-title";
+  const id = "dialog-title";
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex ${isBottom ? "items-end" : "justify-end"}`}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
       onKeyDown={handleKeyDown}
       role="dialog"
       aria-modal="true"
       aria-labelledby={id}
     >
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+        className="absolute inset-0 bg-background/50 backdrop-blur-md before:pointer-events-none before:absolute before:inset-0 before:bg-accent/8 before:content-['']"
         onClick={onClose}
         aria-hidden="true"
       />
 
       <style>{`
-        @keyframes sheet-enter-right {
-          from { transform: translateX(100%); }
-          to { transform: translateX(0); }
-        }
-        @keyframes sheet-enter-bottom {
-          from { transform: translateY(100%); }
-          to { transform: translateY(0); }
+        @keyframes dialog-enter {
+          from { opacity: 0; transform: scale(0.96) translateY(6px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
         }
       `}</style>
 
       <div
         ref={panelRef}
         tabIndex={-1}
-        className={`relative z-10 flex flex-col bg-card shadow-2xl outline-none ${
-          isBottom
-            ? "w-full rounded-t-2xl"
-            : "w-full max-w-sm"
-        }`}
-        style={{
-          animation: isBottom
-            ? "sheet-enter-bottom 0.3s ease-out"
-            : "sheet-enter-right 0.25s ease-out",
-          maxHeight: isBottom ? "85vh" : undefined,
-        }}
+        className="relative z-10 flex max-h-[85vh] w-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl outline-none"
+        style={{ animation: "dialog-enter 0.2s ease-out" }}
       >
         <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <h2 id={id} className="text-[11px] font-bold leading-none uppercase tracking-widest text-foreground">
-              {title}
-            </h2>
-            {subtitle ? (
-              <p className="text-xs text-muted-foreground">{subtitle}</p>
-            ) : null}
-          </div>
+          <h2 id={id} className="text-[11px] font-bold leading-none uppercase tracking-widest text-foreground">
+            {title}
+          </h2>
           <Button
             variant="unstyled"
             size="none"
             onClick={onClose}
-            aria-label="Close"
-            className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
+            aria-label={t("close")}
+            className="flex size-7 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
           >
-            <IconX className="h-4 w-4" />
+            <IconX className="size-4" />
           </Button>
         </div>
 
