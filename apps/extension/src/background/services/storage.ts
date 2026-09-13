@@ -92,7 +92,15 @@ export const setPresenceSettings = async (slug: string, partial: PresenceSetting
 
 export const getSettings = async (): Promise<ExtensionSettings> => {
   const result = await chrome.storage.local.get(SETTINGS_KEY);
-  return { ...DEFAULT_SETTINGS, ...(result[SETTINGS_KEY] as Partial<ExtensionSettings> | undefined) };
+  const stored = (result[SETTINGS_KEY] as Partial<ExtensionSettings> | undefined) ?? {};
+  const settings = { ...DEFAULT_SETTINGS, ...stored };
+
+  if (stored.separateActivePresence === true) {
+    settings.separateActivePresence = false;
+    void chrome.storage.local.set({ [SETTINGS_KEY]: settings });
+  }
+
+  return settings;
 };
 
 export const setSettings = async (partial: Partial<ExtensionSettings>): Promise<ExtensionSettings> => {
