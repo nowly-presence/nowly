@@ -15,7 +15,7 @@
   --dim-foreground: #52525b;
   --border: rgba(255, 255, 255, 0.08);
   --border-light: rgba(255, 255, 255, 0.12);
-  --radius: 0.5rem;
+  --radius: 0.75rem;
 }
 
 [data-theme="donator"] {
@@ -61,11 +61,78 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+#root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+.sidepanel-shell,
+.sidepanel-chrome {
+  display: flex;
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  overflow: clip;
+}
+
+.sidepanel-chrome {
+  gap: 12px;
+}
+
+.sidepanel-body {
+  display: flex;
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  gap: 16px;
+  padding: 12px 12px 0;
+  overflow: clip;
+}
+
+.sidepanel-topbar {
+  flex: 0 0 auto;
+}
+
+.sidepanel-scroll {
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: none;
+}
+
+.sidepanel-scroll-plain {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sidepanel-scroll-plain::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-size: 14px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -104,15 +171,14 @@ button:disabled {
   }
 }
 
-main[data-bg-anim="true"]::before {
-  content: "";
-  position: fixed;
+.sidepanel-bg {
+  pointer-events: none;
+  position: absolute;
   inset: 0;
+  z-index: 0;
   background: linear-gradient(135deg, transparent, color-mix(in srgb, var(--accent) 8%, transparent), transparent, color-mix(in srgb, var(--accent) 4%, transparent), transparent);
   background-size: 400% 400%;
   animation: bg-gradient-drift 15s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 0;
 }
 
 @keyframes bg-gradient-drift {
