@@ -14,8 +14,8 @@ export const ActionButton: FC<Props> = ({ children, onClick, primary = false }) 
     onClick={onClick}
     className={
       primary
-        ? "inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-accent px-4 text-sm font-semibold text-background transition-opacity hover:opacity-90"
-        : "inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-border bg-card-2 px-4 text-sm font-semibold text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground"
+        ? "inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-accent px-4 text-sm font-semibold text-background transition-opacity hover:opacity-90"
+        : "inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-border bg-card-2 px-4 text-sm font-semibold text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground"
     }
   >
     {children}

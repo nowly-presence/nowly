@@ -1,6 +1,6 @@
 import { Header } from "@/components/layout/header";
 import { t } from "@/shared/i18n";
-import { IconCircleCheckFilled } from "@tabler/icons-react";
+import { IconCircleCheckFilled } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 import { useEffect, useRef, useState } from "react";
 import { LocalePicker } from "@/features/onboarding/locale-picker";
@@ -93,7 +93,7 @@ export const OnboardingOverlay: FC<OnboardingOverlayProps> = ({
     : allDone
       ? {
         actions: undefined,
-        details: <p className="mt-2 text-xs leading-5 text-dim-foreground">{t("onboarding-ready-message")}</p>,
+        details: <p className="mt-3 text-sm leading-5 text-muted-foreground">{t("onboarding-ready-message")}</p>,
         icon: IconCircleCheckFilled,
         status: "success",
         title: t("onboarding-ready-title"),
@@ -104,47 +104,48 @@ export const OnboardingOverlay: FC<OnboardingOverlayProps> = ({
   if (onboardingCompleted) return null;
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-50">
-      <div className="absolute inset-0 bg-background/40 backdrop-blur-md" />
-      <div className="pointer-events-auto absolute inset-0 flex min-h-0 flex-col p-3">
-        <section className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border bg-card/95 shadow-[0_18px_50px_rgba(0,0,0,.55)]">
-          <div className="flex items-center border-b border-border px-4 py-3">
+    <div className="absolute inset-0 z-50 flex flex-col bg-background font-sans text-foreground">
+      {settings.backgroundAnimation !== false ? <div className="sidepanel-bg" aria-hidden /> : null}
+
+      <div className="relative z-1 flex min-h-0 flex-1 flex-col">
+        <div className="flex items-center gap-2 px-3 pt-3">
+          <div className="min-w-0 flex-1">
             <Header supporter={supporter} />
-            <LocalePicker
-              localePreference={localePreference}
-              onLocaleChange={onLocaleChange}
-            />
           </div>
-
-          <div className="flex min-h-0 flex-1 items-center justify-center p-5 text-center">
-            <div className="max-w-sm">
-              <StepIcon icon={currentStep.icon} status={currentStep.status} />
-              <h1 className="mt-4 text-lg font-semibold text-foreground">{currentStep.title}</h1>
-              <p className="mt-3 text-sm leading-6 text-muted-foreground">{currentStep.message}</p>
-              {currentStep.details}
-              {currentStep.actions ? (
-                <div className="mt-5 flex justify-center">{currentStep.actions}</div>
-              ) : null}
-              <ProgressDots
-                activeIndex={activeProgressIndex}
-                allDone={allDone}
-                devReplayOnboarding={devReplayOnboarding}
-                onSelect={setReplayIndex}
-                steps={progressSteps}
-              />
-            </div>
-          </div>
-
-          <OnboardingFooter
-            canReplayNext={canReplayNext}
-            canReplayPrevious={canReplayPrevious}
-            devReplayOnboarding={devReplayOnboarding}
-            onNext={() => setReplayIndex((current) => Math.min(replayMaxIndex, current + 1))}
-            onPrevious={() => setReplayIndex((current) => Math.max(0, current - 1))}
-            onSkipTour={onSkipTour}
-            showSkip={!allDone}
+          <LocalePicker
+            localePreference={localePreference}
+            onLocaleChange={onLocaleChange}
           />
-        </section>
+        </div>
+
+        <div className="flex min-h-0 flex-1 flex-col justify-center overflow-y-auto px-3 py-4">
+          <section className="rounded-xl border border-border bg-card p-5 text-center">
+            <StepIcon icon={currentStep.icon} status={currentStep.status} />
+            <h1 className="mt-4 text-base font-semibold text-foreground">{currentStep.title}</h1>
+            <p className="mt-2 text-sm leading-5 text-muted-foreground">{currentStep.message}</p>
+            {currentStep.details}
+            {currentStep.actions ? (
+              <div className="mt-5 flex justify-center">{currentStep.actions}</div>
+            ) : null}
+            <ProgressDots
+              activeIndex={activeProgressIndex}
+              allDone={allDone}
+              devReplayOnboarding={devReplayOnboarding}
+              onSelect={setReplayIndex}
+              steps={progressSteps}
+            />
+          </section>
+        </div>
+
+        <OnboardingFooter
+          canReplayNext={canReplayNext}
+          canReplayPrevious={canReplayPrevious}
+          devReplayOnboarding={devReplayOnboarding}
+          onNext={() => setReplayIndex((current) => Math.min(replayMaxIndex, current + 1))}
+          onPrevious={() => setReplayIndex((current) => Math.max(0, current - 1))}
+          onSkipTour={onSkipTour}
+          showSkip={!allDone}
+        />
       </div>
     </div>
   );

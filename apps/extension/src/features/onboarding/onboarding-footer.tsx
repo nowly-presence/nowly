@@ -12,8 +12,8 @@ type Props = {
   showSkip: boolean;
 };
 
-const buttonClassName = "rounded-lg border border-border bg-card-2 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground";
-const disabledClassName = "disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-card-2 disabled:hover:text-muted-foreground";
+const dockItemClassName =
+  "relative isolate flex flex-1 flex-col items-center gap-1 px-2 py-2.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-muted-foreground";
 
 export const OnboardingFooter: FC<Props> = ({
   canReplayNext,
@@ -24,51 +24,53 @@ export const OnboardingFooter: FC<Props> = ({
   onSkipTour,
   showSkip,
 }) => {
-  if (devReplayOnboarding) {
-    return (
-      <footer className="flex items-center justify-between gap-2 border-t border-border px-4 py-3">
-        <Button
-          variant="unstyled"
-          size="none"
-          disabled={!canReplayPrevious}
-          onClick={onPrevious}
-          className={`${buttonClassName} ${disabledClassName}`}
-        >
-          {t("onboarding-previous")}
-        </Button>
-        <Button
-          variant="unstyled"
-          size="none"
-          onClick={onSkipTour}
-          className={buttonClassName}
-        >
-          {t("onboarding-finish")}
-        </Button>
-        <Button
-          variant="unstyled"
-          size="none"
-          disabled={!canReplayNext}
-          onClick={onNext}
-          className={`${buttonClassName} ${disabledClassName}`}
-        >
-          {t("onboarding-next")}
-        </Button>
-      </footer>
-    );
+  if (!devReplayOnboarding && !showSkip) {
+    return <div className="h-3 shrink-0" />;
   }
 
-  if (!showSkip) return null;
-
   return (
-    <footer className="flex items-center justify-between gap-2 border-t border-border px-4 py-3">
-      <Button
-        variant="unstyled"
-        size="none"
-        onClick={onSkipTour}
-        className={buttonClassName}
-      >
-        {t("onboarding-skip")}
-      </Button>
-    </footer>
+    <nav className="shrink-0 px-3 pb-3">
+      <div className={`grid overflow-hidden rounded-xl border border-border bg-card ${devReplayOnboarding ? "grid-cols-3" : "grid-cols-1"}`}>
+        {devReplayOnboarding ? (
+          <>
+            <Button
+              variant="unstyled"
+              size="none"
+              disabled={!canReplayPrevious}
+              onClick={onPrevious}
+              className={dockItemClassName}
+            >
+              {t("onboarding-previous")}
+            </Button>
+            <Button
+              variant="unstyled"
+              size="none"
+              onClick={onSkipTour}
+              className={dockItemClassName}
+            >
+              {t("onboarding-finish")}
+            </Button>
+            <Button
+              variant="unstyled"
+              size="none"
+              disabled={!canReplayNext}
+              onClick={onNext}
+              className={dockItemClassName}
+            >
+              {t("onboarding-next")}
+            </Button>
+          </>
+        ) : (
+          <Button
+            variant="unstyled"
+            size="none"
+            onClick={onSkipTour}
+            className={dockItemClassName}
+          >
+            {t("onboarding-skip")}
+          </Button>
+        )}
+      </div>
+    </nav>
   );
 };

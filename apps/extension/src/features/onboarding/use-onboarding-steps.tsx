@@ -2,7 +2,7 @@ import { buildDiagnosticSnapshot, isHostChecking, YOUTUBE_TEST_URL } from "@/fea
 import { DiscordIcon } from "@/lib/icons";
 import { extensionDetailsUrl, openUrl, siteUrl } from "@/shared/browser-links";
 import { t } from "@/shared/i18n";
-import { IconInfoCircle, IconChartBar, IconExternalLink, IconLock, IconDeviceDesktopDown, IconPuzzle2, IconShoppingBag, IconBrandYoutube } from "@tabler/icons-react";
+import { IconInfoCircle, IconChartBar, IconExternalLink, IconLock, IconDeviceDesktopDown, IconPuzzle2, IconShoppingBag, IconBrandYoutube } from "@/lib/tabler-icons";
 import { ActionButton } from "@/features/onboarding/action-button";
 import { AnalyticsChecklist } from "@/features/onboarding/analytics-checklist";
 import { LinkActionButton } from "@/features/onboarding/link-action-button";
@@ -48,9 +48,9 @@ export const useOnboardingSteps = ({
         ? t("onboarding-step-user-scripts-success")
         : t("onboarding-step-user-scripts-error"),
       details: !snapshot.userScriptsActive ? (
-        <div className="mt-4 space-y-2 rounded-lg border border-border bg-card-2 p-3 text-left">
-          <p className="text-xs leading-5 text-muted-foreground">{t("onboarding-user-scripts-gate-body")}</p>
-          <p className="text-xs leading-5 text-dim-foreground">{t("onboarding-user-scripts-gate-privacy")}</p>
+        <div className="mt-4 space-y-2 rounded-xl border border-border bg-card-2 p-3 text-left">
+          <p className="text-sm leading-5 text-muted-foreground">{t("onboarding-user-scripts-gate-body")}</p>
+          <p className="text-sm leading-5 text-muted-foreground">{t("onboarding-user-scripts-gate-privacy")}</p>
         </div>
       ) : undefined,
       actions: !snapshot.userScriptsActive ? (
