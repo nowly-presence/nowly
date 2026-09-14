@@ -34,18 +34,13 @@ export const Navbar: FC = (): ReactElement => {
               <SheetContent side="right" showCloseButton={false}>
                 <div className="flex flex-col gap-6 px-6 pt-12">
                   <SheetClose asChild>
-                    <Link href="/docs" className="text-lg font-semibold text-foreground transition-colors hover:text-accent">
+                    <Link href="/" className="text-lg font-semibold text-foreground transition-colors hover:text-accent">
                       {t("docs")}
                     </Link>
                   </SheetClose>
                   <SheetClose asChild>
                     <Link href={`${SITE_URL}/library`} className="text-lg font-semibold text-foreground transition-colors hover:text-accent">
                       {t("marketplace")}
-                    </Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link href={`${SITE_URL}/host`} className="text-lg font-semibold text-foreground transition-colors hover:text-accent">
-                      {t("host")}
                     </Link>
                   </SheetClose>
                   <SheetClose asChild>
@@ -63,14 +58,11 @@ export const Navbar: FC = (): ReactElement => {
           </div>
 
           <div className="hidden min-w-0 items-center gap-2 lg:flex">
-            <Link href="/docs" className={buttonVariants({ size: "md", variant: "ghost" })}>
+            <Link href="/" className={buttonVariants({ size: "md", variant: "ghost" })}>
               {t("docs")}
             </Link>
             <Link href={`${SITE_URL}/library`} className={buttonVariants({ size: "md", variant: "ghost" })}>
               {t("marketplace")}
-            </Link>
-            <Link href={`${SITE_URL}/host`} className={buttonVariants({ size: "md", variant: "ghost" })}>
-              {t("host")}
             </Link>
             <Link href={`${SITE_URL}/#download`} className={buttonVariants({ size: "md", variant: "accent" })}>
               <IconDownload size={16} />

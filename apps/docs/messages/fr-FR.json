@@ -2,7 +2,7 @@
   "navbar": {
     "marketplace": "Bibliothèque",
     "docs": "Documentation",
-    "host": "Host",
+    "host": "Nowly Host",
     "download-desktop": "Télécharger Nowly Host",
     "download-extension": "Télécharger l'extension",
     "download-for": "Télécharger pour {browser}",
@@ -12,13 +12,13 @@
     "badge": "Nouveau",
     "title": "Votre activité Discord,",
     "title-accent": "synchronisée.",
-    "description": "La façon la plus simple d'afficher automatiquement ce que vous regardez. Séries, films ou streams, votre statut Discord reste toujours à jour.",
+    "description": "Le moyen le plus simple d’afficher ce que vous regardez. Séries, films ou streams — votre statut Discord reste à jour.",
     "cta": "Découvrir les présences"
   },
   "platforms-section": {
     "section-label": "Plateformes",
     "title": "Vos services favoris",
-    "description": "Compatible avec les plateformes de streaming les plus populaires",
+    "description": "Compatible avec les plateformes de streaming que vous utilisez déjà.",
     "library-cta": "Ouvrir la bibliothèque",
     "services-count": "{count, plural, one {# service prêt} other {# services prêts}}",
     "available-heading": "Disponibles",
@@ -89,12 +89,12 @@
     "section-label": "FAQ",
     "title": "Questions fréquentes",
     "description": "Les réponses rapides aux questions les plus courantes sur Nowly, l'installation et la confidentialité.",
-    "faq-cta": "Aller sur la page",
+    "faq-cta": "Voir la FAQ",
     "discord-cta": "Discord communautaire",
     "items": [
       {
         "question": "Qu'est-ce que Nowly ?",
-        "answer": "Nowly affiche automatiquement ce que vous regardez dans votre statut Discord grâce à une extension navigateur et une Nowly Host."
+        "answer": "Nowly affiche automatiquement ce que vous regardez dans votre statut Discord, grâce à une extension navigateur et à Nowly Host."
       },
       {
         "question": "Est-ce que mes données passent par vos serveurs ?",
@@ -117,6 +117,7 @@
     "english": "Anglais",
     "spanish": "Espagnol",
     "category-product": "Produit",
+    "category-developers": "Développeurs",
     "category-legal": "Légal",
     "about": "À propos",
     "team": "Équipe",
@@ -130,9 +131,10 @@
     "cookies": "Cookies",
     "data-management": "Données et confidentialité",
     "marketplace": "Bibliothèque",
-    "host": "Host",
+    "host": "App bureau",
     "docs": "Documentation",
-    "discord": "Discord"
+    "discord": "Discord",
+    "category-company": "Projet"
   },
   "cookie-banner": {
     "message": "Ce site utilise des cookies strictement nécessaires. Des technologies publicitaires peuvent être utilisées si les annonces sont activées.",
@@ -142,7 +144,7 @@
   "support-page": {
     "badge": "Support",
     "title": "Besoin d'aide ?",
-    "description": "Version New Amsterdam : dites-nous comment on peut aider, avec le bon contexte dès le départ.",
+    "description": "Dites-nous de quoi vous avez besoin, avec le bon contexte dès le départ.",
     "discord": {
       "title": "Ticket Discord",
       "description": "Rejoignez le serveur Nowly et créez un ticket pour discuter directement avec le staff."
@@ -207,7 +209,7 @@
   },
   "sponsor-modal": {
     "title": "Le projet est gratuit",
-    "description": "On a pris un truc qui existait et on s'est dit : on peut faire mieux, plus complet, et avec une interface qui déchire.",
+    "description": "Nous avons regardé ce qui existait et pensé qu’on pouvait faire mieux : plus complet, avec une interface vraiment agréable.",
     "supportTitle": "Nous soutenir sur",
     "supportKofi": "Ko-fi",
     "skipDownload": "Non merci, télécharger directement",
@@ -271,7 +273,7 @@
   "about-page": {
     "badge": "À propos",
     "title": "Une vision moderne de l'activité Discord",
-    "intro": "Nowly remet le Rich Presence communautaire au goût du jour : plus propre, plus simple, plus moderne.",
+    "intro": "Nowly reprend l’idée des outils communautaires de Rich Presence et va plus loin : une expérience plus propre, plus actuelle, plus simple à utiliser, avec une direction visuelle cohérente.",
     "sections": [
       {
         "title": "Notre objectif",
@@ -279,7 +281,7 @@
       },
       {
         "title": "Une approche locale",
-        "body": "Le flux local est constant, votre navigateur détecte l'activité, Nowly Host la transmet à Discord, sans passage par nos serveurs*."
+        "body": "Le flux local reste le même : votre navigateur détecte l’activité, Nowly Host la transmet à Discord, sans passer par nos serveurs*."
       },
       {
         "title": "Un projet communautaire",
@@ -298,8 +300,8 @@
     "description": "Tout est opérationnel ? Vérifiez en un coup d'œil.",
     "checked-history": "Dernière vérification {time}",
     "latest-latency": "Dernière latence",
-    "last-checked": "Dernier check",
-    "recent-checks": "10 derniers checks",
+    "last-checked": "Dernière vérification",
+    "recent-checks": "10 dernières vérifications",
     "history-label": "Historique récent des temps de réponse",
     "no-data": "Aucune donnée",
     "all-operational": "Tous les services sont opérationnels",
@@ -349,7 +351,7 @@
     "sections": [
       {
         "title": "Fonctionnement général",
-        "body": "Nowly se compose de trois parties : une <strong>extension navigateur</strong>, une <strong>Nowly Host</strong> et un <strong>site web</strong> (bibliothèque). L'extension détecte les contenus multimédias dans votre navigateur et les transmet à Nowly Host, qui les envoie directement au client Discord installé sur votre machine via une communication locale IPC. Ces données d'activité ne transitent pas par nos serveurs."
+        "body": "Nowly se compose de trois parties : une <strong>extension navigateur</strong>, <strong>Nowly Host</strong> et un <strong>site web</strong> (bibliothèque). L'extension détecte les contenus multimédias dans votre navigateur et les transmet à Nowly Host, qui les envoie directement au client Discord installé sur votre machine via une communication locale IPC. Ces données d'activité ne transitent pas par nos serveurs."
       },
       {
         "title": "Données traitées localement (extension)",
@@ -361,7 +363,7 @@
       },
       {
         "title": "Données traitées localement (Nowly Host)",
-        "body": "Nowly Host écrit un fichier de log local dans <code>%LOCALAPPDATA%\\\\NowlyClient\\\\nowly-host.log</code>, contenant des horodatages et des informations d'activité envoyées à Discord. Ce fichier reste sur votre appareil, peut être supprimé à tout moment et n'est <strong>jamais</strong> envoyé à nos serveurs."
+        "body": "Nowly Host écrit un journal local dans <code>%LOCALAPPDATA%\\\\NowlyClient\\\\nowly-host.log</code>, contenant des horodatages et des informations d'activité envoyées à Discord. Ce fichier reste sur votre appareil, peut être supprimé à tout moment et n'est <strong>jamais</strong> envoyé à nos serveurs."
       },
       {
         "title": "Données traitées côté serveur — Analytics (opt-in)",
@@ -397,7 +399,7 @@
       },
       {
         "title": "Vos droits (RGPD)",
-        "body": "Conformément au RGPD, vous disposez des droits suivants :<ul><li><strong>Accès</strong> : demandez les données vous concernant. Le <strong>mode développeur</strong> de l'extension donne en outre accès à un onglet « Analytics logs » qui affiche en local les événements analytics collectés.</li><li><strong>Suppression</strong> : désactivez les analytics depuis l'extension pour effacer les données d'appareil.</li><li><strong>Opposition</strong> : refusez les analytics lors de l'installation ou désactivez-les à tout moment.</li><li><strong>Portabilité</strong> : exportez vous-même l'ensemble de vos données analytics au format JSON, en libre-service, depuis la page <a href='/consent'>de gestion du consentement</a>.</li></ul>Pour exercer ces droits, contactez-nous via le <a href='https://github.com/nowly-presence/nowly'>dépôt GitHub</a> ou à l'adresse indiquée dans les <a href='/legal-notice'>mentions légales</a>."
+        "body": "Conformément au RGPD, vous disposez des droits suivants :<ul><li><strong>Accès</strong> : demandez les données vous concernant. Le <strong>mode développeur</strong> de l'extension donne en outre accès à un onglet « Journaux analytics » qui affiche en local les événements analytics collectés.</li><li><strong>Suppression</strong> : désactivez les analytics depuis l'extension pour effacer les données d'appareil.</li><li><strong>Opposition</strong> : refusez les analytics lors de l'installation ou désactivez-les à tout moment.</li><li><strong>Portabilité</strong> : exportez vous-même l'ensemble de vos données analytics au format JSON, en libre-service, depuis la page <a href='/consent'>de gestion du consentement</a>.</li></ul>Pour exercer ces droits, contactez-nous via le <a href='https://github.com/nowly-presence/nowly'>dépôt GitHub</a> ou à l'adresse indiquée dans les <a href='/legal-notice'>mentions légales</a>."
       },
       {
         "title": "Contact",
@@ -417,7 +419,7 @@
       },
       {
         "title": "Description du service",
-        "body": "Nowly est un outil <strong>open source et gratuit</strong> qui détecte les contenus multimédias dans votre navigateur et met automatiquement à jour votre statut Discord (Rich Presence) via une communication locale avec le client Discord. Le service comprend :<ul><li>Une <strong>extension Chromium</strong> qui détecte et transmet l'activité.</li><li>Une <strong>Nowly Host</strong> qui sert de passerelle vers Discord.</li><li>Un <strong>site web</strong> pour découvrir et installer des présences.</li><li>Un <strong>SDK développeur</strong> et des outils pour créer des présences personnalisées.</li></ul>"
+        "body": "Nowly est un outil <strong>open source et gratuit</strong> qui détecte les contenus multimédias dans votre navigateur et met automatiquement à jour votre statut Discord (Rich Presence) via une communication locale avec le client Discord. Le service comprend :<ul><li>Une <strong>extension Chromium</strong> qui détecte et transmet l'activité.</li><li><strong>Nowly Host</strong>, qui sert de passerelle vers Discord.</li><li>Un <strong>site web</strong> pour découvrir et installer des présences.</li><li>Un <strong>SDK développeur</strong> et des outils pour créer des présences personnalisées.</li></ul>"
       },
       {
         "title": "Âge minimum",
@@ -537,7 +539,7 @@
   "marketplace-page": {
     "badge": "Bibliothèque",
     "title": "Plateformes compatibles",
-    "description": "Découvrez toutes les plateformes compatibles avec Nowly",
+    "description": "Toutes les plateformes actuellement compatibles avec Nowly.",
     "search-placeholder": "Rechercher une plateforme...",
     "sort-label": "Trier par :",
     "sort-popular": "Popularité",
@@ -562,18 +564,18 @@
     "author-label": "Auteur",
     "author-all": "Tous les auteurs",
     "contribute-lead": "Un site manque ?",
-    "request-presence": "Demander une presence",
-    "create-presence": "En créer une"
+    "request-presence": "Demander une présence",
+    "create-presence": "Créer une présence"
   },
   "author-page": {
     "badge": "Auteur",
-    "description": "{count, plural, one {# presence par {name}} other {# presences par {name}}}",
+    "description": "{count, plural, one {# présence par {name}} other {# présences par {name}}}",
     "view-in-library": "Voir dans la bibliothèque"
   },
   "docs": {
     "documentation": "Documentation",
     "on-this-page": "Sur cette page",
-    "toc": "TOC",
+    "toc": "Sommaire",
     "open-table-of-contents": "Ouvrir la table des matières",
     "previous": "Précédent",
     "next": "Suivant",
@@ -674,11 +676,11 @@
   "host-page": {
     "badge": "Nowly Host",
     "title": "Télécharger Nowly Host",
-    "description": "Le pont entre votre navigateur et Discord. Synchronise votre Rich Presence en arrière-plan.",
+    "description": "Le pont local entre votre navigateur et Discord. Il synchronise votre Rich Presence en arrière-plan.",
     "card-title": "Télécharger Nowly Host pour",
     "card-version": "{details}",
     "platform-select-label": "Sélectionner la plateforme",
-    "windows-details": "Windows 10/11, 64\u2011bit",
+    "windows-details": "Windows 10/11, 64‑bit",
     "macos-details": "macOS 11+, Intel ou Apple Silicon",
     "linux-details": "Linux 2.6.32+ / glibc 2.17+",
     "download-for": "Télécharger pour {platform}",
@@ -790,16 +792,16 @@
   },
   "error-page": {
     "title": "Une erreur est survenue",
-    "description": "Une erreur inattendue s'est produite. Réessaie ou reviens plus tard.",
+    "description": "Une erreur inattendue s'est produite. Réessayez ou revenez plus tard.",
     "retry": "Réessayer"
   },
   "changelog-page": {
     "badge": "Mise à jour de l'extension",
     "title": "Votre extension a été mise à jour",
     "description": "Nowly {version} est maintenant installée. Voici ce qui a changé dans cette version.",
-    "meta-title": "Changelog Nowly {version}",
+    "meta-title": "Notes de version Nowly {version}",
     "library-cta": "Parcourir la bibliothèque",
-    "docs-cta": "Changelog complet",
-    "missing": "Les notes de cette version ne sont pas encore publiées. Vous pouvez consulter le changelog complet dans la documentation."
+    "docs-cta": "Notes de version complètes",
+    "missing": "Les notes de cette version ne sont pas encore publiées. Vous pouvez consulter l’historique complet dans la documentation."
   }
 }

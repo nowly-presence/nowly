@@ -14,9 +14,13 @@ export const FooterLinks: FC = (): ReactElement => {
       links: [
         { href: `${SITE_URL}/library`, label: t("marketplace") },
         { href: `${SITE_URL}/host`, label: t("host") },
-        { href: "/docs", label: t("docs") },
-        { href: `${SITE_URL}/about`, label: t("about") },
-        { href: "/docs/changelog", label: t("changelog") },
+      ],
+    },
+    {
+      label: t("category-developers"),
+      links: [
+        { href: "/", label: t("docs") },
+        { href: "/changelog", label: t("changelog") },
       ],
     },
     {
@@ -30,7 +34,7 @@ export const FooterLinks: FC = (): ReactElement => {
   ];
 
   return (
-    <div className="flex gap-12">
+    <div className="grid grid-cols-2 gap-x-8 gap-y-8 md:grid-cols-3">
       {categories.map((category) => (
         <div key={category.label} className="flex flex-col gap-3">
           <p className="text-xs font-semibold tracking-wider text-foreground/40 uppercase">
