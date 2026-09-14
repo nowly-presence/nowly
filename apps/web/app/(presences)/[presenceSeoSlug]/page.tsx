@@ -28,7 +28,7 @@ const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const data = await presenceApi.get<PresenceRelease>(`/${item}`).catch(() => null);
 
   if (!data) {
-    return { title: "Not Found" };
+    return { title: "Not Found", robots: { index: false, follow: false } };
   }
 
   return createPresenceMetadata(item, data, buildPresenceSeoPath(item));

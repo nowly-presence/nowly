@@ -6,11 +6,12 @@ const robots = (): MetadataRoute.Robots => {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        disallow: "/api/",
+        allow: ["/", "/api/og/"],
+        disallow: ["/api/", "/cdn-cgi/", "/uninstall"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 };
 

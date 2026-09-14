@@ -1,7 +1,8 @@
 import { execFileSync } from "child_process";
-import { mkdirSync, readFileSync, rmSync } from "fs";
+import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { join, relative } from "path";
 import { fileURLToPath } from "url";
+import { zipSync } from "fflate";
 
 type Browser = "chrome" | "firefox";
 type PackageTarget = Browser | "all";
@@ -53,22 +54,27 @@ const runBuild = (browser: Browser): void => {
   runPnpmCommand(`pnpm --filter @nowly/extension build:${browser}`);
 };
 
-const createZip = (sourceDir: string, outputPath: string): void => {
-  rmSync(outputPath, { force: true });
+const collectZipEntries = (dir: string, root: string): Record<string, Uint8Array> => {
+  const entries: Record<string, Uint8Array> = {};
 
-  if (process.platform === "win32") {
-    execFileSync("powershell.exe", [
-      "-NoProfile",
-      "-Command",
-      `Compress-Archive -Path "${sourceDir}\\*" -DestinationPath "${outputPath}"`,
-    ], { stdio: "inherit" });
-    return;
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      Object.assign(entries, collectZipEntries(fullPath, root));
+      continue;
+    }
+
+    // AMO rejects Windows backslash paths (e.g. icons\icon128.png).
+    const posixPath = relative(root, fullPath).replaceAll("\\", "/");
+    entries[posixPath] = new Uint8Array(readFileSync(fullPath));
   }
 
-  execFileSync("zip", ["-qr", outputPath, "."], {
-    cwd: sourceDir,
-    stdio: "inherit",
-  });
+  return entries;
+};
+
+const createZip = (sourceDir: string, outputPath: string): void => {
+  rmSync(outputPath, { force: true });
+  writeFileSync(outputPath, zipSync(collectZipEntries(sourceDir, sourceDir), { level: 9 }));
 };
 
 const packageBrowser = (browser: Browser): void => {

@@ -13,12 +13,12 @@ Los paquetes son opcionales. Una presencia sin carpeta `locales` sigue usando su
 
 Una presencia localizada incluye los tres diccionarios runtime:
 
-\`\`\`text
+```text
 locales/
 ├── en-US.json
 ├── fr-FR.json
 └── es-ES.json
-\`\`\`
+```
 
 Cada archivo debe ser un objeto JSON plano con las mismas claves y solo valores de texto. \`en-US.json\` es la referencia y alternativa. El build rechaza JSON inválido, locales ausentes, archivos desconocidos, valores no textuales y claves diferentes.
 
@@ -28,7 +28,7 @@ Cada archivo debe ser un objeto JSON plano con las mismas claves y solo valores 
 
 ## Autocompletado tipado
 
-\`\`\`typescript
+```typescript
 import type enUS from "./locales/en-US.json"
 
 const locale = await presence.getStrings<typeof enUS>()
@@ -37,7 +37,7 @@ const title = document.title
 await presence.setActivity({
   details: presence.formatString(locale.watchingVideo, { title }),
 })
-\`\`\`
+```
 
 La importación de tipo ofrece autocompletado en el IDE y rechaza claves desconocidas sin añadir el JSON al bundle. No hace falta generar tipos.
 

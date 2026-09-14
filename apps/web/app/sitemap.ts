@@ -27,12 +27,6 @@ const fetchPresencePages = async (): Promise<MetadataRoute.Sitemap> => {
 
         return [
           {
-            url: `${SITE_URL}/library/${presence.slug}`,
-            lastModified,
-            changeFrequency: "weekly" as const,
-            priority: 0.85,
-          },
-          {
             url: `${SITE_URL}${buildPresenceSeoPath(presence.slug)}`,
             lastModified,
             changeFrequency: "weekly" as const,
@@ -66,12 +60,6 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
             priority: 0.7,
           },
           ...pages,
-          ...section.children.map((page) => ({
-            url: `${SITE_URL}/changelog/${page.slug}`,
-            lastModified: new Date(),
-            changeFrequency: "monthly" as const,
-            priority: 0.55,
-          })),
         ]
       : pages;
   });

@@ -1,5 +1,6 @@
 import type { Presence } from "@/lib/data/presences";
 import { SITE_URL } from "@/lib/seo";
+import { buildPresenceSeoPath } from "@/lib/seo-presence";
 import type { FC, ReactElement } from "react";
 import { JsonLd } from "./json-ld";
 
@@ -17,7 +18,7 @@ export const PresenceStructuredData: FC<Props> = ({ presence, slug }): ReactElem
         name: `${presence.name} Presence for Nowly`,
         applicationCategory: "BrowserApplication",
         operatingSystem: "Windows, Chromium",
-        url: `${SITE_URL}/library/${slug}`,
+        url: `${SITE_URL}${buildPresenceSeoPath(slug)}`,
         description: presence.description,
         author: {
           "@type": "Person",
@@ -46,7 +47,7 @@ export const PresenceStructuredData: FC<Props> = ({ presence, slug }): ReactElem
             "@type": "ListItem",
             position: 2,
             name: presence.name,
-            item: `${SITE_URL}/library/${slug}`,
+            item: `${SITE_URL}${buildPresenceSeoPath(slug)}`,
           },
         ],
       }}

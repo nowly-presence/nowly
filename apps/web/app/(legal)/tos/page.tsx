@@ -1,4 +1,5 @@
 import { StructuredContentPage } from "@/components/layout/structured-content-page";
+import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
@@ -8,16 +9,11 @@ type PageSection = {
   body: string
 };
 
-const generateMetadata = (): Metadata => {
-  return {
-    title: "Terms of Service — Nowly",
-    description: "Terms of Service for Nowly. Please read before using the browser extension, Nowly Host and website.",
-    openGraph: {
-      title: "Terms of Service — Nowly",
-      description: "Terms of Service for Nowly. Please read before using the browser extension, Nowly Host and website.",
-    },
-  };
-};
+const generateMetadata = (): Metadata => createMetadata({
+  title: "Terms of Service",
+  description: "Terms of Service for Nowly. Please read before using the browser extension, Nowly Host and website.",
+  path: "/tos",
+});
 
 const Page = (): ReactElement => {
   const t = useTranslations("tos-page");

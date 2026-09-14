@@ -1,8 +1,5 @@
-import { presenceApi } from "@/lib/presence-api";
-import type { Metadata, Viewport } from "next";
-import type { ReactElement } from "react";
-import type { PresenceRelease } from "./fetch-presence";
-import { createPresenceMetadata, renderPresencePage } from "./presence-page";
+import { buildPresenceSeoPath } from "@/lib/seo-presence";
+import { permanentRedirect } from "next/navigation";
 
 type Props = {
   params: Promise<{
@@ -10,35 +7,9 @@ type Props = {
   }>
 };
 
-const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
+const Page = async ({ params }: Props): Promise<never> => {
   const { item: raw } = await params;
-  const item = raw.toLowerCase();
-  const data = await presenceApi.get<PresenceRelease>(`/${item}`).catch(() => null);
-
-  if (!data) {
-    return { title: "Not Found" };
-  }
-
-  return createPresenceMetadata(item, data, `/library/${item}`);
+  permanentRedirect(buildPresenceSeoPath(raw.toLowerCase()));
 };
-
-const Page = async ({ params }: Props): Promise<ReactElement> => {
-  const { item: raw } = await params;
-  return renderPresencePage(raw.toLowerCase());
-};
-
-const generateViewport = async ({ params }: Props): Promise<Viewport> => {
-  const { item: raw } = await params;
-  const item = raw.toLowerCase();
-  const data = await presenceApi.get<PresenceRelease>(`/${item}`).catch(() => null);
-
-  return {
-    themeColor: data?.metadata?.color ?? "#22d3ee",
-    width: "device-width",
-    initialScale: 1,
-  };
-};
-
-export { generateMetadata, generateViewport };
 
 export default Page;

@@ -1,4 +1,5 @@
 import { StructuredContentPage } from "@/components/layout/structured-content-page";
+import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
@@ -8,16 +9,11 @@ type PageSection = {
   body: string
 };
 
-const generateMetadata = (): Metadata => {
-  return {
-    title: "Privacy Policy — Nowly",
-    description: "Privacy Policy for Nowly. Learn how your data is processed locally and what information is collected.",
-    openGraph: {
-      title: "Privacy Policy — Nowly",
-      description: "Privacy Policy for Nowly. Learn how your data is processed locally and what information is collected.",
-    },
-  };
-};
+const generateMetadata = (): Metadata => createMetadata({
+  title: "Privacy Policy",
+  description: "Privacy Policy for Nowly. Learn how your data is processed locally and what information is collected.",
+  path: "/privacy",
+});
 
 const Page = (): ReactElement => {
   const t = useTranslations("privacy-page");

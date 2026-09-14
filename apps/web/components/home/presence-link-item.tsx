@@ -1,6 +1,7 @@
 import { ASSET_URL } from "@/lib/assets";
 import { getLocalizedDescription } from "@/lib/data/localized";
 import type { Presence } from "@/lib/data/presences";
+import { buildPresenceSeoPath } from "@/lib/seo-presence";
 import { IconArrowUpRight, IconDownload, IconUsers } from "@tabler/icons-react";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
@@ -15,7 +16,7 @@ export const PresenceLinkItem: FC<Props> = ({ presence, locale }) => {
 
   return (
     <Link
-      href={`/library/${presence.slug}`}
+      href={buildPresenceSeoPath(presence.slug)}
       className="group relative isolate overflow-hidden rounded-lg border border-border bg-card p-5 transition-all hover:bg-card-hover/45"
     >
       <div

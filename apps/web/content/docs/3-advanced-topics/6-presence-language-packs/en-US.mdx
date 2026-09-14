@@ -13,12 +13,12 @@ Language packs are optional. A presence without a `locales` directory keeps usin
 
 A localized presence provides all three runtime dictionaries:
 
-\`\`\`text
+```text
 locales/
 ├── en-US.json
 ├── fr-FR.json
 └── es-ES.json
-\`\`\`
+```
 
 Each file must be a flat JSON object with the same keys and string values. \`en-US.json\` is the reference dictionary and fallback. Builds reject invalid JSON, missing locales, unsupported files, non-string values, and mismatched keys.
 
@@ -28,7 +28,7 @@ Each file must be a flat JSON object with the same keys and string values. \`en-
 
 ## Typed Autocomplete
 
-\`\`\`typescript
+```typescript
 import type enUS from "./locales/en-US.json"
 
 const locale = await presence.getStrings<typeof enUS>()
@@ -37,7 +37,7 @@ const title = document.title
 await presence.setActivity({
   details: presence.formatString(locale.watchingVideo, { title }),
 })
-\`\`\`
+```
 
 The type-only import provides IDE autocomplete and rejects unknown keys without adding the JSON to the bundle. No type-generation command is needed.
 

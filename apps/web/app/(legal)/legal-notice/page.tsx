@@ -1,4 +1,5 @@
 import { StructuredContentPage } from "@/components/layout/structured-content-page";
+import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
@@ -24,16 +25,11 @@ const injectPublisherInfo = (body: string): string =>
     .replaceAll("{publisherEmail}", PUBLISHER.email)
     .replaceAll("{dataRegion}", PUBLISHER.dataRegion);
 
-const generateMetadata = (): Metadata => {
-  return {
-    title: "Legal Notice — Nowly",
-    description: "Legal information about the publisher, hosting provider and intellectual property of Nowly.",
-    openGraph: {
-      title: "Legal Notice — Nowly",
-      description: "Legal information about the publisher, hosting provider and intellectual property of Nowly.",
-    },
-  };
-};
+const generateMetadata = (): Metadata => createMetadata({
+  title: "Legal Notice",
+  description: "Legal information about the publisher, hosting provider and intellectual property of Nowly.",
+  path: "/legal-notice",
+});
 
 const Page = (): ReactElement => {
   const t = useTranslations("legal-notice-page");

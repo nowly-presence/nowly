@@ -1,6 +1,7 @@
 "use client";
 
 import type { Presence } from "@/lib/data/presences";
+import { buildPresenceSeoPath } from "@/lib/seo-presence";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -19,7 +20,7 @@ export const PresenceCard: FC<Props> = ({ presence, locale }): ReactElement => {
 
   return (
     <Link
-      href={`/library/${presence.slug}`}
+      href={buildPresenceSeoPath(presence.slug)}
       prefetch={false}
       className={cn(
         "group bg-card border rounded-lg transition-colors hover:bg-card-hover overflow-hidden",

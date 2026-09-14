@@ -26,7 +26,10 @@ const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const doc = getDocContent(pageSlug, locale);
 
   if (!doc) {
-    return { title: "Not Found" };
+    return {
+      title: "Not Found",
+      robots: { index: false, follow: false },
+    };
   }
 
   const description = doc.description || "Nowly documentation for Discord Rich Presence setup and presence development.";

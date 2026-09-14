@@ -30,6 +30,11 @@ server.get("/health", async () => {
   }
 })
 
+server.get("/robots.txt", async (_request, reply) => {
+  reply.type("text/plain")
+  return "User-agent: *\nDisallow: /\n"
+})
+
 await server.register(analyticsRoutes, { prefix: "/analytics" })
 await server.register(deviceRoutes, { prefix: "/devices" })
 await server.register(authRoutes, { prefix: "/auth" })
