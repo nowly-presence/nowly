@@ -13,17 +13,18 @@ type Props = {
   entries: PresenceListEntry[];
   isLoading: boolean;
   onOpen: (slug: string) => void;
-  onOpenMarketplace: (slug: string) => void;
   onSchedule: (slug: string) => void;
   onToggle: (slug: string, enabled: boolean) => void;
+  onUpdatePresence: (slug: string) => void;
   separateActive: boolean;
   showSchedule: boolean;
   updates: Record<string, string>;
+  updatingSlug?: string | null;
 };
 
 type SectionProps = Pick<
   Props,
-  "onOpen" | "onOpenMarketplace" | "onSchedule" | "onToggle" | "showSchedule" | "updates"
+  "onOpen" | "onUpdatePresence" | "onSchedule" | "onToggle" | "showSchedule" | "updates" | "updatingSlug"
 > & {
   entries: PresenceListEntry[];
   layout: "list" | "grid";
@@ -33,11 +34,12 @@ const PresenceEntries: FC<SectionProps> = ({
   entries,
   layout,
   onOpen,
-  onOpenMarketplace,
+  onUpdatePresence,
   onSchedule,
   onToggle,
   showSchedule,
   updates,
+  updatingSlug,
 }): ReactElement =>
   layout === "grid" ? (
     <PresenceGridSection entries={entries} onOpen={onOpen} updates={updates} />
@@ -45,11 +47,12 @@ const PresenceEntries: FC<SectionProps> = ({
     <PresenceListSection
       entries={entries}
       onOpen={onOpen}
-      onOpenMarketplace={onOpenMarketplace}
+      onUpdatePresence={onUpdatePresence}
       onSchedule={onSchedule}
       onToggle={onToggle}
       showSchedule={showSchedule}
       updates={updates}
+      updatingSlug={updatingSlug}
     />
   );
 
@@ -59,12 +62,13 @@ export const PresenceList: FC<Props> = ({
   entries,
   isLoading,
   onOpen,
-  onOpenMarketplace,
   onSchedule,
   onToggle,
+  onUpdatePresence,
   separateActive,
   showSchedule,
   updates,
+  updatingSlug,
 }) => {
   if (isLoading) {
     return (
@@ -80,11 +84,12 @@ export const PresenceList: FC<Props> = ({
 
   const sectionProps = {
     onOpen,
-    onOpenMarketplace,
+    onUpdatePresence,
     onSchedule,
     onToggle,
     showSchedule,
     updates,
+    updatingSlug,
   };
   const layout = displayMode === "grid" ? "grid" : "list";
   const groups = groupByCategory(filtered);

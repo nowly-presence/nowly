@@ -1,14 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { VersionBadge } from "@/components/shared/version-badge";
 import { assetUrl } from "@/shared/api";
 import { t } from "@/shared/i18n";
 import type { StoredPresence } from "@/shared/types";
-import { IconCalendar, IconExternalLink, IconSettings } from "@/lib/tabler-icons";
+import { IconCalendar, IconLoader2, IconSettings } from "@/lib/tabler-icons";
 import type { FC, MouseEvent, ReactElement } from "react";
 
 type Props = {
   onOpen: (slug: string) => void;
-  onOpenMarketplace: (slug: string) => void;
+  onUpdatePresence: (slug: string) => void;
+  updating?: boolean;
   onSchedule: (slug: string) => void;
   onToggle: (slug: string, enabled: boolean) => void;
   presence: StoredPresence;
@@ -19,7 +21,8 @@ type Props = {
 
 export const PresenceListItem: FC<Props> = ({
   onOpen,
-  onOpenMarketplace,
+  onUpdatePresence,
+  updating = false,
   onSchedule,
   onToggle,
   presence,
@@ -31,7 +34,8 @@ export const PresenceListItem: FC<Props> = ({
 
   const openUpdate = (event: MouseEvent): void => {
     event.stopPropagation();
-    onOpenMarketplace(slug);
+    if (updating) return;
+    onUpdatePresence(slug);
   };
 
   return (
@@ -54,10 +58,11 @@ export const PresenceListItem: FC<Props> = ({
             variant="unstyled"
             size="none"
             onClick={openUpdate}
-            className="inline-flex h-6 shrink-0 items-center gap-1 rounded-md border border-border bg-card-2 px-2 text-[11px] font-semibold text-foreground transition-colors hover:bg-card-hover"
+            className="inline-flex h-6 shrink-0 items-center gap-1 rounded-md border border-border bg-card-2 px-2 text-[11px] font-semibold text-foreground transition-colors hover:bg-card-hover disabled:opacity-60"
+            disabled={updating}
           >
-            {t("presence-update-action")}
-            <IconExternalLink className="h-3 w-3" />
+            {updating ? <IconLoader2 className="h-3 w-3 animate-spin" /> : null}
+            {updating ? t("store-installing") : t("presence-update-action")}
           </Button>
         </div>
       ) : null}
@@ -90,7 +95,7 @@ export const PresenceListItem: FC<Props> = ({
 
               <span className="truncate">{presence.enabled ? t("enabled") : t("disabled")}</span>
               {presence.metadata.version ? (
-                <span className="truncate">{t("version", { version: presence.metadata.version })}</span>
+                <VersionBadge version={presence.metadata.version} />
               ) : null}
             </div>
           </div>

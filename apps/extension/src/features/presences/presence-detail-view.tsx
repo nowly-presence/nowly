@@ -6,22 +6,25 @@ import { PresenceAboutCard } from "@/features/presences/presence-detail-info";
 import { resolveLocaleList, resolveLocaleString } from "@/features/presences/presence-locale";
 import { PresenceSettingsFields } from "@/features/presences/presence-settings-fields";
 import { getCategoryLabel } from "@/features/presences/presence-list.model";
+import { VersionBadge } from "@/components/shared/version-badge";
 import { assetUrl } from "@/shared/api";
 import { t } from "@/shared/i18n";
 import type { StoredPresence } from "@/shared/types";
-import { IconCalendar, IconChevronLeft, IconExternalLink, IconTrash } from "@/lib/tabler-icons";
+import { IconCalendar, IconChevronLeft, IconExternalLink, IconLoader2, IconTrash } from "@/lib/tabler-icons";
 import type { FC, MouseEvent, ReactElement } from "react";
 import { useEffect, useState } from "react";
 
 type Props = {
   onBack: () => void;
-  onOpenMarketplace: (slug: string) => void;
+  onOpenWebsite: (slug: string) => void;
   onRemove: (slug: string) => void;
   onSchedule?: (slug: string) => void;
   onToggle: (slug: string, enabled: boolean) => void;
+  onUpdatePresence: (slug: string) => void;
   presence: StoredPresence;
   slug: string;
   updateAvailable?: string;
+  updating?: boolean;
 };
 
 const actionRowClassName =
@@ -29,23 +32,22 @@ const actionRowClassName =
 
 export const PresenceDetailView: FC<Props> = ({
   onBack,
-  onOpenMarketplace,
+  onOpenWebsite,
   onRemove,
   onSchedule,
   onToggle,
+  onUpdatePresence,
   presence,
   slug,
   updateAvailable,
+  updating = false,
 }): ReactElement => {
   const color = presence.metadata.color;
   const description = resolveLocaleString(presence.metadata.description);
   const features = resolveLocaleList(presence.metadata.features);
   const urls = [...new Set(presence.metadata.url ?? [])];
   const [confirmUninstall, setConfirmUninstall] = useState(false);
-  const meta = [
-    getCategoryLabel(presence.metadata.category),
-    presence.metadata.version ? t("version", { version: presence.metadata.version }) : null,
-  ].filter((value): value is string => Boolean(value));
+  const category = getCategoryLabel(presence.metadata.category);
 
   useEffect(() => {
     document.getElementById("sidepanel-tabpanel")?.scrollTo(0, 0);
@@ -53,7 +55,8 @@ export const PresenceDetailView: FC<Props> = ({
 
   const openUpdate = (event: MouseEvent): void => {
     event.stopPropagation();
-    onOpenMarketplace(slug);
+    if (updating) return;
+    onUpdatePresence(slug);
   };
 
   return (
@@ -82,15 +85,12 @@ export const PresenceDetailView: FC<Props> = ({
             <img src={assetUrl(slug, "icon")} alt="" className="size-7 object-contain" />
           </div>
           <div className="min-w-0 flex-1">
-            <h1 className="truncate text-base font-semibold text-foreground">{presence.metadata.name}</h1>
-            {meta.length > 0 ? (
-              <p className="mt-0.5 flex min-w-0 flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
-                {meta.map((item) => (
-                  <span key={item} className="truncate">
-                    {item}
-                  </span>
-                ))}
-              </p>
+            <div className="flex min-w-0 items-center gap-2">
+              <h1 className="min-w-0 truncate text-base font-semibold text-foreground">{presence.metadata.name}</h1>
+              {presence.metadata.version ? <VersionBadge version={presence.metadata.version} /> : null}
+            </div>
+            {category ? (
+              <p className="mt-0.5 truncate text-xs text-muted-foreground">{category}</p>
             ) : null}
             {description ? (
               <p className="mt-2 text-sm leading-5 text-muted-foreground">{description}</p>
@@ -106,12 +106,13 @@ export const PresenceDetailView: FC<Props> = ({
           <button
             type="button"
             onClick={openUpdate}
-            className="flex w-full items-center gap-2 border-t border-accent/20 bg-accent/10 px-4 py-2 text-left text-xs font-medium text-accent"
+            className="flex w-full items-center gap-2 border-t border-accent/20 bg-accent/10 px-4 py-2 text-left text-xs font-medium text-accent disabled:opacity-60"
+            disabled={updating}
           >
             <span className="min-w-0 flex-1">{t("presence-update-available")}</span>
             <span className="inline-flex shrink-0 items-center gap-1">
-              {t("presence-update-action")}
-              <IconExternalLink className="size-3.5" />
+              {updating ? <IconLoader2 className="size-3.5 animate-spin" /> : null}
+              {updating ? t("store-installing") : t("presence-update-action")}
             </span>
           </button>
         ) : null}
@@ -137,7 +138,7 @@ export const PresenceDetailView: FC<Props> = ({
               <span className="min-w-0 flex-1">{t("schedule")}</span>
             </button>
           ) : null}
-          <button type="button" onClick={() => onOpenMarketplace(slug)} className={actionRowClassName}>
+          <button type="button" onClick={() => onOpenWebsite(slug)} className={actionRowClassName}>
             <IconExternalLink className="size-4 shrink-0 text-muted-foreground" />
             <span className="min-w-0 flex-1">{t("presence-open-site")}</span>
           </button>

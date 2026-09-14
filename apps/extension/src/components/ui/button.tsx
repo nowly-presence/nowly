@@ -8,7 +8,7 @@ export type ButtonSize = "sm" | "md" | "icon" | "none";
 const BASE = "inline-flex items-center justify-center gap-1.5 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:opacity-50 disabled:pointer-events-none";
 
 const VARIANTS: Record<ButtonVariant, string> = {
-  primary: "rounded-md bg-accent text-white hover:bg-accent/90",
+  primary: "rounded-md bg-accent text-background hover:bg-accent/90",
   ghost: "rounded-md text-muted-foreground hover:bg-card-2 hover:text-foreground",
   outline: "rounded-md border border-border bg-card text-foreground hover:bg-card-2",
   subtle: "rounded-md bg-card-2 text-foreground hover:bg-card-hover",

@@ -18,6 +18,7 @@ type ExtensionState = {
   nativeStatus: NativeStatus;
   presences: InstalledPresences;
   removePresence: (slug: string) => void;
+  installPresenceFromApi: (slug: string) => Promise<boolean>;
   resetOnboardingForDev: () => Promise<void>;
   togglePresence: (slug: string, enabled: boolean) => void;
   updates: Record<string, string>;
@@ -164,6 +165,9 @@ export const useExtensionState = (): ExtensionState => {
     });
   };
 
+  const installPresenceFromApi = (slug: string): Promise<boolean> =>
+    sendMessage<{ ok?: boolean }>("INSTALL_PRESENCE_FROM_API", { slug }).then((result) => result?.ok === true);
+
   const connectNative = (): void => {
     setNativeStatus((current) => ({ ...current, status: "connecting" }));
     void sendMessage<NativeStatus>("CONNECT_NATIVE").then((status) => {
@@ -203,6 +207,7 @@ export const useExtensionState = (): ExtensionState => {
     nativeStatus,
     presences,
     removePresence,
+    installPresenceFromApi,
     resetOnboardingForDev,
     togglePresence,
     updates,

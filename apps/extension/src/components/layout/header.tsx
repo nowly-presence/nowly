@@ -21,7 +21,6 @@ type Props = {
   isCheckingUpdates?: boolean;
   onCheckUpdates?: () => void;
   onDisplayModeChange?: (mode: PresenceDisplayMode) => void;
-  onOpenLibrary?: () => void;
   onReplayOnboarding?: () => void;
   supporter?: boolean;
 };
@@ -43,7 +42,6 @@ export const Header: FC<Props> = ({
   isCheckingUpdates = false,
   onCheckUpdates,
   onDisplayModeChange,
-  onOpenLibrary,
   onReplayOnboarding,
   supporter = false,
 }): ReactElement => {
@@ -106,17 +104,6 @@ export const Header: FC<Props> = ({
       <div className="mr-2 flex shrink-0 items-center gap-1.5">
         {displayMode && onDisplayModeChange ? (
           <PresenceLayoutToggle value={displayMode} onChange={onDisplayModeChange} />
-        ) : null}
-        {onOpenLibrary ? (
-          <Button
-            variant="unstyled"
-            size="none"
-            onClick={onOpenLibrary}
-            className="inline-flex h-8 items-center gap-1.5 rounded-xl px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
-          >
-            {t("marketplace")}
-            <IconExternalLink className="size-3.5" />
-          </Button>
         ) : null}
         <div ref={menuRef} className="relative">
           <Button

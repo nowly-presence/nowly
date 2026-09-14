@@ -8,14 +8,16 @@ type Props = {
   activity: CurrentActivity | null;
   entries: Array<[string, InstalledPresences[string]]>;
   isLoading: boolean;
-  onOpenMarketplace: (slug: string) => void;
+  onOpenWebsite: (slug: string) => void;
   onRemove: (slug: string) => void;
   onSchedule: (slug: string) => void;
   onSelectPresence: (slug: string | null) => void;
   onToggle: (slug: string, enabled: boolean) => void;
+  onUpdatePresence: (slug: string) => void;
   selectedSlug: string | null;
   settings: ExtensionSettings;
   updates: Record<string, string>;
+  updatingSlug?: string | null;
 };
 
 const resolveDisplayMode = (mode: ExtensionSettings["presenceDisplayMode"]): PresenceDisplayMode =>
@@ -25,14 +27,16 @@ export const ActivityView: FC<Props> = ({
   activity,
   entries,
   isLoading,
-  onOpenMarketplace,
+  onOpenWebsite,
   onRemove,
   onSchedule,
   onSelectPresence,
   onToggle,
+  onUpdatePresence,
   selectedSlug,
   settings,
   updates,
+  updatingSlug,
 }): ReactElement => {
   const displayMode = resolveDisplayMode(settings.presenceDisplayMode);
   const selected = selectedSlug ? entries.find(([slug]) => slug === selectedSlug) : undefined;
@@ -49,14 +53,16 @@ export const ActivityView: FC<Props> = ({
         slug={slug}
         presence={presence}
         onBack={() => onSelectPresence(null)}
-        onOpenMarketplace={onOpenMarketplace}
+        onOpenWebsite={onOpenWebsite}
         onRemove={(nextSlug) => {
           onRemove(nextSlug);
           onSelectPresence(null);
         }}
         onSchedule={settings.scheduleEnabled !== false ? onSchedule : undefined}
         onToggle={onToggle}
+        onUpdatePresence={onUpdatePresence}
         updateAvailable={updates[slug]}
+        updating={updatingSlug === slug}
       />
     );
   }
@@ -68,12 +74,13 @@ export const ActivityView: FC<Props> = ({
       displayMode={displayMode}
       entries={entries}
       onOpen={onSelectPresence}
-      onOpenMarketplace={onOpenMarketplace}
       onSchedule={onSchedule}
       onToggle={onToggle}
+      onUpdatePresence={onUpdatePresence}
       separateActive={settings.separateActivePresence}
       showSchedule={settings.scheduleEnabled !== false}
       updates={updates}
+      updatingSlug={updatingSlug}
     />
   );
 };

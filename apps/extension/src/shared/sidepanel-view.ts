@@ -5,7 +5,7 @@ export const SIDEPANEL_VIEW_KEY = "sidepanelActiveView";
 export type PersistedAppView = Exclude<AppView, "logs">;
 
 export const isPersistedAppView = (value: unknown): value is PersistedAppView =>
-  value === "home" || value === "settings";
+  value === "home" || value === "store" || value === "settings";
 
 export const loadPersistedAppView = async (): Promise<PersistedAppView> => {
   const result = await chrome.storage.local.get(SIDEPANEL_VIEW_KEY);

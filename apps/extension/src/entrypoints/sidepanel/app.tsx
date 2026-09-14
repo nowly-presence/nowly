@@ -7,6 +7,7 @@ import { ActivityView } from "@/features/presences/activity-view";
 import { CurrentActivityCard } from "@/features/presences/current-activity-card";
 import { ScheduleDialog } from "@/features/presences/schedule-dialog";
 import { SnoozeDialog } from "@/features/presences/snooze-dialog";
+import { StoreView } from "@/features/store/store-view";
 import { SettingsView } from "@/features/settings/settings-view";
 import { SupporterThankYouOverlay } from "@/features/supporter/supporter-thank-you-overlay";
 import { useExtensionState } from "@/hooks/use-extension-state";
@@ -14,6 +15,7 @@ import { useLocalePreference } from "@/hooks/use-locale-preference";
 import { useOnboardingState } from "@/hooks/use-onboarding-state";
 import { sendMessage } from "@/lib/messages";
 import { WEB_BASE_URL } from "@/shared/constants";
+import { t } from "@/shared/i18n";
 import { persistAppView } from "@/shared/sidepanel-view";
 import type { FC, ReactElement } from "react";
 import { useCallback, useEffect, useState } from "react";
@@ -23,7 +25,7 @@ type Props = {
 };
 
 const App: FC<Props> = ({ initialView }): ReactElement => {
-  const { activity, checkHostUpdate, checkUpdates, connectNative, debug, dismissSupporterThankYou, entries, hostVersionInfo, isCheckingHostVersion, isCheckingUpdates, isLoading, isUnpacked, nativeStatus, presences, removePresence, resetOnboardingForDev, supporterStatus, togglePresence, updates, settings, setSettings } =
+  const { activity, checkHostUpdate, checkUpdates, connectNative, debug, dismissSupporterThankYou, entries, hostVersionInfo, isCheckingHostVersion, isCheckingUpdates, isLoading, isUnpacked, nativeStatus, presences, installPresenceFromApi, removePresence, resetOnboardingForDev, supporterStatus, togglePresence, updates, settings, setSettings } =
     useExtensionState();
   const { localePreference, setLocalePreference } = useLocalePreference();
   const { onboarding, setOnboarding, nativeStatus: onboardingNativeStatus, userScripts } = useOnboardingState();
@@ -32,6 +34,8 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
   const [snoozeOpen, setSnoozeOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [scheduleSlug, setScheduleSlug] = useState<string | null>(null);
+  const [installingSlug, setInstallingSlug] = useState<string | null>(null);
+  const [installError, setInstallError] = useState(false);
   const liveNativeStatus = onboardingNativeStatus.status === "unknown" && nativeStatus.status !== "unknown"
     ? nativeStatus
     : onboardingNativeStatus;
@@ -39,13 +43,17 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
 
   const [statusVisible, setStatusVisible] = useState(true);
 
-  const onOpenMarketplace = useCallback((slug: string): void => {
+  const onOpenWebsite = useCallback((slug: string): void => {
     void chrome.tabs.create({ url: `${WEB_BASE_URL}/library/${slug}` });
   }, []);
 
-  const onOpenLibrary = useCallback((): void => {
-    void chrome.tabs.create({ url: `${WEB_BASE_URL}/library` });
-  }, []);
+  const handleInstallFromApi = useCallback(async (slug: string): Promise<void> => {
+    setInstallError(false);
+    setInstallingSlug(slug);
+    const ok = await installPresenceFromApi(slug);
+    setInstallingSlug(null);
+    if (!ok) setInstallError(true);
+  }, [installPresenceFromApi]);
 
   const activePresence = activity?.slug ? presences[activity.slug] : null;
   const isSnoozed = Boolean(activePresence?.snoozeUntil && activePresence.snoozeUntil > Date.now());
@@ -62,6 +70,7 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
 
   const handleViewChange = useCallback((view: AppView): void => {
     setSelectedPresenceSlug(null);
+    setInstallError(false);
     setActiveView(view);
     persistAppView(view);
   }, []);
@@ -95,7 +104,6 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
             isCheckingUpdates={isCheckingUpdates}
             onCheckUpdates={checkUpdates}
             onDisplayModeChange={showLayoutToggle ? (mode) => setSettings({ presenceDisplayMode: mode }) : undefined}
-            onOpenLibrary={onOpenLibrary}
             onReplayOnboarding={resetOnboardingForDev}
             supporter={supporterStatus.adFree}
           />
@@ -105,7 +113,7 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
           id="sidepanel-tabpanel"
           role="tabpanel"
           aria-labelledby={`sidepanel-tab-${activeView}`}
-          className={`sidepanel-scroll${activeView === "home" ? " sidepanel-scroll-plain" : ""}`}
+          className={`sidepanel-scroll${activeView === "home" || activeView === "store" ? " sidepanel-scroll-plain" : ""}`}
         >
           {activeView === "home" ? (
             <div className="flex flex-col gap-4">
@@ -123,13 +131,27 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
                 activity={activity}
                 entries={entries}
                 isLoading={isLoading}
-                onOpenMarketplace={onOpenMarketplace}
+                onOpenWebsite={onOpenWebsite}
                 onRemove={removePresence}
                 onSchedule={handleScheduleOpen}
                 onSelectPresence={setSelectedPresenceSlug}
                 onToggle={togglePresence}
+                onUpdatePresence={(slug) => void handleInstallFromApi(slug)}
                 selectedSlug={selectedPresenceSlug}
                 settings={settings}
+                updates={updates}
+                updatingSlug={installingSlug}
+              />
+            </div>
+          ) : activeView === "store" ? (
+            <div className="flex flex-col gap-3">
+              {installError ? (
+                <p className="text-xs text-red-400">{t("store-install-error")}</p>
+              ) : null}
+              <StoreView
+                installingSlug={installingSlug}
+                onInstall={(slug) => void handleInstallFromApi(slug)}
+                presences={presences}
                 updates={updates}
               />
             </div>

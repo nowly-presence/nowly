@@ -1,7 +1,6 @@
 import { t } from "@/shared/i18n";
 import { IconPackage } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
-import { MarketplaceLink } from "@/features/presences/marketplace-link";
 
 export const EmptyState: FC = (): ReactElement => (
   <section className="rounded-xl border border-dashed border-border bg-card p-6 text-center">
@@ -10,8 +9,5 @@ export const EmptyState: FC = (): ReactElement => (
     </div>
     <p className="text-sm font-semibold">{t("empty-title")}</p>
     <p className="mx-auto mt-1 max-w-60 text-xs leading-5 text-muted-foreground">{t("empty-description")}</p>
-    <div className="mt-4 flex justify-center">
-      <MarketplaceLink />
-    </div>
   </section>
 );

@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { IconHome, IconListTree, IconSettings } from "@/lib/tabler-icons";
+import { IconHome, IconListTree, IconSettings, IconShoppingBag } from "@/lib/tabler-icons";
 import { t } from "@/shared/i18n";
 import type { FC, KeyboardEvent, ReactElement } from "react";
 import { useRef } from "react";
 
-export type AppView = "home" | "settings" | "logs";
+export type AppView = "home" | "store" | "settings" | "logs";
 
 type Props = {
   activeView: AppView;
@@ -21,6 +21,7 @@ type Tab = {
 export const BottomNav: FC<Props> = ({ activeView, onViewChange, showLogs = false }): ReactElement => {
   const tabs: Tab[] = [
     { view: "home", icon: IconHome, label: "nav-home" },
+    { view: "store", icon: IconShoppingBag, label: "nav-store" },
     ...(showLogs ? [{ view: "logs" as const, icon: IconListTree, label: "nav-logs" as const }] : []),
     { view: "settings", icon: IconSettings, label: "nav-settings" },
   ];
@@ -64,7 +65,7 @@ export const BottomNav: FC<Props> = ({ activeView, onViewChange, showLogs = fals
         role="tablist"
         aria-label={t("nav-tablist")}
         onKeyDown={onTabListKeyDown}
-        className={`grid overflow-hidden rounded-xl border border-border bg-card ${showLogs ? "grid-cols-3" : "grid-cols-2"}`}
+        className={`grid overflow-hidden rounded-xl border border-border bg-card ${showLogs ? "grid-cols-4" : "grid-cols-3"}`}
       >
         {tabs.map((tab, index) => {
           const Icon = tab.icon;
