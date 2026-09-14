@@ -15,7 +15,7 @@
     "message": "Ouvrir Nowly"
   },
   "commandTogglePause": {
-    "message": "Mettre en pause ou reprendre Discord"
+    "message": "Mettre en pause ou reprendre la présence Discord"
   },
   "contextMenuPage": {
     "message": "Présence Nowly pour cette page"
