@@ -55,11 +55,10 @@ const Page = async ({ params }: Props): Promise<ReactElement> => {
           <p className="text-muted-foreground">
             {t("description", { name, count: authored.length })}
           </p>
-          <p className="mt-4 text-sm">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-sm">
             <Link href={`/library?author=${handle}`} className="text-accent hover:underline">
               {t("view-in-library")}
             </Link>
-            {" · "}
             <a
               href={`https://github.com/${handle}`}
               target="_blank"
@@ -68,7 +67,7 @@ const Page = async ({ params }: Props): Promise<ReactElement> => {
             >
               GitHub
             </a>
-          </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
