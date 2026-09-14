@@ -1,7 +1,7 @@
 {
   "name": "presence",
   "private": true,
-  "packageManager": "pnpm@11.9.0",
+  "packageManager": "pnpm@11.25.0",
   "version": "1.2.2",
   "license": "BUSL-1.1",
   "author": {
