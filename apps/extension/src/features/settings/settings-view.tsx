@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { DebugPanel } from "@/features/settings/debug-panel";
 import { SettingsGroup } from "@/features/settings/settings-group";
+import { ShortcutSettings } from "@/features/settings/shortcut-settings";
 import { ThemeSelector } from "@/features/settings/theme-selector";
 import { ThemeUpsellCard } from "@/features/settings/theme-upsell-card";
 import type { NativeStatus } from "@/lib/messages";
@@ -181,6 +182,23 @@ export const SettingsView: FC<Props> = ({
             <ThemeUpsellCard />
           )}
         </div>
+
+        <section className={innerClassName}>
+          <Label unstyled className="flex cursor-pointer items-center justify-between gap-3">
+            <span className="min-w-0">
+              <span className="block text-sm font-medium text-foreground">{t("presence-pause")}</span>
+              <span className="mt-0.5 block text-xs leading-4 text-muted-foreground">{t("presence-pause-description")}</span>
+            </span>
+            <Switch
+              checked={settings.presencePaused === true}
+              onChange={(checked) => onSettingsChange({ presencePaused: checked })}
+            />
+          </Label>
+        </section>
+
+        <section className={innerClassName}>
+          <ShortcutSettings />
+        </section>
 
         <section className={innerClassName}>
           <Label unstyled className="flex cursor-pointer items-center justify-between gap-3">

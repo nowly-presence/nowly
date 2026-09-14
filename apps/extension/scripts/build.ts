@@ -101,6 +101,16 @@ const copyManifest = () => {
       default_panel: "sidepanel/index.html",
       default_title: "__MSG_extensionName__",
     }
+    if (manifest.commands?.["open-side-panel"]) {
+      manifest.commands._execute_sidebar_action = {
+        suggested_key: manifest.commands["open-side-panel"].suggested_key,
+        description: manifest.commands["open-side-panel"].description,
+      }
+      delete manifest.commands["open-side-panel"]
+    }
+    if (manifest.commands?._execute_action) {
+      delete manifest.commands._execute_action
+    }
     manifest.browser_specific_settings = {
       gecko: {
         id: "nowly@nowly.me",

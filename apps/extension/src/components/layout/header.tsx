@@ -6,6 +6,8 @@ import {
   IconDots,
   IconExternalLink,
   IconHeart,
+  IconPlayerPause,
+  IconPlayerPlay,
   IconRefresh,
   IconRotateClockwise2,
   IconWorld,
@@ -22,6 +24,8 @@ type Props = {
   onCheckUpdates?: () => void;
   onDisplayModeChange?: (mode: PresenceDisplayMode) => void;
   onReplayOnboarding?: () => void;
+  onTogglePause?: () => void;
+  presencePaused?: boolean;
   supporter?: boolean;
 };
 
@@ -43,6 +47,8 @@ export const Header: FC<Props> = ({
   onCheckUpdates,
   onDisplayModeChange,
   onReplayOnboarding,
+  onTogglePause,
+  presencePaused = false,
   supporter = false,
 }): ReactElement => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -104,6 +110,22 @@ export const Header: FC<Props> = ({
       <div className="mr-2 flex shrink-0 items-center gap-1.5">
         {displayMode && onDisplayModeChange ? (
           <PresenceLayoutToggle value={displayMode} onChange={onDisplayModeChange} />
+        ) : null}
+        {onTogglePause ? (
+          <Button
+            variant="unstyled"
+            size="none"
+            aria-pressed={presencePaused}
+            aria-label={presencePaused ? t("presence-pause-resume") : t("presence-pause")}
+            onClick={onTogglePause}
+            className={`flex size-8 items-center justify-center rounded-xl border border-border transition-colors ${
+              presencePaused
+                ? "bg-amber-400/15 text-amber-300 hover:bg-amber-400/25"
+                : "bg-card-2 text-foreground hover:bg-card-hover"
+            }`}
+          >
+            {presencePaused ? <IconPlayerPlay className="size-4" /> : <IconPlayerPause className="size-4" />}
+          </Button>
         ) : null}
         <div ref={menuRef} className="relative">
           <Button

@@ -37,6 +37,11 @@ const normalizeImage = (value: string | undefined): string | undefined => {
   return undefined;
 };
 
+const setPausedBadge = (): void => {
+  chrome.action.setBadgeText({ text: "II" }).catch(() => {});
+  chrome.action.setBadgeBackgroundColor({ color: "#f59e0b" }).catch(() => {});
+};
+
 const setActivityBadge = (slug?: string): void => {
   if (!slug) {
     chrome.action.setBadgeText({ text: "" }).catch(() => {});
@@ -50,14 +55,21 @@ const clearActivityBadge = (): void => {
   chrome.action.setBadgeText({ text: "" }).catch(() => {});
 };
 
-export const restoreActivityBadge = async (): Promise<void> => {
+export const refreshToolbarBadge = async (): Promise<void> => {
+  const settings = await getSettings();
+  if (settings.presencePaused) {
+    setPausedBadge();
+    return;
+  }
   const activity = await getCurrentActivity();
   if (activity) {
     setActivityBadge(activity.slug);
-  } else {
-    clearActivityBadge();
+    return;
   }
+  clearActivityBadge();
 };
+
+export const restoreActivityBadge = (): Promise<void> => refreshToolbarBadge();
 
 export const normalizeActivity = (activity: PresenceData, fallbackName: string): PresenceData => {
   const allowedTypes = new Set([0, 1, 2, 3, 5]);
@@ -82,10 +94,12 @@ export const normalizeActivity = (activity: PresenceData, fallbackName: string):
   };
 };
 
-const isSnoozed = async (presence: StoredPresence): Promise<boolean> => {
+const shouldHoldDiscord = async (presence: StoredPresence): Promise<boolean> => {
+  const settings = await getSettings();
+  if (settings.presencePaused) return true;
   if (presence.snoozeUntil && presence.snoozeUntil > Date.now()) return true;
 
-  const schedule = presence.schedule ?? (await getSettings()).globalSchedule;
+  const schedule = presence.schedule ?? settings.globalSchedule;
 
   if (schedule) {
     const now = new Date();
@@ -103,6 +117,30 @@ const isSnoozed = async (presence: StoredPresence): Promise<boolean> => {
   }
 
   return false;
+};
+
+export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
+  const [current, presences, settings] = await Promise.all([
+    getCurrentActivity(),
+    getPresences(),
+    getSettings(),
+  ]);
+
+  if (settings.presencePaused || !current) {
+    if (settings.presencePaused) postNative({ type: "CLEAR_ACTIVITY" });
+    await refreshToolbarBadge();
+    return;
+  }
+
+  const stored = presences[current.slug];
+  if (!stored || await shouldHoldDiscord(stored)) {
+    postNative({ type: "CLEAR_ACTIVITY" });
+    await refreshToolbarBadge();
+    return;
+  }
+
+  postNative({ type: "SET_ACTIVITY", presence: current.presence });
+  await refreshToolbarBadge();
 };
 
 export const getPresenceVersion = async (slug: string): Promise<string | undefined> => {
@@ -155,9 +193,10 @@ export const handleActivityUpdate = async (
     return { ok: false };
   }
 
-  if (await isSnoozed(stored)) {
+  if (await shouldHoldDiscord(stored)) {
     postNative({ type: "CLEAR_ACTIVITY" });
-    // Keep the Nowly state updated so unsnooze sends the latest activity.
+    await refreshToolbarBadge();
+    // Keep the Nowly state updated so resume sends the latest activity.
     const appName = activity.appName ?? stored.release.metadata.name;
     const normalizedActivity = normalizeActivity(activity, appName);
     const presence = mapPresenceData(normalizedActivity);
@@ -182,7 +221,7 @@ export const handleActivityUpdate = async (
 
   if (tabId) setActiveTabId(tabId);
   await addActiveSlug(slug);
-  setActivityBadge(slug);
+  await refreshToolbarBadge();
 
   postNative({ type: "SET_ACTIVITY", presence });
 
@@ -206,7 +245,7 @@ export const handleClearActivity = async (slug?: string): Promise<{ ok: boolean 
     await clearActiveSlugs("clear");
   }
   postNative({ type: "CLEAR_ACTIVITY" });
-  clearActivityBadge();
+  await refreshToolbarBadge();
 
   await Promise.all([
     setCurrentActivity(null),
@@ -224,5 +263,6 @@ export const handleRemovedTab = (tabId: number): void => {
   void Promise.all([
     setCurrentActivity(null),
     setDebug({ stage: "clear", message: "activity cleared (tab closed)", updatedAt: Date.now() }),
+    refreshToolbarBadge(),
   ]);
 };

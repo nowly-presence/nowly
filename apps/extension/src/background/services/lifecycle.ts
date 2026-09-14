@@ -5,7 +5,8 @@ import { trackAnalytics } from "@/background/analytics/analytics-tracker";
 import { initializeCustomApiUrl } from "@/background/services/api-state";
 import { syncDeviceState, syncUninstallUrl } from "@/background/services/device-sync";
 import { connectNative, onNativeResponse } from "@/background/services/native";
-import { installBundledPresences } from "@/background/managers/presence-manager";
+import { drainInstallQueue, installBundledPresences } from "@/background/managers/presence-manager";
+import { registerContextMenu } from "@/background/services/context-menu";
 import { syncPresenceScripts } from "@/background/runtime/presence-scripts";
 import { getPresences, setDebug } from "@/background/services/storage";
 import { WEB_BASE_URL } from "@/shared/constants";
@@ -95,6 +96,7 @@ const bootBackground = async (options: { restoreBadge?: boolean; syncScripts?: b
   await installBundledPresences();
   const presences = await getPresences();
   await syncDeviceState();
+  void drainInstallQueue();
   if (options.restoreBadge) await restoreActivityBadge();
   if (options.syncScripts !== false) await syncPresenceScripts(presences);
   return presences;
@@ -105,11 +107,13 @@ export const registerLifecycleHandlers = (): void => {
 
   chrome.runtime.onStartup.addListener(async () => {
     enableSidePanelAction();
+    registerContextMenu();
     await bootBackground({ restoreBadge: true });
   });
 
   chrome.runtime.onInstalled.addListener(async (details) => {
     enableSidePanelAction();
+    registerContextMenu();
     const presences = await bootBackground({ syncScripts: false });
     void trackAnalytics(details.reason === "update" ? "extension_update" : "extension_install", {
       payload: { source: "onInstalled", previousVersion: details.previousVersion },
@@ -130,5 +134,6 @@ export const registerLifecycleHandlers = (): void => {
 
 export const initializeBackground = (): void => {
   enableSidePanelAction();
+  registerContextMenu();
   void bootBackground();
 };

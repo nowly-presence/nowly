@@ -7,6 +7,7 @@ import { ActivityView } from "@/features/presences/activity-view";
 import { CurrentActivityCard } from "@/features/presences/current-activity-card";
 import { ScheduleDialog } from "@/features/presences/schedule-dialog";
 import { SnoozeDialog } from "@/features/presences/snooze-dialog";
+import { InstallQueueBanner } from "@/features/store/install-queue-banner";
 import { StoreView } from "@/features/store/store-view";
 import { SettingsView } from "@/features/settings/settings-view";
 import { SupporterThankYouOverlay } from "@/features/supporter/supporter-thank-you-overlay";
@@ -16,7 +17,14 @@ import { useOnboardingState } from "@/hooks/use-onboarding-state";
 import { sendMessage } from "@/lib/messages";
 import { WEB_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
-import { persistAppView } from "@/shared/sidepanel-view";
+import {
+  SIDEPANEL_NAV_KEY,
+  clearPendingSidepanelNav,
+  isSidepanelPendingNav,
+  loadPendingSidepanelNav,
+  persistAppView,
+  type SidepanelPendingNav,
+} from "@/shared/sidepanel-view";
 import type { FC, ReactElement } from "react";
 import { useCallback, useEffect, useState } from "react";
 
@@ -25,23 +33,92 @@ type Props = {
 };
 
 const App: FC<Props> = ({ initialView }): ReactElement => {
-  const { activity, checkHostUpdate, checkUpdates, connectNative, debug, dismissSupporterThankYou, entries, hostVersionInfo, isCheckingHostVersion, isCheckingUpdates, isLoading, isUnpacked, nativeStatus, presences, installPresenceFromApi, removePresence, resetOnboardingForDev, supporterStatus, togglePresence, updates, settings, setSettings } =
-    useExtensionState();
+  const {
+    activity,
+    checkHostUpdate,
+    checkUpdates,
+    connectNative,
+    debug,
+    dismissSupporterThankYou,
+    entries,
+    hostVersionInfo,
+    installQueue,
+    isCheckingHostVersion,
+    isCheckingUpdates,
+    isLoading,
+    isUnpacked,
+    nativeStatus,
+    presences,
+    installPresenceFromApi,
+    removePresence,
+    resetOnboardingForDev,
+    retryInstallQueue,
+    setPresencePaused,
+    supporterStatus,
+    togglePresence,
+    updates,
+    settings,
+    setSettings,
+  } = useExtensionState();
   const { localePreference, setLocalePreference } = useLocalePreference();
   const { onboarding, setOnboarding, nativeStatus: onboardingNativeStatus, userScripts } = useOnboardingState();
   const [activeView, setActiveView] = useState<AppView>(initialView);
   const [selectedPresenceSlug, setSelectedPresenceSlug] = useState<string | null>(null);
+  const [storeSeed, setStoreSeed] = useState<{ query: string; slug: string | null }>({ query: "", slug: null });
   const [snoozeOpen, setSnoozeOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [scheduleSlug, setScheduleSlug] = useState<string | null>(null);
   const [installingSlug, setInstallingSlug] = useState<string | null>(null);
   const [installError, setInstallError] = useState(false);
+  const [installQueued, setInstallQueued] = useState(false);
   const liveNativeStatus = onboardingNativeStatus.status === "unknown" && nativeStatus.status !== "unknown"
     ? nativeStatus
     : onboardingNativeStatus;
   const developerModeEnabled = settings.developerMode ?? isUnpacked;
+  const presencePaused = settings.presencePaused === true;
 
   const [statusVisible, setStatusVisible] = useState(true);
+
+  const applyPendingNav = useCallback((nav: SidepanelPendingNav): void => {
+    setInstallError(false);
+    setInstallQueued(false);
+    if (nav.view === "home") {
+      setActiveView("home");
+      setSelectedPresenceSlug(nav.slug ?? null);
+      persistAppView("home");
+      return;
+    }
+    if (nav.view === "store") {
+      setActiveView("store");
+      setSelectedPresenceSlug(null);
+      setStoreSeed({ query: nav.query ?? "", slug: nav.slug ?? null });
+      persistAppView("store");
+      return;
+    }
+    setActiveView(nav.view);
+    persistAppView(nav.view);
+  }, []);
+
+  useEffect(() => {
+    void loadPendingSidepanelNav().then((nav) => {
+      if (!nav) return;
+      applyPendingNav(nav);
+      void clearPendingSidepanelNav();
+    });
+
+    const onStorageChanged = (
+      changes: Record<string, chrome.storage.StorageChange>,
+      areaName: string,
+    ): void => {
+      if (areaName !== "local" || !changes[SIDEPANEL_NAV_KEY]) return;
+      const nav = changes[SIDEPANEL_NAV_KEY].newValue;
+      if (!isSidepanelPendingNav(nav)) return;
+      applyPendingNav(nav);
+      void clearPendingSidepanelNav();
+    };
+    chrome.storage.onChanged.addListener(onStorageChanged);
+    return () => chrome.storage.onChanged.removeListener(onStorageChanged);
+  }, [applyPendingNav]);
 
   const onOpenWebsite = useCallback((slug: string): void => {
     void chrome.tabs.create({ url: `${WEB_BASE_URL}/library/${slug}` });
@@ -49,10 +126,16 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
 
   const handleInstallFromApi = useCallback(async (slug: string): Promise<void> => {
     setInstallError(false);
+    setInstallQueued(false);
     setInstallingSlug(slug);
-    const ok = await installPresenceFromApi(slug);
+    const result = await installPresenceFromApi(slug);
     setInstallingSlug(null);
-    if (!ok) setInstallError(true);
+    if (result.ok) return;
+    if (result.queued) {
+      setInstallQueued(true);
+      return;
+    }
+    setInstallError(true);
   }, [installPresenceFromApi]);
 
   const activePresence = activity?.slug ? presences[activity.slug] : null;
@@ -71,6 +154,8 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
   const handleViewChange = useCallback((view: AppView): void => {
     setSelectedPresenceSlug(null);
     setInstallError(false);
+    setInstallQueued(false);
+    setStoreSeed({ query: "", slug: null });
     setActiveView(view);
     persistAppView(view);
   }, []);
@@ -88,10 +173,15 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
 
   useEffect(() => {
     setStatusVisible(true);
+    if (presencePaused) return;
     if (!connectionHealthy) return;
     const timer = window.setTimeout(() => setStatusVisible(false), 2500);
     return () => window.clearTimeout(timer);
-  }, [connectionHealthy]);
+  }, [connectionHealthy, presencePaused]);
+
+  const queueBanner = (
+    <InstallQueueBanner count={installQueue.length} onRetry={() => void retryInstallQueue()} />
+  );
 
   return (
     <main data-theme={settings.theme ?? "default"} className="sidepanel-shell relative bg-background text-foreground">
@@ -105,6 +195,8 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
             onCheckUpdates={checkUpdates}
             onDisplayModeChange={showLayoutToggle ? (mode) => setSettings({ presenceDisplayMode: mode }) : undefined}
             onReplayOnboarding={resetOnboardingForDev}
+            onTogglePause={() => setPresencePaused(!presencePaused)}
+            presencePaused={presencePaused}
             supporter={supporterStatus.adFree}
           />
         </div>
@@ -117,10 +209,18 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
         >
           {activeView === "home" ? (
             <div className="flex flex-col gap-4">
+              {queueBanner}
+              {installError ? (
+                <p className="text-xs text-red-400">{t("store-install-error")}</p>
+              ) : null}
+              {installQueued ? (
+                <p className="text-xs text-amber-300">{t("store-install-queued")}</p>
+              ) : null}
               {settings.showPlayer !== false && !selectedPresenceSlug ? (
                 <CurrentActivityCard
                   activity={activity}
                   isLoading={isLoading}
+                  isPaused={presencePaused}
                   isSnoozed={isSnoozed}
                   onSnooze={() => setSnoozeOpen(true)}
                   onUnsnooze={handleUnsnooze}
@@ -145,13 +245,19 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
             </div>
           ) : activeView === "store" ? (
             <div className="flex flex-col gap-3">
+              {queueBanner}
               {installError ? (
                 <p className="text-xs text-red-400">{t("store-install-error")}</p>
+              ) : null}
+              {installQueued ? (
+                <p className="text-xs text-amber-300">{t("store-install-queued")}</p>
               ) : null}
               <StoreView
                 installingSlug={installingSlug}
                 onInstall={(slug) => void handleInstallFromApi(slug)}
                 presences={presences}
+                seedQuery={storeSeed.query}
+                seedSlug={storeSeed.slug}
                 updates={updates}
               />
             </div>
@@ -179,7 +285,12 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
         </div>
       </div>
 
-      <ConnectionStatusBar nativeStatus={liveNativeStatus} onConnect={connectNative} visible={statusVisible} />
+      <ConnectionStatusBar
+        nativeStatus={liveNativeStatus}
+        onConnect={connectNative}
+        presencePaused={presencePaused}
+        visible={statusVisible}
+      />
 
       <BottomNav
         activeView={activeView}

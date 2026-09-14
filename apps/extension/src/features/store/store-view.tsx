@@ -14,12 +14,14 @@ import { t } from "@/shared/i18n";
 import type { InstalledPresences } from "@/shared/types";
 import type { PresenceCategory } from "@/features/presences/presence-list.model";
 import type { FC, ReactElement } from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Props = {
   installingSlug: string | null;
   onInstall: (slug: string) => void;
   presences: InstalledPresences;
+  seedQuery?: string;
+  seedSlug?: string | null;
   updates: Record<string, string>;
 };
 
@@ -36,12 +38,19 @@ export const StoreView: FC<Props> = ({
   installingSlug,
   onInstall,
   presences,
+  seedQuery = "",
+  seedSlug = null,
   updates,
 }): ReactElement => {
   const { items, isError, isLoading, refetch } = usePresenceCatalog();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(seedQuery);
   const [category, setCategory] = useState<PresenceCategory | null>(null);
-  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(seedSlug);
+
+  useEffect(() => {
+    setQuery(seedQuery);
+    setSelectedSlug(seedSlug);
+  }, [seedQuery, seedSlug]);
 
   const categories = useMemo(() => catalogCategories(items), [items]);
   const filtered = useMemo(

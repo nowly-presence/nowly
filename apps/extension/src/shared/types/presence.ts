@@ -66,6 +66,7 @@ export type StoredPresence = {
   updatedAt?: number;
   snoozeUntil?: number;
   schedule?: PresenceSchedule;
+  source?: "store" | "bundle" | "local";
 };
 
 export type InstalledPresences = Record<string, StoredPresence>;

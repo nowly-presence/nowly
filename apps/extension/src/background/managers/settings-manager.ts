@@ -1,3 +1,4 @@
+import { applyPresencePause } from "@/background/managers/presence-pause";
 import type { ExtensionSettings } from "@/shared/types";
 import { addAnalyticsLog } from "@/background/analytics/analytics-log";
 import { trackAnalytics } from "@/background/analytics/analytics-tracker";
@@ -38,6 +39,9 @@ export const updateSettings = async (partial: Partial<ExtensionSettings>): Promi
     void trackAnalytics("settings_custom_api_changed", {
       payload: { enabled: Boolean(partial.customApiBaseUrl) },
     });
+  }
+  if (typeof partial.presencePaused === "boolean" && partial.presencePaused !== previousSettings.presencePaused) {
+    await applyPresencePause(partial.presencePaused);
   }
 
   return settings;

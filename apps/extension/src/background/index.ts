@@ -1,3 +1,4 @@
+import { registerCommandHandlers } from "@/background/services/commands";
 import { registerAlarmHandlers } from "@/background/services/alarms";
 import { initializeBackground, registerLifecycleHandlers } from "@/background/services/lifecycle";
 import { registerRuntimeMessageRouter } from "@/background/services/message-router";
@@ -7,4 +8,5 @@ registerRuntimeMessageRouter();
 registerPresenceRuntimeBridge();
 registerLifecycleHandlers();
 registerAlarmHandlers();
+registerCommandHandlers();
 initializeBackground();

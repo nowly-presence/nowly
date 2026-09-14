@@ -1,11 +1,13 @@
 import type { ExtensionMessage, ExtensionSettings, PresenceData, PresenceDebug, PresenceSchedule, UserScriptsStatus } from "@/shared/types";
-import { handleActivityUpdate, handleClearActivity } from "@/background/managers/activity-manager";
+import { handleActivityUpdate, handleClearActivity, resumeStoredActivityIfAllowed } from "@/background/managers/activity-manager";
 import { clearAnalyticsLogs, getAnalyticsLogs } from "@/background/analytics/analytics-log";
 import { trackAnalytics, trackExtensionOpen } from "@/background/analytics/analytics-tracker";
 import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { getActiveDeviceId } from "@/background/services/device-sync";
-import { postNative, reconnectNative, refreshNativeStatus, restartNative } from "@/background/services/native";
-import { checkUpdates, fetchPresenceCatalog, installPresence, installPresenceFromApi, togglePresence, uninstallPresence } from "@/background/managers/presence-manager";
+import { reconnectNative, refreshNativeStatus, restartNative } from "@/background/services/native";
+import { getInstallQueue } from "@/background/managers/install-queue";
+import { setPresencePaused } from "@/background/managers/presence-pause";
+import { checkUpdates, drainInstallQueue, fetchPresenceCatalog, installLocalPresenceZip, installPresence, installPresenceFromApi, togglePresence, uninstallPresence } from "@/background/managers/presence-manager";
 import { getPresenceStrings, registerPresenceScript, syncPresenceScripts } from "@/background/runtime/presence-scripts";
 import { resetOnboardingForDev, updateSettings } from "@/background/managers/settings-manager";
 import { clearSnooze, dismissSupporterThankYou, getCurrentActivity, getDebug, getPresenceSettings, getPresences, getSettings, getSupporterStatus, setDebug, setPresenceSchedule, setPresenceSettings, setSupporterStatus, snoozePresence } from "@/background/services/storage";
@@ -140,6 +142,15 @@ export const registerRuntimeMessageRouter = (): void => {
           }));
         return true;
 
+      case "INSTALL_LOCAL_PRESENCE_ZIP":
+        installLocalPresenceZip(message.payload)
+          .then((result) => respond(sendResponse, result))
+          .catch((error) => respond(sendResponse, {
+            ok: false,
+            error: error instanceof Error ? error.message : "presence install failed",
+          }));
+        return true;
+
       case "FETCH_PRESENCE_CATALOG":
         fetchPresenceCatalog()
           .then((items) => respond(sendResponse, { ok: true, items }))
@@ -179,13 +190,29 @@ export const registerRuntimeMessageRouter = (): void => {
         getPresences().then(async () => {
           const { slug } = message.payload as { slug: string };
           const updated = await clearSnooze(slug);
-          // Resend the stored activity if one exists for this slug.
-          const current = await getCurrentActivity();
-          if (current && current.slug === slug) {
-            postNative({ type: "SET_ACTIVITY", presence: current.presence });
-          }
+          await resumeStoredActivityIfAllowed();
           respond(sendResponse, updated);
         });
+        return true;
+
+      case "SET_PRESENCE_PAUSE": {
+        const paused = typeof message.payload === "object" && message.payload !== null
+          ? (message.payload as { paused?: unknown }).paused
+          : undefined;
+        if (typeof paused !== "boolean") {
+          respond(sendResponse, { ok: false });
+          return false;
+        }
+        setPresencePaused(paused).then((result) => respond(sendResponse, result));
+        return true;
+      }
+
+      case "GET_INSTALL_QUEUE":
+        getInstallQueue().then((items) => respond(sendResponse, { items }));
+        return true;
+
+      case "RETRY_INSTALL_QUEUE":
+        drainInstallQueue().then((result) => respond(sendResponse, result));
         return true;
 
       case "SET_PRESENCE_SCHEDULE":

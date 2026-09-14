@@ -21,6 +21,15 @@ const categoryLabelKeys: Record<PresenceCategory, MessageKey> = {
 
 export const getCategoryLabel = (category: PresenceCategory): string => t(categoryLabelKeys[category]);
 
+export const matchesPresenceSearch = (slug: string, presence: InstalledPresences[string], query: string): boolean => {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return true;
+  const name = presence.metadata.name.toLowerCase();
+  const category = getCategoryLabel(presence.metadata.category).toLowerCase();
+  const urls = (presence.metadata.url ?? []).join(" ").toLowerCase();
+  return name.includes(normalized) || slug.toLowerCase().includes(normalized) || category.includes(normalized) || urls.includes(normalized);
+};
+
 export const groupByCategory = (entries: PresenceListEntry[]): Array<[PresenceCategory, PresenceListEntry[]]> => {
   const groups = new Map<PresenceCategory, PresenceListEntry[]>();
 

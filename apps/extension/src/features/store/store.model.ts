@@ -66,6 +66,7 @@ export const filterStorePresences = (
         item.name.toLowerCase().includes(normalized)
         || item.description.toLowerCase().includes(normalized)
         || item.slug.toLowerCase().includes(normalized)
+        || item.urls.some((url) => url.toLowerCase().includes(normalized))
       );
     })
     .sort((left, right) => {

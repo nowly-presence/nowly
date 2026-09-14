@@ -6,6 +6,7 @@ import type { NativeStatus } from "@/lib/messages";
 import { API_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
 import type { ExtensionSettings, PresenceDebug } from "@/shared/types";
+import { PresenceZipDrop } from "@/features/settings/presence-zip-drop";
 import { IconChevronDown, IconRotateClockwise2, IconTerminal } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 import { useEffect, useState } from "react";
@@ -99,6 +100,8 @@ export const DebugPanel: FC<Props> = ({ debug, nativeStatus, onForceShowOnboardi
               {t("developer-onboarding-reset-action")}
             </Button>
           </div>
+
+          <PresenceZipDrop />
 
           <div className="mt-3 border-t border-border pt-3">
             <Label unstyled className="text-[11px] font-medium text-dim-foreground">

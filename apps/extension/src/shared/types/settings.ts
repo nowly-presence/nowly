@@ -9,6 +9,7 @@ export type ExtensionSettings = {
   presenceDisplayMode: PresenceDisplayMode;
   separateActivePresence: boolean;
   showPlayer: boolean;
+  presencePaused?: boolean;
   analyticsConsent?: boolean;
   developerMode?: boolean;
   customApiBaseUrl?: string;

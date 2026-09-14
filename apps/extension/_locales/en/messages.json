@@ -10,5 +10,14 @@
   },
   "paused": {
     "message": "Playback Paused"
+  },
+  "commandOpenPanel": {
+    "message": "Open Nowly"
+  },
+  "commandTogglePause": {
+    "message": "Pause or resume Discord presence"
+  },
+  "contextMenuPage": {
+    "message": "Nowly presence for this page"
   }
 }

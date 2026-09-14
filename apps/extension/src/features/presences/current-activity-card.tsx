@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 type Props = {
   activity: CurrentActivity | null;
   isLoading: boolean;
+  isPaused?: boolean;
   isSnoozed: boolean;
   onSnooze: () => void;
   onUnsnooze: () => void;
@@ -77,6 +78,7 @@ const useCountdown = (targetTimestamp: number | undefined): string | null => {
 export const CurrentActivityCard: FC<Props> = ({
   activity,
   isLoading,
+  isPaused = false,
   isSnoozed,
   onSnooze,
   onUnsnooze,
@@ -153,7 +155,11 @@ export const CurrentActivityCard: FC<Props> = ({
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold text-foreground">{title}</p>
           {subtitle ? <p className="truncate text-xs text-muted-foreground">{subtitle}</p> : null}
-          {isSnoozed && snoozeRemaining ? (
+          {isPaused ? (
+            <span className="mt-1 inline-flex items-center gap-1 text-xs text-amber-300">
+              {t("presence-paused")}
+            </span>
+          ) : isSnoozed && snoozeRemaining ? (
             <span className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground">
               <IconSnowflake className="size-3" />
               {t("snoozed")}
