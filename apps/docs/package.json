@@ -19,6 +19,7 @@
     "@radix-ui/react-avatar": "1.2.6",
     "@radix-ui/react-dialog": "1.1.23",
     "@radix-ui/react-select": "2.3.7",
+    "@ridemountainpig/svgl-react": "^1.0.17",
     "@tabler/icons-react": "^3.46.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -30,6 +31,7 @@
     "radix-ui": "^1.6.7",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "react-hotkeys-hook": "^5.3.3",
     "shiki": "^4.4.3",
     "tailwind-merge": "^3.7.0"
   },
