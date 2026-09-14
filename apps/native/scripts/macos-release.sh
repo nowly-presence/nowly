@@ -21,17 +21,14 @@ echo "  Nowly Native Host macOS Release v$VERSION"
 echo "=============================================="
 echo ""
 
-# Detect the best available source icon
+# Fetch brand icon from CDN (fallback to local native asset)
 ICON_SOURCE=""
-for candidate in \
-  "$ROOT_DIR/../../apps/extension/src/icons/icon128.png" \
-  "$ROOT_DIR/../../apps/web/public/apple-icon.png" \
-  "$ROOT_DIR/../../apps/native/assets/icon.png"; do
-  if [ -f "$candidate" ]; then
-    ICON_SOURCE="$candidate"
-    break
-  fi
-done
+ICON_TMP="$(mktemp "${TMPDIR:-/tmp}/nowly-brand-icon.XXXXXX.png")"
+if curl -fsSL "https://cdn.nowly.me/brand/favicons/favicon-192.png" -o "$ICON_TMP"; then
+  ICON_SOURCE="$ICON_TMP"
+elif [ -f "$ROOT_DIR/assets/icon.png" ]; then
+  ICON_SOURCE="$ROOT_DIR/assets/icon.png"
+fi
 
 mkdir -p "$RELEASE_DIR"
 

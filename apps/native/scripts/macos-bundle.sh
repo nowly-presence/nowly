@@ -63,7 +63,15 @@ cat > "$APP_DIR/Contents/Info.plist" <<EOF
 EOF
 
 # Generate .icns if iconutil is available (macOS)
-ICON_SOURCE="${3:-$ROOT_DIR/../../apps/extension/src/icons/icon128.png}"
+ICON_SOURCE="${3:-}"
+if [ -z "$ICON_SOURCE" ] || [ ! -f "$ICON_SOURCE" ]; then
+  ICON_TMP="$(mktemp "${TMPDIR:-/tmp}/nowly-brand-icon.XXXXXX.png")"
+  if curl -fsSL "https://cdn.nowly.me/brand/favicons/favicon-192.png" -o "$ICON_TMP"; then
+    ICON_SOURCE="$ICON_TMP"
+  elif [ -f "$ROOT_DIR/assets/icon.png" ]; then
+    ICON_SOURCE="$ROOT_DIR/assets/icon.png"
+  fi
+fi
 ICONSET_DIR="$APP_DIR/Contents/Resources/icon.iconset"
 ICNS_OUTPUT="$APP_DIR/Contents/Resources/icon.icns"
 

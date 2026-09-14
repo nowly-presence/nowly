@@ -39,6 +39,11 @@ $env:GOARCH = 'arm64'
 Write-Host "   + nowly-host-darwin-arm64 (Apple Silicon)"
 Write-Host ""
 
+Write-Host ">> Fetching brand icon from CDN..."
+New-Item -ItemType Directory -Force -Path (Join-Path $RootDir 'assets') | Out-Null
+Invoke-WebRequest -Uri "https://cdn.nowly.me/brand/favicons/favicon-192.png" -OutFile (Join-Path $RootDir 'assets\icon.png')
+Write-Host ""
+
 # Create release directory
 New-Item -ItemType Directory -Force -Path $ReleaseDir | Out-Null
 
