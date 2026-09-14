@@ -36,12 +36,16 @@ export const LocaleSelector: FC = () => {
           size="sm"
           className="h-9 border border-border bg-card-2 text-foreground hover:border-muted-foreground hover:bg-card-hover"
         >
-          <LocaleFlag locale={locale} />
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
           {SUPPORTED_LOCALES.map((code) => (
-            <SelectItem key={code} value={code}>{t(localeLabelKey[code])}</SelectItem>
+            <SelectItem key={code} value={code}>
+              <span className="inline-flex size-4 shrink-0 overflow-hidden [&>svg]:size-full">
+                <LocaleFlag locale={code} />
+              </span>
+              {t(localeLabelKey[code])}
+            </SelectItem>
           ))}
         </SelectContent>
       </Select>
