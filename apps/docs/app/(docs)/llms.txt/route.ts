@@ -1,4 +1,5 @@
 import { getDocContent, getNavigationItems } from "@/lib/docs/content";
+import { DOCS_URL } from "@/lib/constants";
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -20,7 +21,7 @@ export const GET = async () => {
       const doc = getDocContent(page.path, "en-US");
       if (!doc) continue;
 
-      lines.push(`- [${doc.title}](https://docs.nowly.me/docs/${doc.path}): ${doc.description || "Documentation for " + doc.title}`);
+      lines.push(`- [${doc.title}](${DOCS_URL}/${doc.path}): ${doc.description || "Documentation for " + doc.title}`);
     }
   }
 
@@ -32,7 +33,7 @@ export const GET = async () => {
       const doc = getDocContent(page.path, "en-US");
       if (!doc) continue;
 
-      lines.push(`- [${doc.title}](https://docs.nowly.me/docs/${doc.path}): ${doc.description || "Release notes for Nowly."}`);
+      lines.push(`- [${doc.title}](${DOCS_URL}/${doc.path}): ${doc.description || "Release notes for Nowly."}`);
     }
   }
 

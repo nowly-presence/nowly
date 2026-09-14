@@ -6,7 +6,7 @@ const sitemap = (): MetadataRoute.Sitemap => {
   const docs = getNavigationItems("en-US");
   const docPages = docs.flatMap((section) => {
     const pages = section.children.map((page) => ({
-      url: `${DOCS_URL}/docs/${page.path}`,
+      url: `${DOCS_URL}/${page.path}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: section.slug === "changelog" ? 0.65 : 0.8,
@@ -15,7 +15,7 @@ const sitemap = (): MetadataRoute.Sitemap => {
     return section.slug === "changelog"
       ? [
           {
-            url: `${DOCS_URL}/docs/changelog`,
+            url: `${DOCS_URL}/changelog`,
             lastModified: new Date(),
             changeFrequency: "monthly" as const,
             priority: 0.7,
@@ -27,7 +27,7 @@ const sitemap = (): MetadataRoute.Sitemap => {
 
   return [
     {
-      url: `${DOCS_URL}/docs`,
+      url: `${DOCS_URL}/`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,

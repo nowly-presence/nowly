@@ -23,7 +23,7 @@ const generateMetadata = async (): Promise<Metadata> => {
   return createMetadata({
     title: doc.title,
     description: doc.description || "Release notes for Nowly.",
-    path: "/docs/changelog",
+    path: "/changelog",
     type: "article",
   });
 };

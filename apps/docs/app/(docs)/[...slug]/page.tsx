@@ -3,7 +3,8 @@ import { mdxComponents } from "@/components/docs/mdx-components";
 import { OpenIn } from "@/components/docs/open-in";
 import { PageNavigation } from "@/components/docs/page-navigation";
 import { TableOfContents } from "@/components/docs/table-of-contents";
-import { getAdjacentPages, getCategoryForPath, getDocContent, getFirstDocPath } from "@/lib/docs/content";
+import { getAdjacentPages, getCategoryForPath, getDocContent } from "@/lib/docs/content";
+import { docHref } from "@/lib/docs/href";
 import { extractTocItems } from "@/lib/docs/types";
 import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -15,14 +16,14 @@ import type { ReactElement } from "react";
 
 type Props = {
   params: Promise<{
-    slug?: string[]
+    slug: string[]
   }>;
 };
 
 const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const locale = await getLocale();
   const { slug } = await params;
-  const pageSlug = slug?.join("/") || getFirstDocPath();
+  const pageSlug = slug.join("/");
   const doc = getDocContent(pageSlug, locale);
 
   if (!doc) {
@@ -43,7 +44,7 @@ const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   return createMetadata({
     title: doc.title,
     description,
-    path: `/docs/${doc.path}`,
+    path: docHref(doc.path),
     image: `/api/og/docs/${doc.path}?${ogParams.toString()}`,
   });
 };
@@ -52,7 +53,7 @@ const Page = async ({ params }: Props): Promise<ReactElement> => {
   const locale = await getLocale();
   const { slug } = await params;
 
-  const pageSlug = slug?.join("/") || getFirstDocPath();
+  const pageSlug = slug.join("/");
   const doc = getDocContent(pageSlug, locale);
 
   if (!doc) {

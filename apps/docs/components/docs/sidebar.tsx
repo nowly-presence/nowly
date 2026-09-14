@@ -1,6 +1,7 @@
 "use client";
 
 import { useSidebar } from "@/components/ui/sidebar-context";
+import { docHref } from "@/lib/docs/href";
 import type { DocNavigationItem } from "@/lib/docs/types";
 import { cn } from "@/lib/utils";
 import { IconX } from "@tabler/icons-react";
@@ -29,8 +30,8 @@ export const AppSidebar: FC<AppSidebarProps> = ({ items }) => {
 
             <ul className="space-y-0.5">
               {item.children.map((child) => {
-                const isChildActive = pathname === `/docs/${child.path}`;
-                const href = `/docs/${child.path}`;
+                const href = docHref(child.path);
+                const isChildActive = pathname === href;
 
                 return (
                   <li key={child.slug}>

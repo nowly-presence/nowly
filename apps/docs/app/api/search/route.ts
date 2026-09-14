@@ -79,7 +79,7 @@ export const GET = async (request: NextRequest) => {
 
       results.push({
         title,
-        href: `/docs/${doc.path}`,
+        href: `/${doc.path}`,
         description,
         content: body.slice(0, 200),
         matches: totalMatches,

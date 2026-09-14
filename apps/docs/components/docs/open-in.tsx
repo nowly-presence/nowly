@@ -3,7 +3,8 @@
 import { ClaudeIcon, GitHubIcon, OpenAIIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { PROJECT_REPOSITORY_URL, DOCS_URL } from "@/lib/constants";
+import { DOCS_URL, PROJECT_REPOSITORY_URL } from "@/lib/constants";
+import { docHref } from "@/lib/docs/href";
 import { IconChevronDown, IconExternalLink } from "@tabler/icons-react";
 import type { FC } from "react";
 
@@ -18,7 +19,7 @@ const buildSearchUrl = (url: string) => {
 
 export const OpenIn: FC<OpenInProps> = ({ slug, locale }) => {
   const githubUrl = `${PROJECT_REPOSITORY_URL}/blob/stable/apps/docs/content/docs/${slug}/${locale}.mdx`;
-  const markdownUrl = `${DOCS_URL}/docs/${slug}`;
+  const markdownUrl = `${DOCS_URL}${docHref(slug)}`;
 
   const services = [
     { name: "GitHub", url: githubUrl, icon: <GitHubIcon className="size-4" /> },

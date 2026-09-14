@@ -1,6 +1,7 @@
 "use client";
 
 import type { DocNavigationItem } from "@/lib/docs/types";
+import { docHref } from "@/lib/docs/href";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -19,7 +20,7 @@ export const PageNavigation: FC<PageNavigationProps> = ({ prev, next }) => {
       {prev && (
         <div className="flex-1">
           <Link
-            href={`/docs/${prev.slug}`}
+            href={docHref(prev.slug)}
             className="group flex flex-col gap-1 rounded-lg p-3 transition-colors hover:bg-card-hover"
           >
             <span className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -37,7 +38,7 @@ export const PageNavigation: FC<PageNavigationProps> = ({ prev, next }) => {
       {next && (
         <div className="flex-1 text-right">
           <Link
-            href={`/docs/${next.slug}`}
+            href={docHref(next.slug)}
             className="group flex flex-col gap-1 rounded-lg p-3 transition-colors hover:bg-card-hover"
           >
             <span className="flex items-center justify-end gap-1 text-xs text-muted-foreground">

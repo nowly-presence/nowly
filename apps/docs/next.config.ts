@@ -7,6 +7,20 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [{ protocol: "https", hostname: "cdn.nowly.me" }],
   },
+  async redirects() {
+    return [
+      {
+        source: "/docs",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/docs/:path*",
+        destination: "/:path*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();

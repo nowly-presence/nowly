@@ -20,7 +20,7 @@ type SeoOptions = {
 export const createMetadata = ({
   title,
   description,
-  path = "/docs",
+  path = "/",
   image,
   type = "website",
   noIndex = false,
