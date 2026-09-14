@@ -402,8 +402,8 @@ importers:
   packages/presences:
     dependencies:
       '@nowly/sdk':
-        specifier: ^1.3.0
-        version: 1.3.0
+        specifier: ^1.4.0
+        version: 1.4.0
     devDependencies:
       '@types/node':
         specifier: ^26.0.1
@@ -1710,8 +1710,8 @@ packages:
     resolution: {integrity: sha512-sXiVUI18qaCei5Y5qXty7xfEKrk4Vx89qKNZkG2sGWZG/iTThO3Xmnp5IjQpXCy941IksVDcl41HhvWRuhDLyw==}
     engines: {node: '>= 12'}
 
-  '@nowly/sdk@1.3.0':
-    resolution: {integrity: sha512-gSqtyd9OdVaWlWY4a/X+XPntXVHTjyA7+8i2mIJe+G83caUjVwN36VNku9fKEfl0W0RK4rGKvatHKg7wK0awBQ==}
+  '@nowly/sdk@1.4.0':
+    resolution: {integrity: sha512-bHRGoL5TtMlqgT/SIO4Xm46rCz2defmiBqj/E5AjC2KUAb49tiTnje17HAyR/nSTLO3Vj/buHsirRwW2tGVlgw==}
 
   '@opencoredev/email-sdk@0.6.5':
     resolution: {integrity: sha512-CuEfbOSjjr4/bsCz7g/X7l7ha1D/QLq0Q4glX4CRsj0uUCnuhdBYRDXv6ffi9myaVx3afw3P8RzAnw+1++jLMg==}
@@ -7118,7 +7118,7 @@ snapshots:
       '@node-rs/xxhash-win32-ia32-msvc': 1.7.8
       '@node-rs/xxhash-win32-x64-msvc': 1.7.8
 
-  '@nowly/sdk@1.3.0': {}
+  '@nowly/sdk@1.4.0': {}
 
   '@opencoredev/email-sdk@0.6.5': {}
 
