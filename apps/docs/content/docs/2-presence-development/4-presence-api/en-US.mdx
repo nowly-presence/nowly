@@ -1,0 +1,77 @@
+---
+title: Presence API
+description: Use the Nowly Presence API to update Discord Rich Presence from a website integration.
+---
+
+## Creating a Presence
+
+`Presence` is a **global** injected by the Nowly runtime — you don't need to import it.
+
+Every presence starts with a `Presence` instance:
+
+```ts filename="presence.ts"
+const presence = new Presence()
+```
+
+## UpdateData Event
+
+Use `UpdateData` to refresh activity:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: "Watching a video",
+  })
+})
+```
+
+## setActivity
+
+`setActivity` sends the current Discord activity. Common fields include:
+
+<TypeTable
+  properties={[
+    { name: "details", type: "string", description: "Primary activity line shown in Discord." },
+    { name: "state", type: "string", description: "Secondary activity line shown below details." },
+    { name: "startTimestamp", type: "number", description: "Unix timestamp for elapsed activity progress." },
+    { name: "endTimestamp", type: "number", description: "Unix timestamp for remaining activity progress." },
+    { name: "largeImageKey", type: "string", description: "Main image asset key, usually Assets.Logo or Assets.Thumbnail (globals provided by the runtime)." },
+    { name: "largeImageText", type: "string", description: "Tooltip for the large image." },
+    { name: "smallImageKey", type: "string", description: "Optional small image asset key." },
+    { name: "smallImageText", type: "string", description: "Tooltip for the small image." },
+    { name: "type", type: "number", description: "Discord activity type from PresenceType." },
+    { name: "buttons", type: "array", description: "Optional Discord activity buttons." }
+  ]}
+/>
+
+## clearActivity
+
+Call `clearActivity` when the user is no longer doing anything worth showing:
+
+```ts filename="presence.ts"
+presence.clearActivity()
+```
+
+## PresenceType
+
+`PresenceType` is a named export from `@nowly/sdk`:
+
+```ts filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+```
+
+It maps to Discord activity types: `Playing`, `Streaming`, `Listening`, `Watching`, and `Competing`.
+
+## getSetting
+
+Read a typed per-presence setting after `Presence.Settings`. The value is the user's saved setting, or the definition default:
+
+```ts filename="presence.ts"
+const showButtons = await presence.getSetting<boolean>("showButtons")
+```
+
+`UpdateData` also receives `ctx.settings` with the same map. Both update when the user changes settings in the side panel.
+
+## Logging
+
+Use `presence.info` and `presence.error` for debug messages during development.

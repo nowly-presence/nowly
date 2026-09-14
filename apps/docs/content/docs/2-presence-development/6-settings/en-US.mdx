@@ -1,0 +1,58 @@
+---
+title: Settings
+description: Add typed per-presence settings with boolean, input, select, and slider controls.
+---
+
+## What Settings Are
+
+Settings let users customize how a presence behaves without editing code.
+
+## Supported Setting Types
+
+Nowly supports boolean, input, select, and slider settings.
+
+<TypeTable
+  properties={[
+    { name: "boolean", type: "boolean", description: "Toggle for enabled/disabled options." },
+    { name: "input", type: "string", description: "Free-form text value." },
+    { name: "select", type: "string", description: "One value selected from predefined options." },
+    { name: "slider", type: "number", description: "Numeric value with optional min, max, and step." }
+  ]}
+/>
+
+## Defining Settings
+
+Use [`Presence.Settings`](/docs/presence-development/presence-api) to define typed settings:
+
+```ts filename="presence.ts"
+const settings = Presence.Settings({
+  showButtons: {
+    type: "boolean",
+    default: true,
+    label: {
+      "en-US": "Show buttons"
+    }
+  }
+})
+```
+
+## Reading Settings
+
+Use `getSetting` at runtime. Values come from the user's saved settings, falling back to the defaults from `Presence.Settings`. Live changes from the side panel arrive as `SETTINGS_UPDATED` and update the same map.
+
+You can also read the current map from `ctx.settings` in `UpdateData`:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async (ctx) => {
+  const showButtons = await presence.getSetting<boolean>("showButtons")
+  // same value: ctx.settings.showButtons
+})
+```
+
+## Localized Labels
+
+Setting labels and descriptions use the same locale keys used in metadata.
+
+## Defaults
+
+Choose safe defaults. A presence should work immediately after installation without requiring configuration.

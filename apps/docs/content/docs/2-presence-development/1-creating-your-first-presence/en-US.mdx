@@ -1,0 +1,114 @@
+---
+title: Creating Your First Presence
+description: Create a new Nowly presence with the CLI and send your first Discord Rich Presence activity.
+---
+
+## Start With the CLI
+
+Use the Nowly CLI to scaffold a new presence:
+
+```bash
+nowly init "Example"
+```
+
+The CLI creates metadata, a presence script, and required assets.
+
+## Basic Presence Code
+
+`Presence` and `Assets` are provided by the runtime — see [Presence API](/docs/presence-development/presence-api) and [Assets](/docs/presence-development/assets).
+`document` is the standard browser DOM API, available because presences run as content scripts in the extension.
+
+Only `PresenceType` (and other helpers like `createMediaTimestamps`) must be imported from `@nowly/sdk`.
+
+```ts filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+
+const presence = new Presence()
+
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: document.title,
+    state: document.location.hostname,
+    largeImageKey: Assets.Logo,
+    type: PresenceType.Watching,
+  })
+})
+```
+
+## Runtime Flow
+
+When the user visits a matching URL, Nowly loads your presence. The presence reads page state and calls `setActivity`. The extension forwards that payload to Nowly Host, which updates Discord.
+
+## Development Loop
+
+<Steps>
+<Step title="Scaffold" description="Generate the presence folder, metadata, and required assets.">
+
+```bash
+nowly init "Example"
+```
+
+</Step>
+<Step title="Configure" description="Set the name, author, supported URLs, category, color, and localized descriptions.">
+
+Edit `metadata.json` — see [Metadata](/docs/presence-development/metadata) for all available fields.
+
+</Step>
+<Step title="Implement" description="Write the presence logic using the Presence SDK.">
+
+```typescript filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+
+const presence = new Presence()
+
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    type: PresenceType.Watching,
+  })
+})
+```
+
+</Step>
+<Step title="Validate" description="Check that your metadata structure is correct and assets are in place.">
+
+```bash
+nowly validate
+```
+
+</Step>
+<Step title="Build" description="Compile the presence into a standalone bundle.">
+
+```bash
+nowly build example
+```
+
+</Step>
+<Step title="Load" description="Install the built presence in the browser. Two methods: a pre-built extension, or a zip drop.">
+
+See [Load and Test Locally](/docs/presence-development/load-and-test) for the full comparison.
+
+**First time** (no Nowly in the browser): bake the presence into a ready-made extension.
+
+```bash
+nowly extension example
+```
+
+Load `dist/extension-dev` unpacked at `chrome://extensions`.
+
+**Already have Nowly loaded unpacked:** pack a zip and drop it in Settings → Advanced → Debug. Store installs reject unsigned zips.
+
+```bash
+nowly pack example
+```
+
+</Step>
+<Step title="Test" description="Open the target website — the presence activates automatically.">
+
+Visit the site
+
+</Step>
+</Steps>
+
+Repeat **Implement** → **Build** → **Load** after each code change.

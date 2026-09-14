@@ -1,0 +1,36 @@
+---
+title: iFrames
+description: Maneja datos de actividad que se encuentran dentro de marcos incrustados.
+---
+
+<CalloutWarning>
+Los scripts de presence en iFrames **aún no están implementados** en el runtime de la extensión Nowly. `presence.on("iFrameData")` está reservado en los tipos del SDK, pero la extensión no inyecta en marcos anidados ni emite ese evento. Prefiere la página de nivel superior (DOM, `<audio>` / `<video>`, estado público) hasta que esto se publique.
+</CalloutWarning>
+
+## Cuándo importan los iFrames
+
+Algunos sitios web renderizan reproductores multimedia o estado importante dentro de iframes. Un script de presence normal puede no poder leer todo desde la página de nivel superior.
+
+Hasta que exista soporte iframe, evita sitios cuya actividad solo está en un marco cross-origin, o documenta la limitación en la descripción de la presence.
+
+## API prevista
+
+La API de Presence reserva un evento `iFrameData` para comunicación futura a nivel de marco:
+
+```ts filename="presence.ts"
+presence.on("iFrameData", async (...args) => {
+  presence.info("Datos de iframe recibidos")
+})
+```
+
+No dependas de este listener en presences de producción hoy.
+
+## Enfoque recomendado
+
+Usa el manejo de iframes solo cuando la página principal no pueda acceder al estado requerido.
+
+Prefiere selectores DOM estables, elementos multimedia y estado público de la página antes de añadir lógica de iframes.
+
+## Seguridad
+
+Evita recopilar datos personales o sensibles de los marcos. Una presence solo debe enviar información de actividad que sea útil para Discord Rich Presence.

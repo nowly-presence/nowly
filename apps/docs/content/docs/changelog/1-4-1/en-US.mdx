@@ -1,0 +1,24 @@
+---
+title: 1.4.1
+date: 2026-09-14
+description: Patch after 1.4.0 — language selectors show flags in the dropdown.
+---
+
+`1.4.1` is a small follow-up to `1.4.0`. It does not change the side panel architecture. It fixes language menus that could not show flags in the open list.
+
+<ReleaseTable
+  headers={["Area", "What changed", "Why it matters"]}
+  rows={[
+    ["Language selectors", "Native `<select>` menus cannot render SVGs in options. The extension now uses a custom select for UI language, presence language, onboarding, and per-presence locale. Each option shows its flag (or a globe for Auto / per-presence). The website footer language menu includes flags in the list as well.", "You can tell English, French, and Spanish apart in the open menu, not only from the closed trigger."],
+  ]}
+/>
+
+## Language selectors
+
+The previous language controls overlaid a flag on the closed field and used a native HTML select. Browsers strip custom markup from `<option>`, so the open list was text-only.
+
+The extension dropdown is now a custom listbox (portal, so it is not clipped by rounded settings cards). The website footer still uses the shared Select, with a flag next to each locale in the menu.
+
+## After an update
+
+Chrome and Firefox store builds still open `https://nowly.me/changelog/{manifest version}` on `onInstalled` with `reason === "update"`. For this release that URL is `/changelog/1.4.1`. Unpacked reloads do not open a tab.

@@ -1,0 +1,36 @@
+---
+title: iFrames
+description: Handle activity data that lives inside embedded frames.
+---
+
+<CalloutWarning>
+iFrame presence scripts are **not implemented** in the Nowly extension runtime yet. `presence.on("iFrameData")` is reserved in the SDK types, but the extension does not inject into nested frames or emit that event. Prefer reading the top-level page (DOM, `<audio>` / `<video>`, public page state) until this ships.
+</CalloutWarning>
+
+## When iFrames Matter
+
+Some websites render media players or important state inside iframes. A normal presence script may not be able to read everything from the top-level page.
+
+Until iframe support exists, skip sites that only expose activity inside a cross-origin frame, or document the limitation in the presence description.
+
+## Planned API
+
+The Presence API reserves an `iFrameData` event for future frame-level communication:
+
+```ts filename="presence.ts"
+presence.on("iFrameData", async (...args) => {
+  presence.info("Received iframe data")
+})
+```
+
+Do not rely on this listener in production presences today.
+
+## Recommended Approach
+
+Only use iframe handling when the main page cannot access the required state.
+
+Prefer stable DOM selectors, media elements, and public page state before adding iframe logic.
+
+## Safety
+
+Avoid collecting personal or sensitive data from frames. A presence should only send activity information that is useful for Discord Rich Presence.
