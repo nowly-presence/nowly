@@ -1,24 +1,37 @@
 ---
 title: 1.4.1
 date: 2026-09-14
-description: Parche tras 1.4.0 — los selectores de idioma muestran banderas en la lista.
+description: Sitio de docs dedicado, menús de idioma con banderas, páginas de autor en la biblioteca, reconexión de Host y snooze hasta medianoche, y watch en la CLI para autores.
 ---
 
-`1.4.1` es un seguimiento pequeño de `1.4.0`. No cambia la arquitectura del panel. Corrige los menús de idioma que no podían mostrar banderas en la lista abierta.
+`1.4.1` sigue a `1.4.0`. La arquitectura del panel no cambia. Esta versión añade un sitio de documentación dedicado, menús de idioma más claros, páginas de autor en la biblioteca, un asistente de reconexión de Host, snooze hasta medianoche, y `nowly build --watch` / `nowly pack --watch` para autores.
 
 <ReleaseTable
   headers={["Zona", "Qué cambia", "Por qué es útil"]}
   rows={[
-    ["Selectores de idioma", "Un `<select>` nativo no puede mostrar SVG en las `<option>`. La extensión usa ahora un select custom para el idioma de la UI, el idioma de presencias, el onboarding y el locale por presencia. Cada opción muestra su bandera (o un globo para Auto / por presencia). El menú de idioma del footer del sitio también incluye banderas en la lista.", "Distingues inglés, francés y español con el menú abierto, no solo en el campo cerrado."],
+    ["Documentación", "Las docs están en docs.nowly.me, con rutas como `/getting-started/troubleshooting` (ya no `/docs/...`). nowly.me/docs y las URLs antiguas `/docs/...` redirigen. Las actualizaciones de la store siguen abriendo nowly.me/changelog/{version}, que lleva a las notas correspondientes.", "Compartir y buscar llegan al host de docs actual, sin el prefijo /docs de más."],
+    ["Selectores de idioma", "Un `<select>` nativo no puede mostrar SVG en las `<option>`. La extensión usa un select custom para el idioma de la UI, el idioma de presencias, el onboarding y el locale por presencia. Cada opción muestra su bandera (o un globo para Auto). El menú de idioma del footer también incluye banderas.", "Distingues inglés, francés y español con el menú abierto, no solo en el campo cerrado."],
+    ["Ticks de presencias", "`getSetting` está disponible en los scripts. La actividad también se refresca con la visibilidad de la pestaña, cambios de historial y hash, y eventos de media, no solo en el intervalo.", "Los ajustes y los cambios de página llegan antes a Discord."],
+    ["Nowly Host", "La extensión guía la reconexión y la versión del Host cuando falta el puente nativo o está desactualizado.", "Una conexión Host rota se corrige con un recorrido, no en silencio."],
+    ["Snooze y planificación", "Puedes posponer hasta medianoche. Las instalaciones nuevas dejan la planificación de presencias desactivada por defecto. Las existentes conservan el ajuste que ya tenías.", "Cortas Discord hasta el final del día sin cambiar el plan de mañana."],
+    ["Autores de la biblioteca", "La biblioteca del sitio puede filtrar por autor de GitHub, incluidas las páginas `/author/[github]`.", "Abres todas las presencias públicas de un mismo autor."],
+    ["Biblioteca vacía", "Cuando la búsqueda o los filtros no coinciden, dos botones ofrecen pedir una presencia o crear una. No están bajo el título de la página ni en la tarjeta Development.", "Una búsqueda sin resultados sigue teniendo un siguiente paso."],
+    ["Footer del sitio", "Los grupos son Producto, Compañía, Desarrolladores y Legal. La app nativa se llama App de escritorio.", "Los enlaces quedan agrupados como en el resto del sitio."],
+    ["Marca", "El lockup de la navbar, los favicons y las tarjetas de compartir usan los assets CDN actuales.", "Docs y web muestran el mismo lockup al compartir una página."],
+    ["CLI", "`nowly build --watch` y `nowly pack --watch` reconstruyen cuando cambian los archivos de una presencia.", "Los autores iteran sin lanzar un build completo a mano cada vez."],
   ]}
 />
+
+## Documentación
+
+La app de docs es `@nowly/docs` en [docs.nowly.me](https://docs.nowly.me). Las páginas usan solo el slug (`/changelog`, `/getting-started/installation`). `https://docs.nowly.me/docs/...` y `https://nowly.me/docs/...` redirigen a la misma página, sin el segmento `/docs` extra.
 
 ## Selectores de idioma
 
 Los controles anteriores superponían una bandera en el campo cerrado y usaban un select HTML nativo. Los navegadores quitan el markup custom de `<option>`, así que la lista abierta era solo texto.
 
-El menú de la extensión es ahora un listbox custom (portal, para no recortarse en las tarjetas de ajustes). El footer del sitio sigue usando el Select compartido, con una bandera junto a cada locale.
+El menú de la extensión es un listbox custom (portal, para no recortarse en las tarjetas de ajustes). El footer del sitio sigue usando el Select compartido, con una bandera junto a cada locale.
 
 ## Tras una actualización
 
-Las builds de Chrome y Firefox Store siguen abriendo `https://nowly.me/changelog/{versión del manifiesto}` en `onInstalled` con `reason === "update"`. En esta release esa URL es `/changelog/1.4.1`. Un reload unpacked no abre pestaña.
+Las builds de Chrome y Firefox Store siguen abriendo `https://nowly.me/changelog/{versión del manifiesto}` en `onInstalled` con `reason === "update"`. En esta release esa URL es `/changelog/1.4.1`, que redirige a las notas en docs.nowly.me. Un reload unpacked no abre pestaña.
