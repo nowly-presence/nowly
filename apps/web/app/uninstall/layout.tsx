@@ -8,6 +8,6 @@ export const metadata = createMetadata({
   noIndex: true,
 });
 
-const Layout = ({ children }: PropsWithChildren): ReactElement => children;
+const Layout = ({ children }: PropsWithChildren): ReactElement => <>{children}</>;
 
 export default Layout;
