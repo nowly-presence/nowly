@@ -58,7 +58,7 @@ export const ActivityView: FC<Props> = ({
           onRemove(nextSlug);
           onSelectPresence(null);
         }}
-        onSchedule={settings.scheduleEnabled !== false ? onSchedule : undefined}
+        onSchedule={settings.scheduleEnabled === true ? onSchedule : undefined}
         onToggle={onToggle}
         onUpdatePresence={onUpdatePresence}
         updateAvailable={updates[slug]}
@@ -78,7 +78,7 @@ export const ActivityView: FC<Props> = ({
       onToggle={onToggle}
       onUpdatePresence={onUpdatePresence}
       separateActive={settings.separateActivePresence}
-      showSchedule={settings.scheduleEnabled !== false}
+      showSchedule={settings.scheduleEnabled === true}
       updates={updates}
       updatingSlug={updatingSlug}
     />

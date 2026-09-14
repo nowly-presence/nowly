@@ -36,6 +36,10 @@ export const PresenceZipDrop: FC = (): ReactElement => {
     }
 
     setStatus("error");
+    if (result?.error === "UNPACKED_BUILD_ONLY" || result?.error === "unpacked builds only") {
+      setDetail(t("local-zip-unpacked-only"));
+      return;
+    }
     setDetail(result?.error ? t("local-zip-error-detail", { error: result.error }) : t("local-zip-error"));
   };
 

@@ -283,7 +283,7 @@ const installDevPresences = async (presences: Record<string, StoredPresence>): P
 
 export const installLocalPresenceZip = async (payload: unknown): Promise<{ ok: boolean; error?: string; slug?: string }> => {
   if (chrome.runtime.getManifest().update_url) {
-    return { ok: false, error: "unpacked builds only" };
+    return { ok: false, error: "UNPACKED_BUILD_ONLY" };
   }
 
   const fileName = typeof payload === "object" && payload !== null && typeof (payload as { fileName?: unknown }).fileName === "string"

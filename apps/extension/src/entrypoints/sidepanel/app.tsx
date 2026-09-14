@@ -220,6 +220,14 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
               {settings.showPlayer !== false && !selectedPresenceSlug ? (
                 <CurrentActivityCard
                   activity={activity}
+                  idleHint={
+                    !activity && settings.scheduleEnabled === true && (
+                      Boolean(settings.globalSchedule)
+                      || Object.values(presences).some((presence) => Boolean(presence.schedule))
+                    )
+                      ? t("schedule-idle-hint")
+                      : undefined
+                  }
                   isLoading={isLoading}
                   isPaused={presencePaused}
                   isSnoozed={isSnoozed}

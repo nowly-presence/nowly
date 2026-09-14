@@ -234,11 +234,11 @@ export const SettingsView: FC<Props> = ({
               <span className="mt-0.5 block text-xs leading-4 text-muted-foreground">{t("schedule-feature-description")}</span>
             </span>
             <Switch
-              checked={settings.scheduleEnabled !== false}
+              checked={settings.scheduleEnabled === true}
               onChange={(checked) => onSettingsChange({ scheduleEnabled: checked })}
             />
           </Label>
-          {settings.scheduleEnabled !== false ? (
+          {settings.scheduleEnabled === true ? (
             <Button
               variant="unstyled"
               size="none"
