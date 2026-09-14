@@ -1,10 +1,11 @@
+import { BRAND_LOCKUP_BLUE_PNG } from "@/lib/brand";
 import { clientEnv } from "@nowly/env/client";
 import type { Metadata } from "next";
 
 export const SITE_URL = "https://nowly.me";
 export const DOCS_URL = clientEnv.NEXT_PUBLIC_DOCS_BASE_URL.replace(/\/$/, "");
 export const SITE_NAME = "Nowly";
-export const DEFAULT_OG_IMAGE = "/og-image.gif";
+export const DEFAULT_OG_IMAGE = BRAND_LOCKUP_BLUE_PNG;
 
 export const DEFAULT_SEO = {
   title: "Nowly | Automatic Discord Rich Presence",

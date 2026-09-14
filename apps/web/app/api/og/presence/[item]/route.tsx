@@ -1,4 +1,5 @@
 import { ASSET_URL } from "@/lib/assets";
+import { BRAND_LOCKUP_BLUE_PNG, BRAND_LOGO_BLUE_DARK } from "@/lib/brand";
 import { API_BASE_URL } from "@/lib/constants";
 import { metadataToPlatform } from "@/lib/data/presence-adapter";
 import type { Presence } from "@/lib/data/presences";
@@ -33,8 +34,8 @@ const fallbackOg = (name: string): ImageResponse =>
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#050505",
-          color: "#ffffff",
+          background: "#07080C",
+          color: "#E4F2FF",
           fontSize: 72,
           fontWeight: 800,
         }}
@@ -79,13 +80,13 @@ const renderPresenceOg = (presence: Presence): ImageResponse => {
           display: "flex",
           flexDirection: "column",
           padding: 58,
-          background: `radial-gradient(circle at 112% -18%, ${presence.iconColor}55 0, ${presence.iconColor}22 24%, transparent 58%), linear-gradient(135deg, #050505, #09090b 48%, #020617)`,
-          color: "#ffffff",
+          background: `radial-gradient(circle at 112% -18%, ${presence.iconColor}55 0, ${presence.iconColor}22 24%, transparent 58%), linear-gradient(135deg, #07080C, #0c1018 48%, #07080C)`,
+          color: "#E4F2FF",
           fontFamily: "Inter, Arial, sans-serif",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <img alt="Nowly" src="https://cdn.nowly.me/assets/app_title.png" width={150} />
+          <img alt="Nowly" src={BRAND_LOCKUP_BLUE_PNG} width={150} />
         </div>
 
         <div style={{ display: "flex", flex: 1, alignItems: "center", gap: 42 }}>
@@ -133,7 +134,7 @@ const renderPresenceOg = (presence: Presence): ImageResponse => {
                       src={
                         person.github
                           ? `https://github.com/${person.github}.png?size=92`
-                          : "https://cdn.nowly.me/assets/app_icon.png"}
+                          : BRAND_LOGO_BLUE_DARK}
                       width={45}
                       height={45}
                       alt=""
@@ -142,14 +143,14 @@ const renderPresenceOg = (presence: Presence): ImageResponse => {
                         left: index * 25,
                         top: 0,
                         borderRadius: 999,
-                        border: "2px solid #050505",
+                        border: "2px solid #07080C",
                       }}
                     />
                   );
                 })}
               </div>
 
-              <span style={{ color: "#ffffff", fontWeight: 650 }}>
+              <span style={{ color: "#E4F2FF", fontWeight: 650 }}>
                 {people.map((person) => person.name).join(", ")}
               </span>
             </div>
