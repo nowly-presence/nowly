@@ -1,5 +1,4 @@
-import { getNavigationItems } from "@/lib/docs/content";
-import { SITE_URL } from "@/lib/seo";
+import { DOCS_URL, SITE_URL } from "@/lib/seo";
 import { buildPresenceSeoPath } from "@/lib/seo-presence";
 import { clientEnv } from "@nowly/env/client";
 import type { MetadataRoute } from "next";
@@ -8,6 +7,8 @@ type PresenceSitemapItem = {
   slug?: string
   lastUpdated?: string
   addedAt?: string
+  author?: { github?: string }
+  contributors?: Array<{ github?: string }>
 };
 
 const fetchPresencePages = async (): Promise<MetadataRoute.Sitemap> => {
@@ -19,11 +20,16 @@ const fetchPresencePages = async (): Promise<MetadataRoute.Sitemap> => {
     if (!res.ok) return [];
 
     const presences = await res.json() as PresenceSitemapItem[];
+    const authors = new Set<string>();
 
     const validPresences = presences
       .filter((presence): presence is PresenceSitemapItem & { slug: string } => Boolean(presence.slug))
       .flatMap((presence) => {
         const lastModified = presence.lastUpdated ?? presence.addedAt ?? new Date();
+        const handles = [presence.author?.github, ...(presence.contributors ?? []).map((item) => item.github)]
+          .map((handle) => handle?.replace(/^@/, "").toLowerCase())
+          .filter((handle): handle is string => Boolean(handle));
+        for (const handle of handles) authors.add(handle);
 
         return [
           {
@@ -35,35 +41,20 @@ const fetchPresencePages = async (): Promise<MetadataRoute.Sitemap> => {
         ];
       });
 
-    return validPresences;
+    const authorPages = [...authors].map((github) => ({
+      url: `${SITE_URL}/author/${github}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.55,
+    }));
+
+    return [...validPresences, ...authorPages];
   } catch {
     return [];
   }
 };
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
-  const docs = getNavigationItems("en-US");
-  const docPages = docs.flatMap((section) => {
-    const pages = section.children.map((page) => ({
-      url: `${SITE_URL}/docs/${page.path}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: section.slug === "changelog" ? 0.65 : 0.7,
-    }));
-
-    return section.slug === "changelog"
-      ? [
-          {
-            url: `${SITE_URL}/docs/changelog`,
-            lastModified: new Date(),
-            changeFrequency: "monthly" as const,
-            priority: 0.7,
-          },
-          ...pages,
-        ]
-      : pages;
-  });
-
   const pages: MetadataRoute.Sitemap = [
     {
       url: SITE_URL,
@@ -76,6 +67,12 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.95,
+    },
+    {
+      url: `${DOCS_URL}/docs`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
     {
       url: `${SITE_URL}/host`,
@@ -102,6 +99,42 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       priority: 0.65,
     },
     {
+      url: `${SITE_URL}/team`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${SITE_URL}/support`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/support/redeem`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${SITE_URL}/consent`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.45,
+    },
+    {
+      url: `${SITE_URL}/cookies`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.4,
+    },
+    {
+      url: `${SITE_URL}/legal-notice`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.4,
+    },
+    {
       url: `${SITE_URL}/privacy`,
       lastModified: new Date(),
       changeFrequency: "yearly",
@@ -121,7 +154,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     },
   ];
 
-  return [...pages, ...docPages, ...await fetchPresencePages()];
+  return [...pages, ...await fetchPresencePages()];
 };
 
 export default sitemap;
