@@ -24,7 +24,6 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { MarketplaceFilters } from "./marketplace-filters";
 import { MarketplaceGrid } from "./marketplace-grid";
 import { MarketplaceSearch } from "./marketplace-search";
-import { PresenceContributeLinks } from "./presence-contribute-links";
 
 export const MarketplaceClient: FC = (): ReactElement => {
   const locale = useLocale();
@@ -156,7 +155,6 @@ export const MarketplaceClient: FC = (): ReactElement => {
           <p className="text-muted-foreground">
             {t("description")}
           </p>
-          <PresenceContributeLinks className="mx-auto mt-4 max-w-lg text-center text-sm text-muted-foreground" />
         </div>
 
         <MarketplaceSearch

@@ -28,7 +28,9 @@ export const MarketplaceGrid: FC<Props> = ({ platforms, locale, onReset }) => {
           <button onClick={onReset} className="text-accent hover:underline text-sm">
             {t("reset")}
           </button>
-          <PresenceContributeLinks className="mx-auto mt-6 max-w-md text-sm text-muted-foreground" />
+          <div className="mt-8">
+            <PresenceContributeLinks />
+          </div>
         </div>
       </div>
     );
