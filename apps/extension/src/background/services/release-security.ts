@@ -1,4 +1,3 @@
-import { getSettings } from "@/background/services/storage";
 import type { PresenceRelease } from "@/shared/types";
 import { canonicalJson } from "@nowly/shared";
 import { API_BASE_URL } from "@/shared/constants";

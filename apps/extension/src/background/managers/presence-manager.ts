@@ -11,7 +11,7 @@ import { registerPresenceScript, unregisterPresenceScript } from "@/background/r
 import { verifyPresenceRelease } from "@/background/services/release-security";
 import { enqueueInstall, getInstallQueue, isRetriableInstallFailure, setInstallQueue, syncInstallQueueAlarm, type InstallQueueItem } from "@/background/managers/install-queue";
 import { parsePresenceZip, toLocalRelease } from "@/background/managers/local-presence-zip";
-import { getCurrentActivity, getPresences, getSettings, setPresences } from "@/background/services/storage";
+import { getCurrentActivity, getPresences, setPresences } from "@/background/services/storage";
 
 export const broadcastPresencesChanged = (): void => {
   chrome.runtime.sendMessage({ source: "PRESENCES_BACKGROUND", type: "PRESENCES_CHANGED" }).catch(() => {
