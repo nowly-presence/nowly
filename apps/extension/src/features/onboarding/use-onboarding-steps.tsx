@@ -19,6 +19,7 @@ type UseOnboardingStepsProps = Pick<
   | "presences"
   | "settings"
   | "onSettingsChange"
+  | "hostVersionInfo"
 >;
 
 export const useOnboardingSteps = ({
@@ -29,6 +30,7 @@ export const useOnboardingSteps = ({
   presences,
   settings,
   onSettingsChange,
+  hostVersionInfo,
 }: UseOnboardingStepsProps): GuidedStep[] => {
   const snapshot = buildDiagnosticSnapshot({ activity, nativeStatus, presences, userScripts });
   const hostStatus: StepStatus = snapshot.hostDetected ? "success" : isHostChecking(nativeStatus) ? "loading" : "error";
@@ -71,14 +73,16 @@ export const useOnboardingSteps = ({
       status: snapshot.userScriptsActive ? hostStatus : "loading",
       title: t("onboarding-step-host-title"),
       message: snapshot.hostDetected
-        ? t("onboarding-step-host-success")
+        ? hostVersionInfo?.updateAvailable
+          ? t("onboarding-step-host-outdated", { current: hostVersionInfo.currentVersion ?? "?", latest: hostVersionInfo.latestVersion })
+          : t("onboarding-step-host-success")
         : hostStatus === "loading" && snapshot.userScriptsActive
           ? t("onboarding-step-host-loading")
           : t("onboarding-step-host-error"),
-      actions: showHostActions ? (
+      actions: showHostActions || (snapshot.hostDetected && hostVersionInfo?.updateAvailable) ? (
         <div className="flex flex-wrap justify-center gap-2">
           <ActionButton primary onClick={() => openUrl(siteUrl("/host"))}>
-            {t("diagnostic-install-host")}
+            {hostVersionInfo?.updateAvailable ? t("diagnostic-update-host") : t("diagnostic-install-host")}
             <IconExternalLink className="h-4 w-4" />
           </ActionButton>
           <ActionButton onClick={onConnectNative}>{t("diagnostic-check-connection")}</ActionButton>

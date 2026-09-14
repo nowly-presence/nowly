@@ -1,4 +1,5 @@
 import type { NativeStatus } from "@/lib/messages";
+import type { HostVersionInfo } from "@/hooks/use-host-version";
 import type { CurrentActivity, ExtensionSettings, InstalledPresences, UserScriptsStatus } from "@/shared/types";
 import type { ComponentType, ReactNode } from "react";
 
@@ -17,6 +18,7 @@ export type OnboardingOverlayProps = {
   settings: ExtensionSettings;
   onSettingsChange: (partial: Partial<ExtensionSettings>) => void;
   supporter?: boolean;
+  hostVersionInfo?: HostVersionInfo | null;
 };
 
 export type StepStatus = "loading" | "success" | "error";

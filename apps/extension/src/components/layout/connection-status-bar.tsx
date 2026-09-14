@@ -7,6 +7,7 @@ type Props = {
   nativeStatus: NativeStatus;
   onConnect: () => void;
   presencePaused?: boolean;
+  hostUpdateAvailable?: boolean;
   visible: boolean;
 };
 
@@ -18,9 +19,12 @@ type Tone = {
 
 export const isConnectionHealthy = (ns: NativeStatus): boolean => Boolean(ns.discordConnected);
 
-const toneFor = (ns: NativeStatus, presencePaused: boolean): Tone => {
+const toneFor = (ns: NativeStatus, presencePaused: boolean, hostUpdateAvailable: boolean): Tone => {
   if (presencePaused) {
     return { stripe: "bg-amber-400", label: t("status-bar-presence-paused"), actionable: false };
+  }
+  if (hostUpdateAvailable && ns.connected) {
+    return { stripe: "bg-amber-400", label: t("status-bar-host-outdated"), actionable: true };
   }
   if (ns.discordConnected) {
     return { stripe: "bg-accent", label: t("status-bar-discord-connected"), actionable: false };
@@ -34,8 +38,8 @@ const toneFor = (ns: NativeStatus, presencePaused: boolean): Tone => {
   return { stripe: "bg-red-500", label: t("status-bar-host-missing"), actionable: true };
 };
 
-export const ConnectionStatusBar: FC<Props> = ({ nativeStatus, onConnect, presencePaused = false, visible }): ReactElement => {
-  const tone = toneFor(nativeStatus, presencePaused);
+export const ConnectionStatusBar: FC<Props> = ({ nativeStatus, onConnect, presencePaused = false, hostUpdateAvailable = false, visible }): ReactElement => {
+  const tone = toneFor(nativeStatus, presencePaused, hostUpdateAvailable);
 
   return (
     <div className={`grid shrink-0 transition-[grid-template-rows] duration-300 ease-out ${visible ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
