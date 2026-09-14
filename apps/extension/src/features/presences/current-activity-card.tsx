@@ -156,7 +156,8 @@ export const CurrentActivityCard: FC<Props> = ({
           {isSnoozed && snoozeRemaining ? (
             <span className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground">
               <IconSnowflake className="size-3" />
-              {t("snoozed")} · {snoozeRemaining}
+              {t("snoozed")}
+              <span>{snoozeRemaining}</span>
             </span>
           ) : null}
         </div>

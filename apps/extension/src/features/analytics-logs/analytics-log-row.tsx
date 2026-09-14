@@ -11,7 +11,10 @@ export const AnalyticsLogRow: FC<Props> = ({ log }) => (
     <div className="flex items-start justify-between gap-2">
       <div className="min-w-0">
         <p className="truncate text-xs font-semibold text-foreground">{log.message}</p>
-        <p className="text-[11px] text-muted-foreground">{formatTime(log.at)} Â· {log.type}</p>
+        <p className="flex items-center gap-2 text-[11px] text-muted-foreground">
+          <span>{formatTime(log.at)}</span>
+          <span>{log.type}</span>
+        </p>
       </div>
       <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase ${levelClass[log.level]}`}>
         {log.level}
