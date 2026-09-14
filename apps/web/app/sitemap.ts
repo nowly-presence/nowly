@@ -69,7 +69,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       priority: 0.95,
     },
     {
-      url: `${DOCS_URL}/docs`,
+      url: `${DOCS_URL}/`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,

@@ -15,7 +15,8 @@ export const middleware = (request: NextRequest): NextResponse => {
   }
 
   if (pathname === "/docs" || pathname.startsWith("/docs/")) {
-    return NextResponse.redirect(`${docsOrigin()}${pathname}${search}`, 308);
+    const docsPath = pathname === "/docs" ? "/" : pathname.slice("/docs".length);
+    return NextResponse.redirect(`${docsOrigin()}${docsPath}${search}`, 308);
   }
 
   return NextResponse.next();

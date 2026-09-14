@@ -61,14 +61,19 @@ export const absoluteUrl = (path = "/", origin = SITE_URL): string => {
   return `${origin}${path.startsWith("/") ? path : `/${path}`}`;
 };
 
-export const isDocsPath = (path: string): boolean => path === "/docs" || path.startsWith("/docs/");
+export const isDocsPath = (path: string): boolean =>
+  path === "/docs" || path.startsWith("/docs/");
 
-export const docsHref = (path = "/docs"): string => {
-  const normalized = path === "" || path === "/"
-    ? "/docs"
-    : path.startsWith("/docs")
-      ? path
-      : `/docs/${path.replace(/^\//, "")}`;
+export const docsHref = (path = "/"): string => {
+  let normalized = path.trim() || "/";
+  if (!normalized.startsWith("/")) {
+    normalized = `/${normalized}`;
+  }
+  if (normalized === "/docs") {
+    normalized = "/";
+  } else if (normalized.startsWith("/docs/")) {
+    normalized = normalized.slice("/docs".length);
+  }
   return `${DOCS_URL}${normalized}`;
 };
 

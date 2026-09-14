@@ -39,12 +39,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/docs",
-        destination: `${docsBase}/docs`,
+        destination: `${docsBase}/`,
         permanent: true,
       },
       {
         source: "/docs/:path*",
-        destination: `${docsBase}/docs/:path*`,
+        destination: `${docsBase}/:path*`,
         permanent: true,
       },
       {
