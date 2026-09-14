@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [{ protocol: "https", hostname: "cdn.nowly.me" }],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/favicon.ico",
+        destination: "https://cdn.nowly.me/brand/favicons/favicon-32.png",
+      },
+    ];
+  },
   async redirects() {
     return [
       {
