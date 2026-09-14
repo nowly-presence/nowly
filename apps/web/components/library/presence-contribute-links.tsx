@@ -24,7 +24,7 @@ export const PresenceContributeLinks: FC<Props> = ({ showLead = true }): ReactEl
           </Link>
         </Button>
         <Button variant="ghost" size="sm" asChild>
-          <Link href={docsHref("/docs/presence-development/creating-your-first-presence")}>
+          <Link href={docsHref("/presence-development/creating-your-first-presence")}>
             {t("create-presence")}
           </Link>
         </Button>

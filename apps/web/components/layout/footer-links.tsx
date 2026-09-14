@@ -34,8 +34,8 @@ export const FooterLinks: FC = (): ReactElement => {
     {
       label: t("category-developers"),
       links: [
-        { href: docsHref("/docs"), label: t("docs") },
-        { href: docsHref("/docs/changelog"), label: t("changelog") },
+        { href: docsHref("/"), label: t("docs") },
+        { href: docsHref("/changelog"), label: t("changelog") },
       ],
     },
     {

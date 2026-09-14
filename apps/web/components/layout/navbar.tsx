@@ -51,7 +51,7 @@ export const Navbar: FC = (): ReactElement => {
                 <div className="flex flex-col gap-6 px-6 pt-12">
                   <SheetClose asChild>
                     <Link
-                      href={docsHref("/docs")}
+                      href={docsHref("/")}
                       className="text-lg font-semibold text-foreground hover:text-accent transition-colors"
                     >
                       {t("docs")}
@@ -82,7 +82,7 @@ export const Navbar: FC = (): ReactElement => {
           </div>
 
           <div className="hidden min-w-0 items-center gap-2 lg:flex">
-            <Link href={docsHref("/docs")}
+            <Link href={docsHref("/")}
               className={buttonVariants({ size: "md", variant: "ghost" })}
             >
               {t("docs")}
