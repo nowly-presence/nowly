@@ -4,8 +4,8 @@ import type { PresenceListEntry } from "@/features/presences/presence-list.model
 
 type Props = {
   entries: PresenceListEntry[];
+  onOpen: (slug: string) => void;
   onOpenMarketplace: (slug: string) => void;
-  onRemove: (slug: string) => void;
   onSchedule: (slug: string) => void;
   onToggle: (slug: string, enabled: boolean) => void;
   showSchedule: boolean;
@@ -14,8 +14,8 @@ type Props = {
 
 export const PresenceListSection: FC<Props> = ({
   entries,
+  onOpen,
   onOpenMarketplace,
-  onRemove,
   onSchedule,
   onToggle,
   showSchedule,
@@ -28,8 +28,8 @@ export const PresenceListSection: FC<Props> = ({
         slug={slug}
         presence={presence}
         showSchedule={showSchedule}
+        onOpen={onOpen}
         onToggle={onToggle}
-        onRemove={onRemove}
         onSchedule={onSchedule}
         onOpenMarketplace={onOpenMarketplace}
         updateAvailable={updates[slug]}

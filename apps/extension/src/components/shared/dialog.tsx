@@ -11,10 +11,13 @@ export const dialogSecondaryClassName =
   "inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-border bg-card-2 px-4 text-sm font-medium text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground";
 
 export const dialogDangerClassName =
-  "inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-destructive/30 bg-destructive/5 px-4 text-sm font-semibold text-destructive transition-colors hover:bg-destructive/15";
+  "inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-destructive/20 bg-destructive/10 px-4 text-sm font-semibold text-destructive transition-colors hover:bg-destructive/20";
+
+export const dialogDangerSolidClassName =
+  "inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-destructive px-4 text-sm font-semibold text-foreground transition-opacity hover:opacity-90";
 
 type Props = {
-  children: ReactNode;
+  children?: ReactNode;
   footer?: ReactNode;
   onClose: () => void;
   open: boolean;
@@ -123,9 +126,11 @@ export const Dialog: FC<Props> = ({ children, footer, onClose, open, subtitle, t
           </Button>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
-          {children}
-        </div>
+        {children ? (
+          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+            {children}
+          </div>
+        ) : null}
 
         {footer ? (
           <div className="flex flex-col gap-2 border-t border-border px-5 py-4">

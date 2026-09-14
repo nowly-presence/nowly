@@ -34,6 +34,3 @@ export const groupByCategory = (entries: PresenceListEntry[]): Array<[PresenceCa
     getCategoryLabel(left).localeCompare(getCategoryLabel(right)),
   );
 };
-
-export const sortAlphabetically = (entries: PresenceListEntry[]): PresenceListEntry[] =>
-  [...entries].sort(([, a], [, b]) => a.metadata.name.localeCompare(b.metadata.name));

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { PresenceLayoutToggle } from "@/features/presences/presence-layout-toggle";
 import {
   IconBrandDiscord,
   IconDeviceDesktopDown,
@@ -11,12 +12,15 @@ import {
 } from "@/lib/tabler-icons";
 import { DISCORD_INVITE_URL, HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
+import type { PresenceDisplayMode } from "@/shared/types";
 import type { FC, ReactElement } from "react";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
+  displayMode?: PresenceDisplayMode;
   isCheckingUpdates?: boolean;
   onCheckUpdates?: () => void;
+  onDisplayModeChange?: (mode: PresenceDisplayMode) => void;
   onOpenLibrary?: () => void;
   onReplayOnboarding?: () => void;
   supporter?: boolean;
@@ -35,8 +39,10 @@ const openUrl = (url: string): void => {
 };
 
 export const Header: FC<Props> = ({
+  displayMode,
   isCheckingUpdates = false,
   onCheckUpdates,
+  onDisplayModeChange,
   onOpenLibrary,
   onReplayOnboarding,
   supporter = false,
@@ -97,7 +103,10 @@ export const Header: FC<Props> = ({
         alt="Nowly"
         className="ml-2 h-7 w-auto min-w-0"
       />
-      <div className="mr-2 flex shrink-0 items-center gap-1">
+      <div className="mr-2 flex shrink-0 items-center gap-1.5">
+        {displayMode && onDisplayModeChange ? (
+          <PresenceLayoutToggle value={displayMode} onChange={onDisplayModeChange} />
+        ) : null}
         {onOpenLibrary ? (
           <Button
             variant="unstyled"
@@ -117,7 +126,7 @@ export const Header: FC<Props> = ({
             aria-haspopup="menu"
             aria-label={t("more")}
             onClick={() => setMenuOpen((open) => !open)}
-            className="flex size-8 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-card-2 hover:text-foreground"
+            className="flex size-8 items-center justify-center rounded-xl border border-border bg-card-2 text-foreground transition-colors hover:bg-card-hover"
           >
             <IconDots className="size-4" />
           </Button>

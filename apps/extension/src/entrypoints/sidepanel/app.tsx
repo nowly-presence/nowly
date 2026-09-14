@@ -28,6 +28,7 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
   const { localePreference, setLocalePreference } = useLocalePreference();
   const { onboarding, setOnboarding, nativeStatus: onboardingNativeStatus, userScripts } = useOnboardingState();
   const [activeView, setActiveView] = useState<AppView>(initialView);
+  const [selectedPresenceSlug, setSelectedPresenceSlug] = useState<string | null>(null);
   const [snoozeOpen, setSnoozeOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [scheduleSlug, setScheduleSlug] = useState<string | null>(null);
@@ -60,6 +61,7 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
   }, []);
 
   const handleViewChange = useCallback((view: AppView): void => {
+    setSelectedPresenceSlug(null);
     setActiveView(view);
     persistAppView(view);
   }, []);
@@ -72,6 +74,8 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
   }, [activeView, developerModeEnabled]);
 
   const connectionHealthy = isConnectionHealthy(liveNativeStatus);
+  const displayMode = settings.presenceDisplayMode === "grid" ? "grid" : "category";
+  const showLayoutToggle = activeView === "home" && !selectedPresenceSlug;
 
   useEffect(() => {
     setStatusVisible(true);
@@ -87,8 +91,10 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
       <div className="sidepanel-body">
         <div className="sidepanel-topbar">
           <Header
+            displayMode={showLayoutToggle ? displayMode : undefined}
             isCheckingUpdates={isCheckingUpdates}
             onCheckUpdates={checkUpdates}
+            onDisplayModeChange={showLayoutToggle ? (mode) => setSettings({ presenceDisplayMode: mode }) : undefined}
             onOpenLibrary={onOpenLibrary}
             onReplayOnboarding={resetOnboardingForDev}
             supporter={supporterStatus.adFree}
@@ -103,7 +109,7 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
         >
           {activeView === "home" ? (
             <div className="flex flex-col gap-4">
-              {settings.showPlayer !== false ? (
+              {settings.showPlayer !== false && !selectedPresenceSlug ? (
                 <CurrentActivityCard
                   activity={activity}
                   isLoading={isLoading}
@@ -120,7 +126,9 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
                 onOpenMarketplace={onOpenMarketplace}
                 onRemove={removePresence}
                 onSchedule={handleScheduleOpen}
+                onSelectPresence={setSelectedPresenceSlug}
                 onToggle={togglePresence}
+                selectedSlug={selectedPresenceSlug}
                 settings={settings}
                 updates={updates}
               />

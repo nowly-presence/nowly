@@ -6,7 +6,6 @@ import { Select } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { DebugPanel } from "@/features/settings/debug-panel";
-import { DisplaySettings } from "@/features/settings/display-settings";
 import { SettingsGroup } from "@/features/settings/settings-group";
 import { ThemeSelector } from "@/features/settings/theme-selector";
 import { ThemeUpsellCard } from "@/features/settings/theme-upsell-card";
@@ -203,10 +202,6 @@ export const SettingsView: FC<Props> = ({
         onToggle={() => toggleGroup("presences")}
         title={t("settings-group-presences")}
       >
-        <div className={innerClassName}>
-          <DisplaySettings settings={settings} onSettingsChange={onSettingsChange} />
-        </div>
-
         <section className={innerClassName}>
           <h2 className={sectionTitleClassName}>{t("presence-language")}</h2>
           <p className="mb-3 text-xs leading-5 text-muted-foreground">{t("presence-language-description")}</p>
