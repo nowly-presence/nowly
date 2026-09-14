@@ -1,6 +1,7 @@
 "use client";
 
 import { PresenceCard } from "@/components/library/presence-card";
+import { PresenceContributeLinks } from "@/components/library/presence-contribute-links";
 import { ADSENSE_ENABLED } from "@/lib/constants";
 import type { Presence } from "@/lib/data/presences";
 import { useTranslations } from "next-intl";
@@ -27,6 +28,7 @@ export const MarketplaceGrid: FC<Props> = ({ platforms, locale, onReset }) => {
           <button onClick={onReset} className="text-accent hover:underline text-sm">
             {t("reset")}
           </button>
+          <PresenceContributeLinks className="mx-auto mt-6 max-w-md text-sm text-muted-foreground" />
         </div>
       </div>
     );

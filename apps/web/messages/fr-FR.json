@@ -550,7 +550,17 @@
     },
     "results": "{count, plural, one {# plateforme trouvée} other {# plateformes trouvées}}",
     "empty": "Aucune plateforme trouvée",
-    "reset": "Réinitialiser les filtres"
+    "reset": "Réinitialiser les filtres",
+    "author-label": "Auteur",
+    "author-all": "Tous les auteurs",
+    "contribute-lead": "Un site manque ?",
+    "request-presence": "Demander une presence",
+    "create-presence": "En créer une"
+  },
+  "author-page": {
+    "badge": "Auteur",
+    "description": "{count, plural, one {# presence par {name}} other {# presences par {name}}}",
+    "view-in-library": "Voir dans la bibliothèque"
   },
   "docs": {
     "documentation": "Documentation",

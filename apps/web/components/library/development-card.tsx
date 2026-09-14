@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
 import { AuthorItem } from "./author-item";
+import { PresenceContributeLinks } from "./presence-contribute-links";
 
 type Props = {
   platform: Presence;
@@ -41,6 +42,8 @@ export const DevelopmentCard: FC<Props> = ({ platform }): ReactElement => {
           <AuthorItem key={index} contributor={contributor} label={t("contributor-label")} />
         ))}
       </div>
+
+      <PresenceContributeLinks className="mt-4 text-xs text-muted-foreground" />
     </Card>
   );
 };

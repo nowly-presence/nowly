@@ -550,7 +550,17 @@
     },
     "results": "{count, plural, one {# platform found} other {# platforms found}}",
     "empty": "No platforms found",
-    "reset": "Reset Filters"
+    "reset": "Reset Filters",
+    "author-label": "Author",
+    "author-all": "All authors",
+    "contribute-lead": "Missing a site?",
+    "request-presence": "Request a presence",
+    "create-presence": "Build one"
+  },
+  "author-page": {
+    "badge": "Author",
+    "description": "{count, plural, one {# presence by {name}} other {# presences by {name}}}",
+    "view-in-library": "View in the library"
   },
   "docs": {
     "documentation": "Documentation",
