@@ -84,3 +84,16 @@ export type PresenceDebug = {
 };
 
 export type PresenceSettings = Record<string, unknown>;
+
+export type PresenceCatalogItem = {
+  slug: string;
+  name?: string | Record<string, string>;
+  description?: string | Record<string, string>;
+  longDescription?: string | Record<string, string>;
+  category?: PresenceMetadata["category"];
+  color?: string;
+  version?: string | null;
+  url?: string[];
+  features?: Record<string, string[]>;
+  totalInstalls?: number;
+};

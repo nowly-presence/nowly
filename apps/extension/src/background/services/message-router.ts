@@ -5,7 +5,7 @@ import { trackAnalytics, trackExtensionOpen } from "@/background/analytics/analy
 import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { getActiveDeviceId } from "@/background/services/device-sync";
 import { postNative, reconnectNative, refreshNativeStatus, restartNative } from "@/background/services/native";
-import { checkUpdates, installPresence, togglePresence, uninstallPresence } from "@/background/managers/presence-manager";
+import { checkUpdates, fetchPresenceCatalog, installPresence, installPresenceFromApi, togglePresence, uninstallPresence } from "@/background/managers/presence-manager";
 import { getPresenceStrings, registerPresenceScript, syncPresenceScripts } from "@/background/runtime/presence-scripts";
 import { resetOnboardingForDev, updateSettings } from "@/background/managers/settings-manager";
 import { clearSnooze, dismissSupporterThankYou, getCurrentActivity, getDebug, getPresenceSettings, getPresences, getSettings, getSupporterStatus, setDebug, setPresenceSchedule, setPresenceSettings, setSupporterStatus, snoozePresence } from "@/background/services/storage";
@@ -128,6 +128,24 @@ export const registerRuntimeMessageRouter = (): void => {
           .catch((error) => respond(sendResponse, {
             ok: false,
             error: error instanceof Error ? error.message : "presence install failed",
+          }));
+        return true;
+
+      case "INSTALL_PRESENCE_FROM_API":
+        installPresenceFromApi(message.payload)
+          .then((result) => respond(sendResponse, result))
+          .catch((error) => respond(sendResponse, {
+            ok: false,
+            error: error instanceof Error ? error.message : "presence install failed",
+          }));
+        return true;
+
+      case "FETCH_PRESENCE_CATALOG":
+        fetchPresenceCatalog()
+          .then((items) => respond(sendResponse, { ok: true, items }))
+          .catch((error) => respond(sendResponse, {
+            ok: false,
+            error: error instanceof Error ? error.message : "catalog request failed",
           }));
         return true;
 

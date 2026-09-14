@@ -1,6 +1,6 @@
 import { BUNDLED_PRESENCES } from "@/generated/bundled-presences";
 import type { BundledPresence } from "@/generated/bundled-presences";
-import type { PresenceRelease, StoredPresence } from "@/shared/types";
+import type { PresenceCatalogItem, PresenceRelease, StoredPresence } from "@/shared/types";
 import { handleClearActivity, removeActiveSlug } from "@/background/managers/activity-manager";
 import { addAnalyticsLog } from "@/background/analytics/analytics-log";
 import { trackAnalytics } from "@/background/analytics/analytics-tracker";
@@ -76,6 +76,43 @@ const deleteActivePresence = async (deviceId: string, slug: string): Promise<voi
       slug,
       error: error instanceof Error ? error.message : String(error),
     });
+  }
+};
+
+export const fetchPresenceCatalog = async (): Promise<PresenceCatalogItem[]> => {
+  const response = await fetch(`${getEffectiveApiUrl()}/presences`, { cache: "no-store" });
+  if (!response.ok) throw new Error(`catalog request failed: ${response.status}`);
+  const data: unknown = await response.json();
+  if (!Array.isArray(data)) throw new Error("invalid catalog");
+  return data.filter((item): item is PresenceCatalogItem => {
+    if (!item || typeof item !== "object") return false;
+    const slug = (item as PresenceCatalogItem).slug;
+    return typeof slug === "string" && slug.length > 0;
+  });
+};
+
+export const installPresenceFromApi = async (payload: unknown): Promise<{ ok: boolean; error?: string }> => {
+  const slug = typeof payload === "object" && payload !== null
+    ? (payload as { slug?: unknown }).slug
+    : undefined;
+  if (typeof slug !== "string" || slug.length === 0) {
+    return { ok: false, error: "missing slug" };
+  }
+
+  try {
+    const response = await fetch(`${getEffectiveApiUrl()}/presences/${encodeURIComponent(slug)}`, {
+      cache: "no-store",
+    });
+    if (!response.ok) {
+      addAnalyticsLog("error", "api", "GET /presences/:slug failed", { slug, status: response.status });
+      return { ok: false, error: `release request failed: ${response.status}` };
+    }
+    const release = await response.json() as PresenceRelease;
+    return installPresence({ slug, release });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "presence install failed";
+    addAnalyticsLog("error", "api", "GET /presences/:slug failed", { slug, error: message });
+    return { ok: false, error: message };
   }
 };
 
