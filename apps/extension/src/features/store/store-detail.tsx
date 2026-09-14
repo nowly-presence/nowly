@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { PresenceAboutCard } from "@/features/presences/presence-detail-info";
+import { PresenceHeroCard } from "@/features/presences/presence-hero-card";
 import { storeCategoryLabel, type StorePresence } from "@/features/store/store.model";
 import { VersionBadge } from "@/components/shared/version-badge";
 import { assetUrl } from "@/shared/api";
@@ -45,11 +46,8 @@ export const StoreDetail: FC<Props> = ({
         {t("back")}
       </Button>
 
-      <section
-        className="overflow-hidden rounded-xl border border-border bg-card"
-        style={{ backgroundImage: `radial-gradient(140px 90px at 32px 32px, ${presence.color}20, transparent 70%)` }}
-      >
-        <div className="flex items-start gap-3 p-4">
+      <PresenceHeroCard key={presence.slug} slug={presence.slug} color={presence.color}>
+        <div className="flex items-start gap-3">
           <div
             className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl"
             style={{ backgroundColor: `${presence.color}20` }}
@@ -69,7 +67,7 @@ export const StoreDetail: FC<Props> = ({
             ) : null}
           </div>
         </div>
-      </section>
+      </PresenceHeroCard>
 
       <PresenceAboutCard color={presence.color} features={presence.features} urls={presence.urls} />
 

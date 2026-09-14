@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { PresenceCreditsCard } from "@/features/presences/presence-credits-card";
 import { PresenceAboutCard } from "@/features/presences/presence-detail-info";
+import { PresenceHeroCard } from "@/features/presences/presence-hero-card";
 import { resolveLocaleList, resolveLocaleString } from "@/features/presences/presence-locale";
 import { PresenceSettingsFields } from "@/features/presences/presence-settings-fields";
 import { getCategoryLabel } from "@/features/presences/presence-list.model";
@@ -71,11 +72,28 @@ export const PresenceDetailView: FC<Props> = ({
         {t("back")}
       </Button>
 
-      <section
-        className="overflow-hidden rounded-xl border border-border bg-card"
-        style={{ backgroundImage: `radial-gradient(140px 90px at 32px 32px, ${color}20, transparent 70%)` }}
+      <PresenceHeroCard
+        key={slug}
+        slug={slug}
+        color={color}
+        footer={
+          updateAvailable ? (
+            <button
+              type="button"
+              onClick={openUpdate}
+              className="relative z-10 flex w-full items-center gap-2 border-t border-accent/20 bg-accent/10 px-4 py-2 text-left text-xs font-medium text-accent disabled:opacity-60"
+              disabled={updating}
+            >
+              <span className="min-w-0 flex-1">{t("presence-update-available")}</span>
+              <span className="inline-flex shrink-0 items-center gap-1">
+                {updating ? <IconLoader2 className="size-3.5 animate-spin" /> : null}
+                {updating ? t("store-installing") : t("presence-update-action")}
+              </span>
+            </button>
+          ) : null
+        }
       >
-        <div className="flex items-start gap-3 p-4">
+        <div className="flex items-start gap-3">
           <div
             className={`flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl ${
               presence.enabled ? "" : "opacity-60 saturate-0"
@@ -102,21 +120,7 @@ export const PresenceDetailView: FC<Props> = ({
             ariaLabel={presence.enabled ? t("disable") : t("enable")}
           />
         </div>
-        {updateAvailable ? (
-          <button
-            type="button"
-            onClick={openUpdate}
-            className="flex w-full items-center gap-2 border-t border-accent/20 bg-accent/10 px-4 py-2 text-left text-xs font-medium text-accent disabled:opacity-60"
-            disabled={updating}
-          >
-            <span className="min-w-0 flex-1">{t("presence-update-available")}</span>
-            <span className="inline-flex shrink-0 items-center gap-1">
-              {updating ? <IconLoader2 className="size-3.5 animate-spin" /> : null}
-              {updating ? t("store-installing") : t("presence-update-action")}
-            </span>
-          </button>
-        ) : null}
-      </section>
+      </PresenceHeroCard>
 
       <PresenceAboutCard color={color} features={features} urls={urls} />
       <PresenceCreditsCard
