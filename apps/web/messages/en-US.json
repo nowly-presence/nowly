@@ -2,8 +2,6 @@
   "navbar": {
     "marketplace": "Library",
     "docs": "Docs",
-    "host": "Host",
-    "download-desktop": "Download Nowly Host",
     "download-extension": "Download extension",
     "download-for": "Download for {browser}",
     "download-short": "Download"
@@ -12,13 +10,13 @@
     "badge": "New",
     "title": "Your Discord activity,",
     "title-accent": "synced.",
-    "description": "The easiest way to automatically show what you're watching. Series, movies, or streams, your Discord status always stays up to date.",
+    "description": "The simplest way to show what you're watching. Series, movies, or streams — your Discord status stays up to date.",
     "cta": "Browse Presences"
   },
   "platforms-section": {
     "section-label": "Platforms",
     "title": "Your favorite services",
-    "description": "Compatible with the most popular streaming platforms",
+    "description": "Works with the streaming platforms you already use.",
     "library-cta": "Open library",
     "services-count": "{count, plural, one {# service ready} other {# services ready}}",
     "available-heading": "Available",
@@ -29,7 +27,7 @@
   "stats-section": {
     "section-label": "Statistics",
     "title": "Nowly in numbers",
-    "description": "An anonymous snapshot of real Nowly usage, based on installs and active presences.",
+    "description": "An anonymous snapshot of real usage: installs and active presences.",
     "items": {
       "total-users": {
         "label": "Users",
@@ -58,23 +56,22 @@
     "steps": [
       {
         "title": "Install Nowly",
-        "description": "Download and install Nowly on your Windows PC. Setup only takes a few seconds."
+        "description": "Download and install Nowly on your Windows PC. Setup takes only a few seconds."
       },
       {
         "title": "Connect Discord",
-        "description": "Nowly automatically detects Discord and establishes the connection. No manual configuration is required."
+        "description": "Nowly detects Discord and connects on its own. No manual setup required."
       },
       {
         "title": "Enjoy your content",
-        "description": "Open your favorite platform and your Discord status will update automatically."
+        "description": "Open your favorite platform — your Discord status updates automatically."
       }
     ]
   },
   "cta-section": {
     "title": "Get started today",
-    "description": "No subscription required. Lightweight and secure.",
+    "description": "No subscription. Lightweight and secure.",
     "download-for": "Download for {browser}",
-    "download-desktop": "Download Nowly Host",
     "desktop-only-title": "Desktop only",
     "desktop-only-body": "The Nowly extension is built for desktop browsers. Install it on your PC to use Discord Rich Presence.",
     "coming-soon": "Coming Soon",
@@ -88,13 +85,13 @@
   "home-faq-section": {
     "section-label": "FAQ",
     "title": "Frequently asked questions",
-    "description": "Quick answers to the most common questions about Nowly, installation, and privacy.",
-    "faq-cta": "Go to page",
+    "description": "Short answers to common questions about Nowly, setup, and privacy.",
+    "faq-cta": "View FAQ",
     "discord-cta": "Community Discord",
     "items": [
       {
         "question": "What is Nowly?",
-        "answer": "Nowly automatically shows what you are watching in your Discord status through a browser extension and a Nowly Host."
+        "answer": "Nowly automatically shows what you are watching in your Discord status, using a browser extension and Nowly Host."
       },
       {
         "question": "Do my data pass through your servers?",
@@ -117,6 +114,8 @@
     "english": "English",
     "spanish": "Spanish",
     "category-product": "Product",
+    "category-company": "Company",
+    "category-developers": "Developers",
     "category-legal": "Legal",
     "about": "About",
     "team": "Team",
@@ -130,7 +129,7 @@
     "cookies": "Cookies",
     "data-management": "Data & Privacy",
     "marketplace": "Library",
-    "host": "Host",
+    "host": "Desktop app",
     "docs": "Docs",
     "discord": "Discord"
   },
@@ -142,13 +141,13 @@
   "support-page": {
     "badge": "Support",
     "title": "Need help?",
-    "description": "New Amsterdam mode: tell us how we can help, with the right context from the start.",
+    "description": "Tell us what you need, with the right context from the start.",
     "discord": {
       "title": "Discord ticket",
       "description": "Join the Nowly server and create a ticket to talk directly with the staff."
     },
     "brokenPresence": {
-      "title": "Broken presence",
+      "title": "Broken Presence",
       "description": "Report a platform that no longer detects activity, shows wrong information, or clears itself."
     },
     "bugReport": {
@@ -207,7 +206,7 @@
   },
   "sponsor-modal": {
     "title": "This project is free",
-    "description": "We looked at what was out there and thought: we can do better — richer, and with a UI that actually rocks.",
+    "description": "We looked at what existed and thought we could do better: richer, and with an interface that actually feels good to use.",
     "supportTitle": "Support us on",
     "supportKofi": "Ko-fi",
     "skipDownload": "No thanks, download directly",
@@ -271,7 +270,7 @@
   "about-page": {
     "badge": "About",
     "title": "A modern take on Discord activity",
-    "intro": "Nowly builds on the idea behind community Rich Presence tools and pushes it further: a cleaner, more current experience that is easier to use and shaped by a coherent visual direction.",
+    "intro": "Nowly builds on community Rich Presence tools and takes them further: a cleaner, more current experience that is easier to use, with a coherent visual direction.",
     "sections": [
       {
         "title": "Our goal",
@@ -279,7 +278,7 @@
       },
       {
         "title": "A local-first approach",
-        "body": "The local flow stays constant: your browser detects activity, Nowly Host sends it to Discord, without going through our servers*."
+        "body": "The local flow stays the same: your browser detects activity, Nowly Host sends it to Discord, without going through our servers*."
       },
       {
         "title": "A community project",
@@ -537,7 +536,7 @@
   "marketplace-page": {
     "badge": "Library",
     "title": "Supported Platforms",
-    "description": "Discover every platform compatible with Nowly",
+    "description": "Every platform Nowly currently supports.",
     "search-placeholder": "Search for a platform...",
     "sort-label": "Sort by:",
     "sort-popular": "Popularity",
@@ -563,7 +562,7 @@
     "author-all": "All authors",
     "contribute-lead": "Missing a site?",
     "request-presence": "Request a presence",
-    "create-presence": "Build one"
+    "create-presence": "Create a presence"
   },
   "author-page": {
     "badge": "Author",
@@ -573,7 +572,7 @@
   "docs": {
     "documentation": "Documentation",
     "on-this-page": "On this page",
-    "toc": "TOC",
+    "toc": "Contents",
     "open-table-of-contents": "Open table of contents",
     "previous": "Previous",
     "next": "Next",
@@ -593,7 +592,7 @@
     "features": "Features",
     "author-label": "Author",
     "contributor-label": "Contributor",
-    "development": "Contribution",
+    "development": "Contributors",
     "stats": "Statistics",
     "active-users": "Active Users",
     "total-installs": "Total Installs",
@@ -645,7 +644,7 @@
     "presence-installed-title": "Presence installed",
     "presence-installed-youtube-description": "Presence installed. Open YouTube to start the test.",
     "presence-installed-description": "Presence installed. Open a URL supported by {platform} to start.",
-    "diagnostic-host-missing-message": "Nowly Host is not detected. Install it from Nowly Host page, then check the connection.",
+    "diagnostic-host-missing-message": "Nowly Host is not detected. Install it from the Nowly Host page, then check the connection.",
     "diagnostic-discord-closed-message": "Nowly Host is installed but Discord Desktop is not open.",
     "test-youtube-action": "Test with YouTube",
     "open-supported-site-action": "Open supported site",
@@ -668,13 +667,13 @@
     "contributors-label": "Contributors"
   },
   "not-found": {
-    "description": "The page you're looking for doesn't exist or has been moved.",
+    "description": "This page does not exist or has been moved.",
     "back-to-home": "Back to Home"
   },
   "host-page": {
     "badge": "Nowly Host",
     "title": "Download Nowly Host",
-    "description": "The bridge between your browser and Discord. Keeps your Rich Presence synced in the background.",
+    "description": "The local bridge between your browser and Discord. It keeps your Rich Presence synced in the background.",
     "card-title": "Download Nowly Host for",
     "card-version": "{details}",
     "platform-select-label": "Select platform",
@@ -687,7 +686,7 @@
     "download-archive": "Download Archive (.tar.gz)",
     "macos-download": "Download DMG (.dmg)",
     "unsigned-title": "Unsigned build",
-    "unsigned-desc": "This build is not code-signed. Windows may show a SmartScreen warning when you run the installer. Click \"More info\" then \"Run anyway\" to proceed.",
+    "unsigned-desc": "This build is not code-signed. Windows may show a SmartScreen warning when you run the installer. Click “More info”, then “Run anyway” to continue.",
     "signed-title": "Signed & notarized by Apple",
     "signed-desc": "A special thanks to the anonymous friend who provided their Apple Developer Program account to make signed macOS builds possible. Your builds are verified by Apple's notarization service.",
     "chip-open-source": "Open source",
@@ -757,7 +756,7 @@
       },
       {
         "title": "Why this helps",
-        "body": "These stats show which presences need maintenance, whether Nowly Host connects reliably, and which onboarding steps fail most often. That makes fixes less guesswork and more focused."
+        "body": "These stats show which presences need maintenance, whether Nowly Host connects reliably, and which setup steps fail most often. Fixes become more focused, and less guesswork."
       },
       {
         "title": "Your control",
