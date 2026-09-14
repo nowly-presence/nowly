@@ -94,6 +94,13 @@ const pickMetadataPath = (paths: string[]): string | null => {
   return matches.slice().sort((left, right) => left.split("/").length - right.split("/").length || left.localeCompare(right))[0] ?? null;
 };
 
+const slugFromPath = (metadataPath: string, fallback: string): string => {
+  const parts = normalizePath(metadataPath).split("/").filter(Boolean);
+  const parent = parts.length >= 2 ? parts[parts.length - 2] : "";
+  if (!parent || parent === "." || parent === "..") return fallback;
+  return parent.toLowerCase().replace(/\s+/g, "-");
+};
+
 const fileLookup = (files: Record<string, Uint8Array>): Map<string, Uint8Array> => {
   const map = new Map<string, Uint8Array>();
   for (const [path, content] of Object.entries(files)) {
