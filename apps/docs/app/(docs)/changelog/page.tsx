@@ -4,7 +4,7 @@ import { ScrollToTop } from "@/components/docs/scroll-to-top";
 import { TableOfContents } from "@/components/docs/table-of-contents";
 import { getDocContent } from "@/lib/docs/content";
 import { extractTocItems } from "@/lib/docs/types";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata, docsOgImage } from "@/lib/seo";
 import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -20,11 +20,18 @@ const generateMetadata = async (): Promise<Metadata> => {
     return { title: "Not Found" };
   }
 
+  const description = doc.description || "Release notes for Nowly.";
+
   return createMetadata({
     title: doc.title,
-    description: doc.description || "Release notes for Nowly.",
+    description,
     path: "/changelog",
     type: "article",
+    image: docsOgImage("changelog", {
+      title: doc.title,
+      description,
+      category: "Changelog",
+    }),
   });
 };
 

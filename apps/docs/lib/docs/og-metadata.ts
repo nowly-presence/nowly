@@ -32,9 +32,12 @@ const readDocFile = (pagePath: string, locale: string): { raw: string } | null =
 
 export const getDocOgMetadata = (slug: string, locale: string = "en-US"): DocOgMetadata | null => {
   const validLocale = getValidLocale(locale);
+  const lastSegment = slug.split("/").at(-1) ?? slug;
 
   for (const category of getDocsNav()) {
-    const page = category.children.find((child) => child.slug === slug);
+    const page = category.children.find(
+      (child) => child.slug === slug || `${category.slug}/${child.slug}` === slug || child.slug === lastSegment,
+    );
     if (!page) continue;
 
     const docFile = readDocFile(page.path, validLocale);

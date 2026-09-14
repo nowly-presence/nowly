@@ -6,7 +6,7 @@ import { TableOfContents } from "@/components/docs/table-of-contents";
 import { getAdjacentPages, getCategoryForPath, getDocContent } from "@/lib/docs/content";
 import { docHref } from "@/lib/docs/href";
 import { extractTocItems } from "@/lib/docs/types";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata, docsOgImage } from "@/lib/seo";
 import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -34,18 +34,16 @@ const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   }
 
   const description = doc.description || "Nowly documentation for Discord Rich Presence setup and presence development.";
-  const ogParams = new URLSearchParams({
-    title: doc.title,
-    description,
-    category: getCategoryForPath(pageSlug, "en-US"),
-    mode: "dark",
-  });
 
   return createMetadata({
     title: doc.title,
     description,
     path: docHref(doc.path),
-    image: `/api/og/docs/${doc.path}?${ogParams.toString()}`,
+    image: docsOgImage(doc.path, {
+      title: doc.title,
+      description,
+      category: getCategoryForPath(pageSlug, "en-US"),
+    }),
   });
 };
 

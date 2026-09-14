@@ -2,6 +2,28 @@ import { DOCS_URL } from "@/lib/constants";
 import type { Metadata } from "next";
 
 export const SITE_NAME = "Nowly";
+export const OG_IMAGE_VERSION = "2";
+
+export const docsOgImage = (
+  docPath: string,
+  params: {
+    title: string
+    description: string
+    category: string
+  },
+): string => {
+  const search = new URLSearchParams({
+    title: params.title,
+    description: params.description,
+    category: params.category,
+    mode: "dark",
+    v: OG_IMAGE_VERSION,
+  });
+  const slug = docPath.replace(/^\/+/, "");
+  const prefix = slug ? `/api/og/docs/${slug}` : "/api/og/docs";
+
+  return `${prefix}?${search.toString()}`;
+};
 
 export const absoluteUrl = (path = "/"): string => {
   if (path.startsWith("http")) return path;
