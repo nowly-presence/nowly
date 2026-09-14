@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useBrowser } from "@/hooks/use-browser";
 import { IconCircleCheck, IconDownload, IconDeviceDesktop, IconShield } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 
 import type { FC, ReactElement } from "react";
 import { useState } from "react";
@@ -39,13 +38,6 @@ export const CtaSection: FC = (): ReactElement => {
                 {browser && browser !== "Firefox" && browser !== "Safari"
                   ? t("download-for", { browser })
                   : t("extension")}
-              </Button>
-
-              <Button asChild variant="secondary" size="lg">
-                <Link href="/host">
-                  <IconDeviceDesktop className="w-5 h-5" />
-                  {t("download-desktop")}
-                </Link>
               </Button>
 
               <Button disabled variant="secondary" size="lg">

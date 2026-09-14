@@ -2,6 +2,7 @@
 
 import { buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useBrowser } from "@/hooks/use-browser";
 import { docsHref } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { IconDownload, IconMenu2 } from "@tabler/icons-react";
@@ -67,15 +68,6 @@ export const Navbar: FC = (): ReactElement => {
 
                   <SheetClose asChild>
                     <Link
-                      href="/host"
-                      className="text-lg font-semibold text-foreground hover:text-accent transition-colors"
-                    >
-                      {t("host")}
-                    </Link>
-                  </SheetClose>
-
-                  <SheetClose asChild>
-                    <Link
                       href={downloadHref}
                       className={buttonVariants({ size: "md", variant: "accent", className: "justify-center" })}
                     >
@@ -99,12 +91,6 @@ export const Navbar: FC = (): ReactElement => {
               className={buttonVariants({ size: "md", variant: "ghost" })}
             >
               {t("marketplace")}
-            </Link>
-
-            <Link href="/host"
-              className={buttonVariants({ size: "md", variant: "ghost" })}
-            >
-              {t("host")}
             </Link>
 
             <Link
