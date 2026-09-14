@@ -18,7 +18,7 @@ export const Navbar: FC = (): ReactElement => {
       <div className="mx-auto w-full min-w-0 max-w-300 px-6">
         <div className="flex min-w-0 items-center justify-between">
           <Link href={`${SITE_URL}/`} className="min-w-0 shrink-0 cursor-pointer select-none">
-            <img src={BRAND_LOCKUP_BLUE} alt="Nowly" width={420} height={128} className="h-8 w-auto" />
+            <img src={BRAND_LOCKUP_BLUE} alt="Nowly" width={420} height={128} className="h-10 w-auto max-w-full" />
           </Link>
 
           <div className="lg:hidden">
