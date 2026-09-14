@@ -1,135 +1,163 @@
+import { Input } from "@/components/ui/input";
 import { t } from "@/shared/i18n";
 import type { PresenceDisplayMode } from "@/shared/types";
-import type { FC } from "react";
+import type { FC, ReactElement } from "react";
+import { useMemo, useState } from "react";
 import { EmptyState } from "@/features/presences/empty-state";
+import { PresenceGridSection } from "@/features/presences/presence-grid-section";
 import { PresenceListSection } from "@/features/presences/presence-list-section";
 import { PresenceListSkeleton } from "@/features/presences/presence-list-skeleton";
-import { getCategoryLabel, groupByCategory, sortAlphabetically, type PresenceListEntry } from "@/features/presences/presence-list.model";
+import {
+  getCategoryLabel,
+  groupByCategory,
+  matchesPresenceSearch,
+  type PresenceListEntry,
+} from "@/features/presences/presence-list.model";
 
 type Props = {
   activeSlug: string | null;
   displayMode: PresenceDisplayMode;
   entries: PresenceListEntry[];
   isLoading: boolean;
-  onOpenMarketplace: (slug: string) => void;
-  onRemove: (slug: string) => void;
+  onOpen: (slug: string) => void;
   onSchedule: (slug: string) => void;
   onToggle: (slug: string, enabled: boolean) => void;
+  onUpdatePresence: (slug: string) => void;
   separateActive: boolean;
   showSchedule: boolean;
   updates: Record<string, string>;
+  updatingSlug?: string | null;
 };
+
+type SectionProps = Pick<
+  Props,
+  "onOpen" | "onUpdatePresence" | "onSchedule" | "onToggle" | "showSchedule" | "updates" | "updatingSlug"
+> & {
+  entries: PresenceListEntry[];
+  layout: "list" | "grid";
+};
+
+const PresenceEntries: FC<SectionProps> = ({
+  entries,
+  layout,
+  onOpen,
+  onUpdatePresence,
+  onSchedule,
+  onToggle,
+  showSchedule,
+  updates,
+  updatingSlug,
+}): ReactElement =>
+  layout === "grid" ? (
+    <PresenceGridSection entries={entries} onOpen={onOpen} updates={updates} />
+  ) : (
+    <PresenceListSection
+      entries={entries}
+      onOpen={onOpen}
+      onUpdatePresence={onUpdatePresence}
+      onSchedule={onSchedule}
+      onToggle={onToggle}
+      showSchedule={showSchedule}
+      updates={updates}
+      updatingSlug={updatingSlug}
+    />
+  );
+
+const searchInputClassName =
+  "h-9 w-full appearance-none rounded-xl border border-border bg-card-2 px-3 text-sm text-foreground outline-none transition-colors placeholder:text-dim-foreground hover:bg-card-hover focus:border-border-light focus:bg-card-2";
 
 export const PresenceList: FC<Props> = ({
   activeSlug,
   displayMode,
   entries,
   isLoading,
-  onOpenMarketplace,
-  onRemove,
+  onOpen,
   onSchedule,
   onToggle,
+  onUpdatePresence,
   separateActive,
   showSchedule,
   updates,
+  updatingSlug,
 }) => {
-  if (isLoading) return <PresenceListSkeleton />;
+  const [query, setQuery] = useState("");
 
-  const filtered = separateActive && activeSlug
-    ? entries.filter(([slug]) => slug !== activeSlug)
-    : entries;
+  const scoped = useMemo(
+    () => (separateActive && activeSlug ? entries.filter(([slug]) => slug !== activeSlug) : entries),
+    [activeSlug, entries, separateActive],
+  );
 
-  if (filtered.length === 0) return <EmptyState />;
+  const filtered = useMemo(
+    () => scoped.filter(([slug, presence]) => matchesPresenceSearch(slug, presence, query)),
+    [query, scoped],
+  );
 
-  const disabledEntries = filtered.filter(([, p]) => !p.enabled);
-  const hasDisabled = disabledEntries.length > 0;
-
-  if (displayMode === "alphabetical") {
-    const activeSorted = sortAlphabetically(filtered.filter(([, p]) => p.enabled));
-
-    if (!hasDisabled) {
-      return (
-        <section className="flex min-h-0 flex-1 flex-col gap-3">
-          <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pr-1">
-            <PresenceListSection
-              entries={activeSorted}
-              onOpenMarketplace={onOpenMarketplace}
-              onRemove={onRemove}
-              onSchedule={onSchedule}
-              onToggle={onToggle}
-              showSchedule={showSchedule}
-              updates={updates}
-            />
-          </div>
-        </section>
-      );
-    }
-
+  if (isLoading) {
     return (
-      <section className="flex min-h-0 flex-1 flex-col gap-3">
-        <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pr-1">
-          <section className="flex flex-col gap-2">
-            <h2 className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-              {t("active-presences")}
-            </h2>
-            <PresenceListSection
-              entries={activeSorted}
-              onOpenMarketplace={onOpenMarketplace}
-              onRemove={onRemove}
-              onSchedule={onSchedule}
-              onToggle={onToggle}
-              showSchedule={showSchedule}
-              updates={updates}
-            />
-          </section>
-
-          <section className="flex flex-col gap-2">
-            <h2 className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-              {t("disabled-presences")}
-            </h2>
-            <PresenceListSection
-              entries={sortAlphabetically(disabledEntries)}
-              onOpenMarketplace={onOpenMarketplace}
-              onRemove={onRemove}
-              onSchedule={onSchedule}
-              onToggle={onToggle}
-              showSchedule={showSchedule}
-              updates={updates}
-            />
-          </section>
-        </div>
-      </section>
+      <PresenceListSkeleton displayMode={displayMode} />
     );
   }
 
+  if (scoped.length === 0) return <EmptyState />;
+
+  const sectionProps = {
+    onOpen,
+    onUpdatePresence,
+    onSchedule,
+    onToggle,
+    showSchedule,
+    updates,
+    updatingSlug,
+  };
+  const layout = displayMode === "grid" ? "grid" : "list";
   const groups = groupByCategory(filtered);
 
   return (
-    <section className="flex min-h-0 flex-1 flex-col gap-3">
-      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pr-1">
-        {groups.map(([category, categoryEntries]) => {
-          const enabled = categoryEntries.filter(([, p]) => p.enabled);
-          const disabled = categoryEntries.filter(([, p]) => !p.enabled);
+    <div className="flex flex-col gap-4">
+      <Input
+        unstyled
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder={t("home-search")}
+        aria-label={t("home-search")}
+        className={searchInputClassName}
+      />
+
+      {filtered.length === 0 ? (
+        <EmptyState description={t("home-search-empty")} title={t("home-search-empty-title")} />
+      ) : (
+        groups.map(([category, categoryEntries]) => {
+          const enabled = categoryEntries.filter(([, presence]) => presence.enabled);
+          const disabled = categoryEntries.filter(([, presence]) => !presence.enabled);
+          const total = categoryEntries.length;
+          const activeCount = enabled.length;
+          const countLabel =
+            activeCount === 0
+              ? t("category-count-none")
+              : activeCount === total
+                ? t("category-count-all")
+                : t("category-count-some", { count: String(activeCount), total: String(total) });
 
           return (
             <section key={category} className="flex flex-col gap-2">
-              <h2 className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-                {getCategoryLabel(category)} {enabled.length}/{categoryEntries.length}
-              </h2>
+              <div className="flex items-center justify-between gap-3">
+                <h2 className="min-w-0 truncate text-base font-semibold text-foreground">
+                  {getCategoryLabel(category)}
+                </h2>
+                <span className="shrink-0 rounded-md bg-card-2 px-2 py-0.5 text-xs text-muted-foreground">
+                  {countLabel}
+                </span>
+              </div>
 
-              <PresenceListSection
+              <PresenceEntries
+                layout={layout}
                 entries={[...enabled, ...disabled]}
-                onOpenMarketplace={onOpenMarketplace}
-                onRemove={onRemove}
-                onSchedule={onSchedule}
-                onToggle={onToggle}
-                showSchedule={showSchedule}
-                updates={updates}
+                {...sectionProps}
               />
             </section>
           );
-        })}
-      </div>
-    </section>
+        })
+      )}
+    </div>
   );
 };

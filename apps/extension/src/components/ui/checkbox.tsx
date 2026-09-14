@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck } from "@/lib/tabler-icons";
 import type { FC } from "react";
 
 type Props = {

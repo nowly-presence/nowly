@@ -20,8 +20,8 @@ export const ThemeSelector: FC<Props> = ({ settings, onSettingsChange }): ReactE
   const current = settings.theme ?? "default";
 
   return (
-    <section className="rounded-lg border border-border bg-card p-4">
-      <h2 className="mb-2 text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+    <section>
+      <h2 className="mb-2 text-xs font-semibold text-muted-foreground">
         {t("theme-section-title")}
       </h2>
       <p className="mb-3 text-xs leading-5 text-muted-foreground">{t("theme-section-description")}</p>
@@ -31,14 +31,14 @@ export const ThemeSelector: FC<Props> = ({ settings, onSettingsChange }): ReactE
             key={key}
             type="button"
             onClick={() => onSettingsChange({ theme: key })}
-            className={`flex flex-col items-center gap-2 rounded-lg border p-3 transition-colors ${
+            className={`flex flex-col items-center gap-2 rounded-xl border p-3 transition-colors ${
               current === key
                 ? "border-accent bg-accent/10"
                 : "border-border bg-card-2 hover:bg-card-hover"
             }`}
           >
             <span className="h-6 w-6 rounded-full" style={{ backgroundColor: color }} />
-            <span className="text-[11px] font-medium text-foreground">
+            <span className="text-xs font-medium text-foreground">
               {t(`theme-${key}` as const)}
             </span>
           </button>

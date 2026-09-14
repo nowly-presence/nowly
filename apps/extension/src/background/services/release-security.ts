@@ -133,9 +133,11 @@ export const verifyPresenceRelease = async (
   const metadataHash = await sha256Base64Url(canonicalJson(release.metadata));
   if (metadataHash !== release.metadataHash) return { ok: false, error: "metadata hash mismatch" };
 
-  if (!IS_UNPACKED() || release.signature) {
+  if (release.signature) {
     if (!await verifySignature(release)) return { ok: false, error: "release signature invalid" };
+    return { ok: true };
   }
 
-  return { ok: true };
+  if (IS_UNPACKED()) return { ok: true };
+  return { ok: false, error: "release signature missing" };
 };

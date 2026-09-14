@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { t } from "@/shared/i18n";
-import { IconCheck, IconCopy, IconTrash } from "@tabler/icons-react";
+import { IconCheck, IconCopy, IconTrash } from "@/lib/tabler-icons";
 import type { FC } from "react";
 
 type Props = {

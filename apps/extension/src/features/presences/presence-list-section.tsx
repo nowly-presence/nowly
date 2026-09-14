@@ -4,35 +4,38 @@ import type { PresenceListEntry } from "@/features/presences/presence-list.model
 
 type Props = {
   entries: PresenceListEntry[];
-  onOpenMarketplace: (slug: string) => void;
-  onRemove: (slug: string) => void;
+  onOpen: (slug: string) => void;
+  onUpdatePresence: (slug: string) => void;
   onSchedule: (slug: string) => void;
   onToggle: (slug: string, enabled: boolean) => void;
   showSchedule: boolean;
   updates: Record<string, string>;
+  updatingSlug?: string | null;
 };
 
 export const PresenceListSection: FC<Props> = ({
   entries,
-  onOpenMarketplace,
-  onRemove,
+  onOpen,
+  onUpdatePresence,
   onSchedule,
   onToggle,
   showSchedule,
   updates,
+  updatingSlug,
 }) => (
-  <div className="overflow-hidden rounded-lg border border-border bg-card">
+  <div className="overflow-hidden rounded-xl border border-border bg-card">
     {entries.map(([slug, presence]) => (
       <PresenceListItem
         key={slug}
         slug={slug}
         presence={presence}
         showSchedule={showSchedule}
+        onOpen={onOpen}
         onToggle={onToggle}
-        onRemove={onRemove}
         onSchedule={onSchedule}
-        onOpenMarketplace={onOpenMarketplace}
+        onUpdatePresence={onUpdatePresence}
         updateAvailable={updates[slug]}
+        updating={updatingSlug === slug}
       />
     ))}
   </div>

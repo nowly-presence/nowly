@@ -1,11 +1,14 @@
-import { ActionBar } from "@/components/layout/action-bar";
+import { BottomNav, type AppView } from "@/components/layout/bottom-nav";
+import { ConnectionStatusBar, isConnectionHealthy } from "@/components/layout/connection-status-bar";
 import { Header } from "@/components/layout/header";
-import { SidepanelNav, type SidepanelView } from "@/components/layout/sidepanel-nav";
 import { AnalyticsLogsView } from "@/features/analytics-logs/analytics-logs-view";
 import { OnboardingOverlay } from "@/features/onboarding/onboarding-overlay";
 import { ActivityView } from "@/features/presences/activity-view";
-import { ScheduleSheet } from "@/features/presences/schedule-sheet";
-import { SnoozeSheet } from "@/features/presences/snooze-sheet";
+import { CurrentActivityCard } from "@/features/presences/current-activity-card";
+import { ScheduleDialog } from "@/features/presences/schedule-dialog";
+import { SnoozeDialog } from "@/features/presences/snooze-dialog";
+import { InstallQueueBanner } from "@/features/store/install-queue-banner";
+import { StoreView } from "@/features/store/store-view";
 import { SettingsView } from "@/features/settings/settings-view";
 import { SupporterThankYouOverlay } from "@/features/supporter/supporter-thank-you-overlay";
 import { useExtensionState } from "@/hooks/use-extension-state";
@@ -13,32 +16,127 @@ import { useLocalePreference } from "@/hooks/use-locale-preference";
 import { useOnboardingState } from "@/hooks/use-onboarding-state";
 import { sendMessage } from "@/lib/messages";
 import { WEB_BASE_URL } from "@/shared/constants";
+import { t } from "@/shared/i18n";
+import {
+  SIDEPANEL_NAV_KEY,
+  clearPendingSidepanelNav,
+  isSidepanelPendingNav,
+  loadPendingSidepanelNav,
+  persistAppView,
+  type SidepanelPendingNav,
+} from "@/shared/sidepanel-view";
 import type { FC, ReactElement } from "react";
 import { useCallback, useEffect, useState } from "react";
 
-const App: FC = (): ReactElement => {
-  const { activity, checkHostUpdate, checkUpdates, connectNative, debug, dismissSupporterThankYou, entries, hostVersionInfo, isCheckingHostVersion, isCheckingUpdates, isLoading, isUnpacked, nativeStatus, presences, removePresence, resetOnboardingForDev, supporterStatus, togglePresence, updates, settings, setSettings } =
-    useExtensionState();
+type Props = {
+  initialView: AppView;
+};
+
+const App: FC<Props> = ({ initialView }): ReactElement => {
+  const {
+    activity,
+    checkHostUpdate,
+    checkUpdates,
+    connectNative,
+    debug,
+    dismissSupporterThankYou,
+    entries,
+    hostVersionInfo,
+    installQueue,
+    isCheckingHostVersion,
+    isCheckingUpdates,
+    isLoading,
+    isUnpacked,
+    nativeStatus,
+    presences,
+    installPresenceFromApi,
+    removePresence,
+    resetOnboardingForDev,
+    retryInstallQueue,
+    setPresencePaused,
+    supporterStatus,
+    togglePresence,
+    updates,
+    settings,
+    setSettings,
+  } = useExtensionState();
   const { localePreference, setLocalePreference } = useLocalePreference();
   const { onboarding, setOnboarding, nativeStatus: onboardingNativeStatus, userScripts } = useOnboardingState();
-  const [activeView, setActiveView] = useState<SidepanelView>("activity");
-  const [snoozeSheetOpen, setSnoozeSheetOpen] = useState(false);
-  const [scheduleSheetOpen, setScheduleSheetOpen] = useState(false);
+  const [activeView, setActiveView] = useState<AppView>(initialView);
+  const [selectedPresenceSlug, setSelectedPresenceSlug] = useState<string | null>(null);
+  const [storeSeed, setStoreSeed] = useState<{ query: string; slug: string | null }>({ query: "", slug: null });
+  const [snoozeOpen, setSnoozeOpen] = useState(false);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
   const [scheduleSlug, setScheduleSlug] = useState<string | null>(null);
+  const [installingSlug, setInstallingSlug] = useState<string | null>(null);
+  const [installError, setInstallError] = useState(false);
+  const [installQueued, setInstallQueued] = useState(false);
   const liveNativeStatus = onboardingNativeStatus.status === "unknown" && nativeStatus.status !== "unknown"
     ? nativeStatus
     : onboardingNativeStatus;
   const developerModeEnabled = settings.developerMode ?? isUnpacked;
+  const presencePaused = settings.presencePaused === true;
+
+  const [statusVisible, setStatusVisible] = useState(true);
+
+  const applyPendingNav = useCallback((nav: SidepanelPendingNav): void => {
+    setInstallError(false);
+    setInstallQueued(false);
+    if (nav.view === "home") {
+      setActiveView("home");
+      setSelectedPresenceSlug(nav.slug ?? null);
+      persistAppView("home");
+      return;
+    }
+    if (nav.view === "store") {
+      setActiveView("store");
+      setSelectedPresenceSlug(null);
+      setStoreSeed({ query: nav.query ?? "", slug: nav.slug ?? null });
+      persistAppView("store");
+      return;
+    }
+    setActiveView(nav.view);
+    persistAppView(nav.view);
+  }, []);
 
   useEffect(() => {
-    if (activeView === "analyticsLogs" && !developerModeEnabled) {
-      setActiveView("activity");
-    }
-  }, [activeView, developerModeEnabled]);
+    void loadPendingSidepanelNav().then((nav) => {
+      if (!nav) return;
+      applyPendingNav(nav);
+      void clearPendingSidepanelNav();
+    });
 
-  const onOpenMarketplace = useCallback((slug: string): void => {
+    const onStorageChanged = (
+      changes: Record<string, chrome.storage.StorageChange>,
+      areaName: string,
+    ): void => {
+      if (areaName !== "local" || !changes[SIDEPANEL_NAV_KEY]) return;
+      const nav = changes[SIDEPANEL_NAV_KEY].newValue;
+      if (!isSidepanelPendingNav(nav)) return;
+      applyPendingNav(nav);
+      void clearPendingSidepanelNav();
+    };
+    chrome.storage.onChanged.addListener(onStorageChanged);
+    return () => chrome.storage.onChanged.removeListener(onStorageChanged);
+  }, [applyPendingNav]);
+
+  const onOpenWebsite = useCallback((slug: string): void => {
     void chrome.tabs.create({ url: `${WEB_BASE_URL}/library/${slug}` });
   }, []);
+
+  const handleInstallFromApi = useCallback(async (slug: string): Promise<void> => {
+    setInstallError(false);
+    setInstallQueued(false);
+    setInstallingSlug(slug);
+    const result = await installPresenceFromApi(slug);
+    setInstallingSlug(null);
+    if (result.ok) return;
+    if (result.queued) {
+      setInstallQueued(true);
+      return;
+    }
+    setInstallError(true);
+  }, [installPresenceFromApi]);
 
   const activePresence = activity?.slug ? presences[activity.slug] : null;
   const isSnoozed = Boolean(activePresence?.snoozeUntil && activePresence.snoozeUntil > Date.now());
@@ -50,76 +148,169 @@ const App: FC = (): ReactElement => {
 
   const handleScheduleOpen = useCallback((slug: string | null) => {
     setScheduleSlug(slug);
-    setScheduleSheetOpen(true);
+    setScheduleOpen(true);
   }, []);
 
+  const handleViewChange = useCallback((view: AppView): void => {
+    setSelectedPresenceSlug(null);
+    setInstallError(false);
+    setInstallQueued(false);
+    setStoreSeed({ query: "", slug: null });
+    setActiveView(view);
+    persistAppView(view);
+  }, []);
+
+  useEffect(() => {
+    if (!developerModeEnabled && activeView === "logs") {
+      setActiveView("home");
+      persistAppView("home");
+    }
+  }, [activeView, developerModeEnabled]);
+
+  const connectionHealthy = isConnectionHealthy(liveNativeStatus);
+  const displayMode = settings.presenceDisplayMode === "grid" ? "grid" : "category";
+  const showLayoutToggle = activeView === "home" && !selectedPresenceSlug;
+
+  useEffect(() => {
+    setStatusVisible(true);
+    if (presencePaused) return;
+    if (!connectionHealthy) return;
+    const timer = window.setTimeout(() => setStatusVisible(false), 2500);
+    return () => window.clearTimeout(timer);
+  }, [connectionHealthy, presencePaused]);
+
+  const queueBanner = (
+    <InstallQueueBanner count={installQueue.length} onRetry={() => void retryInstallQueue()} />
+  );
+
   return (
-    <main data-theme={settings.theme ?? "default"} data-bg-anim={settings.backgroundAnimation !== false} className="relative min-h-screen bg-background text-foreground">
-      <div className="relative z-1 flex min-h-screen w-full min-w-0 flex-col gap-4 p-3">
-        <Header nativeStatus={liveNativeStatus} supporter={supporterStatus.adFree} />
-        
-        <SidepanelNav activeView={activeView} onChange={setActiveView} showAnalyticsLogs={developerModeEnabled} />
-
-        {activeView === "activity" ? (
-          <section className="flex min-h-0 flex-1 flex-col gap-3">
-            <ActivityView
-              activity={activity}
-              entries={entries}
-              isLoading={isLoading}
-              onOpenMarketplace={onOpenMarketplace}
-              onRemove={removePresence}
-              onSchedule={handleScheduleOpen}
-              onToggle={togglePresence}
-              presences={presences}
-              settings={settings}
-              updates={updates}
-            />
-
-            <ActionBar
-              activeSlug={activity?.slug ?? null}
-              backgroundAnimation={settings.backgroundAnimation !== false}
-              isCheckingUpdates={isCheckingUpdates}
-              isSnoozed={isSnoozed}
-              scheduleEnabled={settings.scheduleEnabled !== false}
-              onCheckUpdates={checkUpdates}
-              onScheduleClick={() => handleScheduleOpen(null)}
-              onSnoozeClick={() => setSnoozeSheetOpen(true)}
-              onToggleAnimation={() => setSettings({ backgroundAnimation: settings.backgroundAnimation === false ? true : false })}
-              onUnsnoozeClick={handleUnsnooze}
-            />
-          </section>
-        ) : activeView === "analyticsLogs" && developerModeEnabled ? (
-          <AnalyticsLogsView />
-        ) : (
-          <SettingsView
-            adFree={supporterStatus.adFree}
-            debug={debug}
-            hostVersionInfo={hostVersionInfo}
-            isCheckingHostVersion={isCheckingHostVersion}
-            isLoading={isLoading}
-            localePreference={localePreference}
-            nativeStatus={liveNativeStatus}
-            onCheckHostUpdate={checkHostUpdate}
-            onForceShowOnboarding={resetOnboardingForDev}
-            onLocaleChange={setLocalePreference}
-            settings={settings}
-            onSettingsChange={setSettings}
+    <main data-theme={settings.theme ?? "default"} className="sidepanel-shell relative bg-background text-foreground">
+      {settings.backgroundAnimation !== false ? <div className="sidepanel-bg" aria-hidden /> : null}
+      <div className="sidepanel-chrome relative z-1">
+      <div className="sidepanel-body">
+        <div className="sidepanel-topbar">
+          <Header
+            displayMode={showLayoutToggle ? displayMode : undefined}
+            isCheckingUpdates={isCheckingUpdates}
+            onCheckUpdates={checkUpdates}
+            onDisplayModeChange={showLayoutToggle ? (mode) => setSettings({ presenceDisplayMode: mode }) : undefined}
+            onReplayOnboarding={resetOnboardingForDev}
+            onTogglePause={() => setPresencePaused(!presencePaused)}
+            presencePaused={presencePaused}
+            supporter={supporterStatus.adFree}
           />
-        )}
+        </div>
+
+        <div
+          id="sidepanel-tabpanel"
+          role="tabpanel"
+          aria-labelledby={`sidepanel-tab-${activeView}`}
+          className={`sidepanel-scroll${activeView === "home" || activeView === "store" ? " sidepanel-scroll-plain" : ""}`}
+        >
+          {activeView === "home" ? (
+            <div className="flex flex-col gap-4">
+              {queueBanner}
+              {installError ? (
+                <p className="text-xs text-red-400">{t("store-install-error")}</p>
+              ) : null}
+              {installQueued ? (
+                <p className="text-xs text-amber-300">{t("store-install-queued")}</p>
+              ) : null}
+              {settings.showPlayer !== false && !selectedPresenceSlug ? (
+                <CurrentActivityCard
+                  activity={activity}
+                  isLoading={isLoading}
+                  isPaused={presencePaused}
+                  isSnoozed={isSnoozed}
+                  onSnooze={() => setSnoozeOpen(true)}
+                  onUnsnooze={handleUnsnooze}
+                  presences={presences}
+                />
+              ) : null}
+              <ActivityView
+                activity={activity}
+                entries={entries}
+                isLoading={isLoading}
+                onOpenWebsite={onOpenWebsite}
+                onRemove={removePresence}
+                onSchedule={handleScheduleOpen}
+                onSelectPresence={setSelectedPresenceSlug}
+                onToggle={togglePresence}
+                onUpdatePresence={(slug) => void handleInstallFromApi(slug)}
+                selectedSlug={selectedPresenceSlug}
+                settings={settings}
+                updates={updates}
+                updatingSlug={installingSlug}
+              />
+            </div>
+          ) : activeView === "store" ? (
+            <div className="flex flex-col gap-3">
+              {queueBanner}
+              {installError ? (
+                <p className="text-xs text-red-400">{t("store-install-error")}</p>
+              ) : null}
+              {installQueued ? (
+                <p className="text-xs text-amber-300">{t("store-install-queued")}</p>
+              ) : null}
+              <StoreView
+                installingSlug={installingSlug}
+                onInstall={(slug) => void handleInstallFromApi(slug)}
+                presences={presences}
+                seedQuery={storeSeed.query}
+                seedSlug={storeSeed.slug}
+                updates={updates}
+              />
+            </div>
+          ) : activeView === "logs" && developerModeEnabled ? (
+            <AnalyticsLogsView />
+          ) : (
+            <SettingsView
+              adFree={supporterStatus.adFree}
+              debug={debug}
+              hostVersionInfo={hostVersionInfo}
+              isCheckingHostVersion={isCheckingHostVersion}
+              isCheckingUpdates={isCheckingUpdates}
+              isLoading={isLoading}
+              localePreference={localePreference}
+              nativeStatus={liveNativeStatus}
+              onCheckHostUpdate={checkHostUpdate}
+              onCheckUpdates={checkUpdates}
+              onForceShowOnboarding={resetOnboardingForDev}
+              onLocaleChange={setLocalePreference}
+              onScheduleGlobal={() => handleScheduleOpen(null)}
+              settings={settings}
+              onSettingsChange={setSettings}
+            />
+          )}
+        </div>
       </div>
 
-      <SnoozeSheet
+      <ConnectionStatusBar
+        nativeStatus={liveNativeStatus}
+        onConnect={connectNative}
+        presencePaused={presencePaused}
+        visible={statusVisible}
+      />
+
+      <BottomNav
+        activeView={activeView}
+        onViewChange={handleViewChange}
+        showLogs={developerModeEnabled}
+      />
+      </div>
+
+      <SnoozeDialog
         activeSlug={activity?.slug ?? null}
-        onClose={() => setSnoozeSheetOpen(false)}
-        open={snoozeSheetOpen}
+        onClose={() => setSnoozeOpen(false)}
+        open={snoozeOpen}
         presences={presences}
       />
 
-      <ScheduleSheet
+      <ScheduleDialog
         activeSlug={scheduleSlug}
         globalSchedule={settings.globalSchedule}
-        onClose={() => setScheduleSheetOpen(false)}
-        open={scheduleSheetOpen}
+        onClose={() => setScheduleOpen(false)}
+        open={scheduleOpen}
         presences={presences}
       />
 

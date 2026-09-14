@@ -1,3 +1,5 @@
+import { INSTALL_QUEUE_ALARM } from "@/background/managers/install-queue";
+import { drainInstallQueue } from "@/background/managers/presence-manager";
 import { getPresenceVersion } from "@/background/managers/activity-manager";
 import { addAnalyticsLog } from "@/background/analytics/analytics-log";
 import { flushAnalytics, trackAnalytics } from "@/background/analytics/analytics-tracker";
@@ -41,5 +43,6 @@ export const registerAlarmHandlers = (): void => {
       })();
     }
     if (alarm.name === "analytics-flush") void flushAnalytics();
+    if (alarm.name === INSTALL_QUEUE_ALARM) void drainInstallQueue();
   });
 };

@@ -3,7 +3,7 @@ import type { NativeStatus } from "@/lib/messages";
 import { extensionDetailsUrl, openUrl, siteUrl } from "@/shared/browser-links";
 import { t } from "@/shared/i18n";
 import type { CurrentActivity, InstalledPresences, UserScriptsStatus } from "@/shared/types";
-import { IconClipboard, IconExternalLink } from "@tabler/icons-react";
+import { IconClipboard, IconExternalLink } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 import { useMemo } from "react";
 import { buildDiagnosticSnapshot, isHostChecking, YOUTUBE_TEST_URL } from "@/features/diagnostics/diagnostic-status";

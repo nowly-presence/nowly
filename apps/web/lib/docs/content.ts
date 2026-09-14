@@ -143,7 +143,7 @@ const readChangelogFrontmatter = (slug: string, locale: string): { title?: strin
   };
 };
 
-const getChangelogVersions = (): ChangelogVersion[] => {
+export const getChangelogVersions = (): ChangelogVersion[] => {
   if (!existsSync(CHANGELOG_ROOT)) return [];
 
   return readdirSync(CHANGELOG_ROOT, { withFileTypes: true })
@@ -151,6 +151,19 @@ const getChangelogVersions = (): ChangelogVersion[] => {
     .map((entry) => parseChangelogVersion(entry.name))
     .filter((version): version is ChangelogVersion => Boolean(version))
     .sort(compareChangelogVersionsDesc);
+};
+
+export const parsePublicChangelogVersion = (
+  value: string,
+): { publicVersion: string; docSlug: string } | null => {
+  const match = /^(\d+)[.-](\d+)[.-](\d+)$/.exec(value.trim().replace(/^v/i, ""));
+
+  if (!match) return null;
+
+  return {
+    publicVersion: `${match[1]}.${match[2]}.${match[3]}`,
+    docSlug: `${match[1]}-${match[2]}-${match[3]}`,
+  };
 };
 
 const findCategory = (slug: string): DocSection | null => {

@@ -11,6 +11,7 @@ type ExtensionState = {
   connectNative: () => void;
   debug: PresenceDebug | null;
   entries: Array<[string, InstalledPresences[string]]>;
+  installQueue: string[];
   isCheckingUpdates: boolean;
   isCheckingHostVersion: boolean;
   isLoading: boolean;
@@ -18,7 +19,10 @@ type ExtensionState = {
   nativeStatus: NativeStatus;
   presences: InstalledPresences;
   removePresence: (slug: string) => void;
+  installPresenceFromApi: (slug: string) => Promise<{ ok: boolean; queued: boolean }>;
+  retryInstallQueue: () => Promise<void>;
   resetOnboardingForDev: () => Promise<void>;
+  setPresencePaused: (paused: boolean) => void;
   togglePresence: (slug: string, enabled: boolean) => void;
   updates: Record<string, string>;
   settings: ExtensionSettings;
@@ -54,6 +58,7 @@ export const useExtensionState = (): ExtensionState => {
   const [isCheckingUpdates, setIsCheckingUpdates] = useState(false);
   const [isUnpacked, setIsUnpacked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [installQueue, setInstallQueue] = useState<string[]>([]);
   const isUnpackedRef = useRef(false);
 
   useEffect(() => {
@@ -80,13 +85,15 @@ export const useExtensionState = (): ExtensionState => {
       sendMessage<PresenceDebug | null>("GET_DEBUG"),
       sendMessage<ExtensionSettings>("GET_SETTINGS"),
       sendMessage<SupporterStatus>("GET_SUPPORTER_STATUS"),
-    ]).then(([nextPresences, nextActivity, nextNativeStatus, nextDebug, nextSettings, nextSupporterStatus]) => {
+      sendMessage<{ items?: Array<{ slug: string }> }>("GET_INSTALL_QUEUE"),
+    ]).then(([nextPresences, nextActivity, nextNativeStatus, nextDebug, nextSettings, nextSupporterStatus, nextQueue]) => {
       setPresences(nextPresences ?? {});
       setActivity(nextActivity ?? null);
       setNativeStatus(nextNativeStatus ?? FALLBACK_NATIVE_STATUS);
       setDebug(nextDebug ?? null);
       setSettingsState(nextSettings ?? FALLBACK_SETTINGS);
       setSupporterStatus(nextSupporterStatus ?? FALLBACK_SUPPORTER_STATUS);
+      setInstallQueue((nextQueue?.items ?? []).map((item) => item.slug));
     }).finally(() => {
       setIsLoading(false);
     });
@@ -120,7 +127,7 @@ export const useExtensionState = (): ExtensionState => {
       areaName: string,
     ): void => {
       if (areaName !== "local") return;
-      if (changes.presences || changes.settings || changes.currentActivity || changes.debug || changes.supporterStatus) {
+      if (changes.presences || changes.settings || changes.currentActivity || changes.debug || changes.supporterStatus || changes.presenceInstallQueue) {
         refresh();
       }
     };
@@ -164,6 +171,25 @@ export const useExtensionState = (): ExtensionState => {
     });
   };
 
+  const installPresenceFromApi = (slug: string): Promise<{ ok: boolean; queued: boolean }> =>
+    sendMessage<{ ok?: boolean; queued?: boolean }>("INSTALL_PRESENCE_FROM_API", { slug }).then((result) => ({
+      ok: result?.ok === true,
+      queued: result?.queued === true,
+    }));
+
+  const retryInstallQueue = useCallback(async (): Promise<void> => {
+    await sendMessage("RETRY_INSTALL_QUEUE");
+    refresh();
+  }, [refresh]);
+
+  const setPresencePaused = useCallback((paused: boolean): void => {
+    void sendMessage<{ paused?: boolean }>("SET_PRESENCE_PAUSE", { paused }).then((result) => {
+      if (typeof result?.paused === "boolean") {
+        setSettingsState((current) => ({ ...current, presencePaused: result.paused }));
+      }
+    });
+  }, []);
+
   const connectNative = (): void => {
     setNativeStatus((current) => ({ ...current, status: "connecting" }));
     void sendMessage<NativeStatus>("CONNECT_NATIVE").then((status) => {
@@ -197,13 +223,17 @@ export const useExtensionState = (): ExtensionState => {
     connectNative,
     debug,
     entries,
+    installQueue,
     isLoading,
     isCheckingUpdates,
     isUnpacked,
     nativeStatus,
     presences,
     removePresence,
+    installPresenceFromApi,
+    retryInstallQueue,
     resetOnboardingForDev,
+    setPresencePaused,
     togglePresence,
     updates,
     settings,

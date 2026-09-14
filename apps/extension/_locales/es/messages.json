@@ -10,5 +10,14 @@
   },
   "paused": {
     "message": "Reproducción en pausa"
+  },
+  "commandOpenPanel": {
+    "message": "Abrir Nowly"
+  },
+  "commandTogglePause": {
+    "message": "Pausar o reanudar la presencia de Discord"
+  },
+  "contextMenuPage": {
+    "message": "Presencia Nowly para esta página"
   }
 }

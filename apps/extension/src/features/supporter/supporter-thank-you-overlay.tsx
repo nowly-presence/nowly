@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { t } from "@/shared/i18n";
 import type { SupporterStatus } from "@/shared/types";
-import { IconCircleCheckFilled, IconCopy } from "@tabler/icons-react";
+import { IconCircleCheckFilled, IconCopy } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 import { useState } from "react";
 
