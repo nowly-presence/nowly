@@ -12,17 +12,17 @@ description: Primera release de mantenimiento de Nowly, centrada en los flujos d
     ["Navegación de la extensión", "El badge de actualización ahora abre directamente `/library/[item]`.", "Ya no hay desvío por la antigua estructura de URLs con idioma."],
     ["Estado de actualización", "La versión instalada se refresca en cuanto llega la actualización.", "El badge desaparece al momento en lugar de quedarse hasta reiniciar."],
     ["Tracking activo", "`activeUsers` ahora sigue un modelo por dispositivo.", "El número refleja dispositivos realmente activos en lugar de un simple placeholder."],
-    ["Flujo de desactivación", "Desactivar una presence elimina ese dispositivo del contador activo.", "No queda actividad fantasma después de un toggle."],
+    ["Flujo de desactivación", "Desactivar una presencia elimina ese dispositivo del contador activo.", "No queda actividad fantasma después de un toggle."],
     ["Limpieza al desinstalar", "La extensión define una URL de desinstalación best-effort y la página web purga el dispositivo.", "La eliminación sigue funcionando aunque la extensión ya no esté disponible."],
     ["Pulido de la página detalle", "Los bloques de icono transparentes usan backdrop blur.", "La banner ya no se filtra tanto a través del tratamiento del icono."],
-    ["Estructura del changelog", "El changelog se movió a `/docs/changelog` y ahora usa una página por versión.", "Cada release se puede enlazar, revisar y mantener de forma independiente."],
+    ["Estructura del changelog", "El changelog se movió a `/changelog` y ahora usa una página por versión.", "Cada release se puede enlazar, revisar y mantener de forma independiente."],
     ["Navegación docs", "El changelog ahora aparece en la sidebar de docs con hijos por versión.", "Las notas de versión son accesibles como el resto de la documentación."],
     ["Sitemap docs", "El sitemap de docs ahora incluye el índice del changelog y las páginas de versión.", "Las release notes se indexan como el resto de la documentación."],
     ["UI del host", "El flujo de descarga del host se consolidó en el hero principal y las tarjetas secundarias open source / bajo impacto quedaron ocultas.", "La página mantiene una sola zona de descarga clara en lugar de varios bloques compitiendo."],
     ["Panel de descarga del host", "El select de plataforma, la línea de versión y los botones de descarga ahora viven en un panel compacto debajo del hero.", "El hero se mantiene limpio mientras los controles de descarga siguen agrupados."],
     ["CTA del host", "El CTA de instalar la extensión ahora usa un icono y apunta a la biblioteca.", "La llamada a la acción es más clara y coincide con el flujo real de instalación."],
     ["Almacenamiento del host", "La nota de almacenamiento ahora muestra los tamaños exactos del manifest host `1.1.0`.", "El texto es preciso en lugar de usar un tamaño fijo inventado."],
-    ["Plataformas del inicio", "La sección de plataformas del inicio ahora usa tarjetas de servicio más completas y elimina el título `Disponibles`.", "La lista de servicios se siente más actual y sigue alimentada por los datos live de las presences."],
+    ["Plataformas del inicio", "La sección de plataformas del inicio ahora usa tarjetas de servicio más completas y elimina el título `Disponibles`.", "La lista de servicios se siente más actual y sigue alimentada por los datos live de las presencias."],
     ["Espaciado de contribuidores", "Las filas de contribuidores ahora son compactas y de ancho completo.", "La sección ya no muestra un hueco extraño entre personas."],
     ["Docs CLI", "La nota de build de producción se retiró de la documentación CLI.", "La doc ya no sugiere un camino separado de build Chrome Web Store ahí."],
   ]}
@@ -34,11 +34,11 @@ El badge de actualización ahora envía a la ruta actual de la biblioteca en lug
 
 ## Estado de actualización
 
-Cuando una presence termina de actualizarse, la versión instalada se refresca inmediatamente. El badge ya no se queda visible hasta reabrir la extensión, así que el estado mostrado coincide con lo que el usuario acaba de hacer.
+Cuando una presencia termina de actualizarse, la versión instalada se refresca inmediatamente. El badge ya no se queda visible hasta reabrir la extensión, así que el estado mostrado coincide con lo que el usuario acaba de hacer.
 
 ## Tracking activo
 
-`activeUsers` ahora sigue dispositivos en lugar de guardar un simple flag de presence.
+`activeUsers` ahora sigue dispositivos en lugar de guardar un simple flag de presencia.
 
 - un `deviceId` estable actúa como clave de tracking
 - los heartbeats actualizan el registro activo en vez de solo cambiar un bit
@@ -46,7 +46,7 @@ Cuando una presence termina de actualizarse, la versión instalada se refresca i
 
 ## Desactivación
 
-Desactivar una presence ahora elimina el dispositivo del conjunto activo. Al volver a activarla, se añade de nuevo al mismo modelo de tracking, para mantener el contador alineado con el estado runtime real.
+Desactivar una presencia ahora elimina el dispositivo del conjunto activo. Al volver a activarla, se añade de nuevo al mismo modelo de tracking, para mantener el contador alineado con el estado runtime real.
 
 ## Limpieza al desinstalar
 
@@ -58,16 +58,16 @@ La extensión usa una URL de desinstalación best-effort, y la parte web purga e
 
 ## Pulido de la página detalle
 
-Los bloques de icono transparentes ahora descansan sobre un backdrop blur, para que la banner de la presence no se filtre tanto a través del tratamiento del icono. El efecto se aplica al contenedor del icono, no a la banner detrás.
+Los bloques de icono transparentes ahora descansan sobre un backdrop blur, para que el banner de la presencia no se filtre tanto a través del tratamiento del icono. El efecto se aplica al contenedor del icono, no a la banner detrás.
 
 ## Estructura del changelog
 
 El changelog ya no es una sola página con anclas. Ahora está dividido en un índice y páginas por versión:
 
 ```txt
-/docs/changelog
-/docs/changelog/1-0-0
-/docs/changelog/1-1-0
+/changelog
+/changelog/1-0-0
+/changelog/1-1-0
 ```
 
 Esa estructura hace que el historial de releases sea más fácil de mantener, enlazar y navegar desde la sidebar.
@@ -97,7 +97,7 @@ Los requirements del host ya no anuncian un `~15 MB` fijo. Esa nota no era exact
 
 ## Plataformas del inicio
 
-La sección de plataformas de la página de inicio se reconstruyó alrededor de la lista live de presences, en lugar de un muro de logos demasiado estático. El antiguo texto `Disponibles` se eliminó, y cada servicio ahora usa una tarjeta más completa con su icono, descripción localizada, número de instalaciones, usuarios activos, valoración y enlace directo a la página de detalle de la biblioteca.
+La sección de plataformas de la página de inicio se reconstruyó alrededor de la lista live de presencias, en lugar de un muro de logos demasiado estático. El antiguo texto `Disponibles` se eliminó, y cada servicio ahora usa una tarjeta más completa con su icono, descripción localizada, número de instalaciones, usuarios activos, valoración y enlace directo a la página de detalle de la biblioteca.
 
 El tratamiento visual de las tarjetas también usa un glow de dos capas basado en el color del icono: una capa amplia y suave, y otra más corta cerca de la esquina superior derecha. La sección se siente más actual sin desconectarse de los datos reales de la biblioteca.
 
@@ -117,9 +117,9 @@ POST /presences/active
 DELETE /presences/active/:deviceId
 GET /library/[item]
 GET /
-GET /docs/changelog
-GET /docs/changelog/1-0-0
-GET /docs/changelog/1-1-0
+GET /changelog
+GET /changelog/1-0-0
+GET /changelog/1-1-0
 ```
 
-> Esta release no introduce un workflow nuevo. Hace que el workflow existente sea coherente y medible.
+> Esta versión no introduce un workflow nuevo. Hace que el workflow existente sea coherente y medible.

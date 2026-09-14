@@ -5,11 +5,11 @@ description: Muestra el progreso de reproducción en Discord Rich Presence con m
 
 ## Por qué importan las marcas de tiempo
 
-Las marcas de tiempo hacen que la actividad de Discord se sienta en vivo. Muestran cuánto tiempo ha estado viendo el usuario o cuánto tiempo queda.
+Las marcas de tiempo hacen que la actividad de Discord se sienta en vivo. Muestran cuánto tiempo lleva viendo el usuario o cuánto tiempo queda.
 
-## Usando createMediaTimestamps
+## Usar createMediaTimestamps
 
-`document` es la API DOM del navegador (disponible porque las presences se ejecutan como scripts de contenido). `Assets` es proporcionado por el runtime (consulta [Assets](/docs/presence-development/assets)).
+`document` es la API DOM del navegador (disponible porque las presencias se ejecutan como scripts de contenido). `Assets` lo proporciona el runtime (consulta [Assets](/presence-development/assets)).
 
 ```ts filename="presence.ts"
 import { createMediaTimestamps } from "@nowly/sdk"
@@ -27,7 +27,7 @@ if (video) {
 
 ## Multimedia en pausa
 
-Cuando el multimedia está en pausa, `createMediaTimestamps` no devuelve marcas de tiempo. Esto evita mostrar un progreso de reproducción incorrecto.
+Cuando el multimedia está en pausa, `createMediaTimestamps` no devuelve marcas de tiempo. Así se evita mostrar un progreso de reproducción incorrecto.
 
 ## Transmisiones en vivo
 

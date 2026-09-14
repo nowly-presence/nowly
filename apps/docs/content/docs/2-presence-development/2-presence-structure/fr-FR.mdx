@@ -1,11 +1,11 @@
 ---
-title: Structure d'une presence
-description: Comprenez la structure de dossiers requise pour une presence Nowly.
+title: Structure d'une présence
+description: Comprenez la structure de dossiers requise pour une présence Nowly.
 ---
 
 ## Structure des dossiers
 
-Une presence se trouve sous `src`, regroupée par la première lettre de son nom&nbsp;:
+Une présence se trouve sous `src`, regroupée par la première lettre de son nom&nbsp;:
 
 ```txt
 src/Y/YouTube/
@@ -19,7 +19,7 @@ src/Y/YouTube/
 
 ## metadata.json
 
-`metadata.json` décrit la plateforme, les URL prises en charge, l'auteur, la catégorie, les descriptions localisées et les assets de la place de marché.
+`metadata.json` décrit la plateforme, les URL prises en charge, l'auteur, la catégorie, les descriptions localisées et les visuels de la bibliothèque.
 
 ## presence.ts
 
@@ -27,7 +27,7 @@ src/Y/YouTube/
 
 ## utils/
 
-Pour les presences complexes, répartissez votre logique dans des fichiers dédiés sous un dossier `utils/`. La presence YouTube, par exemple, organise les helpers DOM, l'analyse des chaînes et la résolution des Shorts dans des modules séparés&nbsp;:
+Pour les présences complexes, répartissez votre logique dans des fichiers dédiés sous un dossier `utils/`. La présence YouTube, par exemple, organise les helpers DOM, l'analyse des chaînes et la résolution des Shorts dans des modules séparés&nbsp;:
 
 ```txt
 src/Y/YouTube/
@@ -57,14 +57,14 @@ import { getChannelInfo } from "./utils/channel"
 
 ## assets
 
-Les assets sont utilisés par la place de marché, le paquet de presence installé, les payloads d'activité Discord et les images Open Graph.
+Les fichiers visuels servent à la bibliothèque, au paquet de présence installé, aux données d'activité Discord et aux images Open Graph.
 
 Fichiers requis&nbsp;:
 
 <TypeTable
   properties={[
-    { name: "logo.png", type: "PNG", description: "Marque large pour les en-têtes de la place de marché, les pages de presence et les images OG générées.", required: true },
+    { name: "logo.png", type: "PNG", description: "Marque large pour les en-têtes de la bibliothèque, les pages de présence et les images OG générées.", required: true },
     { name: "icon.png", type: "PNG", description: "Icône carrée pour les surfaces d'interface compactes et les clés d'image d'activité Discord.", required: true },
-    { name: "thumbnail.jpg", type: "JPG", description: "Image d'aperçu utilisée lorsque la presence a besoin d'un visuel plus grand.", required: true }
+    { name: "thumbnail.jpg", type: "JPG", description: "Image d'aperçu utilisée lorsque la présence a besoin d'un visuel plus grand.", required: true }
   ]}
 />

@@ -1,11 +1,11 @@
 ---
 title: Ajustes
-description: Añade ajustes tipados por presence con controles booleanos, de entrada, selección y deslizantes.
+description: Añade ajustes tipados por presencia con controles booleanos, de entrada, selección y deslizantes.
 ---
 
 ## Qué son los ajustes
 
-Los ajustes permiten a los usuarios personalizar cómo se comporta una presence sin editar código.
+Los ajustes permiten a los usuarios personalizar el comportamiento de una presencia sin editar código.
 
 ## Tipos de ajuste compatibles
 
@@ -20,9 +20,9 @@ Nowly admite ajustes booleanos, de entrada, selección y deslizantes.
   ]}
 />
 
-## Definiendo ajustes
+## Definir ajustes
 
-Usa [`Presence.Settings`](/docs/presence-development/presence-api) para definir ajustes tipados:
+Usa [`Presence.Settings`](/presence-development/presence-api) para definir ajustes tipados:
 
 ```ts filename="presence.ts"
 const settings = Presence.Settings({
@@ -36,9 +36,9 @@ const settings = Presence.Settings({
 })
 ```
 
-## Leyendo ajustes
+## Leer ajustes
 
-Usa `getSetting` en tiempo de ejecución. Los valores vienen de los ajustes guardados del usuario, con fallback a los defaults de `Presence.Settings`. Los cambios desde el panel lateral llegan como `SETTINGS_UPDATED` y actualizan el mismo mapa.
+Usa `getSetting` en tiempo de ejecución. Los valores vienen de los ajustes guardados del usuario, con respaldo a los valores por defecto de `Presence.Settings`. Los cambios desde el panel lateral llegan como `SETTINGS_UPDATED` y actualizan el mismo mapa.
 
 También puedes leer `ctx.settings` en `UpdateData`:
 
@@ -55,4 +55,4 @@ Las etiquetas y descripciones de los ajustes usan las mismas claves de idioma qu
 
 ## Valores predeterminados
 
-Elige valores predeterminados seguros. Una presence debería funcionar inmediatamente después de la instalación sin requerir configuración.
+Elige valores predeterminados seguros. Una presencia debería funcionar justo después de la instalación, sin configuración.

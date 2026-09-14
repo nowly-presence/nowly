@@ -1,35 +1,35 @@
 ---
 title: Recursos
-description: Prepara recursos de logo, icono y miniatura para las presences de Nowly.
+description: Prepara el logo, el icono y la miniatura para las presencias de Nowly.
 ---
 
 ## Recursos requeridos
 
-Cada presence debe incluir:
+Cada presencia debe incluir:
 
 <TypeTable
   properties={[
     { name: "logo.png", type: "PNG", description: "Marca de la plataforma para colocaciones amplias, encabezados e imágenes Open Graph.", required: true },
-    { name: "icon.png", type: "PNG", description: "Icono cuadrado compacto utilizado en superficies UI pequeñas e imágenes de actividad de Discord.", required: true },
-    { name: "thumbnail.jpg", type: "JPG", description: "Visual del mercado y página de detalle que represente claramente la plataforma.", required: true }
+    { name: "icon.png", type: "PNG", description: "Icono cuadrado compacto usado en superficies de interfaz pequeñas e imágenes de actividad de Discord.", required: true },
+    { name: "thumbnail.jpg", type: "JPG", description: "Visual de la biblioteca y página de detalle que represente claramente la plataforma.", required: true }
   ]}
 />
 
 ## Logo
 
-Usa `logo.png` para la marca de la plataforma cuando sea apropiada una imagen más amplia.
+Usa `logo.png` para la marca de la plataforma cuando convenga una imagen más amplia.
 
 ## Icono
 
-Usa `icon.png` para displays cuadrados compactos, fondos de color e imágenes de actividad de Discord.
+Usa `icon.png` para pantallas cuadradas compactas, fondos de color e imágenes de actividad de Discord.
 
 ## Miniatura
 
-Usa `thumbnail.jpg` para visuales del mercado y páginas de detalle. Debe representar la plataforma claramente.
+Usa `thumbnail.jpg` para los visuales de la biblioteca y las páginas de detalle. Debe representar la plataforma con claridad.
 
 ## Constantes de recursos en runtime
 
-`Assets` es proporcionado por el runtime (consulta [Presence API](/docs/presence-development/presence-api)). Expone las tres claves de recursos predeterminadas:
+`Assets` lo proporciona el runtime (consulta [Presence API](/presence-development/presence-api)). Expone las tres claves de recursos predeterminadas:
 
 ```ts filename="presence.ts"
 Assets.Logo      // → "logo.png"
@@ -37,7 +37,7 @@ Assets.Icon      // → "icon.png"
 Assets.Thumbnail // → "thumbnail.jpg"
 ```
 
-Úsalas en los payloads de actividad:
+Úsalas en los datos de actividad:
 
 ```ts filename="presence.ts"
 await presence.setActivity({
@@ -48,4 +48,4 @@ await presence.setActivity({
 
 ## Directrices de calidad
 
-Usa un PNG transparente para `icon.png` — el icono se muestra sobre un fondo de color en la biblioteca de Nowly, por lo que un fondo relleno causará conflicto. Se prefiere un `logo.png` transparente, aunque es menos crítico. Mantén las miniaturas legibles en tamaños pequeños y evita imágenes genéricas.
+Usa un PNG transparente para `icon.png` — el icono se muestra sobre un fondo de color en la biblioteca de Nowly, así que un fondo relleno chocará. Se prefiere un `logo.png` transparente, aunque es menos crítico. Mantén las miniaturas legibles en tamaños pequeños y evita imágenes genéricas.

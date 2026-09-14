@@ -3,11 +3,11 @@ title: Presence API
 description: Utilisez l'API Presence de Nowly pour mettre à jour Discord Rich Presence depuis une intégration web.
 ---
 
-## Créer une Presence
+## Créer une présence
 
 `Presence` est une **globale** injectée par le runtime Nowly — vous n'avez pas besoin de l'importer.
 
-Chaque presence commence par une instance de `Presence`&nbsp;:
+Chaque présence commence par une instance de `Presence`&nbsp;:
 
 ```ts filename="presence.ts"
 const presence = new Presence()
@@ -33,20 +33,20 @@ presence.on("UpdateData", async () => {
   properties={[
     { name: "details", type: "string", description: "Ligne d'activité principale affichée dans Discord." },
     { name: "state", type: "string", description: "Ligne d'activité secondaire affichée sous les détails." },
-    { name: "startTimestamp", type: "number", description: "Timestamp Unix pour la progression de l'activité écoulée." },
-    { name: "endTimestamp", type: "number", description: "Timestamp Unix pour la progression de l'activité restante." },
+    { name: "startTimestamp", type: "number", description: "Horodatage Unix pour la progression de l'activité écoulée." },
+    { name: "endTimestamp", type: "number", description: "Horodatage Unix pour la progression de l'activité restante." },
     { name: "largeImageKey", type: "string", description: "Clé d'image principale, généralement Assets.Logo ou Assets.Thumbnail (globales fournies par le runtime)." },
-    { name: "largeImageText", type: "string", description: "Infobulle pour l'image grande." },
-    { name: "smallImageKey", type: "string", description: "Clé d'image petite optionnelle." },
-    { name: "smallImageText", type: "string", description: "Infobulle pour l'image petite." },
+    { name: "largeImageText", type: "string", description: "Infobulle de la grande image." },
+    { name: "smallImageKey", type: "string", description: "Clé d'image petite facultative." },
+    { name: "smallImageText", type: "string", description: "Infobulle de la petite image." },
     { name: "type", type: "number", description: "Type d'activité Discord depuis PresenceType." },
-    { name: "buttons", type: "array", description: "Boutons d'activité Discord optionnels." }
+    { name: "buttons", type: "array", description: "Boutons d'activité Discord facultatifs." }
   ]}
 />
 
 ## clearActivity
 
-Appelez `clearActivity` lorsque l'utilisateur ne fait plus rien qui mérite d'être affiché&nbsp;:
+Appelez `clearActivity` lorsqu'il n'y a plus rien à afficher&nbsp;:
 
 ```ts filename="presence.ts"
 presence.clearActivity()
@@ -64,13 +64,13 @@ Il correspond aux types d'activité Discord&nbsp;: `Playing`, `Streaming`, `List
 
 ## getSetting
 
-Lisez un paramètre typé après `Presence.Settings`. La valeur est le réglage enregistré, ou le défaut de la définition&nbsp;:
+Lisez un paramètre typé après `Presence.Settings`. La valeur est le réglage enregistré de l'utilisateur, ou la valeur par défaut de la définition&nbsp;:
 
 ```ts filename="presence.ts"
 const showButtons = await presence.getSetting<boolean>("showButtons")
 ```
 
-`UpdateData` reçoit aussi `ctx.settings` avec la même map. Les deux se mettent à jour quand l'utilisateur change les réglages dans le panneau.
+`UpdateData` reçoit aussi `ctx.settings` avec la même correspondance. Les deux se mettent à jour lorsque l'utilisateur change les réglages dans le panneau.
 
 ## Journalisation
 

@@ -4,7 +4,7 @@ date: 2026-09-14
 description: Refonte du panneau latéral avec navigation basse, bibliothèque intégrée, pause et raccourcis, install zip via nowly pack, visuel des présences, et page changelog dédiée après une mise à jour.
 ---
 
-`1.4.0` reconstruit le panneau autour d'Accueil, Bibliothèque et Réglages, et ajoute ce que tu utilises au quotidien : pause Discord, raccourcis clavier, menu contextuel de page, recherche sur l'accueil, file d'install hors-ligne, et un flux zip pour les auteurs de présences (`nowly pack`). Une mise à jour store ouvre une page changelog dédiée sur le site.
+`1.4.0` reconstruit le panneau autour d'Accueil, Bibliothèque et Réglages, et ajoute ce que vous utilisez au quotidien : pause Discord, raccourcis clavier, menu contextuel de page, recherche sur l'accueil, file d'install hors-ligne, et un flux zip pour les auteurs de présences (`nowly pack`). Une mise à jour store ouvre une page changelog dédiée sur le site.
 
 <ReleaseTable
   headers={["Zone", "Ce qui change", "Pourquoi c'est utile"]}
@@ -13,12 +13,12 @@ description: Refonte du panneau latéral avec navigation basse, bibliothèque in
     ["Bibliothèque intégrée", "Un onglet Bibliothèque dans la navigation basse liste le catalogue public via l'API (recherche, catégories qui passent à la ligne, fiche compacte). Installer et mettre à jour se font dans l'extension après vérification de signature, y compris depuis les bandeaux de mise à jour de l'accueil. Plus de redirection vers nowly.me pour installer. Le header et l'état vide n'ont plus de bouton Bibliothèque. Les fiches déjà installées gardent un lien Voir sur le site.", "Ajouter ou mettre à jour une présence ne demande plus de quitter le panneau."],
     ["Visuel présence", "Les fiches installées et Bibliothèque affichent la miniature en bannière en haut de la carte. Si l'image manque, un halo de la couleur de la présence prend le relais.", "La fiche de gestion ressemble à la page du site, plus à une liste plate de champs."],
     ["Versions", "La version s'affiche en badge : à côté du nom sur les fiches (accueil et bibliothèque), à côté de la catégorie dans la liste boutique, à côté du statut Activée ou Désactivée dans la liste d'accueil.", "La version se lit d'un coup d'œil, sans se mélanger au texte de statut ou de catégorie."],
-    ["Pause Discord", "Une pause persistante coupe la Rich Presence sur Discord (bouton du header, Réglages, ou Ctrl+Shift+U) sans désinstaller ni désactiver les scripts. Un badge toolbar et la barre de statut l'indiquent.", "Tu peux masquer Nowly sur Discord pendant une réunion sans tout démonter."],
-    ["Raccourcis", "Ctrl+Shift+Y ouvre le panneau et Ctrl+Shift+U met Discord en pause. Réglages liste les raccourcis actuels et un lien pour les changer dans le navigateur. Le panneau s'ouvre sur le même geste que la commande (Chrome l'exige).", "Tu ouvres Nowly ou coupes Discord sans chercher l'icône de la barre d'outils."],
-    ["Menu page", "Clic droit sur une page pour ouvrir la présence installée correspondante, la fiche Bibliothèque, ou une recherche par nom d'hôte.", "Tu arrives sur la bonne présence depuis la page en cours."],
+    ["Pause Discord", "Une pause persistante coupe la Rich Presence sur Discord (bouton du header, Réglages, ou Ctrl+Shift+U) sans désinstaller ni désactiver les scripts. Un badge toolbar et la barre de statut l'indiquent.", "Vous pouvez masquer Nowly sur Discord pendant une réunion sans tout démonter."],
+    ["Raccourcis", "Ctrl+Shift+Y ouvre le panneau et Ctrl+Shift+U met Discord en pause. Réglages liste les raccourcis actuels et un lien pour les changer dans le navigateur. Le panneau s'ouvre sur le même geste que la commande (Chrome l'exige).", "Vous ouvrez Nowly ou coupez Discord sans chercher l'icône de la barre d'outils."],
+    ["Menu page", "Clic droit sur une page pour ouvrir la présence installée correspondante, la fiche Bibliothèque, ou une recherche par nom d'hôte.", "Vous arrivez sur la bonne présence depuis la page en cours."],
     ["Recherche accueil", "L'accueil filtre les présences installées par nom, slug, catégorie ou URL.", "Trouver une présence ne demande plus de parcourir toutes les catégories."],
-    ["Install hors-ligne", "Les install ou mises à jour en échec réseau ou serveur partent en file de réessai (automatique chaque minute, plus Réessayer).", "Une coupure API n'annule plus l'install que tu venais de lancer."],
-    ["Zip local", "Sur un build unpacked (Charger l'extension non empaquetée), dépose un zip de présence compilée sur le panneau Debug. Le zip doit contenir metadata.json et bundle.js. Un dossier source avec seulement presence.ts est refusé. Les installs locales survivent au reload d'une extension unpacked. Les installs Chrome Web Store refusent les zips non signés même si le mode développeur est activé.", "Itérer sur une présence sans reconstruire toute l'extension."],
+    ["Install hors-ligne", "Les install ou mises à jour en échec réseau ou serveur partent en file de réessai (automatique chaque minute, plus Réessayer).", "Une coupure API n'annule plus l'installation que vous veniez de lancer."],
+    ["Zip local", "Sur un build unpacked (Charger l'extension non empaquetée), déposez un zip de présence compilée sur le panneau Debug. Le zip doit contenir metadata.json et bundle.js. Un dossier source avec seulement presence.ts est refusé. Les installs locales survivent au reload d'une extension unpacked. Les installs Chrome Web Store refusent les zips non signés même si le mode développeur est activé.", "Itérer sur une présence sans reconstruire toute l'extension."],
     ["CLI pack", "`nowly pack <slug>` compile la présence et écrit dist/packs/<slug>.zip. `nowly extension <slug...>` produit toujours un dossier Chrome prêt à charger. Pack fonctionne depuis le package presences ou la racine du monorepo Nowly.", "Les auteurs chargent une présence dans une extension déjà installée, au lieu de recréer un unpacked à chaque fois."],
     ["Boutons primaires", "Installer et les autres boutons primaires utilisent le fond accent avec un texte sombre, lisible sur le cyan du thème par défaut.", "Le contraste reste correct sur tous les thèmes, y compris ceux à accent clair."],
     ["Réglages", "Les réglages sont découpés en groupes repliables Général, Présences et Avancé. L'ancien toggle qui isolait la présence active a été retiré de l'UI. Les raccourcis sont avec le reste des options.", "Les options liées restent ensemble, Avancé ne gêne plus, et la liste des présences n'a plus deux layouts en concurrence."],
@@ -42,14 +42,14 @@ Le menu overflow du header utilise un bouton plein.
 
 ## Pause, raccourcis et menu page
 
-La pause est stockée dans les réglages de l'extension. Les scripts de présence peuvent continuer à tourner ; Discord ne reçoit plus d'activité tant que tu n'as pas repris.
+La pause est stockée dans les réglages de l'extension. Les scripts de présence peuvent continuer à tourner ; Discord ne reçoit plus d'activité tant que vous n'avez pas repris.
 
 Raccourcis par défaut (Chrome et navigateurs Chromium) :
 
 - **Ctrl+Shift+Y** ouvre le panneau latéral.
 - **Ctrl+Shift+U** bascule la pause Discord.
 
-Change-les dans `chrome://extensions/shortcuts`. Les réglages du panneau listent seulement les touches actuelles.
+Changez-les dans `chrome://extensions/shortcuts`. Les réglages du panneau listent seulement les touches actuelles.
 
 Clic droit sur une page compatible pour ouvrir Nowly sur cette présence, ou une recherche Bibliothèque si elle n'est pas encore installée.
 
@@ -86,17 +86,17 @@ Le snooze et le planning utilisent le même Dialog. Ouvrir une présence affiche
 
 ## Flux développeur
 
-Si Nowly est déjà chargé en unpacked, compile un zip et dépose-le sur le panneau Debug :
+Si Nowly est déjà chargé en unpacked, compilez un zip et déposez-le sur le panneau Debug :
 
 ```
 nowly pack youtube
 ```
 
-Le zip est écrit dans `dist/packs/<slug>.zip` et doit contenir `metadata.json` plus `bundle.js`. Ne zippe pas le source TypeScript.
+Le zip est écrit dans `dist/packs/<slug>.zip` et doit contenir `metadata.json` plus `bundle.js`. Ne zippez pas le source TypeScript.
 
 Si l'extension n'est pas encore chargée, `nowly extension <slug>` écrit toujours un dossier Chrome avec `dev-presences.json`.
 
-Doc : [Charger et tester en local](/docs/presence-development/load-and-test).
+Doc : [Charger et tester en local](/presence-development/load-and-test).
 
 ## Après une mise à jour
 

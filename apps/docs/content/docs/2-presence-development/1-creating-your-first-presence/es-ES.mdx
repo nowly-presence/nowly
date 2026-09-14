@@ -1,22 +1,22 @@
 ---
-title: Creando tu primera presence
-description: Crea una nueva presence de Nowly con la CLI y envía tu primera actividad de Discord Rich Presence.
+title: Crear tu primera presencia
+description: Crea una nueva presencia de Nowly con la CLI y envía tu primera actividad de Discord Rich Presence.
 ---
 
-## Comienza con la CLI
+## Empieza con la CLI
 
-Usa la CLI de Nowly para generar una nueva presence:
+Usa la CLI de Nowly para generar una nueva presencia:
 
 ```bash
 nowly init "Ejemplo"
 ```
 
-La CLI crea los metadatos, un script de presence y los recursos requeridos.
+La CLI crea los metadatos, un script de presencia y los recursos requeridos.
 
-## Código básico de presence
+## Código básico de una presencia
 
-`Presence` y `Assets` son proporcionados por el runtime — consulta [Presence API](/docs/presence-development/presence-api) y [Assets](/docs/presence-development/assets).
-`document` es la API DOM estándar del navegador, disponible porque las presences se ejecutan como scripts de contenido en la extensión.
+`Presence` y `Assets` los proporciona el runtime — consulta [Presence API](/presence-development/presence-api) y [Assets](/presence-development/assets).
+`document` es la API DOM estándar del navegador, disponible porque las presencias se ejecutan como scripts de contenido en la extensión.
 
 Solo `PresenceType` (y otros helpers como `createMediaTimestamps`) deben importarse desde `@nowly/sdk`.
 
@@ -35,14 +35,14 @@ presence.on("UpdateData", async () => {
 })
 ```
 
-## Flujo de runtime
+## Flujo en tiempo de ejecución
 
-Cuando el usuario visita una URL coincidente, Nowly carga tu presence. La presence lee el estado de la página y llama a `setActivity`. La extensión reenvía ese payload al Nowly Host, que actualiza Discord.
+Cuando el usuario visita una URL coincidente, Nowly carga tu presencia. La presencia lee el estado de la página y llama a `setActivity`. La extensión reenvía esos datos a Nowly Host, que actualiza Discord.
 
 ## Ciclo de desarrollo
 
 <Steps>
-<Step title="Generar" description="Crea la carpeta de la presence, los metadatos y los recursos requeridos.">
+<Step title="Generar" description="Crea la carpeta de la presencia, los metadatos y los recursos requeridos.">
 
 ```bash
 nowly init "Ejemplo"
@@ -51,10 +51,10 @@ nowly init "Ejemplo"
 </Step>
 <Step title="Configurar" description="Establece el nombre, autor, URL compatibles, categoría, color y descripciones localizadas.">
 
-Edita `metadata.json` — consulta [Metadata](/docs/presence-development/metadata) para todos los campos disponibles.
+Edita `metadata.json` — consulta [Metadata](/presence-development/metadata) para todos los campos disponibles.
 
 </Step>
-<Step title="Implementar" description="Escribe la lógica de la presence usando el SDK de Presence.">
+<Step title="Implementar" description="Escribe la lógica de la presencia usando el SDK de Presence.">
 
 ```typescript filename="presence.ts"
 import { PresenceType } from "@nowly/sdk"
@@ -71,25 +71,25 @@ presence.on("UpdateData", async () => {
 ```
 
 </Step>
-<Step title="Validar" description="Comprueba que la estructura de metadatos sea correcta y que los recursos estén en su lugar.">
+<Step title="Validar" description="Comprueba que la estructura de metadatos sea correcta y que los recursos estén en su sitio.">
 
 ```bash
 nowly validate
 ```
 
 </Step>
-<Step title="Compilar" description="Compila la presence en un paquete independiente.">
+<Step title="Compilar" description="Compila la presencia en un paquete independiente.">
 
 ```bash
 nowly build ejemplo
 ```
 
 </Step>
-<Step title="Cargar" description="Instala la presence compilada en el navegador. Dos métodos: una extensión precompilada, o soltar un zip.">
+<Step title="Cargar" description="Instala la presencia compilada en el navegador. Dos métodos: una extensión precompilada, o soltar un zip.">
 
-Consulta [Cargar y probar en local](/docs/presence-development/load-and-test) para la comparación completa.
+Consulta [Cargar y probar en local](/presence-development/load-and-test) para la comparación completa.
 
-**Primera vez** (Nowly aún no está en el navegador): incluye la presence en una extensión lista para cargar.
+**Primera vez** (Nowly aún no está en el navegador): incluye la presencia en una extensión lista para cargar.
 
 ```bash
 nowly extension ejemplo
@@ -97,17 +97,16 @@ nowly extension ejemplo
 
 Carga `dist/extension-dev` como unpacked en `chrome://extensions`.
 
-**Nowly ya cargada unpacked:** empaqueta un zip y suéltalo en Ajustes → Avanzado → Debug. Las installs de tienda rechazan zips sin firma.
+**Nowly ya cargada unpacked:** empaqueta un zip y suéltalo en Ajustes → Avanzado → Debug. Las instalaciones de la tienda rechazan zips sin firma.
 
 ```bash
 nowly pack ejemplo
 ```
 
 </Step>
-<Step title="Probar" description="Abre el sitio web objetivo — la presence se activa automáticamente.">
+<Step title="Probar" description="Abre el sitio web objetivo — la presencia se activa automáticamente.">
 
 Visita el sitio
-
 </Step>
 </Steps>
 

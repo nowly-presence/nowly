@@ -1,11 +1,11 @@
 ---
 title: Métadonnées
-description: Documentez chaque champ obligatoire et facultatif du fichier metadata.json d'une presence Nowly.
+description: Documentez chaque champ obligatoire et facultatif du fichier metadata.json d'une présence Nowly.
 ---
 
 ## Champs obligatoires
 
-Chaque presence nécessite&nbsp;:
+Chaque présence nécessite&nbsp;:
 
 <TypeTable
   properties={[
@@ -39,17 +39,17 @@ Chaque presence nécessite&nbsp;:
 ## Auteur et contributeurs
 
 - `author` — Mainteneur principal, affiché en premier dans la bibliothèque et les images OG.
-- `contributors` — Personnes supplémentaires ayant contribué à la presence.
+- `contributors` — Personnes supplémentaires ayant contribué à la présence.
 
 <CalloutInfo>
-Les noms d'utilisateur GitHub (la clé `github`) sont utilisés pour résoudre les avatars.
+Les noms d'utilisateur GitHub (la clé `github`) servent à résoudre les avatars.
 </CalloutInfo>
 
 ## Descriptions et fonctionnalités
 
-- `description` — Texte court pour la place de marché, organisé par langue.
+- `description` — Texte court pour la bibliothèque, organisé par langue.
 - `longDescription` — Description détaillée pour les pages de détail.
-- `features` — Liste localisée des comportements pris en charge (ex. prise en charge des boutons, touches multimédias).
+- `features` — Liste localisée des comportements pris en charge (ex. boutons, touches multimédias).
 
 ## Correspondance d'URL
 
@@ -62,7 +62,7 @@ Utilisez `regExp` uniquement lorsque la correspondance simple d'`url` ne suffit 
 
 ## Contexte d'exécution
 
-Deux champs facultatifs contrôlent comment et quand le script de votre presence s'exécute dans le navigateur.
+Deux champs facultatifs contrôlent comment et quand le script de votre présence s'exécute dans le navigateur.
 
 <TypeTable
   properties={[
@@ -71,9 +71,9 @@ Deux champs facultatifs contrôlent comment et quand le script de votre presence
   ]}
 />
 
-Par défaut, une presence s'exécute dans le monde **isolated** : elle partage le DOM de la page mais pas son contexte JavaScript. C'est le réglage sûr par défaut et il convient à presque toutes les presences.
+Par défaut, une présence s'exécute dans le monde **isolated** : elle partage le DOM de la page mais pas son contexte JavaScript. C'est le réglage sûr par défaut et il convient à presque toutes les présences.
 
-Définissez `"world": "main"` lorsque votre presence a besoin du **contexte de la page**, en particulier&nbsp;:
+Définissez `"world": "main"` lorsque votre présence a besoin du **contexte de la page**, en particulier&nbsp;:
 
 - lire des variables globales de la page (ex. un objet lecteur exposé par le site sur `window`)&nbsp;;
 - effectuer un **`fetch` authentifié de même origine** qui doit transmettre les cookies de session de l'utilisateur (ex. l'API de métadonnées interne d'un site).
@@ -92,11 +92,11 @@ Définissez `"world": "main"` lorsque votre presence a besoin du **contexte de l
 ```
 
 <CalloutWarning>
-Un `fetch` depuis le monde isolé n'est pas considéré comme une requête first-party&nbsp;: les appels authentifiés échouent silencieusement. Si votre presence dépend de l'API connectée du site, vous devez définir `"world": "main"`.
+Un `fetch` depuis le monde isolé n'est pas considéré comme une requête first-party&nbsp;: les appels authentifiés échouent silencieusement. Si votre présence dépend de l'API connectée du site, vous devez définir `"world": "main"`.
 </CalloutWarning>
 
 <CalloutInfo>
-La déclaration vit entièrement dans `metadata.json` — l'extension la lit au moment de l'enregistrement. Aucune modification de l'extension n'est nécessaire pour ajouter une nouvelle presence en contexte page.
+La déclaration se trouve entièrement dans `metadata.json` — l'extension la lit au moment de l'enregistrement. Aucune modification de l'extension n'est nécessaire pour ajouter une nouvelle présence en contexte page.
 </CalloutInfo>
 
 ## Catégorie

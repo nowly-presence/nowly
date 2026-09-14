@@ -7,7 +7,7 @@ description: Usa el proxy de imágenes de Nowly cuando Discord no pueda cargar d
 
 El proxy de imágenes está pensado para un caso concreto: una presencia puede ver una imagen pública en la página, pero Discord no puede cargarla de forma fiable desde la URL original.
 
-Es útil para miniaturas de vídeo, avatares, posters o imágenes de categoría servidas por un CDN externo cuando:
+Es útil para miniaturas de vídeo, avatares, pósters o imágenes de categoría servidas por un CDN externo cuando:
 
 - la imagen es pública y ya está visible en el navegador;
 - la URL del CDN es demasiado larga para Discord Rich Presence;
@@ -48,7 +48,7 @@ La caché es corta, actualmente cinco minutos. El helper también mantiene una c
 
 ## Endpoint directo
 
-El proxy directo anterior sigue disponible para pruebas manuales o URLs que ya sean suficientemente cortas:
+El proxy directo anterior sigue disponible para pruebas manuales o URL que ya sean suficientemente cortas:
 
 ```txt
 https://api.nowly.me/image-proxy?service=<service>&url=<url-codificada>
@@ -83,7 +83,7 @@ await presence.setActivity({
 })
 ```
 
-Mantén siempre un asset de respaldo. Si la página no tiene imagen, la imagen es demasiado pesada o el origen no está permitido, la presencia debe seguir funcionando con `Assets.Logo` o un asset local.
+Mantén siempre un recurso de respaldo. Si la página no tiene imagen, la imagen es demasiado pesada o el origen no está permitido, la presencia debe seguir funcionando con `Assets.Logo` o un recurso local.
 
 ## Añadir un servicio
 
@@ -96,15 +96,15 @@ Los dominios permitidos se validan en la API, no en la presencia. Para añadir u
 
 Si una presencia necesita un nuevo dominio de imagen, puedes usar el helper en tu PR de presencia y explicar:
 
-- qué hostnames exactos necesitan soporte;
+- qué nombres de host exactos necesitan soporte;
 - por qué Discord no puede usar la URL directa;
 - qué imagen verá el usuario;
 - por qué la imagen es pública y se puede proxificar de forma segura.
 
-Los reviewers decidirán si añaden esas URLs a los servicios compatibles. Pueden rechazar orígenes demasiado amplios, inestables, privados o inseguros.
+Los revisores decidirán si añaden esas URL a los servicios compatibles. Pueden rechazar orígenes demasiado amplios, inestables, privados o inseguros.
 
 ## Límites y seguridad
 
-El proxy solo debe servir imágenes públicas necesarias para presencias revisadas y aceptadas. Rechaza URLs que no sean HTTPS, dominios no permitidos, respuestas que no sean imágenes y archivos demasiado grandes.
+El proxy solo debe servir imágenes públicas necesarias para presencias revisadas y aceptadas. Rechaza URL que no sean HTTPS, dominios no permitidos, respuestas que no sean imágenes y archivos demasiado grandes.
 
-No lo uses para contenido de cuentas privadas, recursos autenticados, URLs de tracking, entradas arbitrarias del usuario o contenido que no sea una imagen.
+No lo uses para contenido de cuentas privadas, recursos autenticados, URL de tracking, entradas arbitrarias del usuario o contenido que no sea una imagen.

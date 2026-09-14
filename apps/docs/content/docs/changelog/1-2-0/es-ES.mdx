@@ -4,7 +4,7 @@ date: 2026-06-25
 description: Renovación de la UI/UX de la extensión con nuevo reproductor, componentes nativos, insignia de actividad, snooze y planificación, panel de depuración condicional y reorganización de ajustes.
 ---
 
-`1.2.0` es una release visual y funcional importante. Introduce un reproductor rediseñado con animación de vinilo, un componente Sheet hecho a mano, una insignia de icono de extensión, componentes Switch y Checkbox personalizados, funciones de snooze y planificación, un panel de depuración condicional y ajustes completamente reorganizados.
+`1.2.0` es una versión visual y funcional importante. Introduce un reproductor rediseñado con animación de vinilo, un componente Sheet hecho a mano, una insignia de icono de extensión, componentes Switch y Checkbox personalizados, funciones de snooze y planificación, un panel de depuración condicional y ajustes completamente reorganizados.
 
 <ReleaseTable
   headers={["Zona", "Qué cambia", "Por qué es útil"]}
@@ -35,7 +35,7 @@ description: Renovación de la UI/UX de la extensión con nuevo reproductor, com
 
 ## Reproductor
 
-El componente `CurrentActivityCard` ha sido rediseñado por completo con un diseño Bar compacto. El estado inactivo muestra un vinilo SVG animado de 48px con el texto "No Activity Detected" en línea. El estado activo muestra la carátula en 48×48, título, subtítulo y un fondo borroso del póster cuando `largeImage` está presente.
+El componente `CurrentActivityCard` ha sido rediseñado por completo con un diseño Bar compacto. El estado inactivo muestra un vinilo SVG animado de 48px con el texto "Ninguna actividad detectada" en línea. El estado activo muestra la carátula en 48×48, título, subtítulo y un fondo borroso del póster cuando `largeImage` está presente.
 
 Los controles multimedia (anterior, reproducir/pausa, siguiente) se han eliminado — no pausaban el multimedia real y añadían desorden visual. La barra de progreso ahora es condicional: solo las presencias `music`, `streaming`, `tv` y `anime` la muestran; las presencias `other` no.
 
@@ -109,7 +109,7 @@ El sitio público añade páginas de aviso legal y cookies, banner de cookies, f
 
 ## Nowly Host y diagnósticos
 
-La extensión puede reiniciar el Nowly Host antes de verificar versiones del host, y Ajustes incluye una verificación manual de actualización. El Nowly Host registra con más claridad los cambios de actividad, muestra errores IPC de Discord y rota logs para evitar archivos sin límite.
+La extensión puede reiniciar Nowly Host antes de verificar versiones del host, y Ajustes incluye una verificación manual de actualización. Nowly Host registra con más claridad los cambios de actividad, muestra errores IPC de Discord y rota logs para evitar archivos sin límite.
 
 ## Documentación, repo y assets
 

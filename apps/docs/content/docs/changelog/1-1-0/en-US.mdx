@@ -12,10 +12,10 @@ description: The first maintenance release for Nowly, focused on update flows, a
     ["Extension navigation", "The update badge now opens `/library/[item]` directly.", "There is no longer a detour through the old localized route structure."],
     ["Update state", "The installed version refreshes as soon as an update lands.", "The badge clears immediately instead of lingering until restart."],
     ["Active tracking", "`activeUsers` now follows a per-device model.", "The number reflects actual active devices instead of a flat placeholder."],
-    ["Disable flow", "Disabling a presence removes that device from the active counter.", "Stale activity does not remain behind after a toggle."],
+    ["Disable flow", "Disabling a presence removes that device from the active counter.", "Stale activity does not linger after a toggle."],
     ["Uninstall cleanup", "The extension sets a best-effort uninstall URL and the web page purges the device.", "Removal still happens when the extension is no longer available."],
     ["Detail page polish", "Transparent icon blocks use a backdrop blur.", "The banner no longer bleeds through the icon treatment as aggressively."],
-    ["Changelog structure", "The changelog moved to `/docs/changelog` and now uses one page per version.", "Each release can be linked, scanned, and maintained independently."],
+    ["Changelog structure", "The changelog moved to `/changelog` and now uses one page per version.", "Each release can be linked, scanned, and maintained independently."],
     ["Docs navigation", "The changelog now appears in the docs sidebar with version children.", "Release notes are discoverable from the same navigation surface as the rest of the docs."],
     ["Docs sitemap", "The docs sitemap now includes the changelog index and version pages.", "Release notes are indexed like the rest of the documentation."],
     ["Host page UI", "The host page download flow was consolidated into the main hero and the secondary open source / low footprint cards were hidden.", "The page keeps one clear download area instead of multiple competing blocks."],
@@ -65,9 +65,9 @@ Transparent icon blocks now sit over a backdrop blur so the presence banner no l
 The changelog is no longer one long page with anchors. It is now split into an index and per-version pages:
 
 ```txt
-/docs/changelog
-/docs/changelog/1-0-0
-/docs/changelog/1-1-0
+/changelog
+/changelog/1-0-0
+/changelog/1-1-0
 ```
 
 That structure makes the release history easier to maintain, easier to link, and easier to browse from the sidebar.
@@ -117,9 +117,9 @@ POST /presences/active
 DELETE /presences/active/:deviceId
 GET /library/[item]
 GET /
-GET /docs/changelog
-GET /docs/changelog/1-0-0
-GET /docs/changelog/1-1-0
+GET /changelog
+GET /changelog/1-0-0
+GET /changelog/1-1-0
 ```
 
 > This release does not introduce a new workflow. It makes the existing workflow consistent and measurable.

@@ -1,15 +1,15 @@
 ---
-title: Timestamps
-description: Affichez la progression de la lecture dans Discord Rich Presence avec des timestamps multimédias.
+title: Horodatages
+description: Affichez la progression de la lecture dans Discord Rich Presence avec des horodatages multimédias.
 ---
 
-## Pourquoi les timestamps comptent
+## Pourquoi les horodatages comptent
 
-Les timestamps rendent l'activité Discord vivante. Ils montrent depuis combien de temps l'utilisateur regarde ou combien de temps il reste.
+Les horodatages rendent l'activité Discord vivante. Ils montrent depuis combien de temps l'utilisateur regarde ou combien de temps il reste.
 
 ## Utiliser createMediaTimestamps
 
-`document` est l'API DOM du navigateur (disponible car les presences s'exécutent comme des scripts de contenu). `Assets` est fourni par le runtime (voir [Assets](/docs/presence-development/assets)).
+`document` est l'API DOM du navigateur (disponible car les présences s'exécutent comme des scripts de contenu). `Assets` est fourni par le runtime (voir [Assets](/presence-development/assets)).
 
 ```ts filename="presence.ts"
 import { createMediaTimestamps } from "@nowly/sdk"
@@ -27,8 +27,8 @@ if (video) {
 
 ## Média en pause
 
-Lorsque le média est en pause, `createMediaTimestamps` ne renvoie aucun timestamp. Cela évite d'afficher une progression de lecture incorrecte.
+Lorsque le média est en pause, `createMediaTimestamps` ne renvoie aucun horodatage. Cela évite d'afficher une progression de lecture incorrecte.
 
 ## Flux en direct
 
-Les flux en direct n'ont souvent pas de durée fixe. Utilisez uniquement un timestamp de début ou omettez les timestamps selon le comportement de la plateforme.
+Les flux en direct n'ont souvent pas de durée fixe. Utilisez uniquement un horodatage de début, ou omettez les horodatages selon le comportement de la plateforme.
