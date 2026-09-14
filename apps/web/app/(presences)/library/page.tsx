@@ -4,6 +4,7 @@ import { createMetadata } from "@/lib/seo";
 import { clientEnv } from "@nowly/env/client";
 import type { Metadata } from "next";
 import type { FC, ReactElement } from "react";
+import { Suspense } from "react";
 
 type PresenceMetadataItem = {
   name?: string
@@ -54,7 +55,9 @@ const Page: FC = (): ReactElement => {
   return (
     <>
       <LibraryStructuredData />
-      <MarketplaceClient />
+      <Suspense>
+        <MarketplaceClient />
+      </Suspense>
     </>
   );
 };

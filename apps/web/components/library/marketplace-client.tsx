@@ -8,29 +8,52 @@ import { trackPublicAnalytics } from "@/lib/analytics-client";
 import { CATEGORIES } from "@/lib/data/categories";
 import { type PresenceCategory } from "@/lib/data/presences";
 import { ADSENSE_ENABLED } from "@/lib/constants";
+import {
+  parseLibraryCategories,
+  parseLibrarySort,
+  presenceMatchesGithub,
+  uniqueGithubAuthors,
+  type LibrarySort,
+} from "@/lib/library-query";
 import { useAdStatus } from "@/providers/ad-status-provider";
 import { IconAlertCircle, IconChevronLeft, IconChevronRight, IconRefresh } from "@tabler/icons-react";
 import { useLocale, useTranslations } from "next-intl";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { FC, ReactElement } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { MarketplaceFilters } from "./marketplace-filters";
 import { MarketplaceGrid } from "./marketplace-grid";
 import { MarketplaceSearch } from "./marketplace-search";
-
-type SortOption = "name-asc" | "name-desc" | "popular" | "recent";
+import { PresenceContributeLinks } from "./presence-contribute-links";
 
 export const MarketplaceClient: FC = (): ReactElement => {
   const locale = useLocale();
   const t = useTranslations("marketplace-page");
   const { data: presences, isLoading, isError, refetch } = usePresences();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<PresenceCategory[]>([]);
-  const [sortBy, setSortBy] = useState<SortOption>("popular");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const { hasAds, adFree } = useAdStatus();
-  const [currentPage, setCurrentPage] = useState(1);
   const lastFilterEventRef = useRef("");
 
+  const searchQuery = searchParams.get("q") ?? "";
+  const selectedCategories = parseLibraryCategories(searchParams.get("category"));
+  const sortBy = parseLibrarySort(searchParams.get("sort"));
+  const author = searchParams.get("author") ?? "";
+  const currentPage = Math.max(1, Number.parseInt(searchParams.get("page") ?? "1", 10) || 1);
+
   const itemsPerPage = ADSENSE_ENABLED && hasAds && !adFree ? 8 : 9;
+
+  const replaceParams = useCallback((patch: Record<string, string | null>, resetPage = false) => {
+    const next = new URLSearchParams(searchParams.toString());
+    for (const [key, value] of Object.entries(patch)) {
+      if (!value) next.delete(key);
+      else next.set(key, value);
+    }
+    if (resetPage) next.delete("page");
+    const query = next.toString();
+    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  }, [pathname, router, searchParams]);
 
   const availableCategories = useMemo<PresenceCategory[]>(() => {
     if (!presences) return [];
@@ -38,12 +61,7 @@ export const MarketplaceClient: FC = (): ReactElement => {
     return CATEGORIES.filter((category) => categories.has(category));
   }, [presences]);
 
-  useEffect(() => {
-    if (!presences) return;
-    setSelectedCategories((prev) =>
-      prev.filter((category) => availableCategories.includes(category)),
-    );
-  }, [availableCategories, presences]);
+  const authors = useMemo(() => uniqueGithubAuthors(presences ?? []), [presences]);
 
   useEffect(() => {
     trackPublicAnalytics({
@@ -70,6 +88,10 @@ export const MarketplaceClient: FC = (): ReactElement => {
       result = result.filter((p) => selectedCategories.includes(p.category));
     }
 
+    if (author) {
+      result = result.filter((p) => presenceMatchesGithub(p, author));
+    }
+
     switch (sortBy) {
       case "name-asc":
         result.sort((a, b) => a.name.localeCompare(b.name));
@@ -86,30 +108,26 @@ export const MarketplaceClient: FC = (): ReactElement => {
     }
 
     return result;
-  }, [searchQuery, selectedCategories, sortBy, presences]);
+  }, [author, searchQuery, selectedCategories, sortBy, presences]);
 
   const totalPages = Math.max(1, Math.ceil(filteredPresences.length / itemsPerPage));
+  const safePage = Math.min(currentPage, totalPages);
   const paginatedPresences = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
+    const start = (safePage - 1) * itemsPerPage;
     return filteredPresences.slice(start, start + itemsPerPage);
-  }, [filteredPresences, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, selectedCategories, sortBy]);
+  }, [filteredPresences, itemsPerPage, safePage]);
 
   const toggleCategory = (category: PresenceCategory): void => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category],
-    );
+    const next = selectedCategories.includes(category)
+      ? selectedCategories.filter((item) => item !== category)
+      : [...selectedCategories, category];
+    replaceParams({ category: next.length > 0 ? next.join(",") : null }, true);
   };
 
   useEffect(() => {
     if (!presences) return;
     const category = selectedCategories.join(",");
-    const signature = `${category}|${sortBy}|${filteredPresences.length}|${Boolean(searchQuery)}`;
+    const signature = `${category}|${sortBy}|${author}|${filteredPresences.length}|${Boolean(searchQuery)}`;
     if (signature === lastFilterEventRef.current) return;
     lastFilterEventRef.current = signature;
 
@@ -123,7 +141,7 @@ export const MarketplaceClient: FC = (): ReactElement => {
         resultCount: filteredPresences.length,
       },
     });
-  }, [filteredPresences.length, locale, presences, searchQuery, selectedCategories, sortBy]);
+  }, [author, filteredPresences.length, locale, presences, searchQuery, selectedCategories, sortBy]);
 
   return (
     <PageLayout>
@@ -138,20 +156,24 @@ export const MarketplaceClient: FC = (): ReactElement => {
           <p className="text-muted-foreground">
             {t("description")}
           </p>
+          <PresenceContributeLinks className="mx-auto mt-4 max-w-lg text-center text-sm text-muted-foreground" />
         </div>
 
         <MarketplaceSearch
           value={searchQuery}
           placeholder={t("search-placeholder")}
-          onChange={setSearchQuery}
+          onChange={(value) => replaceParams({ q: value || null }, true)}
         />
 
         <MarketplaceFilters
           availableCategories={availableCategories}
           selectedCategories={selectedCategories}
           sortBy={sortBy}
+          authors={authors}
+          author={author}
           onToggleCategory={toggleCategory}
-          onSortChange={setSortBy}
+          onSortChange={(sort: LibrarySort) => replaceParams({ sort: sort === "popular" ? null : sort }, true)}
+          onAuthorChange={(value) => replaceParams({ author: value || null }, true)}
         />
 
         <div className="flex items-center justify-between mb-6">
@@ -176,8 +198,8 @@ export const MarketplaceClient: FC = (): ReactElement => {
               ) : (
                 <>
                   <button
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    disabled={currentPage <= 1}
+                    onClick={() => replaceParams({ page: safePage <= 2 ? null : String(safePage - 1) })}
+                    disabled={safePage <= 1}
                     className="p-1.5 rounded-lg hover:bg-accent/10 disabled:opacity-30 disabled:pointer-events-none transition-colors"
                     aria-label="Previous page"
                   >
@@ -187,9 +209,9 @@ export const MarketplaceClient: FC = (): ReactElement => {
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <button
                       key={page}
-                      onClick={() => setCurrentPage(page)}
+                      onClick={() => replaceParams({ page: page === 1 ? null : String(page) })}
                       className={`min-w-8 h-8 text-sm rounded-lg transition-colors ${
-                        page === currentPage
+                        page === safePage
                           ? "bg-accent text-accent-foreground font-medium"
                           : "hover:bg-accent/10 text-dim-foreground"
                       }`}
@@ -199,8 +221,8 @@ export const MarketplaceClient: FC = (): ReactElement => {
                   ))}
 
                   <button
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={currentPage >= totalPages}
+                    onClick={() => replaceParams({ page: String(Math.min(totalPages, safePage + 1)) })}
+                    disabled={safePage >= totalPages}
                     className="p-1.5 rounded-lg hover:bg-accent/10 disabled:opacity-30 disabled:pointer-events-none transition-colors"
                     aria-label="Next page"
                   >
@@ -232,11 +254,7 @@ export const MarketplaceClient: FC = (): ReactElement => {
           <MarketplaceGrid
             platforms={paginatedPresences}
             locale={locale}
-            onReset={() => {
-              setSearchQuery("");
-              setSelectedCategories([]);
-              setCurrentPage(1);
-            }}
+            onReset={() => router.replace(pathname, { scroll: false })}
           />
         )}
       </div>
