@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [{ protocol: "https", hostname: "cdn.nowly.me" }]
   },
+  outputFileTracingIncludes: {
+    "/changelog/[version]": ["../docs/content/docs/changelog/**/*"],
+  },
   async redirects() {
     return [
       {

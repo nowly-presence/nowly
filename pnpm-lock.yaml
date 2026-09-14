@@ -329,6 +329,9 @@ importers:
       cmdk:
         specifier: 1.1.1
         version: 1.1.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      gray-matter:
+        specifier: ^4.0.3
+        version: 4.0.3
       motion:
         specifier: ^12.42.0
         version: 12.42.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -338,6 +341,9 @@ importers:
       next-intl:
         specifier: ^4.14.4
         version: 4.14.4(@swc/helpers@0.5.23)(next@16.3.5(@types/node@26.5.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
+      next-mdx-remote:
+        specifier: ^6.0.0
+        version: 6.0.0(@types/react@19.3.0)(react@19.3.0)(supports-color@5.5.0)
       radix-ui:
         specifier: ^1.6.7
         version: 1.6.7(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)

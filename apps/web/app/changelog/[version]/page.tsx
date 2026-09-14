@@ -1,15 +1,57 @@
-import { docsHref } from "@/lib/seo";
+import { ChangelogRelease } from "@/components/changelog/changelog-release";
+import { getChangelogDoc, getChangelogVersions, parsePublicChangelogVersion } from "@/lib/changelog";
+import { createMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
+import type { ReactElement } from "react";
 
 type Props = {
-  params: Promise<{ version: string }>
+  params: Promise<{
+    version: string
+  }>
 };
 
-const Page = async ({ params }: Props): Promise<never> => {
+export const generateStaticParams = (): Array<{ version: string }> =>
+  getChangelogVersions().map((version) => ({
+    version: version.publicVersion,
+  }));
+
+const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const { version } = await params;
-  const match = /^(\d+)[.-](\d+)[.-](\d+)$/.exec(version.trim().replace(/^v/i, ""));
-  if (!match) notFound();
-  redirect(docsHref(`/docs/changelog/${match[1]}-${match[2]}-${match[3]}`));
+  const parsed = parsePublicChangelogVersion(version);
+
+  if (!parsed) {
+    return { title: "Not Found", robots: { index: false, follow: false } };
+  }
+
+  const t = await getTranslations("changelog-page");
+
+  return createMetadata({
+    title: t("meta-title", { version: parsed.publicVersion }),
+    description: t("description", { version: parsed.publicVersion }),
+    path: `/changelog/${parsed.publicVersion}`,
+    type: "article",
+  });
 };
 
+const Page = async ({ params }: Props): Promise<ReactElement> => {
+  const { version } = await params;
+  const parsed = parsePublicChangelogVersion(version);
+
+  if (!parsed) {
+    notFound();
+  }
+
+  if (parsed.publicVersion !== version) {
+    redirect(`/changelog/${parsed.publicVersion}`);
+  }
+
+  const locale = await getLocale();
+  const doc = getChangelogDoc(parsed.docSlug, locale);
+
+  return <ChangelogRelease version={parsed.publicVersion} doc={doc} />;
+};
+
+export { generateMetadata };
 export default Page;
