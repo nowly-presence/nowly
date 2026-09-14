@@ -19,12 +19,22 @@ export const FooterLinks: FC = (): ReactElement => {
       links: [
         { href: "/library", label: t("marketplace") },
         { href: "/host", label: t("host") },
-        { href: docsHref("/docs"), label: t("docs") },
+        { href: "/support", label: t("help") },
+        { href: "/status", label: t("status") },
+      ],
+    },
+    {
+      label: t("category-company"),
+      links: [
         { href: "/about", label: t("about") },
         { href: "/team", label: t("team") },
         { href: "/faq", label: t("faq") },
-        { href: "/support", label: t("help") },
-        { href: "/status", label: t("status") },
+      ],
+    },
+    {
+      label: t("category-developers"),
+      links: [
+        { href: docsHref("/docs"), label: t("docs") },
         { href: docsHref("/docs/changelog"), label: t("changelog") },
       ],
     },
@@ -41,7 +51,7 @@ export const FooterLinks: FC = (): ReactElement => {
   ];
 
   return (
-    <div className="flex gap-12">
+    <div className="grid w-fit grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-4">
       {categories.map((category) => (
         <div key={category.label} className="flex flex-col gap-3">
           <p className="text-xs font-semibold uppercase tracking-wider text-foreground/40">
