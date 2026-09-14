@@ -1,3 +1,4 @@
+import { BRAND_LOCKUP_BLUE_PNG, BRAND_LOCKUP_DARK_PNG } from "@/lib/brand";
 import { getDocOgMetadata } from "@/lib/docs/og-metadata";
 import { ImageResponse } from "next/og";
 
@@ -46,13 +47,13 @@ export const GET = async (req: Request, { params }: Props) => {
         style={{
           background:
             mode === "dark"
-              ? "linear-gradient(to top right, #000000 0%, #001419 40%, #22d3ee 100%)"
-              : "linear-gradient(to top right, #fff 0%, #ecfeff 70%, #cffafe 100%)",
+              ? "linear-gradient(to top right, #07080C 0%, #001419 40%, #22d3ee 100%)"
+              : "linear-gradient(to top right, #E4F2FF 0%, #ecfeff 70%, #cffafe 100%)",
         }}
         tw={`relative flex h-full w-full flex-col p-20 ${mode === "dark" ? "text-white" : "text-black"}`}
       >
         <div tw="flex items-center">
-          <img alt="Nowly" src="https://cdn.nowly.me/assets/app_title.png" width={150} />
+          <img alt="Nowly" src={mode === "dark" ? BRAND_LOCKUP_BLUE_PNG : BRAND_LOCKUP_DARK_PNG} width={150} />
         </div>
 
         <div

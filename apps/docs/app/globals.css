@@ -5,11 +5,11 @@
 
 :root {
   /* Background colors */
-  --background: #030506;
-  --surface: #070b0d;
-  --card: #0d1114;
-  --card-2: #12181c;
-  --card-hover: #172126;
+  --background: #07080C;
+  --surface: #0c0e14;
+  --card: #11141a;
+  --card-2: #161b22;
+  --card-hover: #1b222b;
 
   /* Accent colors */
   --accent: #22d3ee;
@@ -22,28 +22,28 @@
   --destructive: #ef4444;
 
   /* Text colors */
-  --foreground: #f8fafc;
+  --foreground: #E4F2FF;
   --muted-foreground: #a1adb8;
   --dim-foreground: #64707d;
 
   /* Border colors */
-  --border: rgba(248, 250, 252, 0.08);
-  --border-light: rgba(248, 250, 252, 0.14);
+  --border: rgba(228, 242, 255, 0.08);
+  --border-light: rgba(228, 242, 255, 0.14);
   --border-accent: rgba(34, 211, 238, 0.24);
 
   /* Component tokens */
-  --primary: #f8fafc;
-  --primary-foreground: #030506;
+  --primary: #E4F2FF;
+  --primary-foreground: #07080C;
 
-  --secondary: #12181c;
-  --secondary-foreground: #f8fafc;
+  --secondary: #161b22;
+  --secondary-foreground: #E4F2FF;
 
   --muted: #10161a;
 
-  --popover: #0d1114;
-  --popover-foreground: #f8fafc;
+  --popover: #11141a;
+  --popover-foreground: #E4F2FF;
 
-  --input: rgba(248, 250, 252, 0.1);
+  --input: rgba(228, 242, 255, 0.1);
 
   --ring: #22d3ee;
 

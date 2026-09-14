@@ -2,6 +2,7 @@
 
 import { buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { BRAND_LOCKUP_BLUE } from "@/lib/brand";
 import { SITE_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { IconDownload, IconMenu2 } from "@tabler/icons-react";
@@ -17,7 +18,7 @@ export const Navbar: FC = (): ReactElement => {
       <div className="mx-auto w-full min-w-0 max-w-300 px-6">
         <div className="flex min-w-0 items-center justify-between">
           <Link href={`${SITE_URL}/`} className="min-w-0 shrink-0 cursor-pointer select-none">
-            <img src="https://cdn.nowly.me/assets/app_title.png" alt="Nowly" width={420} height={128} className="h-8 w-auto" />
+            <img src={BRAND_LOCKUP_BLUE} alt="Nowly" width={420} height={128} className="h-8 w-auto" />
           </Link>
 
           <div className="lg:hidden">

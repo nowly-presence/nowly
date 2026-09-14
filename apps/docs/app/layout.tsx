@@ -1,5 +1,6 @@
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { BRAND_LOCKUP_BLUE_PNG, BRAND_METADATA_ICONS } from "@/lib/brand";
 import { geist, instrumentSans } from "./fonts";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -14,6 +15,11 @@ export const metadata: Metadata = {
   },
   description: "Install Nowly, build presences, and publish Discord Rich Presence integrations.",
   metadataBase: new URL("https://docs.nowly.me"),
+  manifest: "/manifest.json",
+  icons: BRAND_METADATA_ICONS,
+  openGraph: {
+    images: [{ url: BRAND_LOCKUP_BLUE_PNG, width: 1200, height: 630, alt: "Nowly" }],
+  },
 };
 
 export const viewport: Viewport = {
