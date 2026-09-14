@@ -1,0 +1,53 @@
+---
+title: 1.4.0
+date: 2026-09-14
+description: Refonte du panneau latéral avec navigation basse, fiche de gestion des présences, liste ou grille depuis le header, réglages groupés, et page changelog dédiée après une mise à jour.
+---
+
+`1.4.0` est une release de navigation et de mise en page pour l'extension. Le panneau latéral est reconstruit autour d'un shell accueil / réglages, chaque présence installée ouvre une fiche de gestion dédiée, l'accueil bascule liste / grille depuis le header, et une mise à jour store ouvre une page changelog dédiée sur le site.
+
+<ReleaseTable
+  headers={["Zone", "Ce qui change", "Pourquoi c'est utile"]}
+  rows={[
+    ["Shell du panneau", "La barre d'actions et la navigation latérale sont remplacées par une navigation basse, un header retravaillé et une barre de statut de connexion qui se masque toute seule quand Nowly Host est OK. Le menu overflow du header est un bouton plein, distinct du lien ghost Bibliothèque.", "Le panneau se comporte comme une mini-app : on change de vue sans perdre l'activité en cours, et les problèmes de connexion n'apparaissent que quand ils comptent."],
+    ["Réglages", "Les réglages sont découpés en groupes repliables Général, Présences et Avancé. L'ancien toggle qui isolait la présence active a été retiré de l'UI.", "Les options liées restent ensemble, Avancé ne gêne plus, et la liste des présences n'a plus deux layouts en concurrence."],
+    ["Dialogs", "Le snooze et le planning s'ouvrent dans un Dialog au lieu d'un Sheet.", "Les overlays sont centrés, partagent le même modèle, et collent mieux au nouveau panneau que des panneaux glissants."],
+    ["Accueil", "La liste des présences et la carte d'activité ont été retravaillées pour le nouveau shell. En liste, activation, planning et réglages restent sur la ligne. En grille, les cartes sont des tuiles compactes (icône, nom, statut) sans contrôles inline : toute la carte ouvre la fiche. Le snooze reste sur la carte d'activité.", "Parcourir les présences installées demande moins de chrome. La liste reste actionnable ; la grille reste une surface de parcours."],
+    ["Affichage", "L'accueil bascule entre liste par catégorie et grille de cartes via un sélecteur compact dans le header, à côté de Bibliothèque. Le mode alphabétique a été retiré.", "On change de layout depuis la barre du haut, sans passer par les réglages ni coller le contrôle sur la première catégorie."],
+    ["Fiche présence", "Ouvrir une présence (nom ou réglages en liste, ou carte en grille) remplace la liste par un panneau complet : description, switch, bandeau de mise à jour, fonctionnalités avec coches teintées à la couleur de la présence, URL compatibles, crédits, un bloc Réglages titré (champs, planning, voir sur le site), et une désinstallation séparée avec confirmation.", "Gérer une présence reprend la page du site, au lieu d'un overlay trop étroit de champs sans titre."],
+    ["Onboarding", "Le layout du premier lancement a été reconstruit et les textes mis à jour en anglais, français et espagnol.", "L'installation suit le même langage visuel que le reste du panneau au lieu de ressembler à un écran à part."],
+    ["Typographie", "Le panneau utilise maintenant Instrument Sans.", "L'UI de l'extension se rapproche du site au lieu de la pile système précédente."],
+    ["Changelog à l'update", "Une mise à jour store ouvre `/changelog/{version}` sur nowly.me. La page réutilise les notes de la doc avec un hero « votre extension a été mise à jour ».", "Après une update, on arrive directement sur ce qui a changé au lieu de chercher dans la sidebar docs."],
+  ]}
+/>
+
+## Panneau latéral
+
+Le panneau n'est plus une seule page scrollable avec une barre d'actions. **Accueil** et **Réglages** sont des vues séparées, plus un onglet **Logs** en mode développeur. La vue courante est conservée après un redémarrage du service worker.
+
+La barre de statut confirme Nowly Host quand le pont natif est sain, puis disparaît. Elle reste affichée si l'hôte manque ou est déconnecté.
+
+Le header garde Bibliothèque en action texte. Le menu overflow utilise un bouton plein pour ne pas se confondre avec le même lien ghost.
+
+## Liste et grille
+
+Les présences restent groupées par catégorie. Le sélecteur liste / grille vit dans le header et n'apparaît que sur l'accueil tant que la liste est visible (pas sur une fiche, les réglages ou les logs).
+
+- **Liste :** le nom ouvre la fiche. Activation, planning et réglages restent sur la ligne.
+- **Grille :** icône, nom et statut, alignés à gauche. Toute la carte est cliquable. Activation et planning sont sur la fiche.
+
+## Fiche de gestion
+
+Retour (ou Accueil) ramène à la liste. La carte lecteur est masquée tant qu'une présence est ouverte.
+
+La page est découpée en blocs titrés : fonctionnalités et URL, crédits, puis Réglages. Désinstaller est en dessous, isolé, avec une confirmation.
+
+## Réglages et dialogs
+
+Général, Présences et Avancé se plient indépendamment. Avancé ne s'ouvre par défaut que si le mode développeur est déjà actif.
+
+Le snooze et le planning utilisent le même Dialog. Ouvrir une présence affiche maintenant une fiche de gestion, plus un overlay. Les anciens flux en Sheet ont disparu.
+
+## Après une mise à jour
+
+Les builds store Chrome et Firefox ouvrent `https://nowly.me/changelog/1.4.0` (ou la version du manifeste) sur `onInstalled` avec `reason === "update"`. Un reload unpacked n'ouvre pas d'onglet.
