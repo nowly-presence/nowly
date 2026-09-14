@@ -60,7 +60,7 @@ export const AppSidebar: FC<AppSidebarProps> = ({ items }) => {
   return (
     <>
       <aside className="hidden lg:block w-56 shrink-0">
-        <div className="sticky top-24 w-56 max-h-[calc(100vh-8rem)] overflow-y-auto">
+        <div className="docs-sidebar-scroll sticky top-24 w-56 max-h-[calc(100vh-8rem)] overflow-y-auto">
           {sidebarContent}
         </div>
       </aside>
@@ -71,7 +71,7 @@ export const AppSidebar: FC<AppSidebarProps> = ({ items }) => {
             className="absolute inset-0 bg-background/60 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="absolute left-0 top-0 bottom-0 w-72 bg-card border-r border-border p-6 overflow-y-auto">
+          <div className="docs-sidebar-scroll absolute left-0 top-0 bottom-0 w-72 bg-card border-r border-border p-6 overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <p className="text-sm font-semibold text-foreground">{t("documentation")}</p>
               <button
