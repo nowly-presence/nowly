@@ -2,7 +2,9 @@
   "navbar": {
     "marketplace": "Library",
     "docs": "Docs",
+    "host": "Host",
     "download-desktop": "Download Nowly Host",
+    "download-extension": "Download extension",
     "download-for": "Download for {browser}",
     "download-short": "Download"
   },
@@ -73,6 +75,8 @@
     "description": "No subscription required. Lightweight and secure.",
     "download-for": "Download for {browser}",
     "download-desktop": "Download Nowly Host",
+    "desktop-only-title": "Desktop only",
+    "desktop-only-body": "The Nowly extension is built for desktop browsers. Install it on your PC to use Discord Rich Presence.",
     "coming-soon": "Coming Soon",
     "firefox-status": "Coming soon",
     "extension": "Download Extension",
@@ -124,7 +128,11 @@
     "tos": "Terms of Service",
     "legal-notice": "Legal Notice",
     "cookies": "Cookies",
-    "data-management": "Data & Privacy"
+    "data-management": "Data & Privacy",
+    "marketplace": "Library",
+    "host": "Host",
+    "docs": "Docs",
+    "discord": "Discord"
   },
   "cookie-banner": {
     "message": "This site uses strictly necessary cookies. Advertising technologies may be used if ads are enabled.",
@@ -721,6 +729,14 @@
     "req-discord": "Discord",
     "req-browser": "Browser",
     "req-storage": "Storage",
+    "req-os-windows-value": "Windows 10 or Windows 11",
+    "req-os-macos-value": "macOS 11 Big Sur or later",
+    "req-os-linux-value": "Linux 2.6.32+ / glibc 2.17+",
+    "req-arch-windows-value": "64-bit (x64)",
+    "req-arch-macos-value": "Intel x64 / Apple Silicon (ARM64)",
+    "req-arch-linux-value": "64-bit (x64)",
+    "req-discord-value": "Discord desktop app installed and running",
+    "req-browser-value": "Chromium-based browser (Chrome, Edge, Brave, Opera)",
     "req-storage-windows-value": "Installer 3.71 MB / Portable 1.82 MB",
     "req-storage-macos-value": "3.38 MB",
     "req-storage-linux-value": "1.76 MB"

@@ -3,7 +3,7 @@
 import { GitHubIcon } from "@/components/icons";
 import { Avatar, AvatarGroup } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
-import { PROJECT_REPOSITORY_URL } from "@/lib/constants";
+import { DISCORD_INVITE_URL, PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -64,6 +64,19 @@ export const Footer: FC = (): ReactElement => {
 
             <div className="flex items-center gap-3 flex-wrap">
               <SupportButton />
+
+              <Link
+                href={DISCORD_INVITE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={buttonVariants({
+                  className: "text-muted-foreground hover:border-zinc-500/40 hover:text-foreground hover:bg-zinc-500/10 text-xs sm:text-sm px-2 sm:px-3",
+                  size: "sm",
+                  variant: "secondary",
+                })}
+              >
+                <span>{t("discord")}</span>
+              </Link>
 
               <Link
                 href={PROJECT_REPOSITORY_URL}

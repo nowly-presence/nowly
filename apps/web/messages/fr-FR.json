@@ -2,7 +2,9 @@
   "navbar": {
     "marketplace": "Bibliothèque",
     "docs": "Documentation",
+    "host": "Host",
     "download-desktop": "Télécharger Nowly Host",
+    "download-extension": "Télécharger l'extension",
     "download-for": "Télécharger pour {browser}",
     "download-short": "Télécharger"
   },
@@ -73,6 +75,8 @@
     "description": "Aucun abonnement requis. Léger et sécurisé.",
     "download-for": "Télécharger pour {browser}",
     "download-desktop": "Télécharger Nowly Host",
+    "desktop-only-title": "Version ordinateur uniquement",
+    "desktop-only-body": "L'extension Nowly est conçue pour les navigateurs de bureau. Installez-la sur votre PC pour utiliser Discord Rich Presence.",
     "coming-soon": "Bientôt disponible",
     "firefox-status": "Bientôt",
     "extension": "Télécharger l'extension",
@@ -124,7 +128,11 @@
     "tos": "Conditions d'utilisation",
     "legal-notice": "Mentions légales",
     "cookies": "Cookies",
-    "data-management": "Données et confidentialité"
+    "data-management": "Données et confidentialité",
+    "marketplace": "Bibliothèque",
+    "host": "Host",
+    "docs": "Documentation",
+    "discord": "Discord"
   },
   "cookie-banner": {
     "message": "Ce site utilise des cookies strictement nécessaires. Des technologies publicitaires peuvent être utilisées si les annonces sont activées.",
@@ -721,6 +729,14 @@
     "req-discord": "Discord",
     "req-browser": "Navigateur",
     "req-storage": "Stockage",
+    "req-os-windows-value": "Windows 10 ou Windows 11",
+    "req-os-macos-value": "macOS 11 Big Sur ou ultérieur",
+    "req-os-linux-value": "Linux 2.6.32+ / glibc 2.17+",
+    "req-arch-windows-value": "64-bit (x64)",
+    "req-arch-macos-value": "Intel x64 / Apple Silicon (ARM64)",
+    "req-arch-linux-value": "64-bit (x64)",
+    "req-discord-value": "Application Discord installée et en cours d'exécution",
+    "req-browser-value": "Navigateur basé sur Chromium (Chrome, Edge, Brave, Opera)",
     "req-storage-windows-value": "Installateur 3,71 Mo / Portable 1,82 Mo",
     "req-storage-macos-value": "3,38 Mo",
     "req-storage-linux-value": "1,76 Mo"

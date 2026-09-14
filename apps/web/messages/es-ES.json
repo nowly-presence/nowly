@@ -2,7 +2,9 @@
   "navbar": {
     "marketplace": "Biblioteca",
     "docs": "Documentación",
+    "host": "Host",
     "download-desktop": "Descargar Nowly Host",
+    "download-extension": "Descargar extensión",
     "download-for": "Descargar para {browser}",
     "download-short": "Descargar"
   },
@@ -73,6 +75,8 @@
     "description": "Sin suscripción. Ligero y seguro.",
     "download-for": "Descargar para {browser}",
     "download-desktop": "Descargar Nowly Host",
+    "desktop-only-title": "Solo en escritorio",
+    "desktop-only-body": "La extensión Nowly está pensada para navegadores de escritorio. Instálala en tu PC para usar Discord Rich Presence.",
     "coming-soon": "Próximamente",
     "firefox-status": "Próximamente",
     "extension": "Descargar extensión",
@@ -124,7 +128,11 @@
     "tos": "Términos del servicio",
     "legal-notice": "Aviso legal",
     "cookies": "Cookies",
-    "data-management": "Datos y privacidad"
+    "data-management": "Datos y privacidad",
+    "marketplace": "Biblioteca",
+    "host": "Host",
+    "docs": "Documentación",
+    "discord": "Discord"
   },
   "cookie-banner": {
     "message": "Este sitio usa cookies estrictamente necesarias. Se pueden usar tecnologías publicitarias si los anuncios están activados.",
@@ -721,6 +729,14 @@
     "req-discord": "Discord",
     "req-browser": "Navegador",
     "req-storage": "Almacenamiento",
+    "req-os-windows-value": "Windows 10 o Windows 11",
+    "req-os-macos-value": "macOS 11 Big Sur o posterior",
+    "req-os-linux-value": "Linux 2.6.32+ / glibc 2.17+",
+    "req-arch-windows-value": "64-bit (x64)",
+    "req-arch-macos-value": "Intel x64 / Apple Silicon (ARM64)",
+    "req-arch-linux-value": "64-bit (x64)",
+    "req-discord-value": "Aplicación Discord instalada y en ejecución",
+    "req-browser-value": "Navegador basado en Chromium (Chrome, Edge, Brave, Opera)",
     "req-storage-windows-value": "Instalador 3,71 MB / Portable 1,82 MB",
     "req-storage-macos-value": "3,38 MB",
     "req-storage-linux-value": "1,76 MB"

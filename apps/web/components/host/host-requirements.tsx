@@ -6,37 +6,33 @@ type Props = {
   platform: Exclude<Platform, "">;
 };
 
-const requirementsData: Record<Exclude<Platform, "">, Array<{ key: string; value: string }>> = {
+const requirementKeys: Record<Exclude<Platform, "">, Array<{ label: string; value: string }>> = {
   windows: [
-    { key: "req-os", value: "Windows 10 ou Windows 11" },
-    { key: "req-arch", value: "64-bit (x64)" },
-    { key: "req-discord", value: "Application Discord installée et en cours d'exécution" },
-    { key: "req-browser", value: "Navigateur basé sur Chromium (Chrome, Edge, Brave, Opera)" },
-    { key: "req-storage", value: "req-storage-windows-value" },
+    { label: "req-os", value: "req-os-windows-value" },
+    { label: "req-arch", value: "req-arch-windows-value" },
+    { label: "req-discord", value: "req-discord-value" },
+    { label: "req-browser", value: "req-browser-value" },
+    { label: "req-storage", value: "req-storage-windows-value" },
   ],
   macos: [
-    { key: "req-os", value: "macOS 11 Big Sur ou ultérieur" },
-    { key: "req-arch", value: "Intel x64 / Apple Silicon (ARM64)" },
-    { key: "req-discord", value: "Application Discord installée et en cours d'exécution" },
-    { key: "req-browser", value: "Navigateur basé sur Chromium (Chrome, Edge, Brave, Opera)" },
-    { key: "req-storage", value: "req-storage-macos-value" },
+    { label: "req-os", value: "req-os-macos-value" },
+    { label: "req-arch", value: "req-arch-macos-value" },
+    { label: "req-discord", value: "req-discord-value" },
+    { label: "req-browser", value: "req-browser-value" },
+    { label: "req-storage", value: "req-storage-macos-value" },
   ],
   linux: [
-    { key: "req-os", value: "Linux 2.6.32+ / glibc 2.17+" },
-    { key: "req-arch", value: "64-bit (x64)" },
-    { key: "req-discord", value: "Application Discord installée et en cours d'exécution" },
-    { key: "req-browser", value: "Navigateur basé sur Chromium (Chrome, Edge, Brave, Opera)" },
-    { key: "req-storage", value: "req-storage-linux-value" },
+    { label: "req-os", value: "req-os-linux-value" },
+    { label: "req-arch", value: "req-arch-linux-value" },
+    { label: "req-discord", value: "req-discord-value" },
+    { label: "req-browser", value: "req-browser-value" },
+    { label: "req-storage", value: "req-storage-linux-value" },
   ],
 };
 
 export const HostRequirements: FC<Props> = ({ platform }): ReactElement => {
   const t = useTranslations("host-page");
-  const reqs = requirementsData[platform].map((req) => (
-    req.key === "req-storage"
-      ? { ...req, value: t(req.value) }
-      : req
-  ));
+  const reqs = requirementKeys[platform];
 
   return (
     <section id="requirements" className="scroll-mt-24">
@@ -44,9 +40,9 @@ export const HostRequirements: FC<Props> = ({ platform }): ReactElement => {
 
       <div className="bg-card border border-border rounded-xl divide-y divide-border">
         {reqs.map((req) => (
-          <div key={req.key} className="flex items-center justify-between px-6 py-4">
-            <span className="text-sm text-muted-foreground">{t(req.key)}</span>
-            <span className="text-sm font-medium">{req.value}</span>
+          <div key={req.value} className="flex items-center justify-between gap-4 px-6 py-4">
+            <span className="text-sm text-muted-foreground">{t(req.label)}</span>
+            <span className="text-sm font-medium text-right">{t(req.value)}</span>
           </div>
         ))}
       </div>

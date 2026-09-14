@@ -1,3 +1,4 @@
+import { docsHref } from "@/lib/seo";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
@@ -16,12 +17,15 @@ export const FooterLinks: FC = (): ReactElement => {
     {
       label: t("category-product"),
       links: [
+        { href: "/library", label: t("marketplace") },
+        { href: "/host", label: t("host") },
+        { href: docsHref("/docs"), label: t("docs") },
         { href: "/about", label: t("about") },
         { href: "/team", label: t("team") },
         { href: "/faq", label: t("faq") },
         { href: "/support", label: t("help") },
         { href: "/status", label: t("status") },
-        { href: "/docs/changelog", label: t("changelog") },
+        { href: docsHref("/docs/changelog"), label: t("changelog") },
       ],
     },
     {
