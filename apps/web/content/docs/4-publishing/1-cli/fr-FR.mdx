@@ -38,6 +38,10 @@ nowly build youtube
 
 ## Tester une presence localement
 
+Deux façons de charger une presence compilée sans passer par l'API Nowly. Guide complet&nbsp;: [Charger et tester en local](/docs/presence-development/load-and-test).
+
+### Extension pré-build
+
 Si tu n'as cloné que le repo `presences` (le cas le plus courant pour les contributeurs), utilise `nowly extension` pour obtenir un build de dev prêt à charger, sans avoir besoin du monorepo `nowly` complet&nbsp;:
 
 ```bash
@@ -58,6 +62,16 @@ Pour utiliser un build local précis plutôt que celui du CDN, passe `--from`&nb
 ```bash
 nowly extension youtube --from ../nowly/apps/extension/dist/chrome
 ```
+
+### Dépôt d'un zip
+
+Si Nowly est déjà chargé dans le navigateur, crée un zip et dépose-le dans le panneau Debug (mode développeur)&nbsp;:
+
+```bash
+nowly pack youtube
+```
+
+Le zip est écrit dans `dist/packs/youtube.zip`. Dépose-le dans **Réglages → Avancé → Debug**. Les zips non signés ne marchent qu'en build unpacked ou avec le mode développeur.
 
 ### Si tu as le monorepo complet
 

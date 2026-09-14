@@ -85,18 +85,23 @@ nowly build ejemplo
 ```
 
 </Step>
-<Step title="Empaquetar" description="Obtén una build de desarrollo de la extensión con tu presence incluida.">
+<Step title="Cargar" description="Instala la presence compilada en el navegador. Dos métodos: una extensión precompilada, o soltar un zip.">
+
+Consulta [Cargar y probar en local](/docs/presence-development/load-and-test) para la comparación completa.
+
+**Primera vez** (Nowly aún no está en el navegador): incluye la presence en una extensión lista para cargar.
 
 ```bash
 nowly extension ejemplo
 ```
 
-Descarga la última build de desarrollo de la extensión desde el CDN y empaqueta `ejemplo` en ella. Consulta [CLI](/docs/publishing/cli#probar-una-presence-localmente) para la alternativa con el monorepo completo y la opción `--from`.
+Carga `dist/extension-dev` como unpacked en `chrome://extensions`.
 
-</Step>
-<Step title="Recargar" description="La presence se instala automáticamente en cuanto la extensión se recarga.">
+**Nowly ya cargada:** empaqueta un zip y suéltalo en Ajustes → Avanzado → Debug (modo desarrollador).
 
-Carga `dist/extension-dev` como extensión sin empaquetar (o recárgala) en `chrome://extensions`
+```bash
+nowly pack ejemplo
+```
 
 </Step>
 <Step title="Probar" description="Abre el sitio web objetivo — la presence se activa automáticamente.">
@@ -106,4 +111,4 @@ Visita el sitio
 </Step>
 </Steps>
 
-Repite **Implementar** → **Compilar** → **Empaquetar** → **Recargar** después de cada cambio de código.
+Repite **Implementar** → **Compilar** → **Cargar** después de cada cambio de código.

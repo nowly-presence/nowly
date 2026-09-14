@@ -1,0 +1,87 @@
+---
+title: Charger et tester en local
+description: Chargez une presence compilée dans l'extension Nowly avec un build de dev préparé ou un zip à déposer.
+---
+
+Après `nowly build <slug>`, il faut encore injecter ce bundle dans un navigateur. Il y a deux méthodes locales. Aucune ne passe par l'API Nowly.
+
+## 1. Extension pré-build (`nowly extension`)
+
+C'est le chemin habituel la première fois, surtout si tu n'as cloné que le dépôt `presences`. La CLI télécharge un build Chrome de dev prêt à l'emploi (ou copie un build local), puis y intègre ta presence compilée.
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+Tu peux passer plusieurs slugs&nbsp;:
+
+```bash
+nowly extension youtube github figma
+```
+
+Ensuite&nbsp;:
+
+1. Ouvre `chrome://extensions` et active le **mode développeur**
+2. **Charger l'extension non empaquetée** et sélectionne `dist/extension-dev`
+3. Ouvre le site cible avec Discord Desktop et Nowly Host
+
+La presence s'installe depuis `dev-presences.json` dès le démarrage de l'extension. Après une modification, recompile, relance `nowly extension <slug>`, puis recharge l'extension unpacked.
+
+Pour utiliser un build local d'extension plutôt que le zip CDN&nbsp;:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+<CalloutInfo>
+`nowly extension` écrit un dossier unpacked. C'est l'outil adapté quand Nowly n'est pas encore chargé dans le navigateur.
+</CalloutInfo>
+
+### Monorepo Nowly complet
+
+Si tu as cloné `nowly` (avec `presences` en submodule), tu peux intégrer toutes les presences compilées dans l'extension&nbsp;:
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+Charge `apps/extension/dist/chrome` en unpacked. Recharge après chaque rebuild.
+
+## 2. Dépôt d'un zip (`nowly pack`)
+
+Utilise cette méthode quand Nowly est **déjà** chargé (unpacked, ou build store avec le mode développeur). Tu ne recompiles que la presence, pas toute l'extension.
+
+```bash
+nowly pack youtube
+```
+
+Cette commande compile la presence, puis zippe `dist/presences/youtube/` vers `dist/packs/youtube.zip`. Le zip doit contenir au minimum `metadata.json` et `bundle.js`. Un dossier imbriqué est accepté.
+
+Puis dans le panneau latéral&nbsp;:
+
+1. Ouvre **Réglages** → **Avancé**
+2. Active le **mode développeur** (toujours actif sur un build unpacked)
+3. Déplie **Debug**
+4. Dépose le `.zip` (ou parcours le fichier)
+
+La presence s'installe en source **locale**. Le prune unpacked au démarrage ne la supprime pas. Les zips non signés sont acceptés seulement en build unpacked ou avec le mode développeur. Un build store sans mode développeur exige toujours une release signée via l'API.
+
+Après chaque changement de code&nbsp;:
+
+```bash
+nowly pack youtube
+```
+
+Dépose à nouveau le zip. Pas besoin de recharger l'extension unpacked, sauf si tu as modifié l'extension elle-même.
+
+## Quelle méthode choisir
+
+| Situation | Méthode |
+|---|---|
+| Premier setup, ou Nowly absent du navigateur | `nowly extension <slug>` |
+| Nowly déjà chargé, itérer sur une presence | `nowly pack <slug>` puis déposer le zip |
+| Tu travailles dans le monorepo `nowly` | `pnpm build:extension:dev` |
+
+Voir aussi [CLI](/docs/publishing/cli#tester-une-presence-localement).

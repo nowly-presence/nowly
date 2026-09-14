@@ -1,23 +1,31 @@
 ---
 title: 1.4.0
 date: 2026-09-14
-description: Refonte du panneau latéral avec navigation basse, bibliothèque intégrée, fiche de gestion des présences, liste ou grille depuis le header, réglages groupés, et page changelog dédiée après une mise à jour.
+description: Refonte du panneau latéral avec navigation basse, bibliothèque intégrée, pause et raccourcis, install zip via nowly pack, visuel des présences, et page changelog dédiée après une mise à jour.
 ---
 
-`1.4.0` est une release de navigation et de mise en page pour l'extension. Le panneau latéral est reconstruit autour d'un shell accueil / bibliothèque / réglages, chaque présence installée ouvre une fiche de gestion dédiée, l'accueil bascule liste / grille depuis le header, et une mise à jour store ouvre une page changelog dédiée sur le site.
+`1.4.0` reconstruit le panneau autour d'Accueil, Bibliothèque et Réglages, et ajoute ce que tu utilises au quotidien : pause Discord, raccourcis clavier, menu contextuel de page, recherche sur l'accueil, file d'install hors-ligne, et un flux zip pour les auteurs de présences (`nowly pack`). Une mise à jour store ouvre une page changelog dédiée sur le site.
 
 <ReleaseTable
   headers={["Zone", "Ce qui change", "Pourquoi c'est utile"]}
   rows={[
     ["Shell du panneau", "La barre d'actions et la navigation latérale sont remplacées par une navigation basse, un header retravaillé et une barre de statut de connexion qui se masque toute seule quand Nowly Host est OK.", "Le panneau se comporte comme une mini-app : on change de vue sans perdre l'activité en cours, et les problèmes de connexion n'apparaissent que quand ils comptent."],
     ["Bibliothèque intégrée", "Un onglet Bibliothèque dans la navigation basse liste le catalogue public via l'API (recherche, catégories qui passent à la ligne, fiche compacte). Installer et mettre à jour se font dans l'extension après vérification de signature, y compris depuis les bandeaux de mise à jour de l'accueil. Plus de redirection vers nowly.me pour installer. Le header et l'état vide n'ont plus de bouton Bibliothèque. Les fiches déjà installées gardent un lien Voir sur le site.", "Ajouter ou mettre à jour une présence ne demande plus de quitter le panneau."],
+    ["Visuel présence", "Les fiches installées et Bibliothèque affichent la miniature en bannière en haut de la carte. Si l'image manque, un halo de la couleur de la présence prend le relais.", "La fiche de gestion ressemble à la page du site, plus à une liste plate de champs."],
     ["Versions", "La version s'affiche en badge : à côté du nom sur les fiches (accueil et bibliothèque), à côté de la catégorie dans la liste boutique, à côté du statut Activée ou Désactivée dans la liste d'accueil.", "La version se lit d'un coup d'œil, sans se mélanger au texte de statut ou de catégorie."],
+    ["Pause Discord", "Une pause persistante coupe la Rich Presence sur Discord (bouton du header, Réglages, ou Ctrl+Shift+U) sans désinstaller ni désactiver les scripts. Un badge toolbar et la barre de statut l'indiquent.", "Tu peux masquer Nowly sur Discord pendant une réunion sans tout démonter."],
+    ["Raccourcis", "Ctrl+Shift+Y ouvre le panneau et Ctrl+Shift+U met Discord en pause. Réglages liste les raccourcis actuels et un lien pour les changer dans le navigateur. Le panneau s'ouvre sur le même geste que la commande (Chrome l'exige).", "Tu ouvres Nowly ou coupes Discord sans chercher l'icône de la barre d'outils."],
+    ["Menu page", "Clic droit sur une page pour ouvrir la présence installée correspondante, la fiche Bibliothèque, ou une recherche par nom d'hôte.", "Tu arrives sur la bonne présence depuis la page en cours."],
+    ["Recherche accueil", "L'accueil filtre les présences installées par nom, slug, catégorie ou URL.", "Trouver une présence ne demande plus de parcourir toutes les catégories."],
+    ["Install hors-ligne", "Les install ou mises à jour en échec réseau ou serveur partent en file de réessai (automatique chaque minute, plus Réessayer).", "Une coupure API n'annule plus l'install que tu venais de lancer."],
+    ["Zip local", "En mode développeur (ou build unpacked), dépose un zip de présence compilée sur le panneau Debug. Le zip doit contenir metadata.json et bundle.js. Un dossier source avec seulement presence.ts est refusé. Les installs locales survivent au reload d'une extension unpacked.", "Itérer sur une présence sans reconstruire toute l'extension."],
+    ["CLI pack", "`nowly pack <slug>` compile la présence et écrit dist/packs/<slug>.zip. `nowly extension <slug...>` produit toujours un dossier Chrome prêt à charger. Pack fonctionne depuis le package presences ou la racine du monorepo Nowly.", "Les auteurs chargent une présence dans une extension déjà installée, au lieu de recréer un unpacked à chaque fois."],
     ["Boutons primaires", "Installer et les autres boutons primaires utilisent le fond accent avec un texte sombre, lisible sur le cyan du thème par défaut.", "Le contraste reste correct sur tous les thèmes, y compris ceux à accent clair."],
-    ["Réglages", "Les réglages sont découpés en groupes repliables Général, Présences et Avancé. L'ancien toggle qui isolait la présence active a été retiré de l'UI.", "Les options liées restent ensemble, Avancé ne gêne plus, et la liste des présences n'a plus deux layouts en concurrence."],
+    ["Réglages", "Les réglages sont découpés en groupes repliables Général, Présences et Avancé. L'ancien toggle qui isolait la présence active a été retiré de l'UI. Les raccourcis sont avec le reste des options.", "Les options liées restent ensemble, Avancé ne gêne plus, et la liste des présences n'a plus deux layouts en concurrence."],
     ["Dialogs", "Le snooze et le planning s'ouvrent dans un Dialog au lieu d'un Sheet.", "Les overlays sont centrés, partagent le même modèle, et collent mieux au nouveau panneau que des panneaux glissants."],
     ["Accueil", "La liste des présences et la carte d'activité ont été retravaillées pour le nouveau shell. En liste, activation, planning et réglages restent sur la ligne. En grille, les cartes sont des tuiles compactes (icône, nom, statut) sans contrôles inline : toute la carte ouvre la fiche. Le snooze reste sur la carte d'activité.", "Parcourir les présences installées demande moins de chrome. La liste reste actionnable ; la grille reste une surface de parcours."],
     ["Affichage", "L'accueil bascule entre liste par catégorie et grille de cartes via un sélecteur compact dans le header. Le mode alphabétique a été retiré.", "On change de layout depuis la barre du haut, sans passer par les réglages ni coller le contrôle sur la première catégorie."],
-    ["Fiche présence", "Ouvrir une présence (nom ou réglages en liste, ou carte en grille) remplace la liste par un panneau complet : description, switch, bandeau de mise à jour, fonctionnalités avec coches teintées à la couleur de la présence, URL compatibles, crédits, un bloc Réglages titré (champs, planning, voir sur le site), et une désinstallation séparée avec confirmation.", "Gérer une présence reprend la page du site, au lieu d'un overlay trop étroit de champs sans titre."],
+    ["Fiche présence", "Ouvrir une présence (nom ou réglages en liste, ou carte en grille) remplace la liste par un panneau complet : visuel, description, switch, bandeau de mise à jour, fonctionnalités avec coches teintées à la couleur de la présence, URL compatibles, crédits, un bloc Réglages titré (champs, planning, voir sur le site), et une désinstallation séparée avec confirmation.", "Gérer une présence reprend la page du site, au lieu d'un overlay trop étroit de champs sans titre."],
     ["Onboarding", "Le layout du premier lancement a été reconstruit et les textes mis à jour en anglais, français et espagnol.", "L'installation suit le même langage visuel que le reste du panneau au lieu de ressembler à un écran à part."],
     ["Typographie", "Le panneau utilise maintenant Instrument Sans.", "L'UI de l'extension se rapproche du site au lieu de la pile système précédente."],
     ["Changelog à l'update", "Une mise à jour store ouvre `/changelog/{version}` sur nowly.me. La page réutilise les notes de la doc avec un hero « votre extension a été mise à jour ».", "Après une update, on arrive directement sur ce qui a changé au lieu de chercher dans la sidebar docs."],
@@ -28,9 +36,22 @@ description: Refonte du panneau latéral avec navigation basse, bibliothèque in
 
 Le panneau n'est plus une seule page scrollable avec une barre d'actions. **Accueil**, **Bibliothèque** et **Réglages** sont des vues séparées, plus un onglet **Logs** en mode développeur. La vue courante est conservée après un redémarrage du service worker.
 
-La barre de statut confirme Nowly Host quand le pont natif est sain, puis disparaît. Elle reste affichée si l'hôte manque ou est déconnecté.
+La barre de statut confirme Nowly Host quand le pont natif est sain, puis disparaît. Elle reste affichée si l'hôte manque ou est déconnecté. Tant que la pause Discord est active, le badge toolbar et la barre de statut restent visibles.
 
 Le menu overflow du header utilise un bouton plein.
+
+## Pause, raccourcis et menu page
+
+La pause est stockée dans les réglages de l'extension. Les scripts de présence peuvent continuer à tourner ; Discord ne reçoit plus d'activité tant que tu n'as pas repris.
+
+Raccourcis par défaut (Chrome et navigateurs Chromium) :
+
+- **Ctrl+Shift+Y** ouvre le panneau latéral.
+- **Ctrl+Shift+U** bascule la pause Discord.
+
+Change-les dans `chrome://extensions/shortcuts`. Les réglages du panneau listent seulement les touches actuelles.
+
+Clic droit sur une page compatible pour ouvrir Nowly sur cette présence, ou une recherche Bibliothèque si elle n'est pas encore installée.
 
 ## Bibliothèque
 
@@ -38,7 +59,7 @@ L'onglet **Bibliothèque** est dans la navigation basse, à côté d'Accueil et 
 
 La recherche et les filtres de catégorie restent dans le panneau. Les catégories passent à la ligne au lieu d'un scroll horizontal. Le champ de recherche garde le fond de carte au focus.
 
-Une ligne ouvre une fiche compacte (description, URL, installer). Pas de choix de version dans l'extension : ça reste sur le site.
+Une ligne ouvre une fiche compacte (visuel, description, URL, installer). Pas de choix de version dans l'extension : ça reste sur le site.
 
 Les mises à jour proposées sur l'accueil appellent le même flux d'install. Le site nowly.me peut toujours installer via le content script.
 
@@ -49,17 +70,33 @@ Les présences restent groupées par catégorie. Le sélecteur liste / grille vi
 - **Liste :** le nom ouvre la fiche. Activation, planning et réglages restent sur la ligne. Un badge de version s'affiche à côté du statut Activée ou Désactivée.
 - **Grille :** icône, nom et statut, alignés à gauche. Toute la carte est cliquable. Activation et planning sont sur la fiche.
 
+La recherche filtre la liste installée sans quitter l'accueil.
+
 ## Fiche de gestion
 
 Retour (ou Accueil) ramène à la liste. La carte lecteur est masquée tant qu'une présence est ouverte.
 
-La page est découpée en blocs titrés : fonctionnalités et URL, crédits, puis Réglages. Un badge de version est collé au nom. Désinstaller est en dessous, isolé, avec une confirmation.
+La page est découpée en blocs titrés : visuel, fonctionnalités et URL, crédits, puis Réglages. Un badge de version est collé au nom. Désinstaller est en dessous, isolé, avec une confirmation.
 
 ## Réglages et dialogs
 
 Général, Présences et Avancé se plient indépendamment. Avancé ne s'ouvre par défaut que si le mode développeur est déjà actif.
 
 Le snooze et le planning utilisent le même Dialog. Ouvrir une présence affiche maintenant une fiche de gestion, plus un overlay. Les anciens flux en Sheet ont disparu.
+
+## Flux développeur
+
+Si Nowly est déjà chargé en unpacked, compile un zip et dépose-le sur le panneau Debug (mode développeur) :
+
+```
+nowly pack youtube
+```
+
+Le zip est écrit dans `dist/packs/<slug>.zip` et doit contenir `metadata.json` plus `bundle.js`. Ne zippe pas le source TypeScript.
+
+Si l'extension n'est pas encore chargée, `nowly extension <slug>` écrit toujours un dossier Chrome avec `dev-presences.json`.
+
+Doc : [Charger et tester en local](/docs/presence-development/load-and-test).
 
 ## Après une mise à jour
 
