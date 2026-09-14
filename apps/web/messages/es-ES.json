@@ -766,5 +766,14 @@
     "title": "Algo salió mal",
     "description": "Ocurrió un error inesperado. Inténtalo de nuevo o vuelve más tarde.",
     "retry": "Intentar de nuevo"
+  },
+  "changelog-page": {
+    "badge": "Actualización de la extensión",
+    "title": "Tu extensión se ha actualizado",
+    "description": "Nowly {version} ya está instalada. Esto es lo que ha cambiado en esta versión.",
+    "meta-title": "Changelog de Nowly {version}",
+    "library-cta": "Explorar la biblioteca",
+    "docs-cta": "Changelog completo",
+    "missing": "Las notas de esta versión aún no están publicadas. Puedes consultar el changelog completo en la documentación."
   }
 }

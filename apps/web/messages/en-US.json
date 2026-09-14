@@ -766,5 +766,14 @@
     "title": "Something went wrong",
     "description": "An unexpected error occurred. Please try again or come back later.",
     "retry": "Try again"
+  },
+  "changelog-page": {
+    "badge": "Extension update",
+    "title": "Your extension has been updated",
+    "description": "Nowly {version} is now installed. Here is what changed in this release.",
+    "meta-title": "Nowly {version} changelog",
+    "library-cta": "Browse library",
+    "docs-cta": "Full changelog",
+    "missing": "Release notes for this version are not published yet. You can still browse the full changelog in the documentation."
   }
 }

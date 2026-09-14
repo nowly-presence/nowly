@@ -766,5 +766,14 @@
     "title": "Une erreur est survenue",
     "description": "Une erreur inattendue s'est produite. Réessaie ou reviens plus tard.",
     "retry": "Réessayer"
+  },
+  "changelog-page": {
+    "badge": "Mise à jour de l'extension",
+    "title": "Votre extension a été mise à jour",
+    "description": "Nowly {version} est maintenant installée. Voici ce qui a changé dans cette version.",
+    "meta-title": "Changelog Nowly {version}",
+    "library-cta": "Parcourir la bibliothèque",
+    "docs-cta": "Changelog complet",
+    "missing": "Les notes de cette version ne sont pas encore publiées. Vous pouvez consulter le changelog complet dans la documentation."
   }
 }

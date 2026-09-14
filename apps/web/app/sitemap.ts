@@ -66,6 +66,12 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
             priority: 0.7,
           },
           ...pages,
+          ...section.children.map((page) => ({
+            url: `${SITE_URL}/changelog/${page.slug}`,
+            lastModified: new Date(),
+            changeFrequency: "monthly" as const,
+            priority: 0.55,
+          })),
         ]
       : pages;
   });
