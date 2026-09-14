@@ -132,6 +132,9 @@ importers:
       '@tabler/icons-react':
         specifier: ^3.46.0
         version: 3.46.0(react@19.3.0)
+      fflate:
+        specifier: ^0.8.3
+        version: 0.8.3
       react:
         specifier: ^19.3.0
         version: 19.3.0
@@ -399,20 +402,20 @@ importers:
   packages/presences:
     dependencies:
       '@nowly/sdk':
-        specifier: workspace:*
-        version: link:../sdk
+        specifier: ^1.3.0
+        version: 1.3.0
     devDependencies:
       '@types/node':
-        specifier: ^26.5.1
+        specifier: ^26.0.1
         version: 26.5.1
       eslint:
-        specifier: ^10.10.0
+        specifier: ^10.6.0
         version: 10.10.0(jiti@2.7.0)(supports-color@5.5.0)
       sharp:
         specifier: ^0.34.5
         version: 0.34.5
       tsx:
-        specifier: ^4.23.13
+        specifier: ^4.22.4
         version: 4.23.13
       typescript:
         specifier: ^6.0.3
@@ -1706,6 +1709,9 @@ packages:
   '@node-rs/xxhash@1.7.8':
     resolution: {integrity: sha512-sXiVUI18qaCei5Y5qXty7xfEKrk4Vx89qKNZkG2sGWZG/iTThO3Xmnp5IjQpXCy941IksVDcl41HhvWRuhDLyw==}
     engines: {node: '>= 12'}
+
+  '@nowly/sdk@1.3.0':
+    resolution: {integrity: sha512-gSqtyd9OdVaWlWY4a/X+XPntXVHTjyA7+8i2mIJe+G83caUjVwN36VNku9fKEfl0W0RK4rGKvatHKg7wK0awBQ==}
 
   '@opencoredev/email-sdk@0.6.5':
     resolution: {integrity: sha512-CuEfbOSjjr4/bsCz7g/X7l7ha1D/QLq0Q4glX4CRsj0uUCnuhdBYRDXv6ffi9myaVx3afw3P8RzAnw+1++jLMg==}
@@ -4265,6 +4271,9 @@ packages:
     peerDependenciesMeta:
       picomatch:
         optional: true
+
+  fflate@0.8.3:
+    resolution: {integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==}
 
   file-entry-cache@11.1.5:
     resolution: {integrity: sha512-+PFTHITI08JIGhnNpGNI8T8inUpgZfk3GNEqfT9R2zZV2iFXg3CvqzSl/uEhs7TSGujYRELEANyDvS8Fj7+S7Q==}
@@ -7109,6 +7118,8 @@ snapshots:
       '@node-rs/xxhash-win32-ia32-msvc': 1.7.8
       '@node-rs/xxhash-win32-x64-msvc': 1.7.8
 
+  '@nowly/sdk@1.3.0': {}
+
   '@opencoredev/email-sdk@0.6.5': {}
 
   '@oxc-project/types@0.149.0': {}
@@ -9697,6 +9708,8 @@ snapshots:
   fdir@6.5.0(picomatch@4.0.4):
     optionalDependencies:
       picomatch: 4.0.4
+
+  fflate@0.8.3: {}
 
   file-entry-cache@11.1.5:
     dependencies:
