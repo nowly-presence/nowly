@@ -1,19 +1,22 @@
 ---
 title: 1.4.0
 date: 2026-09-14
-description: Rediseño del panel lateral con navegación inferior, ficha de gestión de presencias, lista o cuadrícula desde la cabecera, ajustes agrupados y una página de changelog dedicada tras actualizar.
+description: Rediseño del panel lateral con navegación inferior, biblioteca integrada, ficha de gestión de presencias, lista o cuadrícula desde la cabecera, ajustes agrupados y una página de changelog dedicada tras actualizar.
 ---
 
-`1.4.0` es una versión de navegación y layout de la extensión. El panel se reconstruye alrededor de un shell inicio / ajustes, cada presencia instalada abre una ficha de gestión dedicada, inicio alterna lista / cuadrícula desde la cabecera y una actualización de la tienda abre una página de changelog dedicada en el sitio.
+`1.4.0` es una versión de navegación y layout de la extensión. El panel se reconstruye alrededor de un shell inicio / biblioteca / ajustes, cada presencia instalada abre una ficha de gestión dedicada, inicio alterna lista / cuadrícula desde la cabecera y una actualización de la tienda abre una página de changelog dedicada en el sitio.
 
 <ReleaseTable
   headers={["Área", "Qué cambia", "Por qué importa"]}
   rows={[
-    ["Shell del panel", "La barra de acciones y la navegación lateral se sustituyen por una navegación inferior, una cabecera rediseñada y una barra de estado de conexión que se oculta sola cuando Nowly Host está bien. El menú overflow de la cabecera es un botón con fondo, distinto del enlace ghost Biblioteca.", "El panel se comporta como una mini app: cambias de vista sin perder la actividad actual, y los problemas de conexión solo se ven cuando importan."],
+    ["Shell del panel", "La barra de acciones y la navegación lateral se sustituyen por una navegación inferior, una cabecera rediseñada y una barra de estado de conexión que se oculta sola cuando Nowly Host está bien.", "El panel se comporta como una mini app: cambias de vista sin perder la actividad actual, y los problemas de conexión solo se ven cuando importan."],
+    ["Biblioteca integrada", "Una pestaña Biblioteca en la navegación inferior lista el catálogo público desde la API (búsqueda, categorías que saltan de línea, ficha compacta). Instalar y actualizar se hace en la extensión tras verificar la firma, también desde las franjas de actualización de Inicio. Ya no se abre nowly.me para instalar. La cabecera y el estado vacío ya no tienen un botón Biblioteca. Las fichas ya instaladas conservan un enlace Ver en el sitio.", "Añadir o actualizar una presencia ya no obliga a salir del panel."],
+    ["Versiones", "La versión se muestra como insignia: junto al nombre en las fichas (Inicio y Biblioteca), junto a la categoría en la lista de la biblioteca, junto al estado Activada o Desactivada en la lista de Inicio.", "La versión se lee de un vistazo y ya no se mezcla con el texto de estado o de categoría."],
+    ["Botones primarios", "Instalar y el resto de botones primarios usan el fondo de acento con texto oscuro, legible sobre el cian del tema por defecto.", "El contraste se mantiene en todos los temas, también en los de acento claro."],
     ["Ajustes", "Los ajustes se dividen en grupos plegables General, Presencias y Avanzado. Se eliminó de la UI el interruptor legado que aislaba la presencia activa.", "Las opciones relacionadas van juntas, Avanzado no estorba y la lista de presencias ya no tiene dos layouts en conflicto."],
     ["Diálogos", "El snooze y la planificación se abren en un Dialog en lugar de un Sheet.", "Los overlays quedan centrados, comparten un mismo patrón y encajan mejor en el panel nuevo que las hojas deslizantes."],
     ["Inicio", "La lista de presencias y la tarjeta de actividad se rehicieron para el nuevo shell. En lista, activar, planificar y ajustes siguen en la fila. En cuadrícula, las tarjetas son teselas compactas (icono, nombre, estado) sin controles inline: toda la tarjeta abre la ficha. El snooze sigue en la tarjeta de actividad.", "Revisar las presencias instaladas pide menos cromo. La lista sigue siendo accionable; la cuadrícula sirve para recorrer."],
-    ["Visualización", "Inicio alterna entre lista por categoría y cuadrícula de tarjetas con un selector compacto en la cabecera, junto a Biblioteca. Se eliminó el modo alfabético.", "Cambias el layout desde la barra superior, sin pasar por ajustes ni pegar el control en la primera categoría."],
+    ["Visualización", "Inicio alterna entre lista por categoría y cuadrícula de tarjetas con un selector compacto en la cabecera. Se eliminó el modo alfabético.", "Cambias el layout desde la barra superior, sin pasar por ajustes ni pegar el control en la primera categoría."],
     ["Ficha de presencia", "Abrir una presencia (nombre o ajustes en lista, o tarjeta en cuadrícula) sustituye la lista por un panel completo: descripción, interruptor, franja de actualización, funciones con marcas tintadas al color de la presencia, URL compatibles, créditos, un bloque Ajustes con título (campos, planificación, ver en el sitio) y una desinstalación aparte con confirmación.", "Gestionar una presencia replica la página del sitio, en lugar de un overlay estrecho de campos sin título."],
     ["Onboarding", "Se reconstruyó el layout del primer inicio y se actualizaron los textos en inglés, francés y español.", "La configuración sigue el mismo lenguaje visual que el resto del panel en lugar de parecer una pantalla suelta."],
     ["Tipografía", "El panel usa ahora Instrument Sans.", "La UI de la extensión se acerca al sitio web en lugar de la pila de sistema anterior."],
@@ -23,24 +26,34 @@ description: Rediseño del panel lateral con navegación inferior, ficha de gest
 
 ## Panel lateral
 
-El panel ya no es una sola página con barra de acciones. **Inicio** y **Ajustes** son vistas distintas, más una pestaña **Logs** en modo desarrollador. La vista actual se conserva tras un reinicio del service worker.
+El panel ya no es una sola página con barra de acciones. **Inicio**, **Biblioteca** y **Ajustes** son vistas distintas, más una pestaña **Logs** en modo desarrollador. La vista actual se conserva tras un reinicio del service worker.
 
 La barra de estado confirma Nowly Host cuando el puente nativo está sano y luego desaparece. Permanece visible si el host falta o está desconectado.
 
-La cabecera mantiene Biblioteca como acción de texto. El menú overflow usa un botón con fondo para no confundirse con el mismo enlace ghost.
+El menú overflow de la cabecera usa un botón con fondo.
+
+## Biblioteca
+
+La pestaña **Biblioteca** está en la navegación inferior, junto a Inicio y Ajustes. El catálogo viene de `GET /presences`. La instalación descarga `GET /presences/:slug` en el service worker, verifica la firma y registra el userScript. La UI no manipula el bundle.
+
+La búsqueda y los filtros de categoría se quedan en el panel. Las categorías saltan de línea en lugar de un scroll horizontal. El campo de búsqueda mantiene el fondo de tarjeta al enfocar.
+
+Una fila abre una ficha compacta (descripción, URL, instalar). No hay selector de versión en la extensión: eso sigue en el sitio.
+
+Las franjas de actualización de Inicio usan el mismo flujo de instalación. nowly.me puede seguir instalando a través del content script.
 
 ## Lista y cuadrícula
 
 Las presencias siguen agrupadas por categoría. El selector lista / cuadrícula vive en la cabecera y solo aparece en Inicio mientras la lista está visible (no en una ficha, Ajustes o Logs).
 
-- **Lista:** el nombre abre la ficha. Activar, planificar y ajustes siguen en la fila.
+- **Lista:** el nombre abre la ficha. Activar, planificar y ajustes siguen en la fila. Una insignia de versión queda junto al estado Activada o Desactivada.
 - **Cuadrícula:** icono, nombre y estado, alineados a la izquierda. Toda la tarjeta es clicable. Activar y planificar están en la ficha.
 
 ## Ficha de gestión
 
 Atrás (o Inicio) vuelve a la lista. La tarjeta del reproductor se oculta mientras una presencia está abierta.
 
-La página se divide en bloques con título: funciones y URL, créditos, luego Ajustes. Desinstalar queda debajo, aislado, con confirmación.
+La página se divide en bloques con título: funciones y URL, créditos, luego Ajustes. Una insignia de versión queda junto al nombre. Desinstalar queda debajo, aislado, con confirmación.
 
 ## Ajustes y diálogos
 
