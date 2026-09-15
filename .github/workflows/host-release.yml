@@ -51,6 +51,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - uses: actions/setup-go@v5
         with:
@@ -115,19 +117,6 @@ jobs:
           Copy-Item scripts/uninstall-linux.sh dist/linux/scripts/uninstall-linux.sh
           tar -czf dist/nowly-linux.tar.gz -C dist/linux .
 
-      - name: Publish to CDN
-        env:
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET || 'nowly' }}
-        run: >
-          pnpm admin host:publish
-          --release-version ${{ needs.version.outputs.version }}
-          --installer "${{ github.workspace }}/apps/native/dist/NowlySetup.exe"
-          --portable "${{ github.workspace }}/apps/native/dist/nowly-windows.zip"
-          --linux "${{ github.workspace }}/apps/native/dist/nowly-linux.tar.gz"
-
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -142,6 +131,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - uses: actions/setup-go@v5
         with:
@@ -199,21 +190,6 @@ jobs:
         run: |
           bash scripts/macos-release.sh "${{ needs.version.outputs.version }}"
 
-      - name: Publish DMG to CDN
-        env:
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET || 'nowly' }}
-        run: |
-          if [ -n "${R2_ACCESS_KEY_ID:-}" ]; then
-            pnpm admin host:publish \
-              --release-version ${{ needs.version.outputs.version }} \
-              --macos-dmg "${{ github.workspace }}/apps/native/releases/${{ needs.version.outputs.version }}/NowlyHost-macos.dmg"
-          else
-            echo "R2 credentials not configured — skipping CDN publish"
-          fi
-
       - name: Upload DMG artifact
         uses: actions/upload-artifact@v4
         with:
@@ -222,16 +198,56 @@ jobs:
 
   release:
     needs: [version, windows, macos]
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4
         with:
-          name: nowly-host-windows
+          submodules: recursive
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - uses: actions/download-artifact@v4
         with:
-          name: nowly-host-macos
+          path: artifacts
+          merge-multiple: true
+
+      - name: Resolve artifact paths
+        id: artifacts
+        run: |
+          set -euo pipefail
+          find artifacts -type f | sort
+          installer=$(find artifacts -name 'NowlySetup.exe' | head -n 1)
+          portable=$(find artifacts -name 'nowly-windows.zip' | head -n 1)
+          linux=$(find artifacts -name 'nowly-linux.tar.gz' | head -n 1)
+          dmg=$(find artifacts -name 'NowlyHost-macos.dmg' | head -n 1)
+          test -n "$installer" && test -n "$portable" && test -n "$linux" && test -n "$dmg"
+          echo "installer=$installer" >> "$GITHUB_OUTPUT"
+          echo "portable=$portable" >> "$GITHUB_OUTPUT"
+          echo "linux=$linux" >> "$GITHUB_OUTPUT"
+          echo "dmg=$dmg" >> "$GITHUB_OUTPUT"
+
+      - name: Publish to CDN
+        env:
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET || 'nowly' }}
+        run: >
+          pnpm --filter @nowly/internal-cli host:publish --
+          --release-version ${{ needs.version.outputs.version }}
+          --installer "${{ steps.artifacts.outputs.installer }}"
+          --portable "${{ steps.artifacts.outputs.portable }}"
+          --linux "${{ steps.artifacts.outputs.linux }}"
+          --macos-dmg "${{ steps.artifacts.outputs.dmg }}"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -239,9 +255,9 @@ jobs:
           tag_name: native-v${{ needs.version.outputs.version }}
           name: Nowly Host v${{ needs.version.outputs.version }}
           files: |
-            NowlySetup.exe
-            nowly-windows.zip
-            nowly-linux.tar.gz
-            NowlyHost-macos.dmg
+            ${{ steps.artifacts.outputs.installer }}
+            ${{ steps.artifacts.outputs.portable }}
+            ${{ steps.artifacts.outputs.linux }}
+            ${{ steps.artifacts.outputs.dmg }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
