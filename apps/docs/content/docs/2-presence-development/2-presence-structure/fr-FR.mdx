@@ -1,0 +1,70 @@
+---
+title: Structure d'une présence
+description: Comprenez la structure de dossiers requise pour une présence Nowly.
+---
+
+## Structure des dossiers
+
+Une présence se trouve sous `src`, regroupée par la première lettre de son nom&nbsp;:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+`-- assets/
+    |-- logo.png
+    |-- icon.png
+    `-- thumbnail.jpg
+```
+
+## metadata.json
+
+`metadata.json` décrit la plateforme, les URL prises en charge, l'auteur, la catégorie, les descriptions localisées et les visuels de la bibliothèque.
+
+## presence.ts
+
+`presence.ts` contient la logique d'exécution. Elle détecte l'état de la page et appelle l'API Presence.
+
+## utils/
+
+Pour les présences complexes, répartissez votre logique dans des fichiers dédiés sous un dossier `utils/`. La présence YouTube, par exemple, organise les helpers DOM, l'analyse des chaînes et la résolution des Shorts dans des modules séparés&nbsp;:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+|-- assets/
+|   |-- logo.png
+|   |-- icon.png
+|   `-- thumbnail.jpg
+`-- utils/
+    |-- categories.ts
+    |-- dom.ts
+    |-- channel.ts
+    |-- text.ts
+    |-- bridge.ts
+    |-- shorts-dom.ts
+    |-- shorts-resolve.ts
+    `-- youtube-data.ts
+```
+
+Le bundler résout les importations locales depuis `presence.ts`, vous pouvez donc importer les fichiers utilitaires normalement&nbsp;:
+
+```ts filename="presence.ts"
+import { findVideo } from "./utils/dom"
+import { getChannelInfo } from "./utils/channel"
+```
+
+## assets
+
+Les fichiers visuels servent à la bibliothèque, au paquet de présence installé, aux données d'activité Discord et aux images Open Graph.
+
+Fichiers requis&nbsp;:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG", description: "Marque large pour les en-têtes de la bibliothèque, les pages de présence et les images OG générées.", required: true },
+    { name: "icon.png", type: "PNG", description: "Icône carrée pour les surfaces d'interface compactes et les clés d'image d'activité Discord.", required: true },
+    { name: "thumbnail.jpg", type: "JPG", description: "Image d'aperçu utilisée lorsque la présence a besoin d'un visuel plus grand.", required: true }
+  ]}
+/>

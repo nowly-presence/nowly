@@ -1,0 +1,60 @@
+---
+title: Troubleshooting
+description: Fix a missing Nowly Host, closed Discord Desktop, missing presences, missing activity, unsupported URLs, and permission issues.
+---
+
+## Start With the Diagnostic
+
+Open the extension side panel and read each row on its own:
+
+- Extension installed
+- User scripts active
+- Nowly Host detected
+- Discord connected
+- Presence installed
+- Activity detected
+
+Do not rely on a single global status. The missing row is the next thing to fix.
+
+## Nowly Host Is Not Detected
+
+Message shown: **Nowly Host is not detected.**
+
+Install Nowly Host from the [Nowly Host page](/host), then click **Check connection** in the extension. If you just installed it, close and reopen the extension side panel.
+
+## Discord Desktop Is Closed
+
+Message shown: **Nowly Host is installed but Discord Desktop is not open.**
+
+Open Discord Desktop, wait a few seconds, then click **Check connection**. Discord in the browser cannot receive local Rich Presence updates.
+
+## No Presence Is Installed
+
+Install a presence from the library. For the fastest test, install the [YouTube presence](/library/youtube), then open YouTube.
+
+## No Activity Is Detected
+
+Make sure:
+
+- the matching presence is installed and enabled
+- the current URL is supported by that presence
+- user scripts are active
+- the page was reloaded after you installed the presence
+
+## URL Is Not Supported
+
+Open the presence detail page and compare your current URL with the **Supported URLs** list. If the site changed its address or layout, report the presence from the support page.
+
+## Permissions Are Missing
+
+Open your browser extension settings and check:
+
+- Nowly is enabled
+- user scripts are allowed
+- site access is allowed for the current site
+
+After you change permissions, reload the website tab and reopen the extension side panel.
+
+## Copy a Support Diagnostic
+
+The extension diagnostic includes a **Copy support** button. It copies the state of Nowly Host, Discord, presences, and activity without exposing technical logs.

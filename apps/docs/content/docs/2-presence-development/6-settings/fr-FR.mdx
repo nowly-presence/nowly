@@ -1,0 +1,58 @@
+---
+title: Paramètres
+description: Ajoutez des paramètres typés par présence avec des contrôles booléens, de saisie, de sélection et de curseur.
+---
+
+## Que sont les paramètres
+
+Les paramètres permettent aux utilisateurs de personnaliser le comportement d'une présence sans modifier le code.
+
+## Types de paramètres pris en charge
+
+Nowly prend en charge les paramètres booléens, de saisie, de sélection et de curseur.
+
+<TypeTable
+  properties={[
+    { name: "boolean", type: "boolean", description: "Interrupteur pour les options activées/désactivées." },
+    { name: "input", type: "string", description: "Valeur textuelle libre." },
+    { name: "select", type: "string", description: "Une valeur sélectionnée parmi des options prédéfinies." },
+    { name: "slider", type: "number", description: "Valeur numérique avec minimum, maximum et pas facultatifs." }
+  ]}
+/>
+
+## Définir des paramètres
+
+Utilisez [`Presence.Settings`](/presence-development/presence-api) pour définir des paramètres typés&nbsp;:
+
+```ts filename="presence.ts"
+const settings = Presence.Settings({
+  showButtons: {
+    type: "boolean",
+    default: true,
+    label: {
+      "en-US": "Afficher les boutons"
+    }
+  }
+})
+```
+
+## Lire les paramètres
+
+Utilisez `getSetting` au moment de l'exécution. Les valeurs viennent des réglages enregistrés de l'utilisateur, avec repli sur les valeurs par défaut de `Presence.Settings`. Les changements depuis le panneau latéral arrivent via `SETTINGS_UPDATED` et mettent à jour la même correspondance.
+
+Vous pouvez aussi lire `ctx.settings` dans `UpdateData`&nbsp;:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async (ctx) => {
+  const showButtons = await presence.getSetting<boolean>("showButtons")
+  // même valeur : ctx.settings.showButtons
+})
+```
+
+## Étiquettes localisées
+
+Les étiquettes et descriptions des paramètres utilisent les mêmes clés de langue que les métadonnées.
+
+## Valeurs par défaut
+
+Choisissez des valeurs par défaut sûres. Une présence devrait fonctionner immédiatement après l'installation, sans configuration.

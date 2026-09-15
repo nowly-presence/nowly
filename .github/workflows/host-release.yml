@@ -89,6 +89,13 @@ jobs:
           $env:GOARCH = "amd64"
           go build -ldflags $ldflags -o dist/nowly-host-linux ./cmd/host
 
+      - name: Fetch brand icon from CDN
+        working-directory: apps/native
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path assets | Out-Null
+          Invoke-WebRequest -Uri "https://cdn.nowly.me/brand/favicons/favicon-192.png" -OutFile "assets/icon.png"
+
       - name: Build Windows installer
         working-directory: apps/native
         shell: pwsh

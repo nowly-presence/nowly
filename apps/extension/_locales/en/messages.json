@@ -9,7 +9,7 @@
     "message": "Playing"
   },
   "paused": {
-    "message": "Playback Paused"
+    "message": "Paused"
   },
   "commandOpenPanel": {
     "message": "Open Nowly"

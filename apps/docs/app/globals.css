@@ -1,0 +1,211 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Background colors */
+  --background: #07080C;
+  --surface: #0c0e14;
+  --card: #11141a;
+  --card-2: #161b22;
+  --card-hover: #1b222b;
+
+  /* Accent colors */
+  --accent: #22d3ee;
+  --accent-soft: rgba(34, 211, 238, 0.14);
+  --accent-muted: rgba(34, 211, 238, 0.32);
+
+  --discord: #5865f2;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --destructive: #ef4444;
+
+  /* Text colors */
+  --foreground: #E4F2FF;
+  --muted-foreground: #a1adb8;
+  --dim-foreground: #64707d;
+
+  /* Border colors */
+  --border: rgba(228, 242, 255, 0.08);
+  --border-light: rgba(228, 242, 255, 0.14);
+  --border-accent: rgba(34, 211, 238, 0.24);
+
+  /* Component tokens */
+  --primary: #E4F2FF;
+  --primary-foreground: #07080C;
+
+  --secondary: #161b22;
+  --secondary-foreground: #E4F2FF;
+
+  --muted: #10161a;
+
+  --popover: #11141a;
+  --popover-foreground: #E4F2FF;
+
+  --input: rgba(228, 242, 255, 0.1);
+
+  --ring: #22d3ee;
+
+  --radius: 0.875rem;
+}
+
+@theme inline {
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-heading: var(--font-heading), sans-serif;
+  --font-mono: var(--font-mono), monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--foreground);
+
+  --color-border: var(--border);
+  --color-border-light: var(--border-light);
+
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-surface: var(--surface);
+  --color-card-2: var(--card-2);
+  --color-card-hover: var(--card-hover);
+
+  --color-discord: var(--discord);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
+  --color-dim-foreground: var(--dim-foreground);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  code {
+    font-family: var(--font-mono);
+  }
+}
+
+/* Animations */
+
+@keyframes float {
+  0%,
+  100% {
+    transform: rotateY(-5deg) rotateX(2deg) translateY(0);
+  }
+
+  50% {
+    transform: rotateY(-5deg) rotateX(2deg) translateY(-10px);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes progress {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: var(--progress-width, 65%);
+  }
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    transform: translateX(200%);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+.animate-progress {
+  animation: progress 2s ease-out forwards;
+}
+
+/* Sonner */
+
+.cn-toast {
+  backdrop-filter: blur(16px);
+}
+
+.docs-sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--foreground) 18%, transparent) transparent;
+}
+
+.docs-sidebar-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.docs-sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.docs-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--foreground) 18%, transparent);
+  border-radius: 999px;
+}

@@ -1,0 +1,38 @@
+---
+title: Localisation
+description: Localisez les métadonnées, fonctionnalités, paramètres et chaînes des présences.
+---
+
+## Langues prises en charge
+
+<LanguageTable
+  languages={[
+    { language: "Anglais", code: "en-US", default: true },
+    { language: "Français", code: "fr-FR" },
+    { language: "Espagnol", code: "es-ES" },
+  ]}
+/>
+
+## Localisation des métadonnées
+
+```json filename="metadata.json"
+{
+  "description": {
+    "en-US": "Watch and share videos.",
+    "fr-FR": "Regardez et partagez des vidéos.",
+    "es-ES": "Mira y comparte videos."
+  }
+}
+```
+
+## Localisation des paramètres
+
+Les étiquettes et descriptions des paramètres utilisent le même format de langue.
+
+## Chaînes au runtime
+
+Les textes d'activité Discord utilisent des [packs de langues de présence](/advanced-topics/presence-language-packs) facultatifs, distincts de la localisation des métadonnées et des paramètres.
+
+## Gardez le texte court
+
+Les champs d'activité Discord sont compacts. Gardez les chaînes localisées concises et évitez les longs paragraphes dans l'activité d'exécution.

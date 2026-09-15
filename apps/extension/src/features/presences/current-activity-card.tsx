@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 
 type Props = {
   activity: CurrentActivity | null;
+  idleHint?: string;
   isLoading: boolean;
   isPaused?: boolean;
   isSnoozed: boolean;
@@ -77,6 +78,7 @@ const useCountdown = (targetTimestamp: number | undefined): string | null => {
 
 export const CurrentActivityCard: FC<Props> = ({
   activity,
+  idleHint,
   isLoading,
   isPaused = false,
   isSnoozed,
@@ -119,7 +121,10 @@ export const CurrentActivityCard: FC<Props> = ({
       <section className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="flex items-center gap-3 p-4">
           <VinylAnimation size={56} />
-          <p className="min-w-0 flex-1 truncate text-sm font-semibold text-foreground">{title}</p>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-semibold text-foreground">{title}</p>
+            {idleHint ? <p className="mt-1 text-xs leading-4 text-muted-foreground">{idleHint}</p> : null}
+          </div>
         </div>
       </section>
     );

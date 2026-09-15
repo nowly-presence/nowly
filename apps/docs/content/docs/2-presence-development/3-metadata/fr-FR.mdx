@@ -1,0 +1,104 @@
+---
+title: Métadonnées
+description: Documentez chaque champ obligatoire et facultatif du fichier metadata.json d'une présence Nowly.
+---
+
+## Champs obligatoires
+
+Chaque présence nécessite&nbsp;:
+
+<TypeTable
+  properties={[
+    { name: "name", type: "string", description: "Nom affiché du service ou de la plateforme.", required: true },
+    { name: "author", type: "object", description: "Auteur principal affiché en premier dans la bibliothèque et les images OG.", required: true },
+    { name: "description", type: "object", description: "Descriptions courtes localisées par langue.", required: true },
+    { name: "url", type: "string[]", description: "Domaines ou motifs d'URL pris en charge pour la correspondance des pages.", required: true },
+    { name: "color", type: "string", description: "Couleur de la marque au format hex, utilisée par l'interface et les embeds.", required: true },
+    { name: "category", type: "string", description: "Un parmi streaming, music, video, social, gaming, tools, ai, learning, creator ou other.", required: true }
+  ]}
+/>
+
+## Exemple
+
+```json
+{
+  "name": "YouTube",
+  "author": {
+    "name": "Développeur Nowly",
+    "github": "exemple"
+  },
+  "url": ["youtube.com", "www.youtube.com"],
+  "color": "#FF0033",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch and share videos on YouTube."
+  }
+}
+```
+
+## Auteur et contributeurs
+
+- `author` — Mainteneur principal, affiché en premier dans la bibliothèque et les images OG.
+- `contributors` — Personnes supplémentaires ayant contribué à la présence.
+
+<CalloutInfo>
+Les noms d'utilisateur GitHub (la clé `github`) servent à résoudre les avatars.
+</CalloutInfo>
+
+## Descriptions et fonctionnalités
+
+- `description` — Texte court pour la bibliothèque, organisé par langue.
+- `longDescription` — Description détaillée pour les pages de détail.
+- `features` — Liste localisée des comportements pris en charge (ex. boutons, touches multimédias).
+
+## Correspondance d'URL
+
+- `url` — Domaines ou motifs d'URL pris en charge pour la correspondance des pages.
+- `regExp` — Correspondance basée sur des expressions régulières pour les motifs d'URL complexes.
+
+<CalloutWarning>
+Utilisez `regExp` uniquement lorsque la correspondance simple d'`url` ne suffit pas. Préférez des listes de domaines explicites.
+</CalloutWarning>
+
+## Contexte d'exécution
+
+Deux champs facultatifs contrôlent comment et quand le script de votre présence s'exécute dans le navigateur.
+
+<TypeTable
+  properties={[
+    { name: "world", type: "\"main\" | \"isolated\"", description: "Monde d'exécution. Par défaut : isolated.", required: false },
+    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "Moment d'injection du script. Par défaut : document_idle.", required: false }
+  ]}
+/>
+
+Par défaut, une présence s'exécute dans le monde **isolated** : elle partage le DOM de la page mais pas son contexte JavaScript. C'est le réglage sûr par défaut et il convient à presque toutes les présences.
+
+Définissez `"world": "main"` lorsque votre présence a besoin du **contexte de la page**, en particulier&nbsp;:
+
+- lire des variables globales de la page (ex. un objet lecteur exposé par le site sur `window`)&nbsp;;
+- effectuer un **`fetch` authentifié de même origine** qui doit transmettre les cookies de session de l'utilisateur (ex. l'API de métadonnées interne d'un site).
+
+```json
+{
+  "name": "Netflix",
+  "url": ["netflix.com", "www.netflix.com"],
+  "world": "main",
+  "color": "#E50914",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch movies and series on Netflix."
+  }
+}
+```
+
+<CalloutWarning>
+Un `fetch` depuis le monde isolé n'est pas considéré comme une requête first-party&nbsp;: les appels authentifiés échouent silencieusement. Si votre présence dépend de l'API connectée du site, vous devez définir `"world": "main"`.
+</CalloutWarning>
+
+<CalloutInfo>
+La déclaration se trouve entièrement dans `metadata.json` — l'extension la lit au moment de l'enregistrement. Aucune modification de l'extension n'est nécessaire pour ajouter une nouvelle présence en contexte page.
+</CalloutInfo>
+
+## Catégorie
+
+Les catégories autorisées sont `streaming`, `music`, `video`, `social`, `gaming`, `tools`, `ai`, `learning`, `creator` et `other`.

@@ -1,0 +1,51 @@
+---
+title: Assets
+description: Préparez le logo, l'icône et la vignette pour les présences Nowly.
+---
+
+## Fichiers visuels requis
+
+Chaque présence doit inclure&nbsp;:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG", description: "Marque de la plateforme pour les placements larges, les en-têtes et les images Open Graph.", required: true },
+    { name: "icon.png", type: "PNG", description: "Icône carrée compacte utilisée dans les petites surfaces d'interface et les images d'activité Discord.", required: true },
+    { name: "thumbnail.jpg", type: "JPG", description: "Visuel de la bibliothèque et de la page de détail représentant clairement la plateforme.", required: true }
+  ]}
+/>
+
+## Logo
+
+Utilisez `logo.png` pour la marque de la plateforme lorsqu'une image plus large est appropriée.
+
+## Icône
+
+Utilisez `icon.png` pour les affichages carrés compacts, les fonds colorés et les images d'activité Discord.
+
+## Vignette
+
+Utilisez `thumbnail.jpg` pour les visuels de la bibliothèque et des pages de détail. Elle doit représenter clairement la plateforme.
+
+## Constantes d'assets au runtime
+
+`Assets` est fourni par le runtime (voir [Presence API](/presence-development/presence-api)). Il expose les trois clés d'assets par défaut&nbsp;:
+
+```ts filename="presence.ts"
+Assets.Logo      // → "logo.png"
+Assets.Icon      // → "icon.png"
+Assets.Thumbnail // → "thumbnail.jpg"
+```
+
+Utilisez-les dans les données d'activité&nbsp;:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  largeImageKey: Assets.Logo,
+  largeImageText: "YouTube",
+})
+```
+
+## Directives de qualité
+
+Utilisez un PNG transparent pour `icon.png` — l'icône est affichée sur un fond coloré dans la bibliothèque Nowly, un fond opaque créera donc un conflit. Un `logo.png` transparent est préférable, mais moins critique. Gardez les vignettes lisibles à petite taille et évitez les images génériques.

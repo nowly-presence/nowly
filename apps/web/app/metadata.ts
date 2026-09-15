@@ -1,3 +1,4 @@
+import { BRAND_METADATA_ICONS } from "@/lib/brand";
 import { DEFAULT_OG_IMAGE, DEFAULT_SEO, SITE_NAME, SITE_URL } from "@/lib/seo";
 import type { Metadata, Viewport } from "next";
 
@@ -25,13 +26,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   manifest: "/manifest.json",
-  icons: {
-    icon: [
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: "/apple-icon.png",
-  },
+  icons: BRAND_METADATA_ICONS,
   openGraph: {
     type: "website",
     siteName: SITE_NAME,

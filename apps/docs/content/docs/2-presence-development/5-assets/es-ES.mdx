@@ -1,0 +1,51 @@
+---
+title: Recursos
+description: Prepara el logo, el icono y la miniatura para las presencias de Nowly.
+---
+
+## Recursos requeridos
+
+Cada presencia debe incluir:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG", description: "Marca de la plataforma para colocaciones amplias, encabezados e imágenes Open Graph.", required: true },
+    { name: "icon.png", type: "PNG", description: "Icono cuadrado compacto usado en superficies de interfaz pequeñas e imágenes de actividad de Discord.", required: true },
+    { name: "thumbnail.jpg", type: "JPG", description: "Visual de la biblioteca y página de detalle que represente claramente la plataforma.", required: true }
+  ]}
+/>
+
+## Logo
+
+Usa `logo.png` para la marca de la plataforma cuando convenga una imagen más amplia.
+
+## Icono
+
+Usa `icon.png` para pantallas cuadradas compactas, fondos de color e imágenes de actividad de Discord.
+
+## Miniatura
+
+Usa `thumbnail.jpg` para los visuales de la biblioteca y las páginas de detalle. Debe representar la plataforma con claridad.
+
+## Constantes de recursos en runtime
+
+`Assets` lo proporciona el runtime (consulta [Presence API](/presence-development/presence-api)). Expone las tres claves de recursos predeterminadas:
+
+```ts filename="presence.ts"
+Assets.Logo      // → "logo.png"
+Assets.Icon      // → "icon.png"
+Assets.Thumbnail // → "thumbnail.jpg"
+```
+
+Úsalas en los datos de actividad:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  largeImageKey: Assets.Logo,
+  largeImageText: "YouTube",
+})
+```
+
+## Directrices de calidad
+
+Usa un PNG transparente para `icon.png` — el icono se muestra sobre un fondo de color en la biblioteca de Nowly, así que un fondo relleno chocará. Se prefiere un `logo.png` transparente, aunque es menos crítico. Mantén las miniaturas legibles en tamaños pequeños y evita imágenes genéricas.

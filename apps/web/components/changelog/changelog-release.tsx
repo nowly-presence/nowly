@@ -1,7 +1,7 @@
-import { HeadingAnchor } from "@/components/docs/heading-anchor";
-import { ReleaseTable } from "@/components/docs/release-table";
+import { ReleaseTable } from "@/components/changelog/release-table";
 import { buttonVariants } from "@/components/ui/button";
-import type { DocContent } from "@/lib/docs/types";
+import type { ChangelogDoc } from "@/lib/changelog";
+import { docsHref } from "@/lib/seo";
 import { IconArrowRight, IconSparkles } from "@tabler/icons-react";
 import { getTranslations } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -9,23 +9,41 @@ import Link from "next/link";
 import type { ComponentType, FC, ReactElement, ReactNode } from "react";
 
 type ChangelogReleaseProps = {
-  version: string;
-  doc: DocContent | null;
+  version: string
+  doc: ChangelogDoc | null
 };
 
 type MDXComponents = Record<string, ComponentType<Record<string, unknown>>>;
 
+const headingId = (children: ReactNode): string =>
+  String(children)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+const resolveHref = (href?: string): string | undefined => {
+  if (!href || href.startsWith("http") || href.startsWith("#") || href.startsWith("/changelog")) {
+    return href;
+  }
+
+  if (href.startsWith("/library") || href.startsWith("/privacy") || href.startsWith("/consent")) {
+    return href;
+  }
+
+  return docsHref(href);
+};
+
 const changelogMdxComponents: MDXComponents = {
-  h2: (({ children, id, ...props }) => (
-    <HeadingAnchor as="h2" id={id} className="text-2xl font-semibold mt-12 mb-4" {...props}>
+  h2: (({ children, ...props }) => (
+    <h2 id={headingId(children)} className="text-2xl font-semibold mt-12 mb-4" {...props}>
       {children}
-    </HeadingAnchor>
-  )) as FC<{ children?: ReactNode; id?: string }>,
-  h3: (({ children, id, ...props }) => (
-    <HeadingAnchor as="h3" id={id} className="text-xl font-semibold mt-8 mb-3" {...props}>
+    </h2>
+  )) as FC<{ children?: ReactNode }>,
+  h3: (({ children, ...props }) => (
+    <h3 id={headingId(children)} className="text-xl font-semibold mt-8 mb-3" {...props}>
       {children}
-    </HeadingAnchor>
-  )) as FC<{ children?: ReactNode; id?: string }>,
+    </h3>
+  )) as FC<{ children?: ReactNode }>,
   p: (({ children }) => (
     <p className="mb-4 leading-relaxed text-foreground/85">{children}</p>
   )) as FC<{ children?: ReactNode }>,
@@ -43,7 +61,7 @@ const changelogMdxComponents: MDXComponents = {
   )) as FC<{ children?: ReactNode }>,
   a: (({ href, children }) => (
     <a
-      href={href}
+      href={resolveHref(href)}
       className="text-accent underline decoration-accent/30 underline-offset-2 transition-colors hover:decoration-accent"
     >
       {children}
@@ -80,7 +98,7 @@ export const ChangelogRelease = async ({
             {t("library-cta")}
             <IconArrowRight className="size-4" />
           </Link>
-          <Link href="/docs/changelog" className={buttonVariants({ variant: "outline", size: "md" })}>
+          <Link href={docsHref("/changelog")} className={buttonVariants({ variant: "outline", size: "md" })}>
             {t("docs-cta")}
           </Link>
         </div>

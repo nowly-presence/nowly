@@ -22,7 +22,7 @@ export const Footer: FC = (): ReactElement => {
   return (
     <footer className="py-12 border-t border-border text-dim-foreground text-sm">
       <div className="mx-auto w-full max-w-300 min-w-0 px-6">
-        <div className="flex flex-col gap-10 sm:flex-row sm:justify-between">
+        <div className="flex flex-col gap-10 sm:flex-row sm:justify-between sm:gap-16">
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-3">
               <AvatarGroup className="-space-x-4">
@@ -49,7 +49,7 @@ export const Footer: FC = (): ReactElement => {
               </div>
             </div>
 
-            <small className="opacity-50 text-xs max-w-56 leading-relaxed">
+            <small className="opacity-50 text-xs leading-relaxed">
               {t("trademark")}{" "}
               <Link
                 href="https://discord.com/"
@@ -78,11 +78,10 @@ export const Footer: FC = (): ReactElement => {
                 <GitHubIcon className="w-4 h-4" />
                 <span className="hidden sm:inline">{t("open-source")}</span>
               </Link>
-
             </div>
           </div>
 
-          <div className="flex flex-col items-end gap-6">
+          <div className="flex flex-col items-start gap-6 sm:items-end">
             <FooterLinks />
             <LocaleSelector />
           </div>

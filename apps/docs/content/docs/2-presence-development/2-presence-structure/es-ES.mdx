@@ -1,0 +1,70 @@
+---
+title: Estructura de una presencia
+description: Comprende la estructura de carpetas requerida para una presencia de Nowly.
+---
+
+## Estructura de carpetas
+
+Una presencia se encuentra en `src`, agrupada por la primera letra de su nombre:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+`-- assets/
+    |-- logo.png
+    |-- icon.png
+    `-- thumbnail.jpg
+```
+
+## metadata.json
+
+`metadata.json` describe la plataforma, URL compatibles, autor, categoría, descripciones localizadas y recursos de la biblioteca.
+
+## presence.ts
+
+`presence.ts` contiene la lógica de ejecución. Detecta el estado de la página y llama a la API de Presence.
+
+## utils/
+
+Para presencias complejas, divide tu lógica en archivos dedicados bajo una carpeta `utils/`. La presencia de YouTube, por ejemplo, organiza helpers DOM, análisis de canales y resolución de Shorts en módulos separados:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+|-- assets/
+|   |-- logo.png
+|   |-- icon.png
+|   `-- thumbnail.jpg
+`-- utils/
+    |-- categories.ts
+    |-- dom.ts
+    |-- channel.ts
+    |-- text.ts
+    |-- bridge.ts
+    |-- shorts-dom.ts
+    |-- shorts-resolve.ts
+    `-- youtube-data.ts
+```
+
+El empaquetador resuelve importaciones locales desde `presence.ts`, por lo que puedes importar archivos de utilidad con normalidad:
+
+```ts filename="presence.ts"
+import { findVideo } from "./utils/dom"
+import { getChannelInfo } from "./utils/channel"
+```
+
+## assets
+
+Los recursos los usan la biblioteca, el paquete de presencia instalado, los datos de actividad de Discord y las imágenes Open Graph.
+
+Archivos requeridos:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG", description: "Marca amplia para encabezados de la biblioteca, páginas de presencia e imágenes OG generadas.", required: true },
+    { name: "icon.png", type: "PNG", description: "Icono cuadrado para superficies de interfaz compactas y claves de imagen de actividad de Discord.", required: true },
+    { name: "thumbnail.jpg", type: "JPG", description: "Imagen de vista previa usada cuando la presencia necesita un visual más grande.", required: true }
+  ]}
+/>

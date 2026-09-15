@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 :root, [data-theme="default"] {
-  --background: #050505;
-  --surface: #0a0a0c;
-  --card: #111113;
-  --card-2: #18181b;
-  --card-hover: #1f1f22;
+  --background: #07080C;
+  --surface: #0c0e14;
+  --card: #11141a;
+  --card-2: #161b22;
+  --card-hover: #1b222b;
   --accent: #22d3ee;
   --discord: #5865f2;
   --success: #22c55e;
   --destructive: #ef4444;
-  --foreground: #ffffff;
+  --foreground: #E4F2FF;
   --muted-foreground: #a1a1aa;
   --dim-foreground: #52525b;
-  --border: rgba(255, 255, 255, 0.08);
-  --border-light: rgba(255, 255, 255, 0.12);
+  --border: rgba(228, 242, 255, 0.08);
+  --border-light: rgba(228, 242, 255, 0.12);
   --radius: 0.75rem;
 }
 

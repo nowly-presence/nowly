@@ -41,6 +41,7 @@ const FALLBACK_SETTINGS: ExtensionSettings = {
   presenceDisplayMode: "category",
   separateActivePresence: false,
   showPlayer: true,
+  scheduleEnabled: false,
 };
 
 const FALLBACK_SUPPORTER_STATUS: SupporterStatus = {
@@ -144,12 +145,24 @@ export const useExtensionState = (): ExtensionState => {
     };
     chrome.runtime.onMessage.addListener(onRuntimeMessage);
 
+    const onVisible = (): void => {
+      if (document.visibilityState !== "visible") return;
+      void sendMessage<NativeStatus>("CONNECT_NATIVE").then((status) => {
+        setNativeStatus(status ?? FALLBACK_NATIVE_STATUS);
+      });
+      refresh();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", onVisible);
+
     return () => {
       window.clearInterval(interval);
       chrome.storage.onChanged.removeListener(onStorageChanged);
       chrome.runtime.onMessage.removeListener(onRuntimeMessage);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", onVisible);
     };
-  }, [refresh]);
+  }, [refresh, refreshUpdates]);
 
   const togglePresence = (slug: string, enabled: boolean): void => {
     void sendMessage("TOGGLE_PRESENCE", { slug, enabled }).then(() => {

@@ -1,20 +1,20 @@
 import { ChangelogRelease } from "@/components/changelog/changelog-release";
-import { getChangelogVersions, getDocContent, parsePublicChangelogVersion } from "@/lib/docs/content";
+import { getChangelogDoc, getChangelogVersions, parsePublicChangelogVersion } from "@/lib/changelog";
 import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { ReactElement } from "react";
 
 type Props = {
   params: Promise<{
-    version: string;
-  }>;
+    version: string
+  }>
 };
 
 export const generateStaticParams = (): Array<{ version: string }> =>
   getChangelogVersions().map((version) => ({
-    version: version.parts.join("."),
+    version: version.publicVersion,
   }));
 
 const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
@@ -43,8 +43,12 @@ const Page = async ({ params }: Props): Promise<ReactElement> => {
     notFound();
   }
 
+  if (parsed.publicVersion !== version) {
+    redirect(`/changelog/${parsed.publicVersion}`);
+  }
+
   const locale = await getLocale();
-  const doc = getDocContent(`changelog/${parsed.docSlug}`, locale);
+  const doc = getChangelogDoc(parsed.docSlug, locale);
 
   return <ChangelogRelease version={parsed.publicVersion} doc={doc} />;
 };

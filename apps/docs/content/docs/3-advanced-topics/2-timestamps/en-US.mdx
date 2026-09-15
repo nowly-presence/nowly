@@ -1,0 +1,34 @@
+---
+title: Timestamps
+description: Display playback progress in Discord Rich Presence with media timestamps.
+---
+
+## Why Timestamps Matter
+
+Timestamps make Discord activity feel live. They show how long the user has been watching or how much time remains.
+
+## Using createMediaTimestamps
+
+`document` is the browser DOM API (available because presences run as content scripts). `Assets` is provided by the runtime (see [Assets](/presence-development/assets)).
+
+```ts filename="presence.ts"
+import { createMediaTimestamps } from "@nowly/sdk"
+
+const video = document.querySelector("video")
+
+if (video) {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    ...createMediaTimestamps(video),
+  })
+}
+```
+
+## Paused Media
+
+When media is paused, `createMediaTimestamps` returns no timestamps. This avoids showing incorrect playback progress.
+
+## Live Streams
+
+Live streams often have no fixed duration. Use a start timestamp only or omit timestamps depending on platform behavior.

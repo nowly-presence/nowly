@@ -1,0 +1,58 @@
+---
+title: Ajustes
+description: Añade ajustes tipados por presencia con controles booleanos, de entrada, selección y deslizantes.
+---
+
+## Qué son los ajustes
+
+Los ajustes permiten a los usuarios personalizar el comportamiento de una presencia sin editar código.
+
+## Tipos de ajuste compatibles
+
+Nowly admite ajustes booleanos, de entrada, selección y deslizantes.
+
+<TypeTable
+  properties={[
+    { name: "boolean", type: "boolean", description: "Interruptor para opciones activadas/desactivadas." },
+    { name: "input", type: "string", description: "Valor de texto libre." },
+    { name: "select", type: "string", description: "Un valor seleccionado de opciones predefinidas." },
+    { name: "slider", type: "number", description: "Valor numérico con mínimo, máximo y paso opcionales." }
+  ]}
+/>
+
+## Definir ajustes
+
+Usa [`Presence.Settings`](/presence-development/presence-api) para definir ajustes tipados:
+
+```ts filename="presence.ts"
+const settings = Presence.Settings({
+  showButtons: {
+    type: "boolean",
+    default: true,
+    label: {
+      "en-US": "Mostrar botones"
+    }
+  }
+})
+```
+
+## Leer ajustes
+
+Usa `getSetting` en tiempo de ejecución. Los valores vienen de los ajustes guardados del usuario, con respaldo a los valores por defecto de `Presence.Settings`. Los cambios desde el panel lateral llegan como `SETTINGS_UPDATED` y actualizan el mismo mapa.
+
+También puedes leer `ctx.settings` en `UpdateData`:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async (ctx) => {
+  const showButtons = await presence.getSetting<boolean>("showButtons")
+  // mismo valor: ctx.settings.showButtons
+})
+```
+
+## Etiquetas localizadas
+
+Las etiquetas y descripciones de los ajustes usan las mismas claves de idioma que los metadatos.
+
+## Valores predeterminados
+
+Elige valores predeterminados seguros. Una presencia debería funcionar justo después de la instalación, sin configuración.

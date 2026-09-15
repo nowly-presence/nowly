@@ -41,6 +41,16 @@ export const SnoozeDialog: FC<Props> = ({ activeSlug, onClose, open, presences }
     onClose();
   };
 
+  const handleSnoozeUntilMidnight = (): void => {
+    if (!activeSlug) return;
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(24, 0, 0, 0);
+    const duration = Math.max(60 * 1000, midnight.getTime() - now.getTime());
+    void sendMessage("SNOOZE_PRESENCE", { slug: activeSlug, duration });
+    onClose();
+  };
+
   const handleClearSnooze = (): void => {
     if (!activeSlug) return;
     void sendMessage("CLEAR_SNOOZE", { slug: activeSlug });
@@ -57,6 +67,9 @@ export const SnoozeDialog: FC<Props> = ({ activeSlug, onClose, open, presences }
         <>
           <Button variant="unstyled" size="none" onClick={handleSnooze} className={dialogPrimaryClassName}>
             {t("snooze")}
+          </Button>
+          <Button variant="unstyled" size="none" onClick={handleSnoozeUntilMidnight} className={dialogSecondaryClassName}>
+            {t("snooze-until-midnight")}
           </Button>
           {isSnoozed ? (
             <Button variant="unstyled" size="none" onClick={handleClearSnooze} className={dialogSecondaryClassName}>

@@ -24,10 +24,10 @@ import type { CSSProperties, ReactElement } from "react"
 const YELLOW = "#FEE961"
 const ACCENT = "#22D3EE"
 const BG_BODY = "#F4F4F5"
-const BG_CARD = "#FFFFFF"
+const BG_CARD = "#E4F2FF"
 const BG_SURFACE = "#FAFAFA"
 const BORDER = "rgba(0, 0, 0, 0.08)"
-const TEXT_PRIMARY = "#18181B"
+const TEXT_PRIMARY = "#07080C"
 const TEXT_SECONDARY = "#52525B"
 const TEXT_MUTED = "#71717A"
 const TEXT_FOOTER = "#A1A1AA"
@@ -96,7 +96,7 @@ export const SupporterPassEmail = ({
 
           <Section style={headerSectionStyle}>
             <Img
-              src="https://cdn.nowly.me/assets/app_title_dark.png"
+              src="https://cdn.nowly.me/brand/lockup/dark.png"
               width="160"
               height="45"
               alt="Nowly"

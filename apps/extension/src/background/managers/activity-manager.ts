@@ -98,6 +98,7 @@ const shouldHoldDiscord = async (presence: StoredPresence): Promise<boolean> => 
   const settings = await getSettings();
   if (settings.presencePaused) return true;
   if (presence.snoozeUntil && presence.snoozeUntil > Date.now()) return true;
+  if (settings.scheduleEnabled === false) return false;
 
   const schedule = presence.schedule ?? settings.globalSchedule;
 

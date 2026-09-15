@@ -1,0 +1,36 @@
+---
+title: Validar y compilar
+description: Valida los metadatos de la presencia y compila los paquetes de presencia antes de publicar.
+---
+
+## Validar metadatos
+
+Ejecuta:
+
+```bash
+nowly validate
+```
+
+La validación comprueba `metadata.json` contra el esquema de Nowly. Corrige los errores de validación antes de compilar.
+
+## Compilar todas las presencias
+
+Ejecuta:
+
+```bash
+nowly build
+```
+
+## Compilar una presencia
+
+Ejecuta:
+
+```bash
+nowly build youtube
+```
+
+Usa el slug o el nombre derivado de la carpeta para la presencia objetivo.
+
+## Cargar en el navegador
+
+Tras una compilación correcta, carga la presencia con `nowly extension <slug>` o suelta un zip de `nowly pack <slug>`. Consulta [Cargar y probar en local](/presence-development/load-and-test).

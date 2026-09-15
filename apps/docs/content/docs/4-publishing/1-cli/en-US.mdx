@@ -1,0 +1,110 @@
+---
+title: CLI
+description: Use the Nowly CLI to create, build, validate, and test presences locally.
+---
+
+The Nowly CLI is published as `@nowly/cli` on npm. Install it globally:
+```bash
+pnpm i -g @nowly/cli
+```
+
+## Interactive Mode
+
+Run the CLI without arguments to open an interactive menu:
+
+```bash
+nowly
+```
+
+## Create a Presence
+
+```bash
+nowly init "Netflix"
+```
+
+## Build Presences
+
+Build every presence:
+
+```bash
+nowly build
+```
+
+Build one presence:
+
+```bash
+nowly build youtube
+```
+
+Rebuild on file changes (reload the unpacked extension after each rebuild, or re-drop the zip if you use `pack`):
+
+```bash
+nowly build youtube --watch
+nowly pack youtube --watch
+```
+
+## Test a Presence Locally
+
+There are two ways to load a built presence without the Nowly API. Full walkthrough: [Load and Test Locally](/presence-development/load-and-test).
+
+### Pre-built extension
+
+If you only cloned the `presences` repository (the common case for contributors), use `nowly extension` to get a ready-to-load dev build without the full `nowly` monorepo:
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+This downloads the latest dev extension build from the CDN, bundles the presence(s) you list, and writes a `dev-presences.json` file into it. Then:
+
+1. Open `chrome://extensions`, enable **Developer mode**
+2. **Load unpacked** → select the generated `dist/extension-dev` folder
+3. The presence installs automatically — no API server, no install page, no Custom API URL needed
+
+After editing the presence, rebuild and rerun `nowly extension <slug>`, then reload the extension.
+
+To use a specific local extension build instead of the CDN one, pass `--from`:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+### Zip drop
+
+If Nowly is already loaded as an **unpacked** development build, pack the presence and drop it in the Debug panel:
+
+```bash
+nowly pack youtube
+```
+
+The zip is written to `dist/packs/youtube.zip`. Drop it on **Settings → Advanced → Debug**. Unsigned zips only work on unpacked builds, not Chrome Web Store installs. Developer mode only reveals the Debug UI.
+
+### If you have the full monorepo
+
+If you cloned `nowly` itself (with `presences` as a submodule), you can build the extension with every presence baked in directly:
+
+```bash
+pnpm build:extension:dev
+```
+
+Rebuild the changed presence then the extension after each change:
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+Reload at `chrome://extensions` — the presence is already installed and ready to use.
+
+## List Presences
+
+```bash
+nowly list
+```
+
+## Validate Metadata
+
+```bash
+nowly validate
+```

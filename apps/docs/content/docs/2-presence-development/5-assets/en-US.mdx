@@ -1,0 +1,51 @@
+---
+title: Assets
+description: Prepare logo, icon, and thumbnail assets for Nowly presences.
+---
+
+## Required Assets
+
+Each presence must include:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG", description: "Platform brand mark for wider placements, headers, and Open Graph images.", required: true },
+    { name: "icon.png", type: "PNG", description: "Compact square icon used in small UI surfaces and Discord activity images.", required: true },
+    { name: "thumbnail.jpg", type: "JPG", description: "Marketplace and detail page visual that clearly represents the platform.", required: true }
+  ]}
+/>
+
+## Logo
+
+Use `logo.png` for the platform brand mark when a wider image is appropriate.
+
+## Icon
+
+Use `icon.png` for compact square displays, colored backgrounds, and Discord activity images.
+
+## Thumbnail
+
+Use `thumbnail.jpg` for marketplace and detail page visuals. It should represent the platform clearly.
+
+## Runtime Asset Constants
+
+`Assets` is provided by the runtime (see [Presence API](/presence-development/presence-api)). It exposes the three default asset keys:
+
+```ts filename="presence.ts"
+Assets.Logo      // → "logo.png"
+Assets.Icon      // → "icon.png"
+Assets.Thumbnail // → "thumbnail.jpg"
+```
+
+Use them in activity payloads:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  largeImageKey: Assets.Logo,
+  largeImageText: "YouTube",
+})
+```
+
+## Quality Guidelines
+
+Use a transparent PNG for `icon.png` — the icon is displayed on a colored background in the Nowly library, so a filled background will clash. A transparent `logo.png` is preferred but less critical. Keep thumbnails readable at small sizes and avoid generic imagery.

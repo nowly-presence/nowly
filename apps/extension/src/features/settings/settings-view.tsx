@@ -1,8 +1,8 @@
 import { LocaleFlag } from "@/components/shared/locale-flag";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { CustomSelect } from "@/components/ui/custom-select";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { DebugPanel } from "@/features/settings/debug-panel";
@@ -12,9 +12,9 @@ import { ThemeSelector } from "@/features/settings/theme-selector";
 import { ThemeUpsellCard } from "@/features/settings/theme-upsell-card";
 import type { NativeStatus } from "@/lib/messages";
 import { WEB_BASE_URL } from "@/shared/constants";
-import { resolveLocale, t, type LocalePreference } from "@/shared/i18n";
-import type { ExtensionSettings, PresenceDebug, PresenceLanguageMode } from "@/shared/types";
-import { IconCalendar, IconChevronDown, IconExternalLink, IconRefresh } from "@/lib/tabler-icons";
+import { t, type LocalePreference } from "@/shared/i18n";
+import type { ExtensionSettings, PresenceDebug } from "@/shared/types";
+import { IconCalendar, IconExternalLink, IconRefresh, IconWorld } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -74,11 +74,17 @@ export const SettingsView: FC<Props> = ({
   });
   const lastCheckRef = useRef(0);
   const consentUrl = `${WEB_BASE_URL}/consent`;
-  const localeOptions: Array<{ label: string; value: LocalePreference }> = [
-    { label: t("locale-auto"), value: "browser" },
-    { label: t("locale-fr"), value: "fr" },
-    { label: t("locale-en"), value: "en" },
-    { label: t("locale-es"), value: "es" },
+  const localeOptions = [
+    { icon: <IconWorld className="size-4 text-muted-foreground" />, label: t("locale-auto"), value: "browser" as const },
+    { icon: <LocaleFlag locale="fr-FR" />, label: t("locale-fr"), value: "fr" as const },
+    { icon: <LocaleFlag locale="en-US" />, label: t("locale-en"), value: "en" as const },
+    { icon: <LocaleFlag locale="es-ES" />, label: t("locale-es"), value: "es" as const },
+  ];
+  const presenceLanguageOptions = [
+    { icon: <IconWorld className="size-4 text-muted-foreground" />, label: t("presence-language-per-presence"), value: "per-presence" as const },
+    { icon: <LocaleFlag locale="en-US" />, label: t("locale-en"), value: "en-US" as const },
+    { icon: <LocaleFlag locale="fr-FR" />, label: t("locale-fr"), value: "fr-FR" as const },
+    { icon: <LocaleFlag locale="es-ES" />, label: t("locale-es"), value: "es-ES" as const },
   ];
 
   useEffect(() => {
@@ -155,24 +161,13 @@ export const SettingsView: FC<Props> = ({
         <section className={innerClassName}>
           <h2 className={sectionTitleClassName}>{t("language")}</h2>
           <p className="mb-3 text-xs leading-5 text-muted-foreground">{t("language-description")}</p>
-          <div className="relative">
-            <Select
-              unstyled
-              value={localePreference}
-              onChange={(event) => onLocaleChange(event.target.value as LocalePreference)}
-              className="h-10 w-full appearance-none rounded-xl border border-border bg-card-2 px-3 pr-10 pl-10 text-sm text-foreground outline-none transition-colors hover:bg-card-hover focus:border-border-light"
-            >
-              {localeOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </Select>
-            <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-muted-foreground">
-              <LocaleFlag locale={resolveLocale(localePreference)} />
-            </div>
-            <IconChevronDown className="pointer-events-none absolute inset-y-0 right-3 my-auto size-4 text-muted-foreground" />
-          </div>
+          <CustomSelect
+            aria-label={t("language")}
+            className="h-10"
+            onChange={onLocaleChange}
+            options={localeOptions}
+            value={localePreference}
+          />
         </section>
 
         <div className={innerClassName}>
@@ -223,17 +218,13 @@ export const SettingsView: FC<Props> = ({
         <section className={innerClassName}>
           <h2 className={sectionTitleClassName}>{t("presence-language")}</h2>
           <p className="mb-3 text-xs leading-5 text-muted-foreground">{t("presence-language-description")}</p>
-          <Select
-            unstyled
+          <CustomSelect
+            aria-label={t("presence-language")}
+            className="h-10"
+            onChange={(value) => onSettingsChange({ presenceLanguage: value })}
+            options={presenceLanguageOptions}
             value={settings.presenceLanguage ?? "per-presence"}
-            onChange={(event) => onSettingsChange({ presenceLanguage: event.target.value as PresenceLanguageMode })}
-            className="h-10 w-full rounded-xl border border-border bg-card-2 px-3 text-sm text-foreground outline-none transition-colors focus:border-border-light"
-          >
-            <option value="per-presence">{t("presence-language-per-presence")}</option>
-            <option value="en-US">{t("locale-en")}</option>
-            <option value="fr-FR">{t("locale-fr")}</option>
-            <option value="es-ES">{t("locale-es")}</option>
-          </Select>
+          />
         </section>
 
         <section className={innerClassName}>
@@ -243,11 +234,11 @@ export const SettingsView: FC<Props> = ({
               <span className="mt-0.5 block text-xs leading-4 text-muted-foreground">{t("schedule-feature-description")}</span>
             </span>
             <Switch
-              checked={settings.scheduleEnabled !== false}
+              checked={settings.scheduleEnabled === true}
               onChange={(checked) => onSettingsChange({ scheduleEnabled: checked })}
             />
           </Label>
-          {settings.scheduleEnabled !== false ? (
+          {settings.scheduleEnabled === true ? (
             <Button
               variant="unstyled"
               size="none"

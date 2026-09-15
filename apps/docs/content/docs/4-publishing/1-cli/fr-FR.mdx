@@ -1,0 +1,110 @@
+---
+title: CLI
+description: Utilisez la CLI Nowly pour créer, compiler, valider et tester les présences localement.
+---
+
+La CLI Nowly est publiée sous `@nowly/cli` sur npm. Installez-la globalement :
+```bash
+pnpm i -g @nowly/cli
+```
+
+## Mode interactif
+
+Exécutez la CLI sans arguments pour ouvrir un menu interactif&nbsp;:
+
+```bash
+nowly
+```
+
+## Créer une présence
+
+```bash
+nowly init "Netflix"
+```
+
+## Compiler les présences
+
+Compiler toutes les présences&nbsp;:
+
+```bash
+nowly build
+```
+
+Compiler une présence&nbsp;:
+
+```bash
+nowly build youtube
+```
+
+Recompiler à chaque changement de fichier (rechargez l'extension unpacked après chaque rebuild, ou redéposez le zip avec `pack`)&nbsp;:
+
+```bash
+nowly build youtube --watch
+nowly pack youtube --watch
+```
+
+## Tester une présence localement
+
+Deux façons de charger une présence compilée sans passer par l'API Nowly. Guide complet&nbsp;: [Charger et tester en local](/presence-development/load-and-test).
+
+### Extension précompilée
+
+Si vous n'avez cloné que le dépôt `presences` (le cas le plus courant pour les contributeurs), utilisez `nowly extension` pour obtenir un build de développement prêt à charger, sans le monorepo `nowly` complet&nbsp;:
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+Ceci télécharge le dernier build de développement de l'extension depuis le CDN, y empaquette la ou les présences listées, et écrit un fichier `dev-presences.json` dedans. Ensuite&nbsp;:
+
+1. Ouvrez `chrome://extensions`, activez le **mode développeur**
+2. **Charger l'extension non empaquetée** → sélectionnez le dossier généré `dist/extension-dev`
+3. La présence s'installe automatiquement — pas de serveur API, pas de page d'installation, pas d'URL API personnalisée
+
+Après avoir modifié la présence, recompilez-la puis relancez `nowly extension <slug>`, et rechargez l'extension.
+
+Pour utiliser un build local précis plutôt que celui du CDN, passez `--from`&nbsp;:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+### Dépôt d'un zip
+
+Si Nowly est déjà chargé en build de développement **unpacked**, créez un zip et déposez-le dans le panneau Debug&nbsp;:
+
+```bash
+nowly pack youtube
+```
+
+Le zip est écrit dans `dist/packs/youtube.zip`. Déposez-le dans **Réglages → Avancé → Debug**. Les zips non signés ne marchent que sur un build unpacked, pas sur une installation Chrome Web Store. Le mode développeur n'affiche que l'interface Debug.
+
+### Si vous avez le monorepo complet
+
+Si vous avez cloné `nowly` lui-même (avec `presences` en submodule), vous pouvez compiler l'extension avec toutes les présences intégrées directement&nbsp;:
+
+```bash
+pnpm build:extension:dev
+```
+
+Recompilez la présence modifiée puis l'extension après chaque changement&nbsp;:
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+Rechargez dans `chrome://extensions` — la présence est déjà installée et prête à l'emploi.
+
+## Lister les présences
+
+```bash
+nowly list
+```
+
+## Valider les métadonnées
+
+```bash
+nowly validate
+```

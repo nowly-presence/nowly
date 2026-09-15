@@ -1,7 +1,7 @@
 import { LocaleFlag } from "@/components/shared/locale-flag";
-import { Select } from "@/components/ui/select";
+import { CustomSelect } from "@/components/ui/custom-select";
 import { t, type LocalePreference } from "@/shared/i18n";
-import { IconChevronDown } from "@/lib/tabler-icons";
+import { IconWorld } from "@/lib/tabler-icons";
 import { useMemo, type FC } from "react";
 import { marketplaceLocale } from "@/features/onboarding/onboarding.utils";
 
@@ -11,31 +11,20 @@ type Props = {
 };
 
 export const LocalePicker: FC<Props> = ({ localePreference, onLocaleChange }) => {
-  const localeOptions = useMemo<Array<{ label: string; value: LocalePreference }>>(() => [
-    { label: t("locale-auto"), value: "browser" },
-    { label: t("locale-fr"), value: "fr" },
-    { label: t("locale-en"), value: "en" },
-    { label: t("locale-es"), value: "es" },
+  const localeOptions = useMemo(() => [
+    { icon: <IconWorld className="size-4 text-muted-foreground" />, label: t("locale-auto"), value: "browser" as const },
+    { icon: <LocaleFlag locale={marketplaceLocale("fr")} />, label: t("locale-fr"), value: "fr" as const },
+    { icon: <LocaleFlag locale={marketplaceLocale("en")} />, label: t("locale-en"), value: "en" as const },
+    { icon: <LocaleFlag locale={marketplaceLocale("es")} />, label: t("locale-es"), value: "es" as const },
   ], [localePreference]);
 
   return (
-    <div className="relative">
-      <Select
-        unstyled
-        value={localePreference}
-        onChange={(event) => onLocaleChange(event.target.value as LocalePreference)}
-        className="h-8 appearance-none rounded-xl border border-border bg-card-2 pl-8 pr-8 text-xs font-medium text-foreground outline-none transition-colors hover:bg-card-hover hover:text-foreground focus:border-border-light"
-      >
-        {localeOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </Select>
-      <div className="pointer-events-none absolute inset-y-0 left-2 flex items-center">
-        <LocaleFlag locale={marketplaceLocale(localePreference)} />
-      </div>
-      <IconChevronDown className="pointer-events-none absolute inset-y-0 right-3 my-auto size-4 text-muted-foreground" />
-    </div>
+    <CustomSelect
+      aria-label={t("language")}
+      className="h-8 text-xs font-medium"
+      onChange={onLocaleChange}
+      options={localeOptions}
+      value={localePreference}
+    />
   );
 };

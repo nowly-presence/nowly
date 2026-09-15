@@ -11,6 +11,7 @@ export const clientEnv = createEnv({
   client: {
     NEXT_PUBLIC_API_BASE_URL: z.url().trim().default("https://api.nowly.me"),
     NEXT_PUBLIC_BASE_URL: z.url().trim().default("https://nowly.me"),
+    NEXT_PUBLIC_DOCS_BASE_URL: z.url().trim().default("https://docs.nowly.me"),
     NEXT_PUBLIC_EXTENSION_ID: z.string().trim().min(1).default("kmnlnfldimgneaopdihplkebobckcjpf"),
     NEXT_PUBLIC_ADSENSE_ENABLED: booleanEnv,
     NEXT_PUBLIC_ADSENSE_CLIENT_ID: z.string().trim().default(""),
@@ -21,6 +22,7 @@ export const clientEnv = createEnv({
     PRESENCE_API_URL: process.env.PRESENCE_API_URL,
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_DOCS_BASE_URL: process.env.NEXT_PUBLIC_DOCS_BASE_URL,
     NEXT_PUBLIC_EXTENSION_ID: process.env.NEXT_PUBLIC_EXTENSION_ID,
     NEXT_PUBLIC_ADSENSE_ENABLED: process.env.NEXT_PUBLIC_ADSENSE_ENABLED,
     NEXT_PUBLIC_ADSENSE_CLIENT_ID: process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID,

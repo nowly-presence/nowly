@@ -1,11 +1,16 @@
 import { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
+
+const docsBase = (process.env.NEXT_PUBLIC_DOCS_BASE_URL ?? "https://docs.nowly.me").replace(/\/$/, "");
  
 const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
   images: {
     remotePatterns: [{ protocol: "https", hostname: "cdn.nowly.me" }]
+  },
+  outputFileTracingIncludes: {
+    "/changelog/[version]": ["../docs/content/docs/changelog/**/*"],
   },
   async redirects() {
     return [
@@ -33,6 +38,36 @@ const nextConfig: NextConfig = {
       {
         source: "/docs/:section/:page/privacy",
         destination: "/privacy",
+        permanent: true,
+      },
+      {
+        source: "/docs",
+        destination: `${docsBase}/`,
+        permanent: true,
+      },
+      {
+        source: "/docs/:path*",
+        destination: `${docsBase}/:path*`,
+        permanent: true,
+      },
+      {
+        source: "/llms.txt",
+        destination: `${docsBase}/llms.txt`,
+        permanent: true,
+      },
+      {
+        source: "/llms-full.txt",
+        destination: `${docsBase}/llms-full.txt`,
+        permanent: true,
+      },
+      {
+        source: "/api/search",
+        destination: `${docsBase}/api/search`,
+        permanent: true,
+      },
+      {
+        source: "/api/og/docs/:path*",
+        destination: `${docsBase}/api/og/docs/:path*`,
         permanent: true,
       },
       {

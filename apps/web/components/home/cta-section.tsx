@@ -35,7 +35,9 @@ export const CtaSection: FC = (): ReactElement => {
             <div className="flex min-w-0 flex-wrap items-stretch justify-center gap-4">
               <Button onClick={handleDownload} variant="primary" size="lg">
                 <IconDownload className="w-5 h-5" />
-                {browser ? t("download-for", { browser }) : t("download-desktop")}
+                {browser && browser !== "Firefox" && browser !== "Safari"
+                  ? t("download-for", { browser })
+                  : t("extension")}
               </Button>
 
               <Button disabled variant="secondary" size="lg">
@@ -86,10 +88,10 @@ export const CtaSection: FC = (): ReactElement => {
             <div className="relative z-10 flex flex-col items-center justify-center px-8 py-24 text-center">
               <IconDeviceDesktop className="w-16 h-16 text-accent mb-6" />
               <h2 className="text-2xl font-bold tracking-tight mb-3 text-foreground">
-                Version desktop uniquement
+                {t("desktop-only-title")}
               </h2>
               <p className="text-muted-foreground max-w-sm mx-auto leading-relaxed">
-                L'extension Nowly est conçue pour les navigateurs de bureau. Pour profiter de Discord Rich Presence, installe-la sur ton PC.
+                {t("desktop-only-body")}
               </p>
             </div>
           </div>

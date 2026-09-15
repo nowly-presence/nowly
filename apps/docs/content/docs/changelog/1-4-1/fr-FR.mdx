@@ -1,0 +1,37 @@
+---
+title: 1.4.1
+date: 2026-09-14
+description: Site de documentation dédié, menus de langue avec drapeaux, pages auteur bibliothèque, reconnexion Host et snooze jusqu'à minuit, watch CLI pour les auteurs.
+---
+
+`1.4.1` suit `1.4.0`. L'architecture du panneau ne change pas. Cette version ajoute un site de documentation dédié, des menus de langue plus lisibles, des pages auteur dans la bibliothèque, un assistant de reconnexion Host, un snooze jusqu'à minuit, et `nowly build --watch` / `nowly pack --watch` pour les auteurs.
+
+<ReleaseTable
+  headers={["Zone", "Ce qui change", "Pourquoi c'est utile"]}
+  rows={[
+    ["Documentation", "Les docs sont sur docs.nowly.me, avec des chemins du type `/getting-started/troubleshooting` (plus `/docs/...`). nowly.me/docs et les anciennes URLs `/docs/...` redirigent. Les mises à jour store ouvrent toujours nowly.me/changelog/{version}, qui envoie vers les notes correspondantes.", "Les partages et les recherches arrivent sur l'hôte docs actuel, sans préfixe /docs en trop."],
+    ["Sélecteurs de langue", "Un `<select>` natif ne peut pas afficher de SVG dans les `<option>`. L'extension utilise un select custom pour la langue de l'UI, la langue des présences, l'onboarding et la locale par présence. Chaque option a son drapeau (ou un globe pour Auto). Le menu de langue du footer du site affiche aussi les drapeaux.", "On distingue anglais, français et espagnol dans le menu ouvert, pas seulement sur le champ fermé."],
+    ["Ticks des présences", "`getSetting` est disponible dans les scripts. L'activité se rafraîchit aussi à la visibilité de l'onglet, aux changements d'historique et de hash, et aux événements média, pas seulement à l'intervalle.", "Les réglages et les changements de page arrivent plus vite sur Discord."],
+    ["Nowly Host", "L'extension guide la reconnexion et la version du Host quand le pont natif manque ou est trop ancien.", "Une connexion Host cassée se corrige avec un parcours, pas en silence."],
+    ["Snooze et planning", "On peut snooze jusqu'à minuit. Les nouvelles installs laissent le planning des présences désactivé par défaut. Les installs existantes gardent le réglage déjà choisi.", "On coupe Discord jusqu'à la fin de la journée sans changer le planning du lendemain."],
+    ["Auteurs bibliothèque", "La bibliothèque du site peut filtrer par auteur GitHub, y compris les pages `/author/[github]`.", "On ouvre toutes les présences publiques d'un même auteur."],
+    ["Bibliothèque vide", "Quand la recherche ou les filtres ne matchent rien, deux boutons proposent de demander une présence ou d'en créer une. Ils ne sont pas sous le titre de page, ni sur la carte Development.", "Une recherche sans résultat a quand même une suite."],
+    ["Footer du site", "Les groupes sont Produit, Projet, Développeurs et Légal. L'app native est libellée App bureau.", "Les liens sont regroupés comme sur le reste du site."],
+    ["Marque", "Le lockup navbar, les favicons et les cartes de partage utilisent les assets CDN actuels.", "Docs et site affichent le même lockup quand on partage une page."],
+    ["CLI", "`nowly build --watch` et `nowly pack --watch` relancent le build quand les fichiers d'une présence changent.", "Les auteurs itèrent sans relancer un build complet à la main."],
+  ]}
+/>
+
+## Documentation
+
+L'app docs est `@nowly/docs` sur [docs.nowly.me](https://docs.nowly.me). Les pages n'utilisent que le slug (`/changelog`, `/getting-started/installation`). `https://docs.nowly.me/docs/...` et `https://nowly.me/docs/...` redirigent vers la même page, sans segment `/docs` en trop.
+
+## Sélecteurs de langue
+
+Les contrôles précédents superposaient un drapeau sur le champ fermé et s'appuyaient sur un select HTML natif. Les navigateurs retirent le markup custom des `<option>`, donc la liste ouverte était du texte seul.
+
+Le menu de l'extension est un listbox custom (portal, pour ne pas être coupé par les cartes de réglages arrondies). Le footer du site garde le Select partagé, avec un drapeau à côté de chaque locale.
+
+## Après une mise à jour
+
+Les builds store Chrome et Firefox ouvrent toujours `https://nowly.me/changelog/{version du manifeste}` sur `onInstalled` avec `reason === "update"`. Pour cette release, l'URL est `/changelog/1.4.1`, qui redirige vers les notes sur docs.nowly.me. Un reload unpacked n'ouvre pas d'onglet.

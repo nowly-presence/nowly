@@ -1,3 +1,4 @@
+import { docsHref } from "@/lib/seo";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
@@ -16,12 +17,25 @@ export const FooterLinks: FC = (): ReactElement => {
     {
       label: t("category-product"),
       links: [
+        { href: "/library", label: t("marketplace") },
+        { href: "/host", label: t("host") },
+        { href: "/support", label: t("help") },
+        { href: "/status", label: t("status") },
+      ],
+    },
+    {
+      label: t("category-company"),
+      links: [
         { href: "/about", label: t("about") },
         { href: "/team", label: t("team") },
         { href: "/faq", label: t("faq") },
-        { href: "/support", label: t("help") },
-        { href: "/status", label: t("status") },
-        { href: "/docs/changelog", label: t("changelog") },
+      ],
+    },
+    {
+      label: t("category-developers"),
+      links: [
+        { href: docsHref("/"), label: t("docs") },
+        { href: docsHref("/changelog"), label: t("changelog") },
       ],
     },
     {
@@ -37,7 +51,7 @@ export const FooterLinks: FC = (): ReactElement => {
   ];
 
   return (
-    <div className="flex gap-12">
+    <div className="grid w-fit grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-4">
       {categories.map((category) => (
         <div key={category.label} className="flex flex-col gap-3">
           <p className="text-xs font-semibold uppercase tracking-wider text-foreground/40">

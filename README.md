@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://cdn.nowly.me/assets/app_title.png" height="94" alt="Nowly" />
+<img src="https://cdn.nowly.me/brand/lockup/blue.svg" height="94" alt="Nowly" />
 
 Open-source Discord Rich Presence for the modern web.
 

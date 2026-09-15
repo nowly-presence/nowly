@@ -1,4 +1,5 @@
 import { LocaleFlag } from "@/components/shared/locale-flag";
+import { CustomSelect } from "@/components/ui/custom-select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -7,7 +8,6 @@ import { localeLabel, resolveLocaleString } from "@/features/presences/presence-
 import { sendMessage } from "@/lib/messages";
 import { t } from "@/shared/i18n";
 import type { ExtensionSettings, PresenceLocale } from "@/shared/types";
-import { IconChevronDown } from "@/lib/tabler-icons";
 import type { FC, ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
 
@@ -88,22 +88,18 @@ export const PresenceSettingsFields: FC<Props> = ({ definitions, locales, slug }
       {showLanguage ? (
         <div className="flex items-center justify-between gap-3 px-4 py-3">
           <Label unstyled className="text-sm text-foreground">{t("presence-language-this")}</Label>
-          <div className="relative">
-            <Select
-              unstyled
-              value={presenceLocale}
-              onChange={(event) => handleLanguageChange(event.target.value as PresenceLocale)}
-              className="h-10 w-36 appearance-none rounded-xl border border-border bg-card-2 py-1 pl-8 pr-8 text-sm text-foreground outline-none transition-colors focus:border-border-light"
-            >
-              {Object.keys(locales ?? {}).map((locale) => (
-                <option key={locale} value={locale}>{localeLabel(locale)}</option>
-              ))}
-            </Select>
-            <div className="pointer-events-none absolute inset-y-0 left-2.5 flex items-center text-muted-foreground">
-              <LocaleFlag locale={presenceLocale} />
-            </div>
-            <IconChevronDown className="pointer-events-none absolute inset-y-0 right-3 my-auto size-4 text-muted-foreground" />
-          </div>
+          <CustomSelect
+            align="end"
+            aria-label={t("presence-language-this")}
+            className="h-10 w-36"
+            onChange={handleLanguageChange}
+            options={Object.keys(locales ?? {}).map((locale) => ({
+              icon: <LocaleFlag locale={locale} />,
+              label: localeLabel(locale),
+              value: locale as PresenceLocale,
+            }))}
+            value={presenceLocale}
+          />
         </div>
       ) : null}
       {settingKeys.map(([key, def]) => {

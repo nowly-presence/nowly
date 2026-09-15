@@ -3,15 +3,24 @@
 import { buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useBrowser } from "@/hooks/use-browser";
+import { BRAND_LOCKUP_BLUE } from "@/lib/brand";
+import { docsHref } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { IconDownload, IconMenu2 } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { FC, ReactElement } from "react";
 
+const chromiumDownloadLabel = (browser: string): boolean =>
+  Boolean(browser) && browser !== "Firefox" && browser !== "Safari";
+
 export const Navbar: FC = (): ReactElement => {
   const browser = useBrowser();
   const t = useTranslations("navbar");
+  const downloadHref = "/#download";
+  const downloadLabel = chromiumDownloadLabel(browser)
+    ? t("download-for", { browser })
+    : t("download-extension");
 
   return (
     <nav
@@ -23,10 +32,9 @@ export const Navbar: FC = (): ReactElement => {
       <div className="mx-auto w-full max-w-300 min-w-0 px-6">
         <div className="flex min-w-0 items-center justify-between">
           <Link href="/" className="min-w-0 shrink-0 cursor-pointer select-none">
-            <img src="https://cdn.nowly.me/assets/app_title.png" alt="Nowly" width={420} height={128} className="h-8 w-auto" />
+            <img src={BRAND_LOCKUP_BLUE} alt="Nowly" width={420} height={128} className="h-10 w-auto max-w-full" />
           </Link>
 
-          {/* Mobile: hamburger menu */}
           <div className="lg:hidden">
             <Sheet>
               <SheetTrigger asChild>
@@ -43,7 +51,7 @@ export const Navbar: FC = (): ReactElement => {
                 <div className="flex flex-col gap-6 px-6 pt-12">
                   <SheetClose asChild>
                     <Link
-                      href="/docs"
+                      href={docsHref("/")}
                       className="text-lg font-semibold text-foreground hover:text-accent transition-colors"
                     >
                       {t("docs")}
@@ -58,14 +66,23 @@ export const Navbar: FC = (): ReactElement => {
                       {t("marketplace")}
                     </Link>
                   </SheetClose>
+
+                  <SheetClose asChild>
+                    <Link
+                      href={downloadHref}
+                      className={buttonVariants({ size: "md", variant: "accent", className: "justify-center" })}
+                    >
+                      <IconDownload size={16} />
+                      {downloadLabel}
+                    </Link>
+                  </SheetClose>
                 </div>
               </SheetContent>
             </Sheet>
           </div>
 
-          {/* Desktop: nav links + download button */}
           <div className="hidden min-w-0 items-center gap-2 lg:flex">
-            <Link href="/docs"
+            <Link href={docsHref("/")}
               className={buttonVariants({ size: "md", variant: "ghost" })}
             >
               {t("docs")}
@@ -78,15 +95,13 @@ export const Navbar: FC = (): ReactElement => {
             </Link>
 
             <Link
-              href="/#download"
+              href={downloadHref}
               className={buttonVariants({ size: "md", variant: "accent" })}
             >
               <IconDownload size={16} />
 
-              <span className="hidden sm:inline">
-                {browser ? t("download-for", { browser }) : t("download-desktop")}
-              </span>
-              <span className="sm:hidden">{browser || t("download-short")}</span>
+              <span className="hidden sm:inline">{downloadLabel}</span>
+              <span className="sm:hidden">{t("download-short")}</span>
             </Link>
           </div>
         </div>

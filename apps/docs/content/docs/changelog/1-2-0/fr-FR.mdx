@@ -1,0 +1,145 @@
+---
+title: 1.2.0
+date: 2026-06-25
+description: Refonte UI/UX de l'extension avec nouveau lecteur, composants natifs, badge d'activité, snooze & planning, panneau de debug conditionnel et réorganisation des paramètres.
+---
+
+`1.2.0` est une version visuelle et fonctionnelle majeure. Elle introduit un lecteur repensé avec animation vinyle, un composant Sheet fait maison, un badge d'icône d'extension, des composants Switch et Checkbox personnalisés, les fonctionnalités snooze et planning, un panneau de debug conditionnel, et des paramètres entièrement réorganisés.
+
+<ReleaseTable
+  headers={["Zone", "Ce qui change", "Pourquoi c'est utile"]}
+  rows={[
+    ["Lecteur", "Nouveau layout Bar avec artwork 48×48 (idle : vinyle tournant), barre de progression optionnelle (music/streaming/tv/anime uniquement), et toggle showPlayer pour masquer la carte. Contrôles supprimés.", "Design compact et épuré. Les utilisateurs peuvent masquer le lecteur s'ils préfèrent une interface plus simple."],
+    ["Sheet", "Nouveau composant Sheet natif en Tailwind v4 (sans Radix), glissant depuis le bas ou la droite. Intégré aux paramètres de présence, snooze et planning.", "Plus de dépendance à Radix, animation fluide, mobile-friendly, et focus trap intégré."],
+    ["Badge d'extension", "Un indicateur • apparaît sur l'icône de l'extension quand une présence est active.", "L'utilisateur sait d'un coup d'œil si une activité Discord est en cours, sans ouvrir le panneau."],
+    ["Switch personnalisé", "Toggle carré aux coins arrondis : fond avec bordure (off), fond violet avec bouton blanc (on).", "S'aligne avec l'identité visuelle Nowly au lieu du switch navigateur standard."],
+    ["Checkbox personnalisé", "Checkbox 18×18px arrondie avec remplissage accent et icône check blanche.", "Look cohérent pour les toggles de consentement et futurs formulaires."],
+    ["Paramètres présence", "Les paramètres s'ouvrent dans un Sheet depuis le bas avec les réglages et le bouton Désinstaller. Labels liés au switch via htmlFor.", "Interface plus propre, plus accessible (clic sur le label = toggle), désinstallation toujours disponible."],
+    ["Snooze", "Snooze par présence avec un stepper en bottom sheet ([−] [temps] [+], pas de 5min, 5–240min). Icône Flocon pour snoozer, Soleil pour réveiller. Envoie seulement CLEAR_ACTIVITY au réveil — l'activité reste visible avec un badge 'Snoozé'.", "Mettre en pause l'activité Discord sans perdre l'état Nowly. Stepper rapide, indicateur clair."],
+    ["Planning", "Planning par présence ou global avec boutons jour (Dim–Sam) et plage horaire optionnelle. Mode 'toute la journée' masque les heures. Global via la barre d'actions, par présence via le bouton Calendar.", "Contrôle total sur quand une présence s'affiche sur Discord. Mode journée simplifie la configuration."],
+    ["Réorganisation paramètres", "Header simplifié avec bullet coloré + statut. Carte connexion/Nowly Host supprimée. Gestion données fusionnée avec analytics. Carte mise à jour conditionnelle avec style accent. Barre d'actions visible uniquement sur l'onglet Activité.", "Paramètres plus épurés. La mise à jour Nowly Host se démarque quand elle est disponible. Aucune distraction pendant la configuration."],
+    ["Panneau de debug conditionnel", "DebugPanel masqué dans les builds Chrome Web Store (vérification update_url). Affiché uniquement dans la vue Réglages avec un header repliable — plus de bannière séparée. Vérifier MAJ devient inactif en mode dev.", "Pas de fuite de debug en production. UI plus propre : le header sert aussi de notice. Pas de fausses mises à jour en développement."],
+    ["Barre de progression", "Affichée uniquement pour les catégories music, streaming, tv et anime. Masquée pour les présences 'other'.", "La barre de progression reste pertinente — pas de timer inutile pour les présences non-média."],
+    ["Consentement analytics", "Écran d'onboarding repensé avec une grille compacte : 6 éléments non collectés (X) et 1 élément collecté (✓). Bouton 'Partager' centré, 'Non merci' en texte cliquable.", "Communication plus claire sur la vie privée. Moins intimidant que l'ancien mur de texte."],
+    ["Support Firefox", "Chrome et Firefox disposent maintenant de chemins de build séparés, d'un packaging store, de l'injection native userScripts, du support des pages CSP strictes et de manifests Nowly Host pour les IDs Firefox de production.", "Nowly est prêt pour une distribution navigateur plus large sans fragiliser l'injection des présences."],
+    ["Durcissement API", "Auth, analytics, notes, proxy d'images, synchronisation de présences et génération de changelog IA ont été renforcés avec validation, nonce, redirections plus sûres, caches bornés et prompts protégés.", "Les endpoints publics résistent mieux aux entrées invalides, aux URLs hostiles et aux abus."],
+    ["Web, légal et consentement", "Ajout des pages mentions légales/cookies, bannière cookies, gestion du consentement avec export/suppression, page équipe, footer catégorisé, CTA navigateur dynamique et corrections de statut.", "Le site public couvre mieux les sujets de release, confiance, confidentialité, support et équipe."],
+    ["Nowly Host et release tooling", "La vérification manuelle des mises à jour redémarre d'abord le pont natif. Les logs Nowly Host sont plus clairs, les erreurs IPC Discord sont journalisées, les logs tournent, et les archives extension passent par tar.", "Les mises à jour et diagnostics locaux sont plus fiables sur les installations et artefacts de release."],
+    ["Qualité interne", "Les utilitaires partagés passent dans @nowly/shared, les types/background helpers extension sont découpés, les primitives UI remplacent les éléments bruts, le README est enrichi, et les assets YouTube Music sont rafraîchis.", "Le code est plus maintenable et la documentation de release reflète toute la portée de la branche."],
+    ["Pass Supporter", "Nouveau système de pass supporter avec email, notifications Discord, statut ad-free et page de validation dédiée. Le statut supporter est synchronisé entre appareils avec un overlay de remerciement. Inclut un endpoint `GET /support/verify-code` et un template email light redessiné.", "Base de monétisation : les utilisateurs peuvent soutenir le projet et naviguer sans publicité. Le flux complet gère l'activation du pass, les alertes Discord et la synchronisation."],
+    ["Endpoint sécurité", "Nouvel endpoint `GET /security/public-key` qui dérive la clé publique depuis `PRESENCE_SIGNING_PRIVATE_KEY` au runtime. L'extension la récupère au démarrage avec un fallback hardcodé.", "Permet la rotation de clé sans mise à jour de l'extension. Rétrocompatible via la clé de secours."],
+    ["Migration CDN", "Tous les assets statiques (logos, icônes, titres) sont servis depuis `cdn.nowly.me/assets/` au lieu de `nowly.me` ou `chrome.runtime.getURL`. Les fichiers legacy supprimés de web/public et des scripts de build.", "Livraison mondiale plus rapide, bundle d'extension réduit, gestion centralisée des assets."],
+    ["Refactor architecture", "Points d'entrée déplacés dans `src/entrypoints/`. Background découpé en `managers/`, `services/`, `runtime/`, `analytics/`. Composants réorganisés en `layout/`, `shared/`, `ui/`. Tous les imports relatifs remplacés par des alias `@/`.", "Code plus propre, navigation facilitée, imports cohérents dans toute l'extension."],
+  ]}
+/>
+
+## Lecteur
+
+Le composant `CurrentActivityCard` a été entièrement repensé avec un layout Bar compact. L'état idle affiche un vinyle SVG animé de 48px avec le texte "Aucune activité détectée" en ligne. L'état actif affiche l'artwork en 48×48, le titre, le sous-titre, et un fond flou du poster quand `largeImage` est présent.
+
+Les contrôles média (précédent, lecture/pause, suivant) ont été supprimés — ils ne mettaient pas en pause le média réel et ajoutaient du bruit visuel. La barre de progression est maintenant conditionnelle : seules les présences `music`, `streaming`, `tv` et `anime` l'affichent ; les présences `other` ne l'ont pas.
+
+Un toggle `showPlayer` dans les paramètres d'affichage permet de masquer entièrement la carte du lecteur.
+
+## Sheet
+
+Un composant `Sheet` natif a été créé de zéro en Tailwind v4, sans Radix UI. Il supporte deux positions : un panneau latéral depuis la droite, et un panneau depuis le bas avec bords supérieurs arrondis. Le composant gère l'overlay sombre avec `backdrop-blur`, la fermeture au clic sur l'overlay ou la touche Escape, un focus trap cyclique, la sauvegarde et la restauration du focus précédent, et une animation CSS d'entrée. Une prop `subtitle` optionnelle permet d'afficher un texte secondaire dans l'en-tête.
+
+## Badge d'extension
+
+Le service worker définit un badge `•` quand une présence envoie une activité à Discord. La couleur du badge utilise l'accent Nowly (`#5865F2`). Il se nettoie quand l'activité est effacée.
+
+## Switch et Checkbox personnalisés
+
+Deux composants remplacent les éléments de formulaire natifs du navigateur. Le Switch a un track carré de 18×36px avec `rounded-lg`. OFF : `bg-card-2` avec bordure, bouton gris. ON : `bg-accent`, bouton blanc. La Checkbox fait 18×18px avec `rounded-[5px]`. OFF : `bg-card-2 border-border`. ON : `bg-accent` avec une icône `Check` blanche.
+
+Les deux supportent la prop `id` pour le lien de label via `htmlFor`.
+
+## Snooze
+
+La fonctionnalité snooze permet de mettre en pause l'activité Discord pour une durée définie. Un bottom sheet avec un stepper `[−] [minutes] [+]` (pas de 5 minutes, plage 5–240 minutes) permet une sélection rapide de la durée. Quand le snooze est actif, la barre d'actions affiche une icône Soleil au lieu du Flocon.
+
+Le badge de l'activité affiche aussi le temps de gel restant, par exemple `Gelé · 14:32`, pour savoir quand l'activité Discord reprendra.
+
+Le réveil n'envoie que `CLEAR_ACTIVITY` à Discord — l'activité Nowly reste visible avec un badge "Snoozé". Le désnoozage renvoie l'activité stockée à Discord.
+
+## Planning
+
+Les utilisateurs peuvent définir des plannings par présence ou globalement. Le sheet de planning affiche 7 boutons de jour (Dim–Sam) avec un toggle de plage horaire optionnel. Quand le mode "Toute la journée" est activé, seuls les jours sont sauvegardés — la présence est active toute la journée sur les jours sélectionnés. Quand la plage horaire est active, les heures de début et fin sont affichées.
+
+Le planning global (accessible depuis le bouton Calendar de la barre d'actions) sert de fallback quand aucun planning par présence n'est défini. Un bouton Calendar par présence se trouve à côté de l'icône engrenage sur chaque élément de la liste.
+
+Le planning peut être désactivé via la section "Fonctionnalités supplémentaires" dans les paramètres (`scheduleEnabled` désactivé par défaut), ce qui masque tous les boutons de planning.
+
+## Réorganisation des paramètres
+
+Le panneau des paramètres a été simplifié :
+- **Header** : Le statut de connexion est maintenant un bullet coloré + texte de statut. La carte connexion/Nowly Host est supprimée.
+- **Carte de mise à jour** : Affichée uniquement quand `hostVersionInfo.updateAvailable` est vrai, stylisée avec une teinte accent (`bg-accent/5`, `border-accent/20`).
+- **Gestion des données** : Fusionnée avec le consentement analytics sous une seule carte "Données et confidentialité".
+- **Vérifier les mises à jour** : Déplacé du footer d'activité vers la barre d'actions, avec une limite de 30 secondes. Désactivé automatiquement en mode décompressé.
+- **Fonctionnalités supplémentaires** : Nouvelle section hébergeant les toggles de fonctionnalités (Planning est le premier).
+- **Barre d'actions** : Visible uniquement sur l'onglet Activité — l'onglet Réglages reste dégagé sans boutons d'action.
+
+## Panneau de debug conditionnel
+
+Le `DebugPanel` n'est rendu que dans les extensions **décompressées** (`!chrome.runtime.getManifest().update_url`). Il réside exclusivement dans la vue **Réglages** — la page Activité reste propre. Quand un problème de debug existe (`debug` n'est pas null ou `nativeStatus` n'est pas connecté/ok), l'en-tête du panneau est toujours visible avec une icône Terminal et le label "Debug". En cliquant sur l'en-tête, le panneau se déploie pour afficher les détails de debug et un champ de personnalisation de l'URL de l'API.
+
+Dans les builds Chrome Web Store (`update_url` présent), le panneau de debug n'est jamais rendu.
+
+De plus, **Vérifier les mises à jour** est automatiquement désactivé en mode décompressé — l'appel devient inactif pour éviter les fausses notifications de mise à jour causées par l'absence de métadonnées de version dans les présences en développement.
+
+## Firefox et packaging
+
+L'extension dispose maintenant de chemins de build séparés pour Chrome et Firefox. Les builds Firefox retirent les champs Chromium-only du manifest, déclarent correctement la permission `userScripts`, utilisent un ID Gecko dédié et s'appuient sur l'API native `userScripts` pour injecter les présences. Les pages avec CSP strictes sont couvertes par ce nouveau chemin d'injection, et les installateurs/manifests de Nowly Host connaissent les IDs Firefox de développement et de production.
+
+Le packaging store a aussi été ajouté pour produire les archives Chrome et Firefox. Le flux utilise désormais `tar.exe` au lieu de PowerShell `Compress-Archive`, afin de garder des artefacts cohérents depuis les scripts de l'extension.
+
+## Sécurité API et pipeline release
+
+Plusieurs surfaces publiques de l'API ont été durcies. L'auth utilise maintenant un nonce CSRF OAuth et renvoie le JWT via le fragment d'URL. Les payloads analytics et notes sont validés et bornés. Le proxy d'images bloque les cibles privées pour éviter les SSRF et borne son cache. La synchronisation des présences passe par un pipeline dédié avec des schémas Zod partagés, et la génération de changelog nettoie ses entrées avant de les envoyer à OpenAI.
+
+Le nouveau package `@nowly/shared` centralise les constantes, le JSON canonique, les helpers de formatage et les schémas utilisés par l'API et les outils de release.
+
+## Analytics, consentement et web public
+
+Analytics enregistre maintenant une dimension `source`, et l'extension expose des logs analytics réservés au mode décompressé. Les utilisateurs peuvent gérer leur consentement depuis le site avec des flux d'export et de suppression liés à leur appareil.
+
+Le site public ajoute les pages mentions légales et cookies, une bannière cookies, un footer catégorisé, une page équipe avec liens sociaux, la détection dynamique du navigateur dans le CTA, des corrections de date sur la page statut, des ancres de titres plus cohérentes et plusieurs polishs UI sur navigation, boutons, logos et cartes de présences.
+
+## Nowly Host et diagnostics
+
+L'extension peut redémarrer Nowly Host avant de vérifier ses versions, et les Réglages incluent une vérification manuelle de mise à jour. Nowly Host journalise plus clairement les changements d'activité, remonte les erreurs IPC Discord et effectue une rotation des logs pour éviter les fichiers non bornés.
+
+## Documentation, repo et assets
+
+Le README documente maintenant plus largement l'architecture du projet, le flux de développement, les étapes d'installation, le chemin de release de Nowly Host et le workflow des présences. Les liens de dépôt ont migré vers l'organisation `nowly-presence`, les clés de traduction ont été normalisées en kebab-case, les doublons de locales ont été nettoyés et les icônes YouTube Music ont été rafraîchies.
+
+## Pass Supporter
+
+Un système complet de pass supporter a été ajouté, permettant aux utilisateurs d'acheter des passes qui offrent une navigation sans publicité sur tous leurs appareils. Le backend gère la création, la validation et le lien des passes aux appareils. Les supporters sont notifiés via un template email light redessiné, et des webhooks Discord alertent l'équipe sur les nouvelles activations. L'endpoint `GET /support/verify-code` valide les codes de pass, et l'application web inclut une page de validation dédiée avec intégration ad-free.
+
+Côté extension, le statut supporter est synchronisé via `chrome.storage`, pilote un système de thème avec variante donator logo, et affiche un overlay de remerciement à la première activation. La page de détail des présences sur nowly.me a aussi été simplifiée.
+
+## Endpoint sécurité
+
+Une nouvelle route `GET /security/public-key` a été ajoutée à l'API. Elle dérive la clé publique ECDSA P-256 depuis la variable d'environnement `PRESENCE_SIGNING_PRIVATE_KEY` avec `node:crypto`. L'extension récupère cette clé au démarrage avec un fallback à trois niveaux : cache mémoire → `chrome.storage.local` → API distante → constante hardcodée. Cela permet la rotation de clé sans mise à jour de l'extension, tout en restant rétrocompatible pour les versions plus anciennes.
+
+## Migration CDN
+
+Tous les assets statiques ont été migrés de `nowly.me` et `chrome.runtime.getURL()` vers `https://cdn.nowly.me/assets/`. Cela couvre le logo du header de l'extension, le logo de la navbar web, les assets OG image (pages docs et présence) et le logo du template email de support. Les fichiers PNG legacy ont été supprimés de `web/public/`, et la logique de copie des logos a été retirée des deux scripts de build (`build.ts`, `build-dev.ts`), réduisant la taille du bundle.
+
+## Refactor architecture
+
+Le code source de l'extension a été réorganisé pour une meilleure maintenabilité :
+
+- **Points d'entrée** : `src/app/` a été déplacé vers `src/entrypoints/sidepanel/`. Des wrappers fins dans `src/entrypoints/background/` et `src/entrypoints/content/` délèguent aux modules principaux.
+- **Background** : Le dossier plat `src/background/` a été découpé en `managers/`, `services/`, `runtime/` et `analytics/`.
+- **Composants** : `src/components/` a été réorganisé en `layout/`, `shared/` et `ui/`.
+- **Imports** : Tous les imports relatifs (`./` et `../`) ont été remplacés par des alias `@/` dans toute l'extension.
+
+## Style des présences inactives
+
+Quand une présence est désactivée, son icône devient `opacity-60 saturate-0` et le nom s'estompe en `text-muted-foreground/80` — subtilement atténué mais toujours lisible.
+
+> Cette release transforme Nowly d'un simple gestionnaire de présence en un outil complet avec planification, snooze et une interface raffinée.

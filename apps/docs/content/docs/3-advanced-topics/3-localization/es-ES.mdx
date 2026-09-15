@@ -1,0 +1,38 @@
+---
+title: Localización
+description: Localiza los metadatos, características, ajustes y cadenas de texto de las presencias.
+---
+
+## Idiomas compatibles
+
+<LanguageTable
+  languages={[
+    { language: "Inglés", code: "en-US", default: true },
+    { language: "Francés", code: "fr-FR" },
+    { language: "Español", code: "es-ES" },
+  ]}
+/>
+
+## Localización de metadatos
+
+```json filename="metadata.json"
+{
+  "description": {
+    "en-US": "Watch and share videos.",
+    "fr-FR": "Regardez et partagez des vidéos.",
+    "es-ES": "Mira y comparte videos."
+  }
+}
+```
+
+## Localización de ajustes
+
+Las etiquetas y descripciones de los ajustes usan el mismo formato de idioma.
+
+## Cadenas en runtime
+
+Los textos de actividad de Discord usan [paquetes de idioma de presencia](/advanced-topics/presence-language-packs) opcionales, separados de la localización de metadatos y ajustes.
+
+## Mantén el texto corto
+
+Los campos de actividad de Discord son compactos. Mantén las cadenas localizadas concisas y evita párrafos largos en la actividad en tiempo de ejecución.

@@ -25,6 +25,7 @@ export const OnboardingOverlay: FC<OnboardingOverlayProps> = ({
   settings,
   onSettingsChange,
   supporter = false,
+  hostVersionInfo,
 }): ReactElement | null => {
   const steps = useOnboardingSteps({
     activity,
@@ -34,6 +35,7 @@ export const OnboardingOverlay: FC<OnboardingOverlayProps> = ({
     presences,
     settings,
     onSettingsChange,
+    hostVersionInfo,
   });
 
   const pendingIndex = steps.findIndex((step) => step.status !== "success");

@@ -112,8 +112,8 @@ export const createPresenceRuntime = (
       );
     }
 
-    getSetting() {
-      return Promise.resolve(undefined);
+    getSetting(key) {
+      return Promise.resolve(key == null ? undefined : ctxSettings[key]);
     }
 
     info(message) {
@@ -178,8 +178,45 @@ export const createPresenceRuntime = (
 
     tick();
     const timer = setInterval(tick, 5000);
+    let mediaDebounce;
+    let timeupdateDebounce;
+    const scheduleTick = () => {
+      clearTimeout(mediaDebounce);
+      mediaDebounce = setTimeout(tick, 250);
+    };
+    const scheduleTimeupdateTick = () => {
+      clearTimeout(timeupdateDebounce);
+      timeupdateDebounce = setTimeout(tick, 1000);
+    };
+    const boundMedia = new WeakSet();
+    const bindMedia = (el) => {
+      if (boundMedia.has(el)) return;
+      boundMedia.add(el);
+      el.addEventListener("play", scheduleTick);
+      el.addEventListener("pause", scheduleTick);
+      el.addEventListener("ended", scheduleTick);
+      el.addEventListener("seeked", scheduleTick);
+      el.addEventListener("timeupdate", scheduleTimeupdateTick);
+    };
+    const scanMedia = () => {
+      document.querySelectorAll("audio, video").forEach(bindMedia);
+    };
+    scanMedia();
+    window.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") tick();
+    });
+    window.addEventListener("popstate", scheduleTick);
+    window.addEventListener("hashchange", scheduleTick);
+    const observer = new MutationObserver(() => {
+      scanMedia();
+      scheduleTick();
+    });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
     window.addEventListener("pagehide", () => {
       clearInterval(timer);
+      clearTimeout(mediaDebounce);
+      clearTimeout(timeupdateDebounce);
+      observer.disconnect();
       factory?.destroy?.();
       post("CLEAR_ACTIVITY");
     });

@@ -16,6 +16,10 @@ $env:GOARCH = 'amd64'
 & go build -ldflags "-X nowly.client/native/internal/contract.HostVersion=$Version" -o (Join-Path $DistDir 'nowly-host.exe') ./cmd/host
 Write-Host "  + nowly-host.exe"
 
+Write-Host ">> Fetching brand icon from CDN..."
+New-Item -ItemType Directory -Force -Path (Join-Path $RootDir 'assets') | Out-Null
+Invoke-WebRequest -Uri "https://cdn.nowly.me/brand/favicons/favicon-192.png" -OutFile (Join-Path $RootDir 'assets\icon.png')
+
 $Iscc = Get-Command 'iscc' -ErrorAction SilentlyContinue
 if (-not $Iscc) {
   $isccPaths = @(

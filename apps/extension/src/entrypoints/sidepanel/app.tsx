@@ -15,7 +15,7 @@ import { useExtensionState } from "@/hooks/use-extension-state";
 import { useLocalePreference } from "@/hooks/use-locale-preference";
 import { useOnboardingState } from "@/hooks/use-onboarding-state";
 import { sendMessage } from "@/lib/messages";
-import { WEB_BASE_URL } from "@/shared/constants";
+import { HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
 import {
   SIDEPANEL_NAV_KEY,
@@ -174,10 +174,11 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
   useEffect(() => {
     setStatusVisible(true);
     if (presencePaused) return;
+    if (hostVersionInfo?.updateAvailable) return;
     if (!connectionHealthy) return;
     const timer = window.setTimeout(() => setStatusVisible(false), 2500);
     return () => window.clearTimeout(timer);
-  }, [connectionHealthy, presencePaused]);
+  }, [connectionHealthy, hostVersionInfo?.updateAvailable, presencePaused]);
 
   const queueBanner = (
     <InstallQueueBanner count={installQueue.length} onRetry={() => void retryInstallQueue()} />
@@ -219,6 +220,14 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
               {settings.showPlayer !== false && !selectedPresenceSlug ? (
                 <CurrentActivityCard
                   activity={activity}
+                  idleHint={
+                    !activity && settings.scheduleEnabled === true && (
+                      Boolean(settings.globalSchedule)
+                      || Object.values(presences).some((presence) => Boolean(presence.schedule))
+                    )
+                      ? t("schedule-idle-hint")
+                      : undefined
+                  }
                   isLoading={isLoading}
                   isPaused={presencePaused}
                   isSnoozed={isSnoozed}
@@ -287,8 +296,15 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
 
       <ConnectionStatusBar
         nativeStatus={liveNativeStatus}
-        onConnect={connectNative}
+        onConnect={() => {
+          if (hostVersionInfo?.updateAvailable && liveNativeStatus.connected) {
+            void chrome.tabs.create({ url: HOST_DOWNLOAD_URL });
+            return;
+          }
+          connectNative();
+        }}
         presencePaused={presencePaused}
+        hostUpdateAvailable={hostVersionInfo?.updateAvailable === true}
         visible={statusVisible}
       />
 
@@ -331,6 +347,7 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
         settings={settings}
         onSettingsChange={setSettings}
         supporter={supporterStatus.adFree}
+        hostVersionInfo={hostVersionInfo}
       />
 
       <SupporterThankYouOverlay

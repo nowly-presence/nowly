@@ -1,0 +1,34 @@
+---
+title: Horodatages
+description: Affichez la progression de la lecture dans Discord Rich Presence avec des horodatages multimédias.
+---
+
+## Pourquoi les horodatages comptent
+
+Les horodatages rendent l'activité Discord vivante. Ils montrent depuis combien de temps l'utilisateur regarde ou combien de temps il reste.
+
+## Utiliser createMediaTimestamps
+
+`document` est l'API DOM du navigateur (disponible car les présences s'exécutent comme des scripts de contenu). `Assets` est fourni par le runtime (voir [Assets](/presence-development/assets)).
+
+```ts filename="presence.ts"
+import { createMediaTimestamps } from "@nowly/sdk"
+
+const video = document.querySelector("video")
+
+if (video) {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    ...createMediaTimestamps(video),
+  })
+}
+```
+
+## Média en pause
+
+Lorsque le média est en pause, `createMediaTimestamps` ne renvoie aucun horodatage. Cela évite d'afficher une progression de lecture incorrecte.
+
+## Flux en direct
+
+Les flux en direct n'ont souvent pas de durée fixe. Utilisez uniquement un horodatage de début, ou omettez les horodatages selon le comportement de la plateforme.

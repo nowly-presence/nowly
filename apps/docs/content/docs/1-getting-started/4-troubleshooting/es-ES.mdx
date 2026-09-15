@@ -1,0 +1,60 @@
+---
+title: Solución de problemas
+description: Corrige Nowly Host ausente, Discord Desktop cerrado, presencia ausente, actividad ausente, URL no compatible y permisos faltantes.
+---
+
+## Empieza por el diagnóstico
+
+Abre el panel lateral de la extensión y lee cada línea por separado:
+
+- Extensión instalada
+- Scripts de usuario activos
+- Nowly Host detectado
+- Discord conectado
+- Presencia instalada
+- Actividad detectada
+
+No dependas de un estado global. La línea que falta indica la siguiente acción.
+
+## Nowly Host no está detectado
+
+Mensaje mostrado: **Nowly Host no está detectado.**
+
+Instala Nowly Host desde la [página de Nowly Host](/host) y haz clic en **Comprobar conexión** en la extensión. Si acabas de instalarlo, cierra y vuelve a abrir el panel lateral.
+
+## Discord Desktop está cerrado
+
+Mensaje mostrado: **Nowly Host está instalado pero Discord Desktop no está abierto.**
+
+Abre Discord Desktop, espera unos segundos y haz clic en **Comprobar conexión**. Discord en el navegador no puede recibir actualizaciones locales de Rich Presence.
+
+## No hay ninguna presencia instalada
+
+Instala una presencia desde la biblioteca. Para la prueba más rápida, instala la [presencia de YouTube](/library/youtube) y abre YouTube.
+
+## No se detecta actividad
+
+Comprueba que:
+
+- la presencia correspondiente está instalada y activada
+- la URL actual es compatible con esa presencia
+- los scripts de usuario están activos
+- la página se recargó después de instalar la presencia
+
+## URL no compatible
+
+Abre la página de detalle de la presencia y compara tu URL actual con la lista **URL compatibles**. Si el sitio cambió de dirección o estructura, informa de la presencia desde la página de soporte.
+
+## Faltan permisos
+
+Abre los ajustes de extensiones de tu navegador y comprueba que:
+
+- Nowly está activada
+- los scripts de usuario están permitidos
+- el acceso al sitio está permitido para el sitio actual
+
+Después de cambiar permisos, recarga la pestaña del sitio y vuelve a abrir el panel lateral de la extensión.
+
+## Copiar un diagnóstico de soporte
+
+El diagnóstico de la extensión incluye un botón **Copiar soporte**. Copia el estado de Nowly Host, Discord, presencias y actividad sin exponer registros técnicos.

@@ -1,8 +1,11 @@
+import { BRAND_LOCKUP_BLUE_PNG } from "@/lib/brand";
+import { clientEnv } from "@nowly/env/client";
 import type { Metadata } from "next";
 
 export const SITE_URL = "https://nowly.me";
+export const DOCS_URL = clientEnv.NEXT_PUBLIC_DOCS_BASE_URL.replace(/\/$/, "");
 export const SITE_NAME = "Nowly";
-export const DEFAULT_OG_IMAGE = "/og-image.gif";
+export const DEFAULT_OG_IMAGE = BRAND_LOCKUP_BLUE_PNG;
 
 export const DEFAULT_SEO = {
   title: "Nowly | Automatic Discord Rich Presence",
@@ -54,9 +57,25 @@ type SeoOptions = {
   noIndex?: boolean
 };
 
-export const absoluteUrl = (path = "/"): string => {
+export const absoluteUrl = (path = "/", origin = SITE_URL): string => {
   if (path.startsWith("http")) return path;
-  return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
+  return `${origin}${path.startsWith("/") ? path : `/${path}`}`;
+};
+
+export const isDocsPath = (path: string): boolean =>
+  path === "/docs" || path.startsWith("/docs/");
+
+export const docsHref = (path = "/"): string => {
+  let normalized = path.trim() || "/";
+  if (!normalized.startsWith("/")) {
+    normalized = `/${normalized}`;
+  }
+  if (normalized === "/docs") {
+    normalized = "/";
+  } else if (normalized.startsWith("/docs/")) {
+    normalized = normalized.slice("/docs".length);
+  }
+  return `${DOCS_URL}${normalized}`;
 };
 
 export const createMetadata = ({
@@ -68,8 +87,9 @@ export const createMetadata = ({
   type = "website",
   noIndex = false,
 }: SeoOptions): Metadata => {
-  const url = absoluteUrl(path);
-  const imageUrl = absoluteUrl(image);
+  const origin = isDocsPath(path) ? DOCS_URL : SITE_URL;
+  const url = absoluteUrl(path, origin);
+  const imageUrl = absoluteUrl(image, origin);
   const resolvedTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
 
   return {

@@ -1,6 +1,7 @@
 import react from "@vitejs/plugin-react"
 import "dotenv/config"
-import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs"
+import { fetchBrandIcons } from "./fetch-brand-icons"
+import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs"
 import { dirname, join, resolve } from "path"
 import { fileURLToPath } from "url"
 import { build } from "vite"
@@ -148,15 +149,13 @@ const resetGeneratedPresences = () => {
   ].join("\n"))
 }
 
-const copyStatic = () => {
-  mkdirSync(join(DIST, "icons"), { recursive: true })
-  for (const size of [16, 48, 128]) {
-    copyFileSync(
-      join(ROOT, "src", "icons", `icon${size}.png`),
-      join(DIST, "icons", `icon${size}.png`),
-    )
-  }
+const copyStatic = async () => {
   cpSync(join(ROOT, "_locales"), join(DIST, "_locales"), { recursive: true })
+  try {
+    await fetchBrandIcons(join(DIST, "icons"))
+  } catch (error) {
+    console.warn("  ⚠ Could not fetch brand icons from CDN — load the unpacked build anyway.", error)
+  }
 }
 
 resetGeneratedPresences()
@@ -165,4 +164,4 @@ await buildPage("sidepanel", "entrypoints/sidepanel")
 await buildScript("background", join(ROOT, "src", "entrypoints", "background", "index.ts"))
 await buildScript("content", join(ROOT, "src", "entrypoints", "content", "index.ts"))
 copyManifest()
-copyStatic()
+await copyStatic()
