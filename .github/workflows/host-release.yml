@@ -51,8 +51,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - uses: actions/setup-go@v5
         with:
@@ -131,8 +129,6 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - uses: actions/setup-go@v5
         with:
@@ -201,19 +197,28 @@ jobs:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+          owner: nowly-presence
+          repositories: internal-cli
+
       - uses: actions/checkout@v4
         with:
-          submodules: recursive
-
-      - uses: pnpm/action-setup@v4
+          repository: nowly-presence/internal-cli
+          token: ${{ steps.app-token.outputs.token }}
+          path: internal-cli
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install internal-cli
+        working-directory: internal-cli
+        run: npm install
 
       - uses: actions/download-artifact@v4
         with:
@@ -242,12 +247,13 @@ jobs:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET || 'nowly' }}
         run: >
-          pnpm --filter @nowly/internal-cli host:publish --
+          npx tsx index.ts host:publish
           --release-version ${{ needs.version.outputs.version }}
-          --installer "${{ steps.artifacts.outputs.installer }}"
-          --portable "${{ steps.artifacts.outputs.portable }}"
-          --linux "${{ steps.artifacts.outputs.linux }}"
-          --macos-dmg "${{ steps.artifacts.outputs.dmg }}"
+          --installer "${{ github.workspace }}/${{ steps.artifacts.outputs.installer }}"
+          --portable "${{ github.workspace }}/${{ steps.artifacts.outputs.portable }}"
+          --linux "${{ github.workspace }}/${{ steps.artifacts.outputs.linux }}"
+          --macos-dmg "${{ github.workspace }}/${{ steps.artifacts.outputs.dmg }}"
+        working-directory: internal-cli
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
