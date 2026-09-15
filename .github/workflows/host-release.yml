@@ -94,7 +94,9 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path assets | Out-Null
-          Invoke-WebRequest -Uri "https://cdn.nowly.me/brand/favicons/favicon-192.png" -OutFile "assets/icon.png"
+          Invoke-WebRequest -Uri "https://cdn.nowly.me/brand/favicons/favicon-512.png" -OutFile "assets/icon.png"
+          python -m pip install --quiet pillow
+          python scripts/make-installer-ico.py --png assets/icon.png --out installer.ico
 
       - name: Build Windows installer
         working-directory: apps/native

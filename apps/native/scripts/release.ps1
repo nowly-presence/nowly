@@ -41,7 +41,9 @@ Write-Host ""
 
 Write-Host ">> Fetching brand icon from CDN..."
 New-Item -ItemType Directory -Force -Path (Join-Path $RootDir 'assets') | Out-Null
-Invoke-WebRequest -Uri "https://cdn.nowly.me/brand/favicons/favicon-192.png" -OutFile (Join-Path $RootDir 'assets\icon.png')
+Invoke-WebRequest -Uri "https://cdn.nowly.me/brand/favicons/favicon-512.png" -OutFile (Join-Path $RootDir 'assets\icon.png')
+python -m pip install --quiet pillow
+python (Join-Path $ScriptDir 'make-installer-ico.py') --png (Join-Path $RootDir 'assets\icon.png') --out (Join-Path $RootDir 'installer.ico')
 Write-Host ""
 
 # Create release directory
