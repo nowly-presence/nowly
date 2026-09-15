@@ -197,28 +197,7 @@ jobs:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - name: Generate token
-        id: app-token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.BOT_APP_ID }}
-          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
-          owner: nowly-presence
-          repositories: internal-cli
-
       - uses: actions/checkout@v4
-        with:
-          repository: nowly-presence/internal-cli
-          token: ${{ steps.app-token.outputs.token }}
-          path: internal-cli
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install internal-cli
-        working-directory: internal-cli
-        run: npm install
 
       - uses: actions/download-artifact@v4
         with:
@@ -247,13 +226,12 @@ jobs:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET || 'nowly' }}
         run: >
-          npx tsx index.ts host:publish
+          python3 apps/native/scripts/publish-host-cdn.py
           --release-version ${{ needs.version.outputs.version }}
           --installer "${{ github.workspace }}/${{ steps.artifacts.outputs.installer }}"
           --portable "${{ github.workspace }}/${{ steps.artifacts.outputs.portable }}"
           --linux "${{ github.workspace }}/${{ steps.artifacts.outputs.linux }}"
           --macos-dmg "${{ github.workspace }}/${{ steps.artifacts.outputs.dmg }}"
-        working-directory: internal-cli
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
