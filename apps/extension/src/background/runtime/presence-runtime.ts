@@ -40,6 +40,15 @@ export const createPresenceRuntime = (
     largeImageText: localizeText(data.largeImageText),
     smallImageText: localizeText(data.smallImageText),
   });
+  const postActivity = (data) => {
+    const localized = localizeActivity(data);
+    post("ACTIVITY_UPDATE", {
+      activity: {
+        ...localized,
+        name: localized.name || localized.appName || NOWLY_NAME,
+      },
+    });
+  };
 
   const post = (type, payload = {}) => {
     window.postMessage({
@@ -94,7 +103,7 @@ export const createPresenceRuntime = (
         return Promise.resolve();
       }
 
-      post("ACTIVITY_UPDATE", { activity: { name: NOWLY_NAME, ...localizeActivity(data) } });
+      postActivity(data);
       return Promise.resolve();
     }
 
@@ -134,7 +143,7 @@ export const createPresenceRuntime = (
 
   const ctx = {
     setActivity(data) {
-      post("ACTIVITY_UPDATE", { activity: { name: NOWLY_NAME, ...localizeActivity(data) } });
+      postActivity(data);
     },
     clearActivity() {
       post("CLEAR_ACTIVITY");
