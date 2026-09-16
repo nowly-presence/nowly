@@ -1,7 +1,8 @@
 "use client";
 
-import { LibraryCard } from "@/components/library/library-card";
+import { PaginatedLibraryGrid } from "@/components/library/paginated-library-grid";
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button-link";
 import {
   Empty,
   EmptyContent,
@@ -13,13 +14,15 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   catalogCategories,
+  presenceMatchesGithub,
   presenceSearchText,
   type LibraryCategory,
   type LibraryPresence,
 } from "@/lib/library-catalog";
 import { cn } from "@/lib/utils";
 import { RiCloseLine, RiSearchLine } from "@remixicon/react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
 const navJoinOffset = () =>
@@ -89,9 +92,14 @@ const useNavJoin = () => {
   return { joined, sentinelRef, toolbarRef };
 };
 
-export const LibraryView = ({ items }: { items: LibraryPresence[] }) => {
+export const LibraryView = ({
+  items,
+  authorHandle = null,
+}: {
+  items: LibraryPresence[]
+  authorHandle?: string | null
+}) => {
   const t = useTranslations("libraryPage");
-  const locale = useLocale();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<LibraryCategory | "all">("all");
   const deferredQuery = useDeferredValue(query);
@@ -101,11 +109,12 @@ export const LibraryView = ({ items }: { items: LibraryPresence[] }) => {
 
   const results = useMemo(() => {
     return items.filter((presence) => {
+      if (authorHandle && !presenceMatchesGithub(presence, authorHandle)) return false;
       if (category !== "all" && presence.category !== category) return false;
       if (!normalizedQuery) return true;
       return presenceSearchText(presence).includes(normalizedQuery);
     });
-  }, [category, items, normalizedQuery]);
+  }, [authorHandle, category, items, normalizedQuery]);
 
   const isStale = query.trim().toLowerCase() !== normalizedQuery;
 
@@ -158,6 +167,15 @@ export const LibraryView = ({ items }: { items: LibraryPresence[] }) => {
           </label>
 
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+            {authorHandle ? (
+              <Link
+                href="/library"
+                className="flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-foreground px-3.5 text-sm font-medium text-background"
+              >
+                @{authorHandle}
+                <RiCloseLine className="size-3.5" />
+              </Link>
+            ) : null}
             <FilterChip
               active={category === "all"}
               onClick={() => setCategory("all")}
@@ -183,13 +201,11 @@ export const LibraryView = ({ items }: { items: LibraryPresence[] }) => {
         </p>
 
         {results.length > 0 ? (
-          <section
-            className={cn("mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3", isStale && "opacity-70")}
-          >
-            {results.map((presence) => (
-              <LibraryCard key={presence.slug} presence={presence} locale={locale} />
-            ))}
-          </section>
+          <PaginatedLibraryGrid
+            items={results}
+            resetKey={`${authorHandle ?? ""}:${category}:${normalizedQuery}`}
+            className={isStale ? "opacity-70" : undefined}
+          />
         ) : (
           <Empty className="mt-16 border">
             <EmptyHeader>
@@ -200,16 +216,22 @@ export const LibraryView = ({ items }: { items: LibraryPresence[] }) => {
               <EmptyDescription>{t("empty-description")}</EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  setQuery("");
-                  setCategory("all");
-                }}
-              >
-                {t("clear")}
-              </Button>
+              {authorHandle ? (
+                <ButtonLink href="/library" variant="outline">
+                  {t("clear")}
+                </ButtonLink>
+              ) : (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setQuery("");
+                    setCategory("all");
+                  }}
+                >
+                  {t("clear")}
+                </Button>
+              )}
             </EmptyContent>
           </Empty>
         )}
