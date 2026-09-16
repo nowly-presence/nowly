@@ -102,25 +102,24 @@
     "items": [
       {
         "title": "The extension",
-        "text": "Add Nowly to Chrome or Firefox.",
+        "text": "Add Nowly to Chrome or Firefox, for free.",
         "action": "Download"
       },
       {
         "title": "Desktop app",
-        "text": "The local bridge to Discord.",
+        "text": "Install the local bridge that talks to Discord.",
         "action": "Get the app"
       },
       {
         "title": "One presence",
-        "text": "YouTube, Netflix, or Twitch.",
+        "text": "Enable YouTube, Netflix, or Twitch from the library.",
         "action": "Open library"
       }
     ]
   },
   "cta": {
     "title": "Get started with Nowly",
-    "description": "Install the free extension. You’re set up in seconds.",
-    "docs": "View the docs"
+    "description": "Install the free extension. You’re set up in seconds."
   },
   "features": {
     "eyebrow": "Product",
@@ -186,20 +185,20 @@
       },
       {
         "question": "Does my activity go through your servers?",
-        "answer": "No. Activity stays local and is sent to Discord from your machine. Reviews you publish, if any, are stored server-side. Analytics are optional and off by default."
+        "answer": "No. Activity stays local and is sent to Discord from your machine. Analytics are optional and off by default."
       },
       {
         "question": "Which platforms are supported?",
         "answer": "The live list is the library. New presences can be added without updating the extension, so install the ones you actually use."
       }
     ]
+  },
   "open-source": {
     "eyebrow": "Open source",
     "title": "Add a presence",
     "description": "Presence scripts are public. Fork, write, open a PR. The CLI and docs are enough to start.",
     "docs": "Read the docs",
     "file": "presence.ts"
-  },
   },
   "store": {
     "download-chrome": "Download for Chrome",

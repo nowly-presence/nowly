@@ -24,7 +24,9 @@ export const SectionHeading = ({
     ) : null}
     <h2 className="text-[26px] font-normal leading-tight text-foreground sm:text-[30px] lg:text-nowrap">{title}</h2>
     {description ? (
-      <p className="mx-auto mt-4 max-w-[36rem] text-base leading-relaxed text-muted-foreground sm:text-lg">{description}</p>
+      <p className="mx-auto mt-2 max-w-[36rem] text-base leading-relaxed text-muted-foreground sm:text-lg lg:max-w-none lg:text-nowrap">
+        {description}
+      </p>
     ) : null}
   </div>
 );

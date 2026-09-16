@@ -1,7 +1,7 @@
 import { SectionHeading } from "@/components/home/section-heading";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import {
-  RiChromeLine,
+  RiGlobalLine,
   RiLockLine,
   RiPuzzleLine,
   RiRefreshLine,
@@ -10,7 +10,7 @@ import {
 } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
-const icons = [RiRefreshLine, RiPuzzleLine, RiLockLine, RiShieldCheckLine, RiChromeLine, RiWindowLine];
+const icons = [RiRefreshLine, RiPuzzleLine, RiLockLine, RiShieldCheckLine, RiGlobalLine, RiWindowLine];
 
 export const FeaturesSection = async () => {
   const t = await getTranslations("features");

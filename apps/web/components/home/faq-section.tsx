@@ -18,7 +18,7 @@ export const FaqSection = async () => {
           <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[2.15rem]">
             {t("title")}
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">{t("description")}</p>
+          <p className="mt-2 text-base leading-relaxed text-muted-foreground sm:text-lg">{t("description")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonAnchor href={docsHref("/")} rel="noreferrer" target="_blank" variant="inverted">
               {t("docs")}

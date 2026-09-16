@@ -16,7 +16,7 @@ export const PrivacySection = async () => {
           <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[2.15rem]">
             {t("title")}
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">{t("description")}</p>
+          <p className="mt-2 text-base leading-relaxed text-muted-foreground sm:text-lg">{t("description")}</p>
           <p className="mt-8">
             <Link
               href="/privacy"

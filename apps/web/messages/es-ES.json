@@ -102,25 +102,24 @@
     "items": [
       {
         "title": "La extensión",
-        "text": "Añade Nowly a Chrome o Firefox.",
+        "text": "Añade Nowly a Chrome o Firefox, es gratis.",
         "action": "Descargar"
       },
       {
         "title": "App de escritorio",
-        "text": "El puente local hacia Discord.",
+        "text": "Instala el puente local que habla con Discord.",
         "action": "Ver la app"
       },
       {
         "title": "Una presencia",
-        "text": "YouTube, Netflix o Twitch.",
+        "text": "Activa YouTube, Netflix o Twitch en la biblioteca.",
         "action": "Biblioteca"
       }
     ]
   },
   "cta": {
     "title": "Empieza con Nowly",
-    "description": "Instala la extensión gratis y en segundos estás listo.",
-    "docs": "Ver la documentación"
+    "description": "Instala la extensión gratis y en segundos estás listo."
   },
   "features": {
     "eyebrow": "Producto",
@@ -186,20 +185,20 @@
       },
       {
         "question": "¿Mi actividad pasa por los servidores de Nowly?",
-        "answer": "No. La actividad se queda local y se envía a Discord desde tu máquina. Las reseñas que publiques, si las hay, se guardan en el servidor. Las analytics son opcionales y están desactivadas por defecto."
+        "answer": "No. La actividad se queda local y se envía a Discord desde tu máquina. Las analytics son opcionales y están desactivadas por defecto."
       },
       {
         "question": "¿Qué plataformas están soportadas?",
         "answer": "La lista actualizada es la biblioteca. Pueden llegar presencias nuevas sin actualizar la extensión: instala las que uses de verdad."
       }
     ]
+  },
   "open-source": {
     "eyebrow": "Open source",
     "title": "Añade una presencia",
     "description": "Los scripts son públicos. Haz fork, escribe, abre un PR. La CLI y la doc bastan para empezar.",
     "docs": "Ver la documentación",
     "file": "presence.ts"
-  },
   },
   "store": {
     "download-chrome": "Descargar para Chrome",

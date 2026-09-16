@@ -1,7 +1,7 @@
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { homeSectionAltClass, SectionHeading } from "@/components/home/section-heading";
 import { ButtonLink } from "@/components/ui/button-link";
-import { RiAddLine, RiBookShelfFill, RiWindow2Fill, RiWindowLine } from "@remixicon/react";
+import { RiBookShelfFill, RiWindow2Fill } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
 type StepItem = {
