@@ -386,6 +386,21 @@
       "storage-linux": "About 2 MB"
     }
   },
+  "changelogPage": {
+    "eyebrow": "Release notes",
+    "title": "What changed",
+    "description": "Each Nowly release, from the latest store build back to the first public version.",
+    "latest": "Latest",
+    "read": "Read the notes",
+    "docs": "Full notes",
+    "back": "All releases",
+    "library": "Library",
+    "update-eyebrow": "Extension update",
+    "update-title": "Nowly {version} is installed",
+    "update-description": "Here is what changed in this release.",
+    "meta-title": "Nowly {version}",
+    "missing": "Notes for this version are not on the site yet. You can still browse the full changelog in the docs."
+  },
   "placeholder": {
     "badge": "Coming soon",
     "description": "This page is being rebuilt for the new site. The previous version stays available for reference."

@@ -386,6 +386,21 @@
       "storage-linux": "Unos 2 MB"
     }
   },
+  "changelogPage": {
+    "eyebrow": "Notas de la versión",
+    "title": "Qué ha cambiado",
+    "description": "Cada versión de Nowly, desde la última build de la tienda hasta la primera versión pública.",
+    "latest": "Actual",
+    "read": "Leer las notas",
+    "docs": "Notas completas",
+    "back": "Todas las versiones",
+    "library": "Biblioteca",
+    "update-eyebrow": "Actualización de la extensión",
+    "update-title": "Nowly {version} está instalado",
+    "update-description": "Esto es lo que cambia en esta versión.",
+    "meta-title": "Nowly {version}",
+    "missing": "Las notas de esta versión aún no están en el sitio. El changelog completo sigue en la documentación."
+  },
   "placeholder": {
     "badge": "Próximamente",
     "description": "Esta página se está rediseñando. La versión anterior queda disponible como referencia."
