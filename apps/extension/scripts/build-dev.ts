@@ -35,6 +35,7 @@ const define = {
   "import.meta.env.VITE_WEB_BASE_URL": JSON.stringify(webBaseUrl),
   "import.meta.env.VITE_API_BASE_URL": JSON.stringify(apiBaseUrl),
   "import.meta.env.VITE_CDN_BASE_URL": JSON.stringify(cdnBaseUrl),
+  "import.meta.env.VITE_NOWLY_CHANNEL": JSON.stringify("canary"),
   "import.meta.env.BROWSER": JSON.stringify(BROWSER),
 }
 
@@ -144,10 +145,44 @@ const copyManifest = () => {
   writeFileSync(join(DIST, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`)
 }
 
+const applyCanaryLocales = (localesDir: string): void => {
+  const names: Record<string, { commandOpenPanel: string; contextMenuPage: string }> = {
+    en: {
+      commandOpenPanel: "Open Nowly Canary",
+      contextMenuPage: "Nowly Canary presence for this page",
+    },
+    fr: {
+      commandOpenPanel: "Ouvrir Nowly Canary",
+      contextMenuPage: "Présence Nowly Canary pour cette page",
+    },
+    es: {
+      commandOpenPanel: "Abrir Nowly Canary",
+      contextMenuPage: "Presencia Nowly Canary para esta página",
+    },
+  }
+
+  for (const locale of readdirSync(localesDir, { withFileTypes: true })) {
+    if (!locale.isDirectory()) continue
+    const messagesPath = join(localesDir, locale.name, "messages.json")
+    if (!existsSync(messagesPath)) continue
+
+    const messages = JSON.parse(readFileSync(messagesPath, "utf-8")) as Record<string, { message?: string }>
+    messages.extensionName = { message: "Nowly Canary" }
+    const localized = names[locale.name]
+    if (localized) {
+      messages.commandOpenPanel = { message: localized.commandOpenPanel }
+      messages.contextMenuPage = { message: localized.contextMenuPage }
+    }
+    writeFileSync(messagesPath, `${JSON.stringify(messages, null, 2)}\n`)
+  }
+  console.log("  ✔ Canary branding (name + icons)")
+}
+
 const copyStatic = async () => {
   cpSync(join(ROOT, "_locales"), join(DIST, "_locales"), { recursive: true })
+  applyCanaryLocales(join(DIST, "_locales"))
   try {
-    await fetchBrandIcons(join(DIST, "icons"))
+    await fetchBrandIcons(join(DIST, "icons"), "canary")
   } catch (error) {
     console.warn("  ⚠ Could not fetch brand icons from CDN - load the unpacked build anyway.", error)
   }

@@ -18,6 +18,11 @@
   --radius: 0.75rem;
 }
 
+html[data-channel="canary"],
+html[data-channel="canary"] [data-theme="default"] {
+  --accent: #CFEE22;
+}
+
 [data-theme="donator"] {
   --accent: #FEE961;
 }

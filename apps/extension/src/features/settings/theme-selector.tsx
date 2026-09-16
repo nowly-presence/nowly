@@ -8,7 +8,7 @@ type Props = {
 };
 
 const THEMES: Array<{ key: AccentTheme; color: string }> = [
-  { key: "default", color: "#22d3ee" },
+  { key: "default", color: import.meta.env.VITE_NOWLY_CHANNEL === "canary" ? "#CFEE22" : "#22d3ee" },
   { key: "donator", color: "#FEE961" },
   { key: "fleuri", color: "#DA47D0" },
   { key: "violet", color: "#A78BFA" },

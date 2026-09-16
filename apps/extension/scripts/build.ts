@@ -20,6 +20,7 @@ const define = {
   "import.meta.env.VITE_WEB_BASE_URL": JSON.stringify(webBaseUrl),
   "import.meta.env.VITE_API_BASE_URL": JSON.stringify(apiBaseUrl),
   "import.meta.env.VITE_CDN_BASE_URL": JSON.stringify(cdnBaseUrl),
+  "import.meta.env.VITE_NOWLY_CHANNEL": JSON.stringify("stable"),
   "import.meta.env.BROWSER": JSON.stringify(BROWSER),
 }
 

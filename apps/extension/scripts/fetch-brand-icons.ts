@@ -3,11 +3,19 @@ import { join } from "path"
 
 export const CDN_BRAND = "https://cdn.nowly.me/brand"
 
-const ICONS = [
-  { size: 16, url: `${CDN_BRAND}/favicons/favicon-16.png` },
-  { size: 48, url: `${CDN_BRAND}/favicons/favicon-48.png` },
-  { size: 128, url: `${CDN_BRAND}/favicons/favicon-192.png` },
-] as const
+export type BrandIconVariant = "stable" | "canary"
+
+const iconUrls = (variant: BrandIconVariant) => {
+  const folder = variant === "canary"
+    ? `${CDN_BRAND}/favicons/canary`
+    : `${CDN_BRAND}/favicons`
+
+  return [
+    { size: 16, url: `${folder}/favicon-16.png` },
+    { size: 48, url: `${folder}/favicon-48.png` },
+    { size: 128, url: `${folder}/favicon-192.png` },
+  ] as const
+}
 
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -32,10 +40,13 @@ const fetchBuffer = async (url: string): Promise<Buffer> => {
   throw lastError
 }
 
-export const fetchBrandIcons = async (destDir: string): Promise<void> => {
+export const fetchBrandIcons = async (
+  destDir: string,
+  variant: BrandIconVariant = "stable",
+): Promise<void> => {
   mkdirSync(destDir, { recursive: true })
 
-  await Promise.all(ICONS.map(async ({ size, url }) => {
+  await Promise.all(iconUrls(variant).map(async ({ size, url }) => {
     const buf = await fetchBuffer(url)
     writeFileSync(join(destDir, `icon${size}.png`), buf)
   }))

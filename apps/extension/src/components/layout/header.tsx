@@ -12,7 +12,7 @@ import {
   IconRotateClockwise2,
   IconWorld,
 } from "@/lib/tabler-icons";
-import { BRAND_LOCKUP_BLUE } from "@/shared/brand";
+import { BRAND_LOCKUP } from "@/shared/brand";
 import { DISCORD_INVITE_URL, HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
 import type { PresenceDisplayMode } from "@/shared/types";
@@ -104,8 +104,8 @@ export const Header: FC<Props> = ({
   return (
     <header className={`flex items-center justify-between gap-3 ${menuOpen ? "relative z-20" : ""}`}>
       <img
-        src={BRAND_LOCKUP_BLUE}
-        alt="Nowly"
+        src={BRAND_LOCKUP}
+        alt={chrome.i18n.getMessage("extensionName") || "Nowly"}
         className="ml-2 h-[53px] w-auto min-w-0"
       />
       <div className="mr-2 flex shrink-0 items-center gap-1.5">
