@@ -31,7 +31,7 @@ export const DevelopmentCard: FC<Props> = ({ platform }): ReactElement => {
         </Link>
       </div>
 
-      <div>
+      <div className="overflow-hidden rounded-lg">
         <AuthorItem
           contributor={platform.author}
           label={platform.contributors.length > 0 ? t("author-label") : undefined}

@@ -24,17 +24,17 @@ export const AuthorItem: FC<Props> = ({ contributor, label }): ReactElement => {
         <AvatarFallback>{contributor.name.charAt(0).toUpperCase()}</AvatarFallback>
       </Avatar>
 
-      <span className="text-sm text-foreground flex-1">{contributor.name}</span>
-      {label && (
-        <span className="text-[10px] font-bold uppercase tracking-wider text-dim-foreground">
+      <span className="min-w-0 flex-1 truncate text-sm text-foreground">{contributor.name}</span>
+      {label ? (
+        <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider text-dim-foreground">
           {label}
         </span>
-      )}
+      ) : null}
     </>
   );
 
   return (
-    <div className="flex w-full items-center first:rounded-t-lg last:rounded-b-lg overflow-hidden">
+    <div className="flex w-full items-stretch">
       {profileHref ? (
         <Link
           href={profileHref}
@@ -54,10 +54,10 @@ export const AuthorItem: FC<Props> = ({ contributor, label }): ReactElement => {
           href={githubHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="shrink-0 bg-card-2 px-3 py-2 text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground"
+          className="flex shrink-0 items-center justify-center bg-card-2 py-2 pr-4 pl-2 text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground"
           aria-label={`${contributor.name} on GitHub`}
         >
-          <GitHubIcon className="h-4 w-4" />
+          <GitHubIcon className="size-4" />
         </a>
       ) : null}
     </div>
