@@ -234,6 +234,31 @@
     "cookies": "Cookies",
     "legal-notice": "Mentions légales"
   },
+  "libraryPage": {
+    "eyebrow": "Bibliothèque",
+    "title": "Toutes les présences, au même endroit",
+    "description": "Parcourez les plateformes que Nowly peut afficher sur Discord. Cherchez, filtrez, et choisissez ce que vous voulez montrer.",
+    "search": "Rechercher Netflix, Spotify, Figma...",
+    "search-label": "Rechercher dans la bibliothèque",
+    "clear-search": "Effacer la recherche",
+    "all": "Tout",
+    "featured": "Populaires",
+    "count": "{count, plural, one {# présence} other {# présences}}",
+    "empty-title": "Aucun résultat",
+    "empty-description": "Essayez un autre nom, ou réinitialisez les filtres.",
+    "clear": "Réinitialiser",
+    "categories": {
+      "streaming": "Streaming",
+      "music": "Musique",
+      "video": "Vidéo",
+      "gaming": "Jeux",
+      "social": "Social",
+      "ai": "IA",
+      "tools": "Outils",
+      "learning": "Apprentissage",
+      "other": "Autre"
+    }
+  },
   "placeholder": {
     "badge": "Bientôt",
     "description": "Cette page est en cours de refonte. L’ancienne version reste disponible pour référence."
@@ -241,7 +266,7 @@
   "pages": {
     "library": {
       "title": "Bibliothèque",
-      "description": "Parcourez et installez les présences Discord de vos plateformes préférées."
+      "description": "Parcourez les plateformes que Nowly peut afficher sur Discord."
     },
     "host": {
       "title": "Application bureau",

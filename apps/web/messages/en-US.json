@@ -234,6 +234,31 @@
     "cookies": "Cookies",
     "legal-notice": "Legal notice"
   },
+  "libraryPage": {
+    "eyebrow": "Library",
+    "title": "Every presence, in one place",
+    "description": "Browse the platforms Nowly can share on Discord. Search, filter, and pick what you want to show.",
+    "search": "Search Netflix, Spotify, Figma...",
+    "search-label": "Search the library",
+    "clear-search": "Clear search",
+    "all": "All",
+    "featured": "Popular",
+    "count": "{count, plural, one {# presence} other {# presences}}",
+    "empty-title": "Nothing matches",
+    "empty-description": "Try another name, or reset the filters.",
+    "clear": "Reset",
+    "categories": {
+      "streaming": "Streaming",
+      "music": "Music",
+      "video": "Video",
+      "gaming": "Gaming",
+      "social": "Social",
+      "ai": "AI",
+      "tools": "Tools",
+      "learning": "Learning",
+      "other": "Other"
+    }
+  },
   "placeholder": {
     "badge": "Coming soon",
     "description": "This page is being rebuilt for the new site. The previous version stays available for reference."
@@ -241,7 +266,7 @@
   "pages": {
     "library": {
       "title": "Library",
-      "description": "Browse and install Discord Rich Presence scripts for your favorite platforms."
+      "description": "Browse the platforms Nowly can share on Discord."
     },
     "host": {
       "title": "Desktop app",
