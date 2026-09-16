@@ -2,6 +2,7 @@ model Presence {
   slug      String    @id
   metadata  Json      @default("{}")
   version   String?
+  archived  Boolean   @default(false)
   addedAt   DateTime? @map("added_at") @db.Timestamptz(6)
   updatedAt DateTime? @map("updated_at") @db.Timestamptz(6)
 

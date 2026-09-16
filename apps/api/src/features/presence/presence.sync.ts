@@ -3,8 +3,8 @@ import { generateChangelog, translateChangelog } from "@/shared/openai.service"
 import { sha256Base64Url } from "@/shared/crypto.service"
 import { serializeJsonField } from "./presence.service"
 import {
-  addVersion, getPresenceStats, getVersionHistory,
-  setAdded, setPresenceMeta, setUpdated, setVersion,
+  addVersion, getAllPresenceSlugs, getPresenceStats, getVersionHistory,
+  setAdded, setArchived, setPresenceMeta, setUpdated, setVersion,
 } from "./presence.repository"
 
 type ReleasePerson = {
@@ -36,7 +36,9 @@ export type PresenceSyncEntry = {
 }
 
 export type PresenceSyncBody = {
-  presences: PresenceSyncEntry[]
+  presences?: PresenceSyncEntry[]
+  archivedSlugs?: string[]
+  catalogSlugs?: string[]
   pr?: string
   prTitle?: string
   changes?: string
@@ -47,6 +49,13 @@ export type PresenceSyncResult = {
   version: string
   changelog: string
 }
+
+export type PresenceSyncResponse = {
+  results: PresenceSyncResult[]
+  archived: string[]
+}
+
+const normalizeSlug = (slug: string): string => slug.trim().toLowerCase()
 
 const bumpPatch = (version: string): string => {
   const parts = version.split(".").map(Number)
@@ -59,11 +68,11 @@ const bumpPatch = (version: string): string => {
  * For each presence it resolves the next version, generates/translates the
  * changelog, records the version history entry and upserts metadata.
  */
-export const processPresenceSync = async (body: PresenceSyncBody): Promise<PresenceSyncResult[]> => {
+export const processPresenceSync = async (body: PresenceSyncBody): Promise<PresenceSyncResponse> => {
   const results: PresenceSyncResult[] = []
   const seen = new Set<string>()
 
-  for (const p of body.presences) {
+  for (const p of body.presences ?? []) {
     if (seen.has(p.slug)) continue
     seen.add(p.slug)
 
@@ -146,7 +155,28 @@ export const processPresenceSync = async (body: PresenceSyncBody): Promise<Prese
         url: p.url,
       })
     }
+
+    await setArchived(p.slug, false)
   }
 
-  return results
+  const toArchive = new Set(
+    (body.archivedSlugs ?? []).map(normalizeSlug).filter(Boolean),
+  )
+
+  if (body.catalogSlugs) {
+    const catalog = new Set(body.catalogSlugs.map(normalizeSlug).filter(Boolean))
+    const known = await getAllPresenceSlugs({ includeArchived: true })
+    for (const slug of known) {
+      if (!catalog.has(slug)) toArchive.add(slug)
+    }
+  }
+
+  for (const slug of seen) toArchive.delete(slug)
+
+  const archived: string[] = []
+  for (const slug of toArchive) {
+    if (await setArchived(slug, true)) archived.push(slug)
+  }
+
+  return { results, archived }
 }

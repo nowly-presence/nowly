@@ -1,7 +1,7 @@
-import { requireAuth } from "@/features/auth/auth.middleware"
+import { hasAdminAuth, requireAuth } from "@/features/auth/auth.middleware"
 import { buildLocaleObject } from "@nowly/locales"
 import { presenceActiveBodySchema, presencePutBodySchema } from "@nowly/shared/schemas"
-import type { FastifyInstance } from "fastify"
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
 import {
   addVersion,
   clearActiveDevice, clearActiveDevicesForDevice,
@@ -11,6 +11,17 @@ import {
 } from "./presence.repository"
 import { buildRelease } from "./presence.service"
 import { processPresenceSync, type PresenceSyncBody } from "./presence.sync"
+
+const sendArchivedNotFound = async (
+  slug: string,
+  request: FastifyRequest,
+  reply: FastifyReply,
+): Promise<boolean> => {
+  const stats = await getPresenceStats(slug)
+  if (!stats?.archived || hasAdminAuth(request)) return false
+  reply.status(404).send({ error: "Presence not found" })
+  return true
+}
 
 export const presenceRoutes = async (fastify: FastifyInstance) => {
   fastify.get("", async (_request, _reply) => {
@@ -43,6 +54,8 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
 
   fastify.get<{ Params: { slug: string } }>("/:slug", async (request, reply) => {
     const slug = request.params.slug.toLowerCase()
+    if (await sendArchivedNotFound(slug, request, reply)) return
+
     const release = await buildRelease(slug)
 
     if (!release) {
@@ -56,6 +69,8 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
 
   fastify.get<{ Params: { slug: string } }>("/:slug/versions", async (request, reply) => {
     const slug = request.params.slug.toLowerCase()
+    if (await sendArchivedNotFound(slug, request, reply)) return
+
     const history = await getVersionHistory(slug)
     return reply.send(history)
   })
@@ -63,6 +78,8 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
   fastify.get<{ Params: { slug: string; version: string } }>("/:slug/versions/:version", async (request, reply) => {
     const slug = request.params.slug.toLowerCase()
     const version = request.params.version
+    if (await sendArchivedNotFound(slug, request, reply)) return
+
     const release = await buildRelease(slug, version)
 
     if (!release) {
@@ -111,8 +128,8 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
     await requireAuth(request, reply)
     if (reply.sent) return
 
-    const results = await processPresenceSync(request.body as PresenceSyncBody)
-    return { ok: true, results }
+    const { results, archived } = await processPresenceSync(request.body as PresenceSyncBody)
+    return { ok: true, results, archived }
   })
 
   fastify.post("/active", async (request, reply) => {

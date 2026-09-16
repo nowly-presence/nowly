@@ -2,6 +2,7 @@ export interface PresenceStats {
   totalInstalls: number
   activeUsers: number
   version: string | null
+  archived: boolean
   addedAt: string | null
   lastUpdated: string | null
 }

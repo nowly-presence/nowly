@@ -21,6 +21,7 @@ const mockPresenceRepo = vi.hoisted(() => ({
   setUpdated: vi.fn(),
   addVersion: vi.fn(),
   getVersionHistory: vi.fn(),
+  setArchived: vi.fn(),
 }))
 
 vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo)
@@ -150,6 +151,19 @@ describe("Presence Routes", () => {
     const res = await app.inject({ method: "GET", url: "/presences/nonexistent" })
 
     expect(res.statusCode).toBe(404)
+  })
+
+  it("GET /presences/:slug returns 404 when archived", async () => {
+    process.env.API_SECRET_KEY = "test-secret"
+    mockPresenceRepo.getPresenceStats.mockResolvedValue({
+      totalInstalls: 12, activeUsers: 0, version: "1.0.0", archived: true, addedAt: null, lastUpdated: null,
+    })
+
+    const res = await app.inject({ method: "GET", url: "/presences/cinepulse" })
+
+    expect(res.statusCode).toBe(404)
+    expect(JSON.parse(res.body)).toEqual({ error: "Presence not found" })
+    expect(mockPresenceRepo.getPresenceMeta).not.toHaveBeenCalled()
   })
 
   it("GET /presences/:slug returns 200 with release data", async () => {
@@ -301,6 +315,29 @@ describe("Presence Routes", () => {
     expect(mockPresenceRepo.setPresenceMeta).toHaveBeenCalledWith("youtube", expect.objectContaining({
       slug: "youtube", name: "YouTube", author: "dev", category: "video",
     }))
+    expect(mockPresenceRepo.setArchived).toHaveBeenCalledWith("youtube", false)
+  })
+
+  it("POST /presences/sync archives removed slugs", async () => {
+    mockPresenceRepo.setArchived.mockResolvedValue(true)
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/sync",
+      headers: { authorization: "Bearer test-secret" },
+      payload: {
+        archivedSlugs: ["cinepulse"],
+        pr: "11",
+        prTitle: "Remove Cinepulse",
+      },
+    })
+
+    expect(res.statusCode).toBe(200)
+    const body = JSON.parse(res.body)
+    expect(body.ok).toBe(true)
+    expect(body.results).toEqual([])
+    expect(body.archived).toEqual(["cinepulse"])
+    expect(mockPresenceRepo.setArchived).toHaveBeenCalledWith("cinepulse", true)
   })
 })
 

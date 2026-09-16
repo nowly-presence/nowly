@@ -64,6 +64,7 @@ export const getPresenceStats = async (slug: string): Promise<PresenceStats> => 
     totalInstalls,
     activeUsers: await getActiveUsers(slug),
     version: presence?.version ?? null,
+    archived: presence?.archived ?? false,
     addedAt: iso(presence?.addedAt),
     lastUpdated: iso(presence?.updatedAt),
   }
@@ -181,9 +182,21 @@ export const getPresenceMeta = async (slug: string): Promise<PresenceMeta | null
   return (row?.metadata as PresenceMeta | null) ?? null
 }
 
-export const getAllPresenceSlugs = async (): Promise<string[]> => {
-  const rows = await getPrisma().presence.findMany({ select: { slug: true }, orderBy: { slug: "asc" } })
+export const getAllPresenceSlugs = async (options: { includeArchived?: boolean } = {}): Promise<string[]> => {
+  const rows = await getPrisma().presence.findMany({
+    where: options.includeArchived ? undefined : { archived: false },
+    select: { slug: true },
+    orderBy: { slug: "asc" },
+  })
   return rows.map((row) => row.slug)
+}
+
+export const setArchived = async (slug: string, archived: boolean): Promise<boolean> => {
+  const result = await getPrisma().presence.updateMany({
+    where: { slug, archived: { not: archived } },
+    data: { archived },
+  })
+  return result.count > 0
 }
 
 export const getVersionHistory = async (slug: string): Promise<VersionEntry[]> => {

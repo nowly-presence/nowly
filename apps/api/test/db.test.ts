@@ -5,6 +5,7 @@ const mockPrisma = vi.hoisted(() => ({
     findUnique: vi.fn(),
     findMany: vi.fn(),
     upsert: vi.fn(),
+    updateMany: vi.fn(),
   },
   presenceVersion: {
     findMany: vi.fn(),
@@ -58,6 +59,7 @@ import {
   getPresenceMeta,
   getAllPresenceSlugs,
   getVersionHistory,
+  setArchived,
 } from "@/features/presence/presence.repository"
 
 import {
@@ -80,6 +82,7 @@ describe("getPresenceStats", () => {
     expect(stats.totalInstalls).toBe(0)
     expect(stats.activeUsers).toBe(0)
     expect(stats.version).toBeNull()
+    expect(stats.archived).toBe(false)
     expect(stats.addedAt).toBeNull()
     expect(stats.lastUpdated).toBeNull()
   })
@@ -88,7 +91,7 @@ describe("getPresenceStats", () => {
     const addedAt = new Date("2024-01-01")
     const updatedAt = new Date("2024-06-01")
     mockPrisma.presence.findUnique.mockResolvedValue({
-      slug: "youtube", version: "1.2.3", addedAt, updatedAt,
+      slug: "youtube", version: "1.2.3", archived: true, addedAt, updatedAt,
     })
     mockPrisma.devicePresence.count.mockResolvedValue(100)
     mockPrisma.presenceActiveDevice.deleteMany.mockResolvedValue({ count: 0 })
@@ -98,6 +101,7 @@ describe("getPresenceStats", () => {
     expect(stats.totalInstalls).toBe(100)
     expect(stats.activeUsers).toBe(25)
     expect(stats.version).toBe("1.2.3")
+    expect(stats.archived).toBe(true)
     expect(stats.addedAt).toBe("2024-01-01T00:00:00.000Z")
     expect(stats.lastUpdated).toBe("2024-06-01T00:00:00.000Z")
   })
@@ -320,13 +324,43 @@ describe("getAllPresenceSlugs", () => {
     ])
     expect(await getAllPresenceSlugs()).toEqual(["youtube", "twitch"])
     expect(mockPrisma.presence.findMany).toHaveBeenCalledWith({
-      select: { slug: true }, orderBy: { slug: "asc" },
+      where: { archived: false },
+      select: { slug: true },
+      orderBy: { slug: "asc" },
+    })
+  })
+
+  it("includes archived slugs when requested", async () => {
+    mockPrisma.presence.findMany.mockResolvedValue([{ slug: "youtube" }])
+    expect(await getAllPresenceSlugs({ includeArchived: true })).toEqual(["youtube"])
+    expect(mockPrisma.presence.findMany).toHaveBeenCalledWith({
+      where: undefined,
+      select: { slug: true },
+      orderBy: { slug: "asc" },
     })
   })
 
   it("returns empty when none", async () => {
     mockPrisma.presence.findMany.mockResolvedValue([])
     expect(await getAllPresenceSlugs()).toEqual([])
+  })
+})
+
+describe("setArchived", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("archives a presence that is not already archived", async () => {
+    mockPrisma.presence.updateMany.mockResolvedValue({ count: 1 })
+    expect(await setArchived("cinepulse", true)).toBe(true)
+    expect(mockPrisma.presence.updateMany).toHaveBeenCalledWith({
+      where: { slug: "cinepulse", archived: { not: true } },
+      data: { archived: true },
+    })
+  })
+
+  it("returns false when the presence is missing or already in that state", async () => {
+    mockPrisma.presence.updateMany.mockResolvedValue({ count: 0 })
+    expect(await setArchived("cinepulse", false)).toBe(false)
   })
 })
 
