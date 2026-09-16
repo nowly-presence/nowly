@@ -231,17 +231,19 @@ export const checkUpdates = async (): Promise<Record<string, string>> => {
   const results = await Promise.allSettled(
     slugs.map((slug) =>
       fetch(`${getEffectiveApiUrl()}/presences/${slug}`)
-        .then((r) => r.json() as Promise<{ version: string }>)
-        .then((data) => ({ slug, latestVersion: data.version }))
+        .then(async (response) => {
+          if (!response.ok) return null;
+          const data = await response.json() as { version?: string };
+          return { slug, latestVersion: data.version };
+        })
     )
   );
   for (const result of results) {
-    if (result.status === "fulfilled") {
-      const { slug, latestVersion } = result.value;
-      const installed = presences[slug].release?.version;
-      if (installed && latestVersion !== installed) {
-        updates[slug] = latestVersion;
-      }
+    if (result.status !== "fulfilled" || !result.value?.latestVersion) continue;
+    const { slug, latestVersion } = result.value;
+    const installed = presences[slug].release?.version;
+    if (installed && latestVersion !== installed) {
+      updates[slug] = latestVersion;
     }
   }
   return updates;
