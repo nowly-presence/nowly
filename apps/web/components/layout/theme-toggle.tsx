@@ -15,7 +15,7 @@ export const ThemeToggle = () => {
     setMounted(true);
   }, []);
 
-  const isDark = resolvedTheme === "dark";
+  const isDark = mounted && resolvedTheme === "dark";
 
   return (
     <Button
@@ -23,10 +23,10 @@ export const ThemeToggle = () => {
       variant="ghost"
       size="icon"
       aria-label={t("toggle")}
-      title={isDark ? t("light") : t("dark")}
+      title={mounted ? (isDark ? t("light") : t("dark")) : t("toggle")}
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
-      {mounted && isDark ? <RiSunLine /> : <RiMoonLine />}
+      {isDark ? <RiSunLine /> : <RiMoonLine />}
     </Button>
   );
 };
