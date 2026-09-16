@@ -1,6 +1,7 @@
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { homeSectionAltClass, SectionHeading } from "@/components/home/section-heading";
 import { ButtonLink } from "@/components/ui/button-link";
+import { cn } from "@/lib/utils";
 import { RiBookShelfFill, RiWindow2Fill } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
@@ -41,7 +42,7 @@ export const StepsSection = async () => {
   const items = t.raw("items") as StepItem[];
 
   return (
-    <section className={`px-5 py-28 sm:px-6 sm:py-36 ${homeSectionAltClass}`}>
+    <section className={cn("px-5 py-28 sm:px-6 sm:py-36", homeSectionAltClass)}>
       <SectionHeading eyebrow={t("eyebrow")} title={t("title")} description={t("description")} />
 
       <div className="mx-auto mt-12 grid max-w-[1200px] gap-5 md:grid-cols-3">

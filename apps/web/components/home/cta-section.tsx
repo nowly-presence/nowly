@@ -1,12 +1,13 @@
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { homeSectionAltClass } from "@/components/home/section-heading";
+import { cn } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 
 export const CtaSection = async () => {
   const t = await getTranslations("cta");
 
   return (
-    <section className={`px-5 py-28 sm:px-10 sm:py-36 ${homeSectionAltClass}`}>
+    <section className={cn("px-5 py-28 sm:px-10 sm:py-36", homeSectionAltClass)}>
       <div className="mx-auto max-w-[1080px] rounded-[24px] bg-cta-surface px-6 py-16 text-center text-cta-ink sm:px-12 sm:py-20">
         <h2 className="mx-auto max-w-[28rem] text-pretty text-[2rem] font-normal leading-[1.1] sm:text-[2.5rem]">
           {t("title")}

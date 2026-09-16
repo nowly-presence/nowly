@@ -1,6 +1,7 @@
 import { homeSectionAltClass, SectionHeading } from "@/components/home/section-heading";
 import { PresenceTile } from "@/components/presence-tile";
 import { getPresencePlatforms, type PresencePlatform } from "@/lib/presence-api";
+import { cn } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
@@ -40,7 +41,7 @@ export const PlatformsSection = async () => {
   ]);
 
   return (
-    <section className={`overflow-x-clip px-5 py-28 sm:px-10 sm:py-36 ${homeSectionAltClass}`}>
+    <section className={cn("overflow-x-clip px-5 py-28 sm:px-10 sm:py-36", homeSectionAltClass)}>
       <SectionHeading eyebrow={t("eyebrow")} title={t("title")} description={t("description")} />
 
       {platforms.length > 0 ? (
