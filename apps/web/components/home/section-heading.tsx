@@ -18,13 +18,13 @@ export const SectionHeading = ({
   align = "center",
   className,
 }: SectionHeadingProps) => (
-  <div className={cn(align === "center" ? "mx-auto max-w-[36rem] text-center" : "max-w-[38rem]", className)}>
+  <div className={cn(align === "center" ? "mx-auto max-w-[44rem] text-center" : "max-w-[38rem]", className)}>
     {eyebrow ? (
       <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{eyebrow}</p>
     ) : null}
-    <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[30px]">{title}</h2>
+    <h2 className="text-[26px] font-normal leading-tight text-foreground sm:text-[30px] lg:text-nowrap">{title}</h2>
     {description ? (
-      <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">{description}</p>
+      <p className="mx-auto mt-4 max-w-[36rem] text-base leading-relaxed text-muted-foreground sm:text-lg">{description}</p>
     ) : null}
   </div>
 );

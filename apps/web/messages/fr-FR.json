@@ -27,13 +27,13 @@
   },
   "platforms": {
     "eyebrow": "Plateformes",
-    "title": "Compatible avec les plateformes que vous utilisez déjà",
-    "description": "Connectez vos services préférés, Nowly affiche automatiquement ce que vous regardez, écoutez ou jouez."
+    "title": "Compatible avec vos plateformes",
+    "description": "Nowly affiche ce que vous regardez, écoutez ou jouez, sur vos services habituels."
   },
   "steps": {
     "eyebrow": "Installation",
-    "title": "Trois étapes. Ensuite Discord suit.",
-    "description": "L’extension lit l’onglet, l’application bureau parle à Discord, une présence décide quoi afficher.",
+    "title": "Trois étapes, Discord suit",
+    "description": "L’extension lit l’onglet. L’application bureau envoie le statut à Discord.",
     "items": [
       {
         "title": "L’extension",
@@ -59,8 +59,8 @@
   },
   "features": {
     "eyebrow": "Produit",
-    "title": "Un statut qui a vraiment l’air vivant",
-    "description": "Nowly, c’est une extension, une application bureau, et une bibliothèque de scripts de présence signés.",
+    "title": "Un statut vraiment vivant",
+    "description": "Une extension, une application bureau, et une bibliothèque de scripts signés.",
     "items": [
       {
         "title": "Mises à jour automatiques",
@@ -91,7 +91,7 @@
   "privacy-section": {
     "eyebrow": "Confidentialité",
     "title": "Votre activité n’est pas notre produit",
-    "description": "Ce que vous regardez reste sur votre ordinateur. Discord reçoit le statut depuis votre machine, pas depuis nowly.me.",
+    "description": "Ce que vous regardez reste sur votre PC, pas sur nowly.me.",
     "items": [
       {
         "title": "Rien ne transite par nos serveurs",

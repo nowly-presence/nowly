@@ -27,13 +27,13 @@
   },
   "platforms": {
     "eyebrow": "Platforms",
-    "title": "Works with the platforms you already use",
-    "description": "Connect your favorite services and Nowly automatically shows what you watch, listen to, or play."
+    "title": "Works with your platforms",
+    "description": "Nowly shows what you watch, listen to, or play on the services you already use."
   },
   "steps": {
     "eyebrow": "Setup",
-    "title": "Three steps. Then Discord keeps up.",
-    "description": "The extension reads the tab, the desktop app talks to Discord, and a presence decides what to show.",
+    "title": "Three steps, Discord follows",
+    "description": "The extension reads the tab. The desktop app sends the status to Discord.",
     "items": [
       {
         "title": "The extension",
@@ -54,13 +54,13 @@
   },
   "cta": {
     "title": "Get started with Nowly",
-    "description": "Install the extension for free and you're set up in seconds.",
+    "description": "Install the free extension. You’re set up in seconds.",
     "docs": "View the docs"
   },
   "features": {
     "eyebrow": "Product",
-    "title": "A status that actually feels alive",
-    "description": "Nowly is a browser extension, a desktop app, and a library of signed presence scripts.",
+    "title": "A status that feels alive",
+    "description": "A browser extension, a desktop app, and a library of signed scripts.",
     "items": [
       {
         "title": "Automatic updates",
@@ -91,7 +91,7 @@
   "privacy-section": {
     "eyebrow": "Privacy",
     "title": "Your activity is not our product",
-    "description": "What you watch stays on your computer. Discord gets the status from your machine, not from nowly.me.",
+    "description": "What you watch stays on your PC, not on nowly.me.",
     "items": [
       {
         "title": "Nothing goes through our servers",
