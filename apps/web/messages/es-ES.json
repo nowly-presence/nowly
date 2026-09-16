@@ -23,7 +23,72 @@
     "title-accent": "tiempo real",
     "description": "Nowly transforma tu actividad en una presencia rica y dinámica de Discord.",
     "install": "Instalar Nowly",
-    "library": "Ver la biblioteca"
+    "library": "Ver la biblioteca",
+    "cards": {
+      "netflix": {
+        "app-label": "Viendo Netflix",
+        "title": "La casa de papel",
+        "subtitle": "T1 E1. Episodio 1",
+        "elapsed": "00:44",
+        "duration": "48:40",
+        "cta": "Ver episodio"
+      },
+      "prime": {
+        "app-label": "Viendo Prime Video",
+        "title": "Reacher",
+        "subtitle": "T1 E1. Bienvenida a Margrave",
+        "elapsed": "15:13",
+        "duration": "40:32",
+        "cta": "Ver episodio"
+      },
+      "figma": {
+        "app-label": "Jugando en Figma",
+        "title": "Diseñando en Figma",
+        "subtitle": "Acme Corp",
+        "timer": "00:44"
+      },
+      "youtube": {
+        "app-label": "Viendo YouTube",
+        "title": "Grand Theft Auto VI: An Extended Look",
+        "subtitle": "Rockstar Games",
+        "elapsed": "14:10",
+        "duration": "26:48",
+        "cta": "Ver el vídeo"
+      },
+      "twitch": {
+        "app-label": "Viendo Twitch",
+        "title": "Speedrun Elden Ring - Any%",
+        "subtitle": "NoctaPlays • Elden Ring",
+        "timer": "01:42:18",
+        "cta": "Ver el directo"
+      },
+      "chatgpt": {
+        "app-label": "Jugando a ChatGPT",
+        "title": "Chateando: Plan de viaje a Japón",
+        "timer": "12:34",
+        "cta": "Abrir el chat"
+      },
+      "notion": {
+        "app-label": "Viendo Notion",
+        "title": "Editando una página",
+        "subtitle": "Roadmap T3",
+        "timer": "24:18"
+      },
+      "steam": {
+        "app-label": "Jugando a Steam",
+        "title": "Consultando un juego",
+        "subtitle": "Minecraft Legends",
+        "timer": "08:02",
+        "cta": "Ver en la tienda"
+      },
+      "github": {
+        "app-label": "Viendo GitHub",
+        "title": "Viendo la Pull Request #39",
+        "subtitle": "nowly-presence/presences",
+        "timer": "03:41",
+        "cta": "Ver la Pull Request"
+      }
+    }
   },
   "platforms": {
     "eyebrow": "Plataformas",

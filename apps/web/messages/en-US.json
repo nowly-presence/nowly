@@ -23,7 +23,72 @@
     "title-accent": "real time",
     "description": "Nowly turns your activity into a rich, dynamic Discord presence.",
     "install": "Install Nowly",
-    "library": "Browse the library"
+    "library": "Browse the library",
+    "cards": {
+      "netflix": {
+        "app-label": "Watching Netflix",
+        "title": "La casa de papel",
+        "subtitle": "S1 E1. Episode 1",
+        "elapsed": "00:44",
+        "duration": "48:40",
+        "cta": "Watch Episode"
+      },
+      "prime": {
+        "app-label": "Watching Prime Video",
+        "title": "Reacher",
+        "subtitle": "S1 E1. Welcome to Margrave",
+        "elapsed": "15:13",
+        "duration": "40:32",
+        "cta": "Watch Episode"
+      },
+      "figma": {
+        "app-label": "Playing Figma",
+        "title": "Designing on Figma",
+        "subtitle": "Acme Corp",
+        "timer": "00:44"
+      },
+      "youtube": {
+        "app-label": "Watching YouTube",
+        "title": "Grand Theft Auto VI: An Extended Look",
+        "subtitle": "Rockstar Games",
+        "elapsed": "14:10",
+        "duration": "26:48",
+        "cta": "Watch video"
+      },
+      "twitch": {
+        "app-label": "Watching Twitch",
+        "title": "Speedrun Elden Ring - Any%",
+        "subtitle": "NoctaPlays • Elden Ring",
+        "timer": "01:42:18",
+        "cta": "Watch live"
+      },
+      "chatgpt": {
+        "app-label": "Playing ChatGPT",
+        "title": "Chatting: Trip plan to Japan",
+        "timer": "12:34",
+        "cta": "Open chat"
+      },
+      "notion": {
+        "app-label": "Watching Notion",
+        "title": "Editing a page",
+        "subtitle": "Q3 Roadmap",
+        "timer": "24:18"
+      },
+      "steam": {
+        "app-label": "Playing Steam",
+        "title": "Viewing a game",
+        "subtitle": "Minecraft Legends",
+        "timer": "08:02",
+        "cta": "View store page"
+      },
+      "github": {
+        "app-label": "Watching GitHub",
+        "title": "Viewing Pull Request #39",
+        "subtitle": "nowly-presence/presences",
+        "timer": "03:41",
+        "cta": "View Pull Request"
+      }
+    }
   },
   "platforms": {
     "eyebrow": "Platforms",

@@ -23,7 +23,72 @@
     "title-accent": "temps réel",
     "description": "Nowly transforme votre activité en présence Discord riche et dynamique.",
     "install": "Installer Nowly",
-    "library": "Voir la bibliothèque"
+    "library": "Voir la bibliothèque",
+    "cards": {
+      "netflix": {
+        "app-label": "Regarde Netflix",
+        "title": "La casa de papel",
+        "subtitle": "S1 E1. Episode 1",
+        "elapsed": "00:44",
+        "duration": "48:40",
+        "cta": "Regarder l’épisode"
+      },
+      "prime": {
+        "app-label": "Regarde Prime Video",
+        "title": "Reacher",
+        "subtitle": "S1 E1. Bienvenue à Margrave",
+        "elapsed": "15:13",
+        "duration": "40:32",
+        "cta": "Regarder l’épisode"
+      },
+      "figma": {
+        "app-label": "Joue à Figma",
+        "title": "Conception sur Figma",
+        "subtitle": "Acme Corp",
+        "timer": "00:44"
+      },
+      "youtube": {
+        "app-label": "Regarde YouTube",
+        "title": "Grand Theft Auto VI: An Extended Look",
+        "subtitle": "Rockstar Games",
+        "elapsed": "14:10",
+        "duration": "26:48",
+        "cta": "Regarder la vidéo"
+      },
+      "twitch": {
+        "app-label": "Regarde Twitch",
+        "title": "Speedrun Elden Ring - Any%",
+        "subtitle": "NoctaPlays • Elden Ring",
+        "timer": "01:42:18",
+        "cta": "Regarder le live"
+      },
+      "chatgpt": {
+        "app-label": "Joue à ChatGPT",
+        "title": "Discute : Plan de voyage au Japon",
+        "timer": "12:34",
+        "cta": "Ouvrir la discussion"
+      },
+      "notion": {
+        "app-label": "Regarde Notion",
+        "title": "Modifie une page",
+        "subtitle": "Roadmap Q3",
+        "timer": "24:18"
+      },
+      "steam": {
+        "app-label": "Joue à Steam",
+        "title": "Consulte un jeu",
+        "subtitle": "Minecraft Legends",
+        "timer": "08:02",
+        "cta": "Voir la boutique"
+      },
+      "github": {
+        "app-label": "Regarde GitHub",
+        "title": "Consulte la Pull Request #39",
+        "subtitle": "nowly-presence/presences",
+        "timer": "03:41",
+        "cta": "Voir la Pull Request"
+      }
+    }
   },
   "platforms": {
     "eyebrow": "Plateformes",

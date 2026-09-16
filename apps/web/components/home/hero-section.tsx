@@ -3,20 +3,12 @@ import { HeroCards } from "@/components/home/hero-cards";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
-type HeroSectionProps = {
-  cards: {
-    back: string
-    mid: string
-    front: string
-  }
-};
-
-export const HeroSection = async ({ cards }: HeroSectionProps) => {
+export const HeroSection = async () => {
   const t = await getTranslations("hero");
 
   return (
-    <section className="px-5 pb-16 pt-28 sm:px-10 sm:pt-36 lg:pb-20 lg:pt-44">
-      <div className="mx-auto grid w-full max-w-[1280px] items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-8">
+    <section className="overflow-x-clip px-5 pb-24 pt-28 sm:px-10 sm:pb-28 sm:pt-36 lg:pb-32 lg:pt-40">
+      <div className="mx-auto grid w-full max-w-[1280px] items-center gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-6">
         <div className="max-w-[34rem]">
           <h1 className="text-pretty text-[2.35rem] font-medium leading-[1.06] tracking-tight text-foreground sm:text-[2.85rem] lg:text-[3.35rem]">
             {t("title-before")}{" "}
@@ -38,7 +30,7 @@ export const HeroSection = async ({ cards }: HeroSectionProps) => {
           </div>
         </div>
 
-        <HeroCards cards={cards} />
+        <HeroCards />
       </div>
     </section>
   );

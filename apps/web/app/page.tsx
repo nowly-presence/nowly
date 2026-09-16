@@ -6,11 +6,9 @@ import { HomeJsonLd } from "@/components/home/home-json-ld";
 import { PlatformsSection } from "@/components/home/platforms-section";
 import { PrivacySection } from "@/components/home/privacy-section";
 import { StepsSection } from "@/components/home/steps-section";
-import { getHeroMedia } from "@/lib/media";
 import { createMetadata } from "@/lib/seo";
-import type { LocaleString } from "@nowly/locales";
 import type { Metadata } from "next";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations("metadata");
@@ -23,13 +21,10 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const HomePage = async () => {
-  const locale = (await getLocale()) as LocaleString;
-  const cards = getHeroMedia(locale);
-
   return (
     <>
       <HomeJsonLd />
-      <HeroSection cards={cards} />
+      <HeroSection />
       <PlatformsSection />
       <FeaturesSection />
       <StepsSection />
