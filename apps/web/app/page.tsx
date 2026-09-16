@@ -3,6 +3,7 @@ import { FaqSection } from "@/components/home/faq-section";
 import { FeaturesSection } from "@/components/home/features-section";
 import { HeroSection } from "@/components/home/hero-section";
 import { HomeJsonLd } from "@/components/home/home-json-ld";
+import { OpenSourceSection } from "@/components/home/open-source-section";
 import { PlatformsSection } from "@/components/home/platforms-section";
 import { PrivacySection } from "@/components/home/privacy-section";
 import { StepsSection } from "@/components/home/steps-section";
@@ -30,6 +31,7 @@ const HomePage = async () => {
       <StepsSection />
       <PrivacySection />
       <FaqSection />
+      <OpenSourceSection />
       <CtaSection />
     </>
   );

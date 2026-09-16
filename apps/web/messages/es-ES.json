@@ -193,6 +193,13 @@
         "answer": "La lista actualizada es la biblioteca. Pueden llegar presencias nuevas sin actualizar la extensión: instala las que uses de verdad."
       }
     ]
+  "open-source": {
+    "eyebrow": "Open source",
+    "title": "Añade una presencia",
+    "description": "Los scripts son públicos. Haz fork, escribe, abre un PR. La CLI y la doc bastan para empezar.",
+    "docs": "Ver la documentación",
+    "file": "presence.ts"
+  },
   },
   "store": {
     "download-chrome": "Descargar para Chrome",

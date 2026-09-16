@@ -193,6 +193,13 @@
         "answer": "The live list is the library. New presences can be added without updating the extension, so install the ones you actually use."
       }
     ]
+  "open-source": {
+    "eyebrow": "Open source",
+    "title": "Add a presence",
+    "description": "Presence scripts are public. Fork, write, open a PR. The CLI and docs are enough to start.",
+    "docs": "Read the docs",
+    "file": "presence.ts"
+  },
   },
   "store": {
     "download-chrome": "Download for Chrome",

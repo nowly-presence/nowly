@@ -193,6 +193,13 @@
         "answer": "La liste à jour, c’est la bibliothèque. De nouvelles présences peuvent arriver sans mettre à jour l’extension : installez celles que vous utilisez vraiment."
       }
     ]
+  "open-source": {
+    "eyebrow": "Open source",
+    "title": "Ajoutez une présence",
+    "description": "Les scripts sont publics. Forkez, écrivez, proposez. La CLI et la doc suffisent pour partir.",
+    "docs": "Voir la documentation",
+    "file": "presence.ts"
+  },
   },
   "store": {
     "download-chrome": "Télécharger pour Chrome",
