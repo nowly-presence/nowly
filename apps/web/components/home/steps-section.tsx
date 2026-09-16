@@ -21,7 +21,7 @@ const actions = [
   },
   {
     render: (label: string) => (
-      <ButtonLink href="/host" variant="dark" size="sm">
+      <ButtonLink href="/desktop" variant="dark" size="sm">
         <RiWindow2Fill data-icon="inline-start" />
         {label}
       </ButtonLink>

@@ -16,7 +16,7 @@ export const Footer = async () => {
       links: [
         { href: "/", label: t("home") },
         { href: "/library", label: t("library") },
-        { href: "/host", label: t("host") },
+        { href: "/desktop", label: t("host") },
       ],
     },
     {

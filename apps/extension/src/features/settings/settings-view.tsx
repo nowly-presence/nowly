@@ -11,7 +11,7 @@ import { ShortcutSettings } from "@/features/settings/shortcut-settings";
 import { ThemeSelector } from "@/features/settings/theme-selector";
 import { ThemeUpsellCard } from "@/features/settings/theme-upsell-card";
 import type { NativeStatus } from "@/lib/messages";
-import { WEB_BASE_URL } from "@/shared/constants";
+import { HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
 import { t, type LocalePreference } from "@/shared/i18n";
 import type { ExtensionSettings, PresenceDebug } from "@/shared/types";
 import { IconCalendar, IconExternalLink, IconRefresh, IconWorld } from "@/lib/tabler-icons";
@@ -130,7 +130,7 @@ export const SettingsView: FC<Props> = ({
           </h2>
           <div className="flex flex-col gap-2 sm:flex-row">
             <a
-              href="https://nowly.me/host"
+              href={HOST_DOWNLOAD_URL}
               target="_blank"
               rel="noreferrer"
               className={`${hostUpdateActionClassName} border border-accent/20 bg-accent/10 text-accent hover:bg-accent/20`}

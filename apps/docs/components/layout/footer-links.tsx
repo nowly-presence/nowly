@@ -13,7 +13,7 @@ export const FooterLinks: FC = (): ReactElement => {
       label: t("category-product"),
       links: [
         { href: `${SITE_URL}/library`, label: t("marketplace") },
-        { href: `${SITE_URL}/host`, label: t("host") },
+        { href: `${SITE_URL}/desktop`, label: t("host") },
       ],
     },
     {

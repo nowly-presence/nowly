@@ -103,7 +103,7 @@ export const UserDiagnosticCard: FC<Props> = ({
               : t("diagnostic-host-missing-message")}
           action={!snapshot.hostDetected && hostStatus !== "loading" ? (
             <>
-              <SmallAction onClick={() => openUrl(siteUrl("/host"))}>
+              <SmallAction onClick={() => openUrl(siteUrl("/desktop"))}>
                 {t("diagnostic-install-host")}
                 <IconExternalLink className="h-3 w-3" />
               </SmallAction>
