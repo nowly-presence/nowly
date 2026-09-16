@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { IconCircleCheck, IconInfoCircle, IconLoader2, IconCircleX, IconAlertTriangle } from "@tabler/icons-react";
-import type { CSSProperties } from "react";
-import { Toaster as Sonner, type ToasterProps } from "sonner";
+import * as React from "react"
+import { Toaster as Sonner, type ToasterProps } from "sonner"
+import { RiCheckboxCircleLine, RiInformationLine, RiAlertLine, RiCloseCircleLine, RiLoader4Line } from "@remixicon/react"
 
 const Toaster = ({ ...props }: ToasterProps) => {
   return (
@@ -10,50 +10,38 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme="dark"
       className="toaster group"
       icons={{
-        success: <IconCircleCheck className="size-4" />,
-        info: <IconInfoCircle className="size-4" />,
-        warning: <IconAlertTriangle className="size-4" />,
-        error: <IconCircleX className="size-4" />,
-        loading: <IconLoader2 className="size-4 animate-spin" />,
+        success: (
+          <RiCheckboxCircleLine className="size-4" />
+        ),
+        info: (
+          <RiInformationLine className="size-4" />
+        ),
+        warning: (
+          <RiAlertLine className="size-4" />
+        ),
+        error: (
+          <RiCloseCircleLine className="size-4" />
+        ),
+        loading: (
+          <RiLoader4Line className="size-4 animate-spin" />
+        ),
       }}
       style={
         {
-          "--normal-bg": "var(--foreground)",
-          "--normal-text": "var(--background)",
-          "--normal-border": "rgba(255, 255, 255, 0.12)",
-
-          "--success-bg": "var(--foreground)",
-          "--success-text": "var(--background)",
-          "--success-border": "rgba(255, 255, 255, 0.12)",
-
-          "--info-bg": "var(--foreground)",
-          "--info-text": "var(--background)",
-          "--info-border": "rgba(255, 255, 255, 0.12)",
-
-          "--warning-bg": "var(--foreground)",
-          "--warning-text": "var(--background)",
-          "--warning-border": "rgba(255, 255, 255, 0.12)",
-
-          "--error-bg": "var(--destructive)",
-          "--error-text": "var(--foreground)",
-          "--error-border": "rgba(239, 68, 68, 0.35)",
-
-          "--border-radius": "12px",
-        } as CSSProperties
+          "--normal-bg": "var(--popover)",
+          "--normal-text": "var(--popover-foreground)",
+          "--normal-border": "var(--border)",
+          "--border-radius": "var(--radius)",
+        } as React.CSSProperties
       }
       toastOptions={{
         classNames: {
-          toast: "font-medium shadow-[0_16px_40px_rgba(0,0,0,0.35)]",
-          description: "opacity-70",
-          actionButton: "bg-background text-foreground",
-          cancelButton: "bg-background/10 text-current",
-          closeButton: "bg-transparent text-current",
+          toast: "cn-toast",
         },
       }}
       {...props}
     />
-  );
-};
+  )
+}
 
-export { Toaster };
-
+export { Toaster }
