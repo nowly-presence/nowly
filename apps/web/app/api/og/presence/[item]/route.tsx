@@ -171,7 +171,9 @@ export const GET = async (_request: Request, { params }: Props) => {
       next: { revalidate: 3600 },
     });
 
-    if (!res.ok) return fallbackOg("Nowly Presence");
+    if (!res.ok) {
+      return new Response("Not found", { status: 404 });
+    }
 
     const data = await res.json() as PresenceRelease;
     const presence = metadataToPlatform({
