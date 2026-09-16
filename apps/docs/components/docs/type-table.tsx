@@ -103,7 +103,7 @@ const tableConfigs = {
           {lang.default ? (
             <span className="font-medium text-primary">Yes</span>
           ) : (
-            <span className="text-muted-foreground/70">—</span>
+            <span className="text-muted-foreground/70">-</span>
           )}
         </td>
       </tr>

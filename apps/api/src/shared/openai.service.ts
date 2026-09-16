@@ -43,8 +43,8 @@ const fallbackChangelogs = (ctx: ChangelogContext): z.infer<typeof ChangelogSche
   }
 
   const title = ctx.prTitle || `Update ${ctx.name} presence`
-  const details = [ctx.changes, ctx.changedFiles?.join(", "), ctx.diffSummary].filter(Boolean).join(" — ")
-  const suffix = details ? ` — ${details}` : ""
+  const details = [ctx.changes, ctx.changedFiles?.join(", "), ctx.diffSummary].filter(Boolean).join(" - ")
+  const suffix = details ? ` - ${details}` : ""
   return buildLocaleObject(`${title}${suffix}`)
 }
 

@@ -7,12 +7,12 @@ import { createHmac, timingSafeEqual } from "node:crypto"
 // travels in analytics payloads, the /consent and /uninstall URLs, referrers
 // and logs), so on its own it is a weak authorization secret. The token is
 // HMAC-derived from the deviceId and only ever travels on the /devices/sync
-// response and inside the consent/uninstall links — never in analytics events —
+// response and inside the consent/uninstall links - never in analytics events -
 // which shrinks the surface from which it can leak.
 //
 // Trade-off (intentional, see device-token discussion): because the token is
 // deterministically derivable from (secret, deviceId), `/devices/sync` returns
-// it for any deviceId. This keeps the rollout migration-free — every existing
+// it for any deviceId. This keeps the rollout migration-free - every existing
 // device receives its token on the next sync with no DB change. A stronger
 // design would store a random per-device secret in the database; revisit if the
 // data handled here becomes more sensitive.
