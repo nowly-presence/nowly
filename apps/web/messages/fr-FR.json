@@ -18,6 +18,11 @@
     "open-menu": "Ouvrir le menu",
     "close-menu": "Fermer le menu"
   },
+  "theme": {
+    "toggle": "Changer de thème",
+    "light": "Clair",
+    "dark": "Sombre"
+  },
   "hero": {
     "title-before": "Partagez ce que vous faites, en",
     "title-accent": "temps réel",

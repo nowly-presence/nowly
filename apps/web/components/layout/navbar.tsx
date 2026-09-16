@@ -2,9 +2,9 @@
 
 import { RiMenuLine } from "@remixicon/react";
 import { ExtensionStoreButton } from "@/components/extension-store-button";
+import { BrandLockup } from "@/components/layout/brand-lockup";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { BRAND_LOCKUP_WHITE } from "@/lib/brand";
 import { docsHref } from "@/lib/seo";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -21,11 +21,9 @@ export const Navbar = () => {
 
   return (
     <header className="pointer-events-none sticky top-0 z-50 px-4 pt-4 sm:px-6 sm:pt-8 lg:px-10">
-      <div className="pointer-events-auto mx-auto flex h-[68px] max-w-[1200px] items-center justify-between gap-4 rounded-[12px] bg-[#07080C50] px-3 backdrop-blur-xl sm:h-[84px] sm:px-4">
+      <div className="pointer-events-auto mx-auto flex h-[68px] max-w-[1200px] items-center justify-between gap-4 rounded-[12px] bg-background/50 px-3 backdrop-blur-xl sm:h-[84px] sm:px-4">
         <Link href="/" className="relative flex h-11 w-[120px] shrink-0 items-center sm:h-[60px] sm:w-[148px]">
-          <img
-            src={BRAND_LOCKUP_WHITE}
-            alt="Nowly"
+          <BrandLockup
             width={148}
             height={60}
             className="h-full w-auto object-contain object-left"
@@ -60,7 +58,7 @@ export const Navbar = () => {
           >
             <RiMenuLine />
           </SheetTrigger>
-          <SheetContent side="right" className="w-[min(100%,20rem)] bg-[#0e1118] p-0 lg:hidden">
+          <SheetContent side="right" className="w-[min(100%,20rem)] bg-background p-0 lg:hidden">
             <SheetHeader>
               <SheetTitle>{t("open-menu")}</SheetTitle>
             </SheetHeader>

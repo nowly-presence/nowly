@@ -9,6 +9,7 @@ export const brandFavicon = (file: string): string => `${CDN_BRAND}/favicons/${f
 
 export const BRAND_LOCKUP_BLUE = brandLockup("blue");
 export const BRAND_LOCKUP_BLUE_PNG = brandLockup("blue", "png");
+export const BRAND_LOCKUP_DARK = brandLockup("dark");
 export const BRAND_LOCKUP_WHITE = brandLockup("white");
 export const BRAND_LOCKUP_WHITE_PNG = brandLockup("white", "png");
 

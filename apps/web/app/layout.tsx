@@ -20,8 +20,8 @@ const Layout = async ({ children }: PropsWithChildren) => {
   const [messages, locale] = await Promise.all([getMessages(), getLocale()]);
 
   return (
-    <html lang={localeToHtmlLang[locale] ?? "en"} className="dark bg-background">
-      <body className="min-h-dvh font-sans antialiased">
+    <html lang={localeToHtmlLang[locale] ?? "en"} suppressHydrationWarning>
+      <body className="min-h-dvh bg-background font-sans antialiased" suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AppProviders>
             <div className="flex min-h-dvh flex-col">

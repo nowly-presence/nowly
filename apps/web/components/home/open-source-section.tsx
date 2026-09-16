@@ -33,8 +33,8 @@ export const OpenSourceSection = async () => {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-[16px] bg-[#07080C] shadow-[0_0_0_1px_rgba(228,242,255,0.08)]">
-          <div className="flex items-center gap-2 border-b border-foreground/8 px-4 py-2.5">
+        <div className="overflow-hidden rounded-[16px] bg-code-surface shadow-[0_0_0_1px_var(--border)]">
+          <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
             <span className="size-2 rounded-full bg-foreground/20" />
             <span className="size-2 rounded-full bg-foreground/20" />
             <span className="size-2 rounded-full bg-foreground/20" />

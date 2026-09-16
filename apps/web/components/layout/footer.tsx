@@ -1,6 +1,7 @@
+import { BrandLockup } from "@/components/layout/brand-lockup";
 import { LocaleSelector } from "@/components/layout/locale-selector";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Separator } from "@/components/ui/separator";
-import { BRAND_LOCKUP_BLUE } from "@/lib/brand";
 import { DISCORD_INVITE_URL, DISCORD_SITE_URL, PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import { docsHref } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
@@ -47,10 +48,11 @@ export const Footer = async () => {
     <footer className="relative overflow-hidden px-5 pb-8 pt-10 sm:px-8 lg:px-9">
       <div className="mx-auto flex max-w-[1280px] flex-col gap-10 lg:flex-row lg:justify-between">
         <div className="max-w-xs">
-          <img src={BRAND_LOCKUP_BLUE} alt="Nowly" width={119} height={48} className="h-14 w-auto" />
+          <BrandLockup width={119} height={48} className="h-14 w-auto" />
           <p className="mt-3 text-base text-muted-foreground">{t("tagline")}</p>
-          <div className="mt-5">
+          <div className="mt-5 flex items-center gap-2">
             <LocaleSelector />
+            <ThemeToggle />
           </div>
         </div>
 

@@ -53,7 +53,7 @@ export const StepsSection = async () => {
               key={item.title}
               className="relative min-h-[190px] overflow-hidden rounded-[14px] bg-cta-surface p-5 text-cta-ink"
             >
-              <span className="pointer-events-none absolute bottom-0 left-0 origin-bottom-left translate-x-[-38px] translate-y-[42px] select-none text-[260px] font-black leading-none lining-nums text-[rgba(7,8,12,0.1)]">
+              <span className="pointer-events-none absolute bottom-0 left-0 origin-bottom-left translate-x-[-38px] translate-y-[42px] select-none text-[260px] font-black leading-none lining-nums text-cta-ink/12">
                 {index + 1}
               </span>
 

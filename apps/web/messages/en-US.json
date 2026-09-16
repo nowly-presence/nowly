@@ -18,6 +18,11 @@
     "open-menu": "Open menu",
     "close-menu": "Close menu"
   },
+  "theme": {
+    "toggle": "Toggle color theme",
+    "light": "Light",
+    "dark": "Dark"
+  },
   "hero": {
     "title-before": "Share what you do, in",
     "title-accent": "real time",

@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/** Figma: #E4F2FF at 1% */
-export const homeSectionAltClass = "bg-[rgba(228,242,255,0.01)]";
+export const homeSectionAltClass = "bg-section-alt";
 
 type SectionHeadingProps = {
   eyebrow?: string
