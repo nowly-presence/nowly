@@ -15,11 +15,11 @@ description: Refonte UI/UX de l'extension avec nouveau lecteur, composants natif
     ["Switch personnalisé", "Toggle carré aux coins arrondis : fond avec bordure (off), fond violet avec bouton blanc (on).", "S'aligne avec l'identité visuelle Nowly au lieu du switch navigateur standard."],
     ["Checkbox personnalisé", "Checkbox 18×18px arrondie avec remplissage accent et icône check blanche.", "Look cohérent pour les toggles de consentement et futurs formulaires."],
     ["Paramètres présence", "Les paramètres s'ouvrent dans un Sheet depuis le bas avec les réglages et le bouton Désinstaller. Labels liés au switch via htmlFor.", "Interface plus propre, plus accessible (clic sur le label = toggle), désinstallation toujours disponible."],
-    ["Snooze", "Snooze par présence avec un stepper en bottom sheet ([−] [temps] [+], pas de 5min, 5–240min). Icône Flocon pour snoozer, Soleil pour réveiller. Envoie seulement CLEAR_ACTIVITY au réveil — l'activité reste visible avec un badge 'Snoozé'.", "Mettre en pause l'activité Discord sans perdre l'état Nowly. Stepper rapide, indicateur clair."],
+    ["Snooze", "Snooze par présence avec un stepper en bottom sheet ([−] [temps] [+], pas de 5min, 5–240min). Icône Flocon pour snoozer, Soleil pour réveiller. Envoie seulement CLEAR_ACTIVITY au réveil - l'activité reste visible avec un badge 'Snoozé'.", "Mettre en pause l'activité Discord sans perdre l'état Nowly. Stepper rapide, indicateur clair."],
     ["Planning", "Planning par présence ou global avec boutons jour (Dim–Sam) et plage horaire optionnelle. Mode 'toute la journée' masque les heures. Global via la barre d'actions, par présence via le bouton Calendar.", "Contrôle total sur quand une présence s'affiche sur Discord. Mode journée simplifie la configuration."],
     ["Réorganisation paramètres", "Header simplifié avec bullet coloré + statut. Carte connexion/Nowly Host supprimée. Gestion données fusionnée avec analytics. Carte mise à jour conditionnelle avec style accent. Barre d'actions visible uniquement sur l'onglet Activité.", "Paramètres plus épurés. La mise à jour Nowly Host se démarque quand elle est disponible. Aucune distraction pendant la configuration."],
-    ["Panneau de debug conditionnel", "DebugPanel masqué dans les builds Chrome Web Store (vérification update_url). Affiché uniquement dans la vue Réglages avec un header repliable — plus de bannière séparée. Vérifier MAJ devient inactif en mode dev.", "Pas de fuite de debug en production. UI plus propre : le header sert aussi de notice. Pas de fausses mises à jour en développement."],
-    ["Barre de progression", "Affichée uniquement pour les catégories music, streaming, tv et anime. Masquée pour les présences 'other'.", "La barre de progression reste pertinente — pas de timer inutile pour les présences non-média."],
+    ["Panneau de debug conditionnel", "DebugPanel masqué dans les builds Chrome Web Store (vérification update_url). Affiché uniquement dans la vue Réglages avec un header repliable - plus de bannière séparée. Vérifier MAJ devient inactif en mode dev.", "Pas de fuite de debug en production. UI plus propre : le header sert aussi de notice. Pas de fausses mises à jour en développement."],
+    ["Barre de progression", "Affichée uniquement pour les catégories music, streaming, tv et anime. Masquée pour les présences 'other'.", "La barre de progression reste pertinente - pas de timer inutile pour les présences non-média."],
     ["Consentement analytics", "Écran d'onboarding repensé avec une grille compacte : 6 éléments non collectés (X) et 1 élément collecté (✓). Bouton 'Partager' centré, 'Non merci' en texte cliquable.", "Communication plus claire sur la vie privée. Moins intimidant que l'ancien mur de texte."],
     ["Support Firefox", "Chrome et Firefox disposent maintenant de chemins de build séparés, d'un packaging store, de l'injection native userScripts, du support des pages CSP strictes et de manifests Nowly Host pour les IDs Firefox de production.", "Nowly est prêt pour une distribution navigateur plus large sans fragiliser l'injection des présences."],
     ["Durcissement API", "Auth, analytics, notes, proxy d'images, synchronisation de présences et génération de changelog IA ont été renforcés avec validation, nonce, redirections plus sûres, caches bornés et prompts protégés.", "Les endpoints publics résistent mieux aux entrées invalides, aux URLs hostiles et aux abus."],
@@ -37,7 +37,7 @@ description: Refonte UI/UX de l'extension avec nouveau lecteur, composants natif
 
 Le composant `CurrentActivityCard` a été entièrement repensé avec un layout Bar compact. L'état idle affiche un vinyle SVG animé de 48px avec le texte "Aucune activité détectée" en ligne. L'état actif affiche l'artwork en 48×48, le titre, le sous-titre, et un fond flou du poster quand `largeImage` est présent.
 
-Les contrôles média (précédent, lecture/pause, suivant) ont été supprimés — ils ne mettaient pas en pause le média réel et ajoutaient du bruit visuel. La barre de progression est maintenant conditionnelle : seules les présences `music`, `streaming`, `tv` et `anime` l'affichent ; les présences `other` ne l'ont pas.
+Les contrôles média (précédent, lecture/pause, suivant) ont été supprimés - ils ne mettaient pas en pause le média réel et ajoutaient du bruit visuel. La barre de progression est maintenant conditionnelle : seules les présences `music`, `streaming`, `tv` et `anime` l'affichent ; les présences `other` ne l'ont pas.
 
 Un toggle `showPlayer` dans les paramètres d'affichage permet de masquer entièrement la carte du lecteur.
 
@@ -61,11 +61,11 @@ La fonctionnalité snooze permet de mettre en pause l'activité Discord pour une
 
 Le badge de l'activité affiche aussi le temps de gel restant, par exemple `Gelé · 14:32`, pour savoir quand l'activité Discord reprendra.
 
-Le réveil n'envoie que `CLEAR_ACTIVITY` à Discord — l'activité Nowly reste visible avec un badge "Snoozé". Le désnoozage renvoie l'activité stockée à Discord.
+Le réveil n'envoie que `CLEAR_ACTIVITY` à Discord - l'activité Nowly reste visible avec un badge "Snoozé". Le désnoozage renvoie l'activité stockée à Discord.
 
 ## Planning
 
-Les utilisateurs peuvent définir des plannings par présence ou globalement. Le sheet de planning affiche 7 boutons de jour (Dim–Sam) avec un toggle de plage horaire optionnel. Quand le mode "Toute la journée" est activé, seuls les jours sont sauvegardés — la présence est active toute la journée sur les jours sélectionnés. Quand la plage horaire est active, les heures de début et fin sont affichées.
+Les utilisateurs peuvent définir des plannings par présence ou globalement. Le sheet de planning affiche 7 boutons de jour (Dim–Sam) avec un toggle de plage horaire optionnel. Quand le mode "Toute la journée" est activé, seuls les jours sont sauvegardés - la présence est active toute la journée sur les jours sélectionnés. Quand la plage horaire est active, les heures de début et fin sont affichées.
 
 Le planning global (accessible depuis le bouton Calendar de la barre d'actions) sert de fallback quand aucun planning par présence n'est défini. Un bouton Calendar par présence se trouve à côté de l'icône engrenage sur chaque élément de la liste.
 
@@ -79,15 +79,15 @@ Le panneau des paramètres a été simplifié :
 - **Gestion des données** : Fusionnée avec le consentement analytics sous une seule carte "Données et confidentialité".
 - **Vérifier les mises à jour** : Déplacé du footer d'activité vers la barre d'actions, avec une limite de 30 secondes. Désactivé automatiquement en mode décompressé.
 - **Fonctionnalités supplémentaires** : Nouvelle section hébergeant les toggles de fonctionnalités (Planning est le premier).
-- **Barre d'actions** : Visible uniquement sur l'onglet Activité — l'onglet Réglages reste dégagé sans boutons d'action.
+- **Barre d'actions** : Visible uniquement sur l'onglet Activité - l'onglet Réglages reste dégagé sans boutons d'action.
 
 ## Panneau de debug conditionnel
 
-Le `DebugPanel` n'est rendu que dans les extensions **décompressées** (`!chrome.runtime.getManifest().update_url`). Il réside exclusivement dans la vue **Réglages** — la page Activité reste propre. Quand un problème de debug existe (`debug` n'est pas null ou `nativeStatus` n'est pas connecté/ok), l'en-tête du panneau est toujours visible avec une icône Terminal et le label "Debug". En cliquant sur l'en-tête, le panneau se déploie pour afficher les détails de debug et un champ de personnalisation de l'URL de l'API.
+Le `DebugPanel` n'est rendu que dans les extensions **décompressées** (`!chrome.runtime.getManifest().update_url`). Il réside exclusivement dans la vue **Réglages** - la page Activité reste propre. Quand un problème de debug existe (`debug` n'est pas null ou `nativeStatus` n'est pas connecté/ok), l'en-tête du panneau est toujours visible avec une icône Terminal et le label "Debug". En cliquant sur l'en-tête, le panneau se déploie pour afficher les détails de debug et un champ de personnalisation de l'URL de l'API.
 
 Dans les builds Chrome Web Store (`update_url` présent), le panneau de debug n'est jamais rendu.
 
-De plus, **Vérifier les mises à jour** est automatiquement désactivé en mode décompressé — l'appel devient inactif pour éviter les fausses notifications de mise à jour causées par l'absence de métadonnées de version dans les présences en développement.
+De plus, **Vérifier les mises à jour** est automatiquement désactivé en mode décompressé - l'appel devient inactif pour éviter les fausses notifications de mise à jour causées par l'absence de métadonnées de version dans les présences en développement.
 
 ## Firefox et packaging
 
@@ -140,6 +140,6 @@ Le code source de l'extension a été réorganisé pour une meilleure maintenabi
 
 ## Style des présences inactives
 
-Quand une présence est désactivée, son icône devient `opacity-60 saturate-0` et le nom s'estompe en `text-muted-foreground/80` — subtilement atténué mais toujours lisible.
+Quand une présence est désactivée, son icône devient `opacity-60 saturate-0` et le nom s'estompe en `text-muted-foreground/80` - subtilement atténué mais toujours lisible.
 
 > Cette release transforme Nowly d'un simple gestionnaire de présence en un outil complet avec planification, snooze et une interface raffinée.

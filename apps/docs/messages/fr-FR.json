@@ -12,7 +12,7 @@
     "badge": "Nouveau",
     "title": "Votre activité Discord,",
     "title-accent": "synchronisée.",
-    "description": "Le moyen le plus simple d’afficher ce que vous regardez. Séries, films ou streams — votre statut Discord reste à jour.",
+    "description": "Le moyen le plus simple d’afficher ce que vous regardez. Séries, films ou streams - votre statut Discord reste à jour.",
     "cta": "Découvrir les présences"
   },
   "platforms-section": {
@@ -98,7 +98,7 @@
       },
       {
         "question": "Est-ce que mes données passent par vos serveurs ?",
-        "answer": "Votre activité Rich Presence, non — elle transite localement vers Nowly Host, puis directement vers Discord. Seuls les avis que vous publiez volontairement (opt-in) sont stockés côté serveur."
+        "answer": "Votre activité Rich Presence, non - elle transite localement vers Nowly Host, puis directement vers Discord. Seuls les avis que vous publiez volontairement (opt-in) sont stockés côté serveur."
       },
       {
         "question": "Quelles plateformes sont compatibles ?",
@@ -347,7 +347,7 @@
     "title": "Politique de confidentialité",
     "description": "Découvrez comment Nowly traite vos données, ce qui reste local et ce qui dépend de votre consentement.",
     "last-updated": "Dernière mise à jour : 18 juin 2026.",
-    "intro": "Nowly est conçu avec la confidentialité comme priorité. L'activité Rich Presence est traitée <strong>entièrement en local</strong> sur votre machine — elle ne transite jamais par nos serveurs. Certaines fonctionnalités optionnelles (analytics) impliquent un traitement côté serveur, décrit ci-dessous.",
+    "intro": "Nowly est conçu avec la confidentialité comme priorité. L'activité Rich Presence est traitée <strong>entièrement en local</strong> sur votre machine - elle ne transite jamais par nos serveurs. Certaines fonctionnalités optionnelles (analytics) impliquent un traitement côté serveur, décrit ci-dessous.",
     "sections": [
       {
         "title": "Fonctionnement général",
@@ -355,18 +355,18 @@
       },
       {
         "title": "Données traitées localement (extension)",
-        "body": "L'extension navigateur stocke localement les données suivantes dans <code>chrome.storage.local</code> — elles ne quittent jamais votre appareil :<ul><li>Présences installées (métadonnées, bundles signés, état d'activation).</li><li>Activité actuelle (titre du contenu, plateforme, durée, miniature).</li><li>Journal de débogage (horodatages, actions, URL visitées).</li><li>État d'onboarding et <strong>copie locale</strong> de votre profil Discord (ID, pseudo, avatar) utilisée uniquement pour l'affichage dans l'interface.</li><li>Préférences d'affichage et paramètres par présence.</li></ul>Ces données peuvent être effacées en désinstallant l'extension ou via les options de réinitialisation."
+        "body": "L'extension navigateur stocke localement les données suivantes dans <code>chrome.storage.local</code> - elles ne quittent jamais votre appareil :<ul><li>Présences installées (métadonnées, bundles signés, état d'activation).</li><li>Activité actuelle (titre du contenu, plateforme, durée, miniature).</li><li>Journal de débogage (horodatages, actions, URL visitées).</li><li>État d'onboarding et <strong>copie locale</strong> de votre profil Discord (ID, pseudo, avatar) utilisée uniquement pour l'affichage dans l'interface.</li><li>Préférences d'affichage et paramètres par présence.</li></ul>Ces données peuvent être effacées en désinstallant l'extension ou via les options de réinitialisation."
       },
       {
         "title": "Permissions de l'extension navigateur",
-        "body": "L'extension requiert certaines permissions pour fonctionner :<ul><li><strong>Accès à toutes les pages (<code>&lt;all_urls&gt;</code>)</strong> : un script léger est injecté sur chaque page que vous visitez afin de détecter les plateformes prises en charge. Il ne collecte aucune donnée en dehors des plateformes reconnues et ne transmet rien à nos serveurs.</li><li><strong>User Scripts</strong> : cette permission permet d'exécuter les scripts de présences sur les sites compatibles. Chaque script est signé cryptographiquement (ECDSA P-256) et vérifié localement avant son exécution — aucun script non autorisé ne peut s'exécuter.</li></ul>"
+        "body": "L'extension requiert certaines permissions pour fonctionner :<ul><li><strong>Accès à toutes les pages (<code>&lt;all_urls&gt;</code>)</strong> : un script léger est injecté sur chaque page que vous visitez afin de détecter les plateformes prises en charge. Il ne collecte aucune donnée en dehors des plateformes reconnues et ne transmet rien à nos serveurs.</li><li><strong>User Scripts</strong> : cette permission permet d'exécuter les scripts de présences sur les sites compatibles. Chaque script est signé cryptographiquement (ECDSA P-256) et vérifié localement avant son exécution - aucun script non autorisé ne peut s'exécuter.</li></ul>"
       },
       {
         "title": "Données traitées localement (Nowly Host)",
         "body": "Nowly Host écrit un journal local dans <code>%LOCALAPPDATA%\\\\NowlyClient\\\\nowly-host.log</code>, contenant des horodatages et des informations d'activité envoyées à Discord. Ce fichier reste sur votre appareil, peut être supprimé à tout moment et n'est <strong>jamais</strong> envoyé à nos serveurs."
       },
       {
-        "title": "Données traitées côté serveur — Analytics (opt-in)",
+        "title": "Données traitées côté serveur - Analytics (opt-in)",
         "body": "L'extension vous propose, lors de l'installation, d'activer des <strong>analytics anonymes</strong> (désactivées par défaut). Si vous les activez, les informations suivantes sont collectées :<ul><li>Un identifiant d'appareil anonyme (UUID généré localement, sans lien avec votre identité).</li><li>Navigateur, système d'exploitation, langue, version de l'extension et de Nowly Host.</li><li>Présences installées et sessions d'activité (durée, plateforme).</li></ul>Ces données servent uniquement à améliorer le service et à mesurer la popularité des présences. Vous pouvez <strong>révoquer votre consentement</strong> à tout moment depuis les paramètres de l'extension : l'ensemble des données associées à votre identifiant d'appareil sera alors supprimé."
       },
       {
@@ -375,7 +375,7 @@
       },
       {
         "title": "Base légale des traitements (RGPD)",
-        "body": "Conformément à l'article 6 du RGPD, chaque traitement repose sur une base juridique :<ul><li><strong>Analytics anonymes</strong> — votre consentement, recueilli en opt-in (art. 6 §1(a)).</li><li><strong>Proxy d'images</strong> (miniatures de plateformes tierces) — intérêt légitime (art. 6 §1(f)).</li><li><strong>Cookie <code>locale</code></strong> (préférence linguistique) — intérêt légitime (art. 6 §1(f)).</li></ul>"
+        "body": "Conformément à l'article 6 du RGPD, chaque traitement repose sur une base juridique :<ul><li><strong>Analytics anonymes</strong> - votre consentement, recueilli en opt-in (art. 6 §1(a)).</li><li><strong>Proxy d'images</strong> (miniatures de plateformes tierces) - intérêt légitime (art. 6 §1(f)).</li><li><strong>Cookie <code>locale</code></strong> (préférence linguistique) - intérêt légitime (art. 6 §1(f)).</li></ul>"
       },
       {
         "title": "Durées de conservation",
@@ -383,7 +383,7 @@
       },
       {
         "title": "Services tiers",
-        "body": "Nowly utilise les services tiers suivants :<ul><li><strong>Railway</strong> (États-Unis) : hébergement du site web, de l'API et de la base de données PostgreSQL. Les transferts vers les États-Unis sont encadrés par les <strong>Clauses Contractuelles Types (CCT)</strong> de la Commission européenne. <a href='https://railway.com/legal/privacy'>Politique de confidentialité Railway</a>.</li><li><strong>Cloudflare</strong> (États-Unis) : distribution des ressources statiques (miniatures, installateur natif) via CDN. Les transferts sont encadrés par les <strong>Clauses Contractuelles Types (CCT)</strong> et le <strong>Data Privacy Framework UE/UK–États-Unis</strong>.</li><li><strong>Chrome Web Store / Google</strong> : distribution de l'extension navigateur.</li><li><strong>Google AdSense</strong> : affichage éventuel d'annonces sur le site. Google peut utiliser des cookies ou technologies similaires selon ses propres règles et vos choix de consentement.</li><li><strong>Ko-fi</strong> : dons facultatifs — Nowly ne partage aucune donnée personnelle avec Ko-fi.</li><li><strong>OpenAI</strong> : génération automatique de notes de version. Seuls des titres de pull requests et des diffs de code sont transmis — aucune donnée utilisateur.</li></ul>L'extension permet, pour les utilisateurs avancés, de configurer une <strong>URL d'API personnalisée</strong> pointant vers une instance auto-hébergée. Dans ce cas, vos données sont envoyées au serveur que vous avez configuré : la présente politique de confidentialité ne s'applique pas à ce serveur, sur lequel Nowly n'exerce aucun contrôle."
+        "body": "Nowly utilise les services tiers suivants :<ul><li><strong>Railway</strong> (États-Unis) : hébergement du site web, de l'API et de la base de données PostgreSQL. Les transferts vers les États-Unis sont encadrés par les <strong>Clauses Contractuelles Types (CCT)</strong> de la Commission européenne. <a href='https://railway.com/legal/privacy'>Politique de confidentialité Railway</a>.</li><li><strong>Cloudflare</strong> (États-Unis) : distribution des ressources statiques (miniatures, installateur natif) via CDN. Les transferts sont encadrés par les <strong>Clauses Contractuelles Types (CCT)</strong> et le <strong>Data Privacy Framework UE/UK–États-Unis</strong>.</li><li><strong>Chrome Web Store / Google</strong> : distribution de l'extension navigateur.</li><li><strong>Google AdSense</strong> : affichage éventuel d'annonces sur le site. Google peut utiliser des cookies ou technologies similaires selon ses propres règles et vos choix de consentement.</li><li><strong>Ko-fi</strong> : dons facultatifs - Nowly ne partage aucune donnée personnelle avec Ko-fi.</li><li><strong>OpenAI</strong> : génération automatique de notes de version. Seuls des titres de pull requests et des diffs de code sont transmis - aucune donnée utilisateur.</li></ul>L'extension permet, pour les utilisateurs avancés, de configurer une <strong>URL d'API personnalisée</strong> pointant vers une instance auto-hébergée. Dans ce cas, vos données sont envoyées au serveur que vous avez configuré : la présente politique de confidentialité ne s'applique pas à ce serveur, sur lequel Nowly n'exerce aucun contrôle."
       },
       {
         "title": "Cookies",
@@ -467,27 +467,27 @@
     "badge": "Légal",
     "title": "Mentions légales",
     "description": "Les informations obligatoires sur l'éditeur, l'hébergement et les droits liés à Nowly.",
-    "last-updated": "En vigueur depuis le 18 juin 2026 — requises par le droit français (LCEN, art. 6-III).",
+    "last-updated": "En vigueur depuis le 18 juin 2026 - requises par le droit français (LCEN, art. 6-III).",
     "sections": [
       {
         "title": "Éditeur",
-        "body": "Le site <strong>nowly.me</strong>, l'extension navigateur Nowly et Nowly Host sont publiés par :<br/><br/>Éditeur : <strong>{publisherName}</strong><br/>Statut : Auto-entrepreneur (micro-entreprise)<br/>SIREN : <strong>{publisherSiren}</strong><br/>Adresse : <strong>{publisherAddress}</strong><br/>TVA : Non applicable — franchise en base de TVA (art. 293 B du CGI)<br/>Email : <a href='mailto:{publisherEmail}'>{publisherEmail}</a>"
+        "body": "Le site <strong>nowly.me</strong>, l'extension navigateur Nowly et Nowly Host sont publiés par :<br/><br/>Éditeur : <strong>{publisherName}</strong><br/>Statut : Auto-entrepreneur (micro-entreprise)<br/>SIREN : <strong>{publisherSiren}</strong><br/>Adresse : <strong>{publisherAddress}</strong><br/>TVA : Non applicable - franchise en base de TVA (art. 293 B du CGI)<br/>Email : <a href='mailto:{publisherEmail}'>{publisherEmail}</a>"
       },
       {
         "title": "Directeur de la publication",
         "body": "<strong>{publisherName}</strong>, en qualité d'éditeur du site."
       },
       {
-        "title": "Hébergement — Site web, API et base de données",
-        "body": "L'ensemble des services en ligne (site web, API et base de données PostgreSQL) sont hébergés par :<br/><br/><strong>Railway Corporation</strong><br/>2261 Market Street #4667<br/>San Francisco, CA 94114 — États-Unis<br/><a href='https://railway.com'>railway.com</a><br/><br/>Région des données : <strong>{dataRegion}</strong>"
+        "title": "Hébergement - Site web, API et base de données",
+        "body": "L'ensemble des services en ligne (site web, API et base de données PostgreSQL) sont hébergés par :<br/><br/><strong>Railway Corporation</strong><br/>2261 Market Street #4667<br/>San Francisco, CA 94114 - États-Unis<br/><a href='https://railway.com'>railway.com</a><br/><br/>Région des données : <strong>{dataRegion}</strong>"
       },
       {
-        "title": "Hébergement — CDN et Nowly Host",
-        "body": "Les ressources statiques (miniatures, installateur Windows, binaires de Nowly Host) sont distribuées via :<br/><br/><strong>Cloudflare, Inc.</strong><br/>101 Townsend St, San Francisco, CA 94107 — États-Unis<br/><a href='https://cloudflare.com'>cloudflare.com</a>"
+        "title": "Hébergement - CDN et Nowly Host",
+        "body": "Les ressources statiques (miniatures, installateur Windows, binaires de Nowly Host) sont distribuées via :<br/><br/><strong>Cloudflare, Inc.</strong><br/>101 Townsend St, San Francisco, CA 94107 - États-Unis<br/><a href='https://cloudflare.com'>cloudflare.com</a>"
       },
       {
         "title": "Distribution de l'extension",
-        "body": "L'extension navigateur est distribuée via le <strong>Chrome Web Store</strong>, exploité par Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043 — États-Unis."
+        "body": "L'extension navigateur est distribuée via le <strong>Chrome Web Store</strong>, exploité par Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043 - États-Unis."
       },
       {
         "title": "Propriété intellectuelle",

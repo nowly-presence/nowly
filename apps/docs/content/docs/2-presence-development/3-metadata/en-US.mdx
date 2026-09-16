@@ -38,8 +38,8 @@ Every presence needs:
 
 ## Author and Contributors
 
-- `author` — Main maintainer, displayed first in the library and OG images.
-- `contributors` — Additional people who helped with the presence.
+- `author` - Main maintainer, displayed first in the library and OG images.
+- `contributors` - Additional people who helped with the presence.
 
 <CalloutInfo>
 GitHub usernames (the `github` key) are used to resolve avatars.
@@ -47,14 +47,14 @@ GitHub usernames (the `github` key) are used to resolve avatars.
 
 ## Descriptions and Features
 
-- `description` — Short marketplace copy, keyed by locale.
-- `longDescription` — Expanded description for detail pages.
-- `features` — Localized list of supported behavior (e.g., button support, media keys).
+- `description` - Short marketplace copy, keyed by locale.
+- `longDescription` - Expanded description for detail pages.
+- `features` - Localized list of supported behavior (e.g., button support, media keys).
 
 ## URL Matching
 
-- `url` — Supported domains or URL patterns for matching pages.
-- `regExp` — Regex-based matching for complex URL patterns.
+- `url` - Supported domains or URL patterns for matching pages.
+- `regExp` - Regex-based matching for complex URL patterns.
 
 <CalloutWarning>
 Use `regExp` only when simple `url` matching is not enough. Prefer explicit domain lists.
@@ -96,7 +96,7 @@ A `fetch` from the isolated world is not treated as a first-party request, so au
 </CalloutWarning>
 
 <CalloutInfo>
-The declaration lives entirely in `metadata.json` — the extension reads it at registration time. No changes to the extension are needed to add a new page-context presence.
+The declaration lives entirely in `metadata.json` - the extension reads it at registration time. No changes to the extension are needed to add a new page-context presence.
 </CalloutInfo>
 
 ## Category

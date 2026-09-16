@@ -12,7 +12,7 @@
     "badge": "New",
     "title": "Your Discord activity,",
     "title-accent": "synced.",
-    "description": "The simplest way to show what you're watching. Series, movies, or streams — your Discord status stays up to date.",
+    "description": "The simplest way to show what you're watching. Series, movies, or streams - your Discord status stays up to date.",
     "cta": "Browse Presences"
   },
   "platforms-section": {
@@ -66,7 +66,7 @@
       },
       {
         "title": "Enjoy your content",
-        "description": "Open your favorite platform — your Discord status updates automatically."
+        "description": "Open your favorite platform - your Discord status updates automatically."
       }
     ]
   },
@@ -98,7 +98,7 @@
       },
       {
         "question": "Do my data pass through your servers?",
-        "answer": "Your Rich Presence activity, no — it goes locally to Nowly Host, then directly to Discord. Only reviews you voluntarily post (opt-in) are stored server-side."
+        "answer": "Your Rich Presence activity, no - it goes locally to Nowly Host, then directly to Discord. Only reviews you voluntarily post (opt-in) are stored server-side."
       },
       {
         "question": "Which platforms are supported?",
@@ -347,7 +347,7 @@
     "title": "Privacy Policy",
     "description": "Learn how Nowly handles your data, what stays local, and what depends on your consent.",
     "last-updated": "Last updated: June 18, 2026.",
-    "intro": "Nowly is designed with privacy as a priority. Your Rich Presence activity is processed <strong>entirely locally</strong> on your machine — it never passes through our servers. Some optional features (analytics) involve server-side processing, described below.",
+    "intro": "Nowly is designed with privacy as a priority. Your Rich Presence activity is processed <strong>entirely locally</strong> on your machine - it never passes through our servers. Some optional features (analytics) involve server-side processing, described below.",
     "sections": [
       {
         "title": "General Operation",
@@ -355,19 +355,19 @@
       },
       {
         "title": "Data Processed Locally (Extension)",
-        "body": "The browser extension stores the following data locally in <code>chrome.storage.local</code> — it never leaves your device:<ul><li>Installed presences (metadata, signed bundles, activation state).</li><li>Current activity (content title, platform, duration, thumbnail).</li><li>A debug log (timestamps, actions, visited URLs).</li><li>Onboarding state and a <strong>local snapshot</strong> of your Discord profile (ID, username, avatar) used solely for UI display.</li><li>Display preferences and per-presence settings.</li></ul>This data can be erased by uninstalling the extension or using the reset option in the extension settings."
+        "body": "The browser extension stores the following data locally in <code>chrome.storage.local</code> - it never leaves your device:<ul><li>Installed presences (metadata, signed bundles, activation state).</li><li>Current activity (content title, platform, duration, thumbnail).</li><li>A debug log (timestamps, actions, visited URLs).</li><li>Onboarding state and a <strong>local snapshot</strong> of your Discord profile (ID, username, avatar) used solely for UI display.</li><li>Display preferences and per-presence settings.</li></ul>This data can be erased by uninstalling the extension or using the reset option in the extension settings."
       },
       {
         "title": "Browser Extension Permissions",
-        "body": "The extension requires certain permissions to operate:<ul><li><strong>Access to all pages (<code>&lt;all_urls&gt;</code>)</strong>: a lightweight script is injected on every page you visit in order to detect supported platforms. It collects no data outside recognized platforms and sends nothing to our servers.</li><li><strong>User Scripts</strong>: this permission allows presence scripts to run on supported sites. Each script is cryptographically signed (ECDSA P-256) and verified locally before it runs — no unauthorized script can execute.</li></ul>"
+        "body": "The extension requires certain permissions to operate:<ul><li><strong>Access to all pages (<code>&lt;all_urls&gt;</code>)</strong>: a lightweight script is injected on every page you visit in order to detect supported platforms. It collects no data outside recognized platforms and sends nothing to our servers.</li><li><strong>User Scripts</strong>: this permission allows presence scripts to run on supported sites. Each script is cryptographically signed (ECDSA P-256) and verified locally before it runs - no unauthorized script can execute.</li></ul>"
       },
       {
         "title": "Data Processed Locally (Nowly Host)",
         "body": "Nowly Host writes a log file to <code>%LOCALAPPDATA%\\NowlyClient\\nowly-host.log</code> containing timestamps and activity information sent to Discord. This file is stored locally, can be deleted at any time, and is <strong>never</strong> sent to our servers."
       },
       {
-        "title": "Server-Side Data — Analytics (Opt-In)",
-        "body": "The extension offers, during installation, the option to enable <strong>anonymous analytics</strong> (disabled by default). If enabled, the following is collected:<ul><li>An anonymous device ID (locally generated UUID, not linked to your identity).</li><li>Browser, OS, language, extension version, and Nowly Host version.</li><li>Installed presences and activity sessions (duration, platform).</li></ul>This data is used solely to improve the service and measure presence popularity. You can <strong>withdraw consent</strong> at any time from the extension settings — all data associated with your device ID will then be deleted."
+        "title": "Server-Side Data - Analytics (Opt-In)",
+        "body": "The extension offers, during installation, the option to enable <strong>anonymous analytics</strong> (disabled by default). If enabled, the following is collected:<ul><li>An anonymous device ID (locally generated UUID, not linked to your identity).</li><li>Browser, OS, language, extension version, and Nowly Host version.</li><li>Installed presences and activity sessions (duration, platform).</li></ul>This data is used solely to improve the service and measure presence popularity. You can <strong>withdraw consent</strong> at any time from the extension settings - all data associated with your device ID will then be deleted."
       },
       {
         "title": "Discord Communication",
@@ -375,7 +375,7 @@
       },
       {
         "title": "Legal Basis for Processing (GDPR)",
-        "body": "In accordance with Article 6 of the GDPR, each processing activity relies on a legal basis:<ul><li><strong>Anonymous analytics</strong> — your consent, collected on an opt-in basis (Art. 6(1)(a)).</li><li><strong>Image proxy</strong> (third-party thumbnails) — legitimate interest (Art. 6(1)(f)).</li><li><strong><code>locale</code> cookie</strong> (language preference) — legitimate interest (Art. 6(1)(f)).</li></ul>"
+        "body": "In accordance with Article 6 of the GDPR, each processing activity relies on a legal basis:<ul><li><strong>Anonymous analytics</strong> - your consent, collected on an opt-in basis (Art. 6(1)(a)).</li><li><strong>Image proxy</strong> (third-party thumbnails) - legitimate interest (Art. 6(1)(f)).</li><li><strong><code>locale</code> cookie</strong> (language preference) - legitimate interest (Art. 6(1)(f)).</li></ul>"
       },
       {
         "title": "Data Retention",
@@ -383,7 +383,7 @@
       },
       {
         "title": "Third-Party Services",
-        "body": "Nowly uses the following third-party services:<ul><li><strong>Railway</strong> (United States) — website, API, and PostgreSQL database hosting. Transfers to the United States are governed by the European Commission's <strong>Standard Contractual Clauses (SCCs)</strong>. <a href='https://railway.com/legal/privacy'>Railway Privacy Policy</a>.</li><li><strong>Cloudflare</strong> (United States) — static asset delivery (thumbnails, Nowly Host installer) via CDN. Transfers are governed by the <strong>Standard Contractual Clauses (SCCs)</strong> and the <strong>EU/UK–US Data Privacy Framework</strong>.</li><li><strong>Chrome Web Store / Google</strong> — browser extension distribution.</li><li><strong>Google AdSense</strong> — optional ad display on the website. Google may use cookies or similar technologies under its own rules and your consent choices.</li><li><strong>Ko-fi</strong> — optional donations. Nowly shares no personal data with Ko-fi.</li><li><strong>OpenAI</strong> — automatic changelog generation. Only PR titles and code diffs are sent — no user data.</li></ul>For advanced users, the extension allows configuring a <strong>custom API URL</strong> pointing to a self-hosted instance. In that case, your data is sent to the server you configured: this Privacy Policy does not apply to that server, over which Nowly has no control."
+        "body": "Nowly uses the following third-party services:<ul><li><strong>Railway</strong> (United States) - website, API, and PostgreSQL database hosting. Transfers to the United States are governed by the European Commission's <strong>Standard Contractual Clauses (SCCs)</strong>. <a href='https://railway.com/legal/privacy'>Railway Privacy Policy</a>.</li><li><strong>Cloudflare</strong> (United States) - static asset delivery (thumbnails, Nowly Host installer) via CDN. Transfers are governed by the <strong>Standard Contractual Clauses (SCCs)</strong> and the <strong>EU/UK–US Data Privacy Framework</strong>.</li><li><strong>Chrome Web Store / Google</strong> - browser extension distribution.</li><li><strong>Google AdSense</strong> - optional ad display on the website. Google may use cookies or similar technologies under its own rules and your consent choices.</li><li><strong>Ko-fi</strong> - optional donations. Nowly shares no personal data with Ko-fi.</li><li><strong>OpenAI</strong> - automatic changelog generation. Only PR titles and code diffs are sent - no user data.</li></ul>For advanced users, the extension allows configuring a <strong>custom API URL</strong> pointing to a self-hosted instance. In that case, your data is sent to the server you configured: this Privacy Policy does not apply to that server, over which Nowly has no control."
       },
       {
         "title": "Cookies",
@@ -391,7 +391,7 @@
       },
       {
         "title": "Image Proxy",
-        "body": "Nowly runs a server-side image proxy that fetches thumbnails from third-party platform CDNs (YouTube, Twitch, Netflix, etc.) for display in the UI. This proxy collects no personal data — it processes only public image URLs server-side, with no link to your identity."
+        "body": "Nowly runs a server-side image proxy that fetches thumbnails from third-party platform CDNs (YouTube, Twitch, Netflix, etc.) for display in the UI. This proxy collects no personal data - it processes only public image URLs server-side, with no link to your identity."
       },
       {
         "title": "Security",
@@ -467,27 +467,27 @@
     "badge": "Legal",
     "title": "Legal Notice",
     "description": "Required information about Nowly's publisher, hosting, and intellectual property.",
-    "last-updated": "Effective as of 18 June 2026 — required under French law (LCEN, art. 6-III).",
+    "last-updated": "Effective as of 18 June 2026 - required under French law (LCEN, art. 6-III).",
     "sections": [
       {
         "title": "Publisher",
-        "body": "The website <strong>nowly.me</strong>, the Nowly browser extension and Nowly Host are published by:<br/><br/>Publisher: <strong>{publisherName}</strong><br/>Status: Sole trader (auto-entrepreneur / micro-enterprise)<br/>SIREN: <strong>{publisherSiren}</strong><br/>Address: <strong>{publisherAddress}</strong><br/>VAT: Not applicable — VAT exemption (French CGI art. 293 B)<br/>Email: <a href='mailto:{publisherEmail}'>{publisherEmail}</a>"
+        "body": "The website <strong>nowly.me</strong>, the Nowly browser extension and Nowly Host are published by:<br/><br/>Publisher: <strong>{publisherName}</strong><br/>Status: Sole trader (auto-entrepreneur / micro-enterprise)<br/>SIREN: <strong>{publisherSiren}</strong><br/>Address: <strong>{publisherAddress}</strong><br/>VAT: Not applicable - VAT exemption (French CGI art. 293 B)<br/>Email: <a href='mailto:{publisherEmail}'>{publisherEmail}</a>"
       },
       {
         "title": "Publication Director",
         "body": "<strong>{publisherName}</strong>, as publisher of the site."
       },
       {
-        "title": "Hosting — Website, API & Database",
-        "body": "All online services (website, API and PostgreSQL database) are hosted by:<br/><br/><strong>Railway Corporation</strong><br/>2261 Market Street #4667<br/>San Francisco, CA 94114 — United States<br/><a href='https://railway.com'>railway.com</a><br/><br/>Data region: <strong>{dataRegion}</strong>"
+        "title": "Hosting - Website, API & Database",
+        "body": "All online services (website, API and PostgreSQL database) are hosted by:<br/><br/><strong>Railway Corporation</strong><br/>2261 Market Street #4667<br/>San Francisco, CA 94114 - United States<br/><a href='https://railway.com'>railway.com</a><br/><br/>Data region: <strong>{dataRegion}</strong>"
       },
       {
-        "title": "Hosting — CDN & Nowly Host",
-        "body": "Static assets (thumbnails, Windows installer, Nowly Host binaries) are distributed via:<br/><br/><strong>Cloudflare, Inc.</strong><br/>101 Townsend St, San Francisco, CA 94107 — United States<br/><a href='https://cloudflare.com'>cloudflare.com</a>"
+        "title": "Hosting - CDN & Nowly Host",
+        "body": "Static assets (thumbnails, Windows installer, Nowly Host binaries) are distributed via:<br/><br/><strong>Cloudflare, Inc.</strong><br/>101 Townsend St, San Francisco, CA 94107 - United States<br/><a href='https://cloudflare.com'>cloudflare.com</a>"
       },
       {
         "title": "Extension Distribution",
-        "body": "The browser extension is distributed through the <strong>Chrome Web Store</strong>, operated by Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043 — United States."
+        "body": "The browser extension is distributed through the <strong>Chrome Web Store</strong>, operated by Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043 - United States."
       },
       {
         "title": "Intellectual Property",

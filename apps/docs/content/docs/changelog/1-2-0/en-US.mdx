@@ -15,11 +15,11 @@ description: UI/UX overhaul of the extension with a redesigned player, native co
     ["Custom Switch", "Square toggle with rounded corners: bordered background (off), purple fill with white knob (on).", "Aligns with the Nowly brand identity instead of the standard browser toggle."],
     ["Custom Checkbox", "18×18px rounded checkbox with accent fill and white check icon.", "Consistent branded look for consent toggles and future forms."],
     ["Presence settings", "Settings open in a bottom Sheet with configuration options and an Uninstall button. Labels linked to switches via htmlFor.", "Cleaner interface, more accessible (click label to toggle), uninstall always available."],
-    ["Snooze", "Per-presence snooze with a bottom sheet stepper ([−] [time] [+], 5min steps, 5–240min). Snowflake icon to snooze, Sun icon to clear. Only posts CLEAR_ACTIVITY on unsnooze — activity stays visible with 'Snoozed' badge.", "Pause Discord activity without losing Nowly state. Quick stepper, clear affordance."],
+    ["Snooze", "Per-presence snooze with a bottom sheet stepper ([−] [time] [+], 5min steps, 5–240min). Snowflake icon to snooze, Sun icon to clear. Only posts CLEAR_ACTIVITY on unsnooze - activity stays visible with 'Snoozed' badge.", "Pause Discord activity without losing Nowly state. Quick stepper, clear affordance."],
     ["Planning", "Schedule per-presence or globally via day buttons (Sun–Sat) with optional time range. All-day mode hides start/end times. Global via action bar, per-presence via Calendar button on list items.", "Full control over when a presence shows on Discord. All-day mode simplifies setup."],
     ["Settings reorganization", "Header simplified with colored bullet + Nowly Host status. Connection/host card removed. Data management merged with analytics. Update card shown conditionally with accent styling. Action bar only appears on the Activity tab.", "Cleaner settings with less clutter. Host update stands out when available. No distraction from action buttons while configuring."],
-    ["Conditional debug panel", "DebugPanel hidden in Chrome Web Store builds (update_url check). Shown only in the Settings view with a collapsible header — no separate banner. Check Updates becomes a no-op in unpacked builds to avoid false update indicators.", "No debug leaks to production users. Cleaner UI: the header doubles as the notice. Dev users won't see phantom updates."],
-    ["Progress bar", "Only shown for music, streaming, tv, and anime categories. Hidden for 'other' presences.", "Progress bar stays relevant — no meaningless timers for non-media presences."],
+    ["Conditional debug panel", "DebugPanel hidden in Chrome Web Store builds (update_url check). Shown only in the Settings view with a collapsible header - no separate banner. Check Updates becomes a no-op in unpacked builds to avoid false update indicators.", "No debug leaks to production users. Cleaner UI: the header doubles as the notice. Dev users won't see phantom updates."],
+    ["Progress bar", "Only shown for music, streaming, tv, and anime categories. Hidden for 'other' presences.", "Progress bar stays relevant - no meaningless timers for non-media presences."],
     ["Analytics consent", "Redesigned onboarding step with a compact grid showing 6 items we don't collect (X) and 1 item we do (✓). 'Share' button centered, 'No thanks' as plain text link.", "Clearer privacy communication. Less intimidating than the previous wall of text."],
     ["Firefox support", "Chrome and Firefox now have separate build paths, store packaging, native userScripts injection, CSP-strict page support, and host manifests for production Firefox IDs.", "Nowly is ready for a broader browser rollout without compromising presence injection reliability."],
     ["API hardening", "Auth, analytics, ratings, image proxy, presence sync, and AI changelog generation were tightened with validation, nonce checks, safer redirects, bounded caches, and injection-resistant prompts.", "Public endpoints are more predictable and safer under malformed input or hostile URLs."],
@@ -37,7 +37,7 @@ description: UI/UX overhaul of the extension with a redesigned player, native co
 
 The `CurrentActivityCard` has been fully redesigned with a compact Bar layout. The idle state shows a 48px spinning vinyl SVG with "No Activity Detected" text inline. The active state displays 48×48 artwork, title, subtitle, and a blurred poster background when `largeImage` is present.
 
-Media controls (previous, play/pause, next) have been removed — they didn't pause actual media and added clutter. The progress bar is now conditional: only `music`, `streaming`, `tv`, and `anime` presences show it; `other` presences do not.
+Media controls (previous, play/pause, next) have been removed - they didn't pause actual media and added clutter. The progress bar is now conditional: only `music`, `streaming`, `tv`, and `anime` presences show it; `other` presences do not.
 
 A `showPlayer` toggle in Display settings lets users hide the player card entirely.
 
@@ -61,11 +61,11 @@ The snooze feature lets users pause Discord activity for a set duration. A botto
 
 The activity badge also shows the remaining freeze time, for example `Snoozed · 14:32`, so users can see when Discord activity will resume.
 
-Clearing a snooze only posts `CLEAR_ACTIVITY` to Discord — the Nowly activity stays visible with a "Snoozed" badge. Unsnoozing resends the stored activity to Discord.
+Clearing a snooze only posts `CLEAR_ACTIVITY` to Discord - the Nowly activity stays visible with a "Snoozed" badge. Unsnoozing resends the stored activity to Discord.
 
 ## Planning
 
-Users can define schedules per-presence or globally. The schedule sheet shows 7 day buttons (Sun–Sat) with an optional time range toggle. When "All day" mode is enabled, only days are saved — the presence is active all day on selected days. When time range is on, `start` and `end` times are shown.
+Users can define schedules per-presence or globally. The schedule sheet shows 7 day buttons (Sun–Sat) with an optional time range toggle. When "All day" mode is enabled, only days are saved - the presence is active all day on selected days. When time range is on, `start` and `end` times are shown.
 
 The global schedule (accessible from the action bar's Calendar button) acts as a fallback when no per-presence schedule is set. A per-presence Calendar button sits next to the gear icon on each presence list item.
 
@@ -79,15 +79,15 @@ The settings panel has been streamlined:
 - **Data management**: Merged with analytics consent under a single "Data & Privacy" card.
 - **Check Updates**: Moved from the activity footer to the action bar, with a 30-second client-side rate limit. Automatically disabled in unpacked builds.
 - **Additional Features**: New section hosting feature toggles (Schedule is the first).
-- **Action bar**: Only visible on the Activity tab — the Settings tab keeps a clean scrollable view without action buttons.
+- **Action bar**: Only visible on the Activity tab - the Settings tab keeps a clean scrollable view without action buttons.
 
 ## Conditional debug panel
 
-The `DebugPanel` is only rendered in **unpacked** extensions (`!chrome.runtime.getManifest().update_url`). It lives exclusively in the **Settings view** — the Activity page stays clean. When a debug issue exists (`debug` is not null or `nativeStatus` is not connected/ok), the panel header is always visible with a Terminal icon and "Debug" label. Clicking the header expands it to show full debug details and an API URL override field.
+The `DebugPanel` is only rendered in **unpacked** extensions (`!chrome.runtime.getManifest().update_url`). It lives exclusively in the **Settings view** - the Activity page stays clean. When a debug issue exists (`debug` is not null or `nativeStatus` is not connected/ok), the panel header is always visible with a Terminal icon and "Debug" label. Clicking the header expands it to show full debug details and an API URL override field.
 
 In Chrome Web Store builds (`update_url` present), the debug panel is never rendered.
 
-Additionally, **Check Updates** is automatically disabled in unpacked builds — it becomes a no-op and never fetches presence versions. This prevents phantom "update available" badges caused by missing version metadata in development presences.
+Additionally, **Check Updates** is automatically disabled in unpacked builds - it becomes a no-op and never fetches presence versions. This prevents phantom "update available" badges caused by missing version metadata in development presences.
 
 ## Firefox and packaging
 
@@ -140,6 +140,6 @@ The extension source was reorganized for better maintainability:
 
 ## Inactive presence styling
 
-When a presence is disabled, its icon becomes `opacity-60 saturate-0` and the name fades to `text-muted-foreground/80` — subtly muted but still readable.
+When a presence is disabled, its icon becomes `opacity-60 saturate-0` and the name fades to `text-muted-foreground/80` - subtly muted but still readable.
 
 > This release transforms Nowly from a basic presence manager into a polished tool with scheduling, snoozing, and a refined interface.
