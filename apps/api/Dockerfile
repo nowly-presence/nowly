@@ -21,4 +21,4 @@ RUN pnpm install --no-frozen-lockfile && \
     pnpm --filter @nowly/api build
 
 # Apply pending migrations against DATABASE_URL at runtime, then start the API.
-CMD ["sh", "-c", "cd /app/apps/api && pnpm exec prisma migrate deploy && exec node dist/index.js"]
+CMD ["sh", "-c", "cd /app/apps/api && sh migrate-deploy.sh && exec node dist/index.js"]
