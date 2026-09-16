@@ -1,8 +1,9 @@
-import { docsHref } from "@/lib/seo";
-import { redirect } from "next/navigation";
+import { PlaceholderPage, generatePlaceholderMetadata } from "@/components/placeholder-page";
+import type { Metadata } from "next";
 
-const Page = (): never => {
-  redirect(docsHref("/changelog"));
-};
+export const generateMetadata = async (): Promise<Metadata> =>
+  generatePlaceholderMetadata("changelog", "/changelog");
+
+const Page = () => <PlaceholderPage pageKey="changelog" />;
 
 export default Page;

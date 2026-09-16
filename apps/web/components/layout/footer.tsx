@@ -1,91 +1,107 @@
-"use client";
-
-import { GitHubIcon } from "@/components/icons";
-import { Avatar, AvatarGroup } from "@/components/ui/avatar";
-import { buttonVariants } from "@/components/ui/button";
-import { PROJECT_REPOSITORY_URL } from "@/lib/constants";
-import { AvatarImage } from "@radix-ui/react-avatar";
-import { useTranslations } from "next-intl";
+import { LocaleSelector } from "@/components/layout/locale-selector";
+import { Separator } from "@/components/ui/separator";
+import { BRAND_LOCKUP_BLUE } from "@/lib/brand";
+import { DISCORD_INVITE_URL, DISCORD_SITE_URL, PROJECT_REPOSITORY_URL, TWITTER_URL } from "@/lib/constants";
+import { docsHref } from "@/lib/seo";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import type { FC, ReactElement } from "react";
-import { FooterLinks } from "./footer-links";
-import { LocaleSelector } from "./locale-selector";
-import { SupportButton } from "./support-button";
 
-export const Footer: FC = (): ReactElement => {
-  const t = useTranslations("footer");
-  const pathname = usePathname();
-  const isTeamPage = pathname === "/team";
-  const teamAvatarClass = isTeamPage ? "grayscale opacity-30 brightness-50 transition duration-200 group-hover/avatar:opacity-100 group-hover/avatar:brightness-100 group-hover/avatar:grayscale-0" : undefined;
+export const Footer = async () => {
+  const t = await getTranslations("footer");
+
+  const columns = [
+    {
+      title: t("product"),
+      links: [
+        { href: "/", label: t("home") },
+        { href: "/library", label: t("library") },
+        { href: "/host", label: t("host") },
+      ],
+    },
+    {
+      title: t("resources"),
+      links: [
+        { href: docsHref("/"), label: t("docs"), external: true },
+        { href: "/changelog", label: t("changelog") },
+        { href: "/support", label: t("support") },
+      ],
+    },
+    {
+      title: t("community"),
+      links: [
+        { href: DISCORD_INVITE_URL, label: t("discord"), external: true },
+        { href: PROJECT_REPOSITORY_URL, label: t("github"), external: true },
+        { href: TWITTER_URL, label: t("twitter"), external: true },
+      ],
+    },
+  ];
+
+  const legal = [
+    { href: "/legal-notice", label: t("legal-notice") },
+    { href: "/cookies", label: t("cookies") },
+    { href: "/privacy", label: t("privacy") },
+    { href: "/tos", label: t("tos") },
+  ];
 
   return (
-    <footer className="py-12 border-t border-border text-dim-foreground text-sm">
-      <div className="mx-auto w-full max-w-300 min-w-0 px-6">
-        <div className="flex flex-col gap-10 sm:flex-row sm:justify-between sm:gap-16">
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center gap-3">
-              <AvatarGroup className="-space-x-4">
-                <Avatar size="lg" className="z-6">
-                  <AvatarImage
-                    src="https://avatars.githubusercontent.com/u/51194216?v=4"
-                    alt={t("author-alt")}
-                    className={teamAvatarClass}
-                  />
-                </Avatar>
-
-                <Avatar size="lg" className="z-4">
-                  <AvatarImage
-                    src="https://avatars.githubusercontent.com/steellgold?v=4"
-                    alt="steellgold"
-                    className={teamAvatarClass}
-                  />
-                </Avatar>
-              </AvatarGroup>
-
-              <div className="min-w-0 text-left">
-                <p className="text-muted-foreground font-medium">Nowly</p>
-                <p className="opacity-60 text-xs">{t("copyright")}</p>
-              </div>
-            </div>
-
-            <small className="opacity-50 text-xs leading-relaxed">
-              {t("trademark")}{" "}
-              <Link
-                href="https://discord.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-foreground transition-colors"
-              >
-                Discord Inc
-              </Link>
-              .
-            </small>
-
-            <div className="flex items-center gap-3 flex-wrap">
-              <SupportButton />
-
-              <Link
-                href={PROJECT_REPOSITORY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={buttonVariants({
-                  className: "text-muted-foreground hover:border-zinc-500/40 hover:text-foreground hover:bg-zinc-500/10 text-xs sm:text-sm px-2 sm:px-3",
-                  size: "sm",
-                  variant: "secondary",
-                })}
-              >
-                <GitHubIcon className="w-4 h-4" />
-                <span className="hidden sm:inline">{t("open-source")}</span>
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-start gap-6 sm:items-end">
-            <FooterLinks />
+    <footer className="relative overflow-hidden px-5 pb-8 pt-10 sm:px-8 lg:px-9">
+      <div className="mx-auto flex max-w-[1280px] flex-col gap-10 lg:flex-row lg:justify-between">
+        <div className="max-w-xs">
+          <img src={BRAND_LOCKUP_BLUE} alt="Nowly" width={119} height={48} className="h-14 w-auto" />
+          <p className="mt-3 text-base text-muted-foreground">{t("tagline")}</p>
+          <div className="mt-5">
             <LocaleSelector />
           </div>
         </div>
+
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:gap-16">
+          {columns.map((column) => (
+            <div key={column.title} className="text-sm leading-relaxed text-muted-foreground">
+              <p className="font-bold">{column.title}</p>
+              <ul className="mt-2 flex flex-col gap-1">
+                {column.links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="transition-opacity hover:opacity-80"
+                      {...("external" in link && link.external ? { rel: "noreferrer", target: "_blank" } : {})}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator className="mx-auto mt-16 max-w-[1280px]" />
+      <div className="mx-auto mt-5 flex max-w-[1280px] flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-1">
+          <p>{t("copyright")}</p>
+          <p className="text-muted-foreground/55">
+            {t.rich("trademark", {
+              inc: (chunks) => (
+                <a
+                  href={DISCORD_SITE_URL}
+                  rel="noreferrer"
+                  target="_blank"
+                  className="underline decoration-foreground/15 underline-offset-4 transition-colors hover:text-muted-foreground"
+                >
+                  {chunks}
+                </a>
+              ),
+            })}
+          </p>
+        </div>
+        <nav className="flex flex-wrap gap-x-4 gap-y-1 sm:justify-end">
+          {legal.map((link) => (
+            <Link key={link.href} href={link.href} className="hover:opacity-80">
+              {link.label}
+            </Link>
+          ))}
+        </nav>
       </div>
     </footer>
   );

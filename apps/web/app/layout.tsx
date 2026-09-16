@@ -1,41 +1,36 @@
-import { AdblockNotice } from "@/components/layout/adblock-notice";
 import { CookieBanner } from "@/components/layout/cookie-banner";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
-import { Toaster } from "@/components/ui/sonner";
-import { ADSENSE_ENABLED } from "@/lib/constants";
-import { Providers } from "@/providers/providers";
+import { AppProviders } from "@/components/providers";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import type { PropsWithChildren, ReactElement } from "react";
-import { geist, instrumentSans } from "./fonts";
+import type { PropsWithChildren } from "react";
 import "./globals.css";
-import { metadata, viewport } from "./metadata";
+import { generateMetadata, viewport } from "./metadata";
 
-export { metadata, viewport };
+export { generateMetadata, viewport };
 
-const Layout = async ({ children }: PropsWithChildren): Promise<ReactElement> => {
+const localeToHtmlLang: Record<string, string> = {
+  "en-US": "en",
+  "fr-FR": "fr",
+  "es-ES": "es",
+};
+
+const Layout = async ({ children }: PropsWithChildren) => {
   const [messages, locale] = await Promise.all([getMessages(), getLocale()]);
 
   return (
-    <html
-      lang={locale}
-      data-scroll-behavior="smooth"
-      className={`${instrumentSans.variable} ${geist.variable} bg-background scroll-smooth`}
-    >
-      <body className="font-sans antialiased">
+    <html lang={localeToHtmlLang[locale] ?? "en"} className="dark bg-background">
+      <body className="min-h-dvh font-sans antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <Providers>
-            <div className="flex min-h-screen min-w-0 flex-col">
+          <AppProviders>
+            <div className="flex min-h-dvh flex-col">
               <Navbar />
-              <main className="flex min-w-0 flex-1 flex-col">{children}</main>
+              <main className="flex-1">{children}</main>
               <Footer />
             </div>
-
-            <Toaster />
-            <AdblockNotice enabled={ADSENSE_ENABLED} />
             <CookieBanner />
-          </Providers>
+          </AppProviders>
         </NextIntlClientProvider>
       </body>
     </html>

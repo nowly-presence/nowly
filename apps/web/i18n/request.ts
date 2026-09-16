@@ -1,8 +1,8 @@
-import { SUPPORTED_LOCALES, type LocaleString as Locale } from "@nowly/locales";
+import { FALLBACK_LOCALE, isValidLocale, type LocaleString } from "@nowly/locales";
 import { getRequestConfig } from "next-intl/server";
 import { cookies, headers } from "next/headers";
 
-const parseAcceptLanguage = (acceptLanguage: string | null): Locale | null => {
+const parseAcceptLanguage = (acceptLanguage: string | null): LocaleString | null => {
   if (!acceptLanguage) return null;
 
   const locales = acceptLanguage
@@ -14,17 +14,13 @@ const parseAcceptLanguage = (acceptLanguage: string | null): Locale | null => {
     .sort((a, b) => b.q - a.q);
 
   for (const { lang } of locales) {
-    const normalized = lang.replace("-", "_").toLowerCase();
-    const match = SUPPORTED_LOCALES.find(
-      (s) => s.toLowerCase() === normalized || s.split("-")[0].toLowerCase() === normalized
-    );
-    if (match) return match;
+    const normalized = lang.replace("_", "-");
+    if (isValidLocale(normalized)) return normalized;
 
     const langPrefix = lang.split("-")[0].toLowerCase();
-    const matchByPrefix = SUPPORTED_LOCALES.find(
-      (s) => s.split("-")[0].toLowerCase() === langPrefix
-    );
-    if (matchByPrefix) return matchByPrefix;
+    if (langPrefix === "en") return "en-US";
+    if (langPrefix === "fr") return "fr-FR";
+    if (langPrefix === "es") return "es-ES";
   }
 
   return null;
@@ -32,20 +28,12 @@ const parseAcceptLanguage = (acceptLanguage: string | null): Locale | null => {
 
 export default getRequestConfig(async () => {
   const store = await cookies();
-  const cookieLocale = store.get("locale")?.value as Locale | undefined;
-
-  if (cookieLocale) {
-    return {
-      locale: cookieLocale,
-      messages: (await import(`../messages/${cookieLocale}.json`)).default,
-    };
-  }
-
+  const cookieLocale = store.get("locale")?.value;
   const headersList = await headers();
-  const acceptLanguage = headersList.get("accept-language");
-  const detected = parseAcceptLanguage(acceptLanguage);
-
-  const locale = detected ?? "en-US";
+  const detected = parseAcceptLanguage(headersList.get("accept-language"));
+  const locale: LocaleString = isValidLocale(cookieLocale ?? "")
+    ? (cookieLocale as LocaleString)
+    : (detected ?? FALLBACK_LOCALE);
 
   return {
     locale,
