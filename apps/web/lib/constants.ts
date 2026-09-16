@@ -1,4 +1,5 @@
 export const PROJECT_REPOSITORY_URL = "https://github.com/nowly-presence/nowly";
+export const PRESENCES_REPOSITORY_URL = "https://github.com/nowly-presence/presences";
 export const DISCORD_INVITE_URL = "https://discord.gg/MnZap7czgB";
 export const DISCORD_SITE_URL = "https://discord.com";
 export const TWITTER_URL = "https://x.com/nowly";
