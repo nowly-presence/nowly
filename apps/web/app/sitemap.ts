@@ -5,7 +5,7 @@ const sitemap = (): MetadataRoute.Sitemap => [
   { url: SITE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
   { url: `${SITE_URL}/library`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
   { url: `${DOCS_URL}/`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.85 },
-  { url: `${SITE_URL}/host`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+  { url: `${SITE_URL}/desktop`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
   { url: `${SITE_URL}/changelog`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
   { url: `${SITE_URL}/support`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
   { url: `${SITE_URL}/privacy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.4 },

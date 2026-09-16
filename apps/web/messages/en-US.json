@@ -304,6 +304,88 @@
     "user-scripts": "Allow user scripts for Nowly in your browser, then reload this page.",
     "related-title": "You might also like"
   },
+  "desktopPage": {
+    "eyebrow": "Desktop app",
+    "title": "The local bridge to Discord",
+    "description": "The extension reads the tab. The desktop app sends your status to Discord. Title, platform, and playback never leave your PC.",
+    "detected": "Detected",
+    "version": "Version {version}",
+    "card-title": "Download for {platform}",
+    "platforms": {
+      "windows": "Windows",
+      "macos": "macOS",
+      "linux": "Linux"
+    },
+    "windows-installer": "Windows installer (.exe)",
+    "windows-portable": "Portable archive (.zip)",
+    "macos-dmg": "Disk image (.dmg)",
+    "macos-archive": "Archive (.tar.gz)",
+    "linux-archive": "Archive (.tar.gz)",
+    "open-source": "Open source",
+    "lightweight": "Small footprint",
+    "unsigned-title": "Unsigned build",
+    "unsigned-desc": "Windows may show a SmartScreen warning. Open More info, then Run anyway, only if you downloaded the file from this page.",
+    "signed-title": "Notarized by Apple",
+    "signed-desc": "macOS builds are notarized. Gatekeeper should accept the disk image.",
+    "trust-title": "What it does",
+    "trust-items": [
+      {
+        "title": "Stays on your machine",
+        "text": "The extension sees the tab. The desktop app talks to Discord locally. Nothing is sent to nowly.me."
+      },
+      {
+        "title": "Speaks Discord’s language",
+        "text": "Discord only accepts this local bridge. That is why the browser extension is not enough on its own."
+      },
+      {
+        "title": "Quiet in the background",
+        "text": "It is small, has no window to babysit, and only runs so your status can update."
+      }
+    ],
+    "guide-title": "Install it",
+    "guide-items": [
+      {
+        "title": "Download the right file",
+        "text": "Use the installer for your system. The portable archive is there if you prefer not to run a setup wizard."
+      },
+      {
+        "title": "Open the downloaded file",
+        "text": "Run the app and follow the setup. On Windows, read the SmartScreen note if a protection prompt appears."
+      },
+      {
+        "title": "Install a presence",
+        "text": "From the library, add something like YouTube to check that the extension and the desktop app talk to each other."
+      },
+      {
+        "title": "Check Discord",
+        "text": "Keep the Discord desktop app open, start a supported site, then check that your status updates."
+      }
+    ],
+    "guide-library": "Open the library",
+    "req-title": "Requirements",
+    "req": {
+      "os": "Operating system",
+      "arch": "Architecture",
+      "discord": "Discord",
+      "browser": "Browser",
+      "storage": "Storage",
+      "os-windows": "Windows 10 or Windows 11",
+      "os-macos": "macOS 11 Big Sur or later",
+      "os-linux": "Linux 2.6.32+ / glibc 2.17+",
+      "arch-windows": "64-bit (x64)",
+      "arch-macos": "Intel x64 / Apple Silicon (ARM64)",
+      "arch-linux": "64-bit (x64)",
+      "discord-windows": "Discord desktop app installed and running",
+      "discord-macos": "Discord desktop app installed and running",
+      "discord-linux": "Discord desktop app installed and running",
+      "browser-windows": "Chromium browser (Chrome, Edge, Brave, Opera) or Firefox",
+      "browser-macos": "Chromium browser (Chrome, Edge, Brave, Opera) or Firefox",
+      "browser-linux": "Chromium browser (Chrome, Edge, Brave, Opera) or Firefox",
+      "storage-windows": "About 4 MB",
+      "storage-macos": "About 4 MB",
+      "storage-linux": "About 2 MB"
+    }
+  },
   "placeholder": {
     "badge": "Coming soon",
     "description": "This page is being rebuilt for the new site. The previous version stays available for reference."
@@ -314,6 +396,10 @@
       "description": "Browse the platforms Nowly can share on Discord."
     },
     "host": {
+      "title": "Desktop app",
+      "description": "Download the desktop app to send your activity to Discord."
+    },
+    "desktop": {
       "title": "Desktop app",
       "description": "Download the desktop app to send your activity to Discord."
     },

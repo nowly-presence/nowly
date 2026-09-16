@@ -32,6 +32,11 @@ const nextConfig: NextConfig = {
         destination: `${docsBase}/:path*`,
         permanent: true,
       },
+      {
+        source: "/host",
+        destination: "/desktop",
+        permanent: true,
+      },
     ];
   },
 };

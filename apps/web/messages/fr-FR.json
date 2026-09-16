@@ -304,6 +304,88 @@
     "user-scripts": "Autorisez les scripts utilisateur pour Nowly dans votre navigateur, puis rechargez la page.",
     "related-title": "Vous aimerez aussi"
   },
+  "desktopPage": {
+    "eyebrow": "Application bureau",
+    "title": "Le pont local vers Discord",
+    "description": "L’extension lit l’onglet. L’application bureau envoie votre statut à Discord. Titre, plateforme et lecture ne quittent pas votre PC.",
+    "detected": "Détecté",
+    "version": "Version {version}",
+    "card-title": "Télécharger pour {platform}",
+    "platforms": {
+      "windows": "Windows",
+      "macos": "macOS",
+      "linux": "Linux"
+    },
+    "windows-installer": "Installateur Windows (.exe)",
+    "windows-portable": "Archive portable (.zip)",
+    "macos-dmg": "Image disque (.dmg)",
+    "macos-archive": "Archive (.tar.gz)",
+    "linux-archive": "Archive (.tar.gz)",
+    "open-source": "Open source",
+    "lightweight": "Léger",
+    "unsigned-title": "Build non signé",
+    "unsigned-desc": "Windows peut afficher un avertissement SmartScreen. Ouvrez Plus d’infos, puis Exécuter quand même, uniquement si le fichier vient de cette page.",
+    "signed-title": "Notarisé par Apple",
+    "signed-desc": "Les builds macOS sont notarisés. Gatekeeper devrait accepter l’image disque.",
+    "trust-title": "Ce qu’elle fait",
+    "trust-items": [
+      {
+        "title": "Reste sur votre machine",
+        "text": "L’extension voit l’onglet. L’application bureau parle à Discord en local. Rien n’est envoyé à nowly.me."
+      },
+      {
+        "title": "Le langage que Discord accepte",
+        "text": "Discord n’accepte que ce pont local. C’est pour ça que l’extension navigateur ne suffit pas toute seule."
+      },
+      {
+        "title": "Discrète en arrière-plan",
+        "text": "Elle est petite, n’a pas de fenêtre à surveiller, et ne tourne que pour mettre à jour votre statut."
+      }
+    ],
+    "guide-title": "L’installer",
+    "guide-items": [
+      {
+        "title": "Téléchargez le bon fichier",
+        "text": "Prenez l’installateur de votre système. L’archive portable est là si vous préférez éviter l’assistant."
+      },
+      {
+        "title": "Ouvrez le fichier téléchargé",
+        "text": "Lancez l’app et suivez l’installation. Sous Windows, lisez la note SmartScreen si un avertissement apparaît."
+      },
+      {
+        "title": "Installez une présence",
+        "text": "Depuis la bibliothèque, ajoutez YouTube par exemple pour vérifier que l’extension et l’application bureau communiquent."
+      },
+      {
+        "title": "Vérifiez Discord",
+        "text": "Gardez l’application Discord ouverte, lancez un site pris en charge, puis vérifiez que le statut se met à jour."
+      }
+    ],
+    "guide-library": "Ouvrir la bibliothèque",
+    "req-title": "Prérequis",
+    "req": {
+      "os": "Système",
+      "arch": "Architecture",
+      "discord": "Discord",
+      "browser": "Navigateur",
+      "storage": "Espace disque",
+      "os-windows": "Windows 10 ou Windows 11",
+      "os-macos": "macOS 11 Big Sur ou plus récent",
+      "os-linux": "Linux 2.6.32+ / glibc 2.17+",
+      "arch-windows": "64 bits (x64)",
+      "arch-macos": "Intel x64 / Apple Silicon (ARM64)",
+      "arch-linux": "64 bits (x64)",
+      "discord-windows": "Application Discord installée et en cours d’exécution",
+      "discord-macos": "Application Discord installée et en cours d’exécution",
+      "discord-linux": "Application Discord installée et en cours d’exécution",
+      "browser-windows": "Navigateur Chromium (Chrome, Edge, Brave, Opera) ou Firefox",
+      "browser-macos": "Navigateur Chromium (Chrome, Edge, Brave, Opera) ou Firefox",
+      "browser-linux": "Navigateur Chromium (Chrome, Edge, Brave, Opera) ou Firefox",
+      "storage-windows": "Environ 4 Mo",
+      "storage-macos": "Environ 4 Mo",
+      "storage-linux": "Environ 2 Mo"
+    }
+  },
   "placeholder": {
     "badge": "Bientôt",
     "description": "Cette page est en cours de refonte. L’ancienne version reste disponible pour référence."
@@ -314,6 +396,10 @@
       "description": "Parcourez les plateformes que Nowly peut afficher sur Discord."
     },
     "host": {
+      "title": "Application bureau",
+      "description": "Téléchargez l’application bureau pour envoyer votre activité à Discord."
+    },
+    "desktop": {
       "title": "Application bureau",
       "description": "Téléchargez l’application bureau pour envoyer votre activité à Discord."
     },
