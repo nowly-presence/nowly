@@ -6,6 +6,12 @@ const IS_UNPACKED = !chrome.runtime.getManifest().update_url;
 const DEVICE_KEY = "deviceId";
 const DEVICE_TOKEN_KEY = "deviceToken";
 let MARKETPLACE_ORIGIN = new URL(WEB_BASE_URL).origin;
+
+const isAllowedWebOrigin = (origin: string): boolean => {
+  if (IS_UNPACKED) return true;
+  if (origin === MARKETPLACE_ORIGIN) return true;
+  return /^https?:\/\/(localhost|127\.0\.0\.1):3000$/.test(origin);
+};
 const WEB_MESSAGE_TYPES = new Set([
   "INSTALL_PRESENCE",
   "UPDATE_PRESENCE",
@@ -97,7 +103,7 @@ const broadcastDetected = (): void => {
 };
 
 window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
-  if (!IS_UNPACKED && event.origin !== MARKETPLACE_ORIGIN) return;
+  if (!isAllowedWebOrigin(event.origin)) return;
 
   if (event.data?.source === EXT_WEB_SOURCE && event.data.type === "PING") {
     window.postMessage({ source: EXT_WEB_SOURCE, type: "EXT_DETECTED" }, "*");
@@ -105,7 +111,7 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
 });
 
 window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
-  if (!IS_UNPACKED && event.origin !== MARKETPLACE_ORIGIN) return;
+  if (!isAllowedWebOrigin(event.origin)) return;
   if (event.data?.source !== EXT_WEB_SOURCE || event.data.type === "PING") return;
   if (!WEB_MESSAGE_TYPES.has(event.data.type)) return;
 
