@@ -32,3 +32,7 @@ declare module "@/generated/bundled-presences" {
 
   export const BUNDLED_PRESENCES: BundledPresence[]
 }
+
+declare module "@/generated/bundled-presence-slugs" {
+  export const BUNDLED_PRESENCE_SLUGS: string[]
+}

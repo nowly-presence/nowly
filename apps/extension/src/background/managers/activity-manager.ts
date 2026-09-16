@@ -12,6 +12,7 @@ import {
   setActiveSessionStartedAt,
   setActiveTabId,
 } from "@/background/services/background-context";
+import { CDN_BASE_URL } from "@/shared/constants";
 import { mapPresenceData, postNative } from "@/background/services/native";
 import { verifyPresenceRelease } from "@/background/services/release-security";
 import { getCurrentActivity, getPresences, getSettings, setCurrentActivity, setDebug } from "@/background/services/storage";
@@ -32,6 +33,12 @@ const normalizeTimestamp = (value: number | undefined): number | undefined => {
 const normalizeImage = (value: string | undefined): string | undefined => {
   if (!value) return undefined;
   if (value.startsWith("http://")) return undefined;
+
+  const extensionAsset = value.match(/^chrome-extension:\/\/[^/]+\/presences\/([^/]+)\/assets\/(.+)$/i);
+  if (extensionAsset?.[1] && extensionAsset[2] && CDN_BASE_URL) {
+    return `${CDN_BASE_URL.replace(/\/+$/, "")}/presences/${extensionAsset[1]}/assets/${extensionAsset[2]}`;
+  }
+
   if (value.startsWith("https://")) return value;
   if (/^[a-z0-9_-]{1,64}$/i.test(value)) return value;
   return undefined;
