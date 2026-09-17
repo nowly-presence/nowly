@@ -43,6 +43,7 @@ export type LibraryPresence = {
   author: PresencePerson
   contributors: PresencePerson[]
   version: string | null
+  discordNative: boolean
 };
 
 export const libraryLogoUrl = (slug: string): string => presenceLogoUrl(slug);

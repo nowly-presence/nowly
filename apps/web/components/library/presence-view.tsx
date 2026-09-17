@@ -2,6 +2,7 @@ import { LibraryCard } from "@/components/library/library-card";
 import { LibraryMedia } from "@/components/library/library-media";
 import { PresenceActions } from "@/components/library/presence-actions";
 import { PresenceInfo } from "@/components/library/presence-info";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import {
@@ -12,7 +13,7 @@ import {
   type LibraryPresence,
 } from "@/lib/library-catalog";
 import type { PresenceCommit } from "@/lib/presence-api";
-import { RiArrowLeftLine, RiCheckboxCircleLine } from "@remixicon/react";
+import { RiArrowLeftLine, RiCheckboxCircleLine, RiInformationLine } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
 type PresenceViewProps = {
@@ -52,6 +53,15 @@ export const PresenceView = async ({ presence, catalog, locale, commit }: Presen
                 <p className="mt-4 max-w-[46ch] text-[1.05rem] leading-relaxed text-foreground/68">
                   {description}
                 </p>
+                {presence.discordNative ? (
+                  <Alert className="mt-6 rounded-[16px] border-accent/20 bg-accent/8 px-4 py-3.5">
+                    <RiInformationLine className="text-accent" />
+                    <AlertTitle>{t("discord-native-title")}</AlertTitle>
+                    <AlertDescription>
+                      {t("discord-native-description", { name: presence.name })}
+                    </AlertDescription>
+                  </Alert>
+                ) : null}
                 <PresenceActions
                   slug={presence.slug}
                   name={presence.name}

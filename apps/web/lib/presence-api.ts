@@ -158,6 +158,7 @@ export const getPresenceCatalog = cache(async (): Promise<LibraryPresence[]> => 
         contributors?: unknown
         version?: unknown
         totalInstalls?: unknown
+        discordNative?: unknown
       };
       if (typeof item.slug !== "string") return [];
       const slug = item.slug.trim().toLowerCase();
@@ -179,6 +180,7 @@ export const getPresenceCatalog = cache(async (): Promise<LibraryPresence[]> => 
         author: parsePerson(item.author, name),
         contributors: parsePeople(item.contributors, name),
         version: typeof item.version === "string" && item.version.trim() ? item.version.trim() : null,
+        discordNative: item.discordNative === true,
         totalInstalls: typeof item.totalInstalls === "number" ? item.totalInstalls : 0,
       }];
     })

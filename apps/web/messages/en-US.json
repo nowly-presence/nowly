@@ -316,7 +316,9 @@
     "report-close": "Close",
     "report-thanks-title": "Thanks for the report",
     "report-thanks-description": "We received your note about {name}. That helps us keep the library in good shape.",
-    "report-error": "Could not send the report. Try again in a moment."
+    "report-error": "Could not send the report. Try again in a moment.",
+    "discord-native-title": "Already on Discord",
+    "discord-native-description": "Discord shows {name} if you link your account. Nowly does the same without that link."
   },
   "desktopPage": {
     "eyebrow": "Desktop app",

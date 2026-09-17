@@ -316,7 +316,9 @@
     "report-close": "Fermer",
     "report-thanks-title": "Merci de votre signalement",
     "report-thanks-description": "Nous avons bien reçu votre note à propos de {name}. Cela nous aide à améliorer la bibliothèque.",
-    "report-error": "Impossible d’envoyer le signalement. Réessayez dans un instant."
+    "report-error": "Impossible d’envoyer le signalement. Réessayez dans un instant.",
+    "discord-native-title": "Déjà sur Discord",
+    "discord-native-description": "Discord affiche {name} si vous liez votre compte. Nowly le fait sans cette liaison."
   },
   "desktopPage": {
     "eyebrow": "Application bureau",

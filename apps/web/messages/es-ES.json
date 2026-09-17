@@ -316,7 +316,9 @@
     "report-close": "Cerrar",
     "report-thanks-title": "Gracias por el aviso",
     "report-thanks-description": "Hemos recibido tu nota sobre {name}. Eso nos ayuda a cuidar la biblioteca.",
-    "report-error": "No se pudo enviar el informe. Inténtalo de nuevo en un momento."
+    "report-error": "No se pudo enviar el informe. Inténtalo de nuevo en un momento.",
+    "discord-native-title": "Ya en Discord",
+    "discord-native-description": "Discord muestra {name} si vinculas tu cuenta. Nowly lo hace sin esa vinculación."
   },
   "desktopPage": {
     "eyebrow": "App de escritorio",
