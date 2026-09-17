@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
 type PlaceholderPageProps = {
-  pageKey: "library" | "host" | "changelog" | "support" | "privacy" | "tos" | "cookies" | "legal-notice"
+  pageKey: "library" | "privacy" | "tos" | "cookies" | "legal-notice"
   path: string
   heading?: string
 };
