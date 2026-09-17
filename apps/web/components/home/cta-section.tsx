@@ -2,6 +2,7 @@ import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { homeSectionAltClass } from "@/components/home/section-heading";
 import { cn } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 
 export const CtaSection = async () => {
   const t = await getTranslations("cta");
@@ -15,8 +16,14 @@ export const CtaSection = async () => {
         <p className="mx-auto mt-2 max-w-[34rem] text-base font-normal leading-relaxed text-cta-muted sm:text-lg">
           {t("description")}
         </p>
-        <div className="mt-9 flex flex-wrap items-center justify-center">
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           <ExtensionStoreButton variant="dark" size="lg" />
+          <Link
+            href="/extension"
+            className="text-sm text-cta-muted underline decoration-cta-muted/40 underline-offset-4 transition-colors hover:text-cta-ink hover:decoration-cta-ink/60"
+          >
+            {t("other-versions")}
+          </Link>
         </div>
       </div>
     </section>

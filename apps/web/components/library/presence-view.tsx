@@ -12,7 +12,7 @@ import {
   relatedPresences,
   type LibraryPresence,
 } from "@/lib/library-catalog";
-import type { PresenceCommit } from "@/lib/presence-api";
+import type { PresenceVersionNote } from "@/lib/presence-api";
 import { RiArrowLeftLine, RiCheckboxCircleLine, RiInformationLine } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
@@ -20,16 +20,18 @@ type PresenceViewProps = {
   presence: LibraryPresence
   catalog: LibraryPresence[]
   locale: string
-  commit: PresenceCommit | null
+  versions: PresenceVersionNote[]
 };
 
-export const PresenceView = async ({ presence, catalog, locale, commit }: PresenceViewProps) => {
+export const PresenceView = async ({ presence, catalog, locale, versions }: PresenceViewProps) => {
   const t = await getTranslations("presencePage");
   const library = await getTranslations("libraryPage");
   const description = localizedDescription(presence, locale);
   const about = localizedLongDescription(presence, locale);
   const features = localizedFeatures(presence, locale);
   const related = relatedPresences(catalog, presence);
+  const currentVersion = versions.find((entry) => entry.version === presence.version) ?? versions[0] ?? null;
+  const currentNote = currentVersion?.note[locale as keyof typeof currentVersion.note] || currentVersion?.note["en-US"] || "";
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
@@ -78,7 +80,7 @@ export const PresenceView = async ({ presence, catalog, locale, commit }: Presen
           </div>
 
           <div className="flex flex-col gap-4">
-            <PresenceInfo presence={presence} commit={commit} />
+            <PresenceInfo presence={presence} commit={currentVersion?.commit ?? null} changelog={currentNote} />
             {features.length > 0 ? (
               <Card size="sm">
                 <CardContent>

@@ -12,6 +12,7 @@ import type { LibraryPresence } from "@/lib/library-catalog";
 import { cn } from "@/lib/utils";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react";
 import { useLocale, useTranslations } from "next-intl";
+import { parseAsInteger, useQueryState } from "nuqs";
 import { useLayoutEffect, useRef, useState } from "react";
 
 const PAGE_SIZE = 9;
@@ -131,7 +132,7 @@ export const PaginatedLibraryGrid = ({ items, resetKey, className }: PaginatedLi
   const locale = useLocale();
   const gridRef = useRef<HTMLElement>(null);
   const anchorRef = useRef<HTMLDivElement>(null);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1).withOptions({ history: "push" }));
   const [docked, setDocked] = useState(false);
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);

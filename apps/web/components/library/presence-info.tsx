@@ -52,9 +52,11 @@ const PersonRow = ({ person, label }: { person: PresencePerson; label: string })
 export const PresenceInfo = async ({
   presence,
   commit,
+  changelog,
 }: {
   presence: LibraryPresence
   commit: PresenceCommit | null
+  changelog?: string
 }) => {
   const t = await getTranslations("presencePage");
   const people = [presence.author, ...presence.contributors];
@@ -116,6 +118,9 @@ export const PresenceInfo = async ({
                 </ButtonAnchor>
               ) : null}
             </div>
+            {changelog ? (
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{changelog}</p>
+            ) : null}
           </CardContent>
         </Card>
       ) : null}

@@ -211,42 +211,67 @@ export type PresenceCommit = {
   href: string
 };
 
-export const getLatestPresenceCommit = cache(async (slug: string, version?: string | null): Promise<PresenceCommit | null> => {
+export type PresenceVersionNote = {
+  version: string
+  note: LocalizedCopy
+  date: string | null
+  commit: PresenceCommit | null
+};
+
+const toCommit = (sha: string): PresenceCommit | null => {
+  if (!COMMIT_SHA.test(sha)) return null;
+  return {
+    sha,
+    shortSha: sha.slice(0, 7),
+    href: `${PRESENCES_REPOSITORY_URL}/commit/${sha}`,
+  };
+};
+
+const parseChangelogField = (value: unknown): LocalizedCopy => {
+  if (typeof value === "string" && value.trim()) {
+    try {
+      return localizedCopy(JSON.parse(value), "");
+    } catch {
+      return localizedCopy(value, "");
+    }
+  }
+  return localizedCopy(value, "");
+};
+
+const versionDate = (value: unknown): string | null => {
+  if (typeof value !== "string" || !value.trim()) return null;
+  const day = value.trim().slice(0, 10);
+  return /^\d{4}-\d{2}-\d{2}$/.test(day) ? day : null;
+};
+
+export const getPresenceVersionHistory = cache(async (slug: string): Promise<PresenceVersionNote[]> => {
   const normalized = slug.trim().toLowerCase();
-  if (!normalized) return null;
+  if (!normalized) return [];
 
   try {
     const response = await fetch(
       `${PRODUCTION_API_URL}/presences/${encodeURIComponent(normalized)}/versions`,
       { next: { revalidate: 3600 } },
     );
-    if (!response.ok) return null;
+    if (!response.ok) return [];
     const data: unknown = await response.json();
-    if (!Array.isArray(data)) return null;
+    if (!Array.isArray(data)) return [];
 
-    const rows = data.flatMap((row) => {
+    return data.flatMap((row) => {
       if (!row || typeof row !== "object") return [];
-      const entry = row as { version?: unknown; commitSha?: unknown };
+      const entry = row as { version?: unknown; changelog?: unknown; createdAt?: unknown; commitSha?: unknown };
+      const version = typeof entry.version === "string" ? entry.version.trim() : "";
+      if (!version) return [];
       const sha = typeof entry.commitSha === "string" ? entry.commitSha.trim() : "";
-      if (!COMMIT_SHA.test(sha)) return [];
       return [{
-        version: typeof entry.version === "string" ? entry.version : "",
-        sha,
+        version,
+        note: parseChangelogField(entry.changelog),
+        date: versionDate(entry.createdAt),
+        commit: toCommit(sha),
       }];
     });
-
-    const matched = (version
-      ? rows.find((row) => row.version === version)
-      : null) ?? rows[0];
-    if (!matched) return null;
-
-    return {
-      sha: matched.sha,
-      shortSha: matched.sha.slice(0, 7),
-      href: `${PRESENCES_REPOSITORY_URL}/commit/${matched.sha}`,
-    };
   } catch {
-    return null;
+    return [];
   }
 });
 

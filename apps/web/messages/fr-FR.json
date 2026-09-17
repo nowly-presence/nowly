@@ -124,7 +124,8 @@
   },
   "cta": {
     "title": "Commencez avec Nowly",
-    "description": "Installez l’extension gratuitement, c’est prêt en quelques secondes."
+    "description": "Installez l’extension gratuitement, c’est prêt en quelques secondes.",
+    "other-versions": "Voir d’autres versions"
   },
   "features": {
     "eyebrow": "Produit",
@@ -402,6 +403,54 @@
       "storage-linux": "Environ 2 Mo"
     }
   },
+  "extensionPage": {
+    "eyebrow": "Extension navigateur",
+    "title": "L’extension qui lit vos onglets",
+    "description": "Nowly détecte ce que vous regardez, écoutez ou jouez, puis transmet l’activité à l’application bureau pour Discord.",
+    "detected": "Détecté",
+    "card-title": "Ajouter à {browser}",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-description": {
+      "chrome": "Disponible sur le Chrome Web Store. Fonctionne aussi sur Edge, Brave et Opera.",
+      "firefox": "Disponible sur addons.mozilla.org."
+    },
+    "dev-version": "Voir la version de développement",
+    "trust-title": "Ce qu’elle fait",
+    "trust-items": [
+      {
+        "title": "Uniquement les sites que vous installez",
+        "text": "Une présence ne s’exécute qu’après installation depuis la bibliothèque."
+      },
+      {
+        "title": "Rien ne quitte votre PC",
+        "text": "Le titre et l’activité partent vers l’application bureau, pas vers nowly.me."
+      },
+      {
+        "title": "Scripts signés",
+        "text": "Les présences officielles sont vérifiées avant d’être exécutées."
+      }
+    ],
+    "guide-title": "L’installer",
+    "guide-items": [
+      {
+        "title": "Ajoutez l’extension",
+        "text": "Depuis le store de votre navigateur, en un clic."
+      },
+      {
+        "title": "Installez l’application bureau",
+        "text": "C’est elle qui parle à Discord."
+      },
+      {
+        "title": "Activez une présence",
+        "text": "Depuis la bibliothèque, ajoutez YouTube, Netflix ou Twitch."
+      }
+    ],
+    "guide-desktop": "Voir l’application bureau",
+    "guide-library": "Ouvrir la bibliothèque"
+  },
   "changelogPage": {
     "eyebrow": "Notes de mise à jour",
     "title": "Ce qui a changé",
@@ -570,6 +619,10 @@
     "desktop": {
       "title": "Application bureau",
       "description": "Téléchargez l’application bureau pour envoyer votre activité à Discord."
+    },
+    "extension": {
+      "title": "Extension navigateur",
+      "description": "Ajoutez l’extension Nowly à Chrome ou Firefox pour détecter ce que vous regardez, écoutez ou jouez."
     },
     "changelog": {
       "title": "Notes de mise à jour",

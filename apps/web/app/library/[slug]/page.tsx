@@ -1,7 +1,7 @@
 import { PresenceView } from "@/components/library/presence-view";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { localizedDescription } from "@/lib/library-catalog";
-import { getLatestPresenceCommit, getPresenceBySlug, getPresenceCatalog, presenceThumbnailUrl } from "@/lib/presence-api";
+import { getPresenceBySlug, getPresenceCatalog, getPresenceVersionHistory, presenceThumbnailUrl } from "@/lib/presence-api";
 import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -43,11 +43,11 @@ export const generateMetadata = async ({ params }: PresencePageProps): Promise<M
 
 const Page = async ({ params }: PresencePageProps) => {
   const { slug } = await params;
-  const [presence, catalog, locale, commit] = await Promise.all([
+  const [presence, catalog, locale, versions] = await Promise.all([
     getPresenceBySlug(slug),
     getPresenceCatalog(),
     getLocale(),
-    getLatestPresenceCommit(slug),
+    getPresenceVersionHistory(slug),
   ]);
 
   if (!presence) notFound();
@@ -66,7 +66,7 @@ const Page = async ({ params }: PresencePageProps) => {
           { name: presence.name, path: `/library/${presence.slug}` },
         ]}
       />
-      <PresenceView presence={presence} catalog={catalog} locale={locale} commit={commit} />
+      <PresenceView presence={presence} catalog={catalog} locale={locale} versions={versions} />
     </>
   );
 };

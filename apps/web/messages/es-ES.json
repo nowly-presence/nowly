@@ -124,7 +124,8 @@
   },
   "cta": {
     "title": "Empieza con Nowly",
-    "description": "Instala la extensión gratis y en segundos estás listo."
+    "description": "Instala la extensión gratis y en segundos estás listo.",
+    "other-versions": "Ver otras versiones"
   },
   "features": {
     "eyebrow": "Producto",
@@ -402,6 +403,54 @@
       "storage-linux": "Unos 2 MB"
     }
   },
+  "extensionPage": {
+    "eyebrow": "Extensión del navegador",
+    "title": "La extensión que lee tus pestañas",
+    "description": "Nowly detecta lo que ves, escuchas o juegas, y lo envía a la app de escritorio para Discord.",
+    "detected": "Detectado",
+    "card-title": "Añadir a {browser}",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-description": {
+      "chrome": "Disponible en Chrome Web Store. También funciona en Edge, Brave y Opera.",
+      "firefox": "Disponible en addons.mozilla.org."
+    },
+    "dev-version": "Ver la versión de desarrollo",
+    "trust-title": "Qué hace",
+    "trust-items": [
+      {
+        "title": "Solo los sitios que instalas",
+        "text": "Una presencia solo se ejecuta tras instalarla desde la biblioteca."
+      },
+      {
+        "title": "Nada sale de tu PC",
+        "text": "El título y la actividad van a la app de escritorio, no a nowly.me."
+      },
+      {
+        "title": "Scripts firmados",
+        "text": "Las presencias oficiales se verifican antes de ejecutarse."
+      }
+    ],
+    "guide-title": "Instalarla",
+    "guide-items": [
+      {
+        "title": "Añade la extensión",
+        "text": "Desde la tienda de tu navegador, en un clic."
+      },
+      {
+        "title": "Instala la app de escritorio",
+        "text": "Es la que habla con Discord."
+      },
+      {
+        "title": "Activa una presencia",
+        "text": "Desde la biblioteca, añade YouTube, Netflix o Twitch."
+      }
+    ],
+    "guide-desktop": "Ver la app de escritorio",
+    "guide-library": "Abrir la biblioteca"
+  },
   "changelogPage": {
     "eyebrow": "Notas de la versión",
     "title": "Qué ha cambiado",
@@ -570,6 +619,10 @@
     "desktop": {
       "title": "App de escritorio",
       "description": "Descarga la app de escritorio para enviar tu actividad a Discord."
+    },
+    "extension": {
+      "title": "Extensión del navegador",
+      "description": "Añade la extensión Nowly a Chrome o Firefox para detectar lo que ves, escuchas o juegas."
     },
     "changelog": {
       "title": "Notas de la versión",

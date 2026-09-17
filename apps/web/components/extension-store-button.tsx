@@ -1,6 +1,6 @@
 "use client";
 
-import { RiDownloadLine } from "@remixicon/react";
+import { RiChromeFill, RiFirefoxBrowserFill } from "@remixicon/react";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { detectExtensionBrowser, getExtensionDownloadUrl } from "@/lib/extension-store";
 import type { ExtensionBrowser } from "@/lib/extension-store";
@@ -30,6 +30,7 @@ export const ExtensionStoreButton = ({
 }: ExtensionStoreButtonProps) => {
   const t = useTranslations("store");
   const browser = useExtensionBrowser();
+  const Icon = browser === "firefox" ? RiFirefoxBrowserFill : RiChromeFill;
 
   return (
     <a
@@ -39,7 +40,7 @@ export const ExtensionStoreButton = ({
       className={cn(buttonVariants({ variant, size }), className)}
       {...props}
     >
-      <RiDownloadLine data-icon="inline-start" />
+      <Icon data-icon="inline-start" />
       {children ?? t(browser === "firefox" ? "download-firefox" : "download-chrome")}
     </a>
   );

@@ -124,7 +124,8 @@
   },
   "cta": {
     "title": "Get started with Nowly",
-    "description": "Install the free extension. You’re set up in seconds."
+    "description": "Install the free extension. You’re set up in seconds.",
+    "other-versions": "See other versions"
   },
   "features": {
     "eyebrow": "Product",
@@ -402,6 +403,54 @@
       "storage-linux": "About 2 MB"
     }
   },
+  "extensionPage": {
+    "eyebrow": "Browser extension",
+    "title": "The extension that reads your tabs",
+    "description": "Nowly detects what you're watching, listening to, or playing, then sends it to the desktop app for Discord.",
+    "detected": "Detected",
+    "card-title": "Add to {browser}",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-description": {
+      "chrome": "Available on the Chrome Web Store. Also works on Edge, Brave, and Opera.",
+      "firefox": "Available on addons.mozilla.org."
+    },
+    "dev-version": "See the development version",
+    "trust-title": "What it does",
+    "trust-items": [
+      {
+        "title": "Only the sites you install",
+        "text": "A presence only runs once installed from the library."
+      },
+      {
+        "title": "Nothing leaves your PC",
+        "text": "Title and activity go to the desktop app, not to nowly.me."
+      },
+      {
+        "title": "Signed scripts",
+        "text": "Official presences are verified before they run."
+      }
+    ],
+    "guide-title": "Install it",
+    "guide-items": [
+      {
+        "title": "Add the extension",
+        "text": "From your browser's store, in one click."
+      },
+      {
+        "title": "Install the desktop app",
+        "text": "It's the one that talks to Discord."
+      },
+      {
+        "title": "Turn on a presence",
+        "text": "From the library, add YouTube, Netflix, or Twitch."
+      }
+    ],
+    "guide-desktop": "See the desktop app",
+    "guide-library": "Open the library"
+  },
   "changelogPage": {
     "eyebrow": "Release notes",
     "title": "What changed",
@@ -570,6 +619,10 @@
     "desktop": {
       "title": "Desktop app",
       "description": "Download the desktop app to send your activity to Discord."
+    },
+    "extension": {
+      "title": "Browser extension",
+      "description": "Add the Nowly extension to Chrome or Firefox to detect what you're watching, listening to, or playing."
     },
     "changelog": {
       "title": "Release notes",

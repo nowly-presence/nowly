@@ -32,6 +32,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       priority: 0.85,
     },
     entry("/desktop", "monthly", 0.7),
+    entry("/extension", "monthly", 0.7),
     entry("/canary", "weekly", 0.55),
     entry("/changelog", "monthly", 0.6),
     ...CHANGELOG_RELEASES.map((release) =>
