@@ -8,9 +8,10 @@ const DEVICE_TOKEN_KEY = "deviceToken";
 let MARKETPLACE_ORIGIN = new URL(WEB_BASE_URL).origin;
 
 const isAllowedWebOrigin = (origin: string): boolean => {
-  if (IS_UNPACKED) return true;
-  if (origin === MARKETPLACE_ORIGIN) return true;
-  return /^https?:\/\/(localhost|127\.0\.0\.1):3000$/.test(origin);
+  if (IS_UNPACKED) {
+    return origin === MARKETPLACE_ORIGIN || /^https?:\/\/(localhost|127\.0\.0\.1):3000$/.test(origin);
+  }
+  return origin === MARKETPLACE_ORIGIN;
 };
 const WEB_MESSAGE_TYPES = new Set([
   "INSTALL_PRESENCE",
