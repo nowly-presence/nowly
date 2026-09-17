@@ -1,5 +1,6 @@
 import { getPrisma, hasDatabase } from "@/db/client"
 import {
+  ANALYTICS_SOURCES,
   catalogPublicJson,
   getAnalyticsMetric,
   getFunnel,
@@ -15,6 +16,7 @@ import {
   sanitizeEventKey,
   sanitizePayload,
   sanitizeSlug,
+  sanitizeSource,
   sanitizeVersion,
   stepKeys,
   type AnalyticsGranularity,
@@ -27,6 +29,18 @@ export type InsightsRecordResult = {
   inserted: number
   rejected: number
   duplicates: number
+}
+
+// Dimensions an admin can combine on a query. slug/source/country live
+// directly on AnalyticsEvent; browser/os/locale live on Device and are
+// resolved to a deviceId allowlist before filtering (see resolveDeviceIds).
+export type InsightsFilters = {
+  slug?: string
+  source?: string
+  country?: string
+  browser?: string
+  os?: string
+  locale?: string
 }
 
 type LiveEvent = {
@@ -120,7 +134,7 @@ const normalizeCreatedAt = (value: unknown): Date => {
 
 export const parseIngestBody = (body: unknown) => ingestEventsBodySchema.safeParse(body)
 
-export const recordInsightEvents = async (events: IngestEvent[]): Promise<InsightsRecordResult> => {
+export const recordInsightEvents = async (events: IngestEvent[], country?: string): Promise<InsightsRecordResult> => {
   if (!hasDatabase()) return { inserted: 0, rejected: 0, duplicates: 0 }
 
   const prisma = getPrisma()
@@ -154,6 +168,8 @@ export const recordInsightEvents = async (events: IngestEvent[]): Promise<Insigh
           deviceId,
           slug: sanitizeSlug(event.slug),
           version: sanitizeVersion(event.version),
+          source: sanitizeSource(event.source),
+          country,
           payload: payload as Prisma.InputJsonObject,
           createdAt,
         },
@@ -175,6 +191,7 @@ export const recordInsightEvents = async (events: IngestEvent[]): Promise<Insigh
 
 export const getCatalogPayload = () => ({
   metrics: catalogPublicJson(),
+  sources: ANALYTICS_SOURCES,
   funnels: listFunnels().map((funnel) => ({
     id: funnel.id,
     label: funnel.label,
@@ -185,7 +202,34 @@ export const getCatalogPayload = () => ({
   })),
 })
 
-export const getOverview = async (rangeValue: unknown) => {
+// browser/os/locale live on Device, not AnalyticsEvent - resolve them to a
+// deviceId allowlist once, then filter events by that list. Returns
+// undefined when no device-level filter was requested (no restriction).
+const resolveDeviceIds = async (filters: InsightsFilters): Promise<string[] | undefined> => {
+  if (!filters.browser && !filters.os && !filters.locale) return undefined
+
+  const devices = await getPrisma().device.findMany({
+    where: {
+      browser: filters.browser,
+      os: filters.os,
+      locale: filters.locale,
+    },
+    select: { deviceId: true },
+  })
+  return devices.map((device) => device.deviceId)
+}
+
+const eventWhereFromFilters = (
+  filters: InsightsFilters,
+  deviceIds: string[] | undefined,
+): Prisma.AnalyticsEventWhereInput => ({
+  ...(filters.slug && { slug: filters.slug }),
+  ...(filters.source && { source: filters.source }),
+  ...(filters.country && { country: filters.country }),
+  ...(deviceIds && { deviceId: { in: deviceIds } }),
+})
+
+export const getOverview = async (rangeValue: unknown, filters: InsightsFilters = {}) => {
   const range = resolveRange(rangeValue)
   if (!hasDatabase()) {
     return {
@@ -201,7 +245,8 @@ export const getOverview = async (rangeValue: unknown) => {
   const prisma = getPrisma()
   const to = new Date()
   const from = new Date(to.getTime() - range.ms)
-  const where = { createdAt: { gte: from, lte: to } }
+  const deviceIds = await resolveDeviceIds(filters)
+  const where = { createdAt: { gte: from, lte: to }, ...eventWhereFromFilters(filters, deviceIds) }
 
   const [events, uniqueDevices, grouped] = await Promise.all([
     prisma.analyticsEvent.count({ where }),
@@ -220,7 +265,7 @@ export const getOverview = async (rangeValue: unknown) => {
 
   const funnels = await Promise.all(
     listFunnels().map(async (funnel) => {
-      const measurement = await getFunnelMeasurement(funnel.id, rangeValue)
+      const measurement = await getFunnelMeasurement(funnel.id, rangeValue, filters)
       return {
         id: funnel.id,
         label: funnel.label,
@@ -246,7 +291,12 @@ const truncExpr = (granularity: AnalyticsGranularity) => {
   return Prisma.sql`date_trunc('day', created_at)`
 }
 
-export const getSeries = async (metric: string, rangeValue: unknown, granularityValue?: string) => {
+export const getSeries = async (
+  metric: string,
+  rangeValue: unknown,
+  granularityValue?: string,
+  filters: InsightsFilters = {},
+) => {
   const catalogMetric = getAnalyticsMetric(metric)
   if (!catalogMetric) return null
 
@@ -267,11 +317,20 @@ export const getSeries = async (metric: string, rangeValue: unknown, granularity
     }
   }
 
+  const deviceIds = await resolveDeviceIds(filters)
+  const extraConditions = [
+    filters.slug ? Prisma.sql`AND slug = ${filters.slug}` : Prisma.empty,
+    filters.source ? Prisma.sql`AND source = ${filters.source}` : Prisma.empty,
+    filters.country ? Prisma.sql`AND country = ${filters.country}` : Prisma.empty,
+    deviceIds ? Prisma.sql`AND device_id = ANY(${deviceIds})` : Prisma.empty,
+  ]
+
   const prisma = getPrisma()
   const rows = await prisma.$queryRaw<Array<{ bucket: Date; count: number }>>`
     SELECT ${truncExpr(granularity)} AS bucket, COUNT(*)::int AS count
     FROM analytics_events
     WHERE key = ${metric} AND created_at >= ${from} AND created_at <= ${to}
+    ${Prisma.join(extraConditions, " ")}
     GROUP BY 1
     ORDER BY 1
   `
@@ -292,7 +351,7 @@ export const getSeries = async (metric: string, rangeValue: unknown, granularity
   }
 }
 
-export const getFunnelMeasurement = async (id: string, rangeValue: unknown) => {
+export const getFunnelMeasurement = async (id: string, rangeValue: unknown, filters: InsightsFilters = {}) => {
   const funnel = getFunnel(id)
   if (!funnel) return null
 
@@ -305,12 +364,14 @@ export const getFunnelMeasurement = async (id: string, rangeValue: unknown) => {
     return { range: range.id, from: from.toISOString(), to: to.toISOString(), ...measureFunnel(funnel, []) }
   }
 
+  const deviceIds = await resolveDeviceIds(filters)
   const prisma = getPrisma()
   const rows = await prisma.analyticsEvent.findMany({
     where: {
       key: { in: keys },
       deviceId: { not: null },
       createdAt: { gte: from, lte: to },
+      ...eventWhereFromFilters(filters, deviceIds),
     },
     select: { key: true, deviceId: true, createdAt: true },
     orderBy: { createdAt: "asc" },
@@ -328,7 +389,7 @@ export const getFunnelMeasurement = async (id: string, rangeValue: unknown) => {
   }
 }
 
-export const listFunnelSummaries = async (rangeValue: unknown) => {
-  const measurements = await Promise.all(listFunnels().map((funnel) => getFunnelMeasurement(funnel.id, rangeValue)))
+export const listFunnelSummaries = async (rangeValue: unknown, filters: InsightsFilters = {}) => {
+  const measurements = await Promise.all(listFunnels().map((funnel) => getFunnelMeasurement(funnel.id, rangeValue, filters)))
   return measurements.filter((item): item is NonNullable<typeof item> => Boolean(item))
 }

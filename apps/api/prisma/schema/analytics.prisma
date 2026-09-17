@@ -4,10 +4,14 @@ model AnalyticsEvent {
   deviceId  String?  @map("device_id")
   slug      String?
   version   String?
+  source    String?
+  country   String?
   payload   Json     @default("{}")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@index([key, createdAt])
   @@index([deviceId])
+  @@index([key, source])
+  @@index([key, country])
   @@map("analytics_events")
 }
