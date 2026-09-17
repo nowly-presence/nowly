@@ -1,6 +1,7 @@
 import { z } from "zod"
 import {
   MAX_ANALYTICS_EVENTS_PER_BATCH,
+  PRESENCE_REPORT_MAX_LENGTH,
   SLUG_MAX_LENGTH,
 } from "./constants"
 
@@ -76,6 +77,13 @@ export const presencePutBodySchema = z.object({
   pr: z.string().trim().max(200).optional(),
 })
 export type PresencePutBody = z.infer<typeof presencePutBodySchema>
+
+/** POST /presences/:slug/report */
+export const presenceReportBodySchema = z.object({
+  message: z.string().trim().min(1).max(PRESENCE_REPORT_MAX_LENGTH),
+  locale: z.string().trim().max(20).optional(),
+})
+export type PresenceReportBody = z.infer<typeof presenceReportBodySchema>
 
 /** GET /ads/status */
 export const adsStatusQuerySchema = z.object({

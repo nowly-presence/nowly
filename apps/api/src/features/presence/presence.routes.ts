@@ -1,6 +1,6 @@
 import { hasAdminAuth, requireAuth } from "@/features/auth/auth.middleware"
 import { buildLocaleObject } from "@nowly/locales"
-import { presenceActiveBodySchema, presencePutBodySchema } from "@nowly/shared/schemas"
+import { presenceActiveBodySchema, presencePutBodySchema, presenceReportBodySchema } from "@nowly/shared/schemas"
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
 import {
   addVersion,
@@ -10,6 +10,11 @@ import {
   setAdded, setUpdated, setVersion,
 } from "./presence.repository"
 import { buildRelease } from "./presence.service"
+import {
+  presenceDisplayName,
+  sanitizeReportMessage,
+  submitPresenceReport,
+} from "./presence-report"
 import { processPresenceSync, type PresenceSyncBody } from "./presence.sync"
 
 const sendArchivedNotFound = async (
@@ -65,6 +70,49 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
     return reply
       .header("Cache-Control", "no-store")
       .send(release)
+  })
+
+  fastify.post<{ Params: { slug: string } }>("/:slug/report", {
+    config: {
+      rateLimit: {
+        max: 8,
+        timeWindow: "10 minutes",
+      },
+    },
+  }, async (request, reply) => {
+    const slug = request.params.slug.toLowerCase()
+    if (await sendArchivedNotFound(slug, request, reply)) return
+
+    const parsed = presenceReportBodySchema.safeParse(request.body)
+    if (!parsed.success) {
+      return reply.status(400).send({ error: "Invalid request body" })
+    }
+
+    const meta = await getPresenceMeta(slug)
+    if (!meta) {
+      return reply.status(404).send({ error: "Presence not found" })
+    }
+
+    const message = sanitizeReportMessage(parsed.data.message)
+    if (!message) {
+      return reply.status(400).send({ error: "Invalid request body" })
+    }
+
+    const result = await submitPresenceReport({
+      slug,
+      name: presenceDisplayName(meta, slug, parsed.data.locale),
+      message,
+      locale: parsed.data.locale,
+    })
+
+    if (result === "unconfigured") {
+      return reply.status(503).send({ error: "Reports are temporarily unavailable" })
+    }
+    if (result === "failed") {
+      return reply.status(502).send({ error: "Could not send the report" })
+    }
+
+    return { ok: true }
   })
 
   fastify.get<{ Params: { slug: string } }>("/:slug/versions", async (request, reply) => {

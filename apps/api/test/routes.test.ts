@@ -26,6 +26,18 @@ const mockPresenceRepo = vi.hoisted(() => ({
 
 vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo)
 
+const mockPresenceReport = vi.hoisted(() => ({
+  submitPresenceReport: vi.fn(),
+}))
+
+vi.mock("@/features/presence/presence-report", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/features/presence/presence-report")>()
+  return {
+    ...actual,
+    submitPresenceReport: mockPresenceReport.submitPresenceReport,
+  }
+})
+
 vi.mock("@/db/client", () => ({
   getPrisma: vi.fn(() => ({})),
   hasDatabase: vi.fn(() => true),
@@ -395,6 +407,74 @@ describe("Stats Routes", () => {
     expect(res.statusCode).toBe(200)
     expect(JSON.parse(res.body)).toEqual({ ok: true, removed: null })
     expect(mockPresenceRepo.clearActiveDevicesForDevice).toHaveBeenCalledWith("device-123")
+  })
+
+  it("POST /presences/:slug/report sends a valid report", async () => {
+    mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: { "en-US": "YouTube" } })
+    mockPresenceRepo.getPresenceStats.mockResolvedValue({ archived: false })
+    mockPresenceReport.submitPresenceReport.mockResolvedValue("sent")
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/youtube/report",
+      payload: { message: "The presence stays idle on the watch page.", locale: "fr-FR" },
+    })
+
+    expect(res.statusCode).toBe(200)
+    expect(JSON.parse(res.body)).toEqual({ ok: true })
+    expect(mockPresenceReport.submitPresenceReport).toHaveBeenCalledWith({
+      slug: "youtube",
+      name: "YouTube",
+      message: "The presence stays idle on the watch page.",
+      locale: "fr-FR",
+    })
+  })
+
+  it("POST /presences/:slug/report rejects empty or oversized messages", async () => {
+    mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: "YouTube" })
+
+    const empty = await app.inject({
+      method: "POST",
+      url: "/presences/youtube/report",
+      payload: { message: "   " },
+    })
+    expect(empty.statusCode).toBe(400)
+
+    const oversized = await app.inject({
+      method: "POST",
+      url: "/presences/youtube/report",
+      payload: { message: "x".repeat(751) },
+    })
+    expect(oversized.statusCode).toBe(400)
+    expect(mockPresenceReport.submitPresenceReport).not.toHaveBeenCalled()
+  })
+
+  it("POST /presences/:slug/report returns 404 for unknown presences", async () => {
+    mockPresenceRepo.getPresenceMeta.mockResolvedValue(null)
+    mockPresenceRepo.getPresenceStats.mockResolvedValue({ archived: false })
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/missing/report",
+      payload: { message: "Broken" },
+    })
+
+    expect(res.statusCode).toBe(404)
+    expect(mockPresenceReport.submitPresenceReport).not.toHaveBeenCalled()
+  })
+
+  it("POST /presences/:slug/report returns 503 when Discord is not configured", async () => {
+    mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: "YouTube" })
+    mockPresenceRepo.getPresenceStats.mockResolvedValue({ archived: false })
+    mockPresenceReport.submitPresenceReport.mockResolvedValue("unconfigured")
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/youtube/report",
+      payload: { message: "Broken timestamps" },
+    })
+
+    expect(res.statusCode).toBe(503)
   })
 
 })

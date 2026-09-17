@@ -24,6 +24,7 @@ export const serverEnv = createEnv({
     GITHUB_SPONSORS_WEBHOOK_SECRET: required.optional(),
     DISCORD_WEBHOOK_SUCCESS_URL: z.string().trim().url().optional(),
     DISCORD_WEBHOOK_FAILURE_URL: z.string().trim().url().optional(),
+    DISCORD_WEBHOOK_REPORT_URL: z.string().trim().url().optional(),
     STATUS_CRON_SECRET: required.optional(),
     STATUS_CHECK_INTERVAL_HOURS: z.coerce.number().int().positive().default(1),
     STATUS_SAMPLE_LIMIT: z.coerce.number().int().positive().default(168),
