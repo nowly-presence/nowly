@@ -1,8 +1,7 @@
-import { clearActiveDevicesForDevice } from "@/features/presence/presence.service"
 import { deviceSyncBodySchema } from "@nowly/shared/schemas"
 import type { FastifyInstance } from "fastify"
 import { deriveDeviceToken, requireDeviceAccess } from "./device-token"
-import { syncDevice } from "./device.service"
+import { deleteDeviceData, exportDeviceData, syncDevice } from "./device.service"
 
 export const deviceRoutes = async (fastify: FastifyInstance) => {
   fastify.post("/sync", async (request, reply) => {
@@ -13,11 +12,28 @@ export const deviceRoutes = async (fastify: FastifyInstance) => {
     return { ok: true, deviceToken: deriveDeviceToken(parsed.data.deviceId) }
   })
 
-  fastify.delete<{ Params: { deviceId: string }; Querystring: { token?: string } }>("/:deviceId", async (request, reply) => {
-    const deviceId = request.params.deviceId.trim()
-    if (!requireDeviceAccess(request, reply, deviceId)) return
+  // Right to access: everything Nowly has stored for this device.
+  fastify.get<{ Params: { deviceId: string }; Querystring: { token?: string } }>(
+    "/:deviceId/export",
+    async (request, reply) => {
+      const deviceId = request.params.deviceId.trim()
+      if (!requireDeviceAccess(request, reply, deviceId)) return
 
-    await clearActiveDevicesForDevice(deviceId)
-    return { ok: true }
-  })
+      const data = await exportDeviceData(deviceId)
+      if (!data) return reply.status(404).send({ error: "Device not found" })
+      return data
+    },
+  )
+
+  // Right to erasure: wipes the device row, its presences, sessions, and analytics events.
+  fastify.delete<{ Params: { deviceId: string }; Querystring: { token?: string } }>(
+    "/:deviceId",
+    async (request, reply) => {
+      const deviceId = request.params.deviceId.trim()
+      if (!requireDeviceAccess(request, reply, deviceId)) return
+
+      await deleteDeviceData(deviceId)
+      return { ok: true }
+    },
+  )
 }

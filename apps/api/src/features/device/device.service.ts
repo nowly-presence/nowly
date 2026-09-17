@@ -43,6 +43,73 @@ export const upsertDevice = async (input: DeviceSyncInput): Promise<void> => {
   })
 }
 
+export type DeviceExport = {
+  device: {
+    deviceId: string
+    extensionVersion: string | null
+    nativeVersion: string | null
+    browser: string | null
+    os: string | null
+    locale: string | null
+    firstSeenAt: string
+    lastSeenAt: string
+  } | null
+  presences: Array<{ slug: string; installed: boolean; enabled: boolean; installedVersion: string | null }>
+  analyticsEvents: Array<{ key: string; slug: string | null; source: string | null; country: string | null; createdAt: string }>
+}
+
+export const exportDeviceData = async (deviceId: string): Promise<DeviceExport | null> => {
+  if (!hasDatabase()) return null
+
+  const prisma = getPrisma()
+  const [device, presences, analyticsEvents] = await Promise.all([
+    prisma.device.findUnique({ where: { deviceId } }),
+    prisma.devicePresence.findMany({ where: { deviceId } }),
+    prisma.analyticsEvent.findMany({ where: { deviceId } }),
+  ])
+
+  if (!device) return null
+
+  return {
+    device: {
+      deviceId: device.deviceId,
+      extensionVersion: device.extensionVersion,
+      nativeVersion: device.nativeVersion,
+      browser: device.browser,
+      os: device.os,
+      locale: device.locale,
+      firstSeenAt: device.firstSeenAt.toISOString(),
+      lastSeenAt: device.lastSeenAt.toISOString(),
+    },
+    presences: presences.map((presence) => ({
+      slug: presence.slug,
+      installed: presence.installed,
+      enabled: presence.enabled,
+      installedVersion: presence.installedVersion,
+    })),
+    analyticsEvents: analyticsEvents.map((event) => ({
+      key: event.key,
+      slug: event.slug,
+      source: event.source,
+      country: event.country,
+      createdAt: event.createdAt.toISOString(),
+    })),
+  }
+}
+
+export const deleteDeviceData = async (deviceId: string): Promise<void> => {
+  if (!hasDatabase()) return
+
+  const prisma = getPrisma()
+  await prisma.$transaction([
+    prisma.analyticsEvent.deleteMany({ where: { deviceId } }),
+    prisma.devicePresence.deleteMany({ where: { deviceId } }),
+    prisma.presenceActiveDevice.deleteMany({ where: { deviceId } }),
+    prisma.presenceActiveSession.deleteMany({ where: { deviceId } }),
+    prisma.device.deleteMany({ where: { deviceId } }),
+  ])
+}
+
 export const syncDevice = async (input: DeviceSyncInput): Promise<void> => {
   await upsertDevice(input)
   if (!hasDatabase() || !input.presences?.length) return
