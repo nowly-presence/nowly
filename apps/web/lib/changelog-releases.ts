@@ -9,13 +9,13 @@ export type ChangelogRelease = {
 
 export const CHANGELOG_RELEASES: ChangelogRelease[] = [
   {
-    version: "1.4.1",
-    slug: "1-4-1",
-    date: "2026-09-14",
+    version: "1.5.0",
+    slug: "1-5-0",
+    date: "2026-09-17",
     summary: {
-      "en-US": "Dedicated docs site, language menus with flags, library author pages, desktop app reconnect and midnight snooze, and CLI watch for presence authors.",
-      "fr-FR": "Site de documentation dédié, menus de langue avec drapeaux, pages auteur, reconnexion de l’application bureau et snooze jusqu’à minuit, watch CLI pour les auteurs.",
-      "es-ES": "Sitio de docs dedicado, menús de idioma con banderas, páginas de autor, reconexión de la app de escritorio y snooze hasta medianoche, y watch en la CLI para autores.",
+      "en-US": "Website rebrand, public library, desktop and Canary pages, legal docs, Chrome and Firefox, language flags, desktop reconnect, midnight snooze, and CLI watch.",
+      "fr-FR": "Refonte du site, bibliothèque publique, pages bureau et Canary, textes légaux, Chrome et Firefox, drapeaux, reconnexion bureau, snooze minuit, et watch CLI.",
+      "es-ES": "Rediseño del sitio, biblioteca pública, páginas de escritorio y Canary, textos legales, Chrome y Firefox, banderas, reconexión de escritorio, snooze a medianoche y watch en la CLI.",
     },
   },
   {
