@@ -1,4 +1,5 @@
 import { ChangelogReleaseView } from "@/components/changelog/changelog-view";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { CHANGELOG_RELEASES, getChangelogRelease, parseChangelogVersion } from "@/lib/changelog-releases";
 import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -36,6 +37,7 @@ export const generateMetadata = async ({ params }: ChangelogVersionPageProps): P
       ? t("update-description", { version: parsed.version })
       : t("missing"),
     path: `/changelog/${parsed.version}`,
+    noIndex: !release,
   });
 };
 
@@ -44,11 +46,18 @@ const Page = async ({ params }: ChangelogVersionPageProps) => {
   const parsed = parseChangelogVersion(raw);
   if (!parsed) notFound();
 
+  const t = await getTranslations("changelogPage");
+  const release = getChangelogRelease(parsed.version);
+
   return (
-    <ChangelogReleaseView
-      version={parsed.version}
-      release={getChangelogRelease(parsed.version)}
-    />
+    <>
+      <WebPageJsonLd
+        name={t("meta-title", { version: parsed.version })}
+        description={release ? t("update-description", { version: parsed.version }) : t("missing")}
+        path={`/changelog/${parsed.version}`}
+      />
+      <ChangelogReleaseView version={parsed.version} release={release} />
+    </>
   );
 };
 

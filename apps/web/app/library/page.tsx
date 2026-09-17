@@ -1,4 +1,5 @@
 import { LibraryView } from "@/components/library/library-view";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { normalizeGithub } from "@/lib/library-catalog";
 import { getPresenceCatalog } from "@/lib/presence-api";
 import { createMetadata } from "@/lib/seo";
@@ -19,14 +20,20 @@ const Page = async ({
 }: {
   searchParams: Promise<{ author?: string | string[] }>
 }) => {
-  const [{ author }, items] = await Promise.all([
+  const [{ author }, items, t] = await Promise.all([
     searchParams,
     getPresenceCatalog(),
+    getTranslations("pages.library"),
   ]);
   const authorValue = Array.isArray(author) ? author[0] : author;
   const authorHandle = authorValue ? normalizeGithub(authorValue) : null;
 
-  return <LibraryView items={items} authorHandle={authorHandle || null} />;
+  return (
+    <>
+      <WebPageJsonLd name={t("title")} description={t("description")} path="/library" />
+      <LibraryView items={items} authorHandle={authorHandle || null} />
+    </>
+  );
 };
 
 export default Page;

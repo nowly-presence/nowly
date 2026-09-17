@@ -1,4 +1,5 @@
 import { AuthorView } from "@/components/library/author-view";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import {
   catalogGithubHandles,
   contributorDisplayName,
@@ -48,7 +49,21 @@ const Page = async ({ params }: AuthorPageProps) => {
   const authored = catalog.filter((presence) => presenceMatchesGithub(presence, handle));
   if (authored.length === 0) notFound();
 
-  return <AuthorView handle={handle} items={authored} />;
+  const t = await getTranslations("authorPage");
+  const author = authored[0];
+  if (!author) notFound();
+  const name = contributorDisplayName(author, handle);
+
+  return (
+    <>
+      <WebPageJsonLd
+        name={name}
+        description={t("meta-description", { name })}
+        path={`/author/${handle}`}
+      />
+      <AuthorView handle={handle} items={authored} />
+    </>
+  );
 };
 
 export default Page;

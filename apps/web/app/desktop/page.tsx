@@ -1,4 +1,5 @@
 import { DesktopView } from "@/components/desktop/desktop-view";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { getDesktopRelease } from "@/lib/desktop-release";
 import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -14,8 +15,13 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const Page = async () => {
-  const release = await getDesktopRelease();
-  return <DesktopView release={release} />;
+  const [release, t] = await Promise.all([getDesktopRelease(), getTranslations("pages.desktop")]);
+  return (
+    <>
+      <WebPageJsonLd name={t("title")} description={t("description")} path="/desktop" />
+      <DesktopView release={release} />
+    </>
+  );
 };
 
 export default Page;

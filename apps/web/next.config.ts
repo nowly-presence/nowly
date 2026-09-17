@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
-const docsBase = (process.env.NEXT_PUBLIC_DOCS_BASE_URL ?? "https://docs.nowly.me").replace(/\/$/, "");
+const docsBase = "https://docs.nowly.me";
 
 const nextConfig: NextConfig = {
   compress: true,

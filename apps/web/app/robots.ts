@@ -1,16 +1,24 @@
-import { SITE_URL } from "@/lib/seo";
+import { CANONICAL_ORIGIN, isSeoPreview } from "@/lib/seo";
 import type { MetadataRoute } from "next";
 
-const robots = (): MetadataRoute.Robots => ({
-  rules: [
-    {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/api/"],
-    },
-  ],
-  sitemap: `${SITE_URL}/sitemap.xml`,
-  host: SITE_URL,
-});
+const robots = (): MetadataRoute.Robots => {
+  if (isSeoPreview) {
+    return {
+      rules: [{ userAgent: "*", disallow: "/" }],
+    };
+  }
+
+  return {
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/api/", "/host/"],
+      },
+    ],
+    sitemap: `${CANONICAL_ORIGIN}/sitemap.xml`,
+    host: CANONICAL_ORIGIN,
+  };
+};
 
 export default robots;

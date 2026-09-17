@@ -1,6 +1,7 @@
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { BRAND_FAVICON_32, BRAND_METADATA_ICONS } from "@/lib/brand";
+import { isSeoPreview } from "@/lib/constants";
 import { OG_IMAGE_VERSION } from "@/lib/seo";
 import { geist, instrumentSans } from "./fonts";
 import { NextIntlClientProvider } from "next-intl";
@@ -16,6 +17,9 @@ export const metadata: Metadata = {
   },
   description: "Install Nowly, build presences, and publish Discord Rich Presence integrations.",
   metadataBase: new URL("https://docs.nowly.me"),
+  robots: isSeoPreview
+    ? { index: false, follow: false, nocache: true }
+    : { index: true, follow: true },
   manifest: "/manifest.json",
   icons: {
     ...BRAND_METADATA_ICONS,

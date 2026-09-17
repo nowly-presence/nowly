@@ -1,4 +1,5 @@
 import { PresenceView } from "@/components/library/presence-view";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { localizedDescription } from "@/lib/library-catalog";
 import { getLatestPresenceCommit, getPresenceBySlug, getPresenceCatalog, presenceThumbnailUrl } from "@/lib/presence-api";
 import { createMetadata } from "@/lib/seo";
@@ -28,6 +29,7 @@ export const generateMetadata = async ({ params }: PresencePageProps): Promise<M
       title: t("title"),
       description: t("description"),
       path: `/library/${slug}`,
+      noIndex: true,
     });
   }
 
@@ -50,7 +52,23 @@ const Page = async ({ params }: PresencePageProps) => {
 
   if (!presence) notFound();
 
-  return <PresenceView presence={presence} catalog={catalog} locale={locale} commit={commit} />;
+  const library = await getTranslations("pages.library");
+
+  return (
+    <>
+      <WebPageJsonLd
+        name={presence.name}
+        description={localizedDescription(presence, locale)}
+        path={`/library/${presence.slug}`}
+        crumbs={[
+          { name: "Nowly", path: "/" },
+          { name: library("title"), path: "/library" },
+          { name: presence.name, path: `/library/${presence.slug}` },
+        ]}
+      />
+      <PresenceView presence={presence} catalog={catalog} locale={locale} commit={commit} />
+    </>
+  );
 };
 
 export default Page;
