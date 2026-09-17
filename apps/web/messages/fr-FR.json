@@ -401,6 +401,46 @@
     "meta-title": "Nowly {version}",
     "missing": "Les notes de cette version ne sont pas encore sur le site. Le changelog complet reste dans la doc."
   },
+  "supportPage": {
+    "eyebrow": "Support",
+    "title": "Besoin d’aide ?",
+    "description": "Choisissez le canal qui correspond à votre problème. Discord est le plus rapide pour en parler. GitHub garde une trace publique.",
+    "open": "Ouvrir",
+    "donate": "Nowly reste gratuit. Si vous voulez aider le projet, vous pouvez passer par <kofi>Ko-fi</kofi> ou <sponsors>GitHub Sponsors</sponsors>.",
+    "sections": {
+      "community": "Communauté",
+      "presences": "Présences",
+      "technical": "Technique"
+    },
+    "discord": {
+      "title": "Ticket Discord",
+      "description": "Rejoignez le serveur Nowly et créez un ticket pour parler avec l’équipe."
+    },
+    "docs": {
+      "title": "Dépannage",
+      "description": "Correctifs pour l’application bureau, Discord Desktop, une activité manquante, et les permissions."
+    },
+    "broken": {
+      "title": "Présence cassée",
+      "description": "Signalez une plateforme qui ne détecte plus l’activité, affiche de mauvaises infos, ou se coupe toute seule."
+    },
+    "request": {
+      "title": "Demander une présence",
+      "description": "Proposez une nouvelle plateforme à ajouter à la bibliothèque Nowly."
+    },
+    "bug": {
+      "title": "Signaler un bug",
+      "description": "Signalez un problème sur le site, l’extension, l’API ou l’application bureau."
+    },
+    "feature": {
+      "title": "Suggérer une amélioration",
+      "description": "Partagez une idée pour l’expérience, les réglages ou les outils autour de Nowly."
+    },
+    "other": {
+      "title": "Autre demande",
+      "description": "Ouvrez une issue libre si votre sujet ne rentre pas dans les formulaires proposés."
+    }
+  },
   "placeholder": {
     "badge": "Bientôt",
     "description": "Cette page est en cours de refonte. L’ancienne version reste disponible pour référence."

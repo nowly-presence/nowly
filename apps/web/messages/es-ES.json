@@ -401,6 +401,46 @@
     "meta-title": "Nowly {version}",
     "missing": "Las notas de esta versión aún no están en el sitio. El changelog completo sigue en la documentación."
   },
+  "supportPage": {
+    "eyebrow": "Soporte",
+    "title": "¿Necesitas ayuda?",
+    "description": "Elige el canal que encaje con tu problema. Discord es lo más rápido para hablar. GitHub deja un rastro público.",
+    "open": "Abrir",
+    "donate": "Nowly sigue siendo gratis. Si quieres ayudar al proyecto, puedes usar <kofi>Ko-fi</kofi> o <sponsors>GitHub Sponsors</sponsors>.",
+    "sections": {
+      "community": "Comunidad",
+      "presences": "Presencias",
+      "technical": "Técnico"
+    },
+    "discord": {
+      "title": "Ticket de Discord",
+      "description": "Únete al servidor de Nowly y crea un ticket para hablar con el equipo."
+    },
+    "docs": {
+      "title": "Solución de problemas",
+      "description": "Correcciones para la app de escritorio, Discord Desktop, actividad ausente y permisos."
+    },
+    "broken": {
+      "title": "Presencia rota",
+      "description": "Informa de una plataforma que ya no detecta actividad, muestra información incorrecta o se borra sola."
+    },
+    "request": {
+      "title": "Solicitar una presencia",
+      "description": "Propón una nueva plataforma para añadir a la biblioteca de Nowly."
+    },
+    "bug": {
+      "title": "Informar de un bug",
+      "description": "Informa de un problema en el sitio, la extensión, la API o la app de escritorio."
+    },
+    "feature": {
+      "title": "Sugerir una mejora",
+      "description": "Comparte una idea para mejorar la experiencia, los ajustes o las herramientas de Nowly."
+    },
+    "other": {
+      "title": "Otra solicitud",
+      "description": "Abre una issue libre si tu tema no encaja en los formularios guiados."
+    }
+  },
   "placeholder": {
     "badge": "Próximamente",
     "description": "Esta página se está rediseñando. La versión anterior queda disponible como referencia."

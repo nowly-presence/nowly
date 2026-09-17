@@ -401,6 +401,46 @@
     "meta-title": "Nowly {version}",
     "missing": "Notes for this version are not on the site yet. You can still browse the full changelog in the docs."
   },
+  "supportPage": {
+    "eyebrow": "Support",
+    "title": "Need help?",
+    "description": "Pick the channel that matches your issue. Discord is fastest for a conversation. GitHub keeps a public trail.",
+    "open": "Open",
+    "donate": "Nowly stays free. If you want to help the project, you can use <kofi>Ko-fi</kofi> or <sponsors>GitHub Sponsors</sponsors>.",
+    "sections": {
+      "community": "Community",
+      "presences": "Presences",
+      "technical": "Technical"
+    },
+    "discord": {
+      "title": "Discord ticket",
+      "description": "Join the Nowly server and open a ticket to talk with the team."
+    },
+    "docs": {
+      "title": "Troubleshooting",
+      "description": "Fixes for the desktop app, Discord Desktop, missing activity, and permissions."
+    },
+    "broken": {
+      "title": "Broken presence",
+      "description": "Report a platform that no longer detects activity, shows the wrong info, or clears itself."
+    },
+    "request": {
+      "title": "Request a presence",
+      "description": "Suggest a new platform to add to the Nowly library."
+    },
+    "bug": {
+      "title": "Report a bug",
+      "description": "Report an issue with the website, extension, API, or desktop app."
+    },
+    "feature": {
+      "title": "Suggest an improvement",
+      "description": "Share an idea for the experience, settings, or tools around Nowly."
+    },
+    "other": {
+      "title": "Other request",
+      "description": "Open a blank issue if your topic does not fit one of the guided forms."
+    }
+  },
   "placeholder": {
     "badge": "Coming soon",
     "description": "This page is being rebuilt for the new site. The previous version stays available for reference."
