@@ -5,6 +5,7 @@ const docsBase = "https://docs.nowly.me";
 
 const nextConfig: NextConfig = {
   compress: true,
+  transpilePackages: ["@nowly/analytics"],
   poweredByHeader: false,
   experimental: {
     optimizePackageImports: ["@remixicon/react", "@base-ui/react"],
