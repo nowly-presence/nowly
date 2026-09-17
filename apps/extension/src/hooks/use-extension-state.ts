@@ -1,5 +1,5 @@
 import { sendMessage, type NativeStatus } from "@/lib/messages";
-import type { CurrentActivity, ExtensionSettings, InstalledPresences, PresenceDebug, SupporterStatus } from "@/shared/types";
+import type { CurrentActivity, ExtensionSettings, InstalledPresences, PresenceDebug } from "@/shared/types";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useHostVersion, type HostVersionInfo } from "@/hooks/use-host-version";
 
@@ -27,8 +27,8 @@ type ExtensionState = {
   updates: Record<string, string>;
   settings: ExtensionSettings;
   setSettings: (partial: Partial<ExtensionSettings>) => void;
-  supporterStatus: SupporterStatus;
-  dismissSupporterThankYou: () => void;
+  analyticsConsent: boolean;
+  setAnalyticsConsent: (granted: boolean) => void;
 };
 
 const FALLBACK_NATIVE_STATUS: NativeStatus = {
@@ -44,18 +44,12 @@ const FALLBACK_SETTINGS: ExtensionSettings = {
   scheduleEnabled: false,
 };
 
-const FALLBACK_SUPPORTER_STATUS: SupporterStatus = {
-  adFree: false,
-  hasAds: true,
-};
-
 export const useExtensionState = (): ExtensionState => {
   const [presences, setPresences] = useState<InstalledPresences>({});
   const [activity, setActivity] = useState<CurrentActivity | null>(null);
   const [nativeStatus, setNativeStatus] = useState<NativeStatus>(FALLBACK_NATIVE_STATUS);
   const [debug, setDebug] = useState<PresenceDebug | null>(null);
   const [updates, setUpdates] = useState<Record<string, string>>({});
-  const [supporterStatus, setSupporterStatus] = useState<SupporterStatus>(FALLBACK_SUPPORTER_STATUS);
   const [isCheckingUpdates, setIsCheckingUpdates] = useState(false);
   const [isUnpacked, setIsUnpacked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -73,6 +67,7 @@ export const useExtensionState = (): ExtensionState => {
   }, []);
 
   const [settings, setSettingsState] = useState<ExtensionSettings>(FALLBACK_SETTINGS);
+  const [analyticsConsent, setAnalyticsConsentState] = useState(false);
 
   const { hostVersionInfo, isCheckingHostVersion, checkHostUpdate, fetchHostVersion } = useHostVersion();
 
@@ -85,16 +80,16 @@ export const useExtensionState = (): ExtensionState => {
       sendMessage<NativeStatus>("GET_NATIVE_STATUS"),
       sendMessage<PresenceDebug | null>("GET_DEBUG"),
       sendMessage<ExtensionSettings>("GET_SETTINGS"),
-      sendMessage<SupporterStatus>("GET_SUPPORTER_STATUS"),
       sendMessage<{ items?: Array<{ slug: string }> }>("GET_INSTALL_QUEUE"),
-    ]).then(([nextPresences, nextActivity, nextNativeStatus, nextDebug, nextSettings, nextSupporterStatus, nextQueue]) => {
+      sendMessage<{ granted?: boolean }>("GET_ANALYTICS_CONSENT"),
+    ]).then(([nextPresences, nextActivity, nextNativeStatus, nextDebug, nextSettings, nextQueue, nextConsent]) => {
       setPresences(nextPresences ?? {});
       setActivity(nextActivity ?? null);
       setNativeStatus(nextNativeStatus ?? FALLBACK_NATIVE_STATUS);
       setDebug(nextDebug ?? null);
       setSettingsState(nextSettings ?? FALLBACK_SETTINGS);
-      setSupporterStatus(nextSupporterStatus ?? FALLBACK_SUPPORTER_STATUS);
       setInstallQueue((nextQueue?.items ?? []).map((item) => item.slug));
+      setAnalyticsConsentState(nextConsent?.granted === true);
     }).finally(() => {
       setIsLoading(false);
     });
@@ -128,7 +123,7 @@ export const useExtensionState = (): ExtensionState => {
       areaName: string,
     ): void => {
       if (areaName !== "local") return;
-      if (changes.presences || changes.settings || changes.currentActivity || changes.debug || changes.supporterStatus || changes.presenceInstallQueue) {
+      if (changes.presences || changes.settings || changes.currentActivity || changes.debug || changes.presenceInstallQueue) {
         refresh();
       }
     };
@@ -138,9 +133,6 @@ export const useExtensionState = (): ExtensionState => {
       if (message.source === "PRESENCES_BACKGROUND" && message.type === "PRESENCES_CHANGED") {
         refresh();
         refreshUpdates();
-      }
-      if (message.source === "PRESENCES_CONTENT" && message.type === "SUPPORTER_STATUS_CHANGED") {
-        refresh();
       }
     };
     chrome.runtime.onMessage.addListener(onRuntimeMessage);
@@ -221,9 +213,9 @@ export const useExtensionState = (): ExtensionState => {
     if (next) setSettingsState(next);
   }, []);
 
-  const dismissSupporterThankYou = useCallback((): void => {
-    void sendMessage<SupporterStatus>("DISMISS_SUPPORTER_THANK_YOU").then((next) => {
-      if (next) setSupporterStatus(next);
+  const setAnalyticsConsent = useCallback((granted: boolean): void => {
+    void sendMessage<{ granted?: boolean }>("SET_ANALYTICS_CONSENT", { granted }).then((next) => {
+      setAnalyticsConsentState(next?.granted === true);
     });
   }, []);
 
@@ -251,7 +243,7 @@ export const useExtensionState = (): ExtensionState => {
     updates,
     settings,
     setSettings,
-    supporterStatus,
-    dismissSupporterThankYou,
+    analyticsConsent,
+    setAnalyticsConsent,
   };
 };

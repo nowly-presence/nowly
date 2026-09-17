@@ -1,7 +1,6 @@
 import { CDN_BASE_URL } from "@/shared/constants";
 import type { ExtensionSettings, InstalledPresences, PresenceMetadata, StoredPresence } from "@/shared/types";
-import { addAnalyticsLog } from "@/background/analytics/analytics-log";
-import { trackAnalytics } from "@/background/analytics/analytics-tracker";
+import { addRuntimeLog } from "@/background/runtime-logs";
 import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { presenceInjector } from "@/background/runtime/presence-injection";
 import { createPresenceRuntime } from "@/background/runtime/presence-runtime";
@@ -43,7 +42,7 @@ export const registerPresenceScript = async (slug: string, presence: StoredPrese
   if (!presence.release.bundle?.trim()) return { ok: false, error: "presence has no bundle" };
 
   try {
-    addAnalyticsLog("info", "presence", "register presence script", { slug, version: presence.release.version });
+    addRuntimeLog("info", "presence", "register presence script", { slug, version: presence.release.version });
     await unregisterPresenceScript(slug);
     const code = await getPresenceRuntime(slug, metadata, presence.release.bundle);
 
@@ -58,7 +57,7 @@ export const registerPresenceScript = async (slug: string, presence: StoredPrese
     await presenceInjector.register(script);
     return { ok: true };
   } catch (error) {
-    addAnalyticsLog("error", "presence", "register presence script failed", {
+    addRuntimeLog("error", "presence", "register presence script failed", {
       slug,
       error: error instanceof Error ? error.message : "failed to register presence user script",
     });
@@ -83,7 +82,6 @@ export const syncPresenceScripts = async (presences: InstalledPresences): Promis
         message: `[${slug}] ${result.error ?? "failed to register presence"}`,
         updatedAt: Date.now(),
       });
-      void trackAnalytics("presence_error", { slug, payload: { stage: "userScripts" } });
     }
   }
 };

@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@fontsource/instrument-sans": "^5.3.0",
+    "@nowly/analytics": "workspace:*",
     "@nowly/env": "workspace:*",
     "@nowly/locales": "workspace:*",
     "@nowly/shared": "workspace:*",

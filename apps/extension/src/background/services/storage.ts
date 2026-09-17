@@ -1,5 +1,4 @@
-import { SUPPORTER_STATUS_KEY } from "@/shared/constants";
-import type { CurrentActivity, DiscordProfileSnapshot, ExtensionSettings, InstalledPresences, PresenceDebug, PresenceDisplayMode, PresenceSchedule, PresenceSettings, StoredPresence, SupporterStatus } from "@/shared/types";
+import type { CurrentActivity, DiscordProfileSnapshot, ExtensionSettings, InstalledPresences, PresenceDebug, PresenceDisplayMode, PresenceSchedule, PresenceSettings, StoredPresence } from "@/shared/types";
 
 const PRESENCES_KEY = "presences";
 const ACTIVITY_KEY = "currentActivity";
@@ -9,6 +8,7 @@ const SETTINGS_KEY = "settings";
 const PRESENCE_SETTINGS_KEY = "presenceSettings";
 const DEVICE_ID_KEY = "deviceId";
 const DEVICE_TOKEN_KEY = "deviceToken";
+const ANALYTICS_CONSENT_KEY = "analyticsConsent";
 
 export const DEFAULT_SETTINGS: ExtensionSettings = {
   presenceDisplayMode: "category" as PresenceDisplayMode,
@@ -141,27 +141,17 @@ export const setDeviceToken = async (token: string): Promise<void> => {
   await chrome.storage.local.set({ [DEVICE_TOKEN_KEY]: token });
 };
 
-export const getSupporterStatus = async (): Promise<SupporterStatus> => {
-  const result = await chrome.storage.local.get(SUPPORTER_STATUS_KEY);
-  const value = result[SUPPORTER_STATUS_KEY] as Partial<SupporterStatus> | undefined;
-  return {
-    adFree: value?.adFree === true,
-    hasAds: value?.hasAds !== false,
-    deviceId: typeof value?.deviceId === "string" ? value.deviceId : undefined,
-    activatedAt: typeof value?.activatedAt === "string" ? value.activatedAt : undefined,
-    showThankYou: value?.showThankYou === true,
-  };
+// Opt-in: undefined/missing means "not decided yet", not "granted". Analytics
+// must never fire until this is explicitly true.
+export const getAnalyticsConsent = async (): Promise<boolean> => {
+  const result = await chrome.storage.local.get(ANALYTICS_CONSENT_KEY);
+  return result[ANALYTICS_CONSENT_KEY] === true;
 };
 
-export const setSupporterStatus = async (partial: Partial<SupporterStatus>): Promise<SupporterStatus> => {
-  const current = await getSupporterStatus();
-  const next = { ...current, ...partial } satisfies SupporterStatus;
-  await chrome.storage.local.set({ [SUPPORTER_STATUS_KEY]: next });
-  return next;
+export const setAnalyticsConsent = async (granted: boolean): Promise<boolean> => {
+  await chrome.storage.local.set({ [ANALYTICS_CONSENT_KEY]: granted });
+  return granted;
 };
-
-export const dismissSupporterThankYou = async (): Promise<SupporterStatus> =>
-  setSupporterStatus({ showThankYou: false });
 
 export const snoozePresence = async (slug: string, durationMs: number): Promise<StoredPresence | null> => {
   const presences = await getPresences();

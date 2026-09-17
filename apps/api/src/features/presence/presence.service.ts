@@ -1,5 +1,7 @@
 import { sha256Base64Url, canonicalJson, signedPayload, signPresenceRelease } from "@/shared/crypto.service"
-import { getPresenceMeta, getPresenceStats, setPresenceMeta } from "./presence.repository"
+import { clearActiveDevicesForDevice, getPresenceMeta, getPresenceStats, setPresenceMeta } from "./presence.repository"
+
+export { clearActiveDevicesForDevice }
 
 export const serializeJsonField = (value: unknown): string | undefined => {
   if (value == null) return undefined

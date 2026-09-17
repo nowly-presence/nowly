@@ -1,34 +1,17 @@
 model AnalyticsEvent {
-  id        String   @id
+  eventId   String   @id @map("event_id")
   key       String
   deviceId  String?  @map("device_id")
   slug      String?
   version   String?
+  source    String?
+  country   String?
   payload   Json     @default("{}")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  device Device? @relation(fields: [deviceId], references: [deviceId], onDelete: Cascade)
-
-  @@index([key])
+  @@index([key, createdAt])
   @@index([deviceId])
-  @@index([slug])
+  @@index([key, source])
+  @@index([key, country])
   @@map("analytics_events")
-}
-
-model AnalyticsDailyRollup {
-  day        String
-  key        String
-  slug       String @default("")
-  dimensions Json   @default("{}")
-  count      Int    @default(0)
-
-  @@unique([day, key, slug])
-  @@map("analytics_daily_rollups")
-}
-
-model AnalyticsAdmin {
-  discordId String   @id @map("discord_id")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-
-  @@map("analytics_admins")
 }

@@ -1,6 +1,5 @@
 model Device {
   deviceId         String   @id @map("device_id")
-  analyticsConsent Boolean  @default(false) @map("analytics_consent")
   extensionVersion String?  @map("extension_version")
   nativeVersion    String?  @map("native_version")
   browser          String?
@@ -10,7 +9,6 @@ model Device {
   lastSeenAt       DateTime @default(now()) @map("last_seen_at") @db.Timestamptz(6)
 
   presences DevicePresence[]
-  events    AnalyticsEvent[]
   sessions  PresenceActiveSession[]
 
   @@map("devices")

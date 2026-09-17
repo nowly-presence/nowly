@@ -1,13 +1,22 @@
 import { hasAdminAuth, requireAuth } from "@/features/auth/auth.middleware"
+import { requireDeviceAccess } from "@/features/device/device-token"
 import { buildLocaleObject } from "@nowly/locales"
-import { presenceActiveBodySchema, presencePutBodySchema, presenceReportBodySchema } from "@nowly/shared/schemas"
+import {
+  presenceActiveBodySchema,
+  presenceLikeBodySchema,
+  presenceLikeQuerySchema,
+  presencePutBodySchema,
+  presenceReportBodySchema,
+} from "@nowly/shared/schemas"
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
 import {
   addVersion,
   clearActiveDevice, clearActiveDevicesForDevice,
-  getAllPresenceSlugs, getGlobalPresenceStats, getPresenceMeta, getPresenceStats, getVersionHistory,
+  getAllPresenceSlugs, getGlobalPresenceStats, getLikeCount, getPresenceMeta, getPresenceStats, getVersionHistory,
+  hasLikedPresence, likePresence,
   markActiveDevice,
   setAdded, setUpdated, setVersion,
+  unlikePresence,
 } from "./presence.repository"
 import { buildRelease } from "./presence.service"
 import {
@@ -44,6 +53,7 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
         version: stats.version || "",
         totalInstalls: stats.totalInstalls,
         activeUsers: stats.activeUsers,
+        likes: stats.likes,
       }
     }))
 
@@ -139,46 +149,48 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
       .send(release)
   })
 
-  fastify.put<{ Params: { slug: string } }>("/:slug", async (request, reply) => {
-    await requireAuth(request, reply)
-    if (reply.sent) return
-
-    const slug = request.params.slug.toLowerCase()
-    const parsedBody = presencePutBodySchema.safeParse(request.body)
-    if (!parsedBody.success) {
-      return reply.status(400).send({ error: "Invalid request body" })
-    }
-    const body = parsedBody.data
-
-    if (body.version) {
-      await setVersion(slug, body.version)
-      if (body.changelog || body.author) {
-        await addVersion(slug, {
-          version: body.version,
-          changelog: body.changelog
-            ? JSON.stringify(buildLocaleObject(body.changelog))
-            : "",
-          author: body.author ?? "unknown",
-          authorGithub: body.authorGithub,
-          pr: body.pr,
-          timestamp: Date.now(),
-        })
+  fastify.put<{ Params: { slug: string } }>(
+    "/:slug",
+    { preHandler: requireAuth },
+    async (request, reply) => {
+      const slug = request.params.slug.toLowerCase()
+      const parsedBody = presencePutBodySchema.safeParse(request.body)
+      if (!parsedBody.success) {
+        return reply.status(400).send({ error: "Invalid request body" })
       }
-    }
+      const body = parsedBody.data
 
-    if (body.added) await setAdded(slug, body.added)
-    if (body.updated) await setUpdated(slug, body.updated)
+      if (body.version) {
+        await setVersion(slug, body.version)
+        if (body.changelog || body.author) {
+          await addVersion(slug, {
+            version: body.version,
+            changelog: body.changelog
+              ? JSON.stringify(buildLocaleObject(body.changelog))
+              : "",
+            author: body.author ?? "unknown",
+            authorGithub: body.authorGithub,
+            pr: body.pr,
+            timestamp: Date.now(),
+          })
+        }
+      }
 
-    return { ok: true }
-  })
+      if (body.added) await setAdded(slug, body.added)
+      if (body.updated) await setUpdated(slug, body.updated)
 
-  fastify.post("/sync", async (request, reply) => {
-    await requireAuth(request, reply)
-    if (reply.sent) return
+      return { ok: true }
+    },
+  )
 
-    const { results, archived } = await processPresenceSync(request.body as PresenceSyncBody)
-    return { ok: true, results, archived }
-  })
+  fastify.post(
+    "/sync",
+    { preHandler: requireAuth },
+    async (request, reply) => {
+      const { results, archived } = await processPresenceSync(request.body as PresenceSyncBody)
+      return { ok: true, results, archived }
+    },
+  )
 
   fastify.post("/active", async (request, reply) => {
     const parsed = presenceActiveBodySchema.safeParse(request.body)
@@ -211,8 +223,46 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
     return { ok: true, removed: null }
   })
 
-}
+  fastify.get<{ Params: { slug: string }; Querystring: { deviceId?: string } }>(
+    "/:slug/like",
+    async (request, reply) => {
+      const slug = request.params.slug.toLowerCase()
+      const parsed = presenceLikeQuerySchema.safeParse(request.query)
+      if (!parsed.success) {
+        return reply.status(400).send({ error: "deviceId is required" })
+      }
 
-export const register = async (app: FastifyInstance): Promise<void> => {
-  await app.register(presenceRoutes, { prefix: "/presences" })
+      return { liked: await hasLikedPresence(slug, parsed.data.deviceId), count: await getLikeCount(slug) }
+    },
+  )
+
+  fastify.post<{ Params: { slug: string } }>(
+    "/:slug/like",
+    async (request, reply) => {
+      const slug = request.params.slug.toLowerCase()
+      const parsed = presenceLikeBodySchema.safeParse(request.body)
+      if (!parsed.success) {
+        return reply.status(400).send({ error: "deviceId is required" })
+      }
+      if (!requireDeviceAccess(request, reply, parsed.data.deviceId)) return
+
+      await likePresence(slug, parsed.data.deviceId)
+      return { ok: true, count: await getLikeCount(slug) }
+    },
+  )
+
+  fastify.delete<{ Params: { slug: string }; Querystring: { deviceId?: string } }>(
+    "/:slug/like",
+    async (request, reply) => {
+      const slug = request.params.slug.toLowerCase()
+      const parsed = presenceLikeQuerySchema.safeParse(request.query)
+      if (!parsed.success) {
+        return reply.status(400).send({ error: "deviceId is required" })
+      }
+      if (!requireDeviceAccess(request, reply, parsed.data.deviceId)) return
+
+      await unlikePresence(slug, parsed.data.deviceId)
+      return { ok: true, count: await getLikeCount(slug) }
+    },
+  )
 }

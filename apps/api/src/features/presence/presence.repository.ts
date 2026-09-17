@@ -63,11 +63,33 @@ export const getPresenceStats = async (slug: string): Promise<PresenceStats> => 
   return {
     totalInstalls,
     activeUsers: await getActiveUsers(slug),
+    likes: await getLikeCount(slug),
     version: presence?.version ?? null,
     archived: presence?.archived ?? false,
     addedAt: iso(presence?.addedAt),
     lastUpdated: iso(presence?.updatedAt),
   }
+}
+
+export const likePresence = async (slug: string, deviceId: string): Promise<void> => {
+  await getPrisma().presenceLike.upsert({
+    where: { slug_deviceId: { slug, deviceId } },
+    create: { slug, deviceId },
+    update: {},
+  })
+}
+
+export const unlikePresence = async (slug: string, deviceId: string): Promise<void> => {
+  await getPrisma().presenceLike.deleteMany({ where: { slug, deviceId } })
+}
+
+export const hasLikedPresence = async (slug: string, deviceId: string): Promise<boolean> => {
+  const like = await getPrisma().presenceLike.findUnique({ where: { slug_deviceId: { slug, deviceId } } })
+  return like !== null
+}
+
+export const getLikeCount = async (slug: string): Promise<number> => {
+  return getPrisma().presenceLike.count({ where: { slug } })
 }
 
 export const incrementInstalls = async (slug: string, deviceId?: string, version?: string): Promise<number> => {

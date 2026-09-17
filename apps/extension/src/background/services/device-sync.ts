@@ -1,9 +1,9 @@
 import { WEB_BASE_URL } from "@/shared/constants";
-import { addAnalyticsLog } from "@/background/analytics/analytics-log";
+import { addRuntimeLog } from "@/background/runtime-logs";
 import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { getCachedDeviceId, setCachedDeviceId } from "@/background/services/background-context";
 import { browserName, osName } from "@/background/services/device-info";
-import { getDeviceId, getDeviceToken, getPresences, getSettings, setDeviceToken } from "@/background/services/storage";
+import { getDeviceId, getDeviceToken, getPresences, setDeviceToken } from "@/background/services/storage";
 
 type SyncPresence = {
   slug: string;
@@ -37,10 +37,9 @@ export const syncUninstallUrl = async (): Promise<void> => {
 };
 
 export const syncDeviceState = async (extraPresences: SyncPresence[] = []): Promise<void> => {
-  const [deviceId, presences, settings] = await Promise.all([
+  const [deviceId, presences] = await Promise.all([
     getActiveDeviceId(),
     getPresences(),
-    getSettings(),
   ]);
 
   const syncedPresences = [
@@ -53,7 +52,7 @@ export const syncDeviceState = async (extraPresences: SyncPresence[] = []): Prom
     ...extraPresences,
   ];
 
-  addAnalyticsLog("info", "api", "POST /devices/sync", { presenceCount: syncedPresences.length });
+  addRuntimeLog("info", "api", "POST /devices/sync", { presenceCount: syncedPresences.length });
 
   try {
     const response = await fetch(`${getEffectiveApiUrl()}/devices/sync`, {
@@ -61,14 +60,13 @@ export const syncDeviceState = async (extraPresences: SyncPresence[] = []): Prom
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         deviceId,
-        analyticsConsent: settings.analyticsConsent === true,
         extensionVersion: chrome.runtime.getManifest().version,
         browser: browserName(),
         os: osName(),
         presences: syncedPresences,
       }),
     });
-    addAnalyticsLog(response.ok ? "success" : "warn", "api", "POST /devices/sync result", { status: response.status });
+    addRuntimeLog(response.ok ? "success" : "warn", "api", "POST /devices/sync result", { status: response.status });
     if (response.ok) {
       try {
         const data = (await response.json()) as { deviceToken?: unknown };
@@ -85,7 +83,7 @@ export const syncDeviceState = async (extraPresences: SyncPresence[] = []): Prom
       }
     }
   } catch (error) {
-    addAnalyticsLog("error", "api", "POST /devices/sync failed", {
+    addRuntimeLog("error", "api", "POST /devices/sync failed", {
       error: error instanceof Error ? error.message : String(error),
     });
   }

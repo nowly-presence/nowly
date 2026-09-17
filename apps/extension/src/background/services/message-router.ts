@@ -1,16 +1,14 @@
 import type { ExtensionMessage, ExtensionSettings, PresenceData, PresenceDebug, PresenceSchedule, UserScriptsStatus } from "@/shared/types";
 import { handleActivityUpdate, handleClearActivity, resumeStoredActivityIfAllowed } from "@/background/managers/activity-manager";
-import { clearAnalyticsLogs, getAnalyticsLogs } from "@/background/analytics/analytics-log";
-import { trackAnalytics, trackExtensionOpen } from "@/background/analytics/analytics-tracker";
-import { getEffectiveApiUrl } from "@/background/services/api-state";
-import { getActiveDeviceId } from "@/background/services/device-sync";
+import { trackAnalytics } from "@/background/analytics-client";
+import { clearRuntimeLogs, getRuntimeLogs } from "@/background/runtime-logs";
 import { reconnectNative, refreshNativeStatus, restartNative } from "@/background/services/native";
 import { getInstallQueue } from "@/background/managers/install-queue";
 import { setPresencePaused } from "@/background/managers/presence-pause";
 import { checkUpdates, drainInstallQueue, fetchPresenceCatalog, installLocalPresenceZip, installPresence, installPresenceFromApi, togglePresence, uninstallPresence } from "@/background/managers/presence-manager";
 import { getPresenceStrings, registerPresenceScript, syncPresenceScripts } from "@/background/runtime/presence-scripts";
 import { resetOnboardingForDev, updateSettings } from "@/background/managers/settings-manager";
-import { clearSnooze, dismissSupporterThankYou, getCurrentActivity, getDebug, getPresenceSettings, getPresences, getSettings, getSupporterStatus, setDebug, setPresenceSchedule, setPresenceSettings, setSupporterStatus, snoozePresence } from "@/background/services/storage";
+import { getAnalyticsConsent, setAnalyticsConsent, clearSnooze, getCurrentActivity, getDebug, getPresenceSettings, getPresences, getSettings, setDebug, setPresenceSchedule, setPresenceSettings, snoozePresence } from "@/background/services/storage";
 import { visiblePresences } from "@/background/runtime/user-scripts";
 
 const respond = <T>(sendResponse: (response?: T) => void, value: T): void => sendResponse(value);
@@ -50,28 +48,6 @@ const respondWithUserScriptsStatus = (sendResponse: (response?: UserScriptsStatu
   return false;
 };
 
-const getFreshSupporterStatus = async () => {
-  const [deviceId, cached] = await Promise.all([getActiveDeviceId(), getSupporterStatus()]);
-
-  try {
-    const response = await fetch(`${getEffectiveApiUrl()}/ads/status?deviceId=${encodeURIComponent(deviceId)}`, {
-      cache: "no-store",
-    });
-    if (!response.ok) return { ...cached, deviceId };
-
-    const status = await response.json() as { hasAds?: unknown; adFree?: unknown };
-    const adFree = status.adFree === true;
-    return setSupporterStatus({
-      adFree,
-      hasAds: adFree ? false : status.hasAds !== false,
-      deviceId,
-      showThankYou: cached.showThankYou === true,
-    });
-  } catch {
-    return { ...cached, deviceId };
-  }
-};
-
 export const registerRuntimeMessageRouter = (): void => {
   chrome.runtime.onMessage.addListener((message: ExtensionMessage, sender, sendResponse) => {
     if (message.source !== "PRESENCES_POPUP" && message.source !== "PRESENCES_CONTENT") return false;
@@ -79,7 +55,6 @@ export const registerRuntimeMessageRouter = (): void => {
     switch (message.type) {
       case "GET_PRESENCES":
       case "GET_INSTALLED":
-        trackExtensionOpen();
         getPresences().then((presences) => respond(sendResponse, visiblePresences(presences)));
         return true;
 
@@ -106,12 +81,10 @@ export const registerRuntimeMessageRouter = (): void => {
         return true;
 
       case "CONNECT_NATIVE":
-        void trackAnalytics("native_reconnect", { payload: { source: "extension" } });
         respond(sendResponse, reconnectNative());
         return false;
 
       case "RESTART_NATIVE":
-        void trackAnalytics("native_reconnect", { payload: { source: "extension_restart" } });
         respond(sendResponse, restartNative());
         return false;
 
@@ -228,7 +201,6 @@ export const registerRuntimeMessageRouter = (): void => {
         return true;
 
       case "GET_SETTINGS":
-        trackExtensionOpen();
         getSettings().then((settings) => respond(sendResponse, settings));
         return true;
 
@@ -254,13 +226,20 @@ export const registerRuntimeMessageRouter = (): void => {
         });
         return true;
 
-      case "GET_SUPPORTER_STATUS":
-        getFreshSupporterStatus().then((status) => respond(sendResponse, status));
+      case "GET_ANALYTICS_CONSENT":
+        getAnalyticsConsent().then((granted) => respond(sendResponse, { granted }));
         return true;
 
-      case "DISMISS_SUPPORTER_THANK_YOU":
-        dismissSupporterThankYou().then((status) => respond(sendResponse, status));
+      case "SET_ANALYTICS_CONSENT": {
+        const granted = (message.payload as { granted?: unknown } | undefined)?.granted === true;
+        setAnalyticsConsent(granted).then((next) => {
+          respond(sendResponse, { granted: next });
+          // Only the acceptance itself is worth recording - a decline must not
+          // send anything, and consent is granted by the time this call resolves.
+          if (next) trackAnalytics("analytics_consent_accepted", { source: "extension_settings" });
+        });
         return true;
+      }
 
       case "RESET_ONBOARDING_FOR_DEV":
         resetOnboardingForDev().then((settings) => respond(sendResponse, settings));
@@ -274,10 +253,6 @@ export const registerRuntimeMessageRouter = (): void => {
         const { slug, partial } = message.payload as { slug: string; partial: Record<string, unknown> };
         void setPresenceSettings(slug, partial).then((settings) => {
           respond(sendResponse, settings);
-          void trackAnalytics("settings_presence_changed", {
-            slug,
-            payload: { settingCount: Object.keys(settings).length },
-          });
           getPresences().then(async (presences) => {
             const stored = presences[slug];
             if (stored?.enabled && stored.release?.bundle) {
@@ -301,12 +276,12 @@ export const registerRuntimeMessageRouter = (): void => {
         setDebug(message.payload as PresenceDebug).then(() => respond(sendResponse, { ok: true }));
         return true;
 
-      case "GET_ANALYTICS_LOGS":
-        respond(sendResponse, getAnalyticsLogs());
+      case "GET_RUNTIME_LOGS":
+        respond(sendResponse, getRuntimeLogs());
         return false;
 
-      case "CLEAR_ANALYTICS_LOGS":
-        clearAnalyticsLogs();
+      case "CLEAR_RUNTIME_LOGS":
+        clearRuntimeLogs();
         respond(sendResponse, { ok: true });
         return false;
 
