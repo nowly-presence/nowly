@@ -1,5 +1,4 @@
 import type { PresenceData, StoredPresence } from "@/shared/types";
-import { trackAnalytics } from "@/background/analytics/analytics-tracker";
 import {
   addActiveSlugToState,
   clearActiveSlugsFromState,
@@ -160,10 +159,6 @@ export const addActiveSlug = async (slug: string): Promise<void> => {
   addActiveSlugToState(slug);
   if (hasActiveSession(slug)) return;
   setActiveSessionStartedAt(slug, Date.now());
-  void trackAnalytics("presence_session_start", {
-    slug,
-    version: await getPresenceVersion(slug),
-  });
 };
 
 export const removeActiveSlug = async (slug: string, reason: string): Promise<void> => {
@@ -171,14 +166,6 @@ export const removeActiveSlug = async (slug: string, reason: string): Promise<vo
   const startedAt = getActiveSessionStartedAt(slug);
   removeActiveSession(slug);
   if (!startedAt) return;
-  void trackAnalytics("presence_session_end", {
-    slug,
-    version: await getPresenceVersion(slug),
-    payload: {
-      durationMs: Math.max(0, Date.now() - startedAt),
-      reason,
-    },
-  });
 };
 
 export const clearActiveSlugs = async (reason: string): Promise<void> => {
@@ -219,7 +206,6 @@ export const handleActivityUpdate = async (
       message: `[${slug}] ${verified.error ?? "release verification failed"}`,
       updatedAt: Date.now(),
     });
-    void trackAnalytics("presence_error", { slug, payload: { stage: "security" } });
     return { ok: false };
   }
 
