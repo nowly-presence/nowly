@@ -451,6 +451,14 @@
     "guide-desktop": "See the desktop app",
     "guide-library": "Open the library"
   },
+  "uninstallPage": {
+    "eyebrow": "Goodbye",
+    "title": "The extension was removed",
+    "description": "Your local data stays on your device. We hope to see you again soon.",
+    "feedback-title": "Anything you want to tell us?",
+    "feedback-description": "A bug, a missing presence, or just feedback: Discord is the fastest way to reach us.",
+    "discord": "Join the Discord"
+  },
   "changelogPage": {
     "eyebrow": "Release notes",
     "title": "What changed",
@@ -639,6 +647,10 @@
     "redeem": {
       "title": "Activate a supporter key",
       "description": "Enter your Nowly supporter key to remove ads on this browser."
+    },
+    "uninstall": {
+      "title": "The extension was removed",
+      "description": "We hope to see you again. Tell us what went wrong, it helps us improve Nowly."
     },
     "privacy": {
       "title": "Privacy",

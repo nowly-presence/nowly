@@ -103,20 +103,26 @@ export const LibraryView = ({
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<LibraryCategory | "all">("all");
   const deferredQuery = useDeferredValue(query);
-  const normalizedQuery = deferredQuery.trim().toLowerCase();
+  const trimmedQuery = deferredQuery.trim();
+  const mentionMatch = /^@(\S+)/.exec(trimmedQuery);
+  const typedAuthorHandle = mentionMatch?.[1] ?? null;
+  const effectiveAuthorHandle = authorHandle ?? typedAuthorHandle;
+  const normalizedQuery = (mentionMatch ? trimmedQuery.slice(mentionMatch[0].length) : trimmedQuery)
+    .trim()
+    .toLowerCase();
   const categories = catalogCategories(items);
   const { joined, sentinelRef, toolbarRef } = useNavJoin();
 
   const results = useMemo(() => {
     return items.filter((presence) => {
-      if (authorHandle && !presenceMatchesGithub(presence, authorHandle)) return false;
+      if (effectiveAuthorHandle && !presenceMatchesGithub(presence, effectiveAuthorHandle)) return false;
       if (category !== "all" && presence.category !== category) return false;
       if (!normalizedQuery) return true;
       return presenceSearchText(presence).includes(normalizedQuery);
     });
-  }, [authorHandle, category, items, normalizedQuery]);
+  }, [effectiveAuthorHandle, category, items, normalizedQuery]);
 
-  const isStale = query.trim().toLowerCase() !== normalizedQuery;
+  const isStale = query !== deferredQuery;
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
@@ -175,6 +181,15 @@ export const LibraryView = ({
                 @{authorHandle}
                 <RiCloseLine className="size-3.5" />
               </Link>
+            ) : typedAuthorHandle ? (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                className="flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-foreground px-3.5 text-sm font-medium text-background"
+              >
+                @{typedAuthorHandle}
+                <RiCloseLine className="size-3.5" />
+              </button>
             ) : null}
             <FilterChip
               active={category === "all"}
@@ -203,7 +218,7 @@ export const LibraryView = ({
         {results.length > 0 ? (
           <PaginatedLibraryGrid
             items={results}
-            resetKey={`${authorHandle ?? ""}:${category}:${normalizedQuery}`}
+            resetKey={`${effectiveAuthorHandle ?? ""}:${category}:${normalizedQuery}`}
             className={isStale ? "opacity-70" : undefined}
           />
         ) : (
