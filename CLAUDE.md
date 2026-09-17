@@ -99,7 +99,7 @@ pnpm internal-cli host:publish # Publish native host binaries & installer to CDN
 - Presences are TypeScript files compiled to JS by the CLI (esbuild)
 - Stored in `/packages/websites/src/` organized by initial letter (A/, D/, N/, T/, etc.)
 - Built output goes to `dist/presences/{name}/` with `metadata.json` and `script.js`
-- Each presence has `metadata.json` defining name, description, settings schema, icon/thumbnail URLs
+- Each presence has `metadata.json` defining name, description, settings schema, icon/thumbnail URLs, and optional `discordNative`
 - **PresenceConstructor** global available in scripts with `Settings()`, `Assets()`, `on('UpdateData')` API
 
 ### Extension Architecture (@nowly/extension)
@@ -153,11 +153,12 @@ Use `createMediaTimestamps()` to compute activity duration from `<audio>` / `<vi
   "category": ["streaming"],
   "icon": "https://cdn.nowly.me/...",
   "thumbnail": "https://cdn.nowly.me/...",
+  "discordNative": false,
   "settings": {}
 }
 ```
 
-Settings use `PresenceSetting` types (boolean, input, select, slider) with multilingual labels. Schema validated against `packages/websites/metadata.schema.json`.
+Settings use `PresenceSetting` types (boolean, input, select, slider) with multilingual labels. Schema validated against `packages/presences/metadata.schema.json`. Optional `discordNative` marks platforms Discord already supports via account linking.
 
 ## Common Workflows
 
