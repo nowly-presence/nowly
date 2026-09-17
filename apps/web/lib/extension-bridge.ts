@@ -6,7 +6,8 @@ export type ExtensionRequestType =
   | "GET_DIAGNOSTIC"
   | "INSTALL_PRESENCE"
   | "UPDATE_PRESENCE"
-  | "UNINSTALL_PRESENCE";
+  | "UNINSTALL_PRESENCE"
+  | "REDEEM_SUPPORT_CODE";
 
 export type ExtensionDiagnostic = {
   extensionInstalled: boolean

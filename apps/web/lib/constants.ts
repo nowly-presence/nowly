@@ -5,6 +5,7 @@ export const DISCORD_SITE_URL = "https://discord.com";
 export const TWITTER_URL = "https://x.com/nowly";
 export const KOFI_URL = "https://ko-fi.com/nowly";
 export const GITHUB_SPONSORS_URL = "https://github.com/sponsors/nowly-presence";
+export const REDEEM_PAGE_URL = "https://nowly.me/redeem";
 
 export const CDN_INSTALLER_BASE_URL = "https://cdn.nowly.me/installer";
 export const DESKTOP_LATEST_MANIFEST_URL = `${CDN_INSTALLER_BASE_URL}/latest.json`;

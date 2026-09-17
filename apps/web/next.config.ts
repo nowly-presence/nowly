@@ -37,6 +37,16 @@ const nextConfig: NextConfig = {
         destination: "/desktop",
         permanent: true,
       },
+      {
+        source: "/redem",
+        destination: "/redeem",
+        permanent: true,
+      },
+      {
+        source: "/support/redeem",
+        destination: "/redeem",
+        permanent: true,
+      },
     ];
   },
 };

@@ -393,6 +393,7 @@
     "description": "Each Nowly release, from the latest store build back to the first public version.",
     "latest": "Latest",
     "read": "Read the notes",
+    "banner-alt": "Nowly {version} website",
     "docs": "Full notes",
     "back": "All releases",
     "library": "Library",
@@ -523,6 +524,25 @@
       "description": "Open a blank issue if your topic does not fit one of the guided forms."
     }
   },
+  "redeemPage": {
+    "eyebrow": "Supporter",
+    "title": "Activate a supporter key",
+    "description": "Enter the key from your donation email. The Nowly extension must be installed on this browser so the key can be linked to this device.",
+    "card-title": "Supporter key",
+    "card-description": "The same key can be reused on your other devices, up to the device limit of the pass.",
+    "activate": "Activate key",
+    "activating": "Activating...",
+    "checking": "Looking for the Nowly extension...",
+    "missing-code": "Enter a supporter key.",
+    "extension-missing": "Install the Nowly extension, then reload this page. Activation only works from a browser where the extension is running.",
+    "success": "This browser is now ad-free. Activated devices: {count}/{max}.",
+    "invalid-code": "This supporter key is invalid.",
+    "inactive-code": "This supporter key is no longer active.",
+    "device-limit": "The device limit for this key has been reached.",
+    "network-error": "Could not reach the Nowly API. Try again in a moment.",
+    "timeout": "The extension did not respond in time. Reload the page and try again.",
+    "generic-error": "The key could not be activated."
+  },
   "pages": {
     "library": {
       "title": "Library",
@@ -547,6 +567,10 @@
     "support": {
       "title": "Support",
       "description": "Get help with Nowly, the extension, or a presence."
+    },
+    "redeem": {
+      "title": "Activate a supporter key",
+      "description": "Enter your Nowly supporter key to remove ads on this browser."
     },
     "privacy": {
       "title": "Privacy",
