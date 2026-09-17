@@ -19,27 +19,17 @@ Typed environment access for the Nowly monorepo.
 | --- | --- | --- |
 | `PORT` | No | `3001` |
 | `FRONTEND_URL` | No | `http://localhost:3000` |
+| `INSIGHTS_URL` | No | `http://localhost:3002` |
 | `DATABASE_URL` | No | - |
 | `JWT_SECRET` | Yes | - |
-| `ANONYMOUS_HASH_SECRET` | Yes | - |
 | `DISCORD_CLIENT_ID` | Yes | - |
 | `DISCORD_CLIENT_SECRET` | Yes | - |
-| `DISCORD_REDIRECT_URI` | Yes | - |
+| `BETTER_AUTH_SECRET` | Yes | - |
+| `BETTER_AUTH_URL` | No | `http://localhost:3001` |
 | `PRESENCE_SIGNING_PRIVATE_KEY` | Yes | - |
 | `API_SECRET_KEY` | Contextual | - |
-| `ANALYTICS_ALLOWED_DISCORD_IDS` | No | - |
 | `DEVICE_TOKEN_SECRET` | No | - |
 | `OPENAI_API_KEY` | No | - |
-| `SUPPORT_PASS_DEFAULT_MAX_DEVICES` | No | `5` |
-| `KOFI_WEBHOOK_TOKEN` | No | - |
-| `GITHUB_SPONSORS_WEBHOOK_SECRET` | No | - |
-| `AWS_ACCESS_KEY_ID` | No | - |
-| `AWS_SECRET_ACCESS_KEY` | No | - |
-| `AWS_REGION` | No | `us-east-1` |
-
-| `SUPPORT_EMAIL_FROM` | No | - |
-| `SUPPORT_EMAIL_REPLY_TO` | No | - |
-| `SUPPORT_REDEEM_URL` | No | `https://nowly.me/redeem` |
 
 ### client (Next.js web)
 
