@@ -74,8 +74,8 @@ export const PresenceActions = ({ slug, name, version }: PresenceActionsProps) =
           <ExtensionStoreButton size="lg">{t("cta")}</ExtensionStoreButton>
         ) : null}
 
-        {!checking && detected && !bridgeBlocked && (!isInstalled || needsUpdate) ? (
-          <Button type="button" size="lg" disabled={busy || mobile} onClick={() => void onInstall()}>
+        {!checking && detected && (!isInstalled || needsUpdate) ? (
+          <Button type="button" size="lg" disabled={busy || mobile || bridgeBlocked} onClick={() => void onInstall()}>
             {busy ? (
               <Spinner data-icon="inline-start" />
             ) : needsUpdate ? (
