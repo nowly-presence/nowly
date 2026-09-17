@@ -303,7 +303,20 @@
     "ext-missing": "Installez l’extension Nowly pour ajouter cette présence.",
     "mobile": "L’installation d’une présence se fait depuis un navigateur bureau.",
     "user-scripts": "Autorisez les scripts utilisateur pour Nowly dans votre navigateur, puis rechargez la page.",
-    "related-title": "Vous aimerez aussi"
+    "related-title": "Vous aimerez aussi",
+    "report": "Signaler un problème",
+    "report-title": "Signaler un problème",
+    "report-description": "Décrivez ce qui ne va pas avec {name}. Nous lisons chaque signalement.",
+    "report-label": "Description",
+    "report-placeholder": "Que s’est-il passé ? Sur quelle page ou action ?",
+    "report-count": "{count}/{max}",
+    "report-submit": "Envoyer",
+    "report-sending": "Envoi...",
+    "report-cancel": "Annuler",
+    "report-close": "Fermer",
+    "report-thanks-title": "Merci de votre signalement",
+    "report-thanks-description": "Nous avons bien reçu votre note à propos de {name}. Cela nous aide à améliorer la bibliothèque.",
+    "report-error": "Impossible d’envoyer le signalement. Réessayez dans un instant."
   },
   "desktopPage": {
     "eyebrow": "Application bureau",

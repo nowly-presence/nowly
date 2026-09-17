@@ -303,7 +303,20 @@
     "ext-missing": "Install the Nowly extension to add this presence.",
     "mobile": "Presence install is available on desktop browsers.",
     "user-scripts": "Allow user scripts for Nowly in your browser, then reload this page.",
-    "related-title": "You might also like"
+    "related-title": "You might also like",
+    "report": "Report a problem",
+    "report-title": "Report a problem",
+    "report-description": "Tell us what is wrong with {name}. We read every report.",
+    "report-label": "Description",
+    "report-placeholder": "What happened? Which page or action failed?",
+    "report-count": "{count}/{max}",
+    "report-submit": "Send report",
+    "report-sending": "Sending...",
+    "report-cancel": "Cancel",
+    "report-close": "Close",
+    "report-thanks-title": "Thanks for the report",
+    "report-thanks-description": "We received your note about {name}. That helps us keep the library in good shape.",
+    "report-error": "Could not send the report. Try again in a moment."
   },
   "desktopPage": {
     "eyebrow": "Desktop app",

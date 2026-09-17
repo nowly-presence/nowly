@@ -1,6 +1,7 @@
 "use client";
 
 import { ExtensionStoreButton } from "@/components/extension-store-button";
+import { PresenceReportDialog } from "@/components/library/presence-report-dialog";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -105,6 +106,8 @@ export const PresenceActions = ({ slug, name, version }: PresenceActionsProps) =
             {t("uninstall")}
           </Button>
         ) : null}
+
+        <PresenceReportDialog slug={slug} name={name} disabled={checking || !detected} />
       </div>
 
       {!checking && !detected ? (
