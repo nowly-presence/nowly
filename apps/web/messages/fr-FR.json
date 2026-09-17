@@ -451,6 +451,14 @@
     "guide-desktop": "Voir l’application bureau",
     "guide-library": "Ouvrir la bibliothèque"
   },
+  "uninstallPage": {
+    "eyebrow": "Au revoir",
+    "title": "L’extension a été retirée",
+    "description": "Vos données locales restent sur votre appareil. On espère vous revoir bientôt.",
+    "feedback-title": "Une remarque à nous faire ?",
+    "feedback-description": "Un bug, une présence manquante, ou juste un avis : le Discord est le plus rapide pour nous joindre.",
+    "discord": "Rejoindre le Discord"
+  },
   "changelogPage": {
     "eyebrow": "Notes de mise à jour",
     "title": "Ce qui a changé",
@@ -639,6 +647,10 @@
     "redeem": {
       "title": "Activer une clé supporter",
       "description": "Saisissez votre clé supporter Nowly pour retirer les publicités sur ce navigateur."
+    },
+    "uninstall": {
+      "title": "L’extension a été retirée",
+      "description": "On espère vous revoir. Dites-nous ce qui n’a pas marché, ça nous aide à améliorer Nowly."
     },
     "privacy": {
       "title": "Confidentialité",

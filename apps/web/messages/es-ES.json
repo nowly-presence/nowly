@@ -451,6 +451,14 @@
     "guide-desktop": "Ver la app de escritorio",
     "guide-library": "Abrir la biblioteca"
   },
+  "uninstallPage": {
+    "eyebrow": "Adiós",
+    "title": "Se ha quitado la extensión",
+    "description": "Tus datos locales se quedan en tu dispositivo. Esperamos volver a verte pronto.",
+    "feedback-title": "¿Algo que quieras decirnos?",
+    "feedback-description": "Un fallo, una presencia que falta, o solo tu opinión: Discord es la vía más rápida para contactarnos.",
+    "discord": "Unirse al Discord"
+  },
   "changelogPage": {
     "eyebrow": "Notas de la versión",
     "title": "Qué ha cambiado",
@@ -639,6 +647,10 @@
     "redeem": {
       "title": "Activar una clave de supporter",
       "description": "Introduce tu clave de supporter de Nowly para quitar los anuncios en este navegador."
+    },
+    "uninstall": {
+      "title": "Se ha quitado la extensión",
+      "description": "Esperamos volver a verte. Cuéntanos qué falló, nos ayuda a mejorar Nowly."
     },
     "privacy": {
       "title": "Privacidad",
