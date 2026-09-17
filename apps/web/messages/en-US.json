@@ -230,7 +230,7 @@
     "discord": "Discord",
     "github": "GitHub",
     "twitter": "X / Twitter",
-    "tos": "Terms of use",
+    "tos": "Terms of Service",
     "privacy": "Privacy",
     "cookies": "Cookies",
     "legal-notice": "Legal notice"
@@ -523,10 +523,6 @@
       "description": "Open a blank issue if your topic does not fit one of the guided forms."
     }
   },
-  "placeholder": {
-    "badge": "Coming soon",
-    "description": "This page is being rebuilt for the new site. The previous version stays available for reference."
-  },
   "pages": {
     "library": {
       "title": "Library",
@@ -554,19 +550,19 @@
     },
     "privacy": {
       "title": "Privacy",
-      "description": "How Nowly handles your data."
+      "description": "Learn how Nowly handles your data, what stays local, and what depends on your consent."
     },
     "tos": {
-      "title": "Terms of use",
-      "description": "Terms that apply when you use Nowly."
+      "title": "Terms of Service",
+      "description": "The rules for using Nowly, the browser extension, desktop app, and the website."
     },
     "cookies": {
       "title": "Cookies",
-      "description": "Cookies used on nowly.me."
+      "description": "The cookies and local storage used on nowly.me."
     },
     "legal-notice": {
       "title": "Legal notice",
-      "description": "Legal information about Nowly."
+      "description": "Required information about Nowly's publisher, hosting, and intellectual property."
     }
   },
   "not-found": {
@@ -575,8 +571,210 @@
     "home": "Back home"
   },
   "cookie-banner": {
-    "message": "This site uses strictly necessary cookies, plus advertising technologies if ads are enabled.",
+    "message": "This site uses a strictly necessary language cookie. If advertising is later enabled, Google may also use advertising technologies.",
     "learn-more": "Learn more",
     "dismiss": "Got it"
+  },
+  "privacy-page": {
+    "badge": "Privacy",
+    "title": "Privacy Policy",
+    "description": "How Nowly handles your data, what stays on your device, and what depends on your consent.",
+    "last-updated": "Last updated: 17 September 2026.",
+    "intro": "This policy describes how <strong>{publisherName}</strong> (“we”), as data controller, processes personal data in connection with Nowly. Rich Presence activity is sent from your browser to the Discord client <strong>on your machine</strong>. It does not pass through our servers. Optional usage statistics and a few website features do involve our API or processors, as described below.",
+    "sections": [
+      {
+        "title": "Controller",
+        "body": "The controller is <strong>{publisherName}</strong>, sole trader (micro-enterprise), SIREN {publisherSiren}, {publisherAddress}. Email: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Full identification is in the <a href=\"/legal-notice\">legal notice</a>. No data protection officer has been appointed."
+      },
+      {
+        "title": "What Nowly is",
+        "body": "Nowly includes a <strong>browser extension</strong> (Chrome and Firefox), a <strong>desktop app</strong> that talks to Discord locally, a <strong>website</strong> (nowly.me), <strong>documentation</strong> (<a href=\"https://docs.nowly.me\">docs.nowly.me</a>), a public <strong>API</strong>, and optional <strong>Canary</strong> test builds. The extension detects supported sites in your browser and, with the desktop app, updates Discord Rich Presence over a local IPC channel."
+      },
+      {
+        "title": "Data processed on your device (extension)",
+        "body": "The extension stores data in the browser’s local storage API (Chrome <code>chrome.storage.local</code> / Firefox equivalent). It stays on that device unless you enable optional analytics or use a custom API URL:<ul><li>Installed presences (metadata, signed bundles, activation state).</li><li>Current activity (title, platform, duration, thumbnail URL).</li><li>A debug log (timestamps, actions, visited URLs of supported sites).</li><li>Onboarding state and a <strong>local snapshot</strong> of your Discord profile (ID, username, avatar) used only to display the extension UI, taken from the local Discord client.</li><li>Display preferences, shortcuts, and per-presence settings.</li><li>A locally generated device identifier (UUID) used if you opt into analytics.</li></ul>You can erase this data by resetting the extension or uninstalling it."
+      },
+      {
+        "title": "Browser extension permissions",
+        "body": "The extension needs certain permissions to work:<ul><li><strong>Access to websites</strong> (including a broad host permission): a lightweight content script can run on pages you visit so Nowly can detect supported platforms. It is not used to send your browsing history to our servers.</li><li><strong>User Scripts</strong> (Chromium): presence scripts run on matching sites. Official catalogue scripts are cryptographically signed (ECDSA P-256) and verified locally before they run. Canary and sideloaded packages may not carry the same production signature guarantees; treat them as experimental.</li></ul>"
+      },
+      {
+        "title": "Data processed on your device (desktop app)",
+        "body": "The desktop app may write a local log named <code>nowly-host.log</code> under the NowlyClient cache directory, for example:<ul><li>Windows: <code>%LOCALAPPDATA%\\NowlyClient\\</code></li><li>macOS: <code>~/Library/Caches/NowlyClient/</code></li><li>Linux: <code>~/.cache/NowlyClient/</code></li></ul>The file can include timestamps and activity details sent to Discord. It stays on your computer and is not uploaded to our servers. You may delete it at any time."
+      },
+      {
+        "title": "Usage statistics (opt-in)",
+        "body": "Analytics are <strong>off by default</strong>. If you enable them during onboarding or later in extension settings, our API may receive:<ul><li>Your device UUID (pseudonymous: it is not your Discord or Google account, but it is still personal data under the GDPR because it can identify your installation).</li><li>Browser, OS, language, extension version, and desktop app version.</li><li>Installed presence slugs/versions and usage events (for example installs, heartbeats, ratings) with a limited payload.</li></ul>We use this to improve Nowly and to show how popular presences are. Turning the setting off <strong>stops further collection</strong> and records that consent is withdrawn. It does <strong>not</strong> by itself erase events already stored. To have server-side records deleted, email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> with your device ID (visible in the extension) or another element that lets us locate the record."
+      },
+      {
+        "title": "Discord",
+        "body": "Nowly talks to the Discord desktop/browser client through <strong>local IPC</strong>. Typical Rich Presence fields include platform name, title, channel or author, play/pause state, and timestamps. Anyone who can see your Discord profile may see that status. Once Discord receives it, Discord’s own processing applies. See <a href=\"https://discord.com/privacy\">Discord’s privacy policy</a>.<br/><br/>The API can also issue a session token (JWT, typically 30 days) after optional Discord OAuth for account features (for example reviews). The public marketing site does not require an account. If you never log in, we do not create that token for you."
+      },
+      {
+        "title": "Legal bases (GDPR Art. 6)",
+        "body": "<ul><li><strong>Opt-in usage statistics</strong>: consent (Art. 6(1)(a)). You may withdraw it in the extension at any time, without affecting the lawfulness of processing before withdrawal.</li><li><strong>Language cookie and documentation cookie</strong>: necessary for the service you request and/or legitimate interest in remembering your language (Art. 6(1)(b) and/or (f)).</li><li><strong>Theme and cookie-notice flags</strong> (local storage): legitimate interest in a usable interface (Art. 6(1)(f)).</li><li><strong>Image proxy</strong>: legitimate interest in displaying catalogue and activity artwork without loading every third-party CDN in your browser (Art. 6(1)(f)).</li><li><strong>Optional Discord login</strong>: performance of the account feature you request (Art. 6(1)(b)) and, where needed, our legitimate interest in securing the API (Art. 6(1)(f)).</li><li><strong>GitHub, Discord community, Ko-fi, GitHub Sponsors</strong>: data you choose to send to those services is processed under their policies; we read public issues or messages you address to us in order to reply (Art. 6(1)(b) or (f)).</li></ul>"
+      },
+      {
+        "title": "Retention",
+        "body": "<ul><li><strong>Local extension and desktop logs</strong>: until you delete them, reset, or uninstall.</li><li><strong>Language cookie</strong>: 1 year, refreshed when you change language.</li><li><strong>Usage statistics</strong>: kept only as long as needed to produce aggregated metrics. There is <strong>no automatic 12-month purge</strong> implemented today. You may request erasure as described above.</li><li><strong>JWT (if you log in)</strong>: about 30 days unless you log out or we revoke it.</li></ul>"
+      },
+      {
+        "title": "Processors and transfers",
+        "body": "We use:<ul><li><strong>Contabo GmbH</strong> (Germany) as hosting provider of the VPS on which we run the website, API, and PostgreSQL. The publisher administers the server. Processing takes place in the <strong>{dataRegion}</strong>. This is an intra-EU hosting arrangement, not a transfer to the United States. <a href=\"https://contabo.com/en/legal/privacy-policy/\">Contabo privacy policy</a>.</li><li><strong>Cloudflare</strong> to deliver static files (thumbnails, desktop installers, Canary zips) and to protect the sites. Transfers may rely on SCCs and, where applicable, the EU-US Data Privacy Framework.</li><li><strong>Google</strong> (Chrome Web Store) and <strong>Mozilla</strong> (Firefox Add-ons) to distribute the extension; their stores process installer and account data under their own terms.</li><li><strong>Google AdSense</strong> only <strong>if advertising is enabled</strong> on the website (it is off unless we turn it on). Google then acts as an independent controller or joint controller for its advertising cookies, according to Google’s terms.</li></ul>If you set a <strong>custom API URL</strong>, traffic goes to the server you chose. This policy does not apply to that server."
+      },
+      {
+        "title": "Image proxy",
+        "body": "Our API can fetch public thumbnail URLs (YouTube, Twitch, and similar CDNs) so the UI can display artwork. We do not use the proxy to sell advertising profiles. The requested URL can still relate to a title you were viewing. Logs of those requests are kept only as technically needed to operate and secure the service."
+      },
+      {
+        "title": "Cookies",
+        "body": "nowly.me and docs.nowly.me each set a <code>locale</code> cookie for language. Theme and the cookie notice use local storage, not cookies. See the <a href=\"/cookies\">cookie policy</a>."
+      },
+      {
+        "title": "Security",
+        "body": "Official presence packages are signed (ECDSA P-256). The production extension verifies signatures before running catalogue presences. Canary builds distributed as zip files are test software and may be unsigned. Do not install packages from untrusted sources."
+      },
+      {
+        "title": "Your rights",
+        "body": "If the GDPR applies, you may request access, rectification, erasure, restriction, objection, and portability, and you may withdraw consent for analytics. Developer diagnostics in the extension may show events still queued on your device; they are not a complete export of our servers. To exercise rights, email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> or use the <a href=\"https://github.com/nowly-presence/nowly\">GitHub repository</a>. You may also lodge a complaint with the <a href=\"https://www.cnil.fr\">CNIL</a> (France) or your local supervisory authority."
+      },
+      {
+        "title": "Contact",
+        "body": "Email: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Publisher details: <a href=\"/legal-notice\">legal notice</a>."
+      }
+    ]
+  },
+  "tos-page": {
+    "badge": "Legal",
+    "title": "Terms of Service",
+    "description": "The rules for using Nowly, the browser extension, desktop app, and the website.",
+    "last-updated": "Last updated: 17 September 2026.",
+    "sections": [
+      {
+        "title": "Acceptance",
+        "body": "By downloading, installing, or using Nowly (extension, desktop app, website, documentation, API, and related software), you agree to these terms. If you do not agree, do not use the software. Mandatory consumer rights remain unaffected."
+      },
+      {
+        "title": "Service",
+        "body": "Nowly is a <strong>free</strong> tool that updates Discord Rich Presence from supported websites, using a local desktop app. Source code is available on GitHub under BUSL-1.1 (source-available; not an OSI-approved open-source licence until the Change Date). The service includes:<ul><li>A browser extension for Chromium and Firefox.</li><li>A desktop app that talks to Discord on your computer.</li><li>The nowly.me website and docs.nowly.me.</li><li>A public API and a developer SDK to build presences.</li><li>Optional Canary builds from our CDN, which are pre-release and may be unsigned.</li></ul>"
+      },
+      {
+        "title": "Minimum age",
+        "body": "You must be at least <strong>15</strong> and old enough to use Discord under Discord’s own terms. If you are under the digital age of consent in your country, you need permission from a parent or guardian where the law requires it."
+      },
+      {
+        "title": "Licence",
+        "body": "Nowly is licensed under the <strong>Business Source License 1.1</strong>. You may use, copy, and modify it for <strong>personal, non-commercial</strong> purposes. Commercial use (including resale or offering Nowly as a paid or hosted service) needs a separate licence from the publisher. The licence converts to MIT on the Change Date: four years after first public distribution, and in any event no earlier than <strong>1 June 2028</strong>. The full text is in the <a href=\"https://github.com/nowly-presence/nowly\">GitHub repository</a>. This does not license third-party content (YouTube, Twitch, and so on) that you display through Nowly."
+      },
+      {
+        "title": "Acceptable use",
+        "body": "You must comply with applicable law and <a href=\"https://discord.com/terms\">Discord’s Terms of Service</a>. You must not:<ul><li>Use Nowly to display illegal, hateful, defamatory, or infringing content.</li><li>Bypass security of the official extension, desktop app, or API.</li><li>Distribute modified, forged, or unauthorized presences through Nowly’s official infrastructure.</li><li>Abuse the API (including excessive automated requests).</li></ul>If you point the extension at a <strong>custom API URL</strong>, you are solely responsible for that server. Our <a href=\"/privacy\">privacy policy</a> does not cover it."
+      },
+      {
+        "title": "Donations",
+        "body": "Nowly remains usable without payment. Voluntary support via <a href=\"https://ko-fi.com/nowly\">Ko-fi</a> or <a href=\"https://github.com/sponsors/nowly-presence\">GitHub Sponsors</a> is processed by those platforms under their own terms. A donation does not buy extra product features unless we clearly say otherwise at the time. Refunds follow the platform’s rules and, where they apply, mandatory consumer rights."
+      },
+      {
+        "title": "Intellectual property",
+        "body": "The Nowly code is licensed as above. Discord, YouTube, Twitch, Disney+, Apple TV+, Prime Video, TikTok and other platform names and logos belong to their owners. Nowly is <strong>not affiliated with, endorsed by, or sponsored by</strong> Discord Inc. or those platforms."
+      },
+      {
+        "title": "Limitation of liability",
+        "body": "Nowly is provided <strong>“as is”</strong>, without warranty, to the extent permitted by law. We are not liable for indirect damage arising from use or inability to use the software, including Discord outages or sanctions against your Discord account, or loss of local extension data. Nothing excludes liability for fraud, gross negligence, death or personal injury, or any liability that French or EU law does not allow us to limit. These clauses do not reduce mandatory consumer rights."
+      },
+      {
+        "title": "Privacy",
+        "body": "Use of Nowly is also governed by the <a href=\"/privacy\">privacy policy</a> and <a href=\"/cookies\">cookie policy</a>."
+      },
+      {
+        "title": "Changes",
+        "body": "We may update these terms by publishing a new version on this page, with a new “last updated” date. For material changes we will try to give reasonable notice on the site or repository. Continued use after the new version takes effect means you accept it, except where the law requires your explicit agreement."
+      },
+      {
+        "title": "Governing law",
+        "body": "These terms are governed by <strong>French law</strong>. If an amicable solution fails, French courts have jurisdiction, without prejudice to mandatory consumer venue rules. The <a href=\"https://ec.europa.eu/consumers/odr\">EU online dispute resolution platform</a> is available."
+      },
+      {
+        "title": "Contact",
+        "body": "Email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> or see the <a href=\"/legal-notice\">legal notice</a>. GitHub: <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>."
+      }
+    ]
+  },
+  "legal-notice-page": {
+    "badge": "Legal",
+    "title": "Legal Notice",
+    "description": "Publisher, hosting, and intellectual property information required under French law.",
+    "last-updated": "Effective 17 September 2026. Required under French LCEN, article 6-III.",
+    "sections": [
+      {
+        "title": "Publisher",
+        "body": "The websites <strong>nowly.me</strong> and <strong>docs.nowly.me</strong>, the Nowly browser extension and the desktop app are published by:<br/><br/>Publisher: <strong>{publisherName}</strong><br/>Status: Sole trader (auto-entrepreneur / micro-enterprise)<br/>SIREN: <strong>{publisherSiren}</strong><br/>Address: <strong>{publisherAddress}</strong><br/>VAT: Not applicable (French CGI art. 293 B exemption)<br/>Email: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>"
+      },
+      {
+        "title": "Publication director",
+        "body": "<strong>{publisherName}</strong>, as natural-person publisher. French law provides for a <strong>single</strong> publication director (loi du 29 juillet 1881, applied online). Contributors or developers are not additional publication directors."
+      },
+      {
+        "title": "Hosting (website, API, database)",
+        "body": "The website, API and PostgreSQL database run on a virtual private server (VPS) rented from:<br/><br/><strong>Contabo GmbH</strong><br/>Welfenstrasse 22<br/>81541 Munich, Germany<br/><a href=\"https://contabo.com\">contabo.com</a><br/><a href=\"https://contabo.com/en/legal/impressum/\">Legal notice (Impressum)</a><br/><br/>The publisher administers the server. Location: <strong>{dataRegion}</strong>"
+      },
+      {
+        "title": "CDN and desktop binaries",
+        "body": "Static assets (thumbnails, installers, Canary archives) are distributed via:<br/><br/><strong>Cloudflare, Inc.</strong><br/>101 Townsend Street, San Francisco, CA 94107, United States<br/><a href=\"https://www.cloudflare.com\">cloudflare.com</a>"
+      },
+      {
+        "title": "Extension distribution",
+        "body": "The production extension is distributed for <strong>Chrome</strong> (and other Chromium browsers) via the <strong>Chrome Web Store</strong>, operated by Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States, and for <strong>Firefox</strong> via <strong>Firefox Add-ons</strong>, operated by Mozilla Corporation (United States). Experimental Canary builds may also be offered as zip files from our CDN."
+      },
+      {
+        "title": "Intellectual property",
+        "body": "Nowly source code is published under <strong>BUSL-1.1</strong> at <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>. Third-party trademarks remain their owners’. <strong>Nowly is not affiliated with Discord Inc. or the supported platforms.</strong>"
+      },
+      {
+        "title": "Illegal content",
+        "body": "Manifestly illegal content may be reported to <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> with the date, a description, the URL, and the legal grounds, as required by LCEN article 6."
+      },
+      {
+        "title": "Contact",
+        "body": "Email: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a><br/>GitHub: <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>"
+      }
+    ]
+  },
+  "cookies-page": {
+    "badge": "Cookies",
+    "title": "Cookie Policy",
+    "description": "Cookies and local storage used on nowly.me and docs.nowly.me.",
+    "last-updated": "Last updated: 17 September 2026.",
+    "intro": "This page describes cookies and similar technologies on <strong>nowly.me</strong> and <strong>docs.nowly.me</strong>. We set a language cookie. Theme and the cookie notice use local storage. Google AdSense is not loaded unless advertising is enabled.",
+    "sections": [
+      {
+        "title": "Strictly necessary",
+        "body": "The language cookie is needed to remember the locale you chose (or that we detected) on each site. It does not require a prior advertising-style consent under the French “cookies and other trackers” guidelines, because it is strictly necessary to provide the multilingual service."
+      },
+      {
+        "title": "locale cookie",
+        "body": "<strong><code>locale</code></strong> (nowly.me and, separately, docs.nowly.me)<br/>Purpose: French, English, or Spanish interface.<br/>Duration: 1 year (<code>max-age</code> 31,536,000 seconds), refreshed when you change language.<br/>Attributes: first-party, not HttpOnly, SameSite=Lax. The value is a locale code (for example <code>fr-FR</code>). Combined with your IP address in server logs it can contribute to identifying a visitor, even if the cookie itself is only a language code."
+      },
+      {
+        "title": "Local storage",
+        "body": "The sites store the colour theme (light, dark, or system) and whether you dismissed the cookie notice. Those values stay in your browser and are not sent as cookies to Nowly."
+      },
+      {
+        "title": "Analytics cookies",
+        "body": "The websites do <strong>not</strong> set third-party analytics cookies. Optional usage statistics, if you enable them, are collected by the <strong>extension</strong> with a device ID, not with a website cookie."
+      },
+      {
+        "title": "Advertising",
+        "body": "If we enable <strong>Google AdSense</strong> on the website, Google may set cookies or similar technologies under its own policy. Until then, Nowly does not place advertising cookies."
+      },
+      {
+        "title": "How to delete them",
+        "body": "You can block or delete cookies in your browser. Deleting <code>locale</code> resets the language to the detected value on the next visit."
+      },
+      {
+        "title": "Contact",
+        "body": "Email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> or see the <a href=\"/legal-notice\">legal notice</a>."
+      }
+    ]
   }
 }
