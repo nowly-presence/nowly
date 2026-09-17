@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
+    "@nowly/analytics": "workspace:*",
     "@nowly/env": "workspace:*",
     "@nowly/locales": "workspace:*",
     "@remixicon/react": "^4.9.0",
