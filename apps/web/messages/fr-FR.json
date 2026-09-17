@@ -15,8 +15,7 @@
   "navbar": {
     "docs": "Documentation",
     "library": "Bibliothèque",
-    "open-menu": "Ouvrir le menu",
-    "close-menu": "Fermer le menu"
+    "open-menu": "Ouvrir le menu"
   },
   "theme": {
     "toggle": "Changer de thème",
@@ -245,7 +244,6 @@
     "search-label": "Rechercher dans la bibliothèque",
     "clear-search": "Effacer la recherche",
     "all": "Tout",
-    "featured": "Populaires",
     "count": "{count, plural, one {# présence} other {# présences}}",
     "empty-title": "Aucun résultat",
     "empty-description": "Essayez un autre nom, ou réinitialisez les filtres.",
@@ -452,32 +450,6 @@
     "guide-desktop": "Voir l’application bureau",
     "guide-library": "Ouvrir la bibliothèque"
   },
-  "uninstallPage": {
-    "eyebrow": "Au revoir",
-    "title": "L’extension a été retirée",
-    "description": "Vos données locales restent sur votre appareil. On espère vous revoir bientôt.",
-    "feedback-title": "Une remarque à nous faire ?",
-    "feedback-description": "Un bug, une présence manquante, ou juste un avis : le Discord est le plus rapide pour nous joindre.",
-    "discord": "Rejoindre le Discord"
-  },
-  "consentPage": {
-    "eyebrow": "Confidentialité",
-    "title": "Vos données",
-    "description": "Nowly ne collecte des analytics d'usage anonymes que si vous l'activez explicitement ci-dessous. Cette page vous permet aussi de voir, exporter ou supprimer tout ce qui est stocké pour votre appareil.",
-    "checking": "Recherche de l'extension Nowly...",
-    "not-detected-title": "Extension non détectée",
-    "not-detected-description": "Ouvrez cette page depuis le navigateur où Nowly est installée pour gérer votre consentement et vos données.",
-    "toggle-title": "Partager des données d'usage anonymes",
-    "toggle-description": "Désactivé par défaut. Nous aide à voir quelles présences et fonctionnalités sont réellement utilisées - aucun historique de navigation ni donnée personnelle n'est jamais collecté.",
-    "data-title": "Vos données",
-    "data-description": "Exportez tout ce que Nowly a stocké pour cet appareil, ou supprimez-le entièrement.",
-    "export": "Exporter mes données",
-    "delete": "Supprimer mes données",
-    "delete-confirm": "Cette action supprime définitivement tout ce que Nowly a stocké pour cet appareil. C'est irréversible.",
-    "export-success": "Vos données ont été téléchargées.",
-    "delete-success": "Vos données ont été supprimées.",
-    "action-error": "Une erreur s'est produite. Veuillez réessayer."
-  },
   "changelogPage": {
     "eyebrow": "Notes de mise à jour",
     "title": "Ce qui a changé",
@@ -639,10 +611,6 @@
       "title": "Bibliothèque",
       "description": "Parcourez les plateformes que Nowly peut afficher sur Discord."
     },
-    "host": {
-      "title": "Application bureau",
-      "description": "Téléchargez l’application bureau pour envoyer votre activité à Discord."
-    },
     "desktop": {
       "title": "Application bureau",
       "description": "Téléchargez l’application bureau pour envoyer votre activité à Discord."
@@ -671,25 +639,9 @@
       "title": "L’extension a été retirée",
       "description": "On espère vous revoir. Dites-nous ce qui n’a pas marché, ça nous aide à améliorer Nowly."
     },
-    "privacy": {
-      "title": "Confidentialité",
-      "description": "Découvrez comment Nowly traite vos données, ce qui reste local et ce qui dépend de votre consentement."
-    },
     "consent": {
       "title": "Vos données",
       "description": "Gérez le consentement analytics optionnel, et consultez, exportez ou supprimez les données que Nowly a stockées pour votre appareil."
-    },
-    "tos": {
-      "title": "Conditions d’utilisation",
-      "description": "Les règles d'utilisation de Nowly, de l'extension navigateur, de l'application bureau et du site web."
-    },
-    "cookies": {
-      "title": "Cookies",
-      "description": "Les cookies et le stockage local utilisés sur nowly.me."
-    },
-    "legal-notice": {
-      "title": "Mentions légales",
-      "description": "Les informations obligatoires sur l'éditeur, l'hébergement et les droits liés à Nowly."
     }
   },
   "not-found": {
@@ -903,5 +855,31 @@
         "body": "Courriel : <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Voir les <a href=\"/legal-notice\">mentions légales</a>."
       }
     ]
+  },
+  "uninstallPage": {
+    "eyebrow": "Au revoir",
+    "title": "L’extension a été retirée",
+    "description": "Vos données locales restent sur votre appareil. On espère vous revoir bientôt.",
+    "feedback-title": "Une remarque à nous faire ?",
+    "feedback-description": "Un bug, une présence manquante, ou juste un avis : le Discord est le plus rapide pour nous joindre.",
+    "discord": "Rejoindre le Discord"
+  },
+  "consentPage": {
+    "eyebrow": "Confidentialité",
+    "title": "Vos données",
+    "description": "Nowly ne collecte des analytics d'usage anonymes que si vous l'activez explicitement ci-dessous. Cette page vous permet aussi de voir, exporter ou supprimer tout ce qui est stocké pour votre appareil.",
+    "checking": "Recherche de l'extension Nowly...",
+    "not-detected-title": "Extension non détectée",
+    "not-detected-description": "Ouvrez cette page depuis le navigateur où Nowly est installée pour gérer votre consentement et vos données.",
+    "toggle-title": "Partager des données d'usage anonymes",
+    "toggle-description": "Désactivé par défaut. Nous aide à voir quelles présences et fonctionnalités sont réellement utilisées - aucun historique de navigation ni donnée personnelle n'est jamais collecté.",
+    "data-title": "Vos données",
+    "data-description": "Exportez tout ce que Nowly a stocké pour cet appareil, ou supprimez-le entièrement.",
+    "export": "Exporter mes données",
+    "delete": "Supprimer mes données",
+    "delete-confirm": "Cette action supprime définitivement tout ce que Nowly a stocké pour cet appareil. C'est irréversible.",
+    "export-success": "Vos données ont été téléchargées.",
+    "delete-success": "Vos données ont été supprimées.",
+    "action-error": "Une erreur s'est produite. Veuillez réessayer."
   }
 }

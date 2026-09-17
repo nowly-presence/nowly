@@ -15,8 +15,7 @@
   "navbar": {
     "docs": "Documentación",
     "library": "Biblioteca",
-    "open-menu": "Abrir menú",
-    "close-menu": "Cerrar menú"
+    "open-menu": "Abrir menú"
   },
   "theme": {
     "toggle": "Cambiar tema",
@@ -245,7 +244,6 @@
     "search-label": "Buscar en la biblioteca",
     "clear-search": "Borrar búsqueda",
     "all": "Todo",
-    "featured": "Populares",
     "count": "{count, plural, one {# presencia} other {# presencias}}",
     "empty-title": "Nada coincide",
     "empty-description": "Prueba otro nombre, o restablece los filtros.",
@@ -452,32 +450,6 @@
     "guide-desktop": "Ver la app de escritorio",
     "guide-library": "Abrir la biblioteca"
   },
-  "uninstallPage": {
-    "eyebrow": "Adiós",
-    "title": "Se ha quitado la extensión",
-    "description": "Tus datos locales se quedan en tu dispositivo. Esperamos volver a verte pronto.",
-    "feedback-title": "¿Algo que quieras decirnos?",
-    "feedback-description": "Un fallo, una presencia que falta, o solo tu opinión: Discord es la vía más rápida para contactarnos.",
-    "discord": "Unirse al Discord"
-  },
-  "consentPage": {
-    "eyebrow": "Privacidad",
-    "title": "Tus datos",
-    "description": "Nowly solo recopila analítica de uso anónima si la activas explícitamente a continuación. Esta página también te permite ver, exportar o eliminar todo lo almacenado para tu dispositivo.",
-    "checking": "Buscando la extensión Nowly...",
-    "not-detected-title": "Extensión no detectada",
-    "not-detected-description": "Abre esta página desde el navegador donde Nowly está instalada para gestionar tu consentimiento y tus datos.",
-    "toggle-title": "Compartir datos de uso anónimos",
-    "toggle-description": "Desactivado por defecto. Nos ayuda a ver qué presencias y funciones se usan realmente - nunca se recopila historial de navegación ni datos personales.",
-    "data-title": "Tus datos",
-    "data-description": "Exporta todo lo que Nowly ha almacenado para este dispositivo, o elimínalo por completo.",
-    "export": "Exportar mis datos",
-    "delete": "Eliminar mis datos",
-    "delete-confirm": "Esta acción elimina permanentemente todo lo que Nowly ha almacenado para este dispositivo. No se puede deshacer.",
-    "export-success": "Tus datos se han descargado.",
-    "delete-success": "Tus datos han sido eliminados.",
-    "action-error": "Algo salió mal. Inténtalo de nuevo."
-  },
   "changelogPage": {
     "eyebrow": "Notas de la versión",
     "title": "Qué ha cambiado",
@@ -639,10 +611,6 @@
       "title": "Biblioteca",
       "description": "Explora las plataformas que Nowly puede mostrar en Discord."
     },
-    "host": {
-      "title": "App de escritorio",
-      "description": "Descarga la app de escritorio para enviar tu actividad a Discord."
-    },
     "desktop": {
       "title": "App de escritorio",
       "description": "Descarga la app de escritorio para enviar tu actividad a Discord."
@@ -671,25 +639,9 @@
       "title": "Se ha quitado la extensión",
       "description": "Esperamos volver a verte. Cuéntanos qué falló, nos ayuda a mejorar Nowly."
     },
-    "privacy": {
-      "title": "Privacidad",
-      "description": "Descubre cómo Nowly trata tus datos, qué se queda en local y qué depende de tu consentimiento."
-    },
     "consent": {
       "title": "Tus datos",
       "description": "Gestiona el consentimiento analítico opcional, y consulta, exporta o elimina los datos que Nowly ha guardado de tu dispositivo."
-    },
-    "tos": {
-      "title": "Términos del servicio",
-      "description": "Las reglas para usar Nowly, la extensión de navegador, la app de escritorio y el sitio web."
-    },
-    "cookies": {
-      "title": "Cookies",
-      "description": "Las cookies y el almacenamiento local usados en nowly.me."
-    },
-    "legal-notice": {
-      "title": "Aviso legal",
-      "description": "Información obligatoria sobre el editor, el alojamiento y la propiedad intelectual de Nowly."
     }
   },
   "not-found": {
@@ -903,5 +855,31 @@
         "body": "Correo: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Véase el <a href=\"/legal-notice\">aviso legal</a>."
       }
     ]
+  },
+  "uninstallPage": {
+    "eyebrow": "Adiós",
+    "title": "Se ha quitado la extensión",
+    "description": "Tus datos locales se quedan en tu dispositivo. Esperamos volver a verte pronto.",
+    "feedback-title": "¿Algo que quieras decirnos?",
+    "feedback-description": "Un fallo, una presencia que falta, o solo tu opinión: Discord es la vía más rápida para contactarnos.",
+    "discord": "Unirse al Discord"
+  },
+  "consentPage": {
+    "eyebrow": "Privacidad",
+    "title": "Tus datos",
+    "description": "Nowly solo recopila analítica de uso anónima si la activas explícitamente a continuación. Esta página también te permite ver, exportar o eliminar todo lo almacenado para tu dispositivo.",
+    "checking": "Buscando la extensión Nowly...",
+    "not-detected-title": "Extensión no detectada",
+    "not-detected-description": "Abre esta página desde el navegador donde Nowly está instalada para gestionar tu consentimiento y tus datos.",
+    "toggle-title": "Compartir datos de uso anónimos",
+    "toggle-description": "Desactivado por defecto. Nos ayuda a ver qué presencias y funciones se usan realmente - nunca se recopila historial de navegación ni datos personales.",
+    "data-title": "Tus datos",
+    "data-description": "Exporta todo lo que Nowly ha almacenado para este dispositivo, o elimínalo por completo.",
+    "export": "Exportar mis datos",
+    "delete": "Eliminar mis datos",
+    "delete-confirm": "Esta acción elimina permanentemente todo lo que Nowly ha almacenado para este dispositivo. No se puede deshacer.",
+    "export-success": "Tus datos se han descargado.",
+    "delete-success": "Tus datos han sido eliminados.",
+    "action-error": "Algo salió mal. Inténtalo de nuevo."
   }
 }

@@ -15,8 +15,7 @@
   "navbar": {
     "docs": "Documentation",
     "library": "Library",
-    "open-menu": "Open menu",
-    "close-menu": "Close menu"
+    "open-menu": "Open menu"
   },
   "theme": {
     "toggle": "Toggle color theme",
@@ -245,7 +244,6 @@
     "search-label": "Search the library",
     "clear-search": "Clear search",
     "all": "All",
-    "featured": "Popular",
     "count": "{count, plural, one {# presence} other {# presences}}",
     "empty-title": "Nothing matches",
     "empty-description": "Try another name, or reset the filters.",
@@ -452,32 +450,6 @@
     "guide-desktop": "See the desktop app",
     "guide-library": "Open the library"
   },
-  "uninstallPage": {
-    "eyebrow": "Goodbye",
-    "title": "The extension was removed",
-    "description": "Your local data stays on your device. We hope to see you again soon.",
-    "feedback-title": "Anything you want to tell us?",
-    "feedback-description": "A bug, a missing presence, or just feedback: Discord is the fastest way to reach us.",
-    "discord": "Join the Discord"
-  },
-  "consentPage": {
-    "eyebrow": "Privacy",
-    "title": "Your data",
-    "description": "Nowly only collects anonymous usage analytics if you explicitly turn it on below. This page also lets you see, export, or delete everything stored for your device.",
-    "checking": "Looking for the Nowly extension...",
-    "not-detected-title": "Extension not detected",
-    "not-detected-description": "Open this page from the browser where Nowly is installed to manage your consent and data.",
-    "toggle-title": "Share anonymous usage data",
-    "toggle-description": "Off by default. Helps us see which presences and features are actually used - no browsing history or personal data is ever collected.",
-    "data-title": "Your data",
-    "data-description": "Export everything Nowly has stored for this device, or delete it entirely.",
-    "export": "Export my data",
-    "delete": "Delete my data",
-    "delete-confirm": "This permanently deletes everything Nowly has stored for this device. This cannot be undone.",
-    "export-success": "Your data was downloaded.",
-    "delete-success": "Your data has been deleted.",
-    "action-error": "Something went wrong. Please try again."
-  },
   "changelogPage": {
     "eyebrow": "Release notes",
     "title": "What changed",
@@ -639,10 +611,6 @@
       "title": "Library",
       "description": "Browse the platforms Nowly can share on Discord."
     },
-    "host": {
-      "title": "Desktop app",
-      "description": "Download the desktop app to send your activity to Discord."
-    },
     "desktop": {
       "title": "Desktop app",
       "description": "Download the desktop app to send your activity to Discord."
@@ -671,25 +639,9 @@
       "title": "The extension was removed",
       "description": "We hope to see you again. Tell us what went wrong, it helps us improve Nowly."
     },
-    "privacy": {
-      "title": "Privacy",
-      "description": "Learn how Nowly handles your data, what stays local, and what depends on your consent."
-    },
     "consent": {
       "title": "Your data",
       "description": "Manage the optional analytics consent, and view, export, or delete the data Nowly has stored for your device."
-    },
-    "tos": {
-      "title": "Terms of Service",
-      "description": "The rules for using Nowly, the browser extension, desktop app, and the website."
-    },
-    "cookies": {
-      "title": "Cookies",
-      "description": "The cookies and local storage used on nowly.me."
-    },
-    "legal-notice": {
-      "title": "Legal notice",
-      "description": "Required information about Nowly's publisher, hosting, and intellectual property."
     }
   },
   "not-found": {
@@ -903,5 +855,31 @@
         "body": "Email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> or see the <a href=\"/legal-notice\">legal notice</a>."
       }
     ]
+  },
+  "uninstallPage": {
+    "eyebrow": "Goodbye",
+    "title": "The extension was removed",
+    "description": "Your local data stays on your device. We hope to see you again soon.",
+    "feedback-title": "Anything you want to tell us?",
+    "feedback-description": "A bug, a missing presence, or just feedback: Discord is the fastest way to reach us.",
+    "discord": "Join the Discord"
+  },
+  "consentPage": {
+    "eyebrow": "Privacy",
+    "title": "Your data",
+    "description": "Nowly only collects anonymous usage analytics if you explicitly turn it on below. This page also lets you see, export, or delete everything stored for your device.",
+    "checking": "Looking for the Nowly extension...",
+    "not-detected-title": "Extension not detected",
+    "not-detected-description": "Open this page from the browser where Nowly is installed to manage your consent and data.",
+    "toggle-title": "Share anonymous usage data",
+    "toggle-description": "Off by default. Helps us see which presences and features are actually used - no browsing history or personal data is ever collected.",
+    "data-title": "Your data",
+    "data-description": "Export everything Nowly has stored for this device, or delete it entirely.",
+    "export": "Export my data",
+    "delete": "Delete my data",
+    "delete-confirm": "This permanently deletes everything Nowly has stored for this device. This cannot be undone.",
+    "export-success": "Your data was downloaded.",
+    "delete-success": "Your data has been deleted.",
+    "action-error": "Something went wrong. Please try again."
   }
 }
