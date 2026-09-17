@@ -468,8 +468,8 @@ importers:
         specifier: ^3.1131.0
         version: 3.1131.0
       '@nowly/sdk':
-        specifier: workspace:*
-        version: link:../sdk
+        specifier: ^1.5.1
+        version: 1.5.1
       chalk:
         specifier: ^5.6.2
         version: 5.6.2
@@ -1818,6 +1818,9 @@ packages:
 
   '@nowly/sdk@1.4.0':
     resolution: {integrity: sha512-bHRGoL5TtMlqgT/SIO4Xm46rCz2defmiBqj/E5AjC2KUAb49tiTnje17HAyR/nSTLO3Vj/buHsirRwW2tGVlgw==}
+
+  '@nowly/sdk@1.5.1':
+    resolution: {integrity: sha512-8grIvWLf5YRXMZO2qQvk7+qyClMKZeclKenjHNDI4v5nlXw8YbKk8zJOQvQH/Cdvr/V2d2V9A67zCfmnqVP7iQ==}
 
   '@opencoredev/email-sdk@0.6.5':
     resolution: {integrity: sha512-CuEfbOSjjr4/bsCz7g/X7l7ha1D/QLq0Q4glX4CRsj0uUCnuhdBYRDXv6ffi9myaVx3afw3P8RzAnw+1++jLMg==}
@@ -7158,6 +7161,8 @@ snapshots:
       '@node-rs/xxhash-win32-x64-msvc': 1.7.8
 
   '@nowly/sdk@1.4.0': {}
+
+  '@nowly/sdk@1.5.1': {}
 
   '@opencoredev/email-sdk@0.6.5': {}
 
