@@ -8,6 +8,20 @@ export type AnalyticsGroup =
   | "ratings"
   | "release"
 
+// Always available on every event via a dedicated column (source, country) or
+// a join on Device (browser/os/locale/extensionVersion/nativeVersion are
+// collected once per device by /devices/sync). Never declared per metric
+// below and never expected in an event's payload - see insights.service.ts
+// for how they're actually queried/joined.
+export const UNIVERSAL_DIMENSIONS = [
+  "country",
+  "browser",
+  "os",
+  "locale",
+  "extensionVersion",
+  "nativeVersion",
+] as const
+
 export type AnalyticsMetric = {
   key: string
   label: string
@@ -60,77 +74,77 @@ export const analyticsRegistry = [
     label: "Extension install",
     description: "Extension installation lifecycle event.",
     group: "extension",
-    dimensions: ["extensionVersion", "browser", "os", "locale", "source"],
+    dimensions: ["source"],
   }),
   new Analytics({
     key: "extension_update",
     label: "Extension update",
     description: "Extension update lifecycle event.",
     group: "extension",
-    dimensions: ["extensionVersion", "browser", "os", "locale", "source"],
+    dimensions: ["source"],
   }),
   new Analytics({
     key: "extension_open",
     label: "Extension open",
     description: "Extension UI opened.",
     group: "extension",
-    dimensions: ["extensionVersion", "browser", "os", "locale", "surface"],
+    dimensions: ["surface"],
   }),
   new Analytics({
     key: "onboarding_started",
     label: "Onboarding started",
     description: "Onboarding flow was shown.",
     group: "extension",
-    dimensions: ["extensionVersion", "browser", "os", "locale", "source"],
+    dimensions: ["source"],
   }),
   new Analytics({
     key: "onboarding_completed",
     label: "Onboarding completed",
     description: "Onboarding flow was completed.",
     group: "extension",
-    dimensions: ["extensionVersion", "browser", "os", "locale", "source"],
+    dimensions: ["source"],
   }),
   new Analytics({
     key: "onboarding_skipped",
     label: "Onboarding skipped",
     description: "Onboarding flow was skipped.",
     group: "extension",
-    dimensions: ["extensionVersion", "browser", "os", "locale", "source"],
+    dimensions: ["source"],
   }),
   new Analytics({
     key: "onboarding_gate_seen",
     label: "Onboarding gate seen",
     description: "Onboarding permission or native gate was displayed.",
     group: "extension",
-    dimensions: ["extensionVersion", "browser", "os", "locale", "gate"],
+    dimensions: ["gate"],
   }),
   new Analytics({
     key: "analytics_consent_accepted",
     label: "Analytics consent accepted",
     description: "Optional analytics consent was accepted.",
     group: "extension",
-    dimensions: ["extensionVersion", "browser", "os", "locale", "source"],
+    dimensions: ["source"],
   }),
   new Analytics({
     key: "analytics_consent_declined",
     label: "Analytics consent declined",
     description: "Optional analytics consent was declined.",
     group: "extension",
-    dimensions: ["extensionVersion", "browser", "os", "locale", "source"],
+    dimensions: ["source"],
   }),
   new Analytics({
     key: "analytics_consent_changed",
     label: "Analytics consent changed",
     description: "Optional analytics consent was changed later in settings.",
     group: "extension",
-    dimensions: ["extensionVersion", "browser", "os", "locale", "enabled", "source"],
+    dimensions: ["enabled", "source"],
   }),
   new Analytics({
     key: "native_connected",
     label: "Native connected",
     description: "Native client connection succeeded.",
     group: "native",
-    dimensions: ["extensionVersion", "nativeVersion", "browser", "os"],
+    dimensions: [],
   }),
   new Analytics({
     key: "native_disconnected",
@@ -138,7 +152,7 @@ export const analyticsRegistry = [
     description: "Native client disconnected.",
     group: "native",
     private: true,
-    dimensions: ["extensionVersion", "nativeVersion", "browser", "os", "reason"],
+    dimensions: ["reason"],
     retentionDays: 90,
   }),
   new Analytics({
@@ -146,7 +160,7 @@ export const analyticsRegistry = [
     label: "Native heartbeat OK",
     description: "Native client heartbeat succeeded.",
     group: "native",
-    dimensions: ["extensionVersion", "nativeVersion", "browser", "os"],
+    dimensions: [],
   }),
   new Analytics({
     key: "native_heartbeat_failed",
@@ -154,7 +168,7 @@ export const analyticsRegistry = [
     description: "Native client heartbeat failed.",
     group: "native",
     private: true,
-    dimensions: ["extensionVersion", "nativeVersion", "browser", "os", "reason"],
+    dimensions: ["reason"],
     retentionDays: 90,
   }),
   new Analytics({
@@ -162,14 +176,14 @@ export const analyticsRegistry = [
     label: "Native version outdated",
     description: "Native client version is older than expected.",
     group: "native",
-    dimensions: ["extensionVersion", "nativeVersion", "browser", "os"],
+    dimensions: [],
   }),
   new Analytics({
     key: "native_reconnect",
     label: "Native reconnect",
     description: "Native client reconnect was requested.",
     group: "native",
-    dimensions: ["extensionVersion", "nativeVersion", "browser", "os", "source"],
+    dimensions: ["source"],
   }),
   new Analytics({
     key: "presence_install",
@@ -212,7 +226,7 @@ export const analyticsRegistry = [
     description: "Presence usage session started.",
     group: "presence",
     private: true,
-    dimensions: ["slug", "version", "browser", "os"],
+    dimensions: ["slug", "version"],
     retentionDays: 180,
   }),
   new Analytics({
@@ -221,7 +235,7 @@ export const analyticsRegistry = [
     description: "Presence usage session ended.",
     group: "presence",
     private: true,
-    dimensions: ["slug", "version", "browser", "os", "durationMs", "reason"],
+    dimensions: ["slug", "version", "durationMs", "reason"],
     retentionDays: 180,
   }),
   new Analytics({
@@ -230,7 +244,7 @@ export const analyticsRegistry = [
     description: "Aggregated technical errors by presence, extension version, and runtime stage.",
     group: "presence",
     private: true,
-    dimensions: ["slug", "version", "stage", "browser", "os"],
+    dimensions: ["slug", "version", "stage"],
     retentionDays: 90,
   }),
   new Analytics({
@@ -314,14 +328,14 @@ export const analyticsRegistry = [
     label: "Display settings changed",
     description: "Display preference changed.",
     group: "settings",
-    dimensions: ["extensionVersion", "browser", "os", "displayMode", "separateActivePresence", "showPlayer"],
+    dimensions: ["displayMode", "separateActivePresence", "showPlayer"],
   }),
   new Analytics({
     key: "settings_language_changed",
     label: "Language settings changed",
     description: "Language preference changed.",
     group: "settings",
-    dimensions: ["extensionVersion", "browser", "os", "locale"],
+    dimensions: [],
   }),
   new Analytics({
     key: "settings_custom_api_changed",
@@ -329,7 +343,7 @@ export const analyticsRegistry = [
     description: "Custom API setting was enabled or disabled, without storing the URL.",
     group: "settings",
     private: true,
-    dimensions: ["extensionVersion", "browser", "os", "enabled"],
+    dimensions: ["enabled"],
     retentionDays: 90,
   }),
   new Analytics({
