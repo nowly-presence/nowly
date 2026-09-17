@@ -1,6 +1,7 @@
 export interface PresenceStats {
   totalInstalls: number
   activeUsers: number
+  likes: number
   version: string | null
   archived: boolean
   addedAt: string | null
