@@ -60,7 +60,7 @@ const getAdStatus = async (): Promise<Record<string, unknown>> => {
 
 const redeemSupportCode = async (code: string): Promise<Record<string, unknown>> => {
   const deviceId = await getDeviceId();
-  const response = await fetch(`${API_BASE_URL}/support/redeem-device`, {
+  const response = await fetch(`${API_BASE_URL}/redeem`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ code, deviceId }),

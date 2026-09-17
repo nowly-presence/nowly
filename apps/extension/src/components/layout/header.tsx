@@ -13,7 +13,7 @@ import {
   IconWorld,
 } from "@/lib/tabler-icons";
 import { BRAND_LOCKUP } from "@/shared/brand";
-import { DISCORD_INVITE_URL, HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
+import { DISCORD_INVITE_URL, HOST_DOWNLOAD_URL, REDEEM_PAGE_URL, WEB_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
 import type { PresenceDisplayMode } from "@/shared/types";
 import type { FC, ReactElement } from "react";
@@ -97,7 +97,7 @@ export const Header: FC<Props> = ({
       icon: IconHeart,
       label: "menu-support",
       external: true,
-      onSelect: () => openUrl(`${WEB_BASE_URL.replace(/\/$/, "")}/support/redeem`),
+      onSelect: () => openUrl(REDEEM_PAGE_URL),
     });
   }
 
