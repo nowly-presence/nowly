@@ -1,0 +1,50 @@
+---
+title: 1.5.0
+date: 2026-09-17
+description: Refonte complète du site, bibliothèque publique, pages bureau et Canary, documents légaux, Chrome et Firefox, drapeaux de langue, reconnexion bureau, snooze minuit, watch CLI.
+---
+
+`1.5.0` suit `1.4.0` (1.4.1 n'est jamais partie sur les stores). L'architecture du panneau de 1.4.0 ne change pas. Cette version reconstruit nowly.me, ajoute les pages publiques manquantes, et livre les correctifs d'extension qui attendaient avec ce travail.
+
+<ReleaseTable
+  headers={["Zone", "Ce qui change", "Pourquoi c'est utile"]}
+  rows={[
+    ["Accueil", "nowly.me est un nouveau site : hero, plateformes, fonctionnalités, étapes, confidentialité, FAQ, section code source disponible, CTA. Textes en anglais, français et espagnol. Clair et sombre suivent le système par défaut. Les cartes de présence animées du hero tournent sur bureau seulement, pas sur petit écran.", "La page d'accueil explique le produit, sans sections orphelines de l'ancien site."],
+    ["Thème", "Un sélecteur dans le footer cycle clair, sombre et système. Le choix reste en local. Le libellé ne clignote plus au premier rendu. Le lockup reste lisible sur fond clair.", "Le site suit l'interface et n'affiche plus le mauvais thème une fraction de seconde."],
+    ["Bibliothèque", "Catalogue complet sur `/library` : recherche, filtres par catégorie, pagination, fiches `/library/[slug]`, pages auteur `/author/[github]`. Un résultat vide propose encore de demander ou de créer une présence. Le sitemap inclut le catalogue et les auteurs.", "On parcourt, filtre et ouvre chaque présence publique depuis le site."],
+    ["Install depuis le site", "Avec l'extension installée, une fiche bibliothèque peut lancer l'install via le pont page-extension (y compris en local).", "Plus besoin de recopier un slug dans le panneau."],
+    ["Page application bureau", "`/desktop` sert les téléchargements de l'application native (Windows, macOS, Linux). Les libellés disent Application bureau / Desktop app / App de escritorio, jamais Host.", "L'installateur a une vraie page, sans l'ancien mot Host."],
+    ["Chrome et Firefox", "Les installs stables pointent vers le Chrome Web Store et Firefox Add-ons. La navbar et les CTA couvrent les deux.", "Firefox est un chemin d'install à part entière."],
+    ["Canary", "`/canary` propose des zips d'essai Chrome et Firefox depuis le CDN, avec détection du navigateur. Le bouton store est mis en avant sur cette page. Les builds Canary de l'extension ont un lockup et une couleur distincts. Les zips peuvent être publiés par la CI sur la branche stable.", "On distingue un build de test du build store, et on prend le bon zip."],
+    ["Support", "`/support` liste Discord, les types d'issues GitHub, et les dons via Ko-fi et GitHub Sponsors. Nowly reste gratuit.", "L'aide et le soutien facultatif sont au même endroit."],
+    ["Notes de version", "`/changelog` liste les versions. Chaque version a son URL. Les mises à jour store ouvrent toujours `nowly.me/changelog/{version du manifeste}`, qui envoie vers docs.nowly.me.", "Après une mise à jour, on arrive sur ce qui a changé."],
+    ["Légal", "Confidentialité, conditions, cookies et mentions légales sont sur nowly.me. Ils nomment l'éditeur, Contabo GmbH (VPS UE), Cloudflare, Chrome Web Store et Firefox Add-ons, la BUSL-1.1 (code source disponible, pas open source OSI avant la Change Date), et un bandeau pour le cookie de langue nécessaire. La publicité est décrite comme inactive tant qu'on ne l'active pas.", "Les textes collent au produit, plus Railway seul, Chrome seul ou Ko-fi seul."],
+    ["SEO", "URL canoniques, sitemap, robots, Open Graph et JSON-LD couvrent les routes publiques. Les hôtes de staging comme dev.nowly.me ne servent jamais d'URL canonique.", "Recherche et partage pointent vers nowly.me et docs.nowly.me."],
+    ["Footer et nav", "Groupes Produit, Projet, Développeurs, Légal. Les liens sont de vrais `Link` / `<a>` stylés en boutons. Le menu de langue affiche les drapeaux. Canary, Support, Application bureau et pages légales sont dans la nav ou le footer.", "La navigation correspond aux pages qui existent."],
+    ["Documentation", "Les docs sont sur docs.nowly.me, chemins du type `/getting-started/troubleshooting` (plus `/docs/...`). nowly.me/docs et les anciennes URLs redirigent.", "Partages et recherches arrivent sur l'hôte docs actuel."],
+    ["Sélecteurs de langue", "Un `<select>` natif ne peut pas afficher de SVG dans les `<option>`. L'extension utilise un select custom pour l'UI, les présences, l'onboarding et la locale par présence. Chaque option a son drapeau (ou un globe pour Auto).", "On distingue anglais, français et espagnol dans le menu ouvert."],
+    ["Ticks des présences", "`getSetting` est disponible dans les scripts. L'activité se rafraîchit aussi à la visibilité de l'onglet, à l'historique, au hash et aux événements média, pas seulement à l'intervalle.", "Réglages et changements de page arrivent plus vite sur Discord."],
+    ["Reconnexion application bureau", "L'extension guide la reconnexion et la version quand le pont natif manque ou est trop ancien.", "Une connexion bureau cassée se corrige avec un parcours, pas en silence."],
+    ["Snooze et planning", "On peut snooze jusqu'à minuit. Les nouvelles installs laissent le planning désactivé par défaut. Les installs existantes gardent le réglage déjà choisi.", "On coupe Discord jusqu'à la fin de la journée sans changer le lendemain."],
+    ["Catalogue extension", "Les assets de présences bundlés peuvent se charger en local. Les mises à jour ignorent les présences archivées. Sans titre, l'activité reprend le nom de l'app.", "Installé et archivé se comportent de façon plus prévisible."],
+    ["CLI", "`nowly build --watch` et `nowly pack --watch` relancent le build quand les fichiers d'une présence changent.", "Les auteurs itèrent sans un build manuel à chaque fois."],
+  ]}
+/>
+
+## Site web
+
+Routes publiques : `/`, `/library`, `/library/[slug]`, `/author/[github]`, `/desktop`, `/canary`, `/support`, `/changelog`, `/changelog/[version]`, `/privacy`, `/tos`, `/cookies`, `/legal-notice`. Les dons passent par Ko-fi et GitHub Sponsors. Le site et l'API tournent sur un VPS Contabo ; les fichiers statiques restent sur Cloudflare.
+
+## Documentation
+
+L'app docs est `@nowly/docs` sur [docs.nowly.me](https://docs.nowly.me). Les pages n'utilisent que le slug (`/changelog`, `/getting-started/installation`). `https://docs.nowly.me/docs/...` et `https://nowly.me/docs/...` redirigent vers la même page, sans segment `/docs` en trop.
+
+## Sélecteurs de langue
+
+Les contrôles précédents superposaient un drapeau sur le champ fermé et s'appuyaient sur un select HTML natif. Les navigateurs retirent le markup custom des `<option>`, donc la liste ouverte était du texte seul.
+
+Le menu de l'extension est un listbox custom (portal, pour ne pas être coupé par les cartes de réglages). Le Select du footer affiche un drapeau à côté de chaque locale.
+
+## Après une mise à jour
+
+Les builds store Chrome et Firefox ouvrent toujours `https://nowly.me/changelog/{version du manifeste}` sur `onInstalled` avec `reason === "update"`. Pour cette release, l'URL est `/changelog/1.5.0`, qui envoie vers les notes sur docs.nowly.me. Un reload unpacked n'ouvre pas d'onglet.

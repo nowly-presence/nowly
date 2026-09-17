@@ -1,0 +1,50 @@
+---
+title: 1.5.0
+date: 2026-09-17
+description: Full website rebrand, public library, desktop and Canary pages, legal docs, Chrome and Firefox, language flags, desktop reconnect, midnight snooze, and CLI watch.
+---
+
+`1.5.0` follows `1.4.0` (1.4.1 was never shipped to the stores). The side panel shell from 1.4.0 stays. This release rebuilds nowly.me, adds the missing public pages, and ships the extension fixes that were waiting with that work.
+
+<ReleaseTable
+  headers={["Area", "What changed", "Why it matters"]}
+  rows={[
+    ["Landing", "nowly.me is a new marketing site: hero, supported platforms, features, setup steps, privacy, FAQ, source-available section, and a closing CTA. Copy is English, French, and Spanish. Light and dark follow the OS by default. Animated presence cards in the hero run on desktop only and stay off on small screens.", "The homepage explains the product without leftover sections from the old site."],
+    ["Theme", "A theme switcher in the footer cycles light, dark, and system. The choice is stored locally. The toggle no longer flashes the wrong label on first paint. The brand lockup stays readable on a light background.", "The site matches the rest of the UI and does not blink the wrong theme."],
+    ["Library", "A full catalog at `/library`: search, category filters, pagination, presence detail pages (`/library/[slug]`), and author pages (`/author/[github]`). Empty results still offer requesting or creating a presence. Sitemap entries cover catalog and author URLs.", "You can browse, filter, and open every public presence from the website."],
+    ["Install from the website", "With the extension installed, you can start an install from a library page through the page-to-extension bridge (including local development origins).", "You do not have to copy a slug into the side panel first."],
+    ["Desktop app page", "`/desktop` is the download page for the native desktop app (Windows, macOS, Linux). User-facing copy says Desktop app / Application bureau / App de escritorio, never Host.", "The installer has a real page instead of a leftover Host label."],
+    ["Chrome and Firefox", "Stable installs point at the Chrome Web Store and Firefox Add-ons. Navbar and CTAs cover both browsers.", "Firefox is a first-class install path, not an afterthought."],
+    ["Canary", "`/canary` offers unsigned Chrome and Firefox test zips from the CDN, with browser detection. The store download control is highlighted on that page. Canary extension builds use a distinct lockup and accent. Zips can be published from CI on the stable branch.", "You can tell a test build from the store build and pick the right zip."],
+    ["Support", "`/support` lists Discord, GitHub issue types, and optional donations through Ko-fi and GitHub Sponsors. Nowly stays free to use.", "Help and voluntary support sit on one page."],
+    ["Changelog", "`/changelog` lists every version. Each version has its own URL. Store updates still open `nowly.me/changelog/{manifest version}`, which forwards to the matching notes on docs.nowly.me.", "After an update you land on what changed, not a generic homepage."],
+    ["Legal", "Privacy, terms, cookies, and legal notice are on nowly.me. They name the publisher, Contabo GmbH as the EU VPS host, Cloudflare for the CDN, Chrome Web Store and Firefox Add-ons, BUSL-1.1 (source-available, not OSI open source until the Change Date), and a cookie banner for the necessary language cookie. Ads are described as off unless enabled later.", "The documents match the product instead of Railway-only, Chrome-only, or Ko-fi-only copy."],
+    ["SEO", "Canonical URLs, sitemap, robots, Open Graph, and JSON-LD cover the public routes. Staging hosts such as dev.nowly.me are never used as canonical URLs. Docs SEO uses the same public origin.", "Search and sharing point at nowly.me and docs.nowly.me."],
+    ["Footer and nav", "Groups are Product, Company (Projet in French), Developers, and Legal. Links use real `Link` / `<a>` styled as buttons. Language menu shows flags. Canary, Support, Desktop app, and legal pages are in the nav or footer.", "Navigation matches the pages that actually exist."],
+    ["Documentation", "Docs live on docs.nowly.me at slug paths like `/getting-started/troubleshooting` (not `/docs/...`). nowly.me/docs and old `/docs/...` URLs redirect there.", "Shares and searches hit the current docs host."],
+    ["Language selectors", "Native `<select>` menus cannot render SVGs in options. The extension uses a custom select for UI language, presence language, onboarding, and per-presence locale. Each option shows its flag (or a globe for Auto).", "You can tell English, French, and Spanish apart in the open menu."],
+    ["Presence ticks", "`getSetting` is available in presence scripts. Activity also refreshes on tab visibility, history and hash changes, and media events, not only on the interval.", "Settings and page changes show up on Discord sooner."],
+    ["Desktop app reconnect", "The extension walks through reconnect and desktop app version when the native bridge is missing or outdated.", "A broken desktop connection is a guided fix, not a silent failure."],
+    ["Snooze and schedule", "You can snooze until midnight. New installs keep presence scheduling off by default. Existing installs keep the schedule you already chose.", "Pause Discord for the rest of the day without changing tomorrow's plan."],
+    ["Extension catalog", "Bundled presence assets can load locally. Update checks skip archived presences. If a title is missing, the activity falls back to the app name.", "Installed and archived items behave more predictably."],
+    ["CLI", "`nowly build --watch` and `nowly pack --watch` rebuild when presence files change.", "Authors iterate without a full manual rebuild each time."],
+  ]}
+/>
+
+## Website
+
+Public routes: `/`, `/library`, `/library/[slug]`, `/author/[github]`, `/desktop`, `/canary`, `/support`, `/changelog`, `/changelog/[version]`, `/privacy`, `/tos`, `/cookies`, `/legal-notice`. Donations go through Ko-fi and GitHub Sponsors. The site and API run on a Contabo VPS; static assets stay on Cloudflare.
+
+## Documentation
+
+The docs app is `@nowly/docs` at [docs.nowly.me](https://docs.nowly.me). Pages use the slug only (`/changelog`, `/getting-started/installation`). `https://docs.nowly.me/docs/...` and `https://nowly.me/docs/...` redirect to the same page without the extra `/docs` segment.
+
+## Language selectors
+
+The previous language controls overlaid a flag on the closed field and used a native HTML select. Browsers strip custom markup from `<option>`, so the open list was text-only.
+
+The extension dropdown is a custom listbox (portal, so it is not clipped by rounded settings cards). The website footer Select shows a flag next to each locale.
+
+## After an update
+
+Chrome and Firefox store builds still open `https://nowly.me/changelog/{manifest version}` on `onInstalled` with `reason === "update"`. For this release that URL is `/changelog/1.5.0`, which forwards to the notes on docs.nowly.me. Unpacked reloads do not open a tab.
