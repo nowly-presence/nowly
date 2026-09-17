@@ -1,4 +1,4 @@
-import type { AnalyticsLogEntry, AnalyticsLogLevel, AnalyticsLogType } from "@/shared/types";
+import type { RuntimeLogEntry, RuntimeLogLevel, RuntimeLogType } from "@/shared/types";
 
 const MAX_LOGS = 500;
 const forbiddenPayloadKeys = new Set([
@@ -17,7 +17,7 @@ const forbiddenPayloadKeys = new Set([
   "discordUserId",
 ]);
 
-const logs: AnalyticsLogEntry[] = [];
+const logs: RuntimeLogEntry[] = [];
 
 const sanitizeValue = (value: unknown): string | number | boolean | null | undefined => {
   if (typeof value === "string") return value.slice(0, 160);
@@ -33,13 +33,13 @@ export const sanitizeLogPayload = (payload: Record<string, unknown> = {}): Recor
       .filter(([, value]) => value !== undefined),
   ) as Record<string, string | number | boolean | null>;
 
-export const addAnalyticsLog = (
-  level: AnalyticsLogLevel,
-  type: AnalyticsLogType,
+export const addRuntimeLog = (
+  level: RuntimeLogLevel,
+  type: RuntimeLogType,
   message: string,
   payload?: Record<string, unknown>,
-): AnalyticsLogEntry => {
-  const entry: AnalyticsLogEntry = {
+): RuntimeLogEntry => {
+  const entry: RuntimeLogEntry = {
     id: crypto.randomUUID(),
     at: Date.now(),
     level,
@@ -53,7 +53,7 @@ export const addAnalyticsLog = (
 
   chrome.runtime.sendMessage({
     source: "PRESENCES_BACKGROUND",
-    type: "ANALYTICS_LOG_ADDED",
+    type: "RUNTIME_LOGS_ADDED",
     payload: entry,
   }).catch(() => {
     // No extension page is open.
@@ -62,8 +62,8 @@ export const addAnalyticsLog = (
   return entry;
 };
 
-export const getAnalyticsLogs = (): AnalyticsLogEntry[] => [...logs];
+export const getRuntimeLogs = (): RuntimeLogEntry[] => [...logs];
 
-export const clearAnalyticsLogs = (): void => {
+export const clearRuntimeLogs = (): void => {
   logs.splice(0, logs.length);
 };

@@ -1,7 +1,7 @@
 import { BottomNav, type AppView } from "@/components/layout/bottom-nav";
 import { ConnectionStatusBar, isConnectionHealthy } from "@/components/layout/connection-status-bar";
 import { Header } from "@/components/layout/header";
-import { AnalyticsLogsView } from "@/features/analytics-logs/analytics-logs-view";
+import { RuntimeLogsView } from "@/features/runtime-logs/runtime-logs-view";
 import { OnboardingOverlay } from "@/features/onboarding/onboarding-overlay";
 import { ActivityView } from "@/features/presences/activity-view";
 import { CurrentActivityCard } from "@/features/presences/current-activity-card";
@@ -10,7 +10,6 @@ import { SnoozeDialog } from "@/features/presences/snooze-dialog";
 import { InstallQueueBanner } from "@/features/store/install-queue-banner";
 import { StoreView } from "@/features/store/store-view";
 import { SettingsView } from "@/features/settings/settings-view";
-import { SupporterThankYouOverlay } from "@/features/supporter/supporter-thank-you-overlay";
 import { useAppearance } from "@/hooks/use-appearance";
 import { useExtensionState } from "@/hooks/use-extension-state";
 import { useLocalePreference } from "@/hooks/use-locale-preference";
@@ -40,7 +39,6 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
     checkUpdates,
     connectNative,
     debug,
-    dismissSupporterThankYou,
     entries,
     hostVersionInfo,
     installQueue,
@@ -55,7 +53,6 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
     resetOnboardingForDev,
     retryInstallQueue,
     setPresencePaused,
-    supporterStatus,
     togglePresence,
     updates,
     settings,
@@ -141,7 +138,9 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
     setInstallingSlug(slug);
     const result = await installPresenceFromApi(slug);
     setInstallingSlug(null);
-    if (result.ok) return;
+    if (result.ok) {
+      return;
+    }
     if (result.queued) {
       setInstallQueued(true);
       return;
@@ -209,7 +208,6 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
             onReplayOnboarding={resetOnboardingForDev}
             onTogglePause={() => setPresencePaused(!presencePaused)}
             presencePaused={presencePaused}
-            supporter={supporterStatus.adFree}
           />
         </div>
 
@@ -282,10 +280,9 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
               />
             </div>
           ) : activeView === "logs" && developerModeEnabled ? (
-            <AnalyticsLogsView />
+            <RuntimeLogsView />
           ) : (
             <SettingsView
-              adFree={supporterStatus.adFree}
               debug={debug}
               hostVersionInfo={hostVersionInfo}
               isCheckingHostVersion={isCheckingHostVersion}
@@ -353,17 +350,15 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
         onConnectNative={() => {
           connectNative();
         }}
-        onComplete={() => setOnboarding({ devReplayOnboarding: false, onboardingCompleted: true })}
-        onSkipTour={() => setOnboarding({ devReplayOnboarding: false, onboardingCompleted: true })}
+        onComplete={() => {
+          setOnboarding({ devReplayOnboarding: false, onboardingCompleted: true });
+        }}
+        onSkipTour={() => {
+          setOnboarding({ devReplayOnboarding: false, onboardingCompleted: true });
+        }}
         settings={settings}
         onSettingsChange={setSettings}
-        supporter={supporterStatus.adFree}
         hostVersionInfo={hostVersionInfo}
-      />
-
-      <SupporterThankYouOverlay
-        status={supporterStatus}
-        onClose={dismissSupporterThankYou}
       />
     </main>
   );

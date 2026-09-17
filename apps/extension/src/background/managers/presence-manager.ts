@@ -2,8 +2,7 @@ import { BUNDLED_PRESENCES } from "@/generated/bundled-presences";
 import type { BundledPresence } from "@/generated/bundled-presences";
 import type { PresenceCatalogItem, PresenceRelease, StoredPresence } from "@/shared/types";
 import { handleClearActivity, removeActiveSlug } from "@/background/managers/activity-manager";
-import { addAnalyticsLog } from "@/background/analytics/analytics-log";
-import { trackAnalytics } from "@/background/analytics/analytics-tracker";
+import { addRuntimeLog } from "@/background/runtime-logs";
 import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { hasActiveSlugs } from "@/background/services/background-context";
 import { getActiveDeviceId, syncDeviceState } from "@/background/services/device-sync";
@@ -20,10 +19,15 @@ export const broadcastPresencesChanged = (): void => {
 };
 
 export const installPresence = async (payload: unknown): Promise<{ ok: boolean; error?: string }> => {
-  const presence = payload as { slug: string; release: PresenceRelease; source?: StoredPresence["source"] };
+  const presence = payload as {
+    slug: string
+    release: PresenceRelease
+    source?: StoredPresence["source"]
+    analyticsSource?: string
+  };
   const verified = await verifyPresenceRelease(presence.release, presence.slug);
   if (!verified.ok) {
-    addAnalyticsLog("error", "presence", "presence install verification failed", {
+    addRuntimeLog("error", "presence", "presence install verification failed", {
       slug: presence.slug,
       version: presence.release?.version,
       error: verified.error,
@@ -44,7 +48,7 @@ export const installPresence = async (payload: unknown): Promise<{ ok: boolean; 
 
   const registerResult = await registerPresenceScript(presence.slug, nextPresence);
   if (!registerResult.ok) {
-    addAnalyticsLog("error", "presence", "presence install failed", {
+    addRuntimeLog("error", "presence", "presence install failed", {
       slug: presence.slug,
       version: presence.release.version,
       error: registerResult.error,
@@ -55,14 +59,9 @@ export const installPresence = async (payload: unknown): Promise<{ ok: boolean; 
   presences[presence.slug] = nextPresence;
   await setPresences(presences);
   await syncDeviceState();
-  addAnalyticsLog("success", "presence", existing ? "presence update installed" : "presence installed", {
+  addRuntimeLog("success", "presence", existing ? "presence update installed" : "presence installed", {
     slug: presence.slug,
     version: presence.release.version,
-  });
-  void trackAnalytics(existing ? "presence_update" : "presence_install", {
-    slug: presence.slug,
-    version: presence.release.version,
-    payload: { source: "extension" },
   });
   const queued = await getInstallQueue();
   const remaining = queued.filter((item) => item.slug !== presence.slug);
@@ -79,9 +78,9 @@ const deleteActivePresence = async (deviceId: string, slug: string): Promise<voi
     const response = await fetch(`${getEffectiveApiUrl()}/presences/active/${encodeURIComponent(deviceId)}/${encodeURIComponent(slug)}`, {
       method: "DELETE",
     });
-    addAnalyticsLog(response.ok ? "success" : "warn", "api", "DELETE /presences/active/:deviceId/:slug result", { status: response.status, slug });
+    addRuntimeLog(response.ok ? "success" : "warn", "api", "DELETE /presences/active/:deviceId/:slug result", { status: response.status, slug });
   } catch (error) {
-    addAnalyticsLog("error", "api", "DELETE /presences/active/:deviceId/:slug failed", {
+    addRuntimeLog("error", "api", "DELETE /presences/active/:deviceId/:slug failed", {
       slug,
       error: error instanceof Error ? error.message : String(error),
     });
@@ -131,14 +130,14 @@ export const installPresenceFromApi = async (
       cache: "no-store",
     });
     if (!response.ok) {
-      addAnalyticsLog("error", "api", "GET /presences/:slug failed", { slug, status: response.status });
+      addRuntimeLog("error", "api", "GET /presences/:slug failed", { slug, status: response.status });
       return queueIfNeeded(response.status, `release request failed: ${response.status}`);
     }
     const release = await response.json() as PresenceRelease;
-    return installPresence({ slug, release });
+    return installPresence({ slug, release, analyticsSource: "extension" });
   } catch (error) {
     const message = error instanceof Error ? error.message : "presence install failed";
-    addAnalyticsLog("error", "api", "GET /presences/:slug failed", { slug, error: message });
+    addRuntimeLog("error", "api", "GET /presences/:slug failed", { slug, error: message });
     return queueIfNeeded(undefined, message);
   }
 };
@@ -178,11 +177,10 @@ export const uninstallPresence = async (payload: unknown): Promise<{ ok: boolean
     enabled: false,
     installed: false,
   }]);
-  addAnalyticsLog("success", "presence", "presence uninstalled", {
+  addRuntimeLog("success", "presence", "presence uninstalled", {
     slug,
     version: removedPresence?.release?.version ?? removedPresence?.metadata?.version,
   });
-  void trackAnalytics("presence_uninstall", { slug, payload: { source: "extension" } });
   broadcastPresencesChanged();
   await unregisterPresenceScript(slug);
   await removeActiveSlug(slug, "uninstall");
@@ -205,11 +203,10 @@ export const togglePresence = async (payload: unknown): Promise<{ ok: boolean; e
   presences[slug].enabled = enabled;
   await setPresences(presences);
   await syncDeviceState();
-  void trackAnalytics("presence_toggle", { slug, payload: { enabled } });
   broadcastPresencesChanged();
   if (enabled) {
     const result = await registerPresenceScript(slug, presences[slug]);
-    addAnalyticsLog(result.ok ? "success" : "error", "presence", "presence enabled", { slug, error: result.error });
+    addRuntimeLog(result.ok ? "success" : "error", "presence", "presence enabled", { slug, error: result.error });
     return result;
   }
 
@@ -219,7 +216,7 @@ export const togglePresence = async (payload: unknown): Promise<{ ok: boolean; e
   if (current?.slug === slug || !hasActiveSlugs()) {
     await handleClearActivity(slug);
   }
-  addAnalyticsLog("info", "presence", "presence disabled", { slug });
+  addRuntimeLog("info", "presence", "presence disabled", { slug });
   await deleteActivePresence(deviceId, slug);
   return { ok: true };
 };
