@@ -1,12 +1,18 @@
 {
   "navbar": {
-    "marketplace": "Library",
-    "docs": "Docs",
-    "host": "Nowly Host",
-    "download-desktop": "Download Nowly Host",
-    "download-extension": "Download extension",
-    "download-for": "Download for {browser}",
-    "download-short": "Download"
+    "docs": "Documentation",
+    "library": "Library",
+    "open-menu": "Open menu",
+    "close-menu": "Close menu"
+  },
+  "store": {
+    "download-chrome": "Download for Chrome",
+    "download-firefox": "Download for Firefox"
+  },
+  "theme": {
+    "toggle": "Toggle color theme",
+    "light": "Light",
+    "dark": "Dark"
   },
   "hero-section": {
     "badge": "New",
@@ -107,37 +113,32 @@
     ]
   },
   "footer": {
-    "copyright": "© 2026 Nowly.",
-    "trademark": "Discord is a registered trademark of",
-    "support": "Support the project",
-    "open-source": "Open Source",
-    "author-alt": "Author",
-    "language-label": "View the site in",
-    "french": "French",
+    "tagline": "Share what you do.",
+    "copyright": "© 2026 Nowly. All rights reserved.",
+    "trademark": "Discord is a registered trademark of <inc>Discord Inc.</inc>",
+    "language-label": "Language",
     "english": "English",
-    "spanish": "Spanish",
-    "category-product": "Product",
-    "category-developers": "Developers",
-    "category-legal": "Legal",
-    "about": "About",
-    "team": "Team",
-    "faq": "FAQ",
-    "help": "Support",
-    "status": "Status",
-    "changelog": "Changelog",
-    "privacy": "Privacy Policy",
-    "tos": "Terms of Service",
-    "legal-notice": "Legal Notice",
-    "cookies": "Cookies",
-    "data-management": "Data & Privacy",
-    "marketplace": "Library",
+    "french": "Français",
+    "spanish": "Español",
+    "product": "Product",
+    "home": "Home",
+    "library": "Library",
     "host": "Desktop app",
-    "docs": "Docs",
+    "resources": "Resources",
+    "docs": "Documentation",
+    "changelog": "Release notes",
+    "canary": "Canary",
+    "support": "Support",
+    "community": "Community",
     "discord": "Discord",
-    "category-company": "Company"
+    "github": "GitHub",
+    "tos": "Terms of Service",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
+    "legal-notice": "Legal notice"
   },
   "cookie-banner": {
-    "message": "This site uses strictly necessary cookies. Advertising technologies may be used if ads are enabled.",
+    "message": "This site uses a strictly necessary language cookie. If advertising is later enabled, Google may also use advertising technologies.",
     "learn-more": "Learn more",
     "dismiss": "Got it"
   },

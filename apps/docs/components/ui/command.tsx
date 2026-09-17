@@ -49,7 +49,7 @@ function CommandDialog({
       <DialogContent
         size="sm"
         className={cn(
-          "top-24 translate-y-0 overflow-hidden p-0",
+          "top-20 translate-y-0 overflow-hidden p-0",
           "max-w-xl!",
           className
         )}

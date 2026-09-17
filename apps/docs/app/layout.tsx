@@ -1,9 +1,10 @@
+import { CookieBanner } from "@/components/layout/cookie-banner";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { AppProviders } from "@/components/providers";
 import { BRAND_FAVICON_32, BRAND_METADATA_ICONS } from "@/lib/brand";
 import { isSeoPreview } from "@/lib/constants";
 import { OG_IMAGE_VERSION } from "@/lib/seo";
-import { geist, instrumentSans } from "./fonts";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import type { Metadata, Viewport } from "next";
@@ -31,27 +32,35 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#22d3ee",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#eef5fc" },
+    { media: "(prefers-color-scheme: dark)", color: "#07080c" },
+  ],
   width: "device-width",
   initialScale: 1,
+};
+
+const localeToHtmlLang: Record<string, string> = {
+  "en-US": "en",
+  "fr-FR": "fr",
+  "es-ES": "es",
 };
 
 const Layout = async ({ children }: PropsWithChildren): Promise<ReactElement> => {
   const [messages, locale] = await Promise.all([getMessages(), getLocale()]);
 
   return (
-    <html
-      lang={locale}
-      data-scroll-behavior="smooth"
-      className={`${instrumentSans.variable} ${geist.variable} bg-background scroll-smooth`}
-    >
-      <body className="font-sans antialiased">
+    <html lang={localeToHtmlLang[locale] ?? "en"} suppressHydrationWarning>
+      <body className="min-h-dvh bg-background font-sans antialiased" suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <div className="flex min-h-screen min-w-0 flex-col">
-            <Navbar />
-            <main className="flex min-w-0 flex-1 flex-col">{children}</main>
-            <Footer />
-          </div>
+          <AppProviders>
+            <div className="flex min-h-dvh min-w-0 flex-col">
+              <Navbar />
+              <main className="flex min-w-0 flex-1 flex-col">{children}</main>
+              <Footer />
+            </div>
+            <CookieBanner />
+          </AppProviders>
         </NextIntlClientProvider>
       </body>
     </html>

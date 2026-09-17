@@ -34,7 +34,7 @@ export const LocaleSelector: FC = () => {
       <Select value={locale} onValueChange={handleLocaleChange}>
         <SelectTrigger
           size="sm"
-          className="h-9 border border-border bg-card-2 text-foreground hover:border-muted-foreground hover:bg-card-hover"
+          className="h-9 min-w-[148px] rounded-[10px] border-input bg-transparent text-foreground hover:border-border-light hover:bg-foreground/6"
         >
           <SelectValue />
         </SelectTrigger>

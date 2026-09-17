@@ -4,6 +4,9 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
+  experimental: {
+    optimizePackageImports: ["@remixicon/react"],
+  },
   images: {
     remotePatterns: [{ protocol: "https", hostname: "cdn.nowly.me" }],
   },

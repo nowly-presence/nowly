@@ -1,12 +1,18 @@
 {
   "navbar": {
-    "marketplace": "Bibliothèque",
     "docs": "Documentation",
-    "host": "Nowly Host",
-    "download-desktop": "Télécharger Nowly Host",
-    "download-extension": "Télécharger l'extension",
-    "download-for": "Télécharger pour {browser}",
-    "download-short": "Télécharger"
+    "library": "Bibliothèque",
+    "open-menu": "Ouvrir le menu",
+    "close-menu": "Fermer le menu"
+  },
+  "store": {
+    "download-chrome": "Télécharger pour Chrome",
+    "download-firefox": "Télécharger pour Firefox"
+  },
+  "theme": {
+    "toggle": "Changer de thème",
+    "light": "Clair",
+    "dark": "Sombre"
   },
   "hero-section": {
     "badge": "Nouveau",
@@ -107,37 +113,32 @@
     ]
   },
   "footer": {
-    "copyright": "© 2026 Nowly.",
-    "trademark": "Discord est une marque déposée de",
-    "support": "Soutenir le projet",
-    "open-source": "Open source",
-    "author-alt": "Auteur",
-    "language-label": "Afficher le site en",
+    "tagline": "Partagez ce que vous faites.",
+    "copyright": "© 2026 Nowly. Tous droits réservés.",
+    "trademark": "Discord est une marque déposée de <inc>Discord Inc.</inc>",
+    "language-label": "Langue",
+    "english": "English",
     "french": "Français",
-    "english": "Anglais",
-    "spanish": "Espagnol",
-    "category-product": "Produit",
-    "category-developers": "Développeurs",
-    "category-legal": "Légal",
-    "about": "À propos",
-    "team": "Équipe",
-    "faq": "FAQ",
-    "help": "Support",
-    "status": "Statut",
-    "changelog": "Notes de version",
-    "privacy": "Politique de confidentialité",
-    "tos": "Conditions d'utilisation",
-    "legal-notice": "Mentions légales",
-    "cookies": "Cookies",
-    "data-management": "Données et confidentialité",
-    "marketplace": "Bibliothèque",
-    "host": "App bureau",
+    "spanish": "Español",
+    "product": "Produit",
+    "home": "Accueil",
+    "library": "Bibliothèque",
+    "host": "Application bureau",
+    "resources": "Ressources",
     "docs": "Documentation",
+    "changelog": "Notes de mise à jour",
+    "canary": "Canary",
+    "support": "Support",
+    "community": "Communauté",
     "discord": "Discord",
-    "category-company": "Projet"
+    "github": "GitHub",
+    "tos": "Conditions d'utilisation",
+    "privacy": "Confidentialité",
+    "cookies": "Cookies",
+    "legal-notice": "Mentions légales"
   },
   "cookie-banner": {
-    "message": "Ce site utilise des cookies strictement nécessaires. Des technologies publicitaires peuvent être utilisées si les annonces sont activées.",
+    "message": "Ce site utilise un cookie de langue strictement nécessaire. Si la publicité est activée plus tard, Google pourra aussi utiliser des technologies publicitaires.",
     "learn-more": "En savoir plus",
     "dismiss": "Compris"
   },
