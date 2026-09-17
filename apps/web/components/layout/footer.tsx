@@ -24,6 +24,7 @@ export const Footer = async () => {
       links: [
         { href: docsHref("/"), label: t("docs"), external: true },
         { href: "/changelog", label: t("changelog") },
+        { href: "/canary", label: t("canary") },
         { href: "/support", label: t("support") },
       ],
     },

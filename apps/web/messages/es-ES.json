@@ -224,6 +224,7 @@
     "resources": "Recursos",
     "docs": "Documentación",
     "changelog": "Notas de la versión",
+    "canary": "Canary",
     "support": "Soporte",
     "community": "Comunidad",
     "discord": "Discord",
@@ -401,6 +402,87 @@
     "meta-title": "Nowly {version}",
     "missing": "Las notas de esta versión aún no están en el sitio. El changelog completo sigue en la documentación."
   },
+  "canaryPage": {
+    "eyebrow": "Canary",
+    "title": "Prueba el próximo Nowly",
+    "description": "Canary es la build unpacked que enviamos a testers. Se mueve más rápido que las tiendas, y puede romperse.",
+    "detected": "Detectado",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-title": "Descarga para {browser}",
+    "card-description": {
+      "chrome": "Chrome no instala esta build desde la tienda. Cargas la carpeta descomprimida tú.",
+      "firefox": "Firefox no instala esta build desde addons.mozilla.org. La cargas como complemento temporal."
+    },
+    "download": "Descargar Nowly Canary",
+    "stable": {
+      "chrome": "Ir a la versión de Chrome",
+      "firefox": "Ir al complemento de Firefox"
+    },
+    "store-note": {
+      "chrome": "Quédate con la build de la tienda para el día a día. Canary puede convivir: usan IDs de extensión distintos.",
+      "firefox": "Quédate con el complemento para el día a día. Un Canary temporal se quita al reiniciar Firefox."
+    },
+    "notes-title": "Antes de instalar",
+    "notes": [
+      {
+        "title": "Inestable a propósito",
+        "text": "Estos zips siguen el trabajo reciente de la extensión. Funciones pueden llegar, cambiar o desaparecer sin revisión de la tienda."
+      },
+      {
+        "title": "Sin actualizaciones de la tienda",
+        "text": "El navegador no actualiza Canary solo. Cuando haya un zip nuevo, descárgalo otra vez y recarga la build."
+      },
+      {
+        "title": "Conserva la carpeta",
+        "text": "La carga unpacked o temporal apunta a un directorio en disco. Si lo borras o lo mueves, la extensión desaparece."
+      }
+    ],
+    "guide-title": {
+      "chrome": "Cárgala en Chrome",
+      "firefox": "Cárgala en Firefox"
+    },
+    "guide": {
+      "chrome": [
+        {
+          "title": "Descarga y descomprime",
+          "text": "Guarda el zip y extráelo a una carpeta que no vayas a tirar en la próxima limpieza."
+        },
+        {
+          "title": "Abre chrome://extensions",
+          "text": "Pega esa dirección en la barra de pestañas. Activa el modo de desarrollador arriba a la derecha."
+        },
+        {
+          "title": "Load unpacked",
+          "text": "Elige la carpeta extraída, no el zip. Deberías ver Nowly Canary en la lista."
+        },
+        {
+          "title": "Recarga tras un zip nuevo",
+          "text": "Sustituye el contenido de la carpeta por la build nueva y pulsa Recargar en la tarjeta de la extensión."
+        }
+      ],
+      "firefox": [
+        {
+          "title": "Descarga y descomprime",
+          "text": "Guarda el zip de Firefox y extráelo a una carpeta que vas a conservar."
+        },
+        {
+          "title": "Abre about:debugging",
+          "text": "Pega about:debugging#/runtime/this-firefox en la barra de direcciones."
+        },
+        {
+          "title": "Load Temporary Add-on",
+          "text": "Elige el manifest.json dentro de la carpeta extraída, no el zip."
+        },
+        {
+          "title": "Vuelve a cargarla tras un reinicio",
+          "text": "Firefox quita los complementos temporales al cerrar. Tras un zip nuevo, sustituye la carpeta y cárgala otra vez."
+        }
+      ]
+    }
+  },
   "supportPage": {
     "eyebrow": "Soporte",
     "title": "¿Necesitas ayuda?",
@@ -461,6 +543,10 @@
     "changelog": {
       "title": "Notas de la versión",
       "description": "Consulta los cambios de Nowly."
+    },
+    "canary": {
+      "title": "Nowly Canary",
+      "description": "Descarga la build unpacked de Chrome o Firefox usada para pruebas."
     },
     "support": {
       "title": "Soporte",

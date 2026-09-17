@@ -13,11 +13,11 @@ import {
   RiWindowsFill,
 } from "@remixicon/react";
 import { useTranslations } from "next-intl";
-import { useLayoutEffect, useState, type ComponentType, type SVGProps } from "react";
+import { useLayoutEffect, useState } from "react";
 
 const platforms = ["windows", "macos", "linux"] as const;
 
-const platformIcons: Record<DesktopPlatform, ComponentType<SVGProps<SVGSVGElement>>> = {
+const platformIcons = {
   windows: RiWindowsFill,
   macos: RiAppleFill,
   linux: RiUbuntuFill,

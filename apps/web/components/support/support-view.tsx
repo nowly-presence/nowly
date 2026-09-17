@@ -12,12 +12,11 @@ import {
   RiMoreLine,
 } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
-import type { ComponentType, SVGProps } from "react";
 
 type SupportCard = {
   key: "discord" | "docs" | "broken" | "request" | "bug" | "feature" | "other"
   href: string
-  icon: ComponentType<SVGProps<SVGSVGElement>>
+  icon: typeof RiDiscordFill
 };
 
 const sections: Array<{ id: "community" | "presences" | "technical"; cards: SupportCard[] }> = [

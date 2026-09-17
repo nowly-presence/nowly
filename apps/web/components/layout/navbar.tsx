@@ -5,14 +5,21 @@ import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { BrandLockup } from "@/components/layout/brand-lockup";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { CANARY_ACCENT, CANARY_INK } from "@/lib/brand";
 import { docsHref } from "@/lib/seo";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 export const Navbar = () => {
   const t = useTranslations("navbar");
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const canary = pathname === "/canary";
+  const storeButtonProps = canary
+    ? { className: "border-transparent hover:brightness-110", style: { backgroundColor: CANARY_ACCENT, color: CANARY_INK } }
+    : {};
 
   const links = [
     { href: docsHref("/"), label: t("docs"), external: true },
@@ -46,7 +53,7 @@ export const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          <ExtensionStoreButton />
+          <ExtensionStoreButton {...storeButtonProps} />
         </nav>
 
         <Sheet open={open} onOpenChange={setOpen}>
@@ -79,7 +86,7 @@ export const Navbar = () => {
                   {link.label}
                 </Link>
               ))}
-              <ExtensionStoreButton />
+              <ExtensionStoreButton {...storeButtonProps} />
             </nav>
           </SheetContent>
         </Sheet>

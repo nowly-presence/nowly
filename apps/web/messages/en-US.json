@@ -224,6 +224,7 @@
     "resources": "Resources",
     "docs": "Documentation",
     "changelog": "Release notes",
+    "canary": "Canary",
     "support": "Support",
     "community": "Community",
     "discord": "Discord",
@@ -401,6 +402,87 @@
     "meta-title": "Nowly {version}",
     "missing": "Notes for this version are not on the site yet. You can still browse the full changelog in the docs."
   },
+  "canaryPage": {
+    "eyebrow": "Canary",
+    "title": "Try the next Nowly",
+    "description": "Canary is the unpacked build we ship to testers. It moves faster than the stores, and it can break.",
+    "detected": "Detected",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-title": "Download for {browser}",
+    "card-description": {
+      "chrome": "Chrome cannot install this from the store. You load the unzipped folder yourself.",
+      "firefox": "Firefox cannot install this from addons.mozilla.org. You load it as a temporary add-on."
+    },
+    "download": "Download Nowly Canary",
+    "stable": {
+      "chrome": "Get the Chrome store version",
+      "firefox": "Get the Firefox add-on"
+    },
+    "store-note": {
+      "chrome": "Keep the store build for daily use. Canary can sit next to it: they use different extension IDs.",
+      "firefox": "Keep the add-on for daily use. A temporary Canary is removed when Firefox restarts."
+    },
+    "notes-title": "Before you install",
+    "notes": [
+      {
+        "title": "Unstable on purpose",
+        "text": "These zips track the latest extension work. Features can land, change, or disappear without a store review."
+      },
+      {
+        "title": "No store updates",
+        "text": "The browser will not auto-update Canary. When a new zip is published, download it again and reload the build."
+      },
+      {
+        "title": "Keep the folder",
+        "text": "The unpacked or temporary load points at a directory on disk. If you delete or move it, the extension disappears."
+      }
+    ],
+    "guide-title": {
+      "chrome": "Load it in Chrome",
+      "firefox": "Load it in Firefox"
+    },
+    "guide": {
+      "chrome": [
+        {
+          "title": "Download and unzip",
+          "text": "Save the zip, then extract it to a folder you will not throw away after a cleanup."
+        },
+        {
+          "title": "Open chrome://extensions",
+          "text": "Paste that address in the tab bar. Turn on Developer mode in the top right."
+        },
+        {
+          "title": "Load unpacked",
+          "text": "Choose the extracted folder, not the zip. You should see Nowly Canary in the list."
+        },
+        {
+          "title": "Reload after a new zip",
+          "text": "Replace the folder contents with the new build, then hit Reload on the extension card."
+        }
+      ],
+      "firefox": [
+        {
+          "title": "Download and unzip",
+          "text": "Save the Firefox zip, then extract it to a folder you will keep around."
+        },
+        {
+          "title": "Open about:debugging",
+          "text": "Paste about:debugging#/runtime/this-firefox in the address bar."
+        },
+        {
+          "title": "Load Temporary Add-on",
+          "text": "Choose manifest.json inside the extracted folder, not the zip."
+        },
+        {
+          "title": "Load it again after a restart",
+          "text": "Firefox drops temporary add-ons when it quits. After a new zip, replace the folder then load it again."
+        }
+      ]
+    }
+  },
   "supportPage": {
     "eyebrow": "Support",
     "title": "Need help?",
@@ -461,6 +543,10 @@
     "changelog": {
       "title": "Release notes",
       "description": "See what changed in Nowly."
+    },
+    "canary": {
+      "title": "Nowly Canary",
+      "description": "Download the unpacked Chrome or Firefox build used for testing."
     },
     "support": {
       "title": "Support",

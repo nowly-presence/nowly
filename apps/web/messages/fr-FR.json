@@ -224,6 +224,7 @@
     "resources": "Ressources",
     "docs": "Documentation",
     "changelog": "Notes de mise à jour",
+    "canary": "Canary",
     "support": "Support",
     "community": "Communauté",
     "discord": "Discord",
@@ -401,6 +402,87 @@
     "meta-title": "Nowly {version}",
     "missing": "Les notes de cette version ne sont pas encore sur le site. Le changelog complet reste dans la doc."
   },
+  "canaryPage": {
+    "eyebrow": "Canary",
+    "title": "Tester le prochain Nowly",
+    "description": "Canary est la build unpacked que l’on envoie aux testeurs. Elle avance plus vite que les stores, et elle peut casser.",
+    "detected": "Détecté",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-title": "Télécharger pour {browser}",
+    "card-description": {
+      "chrome": "Chrome n’installe pas cette build depuis le store. Vous chargez le dossier décompressé vous-même.",
+      "firefox": "Firefox n’installe pas cette build depuis addons.mozilla.org. Vous la chargez comme module temporaire."
+    },
+    "download": "Télécharger Nowly Canary",
+    "stable": {
+      "chrome": "Prendre la version Chrome store",
+      "firefox": "Prendre le module Firefox"
+    },
+    "store-note": {
+      "chrome": "Gardez la build store au quotidien. Canary peut cohabiter : les IDs d’extension sont différents.",
+      "firefox": "Gardez le module AMO au quotidien. Un Canary temporaire disparaît quand Firefox redémarre."
+    },
+    "notes-title": "Avant d’installer",
+    "notes": [
+      {
+        "title": "Instable, volontairement",
+        "text": "Ces zips suivent le travail en cours sur l’extension. Des fonctions peuvent arriver, changer, ou disparaître sans passage store."
+      },
+      {
+        "title": "Pas de mises à jour store",
+        "text": "Le navigateur ne met pas Canary à jour tout seul. Quand un nouveau zip est publié, retéléchargez-le et rechargez la build."
+      },
+      {
+        "title": "Gardez le dossier",
+        "text": "Le chargement unpacked ou temporaire pointe vers un dossier sur le disque. Si vous le supprimez ou le déplacez, l’extension disparaît."
+      }
+    ],
+    "guide-title": {
+      "chrome": "La charger dans Chrome",
+      "firefox": "La charger dans Firefox"
+    },
+    "guide": {
+      "chrome": [
+        {
+          "title": "Télécharger et décompresser",
+          "text": "Enregistrez le zip, puis extrayez-le dans un dossier que vous ne jetterez pas au prochain ménage."
+        },
+        {
+          "title": "Ouvrir chrome://extensions",
+          "text": "Collez cette adresse dans la barre d’onglets. Activez le mode développeur en haut à droite."
+        },
+        {
+          "title": "Load unpacked",
+          "text": "Choisissez le dossier extrait, pas le zip. Nowly Canary doit apparaître dans la liste."
+        },
+        {
+          "title": "Recharger après un nouveau zip",
+          "text": "Remplacez le contenu du dossier par la nouvelle build, puis cliquez Recharger sur la carte de l’extension."
+        }
+      ],
+      "firefox": [
+        {
+          "title": "Télécharger et décompresser",
+          "text": "Enregistrez le zip Firefox, puis extrayez-le dans un dossier que vous garderez."
+        },
+        {
+          "title": "Ouvrir about:debugging",
+          "text": "Collez about:debugging#/runtime/this-firefox dans la barre d’adresse."
+        },
+        {
+          "title": "Load Temporary Add-on",
+          "text": "Choisissez le manifest.json dans le dossier extrait, pas le zip."
+        },
+        {
+          "title": "Le recharger après un redémarrage",
+          "text": "Firefox retire les modules temporaires à la fermeture. Après un nouveau zip, remplacez le dossier puis chargez-le à nouveau."
+        }
+      ]
+    }
+  },
   "supportPage": {
     "eyebrow": "Support",
     "title": "Besoin d’aide ?",
@@ -461,6 +543,10 @@
     "changelog": {
       "title": "Notes de mise à jour",
       "description": "Découvrez les nouveautés de Nowly."
+    },
+    "canary": {
+      "title": "Nowly Canary",
+      "description": "Téléchargez la build unpacked Chrome ou Firefox destinée aux tests."
     },
     "support": {
       "title": "Support",
