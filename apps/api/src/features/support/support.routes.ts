@@ -2,8 +2,9 @@ import { requireAuth } from "@/features/auth/auth.middleware"
 import { serverEnv } from "@nowly/env/server"
 import {
   adsStatusQuerySchema,
-  supportCreatePassBodySchema,
-  supportRedeemDeviceBodySchema,
+  createPassBodySchema,
+  redeemBodySchema,
+  redeemQuerySchema,
 } from "@nowly/shared/schemas"
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
 import { createHmac, timingSafeEqual } from "node:crypto"
@@ -17,29 +18,6 @@ import {
   verifySupporterCode,
 } from "./support.repository"
 import { sendSupporterPassEmail } from "./support-email"
-
-const DISCORD_WEBHOOK_SUCCESS = serverEnv.DISCORD_WEBHOOK_SUCCESS_URL
-const DISCORD_WEBHOOK_FAILURE = serverEnv.DISCORD_WEBHOOK_FAILURE_URL
-
-const sendDiscordEmbed = async (url: string | undefined, embed: {
-  color?: number
-  description?: string
-  fields?: { name: string; value: string; inline?: boolean }[]
-}): Promise<void> => {
-  if (!url) return
-  try {
-    await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ embeds: [embed] }),
-    })
-  } catch {
-    // silent
-  }
-}
-
-const providerLabel = (provider: string): string =>
-  provider === "github" ? "GitHub Sponsors" : provider === "kofi" ? "Ko-fi" : provider
 
 type RawBodyRequest = FastifyRequest & {
   rawBody?: string
@@ -113,19 +91,6 @@ const sendSupporterEmailIfPossible = async (
 
     if (!result.sent) {
     request.log.warn({ error: result.error, reason: result.reason, provider: input.provider }, "Failed to send supporter pass email")
-    await sendDiscordEmbed(
-      DISCORD_WEBHOOK_FAILURE,
-      {
-        color: 0x2F57F9,
-        description: "Supporter pass created but email not sent",
-        fields: [
-          { name: "Provider", value: providerLabel(input.provider), inline: true },
-          { name: "Donor", value: input.donorName || "unknown", inline: true },
-          { name: "Code", value: `\`${input.code}\``, inline: true },
-          { name: "Reason", value: `\`${result.error || result.reason}\``, inline: true },
-        ],
-      },
-    )
   }
 }
 
@@ -151,12 +116,12 @@ export const supportRoutes = async (fastify: FastifyInstance) => {
 
   fastify.addHook("preParsing", rawBodyHook)
 
-  fastify.get("/support/verify-code", async (request, reply) => {
-    const { code } = request.query as { code?: string }
-    if (!code || typeof code !== "string") {
+  fastify.get("/redeem", async (request, reply) => {
+    const parsed = redeemQuerySchema.safeParse(request.query)
+    if (!parsed.success) {
       return reply.status(400).send({ valid: false, error: "missing_code" })
     }
-    const result = await verifySupporterCode(code)
+    const result = await verifySupporterCode(parsed.data.code)
     if (!result.valid) return reply.send({ valid: false })
     return reply.send({ valid: true, maxDevices: result.maxDevices })
   })
@@ -171,8 +136,8 @@ export const supportRoutes = async (fastify: FastifyInstance) => {
     return reply.header("Cache-Control", "no-store").send({ hasAds: !adFree, adFree })
   })
 
-  fastify.post("/support/redeem-device", async (request, reply) => {
-    const parsed = supportRedeemDeviceBodySchema.safeParse(request.body)
+  fastify.post("/redeem", async (request, reply) => {
+    const parsed = redeemBodySchema.safeParse(request.body)
     if (!parsed.success) return reply.status(400).send({ ok: false, error: "invalid_request" })
 
     const result = await redeemSupporterCodeForDevice(parsed.data.code, parsed.data.deviceId)
@@ -184,11 +149,11 @@ export const supportRoutes = async (fastify: FastifyInstance) => {
     return { ...result, hasAds: false }
   })
 
-  fastify.post("/support/passes", async (request, reply) => {
+  fastify.post("/passes", async (request, reply) => {
     await requireAuth(request, reply)
     if (reply.sent) return
 
-    const parsed = supportCreatePassBodySchema.safeParse(request.body ?? {})
+    const parsed = createPassBodySchema.safeParse(request.body ?? {})
     if (!parsed.success) return reply.status(400).send({ error: "Invalid request body" })
 
     const pass = await createSupporterPass(parsed.data)
@@ -236,16 +201,6 @@ export const supportRoutes = async (fastify: FastifyInstance) => {
       currency,
     })
 
-    if (result.created) {
-      await sendDiscordEmbed(
-        DISCORD_WEBHOOK_SUCCESS,
-        {
-          color: 0x2F57F9,
-          description: `Thank you **${donorName || "someone"}** for donating on Ko-fi!${amount ? ` (${amount} ${currency})` : ""}`,
-        },
-      )
-    }
-
     return { ok: true, ...result }
   })
 
@@ -291,16 +246,6 @@ export const supportRoutes = async (fastify: FastifyInstance) => {
       amount,
       currency: "USD",
     })
-
-    if (result.created) {
-      await sendDiscordEmbed(
-        DISCORD_WEBHOOK_SUCCESS,
-        {
-          color: 0x2F57F9,
-          description: `Thank you **${sponsorLogin || "someone"}** for sponsoring on GitHub Sponsors!`,
-        },
-      )
-    }
 
     return { ok: true, ...result }
   })

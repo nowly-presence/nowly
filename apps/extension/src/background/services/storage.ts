@@ -15,6 +15,8 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   separateActivePresence: false,
   showPlayer: true,
   scheduleEnabled: false,
+  appearance: "system",
+  canaryTheme: import.meta.env.VITE_NOWLY_CHANNEL === "canary",
   presenceLanguage: "per-presence",
   presenceLanguages: {},
 };

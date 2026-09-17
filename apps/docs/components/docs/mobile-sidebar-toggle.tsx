@@ -1,6 +1,6 @@
 "use client";
 
-import { IconMenu2 } from "@tabler/icons-react";
+import { RiMenuLine } from "@remixicon/react";
 import { useTranslations } from "next-intl";
 import { useSidebar } from "../ui/sidebar-context";
 
@@ -15,7 +15,7 @@ export const MobileSidebarToggle = () => {
         onClick={toggle}
         className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
       >
-        <IconMenu2 size={18} />
+        <RiMenuLine className="size-[18px]" />
         <span>{t("menu")}</span>
       </button>
     </div>

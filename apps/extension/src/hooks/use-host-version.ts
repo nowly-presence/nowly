@@ -57,7 +57,7 @@ export const useHostVersion = (): UseHostVersion => {
         updateAvailable: Boolean(currentVersion && data.version !== currentVersion),
       });
     } catch {
-      // Host unreachable — keep previous state
+      // Host unreachable - keep previous state
     }
   }, []);
 

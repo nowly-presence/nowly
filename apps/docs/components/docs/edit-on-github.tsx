@@ -1,5 +1,5 @@
 import { GitHubIcon } from "@/components/icons";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import Link from "next/link";
 import type { FC } from "react";

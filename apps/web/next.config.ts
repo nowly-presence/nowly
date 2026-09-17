@@ -1,16 +1,18 @@
-import { NextConfig } from 'next';
-import createNextIntlPlugin from 'next-intl/plugin';
+import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
-const docsBase = (process.env.NEXT_PUBLIC_DOCS_BASE_URL ?? "https://docs.nowly.me").replace(/\/$/, "");
- 
+const docsBase = "https://docs.nowly.me";
+
 const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
-  images: {
-    remotePatterns: [{ protocol: "https", hostname: "cdn.nowly.me" }]
+  experimental: {
+    optimizePackageImports: ["@remixicon/react", "@base-ui/react"],
   },
-  outputFileTracingIncludes: {
-    "/changelog/[version]": ["../docs/content/docs/changelog/**/*"],
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "cdn.nowly.me" },
+    ],
   },
   async redirects() {
     return [
@@ -18,26 +20,6 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         has: [{ type: "host", value: "www.nowly.me" }],
         destination: "https://nowly.me/:path*",
-        permanent: true,
-      },
-      {
-        source: "/library/privacy",
-        destination: "/privacy",
-        permanent: true,
-      },
-      {
-        source: "/docs/privacy",
-        destination: "/privacy",
-        permanent: true,
-      },
-      {
-        source: "/docs/:section/privacy",
-        destination: "/privacy",
-        permanent: true,
-      },
-      {
-        source: "/docs/:section/:page/privacy",
-        destination: "/privacy",
         permanent: true,
       },
       {
@@ -51,70 +33,24 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: "/llms.txt",
-        destination: `${docsBase}/llms.txt`,
+        source: "/host",
+        destination: "/desktop",
         permanent: true,
       },
       {
-        source: "/llms-full.txt",
-        destination: `${docsBase}/llms-full.txt`,
+        source: "/redem",
+        destination: "/redeem",
         permanent: true,
       },
       {
-        source: "/api/search",
-        destination: `${docsBase}/api/search`,
+        source: "/support/redeem",
+        destination: "/redeem",
         permanent: true,
-      },
-      {
-        source: "/api/og/docs/:path*",
-        destination: `${docsBase}/api/og/docs/:path*`,
-        permanent: true,
-      },
-      {
-        source: "/library/:slug/privacy",
-        destination: "/privacy",
-        permanent: true,
-      },
-      {
-        source: "/library/:slug/comments",
-        destination: "/:slug-discord-rich-presence",
-        permanent: true,
-      },
-      {
-        source: "/library/:slug-discord-rich-presence",
-        destination: "/:slug-discord-rich-presence",
-        permanent: true,
-      },
-      {
-        source: "/library/:slug-rich-presence",
-        destination: "/:slug-discord-rich-presence",
-        permanent: true,
-      },
-      {
-        source: "/library/:slug",
-        destination: "/:slug-discord-rich-presence",
-        permanent: true,
-      },
-    ];
-  },
-  async headers() {
-    return [
-      {
-        source: "/api/:path*",
-        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
-      },
-      {
-        source: "/uninstall",
-        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
-      },
-      {
-        source: "/consent",
-        headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
       },
     ];
   },
 };
- 
-const withNextIntl = createNextIntlPlugin();
+
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 export default withNextIntl(nextConfig);

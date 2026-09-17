@@ -1,4 +1,4 @@
-import { DOCS_URL } from "@/lib/constants";
+import { DOCS_URL, isSeoPreview } from "@/lib/constants";
 import type { Metadata } from "next";
 
 export const SITE_NAME = "Nowly";
@@ -50,12 +50,16 @@ export const createMetadata = ({
   const url = absoluteUrl(path);
   const imageUrl = image ? absoluteUrl(image) : undefined;
   const resolvedTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+  const hideFromIndex = noIndex || isSeoPreview;
 
   return {
+    metadataBase: new URL(DOCS_URL),
     title: { absolute: resolvedTitle },
     description,
     alternates: { canonical: url },
-    robots: noIndex ? { index: false, follow: false } : { index: true, follow: true },
+    robots: hideFromIndex
+      ? { index: false, follow: false, nocache: true }
+      : { index: true, follow: true },
     openGraph: {
       type,
       siteName: SITE_NAME,
@@ -68,6 +72,7 @@ export const createMetadata = ({
     },
     twitter: {
       card: "summary_large_image",
+      site: "@nowly",
       title: resolvedTitle,
       description,
       images: imageUrl ? [imageUrl] : undefined,

@@ -1,8 +1,10 @@
 import { getNavigationItems } from "@/lib/docs/content";
-import { DOCS_URL } from "@/lib/constants";
+import { DOCS_URL, isSeoPreview } from "@/lib/constants";
 import type { MetadataRoute } from "next";
 
 const sitemap = (): MetadataRoute.Sitemap => {
+  if (isSeoPreview) return [];
+
   const docs = getNavigationItems("en-US");
   const docPages = docs.flatMap((section) => {
     const pages = section.children.map((page) => ({

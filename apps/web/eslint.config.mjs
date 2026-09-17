@@ -14,6 +14,6 @@ export default tseslint.config(
     },
   },
   {
-    ignores: [".next/**", "node_modules/**", "dist/**", "components/ui/**", "hooks/**"],
+    ignores: [".next/**", "node_modules/**", "dist/**"],
   },
 );

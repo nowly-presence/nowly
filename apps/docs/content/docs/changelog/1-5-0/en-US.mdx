@@ -1,0 +1,48 @@
+---
+title: 1.5.0
+date: 2026-09-17
+description: A rebuilt nowly.me, public library, desktop and Canary downloads, legal pages, and Chrome plus Firefox.
+---
+
+1.5.0 follows 1.4.0. There is no 1.4.1 on the stores. The side panel from 1.4.0 stays. This release is the public site, the library, and the install paths around it.
+
+## A new nowly.me
+
+The marketing site is rebuilt from scratch: hero, platforms, features, setup, privacy, FAQ, source-available section, and a closing CTA. Copy ships in English, French, and Spanish. Light and dark follow the system by default. Animated presence cards in the hero run on desktop only.
+
+The footer theme switcher cycles light, dark, and system without flashing the wrong label. The lockup stays readable on a light background. Navigation uses real links, not buttons pretending to be links. User-facing copy says Desktop app, never Host.
+
+## Library on the website
+
+`/library` is a full catalog: search, category filters, pagination, presence pages, and author pages. Empty results still offer requesting or creating a presence. With the extension installed, you can start an install from a library page.
+
+## Desktop app, Chrome, and Firefox
+
+`/desktop` is the download page for Windows, macOS, and Linux. Stable installs point at the Chrome Web Store and Firefox Add-ons. Firefox is a first-class path, not an extra link at the bottom.
+
+## Canary
+
+`/canary` offers Chrome and Firefox test zips from the CDN, with browser detection. The store control is highlighted on that page so you do not mix a test build with a stable one. Canary extension builds use a distinct lockup and accent.
+
+## Support, changelog, and legal
+
+`/support` lists Discord, GitHub, Ko-fi, and GitHub Sponsors. Nowly stays free.
+
+`/changelog` lists every version. A store update still opens `nowly.me/changelog/{version}` and forwards to the matching notes here.
+
+Privacy, terms, cookies, and the legal notice are on nowly.me. They name the publisher, a Contabo VPS in the EU, Cloudflare, both stores, and BUSL-1.1 (source-available, not OSI open source until the Change Date). A short banner covers the language cookie. Advertising is described as off unless we turn it on.
+
+Canonical URLs, sitemap, robots, Open Graph, and JSON-LD cover the public routes. Staging hosts such as `dev.nowly.me` are never canonical.
+
+## Documentation
+
+Docs live at [docs.nowly.me](https://docs.nowly.me) on slug paths (`/changelog`, `/getting-started/installation`). Old `/docs/...` URLs redirect.
+
+## Also in this release
+
+- Custom language menus in the extension, with flags in the open list
+- `getSetting` in presence scripts, plus faster activity ticks on visibility, history, hash, and media events
+- Guided reconnect when the desktop app is missing or outdated
+- Snooze until midnight; new installs keep scheduling off
+- Bundled presence assets can load locally; archived presences are skipped on update
+- `nowly build --watch` and `nowly pack --watch`

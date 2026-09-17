@@ -1,15 +1,13 @@
 import { IconPalette } from "@/lib/tabler-icons";
-import type { FC, ReactElement } from "react";
-import { WEB_BASE_URL } from "@/shared/constants";
+import { REDEEM_PAGE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
-
-const SUPPORT_REDEEM_URL = `${WEB_BASE_URL.replace(/\/$/, "")}/support/redeem`;
+import type { FC, ReactElement } from "react";
 
 const THEME_SWATCHES = ["#FEE961", "#DA47D0", "#A78BFA", "#4ADE80", "#FB923C"];
 
 export const ThemeUpsellCard: FC = (): ReactElement => (
   <a
-    href={SUPPORT_REDEEM_URL}
+    href={REDEEM_PAGE_URL}
     target="_blank"
     rel="noreferrer"
     aria-label={t("theme-upsell-title")}

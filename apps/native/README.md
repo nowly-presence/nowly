@@ -15,12 +15,12 @@ Nowly Host bridges the Chromium extension with Discord Rich Presence.
 
 | Type | Direction | Payload |
 |------|-----------|---------|
-| `PING` | Extension → Host | — |
+| `PING` | Extension → Host | - |
 | `PONG` | Host → Extension | `connected`, `status`, `discordConnected`, `profile` |
-| `CONNECTED` | Host → Extension | — |
+| `CONNECTED` | Host → Extension | - |
 | `SET_ACTIVITY` | Extension → Host | `PresencePayload` |
-| `CLEAR_ACTIVITY` | Extension → Host | — |
-| `OK` | Host → Extension | — |
+| `CLEAR_ACTIVITY` | Extension → Host | - |
+| `OK` | Host → Extension | - |
 | `ERROR` | Host → Extension | `error` string |
 
 ## Build
@@ -91,7 +91,7 @@ This produces a universal `Nowly Host.app` bundle (Intel + Apple Silicon in one 
 | `dist/Nowly Host.app` | Universal .app bundle |
 | `dist/NowlyHost-macos.dmg` | Universal disk image |
 
-The `.app` bundle is unsigned and unnotarized — no Apple Developer account required. On first launch, the binary automatically registers itself with Chrome/Firefox via native messaging manifests.
+The `.app` bundle is unsigned and unnotarized - no Apple Developer account required. On first launch, the binary automatically registers itself with Chrome/Firefox via native messaging manifests.
 
 ### Output
 

@@ -11,10 +11,10 @@ import { ShortcutSettings } from "@/features/settings/shortcut-settings";
 import { ThemeSelector } from "@/features/settings/theme-selector";
 import { ThemeUpsellCard } from "@/features/settings/theme-upsell-card";
 import type { NativeStatus } from "@/lib/messages";
-import { WEB_BASE_URL } from "@/shared/constants";
+import { HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
 import { t, type LocalePreference } from "@/shared/i18n";
 import type { ExtensionSettings, PresenceDebug } from "@/shared/types";
-import { IconCalendar, IconExternalLink, IconRefresh, IconWorld } from "@/lib/tabler-icons";
+import { IconCalendar, IconDeviceDesktop, IconExternalLink, IconMoon, IconRefresh, IconSun, IconWorld } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -80,6 +80,11 @@ export const SettingsView: FC<Props> = ({
     { icon: <LocaleFlag locale="en-US" />, label: t("locale-en"), value: "en" as const },
     { icon: <LocaleFlag locale="es-ES" />, label: t("locale-es"), value: "es" as const },
   ];
+  const appearanceOptions = [
+    { icon: <IconDeviceDesktop className="size-4 text-muted-foreground" />, label: t("appearance-system"), value: "system" as const },
+    { icon: <IconSun className="size-4 text-muted-foreground" />, label: t("appearance-light"), value: "light" as const },
+    { icon: <IconMoon className="size-4 text-muted-foreground" />, label: t("appearance-dark"), value: "dark" as const },
+  ];
   const presenceLanguageOptions = [
     { icon: <IconWorld className="size-4 text-muted-foreground" />, label: t("presence-language-per-presence"), value: "per-presence" as const },
     { icon: <LocaleFlag locale="en-US" />, label: t("locale-en"), value: "en-US" as const },
@@ -92,6 +97,7 @@ export const SettingsView: FC<Props> = ({
   }, []);
 
   const developerModeEnabled = settings.developerMode ?? isUnpacked;
+  const canaryEnabled = settings.canaryTheme ?? import.meta.env.VITE_NOWLY_CHANNEL === "canary";
 
   const toggleGroup = (id: SettingsGroupId): void => {
     setOpenGroups((current) => ({ ...current, [id]: !current[id] }));
@@ -130,7 +136,7 @@ export const SettingsView: FC<Props> = ({
           </h2>
           <div className="flex flex-col gap-2 sm:flex-row">
             <a
-              href="https://nowly.me/host"
+              href={HOST_DOWNLOAD_URL}
               target="_blank"
               rel="noreferrer"
               className={`${hostUpdateActionClassName} border border-accent/20 bg-accent/10 text-accent hover:bg-accent/20`}
@@ -170,9 +176,21 @@ export const SettingsView: FC<Props> = ({
           />
         </section>
 
+        <section className={innerClassName}>
+          <h2 className={sectionTitleClassName}>{t("appearance")}</h2>
+          <p className="mb-3 text-xs leading-5 text-muted-foreground">{t("appearance-description")}</p>
+          <CustomSelect
+            aria-label={t("appearance")}
+            className="h-10"
+            onChange={(value) => onSettingsChange({ appearance: value })}
+            options={appearanceOptions}
+            value={settings.appearance ?? "system"}
+          />
+        </section>
+
         <div className={innerClassName}>
           {adFree ? (
-            <ThemeSelector settings={settings} onSettingsChange={onSettingsChange} />
+            <ThemeSelector settings={settings} onSettingsChange={onSettingsChange} canary={canaryEnabled} />
           ) : (
             <ThemeUpsellCard />
           )}
@@ -273,6 +291,21 @@ export const SettingsView: FC<Props> = ({
             />
           </Label>
         </section>
+
+        {isUnpacked ? (
+          <section className={innerClassName}>
+            <Label unstyled className="flex cursor-pointer items-center justify-between gap-3">
+              <span className="min-w-0">
+                <span className="block text-sm font-medium text-foreground">{t("canary-theme")}</span>
+                <span className="mt-0.5 block text-xs leading-4 text-muted-foreground">{t("canary-theme-description")}</span>
+              </span>
+              <Switch
+                checked={canaryEnabled}
+                onChange={(checked) => onSettingsChange({ canaryTheme: checked })}
+              />
+            </Label>
+          </section>
+        ) : null}
 
         <section className={innerClassName}>
           <h2 className={sectionTitleClassName}>{t("check-updates")}</h2>

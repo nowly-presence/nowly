@@ -43,6 +43,7 @@ export type PresenceMetadata = {
   locales?: Record<string, Record<string, string>>;
   world?: "main" | "isolated";
   runAt?: "document_start" | "document_end" | "document_idle";
+  discordNative?: boolean;
 };
 
 export type PresenceRelease = {
@@ -97,4 +98,5 @@ export type PresenceCatalogItem = {
   url?: string[];
   features?: Record<string, string[]>;
   totalInstalls?: number;
+  discordNative?: boolean;
 };

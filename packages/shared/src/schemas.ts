@@ -1,6 +1,7 @@
 import { z } from "zod"
 import {
   MAX_ANALYTICS_EVENTS_PER_BATCH,
+  PRESENCE_REPORT_MAX_LENGTH,
   SLUG_MAX_LENGTH,
 } from "./constants"
 
@@ -77,23 +78,36 @@ export const presencePutBodySchema = z.object({
 })
 export type PresencePutBody = z.infer<typeof presencePutBodySchema>
 
+/** POST /presences/:slug/report */
+export const presenceReportBodySchema = z.object({
+  message: z.string().trim().min(1).max(PRESENCE_REPORT_MAX_LENGTH),
+  locale: z.string().trim().max(20).optional(),
+})
+export type PresenceReportBody = z.infer<typeof presenceReportBodySchema>
+
 /** GET /ads/status */
 export const adsStatusQuerySchema = z.object({
   deviceId: z.string().trim().min(1).max(120).optional(),
 })
 export type AdsStatusQuery = z.infer<typeof adsStatusQuerySchema>
 
-/** POST /support/redeem-device */
-export const supportRedeemDeviceBodySchema = z.object({
+/** GET /redeem */
+export const redeemQuerySchema = z.object({
+  code: z.string().trim().min(8).max(80),
+})
+export type RedeemQuery = z.infer<typeof redeemQuerySchema>
+
+/** POST /redeem */
+export const redeemBodySchema = z.object({
   code: z.string().trim().min(8).max(80),
   deviceId: z.string().trim().min(1).max(120),
 })
-export type SupportRedeemDeviceBody = z.infer<typeof supportRedeemDeviceBodySchema>
+export type RedeemBody = z.infer<typeof redeemBodySchema>
 
-/** POST /support/passes (admin) */
-export const supportCreatePassBodySchema = z.object({
+/** POST /passes */
+export const createPassBodySchema = z.object({
   provider: z.string().trim().min(1).max(40).default("manual"),
   providerRef: z.string().trim().max(160).optional(),
   maxDevices: z.coerce.number().int().positive().max(50).optional(),
 })
-export type SupportCreatePassBody = z.infer<typeof supportCreatePassBodySchema>
+export type CreatePassBody = z.infer<typeof createPassBodySchema>

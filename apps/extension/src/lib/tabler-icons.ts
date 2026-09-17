@@ -12,6 +12,7 @@ export { default as IconCircleX } from "@tabler/icons-react/dist/esm/icons/IconC
 export { default as IconClipboard } from "@tabler/icons-react/dist/esm/icons/IconClipboard.mjs";
 export { default as IconClock } from "@tabler/icons-react/dist/esm/icons/IconClock.mjs";
 export { default as IconCopy } from "@tabler/icons-react/dist/esm/icons/IconCopy.mjs";
+export { default as IconDeviceDesktop } from "@tabler/icons-react/dist/esm/icons/IconDeviceDesktop.mjs";
 export { default as IconDeviceDesktopDown } from "@tabler/icons-react/dist/esm/icons/IconDeviceDesktopDown.mjs";
 export { default as IconDisc } from "@tabler/icons-react/dist/esm/icons/IconDisc.mjs";
 export { default as IconDots } from "@tabler/icons-react/dist/esm/icons/IconDots.mjs";
@@ -26,6 +27,7 @@ export { default as IconListTree } from "@tabler/icons-react/dist/esm/icons/Icon
 export { default as IconLoader2 } from "@tabler/icons-react/dist/esm/icons/IconLoader2.mjs";
 export { default as IconLock } from "@tabler/icons-react/dist/esm/icons/IconLock.mjs";
 export { default as IconMinus } from "@tabler/icons-react/dist/esm/icons/IconMinus.mjs";
+export { default as IconMoon } from "@tabler/icons-react/dist/esm/icons/IconMoon.mjs";
 export { default as IconPackage } from "@tabler/icons-react/dist/esm/icons/IconPackage.mjs";
 export { default as IconPlayerPause } from "@tabler/icons-react/dist/esm/icons/IconPlayerPause.mjs";
 export { default as IconPlayerPlay } from "@tabler/icons-react/dist/esm/icons/IconPlayerPlay.mjs";

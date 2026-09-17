@@ -1,85 +1,31 @@
 ---
 title: 1.0.0
 date: June 10, 2026
-description: The first stable launch of Nowly, covering the browser extension, Nowly Host, public library, and publishing workflow.
+description: The first stable launch of Nowly, covering the browser extension, the desktop app, public library, and publishing workflow.
 ---
 
 `1.0.0` is the point where Nowly became a complete product instead of a collection of separate pieces. It is the first stable launch and the baseline for everything that follows.
 
-<ReleaseTable
-  headers={["Surface", "What shipped", "Why it matters"]}
-  rows={[
-    ["Browser extension", "Detects supported websites, loads signed presences, and forwards activity to Nowly Host.", "This is the user-facing entry point for all presence activity."],
-    ["Nowly Host", "Bridges browser activity into Discord Rich Presence.", "Discord updates happen locally without turning the browser into the integration layer."],
-    ["Public library", "Lists presences, shows detail pages, comments, ratings, and release history.", "Users can inspect a presence before installing it."],
-    ["Presence lifecycle", "Supports install, update, disable, and uninstall flows.", "Presence management is exposed as a normal user workflow."],
-    ["Documentation", "Covers setup, troubleshooting, presence development, and publishing.", "Contributors and users have a single place to look up the product behavior."],
-    ["CLI", "Builds, validates, and publishes presence bundles.", "Presence development is repeatable instead of being a manual one-off process."],
-  ]}
-/>
-
 ## Browser extension
 
-The extension is the first visible piece of the system. It watches supported sites, installs the right presence bundle, and keeps activity moving to Nowly Host without asking the user to manage the plumbing.
+Detects supported websites, loads signed presences, and forwards activity to the desktop app. This is the user-facing entry point for all presence activity.
 
-- Presences only run on matched websites.
-- The extension loads the correct signed bundle for the presence.
-- Activity is forwarded to Discord through the local Nowly Host.
-- User script support is documented and gated because it is a sensitive permission.
+## Desktop app
 
-## Nowly Host
+Bridges browser activity into Discord Rich Presence. Discord updates happen locally without turning the browser into the integration layer.
 
-Nowly Host is what turns page state into an actual Discord status. It keeps the browser layer focused and gives the system a clean handoff point.
+## Public library
 
-- It receives presence payloads from the extension.
-- It translates those payloads into Discord Rich Presence updates.
-- It keeps the Discord connection separate from the browser session.
-
-## Library and discovery
-
-The public library is the product surface people browse before they install anything.
-
-- Each presence has a dedicated detail page.
-- Supported URLs, version history, ratings, and comments are visible before install.
-- Installation stats help people judge whether a presence is active and maintained.
-- Presence pages expose enough metadata to understand what the integration does before a user commits to it.
+Lists presences, shows detail pages, comments, ratings, and release history. Users can inspect a presence before installing it.
 
 ## Presence lifecycle
 
-The lifecycle is deliberately simple and user-facing:
+Supports install, update, disable, and uninstall flows. Presence management is exposed as a normal user workflow.
 
-```txt
-install -> enable -> update -> disable -> uninstall
-```
+## Documentation
 
-- Install fetches the latest signed release.
-- Update keeps the installed bundle aligned with the published release.
-- Disable stops the presence without removing it from the user list.
-- Uninstall removes the presence from the extension.
+Covers setup, troubleshooting, presence development, and publishing. Contributors and users have a single place to look up the product behavior.
 
-## Documentation and onboarding
+## CLI
 
-The first stable release also established the support material around the product.
-
-- The onboarding flow explains the relationship between extension, Nowly Host, and presences.
-- Troubleshooting covers the common failure modes instead of assuming the user can infer them.
-- Documentation explains the structure of a presence and how it is published.
-
-## Developer workflow
-
-The release is also the point where the project became publishable in a repeatable way.
-
-```bash
-pnpm presence init "Example"
-pnpm presence validate
-pnpm presence build example
-pnpm presence push example
-```
-
-- Metadata validation helps keep the catalog consistent.
-- Bundling and signing are part of the release path.
-- The CLI gives contributors a predictable way to create and ship presences.
-
-## Why `1.0.0` matters
-
-> This is the release where the product becomes coherent: the extension, host, library, docs, and publishing pipeline all line up.
+Builds, validates, and publishes presence bundles. Presence development is repeatable instead of being a manual one-off process.

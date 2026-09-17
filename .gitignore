@@ -25,6 +25,9 @@ extension-key.pem
 *.cer
 *.certSigningRequest
 
+# Archived previous web app (local reference only)
+_tmp/
+
 # Auto-generated extension source
 apps/extension/src/generated/*
 apps/extension/artifacts/

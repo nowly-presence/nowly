@@ -32,12 +32,13 @@ const parseAcceptLanguage = (acceptLanguage: string | null): Locale | null => {
 
 export default getRequestConfig(async () => {
   const store = await cookies();
-  const cookieLocale = store.get("locale")?.value as Locale | undefined;
+  const cookieLocale = store.get("locale")?.value;
+  const validCookie = SUPPORTED_LOCALES.find((locale) => locale === cookieLocale);
 
-  if (cookieLocale) {
+  if (validCookie) {
     return {
-      locale: cookieLocale,
-      messages: (await import(`../messages/${cookieLocale}.json`)).default,
+      locale: validCookie,
+      messages: (await import(`../messages/${validCookie}.json`)).default,
     };
   }
 

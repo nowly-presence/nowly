@@ -22,8 +22,7 @@ export const serverEnv = createEnv({
     SUPPORT_PASS_DEFAULT_MAX_DEVICES: z.coerce.number().int().positive().default(5),
     KOFI_WEBHOOK_TOKEN: required.optional(),
     GITHUB_SPONSORS_WEBHOOK_SECRET: required.optional(),
-    DISCORD_WEBHOOK_SUCCESS_URL: z.string().trim().url().optional(),
-    DISCORD_WEBHOOK_FAILURE_URL: z.string().trim().url().optional(),
+    DISCORD_WEBHOOK_REPORT_URL: z.string().trim().url().optional(),
     STATUS_CRON_SECRET: required.optional(),
     STATUS_CHECK_INTERVAL_HOURS: z.coerce.number().int().positive().default(1),
     STATUS_SAMPLE_LIMIT: z.coerce.number().int().positive().default(168),
@@ -31,7 +30,7 @@ export const serverEnv = createEnv({
     AWS_SECRET_ACCESS_KEY: required.optional(),
     AWS_REGION: z.string().trim().min(1).default("us-east-1"),
 
-    SUPPORT_REDEEM_URL: z.string().trim().url().optional(),
+    SUPPORT_REDEEM_URL: z.string().trim().url().default("https://nowly.me/redeem"),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

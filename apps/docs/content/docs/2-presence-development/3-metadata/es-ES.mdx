@@ -38,8 +38,8 @@ Cada presencia necesita:
 
 ## Autor y colaboradores
 
-- `author` — Mantenedor principal, mostrado primero en la biblioteca e imágenes OG.
-- `contributors` — Personas adicionales que ayudaron con la presencia.
+- `author` - Mantenedor principal, mostrado primero en la biblioteca e imágenes OG.
+- `contributors` - Personas adicionales que ayudaron con la presencia.
 
 <CalloutInfo>
 Los nombres de usuario de GitHub (la clave `github`) se usan para resolver avatares.
@@ -47,14 +47,33 @@ Los nombres de usuario de GitHub (la clave `github`) se usan para resolver avata
 
 ## Descripciones y características
 
-- `description` — Texto corto para la biblioteca, organizado por idioma.
-- `longDescription` — Descripción ampliada para páginas de detalle.
-- `features` — Lista localizada de comportamientos compatibles (p. ej. botones, teclas multimedia).
+- `description` - Texto corto para la biblioteca, organizado por idioma.
+- `longDescription` - Descripción ampliada para páginas de detalle.
+- `features` - Lista localizada de comportamientos compatibles (p. ej. botones, teclas multimedia).
+
+## Compatibilidad nativa de Discord
+
+Algunas plataformas ya aparecen en Discord si el usuario vincula su cuenta (Spotify es el ejemplo habitual). Esta bandera opcional permite explicar que Nowly sigue siendo útil sin esa vinculación.
+
+<TypeTable
+  properties={[
+    { name: "discordNative", type: "boolean", description: "True cuando Discord ya muestra esta plataforma si el usuario vincula su cuenta. Opcional. False por defecto.", required: false }
+  ]}
+/>
+
+```json
+{
+  "name": "Spotify",
+  "discordNative": true
+}
+```
+
+Solo muestra una nota informativa en la página de la biblioteca y en la extensión (tienda y detalle de una presencia instalada). No bloquea la instalación.
 
 ## Coincidencia de URL
 
-- `url` — Dominios o patrones de URL compatibles para la coincidencia de páginas.
-- `regExp` — Coincidencia basada en expresiones regulares para patrones de URL complejos.
+- `url` - Dominios o patrones de URL compatibles para la coincidencia de páginas.
+- `regExp` - Coincidencia basada en expresiones regulares para patrones de URL complejos.
 
 <CalloutWarning>
 Usa `regExp` solo cuando la coincidencia simple de `url` no sea suficiente. Prefiere listas de dominios explícitas.
@@ -96,7 +115,7 @@ Un `fetch` desde el mundo aislado no se trata como una solicitud de origen propi
 </CalloutWarning>
 
 <CalloutInfo>
-La declaración reside por completo en `metadata.json` — la extensión la lee en el momento del registro. No hace falta cambiar la extensión para añadir una nueva presencia en contexto de página.
+La declaración reside por completo en `metadata.json` - la extensión la lee en el momento del registro. No hace falta cambiar la extensión para añadir una nueva presencia en contexto de página.
 </CalloutInfo>
 
 ## Categoría

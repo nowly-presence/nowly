@@ -9,8 +9,8 @@ export interface PresenceInjector {
 // --- userScripts implementation (Chrome + Firefox 136+) ---
 // Both browsers expose the MV3 userScripts API on `chrome.userScripts` and compile the
 // inline `code` natively in a CSP-exempt USER_SCRIPT world, so no eval/new Function is
-// needed on our side. The API namespace is undefined until enabled — Chrome's "Allow user
-// scripts" toggle, Firefox's optional `userScripts` permission grant — and we no-op until then
+// needed on our side. The API namespace is undefined until enabled - Chrome's "Allow user
+// scripts" toggle, Firefox's optional `userScripts` permission grant - and we no-op until then
 // (the onboarding gate prompts the user). The same registration persists and auto-injects on
 // future navigations in both browsers.
 

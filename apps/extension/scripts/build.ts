@@ -20,6 +20,7 @@ const define = {
   "import.meta.env.VITE_WEB_BASE_URL": JSON.stringify(webBaseUrl),
   "import.meta.env.VITE_API_BASE_URL": JSON.stringify(apiBaseUrl),
   "import.meta.env.VITE_CDN_BASE_URL": JSON.stringify(cdnBaseUrl),
+  "import.meta.env.VITE_NOWLY_CHANNEL": JSON.stringify("stable"),
   "import.meta.env.BROWSER": JSON.stringify(BROWSER),
 }
 
@@ -90,7 +91,7 @@ const copyManifest = () => {
   if (BROWSER === "firefox") {
     manifest.background = { scripts: ["background.js"] }
     delete manifest.minimum_chrome_version
-    // userScripts is an optional-only permission on Firefox — declare it in optional_permissions
+    // userScripts is an optional-only permission on Firefox - declare it in optional_permissions
     // and request it at runtime (Firefox 136+ MV3 userScripts API).
     manifest.permissions = manifest.permissions
       .filter((p: string) => p !== "userScripts" && p !== "sidePanel")
@@ -116,7 +117,7 @@ const copyManifest = () => {
       gecko: {
         id: "nowly@nowly.me",
         strict_min_version: "136.0",
-        // Required by AMO — declare data collection practices.
+        // Required by AMO - declare data collection practices.
         // "none" = nothing collected/transmitted. Update if that changes.
         data_collection_permissions: { required: ["none"] },
       },
@@ -161,7 +162,7 @@ const copyStatic = async () => {
   try {
     await fetchBrandIcons(join(DIST, "icons"))
   } catch (error) {
-    console.warn("  ⚠ Could not fetch brand icons from CDN — load the unpacked build anyway.", error)
+    console.warn("  ⚠ Could not fetch brand icons from CDN - load the unpacked build anyway.", error)
   }
 }
 

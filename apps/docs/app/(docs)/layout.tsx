@@ -13,7 +13,7 @@ const Layout = async ({ children }: PropsWithChildren): Promise<ReactElement> =>
   return (
     <SidebarProvider>
       <SearchProvider>
-        <div className="flex mx-auto max-w-screen-2xl w-full gap-8 px-6 pt-24 pb-16 flex-1">
+        <div className="mx-auto flex w-full max-w-screen-2xl flex-1 gap-8 px-6 py-8">
           <AppSidebar items={navItems} />
 
           <main className="flex-1 min-w-0 max-w-3xl">

@@ -1,29 +1,21 @@
 export const CDN_BRAND = "https://cdn.nowly.me/brand";
 
 export const brandLockup = (
-  variant: "blue" | "dark" | "white",
+  variant: "blue" | "dark" | "white" | "canary",
   ext: "svg" | "png" = "svg",
 ): string => `${CDN_BRAND}/lockup/${variant}.${ext}`;
-
-export const brandWordmark = (
-  variant: "blue" | "dark" | "white",
-  ext: "svg" | "png" = "svg",
-): string => `${CDN_BRAND}/wordmark/${variant}.${ext}`;
-
-export const brandLogo = (
-  variant: "blue_dark" | "dark_blue" | "dark_light" | "light_dark",
-): string => `${CDN_BRAND}/logo/${variant}.png`;
 
 export const brandFavicon = (file: string): string => `${CDN_BRAND}/favicons/${file}`;
 
 export const BRAND_LOCKUP_BLUE = brandLockup("blue");
 export const BRAND_LOCKUP_BLUE_PNG = brandLockup("blue", "png");
 export const BRAND_LOCKUP_DARK = brandLockup("dark");
-export const BRAND_LOCKUP_DARK_PNG = brandLockup("dark", "png");
 export const BRAND_LOCKUP_WHITE = brandLockup("white");
 export const BRAND_LOCKUP_WHITE_PNG = brandLockup("white", "png");
-
-export const BRAND_LOGO_BLUE_DARK = brandLogo("blue_dark");
+export const BRAND_LOCKUP_CANARY = brandLockup("canary");
+export const BRAND_LOCKUP_CANARY_PNG = brandLockup("canary", "png");
+export const CANARY_ACCENT = "#CFEE22";
+export const CANARY_INK = "#07080C";
 
 export const BRAND_FAVICON_SVG = brandFavicon("favicon.svg");
 export const BRAND_FAVICON_16 = brandFavicon("favicon-16.png");

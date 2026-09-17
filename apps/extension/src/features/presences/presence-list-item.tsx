@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { PresenceTile } from "@/components/shared/presence-tile";
 import { VersionBadge } from "@/components/shared/version-badge";
-import { assetUrl } from "@/shared/api";
 import { t } from "@/shared/i18n";
 import type { StoredPresence } from "@/shared/types";
 import { IconCalendar, IconLoader2, IconSettings } from "@/lib/tabler-icons";
@@ -72,16 +72,7 @@ export const PresenceListItem: FC<Props> = ({
           onClick={() => onOpen(slug)}
           className="flex min-w-0 flex-1 items-center gap-3 text-left"
         >
-          <div
-            className={`flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl transition-all duration-300 ${
-              !presence.enabled ? "opacity-60 saturate-0" : ""
-            }`}
-            style={{ backgroundColor: `${presence.metadata.color}20` }}
-          >
-            <img src={assetUrl(slug, "icon")} alt="" className={`h-6 w-6 object-contain transition-all duration-300 ${
-              !presence.enabled ? "opacity-60 saturate-0" : ""
-            }`} />
-          </div>
+          <PresenceTile slug={slug} name={presence.metadata.name} dimmed={!presence.enabled} className="size-10" />
 
           <div className="min-w-0 flex-1">
             <p className={`truncate text-sm font-medium transition-all duration-300 ${

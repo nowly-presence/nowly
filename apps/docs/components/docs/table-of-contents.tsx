@@ -24,7 +24,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
           }
         }
       },
-      { rootMargin: "-80px 0px -60% 0px", threshold: 0.1 }
+      { rootMargin: "-64px 0px -60% 0px", threshold: 0.1 }
     );
 
     const headings = document.querySelectorAll("h2, h3");
@@ -37,7 +37,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
 
   return (
     <>
-      <nav className="hidden xl:block fixed top-24 w-56 max-h-[calc(100vh-8rem)] overflow-y-auto" style={{ right: "max(1rem, calc((100vw - 1280px) / 2 + 1rem))" }}>
+      <nav className="docs-sidebar-scroll hidden xl:block fixed top-16 w-56 max-h-[calc(100vh-4rem)] overflow-y-auto pt-8" style={{ right: "max(1rem, calc((100vw - 1280px) / 2 + 1rem))" }}>
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
           {t("on-this-page")}
         </p>

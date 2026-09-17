@@ -1,77 +1,76 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { BRAND_LOCKUP_BLUE } from "@/lib/brand";
+import { RiMenuLine } from "@remixicon/react";
+import { ExtensionStoreButton } from "@/components/extension-store-button";
+import { BrandLockup } from "@/components/layout/brand-lockup";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { SITE_URL } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import { IconDownload, IconMenu2 } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import type { FC, ReactElement } from "react";
+import { useState } from "react";
 
-export const Navbar: FC = (): ReactElement => {
+export const Navbar = () => {
   const t = useTranslations("navbar");
+  const [open, setOpen] = useState(false);
+
+  const links = [
+    { href: "/", label: t("docs"), external: false },
+    { href: `${SITE_URL}/library`, label: t("library"), external: true },
+  ];
 
   return (
-    <nav className={cn("fixed top-0 right-0 left-0 z-50 bg-background/35 py-4 backdrop-blur-xl")}>
-      <div className="mx-auto w-full min-w-0 max-w-300 px-6">
-        <div className="flex min-w-0 items-center justify-between">
-          <Link href={`${SITE_URL}/`} className="min-w-0 shrink-0 cursor-pointer select-none">
-            <img src={BRAND_LOCKUP_BLUE} alt="Nowly" width={420} height={128} className="h-10 w-auto max-w-full" />
-          </Link>
+    <header className="pointer-events-none relative sticky top-0 z-50 px-4 pt-4 sm:px-6 sm:pt-8 lg:px-10">
+      <div className="pointer-events-auto relative mx-auto flex h-[68px] max-w-[1200px] items-center justify-between gap-4 rounded-[12px] bg-background/50 px-3 backdrop-blur-xl sm:h-[84px] sm:px-4">
+        <Link href="/" className="relative flex h-11 w-[120px] shrink-0 items-center sm:h-[60px] sm:w-[148px]">
+          <BrandLockup
+            width={148}
+            height={60}
+            className="h-full w-auto object-contain object-left"
+          />
+        </Link>
 
-          <div className="lg:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <button
-                  type="button"
-                  className="hover:bg-card-hover inline-flex items-center justify-center rounded-lg p-2 text-muted-foreground transition-colors hover:text-foreground"
-                  aria-label="Open menu"
+        <nav className="hidden items-center gap-8 lg:flex">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm text-foreground transition-opacity hover:opacity-80"
+              {...(link.external ? { rel: "noreferrer", target: "_blank" } : {})}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <ExtensionStoreButton />
+        </nav>
+
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger asChild>
+            <Button type="button" variant="ghost" size="icon" className="lg:hidden" aria-label={t("open-menu")}>
+              <RiMenuLine />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[min(100%,20rem)] bg-background p-0 lg:hidden">
+            <SheetHeader>
+              <SheetTitle>{t("open-menu")}</SheetTitle>
+            </SheetHeader>
+            <nav className="flex flex-col gap-3 px-4 pb-6">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-foreground"
+                  onClick={() => setOpen(false)}
+                  {...(link.external ? { rel: "noreferrer", target: "_blank" } : {})}
                 >
-                  <IconMenu2 size={22} />
-                </button>
-              </SheetTrigger>
-              <SheetContent side="right" showCloseButton={false}>
-                <div className="flex flex-col gap-6 px-6 pt-12">
-                  <SheetClose asChild>
-                    <Link href="/" className="text-lg font-semibold text-foreground transition-colors hover:text-accent">
-                      {t("docs")}
-                    </Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link href={`${SITE_URL}/library`} className="text-lg font-semibold text-foreground transition-colors hover:text-accent">
-                      {t("marketplace")}
-                    </Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link
-                      href={`${SITE_URL}/#download`}
-                      className={buttonVariants({ size: "md", variant: "accent", className: "justify-center" })}
-                    >
-                      <IconDownload size={16} />
-                      {t("download-extension")}
-                    </Link>
-                  </SheetClose>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-
-          <div className="hidden min-w-0 items-center gap-2 lg:flex">
-            <Link href="/" className={buttonVariants({ size: "md", variant: "ghost" })}>
-              {t("docs")}
-            </Link>
-            <Link href={`${SITE_URL}/library`} className={buttonVariants({ size: "md", variant: "ghost" })}>
-              {t("marketplace")}
-            </Link>
-            <Link href={`${SITE_URL}/#download`} className={buttonVariants({ size: "md", variant: "accent" })}>
-              <IconDownload size={16} />
-              {t("download-extension")}
-            </Link>
-          </div>
-        </div>
+                  {link.label}
+                </Link>
+              ))}
+              <ExtensionStoreButton />
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
-    </nav>
+    </header>
   );
 };

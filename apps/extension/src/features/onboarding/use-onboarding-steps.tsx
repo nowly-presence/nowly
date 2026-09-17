@@ -81,7 +81,7 @@ export const useOnboardingSteps = ({
           : t("onboarding-step-host-error"),
       actions: showHostActions || (snapshot.hostDetected && hostVersionInfo?.updateAvailable) ? (
         <div className="flex flex-wrap justify-center gap-2">
-          <ActionButton primary onClick={() => openUrl(siteUrl("/host"))}>
+          <ActionButton primary onClick={() => openUrl(siteUrl("/desktop"))}>
             {hostVersionInfo?.updateAvailable ? t("diagnostic-update-host") : t("diagnostic-install-host")}
             <IconExternalLink className="h-4 w-4" />
           </ActionButton>
