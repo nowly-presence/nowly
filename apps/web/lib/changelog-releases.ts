@@ -5,13 +5,18 @@ export type ChangelogRelease = {
   slug: string
   date: string | null
   summary: LocalizedCopy
+  banner?: string
 };
+
+const screenshot = (file: string): string =>
+  `https://cdn.nowly.me/assets/screenshots/${file}`;
 
 export const CHANGELOG_RELEASES: ChangelogRelease[] = [
   {
     version: "1.5.0",
     slug: "1-5-0",
     date: "2026-09-17",
+    banner: screenshot("home-updated.png"),
     summary: {
       "en-US": "Website rebrand, public library, desktop and Canary pages, legal docs, Chrome and Firefox, language flags, desktop reconnect, midnight snooze, and CLI watch.",
       "fr-FR": "Refonte du site, bibliothèque publique, pages bureau et Canary, textes légaux, Chrome et Firefox, drapeaux, reconnexion bureau, snooze minuit, et watch CLI.",
