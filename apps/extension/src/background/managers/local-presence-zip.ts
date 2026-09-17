@@ -77,6 +77,7 @@ export const normalizeLocalMetadata = (raw: unknown, slug: string): PresenceMeta
     ...(data.locales && typeof data.locales === "object"
       ? { locales: data.locales as Record<string, Record<string, string>> }
       : {}),
+    ...(data.discordNative === true ? { discordNative: true } : {}),
   };
 };
 

@@ -35,6 +35,8 @@
   "back": "Retour",
   "presence-open-site": "Voir sur le site",
   "presence-features": "Fonctionnalités",
+  "discord-native-title": "Déjà sur Discord",
+  "discord-native-description": "Discord affiche {name} si vous liez votre compte. Nowly le fait sans cette liaison.",
   "presence-supported-urls": "URL compatibles",
   "presence-credits": "Contributeurs",
   "presence-author-label": "Auteur",

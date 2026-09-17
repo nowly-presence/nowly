@@ -35,6 +35,8 @@
   "back": "Back",
   "presence-open-site": "View on website",
   "presence-features": "Features",
+  "discord-native-title": "Already on Discord",
+  "discord-native-description": "Discord shows {name} if you link your account. Nowly does the same without that link.",
   "presence-supported-urls": "Supported URLs",
   "presence-credits": "Contributors",
   "presence-author-label": "Author",

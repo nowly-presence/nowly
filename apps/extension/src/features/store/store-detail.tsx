@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { PresenceAboutCard } from "@/features/presences/presence-detail-info";
+import { DiscordNativeNotice } from "@/features/presences/discord-native-notice";
 import { PresenceHeroCard } from "@/features/presences/presence-hero-card";
 import { storeCategoryLabel, type StorePresence } from "@/features/store/store.model";
 import { VersionBadge } from "@/components/shared/version-badge";
@@ -68,6 +69,8 @@ export const StoreDetail: FC<Props> = ({
           </div>
         </div>
       </PresenceHeroCard>
+
+      {presence.discordNative ? <DiscordNativeNotice name={presence.name} /> : null}
 
       <PresenceAboutCard color={presence.color} features={presence.features} urls={presence.urls} />
 

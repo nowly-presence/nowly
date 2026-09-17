@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { PresenceCreditsCard } from "@/features/presences/presence-credits-card";
 import { PresenceAboutCard } from "@/features/presences/presence-detail-info";
+import { DiscordNativeNotice } from "@/features/presences/discord-native-notice";
 import { PresenceHeroCard } from "@/features/presences/presence-hero-card";
 import { resolveLocaleList, resolveLocaleString } from "@/features/presences/presence-locale";
 import { PresenceSettingsFields } from "@/features/presences/presence-settings-fields";
@@ -121,6 +122,10 @@ export const PresenceDetailView: FC<Props> = ({
           />
         </div>
       </PresenceHeroCard>
+
+      {presence.metadata.discordNative ? (
+        <DiscordNativeNotice name={presence.metadata.name} />
+      ) : null}
 
       <PresenceAboutCard color={color} features={features} urls={urls} />
       <PresenceCreditsCard
