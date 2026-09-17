@@ -24,6 +24,7 @@ export const ANALYTICS_SOURCES = [
   "web_library",
   "extension_library",
   "extension_onboarding",
+  "extension_settings",
   "direct_link",
   "native",
   "system",
