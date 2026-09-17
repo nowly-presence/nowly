@@ -381,6 +381,9 @@ importers:
 
   packages/cli:
     dependencies:
+      '@nowly/cli':
+        specifier: 'link:'
+        version: 'link:'
       '@nowly/sdk':
         specifier: workspace:*
         version: link:../sdk
