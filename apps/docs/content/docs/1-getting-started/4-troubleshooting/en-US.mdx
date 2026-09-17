@@ -1,6 +1,6 @@
 ---
 title: Troubleshooting
-description: Fix a missing Nowly Host, closed Discord Desktop, missing presences, missing activity, unsupported URLs, and permission issues.
+description: Fix a missing desktop app, closed Discord Desktop, missing presences, missing activity, unsupported URLs, and permission issues.
 ---
 
 ## Start With the Diagnostic
@@ -9,22 +9,22 @@ Open the extension side panel and read each row on its own:
 
 - Extension installed
 - User scripts active
-- Nowly Host detected
+- Desktop app detected
 - Discord connected
 - Presence installed
 - Activity detected
 
 Do not rely on a single global status. The missing row is the next thing to fix.
 
-## Nowly Host Is Not Detected
+## Desktop app is not detected
 
-Message shown: **Nowly Host is not detected.**
+Message shown: **The desktop app is not detected.**
 
 Install the desktop app from the [desktop app page](https://nowly.me/desktop), then click **Check connection** in the extension. If you just installed it, close and reopen the extension side panel.
 
 ## Discord Desktop Is Closed
 
-Message shown: **Nowly Host is installed but Discord Desktop is not open.**
+Message shown: **The desktop app is installed but Discord Desktop is not open.**
 
 Open Discord Desktop, wait a few seconds, then click **Check connection**. Discord in the browser cannot receive local Rich Presence updates.
 
@@ -57,4 +57,4 @@ After you change permissions, reload the website tab and reopen the extension si
 
 ## Copy a Support Diagnostic
 
-The extension diagnostic includes a **Copy support** button. It copies the state of Nowly Host, Discord, presences, and activity without exposing technical logs.
+The extension diagnostic includes a **Copy support** button. It copies the state of the desktop app, Discord, presences, and activity without exposing technical logs.
