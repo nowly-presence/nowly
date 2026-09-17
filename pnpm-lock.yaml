@@ -450,8 +450,8 @@ importers:
         specifier: ^3.1131.0
         version: 3.1131.0
       '@nowly/sdk':
-        specifier: workspace:*
-        version: link:../sdk
+        specifier: ^1.5.1
+        version: 1.5.1
       chalk:
         specifier: ^5.6.2
         version: 5.6.2
@@ -470,10 +470,16 @@ importers:
       ora:
         specifier: ^9.4.1
         version: 9.4.1
+      pg:
+        specifier: ^8.23.0
+        version: 8.23.0
     devDependencies:
       '@types/node':
         specifier: ^26.5.1
         version: 26.5.1
+      '@types/pg':
+        specifier: ^8.23.1
+        version: 8.23.1
       tsx:
         specifier: ^4.23.13
         version: 4.23.13
@@ -1990,6 +1996,9 @@ packages:
 
   '@nowly/sdk@1.4.0':
     resolution: {integrity: sha512-bHRGoL5TtMlqgT/SIO4Xm46rCz2defmiBqj/E5AjC2KUAb49tiTnje17HAyR/nSTLO3Vj/buHsirRwW2tGVlgw==}
+
+  '@nowly/sdk@1.5.1':
+    resolution: {integrity: sha512-8grIvWLf5YRXMZO2qQvk7+qyClMKZeclKenjHNDI4v5nlXw8YbKk8zJOQvQH/Cdvr/V2d2V9A67zCfmnqVP7iQ==}
 
   '@opencoredev/email-sdk@0.6.5':
     resolution: {integrity: sha512-CuEfbOSjjr4/bsCz7g/X7l7ha1D/QLq0Q4glX4CRsj0uUCnuhdBYRDXv6ffi9myaVx3afw3P8RzAnw+1++jLMg==}
@@ -3697,6 +3706,9 @@ packages:
 
   '@types/pg@8.20.0':
     resolution: {integrity: sha512-bEPFOaMAHTEP1EzpvHTbmwR8UsFyHSKsRisLIHVMXnpNefSbGA1bD6CVy+qKjGSqmZqNqBDV2azOBo8TgkcVow==}
+
+  '@types/pg@8.23.1':
+    resolution: {integrity: sha512-fKVHpikPdg4GKks3JuLEhvwSyvwzF23hnabPy6DD8ljVbC7+6J5dQzdv4arV6jqq57djnMgs1HKBxX4P8aBI3A==}
 
   '@types/react-dom@19.3.0':
     resolution: {integrity: sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==}
@@ -8346,6 +8358,8 @@ snapshots:
 
   '@nowly/sdk@1.4.0': {}
 
+  '@nowly/sdk@1.5.1': {}
+
   '@opencoredev/email-sdk@0.6.5': {}
 
   '@oxc-project/types@0.149.0': {}
@@ -9908,6 +9922,12 @@ snapshots:
       undici-types: 8.9.0
 
   '@types/pg@8.20.0':
+    dependencies:
+      '@types/node': 26.5.1
+      pg-protocol: 1.16.0
+      pg-types: 2.2.0
+
+  '@types/pg@8.23.1':
     dependencies:
       '@types/node': 26.5.1
       pg-protocol: 1.16.0
