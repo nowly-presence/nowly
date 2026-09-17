@@ -2,8 +2,9 @@ import { requireAuth } from "@/features/auth/auth.middleware"
 import { serverEnv } from "@nowly/env/server"
 import {
   adsStatusQuerySchema,
-  supportCreatePassBodySchema,
-  supportRedeemDeviceBodySchema,
+  createPassBodySchema,
+  redeemBodySchema,
+  redeemQuerySchema,
 } from "@nowly/shared/schemas"
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
 import { createHmac, timingSafeEqual } from "node:crypto"
@@ -151,12 +152,12 @@ export const supportRoutes = async (fastify: FastifyInstance) => {
 
   fastify.addHook("preParsing", rawBodyHook)
 
-  fastify.get("/support/verify-code", async (request, reply) => {
-    const { code } = request.query as { code?: string }
-    if (!code || typeof code !== "string") {
+  fastify.get("/redeem", async (request, reply) => {
+    const parsed = redeemQuerySchema.safeParse(request.query)
+    if (!parsed.success) {
       return reply.status(400).send({ valid: false, error: "missing_code" })
     }
-    const result = await verifySupporterCode(code)
+    const result = await verifySupporterCode(parsed.data.code)
     if (!result.valid) return reply.send({ valid: false })
     return reply.send({ valid: true, maxDevices: result.maxDevices })
   })
@@ -171,8 +172,8 @@ export const supportRoutes = async (fastify: FastifyInstance) => {
     return reply.header("Cache-Control", "no-store").send({ hasAds: !adFree, adFree })
   })
 
-  fastify.post("/support/redeem-device", async (request, reply) => {
-    const parsed = supportRedeemDeviceBodySchema.safeParse(request.body)
+  fastify.post("/redeem", async (request, reply) => {
+    const parsed = redeemBodySchema.safeParse(request.body)
     if (!parsed.success) return reply.status(400).send({ ok: false, error: "invalid_request" })
 
     const result = await redeemSupporterCodeForDevice(parsed.data.code, parsed.data.deviceId)
@@ -184,11 +185,11 @@ export const supportRoutes = async (fastify: FastifyInstance) => {
     return { ...result, hasAds: false }
   })
 
-  fastify.post("/support/passes", async (request, reply) => {
+  fastify.post("/passes", async (request, reply) => {
     await requireAuth(request, reply)
     if (reply.sent) return
 
-    const parsed = supportCreatePassBodySchema.safeParse(request.body ?? {})
+    const parsed = createPassBodySchema.safeParse(request.body ?? {})
     if (!parsed.success) return reply.status(400).send({ error: "Invalid request body" })
 
     const pass = await createSupporterPass(parsed.data)

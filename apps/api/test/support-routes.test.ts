@@ -54,7 +54,7 @@ describe("Support routes", () => {
     expect(mockSupportRepo.hasAdFreeAccess).toHaveBeenCalledWith("device-1")
   })
 
-  it("POST /support/redeem-device links a valid code to a device", async () => {
+  it("POST /redeem links a valid code to a device", async () => {
     mockSupportRepo.redeemSupporterCodeForDevice.mockResolvedValue({
       ok: true,
       adFree: true,
@@ -64,7 +64,7 @@ describe("Support routes", () => {
 
     const res = await app.inject({
       method: "POST",
-      url: "/support/redeem-device",
+      url: "/redeem",
       payload: { code: "NOWLY-AAAA-BBBB-CCCC", deviceId: "device-1" },
     })
 
@@ -78,7 +78,7 @@ describe("Support routes", () => {
     })
   })
 
-  it("POST /support/redeem-device returns 409 when the device limit is reached", async () => {
+  it("POST /redeem returns 409 when the device limit is reached", async () => {
     mockSupportRepo.redeemSupporterCodeForDevice.mockResolvedValue({
       ok: false,
       error: "device_limit_reached",
@@ -87,7 +87,7 @@ describe("Support routes", () => {
 
     const res = await app.inject({
       method: "POST",
-      url: "/support/redeem-device",
+      url: "/redeem",
       payload: { code: "NOWLY-AAAA-BBBB-CCCC", deviceId: "device-6" },
     })
 

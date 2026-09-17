@@ -39,7 +39,7 @@ Typed environment access for the Nowly monorepo.
 
 | `SUPPORT_EMAIL_FROM` | No | - |
 | `SUPPORT_EMAIL_REPLY_TO` | No | - |
-| `SUPPORT_REDEEM_URL` | No | - |
+| `SUPPORT_REDEEM_URL` | No | `https://nowly.me/redeem` |
 
 ### client (Next.js web)
 

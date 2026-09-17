@@ -32,8 +32,7 @@ const TEXT_SECONDARY = "#52525B"
 const TEXT_MUTED = "#71717A"
 const TEXT_FOOTER = "#A1A1AA"
 
-const redeemUrl = (): string =>
-  serverEnv.SUPPORT_REDEEM_URL ?? `${serverEnv.FRONTEND_URL.replace(/\/$/, "")}/support/redeem`
+const redeemUrl = (): string => serverEnv.SUPPORT_REDEEM_URL
 
 let emailClient: EmailClient | null = null
 

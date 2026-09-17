@@ -31,7 +31,7 @@ export const serverEnv = createEnv({
     AWS_SECRET_ACCESS_KEY: required.optional(),
     AWS_REGION: z.string().trim().min(1).default("us-east-1"),
 
-    SUPPORT_REDEEM_URL: z.string().trim().url().optional(),
+    SUPPORT_REDEEM_URL: z.string().trim().url().default("https://nowly.me/redeem"),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
