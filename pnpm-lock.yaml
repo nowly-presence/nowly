@@ -447,8 +447,8 @@ importers:
         specifier: ^3.1131.0
         version: 3.1131.0
       '@nowly/sdk':
-        specifier: workspace:*
-        version: link:../sdk
+        specifier: ^1.5.1
+        version: 1.5.1
       chalk:
         specifier: ^5.6.2
         version: 5.6.2
@@ -467,10 +467,16 @@ importers:
       ora:
         specifier: ^9.4.1
         version: 9.4.1
+      pg:
+        specifier: ^8.23.0
+        version: 8.23.0
     devDependencies:
       '@types/node':
         specifier: ^26.5.1
         version: 26.5.1
+      '@types/pg':
+        specifier: ^8.23.1
+        version: 8.23.1
       tsx:
         specifier: ^4.23.13
         version: 4.23.13
@@ -1987,6 +1993,9 @@ packages:
 
   '@nowly/sdk@1.4.0':
     resolution: {integrity: sha512-bHRGoL5TtMlqgT/SIO4Xm46rCz2defmiBqj/E5AjC2KUAb49tiTnje17HAyR/nSTLO3Vj/buHsirRwW2tGVlgw==}
+
+  '@nowly/sdk@1.5.1':
+    resolution: {integrity: sha512-8grIvWLf5YRXMZO2qQvk7+qyClMKZeclKenjHNDI4v5nlXw8YbKk8zJOQvQH/Cdvr/V2d2V9A67zCfmnqVP7iQ==}
 
   '@opencoredev/email-sdk@0.6.5':
     resolution: {integrity: sha512-CuEfbOSjjr4/bsCz7g/X7l7ha1D/QLq0Q4glX4CRsj0uUCnuhdBYRDXv6ffi9myaVx3afw3P8RzAnw+1++jLMg==}
@@ -3694,6 +3703,9 @@ packages:
 
   '@types/pg@8.20.0':
     resolution: {integrity: sha512-bEPFOaMAHTEP1EzpvHTbmwR8UsFyHSKsRisLIHVMXnpNefSbGA1bD6CVy+qKjGSqmZqNqBDV2azOBo8TgkcVow==}
+
+  '@types/pg@8.23.1':
+    resolution: {integrity: sha512-fKVHpikPdg4GKks3JuLEhvwSyvwzF23hnabPy6DD8ljVbC7+6J5dQzdv4arV6jqq57djnMgs1HKBxX4P8aBI3A==}
 
   '@types/react-dom@19.3.0':
     resolution: {integrity: sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==}
@@ -5877,24 +5889,12 @@ packages:
     peerDependencies:
       pg: '>=8.0'
 
-  pg-protocol@1.15.0:
-    resolution: {integrity: sha512-cq9sECI5s0+uPUXjbz8ioyPJni6RzsRib0US67i5IoTZKw8fNeYlVE7u8F4dG7vEJJtc5wdD1K189lCCUwqWTQ==}
-
   pg-protocol@1.16.0:
     resolution: {integrity: sha512-sILXutLVjCLjcDuOmvhX5e2Z4cS5qG/6Bu3VkpFwdf/633ElGLpEh9bgmuI5I4sqKqkifQiGyiCcx1HdtrK7tg==}
 
   pg-types@2.2.0:
     resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
     engines: {node: '>=4'}
-
-  pg@8.22.0:
-    resolution: {integrity: sha512-8wih1vVIBMxoUM2oB4soJsD9tDnDpLv4OXBJ+EJzFsvycD+lfyIreC2gGHq78f8jbLLt+bvlPTFdFZfJkOuzAA==}
-    engines: {node: '>= 16.0.0'}
-    peerDependencies:
-      pg-native: '>=3.0.1'
-    peerDependenciesMeta:
-      pg-native:
-        optional: true
 
   pg@8.23.0:
     resolution: {integrity: sha512-Ip2EQCngowJLGOfCwkFhPXU7/ljlhn6Rxlmy4XYfL2Y+vyRM59+8uR2xqRWKdYmbXmxCFOAmKxBuSUCdF34qLg==}
@@ -8334,6 +8334,8 @@ snapshots:
 
   '@nowly/sdk@1.4.0': {}
 
+  '@nowly/sdk@1.5.1': {}
+
   '@opencoredev/email-sdk@0.6.5': {}
 
   '@oxc-project/types@0.149.0': {}
@@ -8465,7 +8467,7 @@ snapshots:
     dependencies:
       '@prisma/driver-adapter-utils': 7.10.0
       '@types/pg': 8.20.0
-      pg: 8.22.0
+      pg: 8.23.0
       postgres-array: 3.0.4
     transitivePeerDependencies:
       - pg-native
@@ -9898,7 +9900,13 @@ snapshots:
   '@types/pg@8.20.0':
     dependencies:
       '@types/node': 26.5.1
-      pg-protocol: 1.15.0
+      pg-protocol: 1.16.0
+      pg-types: 2.2.0
+
+  '@types/pg@8.23.1':
+    dependencies:
+      '@types/node': 26.5.1
+      pg-protocol: 1.16.0
       pg-types: 2.2.0
 
   '@types/react-dom@19.3.0(@types/react@19.3.0)':
@@ -12433,15 +12441,9 @@ snapshots:
 
   pg-int8@1.0.1: {}
 
-  pg-pool@3.14.0(pg@8.22.0):
-    dependencies:
-      pg: 8.22.0
-
   pg-pool@3.14.0(pg@8.23.0):
     dependencies:
       pg: 8.23.0
-
-  pg-protocol@1.15.0: {}
 
   pg-protocol@1.16.0: {}
 
@@ -12452,16 +12454,6 @@ snapshots:
       postgres-bytea: 1.0.1
       postgres-date: 1.0.7
       postgres-interval: 1.2.0
-
-  pg@8.22.0:
-    dependencies:
-      pg-connection-string: 2.14.0
-      pg-pool: 3.14.0(pg@8.22.0)
-      pg-protocol: 1.15.0
-      pg-types: 2.2.0
-      pgpass: 1.0.5
-    optionalDependencies:
-      pg-cloudflare: 1.4.0
 
   pg@8.23.0:
     dependencies:
