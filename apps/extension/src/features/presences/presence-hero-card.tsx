@@ -9,18 +9,11 @@ type Props = {
   slug: string;
 };
 
-export const PresenceHeroCard: FC<Props> = ({ children, color, footer, slug }): ReactElement => {
+export const PresenceHeroCard: FC<Props> = ({ children, footer, slug }): ReactElement => {
   const [banner, setBanner] = useState(true);
 
   return (
-    <section
-      className="relative overflow-hidden rounded-xl border border-border bg-card"
-      style={
-        banner
-          ? undefined
-          : { backgroundImage: `radial-gradient(140px 90px at 32px 32px, ${color}20, transparent 70%)` }
-      }
-    >
+    <section className="relative overflow-hidden rounded-xl border border-border bg-card">
       {banner ? (
         <div className="pointer-events-none absolute inset-x-0 top-0 h-28 overflow-hidden">
           <img

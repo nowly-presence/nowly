@@ -3,14 +3,13 @@ import { IconCircleCheck } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 
 type Props = {
-  color: string;
   features: string[];
   urls: string[];
 };
 
 const toHref = (url: string): string => (url.includes("://") ? url : `https://${url}`);
 
-export const PresenceAboutCard: FC<Props> = ({ color, features, urls }): ReactElement | null => {
+export const PresenceAboutCard: FC<Props> = ({ features, urls }): ReactElement | null => {
   if (features.length === 0 && urls.length === 0) return null;
 
   return (
@@ -21,7 +20,7 @@ export const PresenceAboutCard: FC<Props> = ({ color, features, urls }): ReactEl
           <ul className="flex flex-col gap-3">
             {features.map((feature) => (
               <li key={feature} className="flex items-center gap-3 text-sm leading-5 text-muted-foreground">
-                <IconCircleCheck className="size-5 shrink-0" style={{ color }} />
+                <IconCircleCheck className="size-5 shrink-0 text-accent" />
                 <span>{feature}</span>
               </li>
             ))}

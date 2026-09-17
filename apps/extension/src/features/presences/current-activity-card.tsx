@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import VinylAnimation from "@/features/presences/vinyl-animation";
 import { getActivitySubtitle, getActivityTitle } from "@/lib/format";
-import { assetUrl } from "@/shared/api";
+import { PresenceTile } from "@/components/shared/presence-tile";
 import { t } from "@/shared/i18n";
 import type { CurrentActivity, InstalledPresences } from "@/shared/types";
 import { IconDisc, IconSnowflake, IconSun } from "@/lib/tabler-icons";
@@ -142,20 +142,17 @@ export const CurrentActivityCard: FC<Props> = ({
         </>
       ) : null}
       <div className="relative z-1 flex items-center gap-3 p-4">
-        <div
-          className={`flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl ${
-            hasLargeImage ? "border border-border shadow-md" : ""
-          }`}
-          style={{ backgroundColor: presence ? `${presence.metadata.color}20` : undefined }}
-        >
-          {hasLargeImage ? (
+        {hasLargeImage ? (
+          <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border shadow-md">
             <img src={largeImage} alt="" className="size-full object-cover" />
-          ) : presence ? (
-            <img src={assetUrl(presence.metadata.slug, "icon")} alt="" className="size-8 object-contain" />
-          ) : (
+          </div>
+        ) : presence ? (
+          <PresenceTile slug={presence.metadata.slug} name={presence.metadata.name} className="size-14" />
+        ) : (
+          <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-card-2">
             <IconDisc className="size-6 text-dim-foreground" />
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold text-foreground">{title}</p>

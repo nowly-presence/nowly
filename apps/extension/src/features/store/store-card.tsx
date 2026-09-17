@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { PresenceTile } from "@/components/shared/presence-tile";
 import { VersionBadge } from "@/components/shared/version-badge";
-import { assetUrl } from "@/shared/api";
 import { t } from "@/shared/i18n";
 import { IconLoader2 } from "@/lib/tabler-icons";
 import type { FC, MouseEvent, ReactElement } from "react";
@@ -47,12 +47,7 @@ export const StoreCard: FC<Props> = ({
           onClick={() => onOpen(presence.slug)}
           className="flex min-w-0 flex-1 items-center gap-3 text-left"
         >
-          <div
-            className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl"
-            style={{ backgroundColor: `${presence.color}20` }}
-          >
-            <img src={assetUrl(presence.slug, "icon")} alt="" className="h-6 w-6 object-contain" />
-          </div>
+          <PresenceTile slug={presence.slug} name={presence.name} className="size-10" />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-foreground">{presence.name}</p>
             <p className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">

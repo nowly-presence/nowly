@@ -8,8 +8,8 @@ import { PresenceHeroCard } from "@/features/presences/presence-hero-card";
 import { resolveLocaleList, resolveLocaleString } from "@/features/presences/presence-locale";
 import { PresenceSettingsFields } from "@/features/presences/presence-settings-fields";
 import { getCategoryLabel } from "@/features/presences/presence-list.model";
+import { PresenceTile } from "@/components/shared/presence-tile";
 import { VersionBadge } from "@/components/shared/version-badge";
-import { assetUrl } from "@/shared/api";
 import { t } from "@/shared/i18n";
 import type { StoredPresence } from "@/shared/types";
 import { IconCalendar, IconChevronLeft, IconExternalLink, IconLoader2, IconTrash } from "@/lib/tabler-icons";
@@ -95,14 +95,7 @@ export const PresenceDetailView: FC<Props> = ({
         }
       >
         <div className="flex items-start gap-3">
-          <div
-            className={`flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl ${
-              presence.enabled ? "" : "opacity-60 saturate-0"
-            }`}
-            style={{ backgroundColor: `${color}20` }}
-          >
-            <img src={assetUrl(slug, "icon")} alt="" className="size-7 object-contain" />
-          </div>
+          <PresenceTile slug={slug} name={presence.metadata.name} dimmed={!presence.enabled} className="size-12" />
           <div className="min-w-0 flex-1">
             <div className="flex min-w-0 items-center gap-2">
               <h1 className="min-w-0 truncate text-base font-semibold text-foreground">{presence.metadata.name}</h1>
@@ -127,7 +120,7 @@ export const PresenceDetailView: FC<Props> = ({
         <DiscordNativeNotice name={presence.metadata.name} />
       ) : null}
 
-      <PresenceAboutCard color={color} features={features} urls={urls} />
+      <PresenceAboutCard features={features} urls={urls} />
       <PresenceCreditsCard
         author={presence.metadata.author}
         contributors={presence.metadata.contributors}

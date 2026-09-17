@@ -3,8 +3,8 @@ import { PresenceAboutCard } from "@/features/presences/presence-detail-info";
 import { DiscordNativeNotice } from "@/features/presences/discord-native-notice";
 import { PresenceHeroCard } from "@/features/presences/presence-hero-card";
 import { storeCategoryLabel, type StorePresence } from "@/features/store/store.model";
+import { PresenceTile } from "@/components/shared/presence-tile";
 import { VersionBadge } from "@/components/shared/version-badge";
-import { assetUrl } from "@/shared/api";
 import { t } from "@/shared/i18n";
 import { IconChevronLeft, IconLoader2 } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
@@ -49,12 +49,7 @@ export const StoreDetail: FC<Props> = ({
 
       <PresenceHeroCard key={presence.slug} slug={presence.slug} color={presence.color}>
         <div className="flex items-start gap-3">
-          <div
-            className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl"
-            style={{ backgroundColor: `${presence.color}20` }}
-          >
-            <img src={assetUrl(presence.slug, "icon")} alt="" className="size-7 object-contain" />
-          </div>
+          <PresenceTile slug={presence.slug} name={presence.name} className="size-12" />
           <div className="min-w-0 flex-1">
             <div className="flex min-w-0 items-center gap-2">
               <h1 className="min-w-0 truncate text-base font-semibold text-foreground">{presence.name}</h1>
@@ -72,7 +67,7 @@ export const StoreDetail: FC<Props> = ({
 
       {presence.discordNative ? <DiscordNativeNotice name={presence.name} /> : null}
 
-      <PresenceAboutCard color={presence.color} features={presence.features} urls={presence.urls} />
+      <PresenceAboutCard features={presence.features} urls={presence.urls} />
 
       <Button
         variant={action === "installed" ? "subtle" : "primary"}
