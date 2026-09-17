@@ -15,8 +15,7 @@
   "navbar": {
     "docs": "Documentation",
     "library": "Library",
-    "open-menu": "Open menu",
-    "close-menu": "Close menu"
+    "open-menu": "Open menu"
   },
   "theme": {
     "toggle": "Toggle color theme",
@@ -244,7 +243,6 @@
     "search-label": "Search the library",
     "clear-search": "Clear search",
     "all": "All",
-    "featured": "Popular",
     "count": "{count, plural, one {# presence} other {# presences}}",
     "empty-title": "Nothing matches",
     "empty-description": "Try another name, or reset the filters.",
@@ -620,10 +618,6 @@
       "title": "Library",
       "description": "Browse the platforms Nowly can share on Discord."
     },
-    "host": {
-      "title": "Desktop app",
-      "description": "Download the desktop app to send your activity to Discord."
-    },
     "desktop": {
       "title": "Desktop app",
       "description": "Download the desktop app to send your activity to Discord."
@@ -651,22 +645,6 @@
     "uninstall": {
       "title": "The extension was removed",
       "description": "We hope to see you again. Tell us what went wrong, it helps us improve Nowly."
-    },
-    "privacy": {
-      "title": "Privacy",
-      "description": "Learn how Nowly handles your data, what stays local, and what depends on your consent."
-    },
-    "tos": {
-      "title": "Terms of Service",
-      "description": "The rules for using Nowly, the browser extension, desktop app, and the website."
-    },
-    "cookies": {
-      "title": "Cookies",
-      "description": "The cookies and local storage used on nowly.me."
-    },
-    "legal-notice": {
-      "title": "Legal notice",
-      "description": "Required information about Nowly's publisher, hosting, and intellectual property."
     }
   },
   "not-found": {

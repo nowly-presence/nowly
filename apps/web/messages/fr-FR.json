@@ -15,8 +15,7 @@
   "navbar": {
     "docs": "Documentation",
     "library": "Bibliothèque",
-    "open-menu": "Ouvrir le menu",
-    "close-menu": "Fermer le menu"
+    "open-menu": "Ouvrir le menu"
   },
   "theme": {
     "toggle": "Changer de thème",
@@ -244,7 +243,6 @@
     "search-label": "Rechercher dans la bibliothèque",
     "clear-search": "Effacer la recherche",
     "all": "Tout",
-    "featured": "Populaires",
     "count": "{count, plural, one {# présence} other {# présences}}",
     "empty-title": "Aucun résultat",
     "empty-description": "Essayez un autre nom, ou réinitialisez les filtres.",
@@ -620,10 +618,6 @@
       "title": "Bibliothèque",
       "description": "Parcourez les plateformes que Nowly peut afficher sur Discord."
     },
-    "host": {
-      "title": "Application bureau",
-      "description": "Téléchargez l’application bureau pour envoyer votre activité à Discord."
-    },
     "desktop": {
       "title": "Application bureau",
       "description": "Téléchargez l’application bureau pour envoyer votre activité à Discord."
@@ -651,22 +645,6 @@
     "uninstall": {
       "title": "L’extension a été retirée",
       "description": "On espère vous revoir. Dites-nous ce qui n’a pas marché, ça nous aide à améliorer Nowly."
-    },
-    "privacy": {
-      "title": "Confidentialité",
-      "description": "Découvrez comment Nowly traite vos données, ce qui reste local et ce qui dépend de votre consentement."
-    },
-    "tos": {
-      "title": "Conditions d’utilisation",
-      "description": "Les règles d'utilisation de Nowly, de l'extension navigateur, de l'application bureau et du site web."
-    },
-    "cookies": {
-      "title": "Cookies",
-      "description": "Les cookies et le stockage local utilisés sur nowly.me."
-    },
-    "legal-notice": {
-      "title": "Mentions légales",
-      "description": "Les informations obligatoires sur l'éditeur, l'hébergement et les droits liés à Nowly."
     }
   },
   "not-found": {

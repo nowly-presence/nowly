@@ -15,8 +15,7 @@
   "navbar": {
     "docs": "Documentación",
     "library": "Biblioteca",
-    "open-menu": "Abrir menú",
-    "close-menu": "Cerrar menú"
+    "open-menu": "Abrir menú"
   },
   "theme": {
     "toggle": "Cambiar tema",
@@ -244,7 +243,6 @@
     "search-label": "Buscar en la biblioteca",
     "clear-search": "Borrar búsqueda",
     "all": "Todo",
-    "featured": "Populares",
     "count": "{count, plural, one {# presencia} other {# presencias}}",
     "empty-title": "Nada coincide",
     "empty-description": "Prueba otro nombre, o restablece los filtros.",
@@ -620,10 +618,6 @@
       "title": "Biblioteca",
       "description": "Explora las plataformas que Nowly puede mostrar en Discord."
     },
-    "host": {
-      "title": "App de escritorio",
-      "description": "Descarga la app de escritorio para enviar tu actividad a Discord."
-    },
     "desktop": {
       "title": "App de escritorio",
       "description": "Descarga la app de escritorio para enviar tu actividad a Discord."
@@ -651,22 +645,6 @@
     "uninstall": {
       "title": "Se ha quitado la extensión",
       "description": "Esperamos volver a verte. Cuéntanos qué falló, nos ayuda a mejorar Nowly."
-    },
-    "privacy": {
-      "title": "Privacidad",
-      "description": "Descubre cómo Nowly trata tus datos, qué se queda en local y qué depende de tu consentimiento."
-    },
-    "tos": {
-      "title": "Términos del servicio",
-      "description": "Las reglas para usar Nowly, la extensión de navegador, la app de escritorio y el sitio web."
-    },
-    "cookies": {
-      "title": "Cookies",
-      "description": "Las cookies y el almacenamiento local usados en nowly.me."
-    },
-    "legal-notice": {
-      "title": "Aviso legal",
-      "description": "Información obligatoria sobre el editor, el alojamiento y la propiedad intelectual de Nowly."
     }
   },
   "not-found": {
