@@ -233,6 +233,7 @@
     "twitter": "X / Twitter",
     "tos": "Términos del servicio",
     "privacy": "Privacidad",
+    "consent": "Tus datos",
     "cookies": "Cookies",
     "legal-notice": "Aviso legal"
   },
@@ -459,6 +460,24 @@
     "feedback-description": "Un fallo, una presencia que falta, o solo tu opinión: Discord es la vía más rápida para contactarnos.",
     "discord": "Unirse al Discord"
   },
+  "consentPage": {
+    "eyebrow": "Privacidad",
+    "title": "Tus datos",
+    "description": "Nowly solo recopila analítica de uso anónima si la activas explícitamente a continuación. Esta página también te permite ver, exportar o eliminar todo lo almacenado para tu dispositivo.",
+    "checking": "Buscando la extensión Nowly...",
+    "not-detected-title": "Extensión no detectada",
+    "not-detected-description": "Abre esta página desde el navegador donde Nowly está instalada para gestionar tu consentimiento y tus datos.",
+    "toggle-title": "Compartir datos de uso anónimos",
+    "toggle-description": "Desactivado por defecto. Nos ayuda a ver qué presencias y funciones se usan realmente - nunca se recopila historial de navegación ni datos personales.",
+    "data-title": "Tus datos",
+    "data-description": "Exporta todo lo que Nowly ha almacenado para este dispositivo, o elimínalo por completo.",
+    "export": "Exportar mis datos",
+    "delete": "Eliminar mis datos",
+    "delete-confirm": "Esta acción elimina permanentemente todo lo que Nowly ha almacenado para este dispositivo. No se puede deshacer.",
+    "export-success": "Tus datos se han descargado.",
+    "delete-success": "Tus datos han sido eliminados.",
+    "action-error": "Algo salió mal. Inténtalo de nuevo."
+  },
   "changelogPage": {
     "eyebrow": "Notas de la versión",
     "title": "Qué ha cambiado",
@@ -655,6 +674,10 @@
     "privacy": {
       "title": "Privacidad",
       "description": "Descubre cómo Nowly trata tus datos, qué se queda en local y qué depende de tu consentimiento."
+    },
+    "consent": {
+      "title": "Tus datos",
+      "description": "Gestiona el consentimiento analítico opcional, y consulta, exporta o elimina los datos que Nowly ha guardado de tu dispositivo."
     },
     "tos": {
       "title": "Términos del servicio",

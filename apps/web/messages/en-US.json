@@ -233,6 +233,7 @@
     "twitter": "X / Twitter",
     "tos": "Terms of Service",
     "privacy": "Privacy",
+    "consent": "Your data",
     "cookies": "Cookies",
     "legal-notice": "Legal notice"
   },
@@ -459,6 +460,24 @@
     "feedback-description": "A bug, a missing presence, or just feedback: Discord is the fastest way to reach us.",
     "discord": "Join the Discord"
   },
+  "consentPage": {
+    "eyebrow": "Privacy",
+    "title": "Your data",
+    "description": "Nowly only collects anonymous usage analytics if you explicitly turn it on below. This page also lets you see, export, or delete everything stored for your device.",
+    "checking": "Looking for the Nowly extension...",
+    "not-detected-title": "Extension not detected",
+    "not-detected-description": "Open this page from the browser where Nowly is installed to manage your consent and data.",
+    "toggle-title": "Share anonymous usage data",
+    "toggle-description": "Off by default. Helps us see which presences and features are actually used - no browsing history or personal data is ever collected.",
+    "data-title": "Your data",
+    "data-description": "Export everything Nowly has stored for this device, or delete it entirely.",
+    "export": "Export my data",
+    "delete": "Delete my data",
+    "delete-confirm": "This permanently deletes everything Nowly has stored for this device. This cannot be undone.",
+    "export-success": "Your data was downloaded.",
+    "delete-success": "Your data has been deleted.",
+    "action-error": "Something went wrong. Please try again."
+  },
   "changelogPage": {
     "eyebrow": "Release notes",
     "title": "What changed",
@@ -655,6 +674,10 @@
     "privacy": {
       "title": "Privacy",
       "description": "Learn how Nowly handles your data, what stays local, and what depends on your consent."
+    },
+    "consent": {
+      "title": "Your data",
+      "description": "Manage the optional analytics consent, and view, export, or delete the data Nowly has stored for your device."
     },
     "tos": {
       "title": "Terms of Service",

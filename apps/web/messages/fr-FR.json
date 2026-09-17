@@ -233,6 +233,7 @@
     "twitter": "X / Twitter",
     "tos": "Conditions d’utilisation",
     "privacy": "Confidentialité",
+    "consent": "Vos données",
     "cookies": "Cookies",
     "legal-notice": "Mentions légales"
   },
@@ -459,6 +460,24 @@
     "feedback-description": "Un bug, une présence manquante, ou juste un avis : le Discord est le plus rapide pour nous joindre.",
     "discord": "Rejoindre le Discord"
   },
+  "consentPage": {
+    "eyebrow": "Confidentialité",
+    "title": "Vos données",
+    "description": "Nowly ne collecte des analytics d'usage anonymes que si vous l'activez explicitement ci-dessous. Cette page vous permet aussi de voir, exporter ou supprimer tout ce qui est stocké pour votre appareil.",
+    "checking": "Recherche de l'extension Nowly...",
+    "not-detected-title": "Extension non détectée",
+    "not-detected-description": "Ouvrez cette page depuis le navigateur où Nowly est installée pour gérer votre consentement et vos données.",
+    "toggle-title": "Partager des données d'usage anonymes",
+    "toggle-description": "Désactivé par défaut. Nous aide à voir quelles présences et fonctionnalités sont réellement utilisées - aucun historique de navigation ni donnée personnelle n'est jamais collecté.",
+    "data-title": "Vos données",
+    "data-description": "Exportez tout ce que Nowly a stocké pour cet appareil, ou supprimez-le entièrement.",
+    "export": "Exporter mes données",
+    "delete": "Supprimer mes données",
+    "delete-confirm": "Cette action supprime définitivement tout ce que Nowly a stocké pour cet appareil. C'est irréversible.",
+    "export-success": "Vos données ont été téléchargées.",
+    "delete-success": "Vos données ont été supprimées.",
+    "action-error": "Une erreur s'est produite. Veuillez réessayer."
+  },
   "changelogPage": {
     "eyebrow": "Notes de mise à jour",
     "title": "Ce qui a changé",
@@ -655,6 +674,10 @@
     "privacy": {
       "title": "Confidentialité",
       "description": "Découvrez comment Nowly traite vos données, ce qui reste local et ce qui dépend de votre consentement."
+    },
+    "consent": {
+      "title": "Vos données",
+      "description": "Gérez le consentement analytics optionnel, et consultez, exportez ou supprimez les données que Nowly a stockées pour votre appareil."
     },
     "tos": {
       "title": "Conditions d’utilisation",

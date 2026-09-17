@@ -7,7 +7,14 @@ export type ExtensionRequestType =
   | "INSTALL_PRESENCE"
   | "UPDATE_PRESENCE"
   | "UNINSTALL_PRESENCE"
-  | "REDEEM_SUPPORT_CODE";
+  | "GET_DEVICE_INFO"
+  | "GET_ANALYTICS_CONSENT"
+  | "SET_ANALYTICS_CONSENT";
+
+export type ExtensionDeviceInfo = {
+  deviceId: string | null
+  deviceToken: string | null
+};
 
 export type ExtensionDiagnostic = {
   extensionInstalled: boolean
@@ -45,6 +52,7 @@ const nextMessageId = (): string => {
 
 const resultTypeFor = (type: ExtensionRequestType): string => {
   if (type === "GET_INSTALLED") return "INSTALLED_PRESENCES";
+  if (type === "GET_DEVICE_INFO") return "DEVICE_INFO";
   return `${type}_RESULT`;
 };
 

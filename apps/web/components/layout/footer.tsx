@@ -42,6 +42,7 @@ export const Footer = async () => {
     { href: "/legal-notice", label: t("legal-notice") },
     { href: "/cookies", label: t("cookies") },
     { href: "/privacy", label: t("privacy") },
+    { href: "/consent", label: t("consent") },
     { href: "/tos", label: t("tos") },
   ];
 
