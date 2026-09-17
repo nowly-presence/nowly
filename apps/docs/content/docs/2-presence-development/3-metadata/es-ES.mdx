@@ -51,6 +51,25 @@ Los nombres de usuario de GitHub (la clave `github`) se usan para resolver avata
 - `longDescription` - Descripción ampliada para páginas de detalle.
 - `features` - Lista localizada de comportamientos compatibles (p. ej. botones, teclas multimedia).
 
+## Compatibilidad nativa de Discord
+
+Algunas plataformas ya aparecen en Discord si el usuario vincula su cuenta (Spotify es el ejemplo habitual). Esta bandera opcional permite explicar que Nowly sigue siendo útil sin esa vinculación.
+
+<TypeTable
+  properties={[
+    { name: "discordNative", type: "boolean", description: "True cuando Discord ya muestra esta plataforma si el usuario vincula su cuenta. Opcional. False por defecto.", required: false }
+  ]}
+/>
+
+```json
+{
+  "name": "Spotify",
+  "discordNative": true
+}
+```
+
+Solo muestra una nota informativa en la página de la biblioteca y en la extensión (tienda y detalle de una presencia instalada). No bloquea la instalación.
+
 ## Coincidencia de URL
 
 - `url` - Dominios o patrones de URL compatibles para la coincidencia de páginas.

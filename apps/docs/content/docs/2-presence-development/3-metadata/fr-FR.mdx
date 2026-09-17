@@ -51,6 +51,25 @@ Les noms d'utilisateur GitHub (la clé `github`) servent à résoudre les avatar
 - `longDescription` - Description détaillée pour les pages de détail.
 - `features` - Liste localisée des comportements pris en charge (ex. boutons, touches multimédias).
 
+## Prise en charge native Discord
+
+Certaines plateformes apparaissent déjà sur Discord si l'utilisateur lie son compte (Spotify en est l'exemple habituel). Ce booléen facultatif permet d'expliquer que Nowly reste utile sans cette liaison.
+
+<TypeTable
+  properties={[
+    { name: "discordNative", type: "boolean", description: "True lorsque Discord affiche déjà cette plateforme si l'utilisateur lie son compte. Facultatif. False par défaut.", required: false }
+  ]}
+/>
+
+```json
+{
+  "name": "Spotify",
+  "discordNative": true
+}
+```
+
+Cela affiche seulement une note d'information sur la page bibliothèque et dans l'extension (boutique et détail d'une présence installée). Cela n'empêche pas l'installation.
+
 ## Correspondance d'URL
 
 - `url` - Domaines ou motifs d'URL pris en charge pour la correspondance des pages.

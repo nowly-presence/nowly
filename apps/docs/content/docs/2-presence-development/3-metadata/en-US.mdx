@@ -51,6 +51,25 @@ GitHub usernames (the `github` key) are used to resolve avatars.
 - `longDescription` - Expanded description for detail pages.
 - `features` - Localized list of supported behavior (e.g., button support, media keys).
 
+## Discord native support
+
+Some platforms already appear on Discord when the user links their account (Spotify is the usual example). Set this optional flag so the library can explain that Nowly is still useful without that link.
+
+<TypeTable
+  properties={[
+    { name: "discordNative", type: "boolean", description: "True when Discord already shows this platform if the user links their account. Optional. Defaults to false.", required: false }
+  ]}
+/>
+
+```json
+{
+  "name": "Spotify",
+  "discordNative": true
+}
+```
+
+This only shows an info note on the library page and in the extension (store and installed presence details). It does not block install.
+
 ## URL Matching
 
 - `url` - Supported domains or URL patterns for matching pages.
