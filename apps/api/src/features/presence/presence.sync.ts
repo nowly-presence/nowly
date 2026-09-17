@@ -85,8 +85,6 @@ export const processPresenceSync = async (body: PresenceSyncBody): Promise<Prese
       : await generateChangelog({
         type: p.type,
         name: p.name,
-        prTitle: body.prTitle,
-        changes: body.changes,
         changedFiles: p.changedFiles,
         diffSummary: p.diffSummary,
         ...(p.type === "new" ? { descriptions: p.description } : {}),

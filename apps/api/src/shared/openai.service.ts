@@ -10,8 +10,6 @@ interface ChangelogContext {
   names?: Record<string, string>
   description?: string
   descriptions?: Record<string, string>
-  prTitle?: string
-  changes?: string
   changedFiles?: string[]
   diffSummary?: string
 }
@@ -42,8 +40,8 @@ const fallbackChangelogs = (ctx: ChangelogContext): z.infer<typeof ChangelogSche
     }
   }
 
-  const title = ctx.prTitle || `Update ${ctx.name} presence`
-  const details = [ctx.changes, ctx.changedFiles?.join(", "), ctx.diffSummary].filter(Boolean).join(" — ")
+  const title = `Update ${ctx.name} presence`
+  const details = [ctx.changedFiles?.join(", "), ctx.diffSummary].filter(Boolean).join(" — ")
   const suffix = details ? ` — ${details}` : ""
   return buildLocaleObject(`${title}${suffix}`)
 }
@@ -116,9 +114,6 @@ Example: {"en-US":"Add YouTube presence - Watch videos","fr-FR":"Ajout de YouTub
 Name (en): ${nameEn}
 Name (fr): ${nameFr}
 Name (es): ${nameEs}
-PR title: ${sanitizePromptInput(ctx.prTitle, 200)}
-Changes:
-${sanitizePromptInput(ctx.changes, 800) || "No details"}
 Changed files:
 ${sanitizePromptInput(ctx.changedFiles?.join("\n"), 800) || "No changed files"}
 Diff summary:
