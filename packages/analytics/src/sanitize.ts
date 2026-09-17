@@ -1,5 +1,5 @@
 import { getAnalyticsMetric } from "./catalog"
-import { DEFAULT_TEXT_MAX_LENGTH, FORBIDDEN_PAYLOAD_KEYS_SET } from "./policies"
+import { DEFAULT_TEXT_MAX_LENGTH, FORBIDDEN_PAYLOAD_KEYS_SET, isAnalyticsSource, type AnalyticsSource } from "./policies"
 
 export type SanitizedPayload = Record<string, string | number | boolean>
 
@@ -30,6 +30,9 @@ export const sanitizeSlug = (value: unknown): string | undefined =>
   cleanText(value, 80)?.toLowerCase()
 
 export const sanitizeVersion = (value: unknown): string | undefined => cleanText(value, 60)
+
+export const sanitizeSource = (value: unknown): AnalyticsSource | undefined =>
+  isAnalyticsSource(value) ? value : undefined
 
 export const sanitizeDeviceId = (value: unknown): string | undefined => cleanText(value, 120)
 

@@ -6,6 +6,7 @@ export type OutboundAnalyticsEvent = {
   deviceId?: string
   slug?: string
   version?: string
+  source?: string
   payload: SanitizedPayload
   createdAt: string
 }

@@ -4,12 +4,13 @@ import { isConsentGranted } from "./consent"
 import type { IdentityProvider } from "./identity"
 import { MAX_ANALYTICS_EVENTS_PER_BATCH } from "./policies"
 import { AnalyticsQueue } from "./queue"
-import { sanitizeDeviceId, sanitizePayload, sanitizeSlug, sanitizeVersion } from "./sanitize"
+import { sanitizeDeviceId, sanitizePayload, sanitizeSlug, sanitizeSource, sanitizeVersion } from "./sanitize"
 import type { AnalyticsTransport, OutboundAnalyticsEvent } from "./transport"
 
 export type TrackInput = {
   slug?: string
   version?: string
+  source?: string
   payload?: Record<string, unknown>
   deviceId?: string
   eventId?: string
@@ -71,6 +72,7 @@ export const createAnalyticsClient = (options: AnalyticsClientOptions) => {
       deviceId: sanitizeDeviceId(input.deviceId ?? identityDeviceId),
       slug: sanitizeSlug(input.slug),
       version: sanitizeVersion(input.version),
+      source: sanitizeSource(input.source),
       payload: sanitizePayload(key, input.payload),
       createdAt,
     }
