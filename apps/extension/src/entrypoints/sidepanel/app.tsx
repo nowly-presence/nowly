@@ -11,6 +11,7 @@ import { InstallQueueBanner } from "@/features/store/install-queue-banner";
 import { StoreView } from "@/features/store/store-view";
 import { SettingsView } from "@/features/settings/settings-view";
 import { SupporterThankYouOverlay } from "@/features/supporter/supporter-thank-you-overlay";
+import { useAppearance } from "@/hooks/use-appearance";
 import { useExtensionState } from "@/hooks/use-extension-state";
 import { useLocalePreference } from "@/hooks/use-locale-preference";
 import { useOnboardingState } from "@/hooks/use-onboarding-state";
@@ -60,6 +61,16 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
     settings,
     setSettings,
   } = useExtensionState();
+  useAppearance(settings.appearance ?? "system");
+  useEffect(() => {
+    // Dev-only: let an unpacked build toggle the Canary accent to preview the
+    // global (stable) look. Store builds keep their compiled channel.
+    if (!isUnpacked) return;
+    const canary = settings.canaryTheme ?? import.meta.env.VITE_NOWLY_CHANNEL === "canary";
+    const root = document.documentElement;
+    if (canary) root.dataset.channel = "canary";
+    else delete root.dataset.channel;
+  }, [isUnpacked, settings.canaryTheme]);
   const { localePreference, setLocalePreference } = useLocalePreference();
   const { onboarding, setOnboarding, nativeStatus: onboardingNativeStatus, userScripts } = useOnboardingState();
   const [activeView, setActiveView] = useState<AppView>(initialView);
