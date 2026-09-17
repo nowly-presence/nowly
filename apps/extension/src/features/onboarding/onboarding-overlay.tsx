@@ -24,7 +24,6 @@ export const OnboardingOverlay: FC<OnboardingOverlayProps> = ({
   presences,
   settings,
   onSettingsChange,
-  supporter = false,
   hostVersionInfo,
 }): ReactElement | null => {
   const steps = useOnboardingSteps({
@@ -33,8 +32,6 @@ export const OnboardingOverlay: FC<OnboardingOverlayProps> = ({
     userScripts,
     onConnectNative,
     presences,
-    settings,
-    onSettingsChange,
     hostVersionInfo,
   });
 
@@ -112,7 +109,7 @@ export const OnboardingOverlay: FC<OnboardingOverlayProps> = ({
       <div className="relative z-1 flex min-h-0 flex-1 flex-col">
         <div className="flex items-center gap-2 px-3 pt-3">
           <div className="min-w-0 flex-1">
-            <Header supporter={supporter} />
+            <Header />
           </div>
           <LocalePicker
             localePreference={localePreference}

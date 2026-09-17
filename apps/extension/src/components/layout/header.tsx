@@ -5,7 +5,6 @@ import {
   IconDeviceDesktopDown,
   IconDots,
   IconExternalLink,
-  IconHeart,
   IconPlayerPause,
   IconPlayerPlay,
   IconRefresh,
@@ -13,7 +12,7 @@ import {
   IconWorld,
 } from "@/lib/tabler-icons";
 import { BRAND_LOCKUP } from "@/shared/brand";
-import { DISCORD_INVITE_URL, HOST_DOWNLOAD_URL, REDEEM_PAGE_URL, WEB_BASE_URL } from "@/shared/constants";
+import { DISCORD_INVITE_URL, HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
 import type { PresenceDisplayMode } from "@/shared/types";
 import type { FC, ReactElement } from "react";
@@ -27,7 +26,6 @@ type Props = {
   onReplayOnboarding?: () => void;
   onTogglePause?: () => void;
   presencePaused?: boolean;
-  supporter?: boolean;
 };
 
 type MenuItem = {
@@ -50,7 +48,6 @@ export const Header: FC<Props> = ({
   onReplayOnboarding,
   onTogglePause,
   presencePaused = false,
-  supporter = false,
 }): ReactElement => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -90,15 +87,6 @@ export const Header: FC<Props> = ({
   }
   if (onReplayOnboarding) {
     items.push({ id: "onboarding", icon: IconRotateClockwise2, label: "menu-onboarding", onSelect: () => void onReplayOnboarding() });
-  }
-  if (!supporter) {
-    items.push({
-      id: "support",
-      icon: IconHeart,
-      label: "menu-support",
-      external: true,
-      onSelect: () => openUrl(REDEEM_PAGE_URL),
-    });
   }
 
   return (

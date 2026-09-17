@@ -7,5 +7,3 @@ export const API_BASE_URL = extensionEnv.VITE_API_BASE_URL;
 export const CDN_BASE_URL = extensionEnv.VITE_CDN_BASE_URL;
 export const DISCORD_INVITE_URL = "https://discord.gg/MnZap7czgB";
 export const HOST_DOWNLOAD_URL = `${WEB_BASE_URL.replace(/\/$/, "")}/desktop`;
-export const REDEEM_PAGE_URL = "https://nowly.me/redeem";
-export const SUPPORTER_STATUS_KEY = "supporterStatus";

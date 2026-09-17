@@ -1,6 +1,5 @@
 import { LocaleFlag } from "@/components/shared/locale-flag";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { CustomSelect } from "@/components/ui/custom-select";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -9,9 +8,8 @@ import { DebugPanel } from "@/features/settings/debug-panel";
 import { SettingsGroup } from "@/features/settings/settings-group";
 import { ShortcutSettings } from "@/features/settings/shortcut-settings";
 import { ThemeSelector } from "@/features/settings/theme-selector";
-import { ThemeUpsellCard } from "@/features/settings/theme-upsell-card";
 import type { NativeStatus } from "@/lib/messages";
-import { HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
+import { HOST_DOWNLOAD_URL } from "@/shared/constants";
 import { t, type LocalePreference } from "@/shared/i18n";
 import type { ExtensionSettings, PresenceDebug } from "@/shared/types";
 import { IconCalendar, IconDeviceDesktop, IconExternalLink, IconMoon, IconRefresh, IconSun, IconWorld } from "@/lib/tabler-icons";
@@ -25,7 +23,6 @@ type HostVersionInfo = {
 };
 
 type Props = {
-  adFree: boolean;
   debug: PresenceDebug | null;
   hostVersionInfo: HostVersionInfo | null;
   isCheckingHostVersion: boolean;
@@ -50,7 +47,6 @@ const innerClassName = "px-4 py-4";
 const sectionTitleClassName = "mb-2 text-xs font-semibold text-muted-foreground";
 
 export const SettingsView: FC<Props> = ({
-  adFree,
   debug,
   hostVersionInfo,
   isCheckingHostVersion,
@@ -73,7 +69,6 @@ export const SettingsView: FC<Props> = ({
     advanced: settings.developerMode === true,
   });
   const lastCheckRef = useRef(0);
-  const consentUrl = `${WEB_BASE_URL}/consent`;
   const localeOptions = [
     { icon: <IconWorld className="size-4 text-muted-foreground" />, label: t("locale-auto"), value: "browser" as const },
     { icon: <LocaleFlag locale="fr-FR" />, label: t("locale-fr"), value: "fr" as const },
@@ -189,11 +184,7 @@ export const SettingsView: FC<Props> = ({
         </section>
 
         <div className={innerClassName}>
-          {adFree ? (
-            <ThemeSelector settings={settings} onSettingsChange={onSettingsChange} canary={canaryEnabled} />
-          ) : (
-            <ThemeUpsellCard />
-          )}
+          <ThemeSelector settings={settings} onSettingsChange={onSettingsChange} canary={canaryEnabled} />
         </div>
 
         <section className={innerClassName}>
@@ -320,31 +311,6 @@ export const SettingsView: FC<Props> = ({
             <IconRefresh className={`size-4 ${isCheckingUpdates ? "animate-spin" : ""}`} />
             {t("check-updates")}
           </Button>
-        </section>
-
-        <section className={innerClassName}>
-          <Label unstyled className="flex cursor-pointer items-start justify-between gap-3">
-            <span className="min-w-0">
-              <span className={`block ${sectionTitleClassName} mb-0`}>{t("data-management")}</span>
-              <span className="mt-2 block text-sm font-medium text-foreground">{t("analytics-consent")}</span>
-              <span className="mt-1 block text-xs leading-4 text-muted-foreground">{t("analytics-description")}</span>
-            </span>
-            <Checkbox
-              ariaLabel={t("analytics-consent")}
-              checked={settings.analyticsConsent === true}
-              onChange={(checked) => onSettingsChange({ analyticsConsent: checked })}
-            />
-          </Label>
-
-          <a
-            href={consentUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-3 inline-flex h-8 items-center gap-2 rounded-xl border border-border bg-card-2 px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground"
-          >
-            {t("data-management")}
-            <IconExternalLink className="size-3.5" />
-          </a>
         </section>
 
         {developerModeEnabled ? (
