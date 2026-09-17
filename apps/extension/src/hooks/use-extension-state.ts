@@ -27,6 +27,8 @@ type ExtensionState = {
   updates: Record<string, string>;
   settings: ExtensionSettings;
   setSettings: (partial: Partial<ExtensionSettings>) => void;
+  analyticsConsent: boolean;
+  setAnalyticsConsent: (granted: boolean) => void;
 };
 
 const FALLBACK_NATIVE_STATUS: NativeStatus = {
@@ -65,6 +67,7 @@ export const useExtensionState = (): ExtensionState => {
   }, []);
 
   const [settings, setSettingsState] = useState<ExtensionSettings>(FALLBACK_SETTINGS);
+  const [analyticsConsent, setAnalyticsConsentState] = useState(false);
 
   const { hostVersionInfo, isCheckingHostVersion, checkHostUpdate, fetchHostVersion } = useHostVersion();
 
@@ -78,13 +81,15 @@ export const useExtensionState = (): ExtensionState => {
       sendMessage<PresenceDebug | null>("GET_DEBUG"),
       sendMessage<ExtensionSettings>("GET_SETTINGS"),
       sendMessage<{ items?: Array<{ slug: string }> }>("GET_INSTALL_QUEUE"),
-    ]).then(([nextPresences, nextActivity, nextNativeStatus, nextDebug, nextSettings, nextQueue]) => {
+      sendMessage<{ granted?: boolean }>("GET_ANALYTICS_CONSENT"),
+    ]).then(([nextPresences, nextActivity, nextNativeStatus, nextDebug, nextSettings, nextQueue, nextConsent]) => {
       setPresences(nextPresences ?? {});
       setActivity(nextActivity ?? null);
       setNativeStatus(nextNativeStatus ?? FALLBACK_NATIVE_STATUS);
       setDebug(nextDebug ?? null);
       setSettingsState(nextSettings ?? FALLBACK_SETTINGS);
       setInstallQueue((nextQueue?.items ?? []).map((item) => item.slug));
+      setAnalyticsConsentState(nextConsent?.granted === true);
     }).finally(() => {
       setIsLoading(false);
     });
@@ -208,6 +213,12 @@ export const useExtensionState = (): ExtensionState => {
     if (next) setSettingsState(next);
   }, []);
 
+  const setAnalyticsConsent = useCallback((granted: boolean): void => {
+    void sendMessage<{ granted?: boolean }>("SET_ANALYTICS_CONSENT", { granted }).then((next) => {
+      setAnalyticsConsentState(next?.granted === true);
+    });
+  }, []);
+
   return {
     activity,
     checkUpdates: refreshUpdates,
@@ -232,5 +243,7 @@ export const useExtensionState = (): ExtensionState => {
     updates,
     settings,
     setSettings,
+    analyticsConsent,
+    setAnalyticsConsent,
   };
 };

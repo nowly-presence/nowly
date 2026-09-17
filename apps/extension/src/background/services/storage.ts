@@ -8,6 +8,7 @@ const SETTINGS_KEY = "settings";
 const PRESENCE_SETTINGS_KEY = "presenceSettings";
 const DEVICE_ID_KEY = "deviceId";
 const DEVICE_TOKEN_KEY = "deviceToken";
+const ANALYTICS_CONSENT_KEY = "analyticsConsent";
 
 export const DEFAULT_SETTINGS: ExtensionSettings = {
   presenceDisplayMode: "category" as PresenceDisplayMode,
@@ -138,6 +139,18 @@ export const getDeviceToken = async (): Promise<string | null> => {
 
 export const setDeviceToken = async (token: string): Promise<void> => {
   await chrome.storage.local.set({ [DEVICE_TOKEN_KEY]: token });
+};
+
+// Opt-in: undefined/missing means "not decided yet", not "granted". Analytics
+// must never fire until this is explicitly true.
+export const getAnalyticsConsent = async (): Promise<boolean> => {
+  const result = await chrome.storage.local.get(ANALYTICS_CONSENT_KEY);
+  return result[ANALYTICS_CONSENT_KEY] === true;
+};
+
+export const setAnalyticsConsent = async (granted: boolean): Promise<boolean> => {
+  await chrome.storage.local.set({ [ANALYTICS_CONSENT_KEY]: granted });
+  return granted;
 };
 
 export const snoozePresence = async (slug: string, durationMs: number): Promise<StoredPresence | null> => {

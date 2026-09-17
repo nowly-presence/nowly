@@ -4,7 +4,9 @@ export type WebMessageType =
   | "UNINSTALL_PRESENCE"
   | "GET_INSTALLED"
   | "GET_DIAGNOSTIC"
-  | "GET_DEVICE_INFO";
+  | "GET_DEVICE_INFO"
+  | "GET_ANALYTICS_CONSENT"
+  | "SET_ANALYTICS_CONSENT";
 
 export type ExtensionMessageType =
   | "GET_PRESENCES"
@@ -32,6 +34,8 @@ export type ExtensionMessageType =
   | "CHECK_UPDATES"
   | "GET_SETTINGS"
   | "SET_SETTINGS"
+  | "GET_ANALYTICS_CONSENT"
+  | "SET_ANALYTICS_CONSENT"
   | "RESET_ONBOARDING_FOR_DEV"
   | "GET_PRESENCE_SETTINGS"
   | "SET_PRESENCE_SETTINGS"

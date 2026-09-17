@@ -1,7 +1,7 @@
-import { alwaysGrantedConsent, createAnalyticsClient, type TrackInput } from "@nowly/analytics";
+import { createAnalyticsClient, type ConsentState, type TrackInput } from "@nowly/analytics";
 import { getActiveDeviceId } from "@/background/services/device-sync";
 import { getEffectiveApiUrl } from "@/background/services/api-state";
-import { browserName, osName } from "@/background/services/device-info";
+import { getAnalyticsConsent } from "@/background/services/storage";
 
 const client = createAnalyticsClient({
   transport: {
@@ -16,27 +16,18 @@ const client = createAnalyticsClient({
       }
     },
   },
-  consent: alwaysGrantedConsent,
+  // Opt-in: nothing is sent until the user explicitly grants consent in settings.
+  consent: {
+    get: async (): Promise<ConsentState> => (await getAnalyticsConsent()) ? "granted" : "denied",
+  },
   identity: {
     getDeviceId: () => getActiveDeviceId(),
   },
   flushAt: 1,
 });
 
-export const analyticsContext = (): Record<string, string> => ({
-  extensionVersion: chrome.runtime.getManifest().version,
-  browser: browserName(),
-  os: osName(),
-});
-
 export const trackAnalytics = (key: string, input: TrackInput = {}): void => {
-  void client.track(key, {
-    ...input,
-    payload: {
-      ...analyticsContext(),
-      ...input.payload,
-    },
-  }).catch(() => {
+  void client.track(key, input).catch(() => {
     // Best-effort ingest.
   });
 };

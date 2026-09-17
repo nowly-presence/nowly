@@ -20,6 +20,8 @@ const WEB_MESSAGE_TYPES = new Set([
   "GET_INSTALLED",
   "GET_DIAGNOSTIC",
   "GET_DEVICE_INFO",
+  "GET_ANALYTICS_CONSENT",
+  "SET_ANALYTICS_CONSENT",
 ]);
 
 const sendRuntimeMessage = async <T = unknown>(message: Record<string, unknown>): Promise<T | null> => {

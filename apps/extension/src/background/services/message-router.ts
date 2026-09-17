@@ -1,5 +1,6 @@
 import type { ExtensionMessage, ExtensionSettings, PresenceData, PresenceDebug, PresenceSchedule, UserScriptsStatus } from "@/shared/types";
 import { handleActivityUpdate, handleClearActivity, resumeStoredActivityIfAllowed } from "@/background/managers/activity-manager";
+import { trackAnalytics } from "@/background/analytics-client";
 import { clearRuntimeLogs, getRuntimeLogs } from "@/background/runtime-logs";
 import { reconnectNative, refreshNativeStatus, restartNative } from "@/background/services/native";
 import { getInstallQueue } from "@/background/managers/install-queue";
@@ -7,7 +8,7 @@ import { setPresencePaused } from "@/background/managers/presence-pause";
 import { checkUpdates, drainInstallQueue, fetchPresenceCatalog, installLocalPresenceZip, installPresence, installPresenceFromApi, togglePresence, uninstallPresence } from "@/background/managers/presence-manager";
 import { getPresenceStrings, registerPresenceScript, syncPresenceScripts } from "@/background/runtime/presence-scripts";
 import { resetOnboardingForDev, updateSettings } from "@/background/managers/settings-manager";
-import { clearSnooze, getCurrentActivity, getDebug, getPresenceSettings, getPresences, getSettings, setDebug, setPresenceSchedule, setPresenceSettings, snoozePresence } from "@/background/services/storage";
+import { getAnalyticsConsent, setAnalyticsConsent, clearSnooze, getCurrentActivity, getDebug, getPresenceSettings, getPresences, getSettings, setDebug, setPresenceSchedule, setPresenceSettings, snoozePresence } from "@/background/services/storage";
 import { visiblePresences } from "@/background/runtime/user-scripts";
 
 const respond = <T>(sendResponse: (response?: T) => void, value: T): void => sendResponse(value);
@@ -224,6 +225,21 @@ export const registerRuntimeMessageRouter = (): void => {
           }
         });
         return true;
+
+      case "GET_ANALYTICS_CONSENT":
+        getAnalyticsConsent().then((granted) => respond(sendResponse, { granted }));
+        return true;
+
+      case "SET_ANALYTICS_CONSENT": {
+        const granted = (message.payload as { granted?: unknown } | undefined)?.granted === true;
+        setAnalyticsConsent(granted).then((next) => {
+          respond(sendResponse, { granted: next });
+          // Only the acceptance itself is worth recording - a decline must not
+          // send anything, and consent is granted by the time this call resolves.
+          if (next) trackAnalytics("analytics_consent_accepted", { source: "extension_settings" });
+        });
+        return true;
+      }
 
       case "RESET_ONBOARDING_FOR_DEV":
         resetOnboardingForDev().then((settings) => respond(sendResponse, settings));

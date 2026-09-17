@@ -57,6 +57,8 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
     updates,
     settings,
     setSettings,
+    analyticsConsent,
+    setAnalyticsConsent,
   } = useExtensionState();
   useAppearance(settings.appearance ?? "system");
   useEffect(() => {
@@ -297,6 +299,8 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
               onScheduleGlobal={() => handleScheduleOpen(null)}
               settings={settings}
               onSettingsChange={setSettings}
+              analyticsConsent={analyticsConsent}
+              onAnalyticsConsentChange={setAnalyticsConsent}
             />
           )}
         </div>

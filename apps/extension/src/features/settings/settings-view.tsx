@@ -9,7 +9,7 @@ import { SettingsGroup } from "@/features/settings/settings-group";
 import { ShortcutSettings } from "@/features/settings/shortcut-settings";
 import { ThemeSelector } from "@/features/settings/theme-selector";
 import type { NativeStatus } from "@/lib/messages";
-import { HOST_DOWNLOAD_URL } from "@/shared/constants";
+import { HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
 import { t, type LocalePreference } from "@/shared/i18n";
 import type { ExtensionSettings, PresenceDebug } from "@/shared/types";
 import { IconCalendar, IconDeviceDesktop, IconExternalLink, IconMoon, IconRefresh, IconSun, IconWorld } from "@/lib/tabler-icons";
@@ -37,6 +37,8 @@ type Props = {
   onScheduleGlobal: () => void;
   settings: ExtensionSettings;
   onSettingsChange: (partial: Partial<ExtensionSettings>) => void;
+  analyticsConsent: boolean;
+  onAnalyticsConsentChange: (granted: boolean) => void;
 };
 
 type SettingsGroupId = "general" | "presences" | "advanced";
@@ -61,6 +63,8 @@ export const SettingsView: FC<Props> = ({
   onScheduleGlobal,
   settings,
   onSettingsChange,
+  analyticsConsent,
+  onAnalyticsConsentChange,
 }): ReactElement => {
   const [isUnpacked, setIsUnpacked] = useState(false);
   const [openGroups, setOpenGroups] = useState<Record<SettingsGroupId, boolean>>({
@@ -215,6 +219,28 @@ export const SettingsView: FC<Props> = ({
               onChange={(checked) => onSettingsChange({ backgroundAnimation: checked })}
             />
           </Label>
+        </section>
+
+        <section className={innerClassName}>
+          <Label unstyled className="flex cursor-pointer items-center justify-between gap-3">
+            <span className="min-w-0">
+              <span className="block text-sm font-medium text-foreground">{t("analytics-consent")}</span>
+              <span className="mt-0.5 block text-xs leading-4 text-muted-foreground">{t("analytics-consent-description")}</span>
+            </span>
+            <Switch
+              checked={analyticsConsent}
+              onChange={onAnalyticsConsentChange}
+            />
+          </Label>
+          <a
+            href={`${WEB_BASE_URL.replace(/\/$/, "")}/consent`}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline"
+          >
+            {t("analytics-consent-manage")}
+            <IconExternalLink className="size-3" />
+          </a>
         </section>
       </SettingsGroup>
 
