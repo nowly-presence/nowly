@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
-import { CopyButton } from "@/components/ui/copy-button";
+import { cn } from "@nowly/ui";
+import { CopyButton } from "@/components/copy-button";
 import {
   BashDark,
   CSS,

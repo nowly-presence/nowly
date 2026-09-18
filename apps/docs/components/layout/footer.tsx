@@ -1,7 +1,8 @@
 import { BrandLockup } from "@/components/layout/brand-lockup";
 import { LocaleSelector } from "@/components/layout/locale-selector";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@nowly/ui";
+
 import { DISCORD_INVITE_URL, DISCORD_SITE_URL, PROJECT_REPOSITORY_URL, SITE_URL } from "@/lib/constants";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";

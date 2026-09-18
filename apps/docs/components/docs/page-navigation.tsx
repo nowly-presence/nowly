@@ -1,8 +1,9 @@
 "use client";
+import { RiArrowLeftSLine, RiArrowRightSLine } from "@nowly/ui/icons";
 
 import type { DocNavigationItem } from "@/lib/docs/types";
 import { docHref } from "@/lib/docs/href";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import type { FC } from "react";
@@ -24,7 +25,7 @@ export const PageNavigation: FC<PageNavigationProps> = ({ prev, next }) => {
             className="group flex flex-col gap-1 rounded-lg p-3 transition-colors hover:bg-card-hover"
           >
             <span className="flex items-center gap-1 text-xs text-muted-foreground">
-              <IconChevronLeft size={14} />
+              <RiArrowLeftSLine size={14} />
               {t("previous")}
             </span>
 
@@ -43,7 +44,7 @@ export const PageNavigation: FC<PageNavigationProps> = ({ prev, next }) => {
           >
             <span className="flex items-center justify-end gap-1 text-xs text-muted-foreground">
               {t("next")}
-              <IconChevronRight size={14} />
+              <RiArrowRightSLine size={14} />
             </span>
 
             <span className="text-sm font-medium group-hover:text-accent transition-colors">

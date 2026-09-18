@@ -1,8 +1,8 @@
 "use client";
 
-import { RiMenuLine } from "@remixicon/react";
+import { RiMenuLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
-import { useSidebar } from "../ui/sidebar-context";
+import { useSidebar } from "@/components/sidebar-context";
 
 export const MobileSidebarToggle = () => {
   const t = useTranslations("docs");

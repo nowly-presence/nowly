@@ -2,8 +2,9 @@
 
 import { createContext, useContext, useRef, useMemo } from "react";
 import type { FC, ReactNode } from "react";
-import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, cn } from "@nowly/ui";
+
+
 
 type StepProps = {
   title: string;

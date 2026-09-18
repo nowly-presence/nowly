@@ -1,10 +1,10 @@
 "use client";
 
-import { useSidebar } from "@/components/ui/sidebar-context";
+import { useSidebar } from "@/components/sidebar-context";
 import { docHref } from "@/lib/docs/href";
 import type { DocNavigationItem } from "@/lib/docs/types";
-import { cn } from "@/lib/utils";
-import { RiCloseLine } from "@remixicon/react";
+import { cn } from "@nowly/ui";
+import { RiCloseLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

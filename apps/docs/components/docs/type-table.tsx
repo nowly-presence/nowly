@@ -1,5 +1,6 @@
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { Badge, cn } from "@nowly/ui";
+
+
 import type { FC, ReactElement, ReactNode } from "react";
 
 export type TypeProperty = {

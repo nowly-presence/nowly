@@ -1,10 +1,11 @@
 "use client";
 
-import { RiMenuLine } from "@remixicon/react";
+import { RiMenuLine } from "@nowly/ui/icons";
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { BrandLockup } from "@/components/layout/brand-lockup";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Button, Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@nowly/ui";
+
+
 import { SITE_URL } from "@/lib/constants";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -45,10 +46,10 @@ export const Navbar = () => {
         </nav>
 
         <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <Button type="button" variant="ghost" size="icon" className="lg:hidden" aria-label={t("open-menu")}>
-              <RiMenuLine />
-            </Button>
+          <SheetTrigger
+            render={<Button type="button" variant="ghost" size="icon" className="lg:hidden" aria-label={t("open-menu")} />}
+          >
+            <RiMenuLine />
           </SheetTrigger>
           <SheetContent side="right" className="w-[min(100%,20rem)] bg-background p-0 lg:hidden">
             <SheetHeader>

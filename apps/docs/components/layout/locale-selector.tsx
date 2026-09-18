@@ -1,13 +1,8 @@
 "use client";
 
 import { LocaleFlag } from "@/components/locale-flag";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@nowly/ui";
+
 import { SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -24,7 +19,8 @@ export const LocaleSelector: FC = () => {
   const router = useRouter();
   const t = useTranslations("footer");
 
-  const handleLocaleChange = (value: string): void => {
+  const handleLocaleChange = (value: string | null): void => {
+    if (!value) return;
     document.cookie = `locale=${value};path=/;max-age=31536000;SameSite=Lax`;
     router.refresh();
   };

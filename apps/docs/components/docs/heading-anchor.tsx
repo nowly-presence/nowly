@@ -1,6 +1,8 @@
+import { RiLinksLine } from "@nowly/ui/icons";
 import { createHeadingId } from "@/lib/docs/types";
-import { cn } from "@/lib/utils";
-import { IconLink } from "@tabler/icons-react";
+import { cn } from "@nowly/ui";
+
+
 import type { FC, ReactNode } from "react";
 
 type HeadingAnchorProps = {
@@ -18,9 +20,9 @@ export const HeadingAnchor: FC<HeadingAnchorProps> = ({ as: Tag, id, children, c
       <a
         href={`#${anchorId}`}
         className="absolute -left-6 top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100"
-        aria-label={`IconLink to ${children}`}
+        aria-label={`RiLinksLine to ${children}`}
       >
-        <IconLink size={16} className="text-muted-foreground" />
+        <RiLinksLine size={16} className="text-muted-foreground" />
       </a>
       {children}
     </Tag>
