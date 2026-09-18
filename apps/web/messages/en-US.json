@@ -226,6 +226,7 @@
     "changelog": "Release notes",
     "canary": "Canary",
     "support": "Support",
+    "status": "Status",
     "community": "Community",
     "discord": "Discord",
     "github": "GitHub",
@@ -587,6 +588,42 @@
       "description": "Open a blank issue if your topic does not fit one of the guided forms."
     }
   },
+  "statusPage": {
+    "eyebrow": "Status",
+    "title": "Nowly service status",
+    "description": "Live status for the website, API, presence library, and host downloads.",
+    "checked-history": "Checked live at {time}",
+    "no-data": "No data",
+    "history-label": "Recent service response history",
+    "overall": {
+      "operational": "All systems operational",
+      "slow": "Some services are slower than usual",
+      "degraded": "Some services are degraded",
+      "down": "Some services are unavailable",
+      "unknown": "No status data yet"
+    },
+    "status-labels": {
+      "operational": "Operational",
+      "slow": "Slow",
+      "degraded": "Degraded",
+      "down": "Down",
+      "unknown": "No data"
+    },
+    "services": {
+      "website": {
+        "title": "Website"
+      },
+      "api": {
+        "title": "Nowly API"
+      },
+      "library": {
+        "title": "Presence library"
+      },
+      "cdn": {
+        "title": "Nowly Host downloads"
+      }
+    }
+  },
   "redeemPage": {
     "eyebrow": "Supporter",
     "title": "Activate a supporter key",
@@ -630,6 +667,10 @@
     "support": {
       "title": "Support",
       "description": "Get help with Nowly, the extension, or a presence."
+    },
+    "status": {
+      "title": "Status",
+      "description": "Live status for the Nowly website, API, presence library, and host downloads."
     },
     "redeem": {
       "title": "Activate a supporter key",

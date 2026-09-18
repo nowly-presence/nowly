@@ -44,6 +44,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       ),
     ),
     entry("/support", "monthly", 0.6),
+    entry("/status", "hourly", 0.4),
     ...catalog.map((presence) => entry(`/library/${presence.slug}`, "weekly", 0.75)),
     ...authors.map((github) => entry(`/author/${github}`, "weekly", 0.45)),
     entry("/privacy", "yearly", 0.3),

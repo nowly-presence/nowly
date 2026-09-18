@@ -26,6 +26,7 @@ export const Footer = async () => {
         { href: "/changelog", label: t("changelog") },
         { href: "/canary", label: t("canary") },
         { href: "/support", label: t("support") },
+        { href: "/status", label: t("status") },
       ],
     },
     {

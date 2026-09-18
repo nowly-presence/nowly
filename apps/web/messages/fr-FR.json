@@ -226,6 +226,7 @@
     "changelog": "Notes de mise à jour",
     "canary": "Canary",
     "support": "Support",
+    "status": "Statut des services",
     "community": "Communauté",
     "discord": "Discord",
     "github": "GitHub",
@@ -587,6 +588,42 @@
       "description": "Ouvrez une issue libre si votre sujet ne rentre pas dans les formulaires proposés."
     }
   },
+  "statusPage": {
+    "eyebrow": "Statut",
+    "title": "Statut des services Nowly",
+    "description": "Statut en direct du site, de l’API, de la bibliothèque de présences et des téléchargements de Nowly Host.",
+    "checked-history": "Vérifié en direct {time}",
+    "no-data": "Aucune donnée",
+    "history-label": "Historique récent des temps de réponse",
+    "overall": {
+      "operational": "Tous les services sont opérationnels",
+      "slow": "Certains services sont plus lents que d’habitude",
+      "degraded": "Certains services sont dégradés",
+      "down": "Certains services sont indisponibles",
+      "unknown": "Aucune donnée de statut pour le moment"
+    },
+    "status-labels": {
+      "operational": "Opérationnel",
+      "slow": "Lent",
+      "degraded": "Dégradé",
+      "down": "Hors service",
+      "unknown": "Sans donnée"
+    },
+    "services": {
+      "website": {
+        "title": "Site web"
+      },
+      "api": {
+        "title": "API Nowly"
+      },
+      "library": {
+        "title": "Bibliothèque de présences"
+      },
+      "cdn": {
+        "title": "Téléchargements Nowly Host"
+      }
+    }
+  },
   "redeemPage": {
     "eyebrow": "Soutien",
     "title": "Activer une clé supporter",
@@ -630,6 +667,10 @@
     "support": {
       "title": "Support",
       "description": "Obtenez de l’aide pour Nowly, l’extension ou une présence."
+    },
+    "status": {
+      "title": "Statut",
+      "description": "Statut en direct du site Nowly, de l’API, de la bibliothèque de présences et des téléchargements de Nowly Host."
     },
     "redeem": {
       "title": "Activer une clé supporter",
