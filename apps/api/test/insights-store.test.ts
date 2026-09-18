@@ -107,7 +107,7 @@ describe("insights filters (combinable dimensions)", () => {
     const { getOverview } = await import("@/features/insights/insights.service")
     mockPrisma.device.findMany.mockResolvedValue([{ deviceId: "device-1" }, { deviceId: "device-2" }])
 
-    await getOverview("7d", { slug: "youtube", browser: "firefox", os: "windows" })
+    await getOverview({ range: "7d" }, { slug: "youtube", browser: "firefox", os: "windows" })
 
     expect(mockPrisma.device.findMany).toHaveBeenCalledWith({
       where: { browser: "firefox", os: "windows", locale: undefined },
@@ -121,7 +121,7 @@ describe("insights filters (combinable dimensions)", () => {
   it("skips the device lookup entirely when no device-level filter is set", async () => {
     const { getOverview } = await import("@/features/insights/insights.service")
 
-    await getOverview("7d", { source: "extension_library" })
+    await getOverview({ range: "7d" }, { source: "extension_library" })
 
     expect(mockPrisma.device.findMany).not.toHaveBeenCalled()
     expect(mockPrisma.analyticsEvent.count).toHaveBeenCalledWith({

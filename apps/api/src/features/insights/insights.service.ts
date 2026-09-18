@@ -9,8 +9,9 @@ import {
   MAX_ANALYTICS_EVENTS_PER_BATCH,
   MAX_ANALYTICS_EVENTS_PER_DEVICE_PER_MINUTE,
   measureFunnel,
+  previousWindow,
   resolveGranularity,
-  resolveRange,
+  resolveWindow,
   sanitizeDeviceId,
   sanitizeEventId,
   sanitizeEventKey,
@@ -23,6 +24,10 @@ import {
   type FunnelEventRow,
   type IngestEvent,
 } from "@nowly/analytics"
+
+// Either a preset range id (e.g. "7d") or an explicit custom from/to pair -
+// from/to win when both are present (see resolveWindow).
+export type InsightsWindow = { range?: unknown; from?: unknown; to?: unknown }
 import { Prisma } from "../../generated/prisma/client"
 
 export type InsightsRecordResult = {
@@ -229,13 +234,13 @@ const eventWhereFromFilters = (
   ...(deviceIds && { deviceId: { in: deviceIds } }),
 })
 
-export const getOverview = async (rangeValue: unknown, filters: InsightsFilters = {}) => {
-  const range = resolveRange(rangeValue)
+export const getOverview = async (windowInput: InsightsWindow, filters: InsightsFilters = {}) => {
+  const { range, from, to } = resolveWindow(windowInput)
   if (!hasDatabase()) {
     return {
-      range: range.id,
-      from: new Date(Date.now() - range.ms).toISOString(),
-      to: new Date().toISOString(),
+      range,
+      from: from.toISOString(),
+      to: to.toISOString(),
       totals: { events: 0, uniqueDevices: 0 },
       topEvents: [] as Array<{ key: string; count: number }>,
       funnels: listFunnels().map((funnel) => ({ id: funnel.id, label: funnel.label, overallConversion: null as number | null })),
@@ -243,8 +248,6 @@ export const getOverview = async (rangeValue: unknown, filters: InsightsFilters 
   }
 
   const prisma = getPrisma()
-  const to = new Date()
-  const from = new Date(to.getTime() - range.ms)
   const deviceIds = await resolveDeviceIds(filters)
   const where = { createdAt: { gte: from, lte: to }, ...eventWhereFromFilters(filters, deviceIds) }
 
@@ -265,7 +268,7 @@ export const getOverview = async (rangeValue: unknown, filters: InsightsFilters 
 
   const funnels = await Promise.all(
     listFunnels().map(async (funnel) => {
-      const measurement = await getFunnelMeasurement(funnel.id, rangeValue, filters)
+      const measurement = await getFunnelMeasurement(funnel.id, windowInput, filters)
       return {
         id: funnel.id,
         label: funnel.label,
@@ -275,7 +278,7 @@ export const getOverview = async (rangeValue: unknown, filters: InsightsFilters 
   )
 
   return {
-    range: range.id,
+    range,
     from: from.toISOString(),
     to: to.toISOString(),
     totals: { events, uniqueDevices: uniqueDevices.length },
@@ -293,75 +296,73 @@ const truncExpr = (granularity: AnalyticsGranularity) => {
 
 export const getSeries = async (
   metric: string,
-  rangeValue: unknown,
-  granularityValue?: string,
+  windowInput: InsightsWindow,
+  granularityValue: string | undefined,
   filters: InsightsFilters = {},
+  compare = false,
 ) => {
   const catalogMetric = getAnalyticsMetric(metric)
   if (!catalogMetric) return null
 
-  const range = resolveRange(rangeValue)
-  const granularity = resolveGranularity(range.id, granularityValue)
-  const to = new Date()
-  const from = new Date(to.getTime() - range.ms)
+  const { range, from, to, defaultGranularity } = resolveWindow(windowInput)
+  const granularity =
+    range === "custom"
+      ? (granularityValue as AnalyticsGranularity | undefined) ?? defaultGranularity
+      : resolveGranularity(range, granularityValue)
 
-  if (!hasDatabase()) {
-    return {
-      metric: catalogMetric.toJSON(),
-      range: range.id,
-      granularity,
-      from: from.toISOString(),
-      to: to.toISOString(),
-      points: [] as Array<{ bucket: string; count: number }>,
-      total: 0,
-    }
+  const bucketize = async (rangeFrom: Date, rangeTo: Date) => {
+    if (!hasDatabase()) return [] as Array<{ bucket: string; count: number }>
+
+    const deviceIds = await resolveDeviceIds(filters)
+    const extraConditions = [
+      filters.slug ? Prisma.sql`AND slug = ${filters.slug}` : Prisma.empty,
+      filters.source ? Prisma.sql`AND source = ${filters.source}` : Prisma.empty,
+      filters.country ? Prisma.sql`AND country = ${filters.country}` : Prisma.empty,
+      deviceIds ? Prisma.sql`AND device_id = ANY(${deviceIds})` : Prisma.empty,
+    ]
+
+    const rows = await getPrisma().$queryRaw<Array<{ bucket: Date; count: number }>>`
+      SELECT ${truncExpr(granularity)} AS bucket, COUNT(*)::int AS count
+      FROM analytics_events
+      WHERE key = ${metric} AND created_at >= ${rangeFrom} AND created_at <= ${rangeTo}
+      ${Prisma.join(extraConditions, " ")}
+      GROUP BY 1
+      ORDER BY 1
+    `
+    return rows.map((row) => ({ bucket: row.bucket.toISOString(), count: Number(row.count) }))
   }
 
-  const deviceIds = await resolveDeviceIds(filters)
-  const extraConditions = [
-    filters.slug ? Prisma.sql`AND slug = ${filters.slug}` : Prisma.empty,
-    filters.source ? Prisma.sql`AND source = ${filters.source}` : Prisma.empty,
-    filters.country ? Prisma.sql`AND country = ${filters.country}` : Prisma.empty,
-    deviceIds ? Prisma.sql`AND device_id = ANY(${deviceIds})` : Prisma.empty,
-  ]
+  const points = await bucketize(from, to)
 
-  const prisma = getPrisma()
-  const rows = await prisma.$queryRaw<Array<{ bucket: Date; count: number }>>`
-    SELECT ${truncExpr(granularity)} AS bucket, COUNT(*)::int AS count
-    FROM analytics_events
-    WHERE key = ${metric} AND created_at >= ${from} AND created_at <= ${to}
-    ${Prisma.join(extraConditions, " ")}
-    GROUP BY 1
-    ORDER BY 1
-  `
-
-  const points = rows.map((row) => ({
-    bucket: row.bucket.toISOString(),
-    count: Number(row.count),
-  }))
+  let comparePoints: Array<{ bucket: string; count: number }> | undefined
+  let compareTotal: number | undefined
+  if (compare) {
+    const previous = previousWindow(from, to)
+    comparePoints = await bucketize(previous.from, previous.to)
+    compareTotal = comparePoints.reduce((sum, point) => sum + point.count, 0)
+  }
 
   return {
     metric: catalogMetric.toJSON(),
-    range: range.id,
+    range,
     granularity,
     from: from.toISOString(),
     to: to.toISOString(),
     points,
     total: points.reduce((sum, point) => sum + point.count, 0),
+    ...(comparePoints ? { comparePoints, compareTotal } : {}),
   }
 }
 
-export const getFunnelMeasurement = async (id: string, rangeValue: unknown, filters: InsightsFilters = {}) => {
+export const getFunnelMeasurement = async (id: string, windowInput: InsightsWindow, filters: InsightsFilters = {}) => {
   const funnel = getFunnel(id)
   if (!funnel) return null
 
-  const range = resolveRange(rangeValue)
-  const to = new Date()
-  const from = new Date(to.getTime() - range.ms)
+  const { range, from, to } = resolveWindow(windowInput)
   const keys = funnel.steps.flatMap(stepKeys)
 
   if (!hasDatabase()) {
-    return { range: range.id, from: from.toISOString(), to: to.toISOString(), ...measureFunnel(funnel, []) }
+    return { range, from: from.toISOString(), to: to.toISOString(), ...measureFunnel(funnel, []) }
   }
 
   const deviceIds = await resolveDeviceIds(filters)
@@ -382,14 +383,14 @@ export const getFunnelMeasurement = async (id: string, rangeValue: unknown, filt
   )
 
   return {
-    range: range.id,
+    range,
     from: from.toISOString(),
     to: to.toISOString(),
     ...measureFunnel(funnel, funnelRows),
   }
 }
 
-export const listFunnelSummaries = async (rangeValue: unknown, filters: InsightsFilters = {}) => {
-  const measurements = await Promise.all(listFunnels().map((funnel) => getFunnelMeasurement(funnel.id, rangeValue, filters)))
+export const listFunnelSummaries = async (windowInput: InsightsWindow, filters: InsightsFilters = {}) => {
+  const measurements = await Promise.all(listFunnels().map((funnel) => getFunnelMeasurement(funnel.id, windowInput, filters)))
   return measurements.filter((item): item is NonNullable<typeof item> => Boolean(item))
 }
