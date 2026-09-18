@@ -23,6 +23,7 @@ const REPORTS: Record<string, { metric: string; dimension: string }> = {
   "Pages vues par source": { metric: "page_views", dimension: "source" },
   "Pages vues par support": { metric: "page_views", dimension: "device_type" },
   "Pages vues par campagne": { metric: "page_views", dimension: "campaign" },
+  "Évolution des avis au fil du temps": { metric: "ratings", dimension: "stars" },
 }
 
 export type CwsStatRow = { date: Date; metric: string; dimension: string; dimensionValue: string; value: number }
