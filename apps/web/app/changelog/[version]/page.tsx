@@ -1,6 +1,6 @@
 import { ChangelogReleaseView } from "@/components/changelog/changelog-view";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
-import { CHANGELOG_RELEASES, getChangelogRelease, parseChangelogVersion } from "@/lib/changelog-releases";
+import { getChangelogRelease, parseChangelogVersion } from "@/lib/changelog-releases";
 import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
@@ -9,12 +9,6 @@ import { notFound } from "next/navigation";
 type ChangelogVersionPageProps = {
   params: Promise<{ version: string }>
 };
-
-export const generateStaticParams = async () =>
-  CHANGELOG_RELEASES.flatMap((release) => [
-    { version: release.version },
-    { version: release.slug },
-  ]);
 
 export const generateMetadata = async ({ params }: ChangelogVersionPageProps): Promise<Metadata> => {
   const { version: raw } = await params;

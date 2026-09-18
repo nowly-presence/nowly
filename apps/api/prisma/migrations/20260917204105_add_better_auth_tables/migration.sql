@@ -6,10 +6,10 @@
 
 */
 -- DropTable
-DROP TABLE "comments";
+DROP TABLE IF EXISTS "comments";
 
 -- DropTable
-DROP TABLE "ratings";
+DROP TABLE IF EXISTS "ratings";
 
 -- CreateTable
 CREATE TABLE "users" (
