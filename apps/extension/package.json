@@ -24,6 +24,7 @@
     "package": "tsx --tsconfig scripts/tsconfig.json scripts/package.ts all",
     "package:chrome": "tsx --tsconfig scripts/tsconfig.json scripts/package.ts chrome",
     "package:firefox": "tsx --tsconfig scripts/tsconfig.json scripts/package.ts firefox",
+    "package:source": "tsx --tsconfig scripts/tsconfig.json scripts/package-source.ts",
     "dev": "vite build --watch",
     "lint": "tsc --noEmit"
   },
