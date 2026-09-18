@@ -1,10 +1,12 @@
 import { INSTALL_QUEUE_ALARM } from "@/background/managers/install-queue";
 import { drainInstallQueue } from "@/background/managers/presence-manager";
+import { trackAnalytics } from "@/background/analytics-client";
 import { addRuntimeLog } from "@/background/runtime-logs";
 import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { getActiveSlugsSnapshot, hasActiveSlugs } from "@/background/services/background-context";
 import { getActiveDeviceId, syncDeviceState } from "@/background/services/device-sync";
 import { postNative } from "@/background/services/native";
+import { getPresences } from "@/background/services/storage";
 
 export const registerAlarmHandlers = (): void => {
   chrome.alarms.create("native-heartbeat", { periodInMinutes: 1 });
@@ -17,6 +19,15 @@ export const registerAlarmHandlers = (): void => {
         const slugs = getActiveSlugsSnapshot();
         const deviceId = await getActiveDeviceId();
         addRuntimeLog("info", "api", "POST /presences/active", { count: slugs.length });
+        const presences = await getPresences();
+        for (const slug of slugs) {
+          const stored = presences[slug];
+          trackAnalytics("presence_active_heartbeat", {
+            slug,
+            version: stored?.release?.version ?? stored?.metadata?.version,
+            source: "extension_library",
+          });
+        }
         try {
           const response = await fetch(`${getEffectiveApiUrl()}/presences/active`, {
             method: "POST",

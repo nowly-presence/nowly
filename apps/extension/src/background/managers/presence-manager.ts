@@ -2,6 +2,8 @@ import { BUNDLED_PRESENCES } from "@/generated/bundled-presences";
 import type { BundledPresence } from "@/generated/bundled-presences";
 import type { PresenceCatalogItem, PresenceRelease, StoredPresence } from "@/shared/types";
 import { handleClearActivity, removeActiveSlug } from "@/background/managers/activity-manager";
+import { trackAnalytics } from "@/background/analytics-client";
+import { isAnalyticsSource } from "@nowly/analytics";
 import { addRuntimeLog } from "@/background/runtime-logs";
 import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { hasActiveSlugs } from "@/background/services/background-context";
@@ -16,6 +18,17 @@ export const broadcastPresencesChanged = (): void => {
   chrome.runtime.sendMessage({ source: "PRESENCES_BACKGROUND", type: "PRESENCES_CHANGED" }).catch(() => {
     // No extension pages (popup/sidepanel) are open - that's fine.
   });
+};
+
+const sourceForStorage: Record<NonNullable<StoredPresence["source"]>, string> = {
+  store: "extension_library",
+  bundle: "system",
+  local: "system",
+};
+
+const resolveAnalyticsSource = (analyticsSource: string | undefined, storageSource: StoredPresence["source"]): string => {
+  if (analyticsSource && isAnalyticsSource(analyticsSource)) return analyticsSource;
+  return sourceForStorage[storageSource ?? "store"];
 };
 
 export const installPresence = async (payload: unknown): Promise<{ ok: boolean; error?: string }> => {
@@ -62,6 +75,11 @@ export const installPresence = async (payload: unknown): Promise<{ ok: boolean; 
   addRuntimeLog("success", "presence", existing ? "presence update installed" : "presence installed", {
     slug: presence.slug,
     version: presence.release.version,
+  });
+  trackAnalytics(existing ? "presence_update" : "presence_install", {
+    slug: presence.slug,
+    version: presence.release.version,
+    source: resolveAnalyticsSource(presence.analyticsSource, nextPresence.source),
   });
   const queued = await getInstallQueue();
   const remaining = queued.filter((item) => item.slug !== presence.slug);
@@ -181,6 +199,11 @@ export const uninstallPresence = async (payload: unknown): Promise<{ ok: boolean
     slug,
     version: removedPresence?.release?.version ?? removedPresence?.metadata?.version,
   });
+  trackAnalytics("presence_uninstall", {
+    slug,
+    version: removedPresence?.release?.version ?? removedPresence?.metadata?.version,
+    source: resolveAnalyticsSource(undefined, removedPresence?.source),
+  });
   broadcastPresencesChanged();
   await unregisterPresenceScript(slug);
   await removeActiveSlug(slug, "uninstall");
@@ -204,6 +227,11 @@ export const togglePresence = async (payload: unknown): Promise<{ ok: boolean; e
   await setPresences(presences);
   await syncDeviceState();
   broadcastPresencesChanged();
+  trackAnalytics("presence_toggle", {
+    slug,
+    version: presences[slug].release?.version ?? presences[slug].metadata?.version,
+    payload: { enabled },
+  });
   if (enabled) {
     const result = await registerPresenceScript(slug, presences[slug]);
     addRuntimeLog(result.ok ? "success" : "error", "presence", "presence enabled", { slug, error: result.error });

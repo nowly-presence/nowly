@@ -43,7 +43,8 @@ export type ExtensionMessageType =
   | "CLEAR_SNOOZE"
   | "SET_PRESENCE_SCHEDULE"
   | "GET_RUNTIME_LOGS"
-  | "CLEAR_RUNTIME_LOGS";
+  | "CLEAR_RUNTIME_LOGS"
+  | "TRACK_EVENT";
 
 export type UserScriptsStatus = {
   enabled: boolean;

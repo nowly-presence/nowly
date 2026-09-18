@@ -1,6 +1,7 @@
 import type { ExtensionMessage, ExtensionSettings, PresenceData, PresenceDebug, PresenceSchedule, UserScriptsStatus } from "@/shared/types";
 import { handleActivityUpdate, handleClearActivity, resumeStoredActivityIfAllowed } from "@/background/managers/activity-manager";
 import { trackAnalytics } from "@/background/analytics-client";
+import type { TrackInput } from "@nowly/analytics";
 import { clearRuntimeLogs, getRuntimeLogs } from "@/background/runtime-logs";
 import { reconnectNative, refreshNativeStatus, restartNative } from "@/background/services/native";
 import { getInstallQueue } from "@/background/managers/install-queue";
@@ -235,10 +236,19 @@ export const registerRuntimeMessageRouter = (): void => {
         setAnalyticsConsent(granted).then((next) => {
           respond(sendResponse, { granted: next });
           // Only the acceptance itself is worth recording - a decline must not
-          // send anything, and consent is granted by the time this call resolves.
+          // send anything (consent is denied by the time this resolves, so the
+          // client's own gate would silently drop it anyway), and consent is
+          // granted by the time this call resolves for the accept case.
           if (next) trackAnalytics("analytics_consent_accepted", { source: "extension_settings" });
         });
         return true;
+      }
+
+      case "TRACK_EVENT": {
+        const { key, ...input } = message.payload as { key: string } & TrackInput;
+        trackAnalytics(key, input);
+        respond(sendResponse, { ok: true });
+        return false;
       }
 
       case "RESET_ONBOARDING_FOR_DEV":
@@ -255,6 +265,11 @@ export const registerRuntimeMessageRouter = (): void => {
           respond(sendResponse, settings);
           getPresences().then(async (presences) => {
             const stored = presences[slug];
+            trackAnalytics("settings_presence_changed", {
+              slug,
+              version: stored?.release?.version ?? stored?.metadata?.version,
+              payload: { settingCount: Object.keys(partial).length },
+            });
             if (stored?.enabled && stored.release?.bundle) {
               void registerPresenceScript(slug, stored);
               // Push updated settings to the already-running presence on the active tab.

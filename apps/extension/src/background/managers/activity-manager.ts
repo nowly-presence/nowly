@@ -12,6 +12,7 @@ import {
   setActiveTabId,
 } from "@/background/services/background-context";
 import { CDN_BASE_URL } from "@/shared/constants";
+import { trackAnalytics } from "@/background/analytics-client";
 import { mapPresenceData, postNative } from "@/background/services/native";
 import { verifyPresenceRelease } from "@/background/services/release-security";
 import { getCurrentActivity, getPresences, getSettings, setCurrentActivity, setDebug } from "@/background/services/storage";
@@ -159,6 +160,7 @@ export const addActiveSlug = async (slug: string): Promise<void> => {
   addActiveSlugToState(slug);
   if (hasActiveSession(slug)) return;
   setActiveSessionStartedAt(slug, Date.now());
+  trackAnalytics("presence_session_start", { slug, version: await getPresenceVersion(slug) });
 };
 
 export const removeActiveSlug = async (slug: string, reason: string): Promise<void> => {
@@ -166,6 +168,11 @@ export const removeActiveSlug = async (slug: string, reason: string): Promise<vo
   const startedAt = getActiveSessionStartedAt(slug);
   removeActiveSession(slug);
   if (!startedAt) return;
+  trackAnalytics("presence_session_end", {
+    slug,
+    version: await getPresenceVersion(slug),
+    payload: { durationMs: Date.now() - startedAt, reason },
+  });
 };
 
 export const clearActiveSlugs = async (reason: string): Promise<void> => {
@@ -205,6 +212,11 @@ export const handleActivityUpdate = async (
       stage: "security",
       message: `[${slug}] ${verified.error ?? "release verification failed"}`,
       updatedAt: Date.now(),
+    });
+    trackAnalytics("presence_error", {
+      slug,
+      version: stored.release?.version ?? stored.metadata?.version,
+      payload: { stage: "security" },
     });
     return { ok: false };
   }

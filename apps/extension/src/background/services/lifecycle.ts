@@ -1,5 +1,6 @@
 import type { InstalledPresences } from "@/shared/types";
 import { handleClearActivity, handleRemovedTab, restoreActivityBadge } from "@/background/managers/activity-manager";
+import { trackAnalytics } from "@/background/analytics-client";
 import { addRuntimeLog } from "@/background/runtime-logs";
 import { initializeCustomApiUrl } from "@/background/services/api-state";
 import { syncDeviceState, syncUninstallUrl } from "@/background/services/device-sync";
@@ -40,6 +41,7 @@ const registerNativeResponseHandler = (): void => {
   onNativeResponse((message) => {
     if (message.type === "ERROR") {
       addRuntimeLog("error", "native", "native error", { reason: message.error });
+      trackAnalytics("native_heartbeat_failed", { payload: { reason: message.error } });
       void setDebug({
         stage: "native-error",
         message: message.error,
@@ -50,6 +52,7 @@ const registerNativeResponseHandler = (): void => {
 
     if (message.type === "CONNECTED") {
       addRuntimeLog("success", "native", "native connected", { nativeVersion: message.version });
+      trackAnalytics("native_connected");
     }
 
     if (message.type === "PONG") {
@@ -58,6 +61,10 @@ const registerNativeResponseHandler = (): void => {
         status: message.status,
         nativeVersion: message.version,
       });
+      trackAnalytics(
+        message.connected ? "native_heartbeat_ok" : "native_heartbeat_failed",
+        message.connected ? undefined : { payload: { reason: message.status } },
+      );
     }
 
     if (message.type === "OK") {
@@ -105,6 +112,8 @@ export const registerLifecycleHandlers = (): void => {
   chrome.runtime.onInstalled.addListener(async (details) => {
     enableSidePanelAction();
     registerContextMenu();
+    if (details.reason === "install") trackAnalytics("extension_install", { source: "system" });
+    if (details.reason === "update") trackAnalytics("extension_update", { source: "system" });
     const presences = await bootBackground({ syncScripts: false });
     openChangelogOnUpdate(details);
     await syncPresenceScripts(presences);
