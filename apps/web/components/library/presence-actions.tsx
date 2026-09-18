@@ -4,8 +4,9 @@ import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { PresenceReportDialog } from "@/components/library/presence-report-dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, Button, Spinner, toast } from "@nowly/ui";
 import { usePresenceExtension } from "@/hooks/use-extension";
+import { trackPublicAnalytics } from "@/lib/analytics";
 import { RiCheckboxCircleLine, RiDeleteBinLine, RiDownloadLine, RiRefreshLine } from "@nowly/ui/icons";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
 type PresenceActionsProps = {
@@ -16,6 +17,7 @@ type PresenceActionsProps = {
 
 export const PresenceActions = ({ slug, name, version }: PresenceActionsProps) => {
   const t = useTranslations("presencePage");
+  const locale = useLocale();
   const {
     bridgeBlocked,
     busy,
@@ -31,9 +33,12 @@ export const PresenceActions = ({ slug, name, version }: PresenceActionsProps) =
   const [confirmUninstall, setConfirmUninstall] = useState(false);
 
   const onInstall = async () => {
+    trackPublicAnalytics("marketplace_install_click", { slug, source: "web_library", payload: { locale } });
     const result = await install();
-    if (result === "ok") toast.success(t(needsUpdate ? "update-success" : "install-success", { name }));
-    else if (result === "queued") toast.success(t("install-queued", { name }));
+    if (result === "ok") {
+      trackPublicAnalytics("marketplace_conversion", { slug, source: "web_library", payload: { locale } });
+      toast.success(t(needsUpdate ? "update-success" : "install-success", { name }));
+    } else if (result === "queued") toast.success(t("install-queued", { name }));
     else if (result === "blocked") toast.error(t("install-origin"));
     else toast.error(t("install-error", { name }));
   };

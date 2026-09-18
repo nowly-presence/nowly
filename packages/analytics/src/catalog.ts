@@ -283,6 +283,20 @@ export const analyticsRegistry = [
     dimensions: ["source", "locale", "category", "sort"],
   }),
   new Analytics({
+    key: "search_performed",
+    label: "Marketplace search performed",
+    description: "A search was performed, without storing the search text.",
+    group: "marketplace",
+    dimensions: ["source", "locale", "hasResults"],
+  }),
+  new Analytics({
+    key: "marketplace_author_page_view",
+    label: "Marketplace author page view",
+    description: "An author profile page was viewed.",
+    group: "marketplace",
+    dimensions: ["source", "locale"],
+  }),
+  new Analytics({
     key: "uninstall_cleanup_received",
     label: "Uninstall cleanup received",
     description: "Best-effort extension uninstall cleanup page was opened.",

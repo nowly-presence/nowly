@@ -14,8 +14,9 @@ import {
   type LibraryPresence,
 } from "@/lib/library-catalog";
 
+import { trackPublicAnalytics } from "@/lib/analytics";
 import { RiCloseLine, RiSearchLine } from "@nowly/ui/icons";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
@@ -94,6 +95,7 @@ export const LibraryView = ({
   authorHandle?: string | null
 }) => {
   const t = useTranslations("libraryPage");
+  const locale = useLocale();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<LibraryCategory | "all">("all");
   const deferredQuery = useDeferredValue(query);
@@ -117,6 +119,42 @@ export const LibraryView = ({
   }, [effectiveAuthorHandle, category, items, normalizedQuery]);
 
   const isStale = query !== deferredQuery;
+
+  useEffect(() => {
+    trackPublicAnalytics("marketplace_page_view", { source: "web_library", payload: { locale } });
+  }, []);
+
+  const isFirstFilterRef = useRef(true);
+  useEffect(() => {
+    if (isFirstFilterRef.current) {
+      isFirstFilterRef.current = false;
+      return;
+    }
+    trackPublicAnalytics("marketplace_filter", {
+      source: "web_library",
+      payload: { locale, category, resultCount: results.length },
+    });
+  }, [category, locale, results.length]);
+
+  const wasEmptyRef = useRef(false);
+  useEffect(() => {
+    const isEmpty = results.length === 0;
+    if (isEmpty && !wasEmptyRef.current) {
+      trackPublicAnalytics("marketplace_no_results", { source: "web_library", payload: { locale, category } });
+    }
+    wasEmptyRef.current = isEmpty;
+  }, [results.length, locale, category]);
+
+  useEffect(() => {
+    if (!normalizedQuery) return;
+    const timer = window.setTimeout(() => {
+      trackPublicAnalytics("search_performed", {
+        source: "web_library",
+        payload: { locale, hasResults: results.length > 0 },
+      });
+    }, 500);
+    return () => window.clearTimeout(timer);
+  }, [normalizedQuery, locale, results.length]);
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">

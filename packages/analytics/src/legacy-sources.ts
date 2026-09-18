@@ -232,6 +232,20 @@ export const legacySources: LegacySource[] = [
     notes: "Shares the filter effect; mutually exclusive with marketplace_filter.",
   },
   {
+    key: "search_performed",
+    surface: "web",
+    status: "tracked",
+    callSites: ["apps/web/components/library/library-view.tsx"],
+    notes: "Added alongside the reconnected instrumentation pass; never stores the search text.",
+  },
+  {
+    key: "marketplace_author_page_view",
+    surface: "web",
+    status: "tracked",
+    callSites: ["apps/web/components/library/author-view.tsx (author-view-tracker.tsx child)"],
+    notes: "Added alongside the reconnected instrumentation pass.",
+  },
+  {
     key: "uninstall_cleanup_received",
     surface: "web",
     status: "duplicate-risk",
