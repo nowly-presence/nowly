@@ -116,10 +116,15 @@ const copyManifest = () => {
     manifest.browser_specific_settings = {
       gecko: {
         id: "nowly@nowly.me",
-        strict_min_version: "136.0",
+        // data_collection_permissions needs Firefox 140+ (desktop).
+        strict_min_version: "140.0",
         // Required by AMO - declare data collection practices.
         // "none" = nothing collected/transmitted. Update if that changes.
         data_collection_permissions: { required: ["none"] },
+      },
+      gecko_android: {
+        // data_collection_permissions needs Firefox for Android 142+.
+        strict_min_version: "142.0",
       },
     }
   } else {

@@ -1,19 +1,22 @@
 import { mkdirSync, writeFileSync } from "fs"
 import { join } from "path"
+import sharp from "sharp"
 
 export const CDN_BRAND = "https://cdn.nowly.me/brand"
 
 export type BrandIconVariant = "stable" | "canary"
 
+// The CDN only hosts 16/32/48/192 favicons - there is no 128 variant, but the
+// store manifests require an exact 128x128 icon, so it's downscaled from 192.
 const iconUrls = (variant: BrandIconVariant) => {
   const folder = variant === "canary"
     ? `${CDN_BRAND}/favicons/canary`
     : `${CDN_BRAND}/favicons`
 
   return [
-    { size: 16, url: `${folder}/favicon-16.png` },
-    { size: 48, url: `${folder}/favicon-48.png` },
-    { size: 128, url: `${folder}/favicon-192.png` },
+    { size: 16, url: `${folder}/favicon-16.png`, resizeFrom: undefined },
+    { size: 48, url: `${folder}/favicon-48.png`, resizeFrom: undefined },
+    { size: 128, url: `${folder}/favicon-192.png`, resizeFrom: 128 },
   ] as const
 }
 
@@ -46,8 +49,9 @@ export const fetchBrandIcons = async (
 ): Promise<void> => {
   mkdirSync(destDir, { recursive: true })
 
-  await Promise.all(iconUrls(variant).map(async ({ size, url }) => {
+  await Promise.all(iconUrls(variant).map(async ({ size, url, resizeFrom }) => {
     const buf = await fetchBuffer(url)
-    writeFileSync(join(destDir, `icon${size}.png`), buf)
+    const output = resizeFrom ? await sharp(buf).resize(resizeFrom, resizeFrom).png().toBuffer() : buf
+    writeFileSync(join(destDir, `icon${size}.png`), output)
   }))
 }
