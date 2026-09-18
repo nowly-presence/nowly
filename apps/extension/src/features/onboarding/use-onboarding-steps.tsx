@@ -4,8 +4,18 @@ import { extensionDetailsUrl, openUrl, siteUrl } from "@/shared/browser-links";
 import { t } from "@/shared/i18n";
 import { IconExternalLink, IconLock, IconDeviceDesktopDown, IconPuzzle2, IconShoppingBag, IconBrandYoutube } from "@/lib/tabler-icons";
 import { ActionButton } from "@/features/onboarding/action-button";
+import { ChromeOsWaitlistForm } from "@/features/onboarding/chromeos-waitlist-form";
 import type { GuidedStep, OnboardingOverlayProps, StepStatus } from "@/features/onboarding/onboarding.types";
 import { requestUserScriptsPermission } from "@/features/onboarding/onboarding.utils";
+import { useEffect, useState } from "react";
+
+const useIsChromeOs = (): boolean => {
+  const [isChromeOs, setIsChromeOs] = useState(false);
+  useEffect(() => {
+    chrome.runtime.getPlatformInfo().then((info) => setIsChromeOs(info.os === "cros")).catch(() => {});
+  }, []);
+  return isChromeOs;
+};
 
 type UseOnboardingStepsProps = Pick<
   OnboardingOverlayProps,
@@ -25,6 +35,7 @@ export const useOnboardingSteps = ({
   presences,
   hostVersionInfo,
 }: UseOnboardingStepsProps): GuidedStep[] => {
+  const isChromeOs = useIsChromeOs();
   const snapshot = buildDiagnosticSnapshot({ activity, nativeStatus, presences, userScripts });
   const hostStatus: StepStatus = snapshot.hostDetected ? "success" : isHostChecking(nativeStatus) ? "loading" : "error";
   const discordStatus: StepStatus = snapshot.discordConnected ? "success" : snapshot.hostDetected ? "error" : "loading";
@@ -60,7 +71,13 @@ export const useOnboardingSteps = ({
         )
       ) : undefined,
     },
-    {
+    isChromeOs ? {
+      icon: IconDeviceDesktopDown,
+      status: "error" as StepStatus,
+      title: t("onboarding-step-host-chromeos-title"),
+      message: t("onboarding-step-host-chromeos-message"),
+      details: <ChromeOsWaitlistForm />,
+    } : {
       icon: IconDeviceDesktopDown,
       status: snapshot.userScriptsActive ? hostStatus : "loading",
       title: t("onboarding-step-host-title"),
