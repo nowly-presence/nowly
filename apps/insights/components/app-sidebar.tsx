@@ -1,6 +1,7 @@
 "use client";
 
 import { ApiTargetSwitcher } from "@/components/api-target-switcher";
+import { CwsStatsImport } from "@/components/cws-stats-import";
 import { DevTools } from "@/components/dev-tools";
 import { DEFAULT_VIEW_LABELS, DEFAULT_VIEW_SLUGS } from "@/lib/default-views";
 import type { Session } from "@/lib/session";
@@ -15,7 +16,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@nowly/ui";
-import { RiAddLine } from "@nowly/ui/icons";
+import { RiAddLine, RiMailLine } from "@nowly/ui/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -31,6 +32,17 @@ export const AppSidebar = ({ views, user }: { views: InsightsViewSummary[]; user
       </SidebarHeader>
 
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton render={<Link href="/campaigns" />} isActive={pathname === "/campaigns"}>
+                <RiMailLine />
+                <span className="truncate">Campaigns</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+
         <SidebarGroup>
           <SidebarGroupLabel>Default views</SidebarGroupLabel>
           <SidebarMenu>
@@ -72,6 +84,7 @@ export const AppSidebar = ({ views, user }: { views: InsightsViewSummary[]; user
 
       <SidebarFooter className="gap-3">
         <DevTools />
+        <CwsStatsImport />
         <ApiTargetSwitcher />
         <div className="flex items-center gap-2 px-2 py-1">
           {user.image ? (
