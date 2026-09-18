@@ -9,6 +9,12 @@ const createAuth = () => betterAuth({
   basePath: "/auth",
   trustedOrigins: [serverEnv.FRONTEND_URL, serverEnv.INSIGHTS_URL],
   database: prismaAdapter(getPrisma(), { provider: "postgresql" }),
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: true,
+      domain: ".nowly.me",
+    },
+  },
   socialProviders: {
     discord: {
       clientId: serverEnv.DISCORD_CLIENT_ID,
