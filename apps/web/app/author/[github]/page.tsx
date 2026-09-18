@@ -1,7 +1,6 @@
 import { AuthorView } from "@/components/library/author-view";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import {
-  catalogGithubHandles,
   contributorDisplayName,
   normalizeGithub,
   presenceMatchesGithub,
@@ -14,11 +13,6 @@ import { notFound } from "next/navigation";
 
 type AuthorPageProps = {
   params: Promise<{ github: string }>
-};
-
-export const generateStaticParams = async () => {
-  const catalog = await getPresenceCatalog();
-  return catalogGithubHandles(catalog).map((github) => ({ github }));
 };
 
 export const generateMetadata = async ({ params }: AuthorPageProps): Promise<Metadata> => {

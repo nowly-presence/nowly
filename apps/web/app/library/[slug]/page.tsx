@@ -11,11 +11,6 @@ type PresencePageProps = {
   params: Promise<{ slug: string }>
 };
 
-export const generateStaticParams = async () => {
-  const catalog = await getPresenceCatalog();
-  return catalog.map((presence) => ({ slug: presence.slug }));
-};
-
 export const generateMetadata = async ({ params }: PresencePageProps): Promise<Metadata> => {
   const { slug } = await params;
   const [presence, locale, t] = await Promise.all([
