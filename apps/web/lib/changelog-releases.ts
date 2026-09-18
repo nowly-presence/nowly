@@ -13,14 +13,14 @@ const screenshot = (file: string): string =>
 
 export const CHANGELOG_RELEASES: ChangelogRelease[] = [
   {
-    version: "1.5.0",
-    slug: "1-5-0",
+    version: "2.0.0",
+    slug: "2-0-0",
     date: "2026-09-17",
     banner: screenshot("home-updated.png"),
     summary: {
-      "en-US": "Website rebrand, public library, desktop and Canary pages, legal docs, Chrome and Firefox, language flags, desktop reconnect, midnight snooze, and CLI watch.",
-      "fr-FR": "Refonte du site, bibliothèque publique, pages bureau et Canary, textes légaux, Chrome et Firefox, drapeaux, reconnexion bureau, snooze minuit, et watch CLI.",
-      "es-ES": "Rediseño del sitio, biblioteca pública, páginas de escritorio y Canary, textos legales, Chrome y Firefox, banderas, reconexión de escritorio, snooze a medianoche y watch en la CLI.",
+      "en-US": "Website rebrand, public library, privacy and data controls, ChromeOS awareness, desktop and Canary pages, legal docs, Chrome and Firefox, and an extension privacy/appearance pass.",
+      "fr-FR": "Refonte du site, bibliothèque publique, gestion de la vie privée et des données, prise en compte de ChromeOS, pages bureau et Canary, textes légaux, Chrome et Firefox, et passe vie privée/apparence sur l'extension.",
+      "es-ES": "Rediseño del sitio, biblioteca pública, gestión de privacidad y datos, soporte informativo de ChromeOS, páginas de escritorio y Canary, textos legales, Chrome y Firefox, y una pasada de privacidad/apariencia en la extensión.",
     },
   },
   {
