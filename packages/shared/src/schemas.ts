@@ -1,6 +1,6 @@
 import { z } from "zod"
 import {
-  MAX_ANALYTICS_EVENTS_PER_BATCH,
+  PRESENCE_REPORT_MAX_LENGTH,
   SLUG_MAX_LENGTH,
 } from "./constants"
 
@@ -22,12 +22,6 @@ export const presenceActiveBodySchema = z.object({
 })
 export type PresenceActiveBody = z.infer<typeof presenceActiveBodySchema>
 
-/** POST /analytics/consent */
-export const analyticsConsentBodySchema = z.object({
-  deviceId: z.string().trim().min(1).max(120),
-  analyticsConsent: z.boolean().optional(),
-})
-
 /** A single device-reported presence in a device-sync payload. */
 export const deviceSyncPresenceSchema = z.object({
   slug: slugSchema,
@@ -39,7 +33,6 @@ export const deviceSyncPresenceSchema = z.object({
 /** POST /devices/sync */
 export const deviceSyncBodySchema = z.object({
   deviceId: z.string().trim().min(1).max(120),
-  analyticsConsent: z.boolean().optional(),
   extensionVersion: z.string().trim().max(40).optional(),
   nativeVersion: z.string().trim().max(40).optional(),
   browser: z.string().trim().max(60).optional(),
@@ -48,22 +41,6 @@ export const deviceSyncBodySchema = z.object({
   presences: z.array(deviceSyncPresenceSchema).max(1000).optional(),
 })
 export type DeviceSyncBody = z.infer<typeof deviceSyncBodySchema>
-
-/** A single analytics event. */
-export const analyticsEventSchema = z.object({
-  key: z.string().trim().min(1).max(100),
-  deviceId: z.string().trim().max(120).optional(),
-  slug: z.string().trim().max(SLUG_MAX_LENGTH).optional(),
-  version: z.string().trim().max(60).optional(),
-  payload: z.record(z.string(), z.unknown()).optional(),
-  createdAt: z.string().trim().optional(),
-})
-export type AnalyticsEvent = z.infer<typeof analyticsEventSchema>
-
-/** POST /analytics/events */
-export const analyticsEventsBodySchema = z.object({
-  events: z.array(analyticsEventSchema).max(MAX_ANALYTICS_EVENTS_PER_BATCH).default([]),
-})
 
 /** PUT /presences/:slug (admin) */
 export const presencePutBodySchema = z.object({
@@ -77,23 +54,20 @@ export const presencePutBodySchema = z.object({
 })
 export type PresencePutBody = z.infer<typeof presencePutBodySchema>
 
-/** GET /ads/status */
-export const adsStatusQuerySchema = z.object({
-  deviceId: z.string().trim().min(1).max(120).optional(),
+/** POST /presences/:slug/report */
+export const presenceReportBodySchema = z.object({
+  message: z.string().trim().min(1).max(PRESENCE_REPORT_MAX_LENGTH),
+  locale: z.string().trim().max(20).optional(),
 })
-export type AdsStatusQuery = z.infer<typeof adsStatusQuerySchema>
+export type PresenceReportBody = z.infer<typeof presenceReportBodySchema>
 
-/** POST /support/redeem-device */
-export const supportRedeemDeviceBodySchema = z.object({
-  code: z.string().trim().min(8).max(80),
+/** POST/DELETE /presences/:slug/like, GET /presences/:slug/like */
+export const presenceLikeBodySchema = z.object({
   deviceId: z.string().trim().min(1).max(120),
 })
-export type SupportRedeemDeviceBody = z.infer<typeof supportRedeemDeviceBodySchema>
+export type PresenceLikeBody = z.infer<typeof presenceLikeBodySchema>
 
-/** POST /support/passes (admin) */
-export const supportCreatePassBodySchema = z.object({
-  provider: z.string().trim().min(1).max(40).default("manual"),
-  providerRef: z.string().trim().max(160).optional(),
-  maxDevices: z.coerce.number().int().positive().max(50).optional(),
+export const presenceLikeQuerySchema = z.object({
+  deviceId: z.string().trim().min(1).max(120),
 })
-export type SupportCreatePassBody = z.infer<typeof supportCreatePassBodySchema>
+export type PresenceLikeQuery = z.infer<typeof presenceLikeQuerySchema>

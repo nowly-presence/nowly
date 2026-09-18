@@ -1,63 +1,37 @@
-"use client";
-
-import { SponsorModal } from "@/components/l-ui/sponsor-modal";
-import { buttonVariants } from "@/components/ui/button";
-import HighlightedText from "@/components/ui/highlighted-text";
-import { IconArrowRight } from "@tabler/icons-react";
-import { useTranslations } from "next-intl";
+import { ExtensionStoreButton } from "@/components/extension-store-button";
+import { HeroCards } from "@/components/home/hero-cards";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
-import type { FC, ReactElement } from "react";
-import { useState } from "react";
-import { ExtensionPreview } from "./extension-preview";
 
-export const HeroSection: FC = (): ReactElement => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const t = useTranslations("hero-section");
+export const HeroSection = async () => {
+  const t = await getTranslations("hero");
 
   return (
-    <>
-      <section className="min-h-screen flex items-center relative overflow-hidden border-b border-border">
-        <div className="relative z-2 mx-auto w-full max-w-300 min-w-0 px-6">
-          <div className="grid min-w-0 grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1fr)_480px]">
-            {/* Content */}
-            <div className="min-w-0 max-w-135 lg:max-w-none">
-              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-accent/10 text-accent border border-accent/20 text-[11px] font-bold uppercase tracking-wider mb-4">
-                {t("badge")}
-              </div>
-
-              <h1 className="mb-6 text-balance text-[clamp(2.75rem,5vw,4.5rem)] font-extrabold leading-[1.1] tracking-tight bg-linear-to-br from-white to-muted-foreground bg-clip-text text-transparent">
-                {t("title")}
-                <br />
-                <HighlightedText from="left" delay={0}>
-                  {t("title-accent")}
-                </HighlightedText>
-              </h1>
-
-              <p className="mb-8 max-w-2xl text-balance text-lg text-muted-foreground">
-                {t("description")}
-              </p>
-
-              <div className="flex flex-wrap gap-3 mt-6">
-                <Link href="/library" className={buttonVariants({ variant: "primary", size: "md" })}>
-                  {t("cta")}
-                  <IconArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Visual */}
-            <div className="hidden min-w-0 lg:block">
-        <ExtensionPreview />
-            </div>
+    <section className="overflow-x-clip px-5 pb-24 pt-28 sm:px-10 sm:pb-28 sm:pt-36 lg:pb-32 lg:pt-40">
+      <div className="mx-auto grid w-full max-w-[1280px] items-center gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-6">
+        <div className="max-w-[34rem]">
+          <h1 className="text-pretty text-[2.35rem] font-medium leading-[1.06] tracking-tight text-foreground sm:text-[2.85rem] lg:text-[3.35rem]">
+            {t("title-before")}{" "}
+            <span className="font-bold text-accent">{t("title-accent")}</span>
+          </h1>
+          <p className="mt-6 max-w-[38ch] text-[1.05rem] leading-[1.55] text-foreground/68 sm:text-lg">
+            {t("description")}
+          </p>
+          <div className="mt-9 flex flex-wrap items-center gap-5">
+            <ExtensionStoreButton variant="inverted" size="lg">
+              {t("install")}
+            </ExtensionStoreButton>
+            <Link
+              href="/library"
+              className="text-sm text-muted-foreground underline decoration-foreground/20 underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground/50"
+            >
+              {t("library")}
+            </Link>
           </div>
         </div>
-      </section>
 
-      <SponsorModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        downloadOnAction
-      />
-    </>
+        <HeroCards />
+      </div>
+    </section>
   );
 };

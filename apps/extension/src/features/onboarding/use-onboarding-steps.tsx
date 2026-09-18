@@ -2,13 +2,20 @@ import { buildDiagnosticSnapshot, isHostChecking, YOUTUBE_TEST_URL } from "@/fea
 import { DiscordIcon } from "@/lib/icons";
 import { extensionDetailsUrl, openUrl, siteUrl } from "@/shared/browser-links";
 import { t } from "@/shared/i18n";
-import { IconInfoCircle, IconChartBar, IconExternalLink, IconLock, IconDeviceDesktopDown, IconPuzzle2, IconShoppingBag, IconBrandYoutube } from "@/lib/tabler-icons";
+import { IconExternalLink, IconLock, IconDeviceDesktopDown, IconPuzzle2, IconShoppingBag, IconBrandYoutube } from "@/lib/tabler-icons";
 import { ActionButton } from "@/features/onboarding/action-button";
-import { AnalyticsChecklist } from "@/features/onboarding/analytics-checklist";
-import { LinkActionButton } from "@/features/onboarding/link-action-button";
+import { ChromeOsWaitlistForm } from "@/features/onboarding/chromeos-waitlist-form";
 import type { GuidedStep, OnboardingOverlayProps, StepStatus } from "@/features/onboarding/onboarding.types";
 import { requestUserScriptsPermission } from "@/features/onboarding/onboarding.utils";
-import { QuietActionButton } from "@/features/onboarding/quiet-action-button";
+import { useEffect, useState } from "react";
+
+const useIsChromeOs = (): boolean => {
+  const [isChromeOs, setIsChromeOs] = useState(false);
+  useEffect(() => {
+    chrome.runtime.getPlatformInfo().then((info) => setIsChromeOs(info.os === "cros")).catch(() => {});
+  }, []);
+  return isChromeOs;
+};
 
 type UseOnboardingStepsProps = Pick<
   OnboardingOverlayProps,
@@ -17,8 +24,6 @@ type UseOnboardingStepsProps = Pick<
   | "userScripts"
   | "onConnectNative"
   | "presences"
-  | "settings"
-  | "onSettingsChange"
   | "hostVersionInfo"
 >;
 
@@ -28,16 +33,14 @@ export const useOnboardingSteps = ({
   userScripts,
   onConnectNative,
   presences,
-  settings,
-  onSettingsChange,
   hostVersionInfo,
 }: UseOnboardingStepsProps): GuidedStep[] => {
+  const isChromeOs = useIsChromeOs();
   const snapshot = buildDiagnosticSnapshot({ activity, nativeStatus, presences, userScripts });
   const hostStatus: StepStatus = snapshot.hostDetected ? "success" : isHostChecking(nativeStatus) ? "loading" : "error";
   const discordStatus: StepStatus = snapshot.discordConnected ? "success" : snapshot.hostDetected ? "error" : "loading";
   const youtubeInstallStatus: StepStatus = snapshot.youtubePresenceInstalled ? "success" : snapshot.discordConnected ? "error" : "loading";
   const youtubeTestStatus: StepStatus = snapshot.youtubeActivityDetected ? "success" : snapshot.youtubePresenceInstalled ? "error" : "loading";
-  const analyticsConsentDecided = settings.analyticsConsent !== undefined;
   const showHostActions = snapshot.userScriptsActive && !snapshot.hostDetected && hostStatus !== "loading";
 
   return [
@@ -68,7 +71,13 @@ export const useOnboardingSteps = ({
         )
       ) : undefined,
     },
-    {
+    isChromeOs ? {
+      icon: IconDeviceDesktopDown,
+      status: "error" as StepStatus,
+      title: t("onboarding-step-host-chromeos-title"),
+      message: t("onboarding-step-host-chromeos-message"),
+      details: <ChromeOsWaitlistForm />,
+    } : {
       icon: IconDeviceDesktopDown,
       status: snapshot.userScriptsActive ? hostStatus : "loading",
       title: t("onboarding-step-host-title"),
@@ -81,7 +90,7 @@ export const useOnboardingSteps = ({
           : t("onboarding-step-host-error"),
       actions: showHostActions || (snapshot.hostDetected && hostVersionInfo?.updateAvailable) ? (
         <div className="flex flex-wrap justify-center gap-2">
-          <ActionButton primary onClick={() => openUrl(siteUrl("/host"))}>
+          <ActionButton primary onClick={() => openUrl(siteUrl("/desktop"))}>
             {hostVersionInfo?.updateAvailable ? t("diagnostic-update-host") : t("diagnostic-install-host")}
             <IconExternalLink className="h-4 w-4" />
           </ActionButton>
@@ -132,37 +141,6 @@ export const useOnboardingSteps = ({
           {t("diagnostic-test-youtube")}
           <IconExternalLink className="h-4 w-4" />
         </ActionButton>
-      ) : undefined,
-    },
-    {
-      icon: IconChartBar,
-      status: snapshot.youtubeActivityDetected
-        ? analyticsConsentDecided
-          ? "success"
-          : "error"
-        : "loading",
-      title: t("onboarding-analytics-title"),
-      message: analyticsConsentDecided
-        ? t("onboarding-step-analytics-success")
-        : snapshot.youtubeActivityDetected
-          ? t("onboarding-analytics-help")
-          : t("onboarding-step-analytics-waiting"),
-      details: snapshot.youtubeActivityDetected && !analyticsConsentDecided ? <AnalyticsChecklist /> : undefined,
-      actions: snapshot.youtubeActivityDetected && !analyticsConsentDecided ? (
-        <div className="flex flex-col items-center gap-2">
-          <ActionButton primary onClick={() => onSettingsChange({ analyticsConsent: true })}>
-            {t("onboarding-analytics-accept")}
-          </ActionButton>
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
-            <QuietActionButton onClick={() => onSettingsChange({ analyticsConsent: false })}>
-              {t("onboarding-analytics-decline")}
-            </QuietActionButton>
-            <LinkActionButton onClick={() => openUrl(siteUrl("/data-collected"))}>
-              <IconInfoCircle className="h-3.5 w-3.5" />
-              {t("onboarding-analytics-learn-more")}
-            </LinkActionButton>
-          </div>
-        </div>
       ) : undefined,
     },
   ];

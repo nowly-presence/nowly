@@ -4,6 +4,10 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
+  transpilePackages: ["@nowly/ui"],
+  experimental: {
+    optimizePackageImports: ["@nowly/ui"],
+  },
   images: {
     remotePatterns: [{ protocol: "https", hostname: "cdn.nowly.me" }],
   },

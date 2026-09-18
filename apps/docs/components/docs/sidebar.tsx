@@ -1,10 +1,10 @@
 "use client";
 
-import { useSidebar } from "@/components/ui/sidebar-context";
+import { useSidebar } from "@/components/sidebar-context";
 import { docHref } from "@/lib/docs/href";
 import type { DocNavigationItem } from "@/lib/docs/types";
-import { cn } from "@/lib/utils";
-import { IconX } from "@tabler/icons-react";
+import { cn } from "@nowly/ui";
+import { RiCloseLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -41,7 +41,7 @@ export const AppSidebar: FC<AppSidebarProps> = ({ items }) => {
                       className={cn(
                         "block rounded-lg px-3 py-1.5 text-sm transition-colors", {
                           "bg-accent/10 text-accent font-medium": isChildActive,
-                          "text-muted-foreground hover:text-foreground hover:bg-card-hover": !isChildActive,
+                          "text-muted-foreground hover:bg-card-hover hover:text-foreground": !isChildActive,
                         }
                       )}
                     >
@@ -60,7 +60,7 @@ export const AppSidebar: FC<AppSidebarProps> = ({ items }) => {
   return (
     <>
       <aside className="hidden lg:block w-56 shrink-0">
-        <div className="docs-sidebar-scroll sticky top-24 w-56 max-h-[calc(100vh-8rem)] overflow-y-auto">
+        <div className="docs-sidebar-scroll sticky top-16 w-56 max-h-[calc(100vh-4rem)] overflow-y-auto">
           {sidebarContent}
         </div>
       </aside>
@@ -79,7 +79,7 @@ export const AppSidebar: FC<AppSidebarProps> = ({ items }) => {
                 onClick={() => setMobileOpen(false)}
                 className="text-muted-foreground hover:text-foreground"
               >
-                <IconX size={20} />
+                <RiCloseLine className="size-5" />
               </button>
             </div>
             {sidebarContent}

@@ -1,7 +1,7 @@
 import { BottomNav, type AppView } from "@/components/layout/bottom-nav";
 import { ConnectionStatusBar, isConnectionHealthy } from "@/components/layout/connection-status-bar";
 import { Header } from "@/components/layout/header";
-import { AnalyticsLogsView } from "@/features/analytics-logs/analytics-logs-view";
+import { RuntimeLogsView } from "@/features/runtime-logs/runtime-logs-view";
 import { OnboardingOverlay } from "@/features/onboarding/onboarding-overlay";
 import { ActivityView } from "@/features/presences/activity-view";
 import { CurrentActivityCard } from "@/features/presences/current-activity-card";
@@ -10,10 +10,11 @@ import { SnoozeDialog } from "@/features/presences/snooze-dialog";
 import { InstallQueueBanner } from "@/features/store/install-queue-banner";
 import { StoreView } from "@/features/store/store-view";
 import { SettingsView } from "@/features/settings/settings-view";
-import { SupporterThankYouOverlay } from "@/features/supporter/supporter-thank-you-overlay";
+import { useAppearance } from "@/hooks/use-appearance";
 import { useExtensionState } from "@/hooks/use-extension-state";
 import { useLocalePreference } from "@/hooks/use-locale-preference";
 import { useOnboardingState } from "@/hooks/use-onboarding-state";
+import { trackUiEvent } from "@/lib/analytics";
 import { sendMessage } from "@/lib/messages";
 import { HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
@@ -39,7 +40,6 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
     checkUpdates,
     connectNative,
     debug,
-    dismissSupporterThankYou,
     entries,
     hostVersionInfo,
     installQueue,
@@ -54,13 +54,31 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
     resetOnboardingForDev,
     retryInstallQueue,
     setPresencePaused,
-    supporterStatus,
     togglePresence,
     updates,
     settings,
     setSettings,
+    analyticsConsent,
+    setAnalyticsConsent,
   } = useExtensionState();
+  useAppearance(settings.appearance ?? "system");
+  useEffect(() => {
+    trackUiEvent("extension_open", { payload: { surface: "sidepanel" } });
+  }, []);
+  useEffect(() => {
+    // Dev-only: let an unpacked build toggle the Canary accent to preview the
+    // global (stable) look. Store builds keep their compiled channel.
+    if (!isUnpacked) return;
+    const canary = settings.canaryTheme ?? import.meta.env.VITE_NOWLY_CHANNEL === "canary";
+    const root = document.documentElement;
+    if (canary) root.dataset.channel = "canary";
+    else delete root.dataset.channel;
+  }, [isUnpacked, settings.canaryTheme]);
   const { localePreference, setLocalePreference } = useLocalePreference();
+  const onSettingsLocaleChange = (locale: Parameters<typeof setLocalePreference>[0]) => {
+    trackUiEvent("settings_language_changed");
+    setLocalePreference(locale);
+  };
   const { onboarding, setOnboarding, nativeStatus: onboardingNativeStatus, userScripts } = useOnboardingState();
   const [activeView, setActiveView] = useState<AppView>(initialView);
   const [selectedPresenceSlug, setSelectedPresenceSlug] = useState<string | null>(null);
@@ -130,7 +148,9 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
     setInstallingSlug(slug);
     const result = await installPresenceFromApi(slug);
     setInstallingSlug(null);
-    if (result.ok) return;
+    if (result.ok) {
+      return;
+    }
     if (result.queued) {
       setInstallQueued(true);
       return;
@@ -198,7 +218,6 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
             onReplayOnboarding={resetOnboardingForDev}
             onTogglePause={() => setPresencePaused(!presencePaused)}
             presencePaused={presencePaused}
-            supporter={supporterStatus.adFree}
           />
         </div>
 
@@ -271,10 +290,9 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
               />
             </div>
           ) : activeView === "logs" && developerModeEnabled ? (
-            <AnalyticsLogsView />
+            <RuntimeLogsView />
           ) : (
             <SettingsView
-              adFree={supporterStatus.adFree}
               debug={debug}
               hostVersionInfo={hostVersionInfo}
               isCheckingHostVersion={isCheckingHostVersion}
@@ -285,10 +303,12 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
               onCheckHostUpdate={checkHostUpdate}
               onCheckUpdates={checkUpdates}
               onForceShowOnboarding={resetOnboardingForDev}
-              onLocaleChange={setLocalePreference}
+              onLocaleChange={onSettingsLocaleChange}
               onScheduleGlobal={() => handleScheduleOpen(null)}
               settings={settings}
               onSettingsChange={setSettings}
+              analyticsConsent={analyticsConsent}
+              onAnalyticsConsentChange={setAnalyticsConsent}
             />
           )}
         </div>
@@ -342,17 +362,16 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
         onConnectNative={() => {
           connectNative();
         }}
-        onComplete={() => setOnboarding({ devReplayOnboarding: false, onboardingCompleted: true })}
-        onSkipTour={() => setOnboarding({ devReplayOnboarding: false, onboardingCompleted: true })}
+        onComplete={() => {
+          setOnboarding({ devReplayOnboarding: false, onboardingCompleted: true });
+        }}
+        onSkipTour={() => {
+          trackUiEvent("onboarding_skipped", { source: "extension_onboarding" });
+          setOnboarding({ devReplayOnboarding: false, onboardingCompleted: true });
+        }}
         settings={settings}
         onSettingsChange={setSettings}
-        supporter={supporterStatus.adFree}
         hostVersionInfo={hostVersionInfo}
-      />
-
-      <SupporterThankYouOverlay
-        status={supporterStatus}
-        onClose={dismissSupporterThankYou}
       />
     </main>
   );

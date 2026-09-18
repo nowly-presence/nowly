@@ -1,4 +1,4 @@
-import { API_BASE_URL, EXT_WEB_SOURCE, SUPPORTER_STATUS_KEY, WEB_BASE_URL } from "@/shared/constants";
+import { EXT_WEB_SOURCE, WEB_BASE_URL } from "@/shared/constants";
 import type { WebMessage } from "@/shared/types";
 
 const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE";
@@ -6,15 +6,22 @@ const IS_UNPACKED = !chrome.runtime.getManifest().update_url;
 const DEVICE_KEY = "deviceId";
 const DEVICE_TOKEN_KEY = "deviceToken";
 let MARKETPLACE_ORIGIN = new URL(WEB_BASE_URL).origin;
+
+const isAllowedWebOrigin = (origin: string): boolean => {
+  if (IS_UNPACKED) {
+    return origin === MARKETPLACE_ORIGIN || /^https?:\/\/(localhost|127\.0\.0\.1):3000$/.test(origin);
+  }
+  return origin === MARKETPLACE_ORIGIN;
+};
 const WEB_MESSAGE_TYPES = new Set([
   "INSTALL_PRESENCE",
   "UPDATE_PRESENCE",
   "UNINSTALL_PRESENCE",
   "GET_INSTALLED",
   "GET_DIAGNOSTIC",
-  "GET_AD_STATUS",
   "GET_DEVICE_INFO",
-  "REDEEM_SUPPORT_CODE",
+  "GET_ANALYTICS_CONSENT",
+  "SET_ANALYTICS_CONSENT",
 ]);
 
 const sendRuntimeMessage = async <T = unknown>(message: Record<string, unknown>): Promise<T | null> => {
@@ -33,60 +40,6 @@ const getDeviceId = async (): Promise<string> => {
   return id;
 };
 
-const getAdStatus = async (): Promise<Record<string, unknown>> => {
-  const deviceId = await getDeviceId();
-  const response = await fetch(`${API_BASE_URL}/ads/status?deviceId=${encodeURIComponent(deviceId)}`, {
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
-    return { ok: false, hasAds: true, adFree: false, deviceId };
-  }
-
-  const status = await response.json() as { hasAds?: unknown; adFree?: unknown };
-  return {
-    ok: true,
-    hasAds: status.hasAds !== false,
-    adFree: status.adFree === true,
-    deviceId,
-  };
-};
-
-const redeemSupportCode = async (code: string): Promise<Record<string, unknown>> => {
-  const deviceId = await getDeviceId();
-  const response = await fetch(`${API_BASE_URL}/support/redeem-device`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ code, deviceId }),
-  });
-
-  const payload = await response.json().catch(() => ({})) as Record<string, unknown>;
-  const result = {
-    ok: response.ok && payload.ok !== false,
-    deviceId,
-    ...payload,
-  };
-
-  if (result.ok === true) {
-    await chrome.storage.local.set({
-      [SUPPORTER_STATUS_KEY]: {
-        adFree: true,
-        hasAds: false,
-        deviceId,
-        activatedAt: new Date().toISOString(),
-        showThankYou: true,
-      },
-    });
-    chrome.runtime.sendMessage({
-      source: "PRESENCES_CONTENT",
-      type: "SUPPORTER_STATUS_CHANGED",
-      payload: { adFree: true, deviceId },
-    }).catch(() => {});
-  }
-
-  return result;
-};
-
 const broadcastDetected = (): void => {
   let count = 0;
   const interval = window.setInterval(() => {
@@ -97,7 +50,7 @@ const broadcastDetected = (): void => {
 };
 
 window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
-  if (!IS_UNPACKED && event.origin !== MARKETPLACE_ORIGIN) return;
+  if (!isAllowedWebOrigin(event.origin)) return;
 
   if (event.data?.source === EXT_WEB_SOURCE && event.data.type === "PING") {
     window.postMessage({ source: EXT_WEB_SOURCE, type: "EXT_DETECTED" }, "*");
@@ -105,29 +58,12 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
 });
 
 window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
-  if (!IS_UNPACKED && event.origin !== MARKETPLACE_ORIGIN) return;
+  if (!isAllowedWebOrigin(event.origin)) return;
   if (event.data?.source !== EXT_WEB_SOURCE || event.data.type === "PING") return;
   if (!WEB_MESSAGE_TYPES.has(event.data.type)) return;
 
   const msg = event.data;
   if (!msg.messageId) return;
-
-  if (msg.type === "GET_AD_STATUS") {
-    getAdStatus()
-      .then((payload) => {
-        window.postMessage(
-          { source: EXT_WEB_SOURCE, type: "AD_STATUS", payload, messageId: msg.messageId },
-          "*",
-        );
-      })
-      .catch(() => {
-        window.postMessage(
-          { source: EXT_WEB_SOURCE, type: "AD_STATUS", payload: { ok: false, hasAds: true, adFree: false }, messageId: msg.messageId },
-          "*",
-        );
-      });
-    return;
-  }
 
   if (msg.type === "GET_DEVICE_INFO") {
     Promise.all([getDeviceId(), chrome.storage.local.get(DEVICE_TOKEN_KEY)]).then(([deviceId, tokenResult]) => {
@@ -137,32 +73,6 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
         "*",
       );
     });
-    return;
-  }
-
-  if (msg.type === "REDEEM_SUPPORT_CODE") {
-    const { code } = (msg.payload ?? {}) as { code?: string };
-    if (!code) {
-      window.postMessage(
-        { source: EXT_WEB_SOURCE, type: "REDEEM_SUPPORT_CODE_RESULT", payload: { ok: false, error: "missing_code" }, messageId: msg.messageId },
-        "*",
-      );
-      return;
-    }
-
-    redeemSupportCode(code)
-      .then((payload) => {
-        window.postMessage(
-          { source: EXT_WEB_SOURCE, type: "REDEEM_SUPPORT_CODE_RESULT", payload, messageId: msg.messageId },
-          "*",
-        );
-      })
-      .catch(() => {
-        window.postMessage(
-          { source: EXT_WEB_SOURCE, type: "REDEEM_SUPPORT_CODE_RESULT", payload: { ok: false, error: "network_error" }, messageId: msg.messageId },
-          "*",
-        );
-      });
     return;
   }
 

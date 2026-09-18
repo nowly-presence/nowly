@@ -16,6 +16,7 @@ declare module "@tabler/icons-react/dist/esm/icons/*.mjs" {
 
 interface ImportMetaEnv {
   readonly BROWSER: "chrome" | "firefox"
+  readonly VITE_NOWLY_CHANNEL: "stable" | "canary"
 }
 
 interface ImportMeta {

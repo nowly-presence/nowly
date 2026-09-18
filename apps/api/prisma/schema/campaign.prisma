@@ -1,0 +1,25 @@
+// Generic waitlist/email-capture campaigns. A campaign's id is the public
+// identifier embedded wherever a signup form is placed (web page, extension
+// onboarding, etc.) - created once from the insights admin UI.
+model Campaign {
+  id        String   @id @default(cuid())
+  name      String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  signups CampaignSignup[]
+
+  @@map("campaigns")
+}
+
+model CampaignSignup {
+  id         String   @id @default(cuid())
+  campaignId String   @map("campaign_id")
+  email      String
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, email])
+  @@map("campaign_signups")
+}

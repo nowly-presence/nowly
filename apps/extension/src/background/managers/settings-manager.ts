@@ -1,7 +1,7 @@
 import { applyPresencePause } from "@/background/managers/presence-pause";
 import type { ExtensionSettings } from "@/shared/types";
-import { addAnalyticsLog } from "@/background/analytics/analytics-log";
-import { trackAnalytics } from "@/background/analytics/analytics-tracker";
+import { trackAnalytics } from "@/background/analytics-client";
+import { addRuntimeLog } from "@/background/runtime-logs";
 import { setCustomApiUrl } from "@/background/services/background-context";
 import { syncDeviceState } from "@/background/services/device-sync";
 import { getSettings, setOnboarding, setSettings } from "@/background/services/storage";
@@ -11,23 +11,13 @@ export const updateSettings = async (partial: Partial<ExtensionSettings>): Promi
   const settings = await setSettings(partial);
   setCustomApiUrl(settings.customApiBaseUrl);
   void syncDeviceState();
-  addAnalyticsLog("info", "settings", "settings changed", {
-    analyticsConsent: settings.analyticsConsent === true,
+  addRuntimeLog("info", "settings", "settings changed", {
     customApiEnabled: Boolean(settings.customApiBaseUrl),
     scheduleEnabled: settings.scheduleEnabled !== false,
   });
 
-  const source = previousSettings.analyticsConsent === undefined ? "onboarding" : "settings";
-  if (typeof partial.analyticsConsent === "boolean" && partial.analyticsConsent !== previousSettings.analyticsConsent) {
-    void trackAnalytics(partial.analyticsConsent ? "analytics_consent_accepted" : "analytics_consent_declined", {
-      payload: { source },
-    });
-    void trackAnalytics("analytics_consent_changed", {
-      payload: { enabled: partial.analyticsConsent, source },
-    });
-  }
-  if (partial.presenceDisplayMode || typeof partial.separateActivePresence === "boolean" || typeof partial.showPlayer === "boolean") {
-    void trackAnalytics("settings_display_changed", {
+  if ("presenceDisplayMode" in partial || "separateActivePresence" in partial || "showPlayer" in partial) {
+    trackAnalytics("settings_display_changed", {
       payload: {
         displayMode: settings.presenceDisplayMode,
         separateActivePresence: settings.separateActivePresence,
@@ -35,11 +25,11 @@ export const updateSettings = async (partial: Partial<ExtensionSettings>): Promi
       },
     });
   }
+
   if ("customApiBaseUrl" in partial) {
-    void trackAnalytics("settings_custom_api_changed", {
-      payload: { enabled: Boolean(partial.customApiBaseUrl) },
-    });
+    trackAnalytics("settings_custom_api_changed", { payload: { enabled: Boolean(settings.customApiBaseUrl) } });
   }
+
   if (typeof partial.presencePaused === "boolean" && partial.presencePaused !== previousSettings.presencePaused) {
     await applyPresencePause(partial.presencePaused);
   }
@@ -49,8 +39,8 @@ export const updateSettings = async (partial: Partial<ExtensionSettings>): Promi
 
 export const resetOnboardingForDev = async (): Promise<ExtensionSettings> => {
   await setOnboarding({ devReplayOnboarding: true, onboardingCompleted: false });
-  const settings = await setSettings({ analyticsConsent: undefined });
+  const settings = await getSettings();
   await syncDeviceState();
-  addAnalyticsLog("info", "settings", "developer onboarding reset");
+  addRuntimeLog("info", "settings", "developer onboarding reset");
   return settings;
 };

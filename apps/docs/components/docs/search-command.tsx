@@ -1,10 +1,11 @@
 "use client";
 
-import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@nowly/ui";
+
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FC } from "react";
-import { Spinner } from "../ui/spinner";
+import { Spinner } from "@nowly/ui";
 
 type SearchResult = {
   title: string;

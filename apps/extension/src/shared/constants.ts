@@ -6,5 +6,7 @@ export const WEB_BASE_URL = extensionEnv.VITE_WEB_BASE_URL;
 export const API_BASE_URL = extensionEnv.VITE_API_BASE_URL;
 export const CDN_BASE_URL = extensionEnv.VITE_CDN_BASE_URL;
 export const DISCORD_INVITE_URL = "https://discord.gg/MnZap7czgB";
-export const HOST_DOWNLOAD_URL = "https://nowly.me/host";
-export const SUPPORTER_STATUS_KEY = "supporterStatus";
+export const HOST_DOWNLOAD_URL = `${WEB_BASE_URL.replace(/\/$/, "")}/desktop`;
+
+// Set once the "ChromeOS waitlist" campaign is created from the insights admin UI.
+export const CHROMEOS_WAITLIST_CAMPAIGN_ID = "";

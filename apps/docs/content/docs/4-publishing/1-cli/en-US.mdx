@@ -22,6 +22,12 @@ nowly
 nowly init "Netflix"
 ```
 
+The interactive prompt asks whether Discord already supports the platform if the user links their account. That writes `discordNative` in `metadata.json`. You can also pass it:
+
+```bash
+nowly init "Spotify" --discord-native
+```
+
 ## Build Presences
 
 Build every presence:
@@ -60,7 +66,7 @@ This downloads the latest dev extension build from the CDN, bundles the presence
 
 1. Open `chrome://extensions`, enable **Developer mode**
 2. **Load unpacked** → select the generated `dist/extension-dev` folder
-3. The presence installs automatically — no API server, no install page, no Custom API URL needed
+3. The presence installs automatically - no API server, no install page, no Custom API URL needed
 
 After editing the presence, rebuild and rerun `nowly extension <slug>`, then reload the extension.
 
@@ -95,7 +101,7 @@ nowly build youtube
 pnpm build:extension:dev
 ```
 
-Reload at `chrome://extensions` — the presence is already installed and ready to use.
+Reload at `chrome://extensions` - the presence is already installed and ready to use.
 
 ## List Presences
 

@@ -1,3 +1,5 @@
+import { presenceApiBaseUrl } from "@/lib/presence-api";
+
 export type ServiceStatus = "operational" | "slow" | "degraded" | "down" | "unknown";
 export type StatusServiceId = "website" | "api" | "library" | "cdn";
 
@@ -49,10 +51,8 @@ const isValidStatusReport = (data: unknown): data is StatusReport =>
   typeof data === "object" && data !== null && "services" in data && Array.isArray((data as Record<string, unknown>).services);
 
 export const fetchStatusReport = async (): Promise<StatusReport> => {
-  const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.nowly.me";
-
   try {
-    const res = await fetch(`${apiBase}/status`, { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    const res = await fetch(`${presenceApiBaseUrl()}/status`, { cache: "no-store", signal: AbortSignal.timeout(10000) });
     const data = await res.json() as StatusReport;
     return isValidStatusReport(data) ? data : getFallbackStatusReport();
   } catch {

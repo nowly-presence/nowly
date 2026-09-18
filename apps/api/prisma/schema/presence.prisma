@@ -37,3 +37,13 @@ model PresenceVersion {
   @@index([slug])
   @@map("presence_versions")
 }
+
+model PresenceLike {
+  slug     String
+  deviceId String   @map("device_id")
+  likedAt  DateTime @default(now()) @map("liked_at") @db.Timestamptz(6)
+
+  @@id([slug, deviceId])
+  @@index([slug])
+  @@map("presence_likes")
+}

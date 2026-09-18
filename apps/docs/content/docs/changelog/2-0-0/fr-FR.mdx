@@ -1,0 +1,70 @@
+---
+title: 2.0.0
+date: 2026-09-17
+description: Un nowly.me reconstruit, bibliothèque publique, téléchargements bureau et Canary, pages légales, Chrome et Firefox.
+---
+
+2.0.0 suit 1.4.0. Il n'y a pas de 1.4.1 sur les stores. Le panneau de 1.4.0 reste. Cette version, c'est le site public, la bibliothèque, les chemins d'install autour, et une passe sur la vie privée et l'extension.
+
+## Un nouveau nowly.me
+
+Le site est reconstruit : hero, plateformes, fonctionnalités, installation, confidentialité, FAQ, section code source disponible, CTA. Les textes sont en anglais, français et espagnol. Clair et sombre suivent le système. Les cartes animées du hero tournent seulement sur grand écran.
+
+Le sélecteur de thème du footer cycle clair, sombre et système sans clignoter. Le lockup reste lisible sur fond clair. La navigation utilise de vrais liens. Les libellés disent Application bureau, jamais Host. Une bannière signale désormais quand une nouvelle version est disponible.
+
+Une page `/extension` présente le navigateur seul, séparée de `/desktop` qui reste dédiée à l'application bureau.
+
+## Bibliothèque sur le site
+
+`/library` est un vrai catalogue : recherche, filtres, pagination, fiches de présence, pages auteur. Un résultat vide propose encore de demander ou de créer une présence. Avec l'extension, on peut lancer l'install depuis une fiche. Un problème sur une présence peut désormais être signalé directement depuis sa fiche.
+
+## Vie privée et vos données
+
+Une page `/consent` centralise la gestion de vos données : activer ou couper la collecte anonyme, exporter tout ce qui est stocké pour votre appareil, ou le supprimer entièrement. Rien de tout ça n'est jamais activé sans action explicite de votre part.
+
+`/status` affiche l'état des services en temps réel (disponibilité, incidents).
+
+La page ouverte après avoir retiré l'extension (`/uninstall`) propose le même choix : garder les statistiques anonymes, ou supprimer toutes les données liées à l'appareil. Rien n'est envoyé avant ce choix.
+
+## Application bureau, Chrome et Firefox
+
+`/desktop` sert Windows, macOS et Linux. Les installs stables pointent vers le Chrome Web Store et Firefox Add-ons. Firefox n'est plus un lien oublié.
+
+ChromeOS est désormais détecté et clairement indiqué comme non supporté pour l'instant, plutôt que de proposer un téléchargement qui ne fonctionnera pas : l'application bureau a besoin d'un binaire natif que ChromeOS ne peut pas exécuter aujourd'hui. Un moyen d'être prévenu si ça change est proposé, sur le site comme dans l'extension.
+
+## Canary
+
+`/canary` propose des zips d'essai Chrome et Firefox, avec détection du navigateur. Le bouton store est mis en avant pour ne pas confondre test et version stable. Les builds Canary de l'extension ont un lockup et une couleur distincts.
+
+## Extension
+
+Le consentement pour les statistiques d'usage anonymes est une vraie option dans les réglages, désactivée par défaut : rien n'est jamais envoyé sans l'avoir explicitement activé.
+
+Les modes d'apparence clair et sombre sont disponibles dans le panneau, en plus du mode système.
+
+Quand une présence est déjà nativement gérée par Discord (le jeu ou l'app est reconnu directement), l'extension l'indique clairement pour éviter d'activer les deux en double.
+
+Le pont de communication entre le site et l'extension fonctionne aussi avec une instance hébergée en local (localhost).
+
+## Support, notes de version, légal
+
+`/support` liste Discord, GitHub, Ko-fi et GitHub Sponsors. Nowly reste gratuit. L'ancien système de soutien interne (`/redeem`) est retiré : le soutien du projet passe désormais uniquement par ces liens externes.
+
+`/changelog` liste les versions. Une mise à jour store ouvre toujours `nowly.me/changelog/{version}` puis envoie vers les notes ici.
+
+Confidentialité, conditions, cookies et mentions légales sont sur nowly.me. Ils nomment l'éditeur, un VPS Contabo dans l'UE, Cloudflare, les deux stores, et la BUSL-1.1 (code source disponible, pas open source OSI avant la Change Date). Un bandeau couvre le cookie de langue. La publicité est décrite comme inactive tant qu'on ne l'active pas.
+
+URL canoniques, sitemap, robots, Open Graph et JSON-LD couvrent les pages publiques. Les hôtes de staging comme `dev.nowly.me` ne sont jamais canoniques.
+
+## Documentation
+
+Les docs sont sur [docs.nowly.me](https://docs.nowly.me), chemins du type `/changelog`. Les anciennes URLs `/docs/...` redirigent. Le site des docs a été redessiné et suit désormais aussi le thème clair/sombre.
+
+## Aussi dans cette version
+
+- Menus de langue custom dans l'extension, avec drapeaux dans la liste ouverte
+- `getSetting` dans les scripts, ticks plus rapides (visibilité, historique, hash, média)
+- Parcours de reconnexion si l'application bureau manque ou est trop ancienne
+- Snooze jusqu'à minuit ; planning off par défaut sur les nouvelles installs
+- Assets bundlés chargeables en local ; présences archivées ignorées à la mise à jour
+- `nowly build --watch` et `nowly pack --watch`

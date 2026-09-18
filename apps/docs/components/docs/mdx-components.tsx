@@ -3,7 +3,6 @@ import { Callout } from "./callout";
 import { CodeBlock } from "./code-block";
 import { Faq } from "./faq";
 import { HeadingAnchor } from "./heading-anchor";
-import { ReleaseTable } from "./release-table";
 import { Step, Steps } from "./steps";
 import { LanguageTable, TypeTable } from "./type-table";
 
@@ -40,7 +39,7 @@ export const mdxComponents: MDXComponents = {
   )) as FC<{ children?: ReactNode; id?: string }>,
 
   h2: (({ children, id, ...props }) => (
-    <HeadingAnchor as="h2" id={id} className="text-2xl font-semibold mt-12 mb-4" {...props}>
+    <HeadingAnchor as="h2" id={id} className="text-2xl font-semibold mt-10 mb-3" {...props}>
       {children}
     </HeadingAnchor>
   )) as FC<{ children?: ReactNode; id?: string }>,
@@ -62,7 +61,7 @@ export const mdxComponents: MDXComponents = {
   )) as FC<{ children?: ReactNode }>,
 
   ul: (({ children }) => (
-    <ul className="mb-4 space-y-1.5 list-disc list-inside text-foreground/85">{children}</ul>
+    <ul className="mb-6 list-disc space-y-2 pl-5 text-foreground/85">{children}</ul>
   )) as FC<{ children?: ReactNode }>,
 
   ol: (({ children }) => (
@@ -167,5 +166,4 @@ export const mdxComponents: MDXComponents = {
   Step: Step as ComponentType<Record<string, unknown>>,
   CodeBlock: CodeBlock as ComponentType<Record<string, unknown>>,
   Faq: Faq as ComponentType<Record<string, unknown>>,
-  ReleaseTable: ReleaseTable as ComponentType<Record<string, unknown>>,
 };

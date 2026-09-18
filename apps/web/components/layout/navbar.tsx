@@ -1,111 +1,97 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useBrowser } from "@/hooks/use-browser";
-import { BRAND_LOCKUP_BLUE } from "@/lib/brand";
+import { RiMenuLine } from "@nowly/ui/icons";
+import { ExtensionStoreButton } from "@/components/extension-store-button";
+import { BrandLockup } from "@/components/layout/brand-lockup";
+import { Button, Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@nowly/ui";
+
+
+import { CANARY_ACCENT, CANARY_INK } from "@/lib/brand";
 import { docsHref } from "@/lib/seo";
-import { cn } from "@/lib/utils";
-import { IconDownload, IconMenu2 } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import type { FC, ReactElement } from "react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
-const chromiumDownloadLabel = (browser: string): boolean =>
-  Boolean(browser) && browser !== "Firefox" && browser !== "Safari";
-
-export const Navbar: FC = (): ReactElement => {
-  const browser = useBrowser();
+export const Navbar = () => {
   const t = useTranslations("navbar");
-  const downloadHref = "/#download";
-  const downloadLabel = chromiumDownloadLabel(browser)
-    ? t("download-for", { browser })
-    : t("download-extension");
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const canary = pathname === "/canary";
+  const storeButtonProps = canary
+    ? { className: "border-transparent hover:brightness-110", style: { backgroundColor: CANARY_ACCENT, color: CANARY_INK } }
+    : {};
+
+  const links = [
+    { href: docsHref("/"), label: t("docs"), external: true },
+    { href: "/library", label: t("library"), external: false },
+  ];
 
   return (
-    <nav
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 py-4 transition-all duration-300",
-        "bg-background/35 backdrop-blur-xl"
-      )}
-    >
-      <div className="mx-auto w-full max-w-300 min-w-0 px-6">
-        <div className="flex min-w-0 items-center justify-between">
-          <Link href="/" className="min-w-0 shrink-0 cursor-pointer select-none">
-            <img src={BRAND_LOCKUP_BLUE} alt="Nowly" width={420} height={128} className="h-10 w-auto max-w-full" />
-          </Link>
+    <header className="pointer-events-none relative sticky top-0 z-50 px-4 pt-4 sm:px-6 sm:pt-8 lg:px-10">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-4 right-4 left-4 mx-auto max-w-[1200px] rounded-[12px] bg-background/50 opacity-0 backdrop-blur-xl transition-opacity duration-200 sm:top-8 sm:right-6 sm:left-6 lg:right-10 lg:left-10 [[data-nav-join]_&]:opacity-100"
+        style={{ height: "var(--nav-join-panel, 0px)" }}
+      />
+      <div className="pointer-events-auto relative mx-auto flex h-[68px] max-w-[1200px] items-center justify-between gap-4 rounded-[12px] bg-background/50 px-3 backdrop-blur-xl transition-[background-color,border-radius,backdrop-filter] duration-200 sm:h-[84px] sm:px-4 [[data-nav-join]_&]:rounded-b-none [[data-nav-join]_&]:bg-transparent [[data-nav-join]_&]:backdrop-blur-none">
+        <Link href="/" className="relative flex h-11 w-[120px] shrink-0 items-center sm:h-[60px] sm:w-[148px]">
+          <BrandLockup
+            width={148}
+            height={60}
+            className="h-full w-auto object-contain object-left"
+          />
+        </Link>
 
-          <div className="lg:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <button
-                  type="button"
-                  className="inline-flex items-center justify-center rounded-lg p-2 text-muted-foreground hover:text-foreground hover:bg-card-hover transition-colors"
-                  aria-label="Open menu"
-                >
-                  <IconMenu2 size={22} />
-                </button>
-              </SheetTrigger>
-
-              <SheetContent side="right" showCloseButton={false}>
-                <div className="flex flex-col gap-6 px-6 pt-12">
-                  <SheetClose asChild>
-                    <Link
-                      href={docsHref("/")}
-                      className="text-lg font-semibold text-foreground hover:text-accent transition-colors"
-                    >
-                      {t("docs")}
-                    </Link>
-                  </SheetClose>
-
-                  <SheetClose asChild>
-                    <Link
-                      href="/library"
-                      className="text-lg font-semibold text-foreground hover:text-accent transition-colors"
-                    >
-                      {t("marketplace")}
-                    </Link>
-                  </SheetClose>
-
-                  <SheetClose asChild>
-                    <Link
-                      href={downloadHref}
-                      className={buttonVariants({ size: "md", variant: "accent", className: "justify-center" })}
-                    >
-                      <IconDownload size={16} />
-                      {downloadLabel}
-                    </Link>
-                  </SheetClose>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-
-          <div className="hidden min-w-0 items-center gap-2 lg:flex">
-            <Link href={docsHref("/")}
-              className={buttonVariants({ size: "md", variant: "ghost" })}
-            >
-              {t("docs")}
-            </Link>
-
-            <Link href="/library"
-              className={buttonVariants({ size: "md", variant: "ghost" })}
-            >
-              {t("marketplace")}
-            </Link>
-
+        <nav className="hidden items-center gap-8 lg:flex">
+          {links.map((link) => (
             <Link
-              href={downloadHref}
-              className={buttonVariants({ size: "md", variant: "accent" })}
+              key={link.href}
+              href={link.href}
+              className="text-sm text-foreground transition-opacity hover:opacity-80"
+              {...(link.external ? { rel: "noreferrer", target: "_blank" } : {})}
             >
-              <IconDownload size={16} />
-
-              <span className="hidden sm:inline">{downloadLabel}</span>
-              <span className="sm:hidden">{t("download-short")}</span>
+              {link.label}
             </Link>
-          </div>
-        </div>
+          ))}
+          <ExtensionStoreButton {...storeButtonProps} />
+        </nav>
+
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger
+            render={
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="lg:hidden"
+                aria-label={t("open-menu")}
+              />
+            }
+          >
+            <RiMenuLine />
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[min(100%,20rem)] bg-background p-0 lg:hidden">
+            <SheetHeader>
+              <SheetTitle>{t("open-menu")}</SheetTitle>
+            </SheetHeader>
+            <nav className="flex flex-col gap-3 px-4 pb-6">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-foreground"
+                  onClick={() => setOpen(false)}
+                  {...(link.external ? { rel: "noreferrer", target: "_blank" } : {})}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <ExtensionStoreButton {...storeButtonProps} />
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
-    </nav>
+    </header>
   );
 };

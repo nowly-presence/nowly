@@ -1,11 +1,13 @@
 "use client";
+import { RiArrowDownSLine, RiExternalLinkLine } from "@nowly/ui/icons";
 
 import { ClaudeIcon, GitHubIcon, OpenAIIcon } from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@nowly/ui";
+
+
 import { DOCS_URL, PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import { docHref } from "@/lib/docs/href";
-import { IconChevronDown, IconExternalLink } from "@tabler/icons-react";
+
 import type { FC } from "react";
 
 type OpenInProps = {
@@ -31,11 +33,9 @@ export const OpenIn: FC<OpenInProps> = ({ slug, locale }) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="secondary" size="sm">
-          Open in
-          <IconChevronDown className="size-4" />
-        </Button>
+      <DropdownMenuTrigger render={<Button variant="secondary" size="sm" />}>
+        Open in
+        <RiArrowDownSLine className="size-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-xl w-full" align="end">
         {services.map((service) => (
@@ -46,7 +46,7 @@ export const OpenIn: FC<OpenInProps> = ({ slug, locale }) => {
           >
             {service.icon}
             <span>Open in {service.name}</span>
-            <IconExternalLink className="text-muted-foreground ml-auto size-4" />
+            <RiExternalLinkLine className="text-muted-foreground ml-auto size-4" />
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

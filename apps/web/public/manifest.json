@@ -1,11 +1,13 @@
 {
   "name": "Nowly",
   "short_name": "Nowly",
-  "description": "Automatic Discord Rich Presence for your favorite streaming platforms.",
-  "start_url": "/",
+  "description": "Automatic Discord Rich Presence for your favorite platforms.",
+  "id": "https://nowly.me/",
+  "start_url": "https://nowly.me/",
+  "scope": "https://nowly.me/",
   "display": "standalone",
   "background_color": "#07080C",
-  "theme_color": "#07080C",
+  "theme_color": "#22d3ee",
   "icons": [
     {
       "src": "https://cdn.nowly.me/brand/favicons/favicon-16.png",

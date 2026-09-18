@@ -1,5 +1,4 @@
 import type { PresenceData, StoredPresence } from "@/shared/types";
-import { trackAnalytics } from "@/background/analytics/analytics-tracker";
 import {
   addActiveSlugToState,
   clearActiveSlugsFromState,
@@ -13,6 +12,7 @@ import {
   setActiveTabId,
 } from "@/background/services/background-context";
 import { CDN_BASE_URL } from "@/shared/constants";
+import { trackAnalytics } from "@/background/analytics-client";
 import { mapPresenceData, postNative } from "@/background/services/native";
 import { verifyPresenceRelease } from "@/background/services/release-security";
 import { getCurrentActivity, getPresences, getSettings, setCurrentActivity, setDebug } from "@/background/services/storage";
@@ -160,10 +160,7 @@ export const addActiveSlug = async (slug: string): Promise<void> => {
   addActiveSlugToState(slug);
   if (hasActiveSession(slug)) return;
   setActiveSessionStartedAt(slug, Date.now());
-  void trackAnalytics("presence_session_start", {
-    slug,
-    version: await getPresenceVersion(slug),
-  });
+  trackAnalytics("presence_session_start", { slug, version: await getPresenceVersion(slug) });
 };
 
 export const removeActiveSlug = async (slug: string, reason: string): Promise<void> => {
@@ -171,13 +168,10 @@ export const removeActiveSlug = async (slug: string, reason: string): Promise<vo
   const startedAt = getActiveSessionStartedAt(slug);
   removeActiveSession(slug);
   if (!startedAt) return;
-  void trackAnalytics("presence_session_end", {
+  trackAnalytics("presence_session_end", {
     slug,
     version: await getPresenceVersion(slug),
-    payload: {
-      durationMs: Math.max(0, Date.now() - startedAt),
-      reason,
-    },
+    payload: { durationMs: Date.now() - startedAt, reason },
   });
 };
 
@@ -219,7 +213,11 @@ export const handleActivityUpdate = async (
       message: `[${slug}] ${verified.error ?? "release verification failed"}`,
       updatedAt: Date.now(),
     });
-    void trackAnalytics("presence_error", { slug, payload: { stage: "security" } });
+    trackAnalytics("presence_error", {
+      slug,
+      version: stored.release?.version ?? stored.metadata?.version,
+      payload: { stage: "security" },
+    });
     return { ok: false };
   }
 

@@ -1,44 +1,71 @@
-import { useTranslations } from "next-intl";
-import type { FC, ReactElement } from "react";
+import { ExtensionStoreButton } from "@/components/extension-store-button";
+import { homeSectionAltClass, SectionHeading } from "@/components/home/section-heading";
+import { ButtonLink, cn } from "@nowly/ui";
 
-export const StepsSection: FC = (): ReactElement => {
-  const t = useTranslations("steps-section");
-  const steps = t.raw("steps") as Array<{
-    title: string
-    description: string
-  }>;
+
+import { RiBookShelfFill, RiWindow2Fill } from "@nowly/ui/icons";
+import { getTranslations } from "next-intl/server";
+
+type StepItem = {
+  title: string
+  text: string
+  action: string
+};
+
+const actions = [
+  {
+    render: (label: string) => (
+      <ExtensionStoreButton variant="dark" size="sm">
+        {label}
+      </ExtensionStoreButton>
+    ),
+  },
+  {
+    render: (label: string) => (
+      <ButtonLink href="/desktop" variant="dark" size="sm">
+        <RiWindow2Fill data-icon="inline-start" />
+        {label}
+      </ButtonLink>
+    ),
+  },
+  {
+    render: (label: string) => (
+      <ButtonLink href="/library" variant="dark" size="sm">
+        <RiBookShelfFill data-icon="inline-start" />
+        {label}
+      </ButtonLink>
+    ),
+  },
+] as const;
+
+export const StepsSection = async () => {
+  const t = await getTranslations("steps");
+  const items = t.raw("items") as StepItem[];
 
   return (
-    <section className="py-24 border-b border-border">
-      <div className="relative z-2 mx-auto w-full max-w-300 min-w-0 px-6">
-        <div className="mx-auto mb-16 max-w-150 text-center">
-          <span className="text-accent font-bold uppercase tracking-widest text-xs mb-4 block">
-            {t("section-label")}
-          </span>
-          <h2 className="mb-4 text-balance text-[2.5rem]">
-            {t("title")}
-          </h2>
-          <p className="text-balance text-muted-foreground">
-            {t("description")}
-          </p>
-        </div>
+    <section className={cn("px-5 py-28 sm:px-6 sm:py-36", homeSectionAltClass)}>
+      <SectionHeading eyebrow={t("eyebrow")} title={t("title")} description={t("description")} />
 
-        <div className="grid min-w-0 grid-cols-1 gap-8 md:grid-cols-3">
-          {steps.map((step, index) => (
-            <div
-              key={step.title}
-              className="min-w-0 rounded-xl border border-border bg-card p-8"
+      <div className="mx-auto mt-12 grid max-w-[1200px] gap-5 md:grid-cols-3">
+        {items.map((item, index) => {
+          const action = actions[index];
+          return (
+            <article
+              key={item.title}
+              className="relative min-h-[190px] overflow-hidden rounded-[14px] bg-cta-surface p-5 text-cta-ink"
             >
-              <span className="text-accent font-mono text-sm font-bold mb-4 block">
-                0{index + 1}
+              <span className="pointer-events-none absolute bottom-0 left-0 origin-bottom-left translate-x-[-38px] translate-y-[42px] select-none text-[260px] font-black leading-none lining-nums text-cta-ink/12">
+                {index + 1}
               </span>
-              <h3 className="mb-2 wrap-break-word text-lg font-bold">{step.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {step.description}
-              </p>
-            </div>
-          ))}
-        </div>
+
+              <div className="relative z-10 flex h-full min-h-[150px] flex-col pl-[84px]">
+                <h3 className="text-[1.05rem] font-semibold leading-tight">{item.title}</h3>
+                <p className="mt-2 max-w-[36ch] flex-1 text-sm leading-snug text-cta-muted">{item.text}</p>
+                <div className="mt-5">{action?.render(item.action)}</div>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

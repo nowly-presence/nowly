@@ -1,313 +1,608 @@
 {
+  "metadata": {
+    "title": "Nowly | Share what you do, in real time",
+    "description": "Nowly turns what you watch, listen to, or play into a rich, live Discord presence.",
+    "keywords": [
+      "Discord Rich Presence",
+      "Discord activity",
+      "Nowly",
+      "browser extension",
+      "YouTube Discord",
+      "Spotify Discord",
+      "Netflix Discord"
+    ]
+  },
   "navbar": {
-    "marketplace": "Library",
-    "docs": "Docs",
-    "download-extension": "Download extension",
-    "download-for": "Download for {browser}",
-    "download-short": "Download"
+    "docs": "Documentation",
+    "library": "Library",
+    "open-menu": "Open menu"
   },
-  "hero-section": {
-    "badge": "New",
-    "title": "Your Discord activity,",
-    "title-accent": "synced.",
-    "description": "The simplest way to show what you're watching. Series, movies, or streams — your Discord status stays up to date.",
-    "cta": "Browse Presences"
+  "theme": {
+    "toggle": "Toggle color theme",
+    "light": "Light",
+    "dark": "Dark"
   },
-  "platforms-section": {
-    "section-label": "Platforms",
-    "title": "Your favorite services",
-    "description": "Works with the streaming platforms you already use.",
-    "library-cta": "Open library",
-    "services-count": "{count, plural, one {# service ready} other {# services ready}}",
-    "available-heading": "Available",
-    "coming-soon-heading": "Coming Soon",
-    "coming-soon-badge": "Coming Soon",
-    "more-to-discover": "More to discover"
-  },
-  "stats-section": {
-    "section-label": "Statistics",
-    "title": "Nowly in numbers",
-    "description": "An anonymous snapshot of real usage: installs and active presences.",
-    "items": {
-      "total-users": {
-        "label": "Users",
-        "description": "Devices that synced Nowly at least once."
+  "hero": {
+    "title-before": "Share what you do, in",
+    "title-accent": "real time",
+    "description": "Nowly turns your activity into a rich, dynamic Discord presence.",
+    "install": "Install Nowly",
+    "library": "Browse the library",
+    "cards": {
+      "netflix": {
+        "app-label": "Watching Netflix",
+        "title": "La casa de papel",
+        "subtitle": "S1 E1. Episode 1",
+        "elapsed": "00:44",
+        "duration": "48:40",
+        "cta": "Watch Episode"
       },
-      "active-users": {
-        "label": "Active now",
-        "description": "Users with at least one recently active presence."
+      "prime": {
+        "app-label": "Watching Prime Video",
+        "title": "Reacher",
+        "subtitle": "S1 E1. Welcome to Margrave",
+        "elapsed": "15:13",
+        "duration": "40:32",
+        "cta": "Watch Episode"
       },
-      "active-presences": {
-        "label": "Active presences",
-        "description": "Presences currently detected on active devices."
+      "figma": {
+        "app-label": "Playing Figma",
+        "title": "Designing on Figma",
+        "subtitle": "Acme Corp",
+        "timer": "00:44"
       },
-      "installed-presences": {
-        "label": "Installed presences",
-        "description": "Presences installed and still enabled in Nowly."
+      "youtube": {
+        "app-label": "Watching YouTube",
+        "title": "Grand Theft Auto VI: An Extended Look",
+        "subtitle": "Rockstar Games",
+        "elapsed": "14:10",
+        "duration": "26:48",
+        "cta": "Watch video"
+      },
+      "twitch": {
+        "app-label": "Watching Twitch",
+        "title": "Speedrun Elden Ring - Any%",
+        "subtitle": "NoctaPlays • Elden Ring",
+        "timer": "01:42:18",
+        "cta": "Watch live"
+      },
+      "chatgpt": {
+        "app-label": "Playing ChatGPT",
+        "title": "Chatting: Trip plan to Japan",
+        "timer": "12:34",
+        "cta": "Open chat"
+      },
+      "notion": {
+        "app-label": "Watching Notion",
+        "title": "Editing a page",
+        "subtitle": "Q3 Roadmap",
+        "timer": "24:18"
+      },
+      "steam": {
+        "app-label": "Playing Steam",
+        "title": "Viewing a game",
+        "subtitle": "Minecraft Legends",
+        "timer": "08:02",
+        "cta": "View store page"
+      },
+      "github": {
+        "app-label": "Watching GitHub",
+        "title": "Viewing Pull Request #39",
+        "subtitle": "nowly-presence/presences",
+        "timer": "03:41",
+        "cta": "View Pull Request"
       }
-    },
-    "footnote": "Active counters expire automatically after a few minutes without a signal.",
-    "unavailable": "Statistics are temporarily unavailable."
+    }
   },
-  "steps-section": {
-    "section-label": "How it works",
-    "title": "It's that simple",
-    "description": "Three steps to show what you're watching",
-    "steps": [
+  "platforms": {
+    "eyebrow": "Platforms",
+    "title": "Works with your platforms",
+    "description": "Nowly shows what you watch, listen to, or play on the services you already use."
+  },
+  "steps": {
+    "eyebrow": "Setup",
+    "title": "Three steps, Discord follows",
+    "description": "The extension reads the tab. The desktop app sends the status to Discord.",
+    "items": [
       {
-        "title": "Install Nowly",
-        "description": "Download and install Nowly on your Windows PC. Setup takes only a few seconds."
+        "title": "The extension",
+        "text": "Add Nowly to Chrome or Firefox, for free.",
+        "action": "Download"
       },
       {
-        "title": "Connect Discord",
-        "description": "Nowly detects Discord and connects on its own. No manual setup required."
+        "title": "Desktop app",
+        "text": "Install the local bridge that talks to Discord.",
+        "action": "Get the app"
       },
       {
-        "title": "Enjoy your content",
-        "description": "Open your favorite platform — your Discord status updates automatically."
+        "title": "One presence",
+        "text": "Enable YouTube, Netflix, or Twitch from the library.",
+        "action": "Open library"
       }
     ]
   },
-  "cta-section": {
-    "title": "Get started today",
-    "description": "No subscription. Lightweight and secure.",
-    "download-for": "Download for {browser}",
-    "desktop-only-title": "Desktop only",
-    "desktop-only-body": "The Nowly extension is built for desktop browsers. Install it on your PC to use Discord Rich Presence.",
-    "coming-soon": "Coming Soon",
-    "firefox-status": "Coming soon",
-    "extension": "Download Extension",
-    "browser": "Browser",
-    "platforms": "Compatible with Chromium-based browsers",
-    "open-source": "Open Source",
-    "free": "Free"
+  "cta": {
+    "title": "Get started with Nowly",
+    "description": "Install the free extension. You’re set up in seconds.",
+    "other-versions": "See other versions"
   },
-  "home-faq-section": {
-    "section-label": "FAQ",
-    "title": "Frequently asked questions",
-    "description": "Short answers to common questions about Nowly, setup, and privacy.",
-    "faq-cta": "View FAQ",
-    "discord-cta": "Community Discord",
+  "features": {
+    "eyebrow": "Product",
+    "title": "A status that feels alive",
+    "description": "A browser extension, a desktop app, and a library of signed scripts.",
+    "items": [
+      {
+        "title": "Automatic updates",
+        "description": "Title, artwork, timestamps, and playback state refresh as the page changes."
+      },
+      {
+        "title": "Install what you need",
+        "description": "YouTube, Netflix, Twitch, and more. Enable a presence from the library in one click."
+      },
+      {
+        "title": "Nothing extra on the page",
+        "description": "Scripts run only on the sites you install, nothing runs anywhere else."
+      },
+      {
+        "title": "Signed scripts",
+        "description": "Official presences are verified before they run, so the runtime stays under control."
+      },
+      {
+        "title": "Chrome and Firefox",
+        "description": "Works on Chromium browsers and Firefox. The download button follows your browser."
+      },
+      {
+        "title": "Desktop app",
+        "description": "The desktop app is the local bridge Discord actually accepts. Windows, macOS, and Linux."
+      }
+    ]
+  },
+  "privacy-section": {
+    "eyebrow": "Privacy",
+    "title": "Your activity is not our product",
+    "description": "What you watch stays on your PC, not on nowly.me.",
+    "items": [
+      {
+        "title": "Nothing goes through our servers",
+        "description": "Extension, desktop app, then Discord. Title, platform, and playback never leave your PC."
+      },
+      {
+        "title": "No analytics unless you ask",
+        "description": "If you turn them on, they only help improve Nowly. You can turn them off at any time."
+      },
+      {
+        "title": "Only the sites you install",
+        "description": "A presence runs only after you install it. Remove it, and Nowly leaves that site alone."
+      }
+    ],
+    "cta": "Read the privacy policy"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Questions, answered quickly",
+    "description": "The essentials on install, data, and Discord. Docs and Discord go further.",
+    "docs": "Open the docs",
+    "discord": "Join the Discord",
     "items": [
       {
         "question": "What is Nowly?",
-        "answer": "Nowly automatically shows what you are watching in your Discord status, using a browser extension and Nowly Host."
+        "answer": "Nowly shows what you watch, listen to, or play as Discord Rich Presence. It is a browser extension, a desktop app, and a library of platform scripts."
       },
       {
-        "question": "Do my data pass through your servers?",
-        "answer": "Your Rich Presence activity, no — it goes locally to Nowly Host, then directly to Discord. Only reviews you voluntarily post (opt-in) are stored server-side."
+        "question": "Does my activity go through your servers?",
+        "answer": "No. Activity stays local and is sent to Discord from your machine. Analytics are optional and off by default."
       },
       {
         "question": "Which platforms are supported?",
-        "answer": "Nowly already supports several streaming platforms, and the library lets you follow available and upcoming presences."
+        "answer": "The live list is the library. New presences can be added without updating the extension, so install the ones you actually use."
       }
     ]
   },
+  "open-source": {
+    "eyebrow": "Open source",
+    "title": "Add a presence",
+    "description": "Presence scripts are public. Fork, write, open a PR. The CLI and docs are enough to start.",
+    "docs": "Read the docs",
+    "file": "presence.ts"
+  },
+  "store": {
+    "download-chrome": "Download for Chrome",
+    "download-firefox": "Download for Firefox"
+  },
   "footer": {
-    "copyright": "© 2026 Nowly.",
-    "trademark": "Discord is a registered trademark of",
-    "support": "Support the project",
-    "open-source": "Open Source",
-    "author-alt": "Author",
-    "language-label": "View the site in",
-    "french": "French",
+    "tagline": "Share what you do.",
+    "copyright": "© 2026 Nowly. All rights reserved.",
+    "trademark": "Discord is a registered trademark of <inc>Discord Inc.</inc>",
+    "language-label": "Language",
     "english": "English",
-    "spanish": "Spanish",
-    "category-product": "Product",
-    "category-company": "Company",
-    "category-developers": "Developers",
-    "category-legal": "Legal",
-    "about": "About",
-    "team": "Team",
-    "faq": "FAQ",
-    "help": "Support",
-    "status": "Status",
-    "changelog": "Changelog",
-    "privacy": "Privacy Policy",
-    "tos": "Terms of Service",
-    "legal-notice": "Legal Notice",
-    "cookies": "Cookies",
-    "data-management": "Data & Privacy",
-    "marketplace": "Library",
+    "french": "Français",
+    "spanish": "Español",
+    "product": "Product",
+    "home": "Home",
+    "library": "Library",
     "host": "Desktop app",
-    "docs": "Docs",
-    "discord": "Discord"
+    "resources": "Resources",
+    "docs": "Documentation",
+    "changelog": "Release notes",
+    "canary": "Canary",
+    "support": "Support",
+    "status": "Status",
+    "community": "Community",
+    "discord": "Discord",
+    "github": "GitHub",
+    "twitter": "X / Twitter",
+    "tos": "Terms of Service",
+    "privacy": "Privacy",
+    "consent": "Your data",
+    "cookies": "Cookies",
+    "legal-notice": "Legal notice"
   },
-  "cookie-banner": {
-    "message": "This site uses strictly necessary cookies. Advertising technologies may be used if ads are enabled.",
-    "learn-more": "Learn more",
-    "dismiss": "Got it"
+  "libraryPage": {
+    "eyebrow": "Library",
+    "title": "Every presence, in one place",
+    "description": "Browse the platforms Nowly can share on Discord. Search, filter, and pick what you want to show.",
+    "search": "Search Netflix, Spotify, Figma...",
+    "search-label": "Search the library",
+    "clear-search": "Clear search",
+    "all": "All",
+    "count": "{count, plural, one {# presence} other {# presences}}",
+    "empty-title": "Nothing matches",
+    "empty-description": "Try another name, or reset the filters.",
+    "clear": "Reset",
+    "previous": "Previous",
+    "next": "Next",
+    "pagination": "Pagination",
+    "page-status": "Page {page} of {total}",
+    "go-to-page": "Go to page {page}",
+    "categories": {
+      "streaming": "Streaming",
+      "music": "Music",
+      "video": "Video",
+      "gaming": "Gaming",
+      "social": "Social",
+      "ai": "AI",
+      "tools": "Tools",
+      "learning": "Learning",
+      "other": "Other"
+    }
   },
-  "support-page": {
-    "badge": "Support",
+  "authorPage": {
+    "badge": "Author",
+    "back": "Back to the library",
+    "description": "{count, plural, one {# presence} other {# presences}}",
+    "meta-description": "Nowly presences by {name}.",
+    "view-in-library": "View in the library"
+  },
+  "presencePage": {
+    "back": "Back to the library",
+    "cta": "Get Nowly",
+    "about": "About",
+    "features": "What it does",
+    "contributors": "Contributors",
+    "author": "Author",
+    "contributor": "Contributor",
+    "supported-urls": "Supported sites",
+    "version": "Version",
+    "commit": "Commit {sha}",
+    "checking": "Looking for Nowly",
+    "install": "Install",
+    "installing": "Installing...",
+    "installed": "Installed",
+    "update": "Update",
+    "uninstall": "Remove",
+    "install-success": "{name} is installed.",
+    "update-success": "{name} is up to date.",
+    "install-error": "Could not install {name}.",
+    "install-origin": "The Chrome Web Store extension only accepts nowly.me. Load an unpacked Nowly build to install from localhost.",
+    "install-queued": "{name} will install when Nowly can reach the catalog.",
+    "uninstall-success": "{name} was removed.",
+    "uninstall-error": "Could not remove {name}.",
+    "uninstall-title": "Remove Presence",
+    "uninstall-description": "If {name} contains any configuration data, it will be permanently lost.",
+    "uninstall-confirm": "Remove",
+    "uninstall-cancel": "Cancel",
+    "ext-missing": "Install the Nowly extension to add this presence.",
+    "mobile": "Presence install is available on desktop browsers.",
+    "user-scripts": "Allow user scripts for Nowly in your browser, then reload this page.",
+    "related-title": "You might also like",
+    "report": "Report a problem",
+    "report-title": "Report a problem",
+    "report-description": "Tell us what is wrong with {name}. We read every report.",
+    "report-label": "Description",
+    "report-placeholder": "What happened? Which page or action failed?",
+    "report-count": "{count}/{max}",
+    "report-submit": "Send report",
+    "report-sending": "Sending...",
+    "report-cancel": "Cancel",
+    "report-close": "Close",
+    "report-thanks-title": "Thanks for the report",
+    "report-thanks-description": "We received your note about {name}. That helps us keep the library in good shape.",
+    "report-error": "Could not send the report. Try again in a moment.",
+    "discord-native-title": "Already on Discord",
+    "discord-native-description": "Discord shows {name} if you link your account. Nowly does the same without that link."
+  },
+  "desktopPage": {
+    "eyebrow": "Desktop app",
+    "title": "The local bridge to Discord",
+    "description": "The extension reads the tab. The desktop app sends your status to Discord. Title, platform, and playback never leave your PC.",
+    "detected": "Detected",
+    "chromeos-title": "ChromeOS isn't supported yet",
+    "chromeos-description": "Discord Rich Presence needs a native app that ChromeOS can't run today. We're looking into it - leave your email to get notified if that changes.",
+    "chromeos-email-placeholder": "you@example.com",
+    "chromeos-submit": "Notify me",
+    "chromeos-success": "Thanks, we'll let you know.",
+    "version": "Version {version}",
+    "card-title": "Download for {platform}",
+    "platforms": {
+      "windows": "Windows",
+      "macos": "macOS",
+      "linux": "Linux",
+      "chromeos": "ChromeOS"
+    },
+    "windows-installer": "Windows installer (.exe)",
+    "windows-portable": "Portable archive (.zip)",
+    "macos-dmg": "Disk image (.dmg)",
+    "macos-archive": "Archive (.tar.gz)",
+    "linux-archive": "Archive (.tar.gz)",
+    "open-source": "Open source",
+    "lightweight": "Small footprint",
+    "unsigned-title": "Unsigned build",
+    "unsigned-desc": "Windows may show a SmartScreen warning. Open More info, then Run anyway, only if you downloaded the file from this page.",
+    "signed-title": "Notarized by Apple",
+    "signed-desc": "macOS builds are notarized. Gatekeeper should accept the disk image.",
+    "trust-title": "What it does",
+    "trust-items": [
+      {
+        "title": "Stays on your machine",
+        "text": "The extension sees the tab. The desktop app talks to Discord locally. Nothing is sent to nowly.me."
+      },
+      {
+        "title": "Speaks Discord’s language",
+        "text": "Discord only accepts this local bridge. That is why the browser extension is not enough on its own."
+      },
+      {
+        "title": "Quiet in the background",
+        "text": "It is small, has no window to babysit, and only runs so your status can update."
+      }
+    ],
+    "guide-title": "Install it",
+    "guide-items": [
+      {
+        "title": "Download the right file",
+        "text": "Use the installer for your system. The portable archive is there if you prefer not to run a setup wizard."
+      },
+      {
+        "title": "Open the downloaded file",
+        "text": "Run the app and follow the setup. On Windows, read the SmartScreen note if a protection prompt appears."
+      },
+      {
+        "title": "Install a presence",
+        "text": "From the library, add something like YouTube to check that the extension and the desktop app talk to each other."
+      },
+      {
+        "title": "Check Discord",
+        "text": "Keep the Discord desktop app open, start a supported site, then check that your status updates."
+      }
+    ],
+    "guide-library": "Open the library",
+    "req-title": "Requirements",
+    "req": {
+      "os": "Operating system",
+      "arch": "Architecture",
+      "discord": "Discord",
+      "browser": "Browser",
+      "storage": "Storage",
+      "os-windows": "Windows 10 or Windows 11",
+      "os-macos": "macOS 11 Big Sur or later",
+      "os-linux": "Linux 2.6.32+ / glibc 2.17+",
+      "arch-windows": "64-bit (x64)",
+      "arch-macos": "Intel x64 / Apple Silicon (ARM64)",
+      "arch-linux": "64-bit (x64)",
+      "discord-windows": "Discord desktop app installed and running",
+      "discord-macos": "Discord desktop app installed and running",
+      "discord-linux": "Discord desktop app installed and running",
+      "browser-windows": "Chromium browser (Chrome, Edge, Brave, Opera) or Firefox",
+      "browser-macos": "Chromium browser (Chrome, Edge, Brave, Opera) or Firefox",
+      "browser-linux": "Chromium browser (Chrome, Edge, Brave, Opera) or Firefox",
+      "storage-windows": "About 4 MB",
+      "storage-macos": "About 4 MB",
+      "storage-linux": "About 2 MB"
+    }
+  },
+  "extensionPage": {
+    "eyebrow": "Browser extension",
+    "title": "The extension that reads your tabs",
+    "description": "Nowly detects what you're watching, listening to, or playing, then sends it to the desktop app for Discord.",
+    "detected": "Detected",
+    "card-title": "Add to {browser}",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-description": {
+      "chrome": "Available on the Chrome Web Store. Also works on Edge, Brave, and Opera.",
+      "firefox": "Available on addons.mozilla.org."
+    },
+    "dev-version": "See the development version",
+    "trust-title": "What it does",
+    "trust-items": [
+      {
+        "title": "Only the sites you install",
+        "text": "A presence only runs once installed from the library."
+      },
+      {
+        "title": "Nothing leaves your PC",
+        "text": "Title and activity go to the desktop app, not to nowly.me."
+      },
+      {
+        "title": "Signed scripts",
+        "text": "Official presences are verified before they run."
+      }
+    ],
+    "guide-title": "Install it",
+    "guide-items": [
+      {
+        "title": "Add the extension",
+        "text": "From your browser's store, in one click."
+      },
+      {
+        "title": "Install the desktop app",
+        "text": "It's the one that talks to Discord."
+      },
+      {
+        "title": "Turn on a presence",
+        "text": "From the library, add YouTube, Netflix, or Twitch."
+      }
+    ],
+    "guide-desktop": "See the desktop app",
+    "guide-library": "Open the library"
+  },
+  "changelogPage": {
+    "eyebrow": "Release notes",
+    "title": "What changed",
+    "description": "Each Nowly release, from the latest store build back to the first public version.",
+    "latest": "Latest",
+    "read": "Read the notes",
+    "banner-alt": "Nowly {version} website",
+    "docs": "Full notes",
+    "back": "All releases",
+    "library": "Library",
+    "update-eyebrow": "Extension update",
+    "update-title": "Nowly {version} is installed",
+    "update-description": "Here is what changed in this release.",
+    "meta-title": "Nowly {version}",
+    "missing": "Notes for this version are not on the site yet. You can still browse the full changelog in the docs."
+  },
+  "canaryPage": {
+    "eyebrow": "Canary",
+    "title": "Try the next Nowly",
+    "description": "Canary is the unpacked build we ship to testers. It moves faster than the stores, and it can break.",
+    "detected": "Detected",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-title": "Download for {browser}",
+    "card-description": {
+      "chrome": "Chrome cannot install this from the store. You load the unzipped folder yourself.",
+      "firefox": "Firefox cannot install this from addons.mozilla.org. You load it as a temporary add-on."
+    },
+    "download": "Download Nowly Canary",
+    "stable": {
+      "chrome": "Get the Chrome store version",
+      "firefox": "Get the Firefox add-on"
+    },
+    "store-note": {
+      "chrome": "Keep the store build for daily use. Canary can sit next to it: they use different extension IDs.",
+      "firefox": "Keep the add-on for daily use. A temporary Canary is removed when Firefox restarts."
+    },
+    "notes-title": "Before you install",
+    "notes": [
+      {
+        "title": "Unstable on purpose",
+        "text": "These zips track the latest extension work. Features can land, change, or disappear without a store review."
+      },
+      {
+        "title": "No store updates",
+        "text": "The browser will not auto-update Canary. When a new zip is published, download it again and reload the build."
+      },
+      {
+        "title": "Keep the folder",
+        "text": "The unpacked or temporary load points at a directory on disk. If you delete or move it, the extension disappears."
+      }
+    ],
+    "guide-title": {
+      "chrome": "Load it in Chrome",
+      "firefox": "Load it in Firefox"
+    },
+    "guide": {
+      "chrome": [
+        {
+          "title": "Download and unzip",
+          "text": "Save the zip, then extract it to a folder you will not throw away after a cleanup."
+        },
+        {
+          "title": "Open chrome://extensions",
+          "text": "Paste that address in the tab bar. Turn on Developer mode in the top right."
+        },
+        {
+          "title": "Load unpacked",
+          "text": "Choose the extracted folder, not the zip. You should see Nowly Canary in the list."
+        },
+        {
+          "title": "Reload after a new zip",
+          "text": "Replace the folder contents with the new build, then hit Reload on the extension card."
+        }
+      ],
+      "firefox": [
+        {
+          "title": "Download and unzip",
+          "text": "Save the Firefox zip, then extract it to a folder you will keep around."
+        },
+        {
+          "title": "Open about:debugging",
+          "text": "Paste about:debugging#/runtime/this-firefox in the address bar."
+        },
+        {
+          "title": "Load Temporary Add-on",
+          "text": "Choose manifest.json inside the extracted folder, not the zip."
+        },
+        {
+          "title": "Load it again after a restart",
+          "text": "Firefox drops temporary add-ons when it quits. After a new zip, replace the folder then load it again."
+        }
+      ]
+    }
+  },
+  "supportPage": {
+    "eyebrow": "Support",
     "title": "Need help?",
-    "description": "Tell us what you need, with the right context from the start.",
+    "description": "Pick the channel that matches your issue. Discord is fastest for a conversation. GitHub keeps a public trail.",
+    "open": "Open",
+    "donate": "Nowly stays free. If you want to help the project, you can use <kofi>Ko-fi</kofi> or <sponsors>GitHub Sponsors</sponsors>.",
+    "sections": {
+      "community": "Community",
+      "presences": "Presences",
+      "technical": "Technical"
+    },
     "discord": {
       "title": "Discord ticket",
-      "description": "Join the Nowly server and create a ticket to talk directly with the staff."
+      "description": "Join the Nowly server and open a ticket to talk with the team."
     },
-    "brokenPresence": {
-      "title": "Broken Presence",
-      "description": "Report a platform that no longer detects activity, shows wrong information, or clears itself."
+    "docs": {
+      "title": "Troubleshooting",
+      "description": "Fixes for the desktop app, Discord Desktop, missing activity, and permissions."
     },
-    "bugReport": {
-      "title": "Report a bug",
-      "description": "Report an issue with the website, extension, API, or Nowly Host."
+    "broken": {
+      "title": "Broken presence",
+      "description": "Report a platform that no longer detects activity, shows the wrong info, or clears itself."
     },
-    "newPresence": {
+    "request": {
       "title": "Request a presence",
       "description": "Suggest a new platform to add to the Nowly library."
     },
-    "featureRequest": {
-      "title": "Suggest an improvement",
-      "description": "Share an idea to improve the experience, settings, or tooling around Nowly."
+    "bug": {
+      "title": "Report a bug",
+      "description": "Report an issue with the website, extension, API, or desktop app."
     },
-    "blankIssue": {
+    "feature": {
+      "title": "Suggest an improvement",
+      "description": "Share an idea for the experience, settings, or tools around Nowly."
+    },
+    "other": {
       "title": "Other request",
       "description": "Open a blank issue if your topic does not fit one of the guided forms."
-    },
-    "sectionPresences": "Presences",
-    "sectionTechnical": "Technical",
-    "sectionCommunity": "Community"
-  },
-  "support-redeem-page": {
-    "badge": "Supporter",
-    "title": "Activate a supporter key",
-    "description": "Enter your Nowly key on this browser to remove ads from the site.",
-    "card-title": "Supporter key",
-    "card-description": "The key is linked to this browser's Nowly installation. You can reuse the same key on your other devices.",
-    "activate": "Activate key",
-    "activating": "Activating...",
-    "missing-code": "Enter a supporter key.",
-    "extension-missing-title": "Nowly extension not detected",
-    "extension-missing": "Install the Nowly extension or reload the page if it is already enabled. The extension only provides this device ID.",
-    "success-title": "Key activated",
-    "success": "This browser is now ad-free. Activated devices: {count}/{max}.",
-    "error-title": "Activation failed",
-    "invalid-code": "This supporter key is invalid.",
-    "inactive-code": "This supporter key is no longer active.",
-    "device-limit": "The device limit for this key has been reached.",
-    "network-error": "Could not reach the Nowly API. Try again in a moment.",
-    "timeout": "The extension did not respond in time. Reload the page and try again.",
-    "generic-error": "The key could not be activated."
-  },
-  "team-page": {
-    "badge": "Team",
-    "title": "The people behind Nowly",
-    "description": "Nowly is built by two people who care about a cleaner, simpler Discord Rich Presence experience.",
-    "emptyBio": "No GitHub bio yet.",
-    "followers": "followers",
-    "following": "following",
-    "links": {
-      "github": "GitHub",
-      "website": "Website",
-      "twitter": "X"
     }
   },
-  "sponsor-modal": {
-    "title": "This project is free",
-    "description": "We looked at what existed and thought we could do better: richer, and with an interface that actually feels good to use.",
-    "supportTitle": "Support us on",
-    "supportKofi": "Ko-fi",
-    "skipDownload": "No thanks, download directly",
-    "close": "Close"
-  },
-  "ads": {
-    "label": "Advertisement",
-    "placeholder": "Reserved ad placement. Add the AdSense data-ad-slot to enable ads.",
-    "card-title": "Sponsor",
-    "card-description": "A subtle placement that supports Nowly without interrupting browsing.",
-    "adblock-title": "Nowly ads",
-    "adblock-status": "Optional support",
-    "adblock-message-title": "Want to support Nowly?",
-    "adblock-message": "Ads fund part of Nowly. Allowing them helps us keep improving the project, but it remains entirely your choice.",
-    "adblock-dismiss": "I understand",
-    "adblock-close": "Close adblock notice"
-  },
-  "faq-page": {
-    "badge": "FAQ",
-    "title": "Frequently Asked Questions",
-    "description": "Quick answers to the most common questions about Nowly, installation, supported platforms, and privacy.",
-    "items": [
-      {
-        "question": "What is Nowly?",
-        "answer": "Nowly automatically updates your <strong>Discord status (Rich Presence)</strong> with what you are watching or listening to on supported websites. The project is made of:<ul><li>a browser extension for Chrome, Edge, Brave, and Firefox;</li><li><strong>Nowly Host</strong> for Windows, macOS, and Linux;</li><li>a web library of presences.</li></ul>The entire project is <strong>open source</strong> and <strong>free</strong>."
-      },
-      {
-        "question": "Is Nowly free?",
-        "answer": "Yes, Nowly is <strong>completely free</strong>. The project is developed by <strong>two people</strong> in their spare time. If you want to help, you can support the project through <a href='https://ko-fi.com/qkimi_'>Ko-fi</a> or <a href='https://github.com/sponsors/nowly-presence'>GitHub Sponsors</a>. It is optional: features remain free."
-      },
-      {
-        "question": "How do I install Nowly?",
-        "answer": "Installation takes a few steps:<ol><li>Install the extension from the <a href='https://chromewebstore.google.com/detail/nowly/kmnlnfldimgneaopdihplkebobckcjpf'>Chrome Web Store</a> or from the version that matches your browser.</li><li>Download and run <strong>Nowly Host</strong> for Windows, macOS, or Linux.</li><li>Open Discord Desktop.</li><li>Install a presence from the <a href='/library'>library</a>.</li></ol>"
-      },
-      {
-        "question": "Which platforms are supported?",
-        "answer": "Nowly already supports several platforms, such as <strong>YouTube</strong>, <strong>Twitch</strong>, and other streaming services. To avoid an outdated list, check the <a href='/library'>library</a> for every available presence and the ones in progress.<br /><br />Presences are added dynamically by the community or by the team in their spare time. <strong>No extension update is required</strong> to receive a new presence available in the library."
-      },
-      {
-        "question": "How does the Discord connection work?",
-        "answer": "<strong>Nowly Host</strong> communicates directly with the <a href='https://discord.com'>Discord</a> client on your computer through a local IPC* connection. <strong>No data passes through our servers</strong> to display your Rich Presence. Nowly only sends the activity information Discord needs: title, platform, duration, playback state.<br /><br />* <strong>IPC</strong> means local communication between two applications on your computer."
-      },
-      {
-        "question": "Is my data sent to your servers?",
-        "answer": "<strong>Your Rich Presence activity, no.</strong> It stays local: the extension passes it to Nowly Host, which sends it directly to <a href='https://discord.com'>Discord</a>.<ul><li><strong>Reviews and comments:</strong> if you publish a review on a presence, the rating and comment are stored server-side.</li><li><strong>Anonymous publishing:</strong> you can publish anonymously to avoid showing your Discord identity publicly.</li><li><strong>Analytics:</strong> they are <a href='/privacy'>optional</a>, disabled by default, and only used to improve Nowly.</li></ul>"
-      },
-      {
-        "question": "Why is my Discord status not updating?",
-        "answer": "Several possible reasons:<ul><li>Is <a href='https://discord.com'>Discord</a> Desktop running?</li><li>Is Nowly Host installed and detected?</li><li>Is the extension enabled in your browser?</li><li>Are user scripts and browser permissions enabled?</li><li>Is the matching presence installed from the library?</li></ul>Open the extension side panel to see the Nowly diagnostic."
-      },
-      {
-        "question": "How do I uninstall Nowly?",
-        "answer": "You can remove Nowly in two parts:<ul><li><strong>Extension:</strong> remove Nowly from your browser extension manager. After removal, you are automatically redirected to a page that removes your device from active counters.</li><li><strong>Analytics:</strong> if you enabled them, that page also lets you delete analytics data linked to your device.</li><li><strong>Nowly Host:</strong> uninstall the app from your system settings, whether you are on Windows, macOS, or Linux.</li></ul>"
-      },
-      {
-        "question": "Is Nowly open source?",
-        "answer": "Yes, the <strong>complete source code</strong> of Nowly is available on <a href='https://github.com/nowly-presence/nowly'>GitHub</a>. You can browse the code, suggest improvements, report bugs, or contribute to the project's development."
-      }
-    ]
-  },
-  "about-page": {
-    "badge": "About",
-    "title": "A modern take on Discord activity",
-    "intro": "Nowly builds on community Rich Presence tools and takes them further: a cleaner, more current experience that is easier to use, with a coherent visual direction.",
-    "sections": [
-      {
-        "title": "Our goal",
-        "body": "We are building a lightweight, open, and understandable alternative for syncing streaming platforms with Discord Rich Presence."
-      },
-      {
-        "title": "A local-first approach",
-        "body": "The local flow stays the same: your browser detects activity, Nowly Host sends it to Discord, without going through our servers*."
-      },
-      {
-        "title": "A community project",
-        "body": "Nowly is open source. The presence library can grow through feedback, ideas, and contributions from the community."
-      },
-      {
-        "title": "What we want to improve",
-        "body": "We are progressively adding new platforms, a smoother installation experience, and simpler tools for creating reliable presences."
-      }
-    ],
-    "analytics-note": "* Except optional analytics, which can be disabled during installation. They only measure aggregated information such as installs, with no name, email, or personal data that could identify you."
-  },
-  "status-page": {
-    "badge": "Status",
+  "statusPage": {
+    "eyebrow": "Status",
     "title": "Nowly service status",
-    "description": "Everything running smoothly? Check at a glance.",
+    "description": "Live status for the website, API, presence library, and host downloads.",
     "checked-history": "Checked live at {time}",
-    "latest-latency": "Latest latency",
-    "last-checked": "Last checked",
-    "recent-checks": "Last 10 checks",
-    "history-label": "Recent service response history",
     "no-data": "No data",
-    "all-operational": "All services are operational",
-    "some-degraded": "Some services are degraded",
-    "checked-live": "These checks run live with a short timeout.",
-    "operational": "Operational",
-    "degraded": "Degraded",
+    "history-label": "Recent service response history",
     "overall": {
-      "operational": "All services are operational",
+      "operational": "All systems operational",
       "slow": "Some services are slower than usual",
       "degraded": "Some services are degraded",
       "down": "Some services are unavailable",
@@ -322,483 +617,300 @@
     },
     "services": {
       "website": {
-        "title": "Website",
-        "description": "Public interface, documentation, download pages, and library."
+        "title": "Website"
       },
       "api": {
-        "title": "Nowly API",
-        "description": "Routes used to load presences, stats, comments, and installations."
+        "title": "Nowly API"
       },
       "library": {
-        "title": "Presence library",
-        "description": "Catalog of supported platforms and their associated metadata."
+        "title": "Presence library"
       },
       "cdn": {
-        "title": "Nowly Host downloads",
-        "description": "Manifest and files used to distribute Nowly Host."
+        "title": "Nowly Host downloads"
       }
     }
+  },
+  "pages": {
+    "library": {
+      "title": "Library",
+      "description": "Browse the platforms Nowly can share on Discord."
+    },
+    "desktop": {
+      "title": "Desktop app",
+      "description": "Download the desktop app to send your activity to Discord."
+    },
+    "extension": {
+      "title": "Browser extension",
+      "description": "Add the Nowly extension to Chrome or Firefox to detect what you're watching, listening to, or playing."
+    },
+    "changelog": {
+      "title": "Release notes",
+      "description": "See what changed in Nowly."
+    },
+    "canary": {
+      "title": "Nowly Canary",
+      "description": "Download the unpacked Chrome or Firefox build used for testing."
+    },
+    "support": {
+      "title": "Support",
+      "description": "Get help with Nowly, the extension, or a presence."
+    },
+    "status": {
+      "title": "Status",
+      "description": "Live status for the Nowly website, API, presence library, and host downloads."
+    },
+    "uninstall": {
+      "title": "The extension was removed",
+      "description": "We hope to see you again. Tell us what went wrong, it helps us improve Nowly."
+    },
+    "consent": {
+      "title": "Your data",
+      "description": "Manage the optional analytics consent, and view, export, or delete the data Nowly has stored for your device."
+    }
+  },
+  "not-found": {
+    "title": "Page not found",
+    "description": "This page does not exist or has moved.",
+    "home": "Back home"
+  },
+  "cookie-banner": {
+    "message": "This site uses a strictly necessary language cookie. If advertising is later enabled, Google may also use advertising technologies.",
+    "learn-more": "Learn more",
+    "dismiss": "Got it"
   },
   "privacy-page": {
     "badge": "Privacy",
     "title": "Privacy Policy",
-    "description": "Learn how Nowly handles your data, what stays local, and what depends on your consent.",
-    "last-updated": "Last updated: June 18, 2026.",
-    "intro": "Nowly is designed with privacy as a priority. Your Rich Presence activity is processed <strong>entirely locally</strong> on your machine — it never passes through our servers. Some optional features (analytics) involve server-side processing, described below.",
+    "description": "How Nowly handles your data, what stays on your device, and what depends on your consent.",
+    "last-updated": "Last updated: 17 September 2026.",
+    "intro": "This policy describes how <strong>{publisherName}</strong> (“we”), as data controller, processes personal data in connection with Nowly. Rich Presence activity is sent from your browser to the Discord client <strong>on your machine</strong>. It does not pass through our servers. Optional usage statistics and a few website features do involve our API or processors, as described below.",
     "sections": [
       {
-        "title": "General Operation",
-        "body": "Nowly consists of three parts: a <strong>browser extension</strong>, a <strong>Nowly Host</strong>, and a <strong>website</strong> (library). The extension detects media content in your browser and passes it to Nowly Host, which sends it directly to the Discord client on your machine via a local IPC connection. This activity data never touches our servers."
+        "title": "Controller",
+        "body": "The controller is <strong>{publisherName}</strong>, sole trader (micro-enterprise), SIREN {publisherSiren}, {publisherAddress}. Email: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Full identification is in the <a href=\"/legal-notice\">legal notice</a>. No data protection officer has been appointed."
       },
       {
-        "title": "Data Processed Locally (Extension)",
-        "body": "The browser extension stores the following data locally in <code>chrome.storage.local</code> — it never leaves your device:<ul><li>Installed presences (metadata, signed bundles, activation state).</li><li>Current activity (content title, platform, duration, thumbnail).</li><li>A debug log (timestamps, actions, visited URLs).</li><li>Onboarding state and a <strong>local snapshot</strong> of your Discord profile (ID, username, avatar) used solely for UI display.</li><li>Display preferences and per-presence settings.</li></ul>This data can be erased by uninstalling the extension or using the reset option in the extension settings."
+        "title": "What Nowly is",
+        "body": "Nowly includes a <strong>browser extension</strong> (Chrome and Firefox), a <strong>desktop app</strong> that talks to Discord locally, a <strong>website</strong> (nowly.me), <strong>documentation</strong> (<a href=\"https://docs.nowly.me\">docs.nowly.me</a>), a public <strong>API</strong>, and optional <strong>Canary</strong> test builds. The extension detects supported sites in your browser and, with the desktop app, updates Discord Rich Presence over a local IPC channel."
       },
       {
-        "title": "Browser Extension Permissions",
-        "body": "The extension requires certain permissions to operate:<ul><li><strong>Access to all pages (<code>&lt;all_urls&gt;</code>)</strong>: a lightweight script is injected on every page you visit in order to detect supported platforms. It collects no data outside recognized platforms and sends nothing to our servers.</li><li><strong>User Scripts</strong>: this permission allows presence scripts to run on supported sites. Each script is cryptographically signed (ECDSA P-256) and verified locally before it runs — no unauthorized script can execute.</li></ul>"
+        "title": "Data processed on your device (extension)",
+        "body": "The extension stores data in the browser’s local storage API (Chrome <code>chrome.storage.local</code> / Firefox equivalent). It stays on that device unless you enable optional analytics or use a custom API URL:<ul><li>Installed presences (metadata, signed bundles, activation state).</li><li>Current activity (title, platform, duration, thumbnail URL).</li><li>A debug log (timestamps, actions, visited URLs of supported sites).</li><li>Onboarding state and a <strong>local snapshot</strong> of your Discord profile (ID, username, avatar) used only to display the extension UI, taken from the local Discord client.</li><li>Display preferences, shortcuts, and per-presence settings.</li><li>A locally generated device identifier (UUID) used if you opt into analytics.</li></ul>You can erase this data by resetting the extension or uninstalling it."
       },
       {
-        "title": "Data Processed Locally (Nowly Host)",
-        "body": "Nowly Host writes a log file to <code>%LOCALAPPDATA%\\NowlyClient\\nowly-host.log</code> containing timestamps and activity information sent to Discord. This file is stored locally, can be deleted at any time, and is <strong>never</strong> sent to our servers."
+        "title": "Browser extension permissions",
+        "body": "The extension needs certain permissions to work:<ul><li><strong>Access to websites</strong> (including a broad host permission): a lightweight content script can run on pages you visit so Nowly can detect supported platforms. It is not used to send your browsing history to our servers.</li><li><strong>User Scripts</strong> (Chromium): presence scripts run on matching sites. Official catalogue scripts are cryptographically signed (ECDSA P-256) and verified locally before they run. Canary and sideloaded packages may not carry the same production signature guarantees; treat them as experimental.</li></ul>"
       },
       {
-        "title": "Server-Side Data — Analytics (Opt-In)",
-        "body": "The extension offers, during installation, the option to enable <strong>anonymous analytics</strong> (disabled by default). If enabled, the following is collected:<ul><li>An anonymous device ID (locally generated UUID, not linked to your identity).</li><li>Browser, OS, language, extension version, and Nowly Host version.</li><li>Installed presences and activity sessions (duration, platform).</li></ul>This data is used solely to improve the service and measure presence popularity. You can <strong>withdraw consent</strong> at any time from the extension settings — all data associated with your device ID will then be deleted."
+        "title": "Data processed on your device (desktop app)",
+        "body": "The desktop app may write a local log named <code>nowly-host.log</code> under the NowlyClient cache directory, for example:<ul><li>Windows: <code>%LOCALAPPDATA%\\NowlyClient\\</code></li><li>macOS: <code>~/Library/Caches/NowlyClient/</code></li><li>Linux: <code>~/.cache/NowlyClient/</code></li></ul>The file can include timestamps and activity details sent to Discord. It stays on your computer and is not uploaded to our servers. You may delete it at any time."
       },
       {
-        "title": "Discord Communication",
-        "body": "Nowly communicates with the Discord client via a <strong>local IPC interface</strong>. The following information may be transmitted to Discord solely for displaying your Rich Presence:<ul><li>The platform name (e.g. YouTube).</li><li>The content title you are watching.</li><li>The channel or author name.</li><li>Playback state (playing / paused).</li><li>Duration and elapsed time.</li></ul>This information is visible to anyone who can see your Discord profile. Nowly has no control over how Discord processes this data once received. Please refer to <a href='https://discord.com/privacy'>Discord's Privacy Policy</a> for more details."
+        "title": "Usage statistics (opt-in)",
+        "body": "Analytics are <strong>off by default</strong>. If you enable them during onboarding or later in extension settings, our API may receive:<ul><li>Your device UUID (pseudonymous: it is not your Discord or Google account, but it is still personal data under the GDPR because it can identify your installation).</li><li>Browser, OS, language, extension version, and desktop app version.</li><li>Installed presence slugs/versions and usage events (for example installs, heartbeats, ratings) with a limited payload.</li></ul>We use this to improve Nowly and to show how popular presences are. Turning the setting off <strong>stops further collection</strong> and records that consent is withdrawn. It does <strong>not</strong> by itself erase events already stored. To have server-side records deleted, email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> with your device ID (visible in the extension) or another element that lets us locate the record."
       },
       {
-        "title": "Legal Basis for Processing (GDPR)",
-        "body": "In accordance with Article 6 of the GDPR, each processing activity relies on a legal basis:<ul><li><strong>Anonymous analytics</strong> — your consent, collected on an opt-in basis (Art. 6(1)(a)).</li><li><strong>Image proxy</strong> (third-party thumbnails) — legitimate interest (Art. 6(1)(f)).</li><li><strong><code>locale</code> cookie</strong> (language preference) — legitimate interest (Art. 6(1)(f)).</li></ul>"
+        "title": "Discord",
+        "body": "Nowly talks to the Discord desktop/browser client through <strong>local IPC</strong>. Typical Rich Presence fields include platform name, title, channel or author, play/pause state, and timestamps. Anyone who can see your Discord profile may see that status. Once Discord receives it, Discord’s own processing applies. See <a href=\"https://discord.com/privacy\">Discord’s privacy policy</a>.<br/><br/>The API can also issue a session token (JWT, typically 30 days) after optional Discord OAuth for account features (for example reviews). The public marketing site does not require an account. If you never log in, we do not create that token for you."
       },
       {
-        "title": "Data Retention",
-        "body": "Your data is not kept longer than necessary:<ul><li><strong>Analytics events</strong>: automatically purged after 12 months.</li></ul>"
+        "title": "Legal bases (GDPR Art. 6)",
+        "body": "<ul><li><strong>Opt-in usage statistics</strong>: consent (Art. 6(1)(a)). You may withdraw it in the extension at any time, without affecting the lawfulness of processing before withdrawal.</li><li><strong>Language cookie and documentation cookie</strong>: necessary for the service you request and/or legitimate interest in remembering your language (Art. 6(1)(b) and/or (f)).</li><li><strong>Theme and cookie-notice flags</strong> (local storage): legitimate interest in a usable interface (Art. 6(1)(f)).</li><li><strong>Image proxy</strong>: legitimate interest in displaying catalogue and activity artwork without loading every third-party CDN in your browser (Art. 6(1)(f)).</li><li><strong>Optional Discord login</strong>: performance of the account feature you request (Art. 6(1)(b)) and, where needed, our legitimate interest in securing the API (Art. 6(1)(f)).</li><li><strong>GitHub, Discord community, Ko-fi, GitHub Sponsors</strong>: data you choose to send to those services is processed under their policies; we read public issues or messages you address to us in order to reply (Art. 6(1)(b) or (f)).</li></ul>"
       },
       {
-        "title": "Third-Party Services",
-        "body": "Nowly uses the following third-party services:<ul><li><strong>Railway</strong> (United States) — website, API, and PostgreSQL database hosting. Transfers to the United States are governed by the European Commission's <strong>Standard Contractual Clauses (SCCs)</strong>. <a href='https://railway.com/legal/privacy'>Railway Privacy Policy</a>.</li><li><strong>Cloudflare</strong> (United States) — static asset delivery (thumbnails, Nowly Host installer) via CDN. Transfers are governed by the <strong>Standard Contractual Clauses (SCCs)</strong> and the <strong>EU/UK–US Data Privacy Framework</strong>.</li><li><strong>Chrome Web Store / Google</strong> — browser extension distribution.</li><li><strong>Google AdSense</strong> — optional ad display on the website. Google may use cookies or similar technologies under its own rules and your consent choices.</li><li><strong>Ko-fi</strong> — optional donations. Nowly shares no personal data with Ko-fi.</li><li><strong>OpenAI</strong> — automatic changelog generation. Only PR titles and code diffs are sent — no user data.</li></ul>For advanced users, the extension allows configuring a <strong>custom API URL</strong> pointing to a self-hosted instance. In that case, your data is sent to the server you configured: this Privacy Policy does not apply to that server, over which Nowly has no control."
+        "title": "Retention",
+        "body": "<ul><li><strong>Local extension and desktop logs</strong>: until you delete them, reset, or uninstall.</li><li><strong>Language cookie</strong>: 1 year, refreshed when you change language.</li><li><strong>Usage statistics</strong>: kept only as long as needed to produce aggregated metrics. There is <strong>no automatic 12-month purge</strong> implemented today. You may request erasure as described above.</li><li><strong>JWT (if you log in)</strong>: about 30 days unless you log out or we revoke it.</li></ul>"
+      },
+      {
+        "title": "Processors and transfers",
+        "body": "We use:<ul><li><strong>Contabo GmbH</strong> (Germany) as hosting provider of the VPS on which we run the website, API, and PostgreSQL. The publisher administers the server. Processing takes place in the <strong>{dataRegion}</strong>. This is an intra-EU hosting arrangement, not a transfer to the United States. <a href=\"https://contabo.com/en/legal/privacy-policy/\">Contabo privacy policy</a>.</li><li><strong>Cloudflare</strong> to deliver static files (thumbnails, desktop installers, Canary zips) and to protect the sites. Transfers may rely on SCCs and, where applicable, the EU-US Data Privacy Framework.</li><li><strong>Google</strong> (Chrome Web Store) and <strong>Mozilla</strong> (Firefox Add-ons) to distribute the extension; their stores process installer and account data under their own terms.</li><li><strong>Google AdSense</strong> only <strong>if advertising is enabled</strong> on the website (it is off unless we turn it on). Google then acts as an independent controller or joint controller for its advertising cookies, according to Google’s terms.</li></ul>If you set a <strong>custom API URL</strong>, traffic goes to the server you chose. This policy does not apply to that server."
+      },
+      {
+        "title": "Image proxy",
+        "body": "Our API can fetch public thumbnail URLs (YouTube, Twitch, and similar CDNs) so the UI can display artwork. We do not use the proxy to sell advertising profiles. The requested URL can still relate to a title you were viewing. Logs of those requests are kept only as technically needed to operate and secure the service."
       },
       {
         "title": "Cookies",
-        "body": "The Nowly website uses a <strong>strictly necessary</strong> cookie:<ul><li><code>locale</code>: language preference cookie, not shared with third parties.</li></ul>When ads are enabled, Google AdSense may also use cookies or similar technologies. See our <a href='/cookies'>Cookie Policy</a> for full details."
-      },
-      {
-        "title": "Image Proxy",
-        "body": "Nowly runs a server-side image proxy that fetches thumbnails from third-party platform CDNs (YouTube, Twitch, Netflix, etc.) for display in the UI. This proxy collects no personal data — it processes only public image URLs server-side, with no link to your identity."
+        "body": "nowly.me and docs.nowly.me each set a <code>locale</code> cookie for language. Theme and the cookie notice use local storage, not cookies. See the <a href=\"/cookies\">cookie policy</a>."
       },
       {
         "title": "Security",
-        "body": "Presence packages are <strong>cryptographically signed</strong> (ECDSA P-256) before distribution. The extension <strong>verifies the signature</strong> before installing or running any presence, ensuring only authorized code executes on your machine. Authentication tokens (JWT) are valid for 30 days and are delivered in a way that avoids server-side logging."
+        "body": "Official presence packages are signed (ECDSA P-256). The production extension verifies signatures before running catalogue presences. Canary builds distributed as zip files are test software and may be unsigned. Do not install packages from untrusted sources."
       },
       {
-        "title": "Your Rights (GDPR)",
-        "body": "Under the GDPR, you have the following rights:<ul><li><strong>Access</strong>: request what data we hold about you. The extension's <strong>developer mode</strong> also exposes an \"Analytics logs\" tab that displays the collected analytics events locally.</li><li><strong>Deletion</strong>: disable analytics from the extension settings to erase device data.</li><li><strong>Objection</strong>: opt out of analytics at installation or disable them at any time.</li><li><strong>Portability</strong>: export all of your analytics data yourself in JSON format, in self-service, from the <a href='/consent'>consent management page</a>.</li></ul>To exercise these rights, contact us via the <a href='https://github.com/nowly-presence/nowly'>GitHub repository</a> or at the address listed in the <a href='/legal-notice'>Legal Notice</a>."
+        "title": "Your rights",
+        "body": "If the GDPR applies, you may request access, rectification, erasure, restriction, objection, and portability, and you may withdraw consent for analytics. Developer diagnostics in the extension may show events still queued on your device; they are not a complete export of our servers. To exercise rights, email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> or use the <a href=\"https://github.com/nowly-presence/nowly\">GitHub repository</a>. You may also lodge a complaint with the <a href=\"https://www.cnil.fr\">CNIL</a> (France) or your local supervisory authority."
       },
       {
         "title": "Contact",
-        "body": "For any questions about this Privacy Policy, contact us via the <a href='https://github.com/nowly-presence/nowly'>GitHub repository</a> or at the address listed in the <a href='/legal-notice'>Legal Notice</a>."
+        "body": "Email: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Publisher details: <a href=\"/legal-notice\">legal notice</a>."
       }
     ]
   },
   "tos-page": {
     "badge": "Legal",
     "title": "Terms of Service",
-    "description": "The rules for using Nowly, the browser extension, Nowly Host, and the website.",
-    "last-updated": "Last updated: June 18, 2026.",
+    "description": "The rules for using Nowly, the browser extension, desktop app, and the website.",
+    "last-updated": "Last updated: 17 September 2026.",
     "sections": [
       {
-        "title": "Acceptance of Terms",
-        "body": "By downloading, installing, or using Nowly (the browser extension, Nowly Host, website, and any associated software), you unconditionally agree to these Terms of Service. If you <strong>do not agree</strong>, please do not use the software."
+        "title": "Acceptance",
+        "body": "By downloading, installing, or using Nowly (extension, desktop app, website, documentation, API, and related software), you agree to these terms. If you do not agree, do not use the software. Mandatory consumer rights remain unaffected."
       },
       {
-        "title": "Service Description",
-        "body": "Nowly is a <strong>free, open-source</strong> tool that detects media content in your browser and automatically updates your Discord status (Rich Presence) via local communication with the Discord client. The service consists of:<ul><li>A <strong>Chromium browser extension</strong> that detects and reports your activity.</li><li>A <strong>Nowly Host</strong> that acts as a gateway to Discord.</li><li>A <strong>website</strong> for discovering and installing presences.</li><li>A <strong>developer SDK</strong> and tooling for creating custom presences.</li></ul>"
+        "title": "Service",
+        "body": "Nowly is a <strong>free</strong> tool that updates Discord Rich Presence from supported websites, using a local desktop app. Source code is available on GitHub under BUSL-1.1 (source-available; not an OSI-approved open-source licence until the Change Date). The service includes:<ul><li>A browser extension for Chromium and Firefox.</li><li>A desktop app that talks to Discord on your computer.</li><li>The nowly.me website and docs.nowly.me.</li><li>A public API and a developer SDK to build presences.</li><li>Optional Canary builds from our CDN, which are pre-release and may be unsigned.</li></ul>"
       },
       {
-        "title": "Minimum Age",
-        "body": "The service is intended for users aged <strong>15 or older</strong>."
+        "title": "Minimum age",
+        "body": "You must be at least <strong>15</strong> and old enough to use Discord under Discord’s own terms. If you are under the digital age of consent in your country, you need permission from a parent or guardian where the law requires it."
       },
       {
-        "title": "License",
-        "body": "Nowly is distributed under the <strong>Business Source License 1.1 (BUSL-1.1)</strong>. You may use, copy, and modify it for <strong>personal, non-commercial</strong> purposes; any commercial use (resale, offering it as a paid or hosted service) requires a separate commercial license. On the <em>Change Date</em>, the license automatically converts to MIT. The full text is available in the <a href='https://github.com/nowly-presence/nowly'>GitHub repository</a>. This license does <strong>not</strong> apply to content from third-party platforms (YouTube, Twitch, etc.) that you choose to display via Nowly."
+        "title": "Licence",
+        "body": "Nowly is licensed under the <strong>Business Source License 1.1</strong>. You may use, copy, and modify it for <strong>personal, non-commercial</strong> purposes. Commercial use (including resale or offering Nowly as a paid or hosted service) needs a separate licence from the publisher. The licence converts to MIT on the Change Date: four years after first public distribution, and in any event no earlier than <strong>1 June 2028</strong>. The full text is in the <a href=\"https://github.com/nowly-presence/nowly\">GitHub repository</a>. This does not license third-party content (YouTube, Twitch, and so on) that you display through Nowly."
       },
       {
-        "title": "Responsible Use",
-        "body": "You agree to use Nowly in compliance with applicable laws and <a href='https://discord.com/terms'>Discord's Terms of Service</a>. You must <strong>not</strong>:<ul><li>Use Nowly to display illegal, hateful, defamatory, or rights-infringing content.</li><li>Attempt to bypass the security mechanisms of the extension or Nowly Host.</li><li>Distribute modified, forged, or unsigned presences through the official infrastructure.</li><li>Use Nowly in a way that violates the terms of Discord or any platform you access.</li><li>Send abusive automated requests to the API.</li></ul><br/>If you configure a <strong>custom API URL</strong> (self-hosted instance), you are solely responsible for the third-party server you target. Nowly's <a href='/privacy'>Privacy Policy</a> does not apply to servers you host or configure yourself."
+        "title": "Acceptable use",
+        "body": "You must comply with applicable law and <a href=\"https://discord.com/terms\">Discord’s Terms of Service</a>. You must not:<ul><li>Use Nowly to display illegal, hateful, defamatory, or infringing content.</li><li>Bypass security of the official extension, desktop app, or API.</li><li>Distribute modified, forged, or unauthorized presences through Nowly’s official infrastructure.</li><li>Abuse the API (including excessive automated requests).</li></ul>If you point the extension at a <strong>custom API URL</strong>, you are solely responsible for that server. Our <a href=\"/privacy\">privacy policy</a> does not cover it."
       },
       {
-        "title": "Donations (Ko-fi)",
-        "body": "The service is and will remain <strong>entirely free</strong>. Donations via <a href='https://ko-fi.com/qkimi_'>Ko-fi</a> are <strong>purely voluntary</strong> and grant no additional features or benefits. Payments are processed by Ko-fi under their own terms. Donations are non-refundable."
+        "title": "Donations",
+        "body": "Nowly remains usable without payment. Voluntary support via <a href=\"https://ko-fi.com/nowly\">Ko-fi</a> or <a href=\"https://github.com/sponsors/nowly-presence\">GitHub Sponsors</a> is processed by those platforms under their own terms. A donation does not buy extra product features unless we clearly say otherwise at the time. Refunds follow the platform’s rules and, where they apply, mandatory consumer rights."
       },
       {
-        "title": "Intellectual Property",
-        "body": "The Nowly source code is subject to its open-source license. All third-party trademarks, logos, and platform names (Discord, YouTube, Twitch, Disney+, Apple TV+, Prime Video, TikTok) remain the property of their respective owners. Nowly is <strong>not affiliated with, endorsed by, or sponsored by</strong> Discord Inc. or any supported platform."
+        "title": "Intellectual property",
+        "body": "The Nowly code is licensed as above. Discord, YouTube, Twitch, Disney+, Apple TV+, Prime Video, TikTok and other platform names and logos belong to their owners. Nowly is <strong>not affiliated with, endorsed by, or sponsored by</strong> Discord Inc. or those platforms."
       },
       {
-        "title": "Limitation of Liability",
-        "body": "Nowly is provided <strong>\"as is\"</strong>, without any warranty, express or implied. To the extent permitted by law, the publisher shall not be liable for indirect damages arising from the use or inability to use the software, including:<ul><li>Malfunction of Discord or your status display.</li><li>Suspension or restriction of your Discord account by Discord Inc.</li><li>Loss of data stored locally by the extension.</li></ul>Nothing in these terms excludes or limits liability for fraud, gross negligence, personal injury, or any case where the law prohibits such limitation. These clauses do not affect mandatory consumer rights."
+        "title": "Limitation of liability",
+        "body": "Nowly is provided <strong>“as is”</strong>, without warranty, to the extent permitted by law. We are not liable for indirect damage arising from use or inability to use the software, including Discord outages or sanctions against your Discord account, or loss of local extension data. Nothing excludes liability for fraud, gross negligence, death or personal injury, or any liability that French or EU law does not allow us to limit. These clauses do not reduce mandatory consumer rights."
       },
       {
         "title": "Privacy",
-        "body": "Your use of Nowly is governed by our <a href='/privacy'>Privacy Policy</a> and <a href='/cookies'>Cookie Policy</a>, both of which form part of these Terms of Service."
+        "body": "Use of Nowly is also governed by the <a href=\"/privacy\">privacy policy</a> and <a href=\"/cookies\">cookie policy</a>."
       },
       {
-        "title": "Changes to Terms",
-        "body": "The publisher reserves the right to modify these Terms at any time. Changes take effect upon publication on this page. <strong>Continued use</strong> of Nowly after changes are posted constitutes acceptance of the updated terms."
+        "title": "Changes",
+        "body": "We may update these terms by publishing a new version on this page, with a new “last updated” date. For material changes we will try to give reasonable notice on the site or repository. Continued use after the new version takes effect means you accept it, except where the law requires your explicit agreement."
       },
       {
-        "title": "Governing Law & Jurisdiction",
-        "body": "These Terms are governed by <strong>French law</strong>. In the event of a dispute, and failing amicable resolution, French courts shall have jurisdiction, subject to mandatory consumer protection rules. The <a href='https://ec.europa.eu/consumers/odr'>EU online dispute resolution platform</a> is also available."
+        "title": "Governing law",
+        "body": "These terms are governed by <strong>French law</strong>. If an amicable solution fails, French courts have jurisdiction, without prejudice to mandatory consumer venue rules. The <a href=\"https://ec.europa.eu/consumers/odr\">EU online dispute resolution platform</a> is available."
       },
       {
         "title": "Contact",
-        "body": "For any questions about these Terms, contact us via the <a href='https://github.com/nowly-presence/nowly'>GitHub repository</a> or at the address listed in the <a href='/legal-notice'>Legal Notice</a>."
+        "body": "Email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> or see the <a href=\"/legal-notice\">legal notice</a>. GitHub: <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>."
       }
     ]
   },
   "legal-notice-page": {
     "badge": "Legal",
     "title": "Legal Notice",
-    "description": "Required information about Nowly's publisher, hosting, and intellectual property.",
-    "last-updated": "Effective as of 18 June 2026 — required under French law (LCEN, art. 6-III).",
+    "description": "Publisher, hosting, and intellectual property information required under French law.",
+    "last-updated": "Effective 17 September 2026. Required under French LCEN, article 6-III.",
     "sections": [
       {
         "title": "Publisher",
-        "body": "The website <strong>nowly.me</strong>, the Nowly browser extension and Nowly Host are published by:<br/><br/>Publisher: <strong>{publisherName}</strong><br/>Status: Sole trader (auto-entrepreneur / micro-enterprise)<br/>SIREN: <strong>{publisherSiren}</strong><br/>Address: <strong>{publisherAddress}</strong><br/>VAT: Not applicable — VAT exemption (French CGI art. 293 B)<br/>Email: <a href='mailto:{publisherEmail}'>{publisherEmail}</a>"
+        "body": "The websites <strong>nowly.me</strong> and <strong>docs.nowly.me</strong>, the Nowly browser extension and the desktop app are published by:<br/><br/>Publisher: <strong>{publisherName}</strong><br/>Status: Sole trader (auto-entrepreneur / micro-enterprise)<br/>SIREN: <strong>{publisherSiren}</strong><br/>Address: <strong>{publisherAddress}</strong><br/>VAT: Not applicable (French CGI art. 293 B exemption)<br/>Email: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>"
       },
       {
-        "title": "Publication Director",
-        "body": "<strong>{publisherName}</strong>, as publisher of the site."
+        "title": "Publication director",
+        "body": "<strong>{publisherName}</strong>, as natural-person publisher. French law provides for a <strong>single</strong> publication director (loi du 29 juillet 1881, applied online). Contributors or developers are not additional publication directors."
       },
       {
-        "title": "Hosting — Website, API & Database",
-        "body": "All online services (website, API and PostgreSQL database) are hosted by:<br/><br/><strong>Railway Corporation</strong><br/>2261 Market Street #4667<br/>San Francisco, CA 94114 — United States<br/><a href='https://railway.com'>railway.com</a><br/><br/>Data region: <strong>{dataRegion}</strong>"
+        "title": "Hosting (website, API, database)",
+        "body": "The website, API and PostgreSQL database run on a virtual private server (VPS) rented from:<br/><br/><strong>Contabo GmbH</strong><br/>Welfenstrasse 22<br/>81541 Munich, Germany<br/><a href=\"https://contabo.com\">contabo.com</a><br/><a href=\"https://contabo.com/en/legal/impressum/\">Legal notice (Impressum)</a><br/><br/>The publisher administers the server. Location: <strong>{dataRegion}</strong>"
       },
       {
-        "title": "Hosting — CDN & Nowly Host",
-        "body": "Static assets (thumbnails, Windows installer, Nowly Host binaries) are distributed via:<br/><br/><strong>Cloudflare, Inc.</strong><br/>101 Townsend St, San Francisco, CA 94107 — United States<br/><a href='https://cloudflare.com'>cloudflare.com</a>"
+        "title": "CDN and desktop binaries",
+        "body": "Static assets (thumbnails, installers, Canary archives) are distributed via:<br/><br/><strong>Cloudflare, Inc.</strong><br/>101 Townsend Street, San Francisco, CA 94107, United States<br/><a href=\"https://www.cloudflare.com\">cloudflare.com</a>"
       },
       {
-        "title": "Extension Distribution",
-        "body": "The browser extension is distributed through the <strong>Chrome Web Store</strong>, operated by Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043 — United States."
+        "title": "Extension distribution",
+        "body": "The production extension is distributed for <strong>Chrome</strong> (and other Chromium browsers) via the <strong>Chrome Web Store</strong>, operated by Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States, and for <strong>Firefox</strong> via <strong>Firefox Add-ons</strong>, operated by Mozilla Corporation (United States). Experimental Canary builds may also be offered as zip files from our CDN."
       },
       {
-        "title": "Intellectual Property",
-        "body": "Nowly's source code is published under the <strong>Business Source License 1.1 (BUSL-1.1)</strong>, available at <a href='https://github.com/nowly-presence/nowly'>github.com/nowly-presence/nowly</a>. Trademarks and logos of third-party platforms (Discord, YouTube, Twitch, Disney+, Apple TV+, Prime Video, TikTok) remain the exclusive property of their respective owners. <strong>Nowly is not affiliated with, endorsed by, or sponsored by Discord Inc. or any of the supported platforms.</strong>"
+        "title": "Intellectual property",
+        "body": "Nowly source code is published under <strong>BUSL-1.1</strong> at <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>. Third-party trademarks remain their owners’. <strong>Nowly is not affiliated with Discord Inc. or the supported platforms.</strong>"
       },
       {
-        "title": "Reporting Illegal Content",
-        "body": "In accordance with French law (LCEN art. 6), any manifestly illegal content may be reported to <a href='mailto:{publisherEmail}'>{publisherEmail}</a>, specifying the date, description, URL and grounds for removal."
+        "title": "Illegal content",
+        "body": "Manifestly illegal content may be reported to <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> with the date, a description, the URL, and the legal grounds, as required by LCEN article 6."
       },
       {
         "title": "Contact",
-        "body": "Email: <a href='mailto:{publisherEmail}'>{publisherEmail}</a><br/>GitHub: <a href='https://github.com/nowly-presence/nowly'>github.com/nowly-presence/nowly</a>"
+        "body": "Email: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a><br/>GitHub: <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>"
       }
     ]
   },
   "cookies-page": {
     "badge": "Cookies",
     "title": "Cookie Policy",
-    "description": "The cookies used by nowly.me, including optional advertising technologies related to Google AdSense.",
-    "last-updated": "Last updated: June 18, 2026.",
-    "intro": "This page describes the cookies and similar technologies used on <strong>nowly.me</strong>. Nowly uses necessary cookies and may load Google AdSense advertising technologies when ads are enabled.",
+    "description": "Cookies and local storage used on nowly.me and docs.nowly.me.",
+    "last-updated": "Last updated: 17 September 2026.",
+    "intro": "This page describes cookies and similar technologies on <strong>nowly.me</strong> and <strong>docs.nowly.me</strong>. We set a language cookie. Theme and the cookie notice use local storage. Google AdSense is not loaded unless advertising is enabled.",
     "sections": [
       {
-        "title": "Strictly Necessary Cookies",
-        "body": "These cookies are essential for the site to function and do not require your prior consent."
+        "title": "Strictly necessary",
+        "body": "The language cookie is needed to remember the locale you chose (or that we detected) on each site. It does not require a prior advertising-style consent under the French “cookies and other trackers” guidelines, because it is strictly necessary to provide the multilingual service."
       },
       {
-        "title": "Preference Cookies",
-        "body": "<strong><code>locale</code></strong><br/>Purpose: remembers your chosen language (French, English, Spanish).<br/>Duration: 1 year (persistent cookie, <code>max-age</code> of 31,536,000 seconds), refreshed each time you change language.<br/>Type: standard cookie, not HttpOnly. Contains no personal data and is not shared with third parties."
+        "title": "locale cookie",
+        "body": "<strong><code>locale</code></strong> (nowly.me and, separately, docs.nowly.me)<br/>Purpose: French, English, or Spanish interface.<br/>Duration: 1 year (<code>max-age</code> 31,536,000 seconds), refreshed when you change language.<br/>Attributes: first-party, not HttpOnly, SameSite=Lax. The value is a locale code (for example <code>fr-FR</code>). Combined with your IP address in server logs it can contribute to identifying a visitor, even if the cookie itself is only a language code."
       },
       {
-        "title": "Analytics Cookies",
-        "body": "Nowly does <strong>not</strong> use any third-party analytics cookies. Usage statistics (installs, sessions, presence popularity) are collected through the extension only with your explicit opt-in consent, without cookies and without any link to your web browsing."
+        "title": "Local storage",
+        "body": "The sites store the colour theme (light, dark, or system) and whether you dismissed the cookie notice. Those values stay in your browser and are not sent as cookies to Nowly."
       },
       {
-        "title": "Advertising Cookies",
-        "body": "Nowly may display ads through <strong>Google AdSense</strong> when ad placements are enabled. In that case, Google may use cookies or similar technologies to measure delivery, limit ad repetition, and, depending on your settings or consent, personalize ads. While ads are not enabled, Nowly does not place advertising cookies."
+        "title": "Analytics cookies",
+        "body": "The websites do <strong>not</strong> set third-party analytics cookies. Optional usage statistics, if you enable them, are collected by the <strong>extension</strong> with a device ID, not with a website cookie."
       },
       {
-        "title": "Managing & Deleting Cookies",
-        "body": "You can modify your browser settings at any time to block or delete cookies. Deleting the <code>locale</code> cookie will reset the language to the automatically detected value."
+        "title": "Advertising",
+        "body": "If we enable <strong>Google AdSense</strong> on the website, Google may set cookies or similar technologies under its own policy. Until then, Nowly does not place advertising cookies."
+      },
+      {
+        "title": "How to delete them",
+        "body": "You can block or delete cookies in your browser. Deleting <code>locale</code> resets the language to the detected value on the next visit."
       },
       {
         "title": "Contact",
-        "body": "For any question about this policy, contact us via the <a href='https://github.com/nowly-presence/nowly'>GitHub repository</a> or at the address listed in the <a href='/legal-notice'>Legal Notice</a>."
+        "body": "Email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> or see the <a href=\"/legal-notice\">legal notice</a>."
       }
     ]
   },
-  "marketplace-page": {
-    "badge": "Library",
-    "title": "Supported Platforms",
-    "description": "Every platform Nowly currently supports.",
-    "search-placeholder": "Search for a platform...",
-    "sort-label": "Sort by:",
-    "sort-popular": "Popularity",
-    "sort-recent": "Most Recent",
-    "sort-name-asc": "A - Z",
-    "sort-name-desc": "Z - A",
-    "categories": {
-      "streaming": "Streaming",
-      "music": "Music",
-      "video": "Videos",
-      "social": "Social",
-      "gaming": "Gaming",
-      "tools": "Tools",
-      "ai": "AI",
-      "learning": "Learning",
-      "creator": "Creators",
-      "other": "Other"
-    },
-    "results": "{count, plural, one {# platform found} other {# platforms found}}",
-    "empty": "No platforms found",
-    "reset": "Reset Filters",
-    "author-label": "Author",
-    "author-all": "All authors",
-    "contribute-lead": "Missing a site?",
-    "request-presence": "Request a presence",
-    "create-presence": "Create a presence"
+  "uninstallPage": {
+    "eyebrow": "Goodbye",
+    "title": "The extension was removed",
+    "description": "Your local data stays on your device. We hope to see you again soon.",
+    "feedback-title": "Anything you want to tell us?",
+    "feedback-description": "A bug, a missing presence, or just feedback: Discord is the fastest way to reach us.",
+    "discord": "Join the Discord",
+    "data-description": "You can keep your anonymous usage stats to help us improve Nowly, or delete everything stored for your device.",
+    "keep": "Keep anonymous stats",
+    "delete": "Delete my data",
+    "delete-confirm": "This permanently deletes everything Nowly has stored for this device. This cannot be undone.",
+    "keep-success": "Thanks, your anonymous stats are kept.",
+    "delete-success": "Your data has been deleted.",
+    "action-error": "Something went wrong. Please try again."
   },
-  "author-page": {
-    "badge": "Author",
-    "description": "{count, plural, one {# presence by {name}} other {# presences by {name}}}",
-    "view-in-library": "View in the library"
-  },
-  "docs": {
-    "documentation": "Documentation",
-    "on-this-page": "On this page",
-    "toc": "Contents",
-    "open-table-of-contents": "Open table of contents",
-    "previous": "Previous",
-    "next": "Next",
-    "menu": "Menu",
-    "collapse": "Collapse",
-    "expand": "Expand"
-  },
-  "common": {
-    "status-available": "Available",
-    "status-soon": "Coming Soon",
-    "status-beta": "Beta"
-  },
-  "marketplace-detail": {
-    "breadcrumb-home": "Library",
-    "about": "About",
-    "supported-urls": "Supported URLs",
-    "features": "Features",
-    "author-label": "Author",
-    "contributor-label": "Contributor",
-    "development": "Contributors",
-    "stats": "Statistics",
-    "active-users": "Active Users",
-    "total-installs": "Total Installs",
-    "rating": "Rating",
-    "added-at": "Added on",
-    "last-updated": "Last Updated",
-    "ready": "Available Now",
-    "installed": "Presence Installed",
-    "install-action": "Install",
-    "installed-action": "Installed",
-    "installing": "Installing...",
-    "update-action": "Update",
-    "update-available": "Update Available",
-    "update-description": "A new version of the {platform} presence is available.",
-    "uninstall-action": "Uninstall",
-    "uninstall-confirm-title": "Remove Presence",
-    "uninstall-confirm-description": "If {platform} contains any configuration data, it will be permanently lost.",
-    "uninstall-confirm-action": "Remove",
-    "uninstall-confirm-cancel": "Cancel",
-    "install-success": "{platform} installed successfully",
-    "install-error": "Failed to install {platform}",
-    "uninstall-success": "{platform} uninstalled",
-    "ext-not-detected": "Nowly extension not detected. Make sure the extension is installed and reload the page.",
-    "beta-label": "Beta",
-    "beta-note": "Beta version. Issues may occur.",
-    "coming-soon": "Coming Soon",
-    "waiting": "Pending",
-    "source": "Source Code",
-    "back": "Back to Library",
-    "active-description": "{platform} is active in your extension",
-    "add-description": "Add {platform} to your Discord presence",
-    "coming-soon-description": "Support for {platform} is currently under development.",
-    "settings": "Settings",
-    "settings-available-in-extension": "Configure these settings from the Nowly extension.",
-    "installation": "Installation",
-    "version-history": "Version History",
-    "show-all-versions": "Show all {count} versions",
-    "current-version": "Current version",
-    "use-version": "Use this version",
-    "version-changed": "{platform} switched to v{version}",
-    "version-change-error": "Failed to switch {platform} to v{version}",
-    "downgrade-confirm-title": "Downgrade Version",
-    "downgrade-confirm-description": "Using an older version is generally not recommended. If you're experiencing issues with the current version, reverting to a previous one may help resolve them.",
-    "downgrade-confirm-action": "Use this version",
-    "downgrade-confirm-cancel": "Cancel",
-    "extension-missing-title": "Nowly extension not detected",
-    "extension-missing-description": "Install the Nowly extension to add this presence from the library. If it is already installed, reload this page.",
-    "extension-install-action": "Install extension",
-    "presence-installed-title": "Presence installed",
-    "presence-installed-youtube-description": "Presence installed. Open YouTube to start the test.",
-    "presence-installed-description": "Presence installed. Open a URL supported by {platform} to start.",
-    "diagnostic-host-missing-message": "Nowly Host is not detected. Install it from the Nowly Host page, then check the connection.",
-    "diagnostic-discord-closed-message": "Nowly Host is installed but Discord Desktop is not open.",
-    "test-youtube-action": "Test with YouTube",
-    "open-supported-site-action": "Open supported site",
-    "presence-not-installed-title": "Install this presence",
-    "youtube-test-description": "YouTube is the recommended test presence for quickly checking Nowly.",
-    "presence-not-installed-description": "Install {platform}, then open a supported URL to detect activity.",
-    "install-youtube-action": "Install YouTube presence",
-    "youtube-test-cta": "Test with YouTube"
-  },
-  "version-updates-card": {
-    "version-title": "Version {version}",
-    "current-badge": "Current",
-    "install-action": "Install",
-    "install-old-action": "Install old version",
-    "version-placeholder": "Version",
-    "size-label": "Size",
-    "source-label": "Source",
-    "commit-label": "Commit",
-    "author-label": "Release author",
-    "contributors-label": "Contributors"
-  },
-  "not-found": {
-    "description": "This page does not exist or has been moved.",
-    "back-to-home": "Back to Home"
-  },
-  "host-page": {
-    "badge": "Nowly Host",
-    "title": "Download Nowly Host",
-    "description": "The local bridge between your browser and Discord. It keeps your Rich Presence synced in the background.",
-    "card-title": "Download Nowly Host for",
-    "card-version": "{details}",
-    "platform-select-label": "Select platform",
-    "windows-details": "Windows 10/11, 64\u2011bit",
-    "macos-details": "macOS 11+, Intel or Apple Silicon",
-    "linux-details": "Linux 2.6.32+ / glibc 2.17+",
-    "download-for": "Download for {platform}",
-    "win-download-installer": "Windows installer (.exe)",
-    "win-download-portable": "Windows portable archive (.zip)",
-    "download-archive": "Download Archive (.tar.gz)",
-    "macos-download": "Download DMG (.dmg)",
-    "unsigned-title": "Unsigned build",
-    "unsigned-desc": "This build is not code-signed. Windows may show a SmartScreen warning when you run the installer. Click “More info”, then “Run anyway” to continue.",
-    "signed-title": "Signed & notarized by Apple",
-    "signed-desc": "A special thanks to the anonymous friend who provided their Apple Developer Program account to make signed macOS builds possible. Your builds are verified by Apple's notarization service.",
-    "chip-open-source": "Open source",
-    "chip-lightweight": "Low footprint",
-    "chip-open-source-desc": "Source code and project history on GitHub.",
-    "chip-lightweight-desc": "Small, quiet, and built to stay out of the way.",
-    "trust-badge": "Trust",
-    "trust-title": "What does Nowly Host do?",
-    "trust-description": "It only acts as a local bridge between your browser and Discord. It lets Nowly update your Rich Presence without sending your activity to our servers.",
-    "trust-items": [
-      {
-        "title": "Local processing",
-        "description": "The extension detects activity in your browser and Nowly Host handles it directly on your machine."
-      },
-      {
-        "title": "Direct Discord connection",
-        "description": "Nowly Host communicates with Discord Desktop through a local connection."
-      },
-      {
-        "title": "No hidden collection",
-        "description": "Your titles, platforms, and playback information are not sent to our servers."
-      }
-    ],
-    "guide-title": "Installation Guide",
-    "step1-title": "Download the right file",
-    "step1-desc": "Choose the recommended installer for your system. The portable build is available if you prefer keeping the files without a setup wizard.",
-    "step2-title": "Open the downloaded file",
-    "step2-desc": "Run Nowly Host and follow the setup. On Windows, read the SmartScreen note below if a protection prompt appears.",
-    "step3-title": "Install a presence",
-    "step3-desc": "From the library, add a presence like YouTube to test that the extension and Nowly Host communicate correctly.",
-    "step3-link": "Open the library",
-    "step4-title": "Check Discord",
-    "step4-desc": "Keep Discord Desktop open, start a supported website, then check that your status updates automatically.",
-    "windows-protect-title": "Windows SmartScreen warning",
-    "windows-protect-description": "Windows may show “Windows protected your PC” because the installer is recent. Click More info, then Run anyway only if you downloaded Nowly Host from this page.",
-    "req-title": "System Requirements",
-    "req-os": "Operating System",
-    "req-arch": "Architecture",
-    "req-discord": "Discord",
-    "req-browser": "Browser",
-    "req-storage": "Storage",
-    "req-os-windows-value": "Windows 10 or Windows 11",
-    "req-os-macos-value": "macOS 11 Big Sur or later",
-    "req-os-linux-value": "Linux 2.6.32+ / glibc 2.17+",
-    "req-arch-windows-value": "64-bit (x64)",
-    "req-arch-macos-value": "Intel x64 / Apple Silicon (ARM64)",
-    "req-arch-linux-value": "64-bit (x64)",
-    "req-discord-value": "Discord desktop app installed and running",
-    "req-browser-value": "Chromium-based browser (Chrome, Edge, Brave, Opera)",
-    "req-storage-windows-value": "Installer 3.71 MB / Portable 1.82 MB",
-    "req-storage-macos-value": "3.38 MB",
-    "req-storage-linux-value": "1.76 MB"
-  },
-  "data-collected-page": {
-    "badge": "Analytics",
-    "title": "Data collected by anonymous analytics",
-    "description": "What Nowly sends if you enable anonymous analytics, and what it never collects.",
-    "intro": "Anonymous analytics are optional. They help us understand whether setup works, which presences are used, and where Nowly needs attention. They are not required to use Rich Presence.",
-    "sections": [
-      {
-        "title": "Collected only if you accept",
-        "body": "If you choose to share anonymous analytics, Nowly may send:<ul><li>An anonymous device ID generated locally, not linked to your name, email, or Discord account.</li><li>Your browser, operating system, language, extension version, and Nowly Host version.</li><li>The list of installed presences and high-level activity sessions, such as platform and duration.</li><li>Setup and consent events, so we can find broken onboarding steps.</li></ul>"
-      },
-      {
-        "title": "Never collected",
-        "body": "Nowly does not collect page URLs, page titles, searches, watched content titles, raw IP addresses, Discord IDs, Discord messages, or your Discord token."
-      },
-      {
-        "title": "Why this helps",
-        "body": "These stats show which presences need maintenance, whether Nowly Host connects reliably, and which setup steps fail most often. Fixes become more focused, and less guesswork."
-      },
-      {
-        "title": "Your control",
-        "body": "You can decline during onboarding, change your choice later in the extension settings, and export or delete analytics data from the <a href='/consent'>Data & Privacy</a> page."
-      }
-    ]
-  },
-  "consent-page": {
-    "badge": "Privacy",
-    "title": "Data & Privacy",
-    "intro": "Your privacy matters. From this page you can review your analytics consent status, export your device data, or delete it entirely.",
-    "consent-status": "Consent Status",
-    "consent-granted": "Analytics consent is active. Your device shares anonymous usage data.",
-    "consent-denied": "Analytics consent is disabled. No data is being collected from your device.",
-    "export-title": "Export Your Data",
-    "export-description": "Download all data associated with your device in JSON format. This includes your device info, installed presences, and analytics events.",
-    "export-button": "Export my data",
-    "export-success": "Your data has been exported.",
-    "export-error": "Failed to export data. Please try again.",
-    "delete-title": "Delete Your Data",
-    "delete-description": "Permanently remove all data associated with your device, including analytics events, presence history, and device metadata. This action cannot be undone.",
-    "delete-button": "Delete my data",
-    "delete-confirm": "Are you sure? This will permanently erase all data linked to your device.",
-    "delete-cancel": "Cancel",
-    "delete-success": "All data associated with your device has been deleted.",
-    "delete-error": "Failed to delete data. Please try again.",
-    "device-id": "Device ID",
-    "no-device": "No device ID found. Open the extension settings and visit this page from the \"Data & Privacy\" section.",
-    "loading": "Loading your data..."
-  },
-  "error-page": {
-    "title": "Something went wrong",
-    "description": "An unexpected error occurred. Please try again or come back later.",
-    "retry": "Try again"
-  },
-  "changelog-page": {
-    "badge": "Extension update",
-    "title": "Your extension has been updated",
-    "description": "Nowly {version} is now installed. Here is what changed in this release.",
-    "meta-title": "Nowly {version} changelog",
-    "library-cta": "Browse library",
-    "docs-cta": "Full changelog",
-    "missing": "Release notes for this version are not published yet. You can still browse the full changelog in the documentation."
+  "consentPage": {
+    "eyebrow": "Privacy",
+    "title": "Your data",
+    "description": "Nowly only collects anonymous usage analytics if you explicitly turn it on below. This page also lets you see, export, or delete everything stored for your device.",
+    "checking": "Looking for the Nowly extension...",
+    "not-detected-title": "Extension not detected",
+    "not-detected-description": "Open this page from the browser where Nowly is installed to manage your consent and data.",
+    "toggle-title": "Share anonymous usage data",
+    "toggle-description": "Off by default. Helps us see which presences and features are actually used - no browsing history or personal data is ever collected.",
+    "data-title": "Your data",
+    "data-description": "Export everything Nowly has stored for this device, or delete it entirely.",
+    "export": "Export my data",
+    "delete": "Delete my data",
+    "delete-confirm": "This permanently deletes everything Nowly has stored for this device. This cannot be undone.",
+    "export-success": "Your data was downloaded.",
+    "delete-success": "Your data has been deleted.",
+    "action-error": "Something went wrong. Please try again."
   }
 }

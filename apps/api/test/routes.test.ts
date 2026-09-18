@@ -1,3 +1,4 @@
+import { deriveDeviceToken } from "@/features/device/device-token"
 import { imageProxyRoutes } from "@/features/image-proxy/image-proxy.routes"
 import { presenceRoutes } from "@/features/presence/presence.routes"
 import cors from "@fastify/cors"
@@ -22,21 +23,30 @@ const mockPresenceRepo = vi.hoisted(() => ({
   addVersion: vi.fn(),
   getVersionHistory: vi.fn(),
   setArchived: vi.fn(),
+  likePresence: vi.fn(),
+  unlikePresence: vi.fn(),
+  hasLikedPresence: vi.fn(),
+  getLikeCount: vi.fn(),
 }))
 
 vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo)
+
+const mockPresenceReport = vi.hoisted(() => ({
+  submitPresenceReport: vi.fn(),
+}))
+
+vi.mock("@/features/presence/presence-report", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/features/presence/presence-report")>()
+  return {
+    ...actual,
+    submitPresenceReport: mockPresenceReport.submitPresenceReport,
+  }
+})
 
 vi.mock("@/db/client", () => ({
   getPrisma: vi.fn(() => ({})),
   hasDatabase: vi.fn(() => true),
 }))
-
-const mockAuth = vi.hoisted(() => ({
-  verifyToken: vi.fn(),
-  hashDiscordId: vi.fn(),
-}))
-
-vi.mock("@/features/auth/auth.service", () => mockAuth)
 
 const mockCrypto = vi.hoisted(() => ({
   sha256Base64Url: vi.fn(),
@@ -397,6 +407,74 @@ describe("Stats Routes", () => {
     expect(mockPresenceRepo.clearActiveDevicesForDevice).toHaveBeenCalledWith("device-123")
   })
 
+  it("POST /presences/:slug/report sends a valid report", async () => {
+    mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: { "en-US": "YouTube" } })
+    mockPresenceRepo.getPresenceStats.mockResolvedValue({ archived: false })
+    mockPresenceReport.submitPresenceReport.mockResolvedValue("sent")
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/youtube/report",
+      payload: { message: "The presence stays idle on the watch page.", locale: "fr-FR" },
+    })
+
+    expect(res.statusCode).toBe(200)
+    expect(JSON.parse(res.body)).toEqual({ ok: true })
+    expect(mockPresenceReport.submitPresenceReport).toHaveBeenCalledWith({
+      slug: "youtube",
+      name: "YouTube",
+      message: "The presence stays idle on the watch page.",
+      locale: "fr-FR",
+    })
+  })
+
+  it("POST /presences/:slug/report rejects empty or oversized messages", async () => {
+    mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: "YouTube" })
+
+    const empty = await app.inject({
+      method: "POST",
+      url: "/presences/youtube/report",
+      payload: { message: "   " },
+    })
+    expect(empty.statusCode).toBe(400)
+
+    const oversized = await app.inject({
+      method: "POST",
+      url: "/presences/youtube/report",
+      payload: { message: "x".repeat(751) },
+    })
+    expect(oversized.statusCode).toBe(400)
+    expect(mockPresenceReport.submitPresenceReport).not.toHaveBeenCalled()
+  })
+
+  it("POST /presences/:slug/report returns 404 for unknown presences", async () => {
+    mockPresenceRepo.getPresenceMeta.mockResolvedValue(null)
+    mockPresenceRepo.getPresenceStats.mockResolvedValue({ archived: false })
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/missing/report",
+      payload: { message: "Broken" },
+    })
+
+    expect(res.statusCode).toBe(404)
+    expect(mockPresenceReport.submitPresenceReport).not.toHaveBeenCalled()
+  })
+
+  it("POST /presences/:slug/report returns 503 when Discord is not configured", async () => {
+    mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: "YouTube" })
+    mockPresenceRepo.getPresenceStats.mockResolvedValue({ archived: false })
+    mockPresenceReport.submitPresenceReport.mockResolvedValue("unconfigured")
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/youtube/report",
+      payload: { message: "Broken timestamps" },
+    })
+
+    expect(res.statusCode).toBe(503)
+  })
+
 })
 
 describe("Image Proxy Routes", () => {
@@ -640,5 +718,99 @@ describe("Image Proxy Routes", () => {
 
     expect(res.statusCode).toBe(400)
     expect(JSON.parse(res.body)).toEqual({ error: "Invalid image URL" })
+  })
+})
+
+describe("Presence Likes", () => {
+  let app: Awaited<ReturnType<typeof buildApp>>
+
+  beforeEach(async () => {
+    vi.clearAllMocks()
+    app = await buildApp()
+  })
+
+  afterEach(async () => {
+    await app.close()
+  })
+
+  it("POST /presences/:slug/like requires a deviceId", async () => {
+    const res = await app.inject({ method: "POST", url: "/presences/youtube/like", payload: {} })
+
+    expect(res.statusCode).toBe(400)
+    expect(mockPresenceRepo.likePresence).not.toHaveBeenCalled()
+  })
+
+  it("POST /presences/:slug/like rejects a missing/invalid device token", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/youtube/like",
+      payload: { deviceId: "device-1" },
+    })
+
+    expect(res.statusCode).toBe(401)
+    expect(mockPresenceRepo.likePresence).not.toHaveBeenCalled()
+  })
+
+  it("POST /presences/:slug/like likes and returns the new count with a valid device token", async () => {
+    mockPresenceRepo.getLikeCount.mockResolvedValue(3)
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/youtube/like",
+      payload: { deviceId: "device-1" },
+      headers: { "x-device-token": deriveDeviceToken("device-1") },
+    })
+
+    expect(res.statusCode).toBe(200)
+    expect(JSON.parse(res.body)).toEqual({ ok: true, count: 3 })
+    expect(mockPresenceRepo.likePresence).toHaveBeenCalledWith("youtube", "device-1")
+  })
+
+  it("DELETE /presences/:slug/like requires a deviceId", async () => {
+    const res = await app.inject({ method: "DELETE", url: "/presences/youtube/like" })
+
+    expect(res.statusCode).toBe(400)
+    expect(mockPresenceRepo.unlikePresence).not.toHaveBeenCalled()
+  })
+
+  it("DELETE /presences/:slug/like rejects a missing/invalid device token", async () => {
+    const res = await app.inject({
+      method: "DELETE",
+      url: "/presences/youtube/like?deviceId=device-1",
+    })
+
+    expect(res.statusCode).toBe(401)
+    expect(mockPresenceRepo.unlikePresence).not.toHaveBeenCalled()
+  })
+
+  it("DELETE /presences/:slug/like unlikes and returns the new count with a valid device token", async () => {
+    mockPresenceRepo.getLikeCount.mockResolvedValue(2)
+
+    const res = await app.inject({
+      method: "DELETE",
+      url: "/presences/youtube/like?deviceId=device-1",
+      headers: { "x-device-token": deriveDeviceToken("device-1") },
+    })
+
+    expect(res.statusCode).toBe(200)
+    expect(JSON.parse(res.body)).toEqual({ ok: true, count: 2 })
+    expect(mockPresenceRepo.unlikePresence).toHaveBeenCalledWith("youtube", "device-1")
+  })
+
+  it("GET /presences/:slug/like reports whether a device has liked it", async () => {
+    mockPresenceRepo.hasLikedPresence.mockResolvedValue(true)
+    mockPresenceRepo.getLikeCount.mockResolvedValue(5)
+
+    const res = await app.inject({ method: "GET", url: "/presences/youtube/like?deviceId=device-1" })
+
+    expect(res.statusCode).toBe(200)
+    expect(JSON.parse(res.body)).toEqual({ liked: true, count: 5 })
+    expect(mockPresenceRepo.hasLikedPresence).toHaveBeenCalledWith("youtube", "device-1")
+  })
+
+  it("GET /presences/:slug/like requires a deviceId", async () => {
+    const res = await app.inject({ method: "GET", url: "/presences/youtube/like" })
+
+    expect(res.statusCode).toBe(400)
   })
 })

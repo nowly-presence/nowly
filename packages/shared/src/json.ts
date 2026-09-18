@@ -2,7 +2,7 @@
  * Deterministic JSON serialization: object keys are sorted and `undefined`
  * values are dropped, so the same logical value always produces the same
  * string. Used on both sides of presence signature verification (API signs,
- * extension verifies) — the algorithm MUST stay byte-for-byte identical.
+ * extension verifies) - the algorithm MUST stay byte-for-byte identical.
  */
 export const canonicalJson = (value: unknown): string => {
   if (value === null || typeof value !== "object") return JSON.stringify(value)

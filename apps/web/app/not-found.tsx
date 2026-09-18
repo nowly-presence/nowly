@@ -1,34 +1,24 @@
-"use client";
+import { ButtonLink } from "@nowly/ui";
 
-import { buttonVariants } from "@/components/ui/button";
-import { IconMoodSad, IconHome } from "@tabler/icons-react";
-import { useTranslations } from "next-intl";
-import Link from "next/link";
-import type { ReactElement } from "react";
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-const NotFound = (): ReactElement => {
-  const t = useTranslations("not-found");
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
+
+const NotFoundPage = async () => {
+  const t = await getTranslations("not-found");
 
   return (
-    <div className="flex flex-1 items-center justify-center px-6">
-      <div className="text-center max-w-sm">
-        <div className="mb-8">
-          <IconMoodSad className="mx-auto h-12 w-12 text-muted-foreground" />
-        </div>
-
-        <h1 className="text-6xl font-extrabold tracking-tight mb-4">404</h1>
-
-        <p className="text-muted-foreground mb-8 leading-relaxed">
-          {t("description")}
-        </p>
-
-        <Link href="/" className={buttonVariants({ variant: "primary", size: "md" })}>
-          <IconHome className="w-4 h-4" />
-          {t("back-to-home")}
-        </Link>
-      </div>
-    </div>
+    <section className="mx-auto flex min-h-[50vh] max-w-lg flex-col items-center justify-center px-5 py-20 text-center">
+      <h1 className="text-3xl font-medium">{t("title")}</h1>
+      <p className="mt-3 text-muted-foreground">{t("description")}</p>
+      <ButtonLink href="/" className="mt-8">
+        {t("home")}
+      </ButtonLink>
+    </section>
   );
 };
 
-export default NotFound;
+export default NotFoundPage;

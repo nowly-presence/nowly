@@ -1,85 +1,31 @@
 ---
 title: 1.0.0
 date: 10 juin 2026
-description: Première version stable de Nowly, couvrant l'extension navigateur, Nowly Host, la bibliothèque publique et le flux de publication.
+description: Première version stable de Nowly, couvrant l'extension navigateur, l'application bureau, la bibliothèque publique et le flux de publication.
 ---
 
 `1.0.0` marque le moment où Nowly est devenu un produit complet plutôt qu'un ensemble de pièces séparées. C'est la première version stable et la base de tout ce qui suit.
 
-<ReleaseTable
-  headers={["Surface", "Ce qui a été livré", "Pourquoi c'est important"]}
-  rows={[
-    ["Extension navigateur", "Détecte les sites compatibles, charge les présences signées et transmet l'activité à Nowly Host.", "C'est le point d'entrée visible pour toute l'activité des présences."],
-    ["Nowly Host", "Fait le lien entre l'activité du navigateur et Discord Rich Presence.", "Les mises à jour Discord se font localement sans transformer le navigateur en couche d'intégration."],
-    ["Bibliothèque publique", "Liste les présences, affiche les pages détail, les commentaires, les notes et l'historique des versions.", "Les utilisateurs peuvent inspecter une présence avant de l'installer."],
-    ["Cycle de vie des présences", "Gère l'installation, la mise à jour, la désactivation et la désinstallation.", "La gestion des présences devient un vrai parcours utilisateur."],
-    ["Documentation", "Couvre l'installation, le dépannage, le développement de présences et la publication.", "Contributeurs et utilisateurs ont un point de référence unique sur le comportement du produit."],
-    ["CLI", "Compile, valide et publie les paquets de présence.", "Le développement des présences devient reproductible au lieu d'être manuel."],
-  ]}
-/>
-
 ## Extension navigateur
 
-L'extension est la première partie visible du système. Elle surveille les sites compatibles, installe le bon paquet de présence et transmet l'activité à Nowly Host sans demander à l'utilisateur de gérer l'infrastructure.
+Détecte les sites compatibles, charge les présences signées et transmet l'activité à l'application bureau. C'est le point d'entrée visible pour toute l'activité des présences.
 
-- Les présences ne s'exécutent que sur les sites compatibles.
-- L'extension charge le bon paquet signé pour la présence.
-- L'activité est transmise à Discord via Nowly Host local.
-- La prise en charge des user scripts est documentée et protégée car il s'agit d'une permission sensible.
+## Application bureau
 
-## Nowly Host
+Fait le lien entre l'activité du navigateur et Discord Rich Presence. Les mises à jour Discord se font localement sans transformer le navigateur en couche d'intégration.
 
-Nowly Host transforme l'état d'une page en statut Discord réel. Il garde la couche navigateur simple et donne au système un point de passage clair.
+## Bibliothèque publique
 
-- Il reçoit les données de présence depuis l'extension.
-- Il les convertit en mises à jour Discord Rich Presence.
-- Il garde la connexion Discord séparée de la session navigateur.
-
-## Bibliothèque et découverte
-
-La bibliothèque publique est la surface produit que les utilisateurs consultent avant d'installer quoi que ce soit.
-
-- Chaque présence dispose d'une page détail dédiée.
-- Les URL prises en charge, l'historique de version, les notes et les commentaires sont visibles avant installation.
-- Les statistiques d'installation aident à juger si une présence est active et maintenue.
-- Les pages de présence exposent assez de métadonnées pour comprendre l'intégration avant de l'adopter.
+Liste les présences, affiche les pages détail, les commentaires, les notes et l'historique des versions. Les utilisateurs peuvent inspecter une présence avant de l'installer.
 
 ## Cycle de vie des présences
 
-Le cycle de vie est volontairement simple et orienté utilisateur :
+Gère l'installation, la mise à jour, la désactivation et la désinstallation. La gestion des présences devient un vrai parcours utilisateur.
 
-```txt
-install -> enable -> update -> disable -> uninstall
-```
+## Documentation
 
-- L'installation récupère la dernière version signée.
-- La mise à jour aligne le paquet installé avec la version publiée.
-- La désactivation stoppe la présence sans la retirer de la liste utilisateur.
-- La désinstallation supprime la présence de l'extension.
+Couvre l'installation, le dépannage, le développement de présences et la publication. Contributeurs et utilisateurs ont un point de référence unique sur le comportement du produit.
 
-## Documentation et onboarding
+## CLI
 
-La première version stable a aussi posé les bases des supports autour du produit.
-
-- Le parcours d'onboarding explique la relation entre extension, Nowly Host et présences.
-- Le dépannage couvre les cas d'échec courants au lieu de supposer que l'utilisateur les devine.
-- La documentation explique la structure d'une présence et sa publication.
-
-## Parcours développeur
-
-Cette version est aussi le moment où le projet est devenu publiable de manière répétable.
-
-```bash
-pnpm presence init "Example"
-pnpm presence validate
-pnpm presence build example
-pnpm presence push example
-```
-
-- La validation des métadonnées aide à garder le catalogue cohérent.
-- Le bundling et la signature font partie du chemin de publication.
-- La CLI donne aux contributeurs une manière prévisible de créer et publier des présences.
-
-## Pourquoi `1.0.0` compte
-
-> C'est la version où le produit devient cohérent : l'extension, Nowly Host, la bibliothèque, la documentation et la chaîne de publication s'alignent.
+Compile, valide et publie les paquets de présence. Le développement des présences devient reproductible au lieu d'être manuel.

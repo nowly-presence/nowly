@@ -15,7 +15,7 @@ The CLI creates metadata, a presence script, and required assets.
 
 ## Basic Presence Code
 
-`Presence` and `Assets` are provided by the runtime — see [Presence API](/presence-development/presence-api) and [Assets](/presence-development/assets).
+`Presence` and `Assets` are provided by the runtime - see [Presence API](/presence-development/presence-api) and [Assets](/presence-development/assets).
 `document` is the standard browser DOM API, available because presences run as content scripts in the extension.
 
 Only `PresenceType` (and other helpers like `createMediaTimestamps`) must be imported from `@nowly/sdk`.
@@ -49,9 +49,9 @@ nowly init "Example"
 ```
 
 </Step>
-<Step title="Configure" description="Set the name, author, supported URLs, category, color, and localized descriptions.">
+<Step title="Configure" description="Set the name, author, supported URLs, category, color, localized descriptions, and discordNative when Discord already supports the platform.">
 
-Edit `metadata.json` — see [Metadata](/presence-development/metadata) for all available fields.
+Edit `metadata.json` - see [Metadata](/presence-development/metadata) for all available fields.
 
 </Step>
 <Step title="Implement" description="Write the presence logic using the Presence SDK.">
@@ -104,7 +104,7 @@ nowly pack example
 ```
 
 </Step>
-<Step title="Test" description="Open the target website — the presence activates automatically.">
+<Step title="Test" description="Open the target website - the presence activates automatically.">
 
 Visit the site
 

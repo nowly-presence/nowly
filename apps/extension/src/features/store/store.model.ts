@@ -26,6 +26,7 @@ export type StorePresence = {
   urls: string[];
   features: string[];
   totalInstalls: number;
+  discordNative: boolean;
 };
 
 const toCategory = (value: unknown): PresenceCategory =>
@@ -44,6 +45,7 @@ export const toStorePresence = (item: PresenceCatalogItem): StorePresence => {
     urls: [...new Set(item.url ?? [])],
     features: resolveLocaleList(item.features),
     totalInstalls: item.totalInstalls ?? 0,
+    discordNative: item.discordNative === true,
   };
 };
 

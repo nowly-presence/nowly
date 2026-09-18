@@ -1,0 +1,13 @@
+// Chrome Web Store dashboard stats, imported from manually-exported CSVs
+// (no public API exposes them). See apps/api/scripts/import-cws-stats.ts.
+model CwsDailyStat {
+  date           DateTime @db.Date
+  metric         String
+  dimension      String   @default("total")
+  dimensionValue String   @default("total") @map("dimension_value")
+  value          Int
+
+  @@id([date, metric, dimension, dimensionValue])
+  @@index([metric, dimension])
+  @@map("cws_daily_stats")
+}

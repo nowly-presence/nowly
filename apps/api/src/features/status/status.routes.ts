@@ -18,10 +18,6 @@ const requireCronAuth = async (request: FastifyRequest, reply: FastifyReply): Pr
   }
 }
 
-export const register = async (app: FastifyInstance): Promise<void> => {
-  await app.register(statusRoutes)
-}
-
 export const statusRoutes = async (app: FastifyInstance): Promise<void> => {
   app.get("/status", async () => {
     return getStatusReport()

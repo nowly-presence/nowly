@@ -1,4 +1,4 @@
-import { assetUrl } from "@/shared/api";
+import { PresenceTile } from "@/components/shared/presence-tile";
 import { t } from "@/shared/i18n";
 import type { StoredPresence } from "@/shared/types";
 import type { FC, ReactElement } from "react";
@@ -27,7 +27,6 @@ export const PresenceGridCard: FC<Props> = ({
       onClick={() => onOpen(slug)}
       aria-label={`${presence.metadata.name}. ${status}`}
       className="relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card p-3 text-left outline-none transition-colors hover:bg-card-hover focus-visible:ring-2 focus-visible:ring-accent/50"
-      style={{ backgroundImage: `radial-gradient(90px 70px at 34px 34px, ${color}20, transparent 70%)` }}
     >
       {updateAvailable ? (
         <span className="mb-2 flex w-full items-center rounded-lg border border-accent/20 bg-accent/10 px-2 py-1 text-[10px] font-medium text-accent">
@@ -36,14 +35,7 @@ export const PresenceGridCard: FC<Props> = ({
       ) : null}
 
       <span className="flex min-w-0 items-start gap-2.5">
-        <span
-          className={`flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl ${
-            presence.enabled ? "" : "opacity-60 saturate-0"
-          }`}
-          style={{ backgroundColor: `${color}20` }}
-        >
-          <img src={assetUrl(slug, "icon")} alt="" className="size-7 object-contain" />
-        </span>
+        <PresenceTile slug={slug} name={presence.metadata.name} dimmed={!presence.enabled} className="size-11" />
         <span className="min-w-0 flex-1">
           <span
             className={`block truncate text-sm font-semibold ${

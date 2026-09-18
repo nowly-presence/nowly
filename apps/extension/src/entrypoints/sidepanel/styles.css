@@ -1,23 +1,51 @@
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@variable&display=swap");
 @import "tailwindcss";
 
-:root, [data-theme="default"] {
-  --background: #07080C;
+/* Dark is the default surface, mirroring the nowly.me design tokens. */
+:root {
+  color-scheme: dark;
+  --background: #07080c;
   --surface: #0c0e14;
-  --card: #11141a;
-  --card-2: #161b22;
-  --card-hover: #1b222b;
+  --card: #0c0e14;
+  --card-2: #12151c;
+  --card-hover: #171b23;
   --accent: #22d3ee;
   --discord: #5865f2;
   --success: #22c55e;
   --destructive: #ef4444;
-  --foreground: #E4F2FF;
-  --muted-foreground: #a1a1aa;
-  --dim-foreground: #52525b;
+  --foreground: #e4f2ff;
+  --muted-foreground: #808e9b;
+  --dim-foreground: #5b6672;
   --border: rgba(228, 242, 255, 0.08);
   --border-light: rgba(228, 242, 255, 0.12);
-  --radius: 0.75rem;
+  --radius: 0.625rem;
 }
 
+html.light {
+  color-scheme: light;
+  --background: #eef5fc;
+  --surface: #f7fbff;
+  --card: #f7fbff;
+  --card-2: #eaf1f9;
+  --card-hover: #e0e9f4;
+  --accent: #0891b2;
+  --discord: #5865f2;
+  --success: #16a34a;
+  --destructive: #dc2626;
+  --foreground: #07080c;
+  --muted-foreground: #4a5560;
+  --dim-foreground: #8a97a5;
+  --border: rgba(7, 8, 12, 0.1);
+  --border-light: rgba(7, 8, 12, 0.14);
+}
+
+/* Canary channel keeps its signature accent in both modes. */
+html[data-channel="canary"],
+html[data-channel="canary"] [data-theme="default"] {
+  --accent: #cfee22;
+}
+
+/* Supporter accent themes override the accent regardless of light or dark. */
 [data-theme="donator"] {
   --accent: #FEE961;
 }
@@ -53,8 +81,11 @@
   --color-dim-foreground: var(--dim-foreground);
   --color-border: var(--border);
   --color-border-light: var(--border-light);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: var(--radius);
   --radius-lg: var(--radius);
-  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --radius-xl: calc(var(--radius) * 1.4);
+  --font-sans: "Satoshi", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 * {
@@ -137,7 +168,6 @@ body {
 }
 
 input {
-  color-scheme: dark;
   -webkit-tap-highlight-color: transparent;
 }
 

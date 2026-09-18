@@ -5,10 +5,10 @@ import type { FC, ReactElement } from "react";
 type Props = {
   settings: ExtensionSettings;
   onSettingsChange: (partial: Partial<ExtensionSettings>) => void;
+  canary?: boolean;
 };
 
-const THEMES: Array<{ key: AccentTheme; color: string }> = [
-  { key: "default", color: "#22d3ee" },
+const accentThemes: Array<{ key: AccentTheme; color: string }> = [
   { key: "donator", color: "#FEE961" },
   { key: "fleuri", color: "#DA47D0" },
   { key: "violet", color: "#A78BFA" },
@@ -16,8 +16,12 @@ const THEMES: Array<{ key: AccentTheme; color: string }> = [
   { key: "orange", color: "#FB923C" },
 ];
 
-export const ThemeSelector: FC<Props> = ({ settings, onSettingsChange }): ReactElement => {
+export const ThemeSelector: FC<Props> = ({ settings, onSettingsChange, canary = import.meta.env.VITE_NOWLY_CHANNEL === "canary" }): ReactElement => {
   const current = settings.theme ?? "default";
+  const themes: Array<{ key: AccentTheme; color: string }> = [
+    { key: "default", color: canary ? "#CFEE22" : "#22d3ee" },
+    ...accentThemes,
+  ];
 
   return (
     <section>
@@ -26,7 +30,7 @@ export const ThemeSelector: FC<Props> = ({ settings, onSettingsChange }): ReactE
       </h2>
       <p className="mb-3 text-xs leading-5 text-muted-foreground">{t("theme-section-description")}</p>
       <div className="grid grid-cols-3 gap-2">
-        {THEMES.map(({ key, color }) => (
+        {themes.map(({ key, color }) => (
           <button
             key={key}
             type="button"

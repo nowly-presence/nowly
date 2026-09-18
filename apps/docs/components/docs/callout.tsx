@@ -1,4 +1,5 @@
-import { IconAlertCircle, IconAlertTriangle, IconInfoCircle } from "@tabler/icons-react";
+import { RiAlertLine, RiErrorWarningLine, RiInformationLine } from "@nowly/ui/icons";
+
 import type { FC, ReactNode } from "react";
 
 type CalloutType = "info" | "warning" | "error";
@@ -9,9 +10,9 @@ type CalloutProps = {
 };
 
 const icons: Record<CalloutType, ReactNode> = {
-  info: <IconInfoCircle size={18} className="shrink-0 mt-0.5 text-accent" />,
-  warning: <IconAlertTriangle size={18} className="shrink-0 mt-0.5 text-warning" />,
-  error: <IconAlertCircle size={18} className="shrink-0 mt-0.5 text-destructive" />,
+  info: <RiInformationLine size={18} className="shrink-0 mt-0.5 text-accent" />,
+  warning: <RiAlertLine size={18} className="shrink-0 mt-0.5 text-warning" />,
+  error: <RiErrorWarningLine size={18} className="shrink-0 mt-0.5 text-destructive" />,
 };
 
 const borders: Record<CalloutType, string> = {

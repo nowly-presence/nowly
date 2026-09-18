@@ -15,7 +15,7 @@ La CLI crée les métadonnées, un script de présence et les fichiers visuels r
 
 ## Code de base d'une présence
 
-`Presence` et `Assets` sont fournis par le runtime — voir [Presence API](/presence-development/presence-api) et [Assets](/presence-development/assets).
+`Presence` et `Assets` sont fournis par le runtime - voir [Presence API](/presence-development/presence-api) et [Assets](/presence-development/assets).
 `document` est l'API DOM standard du navigateur, disponible car les présences s'exécutent comme des scripts de contenu dans l'extension.
 
 Seuls `PresenceType` (et d'autres helpers comme `createMediaTimestamps`) doivent être importés depuis `@nowly/sdk`.
@@ -49,9 +49,9 @@ nowly init "Exemple"
 ```
 
 </Step>
-<Step title="Configurer" description="Définissez le nom, l'auteur, les URL prises en charge, la catégorie, la couleur et les descriptions localisées.">
+<Step title="Configurer" description="Définissez le nom, l'auteur, les URL prises en charge, la catégorie, la couleur, les descriptions localisées, et discordNative si Discord gère déjà la plateforme.">
 
-Modifiez `metadata.json` — voir [Metadata](/presence-development/metadata) pour tous les champs disponibles.
+Modifiez `metadata.json` - voir [Metadata](/presence-development/metadata) pour tous les champs disponibles.
 
 </Step>
 <Step title="Implémenter" description="Écrivez la logique de la présence à l'aide du SDK Presence.">
@@ -104,7 +104,7 @@ nowly pack exemple
 ```
 
 </Step>
-<Step title="Tester" description="Ouvrez le site web cible — la présence s'active automatiquement.">
+<Step title="Tester" description="Ouvrez le site web cible - la présence s'active automatiquement.">
 
 Visitez le site
 </Step>

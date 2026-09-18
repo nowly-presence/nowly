@@ -1,57 +1,65 @@
-import { ChangelogRelease } from "@/components/changelog/changelog-release";
-import { getChangelogDoc, getChangelogVersions, parsePublicChangelogVersion } from "@/lib/changelog";
+import { ChangelogReleaseView } from "@/components/changelog/changelog-view";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
+import { CHANGELOG_RELEASES, getChangelogRelease, parseChangelogVersion } from "@/lib/changelog-releases";
 import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
-import { getLocale, getTranslations } from "next-intl/server";
-import { notFound, redirect } from "next/navigation";
-import type { ReactElement } from "react";
+import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
 
-type Props = {
-  params: Promise<{
-    version: string
-  }>
+type ChangelogVersionPageProps = {
+  params: Promise<{ version: string }>
 };
 
-export const generateStaticParams = (): Array<{ version: string }> =>
-  getChangelogVersions().map((version) => ({
-    version: version.publicVersion,
-  }));
+export const generateStaticParams = async () =>
+  CHANGELOG_RELEASES.flatMap((release) => [
+    { version: release.version },
+    { version: release.slug },
+  ]);
 
-const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
-  const { version } = await params;
-  const parsed = parsePublicChangelogVersion(version);
+export const generateMetadata = async ({ params }: ChangelogVersionPageProps): Promise<Metadata> => {
+  const { version: raw } = await params;
+  const parsed = parseChangelogVersion(raw);
+  const t = await getTranslations("changelogPage");
 
   if (!parsed) {
-    return { title: "Not Found", robots: { index: false, follow: false } };
+    return createMetadata({
+      title: t("eyebrow"),
+      description: t("missing"),
+      path: `/changelog/${raw}`,
+      noIndex: true,
+    });
   }
 
-  const t = await getTranslations("changelog-page");
-
+  const release = getChangelogRelease(parsed.version);
   return createMetadata({
-    title: t("meta-title", { version: parsed.publicVersion }),
-    description: t("description", { version: parsed.publicVersion }),
-    path: `/changelog/${parsed.publicVersion}`,
-    type: "article",
+    title: t("meta-title", { version: parsed.version }),
+    description: release
+      ? t("update-description", { version: parsed.version })
+      : t("missing"),
+    path: `/changelog/${parsed.version}`,
+    noIndex: !release,
+    image: release?.banner,
   });
 };
 
-const Page = async ({ params }: Props): Promise<ReactElement> => {
-  const { version } = await params;
-  const parsed = parsePublicChangelogVersion(version);
+const Page = async ({ params }: ChangelogVersionPageProps) => {
+  const { version: raw } = await params;
+  const parsed = parseChangelogVersion(raw);
+  if (!parsed) notFound();
 
-  if (!parsed) {
-    notFound();
-  }
+  const t = await getTranslations("changelogPage");
+  const release = getChangelogRelease(parsed.version);
 
-  if (parsed.publicVersion !== version) {
-    redirect(`/changelog/${parsed.publicVersion}`);
-  }
-
-  const locale = await getLocale();
-  const doc = getChangelogDoc(parsed.docSlug, locale);
-
-  return <ChangelogRelease version={parsed.publicVersion} doc={doc} />;
+  return (
+    <>
+      <WebPageJsonLd
+        name={t("meta-title", { version: parsed.version })}
+        description={release ? t("update-description", { version: parsed.version }) : t("missing")}
+        path={`/changelog/${parsed.version}`}
+      />
+      <ChangelogReleaseView version={parsed.version} release={release} />
+    </>
+  );
 };
 
-export { generateMetadata };
 export default Page;

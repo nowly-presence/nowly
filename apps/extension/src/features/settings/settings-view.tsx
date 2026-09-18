@@ -1,6 +1,5 @@
 import { LocaleFlag } from "@/components/shared/locale-flag";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { CustomSelect } from "@/components/ui/custom-select";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -9,12 +8,11 @@ import { DebugPanel } from "@/features/settings/debug-panel";
 import { SettingsGroup } from "@/features/settings/settings-group";
 import { ShortcutSettings } from "@/features/settings/shortcut-settings";
 import { ThemeSelector } from "@/features/settings/theme-selector";
-import { ThemeUpsellCard } from "@/features/settings/theme-upsell-card";
 import type { NativeStatus } from "@/lib/messages";
-import { WEB_BASE_URL } from "@/shared/constants";
+import { HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
 import { t, type LocalePreference } from "@/shared/i18n";
 import type { ExtensionSettings, PresenceDebug } from "@/shared/types";
-import { IconCalendar, IconExternalLink, IconRefresh, IconWorld } from "@/lib/tabler-icons";
+import { IconCalendar, IconDeviceDesktop, IconExternalLink, IconMoon, IconRefresh, IconSun, IconWorld } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -25,7 +23,6 @@ type HostVersionInfo = {
 };
 
 type Props = {
-  adFree: boolean;
   debug: PresenceDebug | null;
   hostVersionInfo: HostVersionInfo | null;
   isCheckingHostVersion: boolean;
@@ -40,6 +37,8 @@ type Props = {
   onScheduleGlobal: () => void;
   settings: ExtensionSettings;
   onSettingsChange: (partial: Partial<ExtensionSettings>) => void;
+  analyticsConsent: boolean;
+  onAnalyticsConsentChange: (granted: boolean) => void;
 };
 
 type SettingsGroupId = "general" | "presences" | "advanced";
@@ -50,7 +49,6 @@ const innerClassName = "px-4 py-4";
 const sectionTitleClassName = "mb-2 text-xs font-semibold text-muted-foreground";
 
 export const SettingsView: FC<Props> = ({
-  adFree,
   debug,
   hostVersionInfo,
   isCheckingHostVersion,
@@ -65,6 +63,8 @@ export const SettingsView: FC<Props> = ({
   onScheduleGlobal,
   settings,
   onSettingsChange,
+  analyticsConsent,
+  onAnalyticsConsentChange,
 }): ReactElement => {
   const [isUnpacked, setIsUnpacked] = useState(false);
   const [openGroups, setOpenGroups] = useState<Record<SettingsGroupId, boolean>>({
@@ -73,12 +73,16 @@ export const SettingsView: FC<Props> = ({
     advanced: settings.developerMode === true,
   });
   const lastCheckRef = useRef(0);
-  const consentUrl = `${WEB_BASE_URL}/consent`;
   const localeOptions = [
     { icon: <IconWorld className="size-4 text-muted-foreground" />, label: t("locale-auto"), value: "browser" as const },
     { icon: <LocaleFlag locale="fr-FR" />, label: t("locale-fr"), value: "fr" as const },
     { icon: <LocaleFlag locale="en-US" />, label: t("locale-en"), value: "en" as const },
     { icon: <LocaleFlag locale="es-ES" />, label: t("locale-es"), value: "es" as const },
+  ];
+  const appearanceOptions = [
+    { icon: <IconDeviceDesktop className="size-4 text-muted-foreground" />, label: t("appearance-system"), value: "system" as const },
+    { icon: <IconSun className="size-4 text-muted-foreground" />, label: t("appearance-light"), value: "light" as const },
+    { icon: <IconMoon className="size-4 text-muted-foreground" />, label: t("appearance-dark"), value: "dark" as const },
   ];
   const presenceLanguageOptions = [
     { icon: <IconWorld className="size-4 text-muted-foreground" />, label: t("presence-language-per-presence"), value: "per-presence" as const },
@@ -92,6 +96,7 @@ export const SettingsView: FC<Props> = ({
   }, []);
 
   const developerModeEnabled = settings.developerMode ?? isUnpacked;
+  const canaryEnabled = settings.canaryTheme ?? import.meta.env.VITE_NOWLY_CHANNEL === "canary";
 
   const toggleGroup = (id: SettingsGroupId): void => {
     setOpenGroups((current) => ({ ...current, [id]: !current[id] }));
@@ -130,7 +135,7 @@ export const SettingsView: FC<Props> = ({
           </h2>
           <div className="flex flex-col gap-2 sm:flex-row">
             <a
-              href="https://nowly.me/host"
+              href={HOST_DOWNLOAD_URL}
               target="_blank"
               rel="noreferrer"
               className={`${hostUpdateActionClassName} border border-accent/20 bg-accent/10 text-accent hover:bg-accent/20`}
@@ -170,12 +175,20 @@ export const SettingsView: FC<Props> = ({
           />
         </section>
 
+        <section className={innerClassName}>
+          <h2 className={sectionTitleClassName}>{t("appearance")}</h2>
+          <p className="mb-3 text-xs leading-5 text-muted-foreground">{t("appearance-description")}</p>
+          <CustomSelect
+            aria-label={t("appearance")}
+            className="h-10"
+            onChange={(value) => onSettingsChange({ appearance: value })}
+            options={appearanceOptions}
+            value={settings.appearance ?? "system"}
+          />
+        </section>
+
         <div className={innerClassName}>
-          {adFree ? (
-            <ThemeSelector settings={settings} onSettingsChange={onSettingsChange} />
-          ) : (
-            <ThemeUpsellCard />
-          )}
+          <ThemeSelector settings={settings} onSettingsChange={onSettingsChange} canary={canaryEnabled} />
         </div>
 
         <section className={innerClassName}>
@@ -206,6 +219,28 @@ export const SettingsView: FC<Props> = ({
               onChange={(checked) => onSettingsChange({ backgroundAnimation: checked })}
             />
           </Label>
+        </section>
+
+        <section className={innerClassName}>
+          <Label unstyled className="flex cursor-pointer items-center justify-between gap-3">
+            <span className="min-w-0">
+              <span className="block text-sm font-medium text-foreground">{t("analytics-consent")}</span>
+              <span className="mt-0.5 block text-xs leading-4 text-muted-foreground">{t("analytics-consent-description")}</span>
+            </span>
+            <Switch
+              checked={analyticsConsent}
+              onChange={onAnalyticsConsentChange}
+            />
+          </Label>
+          <a
+            href={`${WEB_BASE_URL.replace(/\/$/, "")}/consent`}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline"
+          >
+            {t("analytics-consent-manage")}
+            <IconExternalLink className="size-3" />
+          </a>
         </section>
       </SettingsGroup>
 
@@ -274,6 +309,21 @@ export const SettingsView: FC<Props> = ({
           </Label>
         </section>
 
+        {isUnpacked ? (
+          <section className={innerClassName}>
+            <Label unstyled className="flex cursor-pointer items-center justify-between gap-3">
+              <span className="min-w-0">
+                <span className="block text-sm font-medium text-foreground">{t("canary-theme")}</span>
+                <span className="mt-0.5 block text-xs leading-4 text-muted-foreground">{t("canary-theme-description")}</span>
+              </span>
+              <Switch
+                checked={canaryEnabled}
+                onChange={(checked) => onSettingsChange({ canaryTheme: checked })}
+              />
+            </Label>
+          </section>
+        ) : null}
+
         <section className={innerClassName}>
           <h2 className={sectionTitleClassName}>{t("check-updates")}</h2>
           <p className="mb-3 text-xs leading-5 text-muted-foreground">{t("check-updates-description")}</p>
@@ -287,31 +337,6 @@ export const SettingsView: FC<Props> = ({
             <IconRefresh className={`size-4 ${isCheckingUpdates ? "animate-spin" : ""}`} />
             {t("check-updates")}
           </Button>
-        </section>
-
-        <section className={innerClassName}>
-          <Label unstyled className="flex cursor-pointer items-start justify-between gap-3">
-            <span className="min-w-0">
-              <span className={`block ${sectionTitleClassName} mb-0`}>{t("data-management")}</span>
-              <span className="mt-2 block text-sm font-medium text-foreground">{t("analytics-consent")}</span>
-              <span className="mt-1 block text-xs leading-4 text-muted-foreground">{t("analytics-description")}</span>
-            </span>
-            <Checkbox
-              ariaLabel={t("analytics-consent")}
-              checked={settings.analyticsConsent === true}
-              onChange={(checked) => onSettingsChange({ analyticsConsent: checked })}
-            />
-          </Label>
-
-          <a
-            href={consentUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-3 inline-flex h-8 items-center gap-2 rounded-xl border border-border bg-card-2 px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-card-hover hover:text-foreground"
-          >
-            {t("data-management")}
-            <IconExternalLink className="size-3.5" />
-          </a>
         </section>
 
         {developerModeEnabled ? (

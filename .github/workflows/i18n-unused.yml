@@ -1,0 +1,29 @@
+name: i18n unused keys
+
+on:
+  pull_request:
+    branches: [stable]
+    paths:
+      - "apps/web/messages/**"
+      - "apps/web/app/**"
+      - "apps/web/components/**"
+      - "apps/web/lib/**"
+      - "apps/web/hooks/**"
+      - "apps/docs/messages/**"
+      - "apps/docs/app/**"
+      - "apps/docs/components/**"
+      - "apps/docs/lib/**"
+      - "apps/extension/messages/**"
+      - "apps/extension/src/**"
+      - "scripts/check-i18n-unused.mjs"
+
+jobs:
+  check:
+    name: Check for unused message keys
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/check-i18n-unused.mjs

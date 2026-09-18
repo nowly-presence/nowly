@@ -16,6 +16,7 @@
     "dev:api": "pnpm --filter @nowly/api dev",
     "dev:web": "pnpm --filter @nowly/web dev",
     "dev:docs": "pnpm --filter @nowly/docs dev",
+    "dev:insights": "pnpm --filter @nowly/insights dev",
     "prisma:generate": "pnpm --filter @nowly/api prisma:generate",
     "start:api": "pnpm --filter @nowly/api start",
     "typecheck:api": "pnpm --filter @nowly/api typecheck",

@@ -1,7 +1,7 @@
 import type { InstalledPresences } from "@/shared/types";
 import { handleClearActivity, handleRemovedTab, restoreActivityBadge } from "@/background/managers/activity-manager";
-import { addAnalyticsLog } from "@/background/analytics/analytics-log";
-import { trackAnalytics } from "@/background/analytics/analytics-tracker";
+import { trackAnalytics } from "@/background/analytics-client";
+import { addRuntimeLog } from "@/background/runtime-logs";
 import { initializeCustomApiUrl } from "@/background/services/api-state";
 import { syncDeviceState, syncUninstallUrl } from "@/background/services/device-sync";
 import { connectNative, onNativeResponse } from "@/background/services/native";
@@ -40,33 +40,31 @@ const enableSidePanelAction = (): void => {
 const registerNativeResponseHandler = (): void => {
   onNativeResponse((message) => {
     if (message.type === "ERROR") {
-      addAnalyticsLog("error", "native", "native error", { reason: message.error });
+      addRuntimeLog("error", "native", "native error", { reason: message.error });
+      trackAnalytics("native_heartbeat_failed", { payload: { reason: message.error } });
       void setDebug({
         stage: "native-error",
         message: message.error,
         updatedAt: Date.now(),
       });
-      void trackAnalytics("native_heartbeat_failed", { payload: { reason: "native-error" } });
       return;
     }
 
     if (message.type === "CONNECTED") {
-      addAnalyticsLog("success", "native", "native connected", { nativeVersion: message.version });
-      void trackAnalytics("native_connected", { payload: { nativeVersion: message.version } });
+      addRuntimeLog("success", "native", "native connected", { nativeVersion: message.version });
+      trackAnalytics("native_connected");
     }
 
     if (message.type === "PONG") {
-      addAnalyticsLog(message.connected ? "success" : "warn", "native", "native heartbeat", {
+      addRuntimeLog(message.connected ? "success" : "warn", "native", "native heartbeat", {
         connected: message.connected,
         status: message.status,
         nativeVersion: message.version,
       });
-      void trackAnalytics(message.connected ? "native_heartbeat_ok" : "native_heartbeat_failed", {
-        payload: {
-          nativeVersion: message.version,
-          reason: message.connected ? undefined : "not-connected",
-        },
-      });
+      trackAnalytics(
+        message.connected ? "native_heartbeat_ok" : "native_heartbeat_failed",
+        message.connected ? undefined : { payload: { reason: message.status } },
+      );
     }
 
     if (message.type === "OK") {
@@ -114,10 +112,9 @@ export const registerLifecycleHandlers = (): void => {
   chrome.runtime.onInstalled.addListener(async (details) => {
     enableSidePanelAction();
     registerContextMenu();
+    if (details.reason === "install") trackAnalytics("extension_install", { source: "system" });
+    if (details.reason === "update") trackAnalytics("extension_update", { source: "system" });
     const presences = await bootBackground({ syncScripts: false });
-    void trackAnalytics(details.reason === "update" ? "extension_update" : "extension_install", {
-      payload: { source: "onInstalled", previousVersion: details.previousVersion },
-    });
     openChangelogOnUpdate(details);
     await syncPresenceScripts(presences);
   });

@@ -1,8 +1,10 @@
 "use client";
+import { RiCloseLine, RiNodeTree } from "@nowly/ui/icons";
 
 import type { TocItem } from "@/lib/docs/types";
-import { cn } from "@/lib/utils";
-import { IconListTree, IconX } from "@tabler/icons-react";
+import { cn } from "@nowly/ui";
+
+
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type FC } from "react";
 
@@ -24,7 +26,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
           }
         }
       },
-      { rootMargin: "-80px 0px -60% 0px", threshold: 0.1 }
+      { rootMargin: "-64px 0px -60% 0px", threshold: 0.1 }
     );
 
     const headings = document.querySelectorAll("h2, h3");
@@ -37,7 +39,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
 
   return (
     <>
-      <nav className="hidden xl:block fixed top-24 w-56 max-h-[calc(100vh-8rem)] overflow-y-auto" style={{ right: "max(1rem, calc((100vw - 1280px) / 2 + 1rem))" }}>
+      <nav className="docs-sidebar-scroll hidden xl:block fixed top-16 w-56 max-h-[calc(100vh-4rem)] overflow-y-auto pt-8" style={{ right: "max(1rem, calc((100vw - 1280px) / 2 + 1rem))" }}>
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
           {t("on-this-page")}
         </p>
@@ -67,7 +69,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
         className="xl:hidden fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-accent text-background px-4 py-3 shadow-lg"
         aria-label={t("open-table-of-contents")}
       >
-        <IconListTree size={18} />
+        <RiNodeTree size={18} />
         <span className="text-sm font-medium">{t("toc")}</span>
       </button>
 
@@ -87,7 +89,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
                 onClick={() => setMobileOpen(false)}
                 className="text-muted-foreground hover:text-foreground"
               >
-                <IconX size={20} />
+                <RiCloseLine size={20} />
               </button>
             </div>
             <ul className="space-y-2">

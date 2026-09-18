@@ -1,160 +1,58 @@
-import { DOCS_URL, SITE_URL } from "@/lib/seo";
-import { buildPresenceSeoPath } from "@/lib/seo-presence";
-import { clientEnv } from "@nowly/env/client";
+import { CHANGELOG_RELEASES } from "@/lib/changelog-releases";
+import { catalogGithubHandles } from "@/lib/library-catalog";
+import { getPresenceCatalog } from "@/lib/presence-api";
+import { DOCS_ORIGIN, isSeoPreview, seoUrl } from "@/lib/seo";
 import type { MetadataRoute } from "next";
 
-type PresenceSitemapItem = {
-  slug?: string
-  lastUpdated?: string
-  addedAt?: string
-  author?: { github?: string }
-  contributors?: Array<{ github?: string }>
-};
-
-const fetchPresencePages = async (): Promise<MetadataRoute.Sitemap> => {
-  try {
-    const res = await fetch(`${clientEnv.NEXT_PUBLIC_API_BASE_URL}/presences`, {
-      next: { revalidate: 3600 },
-    });
-
-    if (!res.ok) return [];
-
-    const presences = await res.json() as PresenceSitemapItem[];
-    const authors = new Set<string>();
-
-    const validPresences = presences
-      .filter((presence): presence is PresenceSitemapItem & { slug: string } => Boolean(presence.slug))
-      .flatMap((presence) => {
-        const lastModified = presence.lastUpdated ?? presence.addedAt ?? new Date();
-        const handles = [presence.author?.github, ...(presence.contributors ?? []).map((item) => item.github)]
-          .map((handle) => handle?.replace(/^@/, "").toLowerCase())
-          .filter((handle): handle is string => Boolean(handle));
-        for (const handle of handles) authors.add(handle);
-
-        return [
-          {
-            url: `${SITE_URL}${buildPresenceSeoPath(presence.slug)}`,
-            lastModified,
-            changeFrequency: "weekly" as const,
-            priority: 0.95,
-          },
-        ];
-      });
-
-    const authorPages = [...authors].map((github) => ({
-      url: `${SITE_URL}/author/${github}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.55,
-    }));
-
-    return [...validPresences, ...authorPages];
-  } catch {
-    return [];
-  }
-};
+const entry = (
+  path: string,
+  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"],
+  priority: number,
+  lastModified?: Date,
+): MetadataRoute.Sitemap[number] => ({
+  url: path.startsWith("http") ? path : seoUrl(path),
+  lastModified: lastModified ?? new Date(),
+  changeFrequency,
+  priority,
+});
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
-  const pages: MetadataRoute.Sitemap = [
-    {
-      url: SITE_URL,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    {
-      url: `${SITE_URL}/library`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.95,
-    },
-    {
-      url: `${DOCS_URL}/`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/host`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.75,
-    },
-    {
-      url: `${SITE_URL}/faq`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/status`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.65,
-    },
-    {
-      url: `${SITE_URL}/team`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${SITE_URL}/support`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/support/redeem`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url: `${SITE_URL}/consent`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.45,
-    },
-    {
-      url: `${SITE_URL}/cookies`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.4,
-    },
-    {
-      url: `${SITE_URL}/legal-notice`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.4,
-    },
-    {
-      url: `${SITE_URL}/privacy`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.4,
-    },
-    {
-      url: `${SITE_URL}/data-collected`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.4,
-    },
-    {
-      url: `${SITE_URL}/tos`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.4,
-    },
-  ];
+  if (isSeoPreview) return [];
 
-  return [...pages, ...await fetchPresencePages()];
+  const catalog = await getPresenceCatalog().catch(() => []);
+  const authors = catalogGithubHandles(catalog);
+
+  return [
+    entry("/", "weekly", 1),
+    entry("/library", "weekly", 0.9),
+    {
+      url: `${DOCS_ORIGIN}/`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    entry("/desktop", "monthly", 0.7),
+    entry("/extension", "monthly", 0.7),
+    entry("/canary", "weekly", 0.55),
+    entry("/changelog", "monthly", 0.6),
+    ...CHANGELOG_RELEASES.map((release) =>
+      entry(
+        `/changelog/${release.version}`,
+        "monthly",
+        0.5,
+        release.date ? new Date(release.date) : undefined,
+      ),
+    ),
+    entry("/support", "monthly", 0.6),
+    entry("/status", "hourly", 0.4),
+    ...catalog.map((presence) => entry(`/library/${presence.slug}`, "weekly", 0.75)),
+    ...authors.map((github) => entry(`/author/${github}`, "weekly", 0.45)),
+    entry("/privacy", "yearly", 0.3),
+    entry("/consent", "yearly", 0.3),
+    entry("/tos", "yearly", 0.3),
+    entry("/cookies", "yearly", 0.3),
+    entry("/legal-notice", "yearly", 0.3),
+  ];
 };
 
 export default sitemap;
