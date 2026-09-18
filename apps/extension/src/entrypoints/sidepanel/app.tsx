@@ -14,6 +14,7 @@ import { useAppearance } from "@/hooks/use-appearance";
 import { useExtensionState } from "@/hooks/use-extension-state";
 import { useLocalePreference } from "@/hooks/use-locale-preference";
 import { useOnboardingState } from "@/hooks/use-onboarding-state";
+import { trackUiEvent } from "@/lib/analytics";
 import { sendMessage } from "@/lib/messages";
 import { HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
 import { t } from "@/shared/i18n";
@@ -62,6 +63,9 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
   } = useExtensionState();
   useAppearance(settings.appearance ?? "system");
   useEffect(() => {
+    trackUiEvent("extension_open", { payload: { surface: "sidepanel" } });
+  }, []);
+  useEffect(() => {
     // Dev-only: let an unpacked build toggle the Canary accent to preview the
     // global (stable) look. Store builds keep their compiled channel.
     if (!isUnpacked) return;
@@ -71,6 +75,10 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
     else delete root.dataset.channel;
   }, [isUnpacked, settings.canaryTheme]);
   const { localePreference, setLocalePreference } = useLocalePreference();
+  const onSettingsLocaleChange = (locale: Parameters<typeof setLocalePreference>[0]) => {
+    trackUiEvent("settings_language_changed");
+    setLocalePreference(locale);
+  };
   const { onboarding, setOnboarding, nativeStatus: onboardingNativeStatus, userScripts } = useOnboardingState();
   const [activeView, setActiveView] = useState<AppView>(initialView);
   const [selectedPresenceSlug, setSelectedPresenceSlug] = useState<string | null>(null);
@@ -295,7 +303,7 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
               onCheckHostUpdate={checkHostUpdate}
               onCheckUpdates={checkUpdates}
               onForceShowOnboarding={resetOnboardingForDev}
-              onLocaleChange={setLocalePreference}
+              onLocaleChange={onSettingsLocaleChange}
               onScheduleGlobal={() => handleScheduleOpen(null)}
               settings={settings}
               onSettingsChange={setSettings}
@@ -358,6 +366,7 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
           setOnboarding({ devReplayOnboarding: false, onboardingCompleted: true });
         }}
         onSkipTour={() => {
+          trackUiEvent("onboarding_skipped", { source: "extension_onboarding" });
           setOnboarding({ devReplayOnboarding: false, onboardingCompleted: true });
         }}
         settings={settings}

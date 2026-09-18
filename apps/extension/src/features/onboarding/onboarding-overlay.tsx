@@ -1,4 +1,5 @@
 import { Header } from "@/components/layout/header";
+import { trackUiEvent } from "@/lib/analytics";
 import { t } from "@/shared/i18n";
 import { IconCircleCheckFilled } from "@/lib/tabler-icons";
 import type { FC, ReactElement } from "react";
@@ -48,10 +49,24 @@ export const OnboardingOverlay: FC<OnboardingOverlayProps> = ({
   const canReplayNext = clampedReplayIndex < replayMaxIndex;
   const [readyCountdown, setReadyCountdown] = useState(5);
   const onCompleteRef = useRef(onComplete);
+  const startedTrackedRef = useRef(false);
+  const gateSeenTrackedRef = useRef(false);
 
   useEffect(() => {
     onCompleteRef.current = onComplete;
   }, [onComplete]);
+
+  useEffect(() => {
+    if (onboardingCompleted || startedTrackedRef.current) return;
+    startedTrackedRef.current = true;
+    trackUiEvent("onboarding_started", { source: "extension_onboarding" });
+  }, [onboardingCompleted]);
+
+  useEffect(() => {
+    if (gateSeenTrackedRef.current || allDone || pendingIndex !== 0) return;
+    gateSeenTrackedRef.current = true;
+    trackUiEvent("onboarding_gate_seen", { payload: { gate: "userScripts" } });
+  }, [allDone, pendingIndex]);
 
   useEffect(() => {
     if (devReplayOnboarding) {
@@ -75,6 +90,7 @@ export const OnboardingOverlay: FC<OnboardingOverlayProps> = ({
       setReadyCountdown((current) => {
         if (current <= 1) {
           window.clearInterval(timer);
+          trackUiEvent("onboarding_completed", { source: "extension_onboarding" });
           onCompleteRef.current();
           return 0;
         }

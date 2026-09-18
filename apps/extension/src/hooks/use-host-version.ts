@@ -1,6 +1,7 @@
+import { trackUiEvent } from "@/lib/analytics";
 import { sendMessage, type NativeStatus } from "@/lib/messages";
 import { WEB_BASE_URL } from "@/shared/constants";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 export type HostVersionInfo = {
   currentVersion?: string;
@@ -38,6 +39,7 @@ const getNativeStatusAfterOptionalRestart = async (restartNative: boolean): Prom
 export const useHostVersion = (): UseHostVersion => {
   const [isCheckingHostVersion, setIsCheckingHostVersion] = useState(false);
   const [hostVersionInfo, setHostVersionInfo] = useState<HostVersionInfo | null>(null);
+  const outdatedTrackedRef = useRef(false);
 
   const fetchHostVersion = useCallback(async (options: FetchHostVersionOptions = {}): Promise<void> => {
     try {
@@ -51,11 +53,12 @@ export const useHostVersion = (): UseHostVersion => {
       const data = await res.json() as { version: string };
       if (typeof data.version !== "string" || !data.version) throw new Error("host version missing");
       const currentVersion = currentStatus?.version;
-      setHostVersionInfo({
-        currentVersion,
-        latestVersion: data.version,
-        updateAvailable: Boolean(currentVersion && data.version !== currentVersion),
-      });
+      const updateAvailable = Boolean(currentVersion && data.version !== currentVersion);
+      setHostVersionInfo({ currentVersion, latestVersion: data.version, updateAvailable });
+      if (updateAvailable && !outdatedTrackedRef.current) {
+        outdatedTrackedRef.current = true;
+        trackUiEvent("native_version_outdated", { version: currentVersion });
+      }
     } catch {
       // Host unreachable - keep previous state
     }
