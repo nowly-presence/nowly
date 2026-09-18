@@ -8,7 +8,7 @@ const OSES = ["windows", "macos", "linux"]
 const LOCALES = ["en-US", "fr-FR", "es-ES"]
 const COUNTRIES = ["FR", "US", "DE", "GB", "ES", "CA"]
 const SLUGS = ["youtube", "netflix", "spotify", "twitch", "figma"]
-const EXTENSION_VERSIONS = ["1.4.0", "1.4.1", "1.5.0"]
+const EXTENSION_VERSIONS = ["1.4.0", "1.5.0", "2.0.0"]
 
 // Metric key -> which dimensions to fill in on each fake event.
 const SEED_METRICS: Array<{ key: string; withSlug?: boolean; withSource?: boolean; dailyRange: [number, number] }> = [
