@@ -20,16 +20,14 @@ await server.register(rateLimit, { max: 100, timeWindow: "1 minute" })
 
 const allowedOrigins = [serverEnv.FRONTEND_URL, serverEnv.INSIGHTS_URL]
 
+const isAllowedOrigin = (origin: string | undefined): boolean =>
+  !origin || allowedOrigins.includes(origin) || origin.startsWith("chrome-extension://") || origin.startsWith("moz-extension://")
+
 await server.register(cors, {
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin) || origin.startsWith("chrome-extension://") || origin.startsWith("moz-extension://")) {
-      callback(null, true)
-      return
-    }
-    callback(null, false)
-  },
+  origin: (origin, callback) => callback(null, isAllowedOrigin(origin)),
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "x-user-token", "x-device-token"],
+  credentials: true,
 })
 
 server.get("/health", async () => {
@@ -58,7 +56,16 @@ server.setErrorHandler((error, _request, reply) => {
 // Auth reads the raw request body itself) doesn't leak to the other routes.
 await server.register(async (instance) => {
   instance.addContentTypeParser("application/json", (_request, _payload, done) => done(null))
-  instance.all("/api/auth/*", async (request, reply) => {
+  instance.all("/auth/*", async (request, reply) => {
+    // toNodeHandler writes straight to reply.raw, bypassing Fastify's reply
+    // pipeline - @fastify/cors sets headers via reply.header(), which only
+    // gets flushed on reply.send(). Set them on the raw response ourselves.
+    const origin = request.headers.origin
+    if (isAllowedOrigin(origin)) {
+      reply.raw.setHeader("Access-Control-Allow-Origin", origin ?? "*")
+      reply.raw.setHeader("Access-Control-Allow-Credentials", "true")
+      reply.raw.setHeader("Vary", "Origin")
+    }
     await toNodeHandler(getAuth())(request.raw, reply.raw)
   })
 })
