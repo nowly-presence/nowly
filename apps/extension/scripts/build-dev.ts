@@ -30,11 +30,13 @@ const GENERATED_DIR = join(ROOT, "src", "generated")
 const webBaseUrl = process.env.VITE_WEB_BASE_URL ?? "https://nowly.me"
 const apiBaseUrl = process.env.VITE_API_BASE_URL ?? "https://api.nowly.me"
 const cdnBaseUrl = process.env.VITE_CDN_BASE_URL ?? ""
+const chromeosWaitlistCampaignId = process.env.VITE_CHROMEOS_WAITLIST_CAMPAIGN_ID ?? ""
 
 const define = {
   "import.meta.env.VITE_WEB_BASE_URL": JSON.stringify(webBaseUrl),
   "import.meta.env.VITE_API_BASE_URL": JSON.stringify(apiBaseUrl),
   "import.meta.env.VITE_CDN_BASE_URL": JSON.stringify(cdnBaseUrl),
+  "import.meta.env.VITE_CHROMEOS_WAITLIST_CAMPAIGN_ID": JSON.stringify(chromeosWaitlistCampaignId),
   "import.meta.env.VITE_NOWLY_CHANNEL": JSON.stringify("canary"),
   "import.meta.env.BROWSER": JSON.stringify(BROWSER),
 }

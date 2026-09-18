@@ -8,5 +8,4 @@ export const CDN_BASE_URL = extensionEnv.VITE_CDN_BASE_URL;
 export const DISCORD_INVITE_URL = "https://discord.gg/MnZap7czgB";
 export const HOST_DOWNLOAD_URL = `${WEB_BASE_URL.replace(/\/$/, "")}/desktop`;
 
-// Set once the "ChromeOS waitlist" campaign is created from the insights admin UI.
-export const CHROMEOS_WAITLIST_CAMPAIGN_ID = "";
+export const CHROMEOS_WAITLIST_CAMPAIGN_ID = extensionEnv.VITE_CHROMEOS_WAITLIST_CAMPAIGN_ID ?? "";
