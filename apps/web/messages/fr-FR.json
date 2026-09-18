@@ -326,12 +326,18 @@
     "title": "Le pont local vers Discord",
     "description": "L’extension lit l’onglet. L’application bureau envoie votre statut à Discord. Titre, plateforme et lecture ne quittent pas votre PC.",
     "detected": "Détecté",
+    "chromeos-title": "ChromeOS n'est pas encore supporté",
+    "chromeos-description": "Discord Rich Presence a besoin d'une application native que ChromeOS ne peut pas exécuter aujourd'hui. On regarde comment y remédier - laissez votre email pour être prévenu si ça change.",
+    "chromeos-email-placeholder": "vous@exemple.com",
+    "chromeos-submit": "Me prévenir",
+    "chromeos-success": "Merci, on vous tiendra au courant.",
     "version": "Version {version}",
     "card-title": "Télécharger pour {platform}",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux"
+      "linux": "Linux",
+      "chromeos": "ChromeOS"
     },
     "windows-installer": "Installateur Windows (.exe)",
     "windows-portable": "Archive portable (.zip)",

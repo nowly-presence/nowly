@@ -1,14 +1,16 @@
 "use client";
 
+import { CampaignSignupForm } from "@/components/campaigns/campaign-signup-form";
 import { ButtonAnchor, ButtonLink, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
 
 
-import { PROJECT_REPOSITORY_URL } from "@/lib/constants";
+import { CHROMEOS_WAITLIST_CAMPAIGN_ID, PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import type { DesktopPlatform, DesktopRelease } from "@/lib/desktop-release";
 
 import {
   RiAppleFill,
   RiCheckLine,
+  RiChromeFill,
   RiGithubLine,
   RiUbuntuFill,
   RiWindowsFill,
@@ -16,16 +18,20 @@ import {
 import { useTranslations } from "next-intl";
 import { useLayoutEffect, useState } from "react";
 
-const platforms = ["windows", "macos", "linux"] as const;
+const platforms = ["windows", "macos", "linux", "chromeos"] as const;
 
 const platformIcons = {
   windows: RiWindowsFill,
   macos: RiAppleFill,
   linux: RiUbuntuFill,
+  chromeos: RiChromeFill,
 };
 
-const detectPlatform = (): DesktopPlatform => {
+type Platform = DesktopPlatform | "chromeos";
+
+const detectPlatform = (): Platform => {
   const ua = navigator.userAgent;
+  if (/CrOS/i.test(ua)) return "chromeos";
   if (/Mac/i.test(ua) && !/iPhone|iPad/i.test(ua)) return "macos";
   if (/Linux/i.test(ua) && !/Android/i.test(ua)) return "linux";
   return "windows";
@@ -37,10 +43,10 @@ type DesktopViewProps = {
 
 export const DesktopView = ({ release }: DesktopViewProps) => {
   const t = useTranslations("desktopPage");
-  const [platform, setPlatform] = useState<DesktopPlatform>("windows");
-  const [detected, setDetected] = useState<DesktopPlatform | null>(null);
+  const [platform, setPlatform] = useState<Platform>("windows");
+  const [detected, setDetected] = useState<Platform | null>(null);
   const Icon = platformIcons[platform];
-  const downloads = platformDownloads(release, platform, {
+  const downloads = platform === "chromeos" ? [] : platformDownloads(release, platform, {
     windowsInstaller: t("windows-installer"),
     windowsPortable: t("windows-portable"),
     macosDmg: t("macos-dmg"),
@@ -108,27 +114,43 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
             </div>
             <div>
               <CardTitle className="text-xl">
-                {t("card-title", { platform: t(`platforms.${platform}`) })}
+                {platform === "chromeos" ? t("chromeos-title") : t("card-title", { platform: t(`platforms.${platform}`) })}
               </CardTitle>
-              {release.version ? (
+              {platform !== "chromeos" && release.version ? (
                 <CardDescription className="mt-1">
                   {t("version", { version: release.version })}
                 </CardDescription>
               ) : null}
+              {platform === "chromeos" ? (
+                <CardDescription className="mt-1">{t("chromeos-description")}</CardDescription>
+              ) : null}
             </div>
-            <div className="flex w-full flex-col gap-2">
-              {downloads.map((item, index) => (
-                <ButtonAnchor
-                  key={item.href}
-                  href={item.href}
-                  variant={index === 0 ? "inverted" : "outline"}
-                  size="lg"
-                  className="w-full"
-                >
-                  {item.label}
-                </ButtonAnchor>
-              ))}
-            </div>
+
+            {platform === "chromeos" ? (
+              CHROMEOS_WAITLIST_CAMPAIGN_ID ? (
+                <CampaignSignupForm
+                  campaignId={CHROMEOS_WAITLIST_CAMPAIGN_ID}
+                  placeholder={t("chromeos-email-placeholder")}
+                  submitLabel={t("chromeos-submit")}
+                  successLabel={t("chromeos-success")}
+                />
+              ) : null
+            ) : (
+              <div className="flex w-full flex-col gap-2">
+                {downloads.map((item, index) => (
+                  <ButtonAnchor
+                    key={item.href}
+                    href={item.href}
+                    variant={index === 0 ? "inverted" : "outline"}
+                    size="lg"
+                    className="w-full"
+                  >
+                    {item.label}
+                  </ButtonAnchor>
+                ))}
+              </div>
+            )}
+
             <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
               <ButtonAnchor
                 href={PROJECT_REPOSITORY_URL}
@@ -193,20 +215,22 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
           </div>
         </section>
 
-        <section className="mt-16 max-w-3xl">
-          <h2 className="text-xl font-medium tracking-tight">{t("req-title")}</h2>
-          <div className="mt-6 divide-y divide-border overflow-hidden rounded-[16px] border border-border bg-foreground/4">
-            {requirementKeys.map((key) => (
-              <div
-                key={key}
-                className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <span className="text-sm text-muted-foreground">{t(`req.${key}`)}</span>
-                <span className="text-sm font-medium">{t(`req.${key}-${platform}`)}</span>
-              </div>
-            ))}
-          </div>
-        </section>
+        {platform !== "chromeos" ? (
+          <section className="mt-16 max-w-3xl">
+            <h2 className="text-xl font-medium tracking-tight">{t("req-title")}</h2>
+            <div className="mt-6 divide-y divide-border overflow-hidden rounded-[16px] border border-border bg-foreground/4">
+              {requirementKeys.map((key) => (
+                <div
+                  key={key}
+                  className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <span className="text-sm text-muted-foreground">{t(`req.${key}`)}</span>
+                  <span className="text-sm font-medium">{t(`req.${key}-${platform}`)}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
       </div>
     </div>
   );

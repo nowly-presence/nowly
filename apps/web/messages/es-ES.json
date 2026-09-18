@@ -326,12 +326,18 @@
     "title": "El puente local hacia Discord",
     "description": "La extensión lee la pestaña. La app de escritorio envía tu estado a Discord. El título, la plataforma y la reproducción no salen de tu PC.",
     "detected": "Detectado",
+    "chromeos-title": "ChromeOS todavía no es compatible",
+    "chromeos-description": "Discord Rich Presence necesita una app nativa que ChromeOS no puede ejecutar hoy. Estamos buscando una solución - deja tu email para que te avisemos si eso cambia.",
+    "chromeos-email-placeholder": "tu@ejemplo.com",
+    "chromeos-submit": "Avisarme",
+    "chromeos-success": "Gracias, te avisaremos.",
     "version": "Versión {version}",
     "card-title": "Descargar para {platform}",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux"
+      "linux": "Linux",
+      "chromeos": "ChromeOS"
     },
     "windows-installer": "Instalador de Windows (.exe)",
     "windows-portable": "Archivo portable (.zip)",

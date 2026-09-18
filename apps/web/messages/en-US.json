@@ -326,12 +326,18 @@
     "title": "The local bridge to Discord",
     "description": "The extension reads the tab. The desktop app sends your status to Discord. Title, platform, and playback never leave your PC.",
     "detected": "Detected",
+    "chromeos-title": "ChromeOS isn't supported yet",
+    "chromeos-description": "Discord Rich Presence needs a native app that ChromeOS can't run today. We're looking into it - leave your email to get notified if that changes.",
+    "chromeos-email-placeholder": "you@example.com",
+    "chromeos-submit": "Notify me",
+    "chromeos-success": "Thanks, we'll let you know.",
     "version": "Version {version}",
     "card-title": "Download for {platform}",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux"
+      "linux": "Linux",
+      "chromeos": "ChromeOS"
     },
     "windows-installer": "Windows installer (.exe)",
     "windows-portable": "Portable archive (.zip)",
