@@ -909,7 +909,14 @@
     "description": "Your local data stays on your device. We hope to see you again soon.",
     "feedback-title": "Anything you want to tell us?",
     "feedback-description": "A bug, a missing presence, or just feedback: Discord is the fastest way to reach us.",
-    "discord": "Join the Discord"
+    "discord": "Join the Discord",
+    "data-description": "You can keep your anonymous usage stats to help us improve Nowly, or delete everything stored for your device.",
+    "keep": "Keep anonymous stats",
+    "delete": "Delete my data",
+    "delete-confirm": "This permanently deletes everything Nowly has stored for this device. This cannot be undone.",
+    "keep-success": "Thanks, your anonymous stats are kept.",
+    "delete-success": "Your data has been deleted.",
+    "action-error": "Something went wrong. Please try again."
   },
   "consentPage": {
     "eyebrow": "Privacy",

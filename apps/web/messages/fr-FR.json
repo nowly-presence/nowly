@@ -909,7 +909,14 @@
     "description": "Vos données locales restent sur votre appareil. On espère vous revoir bientôt.",
     "feedback-title": "Une remarque à nous faire ?",
     "feedback-description": "Un bug, une présence manquante, ou juste un avis : le Discord est le plus rapide pour nous joindre.",
-    "discord": "Rejoindre le Discord"
+    "discord": "Rejoindre le Discord",
+    "data-description": "Vous pouvez conserver vos statistiques d’usage anonymes pour nous aider à améliorer Nowly, ou supprimer tout ce qui est stocké pour votre appareil.",
+    "keep": "Garder les statistiques anonymes",
+    "delete": "Supprimer mes données",
+    "delete-confirm": "Cela supprime définitivement tout ce que Nowly a stocké pour cet appareil. Cette action est irréversible.",
+    "keep-success": "Merci, vos statistiques anonymes sont conservées.",
+    "delete-success": "Vos données ont été supprimées.",
+    "action-error": "Une erreur est survenue. Veuillez réessayer."
   },
   "consentPage": {
     "eyebrow": "Confidentialité",

@@ -3,6 +3,7 @@ import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { Suspense } from "react";
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations("pages.uninstall");
@@ -19,7 +20,9 @@ const Page = async () => {
   return (
     <>
       <WebPageJsonLd name={t("title")} description={t("description")} path="/uninstall" />
-      <UninstallView />
+      <Suspense>
+        <UninstallView />
+      </Suspense>
     </>
   );
 };
