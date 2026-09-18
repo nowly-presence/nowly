@@ -630,25 +630,6 @@
       }
     }
   },
-  "redeemPage": {
-    "eyebrow": "Apoyo",
-    "title": "Activar una clave de supporter",
-    "description": "Introduce la clave del correo de donación. La extensión Nowly debe estar instalada en este navegador para vincular la clave a este dispositivo.",
-    "card-title": "Clave de supporter",
-    "card-description": "La misma clave se puede reutilizar en tus otros dispositivos, hasta el límite del pase.",
-    "activate": "Activar clave",
-    "activating": "Activando...",
-    "checking": "Buscando la extensión Nowly...",
-    "missing-code": "Introduce una clave de supporter.",
-    "extension-missing": "Instala la extensión Nowly y recarga esta página. La activación solo funciona en un navegador donde la extensión esté en marcha.",
-    "success": "Este navegador ya no muestra anuncios. Dispositivos activados: {count}/{max}.",
-    "invalid-code": "Esta clave de supporter no es válida.",
-    "inactive-code": "Esta clave de supporter ya no está activa.",
-    "device-limit": "Se ha alcanzado el límite de dispositivos de esta clave.",
-    "network-error": "No se ha podido contactar con la API de Nowly. Inténtalo de nuevo en un momento.",
-    "timeout": "La extensión no ha respondido a tiempo. Recarga la página e inténtalo de nuevo.",
-    "generic-error": "No se ha podido activar la clave."
-  },
   "pages": {
     "library": {
       "title": "Biblioteca",
@@ -677,10 +658,6 @@
     "status": {
       "title": "Estado",
       "description": "Estado en directo del sitio Nowly, la API, la biblioteca de presencias y las descargas de Nowly Host."
-    },
-    "redeem": {
-      "title": "Activar una clave de supporter",
-      "description": "Introduce tu clave de supporter de Nowly para quitar los anuncios en este navegador."
     },
     "uninstall": {
       "title": "Se ha quitado la extensión",

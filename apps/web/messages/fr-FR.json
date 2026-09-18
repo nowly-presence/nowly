@@ -630,25 +630,6 @@
       }
     }
   },
-  "redeemPage": {
-    "eyebrow": "Soutien",
-    "title": "Activer une clé supporter",
-    "description": "Saisissez la clé reçue par e-mail après un don. L’extension Nowly doit être installée sur ce navigateur pour lier la clé à cet appareil.",
-    "card-title": "Clé supporter",
-    "card-description": "La même clé peut servir sur vos autres appareils, dans la limite du pass.",
-    "activate": "Activer la clé",
-    "activating": "Activation...",
-    "checking": "Recherche de l’extension Nowly...",
-    "missing-code": "Saisissez une clé supporter.",
-    "extension-missing": "Installez l’extension Nowly, puis rechargez cette page. L’activation ne fonctionne que dans un navigateur où l’extension tourne.",
-    "success": "Ce navigateur n’affiche plus de publicité. Appareils activés : {count}/{max}.",
-    "invalid-code": "Cette clé supporter n’est pas valide.",
-    "inactive-code": "Cette clé supporter n’est plus active.",
-    "device-limit": "La limite d’appareils pour cette clé est atteinte.",
-    "network-error": "Impossible de joindre l’API Nowly. Réessayez dans un instant.",
-    "timeout": "L’extension n’a pas répondu à temps. Rechargez la page et réessayez.",
-    "generic-error": "La clé n’a pas pu être activée."
-  },
   "pages": {
     "library": {
       "title": "Bibliothèque",
@@ -677,10 +658,6 @@
     "status": {
       "title": "Statut",
       "description": "Statut en direct du site Nowly, de l’API, de la bibliothèque de présences et des téléchargements de Nowly Host."
-    },
-    "redeem": {
-      "title": "Activer une clé supporter",
-      "description": "Saisissez votre clé supporter Nowly pour retirer les publicités sur ce navigateur."
     },
     "uninstall": {
       "title": "L’extension a été retirée",

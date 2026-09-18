@@ -630,25 +630,6 @@
       }
     }
   },
-  "redeemPage": {
-    "eyebrow": "Supporter",
-    "title": "Activate a supporter key",
-    "description": "Enter the key from your donation email. The Nowly extension must be installed on this browser so the key can be linked to this device.",
-    "card-title": "Supporter key",
-    "card-description": "The same key can be reused on your other devices, up to the device limit of the pass.",
-    "activate": "Activate key",
-    "activating": "Activating...",
-    "checking": "Looking for the Nowly extension...",
-    "missing-code": "Enter a supporter key.",
-    "extension-missing": "Install the Nowly extension, then reload this page. Activation only works from a browser where the extension is running.",
-    "success": "This browser is now ad-free. Activated devices: {count}/{max}.",
-    "invalid-code": "This supporter key is invalid.",
-    "inactive-code": "This supporter key is no longer active.",
-    "device-limit": "The device limit for this key has been reached.",
-    "network-error": "Could not reach the Nowly API. Try again in a moment.",
-    "timeout": "The extension did not respond in time. Reload the page and try again.",
-    "generic-error": "The key could not be activated."
-  },
   "pages": {
     "library": {
       "title": "Library",
@@ -677,10 +658,6 @@
     "status": {
       "title": "Status",
       "description": "Live status for the Nowly website, API, presence library, and host downloads."
-    },
-    "redeem": {
-      "title": "Activate a supporter key",
-      "description": "Enter your Nowly supporter key to remove ads on this browser."
     },
     "uninstall": {
       "title": "The extension was removed",
