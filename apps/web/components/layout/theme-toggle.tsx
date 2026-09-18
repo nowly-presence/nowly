@@ -1,7 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { RiMoonLine, RiSunLine } from "@remixicon/react";
+import { Button } from "@nowly/ui";
+
+import { RiMoonLine, RiSunLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";

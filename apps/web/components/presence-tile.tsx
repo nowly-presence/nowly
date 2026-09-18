@@ -1,4 +1,5 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@nowly/ui";
+
 import Image from "next/image";
 
 type PresenceTileProps = {

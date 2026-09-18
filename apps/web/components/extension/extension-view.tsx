@@ -1,11 +1,12 @@
 "use client";
 
-import { ButtonAnchor, ButtonLink } from "@/components/ui/button-link";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { ButtonAnchor, ButtonLink, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
+
+
 import { detectExtensionBrowser, getExtensionDownloadUrl } from "@/lib/extension-store";
 import type { ExtensionBrowser } from "@/lib/extension-store";
-import { cn } from "@/lib/utils";
-import { RiCheckLine, RiChromeFill, RiFirefoxBrowserFill } from "@remixicon/react";
+
+import { RiCheckLine, RiChromeFill, RiFirefoxBrowserFill } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useLayoutEffect, useState } from "react";

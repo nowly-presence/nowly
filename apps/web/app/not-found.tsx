@@ -1,4 +1,5 @@
-import { ButtonLink } from "@/components/ui/button-link";
+import { ButtonLink } from "@nowly/ui";
+
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 

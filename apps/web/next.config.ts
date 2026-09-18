@@ -5,10 +5,10 @@ const docsBase = "https://docs.nowly.me";
 
 const nextConfig: NextConfig = {
   compress: true,
-  transpilePackages: ["@nowly/analytics"],
+  transpilePackages: ["@nowly/analytics", "@nowly/ui"],
   poweredByHeader: false,
   experimental: {
-    optimizePackageImports: ["@remixicon/react", "@base-ui/react"],
+    optimizePackageImports: ["@nowly/ui"],
   },
   images: {
     remotePatterns: [

@@ -1,13 +1,14 @@
 "use client";
 
-import { RiChromeFill, RiFirefoxBrowserFill } from "@remixicon/react";
-import { buttonVariants } from "@/components/ui/button-variants";
+import { RiChromeFill, RiFirefoxBrowserFill } from "@nowly/ui/icons";
+import { ButtonVariantProps, buttonVariants, cn } from "@nowly/ui";
+
 import { detectExtensionBrowser, getExtensionDownloadUrl } from "@/lib/extension-store";
 import type { ExtensionBrowser } from "@/lib/extension-store";
-import { cn } from "@/lib/utils";
+
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type ComponentProps, type ReactNode } from "react";
-import type { ButtonVariantProps } from "@/components/ui/button-variants";
+
 
 type ExtensionStoreButtonProps = Omit<ComponentProps<"a">, "href"> & ButtonVariantProps;
 

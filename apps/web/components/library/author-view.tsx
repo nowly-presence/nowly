@@ -1,11 +1,12 @@
 import { PaginatedLibraryGrid } from "@/components/library/paginated-library-grid";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ButtonAnchor, ButtonLink } from "@/components/ui/button-link";
+import { Avatar, AvatarFallback, AvatarImage, ButtonAnchor, ButtonLink } from "@nowly/ui";
+
+
 import {
   contributorDisplayName,
   type LibraryPresence,
 } from "@/lib/library-catalog";
-import { RiArrowLeftLine, RiGithubLine } from "@remixicon/react";
+import { RiArrowLeftLine, RiGithubLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
 type AuthorViewProps = {

@@ -1,8 +1,7 @@
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
 import { StatusHistory } from "@/components/status/status-history";
 import { fetchStatusReport, statusBadgeClasses, type ServiceStatus, type StatusServiceId } from "@/features/status/status";
-import { cn } from "@/lib/utils";
-import { RiDatabase2Line, RiGlobalLine, RiPulseLine, RiServerLine } from "@remixicon/react";
+import { RiDatabase2Line, RiGlobalLine, RiPulseLine, RiServerLine } from "@nowly/ui/icons";
 import { getLocale, getTranslations } from "next-intl/server";
 
 const serviceIconMap: Record<StatusServiceId, typeof RiGlobalLine> = {

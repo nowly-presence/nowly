@@ -1,7 +1,8 @@
 "use client";
 
 import { LibraryMedia } from "@/components/library/library-media";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
+
 import { localizedDescription, type LibraryPresence } from "@/lib/library-catalog";
 import { useTranslations } from "next-intl";
 import Link from "next/link";

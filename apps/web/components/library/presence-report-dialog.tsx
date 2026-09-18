@@ -1,29 +1,18 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from "@/components/ui/input-group";
-import { Spinner } from "@/components/ui/spinner";
+import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Field, FieldError, FieldLabel, InputGroup, InputGroupAddon, InputGroupText, InputGroupTextarea, Spinner } from "@nowly/ui";
+
+
+
+
+
 import {
   getExtensionDetected,
   requestExtension,
   subscribeExtensionDetected,
   type ExtensionDiagnostic,
 } from "@/lib/extension-bridge";
-import { RiCheckboxCircleLine, RiFlagLine } from "@remixicon/react";
+import { RiCheckboxCircleLine, RiFlagLine } from "@nowly/ui/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, type FormEvent } from "react";
 

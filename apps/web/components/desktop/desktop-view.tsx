@@ -1,17 +1,18 @@
 "use client";
 
-import { ButtonAnchor, ButtonLink } from "@/components/ui/button-link";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { ButtonAnchor, ButtonLink, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
+
+
 import { PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import type { DesktopPlatform, DesktopRelease } from "@/lib/desktop-release";
-import { cn } from "@/lib/utils";
+
 import {
   RiAppleFill,
   RiCheckLine,
   RiGithubLine,
   RiUbuntuFill,
   RiWindowsFill,
-} from "@remixicon/react";
+} from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useLayoutEffect, useState } from "react";
 

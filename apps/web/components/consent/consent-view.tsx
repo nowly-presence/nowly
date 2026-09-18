@@ -1,15 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
+import { Button, Card, CardContent, CardDescription, CardTitle, Switch } from "@nowly/ui";
+
+
+
 import {
   requestExtension,
   subscribeExtensionDetected,
   type ExtensionDeviceInfo,
 } from "@/lib/extension-bridge";
 import { presenceApiBaseUrl } from "@/lib/presence-api";
-import { RiDownload2Line, RiDeleteBinLine, RiShieldCheckLine } from "@remixicon/react";
+import { RiDownload2Line, RiDeleteBinLine, RiShieldCheckLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 

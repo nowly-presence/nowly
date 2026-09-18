@@ -1,16 +1,12 @@
 "use client";
 
 import { LibraryCard } from "@/components/library/library-card";
-import { Button } from "@/components/ui/button";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-} from "@/components/ui/pagination";
+import { Button, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, cn } from "@nowly/ui";
+
+
 import type { LibraryPresence } from "@/lib/library-catalog";
-import { cn } from "@/lib/utils";
-import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react";
+
+import { RiArrowLeftSLine, RiArrowRightSLine } from "@nowly/ui/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { useLayoutEffect, useRef, useState } from "react";

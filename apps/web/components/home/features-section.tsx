@@ -1,5 +1,6 @@
 import { SectionHeading } from "@/components/home/section-heading";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
+
 import {
   RiGlobalLine,
   RiLockLine,
@@ -7,7 +8,7 @@ import {
   RiRefreshLine,
   RiShieldCheckLine,
   RiWindowLine,
-} from "@remixicon/react";
+} from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
 const icons = [RiRefreshLine, RiPuzzleLine, RiLockLine, RiShieldCheckLine, RiGlobalLine, RiWindowLine];

@@ -1,5 +1,4 @@
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, cn } from "@nowly/ui";
 import type { StatusServiceReport, ServiceStatus, StatusSample } from "@/features/status/status";
 import type { FC, ReactElement } from "react";
 

@@ -1,4 +1,5 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@nowly/ui";
+
 
 export const homeSectionAltClass = "bg-section-alt";
 

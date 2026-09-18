@@ -2,24 +2,11 @@
 
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { PresenceReportDialog } from "@/components/library/presence-report-dialog";
-import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Spinner } from "@/components/ui/spinner";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, Button, Spinner, toast } from "@nowly/ui";
 import { usePresenceExtension } from "@/hooks/use-extension";
-import { RiCheckboxCircleLine, RiDeleteBinLine, RiDownloadLine, RiRefreshLine } from "@remixicon/react";
+import { RiCheckboxCircleLine, RiDeleteBinLine, RiDownloadLine, RiRefreshLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { toast } from "sonner";
 
 type PresenceActionsProps = {
   slug: string

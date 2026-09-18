@@ -1,5 +1,6 @@
-import { ButtonAnchor, ButtonLink } from "@/components/ui/button-link";
-import { Card, CardContent } from "@/components/ui/card";
+import { ButtonAnchor, ButtonLink, Card, CardContent } from "@nowly/ui";
+
+
 import {
   CHANGELOG_RELEASES,
   changelogSummary,
@@ -7,7 +8,7 @@ import {
   type ChangelogRelease,
 } from "@/lib/changelog-releases";
 import { docsHref } from "@/lib/seo";
-import { RiArrowLeftLine } from "@remixicon/react";
+import { RiArrowLeftLine } from "@nowly/ui/icons";
 import { getLocale, getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";

@@ -1,6 +1,7 @@
-import { ButtonAnchor } from "@/components/ui/button-link";
+import { ButtonAnchor } from "@nowly/ui";
+
 import { docsHref } from "@/lib/seo";
-import { RiArrowRightLine } from "@remixicon/react";
+import { RiArrowRightLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
 const kw = "text-accent";

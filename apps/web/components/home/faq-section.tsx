@@ -1,10 +1,11 @@
 import { homeSectionAltClass } from "@/components/home/section-heading";
-import { ButtonAnchor } from "@/components/ui/button-link";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { ButtonAnchor, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
+
+
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { docsHref } from "@/lib/seo";
-import { cn } from "@/lib/utils";
-import { RiArrowRightLine, RiDiscordFill } from "@remixicon/react";
+
+import { RiArrowRightLine, RiDiscordFill } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
 export const FaqSection = async () => {

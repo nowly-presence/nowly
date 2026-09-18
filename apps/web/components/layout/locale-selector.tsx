@@ -1,14 +1,8 @@
 "use client";
 
 import { LocaleFlag } from "@/components/locale-flag";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@nowly/ui";
+
 import { SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";

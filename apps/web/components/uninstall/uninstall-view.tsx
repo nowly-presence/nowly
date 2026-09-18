@@ -1,10 +1,11 @@
 "use client";
 
 import { ExtensionStoreButton } from "@/components/extension-store-button";
-import { ButtonAnchor } from "@/components/ui/button-link";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { ButtonAnchor, Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
+
+
 import { DISCORD_INVITE_URL } from "@/lib/constants";
-import { RiDiscordFill, RiHeartLine } from "@remixicon/react";
+import { RiDiscordFill, RiHeartLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 
 export const UninstallView = () => {

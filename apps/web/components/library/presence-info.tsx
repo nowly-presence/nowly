@@ -1,6 +1,7 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ButtonAnchor } from "@/components/ui/button-link";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage, ButtonAnchor, Card, CardContent, CardTitle } from "@nowly/ui";
+
+
+
 import {
   presenceSiteHref,
   authorHref,
@@ -8,7 +9,7 @@ import {
   type PresencePerson,
 } from "@/lib/library-catalog";
 import type { PresenceCommit } from "@/lib/presence-api";
-import { RiGithubLine } from "@remixicon/react";
+import { RiGithubLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 

@@ -1,4 +1,5 @@
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
+
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { docsHref } from "@/lib/seo";
 import { SUPPORT_LINKS } from "@/lib/support-links";
@@ -10,7 +11,7 @@ import {
   RiDiscordFill,
   RiLightbulbLine,
   RiMoreLine,
-} from "@remixicon/react";
+} from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
 type SupportCard = {

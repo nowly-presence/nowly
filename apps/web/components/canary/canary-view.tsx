@@ -1,7 +1,8 @@
 "use client";
 
-import { ButtonAnchor } from "@/components/ui/button-link";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { ButtonAnchor, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
+
+
 import { BRAND_LOCKUP_CANARY, CANARY_ACCENT, CANARY_INK } from "@/lib/brand";
 import {
   CANARY_EXTENSION_ZIP_URL,
@@ -10,8 +11,8 @@ import {
   PROJECT_EXTENSION_DOWNLOAD_URL,
 } from "@/lib/constants";
 import { detectExtensionBrowser, type ExtensionBrowser } from "@/lib/extension-store";
-import { cn } from "@/lib/utils";
-import { RiCheckLine, RiChromeFill, RiDownloadLine, RiFirefoxFill } from "@remixicon/react";
+
+import { RiCheckLine, RiChromeFill, RiDownloadLine, RiFirefoxFill } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useLayoutEffect, useState } from "react";
 

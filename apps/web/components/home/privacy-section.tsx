@@ -1,4 +1,4 @@
-import { RiLockLine, RiPuzzleLine, RiBarChartLine } from "@remixicon/react";
+import { RiLockLine, RiPuzzleLine, RiBarChartLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 

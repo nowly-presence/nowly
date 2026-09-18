@@ -1,7 +1,8 @@
 import { homeSectionAltClass, SectionHeading } from "@/components/home/section-heading";
 import { PresenceTile } from "@/components/presence-tile";
 import { getPresencePlatforms, type PresencePlatform } from "@/lib/presence-api";
-import { cn } from "@/lib/utils";
+import { cn } from "@nowly/ui";
+
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 

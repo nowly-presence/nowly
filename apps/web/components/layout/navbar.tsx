@@ -1,10 +1,11 @@
 "use client";
 
-import { RiMenuLine } from "@remixicon/react";
+import { RiMenuLine } from "@nowly/ui/icons";
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { BrandLockup } from "@/components/layout/brand-lockup";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Button, Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@nowly/ui";
+
+
 import { CANARY_ACCENT, CANARY_INK } from "@/lib/brand";
 import { docsHref } from "@/lib/seo";
 import { useTranslations } from "next-intl";

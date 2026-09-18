@@ -2,9 +2,10 @@ import { LibraryCard } from "@/components/library/library-card";
 import { LibraryMedia } from "@/components/library/library-media";
 import { PresenceActions } from "@/components/library/presence-actions";
 import { PresenceInfo } from "@/components/library/presence-info";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ButtonLink } from "@/components/ui/button-link";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle, ButtonLink, Card, CardContent, CardTitle } from "@nowly/ui";
+
+
+
 import {
   localizedDescription,
   localizedFeatures,
@@ -13,7 +14,7 @@ import {
   type LibraryPresence,
 } from "@/lib/library-catalog";
 import type { PresenceVersionNote } from "@/lib/presence-api";
-import { RiArrowLeftLine, RiCheckboxCircleLine, RiInformationLine } from "@remixicon/react";
+import { RiArrowLeftLine, RiCheckboxCircleLine, RiInformationLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
 type PresenceViewProps = {
