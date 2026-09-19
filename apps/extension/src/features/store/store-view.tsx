@@ -65,7 +65,7 @@ export const StoreView = ({ installingSlug, installQueueCount, onInstall, onRetr
 
   if (isError) {
     return (
-      <Empty>
+      <Empty className="gap-2 border border-border bg-card">
         <EmptyTitle>{t("store-error")}</EmptyTitle>
         <Button size="sm" onClick={() => void refetch()} className="mt-2">
           {t("store-retry")}
@@ -97,7 +97,7 @@ export const StoreView = ({ installingSlug, installQueueCount, onInstall, onRetr
       ) : null}
 
       {filtered.length === 0 ? (
-        <Empty>
+        <Empty className="gap-2 border border-border bg-card">
           <EmptyTitle>{t("store-empty")}</EmptyTitle>
           <EmptyDescription>{t("home-search-empty")}</EmptyDescription>
         </Empty>

@@ -39,8 +39,8 @@ export const PresenceList = ({ displayMode, entries, isLoading, onOpen, onSchedu
 
   if (entries.length === 0) {
     return (
-      <Empty>
-        <EmptyMedia variant="icon">
+      <Empty className="gap-2 border border-border bg-card">
+        <EmptyMedia variant="icon" className="mb-1 size-12 [&_svg]:size-6">
           <RiBox3Line />
         </EmptyMedia>
         <EmptyTitle>{t("empty-title")}</EmptyTitle>
@@ -59,7 +59,7 @@ export const PresenceList = ({ displayMode, entries, isLoading, onOpen, onSchedu
       </div>
 
       {filtered.length === 0 ? (
-        <Empty>
+        <Empty className="gap-2 border border-border bg-card">
           <EmptyTitle>{t("home-search-empty-title")}</EmptyTitle>
           <EmptyDescription>{t("home-search-empty")}</EmptyDescription>
         </Empty>
