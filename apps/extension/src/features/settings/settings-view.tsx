@@ -9,10 +9,10 @@ import { SettingsGroup } from "@/features/settings/settings-group";
 import { ShortcutSettings } from "@/features/settings/shortcut-settings";
 import { ThemeSelector } from "@/features/settings/theme-selector";
 import type { NativeStatus } from "@/lib/messages";
+import { IconArrowsSort, IconCalendar, IconChevronDown, IconChevronUp, IconDeviceDesktop, IconExternalLink, IconMoon, IconRefresh, IconSun, IconWorld } from "@/lib/tabler-icons";
 import { HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants";
 import { t, type LocalePreference } from "@/shared/i18n";
-import type { ExtensionSettings, PresenceDebug } from "@/shared/types";
-import { IconCalendar, IconDeviceDesktop, IconExternalLink, IconMoon, IconRefresh, IconSun, IconWorld } from "@/lib/tabler-icons";
+import type { ExtensionSettings, InstalledPresences, PresenceDebug } from "@/shared/types";
 import type { FC, ReactElement } from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -35,6 +35,7 @@ type Props = {
   onForceShowOnboarding: () => Promise<void>;
   onLocaleChange: (preference: LocalePreference) => void;
   onScheduleGlobal: () => void;
+  presences: InstalledPresences;
   settings: ExtensionSettings;
   onSettingsChange: (partial: Partial<ExtensionSettings>) => void;
   analyticsConsent: boolean;
@@ -61,6 +62,7 @@ export const SettingsView: FC<Props> = ({
   onForceShowOnboarding,
   onLocaleChange,
   onScheduleGlobal,
+  presences,
   settings,
   onSettingsChange,
   analyticsConsent,
@@ -72,6 +74,7 @@ export const SettingsView: FC<Props> = ({
     presences: false,
     advanced: settings.developerMode === true,
   });
+
   const lastCheckRef = useRef(0);
   const localeOptions = [
     { icon: <IconWorld className="size-4 text-muted-foreground" />, label: t("locale-auto"), value: "browser" as const },
@@ -79,17 +82,38 @@ export const SettingsView: FC<Props> = ({
     { icon: <LocaleFlag locale="en-US" />, label: t("locale-en"), value: "en" as const },
     { icon: <LocaleFlag locale="es-ES" />, label: t("locale-es"), value: "es" as const },
   ];
+
   const appearanceOptions = [
     { icon: <IconDeviceDesktop className="size-4 text-muted-foreground" />, label: t("appearance-system"), value: "system" as const },
     { icon: <IconSun className="size-4 text-muted-foreground" />, label: t("appearance-light"), value: "light" as const },
     { icon: <IconMoon className="size-4 text-muted-foreground" />, label: t("appearance-dark"), value: "dark" as const },
   ];
+
   const presenceLanguageOptions = [
     { icon: <IconWorld className="size-4 text-muted-foreground" />, label: t("presence-language-per-presence"), value: "per-presence" as const },
     { icon: <LocaleFlag locale="en-US" />, label: t("locale-en"), value: "en-US" as const },
     { icon: <LocaleFlag locale="fr-FR" />, label: t("locale-fr"), value: "fr-FR" as const },
     { icon: <LocaleFlag locale="es-ES" />, label: t("locale-es"), value: "es-ES" as const },
   ];
+
+  const activitySelectionModeOptions = [
+    { icon: <IconArrowsSort className="size-4 text-muted-foreground" />, label: t("activity-selection-mode-focused"), value: "focused" as const },
+    { icon: <IconArrowsSort className="size-4 text-muted-foreground" />, label: t("activity-selection-mode-priority"), value: "priority" as const },
+  ];
+
+  const installedSlugs = Object.keys(presences);
+  const priorityOrder = [
+    ...(settings.activityPriorityOrder ?? []).filter((slug) => installedSlugs.includes(slug)),
+    ...installedSlugs.filter((slug) => !(settings.activityPriorityOrder ?? []).includes(slug)),
+  ];
+  const movePriority = (slug: string, direction: -1 | 1): void => {
+    const index = priorityOrder.indexOf(slug);
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= priorityOrder.length) return;
+    const reordered = [...priorityOrder];
+    [reordered[index], reordered[targetIndex]] = [reordered[targetIndex], reordered[index]];
+    onSettingsChange({ activityPriorityOrder: reordered });
+  };
 
   useEffect(() => {
     try { setIsUnpacked(!chrome.runtime.getManifest().update_url) } catch { setIsUnpacked(false) }
@@ -283,6 +307,53 @@ export const SettingsView: FC<Props> = ({
               <IconCalendar className="size-3.5" />
               {t("schedule-edit-global")}
             </Button>
+          ) : null}
+        </section>
+
+        <section className={innerClassName}>
+          <h2 className={sectionTitleClassName}>{t("activity-selection-mode")}</h2>
+          <p className="mb-3 text-xs leading-5 text-muted-foreground">{t("activity-selection-mode-description")}</p>
+          <CustomSelect
+            aria-label={t("activity-selection-mode")}
+            className="h-10"
+            onChange={(value) => onSettingsChange({ activitySelectionMode: value })}
+            options={activitySelectionModeOptions}
+            value={settings.activitySelectionMode ?? "focused"}
+          />
+          {settings.activitySelectionMode === "priority" && installedSlugs.length > 0 ? (
+            <div className="mt-3">
+              <p className="mb-2 text-xs leading-5 text-muted-foreground">{t("activity-priority-order-description")}</p>
+              <ul className="flex flex-col gap-1.5">
+                {priorityOrder.map((slug, index) => (
+                  <li
+                    key={slug}
+                    className="flex items-center justify-between gap-2 rounded-lg border border-border bg-card-2 px-3 py-2 text-sm text-foreground"
+                  >
+                    <span className="min-w-0 truncate">{presences[slug]?.metadata.name ?? slug}</span>
+                    <span className="flex shrink-0 gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label={t("activity-priority-move-up")}
+                        disabled={index === 0}
+                        onClick={() => movePriority(slug, -1)}
+                      >
+                        <IconChevronUp className="size-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label={t("activity-priority-move-down")}
+                        disabled={index === priorityOrder.length - 1}
+                        onClick={() => movePriority(slug, 1)}
+                      >
+                        <IconChevronDown className="size-4" />
+                      </Button>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ) : null}
         </section>
       </SettingsGroup>
