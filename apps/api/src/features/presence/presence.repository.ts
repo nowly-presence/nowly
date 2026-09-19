@@ -213,6 +213,14 @@ export const getAllPresenceSlugs = async (options: { includeArchived?: boolean }
   return rows.map((row) => row.slug)
 }
 
+export const getAllPresenceMetas = async (): Promise<{ slug: string; metadata: PresenceMeta }[]> => {
+  const rows = await getPrisma().presence.findMany({
+    where: { archived: false },
+    select: { slug: true, metadata: true },
+  })
+  return rows.map((row) => ({ slug: row.slug, metadata: row.metadata as PresenceMeta }))
+}
+
 export const setArchived = async (slug: string, archived: boolean): Promise<boolean> => {
   const result = await getPrisma().presence.updateMany({
     where: { slug, archived: { not: archived } },

@@ -1,32 +1,53 @@
 import { createCacheId, fetchImage, parseProxyUrl } from "@/features/image-proxy/image-proxy.service"
-import { afterEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+
+const mockPresenceRepo = vi.hoisted(() => ({
+  getAllPresenceMetas: vi.fn(),
+}))
+
+vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo)
+vi.mock("@/db/client", () => ({
+  getPrisma: vi.fn(() => ({})),
+  hasDatabase: vi.fn(() => true),
+}))
 
 describe("parseProxyUrl", () => {
-  it("matches a known service by host suffix", () => {
-    const result = parseProxyUrl("https://i.ytimg.com/foo.jpg")
-    expect(result?.service.id).toBe("youtube")
+  beforeEach(() => {
+    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([
+      { slug: "tiktok", metadata: { imageProxy: { hostSuffixes: ["tiktokcdn.com"] } } },
+      { slug: "canalplus", metadata: { imageProxy: { hostSuffixes: ["thumb.canalplus.pro"] } } },
+    ])
   })
 
-  it("rejects a host that matches no known service (the generic entry has no host suffixes to match)", () => {
-    expect(parseProxyUrl("https://example.com/foo.jpg")).toBeNull()
+  it("matches a known service by host suffix", async () => {
+    const result = await parseProxyUrl("https://p16.tiktokcdn.com/foo.jpg")
+    expect(result?.service.id).toBe("tiktok")
   })
 
-  it("honors an explicit serviceId over host matching", () => {
-    const result = parseProxyUrl("https://example.com/foo.jpg", "twitch")
-    expect(result?.service.id).toBe("twitch")
+  it("rejects a host that matches no known presence's declared imageProxy config", async () => {
+    expect(await parseProxyUrl("https://example.com/foo.jpg")).toBeNull()
   })
 
-  it("rejects non-http(s) protocols", () => {
-    expect(parseProxyUrl("ftp://example.com/foo.jpg")).toBeNull()
+  it("honors an explicit serviceId over host matching", async () => {
+    const result = await parseProxyUrl("https://example.com/foo.jpg", "canalplus")
+    expect(result?.service.id).toBe("canalplus")
   })
 
-  it("rejects an invalid URL", () => {
-    expect(parseProxyUrl("not-a-url")).toBeNull()
+  it("rejects non-http(s) protocols", async () => {
+    expect(await parseProxyUrl("ftp://example.com/foo.jpg")).toBeNull()
   })
 
-  it("rejects an empty/undefined URL", () => {
-    expect(parseProxyUrl(undefined)).toBeNull()
-    expect(parseProxyUrl("  ")).toBeNull()
+  it("rejects an invalid URL", async () => {
+    expect(await parseProxyUrl("not-a-url")).toBeNull()
+  })
+
+  it("rejects an empty/undefined URL", async () => {
+    expect(await parseProxyUrl(undefined)).toBeNull()
+    expect(await parseProxyUrl("  ")).toBeNull()
+  })
+
+  it("rejects an unknown serviceId", async () => {
+    expect(await parseProxyUrl("https://example.com/foo.jpg", "some-new-presence")).toBeNull()
   })
 })
 

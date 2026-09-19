@@ -87,24 +87,21 @@ Always keep a fallback asset. If the page has no image, the image is too large, 
 
 ## Adding A Service
 
-Allowed domains are checked by the API, not by the presence. To add a new service, add a proxy configuration entry with:
+Allowed domains are checked by the API, not by the presence - a presence cannot proxy an arbitrary domain just by asking for it at runtime. There is no separate approval step or API code change: you declare the hosts your presence needs directly in its own `metadata.json`, using the same `service` value (your presence slug) you already pass to the helper:
 
-- a stable service `id`;
-- the allowed CDN host suffixes;
-- any headers required by the CDN;
-- a clear limit on what the presence can send to the proxy.
+```json filename="metadata.json"
+"imageProxy": {
+  "hostSuffixes": ["netflix.com", "nflxvideo.net", "nflximg.net"],
+  "headers": { "Referer": "https://www.netflix.com/" }
+}
+```
 
-If a presence needs a new image domain, you can use the helper in your presence PR and explain:
+This is published to the API automatically the same way the rest of your `metadata.json` already is. The API only trusts this declaration for your own presence's `service` id, so a presence cannot declare hostnames on another presence's behalf, and a request is only allowed if the target URL's hostname actually matches one of your declared suffixes.
 
-- which exact hostnames need support;
-- why Discord cannot use the direct image URL;
-- what image the user will see;
-- why the image is public and safe to proxy.
-
-Reviewers will then decide whether to add those URLs to the supported services. They may reject origins that are too broad, unstable, private, or unsafe.
+When your PR touches `imageProxy`, the presence preview bot detects it automatically, adds an **Image Proxy Requested** section to its comment listing the declared hostnames, and applies an `image-proxy` label. A reviewer still has to confirm the hostnames are public and safe to proxy before merging - explain in your PR description why Discord can't use the direct image URL and what image the user will see.
 
 ## Limits And Security
 
-The proxy should only serve public images needed by reviewed and accepted presences. It rejects non-HTTPS URLs, non-allowlisted domains, responses that are not images, and files that are too large.
+The proxy only serves public images from hosts a reviewed presence has declared. It rejects non-HTTPS URLs, hosts that don't match any declared suffix, responses that are not images, and files that are too large.
 
-Do not use it for private account content, authenticated resources, tracking URLs, arbitrary user input, or non-image content.
+The endpoints themselves are public and unauthenticated (presences call them directly from the browser, so there's no secret to attach) and share the API's global rate limit - there's no per-presence quota. Do not use the proxy for private account content, authenticated resources, tracking URLs, arbitrary user input, or non-image content.

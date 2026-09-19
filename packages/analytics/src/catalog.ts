@@ -193,6 +193,13 @@ export const analyticsRegistry = [
     dimensions: ["slug", "version", "source"],
   }),
   new Analytics({
+    key: "image_proxy_call",
+    label: "Image proxy call",
+    description: "Image proxy request by the presence (slug) that triggered it.",
+    group: "presence",
+    dimensions: ["slug", "service"],
+  }),
+  new Analytics({
     key: "presence_update",
     label: "Presence update",
     description: "Presence update by slug and version.",

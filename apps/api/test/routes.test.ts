@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 const mockPresenceRepo = vi.hoisted(() => ({
   getAllPresenceSlugs: vi.fn(),
+  getAllPresenceMetas: vi.fn(),
   getPresenceMeta: vi.fn(),
   getVersion: vi.fn(),
   getPresenceStats: vi.fn(),
@@ -483,6 +484,11 @@ describe("Image Proxy Routes", () => {
 
   beforeEach(async () => {
     vi.clearAllMocks()
+    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([
+      { slug: "tiktok", metadata: { imageProxy: { hostSuffixes: ["tiktokcdn.com", "tiktokcdn-eu.com", "tiktokcdn-us.com", "tiktokv.com"], headers: { Referer: "https://www.tiktok.com/" } } } },
+      { slug: "github", metadata: { imageProxy: { hostSuffixes: ["github.com", "githubusercontent.com"], headers: { "User-Agent": "Nowly/1.0" } } } },
+      { slug: "canalplus", metadata: { imageProxy: { hostSuffixes: ["thumb.canalplus.pro"], headers: { Referer: "https://www.canalplus.com/" } } } },
+    ])
     app = await buildApp()
   })
 
