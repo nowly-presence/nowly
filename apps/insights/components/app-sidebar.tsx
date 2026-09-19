@@ -16,7 +16,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@nowly/ui";
-import { RiAddLine, RiMailLine } from "@nowly/ui/icons";
+import { RiAddLine, RiBarChartLine, RiMailLine } from "@nowly/ui/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -38,6 +38,12 @@ export const AppSidebar = ({ views, user }: { views: InsightsViewSummary[]; user
               <SidebarMenuButton render={<Link href="/campaigns" />} isActive={pathname === "/campaigns"}>
                 <RiMailLine />
                 <span className="truncate">Campaigns</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton render={<Link href="/cws-stats" />} isActive={pathname === "/cws-stats"}>
+                <RiBarChartLine />
+                <span className="truncate">CWS stats</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>

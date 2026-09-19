@@ -72,3 +72,19 @@ export const replaceCwsStats = async (rows: CwsStatRow[]): Promise<{ cleared: nu
   if (rows.length > 0) await prisma.cwsDailyStat.createMany({ data: rows })
   return { cleared, inserted: rows.length }
 }
+
+export const listCwsMetrics = async (): Promise<Array<{ metric: string; dimension: string; count: number }>> => {
+  const rows = await getPrisma().cwsDailyStat.groupBy({
+    by: ["metric", "dimension"],
+    _count: { _all: true },
+    orderBy: [{ metric: "asc" }, { dimension: "asc" }],
+  })
+  return rows.map((row) => ({ metric: row.metric, dimension: row.dimension, count: row._count._all }))
+}
+
+export const getCwsSeries = (metric: string, dimension: string) =>
+  getPrisma().cwsDailyStat.findMany({
+    where: { metric, dimension },
+    orderBy: { date: "asc" },
+    select: { date: true, dimensionValue: true, value: true },
+  })

@@ -1,5 +1,5 @@
 import { requireAdmin } from "@/features/auth/require-admin"
-import { parseCwsCsv, replaceCwsStats, type CwsStatRow } from "@/features/cws-stats/cws-stats.service"
+import { getCwsSeries, listCwsMetrics, parseCwsCsv, replaceCwsStats, type CwsStatRow } from "@/features/cws-stats/cws-stats.service"
 import type { FastifyInstance } from "fastify"
 
 type ImportBody = { files?: Array<{ name?: string; content?: string }> }
@@ -21,4 +21,16 @@ export const cwsStatsRoutes = async (fastify: FastifyInstance) => {
     const result = await replaceCwsStats(rows)
     return { ...result, skipped }
   })
+
+  fastify.get("/list", { preHandler: requireAdmin }, async () => ({ metrics: await listCwsMetrics() }))
+
+  fastify.get<{ Querystring: { metric?: string; dimension?: string } }>(
+    "/series",
+    { preHandler: requireAdmin },
+    async (request, reply) => {
+      const { metric, dimension } = request.query
+      if (!metric || !dimension) return reply.status(400).send({ error: "metric and dimension are required" })
+      return { rows: await getCwsSeries(metric, dimension) }
+    },
+  )
 }
