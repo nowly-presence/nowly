@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* Placeholder - replaced with the full token set mirrored from
+   apps/web/app/globals.css in a later step of the redesign. */
+:root {
+  --background: #eef5fc;
+  --foreground: #07080c;
+}
+
+.dark {
+  --background: #07080c;
+  --foreground: #e4f2ff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
