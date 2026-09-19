@@ -15,7 +15,7 @@ import { serverEnv } from "@nowly/env/server"
 import { toNodeHandler } from "better-auth/node"
 import Fastify from "fastify"
 
-const server = Fastify({ logger: true })
+const server = Fastify({ logger: true, trustProxy: true })
 
 await server.register(rateLimit, { max: 100, timeWindow: "1 minute" })
 
