@@ -7,7 +7,7 @@
   "enable": "Activar",
   "disable": "Desactivar",
   "version": "v{version}",
-  "nav-home": "Inicio",
+  "nav-home": "Actividad",
   "nav-store": "Biblioteca",
   "nav-logs": "Registros",
   "nav-settings": "Ajustes",
