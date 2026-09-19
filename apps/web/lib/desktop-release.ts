@@ -6,7 +6,7 @@ export type DesktopRelease = {
   version: string | null
   windows: { installer: string; portable: string }
   macos: { dmg: string; archive: string | null }
-  linux: { archive: string }
+  linux: { archive: string; deb: string | null }
 };
 
 const fallbackRelease = (): DesktopRelease => ({
@@ -21,6 +21,7 @@ const fallbackRelease = (): DesktopRelease => ({
   },
   linux: {
     archive: `${CDN_INSTALLER_BASE_URL}/nowly-linux.tar.gz`,
+    deb: null,
   },
 });
 
@@ -29,7 +30,7 @@ type Manifest = {
   version?: unknown
   windows?: { installer?: ManifestArtifact; portable?: ManifestArtifact }
   macos?: { dmg?: ManifestArtifact; archive?: ManifestArtifact }
-  linux?: { archive?: ManifestArtifact }
+  linux?: { archive?: ManifestArtifact; deb?: ManifestArtifact }
 };
 
 const artifactUrl = (value: ManifestArtifact | undefined, fallback: string): string =>
@@ -59,6 +60,9 @@ export const getDesktopRelease = async (): Promise<DesktopRelease> => {
       },
       linux: {
         archive: artifactUrl(manifest.linux?.archive, fallback.linux.archive),
+        deb: typeof manifest.linux?.deb?.url === "string" && manifest.linux.deb.url.length > 0
+          ? manifest.linux.deb.url
+          : null,
       },
     };
   } catch {

@@ -85,10 +85,6 @@ jobs:
           $env:GOARCH = "amd64"
           go build -ldflags $ldflags -o dist/nowly-host.exe ./cmd/host
 
-          $env:GOOS = "linux"
-          $env:GOARCH = "amd64"
-          go build -ldflags $ldflags -o dist/nowly-host-linux ./cmd/host
-
       - name: Fetch brand icon from CDN
         working-directory: apps/native
         shell: pwsh
@@ -105,17 +101,11 @@ jobs:
           $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
           & $iscc installer.iss /DAPP_VERSION=${{ needs.version.outputs.version }}
 
-      - name: Build portable archives
+      - name: Build portable archive
         working-directory: apps/native
         shell: pwsh
         run: |
           Compress-Archive -Path dist/nowly-host.exe -DestinationPath dist/nowly-windows.zip -Force
-
-          New-Item -ItemType Directory -Force -Path dist/linux/scripts | Out-Null
-          Copy-Item dist/nowly-host-linux dist/linux/nowly-host-linux
-          Copy-Item scripts/install-linux.sh dist/linux/scripts/install-linux.sh
-          Copy-Item scripts/uninstall-linux.sh dist/linux/scripts/uninstall-linux.sh
-          tar -czf dist/nowly-linux.tar.gz -C dist/linux .
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
@@ -124,7 +114,51 @@ jobs:
           path: |
             apps/native/dist/NowlySetup.exe
             apps/native/dist/nowly-windows.zip
+
+  linux:
+    needs: version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+          cache-dependency-path: apps/native/go.mod
+
+      - name: Test Nowly Host
+        working-directory: apps/native
+        run: go test ./...
+
+      - name: Build Nowly Host
+        working-directory: apps/native
+        run: |
+          mkdir -p dist
+          GOOS=linux GOARCH=amd64 go build \
+            -ldflags "-X nowly.client/native/internal/contract.HostVersion=${{ needs.version.outputs.version }}" \
+            -o dist/nowly-host-linux ./cmd/host
+
+      - name: Build portable archive
+        working-directory: apps/native
+        run: |
+          mkdir -p dist/linux/scripts
+          cp dist/nowly-host-linux dist/linux/nowly-host-linux
+          cp scripts/install-linux.sh dist/linux/scripts/install-linux.sh
+          cp scripts/uninstall-linux.sh dist/linux/scripts/uninstall-linux.sh
+          chmod +x dist/linux/nowly-host-linux dist/linux/scripts/*.sh
+          tar -czf dist/nowly-linux.tar.gz -C dist/linux .
+
+      - name: Build .deb package
+        working-directory: apps/native
+        run: ./scripts/build-deb.sh "${{ needs.version.outputs.version }}" dist/nowly-host-linux
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nowly-host-linux
+          path: |
             apps/native/dist/nowly-linux.tar.gz
+            apps/native/dist/nowly-host_${{ needs.version.outputs.version }}_amd64.deb
 
   macos:
     needs: version
@@ -195,7 +229,7 @@ jobs:
           path: apps/native/releases/${{ needs.version.outputs.version }}/NowlyHost-macos.dmg
 
   release:
-    needs: [version, windows, macos]
+    needs: [version, windows, linux, macos]
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
@@ -214,11 +248,13 @@ jobs:
           installer=$(find artifacts -name 'NowlySetup.exe' | head -n 1)
           portable=$(find artifacts -name 'nowly-windows.zip' | head -n 1)
           linux=$(find artifacts -name 'nowly-linux.tar.gz' | head -n 1)
+          deb=$(find artifacts -name 'nowly-host_*_amd64.deb' | head -n 1)
           dmg=$(find artifacts -name 'NowlyHost-macos.dmg' | head -n 1)
-          test -n "$installer" && test -n "$portable" && test -n "$linux" && test -n "$dmg"
+          test -n "$installer" && test -n "$portable" && test -n "$linux" && test -n "$deb" && test -n "$dmg"
           echo "installer=$installer" >> "$GITHUB_OUTPUT"
           echo "portable=$portable" >> "$GITHUB_OUTPUT"
           echo "linux=$linux" >> "$GITHUB_OUTPUT"
+          echo "deb=$deb" >> "$GITHUB_OUTPUT"
           echo "dmg=$dmg" >> "$GITHUB_OUTPUT"
 
       - name: Publish to CDN
@@ -233,6 +269,7 @@ jobs:
           --installer "${{ github.workspace }}/${{ steps.artifacts.outputs.installer }}"
           --portable "${{ github.workspace }}/${{ steps.artifacts.outputs.portable }}"
           --linux "${{ github.workspace }}/${{ steps.artifacts.outputs.linux }}"
+          --linux-deb "${{ github.workspace }}/${{ steps.artifacts.outputs.deb }}"
           --macos-dmg "${{ github.workspace }}/${{ steps.artifacts.outputs.dmg }}"
 
       - name: Create GitHub Release
@@ -244,6 +281,7 @@ jobs:
             ${{ steps.artifacts.outputs.installer }}
             ${{ steps.artifacts.outputs.portable }}
             ${{ steps.artifacts.outputs.linux }}
+            ${{ steps.artifacts.outputs.deb }}
             ${{ steps.artifacts.outputs.dmg }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

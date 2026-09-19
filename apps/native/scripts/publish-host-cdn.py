@@ -76,6 +76,7 @@ def main() -> int:
     parser.add_argument("--installer")
     parser.add_argument("--portable")
     parser.add_argument("--linux")
+    parser.add_argument("--linux-deb")
     parser.add_argument("--macos-dmg")
     args = parser.parse_args()
 
@@ -83,8 +84,9 @@ def main() -> int:
     installer = require_file(args.installer)
     portable = require_file(args.portable)
     linux = require_file(args.linux)
+    linux_deb = require_file(args.linux_deb)
     dmg = require_file(args.macos_dmg)
-    if not any([installer, portable, linux, dmg]):
+    if not any([installer, portable, linux, linux_deb, dmg]):
         raise SystemExit("at least one artifact is required")
 
     for name in ("R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY", "R2_ACCOUNT_ID"):
@@ -109,7 +111,12 @@ def main() -> int:
     if linux:
         url = put_object("installer/nowly-linux.tar.gz", linux, "application/gzip", "public, max-age=300")
         put_object(f"installer/releases/{version}/nowly-linux.tar.gz", linux, "application/gzip", "public, max-age=31536000, immutable")
-        manifest["linux"] = {"archive": artifact(linux, url)}
+        manifest.setdefault("linux", {})["archive"] = artifact(linux, url)
+
+    if linux_deb:
+        url = put_object("installer/nowly-host.deb", linux_deb, "application/vnd.debian.binary-package", "public, max-age=300")
+        put_object(f"installer/releases/{version}/nowly-host.deb", linux_deb, "application/vnd.debian.binary-package", "public, max-age=31536000, immutable")
+        manifest.setdefault("linux", {})["deb"] = artifact(linux_deb, url)
 
     if dmg:
         url = put_object("installer/nowly-macos.dmg", dmg, "application/x-apple-diskimage", "public, max-age=300")

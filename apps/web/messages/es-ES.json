@@ -343,6 +343,7 @@
     "windows-portable": "Archivo portable (.zip)",
     "macos-dmg": "Imagen de disco (.dmg)",
     "macos-archive": "Archivo (.tar.gz)",
+    "linux-deb": "Paquete Debian (.deb)",
     "linux-archive": "Archivo (.tar.gz)",
     "open-source": "Código abierto",
     "lightweight": "Ocupa poco",
@@ -350,6 +351,8 @@
     "unsigned-desc": "Windows puede mostrar un aviso de SmartScreen. Abre Más información y luego Ejecutar de todos modos, solo si descargaste el archivo desde esta página.",
     "signed-title": "Notarizado por Apple",
     "signed-desc": "Las compilaciones de macOS están notarizadas. Gatekeeper debería aceptar la imagen de disco.",
+    "linux-title": "Debian/Ubuntu: instala el .deb",
+    "linux-desc": "En Debian, Ubuntu o Mint, usa el paquete .deb de arriba - se instala solo, sin terminal. En otras distribuciones, extrae el archivo y ejecuta el script de instalación:",
     "trust-title": "Qué hace",
     "trust-items": [
       {

@@ -1,7 +1,18 @@
 "use client";
 
 import { CampaignSignupForm } from "@/components/campaigns/campaign-signup-form";
-import { ButtonAnchor, ButtonLink, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  ButtonAnchor,
+  ButtonLink,
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+  cn,
+} from "@nowly/ui";
 
 
 import { CHROMEOS_WAITLIST_CAMPAIGN_ID, PROJECT_REPOSITORY_URL } from "@/lib/constants";
@@ -11,7 +22,9 @@ import {
   RiAppleFill,
   RiCheckLine,
   RiChromeFill,
+  RiErrorWarningLine,
   RiGithubLine,
+  RiInformationLine,
   RiUbuntuFill,
   RiWindowsFill,
 } from "@nowly/ui/icons";
@@ -51,6 +64,7 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
     windowsPortable: t("windows-portable"),
     macosDmg: t("macos-dmg"),
     macosArchive: t("macos-archive"),
+    linuxDeb: t("linux-deb"),
     linuxArchive: t("linux-archive"),
   });
   const trustItems = t.raw("trust-items") as Array<{ title: string; text: string }>;
@@ -166,16 +180,31 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
               <span>{t("lightweight")}</span>
             </div>
             {platform === "windows" ? (
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                <span className="font-medium text-foreground">{t("unsigned-title")}. </span>
-                {t("unsigned-desc")}
-              </p>
+              <Alert variant="destructive" className="w-full min-w-0">
+                <RiErrorWarningLine />
+                <AlertTitle>{t("unsigned-title")}</AlertTitle>
+                <AlertDescription>{t("unsigned-desc")}</AlertDescription>
+              </Alert>
             ) : null}
             {platform === "macos" ? (
               <p className="text-sm leading-relaxed text-muted-foreground">
                 <span className="font-medium text-foreground">{t("signed-title")}. </span>
                 {t("signed-desc")}
               </p>
+            ) : null}
+            {platform === "linux" ? (
+              <Alert variant="info" className="w-full min-w-0">
+                <RiInformationLine />
+                <AlertTitle>{t("linux-title")}</AlertTitle>
+                <AlertDescription className="min-w-0">
+                  {t("linux-desc")}
+                  <div className="mt-3 min-w-0 overflow-hidden rounded-[10px] bg-code-surface shadow-[0_0_0_1px_var(--border)]">
+                    <pre className="max-w-full overflow-x-auto p-3 font-mono text-[12.5px] leading-[1.7] text-foreground">
+                      <code>{"tar -xzf nowly-linux.tar.gz && ./scripts/install-linux.sh nowly-host-linux"}</code>
+                    </pre>
+                  </div>
+                </AlertDescription>
+              </Alert>
             ) : null}
           </CardContent>
         </Card>
@@ -244,6 +273,7 @@ const platformDownloads = (
     windowsPortable: string
     macosDmg: string
     macosArchive: string
+    linuxDeb: string
     linuxArchive: string
   },
 ) => {
@@ -258,5 +288,8 @@ const platformDownloads = (
     if (release.macos.archive) items.push({ href: release.macos.archive, label: labels.macosArchive });
     return items;
   }
-  return [{ href: release.linux.archive, label: labels.linuxArchive }];
+  const items = [];
+  if (release.linux.deb) items.push({ href: release.linux.deb, label: labels.linuxDeb });
+  items.push({ href: release.linux.archive, label: labels.linuxArchive });
+  return items;
 };

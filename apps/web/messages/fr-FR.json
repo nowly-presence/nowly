@@ -343,6 +343,7 @@
     "windows-portable": "Archive portable (.zip)",
     "macos-dmg": "Image disque (.dmg)",
     "macos-archive": "Archive (.tar.gz)",
+    "linux-deb": "Paquet Debian (.deb)",
     "linux-archive": "Archive (.tar.gz)",
     "open-source": "Open source",
     "lightweight": "Léger",
@@ -350,6 +351,8 @@
     "unsigned-desc": "Windows peut afficher un avertissement SmartScreen. Ouvrez Plus d’infos, puis Exécuter quand même, uniquement si le fichier vient de cette page.",
     "signed-title": "Notarisé par Apple",
     "signed-desc": "Les builds macOS sont notarisés. Gatekeeper devrait accepter l’image disque.",
+    "linux-title": "Debian/Ubuntu : installe le .deb",
+    "linux-desc": "Sur Debian, Ubuntu ou Mint, utilise le paquet .deb ci-dessus - il s’installe tout seul, sans terminal. Sur les autres distributions, extrais l’archive puis lance le script d’installation :",
     "trust-title": "Ce qu’elle fait",
     "trust-items": [
       {
