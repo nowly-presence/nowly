@@ -20,6 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Configure access to private submodule
+        run: git config --global url."https://x-access-token:${{ secrets.INTERNAL_CLI_PAT }}@github.com/".insteadOf "https://github.com/"
+
       - run: git submodule init && git submodule update packages/sdk packages/cli packages/presences packages/internal-cli
 
       - uses: pnpm/action-setup@v4
