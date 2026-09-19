@@ -6,6 +6,7 @@ import {
   getPublicBaseUrl,
   handleImageProxyRequest,
   imageResponse,
+  logImageProxyCall,
   parseProxyUrl,
   setCached,
   withPublicCors,
@@ -18,10 +19,12 @@ export const imageProxyRoutes = async (fastify: FastifyInstance) => {
   )
 
   fastify.post<{ Body: { service?: string; url?: string } }>("/images-proxy", async (request, reply) => {
-    const target = parseProxyUrl(request.body?.url, request.body?.service)
+    const target = await parseProxyUrl(request.body?.url, request.body?.service)
     if (!target) {
       return withPublicCors(reply).status(400).send({ error: "Invalid image URL" })
     }
+
+    logImageProxyCall(target.service)
 
     const id = createCacheId(target.service.id, target.url.href)
     const existing = getCached(id)

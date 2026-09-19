@@ -87,24 +87,21 @@ Gardez toujours un visuel de secours. Si la page ne fournit aucune image, si l'i
 
 ## Ajouter un service
 
-Les domaines autorisés sont vérifiés côté API, pas côté présence. Pour ajouter un nouveau service, ajoutez une entrée de configuration côté proxy avec :
+Les domaines autorisés sont vérifiés côté API, pas côté présence - une présence ne peut pas proxifier un domaine arbitraire juste en le demandant à l'exécution. Il n'y a pas d'étape d'approbation séparée ni de changement de code côté API : vous déclarez directement les hosts dont votre présence a besoin dans son propre `metadata.json`, avec le même `service` (le slug de votre présence) que vous passez déjà au helper :
 
-- un `id` de service stable ;
-- les suffixes de domaines CDN autorisés ;
-- les en-têtes nécessaires, si le CDN en exige ;
-- une limite claire sur ce que la présence peut envoyer au proxy.
+```json filename="metadata.json"
+"imageProxy": {
+  "hostSuffixes": ["netflix.com", "nflxvideo.net", "nflximg.net"],
+  "headers": { "Referer": "https://www.netflix.com/" }
+}
+```
 
-Si une présence a besoin d'un nouveau domaine d'image, vous pouvez utiliser le helper dans votre PR et expliquer :
+C'est publié vers l'API automatiquement, de la même façon que le reste de votre `metadata.json` l'est déjà. L'API ne fait confiance à cette déclaration que pour le `service` id de votre propre présence : une présence ne peut pas déclarer des noms d'hôte au nom d'une autre, et une requête n'est autorisée que si le hostname de l'URL cible correspond réellement à l'un des suffixes déclarés.
 
-- les noms d'hôte exacts à prendre en charge ;
-- pourquoi Discord ne peut pas utiliser l'URL directe ;
-- quelle image sera affichée à l'utilisateur ;
-- pourquoi cette image est publique et peut être proxifiée sans risque.
-
-Les relecteurs décideront ensuite s'ils acceptent d'ajouter ces URL aux services pris en charge. Ils peuvent refuser les origines trop larges, instables, privées ou dangereuses.
+Quand votre PR touche `imageProxy`, le bot de preview des présences le détecte automatiquement, ajoute une section **Image Proxy Requested** à son commentaire listant les noms d'hôte déclarés, et applique un label `image-proxy`. Un relecteur doit tout de même confirmer que ces noms d'hôte sont publics et sûrs à proxifier avant de merger - expliquez dans votre PR pourquoi Discord ne peut pas utiliser l'URL directe et quelle image sera affichée.
 
 ## Limites et sécurité
 
-Le proxy ne doit servir que des images publiques nécessaires à des présences relues et acceptées. Il refuse les URL non HTTPS, les domaines non autorisés, les réponses qui ne sont pas des images et les fichiers trop lourds.
+Le proxy ne sert que des images publiques dont les hosts ont été déclarés par une présence relue. Il refuse les URL non HTTPS, les hosts qui ne correspondent à aucun suffixe déclaré, les réponses qui ne sont pas des images et les fichiers trop lourds.
 
-Ne l'utilisez pas pour des comptes privés, des ressources authentifiées, des URL de tracking, des entrées utilisateur arbitraires ou du contenu qui n'est pas une image.
+Les endpoints eux-mêmes sont publics et non authentifiés (les présences les appellent directement depuis le navigateur, il n'y a donc pas de secret à y attacher) et partagent la limite de débit globale de l'API - il n'y a pas de quota dédié par présence. Ne l'utilisez pas pour des comptes privés, des ressources authentifiées, des URL de tracking, des entrées utilisateur arbitraires ou du contenu qui n'est pas une image.

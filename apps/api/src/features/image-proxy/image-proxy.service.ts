@@ -1,4 +1,6 @@
-import { createHash } from "crypto"
+import { getPrisma, hasDatabase } from "@/db/client"
+import { getAllPresenceMetas } from "@/features/presence/presence.repository"
+import { createHash, randomUUID } from "crypto"
 import type { FastifyReply, FastifyRequest } from "fastify"
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
@@ -6,6 +8,7 @@ const FETCH_TIMEOUT_MS = 8_000
 const CACHED_IMAGE_TTL_SECONDS = 5 * 60
 const CACHED_IMAGE_STALE_SECONDS = 60
 const PUBLIC_IMAGE_PROXY_ORIGIN = "*"
+const PRESENCE_SERVICES_TTL_MS = 5 * 60 * 1000
 
 export type ImageProxyService = {
   id: string
@@ -19,77 +22,59 @@ type CachedImage = {
   expiresAt: number
 }
 
-// ponytail: in-process Map cache, no Redis. Fine for a single instance; swap for a shared cache if the API scales horizontally.
 const cache = new Map<string, CachedImage>()
 
-const services: ImageProxyService[] = [
-  {
-    id: "youtube",
-    hostSuffixes: ["ytimg.com", "ggpht.com", "youtube.com", "googleusercontent.com"],
-    headers: { "User-Agent": "Nowly/1.0" },
-  },
-  {
-    id: "twitch",
-    hostSuffixes: ["twitch.tv", "ttvnw.net", "jtvnw.net"],
-  },
-  {
-    id: "disney",
-    hostSuffixes: ["disney.com", "disney-plus.net", "dssott.com", "bamgrid.com", "disneystreaming.com"],
-  },
-  {
-    id: "netflix",
-    hostSuffixes: ["netflix.com", "nflxvideo.net", "nflximg.net", "nflxext.com", "nflxso.net"],
-  },
-  {
-    id: "prime",
-    hostSuffixes: ["primevideo.com", "amazon.com", "amazonaws.com", "amazonvideo.com", "media-amazon.com"],
-  },
-  {
-    id: "apple",
-    hostSuffixes: ["apple.com", "tv.apple.com"],
-  },
-  {
-    id: "github",
-    hostSuffixes: [
-      "github.com",
-      "github.blog",
-      "githubassets.com",
-      "githubusercontent.com",
-      "githubnext.com",
-      "githubuniverse.com",
-    ],
-    headers: { "User-Agent": "Nowly/1.0" },
-  },
-  {
-    id: "tiktok",
-    hostSuffixes: ["tiktokcdn.com", "tiktokcdn-eu.com", "tiktokcdn-us.com", "tiktokv.com"],
-    headers: { Referer: "https://www.tiktok.com/" },
-  },
-  {
-    id: "canalplus",
-    hostSuffixes: ["thumb.canalplus.pro"],
-    headers: { Referer: "https://www.canalplus.com/" },
-  },
-  {
-    id: "generic",
-    hostSuffixes: [],
-  },
-]
+let presenceServicesCache: { services: ImageProxyService[]; expiresAt: number } | null = null
 
-export const parseProxyUrl = (url?: string, serviceId?: string): { url: URL; service: ImageProxyService } | null => {
+const getPresenceServices = async (): Promise<ImageProxyService[]> => {
+  if (!hasDatabase()) return []
+  if (presenceServicesCache && presenceServicesCache.expiresAt > Date.now()) {
+    return presenceServicesCache.services
+  }
+
+  const metas = await getAllPresenceMetas()
+  const services: ImageProxyService[] = []
+  for (const { slug, metadata } of metas) {
+    const config = metadata?.imageProxy as { hostSuffixes?: string[]; headers?: Record<string, string> } | undefined
+    if (config?.hostSuffixes?.length) {
+      services.push({ id: slug, hostSuffixes: config.hostSuffixes, headers: config.headers })
+    }
+  }
+
+  presenceServicesCache = { services, expiresAt: Date.now() + PRESENCE_SERVICES_TTL_MS }
+  return services
+}
+
+export const parseProxyUrl = async (url?: string, serviceId?: string): Promise<{ url: URL; service: ImageProxyService } | null> => {
   if (!url?.trim()) return null
 
   try {
     const parsed = new URL(url.trim())
     if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return null
 
+    const services = await getPresenceServices()
     const matchedService = serviceId
       ? services.find((s) => s.id === serviceId)
       : services.find((s) => s.hostSuffixes.some((suffix) => parsed.hostname.endsWith(suffix)))
 
-    if (!matchedService) return null
-    return { url: parsed, service: matchedService }
+    return matchedService ? { url: parsed, service: matchedService } : null
   } catch { return null }
+}
+
+export const logImageProxyCall = (service: ImageProxyService): void => {
+  if (!hasDatabase()) return
+
+  try {
+    void getPrisma().analyticsEvent.create({
+      data: {
+        eventId: randomUUID(),
+        key: "image_proxy_call",
+        slug: service.id,
+        payload: {},
+        createdAt: new Date(),
+      },
+    }).catch(() => {})
+  } catch {}
 }
 
 export const createCacheId = (serviceId: string, href: string): string =>
@@ -180,11 +165,13 @@ export const handleImageProxyRequest = async (
   reply: FastifyReply,
   target: { url?: string; service?: string },
 ): Promise<void> => {
-  const parsed = parseProxyUrl(target.url, target.service)
+  const parsed = await parseProxyUrl(target.url, target.service)
   if (!parsed) {
     reply.status(400).send({ error: "Invalid image URL" })
     return
   }
+
+  logImageProxyCall(parsed.service)
 
   const image = await fetchImage(parsed.url, parsed.service)
   if (!image.ok) {
