@@ -36,3 +36,18 @@ export type NativeResponse =
   | { type: "CONNECTED"; version?: string }
   | { type: "OK" }
   | { type: "ERROR"; error: string }
+
+export type NativeStatus = {
+  connected: boolean
+  status: string
+  version?: string
+  discordConnected?: boolean
+}
+
+export type UserScriptsStatus = {
+  enabled: boolean
+  reason?: string
+  // Chrome requires an explicit user toggle in the extension details UI.
+  // Surfaced so onboarding can explain what to do.
+  requiresUserToggle?: boolean
+}
