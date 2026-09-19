@@ -9,23 +9,25 @@ Each presence must include:
 
 <TypeTable
   properties={[
-    { name: "logo.png", type: "PNG", description: "Platform brand mark for wider placements, headers, and Open Graph images.", required: true },
-    { name: "icon.png", type: "PNG", description: "Compact square icon used in small UI surfaces and Discord activity images.", required: true },
-    { name: "thumbnail.jpg", type: "JPG", description: "Marketplace and detail page visual that clearly represents the platform.", required: true }
+    { name: "logo.png", type: "PNG, 300×300", description: "Platform brand mark for wider placements, headers, and Open Graph images.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Compact square icon used in small UI surfaces and Discord activity images.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Marketplace and detail page visual that clearly represents the platform.", required: true }
   ]}
 />
 
+These exact dimensions are enforced by CI on every presence PR - an asset with the wrong size fails validation.
+
 ## Logo
 
-Use `logo.png` for the platform brand mark when a wider image is appropriate.
+Use `logo.png` for the platform brand mark when a wider image is appropriate. Must be exactly **300×300**.
 
 ## Icon
 
-Use `icon.png` for compact square displays, colored backgrounds, and Discord activity images.
+Use `icon.png` for compact square displays, colored backgrounds, and Discord activity images. Must be exactly **128×128**.
 
 ## Thumbnail
 
-Use `thumbnail.jpg` for marketplace and detail page visuals. It should represent the platform clearly.
+Use `thumbnail.jpg` for marketplace and detail page visuals. It should represent the platform clearly. Must be exactly **1920×1080**.
 
 ## Runtime Asset Constants
 

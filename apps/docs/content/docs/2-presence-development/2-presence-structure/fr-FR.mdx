@@ -63,8 +63,10 @@ Fichiers requis&nbsp;:
 
 <TypeTable
   properties={[
-    { name: "logo.png", type: "PNG", description: "Marque large pour les en-têtes de la bibliothèque, les pages de présence et les images OG générées.", required: true },
-    { name: "icon.png", type: "PNG", description: "Icône carrée pour les surfaces d'interface compactes et les clés d'image d'activité Discord.", required: true },
-    { name: "thumbnail.jpg", type: "JPG", description: "Image d'aperçu utilisée lorsque la présence a besoin d'un visuel plus grand.", required: true }
+    { name: "logo.png", type: "PNG, 300×300", description: "Marque large pour les en-têtes de la bibliothèque, les pages de présence et les images OG générées.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Icône carrée pour les surfaces d'interface compactes et les clés d'image d'activité Discord.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Image d'aperçu utilisée lorsque la présence a besoin d'un visuel plus grand.", required: true }
   ]}
 />
+
+Ces dimensions sont des exigences exactes, vérifiées par la CI sur chaque PR de présence - voir [Assets](/presence-development/assets) pour le détail.

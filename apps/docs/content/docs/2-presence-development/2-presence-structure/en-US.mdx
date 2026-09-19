@@ -63,8 +63,10 @@ Required files:
 
 <TypeTable
   properties={[
-    { name: "logo.png", type: "PNG", description: "Wide brand mark for marketplace headers, presence pages, and generated OG images.", required: true },
-    { name: "icon.png", type: "PNG", description: "Square icon for compact UI surfaces and Discord activity image keys.", required: true },
-    { name: "thumbnail.jpg", type: "JPG", description: "Preview image used when the presence needs a larger visual.", required: true }
+    { name: "logo.png", type: "PNG, 300×300", description: "Wide brand mark for marketplace headers, presence pages, and generated OG images.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Square icon for compact UI surfaces and Discord activity image keys.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Preview image used when the presence needs a larger visual.", required: true }
   ]}
 />
+
+These dimensions are exact requirements, checked by CI on every presence PR - see [Assets](/presence-development/assets) for details.

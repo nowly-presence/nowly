@@ -9,23 +9,25 @@ Chaque présence doit inclure&nbsp;:
 
 <TypeTable
   properties={[
-    { name: "logo.png", type: "PNG", description: "Marque de la plateforme pour les placements larges, les en-têtes et les images Open Graph.", required: true },
-    { name: "icon.png", type: "PNG", description: "Icône carrée compacte utilisée dans les petites surfaces d'interface et les images d'activité Discord.", required: true },
-    { name: "thumbnail.jpg", type: "JPG", description: "Visuel de la bibliothèque et de la page de détail représentant clairement la plateforme.", required: true }
+    { name: "logo.png", type: "PNG, 300×300", description: "Marque de la plateforme pour les placements larges, les en-têtes et les images Open Graph.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Icône carrée compacte utilisée dans les petites surfaces d'interface et les images d'activité Discord.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Visuel de la bibliothèque et de la page de détail représentant clairement la plateforme.", required: true }
   ]}
 />
 
+Ces dimensions exactes sont vérifiées par la CI sur chaque PR de présence - un asset à la mauvaise taille fait échouer la validation.
+
 ## Logo
 
-Utilisez `logo.png` pour la marque de la plateforme lorsqu'une image plus large est appropriée.
+Utilisez `logo.png` pour la marque de la plateforme lorsqu'une image plus large est appropriée. Doit faire exactement **300×300**.
 
 ## Icône
 
-Utilisez `icon.png` pour les affichages carrés compacts, les fonds colorés et les images d'activité Discord.
+Utilisez `icon.png` pour les affichages carrés compacts, les fonds colorés et les images d'activité Discord. Doit faire exactement **128×128**.
 
 ## Vignette
 
-Utilisez `thumbnail.jpg` pour les visuels de la bibliothèque et des pages de détail. Elle doit représenter clairement la plateforme.
+Utilisez `thumbnail.jpg` pour les visuels de la bibliothèque et des pages de détail. Elle doit représenter clairement la plateforme. Doit faire exactement **1920×1080**.
 
 ## Constantes d'assets au runtime
 

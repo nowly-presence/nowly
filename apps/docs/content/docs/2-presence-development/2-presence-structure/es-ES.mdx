@@ -63,8 +63,10 @@ Archivos requeridos:
 
 <TypeTable
   properties={[
-    { name: "logo.png", type: "PNG", description: "Marca amplia para encabezados de la biblioteca, páginas de presencia e imágenes OG generadas.", required: true },
-    { name: "icon.png", type: "PNG", description: "Icono cuadrado para superficies de interfaz compactas y claves de imagen de actividad de Discord.", required: true },
-    { name: "thumbnail.jpg", type: "JPG", description: "Imagen de vista previa usada cuando la presencia necesita un visual más grande.", required: true }
+    { name: "logo.png", type: "PNG, 300×300", description: "Marca amplia para encabezados de la biblioteca, páginas de presencia e imágenes OG generadas.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Icono cuadrado para superficies de interfaz compactas y claves de imagen de actividad de Discord.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Imagen de vista previa usada cuando la presencia necesita un visual más grande.", required: true }
   ]}
 />
+
+Estas dimensiones son requisitos exactos, verificados por CI en cada PR de presencia - consulta [Assets](/presence-development/assets) para más detalle.
