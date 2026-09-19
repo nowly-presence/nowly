@@ -97,7 +97,10 @@ export const setCached = (id: string, image: Omit<CachedImage, "expiresAt">): vo
 }
 
 export const withPublicCors = (reply: FastifyReply): FastifyReply =>
-  reply.header("Access-Control-Allow-Origin", PUBLIC_IMAGE_PROXY_ORIGIN)
+  reply
+    .header("Access-Control-Allow-Origin", PUBLIC_IMAGE_PROXY_ORIGIN)
+    .header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+    .header("Access-Control-Allow-Headers", "Content-Type")
 
 export const imageResponse = (
   reply: FastifyReply,
