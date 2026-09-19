@@ -1,7 +1,6 @@
 import { assetsRoutes } from "@/features/assets/assets.routes"
 import { getAuth } from "@/features/auth/better-auth"
 import { campaignsRoutes } from "@/features/campaigns/campaigns.routes"
-import { cwsStatsRoutes } from "@/features/cws-stats/cws-stats.routes"
 import { deviceRoutes } from "@/features/device/device.routes"
 import { imageProxyRoutes } from "@/features/image-proxy/image-proxy.routes"
 import { insightsRoutes } from "@/features/insights/insights.routes"
@@ -73,7 +72,6 @@ await server.register(async (instance) => {
 })
 
 await server.register(insightsRoutes, { prefix: "/insights" })
-await server.register(cwsStatsRoutes, { prefix: "/insights/cws-stats" })
 await server.register(campaignsRoutes, { prefix: "/campaigns" })
 await server.register(deviceRoutes, { prefix: "/devices" })
 await server.register(statusRoutes)
