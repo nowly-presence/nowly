@@ -34,6 +34,7 @@ export type PresenceMetadata = {
   world?: "main" | "isolated"
   runAt?: "document_start" | "document_end" | "document_idle"
   discordNative?: boolean
+  imageProxy?: { hostSuffixes: string[]; headers?: Record<string, string> }
 }
 
 export type PresenceRelease = {
