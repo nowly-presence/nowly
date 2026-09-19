@@ -28,6 +28,9 @@ extension-key.pem
 # Archived previous web app (local reference only)
 _tmp/
 
+# Archived pre-redesign extension (local reference only)
+apps/extension/cache/
+
 # Auto-generated extension source
 apps/extension/src/generated/*
 apps/extension/artifacts/
