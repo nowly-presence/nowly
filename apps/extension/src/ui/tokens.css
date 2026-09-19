@@ -1,18 +1,144 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@source "../";
 
-/* Placeholder - replaced with the full token set mirrored from
-   apps/web/app/globals.css in a later step of the redesign. */
+@custom-variant dark (&:is(.dark *));
+
+/* Satoshi is intentionally not loaded yet: apps/web pulls it from Fontshare's
+   CDN, which MV3's default extension_pages CSP does not reliably allow, and a
+   self-hosted copy needs its license confirmed before the woff2 gets
+   committed (see scripts/fetch-font.ts). Falls back to the system stack until
+   then - same font-family variable as web so swapping it in later is a
+   one-line change. */
 :root {
+  color-scheme: light;
   --background: #eef5fc;
   --foreground: #07080c;
+  --card: #f7fbff;
+  --card-foreground: #07080c;
+  --popover: #f7fbff;
+  --popover-foreground: #07080c;
+  --primary: #0891b2;
+  --primary-foreground: #eef5fc;
+  --secondary: rgba(7, 8, 12, 0.08);
+  --secondary-foreground: #07080c;
+  --muted: #f7fbff;
+  --muted-foreground: #4a5560;
+  --accent: #0891b2;
+  --accent-foreground: #eef5fc;
+  --destructive: oklch(0.577 0.245 27.325);
+  --success: #16a34a;
+  --warning: #d97706;
+  --border: rgba(7, 8, 12, 0.1);
+  --input: rgba(7, 8, 12, 0.12);
+  --ring: #0891b2;
+  --radius: 0.625rem;
 }
 
 .dark {
+  color-scheme: dark;
   --background: #07080c;
   --foreground: #e4f2ff;
+  --card: #0c0e14;
+  --card-foreground: #e4f2ff;
+  --popover: #0c0e14;
+  --popover-foreground: #e4f2ff;
+  --primary: #22d3ee;
+  --primary-foreground: #07080c;
+  --secondary: rgba(228, 242, 255, 0.1);
+  --secondary-foreground: #e4f2ff;
+  --muted: #0c0e14;
+  --muted-foreground: #808e9b;
+  --accent: #22d3ee;
+  --accent-foreground: #07080c;
+  --destructive: oklch(0.704 0.191 22.216);
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --border: rgba(228, 242, 255, 0.08);
+  --input: rgba(228, 242, 255, 0.12);
+  --ring: #22d3ee;
 }
 
 @theme inline {
+  --font-sans: "Satoshi", system-ui, sans-serif;
+  --font-heading: var(--font-sans);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--foreground) 18%, transparent) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--foreground) 18%, transparent);
+    border-radius: 999px;
+  }
+}
+
+/* Optional ambient background animation, toggled by
+   settings.backgroundAnimation (see hooks/use-theme.ts). */
+@keyframes sidepanel-drift {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 100% 50%;
+  }
+}
+
+.sidepanel-bg {
+  background: linear-gradient(120deg, var(--background), color-mix(in oklab, var(--primary) 6%, var(--background)), var(--background));
+  background-size: 200% 200%;
+  animation: sidepanel-drift 18s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidepanel-bg {
+    animation: none;
+  }
 }
