@@ -38,11 +38,16 @@ const enableSidePanelAction = (): void => {
   });
 };
 
+let lastHeartbeatConnected: boolean | undefined;
+
 const registerNativeResponseHandler = (): void => {
   onNativeResponse((message) => {
     if (message.type === "ERROR") {
       addRuntimeLog("error", "native", "native error", { reason: message.error });
-      trackAnalytics("native_heartbeat_failed", { payload: { reason: message.error } });
+      if (lastHeartbeatConnected !== false) {
+        trackAnalytics("native_heartbeat_failed", { payload: { reason: message.error } });
+      }
+      lastHeartbeatConnected = false;
       void setDebug({
         stage: "native-error",
         message: message.error,
@@ -62,10 +67,14 @@ const registerNativeResponseHandler = (): void => {
         status: message.status,
         nativeVersion: message.version,
       });
-      trackAnalytics(
-        message.connected ? "native_heartbeat_ok" : "native_heartbeat_failed",
-        message.connected ? undefined : { payload: { reason: message.status } },
-      );
+      // ponytail: track only on state change, not every tick, to keep insights volume sane
+      if (message.connected !== lastHeartbeatConnected) {
+        trackAnalytics(
+          message.connected ? "native_heartbeat_ok" : "native_heartbeat_failed",
+          message.connected ? undefined : { payload: { reason: message.status } },
+        );
+      }
+      lastHeartbeatConnected = message.connected;
     }
 
     if (message.type === "OK") {

@@ -9,7 +9,7 @@ import { postNative } from "@/background/services/native";
 import { getPresences } from "@/background/services/storage";
 
 export const registerAlarmHandlers = (): void => {
-  chrome.alarms.create("native-heartbeat", { periodInMinutes: 1 });
+  chrome.alarms.create("native-heartbeat", { periodInMinutes: 5 });
   chrome.alarms.create("api-heartbeat", { periodInMinutes: 5 });
 
   chrome.alarms.onAlarm.addListener((alarm) => {
