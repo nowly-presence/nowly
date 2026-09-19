@@ -1,3 +1,4 @@
+import { broadcastActiveTab } from "@/background/managers/activity-manager";
 import { applyPresencePause } from "@/background/managers/presence-pause";
 import type { ExtensionSettings } from "@/shared/types";
 import { trackAnalytics } from "@/background/analytics-client";
@@ -32,6 +33,10 @@ export const updateSettings = async (partial: Partial<ExtensionSettings>): Promi
 
   if (typeof partial.presencePaused === "boolean" && partial.presencePaused !== previousSettings.presencePaused) {
     await applyPresencePause(partial.presencePaused);
+  }
+
+  if ("activitySelectionMode" in partial || "activityPriorityOrder" in partial) {
+    void broadcastActiveTab();
   }
 
   return settings;

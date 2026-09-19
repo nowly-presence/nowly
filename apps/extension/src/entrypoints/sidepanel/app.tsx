@@ -305,6 +305,7 @@ const App: FC<Props> = ({ initialView }): ReactElement => {
               onForceShowOnboarding={resetOnboardingForDev}
               onLocaleChange={onSettingsLocaleChange}
               onScheduleGlobal={() => handleScheduleOpen(null)}
+              presences={presences}
               settings={settings}
               onSettingsChange={setSettings}
               analyticsConsent={analyticsConsent}

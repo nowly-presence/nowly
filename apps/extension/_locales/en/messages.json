@@ -19,5 +19,11 @@
   },
   "contextMenuPage": {
     "message": "Nowly presence for this page"
+  },
+  "contextMenuMuteTab": {
+    "message": "Don't share this tab"
+  },
+  "contextMenuUnmuteTab": {
+    "message": "Share this tab"
   }
 }

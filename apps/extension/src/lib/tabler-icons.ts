@@ -1,3 +1,4 @@
+export { default as IconArrowsSort } from "@tabler/icons-react/dist/esm/icons/IconArrowsSort.mjs";
 export { default as IconBrandDiscord } from "@tabler/icons-react/dist/esm/icons/IconBrandDiscord.mjs";
 export { default as IconBrandGithub } from "@tabler/icons-react/dist/esm/icons/IconBrandGithub.mjs";
 export { default as IconBrandYoutube } from "@tabler/icons-react/dist/esm/icons/IconBrandYoutube.mjs";
@@ -6,6 +7,7 @@ export { default as IconChartBar } from "@tabler/icons-react/dist/esm/icons/Icon
 export { default as IconCheck } from "@tabler/icons-react/dist/esm/icons/IconCheck.mjs";
 export { default as IconChevronDown } from "@tabler/icons-react/dist/esm/icons/IconChevronDown.mjs";
 export { default as IconChevronLeft } from "@tabler/icons-react/dist/esm/icons/IconChevronLeft.mjs";
+export { default as IconChevronUp } from "@tabler/icons-react/dist/esm/icons/IconChevronUp.mjs";
 export { default as IconCircleCheck } from "@tabler/icons-react/dist/esm/icons/IconCircleCheck.mjs";
 export { default as IconCircleCheckFilled } from "@tabler/icons-react/dist/esm/icons/IconCircleCheckFilled.mjs";
 export { default as IconCircleX } from "@tabler/icons-react/dist/esm/icons/IconCircleX.mjs";

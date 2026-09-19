@@ -19,5 +19,11 @@
   },
   "contextMenuPage": {
     "message": "Presencia Nowly para esta página"
+  },
+  "contextMenuMuteTab": {
+    "message": "No compartir esta pestaña"
+  },
+  "contextMenuUnmuteTab": {
+    "message": "Compartir esta pestaña"
   }
 }

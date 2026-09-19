@@ -5,6 +5,7 @@ export type AccentTheme = "default" | "donator" | "fleuri" | "violet" | "vert" |
 export type AppearanceMode = "system" | "light" | "dark";
 export type PresenceLocale = "en-US" | "fr-FR" | "es-ES";
 export type PresenceLanguageMode = "per-presence" | PresenceLocale;
+export type ActivitySelectionMode = "focused" | "priority";
 
 export type ExtensionSettings = {
   presenceDisplayMode: PresenceDisplayMode;
@@ -21,4 +22,6 @@ export type ExtensionSettings = {
   backgroundAnimation?: boolean;
   presenceLanguage?: PresenceLanguageMode;
   presenceLanguages?: Record<string, PresenceLocale>;
+  activitySelectionMode?: ActivitySelectionMode;
+  activityPriorityOrder?: string[];
 };
