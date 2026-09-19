@@ -227,6 +227,7 @@
     "canary": "Canary",
     "support": "Support",
     "status": "Status",
+    "branding": "Branding",
     "community": "Community",
     "discord": "Discord",
     "github": "GitHub",
@@ -557,6 +558,30 @@
       ]
     }
   },
+  "brandingPage": {
+    "eyebrow": "Branding",
+    "title": "Brand assets",
+    "description": "Logo lockups and brand colors for Nowly. Please don't distort, recolor, or alter the logo.",
+    "logo": "Logo",
+    "icon": "Icon",
+    "colors": "Colors",
+    "download-svg": "SVG",
+    "download-png": "PNG",
+    "variants": {
+      "blue": "Blue",
+      "dark": "Dark (light backgrounds)",
+      "white": "White (dark backgrounds)",
+      "canary": "Canary"
+    },
+    "swatches": {
+      "primary-light": "Primary (light)",
+      "primary-dark": "Primary (dark)",
+      "background-light": "Background (light)",
+      "background-dark": "Background (dark)",
+      "canary-accent": "Canary accent",
+      "canary-ink": "Canary ink"
+    }
+  },
   "supportPage": {
     "eyebrow": "Support",
     "title": "Need help?",
@@ -657,6 +682,10 @@
     "support": {
       "title": "Support",
       "description": "Get help with Nowly, the extension, or a presence."
+    },
+    "branding": {
+      "title": "Branding",
+      "description": "Logo lockups and brand colors for Nowly."
     },
     "status": {
       "title": "Status",

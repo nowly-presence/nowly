@@ -28,6 +28,7 @@ export const Footer = async () => {
         { href: "/canary", label: t("canary") },
         { href: "/support", label: t("support") },
         { href: "/status", label: t("status") },
+        { href: "/branding", label: t("branding") },
       ],
     },
     {
