@@ -55,6 +55,30 @@ Abre los ajustes de extensiones de tu navegador y comprueba que:
 
 Después de cambiar permisos, recarga la pestaña del sitio y vuelve a abrir el panel lateral de la extensión.
 
+## Linux: "Actualización disponible" tras instalar el .deb
+
+Mensaje mostrado: **actualización disponible**, aunque el paquete `.deb` se acaba de instalar.
+
+Dos causas frecuentes, compruébalas en este orden:
+
+1. **El `.deb` nunca se instaló realmente.** En algunos entornos de escritorio (XFCE con Thunar, por ejemplo), hacer doble clic en un `.deb` no hace nada si no hay ningún gestor de paquetes gráfico asociado (como GDebi). Instálalo desde una terminal:
+
+   ```bash
+   sudo dpkg -i ~/Descargas/nowly-host.deb
+   ```
+
+   Comprueba después que quedó registrado: `dpkg -L nowly-host` debe listar `/usr/lib/nowly-client/nowly-host`.
+
+2. **Un manifiesto antiguo de usuario tiene prioridad sobre el del .deb.** Si antes instalaste la app de escritorio con el archivo `.tar.gz` (el script `install-linux.sh`) y luego cambiaste al `.deb`, puede quedar un manifiesto en tu carpeta personal que aún apunta al binario antiguo. Elimínalo:
+
+   ```bash
+   rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
+   rm -f ~/.config/*/NativeMessagingHosts/nowly.client.json
+   rm -f ~/.local/share/NowlyClient/nowly-host
+   ```
+
+   Luego reinicia completamente el navegador (no solo la extensión) para que vuelva a lanzar el proceso nativo actualizado.
+
 ## Copiar un diagnóstico de soporte
 
 El diagnóstico de la extensión incluye un botón **Copiar soporte**. Copia el estado de la app de escritorio, Discord, presencias y actividad sin exponer registros técnicos.

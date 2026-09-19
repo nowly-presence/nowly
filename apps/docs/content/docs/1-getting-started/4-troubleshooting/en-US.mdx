@@ -55,6 +55,30 @@ Open your browser extension settings and check:
 
 After you change permissions, reload the website tab and reopen the extension side panel.
 
+## Linux: "Update Available" After Installing the .deb
+
+Message shown: **update available**, even though the `.deb` package was just installed.
+
+Two common causes, check them in order:
+
+1. **The `.deb` was never actually installed.** On some desktop environments (XFCE with Thunar, for example), double-clicking a `.deb` does nothing if no graphical package manager is associated with it (like GDebi). Install it from a terminal instead:
+
+   ```bash
+   sudo dpkg -i ~/Downloads/nowly-host.deb
+   ```
+
+   Then confirm it is registered: `dpkg -L nowly-host` should list `/usr/lib/nowly-client/nowly-host`.
+
+2. **An old per-user manifest is overriding the one from the .deb.** If you previously installed the desktop app from the `.tar.gz` archive (the `install-linux.sh` script) before switching to the `.deb`, a leftover manifest in your home directory can still point to the old binary. Remove it:
+
+   ```bash
+   rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
+   rm -f ~/.config/*/NativeMessagingHosts/nowly.client.json
+   rm -f ~/.local/share/NowlyClient/nowly-host
+   ```
+
+   Then fully restart the browser (not just the extension) so it relaunches the native process with the updated binary.
+
 ## Copy a Support Diagnostic
 
 The extension diagnostic includes a **Copy support** button. It copies the state of the desktop app, Discord, presences, and activity without exposing technical logs.

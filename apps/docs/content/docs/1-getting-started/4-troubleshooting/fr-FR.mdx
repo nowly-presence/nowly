@@ -55,6 +55,30 @@ Ouvrez les paramètres d'extension de votre navigateur et vérifiez que :
 
 Après une modification de permission, rechargez l'onglet du site et rouvrez le panneau latéral de l'extension.
 
+## Linux : « Mise à jour disponible » après avoir installé le .deb
+
+Message affiché : **mise à jour disponible**, alors que le paquet `.deb` vient d'être installé.
+
+Deux causes fréquentes, à vérifier dans l'ordre :
+
+1. **Le `.deb` n'a jamais été installé.** Sur certains environnements de bureau (XFCE avec Thunar, par exemple), double-cliquer sur un `.deb` ne fait rien si aucun gestionnaire de paquets graphique n'est associé (comme GDebi). Installez-le depuis un terminal pour être sûr :
+
+   ```bash
+   sudo dpkg -i ~/Téléchargements/nowly-host.deb
+   ```
+
+   Vérifiez ensuite que le paquet est bien enregistré : `dpkg -L nowly-host` doit lister `/usr/lib/nowly-client/nowly-host`.
+
+2. **Un ancien manifest par utilisateur prend le pas sur celui du `.deb`.** Si vous aviez déjà installé l'application bureau via l'archive `.tar.gz` (script `install-linux.sh`) avant de passer au `.deb`, un manifest resté dans votre dossier personnel peut continuer à pointer vers l'ancien binaire. Supprimez-le :
+
+   ```bash
+   rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
+   rm -f ~/.config/*/NativeMessagingHosts/nowly.client.json
+   rm -f ~/.local/share/NowlyClient/nowly-host
+   ```
+
+   Puis redémarrez complètement le navigateur (pas seulement l'extension) pour qu'il relance le processus natif à jour.
+
 ## Copier un diagnostic support
 
 Le diagnostic de l'extension contient un bouton **Copier support**. Il copie l'état de l'application bureau, Discord, des présences et de l'activité, sans exposer de journaux techniques.
