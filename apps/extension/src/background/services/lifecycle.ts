@@ -1,8 +1,9 @@
 import type { InstalledPresences } from "@/shared/types";
-import { handleClearActivity, handleRemovedTab, restoreActivityBadge } from "@/background/managers/activity-manager";
+import { broadcastActiveTab, handleClearActivity, handleRemovedTab, restoreActivityBadge } from "@/background/managers/activity-manager";
 import { trackAnalytics } from "@/background/analytics-client";
 import { addRuntimeLog } from "@/background/runtime-logs";
 import { initializeCustomApiUrl } from "@/background/services/api-state";
+import { setFocusedTabId } from "@/background/services/background-context";
 import { syncDeviceState, syncUninstallUrl } from "@/background/services/device-sync";
 import { connectNative, onNativeResponse } from "@/background/services/native";
 import { drainInstallQueue, installBundledPresences } from "@/background/managers/presence-manager";
@@ -86,7 +87,13 @@ const openChangelogOnUpdate = (details: chrome.runtime.InstalledDetails): void =
   void chrome.tabs.create({ url: `${webBaseUrl}/changelog/${version}` });
 };
 
+const detectFocusedTab = async (): Promise<void> => {
+  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  if (tab?.id != null) setFocusedTabId(tab.id);
+};
+
 const bootBackground = async (options: { restoreBadge?: boolean; syncScripts?: boolean } = {}): Promise<InstalledPresences> => {
+  await detectFocusedTab();
   await handleClearActivity();
   connectNative();
   await initializeCustomApiUrl();
@@ -127,6 +134,21 @@ export const registerLifecycleHandlers = (): void => {
   }
 
   chrome.tabs.onRemoved.addListener(handleRemovedTab);
+
+  chrome.tabs.onActivated.addListener(({ tabId }) => {
+    setFocusedTabId(tabId);
+    void broadcastActiveTab();
+  });
+
+  chrome.windows.onFocusChanged.addListener((windowId) => {
+    if (windowId === chrome.windows.WINDOW_ID_NONE) return;
+    chrome.tabs.query({ active: true, windowId }, (tabs) => {
+      const tabId = tabs[0]?.id;
+      if (tabId == null) return;
+      setFocusedTabId(tabId);
+      void broadcastActiveTab();
+    });
+  });
 };
 
 export const initializeBackground = (): void => {
