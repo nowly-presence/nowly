@@ -7,15 +7,33 @@ import { ActivityView } from "@/features/activity/activity-view"
 import { CurrentActivityCard } from "@/features/activity/current-activity-card"
 import { ScheduleDialog } from "@/features/activity/schedule-dialog"
 import { SnoozeDialog } from "@/features/activity/snooze-dialog"
+import { StoreView } from "@/features/store/store-view"
 import { ExtensionStateProvider, useExtensionState } from "@/hooks/extension-state-provider"
 import { useTheme } from "@/hooks/use-theme"
 import { WEB_BASE_URL } from "@/shared/constants"
 import { t } from "@/shared/i18n"
 import type { PersistedAppView } from "@/shared/types"
 
-const StoreView = (): React.JSX.Element => (
-  <div className="flex h-full items-center justify-center text-sm text-muted-foreground">Store — bientôt disponible</div>
-)
+const StoreScreen = (): React.JSX.Element => {
+  const state = useExtensionState()
+  const [installingSlug, setInstallingSlug] = useState<string | null>(null)
+
+  const handleInstall = (slug: string): void => {
+    setInstallingSlug(slug)
+    void state.installPresenceFromApi(slug).finally(() => setInstallingSlug(null))
+  }
+
+  return (
+    <StoreView
+      installingSlug={installingSlug}
+      installQueueCount={state.installQueue.length}
+      onInstall={handleInstall}
+      onRetryQueue={() => void state.retryInstallQueue()}
+      presences={state.presences}
+      updates={state.updates}
+    />
+  )
+}
 
 const SettingsView = (): React.JSX.Element => (
   <div className="flex h-full items-center justify-center text-sm text-muted-foreground">Réglages — bientôt disponibles</div>
@@ -93,7 +111,7 @@ const Shell = (): React.JSX.Element => {
           isCheckingUpdates={state.isCheckingUpdates}
         />
         <main id="sidepanel-tabpanel" className="flex-1 overflow-y-auto pb-3" aria-label={t(view === "activity" ? "nav-home" : view === "store" ? "nav-store" : "nav-settings")}>
-          {view === "activity" ? <ActivityScreen /> : view === "store" ? <StoreView /> : <SettingsView />}
+          {view === "activity" ? <ActivityScreen /> : view === "store" ? <StoreScreen /> : <SettingsView />}
         </main>
       </div>
       <BottomNav activeView={view} onViewChange={setView} />
