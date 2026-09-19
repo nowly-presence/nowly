@@ -1,15 +1,23 @@
-import type { PresenceData, StoredPresence } from "@/shared/types";
+import type { ExtensionSettings, PresenceData, StoredPresence } from "@/shared/types";
 import {
   addActiveSlugToState,
   clearActiveSlugsFromState,
+  clearTabPresences,
   getActiveSessionStartedAt,
   getActiveSlugsSnapshot,
-  getActiveTabId,
+  getFocusedTabId,
+  getTabPresence,
+  getTabPresencesSnapshot,
   hasActiveSession,
+  isTabMuted,
+  notifyBroadcastStateChanged,
   removeActiveSession,
   removeActiveSlugFromState,
+  removeTabPresence,
+  removeTabPresencesBySlug,
   setActiveSessionStartedAt,
-  setActiveTabId,
+  setTabMuted,
+  upsertTabPresence,
 } from "@/background/services/background-context";
 import { CDN_BASE_URL } from "@/shared/constants";
 import { trackAnalytics } from "@/background/analytics-client";
@@ -127,6 +135,38 @@ const shouldHoldDiscord = async (presence: StoredPresence): Promise<boolean> => 
   return false;
 };
 
+const pickBroadcastEntry = (settings: ExtensionSettings) => {
+  const entries = getTabPresencesSnapshot();
+  if (entries.length === 0) return null;
+
+  if (settings.activitySelectionMode === "priority") {
+    const order = settings.activityPriorityOrder ?? [];
+    return [...entries].sort((a, b) => {
+      const ai = order.indexOf(a.slug);
+      const bi = order.indexOf(b.slug);
+      return (ai === -1 ? Infinity : ai) - (bi === -1 ? Infinity : bi);
+    })[0];
+  }
+
+  const focusedTabId = getFocusedTabId();
+  const focused = focusedTabId != null ? getTabPresence(focusedTabId) : undefined;
+  return focused ?? entries.reduce((latest, entry) => (entry.updatedAt > latest.updatedAt ? entry : latest));
+};
+
+export const broadcastActiveTab = async (): Promise<void> => {
+  const settings = await getSettings();
+  const entry = pickBroadcastEntry(settings);
+  if (!entry) {
+    postNative({ type: "CLEAR_ACTIVITY" });
+    await setCurrentActivity(null);
+  } else {
+    postNative({ type: "SET_ACTIVITY", presence: entry.presence });
+    await setCurrentActivity({ slug: entry.slug, presence: entry.presence, updatedAt: entry.updatedAt });
+  }
+  await refreshToolbarBadge();
+  notifyBroadcastStateChanged();
+};
+
 export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
   const [current, presences, settings] = await Promise.all([
     getCurrentActivity(),
@@ -181,11 +221,18 @@ export const clearActiveSlugs = async (reason: string): Promise<void> => {
   clearActiveSlugsFromState();
 };
 
+// Content scripts always run in a tab, but the message shape allows tabId to be
+// missing (e.g. a stray call) — fall back to a sentinel so the tab map stays keyed by number.
+const NO_TAB_ID = -1;
+
 export const handleActivityUpdate = async (
   slug: string,
   activity: PresenceData,
   tabId?: number,
 ): Promise<{ ok: boolean }> => {
+  const resolvedTabId = tabId ?? NO_TAB_ID;
+  if (await isTabMuted(resolvedTabId)) return { ok: false };
+
   const presences = await getPresences();
   const stored = presences[slug];
   if (!stored?.release) return { ok: false };
@@ -196,13 +243,13 @@ export const handleActivityUpdate = async (
   }
 
   if (await shouldHoldDiscord(stored)) {
-    postNative({ type: "CLEAR_ACTIVITY" });
-    await refreshToolbarBadge();
+    removeTabPresence(resolvedTabId);
     // Keep the Nowly state updated so resume sends the latest activity.
     const appName = activity.appName ?? stored.release.metadata.name;
     const normalizedActivity = normalizeActivity(activity, appName);
     const presence = mapPresenceData(normalizedActivity);
     await setCurrentActivity({ slug, presence, updatedAt: Date.now() });
+    await broadcastActiveTab();
     return { ok: true };
   }
 
@@ -225,50 +272,40 @@ export const handleActivityUpdate = async (
   const normalizedActivity = normalizeActivity(activity, appName);
   const presence = mapPresenceData(normalizedActivity);
 
-  if (tabId) setActiveTabId(tabId);
+  upsertTabPresence(resolvedTabId, { slug, presence, updatedAt: Date.now() });
   await addActiveSlug(slug);
-  await refreshToolbarBadge();
+  await broadcastActiveTab();
 
-  postNative({ type: "SET_ACTIVITY", presence });
-
-  await Promise.all([
-    setCurrentActivity({ slug, presence, updatedAt: Date.now() }),
-    setDebug({
-      stage: "activity",
-      message: presence.details ?? "activity received",
-      updatedAt: Date.now(),
-    }),
-  ]);
+  await setDebug({
+    stage: "activity",
+    message: presence.details ?? "activity received",
+    updatedAt: Date.now(),
+  });
 
   return { ok: true };
 };
 
 export const handleClearActivity = async (slug?: string): Promise<{ ok: boolean }> => {
-  setActiveTabId(null);
   if (slug) {
+    removeTabPresencesBySlug(slug);
     await removeActiveSlug(slug, "clear");
   } else {
+    clearTabPresences();
     await clearActiveSlugs("clear");
   }
-  postNative({ type: "CLEAR_ACTIVITY" });
-  await refreshToolbarBadge();
+  await broadcastActiveTab();
 
-  await Promise.all([
-    setCurrentActivity(null),
-    setDebug({ stage: "clear", message: "activity cleared", updatedAt: Date.now() }),
-  ]);
+  await setDebug({ stage: "clear", message: "activity cleared", updatedAt: Date.now() });
 
   return { ok: true };
 };
 
 export const handleRemovedTab = (tabId: number): void => {
-  if (tabId !== getActiveTabId()) return;
-  setActiveTabId(null);
-  postNative({ type: "CLEAR_ACTIVITY" });
-
-  void Promise.all([
-    setCurrentActivity(null),
-    setDebug({ stage: "clear", message: "activity cleared (tab closed)", updatedAt: Date.now() }),
-    refreshToolbarBadge(),
-  ]);
+  const hadPresence = Boolean(getTabPresence(tabId));
+  removeTabPresence(tabId);
+  void setTabMuted(tabId, false);
+  void broadcastActiveTab();
+  if (hadPresence) {
+    void setDebug({ stage: "clear", message: "activity cleared (tab closed)", updatedAt: Date.now() });
+  }
 };
