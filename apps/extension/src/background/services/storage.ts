@@ -19,6 +19,8 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   canaryTheme: import.meta.env.VITE_NOWLY_CHANNEL === "canary",
   presenceLanguage: "per-presence",
   presenceLanguages: {},
+  activitySelectionMode: "focused",
+  activityPriorityOrder: [],
 };
 
 export const getPresences = (): Promise<InstalledPresences> =>
