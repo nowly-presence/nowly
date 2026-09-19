@@ -1,7 +1,7 @@
 import { RiHomeLine, RiSettings3Line, RiShoppingBag3Line } from "@remixicon/react"
-import { Tabs, TabsList, TabsTrigger } from "@/ui/tabs"
 import { t } from "@/shared/i18n"
 import type { PersistedAppView } from "@/shared/types"
+import { cn } from "@/ui/utils"
 
 type Props = {
   activeView: PersistedAppView
@@ -16,15 +16,26 @@ const TABS: { view: PersistedAppView; icon: typeof RiHomeLine; label: Parameters
 
 export const BottomNav = ({ activeView, onViewChange }: Props): React.JSX.Element => (
   <nav className="shrink-0 px-3 pb-3">
-    <Tabs value={activeView} onValueChange={(value) => onViewChange(value as PersistedAppView)}>
-      <TabsList aria-label={t("nav-tablist")} className="grid h-auto w-full grid-cols-3 rounded-xl border border-border bg-card p-1">
-        {TABS.map(({ view, icon: Icon, label }) => (
-          <TabsTrigger key={view} value={view} className="flex-col gap-1 py-2 data-active:text-accent data-active:bg-transparent">
+    <div role="tablist" aria-label={t("nav-tablist")} className="grid grid-cols-3 gap-1 rounded-xl border border-border bg-card p-1">
+      {TABS.map(({ view, icon: Icon, label }) => {
+        const active = view === activeView
+        return (
+          <button
+            key={view}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            onClick={() => onViewChange(view)}
+            className={cn(
+              "flex flex-col items-center gap-1 rounded-lg py-2 text-muted-foreground transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+              active ? "bg-accent/10 text-accent" : "hover:bg-muted/50 hover:text-foreground",
+            )}
+          >
             <Icon className="size-5" />
             <span className="text-xs font-medium leading-none">{t(label)}</span>
-          </TabsTrigger>
-        ))}
-      </TabsList>
-    </Tabs>
+          </button>
+        )
+      })}
+    </div>
   </nav>
 )
