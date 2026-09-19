@@ -227,6 +227,7 @@
     "canary": "Canary",
     "support": "Soporte",
     "status": "Estado",
+    "branding": "Identidad de marca",
     "community": "Comunidad",
     "discord": "Discord",
     "github": "GitHub",
@@ -557,6 +558,30 @@
       ]
     }
   },
+  "brandingPage": {
+    "eyebrow": "Identidad de marca",
+    "title": "Recursos de marca",
+    "description": "Logos y colores de la marca Nowly. No distorsiones, recolorees ni modifiques el logo.",
+    "logo": "Logo",
+    "icon": "Icono",
+    "colors": "Colores",
+    "download-svg": "SVG",
+    "download-png": "PNG",
+    "variants": {
+      "blue": "Azul",
+      "dark": "Oscuro (fondos claros)",
+      "white": "Blanco (fondos oscuros)",
+      "canary": "Canary"
+    },
+    "swatches": {
+      "primary-light": "Primario (claro)",
+      "primary-dark": "Primario (oscuro)",
+      "background-light": "Fondo (claro)",
+      "background-dark": "Fondo (oscuro)",
+      "canary-accent": "Acento Canary",
+      "canary-ink": "Tinta Canary"
+    }
+  },
   "supportPage": {
     "eyebrow": "Soporte",
     "title": "¿Necesitas ayuda?",
@@ -657,6 +682,10 @@
     "support": {
       "title": "Soporte",
       "description": "Obtén ayuda con Nowly, la extensión o una presencia."
+    },
+    "branding": {
+      "title": "Identidad de marca",
+      "description": "Logos y colores de la marca Nowly."
     },
     "status": {
       "title": "Estado",

@@ -7,6 +7,12 @@ export const brandLockup = (
 
 export const brandFavicon = (file: string): string => `${CDN_BRAND}/favicons/${file}`;
 
+export const brandIcon = (
+  variant: "blue" | "dark" | "white",
+  size: 16 | 32 | 64 | 128 | 256 | 512 | 1024 = 512,
+  ext: "svg" | "png" = "svg",
+): string => `${CDN_BRAND}/icons/${variant}/${size}.${ext}`;
+
 export const BRAND_LOCKUP_BLUE = brandLockup("blue");
 export const BRAND_LOCKUP_BLUE_PNG = brandLockup("blue", "png");
 export const BRAND_LOCKUP_DARK = brandLockup("dark");
@@ -16,6 +22,13 @@ export const BRAND_LOCKUP_CANARY = brandLockup("canary");
 export const BRAND_LOCKUP_CANARY_PNG = brandLockup("canary", "png");
 export const CANARY_ACCENT = "#CFEE22";
 export const CANARY_INK = "#07080C";
+
+export const BRAND_ICON_BLUE = brandIcon("blue");
+export const BRAND_ICON_BLUE_PNG = brandIcon("blue", 512, "png");
+export const BRAND_ICON_DARK = brandIcon("dark");
+export const BRAND_ICON_DARK_PNG = brandIcon("dark", 512, "png");
+export const BRAND_ICON_WHITE = brandIcon("white");
+export const BRAND_ICON_WHITE_PNG = brandIcon("white", 512, "png");
 
 export const BRAND_FAVICON_SVG = brandFavicon("favicon.svg");
 export const BRAND_FAVICON_16 = brandFavicon("favicon-16.png");
