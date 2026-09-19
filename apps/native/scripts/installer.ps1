@@ -35,6 +35,19 @@ if (-not $Iscc) {
 }
 & "$Iscc" (Join-Path $RootDir 'installer.iss') "/DAPP_VERSION=$Version"
 
+$PayloadExe = Join-Path $DistDir 'NowlyPayload.exe'
+if (-not (Test-Path $PayloadExe)) {
+  throw "Inno Setup did not produce $PayloadExe"
+}
+
+Write-Host ">> Building branded bootstrapper (NowlySetup.exe)..."
+Copy-Item $PayloadExe (Join-Path $RootDir 'cmd\bootstrapper\payload.exe') -Force
+Copy-Item (Join-Path $RootDir 'installer.ico') (Join-Path $RootDir 'cmd\bootstrapper\icon.ico') -Force
+
+$env:GOOS = 'windows'
+$env:GOARCH = 'amd64'
+& go build -ldflags "-X main.version=$Version" -o (Join-Path $DistDir 'NowlySetup.exe') ./cmd/bootstrapper
+
 $SetupExe = Join-Path $DistDir 'NowlySetup.exe'
 if (Test-Path $SetupExe) {
   Write-Host "  + NowlySetup.exe"

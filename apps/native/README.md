@@ -44,6 +44,8 @@ make installer HOST_VERSION=1.0.0-dev
 
 Outputs `dist/nowly-host.exe` + `dist/NowlySetup.exe`.
 
+`NowlySetup.exe` is a small branded bootstrapper (`cmd/bootstrapper/`, Go + raw Win32 calls, no external deps) that shows a rounded animated window matching the web app's CTA styling, then silently runs the real Inno Setup installer embedded inside it as a payload. The build script (`scripts/installer.ps1`) does this in two steps: ISCC compiles `dist/NowlyPayload.exe` from `installer.iss`, then that payload plus the current `installer.ico` are copied into `cmd/bootstrapper/` (`payload.exe`, `icon.ico`) and `go build` compiles the bootstrapper around them into `dist/NowlySetup.exe`. `cmd/bootstrapper/payload.exe` in git is a placeholder — the build always overwrites it before compiling.
+
 ### Platform-specific builds
 
 #### Windows
@@ -106,7 +108,7 @@ The `.app` bundle is unsigned and unnotarized - no Apple Developer account requi
 
 | Platform | Min. version | File | Size | Contents |
 |----------|-------------|------|------|----------|
-| Windows  | Windows 10 x64 | `NowlySetup.exe` | ~3.7 MB | Inno Setup installer (double-click to install) |
+| Windows  | Windows 10 x64 | `NowlySetup.exe` | ~3.7 MB | Branded bootstrapper (rounded animated window) that silently runs the embedded Inno Setup payload |
 | Windows  | Windows 10 x64 | `nowly-windows.zip` | ~3.3 MB | Same `.exe` in a zip |
 | Linux    | Linux 2.6.32+ / glibc 2.17+ | `nowly-linux.tar.gz` | ~1.9 MB | `nowly-host-linux` binary + install/uninstall scripts |
 | macOS    | macOS 11 Big Sur+ | `nowly-macos.tar.gz` | ~3.7 MB | Intel + ARM binaries + install/uninstall scripts |
@@ -185,6 +187,8 @@ The manifest allows both the prod and dev extension IDs, so a single install wor
 | `installer.ico` | Generated from `assets/icon.png` | ICO 48×48 |
 | `assets/banner.png` | Wizard banner (left panel) | PNG 202×386 |
 | `assets/icon.png` | Wizard small logo | PNG 55×55 |
+| `cmd/bootstrapper/icon.ico` | Copy of `installer.ico`, refreshed by the build script | ICO, taskbar/title-bar icon of `NowlySetup.exe` |
+| `cmd/bootstrapper/satoshi.ttf` | Satoshi Regular (Fontshare, same family as the web app) | TTF, embedded and loaded in-memory via `AddFontMemResourceEx` |
 
 To regenerate `installer.ico` from the icon PNG:
 

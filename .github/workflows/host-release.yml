@@ -98,12 +98,22 @@ jobs:
           python -m pip install --quiet pillow
           python scripts/make-installer-ico.py --png assets/icon.png --out installer.ico
 
-      - name: Build Windows installer
+      - name: Build Windows installer payload
         working-directory: apps/native
         shell: pwsh
         run: |
           $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
           & $iscc installer.iss /DAPP_VERSION=${{ needs.version.outputs.version }}
+
+      - name: Build branded bootstrapper (NowlySetup.exe)
+        working-directory: apps/native
+        shell: pwsh
+        run: |
+          Copy-Item dist/NowlyPayload.exe cmd/bootstrapper/payload.exe -Force
+          Copy-Item installer.ico cmd/bootstrapper/icon.ico -Force
+          $env:GOOS = "windows"
+          $env:GOARCH = "amd64"
+          go build -ldflags "-X main.version=${{ needs.version.outputs.version }}" -o dist/NowlySetup.exe ./cmd/bootstrapper
 
       - name: Build portable archives
         working-directory: apps/native
