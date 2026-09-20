@@ -3,8 +3,10 @@ import { useState } from "react"
 import { PresenceTile } from "@/components/shared/presence-tile"
 import { SettingRow } from "@/features/settings/setting-row"
 import { SettingsSectionHeader } from "@/features/settings/settings-section-header"
+import { setPendingSidepanelNav } from "@/shared/sidepanel-view"
 import { t } from "@/shared/i18n"
 import type { ActivitySelectionMode, ExtensionSettings, InstalledPresences } from "@/shared/types"
+import { Button } from "@/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select"
 import { cn } from "@/ui/utils"
 
@@ -37,6 +39,8 @@ export const ActivitySelectionSection = ({ settings, onSettingsChange, presences
     onSettingsChange({ activityPriorityOrder: reordered })
   }
 
+  const unlocked = installedSlugs.length >= 2
+
   return (
     <div className="flex flex-col gap-3">
       <SettingsSectionHeader title={t("settings-group-activity-selection")} onBack={onBack} />
@@ -44,13 +48,15 @@ export const ActivitySelectionSection = ({ settings, onSettingsChange, presences
         <SettingRow
           title={t("activity-selection-mode")}
           description={t("activity-selection-mode-description")}
+          controlId="activity-selection-mode-select"
           control={
             <Select
               value={settings.activitySelectionMode ?? "focused"}
               onValueChange={(value) => onSettingsChange({ activitySelectionMode: value as ActivitySelectionMode })}
               items={{ focused: t("activity-selection-mode-focused"), priority: t("activity-selection-mode-priority") }}
+              disabled={!unlocked}
             >
-              <SelectTrigger size="sm" className="w-40" aria-label={t("activity-selection-mode")}>
+              <SelectTrigger id="activity-selection-mode-select" size="sm" className="w-40" aria-label={t("activity-selection-mode")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -60,6 +66,15 @@ export const ActivitySelectionSection = ({ settings, onSettingsChange, presences
             </Select>
           }
         >
+          {!unlocked ? (
+            <div className="mt-1 flex flex-col items-start gap-2 rounded-lg border border-dashed border-border bg-secondary/50 p-3">
+              <p className="text-xs leading-5 text-muted-foreground">{t("activity-selection-locked-hint")}</p>
+              <Button variant="outline" size="sm" onClick={() => void setPendingSidepanelNav({ view: "store" })}>
+                {t("activity-selection-open-store")}
+              </Button>
+            </div>
+          ) : null}
+
           {settings.activitySelectionMode === "priority" && installedSlugs.length > 0 ? (
             <div className="mt-1">
               <p className="mb-2 text-xs leading-5 text-muted-foreground">{t("activity-priority-order-description")}</p>

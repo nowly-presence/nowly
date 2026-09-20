@@ -15,12 +15,13 @@ type Props = {
 
 export const ScheduleSection = ({ settings, onSettingsChange, onEditGlobalSchedule, onBack }: Props): React.JSX.Element => (
   <div className="flex flex-col gap-3">
-    <SettingsSectionHeader title={t("settings-group-schedule")} onBack={onBack} />
+    <SettingsSectionHeader title={t("settings-group-advanced")} onBack={onBack} />
     <div className="overflow-hidden rounded-xl border border-border bg-card">
       <SettingRow
         title={t("schedule-feature")}
         description={t("schedule-feature-description")}
-        control={<Switch checked={settings.scheduleEnabled === true} onCheckedChange={(checked) => onSettingsChange({ scheduleEnabled: checked })} />}
+        controlId="schedule-feature-toggle"
+        control={<Switch id="schedule-feature-toggle" checked={settings.scheduleEnabled === true} onCheckedChange={(checked) => onSettingsChange({ scheduleEnabled: checked })} />}
       >
         {settings.scheduleEnabled === true ? (
           <Button variant="outline" size="sm" onClick={onEditGlobalSchedule} className="mt-1 w-fit">

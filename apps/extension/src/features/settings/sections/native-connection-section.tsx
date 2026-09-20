@@ -1,6 +1,9 @@
-import { RiExternalLinkLine, RiRefreshLine, RiStethoscopeLine } from "@remixicon/react"
+import { RiClipboardLine, RiExternalLinkLine, RiRefreshLine, RiStethoscopeLine } from "@remixicon/react"
+import { useMemo } from "react"
 import { isConnectionHealthy } from "@/components/layout/connection-status-bar"
+import { buildDiagnosticSnapshot } from "@/features/diagnostics/diagnostic-status"
 import { UserDiagnosticCard } from "@/features/diagnostics/user-diagnostic-card"
+import { useSupportDiagnostic } from "@/features/diagnostics/use-support-diagnostic"
 import { SettingsSectionHeader } from "@/features/settings/settings-section-header"
 import type { HostVersionInfo } from "@/hooks/use-host-version"
 import { HOST_DOWNLOAD_URL } from "@/shared/constants"
@@ -8,7 +11,7 @@ import { t } from "@/shared/i18n"
 import type { CurrentActivity, InstalledPresences, NativeStatus, UserScriptsStatus } from "@/shared/types"
 import { Badge } from "@/ui/badge"
 import { Button } from "@/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/ui/dialog"
 import { cn } from "@/ui/utils"
 
 type Props = {
@@ -20,11 +23,14 @@ type Props = {
   isCheckingHostVersion: boolean
   onCheckHostUpdate: () => void
   onConnect: () => void
+  isConnecting: boolean
   onBack: () => void
 }
 
-export const NativeConnectionSection = ({ activity, presences, userScripts, nativeStatus, hostVersionInfo, isCheckingHostVersion, onCheckHostUpdate, onConnect, onBack }: Props): React.JSX.Element => {
+export const NativeConnectionSection = ({ activity, presences, userScripts, nativeStatus, hostVersionInfo, isCheckingHostVersion, onCheckHostUpdate, onConnect, isConnecting, onBack }: Props): React.JSX.Element => {
   const healthy = isConnectionHealthy(nativeStatus)
+  const snapshot = useMemo(() => buildDiagnosticSnapshot({ activity, nativeStatus, presences, userScripts }), [activity, nativeStatus, presences, userScripts])
+  const { copied, copySupportDiagnostic } = useSupportDiagnostic(snapshot)
 
   return (
     <div className="flex flex-col gap-3">
@@ -40,8 +46,8 @@ export const NativeConnectionSection = ({ activity, presences, userScripts, nati
           </Badge>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="flex-1" onClick={onConnect}>
-            <RiRefreshLine />
+          <Button variant="outline" size="sm" className="flex-1" onClick={onConnect} disabled={isConnecting}>
+            <RiRefreshLine className={cn(isConnecting && "animate-spin")} />
             {t("host-check-update")}
           </Button>
           <Dialog>
@@ -52,8 +58,15 @@ export const NativeConnectionSection = ({ activity, presences, userScripts, nati
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
                 <DialogTitle>{t("diagnostic-title")}</DialogTitle>
+                <DialogDescription>{t("diagnostic-description")}</DialogDescription>
               </DialogHeader>
               <UserDiagnosticCard activity={activity} nativeStatus={nativeStatus} onConnectNative={onConnect} presences={presences} userScripts={userScripts} />
+              <DialogFooter>
+                <Button variant="outline" onClick={copySupportDiagnostic}>
+                  <RiClipboardLine className="size-3.5" />
+                  {copied ? t("support-diagnostic-copied") : t("support-diagnostic-copy")}
+                </Button>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
         </div>

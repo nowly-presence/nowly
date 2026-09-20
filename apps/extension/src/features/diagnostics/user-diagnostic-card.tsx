@@ -1,8 +1,7 @@
-import { RiClipboardLine, RiExternalLinkLine } from "@remixicon/react"
+import { RiExternalLinkLine } from "@remixicon/react"
 import { useMemo } from "react"
 import { buildDiagnosticSnapshot, isHostChecking, YOUTUBE_TEST_URL } from "@/features/diagnostics/diagnostic-status"
 import { StatusRow, type RowStatus } from "@/features/diagnostics/status-row"
-import { useSupportDiagnostic } from "@/features/diagnostics/use-support-diagnostic"
 import { extensionDetailsUrl, openUrl, siteUrl } from "@/shared/browser-links"
 import { t } from "@/shared/i18n"
 import type { CurrentActivity, InstalledPresences, NativeStatus, UserScriptsStatus } from "@/shared/types"
@@ -24,7 +23,6 @@ const SmallAction = ({ onClick, children }: { onClick?: () => void; children: Re
 
 export const UserDiagnosticCard = ({ activity, nativeStatus, onConnectNative, presences, userScripts }: Props): React.JSX.Element => {
   const snapshot = useMemo(() => buildDiagnosticSnapshot({ activity, nativeStatus, presences, userScripts }), [activity, nativeStatus, presences, userScripts])
-  const { copied, copySupportDiagnostic } = useSupportDiagnostic(snapshot)
 
   const hostStatus: RowStatus = snapshot.hostDetected ? "success" : isHostChecking(nativeStatus) ? "loading" : "error"
   const discordStatus: RowStatus = snapshot.discordConnected ? "success" : hostStatus === "loading" ? "loading" : "error"
@@ -32,17 +30,6 @@ export const UserDiagnosticCard = ({ activity, nativeStatus, onConnectNative, pr
 
   return (
     <section className="flex flex-col gap-3">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t("diagnostic-title")}</h2>
-          <p className="mt-1 text-[11px] leading-4 text-muted-foreground">{t("diagnostic-description")}</p>
-        </div>
-        <Button variant="outline" size="sm" onClick={copySupportDiagnostic}>
-          <RiClipboardLine className="size-3.5" />
-          {copied ? t("support-diagnostic-copied") : t("support-diagnostic-copy")}
-        </Button>
-      </div>
-
       <div className="flex flex-col gap-2">
         <StatusRow status="success" label={t("diagnostic-extension-installed")} message={t("diagnostic-extension-installed-message")} />
 

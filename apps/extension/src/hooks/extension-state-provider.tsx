@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react"
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import { sendMessage } from "@/lib/messages"
 import type { CurrentActivity, ExtensionSettings, InstalledPresences, NativeStatus, PresenceDebug } from "@/shared/types"
 
@@ -18,6 +18,7 @@ type ExtensionState = {
   checkUpdates: () => void
   refresh: () => void
   connectNative: () => void
+  isConnectingNative: boolean
   removePresence: (slug: string) => void
   togglePresence: (slug: string, enabled: boolean) => void
   installPresenceFromApi: (slug: string) => Promise<{ ok: boolean; queued: boolean }>
@@ -49,6 +50,8 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }): R
   const [isUnpacked, setIsUnpacked] = useState(false)
   const [updates, setUpdates] = useState<Record<string, string>>({})
   const [isCheckingUpdates, setIsCheckingUpdates] = useState(false)
+  const [isConnectingNative, setIsConnectingNative] = useState(false)
+  const connectingNativeRef = useRef(false)
 
   useEffect(() => {
     try {
@@ -150,8 +153,16 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }): R
   }, [])
 
   const connectNative = useCallback((): void => {
+    if (connectingNativeRef.current) return
+    connectingNativeRef.current = true
+    setIsConnectingNative(true)
     setNativeStatus((current) => ({ ...current, status: "connecting" }))
-    void sendMessage("CONNECT_NATIVE").then((status) => setNativeStatus(status ?? FALLBACK_NATIVE_STATUS))
+    void sendMessage("CONNECT_NATIVE")
+      .then((status) => setNativeStatus(status ?? FALLBACK_NATIVE_STATUS))
+      .finally(() => {
+        connectingNativeRef.current = false
+        setIsConnectingNative(false)
+      })
   }, [])
 
   const setSettings = useCallback((partial: Partial<ExtensionSettings>): void => {
@@ -188,6 +199,7 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }): R
     checkUpdates,
     refresh,
     connectNative,
+    isConnectingNative,
     removePresence,
     togglePresence,
     installPresenceFromApi,
