@@ -155,6 +155,7 @@ pnpm --filter @nowly/internal-cli host:publish                # publish native h
 
 ### Discord Bot (@nowly/discord)
 - Standalone bot (`src/client.ts`) with `commands/` (`donator`, `links`, `presence`, `status`, `support`), `events/`, `services/` - community-facing, separate from the native host's Discord IPC integration
+- **`apps/discord/` is entirely git-ignored** (see root `.gitignore`) - it exists on disk here but has no commit history in this repo and isn't a submodule either. Don't assume a fresh clone of this repo has it.
 
 ### Native Host (Go, apps/native/)
 - Native messaging host ID: prod `kmnlnfldimgneaopdihplkebobckcjpf`, dev `abbegmindbabanjcabnmcjmamaoffbam`
@@ -164,17 +165,20 @@ pnpm --filter @nowly/internal-cli host:publish                # publish native h
 ## Presence SDK API (Global in Scripts)
 
 ```typescript
-const presence = new Presence<typeof Settings>(settings);
+const settings = Presence.Settings({ /* ... */ });
+const presence = new Presence(settings);
 
 presence.on('UpdateData', async (ctx) => {
   // Fires on every tick (page change, user setting update, etc.)
   // ctx.settings - user settings for this presence
 });
 
-presence.setActivity(data: PresenceData); // Send to Discord
+await presence.setActivity(data: PresenceData); // Send to Discord
 presence.clearActivity();
-presence.getStrings<T>();                 // Localized strings from the presence's locales/ files
+await presence.getStrings<T>();           // Localized strings from the presence's locales/ files
 presence.formatString(str, vars);         // Interpolate a localized string
+await presence.getSetting<T>(key);        // Read a single user setting value
+presence.info(msg) / presence.error(msg); // Log to the extension's runtime log
 ```
 
 Use `createMediaTimestamps(video)` to compute activity duration from `<audio>`/`<video>` elements.
@@ -190,17 +194,20 @@ Based on `packages/sdk/src/metadata.ts` (`Metadata` type):
   "contributors": [{ "name": "...", "github": "..." }],
   "url": ["example.com", "www.example.com"],
   "regExp": "^https?://(www\\.)?example\\.com/",
+  "world": "isolated",
+  "runAt": "document_idle",
   "color": "#0098FF",
   "category": "streaming",
   "description": { "en-US": "...", "fr-FR": "...", "es-ES": "..." },
   "longDescription": { "en-US": "...", "fr-FR": "...", "es-ES": "..." },
   "features": { "en-US": ["...", "..."] },
   "settings": {},
-  "discordNative": false
+  "discordNative": false,
+  "imageProxy": { "hostSuffixes": ["cdn.example.com"] }
 }
 ```
 
-`category` is a single enum value (`streaming | music | video | social | gaming | tools | ai | learning | creator | other`), not an array. Settings use the SDK's setting types (`BooleanSetting`, `InputSetting`, `SelectSetting`, `SliderSetting`) with multilingual `label`/`description`. Schema validated against `packages/presences/metadata.schema.json`. Optional `discordNative` marks platforms Discord already supports via account linking.
+`slug` is auto-derived from the folder name and must not be set manually. `category` is a single enum value (`streaming | music | video | social | gaming | tools | ai | learning | creator | other`), not an array. `world` (`isolated` default, or `main` for same-origin authenticated fetches/page globals) and `runAt` (`document_start | document_end | document_idle`, default `document_idle`) control script injection. `imageProxy` declares external CDN hosts to proxy images through via `createCachedImageProxyUrl` when Discord can't load them directly. Settings use the SDK's setting types (`BooleanSetting`, `InputSetting`, `SelectSetting`, `SliderSetting`) with multilingual `label`/`description`. Schema validated against `packages/presences/metadata.schema.json`. Optional `discordNative` marks platforms Discord already supports via account linking.
 
 ## Cursor Rules
 

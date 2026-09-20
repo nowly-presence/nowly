@@ -11,8 +11,8 @@ Put `buttonVariants()` on the **real** `Link` or `<a>`. Never call `buttonVarian
 
 ```tsx
 import Link from "next/link"
-import { buttonVariants } from "@/components/ui/button-variants"
-import { cn } from "@/lib/utils"
+import { buttonVariants } from "@nowly/ui"
+import { cn } from "@nowly/ui"
 
 // Client Component only:
 <Link href="/library" className={cn(buttonVariants({ variant: "ghost", size: "lg" }))}>

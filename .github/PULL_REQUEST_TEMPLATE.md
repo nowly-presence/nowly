@@ -6,9 +6,12 @@
 
 - [ ] Presence
 - [ ] Web
+- [ ] Docs site
+- [ ] Insights
 - [ ] Extension
 - [ ] API
 - [ ] Native host
+- [ ] Discord bot
 - [ ] Documentation
 - [ ] Maintenance
 

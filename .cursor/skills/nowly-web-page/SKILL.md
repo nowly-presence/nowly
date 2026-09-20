@@ -48,7 +48,7 @@ Every inner page (not the home hero) uses this rhythm:
 - Header copy width: `max-w-xl` (or `max-w-160` if the title is long).
 - Vertical space before content: `mt-12` or `mt-14`, not random `mt-7`.
 - Alternate bands on the home page only: `bg-section-alt` via existing home helpers. Inner pages stay on `background`.
-- Cards: `rounded-[16px]`, `Card` from `@/components/ui/card`. Clickable card: wrap with `Link` or `<a className="block rounded-[16px] outline-offset-4">`, never `Button render={Link}`.
+- Cards: `rounded-[16px]`, `Card` from `@nowly/ui`. Clickable card: wrap with `Link` or `<a className="block rounded-[16px] outline-offset-4">`, never `Button render={Link}`.
 - Grids: `gap-4 sm:grid-cols-2 lg:grid-cols-3` unless the reference page does otherwise.
 
 Do **not** reuse library `useNavJoin` / `data-nav-join` unless the page has a sticky toolbar that must fuse with the marketing navbar. That hook is library-specific.
@@ -80,7 +80,7 @@ Light/dark is `next-themes` on `<html class="dark">`. Prefer `bg-card`, `border-
 
 ## Links and buttons
 
-- Navigation: real `Link` or `<a>`. Styled with `ButtonLink` / `ButtonAnchor` from `@/components/ui/button-link`.
+- Navigation: real `Link` or `<a>`. Styled with `ButtonLink` / `ButtonAnchor` from `@nowly/ui`.
 - Never `Button` + `render={<Link />}` / `asChild` / `nativeButton={false}`.
 - Never call `buttonVariants()` in an RSC. The wrapper is a Client Component.
 - `<Button>` only for `type="button"` / `submit`.

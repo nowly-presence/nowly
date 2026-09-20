@@ -72,8 +72,7 @@ Internal card: `Link` from `next/link` with the same `className`.
 ## Actions
 
 ```tsx
-import { ButtonLink, ButtonAnchor } from "@/components/ui/button-link"
-import { Button } from "@/components/ui/button"
+import { ButtonLink, ButtonAnchor, Button } from "@nowly/ui"
 
 <ButtonLink href="/library" variant="outline">Library</ButtonLink>
 <ButtonAnchor href="https://nowly.me/desktop" rel="noreferrer" target="_blank">
