@@ -1,0 +1,53 @@
+---
+title: Assets
+description: Prepare os recursos de logo, ícone e miniatura para presenças Nowly.
+---
+
+## Recursos Obrigatórios
+
+Toda presença deve incluir:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "Marca da plataforma para posicionamentos maiores, cabeçalhos e imagens Open Graph.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Ícone quadrado compacto usado em superfícies de UI pequenas e imagens de atividade do Discord.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Visual do marketplace e da página de detalhes que representa claramente a plataforma.", required: true }
+  ]}
+/>
+
+Essas dimensões exatas são exigidas pela CI em cada PR de presença - um recurso com o tamanho errado falha na validação.
+
+## Logo
+
+Use `logo.png` para a marca da plataforma quando uma imagem mais larga for apropriada. Deve ter exatamente **300×300**.
+
+## Ícone
+
+Use `icon.png` para exibições quadradas compactas, fundos coloridos e imagens de atividade do Discord. Deve ter exatamente **128×128**.
+
+## Miniatura
+
+Use `thumbnail.jpg` para os visuais do marketplace e da página de detalhes. Deve representar a plataforma claramente. Deve ter exatamente **1920×1080**.
+
+## Constantes de recursos em tempo de execução
+
+`Assets` é fornecido pelo runtime (veja [Presence API](/presence-development/presence-api)). Ele expõe as três chaves de recursos padrão:
+
+```ts filename="presence.ts"
+Assets.Logo      // → "logo.png"
+Assets.Icon      // → "icon.png"
+Assets.Thumbnail // → "thumbnail.jpg"
+```
+
+Use-as nos payloads de atividade:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  largeImageKey: Assets.Logo,
+  largeImageText: "YouTube",
+})
+```
+
+## Diretrizes de Qualidade
+
+Use um PNG transparente para `icon.png` - o ícone é exibido em um fundo colorido na biblioteca do Nowly, então um fundo preenchido vai conflitar. Um `logo.png` transparente é preferível, mas menos crítico. Mantenha as miniaturas legíveis em tamanhos pequenos e evite imagens genéricas.

@@ -1,0 +1,53 @@
+---
+title: Assets
+description: Bereite Logo-, Icon- und Thumbnail-Assets für Nowly-Presences vor.
+---
+
+## Erforderliche Assets
+
+Jede Presence muss enthalten:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "Markenzeichen der Plattform für breitere Platzierungen, Header und Open-Graph-Bilder.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Kompaktes quadratisches Icon für kleine UI-Oberflächen und Discord-Activity-Bilder.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Visuelles Element für Marktplatz und Detailseite, das die Plattform klar darstellt.", required: true }
+  ]}
+/>
+
+Diese exakten Maße werden von CI bei jedem Presence-PR durchgesetzt - ein Asset mit falscher Größe schlägt bei der Validierung fehl.
+
+## Logo
+
+Verwende `logo.png` für das Markenzeichen der Plattform, wenn ein breiteres Bild angebracht ist. Muss exakt **300×300** sein.
+
+## Icon
+
+Verwende `icon.png` für kompakte quadratische Anzeigen, farbige Hintergründe und Discord-Activity-Bilder. Muss exakt **128×128** sein.
+
+## Thumbnail
+
+Verwende `thumbnail.jpg` für visuelle Elemente auf dem Marktplatz und der Detailseite. Es sollte die Plattform klar darstellen. Muss exakt **1920×1080** sein.
+
+## Laufzeit-Asset-Konstanten
+
+`Assets` wird von der Laufzeitumgebung bereitgestellt (siehe [Presence API](/presence-development/presence-api)). Sie stellt die drei Standard-Asset-Schlüssel bereit:
+
+```ts filename="presence.ts"
+Assets.Logo      // → "logo.png"
+Assets.Icon      // → "icon.png"
+Assets.Thumbnail // → "thumbnail.jpg"
+```
+
+Verwende sie in Activity-Payloads:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  largeImageKey: Assets.Logo,
+  largeImageText: "YouTube",
+})
+```
+
+## Qualitätsrichtlinien
+
+Verwende ein transparentes PNG für `icon.png` - das Icon wird in der Nowly-Bibliothek auf farbigem Hintergrund angezeigt, sodass ein gefüllter Hintergrund kollidieren würde. Ein transparentes `logo.png` wird bevorzugt, ist aber weniger kritisch. Halte Thumbnails auch in kleiner Größe lesbar und vermeide generische Bildmotive.
