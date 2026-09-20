@@ -1,15 +1,18 @@
 import { RiCheckboxCircleLine } from "@remixicon/react"
+import { PresenceCreditsPills } from "@/features/activity/presence-credits-card"
 import { t } from "@/shared/i18n"
 
 type Props = {
+  author?: { github?: string; name: string }
+  contributors?: Array<{ github?: string; name: string }>
   features: string[]
   urls: string[]
 }
 
 const toHref = (url: string): string => (url.includes("://") ? url : `https://${url}`)
 
-export const PresenceAboutCard = ({ features, urls }: Props): React.JSX.Element | null => {
-  if (features.length === 0 && urls.length === 0) return null
+export const PresenceAboutCard = ({ author, contributors, features, urls }: Props): React.JSX.Element | null => {
+  if (features.length === 0 && urls.length === 0 && !author?.name) return null
 
   return (
     <section className="flex flex-col gap-4 rounded-xl border border-border bg-card px-4 py-3">
@@ -18,7 +21,10 @@ export const PresenceAboutCard = ({ features, urls }: Props): React.JSX.Element 
           <h2 className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("presence-features")}</h2>
           <ul className="flex flex-col gap-3">
             {features.map((feature) => (
-              <li key={feature} className="flex items-center gap-3 text-sm leading-5 text-muted-foreground">
+              <li
+                key={feature}
+                className="flex items-center gap-3 text-sm leading-5 text-muted-foreground"
+              >
                 <RiCheckboxCircleLine className="size-5 shrink-0 text-accent" />
                 <span>{feature}</span>
               </li>
@@ -26,6 +32,10 @@ export const PresenceAboutCard = ({ features, urls }: Props): React.JSX.Element 
           </ul>
         </div>
       ) : null}
+      <PresenceCreditsPills
+        author={author}
+        contributors={contributors}
+      />
       {urls.length > 0 ? (
         <div>
           <h2 className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("presence-supported-urls")}</h2>
