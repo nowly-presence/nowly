@@ -3,9 +3,19 @@ import { cn } from "@/ui/utils"
 
 // Subset of packages/ui/src/dropdown-menu.tsx - just what the header's "more"
 // menu needs. Add sub/checkbox/radio variants back if a future screen needs them.
-const DropdownMenu = ({ ...props }: MenuPrimitive.Root.Props) => <MenuPrimitive.Root data-slot="dropdown-menu" {...props} />
+const DropdownMenu = ({ ...props }: MenuPrimitive.Root.Props) => (
+  <MenuPrimitive.Root
+    data-slot="dropdown-menu"
+    {...props}
+  />
+)
 
-const DropdownMenuTrigger = ({ ...props }: MenuPrimitive.Trigger.Props) => <MenuPrimitive.Trigger data-slot="dropdown-menu-trigger" {...props} />
+const DropdownMenuTrigger = ({ ...props }: MenuPrimitive.Trigger.Props) => (
+  <MenuPrimitive.Trigger
+    data-slot="dropdown-menu-trigger"
+    {...props}
+  />
+)
 
 const DropdownMenuContent = ({
   align = "start",
@@ -16,7 +26,13 @@ const DropdownMenuContent = ({
   ...props
 }: MenuPrimitive.Popup.Props & Pick<MenuPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset">) => (
   <MenuPrimitive.Portal>
-    <MenuPrimitive.Positioner className="isolate z-50 outline-none" align={align} alignOffset={alignOffset} side={side} sideOffset={sideOffset}>
+    <MenuPrimitive.Positioner
+      className="isolate z-50 outline-none"
+      align={align}
+      alignOffset={alignOffset}
+      side={side}
+      sideOffset={sideOffset}
+    >
       <MenuPrimitive.Popup
         data-slot="dropdown-menu-content"
         className={cn(

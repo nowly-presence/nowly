@@ -19,19 +19,38 @@ const useIsChromeOs = (): boolean => {
   return isChromeOs
 }
 
-type UseOnboardingStepsProps = Pick<OnboardingOverlayProps, "activity" | "nativeStatus" | "userScripts" | "onConnectNative" | "presences" | "hostVersionInfo">
+type UseOnboardingStepsProps = Pick<
+  OnboardingOverlayProps,
+  "activity" | "nativeStatus" | "userScripts" | "onConnectNative" | "presences" | "hostVersionInfo"
+>
 
-export const useOnboardingSteps = ({ activity, nativeStatus, userScripts, onConnectNative, presences, hostVersionInfo }: UseOnboardingStepsProps): GuidedStep[] => {
+export const useOnboardingSteps = ({
+  activity,
+  nativeStatus,
+  userScripts,
+  onConnectNative,
+  presences,
+  hostVersionInfo,
+}: UseOnboardingStepsProps): GuidedStep[] => {
   const isChromeOs = useIsChromeOs()
   const snapshot = buildDiagnosticSnapshot({ activity, nativeStatus, presences, userScripts })
   const hostStatus: StepStatus = snapshot.hostDetected ? "success" : isHostChecking(nativeStatus) ? "loading" : "error"
   const discordStatus: StepStatus = snapshot.discordConnected ? "success" : snapshot.hostDetected ? "error" : "loading"
   const youtubeInstallStatus: StepStatus = snapshot.youtubePresenceInstalled ? "success" : snapshot.discordConnected ? "error" : "loading"
-  const youtubeTestStatus: StepStatus = snapshot.youtubeActivityDetected ? "success" : snapshot.youtubePresenceInstalled ? "error" : "loading"
+  const youtubeTestStatus: StepStatus = snapshot.youtubeActivityDetected
+    ? "success"
+    : snapshot.youtubePresenceInstalled
+      ? "error"
+      : "loading"
   const showHostActions = snapshot.userScriptsActive && !snapshot.hostDetected && hostStatus !== "loading"
 
   return [
-    { icon: RiShoppingBag3Line, status: "success", title: t("onboarding-step-extension-title"), message: t("onboarding-step-extension-success") },
+    {
+      icon: RiShoppingBag3Line,
+      status: "success",
+      title: t("onboarding-step-extension-title"),
+      message: t("onboarding-step-extension-success"),
+    },
     {
       icon: RiLockLine,
       status: snapshot.userScriptsActive ? "success" : "error",
@@ -68,7 +87,10 @@ export const useOnboardingSteps = ({ activity, nativeStatus, userScripts, onConn
           title: t("onboarding-step-host-title"),
           message: snapshot.hostDetected
             ? hostVersionInfo?.updateAvailable
-              ? t("onboarding-step-host-outdated", { current: hostVersionInfo.currentVersion ?? "?", latest: hostVersionInfo.latestVersion })
+              ? t("onboarding-step-host-outdated", {
+                  current: hostVersionInfo.currentVersion ?? "?",
+                  latest: hostVersionInfo.latestVersion,
+                })
               : t("onboarding-step-host-success")
             : hostStatus === "loading" && snapshot.userScriptsActive
               ? t("onboarding-step-host-loading")
@@ -80,7 +102,10 @@ export const useOnboardingSteps = ({ activity, nativeStatus, userScripts, onConn
                   {hostVersionInfo?.updateAvailable ? t("diagnostic-update-host") : t("diagnostic-install-host")}
                   <RiExternalLinkLine className="size-4" />
                 </Button>
-                <Button variant="outline" onClick={onConnectNative}>
+                <Button
+                  variant="outline"
+                  onClick={onConnectNative}
+                >
                   {t("diagnostic-check-connection")}
                 </Button>
               </div>
@@ -90,10 +115,17 @@ export const useOnboardingSteps = ({ activity, nativeStatus, userScripts, onConn
       icon: RiDiscordFill,
       status: discordStatus,
       title: t("onboarding-step-discord-title"),
-      message: snapshot.discordConnected ? t("diagnostic-discord-connected-message") : snapshot.hostDetected ? t("diagnostic-discord-closed-message") : t("onboarding-step-discord-waiting"),
+      message: snapshot.discordConnected
+        ? t("diagnostic-discord-connected-message")
+        : snapshot.hostDetected
+          ? t("diagnostic-discord-closed-message")
+          : t("onboarding-step-discord-waiting"),
       actions:
         snapshot.hostDetected && !snapshot.discordConnected ? (
-          <Button variant="outline" onClick={onConnectNative}>
+          <Button
+            variant="outline"
+            onClick={onConnectNative}
+          >
             {t("diagnostic-check-connection")}
           </Button>
         ) : undefined,
@@ -102,7 +134,11 @@ export const useOnboardingSteps = ({ activity, nativeStatus, userScripts, onConn
       icon: RiShoppingBag3Line,
       status: youtubeInstallStatus,
       title: t("onboarding-step-presence-title"),
-      message: snapshot.youtubePresenceInstalled ? t("onboarding-step-presence-success") : snapshot.discordConnected ? t("onboarding-step-presence-error") : t("onboarding-step-presence-waiting"),
+      message: snapshot.youtubePresenceInstalled
+        ? t("onboarding-step-presence-success")
+        : snapshot.discordConnected
+          ? t("onboarding-step-presence-error")
+          : t("onboarding-step-presence-waiting"),
       actions:
         snapshot.discordConnected && !snapshot.youtubePresenceInstalled ? (
           <Button onClick={() => openUrl(siteUrl("/library/youtube"))}>
@@ -115,7 +151,11 @@ export const useOnboardingSteps = ({ activity, nativeStatus, userScripts, onConn
       icon: RiYoutubeFill,
       status: youtubeTestStatus,
       title: t("onboarding-step-youtube-title"),
-      message: snapshot.youtubeActivityDetected ? t("onboarding-step-youtube-success") : snapshot.youtubePresenceInstalled ? t("onboarding-step-youtube-error") : t("onboarding-step-youtube-waiting"),
+      message: snapshot.youtubeActivityDetected
+        ? t("onboarding-step-youtube-success")
+        : snapshot.youtubePresenceInstalled
+          ? t("onboarding-step-youtube-error")
+          : t("onboarding-step-youtube-waiting"),
       actions:
         snapshot.youtubePresenceInstalled && !snapshot.youtubeActivityDetected ? (
           <Button onClick={() => openUrl(YOUTUBE_TEST_URL)}>

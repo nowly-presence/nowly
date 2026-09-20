@@ -15,7 +15,11 @@ const OPTIONS: { id: PresenceDisplayMode; icon: typeof RiListUnordered; labelKey
 ]
 
 export const PresenceLayoutToggle = ({ value, onChange }: Props): React.JSX.Element => (
-  <div role="group" aria-label={t("display")} className="inline-flex h-8 shrink-0 items-center overflow-hidden rounded-lg bg-secondary">
+  <div
+    role="group"
+    aria-label={t("display")}
+    className="inline-flex h-8 shrink-0 items-center overflow-hidden rounded-lg bg-secondary"
+  >
     {OPTIONS.map((option) => (
       <Button
         key={option.id}

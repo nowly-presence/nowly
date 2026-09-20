@@ -22,7 +22,11 @@ export const registerAlarmHandlers = (): void => {
         const presences = await getPresences()
         for (const slug of slugs) {
           const stored = presences[slug]
-          trackAnalytics("presence_active_heartbeat", { slug, version: stored?.release?.version ?? stored?.metadata?.version, source: "extension_library" })
+          trackAnalytics("presence_active_heartbeat", {
+            slug,
+            version: stored?.release?.version ?? stored?.metadata?.version,
+            source: "extension_library",
+          })
         }
         try {
           const response = await fetch(`${getEffectiveApiUrl()}/presences/active`, {
@@ -30,7 +34,10 @@ export const registerAlarmHandlers = (): void => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ presences: slugs, deviceId }),
           })
-          addRuntimeLog(response.ok ? "success" : "warn", "api", "POST /presences/active result", { status: response.status, count: slugs.length })
+          addRuntimeLog(response.ok ? "success" : "warn", "api", "POST /presences/active result", {
+            status: response.status,
+            count: slugs.length,
+          })
         } catch (error) {
           addRuntimeLog("error", "api", "POST /presences/active failed", { error: error instanceof Error ? error.message : String(error) })
         }

@@ -12,7 +12,14 @@ import {
 import { getInstallQueue } from "@/background/managers/install-queue"
 import { registerPresenceScript } from "@/background/runtime/presence-scripts"
 import type { Handler } from "@/background/router/router"
-import { getPresenceSettings, getPresences, setPresenceSettings, clearSnooze, snoozePresence, setPresenceSchedule } from "@/background/storage/presences.store"
+import {
+  getPresenceSettings,
+  getPresences,
+  setPresenceSettings,
+  clearSnooze,
+  snoozePresence,
+  setPresenceSchedule,
+} from "@/background/storage/presences.store"
 import { visiblePresences } from "@/background/runtime/user-scripts"
 import { trackAnalytics } from "@/background/analytics-client"
 
@@ -27,9 +34,11 @@ export const handleToggle: Handler<"TOGGLE_PRESENCE"> = (payload) => togglePrese
 
 export const handleUninstall: Handler<"UNINSTALL_PRESENCE"> = (payload) => uninstallPresence(payload)
 
-export const handleInstall: Handler<"INSTALL_PRESENCE"> = (payload) => installPresence(payload).catch((error) => toError(error, "presence install failed"))
+export const handleInstall: Handler<"INSTALL_PRESENCE"> = (payload) =>
+  installPresence(payload).catch((error) => toError(error, "presence install failed"))
 
-export const handleUpdate: Handler<"UPDATE_PRESENCE"> = (payload) => installPresence(payload).catch((error) => toError(error, "presence install failed"))
+export const handleUpdate: Handler<"UPDATE_PRESENCE"> = (payload) =>
+  installPresence(payload).catch((error) => toError(error, "presence install failed"))
 
 export const handleInstallFromApi: Handler<"INSTALL_PRESENCE_FROM_API"> = (payload) =>
   installPresenceFromApi(payload).catch((error) => toError(error, "presence install failed"))

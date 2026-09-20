@@ -8,7 +8,10 @@ type Props = {
 export const HeadingText = ({ title, description, className, titleFor }: Props): React.JSX.Element => (
   <div className={className}>
     {titleFor ? (
-      <label htmlFor={titleFor} className="block cursor-pointer text-sm leading-tight font-medium text-foreground">
+      <label
+        htmlFor={titleFor}
+        className="block cursor-pointer text-sm leading-tight font-medium text-foreground"
+      >
         {title}
       </label>
     ) : (

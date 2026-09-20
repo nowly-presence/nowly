@@ -7,7 +7,12 @@ type Props = {
 }
 
 export const BackButton = ({ onClick, label }: Props): React.JSX.Element => (
-  <Button variant="ghost" size="sm" onClick={onClick} className="w-fit">
+  <Button
+    variant="ghost"
+    size="sm"
+    onClick={onClick}
+    className="w-fit"
+  >
     <RiArrowLeftSLine className="size-4" />
     {label}
   </Button>

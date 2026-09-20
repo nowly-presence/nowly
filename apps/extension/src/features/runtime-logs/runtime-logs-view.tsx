@@ -17,9 +17,15 @@ const RuntimeLogRow = ({ log }: { log: RuntimeLogEntry }): React.JSX.Element => 
           <span>{log.type}</span>
         </p>
       </div>
-      <span className={cn("shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase", levelClass[log.level])}>{log.level}</span>
+      <span className={cn("shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase", levelClass[log.level])}>
+        {log.level}
+      </span>
     </div>
-    {log.payload ? <pre className="max-h-24 overflow-auto rounded-md bg-background p-2 text-[11px] leading-relaxed text-muted-foreground">{JSON.stringify(log.payload, null, 2)}</pre> : null}
+    {log.payload ? (
+      <pre className="max-h-24 overflow-auto rounded-md bg-background p-2 text-[11px] leading-relaxed text-muted-foreground">
+        {JSON.stringify(log.payload, null, 2)}
+      </pre>
+    ) : null}
   </article>
 )
 
@@ -50,7 +56,14 @@ export const RuntimeLogsView = (): React.JSX.Element => {
     [],
   )
 
-  const visibleLogs = useMemo(() => logs.filter((log) => filter === "all" || log.type === filter).slice().reverse(), [filter, logs])
+  const visibleLogs = useMemo(
+    () =>
+      logs
+        .filter((log) => filter === "all" || log.type === filter)
+        .slice()
+        .reverse(),
+    [filter, logs],
+  )
 
   const showFeedback = useCallback((nextFeedback: Exclude<RuntimeLogFeedback, null>): void => {
     if (feedbackTimerRef.current) window.clearTimeout(feedbackTimerRef.current)
@@ -73,19 +86,41 @@ export const RuntimeLogsView = (): React.JSX.Element => {
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       <div className="flex items-center justify-end gap-1">
-        <Button variant="outline" size="xs" onClick={copyLogs} title={t("runtime-logs-copy-title")} className={cn(feedback === "copied" && "border-success/40 bg-success/10 text-success")}>
+        <Button
+          variant="outline"
+          size="xs"
+          onClick={copyLogs}
+          title={t("runtime-logs-copy-title")}
+          className={cn(feedback === "copied" && "border-success/40 bg-success/10 text-success")}
+        >
           {feedback === "copied" ? <RiCheckLine /> : <RiFileCopyLine />}
           {feedback === "copied" ? t("runtime-logs-copied") : t("runtime-logs-copy-json")}
         </Button>
-        <Button variant="outline" size="xs" onClick={clearLogs} title={t("runtime-logs-clear-title")} className={cn(feedback === "cleared" && "border-success/40 bg-success/10 text-success")}>
+        <Button
+          variant="outline"
+          size="xs"
+          onClick={clearLogs}
+          title={t("runtime-logs-clear-title")}
+          className={cn(feedback === "cleared" && "border-success/40 bg-success/10 text-success")}
+        >
           {feedback === "cleared" ? <RiCheckLine /> : <RiDeleteBinLine />}
           {feedback === "cleared" ? t("runtime-logs-cleared") : t("runtime-logs-clear")}
         </Button>
       </div>
 
-      <div role="tablist" className="flex gap-1 overflow-x-auto">
+      <div
+        role="tablist"
+        className="flex gap-1 overflow-x-auto"
+      >
         {filters.map((item) => (
-          <Button key={item} role="tab" aria-selected={filter === item} variant={filter === item ? "default" : "outline"} size="xs" onClick={() => setFilter(item)}>
+          <Button
+            key={item}
+            role="tab"
+            aria-selected={filter === item}
+            variant={filter === item ? "default" : "outline"}
+            size="xs"
+            onClick={() => setFilter(item)}
+          >
             {item}
           </Button>
         ))}
@@ -93,11 +128,16 @@ export const RuntimeLogsView = (): React.JSX.Element => {
 
       <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-border bg-card">
         {visibleLogs.length === 0 ? (
-          <div className="flex h-full min-h-48 items-center justify-center p-6 text-center text-xs text-muted-foreground">{t("runtime-logs-empty")}</div>
+          <div className="flex h-full min-h-48 items-center justify-center p-6 text-center text-xs text-muted-foreground">
+            {t("runtime-logs-empty")}
+          </div>
         ) : (
           <div className="divide-y divide-border">
             {visibleLogs.map((log) => (
-              <RuntimeLogRow key={log.id} log={log} />
+              <RuntimeLogRow
+                key={log.id}
+                log={log}
+              />
             ))}
           </div>
         )}

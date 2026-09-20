@@ -23,11 +23,19 @@ const toneFor = (ns: NativeStatus, presencePaused: boolean, hostUpdateAvailable:
   return { stripe: "bg-destructive", label: t("status-bar-host-missing"), actionable: true }
 }
 
-export const ConnectionStatusBar = ({ nativeStatus, onConnect, presencePaused = false, hostUpdateAvailable = false, visible }: Props): React.JSX.Element => {
+export const ConnectionStatusBar = ({
+  nativeStatus,
+  onConnect,
+  presencePaused = false,
+  hostUpdateAvailable = false,
+  visible,
+}: Props): React.JSX.Element => {
   const tone = toneFor(nativeStatus, presencePaused, hostUpdateAvailable)
 
   return (
-    <div className={cn("grid shrink-0 transition-[grid-template-rows] duration-300 ease-out", visible ? "grid-rows-[1fr]" : "grid-rows-[0fr]")}>
+    <div
+      className={cn("grid shrink-0 transition-[grid-template-rows] duration-300 ease-out", visible ? "grid-rows-[1fr]" : "grid-rows-[0fr]")}
+    >
       <div className="overflow-hidden">
         <button
           type="button"
@@ -40,7 +48,10 @@ export const ConnectionStatusBar = ({ nativeStatus, onConnect, presencePaused = 
             tone.actionable ? "cursor-pointer hover:bg-muted" : "cursor-default",
           )}
         >
-          <span aria-hidden className={cn("size-2 shrink-0 rounded-full", tone.stripe)} />
+          <span
+            aria-hidden
+            className={cn("size-2 shrink-0 rounded-full", tone.stripe)}
+          />
           <span className="flex-1 text-left">{tone.label}</span>
         </button>
       </div>

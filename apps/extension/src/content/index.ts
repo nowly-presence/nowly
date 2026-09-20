@@ -14,7 +14,16 @@ const isAllowedWebOrigin = (origin: string): boolean => {
   return origin === MARKETPLACE_ORIGIN
 }
 
-const WEB_MESSAGE_TYPES = new Set(["INSTALL_PRESENCE", "UPDATE_PRESENCE", "UNINSTALL_PRESENCE", "GET_INSTALLED", "GET_DIAGNOSTIC", "GET_DEVICE_INFO", "GET_ANALYTICS_CONSENT", "SET_ANALYTICS_CONSENT"])
+const WEB_MESSAGE_TYPES = new Set([
+  "INSTALL_PRESENCE",
+  "UPDATE_PRESENCE",
+  "UNINSTALL_PRESENCE",
+  "GET_INSTALLED",
+  "GET_DIAGNOSTIC",
+  "GET_DEVICE_INFO",
+  "GET_ANALYTICS_CONSENT",
+  "SET_ANALYTICS_CONSENT",
+])
 
 // The external web protocol keeps its own message names (a stable contract
 // with nowly.me) - only "GET_INSTALLED" doesn't match the internal router's
@@ -103,7 +112,10 @@ chrome.runtime.onMessage.addListener((message) => {
   }
 
   if (message?.type === "PRESENCE_SETTINGS_UPDATED") {
-    window.postMessage({ source: "NOWLY_HOST", type: "SETTINGS_UPDATED", slug: message.slug, settings: message.settings, strings: message.strings }, "*")
+    window.postMessage(
+      { source: "NOWLY_HOST", type: "SETTINGS_UPDATED", slug: message.slug, settings: message.settings, strings: message.strings },
+      "*",
+    )
   }
 })
 

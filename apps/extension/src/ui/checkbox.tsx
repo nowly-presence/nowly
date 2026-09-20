@@ -11,7 +11,10 @@ const Checkbox = ({ className, ...props }: CheckboxPrimitive.Root.Props) => (
     )}
     {...props}
   >
-    <CheckboxPrimitive.Indicator data-slot="checkbox-indicator" className="grid place-content-center text-current transition-none [&>svg]:size-3.5">
+    <CheckboxPrimitive.Indicator
+      data-slot="checkbox-indicator"
+      className="grid place-content-center text-current transition-none [&>svg]:size-3.5"
+    >
       <RiCheckLine />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>

@@ -22,7 +22,12 @@ const pushPresenceLanguageUpdate = async (partial: Partial<ExtensionSettings>): 
   for (const [slug, stored] of Object.entries(presences)) {
     if (!stored.enabled || !stored.metadata.locales) continue
     chrome.tabs
-      .sendMessage(tab.id, { type: "PRESENCE_SETTINGS_UPDATED", slug, settings: presenceSettings[slug] ?? {}, strings: getPresenceStrings(slug, stored.metadata, settings) })
+      .sendMessage(tab.id, {
+        type: "PRESENCE_SETTINGS_UPDATED",
+        slug,
+        settings: presenceSettings[slug] ?? {},
+        strings: getPresenceStrings(slug, stored.metadata, settings),
+      })
       .catch(() => {})
   }
 }

@@ -17,8 +17,15 @@ const TABS: { view: PersistedAppView | "logs"; icon: typeof RiHomeLine; label: P
 
 export const BottomNav = ({ activeView, onViewChange, developerModeEnabled }: Props): React.JSX.Element => (
   <nav className="shrink-0 px-3 pb-3">
-    <div role="tablist" aria-label={t("nav-tablist")} className={cn("grid gap-1 rounded-xl border border-border bg-card p-1", developerModeEnabled ? "grid-cols-4" : "grid-cols-3")}>
-      {[...TABS, ...(developerModeEnabled ? [{ view: "logs" as const, icon: RiFileList3Line, label: "runtime-logs-title" as const }] : [])].map(({ view, icon: Icon, label }) => {
+    <div
+      role="tablist"
+      aria-label={t("nav-tablist")}
+      className={cn("grid gap-1 rounded-xl border border-border bg-card p-1", developerModeEnabled ? "grid-cols-4" : "grid-cols-3")}
+    >
+      {[
+        ...TABS,
+        ...(developerModeEnabled ? [{ view: "logs" as const, icon: RiFileList3Line, label: "runtime-logs-title" as const }] : []),
+      ].map(({ view, icon: Icon, label }) => {
         const active = view === activeView
         return (
           <button

@@ -28,7 +28,10 @@ export const LocalePicker = ({ localePreference, onLocaleChange }: Props): React
       el: t("locale-el"),
     }}
   >
-    <SelectTrigger size="sm" aria-label={t("language")}>
+    <SelectTrigger
+      size="sm"
+      aria-label={t("language")}
+    >
       <SelectValue />
     </SelectTrigger>
     <SelectContent>

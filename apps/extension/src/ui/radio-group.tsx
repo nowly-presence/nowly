@@ -3,7 +3,11 @@ import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
 import { cn } from "@/ui/utils"
 
 const RadioGroup = ({ className, ...props }: RadioGroupPrimitive.Props) => (
-  <RadioGroupPrimitive data-slot="radio-group" className={cn("grid w-full gap-2", className)} {...props} />
+  <RadioGroupPrimitive
+    data-slot="radio-group"
+    className={cn("grid w-full gap-2", className)}
+    {...props}
+  />
 )
 
 const RadioGroupItem = ({ className, ...props }: RadioPrimitive.Root.Props) => (
@@ -15,7 +19,10 @@ const RadioGroupItem = ({ className, ...props }: RadioPrimitive.Root.Props) => (
     )}
     {...props}
   >
-    <RadioPrimitive.Indicator data-slot="radio-group-indicator" className="flex size-4 items-center justify-center">
+    <RadioPrimitive.Indicator
+      data-slot="radio-group-indicator"
+      className="flex size-4 items-center justify-center"
+    >
       <span className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-foreground" />
     </RadioPrimitive.Indicator>
   </RadioPrimitive.Root>

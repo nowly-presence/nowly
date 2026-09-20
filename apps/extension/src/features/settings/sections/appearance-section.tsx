@@ -17,7 +17,10 @@ type Props = {
 
 export const AppearanceSection = ({ localePreference, onLocaleChange, settings, onSettingsChange, onBack }: Props): React.JSX.Element => (
   <div className="flex flex-col gap-3">
-    <SettingsSectionHeader title={t("settings-group-appearance")} onBack={onBack} />
+    <SettingsSectionHeader
+      title={t("settings-group-appearance")}
+      onBack={onBack}
+    />
     <div className="overflow-hidden rounded-xl border border-border bg-card divide-y divide-border">
       <SettingRow
         title={t("language")}
@@ -102,7 +105,12 @@ export const AppearanceSection = ({ localePreference, onLocaleChange, settings, 
               ),
             }}
           >
-            <SelectTrigger id="language-select" size="sm" className="w-36" aria-label={t("language")}>
+            <SelectTrigger
+              id="language-select"
+              size="sm"
+              className="w-36"
+              aria-label={t("language")}
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -188,7 +196,12 @@ export const AppearanceSection = ({ localePreference, onLocaleChange, settings, 
               ),
             }}
           >
-            <SelectTrigger id="appearance-select" size="sm" className="w-36" aria-label={t("appearance")}>
+            <SelectTrigger
+              id="appearance-select"
+              size="sm"
+              className="w-36"
+              aria-label={t("appearance")}
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -213,7 +226,13 @@ export const AppearanceSection = ({ localePreference, onLocaleChange, settings, 
         title={t("bg-animation")}
         description={t("bg-animation-description")}
         controlId="bg-animation-toggle"
-        control={<Switch id="bg-animation-toggle" checked={settings.backgroundAnimation !== false} onCheckedChange={(checked) => onSettingsChange({ backgroundAnimation: checked })} />}
+        control={
+          <Switch
+            id="bg-animation-toggle"
+            checked={settings.backgroundAnimation !== false}
+            onCheckedChange={(checked) => onSettingsChange({ backgroundAnimation: checked })}
+          />
+        }
       />
     </div>
   </div>

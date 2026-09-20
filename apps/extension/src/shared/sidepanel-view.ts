@@ -10,7 +10,8 @@ export type SidepanelPendingNav = {
   view: PersistedAppView
 }
 
-export const isPersistedAppView = (value: unknown): value is PersistedAppView => value === "activity" || value === "store" || value === "settings"
+export const isPersistedAppView = (value: unknown): value is PersistedAppView =>
+  value === "activity" || value === "store" || value === "settings"
 
 export const isSidepanelPendingNav = (value: unknown): value is SidepanelPendingNav => {
   if (!value || typeof value !== "object") return false

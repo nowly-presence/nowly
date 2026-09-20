@@ -6,14 +6,27 @@ import { cn } from "@/ui/utils"
 const Select = SelectPrimitive.Root
 
 const SelectGroup = ({ className, ...props }: SelectPrimitive.Group.Props) => (
-  <SelectPrimitive.Group data-slot="select-group" className={cn("scroll-my-1 p-1", className)} {...props} />
+  <SelectPrimitive.Group
+    data-slot="select-group"
+    className={cn("scroll-my-1 p-1", className)}
+    {...props}
+  />
 )
 
 const SelectValue = ({ className, ...props }: SelectPrimitive.Value.Props) => (
-  <SelectPrimitive.Value data-slot="select-value" className={cn("flex flex-1 items-center gap-1.5 text-left", className)} {...props} />
+  <SelectPrimitive.Value
+    data-slot="select-value"
+    className={cn("flex flex-1 items-center gap-1.5 text-left", className)}
+    {...props}
+  />
 )
 
-const SelectTrigger = ({ className, size = "default", children, ...props }: SelectPrimitive.Trigger.Props & { size?: "sm" | "default" }) => (
+const SelectTrigger = ({
+  className,
+  size = "default",
+  children,
+  ...props
+}: SelectPrimitive.Trigger.Props & { size?: "sm" | "default" }) => (
   <SelectPrimitive.Trigger
     data-slot="select-trigger"
     data-size={size}
@@ -66,7 +79,11 @@ const SelectContent = ({
 )
 
 const SelectLabel = ({ className, ...props }: SelectPrimitive.GroupLabel.Props) => (
-  <SelectPrimitive.GroupLabel data-slot="select-label" className={cn("px-1.5 py-1 text-xs text-muted-foreground", className)} {...props} />
+  <SelectPrimitive.GroupLabel
+    data-slot="select-label"
+    className={cn("px-1.5 py-1 text-xs text-muted-foreground", className)}
+    {...props}
+  />
 )
 
 const SelectItem = ({ className, children, ...props }: SelectPrimitive.Item.Props) => (
@@ -79,20 +96,29 @@ const SelectItem = ({ className, children, ...props }: SelectPrimitive.Item.Prop
     {...props}
   >
     <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-nowrap">{children}</SelectPrimitive.ItemText>
-    <SelectPrimitive.ItemIndicator render={<span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />}>
+    <SelectPrimitive.ItemIndicator
+      render={<span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />}
+    >
       <RiCheckLine className="pointer-events-none" />
     </SelectPrimitive.ItemIndicator>
   </SelectPrimitive.Item>
 )
 
 const SelectSeparator = ({ className, ...props }: SelectPrimitive.Separator.Props) => (
-  <SelectPrimitive.Separator data-slot="select-separator" className={cn("pointer-events-none -mx-1 my-1 h-px bg-border", className)} {...props} />
+  <SelectPrimitive.Separator
+    data-slot="select-separator"
+    className={cn("pointer-events-none -mx-1 my-1 h-px bg-border", className)}
+    {...props}
+  />
 )
 
 const SelectScrollUpButton = ({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.ScrollUpArrow>) => (
   <SelectPrimitive.ScrollUpArrow
     data-slot="select-scroll-up-button"
-    className={cn("top-0 z-10 flex w-full cursor-default items-center justify-center bg-popover py-1 [&_svg:not([class*='size-'])]:size-4", className)}
+    className={cn(
+      "top-0 z-10 flex w-full cursor-default items-center justify-center bg-popover py-1 [&_svg:not([class*='size-'])]:size-4",
+      className,
+    )}
     {...props}
   >
     <RiArrowUpSLine />
@@ -102,11 +128,25 @@ const SelectScrollUpButton = ({ className, ...props }: React.ComponentProps<type
 const SelectScrollDownButton = ({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.ScrollDownArrow>) => (
   <SelectPrimitive.ScrollDownArrow
     data-slot="select-scroll-down-button"
-    className={cn("bottom-0 z-10 flex w-full cursor-default items-center justify-center bg-popover py-1 [&_svg:not([class*='size-'])]:size-4", className)}
+    className={cn(
+      "bottom-0 z-10 flex w-full cursor-default items-center justify-center bg-popover py-1 [&_svg:not([class*='size-'])]:size-4",
+      className,
+    )}
     {...props}
   >
     <RiArrowDownSLine />
   </SelectPrimitive.ScrollDownArrow>
 )
 
-export { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue }
+export {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+}

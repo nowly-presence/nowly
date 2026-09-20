@@ -46,7 +46,10 @@ export const useHostVersion = (): UseHostVersion => {
     try {
       const url = `${WEB_BASE_URL.replace(/\/$/, "")}/host/version`
 
-      const [res, currentStatus] = await Promise.all([fetch(url, { signal: AbortSignal.timeout(5000) }), getNativeStatusAfterOptionalRestart(options.restartNative === true)])
+      const [res, currentStatus] = await Promise.all([
+        fetch(url, { signal: AbortSignal.timeout(5000) }),
+        getNativeStatusAfterOptionalRestart(options.restartNative === true),
+      ])
       if (!res.ok) throw new Error("failed to fetch host version")
       const data = (await res.json()) as { version: string }
       if (typeof data.version !== "string" || !data.version) throw new Error("host version missing")

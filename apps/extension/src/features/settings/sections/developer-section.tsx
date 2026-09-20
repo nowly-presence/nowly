@@ -29,10 +29,25 @@ type Props = {
   onBack: () => void
 }
 
-export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug, nativeStatus, isCheckingUpdates, onCheckUpdates, onReplayOnboarding, onOpenLogs, onBack }: Props): React.JSX.Element => {
+export const DeveloperSection = ({
+  settings,
+  onSettingsChange,
+  isUnpacked,
+  debug,
+  nativeStatus,
+  isCheckingUpdates,
+  onCheckUpdates,
+  onReplayOnboarding,
+  onOpenLogs,
+  onBack,
+}: Props): React.JSX.Element => {
   const developerModeEnabled = settings.developerMode ?? isUnpacked
   const hasNativeIssue = !nativeStatus.connected || !nativeStatus.discordConnected
-  const nativeIssueMessage = !nativeStatus.connected ? t("diagnostic-host-missing-message") : !nativeStatus.discordConnected ? t("diagnostic-discord-closed-message") : nativeStatus.status
+  const nativeIssueMessage = !nativeStatus.connected
+    ? t("diagnostic-host-missing-message")
+    : !nativeStatus.discordConnected
+      ? t("diagnostic-discord-closed-message")
+      : nativeStatus.status
   const updatedAt = formatRelativeTime(debug?.updatedAt)
 
   const [apiUrl, setApiUrl] = useState(settings.customApiBaseUrl ?? API_BASE_URL)
@@ -51,18 +66,35 @@ export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug
 
   return (
     <div className="flex flex-col gap-3">
-      <SettingsSectionHeader title={t("settings-group-developer")} onBack={onBack} />
+      <SettingsSectionHeader
+        title={t("settings-group-developer")}
+        onBack={onBack}
+      />
       <div className="overflow-hidden rounded-xl border border-border bg-card">
         <SettingRow
           title={t("developer-mode")}
           description={t("developer-mode-description")}
           controlId="developer-mode-toggle"
-          control={<Switch id="developer-mode-toggle" checked={developerModeEnabled} onCheckedChange={(checked) => onSettingsChange({ developerMode: checked })} />}
+          control={
+            <Switch
+              id="developer-mode-toggle"
+              checked={developerModeEnabled}
+              onCheckedChange={(checked) => onSettingsChange({ developerMode: checked })}
+            />
+          }
         />
 
         {!isUnpacked ? (
-          <SettingRow title={t("check-updates")} description={t("check-updates-description")}>
-            <Button variant="outline" onClick={onCheckUpdates} disabled={isCheckingUpdates} className="w-full">
+          <SettingRow
+            title={t("check-updates")}
+            description={t("check-updates-description")}
+          >
+            <Button
+              variant="outline"
+              onClick={onCheckUpdates}
+              disabled={isCheckingUpdates}
+              className="w-full"
+            >
               <RiRefreshLine className={cn(isCheckingUpdates && "animate-spin")} />
               {t("check-updates")}
             </Button>
@@ -91,7 +123,11 @@ export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug
               </p>
             ) : null}
 
-            <Button variant="outline" size="sm" onClick={onOpenLogs}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onOpenLogs}
+            >
               <RiListUnordered className="size-3.5" />
               {t("runtime-logs-title")}
             </Button>
@@ -99,8 +135,16 @@ export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug
             <Separator />
 
             <div>
-              <HeadingText title={t("developer-onboarding-reset-title")} description={t("developer-onboarding-reset-description")} className="mb-2" />
-              <Button variant="outline" size="sm" onClick={onReplayOnboarding}>
+              <HeadingText
+                title={t("developer-onboarding-reset-title")}
+                description={t("developer-onboarding-reset-description")}
+                className="mb-2"
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onReplayOnboarding}
+              >
                 <RiRestartLine className="size-3.5" />
                 {t("developer-onboarding-reset-action")}
               </Button>
@@ -116,7 +160,10 @@ export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug
             <Separator />
 
             <div>
-              <Label htmlFor="api-base-url-input" className="text-xs font-medium text-muted-foreground">
+              <Label
+                htmlFor="api-base-url-input"
+                className="text-xs font-medium text-muted-foreground"
+              >
                 {t("api-base-url")}
               </Label>
               <p className="mt-0.5 mb-1.5">{t("api-base-url-description")}</p>
@@ -131,11 +178,20 @@ export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug
                   placeholder={API_BASE_URL}
                   className="min-w-0 flex-1"
                 />
-                <Button variant="outline" size="sm" onClick={handleSaveApiUrl}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSaveApiUrl}
+                >
                   {saved ? <span className="text-success">OK</span> : t("save")}
                 </Button>
                 {apiUrl.trim() !== API_BASE_URL ? (
-                  <Button variant="outline" size="sm" title={t("reset")} onClick={() => setApiUrl(API_BASE_URL)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    title={t("reset")}
+                    onClick={() => setApiUrl(API_BASE_URL)}
+                  >
                     ✕
                   </Button>
                 ) : null}

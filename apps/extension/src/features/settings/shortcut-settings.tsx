@@ -51,17 +51,30 @@ export const ShortcutSettings = (): React.JSX.Element => {
   const missing = commands.some((item) => item.shortcut.length === 0)
 
   return (
-    <SettingRow title={t("shortcuts")} description={t("shortcuts-description")}>
+    <SettingRow
+      title={t("shortcuts")}
+      description={t("shortcuts-description")}
+    >
       {missing ? <p className="text-xs leading-4 text-warning">{t("shortcuts-unassigned-hint")}</p> : null}
       <ul className="flex flex-col gap-2">
         {commands.map((item) => (
-          <li key={item.name} className="flex items-center justify-between gap-3">
+          <li
+            key={item.name}
+            className="flex items-center justify-between gap-3"
+          >
             <span className="min-w-0 text-sm text-foreground">{commandLabel(item.name)}</span>
-            <span className="shrink-0 rounded-md border border-border bg-secondary px-2 py-0.5 font-mono text-[11px] text-muted-foreground">{item.shortcut || t("shortcuts-unassigned")}</span>
+            <span className="shrink-0 rounded-md border border-border bg-secondary px-2 py-0.5 font-mono text-[11px] text-muted-foreground">
+              {item.shortcut || t("shortcuts-unassigned")}
+            </span>
           </li>
         ))}
       </ul>
-      <Button variant="outline" size="sm" onClick={openShortcutSettings} className="w-full">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={openShortcutSettings}
+        className="w-full"
+      >
         {t("shortcuts-change")}
         <RiExternalLinkLine className="size-3.5" />
       </Button>

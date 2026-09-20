@@ -18,7 +18,8 @@ export type DiagnosticSnapshot = {
 
 export const isHostDetected = (nativeStatus: NativeStatus): boolean => Boolean(nativeStatus.connected || nativeStatus.discordConnected)
 
-export const isHostChecking = (nativeStatus: NativeStatus): boolean => nativeStatus.status === "connecting" || nativeStatus.status === "unknown"
+export const isHostChecking = (nativeStatus: NativeStatus): boolean =>
+  nativeStatus.status === "connecting" || nativeStatus.status === "unknown"
 
 export const buildDiagnosticSnapshot = ({
   activity,

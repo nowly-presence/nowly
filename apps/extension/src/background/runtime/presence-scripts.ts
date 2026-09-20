@@ -20,7 +20,9 @@ export const unregisterPresenceScript = async (slug: string): Promise<void> => {
 export const getPresenceStrings = (slug: string, metadata: PresenceMetadata, settings: ExtensionSettings): Record<string, string> => {
   if (!metadata.locales) return {}
   const configured =
-    settings.presenceLanguage === "per-presence" || !settings.presenceLanguage ? (settings.presenceLanguages?.[slug] ?? "en-US") : settings.presenceLanguage
+    settings.presenceLanguage === "per-presence" || !settings.presenceLanguage
+      ? (settings.presenceLanguages?.[slug] ?? "en-US")
+      : settings.presenceLanguage
   return metadata.locales[configured] ?? metadata.locales["en-US"] ?? {}
 }
 

@@ -4,16 +4,21 @@ import type { CurrentActivity, PresenceDebug, PresenceSchedule, PresenceSettings
 export const getPresences = (): Promise<InstalledPresences> =>
   chrome.storage.local.get(STORAGE_KEYS.presences).then((result) => (result[STORAGE_KEYS.presences] ?? {}) as InstalledPresences)
 
-export const setPresences = (presences: InstalledPresences): Promise<void> => chrome.storage.local.set({ [STORAGE_KEYS.presences]: presences })
+export const setPresences = (presences: InstalledPresences): Promise<void> =>
+  chrome.storage.local.set({ [STORAGE_KEYS.presences]: presences })
 
 export const getCurrentActivity = (): Promise<CurrentActivity | null> =>
-  chrome.storage.local.get(STORAGE_KEYS.currentActivity).then((result) => (result[STORAGE_KEYS.currentActivity] ?? null) as CurrentActivity | null)
+  chrome.storage.local
+    .get(STORAGE_KEYS.currentActivity)
+    .then((result) => (result[STORAGE_KEYS.currentActivity] ?? null) as CurrentActivity | null)
 
 export const setCurrentActivity = (activity: CurrentActivity | null): Promise<void> =>
   chrome.storage.local.set({ [STORAGE_KEYS.currentActivity]: activity })
 
 export const getDebug = (): Promise<PresenceDebug | null> =>
-  chrome.storage.local.get(STORAGE_KEYS.presenceDebug).then((result) => (result[STORAGE_KEYS.presenceDebug] ?? null) as PresenceDebug | null)
+  chrome.storage.local
+    .get(STORAGE_KEYS.presenceDebug)
+    .then((result) => (result[STORAGE_KEYS.presenceDebug] ?? null) as PresenceDebug | null)
 
 export const setDebug = (debug: PresenceDebug): Promise<void> => chrome.storage.local.set({ [STORAGE_KEYS.presenceDebug]: debug })
 

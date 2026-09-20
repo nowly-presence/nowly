@@ -14,7 +14,10 @@ type Props = {
 
 export const LanguageSection = ({ settings, onSettingsChange, onBack }: Props): React.JSX.Element => (
   <div className="flex flex-col gap-3">
-    <SettingsSectionHeader title={t("settings-group-presence-language")} onBack={onBack} />
+    <SettingsSectionHeader
+      title={t("settings-group-presence-language")}
+      onBack={onBack}
+    />
     <div className="overflow-hidden rounded-xl border border-border bg-card">
       <SettingRow
         title={t("presence-language")}
@@ -51,7 +54,12 @@ export const LanguageSection = ({ settings, onSettingsChange, onBack }: Props): 
               ),
             }}
           >
-            <SelectTrigger id="presence-language-select" size="sm" className="w-40" aria-label={t("presence-language")}>
+            <SelectTrigger
+              id="presence-language-select"
+              size="sm"
+              className="w-40"
+              aria-label={t("presence-language")}
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

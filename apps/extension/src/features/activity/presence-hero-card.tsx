@@ -15,7 +15,13 @@ export const PresenceHeroCard = ({ children, footer, slug }: Props): React.JSX.E
     <section className="relative overflow-hidden rounded-xl border border-border bg-card">
       {banner ? (
         <div className="pointer-events-none absolute inset-x-0 top-0 h-28 overflow-hidden">
-          <img src={assetUrl(slug, "thumbnail")} alt="" aria-hidden="true" className="size-full object-cover opacity-45" onError={() => setBanner(false)} />
+          <img
+            src={assetUrl(slug, "thumbnail")}
+            alt=""
+            aria-hidden="true"
+            className="size-full object-cover opacity-45"
+            onError={() => setBanner(false)}
+          />
           <div className="absolute inset-0 bg-linear-to-b from-transparent via-card/75 to-card" />
         </div>
       ) : null}

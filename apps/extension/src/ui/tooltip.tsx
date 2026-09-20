@@ -2,12 +2,26 @@ import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
 import { cn } from "@/ui/utils"
 
 const TooltipProvider = ({ delay = 0, ...props }: TooltipPrimitive.Provider.Props) => (
-  <TooltipPrimitive.Provider data-slot="tooltip-provider" delay={delay} {...props} />
+  <TooltipPrimitive.Provider
+    data-slot="tooltip-provider"
+    delay={delay}
+    {...props}
+  />
 )
 
-const Tooltip = ({ ...props }: TooltipPrimitive.Root.Props) => <TooltipPrimitive.Root data-slot="tooltip" {...props} />
+const Tooltip = ({ ...props }: TooltipPrimitive.Root.Props) => (
+  <TooltipPrimitive.Root
+    data-slot="tooltip"
+    {...props}
+  />
+)
 
-const TooltipTrigger = ({ ...props }: TooltipPrimitive.Trigger.Props) => <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
+const TooltipTrigger = ({ ...props }: TooltipPrimitive.Trigger.Props) => (
+  <TooltipPrimitive.Trigger
+    data-slot="tooltip-trigger"
+    {...props}
+  />
+)
 
 const TooltipContent = ({
   className,
@@ -19,7 +33,13 @@ const TooltipContent = ({
   ...props
 }: TooltipPrimitive.Popup.Props & Pick<TooltipPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset">) => (
   <TooltipPrimitive.Portal>
-    <TooltipPrimitive.Positioner align={align} alignOffset={alignOffset} side={side} sideOffset={sideOffset} className="isolate z-50">
+    <TooltipPrimitive.Positioner
+      align={align}
+      alignOffset={alignOffset}
+      side={side}
+      sideOffset={sideOffset}
+      className="isolate z-50"
+    >
       <TooltipPrimitive.Popup
         data-slot="tooltip-content"
         className={cn(

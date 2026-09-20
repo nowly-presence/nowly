@@ -84,7 +84,9 @@ const ensurePublicKey = async (refresh = false): Promise<string> => {
 
 const verifyWithKey = async (keyB64: string, release: PresenceRelease): Promise<boolean> => {
   try {
-    const key = await crypto.subtle.importKey("spki", base64UrlToArrayBuffer(keyB64), { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"])
+    const key = await crypto.subtle.importKey("spki", base64UrlToArrayBuffer(keyB64), { name: "ECDSA", namedCurve: "P-256" }, false, [
+      "verify",
+    ])
 
     return crypto.subtle.verify(
       { name: "ECDSA", hash: "SHA-256" },

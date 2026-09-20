@@ -21,11 +21,21 @@ const fieldVariants = cva("group/field flex w-full gap-2 data-[invalid=true]:tex
 })
 
 const Field = ({ className, orientation = "vertical", ...props }: ComponentProps<"div"> & VariantProps<typeof fieldVariants>) => (
-  <div role="group" data-slot="field" data-orientation={orientation} className={cn(fieldVariants({ orientation }), className)} {...props} />
+  <div
+    role="group"
+    data-slot="field"
+    data-orientation={orientation}
+    className={cn(fieldVariants({ orientation }), className)}
+    {...props}
+  />
 )
 
 const FieldContent = ({ className, ...props }: ComponentProps<"div">) => (
-  <div data-slot="field-content" className={cn("group/field-content flex flex-1 flex-col gap-0.5 leading-snug", className)} {...props} />
+  <div
+    data-slot="field-content"
+    className={cn("group/field-content flex flex-1 flex-col gap-0.5 leading-snug", className)}
+    {...props}
+  />
 )
 
 const FieldLabel = ({ className, ...props }: ComponentProps<typeof Label>) => (
@@ -41,7 +51,11 @@ const FieldLabel = ({ className, ...props }: ComponentProps<typeof Label>) => (
 )
 
 const FieldTitle = ({ className, ...props }: ComponentProps<"div">) => (
-  <div data-slot="field-label" className={cn("flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50", className)} {...props} />
+  <div
+    data-slot="field-label"
+    className={cn("flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50", className)}
+    {...props}
+  />
 )
 
 const FieldDescription = ({ className, ...props }: ComponentProps<"p">) => (

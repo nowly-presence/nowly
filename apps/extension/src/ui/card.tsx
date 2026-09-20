@@ -33,15 +33,27 @@ const CardTitle = ({ className, ...props }: React.ComponentProps<"div">) => (
 )
 
 const CardDescription = ({ className, ...props }: React.ComponentProps<"div">) => (
-  <div data-slot="card-description" className={cn("text-sm leading-relaxed text-muted-foreground", className)} {...props} />
+  <div
+    data-slot="card-description"
+    className={cn("text-sm leading-relaxed text-muted-foreground", className)}
+    {...props}
+  />
 )
 
 const CardAction = ({ className, ...props }: React.ComponentProps<"div">) => (
-  <div data-slot="card-action" className={cn("col-start-2 row-span-2 row-start-1 self-start justify-self-end", className)} {...props} />
+  <div
+    data-slot="card-action"
+    className={cn("col-start-2 row-span-2 row-start-1 self-start justify-self-end", className)}
+    {...props}
+  />
 )
 
 const CardContent = ({ className, ...props }: React.ComponentProps<"div">) => (
-  <div data-slot="card-content" className={cn("px-(--card-spacing)", className)} {...props} />
+  <div
+    data-slot="card-content"
+    className={cn("px-(--card-spacing)", className)}
+    {...props}
+  />
 )
 
 const CardFooter = ({ className, ...props }: React.ComponentProps<"div">) => (

@@ -57,7 +57,10 @@ export const SnoozeDialog = ({ activeSlug, onClose, open, presences }: Props): R
   }
 
   return (
-    <Dialog open={open} onOpenChange={(next) => !next && onClose()}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => !next && onClose()}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t("snooze")}</DialogTitle>
@@ -65,22 +68,38 @@ export const SnoozeDialog = ({ activeSlug, onClose, open, presences }: Props): R
         </DialogHeader>
 
         <div className="flex items-center justify-center gap-3 py-2">
-          <Button variant="outline" size="icon" onClick={dec} aria-label="Decrease duration">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={dec}
+            aria-label="Decrease duration"
+          >
             <RiSubtractLine />
           </Button>
           <span className="min-w-18 text-center text-base font-semibold tabular-nums text-foreground">{formatDuration(duration)}</span>
-          <Button variant="outline" size="icon" onClick={inc} aria-label="Increase duration">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={inc}
+            aria-label="Increase duration"
+          >
             <RiAddLine />
           </Button>
         </div>
 
         <DialogFooter>
           {isSnoozed ? (
-            <Button variant="outline" onClick={handleClearSnooze}>
+            <Button
+              variant="outline"
+              onClick={handleClearSnooze}
+            >
               {t("clear-snooze")}
             </Button>
           ) : null}
-          <Button variant="outline" onClick={handleSnoozeUntilMidnight}>
+          <Button
+            variant="outline"
+            onClick={handleSnoozeUntilMidnight}
+          >
             {t("snooze-until-midnight")}
           </Button>
           <Button onClick={handleSnooze}>{t("snooze")}</Button>

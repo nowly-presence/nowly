@@ -43,7 +43,10 @@ export const ActivitySelectionSection = ({ settings, onSettingsChange, presences
 
   return (
     <div className="flex flex-col gap-3">
-      <SettingsSectionHeader title={t("settings-group-activity-selection")} onBack={onBack} />
+      <SettingsSectionHeader
+        title={t("settings-group-activity-selection")}
+        onBack={onBack}
+      />
       <div className="overflow-hidden rounded-xl border border-border bg-card">
         <SettingRow
           title={t("activity-selection-mode")}
@@ -56,7 +59,12 @@ export const ActivitySelectionSection = ({ settings, onSettingsChange, presences
               items={{ focused: t("activity-selection-mode-focused"), priority: t("activity-selection-mode-priority") }}
               disabled={!unlocked}
             >
-              <SelectTrigger id="activity-selection-mode-select" size="sm" className="w-40" aria-label={t("activity-selection-mode")}>
+              <SelectTrigger
+                id="activity-selection-mode-select"
+                size="sm"
+                className="w-40"
+                aria-label={t("activity-selection-mode")}
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -69,7 +77,11 @@ export const ActivitySelectionSection = ({ settings, onSettingsChange, presences
           {!unlocked ? (
             <div className="mt-1 flex flex-col items-start gap-2 rounded-lg border border-dashed border-border bg-secondary/50 p-3">
               <p className="text-xs leading-5 text-muted-foreground">{t("activity-selection-locked-hint")}</p>
-              <Button variant="outline" size="sm" onClick={() => void setPendingSidepanelNav({ view: "store" })}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => void setPendingSidepanelNav({ view: "store" })}
+              >
                 {t("activity-selection-open-store")}
               </Button>
             </div>
@@ -100,8 +112,15 @@ export const ActivitySelectionSection = ({ settings, onSettingsChange, presences
                         draggedSlug === slug && "opacity-50",
                       )}
                     >
-                      <RiDraggable className="size-4 shrink-0 cursor-grab text-muted-foreground active:cursor-grabbing" aria-hidden />
-                      <PresenceTile slug={slug} name={name} className="size-8" />
+                      <RiDraggable
+                        className="size-4 shrink-0 cursor-grab text-muted-foreground active:cursor-grabbing"
+                        aria-hidden
+                      />
+                      <PresenceTile
+                        slug={slug}
+                        name={name}
+                        className="size-8"
+                      />
                       <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">{name}</span>
                     </li>
                   )

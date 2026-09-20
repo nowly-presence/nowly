@@ -29,8 +29,19 @@ export const ChromeOsWaitlistForm = (): React.JSX.Element | null => {
 
   return (
     <div className="mt-4 flex flex-wrap justify-center gap-2">
-      <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("chromeos-waitlist-placeholder")} className="max-w-56" />
-      <Button variant="outline" size="sm" disabled={status === "sending"} onClick={() => void submit()}>
+      <Input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder={t("chromeos-waitlist-placeholder")}
+        className="max-w-56"
+      />
+      <Button
+        variant="outline"
+        size="sm"
+        disabled={status === "sending"}
+        onClick={() => void submit()}
+      >
         {t("chromeos-waitlist-submit")}
       </Button>
     </div>

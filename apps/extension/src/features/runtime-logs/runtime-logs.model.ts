@@ -12,4 +12,5 @@ export const levelClass: Record<RuntimeLogLevel, string> = {
   error: "border-destructive/30 bg-destructive/10 text-destructive",
 }
 
-export const formatTime = (timestamp: number): string => new Intl.DateTimeFormat(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date(timestamp))
+export const formatTime = (timestamp: number): string =>
+  new Intl.DateTimeFormat(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date(timestamp))

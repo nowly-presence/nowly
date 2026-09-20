@@ -1,7 +1,14 @@
 import { broadcastActiveTab } from "@/background/managers/activity-manager"
 import { fetchPresenceCatalog } from "@/background/managers/presence-manager"
 import { urlMatchesPresence } from "@/background/runtime/url-match"
-import { getFocusedTabId, getTabPresence, isTabMuted, onBroadcastStateChanged, removeTabPresence, setTabMuted } from "@/background/services/background-context"
+import {
+  getFocusedTabId,
+  getTabPresence,
+  isTabMuted,
+  onBroadcastStateChanged,
+  removeTabPresence,
+  setTabMuted,
+} from "@/background/services/background-context"
 import { openNowlyPanel } from "@/background/services/open-panel"
 import { getPresences } from "@/background/storage/presences.store"
 import { persistAppView, setPendingSidepanelNav } from "@/shared/sidepanel-view"

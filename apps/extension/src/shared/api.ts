@@ -9,7 +9,8 @@ const ASSET_EXT: Record<string, string> = {
 
 const bundledSlugs = new Set(BUNDLED_PRESENCE_SLUGS)
 
-const localAssetUrl = (slug: string, type: "icon" | "logo" | "thumbnail"): string => chrome.runtime.getURL(`presences/${slug}/assets/${type}${ASSET_EXT[type]}`)
+const localAssetUrl = (slug: string, type: "icon" | "logo" | "thumbnail"): string =>
+  chrome.runtime.getURL(`presences/${slug}/assets/${type}${ASSET_EXT[type]}`)
 
 const cdnAssetUrl = (slug: string, type: "icon" | "logo" | "thumbnail"): string | undefined => {
   if (!CDN_BASE_URL) return undefined

@@ -2,9 +2,19 @@ import * as React from "react"
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover"
 import { cn } from "@/ui/utils"
 
-const Popover = ({ ...props }: PopoverPrimitive.Root.Props) => <PopoverPrimitive.Root data-slot="popover" {...props} />
+const Popover = ({ ...props }: PopoverPrimitive.Root.Props) => (
+  <PopoverPrimitive.Root
+    data-slot="popover"
+    {...props}
+  />
+)
 
-const PopoverTrigger = ({ ...props }: PopoverPrimitive.Trigger.Props) => <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />
+const PopoverTrigger = ({ ...props }: PopoverPrimitive.Trigger.Props) => (
+  <PopoverPrimitive.Trigger
+    data-slot="popover-trigger"
+    {...props}
+  />
+)
 
 const PopoverContent = ({
   className,
@@ -15,7 +25,13 @@ const PopoverContent = ({
   ...props
 }: PopoverPrimitive.Popup.Props & Pick<PopoverPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset">) => (
   <PopoverPrimitive.Portal>
-    <PopoverPrimitive.Positioner align={align} alignOffset={alignOffset} side={side} sideOffset={sideOffset} className="isolate z-50">
+    <PopoverPrimitive.Positioner
+      align={align}
+      alignOffset={alignOffset}
+      side={side}
+      sideOffset={sideOffset}
+      className="isolate z-50"
+    >
       <PopoverPrimitive.Popup
         data-slot="popover-content"
         className={cn(
@@ -29,15 +45,27 @@ const PopoverContent = ({
 )
 
 const PopoverHeader = ({ className, ...props }: React.ComponentProps<"div">) => (
-  <div data-slot="popover-header" className={cn("flex flex-col gap-0.5 text-sm", className)} {...props} />
+  <div
+    data-slot="popover-header"
+    className={cn("flex flex-col gap-0.5 text-sm", className)}
+    {...props}
+  />
 )
 
 const PopoverTitle = ({ className, ...props }: PopoverPrimitive.Title.Props) => (
-  <PopoverPrimitive.Title data-slot="popover-title" className={cn("font-medium", className)} {...props} />
+  <PopoverPrimitive.Title
+    data-slot="popover-title"
+    className={cn("font-medium", className)}
+    {...props}
+  />
 )
 
 const PopoverDescription = ({ className, ...props }: PopoverPrimitive.Description.Props) => (
-  <PopoverPrimitive.Description data-slot="popover-description" className={cn("text-muted-foreground", className)} {...props} />
+  <PopoverPrimitive.Description
+    data-slot="popover-description"
+    className={cn("text-muted-foreground", className)}
+    {...props}
+  />
 )
 
 export { Popover, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger }

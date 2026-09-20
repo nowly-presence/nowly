@@ -4,6 +4,8 @@ import { getEffectiveApiUrl } from "@/background/services/api-state"
 import { browserName, osName } from "@/background/services/device-info"
 import { getDeviceId, getDeviceToken, setDeviceToken } from "@/background/storage/device.store"
 import { getPresences } from "@/background/storage/presences.store"
+import { getLocale } from "@/shared/i18n"
+import { LOCALE_LONG_MAP } from "@nowly/locales"
 import { WEB_BASE_URL } from "@/shared/constants"
 
 type SyncPresence = {
@@ -61,6 +63,7 @@ export const syncDeviceState = async (extraPresences: SyncPresence[] = []): Prom
         extensionVersion: chrome.runtime.getManifest().version,
         browser: browserName(),
         os: osName(),
+        locale: LOCALE_LONG_MAP[getLocale()],
         presences: syncedPresences,
       }),
     })

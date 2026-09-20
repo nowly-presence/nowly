@@ -33,7 +33,12 @@ export const sanitizeLogPayload = (payload: Record<string, unknown> = {}): Recor
       .filter(([, value]) => value !== undefined),
   ) as Record<string, string | number | boolean | null>
 
-export const addRuntimeLog = (level: RuntimeLogLevel, type: RuntimeLogType, message: string, payload?: Record<string, unknown>): RuntimeLogEntry => {
+export const addRuntimeLog = (
+  level: RuntimeLogLevel,
+  type: RuntimeLogType,
+  message: string,
+  payload?: Record<string, unknown>,
+): RuntimeLogEntry => {
   const entry: RuntimeLogEntry = {
     id: crypto.randomUUID(),
     at: Date.now(),
@@ -46,11 +51,9 @@ export const addRuntimeLog = (level: RuntimeLogLevel, type: RuntimeLogType, mess
   logs.push(entry)
   if (logs.length > MAX_LOGS) logs.splice(0, logs.length - MAX_LOGS)
 
-  chrome.runtime
-    .sendMessage({ source: "PRESENCES_BACKGROUND", type: "RUNTIME_LOGS_ADDED", payload: entry })
-    .catch(() => {
-      // No extension page is open.
-    })
+  chrome.runtime.sendMessage({ source: "PRESENCES_BACKGROUND", type: "RUNTIME_LOGS_ADDED", payload: entry }).catch(() => {
+    // No extension page is open.
+  })
 
   return entry
 }

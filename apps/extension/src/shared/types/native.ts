@@ -19,10 +19,7 @@ export type PresencePayload = {
   buttons?: { label: string; url: string }[]
 }
 
-export type NativeMessage =
-  | { type: "PING" }
-  | { type: "SET_ACTIVITY"; presence: PresencePayload }
-  | { type: "CLEAR_ACTIVITY" }
+export type NativeMessage = { type: "PING" } | { type: "SET_ACTIVITY"; presence: PresencePayload } | { type: "CLEAR_ACTIVITY" }
 
 export type NativeResponse =
   | {

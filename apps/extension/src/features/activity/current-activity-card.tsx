@@ -32,7 +32,10 @@ const formatTime = (seconds: number): string => {
   return `${minutes}:${remainingSeconds}`
 }
 
-const useRealtimeProgress = (startTime: number | undefined, endTime: number | undefined): { elapsed: string; duration: string; percent: number } | null => {
+const useRealtimeProgress = (
+  startTime: number | undefined,
+  endTime: number | undefined,
+): { elapsed: string; duration: string; percent: number } | null => {
   const [now, setNow] = useState(() => Math.floor(Date.now() / 1000))
 
   useEffect(() => {
@@ -66,7 +69,16 @@ const useCountdown = (targetTimestamp: number | undefined): string | null => {
   return formatTime(Math.ceil((targetTimestamp - now) / 1000))
 }
 
-export const CurrentActivityCard = ({ activity, idleHint, isLoading, isPaused = false, isSnoozed, onSnooze, onUnsnooze, presences }: Props): React.JSX.Element => {
+export const CurrentActivityCard = ({
+  activity,
+  idleHint,
+  isLoading,
+  isPaused = false,
+  isSnoozed,
+  onSnooze,
+  onUnsnooze,
+  presences,
+}: Props): React.JSX.Element => {
   const presence = activity ? presences[activity.slug] : null
   const snoozeUntil = activity ? presence?.snoozeUntil : undefined
   const progress = useRealtimeProgress(activity?.presence.startTime, activity?.presence.endTime)
@@ -112,17 +124,28 @@ export const CurrentActivityCard = ({ activity, idleHint, isLoading, isPaused = 
     <section className="relative overflow-hidden rounded-xl border border-border bg-card">
       {hasLargeImage ? (
         <>
-          <div className="absolute -inset-x-8 -inset-y-6 bg-cover bg-center opacity-40 blur-2xl saturate-50" style={{ backgroundImage: `url("${largeImage}")` }} />
+          <div
+            className="absolute -inset-x-8 -inset-y-6 bg-cover bg-center opacity-40 blur-2xl saturate-50"
+            style={{ backgroundImage: `url("${largeImage}")` }}
+          />
           <div className="absolute inset-0 bg-linear-to-r from-card/70 via-card/85 to-card/70" />
         </>
       ) : null}
       <div className="relative z-1 flex items-center gap-3 p-4">
         {hasLargeImage ? (
           <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border shadow-md">
-            <img src={largeImage} alt="" className="size-full object-cover" />
+            <img
+              src={largeImage}
+              alt=""
+              className="size-full object-cover"
+            />
           </div>
         ) : presence ? (
-          <PresenceTile slug={presence.metadata.slug} name={presence.metadata.name} className="size-14" />
+          <PresenceTile
+            slug={presence.metadata.slug}
+            name={presence.metadata.name}
+            className="size-14"
+          />
         ) : (
           <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-secondary">
             <RiDiscLine className="size-6 text-muted-foreground" />
@@ -143,7 +166,12 @@ export const CurrentActivityCard = ({ activity, idleHint, isLoading, isPaused = 
           ) : null}
         </div>
 
-        <Button variant="ghost" size="icon-sm" aria-label={isSnoozed ? t("clear-snooze") : t("snooze")} onClick={isSnoozed ? onUnsnooze : onSnooze}>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label={isSnoozed ? t("clear-snooze") : t("snooze")}
+          onClick={isSnoozed ? onUnsnooze : onSnooze}
+        >
           {isSnoozed ? <RiSunLine /> : <RiSnowflakeLine />}
         </Button>
       </div>
@@ -151,7 +179,10 @@ export const CurrentActivityCard = ({ activity, idleHint, isLoading, isPaused = 
       {showProgressBar && progress ? (
         <div className="relative z-1 px-4 pb-4">
           <div className="h-1 overflow-hidden rounded-full bg-accent/15">
-            <div className="h-full rounded-full bg-accent transition-[width] duration-300" style={{ width: `${progress.percent}%` }} />
+            <div
+              className="h-full rounded-full bg-accent transition-[width] duration-300"
+              style={{ width: `${progress.percent}%` }}
+            />
           </div>
           <div className="mt-1.5 flex items-center justify-between text-xs text-muted-foreground">
             <span>{progress.elapsed}</span>

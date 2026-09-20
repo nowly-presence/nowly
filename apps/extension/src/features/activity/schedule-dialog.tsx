@@ -36,7 +36,8 @@ export const ScheduleDialog = ({ activeSlug, globalSchedule, onClose, open, pres
   }
 
   const handleSave = (): void => {
-    const schedule = scheduleDays.length > 0 ? { ...(useTimeRange ? { start: scheduleStart, end: scheduleEnd } : {}), days: scheduleDays } : undefined
+    const schedule =
+      scheduleDays.length > 0 ? { ...(useTimeRange ? { start: scheduleStart, end: scheduleEnd } : {}), days: scheduleDays } : undefined
 
     setSaved("saving")
 
@@ -54,7 +55,10 @@ export const ScheduleDialog = ({ activeSlug, globalSchedule, onClose, open, pres
   }
 
   return (
-    <Dialog open={open} onOpenChange={(next) => !next && onClose()}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => !next && onClose()}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t("schedule")}</DialogTitle>
@@ -77,29 +81,59 @@ export const ScheduleDialog = ({ activeSlug, globalSchedule, onClose, open, pres
           </div>
 
           <div className="flex items-center justify-between rounded-xl border border-border bg-secondary px-3 py-2.5">
-            <label htmlFor="schedule-time-range-toggle" className="flex cursor-pointer items-center gap-2">
+            <label
+              htmlFor="schedule-time-range-toggle"
+              className="flex cursor-pointer items-center gap-2"
+            >
               <RiTimeLine className="size-4 text-muted-foreground" />
               <span className="text-sm text-foreground">{t("schedule-time-range")}</span>
             </label>
-            <Switch id="schedule-time-range-toggle" checked={useTimeRange} onCheckedChange={setUseTimeRange} />
+            <Switch
+              id="schedule-time-range-toggle"
+              checked={useTimeRange}
+              onCheckedChange={setUseTimeRange}
+            />
           </div>
 
           {useTimeRange ? (
             <div className="flex items-center gap-3">
               <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                <span className="text-xs text-muted-foreground">{t("start-time")}</span>
-                <Input type="time" value={scheduleStart} onChange={(e) => setScheduleStart(e.target.value)} />
+                <label
+                  htmlFor="schedule-start-time"
+                  className="text-xs text-muted-foreground"
+                >
+                  {t("start-time")}
+                </label>
+                <Input
+                  id="schedule-start-time"
+                  type="time"
+                  value={scheduleStart}
+                  onChange={(e) => setScheduleStart(e.target.value)}
+                />
               </div>
               <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                <span className="text-xs text-muted-foreground">{t("end-time")}</span>
-                <Input type="time" value={scheduleEnd} onChange={(e) => setScheduleEnd(e.target.value)} />
+                <label
+                  htmlFor="schedule-end-time"
+                  className="text-xs text-muted-foreground"
+                >
+                  {t("end-time")}
+                </label>
+                <Input
+                  id="schedule-end-time"
+                  type="time"
+                  value={scheduleEnd}
+                  onChange={(e) => setScheduleEnd(e.target.value)}
+                />
               </div>
             </div>
           ) : null}
         </div>
 
         <DialogFooter>
-          <Button onClick={handleSave} disabled={saved !== "idle"}>
+          <Button
+            onClick={handleSave}
+            disabled={saved !== "idle"}
+          >
             {saved === "saving" ? <RiLoader2Line className="animate-spin" /> : saved === "done" ? <RiCheckLine /> : t("save")}
           </Button>
         </DialogFooter>

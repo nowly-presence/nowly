@@ -79,7 +79,17 @@ describe("verifyPresenceRelease", () => {
     installChromeMock()
     const { verifyPresenceRelease } = await import("@/background/services/release-security")
     const { privateKey } = await generateKeyPair()
-    const release = await buildRelease(privateKey, { metadata: { slug: "test-presence", name: "Tampered", author: { name: "x" }, description: {}, url: [], color: "#000", category: "other" } })
+    const release = await buildRelease(privateKey, {
+      metadata: {
+        slug: "test-presence",
+        name: "Tampered",
+        author: { name: "x" },
+        description: {},
+        url: [],
+        color: "#000",
+        category: "other",
+      },
+    })
     const result = await verifyPresenceRelease(release)
     expect(result).toEqual({ ok: false, error: "metadata hash mismatch" })
   })

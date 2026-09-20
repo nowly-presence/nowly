@@ -22,7 +22,13 @@ export const PresenceTile = ({ slug, name, className, dimmed = false }: Props): 
   }, [slug])
 
   return (
-    <div className={cn("relative shrink-0 overflow-hidden rounded-[22%] bg-[#03080c] transition-all duration-300", dimmed && "opacity-60 saturate-0", className)}>
+    <div
+      className={cn(
+        "relative shrink-0 overflow-hidden rounded-[22%] bg-[#03080c] transition-all duration-300",
+        dimmed && "opacity-60 saturate-0",
+        className,
+      )}
+    >
       <img
         src={src}
         alt={name}

@@ -6,4 +6,6 @@ type Props = {
   children: ReactNode
 }
 
-export const SettingsBlock = ({ className, children }: Props): React.JSX.Element => <div className={cn("px-4 py-3", className)}>{children}</div>
+export const SettingsBlock = ({ className, children }: Props): React.JSX.Element => (
+  <div className={cn("px-4 py-3", className)}>{children}</div>
+)

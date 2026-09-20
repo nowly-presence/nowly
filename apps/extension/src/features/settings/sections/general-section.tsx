@@ -13,13 +13,22 @@ type Props = {
 
 export const GeneralSection = ({ settings, onSettingsChange, onBack }: Props): React.JSX.Element => (
   <div className="flex flex-col gap-3">
-    <SettingsSectionHeader title={t("settings-group-general")} onBack={onBack} />
+    <SettingsSectionHeader
+      title={t("settings-group-general")}
+      onBack={onBack}
+    />
     <div className="overflow-hidden rounded-xl border border-border bg-card divide-y divide-border">
       <SettingRow
         title={t("presence-pause")}
         description={t("presence-pause-description")}
         controlId="presence-pause-toggle"
-        control={<Switch id="presence-pause-toggle" checked={settings.presencePaused === true} onCheckedChange={(checked) => onSettingsChange({ presencePaused: checked })} />}
+        control={
+          <Switch
+            id="presence-pause-toggle"
+            checked={settings.presencePaused === true}
+            onCheckedChange={(checked) => onSettingsChange({ presencePaused: checked })}
+          />
+        }
       />
 
       <ShortcutSettings />

@@ -138,24 +138,41 @@ export const OnboardingOverlay = ({
 
   return (
     <div className="absolute inset-0 z-50 flex flex-col bg-background font-sans text-foreground">
-      {settings.backgroundAnimation !== false ? <div className="sidepanel-bg absolute inset-0" aria-hidden /> : null}
+      {settings.backgroundAnimation !== false ? (
+        <div
+          className="sidepanel-bg absolute inset-0"
+          aria-hidden
+        />
+      ) : null}
 
       <div className="relative z-1 flex min-h-0 flex-1 flex-col">
         <div className="flex items-center gap-2 px-3 pt-3">
           <div className="min-w-0 flex-1">
             <Header />
           </div>
-          <LocalePicker localePreference={localePreference} onLocaleChange={onLocaleChange} />
+          <LocalePicker
+            localePreference={localePreference}
+            onLocaleChange={onLocaleChange}
+          />
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col justify-center overflow-y-auto px-3 py-4">
           <section className="rounded-xl border border-border bg-card p-5 text-center">
-            <StepIcon icon={currentStep.icon} status={currentStep.status} />
+            <StepIcon
+              icon={currentStep.icon}
+              status={currentStep.status}
+            />
             <h1 className="mt-4 text-base font-semibold text-foreground">{currentStep.title}</h1>
             <p className="mt-2 text-sm leading-5 text-muted-foreground">{currentStep.message}</p>
             {currentStep.details}
             {currentStep.actions ? <div className="mt-5 flex justify-center">{currentStep.actions}</div> : null}
-            <ProgressDots activeIndex={activeProgressIndex} allDone={allDone} devReplayOnboarding={devReplayOnboarding} onSelect={setReplayIndex} steps={progressSteps} />
+            <ProgressDots
+              activeIndex={activeProgressIndex}
+              allDone={allDone}
+              devReplayOnboarding={devReplayOnboarding}
+              onSelect={setReplayIndex}
+              steps={progressSteps}
+            />
           </section>
         </div>
 

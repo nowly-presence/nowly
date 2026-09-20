@@ -15,4 +15,5 @@ export const formatRelativeTime = (timestamp?: number): string | null => {
 
 export const getActivityTitle = (activity: CurrentActivity | null, fallback: string): string => activity?.presence.details ?? fallback
 
-export const getActivitySubtitle = (activity: CurrentActivity | null, fallback: string): string => activity?.presence.state ?? activity?.presence.name ?? fallback
+export const getActivitySubtitle = (activity: CurrentActivity | null, fallback: string): string =>
+  activity?.presence.state ?? activity?.presence.name ?? fallback

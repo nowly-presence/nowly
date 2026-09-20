@@ -56,7 +56,11 @@ export const PresenceZipDrop = (): React.JSX.Element => {
 
   return (
     <div>
-      <HeadingText title={t("local-zip-title")} description={t("local-zip-description")} className="mb-2" />
+      <HeadingText
+        title={t("local-zip-title")}
+        description={t("local-zip-description")}
+        className="mb-2"
+      />
       <div
         onDragOver={(event) => {
           event.preventDefault()
@@ -64,12 +68,27 @@ export const PresenceZipDrop = (): React.JSX.Element => {
         }}
         onDragLeave={() => setDragOver(false)}
         onDrop={onDrop}
-        className={cn("rounded-xl border border-dashed px-3 py-4 text-center transition-colors", dragOver ? "border-accent bg-accent/10" : "border-border bg-secondary")}
+        className={cn(
+          "rounded-xl border border-dashed px-3 py-4 text-center transition-colors",
+          dragOver ? "border-accent bg-accent/10" : "border-border bg-secondary",
+        )}
       >
-        <input ref={inputRef} type="file" accept=".zip,application/zip" className="hidden" onChange={onChange} />
+        <input
+          ref={inputRef}
+          type="file"
+          accept=".zip,application/zip"
+          className="hidden"
+          onChange={onChange}
+        />
         <RiFileZipLine className="mx-auto mb-2 size-5 text-muted-foreground" />
         <p className="text-xs text-foreground">{t("local-zip-drop")}</p>
-        <Button variant="outline" size="sm" disabled={status === "busy"} onClick={() => inputRef.current?.click()} className="mt-2">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={status === "busy"}
+          onClick={() => inputRef.current?.click()}
+          className="mt-2"
+        >
           {status === "busy" ? t("local-zip-busy") : t("local-zip-browse")}
         </Button>
       </div>

@@ -1,4 +1,4 @@
-export const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE";
+export const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE"
 
 export const createPresenceRuntime = (
   slug: string,
@@ -7,7 +7,7 @@ export const createPresenceRuntime = (
   settings: Record<string, unknown> = {},
   strings: Record<string, string> = {},
   apiBaseUrl = "https://api.nowly.me",
-  cdnBaseUrl?: string
+  cdnBaseUrl?: string,
 ): string => {
   const assetsBase = cdnBaseUrl
     ? `${cdnBaseUrl.replace(/\/+$/, "")}/presences/${slug}/assets`
@@ -253,5 +253,5 @@ export const createPresenceRuntime = (
     });
   }
 })();
-`;
+`
 }

@@ -4,13 +4,33 @@ import { RiCloseLine } from "@remixicon/react"
 import { Button } from "@/ui/button"
 import { cn } from "@/ui/utils"
 
-const Dialog = ({ ...props }: DialogPrimitive.Root.Props) => <DialogPrimitive.Root data-slot="dialog" {...props} />
+const Dialog = ({ ...props }: DialogPrimitive.Root.Props) => (
+  <DialogPrimitive.Root
+    data-slot="dialog"
+    {...props}
+  />
+)
 
-const DialogTrigger = ({ ...props }: DialogPrimitive.Trigger.Props) => <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
+const DialogTrigger = ({ ...props }: DialogPrimitive.Trigger.Props) => (
+  <DialogPrimitive.Trigger
+    data-slot="dialog-trigger"
+    {...props}
+  />
+)
 
-const DialogPortal = ({ ...props }: DialogPrimitive.Portal.Props) => <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
+const DialogPortal = ({ ...props }: DialogPrimitive.Portal.Props) => (
+  <DialogPrimitive.Portal
+    data-slot="dialog-portal"
+    {...props}
+  />
+)
 
-const DialogClose = ({ ...props }: DialogPrimitive.Close.Props) => <DialogPrimitive.Close data-slot="dialog-close" {...props} />
+const DialogClose = ({ ...props }: DialogPrimitive.Close.Props) => (
+  <DialogPrimitive.Close
+    data-slot="dialog-close"
+    {...props}
+  />
+)
 
 const DialogOverlay = ({ className, ...props }: DialogPrimitive.Backdrop.Props) => (
   <DialogPrimitive.Backdrop
@@ -41,7 +61,16 @@ const DialogContent = ({
     >
       {children}
       {showCloseButton && (
-        <DialogPrimitive.Close data-slot="dialog-close" render={<Button variant="ghost" className="absolute top-2 right-2" size="icon-sm" />}>
+        <DialogPrimitive.Close
+          data-slot="dialog-close"
+          render={
+            <Button
+              variant="ghost"
+              className="absolute top-2 right-2"
+              size="icon-sm"
+            />
+          }
+        >
           <RiCloseLine />
           <span className="sr-only">Fermer</span>
         </DialogPrimitive.Close>
@@ -51,7 +80,11 @@ const DialogContent = ({
 )
 
 const DialogHeader = ({ className, ...props }: React.ComponentProps<"div">) => (
-  <div data-slot="dialog-header" className={cn("flex flex-col gap-2", className)} {...props} />
+  <div
+    data-slot="dialog-header"
+    className={cn("flex flex-col gap-2", className)}
+    {...props}
+  />
 )
 
 const DialogFooter = ({
@@ -66,14 +99,16 @@ const DialogFooter = ({
     {...props}
   >
     {children}
-    {showCloseButton && (
-      <DialogPrimitive.Close render={<Button variant="outline" />}>Fermer</DialogPrimitive.Close>
-    )}
+    {showCloseButton && <DialogPrimitive.Close render={<Button variant="outline" />}>Fermer</DialogPrimitive.Close>}
   </div>
 )
 
 const DialogTitle = ({ className, ...props }: DialogPrimitive.Title.Props) => (
-  <DialogPrimitive.Title data-slot="dialog-title" className={cn("font-heading text-base leading-none font-medium", className)} {...props} />
+  <DialogPrimitive.Title
+    data-slot="dialog-title"
+    className={cn("font-heading text-base leading-none font-medium", className)}
+    {...props}
+  />
 )
 
 const DialogDescription = ({ className, ...props }: DialogPrimitive.Description.Props) => (
@@ -84,4 +119,15 @@ const DialogDescription = ({ className, ...props }: DialogPrimitive.Description.
   />
 )
 
-export { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger }
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+}

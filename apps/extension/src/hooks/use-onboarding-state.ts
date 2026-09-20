@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react"
-import { DEFAULT_ONBOARDING, getOnboarding, setOnboarding as writeOnboarding, type OnboardingState } from "@/background/storage/onboarding.store"
+import {
+  DEFAULT_ONBOARDING,
+  getOnboarding,
+  setOnboarding as writeOnboarding,
+  type OnboardingState,
+} from "@/background/storage/onboarding.store"
 import { sendMessage } from "@/lib/messages"
 import type { NativeStatus, UserScriptsStatus } from "@/shared/types"
 
@@ -18,11 +23,13 @@ export const useOnboardingState = (): {
   const [userScripts, setUserScripts] = useState<UserScriptsStatus>(FALLBACK_USER_SCRIPTS_STATUS)
 
   const refresh = (): void => {
-    void Promise.all([getOnboarding(), sendMessage("GET_NATIVE_STATUS"), sendMessage("GET_USER_SCRIPTS_STATUS")]).then(([nextOnboarding, nextNative, nextUserScripts]) => {
-      setOnboardingState(nextOnboarding)
-      setNativeStatus(nextNative ?? FALLBACK_NATIVE_STATUS)
-      setUserScripts(nextUserScripts ?? FALLBACK_USER_SCRIPTS_STATUS)
-    })
+    void Promise.all([getOnboarding(), sendMessage("GET_NATIVE_STATUS"), sendMessage("GET_USER_SCRIPTS_STATUS")]).then(
+      ([nextOnboarding, nextNative, nextUserScripts]) => {
+        setOnboardingState(nextOnboarding)
+        setNativeStatus(nextNative ?? FALLBACK_NATIVE_STATUS)
+        setUserScripts(nextUserScripts ?? FALLBACK_USER_SCRIPTS_STATUS)
+      },
+    )
   }
 
   useEffect(() => {

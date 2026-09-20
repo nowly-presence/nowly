@@ -95,7 +95,8 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }): R
 
     const onStorageChanged = (changes: Record<string, chrome.storage.StorageChange>, areaName: string): void => {
       if (areaName !== "local") return
-      if (changes.presences || changes.settings || changes.currentActivity || changes.presenceDebug || changes.presenceInstallQueue) refresh()
+      if (changes.presences || changes.settings || changes.currentActivity || changes.presenceDebug || changes.presenceInstallQueue)
+        refresh()
     }
     chrome.storage.onChanged.addListener(onStorageChanged)
 

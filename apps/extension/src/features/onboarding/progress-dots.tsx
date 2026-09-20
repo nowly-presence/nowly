@@ -16,9 +16,19 @@ export const ProgressDots = ({ activeIndex, allDone, devReplayOnboarding, onSele
       const dotClassName = cn("h-1.5 rounded-full transition-all", stepDotClass(dotIndex === activeIndex, step.status === "success"))
 
       return devReplayOnboarding ? (
-        <button key={step.title} type="button" aria-label={step.title} title={step.title} onClick={() => onSelect(dotIndex)} className={cn(dotClassName, "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50")} />
+        <button
+          key={step.title}
+          type="button"
+          aria-label={step.title}
+          title={step.title}
+          onClick={() => onSelect(dotIndex)}
+          className={cn(dotClassName, "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50")}
+        />
       ) : (
-        <span key={step.title} className={dotClassName} />
+        <span
+          key={step.title}
+          className={dotClassName}
+        />
       )
     })}
     {!devReplayOnboarding && allDone ? <span className="h-1.5 w-5 rounded-full bg-accent transition-all" /> : null}

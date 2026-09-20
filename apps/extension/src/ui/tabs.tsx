@@ -3,7 +3,12 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/ui/utils"
 
 const Tabs = ({ className, orientation = "horizontal", ...props }: TabsPrimitive.Root.Props) => (
-  <TabsPrimitive.Root data-slot="tabs" data-orientation={orientation} className={cn("group/tabs flex gap-2 data-horizontal:flex-col", className)} {...props} />
+  <TabsPrimitive.Root
+    data-slot="tabs"
+    data-orientation={orientation}
+    className={cn("group/tabs flex gap-2 data-horizontal:flex-col", className)}
+    {...props}
+  />
 )
 
 const tabsListVariants = cva(
@@ -22,7 +27,12 @@ const tabsListVariants = cva(
 )
 
 const TabsList = ({ className, variant = "default", ...props }: TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>) => (
-  <TabsPrimitive.List data-slot="tabs-list" data-variant={variant} className={cn(tabsListVariants({ variant }), className)} {...props} />
+  <TabsPrimitive.List
+    data-slot="tabs-list"
+    data-variant={variant}
+    className={cn(tabsListVariants({ variant }), className)}
+    {...props}
+  />
 )
 
 const TabsTrigger = ({ className, ...props }: TabsPrimitive.Tab.Props) => (
@@ -40,7 +50,11 @@ const TabsTrigger = ({ className, ...props }: TabsPrimitive.Tab.Props) => (
 )
 
 const TabsContent = ({ className, ...props }: TabsPrimitive.Panel.Props) => (
-  <TabsPrimitive.Panel data-slot="tabs-content" className={cn("flex-1 text-sm outline-none", className)} {...props} />
+  <TabsPrimitive.Panel
+    data-slot="tabs-content"
+    className={cn("flex-1 text-sm outline-none", className)}
+    {...props}
+  />
 )
 
 export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants }

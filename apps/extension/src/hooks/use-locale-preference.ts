@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react"
-import { getLocalePreference, loadLocalePreference, setLocalePreference as saveLocalePreference, type LocalePreference } from "@/shared/i18n"
+import {
+  getLocalePreference,
+  loadLocalePreference,
+  setLocalePreference as saveLocalePreference,
+  type LocalePreference,
+} from "@/shared/i18n"
 
 type LocalePreferenceState = {
   localePreference: LocalePreference

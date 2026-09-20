@@ -9,7 +9,11 @@ type Props = {
 }
 
 export const SettingsSectionCard = ({ icon: Icon, title, description, onOpen }: Props): React.JSX.Element => (
-  <button type="button" onClick={onOpen} className="flex w-full min-w-0 items-center gap-3 px-3 py-3 text-left outline-none transition-colors hover:bg-secondary focus-visible:bg-secondary">
+  <button
+    type="button"
+    onClick={onOpen}
+    className="flex w-full min-w-0 items-center gap-3 px-3 py-3 text-left outline-none transition-colors hover:bg-secondary focus-visible:bg-secondary"
+  >
     <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-foreground">
       <Icon className="size-5" />
     </span>

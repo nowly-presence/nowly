@@ -12,7 +12,8 @@ export const handleDebug: Handler<"DEBUG"> = async (payload) => {
   return { ok: true }
 }
 
-export const handleActivityUpdateMessage: Handler<"ACTIVITY_UPDATE"> = ({ slug, activity }, sender) => handleActivityUpdate(slug, activity, sender.tab?.id)
+export const handleActivityUpdateMessage: Handler<"ACTIVITY_UPDATE"> = ({ slug, activity }, sender) =>
+  handleActivityUpdate(slug, activity, sender.tab?.id)
 
 export const handleClearActivityMessage: Handler<"CLEAR_ACTIVITY"> = () => handleClearActivity()
 

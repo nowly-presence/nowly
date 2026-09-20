@@ -1,4 +1,14 @@
-import { RiDiscordFill, RiDownload2Line, RiExternalLinkLine, RiGlobalLine, RiMoreLine, RiPauseLine, RiPlayLine, RiRefreshLine, RiRestartLine } from "@remixicon/react"
+import {
+  RiDiscordFill,
+  RiDownload2Line,
+  RiExternalLinkLine,
+  RiGlobalLine,
+  RiMoreLine,
+  RiPauseLine,
+  RiPlayLine,
+  RiRefreshLine,
+  RiRestartLine,
+} from "@remixicon/react"
 import { PresenceLayoutToggle } from "@/features/activity/presence-layout-toggle"
 import { Button } from "@/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/ui/dropdown-menu"
@@ -27,7 +37,15 @@ type MenuItem = {
   onSelect: () => void
 }
 
-export const Header = ({ displayMode, isCheckingUpdates = false, onCheckUpdates, onDisplayModeChange, onReplayOnboarding, onTogglePause, presencePaused = false }: Props): React.JSX.Element => {
+export const Header = ({
+  displayMode,
+  isCheckingUpdates = false,
+  onCheckUpdates,
+  onDisplayModeChange,
+  onReplayOnboarding,
+  onTogglePause,
+  presencePaused = false,
+}: Props): React.JSX.Element => {
   const items: MenuItem[] = [
     { id: "website", icon: RiGlobalLine, label: "menu-website", external: true, onSelect: () => openUrl(WEB_BASE_URL) },
     { id: "host", icon: RiDownload2Line, label: "menu-host", external: true, onSelect: () => openUrl(HOST_DOWNLOAD_URL) },
@@ -35,7 +53,8 @@ export const Header = ({ displayMode, isCheckingUpdates = false, onCheckUpdates,
   ]
 
   if (onCheckUpdates) items.push({ id: "updates", icon: RiRefreshLine, label: "check-updates", onSelect: onCheckUpdates })
-  if (onReplayOnboarding) items.push({ id: "onboarding", icon: RiRestartLine, label: "menu-onboarding", onSelect: () => onReplayOnboarding() })
+  if (onReplayOnboarding)
+    items.push({ id: "onboarding", icon: RiRestartLine, label: "menu-onboarding", onSelect: () => onReplayOnboarding() })
 
   return (
     <header className="flex items-center justify-between gap-3">
@@ -49,7 +68,12 @@ export const Header = ({ displayMode, isCheckingUpdates = false, onCheckUpdates,
       />
 
       <div className="mr-2 flex shrink-0 items-center gap-1.5">
-        {displayMode && onDisplayModeChange ? <PresenceLayoutToggle value={displayMode} onChange={onDisplayModeChange} /> : null}
+        {displayMode && onDisplayModeChange ? (
+          <PresenceLayoutToggle
+            value={displayMode}
+            onChange={onDisplayModeChange}
+          />
+        ) : null}
         {onTogglePause ? (
           <Button
             variant="outline"
@@ -63,14 +87,29 @@ export const Header = ({ displayMode, isCheckingUpdates = false, onCheckUpdates,
           </Button>
         ) : null}
         <DropdownMenu>
-          <DropdownMenuTrigger render={<Button variant="outline" size="icon-sm" aria-label={t("more")} />}>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                variant="outline"
+                size="icon-sm"
+                aria-label={t("more")}
+              />
+            }
+          >
             <RiMoreLine />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-52">
+          <DropdownMenuContent
+            align="end"
+            className="min-w-52"
+          >
             {items.map((item) => {
               const spinning = item.id === "updates" && isCheckingUpdates
               return (
-                <DropdownMenuItem key={item.id} disabled={spinning} onClick={item.onSelect}>
+                <DropdownMenuItem
+                  key={item.id}
+                  disabled={spinning}
+                  onClick={item.onSelect}
+                >
                   <item.icon className={cn("size-4 shrink-0 text-muted-foreground", spinning && "animate-spin")} />
                   <span className="min-w-0 flex-1">{t(item.label)}</span>
                   {item.external ? <RiExternalLinkLine className="size-3.5 shrink-0 text-muted-foreground" /> : null}

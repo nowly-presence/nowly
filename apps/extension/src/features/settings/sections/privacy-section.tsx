@@ -13,13 +13,22 @@ type Props = {
 
 export const PrivacySection = ({ analyticsConsent, onAnalyticsConsentChange, onBack }: Props): React.JSX.Element => (
   <div className="flex flex-col gap-3">
-    <SettingsSectionHeader title={t("settings-group-privacy")} onBack={onBack} />
+    <SettingsSectionHeader
+      title={t("settings-group-privacy")}
+      onBack={onBack}
+    />
     <div className="overflow-hidden rounded-xl border border-border bg-card divide-y divide-border">
       <SettingRow
         title={t("analytics-consent")}
         description={t("analytics-consent-description")}
         controlId="analytics-consent-toggle"
-        control={<Switch id="analytics-consent-toggle" checked={analyticsConsent} onCheckedChange={onAnalyticsConsentChange} />}
+        control={
+          <Switch
+            id="analytics-consent-toggle"
+            checked={analyticsConsent}
+            onCheckedChange={onAnalyticsConsentChange}
+          />
+        }
       >
         <a
           href={`${WEB_BASE_URL.replace(/\/$/, "")}/consent`}

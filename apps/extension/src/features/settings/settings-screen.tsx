@@ -1,4 +1,13 @@
-import { RiDiscordFill, RiFocus3Line, RiLockLine, RiPaletteLine, RiSettings3Line, RiTerminalLine, RiToggleLine, RiTranslate2 } from "@remixicon/react"
+import {
+  RiDiscordFill,
+  RiFocus3Line,
+  RiLockLine,
+  RiPaletteLine,
+  RiSettings3Line,
+  RiTerminalLine,
+  RiToggleLine,
+  RiTranslate2,
+} from "@remixicon/react"
 import { useEffect, useState } from "react"
 import { ScheduleDialog } from "@/features/activity/schedule-dialog"
 import { ActivitySelectionSection } from "@/features/settings/sections/activity-selection-section"
@@ -22,7 +31,16 @@ import { Skeleton } from "@/ui/skeleton"
 
 const FALLBACK_USER_SCRIPTS_STATUS: UserScriptsStatus = { enabled: false, requiresUserToggle: true }
 
-export type SettingsSectionId = "general" | "appearance" | "privacy" | "activity-selection" | "schedule" | "presence-language" | "native" | "developer" | "developer-logs"
+export type SettingsSectionId =
+  | "general"
+  | "appearance"
+  | "privacy"
+  | "activity-selection"
+  | "schedule"
+  | "presence-language"
+  | "native"
+  | "developer"
+  | "developer-logs"
 
 type SectionEntry = {
   id: SettingsSectionId
@@ -35,16 +53,29 @@ const SECTIONS: SectionEntry[] = [
   { id: "general", icon: RiToggleLine, titleKey: "settings-group-general", descriptionKey: "settings-group-general-description" },
   { id: "appearance", icon: RiPaletteLine, titleKey: "settings-group-appearance", descriptionKey: "settings-group-appearance-description" },
   { id: "privacy", icon: RiLockLine, titleKey: "settings-group-privacy", descriptionKey: "settings-group-privacy-description" },
-  { id: "activity-selection", icon: RiFocus3Line, titleKey: "settings-group-activity-selection", descriptionKey: "settings-group-activity-selection-description" },
+  {
+    id: "activity-selection",
+    icon: RiFocus3Line,
+    titleKey: "settings-group-activity-selection",
+    descriptionKey: "settings-group-activity-selection-description",
+  },
   { id: "schedule", icon: RiSettings3Line, titleKey: "settings-group-advanced", descriptionKey: "settings-group-advanced-description" },
-  { id: "presence-language", icon: RiTranslate2, titleKey: "settings-group-presence-language", descriptionKey: "settings-group-presence-language-description" },
+  {
+    id: "presence-language",
+    icon: RiTranslate2,
+    titleKey: "settings-group-presence-language",
+    descriptionKey: "settings-group-presence-language-description",
+  },
   { id: "native", icon: RiDiscordFill, titleKey: "settings-group-native", descriptionKey: "settings-group-native-description" },
   { id: "developer", icon: RiTerminalLine, titleKey: "settings-group-developer", descriptionKey: "settings-group-developer-description" },
 ]
 
 const RuntimeLogsSection = ({ onBack }: { onBack: () => void }): React.JSX.Element => (
   <div className="flex min-h-0 flex-1 flex-col gap-3">
-    <SettingsSectionHeader title={t("runtime-logs-title")} onBack={onBack} />
+    <SettingsSectionHeader
+      title={t("runtime-logs-title")}
+      onBack={onBack}
+    />
     <RuntimeLogsView />
   </div>
 )
@@ -59,6 +90,7 @@ export const SettingsScreen = ({ section, onSectionChange }: Props): React.JSX.E
   const { localePreference, setLocalePreference } = useLocalePreference()
   const { hostVersionInfo, isCheckingHostVersion, checkHostUpdate } = useHostVersion()
   const [globalScheduleOpen, setGlobalScheduleOpen] = useState(false)
+  const [presenceScheduleSlug, setPresenceScheduleSlug] = useState<string | null>(null)
   const [userScripts, setUserScripts] = useState<UserScriptsStatus>(FALLBACK_USER_SCRIPTS_STATUS)
 
   useEffect(() => {
@@ -69,7 +101,10 @@ export const SettingsScreen = ({ section, onSectionChange }: Props): React.JSX.E
     return (
       <div className="flex flex-col gap-2">
         {Array.from({ length: 4 }, (_, index) => (
-          <Skeleton key={index} className="h-16 rounded-xl" />
+          <Skeleton
+            key={index}
+            className="h-16 rounded-xl"
+          />
         ))}
       </div>
     )
@@ -79,22 +114,75 @@ export const SettingsScreen = ({ section, onSectionChange }: Props): React.JSX.E
 
   switch (section) {
     case "general":
-      return <GeneralSection onBack={onBack} settings={state.settings} onSettingsChange={state.setSettings} />
+      return (
+        <GeneralSection
+          onBack={onBack}
+          settings={state.settings}
+          onSettingsChange={state.setSettings}
+        />
+      )
     case "appearance":
-      return <AppearanceSection onBack={onBack} localePreference={localePreference} onLocaleChange={setLocalePreference} settings={state.settings} onSettingsChange={state.setSettings} />
+      return (
+        <AppearanceSection
+          onBack={onBack}
+          localePreference={localePreference}
+          onLocaleChange={setLocalePreference}
+          settings={state.settings}
+          onSettingsChange={state.setSettings}
+        />
+      )
     case "privacy":
-      return <PrivacySection onBack={onBack} analyticsConsent={state.analyticsConsent} onAnalyticsConsentChange={state.setAnalyticsConsent} />
+      return (
+        <PrivacySection
+          onBack={onBack}
+          analyticsConsent={state.analyticsConsent}
+          onAnalyticsConsentChange={state.setAnalyticsConsent}
+        />
+      )
     case "activity-selection":
-      return <ActivitySelectionSection onBack={onBack} settings={state.settings} onSettingsChange={state.setSettings} presences={state.presences} />
+      return (
+        <ActivitySelectionSection
+          onBack={onBack}
+          settings={state.settings}
+          onSettingsChange={state.setSettings}
+          presences={state.presences}
+        />
+      )
     case "schedule":
       return (
         <>
-          <ScheduleSection onBack={onBack} settings={state.settings} onSettingsChange={state.setSettings} onEditGlobalSchedule={() => setGlobalScheduleOpen(true)} />
-          <ScheduleDialog open={globalScheduleOpen} activeSlug={null} globalSchedule={state.settings.globalSchedule} presences={state.presences} onClose={() => setGlobalScheduleOpen(false)} />
+          <ScheduleSection
+            onBack={onBack}
+            settings={state.settings}
+            onSettingsChange={state.setSettings}
+            presences={state.presences}
+            onEditGlobalSchedule={() => setGlobalScheduleOpen(true)}
+            onEditPresenceSchedule={setPresenceScheduleSlug}
+          />
+          <ScheduleDialog
+            open={globalScheduleOpen}
+            activeSlug={null}
+            globalSchedule={state.settings.globalSchedule}
+            presences={state.presences}
+            onClose={() => setGlobalScheduleOpen(false)}
+          />
+          <ScheduleDialog
+            open={presenceScheduleSlug !== null}
+            activeSlug={presenceScheduleSlug}
+            globalSchedule={state.settings.globalSchedule}
+            presences={state.presences}
+            onClose={() => setPresenceScheduleSlug(null)}
+          />
         </>
       )
     case "presence-language":
-      return <LanguageSection onBack={onBack} settings={state.settings} onSettingsChange={state.setSettings} />
+      return (
+        <LanguageSection
+          onBack={onBack}
+          settings={state.settings}
+          onSettingsChange={state.setSettings}
+        />
+      )
     case "native":
       return (
         <NativeConnectionSection
@@ -131,7 +219,13 @@ export const SettingsScreen = ({ section, onSectionChange }: Props): React.JSX.E
       return (
         <div className="overflow-hidden rounded-xl border border-border bg-card divide-y divide-border">
           {SECTIONS.map((entry) => (
-            <SettingsSectionCard key={entry.id} icon={entry.icon} title={t(entry.titleKey)} description={t(entry.descriptionKey)} onOpen={() => onSectionChange(entry.id)} />
+            <SettingsSectionCard
+              key={entry.id}
+              icon={entry.icon}
+              title={t(entry.titleKey)}
+              description={t(entry.descriptionKey)}
+              onOpen={() => onSectionChange(entry.id)}
+            />
           ))}
         </div>
       )
