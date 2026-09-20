@@ -77,11 +77,11 @@ export const ScheduleDialog = ({ activeSlug, globalSchedule, onClose, open, pres
           </div>
 
           <div className="flex items-center justify-between rounded-xl border border-border bg-secondary px-3 py-2.5">
-            <div className="flex items-center gap-2">
+            <label htmlFor="schedule-time-range-toggle" className="flex cursor-pointer items-center gap-2">
               <RiTimeLine className="size-4 text-muted-foreground" />
               <span className="text-sm text-foreground">{t("schedule-time-range")}</span>
-            </div>
-            <Switch checked={useTimeRange} onCheckedChange={setUseTimeRange} aria-label="Toggle time range" />
+            </label>
+            <Switch id="schedule-time-range-toggle" checked={useTimeRange} onCheckedChange={setUseTimeRange} />
           </div>
 
           {useTimeRange ? (
