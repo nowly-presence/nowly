@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { sendMessage } from "@/lib/messages"
 import { BottomNav } from "@/components/layout/bottom-nav"
 import { ConnectionStatusBar, isConnectionHealthy } from "@/components/layout/connection-status-bar"
@@ -18,9 +18,16 @@ import { useTheme } from "@/hooks/use-theme"
 import { trackUiEvent } from "@/lib/analytics"
 import { WEB_BASE_URL } from "@/shared/constants"
 import { t } from "@/shared/i18n"
+import { SIDEPANEL_NAV_KEY, clearPendingSidepanelNav, isSidepanelPendingNav, loadPendingSidepanelNav, persistAppView, type SidepanelPendingNav } from "@/shared/sidepanel-view"
 import type { PersistedAppView } from "@/shared/types"
 
-const StoreScreen = (): React.JSX.Element => {
+type StoreSeed = { query: string; slug: string | null }
+
+type StoreScreenProps = {
+  seed: StoreSeed
+}
+
+const StoreScreen = ({ seed }: StoreScreenProps): React.JSX.Element => {
   const state = useExtensionState()
   const [installingSlug, setInstallingSlug] = useState<string | null>(null)
 
@@ -37,13 +44,19 @@ const StoreScreen = (): React.JSX.Element => {
       onRetryQueue={() => void state.retryInstallQueue()}
       presences={state.presences}
       updates={state.updates}
+      seedQuery={seed.query}
+      seedSlug={seed.slug}
     />
   )
 }
 
-const ActivityScreen = (): React.JSX.Element => {
+type ActivityScreenProps = {
+  selectedSlug: string | null
+  onSelectPresence: (slug: string | null) => void
+}
+
+const ActivityScreen = ({ selectedSlug, onSelectPresence }: ActivityScreenProps): React.JSX.Element => {
   const state = useExtensionState()
-  const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
   const [snoozeSlug, setSnoozeSlug] = useState<string | null>(null)
   const [scheduleSlug, setScheduleSlug] = useState<string | null>(null)
   const [updatingSlug, setUpdatingSlug] = useState<string | null>(null)
@@ -76,7 +89,7 @@ const ActivityScreen = (): React.JSX.Element => {
         updates={state.updates}
         updatingSlug={updatingSlug}
         selectedSlug={selectedSlug}
-        onSelectPresence={setSelectedSlug}
+        onSelectPresence={onSelectPresence}
         onToggle={state.togglePresence}
         onRemove={state.removePresence}
         onSchedule={setScheduleSlug}
@@ -90,9 +103,15 @@ const ActivityScreen = (): React.JSX.Element => {
   )
 }
 
-const Shell = (): React.JSX.Element => {
+type ShellProps = {
+  initialView: PersistedAppView
+}
+
+const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
   const state = useExtensionState()
-  const [view, setView] = useState<PersistedAppView>("activity")
+  const [view, setView] = useState<PersistedAppView>(initialView)
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
+  const [storeSeed, setStoreSeed] = useState<StoreSeed>({ query: "", slug: null })
   useTheme(state.settings.appearance)
 
   const { localePreference, setLocalePreference } = useLocalePreference()
@@ -104,28 +123,77 @@ const Shell = (): React.JSX.Element => {
     setLocalePreference(locale)
   }
 
+  const changeView = (nextView: PersistedAppView): void => {
+    setView(nextView)
+    persistAppView(nextView)
+  }
+
+  // Applied when the right-click "Nowly presence for this page" context menu
+  // (or the store card's "open library entry") asks the panel to jump to a
+  // specific presence/search after it opens.
+  const applyPendingNav = useCallback((nav: SidepanelPendingNav): void => {
+    if (nav.view === "activity") {
+      setSelectedSlug(nav.slug ?? null)
+      changeView("activity")
+      return
+    }
+    if (nav.view === "store") {
+      setStoreSeed({ query: nav.query ?? "", slug: nav.slug ?? null })
+      changeView("store")
+      return
+    }
+    changeView(nav.view)
+  }, [])
+
+  useEffect(() => {
+    void loadPendingSidepanelNav().then((nav) => {
+      if (!nav) return
+      applyPendingNav(nav)
+      void clearPendingSidepanelNav()
+    })
+
+    const onStorageChanged = (changes: Record<string, chrome.storage.StorageChange>, areaName: string): void => {
+      if (areaName !== "local" || !changes[SIDEPANEL_NAV_KEY]) return
+      const nav = changes[SIDEPANEL_NAV_KEY].newValue
+      if (!isSidepanelPendingNav(nav)) return
+      applyPendingNav(nav)
+      void clearPendingSidepanelNav()
+    }
+    chrome.storage.onChanged.addListener(onStorageChanged)
+    return () => chrome.storage.onChanged.removeListener(onStorageChanged)
+  }, [applyPendingNav])
+
   return (
     <div className="relative flex h-dvh flex-col bg-background text-foreground">
-      <ConnectionStatusBar
-        nativeStatus={state.nativeStatus}
-        onConnect={state.connectNative}
-        presencePaused={state.settings.presencePaused === true}
-        visible={!isConnectionHealthy(state.nativeStatus) || state.settings.presencePaused === true}
-      />
-      <div className="flex flex-1 flex-col gap-4 overflow-hidden px-3 pt-3">
-        <Header
-          displayMode={view === "activity" ? state.settings.presenceDisplayMode : undefined}
-          onDisplayModeChange={view === "activity" ? (mode) => state.setSettings({ presenceDisplayMode: mode }) : undefined}
-          onTogglePause={() => state.setPresencePaused(!(state.settings.presencePaused === true))}
+      {state.settings.backgroundAnimation !== false ? <div className="sidepanel-bg absolute inset-0" aria-hidden /> : null}
+      <div className="relative z-1 flex flex-1 flex-col overflow-hidden">
+        <ConnectionStatusBar
+          nativeStatus={state.nativeStatus}
+          onConnect={state.connectNative}
           presencePaused={state.settings.presencePaused === true}
-          onCheckUpdates={view === "activity" && !state.isUnpacked ? state.checkUpdates : undefined}
-          isCheckingUpdates={state.isCheckingUpdates}
+          visible={!isConnectionHealthy(state.nativeStatus) || state.settings.presencePaused === true}
         />
-        <main id="sidepanel-tabpanel" className="flex-1 overflow-y-auto pb-3" aria-label={t(view === "activity" ? "nav-home" : view === "store" ? "nav-store" : "nav-settings")}>
-          {view === "activity" ? <ActivityScreen /> : view === "store" ? <StoreScreen /> : <SettingsScreen />}
-        </main>
+        <div className="flex flex-1 flex-col gap-4 overflow-hidden px-3 pt-3">
+          <Header
+            displayMode={view === "activity" ? state.settings.presenceDisplayMode : undefined}
+            onDisplayModeChange={view === "activity" ? (mode) => state.setSettings({ presenceDisplayMode: mode }) : undefined}
+            onTogglePause={() => state.setPresencePaused(!(state.settings.presencePaused === true))}
+            presencePaused={state.settings.presencePaused === true}
+            onCheckUpdates={view === "activity" && !state.isUnpacked ? state.checkUpdates : undefined}
+            isCheckingUpdates={state.isCheckingUpdates}
+          />
+          <main id="sidepanel-tabpanel" className="flex-1 overflow-y-auto pb-3" aria-label={t(view === "activity" ? "nav-home" : view === "store" ? "nav-store" : "nav-settings")}>
+            {view === "activity" ? (
+              <ActivityScreen selectedSlug={selectedSlug} onSelectPresence={setSelectedSlug} />
+            ) : view === "store" ? (
+              <StoreScreen seed={storeSeed} />
+            ) : (
+              <SettingsScreen />
+            )}
+          </main>
+        </div>
+        <BottomNav activeView={view} onViewChange={changeView} />
       </div>
-      <BottomNav activeView={view} onViewChange={setView} />
 
       <OnboardingOverlay
         activity={state.activity}
@@ -149,8 +217,12 @@ const Shell = (): React.JSX.Element => {
   )
 }
 
-export const App = (): React.JSX.Element => (
+type AppProps = {
+  initialView: PersistedAppView
+}
+
+export const App = ({ initialView }: AppProps): React.JSX.Element => (
   <ExtensionStateProvider>
-    <Shell />
+    <Shell initialView={initialView} />
   </ExtensionStateProvider>
 )
