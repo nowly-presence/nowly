@@ -7,10 +7,15 @@ import { ActivityView } from "@/features/activity/activity-view"
 import { CurrentActivityCard } from "@/features/activity/current-activity-card"
 import { ScheduleDialog } from "@/features/activity/schedule-dialog"
 import { SnoozeDialog } from "@/features/activity/snooze-dialog"
+import { OnboardingOverlay } from "@/features/onboarding/onboarding-overlay"
 import { SettingsScreen } from "@/features/settings/settings-screen"
 import { StoreView } from "@/features/store/store-view"
 import { ExtensionStateProvider, useExtensionState } from "@/hooks/extension-state-provider"
+import { useHostVersion } from "@/hooks/use-host-version"
+import { useLocalePreference } from "@/hooks/use-locale-preference"
+import { useOnboardingState } from "@/hooks/use-onboarding-state"
 import { useTheme } from "@/hooks/use-theme"
+import { trackUiEvent } from "@/lib/analytics"
 import { WEB_BASE_URL } from "@/shared/constants"
 import { t } from "@/shared/i18n"
 import type { PersistedAppView } from "@/shared/types"
@@ -90,8 +95,17 @@ const Shell = (): React.JSX.Element => {
   const [view, setView] = useState<PersistedAppView>("activity")
   useTheme(state.settings.appearance)
 
+  const { localePreference, setLocalePreference } = useLocalePreference()
+  const { onboarding, setOnboarding, nativeStatus: onboardingNativeStatus, userScripts } = useOnboardingState()
+  const { hostVersionInfo } = useHostVersion()
+
+  const onLocaleChange = (locale: typeof localePreference): void => {
+    trackUiEvent("settings_language_changed")
+    setLocalePreference(locale)
+  }
+
   return (
-    <div className="flex h-dvh flex-col bg-background text-foreground">
+    <div className="relative flex h-dvh flex-col bg-background text-foreground">
       <ConnectionStatusBar
         nativeStatus={state.nativeStatus}
         onConnect={state.connectNative}
@@ -112,6 +126,25 @@ const Shell = (): React.JSX.Element => {
         </main>
       </div>
       <BottomNav activeView={view} onViewChange={setView} />
+
+      <OnboardingOverlay
+        activity={state.activity}
+        nativeStatus={onboardingNativeStatus}
+        userScripts={userScripts}
+        devReplayOnboarding={onboarding.devReplayOnboarding}
+        onboardingCompleted={onboarding.onboardingCompleted}
+        localePreference={localePreference}
+        onLocaleChange={onLocaleChange}
+        onConnectNative={state.connectNative}
+        onComplete={() => setOnboarding({ devReplayOnboarding: false, onboardingCompleted: true })}
+        onSkipTour={() => {
+          trackUiEvent("onboarding_skipped", { source: "extension_onboarding" })
+          setOnboarding({ devReplayOnboarding: false, onboardingCompleted: true })
+        }}
+        presences={state.presences}
+        settings={state.settings}
+        hostVersionInfo={hostVersionInfo}
+      />
     </div>
   )
 }
