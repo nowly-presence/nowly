@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { Fragment, useCallback, useEffect, useState } from "react"
 import { LocaleFlag } from "@/components/shared/locale-flag"
 import { localeLabel, resolveLocaleString } from "@/features/activity/presence-locale"
 import { sendMessage } from "@/lib/messages"
@@ -77,13 +77,23 @@ export const PresenceSettingsFields = ({ definitions, locales, slug }: Props): R
     <>
       {showLanguage ? (
         <div className="flex items-center justify-between gap-3 px-4 py-3">
-          <Label className="text-sm text-foreground">{t("presence-language-this")}</Label>
+          <Label htmlFor="presence-language-this-select" className="text-sm text-foreground">
+            {t("presence-language-this")}
+          </Label>
           <Select
             value={presenceLocale}
             onValueChange={(value) => handleLanguageChange(value as PresenceLocale)}
-            items={Object.fromEntries(Object.keys(locales ?? {}).map((locale) => [locale, localeLabel(locale)]))}
+            items={Object.fromEntries(
+              Object.keys(locales ?? {}).map((locale) => [
+                locale,
+                <Fragment key={locale}>
+                  <LocaleFlag locale={locale} />
+                  {localeLabel(locale)}
+                </Fragment>,
+              ]),
+            )}
           >
-            <SelectTrigger size="sm" className="w-36" aria-label={t("presence-language-this")}>
+            <SelectTrigger id="presence-language-this-select" size="sm" className="w-36" aria-label={t("presence-language-this")}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

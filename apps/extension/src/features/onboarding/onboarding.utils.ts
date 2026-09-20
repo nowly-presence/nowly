@@ -1,11 +1,7 @@
+import { LOCALE_LONG_MAP } from "@nowly/locales"
 import { resolveLocale, type LocalePreference } from "@/shared/i18n"
 
-export const marketplaceLocale = (preference: LocalePreference): string => {
-  const locale = resolveLocale(preference)
-  if (locale === "fr") return "fr-FR"
-  if (locale === "es") return "es-ES"
-  return "en-US"
-}
+export const marketplaceLocale = (preference: LocalePreference): string => LOCALE_LONG_MAP[resolveLocale(preference)]
 
 export const requestUserScriptsPermission = (): void => {
   void chrome.permissions.request({ permissions: ["userScripts"] }).catch(() => {

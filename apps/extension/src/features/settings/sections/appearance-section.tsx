@@ -22,13 +22,87 @@ export const AppearanceSection = ({ localePreference, onLocaleChange, settings, 
       <SettingRow
         title={t("language")}
         description={t("language-description")}
+        controlId="language-select"
         control={
           <Select
             value={localePreference}
             onValueChange={(value) => onLocaleChange(value as LocalePreference)}
-            items={{ browser: t("locale-auto"), fr: t("locale-fr"), en: t("locale-en"), es: t("locale-es") }}
+            items={{
+              browser: (
+                <>
+                  <RiGlobalLine className="size-4 text-muted-foreground" />
+                  {t("locale-auto")}
+                </>
+              ),
+              fr: (
+                <>
+                  <LocaleFlag locale="fr-FR" />
+                  {t("locale-fr")}
+                </>
+              ),
+              en: (
+                <>
+                  <LocaleFlag locale="en-US" />
+                  {t("locale-en")}
+                </>
+              ),
+              es: (
+                <>
+                  <LocaleFlag locale="es-ES" />
+                  {t("locale-es")}
+                </>
+              ),
+              de: (
+                <>
+                  <LocaleFlag locale="de-DE" />
+                  {t("locale-de")}
+                </>
+              ),
+              "pt-BR": (
+                <>
+                  <LocaleFlag locale="pt-BR" />
+                  {t("locale-pt-br")}
+                </>
+              ),
+              pl: (
+                <>
+                  <LocaleFlag locale="pl-PL" />
+                  {t("locale-pl")}
+                </>
+              ),
+              ja: (
+                <>
+                  <LocaleFlag locale="ja-JP" />
+                  {t("locale-ja")}
+                </>
+              ),
+              ko: (
+                <>
+                  <LocaleFlag locale="ko-KR" />
+                  {t("locale-ko")}
+                </>
+              ),
+              tr: (
+                <>
+                  <LocaleFlag locale="tr-TR" />
+                  {t("locale-tr")}
+                </>
+              ),
+              ms: (
+                <>
+                  <LocaleFlag locale="ms-MY" />
+                  {t("locale-ms")}
+                </>
+              ),
+              el: (
+                <>
+                  <LocaleFlag locale="el-GR" />
+                  {t("locale-el")}
+                </>
+              ),
+            }}
           >
-            <SelectTrigger size="sm" className="w-36" aria-label={t("language")}>
+            <SelectTrigger id="language-select" size="sm" className="w-36" aria-label={t("language")}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -48,6 +122,38 @@ export const AppearanceSection = ({ localePreference, onLocaleChange, settings, 
                 <LocaleFlag locale="es-ES" />
                 {t("locale-es")}
               </SelectItem>
+              <SelectItem value="de">
+                <LocaleFlag locale="de-DE" />
+                {t("locale-de")}
+              </SelectItem>
+              <SelectItem value="pt-BR">
+                <LocaleFlag locale="pt-BR" />
+                {t("locale-pt-br")}
+              </SelectItem>
+              <SelectItem value="pl">
+                <LocaleFlag locale="pl-PL" />
+                {t("locale-pl")}
+              </SelectItem>
+              <SelectItem value="ja">
+                <LocaleFlag locale="ja-JP" />
+                {t("locale-ja")}
+              </SelectItem>
+              <SelectItem value="ko">
+                <LocaleFlag locale="ko-KR" />
+                {t("locale-ko")}
+              </SelectItem>
+              <SelectItem value="tr">
+                <LocaleFlag locale="tr-TR" />
+                {t("locale-tr")}
+              </SelectItem>
+              <SelectItem value="ms">
+                <LocaleFlag locale="ms-MY" />
+                {t("locale-ms")}
+              </SelectItem>
+              <SelectItem value="el">
+                <LocaleFlag locale="el-GR" />
+                {t("locale-el")}
+              </SelectItem>
             </SelectContent>
           </Select>
         }
@@ -56,13 +162,33 @@ export const AppearanceSection = ({ localePreference, onLocaleChange, settings, 
       <SettingRow
         title={t("appearance")}
         description={t("appearance-description")}
+        controlId="appearance-select"
         control={
           <Select
             value={settings.appearance ?? "system"}
             onValueChange={(value) => onSettingsChange({ appearance: value as AppearanceMode })}
-            items={{ system: t("appearance-system"), light: t("appearance-light"), dark: t("appearance-dark") }}
+            items={{
+              system: (
+                <>
+                  <RiComputerLine className="size-4 text-muted-foreground" />
+                  {t("appearance-system")}
+                </>
+              ),
+              light: (
+                <>
+                  <RiSunLine className="size-4 text-muted-foreground" />
+                  {t("appearance-light")}
+                </>
+              ),
+              dark: (
+                <>
+                  <RiMoonLine className="size-4 text-muted-foreground" />
+                  {t("appearance-dark")}
+                </>
+              ),
+            }}
           >
-            <SelectTrigger size="sm" className="w-36" aria-label={t("appearance")}>
+            <SelectTrigger id="appearance-select" size="sm" className="w-36" aria-label={t("appearance")}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -86,7 +212,8 @@ export const AppearanceSection = ({ localePreference, onLocaleChange, settings, 
       <SettingRow
         title={t("bg-animation")}
         description={t("bg-animation-description")}
-        control={<Switch checked={settings.backgroundAnimation !== false} onCheckedChange={(checked) => onSettingsChange({ backgroundAnimation: checked })} />}
+        controlId="bg-animation-toggle"
+        control={<Switch id="bg-animation-toggle" checked={settings.backgroundAnimation !== false} onCheckedChange={(checked) => onSettingsChange({ backgroundAnimation: checked })} />}
       />
     </div>
   </div>

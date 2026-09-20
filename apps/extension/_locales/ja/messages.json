@@ -1,0 +1,29 @@
+{
+  "extensionName": {
+    "message": "Nowly"
+  },
+  "extensionDescription": {
+    "message": "ウェブでのアクティビティを自動的にDiscordで共有します。"
+  },
+  "playing": {
+    "message": "再生中"
+  },
+  "paused": {
+    "message": "一時停止中"
+  },
+  "commandOpenPanel": {
+    "message": "Nowlyを開く"
+  },
+  "commandTogglePause": {
+    "message": "Discordプレゼンスを一時停止/再開"
+  },
+  "contextMenuPage": {
+    "message": "このページ用のNowlyプレゼンス"
+  },
+  "contextMenuMuteTab": {
+    "message": "このタブを共有しない"
+  },
+  "contextMenuUnmuteTab": {
+    "message": "このタブを共有する"
+  }
+}

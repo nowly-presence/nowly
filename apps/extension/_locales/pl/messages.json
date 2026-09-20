@@ -1,0 +1,29 @@
+{
+  "extensionName": {
+    "message": "Nowly"
+  },
+  "extensionDescription": {
+    "message": "Automatycznie udostępniaj swoją aktywność w sieci na Discordzie."
+  },
+  "playing": {
+    "message": "Odtwarzanie"
+  },
+  "paused": {
+    "message": "Wstrzymano"
+  },
+  "commandOpenPanel": {
+    "message": "Otwórz Nowly"
+  },
+  "commandTogglePause": {
+    "message": "Wstrzymaj lub wznów obecność na Discordzie"
+  },
+  "contextMenuPage": {
+    "message": "Obecność Nowly dla tej strony"
+  },
+  "contextMenuMuteTab": {
+    "message": "Nie udostępniaj tej karty"
+  },
+  "contextMenuUnmuteTab": {
+    "message": "Udostępnij tę kartę"
+  }
+}

@@ -13,7 +13,20 @@ export const LocalePicker = ({ localePreference, onLocaleChange }: Props): React
   <Select
     value={localePreference}
     onValueChange={(value) => onLocaleChange(value as LocalePreference)}
-    items={{ browser: t("locale-auto"), fr: t("locale-fr"), en: t("locale-en"), es: t("locale-es") }}
+    items={{
+      browser: t("locale-auto"),
+      fr: t("locale-fr"),
+      en: t("locale-en"),
+      es: t("locale-es"),
+      de: t("locale-de"),
+      "pt-BR": t("locale-pt-br"),
+      pl: t("locale-pl"),
+      ja: t("locale-ja"),
+      ko: t("locale-ko"),
+      tr: t("locale-tr"),
+      ms: t("locale-ms"),
+      el: t("locale-el"),
+    }}
   >
     <SelectTrigger size="sm" aria-label={t("language")}>
       <SelectValue />
@@ -34,6 +47,38 @@ export const LocalePicker = ({ localePreference, onLocaleChange }: Props): React
       <SelectItem value="es">
         <LocaleFlag locale={marketplaceLocale("es")} />
         {t("locale-es")}
+      </SelectItem>
+      <SelectItem value="de">
+        <LocaleFlag locale={marketplaceLocale("de")} />
+        {t("locale-de")}
+      </SelectItem>
+      <SelectItem value="pt-BR">
+        <LocaleFlag locale={marketplaceLocale("pt-BR")} />
+        {t("locale-pt-br")}
+      </SelectItem>
+      <SelectItem value="pl">
+        <LocaleFlag locale={marketplaceLocale("pl")} />
+        {t("locale-pl")}
+      </SelectItem>
+      <SelectItem value="ja">
+        <LocaleFlag locale={marketplaceLocale("ja")} />
+        {t("locale-ja")}
+      </SelectItem>
+      <SelectItem value="ko">
+        <LocaleFlag locale={marketplaceLocale("ko")} />
+        {t("locale-ko")}
+      </SelectItem>
+      <SelectItem value="tr">
+        <LocaleFlag locale={marketplaceLocale("tr")} />
+        {t("locale-tr")}
+      </SelectItem>
+      <SelectItem value="ms">
+        <LocaleFlag locale={marketplaceLocale("ms")} />
+        {t("locale-ms")}
+      </SelectItem>
+      <SelectItem value="el">
+        <LocaleFlag locale={marketplaceLocale("el")} />
+        {t("locale-el")}
       </SelectItem>
     </SelectContent>
   </Select>

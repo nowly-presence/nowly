@@ -1,0 +1,29 @@
+{
+  "extensionName": {
+    "message": "Nowly"
+  },
+  "extensionDescription": {
+    "message": "Kongsi aktiviti web anda di Discord secara automatik."
+  },
+  "playing": {
+    "message": "Sedang dimainkan"
+  },
+  "paused": {
+    "message": "Dijeda"
+  },
+  "commandOpenPanel": {
+    "message": "Buka Nowly"
+  },
+  "commandTogglePause": {
+    "message": "Jeda atau sambung semula kehadiran Discord"
+  },
+  "contextMenuPage": {
+    "message": "Kehadiran Nowly untuk halaman ini"
+  },
+  "contextMenuMuteTab": {
+    "message": "Jangan kongsi tab ini"
+  },
+  "contextMenuUnmuteTab": {
+    "message": "Kongsi tab ini"
+  }
+}

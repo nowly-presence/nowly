@@ -1,0 +1,29 @@
+{
+  "extensionName": {
+    "message": "Nowly"
+  },
+  "extensionDescription": {
+    "message": "웹 활동을 Discord에 자동으로 공유하세요."
+  },
+  "playing": {
+    "message": "재생 중"
+  },
+  "paused": {
+    "message": "일시 중지됨"
+  },
+  "commandOpenPanel": {
+    "message": "Nowly 열기"
+  },
+  "commandTogglePause": {
+    "message": "Discord 프레즌스 일시 중지/재개"
+  },
+  "contextMenuPage": {
+    "message": "이 페이지에 대한 Nowly 프레즌스"
+  },
+  "contextMenuMuteTab": {
+    "message": "이 탭 공유 안 함"
+  },
+  "contextMenuUnmuteTab": {
+    "message": "이 탭 공유"
+  }
+}

@@ -19,13 +19,39 @@ export const LanguageSection = ({ settings, onSettingsChange, onBack }: Props): 
       <SettingRow
         title={t("presence-language")}
         description={t("presence-language-description")}
+        controlId="presence-language-select"
         control={
           <Select
             value={settings.presenceLanguage ?? "per-presence"}
             onValueChange={(value) => onSettingsChange({ presenceLanguage: value as PresenceLanguageMode })}
-            items={{ "per-presence": t("presence-language-per-presence"), "en-US": t("locale-en"), "fr-FR": t("locale-fr"), "es-ES": t("locale-es") }}
+            items={{
+              "per-presence": (
+                <>
+                  <RiGlobalLine className="size-4 text-muted-foreground" />
+                  {t("presence-language-per-presence")}
+                </>
+              ),
+              "en-US": (
+                <>
+                  <LocaleFlag locale="en-US" />
+                  {t("locale-en")}
+                </>
+              ),
+              "fr-FR": (
+                <>
+                  <LocaleFlag locale="fr-FR" />
+                  {t("locale-fr")}
+                </>
+              ),
+              "es-ES": (
+                <>
+                  <LocaleFlag locale="es-ES" />
+                  {t("locale-es")}
+                </>
+              ),
+            }}
           >
-            <SelectTrigger size="sm" className="w-40" aria-label={t("presence-language")}>
+            <SelectTrigger id="presence-language-select" size="sm" className="w-40" aria-label={t("presence-language")}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
