@@ -1,0 +1,36 @@
+---
+title: Doğrulama ve Derleme
+description: Yayınlamadan önce presence meta verilerini doğrulayın ve presence paketlerini derleyin.
+---
+
+## Meta Verileri Doğrulama
+
+Çalıştırın:
+
+```bash
+nowly validate
+```
+
+Doğrulama, `metadata.json` dosyasını Nowly şemasına göre kontrol eder; `discordNative` mevcutsa bir boole olduğunu da içerir. Derlemeden önce doğrulama hatalarını düzeltin.
+
+## Tüm Presences'ları Derleme
+
+Çalıştırın:
+
+```bash
+nowly build
+```
+
+## Bir Presence Derleme
+
+Çalıştırın:
+
+```bash
+nowly build youtube
+```
+
+Hedef presence için slug veya klasörden türetilen adı kullanın.
+
+## Tarayıcıda yükleme
+
+Başarılı bir derlemeden sonra presence'ı `nowly extension <slug>` ile yükleyin veya `nowly pack <slug>` komutundan bir zip bırakın. Bkz. [Yerel Olarak Yükleme ve Test Etme](/presence-development/load-and-test).

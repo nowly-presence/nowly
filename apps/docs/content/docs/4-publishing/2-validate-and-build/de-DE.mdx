@@ -1,0 +1,36 @@
+---
+title: Validieren und bauen
+description: Validiere Presence-Metadaten und baue Presence-Bundles, bevor du veröffentlichst.
+---
+
+## Metadaten validieren
+
+Ausführen:
+
+```bash
+nowly validate
+```
+
+Die Validierung prüft `metadata.json` gegen das Nowly-Schema, einschließlich dass `discordNative` ein boolescher Wert ist, wenn vorhanden. Behebe Validierungsfehler vor dem Bauen.
+
+## Alle Presences bauen
+
+Ausführen:
+
+```bash
+nowly build
+```
+
+## Eine Presence bauen
+
+Ausführen:
+
+```bash
+nowly build youtube
+```
+
+Verwende den Slug oder den vom Ordnernamen abgeleiteten Namen für die Ziel-Presence.
+
+## Im Browser laden
+
+Nach einem erfolgreichen Build lädst du die Presence mit `nowly extension <slug>` oder legst ein Zip von `nowly pack <slug>` ab. Siehe [Lokal laden und testen](/presence-development/load-and-test).

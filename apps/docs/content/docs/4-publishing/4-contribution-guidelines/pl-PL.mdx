@@ -1,0 +1,37 @@
+---
+title: Zasady współtworzenia
+description: Postępuj zgodnie z oczekiwaniami Nowly, aby tworzyć niezawodne i łatwe w utrzymaniu obecności.
+---
+
+## Przed współtworzeniem
+
+Upewnij się, że platforma jest odpowiednia dla Discord Rich Presence i że aktywność jest warta wyświetlania.
+
+## Jakość obecności
+
+Dobra obecność powinna:
+
+- działać na głównych obsługiwanych adresach URL
+- unikać danych prywatnych lub wrażliwych
+- obsługiwać ładowanie i brakujące elementy
+- używać czytelnych metadanych i zasobów
+- zawierać przydatne zlokalizowane opisy
+- ustawiać `discordNative` na `true`, gdy Discord już pokazuje platformę, jeśli użytkownik połączy swoje konto
+
+## Styl kodu
+
+Utrzymuj kod obecności w małym i czytelnym rozmiarze. Preferuj nazwane funkcje pomocnicze do parsowania stanu strony i unikaj niezwiązanych abstrakcji.
+
+## Zasoby
+
+Używaj czystych zasobów platformy. Ikony powinny być czytelne na ciemnych tłach. Miniatury powinny jasno przedstawiać usługę.
+
+## Testowanie
+
+Przetestuj obecność przed wysłaniem:
+
+- zainstaluj ją lokalnie
+- odwiedź obsługiwane adresy URL
+- sprawdź aktywność na Discordzie
+- sprawdź stany wstrzymania i nieobsługiwane
+- uruchom walidację metadanych

@@ -1,0 +1,36 @@
+---
+title: Walidacja i budowanie
+description: Zwaliduj metadane obecności i zbuduj pakiety obecności przed publikacją.
+---
+
+## Walidacja metadanych
+
+Uruchom:
+
+```bash
+nowly validate
+```
+
+Walidacja sprawdza `metadata.json` względem schematu Nowly, w tym to, czy `discordNative` jest wartością logiczną, gdy jest obecne. Napraw błędy walidacji przed budowaniem.
+
+## Budowanie wszystkich obecności
+
+Uruchom:
+
+```bash
+nowly build
+```
+
+## Budowanie jednej obecności
+
+Uruchom:
+
+```bash
+nowly build youtube
+```
+
+Użyj sluga lub nazwy pochodzącej od folderu dla docelowej obecności.
+
+## Wczytywanie w przeglądarce
+
+Po udanym budowaniu wczytaj obecność za pomocą `nowly extension <slug>` lub upuść zip z `nowly pack <slug>`. Zobacz [Wczytywanie i testowanie lokalne](/presence-development/load-and-test).

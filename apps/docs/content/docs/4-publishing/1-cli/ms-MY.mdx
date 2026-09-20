@@ -1,0 +1,116 @@
+---
+title: CLI
+description: Gunakan CLI Nowly untuk mencipta, membina, mengesahkan dan menguji presence secara setempat.
+---
+
+CLI Nowly diterbitkan sebagai `@nowly/cli` di npm. Pasangnya secara global:
+```bash
+pnpm i -g @nowly/cli
+```
+
+## Mod Interaktif
+
+Jalankan CLI tanpa hujah untuk membuka menu interaktif:
+
+```bash
+nowly
+```
+
+## Mencipta Presence
+
+```bash
+nowly init "Netflix"
+```
+
+Gesaan interaktif bertanya sama ada Discord sudah menyokong platform tersebut jika pengguna memautkan akaun mereka. Itu menulis `discordNative` dalam `metadata.json`. Anda juga boleh menghantarnya terus:
+
+```bash
+nowly init "Spotify" --discord-native
+```
+
+## Membina Presence
+
+Bina semua presence:
+
+```bash
+nowly build
+```
+
+Bina satu presence:
+
+```bash
+nowly build youtube
+```
+
+Bina semula apabila fail berubah (muatkan semula sambungan tanpa pek selepas setiap pembinaan semula, atau jatuhkan semula zip jika anda menggunakan `pack`):
+
+```bash
+nowly build youtube --watch
+nowly pack youtube --watch
+```
+
+## Menguji Presence Secara Setempat
+
+Terdapat dua cara untuk memuatkan presence yang telah dibina tanpa API Nowly. Panduan penuh: [Muat dan Uji Secara Tempatan](/presence-development/load-and-test).
+
+### Sambungan prabina
+
+Jika anda hanya mengklon repositori `presences` (kes biasa untuk penyumbang), gunakan `nowly extension` untuk mendapatkan binaan pembangunan yang sedia dimuat tanpa monorepo `nowly` penuh:
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+Ini memuat turun binaan sambungan pembangunan terkini daripada CDN, membundel presence yang anda senaraikan dan menulis fail `dev-presences.json` ke dalamnya. Kemudian:
+
+1. Buka `chrome://extensions` dan hidupkan **Mod pembangun**
+2. **Muat tanpa pek** → pilih folder `dist/extension-dev` yang dijana
+3. Presence dipasang secara automatik - tiada pelayan API, tiada halaman pemasangan, tiada URL API Tersuai diperlukan
+
+Selepas menyunting presence, bina semula dan jalankan semula `nowly extension <slug>`, kemudian muat semula sambungan.
+
+Untuk menggunakan binaan sambungan tempatan tertentu dan bukannya daripada CDN, hantar `--from`:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+### Jatuhan zip
+
+Jika Nowly sudah dimuatkan sebagai binaan pembangunan **tanpa pek**, pek presence dan jatuhkannya dalam panel Nyahpepijat:
+
+```bash
+nowly pack youtube
+```
+
+Zip ditulis ke `dist/packs/youtube.zip`. Jatuhkannya pada **Tetapan → Lanjutan → Nyahpepijat**. Zip yang tidak ditandatangani hanya berfungsi pada binaan tanpa pek, bukan pemasangan Chrome Web Store. UI Nyahpepijat hanya dipaparkan dalam mod pembangun.
+
+### Jika anda mempunyai monorepo penuh
+
+Jika anda mengklon `nowly` itu sendiri (dengan `presences` sebagai submodul), anda boleh membina sambungan dengan semua presence disertakan terus:
+
+```bash
+pnpm build:extension:dev
+```
+
+Bina semula presence yang diubah kemudian sambungan selepas setiap perubahan:
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+Muat semula di `chrome://extensions` - presence sudah dipasang dan sedia digunakan.
+
+## Senaraikan Presence
+
+```bash
+nowly list
+```
+
+## Sahkan Metadata
+
+```bash
+nowly validate
+```

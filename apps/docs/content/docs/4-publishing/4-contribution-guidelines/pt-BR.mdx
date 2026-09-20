@@ -1,0 +1,37 @@
+---
+title: Diretrizes de contribuição
+description: Siga as expectativas de contribuição do Nowly para presences confiáveis e fáceis de manter.
+---
+
+## Antes de contribuir
+
+Garanta que a plataforma é adequada para Discord Rich Presence e que a atividade é útil de exibir.
+
+## Qualidade da presence
+
+Uma boa presence deve:
+
+- funcionar nas principais URLs compatíveis
+- evitar dados privados ou sensíveis
+- lidar com carregamento e elementos ausentes
+- usar metadados e recursos claros
+- incluir descrições localizadas úteis
+- definir `discordNative` como `true` quando o Discord já mostra a plataforma se o usuário vincular a conta
+
+## Estilo de código
+
+Mantenha o código da presence pequeno e legível. Prefira funções auxiliares nomeadas para analisar o estado da página e evite abstrações não relacionadas.
+
+## Recursos
+
+Use recursos de plataforma limpos. Os ícones devem ser legíveis em fundos escuros. As miniaturas devem representar claramente o serviço.
+
+## Testes
+
+Teste a presence antes de enviar:
+
+- instale-a localmente
+- visite as URLs compatíveis
+- verifique a atividade do Discord
+- verifique os estados pausado e não suportado
+- execute a validação de metadados

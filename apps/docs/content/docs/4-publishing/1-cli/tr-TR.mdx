@@ -1,0 +1,116 @@
+---
+title: CLI
+description: Presences'ları yerel olarak oluşturmak, derlemek, doğrulamak ve test etmek için Nowly CLI'yı kullanın.
+---
+
+Nowly CLI, npm'de `@nowly/cli` olarak yayımlanır. Küresel olarak kurun:
+```bash
+pnpm i -g @nowly/cli
+```
+
+## Etkileşimli Mod
+
+Bağımsız değişken olmadan CLI'yı çalıştırarak etkileşimli bir menü açın:
+
+```bash
+nowly
+```
+
+## Presence Oluşturma
+
+```bash
+nowly init "Netflix"
+```
+
+Etkileşimli istem, kullanıcı hesabını bağlarsa Discord'un platformu zaten destekleyip desteklemediğini sorar. Bu, `metadata.json` içine `discordNative` yazar. Bunu doğrudan da iletebilirsiniz:
+
+```bash
+nowly init "Spotify" --discord-native
+```
+
+## Presences Derleme
+
+Tüm presences'ları derleyin:
+
+```bash
+nowly build
+```
+
+Tek bir presence derleyin:
+
+```bash
+nowly build youtube
+```
+
+Dosyalar değiştiğinde yeniden derleyin (`pack` kullanıyorsanız, her yeniden derlemeden sonra paketlenmemiş uzantıyı yeniden yükleyin veya zip'i tekrar bırakın):
+
+```bash
+nowly build youtube --watch
+nowly pack youtube --watch
+```
+
+## Bir Presence'ı Yerel Olarak Test Etme
+
+Nowly API'si olmadan derlenmiş bir presence yüklemenin iki yolu vardır. Tam yol gösterimi: [Yerel Olarak Yükleme ve Test Etme](/presence-development/load-and-test).
+
+### Önceden derlenmiş uzantı
+
+Yalnızca `presences` deposunu klonladıysanız (katkıda bulunanlar için yaygın durum), tam `nowly` monorepo'su olmadan yüklemeye hazır bir geliştirme derlemesi elde etmek için `nowly extension` kullanın:
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+En son geliştirme uzantısı derlemesini CDN'den indirir, listelediğiniz presences'ları paketler ve içine bir `dev-presences.json` dosyası yazar. Sonra:
+
+1. `chrome://extensions` adresini açın ve **Geliştirici modunu** etkinleştirin
+2. **Paketlenmemiş yükle** → oluşturulan `dist/extension-dev` klasörünü seçin
+3. Presence otomatik olarak kurulur - API sunucusu, kurulum sayfası veya Özel API URL'si gerekmez
+
+Presence'ı düzenledikten sonra yeniden derleyin ve `nowly extension <slug>` komutunu yeniden çalıştırın, ardından uzantıyı yeniden yükleyin.
+
+CDN derlemesi yerine belirli bir yerel uzantı derlemesi kullanmak için `--from` değerini iletin:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+### Zip bırakma
+
+Nowly zaten **paketlenmemiş** bir geliştirme derlemesi olarak yüklüyse, presence'ı paketleyin ve Hata Ayıklama paneline bırakın:
+
+```bash
+nowly pack youtube
+```
+
+Zip, `dist/packs/youtube.zip` konumuna yazılır. **Ayarlar → Gelişmiş → Hata Ayıklama** alanına bırakın. İmzasız zip'ler yalnızca paketlenmemiş derlemelerde çalışır ve Chrome Web Store kurulumlarında çalışmaz. Hata Ayıklama arayüzü yalnızca geliştirici modunda görünür.
+
+### Tam monorepo'ya sahipseniz
+
+`nowly`'nin kendisini klonladıysanız (`presences` alt modül olacak şekilde), tüm presences'ları doğrudan içeren uzantıyı derleyebilirsiniz:
+
+```bash
+pnpm build:extension:dev
+```
+
+Her değişiklikten sonra önce değiştirilen presence'ı, ardından uzantıyı yeniden derleyin:
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+`chrome://extensions` adresinde yeniden yükleyin - presence zaten kurulu ve kullanıma hazır.
+
+## Presences Listeleme
+
+```bash
+nowly list
+```
+
+## Meta Verileri Doğrulama
+
+```bash
+nowly validate
+```

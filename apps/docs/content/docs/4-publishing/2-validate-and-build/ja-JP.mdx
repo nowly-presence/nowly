@@ -1,0 +1,36 @@
+---
+title: 検証とビルド
+description: 公開前にプレゼンスのメタデータを検証し、プレゼンスバンドルをビルドします。
+---
+
+## メタデータを検証する
+
+実行:
+
+```bash
+nowly validate
+```
+
+検証では `metadata.json` をNowlyスキーマに対してチェックします。`discordNative` が存在する場合、それがブール値であることも確認されます。ビルド前に検証エラーを修正してください。
+
+## すべてのプレゼンスをビルドする
+
+実行:
+
+```bash
+nowly build
+```
+
+## 個別のプレゼンスをビルドする
+
+実行:
+
+```bash
+nowly build youtube
+```
+
+対象のプレゼンスには、スラッグまたはフォルダ名から派生した名前を使用します。
+
+## ブラウザで読み込む
+
+ビルドに成功したら、`nowly extension <slug>` でプレゼンスを読み込むか、`nowly pack <slug>` のzipをドロップします。[ローカルでの読み込みとテスト](/presence-development/load-and-test)を参照してください。

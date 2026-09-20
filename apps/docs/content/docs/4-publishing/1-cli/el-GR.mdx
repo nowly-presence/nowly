@@ -1,0 +1,116 @@
+---
+title: CLI
+description: Χρησιμοποίησε το Nowly CLI για να δημιουργείς, χτίζεις, επικυρώνεις και δοκιμάζεις presences τοπικά.
+---
+
+Το Nowly CLI δημοσιεύεται ως `@nowly/cli` στο npm. Εγκατέστησέ το καθολικά:
+```bash
+pnpm i -g @nowly/cli
+```
+
+## Διαδραστική Λειτουργία
+
+Εκτέλεσε το CLI χωρίς ορίσματα για να ανοίξεις ένα διαδραστικό μενού:
+
+```bash
+nowly
+```
+
+## Δημιουργία Presence
+
+```bash
+nowly init "Netflix"
+```
+
+Το διαδραστικό prompt ρωτάει αν το Discord υποστηρίζει ήδη την πλατφόρμα όταν ο χρήστης συνδέει τον λογαριασμό του. Αυτό γράφει το `discordNative` στο `metadata.json`. Μπορείς επίσης να το περάσεις:
+
+```bash
+nowly init "Spotify" --discord-native
+```
+
+## Χτίσιμο Presences
+
+Χτίσε κάθε presence:
+
+```bash
+nowly build
+```
+
+Χτίσε ένα presence:
+
+```bash
+nowly build youtube
+```
+
+Ξαναχτίσε όταν αλλάζουν τα αρχεία (φόρτωσε ξανά την ασυσκεύαστη επέκταση μετά από κάθε build, ή ρίξε ξανά το zip αν χρησιμοποιείς το `pack`):
+
+```bash
+nowly build youtube --watch
+nowly pack youtube --watch
+```
+
+## Δοκιμή Presence Τοπικά
+
+Υπάρχουν δύο τρόποι να φορτώσεις ένα χτισμένο presence χωρίς το Nowly API. Πλήρης οδηγός: [Φόρτωση και Δοκιμή Τοπικά](/presence-development/load-and-test).
+
+### Προκατασκευασμένη επέκταση
+
+Αν μόνο κλωνοποίησες το αποθετήριο `presences` (η συνηθισμένη περίπτωση για συνεισφέροντες), χρησιμοποίησε το `nowly extension` για να πάρεις ένα έτοιμο προς φόρτωση dev build χωρίς ολόκληρο το monorepo `nowly`:
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+Αυτό κατεβάζει το τελευταίο dev build της επέκτασης από το CDN, ενσωματώνει τα presences που αναφέρεις και γράφει ένα αρχείο `dev-presences.json` μέσα σε αυτό. Μετά:
+
+1. Άνοιξε το `chrome://extensions` και ενεργοποίησε τη **Λειτουργία προγραμματιστή**
+2. **Φόρτωση ασυσκεύαστου** → επέλεξε τον φάκελο `dist/extension-dev` που δημιουργήθηκε
+3. Το presence εγκαθίσταται αυτόματα - χωρίς διακομιστή API, χωρίς σελίδα εγκατάστασης, χωρίς Custom API URL
+
+Αφού επεξεργαστείς το presence, ξαναχτίσε το και εκτέλεσε ξανά το `nowly extension <slug>`, μετά φόρτωσε ξανά την επέκταση.
+
+Για να χρησιμοποιήσεις ένα συγκεκριμένο τοπικό build της επέκτασης αντί για το CDN, πέρασε το `--from`:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+### Zip drop
+
+Αν το Nowly είναι ήδη φορτωμένο ως **ασυσκεύαστο** dev build, πακετάρισε το presence και ρίξε το στο πάνελ Debug:
+
+```bash
+nowly pack youtube
+```
+
+Το zip γράφεται στο `dist/packs/youtube.zip`. Ρίξε το στις **Ρυθμίσεις → Προχωρημένες → Debug**. Τα μη υπογεγραμμένα zip λειτουργούν μόνο σε ασυσκεύαστα builds, όχι σε εγκαταστάσεις από το Chrome Web Store. Η λειτουργία προγραμματιστή αποκαλύπτει το Debug UI.
+
+### Αν έχεις ολόκληρο το monorepo
+
+Αν κλωνοποίησες το ίδιο το `nowly` (με το `presences` ως υπομονάδα), μπορείς να χτίσεις την επέκταση με κάθε presence ενσωματωμένο απευθείας:
+
+```bash
+pnpm build:extension:dev
+```
+
+Ξαναχτίσε το presence που άλλαξε και μετά την επέκταση μετά από κάθε αλλαγή:
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+Φόρτωσε ξανά στο `chrome://extensions` - το presence είναι ήδη εγκατεστημένο και έτοιμο προς χρήση.
+
+## Λίστα Presences
+
+```bash
+nowly list
+```
+
+## Επικύρωση Metadata
+
+```bash
+nowly validate
+```

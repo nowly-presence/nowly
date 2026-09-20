@@ -1,0 +1,36 @@
+---
+title: 검증 및 빌드
+description: 게시하기 전에 프레즌스 메타데이터를 검증하고 프레즌스 번들을 빌드하세요.
+---
+
+## 메타데이터 검증
+
+실행:
+
+```bash
+nowly validate
+```
+
+검증은 `metadata.json`을 Nowly 스키마에 대해 확인하며, `discordNative`가 존재할 때 불리언인지도 확인합니다. 빌드하기 전에 검증 오류를 수정하세요.
+
+## 모든 프레즌스 빌드
+
+실행:
+
+```bash
+nowly build
+```
+
+## 프레즌스 하나 빌드
+
+실행:
+
+```bash
+nowly build youtube
+```
+
+대상 프레즌스에는 슬러그 또는 폴더에서 파생된 이름을 사용하세요.
+
+## 브라우저에서 로드
+
+빌드가 성공한 후 `nowly extension <slug>`로 프레즌스를 로드하거나 `nowly pack <slug>`의 zip을 드롭하세요. [로컬에서 로드 및 테스트](/presence-development/load-and-test)를 참고하세요.
