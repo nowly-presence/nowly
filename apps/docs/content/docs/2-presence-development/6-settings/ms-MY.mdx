@@ -1,0 +1,58 @@
+---
+title: Tetapan
+description: Tambah tetapan bertaip bagi setiap presence dengan kawalan boolean, input, select dan slider.
+---
+
+## Apakah Tetapan
+
+Tetapan membolehkan pengguna menyesuaikan cara presence berfungsi tanpa menyunting kod.
+
+## Jenis Tetapan Disokong
+
+Nowly menyokong tetapan boolean, input, select dan slider.
+
+<TypeTable
+  properties={[
+    { name: "boolean", type: "boolean", description: "Togol untuk pilihan didayakan/dilumpuhkan." },
+    { name: "input", type: "string", description: "Nilai teks bebas bentuk." },
+    { name: "select", type: "string", description: "Satu nilai dipilih daripada pilihan pratakrif." },
+    { name: "slider", type: "number", description: "Nilai berangka dengan min, max dan langkah pilihan." }
+  ]}
+/>
+
+## Mentakrifkan Tetapan
+
+Gunakan [`Presence.Settings`](/presence-development/presence-api) untuk mentakrifkan tetapan bertaip:
+
+```ts filename="presence.ts"
+const settings = Presence.Settings({
+  showButtons: {
+    type: "boolean",
+    default: true,
+    label: {
+      "en-US": "Show buttons"
+    }
+  }
+})
+```
+
+## Membaca Tetapan
+
+Gunakan `getSetting` semasa runtime. Nilai datang daripada tetapan tersimpan pengguna, kembali kepada lalai daripada `Presence.Settings`. Perubahan langsung daripada panel sisi tiba sebagai `SETTINGS_UPDATED` dan mengemas kini peta yang sama.
+
+Anda juga boleh membaca peta semasa daripada `ctx.settings` dalam `UpdateData`:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async (ctx) => {
+  const showButtons = await presence.getSetting<boolean>("showButtons")
+  // nilai sama: ctx.settings.showButtons
+})
+```
+
+## Label Tempatan
+
+Label dan penerangan tetapan menggunakan kunci locale yang sama seperti yang digunakan dalam metadata.
+
+## Lalai
+
+Pilih lalai yang selamat. Presence sepatutnya berfungsi serta-merta selepas pemasangan tanpa memerlukan konfigurasi.

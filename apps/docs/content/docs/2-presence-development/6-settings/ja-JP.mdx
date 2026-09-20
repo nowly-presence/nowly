@@ -1,0 +1,58 @@
+---
+title: 設定
+description: boolean、input、select、sliderのコントロールを使って型付けされたプレゼンス個別の設定を追加します。
+---
+
+## 設定とは
+
+設定を使うと、ユーザーはコードを編集せずにプレゼンスの動作をカスタマイズできます。
+
+## サポートされている設定の種類
+
+Nowlyはboolean、input、select、sliderの設定をサポートしています。
+
+<TypeTable
+  properties={[
+    { name: "boolean", type: "boolean", description: "有効/無効のオプションを切り替えます。" },
+    { name: "input", type: "string", description: "自由形式のテキスト値。" },
+    { name: "select", type: "string", description: "あらかじめ定義された選択肢から選ぶ1つの値。" },
+    { name: "slider", type: "number", description: "任意のmin、max、stepを持つ数値。" }
+  ]}
+/>
+
+## 設定の定義
+
+[`Presence.Settings`](/presence-development/presence-api) を使って型付けされた設定を定義します。
+
+```ts filename="presence.ts"
+const settings = Presence.Settings({
+  showButtons: {
+    type: "boolean",
+    default: true,
+    label: {
+      "en-US": "Show buttons"
+    }
+  }
+})
+```
+
+## 設定の読み取り
+
+実行時には `getSetting` を使用します。値はユーザーが保存した設定から取得され、未設定の場合は `Presence.Settings` のデフォルト値にフォールバックします。サイドパネルからのライブ変更は `SETTINGS_UPDATED` として届き、同じマップを更新します。
+
+`UpdateData` 内の `ctx.settings` から現在のマップを読み取ることもできます。
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async (ctx) => {
+  const showButtons = await presence.getSetting<boolean>("showButtons")
+  // 同じ値: ctx.settings.showButtons
+})
+```
+
+## 多言語対応のラベル
+
+設定のラベルと説明は、メタデータで使用されているのと同じロケールキーを使用します。
+
+## デフォルト値
+
+安全なデフォルト値を選んでください。プレゼンスは、設定をしなくてもインストール直後から動作するべきです。

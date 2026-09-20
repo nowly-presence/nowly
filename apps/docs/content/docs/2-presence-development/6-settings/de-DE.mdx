@@ -1,0 +1,58 @@
+---
+title: Einstellungen
+description: Füge typisierte Presence-Einstellungen mit Boolean-, Eingabe-, Auswahl- und Slider-Steuerelementen hinzu.
+---
+
+## Was Einstellungen Sind
+
+Mit Einstellungen können Nutzer das Verhalten einer Presence anpassen, ohne Code zu bearbeiten.
+
+## Unterstützte Einstellungstypen
+
+Nowly unterstützt Boolean-, Eingabe-, Auswahl- und Slider-Einstellungen.
+
+<TypeTable
+  properties={[
+    { name: "boolean", type: "boolean", description: "Umschalter für aktivierte/deaktivierte Optionen." },
+    { name: "input", type: "string", description: "Freier Textwert." },
+    { name: "select", type: "string", description: "Ein Wert, ausgewählt aus vordefinierten Optionen." },
+    { name: "slider", type: "number", description: "Numerischer Wert mit optionalem Min, Max und Schrittweite." }
+  ]}
+/>
+
+## Einstellungen Definieren
+
+Verwende [`Presence.Settings`](/presence-development/presence-api), um typisierte Einstellungen zu definieren:
+
+```ts filename="presence.ts"
+const settings = Presence.Settings({
+  showButtons: {
+    type: "boolean",
+    default: true,
+    label: {
+      "en-US": "Show buttons"
+    }
+  }
+})
+```
+
+## Einstellungen Lesen
+
+Verwende `getSetting` zur Laufzeit. Die Werte stammen aus den gespeicherten Einstellungen des Nutzers und fallen auf die Standardwerte aus `Presence.Settings` zurück. Live-Änderungen aus dem Seitenpanel kommen als `SETTINGS_UPDATED` an und aktualisieren dieselbe Map.
+
+Du kannst die aktuelle Map auch aus `ctx.settings` in `UpdateData` lesen:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async (ctx) => {
+  const showButtons = await presence.getSetting<boolean>("showButtons")
+  // gleicher Wert: ctx.settings.showButtons
+})
+```
+
+## Lokalisierte Bezeichnungen
+
+Einstellungsbezeichnungen und -beschreibungen verwenden dieselben Locale-Schlüssel wie die Metadaten.
+
+## Standardwerte
+
+Wähle sichere Standardwerte. Eine Presence sollte direkt nach der Installation funktionieren, ohne dass eine Konfiguration erforderlich ist.

@@ -1,0 +1,58 @@
+---
+title: Configurações
+description: Adicione configurações tipadas por presença com controles booleanos, de entrada, seleção e slider.
+---
+
+## O Que São Configurações
+
+As configurações permitem que os usuários personalizem o comportamento de uma presença sem editar código.
+
+## Tipos de Configuração Suportados
+
+O Nowly suporta configurações booleanas, de entrada, seleção e slider.
+
+<TypeTable
+  properties={[
+    { name: "boolean", type: "boolean", description: "Alternador para opções ativadas/desativadas." },
+    { name: "input", type: "string", description: "Valor de texto livre." },
+    { name: "select", type: "string", description: "Um valor selecionado entre opções predefinidas." },
+    { name: "slider", type: "number", description: "Valor numérico com mínimo, máximo e incremento opcionais." }
+  ]}
+/>
+
+## Definindo Configurações
+
+Use [`Presence.Settings`](/presence-development/presence-api) para definir configurações tipadas:
+
+```ts filename="presence.ts"
+const settings = Presence.Settings({
+  showButtons: {
+    type: "boolean",
+    default: true,
+    label: {
+      "en-US": "Show buttons"
+    }
+  }
+})
+```
+
+## Lendo Configurações
+
+Use `getSetting` em tempo de execução. Os valores vêm das configurações salvas do usuário, com fallback para os padrões definidos em `Presence.Settings`. Alterações ao vivo feitas no painel lateral chegam como `SETTINGS_UPDATED` e atualizam o mesmo mapa.
+
+Você também pode ler o mapa atual em `ctx.settings` dentro de `UpdateData`:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async (ctx) => {
+  const showButtons = await presence.getSetting<boolean>("showButtons")
+  // mesmo valor: ctx.settings.showButtons
+})
+```
+
+## Rótulos Localizados
+
+Os rótulos e descrições das configurações usam as mesmas chaves de localidade usadas nos metadados.
+
+## Padrões
+
+Escolha padrões seguros. Uma presença deve funcionar imediatamente após a instalação, sem exigir configuração.

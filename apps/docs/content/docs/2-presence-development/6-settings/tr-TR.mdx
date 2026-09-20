@@ -1,0 +1,58 @@
+---
+title: Ayarlar
+description: Boolean, input, select ve slider kontrolleriyle presence başına tipli ayarlar ekleyin.
+---
+
+## Ayarlar Nedir
+
+Ayarlar, kullanıcıların kod düzenlemeden bir presence'ın nasıl davrandığını özelleştirmesine olanak tanır.
+
+## Desteklenen Ayar Türleri
+
+Nowly, boolean, input, select ve slider ayarlarını destekler.
+
+<TypeTable
+  properties={[
+    { name: "boolean", type: "boolean", description: "Etkin/devre dışı seçenekler için anahtar." },
+    { name: "input", type: "string", description: "Serbest biçimli metin değeri." },
+    { name: "select", type: "string", description: "Önceden tanımlanmış seçeneklerden seçilen bir değer." },
+    { name: "slider", type: "number", description: "İsteğe bağlı min, max ve adım değerine sahip sayısal değer." }
+  ]}
+/>
+
+## Ayarları Tanımlama
+
+Tipli ayarları tanımlamak için [`Presence.Settings`](/presence-development/presence-api) kullanın:
+
+```ts filename="presence.ts"
+const settings = Presence.Settings({
+  showButtons: {
+    type: "boolean",
+    default: true,
+    label: {
+      "en-US": "Show buttons"
+    }
+  }
+})
+```
+
+## Ayarları Okuma
+
+Çalışma zamanında `getSetting` kullanın. Değerler, kullanıcının kaydedilmiş ayarlarından gelir ve `Presence.Settings`'teki varsayılanlara geri döner. Yan panelden gelen canlı değişiklikler `SETTINGS_UPDATED` olarak gelir ve aynı haritayı günceller.
+
+Ayrıca `UpdateData` içindeki `ctx.settings`'ten geçerli haritayı da okuyabilirsiniz:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async (ctx) => {
+  const showButtons = await presence.getSetting<boolean>("showButtons")
+  // aynı değer: ctx.settings.showButtons
+})
+```
+
+## Yerelleştirilmiş Etiketler
+
+Ayar etiketleri ve açıklamaları, meta verilerde kullanılan aynı yerel ayar anahtarlarını kullanır.
+
+## Varsayılanlar
+
+Güvenli varsayılanlar seçin. Bir presence, yapılandırma gerektirmeden kurulumdan hemen sonra çalışmalıdır.
