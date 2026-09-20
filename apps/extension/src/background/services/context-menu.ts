@@ -47,7 +47,7 @@ const resolveContextMenuNav = async (info: chrome.contextMenus.OnClickData, tab?
       return
     }
   } catch {
-    // Offline: fall through to store search by hostname.
+    // If the catalog is unavailable, the hostname remains useful as a store search query.
   }
 
   await setPendingSidepanelNav({ view: "store", query: hostnameQuery(href) })

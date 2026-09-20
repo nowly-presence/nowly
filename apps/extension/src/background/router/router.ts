@@ -24,6 +24,8 @@ export const registerRouter = (): void => {
     const handler = handlers[message.type] as Handler<RouterMessageType> | undefined
     if (!handler) return false
 
+    // Returning true keeps Chrome's response channel open while handlers await storage,
+    // network, or native-host operations.
     Promise.resolve(handler(message.payload, sender)).then(sendResponse)
     return true
   })

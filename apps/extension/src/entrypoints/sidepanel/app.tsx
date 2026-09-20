@@ -8,6 +8,7 @@ import { CurrentActivityCard } from "@/features/activity/current-activity-card"
 import { ScheduleDialog } from "@/features/activity/schedule-dialog"
 import { SnoozeDialog } from "@/features/activity/snooze-dialog"
 import { OnboardingOverlay } from "@/features/onboarding/onboarding-overlay"
+import { RuntimeLogsView } from "@/features/runtime-logs/runtime-logs-view"
 import type { SettingsSectionId } from "@/features/settings/settings-screen"
 import { ExtensionStateProvider, useExtensionState } from "@/hooks/extension-state-provider"
 import { useHostVersion } from "@/hooks/use-host-version"
@@ -18,7 +19,7 @@ import { trackUiEvent } from "@/lib/analytics"
 import { WEB_BASE_URL } from "@/shared/constants"
 import { t } from "@/shared/i18n"
 import { SIDEPANEL_NAV_KEY, clearPendingSidepanelNav, isSidepanelPendingNav, loadPendingSidepanelNav, persistAppView, type SidepanelPendingNav } from "@/shared/sidepanel-view"
-import type { PersistedAppView } from "@/shared/types"
+import type { AppView, PersistedAppView } from "@/shared/types"
 
 const StoreView = lazy(() => import("@/features/store/store-view").then((m) => ({ default: m.StoreView })))
 const SettingsScreen = lazy(() => import("@/features/settings/settings-screen").then((m) => ({ default: m.SettingsScreen })))
@@ -136,7 +137,7 @@ type ShellProps = {
 
 const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
   const state = useExtensionState()
-  const [view, setView] = useState<PersistedAppView>(initialView)
+  const [view, setView] = useState<AppView>(initialView)
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
   const [settingsSection, setSettingsSection] = useState<SettingsSectionId | null>(null)
   const [storeSeed, setStoreSeed] = useState<StoreSeed>({ query: "" })
@@ -155,9 +156,12 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
   const presencePaused = state.settings.presencePaused === true
   const connectionHealthy = isConnectionHealthy(state.nativeStatus)
   const hostUpdateAvailable = hostVersionInfo?.updateAvailable === true
+  const developerModeEnabled = state.settings.developerMode === true || state.isUnpacked
 
-  // Flashes the status bar as confirmation on a healthy connection, then
-  // auto-hides after 2.5s - stays up while paused or a host update is pending.
+  useEffect(() => {
+    if (view === "logs" && !developerModeEnabled) setView("settings")
+  }, [developerModeEnabled, view])
+
   const [statusVisible, setStatusVisible] = useState(true)
   useEffect(() => {
     setStatusVisible(true)
@@ -166,9 +170,7 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
     return () => window.clearTimeout(timer)
   }, [connectionHealthy, hostUpdateAvailable, presencePaused])
 
-  const changeView = (nextView: PersistedAppView): void => {
-    // Re-tapping the already-active tab acts like a "home" shortcut: drop back
-    // out of whatever detail page (presence, settings section) is open.
+  const changeView = (nextView: PersistedAppView | "logs"): void => {
     if (nextView === view) {
       if (nextView === "activity") setSelectedSlug(null)
       if (nextView === "store") setStoreSelectedSlug(null)
@@ -178,11 +180,8 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
     persistAppView(nextView)
   }
 
-  // Mouse back/forward side buttons walk the panel's own navigation history
-  // (tab switches, presence drill-down, settings section drill-down),
-  // mirroring browser tab navigation - there's no real page history to hook
-  // into since this is a single SPA view.
-  type NavSnapshot = { view: PersistedAppView; selectedSlug: string | null; storeSelectedSlug: string | null; settingsSection: SettingsSectionId | null }
+  type NavSnapshot = { view: AppView; selectedSlug: string | null; storeSelectedSlug: string | null; settingsSection: SettingsSectionId | null }
+  // Keep detail state with each tab so browser side buttons can restore the exact panel state.
   const navHistory = useRef<NavSnapshot[]>([{ view: initialView, selectedSlug: null, storeSelectedSlug: null, settingsSection: null }])
   const navIndex = useRef(0)
   const skipHistoryPush = useRef(true)
@@ -215,9 +214,6 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
     return () => window.removeEventListener("mouseup", onMouseUp)
   }, [])
 
-  // Applied when the right-click "Nowly presence for this page" context menu
-  // (or the store card's "open library entry") asks the panel to jump to a
-  // specific presence/search after it opens.
   const applyPendingNav = useCallback((nav: SidepanelPendingNav): void => {
     if (nav.view === "activity") {
       setSelectedSlug(nav.slug ?? null)
@@ -257,7 +253,6 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
       <div className="relative z-1 flex flex-1 flex-col overflow-hidden">
         <div className="flex flex-1 flex-col gap-4 overflow-hidden px-3 pt-3">
           <Header
-            // List/grid toggle hidden from the UI - see activity-view.tsx.
             onTogglePause={() => state.setPresencePaused(!presencePaused)}
             presencePaused={presencePaused}
             onCheckUpdates={view === "activity" && !state.isUnpacked ? state.checkUpdates : undefined}
@@ -265,9 +260,11 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
             onReplayOnboarding={() => void sendMessage("RESET_ONBOARDING_FOR_DEV")}
           />
           <ConnectionStatusBar nativeStatus={state.nativeStatus} onConnect={state.connectNative} presencePaused={presencePaused} hostUpdateAvailable={hostUpdateAvailable} visible={statusVisible} />
-          <main id="sidepanel-tabpanel" className="-mx-1 -mt-1 flex-1 overflow-y-auto px-1 pt-1 pb-3" aria-label={t(view === "activity" ? "nav-home" : view === "store" ? "nav-store" : "nav-settings")}>
+          <main id="sidepanel-tabpanel" className="-mx-1 -mt-1 flex-1 overflow-y-auto px-1 pt-1 pb-3" aria-label={t(view === "activity" ? "nav-home" : view === "store" ? "nav-store" : view === "logs" ? "runtime-logs-title" : "nav-settings")}>
             {view === "activity" ? (
               <ActivityScreen selectedSlug={selectedSlug} onSelectPresence={setSelectedSlug} />
+            ) : view === "logs" ? (
+              <RuntimeLogsView />
             ) : (
               <Suspense fallback={null}>
                 {view === "store" ? (
@@ -279,7 +276,7 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
             )}
           </main>
         </div>
-        <BottomNav activeView={view} onViewChange={changeView} />
+        <BottomNav activeView={view} onViewChange={changeView} developerModeEnabled={developerModeEnabled} />
       </div>
 
       <OnboardingOverlay

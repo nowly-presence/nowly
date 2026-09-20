@@ -5,18 +5,11 @@ import { SettingsBlock } from "@/features/settings/settings-block"
 type Props = {
   title: string
   description?: string
-  // Omit when the row has no side control (e.g. a title/description
-  // followed by a full-width action in `children` instead).
   control?: ReactNode
-  // Id of the focusable element inside `control`, so the title can be
-  // rendered as a <label htmlFor> bound to it.
   controlId?: string
   children?: ReactNode
 }
 
-// Every settings row - single control on the right, or a plain heading
-// followed by arbitrary content - shares this exact shape. One place to
-// change the title/description rhythm or the row padding for all of them.
 export const SettingRow = ({ title, description, control, controlId, children }: Props): React.JSX.Element => (
   <SettingsBlock className="flex flex-col gap-2">
     {control ? (

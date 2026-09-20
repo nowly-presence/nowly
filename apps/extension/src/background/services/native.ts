@@ -35,6 +35,8 @@ export const onNativeResponse = (listener: (message: NativeResponse) => void): (
 }
 
 export const refreshNativeStatus = (): NativeStatus => {
+  // The service worker may sleep between UI refreshes, so status is actively
+  // revalidated instead of relying only on the last CONNECTED event.
   if (nativePort) {
     postNative({ type: "PING" })
   } else if (!connecting && Date.now() - lastAutoConnectAttemptAt >= AUTO_CONNECT_RETRY_MS) {
@@ -54,7 +56,7 @@ export const reconnectNative = (): NativeStatus => {
     try {
       nativePort.disconnect()
     } catch {
-      // Ignore stale ports.
+      // A reconnect can leave an old port event in flight; never let it overwrite the current port.
     }
   }
 
@@ -104,6 +106,8 @@ export const connectNative = (options: { silent?: boolean } = {}): void => {
   }
 
   nativePort.onMessage.addListener((message: NativeResponse) => {
+    // All native responses pass through this set before updating the cached
+    // status, allowing feature-specific consumers to observe PONG/ERROR too.
     for (const listener of responseListeners) listener(message)
 
     if (message.type === "CONNECTED") {
@@ -131,6 +135,8 @@ export const connectNative = (options: { silent?: boolean } = {}): void => {
   })
 
   nativePort.onDisconnect.addListener(() => {
+    // Clear every connection field together. A half-reset state would prevent
+    // the next auto-connect attempt or make the UI report Discord as connected.
     const wasConnected = connected
     connecting = false
     connected = false

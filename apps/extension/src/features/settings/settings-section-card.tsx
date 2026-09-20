@@ -8,8 +8,6 @@ type Props = {
   onOpen: () => void
 }
 
-// Settings entry point, one row per section (list, not grid - a 2-column
-// grid of these left too much dead space with the title/description shape).
 export const SettingsSectionCard = ({ icon: Icon, title, description, onOpen }: Props): React.JSX.Element => (
   <button type="button" onClick={onOpen} className="flex w-full min-w-0 items-center gap-3 px-3 py-3 text-left outline-none transition-colors hover:bg-secondary focus-visible:bg-secondary">
     <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-foreground">

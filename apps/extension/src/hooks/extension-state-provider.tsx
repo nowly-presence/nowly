@@ -64,6 +64,8 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }): R
   const entries = useMemo(() => Object.entries(presences), [presences])
 
   const refresh = useCallback((): void => {
+    // Read the complete snapshot in one batch so the panel does not render a
+    // mixture of old and new presence/settings data after a background update.
     void Promise.all([
       sendMessage("GET_PRESENCES"),
       sendMessage("GET_CURRENT_ACTIVITY"),

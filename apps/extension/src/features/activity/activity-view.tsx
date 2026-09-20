@@ -18,8 +18,6 @@ type Props = {
   updatingSlug?: string | null
 }
 
-// The list/grid toggle is hidden from the UI for now (kept here, and in
-// PresenceList's grid branch, in case it comes back) - always resolves to list.
 const resolveDisplayMode = (_mode: ExtensionSettings["presenceDisplayMode"]): PresenceDisplayMode => "category"
 
 export const ActivityView = ({
