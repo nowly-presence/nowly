@@ -18,11 +18,56 @@ import { useTheme } from "@/hooks/use-theme"
 import { trackUiEvent } from "@/lib/analytics"
 import { WEB_BASE_URL } from "@/shared/constants"
 import { t } from "@/shared/i18n"
-import { SIDEPANEL_NAV_KEY, clearPendingSidepanelNav, isSidepanelPendingNav, loadPendingSidepanelNav, persistAppView, type SidepanelPendingNav } from "@/shared/sidepanel-view"
+import {
+  SIDEPANEL_NAV_KEY,
+  clearPendingSidepanelNav,
+  isSidepanelPendingNav,
+  loadPendingSidepanelNav,
+  persistAppView,
+  type SidepanelPendingNav,
+} from "@/shared/sidepanel-view"
 import type { AppView, PersistedAppView } from "@/shared/types"
+import { Skeleton } from "@/ui/skeleton"
 
 const StoreView = lazy(() => import("@/features/store/store-view").then((m) => ({ default: m.StoreView })))
 const SettingsScreen = lazy(() => import("@/features/settings/settings-screen").then((m) => ({ default: m.SettingsScreen })))
+
+const SidepanelViewSkeleton = ({ view }: { view: "store" | "settings" }): React.JSX.Element => (
+  <div
+    className="flex flex-col gap-3"
+    aria-busy="true"
+  >
+    {view === "store" ? (
+      <>
+        <Skeleton className="h-24 rounded-xl" />
+        <div className="flex gap-2">
+          <Skeleton className="h-9 flex-1 rounded-lg" />
+          <Skeleton className="size-9 rounded-lg" />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {Array.from({ length: 4 }, (_, index) => (
+            <Skeleton
+              key={index}
+              className="h-44 rounded-xl"
+            />
+          ))}
+        </div>
+      </>
+    ) : (
+      <>
+        <Skeleton className="h-16 rounded-xl" />
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          {Array.from({ length: 7 }, (_, index) => (
+            <Skeleton
+              key={index}
+              className="m-3 h-14 rounded-lg"
+            />
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+)
 
 type StoreSeed = { query: string }
 
@@ -53,6 +98,7 @@ const StoreScreen = ({ seed, selectedSlug, onSelectPresence }: StoreScreenProps)
         installingSlug={installingSlug}
         installQueueCount={state.installQueue.length}
         onInstall={(slug) => void handleInstall(slug)}
+        onOpenWebsite={(slug) => void chrome.tabs.create({ url: `${WEB_BASE_URL}/library/${slug}` })}
         onRetryQueue={() => void state.retryInstallQueue()}
         onSelectPresence={onSelectPresence}
         presences={state.presences}
@@ -89,7 +135,9 @@ const ActivityScreen = ({ selectedSlug, onSelectPresence }: ActivityScreenProps)
   }
 
   const idleHint =
-    !state.activity && state.settings.scheduleEnabled === true && (Boolean(state.settings.globalSchedule) || Object.values(state.presences).some((presence) => Boolean(presence.schedule)))
+    !state.activity &&
+    state.settings.scheduleEnabled === true &&
+    (Boolean(state.settings.globalSchedule) || Object.values(state.presences).some((presence) => Boolean(presence.schedule)))
       ? t("schedule-idle-hint")
       : undefined
 
@@ -121,12 +169,24 @@ const ActivityScreen = ({ selectedSlug, onSelectPresence }: ActivityScreenProps)
         onToggle={state.togglePresence}
         onRemove={state.removePresence}
         onSchedule={setScheduleSlug}
+        onSnooze={setSnoozeSlug}
         onUpdatePresence={handleUpdate}
         onOpenWebsite={(slug) => void chrome.tabs.create({ url: `${WEB_BASE_URL}/library/${slug}` })}
       />
 
-      <SnoozeDialog open={snoozeSlug !== null} activeSlug={snoozeSlug} presences={state.presences} onClose={() => setSnoozeSlug(null)} />
-      <ScheduleDialog open={scheduleSlug !== null} activeSlug={scheduleSlug} globalSchedule={state.settings.globalSchedule} presences={state.presences} onClose={() => setScheduleSlug(null)} />
+      <SnoozeDialog
+        open={snoozeSlug !== null}
+        activeSlug={snoozeSlug}
+        presences={state.presences}
+        onClose={() => setSnoozeSlug(null)}
+      />
+      <ScheduleDialog
+        open={scheduleSlug !== null}
+        activeSlug={scheduleSlug}
+        globalSchedule={state.settings.globalSchedule}
+        presences={state.presences}
+        onClose={() => setScheduleSlug(null)}
+      />
     </div>
   )
 }
@@ -137,15 +197,22 @@ type ShellProps = {
 
 const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
   const state = useExtensionState()
+
   const [view, setView] = useState<AppView>(initialView)
+
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
+
   const [settingsSection, setSettingsSection] = useState<SettingsSectionId | null>(null)
+
   const [storeSeed, setStoreSeed] = useState<StoreSeed>({ query: "" })
+
   const [storeSelectedSlug, setStoreSelectedSlug] = useState<string | null>(null)
+
   useTheme(state.settings.appearance)
 
   const { localePreference, setLocalePreference } = useLocalePreference()
   const { onboarding, setOnboarding, nativeStatus: onboardingNativeStatus, userScripts } = useOnboardingState()
+
   const { hostVersionInfo } = useHostVersion()
 
   const onLocaleChange = (locale: typeof localePreference): void => {
@@ -154,8 +221,11 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
   }
 
   const presencePaused = state.settings.presencePaused === true
+
   const connectionHealthy = isConnectionHealthy(state.nativeStatus)
+
   const hostUpdateAvailable = hostVersionInfo?.updateAvailable === true
+
   const developerModeEnabled = state.settings.developerMode === true || state.isUnpacked
 
   useEffect(() => {
@@ -174,13 +244,39 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
     if (nextView === view) {
       if (nextView === "activity") setSelectedSlug(null)
       if (nextView === "store") setStoreSelectedSlug(null)
-      if (nextView === "settings") setSettingsSection(null)
     }
+    if (nextView === "settings") setSettingsSection(null)
     setView(nextView)
     persistAppView(nextView)
   }
 
-  type NavSnapshot = { view: AppView; selectedSlug: string | null; storeSelectedSlug: string | null; settingsSection: SettingsSectionId | null }
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent): void => {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return
+      const target = event.target
+      if (target instanceof HTMLElement && (target.isContentEditable || ["INPUT", "SELECT", "TEXTAREA"].includes(target.tagName))) return
+
+      const views: Array<PersistedAppView | "logs"> = ["activity", "store", "settings"]
+      if (developerModeEnabled) views.push("logs")
+
+      const currentIndex = views.indexOf(view)
+      if (currentIndex === -1) return
+      const offset = event.key === "ArrowRight" ? 1 : -1
+      const nextIndex = (currentIndex + offset + views.length) % views.length
+      event.preventDefault()
+      changeView(views[nextIndex])
+    }
+
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [developerModeEnabled, view])
+
+  type NavSnapshot = {
+    view: AppView
+    selectedSlug: string | null
+    storeSelectedSlug: string | null
+    settingsSection: SettingsSectionId | null
+  }
   // Keep detail state with each tab so browser side buttons can restore the exact panel state.
   const navHistory = useRef<NavSnapshot[]>([{ view: initialView, selectedSlug: null, storeSelectedSlug: null, settingsSection: null }])
   const navIndex = useRef(0)
@@ -249,7 +345,12 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
 
   return (
     <div className="relative flex h-dvh flex-col bg-background text-foreground">
-      {state.settings.backgroundAnimation !== false ? <div className="sidepanel-bg absolute inset-0" aria-hidden /> : null}
+      {state.settings.backgroundAnimation !== false ? (
+        <div
+          className="sidepanel-bg absolute inset-0"
+          aria-hidden
+        />
+      ) : null}
       <div className="relative z-1 flex flex-1 flex-col overflow-hidden">
         <div className="flex flex-1 flex-col gap-4 overflow-hidden px-3 pt-3">
           <Header
@@ -259,24 +360,50 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
             isCheckingUpdates={state.isCheckingUpdates}
             onReplayOnboarding={() => void sendMessage("RESET_ONBOARDING_FOR_DEV")}
           />
-          <ConnectionStatusBar nativeStatus={state.nativeStatus} onConnect={state.connectNative} presencePaused={presencePaused} hostUpdateAvailable={hostUpdateAvailable} visible={statusVisible} />
-          <main id="sidepanel-tabpanel" className="-mx-1 -mt-1 flex-1 overflow-y-auto px-1 pt-1 pb-3" aria-label={t(view === "activity" ? "nav-home" : view === "store" ? "nav-store" : view === "logs" ? "runtime-logs-title" : "nav-settings")}>
+          <ConnectionStatusBar
+            nativeStatus={state.nativeStatus}
+            onConnect={state.connectNative}
+            presencePaused={presencePaused}
+            hostUpdateAvailable={hostUpdateAvailable}
+            visible={statusVisible}
+          />
+          <main
+            id="sidepanel-tabpanel"
+            className="-mx-1 -mt-1 flex-1 overflow-y-auto px-1 pt-1 pb-3"
+            aria-label={t(
+              view === "activity" ? "nav-home" : view === "store" ? "nav-store" : view === "logs" ? "runtime-logs-title" : "nav-settings",
+            )}
+          >
             {view === "activity" ? (
-              <ActivityScreen selectedSlug={selectedSlug} onSelectPresence={setSelectedSlug} />
+              <ActivityScreen
+                selectedSlug={selectedSlug}
+                onSelectPresence={setSelectedSlug}
+              />
             ) : view === "logs" ? (
               <RuntimeLogsView />
             ) : (
-              <Suspense fallback={null}>
+              <Suspense fallback={<SidepanelViewSkeleton view={view === "store" ? "store" : "settings"} />}>
                 {view === "store" ? (
-                  <StoreScreen seed={storeSeed} selectedSlug={storeSelectedSlug} onSelectPresence={setStoreSelectedSlug} />
+                  <StoreScreen
+                    seed={storeSeed}
+                    selectedSlug={storeSelectedSlug}
+                    onSelectPresence={setStoreSelectedSlug}
+                  />
                 ) : (
-                  <SettingsScreen section={settingsSection} onSectionChange={setSettingsSection} />
+                  <SettingsScreen
+                    section={settingsSection}
+                    onSectionChange={setSettingsSection}
+                  />
                 )}
               </Suspense>
             )}
           </main>
         </div>
-        <BottomNav activeView={view} onViewChange={changeView} developerModeEnabled={developerModeEnabled} />
+        <BottomNav
+          activeView={view}
+          onViewChange={changeView}
+          developerModeEnabled={developerModeEnabled}
+        />
       </div>
 
       <OnboardingOverlay

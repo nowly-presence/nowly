@@ -18,6 +18,7 @@ type Props = {
   installingSlug: string | null
   installQueueCount: number
   onInstall: (slug: string) => void
+  onOpenWebsite: (slug: string) => void
   onRetryQueue: () => void
   onSelectPresence: (slug: string | null) => void
   presences: InstalledPresences
@@ -36,7 +37,10 @@ const StoreSkeleton = (): React.JSX.Element => (
     <Skeleton className="h-9 w-full rounded-xl" />
     <div className="overflow-hidden rounded-xl border border-border">
       {Array.from({ length: 5 }, (_, index) => (
-        <Skeleton key={index} className="h-16 rounded-none border-b border-border last:border-0" />
+        <Skeleton
+          key={index}
+          className="h-16 rounded-none border-b border-border last:border-0"
+        />
       ))}
     </div>
   </div>
@@ -55,7 +59,18 @@ const CategoryChip = ({ active, label, onSelect }: { active: boolean; label: str
   </button>
 )
 
-export const StoreView = ({ installingSlug, installQueueCount, onInstall, onRetryQueue, onSelectPresence, presences, seedQuery = "", selectedSlug, updates }: Props): React.JSX.Element => {
+export const StoreView = ({
+  installingSlug,
+  installQueueCount,
+  onInstall,
+  onOpenWebsite,
+  onRetryQueue,
+  onSelectPresence,
+  presences,
+  seedQuery = "",
+  selectedSlug,
+  updates,
+}: Props): React.JSX.Element => {
   const { items, isError, isLoading, refetch } = usePresenceCatalog()
   const [query, setQuery] = useState(seedQuery)
   const [category, setCategory] = useState<PresenceCategory | null>(null)
@@ -74,7 +89,11 @@ export const StoreView = ({ installingSlug, installQueueCount, onInstall, onRetr
     return (
       <Empty className="gap-2 border border-border bg-card">
         <EmptyTitle>{t("store-error")}</EmptyTitle>
-        <Button size="sm" onClick={() => void refetch()} className="mt-2">
+        <Button
+          size="sm"
+          onClick={() => void refetch()}
+          className="mt-2"
+        >
           {t("store-retry")}
         </Button>
       </Empty>
@@ -82,23 +101,50 @@ export const StoreView = ({ installingSlug, installQueueCount, onInstall, onRetr
   }
 
   if (selected) {
-    return <StoreDetail action={storeAction(selected.slug, presences, updates)} installing={installingSlug === selected.slug} onBack={() => onSelectPresence(null)} onInstall={onInstall} presence={selected} />
+    return (
+      <StoreDetail
+        action={storeAction(selected.slug, presences, updates)}
+        installing={installingSlug === selected.slug}
+        onBack={() => onSelectPresence(null)}
+        onInstall={onInstall}
+        onOpenWebsite={onOpenWebsite}
+        presence={selected}
+      />
+    )
   }
 
   return (
     <div className="flex flex-col gap-3">
-      <InstallQueueBanner count={installQueueCount} onRetry={onRetryQueue} />
+      <InstallQueueBanner
+        count={installQueueCount}
+        onRetry={onRetryQueue}
+      />
 
       <div className="relative">
         <RiSearchLine className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("store-search")} aria-label={t("store-search")} className="pl-8" />
+        <Input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={t("store-search")}
+          aria-label={t("store-search")}
+          className="pl-8"
+        />
       </div>
 
       {categories.length > 1 ? (
         <div className="flex flex-wrap gap-1.5">
-          <CategoryChip active={category === null} label={t("store-all-categories")} onSelect={() => setCategory(null)} />
+          <CategoryChip
+            active={category === null}
+            label={t("store-all-categories")}
+            onSelect={() => setCategory(null)}
+          />
           {categories.map((item) => (
-            <CategoryChip key={item} active={category === item} label={storeCategoryLabel(item)} onSelect={() => setCategory(item)} />
+            <CategoryChip
+              key={item}
+              active={category === item}
+              label={storeCategoryLabel(item)}
+              onSelect={() => setCategory(item)}
+            />
           ))}
         </div>
       ) : null}
@@ -111,7 +157,15 @@ export const StoreView = ({ installingSlug, installQueueCount, onInstall, onRetr
       ) : (
         <div className="overflow-hidden rounded-xl border border-border divide-y divide-border">
           {filtered.map((presence: StorePresence) => (
-            <StoreCard key={presence.slug} action={storeAction(presence.slug, presences, updates)} installing={installingSlug === presence.slug} onInstall={onInstall} onOpen={onSelectPresence} presence={presence} />
+            <StoreCard
+              key={presence.slug}
+              action={storeAction(presence.slug, presences, updates)}
+              installing={installingSlug === presence.slug}
+              onInstall={onInstall}
+              onOpen={onSelectPresence}
+              onOpenWebsite={onOpenWebsite}
+              presence={presence}
+            />
           ))}
         </div>
       )}
