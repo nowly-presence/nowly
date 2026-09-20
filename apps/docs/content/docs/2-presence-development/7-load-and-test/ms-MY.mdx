@@ -1,0 +1,87 @@
+---
+title: Muat dan Uji Secara Lokal
+description: Muat presence yang dibina ke dalam sambungan Nowly dengan pakej dev pra-bina atau seretan zip.
+---
+
+Selepas `nowly build <slug>`, anda masih perlu membawa bundle tersebut ke pelayar. Terdapat dua kaedah pemuatan lokal. Kedua-duanya tidak berhubung dengan Nowly API.
+
+## 1. Sambungan pra-bina (`nowly extension`)
+
+Ini adalah laluan biasa untuk kali pertama, terutamanya jika anda hanya menyalin repositori `presences`. CLI memuat turun build dev Chrome yang sedia (atau menyalin satu lokal), kemudian membakar presence anda yang telah dikompil ke dalamnya.
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+Anda boleh hantar beberapa slug:
+
+```bash
+nowly extension youtube github figma
+```
+
+Kemudian:
+
+1. Buka `chrome://extensions` dan aktifkan **Mod pembangun**
+2. **Muat tanpa zip** dan pilih `dist/extension-dev`
+3. Buka tapak sasaran dengan Discord Desktop dan Nowly Host berjalan
+
+Presence dipasang daripada `dev-presences.json` sebaik sahaja sambungan dimulakan. Selepas anda menukar kod, bina semula, jalankan `nowly extension <slug>` sekali lagi, dan muat semula sambungan tanpa zip.
+
+Untuk menggunakan build sambungan lokal dan bukannya zip CDN:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+<CalloutInfo>
+`nowly extension` menulis folder tanpa zip. Ia adalah alat yang tepat apabila anda belum memuatkan Nowly ke dalam pelayar.
+</CalloutInfo>
+
+### Repositori monorepo penuh Nowly
+
+Jika anda menyalin `nowly` (dengan `presences` sebagai submodule), anda boleh membakar setiap presence yang dibina ke dalam sambungan:
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+Muat `apps/extension/dist/chrome` tanpa zip. Muat semula selepas setiap binaan semula.
+
+## 2. Seretan zip (`nowly pack`)
+
+Gunakan ini apabila Nowly **sudah** dimuatkan sebagai build pembangunan **tanpa zip**. Pemasangan kedai Chrome Web Store menolak zip tanpa tandatangan. Anda hanya membina semula presence, bukan keseluruhan sambungan.
+
+```bash
+nowly pack youtube
+```
+
+Arahan itu membina presence, kemudian memampatkan `dist/presences/youtube/` ke dalam `dist/packs/youtube.zip`. Zip mesti mengandungi sekurang-kurangnya `metadata.json` dan `bundle.js`. Folder bersarang tidak menjadi masalah.
+
+Kemudian dalam panel sisi:
+
+1. Buka **Tetapan** → **Lanjutan**
+2. Aktifkan **Mod pembangun** (sentiasa aktif untuk build tanpa zip)
+3. Kembangkan **Debug**
+4. Seret `.zip` (atau semak imbas ke arahnya)
+
+Presence dipasang sebagai sumber **lokal**. Pemangkasan semasa but untuk build tanpa zip tidak mengeluarkannya. Zip tanpa tandatangan diterima **hanya pada build tanpa zip** (Load unpacked). Suis mod pembangun dalam tetapan hanya memaparkan UI Debug; ia tidak membenarkan pemasangan zip pada build kedai. Build kedai masih memerlukan keluaran bertandatangan daripada API.
+
+Selepas setiap perubahan kod:
+
+```bash
+nowly pack youtube
+```
+
+Seret zip baru sekali lagi. Anda tidak perlu memuat semula sambungan tanpa zip melainkan anda menukar sambungan itu sendiri.
+
+## Kaedah mana untuk dipilih
+
+| Situasi | Kaedah |
+|---|---|
+| Persediaan pertama, atau tiada Nowly dalam pelayar | `nowly extension <slug>` |
+| Nowly sudah dimuatkan, ulang pada satu presence | `nowly pack <slug>` kemudian seret zip |
+| Anda bekerja dalam monorepo `nowly` penuh | `pnpm build:extension:dev` |
+
+Lihat juga [CLI](/publishing/cli#test-a-presence-locally).

@@ -1,0 +1,87 @@
+---
+title: 로컬에서 로드 및 테스트
+description: 사전 빌드된 개발 패키지 또는 zip 드롭으로 빌드한 프레즌스를 Nowly 확장 프로그램에 로드하세요.
+---
+
+`nowly build <slug>` 이후에도 여전히 해당 번들을 브라우저에 넣어야 합니다. 두 가지 로컬 로드 방법이 있습니다. 둘 다 Nowly API와 통신하지 않습니다.
+
+## 1. 사전 빌드된 확장 프로그램(`nowly extension`)
+
+특히 `presences` 저장소만 클론한 경우, 이것이 일반적인 첫 경로입니다. CLI는 준비된 Chrome 개발 빌드를 다운로드하거나(또는 로컬 빌드를 복사) 컴파일된 프레즌스를 그 안에 포함시킵니다.
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+여러 슬러그를 전달할 수 있습니다.
+
+```bash
+nowly extension youtube github figma
+```
+
+그런 다음:
+
+1. `chrome://extensions`를 열고 **개발자 모드**를 활성화하세요
+2. **압축 해제된 확장 프로그램 로드**를 선택하고 `dist/extension-dev`를 선택하세요
+3. Discord Desktop과 Nowly Host가 실행 중인 상태에서 대상 사이트를 여세요
+
+확장 프로그램이 시작되면 `dev-presences.json`에서 프레즌스가 설치됩니다. 코드를 변경한 후에는 다시 빌드하고, `nowly extension <slug>`를 다시 실행한 다음, 압축 해제된 확장 프로그램을 새로고침하세요.
+
+CDN zip 대신 로컬 확장 프로그램 빌드를 사용하려면:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+<CalloutInfo>
+`nowly extension`은 압축 해제된 폴더를 생성합니다. 브라우저에 아직 Nowly가 로드되어 있지 않을 때 사용하기 적합한 도구입니다.
+</CalloutInfo>
+
+### 전체 Nowly 모노레포
+
+`presences`를 서브모듈로 포함한 `nowly`를 클론한 경우, 빌드한 모든 프레즌스를 확장 프로그램에 포함시킬 수 있습니다.
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+`apps/extension/dist/chrome`를 압축 해제된 상태로 로드하세요. 다시 빌드할 때마다 새로고침하세요.
+
+## 2. Zip 드롭(`nowly pack`)
+
+Nowly가 **이미** **압축 해제된** 개발 빌드로 로드되어 있을 때 사용하세요. Chrome 웹 스토어의 스토어 설치는 서명되지 않은 zip을 거부합니다. 전체 확장 프로그램이 아닌 프레즌스만 다시 빌드합니다.
+
+```bash
+nowly pack youtube
+```
+
+이 명령은 프레즌스를 빌드한 다음 `dist/presences/youtube/`를 `dist/packs/youtube.zip`으로 압축합니다. zip에는 최소한 `metadata.json`과 `bundle.js`가 포함되어야 합니다. 중첩된 폴더가 있어도 괜찮습니다.
+
+그런 다음 사이드 패널에서:
+
+1. **설정** → **고급**을 여세요
+2. **개발자 모드**를 활성화하세요(압축 해제된 빌드에서는 항상 켜져 있음)
+3. **디버그**를 펼치세요
+4. `.zip` 파일을 드롭하세요(또는 찾아보기로 선택)
+
+프레즌스는 **로컬** 소스로 설치됩니다. 압축 해제된 빌드의 시작 시 정리 작업으로도 제거되지 않습니다. 서명되지 않은 zip은 **압축 해제된 빌드에서만** 허용됩니다(압축 해제된 확장 프로그램 로드). 설정의 개발자 모드 토글은 디버그 UI만 표시할 뿐, 스토어 빌드에서 zip 설치를 허용하지는 않습니다. 스토어 빌드는 여전히 API의 서명된 릴리스가 필요합니다.
+
+코드를 변경할 때마다:
+
+```bash
+nowly pack youtube
+```
+
+새 zip을 다시 드롭하세요. 확장 프로그램 자체를 변경하지 않는 한 압축 해제된 확장 프로그램을 새로고침할 필요는 없습니다.
+
+## 어떤 방법을 선택할지
+
+| 상황 | 방법 |
+|---|---|
+| 첫 설정이거나 브라우저에 Nowly가 없는 경우 | `nowly extension <slug>` |
+| Nowly가 이미 로드되어 있고, 하나의 프레즌스를 반복 개발하는 경우 | `nowly pack <slug>` 후 zip 드롭 |
+| 전체 `nowly` 모노레포에서 작업하는 경우 | `pnpm build:extension:dev` |
+
+[CLI](/publishing/cli#test-a-presence-locally)도 참고하세요.

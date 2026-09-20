@@ -1,0 +1,87 @@
+---
+title: Yerel Olarak Yükleme ve Test Etme
+description: Önceden derlenmiş bir geliştirme paketi veya zip bırakma ile derlenmiş bir presence'ı Nowly uzantısına yükleyin.
+---
+
+`nowly build <slug>`'dan sonra bile bu paketi bir tarayıcıya sokmanız gerekir. İki yerel yükleme yöntemi vardır. Hiçbiri Nowly API'siyle konuşmaz.
+
+## 1. Önceden derlenmiş uzantı (`nowly extension`)
+
+Özellikle yalnızca `presences` deposunu klonladıysanız, bu genellikle ilk seferdeki yoldur. CLI, hazır bir Chrome geliştirme derlemesini indirir (veya yerel birini kopyalar), ardından derlenmiş presence'ınızı içine gömer.
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+Birden fazla slug geçebilirsiniz:
+
+```bash
+nowly extension youtube github figma
+```
+
+Ardından:
+
+1. `chrome://extensions` sayfasını açın ve **Geliştirici modunu** etkinleştirin
+2. **Paketlenmemişi yükle**'ye tıklayın ve `dist/extension-dev` klasörünü seçin
+3. Discord Desktop ve Nowly Host çalışırken hedef siteyi açın
+
+Uzantı başlar başlamaz presence, `dev-presences.json`'dan kurulur. Kodu değiştirdikten sonra yeniden derleyin, `nowly extension <slug>`'ı tekrar çalıştırın ve paketlenmemiş uzantıyı yeniden yükleyin.
+
+CDN zip'i yerine yerel bir uzantı derlemesi kullanmak için:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+<CalloutInfo>
+`nowly extension`, paketlenmemiş bir klasör yazar. Tarayıcınızda henüz Nowly yüklü değilse doğru araçtır.
+</CalloutInfo>
+
+### Tam Nowly Monorepo'su
+
+`presences`'ı bir alt modül olarak içeren `nowly`'yi klonladıysanız, derlenmiş her presence'ı uzantıya gömebilirsiniz:
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+`apps/extension/dist/chrome`'u paketlenmemiş olarak yükleyin. Her yeniden derlemeden sonra yeniden yükleyin.
+
+## 2. Zip bırakma (`nowly pack`)
+
+Nowly **zaten** **paketlenmemiş** bir geliştirme derlemesi olarak yüklüyken bunu kullanın. Chrome Web Mağazası'ndan yapılan mağaza kurulumları imzasız zip'leri reddeder. Yalnızca presence'ı yeniden derlersiniz, tüm uzantıyı değil.
+
+```bash
+nowly pack youtube
+```
+
+Bu komut presence'ı derler, ardından `dist/presences/youtube/`'u `dist/packs/youtube.zip` olarak zipler. Zip en azından `metadata.json` ve `bundle.js` içermelidir. İç içe klasörler sorun değildir.
+
+Ardından yan panelde:
+
+1. **Ayarlar** → **Gelişmiş**'i açın
+2. **Geliştirici modunu** etkinleştirin (paketlenmemiş derlemelerde her zaman açıktır)
+3. **Hata Ayıklama**'yı genişletin
+4. `.zip` dosyasını bırakın (veya göz atarak seçin)
+
+Presence, **yerel** bir kaynak olarak kurulur. Paketlenmemiş önyükleme budaması onu kaldırmaz. İmzasız zip'ler **yalnızca paketlenmemiş bir derlemede** kabul edilir (Paketlenmemişi yükle). Ayarlar'daki geliştirici modu anahtarı yalnızca Hata Ayıklama arayüzünü gösterir; bir mağaza derlemesinde zip kurulumuna izin vermez. Mağaza derlemeleri hâlâ API'den imzalı bir sürüm gerektirir.
+
+Her kod değişikliğinden sonra:
+
+```bash
+nowly pack youtube
+```
+
+Yeni zip'i tekrar bırakın. Uzantının kendisini değiştirmediğiniz sürece paketlenmemiş uzantıyı yeniden yüklemenize gerek yoktur.
+
+## Hangi Yöntem Seçilmeli
+
+| Durum | Yöntem |
+|---|---|
+| İlk kurulum veya tarayıcıda Nowly yok | `nowly extension <slug>` |
+| Nowly zaten yüklü, bir presence üzerinde yineleme yapılıyor | `nowly pack <slug>`, ardından zip'i bırakın |
+| Tam `nowly` monorepo'sunda çalışıyorsunuz | `pnpm build:extension:dev` |
+
+Ayrıca bkz. [CLI](/publishing/cli#test-a-presence-locally).

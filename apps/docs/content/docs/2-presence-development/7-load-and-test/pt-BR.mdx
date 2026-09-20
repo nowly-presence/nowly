@@ -1,0 +1,87 @@
+---
+title: Carregar e testar localmente
+description: Carregue uma presença compilada na extensão Nowly com um pacote de desenvolvimento pré-compilado ou um zip solto.
+---
+
+Depois de `nowly build <slug>`, você ainda precisa colocar esse pacote em um navegador. Existem dois métodos de carregamento local. Nenhum deles se comunica com a API do Nowly.
+
+## 1. Extensão pré-compilada (`nowly extension`)
+
+Este é o caminho usual na primeira vez, especialmente se você clonou apenas o repositório `presences`. A CLI baixa um build de desenvolvimento pronto do Chrome (ou copia um local) e então incorpora sua presença compilada nele.
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+Você pode passar vários slugs:
+
+```bash
+nowly extension youtube github figma
+```
+
+Depois:
+
+1. Abra `chrome://extensions` e ative o **Modo desenvolvedor**
+2. **Carregar sem compactação** e selecione `dist/extension-dev`
+3. Abra o site de destino com o Discord Desktop e o Nowly Host em execução
+
+A presença é instalada a partir de `dev-presences.json` assim que a extensão inicia. Depois de alterar o código, recompile, execute novamente `nowly extension <slug>` e recarregue a extensão não compactada.
+
+Para usar um build de extensão local em vez do zip da CDN:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+<CalloutInfo>
+`nowly extension` grava uma pasta não compactada. É a ferramenta certa quando você ainda não tem o Nowly carregado no navegador.
+</CalloutInfo>
+
+### Monorepo completo do Nowly
+
+Se você clonou o `nowly` (com `presences` como submódulo), pode incorporar cada presença compilada na extensão:
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+Carregue `apps/extension/dist/chrome` sem compactação. Recarregue após cada recompilação.
+
+## 2. Zip solto (`nowly pack`)
+
+Use isso quando o Nowly **já** estiver carregado como um build de desenvolvimento **não compactado**. Instalações da Chrome Web Store rejeitam zips não assinados. Você só recompila a presença, não a extensão inteira.
+
+```bash
+nowly pack youtube
+```
+
+Esse comando compila a presença e depois compacta `dist/presences/youtube/` em `dist/packs/youtube.zip`. O zip deve conter no mínimo `metadata.json` e `bundle.js`. Pastas aninhadas não são um problema.
+
+Depois, no painel lateral:
+
+1. Abra **Configurações** → **Avançado**
+2. Ative o **Modo desenvolvedor** (sempre ativo em builds não compactados)
+3. Expanda **Depuração**
+4. Solte o arquivo `.zip` (ou navegue até ele)
+
+A presença é instalada como uma fonte **local**. A limpeza na inicialização de builds não compactados não a remove. Zips não assinados são aceitos **apenas em um build não compactado** (Carregar sem compactação). O botão de modo desenvolvedor nas Configurações apenas exibe a UI de Depuração; ele não permite a instalação de zips em um build da loja. Builds da loja ainda exigem uma versão assinada da API.
+
+Após cada alteração de código:
+
+```bash
+nowly pack youtube
+```
+
+Solte o novo zip novamente. Você não precisa recarregar a extensão não compactada, a menos que tenha alterado a própria extensão.
+
+## Qual método escolher
+
+| Situação | Método |
+|---|---|
+| Primeira configuração, ou sem Nowly no navegador | `nowly extension <slug>` |
+| Nowly já carregado, iterando em uma presença | `nowly pack <slug>` e depois solte o zip |
+| Você trabalha no monorepo completo do `nowly` | `pnpm build:extension:dev` |
+
+Veja também [CLI](/publishing/cli#test-a-presence-locally).
