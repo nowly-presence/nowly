@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react"
 import { sendMessage } from "@/lib/messages"
 import { BottomNav } from "@/components/layout/bottom-nav"
 import { ConnectionStatusBar, isConnectionHealthy } from "@/components/layout/connection-status-bar"
@@ -8,8 +8,7 @@ import { CurrentActivityCard } from "@/features/activity/current-activity-card"
 import { ScheduleDialog } from "@/features/activity/schedule-dialog"
 import { SnoozeDialog } from "@/features/activity/snooze-dialog"
 import { OnboardingOverlay } from "@/features/onboarding/onboarding-overlay"
-import { SettingsScreen, type SettingsSectionId } from "@/features/settings/settings-screen"
-import { StoreView } from "@/features/store/store-view"
+import type { SettingsSectionId } from "@/features/settings/settings-screen"
 import { ExtensionStateProvider, useExtensionState } from "@/hooks/extension-state-provider"
 import { useHostVersion } from "@/hooks/use-host-version"
 import { useLocalePreference } from "@/hooks/use-locale-preference"
@@ -20,6 +19,9 @@ import { WEB_BASE_URL } from "@/shared/constants"
 import { t } from "@/shared/i18n"
 import { SIDEPANEL_NAV_KEY, clearPendingSidepanelNav, isSidepanelPendingNav, loadPendingSidepanelNav, persistAppView, type SidepanelPendingNav } from "@/shared/sidepanel-view"
 import type { PersistedAppView } from "@/shared/types"
+
+const StoreView = lazy(() => import("@/features/store/store-view").then((m) => ({ default: m.StoreView })))
+const SettingsScreen = lazy(() => import("@/features/settings/settings-screen").then((m) => ({ default: m.SettingsScreen })))
 
 type StoreSeed = { query: string }
 
@@ -266,10 +268,14 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
           <main id="sidepanel-tabpanel" className="flex-1 overflow-y-auto pb-3" aria-label={t(view === "activity" ? "nav-home" : view === "store" ? "nav-store" : "nav-settings")}>
             {view === "activity" ? (
               <ActivityScreen selectedSlug={selectedSlug} onSelectPresence={setSelectedSlug} />
-            ) : view === "store" ? (
-              <StoreScreen seed={storeSeed} selectedSlug={storeSelectedSlug} onSelectPresence={setStoreSelectedSlug} />
             ) : (
-              <SettingsScreen section={settingsSection} onSectionChange={setSettingsSection} />
+              <Suspense fallback={null}>
+                {view === "store" ? (
+                  <StoreScreen seed={storeSeed} selectedSlug={storeSelectedSlug} onSelectPresence={setStoreSelectedSlug} />
+                ) : (
+                  <SettingsScreen section={settingsSection} onSectionChange={setSettingsSection} />
+                )}
+              </Suspense>
             )}
           </main>
         </div>

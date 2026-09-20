@@ -33,6 +33,9 @@ const buildPage = (name: string, source = name) =>
       emptyOutDir: true,
       rollupOptions: { input: join(ROOT, "src", source, "index.html") },
       watch: watch ? {} : null,
+      // Loaded from local disk by the browser, not over the network - the
+      // default 500kB budget targets page-load perf, which doesn't apply here.
+      chunkSizeWarningLimit: 1000,
     },
     configFile: false,
   })
