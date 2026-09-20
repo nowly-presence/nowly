@@ -11,14 +11,19 @@ export type StorePresence = {
   longDescription: string
   category: PresenceCategory
   color: string
+  author?: { name: string; github?: string }
+  contributors?: { name: string; github?: string }[]
   version: string | null
   urls: string[]
   features: string[]
+  settings?: Record<string, unknown>
+  locales?: Record<string, Record<string, string>>
   totalInstalls: number
   discordNative: boolean
 }
 
-const toCategory = (value: unknown): PresenceCategory => (CATEGORIES.includes(value as PresenceCategory) ? (value as PresenceCategory) : "other")
+const toCategory = (value: unknown): PresenceCategory =>
+  CATEGORIES.includes(value as PresenceCategory) ? (value as PresenceCategory) : "other"
 
 export const toStorePresence = (item: PresenceCatalogItem): StorePresence => {
   const description = resolveLocaleString(item.description) ?? ""
@@ -29,9 +34,13 @@ export const toStorePresence = (item: PresenceCatalogItem): StorePresence => {
     longDescription: resolveLocaleString(item.longDescription) ?? description,
     category: toCategory(item.category),
     color: typeof item.color === "string" && item.color.length > 0 ? item.color : "#0891B2",
+    author: item.author,
+    contributors: item.contributors,
     version: item.version ?? null,
     urls: [...new Set(item.url ?? [])],
     features: resolveLocaleList(item.features),
+    settings: item.settings,
+    locales: item.locales,
     totalInstalls: item.totalInstalls ?? 0,
     discordNative: item.discordNative === true,
   }
@@ -48,7 +57,12 @@ export const filterStorePresences = (items: StorePresence[], query: string, cate
     .filter((item) => (category ? item.category === category : true))
     .filter((item) => {
       if (!normalized) return true
-      return item.name.toLowerCase().includes(normalized) || item.description.toLowerCase().includes(normalized) || item.slug.toLowerCase().includes(normalized) || item.urls.some((url) => url.toLowerCase().includes(normalized))
+      return (
+        item.name.toLowerCase().includes(normalized) ||
+        item.description.toLowerCase().includes(normalized) ||
+        item.slug.toLowerCase().includes(normalized) ||
+        item.urls.some((url) => url.toLowerCase().includes(normalized))
+      )
     })
     .sort((left, right) => {
       if (right.totalInstalls !== left.totalInstalls) return right.totalInstalls - left.totalInstalls

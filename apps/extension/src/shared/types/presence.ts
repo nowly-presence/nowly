@@ -91,9 +91,13 @@ export type PresenceCatalogItem = {
   longDescription?: string | Record<string, string>
   category?: PresenceMetadata["category"]
   color?: string
+  author?: { name: string; github?: string }
+  contributors?: { name: string; github?: string }[]
   version?: string | null
   url?: string[]
   features?: Record<string, string[]>
+  settings?: Record<string, unknown>
+  locales?: Record<string, Record<string, string>>
   totalInstalls?: number
   activeUsers?: number
   addedAt?: string | null
