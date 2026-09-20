@@ -1,13 +1,15 @@
-import { RiRefreshLine, RiRestartLine, RiTerminalLine } from "@remixicon/react"
+import { RiListUnordered, RiRefreshLine, RiRestartLine, RiTerminalLine } from "@remixicon/react"
 import { useEffect, useState } from "react"
 import { SettingRow } from "@/features/settings/setting-row"
 import { PresenceZipDrop } from "@/features/settings/presence-zip-drop"
+import { RuntimeLogsView } from "@/features/runtime-logs/runtime-logs-view"
 import { formatRelativeTime } from "@/lib/format"
 import { API_BASE_URL } from "@/shared/constants"
 import { t } from "@/shared/i18n"
 import type { ExtensionSettings, NativeStatus, PresenceDebug } from "@/shared/types"
 import { AccordionContent, AccordionItem, AccordionTrigger } from "@/ui/accordion"
 import { Button } from "@/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/ui/dialog"
 import { Input } from "@/ui/input"
 import { Label } from "@/ui/label"
 import { Separator } from "@/ui/separator"
@@ -87,6 +89,19 @@ export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug
                 <span className="font-semibold text-foreground">{t("debug-native-label")}</span> - {nativeIssueMessage}
               </p>
             ) : null}
+
+            <Dialog>
+              <DialogTrigger render={<Button variant="outline" size="sm" />}>
+                <RiListUnordered className="size-3.5" />
+                {t("runtime-logs-title")}
+              </DialogTrigger>
+              <DialogContent className="flex max-h-[85vh] flex-col sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>{t("runtime-logs-title")}</DialogTitle>
+                </DialogHeader>
+                <RuntimeLogsView />
+              </DialogContent>
+            </Dialog>
 
             <Separator />
 

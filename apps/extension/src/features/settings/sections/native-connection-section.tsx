@@ -1,15 +1,20 @@
-import { RiExternalLinkLine, RiRefreshLine } from "@remixicon/react"
+import { RiExternalLinkLine, RiRefreshLine, RiStethoscopeLine } from "@remixicon/react"
 import { isConnectionHealthy } from "@/components/layout/connection-status-bar"
+import { UserDiagnosticCard } from "@/features/diagnostics/user-diagnostic-card"
 import type { HostVersionInfo } from "@/hooks/use-host-version"
 import { HOST_DOWNLOAD_URL } from "@/shared/constants"
 import { t } from "@/shared/i18n"
-import type { NativeStatus } from "@/shared/types"
+import type { CurrentActivity, InstalledPresences, NativeStatus, UserScriptsStatus } from "@/shared/types"
 import { AccordionContent, AccordionItem, AccordionTrigger } from "@/ui/accordion"
 import { Badge } from "@/ui/badge"
 import { Button } from "@/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/ui/dialog"
 import { cn } from "@/ui/utils"
 
 type Props = {
+  activity: CurrentActivity | null
+  presences: InstalledPresences
+  userScripts: UserScriptsStatus
   nativeStatus: NativeStatus
   hostVersionInfo: HostVersionInfo | null
   isCheckingHostVersion: boolean
@@ -17,7 +22,7 @@ type Props = {
   onConnect: () => void
 }
 
-export const NativeConnectionSection = ({ nativeStatus, hostVersionInfo, isCheckingHostVersion, onCheckHostUpdate, onConnect }: Props): React.JSX.Element => {
+export const NativeConnectionSection = ({ activity, presences, userScripts, nativeStatus, hostVersionInfo, isCheckingHostVersion, onCheckHostUpdate, onConnect }: Props): React.JSX.Element => {
   const healthy = isConnectionHealthy(nativeStatus)
 
   return (
@@ -54,6 +59,19 @@ export const NativeConnectionSection = ({ nativeStatus, hostVersionInfo, isCheck
             v{nativeStatus.version ?? "?"}
           </Badge>
         )}
+
+        <Dialog>
+          <DialogTrigger render={<Button variant="outline" size="sm" className="w-fit" />}>
+            <RiStethoscopeLine className="size-3.5" />
+            {t("diagnostic-title")}
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>{t("diagnostic-title")}</DialogTitle>
+            </DialogHeader>
+            <UserDiagnosticCard activity={activity} nativeStatus={nativeStatus} onConnectNative={onConnect} presences={presences} userScripts={userScripts} />
+          </DialogContent>
+        </Dialog>
       </AccordionContent>
     </AccordionItem>
   )

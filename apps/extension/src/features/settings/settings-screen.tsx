@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ScheduleDialog } from "@/features/activity/schedule-dialog"
 import { ActivitySelectionSection } from "@/features/settings/sections/activity-selection-section"
 import { AppearanceSection } from "@/features/settings/sections/appearance-section"
@@ -11,14 +11,22 @@ import { useExtensionState } from "@/hooks/extension-state-provider"
 import { useHostVersion } from "@/hooks/use-host-version"
 import { useLocalePreference } from "@/hooks/use-locale-preference"
 import { sendMessage } from "@/lib/messages"
+import type { UserScriptsStatus } from "@/shared/types"
 import { Accordion } from "@/ui/accordion"
 import { Skeleton } from "@/ui/skeleton"
+
+const FALLBACK_USER_SCRIPTS_STATUS: UserScriptsStatus = { enabled: false, requiresUserToggle: true }
 
 export const SettingsScreen = (): React.JSX.Element => {
   const state = useExtensionState()
   const { localePreference, setLocalePreference } = useLocalePreference()
   const { hostVersionInfo, isCheckingHostVersion, checkHostUpdate } = useHostVersion()
   const [globalScheduleOpen, setGlobalScheduleOpen] = useState(false)
+  const [userScripts, setUserScripts] = useState<UserScriptsStatus>(FALLBACK_USER_SCRIPTS_STATUS)
+
+  useEffect(() => {
+    void sendMessage("GET_USER_SCRIPTS_STATUS").then((status) => setUserScripts(status ?? FALLBACK_USER_SCRIPTS_STATUS))
+  }, [])
 
   if (state.isLoading) {
     return (
@@ -38,7 +46,16 @@ export const SettingsScreen = (): React.JSX.Element => {
         <ActivitySelectionSection settings={state.settings} onSettingsChange={state.setSettings} presences={state.presences} />
         <ScheduleSection settings={state.settings} onSettingsChange={state.setSettings} onEditGlobalSchedule={() => setGlobalScheduleOpen(true)} />
         <LanguageSection settings={state.settings} onSettingsChange={state.setSettings} />
-        <NativeConnectionSection nativeStatus={state.nativeStatus} hostVersionInfo={hostVersionInfo} isCheckingHostVersion={isCheckingHostVersion} onCheckHostUpdate={() => void checkHostUpdate()} onConnect={state.connectNative} />
+        <NativeConnectionSection
+          activity={state.activity}
+          presences={state.presences}
+          userScripts={userScripts}
+          nativeStatus={state.nativeStatus}
+          hostVersionInfo={hostVersionInfo}
+          isCheckingHostVersion={isCheckingHostVersion}
+          onCheckHostUpdate={() => void checkHostUpdate()}
+          onConnect={state.connectNative}
+        />
         <DeveloperSection
           settings={state.settings}
           onSettingsChange={state.setSettings}
