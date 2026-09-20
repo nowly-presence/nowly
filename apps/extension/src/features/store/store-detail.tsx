@@ -1,4 +1,5 @@
-import { RiArrowLeftSLine, RiLoader2Line } from "@remixicon/react"
+import { RiLoader2Line } from "@remixicon/react"
+import { BackButton } from "@/components/shared/back-button"
 import { PresenceTile } from "@/components/shared/presence-tile"
 import { DiscordNativeNotice } from "@/features/activity/discord-native-notice"
 import { PresenceAboutCard } from "@/features/activity/presence-detail-info"
@@ -24,10 +25,7 @@ export const StoreDetail = ({ action, installing, onBack, onInstall, presence }:
 
   return (
     <div className="flex flex-col gap-3">
-      <Button variant="ghost" size="sm" onClick={onBack} className="-ml-1 w-fit">
-        <RiArrowLeftSLine />
-        {t("back")}
-      </Button>
+      <BackButton onClick={onBack} label={t("back")} />
 
       <PresenceHeroCard key={presence.slug} slug={presence.slug} color={presence.color}>
         <div className="flex items-start gap-3">

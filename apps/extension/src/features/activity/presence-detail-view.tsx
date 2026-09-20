@@ -1,5 +1,6 @@
-import { RiArrowLeftSLine, RiCalendarLine, RiExternalLinkLine, RiLoader2Line, RiDeleteBinLine } from "@remixicon/react"
+import { RiCalendarLine, RiExternalLinkLine, RiLoader2Line, RiDeleteBinLine } from "@remixicon/react"
 import { useEffect, useState, type MouseEvent } from "react"
+import { BackButton } from "@/components/shared/back-button"
 import { PresenceTile } from "@/components/shared/presence-tile"
 import { DiscordNativeNotice } from "@/features/activity/discord-native-notice"
 import { getCategoryLabel } from "@/features/activity/presence-list.model"
@@ -48,10 +49,7 @@ export const PresenceDetailView = ({ onBack, onOpenWebsite, onRemove, onSchedule
 
   return (
     <div className="flex flex-col gap-3">
-      <Button variant="ghost" size="sm" onClick={onBack} className="-ml-1 w-fit">
-        <RiArrowLeftSLine />
-        {t("back")}
-      </Button>
+      <BackButton onClick={onBack} label={t("back")} />
 
       <PresenceHeroCard
         key={slug}
