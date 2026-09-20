@@ -7,8 +7,90 @@ type LocaleFlagProps = {
   locale: string;
 };
 
+const cardShading = (
+  <>
+    <path d="M27,4H5c-2.209,0-4,1.791-4,4V24c0,2.209,1.791,4,4,4H27c2.209,0,4-1.791,4-4V8c0-2.209-1.791-4-4-4Zm3,20c0,1.654-1.346,3-3,3H5c-1.654,0-3-1.346-3-3V8c0-1.654,1.346-3,3-3H27c1.654,0,3,1.346,3,3V24Z" opacity=".15" />
+    <path d="M27,5H5c-1.657,0-3,1.343-3,3v1c0-1.657,1.343-3,3-3H27c1.657,0,3,1.343,3,3v-1c0-1.657-1.343-3-3-3Z" fill="#fff" opacity=".2" />
+  </>
+);
+
+const otherFlags: Record<string, ReactElement> = {
+  "de-DE": (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M5,4H27c2.208,0,4,1.792,4,4v2.667H1v-2.667c0-2.208,1.792-4,4-4Z" fill="#1a1a1a" />
+      <path fill="#dd0000" d="M1 10.667H31V21.333H1z" />
+      <path d="M1,21.333H31v2.667c0,2.208-1.792,4-4,4H5c-2.208,0-4-1.792-4-4v-2.667Z" fill="#ffce00" />
+      {cardShading}
+    </svg>
+  ),
+  "pt-BR": (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="1" y="4" width="30" height="24" rx="4" ry="4" fill="#009b3a" />
+      <path d="M16,7l13,9-13,9L3,16l13-9Z" fill="#fedf00" />
+      <circle cx="16" cy="16" r="5.5" fill="#002776" />
+      {cardShading}
+    </svg>
+  ),
+  "pl-PL": (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M5,4H27c2.208,0,4,1.792,4,4v8H1v-8c0-2.208,1.792-4,4-4Z" fill="#fff" />
+      <path d="M1,16H31v8c0,2.208-1.792,4-4,4H5c-2.208,0-4-1.792-4-4v-8Z" fill="#dc143c" />
+      {cardShading}
+    </svg>
+  ),
+  "ja-JP": (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="1" y="4" width="30" height="24" rx="4" ry="4" fill="#fff" />
+      <circle cx="16" cy="16" r="6.4" fill="#bc002d" />
+      {cardShading}
+    </svg>
+  ),
+  "ko-KR": (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="1" y="4" width="30" height="24" rx="4" ry="4" fill="#fff" />
+      <path d="M16,10.5c3.038,0,5.5,2.462,5.5,5.5s2.462,5.5,5.5,5.5c0-6.075-4.925-11-11-11Z" fill="#cd2e3a" />
+      <path d="M16,21.5c-3.038,0-5.5-2.462-5.5-5.5s-2.462-5.5-5.5-5.5c0,6.075,4.925,11,11,11Z" fill="#0047a0" />
+      {cardShading}
+    </svg>
+  ),
+  "tr-TR": (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="1" y="4" width="30" height="24" rx="4" ry="4" fill="#e30a17" />
+      <circle cx="13.5" cy="16" r="5.5" fill="#fff" />
+      <circle cx="15" cy="16" r="4.4" fill="#e30a17" />
+      <path d="M20,13.2l1.1,3.3-2.8-2h3.4l-2.8,2,1.1-3.3Z" fill="#fff" />
+      {cardShading}
+    </svg>
+  ),
+  "ms-MY": (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="1" y="4" width="30" height="24" rx="4" ry="4" fill="#fff" />
+      <path fill="#cc0001" d="M1 4H31V7.43H1z" />
+      <path fill="#cc0001" d="M1 10.29H31V13.71H1z" />
+      <path fill="#cc0001" d="M1 16.57H31V20H1z" />
+      <path d="M5,4H18V17H1V8c0-2.208,1.792-4,4-4Z" fill="#010066" />
+      <circle cx="9.5" cy="10.5" r="4" fill="#fc0" />
+      <circle cx="11" cy="10.5" r="3.2" fill="#010066" />
+      <path d="M15,7.5l.6,1.9,2-.7-1.4,1.6,1.4,1.6-2-.7-.6,1.9-.6-1.9-2,.7,1.4-1.6-1.4-1.6,2,.7.6-1.9Z" fill="#fc0" />
+      {cardShading}
+    </svg>
+  ),
+  "el-GR": (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="1" y="4" width="30" height="24" rx="4" ry="4" fill="#0d5eaf" />
+      <path fill="#fff" d="M1 8.67H31V11.33H1z" />
+      <path fill="#fff" d="M1 13.33H31V16H1z" />
+      <path fill="#fff" d="M1 18H31V20.67H1z" />
+      <path fill="#fff" d="M1 23.33H31V26H1z" />
+      <path d="M5,4h8v8H1v-4c0-2.208,1.792-4,4-4Z" fill="#0d5eaf" />
+      <path d="M10.5,4h2.5v10.5H23v2.5h-10V27h-2.5v-10H1v-2.5H10.5V4Z" fill="#fff" />
+      {cardShading}
+    </svg>
+  ),
+};
+
 export const LocaleFlag: FC<LocaleFlagProps> = ({ className, locale }): ReactElement => {
-  const flag = locale === "es-ES" ? (
+  const flag = locale in otherFlags ? otherFlags[locale] : locale === "es-ES" ? (
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
         <path fill="#f1c142" d="M1 10H31V22H1z"></path>
         <path d="M5,4H27c2.208,0,4,1.792,4,4v3H1v-3c0-2.208,1.792-4,4-4Z" fill="#a0251e"></path>

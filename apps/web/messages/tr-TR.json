@@ -1,0 +1,956 @@
+{
+  "metadata": {
+    "title": "Nowly | Yaptığın şeyi anlık olarak paylaş",
+    "description": "Nowly, izlediğin, dinlediğin veya oynadığın şeyi zengin, canlı bir Discord varlığına dönüştürür.",
+    "keywords": [
+      "Discord Rich Presence",
+      "Discord etkinliği",
+      "Nowly",
+      "tarayıcı uzantısı",
+      "YouTube Discord",
+      "Spotify Discord",
+      "Netflix Discord"
+    ]
+  },
+  "navbar": {
+    "docs": "Dokümantasyon",
+    "library": "Kitaplık",
+    "open-menu": "Menüyü aç"
+  },
+  "theme": {
+    "toggle": "Renk temasını değiştir",
+    "light": "Açık",
+    "dark": "Koyu"
+  },
+  "hero": {
+    "title-before": "Yaptığın şeyi",
+    "title-accent": "anlık olarak paylaş",
+    "description": "Nowly, etkinliğini zengin ve dinamik bir Discord varlığına dönüştürür.",
+    "install": "Nowly'yi Yükle",
+    "library": "Kitaplığa göz at",
+    "cards": {
+      "netflix": {
+        "app-label": "Netflix izliyor",
+        "title": "Kağıt Ev",
+        "subtitle": "S1 B1. Bölüm 1",
+        "elapsed": "00:44",
+        "duration": "48:40",
+        "cta": "Bölümü izle"
+      },
+      "prime": {
+        "app-label": "Prime Video izliyor",
+        "title": "Reacher",
+        "subtitle": "S1 B1. Margrave'e Hoş Geldiniz",
+        "elapsed": "15:13",
+        "duration": "40:32",
+        "cta": "Bölümü izle"
+      },
+      "figma": {
+        "app-label": "Figma kullanıyor",
+        "title": "Figma'da tasarım yapıyor",
+        "subtitle": "Acme Corp",
+        "timer": "00:44"
+      },
+      "youtube": {
+        "app-label": "YouTube izliyor",
+        "title": "Grand Theft Auto VI: Genişletilmiş Bakış",
+        "subtitle": "Rockstar Games",
+        "elapsed": "14:10",
+        "duration": "26:48",
+        "cta": "Videoyu izle"
+      },
+      "twitch": {
+        "app-label": "Twitch izliyor",
+        "title": "Speedrun Elden Ring - Any%",
+        "subtitle": "NoctaPlays • Elden Ring",
+        "timer": "01:42:18",
+        "cta": "Canlı izle"
+      },
+      "chatgpt": {
+        "app-label": "ChatGPT kullanıyor",
+        "title": "Sohbet: Japonya gezi planı",
+        "timer": "12:34",
+        "cta": "Sohbeti aç"
+      },
+      "notion": {
+        "app-label": "Notion kullanıyor",
+        "title": "Bir sayfa düzenliyor",
+        "subtitle": "3. Çeyrek Yol Haritası",
+        "timer": "24:18"
+      },
+      "steam": {
+        "app-label": "Steam kullanıyor",
+        "title": "Bir oyuna bakıyor",
+        "subtitle": "Minecraft Legends",
+        "timer": "08:02",
+        "cta": "Mağaza sayfasını gör"
+      },
+      "github": {
+        "app-label": "GitHub kullanıyor",
+        "title": "Pull Request #39'u görüntülüyor",
+        "subtitle": "nowly-presence/presences",
+        "timer": "03:41",
+        "cta": "Pull Request'i gör"
+      }
+    }
+  },
+  "platforms": {
+    "eyebrow": "Platformlar",
+    "title": "Kullandığın platformlarla çalışır",
+    "description": "Nowly, zaten kullandığın hizmetlerde izlediğin, dinlediğin veya oynadığın şeyi gösterir."
+  },
+  "steps": {
+    "eyebrow": "Kurulum",
+    "title": "Üç adım, Discord takip eder",
+    "description": "Uzantı sekmeyi okur. Masaüstü uygulaması durumu Discord'a gönderir.",
+    "items": [
+      {
+        "title": "Uzantı",
+        "text": "Nowly'yi Chrome veya Firefox'a ücretsiz olarak ekle.",
+        "action": "İndir"
+      },
+      {
+        "title": "Masaüstü uygulaması",
+        "text": "Discord ile konuşan yerel köprüyü yükle.",
+        "action": "Uygulamayı al"
+      },
+      {
+        "title": "Tek bir varlık",
+        "text": "Kitaplıktan YouTube, Netflix veya Twitch'i etkinleştir.",
+        "action": "Kitaplığı aç"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Nowly ile başla",
+    "description": "Ücretsiz uzantıyı yükle. Saniyeler içinde hazırsın.",
+    "other-versions": "Diğer sürümlere bak"
+  },
+  "features": {
+    "eyebrow": "Ürün",
+    "title": "Canlı hissettiren bir durum",
+    "description": "Bir tarayıcı uzantısı, bir masaüstü uygulaması ve imzalı betiklerden oluşan bir kitaplık.",
+    "items": [
+      {
+        "title": "Otomatik güncellemeler",
+        "description": "Başlık, kapak görseli, zaman damgaları ve oynatma durumu sayfa değiştikçe yenilenir."
+      },
+      {
+        "title": "İhtiyacın olanı yükle",
+        "description": "YouTube, Netflix, Twitch ve daha fazlası. Kitaplıktan tek tıkla bir varlığı etkinleştir."
+      },
+      {
+        "title": "Sayfada fazladan hiçbir şey yok",
+        "description": "Betikler yalnızca yüklediğin sitelerde çalışır, başka hiçbir yerde bir şey çalışmaz."
+      },
+      {
+        "title": "İmzalı betikler",
+        "description": "Resmi varlıklar çalıştırılmadan önce doğrulanır, böylece çalışma zamanı kontrol altında kalır."
+      },
+      {
+        "title": "Chrome ve Firefox",
+        "description": "Chromium tabanlı tarayıcılarda ve Firefox'ta çalışır. İndirme düğmesi tarayıcına göre değişir."
+      },
+      {
+        "title": "Masaüstü uygulaması",
+        "description": "Masaüstü uygulaması, Discord'un gerçekten kabul ettiği yerel köprüdür. Windows, macOS ve Linux'ta çalışır."
+      }
+    ]
+  },
+  "privacy-section": {
+    "eyebrow": "Gizlilik",
+    "title": "Etkinliğin bizim ürünümüz değil",
+    "description": "İzlediğin şey nowly.me'de değil, PC'nde kalır.",
+    "items": [
+      {
+        "title": "Hiçbir şey sunucularımızdan geçmez",
+        "description": "Uzantı, masaüstü uygulaması, ardından Discord. Başlık, platform ve oynatma bilgisi PC'nden asla çıkmaz."
+      },
+      {
+        "title": "İstemedikçe analiz yok",
+        "description": "Etkinleştirirsen, yalnızca Nowly'yi geliştirmeye yardımcı olur. İstediğin zaman kapatabilirsin."
+      },
+      {
+        "title": "Yalnızca yüklediğin siteler",
+        "description": "Bir varlık ancak yüklendikten sonra çalışır. Kaldırırsan, Nowly o siteye dokunmaz."
+      }
+    ],
+    "cta": "Gizlilik politikasını oku"
+  },
+  "faq": {
+    "eyebrow": "SSS",
+    "title": "Hızlıca yanıtlanan sorular",
+    "description": "Kurulum, veri ve Discord hakkında temel bilgiler. Dokümantasyon ve Discord daha derine iner.",
+    "docs": "Dokümanları aç",
+    "discord": "Discord'a katıl",
+    "items": [
+      {
+        "question": "Nowly nedir?",
+        "answer": "Nowly, izlediğin, dinlediğin veya oynadığın şeyi Discord Rich Presence olarak gösterir. Bir tarayıcı uzantısı, bir masaüstü uygulaması ve platform betiklerinden oluşan bir kitaplıktır."
+      },
+      {
+        "question": "Etkinliğim sunucularınızdan geçiyor mu?",
+        "answer": "Hayır. Etkinlik yerel kalır ve cihazından Discord'a gönderilir. Analizler isteğe bağlıdır ve varsayılan olarak kapalıdır."
+      },
+      {
+        "question": "Hangi platformlar destekleniyor?",
+        "answer": "Güncel liste kitaplıktadır. Uzantıyı güncellemeden yeni varlıklar eklenebilir, bu yüzden gerçekten kullandıklarını yükle."
+      }
+    ]
+  },
+  "open-source": {
+    "eyebrow": "Açık kaynak",
+    "title": "Bir varlık ekle",
+    "description": "Varlık betikleri herkese açıktır. Fork'la, yaz, bir PR aç. Başlamak için CLI ve dokümantasyon yeterlidir.",
+    "docs": "Dokümanları oku",
+    "file": "presence.ts"
+  },
+  "store": {
+    "download-chrome": "Chrome için indir",
+    "download-firefox": "Firefox için indir"
+  },
+  "footer": {
+    "tagline": "Yaptığın şeyi paylaş.",
+    "copyright": "© 2026 Nowly. Tüm hakları saklıdır.",
+    "trademark": "Discord, <inc>Discord Inc.</inc>'in tescilli ticari markasıdır.",
+    "language-label": "Dil",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "Ürün",
+    "home": "Ana sayfa",
+    "library": "Kitaplık",
+    "host": "Masaüstü uygulaması",
+    "resources": "Kaynaklar",
+    "docs": "Dokümantasyon",
+    "changelog": "Sürüm notları",
+    "canary": "Canary",
+    "support": "Destek",
+    "status": "Durum",
+    "branding": "Marka kimliği",
+    "community": "Topluluk",
+    "discord": "Discord",
+    "github": "GitHub",
+    "twitter": "X / Twitter",
+    "tos": "Hizmet Şartları",
+    "privacy": "Gizlilik",
+    "consent": "Verilerin",
+    "cookies": "Çerezler",
+    "legal-notice": "Yasal bildirim"
+  },
+  "libraryPage": {
+    "eyebrow": "Kitaplık",
+    "title": "Her varlık, tek bir yerde",
+    "description": "Nowly'nin Discord'da paylaşabileceği platformlara göz at. Ara, filtrele ve göstermek istediğini seç.",
+    "search": "Netflix, Spotify, Figma ara...",
+    "search-label": "Kitaplıkta ara",
+    "clear-search": "Aramayı temizle",
+    "all": "Tümü",
+    "count": "{count, plural, one {# varlık} other {# varlık}}",
+    "empty-title": "Hiçbir şey eşleşmiyor",
+    "empty-description": "Başka bir isim dene ya da filtreleri sıfırla.",
+    "clear": "Sıfırla",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "pagination": "Sayfalama",
+    "page-status": "{total} sayfadan {page}. sayfa",
+    "go-to-page": "{page}. sayfaya git",
+    "categories": {
+      "streaming": "Yayın",
+      "music": "Müzik",
+      "video": "Video",
+      "gaming": "Oyun",
+      "social": "Sosyal",
+      "ai": "Yapay Zeka",
+      "tools": "Araçlar",
+      "learning": "Öğrenme",
+      "other": "Diğer"
+    }
+  },
+  "authorPage": {
+    "badge": "Yazar",
+    "back": "Kitaplığa dön",
+    "description": "{count, plural, one {# varlık} other {# varlık}}",
+    "meta-description": "{name} tarafından oluşturulan Nowly varlıkları.",
+    "view-in-library": "Kitaplıkta gör"
+  },
+  "presencePage": {
+    "back": "Kitaplığa dön",
+    "cta": "Nowly'yi al",
+    "about": "Hakkında",
+    "features": "Ne yapar",
+    "contributors": "Katkıda bulunanlar",
+    "author": "Yazar",
+    "contributor": "Katkıda bulunan",
+    "supported-urls": "Desteklenen siteler",
+    "version": "Sürüm",
+    "commit": "Commit {sha}",
+    "checking": "Nowly aranıyor",
+    "install": "Yükle",
+    "installing": "Yükleniyor...",
+    "installed": "Yüklendi",
+    "update": "Güncelle",
+    "uninstall": "Kaldır",
+    "install-success": "{name} yüklendi.",
+    "update-success": "{name} güncel.",
+    "install-error": "{name} yüklenemedi.",
+    "install-origin": "Chrome Web Store uzantısı yalnızca nowly.me'yi kabul eder. localhost'tan yüklemek için paketlenmemiş bir Nowly derlemesi yükle.",
+    "install-queued": "Nowly kataloga erişebildiğinde {name} yüklenecek.",
+    "uninstall-success": "{name} kaldırıldı.",
+    "uninstall-error": "{name} kaldırılamadı.",
+    "uninstall-title": "Varlığı kaldır",
+    "uninstall-description": "{name} yapılandırma verisi içeriyorsa, kalıcı olarak kaybolacaktır.",
+    "uninstall-confirm": "Kaldır",
+    "uninstall-cancel": "İptal",
+    "ext-missing": "Bu varlığı eklemek için Nowly uzantısını yükle.",
+    "mobile": "Varlık yükleme, masaüstü tarayıcılarında kullanılabilir.",
+    "user-scripts": "Tarayıcında Nowly için kullanıcı betiklerine izin ver, sonra bu sayfayı yenile.",
+    "related-title": "Şunları da beğenebilirsin",
+    "report": "Sorun bildir",
+    "report-title": "Sorun bildir",
+    "report-description": "{name} ile ilgili neyin yanlış olduğunu bize söyle. Her raporu okuyoruz.",
+    "report-label": "Açıklama",
+    "report-placeholder": "Ne oldu? Hangi sayfa veya işlem başarısız oldu?",
+    "report-count": "{count}/{max}",
+    "report-submit": "Raporu gönder",
+    "report-sending": "Gönderiliyor...",
+    "report-cancel": "İptal",
+    "report-close": "Kapat",
+    "report-thanks-title": "Rapor için teşekkürler",
+    "report-thanks-description": "{name} hakkındaki notunu aldık. Bu, kitaplığı iyi durumda tutmamıza yardımcı oluyor.",
+    "report-error": "Rapor gönderilemedi. Biraz sonra tekrar dene.",
+    "discord-native-title": "Zaten Discord'da",
+    "discord-native-description": "Hesabını bağlarsan Discord {name}'i gösterir. Nowly bunu o bağlantı olmadan da yapar."
+  },
+  "desktopPage": {
+    "eyebrow": "Masaüstü uygulaması",
+    "title": "Discord'a yerel köprü",
+    "description": "Uzantı sekmeyi okur. Masaüstü uygulaması durumunu Discord'a gönderir. Başlık, platform ve oynatma bilgisi PC'nden asla çıkmaz.",
+    "detected": "Algılandı",
+    "chromeos-title": "ChromeOS henüz desteklenmiyor",
+    "chromeos-description": "Discord Rich Presence, ChromeOS'un bugün çalıştıramadığı yerel bir uygulama gerektirir. Konuyu inceliyoruz - bu değişirse bildirim almak için e-postanı bırak.",
+    "chromeos-email-placeholder": "sen@ornek.com",
+    "chromeos-submit": "Beni bilgilendir",
+    "chromeos-success": "Teşekkürler, sana haber vereceğiz.",
+    "version": "Sürüm {version}",
+    "card-title": "{platform} için indir",
+    "platforms": {
+      "windows": "Windows",
+      "macos": "macOS",
+      "linux": "Linux",
+      "chromeos": "ChromeOS"
+    },
+    "windows-installer": "Windows yükleyici (.exe)",
+    "windows-portable": "Taşınabilir arşiv (.zip)",
+    "macos-dmg": "Disk imajı (.dmg)",
+    "macos-archive": "Arşiv (.tar.gz)",
+    "linux-deb": "Debian paketi (.deb)",
+    "linux-archive": "Arşiv (.tar.gz)",
+    "open-source": "Açık kaynak",
+    "lightweight": "Küçük boyut",
+    "unsigned-title": "İmzasız derleme",
+    "unsigned-desc": "Windows bir SmartScreen uyarısı gösterebilir. Yalnızca dosyayı bu sayfadan indirdiysen \"Diğer bilgiler\"i, ardından \"Yine de çalıştır\"ı aç.",
+    "signed-title": "Apple tarafından noter onaylı",
+    "signed-desc": "macOS derlemeleri noter onaylıdır. Gatekeeper disk imajını kabul etmelidir.",
+    "linux-title": "Debian/Ubuntu: .deb'i yükle",
+    "linux-desc": "Debian, Ubuntu veya Mint'te yukarıdaki .deb paketini kullan - terminal gerekmeden kendini yükler. Diğer dağıtımlarda, arşivi çıkar ve kurulum betiğini çalıştır:",
+    "trust-title": "Ne yapar",
+    "trust-items": [
+      {
+        "title": "Cihazında kalır",
+        "text": "Uzantı sekmeyi görür. Masaüstü uygulaması Discord ile yerel olarak konuşur. nowly.me'ye hiçbir şey gönderilmez."
+      },
+      {
+        "title": "Discord'un dilini konuşur",
+        "text": "Discord yalnızca bu yerel köprüyü kabul eder. Bu yüzden tarayıcı uzantısı tek başına yeterli değildir."
+      },
+      {
+        "title": "Arka planda sessizce çalışır",
+        "text": "Küçüktür, izlenecek bir penceresi yoktur ve yalnızca durumunu güncellemek için çalışır."
+      }
+    ],
+    "guide-title": "Kur",
+    "guide-items": [
+      {
+        "title": "Doğru dosyayı indir",
+        "text": "Sisteminiz için yükleyiciyi kullanın. Kurulum sihirbazı çalıştırmak istemiyorsanız taşınabilir arşiv de mevcuttur."
+      },
+      {
+        "title": "İndirilen dosyayı aç",
+        "text": "Uygulamayı çalıştır ve kurulumu takip et. Windows'ta bir koruma uyarısı görünürse SmartScreen notunu oku."
+      },
+      {
+        "title": "Bir varlık yükle",
+        "text": "Kitaplıktan YouTube gibi bir şey ekleyerek uzantının ve masaüstü uygulamasının birbiriyle konuştuğunu kontrol et."
+      },
+      {
+        "title": "Discord'u kontrol et",
+        "text": "Discord masaüstü uygulamasını açık tut, desteklenen bir siteyi başlat, ardından durumunun güncellendiğini kontrol et."
+      }
+    ],
+    "guide-library": "Kitaplığı aç",
+    "req-title": "Gereksinimler",
+    "req": {
+      "os": "İşletim sistemi",
+      "arch": "Mimari",
+      "discord": "Discord",
+      "browser": "Tarayıcı",
+      "storage": "Depolama",
+      "os-windows": "Windows 10 veya Windows 11",
+      "os-macos": "macOS 11 Big Sur veya üzeri",
+      "os-linux": "Linux 2.6.32+ / glibc 2.17+",
+      "arch-windows": "64 bit (x64)",
+      "arch-macos": "Intel x64 / Apple Silicon (ARM64)",
+      "arch-linux": "64 bit (x64)",
+      "discord-windows": "Discord masaüstü uygulaması yüklü ve çalışır durumda olmalı",
+      "discord-macos": "Discord masaüstü uygulaması yüklü ve çalışır durumda olmalı",
+      "discord-linux": "Discord masaüstü uygulaması yüklü ve çalışır durumda olmalı",
+      "browser-windows": "Chromium tarayıcı (Chrome, Edge, Brave, Opera) veya Firefox",
+      "browser-macos": "Chromium tarayıcı (Chrome, Edge, Brave, Opera) veya Firefox",
+      "browser-linux": "Chromium tarayıcı (Chrome, Edge, Brave, Opera) veya Firefox",
+      "storage-windows": "Yaklaşık 4 MB",
+      "storage-macos": "Yaklaşık 4 MB",
+      "storage-linux": "Yaklaşık 2 MB"
+    }
+  },
+  "extensionPage": {
+    "eyebrow": "Tarayıcı uzantısı",
+    "title": "Sekmelerini okuyan uzantı",
+    "description": "Nowly, izlediğin, dinlediğin veya oynadığın şeyi algılar, ardından Discord için masaüstü uygulamasına gönderir.",
+    "detected": "Algılandı",
+    "card-title": "{browser}'a ekle",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-description": {
+      "chrome": "Chrome Web Store'da mevcuttur. Edge, Brave ve Opera'da da çalışır.",
+      "firefox": "addons.mozilla.org'da mevcuttur."
+    },
+    "dev-version": "Geliştirme sürümüne bak",
+    "trust-title": "Ne yapar",
+    "trust-items": [
+      {
+        "title": "Yalnızca yüklediğin siteler",
+        "text": "Bir varlık, kitaplıktan yüklendikten sonra çalışır."
+      },
+      {
+        "title": "Hiçbir şey PC'nden çıkmaz",
+        "text": "Başlık ve etkinlik, nowly.me'ye değil masaüstü uygulamasına gider."
+      },
+      {
+        "title": "İmzalı betikler",
+        "text": "Resmi varlıklar çalıştırılmadan önce doğrulanır."
+      }
+    ],
+    "guide-title": "Kur",
+    "guide-items": [
+      {
+        "title": "Uzantıyı ekle",
+        "text": "Tarayıcının mağazasından, tek tıkla."
+      },
+      {
+        "title": "Masaüstü uygulamasını yükle",
+        "text": "Discord ile konuşan uygulama bu."
+      },
+      {
+        "title": "Bir varlığı etkinleştir",
+        "text": "Kitaplıktan YouTube, Netflix veya Twitch ekle."
+      }
+    ],
+    "guide-desktop": "Masaüstü uygulamasına bak",
+    "guide-library": "Kitaplığı aç"
+  },
+  "changelogPage": {
+    "eyebrow": "Sürüm notları",
+    "title": "Neler değişti",
+    "description": "En son mağaza derlemesinden ilk genel sürüme kadar her Nowly sürümü.",
+    "latest": "En son",
+    "read": "Notları oku",
+    "banner-alt": "Nowly {version} web sitesi",
+    "docs": "Tam notlar",
+    "back": "Tüm sürümler",
+    "library": "Kitaplık",
+    "update-eyebrow": "Uzantı güncellemesi",
+    "update-title": "Nowly {version} yüklendi",
+    "update-description": "Bu sürümde değişenler şunlar.",
+    "meta-title": "Nowly {version}",
+    "missing": "Bu sürümün notları henüz sitede değil. Dokümantasyonda tam değişiklik günlüğüne yine de göz atabilirsin."
+  },
+  "canaryPage": {
+    "eyebrow": "Canary",
+    "title": "Bir sonraki Nowly'yi dene",
+    "description": "Canary, test kullanıcılarına gönderdiğimiz paketlenmemiş derlemedir. Mağazalardan daha hızlı ilerler ve bozulabilir.",
+    "detected": "Algılandı",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-title": "{browser} için indir",
+    "card-description": {
+      "chrome": "Chrome bunu mağazadan yükleyemez. Sıkıştırılmamış klasörü kendin yüklersin.",
+      "firefox": "Firefox bunu addons.mozilla.org'dan yükleyemez. Geçici bir eklenti olarak yüklersin."
+    },
+    "download": "Nowly Canary'yi indir",
+    "stable": {
+      "chrome": "Chrome mağaza sürümünü al",
+      "firefox": "Firefox eklentisini al"
+    },
+    "store-note": {
+      "chrome": "Günlük kullanım için mağaza derlemesini koru. Canary onun yanında durabilir: farklı uzantı kimlikleri kullanırlar.",
+      "firefox": "Günlük kullanım için eklentiyi koru. Firefox yeniden başladığında geçici bir Canary kaldırılır."
+    },
+    "notes-title": "Yüklemeden önce",
+    "notes": [
+      {
+        "title": "Bilerek kararsız",
+        "text": "Bu zip'ler en son uzantı çalışmasını izler. Özellikler mağaza incelemesi olmadan eklenebilir, değişebilir veya kaybolabilir."
+      },
+      {
+        "title": "Mağaza güncellemesi yok",
+        "text": "Tarayıcı Canary'yi otomatik olarak güncellemez. Yeni bir zip yayınlandığında tekrar indir ve derlemeyi yeniden yükle."
+      },
+      {
+        "title": "Klasörü sakla",
+        "text": "Sıkıştırılmamış veya geçici yükleme, diskteki bir dizini işaret eder. Silersen veya taşırsan uzantı kaybolur."
+      }
+    ],
+    "guide-title": {
+      "chrome": "Chrome'a yükle",
+      "firefox": "Firefox'a yükle"
+    },
+    "guide": {
+      "chrome": [
+        {
+          "title": "İndir ve çıkar",
+          "text": "Zip'i kaydet, ardından bir temizlik sırasında atmayacağın bir klasöre çıkar."
+        },
+        {
+          "title": "chrome://extensions'ı aç",
+          "text": "Bu adresi sekme çubuğuna yapıştır. Sağ üstte Geliştirici modunu aç."
+        },
+        {
+          "title": "Paketlenmemiş yükle",
+          "text": "Zip değil, çıkarılan klasörü seç. Listede Nowly Canary'yi görmelisin."
+        },
+        {
+          "title": "Yeni bir zip'ten sonra yeniden yükle",
+          "text": "Klasör içeriğini yeni derlemeyle değiştir, ardından uzantı kartında Yeniden Yükle'ye tıkla."
+        }
+      ],
+      "firefox": [
+        {
+          "title": "İndir ve çıkar",
+          "text": "Firefox zip'ini kaydet, ardından saklayacağın bir klasöre çıkar."
+        },
+        {
+          "title": "about:debugging'i aç",
+          "text": "about:debugging#/runtime/this-firefox'u adres çubuğuna yapıştır."
+        },
+        {
+          "title": "Geçici Eklenti Yükle",
+          "text": "Zip değil, çıkarılan klasörün içindeki manifest.json'ı seç."
+        },
+        {
+          "title": "Yeniden başlatmadan sonra tekrar yükle",
+          "text": "Firefox kapandığında geçici eklentileri kaldırır. Yeni bir zip'ten sonra klasörü değiştir ve tekrar yükle."
+        }
+      ]
+    }
+  },
+  "brandingPage": {
+    "eyebrow": "Marka kimliği",
+    "title": "Marka materyalleri",
+    "description": "Nowly için logo düzenlemeleri ve marka renkleri. Lütfen logoyu bozmayın, rengini değiştirmeyin veya değiştirmeyin.",
+    "logo": "Logo",
+    "icon": "Simge",
+    "colors": "Renkler",
+    "download-svg": "SVG",
+    "download-png": "PNG",
+    "variants": {
+      "blue": "Mavi",
+      "dark": "Koyu (açık arka planlar)",
+      "white": "Beyaz (koyu arka planlar)",
+      "canary": "Canary"
+    },
+    "swatches": {
+      "primary-light": "Birincil (açık)",
+      "primary-dark": "Birincil (koyu)",
+      "background-light": "Arka plan (açık)",
+      "background-dark": "Arka plan (koyu)",
+      "canary-accent": "Canary vurgusu",
+      "canary-ink": "Canary yazı rengi"
+    }
+  },
+  "supportPage": {
+    "eyebrow": "Destek",
+    "title": "Yardıma mı ihtiyacın var?",
+    "description": "Sorununla eşleşen kanalı seç. Bir sohbet için en hızlısı Discord'dur. GitHub herkese açık bir kayıt tutar.",
+    "open": "Aç",
+    "donate": "Nowly ücretsiz kalmaya devam ediyor. Projeye yardım etmek istersen <kofi>Ko-fi</kofi> veya <sponsors>GitHub Sponsors</sponsors>'ı kullanabilirsin.",
+    "sections": {
+      "community": "Topluluk",
+      "presences": "Varlıklar",
+      "technical": "Teknik"
+    },
+    "discord": {
+      "title": "Discord talebi",
+      "description": "Nowly sunucusuna katıl ve ekiple konuşmak için bir talep aç."
+    },
+    "docs": {
+      "title": "Sorun giderme",
+      "description": "Masaüstü uygulaması, Discord Desktop, eksik etkinlik ve izinler için çözümler."
+    },
+    "broken": {
+      "title": "Bozuk varlık",
+      "description": "Artık etkinlik algılamayan, yanlış bilgi gösteren veya kendini sıfırlayan bir platformu bildir."
+    },
+    "request": {
+      "title": "Bir varlık talep et",
+      "description": "Nowly kitaplığına eklenecek yeni bir platform öner."
+    },
+    "bug": {
+      "title": "Hata bildir",
+      "description": "Web sitesi, uzantı, API veya masaüstü uygulamasıyla ilgili bir sorunu bildir."
+    },
+    "feature": {
+      "title": "İyileştirme öner",
+      "description": "Nowly deneyimi, ayarları veya araçları hakkında bir fikir paylaş."
+    },
+    "other": {
+      "title": "Diğer talep",
+      "description": "Konun rehberli formlardan hiçbirine uymuyorsa boş bir issue aç."
+    }
+  },
+  "statusPage": {
+    "eyebrow": "Durum",
+    "title": "Nowly hizmet durumu",
+    "description": "Web sitesi, API, varlık kitaplığı ve host indirmeleri için canlı durum.",
+    "checked-history": "{time} itibarıyla canlı kontrol edildi",
+    "no-data": "Veri yok",
+    "history-label": "Son hizmet yanıt geçmişi",
+    "overall": {
+      "operational": "Tüm sistemler çalışıyor",
+      "slow": "Bazı hizmetler normalden daha yavaş",
+      "degraded": "Bazı hizmetler düşük performansta",
+      "down": "Bazı hizmetler kullanılamıyor",
+      "unknown": "Henüz durum verisi yok"
+    },
+    "status-labels": {
+      "operational": "Çalışıyor",
+      "slow": "Yavaş",
+      "degraded": "Düşük performans",
+      "down": "Çalışmıyor",
+      "unknown": "Veri yok"
+    },
+    "services": {
+      "website": {
+        "title": "Web sitesi"
+      },
+      "api": {
+        "title": "Nowly API"
+      },
+      "library": {
+        "title": "Varlık kitaplığı"
+      },
+      "cdn": {
+        "title": "Nowly Host indirmeleri"
+      }
+    }
+  },
+  "pages": {
+    "library": {
+      "title": "Kitaplık",
+      "description": "Nowly'nin Discord'da paylaşabileceği platformlara göz at."
+    },
+    "desktop": {
+      "title": "Masaüstü uygulaması",
+      "description": "Etkinliğini Discord'a göndermek için masaüstü uygulamasını indir."
+    },
+    "extension": {
+      "title": "Tarayıcı uzantısı",
+      "description": "İzlediğin, dinlediğin veya oynadığın şeyi algılamak için Nowly uzantısını Chrome veya Firefox'a ekle."
+    },
+    "changelog": {
+      "title": "Sürüm notları",
+      "description": "Nowly'de neler değiştiğini gör."
+    },
+    "canary": {
+      "title": "Nowly Canary",
+      "description": "Test için kullanılan paketlenmemiş Chrome veya Firefox derlemesini indir."
+    },
+    "support": {
+      "title": "Destek",
+      "description": "Nowly, uzantı veya bir varlık hakkında yardım al."
+    },
+    "branding": {
+      "title": "Marka kimliği",
+      "description": "Nowly için logo düzenlemeleri ve marka renkleri."
+    },
+    "status": {
+      "title": "Durum",
+      "description": "Nowly web sitesi, API, varlık kitaplığı ve host indirmeleri için canlı durum."
+    },
+    "uninstall": {
+      "title": "Uzantı kaldırıldı",
+      "description": "Seni tekrar görmeyi umuyoruz. Neyin ters gittiğini söyle, Nowly'yi geliştirmemize yardımcı oluyor."
+    },
+    "consent": {
+      "title": "Verilerin",
+      "description": "İsteğe bağlı analiz iznini yönet ve Nowly'nin cihazın için sakladığı verileri görüntüle, dışa aktar veya sil."
+    }
+  },
+  "not-found": {
+    "title": "Sayfa bulunamadı",
+    "description": "Bu sayfa mevcut değil ya da taşındı.",
+    "home": "Ana sayfaya dön"
+  },
+  "cookie-banner": {
+    "message": "Bu site, kesinlikle gerekli bir dil çerezi kullanır. Reklamlar daha sonra etkinleştirilirse, Google reklam teknolojileri de kullanabilir.",
+    "learn-more": "Daha fazla bilgi",
+    "dismiss": "Anladım"
+  },
+  "privacy-page": {
+    "badge": "Gizlilik",
+    "title": "Gizlilik Politikası",
+    "description": "Nowly'nin verilerini nasıl işlediği, cihazında ne kaldığı ve neyin iznine bağlı olduğu.",
+    "last-updated": "Son güncelleme: 17 Eylül 2026.",
+    "intro": "Bu politika, veri sorumlusu olarak <strong>{publisherName}</strong>'in (\"biz\") Nowly ile bağlantılı kişisel verileri nasıl işlediğini açıklar. Rich Presence etkinliği tarayıcından <strong>cihazındaki</strong> Discord istemcisine gönderilir. Sunucularımızdan geçmez. İsteğe bağlı kullanım istatistikleri ve birkaç web sitesi özelliği, aşağıda açıklandığı gibi API'mizi veya işleyicilerimizi içerir.",
+    "sections": [
+      {
+        "title": "Veri Sorumlusu",
+        "body": "Veri sorumlusu, şahıs işletmesi (mikro işletme), SIREN {publisherSiren}, {publisherAddress} olan <strong>{publisherName}</strong>'dir. E-posta: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Tam kimlik bilgileri <a href=\"/legal-notice\">yasal bildirimde</a> yer alır. Bir veri koruma görevlisi atanmamıştır."
+      },
+      {
+        "title": "Nowly nedir",
+        "body": "Nowly, bir <strong>tarayıcı uzantısı</strong> (Chrome ve Firefox), Discord ile yerel olarak konuşan bir <strong>masaüstü uygulaması</strong>, bir <strong>web sitesi</strong> (nowly.me), <strong>dokümantasyon</strong> (<a href=\"https://docs.nowly.me\">docs.nowly.me</a>), herkese açık bir <strong>API</strong> ve isteğe bağlı <strong>Canary</strong> test derlemelerini içerir. Uzantı, tarayıcında desteklenen siteleri algılar ve masaüstü uygulamasıyla birlikte yerel bir IPC kanalı üzerinden Discord Rich Presence'ı günceller."
+      },
+      {
+        "title": "Cihazında işlenen veriler (uzantı)",
+        "body": "Uzantı, verileri tarayıcının yerel depolama API'sinde saklar (Chrome'da <code>chrome.storage.local</code> / Firefox eşdeğeri). İsteğe bağlı analizleri etkinleştirmediğin veya özel bir API URL'si kullanmadığın sürece bu veriler o cihazda kalır:<ul><li>Yüklenen varlıklar (meta veriler, imzalı paketler, etkinleştirme durumu).</li><li>Mevcut etkinlik (başlık, platform, süre, küçük resim URL'si).</li><li>Bir hata ayıklama günlüğü (zaman damgaları, eylemler, desteklenen sitelerin ziyaret edilen URL'leri).</li><li>Kurulum durumu ve yalnızca uzantı arayüzünü göstermek için kullanılan, yerel Discord istemcisinden alınan Discord profilinin (ID, kullanıcı adı, avatar) <strong>yerel bir anlık görüntüsü</strong>.</li><li>Görüntüleme tercihleri, kısayollar ve varlık başına ayarlar.</li><li>Analizleri tercih etmen halinde kullanılan, yerel olarak oluşturulan bir cihaz tanımlayıcısı (UUID).</li></ul>Uzantıyı sıfırlayarak veya kaldırarak bu verileri silebilirsin."
+      },
+      {
+        "title": "Tarayıcı uzantısı izinleri",
+        "body": "Uzantının çalışması için belirli izinlere ihtiyacı vardır:<ul><li><strong>Web sitelerine erişim</strong> (geniş bir host izni dahil): Nowly'nin desteklenen platformları algılayabilmesi için ziyaret ettiğin sayfalarda hafif bir içerik betiği çalışabilir. Tarama geçmişini sunucularımıza göndermek için kullanılmaz.</li><li><strong>User Scripts</strong> (Chromium): Varlık betikleri eşleşen sitelerde çalışır. Resmi katalog betikleri kriptografik olarak imzalanır (ECDSA P-256) ve çalıştırılmadan önce yerel olarak doğrulanır. Canary ve yan yüklenmiş paketler, üretim sürümüyle aynı imza garantilerine sahip olmayabilir; bunları deneysel olarak kabul et.</li></ul>"
+      },
+      {
+        "title": "Cihazında işlenen veriler (masaüstü uygulaması)",
+        "body": "Masaüstü uygulaması, NowlyClient önbellek dizininde <code>nowly-host.log</code> adlı yerel bir günlük yazabilir, örneğin:<ul><li>Windows: <code>%LOCALAPPDATA%\\NowlyClient\\</code></li><li>macOS: <code>~/Library/Caches/NowlyClient/</code></li><li>Linux: <code>~/.cache/NowlyClient/</code></li></ul>Dosya, Discord'a gönderilen zaman damgalarını ve etkinlik ayrıntılarını içerebilir. Bilgisayarında kalır ve sunucularımıza yüklenmez. İstediğin zaman silebilirsin."
+      },
+      {
+        "title": "Kullanım istatistikleri (isteğe bağlı katılım)",
+        "body": "Analizler <strong>varsayılan olarak kapalıdır</strong>. Kurulum sırasında veya daha sonra uzantı ayarlarında etkinleştirirsen, API'miz şunları alabilir:<ul><li>Cihaz UUID'in (takma ad: Discord veya Google hesabın değil, ancak kurulumunu tanımlayabildiği için GDPR kapsamında yine de kişisel veridir).</li><li>Tarayıcı, işletim sistemi, dil, uzantı sürümü ve masaüstü uygulaması sürümü.</li><li>Yüklenen varlık slug'ları/sürümleri ve sınırlı yükle kullanım olayları (örneğin yüklemeler, kalp atışları, değerlendirmeler).</li></ul>Bunu Nowly'yi geliştirmek ve varlıkların ne kadar popüler olduğunu göstermek için kullanıyoruz. Bu ayarı kapatmak <strong>daha fazla toplamayı durdurur</strong> ve rızanın geri çekildiğini kaydeder. Bu, zaten depolanmış olayları otomatik olarak <strong>silmez</strong>. Sunucu tarafı kayıtların silinmesini istemek için, cihaz kimliğinle (uzantıda görünür) veya kaydı bulmamıza yardımcı olacak başka bir bilgiyle <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> adresine e-posta gönder."
+      },
+      {
+        "title": "Discord",
+        "body": "Nowly, Discord masaüstü/tarayıcı istemcisiyle <strong>yerel IPC</strong> üzerinden konuşur. Tipik Rich Presence alanları platform adı, başlık, kanal veya yazar, oynatma/duraklatma durumu ve zaman damgalarını içerir. Discord profilini görebilen herkes bu durumu görebilir. Discord bunu aldığında, Discord'un kendi işleme süreci geçerli olur. <a href=\"https://discord.com/privacy\">Discord'un gizlilik politikasına</a> bakabilirsin.<br/><br/>API ayrıca, hesap özellikleri (örneğin değerlendirmeler) için isteğe bağlı Discord OAuth sonrasında bir oturum belirteci (JWT, genellikle 30 gün) verebilir. Herkese açık pazarlama sitesi bir hesap gerektirmez. Hiç giriş yapmazsan, senin için bu belirteci oluşturmayız."
+      },
+      {
+        "title": "Yasal Dayanaklar (GDPR Madde 6)",
+        "body": "<ul><li><strong>İsteğe bağlı kullanım istatistikleri</strong>: rıza (Madde 6(1)(a)). Uzantıda istediğin zaman geri çekebilirsin, geri çekmeden önceki işlemin hukuka uygunluğunu etkilemez.</li><li><strong>Dil çerezi ve dokümantasyon çerezi</strong>: talep ettiğin hizmet için gerekli ve/veya dilini hatırlamada meşru menfaat (Madde 6(1)(b) ve/veya (f)).</li><li><strong>Tema ve çerez bildirimi bayrakları</strong> (yerel depolama): kullanılabilir bir arayüzde meşru menfaat (Madde 6(1)(f)).</li><li><strong>Görsel proxy</strong>: tarayıcında her üçüncü taraf CDN'sini yüklemeden katalog ve etkinlik görsellerini görüntülemede meşru menfaat (Madde 6(1)(f)).</li><li><strong>İsteğe bağlı Discord girişi</strong>: talep ettiğin hesap özelliğinin yerine getirilmesi (Madde 6(1)(b)) ve gerektiğinde API'yi güvence altına almadaki meşru menfaatimiz (Madde 6(1)(f)).</li><li><strong>GitHub, Discord topluluğu, Ko-fi, GitHub Sponsors</strong>: bu hizmetlere göndermeyi seçtiğin veriler kendi politikalarına göre işlenir; yanıt vermek için bize yönelttiğin herkese açık issue'ları veya mesajları okuruz (Madde 6(1)(b) veya (f))."
+      },
+      {
+        "title": "Saklama",
+        "body": "<ul><li><strong>Yerel uzantı ve masaüstü günlükleri</strong>: sen silene, sıfırlayana veya kaldırana kadar.</li><li><strong>Dil çerezi</strong>: 1 yıl, dil değiştirdiğinde yenilenir.</li><li><strong>Kullanım istatistikleri</strong>: yalnızca toplu metrikler üretmek için gereken süre boyunca saklanır. Bugün <strong>otomatik 12 aylık silme</strong> uygulanmamaktadır. Yukarıda açıklandığı gibi silme talep edebilirsin.</li><li><strong>JWT (giriş yaparsan)</strong>: çıkış yapmadığın veya biz iptal etmediğimiz sürece yaklaşık 30 gün.</li></ul>"
+      },
+      {
+        "title": "İşleyiciler ve aktarımlar",
+        "body": "Şunları kullanıyoruz:<ul><li>Web sitesini, API'yi ve PostgreSQL'i çalıştırdığımız VPS'in barındırma sağlayıcısı olarak <strong>Contabo GmbH</strong> (Almanya). Sunucuyu yayıncı yönetir. İşleme <strong>{dataRegion}</strong>'de gerçekleşir. Bu, AB içi bir barındırma düzenlemesidir, ABD'ye bir aktarım değildir. <a href=\"https://contabo.com/en/legal/privacy-policy/\">Contabo gizlilik politikası</a>.</li><li>Statik dosyaları (küçük resimler, masaüstü yükleyicileri, Canary zip'leri) sunmak ve siteleri korumak için <strong>Cloudflare</strong>. Aktarımlar SCC'lere ve uygulanabildiği durumlarda AB-ABD Veri Gizliliği Çerçevesi'ne dayanabilir.</li><li>Uzantıyı dağıtmak için <strong>Google</strong> (Chrome Web Store) ve <strong>Mozilla</strong> (Firefox Add-ons); mağazaları yükleyici ve hesap verilerini kendi şartlarına göre işler.</li><li>Web sitesinde reklam <strong>etkinleştirildiğinde</strong> yalnızca <strong>Google AdSense</strong> (etkinleştirmediğimiz sürece kapalıdır). Bu durumda Google, Google'ın şartlarına göre reklam çerezleri için bağımsız veya ortak veri sorumlusu olarak hareket eder.</li></ul><strong>Özel bir API URL'si</strong> ayarlarsan, trafik seçtiğin sunucuya gider. Bu politika o sunucu için geçerli değildir."
+      },
+      {
+        "title": "Görsel proxy",
+        "body": "API'miz, arayüzün görselleri gösterebilmesi için genel küçük resim URL'lerini (YouTube, Twitch ve benzer CDN'ler) alabilir. Proxy'yi reklam profilleri satmak için kullanmıyoruz. Talep edilen URL, izlemekte olduğun bir başlıkla hâlâ ilgili olabilir. Bu isteklerin günlükleri, hizmeti işletmek ve güvence altına almak için teknik olarak gerekli olduğu kadar saklanır."
+      },
+      {
+        "title": "Çerezler",
+        "body": "nowly.me ve docs.nowly.me her biri dil için ayrı ayrı bir <code>locale</code> çerezi ayarlar. Tema ve çerez bildirimi çerezler yerine yerel depolama kullanır. <a href=\"/cookies\">Çerez politikasına</a> bakabilirsin."
+      },
+      {
+        "title": "Güvenlik",
+        "body": "Resmi varlık paketleri imzalanmıştır (ECDSA P-256). Üretim uzantısı, katalog varlıklarını çalıştırmadan önce imzaları doğrular. Zip dosyaları olarak dağıtılan Canary derlemeleri test yazılımıdır ve imzasız olabilir. Güvenilmeyen kaynaklardan paket yükleme."
+      },
+      {
+        "title": "Haklarınız",
+        "body": "GDPR geçerliyse, erişim, düzeltme, silme, kısıtlama, itiraz ve taşınabilirlik talep edebilir ve analizler için rızanı geri çekebilirsin. Uzantıdaki geliştirici tanılamaları, cihazında hâlâ bekleyen olayları gösterebilir; bunlar sunucularımızın tam bir dışa aktarımı değildir. Haklarını kullanmak için <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> adresine e-posta gönder veya <a href=\"https://github.com/nowly-presence/nowly\">GitHub deposunu</a> kullan. Ayrıca <a href=\"https://www.cnil.fr\">CNIL</a>'e (Fransa) veya yerel denetim makamına şikayette bulunabilirsin."
+      },
+      {
+        "title": "İletişim",
+        "body": "E-posta: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Yayıncı bilgileri: <a href=\"/legal-notice\">yasal bildirim</a>."
+      }
+    ]
+  },
+  "tos-page": {
+    "badge": "Yasal",
+    "title": "Hizmet Şartları",
+    "description": "Nowly'yi, tarayıcı uzantısını, masaüstü uygulamasını ve web sitesini kullanma kuralları.",
+    "last-updated": "Son güncelleme: 17 Eylül 2026.",
+    "sections": [
+      {
+        "title": "Kabul",
+        "body": "Nowly'yi (uzantı, masaüstü uygulaması, web sitesi, dokümantasyon, API ve ilgili yazılım) indirerek, yükleyerek veya kullanarak bu şartları kabul edersin. Kabul etmiyorsan yazılımı kullanma. Zorunlu tüketici hakları etkilenmez."
+      },
+      {
+        "title": "Hizmet",
+        "body": "Nowly, yerel bir masaüstü uygulaması kullanarak desteklenen web sitelerinden Discord Rich Presence'ı güncelleyen <strong>ücretsiz</strong> bir araçtır. Kaynak kodu, GitHub'da BUSL-1.1 altında mevcuttur (source-available; Değişiklik Tarihine kadar OSI onaylı açık kaynak lisansı değildir). Hizmet şunları içerir:<ul><li>Chromium ve Firefox için bir tarayıcı uzantısı.</li><li>Bilgisayarında Discord ile konuşan bir masaüstü uygulaması.</li><li>nowly.me web sitesi ve docs.nowly.me.</li><li>Varlık oluşturmak için herkese açık bir API ve geliştirici SDK'sı.</li><li>Ön sürüm niteliğinde olan ve imzasız olabilen, CDN'imizden isteğe bağlı Canary derlemeleri.</li></ul>"
+      },
+      {
+        "title": "Asgari yaş",
+        "body": "En az <strong>15</strong> yaşında ve Discord'un kendi şartlarına göre Discord kullanabilecek yaşta olmalısın. Ülkendeki dijital rıza yaşının altındaysan, kanunun gerektirdiği durumlarda bir ebeveyn veya vasinin iznine ihtiyacın vardır."
+      },
+      {
+        "title": "Lisans",
+        "body": "Nowly, <strong>Business Source License 1.1</strong> altında lisanslanmıştır. <strong>Kişisel, ticari olmayan</strong> amaçlar için kullanabilir, kopyalayabilir ve değiştirebilirsin. Ticari kullanım (Nowly'yi yeniden satmak veya ücretli ya da barındırılan bir hizmet olarak sunmak dahil) yayıncıdan ayrı bir lisans gerektirir. Lisans, ilk kamuya açık dağıtımdan dört yıl sonra ve her halükarda <strong>1 Haziran 2028</strong>'den önce olmamak üzere, Değişiklik Tarihinde MIT'ye dönüşür. Tam metin <a href=\"https://github.com/nowly-presence/nowly\">GitHub deposunda</a> bulunur. Bu, Nowly aracılığıyla görüntülediğin üçüncü taraf içeriğini (YouTube, Twitch vb.) lisanslamaz."
+      },
+      {
+        "title": "Kabul edilebilir kullanım",
+        "body": "Geçerli yasalara ve <a href=\"https://discord.com/terms\">Discord'un Hizmet Şartlarına</a> uymalısın. Şunları yapmamalısın:<ul><li>Nowly'yi yasa dışı, nefret dolu, iftira niteliğinde veya ihlal edici içerik göstermek için kullanmak.</li><li>Resmi uzantının, masaüstü uygulamasının veya API'nin güvenliğini atlatmak.</li><li>Nowly'nin resmi altyapısı aracılığıyla değiştirilmiş, taklit edilmiş veya yetkisiz varlıklar dağıtmak.</li><li>API'yi kötüye kullanmak (aşırı otomatik istekler dahil).</li></ul>Uzantıyı <strong>özel bir API URL'sine</strong> yönlendirirsen, o sunucudan yalnızca sen sorumlusun. Gizlilik politikamız onu kapsamaz."
+      },
+      {
+        "title": "Bağışlar",
+        "body": "Nowly ödeme yapmadan kullanılabilir olmaya devam eder. <a href=\"https://ko-fi.com/nowly\">Ko-fi</a> veya <a href=\"https://github.com/sponsors/nowly-presence\">GitHub Sponsors</a> aracılığıyla yapılan gönüllü destek, bu platformlar tarafından kendi şartlarına göre işlenir. O anda açıkça aksini belirtmediğimiz sürece bir bağış ek ürün özellikleri satın almaz. İadeler platformun kurallarına ve uygulanabildiği durumlarda zorunlu tüketici haklarına tabidir."
+      },
+      {
+        "title": "Fikri mülkiyet",
+        "body": "Nowly kodu yukarıdaki gibi lisanslanmıştır. Discord, YouTube, Twitch, Disney+, Apple TV+, Prime Video, TikTok ve diğer platform adları ve logoları kendi sahiplerine aittir. Nowly, Discord Inc. veya bu platformlarla <strong>bağlantılı, onaylı veya sponsorlu değildir</strong>."
+      },
+      {
+        "title": "Sorumluluğun sınırlandırılması",
+        "body": "Nowly, yasaların izin verdiği ölçüde herhangi bir garanti olmaksızın <strong>\"olduğu gibi\"</strong> sağlanır. Discord kesintileri veya Discord hesabına karşı yaptırımlar ya da yerel uzantı verilerinin kaybı dahil olmak üzere, yazılımın kullanımından veya kullanılamamasından kaynaklanan dolaylı zararlardan sorumlu değiliz. Hiçbir şey, dolandırıcılık, ağır ihmal, ölüm veya kişisel yaralanma sorumluluğunu ya da Fransız veya AB hukukunun sınırlamamıza izin vermediği herhangi bir sorumluluğu hariç tutmaz. Bu maddeler zorunlu tüketici haklarını azaltmaz."
+      },
+      {
+        "title": "Gizlilik",
+        "body": "Nowly'nin kullanımı ayrıca <a href=\"/privacy\">gizlilik politikasına</a> ve <a href=\"/cookies\">çerez politikasına</a> tabidir."
+      },
+      {
+        "title": "Değişiklikler",
+        "body": "Bu sayfada yeni bir \"son güncelleme\" tarihiyle yeni bir sürüm yayınlayarak bu şartları güncelleyebiliriz. Önemli değişiklikler için sitede veya depoda makul bir bildirim vermeye çalışacağız. Kanunun açık rızanı gerektirdiği durumlar dışında, yeni sürüm yürürlüğe girdikten sonra kullanmaya devam etmek onu kabul ettiğin anlamına gelir."
+      },
+      {
+        "title": "Uygulanacak hukuk",
+        "body": "Bu şartlar <strong>Fransız hukukuna</strong> tabidir. Dostane bir çözüm başarısız olursa, zorunlu tüketici yetki kurallarına halel getirmeksizin Fransız mahkemeleri yetkilidir. <a href=\"https://ec.europa.eu/consumers/odr\">AB çevrimiçi anlaşmazlık çözüm platformu</a> mevcuttur."
+      },
+      {
+        "title": "İletişim",
+        "body": "<a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> adresine e-posta gönder veya <a href=\"/legal-notice\">yasal bildirime</a> bak. GitHub: <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>."
+      }
+    ]
+  },
+  "legal-notice-page": {
+    "badge": "Yasal",
+    "title": "Yasal Bildirim",
+    "description": "Fransız hukuku uyarınca gerekli olan yayıncı, barındırma ve fikri mülkiyet bilgileri.",
+    "last-updated": "17 Eylül 2026 tarihinden itibaren geçerlidir. Fransız LCEN, madde 6-III uyarınca gereklidir.",
+    "sections": [
+      {
+        "title": "Yayıncı",
+        "body": "<strong>nowly.me</strong> ve <strong>docs.nowly.me</strong> web siteleri, Nowly tarayıcı uzantısı ve masaüstü uygulaması şunlar tarafından yayınlanmaktadır:<br/><br/>Yayıncı: <strong>{publisherName}</strong><br/>Durum: Şahıs işletmesi (auto-entrepreneur / mikro işletme)<br/>SIREN: <strong>{publisherSiren}</strong><br/>Adres: <strong>{publisherAddress}</strong><br/>KDV: Geçerli değil (Fransız CGI madde 293 B muafiyeti)<br/>E-posta: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>"
+      },
+      {
+        "title": "Yayın yönetmeni",
+        "body": "Gerçek kişi yayıncı olarak <strong>{publisherName}</strong>. Fransız hukuku <strong>tek bir</strong> yayın yönetmeni öngörür (29 Temmuz 1881 tarihli yasa, çevrimiçi olarak uygulanır). Katkıda bulunanlar veya geliştiriciler ek yayın yönetmenleri değildir."
+      },
+      {
+        "title": "Barındırma (web sitesi, API, veritabanı)",
+        "body": "Web sitesi, API ve PostgreSQL veritabanı, şuradan kiralanan sanal özel bir sunucuda (VPS) çalışır:<br/><br/><strong>Contabo GmbH</strong><br/>Welfenstrasse 22<br/>81541 München, Almanya<br/><a href=\"https://contabo.com\">contabo.com</a><br/><a href=\"https://contabo.com/en/legal/impressum/\">Yasal bildirim (Impressum)</a><br/><br/>Sunucuyu yayıncı yönetir. Konum: <strong>{dataRegion}</strong>"
+      },
+      {
+        "title": "CDN ve masaüstü ikili dosyaları",
+        "body": "Statik varlıklar (küçük resimler, yükleyiciler, Canary arşivleri) şunun aracılığıyla dağıtılır:<br/><br/><strong>Cloudflare, Inc.</strong><br/>101 Townsend Street, San Francisco, CA 94107, Amerika Birleşik Devletleri<br/><a href=\"https://www.cloudflare.com\">cloudflare.com</a>"
+      },
+      {
+        "title": "Uzantı dağıtımı",
+        "body": "Üretim uzantısı, Google LLC (1600 Amphitheatre Parkway, Mountain View, CA 94043, Amerika Birleşik Devletleri) tarafından işletilen <strong>Chrome Web Store</strong> aracılığıyla <strong>Chrome</strong> (ve diğer Chromium tarayıcıları) için, Mozilla Corporation (Amerika Birleşik Devletleri) tarafından işletilen <strong>Firefox Add-ons</strong> aracılığıyla <strong>Firefox</strong> için dağıtılır. Deneysel Canary derlemeleri de CDN'imizden zip dosyaları olarak sunulabilir."
+      },
+      {
+        "title": "Fikri mülkiyet",
+        "body": "Nowly kaynak kodu, <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a> adresinde <strong>BUSL-1.1</strong> altında yayınlanmıştır. Üçüncü taraf ticari markalar sahiplerine aittir. <strong>Nowly, Discord Inc. veya desteklenen platformlarla bağlantılı değildir.</strong>"
+      },
+      {
+        "title": "Yasa dışı içerik",
+        "body": "Açıkça yasa dışı içerik, LCEN madde 6'nın gerektirdiği şekilde tarih, açıklama, URL ve yasal gerekçeyle birlikte <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> adresine bildirilebilir."
+      },
+      {
+        "title": "İletişim",
+        "body": "E-posta: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a><br/>GitHub: <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>"
+      }
+    ]
+  },
+  "cookies-page": {
+    "badge": "Çerezler",
+    "title": "Çerez Politikası",
+    "description": "nowly.me ve docs.nowly.me üzerinde kullanılan çerezler ve yerel depolama.",
+    "last-updated": "Son güncelleme: 17 Eylül 2026.",
+    "intro": "Bu sayfa, <strong>nowly.me</strong> ve <strong>docs.nowly.me</strong> üzerindeki çerezleri ve benzer teknolojileri açıklar. Bir dil çerezi ayarlıyoruz. Tema ve çerez bildirimi yerel depolama kullanır. Reklamlar etkinleştirilmediği sürece Google AdSense yüklenmez.",
+    "sections": [
+      {
+        "title": "Kesinlikle gerekli",
+        "body": "Dil çerezi, her sitede seçtiğin (veya algıladığımız) dili hatırlamak için gereklidir. Çok dilli hizmeti sağlamak için kesinlikle gerekli olduğundan, Fransız \"çerezler ve diğer izleyiciler\" yönergeleri kapsamında önceden reklam tarzı bir rıza gerektirmez."
+      },
+      {
+        "title": "locale çerezi",
+        "body": "<strong><code>locale</code></strong> (nowly.me ve ayrı olarak docs.nowly.me)<br/>Amaç: Fransızca, İngilizce veya İspanyolca arayüz.<br/>Süre: 1 yıl (<code>max-age</code> 31.536.000 saniye), dil değiştirdiğinde yenilenir.<br/>Özellikler: birinci taraf, HttpOnly değil, SameSite=Lax. Değer bir dil koduyudur (örneğin <code>fr-FR</code>). Sunucu günlüklerindeki IP adresinle birleştiğinde, çerezin kendisi yalnızca bir dil kodu olsa bile bir ziyaretçiyi tanımlamaya katkıda bulunabilir."
+      },
+      {
+        "title": "Yerel depolama",
+        "body": "Siteler renk temasını (açık, koyu veya sistem) ve çerez bildirimini kapatıp kapatmadığını saklar. Bu değerler tarayıcında kalır ve çerez olarak Nowly'ye gönderilmez."
+      },
+      {
+        "title": "Analiz çerezleri",
+        "body": "Web siteleri üçüncü taraf analiz çerezleri ayarla<strong>maz</strong>. İsteğe bağlı kullanım istatistikleri, etkinleştirirsen, bir web sitesi çerezi yerine bir cihaz kimliğiyle <strong>uzantı</strong> tarafından toplanır."
+      },
+      {
+        "title": "Reklamcılık",
+        "body": "Web sitesinde <strong>Google AdSense</strong>'i etkinleştirirsek, Google kendi politikasına göre çerezler veya benzer teknolojiler ayarlayabilir. O zamana kadar Nowly reklam çerezleri yerleştirmez."
+      },
+      {
+        "title": "Nasıl silinir",
+        "body": "Tarayıcında çerezleri engelleyebilir veya silebilirsin. <code>locale</code>'i silmek, bir sonraki ziyaretinde dili algılanan değere sıfırlar."
+      },
+      {
+        "title": "İletişim",
+        "body": "<a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> adresine e-posta gönder veya <a href=\"/legal-notice\">yasal bildirime</a> bak."
+      }
+    ]
+  },
+  "uninstallPage": {
+    "eyebrow": "Hoşça kal",
+    "title": "Uzantı kaldırıldı",
+    "description": "Yerel verilerin cihazında kalır. Seni yakında tekrar görmeyi umuyoruz.",
+    "feedback-title": "Bize söylemek istediğin bir şey var mı?",
+    "feedback-description": "Bir hata, eksik bir varlık veya sadece geri bildirim: bize ulaşmanın en hızlı yolu Discord'dur.",
+    "discord": "Discord'a katıl",
+    "data-description": "Nowly'yi geliştirmemize yardımcı olmak için anonim kullanım istatistiklerini koruyabilir veya cihazın için saklanan her şeyi silebilirsin.",
+    "keep": "Anonim istatistikleri koru",
+    "delete": "Verilerimi sil",
+    "delete-confirm": "Bu, Nowly'nin bu cihaz için sakladığı her şeyi kalıcı olarak siler. Bu işlem geri alınamaz.",
+    "keep-success": "Teşekkürler, anonim istatistiklerin korunuyor.",
+    "delete-success": "Verilerin silindi.",
+    "action-error": "Bir şeyler ters gitti. Lütfen tekrar dene."
+  },
+  "consentPage": {
+    "eyebrow": "Gizlilik",
+    "title": "Verilerin",
+    "description": "Nowly, yalnızca aşağıda açıkça etkinleştirirsen anonim kullanım analizleri toplar. Bu sayfa ayrıca cihazın için saklanan her şeyi görmene, dışa aktarmana veya silmene olanak tanır.",
+    "checking": "Nowly uzantısı aranıyor...",
+    "not-detected-title": "Uzantı algılanmadı",
+    "not-detected-description": "Rızanı ve verilerini yönetmek için bu sayfayı Nowly'nin yüklü olduğu tarayıcıda aç.",
+    "toggle-title": "Anonim kullanım verilerini paylaş",
+    "toggle-description": "Varsayılan olarak kapalıdır. Hangi varlıkların ve özelliklerin gerçekten kullanıldığını görmemize yardımcı olur - tarama geçmişi veya kişisel veri asla toplanmaz.",
+    "data-title": "Verilerin",
+    "data-description": "Bu cihaz için Nowly'nin sakladığı her şeyi dışa aktar veya tamamen sil.",
+    "export": "Verilerimi dışa aktar",
+    "delete": "Verilerimi sil",
+    "delete-confirm": "Bu, Nowly'nin bu cihaz için sakladığı her şeyi kalıcı olarak siler. Bu işlem geri alınamaz.",
+    "export-success": "Verilerin indirildi.",
+    "delete-success": "Verilerin silindi.",
+    "action-error": "Bir şeyler ters gitti. Lütfen tekrar dene."
+  }
+}
