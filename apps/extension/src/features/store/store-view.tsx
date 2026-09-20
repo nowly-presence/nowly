@@ -12,6 +12,7 @@ import { Button } from "@/ui/button"
 import { Empty, EmptyDescription, EmptyTitle } from "@/ui/empty"
 import { Input } from "@/ui/input"
 import { Skeleton } from "@/ui/skeleton"
+import { cn } from "@/ui/utils"
 
 type Props = {
   installingSlug: string | null
@@ -42,9 +43,16 @@ const StoreSkeleton = (): React.JSX.Element => (
 )
 
 const CategoryChip = ({ active, label, onSelect }: { active: boolean; label: string; onSelect: () => void }): React.JSX.Element => (
-  <Button variant={active ? "default" : "secondary"} size="xs" onClick={onSelect} className="rounded-lg">
+  <button
+    type="button"
+    onClick={onSelect}
+    className={cn(
+      "shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors",
+      active ? "bg-accent/15 text-accent" : "bg-secondary text-muted-foreground hover:bg-foreground/16 hover:text-foreground",
+    )}
+  >
     {label}
-  </Button>
+  </button>
 )
 
 export const StoreView = ({ installingSlug, installQueueCount, onInstall, onRetryQueue, onSelectPresence, presences, seedQuery = "", selectedSlug, updates }: Props): React.JSX.Element => {

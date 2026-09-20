@@ -26,7 +26,7 @@ export const StoreCard = ({ action, installing, onInstall, onOpen, presence }: P
   const label = action === "installed" ? t("store-installed") : action === "update" ? t("store-update") : t("store-install")
 
   return (
-    <article className="relative bg-card transition-colors first:rounded-t-xl last:rounded-b-xl hover:bg-muted/50">
+    <article className="relative bg-card transition-colors first:rounded-t-xl last:rounded-b-xl hover:bg-secondary">
       <div className="flex items-center gap-3 px-3 py-3">
         <button type="button" onClick={() => onOpen(presence.slug)} className="flex min-w-0 flex-1 items-center gap-3 text-left">
           <PresenceTile slug={presence.slug} name={presence.name} className="size-10" />
@@ -38,7 +38,7 @@ export const StoreCard = ({ action, installing, onInstall, onOpen, presence }: P
             </p>
           </div>
         </button>
-        <Button variant={action === "installed" ? "secondary" : "default"} size="sm" disabled={action === "installed" || installing} onClick={onAction}>
+        <Button variant={action === "installed" ? "secondary" : "default"} size="sm" disabled={action === "installed" || installing} onClick={onAction} className="font-normal">
           {installing ? <RiLoader2Line className="animate-spin" /> : null}
           {installing ? t("store-installing") : label}
         </Button>

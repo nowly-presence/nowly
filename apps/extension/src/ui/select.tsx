@@ -10,7 +10,7 @@ const SelectGroup = ({ className, ...props }: SelectPrimitive.Group.Props) => (
 )
 
 const SelectValue = ({ className, ...props }: SelectPrimitive.Value.Props) => (
-  <SelectPrimitive.Value data-slot="select-value" className={cn("flex flex-1 text-left", className)} {...props} />
+  <SelectPrimitive.Value data-slot="select-value" className={cn("flex flex-1 items-center gap-1.5 text-left", className)} {...props} />
 )
 
 const SelectTrigger = ({ className, size = "default", children, ...props }: SelectPrimitive.Trigger.Props & { size?: "sm" | "default" }) => (

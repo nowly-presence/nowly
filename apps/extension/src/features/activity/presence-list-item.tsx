@@ -29,7 +29,7 @@ export const PresenceListItem = ({ onOpen, onUpdatePresence, updating = false, o
   }
 
   return (
-    <article className="relative bg-card transition-colors first:rounded-t-xl last:rounded-b-xl hover:bg-muted/50">
+    <article className="relative bg-card transition-colors first:rounded-t-xl last:rounded-b-xl hover:bg-secondary">
       {updateAvailable ? (
         <div className="flex h-8 items-center gap-2 border-b border-border bg-card px-1.5">
           <Badge variant="default" className="bg-accent/10 text-accent">

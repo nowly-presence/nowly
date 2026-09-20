@@ -265,7 +265,7 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
             onReplayOnboarding={() => void sendMessage("RESET_ONBOARDING_FOR_DEV")}
           />
           <ConnectionStatusBar nativeStatus={state.nativeStatus} onConnect={state.connectNative} presencePaused={presencePaused} hostUpdateAvailable={hostUpdateAvailable} visible={statusVisible} />
-          <main id="sidepanel-tabpanel" className="flex-1 overflow-y-auto pb-3" aria-label={t(view === "activity" ? "nav-home" : view === "store" ? "nav-store" : "nav-settings")}>
+          <main id="sidepanel-tabpanel" className="-mx-1 -mt-1 flex-1 overflow-y-auto px-1 pt-1 pb-3" aria-label={t(view === "activity" ? "nav-home" : view === "store" ? "nav-store" : "nav-settings")}>
             {view === "activity" ? (
               <ActivityScreen selectedSlug={selectedSlug} onSelectPresence={setSelectedSlug} />
             ) : (

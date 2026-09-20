@@ -45,7 +45,7 @@ export const StoreDetail = ({ action, installing, onBack, onInstall, presence }:
 
       <PresenceAboutCard features={presence.features} urls={presence.urls} />
 
-      <Button variant={action === "installed" ? "secondary" : "default"} disabled={action === "installed" || installing} onClick={() => onInstall(presence.slug)}>
+      <Button variant={action === "installed" ? "secondary" : "default"} disabled={action === "installed" || installing} onClick={() => onInstall(presence.slug)} className="font-normal">
         {installing ? <RiLoader2Line className="animate-spin" /> : null}
         {installing ? t("store-installing") : label}
       </Button>

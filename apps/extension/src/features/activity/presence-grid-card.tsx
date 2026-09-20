@@ -20,7 +20,7 @@ export const PresenceGridCard = ({ onOpen, presence, slug, updateAvailable }: Pr
       type="button"
       onClick={() => onOpen(slug)}
       aria-label={`${presence.metadata.name}. ${status}`}
-      className="relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card p-3 text-left outline-none transition-colors hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-accent/50"
+      className="relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card p-3 text-left outline-none transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-accent/50"
     >
       {updateAvailable ? (
         <Badge variant="default" className="mb-2 w-full justify-start bg-accent/10 text-accent">
