@@ -1,0 +1,37 @@
+---
+title: 2.1.0
+date: 2026-09-20
+description: Pengalaman sambungan yang dibina semula, binaan Canary, penyetempatan lebih luas serta dokumentasi dan permukaan web yang direka semula.
+---
+
+Keluaran ini melengkapkan reka bentuk semula sambungan dan meluaskan penyetempatan Nowly merentas sambungan, laman web dan dokumentasi.
+
+## Sambungan yang dibina semula
+
+Sambungan kini menggunakan seni bina panel sisi baharu dengan paparan khusus Activity, Store, Settings, onboarding, diagnostik dan log masa jalan. Tetapan disusun dalam kad dan bahagian yang lebih jelas, dengan mod rupa cerah, gelap dan sistem.
+
+Aliran Activity dan Store baharu memudahkan pemahaman penyemakan, pemasangan, penjadualan, penundaan dan aktiviti semasa presence. Onboarding berpandu, tindakan sambung semula, status sambungan natif, maklum balas pemasangan dan keadaan kosong dibina semula berdasarkan UI baharu.
+
+Lapisan latar kini mempunyai storan bertip, penghala mesej bertip, diagnostik dan log masa jalan, pengurus presence dan aktiviti, pengendalian hos natif, penyegerakan peranti serta pemeriksaan keselamatan keluaran. Peristiwa keterlihatan, sejarah, hash dan media boleh mengemas kini aktiviti tanpa menunggu muat semula halaman penuh.
+
+## Canary dan pembangunan tempatan
+
+Binaan Chrome Canary boleh dihasilkan dengan `pnpm build:canary`. Saluran binaan kini menjana manifest dan membungkus presence untuk edaran pembangunan dan Canary. Sambungan turut menyokong aset presence tempatan serta melangkau presence arkib semasa kemas kini.
+
+CLI menyokong `nowly build --watch` dan `nowly pack --watch` untuk iterasi presence yang lebih pantas. Laman web dan sambungan kini membezakan pemasangan stabil daripada binaan ujian Canary.
+
+## Lebih banyak locale
+
+Sambungan, laman web dan dokumentasi kini merangkumi Jerman, Portugis Brazil, Poland, Jepun, Korea, Turki, Melayu dan Yunani selain Inggeris, Perancis dan Sepanyol. Menu locale menggunakan bendera yang sepadan, pengesanan bahasa pelayar meliputi semua locale disokong, dan halaman dokumentasi diterjemah dalam bahagian pembangunan presence, topik lanjutan, penerbitan dan changelog.
+
+## Butiran sambungan
+
+- Analitik penggunaan tanpa nama kekal dimatikan secara lalai dan boleh diurus daripada Settings.
+- Presence natif Discord dikenal pasti dengan jelas untuk mengelakkan aktiviti berganda.
+- Jambatan sambungan berfungsi dengan tika web yang dihoskan secara tempatan.
+- Penjadualan kekal dimatikan untuk pemasangan baharu, dengan sokongan tunda hingga tengah malam.
+- Aliran sambungan desktop memberikan panduan lebih jelas apabila aplikasi tiada atau lapuk.
+
+## Pengesahan
+
+Keluaran ini merangkumi liputan untuk pengurus aktiviti, padanan URL, keselamatan keluaran, storan dan pengendalian mesej. Typecheck sambungan, suite ujian, binaan Canary, binaan laman web dan binaan dokumentasi termasuk dalam aliran pengesahan akhir.

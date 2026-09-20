@@ -1,0 +1,37 @@
+---
+title: 2.1.0
+date: 2026-09-20
+description: A rebuilt extension experience, Canary builds, and broader localization across the extension, website, and documentation.
+---
+
+This release completes the extension redesign and expands Nowly's localization across the extension, website, and documentation.
+
+## A rebuilt extension
+
+The extension now uses a new side-panel architecture with dedicated Activity, Store, Settings, onboarding, diagnostics, and runtime-log views. Settings are organized into clearer cards and sections, with light, dark, and system appearance modes.
+
+The new Activity and Store flows make presence browsing, installation, scheduling, snoozing, and current activity easier to understand. Guided onboarding, reconnect actions, native connection status, install feedback, and empty states have been rebuilt around the new UI.
+
+The background layer now has typed storage, a typed message router, diagnostics and runtime logs, presence and activity managers, native-host handling, device synchronization, and release-security checks. Visibility, history, hash, and media events can update activity without waiting for a full page reload.
+
+## Canary and local development
+
+Chrome Canary builds can be produced with `pnpm build:canary`. The build pipeline now generates the manifest and bundles presences for development and Canary distributions. The extension also supports local presence assets and skips archived presences during updates.
+
+The CLI supports `nowly build --watch` and `nowly pack --watch` for faster presence iteration. The website and extension now distinguish stable installs from Canary test builds.
+
+## More locales
+
+The extension, website, and documentation now include German, Brazilian Portuguese, Polish, Japanese, Korean, Turkish, Malay, and Greek in addition to English, French, and Spanish. Locale menus use the corresponding flags, browser language detection covers all supported locales, and the documentation pages are translated throughout the presence-development, advanced-topics, publishing, and changelog sections.
+
+## Extension details
+
+- Anonymous usage analytics remain off by default and can be managed from Settings.
+- Discord-native presences are clearly identified to avoid running duplicate activities.
+- The connection bridge works with locally hosted web instances.
+- Scheduling remains off for new installs, with snooze-until-midnight support.
+- The desktop connection flow provides clearer guidance when the app is missing or outdated.
+
+## Validation
+
+The release includes coverage for activity managers, URL matching, release security, storage, and message handling. The extension typecheck, test suite, Canary build, website build, and documentation build are part of the final verification workflow.

@@ -1,0 +1,37 @@
+---
+title: 2.1.0
+date: 2026-09-20
+description: Uma experiência de extensão reconstruída, builds Canary, localização ampliada e uma documentação e superfície web redesenhadas.
+---
+
+Este lançamento conclui o redesenho da extensão e amplia a localização do Nowly na extensão, no site e na documentação.
+
+## Uma extensão reconstruída
+
+A extensão agora usa uma nova arquitetura de painel lateral com telas dedicadas de Atividade, Loja, Configurações, integração, diagnósticos e logs de execução. As configurações são organizadas em cartões e seções mais claros, com modos de aparência claro, escuro e do sistema.
+
+Os novos fluxos de Atividade e Loja tornam mais fáceis de entender a navegação, instalação, programação, suspensão e atividade atual das presences. A integração guiada, as ações de reconexão, o status da conexão nativa, o feedback de instalação e os estados vazios foram reconstruídos em torno da nova interface.
+
+A camada de background agora conta com armazenamento tipado, roteador de mensagens tipado, diagnósticos e logs de execução, gerenciadores de presence e atividade, gerenciamento do host nativo, sincronização de dispositivos e verificações de segurança do lançamento. Eventos de visibilidade, histórico, hash e mídia podem atualizar a atividade sem esperar uma recarga completa da página.
+
+## Canary e desenvolvimento local
+
+Builds do Chrome Canary podem ser produzidos com `pnpm build:canary`. O pipeline agora gera o manifest e empacota presences para distribuições de desenvolvimento e Canary. A extensão também aceita assets locais de presences e ignora presences arquivadas durante as atualizações.
+
+A CLI aceita `nowly build --watch` e `nowly pack --watch` para iterar mais rapidamente. O site e a extensão agora distinguem instalações estáveis de builds de teste Canary.
+
+## Mais idiomas
+
+A extensão, o site e a documentação agora incluem alemão, português do Brasil, polonês, japonês, coreano, turco, malaio e grego, além de inglês, francês e espanhol. Os menus de idioma usam as bandeiras correspondentes, a detecção de idioma do navegador cobre todos os idiomas compatíveis e as páginas de documentação estão traduzidas nas seções de desenvolvimento de presences, tópicos avançados, publicação e changelog.
+
+## Detalhes da extensão
+
+- As análises anônimas de uso continuam desativadas por padrão e podem ser gerenciadas em Configurações.
+- Presences nativas do Discord são identificadas claramente para evitar atividades duplicadas.
+- A ponte de conexão funciona com instâncias web hospedadas localmente.
+- A programação continua desativada em novas instalações, com suspensão até a meia-noite.
+- O fluxo de conexão desktop oferece orientações mais claras quando o aplicativo está ausente ou desatualizado.
+
+## Validação
+
+O lançamento inclui cobertura para gerenciadores de atividade, correspondência de URLs, segurança de releases, armazenamento e tratamento de mensagens. O typecheck, a suíte de testes, o build Canary, o build do site e o build da documentação fazem parte do fluxo final de verificação.

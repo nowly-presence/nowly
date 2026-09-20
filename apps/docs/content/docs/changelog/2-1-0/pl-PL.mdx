@@ -1,0 +1,37 @@
+---
+title: 2.1.0
+date: 2026-09-20
+description: Przebudowane rozszerzenie, kompilacje Canary, szersza lokalizacja oraz przeprojektowana dokumentacja i witryna.
+---
+
+To wydanie kończy przebudowę rozszerzenia i rozszerza lokalizację Nowly na rozszerzenie, witrynę oraz dokumentację.
+
+## Przebudowane rozszerzenie
+
+Rozszerzenie korzysta teraz z nowej architektury panelu bocznego z osobnymi widokami Aktywność, Sklep, Ustawienia, wdrażanie, diagnostyka i dziennik działania. Ustawienia są uporządkowane w czytelniejszych kartach i sekcjach oraz oferują wygląd jasny, ciemny i systemowy.
+
+Nowe przepływy Aktywności i Sklepu ułatwiają zrozumienie przeglądania, instalowania, planowania, usypiania i bieżącej aktywności presence. Przewodnik wdrażania, ponowne łączenie, stan połączenia natywnego, informacje po instalacji i puste widoki przebudowano wokół nowego interfejsu.
+
+Warstwa tła ma teraz typowany magazyn, typowany router wiadomości, diagnostykę i dzienniki działania, menedżery presence i aktywności, obsługę hosta natywnego, synchronizację urządzeń oraz kontrole bezpieczeństwa wydań. Zdarzenia widoczności, historii, skrótu hash i multimediów mogą aktualizować aktywność bez pełnego przeładowania strony.
+
+## Canary i rozwój lokalny
+
+Kompilacje Chrome Canary można tworzyć poleceniem `pnpm build:canary`. Pipeline generuje teraz manifest i pakuje presence dla dystrybucji deweloperskich i Canary. Rozszerzenie obsługuje też lokalne zasoby presence i pomija zarchiwizowane presence podczas aktualizacji.
+
+CLI obsługuje `nowly build --watch` i `nowly pack --watch`, przyspieszając iterację. Witryna i rozszerzenie rozróżniają teraz instalacje stabilne od testowych kompilacji Canary.
+
+## Więcej języków
+
+Rozszerzenie, witryna i dokumentacja obejmują niemiecki, portugalski brazylijski, polski, japoński, koreański, turecki, malajski i grecki, oprócz angielskiego, francuskiego i hiszpańskiego. Menu języków używają odpowiednich flag, wykrywanie języka przeglądarki obejmuje wszystkie obsługiwane języki, a dokumentacja jest przetłumaczona w sekcjach tworzenia presence, tematów zaawansowanych, publikowania i changelogu.
+
+## Szczegóły rozszerzenia
+
+- Analityka anonimowego użycia pozostaje domyślnie wyłączona i można nią zarządzać w Ustawieniach.
+- Presence natywne Discorda są wyraźnie oznaczone, aby uniknąć zduplikowanych aktywności.
+- Most połączenia działa z lokalnie hostowanymi instancjami webowymi.
+- Planowanie pozostaje wyłączone dla nowych instalacji i obsługuje usypianie do północy.
+- Połączenie z aplikacją desktopową daje wyraźniejsze wskazówki, gdy aplikacji brakuje lub jest nieaktualna.
+
+## Walidacja
+
+Wydanie obejmuje testy menedżerów aktywności, dopasowania URL, bezpieczeństwa wydań, magazynu i obsługi wiadomości. Typecheck rozszerzenia, testy, kompilacja Canary, kompilacja witryny i dokumentacji są częścią końcowego procesu weryfikacji.

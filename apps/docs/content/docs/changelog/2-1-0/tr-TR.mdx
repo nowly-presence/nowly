@@ -1,0 +1,37 @@
+---
+title: 2.1.0
+date: 2026-09-20
+description: Yeniden oluşturulan eklenti deneyimi, Canary derlemeleri, genişletilmiş yerelleştirme ve yeniden tasarlanan dokümantasyon ile web yüzeyi.
+---
+
+Bu sürüm eklenti yeniden tasarımını tamamlar ve Nowly yerelleştirmesini eklenti, web sitesi ve dokümantasyona genişletir.
+
+## Yeniden oluşturulan eklenti
+
+Eklenti artık Activity, Store, Settings, onboarding, diagnostics ve runtime-log görünümleri bulunan yeni bir yan panel mimarisi kullanıyor. Ayarlar daha anlaşılır kart ve bölümlerde düzenlendi; açık, koyu ve sistem görünüm modları eklendi.
+
+Yeni Activity ve Store akışları presence gezinme, kurulum, zamanlama, erteleme ve mevcut etkinliği anlamayı kolaylaştırıyor. Rehberli onboarding, yeniden bağlanma, yerel bağlantı durumu, kurulum geri bildirimi ve boş durumlar yeni arayüz etrafında yeniden oluşturuldu.
+
+Arka plan katmanında artık tipli depolama, tipli mesaj yönlendirici, tanılama ve çalışma zamanı günlükleri, presence ve etkinlik yöneticileri, yerel host işlemleri, cihaz senkronizasyonu ve sürüm güvenlik kontrolleri bulunuyor. Görünürlük, geçmiş, hash ve medya olayları tam sayfa yenilemesi beklemeden etkinliği güncelleyebilir.
+
+## Canary ve yerel geliştirme
+
+Chrome Canary derlemeleri `pnpm build:canary` ile üretilebilir. Derleme hattı geliştirme ve Canary dağıtımları için manifest ve presence paketlerini oluşturur. Eklenti yerel presence varlıklarını destekler ve güncellemelerde arşivlenmiş presence'ları atlar.
+
+CLI daha hızlı iterasyon için `nowly build --watch` ve `nowly pack --watch` komutlarını destekler. Web sitesi ve eklenti kararlı kurulumları Canary test derlemelerinden ayırır.
+
+## Daha fazla yerel ayar
+
+Eklenti, web sitesi ve dokümantasyon İngilizce, Fransızca ve İspanyolcaya ek olarak Almanca, Brezilya Portekizcesi, Lehçe, Japonca, Korece, Türkçe, Malayca ve Yunanca içerir. Dil menüleri ilgili bayrakları kullanır, tarayıcı dili algılama tüm desteklenen dilleri kapsar ve dokümantasyon presence geliştirme, ileri konular, yayınlama ve changelog bölümlerinde çevrilmiştir.
+
+## Eklenti ayrıntıları
+
+- Anonim kullanım analizleri varsayılan olarak kapalıdır ve Settings üzerinden yönetilebilir.
+- Discord yerel presence'ları yinelenen etkinlikleri önlemek için açıkça belirtilir.
+- Bağlantı köprüsü yerel barındırılan web örnekleriyle çalışır.
+- Yeni kurulumlarda zamanlama kapalıdır ve gece yarısına kadar erteleme desteklenir.
+- Masaüstü uygulaması eksik veya eski olduğunda bağlantı akışı daha anlaşılır yönlendirme sunar.
+
+## Doğrulama
+
+Sürüm; etkinlik yöneticileri, URL eşleştirme, sürüm güvenliği, depolama ve mesaj işleme için kapsam içerir. Eklenti typecheck, test paketi, Canary derlemesi, web sitesi derlemesi ve dokümantasyon derlemesi son doğrulama akışının parçasıdır.
