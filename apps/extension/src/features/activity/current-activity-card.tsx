@@ -1,7 +1,7 @@
 import { RiDiscLine, RiSnowflakeLine, RiSunLine } from "@remixicon/react"
 import { useEffect, useState } from "react"
 import { PresenceTile } from "@/components/shared/presence-tile"
-import { VinylAnimation } from "@/features/activity/vinyl-animation"
+import { IdlePulse } from "@/features/activity/idle-pulse"
 import { getActivitySubtitle, getActivityTitle } from "@/lib/format"
 import { t } from "@/shared/i18n"
 import type { CurrentActivity, InstalledPresences } from "@/shared/types"
@@ -98,7 +98,7 @@ export const CurrentActivityCard = ({ activity, idleHint, isLoading, isPaused = 
     return (
       <section className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="flex items-center gap-3 p-4">
-          <VinylAnimation size={56} />
+          <IdlePulse size={56} />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-foreground">{title}</p>
             {idleHint ? <p className="mt-1 text-xs leading-4 text-muted-foreground">{idleHint}</p> : null}

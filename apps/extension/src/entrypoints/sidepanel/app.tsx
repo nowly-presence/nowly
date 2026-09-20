@@ -7,6 +7,7 @@ import { ActivityView } from "@/features/activity/activity-view"
 import { CurrentActivityCard } from "@/features/activity/current-activity-card"
 import { ScheduleDialog } from "@/features/activity/schedule-dialog"
 import { SnoozeDialog } from "@/features/activity/snooze-dialog"
+import { SettingsScreen } from "@/features/settings/settings-screen"
 import { StoreView } from "@/features/store/store-view"
 import { ExtensionStateProvider, useExtensionState } from "@/hooks/extension-state-provider"
 import { useTheme } from "@/hooks/use-theme"
@@ -34,10 +35,6 @@ const StoreScreen = (): React.JSX.Element => {
     />
   )
 }
-
-const SettingsView = (): React.JSX.Element => (
-  <div className="flex h-full items-center justify-center text-sm text-muted-foreground">Réglages — bientôt disponibles</div>
-)
 
 const ActivityScreen = (): React.JSX.Element => {
   const state = useExtensionState()
@@ -111,7 +108,7 @@ const Shell = (): React.JSX.Element => {
           isCheckingUpdates={state.isCheckingUpdates}
         />
         <main id="sidepanel-tabpanel" className="flex-1 overflow-y-auto pb-3" aria-label={t(view === "activity" ? "nav-home" : view === "store" ? "nav-store" : "nav-settings")}>
-          {view === "activity" ? <ActivityScreen /> : view === "store" ? <StoreScreen /> : <SettingsView />}
+          {view === "activity" ? <ActivityScreen /> : view === "store" ? <StoreScreen /> : <SettingsScreen />}
         </main>
       </div>
       <BottomNav activeView={view} onViewChange={setView} />
