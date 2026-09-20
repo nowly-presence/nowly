@@ -145,6 +145,20 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
     setLocalePreference(locale)
   }
 
+  const presencePaused = state.settings.presencePaused === true
+  const connectionHealthy = isConnectionHealthy(state.nativeStatus)
+  const hostUpdateAvailable = hostVersionInfo?.updateAvailable === true
+
+  // Flashes the status bar as confirmation on a healthy connection, then
+  // auto-hides after 2.5s - stays up while paused or a host update is pending.
+  const [statusVisible, setStatusVisible] = useState(true)
+  useEffect(() => {
+    setStatusVisible(true)
+    if (presencePaused || hostUpdateAvailable || !connectionHealthy) return
+    const timer = window.setTimeout(() => setStatusVisible(false), 2500)
+    return () => window.clearTimeout(timer)
+  }, [connectionHealthy, hostUpdateAvailable, presencePaused])
+
   const changeView = (nextView: PersistedAppView): void => {
     setView(nextView)
     persistAppView(nextView)
@@ -189,18 +203,13 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
     <div className="relative flex h-dvh flex-col bg-background text-foreground">
       {state.settings.backgroundAnimation !== false ? <div className="sidepanel-bg absolute inset-0" aria-hidden /> : null}
       <div className="relative z-1 flex flex-1 flex-col overflow-hidden">
-        <ConnectionStatusBar
-          nativeStatus={state.nativeStatus}
-          onConnect={state.connectNative}
-          presencePaused={state.settings.presencePaused === true}
-          visible={!isConnectionHealthy(state.nativeStatus) || state.settings.presencePaused === true}
-        />
+        <ConnectionStatusBar nativeStatus={state.nativeStatus} onConnect={state.connectNative} presencePaused={presencePaused} hostUpdateAvailable={hostUpdateAvailable} visible={statusVisible} />
         <div className="flex flex-1 flex-col gap-4 overflow-hidden px-3 pt-3">
           <Header
-            displayMode={view === "activity" ? state.settings.presenceDisplayMode : undefined}
-            onDisplayModeChange={view === "activity" ? (mode) => state.setSettings({ presenceDisplayMode: mode }) : undefined}
-            onTogglePause={() => state.setPresencePaused(!(state.settings.presencePaused === true))}
-            presencePaused={state.settings.presencePaused === true}
+            displayMode={view === "activity" && !selectedSlug ? state.settings.presenceDisplayMode : undefined}
+            onDisplayModeChange={view === "activity" && !selectedSlug ? (mode) => state.setSettings({ presenceDisplayMode: mode }) : undefined}
+            onTogglePause={() => state.setPresencePaused(!presencePaused)}
+            presencePaused={presencePaused}
             onCheckUpdates={view === "activity" && !state.isUnpacked ? state.checkUpdates : undefined}
             isCheckingUpdates={state.isCheckingUpdates}
             onReplayOnboarding={() => void sendMessage("RESET_ONBOARDING_FOR_DEV")}
