@@ -1,0 +1,72 @@
+---
+title: Struktura obecności
+description: Poznaj wymagany układ folderów obecności Nowly.
+---
+
+## Układ Folderów
+
+Obecność znajduje się w `src`, pogrupowana według pierwszej litery jej nazwy:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+`-- assets/
+    |-- logo.png
+    |-- icon.png
+    `-- thumbnail.jpg
+```
+
+## metadata.json
+
+`metadata.json` opisuje platformę, obsługiwane adresy URL, autora, kategorię, zlokalizowane opisy, zasoby marketplace oraz opcjonalne flagi, takie jak `discordNative`.
+
+## presence.ts
+
+`presence.ts` zawiera logikę czasu wykonania. Wykrywa stan strony i wywołuje Presence API.
+
+## utils/
+
+W przypadku złożonych obecności podziel swoją logikę na dedykowane pliki w folderze `utils/`. Na przykład obecność YouTube organizuje pomocnicze funkcje DOM, parsowanie kanałów i rozpoznawanie Shorts w oddzielnych modułach:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+|-- assets/
+|   |-- logo.png
+|   |-- icon.png
+|   `-- thumbnail.jpg
+`-- utils/
+    |-- categories.ts
+    |-- dom.ts
+    |-- channel.ts
+    |-- text.ts
+    |-- bridge.ts
+    |-- shorts-dom.ts
+    |-- shorts-resolve.ts
+    `-- youtube-data.ts
+```
+
+Bundler rozwiązuje lokalne importy z `presence.ts`, więc możesz importować pliki narzędziowe normalnie:
+
+```ts filename="presence.ts"
+import { findVideo } from "./utils/dom"
+import { getChannelInfo } from "./utils/channel"
+```
+
+## assets
+
+Zasoby są używane przez marketplace, zainstalowany pakiet obecności, ładunki aktywności Discorda oraz obrazy Open Graph.
+
+Wymagane pliki:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "Szerokie logo marki do nagłówków marketplace, stron obecności i generowanych obrazów OG.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Kwadratowa ikona do kompaktowych elementów UI i kluczy obrazów aktywności Discorda.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Obraz podglądu używany, gdy obecność potrzebuje większej grafiki.", required: true }
+  ]}
+/>
+
+Te wymiary są dokładnymi wymaganiami, sprawdzanymi przez CI przy każdym PR obecności - szczegóły w [Assets](/presence-development/assets).

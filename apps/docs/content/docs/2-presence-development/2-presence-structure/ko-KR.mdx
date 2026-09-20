@@ -1,0 +1,72 @@
+---
+title: 프레즌스 구조
+description: Nowly 프레즌스에 필요한 폴더 구성을 이해하세요.
+---
+
+## 폴더 구성
+
+프레즌스는 `src` 아래에 위치하며, 이름의 첫 글자로 그룹화됩니다.
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+`-- assets/
+    |-- logo.png
+    |-- icon.png
+    `-- thumbnail.jpg
+```
+
+## metadata.json
+
+`metadata.json`은 플랫폼, 지원 URL, 작성자, 카테고리, 다국어 설명, 마켓플레이스 에셋, 그리고 `discordNative` 같은 선택적 플래그를 설명합니다.
+
+## presence.ts
+
+`presence.ts`에는 런타임 로직이 포함됩니다. 페이지 상태를 감지하고 Presence API를 호출합니다.
+
+## utils/
+
+복잡한 프레즌스의 경우, 로직을 `utils/` 폴더 아래의 전용 파일로 분리하세요. 예를 들어 YouTube 프레즌스는 DOM 헬퍼, 채널 파싱, Shorts 판별을 별도 모듈로 구성합니다.
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+|-- assets/
+|   |-- logo.png
+|   |-- icon.png
+|   `-- thumbnail.jpg
+`-- utils/
+    |-- categories.ts
+    |-- dom.ts
+    |-- channel.ts
+    |-- text.ts
+    |-- bridge.ts
+    |-- shorts-dom.ts
+    |-- shorts-resolve.ts
+    `-- youtube-data.ts
+```
+
+번들러는 `presence.ts`에서의 로컬 임포트를 해석하므로, 유틸리티 파일을 평소처럼 임포트할 수 있습니다.
+
+```ts filename="presence.ts"
+import { findVideo } from "./utils/dom"
+import { getChannelInfo } from "./utils/channel"
+```
+
+## assets
+
+에셋은 마켓플레이스, 설치된 프레즌스 패키지, Discord 활동 페이로드, Open Graph 이미지에서 사용됩니다.
+
+필수 파일:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "마켓플레이스 헤더, 프레즌스 페이지, 생성된 OG 이미지에 사용되는 넓은 브랜드 마크.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "컴팩트한 UI 화면과 Discord 활동 이미지 키에 사용되는 정사각형 아이콘.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "프레즌스에 더 큰 비주얼이 필요할 때 사용되는 미리보기 이미지.", required: true }
+  ]}
+/>
+
+이 크기들은 정확한 요구 사항이며, 모든 프레즌스 PR에서 CI가 검사합니다 - 자세한 내용은 [Assets](/presence-development/assets)를 참고하세요.

@@ -1,0 +1,72 @@
+---
+title: プレゼンスの構造
+description: Nowlyプレゼンスに必要なフォルダ構成を理解します。
+---
+
+## フォルダ構成
+
+プレゼンスは `src` 以下に配置され、名前の頭文字ごとにグループ化されます。
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+`-- assets/
+    |-- logo.png
+    |-- icon.png
+    `-- thumbnail.jpg
+```
+
+## metadata.json
+
+`metadata.json` には、プラットフォーム、対応URL、作者、カテゴリ、多言語対応の説明、マーケットプレイス用アセット、および `discordNative` などのオプションフラグが記述されます。
+
+## presence.ts
+
+`presence.ts` にはランタイムロジックが含まれます。ページの状態を検出し、Presence APIを呼び出します。
+
+## utils/
+
+複雑なプレゼンスの場合、ロジックを `utils/` フォルダ配下の専用ファイルに分割してください。たとえばYouTubeプレゼンスでは、DOMヘルパー、チャンネル解析、Shorts判定を別々のモジュールに整理しています。
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+|-- assets/
+|   |-- logo.png
+|   |-- icon.png
+|   `-- thumbnail.jpg
+`-- utils/
+    |-- categories.ts
+    |-- dom.ts
+    |-- channel.ts
+    |-- text.ts
+    |-- bridge.ts
+    |-- shorts-dom.ts
+    |-- shorts-resolve.ts
+    `-- youtube-data.ts
+```
+
+バンドラーは `presence.ts` からのローカルインポートを解決するため、ユーティリティファイルを通常どおりインポートできます。
+
+```ts filename="presence.ts"
+import { findVideo } from "./utils/dom"
+import { getChannelInfo } from "./utils/channel"
+```
+
+## assets
+
+アセットは、マーケットプレイス、インストールされたプレゼンスパッケージ、Discordのアクティビティペイロード、Open Graph画像で使用されます。
+
+必須ファイル:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "マーケットプレイスのヘッダー、プレゼンスページ、生成されるOG画像用のワイドなブランドマーク。", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "コンパクトなUI表示およびDiscordのアクティビティ画像キー用の正方形アイコン。", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "プレゼンスに大きめのビジュアルが必要な場合に使用されるプレビュー画像。", required: true }
+  ]}
+/>
+
+これらのサイズは正確な要件であり、プレゼンスのPRごとにCIでチェックされます。詳細は[Assets](/presence-development/assets)を参照してください。

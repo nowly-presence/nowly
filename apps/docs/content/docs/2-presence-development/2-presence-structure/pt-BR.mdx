@@ -1,0 +1,72 @@
+---
+title: Estrutura da presença
+description: Entenda a estrutura de pastas exigida para uma presença Nowly.
+---
+
+## Estrutura de Pastas
+
+Uma presença fica em `src`, agrupada pela primeira letra do seu nome:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+`-- assets/
+    |-- logo.png
+    |-- icon.png
+    `-- thumbnail.jpg
+```
+
+## metadata.json
+
+`metadata.json` descreve a plataforma, as URLs compatíveis, o autor, a categoria, as descrições localizadas, os recursos do marketplace e flags opcionais como `discordNative`.
+
+## presence.ts
+
+`presence.ts` contém a lógica de tempo de execução. Ele detecta o estado da página e chama a API de Presence.
+
+## utils/
+
+Para presenças complexas, separe sua lógica em arquivos dedicados dentro de uma pasta `utils/`. A presença do YouTube, por exemplo, organiza helpers de DOM, parsing de canal e resolução de Shorts em módulos separados:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+|-- assets/
+|   |-- logo.png
+|   |-- icon.png
+|   `-- thumbnail.jpg
+`-- utils/
+    |-- categories.ts
+    |-- dom.ts
+    |-- channel.ts
+    |-- text.ts
+    |-- bridge.ts
+    |-- shorts-dom.ts
+    |-- shorts-resolve.ts
+    `-- youtube-data.ts
+```
+
+O bundler resolve importações locais a partir de `presence.ts`, então você pode importar os arquivos de utilitários normalmente:
+
+```ts filename="presence.ts"
+import { findVideo } from "./utils/dom"
+import { getChannelInfo } from "./utils/channel"
+```
+
+## assets
+
+Os recursos são usados pelo marketplace, pelo pacote de presença instalado, pelos payloads de atividade do Discord e pelas imagens Open Graph.
+
+Arquivos obrigatórios:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "Marca ampla para cabeçalhos do marketplace, páginas de presença e imagens OG geradas.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Ícone quadrado para superfícies de UI compactas e chaves de imagem de atividade do Discord.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Imagem de pré-visualização usada quando a presença precisa de um visual maior.", required: true }
+  ]}
+/>
+
+Essas dimensões são requisitos exatos, verificados pela CI em cada PR de presença - veja [Assets](/presence-development/assets) para detalhes.

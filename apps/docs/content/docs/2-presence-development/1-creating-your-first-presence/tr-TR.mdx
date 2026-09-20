@@ -1,0 +1,114 @@
+---
+title: İlk Presence'ınızı Oluşturma
+description: CLI ile yeni bir Nowly presence'ı oluşturun ve ilk Discord Rich Presence etkinliğinizi gönderin.
+---
+
+## CLI ile Başlayın
+
+Yeni bir presence iskeletlemek için Nowly CLI'yi kullanın:
+
+```bash
+nowly init "Example"
+```
+
+CLI, meta veri, bir presence betiği ve gerekli varlıkları oluşturur.
+
+## Temel Presence Kodu
+
+`Presence` ve `Assets`, runtime tarafından sağlanır - bkz. [Presence API](/presence-development/presence-api) ve [Assets](/presence-development/assets).
+`document`, standart tarayıcı DOM API'sidir ve presence'lar uzantıda content script olarak çalıştığı için kullanılabilir.
+
+`@nowly/sdk`'den yalnızca `PresenceType` (ve `createMediaTimestamps` gibi diğer yardımcılar) içe aktarılmalıdır.
+
+```ts filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+
+const presence = new Presence()
+
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: document.title,
+    state: document.location.hostname,
+    largeImageKey: Assets.Logo,
+    type: PresenceType.Watching,
+  })
+})
+```
+
+## Çalışma Zamanı Akışı
+
+Kullanıcı eşleşen bir URL'yi ziyaret ettiğinde Nowly presence'ınızı yükler. Presence, sayfa durumunu okur ve `setActivity`'yi çağırır. Uzantı, bu yükü Discord'u güncelleyen Nowly Host'a iletir.
+
+## Geliştirme Döngüsü
+
+<Steps>
+<Step title="İskeletleme" description="Presence klasörünü, meta verileri ve gerekli varlıkları oluşturur.">
+
+```bash
+nowly init "Example"
+```
+
+</Step>
+<Step title="Yapılandırma" description="Adı, yazarı, desteklenen URL'leri, kategoriyi, rengi, yerelleştirilmiş açıklamaları ve Discord platformu zaten destekliyorsa discordNative'i ayarlayın.">
+
+`metadata.json` dosyasını düzenleyin - mevcut tüm alanlar için bkz. [Metadata](/presence-development/metadata).
+
+</Step>
+<Step title="Uygulama" description="Presence SDK'sını kullanarak presence mantığını yazın.">
+
+```typescript filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+
+const presence = new Presence()
+
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    type: PresenceType.Watching,
+  })
+})
+```
+
+</Step>
+<Step title="Doğrulama" description="Meta veri yapınızın doğru olduğunu ve varlıkların yerinde olduğunu kontrol edin.">
+
+```bash
+nowly validate
+```
+
+</Step>
+<Step title="Derleme" description="Presence'ı bağımsız bir pakete derler.">
+
+```bash
+nowly build example
+```
+
+</Step>
+<Step title="Yükleme" description="Derlenen presence'ı tarayıcıya kurun. İki yöntem: önceden derlenmiş bir uzantı veya bir zip bırakma.">
+
+Tam karşılaştırma için bkz. [Yerel Olarak Yükleme ve Test Etme](/presence-development/load-and-test).
+
+**İlk kez** (tarayıcıda Nowly yok): presence'ı hazır bir uzantıya gömün.
+
+```bash
+nowly extension example
+```
+
+`chrome://extensions` adresinde `dist/extension-dev` klasörünü paketlenmemiş olarak yükleyin.
+
+**Nowly zaten paketlenmemiş olarak yüklüyse:** bir zip paketleyin ve Ayarlar → Gelişmiş → Hata Ayıklama'ya bırakın. Mağaza kurulumları imzasız zip'leri reddeder.
+
+```bash
+nowly pack example
+```
+
+</Step>
+<Step title="Test Etme" description="Hedef web sitesini açın - presence otomatik olarak etkinleşir.">
+
+Siteyi ziyaret edin
+
+</Step>
+</Steps>
+
+Her kod değişikliğinden sonra **Uygulama** → **Derleme** → **Yükleme** adımlarını tekrarlayın.

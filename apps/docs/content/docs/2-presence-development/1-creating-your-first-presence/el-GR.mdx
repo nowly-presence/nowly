@@ -1,0 +1,114 @@
+---
+title: Δημιουργία του Πρώτου σου Presence
+description: Δημιούργησε ένα νέο presence Nowly με το CLI και στείλε την πρώτη σου δραστηριότητα Discord Rich Presence.
+---
+
+## Ξεκίνα με το CLI
+
+Χρησιμοποίησε το Nowly CLI για να δημιουργήσεις ένα νέο presence:
+
+```bash
+nowly init "Example"
+```
+
+Το CLI δημιουργεί metadata, ένα script presence και τα απαραίτητα assets.
+
+## Βασικός Κώδικας Presence
+
+Τα `Presence` και `Assets` παρέχονται από το runtime - δες [Presence API](/presence-development/presence-api) και [Assets](/presence-development/assets).
+Το `document` είναι το τυπικό DOM API του browser, διαθέσιμο επειδή τα presences εκτελούνται ως content scripts μέσα στην επέκταση.
+
+Μόνο το `PresenceType` (και άλλα βοηθητικά όπως το `createMediaTimestamps`) πρέπει να εισαχθούν από το `@nowly/sdk`.
+
+```ts filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+
+const presence = new Presence()
+
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: document.title,
+    state: document.location.hostname,
+    largeImageKey: Assets.Logo,
+    type: PresenceType.Watching,
+  })
+})
+```
+
+## Ροή Εκτέλεσης
+
+Όταν ο χρήστης επισκέπτεται μια αντίστοιχη διεύθυνση URL, το Nowly φορτώνει το presence σου. Το presence διαβάζει την κατάσταση της σελίδας και καλεί το `setActivity`. Η επέκταση προωθεί αυτό το payload στο Nowly Host, το οποίο ενημερώνει το Discord.
+
+## Κύκλος Ανάπτυξης
+
+<Steps>
+<Step title="Δημιουργία σκελετού" description="Δημιουργεί τον φάκελο presence, τα metadata και τα απαραίτητα assets.">
+
+```bash
+nowly init "Example"
+```
+
+</Step>
+<Step title="Ρύθμιση" description="Όρισε το όνομα, τον δημιουργό, τα υποστηριζόμενα URL, την κατηγορία, το χρώμα, τις μεταφρασμένες περιγραφές και το discordNative όταν το Discord υποστηρίζει ήδη την πλατφόρμα.">
+
+Επεξεργάσου το `metadata.json` - δες το [Metadata](/presence-development/metadata) για όλα τα διαθέσιμα πεδία.
+
+</Step>
+<Step title="Υλοποίηση" description="Γράψε τη λογική του presence χρησιμοποιώντας το Presence SDK.">
+
+```typescript filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+
+const presence = new Presence()
+
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    type: PresenceType.Watching,
+  })
+})
+```
+
+</Step>
+<Step title="Επικύρωση" description="Έλεγξε ότι η δομή των metadata είναι σωστή και τα assets βρίσκονται στη θέση τους.">
+
+```bash
+nowly validate
+```
+
+</Step>
+<Step title="Χτίσιμο" description="Μεταγλωττίζει το presence σε ένα αυτόνομο πακέτο.">
+
+```bash
+nowly build example
+```
+
+</Step>
+<Step title="Φόρτωση" description="Εγκατέστησε το presence που χτίστηκε στον browser. Δύο μέθοδοι: μια προκατασκευασμένη επέκταση, ή ένα zip drop.">
+
+Δες [Φόρτωση και Δοκιμή Τοπικά](/presence-development/load-and-test) για την πλήρη σύγκριση.
+
+**Πρώτη φορά** (χωρίς Nowly στον browser): ενσωμάτωσε το presence σε μια έτοιμη επέκταση.
+
+```bash
+nowly extension example
+```
+
+Φόρτωσε το `dist/extension-dev` ασυσκεύαστο στο `chrome://extensions`.
+
+**Έχεις ήδη φορτωμένο το Nowly ασυσκεύαστο:** πακετάρισε ένα zip και ρίξε το στις Ρυθμίσεις → Προχωρημένες → Debug. Οι εγκαταστάσεις από το Store απορρίπτουν μη υπογεγραμμένα zip.
+
+```bash
+nowly pack example
+```
+
+</Step>
+<Step title="Δοκιμή" description="Άνοιξε τον ιστότοπο-στόχο - το presence ενεργοποιείται αυτόματα.">
+
+Επισκέψου τον ιστότοπο
+
+</Step>
+</Steps>
+
+Επανάλαβε **Υλοποίηση** → **Χτίσιμο** → **Φόρτωση** μετά από κάθε αλλαγή κώδικα.

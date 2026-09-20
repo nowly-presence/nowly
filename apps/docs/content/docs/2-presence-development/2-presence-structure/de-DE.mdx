@@ -1,0 +1,72 @@
+---
+title: Presence-Struktur
+description: Verstehe den erforderlichen Ordneraufbau einer Nowly-Presence.
+---
+
+## Ordnerstruktur
+
+Eine Presence liegt unter `src`, gruppiert nach dem ersten Buchstaben ihres Namens:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+`-- assets/
+    |-- logo.png
+    |-- icon.png
+    `-- thumbnail.jpg
+```
+
+## metadata.json
+
+`metadata.json` beschreibt die Plattform, unterstützte URLs, den Autor, die Kategorie, lokalisierte Beschreibungen, Marktplatz-Assets und optionale Flags wie `discordNative`.
+
+## presence.ts
+
+`presence.ts` enthält die Laufzeitlogik. Sie erkennt den Seitenzustand und ruft die Presence-API auf.
+
+## utils/
+
+Bei komplexen Presences teile deine Logik in dedizierte Dateien unter einem `utils/`-Ordner auf. Die YouTube-Presence organisiert zum Beispiel DOM-Hilfsfunktionen, Kanal-Parsing und Shorts-Auflösung in separaten Modulen:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+|-- assets/
+|   |-- logo.png
+|   |-- icon.png
+|   `-- thumbnail.jpg
+`-- utils/
+    |-- categories.ts
+    |-- dom.ts
+    |-- channel.ts
+    |-- text.ts
+    |-- bridge.ts
+    |-- shorts-dom.ts
+    |-- shorts-resolve.ts
+    `-- youtube-data.ts
+```
+
+Der Bundler löst lokale Imports aus `presence.ts` auf, sodass du Utility-Dateien ganz normal importieren kannst:
+
+```ts filename="presence.ts"
+import { findVideo } from "./utils/dom"
+import { getChannelInfo } from "./utils/channel"
+```
+
+## assets
+
+Assets werden vom Marktplatz, dem installierten Presence-Paket, den Discord-Activity-Payloads und den Open-Graph-Bildern verwendet.
+
+Erforderliche Dateien:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "Breites Markenzeichen für Marktplatz-Header, Presence-Seiten und generierte OG-Bilder.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Quadratisches Icon für kompakte UI-Oberflächen und Discord-Activity-Image-Keys.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Vorschaubild, das verwendet wird, wenn die Presence ein größeres Bild benötigt.", required: true }
+  ]}
+/>
+
+Diese Maße sind exakte Anforderungen, die CI bei jedem Presence-PR prüft - siehe [Assets](/presence-development/assets) für Details.
