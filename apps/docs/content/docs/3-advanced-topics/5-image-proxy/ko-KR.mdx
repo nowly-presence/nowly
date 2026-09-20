@@ -1,0 +1,107 @@
+---
+title: Image Proxy
+description: Use the Nowly image proxy when Discord cannot load a presence image directly from a supported external CDN.
+---
+
+## What It Is For
+
+The image proxy is built for a specific case: a presence can see a public image on the page, but Discord cannot reliably load it from the original URL.
+
+This is useful for video thumbnails, avatars, posters, or category images served by an external CDN when:
+
+- the image is public and already visible in the browser;
+- the CDN URL is too long for Discord Rich Presence;
+- Discord rejects, expires, or fails to download the direct image;
+- the presence needs to show content-specific artwork instead of only the service logo.
+
+This is not a general-purpose image proxy. The API only accepts explicitly allowed services and domains.
+
+## How It Works
+
+The recommended flow uses a temporary short URL:
+
+```txt
+POST https://api.nowly.me/images-proxy
+GET  https://api.nowly.me/images-proxy/<id>
+```
+
+The presence sends the real CDN image URL to the API. The API checks that the service is supported, downloads the image, validates its MIME type and size, then stores it temporarily in cache. It returns a short URL such as:
+
+```txt
+https://api.nowly.me/images-proxy/abc123...
+```
+
+That URL directly returns the image bytes with the correct `Content-Type`. It is intended for `largeImageKey` or `smallImageKey`.
+
+```ts filename="presence.ts"
+import { createCachedImageProxyUrl } from "@nowly/sdk"
+
+const image = await createCachedImageProxyUrl("tiktok", imageUrl)
+
+await presence.setActivity({
+  details: "Watching a video",
+  largeImageKey: image ?? Assets.Logo,
+})
+```
+
+The cache is short-lived, currently five minutes. The helper also keeps an in-memory cache inside the presence so it does not call the API on every update.
+
+## Direct Endpoint
+
+The older direct proxy remains available for manual testing or URLs that are already short enough:
+
+```txt
+https://api.nowly.me/image-proxy?service=<service>&url=<encoded-url>
+https://api.nowly.me/i?u=<encoded-url>
+```
+
+The `url` and `u` parameters must be encoded with `encodeURIComponent`. For Discord Rich Presence, prefer `createCachedImageProxyUrl` because Discord limits image keys to 300 characters.
+
+## Setting It Up In A Presence
+
+First, extract the real image URL from the page:
+
+```ts filename="presence.ts"
+const getPoster = (video: HTMLVideoElement): string | undefined => {
+  if (video.poster) return video.poster
+
+  const image = video.closest("[data-video]")?.querySelector("img")
+  return image?.getAttribute("src") ?? undefined
+}
+```
+
+Then pass that URL through the helper before setting the activity:
+
+```ts filename="presence.ts"
+import { createCachedImageProxyUrl } from "@nowly/sdk"
+
+const poster = await createCachedImageProxyUrl("tiktok", getPoster(video))
+
+await presence.setActivity({
+  details: "Watching a video",
+  largeImageKey: poster ?? Assets.Logo,
+})
+```
+
+Always keep a fallback asset. If the page has no image, the image is too large, or the origin is not allowed, the presence should continue to work with `Assets.Logo` or a local asset.
+
+## Adding A Service
+
+Allowed domains are checked by the API, not by the presence - a presence cannot proxy an arbitrary domain just by asking for it at runtime. There is no separate approval step or API code change: you declare the hosts your presence needs directly in its own `metadata.json`, using the same `service` value (your presence slug) you already pass to the helper:
+
+```json filename="metadata.json"
+"imageProxy": {
+  "hostSuffixes": ["netflix.com", "nflxvideo.net", "nflximg.net"],
+  "headers": { "Referer": "https://www.netflix.com/" }
+}
+```
+
+This is published to the API automatically the same way the rest of your `metadata.json` already is. The API only trusts this declaration for your own presence's `service` id, so a presence cannot declare hostnames on another presence's behalf, and a request is only allowed if the target URL's hostname actually matches one of your declared suffixes.
+
+When your PR touches `imageProxy`, the presence preview bot detects it automatically, adds an **Image Proxy Requested** section to its comment listing the declared hostnames, and applies an `image-proxy` label. A reviewer still has to confirm the hostnames are public and safe to proxy before merging - explain in your PR description why Discord can't use the direct image URL and what image the user will see.
+
+## Limits And Security
+
+The proxy only serves public images from hosts a reviewed presence has declared. It rejects non-HTTPS URLs, hosts that don't match any declared suffix, responses that are not images, and files that are too large.
+
+The endpoints themselves are public and unauthenticated (presences call them directly from the browser, so there's no secret to attach) and share the API's global rate limit - there's no per-presence quota. Do not use the proxy for private account content, authenticated resources, tracking URLs, arbitrary user input, or non-image content.

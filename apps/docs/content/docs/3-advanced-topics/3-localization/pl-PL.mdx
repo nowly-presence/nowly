@@ -1,0 +1,38 @@
+---
+title: Lokalizacja
+description: Zlokalizuj metadane, funkcje, ustawienia i stringi obecności.
+---
+
+## Obsługiwane języki
+
+<LanguageTable
+  languages={[
+    { language: "Angielski", code: "en-US", default: true },
+    { language: "Francuski", code: "fr-FR" },
+    { language: "Hiszpański", code: "es-ES" },
+  ]}
+/>
+
+## Lokalizacja metadanych
+
+```json filename="metadata.json"
+{
+  "description": {
+    "en-US": "Watch and share videos.",
+    "fr-FR": "Regardez et partagez des vidéos.",
+    "es-ES": "Mira y comparte videos."
+  }
+}
+```
+
+## Lokalizacja ustawień
+
+Etykiety i opisy ustawień używają tego samego formatu języka.
+
+## Stringi w czasie rzeczywistym
+
+Teksty aktywności Discord używają opcjonalnych [pakietów językowych obecności](/advanced-topics/presence-language-packs), które są oddzielone od lokalizacji metadanych i ustawień.
+
+## Trzymaj tekst zwięźle
+
+Pola aktywności Discord są kompaktowe. Utrzymuj zlokalizowane stringi zwięzłe i unikaj długich paragrafów w aktywności w czasie rzeczywistym.

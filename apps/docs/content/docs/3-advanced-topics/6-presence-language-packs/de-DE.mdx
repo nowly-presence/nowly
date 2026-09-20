@@ -1,0 +1,46 @@
+---
+title: Sprachpakete für Presences
+description: Füge optionale, typisierte Übersetzungen für Discord-Aktivitätstexte hinzu.
+---
+
+## Ein separates Laufzeitsystem
+
+Sprachpakete übersetzen den an Discord gesendeten Text, etwa „Video ansehen“ oder „Figma durchsuchen“. Sie sind von den unterstützten Sprachen für Metadaten und Einstellungstexte getrennt.
+
+Sprachpakete sind optional. Eine Presence ohne `locales`-Verzeichnis verwendet weiterhin wie bisher Inline-TypeScript-Strings.
+
+## Dateistruktur
+
+Eine lokalisierte Presence stellt alle drei Laufzeitwörterbücher bereit:
+
+```text
+locales/
+├── en-US.json
+├── fr-FR.json
+└── es-ES.json
+```
+
+Jede Datei muss ein flaches JSON-Objekt mit denselben Schlüsseln und String-Werten sein. `en-US.json` ist das Referenzwörterbuch und der Fallback. Der Build lehnt ungültiges JSON, fehlende Sprachen, nicht unterstützte Dateien, Nicht-String-Werte und abweichende Schlüssel ab.
+
+```json filename="locales/en-US.json"
+{ "watchingVideo": "Watching {title}" }
+```
+
+## Typisierte Autovervollständigung
+
+```typescript
+import type enUS from "./locales/en-US.json"
+
+const locale = await presence.getStrings<typeof enUS>()
+const title = document.title
+
+await presence.setActivity({
+  details: presence.formatString(locale.watchingVideo, { title }),
+})
+```
+
+Der Nur-Typ-Import bietet IDE-Autovervollständigung und weist unbekannte Schlüssel zurück, ohne das JSON in das Bundle aufzunehmen. Ein Befehl zur Typgenerierung ist nicht nötig.
+
+Dynamische Werte verwenden `{name}`-Platzhalter im JSON und `presence.formatString(template, params)` im Presence-Code.
+
+Nutzer können global eine Aktivitätssprache auswählen oder für jede lokalisierte Presence eine andere Sprache festlegen.

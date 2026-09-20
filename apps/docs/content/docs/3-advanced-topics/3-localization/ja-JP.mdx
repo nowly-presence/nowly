@@ -1,0 +1,38 @@
+---
+title: ローカライズ
+description: プレゼンスのメタデータ、機能、設定、文字列をローカライズします。
+---
+
+## 対応ロケール
+
+<LanguageTable
+  languages={[
+    { language: "英語", code: "en-US", default: true },
+    { language: "フランス語", code: "fr-FR" },
+    { language: "スペイン語", code: "es-ES" },
+  ]}
+/>
+
+## メタデータのローカライズ
+
+```json filename="metadata.json"
+{
+  "description": {
+    "en-US": "Watch and share videos.",
+    "fr-FR": "Regardez et partagez des vidéos.",
+    "es-ES": "Mira y comparte videos."
+  }
+}
+```
+
+## 設定のローカライズ
+
+設定のラベルと説明も同じロケール形式を使用します。
+
+## Runtime文字列
+
+Discordアクティビティのテキストは、任意の[プレゼンス言語パック](/advanced-topics/presence-language-packs)を使用します。これはメタデータや設定のローカライズとは別のものです。
+
+## テキストは短く
+
+Discordのアクティビティフィールドはコンパクトです。ローカライズされた文字列は簡潔にし、runtimeアクティビティで長い段落を避けてください。

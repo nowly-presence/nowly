@@ -1,0 +1,34 @@
+---
+title: 타임스탬프
+description: 미디어 타임스탬프로 Discord Rich Presence에 재생 진행 상황을 표시합니다.
+---
+
+## 타임스탬프가 중요한 이유
+
+타임스탬프는 Discord 활동을 생동감 있게 만듭니다. 사용자가 얼마나 오래 시청했는지, 남은 시간이 얼마인지 보여줍니다.
+
+## createMediaTimestamps 사용
+
+`document`는 브라우저 DOM API입니다(프레즌스가 콘텐츠 스크립트로 실행되기 때문에 사용할 수 있습니다). `Assets`는 런타임에서 제공됩니다([Assets](/presence-development/assets) 참고).
+
+```ts filename="presence.ts"
+import { createMediaTimestamps } from "@nowly/sdk"
+
+const video = document.querySelector("video")
+
+if (video) {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    ...createMediaTimestamps(video),
+  })
+}
+```
+
+## 일시중지된 미디어
+
+미디어가 일시중지되면 `createMediaTimestamps`는 타임스탬프를 반환하지 않습니다. 잘못된 재생 진행 상황이 표시되는 것을 방지합니다.
+
+## 라이브 스트림
+
+라이브 스트림에는 고정된 재생 시간이 없는 경우가 많습니다. 플랫폼 동작에 따라 시작 타임스탬프만 사용하거나 타임스탬프를 생략하세요.

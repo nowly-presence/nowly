@@ -1,0 +1,46 @@
+---
+title: Presence Dil Paketleri
+description: Discord etkinlik metinleri için isteğe bağlı, tür güvenli çeviriler ekleyin.
+---
+
+## Ayrı bir çalışma zamanı sistemi
+
+Dil paketleri Discord'a gönderilen “Video izliyor” veya “Figma'da geziniyor” gibi metinleri çevirir. Metadata ve ayar etiketlerinde kullanılan yerel ayarlardan ayrıdır.
+
+Dil paketleri isteğe bağlıdır. `locales` dizini olmayan bir presence, daha önce olduğu gibi satır içi TypeScript dizelerini kullanır.
+
+## Dosya yapısı
+
+Yerelleştirilmiş bir presence üç çalışma zamanı sözlüğünün tamamını sağlar:
+
+```text
+locales/
+├── en-US.json
+├── fr-FR.json
+└── es-ES.json
+```
+
+Her dosya aynı anahtarlara ve string değerlere sahip düz bir JSON nesnesi olmalıdır. `en-US.json` referans ve geri dönüş sözlüğüdür. Build; geçersiz JSON'ı, eksik yerel ayarları, desteklenmeyen dosyaları, string olmayan değerleri ve uyuşmayan anahtarları reddeder.
+
+```json filename="locales/en-US.json"
+{ "watchingVideo": "Watching {title}" }
+```
+
+## Tür güvenli otomatik tamamlama
+
+```typescript
+import type enUS from "./locales/en-US.json"
+
+const locale = await presence.getStrings<typeof enUS>()
+const title = document.title
+
+await presence.setActivity({
+  details: presence.formatString(locale.watchingVideo, { title }),
+})
+```
+
+Yalnızca tür import'u IDE otomatik tamamlaması sağlar ve JSON'ı bundle'a eklemeden bilinmeyen anahtarları reddeder. Tür üretme komutu gerekmez.
+
+Dinamik değerler JSON'da `{name}` yer tutucularını, presence kodunda `presence.formatString(template, params)` işlevini kullanır.
+
+Kullanıcılar genel olarak tek bir etkinlik dili veya her yerelleştirilmiş presence için farklı bir dil seçebilir.

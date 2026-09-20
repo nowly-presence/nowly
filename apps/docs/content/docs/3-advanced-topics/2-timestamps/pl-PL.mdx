@@ -1,0 +1,34 @@
+---
+title: Znaczniki czasu
+description: Wyświetlaj postęp odtwarzania w Discord Rich Presence za pomocą znaczników czasu multimediów.
+---
+
+## Dlaczego znaczniki czasu mają znaczenie
+
+Znaczniki czasu sprawiają, że aktywność Discord wydaje się na żywo. Pokazują, jak długo użytkownik ogląda lub ile czasu pozostało.
+
+## Korzystanie z createMediaTimestamps
+
+`document` to API DOM przeglądarki (dostępne, ponieważ obecności działają jako content scripty). `Assets` jest dostarczane przez środowisko uruchomieniowe (zobacz [Assets](/presence-development/assets)).
+
+```ts filename="presence.ts"
+import { createMediaTimestamps } from "@nowly/sdk"
+
+const video = document.querySelector("video")
+
+if (video) {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    ...createMediaTimestamps(video),
+  })
+}
+```
+
+## Zatrzymane multimedia
+
+Gdy multimedia są zatrzymane, `createMediaTimestamps` nie zwraca znaczników czasu. Pozwala to uniknąć wyświetlania nieprawidłowego postępu odtwarzania.
+
+## Transmisje na żywo
+
+Transmisje na żywo często nie mają stałej długości. Użyj tylko znacznika czasu rozpoczęcia lub pomiń znaczniki, w zależności od zachowania platformy.

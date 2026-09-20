@@ -1,0 +1,36 @@
+---
+title: iFrames
+description: Gömülü çerçevelerin (frame) içindeki etkinlik verilerini işleyin.
+---
+
+<CalloutWarning>
+iFrame presence betikleri henüz Nowly uzantı runtime'ında **uygulanmamıştır**. `presence.on("iFrameData")` SDK türlerinde ayrılmıştır, ancak uzantı iç içe çerçevelere enjekte etmez veya bu olayı yayınlamaz. Bu özellik çıkana kadar üst düzey sayfayı (DOM, `<audio>` / `<video>`, genel sayfa durumu) okumayı tercih edin.
+</CalloutWarning>
+
+## iFrame'ler Ne Zaman Önemlidir
+
+Bazı web siteleri medya oynatıcılarını veya önemli durumları iframe içinde işler. Normal bir presence betiği, üst düzey sayfadaki her şeyi okuyamayabilir.
+
+iframe desteği gelene kadar, etkinliği yalnızca çapraz kaynaklı (cross-origin) bir çerçeve içinde sunan siteleri atlayın veya bu sınırlamayı presence açıklamasında belirtin.
+
+## Planlanan API
+
+Presence API, gelecekteki çerçeve düzeyi iletişim için bir `iFrameData` olayı ayırır:
+
+```ts filename="presence.ts"
+presence.on("iFrameData", async (...args) => {
+  presence.info("Received iframe data")
+})
+```
+
+Bugün üretimdeki presence'larda bu dinleyiciye güvenmeyin.
+
+## Önerilen Yaklaşım
+
+iFrame işlemeyi yalnızca ana sayfa gerekli duruma erişemediğinde kullanın.
+
+iFrame mantığı eklemeden önce kararlı DOM seçicilerini, medya öğelerini ve genel sayfa durumunu tercih edin.
+
+## Güvenlik
+
+Çerçevelerden kişisel veya hassas veri toplamaktan kaçının. Bir presence, Discord Rich Presence için yararlı olan etkinlik bilgilerini yalnızca göndermelidir.

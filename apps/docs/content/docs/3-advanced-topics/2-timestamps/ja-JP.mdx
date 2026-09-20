@@ -1,0 +1,34 @@
+---
+title: タイムスタンプ
+description: メディアのタイムスタンプを使って、Discord Rich Presenceに再生の進行状況を表示します。
+---
+
+## タイムスタンプが重要な理由
+
+タイムスタンプは、Discordアクティビティをライブ感のあるものにします。ユーザーがどれくらい視聴しているか、残り時間がどれくらいかを示します。
+
+## createMediaTimestampsの使用
+
+`document` はブラウザのDOM APIです(プレゼンスはコンテンツスクリプトとして実行されるため利用できます)。`Assets` はランタイムによって提供されます([Assets](/presence-development/assets)を参照)。
+
+```ts filename="presence.ts"
+import { createMediaTimestamps } from "@nowly/sdk"
+
+const video = document.querySelector("video")
+
+if (video) {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    ...createMediaTimestamps(video),
+  })
+}
+```
+
+## 一時停止中のメディア
+
+メディアが一時停止されている場合、`createMediaTimestamps` はタイムスタンプを返しません。これにより、誤った再生の進行状況が表示されるのを防ぎます。
+
+## ライブ配信
+
+ライブ配信には固定の再生時間がないことがよくあります。プラットフォームの動作に応じて、開始タイムスタンプのみを使用するか、タイムスタンプを省略してください。
