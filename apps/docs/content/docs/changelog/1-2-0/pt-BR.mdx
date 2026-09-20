@@ -1,0 +1,22 @@
+---
+title: 1.2.0
+date: 2026-06-25
+description: Reformulação visual e funcional da extensão, com novo player, componentes nativos, selo de atividade, pausa e planejamento, painel de depuração condicional e configurações reorganizadas.
+---
+
+`1.2.0` é um grande lançamento visual e funcional. Inclui player redesenhado, componente Sheet, selo no ícone, Switch e Checkbox personalizados, pausa, planejamento, depuração condicional e configurações reorganizadas.
+
+## Player
+Novo layout Bar com arte 48×48, vinil giratório em espera, barra de progresso opcional para música, streaming, TV e anime, e `showPlayer` para ocultar o cartão. Os controles de mídia foram removidos.
+
+## Sheet e controles
+O Sheet nativo, feito com Tailwind v4, desliza da parte inferior ou direita e é usado nas configurações, pausa e agenda. Switch e Checkbox personalizados mantêm a identidade visual do Nowly.
+
+## Atividade, pausa e planejamento
+Um ponto indica uma presença ativa no ícone da extensão. A pausa por presença, o planejamento por dias Sun–Sat, intervalos de horário e o modo de dia inteiro controlam quando a atividade aparece no Discord.
+
+## Qualidade e segurança
+Firefox recebeu caminhos de build, userScripts e manifests próprios. API, autenticação, analítica, proxy de imagens e sincronização foram reforçados. O Supporter Pass, `GET /security/public-key`, rotação de chaves e a migração para `cdn.nowly.me/assets/` foram adicionados.
+
+## Arquitetura
+Utilitários foram movidos para `@nowly/shared`; entradas, managers, services, runtime, analytics e componentes de UI foram reorganizados. Imports relativos usam aliases `@/`.

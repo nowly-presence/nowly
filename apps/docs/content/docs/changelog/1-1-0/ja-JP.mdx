@@ -1,0 +1,71 @@
+---
+title: 1.1.0
+date: To be determined
+description: The first maintenance release for Nowly, focused on update flows, active tracking, uninstall cleanup, docs cleanup, and release polish.
+---
+
+`1.1.0` is a maintenance release. It does not change the core product shape; it makes the existing flows behave in a way that matches user expectations and reorganizes the changelog into dedicated release pages.
+
+## Extension navigation
+
+The update badge now opens `/library/[item]` directly. There is no longer a detour through the old localized route structure.
+
+## Update state
+
+The installed version refreshes as soon as an update lands. The badge clears immediately instead of lingering until restart.
+
+## Active tracking
+
+`activeUsers` now follows a per-device model. The number reflects actual active devices instead of a flat placeholder.
+
+## Disable flow
+
+Disabling a presence removes that device from the active counter. Stale activity does not linger after a toggle.
+
+## Uninstall cleanup
+
+The extension sets a best-effort uninstall URL and the web page purges the device. Removal still happens when the extension is no longer available.
+
+## Detail page polish
+
+Transparent icon blocks use a backdrop blur. The banner no longer bleeds through the icon treatment as aggressively.
+
+## Changelog structure
+
+The changelog moved to `/changelog` and now uses one page per version. Each release can be linked, scanned, and maintained independently.
+
+## Docs navigation
+
+The changelog now appears in the docs sidebar with version children. Release notes are discoverable from the same navigation surface as the rest of the docs.
+
+## Docs sitemap
+
+The docs sitemap now includes the changelog index and version pages. Release notes are indexed like the rest of the documentation.
+
+## Desktop app page
+
+The download flow was consolidated into the main hero. Secondary cards were hidden so the page keeps one clear download area.
+
+## Desktop download panel
+
+The platform select, version line, and download buttons now live in a compact panel below the hero.
+
+## Desktop CTA
+
+The install extension CTA now uses an icon and points to the library.
+
+## Desktop storage
+
+The storage note now shows the exact package sizes from the `1.1.0` desktop app manifest.
+
+## Home platforms
+
+The homepage platform section now uses richer service cards and removes the `Available` heading. The service list feels current and stays driven by the live presence data.
+
+## Contributor spacing
+
+The contributor rows are now compact and full-width. The section no longer shows an awkward gap between people.
+
+## CLI docs
+
+The production build note was removed from the CLI documentation. The docs no longer suggest a separate Chrome Web Store build path there.

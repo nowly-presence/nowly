@@ -1,0 +1,91 @@
+---
+title: 1.2.0
+date: 2026-06-25
+description: UI/UX overhaul of the extension with a redesigned player, native components, activity badge, snooze & planning, conditional debug panel, and settings reorganization.
+---
+
+`1.2.0` is a major visual and functional release. It introduces a redesigned player card with vinyl animation, a handcrafted Sheet component, an extension icon badge, custom Switch and Checkbox components, snooze & planning features, a conditional debug panel, and a fully reorganized settings panel.
+
+## Player
+
+New Bar layout with 48×48 artwork (idle: spinning vinyl), optional thin progress bar (music/streaming/tv/anime only), and a showPlayer toggle to hide the card entirely. Media controls removed. Compact, clean design. Users can hide the player if they prefer a simpler interface.
+
+## Sheet
+
+New native Sheet component built with Tailwind v4 (no Radix), sliding from the bottom or right. Integrated into presence settings, snooze, and schedule. No more Radix dependency, smooth animation, mobile-friendly, and built-in focus trap.
+
+## Extension badge
+
+A • indicator appears on the extension icon when a presence is active. Users can tell at a glance whether Discord activity is running without opening the panel.
+
+## Custom Switch
+
+Square toggle with rounded corners: bordered background (off), purple fill with white knob (on). Aligns with the Nowly brand identity instead of the standard browser toggle.
+
+## Custom Checkbox
+
+18×18px rounded checkbox with accent fill and white check icon. Consistent branded look for consent toggles and future forms.
+
+## Presence settings
+
+Settings open in a bottom Sheet with configuration options and an Uninstall button. Labels linked to switches via htmlFor. Cleaner interface, more accessible (click label to toggle), uninstall always available.
+
+## Snooze
+
+Per-presence snooze with a bottom sheet stepper ([−] [time] [+], 5min steps, 5–240min). Snowflake icon to snooze, Sun icon to clear. Only posts CLEAR_ACTIVITY on unsnooze - activity stays visible with 'Snoozed' badge. Pause Discord activity without losing Nowly state. Quick stepper, clear affordance.
+
+## Planning
+
+Schedule per-presence or globally via day buttons (Sun–Sat) with optional time range. All-day mode hides start/end times. Global via action bar, per-presence via Calendar button on list items. Full control over when a presence shows on Discord. All-day mode simplifies setup.
+
+## Settings reorganization
+
+Header simplified with colored bullet + the desktop app status. Connection/host card removed. Data management merged with analytics. Update card shown conditionally with accent styling. Action bar only appears on the Activity tab. Cleaner settings with less clutter. Host update stands out when available. No distraction from action buttons while configuring.
+
+## Conditional debug panel
+
+DebugPanel hidden in Chrome Web Store builds (update_url check). Shown only in the Settings view with a collapsible header - no separate banner. Check Updates becomes a no-op in unpacked builds to avoid false update indicators. No debug leaks to production users. Cleaner UI: the header doubles as the notice. Dev users won't see phantom updates.
+
+## Progress bar
+
+Only shown for music, streaming, tv, and anime categories. Hidden for 'other' presences. Progress bar stays relevant - no meaningless timers for non-media presences.
+
+## Analytics consent
+
+Redesigned onboarding step with a compact grid showing 6 items we don't collect (X) and 1 item we do (✓). 'Share' button centered, 'No thanks' as plain text link. Clearer privacy communication. Less intimidating than the previous wall of text.
+
+## Firefox support
+
+Chrome and Firefox now have separate build paths, store packaging, native userScripts injection, CSP-strict page support, and host manifests for production Firefox IDs. Nowly is ready for a broader browser rollout without compromising presence injection reliability.
+
+## API hardening
+
+Auth, analytics, ratings, image proxy, presence sync, and AI changelog generation were tightened with validation, nonce checks, safer redirects, bounded caches, and injection-resistant prompts. Public endpoints are more predictable and safer under malformed input or hostile URLs.
+
+## Web, legal, and consent
+
+Added legal notice and cookies pages, cookie banner, consent management with export/delete flows, Team page, categorized footer, dynamic browser CTA, and status page fixes. The public site now covers release, trust, privacy, support, and team surfaces more completely.
+
+## Desktop app and release tooling
+
+Manual desktop app update checks restart the native bridge first. Logging is clearer, Discord IPC errors are logged, logs rotate, and extension archives are packaged with tar-based scripts. Updates and diagnostics are more reliable across local installs and release artifacts.
+
+## Internal quality
+
+Shared utilities moved to @nowly/shared, extension types/background helpers were split, UI primitives replaced raw elements, README/docs were expanded, and YouTube Music assets were refreshed. The codebase is easier to maintain while the release documentation matches the actual branch scope.
+
+## Supporter Pass
+
+New supporter pass system with email delivery, Discord webhook notifications, ad-free status, and a dedicated redeem page. Supporter status is synced across devices with a thank-you overlay. Also includes a `GET /support/verify-code` endpoint and a redesigned light-theme email template. Monetization foundation: users can support the project and get ad-free browsing in return. The full flow handles pass activation, Discord alerts, and device syncing seamlessly.
+
+## Security endpoint
+
+New `GET /security/public-key` endpoint derives the public key from `PRESENCE_SIGNING_PRIVATE_KEY` at runtime. The extension fetches it on startup with a hardcoded fallback. Enables key rotation without requiring extension updates. Backward compatible via the hardcoded fallback key.
+
+## CDN migration
+
+All static assets (app logos, icons, titles) are now served from `cdn.nowly.me/assets/` instead of `nowly.me` or `chrome.runtime.getURL`. Legacy logo files removed from web/public and extension build scripts. Faster global delivery, reduced extension bundle size, and centralized asset management.
+
+## Architecture refactor
+
+Entry points moved to `src/entrypoints/` (background, content, sidepanel). Background code reorganized into `managers/`, `services/`, `runtime/`, `analytics/` sub-directories. Components split into `layout/`, `shared/`, `ui/`. All relative imports replaced with `@/` path aliases. Cleaner codebase organization, easier navigation, and consistent import patterns across the entire extension.

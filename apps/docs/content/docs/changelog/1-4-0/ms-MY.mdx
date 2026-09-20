@@ -1,0 +1,73 @@
+---
+title: 1.4.0
+date: 2026-09-14
+description: Panel sisi baharu dengan navigasi bawah, pustaka dalam panel, jeda dan pintasan, pemasangan ZIP tempatan melalui nowly pack serta karya Presence.
+---
+
+`1.4.0` membina semula panel sisi sekitar Home, Library dan Settings. Jeda Discord, carian, menu konteks, percubaan semula luar talian dan `nowly pack` ditambah.
+
+## Library dan pemasangan
+Katalog boleh dicari dan dipasang dalam sambungan selepas semakan tandatangan. ZIP mesti mengandungi `metadata.json` dan `bundle.js`; `nowly pack <slug>` menghasilkan `dist/packs/<slug>.zip`.
+
+## Pintasan dan kemas kini
+`Ctrl+Shift+Y` membuka panel dan `Ctrl+Shift+U` menjeda Discord. Lencana versi, paparan pengurusan dan `/changelog/{version}` turut ditambah.
+
+## Cangkerang panel sisi
+Bar tindakan dan navigasi sisi lama digantikan dengan navigasi bawah, pengepala baharu dan bar status sambungan yang bersembunyi apabila aplikasi desktop sihat. Panel berfungsi seperti aplikasi kecil tanpa kehilangan aktiviti semasa.
+
+## Pustaka dalam panel
+Tab Library menyenaraikan katalog awam daripada API dengan carian, cip kategori dan butiran ringkas. Pemasangan serta kemas kini berjalan dalam sambungan selepas semakan tandatangan, termasuk daripada sepanduk kemas kini Home. Memasang tidak lagi membuka nowly.me.
+
+## Karya Presence
+Halaman Presence yang dipasang dan butiran Library memaparkan lakaran kecil sebagai sepanduk pudar di bahagian atas kad. Jika imej tiada, kad menggunakan halo warna. Paparan pengurusan sepadan dengan halaman laman web.
+
+## Versi
+Versi dipaparkan sebagai lencana di sebelah nama pada halaman Presence, di sebelah kategori dalam senarai Library, dan di sebelah Enabled atau Disabled dalam senarai Home.
+
+## Jeda Discord
+Jeda berterusan menghentikan Rich Presence di Discord tanpa menyahpasang atau melumpuhkan skrip. Butang pengepala, Settings dan Ctrl+Shift+U boleh digunakan; lencana bar alat serta bar status menunjukkan keadaannya.
+
+## Pintasan
+Ctrl+Shift+Y membuka panel dan Ctrl+Shift+U menjeda Discord. Settings menyenaraikan ikatan semasa serta pautan untuk mengubahnya dalam pelayar.
+
+## Menu konteks halaman
+Klik kanan halaman untuk pergi ke Presence yang dipasang, senarai Library atau carian nama hos dalam gedung.
+
+## Carian Home
+Home menapis Presence yang dipasang mengikut nama, slug, kategori atau URL tapak.
+
+## Pemasangan luar talian
+Permintaan pemasangan atau kemas kini yang gagal kerana rangkaian atau pelayan dimasukkan ke dalam baris gilir percubaan semula, secara automatik setiap minit dan melalui Retry now.
+
+## ZIP tempatan
+Dalam binaan tidak dibungkus (Load unpacked), letakkan ZIP Presence yang dibina pada panel Debug. ZIP mesti mengandungi metadata.json dan bundle.js; folder sumber yang hanya mengandungi presence.ts ditolak. Pemasangan tempatan kekal selepas sambungan dimuat semula.
+
+## CLI pack
+`nowly pack <slug>` membina Presence dan menulis `dist/packs/<slug>.zip`. `nowly extension <slug...>` masih menghasilkan folder Chrome yang sedia dimuatkan. Pack boleh dijalankan daripada pakej presences atau akar monorepo Nowly.
+
+## Butang utama
+Install dan butang utama lain menggunakan latar aksen dengan teks gelap. Kontras kekal betul pada setiap tema, termasuk aksen cerah.
+
+## Settings
+Settings dibahagikan kepada kumpulan General, Presences dan Advanced yang boleh dilipat. Togol lama untuk menyenaraikan Presence aktif dibuang; pintasan diletakkan bersama pilihan lain.
+
+## Dialog
+Snooze dan schedule dibuka dalam Dialog, bukan Sheet. Lapisan tindanan dipusatkan dan berkongsi satu corak.
+
+## Home
+Senarai Presence dan kad aktiviti semasa diolah semula. Baris senarai mengekalkan enable, schedule dan settings; kad grid menjadi jubin ringkas tanpa kawalan sebaris dan keseluruhan kad membuka paparan pengurusan.
+
+## Paparan
+Home bertukar antara senarai kategori dan grid kad dua lajur melalui togol padat dalam pengepala. Mod abjad lama dibuang.
+
+## Paparan pengurusan Presence
+Membuka Presence menggantikan senarai dengan panel penuh yang mengandungi karya, penerangan, suis enable, jalur kemas kini, ciri, URL disokong, kredit, blok Settings bertajuk dan kawalan uninstall berasingan dengan pengesahan.
+
+## Onboarding
+Susun atur tindanan penggunaan pertama dibina semula dan salinan dikemas kini dalam bahasa Inggeris, Perancis dan Sepanyol.
+
+## Tipografi
+Panel sisi kini menggunakan Instrument Sans dan lebih hampir kepada laman web.
+
+## Log perubahan kemas kini
+Kemas kini gedung membuka `/changelog/{version}` di nowly.me. Halaman itu menggunakan nota keluaran dokumentasi dengan hero “your extension was updated”.

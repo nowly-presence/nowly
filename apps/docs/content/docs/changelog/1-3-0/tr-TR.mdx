@@ -1,0 +1,22 @@
+---
+title: 1.3.0
+date: 14 Temmuz 2026
+description: Türü belirlenmiş presence dil paketleri, global ve presence başına Discord etkinlik dili denetimleri ve kararlı SDK ile CLI 1.0 sürümleri.
+---
+
+`1.3.0`, Discord etkinlik metni için yerelleştirme sistemi getirir. Yazarlar türü belirlenmiş JSON sözlükleri sunabilir; kullanıcılar dili genel olarak veya presence başına seçebilir.
+
+## Eklenti 1.3.0
+Global İngilizce, Fransızca ve İspanyolca modları ile presence başına mod eklendi. YouTube Fransızca, Netflix İspanyolca gösterebilir.
+## Çalışma zamanı
+İmzalı sözlükleri yükler, en-US'e geri döner, etkin sayfaları hemen günceller ve eski presences uyumluluğunu korur.
+## SDK 1.0.0
+`presence.getStrings<T>()` bağımsız türü belirlenmiş sözlük döndürür; VS Code anahtarları tamamlar ve bilinmeyenleri bildirir.
+## CLI 1.0.0
+İsteğe bağlı dil paketlerini keşfeder, doğrular, kopyalar ve meta verilere ekler; hatalı çeviriler erken ve kesin hatayla durur.
+## Sürüm hattı
+Paketler güncel ve sürümlü CDN yollarına yayımlanır ve değişmez önbellek alır.
+## Presence kütüphanesi
+Tüm mevcut presences en-US, fr-FR ve es-ES paketleri sağlar.
+## Belgeler ve uyumluluk
+Dil paketleri belgelenmiştir. `locales` olmayan presences ve eski imzalı sürümler kurulabilir; seçimler yeniden başlatma sonrasında korunur.
