@@ -1,0 +1,77 @@
+---
+title: Presence API
+description: Użyj Presence API Nowly, aby aktualizować Discord Rich Presence z integracji ze stroną internetową.
+---
+
+## Tworzenie obecności
+
+`Presence` jest obiektem **globalnym** wstrzykiwanym przez środowisko uruchomieniowe Nowly - nie musisz go importować.
+
+Każda obecność zaczyna się od instancji `Presence`:
+
+```ts filename="presence.ts"
+const presence = new Presence()
+```
+
+## Zdarzenie UpdateData
+
+Użyj `UpdateData`, aby odświeżyć aktywność:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: "Watching a video",
+  })
+})
+```
+
+## setActivity
+
+`setActivity` wysyła bieżącą aktywność Discorda. Typowe pola obejmują:
+
+<TypeTable
+  properties={[
+    { name: "details", type: "string", description: "Główna linia aktywności wyświetlana w Discordzie." },
+    { name: "state", type: "string", description: "Druga linia aktywności wyświetlana pod details." },
+    { name: "startTimestamp", type: "number", description: "Znacznik czasu Unix dla upływu postępu aktywności." },
+    { name: "endTimestamp", type: "number", description: "Znacznik czasu Unix dla pozostałego postępu aktywności." },
+    { name: "largeImageKey", type: "string", description: "Klucz głównego zasobu obrazu, zwykle Assets.Logo lub Assets.Thumbnail (globalne dostarczane przez środowisko uruchomieniowe)." },
+    { name: "largeImageText", type: "string", description: "Podpowiedź dla dużego obrazu." },
+    { name: "smallImageKey", type: "string", description: "Opcjonalny klucz małego zasobu obrazu." },
+    { name: "smallImageText", type: "string", description: "Podpowiedź dla małego obrazu." },
+    { name: "type", type: "number", description: "Typ aktywności Discorda z PresenceType." },
+    { name: "buttons", type: "array", description: "Opcjonalne przyciski aktywności Discorda." }
+  ]}
+/>
+
+## clearActivity
+
+Wywołaj `clearActivity`, gdy nie ma nic wartego pokazania:
+
+```ts filename="presence.ts"
+presence.clearActivity()
+```
+
+## PresenceType
+
+`PresenceType` to nazwany eksport z `@nowly/sdk`:
+
+```ts filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+```
+
+Mapuje się na typy aktywności Discorda: `Playing`, `Streaming`, `Listening`, `Watching` i `Competing`.
+
+## getSetting
+
+Odczytaj typowane ustawienie danej obecności po `Presence.Settings`. Wartość to zapisane ustawienie użytkownika lub wartość domyślna z definicji:
+
+```ts filename="presence.ts"
+const showButtons = await presence.getSetting<boolean>("showButtons")
+```
+
+`UpdateData` również otrzymuje `ctx.settings` z tą samą mapą. Oba są aktualizowane, gdy użytkownik zmienia ustawienia w panelu bocznym.
+
+## Logowanie
+
+Użyj `presence.info` i `presence.error` do komunikatów debugowania podczas developmentu.

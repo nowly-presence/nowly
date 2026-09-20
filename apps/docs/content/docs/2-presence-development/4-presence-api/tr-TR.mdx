@@ -1,0 +1,77 @@
+---
+title: Presence API
+description: Bir web sitesi entegrasyonundan Discord Rich Presence'ı güncellemek için Nowly Presence API'yi kullanın.
+---
+
+## Bir Presence Oluşturma
+
+`Presence`, Nowly runtime'ı tarafından enjekte edilen bir **global**dir - onu içe aktarmanıza gerek yoktur.
+
+Her presence bir `Presence` örneğiyle başlar:
+
+```ts filename="presence.ts"
+const presence = new Presence()
+```
+
+## UpdateData Olayı
+
+Etkinliği yenilemek için `UpdateData` kullanın:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: "Watching a video",
+  })
+})
+```
+
+## setActivity
+
+`setActivity`, geçerli Discord etkinliğini gönderir. Yaygın alanlar şunlardır:
+
+<TypeTable
+  properties={[
+    { name: "details", type: "string", description: "Discord'da gösterilen birincil etkinlik satırı." },
+    { name: "state", type: "string", description: "details'in altında gösterilen ikincil etkinlik satırı." },
+    { name: "startTimestamp", type: "number", description: "Geçen etkinlik ilerlemesi için Unix zaman damgası." },
+    { name: "endTimestamp", type: "number", description: "Kalan etkinlik ilerlemesi için Unix zaman damgası." },
+    { name: "largeImageKey", type: "string", description: "Ana görsel varlık anahtarı, genellikle Assets.Logo veya Assets.Thumbnail (runtime tarafından sağlanan globaller)." },
+    { name: "largeImageText", type: "string", description: "Büyük görsel için araç ipucu." },
+    { name: "smallImageKey", type: "string", description: "İsteğe bağlı küçük görsel varlık anahtarı." },
+    { name: "smallImageText", type: "string", description: "Küçük görsel için araç ipucu." },
+    { name: "type", type: "number", description: "PresenceType'dan gelen Discord etkinlik türü." },
+    { name: "buttons", type: "array", description: "İsteğe bağlı Discord etkinlik butonları." }
+  ]}
+/>
+
+## clearActivity
+
+Gösterilmeye değer bir şey olmadığında `clearActivity`'yi çağırın:
+
+```ts filename="presence.ts"
+presence.clearActivity()
+```
+
+## PresenceType
+
+`PresenceType`, `@nowly/sdk`'den adlandırılmış bir export'tur:
+
+```ts filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+```
+
+Discord etkinlik türlerine eşlenir: `Playing`, `Streaming`, `Listening`, `Watching` ve `Competing`.
+
+## getSetting
+
+`Presence.Settings`'ten sonra tipli, presence başına bir ayarı okuyun. Değer, kullanıcının kaydedilmiş ayarı veya tanımdaki varsayılan değerdir:
+
+```ts filename="presence.ts"
+const showButtons = await presence.getSetting<boolean>("showButtons")
+```
+
+`UpdateData`, aynı haritayla birlikte `ctx.settings`'i de alır. Kullanıcı yan panelde ayarları değiştirdiğinde ikisi de güncellenir.
+
+## Günlükleme
+
+Geliştirme sırasında hata ayıklama mesajları için `presence.info` ve `presence.error` kullanın.

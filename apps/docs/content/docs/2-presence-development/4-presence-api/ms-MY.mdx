@@ -1,0 +1,77 @@
+---
+title: Presence API
+description: Gunakan Presence API Nowly untuk mengemas kini Discord Rich Presence daripada integrasi laman web.
+---
+
+## Mencipta Presence
+
+`Presence` ialah **global** yang disuntik oleh runtime Nowly - anda tidak perlu mengimportnya.
+
+Setiap presence bermula dengan satu instance `Presence`:
+
+```ts filename="presence.ts"
+const presence = new Presence()
+```
+
+## Acara UpdateData
+
+Gunakan `UpdateData` untuk menyegarkan aktiviti:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: "Watching a video",
+  })
+})
+```
+
+## setActivity
+
+`setActivity` menghantar aktiviti Discord semasa. Medan biasa termasuk:
+
+<TypeTable
+  properties={[
+    { name: "details", type: "string", description: "Baris aktiviti utama yang dipaparkan dalam Discord." },
+    { name: "state", type: "string", description: "Baris aktiviti kedua dipaparkan di bawah details." },
+    { name: "startTimestamp", type: "number", description: "Cap masa Unix untuk kemajuan aktiviti yang telah berlalu." },
+    { name: "endTimestamp", type: "number", description: "Cap masa Unix untuk kemajuan aktiviti yang berbaki." },
+    { name: "largeImageKey", type: "string", description: "Kunci aset imej utama, biasanya Assets.Logo atau Assets.Thumbnail (global disediakan oleh runtime)." },
+    { name: "largeImageText", type: "string", description: "Petunjuk untuk imej besar." },
+    { name: "smallImageKey", type: "string", description: "Kunci aset imej kecil pilihan." },
+    { name: "smallImageText", type: "string", description: "Petunjuk untuk imej kecil." },
+    { name: "type", type: "number", description: "Jenis aktiviti Discord daripada PresenceType." },
+    { name: "buttons", type: "array", description: "Butang aktiviti Discord pilihan." }
+  ]}
+/>
+
+## clearActivity
+
+Panggil `clearActivity` apabila tiada apa yang berbaloi untuk dipaparkan:
+
+```ts filename="presence.ts"
+presence.clearActivity()
+```
+
+## PresenceType
+
+`PresenceType` ialah eksport bernama daripada `@nowly/sdk`:
+
+```ts filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+```
+
+Ia memetakan kepada jenis aktiviti Discord: `Playing`, `Streaming`, `Listening`, `Watching`, dan `Competing`.
+
+## getSetting
+
+Baca tetapan bertaip bagi setiap presence selepas `Presence.Settings`. Nilai ialah tetapan tersimpan pengguna, atau lalai definisi:
+
+```ts filename="presence.ts"
+const showButtons = await presence.getSetting<boolean>("showButtons")
+```
+
+`UpdateData` turut menerima `ctx.settings` dengan peta yang sama. Kedua-duanya dikemas kini apabila pengguna menukar tetapan dalam panel sisi.
+
+## Pengelogan
+
+Gunakan `presence.info` dan `presence.error` untuk mesej penyahpepijatan semasa pembangunan.
