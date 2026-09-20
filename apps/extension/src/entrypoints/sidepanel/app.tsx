@@ -30,23 +30,31 @@ type StoreScreenProps = {
 const StoreScreen = ({ seed }: StoreScreenProps): React.JSX.Element => {
   const state = useExtensionState()
   const [installingSlug, setInstallingSlug] = useState<string | null>(null)
+  const [installFeedback, setInstallFeedback] = useState<"error" | "queued" | null>(null)
 
-  const handleInstall = (slug: string): void => {
+  const handleInstall = async (slug: string): Promise<void> => {
+    setInstallFeedback(null)
     setInstallingSlug(slug)
-    void state.installPresenceFromApi(slug).finally(() => setInstallingSlug(null))
+    const result = await state.installPresenceFromApi(slug)
+    setInstallingSlug(null)
+    if (!result.ok) setInstallFeedback(result.queued ? "queued" : "error")
   }
 
   return (
-    <StoreView
-      installingSlug={installingSlug}
-      installQueueCount={state.installQueue.length}
-      onInstall={handleInstall}
-      onRetryQueue={() => void state.retryInstallQueue()}
-      presences={state.presences}
-      updates={state.updates}
-      seedQuery={seed.query}
-      seedSlug={seed.slug}
-    />
+    <div className="flex flex-col gap-3">
+      {installFeedback === "error" ? <p className="text-xs text-destructive">{t("store-install-error")}</p> : null}
+      {installFeedback === "queued" ? <p className="text-xs text-warning">{t("store-install-queued")}</p> : null}
+      <StoreView
+        installingSlug={installingSlug}
+        installQueueCount={state.installQueue.length}
+        onInstall={(slug) => void handleInstall(slug)}
+        onRetryQueue={() => void state.retryInstallQueue()}
+        presences={state.presences}
+        updates={state.updates}
+        seedQuery={seed.query}
+        seedSlug={seed.slug}
+      />
+    </div>
   )
 }
 
@@ -60,27 +68,41 @@ const ActivityScreen = ({ selectedSlug, onSelectPresence }: ActivityScreenProps)
   const [snoozeSlug, setSnoozeSlug] = useState<string | null>(null)
   const [scheduleSlug, setScheduleSlug] = useState<string | null>(null)
   const [updatingSlug, setUpdatingSlug] = useState<string | null>(null)
+  const [installFeedback, setInstallFeedback] = useState<"error" | "queued" | null>(null)
 
   const activeSlug = state.activity?.slug ?? null
   const activePresence = activeSlug ? state.presences[activeSlug] : null
   const isSnoozed = Boolean(activePresence?.snoozeUntil && activePresence.snoozeUntil > Date.now())
 
-  const handleUpdate = (slug: string): void => {
+  const handleUpdate = async (slug: string): Promise<void> => {
+    setInstallFeedback(null)
     setUpdatingSlug(slug)
-    void state.installPresenceFromApi(slug).finally(() => setUpdatingSlug(null))
+    const result = await state.installPresenceFromApi(slug)
+    setUpdatingSlug(null)
+    if (!result.ok) setInstallFeedback(result.queued ? "queued" : "error")
   }
+
+  const idleHint =
+    !state.activity && state.settings.scheduleEnabled === true && (Boolean(state.settings.globalSchedule) || Object.values(state.presences).some((presence) => Boolean(presence.schedule)))
+      ? t("schedule-idle-hint")
+      : undefined
 
   return (
     <div className="flex flex-col gap-4">
-      <CurrentActivityCard
-        activity={state.activity}
-        isLoading={state.isLoading}
-        isPaused={state.settings.presencePaused === true}
-        isSnoozed={isSnoozed}
-        presences={state.presences}
-        onSnooze={() => activeSlug && setSnoozeSlug(activeSlug)}
-        onUnsnooze={() => activeSlug && void sendMessage("CLEAR_SNOOZE", { slug: activeSlug })}
-      />
+      {installFeedback === "error" ? <p className="text-xs text-destructive">{t("store-install-error")}</p> : null}
+      {installFeedback === "queued" ? <p className="text-xs text-warning">{t("store-install-queued")}</p> : null}
+      {state.settings.showPlayer !== false && !selectedSlug ? (
+        <CurrentActivityCard
+          activity={state.activity}
+          idleHint={idleHint}
+          isLoading={state.isLoading}
+          isPaused={state.settings.presencePaused === true}
+          isSnoozed={isSnoozed}
+          presences={state.presences}
+          onSnooze={() => activeSlug && setSnoozeSlug(activeSlug)}
+          onUnsnooze={() => activeSlug && void sendMessage("CLEAR_SNOOZE", { slug: activeSlug })}
+        />
+      ) : null}
 
       <ActivityView
         entries={state.entries}
@@ -181,6 +203,7 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
             presencePaused={state.settings.presencePaused === true}
             onCheckUpdates={view === "activity" && !state.isUnpacked ? state.checkUpdates : undefined}
             isCheckingUpdates={state.isCheckingUpdates}
+            onReplayOnboarding={() => void sendMessage("RESET_ONBOARDING_FOR_DEV")}
           />
           <main id="sidepanel-tabpanel" className="flex-1 overflow-y-auto pb-3" aria-label={t(view === "activity" ? "nav-home" : view === "store" ? "nav-store" : "nav-settings")}>
             {view === "activity" ? (
