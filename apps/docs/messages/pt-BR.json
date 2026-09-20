@@ -1,0 +1,63 @@
+{
+  "navbar": {
+    "docs": "Documentação",
+    "library": "Biblioteca",
+    "open-menu": "Abrir menu"
+  },
+  "store": {
+    "download-chrome": "Baixar para Chrome",
+    "download-firefox": "Baixar para Firefox"
+  },
+  "theme": {
+    "toggle": "Alternar tema",
+    "light": "Claro",
+    "dark": "Escuro"
+  },
+  "footer": {
+    "tagline": "Compartilhe o que você faz.",
+    "copyright": "© 2026 Nowly. Todos os direitos reservados.",
+    "trademark": "Discord é uma marca registrada da <inc>Discord Inc.</inc>",
+    "language-label": "Idioma",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português (Brasil)",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "Produto",
+    "home": "Início",
+    "library": "Biblioteca",
+    "host": "App de desktop",
+    "resources": "Recursos",
+    "docs": "Documentação",
+    "changelog": "Notas de versão",
+    "canary": "Canary",
+    "support": "Suporte",
+    "community": "Comunidade",
+    "discord": "Discord",
+    "github": "GitHub",
+    "tos": "Termos de serviço",
+    "privacy": "Privacidade",
+    "cookies": "Cookies",
+    "legal-notice": "Aviso legal"
+  },
+  "cookie-banner": {
+    "message": "Este site usa um cookie de idioma estritamente necessário. Se a publicidade for ativada futuramente, o Google também poderá usar tecnologias de publicidade.",
+    "learn-more": "Saiba mais",
+    "dismiss": "Entendi"
+  },
+  "docs": {
+    "documentation": "Documentação",
+    "on-this-page": "Nesta página",
+    "toc": "Sumário",
+    "open-table-of-contents": "Abrir sumário",
+    "previous": "Anterior",
+    "next": "Próximo",
+    "menu": "Menu"
+  }
+}

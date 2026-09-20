@@ -1,0 +1,84 @@
+---
+title: Rozwiązywanie problemów
+description: Napraw brakującą aplikację desktopową, zamknięty Discord Desktop, brakujące obecności, brak aktywności, nieobsługiwane adresy URL i problemy z uprawnieniami.
+---
+
+## Zacznij od diagnostyki
+
+Otwórz panel boczny rozszerzenia i przeanalizuj każdy wiersz osobno:
+
+- Rozszerzenie zainstalowane
+- Skrypty użytkownika aktywne
+- Wykryto aplikację desktopową
+- Discord połączony
+- Obecność zainstalowana
+- Wykryto aktywność
+
+Nie polegaj na jednym ogólnym statusie. Brakujący wiersz to następna rzecz do naprawienia.
+
+## Nie wykryto aplikacji desktopowej
+
+Wyświetlany komunikat: **Nie wykryto aplikacji desktopowej.**
+
+Zainstaluj aplikację desktopową ze [strony aplikacji desktopowej](https://nowly.me/desktop), a następnie kliknij **Sprawdź połączenie** w rozszerzeniu. Jeśli właśnie ją zainstalowano, zamknij i otwórz ponownie panel boczny rozszerzenia.
+
+## Discord Desktop jest zamknięty
+
+Wyświetlany komunikat: **Aplikacja desktopowa jest zainstalowana, ale Discord Desktop nie jest otwarty.**
+
+Otwórz Discord Desktop, poczekaj kilka sekund, a następnie kliknij **Sprawdź połączenie**. Discord w przeglądarce nie może odbierać lokalnych aktualizacji Rich Presence.
+
+## Nie zainstalowano żadnej obecności
+
+Zainstaluj obecność z biblioteki. Aby najszybciej przetestować, zainstaluj [obecność YouTube](/library/youtube), a następnie otwórz YouTube.
+
+## Nie wykryto aktywności
+
+Upewnij się, że:
+
+- odpowiednia obecność jest zainstalowana i włączona
+- bieżący adres URL jest obsługiwany przez tę obecność
+- skrypty użytkownika są aktywne
+- strona została odświeżona po zainstalowaniu obecności
+
+## Adres URL nie jest obsługiwany
+
+Otwórz stronę szczegółów obecności i porównaj bieżący adres URL z listą **Obsługiwane adresy URL**. Jeśli strona zmieniła adres lub układ, zgłoś obecność ze strony pomocy technicznej.
+
+## Brakujące uprawnienia
+
+Otwórz ustawienia rozszerzeń w przeglądarce i sprawdź:
+
+- czy Nowly jest włączone
+- czy skrypty użytkownika są dozwolone
+- czy dostęp do witryny jest dozwolony dla bieżącej strony
+
+Po zmianie uprawnień odśwież kartę witryny i otwórz ponownie panel boczny rozszerzenia.
+
+## Linux: „Dostępna aktualizacja” po instalacji pliku .deb
+
+Wyświetlany komunikat: **dostępna aktualizacja**, mimo że pakiet `.deb` został właśnie zainstalowany.
+
+Dwie częste przyczyny, sprawdź je po kolei:
+
+1. **Plik `.deb` nigdy nie został faktycznie zainstalowany.** W niektórych środowiskach graficznych (np. XFCE z Thunarem) dwukrotne kliknięcie pliku `.deb` nic nie robi, jeśli nie jest z nim powiązany graficzny menedżer pakietów (np. GDebi). Zainstaluj go z terminala:
+
+   ```bash
+   sudo dpkg -i ~/Downloads/nowly-host.deb
+   ```
+
+   Następnie potwierdź, że jest zarejestrowany: `dpkg -L nowly-host` powinno wyświetlić `/usr/lib/nowly-client/nowly-host`.
+
+2. **Stary manifest per-użytkownik nadpisuje ten z pliku .deb.** Jeśli wcześniej zainstalowano aplikację desktopową z archiwum `.tar.gz` (skrypt `install-linux.sh`) przed przejściem na plik `.deb`, pozostały manifest w katalogu domowym może nadal wskazywać na stary plik binarny. Usuń go:
+
+   ```bash
+   rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
+   rm -f ~/.config/*/NativeMessagingHosts/nowly.client.json
+   rm -f ~/.local/share/NowlyClient/nowly-host
+   ```
+
+   Następnie całkowicie uruchom ponownie przeglądarkę (nie tylko rozszerzenie), aby ponownie uruchomiła proces natywny ze zaktualizowanym plikiem binarnym.
+
+## Kopiowanie diagnostyki pomocy technicznej
+
+Diagnostyka rozszerzenia zawiera przycisk **Kopiuj dane pomocy**. Kopiuje stan aplikacji desktopowej, Discorda, obecności i aktywności bez ujawniania dzienników technicznych.

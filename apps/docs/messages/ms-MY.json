@@ -1,0 +1,63 @@
+{
+  "navbar": {
+    "docs": "Dokumentasi",
+    "library": "Pustaka",
+    "open-menu": "Buka menu"
+  },
+  "store": {
+    "download-chrome": "Muat turun untuk Chrome",
+    "download-firefox": "Muat turun untuk Firefox"
+  },
+  "theme": {
+    "toggle": "Tukar tema warna",
+    "light": "Cerah",
+    "dark": "Gelap"
+  },
+  "footer": {
+    "tagline": "Kongsikan apa yang anda buat.",
+    "copyright": "© 2026 Nowly. Hak cipta terpelihara.",
+    "trademark": "Discord ialah tanda dagangan berdaftar <inc>Discord Inc.</inc>",
+    "language-label": "Bahasa",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português (Brasil)",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "Produk",
+    "home": "Laman utama",
+    "library": "Pustaka",
+    "host": "Aplikasi desktop",
+    "resources": "Sumber",
+    "docs": "Dokumentasi",
+    "changelog": "Nota keluaran",
+    "canary": "Canary",
+    "support": "Sokongan",
+    "community": "Komuniti",
+    "discord": "Discord",
+    "github": "GitHub",
+    "tos": "Terma perkhidmatan",
+    "privacy": "Privasi",
+    "cookies": "Kuki",
+    "legal-notice": "Notis undang-undang"
+  },
+  "cookie-banner": {
+    "message": "Laman ini menggunakan kuki bahasa yang benar-benar diperlukan. Jika iklan diaktifkan kelak, Google turut boleh menggunakan teknologi pengiklanan.",
+    "learn-more": "Ketahui lebih lanjut",
+    "dismiss": "Faham"
+  },
+  "docs": {
+    "documentation": "Dokumentasi",
+    "on-this-page": "Pada halaman ini",
+    "toc": "Kandungan",
+    "open-table-of-contents": "Buka jadual kandungan",
+    "previous": "Sebelumnya",
+    "next": "Seterusnya",
+    "menu": "Menu"
+  }
+}

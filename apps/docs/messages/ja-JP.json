@@ -1,0 +1,63 @@
+{
+  "navbar": {
+    "docs": "ドキュメント",
+    "library": "ライブラリ",
+    "open-menu": "メニューを開く"
+  },
+  "store": {
+    "download-chrome": "Chrome版をダウンロード",
+    "download-firefox": "Firefox版をダウンロード"
+  },
+  "theme": {
+    "toggle": "カラーテーマを切り替え",
+    "light": "ライト",
+    "dark": "ダーク"
+  },
+  "footer": {
+    "tagline": "あなたの「今」をシェアしよう。",
+    "copyright": "© 2026 Nowly. All rights reserved.",
+    "trademark": "Discordは<inc>Discord Inc.</inc>の登録商標です。",
+    "language-label": "言語",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português (Brasil)",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "製品",
+    "home": "ホーム",
+    "library": "ライブラリ",
+    "host": "デスクトップアプリ",
+    "resources": "リソース",
+    "docs": "ドキュメント",
+    "changelog": "リリースノート",
+    "canary": "Canary",
+    "support": "サポート",
+    "community": "コミュニティ",
+    "discord": "Discord",
+    "github": "GitHub",
+    "tos": "利用規約",
+    "privacy": "プライバシー",
+    "cookies": "Cookie",
+    "legal-notice": "特定商取引法に基づく表記"
+  },
+  "cookie-banner": {
+    "message": "このサイトでは、必要最小限の言語設定用Cookieを使用しています。今後広告機能が有効になった場合、Googleが広告技術を使用することがあります。",
+    "learn-more": "詳しく見る",
+    "dismiss": "了解しました"
+  },
+  "docs": {
+    "documentation": "ドキュメント",
+    "on-this-page": "このページの内容",
+    "toc": "目次",
+    "open-table-of-contents": "目次を開く",
+    "previous": "前へ",
+    "next": "次へ",
+    "menu": "メニュー"
+  }
+}

@@ -12,6 +12,14 @@ const localeLabelKey: Record<LocaleString, string> = {
   "en-US": "english",
   "fr-FR": "french",
   "es-ES": "spanish",
+  "de-DE": "german",
+  "pt-BR": "portuguese",
+  "pl-PL": "polish",
+  "ja-JP": "japanese",
+  "ko-KR": "korean",
+  "tr-TR": "turkish",
+  "ms-MY": "malay",
+  "el-GR": "greek",
 };
 
 export const LocaleSelector: FC = () => {

@@ -1,0 +1,52 @@
+---
+title: Προαπαιτούμενα
+description: Ρύθμισε το τοπικό σου περιβάλλον για ανάπτυξη presences - κλωνοποίησε το repository presences και εγκατέστησε το CLI.
+---
+
+## Απαιτήσεις
+
+- **Node.js 22+** - απαιτείται για την εκτέλεση του CLI και τη δημιουργία presences
+- **pnpm** - το repository presences χρησιμοποιεί pnpm workspaces
+- **Discord Desktop** - για τη δοκιμή του presence σου με το Nowly Host
+- **Git** - για την κλωνοποίηση του repository presences
+
+## Κλωνοποίηση του Repository Presences
+
+Όλα τα presences της κοινότητας βρίσκονται στο repository [nowly-presence/presences](https://github.com/nowly-presence/presences).
+
+```bash
+git clone https://github.com/nowly-presence/presences.git
+cd presences
+```
+
+## Εγκατάσταση του CLI Καθολικά
+
+Το Nowly CLI σου επιτρέπει να δημιουργείς, να επικυρώνεις και να χτίζεις presences.
+
+```bash
+pnpm i -g @nowly/cli
+```
+
+> Στο Node 24+, ίσως χρειαστείς `--config.minimumReleaseAge=0` αν το πακέτο δημοσιεύτηκε πρόσφατα.
+
+## Εγκατάσταση Εξαρτήσεων
+
+Το repository presences χρησιμοποιεί pnpm workspaces. Η εγκατάσταση εξαρτήσεων συνδέει επίσης το πακέτο `@nowly/sdk` για έλεγχο τύπων.
+
+```bash
+pnpm install
+```
+
+## Επαλήθευση Ρύθμισης
+
+Εκτέλεσε το CLI για να επιβεβαιώσεις ότι όλα λειτουργούν:
+
+```bash
+nowly --help
+```
+
+Θα πρέπει να δεις μια λίστα διαθέσιμων εντολών (`init`, `build`, `pack`, `extension`, `validate`, κ.λπ.).
+
+## Επόμενο Βήμα
+
+Το περιβάλλον σου είναι έτοιμο. Πήγαινε στο [Δημιουργία του Πρώτου σου Presence](/presence-development/creating-your-first-presence) για να δημιουργήσεις το πρώτο σου presence.

@@ -1,0 +1,52 @@
+---
+title: 사전 요구 사항
+description: 프레즌스를 개발하기 위해 로컬 환경을 설정하세요 - presences 저장소를 클론하고 CLI를 설치합니다.
+---
+
+## 요구 사항
+
+- **Node.js 22 이상** - CLI 실행 및 프레즌스 빌드에 필요합니다
+- **pnpm** - presences 저장소는 pnpm 워크스페이스를 사용합니다
+- **Discord Desktop** - Nowly Host로 프레즌스를 테스트하는 데 사용합니다
+- **Git** - presences 저장소를 클론하는 데 필요합니다
+
+## Presences 저장소 클론하기
+
+모든 커뮤니티 프레즌스는 [nowly-presence/presences](https://github.com/nowly-presence/presences) 저장소에 있습니다.
+
+```bash
+git clone https://github.com/nowly-presence/presences.git
+cd presences
+```
+
+## CLI를 전역으로 설치하기
+
+Nowly CLI를 사용하면 프레즌스를 스캐폴딩하고, 검증하고, 빌드할 수 있습니다.
+
+```bash
+pnpm i -g @nowly/cli
+```
+
+> Node 24 이상에서는 패키지가 최근에 게시된 경우 `--config.minimumReleaseAge=0`이 필요할 수 있습니다.
+
+## 의존성 설치하기
+
+presences 저장소는 pnpm 워크스페이스를 사용합니다. 의존성을 설치하면 타입 검사를 위한 `@nowly/sdk` 패키지도 함께 연결됩니다.
+
+```bash
+pnpm install
+```
+
+## 설정 확인하기
+
+CLI를 실행하여 모든 것이 정상적으로 작동하는지 확인하세요.
+
+```bash
+nowly --help
+```
+
+사용 가능한 명령어 목록(`init`, `build`, `pack`, `extension`, `validate` 등)이 표시되어야 합니다.
+
+## 다음 단계
+
+환경 설정이 완료되었습니다. [첫 프레즌스 만들기](/presence-development/creating-your-first-presence)로 이동하여 첫 프레즌스를 스캐폴딩하세요.

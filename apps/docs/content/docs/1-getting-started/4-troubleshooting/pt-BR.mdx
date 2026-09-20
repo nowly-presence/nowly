@@ -1,0 +1,84 @@
+---
+title: Solução de problemas
+description: Resolva problemas de app de desktop ausente, Discord Desktop fechado, presenças ausentes, atividade não detectada, URLs não compatíveis e permissões.
+---
+
+## Comece pelo diagnóstico
+
+Abra o painel lateral da extensão e leia cada linha individualmente:
+
+- Extensão instalada
+- Scripts de usuário ativos
+- App de desktop detectado
+- Discord conectado
+- Presença instalada
+- Atividade detectada
+
+Não confie em um único status geral. A linha ausente é a próxima coisa a corrigir.
+
+## App de desktop não detectado
+
+Mensagem exibida: **O app de desktop não foi detectado.**
+
+Instale o app de desktop na [página do app de desktop](https://nowly.me/desktop) e clique em **Verificar conexão** na extensão. Se você acabou de instalá-lo, feche e reabra o painel lateral da extensão.
+
+## Discord Desktop está fechado
+
+Mensagem exibida: **O app de desktop está instalado, mas o Discord Desktop não está aberto.**
+
+Abra o Discord Desktop, aguarde alguns segundos e clique em **Verificar conexão**. O Discord no navegador não consegue receber atualizações locais de Rich Presence.
+
+## Nenhuma presença instalada
+
+Instale uma presença na biblioteca. Para o teste mais rápido, instale a [presença do YouTube](/library/youtube) e abra o YouTube.
+
+## Nenhuma atividade detectada
+
+Verifique se:
+
+- a presença correspondente está instalada e ativada
+- a URL atual é compatível com essa presença
+- os scripts de usuário estão ativos
+- a página foi recarregada depois de instalar a presença
+
+## URL não compatível
+
+Abra a página de detalhes da presença e compare sua URL atual com a lista de **URLs compatíveis**. Se o site mudou de endereço ou layout, reporte a presença pela página de suporte.
+
+## Permissões ausentes
+
+Abra as configurações de extensões do seu navegador e verifique:
+
+- o Nowly está ativado
+- os scripts de usuário estão permitidos
+- o acesso ao site está permitido para o site atual
+
+Depois de alterar as permissões, recarregue a aba do site e reabra o painel lateral da extensão.
+
+## Linux: "Atualização disponível" após instalar o .deb
+
+Mensagem exibida: **atualização disponível**, mesmo com o pacote `.deb` recém-instalado.
+
+Duas causas comuns, verifique-as em ordem:
+
+1. **O `.deb` nunca foi realmente instalado.** Em alguns ambientes de desktop (XFCE com Thunar, por exemplo), clicar duas vezes em um `.deb` não faz nada se não houver um gerenciador de pacotes gráfico associado (como o GDebi). Em vez disso, instale pelo terminal:
+
+   ```bash
+   sudo dpkg -i ~/Downloads/nowly-host.deb
+   ```
+
+   Depois confirme se está registrado: `dpkg -L nowly-host` deve listar `/usr/lib/nowly-client/nowly-host`.
+
+2. **Um manifesto antigo por usuário está sobrepondo o do .deb.** Se você instalou anteriormente o app de desktop pelo arquivo `.tar.gz` (o script `install-linux.sh`) antes de mudar para o `.deb`, um manifesto residual no seu diretório home ainda pode apontar para o binário antigo. Remova-o:
+
+   ```bash
+   rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
+   rm -f ~/.config/*/NativeMessagingHosts/nowly.client.json
+   rm -f ~/.local/share/NowlyClient/nowly-host
+   ```
+
+   Depois reinicie completamente o navegador (não apenas a extensão) para que ele reinicie o processo nativo com o binário atualizado.
+
+## Copiar um diagnóstico de suporte
+
+O diagnóstico da extensão inclui um botão **Copiar suporte**. Ele copia o estado do app de desktop, Discord, presenças e atividade sem expor logs técnicos.

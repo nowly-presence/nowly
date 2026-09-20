@@ -1,0 +1,84 @@
+---
+title: Fehlerbehebung
+description: Behebe eine fehlende Desktop-App, geschlossenes Discord Desktop, fehlende Presences, fehlende Aktivität, nicht unterstützte URLs und Berechtigungsprobleme.
+---
+
+## Beginne mit der Diagnose
+
+Öffne das Seitenpanel der Erweiterung und lies jede Zeile einzeln:
+
+- Erweiterung installiert
+- Benutzerskripte aktiv
+- Desktop-App erkannt
+- Discord verbunden
+- Presence installiert
+- Aktivität erkannt
+
+Verlasse dich nicht auf einen einzigen Gesamtstatus. Die fehlende Zeile ist der nächste Punkt, den du beheben musst.
+
+## Desktop-App wird nicht erkannt
+
+Angezeigte Meldung: **Die Desktop-App wird nicht erkannt.**
+
+Installiere die Desktop-App von der [Desktop-App-Seite](https://nowly.me/desktop) und klicke dann in der Erweiterung auf **Verbindung prüfen**. Wenn du sie gerade installiert hast, schließe und öffne das Seitenpanel der Erweiterung erneut.
+
+## Discord Desktop ist geschlossen
+
+Angezeigte Meldung: **Die Desktop-App ist installiert, aber Discord Desktop ist nicht geöffnet.**
+
+Öffne Discord Desktop, warte ein paar Sekunden und klicke dann auf **Verbindung prüfen**. Discord im Browser kann keine lokalen Rich-Presence-Updates empfangen.
+
+## Keine Presence Installiert
+
+Installiere eine Presence aus der Bibliothek. Für den schnellsten Test installiere die [YouTube-Presence](/library/youtube) und öffne dann YouTube.
+
+## Keine Aktivität Erkannt
+
+Stelle sicher, dass:
+
+- die passende Presence installiert und aktiviert ist
+- die aktuelle URL von dieser Presence unterstützt wird
+- Benutzerskripte aktiv sind
+- die Seite nach der Installation der Presence neu geladen wurde
+
+## URL Wird Nicht Unterstützt
+
+Öffne die Detailseite der Presence und vergleiche deine aktuelle URL mit der Liste **Unterstützte URLs**. Falls die Website ihre Adresse oder ihr Layout geändert hat, melde die Presence über die Support-Seite.
+
+## Berechtigungen Fehlen
+
+Öffne die Erweiterungseinstellungen deines Browsers und prüfe:
+
+- Nowly ist aktiviert
+- Benutzerskripte sind erlaubt
+- der Website-Zugriff ist für die aktuelle Seite erlaubt
+
+Nachdem du die Berechtigungen geändert hast, lade den Website-Tab neu und öffne das Seitenpanel der Erweiterung erneut.
+
+## Linux: „Update verfügbar" nach Installation der .deb
+
+Angezeigte Meldung: **update verfügbar**, obwohl das `.deb`-Paket gerade erst installiert wurde.
+
+Zwei häufige Ursachen, prüfe sie der Reihe nach:
+
+1. **Die `.deb` wurde nie wirklich installiert.** In manchen Desktop-Umgebungen (z. B. XFCE mit Thunar) passiert beim Doppelklick auf eine `.deb`-Datei nichts, wenn kein grafischer Paketmanager damit verknüpft ist (wie GDebi). Installiere sie stattdessen über ein Terminal:
+
+   ```bash
+   sudo dpkg -i ~/Downloads/nowly-host.deb
+   ```
+
+   Bestätige anschließend, dass sie registriert ist: `dpkg -L nowly-host` sollte `/usr/lib/nowly-client/nowly-host` auflisten.
+
+2. **Ein altes benutzerspezifisches Manifest überschreibt das aus der .deb.** Wenn du die Desktop-App zuvor aus dem `.tar.gz`-Archiv (dem Skript `install-linux.sh`) installiert hast, bevor du zur `.deb` gewechselt bist, kann ein zurückgebliebenes Manifest in deinem Home-Verzeichnis noch auf die alte Binärdatei verweisen. Entferne es:
+
+   ```bash
+   rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
+   rm -f ~/.config/*/NativeMessagingHosts/nowly.client.json
+   rm -f ~/.local/share/NowlyClient/nowly-host
+   ```
+
+   Starte danach den Browser vollständig neu (nicht nur die Erweiterung), damit er den nativen Prozess mit der aktualisierten Binärdatei neu startet.
+
+## Eine Support-Diagnose kopieren
+
+Die Diagnose der Erweiterung enthält eine Schaltfläche **Support-Info kopieren**. Sie kopiert den Status von Desktop-App, Discord, Presences und Aktivität, ohne technische Logs offenzulegen.
