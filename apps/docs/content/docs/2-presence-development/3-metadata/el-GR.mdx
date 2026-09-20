@@ -1,0 +1,123 @@
+---
+title: Metadata
+description: Τεκμηρίωσε κάθε υποχρεωτικό και προαιρετικό πεδίο στο αρχείο metadata.json ενός presence Nowly.
+---
+
+## Υποχρεωτικά Πεδία
+
+Κάθε presence χρειάζεται:
+
+<TypeTable
+  properties={[
+    { name: "name", type: "string", description: "Το εμφανιζόμενο όνομα της υπηρεσίας ή της πλατφόρμας.", required: true },
+    { name: "author", type: "object", description: "Ο κύριος δημιουργός που εμφανίζεται πρώτος στη βιβλιοθήκη και στις εικόνες OG.", required: true },
+    { name: "description", type: "object", description: "Σύντομες μεταφρασμένες περιγραφές, ταξινομημένες ανά locale.", required: true },
+    { name: "url", type: "string[]", description: "Υποστηριζόμενα domains ή patterns URL για αντιστοίχιση σελίδων.", required: true },
+    { name: "color", type: "string", description: "Χρώμα μάρκας σε μορφή hex, χρησιμοποιείται από το UI και τα embeds.", required: true },
+    { name: "category", type: "string", description: "Ένα από τα streaming, music, video, social, gaming, tools, ai, learning, creator, ή other.", required: true }
+  ]}
+/>
+
+## Παράδειγμα
+
+```json
+{
+  "name": "YouTube",
+  "author": {
+    "name": "Nowly Developer",
+    "github": "example"
+  },
+  "url": ["youtube.com", "www.youtube.com"],
+  "color": "#FF0033",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch and share videos on YouTube."
+  }
+}
+```
+
+## Δημιουργός και Συντελεστές
+
+- `author` - Κύριος συντηρητής, εμφανίζεται πρώτος στη βιβλιοθήκη και στις εικόνες OG.
+- `contributors` - Επιπλέον άτομα που βοήθησαν με το presence.
+
+<CalloutInfo>
+Τα ονόματα χρηστών GitHub (το κλειδί `github`) χρησιμοποιούνται για την επίλυση avatar.
+</CalloutInfo>
+
+## Περιγραφές και Χαρακτηριστικά
+
+- `description` - Σύντομο κείμενο marketplace, ταξινομημένο ανά locale.
+- `longDescription` - Εκτεταμένη περιγραφή για σελίδες λεπτομερειών.
+- `features` - Μεταφρασμένη λίστα υποστηριζόμενης συμπεριφοράς (π.χ. υποστήριξη κουμπιών, πλήκτρα πολυμέσων).
+
+## Εγγενής Υποστήριξη Discord
+
+Ορισμένες πλατφόρμες εμφανίζονται ήδη στο Discord όταν ο χρήστης συνδέσει τον λογαριασμό του (το Spotify είναι το συνηθισμένο παράδειγμα). Όρισε αυτή την προαιρετική σημαία ώστε η βιβλιοθήκη να μπορεί να εξηγήσει ότι το Nowly είναι ακόμα χρήσιμο χωρίς αυτή τη σύνδεση.
+
+<TypeTable
+  properties={[
+    { name: "discordNative", type: "boolean", description: "True όταν το Discord εμφανίζει ήδη αυτή την πλατφόρμα αν ο χρήστης συνδέσει τον λογαριασμό του. Προαιρετικό. Προεπιλογή false.", required: false }
+  ]}
+/>
+
+```json
+{
+  "name": "Spotify",
+  "discordNative": true
+}
+```
+
+Αυτό εμφανίζει μόνο μια ενημερωτική σημείωση στη σελίδα της βιβλιοθήκης και στην επέκταση (κατάστημα και λεπτομέρειες εγκατεστημένου presence). Δεν εμποδίζει την εγκατάσταση.
+
+## Αντιστοίχιση URL
+
+- `url` - Υποστηριζόμενα domains ή patterns URL για αντιστοίχιση σελίδων.
+- `regExp` - Αντιστοίχιση βασισμένη σε regex για σύνθετα patterns URL.
+
+<CalloutWarning>
+Χρησιμοποίησε το `regExp` μόνο όταν η απλή αντιστοίχιση `url` δεν είναι αρκετή. Προτίμησε ρητές λίστες domain.
+</CalloutWarning>
+
+## Πλαίσιο Εκτέλεσης
+
+Δύο προαιρετικά πεδία ελέγχουν πώς και πότε εκτελείται το script του presence σου στον browser.
+
+<TypeTable
+  properties={[
+    { name: "world", type: "\"main\" | \"isolated\"", description: "Κόσμος εκτέλεσης. Προεπιλογή isolated.", required: false },
+    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "Πότε εισάγεται το script. Προεπιλογή document_idle.", required: false }
+  ]}
+/>
+
+Από προεπιλογή, ένα presence εκτελείται στον κόσμο **isolated**: μοιράζεται το DOM της σελίδας αλλά όχι το πλαίσιο JavaScript της σελίδας. Αυτή είναι η ασφαλής προεπιλογή και λειτουργεί για σχεδόν κάθε presence.
+
+Όρισε `"world": "main"` όταν το presence σου χρειάζεται το **πλαίσιο της σελίδας**, συγκεκριμένα για:
+
+- να διαβάζει global μεταβλητές της σελίδας (π.χ. ένα αντικείμενο player που ο ιστότοπος εκθέτει στο `window`)·
+- να κάνει ένα **αυθεντικοποιημένο `fetch` ίδιας προέλευσης** που πρέπει να μεταφέρει τα cookies συνεδρίας του χρήστη (π.χ. ένα εσωτερικό API metadata ενός ιστότοπου).
+
+```json
+{
+  "name": "Netflix",
+  "url": ["netflix.com", "www.netflix.com"],
+  "world": "main",
+  "color": "#E50914",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch movies and series on Netflix."
+  }
+}
+```
+
+<CalloutWarning>
+Ένα `fetch` από τον κόσμο isolated δεν αντιμετωπίζεται ως αίτημα πρώτου μέρους, οπότε οι αυθεντικοποιημένες κλήσεις αποτυγχάνουν σιωπηλά. Αν το presence σου βασίζεται στο συνδεδεμένο API του ιστότοπου, πρέπει να ορίσεις `"world": "main"`.
+</CalloutWarning>
+
+<CalloutInfo>
+Η δήλωση βρίσκεται εξ ολοκλήρου μέσα στο `metadata.json` - η επέκταση τη διαβάζει κατά την εγγραφή. Δεν χρειάζονται αλλαγές στην επέκταση για να προστεθεί ένα νέο presence με πλαίσιο σελίδας.
+</CalloutInfo>
+
+## Κατηγορία
+
+Οι επιτρεπόμενες κατηγορίες είναι `streaming`, `music`, `video`, `social`, `gaming`, `tools`, `ai`, `learning`, `creator`, και `other`.

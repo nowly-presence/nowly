@@ -1,0 +1,123 @@
+---
+title: Metadane
+description: Poznaj każde wymagane i opcjonalne pole w pliku metadata.json obecności Nowly.
+---
+
+## Wymagane Pola
+
+Każda obecność potrzebuje:
+
+<TypeTable
+  properties={[
+    { name: "name", type: "string", description: "Nazwa wyświetlana usługi lub platformy.", required: true },
+    { name: "author", type: "object", description: "Główny autor, wyświetlany jako pierwszy w bibliotece i obrazach OG.", required: true },
+    { name: "description", type: "object", description: "Krótkie zlokalizowane opisy, indeksowane według locale.", required: true },
+    { name: "url", type: "string[]", description: "Obsługiwane domeny lub wzorce URL do dopasowywania stron.", required: true },
+    { name: "color", type: "string", description: "Kolor marki w formacie hex, używany przez UI i osadzenia.", required: true },
+    { name: "category", type: "string", description: "Jedna z: streaming, music, video, social, gaming, tools, ai, learning, creator lub other.", required: true }
+  ]}
+/>
+
+## Przykład
+
+```json
+{
+  "name": "YouTube",
+  "author": {
+    "name": "Nowly Developer",
+    "github": "example"
+  },
+  "url": ["youtube.com", "www.youtube.com"],
+  "color": "#FF0033",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch and share videos on YouTube."
+  }
+}
+```
+
+## Autor i Współtwórcy
+
+- `author` - Główny opiekun, wyświetlany jako pierwszy w bibliotece i obrazach OG.
+- `contributors` - Dodatkowe osoby, które pomogły przy obecności.
+
+<CalloutInfo>
+Nazwy użytkowników GitHub (klucz `github`) są używane do rozpoznawania awatarów.
+</CalloutInfo>
+
+## Opisy i Funkcje
+
+- `description` - Krótki tekst marketplace, indeksowany według locale.
+- `longDescription` - Rozszerzony opis dla stron szczegółów.
+- `features` - Zlokalizowana lista obsługiwanych zachowań (np. obsługa przycisków, klawisze multimedialne).
+
+## Natywne wsparcie Discorda
+
+Niektóre platformy już pojawiają się na Discordzie, gdy użytkownik połączy swoje konto (Spotify to typowy przykład). Ustaw tę opcjonalną flagę, aby biblioteka mogła wyjaśnić, że Nowly nadal jest przydatne bez tego połączenia.
+
+<TypeTable
+  properties={[
+    { name: "discordNative", type: "boolean", description: "True, gdy Discord już pokazuje tę platformę, jeśli użytkownik połączy swoje konto. Opcjonalne. Domyślnie false.", required: false }
+  ]}
+/>
+
+```json
+{
+  "name": "Spotify",
+  "discordNative": true
+}
+```
+
+To wyświetla jedynie informacyjną notatkę na stronie biblioteki i w rozszerzeniu (sklep i szczegóły zainstalowanej obecności). Nie blokuje instalacji.
+
+## Dopasowywanie URL
+
+- `url` - Obsługiwane domeny lub wzorce URL do dopasowywania stron.
+- `regExp` - Dopasowywanie oparte na wyrażeniach regularnych dla złożonych wzorców URL.
+
+<CalloutWarning>
+Używaj `regExp` tylko wtedy, gdy proste dopasowywanie `url` nie wystarcza. Preferuj jawne listy domen.
+</CalloutWarning>
+
+## Kontekst Wykonania
+
+Dwa opcjonalne pola kontrolują, jak i kiedy skrypt Twojej obecności działa w przeglądarce.
+
+<TypeTable
+  properties={[
+    { name: "world", type: "\"main\" | \"isolated\"", description: "Świat wykonania. Domyślnie isolated.", required: false },
+    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "Kiedy skrypt jest wstrzykiwany. Domyślnie document_idle.", required: false }
+  ]}
+/>
+
+Domyślnie obecność działa w świecie **isolated**: współdzieli DOM strony, ale nie kontekst JavaScript strony. To bezpieczne ustawienie domyślne, które działa dla niemal każdej obecności.
+
+Ustaw `"world": "main"`, gdy Twoja obecność potrzebuje **kontekstu strony**, konkretnie do:
+
+- odczytywania globalnych zmiennych strony (np. obiektu odtwarzacza, który strona udostępnia w `window`);
+- wykonania **uwierzytelnionego zapytania `fetch` tego samego pochodzenia**, które musi przenosić pliki cookie sesji użytkownika (np. wewnętrzne API metadanych strony).
+
+```json
+{
+  "name": "Netflix",
+  "url": ["netflix.com", "www.netflix.com"],
+  "world": "main",
+  "color": "#E50914",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch movies and series on Netflix."
+  }
+}
+```
+
+<CalloutWarning>
+`fetch` wykonany ze świata isolated nie jest traktowany jako żądanie pierwszej strony, więc uwierzytelnione wywołania kończą się niepowodzeniem po cichu. Jeśli Twoja obecność polega na zalogowanym API strony, musisz ustawić `"world": "main"`.
+</CalloutWarning>
+
+<CalloutInfo>
+Deklaracja znajduje się w całości w `metadata.json` - rozszerzenie odczytuje ją podczas rejestracji. Nie są potrzebne żadne zmiany w rozszerzeniu, aby dodać nową obecność w kontekście strony.
+</CalloutInfo>
+
+## Kategoria
+
+Dozwolone kategorie to `streaming`, `music`, `video`, `social`, `gaming`, `tools`, `ai`, `learning`, `creator` i `other`.

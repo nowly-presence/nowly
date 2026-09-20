@@ -1,0 +1,123 @@
+---
+title: メタデータ
+description: Nowlyプレゼンスのmetadata.jsonファイルにおける必須項目・任意項目を解説します。
+---
+
+## 必須項目
+
+すべてのプレゼンスに必要な項目:
+
+<TypeTable
+  properties={[
+    { name: "name", type: "string", description: "サービスまたはプラットフォームの表示名。", required: true },
+    { name: "author", type: "object", description: "ライブラリやOG画像で最初に表示される主要作者。", required: true },
+    { name: "description", type: "object", description: "ロケールごとの短い説明文。", required: true },
+    { name: "url", type: "string[]", description: "ページ判定に使用する対応ドメインまたはURLパターン。", required: true },
+    { name: "color", type: "string", description: "UIや埋め込みで使用される16進数形式のブランドカラー。", required: true },
+    { name: "category", type: "string", description: "streaming、music、video、social、gaming、tools、ai、learning、creator、otherのいずれか。", required: true }
+  ]}
+/>
+
+## 例
+
+```json
+{
+  "name": "YouTube",
+  "author": {
+    "name": "Nowly Developer",
+    "github": "example"
+  },
+  "url": ["youtube.com", "www.youtube.com"],
+  "color": "#FF0033",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch and share videos on YouTube."
+  }
+}
+```
+
+## 作者と貢献者
+
+- `author` - ライブラリやOG画像で最初に表示される主要メンテナー。
+- `contributors` - プレゼンスの作成に協力した追加の人物。
+
+<CalloutInfo>
+GitHubのユーザー名(`github`キー)はアバターの解決に使用されます。
+</CalloutInfo>
+
+## 説明文と機能
+
+- `description` - ロケールごとのマーケットプレイス向けの短い説明文。
+- `longDescription` - 詳細ページ用の拡張された説明文。
+- `features` - 対応している動作(ボタン対応、メディアキーなど)のロケール別リスト。
+
+## Discordネイティブ対応
+
+一部のプラットフォームは、ユーザーがアカウントを連携すると既にDiscordに表示されます(Spotifyが典型例です)。この任意フラグを設定すると、その連携なしでもNowlyが有用であることをライブラリで説明できます。
+
+<TypeTable
+  properties={[
+    { name: "discordNative", type: "boolean", description: "ユーザーがアカウントを連携するとDiscordが既にこのプラットフォームを表示する場合はtrue。任意。デフォルトはfalse。", required: false }
+  ]}
+/>
+
+```json
+{
+  "name": "Spotify",
+  "discordNative": true
+}
+```
+
+これはライブラリページと拡張機能(ストアおよびインストール済みプレゼンスの詳細)に情報メモを表示するだけです。インストールをブロックすることはありません。
+
+## URLマッチング
+
+- `url` - ページ判定に使用する対応ドメインまたはURLパターン。
+- `regExp` - 複雑なURLパターン向けの正規表現ベースのマッチング。
+
+<CalloutWarning>
+`regExp` は、シンプルな `url` マッチングだけでは不十分な場合にのみ使用してください。明示的なドメインリストを優先してください。
+</CalloutWarning>
+
+## 実行コンテキスト
+
+2つの任意項目で、プレゼンススクリプトがブラウザ内でどのように・いつ実行されるかを制御できます。
+
+<TypeTable
+  properties={[
+    { name: "world", type: "\"main\" | \"isolated\"", description: "実行環境。デフォルトはisolated。", required: false },
+    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "スクリプトが注入されるタイミング。デフォルトはdocument_idle。", required: false }
+  ]}
+/>
+
+デフォルトでは、プレゼンスは**isolated**環境で実行されます。これはページのDOMは共有しますが、ページのJavaScriptコンテキストは共有しません。これは安全なデフォルト設定であり、ほとんどのプレゼンスで機能します。
+
+**ページコンテキスト**が必要な場合、特に以下のケースでは `"world": "main"` を設定してください。
+
+- サイトが `window` に公開しているプレイヤーオブジェクトなど、ページのグローバル変数を読み取る場合
+- ユーザーのセッションCookieを伴う必要がある**同一オリジンの認証付き`fetch`**を行う場合(サイト内部のメタデータAPIなど)
+
+```json
+{
+  "name": "Netflix",
+  "url": ["netflix.com", "www.netflix.com"],
+  "world": "main",
+  "color": "#E50914",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch movies and series on Netflix."
+  }
+}
+```
+
+<CalloutWarning>
+isolated環境からの `fetch` はファーストパーティのリクエストとして扱われないため、認証付きの呼び出しは黙って失敗します。プレゼンスがサイトのログイン済みAPIに依存する場合は、`"world": "main"` を設定する必要があります。
+</CalloutWarning>
+
+<CalloutInfo>
+この宣言は完全に `metadata.json` 内に存在し、拡張機能は登録時にそれを読み取ります。新しいページコンテキストのプレゼンスを追加するために、拡張機能側の変更は必要ありません。
+</CalloutInfo>
+
+## カテゴリ
+
+許可されているカテゴリは `streaming`、`music`、`video`、`social`、`gaming`、`tools`、`ai`、`learning`、`creator`、`other` です。

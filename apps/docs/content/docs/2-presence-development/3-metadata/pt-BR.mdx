@@ -1,0 +1,123 @@
+---
+title: Metadata
+description: Documente todos os campos obrigatórios e opcionais do arquivo metadata.json de uma presença Nowly.
+---
+
+## Campos Obrigatórios
+
+Toda presença precisa de:
+
+<TypeTable
+  properties={[
+    { name: "name", type: "string", description: "Nome de exibição do serviço ou plataforma.", required: true },
+    { name: "author", type: "object", description: "Autor principal, exibido primeiro na biblioteca e nas imagens OG.", required: true },
+    { name: "description", type: "object", description: "Descrições curtas localizadas, indexadas por localidade.", required: true },
+    { name: "url", type: "string[]", description: "Domínios ou padrões de URL compatíveis para correspondência de páginas.", required: true },
+    { name: "color", type: "string", description: "Cor da marca em formato hexadecimal, usada pela UI e embeds.", required: true },
+    { name: "category", type: "string", description: "Uma de streaming, music, video, social, gaming, tools, ai, learning, creator ou other.", required: true }
+  ]}
+/>
+
+## Exemplo
+
+```json
+{
+  "name": "YouTube",
+  "author": {
+    "name": "Nowly Developer",
+    "github": "example"
+  },
+  "url": ["youtube.com", "www.youtube.com"],
+  "color": "#FF0033",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch and share videos on YouTube."
+  }
+}
+```
+
+## Autor e Colaboradores
+
+- `author` - Mantenedor principal, exibido primeiro na biblioteca e nas imagens OG.
+- `contributors` - Outras pessoas que ajudaram com a presença.
+
+<CalloutInfo>
+Os nomes de usuário do GitHub (a chave `github`) são usados para resolver avatares.
+</CalloutInfo>
+
+## Descrições e Recursos
+
+- `description` - Texto curto do marketplace, indexado por localidade.
+- `longDescription` - Descrição expandida para páginas de detalhes.
+- `features` - Lista localizada de comportamentos suportados (ex.: suporte a botões, teclas de mídia).
+
+## Suporte nativo do Discord
+
+Algumas plataformas já aparecem no Discord quando o usuário vincula sua conta (o Spotify é o exemplo mais comum). Defina essa flag opcional para que a biblioteca possa explicar que o Nowly ainda é útil sem essa vinculação.
+
+<TypeTable
+  properties={[
+    { name: "discordNative", type: "boolean", description: "True quando o Discord já mostra essa plataforma se o usuário vincular sua conta. Opcional. O padrão é false.", required: false }
+  ]}
+/>
+
+```json
+{
+  "name": "Spotify",
+  "discordNative": true
+}
+```
+
+Isso apenas exibe uma nota informativa na página da biblioteca e na extensão (loja e detalhes de presenças instaladas). Não bloqueia a instalação.
+
+## Correspondência de URL
+
+- `url` - Domínios ou padrões de URL compatíveis para correspondência de páginas.
+- `regExp` - Correspondência baseada em regex para padrões de URL complexos.
+
+<CalloutWarning>
+Use `regExp` apenas quando a correspondência simples por `url` não for suficiente. Prefira listas explícitas de domínios.
+</CalloutWarning>
+
+## Contexto de Execução
+
+Dois campos opcionais controlam como e quando o script da sua presença é executado no navegador.
+
+<TypeTable
+  properties={[
+    { name: "world", type: "\"main\" | \"isolated\"", description: "Contexto de execução. O padrão é isolated.", required: false },
+    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "Quando o script é injetado. O padrão é document_idle.", required: false }
+  ]}
+/>
+
+Por padrão, uma presença roda no contexto **isolated**: ela compartilha o DOM da página, mas não o contexto JavaScript da página. Esse é o padrão seguro e funciona para quase todas as presenças.
+
+Defina `"world": "main"` quando sua presença precisar do **contexto da página**, especificamente para:
+
+- ler globais da página (ex.: um objeto player que o site expõe em `window`);
+- fazer um **`fetch` autenticado de mesma origem** que precise carregar os cookies de sessão do usuário (ex.: uma API interna de metadados do site).
+
+```json
+{
+  "name": "Netflix",
+  "url": ["netflix.com", "www.netflix.com"],
+  "world": "main",
+  "color": "#E50914",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch movies and series on Netflix."
+  }
+}
+```
+
+<CalloutWarning>
+Um `fetch` feito a partir do contexto isolated não é tratado como uma requisição de primeira parte, então chamadas autenticadas falham silenciosamente. Se sua presença depende da API autenticada do site, você deve definir `"world": "main"`.
+</CalloutWarning>
+
+<CalloutInfo>
+A declaração vive inteiramente em `metadata.json` - a extensão a lê no momento do registro. Nenhuma alteração na extensão é necessária para adicionar uma nova presença com contexto de página.
+</CalloutInfo>
+
+## Categoria
+
+As categorias permitidas são `streaming`, `music`, `video`, `social`, `gaming`, `tools`, `ai`, `learning`, `creator` e `other`.

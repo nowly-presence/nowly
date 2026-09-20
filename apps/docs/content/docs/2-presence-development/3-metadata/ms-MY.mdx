@@ -1,0 +1,123 @@
+---
+title: Metadata
+description: Dokumenkan setiap medan wajib dan pilihan dalam fail metadata.json presence Nowly.
+---
+
+## Medan Wajib
+
+Setiap presence memerlukan:
+
+<TypeTable
+  properties={[
+    { name: "name", type: "string", description: "Nama paparan perkhidmatan atau platform.", required: true },
+    { name: "author", type: "object", description: "Pengarang utama yang dipaparkan pertama dalam pustaka dan imej OG.", required: true },
+    { name: "description", type: "object", description: "Penerangan tempatan pendek dikunci mengikut locale.", required: true },
+    { name: "url", type: "string[]", description: "Domain atau corak URL disokong untuk memadankan halaman.", required: true },
+    { name: "color", type: "string", description: "Warna jenama dalam format hex, digunakan oleh UI dan embed.", required: true },
+    { name: "category", type: "string", description: "Salah satu daripada streaming, music, video, social, gaming, tools, ai, learning, creator, atau other.", required: true }
+  ]}
+/>
+
+## Contoh
+
+```json
+{
+  "name": "YouTube",
+  "author": {
+    "name": "Nowly Developer",
+    "github": "example"
+  },
+  "url": ["youtube.com", "www.youtube.com"],
+  "color": "#FF0033",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch and share videos on YouTube."
+  }
+}
+```
+
+## Pengarang dan Penyumbang
+
+- `author` - Penyelenggara utama, dipaparkan pertama dalam pustaka dan imej OG.
+- `contributors` - Individu tambahan yang membantu dengan presence tersebut.
+
+<CalloutInfo>
+Nama pengguna GitHub (kunci `github`) digunakan untuk menyelesaikan avatar.
+</CalloutInfo>
+
+## Penerangan dan Ciri
+
+- `description` - Teks marketplace pendek, dikunci mengikut locale.
+- `longDescription` - Penerangan lanjut untuk halaman butiran.
+- `features` - Senarai tempatan tingkah laku yang disokong (contohnya sokongan butang, kekunci media).
+
+## Sokongan native Discord
+
+Sesetengah platform sudah muncul di Discord apabila pengguna memautkan akaun mereka (Spotify ialah contoh biasa). Tetapkan bendera pilihan ini supaya pustaka boleh menerangkan bahawa Nowly masih berguna tanpa pautan itu.
+
+<TypeTable
+  properties={[
+    { name: "discordNative", type: "boolean", description: "True apabila Discord sudah menunjukkan platform ini jika pengguna memautkan akaun mereka. Pilihan. Lalai kepada false.", required: false }
+  ]}
+/>
+
+```json
+{
+  "name": "Spotify",
+  "discordNative": true
+}
+```
+
+Ini hanya memaparkan nota maklumat pada halaman pustaka dan dalam sambungan (butiran kedai dan presence yang dipasang). Ia tidak menyekat pemasangan.
+
+## Pemadanan URL
+
+- `url` - Domain atau corak URL disokong untuk memadankan halaman.
+- `regExp` - Pemadanan berasaskan regex untuk corak URL yang kompleks.
+
+<CalloutWarning>
+Gunakan `regExp` hanya apabila pemadanan `url` biasa tidak mencukupi. Utamakan senarai domain eksplisit.
+</CalloutWarning>
+
+## Konteks Pelaksanaan
+
+Dua medan pilihan mengawal bagaimana dan bila skrip presence anda berjalan dalam pelayar.
+
+<TypeTable
+  properties={[
+    { name: "world", type: "\"main\" | \"isolated\"", description: "Dunia pelaksanaan. Lalai kepada isolated.", required: false },
+    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "Bila skrip disuntik. Lalai kepada document_idle.", required: false }
+  ]}
+/>
+
+Secara lalai, presence berjalan dalam dunia **isolated**: ia berkongsi DOM halaman tetapi bukan konteks JavaScript halaman. Ini adalah lalai selamat dan berfungsi untuk hampir semua presence.
+
+Tetapkan `"world": "main"` apabila presence anda memerlukan **konteks halaman**, khususnya untuk:
+
+- membaca global halaman (contohnya objek pemain yang laman dedahkan pada `window`);
+- membuat **`fetch` disahkan sumber sama** yang perlu membawa kuki sesi pengguna (contohnya API metadata dalaman laman).
+
+```json
+{
+  "name": "Netflix",
+  "url": ["netflix.com", "www.netflix.com"],
+  "world": "main",
+  "color": "#E50914",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch movies and series on Netflix."
+  }
+}
+```
+
+<CalloutWarning>
+`fetch` daripada dunia isolated tidak dianggap sebagai permintaan pihak pertama, jadi panggilan yang disahkan gagal secara senyap. Jika presence anda bergantung pada API log masuk laman, anda mesti menetapkan `"world": "main"`.
+</CalloutWarning>
+
+<CalloutInfo>
+Pengisytiharan ini sepenuhnya berada dalam `metadata.json` - sambungan membacanya semasa pendaftaran. Tiada perubahan pada sambungan diperlukan untuk menambah presence konteks halaman baharu.
+</CalloutInfo>
+
+## Kategori
+
+Kategori yang dibenarkan ialah `streaming`, `music`, `video`, `social`, `gaming`, `tools`, `ai`, `learning`, `creator`, dan `other`.
