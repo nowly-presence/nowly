@@ -10,11 +10,14 @@ const EmptyHeader = ({ className, ...props }: React.ComponentProps<"div">) => (
   <div data-slot="empty-header" className={cn("flex max-w-sm flex-col items-center gap-2", className)} {...props} />
 )
 
-const emptyMediaVariants = cva("mb-2 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0", {
+const emptyMediaVariants = cva("mb-1 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0", {
   variants: {
     variant: {
       default: "bg-transparent",
-      icon: "flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground [&_svg:not([class*='size-'])]:size-4",
+      // bg-secondary (translucent overlay), not bg-muted: Empty is always nested
+      // inside a bg-card container here, and --muted equals --card in tokens.css,
+      // which made the icon plate invisible against its own background.
+      icon: "flex size-14 shrink-0 items-center justify-center rounded-lg bg-secondary text-foreground [&_svg:not([class*='size-'])]:size-6",
     },
   },
   defaultVariants: {
@@ -31,7 +34,7 @@ const EmptyTitle = ({ className, ...props }: React.ComponentProps<"div">) => (
 )
 
 const EmptyDescription = ({ className, ...props }: React.ComponentProps<"p">) => (
-  <div data-slot="empty-description" className={cn("text-sm/relaxed text-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary", className)} {...props} />
+  <div data-slot="empty-description" className={cn("-mt-1 text-sm/relaxed text-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary", className)} {...props} />
 )
 
 const EmptyContent = ({ className, ...props }: React.ComponentProps<"div">) => (

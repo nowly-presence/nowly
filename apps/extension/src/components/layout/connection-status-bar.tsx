@@ -35,10 +35,13 @@ export const ConnectionStatusBar = ({ nativeStatus, onConnect, presencePaused = 
           onClick={tone.actionable ? onConnect : undefined}
           aria-hidden={!visible}
           aria-label={tone.label}
-          className={cn("flex h-9 w-full items-stretch bg-card", tone.actionable ? "cursor-pointer hover:bg-muted" : "cursor-default")}
+          className={cn(
+            "flex w-full items-center gap-2 rounded-xl border border-border bg-card px-3 py-2.5 text-xs font-medium text-foreground",
+            tone.actionable ? "cursor-pointer hover:bg-muted" : "cursor-default",
+          )}
         >
-          <span aria-hidden className={cn("w-1 shrink-0", tone.stripe)} />
-          <span className="flex flex-1 items-center justify-center px-3 text-center text-xs font-medium text-foreground">{tone.label}</span>
+          <span aria-hidden className={cn("size-2 shrink-0 rounded-full", tone.stripe)} />
+          <span className="flex-1 text-left">{tone.label}</span>
         </button>
       </div>
     </div>

@@ -1,13 +1,15 @@
 import { RiListUnordered, RiRefreshLine, RiRestartLine, RiTerminalLine } from "@remixicon/react"
 import { useEffect, useState } from "react"
+import { HeadingText } from "@/components/shared/heading-text"
 import { SettingRow } from "@/features/settings/setting-row"
+import { SettingsBlock } from "@/features/settings/settings-block"
+import { SettingsSectionHeader } from "@/features/settings/settings-section-header"
 import { PresenceZipDrop } from "@/features/settings/presence-zip-drop"
 import { RuntimeLogsView } from "@/features/runtime-logs/runtime-logs-view"
 import { formatRelativeTime } from "@/lib/format"
 import { API_BASE_URL } from "@/shared/constants"
 import { t } from "@/shared/i18n"
 import type { ExtensionSettings, NativeStatus, PresenceDebug } from "@/shared/types"
-import { AccordionContent, AccordionItem, AccordionTrigger } from "@/ui/accordion"
 import { Button } from "@/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/ui/dialog"
 import { Input } from "@/ui/input"
@@ -25,9 +27,10 @@ type Props = {
   isCheckingUpdates: boolean
   onCheckUpdates: () => void
   onReplayOnboarding: () => void
+  onBack: () => void
 }
 
-export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug, nativeStatus, isCheckingUpdates, onCheckUpdates, onReplayOnboarding }: Props): React.JSX.Element => {
+export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug, nativeStatus, isCheckingUpdates, onCheckUpdates, onReplayOnboarding, onBack }: Props): React.JSX.Element => {
   const developerModeEnabled = settings.developerMode ?? isUnpacked
   const hasNativeIssue = !nativeStatus.connected || !nativeStatus.discordConnected
   const nativeIssueMessage = !nativeStatus.connected ? t("diagnostic-host-missing-message") : !nativeStatus.discordConnected ? t("diagnostic-discord-closed-message") : nativeStatus.status
@@ -48,9 +51,9 @@ export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug
   }
 
   return (
-    <AccordionItem value="developer">
-      <AccordionTrigger className="px-4">{t("settings-group-developer")}</AccordionTrigger>
-      <AccordionContent className="pb-0">
+    <div className="flex flex-col gap-3">
+      <SettingsSectionHeader title={t("settings-group-developer")} onBack={onBack} />
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
         <SettingRow
           title={t("developer-mode")}
           description={t("developer-mode-description")}
@@ -58,18 +61,16 @@ export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug
         />
 
         {!isUnpacked ? (
-          <div className="px-4 py-3.5">
-            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("check-updates")}</p>
-            <p className="mb-3 text-xs leading-5 text-muted-foreground">{t("check-updates-description")}</p>
+          <SettingRow title={t("check-updates")} description={t("check-updates-description")}>
             <Button variant="outline" onClick={onCheckUpdates} disabled={isCheckingUpdates} className="w-full">
               <RiRefreshLine className={cn(isCheckingUpdates && "animate-spin")} />
               {t("check-updates")}
             </Button>
-          </div>
+          </SettingRow>
         ) : null}
 
         {developerModeEnabled ? (
-          <div className="flex flex-col gap-4 px-4 py-3.5 text-xs leading-5 text-muted-foreground">
+          <SettingsBlock className="flex flex-col gap-4 text-xs leading-5 text-muted-foreground">
             <Separator />
 
             <div className="flex items-center gap-2 text-foreground">
@@ -106,8 +107,7 @@ export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug
             <Separator />
 
             <div>
-              <p className="font-semibold text-foreground">{t("developer-onboarding-reset-title")}</p>
-              <p className="mb-2">{t("developer-onboarding-reset-description")}</p>
+              <HeadingText title={t("developer-onboarding-reset-title")} description={t("developer-onboarding-reset-description")} className="mb-2" />
               <Button variant="outline" size="sm" onClick={onReplayOnboarding}>
                 <RiRestartLine className="size-3.5" />
                 {t("developer-onboarding-reset-action")}
@@ -143,9 +143,9 @@ export const DeveloperSection = ({ settings, onSettingsChange, isUnpacked, debug
                 ) : null}
               </div>
             </div>
-          </div>
+          </SettingsBlock>
         ) : null}
-      </AccordionContent>
-    </AccordionItem>
+      </div>
+    </div>
   )
 }

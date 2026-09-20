@@ -40,7 +40,7 @@ export const PresenceList = ({ displayMode, entries, isLoading, onOpen, onSchedu
   if (entries.length === 0) {
     return (
       <Empty className="gap-2 border border-border bg-card">
-        <EmptyMedia variant="icon" className="mb-1 size-12 [&_svg]:size-6">
+        <EmptyMedia variant="icon">
           <RiBox3Line />
         </EmptyMedia>
         <EmptyTitle>{t("empty-title")}</EmptyTitle>

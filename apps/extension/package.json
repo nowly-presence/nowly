@@ -25,7 +25,6 @@
     "package:chrome": "tsx --tsconfig scripts/tsconfig.json scripts/package.ts chrome",
     "package:firefox": "tsx --tsconfig scripts/tsconfig.json scripts/package.ts firefox",
     "package:source": "tsx --tsconfig scripts/tsconfig.json scripts/package-source.ts",
-    "fetch:font": "tsx scripts/fetch-font.ts",
     "lint": "tsc --noEmit",
     "test": "vitest run"
   },

@@ -5,12 +5,25 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Satoshi is intentionally not loaded yet: apps/web pulls it from Fontshare's
-   CDN, which MV3's default extension_pages CSP does not reliably allow, and a
-   self-hosted copy needs its license confirmed before the woff2 gets
-   committed (see scripts/fetch-font.ts). Falls back to the system stack until
-   then - same font-family variable as web so swapping it in later is a
-   one-line change. */
+/* Self-hosted, not @import'd from Fontshare's CDN like apps/web does: the
+   remote @import silently failed to apply inside the extension_pages CSP
+   sandbox, so the font kept falling back to system-ui. */
+@font-face {
+  font-family: "Satoshi";
+  src: url("../assets/fonts/Satoshi-Variable.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("../assets/fonts/Satoshi-Variable-Italic.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   color-scheme: light;
   --background: #eef5fc;
@@ -103,6 +116,13 @@
     @apply border-border outline-ring/50;
     scrollbar-width: thin;
     scrollbar-color: color-mix(in oklab, var(--foreground) 18%, transparent) transparent;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  summary {
+    cursor: pointer;
   }
 
   *::-webkit-scrollbar {

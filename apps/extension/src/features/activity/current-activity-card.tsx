@@ -97,7 +97,7 @@ export const CurrentActivityCard = ({ activity, idleHint, isLoading, isPaused = 
   if (!hasActivity) {
     return (
       <section className="overflow-hidden rounded-xl border border-border bg-card">
-        <div className="flex items-center gap-3 p-4">
+        <div className="flex items-center gap-3 px-4 py-2">
           <IdlePulse size={56} />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-foreground">{title}</p>

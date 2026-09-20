@@ -1,42 +1,55 @@
-import { RiArrowDownSLine as RiDown, RiArrowUpSLine as RiUp } from "@remixicon/react"
+import { RiDraggable } from "@remixicon/react"
+import { useState } from "react"
+import { PresenceTile } from "@/components/shared/presence-tile"
 import { SettingRow } from "@/features/settings/setting-row"
+import { SettingsSectionHeader } from "@/features/settings/settings-section-header"
 import { t } from "@/shared/i18n"
 import type { ActivitySelectionMode, ExtensionSettings, InstalledPresences } from "@/shared/types"
-import { AccordionContent, AccordionItem, AccordionTrigger } from "@/ui/accordion"
-import { Button } from "@/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select"
+import { cn } from "@/ui/utils"
 
 type Props = {
   settings: ExtensionSettings
   onSettingsChange: (partial: Partial<ExtensionSettings>) => void
   presences: InstalledPresences
+  onBack: () => void
 }
 
-export const ActivitySelectionSection = ({ settings, onSettingsChange, presences }: Props): React.JSX.Element => {
+export const ActivitySelectionSection = ({ settings, onSettingsChange, presences, onBack }: Props): React.JSX.Element => {
   const installedSlugs = Object.keys(presences)
   const priorityOrder = [
     ...(settings.activityPriorityOrder ?? []).filter((slug) => installedSlugs.includes(slug)),
     ...installedSlugs.filter((slug) => !(settings.activityPriorityOrder ?? []).includes(slug)),
   ]
 
-  const movePriority = (slug: string, direction: -1 | 1): void => {
-    const index = priorityOrder.indexOf(slug)
-    const targetIndex = index + direction
-    if (targetIndex < 0 || targetIndex >= priorityOrder.length) return
+  const [draggedSlug, setDraggedSlug] = useState<string | null>(null)
+
+  // Native HTML5 drag-and-drop - desktop-only side panel, so no touch
+  // fallback needed, and it's one small reorder list, not worth a DnD library.
+  const reorder = (draggedOver: string): void => {
+    if (!draggedSlug || draggedSlug === draggedOver) return
+    const from = priorityOrder.indexOf(draggedSlug)
+    const to = priorityOrder.indexOf(draggedOver)
+    if (from === -1 || to === -1) return
     const reordered = [...priorityOrder]
-    ;[reordered[index], reordered[targetIndex]] = [reordered[targetIndex], reordered[index]]
+    reordered.splice(from, 1)
+    reordered.splice(to, 0, draggedSlug)
     onSettingsChange({ activityPriorityOrder: reordered })
   }
 
   return (
-    <AccordionItem value="activity-selection">
-      <AccordionTrigger className="px-4">{t("settings-group-activity-selection")}</AccordionTrigger>
-      <AccordionContent className="pb-0">
+    <div className="flex flex-col gap-3">
+      <SettingsSectionHeader title={t("settings-group-activity-selection")} onBack={onBack} />
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
         <SettingRow
           title={t("activity-selection-mode")}
           description={t("activity-selection-mode-description")}
           control={
-            <Select value={settings.activitySelectionMode ?? "focused"} onValueChange={(value) => onSettingsChange({ activitySelectionMode: value as ActivitySelectionMode })}>
+            <Select
+              value={settings.activitySelectionMode ?? "focused"}
+              onValueChange={(value) => onSettingsChange({ activitySelectionMode: value as ActivitySelectionMode })}
+              items={{ focused: t("activity-selection-mode-focused"), priority: t("activity-selection-mode-priority") }}
+            >
               <SelectTrigger size="sm" className="w-40" aria-label={t("activity-selection-mode")}>
                 <SelectValue />
               </SelectTrigger>
@@ -51,24 +64,38 @@ export const ActivitySelectionSection = ({ settings, onSettingsChange, presences
             <div className="mt-1">
               <p className="mb-2 text-xs leading-5 text-muted-foreground">{t("activity-priority-order-description")}</p>
               <ul className="flex flex-col gap-1.5">
-                {priorityOrder.map((slug, index) => (
-                  <li key={slug} className="flex items-center justify-between gap-2 rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground">
-                    <span className="min-w-0 truncate">{presences[slug]?.metadata.name ?? slug}</span>
-                    <span className="flex shrink-0 gap-1">
-                      <Button variant="ghost" size="icon-sm" aria-label={t("activity-priority-move-up")} disabled={index === 0} onClick={() => movePriority(slug, -1)}>
-                        <RiUp />
-                      </Button>
-                      <Button variant="ghost" size="icon-sm" aria-label={t("activity-priority-move-down")} disabled={index === priorityOrder.length - 1} onClick={() => movePriority(slug, 1)}>
-                        <RiDown />
-                      </Button>
-                    </span>
-                  </li>
-                ))}
+                {priorityOrder.map((slug) => {
+                  const name = presences[slug]?.metadata.name ?? slug
+                  return (
+                    <li
+                      key={slug}
+                      draggable
+                      onDragStart={(event) => {
+                        setDraggedSlug(slug)
+                        event.dataTransfer.effectAllowed = "move"
+                      }}
+                      onDragOver={(event) => event.preventDefault()}
+                      onDrop={(event) => {
+                        event.preventDefault()
+                        reorder(slug)
+                      }}
+                      onDragEnd={() => setDraggedSlug(null)}
+                      className={cn(
+                        "flex items-center gap-2 rounded-lg border border-border bg-card px-2 py-2 transition-opacity",
+                        draggedSlug === slug && "opacity-50",
+                      )}
+                    >
+                      <RiDraggable className="size-4 shrink-0 cursor-grab text-muted-foreground active:cursor-grabbing" aria-hidden />
+                      <PresenceTile slug={slug} name={name} className="size-8" />
+                      <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">{name}</span>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           ) : null}
         </SettingRow>
-      </AccordionContent>
-    </AccordionItem>
+      </div>
+    </div>
   )
 }

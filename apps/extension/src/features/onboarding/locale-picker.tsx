@@ -10,7 +10,11 @@ type Props = {
 }
 
 export const LocalePicker = ({ localePreference, onLocaleChange }: Props): React.JSX.Element => (
-  <Select value={localePreference} onValueChange={(value) => onLocaleChange(value as LocalePreference)}>
+  <Select
+    value={localePreference}
+    onValueChange={(value) => onLocaleChange(value as LocalePreference)}
+    items={{ browser: t("locale-auto"), fr: t("locale-fr"), en: t("locale-en"), es: t("locale-es") }}
+  >
     <SelectTrigger size="sm" aria-label={t("language")}>
       <SelectValue />
     </SelectTrigger>

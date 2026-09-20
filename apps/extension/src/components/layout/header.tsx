@@ -3,7 +3,7 @@ import { PresenceLayoutToggle } from "@/features/activity/presence-layout-toggle
 import { Button } from "@/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/ui/dropdown-menu"
 import { cn } from "@/ui/utils"
-import { BRAND_LOCKUP } from "@/shared/brand"
+import { BRAND_LOCKUP, IS_CANARY } from "@/shared/brand"
 import { DISCORD_INVITE_URL, HOST_DOWNLOAD_URL, WEB_BASE_URL } from "@/shared/constants"
 import { t } from "@/shared/i18n"
 import { openUrl } from "@/shared/browser-links"
@@ -39,7 +39,15 @@ export const Header = ({ displayMode, isCheckingUpdates = false, onCheckUpdates,
 
   return (
     <header className="flex items-center justify-between gap-3">
-      <img src={BRAND_LOCKUP} alt={chrome.i18n.getMessage("extensionName") || "Nowly"} className="ml-2 h-[53px] w-auto min-w-0" />
+      {/* The canary lockup is yellow, unreadable on the light theme's near-white
+          background - force it to solid black there instead of its own color;
+          dark mode keeps the original yellow, which reads fine on a dark background. */}
+      <img
+        src={BRAND_LOCKUP}
+        alt={chrome.i18n.getMessage("extensionName") || "Nowly"}
+        className={cn("ml-2 h-[40px] w-auto min-w-0", IS_CANARY && "[filter:brightness(0)] dark:filter-none")}
+      />
+
       <div className="mr-2 flex shrink-0 items-center gap-1.5">
         {displayMode && onDisplayModeChange ? <PresenceLayoutToggle value={displayMode} onChange={onDisplayModeChange} /> : null}
         {onTogglePause ? (

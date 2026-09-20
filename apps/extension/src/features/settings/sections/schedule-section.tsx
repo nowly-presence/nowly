@@ -1,8 +1,8 @@
 import { RiCalendarLine } from "@remixicon/react"
 import { SettingRow } from "@/features/settings/setting-row"
+import { SettingsSectionHeader } from "@/features/settings/settings-section-header"
 import { t } from "@/shared/i18n"
 import type { ExtensionSettings } from "@/shared/types"
-import { AccordionContent, AccordionItem, AccordionTrigger } from "@/ui/accordion"
 import { Button } from "@/ui/button"
 import { Switch } from "@/ui/switch"
 
@@ -10,12 +10,13 @@ type Props = {
   settings: ExtensionSettings
   onSettingsChange: (partial: Partial<ExtensionSettings>) => void
   onEditGlobalSchedule: () => void
+  onBack: () => void
 }
 
-export const ScheduleSection = ({ settings, onSettingsChange, onEditGlobalSchedule }: Props): React.JSX.Element => (
-  <AccordionItem value="schedule">
-    <AccordionTrigger className="px-4">{t("settings-group-schedule")}</AccordionTrigger>
-    <AccordionContent className="pb-0">
+export const ScheduleSection = ({ settings, onSettingsChange, onEditGlobalSchedule, onBack }: Props): React.JSX.Element => (
+  <div className="flex flex-col gap-3">
+    <SettingsSectionHeader title={t("settings-group-schedule")} onBack={onBack} />
+    <div className="overflow-hidden rounded-xl border border-border bg-card">
       <SettingRow
         title={t("schedule-feature")}
         description={t("schedule-feature-description")}
@@ -28,6 +29,6 @@ export const ScheduleSection = ({ settings, onSettingsChange, onEditGlobalSchedu
           </Button>
         ) : null}
       </SettingRow>
-    </AccordionContent>
-  </AccordionItem>
+    </div>
+  </div>
 )

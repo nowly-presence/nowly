@@ -1,5 +1,6 @@
 import { RiExternalLinkLine } from "@remixicon/react"
 import { useCallback, useEffect, useState } from "react"
+import { SettingRow } from "@/features/settings/setting-row"
 import { t } from "@/shared/i18n"
 import { Button } from "@/ui/button"
 
@@ -50,11 +51,9 @@ export const ShortcutSettings = (): React.JSX.Element => {
   const missing = commands.some((item) => item.shortcut.length === 0)
 
   return (
-    <div>
-      <p className="text-sm font-medium text-foreground">{t("shortcuts")}</p>
-      <p className="mt-0.5 text-xs leading-4 text-muted-foreground">{t("shortcuts-description")}</p>
-      {missing ? <p className="mt-2 text-xs leading-4 text-warning">{t("shortcuts-unassigned-hint")}</p> : null}
-      <ul className="mt-3 flex flex-col gap-2">
+    <SettingRow title={t("shortcuts")} description={t("shortcuts-description")}>
+      {missing ? <p className="text-xs leading-4 text-warning">{t("shortcuts-unassigned-hint")}</p> : null}
+      <ul className="flex flex-col gap-2">
         {commands.map((item) => (
           <li key={item.name} className="flex items-center justify-between gap-3">
             <span className="min-w-0 text-sm text-foreground">{commandLabel(item.name)}</span>
@@ -62,10 +61,10 @@ export const ShortcutSettings = (): React.JSX.Element => {
           </li>
         ))}
       </ul>
-      <Button variant="outline" size="sm" onClick={openShortcutSettings} className="mt-3 w-full">
+      <Button variant="outline" size="sm" onClick={openShortcutSettings} className="w-full">
         {t("shortcuts-change")}
         <RiExternalLinkLine className="size-3.5" />
       </Button>
-    </div>
+    </SettingRow>
   )
 }

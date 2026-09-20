@@ -27,7 +27,7 @@ export const BottomNav = ({ activeView, onViewChange }: Props): React.JSX.Elemen
             aria-selected={active}
             onClick={() => onViewChange(view)}
             className={cn(
-              "flex flex-col items-center gap-1 rounded-lg py-2 text-muted-foreground transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+              "flex flex-col items-center gap-[5px] rounded-lg py-2 text-muted-foreground transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
               active ? "bg-accent/10 text-accent" : "hover:bg-muted/50 hover:text-foreground",
             )}
           >

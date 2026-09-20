@@ -1,5 +1,6 @@
 import { RiFileZipLine } from "@remixicon/react"
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react"
+import { HeadingText } from "@/components/shared/heading-text"
 import { sendMessage } from "@/lib/messages"
 import { t } from "@/shared/i18n"
 import { bytesToBase64 } from "@/shared/zip-bytes"
@@ -55,8 +56,7 @@ export const PresenceZipDrop = (): React.JSX.Element => {
 
   return (
     <div>
-      <p className="text-sm font-medium text-foreground">{t("local-zip-title")}</p>
-      <p className="mt-0.5 mb-2 text-xs leading-4 text-muted-foreground">{t("local-zip-description")}</p>
+      <HeadingText title={t("local-zip-title")} description={t("local-zip-description")} className="mb-2" />
       <div
         onDragOver={(event) => {
           event.preventDefault()

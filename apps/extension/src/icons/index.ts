@@ -24,6 +24,7 @@ export {
   RiExternalLinkLine,
   RiFileCopyLine,
   RiFileZipLine,
+  RiFocus3Line,
   RiGithubFill,
   RiGlobalLine,
   RiHeartLine,
@@ -49,5 +50,6 @@ export {
   RiSunLine,
   RiTerminalLine,
   RiTimeLine,
+  RiTranslate2,
   RiYoutubeFill,
 } from "@remixicon/react"

@@ -78,7 +78,11 @@ export const PresenceSettingsFields = ({ definitions, locales, slug }: Props): R
       {showLanguage ? (
         <div className="flex items-center justify-between gap-3 px-4 py-3">
           <Label className="text-sm text-foreground">{t("presence-language-this")}</Label>
-          <Select value={presenceLocale} onValueChange={(value) => handleLanguageChange(value as PresenceLocale)}>
+          <Select
+            value={presenceLocale}
+            onValueChange={(value) => handleLanguageChange(value as PresenceLocale)}
+            items={Object.fromEntries(Object.keys(locales ?? {}).map((locale) => [locale, localeLabel(locale)]))}
+          >
             <SelectTrigger size="sm" className="w-36" aria-label={t("presence-language-this")}>
               <SelectValue />
             </SelectTrigger>
@@ -113,24 +117,32 @@ export const PresenceSettingsFields = ({ definitions, locales, slug }: Props): R
               <Input id={fieldId} type="text" value={String(value ?? "")} placeholder={placeholder ?? ""} onChange={(e) => handleChange(key, e.target.value)} className="w-44" />
             ) : null}
 
-            {type === "select" ? (
-              <Select value={String(value ?? "")} onValueChange={(v) => handleChange(key, v)}>
-                <SelectTrigger size="sm" className="w-44" id={fieldId}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {(defObj?.options as Array<Record<string, unknown>> | undefined)?.map((opt) => {
-                    const optValue = String(opt?.value ?? "")
-                    const optionLabel = resolveLocaleString(opt?.label) ?? (opt?.label != null ? String(opt.label) : optValue)
-                    return (
-                      <SelectItem key={optValue} value={optValue}>
-                        {optionLabel}
-                      </SelectItem>
-                    )
-                  })}
-                </SelectContent>
-              </Select>
-            ) : null}
+            {type === "select" ? (() => {
+              const options = (defObj?.options as Array<Record<string, unknown>> | undefined) ?? []
+              const items = Object.fromEntries(
+                options.map((opt) => {
+                  const optValue = String(opt?.value ?? "")
+                  return [optValue, resolveLocaleString(opt?.label) ?? (opt?.label != null ? String(opt.label) : optValue)]
+                }),
+              )
+              return (
+                <Select value={String(value ?? "")} onValueChange={(v) => handleChange(key, v)} items={items}>
+                  <SelectTrigger size="sm" className="w-44" id={fieldId}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {options.map((opt) => {
+                      const optValue = String(opt?.value ?? "")
+                      return (
+                        <SelectItem key={optValue} value={optValue}>
+                          {items[optValue]}
+                        </SelectItem>
+                      )
+                    })}
+                  </SelectContent>
+                </Select>
+              )
+            })() : null}
 
             {type === "slider" ? (
               <div className="flex w-44 items-center gap-2">

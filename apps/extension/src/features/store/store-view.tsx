@@ -18,9 +18,10 @@ type Props = {
   installQueueCount: number
   onInstall: (slug: string) => void
   onRetryQueue: () => void
+  onSelectPresence: (slug: string | null) => void
   presences: InstalledPresences
   seedQuery?: string
-  seedSlug?: string | null
+  selectedSlug: string | null
   updates: Record<string, string>
 }
 
@@ -46,16 +47,14 @@ const CategoryChip = ({ active, label, onSelect }: { active: boolean; label: str
   </Button>
 )
 
-export const StoreView = ({ installingSlug, installQueueCount, onInstall, onRetryQueue, presences, seedQuery = "", seedSlug = null, updates }: Props): React.JSX.Element => {
+export const StoreView = ({ installingSlug, installQueueCount, onInstall, onRetryQueue, onSelectPresence, presences, seedQuery = "", selectedSlug, updates }: Props): React.JSX.Element => {
   const { items, isError, isLoading, refetch } = usePresenceCatalog()
   const [query, setQuery] = useState(seedQuery)
   const [category, setCategory] = useState<PresenceCategory | null>(null)
-  const [selectedSlug, setSelectedSlug] = useState<string | null>(seedSlug)
 
   useEffect(() => {
     setQuery(seedQuery)
-    setSelectedSlug(seedSlug)
-  }, [seedQuery, seedSlug])
+  }, [seedQuery])
 
   const categories = useMemo(() => catalogCategories(items), [items])
   const filtered = useMemo(() => filterStorePresences(items, query, category), [category, items, query])
@@ -75,7 +74,7 @@ export const StoreView = ({ installingSlug, installQueueCount, onInstall, onRetr
   }
 
   if (selected) {
-    return <StoreDetail action={storeAction(selected.slug, presences, updates)} installing={installingSlug === selected.slug} onBack={() => setSelectedSlug(null)} onInstall={onInstall} presence={selected} />
+    return <StoreDetail action={storeAction(selected.slug, presences, updates)} installing={installingSlug === selected.slug} onBack={() => onSelectPresence(null)} onInstall={onInstall} presence={selected} />
   }
 
   return (
@@ -104,7 +103,7 @@ export const StoreView = ({ installingSlug, installQueueCount, onInstall, onRetr
       ) : (
         <div className="overflow-hidden rounded-xl border border-border divide-y divide-border">
           {filtered.map((presence: StorePresence) => (
-            <StoreCard key={presence.slug} action={storeAction(presence.slug, presences, updates)} installing={installingSlug === presence.slug} onInstall={onInstall} onOpen={setSelectedSlug} presence={presence} />
+            <StoreCard key={presence.slug} action={storeAction(presence.slug, presences, updates)} installing={installingSlug === presence.slug} onInstall={onInstall} onOpen={onSelectPresence} presence={presence} />
           ))}
         </div>
       )}
