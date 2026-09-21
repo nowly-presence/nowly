@@ -119,29 +119,29 @@ const verifySignature = async (release: PresenceRelease): Promise<boolean> => {
 }
 
 export const verifyPresenceRelease = async (release: PresenceRelease, expectedSlug?: string): Promise<{ ok: boolean; error?: string }> => {
-  if (!release || typeof release !== "object") return { ok: false, error: "release missing" }
-  if (!release.metadata || typeof release.metadata !== "object") return { ok: false, error: "release metadata missing" }
-  if (typeof release.slug !== "string") return { ok: false, error: "release slug missing" }
-  if (typeof release.version !== "string") return { ok: false, error: "release version missing" }
-  if (typeof release.sha256 !== "string") return { ok: false, error: "release hash missing" }
-  if (typeof release.metadataHash !== "string") return { ok: false, error: "release metadata hash missing" }
-  if (typeof release.signature !== "string") return { ok: false, error: "release signature missing" }
-  if (typeof release.signedAt !== "string") return { ok: false, error: "release signedAt missing" }
-  if (expectedSlug && release.slug !== expectedSlug) return { ok: false, error: "release slug mismatch" }
-  if (release.metadata.slug !== release.slug) return { ok: false, error: "metadata slug mismatch" }
-  if (!release.bundle?.trim()) return { ok: false, error: "release bundle missing" }
+  if (!release || typeof release !== "object") return { ok: false, error: "RELEASE_MISSING" }
+  if (!release.metadata || typeof release.metadata !== "object") return { ok: false, error: "RELEASE_METADATA_MISSING" }
+  if (typeof release.slug !== "string") return { ok: false, error: "RELEASE_SLUG_MISSING" }
+  if (typeof release.version !== "string") return { ok: false, error: "RELEASE_VERSION_MISSING" }
+  if (typeof release.sha256 !== "string") return { ok: false, error: "RELEASE_HASH_MISSING" }
+  if (typeof release.metadataHash !== "string") return { ok: false, error: "RELEASE_METADATA_HASH_MISSING" }
+  if (typeof release.signature !== "string") return { ok: false, error: "RELEASE_SIGNATURE_MISSING" }
+  if (typeof release.signedAt !== "string") return { ok: false, error: "RELEASE_SIGNED_AT_MISSING" }
+  if (expectedSlug && release.slug !== expectedSlug) return { ok: false, error: "RELEASE_SLUG_MISMATCH" }
+  if (release.metadata.slug !== release.slug) return { ok: false, error: "METADATA_SLUG_MISMATCH" }
+  if (!release.bundle?.trim()) return { ok: false, error: "RELEASE_BUNDLE_MISSING" }
 
   const bundleHash = await sha256Base64Url(release.bundle)
-  if (bundleHash !== release.sha256) return { ok: false, error: "bundle hash mismatch" }
+  if (bundleHash !== release.sha256) return { ok: false, error: "BUNDLE_HASH_MISMATCH" }
 
   const metadataHash = await sha256Base64Url(canonicalJson(release.metadata))
-  if (metadataHash !== release.metadataHash) return { ok: false, error: "metadata hash mismatch" }
+  if (metadataHash !== release.metadataHash) return { ok: false, error: "METADATA_HASH_MISMATCH" }
 
   if (release.signature) {
-    if (!(await verifySignature(release))) return { ok: false, error: "release signature invalid" }
+    if (!(await verifySignature(release))) return { ok: false, error: "RELEASE_SIGNATURE_INVALID" }
     return { ok: true }
   }
 
   if (IS_UNPACKED()) return { ok: true }
-  return { ok: false, error: "release signature missing" }
+  return { ok: false, error: "RELEASE_SIGNATURE_MISSING" }
 }

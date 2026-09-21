@@ -63,7 +63,7 @@ describe("verifyPresenceRelease", () => {
     installChromeMock()
     const { verifyPresenceRelease } = await import("@/background/services/release-security")
     const result = await verifyPresenceRelease({} as PresenceRelease)
-    expect(result).toEqual({ ok: false, error: "release metadata missing" })
+    expect(result).toEqual({ ok: false, error: "RELEASE_METADATA_MISSING" })
   })
 
   it("rejects a release whose bundle hash was tampered with", async () => {
@@ -72,7 +72,7 @@ describe("verifyPresenceRelease", () => {
     const { privateKey } = await generateKeyPair()
     const release = await buildRelease(privateKey, { bundle: "tampered bundle" })
     const result = await verifyPresenceRelease(release)
-    expect(result).toEqual({ ok: false, error: "bundle hash mismatch" })
+    expect(result).toEqual({ ok: false, error: "BUNDLE_HASH_MISMATCH" })
   })
 
   it("rejects a release whose metadata was tampered with", async () => {
@@ -91,7 +91,7 @@ describe("verifyPresenceRelease", () => {
       },
     })
     const result = await verifyPresenceRelease(release)
-    expect(result).toEqual({ ok: false, error: "metadata hash mismatch" })
+    expect(result).toEqual({ ok: false, error: "METADATA_HASH_MISMATCH" })
   })
 
   it("accepts an unsigned release only on an unpacked build", async () => {
@@ -107,7 +107,7 @@ describe("verifyPresenceRelease", () => {
     const { verifyPresenceRelease } = await import("@/background/services/release-security")
     const { privateKey } = await generateKeyPair()
     const release = await buildRelease(privateKey, { signature: "" })
-    expect(await verifyPresenceRelease(release)).toEqual({ ok: false, error: "release signature missing" })
+    expect(await verifyPresenceRelease(release)).toEqual({ ok: false, error: "RELEASE_SIGNATURE_MISSING" })
   })
 
   it("accepts a release signed with the cached public key", async () => {
@@ -128,6 +128,6 @@ describe("verifyPresenceRelease", () => {
 
     const { verifyPresenceRelease } = await import("@/background/services/release-security")
     const release = await buildRelease(wrongPrivateKey)
-    expect(await verifyPresenceRelease(release)).toEqual({ ok: false, error: "release signature invalid" })
+    expect(await verifyPresenceRelease(release)).toEqual({ ok: false, error: "RELEASE_SIGNATURE_INVALID" })
   })
 })

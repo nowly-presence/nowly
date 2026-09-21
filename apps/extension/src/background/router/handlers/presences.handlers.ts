@@ -43,21 +43,21 @@ export const handleBulkToggle: Handler<"BULK_TOGGLE_PRESENCE"> = ({ slugs, enabl
 export const handleBulkUninstall: Handler<"BULK_UNINSTALL_PRESENCE"> = ({ slugs }) => bulkUninstallPresences(slugs)
 
 export const handleInstall: Handler<"INSTALL_PRESENCE"> = (payload) =>
-  installPresence(payload).catch((error) => toError(error, "presence install failed"))
+  installPresence(payload).catch((error) => toError(error, "PRESENCE_INSTALL_FAILED"))
 
 export const handleUpdate: Handler<"UPDATE_PRESENCE"> = (payload) =>
-  installPresence(payload).catch((error) => toError(error, "presence install failed"))
+  installPresence(payload).catch((error) => toError(error, "PRESENCE_INSTALL_FAILED"))
 
 export const handleInstallFromApi: Handler<"INSTALL_PRESENCE_FROM_API"> = (payload) =>
-  installPresenceFromApi(payload).catch((error) => toError(error, "presence install failed"))
+  installPresenceFromApi(payload).catch((error) => toError(error, "PRESENCE_INSTALL_FAILED"))
 
 export const handleInstallLocalZip: Handler<"INSTALL_LOCAL_PRESENCE_ZIP"> = (payload) =>
-  installLocalPresenceZip(payload).catch((error) => toError(error, "presence install failed"))
+  installLocalPresenceZip(payload).catch((error) => toError(error, "PRESENCE_INSTALL_FAILED"))
 
 export const handleFetchCatalog: Handler<"FETCH_PRESENCE_CATALOG"> = () =>
   fetchPresenceCatalog()
     .then((items) => ({ ok: true as const, items }))
-    .catch((error) => toError(error, "catalog request failed"))
+    .catch((error) => toError(error, "CATALOG_REQUEST_FAILED"))
 
 export const handleGetPresenceEngagement: Handler<"GET_PRESENCE_ENGAGEMENT"> = ({ slug }) => fetchPresenceEngagement(slug)
 

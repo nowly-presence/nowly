@@ -21,7 +21,7 @@ export const GET = async (_request: Request, { params }: RouteContext) => {
   const { slug } = await params;
   const normalized = slug.trim().toLowerCase();
   if (!normalized) {
-    return Response.json({ error: "Missing slug" }, { status: 400 });
+    return Response.json({ error: "MISSING_SLUG" }, { status: 400 });
   }
 
   const bases = [...new Set([PRODUCTION_API_URL, presenceApiBaseUrl()])];
@@ -30,5 +30,5 @@ export const GET = async (_request: Request, { params }: RouteContext) => {
     if (release) return Response.json(release);
   }
 
-  return Response.json({ error: "Presence not found" }, { status: 404 });
+  return Response.json({ error: "PRESENCE_NOT_FOUND" }, { status: 404 });
 };

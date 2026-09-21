@@ -21,7 +21,7 @@ export const GET = async (): Promise<NextResponse> => {
     );
   } catch {
     return NextResponse.json(
-      { error: "desktop version unavailable" },
+      { error: "DESKTOP_VERSION_UNAVAILABLE" },
       { status: 503, headers: { "Cache-Control": "no-store" } },
     );
   }

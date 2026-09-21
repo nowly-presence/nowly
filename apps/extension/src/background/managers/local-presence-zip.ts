@@ -129,35 +129,35 @@ export const parsePresenceZip = async (
   fileName = "presence.zip",
 ): Promise<{ ok: true; slug: string; metadata: PresenceMetadata; bundle: string } | { ok: false; error: string }> => {
   const raw = toZipBytes(payload)
-  if (!raw) return { ok: false, error: "invalid-zip" }
-  if (raw.byteLength === 0 || raw.byteLength > MAX_ZIP_BYTES) return { ok: false, error: "zip-too-large" }
+  if (!raw) return { ok: false, error: "INVALID_ZIP" }
+  if (raw.byteLength === 0 || raw.byteLength > MAX_ZIP_BYTES) return { ok: false, error: "ZIP_TOO_LARGE" }
   const bytes = new Uint8Array(raw)
 
   let files: Record<string, Uint8Array>
   try {
     files = Object.fromEntries(Object.entries(unzipSync(bytes)).map(([path, content]) => [normalizePath(path), content]))
   } catch {
-    return { ok: false, error: "invalid-zip" }
+    return { ok: false, error: "INVALID_ZIP" }
   }
 
   const lookup = fileLookup(files)
   const paths = [...lookup.keys()]
   const metadataPath = pickMetadataPath(paths)
-  if (!metadataPath) return { ok: false, error: "metadata-missing" }
+  if (!metadataPath) return { ok: false, error: "METADATA_MISSING" }
 
   const bundleBytes = findBundle(lookup, metadataPath)
   if (!bundleBytes) {
-    return { ok: false, error: hasSourceScript(lookup) ? "source-not-built" : "bundle-missing" }
+    return { ok: false, error: hasSourceScript(lookup) ? "SOURCE_NOT_BUILT" : "BUNDLE_MISSING" }
   }
 
   const metadataBytes = fileAt(lookup, metadataPath)
-  if (!metadataBytes) return { ok: false, error: "metadata-missing" }
+  if (!metadataBytes) return { ok: false, error: "METADATA_MISSING" }
 
   let parsed: unknown
   try {
     parsed = JSON.parse(strFromU8(metadataBytes))
   } catch {
-    return { ok: false, error: "metadata-invalid" }
+    return { ok: false, error: "METADATA_INVALID" }
   }
 
   const fallbackSlug =
@@ -169,9 +169,9 @@ export const parsePresenceZip = async (
     typeof (parsed as { slug?: unknown }).slug === "string" ? (parsed as { slug: string }).slug : slugFromPath(metadataPath, fallbackSlug)
   const slug = rawSlug.toLowerCase().replace(/\s+/g, "-")
   const metadata = normalizeLocalMetadata({ ...(parsed as object), slug }, slug)
-  if (!metadata) return { ok: false, error: "urls-missing" }
+  if (!metadata) return { ok: false, error: "URLS_MISSING" }
   const bundle = strFromU8(bundleBytes).trim()
-  if (!bundle) return { ok: false, error: "bundle-empty" }
+  if (!bundle) return { ok: false, error: "BUNDLE_EMPTY" }
 
   return { ok: true, slug, metadata, bundle }
 }

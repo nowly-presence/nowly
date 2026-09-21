@@ -88,7 +88,7 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
       {
         source: EXT_WEB_SOURCE,
         type: msg.type === "GET_INSTALLED" ? "INSTALLED_PRESENCES" : `${msg.type}_RESULT`,
-        payload: response ?? { ok: false, error: "background unavailable" },
+        payload: response ?? { ok: false, error: "BACKGROUND_UNAVAILABLE" },
         messageId: msg.messageId,
       },
       "*",

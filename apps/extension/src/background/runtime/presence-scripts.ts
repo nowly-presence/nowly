@@ -34,14 +34,14 @@ export const getPresenceRuntime = async (slug: string, metadata: PresenceMetadat
 }
 
 export const registerPresenceScript = async (slug: string, presence: StoredPresence): Promise<{ ok: boolean; error?: string }> => {
-  if (!presence.release) return { ok: false, error: "presence release is not signed" }
+  if (!presence.release) return { ok: false, error: "PRESENCE_RELEASE_NOT_SIGNED" }
   const verified = await verifyPresenceRelease(presence.release, slug)
   if (!verified.ok) return verified
 
   const metadata = presence.release.metadata
   const matches = toMatchPatterns(metadata.url)
-  if (!matches.length) return { ok: false, error: "presence has no valid URL patterns" }
-  if (!presence.release.bundle?.trim()) return { ok: false, error: "presence has no bundle" }
+  if (!matches.length) return { ok: false, error: "PRESENCE_NO_VALID_URL_PATTERNS" }
+  if (!presence.release.bundle?.trim()) return { ok: false, error: "PRESENCE_NO_BUNDLE" }
 
   try {
     addRuntimeLog("info", "presence", "register presence script", { slug, version: presence.release.version })
@@ -61,9 +61,9 @@ export const registerPresenceScript = async (slug: string, presence: StoredPrese
   } catch (error) {
     addRuntimeLog("error", "presence", "register presence script failed", {
       slug,
-      error: error instanceof Error ? error.message : "failed to register presence user script",
+      error: error instanceof Error ? error.message : "FAILED_TO_REGISTER_PRESENCE_USER_SCRIPT",
     })
-    return { ok: false, error: error instanceof Error ? error.message : "failed to register presence user script" }
+    return { ok: false, error: error instanceof Error ? error.message : "FAILED_TO_REGISTER_PRESENCE_USER_SCRIPT" }
   }
 }
 

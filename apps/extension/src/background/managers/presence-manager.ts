@@ -120,7 +120,7 @@ export const fetchPresenceCatalog = async (): Promise<PresenceCatalogItem[]> => 
   const response = await fetch(`${getEffectiveApiUrl()}/presences`, { cache: "no-store" })
   if (!response.ok) throw new Error(`catalog request failed: ${response.status}`)
   const data: unknown = await response.json()
-  if (!Array.isArray(data)) throw new Error("invalid catalog")
+  if (!Array.isArray(data)) throw new Error("INVALID_CATALOG")
   return data.filter((item): item is PresenceCatalogItem => {
     if (!item || typeof item !== "object") return false
     const slug = (item as PresenceCatalogItem).slug
@@ -138,7 +138,7 @@ export type InstallFromApiResult = {
 export const installPresenceFromApi = async (payload: unknown, options: { skipQueue?: boolean } = {}): Promise<InstallFromApiResult> => {
   const slug = typeof payload === "object" && payload !== null ? (payload as { slug?: unknown }).slug : undefined
   if (typeof slug !== "string" || slug.length === 0) {
-    return { ok: false, error: "missing slug" }
+    return { ok: false, error: "MISSING_SLUG" }
   }
 
   const queueIfNeeded = async (status?: number, error?: string): Promise<InstallFromApiResult> => {

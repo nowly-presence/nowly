@@ -6,7 +6,7 @@ import { createAgentUIStreamResponse, stepCountIs, ToolLoopAgent, validateUIMess
 
 export const POST = async (request: Request): Promise<Response> => {
   if (!process.env.OPENAI_API_KEY) {
-    return Response.json({ error: "Chat is not configured (missing OPENAI_API_KEY)" }, { status: 503 });
+    return Response.json({ error: "CHAT_NOT_CONFIGURED" }, { status: 503 });
   }
 
   const cookieHeader = request.headers.get("cookie") ?? "";
