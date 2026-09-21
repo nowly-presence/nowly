@@ -177,7 +177,7 @@ export const getNavigationItems = (locale: string): DocNavigationItem[] => {
 
   items.push({
     slug: "changelog",
-    title: changelogIndex.title ?? "Changelog",
+    title: changelogIndex.title ?? "",
     description: changelogIndex.description ?? "",
     order: 99,
     path: "changelog",
@@ -204,7 +204,7 @@ export const getDocContent = (slug: string, locale: string): DocContent | null =
       slug: "changelog",
       path: "changelog",
       sourcePath: "changelog",
-      title: typeof data.title === "string" ? data.title : "Changelog",
+      title: typeof data.title === "string" ? data.title : "",
       description: typeof data.description === "string" ? data.description : "",
       content,
       frontmatter: data,
@@ -252,12 +252,12 @@ export const getCategoryForPath = (slug: string, locale: string): string => {
   const categorySlug = slug.split("/").filter(Boolean)[0];
 
   if (categorySlug === "changelog") {
-    return readChangelogIndexFrontmatter(validLocale).title ?? "Changelog";
+    return readChangelogIndexFrontmatter(validLocale).title ?? "";
   }
 
   const category = categorySlug ? findCategory(categorySlug) : null;
 
-  return category ? getLocalizedTitle(category.title, validLocale, category.slug) : "Documentation";
+  return category ? getLocalizedTitle(category.title, validLocale, category.slug) : categorySlug ?? "";
 };
 
 export const getAdjacentPages = (

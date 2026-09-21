@@ -7,7 +7,7 @@ import { extractTocItems } from "@/lib/docs/types";
 import { createMetadata, docsOgImage } from "@/lib/seo";
 import { getChangelogList } from "@nowly/changelog";
 import type { Metadata } from "next";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -16,13 +16,15 @@ import type { ReactElement } from "react";
 const CHANGELOG_SLUG = "changelog";
 
 const generateMetadata = async (): Promise<Metadata> => {
-  const doc = getDocContent(CHANGELOG_SLUG, "en-US");
+  const locale = await getLocale();
+  const t = await getTranslations("docsMetadata");
+  const doc = getDocContent(CHANGELOG_SLUG, locale);
 
   if (!doc) {
-    return { title: "Not Found" };
+    return { title: t("not-found") };
   }
 
-  const description = doc.description || "Release notes for Nowly.";
+  const description = doc.description || t("changelog-description");
 
   return createMetadata({
     title: doc.title,
@@ -32,7 +34,7 @@ const generateMetadata = async (): Promise<Metadata> => {
     image: docsOgImage("changelog", {
       title: doc.title,
       description,
-      category: "Changelog",
+       category: t("changelog"),
     }),
   });
 };

@@ -1,7 +1,10 @@
+"use client";
+
 import { Badge, cn } from "@nowly/ui";
 
 
 import type { FC, ReactElement, ReactNode } from "react";
+import { useTranslations } from "next-intl";
 
 export type TypeProperty = {
   name: string;
@@ -15,6 +18,7 @@ export type LanguageEntry = {
   language: string;
   code: string;
   default?: boolean;
+  defaultLabel?: string;
 };
 
 export type ApiMethod = {
@@ -51,7 +55,6 @@ const TypeValue: FC<{ type: string }> = ({ type }): ReactElement => (
 
 const tableConfigs = {
   type: {
-    headers: ["Field", "Type", "Description", "Default"],
     renderRow: (prop: TypeProperty): ReactElement => (
       <tr
         key={prop.name}
@@ -86,7 +89,6 @@ const tableConfigs = {
   },
 
   language: {
-    headers: ["Language", "Code", "Default"],
     renderRow: (lang: LanguageEntry): ReactElement => (
       <tr
         key={lang.code}
@@ -101,8 +103,8 @@ const tableConfigs = {
         </td>
 
         <td className="px-4 py-3">
-          {lang.default ? (
-            <span className="font-medium text-primary">Yes</span>
+            {lang.default ? (
+             <span className="font-medium text-primary">{lang.defaultLabel}</span>
           ) : (
             <span className="text-muted-foreground/70">-</span>
           )}
@@ -112,7 +114,6 @@ const tableConfigs = {
   },
 
   api: {
-    headers: ["Method", "Description", "Returns"],
     renderRow: (method: ApiMethod): ReactElement => (
       <tr
         key={method.method}
@@ -134,7 +135,6 @@ const tableConfigs = {
   },
 
   error: {
-    headers: ["Status", "Error", "Solution"],
     renderRow: (error: ErrorEntry): ReactElement => (
       <tr
         key={`${error.status}-${error.error}`}
@@ -159,20 +159,27 @@ const tableConfigs = {
 } as const;
 
 export const DataTable: FC<DataTableProps> = ({ variant, data }): ReactElement => {
+  const t = useTranslations("docsUi");
   const config = tableConfigs[variant];
   const rows = data ?? [];
+  const headers = {
+    type: [t("field"), t("type"), t("description"), t("default")],
+    language: [t("language"), t("code"), t("default")],
+    api: [t("method"), t("description"), t("returns")],
+    error: [t("status"), t("error"), t("solution")],
+  }[variant];
 
   return (
     <div className="overflow-x-auto rounded-md border border-border">
       <table className="w-full min-w-full border-collapse text-sm">
         <thead>
           <tr className="border-b border-border bg-muted/30">
-            {config.headers.map((header, index) => (
+            {headers.map((header, index) => (
               <th
                 key={header}
                 className={cn(
                   "px-4 py-3 text-left text-sm font-semibold text-muted-foreground", {
-                    "border-r border-border": index < config.headers.length - 1
+                     "border-r border-border": index < headers.length - 1
                   }
                 )}
               >
@@ -184,14 +191,16 @@ export const DataTable: FC<DataTableProps> = ({ variant, data }): ReactElement =
 
         <tbody>
           {rows.length > 0 ? (
-            rows.map((item) => config.renderRow(item as never))
+             rows.map((item) => config.renderRow(
+               (variant === "language" ? { ...item, defaultLabel: t("yes") } : item) as never,
+             ))
           ) : (
             <tr>
               <td
-                colSpan={config.headers.length}
+                 colSpan={headers.length}
                 className="px-4 py-8 text-center text-sm text-muted-foreground"
               >
-                No data available.
+                 {t("no-data")}
               </td>
             </tr>
           )}

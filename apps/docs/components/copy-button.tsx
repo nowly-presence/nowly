@@ -5,6 +5,7 @@ import { cn } from "@nowly/ui";
 
 
 import { type FC, useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type CopyButtonProps = {
   content: string;
@@ -13,6 +14,7 @@ type CopyButtonProps = {
 
 export const CopyButton: FC<CopyButtonProps> = ({ content, className }) => {
   const [copied, setCopied] = useState(false);
+  const t = useTranslations("docsUi");
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(content).then(() => {
@@ -29,7 +31,7 @@ export const CopyButton: FC<CopyButtonProps> = ({ content, className }) => {
         "text-muted-foreground hover:text-foreground transition-colors",
         className,
       )}
-      aria-label={copied ? "Copied" : "RiFileCopyLine code"}
+       aria-label={copied ? t("copied") : t("copy-code")}
     >
       {copied ? <RiCheckLine size={14} /> : <RiFileCopyLine size={14} />}
     </button>

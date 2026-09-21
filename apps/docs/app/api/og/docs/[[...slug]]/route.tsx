@@ -1,6 +1,7 @@
 import { BRAND_LOCKUP_BLUE_PNG, BRAND_LOCKUP_DARK_PNG } from "@/lib/brand";
 import { getDocOgMetadata } from "@/lib/docs/og-metadata";
 import { ImageResponse } from "next/og";
+import { getLocale, getTranslations } from "next-intl/server";
 
 type Props = {
   params: Promise<{
@@ -58,11 +59,13 @@ export const GET = async (req: Request, { params }: Props) => {
     loadInter(400),
     loadPngDataUri(lockupUrl),
   ]);
-  const docMetadata = getDocOgMetadata(pageSlug) ?? getDocOgMetadata(docSlug);
+  const locale = await getLocale();
+  const docMetadata = getDocOgMetadata(pageSlug, locale) ?? getDocOgMetadata(docSlug, locale);
+  const t = await getTranslations({ locale, namespace: "docsMetadata" });
 
-  const category = url.searchParams.get("category") ?? docMetadata?.category ?? "Documentation";
-  const title = url.searchParams.get("title") ?? docMetadata?.title ?? "Nowly Documentation";
-  const description = url.searchParams.get("description") ?? docMetadata?.description ?? "Learn how to install, configure and build Discord Rich Presence integrations with Nowly.";
+  const category = url.searchParams.get("category") ?? docMetadata?.category ?? t("documentation");
+  const title = url.searchParams.get("title") ?? docMetadata?.title ?? t("title");
+  const description = url.searchParams.get("description") ?? docMetadata?.description ?? t("description");
 
   return new ImageResponse(
     (
