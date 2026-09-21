@@ -1,0 +1,42 @@
+---
+title: 2.1.0
+date: 2026-09-20
+description: Una experiencia de extensión reconstruida, builds Canary, y una localización más amplia en la extensión, el sitio web y la documentación.
+---
+
+Esta versión completa el rediseño de la extensión y amplía la localización de Nowly en la extensión, el sitio web y la documentación.
+
+## Una extensión reconstruida
+
+La extensión ahora usa una nueva arquitectura de panel lateral con vistas dedicadas de Actividad, Biblioteca, Ajustes, incorporación, diagnósticos y registros en tiempo de ejecución. Los ajustes están organizados en tarjetas y secciones más claras, con modos de apariencia claro, oscuro y del sistema.
+
+Los nuevos flujos de Actividad y Biblioteca facilitan explorar, instalar, programar, posponer y seguir la actividad actual. La incorporación guiada, las acciones de reconexión, el estado de conexión nativa, los mensajes de instalación y los estados vacíos se han reconstruido en torno a la nueva interfaz.
+
+La capa de fondo ahora cuenta con almacenamiento tipado, un enrutador de mensajes tipado, diagnósticos y registros en tiempo de ejecución, gestores de presencias y actividad, gestión del host nativo, sincronización de dispositivos y comprobaciones de seguridad de las releases. Los eventos de visibilidad, historial, hash y medios pueden actualizar la actividad sin esperar a una recarga completa de la página.
+
+## Canary y desarrollo local
+
+Los builds de Chrome Canary pueden generarse con `pnpm build:canary`. El pipeline de build ahora genera el manifest y empaqueta las presencias para las distribuciones de desarrollo y Canary. La extensión también admite assets de presencias locales y omite las presencias archivadas durante las actualizaciones.
+
+La CLI admite `nowly build --watch` y `nowly pack --watch` para iterar más rápido en las presencias. El sitio web y la extensión ahora distinguen las instalaciones estables de los builds de prueba Canary.
+
+## Más idiomas
+
+La extensión, el sitio web y la documentación ahora incluyen alemán, portugués de Brasil, polaco, japonés, coreano, turco, malayo y griego, además de inglés, francés y español. Los menús de idioma usan las banderas correspondientes, la detección del idioma del navegador cubre todos los idiomas soportados, y las páginas de documentación están traducidas en las secciones de desarrollo de presencias, temas avanzados, publicación y changelog.
+
+## Detalles de la extensión
+
+- Las estadísticas de uso anónimas siguen desactivadas por defecto y pueden gestionarse desde Ajustes.
+- Las presencias ya soportadas de forma nativa por Discord se identifican claramente para evitar actividades duplicadas.
+- El puente de conexión funciona con instancias web alojadas localmente.
+- La programación permanece desactivada para las instalaciones nuevas, con soporte de posponer hasta medianoche.
+- El flujo de conexión con la app de escritorio ofrece indicaciones más claras cuando falta o está desactualizada.
+- El modo desarrollador ofrece una vista dedicada de registros en tiempo de ejecución, accesible directamente desde la navegación del panel lateral.
+- El pie de página del sitio web incluye ahora un enlace directo a la cuenta de X de Nowly.
+- Las páginas de detalle de presencias muestran un botón de me gusta y el número de instalaciones y usuarios activos en vivo, tanto en la extensión como en nowly.me.
+- Abrir desde la Biblioteca una presencia ya instalada ahora lleva directamente a su ficha en Actividad, en lugar de mostrar una página de catálogo separada.
+- La lista de Actividad permite seleccionar varias presencias para activarlas, desactivarlas o desinstalarlas a la vez.
+
+## Validación
+
+Esta versión incluye cobertura de pruebas para los gestores de actividad, la coincidencia de URL, la seguridad de las releases, el almacenamiento y la gestión de mensajes. El typecheck de la extensión, la suite de pruebas, el build Canary, el build del sitio web y el build de la documentación forman parte del flujo de verificación final.

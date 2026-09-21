@@ -1,0 +1,42 @@
+---
+title: 2.1.0
+date: 2026-09-20
+description: Une extension entièrement repensée, des builds Canary, et une localisation élargie sur l'extension, le site et la documentation.
+---
+
+Cette version finalise la refonte de l'extension et élargit la localisation de Nowly sur l'extension, le site web et la documentation.
+
+## Une extension repensée
+
+L'extension utilise désormais une nouvelle architecture de panneau latéral avec des vues dédiées Activité, Bibliothèque, Réglages, onboarding, diagnostics et journaux runtime. Les réglages sont organisés en cartes et sections plus claires, avec des modes d'apparence clair, sombre et système.
+
+Les nouveaux flux Activité et Bibliothèque simplifient la navigation, l'installation, la planification, la mise en pause et le suivi de l'activité en cours. L'onboarding guidé, les actions de reconnexion, le statut de connexion native, les retours d'installation et les états vides ont été reconstruits autour de la nouvelle interface.
+
+La couche background dispose désormais d'un stockage typé, d'un routeur de messages typé, de diagnostics et journaux runtime, de gestionnaires de présences et d'activité, de la gestion de l'hôte natif, de la synchronisation des appareils et de vérifications de sécurité des releases. Les événements de visibilité, d'historique, de hash et de média peuvent mettre à jour l'activité sans attendre un rechargement complet de la page.
+
+## Canary et développement local
+
+Les builds Chrome Canary peuvent être produits avec `pnpm build:canary`. Le pipeline de build génère désormais le manifest et bundle les présences pour les distributions de développement et Canary. L'extension prend aussi en charge les assets de présences locales et ignore les présences archivées lors des mises à jour.
+
+La CLI prend en charge `nowly build --watch` et `nowly pack --watch` pour une itération plus rapide sur les présences. Le site web et l'extension distinguent désormais les installations stables des builds de test Canary.
+
+## Plus de langues
+
+L'extension, le site web et la documentation incluent désormais l'allemand, le portugais brésilien, le polonais, le japonais, le coréen, le turc, le malais et le grec, en plus de l'anglais, du français et de l'espagnol. Les menus de langue utilisent les drapeaux correspondants, la détection de la langue du navigateur couvre toutes les langues prises en charge, et les pages de documentation sont traduites dans les sections développement de présences, sujets avancés, publication et changelog.
+
+## Détails de l'extension
+
+- Les statistiques d'usage anonymes restent désactivées par défaut et peuvent être gérées depuis les réglages.
+- Les présences déjà prises en charge nativement par Discord sont clairement identifiées pour éviter les activités en double.
+- Le pont de connexion fonctionne avec des instances web hébergées localement.
+- La planification reste désactivée pour les nouvelles installations, avec prise en charge du snooze jusqu'à minuit.
+- Le flux de connexion à l'application bureau fournit des indications plus claires quand celle-ci est absente ou obsolète.
+- Le mode développeur propose une vue dédiée aux journaux runtime, directement accessible depuis la navigation du panneau latéral.
+- Le pied de page du site inclut désormais un lien direct vers le compte X de Nowly.
+- Les pages de détail des présences affichent un bouton like ainsi que les nombres d'installations et d'utilisateurs actifs en direct, sur l'extension comme sur nowly.me.
+- Ouvrir depuis la Bibliothèque une présence déjà installée redirige désormais directement vers sa fiche dans Activité, au lieu d'afficher une page catalogue séparée.
+- La liste Activité permet de sélectionner plusieurs présences pour les activer, les désactiver ou les désinstaller en une seule action.
+
+## Validation
+
+Cette version inclut une couverture de tests pour les gestionnaires d'activité, la correspondance d'URL, la sécurité des releases, le stockage et la gestion des messages. Le typecheck de l'extension, la suite de tests, le build Canary, le build du site web et le build de la documentation font partie du workflow de vérification final.
