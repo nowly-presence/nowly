@@ -1,5 +1,5 @@
 import { RiClipboardLine, RiExternalLinkLine, RiRefreshLine, RiStethoscopeLine } from "@remixicon/react"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { isConnectionHealthy } from "@/components/layout/connection-status-bar"
 import { buildDiagnosticSnapshot } from "@/features/diagnostics/diagnostic-status"
 import { UserDiagnosticCard } from "@/features/diagnostics/user-diagnostic-card"
@@ -40,16 +40,11 @@ export const NativeConnectionSection = ({
   onBack,
 }: Props): React.JSX.Element => {
   const healthy = isConnectionHealthy(nativeStatus)
-  const [lastCheckedAt, setLastCheckedAt] = useState<number | null>(null)
   const snapshot = useMemo(
     () => buildDiagnosticSnapshot({ activity, nativeStatus, presences, userScripts }),
     [activity, nativeStatus, presences, userScripts],
   )
   const { copied, copySupportDiagnostic } = useSupportDiagnostic(snapshot)
-  const handleConnect = (): void => {
-    setLastCheckedAt(Date.now())
-    onConnect()
-  }
 
   return (
     <div className="flex flex-col gap-3">
@@ -86,7 +81,7 @@ export const NativeConnectionSection = ({
             variant="outline"
             size="sm"
             className="flex-1"
-            onClick={handleConnect}
+            onClick={onConnect}
             disabled={isConnecting}
           >
             <RiRefreshLine className={cn(isConnecting && "animate-spin")} />
@@ -113,14 +108,15 @@ export const NativeConnectionSection = ({
               <UserDiagnosticCard
                 activity={activity}
                 nativeStatus={nativeStatus}
-                onConnectNative={handleConnect}
+                onConnectNative={onConnect}
                 presences={presences}
                 userScripts={userScripts}
               />
               <DialogFooter>
                 <Button
                   variant="outline"
-                  onClick={handleConnect}
+                  className="flex-1"
+                  onClick={onConnect}
                   disabled={isConnecting}
                 >
                   <RiRefreshLine className={cn("size-3.5", isConnecting && "animate-spin")} />
@@ -128,14 +124,12 @@ export const NativeConnectionSection = ({
                 </Button>
                 <Button
                   variant="outline"
+                  className="flex-1"
                   onClick={copySupportDiagnostic}
                 >
                   <RiClipboardLine className="size-3.5" />
                   {copied ? t("support-diagnostic-copied") : t("support-diagnostic-copy")}
                 </Button>
-                {lastCheckedAt ? (
-                  <span className="self-center text-[11px] text-muted-foreground">{new Date(lastCheckedAt).toLocaleTimeString()}</span>
-                ) : null}
               </DialogFooter>
             </DialogContent>
           </Dialog>
