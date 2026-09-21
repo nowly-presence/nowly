@@ -1,3 +1,4 @@
+import { getChangelogBody, getChangelogList } from "@nowly/changelog";
 import { getValidLocale } from "@nowly/locales";
 import matter from "gray-matter";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
@@ -73,27 +74,9 @@ const getLocalizedTitle = (title: Record<string, string>, locale: string, fallba
   return title[locale] ?? title["en-US"] ?? fallback;
 };
 
+// Only the index intro page (content/docs/changelog/{locale}.mdx) lives here - per-version
+// content is owned by @nowly/changelog so adding a release never touches this app.
 const CHANGELOG_ROOT = join(DOCS_ROOT, "changelog");
-
-type ChangelogVersion = {
-  raw: string;
-  parts: [number, number, number];
-};
-
-const parseChangelogVersion = (name: string): ChangelogVersion | null => {
-  const match = /^(\d+)-(\d+)-(\d+)$/.exec(name);
-
-  if (!match) return null;
-
-  return {
-    raw: name,
-    parts: [Number(match[1]), Number(match[2]), Number(match[3])],
-  };
-};
-
-const compareChangelogVersionsDesc = (left: ChangelogVersion, right: ChangelogVersion): number => {
-  return right.parts[0] - left.parts[0] || right.parts[1] - left.parts[1] || right.parts[2] - left.parts[2];
-};
 
 const readMdxFile = (filePath: string): { raw: string } | null => {
   if (!existsSync(filePath)) return null;
@@ -117,21 +100,13 @@ const readDocFile = (page: DocSection, locale: string): { raw: string } | null =
   return null;
 };
 
-const readChangelogDocFile = (slug: string, locale: string): { raw: string } | null => {
+const readChangelogIndexFile = (locale: string): { raw: string } | null => {
   const validLocale = getValidLocale(locale);
-
-  if (slug === "changelog") {
-    return readMdxFile(join(CHANGELOG_ROOT, `${validLocale}.mdx`)) ?? readMdxFile(join(CHANGELOG_ROOT, "en-US.mdx"));
-  }
-
-  const versionSlug = slug.replace(/^changelog\//, "");
-  const versionPath = join(CHANGELOG_ROOT, versionSlug);
-
-  return readMdxFile(join(versionPath, `${validLocale}.mdx`)) ?? readMdxFile(join(versionPath, "en-US.mdx"));
+  return readMdxFile(join(CHANGELOG_ROOT, `${validLocale}.mdx`)) ?? readMdxFile(join(CHANGELOG_ROOT, "en-US.mdx"));
 };
 
-const readChangelogFrontmatter = (slug: string, locale: string): { title?: string; description?: string } => {
-  const docFile = readChangelogDocFile(slug, locale);
+const readChangelogIndexFrontmatter = (locale: string): { title?: string; description?: string } => {
+  const docFile = readChangelogIndexFile(locale);
 
   if (!docFile) return {};
 
@@ -140,29 +115,6 @@ const readChangelogFrontmatter = (slug: string, locale: string): { title?: strin
   return {
     title: typeof data.title === "string" ? data.title : undefined,
     description: typeof data.description === "string" ? data.description : undefined,
-  };
-};
-
-export const getChangelogVersions = (): ChangelogVersion[] => {
-  if (!existsSync(CHANGELOG_ROOT)) return [];
-
-  return readdirSync(CHANGELOG_ROOT, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => parseChangelogVersion(entry.name))
-    .filter((version): version is ChangelogVersion => Boolean(version))
-    .sort(compareChangelogVersionsDesc);
-};
-
-export const parsePublicChangelogVersion = (
-  value: string,
-): { publicVersion: string; docSlug: string } | null => {
-  const match = /^(\d+)[.-](\d+)[.-](\d+)$/.exec(value.trim().replace(/^v/i, ""));
-
-  if (!match) return null;
-
-  return {
-    publicVersion: `${match[1]}.${match[2]}.${match[3]}`,
-    docSlug: `${match[1]}-${match[2]}-${match[3]}`,
   };
 };
 
@@ -220,8 +172,8 @@ export const getNavigationItems = (locale: string): DocNavigationItem[] => {
     }),
   }));
 
-  const changelogIndex = readChangelogFrontmatter("changelog", validLocale);
-  const changelogVersions = getChangelogVersions();
+  const changelogIndex = readChangelogIndexFrontmatter(validLocale);
+  const changelogVersions = getChangelogList(validLocale);
 
   items.push({
     slug: "changelog",
@@ -229,43 +181,49 @@ export const getNavigationItems = (locale: string): DocNavigationItem[] => {
     description: changelogIndex.description ?? "",
     order: 99,
     path: "changelog",
-    children: changelogVersions.map((version, index) => {
-      const label = version.raw.replace(/-/g, ".");
-      const frontmatter = readChangelogFrontmatter(`changelog/${version.raw}`, validLocale);
-
-      return {
-        slug: label,
-        title: frontmatter.title ?? label,
-        description: frontmatter.description ?? "",
-        order: index + 1,
-        path: `changelog/${version.raw}`,
-        children: [],
-      };
-    }),
+    children: changelogVersions.map((entry, index) => ({
+      slug: entry.version,
+      title: entry.title,
+      description: entry.description,
+      order: index + 1,
+      path: `changelog/${entry.slug}`,
+      children: [],
+    })),
   });
 
   return items;
 };
 
 export const getDocContent = (slug: string, locale: string): DocContent | null => {
-  if (slug === "changelog" || slug.startsWith("changelog/")) {
-    const docFile = readChangelogDocFile(slug, locale);
+  if (slug === "changelog") {
+    const docFile = readChangelogIndexFile(locale);
     if (!docFile) return null;
 
     const { data, content } = matter(docFile.raw);
-    const normalizedSlug = slug === "changelog" ? "changelog" : slug;
-    const fallbackTitle = normalizedSlug === "changelog"
-      ? "Changelog"
-      : normalizedSlug.split("/").at(-1)?.replace(/-/g, ".") ?? normalizedSlug;
-
     return {
-      slug: normalizedSlug.split("/").at(-1) ?? "changelog",
-      path: normalizedSlug,
-      sourcePath: normalizedSlug,
-      title: typeof data.title === "string" ? data.title : fallbackTitle,
+      slug: "changelog",
+      path: "changelog",
+      sourcePath: "changelog",
+      title: typeof data.title === "string" ? data.title : "Changelog",
       description: typeof data.description === "string" ? data.description : "",
       content,
       frontmatter: data,
+    };
+  }
+
+  if (slug.startsWith("changelog/")) {
+    const versionSlug = slug.replace(/^changelog\//, "");
+    const doc = getChangelogBody(versionSlug, locale);
+    if (!doc) return null;
+
+    return {
+      slug: versionSlug,
+      path: slug,
+      sourcePath: slug,
+      title: doc.frontmatter.title,
+      description: doc.frontmatter.description,
+      content: doc.content,
+      frontmatter: doc.frontmatter,
     };
   }
 
@@ -294,7 +252,7 @@ export const getCategoryForPath = (slug: string, locale: string): string => {
   const categorySlug = slug.split("/").filter(Boolean)[0];
 
   if (categorySlug === "changelog") {
-    return readChangelogFrontmatter("changelog", validLocale).title ?? "Changelog";
+    return readChangelogIndexFrontmatter(validLocale).title ?? "Changelog";
   }
 
   const category = categorySlug ? findCategory(categorySlug) : null;

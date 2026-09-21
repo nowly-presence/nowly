@@ -3,7 +3,7 @@ import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { getChangelogRelease, parseChangelogVersion } from "@/lib/changelog-releases";
 import { createMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 type ChangelogVersionPageProps = {
@@ -24,7 +24,8 @@ export const generateMetadata = async ({ params }: ChangelogVersionPageProps): P
     });
   }
 
-  const release = getChangelogRelease(parsed.version);
+  const locale = await getLocale();
+  const release = getChangelogRelease(parsed.version, locale);
   return createMetadata({
     title: t("meta-title", { version: parsed.version }),
     description: release
@@ -41,8 +42,8 @@ const Page = async ({ params }: ChangelogVersionPageProps) => {
   const parsed = parseChangelogVersion(raw);
   if (!parsed) notFound();
 
-  const t = await getTranslations("changelogPage");
-  const release = getChangelogRelease(parsed.version);
+  const [t, locale] = await Promise.all([getTranslations("changelogPage"), getLocale()]);
+  const release = getChangelogRelease(parsed.version, locale);
 
   return (
     <>

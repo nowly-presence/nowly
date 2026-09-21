@@ -1,4 +1,4 @@
-import { CHANGELOG_RELEASES } from "@/lib/changelog-releases";
+import { getChangelogReleases } from "@/lib/changelog-releases";
 import { catalogGithubHandles } from "@/lib/library-catalog";
 import { getPresenceCatalog } from "@/lib/presence-api";
 import { DOCS_ORIGIN, isSeoPreview, seoUrl } from "@/lib/seo";
@@ -35,7 +35,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     entry("/extension", "monthly", 0.7),
     entry("/canary", "weekly", 0.55),
     entry("/changelog", "monthly", 0.6),
-    ...CHANGELOG_RELEASES.map((release) =>
+    ...getChangelogReleases("en-US").map((release) =>
       entry(
         `/changelog/${release.version}`,
         "monthly",

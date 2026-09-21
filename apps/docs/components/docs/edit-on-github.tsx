@@ -11,7 +11,11 @@ type EditOnGitHubProps = {
 };
 
 export const EditOnGitHub: FC<EditOnGitHubProps> = ({ slug, locale }) => {
-  const href = `${PROJECT_REPOSITORY_URL}/blob/stable/apps/docs/content/docs/${slug}/${locale}.mdx`;
+  // Per-version changelog content lives in the @nowly/changelog package, not in this app.
+  const contentPath = slug.startsWith("changelog/")
+    ? `packages/changelog/content/${slug.replace(/^changelog\//, "")}`
+    : `apps/docs/content/docs/${slug}`;
+  const href = `${PROJECT_REPOSITORY_URL}/blob/stable/${contentPath}/${locale}.mdx`;
 
   return (
     <Link
