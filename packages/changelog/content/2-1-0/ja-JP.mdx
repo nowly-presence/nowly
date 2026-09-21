@@ -16,7 +16,7 @@ description: 拡張機能の再構築、Canary ビルド、ローカライズの
 
 ## Canary とローカル開発
 
-Chrome Canary ビルドは `pnpm build:canary` で作成できます。ビルドパイプラインは開発用および Canary 配布用の manifest と presence バンドルを生成します。ローカル presence アセットにも対応し、更新時にはアーカイブ済み presence をスキップします。
+Chrome Canary ビルドは `pnpm --filter @nowly/extension build:chrome` で作成できます。ビルドパイプラインは開発用および Canary 配布用の manifest と presence バンドルを生成します。ローカル presence アセットにも対応し、更新時にはアーカイブ済み presence をスキップします。
 
 CLI は `nowly build --watch` と `nowly pack --watch` に対応しました。Web サイトと拡張機能は安定版インストールと Canary テストビルドを区別します。
 

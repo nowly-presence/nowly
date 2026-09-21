@@ -16,7 +16,7 @@ La couche background dispose désormais d'un stockage typé, d'un routeur de mes
 
 ## Canary et développement local
 
-Les builds Chrome Canary peuvent être produits avec `pnpm build:canary`. Le pipeline de build génère désormais le manifest et bundle les présences pour les distributions de développement et Canary. L'extension prend aussi en charge les assets de présences locales et ignore les présences archivées lors des mises à jour.
+Les builds Chrome Canary peuvent être produits avec `pnpm --filter @nowly/extension build:chrome`. Le pipeline de build génère désormais le manifest et bundle les présences pour les distributions de développement et Canary. L'extension prend aussi en charge les assets de présences locales et ignore les présences archivées lors des mises à jour.
 
 La CLI prend en charge `nowly build --watch` et `nowly pack --watch` pour une itération plus rapide sur les présences. Le site web et l'extension distinguent désormais les installations stables des builds de test Canary.
 

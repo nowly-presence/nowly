@@ -16,7 +16,7 @@ description: Ανακατασκευασμένη εμπειρία επέκτασ�
 
 ## Canary και τοπική ανάπτυξη
 
-Οι εκδόσεις Chrome Canary δημιουργούνται με `pnpm build:canary`. Το pipeline δημιουργεί πλέον το manifest και κάνει bundle τα presence για διανομές ανάπτυξης και Canary. Η επέκταση υποστηρίζει τοπικά assets presence και παραλείπει αρχειοθετημένα presence στις ενημερώσεις.
+Οι εκδόσεις Chrome Canary δημιουργούνται με `pnpm --filter @nowly/extension build:chrome`. Το pipeline δημιουργεί πλέον το manifest και κάνει bundle τα presence για διανομές ανάπτυξης και Canary. Η επέκταση υποστηρίζει τοπικά assets presence και παραλείπει αρχειοθετημένα presence στις ενημερώσεις.
 
 Το CLI υποστηρίζει `nowly build --watch` και `nowly pack --watch` για ταχύτερη επανάληψη. Ο ιστότοπος και η επέκταση ξεχωρίζουν τις σταθερές εγκαταστάσεις από τα Canary test builds.
 

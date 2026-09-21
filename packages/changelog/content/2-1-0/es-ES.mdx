@@ -16,7 +16,7 @@ La capa de fondo ahora cuenta con almacenamiento tipado, un enrutador de mensaje
 
 ## Canary y desarrollo local
 
-Los builds de Chrome Canary pueden generarse con `pnpm build:canary`. El pipeline de build ahora genera el manifest y empaqueta las presencias para las distribuciones de desarrollo y Canary. La extensión también admite assets de presencias locales y omite las presencias archivadas durante las actualizaciones.
+Los builds de Chrome Canary pueden generarse con `pnpm --filter @nowly/extension build:chrome`. El pipeline de build ahora genera el manifest y empaqueta las presencias para las distribuciones de desarrollo y Canary. La extensión también admite assets de presencias locales y omite las presencias archivadas durante las actualizaciones.
 
 La CLI admite `nowly build --watch` y `nowly pack --watch` para iterar más rápido en las presencias. El sitio web y la extensión ahora distinguen las instalaciones estables de los builds de prueba Canary.
 

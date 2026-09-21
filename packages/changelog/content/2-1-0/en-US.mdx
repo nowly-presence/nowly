@@ -16,7 +16,7 @@ The background layer now has typed storage, a typed message router, diagnostics 
 
 ## Canary and local development
 
-Chrome Canary builds can be produced with `pnpm build:canary`. The build pipeline now generates the manifest and bundles presences for development and Canary distributions. The extension also supports local presence assets and skips archived presences during updates.
+Chrome Canary builds can be produced with `pnpm --filter @nowly/extension build:chrome`. The build pipeline now generates the manifest and bundles presences for development and Canary distributions. The extension also supports local presence assets and skips archived presences during updates.
 
 The CLI supports `nowly build --watch` and `nowly pack --watch` for faster presence iteration. The website and extension now distinguish stable installs from Canary test builds.
 

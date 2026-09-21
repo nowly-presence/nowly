@@ -16,7 +16,7 @@ Die Hintergrundebene verfügt jetzt über typisierten Speicher, einen typisierte
 
 ## Canary und lokale Entwicklung
 
-Chrome-Canary-Builds können mit `pnpm build:canary` erstellt werden. Die Build-Pipeline erzeugt nun das Manifest und bündelt Presences für Entwicklungs- und Canary-Distributionen. Die Erweiterung unterstützt außerdem lokale Presence-Assets und überspringt archivierte Presences bei Aktualisierungen.
+Chrome-Canary-Builds können mit `pnpm --filter @nowly/extension build:chrome` erstellt werden. Die Build-Pipeline erzeugt nun das Manifest und bündelt Presences für Entwicklungs- und Canary-Distributionen. Die Erweiterung unterstützt außerdem lokale Presence-Assets und überspringt archivierte Presences bei Aktualisierungen.
 
 Die CLI unterstützt `nowly build --watch` und `nowly pack --watch` für schnellere Presence-Iterationen. Website und Erweiterung unterscheiden nun stabile Installationen von Canary-Testbuilds.
 

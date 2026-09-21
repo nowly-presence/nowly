@@ -16,7 +16,7 @@ Warstwa tła ma teraz typowany magazyn, typowany router wiadomości, diagnostyk�
 
 ## Canary i rozwój lokalny
 
-Kompilacje Chrome Canary można tworzyć poleceniem `pnpm build:canary`. Pipeline generuje teraz manifest i pakuje presence dla dystrybucji deweloperskich i Canary. Rozszerzenie obsługuje też lokalne zasoby presence i pomija zarchiwizowane presence podczas aktualizacji.
+Kompilacje Chrome Canary można tworzyć poleceniem `pnpm --filter @nowly/extension build:chrome`. Pipeline generuje teraz manifest i pakuje presence dla dystrybucji deweloperskich i Canary. Rozszerzenie obsługuje też lokalne zasoby presence i pomija zarchiwizowane presence podczas aktualizacji.
 
 CLI obsługuje `nowly build --watch` i `nowly pack --watch`, przyspieszając iterację. Witryna i rozszerzenie rozróżniają teraz instalacje stabilne od testowych kompilacji Canary.
 

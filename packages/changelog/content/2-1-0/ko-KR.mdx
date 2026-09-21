@@ -16,7 +16,7 @@ description: 재구축된 확장 프로그램 경험, Canary 빌드, 확대된 �
 
 ## Canary와 로컬 개발
 
-Chrome Canary 빌드는 `pnpm build:canary`로 만들 수 있습니다. 빌드 파이프라인은 개발 및 Canary 배포용 manifest와 presence를 생성합니다. 로컬 presence asset을 지원하며 업데이트 중 보관된 presence는 건너뜁니다.
+Chrome Canary 빌드는 `pnpm --filter @nowly/extension build:chrome`로 만들 수 있습니다. 빌드 파이프라인은 개발 및 Canary 배포용 manifest와 presence를 생성합니다. 로컬 presence asset을 지원하며 업데이트 중 보관된 presence는 건너뜁니다.
 
 CLI는 `nowly build --watch`와 `nowly pack --watch`를 지원합니다. 웹사이트와 확장 프로그램은 안정 버전 설치와 Canary 테스트 빌드를 구분합니다.
 
