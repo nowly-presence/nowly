@@ -51,7 +51,7 @@ const runPnpmCommand = (command: string): void => {
 };
 
 const runBuild = (browser: Browser): void => {
-  runPnpmCommand(`pnpm --filter @nowly/extension build:${browser}`);
+  runPnpmCommand(`pnpm --filter @nowly/extension exec tsx scripts/build.ts ${browser}`);
 };
 
 const collectZipEntries = (dir: string, root: string): Record<string, Uint8Array> => {
