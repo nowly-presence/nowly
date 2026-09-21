@@ -4,6 +4,14 @@ import { getPresenceCatalog } from "@/lib/presence-api";
 import { DOCS_ORIGIN, isSeoPreview, seoUrl } from "@/lib/seo";
 import type { MetadataRoute } from "next";
 
+// Some changelog entries carry a non-date placeholder (e.g. "To be determined")
+// instead of a real release date - fall back rather than crash the sitemap build.
+const parseReleaseDate = (value: string | null): Date | undefined => {
+  if (!value) return undefined;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? undefined : parsed;
+};
+
 const entry = (
   path: string,
   changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"],
@@ -40,7 +48,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
         `/changelog/${release.version}`,
         "monthly",
         0.5,
-        release.date ? new Date(release.date) : undefined,
+        parseReleaseDate(release.date),
       ),
     ),
     entry("/support", "monthly", 0.6),
