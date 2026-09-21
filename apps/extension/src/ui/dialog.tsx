@@ -3,6 +3,7 @@ import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import { RiCloseLine } from "@remixicon/react"
 import { Button } from "@/ui/button"
 import { cn } from "@/ui/utils"
+import { t } from "@/shared/i18n"
 
 const Dialog = ({ ...props }: DialogPrimitive.Root.Props) => (
   <DialogPrimitive.Root
@@ -72,7 +73,7 @@ const DialogContent = ({
           }
         >
           <RiCloseLine />
-          <span className="sr-only">Fermer</span>
+          <span className="sr-only">{t("close")}</span>
         </DialogPrimitive.Close>
       )}
     </DialogPrimitive.Popup>
@@ -99,7 +100,7 @@ const DialogFooter = ({
     {...props}
   >
     {children}
-    {showCloseButton && <DialogPrimitive.Close render={<Button variant="outline" />}>Fermer</DialogPrimitive.Close>}
+    {showCloseButton && <DialogPrimitive.Close render={<Button variant="outline" />}>{t("close")}</DialogPrimitive.Close>}
   </div>
 )
 

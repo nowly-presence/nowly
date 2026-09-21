@@ -281,5 +281,8 @@
   "runtime-logs-clear": "Kosongkan",
   "runtime-logs-clear-title": "Kosongkan log",
   "runtime-logs-cleared": "Dikosongkan",
-  "runtime-logs-empty": "Belum ada log."
+  "runtime-logs-empty": "Belum ada log.",
+  "close": "Tutup",
+  "snooze-decrease-duration": "Kurangkan tempoh",
+  "snooze-increase-duration": "Tambah tempoh"
 }

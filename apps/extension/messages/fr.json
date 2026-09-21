@@ -281,5 +281,8 @@
   "runtime-logs-clear": "Vider",
   "runtime-logs-clear-title": "Vider les journaux",
   "runtime-logs-cleared": "Vidés",
-  "runtime-logs-empty": "Aucun journal pour le moment."
+  "runtime-logs-empty": "Aucun journal pour le moment.",
+  "close": "Fermer",
+  "snooze-decrease-duration": "Réduire la durée",
+  "snooze-increase-duration": "Augmenter la durée"
 }

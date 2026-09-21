@@ -281,5 +281,8 @@
   "runtime-logs-clear": "Temizle",
   "runtime-logs-clear-title": "Günlükleri temizle",
   "runtime-logs-cleared": "Temizlendi",
-  "runtime-logs-empty": "Henüz günlük yok."
+  "runtime-logs-empty": "Henüz günlük yok.",
+  "close": "Kapat",
+  "snooze-decrease-duration": "Süreyi azalt",
+  "snooze-increase-duration": "Süreyi artır"
 }

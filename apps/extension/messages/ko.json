@@ -281,5 +281,8 @@
   "runtime-logs-clear": "지우기",
   "runtime-logs-clear-title": "로그 지우기",
   "runtime-logs-cleared": "지워짐",
-  "runtime-logs-empty": "아직 로그가 없습니다."
+  "runtime-logs-empty": "아직 로그가 없습니다.",
+  "close": "닫기",
+  "snooze-decrease-duration": "시간 줄이기",
+  "snooze-increase-duration": "시간 늘리기"
 }

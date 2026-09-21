@@ -281,5 +281,8 @@
   "runtime-logs-clear": "Wyczyść",
   "runtime-logs-clear-title": "Wyczyść dzienniki",
   "runtime-logs-cleared": "Wyczyszczono",
-  "runtime-logs-empty": "Brak dzienników."
+  "runtime-logs-empty": "Brak dzienników.",
+  "close": "Zamknij",
+  "snooze-decrease-duration": "Skróć czas",
+  "snooze-increase-duration": "Wydłuż czas"
 }

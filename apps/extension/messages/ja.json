@@ -281,5 +281,8 @@
   "runtime-logs-clear": "消去",
   "runtime-logs-clear-title": "ログを消去",
   "runtime-logs-cleared": "消去しました",
-  "runtime-logs-empty": "まだログがありません。"
+  "runtime-logs-empty": "まだログがありません。",
+  "close": "閉じる",
+  "snooze-decrease-duration": "期間を短くする",
+  "snooze-increase-duration": "期間を長くする"
 }

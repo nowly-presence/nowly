@@ -281,5 +281,8 @@
   "runtime-logs-clear": "Εκκαθάριση",
   "runtime-logs-clear-title": "Εκκαθάριση αρχείων καταγραφής",
   "runtime-logs-cleared": "Εκκαθαρίστηκε",
-  "runtime-logs-empty": "Δεν υπάρχουν ακόμη αρχεία καταγραφής."
+  "runtime-logs-empty": "Δεν υπάρχουν ακόμη αρχεία καταγραφής.",
+  "close": "Κλείσιμο",
+  "snooze-decrease-duration": "Μείωση διάρκειας",
+  "snooze-increase-duration": "Αύξηση διάρκειας"
 }

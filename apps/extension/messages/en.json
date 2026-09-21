@@ -281,5 +281,8 @@
   "runtime-logs-clear": "Clear",
   "runtime-logs-clear-title": "Clear logs",
   "runtime-logs-cleared": "Cleared",
-  "runtime-logs-empty": "No logs yet."
+  "runtime-logs-empty": "No logs yet.",
+  "close": "Close",
+  "snooze-decrease-duration": "Decrease duration",
+  "snooze-increase-duration": "Increase duration"
 }

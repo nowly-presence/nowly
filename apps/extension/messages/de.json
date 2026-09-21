@@ -281,5 +281,8 @@
   "runtime-logs-clear": "Leeren",
   "runtime-logs-clear-title": "Protokolle leeren",
   "runtime-logs-cleared": "Geleert",
-  "runtime-logs-empty": "Noch keine Protokolle."
+  "runtime-logs-empty": "Noch keine Protokolle.",
+  "close": "Schließen",
+  "snooze-decrease-duration": "Dauer verringern",
+  "snooze-increase-duration": "Dauer erhöhen"
 }

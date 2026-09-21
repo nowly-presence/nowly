@@ -183,7 +183,7 @@ export const DeveloperSection = ({
                   size="sm"
                   onClick={handleSaveApiUrl}
                 >
-                  {saved ? <span className="text-success">OK</span> : t("save")}
+                  {saved ? <span className="text-success">{t("diagnostic-status-ok")}</span> : t("save")}
                 </Button>
                 {apiUrl.trim() !== API_BASE_URL ? (
                   <Button

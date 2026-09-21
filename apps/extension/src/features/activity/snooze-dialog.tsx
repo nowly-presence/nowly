@@ -72,7 +72,7 @@ export const SnoozeDialog = ({ activeSlug, onClose, open, presences }: Props): R
             variant="outline"
             size="icon"
             onClick={dec}
-            aria-label="Decrease duration"
+            aria-label={t("snooze-decrease-duration")}
           >
             <RiSubtractLine />
           </Button>
@@ -81,7 +81,7 @@ export const SnoozeDialog = ({ activeSlug, onClose, open, presences }: Props): R
             variant="outline"
             size="icon"
             onClick={inc}
-            aria-label="Increase duration"
+            aria-label={t("snooze-increase-duration")}
           >
             <RiAddLine />
           </Button>

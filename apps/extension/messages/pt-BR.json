@@ -281,5 +281,8 @@
   "runtime-logs-clear": "Limpar",
   "runtime-logs-clear-title": "Limpar registros",
   "runtime-logs-cleared": "Limpo",
-  "runtime-logs-empty": "Ainda não há registros."
+  "runtime-logs-empty": "Ainda não há registros.",
+  "close": "Fechar",
+  "snooze-decrease-duration": "Diminuir duração",
+  "snooze-increase-duration": "Aumentar duração"
 }
