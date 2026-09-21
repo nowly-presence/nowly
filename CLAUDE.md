@@ -81,8 +81,10 @@ pnpm --filter @nowly/extension dev   # extension dev build (watch, canary)
 
 ### Building
 ```bash
-pnpm build:extension             # production extension build (chrome)
-pnpm build:extension:dev         # dev extension build
+pnpm build:extension             # production extension build (chrome + firefox)
+pnpm build:extension:dev         # dev/canary extension build (chrome)
+pnpm --filter @nowly/extension build:chrome    # dev/canary build, chrome
+pnpm --filter @nowly/extension build:firefox   # dev/canary build, firefox
 pnpm build:macos                 # native host macOS .app/.dmg (apps/native/scripts/macos-release.sh)
 pnpm --filter @nowly/api build   # tsup build
 pnpm --filter @nowly/sdk build   # tsup build (submodule)
@@ -140,7 +142,7 @@ pnpm --filter @nowly/internal-cli host:publish                # publish native h
 - **Background** (`src/background/`) - `router/` (message router + contracts), `managers/`, `services/`, `storage/`, `runtime/` - the persistent presence runtime and native-host bridge
 - **Features** (`src/features/`) - UI feature modules: `activity` (presence tiles, detail view, context menu, scheduling/snooze), `store` (catalog browsing/install), `settings`, `onboarding`, `diagnostics`, `runtime-logs`
 - **Content script** (`src/content/`) - lightweight page-context listener injected into matched sites
-- Built via `tsx scripts/build.ts <chrome|firefox> [--canary] [--watch]`, packaged via `scripts/package.ts`
+- Built via `tsx scripts/build.ts <chrome|firefox> [--canary] [--watch]`, packaged via `scripts/package.ts`. The npm scripts `build:chrome`/`build:firefox` always pass `--canary` (dev/canary builds, installable side-by-side with prod); the plain `build` script (used by root `build:extension`) builds both browsers without `--canary` for production.
 
 ### API Architecture (@nowly/api/src)
 - Organized by **feature**, not by route file: `src/features/{admin,assets,auth,campaigns,custom-presets,device,image-proxy,insights,presence,security,status}`, each typically with its own `*.routes.ts` + `*.service.ts`
