@@ -33,6 +33,7 @@
     "@nowly/env": "workspace:*",
     "@nowly/locales": "workspace:*",
     "@nowly/shared": "workspace:*",
+    "@opencoredev/email-sdk": "^1.2.0",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "better-auth": "^1.7.5",
@@ -44,8 +45,8 @@
   "devDependencies": {
     "@types/node": "^26.6.1",
     "prisma": "^7.10.0",
-    "tsx": "^4.23.13",
     "tsup": "^8.5.1",
+    "tsx": "^4.23.13",
     "typescript": "6.0.3",
     "vitest": "^4.1.9"
   }
