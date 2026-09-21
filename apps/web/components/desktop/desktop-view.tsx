@@ -147,6 +147,7 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
                   placeholder={t("chromeos-email-placeholder")}
                   submitLabel={t("chromeos-submit")}
                   successLabel={t("chromeos-success")}
+                  errorLabel={t("chromeos-error")}
                 />
               ) : null
             ) : (
