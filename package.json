@@ -21,7 +21,7 @@
     "start:api": "pnpm --filter @nowly/api start",
     "typecheck:api": "pnpm --filter @nowly/api typecheck",
     "build:extension": "pnpm --filter @nowly/extension build",
-    "build:extension:dev": "pnpm --filter @nowly/extension build:dev",
+    "build:extension:dev": "pnpm --filter @nowly/extension build:chrome",
     "build:macos": "cd apps/native && bash scripts/macos-release.sh",
     "admin": "pnpm --filter @nowly/internal-cli cli",
     "internal-cli": "pnpm --filter @nowly/internal-cli cli"

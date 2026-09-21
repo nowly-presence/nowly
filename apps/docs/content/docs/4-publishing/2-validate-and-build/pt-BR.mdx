@@ -1,0 +1,36 @@
+---
+title: Validar e compilar
+description: Valide os metadados da presence e compile os pacotes de presence antes de publicar.
+---
+
+## Validar metadados
+
+Execute:
+
+```bash
+nowly validate
+```
+
+A validação verifica `metadata.json` contra o schema do Nowly, inclusive que `discordNative` seja um booleano quando presente. Corrija os erros de validação antes de compilar.
+
+## Compilar todas as presences
+
+Execute:
+
+```bash
+nowly build
+```
+
+## Compilar uma presence
+
+Execute:
+
+```bash
+nowly build youtube
+```
+
+Use o slug ou o nome derivado da pasta para a presence de destino.
+
+## Carregar no navegador
+
+Após uma compilação bem-sucedida, carregue a presence com `nowly extension <slug>` ou solte um zip de `nowly pack <slug>`. Veja [Carregar e testar localmente](/presence-development/load-and-test).

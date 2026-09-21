@@ -1,0 +1,978 @@
+{
+  "metadata": {
+    "title": "Nowly | Kongsi apa yang anda lakukan, secara masa nyata",
+    "description": "Nowly mengubah apa yang anda tonton, dengar atau main menjadi kehadiran Discord yang kaya dan langsung.",
+    "keywords": [
+      "Discord Rich Presence",
+      "aktiviti Discord",
+      "Nowly",
+      "sambungan pelayar",
+      "YouTube Discord",
+      "Spotify Discord",
+      "Netflix Discord"
+    ]
+  },
+  "navbar": {
+    "docs": "Dokumentasi",
+    "library": "Perpustakaan",
+    "open-menu": "Buka menu"
+  },
+  "theme": {
+    "toggle": "Tukar tema warna",
+    "light": "Cerah",
+    "dark": "Gelap"
+  },
+  "hero": {
+    "title-before": "Kongsi apa yang anda lakukan, secara",
+    "title-accent": "masa nyata",
+    "description": "Nowly mengubah aktiviti anda menjadi kehadiran Discord yang kaya dan dinamik.",
+    "install": "Pasang Nowly",
+    "library": "Semak imbas perpustakaan",
+    "cards": {
+      "netflix": {
+        "app-label": "Menonton Netflix",
+        "title": "La casa de papel",
+        "subtitle": "M1 E1. Episod 1",
+        "elapsed": "00:44",
+        "duration": "48:40",
+        "cta": "Tonton Episod"
+      },
+      "prime": {
+        "app-label": "Menonton Prime Video",
+        "title": "Reacher",
+        "subtitle": "M1 E1. Selamat Datang ke Margrave",
+        "elapsed": "15:13",
+        "duration": "40:32",
+        "cta": "Tonton Episod"
+      },
+      "figma": {
+        "app-label": "Menggunakan Figma",
+        "title": "Mereka bentuk di Figma",
+        "subtitle": "Acme Corp",
+        "timer": "00:44"
+      },
+      "youtube": {
+        "app-label": "Menonton YouTube",
+        "title": "Grand Theft Auto VI: Tinjauan Lanjutan",
+        "subtitle": "Rockstar Games",
+        "elapsed": "14:10",
+        "duration": "26:48",
+        "cta": "Tonton video"
+      },
+      "twitch": {
+        "app-label": "Menonton Twitch",
+        "title": "Speedrun Elden Ring - Any%",
+        "subtitle": "NoctaPlays • Elden Ring",
+        "timer": "01:42:18",
+        "cta": "Tonton secara langsung"
+      },
+      "chatgpt": {
+        "app-label": "Menggunakan ChatGPT",
+        "title": "Berbual: Rancangan perjalanan ke Jepun",
+        "timer": "12:34",
+        "cta": "Buka sembang"
+      },
+      "notion": {
+        "app-label": "Menggunakan Notion",
+        "title": "Mengedit halaman",
+        "subtitle": "Pelan Hala Tuju S3",
+        "timer": "24:18"
+      },
+      "steam": {
+        "app-label": "Menggunakan Steam",
+        "title": "Melihat permainan",
+        "subtitle": "Minecraft Legends",
+        "timer": "08:02",
+        "cta": "Lihat halaman kedai"
+      },
+      "github": {
+        "app-label": "Menggunakan GitHub",
+        "title": "Melihat Pull Request #39",
+        "subtitle": "nowly-presence/presences",
+        "timer": "03:41",
+        "cta": "Lihat Pull Request"
+      }
+    }
+  },
+  "platforms": {
+    "eyebrow": "Platform",
+    "title": "Berfungsi dengan platform anda",
+    "description": "Nowly menunjukkan apa yang anda tonton, dengar atau main pada perkhidmatan yang anda sudah gunakan."
+  },
+  "steps": {
+    "eyebrow": "Persediaan",
+    "title": "Tiga langkah, Discord mengikut",
+    "description": "Sambungan membaca tab. Aplikasi desktop menghantar status ke Discord.",
+    "items": [
+      {
+        "title": "Sambungan",
+        "text": "Tambah Nowly ke Chrome atau Firefox, secara percuma.",
+        "action": "Muat Turun"
+      },
+      {
+        "title": "Aplikasi desktop",
+        "text": "Pasang jambatan tempatan yang berkomunikasi dengan Discord.",
+        "action": "Dapatkan aplikasi"
+      },
+      {
+        "title": "Satu kehadiran",
+        "text": "Aktifkan YouTube, Netflix atau Twitch daripada perpustakaan.",
+        "action": "Buka perpustakaan"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Mula dengan Nowly",
+    "description": "Pasang sambungan percuma. Anda sedia dalam beberapa saat.",
+    "other-versions": "Lihat versi lain"
+  },
+  "features": {
+    "eyebrow": "Produk",
+    "title": "Status yang terasa hidup",
+    "description": "Sambungan pelayar, aplikasi desktop, dan perpustakaan skrip yang ditandatangani.",
+    "items": [
+      {
+        "title": "Kemas kini automatik",
+        "description": "Tajuk, artwork, cap masa dan status main balik dikemas kini apabila halaman berubah."
+      },
+      {
+        "title": "Pasang apa yang anda perlukan",
+        "description": "YouTube, Netflix, Twitch dan banyak lagi. Aktifkan kehadiran daripada perpustakaan dengan satu klik."
+      },
+      {
+        "title": "Tiada apa-apa tambahan pada halaman",
+        "description": "Skrip hanya berjalan pada laman yang anda pasang, tiada apa-apa berjalan di tempat lain."
+      },
+      {
+        "title": "Skrip yang ditandatangani",
+        "description": "Kehadiran rasmi disahkan sebelum ia dijalankan, supaya masa jalan kekal terkawal."
+      },
+      {
+        "title": "Chrome dan Firefox",
+        "description": "Berfungsi pada pelayar Chromium dan Firefox. Butang muat turun mengikut pelayar anda."
+      },
+      {
+        "title": "Aplikasi desktop",
+        "description": "Aplikasi desktop ialah jambatan tempatan yang benar-benar diterima oleh Discord. Windows, macOS dan Linux."
+      }
+    ]
+  },
+  "privacy-section": {
+    "eyebrow": "Privasi",
+    "title": "Aktiviti anda bukan produk kami",
+    "description": "Apa yang anda tonton kekal di PC anda, bukan di nowly.me.",
+    "items": [
+      {
+        "title": "Tiada apa-apa melalui pelayan kami",
+        "description": "Sambungan, aplikasi desktop, kemudian Discord. Tajuk, platform dan main balik tidak pernah meninggalkan PC anda."
+      },
+      {
+        "title": "Tiada analitik melainkan anda mahukannya",
+        "description": "Jika anda menghidupkannya, ia hanya membantu menambah baik Nowly. Anda boleh mematikannya bila-bila masa."
+      },
+      {
+        "title": "Hanya laman yang anda pasang",
+        "description": "Kehadiran hanya berjalan selepas anda memasangnya. Buang ia, dan Nowly tidak lagi mengambil tahu laman tersebut."
+      }
+    ],
+    "cta": "Baca dasar privasi"
+  },
+  "faq": {
+    "eyebrow": "Soalan Lazim",
+    "title": "Soalan, dijawab dengan cepat",
+    "description": "Perkara asas tentang pemasangan, data dan Discord. Dokumentasi dan Discord pergi lebih jauh.",
+    "docs": "Buka dokumentasi",
+    "discord": "Sertai Discord",
+    "items": [
+      {
+        "question": "Apakah Nowly?",
+        "answer": "Nowly menunjukkan apa yang anda tonton, dengar atau main sebagai Discord Rich Presence. Ia adalah sambungan pelayar, aplikasi desktop, dan perpustakaan skrip platform."
+      },
+      {
+        "question": "Adakah aktiviti saya melalui pelayan anda?",
+        "answer": "Tidak. Aktiviti kekal setempat dan dihantar ke Discord daripada mesin anda. Analitik adalah pilihan dan dimatikan secara lalai."
+      },
+      {
+        "question": "Platform apakah yang disokong?",
+        "answer": "Senarai terkini ialah perpustakaan. Kehadiran baharu boleh ditambah tanpa mengemas kini sambungan, jadi pasang yang anda benar-benar gunakan."
+      }
+    ]
+  },
+  "open-source": {
+    "eyebrow": "Sumber terbuka",
+    "title": "Tambah kehadiran",
+    "description": "Skrip kehadiran adalah awam. Fork, tulis, buka PR. CLI dan dokumentasi sudah memadai untuk bermula.",
+    "docs": "Baca dokumentasi",
+    "file": "presence.ts"
+  },
+  "store": {
+    "download-chrome": "Muat turun untuk Chrome",
+    "download-firefox": "Muat turun untuk Firefox"
+  },
+  "footer": {
+    "tagline": "Kongsi apa yang anda lakukan.",
+    "copyright": "© 2026 Nowly. Hak cipta terpelihara.",
+    "trademark": "Discord ialah tanda dagangan berdaftar <inc>Discord Inc.</inc>",
+    "language-label": "Bahasa",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "Produk",
+    "home": "Laman utama",
+    "library": "Perpustakaan",
+    "host": "Aplikasi desktop",
+    "resources": "Sumber",
+    "docs": "Dokumentasi",
+    "changelog": "Nota keluaran",
+    "canary": "Canary",
+    "support": "Sokongan",
+    "status": "Status",
+    "branding": "Penjenamaan",
+    "community": "Komuniti",
+    "discord": "Discord",
+    "github": "GitHub",
+    "twitter": "X / Twitter",
+    "tos": "Terma Perkhidmatan",
+    "privacy": "Privasi",
+    "consent": "Data anda",
+    "cookies": "Kuki",
+    "legal-notice": "Notis undang-undang"
+  },
+  "libraryPage": {
+    "eyebrow": "Perpustakaan",
+    "title": "Setiap kehadiran, di satu tempat",
+    "description": "Semak imbas platform yang boleh dikongsi Nowly di Discord. Cari, tapis, dan pilih apa yang anda mahu tunjukkan.",
+    "search": "Cari Netflix, Spotify, Figma...",
+    "search-label": "Cari dalam perpustakaan",
+    "clear-search": "Kosongkan carian",
+    "all": "Semua",
+    "count": "{count, plural, other {# kehadiran}}",
+    "empty-title": "Tiada yang sepadan",
+    "empty-description": "Cuba nama lain, atau set semula penapis.",
+    "clear": "Set semula",
+    "previous": "Sebelumnya",
+    "next": "Seterusnya",
+    "pagination": "Penomboran halaman",
+    "page-status": "Halaman {page} daripada {total}",
+    "go-to-page": "Pergi ke halaman {page}",
+    "categories": {
+      "streaming": "Streaming",
+      "music": "Muzik",
+      "video": "Video",
+      "gaming": "Permainan",
+      "social": "Sosial",
+      "ai": "AI",
+      "tools": "Alat",
+      "learning": "Pembelajaran",
+      "other": "Lain-lain"
+    }
+  },
+  "authorPage": {
+    "badge": "Penulis",
+    "back": "Kembali ke perpustakaan",
+    "description": "{count, plural, other {# kehadiran}}",
+    "meta-description": "Kehadiran Nowly oleh {name}.",
+    "view-in-library": "Lihat dalam perpustakaan"
+  },
+  "presencePage": {
+    "back": "Kembali ke perpustakaan",
+    "cta": "Dapatkan Nowly",
+    "about": "Tentang",
+    "features": "Apa yang ia lakukan",
+    "contributors": "Penyumbang",
+    "author": "Penulis",
+    "contributor": "Penyumbang",
+    "supported-urls": "Laman yang disokong",
+    "version": "Versi",
+    "commit": "Commit {sha}",
+    "checking": "Mencari Nowly",
+    "install": "Pasang",
+    "installing": "Memasang...",
+    "installed": "Dipasang",
+    "update": "Kemas kini",
+    "uninstall": "Buang",
+    "install-success": "{name} telah dipasang.",
+    "update-success": "{name} adalah terkini.",
+    "install-error": "Tidak dapat memasang {name}.",
+    "install-origin": "Sambungan Chrome Web Store hanya menerima nowly.me. Muatkan pembinaan Nowly yang tidak dibungkus untuk memasang daripada localhost.",
+    "install-queued": "{name} akan dipasang apabila Nowly dapat mencapai katalog.",
+    "uninstall-success": "{name} telah dibuang.",
+    "uninstall-error": "Tidak dapat membuang {name}.",
+    "uninstall-title": "Buang Kehadiran",
+    "uninstall-description": "Jika {name} mengandungi data konfigurasi, ia akan hilang secara kekal.",
+    "uninstall-confirm": "Buang",
+    "uninstall-cancel": "Batal",
+    "ext-missing": "Pasang sambungan Nowly untuk menambah kehadiran ini.",
+    "mobile": "Pemasangan kehadiran tersedia pada pelayar desktop.",
+    "user-scripts": "Benarkan skrip pengguna untuk Nowly dalam pelayar anda, kemudian muat semula halaman ini.",
+    "related-title": "Anda mungkin juga suka",
+    "report": "Laporkan masalah",
+    "report-title": "Laporkan masalah",
+    "report-description": "Beritahu kami apa yang tidak kena dengan {name}. Kami membaca setiap laporan.",
+    "report-label": "Penerangan",
+    "report-placeholder": "Apa yang berlaku? Halaman atau tindakan mana yang gagal?",
+    "report-count": "{count}/{max}",
+    "report-submit": "Hantar laporan",
+    "report-sending": "Menghantar...",
+    "report-cancel": "Batal",
+    "report-close": "Tutup",
+    "report-thanks-title": "Terima kasih atas laporan",
+    "report-thanks-description": "Kami telah menerima nota anda tentang {name}. Ini membantu kami mengekalkan perpustakaan dalam keadaan baik.",
+    "report-error": "Tidak dapat menghantar laporan. Cuba lagi sebentar lagi.",
+    "discord-native-title": "Sudah ada di Discord",
+    "discord-native-description": "Discord memaparkan {name} jika anda menghubungkan akaun anda. Nowly melakukan perkara yang sama tanpa penghubungan itu.",
+    "like": "Suka",
+    "unlike": "Nyahsuka",
+    "stats": "Statistik",
+    "stat-installs": "{count} pemasangan",
+    "stat-active": "{count} aktif"
+  },
+  "desktopPage": {
+    "eyebrow": "Aplikasi desktop",
+    "title": "Jambatan tempatan ke Discord",
+    "description": "Sambungan membaca tab. Aplikasi desktop menghantar status anda ke Discord. Tajuk, platform dan main balik tidak pernah meninggalkan PC anda.",
+    "detected": "Dikesan",
+    "chromeos-title": "ChromeOS belum lagi disokong",
+    "chromeos-description": "Discord Rich Presence memerlukan aplikasi asli yang tidak dapat dijalankan oleh ChromeOS pada masa ini. Kami sedang menyiasatnya - tinggalkan e-mel anda untuk dimaklumkan jika ini berubah.",
+    "chromeos-email-placeholder": "anda@contoh.com",
+    "chromeos-submit": "Maklumkan saya",
+    "chromeos-success": "Terima kasih, kami akan maklumkan anda.",
+    "chromeos-error": "Sesuatu tidak berjaya. Sila cuba lagi.",
+    "version": "Versi {version}",
+    "card-title": "Muat turun untuk {platform}",
+    "platforms": {
+      "windows": "Windows",
+      "macos": "macOS",
+      "linux": "Linux",
+      "chromeos": "ChromeOS"
+    },
+    "windows-installer": "Pemasang Windows (.exe)",
+    "windows-portable": "Arkib mudah alih (.zip)",
+    "macos-dmg": "Imej cakera (.dmg)",
+    "macos-archive": "Arkib (.tar.gz)",
+    "linux-deb": "Pakej Debian (.deb)",
+    "linux-archive": "Arkib (.tar.gz)",
+    "open-source": "Sumber terbuka",
+    "lightweight": "Saiz kecil",
+    "unsigned-title": "Pembinaan tidak ditandatangani",
+    "unsigned-desc": "Windows mungkin menunjukkan amaran SmartScreen. Buka \"Maklumat lanjut\", kemudian \"Jalankan juga\", hanya jika anda memuat turun fail ini daripada halaman ini.",
+    "signed-title": "Disahkan notari oleh Apple",
+    "signed-desc": "Pembinaan macOS disahkan notari. Gatekeeper sepatutnya menerima imej cakera.",
+    "linux-title": "Debian/Ubuntu: pasang .deb",
+    "linux-desc": "Pada Debian, Ubuntu, atau Mint, gunakan pakej .deb di atas - ia memasang sendiri tanpa memerlukan terminal. Pada distro lain, ekstrak arkib dan jalankan skrip pemasangan:",
+    "trust-title": "Apa yang ia lakukan",
+    "trust-items": [
+      {
+        "title": "Kekal pada mesin anda",
+        "text": "Sambungan melihat tab. Aplikasi desktop bercakap dengan Discord secara setempat. Tiada apa-apa dihantar ke nowly.me."
+      },
+      {
+        "title": "Bercakap bahasa Discord",
+        "text": "Discord hanya menerima jambatan tempatan ini. Itulah sebabnya sambungan pelayar sahaja tidak mencukupi."
+      },
+      {
+        "title": "Senyap di latar belakang",
+        "text": "Ia kecil, tiada tetingkap untuk diperhatikan, dan hanya berjalan supaya status anda boleh dikemas kini."
+      }
+    ],
+    "guide-title": "Pasang",
+    "guide-items": [
+      {
+        "title": "Muat turun fail yang betul",
+        "text": "Gunakan pemasang untuk sistem anda. Arkib mudah alih tersedia jika anda tidak mahu menjalankan bestari pemasangan."
+      },
+      {
+        "title": "Buka fail yang dimuat turun",
+        "text": "Jalankan aplikasi dan ikuti persediaan. Pada Windows, baca nota SmartScreen jika gesaan perlindungan muncul."
+      },
+      {
+        "title": "Pasang kehadiran",
+        "text": "Daripada perpustakaan, tambah sesuatu seperti YouTube untuk menyemak sama ada sambungan dan aplikasi desktop saling berkomunikasi."
+      },
+      {
+        "title": "Semak Discord",
+        "text": "Pastikan aplikasi desktop Discord terbuka, mulakan laman yang disokong, kemudian semak sama ada status anda dikemas kini."
+      }
+    ],
+    "guide-library": "Buka perpustakaan",
+    "req-title": "Keperluan",
+    "req": {
+      "os": "Sistem operasi",
+      "arch": "Seni bina",
+      "discord": "Discord",
+      "browser": "Pelayar",
+      "storage": "Storan",
+      "os-windows": "Windows 10 atau Windows 11",
+      "os-macos": "macOS 11 Big Sur atau lebih baharu",
+      "os-linux": "Linux 2.6.32+ / glibc 2.17+",
+      "arch-windows": "64-bit (x64)",
+      "arch-macos": "Intel x64 / Apple Silicon (ARM64)",
+      "arch-linux": "64-bit (x64)",
+      "discord-windows": "Aplikasi desktop Discord dipasang dan sedang berjalan",
+      "discord-macos": "Aplikasi desktop Discord dipasang dan sedang berjalan",
+      "discord-linux": "Aplikasi desktop Discord dipasang dan sedang berjalan",
+      "browser-windows": "Pelayar Chromium (Chrome, Edge, Brave, Opera) atau Firefox",
+      "browser-macos": "Pelayar Chromium (Chrome, Edge, Brave, Opera) atau Firefox",
+      "browser-linux": "Pelayar Chromium (Chrome, Edge, Brave, Opera) atau Firefox",
+      "storage-windows": "Kira-kira 4 MB",
+      "storage-macos": "Kira-kira 4 MB",
+      "storage-linux": "Kira-kira 2 MB"
+    }
+  },
+  "extensionPage": {
+    "eyebrow": "Sambungan pelayar",
+    "title": "Sambungan yang membaca tab anda",
+    "description": "Nowly mengesan apa yang anda tonton, dengar atau main, kemudian menghantarnya ke aplikasi desktop untuk Discord.",
+    "detected": "Dikesan",
+    "card-title": "Tambah ke {browser}",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-description": {
+      "chrome": "Tersedia di Chrome Web Store. Juga berfungsi pada Edge, Brave dan Opera.",
+      "firefox": "Tersedia di addons.mozilla.org."
+    },
+    "dev-version": "Lihat versi pembangunan",
+    "trust-title": "Apa yang ia lakukan",
+    "trust-items": [
+      {
+        "title": "Hanya laman yang anda pasang",
+        "text": "Kehadiran hanya berjalan sebaik sahaja dipasang daripada perpustakaan."
+      },
+      {
+        "title": "Tiada apa-apa meninggalkan PC anda",
+        "text": "Tajuk dan aktiviti pergi ke aplikasi desktop, bukan ke nowly.me."
+      },
+      {
+        "title": "Skrip yang ditandatangani",
+        "text": "Kehadiran rasmi disahkan sebelum ia dijalankan."
+      }
+    ],
+    "guide-title": "Pasang",
+    "guide-items": [
+      {
+        "title": "Tambah sambungan",
+        "text": "Daripada kedai pelayar anda, dengan satu klik."
+      },
+      {
+        "title": "Pasang aplikasi desktop",
+        "text": "Ia yang berkomunikasi dengan Discord."
+      },
+      {
+        "title": "Hidupkan kehadiran",
+        "text": "Daripada perpustakaan, tambah YouTube, Netflix atau Twitch."
+      }
+    ],
+    "guide-desktop": "Lihat aplikasi desktop",
+    "guide-library": "Buka perpustakaan"
+  },
+  "changelogPage": {
+    "eyebrow": "Nota keluaran",
+    "title": "Apa yang berubah",
+    "description": "Setiap keluaran Nowly, daripada pembinaan kedai terkini hingga versi awam pertama.",
+    "read": "Baca nota",
+    "banner-alt": "Laman web Nowly {version}",
+    "docs": "Nota penuh",
+    "back": "Semua keluaran",
+    "library": "Perpustakaan",
+    "update-eyebrow": "Kemas kini sambungan",
+    "update-title": "Nowly {version} telah dipasang",
+    "update-description": "Ini yang berubah dalam keluaran ini.",
+    "meta-title": "Nowly {version}",
+    "missing": "Nota untuk versi ini belum lagi ada di laman web. Anda masih boleh melayari log perubahan penuh dalam dokumentasi."
+  },
+  "canaryPage": {
+    "eyebrow": "Canary",
+    "title": "Cuba Nowly yang seterusnya",
+    "description": "Canary ialah pembinaan yang tidak dibungkus yang kami hantar kepada penguji. Ia bergerak lebih pantas daripada kedai, dan ia boleh rosak.",
+    "detected": "Dikesan",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-title": "Muat turun untuk {browser}",
+    "card-description": {
+      "chrome": "Chrome tidak dapat memasang ini daripada kedai. Anda memuatkan folder yang tidak dizip sendiri.",
+      "firefox": "Firefox tidak dapat memasang ini daripada addons.mozilla.org. Anda memuatkannya sebagai tambahan sementara."
+    },
+    "download": "Muat turun Nowly Canary",
+    "stable": {
+      "chrome": "Dapatkan versi kedai Chrome",
+      "firefox": "Dapatkan tambahan Firefox"
+    },
+    "store-note": {
+      "chrome": "Kekalkan pembinaan kedai untuk kegunaan harian. Canary boleh berada di sebelahnya: mereka menggunakan ID sambungan yang berbeza.",
+      "firefox": "Kekalkan tambahan untuk kegunaan harian. Canary sementara dibuang apabila Firefox dimulakan semula."
+    },
+    "notes-title": "Sebelum anda pasang",
+    "notes": [
+      {
+        "title": "Tidak stabil secara sengaja",
+        "text": "Zip ini mengikuti kerja sambungan terkini. Ciri boleh muncul, berubah, atau hilang tanpa semakan kedai."
+      },
+      {
+        "title": "Tiada kemas kini kedai",
+        "text": "Pelayar tidak akan mengemas kini Canary secara automatik. Apabila zip baharu diterbitkan, muat turun sekali lagi dan muat semula pembinaan."
+      },
+      {
+        "title": "Simpan folder",
+        "text": "Pemuatan yang tidak dibungkus atau sementara menunjuk kepada direktori pada cakera. Jika anda memadam atau memindahkannya, sambungan hilang."
+      }
+    ],
+    "guide-title": {
+      "chrome": "Muatkan di Chrome",
+      "firefox": "Muatkan di Firefox"
+    },
+    "guide": {
+      "chrome": [
+        {
+          "title": "Muat turun dan unzip",
+          "text": "Simpan zip, kemudian ekstrak ke folder yang tidak akan anda buang semasa pembersihan."
+        },
+        {
+          "title": "Buka chrome://extensions",
+          "text": "Tampalkan alamat ini pada bar tab. Hidupkan Mod Pembangun di sebelah kanan atas."
+        },
+        {
+          "title": "Muatkan yang tidak dibungkus",
+          "text": "Pilih folder yang diekstrak, bukan zip. Anda sepatutnya melihat Nowly Canary dalam senarai."
+        },
+        {
+          "title": "Muat semula selepas zip baharu",
+          "text": "Gantikan kandungan folder dengan pembinaan baharu, kemudian klik Muat Semula pada kad sambungan."
+        }
+      ],
+      "firefox": [
+        {
+          "title": "Muat turun dan unzip",
+          "text": "Simpan zip Firefox, kemudian ekstrak ke folder yang akan anda kekalkan."
+        },
+        {
+          "title": "Buka about:debugging",
+          "text": "Tampalkan about:debugging#/runtime/this-firefox pada bar alamat."
+        },
+        {
+          "title": "Muatkan Tambahan Sementara",
+          "text": "Pilih manifest.json di dalam folder yang diekstrak, bukan zip."
+        },
+        {
+          "title": "Muatkan semula selepas mula semula",
+          "text": "Firefox membuang tambahan sementara apabila ia ditutup. Selepas zip baharu, gantikan folder kemudian muatkan sekali lagi."
+        }
+      ]
+    }
+  },
+  "brandingPage": {
+    "eyebrow": "Penjenamaan",
+    "title": "Bahan jenama",
+    "description": "Susunan logo dan warna jenama untuk Nowly. Sila jangan mengherotkan, menukar warna, atau mengubah logo.",
+    "logo": "Logo",
+    "icon": "Ikon",
+    "colors": "Warna",
+    "download-svg": "SVG",
+    "download-png": "PNG",
+    "variants": {
+      "blue": "Biru",
+      "dark": "Gelap (latar belakang cerah)",
+      "white": "Putih (latar belakang gelap)",
+      "canary": "Canary"
+    },
+    "swatches": {
+      "primary-light": "Utama (cerah)",
+      "primary-dark": "Utama (gelap)",
+      "background-light": "Latar belakang (cerah)",
+      "background-dark": "Latar belakang (gelap)",
+      "canary-accent": "Aksen Canary",
+      "canary-ink": "Dakwat Canary"
+    }
+  },
+  "supportPage": {
+    "eyebrow": "Sokongan",
+    "contact": {
+      "title": "Hubungi pasukan",
+      "description": "Hantar mesej peribadi kepada kami dan kami akan membalas melalui e-mel.",
+      "required-note": "Medan bertanda * adalah wajib.",
+      "name": "Nama (pilihan)",
+      "name-placeholder": "Nama anda",
+      "email": "E-mel",
+      "email-placeholder": "anda@contoh.com",
+      "subject": "Subjek",
+      "subject-placeholder": "Bagaimana kami boleh membantu?",
+      "message": "Mesej",
+      "message-placeholder": "Beritahu kami perkara yang anda perlukan bantuan...",
+      "submit": "Hantar mesej",
+      "sending": "Menghantar...",
+      "success": "Mesej anda telah dihantar.",
+      "error": "Mesej anda tidak dapat dihantar. Sila cuba lagi."
+    },
+    "title": "Perlukan bantuan?",
+    "description": "Pilih saluran yang sepadan dengan isu anda. Discord adalah paling pantas untuk perbualan. GitHub menyimpan rekod awam.",
+    "open": "Buka",
+    "donate": "Nowly kekal percuma. Jika anda mahu membantu projek ini, anda boleh menggunakan <kofi>Ko-fi</kofi> atau <sponsors>GitHub Sponsors</sponsors>.",
+    "sections": {
+      "community": "Komuniti",
+      "presences": "Kehadiran",
+      "technical": "Teknikal"
+    },
+    "discord": {
+      "title": "Tiket Discord",
+      "description": "Sertai pelayan Nowly dan buka tiket untuk bercakap dengan pasukan."
+    },
+    "docs": {
+      "title": "Penyelesaian masalah",
+      "description": "Pembetulan untuk aplikasi desktop, Discord Desktop, aktiviti yang hilang, dan kebenaran."
+    },
+    "broken": {
+      "title": "Kehadiran rosak",
+      "description": "Laporkan platform yang tidak lagi mengesan aktiviti, menunjukkan maklumat yang salah, atau mengosongkan diri sendiri."
+    },
+    "request": {
+      "title": "Minta kehadiran",
+      "description": "Cadangkan platform baharu untuk ditambah ke perpustakaan Nowly."
+    },
+    "bug": {
+      "title": "Laporkan pepijat",
+      "description": "Laporkan isu dengan laman web, sambungan, API, atau aplikasi desktop."
+    },
+    "feature": {
+      "title": "Cadangkan penambahbaikan",
+      "description": "Kongsikan idea untuk pengalaman, tetapan, atau alat sekitar Nowly."
+    },
+    "other": {
+      "title": "Permintaan lain",
+      "description": "Buka isu kosong jika topik anda tidak sepadan dengan mana-mana borang berpandu."
+    }
+  },
+  "statusPage": {
+    "eyebrow": "Status",
+    "title": "Status perkhidmatan Nowly",
+    "description": "Status langsung untuk laman web, API, perpustakaan kehadiran, dan muat turun hos.",
+    "checked-history": "Disemak secara langsung pada {time}",
+    "no-data": "Tiada data",
+    "history-label": "Sejarah respons perkhidmatan terkini",
+    "overall": {
+      "operational": "Semua sistem beroperasi",
+      "slow": "Sesetengah perkhidmatan lebih perlahan daripada biasa",
+      "degraded": "Sesetengah perkhidmatan merosot",
+      "down": "Sesetengah perkhidmatan tidak tersedia",
+      "unknown": "Masih tiada data status"
+    },
+    "status-labels": {
+      "operational": "Beroperasi",
+      "slow": "Perlahan",
+      "degraded": "Merosot",
+      "down": "Terputus",
+      "unknown": "Tiada data"
+    },
+    "services": {
+      "website": {
+        "title": "Laman web"
+      },
+      "api": {
+        "title": "API Nowly"
+      },
+      "library": {
+        "title": "Perpustakaan kehadiran"
+      },
+      "cdn": {
+        "title": "Muat turun Nowly Host"
+      }
+    }
+  },
+  "pages": {
+    "library": {
+      "title": "Perpustakaan",
+      "description": "Semak imbas platform yang boleh dikongsi Nowly di Discord."
+    },
+    "desktop": {
+      "title": "Aplikasi desktop",
+      "description": "Muat turun aplikasi desktop untuk menghantar aktiviti anda ke Discord."
+    },
+    "extension": {
+      "title": "Sambungan pelayar",
+      "description": "Tambah sambungan Nowly ke Chrome atau Firefox untuk mengesan apa yang anda tonton, dengar atau main."
+    },
+    "changelog": {
+      "title": "Nota keluaran",
+      "description": "Lihat apa yang berubah dalam Nowly."
+    },
+    "canary": {
+      "title": "Nowly Canary",
+      "description": "Muat turun pembinaan Chrome atau Firefox yang tidak dibungkus digunakan untuk ujian."
+    },
+    "support": {
+      "title": "Sokongan",
+      "description": "Dapatkan bantuan dengan Nowly, sambungan, atau kehadiran."
+    },
+    "branding": {
+      "title": "Penjenamaan",
+      "description": "Susunan logo dan warna jenama untuk Nowly."
+    },
+    "status": {
+      "title": "Status",
+      "description": "Status langsung untuk laman web Nowly, API, perpustakaan kehadiran, dan muat turun hos."
+    },
+    "uninstall": {
+      "title": "Sambungan telah dibuang",
+      "description": "Kami berharap dapat melihat anda lagi. Beritahu kami apa yang tidak kena, ia membantu kami menambah baik Nowly."
+    },
+    "consent": {
+      "title": "Data anda",
+      "description": "Urus persetujuan analitik pilihan, dan lihat, eksport, atau padam data yang disimpan Nowly untuk peranti anda."
+    }
+  },
+  "not-found": {
+    "title": "Halaman tidak dijumpai",
+    "description": "Halaman ini tidak wujud atau telah dipindahkan.",
+    "home": "Kembali ke laman utama"
+  },
+  "cookie-banner": {
+    "message": "Laman ini menggunakan kuki bahasa yang benar-benar perlu. Jika iklan diaktifkan kemudian, Google mungkin juga menggunakan teknologi pengiklanan.",
+    "learn-more": "Ketahui lebih lanjut",
+    "dismiss": "Faham"
+  },
+  "privacy-page": {
+    "badge": "Privasi",
+    "title": "Dasar Privasi",
+    "description": "Cara Nowly mengendalikan data anda, apa yang kekal pada peranti anda, dan apa yang bergantung pada persetujuan anda.",
+    "last-updated": "Kemas kini terakhir: 17 September 2026.",
+    "intro": "Dasar ini menerangkan bagaimana <strong>{publisherName}</strong> (\"kami\"), sebagai pengawal data, memproses data peribadi berkaitan Nowly. Aktiviti Rich Presence dihantar daripada pelayar anda ke klien Discord <strong>pada mesin anda</strong>. Ia tidak melalui pelayan kami. Statistik penggunaan pilihan dan beberapa ciri laman web melibatkan API atau pemproses kami, seperti yang diterangkan di bawah.",
+    "sections": [
+      {
+        "title": "Pengawal",
+        "body": "Pengawal ialah <strong>{publisherName}</strong>, peniaga tunggal (mikro-perusahaan), SIREN {publisherSiren}, {publisherAddress}. E-mel: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Pengenalan penuh terdapat dalam <a href=\"/legal-notice\">notis undang-undang</a>. Tiada pegawai perlindungan data dilantik."
+      },
+      {
+        "title": "Apakah Nowly",
+        "body": "Nowly termasuk <strong>sambungan pelayar</strong> (Chrome dan Firefox), <strong>aplikasi desktop</strong> yang bercakap dengan Discord secara setempat, <strong>laman web</strong> (nowly.me), <strong>dokumentasi</strong> (<a href=\"https://docs.nowly.me\">docs.nowly.me</a>), <strong>API</strong> awam, dan pembinaan ujian <strong>Canary</strong> pilihan. Sambungan mengesan laman yang disokong dalam pelayar anda dan, bersama aplikasi desktop, mengemas kini Discord Rich Presence melalui saluran IPC setempat."
+      },
+      {
+        "title": "Data diproses pada peranti anda (sambungan)",
+        "body": "Sambungan menyimpan data dalam API storan setempat pelayar (<code>chrome.storage.local</code> Chrome / setara Firefox). Ia kekal pada peranti itu melainkan anda mengaktifkan analitik pilihan atau menggunakan URL API tersuai:<ul><li>Kehadiran yang dipasang (metadata, bundel yang ditandatangani, status pengaktifan).</li><li>Aktiviti semasa (tajuk, platform, tempoh, URL lakaran kecil).</li><li>Log nyahpepijat (cap masa, tindakan, URL yang dilawati bagi laman yang disokong).</li><li>Status onboarding dan <strong>tangkapan setempat</strong> profil Discord anda (ID, nama pengguna, avatar) yang digunakan hanya untuk memaparkan antara muka sambungan, diambil daripada klien Discord setempat.</li><li>Keutamaan paparan, pintasan, dan tetapan setiap kehadiran.</li><li>Pengecam peranti yang dijana secara setempat (UUID) digunakan jika anda memilih untuk analitik.</li></ul>Anda boleh memadamkan data ini dengan menetapkan semula sambungan atau menyahpasangnya."
+      },
+      {
+        "title": "Kebenaran sambungan pelayar",
+        "body": "Sambungan memerlukan kebenaran tertentu untuk berfungsi:<ul><li><strong>Akses kepada laman web</strong> (termasuk kebenaran hos yang luas): skrip kandungan ringan boleh berjalan pada halaman yang anda lawati supaya Nowly dapat mengesan platform yang disokong. Ia tidak digunakan untuk menghantar sejarah pelayaran anda ke pelayan kami.</li><li><strong>User Scripts</strong> (Chromium): skrip kehadiran berjalan pada laman yang sepadan. Skrip katalog rasmi ditandatangani secara kriptografi (ECDSA P-256) dan disahkan secara setempat sebelum ia dijalankan. Pakej Canary dan yang dimuat secara sisi mungkin tidak mempunyai jaminan tandatangan yang sama seperti pengeluaran; anggap ia sebagai eksperimen.</li></ul>"
+      },
+      {
+        "title": "Data diproses pada peranti anda (aplikasi desktop)",
+        "body": "Aplikasi desktop mungkin menulis log setempat bernama <code>nowly-host.log</code> di bawah direktori cache NowlyClient, contohnya:<ul><li>Windows: <code>%LOCALAPPDATA%\\NowlyClient\\</code></li><li>macOS: <code>~/Library/Caches/NowlyClient/</code></li><li>Linux: <code>~/.cache/NowlyClient/</code></li></ul>Fail ini boleh mengandungi cap masa dan butiran aktiviti yang dihantar ke Discord. Ia kekal pada komputer anda dan tidak dimuat naik ke pelayan kami. Anda boleh memadamkannya pada bila-bila masa."
+      },
+      {
+        "title": "Statistik penggunaan (pilih masuk)",
+        "body": "Analitik <strong>dimatikan secara lalai</strong>. Jika anda mengaktifkannya semasa onboarding atau kemudian dalam tetapan sambungan, API kami mungkin menerima:<ul><li>UUID peranti anda (nama samaran: bukan akaun Discord atau Google anda, tetapi masih data peribadi di bawah GDPR kerana ia boleh mengenal pasti pemasangan anda).</li><li>Pelayar, OS, bahasa, versi sambungan, dan versi aplikasi desktop.</li><li>Slug/versi kehadiran yang dipasang dan peristiwa penggunaan (contohnya pemasangan, degupan jantung, penilaian) dengan muatan yang terhad.</li></ul>Kami menggunakan ini untuk menambah baik Nowly dan menunjukkan betapa popularnya kehadiran. Mematikan tetapan ini <strong>menghentikan pengumpulan selanjutnya</strong> dan merekodkan penarikan balik persetujuan. Ia <strong>tidak</strong> memadamkan peristiwa yang telah disimpan dengan sendirinya. Untuk meminta rekod sisi pelayan dipadamkan, e-mel <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> dengan ID peranti anda (kelihatan dalam sambungan) atau elemen lain yang membolehkan kami mencari rekod tersebut."
+      },
+      {
+        "title": "Discord",
+        "body": "Nowly bercakap dengan klien desktop/pelayar Discord melalui <strong>IPC setempat</strong>. Medan Rich Presence yang tipikal termasuk nama platform, tajuk, saluran atau pengarang, status main/jeda, dan cap masa. Sesiapa yang boleh melihat profil Discord anda mungkin melihat status itu. Sebaik sahaja Discord menerimanya, pemprosesan Discord sendiri terpakai. Lihat <a href=\"https://discord.com/privacy\">dasar privasi Discord</a>.<br/><br/>API juga boleh mengeluarkan token sesi (JWT, biasanya 30 hari) selepas OAuth Discord pilihan untuk ciri akaun (contohnya ulasan). Laman pemasaran awam tidak memerlukan akaun. Jika anda tidak pernah log masuk, kami tidak mencipta token itu untuk anda."
+      },
+      {
+        "title": "Asas undang-undang (GDPR Perkara 6)",
+        "body": "<ul><li><strong>Statistik penggunaan pilih masuk</strong>: persetujuan (Perkara 6(1)(a)). Anda boleh menariknya balik dalam sambungan pada bila-bila masa, tanpa menjejaskan keabsahan pemprosesan sebelum penarikan balik.</li><li><strong>Kuki bahasa dan kuki dokumentasi</strong>: perlu untuk perkhidmatan yang anda minta dan/atau kepentingan sah untuk mengingati bahasa anda (Perkara 6(1)(b) dan/atau (f)).</li><li><strong>Bendera tema dan notis kuki</strong> (storan setempat): kepentingan sah dalam antara muka yang boleh digunakan (Perkara 6(1)(f)).</li><li><strong>Proksi imej</strong>: kepentingan sah dalam memaparkan artwork katalog dan aktiviti tanpa memuatkan setiap CDN pihak ketiga dalam pelayar anda (Perkara 6(1)(f)).</li><li><strong>Log masuk Discord pilihan</strong>: pelaksanaan ciri akaun yang anda minta (Perkara 6(1)(b)) dan, apabila diperlukan, kepentingan sah kami dalam mengamankan API (Perkara 6(1)(f)).</li><li><strong>GitHub, komuniti Discord, Ko-fi, GitHub Sponsors</strong>: data yang anda pilih untuk hantar ke perkhidmatan tersebut diproses di bawah dasar mereka sendiri; kami membaca isu awam atau mesej yang anda tujukan kepada kami untuk membalas (Perkara 6(1)(b) atau (f)).</li></ul>"
+      },
+      {
+        "title": "Pengekalan",
+        "body": "<ul><li><strong>Log sambungan dan desktop setempat</strong>: sehingga anda memadam, menetapkan semula, atau menyahpasang.</li><li><strong>Kuki bahasa</strong>: 1 tahun, disegarkan semula apabila anda menukar bahasa.</li><li><strong>Statistik penggunaan</strong>: disimpan hanya selama yang diperlukan untuk menghasilkan metrik agregat. Tiada <strong>pemadaman automatik 12 bulan</strong> dilaksanakan hari ini. Anda boleh meminta pemadaman seperti yang diterangkan di atas.</li><li><strong>JWT (jika anda log masuk)</strong>: kira-kira 30 hari melainkan anda log keluar atau kami membatalkannya.</li></ul>"
+      },
+      {
+        "title": "Pemproses dan pemindahan",
+        "body": "Kami menggunakan:<ul><li><strong>Contabo GmbH</strong> (Jerman) sebagai penyedia hosting VPS di mana kami menjalankan laman web, API, dan PostgreSQL. Penerbit mentadbir pelayan. Pemprosesan berlaku di <strong>{dataRegion}</strong>. Ini adalah susunan hosting dalam-EU, bukan pemindahan ke Amerika Syarikat. <a href=\"https://contabo.com/en/legal/privacy-policy/\">Dasar privasi Contabo</a>.</li><li><strong>Cloudflare</strong> untuk menyampaikan fail statik (lakaran kecil, pemasang desktop, zip Canary) dan melindungi laman. Pemindahan mungkin bergantung pada SCC dan, apabila terpakai, Rangka Kerja Privasi Data EU-AS.</li><li><strong>Google</strong> (Chrome Web Store) dan <strong>Mozilla</strong> (Firefox Add-ons) untuk mengedarkan sambungan; kedai mereka memproses data pemasang dan akaun di bawah terma mereka sendiri.</li><li><strong>Google AdSense</strong> hanya <strong>jika pengiklanan diaktifkan</strong> pada laman web (ia dimatikan melainkan kami mengaktifkannya). Google kemudiannya bertindak sebagai pengawal bebas atau bersama untuk kuki pengiklanannya, mengikut terma Google.</li></ul>Jika anda menetapkan <strong>URL API tersuai</strong>, trafik pergi ke pelayan yang anda pilih. Dasar ini tidak terpakai kepada pelayan itu."
+      },
+      {
+        "title": "Proksi imej",
+        "body": "API kami boleh mengambil URL lakaran kecil awam (YouTube, Twitch dan CDN yang serupa) supaya UI dapat memaparkan artwork. Kami tidak menggunakan proksi untuk menjual profil pengiklanan. URL yang diminta masih boleh berkaitan dengan tajuk yang anda lihat. Log permintaan tersebut disimpan hanya selama yang diperlukan secara teknikal untuk mengendalikan dan mengamankan perkhidmatan."
+      },
+      {
+        "title": "Kuki",
+        "body": "nowly.me dan docs.nowly.me masing-masing menetapkan kuki <code>locale</code> untuk bahasa. Tema dan notis kuki menggunakan storan setempat, bukan kuki. Lihat <a href=\"/cookies\">dasar kuki</a>."
+      },
+      {
+        "title": "Keselamatan",
+        "body": "Pakej kehadiran rasmi ditandatangani (ECDSA P-256). Sambungan pengeluaran mengesahkan tandatangan sebelum menjalankan kehadiran katalog. Pembinaan Canary yang diedarkan sebagai fail zip adalah perisian ujian dan mungkin tidak ditandatangani. Jangan pasang pakej daripada sumber yang tidak dipercayai."
+      },
+      {
+        "title": "Hak anda",
+        "body": "Jika GDPR terpakai, anda boleh meminta akses, pembetulan, pemadaman, sekatan, bantahan, dan kemudahalihan, dan anda boleh menarik balik persetujuan untuk analitik. Diagnostik pembangun dalam sambungan mungkin menunjukkan peristiwa yang masih beratur pada peranti anda; ia bukan eksport lengkap pelayan kami. Untuk menggunakan hak, e-mel <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> atau gunakan <a href=\"https://github.com/nowly-presence/nowly\">repositori GitHub</a>. Anda juga boleh mengemukakan aduan kepada <a href=\"https://www.cnil.fr\">CNIL</a> (Perancis) atau pihak berkuasa penyeliaan tempatan anda."
+      },
+      {
+        "title": "Hubungi kami",
+        "body": "E-mel: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Butiran penerbit: <a href=\"/legal-notice\">notis undang-undang</a>."
+      }
+    ]
+  },
+  "tos-page": {
+    "badge": "Undang-undang",
+    "title": "Terma Perkhidmatan",
+    "description": "Peraturan untuk menggunakan Nowly, sambungan pelayar, aplikasi desktop, dan laman web.",
+    "last-updated": "Kemas kini terakhir: 17 September 2026.",
+    "sections": [
+      {
+        "title": "Penerimaan",
+        "body": "Dengan memuat turun, memasang, atau menggunakan Nowly (sambungan, aplikasi desktop, laman web, dokumentasi, API, dan perisian berkaitan), anda bersetuju dengan terma ini. Jika anda tidak bersetuju, jangan gunakan perisian ini. Hak pengguna wajib tidak terjejas."
+      },
+      {
+        "title": "Perkhidmatan",
+        "body": "Nowly ialah alat <strong>percuma</strong> yang mengemas kini Discord Rich Presence daripada laman web yang disokong, menggunakan aplikasi desktop setempat. Kod sumber tersedia di GitHub di bawah BUSL-1.1 (source-available; bukan lesen sumber terbuka yang diluluskan OSI sehingga Tarikh Perubahan). Perkhidmatan ini termasuk:<ul><li>Sambungan pelayar untuk Chromium dan Firefox.</li><li>Aplikasi desktop yang bercakap dengan Discord pada komputer anda.</li><li>Laman web nowly.me dan docs.nowly.me.</li><li>API awam dan SDK pembangun untuk membina kehadiran.</li><li>Pembinaan Canary pilihan daripada CDN kami, yang merupakan pra-keluaran dan mungkin tidak ditandatangani.</li></ul>"
+      },
+      {
+        "title": "Umur minimum",
+        "body": "Anda mesti sekurang-kurangnya berumur <strong>15</strong> tahun dan cukup umur untuk menggunakan Discord di bawah terma Discord sendiri. Jika anda di bawah umur persetujuan digital di negara anda, anda memerlukan kebenaran daripada ibu bapa atau penjaga di mana undang-undang memerlukannya."
+      },
+      {
+        "title": "Lesen",
+        "body": "Nowly dilesenkan di bawah <strong>Business Source License 1.1</strong>. Anda boleh menggunakan, menyalin, dan mengubah suainya untuk tujuan <strong>peribadi, bukan komersial</strong>. Kegunaan komersial (termasuk jualan semula atau menawarkan Nowly sebagai perkhidmatan berbayar atau dihoskan) memerlukan lesen berasingan daripada penerbit. Lesen bertukar kepada MIT pada Tarikh Perubahan: empat tahun selepas pengedaran awam pertama, dan dalam apa jua keadaan tidak lebih awal daripada <strong>1 Jun 2028</strong>. Teks penuh terdapat dalam <a href=\"https://github.com/nowly-presence/nowly\">repositori GitHub</a>. Ini tidak melesenkan kandungan pihak ketiga (YouTube, Twitch, dan sebagainya) yang anda paparkan melalui Nowly."
+      },
+      {
+        "title": "Penggunaan yang boleh diterima",
+        "body": "Anda mesti mematuhi undang-undang yang terpakai dan <a href=\"https://discord.com/terms\">Terma Perkhidmatan Discord</a>. Anda tidak boleh:<ul><li>Menggunakan Nowly untuk memaparkan kandungan yang menyalahi undang-undang, penuh kebencian, memfitnah, atau melanggar hak.</li><li>Memintas keselamatan sambungan rasmi, aplikasi desktop, atau API.</li><li>Mengedarkan kehadiran yang diubah suai, dipalsukan, atau tidak dibenarkan melalui infrastruktur rasmi Nowly.</li><li>Menyalahgunakan API (termasuk permintaan automatik yang berlebihan).</li></ul>Jika anda mengarahkan sambungan ke <strong>URL API tersuai</strong>, anda bertanggungjawab sepenuhnya untuk pelayan itu. Dasar privasi kami tidak melindunginya."
+      },
+      {
+        "title": "Derma",
+        "body": "Nowly kekal boleh digunakan tanpa bayaran. Sokongan sukarela melalui <a href=\"https://ko-fi.com/nowly\">Ko-fi</a> atau <a href=\"https://github.com/sponsors/nowly-presence\">GitHub Sponsors</a> diproses oleh platform tersebut di bawah terma mereka sendiri. Derma tidak membeli ciri produk tambahan melainkan kami menyatakan sebaliknya dengan jelas pada masa itu. Bayaran balik mengikut peraturan platform dan, apabila terpakai, hak pengguna wajib."
+      },
+      {
+        "title": "Harta intelek",
+        "body": "Kod Nowly dilesenkan seperti di atas. Discord, YouTube, Twitch, Disney+, Apple TV+, Prime Video, TikTok dan nama serta logo platform lain adalah milik pemilik masing-masing. Nowly <strong>tidak bergabung, disahkan, atau ditaja</strong> oleh Discord Inc. atau platform tersebut."
+      },
+      {
+        "title": "Had liabiliti",
+        "body": "Nowly disediakan <strong>\"sebagaimana adanya\"</strong>, tanpa jaminan, setakat yang dibenarkan oleh undang-undang. Kami tidak bertanggungjawab atas kerosakan tidak langsung yang timbul daripada penggunaan atau ketidakupayaan menggunakan perisian ini, termasuk gangguan Discord atau sekatan terhadap akaun Discord anda, atau kehilangan data sambungan setempat. Tiada apa-apa yang mengecualikan liabiliti untuk penipuan, kecuaian teruk, kematian atau kecederaan diri, atau sebarang liabiliti yang undang-undang Perancis atau EU tidak membenarkan kami hadkan. Klausa ini tidak mengurangkan hak pengguna wajib."
+      },
+      {
+        "title": "Privasi",
+        "body": "Penggunaan Nowly juga ditadbir oleh <a href=\"/privacy\">dasar privasi</a> dan <a href=\"/cookies\">dasar kuki</a>."
+      },
+      {
+        "title": "Perubahan",
+        "body": "Kami boleh mengemas kini terma ini dengan menerbitkan versi baharu pada halaman ini, dengan tarikh \"kemas kini terakhir\" yang baharu. Untuk perubahan material kami akan cuba memberikan notis yang munasabah di laman atau repositori. Penggunaan berterusan selepas versi baharu berkuat kuasa bermakna anda menerimanya, kecuali di mana undang-undang memerlukan persetujuan eksplisit anda."
+      },
+      {
+        "title": "Undang-undang yang mentadbir",
+        "body": "Terma ini ditadbir oleh <strong>undang-undang Perancis</strong>. Jika penyelesaian secara aman gagal, mahkamah Perancis mempunyai bidang kuasa, tanpa menjejaskan peraturan bidang kuasa pengguna wajib. <a href=\"https://ec.europa.eu/consumers/odr\">Platform penyelesaian pertikaian dalam talian EU</a> tersedia."
+      },
+      {
+        "title": "Hubungi kami",
+        "body": "E-mel <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> atau lihat <a href=\"/legal-notice\">notis undang-undang</a>. GitHub: <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>."
+      }
+    ]
+  },
+  "legal-notice-page": {
+    "badge": "Undang-undang",
+    "title": "Notis Undang-undang",
+    "description": "Maklumat penerbit, hosting, dan harta intelek yang diperlukan di bawah undang-undang Perancis.",
+    "last-updated": "Berkuat kuasa 17 September 2026. Diperlukan di bawah LCEN Perancis, artikel 6-III.",
+    "sections": [
+      {
+        "title": "Penerbit",
+        "body": "Laman web <strong>nowly.me</strong> dan <strong>docs.nowly.me</strong>, sambungan pelayar Nowly dan aplikasi desktop diterbitkan oleh:<br/><br/>Penerbit: <strong>{publisherName}</strong><br/>Status: Peniaga tunggal (auto-entrepreneur / mikro-perusahaan)<br/>SIREN: <strong>{publisherSiren}</strong><br/>Alamat: <strong>{publisherAddress}</strong><br/>VAT: Tidak berkenaan (pengecualian CGI Perancis artikel 293 B)<br/>E-mel: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>"
+      },
+      {
+        "title": "Pengarah penerbitan",
+        "body": "<strong>{publisherName}</strong>, sebagai penerbit orang semula jadi. Undang-undang Perancis memperuntukkan <strong>seorang</strong> pengarah penerbitan sahaja (loi du 29 juillet 1881, dikenakan secara dalam talian). Penyumbang atau pembangun bukan pengarah penerbitan tambahan."
+      },
+      {
+        "title": "Hosting (laman web, API, pangkalan data)",
+        "body": "Laman web, API dan pangkalan data PostgreSQL berjalan pada pelayan peribadi maya (VPS) yang disewa daripada:<br/><br/><strong>Contabo GmbH</strong><br/>Welfenstrasse 22<br/>81541 München, Jerman<br/><a href=\"https://contabo.com\">contabo.com</a><br/><a href=\"https://contabo.com/en/legal/impressum/\">Notis undang-undang (Impressum)</a><br/><br/>Penerbit mentadbir pelayan. Lokasi: <strong>{dataRegion}</strong>"
+      },
+      {
+        "title": "CDN dan binari desktop",
+        "body": "Aset statik (lakaran kecil, pemasang, arkib Canary) diedarkan melalui:<br/><br/><strong>Cloudflare, Inc.</strong><br/>101 Townsend Street, San Francisco, CA 94107, Amerika Syarikat<br/><a href=\"https://www.cloudflare.com\">cloudflare.com</a>"
+      },
+      {
+        "title": "Pengedaran sambungan",
+        "body": "Sambungan pengeluaran diedarkan untuk <strong>Chrome</strong> (dan pelayar Chromium lain) melalui <strong>Chrome Web Store</strong>, dikendalikan oleh Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, Amerika Syarikat, dan untuk <strong>Firefox</strong> melalui <strong>Firefox Add-ons</strong>, dikendalikan oleh Mozilla Corporation (Amerika Syarikat). Pembinaan Canary eksperimen juga mungkin ditawarkan sebagai fail zip daripada CDN kami."
+      },
+      {
+        "title": "Harta intelek",
+        "body": "Kod sumber Nowly diterbitkan di bawah <strong>BUSL-1.1</strong> di <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>. Tanda dagangan pihak ketiga kekal milik pemiliknya. <strong>Nowly tidak bergabung dengan Discord Inc. atau platform yang disokong.</strong>"
+      },
+      {
+        "title": "Kandungan menyalahi undang-undang",
+        "body": "Kandungan yang jelas menyalahi undang-undang boleh dilaporkan kepada <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> dengan tarikh, penerangan, URL, dan asas undang-undang, seperti yang diperlukan oleh artikel 6 LCEN."
+      },
+      {
+        "title": "Hubungi kami",
+        "body": "E-mel: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a><br/>GitHub: <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>"
+      }
+    ]
+  },
+  "cookies-page": {
+    "badge": "Kuki",
+    "title": "Dasar Kuki",
+    "description": "Kuki dan storan setempat yang digunakan pada nowly.me dan docs.nowly.me.",
+    "last-updated": "Kemas kini terakhir: 17 September 2026.",
+    "intro": "Halaman ini menerangkan kuki dan teknologi serupa pada <strong>nowly.me</strong> dan <strong>docs.nowly.me</strong>. Kami menetapkan kuki bahasa. Tema dan notis kuki menggunakan storan setempat. Google AdSense tidak dimuatkan melainkan pengiklanan diaktifkan.",
+    "sections": [
+      {
+        "title": "Benar-benar perlu",
+        "body": "Kuki bahasa diperlukan untuk mengingati lokal yang anda pilih (atau yang kami kesan) pada setiap laman. Ia tidak memerlukan persetujuan bergaya pengiklanan terlebih dahulu di bawah garis panduan Perancis \"kuki dan penjejak lain\", kerana ia benar-benar perlu untuk menyediakan perkhidmatan berbilang bahasa."
+      },
+      {
+        "title": "Kuki locale",
+        "body": "<strong><code>locale</code></strong> (nowly.me dan, secara berasingan, docs.nowly.me)<br/>Tujuan: antara muka Perancis, Inggeris, atau Sepanyol.<br/>Tempoh: 1 tahun (<code>max-age</code> 31,536,000 saat), disegarkan semula apabila anda menukar bahasa.<br/>Atribut: pihak pertama, bukan HttpOnly, SameSite=Lax. Nilai ialah kod lokal (contohnya <code>fr-FR</code>). Digabungkan dengan alamat IP anda dalam log pelayan, ia boleh menyumbang kepada mengenal pasti pelawat, walaupun kuki itu sendiri hanya kod bahasa."
+      },
+      {
+        "title": "Storan setempat",
+        "body": "Laman menyimpan tema warna (cerah, gelap, atau sistem) dan sama ada anda menolak notis kuki. Nilai tersebut kekal dalam pelayar anda dan tidak dihantar sebagai kuki kepada Nowly."
+      },
+      {
+        "title": "Kuki analitik",
+        "body": "Laman web <strong>tidak</strong> menetapkan kuki analitik pihak ketiga. Statistik penggunaan pilihan, jika anda mengaktifkannya, dikumpul oleh <strong>sambungan</strong> dengan ID peranti, bukan dengan kuki laman web."
+      },
+      {
+        "title": "Pengiklanan",
+        "body": "Jika kami mengaktifkan <strong>Google AdSense</strong> pada laman web, Google mungkin menetapkan kuki atau teknologi serupa di bawah dasarnya sendiri. Sehingga itu, Nowly tidak meletakkan kuki pengiklanan."
+      },
+      {
+        "title": "Cara memadamkannya",
+        "body": "Anda boleh menyekat atau memadam kuki dalam pelayar anda. Memadam <code>locale</code> menetapkan semula bahasa kepada nilai yang dikesan pada lawatan seterusnya."
+      },
+      {
+        "title": "Hubungi kami",
+        "body": "E-mel <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> atau lihat <a href=\"/legal-notice\">notis undang-undang</a>."
+      }
+    ]
+  },
+  "uninstallPage": {
+    "eyebrow": "Selamat tinggal",
+    "title": "Sambungan telah dibuang",
+    "description": "Data setempat anda kekal pada peranti anda. Kami berharap dapat melihat anda lagi tidak lama lagi.",
+    "feedback-title": "Ada apa-apa yang anda mahu beritahu kami?",
+    "feedback-description": "Pepijat, kehadiran yang hilang, atau sekadar maklum balas: Discord adalah cara paling pantas untuk menghubungi kami.",
+    "discord": "Sertai Discord",
+    "data-description": "Anda boleh mengekalkan statistik penggunaan anonim anda untuk membantu kami menambah baik Nowly, atau memadam segala yang disimpan untuk peranti anda.",
+    "keep": "Kekalkan statistik anonim",
+    "delete": "Padam data saya",
+    "delete-confirm": "Ini akan memadam secara kekal segala yang disimpan Nowly untuk peranti ini. Ini tidak boleh dibuat asal.",
+    "keep-success": "Terima kasih, statistik anonim anda dikekalkan.",
+    "delete-success": "Data anda telah dipadamkan.",
+    "action-error": "Sesuatu telah tidak kena. Sila cuba lagi."
+  },
+  "consentPage": {
+    "eyebrow": "Privasi",
+    "title": "Data anda",
+    "description": "Nowly hanya mengumpul analitik penggunaan anonim jika anda mengaktifkannya secara eksplisit di bawah. Halaman ini juga membolehkan anda melihat, mengeksport, atau memadam segala yang disimpan untuk peranti anda.",
+    "checking": "Mencari sambungan Nowly...",
+    "not-detected-title": "Sambungan tidak dikesan",
+    "not-detected-description": "Buka halaman ini pada pelayar di mana Nowly dipasang untuk menguruskan persetujuan dan data anda.",
+    "toggle-title": "Kongsi data penggunaan anonim",
+    "toggle-description": "Dimatikan secara lalai. Membantu kami melihat kehadiran dan ciri mana yang benar-benar digunakan - tiada sejarah pelayaran atau data peribadi dikumpul.",
+    "data-title": "Data anda",
+    "data-description": "Eksport segala yang disimpan Nowly untuk peranti ini, atau padamkannya sepenuhnya.",
+    "export": "Eksport data saya",
+    "delete": "Padam data saya",
+    "delete-confirm": "Ini akan memadam secara kekal segala yang disimpan Nowly untuk peranti ini. Ini tidak boleh dibuat asal.",
+    "export-success": "Data anda telah dimuat turun.",
+    "delete-success": "Data anda telah dipadamkan.",
+    "action-error": "Sesuatu telah tidak kena. Sila cuba lagi."
+  }
+}

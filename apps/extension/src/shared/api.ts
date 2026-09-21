@@ -1,5 +1,5 @@
 import { BUNDLED_PRESENCE_SLUGS } from "@/generated/bundled-presence-slugs"
-import { API_BASE_URL, CDN_BASE_URL } from "@/shared/constants"
+import { CDN_BASE_URL } from "@/shared/constants"
 
 const ASSET_EXT: Record<string, string> = {
   logo: ".png",
@@ -20,10 +20,4 @@ const cdnAssetUrl = (slug: string, type: "icon" | "logo" | "thumbnail"): string 
 export const assetUrl = (slug: string, type: "icon" | "logo" | "thumbnail"): string => {
   if (bundledSlugs.has(slug)) return localAssetUrl(slug, type)
   return cdnAssetUrl(slug, type) ?? localAssetUrl(slug, type)
-}
-
-export const fetchPresenceMetadata = async (slug: string): Promise<unknown> => {
-  const response = await fetch(`${API_BASE_URL}/presences/${slug}`)
-  if (!response.ok) throw new Error(`metadata request failed: ${response.status}`)
-  return response.json()
 }

@@ -1,0 +1,52 @@
+---
+title: Ön Koşullar
+description: Presence geliştirmek için yerel ortamınızı kurun - presences deposunu klonlayın ve CLI'yi yükleyin.
+---
+
+## Gereksinimler
+
+- **Node.js 22+** - CLI'yi çalıştırmak ve presence'ları derlemek için gereklidir
+- **pnpm** - presences deposu pnpm workspace'lerini kullanır
+- **Discord Desktop** - presence'ınızı Nowly Host ile test etmek için
+- **Git** - presences deposunu klonlamak için
+
+## Presences Deposunu Klonlayın
+
+Tüm topluluk presence'ları [nowly-presence/presences](https://github.com/nowly-presence/presences) deposunda bulunur.
+
+```bash
+git clone https://github.com/nowly-presence/presences.git
+cd presences
+```
+
+## CLI'yi Global Olarak Yükleyin
+
+Nowly CLI, presence'ları iskeletlemenize, doğrulamanıza ve derlemenize olanak tanır.
+
+```bash
+pnpm i -g @nowly/cli
+```
+
+> Node 24+ üzerinde, paket yakın zamanda yayımlandıysa `--config.minimumReleaseAge=0` gerekebilir.
+
+## Bağımlılıkları Yükleyin
+
+Presences deposu pnpm workspace'lerini kullanır. Bağımlılıkları yüklemek, tür denetimi için `@nowly/sdk` paketini de bağlar.
+
+```bash
+pnpm install
+```
+
+## Kurulumu Doğrulayın
+
+Her şeyin çalıştığını doğrulamak için CLI'yi çalıştırın:
+
+```bash
+nowly --help
+```
+
+Kullanılabilir komutların bir listesini görmelisiniz (`init`, `build`, `pack`, `extension`, `validate` vb.).
+
+## Sonraki Adım
+
+Ortamınız hazır. İlk presence'ınızı iskeletlemek için [İlk Presence'ınızı Oluşturma](/presence-development/creating-your-first-presence) sayfasına gidin.

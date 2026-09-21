@@ -1,0 +1,46 @@
+---
+title: Pek Bahasa Presence
+description: Tambahkan terjemahan pilihan dan ditaip untuk teks aktiviti Discord.
+---
+
+## Sistem runtime berasingan
+
+Pek bahasa menterjemah teks yang dihantar ke Discord, seperti “Menonton video” atau “Melayari Figma”. Pek ini berasingan daripada locale yang disokong untuk metadata dan label tetapan.
+
+Pek bahasa adalah pilihan. Presence tanpa direktori `locales` terus menggunakan rentetan TypeScript sebaris seperti sebelum ini.
+
+## Struktur fail
+
+Presence setempat menyediakan ketiga-tiga kamus runtime:
+
+```text
+locales/
+├── en-US.json
+├── fr-FR.json
+└── es-ES.json
+```
+
+Setiap fail mesti menjadi objek JSON rata dengan kunci dan nilai rentetan yang sama. `en-US.json` ialah kamus rujukan dan fallback. Build menolak JSON tidak sah, locale yang tiada, fail yang tidak disokong, nilai bukan rentetan dan kunci yang tidak sepadan.
+
+```json filename="locales/en-US.json"
+{ "watchingVideo": "Watching {title}" }
+```
+
+## Autolengkap ditaip
+
+```typescript
+import type enUS from "./locales/en-US.json"
+
+const locale = await presence.getStrings<typeof enUS>()
+const title = document.title
+
+await presence.setActivity({
+  details: presence.formatString(locale.watchingVideo, { title }),
+})
+```
+
+Import jenis sahaja menyediakan autolengkap IDE dan menolak kunci yang tidak diketahui tanpa memasukkan JSON ke dalam bundle. Tiada arahan penjanaan jenis diperlukan.
+
+Nilai dinamik menggunakan ruang letak `{name}` dalam JSON dan `presence.formatString(template, params)` dalam kod presence.
+
+Pengguna boleh memilih satu bahasa aktiviti secara global atau bahasa berbeza bagi setiap presence setempat.

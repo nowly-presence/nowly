@@ -1,0 +1,36 @@
+---
+title: Επικύρωση και Χτίσιμο
+description: Επικύρωσε τα metadata presence και χτίσε πακέτα presence πριν τη δημοσίευση.
+---
+
+## Επικύρωση Metadata
+
+Εκτέλεσε:
+
+```bash
+nowly validate
+```
+
+Η επικύρωση ελέγχει το `metadata.json` βάσει του schema του Nowly, συμπεριλαμβανομένου ότι το `discordNative` είναι boolean όταν υπάρχει. Διόρθωσε τα σφάλματα επικύρωσης πριν χτίσεις.
+
+## Χτίσιμο Όλων των Presences
+
+Εκτέλεσε:
+
+```bash
+nowly build
+```
+
+## Χτίσιμο Ενός Presence
+
+Εκτέλεσε:
+
+```bash
+nowly build youtube
+```
+
+Χρησιμοποίησε το slug ή το όνομα που προκύπτει από τον φάκελο για το presence-στόχο.
+
+## Φόρτωση στον browser
+
+Μετά από ένα επιτυχημένο build, φόρτωσε το presence με το `nowly extension <slug>` ή ρίξε ένα zip από το `nowly pack <slug>`. Δες [Φόρτωση και Δοκιμή Τοπικά](/presence-development/load-and-test).

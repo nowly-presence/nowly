@@ -1,0 +1,36 @@
+---
+title: iFrames
+description: Obsługuj dane aktywności znajdujące się w osadzonych ramkach.
+---
+
+<CalloutWarning>
+Skrypty obecności w iFrame **nie są jeszcze zaimplementowane** w środowisku uruchomieniowym rozszerzenia Nowly. `presence.on("iFrameData")` jest zarezerwowane w typach SDK, ale rozszerzenie nie wstrzykuje się do zagnieżdżonych ramek ani nie emituje tego zdarzenia. Do czasu premiery wolisz czytać najwyższy poziom strony (DOM, `<audio>` / `<video>`, publiczny stan strony).
+</CalloutWarning>
+
+## Kiedy iFrame mają znaczenie
+
+Niektóre strony renderują odtwarzacze multimediów lub ważny stan wewnątrz iframe. Zwykły skrypt obecności może nie być w stanie odczytać wszystkiego z najwyższego poziomu strony.
+
+Dopóki nie będzie wsparcia dla iframe, pomiń strony, które udostępniają aktywność tylko w ramce innego pochodzenia, albo opisz to ograniczenie w opisie obecności.
+
+## Planowane API
+
+Presence API rezerwuje zdarzenie `iFrameData` dla przyszłej komunikacji na poziomie ramek:
+
+```ts filename="presence.ts"
+presence.on("iFrameData", async (...args) => {
+  presence.info("Received iframe data")
+})
+```
+
+Nie polegaj dziś na tym nasłuchiwaczu w produkcyjnych obecnościach.
+
+## Zalecane podejście
+
+Używaj obsługi iframe tylko wtedy, gdy strona główna nie ma dostępu do wymaganego stanu.
+
+Preferuj stabilne selektory DOM, elementy multimediów i publiczny stan strony, zanim dodasz logikę iframe.
+
+## Bezpieczeństwo
+
+Unikaj zbierania danych osobowych lub wrażliwych z ramek. Obecność powinna wysyłać tylko informacje o aktywności, które są przydatne dla Discord Rich Presence.

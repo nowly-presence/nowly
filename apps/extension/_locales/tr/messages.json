@@ -1,0 +1,29 @@
+{
+  "extensionName": {
+    "message": "Nowly"
+  },
+  "extensionDescription": {
+    "message": "Web etkinliğinizi Discord'da otomatik olarak paylaşın."
+  },
+  "playing": {
+    "message": "Oynatılıyor"
+  },
+  "paused": {
+    "message": "Duraklatıldı"
+  },
+  "commandOpenPanel": {
+    "message": "Nowly'yi aç"
+  },
+  "commandTogglePause": {
+    "message": "Discord varlığını duraklat veya devam ettir"
+  },
+  "contextMenuPage": {
+    "message": "Bu sayfa için Nowly varlığı"
+  },
+  "contextMenuMuteTab": {
+    "message": "Bu sekmeyi paylaşma"
+  },
+  "contextMenuUnmuteTab": {
+    "message": "Bu sekmeyi paylaş"
+  }
+}

@@ -2,6 +2,14 @@
   "title": {
     "en-US": "Advanced Topics",
     "fr-FR": "Sujets avancés",
-    "es-ES": "Temas avanzados"
+    "es-ES": "Temas avanzados",
+    "de-DE": "Fortgeschrittene Themen",
+    "pt-BR": "Tópicos avançados",
+    "pl-PL": "Zagadnienia zaawansowane",
+    "ja-JP": "高度なトピック",
+    "ko-KR": "고급 주제",
+    "tr-TR": "İleri Düzey Konular",
+    "ms-MY": "Topik Lanjutan",
+    "el-GR": "Προχωρημένα Θέματα"
   }
 }

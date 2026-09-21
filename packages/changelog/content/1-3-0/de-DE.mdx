@@ -1,0 +1,22 @@
+---
+title: 1.3.0
+date: 14. Juli 2026
+description: Typisierte Presence-Sprachpakete, globale und Presence-spezifische Discord-Aktivitätssprachen sowie stabile SDK- und CLI-Versionen 1.0.
+---
+
+`1.3.0` führt ein eigenes Lokalisierungssystem für Discord-Aktivitätstexte ein. Autoren können typisierte JSON-Wörterbücher liefern; Nutzer wählen eine globale Sprache oder eine pro Presence.
+
+## Erweiterung 1.3.0
+Globale Englisch-, Französisch- und Spanischmodi sowie ein Modus pro Presence. YouTube kann Französisch und Netflix Spanisch anzeigen.
+## Laufzeit
+Signierte Wörterbücher werden geladen, auf en-US zurückgefallen und aktive Seiten sofort aktualisiert. Alte Presences bleiben kompatibel.
+## SDK 1.0.0
+`presence.getStrings<T>()` liefert ein typisiertes Wörterbuch ohne Argument; VS Code ergänzt Schlüssel und meldet unbekannte Schlüssel.
+## CLI 1.0.0
+Optionale Sprachpakete werden gefunden, validiert, kopiert und in Metadaten aufgenommen. Fehlerhafte Übersetzungen schlagen früh und präzise fehl.
+## Release-Pipeline
+Packs werden an aktuelle und versionierte CDN-Pfade veröffentlicht und erhalten unveränderliches Caching.
+## Presence-Bibliothek
+Alle aktuellen Presences bieten en-US-, fr-FR- und es-ES-Packs.
+## Dokumentation und Kompatibilität
+Sprachpakete sind dokumentiert; Presences ohne `locales` und ältere signierte Releases bleiben installierbar. Ungültige Dateien und Schlüssel werden abgelehnt; Auswahl und Speicher bleiben über Neustarts erhalten.

@@ -9,9 +9,10 @@ type CampaignSignupFormProps = {
   placeholder: string
   submitLabel: string
   successLabel: string
+  errorLabel: string
 };
 
-export const CampaignSignupForm = ({ campaignId, placeholder, submitLabel, successLabel }: CampaignSignupFormProps) => {
+export const CampaignSignupForm = ({ campaignId, placeholder, submitLabel, successLabel, errorLabel }: CampaignSignupFormProps) => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
 
@@ -49,7 +50,7 @@ export const CampaignSignupForm = ({ campaignId, placeholder, submitLabel, succe
       <Button type="submit" variant="outline" disabled={status === "sending"}>
         {submitLabel}
       </Button>
-      {status === "error" ? <p className="w-full text-sm text-destructive">Something went wrong. Please try again.</p> : null}
+      {status === "error" ? <p className="w-full text-sm text-destructive">{errorLabel}</p> : null}
     </form>
   );
 };

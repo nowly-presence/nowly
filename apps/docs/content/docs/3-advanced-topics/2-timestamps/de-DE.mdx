@@ -1,0 +1,34 @@
+---
+title: Zeitstempel
+description: Zeige den Wiedergabefortschritt in der Discord-Rich-Presence mit Media-Zeitstempeln an.
+---
+
+## Warum Zeitstempel wichtig sind
+
+Zeitstempel lassen die Discord-Aktivität lebendig wirken. Sie zeigen, wie lange der Nutzer bereits schaut oder wie viel Zeit noch bleibt.
+
+## createMediaTimestamps verwenden
+
+`document` ist die Browser-DOM-API (verfügbar, weil Presences als Content-Skripte laufen). `Assets` wird von der Laufzeitumgebung bereitgestellt (siehe [Assets](/presence-development/assets)).
+
+```ts filename="presence.ts"
+import { createMediaTimestamps } from "@nowly/sdk"
+
+const video = document.querySelector("video")
+
+if (video) {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    ...createMediaTimestamps(video),
+  })
+}
+```
+
+## Pausierte Medien
+
+Wenn Medien pausiert sind, gibt `createMediaTimestamps` keine Zeitstempel zurück. So wird kein falscher Wiedergabefortschritt angezeigt.
+
+## Live-Streams
+
+Live-Streams haben oft keine feste Dauer. Verwende nur einen Start-Zeitstempel oder lasse Zeitstempel weg, je nach Verhalten der Plattform.

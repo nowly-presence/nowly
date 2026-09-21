@@ -1,0 +1,72 @@
+---
+title: Presence Yapısı
+description: Bir Nowly presence'ı için gerekli klasör düzenini anlayın.
+---
+
+## Klasör Düzeni
+
+Bir presence, adının ilk harfine göre gruplanarak `src` altında bulunur:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+`-- assets/
+    |-- logo.png
+    |-- icon.png
+    `-- thumbnail.jpg
+```
+
+## metadata.json
+
+`metadata.json`, platformu, desteklenen URL'leri, yazarı, kategoriyi, yerelleştirilmiş açıklamaları, pazar yeri varlıklarını ve `discordNative` gibi isteğe bağlı bayrakları tanımlar.
+
+## presence.ts
+
+`presence.ts`, çalışma zamanı mantığını içerir. Sayfa durumunu algılar ve Presence API'yi çağırır.
+
+## utils/
+
+Karmaşık presence'lar için mantığınızı bir `utils/` klasörü altındaki özel dosyalara bölün. Örneğin, YouTube presence'ı DOM yardımcılarını, kanal ayrıştırmayı ve Shorts çözümlemesini ayrı modüllerde düzenler:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+|-- assets/
+|   |-- logo.png
+|   |-- icon.png
+|   `-- thumbnail.jpg
+`-- utils/
+    |-- categories.ts
+    |-- dom.ts
+    |-- channel.ts
+    |-- text.ts
+    |-- bridge.ts
+    |-- shorts-dom.ts
+    |-- shorts-resolve.ts
+    `-- youtube-data.ts
+```
+
+Bundler, `presence.ts`'den gelen yerel içe aktarımları çözer, böylece yardımcı dosyaları normal şekilde içe aktarabilirsiniz:
+
+```ts filename="presence.ts"
+import { findVideo } from "./utils/dom"
+import { getChannelInfo } from "./utils/channel"
+```
+
+## assets
+
+Varlıklar; pazar yeri, kurulu presence paketi, Discord etkinlik yükleri ve Open Graph görselleri tarafından kullanılır.
+
+Gerekli dosyalar:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "Pazar yeri başlıkları, presence sayfaları ve oluşturulan OG görselleri için geniş marka işareti.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Kompakt UI yüzeyleri ve Discord etkinlik görsel anahtarları için kare simge.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Presence daha büyük bir görsele ihtiyaç duyduğunda kullanılan önizleme görseli.", required: true }
+  ]}
+/>
+
+Bu boyutlar, her presence PR'sinde CI tarafından kontrol edilen kesin gereksinimlerdir - ayrıntılar için bkz. [Assets](/presence-development/assets).

@@ -1,0 +1,87 @@
+---
+title: ローカルでの読み込みとテスト
+description: ビルド済みのプレゼンスを、事前ビルド済みの開発パッケージまたはzipドロップでNowly拡張機能に読み込みます。
+---
+
+`nowly build <slug>` の後も、そのバンドルをブラウザに読み込む必要があります。ローカルでの読み込み方法は2つあります。どちらもNowly APIとは通信しません。
+
+## 1. ビルド済み拡張機能(`nowly extension`)
+
+これは、特に `presences` リポジトリのみをクローンした場合の、通常の初回手順です。CLIは既製のChrome開発ビルドをダウンロードし(またはローカルのものをコピーし)、コンパイル済みのプレゼンスをそこに組み込みます。
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+複数のスラッグを渡すこともできます。
+
+```bash
+nowly extension youtube github figma
+```
+
+その後:
+
+1. `chrome://extensions` を開き、**デベロッパーモード**を有効にする
+2. **パッケージ化されていない拡張機能を読み込む**を選び、`dist/extension-dev` を選択する
+3. Discord DesktopとNowly Hostを起動した状態で対象サイトを開く
+
+プレゼンスは、拡張機能の起動時に `dev-presences.json` からインストールされます。コードを変更した後は、再ビルドし、`nowly extension <slug>` を再実行し、パッケージ化されていない拡張機能を再読み込みしてください。
+
+CDNのzipの代わりにローカルの拡張機能ビルドを使用するには:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+<CalloutInfo>
+`nowly extension` はパッケージ化されていないフォルダを書き出します。ブラウザにまだNowlyを読み込んでいない場合に適したツールです。
+</CalloutInfo>
+
+### 完全なNowlyモノレポ
+
+`presences` をサブモジュールとして含む `nowly` をクローンしている場合、ビルドしたすべてのプレゼンスを拡張機能に組み込めます。
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+`apps/extension/dist/chrome` をパッケージ化されていない状態で読み込みます。再ビルドのたびに再読み込みしてください。
+
+## 2. Zipドロップ(`nowly pack`)
+
+これは、Nowlyが**すでに**パッケージ化されていない開発ビルドとして読み込まれている場合に使用します。Chromeウェブストアからのストアインストールは署名なしのzipを拒否します。拡張機能全体ではなく、プレゼンスのみを再ビルドします。
+
+```bash
+nowly pack youtube
+```
+
+このコマンドはプレゼンスをビルドし、`dist/presences/youtube/` を `dist/packs/youtube.zip` にzip化します。zipには少なくとも `metadata.json` と `bundle.js` を含める必要があります。ネストしたフォルダがあっても問題ありません。
+
+次に、サイドパネルで:
+
+1. **設定** → **高度な設定**を開く
+2. **デベロッパーモード**を有効にする(パッケージ化されていないビルドでは常に有効)
+3. **デバッグ**を展開する
+4. `.zip` をドロップする(またはファイルを選択する)
+
+プレゼンスは**ローカル**ソースとしてインストールされます。パッケージ化されていないビルドの起動時のプルーニングでも削除されません。署名なしのzipは**パッケージ化されていないビルドでのみ**受け入れられます(パッケージ化されていない拡張機能を読み込む)。設定のデベロッパーモードの切り替えは、デバッグUIを表示するだけで、ストアビルドでのzipインストールを許可するものではありません。ストアビルドは引き続きAPIからの署名付きリリースが必要です。
+
+コードを変更するたびに:
+
+```bash
+nowly pack youtube
+```
+
+新しいzipを再度ドロップします。拡張機能自体を変更しない限り、パッケージ化されていない拡張機能を再読み込みする必要はありません。
+
+## どちらの方法を選ぶか
+
+| 状況 | 方法 |
+|---|---|
+| 初回セットアップ、またはブラウザにNowlyがない場合 | `nowly extension <slug>` |
+| Nowlyがすでに読み込まれていて、1つのプレゼンスを反復開発する場合 | `nowly pack <slug>` の後、zipをドロップ |
+| 完全な `nowly` モノレポで作業している場合 | `pnpm build:extension:dev` |
+
+[CLI](/publishing/cli#test-a-presence-locally)も参照してください。

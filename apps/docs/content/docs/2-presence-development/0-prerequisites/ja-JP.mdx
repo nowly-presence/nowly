@@ -1,0 +1,52 @@
+---
+title: 前提条件
+description: プレゼンスを開発するためにローカル環境をセットアップします。presencesリポジトリをクローンし、CLIをインストールします。
+---
+
+## 必要なもの
+
+- **Node.js 22以上** - CLIの実行とプレゼンスのビルドに必要
+- **pnpm** - presencesリポジトリはpnpmワークスペースを使用します
+- **Discord Desktop** - Nowly Hostでプレゼンスをテストするために使用します
+- **Git** - presencesリポジトリをクローンするために使用します
+
+## presencesリポジトリをクローンする
+
+すべてのコミュニティプレゼンスは[nowly-presence/presences](https://github.com/nowly-presence/presences)リポジトリにあります。
+
+```bash
+git clone https://github.com/nowly-presence/presences.git
+cd presences
+```
+
+## CLIをグローバルにインストールする
+
+Nowly CLIを使うと、プレゼンスの雛形作成、検証、ビルドができます。
+
+```bash
+pnpm i -g @nowly/cli
+```
+
+> Node 24以降では、パッケージが最近公開された場合、`--config.minimumReleaseAge=0` が必要になることがあります。
+
+## 依存関係をインストールする
+
+presencesリポジトリはpnpmワークスペースを使用します。依存関係をインストールすると、型チェック用の `@nowly/sdk` パッケージもリンクされます。
+
+```bash
+pnpm install
+```
+
+## セットアップを確認する
+
+CLIを実行し、正常に動作することを確認します。
+
+```bash
+nowly --help
+```
+
+利用可能なコマンドの一覧(`init`、`build`、`pack`、`extension`、`validate` など)が表示されるはずです。
+
+## 次のステップ
+
+環境の準備が整いました。[最初のプレゼンスを作成する](/presence-development/creating-your-first-presence)に進み、最初のプレゼンスの雛形を作成しましょう。

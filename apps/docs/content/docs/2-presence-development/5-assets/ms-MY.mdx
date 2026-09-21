@@ -1,0 +1,53 @@
+---
+title: Aset
+description: Sediakan aset logo, ikon dan lakaran kecil untuk presence Nowly.
+---
+
+## Aset Wajib
+
+Setiap presence mesti termasuk:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "Tanda jenama platform untuk penempatan lebih luas, pengepala dan imej Open Graph.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Ikon segi empat sama padat digunakan dalam permukaan UI kecil dan imej aktiviti Discord.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Visual marketplace dan halaman butiran yang mewakili platform dengan jelas.", required: true }
+  ]}
+/>
+
+Dimensi tepat ini dikuatkuasakan oleh CI pada setiap PR presence - aset dengan saiz yang salah akan gagal pengesahan.
+
+## Logo
+
+Gunakan `logo.png` untuk tanda jenama platform apabila imej yang lebih luas sesuai. Mesti tepat **300×300**.
+
+## Ikon
+
+Gunakan `icon.png` untuk paparan segi empat sama padat, latar belakang berwarna dan imej aktiviti Discord. Mesti tepat **128×128**.
+
+## Lakaran Kecil
+
+Gunakan `thumbnail.jpg` untuk visual marketplace dan halaman butiran. Ia sepatutnya mewakili platform dengan jelas. Mesti tepat **1920×1080**.
+
+## Pemalar Aset Runtime
+
+`Assets` disediakan oleh runtime (lihat [Presence API](/presence-development/presence-api)). Ia mendedahkan tiga kunci aset lalai:
+
+```ts filename="presence.ts"
+Assets.Logo      // → "logo.png"
+Assets.Icon      // → "icon.png"
+Assets.Thumbnail // → "thumbnail.jpg"
+```
+
+Gunakannya dalam muatan aktiviti:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  largeImageKey: Assets.Logo,
+  largeImageText: "YouTube",
+})
+```
+
+## Garis Panduan Kualiti
+
+Gunakan PNG lutsinar untuk `icon.png` - ikon dipaparkan pada latar belakang berwarna dalam pustaka Nowly, jadi latar belakang berisi akan berlanggar. `logo.png` lutsinar lebih digemari tetapi kurang kritikal. Pastikan lakaran kecil mudah dibaca pada saiz kecil dan elakkan imej generik.

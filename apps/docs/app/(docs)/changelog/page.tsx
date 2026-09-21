@@ -5,22 +5,26 @@ import { TableOfContents } from "@/components/docs/table-of-contents";
 import { getDocContent } from "@/lib/docs/content";
 import { extractTocItems } from "@/lib/docs/types";
 import { createMetadata, docsOgImage } from "@/lib/seo";
+import { getChangelogList } from "@nowly/changelog";
 import type { Metadata } from "next";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import type { ReactElement } from "react";
 
 const CHANGELOG_SLUG = "changelog";
 
 const generateMetadata = async (): Promise<Metadata> => {
-  const doc = getDocContent(CHANGELOG_SLUG, "en-US");
+  const locale = await getLocale();
+  const t = await getTranslations("docsMetadata");
+  const doc = getDocContent(CHANGELOG_SLUG, locale);
 
   if (!doc) {
-    return { title: "Not Found" };
+    return { title: t("not-found") };
   }
 
-  const description = doc.description || "Release notes for Nowly.";
+  const description = doc.description || t("changelog-description");
 
   return createMetadata({
     title: doc.title,
@@ -30,7 +34,7 @@ const generateMetadata = async (): Promise<Metadata> => {
     image: docsOgImage("changelog", {
       title: doc.title,
       description,
-      category: "Changelog",
+       category: t("changelog"),
     }),
   });
 };
@@ -43,6 +47,7 @@ const Page = async (): Promise<ReactElement> => {
     notFound();
   }
 
+  const releases = getChangelogList(locale);
   const tocItems = extractTocItems(doc.content);
 
   return (
@@ -62,6 +67,17 @@ const Page = async (): Promise<ReactElement> => {
         )}
 
         <MDXRemote source={doc.content} components={mdxComponents} options={{ blockJS: false }} />
+
+        {releases.map((release) => (
+          <div key={release.slug} className="mb-2 [&+div]:mt-6">
+            <h2 className="text-2xl font-semibold mt-10 mb-3">
+              <Link href={`/changelog/${release.slug}`} className="hover:underline">
+                {release.version}
+              </Link>
+            </h2>
+            {release.description && <p className="mb-4 leading-relaxed text-foreground/85">{release.description}</p>}
+          </div>
+        ))}
 
         <div className="mt-8 flex items-center border-t border-border pt-4">
           <EditOnGitHub slug={CHANGELOG_SLUG} locale="en-US" />

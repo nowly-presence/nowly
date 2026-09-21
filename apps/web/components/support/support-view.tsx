@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
 
+import { ContactForm } from "@/components/support/contact-form";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { docsHref } from "@/lib/seo";
 import { SUPPORT_LINKS } from "@/lib/support-links";
@@ -9,8 +10,8 @@ import {
   RiBookOpenLine,
   RiBugLine,
   RiDiscordFill,
+  RiGithubLine,
   RiLightbulbLine,
-  RiMoreLine,
 } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
@@ -40,10 +41,12 @@ const sections: Array<{ id: "community" | "presences" | "technical"; cards: Supp
     cards: [
       { key: "bug", href: SUPPORT_LINKS.bugReport, icon: RiBugLine },
       { key: "feature", href: SUPPORT_LINKS.featureRequest, icon: RiLightbulbLine },
-      { key: "other", href: SUPPORT_LINKS.blankIssue, icon: RiMoreLine },
     ],
   },
 ];
+
+const otherCard: SupportCard = { key: "other", href: SUPPORT_LINKS.blankIssue, icon: RiGithubLine };
+const OtherIcon = otherCard.icon;
 
 export const SupportView = async () => {
   const t = await getTranslations("supportPage");
@@ -63,39 +66,60 @@ export const SupportView = async () => {
           </p>
         </header>
 
-        <div className="mt-14 space-y-12">
-          {sections.map((section) => (
-            <section key={section.id}>
-              <h2 className="text-sm font-medium uppercase tracking-[0.16em] text-muted-foreground">
-                {t(`sections.${section.id}`)}
-              </h2>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {section.cards.map((card) => {
-                  const Icon = card.icon;
-                  return (
-                    <a
-                      key={card.key}
-                      href={card.href}
-                      rel="noreferrer"
-                      target="_blank"
-                      className="block rounded-[16px] outline-offset-4"
-                    >
-                      <Card className="h-full transition-colors hover:bg-foreground/6">
-                        <CardContent>
-                          <Icon className="size-5 text-accent" />
-                          <CardTitle className="mt-4 text-lg">{t(`${card.key}.title`)}</CardTitle>
-                          <CardDescription className="mt-2">
-                            {t(`${card.key}.description`)}
-                          </CardDescription>
-                          <p className="mt-5 text-sm font-medium text-accent">{t("open")}</p>
-                        </CardContent>
-                      </Card>
-                    </a>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
+        <div className="mt-14 grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.8fr)]">
+          <div className="space-y-12">
+            {sections.map((section) => (
+              <section key={section.id}>
+                <h2 className="text-sm font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                  {t(`sections.${section.id}`)}
+                </h2>
+                <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
+                  {section.cards.map((card) => {
+                    const Icon = card.icon;
+                    return (
+                      <a
+                        key={card.key}
+                        href={card.href}
+                        rel="noreferrer"
+                        target="_blank"
+                        className="block rounded-[16px] outline-offset-4"
+                      >
+                        <Card className="h-full transition-colors hover:bg-foreground/6">
+                          <CardContent>
+                            <Icon className="size-5 text-accent" />
+                            <CardTitle className="mt-4 text-lg">{t(`${card.key}.title`)}</CardTitle>
+                            <CardDescription className="mt-2">
+                              {t(`${card.key}.description`)}
+                            </CardDescription>
+                            <p className="mt-5 text-sm font-medium text-accent">{t("open")}</p>
+                          </CardContent>
+                        </Card>
+                      </a>
+                    );
+                  })}
+                </div>
+              </section>
+            ))}
+          </div>
+          
+          <div>
+            <ContactForm />
+            <a
+              href={otherCard.href}
+              rel="noreferrer"
+              target="_blank"
+              className="mt-5 block rounded-[16px] outline-offset-4"
+            >
+              <Card className="transition-colors hover:bg-foreground/6">
+                <CardContent>
+                  <OtherIcon className="size-5 text-accent" />
+                  <CardTitle className="mt-4 text-lg">{t(`${otherCard.key}.title`)}</CardTitle>
+                  <CardDescription className="mt-2">{t(`${otherCard.key}.description`)}</CardDescription>
+                  <p className="mt-5 text-sm font-medium text-accent">{t("open")}</p>
+                </CardContent>
+              </Card>
+            </a>
+          </div>
         </div>
 
         <p className="mt-16 max-w-3xl text-sm leading-relaxed text-muted-foreground">

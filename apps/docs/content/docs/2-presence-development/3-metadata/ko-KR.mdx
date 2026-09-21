@@ -1,0 +1,123 @@
+---
+title: 메타데이터
+description: Nowly 프레즌스의 metadata.json 파일에 있는 필수 및 선택 필드를 모두 설명합니다.
+---
+
+## 필수 필드
+
+모든 프레즌스에 필요한 항목:
+
+<TypeTable
+  properties={[
+    { name: "name", type: "string", description: "서비스 또는 플랫폼의 표시 이름.", required: true },
+    { name: "author", type: "object", description: "라이브러리와 OG 이미지에 가장 먼저 표시되는 주 작성자.", required: true },
+    { name: "description", type: "object", description: "로케일별로 키가 지정된 짧은 현지화 설명.", required: true },
+    { name: "url", type: "string[]", description: "페이지 매칭에 사용되는 지원 도메인 또는 URL 패턴.", required: true },
+    { name: "color", type: "string", description: "UI와 임베드에서 사용되는 16진수 형식의 브랜드 색상.", required: true },
+    { name: "category", type: "string", description: "streaming, music, video, social, gaming, tools, ai, learning, creator, other 중 하나.", required: true }
+  ]}
+/>
+
+## 예시
+
+```json
+{
+  "name": "YouTube",
+  "author": {
+    "name": "Nowly Developer",
+    "github": "example"
+  },
+  "url": ["youtube.com", "www.youtube.com"],
+  "color": "#FF0033",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch and share videos on YouTube."
+  }
+}
+```
+
+## 작성자 및 기여자
+
+- `author` - 라이브러리와 OG 이미지에 가장 먼저 표시되는 주 관리자.
+- `contributors` - 프레즌스 제작에 도움을 준 추가 인물들.
+
+<CalloutInfo>
+GitHub 사용자 이름(`github` 키)은 아바타를 해석하는 데 사용됩니다.
+</CalloutInfo>
+
+## 설명 및 기능
+
+- `description` - 로케일별로 키가 지정된 짧은 마켓플레이스 문구.
+- `longDescription` - 상세 페이지용 확장 설명.
+- `features` - 지원되는 동작(예: 버튼 지원, 미디어 키)의 현지화된 목록.
+
+## Discord 네이티브 지원
+
+일부 플랫폼은 사용자가 계정을 연결하면 이미 Discord에 표시됩니다(Spotify가 대표적인 예입니다). 이 선택적 플래그를 설정하면 라이브러리가 그 연결 없이도 Nowly가 여전히 유용하다는 것을 설명할 수 있습니다.
+
+<TypeTable
+  properties={[
+    { name: "discordNative", type: "boolean", description: "사용자가 계정을 연결하면 Discord가 이미 이 플랫폼을 표시하는 경우 true. 선택 사항. 기본값은 false입니다.", required: false }
+  ]}
+/>
+
+```json
+{
+  "name": "Spotify",
+  "discordNative": true
+}
+```
+
+이는 라이브러리 페이지와 확장 프로그램(스토어 및 설치된 프레즌스 상세정보)에 안내 문구를 표시할 뿐, 설치를 막지는 않습니다.
+
+## URL 매칭
+
+- `url` - 페이지 매칭에 사용되는 지원 도메인 또는 URL 패턴.
+- `regExp` - 복잡한 URL 패턴을 위한 정규식 기반 매칭.
+
+<CalloutWarning>
+간단한 `url` 매칭만으로 충분하지 않은 경우에만 `regExp`를 사용하세요. 명시적인 도메인 목록을 우선적으로 사용하세요.
+</CalloutWarning>
+
+## 실행 컨텍스트
+
+두 개의 선택 필드는 브라우저에서 프레즌스 스크립트가 실행되는 방식과 시점을 제어합니다.
+
+<TypeTable
+  properties={[
+    { name: "world", type: "\"main\" | \"isolated\"", description: "실행 환경. 기본값은 isolated입니다.", required: false },
+    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "스크립트가 주입되는 시점. 기본값은 document_idle입니다.", required: false }
+  ]}
+/>
+
+기본적으로 프레즌스는 **isolated** 환경에서 실행됩니다. 페이지의 DOM은 공유하지만 페이지의 JavaScript 컨텍스트는 공유하지 않습니다. 이는 안전한 기본값이며 거의 모든 프레즌스에서 작동합니다.
+
+프레즌스가 **페이지 컨텍스트**가 필요한 경우, 특히 다음의 경우에는 `"world": "main"`을 설정하세요.
+
+- 사이트가 `window`에 노출하는 플레이어 객체 같은 페이지 전역 변수를 읽어야 할 때
+- 사용자의 세션 쿠키를 전달해야 하는 **동일 출처 인증 `fetch`**를 수행해야 할 때(예: 사이트의 내부 메타데이터 API)
+
+```json
+{
+  "name": "Netflix",
+  "url": ["netflix.com", "www.netflix.com"],
+  "world": "main",
+  "color": "#E50914",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch movies and series on Netflix."
+  }
+}
+```
+
+<CalloutWarning>
+isolated 환경에서의 `fetch`는 퍼스트파티 요청으로 취급되지 않으므로, 인증된 호출은 조용히 실패합니다. 프레즌스가 사이트의 로그인된 API에 의존한다면 `"world": "main"`을 설정해야 합니다.
+</CalloutWarning>
+
+<CalloutInfo>
+이 선언은 전적으로 `metadata.json`에 있으며, 확장 프로그램은 등록 시점에 이를 읽습니다. 새로운 페이지 컨텍스트 프레즌스를 추가하기 위해 확장 프로그램을 변경할 필요는 없습니다.
+</CalloutInfo>
+
+## 카테고리
+
+허용되는 카테고리는 `streaming`, `music`, `video`, `social`, `gaming`, `tools`, `ai`, `learning`, `creator`, `other`입니다.

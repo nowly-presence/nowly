@@ -1,0 +1,38 @@
+---
+title: 현지화
+description: 프레즌스 메타데이터, 기능, 설정, 문자열을 현지화합니다.
+---
+
+## 지원 로케일
+
+<LanguageTable
+  languages={[
+    { language: "영어", code: "en-US", default: true },
+    { language: "프랑스어", code: "fr-FR" },
+    { language: "스페인어", code: "es-ES" },
+  ]}
+/>
+
+## 메타데이터 현지화
+
+```json filename="metadata.json"
+{
+  "description": {
+    "en-US": "Watch and share videos.",
+    "fr-FR": "Regardez et partagez des vidéos.",
+    "es-ES": "Mira y comparte videos."
+  }
+}
+```
+
+## 설정 현지화
+
+설정 레이블과 설명도 동일한 로케일 형식을 사용합니다.
+
+## 런타임 문자열
+
+Discord 활동 텍스트는 선택적인 [프레즌스 언어 팩](/advanced-topics/presence-language-packs)을 사용하며, 이는 메타데이터 및 설정 현지화와는 별개입니다.
+
+## 텍스트를 짧게 유지하세요
+
+Discord 활동 필드는 컴팩트합니다. 현지화된 문자열은 간결하게 유지하고 런타임 활동에서 긴 문단을 피하세요.

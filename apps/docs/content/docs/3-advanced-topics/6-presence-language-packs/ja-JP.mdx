@@ -1,0 +1,46 @@
+---
+title: Presence 言語パック
+description: Discord のアクティビティテキストに、任意の型付き翻訳を追加します。
+---
+
+## 独立したランタイムシステム
+
+言語パックは Discord に送信する「動画を視聴中」や「Figma を閲覧中」などのテキストを翻訳します。メタデータや設定ラベルで使う対応ロケールとは別のものです。
+
+言語パックは任意です。`locales` ディレクトリのない Presence は、これまでどおりインラインの TypeScript 文字列を使います。
+
+## ファイル構成
+
+ローカライズされた Presence は、次の 3 つのランタイム辞書をすべて提供します。
+
+```text
+locales/
+├── en-US.json
+├── fr-FR.json
+└── es-ES.json
+```
+
+各ファイルは同じキーと文字列値を持つフラットな JSON オブジェクトである必要があります。`en-US.json` は参照辞書兼フォールバックです。ビルドでは無効な JSON、欠落したロケール、未対応ファイル、文字列以外の値、キーの不一致が拒否されます。
+
+```json filename="locales/en-US.json"
+{ "watchingVideo": "Watching {title}" }
+```
+
+## 型付きオートコンプリート
+
+```typescript
+import type enUS from "./locales/en-US.json"
+
+const locale = await presence.getStrings<typeof enUS>()
+const title = document.title
+
+await presence.setActivity({
+  details: presence.formatString(locale.watchingVideo, { title }),
+})
+```
+
+型のみのインポートにより IDE の補完が使え、JSON をバンドルに追加せず未知のキーを拒否できます。型生成コマンドは不要です。
+
+動的な値には JSON の `{name}` プレースホルダーと、Presence コードの `presence.formatString(template, params)` を使います。
+
+ユーザーは全体で 1 つのアクティビティ言語を選ぶことも、ローカライズされた Presence ごとに異なる言語を選ぶこともできます。

@@ -1,0 +1,16 @@
+---
+title: 1.2.1
+date: 25 czerwca 2026
+description: Hotfix usuwający ujawnione zmienne deweloperskie z buildu produkcyjnego i upraszczający konfigurację API.
+---
+
+`1.2.1` naprawia problem buildu produkcyjnego, porządkuje konfigurację API i poczty, stabilizuje testy oraz usuwa nieaktualne odniesienia prawne. Poprawiono też przekierowania, wymiary obrazów i podział kodu.
+
+## Build rozszerzenia
+Usunięto `dotenv/config`; artefakty zawsze używają `nowly.me`, `api.nowly.me` i `cdn.nowly.me`.
+## Środowisko API
+Usunięto zbędne zmienne AWS, a `AWS_REGION` ustawiono na `us-east-1`.
+## Testy i strony prawne
+Zmienne testowe są dostarczane centralnie, a nieistniejące funkcje usunięto ze stron prawnych.
+## Sitemap i kod
+Stare adresy są przekierowywane, obrazy mają jawne wymiary, a `HighlightedText` ładuje się leniwie.

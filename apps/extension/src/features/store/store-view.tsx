@@ -1,102 +1,149 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { StoreCard } from "@/features/store/store-card";
-import { StoreDetail } from "@/features/store/store-detail";
-import { StoreSkeleton } from "@/features/store/store-skeleton";
-import {
-  catalogCategories,
-  filterStorePresences,
-  storeCategoryLabel,
-  type StorePresence,
-} from "@/features/store/store.model";
-import { usePresenceCatalog } from "@/features/store/use-presence-catalog";
-import { t } from "@/shared/i18n";
-import type { InstalledPresences } from "@/shared/types";
-import type { PresenceCategory } from "@/features/presences/presence-list.model";
-import type { FC, ReactElement } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { RiSearchLine } from "@remixicon/react"
+import { useEffect, useMemo, useState } from "react"
+import { InstallQueueBanner } from "@/features/store/install-queue-banner"
+import { StoreCard } from "@/features/store/store-card"
+import { StoreDetail } from "@/features/store/store-detail"
+import { catalogCategories, filterStorePresences, storeCategoryLabel, type StorePresence } from "@/features/store/store.model"
+import { usePresenceCatalog } from "@/features/store/use-presence-catalog"
+import type { PresenceCategory } from "@/features/activity/presence-list.model"
+import { t } from "@/shared/i18n"
+import type { InstalledPresences } from "@/shared/types"
+import { Button } from "@/ui/button"
+import { Empty, EmptyDescription, EmptyTitle } from "@/ui/empty"
+import { Input } from "@/ui/input"
+import { Skeleton } from "@/ui/skeleton"
+import { cn } from "@/ui/utils"
 
 type Props = {
-  installingSlug: string | null;
-  onInstall: (slug: string) => void;
-  presences: InstalledPresences;
-  seedQuery?: string;
-  seedSlug?: string | null;
-  updates: Record<string, string>;
-};
+  installingSlug: string | null
+  installQueueCount: number
+  onInstall: (slug: string) => void
+  onOpenInstalled: (slug: string) => void
+  onOpenWebsite: (slug: string) => void
+  onRetryQueue: () => void
+  onSelectPresence: (slug: string | null) => void
+  presences: InstalledPresences
+  seedQuery?: string
+  selectedSlug: string | null
+  updates: Record<string, string>
+}
 
-const storeAction = (
-  slug: string,
-  presences: InstalledPresences,
-  updates: Record<string, string>,
-): "install" | "update" | "installed" => {
-  if (!presences[slug]) return "install";
-  return updates[slug] ? "update" : "installed";
-};
+const storeAction = (slug: string, presences: InstalledPresences, updates: Record<string, string>): "install" | "update" | "installed" => {
+  if (!presences[slug]) return "install"
+  return updates[slug] ? "update" : "installed"
+}
 
-export const StoreView: FC<Props> = ({
+const StoreSkeleton = (): React.JSX.Element => (
+  <div className="flex flex-col gap-3">
+    <Skeleton className="h-9 w-full rounded-xl" />
+    <div className="overflow-hidden rounded-xl border border-border">
+      {Array.from({ length: 5 }, (_, index) => (
+        <Skeleton
+          key={index}
+          className="h-16 rounded-none border-b border-border last:border-0"
+        />
+      ))}
+    </div>
+  </div>
+)
+
+const CategoryChip = ({ active, label, onSelect }: { active: boolean; label: string; onSelect: () => void }): React.JSX.Element => (
+  <button
+    type="button"
+    onClick={onSelect}
+    className={cn(
+      "shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors",
+      active ? "bg-accent/15 text-accent" : "bg-secondary text-muted-foreground hover:bg-foreground/16 hover:text-foreground",
+    )}
+  >
+    {label}
+  </button>
+)
+
+export const StoreView = ({
   installingSlug,
+  installQueueCount,
   onInstall,
+  onOpenInstalled,
+  onOpenWebsite,
+  onRetryQueue,
+  onSelectPresence,
   presences,
   seedQuery = "",
-  seedSlug = null,
+  selectedSlug,
   updates,
-}): ReactElement => {
-  const { items, isError, isLoading, refetch } = usePresenceCatalog();
-  const [query, setQuery] = useState(seedQuery);
-  const [category, setCategory] = useState<PresenceCategory | null>(null);
-  const [selectedSlug, setSelectedSlug] = useState<string | null>(seedSlug);
+}: Props): React.JSX.Element => {
+  const { items, isError, isLoading, refetch } = usePresenceCatalog()
+  const [query, setQuery] = useState(seedQuery)
+  const [category, setCategory] = useState<PresenceCategory | null>(null)
 
   useEffect(() => {
-    setQuery(seedQuery);
-    setSelectedSlug(seedSlug);
-  }, [seedQuery, seedSlug]);
+    setQuery(seedQuery)
+  }, [seedQuery])
 
-  const categories = useMemo(() => catalogCategories(items), [items]);
-  const filtered = useMemo(
-    () => filterStorePresences(items, query, category),
-    [category, items, query],
-  );
+  const categories = useMemo(() => catalogCategories(items), [items])
+  const filtered = useMemo(() => filterStorePresences(items, query, category), [category, items, query])
+  const selected = selectedSlug ? (items.find((item) => item.slug === selectedSlug) ?? null) : null
 
-  const selected = selectedSlug
-    ? items.find((item) => item.slug === selectedSlug) ?? null
-    : null;
+  const openPresence = (slug: string): void => {
+    if (presences[slug]) {
+      onOpenInstalled(slug)
+      return
+    }
+    onSelectPresence(slug)
+  }
 
-  if (isLoading) return <StoreSkeleton />;
+  useEffect(() => {
+    if (selected && presences[selected.slug]) onOpenInstalled(selected.slug)
+  }, [selected, presences, onOpenInstalled])
+
+  if (isLoading) return <StoreSkeleton />
 
   if (isError) {
     return (
-      <section className="rounded-xl border border-dashed border-border bg-card p-6 text-center">
-        <p className="text-sm font-semibold">{t("store-error")}</p>
-        <div className="mt-4 flex justify-center">
-          <Button size="sm" onClick={() => void refetch()}>{t("store-retry")}</Button>
-        </div>
-      </section>
-    );
+      <Empty className="gap-2 border border-border bg-card">
+        <EmptyTitle>{t("store-error")}</EmptyTitle>
+        <Button
+          size="sm"
+          onClick={() => void refetch()}
+          className="mt-2"
+        >
+          {t("store-retry")}
+        </Button>
+      </Empty>
+    )
   }
 
-  if (selected) {
+  if (selected && !presences[selected.slug]) {
     return (
       <StoreDetail
         action={storeAction(selected.slug, presences, updates)}
         installing={installingSlug === selected.slug}
-        onBack={() => setSelectedSlug(null)}
+        onBack={() => onSelectPresence(null)}
         onInstall={onInstall}
+        onOpenWebsite={onOpenWebsite}
         presence={selected}
       />
-    );
+    )
   }
 
   return (
     <div className="flex flex-col gap-3">
-      <Input
-        unstyled
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        placeholder={t("store-search")}
-        aria-label={t("store-search")}
-        className="h-9 w-full appearance-none rounded-xl border border-border bg-card-2 px-3 text-sm text-foreground outline-none transition-colors placeholder:text-dim-foreground hover:bg-card-hover focus:border-border-light focus:bg-card-2"
+      <InstallQueueBanner
+        count={installQueueCount}
+        onRetry={onRetryQueue}
       />
+
+      <div className="relative">
+        <RiSearchLine className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={t("store-search")}
+          aria-label={t("store-search")}
+          className="pl-8"
+        />
+      </div>
 
       {categories.length > 1 ? (
         <div className="flex flex-wrap gap-1.5">
@@ -117,44 +164,25 @@ export const StoreView: FC<Props> = ({
       ) : null}
 
       {filtered.length === 0 ? (
-        <section className="rounded-xl border border-dashed border-border bg-card p-6 text-center">
-          <p className="text-sm font-semibold">{t("store-empty")}</p>
-        </section>
+        <Empty className="gap-2 border border-border bg-card">
+          <EmptyTitle>{t("store-empty")}</EmptyTitle>
+          <EmptyDescription>{t("home-search-empty")}</EmptyDescription>
+        </Empty>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-border bg-card">
+        <div className="overflow-hidden rounded-xl border border-border divide-y divide-border">
           {filtered.map((presence: StorePresence) => (
             <StoreCard
               key={presence.slug}
               action={storeAction(presence.slug, presences, updates)}
               installing={installingSlug === presence.slug}
               onInstall={onInstall}
-              onOpen={setSelectedSlug}
+              onOpen={openPresence}
+              onOpenWebsite={onOpenWebsite}
               presence={presence}
             />
           ))}
         </div>
       )}
     </div>
-  );
-};
-
-type ChipProps = {
-  active: boolean;
-  label: string;
-  onSelect: () => void;
-};
-
-const CategoryChip: FC<ChipProps> = ({ active, label, onSelect }): ReactElement => (
-  <Button
-    variant="unstyled"
-    size="none"
-    onClick={onSelect}
-    className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
-      active
-        ? "bg-accent/15 text-accent"
-        : "bg-card-2 text-muted-foreground hover:bg-card-hover hover:text-foreground"
-    }`}
-  >
-    {label}
-  </Button>
-);
+  )
+}

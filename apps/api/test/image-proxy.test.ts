@@ -93,7 +93,7 @@ describe("fetchImage", () => {
     }) as unknown as typeof fetch
 
     const result = await fetchImage(new URL("https://example.com/x.png"), { id: "generic", hostSuffixes: [] })
-    expect(result).toEqual({ ok: false, status: 404, error: "Upstream returned 404" })
+    expect(result).toEqual({ ok: false, status: 404, error: "IMAGE_UPSTREAM_ERROR" })
   })
 
   it("rejects an empty response body", async () => {
@@ -105,6 +105,6 @@ describe("fetchImage", () => {
     }) as unknown as typeof fetch
 
     const result = await fetchImage(new URL("https://example.com/x.png"), { id: "generic", hostSuffixes: [] })
-    expect(result).toEqual({ ok: false, status: 502, error: "Empty image" })
+    expect(result).toEqual({ ok: false, status: 502, error: "EMPTY_IMAGE" })
   })
 })

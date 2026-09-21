@@ -1,0 +1,114 @@
+---
+title: Mencipta Presence Pertama Anda
+description: Cipta presence Nowly baharu dengan CLI dan hantar aktiviti Discord Rich Presence pertama anda.
+---
+
+## Mula Dengan CLI
+
+Gunakan CLI Nowly untuk menjana rangka presence baharu:
+
+```bash
+nowly init "Example"
+```
+
+CLI mencipta metadata, skrip presence dan aset yang diperlukan.
+
+## Kod Presence Asas
+
+`Presence` dan `Assets` disediakan oleh runtime - lihat [Presence API](/presence-development/presence-api) dan [Assets](/presence-development/assets).
+`document` ialah API DOM pelayar standard, tersedia kerana presence berjalan sebagai skrip kandungan dalam sambungan.
+
+Hanya `PresenceType` (dan pembantu lain seperti `createMediaTimestamps`) perlu diimport daripada `@nowly/sdk`.
+
+```ts filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+
+const presence = new Presence()
+
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: document.title,
+    state: document.location.hostname,
+    largeImageKey: Assets.Logo,
+    type: PresenceType.Watching,
+  })
+})
+```
+
+## Aliran Runtime
+
+Apabila pengguna melawat URL yang sepadan, Nowly memuatkan presence anda. Presence membaca keadaan halaman dan memanggil `setActivity`. Sambungan menghantar muatan tersebut kepada Nowly Host, yang mengemas kini Discord.
+
+## Gelung Pembangunan
+
+<Steps>
+<Step title="Rangka" description="Menjana folder presence, metadata dan aset yang diperlukan.">
+
+```bash
+nowly init "Example"
+```
+
+</Step>
+<Step title="Konfigurasi" description="Tetapkan nama, pengarang, URL disokong, kategori, warna, penerangan tempatan dan discordNative apabila Discord sudah menyokong platform tersebut.">
+
+Sunting `metadata.json` - lihat [Metadata](/presence-development/metadata) untuk semua medan yang tersedia.
+
+</Step>
+<Step title="Laksana" description="Tulis logik presence menggunakan Presence SDK.">
+
+```typescript filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+
+const presence = new Presence()
+
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    type: PresenceType.Watching,
+  })
+})
+```
+
+</Step>
+<Step title="Sahkan" description="Semak bahawa struktur metadata anda betul dan aset berada di tempatnya.">
+
+```bash
+nowly validate
+```
+
+</Step>
+<Step title="Bina" description="Mengkompilasi presence menjadi bundel berdikari.">
+
+```bash
+nowly build example
+```
+
+</Step>
+<Step title="Muatkan" description="Pasang presence yang dibina dalam pelayar. Dua kaedah: sambungan yang telah dibina, atau jatuhan zip.">
+
+Lihat [Muat dan Uji Secara Tempatan](/presence-development/load-and-test) untuk perbandingan penuh.
+
+**Kali pertama** (tiada Nowly dalam pelayar): bina presence terus ke dalam sambungan yang sedia dibuat.
+
+```bash
+nowly extension example
+```
+
+Muatkan `dist/extension-dev` tanpa pek di `chrome://extensions`.
+
+**Sudah ada Nowly dimuatkan tanpa pek:** pek satu zip dan jatuhkannya di Tetapan → Lanjutan → Nyahpepijat. Pemasangan Store menolak zip yang tidak ditandatangani.
+
+```bash
+nowly pack example
+```
+
+</Step>
+<Step title="Uji" description="Buka laman web sasaran - presence diaktifkan secara automatik.">
+
+Lawati laman itu
+
+</Step>
+</Steps>
+
+Ulangi **Laksana** → **Bina** → **Muatkan** selepas setiap perubahan kod.

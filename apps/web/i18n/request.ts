@@ -1,4 +1,4 @@
-import { FALLBACK_LOCALE, isValidLocale, type LocaleString } from "@nowly/locales";
+import { FALLBACK_LOCALE, SUPPORTED_LOCALES, isValidLocale, type LocaleString } from "@nowly/locales";
 import { getRequestConfig } from "next-intl/server";
 import { cookies, headers } from "next/headers";
 
@@ -18,9 +18,10 @@ const parseAcceptLanguage = (acceptLanguage: string | null): LocaleString | null
     if (isValidLocale(normalized)) return normalized;
 
     const langPrefix = lang.split("-")[0].toLowerCase();
-    if (langPrefix === "en") return "en-US";
-    if (langPrefix === "fr") return "fr-FR";
-    if (langPrefix === "es") return "es-ES";
+    const matchByPrefix = SUPPORTED_LOCALES.find(
+      (s) => s.split("-")[0].toLowerCase() === langPrefix
+    );
+    if (matchByPrefix) return matchByPrefix;
   }
 
   return null;

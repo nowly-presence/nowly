@@ -1,0 +1,36 @@
+---
+title: Sahkan dan Bina
+description: Sahkan metadata presence dan bina bundel presence sebelum menerbitkan.
+---
+
+## Sahkan Metadata
+
+Jalankan:
+
+```bash
+nowly validate
+```
+
+Pengesahan menyemak `metadata.json` terhadap skema Nowly, termasuk bahawa `discordNative` ialah boolean jika wujud. Betulkan ralat pengesahan sebelum membina.
+
+## Bina Semua Presence
+
+Jalankan:
+
+```bash
+nowly build
+```
+
+## Bina Satu Presence
+
+Jalankan:
+
+```bash
+nowly build youtube
+```
+
+Gunakan slug atau nama yang diperoleh daripada folder untuk presence sasaran.
+
+## Muatkan dalam pelayar
+
+Selepas pembinaan berjaya, muatkan presence dengan `nowly extension <slug>` atau jatuhkan zip daripada `nowly pack <slug>`. Lihat [Muat dan Uji Secara Tempatan](/presence-development/load-and-test).

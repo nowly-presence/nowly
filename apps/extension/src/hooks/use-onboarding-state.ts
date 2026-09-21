@@ -1,93 +1,53 @@
-import { sendMessage, type NativeStatus } from "@/lib/messages";
-import type { DiscordProfileSnapshot } from "@/shared/types";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
+import {
+  DEFAULT_ONBOARDING,
+  getOnboarding,
+  setOnboarding as writeOnboarding,
+  type OnboardingState,
+} from "@/background/storage/onboarding.store"
+import { sendMessage } from "@/lib/messages"
+import type { NativeStatus, UserScriptsStatus } from "@/shared/types"
 
-const ONBOARDING_KEY = "onboarding";
-
-export type OnboardingState = {
-  devReplayOnboarding: boolean;
-  onboardingCompleted: boolean;
-  nativeSeenConnectedOnce: boolean;
-  nativeProfile?: DiscordProfileSnapshot | null;
-};
-
-const DEFAULT_ONBOARDING: OnboardingState = {
-  devReplayOnboarding: false,
-  onboardingCompleted: false,
-  nativeSeenConnectedOnce: false,
-  nativeProfile: null,
-};
-
-const readOnboarding = async (): Promise<OnboardingState> => {
-  const result = await chrome.storage.local.get(ONBOARDING_KEY);
-  const value = result[ONBOARDING_KEY] as Partial<OnboardingState> | undefined;
-  return { ...DEFAULT_ONBOARDING, ...(value ?? {}) };
-};
-
-const writeOnboarding = async (partial: Partial<OnboardingState>): Promise<OnboardingState> => {
-  const current = await readOnboarding();
-  const next = { ...current, ...partial } satisfies OnboardingState;
-  await chrome.storage.local.set({ [ONBOARDING_KEY]: next });
-  return next;
-};
-
-export type UserScriptsStatus = {
-  enabled: boolean;
-  reason?: string;
-  requiresUserToggle?: boolean;
-};
+const FALLBACK_NATIVE_STATUS: NativeStatus = { connected: false, status: "unknown", discordConnected: false }
+const FALLBACK_USER_SCRIPTS_STATUS: UserScriptsStatus = { enabled: false, requiresUserToggle: true }
 
 export const useOnboardingState = (): {
-  onboarding: OnboardingState;
-  setOnboarding: (partial: Partial<OnboardingState>) => void;
-  nativeStatus: NativeStatus;
-  userScripts: UserScriptsStatus;
-  refresh: () => void;
+  onboarding: OnboardingState
+  setOnboarding: (partial: Partial<OnboardingState>) => void
+  nativeStatus: NativeStatus
+  userScripts: UserScriptsStatus
+  refresh: () => void
 } => {
-  const [onboarding, setOnboardingState] = useState<OnboardingState>(DEFAULT_ONBOARDING);
-  const [nativeStatus, setNativeStatus] = useState<NativeStatus>({ connected: false, status: "unknown", discordConnected: false });
-  const [userScripts, setUserScripts] = useState<UserScriptsStatus>({ enabled: false, requiresUserToggle: true });
+  const [onboarding, setOnboardingState] = useState<OnboardingState>(DEFAULT_ONBOARDING)
+  const [nativeStatus, setNativeStatus] = useState<NativeStatus>(FALLBACK_NATIVE_STATUS)
+  const [userScripts, setUserScripts] = useState<UserScriptsStatus>(FALLBACK_USER_SCRIPTS_STATUS)
 
   const refresh = (): void => {
-    void Promise.all([
-      readOnboarding(),
-      sendMessage<NativeStatus>("GET_NATIVE_STATUS"),
-      sendMessage<UserScriptsStatus>("GET_USER_SCRIPTS_STATUS"),
-    ]).then(([nextOnboarding, nextNative, nextUserScripts]) => {
-      setOnboardingState(nextOnboarding);
-      setNativeStatus(nextNative ?? { connected: false, status: "unknown", discordConnected: false });
-      setUserScripts(nextUserScripts ?? { enabled: false, requiresUserToggle: true });
-    });
-  };
+    void Promise.all([getOnboarding(), sendMessage("GET_NATIVE_STATUS"), sendMessage("GET_USER_SCRIPTS_STATUS")]).then(
+      ([nextOnboarding, nextNative, nextUserScripts]) => {
+        setOnboardingState(nextOnboarding)
+        setNativeStatus(nextNative ?? FALLBACK_NATIVE_STATUS)
+        setUserScripts(nextUserScripts ?? FALLBACK_USER_SCRIPTS_STATUS)
+      },
+    )
+  }
 
   useEffect(() => {
-    refresh();
-    const interval = window.setInterval(refresh, 1500);
+    refresh()
 
     const onChanged = (changes: Record<string, chrome.storage.StorageChange>, areaName: string): void => {
-      if (areaName !== "local") return;
-      if (!changes[ONBOARDING_KEY]) return;
+      if (areaName !== "local") return
+      if (!changes.onboarding) return
+      setOnboardingState({ ...DEFAULT_ONBOARDING, ...((changes.onboarding.newValue as Partial<OnboardingState>) ?? {}) })
+    }
 
-      const next = changes[ONBOARDING_KEY].newValue as Partial<OnboardingState> | undefined;
-      setOnboardingState({ ...DEFAULT_ONBOARDING, ...(next ?? {}) });
-    };
-
-    chrome.storage.onChanged.addListener(onChanged);
-    return () => {
-      window.clearInterval(interval);
-      chrome.storage.onChanged.removeListener(onChanged);
-    };
-  }, []);
+    chrome.storage.onChanged.addListener(onChanged)
+    return () => chrome.storage.onChanged.removeListener(onChanged)
+  }, [])
 
   const setOnboarding = (partial: Partial<OnboardingState>): void => {
-    void writeOnboarding(partial).then((next) => setOnboardingState(next));
-  };
+    void writeOnboarding(partial).then(refresh)
+  }
 
-  return {
-    onboarding,
-    setOnboarding,
-    nativeStatus,
-    userScripts,
-    refresh
-  };
-};
+  return { onboarding, setOnboarding, nativeStatus, userScripts, refresh }
+}

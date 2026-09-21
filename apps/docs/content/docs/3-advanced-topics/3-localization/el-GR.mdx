@@ -1,0 +1,38 @@
+---
+title: Τοπικοποίηση
+description: Τοπικοποίησε τα metadata, τα χαρακτηριστικά, τις ρυθμίσεις και τα strings του presence.
+---
+
+## Υποστηριζόμενες Γλώσσες
+
+<LanguageTable
+  languages={[
+    { language: "Αγγλικά", code: "en-US", default: true },
+    { language: "Γαλλικά", code: "fr-FR" },
+    { language: "Ισπανικά", code: "es-ES" },
+  ]}
+/>
+
+## Τοπικοποίηση Metadata
+
+```json filename="metadata.json"
+{
+  "description": {
+    "en-US": "Watch and share videos.",
+    "fr-FR": "Regardez et partagez des vidéos.",
+    "es-ES": "Mira y comparte videos."
+  }
+}
+```
+
+## Τοπικοποίηση Ρυθμίσεων
+
+Οι ετικέτες και οι περιγραφές των ρυθμίσεων χρησιμοποιούν την ίδια μορφή γλώσσας.
+
+## Strings στο Runtime
+
+Το κείμενο δραστηριότητας του Discord χρησιμοποιεί προαιρετικά [γλωσσικά πακέτα presence](/advanced-topics/presence-language-packs), τα οποία είναι ξεχωριστά από την τοπικοποίηση metadata και ρυθμίσεων.
+
+## Κράτα το Κείμενο Σύντομο
+
+Τα πεδία δραστηριότητας του Discord είναι συμπαγή. Κράτα τα τοπικοποιημένα strings περιεκτικά και απόφυγε μεγάλες παραγράφους στη δραστηριότητα του runtime.

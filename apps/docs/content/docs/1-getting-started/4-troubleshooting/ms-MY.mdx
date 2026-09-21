@@ -1,0 +1,84 @@
+---
+title: Penyelesaian Masalah
+description: Betulkan aplikasi desktop yang hilang, Discord Desktop tertutup, presence yang hilang, aktiviti tidak dikesan, URL tidak disokong, dan isu kebenaran.
+---
+
+## Mula Dengan Diagnostik
+
+Buka panel sisi sambungan dan baca setiap baris secara berasingan:
+
+- Sambungan dipasang
+- Skrip pengguna aktif
+- Aplikasi desktop dikesan
+- Discord disambungkan
+- Presence dipasang
+- Aktiviti dikesan
+
+Jangan bergantung pada satu status global sahaja. Baris yang hilang ialah perkara seterusnya untuk dibetulkan.
+
+## Aplikasi desktop tidak dikesan
+
+Mesej yang dipaparkan: **Aplikasi desktop tidak dikesan.**
+
+Pasang aplikasi desktop daripada [halaman aplikasi desktop](https://nowly.me/desktop), kemudian klik **Semak sambungan** dalam sambungan. Jika anda baru sahaja memasangnya, tutup dan buka semula panel sisi sambungan.
+
+## Discord Desktop Tertutup
+
+Mesej yang dipaparkan: **Aplikasi desktop dipasang tetapi Discord Desktop tidak dibuka.**
+
+Buka Discord Desktop, tunggu beberapa saat, kemudian klik **Semak sambungan**. Discord dalam pelayar tidak dapat menerima kemas kini Rich Presence tempatan.
+
+## Tiada Presence Dipasang
+
+Pasang presence daripada pustaka. Untuk ujian paling pantas, pasang [presence YouTube](/library/youtube), kemudian buka YouTube.
+
+## Tiada Aktiviti Dikesan
+
+Pastikan:
+
+- presence yang sepadan dipasang dan didayakan
+- URL semasa disokong oleh presence tersebut
+- skrip pengguna aktif
+- halaman telah dimuat semula selepas anda memasang presence
+
+## URL Tidak Disokong
+
+Buka halaman butiran presence dan bandingkan URL semasa anda dengan senarai **URL Disokong**. Jika laman itu menukar alamat atau susun aturnya, laporkan presence tersebut daripada halaman sokongan.
+
+## Kebenaran Hilang
+
+Buka tetapan sambungan pelayar anda dan semak:
+
+- Nowly didayakan
+- skrip pengguna dibenarkan
+- akses laman dibenarkan untuk laman semasa
+
+Selepas menukar kebenaran, muat semula tab laman web dan buka semula panel sisi sambungan.
+
+## Linux: "Kemas Kini Tersedia" Selepas Memasang .deb
+
+Mesej yang dipaparkan: **kemas kini tersedia**, walaupun pakej `.deb` baru sahaja dipasang.
+
+Dua punca biasa, semak mengikut susunan:
+
+1. **`.deb` sebenarnya tidak pernah dipasang.** Pada sesetengah persekitaran desktop (XFCE dengan Thunar, sebagai contoh), dwi-klik fail `.deb` tidak melakukan apa-apa jika tiada pengurus pakej grafik yang dikaitkan dengannya (seperti GDebi). Pasang daripada terminal sebaliknya:
+
+   ```bash
+   sudo dpkg -i ~/Downloads/nowly-host.deb
+   ```
+
+   Kemudian sahkan ia telah didaftarkan: `dpkg -L nowly-host` sepatutnya menyenaraikan `/usr/lib/nowly-client/nowly-host`.
+
+2. **Manifest lama setiap pengguna mengatasi yang daripada .deb.** Jika anda sebelum ini memasang aplikasi desktop daripada arkib `.tar.gz` (skrip `install-linux.sh`) sebelum beralih kepada `.deb`, manifest yang tertinggal dalam direktori rumah anda mungkin masih menunjuk kepada binari lama. Buangnya:
+
+   ```bash
+   rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
+   rm -f ~/.config/*/NativeMessagingHosts/nowly.client.json
+   rm -f ~/.local/share/NowlyClient/nowly-host
+   ```
+
+   Kemudian mulakan semula pelayar sepenuhnya (bukan sekadar sambungan) supaya ia melancarkan semula proses natif dengan binari yang dikemas kini.
+
+## Salin Diagnostik Sokongan
+
+Diagnostik sambungan mengandungi butang **Salin sokongan**. Ia menyalin keadaan aplikasi desktop, Discord, presence dan aktiviti tanpa mendedahkan log teknikal.

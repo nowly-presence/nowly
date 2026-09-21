@@ -1,6 +1,7 @@
 import { assetsRoutes } from "@/features/assets/assets.routes"
 import { getAuth } from "@/features/auth/better-auth"
 import { campaignsRoutes } from "@/features/campaigns/campaigns.routes"
+import { contactRoutes } from "@/features/contact/contact.routes"
 import { deviceRoutes } from "@/features/device/device.routes"
 import { imageProxyRoutes } from "@/features/image-proxy/image-proxy.routes"
 import { insightsRoutes } from "@/features/insights/insights.routes"
@@ -50,7 +51,7 @@ server.setErrorHandler((error, _request, reply) => {
     return
   }
   server.log.error(error)
-  reply.status(500).send({ error: "Internal server error" })
+  reply.status(500).send({ error: "INTERNAL_SERVER_ERROR" })
 })
 
 // Scoped instance so this content-type parser override (needed because Better
@@ -73,6 +74,7 @@ await server.register(async (instance) => {
 
 await server.register(insightsRoutes, { prefix: "/insights" })
 await server.register(campaignsRoutes, { prefix: "/campaigns" })
+await server.register(contactRoutes, { prefix: "/contact" })
 await server.register(deviceRoutes, { prefix: "/devices" })
 await server.register(statusRoutes)
 await server.register(imageProxyRoutes)

@@ -1,0 +1,87 @@
+---
+title: Wczytywanie i testowanie lokalne
+description: Wczytaj zbudowaną obecność do rozszerzenia Nowly za pomocą gotowego pakietu deweloperskiego lub przeciągnięcia pliku zip.
+---
+
+Po `nowly build <slug>` nadal musisz umieścić ten pakiet w przeglądarce. Istnieją dwie lokalne metody wczytywania. Żadna z nich nie komunikuje się z API Nowly.
+
+## 1. Gotowe rozszerzenie (`nowly extension`)
+
+To zwykła ścieżka za pierwszym razem, zwłaszcza jeśli sklonowano tylko repozytorium `presences`. CLI pobiera gotowy build deweloperski Chrome (lub kopiuje lokalny), a następnie wbudowuje w niego Twoją skompilowaną obecność.
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+Możesz podać kilka slugów:
+
+```bash
+nowly extension youtube github figma
+```
+
+Następnie:
+
+1. Otwórz `chrome://extensions` i włącz **Tryb dewelopera**
+2. Kliknij **Załaduj rozpakowane** i wybierz `dist/extension-dev`
+3. Otwórz docelową stronę przy uruchomionym Discord Desktop i Nowly Host
+
+Obecność jest instalowana z `dev-presences.json` zaraz po uruchomieniu rozszerzenia. Po zmianie kodu: zbuduj ponownie, uruchom ponownie `nowly extension <slug>` i odśwież rozpakowane rozszerzenie.
+
+Aby użyć lokalnego builda rozszerzenia zamiast zipa z CDN:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+<CalloutInfo>
+`nowly extension` zapisuje rozpakowany folder. To odpowiednie narzędzie, gdy nie masz jeszcze wczytanego Nowly w przeglądarce.
+</CalloutInfo>
+
+### Pełne monorepo Nowly
+
+Jeśli sklonowano `nowly` (z `presences` jako submodułem), możesz wbudować każdą zbudowaną obecność do rozszerzenia:
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+Wczytaj `apps/extension/dist/chrome` jako rozpakowane. Odśwież po każdym przebudowaniu.
+
+## 2. Przeciągnięcie pliku zip (`nowly pack`)
+
+Użyj tego, gdy Nowly jest **już** wczytane jako **rozpakowany** build deweloperski. Instalacje ze sklepu Chrome Web Store odrzucają niepodpisane pliki zip. Przebudowujesz tylko obecność, nie całe rozszerzenie.
+
+```bash
+nowly pack youtube
+```
+
+To polecenie buduje obecność, a następnie pakuje `dist/presences/youtube/` do `dist/packs/youtube.zip`. Plik zip musi zawierać co najmniej `metadata.json` i `bundle.js`. Zagnieżdżone foldery są w porządku.
+
+Następnie w panelu bocznym:
+
+1. Otwórz **Ustawienia** → **Zaawansowane**
+2. Włącz **Tryb dewelopera** (zawsze włączony w rozpakowanych buildach)
+3. Rozwiń **Debugowanie**
+4. Upuść plik `.zip` (lub wskaż go w przeglądarce plików)
+
+Obecność instaluje się jako źródło **lokalne**. Czyszczenie przy starcie rozpakowanego builda jej nie usuwa. Niepodpisane pliki zip są akceptowane **tylko w rozpakowanym buildzie** (Załaduj rozpakowane). Przełącznik trybu dewelopera w Ustawieniach pokazuje tylko UI Debugowania; nie zezwala na instalację zip w buildzie sklepowym. Buildy sklepowe nadal wymagają podpisanego wydania z API.
+
+Po każdej zmianie kodu:
+
+```bash
+nowly pack youtube
+```
+
+Upuść nowy plik zip ponownie. Nie musisz odświeżać rozpakowanego rozszerzenia, chyba że zmieniono samo rozszerzenie.
+
+## Którą metodę wybrać
+
+| Sytuacja | Metoda |
+|---|---|
+| Pierwsza konfiguracja lub brak Nowly w przeglądarce | `nowly extension <slug>` |
+| Nowly już wczytane, iteracja nad jedną obecnością | `nowly pack <slug>`, a następnie upuść plik zip |
+| Pracujesz w pełnym monorepo `nowly` | `pnpm build:extension:dev` |
+
+Zobacz też [CLI](/publishing/cli#test-a-presence-locally).

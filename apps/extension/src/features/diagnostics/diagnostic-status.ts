@@ -1,27 +1,25 @@
-import type { NativeStatus } from "@/lib/messages";
-import type { CurrentActivity, InstalledPresences, UserScriptsStatus } from "@/shared/types";
+import type { CurrentActivity, InstalledPresences, NativeStatus, UserScriptsStatus } from "@/shared/types"
 
-export const YOUTUBE_PRESENCE_SLUG = "youtube";
-export const YOUTUBE_TEST_URL = "https://youtube.com";
+export const YOUTUBE_PRESENCE_SLUG = "youtube"
+export const YOUTUBE_TEST_URL = "https://youtube.com"
 
 export type DiagnosticSnapshot = {
-  extensionInstalled: boolean;
-  userScriptsActive: boolean;
-  hostDetected: boolean;
-  discordConnected: boolean;
-  presenceInstalled: boolean;
-  youtubePresenceInstalled: boolean;
-  activityDetected: boolean;
-  youtubeActivityDetected: boolean;
-  installedPresenceCount: number;
-  currentPresenceName?: string;
-};
+  extensionInstalled: boolean
+  userScriptsActive: boolean
+  hostDetected: boolean
+  discordConnected: boolean
+  presenceInstalled: boolean
+  youtubePresenceInstalled: boolean
+  activityDetected: boolean
+  youtubeActivityDetected: boolean
+  installedPresenceCount: number
+  currentPresenceName?: string
+}
 
-export const isHostDetected = (nativeStatus: NativeStatus): boolean =>
-  Boolean(nativeStatus.connected || nativeStatus.discordConnected);
+export const isHostDetected = (nativeStatus: NativeStatus): boolean => Boolean(nativeStatus.connected || nativeStatus.discordConnected)
 
 export const isHostChecking = (nativeStatus: NativeStatus): boolean =>
-  nativeStatus.status === "connecting" || nativeStatus.status === "unknown";
+  nativeStatus.status === "connecting" || nativeStatus.status === "unknown"
 
 export const buildDiagnosticSnapshot = ({
   activity,
@@ -29,15 +27,13 @@ export const buildDiagnosticSnapshot = ({
   presences,
   userScripts,
 }: {
-  activity: CurrentActivity | null;
-  nativeStatus: NativeStatus;
-  presences: InstalledPresences;
-  userScripts: UserScriptsStatus;
+  activity: CurrentActivity | null
+  nativeStatus: NativeStatus
+  presences: InstalledPresences
+  userScripts: UserScriptsStatus
 }): DiagnosticSnapshot => {
-  const installedPresences = Object.values(presences).filter((presence) => (
-    presence?.metadata?.slug && presence.metadata.name
-  ));
-  const currentPresence = activity ? presences[activity.slug] : undefined;
+  const installedPresences = Object.values(presences).filter((presence) => presence?.metadata?.slug && presence.metadata.name)
+  const currentPresence = activity ? presences[activity.slug] : undefined
 
   return {
     extensionInstalled: true,
@@ -50,5 +46,5 @@ export const buildDiagnosticSnapshot = ({
     youtubeActivityDetected: activity?.slug === YOUTUBE_PRESENCE_SLUG,
     installedPresenceCount: installedPresences.length,
     currentPresenceName: currentPresence?.metadata.name ?? activity?.slug,
-  };
-};
+  }
+}

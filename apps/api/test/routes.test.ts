@@ -30,7 +30,12 @@ const mockPresenceRepo = vi.hoisted(() => ({
   getLikeCount: vi.fn(),
 }))
 
+const mockDeviceService = vi.hoisted(() => ({
+  deviceExists: vi.fn().mockResolvedValue(true),
+}))
+
 vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo)
+vi.mock("@/features/device/device.service", () => mockDeviceService)
 
 const mockPresenceReport = vi.hoisted(() => ({
   submitPresenceReport: vi.fn(),
@@ -173,7 +178,7 @@ describe("Presence Routes", () => {
     const res = await app.inject({ method: "GET", url: "/presences/cinepulse" })
 
     expect(res.statusCode).toBe(404)
-    expect(JSON.parse(res.body)).toEqual({ error: "Presence not found" })
+    expect(JSON.parse(res.body)).toEqual({ error: "PRESENCE_NOT_FOUND" })
     expect(mockPresenceRepo.getPresenceMeta).not.toHaveBeenCalled()
   })
 
@@ -504,7 +509,7 @@ describe("Image Proxy Routes", () => {
     })
 
     expect(res.statusCode).toBe(400)
-    expect(JSON.parse(res.body)).toEqual({ error: "Invalid image URL" })
+    expect(JSON.parse(res.body)).toEqual({ error: "INVALID_IMAGE_URL" })
   })
 
   it("GET /image-proxy rejects unencoded nested query parameters", async () => {
@@ -515,8 +520,7 @@ describe("Image Proxy Routes", () => {
 
     expect(res.statusCode).toBe(400)
     expect(JSON.parse(res.body)).toEqual({
-      error: "Image URL must be encoded",
-      message: "Encode the full image URL with encodeURIComponent before passing it to the url parameter.",
+      error: "IMAGE_URL_NOT_ENCODED",
     })
   })
 
@@ -659,7 +663,7 @@ describe("Image Proxy Routes", () => {
     })
 
     expect(res.statusCode).toBe(404)
-    expect(JSON.parse(res.body)).toEqual({ error: "Image not found" })
+    expect(JSON.parse(res.body)).toEqual({ error: "IMAGE_NOT_FOUND" })
   })
 
   it("GET /image-proxy supports explicit service matching", async () => {
@@ -723,7 +727,7 @@ describe("Image Proxy Routes", () => {
     })
 
     expect(res.statusCode).toBe(400)
-    expect(JSON.parse(res.body)).toEqual({ error: "Invalid image URL" })
+    expect(JSON.parse(res.body)).toEqual({ error: "INVALID_IMAGE_URL" })
   })
 })
 

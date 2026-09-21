@@ -30,6 +30,10 @@ Typed environment access for the Nowly monorepo.
 | `API_SECRET_KEY` | Contextual | - |
 | `DEVICE_TOKEN_SECRET` | No | - |
 | `OPENAI_API_KEY` | No | - |
+| `DISCORD_WEBHOOK_REPORT_URL` | No | - |
+| `STATUS_CRON_SECRET` | No | - |
+| `STATUS_CHECK_INTERVAL_HOURS` | No | `1` |
+| `STATUS_SAMPLE_LIMIT` | No | `168` |
 
 ### client (Next.js web)
 
@@ -37,7 +41,8 @@ Typed environment access for the Nowly monorepo.
 | --- | --- | --- |
 | `PRESENCE_API_URL` | No | `https://api.nowly.me` |
 | `NEXT_PUBLIC_API_BASE_URL` | No | `https://api.nowly.me` |
-| `NEXT_PUBLIC_BASE_URL` | No | `http://localhost:3000` |
+| `NEXT_PUBLIC_BASE_URL` | No | `https://nowly.me` |
+| `NEXT_PUBLIC_DOCS_BASE_URL` | No | `https://docs.nowly.me` |
 | `NEXT_PUBLIC_EXTENSION_ID` | No | `kmnlnfldimgneaopdihplkebobckcjpf` |
 | `NEXT_PUBLIC_ADSENSE_ENABLED` | No | `false` |
 | `NEXT_PUBLIC_ADSENSE_CLIENT_ID` | No | - |
@@ -51,6 +56,7 @@ Typed environment access for the Nowly monorepo.
 | `VITE_WEB_BASE_URL` | No | `https://nowly.me` |
 | `VITE_API_BASE_URL` | No | `https://api.nowly.me` |
 | `VITE_CDN_BASE_URL` | No | - |
+| `VITE_CHROMEOS_WAITLIST_CAMPAIGN_ID` | No | - |
 
 ### cli (internal-cli)
 
@@ -66,17 +72,9 @@ Typed environment access for the Nowly monorepo.
 | `CLOUDFLARE_API_TOKEN` | No | - |
 | `CLOUDFLARE_ZONE_ID` | No | - |
 
-## Additional variables
+## Status check endpoint
 
-These are read directly from `process.env` (not validated by `@nowly/env`):
-
-| Variable | Default | Description |
-| --- | --- | --- |
-| `STATUS_CRON_SECRET` | - | Secret for the status check cron endpoint |
-| `STATUS_CHECK_INTERVAL_HOURS` | `1` | Interval in hours between status checks |
-| `STATUS_SAMPLE_LIMIT` | `168` | Number of status samples to keep |
-
-Status check endpoint:
+`STATUS_CRON_SECRET` (server export, see above) protects this endpoint:
 
 ```bash
 curl -fsS -H "Authorization: Bearer $STATUS_CRON_SECRET" https://api.nowly.me/status/check

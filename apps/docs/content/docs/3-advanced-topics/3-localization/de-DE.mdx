@@ -1,0 +1,38 @@
+---
+title: Lokalisierung
+description: Lokalisiere Presence-Metadaten, Funktionen, Einstellungen und Strings.
+---
+
+## Unterstützte Sprachen
+
+<LanguageTable
+  languages={[
+    { language: "Englisch", code: "en-US", default: true },
+    { language: "Französisch", code: "fr-FR" },
+    { language: "Spanisch", code: "es-ES" },
+  ]}
+/>
+
+## Metadaten lokalisieren
+
+```json filename="metadata.json"
+{
+  "description": {
+    "en-US": "Watch and share videos.",
+    "fr-FR": "Regardez et partagez des vidéos.",
+    "es-ES": "Mira y comparte videos."
+  }
+}
+```
+
+## Einstellungen lokalisieren
+
+Die Beschriftungen und Beschreibungen der Einstellungen verwenden dasselbe Sprachformat.
+
+## Runtime-Strings
+
+Discord-Aktivitätstexte verwenden optionale [Presence-Sprachpakete](/advanced-topics/presence-language-packs), die getrennt von der Lokalisierung von Metadaten und Einstellungen sind.
+
+## Halte Texte kurz
+
+Discord-Aktivitätsfelder sind kompakt. Halte lokalisierte Strings kurz und vermeide lange Absätze in der Laufzeitaktivität.

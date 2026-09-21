@@ -1,1 +1,1 @@
-import "@/background/index";
+import "@/background/index"

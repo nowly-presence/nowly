@@ -1,0 +1,36 @@
+---
+title: iFrames
+description: Kendalikan data aktiviti yang berada di dalam bingkai terbenam.
+---
+
+<CalloutWarning>
+Skrip presence iFrame **belum dilaksanakan** dalam runtime sambungan Nowly. `presence.on("iFrameData")` diketepikan dalam jenis SDK, tetapi sambungan tidak menyuntik ke dalam bingkai bersarang atau memancarkan peristiwa tersebut. Lebih suka membaca halaman peringkat atas (DOM, `<audio>` / `<video>`, keadaan halaman awam) sehingga ciri ini dilancarkan.
+</CalloutWarning>
+
+## Bila iFrame Penting
+
+Sesetengah laman web menjadikan pemain media atau keadaan penting di dalam iframe. Skrip presence biasa mungkin tidak dapat membaca segala sesuatu daripada halaman peringkat atas.
+
+Sehingga sokongan iframe wujud, langkau laman yang hanya mendedahkan aktiviti di dalam bingkai asal silang (cross-origin), atau dokumentasikan had tersebut dalam penerangan presence.
+
+## API Dirancang
+
+Presence API mengetepikan peristiwa `iFrameData` untuk komunikasi peringkat bingkai pada masa hadapan:
+
+```ts filename="presence.ts"
+presence.on("iFrameData", async (...args) => {
+  presence.info("Received iframe data")
+})
+```
+
+Jangan harap pada pendengar ini dalam presence produksi buat masa ini.
+
+## Pendekatan Disyorkan
+
+Gunakan pengendalian iframe hanya apabila halaman utama tidak dapat mengakses keadaan yang diperlukan.
+
+Utamakan pemilih DOM yang stabil, elemen media, dan keadaan halaman awam sebelum menambah logik iframe.
+
+## Keselamatan
+
+Elakkan mengumpul data peribadi atau sensitif daripada bingkai. Presence hanya perlu menghantar maklumat aktiviti yang berguna untuk Discord Rich Presence.

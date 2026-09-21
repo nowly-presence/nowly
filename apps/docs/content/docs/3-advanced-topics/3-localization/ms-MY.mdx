@@ -1,0 +1,38 @@
+---
+title: Penyetempatan
+description: Lokalizasikan metadata presence, ciri, tetapan dan rentetan.
+---
+
+## Locale Disokong
+
+<LanguageTable
+  languages={[
+    { language: "Inggeris", code: "en-US", default: true },
+    { language: "Perancis", code: "fr-FR" },
+    { language: "Sepanyol", code: "es-ES" },
+  ]}
+/>
+
+## Penyetempatan Metadata
+
+```json filename="metadata.json"
+{
+  "description": {
+    "en-US": "Watch and share videos.",
+    "fr-FR": "Regardez et partagez des vidéos.",
+    "es-ES": "Mira y comparte videos."
+  }
+}
+```
+
+## Penyetempatan Tetapan
+
+Label dan penerangan tetapan menggunakan format locale yang sama.
+
+## Rentetan Runtime
+
+Teks aktiviti Discord menggunakan [pepakej bahasa presence](/advanced-topics/presence-language-packs) pilihan, yang berasingan daripada penyetempatan metadata dan tetapan.
+
+## Kekalkan Teks Pendek
+
+Medan aktiviti Discord adalah padat. Kekalkan rentetan tempatan ringkas dan elakkan perenggan panjang dalam aktiviti runtime.

@@ -1,0 +1,84 @@
+---
+title: Sorun Giderme
+description: Eksik masaüstü uygulaması, kapalı Discord Desktop, eksik presence'lar, algılanmayan etkinlik, desteklenmeyen URL'ler ve izin sorunlarını çözün.
+---
+
+## Tanılama ile Başlayın
+
+Uzantının yan panelini açın ve her satırı ayrı ayrı okuyun:
+
+- Uzantı kuruldu
+- Kullanıcı komut dosyaları etkin
+- Masaüstü uygulaması algılandı
+- Discord bağlandı
+- Presence kuruldu
+- Etkinlik algılandı
+
+Tek bir genel duruma güvenmeyin. Eksik satır, düzeltilmesi gereken bir sonraki şeydir.
+
+## Masaüstü Uygulaması Algılanmıyor
+
+Gösterilen mesaj: **Masaüstü uygulaması algılanmadı.**
+
+Masaüstü uygulamasını [masaüstü uygulaması sayfasından](https://nowly.me/desktop) kurun, ardından uzantıda **Bağlantıyı kontrol et**'e tıklayın. Yeni kurduysanız uzantının yan panelini kapatıp yeniden açın.
+
+## Discord Desktop Kapalı
+
+Gösterilen mesaj: **Masaüstü uygulaması kurulu ama Discord Desktop açık değil.**
+
+Discord Desktop'ı açın, birkaç saniye bekleyin, ardından **Bağlantıyı kontrol et**'e tıklayın. Tarayıcıdaki Discord, yerel Rich Presence güncellemelerini alamaz.
+
+## Hiçbir Presence Kurulu Değil
+
+Kitaplıktan bir presence kurun. En hızlı test için [YouTube presence'ını](/library/youtube) kurun, ardından YouTube'u açın.
+
+## Hiçbir Etkinlik Algılanmıyor
+
+Şunlardan emin olun:
+
+- eşleşen presence kurulu ve etkin
+- geçerli URL o presence tarafından destekleniyor
+- kullanıcı komut dosyaları etkin
+- presence'ı kurduktan sonra sayfa yeniden yüklendi
+
+## URL Desteklenmiyor
+
+Presence ayrıntı sayfasını açın ve geçerli URL'nizi **Desteklenen URL'ler** listesiyle karşılaştırın. Site adresini veya düzenini değiştirdiyse, presence'ı destek sayfasından bildirin.
+
+## İzinler Eksik
+
+Tarayıcınızın uzantı ayarlarını açın ve şunları kontrol edin:
+
+- Nowly etkin
+- kullanıcı komut dosyalarına izin verildi
+- geçerli site için site erişimine izin verildi
+
+İzinleri değiştirdikten sonra web sitesi sekmesini yeniden yükleyin ve uzantının yan panelini yeniden açın.
+
+## Linux: .deb Kurulduktan Sonra "Güncelleme Mevcut"
+
+Gösterilen mesaj: `.deb` paketi yeni kurulmuş olsa bile **güncelleme mevcut**.
+
+İki yaygın neden, bunları sırayla kontrol edin:
+
+1. **`.deb` aslında hiç kurulmamış.** Bazı masaüstü ortamlarında (örneğin Thunar ile XFCE), grafiksel bir paket yöneticisi (GDebi gibi) ilişkilendirilmemişse bir `.deb` dosyasına çift tıklamak hiçbir şey yapmaz. Bunun yerine bir terminalden kurun:
+
+   ```bash
+   sudo dpkg -i ~/Downloads/nowly-host.deb
+   ```
+
+   Ardından kayıtlı olduğunu doğrulayın: `dpkg -L nowly-host`, `/usr/lib/nowly-client/nowly-host` yolunu listelemelidir.
+
+2. **Eski, kullanıcı başına bir manifest, .deb'den geleni geçersiz kılıyor.** `.deb`'e geçmeden önce masaüstü uygulamasını `.tar.gz` arşivinden (`install-linux.sh` betiği) kurduysanız, ev dizininizde kalan bir manifest hâlâ eski ikili dosyayı gösteriyor olabilir. Kaldırın:
+
+   ```bash
+   rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
+   rm -f ~/.config/*/NativeMessagingHosts/nowly.client.json
+   rm -f ~/.local/share/NowlyClient/nowly-host
+   ```
+
+   Ardından tarayıcıyı (yalnızca uzantıyı değil) tamamen yeniden başlatın, böylece güncellenmiş ikili dosyayla yerel süreci yeniden başlatır.
+
+## Destek Tanılaması Kopyalama
+
+Uzantı tanılaması bir **Destek bilgisini kopyala** düğmesi içerir. Teknik günlükleri ifşa etmeden masaüstü uygulaması, Discord, presence'lar ve etkinliğin durumunu kopyalar.

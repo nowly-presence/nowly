@@ -1,182 +1,110 @@
 import react from "@vitejs/plugin-react"
 import "dotenv/config"
-import { fetchBrandIcons } from "./fetch-brand-icons"
-import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs"
-import { dirname, join, resolve } from "path"
-import { fileURLToPath } from "url"
+import { cpSync, existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from "fs"
+import { join } from "path"
 import { build } from "vite"
+import { copyPresenceAssets, generateBundledPresences, resetBundledPresences } from "./bundle-presences"
+import { alias, buildDefine, ROOT } from "./config"
+import type { Browser, Channel } from "./config"
+import { fetchBrandIcons } from "./fetch-brand-icons"
+import { generateManifest } from "./generate-manifest"
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const ROOT = join(__dirname, "..")
+const args = process.argv.slice(2)
+const browser = (args.find((a) => !a.startsWith("--")) ?? "chrome") as Browser
+const channel: Channel = args.includes("--canary") ? "canary" : "stable"
+const watch = args.includes("--watch")
 
-const BROWSER = (process.argv[2] ?? "chrome") as "chrome" | "firefox"
-const DIST = join(ROOT, "dist", BROWSER)
-
-const webBaseUrl = process.env.VITE_WEB_BASE_URL ?? "https://nowly.me"
-const apiBaseUrl = process.env.VITE_API_BASE_URL ?? "https://api.nowly.me"
-const cdnBaseUrl = process.env.VITE_CDN_BASE_URL ?? "https://cdn.nowly.me"
-const chromeosWaitlistCampaignId = process.env.VITE_CHROMEOS_WAITLIST_CAMPAIGN_ID ?? ""
-
-const define = {
-  "import.meta.env.VITE_WEB_BASE_URL": JSON.stringify(webBaseUrl),
-  "import.meta.env.VITE_API_BASE_URL": JSON.stringify(apiBaseUrl),
-  "import.meta.env.VITE_CDN_BASE_URL": JSON.stringify(cdnBaseUrl),
-  "import.meta.env.VITE_CHROMEOS_WAITLIST_CAMPAIGN_ID": JSON.stringify(chromeosWaitlistCampaignId),
-  "import.meta.env.VITE_NOWLY_CHANNEL": JSON.stringify("stable"),
-  "import.meta.env.BROWSER": JSON.stringify(BROWSER),
+if (browser !== "chrome" && browser !== "firefox") {
+  throw new Error(`Unknown browser "${browser}". Use chrome or firefox.`)
 }
 
-rmSync(DIST, { recursive: true, force: true })
-mkdirSync(DIST, { recursive: true })
+const DIST = join(ROOT, "dist", browser)
+const define = buildDefine(browser, channel)
 
-const buildPage = async (name: string, source = name) => {
-  await build({
+const buildPage = (name: string, source = name) =>
+  build({
     root: join(ROOT, "src", source),
     base: "./",
     plugins: [react()],
     define,
-    resolve: {
-      alias: {
-        "@": resolve(ROOT, "src"),
-        "@messages": resolve(ROOT, "messages"),
-      },
-    },
+    resolve: { alias },
     build: {
       outDir: join(DIST, name),
       emptyOutDir: true,
       rollupOptions: { input: join(ROOT, "src", source, "index.html") },
+      watch: watch ? {} : null,
+      // Loaded from local disk by the browser, not over the network - the
+      // default 500kB budget targets page-load perf, which doesn't apply here.
+      chunkSizeWarningLimit: 1000,
     },
     configFile: false,
   })
-}
 
-const buildScript = async (name: string, entry: string) => {
-  await build({
+const buildScript = (name: string, entry: string) =>
+  build({
     root: ROOT,
     define,
-    resolve: {
-      alias: {
-        "@": resolve(ROOT, "src"),
-        "@messages": resolve(ROOT, "messages"),
-      },
-    },
+    resolve: { alias },
     build: {
       outDir: DIST,
       emptyOutDir: false,
-      lib: {
-        entry,
-        formats: ["iife"] as const,
-        name: `__presences_${name}`,
-        fileName: () => `${name}.js`,
-      },
-      rollupOptions: {
-        external: [],
-      },
+      lib: { entry, formats: ["iife"] as const, name: `__nowly_${name}`, fileName: () => `${name}.js` },
+      watch: watch ? {} : null,
     },
     configFile: false,
   })
-}
 
-const copyManifest = () => {
-  const manifest = JSON.parse(readFileSync(join(ROOT, "manifest.json"), "utf-8"))
-
-  // Common mutations for all browsers
-  manifest.content_scripts[0].js = ["content.js"]
-  manifest.icons = {
-    16: "icons/icon16.png",
-    48: "icons/icon48.png",
-    128: "icons/icon128.png",
+// Canary channel renames the extension in-place so it can be installed
+// side-by-side with the stable build during local/dogfood testing.
+const applyCanaryLocales = (localesDir: string): void => {
+  const names: Record<string, { commandOpenPanel: string; contextMenuPage: string }> = {
+    en: { commandOpenPanel: "Open Nowly Canary", contextMenuPage: "Nowly Canary presence for this page" },
+    fr: { commandOpenPanel: "Ouvrir Nowly Canary", contextMenuPage: "Présence Nowly Canary pour cette page" },
+    es: { commandOpenPanel: "Abrir Nowly Canary", contextMenuPage: "Presencia Nowly Canary para esta página" },
   }
-  manifest.action.default_icon = { ...manifest.icons }
-  delete manifest.key
-
-  if (BROWSER === "firefox") {
-    manifest.background = { scripts: ["background.js"] }
-    delete manifest.minimum_chrome_version
-    // userScripts is an optional-only permission on Firefox - declare it in optional_permissions
-    // and request it at runtime (Firefox 136+ MV3 userScripts API).
-    manifest.permissions = manifest.permissions
-      .filter((p: string) => p !== "userScripts" && p !== "sidePanel")
-    manifest.optional_permissions = [...(manifest.optional_permissions ?? []), "userScripts"]
-    delete manifest.side_panel
-    delete manifest.action.default_popup
-    manifest.sidebar_action = {
-      default_icon: manifest.icons,
-      default_panel: "sidepanel/index.html",
-      default_title: "__MSG_extensionName__",
+  for (const locale of readdirSync(localesDir, { withFileTypes: true })) {
+    if (!locale.isDirectory()) continue
+    const messagesPath = join(localesDir, locale.name, "messages.json")
+    if (!existsSync(messagesPath)) continue
+    const messages = JSON.parse(readFileSync(messagesPath, "utf-8")) as Record<string, { message?: string }>
+    messages.extensionName = { message: "Nowly Canary" }
+    const localized = names[locale.name]
+    if (localized) {
+      messages.commandOpenPanel = { message: localized.commandOpenPanel }
+      messages.contextMenuPage = { message: localized.contextMenuPage }
     }
-    if (manifest.commands?.["open-side-panel"]) {
-      manifest.commands._execute_sidebar_action = {
-        suggested_key: manifest.commands["open-side-panel"].suggested_key,
-        description: manifest.commands["open-side-panel"].description,
-      }
-      delete manifest.commands["open-side-panel"]
-    }
-    if (manifest.commands?._execute_action) {
-      delete manifest.commands._execute_action
-    }
-    manifest.browser_specific_settings = {
-      gecko: {
-        id: "nowly@nowly.me",
-        // data_collection_permissions needs Firefox 140+ (desktop).
-        strict_min_version: "140.0",
-        // Required by AMO - declare data collection practices.
-        // "none" = nothing collected/transmitted. Update if that changes.
-        data_collection_permissions: { required: ["none"] },
-      },
-      gecko_android: {
-        // data_collection_permissions needs Firefox for Android 142+.
-        strict_min_version: "142.0",
-      },
-    }
-  } else {
-    manifest.background.service_worker = "background.js"
-    delete manifest.background.type
-    delete manifest.action.default_popup
-    manifest.side_panel.default_path = "sidepanel/index.html"
+    writeFileSync(messagesPath, `${JSON.stringify(messages, null, 2)}\n`)
   }
-
-  writeFileSync(join(DIST, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`)
-}
-
-const resetGeneratedPresences = () => {
-  const generatedDir = join(ROOT, "src", "generated")
-  const placeholderFile = join(generatedDir, "bundled-presences.ts")
-  mkdirSync(generatedDir, { recursive: true })
-  writeFileSync(placeholderFile, [
-    '// Auto-generated by build.ts - store builds must not include bundled presences',
-    'import type { PresenceRelease } from "@/shared/types"',
-    '',
-    'export interface BundledPresence {',
-    '  slug: string',
-    '  release: PresenceRelease',
-    '}',
-    '',
-    'export const BUNDLED_PRESENCES: BundledPresence[] = []',
-    '',
-    'export const BUNDLED_PRESENCE_SLUGS: string[] = []',
-    '',
-  ].join("\n"))
-  writeFileSync(join(generatedDir, "bundled-presence-slugs.ts"), [
-    '// Auto-generated by build.ts - store builds must not include bundled presences',
-    'export const BUNDLED_PRESENCE_SLUGS: string[] = []',
-    '',
-  ].join("\n"))
 }
 
 const copyStatic = async () => {
   cpSync(join(ROOT, "_locales"), join(DIST, "_locales"), { recursive: true })
+  if (channel === "canary") applyCanaryLocales(join(DIST, "_locales"))
   try {
-    await fetchBrandIcons(join(DIST, "icons"))
+    await fetchBrandIcons(join(DIST, "icons"), channel === "canary" ? "canary" : "stable")
   } catch (error) {
     console.warn("  ⚠ Could not fetch brand icons from CDN - load the unpacked build anyway.", error)
   }
 }
 
-resetGeneratedPresences()
+const run = async (): Promise<void> => {
+  rmSync(DIST, { recursive: true, force: true })
 
-await buildPage("sidepanel", "entrypoints/sidepanel")
-await buildScript("background", join(ROOT, "src", "entrypoints", "background", "index.ts"))
-await buildScript("content", join(ROOT, "src", "entrypoints", "content", "index.ts"))
-copyManifest()
-await copyStatic()
+  if (channel === "canary") generateBundledPresences()
+  else resetBundledPresences()
+
+  const { version } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf-8")) as { version: string }
+  generateManifest(browser, channel, version, DIST)
+  await copyStatic()
+  if (channel === "canary") copyPresenceAssets(DIST)
+
+  await Promise.all([
+    buildPage("sidepanel", "entrypoints/sidepanel"),
+    buildScript("background", join(ROOT, "src", "entrypoints", "background", "index.ts")),
+    buildScript("content", join(ROOT, "src", "entrypoints", "content", "index.ts")),
+  ])
+
+  console.log(watch ? `  ✔ Watching ${browser} (${channel}) - reload the unpacked extension after each rebuild` : `  ✔ Built ${browser} (${channel})`)
+}
+
+await run()

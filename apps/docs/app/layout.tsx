@@ -7,28 +7,32 @@ import { isSeoPreview } from "@/lib/constants";
 import { OG_IMAGE_VERSION } from "@/lib/seo";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren, ReactElement } from "react";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: {
-    default: "Nowly Docs",
-    template: "%s | Nowly",
-  },
-  description: "Install Nowly, build presences, and publish Discord Rich Presence integrations.",
-  metadataBase: new URL("https://docs.nowly.me"),
-  robots: isSeoPreview
-    ? { index: false, follow: false, nocache: true }
-    : { index: true, follow: true },
-  manifest: "/manifest.json",
-  icons: {
-    ...BRAND_METADATA_ICONS,
-    shortcut: BRAND_FAVICON_32,
-  },
-  openGraph: {
-    images: [{ url: `/api/og/docs?mode=dark&v=${OG_IMAGE_VERSION}`, width: 1200, height: 630, alt: "Nowly Docs" }],
-  },
+export const generateMetadata = async (): Promise<Metadata> => {
+  const t = await getTranslations("docsMetadata");
+  return {
+    title: {
+      default: t("title"),
+      template: `%s | ${t("title")}`,
+    },
+    description: t("description"),
+    metadataBase: new URL("https://docs.nowly.me"),
+    robots: isSeoPreview
+      ? { index: false, follow: false, nocache: true }
+      : { index: true, follow: true },
+    manifest: "/manifest.json",
+    icons: {
+      ...BRAND_METADATA_ICONS,
+      shortcut: BRAND_FAVICON_32,
+    },
+    openGraph: {
+      images: [{ url: `/api/og/docs?mode=dark&v=${OG_IMAGE_VERSION}`, width: 1200, height: 630, alt: t("title") }],
+    },
+  };
 };
 
 export const viewport: Viewport = {

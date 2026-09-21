@@ -1,0 +1,52 @@
+---
+title: Pré-requisitos
+description: Configure seu ambiente local para desenvolver presenças - clone o repositório de presenças e instale a CLI.
+---
+
+## Requisitos
+
+- **Node.js 22+** - necessário para rodar a CLI e compilar presenças
+- **pnpm** - o repositório de presenças usa workspaces do pnpm
+- **Discord Desktop** - para testar sua presença com o Nowly Host
+- **Git** - para clonar o repositório de presenças
+
+## Clone o repositório de presenças
+
+Todas as presenças da comunidade ficam no repositório [nowly-presence/presences](https://github.com/nowly-presence/presences).
+
+```bash
+git clone https://github.com/nowly-presence/presences.git
+cd presences
+```
+
+## Instale a CLI Globalmente
+
+A CLI do Nowly permite criar, validar e compilar presenças.
+
+```bash
+pnpm i -g @nowly/cli
+```
+
+> No Node 24+, talvez seja necessário usar `--config.minimumReleaseAge=0` se o pacote tiver sido publicado recentemente.
+
+## Instale as Dependências
+
+O repositório de presenças usa workspaces do pnpm. Instalar as dependências também vincula o pacote `@nowly/sdk` para verificação de tipos.
+
+```bash
+pnpm install
+```
+
+## Verifique a Configuração
+
+Execute a CLI para confirmar que tudo funciona:
+
+```bash
+nowly --help
+```
+
+Você deve ver uma lista de comandos disponíveis (`init`, `build`, `pack`, `extension`, `validate` etc.).
+
+## Próximo Passo
+
+Seu ambiente está pronto. Acesse [Criando sua primeira presença](/presence-development/creating-your-first-presence) para criar sua primeira presença.

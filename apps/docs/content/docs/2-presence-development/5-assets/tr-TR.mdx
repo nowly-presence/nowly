@@ -1,0 +1,53 @@
+---
+title: Varlıklar
+description: Nowly presence'ları için logo, simge ve küçük resim varlıklarını hazırlayın.
+---
+
+## Gerekli Varlıklar
+
+Her presence şunları içermelidir:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "Daha geniş yerleşimler, başlıklar ve Open Graph görselleri için platform marka işareti.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Küçük UI yüzeylerinde ve Discord etkinlik görsellerinde kullanılan kompakt kare simge.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Platformu açıkça temsil eden pazar yeri ve ayrıntı sayfası görseli.", required: true }
+  ]}
+/>
+
+Bu tam boyutlar, her presence PR'sinde CI tarafından zorunlu kılınır - yanlış boyuttaki bir varlık doğrulamada başarısız olur.
+
+## Logo
+
+Daha geniş bir görsel uygunsa, platform marka işareti için `logo.png` kullanın. Tam olarak **300×300** olmalıdır.
+
+## Simge
+
+Kompakt kare görünümler, renkli arka planlar ve Discord etkinlik görselleri için `icon.png` kullanın. Tam olarak **128×128** olmalıdır.
+
+## Küçük Resim
+
+Pazar yeri ve ayrıntı sayfası görselleri için `thumbnail.jpg` kullanın. Platformu açıkça temsil etmelidir. Tam olarak **1920×1080** olmalıdır.
+
+## Çalışma Zamanı Varlık Sabitleri
+
+`Assets`, runtime tarafından sağlanır (bkz. [Presence API](/presence-development/presence-api)). Üç varsayılan varlık anahtarını sunar:
+
+```ts filename="presence.ts"
+Assets.Logo      // → "logo.png"
+Assets.Icon      // → "icon.png"
+Assets.Thumbnail // → "thumbnail.jpg"
+```
+
+Bunları etkinlik yüklerinde kullanın:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  largeImageKey: Assets.Logo,
+  largeImageText: "YouTube",
+})
+```
+
+## Kalite Yönergeleri
+
+`icon.png` için şeffaf bir PNG kullanın - simge, Nowly kitaplığında renkli bir arka plan üzerinde görüntülenir, bu yüzden dolu bir arka plan çakışacaktır. Şeffaf bir `logo.png` tercih edilir ama daha az kritiktir. Küçük resimleri küçük boyutlarda okunaklı tutun ve genel görsellerden kaçının.

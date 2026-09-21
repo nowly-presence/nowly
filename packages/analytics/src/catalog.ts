@@ -156,13 +156,6 @@ export const analyticsRegistry = [
     retentionDays: 90,
   }),
   new Analytics({
-    key: "native_heartbeat_ok",
-    label: "Native heartbeat OK",
-    description: "Native client heartbeat succeeded.",
-    group: "native",
-    dimensions: [],
-  }),
-  new Analytics({
     key: "native_heartbeat_failed",
     label: "Native heartbeat failed",
     description: "Native client heartbeat failed.",

@@ -1,0 +1,58 @@
+---
+title: Ustawienia
+description: Dodaj typowane ustawienia dla poszczególnych obecności z kontrolkami boolean, input, select i slider.
+---
+
+## Czym są ustawienia
+
+Ustawienia pozwalają użytkownikom dostosować działanie obecności bez edytowania kodu.
+
+## Obsługiwane typy ustawień
+
+Nowly obsługuje ustawienia typu boolean, input, select i slider.
+
+<TypeTable
+  properties={[
+    { name: "boolean", type: "boolean", description: "Przełącznik dla opcji włączonych/wyłączonych." },
+    { name: "input", type: "string", description: "Dowolna wartość tekstowa." },
+    { name: "select", type: "string", description: "Jedna wartość wybrana spośród predefiniowanych opcji." },
+    { name: "slider", type: "number", description: "Wartość liczbowa z opcjonalnym min, max i krokiem." }
+  ]}
+/>
+
+## Definiowanie ustawień
+
+Użyj [`Presence.Settings`](/presence-development/presence-api), aby zdefiniować typowane ustawienia:
+
+```ts filename="presence.ts"
+const settings = Presence.Settings({
+  showButtons: {
+    type: "boolean",
+    default: true,
+    label: {
+      "en-US": "Show buttons"
+    }
+  }
+})
+```
+
+## Odczytywanie ustawień
+
+Użyj `getSetting` w czasie wykonywania. Wartości pochodzą z zapisanych ustawień użytkownika, z powrotem do wartości domyślnych z `Presence.Settings`. Zmiany na żywo z panelu bocznego docierają jako `SETTINGS_UPDATED` i aktualizują tę samą mapę.
+
+Możesz też odczytać bieżącą mapę z `ctx.settings` w `UpdateData`:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async (ctx) => {
+  const showButtons = await presence.getSetting<boolean>("showButtons")
+  // ta sama wartość: ctx.settings.showButtons
+})
+```
+
+## Zlokalizowane etykiety
+
+Etykiety i opisy ustawień używają tych samych kluczy locale, co metadane.
+
+## Wartości domyślne
+
+Wybieraj bezpieczne wartości domyślne. Obecność powinna działać od razu po instalacji, bez konieczności konfiguracji.

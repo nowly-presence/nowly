@@ -1,0 +1,116 @@
+---
+title: CLI
+description: Nowly CLIを使って、プレゼンスをローカルで作成、ビルド、検証、テストします。
+---
+
+Nowly CLIはnpmで `@nowly/cli` として公開されています。グローバルにインストールします:
+```bash
+pnpm i -g @nowly/cli
+```
+
+## 対話モード
+
+引数なしでCLIを実行すると、対話メニューが開きます:
+
+```bash
+nowly
+```
+
+## プレゼンスを作成する
+
+```bash
+nowly init "Netflix"
+```
+
+対話プロンプトは、ユーザーがアカウントを連携した場合にDiscordがすでにそのプラットフォームに対応しているかどうかを尋ねます。それが `metadata.json` の `discordNative` に書き込まれます。直接指定することもできます:
+
+```bash
+nowly init "Spotify" --discord-native
+```
+
+## プレゼンスをビルドする
+
+すべてのプレゼンスをビルド:
+
+```bash
+nowly build
+```
+
+個別のプレゼンスをビルド:
+
+```bash
+nowly build youtube
+```
+
+ファイルの変更時に再ビルドします(`pack` を使用する場合は、再ビルドごとにパッケージ化されていない拡張機能を再読み込みするか、zipをドロップし直します):
+
+```bash
+nowly build youtube --watch
+nowly pack youtube --watch
+```
+
+## プレゼンスをローカルでテストする
+
+Nowly APIなしでビルド済みプレゼンスを読み込むには、2つの方法があります。完全な手順は[ローカルでの読み込みとテスト](/presence-development/load-and-test)を参照してください。
+
+### ビルド済み拡張機能
+
+`presences` リポジトリのみをクローンした場合(コントリビューターの一般的なケース)、`nowly extension` を使用して、完全な `nowly` モノレポなしでそのまま読み込める開発ビルドを取得します:
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+最新の開発版拡張機能ビルドがCDNからダウンロードされ、指定したプレゼンスがバンドルされ、`dev-presences.json` ファイルが書き込まれます。その後:
+
+1. `chrome://extensions` を開き、**デベロッパーモード**を有効にします
+2. **パッケージ化されていないものを読み込み** → 生成された `dist/extension-dev` フォルダを選択します
+3. プレゼンスが自動的にインストールされます - APIサーバーも、インストールページも、カスタムAPI URLも必要ありません
+
+プレゼンスを編集したら、再ビルドして `nowly extension <slug>` を再実行し、拡張機能を再読み込みします。
+
+CDN版の代わりに特定のローカル拡張機能ビルドを使用するには、`--from` を渡します:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+### zipドロップ
+
+Nowlyがすでに**パッケージ化されていない**開発ビルドとして読み込まれている場合は、プレゼンスをパッケージ化してデバッグパネルにドロップします:
+
+```bash
+nowly pack youtube
+```
+
+zipは `dist/packs/youtube.zip` に書き込まれます。**設定 → 高度な設定 → デバッグ**にドロップしてください。署名なしのzipはパッケージ化されていないビルドでのみ機能し、Chrome Web Storeからのインストールでは機能しません。デバッグUIはデベロッパーモードでのみ表示されます。
+
+### 完全なモノレポがある場合
+
+`nowly` 自体をクローンした場合(`presences` をサブモジュールとして含む)、すべてのプレゼンスを組み込んだ拡張機能を直接ビルドできます:
+
+```bash
+pnpm build:extension:dev
+```
+
+変更のたびに、変更したプレゼンスを再ビルドしてから拡張機能を再ビルドします:
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+`chrome://extensions` で再読み込みします - プレゼンスはすでにインストール済みで、すぐに使用できます。
+
+## プレゼンスを一覧表示する
+
+```bash
+nowly list
+```
+
+## メタデータを検証する
+
+```bash
+nowly validate
+```

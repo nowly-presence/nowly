@@ -1,6 +1,14 @@
 import { SUPPORTED_LOCALES, type LocaleString as Locale } from "@nowly/locales";
 import { getRequestConfig } from "next-intl/server";
 import { cookies, headers } from "next/headers";
+import englishMessages from "../messages/en-US.json";
+
+const withEnglishFallback = (messages: Record<string, unknown>): Record<string, unknown> => ({
+  ...englishMessages,
+  ...messages,
+  docsUi: { ...englishMessages.docsUi, ...(messages.docsUi as Record<string, unknown> | undefined) },
+  docsMetadata: { ...englishMessages.docsMetadata, ...(messages.docsMetadata as Record<string, unknown> | undefined) },
+});
 
 const parseAcceptLanguage = (acceptLanguage: string | null): Locale | null => {
   if (!acceptLanguage) return null;
@@ -38,7 +46,7 @@ export default getRequestConfig(async () => {
   if (validCookie) {
     return {
       locale: validCookie,
-      messages: (await import(`../messages/${validCookie}.json`)).default,
+      messages: withEnglishFallback((await import(`../messages/${validCookie}.json`)).default),
     };
   }
 
@@ -50,6 +58,6 @@ export default getRequestConfig(async () => {
 
   return {
     locale,
-    messages: (await import(`../messages/${locale}.json`)).default,
+    messages: withEnglishFallback((await import(`../messages/${locale}.json`)).default),
   };
 });

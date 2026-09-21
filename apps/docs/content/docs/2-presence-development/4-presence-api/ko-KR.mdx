@@ -1,0 +1,77 @@
+---
+title: Presence API
+description: 웹사이트 연동에서 Discord Rich Presence를 업데이트하려면 Nowly Presence API를 사용하세요.
+---
+
+## 프레즌스 생성하기
+
+`Presence`는 Nowly 런타임에서 주입하는 **전역** 객체이므로 가져올 필요가 없습니다.
+
+모든 프레즌스는 `Presence` 인스턴스로 시작합니다.
+
+```ts filename="presence.ts"
+const presence = new Presence()
+```
+
+## UpdateData 이벤트
+
+활동을 새로 고치려면 `UpdateData`를 사용하세요.
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: "Watching a video",
+  })
+})
+```
+
+## setActivity
+
+`setActivity`는 현재 Discord 활동을 전송합니다. 일반적인 필드는 다음과 같습니다.
+
+<TypeTable
+  properties={[
+    { name: "details", type: "string", description: "Discord에 표시되는 주요 활동 줄." },
+    { name: "state", type: "string", description: "details 아래에 표시되는 보조 활동 줄." },
+    { name: "startTimestamp", type: "number", description: "경과된 활동 진행 상황을 나타내는 Unix 타임스탬프." },
+    { name: "endTimestamp", type: "number", description: "남은 활동 진행 상황을 나타내는 Unix 타임스탬프." },
+    { name: "largeImageKey", type: "string", description: "주 이미지 에셋 키, 일반적으로 Assets.Logo 또는 Assets.Thumbnail(런타임이 제공하는 전역 변수)." },
+    { name: "largeImageText", type: "string", description: "큰 이미지의 툴팁." },
+    { name: "smallImageKey", type: "string", description: "선택적인 작은 이미지 에셋 키." },
+    { name: "smallImageText", type: "string", description: "작은 이미지의 툴팁." },
+    { name: "type", type: "number", description: "PresenceType에서 가져온 Discord 활동 유형." },
+    { name: "buttons", type: "array", description: "선택적인 Discord 활동 버튼." }
+  ]}
+/>
+
+## clearActivity
+
+표시할 만한 것이 없을 때는 `clearActivity`를 호출하세요.
+
+```ts filename="presence.ts"
+presence.clearActivity()
+```
+
+## PresenceType
+
+`PresenceType`은 `@nowly/sdk`의 이름 있는 내보내기입니다.
+
+```ts filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+```
+
+이는 `Playing`, `Streaming`, `Listening`, `Watching`, `Competing`과 같은 Discord 활동 유형에 매핑됩니다.
+
+## getSetting
+
+`Presence.Settings` 이후 타입이 지정된 프레즌스별 설정을 읽습니다. 값은 사용자가 저장한 설정이거나 정의의 기본값입니다.
+
+```ts filename="presence.ts"
+const showButtons = await presence.getSetting<boolean>("showButtons")
+```
+
+`UpdateData`도 동일한 맵을 가진 `ctx.settings`를 받습니다. 사용자가 사이드 패널에서 설정을 변경하면 둘 다 업데이트됩니다.
+
+## 로깅
+
+개발 중 디버그 메시지에는 `presence.info`와 `presence.error`를 사용하세요.

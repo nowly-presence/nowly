@@ -1,12 +1,14 @@
-import { registerCommandHandlers } from "@/background/services/commands";
-import { registerAlarmHandlers } from "@/background/services/alarms";
-import { initializeBackground, registerLifecycleHandlers } from "@/background/services/lifecycle";
-import { registerRuntimeMessageRouter } from "@/background/services/message-router";
-import { registerPresenceRuntimeBridge } from "@/background/runtime/presence-runtime-bridge";
+import { buildHandlerRegistry } from "@/background/router/handlers"
+import { registerHandlers, registerRouter } from "@/background/router/router"
+import { registerPresenceRuntimeBridge } from "@/background/runtime/presence-runtime-bridge"
+import { registerAlarmHandlers } from "@/background/services/alarms"
+import { registerCommandHandlers } from "@/background/services/commands"
+import { initializeBackground, registerLifecycleHandlers } from "@/background/services/lifecycle"
 
-registerRuntimeMessageRouter();
-registerPresenceRuntimeBridge();
-registerLifecycleHandlers();
-registerAlarmHandlers();
-registerCommandHandlers();
-initializeBackground();
+registerHandlers(buildHandlerRegistry())
+registerRouter()
+registerPresenceRuntimeBridge()
+registerLifecycleHandlers()
+registerAlarmHandlers()
+registerCommandHandlers()
+initializeBackground()

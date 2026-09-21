@@ -1,0 +1,63 @@
+{
+  "navbar": {
+    "docs": "Dokumentacja",
+    "library": "Biblioteka",
+    "open-menu": "Otwórz menu"
+  },
+  "store": {
+    "download-chrome": "Pobierz dla Chrome",
+    "download-firefox": "Pobierz dla Firefox"
+  },
+  "theme": {
+    "toggle": "Przełącz motyw",
+    "light": "Jasny",
+    "dark": "Ciemny"
+  },
+  "footer": {
+    "tagline": "Pokaż, co robisz.",
+    "copyright": "© 2026 Nowly. Wszelkie prawa zastrzeżone.",
+    "trademark": "Discord jest zastrzeżonym znakiem towarowym <inc>Discord Inc.</inc>",
+    "language-label": "Język",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português (Brasil)",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "Produkt",
+    "home": "Strona główna",
+    "library": "Biblioteka",
+    "host": "Aplikacja desktopowa",
+    "resources": "Zasoby",
+    "docs": "Dokumentacja",
+    "changelog": "Informacje o wersji",
+    "canary": "Canary",
+    "support": "Wsparcie",
+    "community": "Społeczność",
+    "discord": "Discord",
+    "github": "GitHub",
+    "tos": "Warunki korzystania",
+    "privacy": "Prywatność",
+    "cookies": "Pliki cookie",
+    "legal-notice": "Nota prawna"
+  },
+  "cookie-banner": {
+    "message": "Ta strona używa wyłącznie niezbędnego pliku cookie językowego. Jeśli w przyszłości zostaną włączone reklamy, Google może również wykorzystywać technologie reklamowe.",
+    "learn-more": "Dowiedz się więcej",
+    "dismiss": "Rozumiem"
+  },
+  "docs": {
+    "documentation": "Dokumentacja",
+    "on-this-page": "Na tej stronie",
+    "toc": "Spis treści",
+    "open-table-of-contents": "Otwórz spis treści",
+    "previous": "Poprzedni",
+    "next": "Następny",
+    "menu": "Menu"
+  }
+}

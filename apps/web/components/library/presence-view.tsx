@@ -13,7 +13,7 @@ import {
   relatedPresences,
   type LibraryPresence,
 } from "@/lib/library-catalog";
-import type { PresenceVersionNote } from "@/lib/presence-api";
+import type { PresenceStats, PresenceVersionNote } from "@/lib/presence-api";
 import { RiArrowLeftLine, RiCheckboxCircleLine, RiInformationLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
@@ -22,9 +22,10 @@ type PresenceViewProps = {
   catalog: LibraryPresence[]
   locale: string
   versions: PresenceVersionNote[]
+  stats: PresenceStats
 };
 
-export const PresenceView = async ({ presence, catalog, locale, versions }: PresenceViewProps) => {
+export const PresenceView = async ({ presence, catalog, locale, versions, stats }: PresenceViewProps) => {
   const t = await getTranslations("presencePage");
   const library = await getTranslations("libraryPage");
   const description = localizedDescription(presence, locale);
@@ -69,6 +70,7 @@ export const PresenceView = async ({ presence, catalog, locale, versions }: Pres
                   slug={presence.slug}
                   name={presence.name}
                   version={presence.version}
+                  likeCount={stats.likes}
                 />
             {about && about !== description ? (
                   <div className="mt-8 border-t border-foreground/8 pt-8">
@@ -81,7 +83,7 @@ export const PresenceView = async ({ presence, catalog, locale, versions }: Pres
           </div>
 
           <div className="flex flex-col gap-4">
-            <PresenceInfo presence={presence} commit={currentVersion?.commit ?? null} changelog={currentNote} />
+            <PresenceInfo presence={presence} commit={currentVersion?.commit ?? null} changelog={currentNote} stats={stats} />
             {features.length > 0 ? (
               <Card size="sm">
                 <CardContent>

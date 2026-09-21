@@ -3,7 +3,7 @@ import { LocaleSelector } from "@/components/layout/locale-selector";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Separator } from "@nowly/ui";
 
-import { DISCORD_INVITE_URL, DISCORD_SITE_URL, PROJECT_REPOSITORY_URL } from "@/lib/constants";
+import { DISCORD_INVITE_URL, DISCORD_SITE_URL, PROJECT_REPOSITORY_URL, TWITTER_URL } from "@/lib/constants";
 import { docsHref } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
@@ -36,7 +36,7 @@ export const Footer = async () => {
       links: [
         { href: DISCORD_INVITE_URL, label: t("discord"), external: true },
         { href: PROJECT_REPOSITORY_URL, label: t("github"), external: true },
-        // { href: TWITTER_URL, label: t("twitter"), external: true },
+        { href: TWITTER_URL, label: t("twitter"), external: true },
       ],
     },
   ];

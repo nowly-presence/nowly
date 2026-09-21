@@ -1,0 +1,77 @@
+---
+title: Presence API
+description: Nowly Presence APIを使って、ウェブサイト連携からDiscord Rich Presenceを更新します。
+---
+
+## プレゼンスの作成
+
+`Presence` はNowlyランタイムによって注入される**グローバル**オブジェクトです。インポートする必要はありません。
+
+すべてのプレゼンスは `Presence` インスタンスから始まります。
+
+```ts filename="presence.ts"
+const presence = new Presence()
+```
+
+## UpdateDataイベント
+
+アクティビティを更新するには `UpdateData` を使用します。
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: "Watching a video",
+  })
+})
+```
+
+## setActivity
+
+`setActivity` は現在のDiscordアクティビティを送信します。主なフィールドは以下のとおりです。
+
+<TypeTable
+  properties={[
+    { name: "details", type: "string", description: "Discordに表示される主要なアクティビティ行。" },
+    { name: "state", type: "string", description: "detailsの下に表示される補助的なアクティビティ行。" },
+    { name: "startTimestamp", type: "number", description: "経過したアクティビティの進行状況を示すUnixタイムスタンプ。" },
+    { name: "endTimestamp", type: "number", description: "残りのアクティビティの進行状況を示すUnixタイムスタンプ。" },
+    { name: "largeImageKey", type: "string", description: "メイン画像アセットのキー。通常はAssets.LogoまたはAssets.Thumbnail(ランタイムが提供するグローバル変数)。" },
+    { name: "largeImageText", type: "string", description: "大きい画像のツールチップ。" },
+    { name: "smallImageKey", type: "string", description: "任意の小さい画像アセットのキー。" },
+    { name: "smallImageText", type: "string", description: "小さい画像のツールチップ。" },
+    { name: "type", type: "number", description: "PresenceTypeによるDiscordアクティビティの種類。" },
+    { name: "buttons", type: "array", description: "任意のDiscordアクティビティボタン。" }
+  ]}
+/>
+
+## clearActivity
+
+表示する価値のあるものがない場合は `clearActivity` を呼び出します。
+
+```ts filename="presence.ts"
+presence.clearActivity()
+```
+
+## PresenceType
+
+`PresenceType` は `@nowly/sdk` からの名前付きエクスポートです。
+
+```ts filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+```
+
+これはDiscordのアクティビティタイプ(`Playing`、`Streaming`、`Listening`、`Watching`、`Competing`)に対応します。
+
+## getSetting
+
+`Presence.Settings` に基づいた、型付けされたプレゼンス個別の設定を読み取ります。値はユーザーが保存した設定、または定義のデフォルト値です。
+
+```ts filename="presence.ts"
+const showButtons = await presence.getSetting<boolean>("showButtons")
+```
+
+`UpdateData` も同じマップを持つ `ctx.settings` を受け取ります。ユーザーがサイドパネルで設定を変更すると、両方とも更新されます。
+
+## ロギング
+
+開発中のデバッグメッセージには `presence.info` と `presence.error` を使用してください。

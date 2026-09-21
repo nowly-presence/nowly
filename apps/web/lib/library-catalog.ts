@@ -75,11 +75,10 @@ export const localizedLongDescription = (
 export const localizedFeatures = (
   presence: LibraryPresence,
   locale: string,
-): string[] => {
-  const features = presence.features[locale as keyof LocalizedList];
-  if (features.length > 0) return features;
-  return presence.features["en-US"];
-};
+): string[] =>
+  presence.features[locale as keyof LocalizedList] ??
+  presence.features["en-US"] ??
+  [];
 
 export const presenceSearchText = (presence: LibraryPresence): string =>
   [

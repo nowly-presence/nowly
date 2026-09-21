@@ -12,7 +12,7 @@ export const campaignsRoutes = async (fastify: FastifyInstance) => {
 
   fastify.post<{ Body: { name?: string } }>("/", { preHandler: requireAdmin }, async (request, reply) => {
     const name = request.body?.name?.trim()
-    if (!name) return reply.status(400).send({ error: "name is required" })
+    if (!name) return reply.status(400).send({ error: "NAME_REQUIRED" })
     return createCampaign(name)
   })
 
@@ -29,9 +29,9 @@ export const campaignsRoutes = async (fastify: FastifyInstance) => {
     { config: { rateLimit: { max: 5, timeWindow: "1 minute" } } },
     async (request, reply) => {
       const email = request.body?.email
-      if (!email) return reply.status(400).send({ error: "email is required" })
+      if (!email) return reply.status(400).send({ error: "EMAIL_REQUIRED" })
       const result = await recordSignup(request.params.id, email)
-      if (!result.ok) return reply.status(400).send({ error: "Invalid email or campaign" })
+      if (!result.ok) return reply.status(400).send({ error: "INVALID_EMAIL_OR_CAMPAIGN" })
       return result
     },
   )

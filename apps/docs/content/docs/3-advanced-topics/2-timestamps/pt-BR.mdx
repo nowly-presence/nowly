@@ -1,0 +1,34 @@
+---
+title: Timestamps
+description: Exiba o progresso de reprodução no Discord Rich Presence usando timestamps de mídia.
+---
+
+## Por que timestamps são importantes
+
+Timestamps fazem a atividade do Discord parecer ao vivo. Eles mostram há quanto tempo o usuário está assistindo ou quanto tempo resta.
+
+## Usando createMediaTimestamps
+
+`document` é a API DOM do navegador (disponível porque as presenças rodam como content scripts). `Assets` é fornecido pelo runtime (veja [Assets](/presence-development/assets)).
+
+```ts filename="presence.ts"
+import { createMediaTimestamps } from "@nowly/sdk"
+
+const video = document.querySelector("video")
+
+if (video) {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    ...createMediaTimestamps(video),
+  })
+}
+```
+
+## Mídia pausada
+
+Quando a mídia está pausada, `createMediaTimestamps` não retorna timestamps. Isso evita exibir um progresso de reprodução incorreto.
+
+## Transmissões ao vivo
+
+Transmissões ao vivo geralmente não têm duração fixa. Use apenas um timestamp de início ou omita os timestamps dependendo do comportamento da plataforma.

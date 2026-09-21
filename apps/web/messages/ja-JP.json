@@ -1,0 +1,978 @@
+{
+  "metadata": {
+    "title": "Nowly | あなたの「今」をリアルタイムで共有",
+    "description": "Nowlyは、あなたが見ている、聴いている、プレイしているものを、リッチでライブなDiscordプレゼンスに変えます。",
+    "keywords": [
+      "Discord Rich Presence",
+      "Discordアクティビティ",
+      "Nowly",
+      "ブラウザ拡張機能",
+      "YouTube Discord",
+      "Spotify Discord",
+      "Netflix Discord"
+    ]
+  },
+  "navbar": {
+    "docs": "ドキュメント",
+    "library": "ライブラリ",
+    "open-menu": "メニューを開く"
+  },
+  "theme": {
+    "toggle": "カラーテーマを切り替え",
+    "light": "ライト",
+    "dark": "ダーク"
+  },
+  "hero": {
+    "title-before": "あなたの「今」を",
+    "title-accent": "リアルタイム",
+    "description": "NowlyはあなたのアクティビティをリッチでダイナミックなDiscordプレゼンスに変えます。",
+    "install": "Nowlyをインストール",
+    "library": "ライブラリを見る",
+    "cards": {
+      "netflix": {
+        "app-label": "Netflixを視聴中",
+        "title": "ペーパー・ハウス",
+        "subtitle": "S1 E1. エピソード1",
+        "elapsed": "00:44",
+        "duration": "48:40",
+        "cta": "エピソードを見る"
+      },
+      "prime": {
+        "app-label": "Prime Videoを視聴中",
+        "title": "リーチャー",
+        "subtitle": "S1 E1. マーグレイブへようこそ",
+        "elapsed": "15:13",
+        "duration": "40:32",
+        "cta": "エピソードを見る"
+      },
+      "figma": {
+        "app-label": "Figmaを使用中",
+        "title": "Figmaでデザイン中",
+        "subtitle": "Acme Corp",
+        "timer": "00:44"
+      },
+      "youtube": {
+        "app-label": "YouTubeを視聴中",
+        "title": "Grand Theft Auto VI: 拡張映像",
+        "subtitle": "Rockstar Games",
+        "elapsed": "14:10",
+        "duration": "26:48",
+        "cta": "動画を見る"
+      },
+      "twitch": {
+        "app-label": "Twitchを視聴中",
+        "title": "Speedrun Elden Ring - Any%",
+        "subtitle": "NoctaPlays • Elden Ring",
+        "timer": "01:42:18",
+        "cta": "ライブを見る"
+      },
+      "chatgpt": {
+        "app-label": "ChatGPTを使用中",
+        "title": "チャット中：日本旅行プラン",
+        "timer": "12:34",
+        "cta": "チャットを開く"
+      },
+      "notion": {
+        "app-label": "Notionを使用中",
+        "title": "ページを編集中",
+        "subtitle": "Q3ロードマップ",
+        "timer": "24:18"
+      },
+      "steam": {
+        "app-label": "Steamを使用中",
+        "title": "ゲームを閲覧中",
+        "subtitle": "Minecraft Legends",
+        "timer": "08:02",
+        "cta": "ストアページを見る"
+      },
+      "github": {
+        "app-label": "GitHubを使用中",
+        "title": "Pull Request #39を閲覧中",
+        "subtitle": "nowly-presence/presences",
+        "timer": "03:41",
+        "cta": "Pull Requestを見る"
+      }
+    }
+  },
+  "platforms": {
+    "eyebrow": "プラットフォーム",
+    "title": "お使いのプラットフォームに対応",
+    "description": "Nowlyは、すでに使っているサービスであなたが見ている、聴いている、プレイしているものを表示します。"
+  },
+  "steps": {
+    "eyebrow": "セットアップ",
+    "title": "3ステップで、Discordが追従します",
+    "description": "拡張機能がタブを読み取ります。デスクトップアプリがDiscordにステータスを送信します。",
+    "items": [
+      {
+        "title": "拡張機能",
+        "text": "NowlyをChromeまたはFirefoxに無料で追加。",
+        "action": "ダウンロード"
+      },
+      {
+        "title": "デスクトップアプリ",
+        "text": "Discordと通信するローカルブリッジをインストール。",
+        "action": "アプリを入手"
+      },
+      {
+        "title": "1つのプレゼンス",
+        "text": "ライブラリからYouTube、Netflix、Twitchなどを有効化。",
+        "action": "ライブラリを開く"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Nowlyを始めよう",
+    "description": "無料の拡張機能をインストール。数秒でセットアップ完了。",
+    "other-versions": "他のバージョンを見る"
+  },
+  "features": {
+    "eyebrow": "プロダクト",
+    "title": "生きているように感じるステータス",
+    "description": "ブラウザ拡張機能、デスクトップアプリ、署名済みスクリプトのライブラリ。",
+    "items": [
+      {
+        "title": "自動更新",
+        "description": "タイトル、アートワーク、タイムスタンプ、再生状態がページの変化に合わせて更新されます。"
+      },
+      {
+        "title": "必要なものだけインストール",
+        "description": "YouTube、Netflix、Twitchなど。ライブラリからワンクリックでプレゼンスを有効化。"
+      },
+      {
+        "title": "ページに余計なものは一切なし",
+        "description": "スクリプトはインストールしたサイトでのみ動作し、他では何も実行されません。"
+      },
+      {
+        "title": "署名済みスクリプト",
+        "description": "公式プレゼンスは実行前に検証され、ランタイムが管理下に置かれます。"
+      },
+      {
+        "title": "ChromeとFirefox",
+        "description": "ChromiumベースのブラウザとFirefoxで動作。ダウンロードボタンはお使いのブラウザに合わせて表示されます。"
+      },
+      {
+        "title": "デスクトップアプリ",
+        "description": "デスクトップアプリは、Discordが実際に受け入れるローカルブリッジです。Windows、macOS、Linuxに対応。"
+      }
+    ]
+  },
+  "privacy-section": {
+    "eyebrow": "プライバシー",
+    "title": "あなたのアクティビティは商品ではありません",
+    "description": "見ているものはあなたのPCに留まり、nowly.meには送られません。",
+    "items": [
+      {
+        "title": "私たちのサーバーを経由しません",
+        "description": "拡張機能、デスクトップアプリ、そしてDiscord。タイトル、プラットフォーム、再生状況はあなたのPCから外に出ません。"
+      },
+      {
+        "title": "有効にしない限りアナリティクスなし",
+        "description": "有効にした場合も、Nowlyの改善のみに使われます。いつでもオフにできます。"
+      },
+      {
+        "title": "インストールしたサイトのみ",
+        "description": "プレゼンスはインストールして初めて動作します。削除すれば、Nowlyはそのサイトに一切関与しなくなります。"
+      }
+    ],
+    "cta": "プライバシーポリシーを読む"
+  },
+  "faq": {
+    "eyebrow": "よくある質問",
+    "title": "すぐわかる質問と回答",
+    "description": "インストール、データ、Discordに関する要点。詳細はドキュメントとDiscordで。",
+    "docs": "ドキュメントを開く",
+    "discord": "Discordに参加",
+    "items": [
+      {
+        "question": "Nowlyとは何ですか？",
+        "answer": "Nowlyは、あなたが見ている、聴いている、プレイしているものをDiscord Rich Presenceとして表示します。ブラウザ拡張機能、デスクトップアプリ、プラットフォームスクリプトのライブラリで構成されています。"
+      },
+      {
+        "question": "自分のアクティビティは御社のサーバーを経由しますか？",
+        "answer": "いいえ。アクティビティはローカルに留まり、あなたのマシンからDiscordに送信されます。アナリティクスは任意でデフォルトではオフです。"
+      },
+      {
+        "question": "どのプラットフォームに対応していますか？",
+        "answer": "最新のリストはライブラリにあります。拡張機能を更新せずに新しいプレゼンスを追加できるため、実際に使うものをインストールしてください。"
+      }
+    ]
+  },
+  "open-source": {
+    "eyebrow": "オープンソース",
+    "title": "プレゼンスを追加",
+    "description": "プレゼンススクリプトは公開されています。フォークして、書いて、PRを開いてください。CLIとドキュメントで十分始められます。",
+    "docs": "ドキュメントを読む",
+    "file": "presence.ts"
+  },
+  "store": {
+    "download-chrome": "Chrome版をダウンロード",
+    "download-firefox": "Firefox版をダウンロード"
+  },
+  "footer": {
+    "tagline": "あなたの「今」を共有。",
+    "copyright": "© 2026 Nowly. All rights reserved.",
+    "trademark": "Discordは<inc>Discord Inc.</inc>の登録商標です。",
+    "language-label": "言語",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "プロダクト",
+    "home": "ホーム",
+    "library": "ライブラリ",
+    "host": "デスクトップアプリ",
+    "resources": "リソース",
+    "docs": "ドキュメント",
+    "changelog": "リリースノート",
+    "canary": "Canary",
+    "support": "サポート",
+    "status": "ステータス",
+    "branding": "ブランディング",
+    "community": "コミュニティ",
+    "discord": "Discord",
+    "github": "GitHub",
+    "twitter": "X / Twitter",
+    "tos": "利用規約",
+    "privacy": "プライバシー",
+    "consent": "あなたのデータ",
+    "cookies": "Cookie",
+    "legal-notice": "法的表示"
+  },
+  "libraryPage": {
+    "eyebrow": "ライブラリ",
+    "title": "すべてのプレゼンスを1か所に",
+    "description": "NowlyがDiscordで共有できるプラットフォームを見てみましょう。検索、絞り込み、表示したいものを選べます。",
+    "search": "Netflix、Spotify、Figmaなどを検索...",
+    "search-label": "ライブラリを検索",
+    "clear-search": "検索をクリア",
+    "all": "すべて",
+    "count": "{count, plural, other {#件のプレゼンス}}",
+    "empty-title": "該当なし",
+    "empty-description": "別の名前を試すか、フィルターをリセットしてください。",
+    "clear": "リセット",
+    "previous": "前へ",
+    "next": "次へ",
+    "pagination": "ページネーション",
+    "page-status": "{total}ページ中{page}ページ目",
+    "go-to-page": "{page}ページ目へ移動",
+    "categories": {
+      "streaming": "ストリーミング",
+      "music": "音楽",
+      "video": "動画",
+      "gaming": "ゲーム",
+      "social": "ソーシャル",
+      "ai": "AI",
+      "tools": "ツール",
+      "learning": "学習",
+      "other": "その他"
+    }
+  },
+  "authorPage": {
+    "badge": "作者",
+    "back": "ライブラリに戻る",
+    "description": "{count, plural, other {#件のプレゼンス}}",
+    "meta-description": "{name}によるNowlyのプレゼンス。",
+    "view-in-library": "ライブラリで見る"
+  },
+  "presencePage": {
+    "back": "ライブラリに戻る",
+    "cta": "Nowlyを入手",
+    "about": "概要",
+    "features": "できること",
+    "contributors": "コントリビューター",
+    "author": "作者",
+    "contributor": "コントリビューター",
+    "supported-urls": "対応サイト",
+    "version": "バージョン",
+    "commit": "コミット {sha}",
+    "checking": "Nowlyを検索中",
+    "install": "インストール",
+    "installing": "インストール中...",
+    "installed": "インストール済み",
+    "update": "更新",
+    "uninstall": "削除",
+    "install-success": "{name}をインストールしました。",
+    "update-success": "{name}は最新です。",
+    "install-error": "{name}をインストールできませんでした。",
+    "install-origin": "Chrome Web Storeの拡張機能はnowly.meのみを受け付けます。localhostからインストールするには、パッケージ化されていないNowlyビルドを読み込んでください。",
+    "install-queued": "Nowlyがカタログに接続できるようになったら{name}がインストールされます。",
+    "uninstall-success": "{name}を削除しました。",
+    "uninstall-error": "{name}を削除できませんでした。",
+    "uninstall-title": "プレゼンスを削除",
+    "uninstall-description": "{name}に設定データが含まれている場合、完全に失われます。",
+    "uninstall-confirm": "削除",
+    "uninstall-cancel": "キャンセル",
+    "ext-missing": "このプレゼンスを追加するには、Nowly拡張機能をインストールしてください。",
+    "mobile": "プレゼンスのインストールはデスクトップブラウザでのみ利用できます。",
+    "user-scripts": "ブラウザでNowlyのユーザースクリプトを許可し、このページを再読み込みしてください。",
+    "related-title": "こちらもおすすめ",
+    "report": "問題を報告",
+    "report-title": "問題を報告",
+    "report-description": "{name}の何が問題か教えてください。すべての報告に目を通しています。",
+    "report-label": "説明",
+    "report-placeholder": "何が起きましたか？どのページまたは操作が失敗しましたか？",
+    "report-count": "{count}/{max}",
+    "report-submit": "報告を送信",
+    "report-sending": "送信中...",
+    "report-cancel": "キャンセル",
+    "report-close": "閉じる",
+    "report-thanks-title": "ご報告ありがとうございます",
+    "report-thanks-description": "{name}についてのメモを受け取りました。ライブラリを良い状態に保つのに役立ちます。",
+    "report-error": "報告を送信できませんでした。しばらくしてから再試行してください。",
+    "discord-native-title": "すでにDiscordに対応",
+    "discord-native-description": "アカウントを連携すると、Discordは{name}を表示します。Nowlyはその連携なしで同じことを行います。",
+    "like": "いいね",
+    "unlike": "いいね解除",
+    "stats": "統計",
+    "stat-installs": "{count} 件インストール",
+    "stat-active": "{count} 人が利用中"
+  },
+  "desktopPage": {
+    "eyebrow": "デスクトップアプリ",
+    "title": "Discordへのローカルブリッジ",
+    "description": "拡張機能がタブを読み取ります。デスクトップアプリがあなたのステータスをDiscordに送信します。タイトル、プラットフォーム、再生状況はあなたのPCから外に出ません。",
+    "detected": "検出済み",
+    "chromeos-title": "ChromeOSはまだ対応していません",
+    "chromeos-description": "Discord Rich Presenceには、現在ChromeOSでは実行できないネイティブアプリが必要です。対応を検討中です。変更があった際に通知を受け取るには、メールアドレスをご登録ください。",
+    "chromeos-email-placeholder": "you@example.com",
+    "chromeos-submit": "通知を受け取る",
+    "chromeos-success": "ありがとうございます。お知らせします。",
+    "chromeos-error": "問題が発生しました。もう一度お試しください。",
+    "version": "バージョン {version}",
+    "card-title": "{platform}用をダウンロード",
+    "platforms": {
+      "windows": "Windows",
+      "macos": "macOS",
+      "linux": "Linux",
+      "chromeos": "ChromeOS"
+    },
+    "windows-installer": "Windowsインストーラー（.exe）",
+    "windows-portable": "ポータブルアーカイブ（.zip）",
+    "macos-dmg": "ディスクイメージ（.dmg）",
+    "macos-archive": "アーカイブ（.tar.gz）",
+    "linux-deb": "Debianパッケージ（.deb）",
+    "linux-archive": "アーカイブ（.tar.gz）",
+    "open-source": "オープンソース",
+    "lightweight": "軽量",
+    "unsigned-title": "未署名ビルド",
+    "unsigned-desc": "Windowsで SmartScreen の警告が表示される場合があります。このページからファイルをダウンロードした場合に限り、「詳細情報」を開き、「実行」を選んでください。",
+    "signed-title": "Appleによる公証済み",
+    "signed-desc": "macOSビルドは公証済みです。Gatekeeperはディスクイメージを許可するはずです。",
+    "linux-title": "Debian/Ubuntu: .debをインストール",
+    "linux-desc": "Debian、Ubuntu、Mintでは、上記の.debパッケージを使用してください。ターミナル不要で自動インストールされます。他のディストリビューションでは、アーカイブを展開してインストールスクリプトを実行してください：",
+    "trust-title": "できること",
+    "trust-items": [
+      {
+        "title": "あなたのマシンに留まります",
+        "text": "拡張機能はタブを確認します。デスクトップアプリはローカルでDiscordと通信します。nowly.meには何も送信されません。"
+      },
+      {
+        "title": "Discordの言語で話します",
+        "text": "Discordはこのローカルブリッジしか受け付けません。そのためブラウザ拡張機能だけでは不十分です。"
+      },
+      {
+        "title": "バックグラウンドで静かに動作",
+        "text": "小さく、監視するウィンドウもなく、ステータスの更新のためだけに動作します。"
+      }
+    ],
+    "guide-title": "インストール方法",
+    "guide-items": [
+      {
+        "title": "適切なファイルをダウンロード",
+        "text": "お使いのシステム用のインストーラーを使用してください。セットアップウィザードを実行したくない場合はポータブルアーカイブもあります。"
+      },
+      {
+        "title": "ダウンロードしたファイルを開く",
+        "text": "アプリを実行してセットアップに従ってください。Windowsでは、保護プロンプトが表示された場合はSmartScreenの注意事項をお読みください。"
+      },
+      {
+        "title": "プレゼンスをインストール",
+        "text": "ライブラリからYouTubeなどを追加し、拡張機能とデスクトップアプリが通信できているか確認してください。"
+      },
+      {
+        "title": "Discordを確認",
+        "text": "Discordデスクトップアプリを開いたまま、対応サイトを開き、ステータスが更新されるか確認してください。"
+      }
+    ],
+    "guide-library": "ライブラリを開く",
+    "req-title": "動作環境",
+    "req": {
+      "os": "OS",
+      "arch": "アーキテクチャ",
+      "discord": "Discord",
+      "browser": "ブラウザ",
+      "storage": "ストレージ",
+      "os-windows": "Windows 10 または Windows 11",
+      "os-macos": "macOS 11 Big Sur 以降",
+      "os-linux": "Linux 2.6.32+ / glibc 2.17+",
+      "arch-windows": "64ビット（x64）",
+      "arch-macos": "Intel x64 / Apple Silicon（ARM64）",
+      "arch-linux": "64ビット（x64）",
+      "discord-windows": "Discordデスクトップアプリがインストールされ実行中であること",
+      "discord-macos": "Discordデスクトップアプリがインストールされ実行中であること",
+      "discord-linux": "Discordデスクトップアプリがインストールされ実行中であること",
+      "browser-windows": "Chromiumブラウザ（Chrome、Edge、Brave、Opera）またはFirefox",
+      "browser-macos": "Chromiumブラウザ（Chrome、Edge、Brave、Opera）またはFirefox",
+      "browser-linux": "Chromiumブラウザ（Chrome、Edge、Brave、Opera）またはFirefox",
+      "storage-windows": "約4MB",
+      "storage-macos": "約4MB",
+      "storage-linux": "約2MB"
+    }
+  },
+  "extensionPage": {
+    "eyebrow": "ブラウザ拡張機能",
+    "title": "あなたのタブを読み取る拡張機能",
+    "description": "Nowlyはあなたが見ている、聴いている、プレイしているものを検出し、デスクトップアプリに送ってDiscordへ反映します。",
+    "detected": "検出済み",
+    "card-title": "{browser}に追加",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-description": {
+      "chrome": "Chrome Web Storeで入手可能。Edge、Brave、Operaでも動作します。",
+      "firefox": "addons.mozilla.orgで入手可能。"
+    },
+    "dev-version": "開発版を見る",
+    "trust-title": "できること",
+    "trust-items": [
+      {
+        "title": "インストールしたサイトのみ",
+        "text": "プレゼンスはライブラリからインストールされて初めて動作します。"
+      },
+      {
+        "title": "あなたのPCから外に出ません",
+        "text": "タイトルとアクティビティはデスクトップアプリに送られ、nowly.meには送られません。"
+      },
+      {
+        "title": "署名済みスクリプト",
+        "text": "公式プレゼンスは実行前に検証されます。"
+      }
+    ],
+    "guide-title": "インストール方法",
+    "guide-items": [
+      {
+        "title": "拡張機能を追加",
+        "text": "お使いのブラウザのストアからワンクリックで。"
+      },
+      {
+        "title": "デスクトップアプリをインストール",
+        "text": "Discordと通信するのはこちらです。"
+      },
+      {
+        "title": "プレゼンスを有効化",
+        "text": "ライブラリからYouTube、Netflix、Twitchなどを追加してください。"
+      }
+    ],
+    "guide-desktop": "デスクトップアプリを見る",
+    "guide-library": "ライブラリを開く"
+  },
+  "changelogPage": {
+    "eyebrow": "リリースノート",
+    "title": "変更内容",
+    "description": "最新のストアビルドから最初の公開バージョンまで、Nowlyの各リリース。",
+    "read": "ノートを読む",
+    "banner-alt": "Nowly {version} ウェブサイト",
+    "docs": "完全なノート",
+    "back": "すべてのリリース",
+    "library": "ライブラリ",
+    "update-eyebrow": "拡張機能のアップデート",
+    "update-title": "Nowly {version} をインストールしました",
+    "update-description": "このリリースでの変更点はこちらです。",
+    "meta-title": "Nowly {version}",
+    "missing": "このバージョンのノートはまだサイトに掲載されていません。ドキュメントで完全なチェンジログを確認できます。"
+  },
+  "canaryPage": {
+    "eyebrow": "Canary",
+    "title": "次のNowlyを試す",
+    "description": "Canaryはテスター向けに配布するパッケージ化されていないビルドです。ストアより高速に更新されますが、不具合が発生する可能性もあります。",
+    "detected": "検出済み",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "card-title": "{browser}用をダウンロード",
+    "card-description": {
+      "chrome": "Chromeはストアからこれをインストールできません。展開したフォルダを自分で読み込みます。",
+      "firefox": "Firefoxはaddons.mozilla.orgからこれをインストールできません。一時的なアドオンとして読み込みます。"
+    },
+    "download": "Nowly Canaryをダウンロード",
+    "stable": {
+      "chrome": "Chromeストア版を入手",
+      "firefox": "Firefoxアドオンを入手"
+    },
+    "store-note": {
+      "chrome": "日常使いにはストアビルドを維持してください。Canaryは別の拡張機能IDを使うため併存できます。",
+      "firefox": "日常使いにはアドオンを維持してください。一時的なCanaryはFirefoxの再起動時に削除されます。"
+    },
+    "notes-title": "インストール前に",
+    "notes": [
+      {
+        "title": "意図的に不安定です",
+        "text": "これらのzipは最新の拡張機能開発を追跡しています。機能はストア審査なしで追加、変更、削除される可能性があります。"
+      },
+      {
+        "title": "ストアからの自動更新なし",
+        "text": "ブラウザはCanaryを自動更新しません。新しいzipが公開されたら再度ダウンロードし、ビルドを再読み込みしてください。"
+      },
+      {
+        "title": "フォルダを保持してください",
+        "text": "パッケージ化されていない、または一時的な読み込みはディスク上のディレクトリを参照します。削除または移動すると、拡張機能は消えます。"
+      }
+    ],
+    "guide-title": {
+      "chrome": "Chromeで読み込む",
+      "firefox": "Firefoxで読み込む"
+    },
+    "guide": {
+      "chrome": [
+        {
+          "title": "ダウンロードして展開",
+          "text": "zipを保存し、クリーンアップ時に削除しないフォルダに展開してください。"
+        },
+        {
+          "title": "chrome://extensionsを開く",
+          "text": "このアドレスをタブバーに貼り付けます。右上でデベロッパーモードを有効にしてください。"
+        },
+        {
+          "title": "パッケージ化されていない拡張機能を読み込む",
+          "text": "zipではなく展開したフォルダを選択してください。リストにNowly Canaryが表示されるはずです。"
+        },
+        {
+          "title": "新しいzipの後に再読み込み",
+          "text": "フォルダの中身を新しいビルドに置き換え、拡張機能カードの「再読み込み」をクリックしてください。"
+        }
+      ],
+      "firefox": [
+        {
+          "title": "ダウンロードして展開",
+          "text": "Firefox用のzipを保存し、保持するフォルダに展開してください。"
+        },
+        {
+          "title": "about:debuggingを開く",
+          "text": "about:debugging#/runtime/this-firefoxをアドレスバーに貼り付けてください。"
+        },
+        {
+          "title": "一時的なアドオンを読み込む",
+          "text": "zipではなく展開したフォルダ内のmanifest.jsonを選択してください。"
+        },
+        {
+          "title": "再起動後に再度読み込む",
+          "text": "Firefoxは終了時に一時的なアドオンを削除します。新しいzipの後は、フォルダを置き換えてから再度読み込んでください。"
+        }
+      ]
+    }
+  },
+  "brandingPage": {
+    "eyebrow": "ブランディング",
+    "title": "ブランド素材",
+    "description": "Nowlyのロゴとブランドカラー。ロゴを変形、色変更、改変しないでください。",
+    "logo": "ロゴ",
+    "icon": "アイコン",
+    "colors": "カラー",
+    "download-svg": "SVG",
+    "download-png": "PNG",
+    "variants": {
+      "blue": "ブルー",
+      "dark": "ダーク（明るい背景用）",
+      "white": "ホワイト（暗い背景用）",
+      "canary": "Canary"
+    },
+    "swatches": {
+      "primary-light": "プライマリ（ライト）",
+      "primary-dark": "プライマリ（ダーク）",
+      "background-light": "背景（ライト）",
+      "background-dark": "背景（ダーク）",
+      "canary-accent": "Canaryアクセント",
+      "canary-ink": "Canaryインク"
+    }
+  },
+  "supportPage": {
+    "eyebrow": "サポート",
+    "contact": {
+      "title": "チームに連絡する",
+      "description": "非公開のメッセージを送信してください。メールで返信します。",
+      "required-note": "* の付いた項目は必須です。",
+      "name": "名前（任意）",
+      "name-placeholder": "お名前",
+      "email": "メールアドレス",
+      "email-placeholder": "you@example.com",
+      "subject": "件名",
+      "subject-placeholder": "どのようなご用件ですか？",
+      "message": "メッセージ",
+      "message-placeholder": "ご相談内容を入力してください...",
+      "submit": "メッセージを送信",
+      "sending": "送信中...",
+      "success": "メッセージを送信しました。",
+      "error": "メッセージを送信できませんでした。もう一度お試しください。"
+    },
+    "title": "お困りですか？",
+    "description": "問題に合ったチャンネルを選んでください。会話にはDiscordが最速です。GitHubは公開の記録を残します。",
+    "open": "開く",
+    "donate": "Nowlyは無料のままです。プロジェクトを応援したい方は<kofi>Ko-fi</kofi>または<sponsors>GitHub Sponsors</sponsors>をご利用ください。",
+    "sections": {
+      "community": "コミュニティ",
+      "presences": "プレゼンス",
+      "technical": "技術的"
+    },
+    "discord": {
+      "title": "Discordチケット",
+      "description": "Nowlyサーバーに参加し、チームと話すためのチケットを開いてください。"
+    },
+    "docs": {
+      "title": "トラブルシューティング",
+      "description": "デスクトップアプリ、Discord Desktop、アクティビティの欠落、権限に関する解決策。"
+    },
+    "broken": {
+      "title": "動作しないプレゼンス",
+      "description": "アクティビティを検出しなくなった、情報が誤っている、自動でクリアされてしまうプラットフォームを報告してください。"
+    },
+    "request": {
+      "title": "プレゼンスをリクエスト",
+      "description": "Nowlyライブラリに追加してほしい新しいプラットフォームを提案してください。"
+    },
+    "bug": {
+      "title": "バグを報告",
+      "description": "ウェブサイト、拡張機能、API、デスクトップアプリの問題を報告してください。"
+    },
+    "feature": {
+      "title": "改善を提案",
+      "description": "Nowlyの体験、設定、ツールに関するアイデアを共有してください。"
+    },
+    "other": {
+      "title": "その他のリクエスト",
+      "description": "内容がどのフォームにも当てはまらない場合は、空のissueを開いてください。"
+    }
+  },
+  "statusPage": {
+    "eyebrow": "ステータス",
+    "title": "Nowlyサービスステータス",
+    "description": "ウェブサイト、API、プレゼンスライブラリ、ホストダウンロードのライブステータス。",
+    "checked-history": "{time}にライブで確認",
+    "no-data": "データなし",
+    "history-label": "直近のサービス応答履歴",
+    "overall": {
+      "operational": "すべてのシステムが正常に稼働中",
+      "slow": "一部のサービスが通常より低速です",
+      "degraded": "一部のサービスが低下しています",
+      "down": "一部のサービスが利用できません",
+      "unknown": "まだステータスデータがありません"
+    },
+    "status-labels": {
+      "operational": "稼働中",
+      "slow": "低速",
+      "degraded": "低下",
+      "down": "停止",
+      "unknown": "データなし"
+    },
+    "services": {
+      "website": {
+        "title": "ウェブサイト"
+      },
+      "api": {
+        "title": "Nowly API"
+      },
+      "library": {
+        "title": "プレゼンスライブラリ"
+      },
+      "cdn": {
+        "title": "Nowly Hostダウンロード"
+      }
+    }
+  },
+  "pages": {
+    "library": {
+      "title": "ライブラリ",
+      "description": "NowlyがDiscordで共有できるプラットフォームを見てみましょう。"
+    },
+    "desktop": {
+      "title": "デスクトップアプリ",
+      "description": "アクティビティをDiscordに送信するためのデスクトップアプリをダウンロードしてください。"
+    },
+    "extension": {
+      "title": "ブラウザ拡張機能",
+      "description": "Nowly拡張機能をChromeまたはFirefoxに追加して、見ている、聴いている、プレイしているものを検出しましょう。"
+    },
+    "changelog": {
+      "title": "リリースノート",
+      "description": "Nowlyの変更内容を確認しましょう。"
+    },
+    "canary": {
+      "title": "Nowly Canary",
+      "description": "テスト用のパッケージ化されていないChromeまたはFirefoxビルドをダウンロード。"
+    },
+    "support": {
+      "title": "サポート",
+      "description": "Nowly、拡張機能、プレゼンスに関するヘルプを取得。"
+    },
+    "branding": {
+      "title": "ブランディング",
+      "description": "Nowlyのロゴとブランドカラー。"
+    },
+    "status": {
+      "title": "ステータス",
+      "description": "Nowlyのウェブサイト、API、プレゼンスライブラリ、ホストダウンロードのライブステータス。"
+    },
+    "uninstall": {
+      "title": "拡張機能を削除しました",
+      "description": "またお会いできることを願っています。何が問題だったか教えてください。Nowlyの改善に役立ちます。"
+    },
+    "consent": {
+      "title": "あなたのデータ",
+      "description": "任意のアナリティクス同意を管理し、お使いのデバイスに対してNowlyが保存しているデータを表示、エクスポート、削除できます。"
+    }
+  },
+  "not-found": {
+    "title": "ページが見つかりません",
+    "description": "このページは存在しないか、移動しました。",
+    "home": "ホームに戻る"
+  },
+  "cookie-banner": {
+    "message": "このサイトは必須の言語Cookieを使用しています。将来広告が有効化された場合、Googleが広告技術を使用する可能性もあります。",
+    "learn-more": "詳しく見る",
+    "dismiss": "了解しました"
+  },
+  "privacy-page": {
+    "badge": "プライバシー",
+    "title": "プライバシーポリシー",
+    "description": "Nowlyがあなたのデータをどう扱うか、何があなたのデバイスに留まるか、何があなたの同意に依存するか。",
+    "last-updated": "最終更新日：2026年9月17日。",
+    "intro": "本ポリシーは、データ管理者である<strong>{publisherName}</strong>（「当社」）が、Nowlyに関連して個人データをどのように処理するかを説明します。Rich Presenceのアクティビティは、あなたのブラウザから<strong>あなたのマシン上の</strong>Discordクライアントへ送信されます。当社のサーバーを経由することはありません。任意の利用統計や一部のウェブサイト機能については、以下で説明するとおり、当社のAPIまたは処理者が関与します。",
+    "sections": [
+      {
+        "title": "管理者",
+        "body": "管理者は<strong>{publisherName}</strong>（個人事業主、マイクロ企業）、SIREN {publisherSiren}、{publisherAddress}です。メール：<a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>。完全な情報は<a href=\"/legal-notice\">法的表示</a>に記載されています。データ保護責任者は任命されていません。"
+      },
+      {
+        "title": "Nowlyとは",
+        "body": "Nowlyには、<strong>ブラウザ拡張機能</strong>（ChromeおよびFirefox）、ローカルでDiscordと通信する<strong>デスクトップアプリ</strong>、<strong>ウェブサイト</strong>（nowly.me）、<strong>ドキュメント</strong>（<a href=\"https://docs.nowly.me\">docs.nowly.me</a>）、公開<strong>API</strong>、任意の<strong>Canary</strong>テストビルドが含まれます。拡張機能はブラウザ内で対応サイトを検出し、デスクトップアプリと共にローカルIPCチャネル経由でDiscord Rich Presenceを更新します。"
+      },
+      {
+        "title": "デバイス上で処理されるデータ（拡張機能）",
+        "body": "拡張機能はブラウザのローカルストレージAPI（Chromeの<code>chrome.storage.local</code>／Firefoxの同等機能）にデータを保存します。任意のアナリティクスを有効にするか、カスタムAPI URLを使用しない限り、データはそのデバイスに留まります：<ul><li>インストール済みのプレゼンス（メタデータ、署名済みバンドル、有効化状態）。</li><li>現在のアクティビティ（タイトル、プラットフォーム、再生時間、サムネイルURL）。</li><li>デバッグログ（タイムスタンプ、操作、対応サイトの訪問URL）。</li><li>オンボーディングの状態、および拡張機能のUI表示のみに使用される、ローカルのDiscordクライアントから取得したDiscordプロフィールの<strong>ローカルスナップショット</strong>（ID、ユーザー名、アバター）。</li><li>表示設定、ショートカット、プレゼンスごとの設定。</li><li>アナリティクスに参加した場合に使用される、ローカルで生成されたデバイス識別子（UUID）。</li></ul>拡張機能をリセットまたはアンインストールすることで、これらのデータを消去できます。"
+      },
+      {
+        "title": "ブラウザ拡張機能の権限",
+        "body": "拡張機能が動作するには特定の権限が必要です：<ul><li><strong>ウェブサイトへのアクセス</strong>（広範なホスト権限を含む）：軽量なコンテンツスクリプトが訪問先ページで実行され、Nowlyが対応プラットフォームを検出できるようにします。閲覧履歴を当社サーバーに送信するためには使用されません。</li><li><strong>User Scripts</strong>（Chromium）：プレゼンススクリプトは一致するサイトで実行されます。公式カタログのスクリプトは暗号的に署名され（ECDSA P-256）、実行前にローカルで検証されます。Canaryおよびサイドロードされたパッケージは、本番と同じ署名保証を持たない場合があるため、実験的なものとして扱ってください。</li></ul>"
+      },
+      {
+        "title": "デバイス上で処理されるデータ（デスクトップアプリ）",
+        "body": "デスクトップアプリは、NowlyClientのキャッシュディレクトリに<code>nowly-host.log</code>というローカルログを書き込む場合があります。例：<ul><li>Windows: <code>%LOCALAPPDATA%\\NowlyClient\\</code></li><li>macOS: <code>~/Library/Caches/NowlyClient/</code></li><li>Linux: <code>~/.cache/NowlyClient/</code></li></ul>このファイルには、Discordに送信されたタイムスタンプやアクティビティの詳細が含まれる場合があります。あなたのコンピュータに留まり、当社サーバーにアップロードされることはありません。いつでも削除できます。"
+      },
+      {
+        "title": "利用統計（オプトイン）",
+        "body": "アナリティクスは<strong>デフォルトでオフ</strong>です。オンボーディング中または後で拡張機能設定で有効にすると、当社のAPIは以下を受け取る場合があります：<ul><li>あなたのデバイスUUID（仮名：あなたのDiscordまたはGoogleアカウントではありませんが、あなたのインストールを識別できるため、GDPR上は個人データとして扱われます）。</li><li>ブラウザ、OS、言語、拡張機能のバージョン、デスクトップアプリのバージョン。</li><li>インストール済みプレゼンスのスラッグ／バージョン、および限定的なペイロードの利用イベント（インストール、ハートビート、評価など）。</li></ul>これはNowlyの改善と、プレゼンスの人気度の表示に使用します。この設定をオフにすると<strong>今後の収集は停止</strong>し、同意の撤回が記録されます。これ自体では、既に保存されたイベントは削除<strong>されません</strong>。サーバー側の記録の削除を希望する場合は、デバイスID（拡張機能内で確認可能）またはレコードを特定できる情報を添えて<a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>までメールしてください。"
+      },
+      {
+        "title": "Discord",
+        "body": "Nowlyは<strong>ローカルIPC</strong>を通じてDiscordのデスクトップ／ブラウザクライアントと通信します。一般的なRich Presenceのフィールドには、プラットフォーム名、タイトル、チャンネルまたは作者、再生／一時停止の状態、タイムスタンプが含まれます。あなたのDiscordプロフィールを見られる人は誰でもこのステータスを見ることができます。Discordがこれを受信すると、Discord自身の処理が適用されます。<a href=\"https://discord.com/privacy\">Discordのプライバシーポリシー</a>をご覧ください。<br/><br/>APIは、アカウント機能（レビューなど）のために任意のDiscord OAuth後にセッショントークン（JWT、通常30日間）を発行することもあります。公開マーケティングサイトはアカウントを必要としません。一度もログインしない場合、このトークンは作成されません。"
+      },
+      {
+        "title": "法的根拠（GDPR第6条）",
+        "body": "<ul><li><strong>オプトインの利用統計</strong>：同意（第6条1項a）。拡張機能内でいつでも撤回できます。撤回前の処理の適法性には影響しません。</li><li><strong>言語Cookieおよびドキュメントページの Cookie</strong>：要求されたサービスに必要／または言語を記憶するための正当な利益（第6条1項b、または/および f）。</li><li><strong>テーマおよびCookie通知フラグ</strong>（ローカルストレージ）：使いやすいインターフェースへの正当な利益（第6条1項f）。</li><li><strong>画像プロキシ</strong>：ブラウザ内であらゆるサードパーティCDNを読み込むことなくカタログおよびアクティビティのアートワークを表示するための正当な利益（第6条1項f）。</li><li><strong>任意のDiscordログイン</strong>：あなたが要求したアカウント機能の履行（第6条1項b）、および必要に応じてAPIを保護するための当社の正当な利益（第6条1項f）。</li><li><strong>GitHub、Discordコミュニティ、Ko-fi、GitHub Sponsors</strong>：これらのサービスに送信することを選択したデータは、それぞれのポリシーに従って処理されます。返信のために、当社宛ての公開issueやメッセージを読みます（第6条1項bまたはf）。</li></ul>"
+      },
+      {
+        "title": "保存期間",
+        "body": "<ul><li><strong>ローカルの拡張機能およびデスクトップログ</strong>：削除、リセット、またはアンインストールするまで。</li><li><strong>言語Cookie</strong>：1年間、言語を変更するたびに更新。</li><li><strong>利用統計</strong>：集計指標の作成に必要な期間のみ保存。現時点で<strong>12か月の自動削除</strong>は実装されていません。上記の方法で削除を要求できます。</li><li><strong>JWT（ログインした場合）</strong>：ログアウトまたは当社による失効がない限り約30日間。</li></ul>"
+      },
+      {
+        "title": "処理者および移転",
+        "body": "当社は以下を使用しています：<ul><li>ウェブサイト、API、PostgreSQLを稼働させるVPSのホスティングプロバイダーとしての<strong>Contabo GmbH</strong>（ドイツ）。サーバーは発行者が管理しています。処理は<strong>{dataRegion}</strong>で行われます。これはEU域内のホスティングであり、米国への移転ではありません。<a href=\"https://contabo.com/en/legal/privacy-policy/\">Contaboのプライバシーポリシー</a>。</li><li>静的ファイル（サムネイル、デスクトップインストーラー、Canary zip）の配信とサイトの保護のための<strong>Cloudflare</strong>。移転はSCC、該当する場合はEU-USデータプライバシーフレームワークに基づく場合があります。</li><li>拡張機能の配布のための<strong>Google</strong>（Chrome Web Store）および<strong>Mozilla</strong>（Firefox Add-ons）。それぞれのストアは独自の条件でインストーラーおよびアカウントデータを処理します。</li><li>ウェブサイトで広告が<strong>有効化された場合のみ</strong>の<strong>Google AdSense</strong>（有効化しない限りオフです）。その場合Googleは、Google独自の条件に従い、広告Cookieについて独立した、または共同の管理者として行動します。</li></ul><strong>カスタムAPI URL</strong>を設定した場合、トラフィックはあなたが選択したサーバーに送られます。本ポリシーはそのサーバーには適用されません。"
+      },
+      {
+        "title": "画像プロキシ",
+        "body": "当社のAPIは、UIがアートワークを表示できるように、公開サムネイルURL（YouTube、Twitchなどの類似CDN）を取得することがあります。プロキシを広告プロファイルの販売に使用することはありません。要求されたURLは、あなたが閲覧していたタイトルに関連する可能性があります。これらの要求のログは、サービスの運用および保護に技術的に必要な期間のみ保存されます。"
+      },
+      {
+        "title": "Cookie",
+        "body": "nowly.meとdocs.nowly.meはそれぞれ、言語用に<code>locale</code> Cookieを設定します。テーマとCookie通知はCookieではなくローカルストレージを使用します。<a href=\"/cookies\">Cookieポリシー</a>をご覧ください。"
+      },
+      {
+        "title": "セキュリティ",
+        "body": "公式のプレゼンスパッケージは署名されています（ECDSA P-256）。本番の拡張機能は、カタログのプレゼンスを実行する前に署名を検証します。zipファイルとして配布されるCanaryビルドはテスト用ソフトウェアであり、署名されていない場合があります。信頼できないソースからパッケージをインストールしないでください。"
+      },
+      {
+        "title": "あなたの権利",
+        "body": "GDPRが適用される場合、アクセス、訂正、削除、制限、異議、データポータビリティを要求でき、アナリティクスへの同意を撤回できます。拡張機能内の開発者診断は、あなたのデバイスにまだキューされているイベントを表示することがありますが、当社サーバーの完全なエクスポートではありません。権利を行使するには、<a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>にメールするか、<a href=\"https://github.com/nowly-presence/nowly\">GitHubリポジトリ</a>を利用してください。<a href=\"https://www.cnil.fr\">CNIL</a>（フランス）または現地の監督機関に苦情を申し立てることもできます。"
+      },
+      {
+        "title": "お問い合わせ",
+        "body": "メール：<a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>。発行者の詳細：<a href=\"/legal-notice\">法的表示</a>。"
+      }
+    ]
+  },
+  "tos-page": {
+    "badge": "法律",
+    "title": "利用規約",
+    "description": "Nowly、ブラウザ拡張機能、デスクトップアプリ、ウェブサイトの利用に関するルール。",
+    "last-updated": "最終更新日：2026年9月17日。",
+    "sections": [
+      {
+        "title": "同意",
+        "body": "Nowly（拡張機能、デスクトップアプリ、ウェブサイト、ドキュメント、API、関連ソフトウェア）をダウンロード、インストール、または使用することにより、本規約に同意したものとみなされます。同意しない場合は、本ソフトウェアを使用しないでください。強行的な消費者の権利には影響しません。"
+      },
+      {
+        "title": "サービス",
+        "body": "Nowlyは、ローカルデスクトップアプリを使用して対応ウェブサイトからDiscord Rich Presenceを更新する<strong>無料</strong>のツールです。ソースコードはGitHub上でBUSL-1.1（source-available；Change DateまではOSI承認のオープンソースライセンスではありません）のもとで公開されています。本サービスには以下が含まれます：<ul><li>ChromiumおよびFirefox用のブラウザ拡張機能。</li><li>お使いのコンピュータ上でDiscordと通信するデスクトップアプリ。</li><li>nowly.meウェブサイトとdocs.nowly.me。</li><li>プレゼンスを構築するための公開APIと開発者SDK。</li><li>当社のCDNからの任意のCanaryビルド（プレリリースであり、署名されていない場合があります）。</li></ul>"
+      },
+      {
+        "title": "最低年齢",
+        "body": "少なくとも<strong>15</strong>歳であり、Discord自身の規約に基づいてDiscordを使用できる年齢である必要があります。お住まいの国のデジタル同意年齢に満たない場合は、法律で求められる場合、保護者の許可が必要です。"
+      },
+      {
+        "title": "ライセンス",
+        "body": "Nowlyは<strong>Business Source License 1.1</strong>のもとでライセンスされています。<strong>個人的、非営利的</strong>な目的での使用、複製、改変が可能です。商業利用（再販やNowlyを有料またはホスティングサービスとして提供する場合を含む）には、発行者からの別途のライセンスが必要です。本ライセンスは、初回の公開配布から4年後、いずれにせよ<strong>2028年6月1日</strong>以降のChange DateにMITライセンスに移行します。全文は<a href=\"https://github.com/nowly-presence/nowly\">GitHubリポジトリ</a>にあります。これは、Nowlyを通じて表示するサードパーティコンテンツ（YouTube、Twitchなど）をライセンスするものではありません。"
+      },
+      {
+        "title": "許容される使用",
+        "body": "適用法および<a href=\"https://discord.com/terms\">Discordの利用規約</a>を遵守する必要があります。以下は禁止されています：<ul><li>違法、憎悪的、名誉毀損的、または権利侵害的なコンテンツを表示するためにNowlyを使用すること。</li><li>公式の拡張機能、デスクトップアプリ、APIのセキュリティを回避すること。</li><li>Nowlyの公式インフラを通じて、改変、偽造、または未承認のプレゼンスを配布すること。</li><li>APIを悪用すること（過度な自動リクエストを含む）。</li></ul>拡張機能を<strong>カスタムAPI URL</strong>に向けた場合、そのサーバーについては単独であなたが責任を負います。当社の<a href=\"/privacy\">プライバシーポリシー</a>はそれをカバーしません。"
+      },
+      {
+        "title": "寄付",
+        "body": "Nowlyは支払いなしで利用可能であり続けます。<a href=\"https://ko-fi.com/nowly\">Ko-fi</a>や<a href=\"https://github.com/sponsors/nowly-presence\">GitHub Sponsors</a>を通じた任意の支援は、これらのプラットフォーム自身の規約のもとで処理されます。その時点で明確に別段の記載がない限り、寄付によって追加の製品機能が購入されることはありません。返金は、プラットフォームのルールおよび適用される場合の強行的消費者権利に従います。"
+      },
+      {
+        "title": "知的財産",
+        "body": "Nowlyのコードは上記のとおりライセンスされています。Discord、YouTube、Twitch、Disney+、Apple TV+、Prime Video、TikTokおよびその他のプラットフォーム名やロゴは、それぞれの所有者に帰属します。Nowlyは、Discord Inc.またはこれらのプラットフォームと<strong>提携、承認、またはスポンサーされているものではありません</strong>。"
+      },
+      {
+        "title": "責任の制限",
+        "body": "Nowlyは、法律で認められる範囲で、保証なしに<strong>「現状のまま」</strong>提供されます。Discordの障害やあなたのDiscordアカウントに対する制裁、ローカルの拡張機能データの損失を含む、本ソフトウェアの使用または使用不能から生じる間接的損害について、当社は責任を負いません。詐欺、重過失、死亡または人身傷害、またはフランスもしくはEU法が当社に制限を認めない責任について、何も除外するものではありません。これらの条項は、強行的な消費者の権利を軽減するものではありません。"
+      },
+      {
+        "title": "プライバシー",
+        "body": "Nowlyの使用は、<a href=\"/privacy\">プライバシーポリシー</a>および<a href=\"/cookies\">Cookieポリシー</a>にも準拠します。"
+      },
+      {
+        "title": "変更",
+        "body": "本ページに新しい「最終更新日」を付けて新しいバージョンを公開することにより、本規約を更新することがあります。重要な変更については、サイトまたはリポジトリで合理的な通知を行うよう努めます。法律が明示的な同意を求める場合を除き、新しいバージョンの発効後も継続して使用することは、それを承諾したものとみなされます。"
+      },
+      {
+        "title": "準拠法",
+        "body": "本規約は<strong>フランス法</strong>に準拠します。友好的な解決が失敗した場合、強行的な消費者の管轄規則を損なうことなく、フランスの裁判所が管轄権を持ちます。<a href=\"https://ec.europa.eu/consumers/odr\">EUオンライン紛争解決プラットフォーム</a>を利用できます。"
+      },
+      {
+        "title": "お問い合わせ",
+        "body": "<a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>にメールするか、<a href=\"/legal-notice\">法的表示</a>をご覧ください。GitHub：<a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>。"
+      }
+    ]
+  },
+  "legal-notice-page": {
+    "badge": "法律",
+    "title": "法的表示",
+    "description": "フランス法に基づいて必要とされる、発行者、ホスティング、知的財産に関する情報。",
+    "last-updated": "2026年9月17日発効。フランスLCEN第6-III条に基づき必要。",
+    "sections": [
+      {
+        "title": "発行者",
+        "body": "<strong>nowly.me</strong>および<strong>docs.nowly.me</strong>のウェブサイト、Nowlyブラウザ拡張機能、デスクトップアプリは以下により発行されています：<br/><br/>発行者：<strong>{publisherName}</strong><br/>ステータス：個人事業主（auto-entrepreneur／マイクロ企業）<br/>SIREN：<strong>{publisherSiren}</strong><br/>住所：<strong>{publisherAddress}</strong><br/>VAT：該当なし（フランスCGI第293 B条の免除）<br/>メール：<a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>"
+      },
+      {
+        "title": "発行責任者",
+        "body": "自然人発行者としての<strong>{publisherName}</strong>。フランス法は<strong>単一の</strong>発行責任者を規定しています（1881年7月29日法、オンラインに適用）。コントリビューターや開発者は追加の発行責任者ではありません。"
+      },
+      {
+        "title": "ホスティング（ウェブサイト、API、データベース）",
+        "body": "ウェブサイト、API、PostgreSQLデータベースは、以下から借りている仮想プライベートサーバー（VPS）上で稼働しています：<br/><br/><strong>Contabo GmbH</strong><br/>Welfenstrasse 22<br/>81541 München, Germany<br/><a href=\"https://contabo.com\">contabo.com</a><br/><a href=\"https://contabo.com/en/legal/impressum/\">法的表示（Impressum）</a><br/><br/>発行者がサーバーを管理しています。所在地：<strong>{dataRegion}</strong>"
+      },
+      {
+        "title": "CDNおよびデスクトップバイナリ",
+        "body": "静的アセット（サムネイル、インストーラー、Canaryアーカイブ）は以下を通じて配信されます：<br/><br/><strong>Cloudflare, Inc.</strong><br/>101 Townsend Street, San Francisco, CA 94107, United States<br/><a href=\"https://www.cloudflare.com\">cloudflare.com</a>"
+      },
+      {
+        "title": "拡張機能の配布",
+        "body": "本番の拡張機能は、Google LLC（1600 Amphitheatre Parkway, Mountain View, CA 94043, United States）が運営する<strong>Chrome Web Store</strong>を通じて<strong>Chrome</strong>（および他のChromiumブラウザ）向けに、Mozilla Corporation（United States）が運営する<strong>Firefox Add-ons</strong>を通じて<strong>Firefox</strong>向けに配布されています。実験的なCanaryビルドは、当社のCDNからzipファイルとしても提供される場合があります。"
+      },
+      {
+        "title": "知的財産",
+        "body": "Nowlyのソースコードは、<a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>にて<strong>BUSL-1.1</strong>のもとで公開されています。サードパーティの商標はそれぞれの所有者に帰属します。<strong>NowlyはDiscord Inc.または対応プラットフォームと提携していません。</strong>"
+      },
+      {
+        "title": "違法なコンテンツ",
+        "body": "明らかに違法なコンテンツは、LCEN第6条で求められるとおり、日付、説明、URL、法的根拠を添えて<a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>に報告できます。"
+      },
+      {
+        "title": "お問い合わせ",
+        "body": "メール：<a href=\"mailto:{publisherEmail}\">{publisherEmail}</a><br/>GitHub：<a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>"
+      }
+    ]
+  },
+  "cookies-page": {
+    "badge": "Cookie",
+    "title": "Cookieポリシー",
+    "description": "nowly.meおよびdocs.nowly.meで使用されるCookieとローカルストレージ。",
+    "last-updated": "最終更新日：2026年9月17日。",
+    "intro": "このページは、<strong>nowly.me</strong>および<strong>docs.nowly.me</strong>上のCookieおよび類似技術について説明します。当社は言語Cookieを設定します。テーマとCookie通知はローカルストレージを使用します。Google AdSenseは、広告が有効化されない限り読み込まれません。",
+    "sections": [
+      {
+        "title": "必須Cookie",
+        "body": "言語Cookieは、各サイトであなたが選択した（または検出された）ロケールを記憶するために必要です。多言語サービスを提供するために厳密に必要であるため、フランスの「Cookieおよびその他のトラッカー」ガイドラインに基づく事前の広告スタイルの同意は必要ありません。"
+      },
+      {
+        "title": "localeクッキー",
+        "body": "<strong><code>locale</code></strong>（nowly.meおよび個別にdocs.nowly.me）<br/>目的：フランス語、英語、またはスペイン語のインターフェース。<br/>有効期間：1年（<code>max-age</code> 31,536,000秒）、言語変更のたびに更新。<br/>属性：ファーストパーティ、HttpOnlyではない、SameSite=Lax。値はロケールコード（例：<code>fr-FR</code>）です。サーバーログ内のIPアドレスと組み合わせると、Cookie自体は単なる言語コードであっても、訪問者の特定に寄与する可能性があります。"
+      },
+      {
+        "title": "ローカルストレージ",
+        "body": "サイトは、カラーテーマ（ライト、ダーク、またはシステム）と、Cookie通知を閉じたかどうかを保存します。これらの値はあなたのブラウザ内に留まり、Cookieとして Nowlyに送信されることはありません。"
+      },
+      {
+        "title": "アナリティクスCookie",
+        "body": "ウェブサイトはサードパーティのアナリティクスCookieを設定<strong>しません</strong>。任意の利用統計を有効にした場合、それはウェブサイトのCookieではなく、デバイスIDを用いて<strong>拡張機能</strong>によって収集されます。"
+      },
+      {
+        "title": "広告",
+        "body": "ウェブサイトで<strong>Google AdSense</strong>を有効にした場合、Googleは独自のポリシーに基づきCookieまたは類似の技術を設定する場合があります。それまでは、Nowlyは広告Cookieを設置しません。"
+      },
+      {
+        "title": "削除方法",
+        "body": "ブラウザでCookieをブロックまたは削除できます。<code>locale</code>を削除すると、次回訪問時に言語が検出された値にリセットされます。"
+      },
+      {
+        "title": "お問い合わせ",
+        "body": "<a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>にメールするか、<a href=\"/legal-notice\">法的表示</a>をご覧ください。"
+      }
+    ]
+  },
+  "uninstallPage": {
+    "eyebrow": "さようなら",
+    "title": "拡張機能を削除しました",
+    "description": "ローカルデータはお使いのデバイスに残ります。またすぐにお会いできることを願っています。",
+    "feedback-title": "何かお伝えしたいことはありますか？",
+    "feedback-description": "バグ、不足しているプレゼンス、あるいは単なるフィードバック：Discordが最速の連絡方法です。",
+    "discord": "Discordに参加",
+    "data-description": "Nowlyの改善に役立てるために匿名の利用統計を保持するか、お使いのデバイスに保存されたすべてを削除できます。",
+    "keep": "匿名の統計を保持",
+    "delete": "データを削除",
+    "delete-confirm": "これにより、このデバイスに対してNowlyが保存したすべてが完全に削除されます。この操作は元に戻せません。",
+    "keep-success": "ありがとうございます。匿名の統計は保持されます。",
+    "delete-success": "データが削除されました。",
+    "action-error": "問題が発生しました。もう一度お試しください。"
+  },
+  "consentPage": {
+    "eyebrow": "プライバシー",
+    "title": "あなたのデータ",
+    "description": "Nowlyは、以下で明示的に有効にした場合のみ、匿名の利用アナリティクスを収集します。このページでは、お使いのデバイスに保存されたすべてを表示、エクスポート、削除することもできます。",
+    "checking": "Nowly拡張機能を検索中...",
+    "not-detected-title": "拡張機能が検出されません",
+    "not-detected-description": "同意とデータを管理するには、Nowlyがインストールされているブラウザでこのページを開いてください。",
+    "toggle-title": "匿名の利用データを共有",
+    "toggle-description": "デフォルトでオフです。どのプレゼンスと機能が実際に使われているかを把握するのに役立ちます - 閲覧履歴や個人データが収集されることはありません。",
+    "data-title": "あなたのデータ",
+    "data-description": "このデバイスに対してNowlyが保存したすべてをエクスポートするか、完全に削除してください。",
+    "export": "データをエクスポート",
+    "delete": "データを削除",
+    "delete-confirm": "これにより、このデバイスに対してNowlyが保存したすべてが完全に削除されます。この操作は元に戻せません。",
+    "export-success": "データがダウンロードされました。",
+    "delete-success": "データが削除されました。",
+    "action-error": "問題が発生しました。もう一度お試しください。"
+  }
+}

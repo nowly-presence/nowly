@@ -2,7 +2,7 @@
 
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@nowly/ui";
 
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FC } from "react";
 import { Spinner } from "@nowly/ui";
@@ -27,6 +27,7 @@ export const SearchCommand: FC<SearchCommandProps> = ({ open, onOpenChange }) =>
   const [isSearching, setIsSearching] = useState(false);
   const router = useRouter();
   const locale = useLocale();
+  const t = useTranslations("docsUi");
 
   useEffect(() => {
     if (!open) {
@@ -70,7 +71,7 @@ export const SearchCommand: FC<SearchCommandProps> = ({ open, onOpenChange }) =>
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
       <CommandInput
-        placeholder="Search documentation..."
+        placeholder={t("search-placeholder")}
         value={query}
         onValueChange={setQuery}
       />
@@ -80,22 +81,22 @@ export const SearchCommand: FC<SearchCommandProps> = ({ open, onOpenChange }) =>
           <CommandEmpty>
             <span className="inline-flex items-center justify-center gap-2">
               <Spinner className="size-4" />
-              Searching...
+               {t("searching")}
             </span>
           </CommandEmpty>
         ) : null}
 
         {!isSearching && hasQuery && !hasResults ? (
-          <CommandEmpty>No results found.</CommandEmpty>
+           <CommandEmpty>{t("no-results")}</CommandEmpty>
         ) : null}
 
         {!isSearching && !hasQuery ? (
-          <CommandEmpty>Type to search...</CommandEmpty>
+           <CommandEmpty>{t("type-to-search")}</CommandEmpty>
         ) : null}
 
         {!isSearching && hasResults ? (
           <CommandGroup
-            heading={`${results.length} result${results.length > 1 ? "s" : ""}`}
+             heading={t("results", { count: results.length })}
           >
             {results.map((result) => (
               <CommandItem

@@ -1,0 +1,52 @@
+---
+title: Prasyarat
+description: Sediakan persekitaran tempatan anda untuk membangunkan presence - klon repositori presences dan pasang CLI.
+---
+
+## Keperluan
+
+- **Node.js 22+** - diperlukan untuk menjalankan CLI dan membina presence
+- **pnpm** - repositori presences menggunakan ruang kerja pnpm
+- **Discord Desktop** - untuk menguji presence anda dengan Nowly Host
+- **Git** - untuk mengklon repositori presences
+
+## Klon Repositori Presences
+
+Semua presence komuniti terdapat dalam repositori [nowly-presence/presences](https://github.com/nowly-presence/presences).
+
+```bash
+git clone https://github.com/nowly-presence/presences.git
+cd presences
+```
+
+## Pasang CLI Secara Global
+
+CLI Nowly membolehkan anda menjana rangka, mengesahkan dan membina presence.
+
+```bash
+pnpm i -g @nowly/cli
+```
+
+> Pada Node 24+, anda mungkin memerlukan `--config.minimumReleaseAge=0` jika pakej itu baru sahaja diterbitkan.
+
+## Pasang Kebergantungan
+
+Repositori presences menggunakan ruang kerja pnpm. Memasang kebergantungan turut memautkan pakej `@nowly/sdk` untuk semakan jenis.
+
+```bash
+pnpm install
+```
+
+## Sahkan Persediaan
+
+Jalankan CLI untuk mengesahkan semuanya berfungsi:
+
+```bash
+nowly --help
+```
+
+Anda sepatutnya melihat senarai arahan yang tersedia (`init`, `build`, `pack`, `extension`, `validate`, dan lain-lain).
+
+## Langkah Seterusnya
+
+Persekitaran anda sudah sedia. Pergi ke [Mencipta Presence Pertama Anda](/presence-development/creating-your-first-presence) untuk menjana rangka presence pertama anda.

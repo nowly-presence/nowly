@@ -1,0 +1,114 @@
+---
+title: 最初のプレゼンスを作成する
+description: CLIを使って新しいNowlyプレゼンスを作成し、最初のDiscord Rich Presenceアクティビティを送信します。
+---
+
+## CLIから始める
+
+Nowly CLIを使って新しいプレゼンスの雛形を作成します。
+
+```bash
+nowly init "Example"
+```
+
+CLIはメタデータ、プレゼンススクリプト、必要なアセットを作成します。
+
+## 基本的なプレゼンスコード
+
+`Presence` と `Assets` はランタイムによって提供されます。詳細は[Presence API](/presence-development/presence-api)と[Assets](/presence-development/assets)を参照してください。
+`document` は標準のブラウザDOM APIで、プレゼンスは拡張機能内でコンテンツスクリプトとして実行されるため利用できます。
+
+`@nowly/sdk` からインポートする必要があるのは `PresenceType`(および `createMediaTimestamps` などの他のヘルパー)だけです。
+
+```ts filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+
+const presence = new Presence()
+
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: document.title,
+    state: document.location.hostname,
+    largeImageKey: Assets.Logo,
+    type: PresenceType.Watching,
+  })
+})
+```
+
+## ランタイムの流れ
+
+ユーザーが対応するURLにアクセスすると、Nowlyはあなたのプレゼンスを読み込みます。プレゼンスはページの状態を読み取り、`setActivity` を呼び出します。拡張機能はそのペイロードをNowly Hostに転送し、Discordが更新されます。
+
+## 開発ループ
+
+<Steps>
+<Step title="雛形作成" description="プレゼンスのフォルダ、メタデータ、必要なアセットを生成します。">
+
+```bash
+nowly init "Example"
+```
+
+</Step>
+<Step title="設定" description="名前、作者、対応URL、カテゴリ、色、多言語対応の説明、そしてDiscordがすでにそのプラットフォームに対応している場合はdiscordNativeを設定します。">
+
+`metadata.json` を編集してください。利用可能な全フィールドについては[Metadata](/presence-development/metadata)を参照してください。
+
+</Step>
+<Step title="実装" description="Presence SDKを使ってプレゼンスのロジックを記述します。">
+
+```typescript filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+
+const presence = new Presence()
+
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    type: PresenceType.Watching,
+  })
+})
+```
+
+</Step>
+<Step title="検証" description="メタデータの構造が正しいこと、アセットが揃っていることを確認します。">
+
+```bash
+nowly validate
+```
+
+</Step>
+<Step title="ビルド" description="プレゼンスを単体のバンドルにコンパイルします。">
+
+```bash
+nowly build example
+```
+
+</Step>
+<Step title="読み込み" description="ビルドしたプレゼンスをブラウザにインストールします。方法は2つ:ビルド済み拡張機能、またはzipドロップです。">
+
+完全な比較については[ローカルでの読み込みとテスト](/presence-development/load-and-test)を参照してください。
+
+**初回**(ブラウザにNowlyがない場合): プレゼンスを組み込んだ拡張機能一式を作成します。
+
+```bash
+nowly extension example
+```
+
+`chrome://extensions` で `dist/extension-dev` をパッケージ化されていない拡張機能として読み込みます。
+
+**すでにNowlyをパッケージ化されていない状態で読み込んでいる場合:** zipにパッケージ化し、設定 → 高度な設定 → デバッグにドロップします。ストアからのインストールでは署名なしのzipは拒否されます。
+
+```bash
+nowly pack example
+```
+
+</Step>
+<Step title="テスト" description="対象のウェブサイトを開くと、プレゼンスが自動的に有効化されます。">
+
+サイトにアクセスする
+
+</Step>
+</Steps>
+
+コードを変更するたびに、**実装**→**ビルド**→**読み込み**を繰り返してください。

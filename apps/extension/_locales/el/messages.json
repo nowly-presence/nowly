@@ -1,0 +1,29 @@
+{
+  "extensionName": {
+    "message": "Nowly"
+  },
+  "extensionDescription": {
+    "message": "Μοιραστείτε αυτόματα τη δραστηριότητά σας στο διαδίκτυο στο Discord."
+  },
+  "playing": {
+    "message": "Αναπαραγωγή"
+  },
+  "paused": {
+    "message": "Σε παύση"
+  },
+  "commandOpenPanel": {
+    "message": "Άνοιγμα Nowly"
+  },
+  "commandTogglePause": {
+    "message": "Παύση ή συνέχιση παρουσίας Discord"
+  },
+  "contextMenuPage": {
+    "message": "Παρουσία Nowly για αυτήν τη σελίδα"
+  },
+  "contextMenuMuteTab": {
+    "message": "Να μην κοινοποιείται αυτή η καρτέλα"
+  },
+  "contextMenuUnmuteTab": {
+    "message": "Κοινοποίηση αυτής της καρτέλας"
+  }
+}

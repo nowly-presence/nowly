@@ -1,0 +1,36 @@
+---
+title: iFrames
+description: 임베디드 프레임 안에 있는 활동 데이터를 처리합니다.
+---
+
+<CalloutWarning>
+iFrame 프레즌스 스크립트는 아직 Nowly 확장 프로그램 런타임에 **구현되어 있지 않습니다**. `presence.on("iFrameData")`는 SDK 타입에 예약되어 있지만, 확장 프로그램은 중첩된 프레임에 주입하지 않으며 해당 이벤트도 발생시키지 않습니다. 이 기능이 제공될 때까지는 최상위 페이지(DOM, `<audio>` / `<video>`, 공개된 페이지 상태)를 읽는 것을 선호하세요.
+</CalloutWarning>
+
+## iFrame이 중요한 경우
+
+일부 웹사이트는 iframe 안에 미디어 플레이어나 중요한 상태를 렌더링합니다. 일반적인 프레즌스 스크립트는 최상위 페이지에서 모든 것을 읽지 못할 수 있습니다.
+
+iframe 지원이 도입될 때까지는 크로스 오리진 프레임 안에서만 활동을 노출하는 사이트를 건너뛰거나, 프레즌스 설명에 이 제한을 문서화하세요.
+
+## 예정된 API
+
+Presence API는 향후 프레임 수준 통신을 위해 `iFrameData` 이벤트를 예약해 둡니다:
+
+```ts filename="presence.ts"
+presence.on("iFrameData", async (...args) => {
+  presence.info("Received iframe data")
+})
+```
+
+지금은 프로덕션 프레즌스에서 이 리스너에 의존하지 마세요.
+
+## 권장 접근 방식
+
+iframe 처리는 메인 페이지가 필요한 상태에 접근할 수 없을 때만 사용하세요.
+
+iframe 로직을 추가하기 전에 안정적인 DOM 선택자, 미디어 요소, 공개된 페이지 상태를 우선하세요.
+
+## 안전
+
+프레임에서 개인정보나 민감한 데이터를 수집하지 마세요. 프레즌스는 Discord Rich Presence에 유용한 활동 정보만 전송해야 합니다.

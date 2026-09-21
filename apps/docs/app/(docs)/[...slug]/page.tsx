@@ -8,7 +8,7 @@ import { docHref } from "@/lib/docs/href";
 import { extractTocItems } from "@/lib/docs/types";
 import { createMetadata, docsOgImage } from "@/lib/seo";
 import type { Metadata } from "next";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
 import { ScrollToTop } from "@/components/docs/scroll-to-top";
@@ -22,18 +22,19 @@ type Props = {
 
 const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const locale = await getLocale();
+  const t = await getTranslations("docsMetadata");
   const { slug } = await params;
   const pageSlug = slug.join("/");
   const doc = getDocContent(pageSlug, locale);
 
   if (!doc) {
     return {
-      title: "Not Found",
+       title: t("not-found"),
       robots: { index: false, follow: false },
     };
   }
 
-  const description = doc.description || "Nowly documentation for Discord Rich Presence setup and presence development.";
+  const description = doc.description || t("documentation-description");
 
   return createMetadata({
     title: doc.title,
@@ -42,7 +43,7 @@ const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
     image: docsOgImage(doc.path, {
       title: doc.title,
       description,
-      category: getCategoryForPath(pageSlug, "en-US"),
+       category: getCategoryForPath(pageSlug, locale),
     }),
   });
 };

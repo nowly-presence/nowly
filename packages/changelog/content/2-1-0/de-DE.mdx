@@ -1,0 +1,42 @@
+---
+title: 2.1.0
+date: 2026-09-20
+description: Eine neu aufgebaute Erweiterung, Canary-Builds, umfangreichere Lokalisierung sowie eine neu gestaltete Dokumentations- und Weboberfläche.
+---
+
+Diese Veröffentlichung schließt die Neugestaltung der Erweiterung ab und erweitert Nowlys Lokalisierung auf Erweiterung, Website und Dokumentation.
+
+## Neu aufgebaute Erweiterung
+
+Die Erweiterung verwendet nun eine neue Seitenleistenarchitektur mit eigenen Ansichten für Aktivität, Store, Einstellungen, Einführung, Diagnose und Laufzeitprotokoll. Einstellungen sind in klareren Karten und Abschnitten organisiert und unterstützen helle, dunkle und systemabhängige Darstellung.
+
+Die neuen Abläufe für Aktivität und Store machen das Durchsuchen, Installieren, Planen, Schlummern und Anzeigen der aktuellen Aktivität verständlicher. Geführte Einführung, Wiederverbindungsaktionen, Status der nativen Verbindung, Installationsfeedback und leere Zustände wurden für die neue Oberfläche neu aufgebaut.
+
+Die Hintergrundebene verfügt jetzt über typisierten Speicher, einen typisierten Nachrichten-Router, Diagnose- und Laufzeitprotokolle, Presence- und Aktivitätsmanager, Native-Host-Verarbeitung, Gerätesynchronisierung und Sicherheitsprüfungen für Veröffentlichungen. Sichtbarkeits-, Verlaufs-, Hash- und Medienereignisse können die Aktivität aktualisieren, ohne auf einen vollständigen Seitenneuladevorgang zu warten.
+
+## Canary und lokale Entwicklung
+
+Chrome-Canary-Builds können mit `pnpm --filter @nowly/extension build:chrome` erstellt werden. Die Build-Pipeline erzeugt nun das Manifest und bündelt Presences für Entwicklungs- und Canary-Distributionen. Die Erweiterung unterstützt außerdem lokale Presence-Assets und überspringt archivierte Presences bei Aktualisierungen.
+
+Die CLI unterstützt `nowly build --watch` und `nowly pack --watch` für schnellere Presence-Iterationen. Website und Erweiterung unterscheiden nun stabile Installationen von Canary-Testbuilds.
+
+## Weitere Sprachen
+
+Erweiterung, Website und Dokumentation enthalten nun Deutsch, brasilianisches Portugiesisch, Polnisch, Japanisch, Koreanisch, Türkisch, Malaiisch und Griechisch zusätzlich zu Englisch, Französisch und Spanisch. Sprachmenüs verwenden die entsprechenden Flaggen, die Browser-Spracherkennung deckt alle unterstützten Sprachen ab und die Dokumentationsseiten sind in den Bereichen Presence-Entwicklung, fortgeschrittene Themen, Veröffentlichung und Changelog vollständig übersetzt.
+
+## Details der Erweiterung
+
+- Anonyme Nutzungsanalysen bleiben standardmäßig deaktiviert und können in den Einstellungen verwaltet werden.
+- Discord-native Presences sind klar gekennzeichnet, damit keine doppelten Aktivitäten ausgeführt werden.
+- Die Verbindungsbrücke funktioniert mit lokal gehosteten Webinstanzen.
+- Die Planung bleibt bei neuen Installationen deaktiviert und unterstützt Schlummern bis Mitternacht.
+- Der Desktop-Verbindungsablauf gibt klarere Hinweise, wenn die Anwendung fehlt oder veraltet ist.
+- Der Entwicklermodus bietet eine eigene Ansicht für Laufzeitprotokolle direkt über die Seitenleistennavigation.
+- Die Fußzeile der Website enthält jetzt einen direkten Link zum X-Konto von Nowly.
+- Die Detailseiten von Presences zeigen einen Like-Button sowie Installations- und Aktiv-Nutzer-Zahlen in Echtzeit, sowohl in der Erweiterung als auch auf nowly.me.
+- Das Öffnen einer bereits installierten Presence aus dem Store führt jetzt direkt zu ihrer Detailansicht in Aktivität, statt zu einer separaten Katalogseite.
+- In der Aktivitätsliste können mehrere Presences ausgewählt werden, um sie gemeinsam zu aktivieren, zu deaktivieren oder zu deinstallieren.
+
+## Validierung
+
+Die Veröffentlichung enthält Abdeckung für Aktivitätsmanager, URL-Abgleich, Veröffentlichungssicherheit, Speicher und Nachrichtenverarbeitung. Typecheck, Testsuite, Canary-Build, Website-Build und Dokumentations-Build der Erweiterung gehören zum abschließenden Prüfablauf.

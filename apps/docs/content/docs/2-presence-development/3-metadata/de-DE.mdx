@@ -1,0 +1,123 @@
+---
+title: Metadaten
+description: Dokumentiert jedes erforderliche und optionale Feld in der metadata.json-Datei einer Nowly-Presence.
+---
+
+## Erforderliche Felder
+
+Jede Presence benötigt:
+
+<TypeTable
+  properties={[
+    { name: "name", type: "string", description: "Anzeigename des Dienstes oder der Plattform.", required: true },
+    { name: "author", type: "object", description: "Hauptautor, der zuerst in der Bibliothek und in OG-Bildern angezeigt wird.", required: true },
+    { name: "description", type: "object", description: "Kurze lokalisierte Beschreibungen, nach Locale sortiert.", required: true },
+    { name: "url", type: "string[]", description: "Unterstützte Domains oder URL-Muster zum Abgleich von Seiten.", required: true },
+    { name: "color", type: "string", description: "Markenfarbe im Hex-Format, verwendet von der UI und Embeds.", required: true },
+    { name: "category", type: "string", description: "Eine von streaming, music, video, social, gaming, tools, ai, learning, creator oder other.", required: true }
+  ]}
+/>
+
+## Beispiel
+
+```json
+{
+  "name": "YouTube",
+  "author": {
+    "name": "Nowly Developer",
+    "github": "example"
+  },
+  "url": ["youtube.com", "www.youtube.com"],
+  "color": "#FF0033",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch and share videos on YouTube."
+  }
+}
+```
+
+## Autor und Mitwirkende
+
+- `author` - Hauptbetreuer, zuerst in der Bibliothek und in OG-Bildern angezeigt.
+- `contributors` - Weitere Personen, die an der Presence mitgewirkt haben.
+
+<CalloutInfo>
+GitHub-Benutzernamen (der Schlüssel `github`) werden zur Auflösung von Avataren verwendet.
+</CalloutInfo>
+
+## Beschreibungen und Funktionen
+
+- `description` - Kurzer Marktplatztext, nach Locale sortiert.
+- `longDescription` - Erweiterte Beschreibung für Detailseiten.
+- `features` - Lokalisierte Liste unterstützter Funktionen (z. B. Button-Unterstützung, Media-Keys).
+
+## Native Discord-Unterstützung
+
+Manche Plattformen erscheinen bereits auf Discord, wenn der Nutzer sein Konto verknüpft (Spotify ist das übliche Beispiel). Setze dieses optionale Flag, damit die Bibliothek erklären kann, dass Nowly auch ohne diese Verknüpfung nützlich ist.
+
+<TypeTable
+  properties={[
+    { name: "discordNative", type: "boolean", description: "True, wenn Discord diese Plattform bereits anzeigt, sobald der Nutzer sein Konto verknüpft. Optional. Standardmäßig false.", required: false }
+  ]}
+/>
+
+```json
+{
+  "name": "Spotify",
+  "discordNative": true
+}
+```
+
+Dies zeigt nur einen Hinweis auf der Bibliotheksseite und in der Erweiterung (Store und Details installierter Presences). Es blockiert die Installation nicht.
+
+## URL-Abgleich
+
+- `url` - Unterstützte Domains oder URL-Muster zum Abgleich von Seiten.
+- `regExp` - Regex-basierter Abgleich für komplexe URL-Muster.
+
+<CalloutWarning>
+Verwende `regExp` nur, wenn ein einfacher `url`-Abgleich nicht ausreicht. Bevorzuge explizite Domain-Listen.
+</CalloutWarning>
+
+## Ausführungskontext
+
+Zwei optionale Felder steuern, wie und wann dein Presence-Skript im Browser ausgeführt wird.
+
+<TypeTable
+  properties={[
+    { name: "world", type: "\"main\" | \"isolated\"", description: "Ausführungswelt. Standardmäßig isolated.", required: false },
+    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "Wann das Skript injiziert wird. Standardmäßig document_idle.", required: false }
+  ]}
+/>
+
+Standardmäßig läuft eine Presence in der **isolated**-Welt: Sie teilt sich das Seiten-DOM, aber nicht den JavaScript-Kontext der Seite. Das ist die sichere Standardeinstellung und funktioniert für fast jede Presence.
+
+Setze `"world": "main"`, wenn deine Presence den **Seitenkontext** benötigt, insbesondere für:
+
+- das Lesen von Seiten-Globals (z. B. ein Player-Objekt, das die Seite auf `window` bereitstellt);
+- einen **same-origin authentifizierten `fetch`**, der die Session-Cookies des Nutzers mitführen muss (z. B. eine interne Metadaten-API einer Seite).
+
+```json
+{
+  "name": "Netflix",
+  "url": ["netflix.com", "www.netflix.com"],
+  "world": "main",
+  "color": "#E50914",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch movies and series on Netflix."
+  }
+}
+```
+
+<CalloutWarning>
+Ein `fetch` aus der isolierten Welt wird nicht als First-Party-Anfrage behandelt, sodass authentifizierte Aufrufe stillschweigend fehlschlagen. Wenn deine Presence auf die angemeldete API der Seite angewiesen ist, musst du `"world": "main"` setzen.
+</CalloutWarning>
+
+<CalloutInfo>
+Die Deklaration befindet sich vollständig in `metadata.json` - die Erweiterung liest sie bei der Registrierung aus. Es sind keine Änderungen an der Erweiterung nötig, um eine neue Page-Context-Presence hinzuzufügen.
+</CalloutInfo>
+
+## Kategorie
+
+Erlaubte Kategorien sind `streaming`, `music`, `video`, `social`, `gaming`, `tools`, `ai`, `learning`, `creator` und `other`.

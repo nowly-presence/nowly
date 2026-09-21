@@ -275,6 +275,34 @@ export const getPresenceVersionHistory = cache(async (slug: string): Promise<Pre
   }
 });
 
+export type PresenceStats = {
+  totalInstalls: number
+  activeUsers: number
+  likes: number
+};
+
+export const getPresenceStats = cache(async (slug: string): Promise<PresenceStats> => {
+  const normalized = slug.trim().toLowerCase();
+  const fallback: PresenceStats = { totalInstalls: 0, activeUsers: 0, likes: 0 };
+  if (!normalized) return fallback;
+
+  try {
+    const response = await fetch(
+      `${presenceApiBaseUrl()}/presences/${encodeURIComponent(normalized)}/stats`,
+      { next: { revalidate: 60 } },
+    );
+    if (!response.ok) return fallback;
+    const data = await response.json() as Partial<PresenceStats>;
+    return {
+      totalInstalls: typeof data.totalInstalls === "number" ? data.totalInstalls : 0,
+      activeUsers: typeof data.activeUsers === "number" ? data.activeUsers : 0,
+      likes: typeof data.likes === "number" ? data.likes : 0,
+    };
+  } catch {
+    return fallback;
+  }
+});
+
 export const fetchPresenceRelease = async (slug: string): Promise<unknown> => {
   const response = await fetch(`/api/presences/${encodeURIComponent(slug)}`, {
     cache: "no-store",

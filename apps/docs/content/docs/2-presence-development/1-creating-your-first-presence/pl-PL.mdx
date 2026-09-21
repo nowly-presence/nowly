@@ -1,0 +1,114 @@
+---
+title: Tworzenie pierwszej obecności
+description: Utwórz nową obecność Nowly za pomocą CLI i wyślij swoją pierwszą aktywność Discord Rich Presence.
+---
+
+## Zacznij od CLI
+
+Użyj CLI Nowly, aby utworzyć szkielet nowej obecności:
+
+```bash
+nowly init "Example"
+```
+
+CLI tworzy metadane, skrypt obecności oraz wymagane zasoby.
+
+## Podstawowy kod obecności
+
+`Presence` i `Assets` są dostarczane przez środowisko uruchomieniowe - zobacz [Presence API](/presence-development/presence-api) i [Assets](/presence-development/assets).
+`document` to standardowe API DOM przeglądarki, dostępne, ponieważ obecności działają jako content scripty w rozszerzeniu.
+
+Tylko `PresenceType` (oraz inne funkcje pomocnicze, jak `createMediaTimestamps`) trzeba zaimportować z `@nowly/sdk`.
+
+```ts filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+
+const presence = new Presence()
+
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: document.title,
+    state: document.location.hostname,
+    largeImageKey: Assets.Logo,
+    type: PresenceType.Watching,
+  })
+})
+```
+
+## Przebieg działania w czasie rzeczywistym
+
+Gdy użytkownik odwiedza pasujący adres URL, Nowly wczytuje Twoją obecność. Obecność odczytuje stan strony i wywołuje `setActivity`. Rozszerzenie przekazuje ten ładunek do Nowly Host, który aktualizuje Discorda.
+
+## Cykl programowania
+
+<Steps>
+<Step title="Utwórz szkielet" description="Generuje folder obecności, metadane i wymagane zasoby.">
+
+```bash
+nowly init "Example"
+```
+
+</Step>
+<Step title="Skonfiguruj" description="Ustaw nazwę, autora, obsługiwane adresy URL, kategorię, kolor, zlokalizowane opisy i discordNative, gdy Discord już obsługuje daną platformę.">
+
+Edytuj `metadata.json` - zobacz [Metadata](/presence-development/metadata), aby poznać wszystkie dostępne pola.
+
+</Step>
+<Step title="Zaimplementuj" description="Napisz logikę obecności za pomocą Presence SDK.">
+
+```typescript filename="presence.ts"
+import { PresenceType } from "@nowly/sdk"
+
+const presence = new Presence()
+
+presence.on("UpdateData", async () => {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    type: PresenceType.Watching,
+  })
+})
+```
+
+</Step>
+<Step title="Zwaliduj" description="Sprawdza, czy struktura metadanych jest poprawna i czy zasoby są na miejscu.">
+
+```bash
+nowly validate
+```
+
+</Step>
+<Step title="Zbuduj" description="Kompiluje obecność do samodzielnego pakietu.">
+
+```bash
+nowly build example
+```
+
+</Step>
+<Step title="Wczytaj" description="Zainstaluj zbudowaną obecność w przeglądarce. Dwie metody: gotowe rozszerzenie lub przeciągnięcie pliku zip.">
+
+Zobacz [Wczytywanie i testowanie lokalne](/presence-development/load-and-test), aby poznać pełne porównanie.
+
+**Za pierwszym razem** (bez Nowly w przeglądarce): wbuduj obecność w gotowe rozszerzenie.
+
+```bash
+nowly extension example
+```
+
+Wczytaj `dist/extension-dev` jako rozpakowane rozszerzenie w `chrome://extensions`.
+
+**Masz już wczytane rozpakowane Nowly:** spakuj plik zip i upuść go w Ustawienia → Zaawansowane → Debugowanie. Instalacje ze sklepu odrzucają niepodpisane pliki zip.
+
+```bash
+nowly pack example
+```
+
+</Step>
+<Step title="Przetestuj" description="Otwórz docelową stronę - obecność aktywuje się automatycznie.">
+
+Odwiedź stronę
+
+</Step>
+</Steps>
+
+Powtarzaj **Zaimplementuj** → **Zbuduj** → **Wczytaj** po każdej zmianie kodu.

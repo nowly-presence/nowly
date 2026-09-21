@@ -1,0 +1,63 @@
+{
+  "navbar": {
+    "docs": "Dokümantasyon",
+    "library": "Kitaplık",
+    "open-menu": "Menüyü aç"
+  },
+  "store": {
+    "download-chrome": "Chrome için indir",
+    "download-firefox": "Firefox için indir"
+  },
+  "theme": {
+    "toggle": "Renk temasını değiştir",
+    "light": "Açık",
+    "dark": "Koyu"
+  },
+  "footer": {
+    "tagline": "Ne yaptığını paylaş.",
+    "copyright": "© 2026 Nowly. Tüm hakları saklıdır.",
+    "trademark": "Discord, <inc>Discord Inc.</inc> şirketinin tescilli ticari markasıdır.",
+    "language-label": "Dil",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português (Brasil)",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "Ürün",
+    "home": "Ana sayfa",
+    "library": "Kitaplık",
+    "host": "Masaüstü uygulaması",
+    "resources": "Kaynaklar",
+    "docs": "Dokümantasyon",
+    "changelog": "Sürüm notları",
+    "canary": "Canary",
+    "support": "Destek",
+    "community": "Topluluk",
+    "discord": "Discord",
+    "github": "GitHub",
+    "tos": "Kullanım koşulları",
+    "privacy": "Gizlilik",
+    "cookies": "Çerezler",
+    "legal-notice": "Yasal bildirim"
+  },
+  "cookie-banner": {
+    "message": "Bu site, kesinlikle gerekli bir dil çerezi kullanır. İleride reklamlar etkinleştirilirse Google reklam teknolojilerini de kullanabilir.",
+    "learn-more": "Daha fazla bilgi",
+    "dismiss": "Anladım"
+  },
+  "docs": {
+    "documentation": "Dokümantasyon",
+    "on-this-page": "Bu sayfada",
+    "toc": "İçindekiler",
+    "open-table-of-contents": "İçindekiler tablosunu aç",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "menu": "Menü"
+  }
+}

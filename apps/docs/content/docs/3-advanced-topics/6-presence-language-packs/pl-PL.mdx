@@ -1,0 +1,46 @@
+---
+title: Pakiety językowe presencji
+description: Dodawaj opcjonalne, typowane tłumaczenia tekstu aktywności Discorda.
+---
+
+## Oddzielny system uruchomieniowy
+
+Pakiety językowe tłumaczą tekst wysyłany do Discorda, na przykład „Ogląda wideo” lub „Przegląda Figmę”. Są oddzielne od języków używanych w metadanych i etykietach ustawień.
+
+Pakiety językowe są opcjonalne. Presencja bez katalogu `locales` nadal używa wbudowanych ciągów TypeScript, tak jak wcześniej.
+
+## Struktura plików
+
+Zlokalizowana presencja udostępnia wszystkie trzy słowniki uruchomieniowe:
+
+```text
+locales/
+├── en-US.json
+├── fr-FR.json
+└── es-ES.json
+```
+
+Każdy plik musi być płaskim obiektem JSON z tymi samymi kluczami i wartościami tekstowymi. `en-US.json` jest słownikiem referencyjnym i zapasowym. Kompilacja odrzuca nieprawidłowy JSON, brakujące języki, nieobsługiwane pliki, wartości niebędące tekstem i niezgodne klucze.
+
+```json filename="locales/en-US.json"
+{ "watchingVideo": "Watching {title}" }
+```
+
+## Typowane uzupełnianie
+
+```typescript
+import type enUS from "./locales/en-US.json"
+
+const locale = await presence.getStrings<typeof enUS>()
+const title = document.title
+
+await presence.setActivity({
+  details: presence.formatString(locale.watchingVideo, { title }),
+})
+```
+
+Import tylko typu zapewnia uzupełnianie w IDE i odrzuca nieznane klucze bez dodawania JSON do bundla. Nie trzeba generować typów.
+
+Wartości dynamiczne używają placeholderów `{name}` w JSON oraz `presence.formatString(template, params)` w kodzie presencji.
+
+Użytkownicy mogą wybrać jeden język aktywności globalnie albo inny język dla każdej zlokalizowanej presencji.

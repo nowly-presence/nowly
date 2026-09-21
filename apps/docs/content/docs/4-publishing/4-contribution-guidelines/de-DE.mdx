@@ -1,0 +1,37 @@
+---
+title: Beitragsrichtlinien
+description: Befolge die Beitragserwartungen von Nowly für zuverlässige und wartbare Presences.
+---
+
+## Vor dem Beitragen
+
+Stelle sicher, dass die Plattform für Discord Rich Presence geeignet ist und die Aktivität sinnvoll angezeigt werden kann.
+
+## Presence-Qualität
+
+Eine gute Presence sollte:
+
+- auf den wichtigsten unterstützten URLs funktionieren
+- private oder sensible Daten vermeiden
+- Ladezustände und fehlende Elemente behandeln
+- klare Metadaten und Assets verwenden
+- nützliche lokalisierte Beschreibungen enthalten
+- `discordNative` auf `true` setzen, wenn Discord die Plattform bereits anzeigt, falls der Nutzer sein Konto verknüpft
+
+## Codestil
+
+Halte den Presence-Code klein und lesbar. Bevorzuge benannte Hilfsfunktionen zum Auswerten des Seitenzustands und vermeide irrelevante Abstraktionen.
+
+## Assets
+
+Verwende saubere Plattform-Assets. Symbole sollten auf dunklen Hintergründen gut lesbar sein. Thumbnails sollten den Dienst klar darstellen.
+
+## Testen
+
+Teste die Presence vor dem Einreichen:
+
+- installiere sie lokal
+- besuche unterstützte URLs
+- prüfe die Discord-Aktivität
+- prüfe pausierte und nicht unterstützte Zustände
+- führe die Metadatenvalidierung aus

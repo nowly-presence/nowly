@@ -1,0 +1,29 @@
+{
+  "extensionName": {
+    "message": "Nowly"
+  },
+  "extensionDescription": {
+    "message": "Compartilhe sua atividade na web no Discord automaticamente."
+  },
+  "playing": {
+    "message": "Reproduzindo"
+  },
+  "paused": {
+    "message": "Pausado"
+  },
+  "commandOpenPanel": {
+    "message": "Abrir Nowly"
+  },
+  "commandTogglePause": {
+    "message": "Pausar ou retomar a presença no Discord"
+  },
+  "contextMenuPage": {
+    "message": "Presença da Nowly para esta página"
+  },
+  "contextMenuMuteTab": {
+    "message": "Não compartilhar esta aba"
+  },
+  "contextMenuUnmuteTab": {
+    "message": "Compartilhar esta aba"
+  }
+}

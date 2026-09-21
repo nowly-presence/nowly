@@ -2,6 +2,14 @@
   "title": {
     "en-US": "Presence Development",
     "fr-FR": "Développement de présences",
-    "es-ES": "Desarrollo de presencias"
+    "es-ES": "Desarrollo de presencias",
+    "de-DE": "Presence-Entwicklung",
+    "pt-BR": "Desenvolvimento de presenças",
+    "pl-PL": "Tworzenie obecności",
+    "ja-JP": "プレゼンス開発",
+    "ko-KR": "프레즌스 개발",
+    "tr-TR": "Presence Geliştirme",
+    "ms-MY": "Pembangunan Presence",
+    "el-GR": "Ανάπτυξη Presence"
   }
 }

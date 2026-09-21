@@ -1,0 +1,38 @@
+---
+title: Yerelleştirme
+description: Presence meta verilerini, özelliklerini, ayarlarını ve string'lerini yerelleştirin.
+---
+
+## Desteklenen Diller
+
+<LanguageTable
+  languages={[
+    { language: "İngilizce", code: "en-US", default: true },
+    { language: "Fransızca", code: "fr-FR" },
+    { language: "İspanyolca", code: "es-ES" },
+  ]}
+/>
+
+## Meta Veri Yerelleştirme
+
+```json filename="metadata.json"
+{
+  "description": {
+    "en-US": "Watch and share videos.",
+    "fr-FR": "Regardez et partagez des vidéos.",
+    "es-ES": "Mira y comparte videos."
+  }
+}
+```
+
+## Ayarları Yerelleştirme
+
+Ayarların etiketleri ve açıklamaları aynı dil biçimini kullanır.
+
+## Çalışma Zamanı String'leri
+
+Discord etkinlik metni, meta veri ve ayar yerelleştirmesinden ayrı olan isteğe bağlı [presence dil paketlerini](/advanced-topics/presence-language-packs) kullanır.
+
+## Metni Kısa Tutun
+
+Discord etkinlik alanları kompakttır. Yerelleştirilmiş string'leri kısa tutun ve çalışma zamanı etkinliğinde uzun paragraflardan kaçının.

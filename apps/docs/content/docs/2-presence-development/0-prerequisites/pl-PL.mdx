@@ -1,0 +1,52 @@
+---
+title: Wymagania wstępne
+description: Skonfiguruj lokalne środowisko do tworzenia obecności - sklonuj repozytorium obecności i zainstaluj CLI.
+---
+
+## Wymagania
+
+- **Node.js 22+** - wymagany do uruchomienia CLI i budowania obecności
+- **pnpm** - repozytorium obecności korzysta z workspace'ów pnpm
+- **Discord Desktop** - do testowania obecności z Nowly Host
+- **Git** - do sklonowania repozytorium obecności
+
+## Sklonuj repozytorium obecności
+
+Wszystkie obecności społeczności znajdują się w repozytorium [nowly-presence/presences](https://github.com/nowly-presence/presences).
+
+```bash
+git clone https://github.com/nowly-presence/presences.git
+cd presences
+```
+
+## Zainstaluj CLI Globalnie
+
+CLI Nowly pozwala tworzyć szkielety, walidować i budować obecności.
+
+```bash
+pnpm i -g @nowly/cli
+```
+
+> W Node 24+ może być potrzebne `--config.minimumReleaseAge=0`, jeśli pakiet został niedawno opublikowany.
+
+## Zainstaluj Zależności
+
+Repozytorium obecności korzysta z workspace'ów pnpm. Instalacja zależności łączy też pakiet `@nowly/sdk` do sprawdzania typów.
+
+```bash
+pnpm install
+```
+
+## Zweryfikuj Konfigurację
+
+Uruchom CLI, aby potwierdzić, że wszystko działa:
+
+```bash
+nowly --help
+```
+
+Powinna pojawić się lista dostępnych poleceń (`init`, `build`, `pack`, `extension`, `validate` itd.).
+
+## Następny Krok
+
+Twoje środowisko jest gotowe. Przejdź do [Tworzenie pierwszej obecności](/presence-development/creating-your-first-presence), aby utworzyć szkielet pierwszej obecności.

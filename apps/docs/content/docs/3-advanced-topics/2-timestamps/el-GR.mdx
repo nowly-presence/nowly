@@ -1,0 +1,34 @@
+---
+title: Timestamps
+description: Εμφάνισε την πρόοδο αναπαραγωγής στο Discord Rich Presence με χρονικές ενδείξεις πολυμέσων.
+---
+
+## Γιατί είναι σημαντικές οι χρονικές ενδείξεις
+
+Οι χρονικές ενδείξεις κάνουν τη δραστηριότητα στο Discord να φαίνεται ζωντανή. Δείχνουν πόση ώρα παρακολουθεί ο χρήστης ή πόσος χρόνος απομένει.
+
+## Χρήση του createMediaTimestamps
+
+Το `document` είναι το DOM API του browser (διαθέσιμο επειδή τα presences εκτελούνται ως content scripts). Το `Assets` παρέχεται από το runtime (βλ. [Assets](/presence-development/assets)).
+
+```ts filename="presence.ts"
+import { createMediaTimestamps } from "@nowly/sdk"
+
+const video = document.querySelector("video")
+
+if (video) {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    ...createMediaTimestamps(video),
+  })
+}
+```
+
+## Παύση πολυμέσων
+
+Όταν η αναπαραγωγή είναι σε παύση, το `createMediaTimestamps` δεν επιστρέφει χρονικές ενδείξεις. Έτσι αποφεύγεται η εμφάνιση λανθασμένης προόδου αναπαραγωγής.
+
+## Ζωντανές μεταδόσεις
+
+Οι ζωντανές μεταδόσεις συχνά δεν έχουν σταθερή διάρκεια. Χρησιμοποίησε μόνο χρονική ένδειξη έναρξης ή παρέλειψε τις χρονικές ενδείξεις, ανάλογα με τη συμπεριφορά της πλατφόρμας.

@@ -58,6 +58,12 @@ export type DeviceExport = {
   analyticsEvents: Array<{ key: string; slug: string | null; source: string | null; country: string | null; createdAt: string }>
 }
 
+export const deviceExists = async (deviceId: string): Promise<boolean> => {
+  if (!hasDatabase()) return false
+  const device = await getPrisma().device.findUnique({ where: { deviceId }, select: { deviceId: true } })
+  return device !== null
+}
+
 export const exportDeviceData = async (deviceId: string): Promise<DeviceExport | null> => {
   if (!hasDatabase()) return null
 

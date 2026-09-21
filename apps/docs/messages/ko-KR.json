@@ -1,0 +1,63 @@
+{
+  "navbar": {
+    "docs": "문서",
+    "library": "라이브러리",
+    "open-menu": "메뉴 열기"
+  },
+  "store": {
+    "download-chrome": "Chrome용 다운로드",
+    "download-firefox": "Firefox용 다운로드"
+  },
+  "theme": {
+    "toggle": "색상 테마 전환",
+    "light": "라이트",
+    "dark": "다크"
+  },
+  "footer": {
+    "tagline": "지금 하고 있는 일을 공유하세요.",
+    "copyright": "© 2026 Nowly. All rights reserved.",
+    "trademark": "Discord는 <inc>Discord Inc.</inc>의 등록 상표입니다.",
+    "language-label": "언어",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português (Brasil)",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "제품",
+    "home": "홈",
+    "library": "라이브러리",
+    "host": "데스크톱 앱",
+    "resources": "리소스",
+    "docs": "문서",
+    "changelog": "릴리스 노트",
+    "canary": "Canary",
+    "support": "지원",
+    "community": "커뮤니티",
+    "discord": "Discord",
+    "github": "GitHub",
+    "tos": "이용약관",
+    "privacy": "개인정보처리방침",
+    "cookies": "쿠키",
+    "legal-notice": "법적 고지"
+  },
+  "cookie-banner": {
+    "message": "이 사이트는 반드시 필요한 언어 설정 쿠키를 사용합니다. 이후 광고 기능이 활성화되면 Google이 광고 기술을 사용할 수 있습니다.",
+    "learn-more": "자세히 알아보기",
+    "dismiss": "확인"
+  },
+  "docs": {
+    "documentation": "문서",
+    "on-this-page": "이 페이지 내용",
+    "toc": "목차",
+    "open-table-of-contents": "목차 열기",
+    "previous": "이전",
+    "next": "다음",
+    "menu": "메뉴"
+  }
+}

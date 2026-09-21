@@ -133,26 +133,26 @@ export const fetchImage = async (url: URL, service: ImageProxyService): Promise<
     } as RequestInit)
 
     if (!response.ok) {
-      return { ok: false, status: response.status, error: `Upstream returned ${response.status}` }
+      return { ok: false, status: response.status, error: "IMAGE_UPSTREAM_ERROR" }
     }
 
     const buffer = Buffer.from(await response.arrayBuffer())
     const contentType = response.headers.get("Content-Type") || "image/webp"
 
     if (response.headers.has("Content-Length") && buffer.byteLength > MAX_IMAGE_BYTES) {
-      return { ok: false, status: 413, error: "Image too large" }
+      return { ok: false, status: 413, error: "IMAGE_TOO_LARGE" }
     }
 
     if (buffer.byteLength === 0) {
-      return { ok: false, status: 502, error: "Empty image" }
+      return { ok: false, status: 502, error: "EMPTY_IMAGE" }
     }
 
     return { ok: true, buffer, contentType, status: response.status }
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") {
-      return { ok: false, status: 504, error: "Fetch timeout" }
+      return { ok: false, status: 504, error: "IMAGE_FETCH_TIMEOUT" }
     }
-    return { ok: false, status: 502, error: "Fetch failed" }
+    return { ok: false, status: 502, error: "IMAGE_FETCH_FAILED" }
   } finally {
     clearTimeout(timeout)
   }
@@ -170,7 +170,7 @@ export const handleImageProxyRequest = async (
 ): Promise<void> => {
   const parsed = await parseProxyUrl(target.url, target.service)
   if (!parsed) {
-    reply.status(400).send({ error: "Invalid image URL" })
+    reply.status(400).send({ error: "INVALID_IMAGE_URL" })
     return
   }
 

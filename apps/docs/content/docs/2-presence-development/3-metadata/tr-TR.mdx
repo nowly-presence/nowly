@@ -1,0 +1,123 @@
+---
+title: Meta Veri
+description: Bir Nowly presence metadata.json dosyasındaki her gerekli ve isteğe bağlı alanı belgeleyin.
+---
+
+## Gerekli Alanlar
+
+Her presence şunlara ihtiyaç duyar:
+
+<TypeTable
+  properties={[
+    { name: "name", type: "string", description: "Hizmetin veya platformun görünen adı.", required: true },
+    { name: "author", type: "object", description: "Kitaplıkta ve OG görsellerinde ilk gösterilen ana yazar.", required: true },
+    { name: "description", type: "object", description: "Yerel ayara göre anahtarlanmış kısa yerelleştirilmiş açıklamalar.", required: true },
+    { name: "url", type: "string[]", description: "Sayfa eşleştirme için desteklenen alan adları veya URL kalıpları.", required: true },
+    { name: "color", type: "string", description: "UI ve gömülü içerikler tarafından kullanılan hex formatında marka rengi.", required: true },
+    { name: "category", type: "string", description: "streaming, music, video, social, gaming, tools, ai, learning, creator veya other'dan biri.", required: true }
+  ]}
+/>
+
+## Örnek
+
+```json
+{
+  "name": "YouTube",
+  "author": {
+    "name": "Nowly Developer",
+    "github": "example"
+  },
+  "url": ["youtube.com", "www.youtube.com"],
+  "color": "#FF0033",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch and share videos on YouTube."
+  }
+}
+```
+
+## Yazar ve Katkıda Bulunanlar
+
+- `author` - Kitaplıkta ve OG görsellerinde ilk gösterilen ana bakımcı.
+- `contributors` - Presence'a yardımcı olan diğer kişiler.
+
+<CalloutInfo>
+GitHub kullanıcı adları (`github` anahtarı) avatarları çözümlemek için kullanılır.
+</CalloutInfo>
+
+## Açıklamalar ve Özellikler
+
+- `description` - Yerel ayara göre anahtarlanmış kısa pazar yeri metni.
+- `longDescription` - Ayrıntı sayfaları için genişletilmiş açıklama.
+- `features` - Desteklenen davranışların (örn. buton desteği, medya tuşları) yerelleştirilmiş listesi.
+
+## Discord Yerel Desteği
+
+Bazı platformlar, kullanıcı hesabını bağladığında Discord'da zaten görünür (Spotify buna tipik bir örnektir). Kitaplığın, o bağlantı olmadan da Nowly'nin hâlâ yararlı olduğunu açıklayabilmesi için bu isteğe bağlı bayrağı ayarlayın.
+
+<TypeTable
+  properties={[
+    { name: "discordNative", type: "boolean", description: "Kullanıcı hesabını bağladığında Discord bu platformu zaten gösteriyorsa true. İsteğe bağlı. Varsayılan olarak false.", required: false }
+  ]}
+/>
+
+```json
+{
+  "name": "Spotify",
+  "discordNative": true
+}
+```
+
+Bu yalnızca kitaplık sayfasında ve uzantıda (mağaza ve kurulu presence ayrıntılarında) bir bilgi notu gösterir. Kurulumu engellemez.
+
+## URL Eşleştirme
+
+- `url` - Sayfa eşleştirme için desteklenen alan adları veya URL kalıpları.
+- `regExp` - Karmaşık URL kalıpları için regex tabanlı eşleştirme.
+
+<CalloutWarning>
+`regExp`'i yalnızca basit `url` eşleştirmesi yeterli olmadığında kullanın. Açık alan adı listelerini tercih edin.
+</CalloutWarning>
+
+## Yürütme Bağlamı
+
+İki isteğe bağlı alan, presence betiğinizin tarayıcıda nasıl ve ne zaman çalıştığını kontrol eder.
+
+<TypeTable
+  properties={[
+    { name: "world", type: "\"main\" | \"isolated\"", description: "Yürütme dünyası. Varsayılan olarak isolated.", required: false },
+    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "Betiğin ne zaman enjekte edildiği. Varsayılan olarak document_idle.", required: false }
+  ]}
+/>
+
+Varsayılan olarak bir presence **isolated** dünyada çalışır: sayfa DOM'unu paylaşır ama sayfanın JavaScript bağlamını paylaşmaz. Bu güvenli varsayılandır ve hemen hemen her presence için işe yarar.
+
+Presence'ınızın **sayfa bağlamına** ihtiyaç duyduğu durumlarda, özellikle şunlar için `"world": "main"` ayarlayın:
+
+- sayfa globallerini okumak (örn. sitenin `window` üzerinde sunduğu bir player nesnesi);
+- kullanıcının oturum çerezlerini taşıması gereken **aynı kaynaklı, kimlik doğrulamalı bir `fetch`** yapmak (örn. bir sitenin dahili meta veri API'si).
+
+```json
+{
+  "name": "Netflix",
+  "url": ["netflix.com", "www.netflix.com"],
+  "world": "main",
+  "color": "#E50914",
+  "category": "streaming",
+  "description": {
+    "en-US": "Watch movies and series on Netflix."
+  }
+}
+```
+
+<CalloutWarning>
+İzole dünyadan yapılan bir `fetch`, birinci taraf isteği olarak değerlendirilmez, bu yüzden kimlik doğrulamalı çağrılar sessizce başarısız olur. Presence'ınız sitenin oturum açmış API'sine bağlıysa `"world": "main"` ayarlamanız gerekir.
+</CalloutWarning>
+
+<CalloutInfo>
+Bildirim tamamen `metadata.json` içinde yer alır - uzantı bunu kayıt sırasında okur. Yeni bir sayfa bağlamlı presence eklemek için uzantıda herhangi bir değişikliğe gerek yoktur.
+</CalloutInfo>
+
+## Kategori
+
+İzin verilen kategoriler `streaming`, `music`, `video`, `social`, `gaming`, `tools`, `ai`, `learning`, `creator` ve `other`'dır.

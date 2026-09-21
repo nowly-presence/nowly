@@ -1,0 +1,28 @@
+---
+title: 1.2.0
+date: 2026-06-25
+description: Vollständige Überarbeitung von Oberfläche und Bedienung der Erweiterung mit neuem Player, nativen Komponenten, Aktivitätsabzeichen, Schlummern und Planung, bedingtem Debug-Panel und neu geordneten Einstellungen.
+---
+
+`1.2.0` ist eine große visuelle und funktionale Veröffentlichung. Sie bringt einen neuen Player mit Vinyl-Animation, die native `Sheet`-Komponente, ein Erweiterungsabzeichen, eigene Schalter und Kontrollkästchen sowie Schlummer-, Planungs- und Debug-Funktionen.
+
+## Player
+Neues Bar-Layout mit 48×48-Kunstwerk, optionalem Fortschrittsbalken für Musik, Streaming, TV und Anime sowie `showPlayer` zum vollständigen Ausblenden. Mediensteuerungen wurden entfernt.
+
+## Sheet und Komponenten
+Die mit Tailwind v4 erstellte native Sheet-Komponente gleitet von unten oder rechts herein und wird für Einstellungen, Schlummern und Planung verwendet. Eigene Switch- und Checkbox-Komponenten sorgen für ein einheitliches Nowly-Design.
+
+## Aktivität und Planung
+Ein Punkt am Erweiterungssymbol zeigt aktive Präsenz an. Präsenzbezogenes Schlummern, CLEAR_ACTIVITY erst beim Aufheben, Tagesplanung von Sun bis Sat, Zeitbereiche und Ganzta­gesmodus geben vollständige Kontrolle über Discord-Aktivitäten.
+
+## Einstellungen und Debugging
+Einstellungen, Datenverwaltung und Analytik wurden neu geordnet; Update-Hinweise erscheinen bedingt. Das DebugPanel bleibt in Chrome-Web-Store-Builds verborgen. Fortschrittsbalken erscheinen nur für Medienkategorien.
+
+## Browser, API und Website
+Chrome- und Firefox-Builds, native userScripts-Injektion, strenge CSP-Unterstützung und Produktions-Manifeste wurden ergänzt. Authentifizierung, Analytik, Bewertungen, Bild-Proxy, Synchronisierung und KI-Changelog wurden gehärtet. Rechts-, Cookie-, Team- und Statusseiten sowie Browser-CTA wurden ergänzt.
+
+## Desktop, Qualität und Architektur
+Update-Prüfungen, Logging, Discord-IPC, Logrotation und Archive sind zuverlässiger. Gemeinsame Hilfsfunktionen liegen in `@nowly/shared`; Einstiegspunkte, Manager, Services, Runtime, Analytik und UI-Komponenten wurden neu organisiert. Alle relativen Imports wurden durch `@/`-Aliase ersetzt.
+
+## Supporter Pass, Sicherheit und CDN
+Der Supporter Pass liefert E-Mails, Discord-Webhooks, werbefreien Status, Redeem-Seite und Gerätesynchronisierung. `GET /security/public-key` ermöglicht Schlüsselrotation mit Fallback. Statische Assets werden aus `cdn.nowly.me/assets/` geladen.

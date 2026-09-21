@@ -13,13 +13,13 @@ export const requireAuth = async (request: FastifyRequest, reply: FastifyReply):
   const secret = serverEnv.API_SECRET_KEY ?? process.env.API_SECRET_KEY
 
   if (!secret && process.env.NODE_ENV === "production") {
-    reply.status(500).send({ error: "Missing API_SECRET_KEY" })
+    reply.status(500).send({ error: "API_SECRET_MISSING" })
     return
   }
 
   if (!secret) return
 
   if (request.headers.authorization !== `Bearer ${secret}`) {
-    reply.status(401).send({ error: "Unauthorized" })
+    reply.status(401).send({ error: "UNAUTHORIZED" })
   }
 }

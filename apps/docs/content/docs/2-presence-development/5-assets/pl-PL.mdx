@@ -1,0 +1,53 @@
+---
+title: Zasoby
+description: Przygotuj zasoby logo, ikony i miniatury dla obecności Nowly.
+---
+
+## Wymagane Zasoby
+
+Każda obecność musi zawierać:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "Znak marki platformy do szerszych umiejscowień, nagłówków i obrazów Open Graph.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Kompaktowa kwadratowa ikona używana w małych elementach UI i obrazach aktywności Discorda.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Grafika dla marketplace i strony szczegółów, która wyraźnie reprezentuje platformę.", required: true }
+  ]}
+/>
+
+Te dokładne wymiary są egzekwowane przez CI przy każdym PR obecności - zasób o niewłaściwym rozmiarze nie przechodzi walidacji.
+
+## Logo
+
+Użyj `logo.png` dla znaku marki platformy, gdy odpowiedni jest szerszy obraz. Musi mieć dokładnie **300×300**.
+
+## Ikona
+
+Użyj `icon.png` do kompaktowych kwadratowych wyświetleń, kolorowych teł i obrazów aktywności Discorda. Musi mieć dokładnie **128×128**.
+
+## Miniatura
+
+Użyj `thumbnail.jpg` dla grafik marketplace i strony szczegółów. Powinna wyraźnie reprezentować platformę. Musi mieć dokładnie **1920×1080**.
+
+## Stałe zasobów w czasie wykonywania
+
+`Assets` jest dostarczane przez środowisko uruchomieniowe (zobacz [Presence API](/presence-development/presence-api)). Udostępnia trzy domyślne klucze zasobów:
+
+```ts filename="presence.ts"
+Assets.Logo      // → "logo.png"
+Assets.Icon      // → "icon.png"
+Assets.Thumbnail // → "thumbnail.jpg"
+```
+
+Użyj ich w ładunkach aktywności:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  largeImageKey: Assets.Logo,
+  largeImageText: "YouTube",
+})
+```
+
+## Wytyczne Jakościowe
+
+Użyj przezroczystego PNG dla `icon.png` - ikona jest wyświetlana na kolorowym tle w bibliotece Nowly, więc wypełnione tło będzie kolidować. Przezroczysty `logo.png` jest preferowany, ale mniej krytyczny. Dbaj o czytelność miniatur w małych rozmiarach i unikaj ogólnikowych obrazów.

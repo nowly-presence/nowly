@@ -1,0 +1,34 @@
+---
+title: Zaman Damgaları
+description: Medya zaman damgalarıyla Discord Rich Presence'da oynatma ilerlemesini görüntüleyin.
+---
+
+## Zaman Damgaları Neden Önemlidir
+
+Zaman damgaları Discord etkinliğinin canlı hissettirmesini sağlar. Kullanıcının ne kadar süredir izlediğini veya ne kadar süre kaldığını gösterir.
+
+## createMediaTimestamps Kullanımı
+
+`document`, tarayıcı DOM API'sidir (presence'lar content script olarak çalıştığı için kullanılabilir). `Assets` runtime tarafından sağlanır (bkz. [Assets](/presence-development/assets)).
+
+```ts filename="presence.ts"
+import { createMediaTimestamps } from "@nowly/sdk"
+
+const video = document.querySelector("video")
+
+if (video) {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    ...createMediaTimestamps(video),
+  })
+}
+```
+
+## Durdurulan Medya
+
+Medya durdurulduğunda `createMediaTimestamps` hiçbir zaman damgası döndürmez. Bu, hatalı oynatma ilerlemesinin gösterilmesini önler.
+
+## Canlı Yayınlar
+
+Canlı yayınların genellikle sabit bir süresi yoktur. Platform davranışına bağlı olarak yalnızca bir başlangıç zaman damgası kullanın veya zaman damgalarını atlayın.

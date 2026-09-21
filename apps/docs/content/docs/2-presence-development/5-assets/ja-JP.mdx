@@ -1,0 +1,53 @@
+---
+title: アセット
+description: Nowlyプレゼンス用のロゴ、アイコン、サムネイルのアセットを準備します。
+---
+
+## 必須アセット
+
+各プレゼンスには以下を含める必要があります。
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "より広い配置、ヘッダー、Open Graph画像用のプラットフォームのブランドマーク。", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "小さなUI表示やDiscordのアクティビティ画像で使用されるコンパクトな正方形アイコン。", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "プラットフォームを明確に表す、マーケットプレイスおよび詳細ページ用のビジュアル。", required: true }
+  ]}
+/>
+
+これらの正確なサイズは、プレゼンスのPRごとにCIで強制されます。サイズが誤っているアセットは検証に失敗します。
+
+## ロゴ
+
+より広い画像が適切な場合、プラットフォームのブランドマークとして `logo.png` を使用してください。正確に**300×300**である必要があります。
+
+## アイコン
+
+コンパクトな正方形表示、色付き背景、Discordのアクティビティ画像には `icon.png` を使用してください。正確に**128×128**である必要があります。
+
+## サムネイル
+
+マーケットプレイスと詳細ページのビジュアルには `thumbnail.jpg` を使用してください。プラットフォームを明確に表すものにしてください。正確に**1920×1080**である必要があります。
+
+## ランタイムアセット定数
+
+`Assets` はランタイムによって提供されます([Presence API](/presence-development/presence-api)を参照)。3つのデフォルトアセットキーを公開します。
+
+```ts filename="presence.ts"
+Assets.Logo      // → "logo.png"
+Assets.Icon      // → "icon.png"
+Assets.Thumbnail // → "thumbnail.jpg"
+```
+
+アクティビティのペイロードで使用します。
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  largeImageKey: Assets.Logo,
+  largeImageText: "YouTube",
+})
+```
+
+## 品質ガイドライン
+
+`icon.png` には透過PNGを使用してください。アイコンはNowlyライブラリ内で色付きの背景の上に表示されるため、塗りつぶされた背景があると見た目が衝突します。透過の `logo.png` が望ましいですが、こちらはそれほど重要ではありません。サムネイルは小さいサイズでも判読できるようにし、一般的すぎる画像は避けてください。

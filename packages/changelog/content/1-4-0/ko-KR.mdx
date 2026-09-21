@@ -1,0 +1,93 @@
+---
+title: 1.4.0
+date: 2026-09-14
+description: 하단 탐색, 인패널 라이브러리, 일시 중지와 단축키, nowly pack ZIP 설치, Presence 아트워크를 포함한 사이드 패널 개편.
+---
+
+`1.4.0`은 Home, Library, Settings 중심으로 사이드 패널을 재구축합니다. Discord 일시 중지, 검색, 컨텍스트 메뉴, 오프라인 재시도와 `nowly pack`을 추가했습니다.
+
+## Library와 설치
+공개 카탈로그를 검색하고 서명 확인 후 확장 프로그램에서 설치할 수 있습니다. ZIP에는 `metadata.json`과 `bundle.js`가 필요하며 `nowly pack <slug>`는 `dist/packs/<slug>.zip`을 만듭니다.
+
+## 조작과 업데이트
+`Ctrl+Shift+Y`는 패널을 열고 `Ctrl+Shift+U`는 Discord를 일시 중지합니다. 버전 배지, 관리 화면, Dialog와 `/changelog/{version}` 업데이트 페이지를 추가했습니다.
+
+## 사이드 패널 셸
+
+이전 액션 바와 사이드 내비게이션을 하단 내비게이션, 새 헤더, 데스크톱 앱이 정상일 때 자동으로 숨겨지는 연결 상태 바로 교체했습니다. 패널은 작은 앱처럼 동작합니다. 현재 활동을 잃지 않고 화면을 전환하며, 연결 문제는 필요할 때만 표시됩니다.
+
+## 패널 내 라이브러리
+
+하단 내비게이션의 Library 탭은 API의 공개 카탈로그를 검색, 카테고리 칩, 간결한 상세 정보와 함께 표시합니다. 서명 확인 후 Home 업데이트 배너를 포함해 확장 프로그램 안에서 설치와 업데이트가 실행됩니다. 설치 시 더 이상 nowly.me를 열지 않습니다. 이미 설치된 Presence 페이지의 View on website 링크는 유지됩니다.
+
+## Presence 아트워크
+
+설치된 Presence와 Library 상세 페이지는 카드 상단에 흐린 배너로 썸네일을 표시합니다. 이미지가 없으면 색상 후광으로 대체합니다. 관리 화면은 단순한 필드 목록 대신 웹사이트 페이지와 같은 형태를 사용합니다.
+
+## 버전
+
+버전은 Home과 Library의 Presence 페이지에서는 이름 옆, Library 목록에서는 카테고리 옆, Home 목록에서는 Enabled 또는 Disabled 옆의 배지로 표시됩니다. 버전은 상태나 카테고리 텍스트에 섞이지 않아 쉽게 확인할 수 있습니다.
+
+## Discord 일시 중지
+
+지속적인 일시 중지는 Presence를 제거하거나 스크립트를 비활성화하지 않고 Discord의 Rich Presence를 멈춥니다. 헤더 버튼, Settings 또는 Ctrl+Shift+U로 사용할 수 있으며 툴바 배지와 상태 표시줄에 상태가 나타납니다.
+
+## 단축키
+
+Ctrl+Shift+Y는 패널을 열고 Ctrl+Shift+U는 Discord를 일시 중지합니다. Settings에는 현재 바인딩과 브라우저에서 변경하는 링크가 표시됩니다.
+
+## 페이지 컨텍스트 메뉴
+
+페이지를 마우스 오른쪽 버튼으로 클릭하면 일치하는 설치된 Presence, Library 목록 또는 스토어의 호스트 이름 검색으로 이동할 수 있습니다.
+
+## Home 검색
+
+Home은 이름, slug, 카테고리 또는 사이트 URL로 설치된 Presence를 필터링합니다.
+
+## 오프라인 설치
+
+네트워크 또는 서버 오류처럼 보이는 설치와 업데이트 실패는 재시도 큐로 이동합니다. 매분 자동 재시도하며 Retry now도 제공합니다.
+
+## 로컬 ZIP
+
+압축 해제된(Load unpacked) 빌드에서는 Debug 패널에 빌드된 Presence ZIP을 놓을 수 있습니다. ZIP에는 metadata.json과 bundle.js가 있어야 합니다. presence.ts만 있는 소스 폴더는 거부됩니다. 압축 해제된 확장 프로그램을 다시 불러와도 로컬 설치는 유지됩니다.
+
+## CLI pack
+
+`nowly pack <slug>`는 Presence를 빌드하고 `dist/packs/<slug>.zip`을 작성합니다. `nowly extension <slug...>`은 계속 로드 가능한 Chrome 폴더를 생성합니다. 작성자는 매번 새 압축 해제 빌드를 만들지 않고 이미 설치된 확장 프로그램에 Presence를 불러올 수 있습니다.
+
+## 기본 버튼
+
+Install 및 기타 기본 버튼은 어두운 텍스트가 있는 강조 배경을 사용합니다. 밝은 강조색을 포함한 모든 테마에서 대비가 올바르게 유지됩니다.
+
+## Settings
+
+Settings는 접을 수 있는 General, Presences, Advanced 그룹으로 나뉩니다. 활성 Presence를 별도로 표시하던 기존 토글은 UI에서 제거했습니다. 단축키는 다른 옵션과 함께 배치됩니다.
+
+## Dialog
+
+Snooze와 schedule은 Sheet 대신 Dialog에서 열립니다. 오버레이는 중앙에 표시되고 하나의 패턴을 공유하며 새 사이드 패널에 더 잘 맞습니다.
+
+## Home
+
+Presence 목록과 현재 활동 카드를 새 셸에 맞게 다시 구성했습니다. 목록 행에는 enable, schedule, settings가 유지됩니다. Grid 카드는 아이콘, 이름, 상태만 있는 간결한 타일이며 전체 카드를 누르면 관리 화면이 열립니다.
+
+## 표시
+
+Home은 헤더의 간결한 토글로 카테고리 목록과 2열 카드 그리드 사이를 전환합니다. 이전 알파벳 모드는 제거했습니다.
+
+## Presence 관리 화면
+
+목록 이름, 설정 또는 Grid 카드에서 Presence를 열면 아트워크, 설명, 활성화 스위치, 업데이트 스트립, 체크 표시가 Presence 색상으로 표시된 기능, 지원 URL, 크레딧, 제목이 있는 Settings 블록과 확인이 필요한 별도 uninstall 컨트롤을 포함한 전체 패널로 전환됩니다.
+
+## 온보딩
+
+첫 실행 오버레이의 레이아웃을 다시 만들고 영어, 프랑스어, 스페인어 문구를 업데이트했습니다.
+
+## 타이포그래피
+
+사이드 패널은 이제 Instrument Sans를 사용합니다.
+
+## 업데이트 변경 로그
+
+스토어 업데이트는 nowly.me의 `/changelog/{version}`을 엽니다. 이 페이지는 전용 “your extension was updated” 히어로와 함께 문서의 릴리스 노트를 재사용합니다.

@@ -26,14 +26,17 @@ packages (`@nowly/analytics`, `@nowly/env`, `@nowly/locales`, `@nowly/shared`).
 
 ```sh
 cd apps/extension
-pnpm build:firefox
+pnpm exec tsx scripts/build.ts firefox
 ```
 
 This runs `apps/extension/scripts/build.ts` (a small Vite-based build script,
 no custom tooling beyond Vite/esbuild) and produces the exact contents of the
 submitted extension at `apps/extension/dist/firefox`.
 
-For a Chrome build instead: `pnpm build:chrome`.
+For a Chrome build instead: `pnpm exec tsx scripts/build.ts chrome`.
+
+(`pnpm build:chrome`/`pnpm build:firefox` build the canary/dev variant instead -
+do not use those to reproduce a store submission.)
 
 ## What the build script does
 

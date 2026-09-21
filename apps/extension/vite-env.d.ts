@@ -1,19 +1,5 @@
 /// <reference types="vite/client" />
 
-declare module "@tabler/icons-react/dist/esm/icons/*.mjs" {
-  import type { ForwardRefExoticComponent, RefAttributes, SVGProps } from "react";
-
-  const Icon: ForwardRefExoticComponent<
-    SVGProps<SVGSVGElement> & {
-      size?: number | string;
-      stroke?: number | string;
-      title?: string;
-    } & RefAttributes<SVGSVGElement>
-  >;
-
-  export default Icon;
-}
-
 interface ImportMetaEnv {
   readonly BROWSER: "chrome" | "firefox"
   readonly VITE_NOWLY_CHANNEL: "stable" | "canary"

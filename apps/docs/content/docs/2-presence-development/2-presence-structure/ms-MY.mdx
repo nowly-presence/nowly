@@ -1,0 +1,72 @@
+---
+title: Struktur Presence
+description: Fahami susun atur folder yang diperlukan untuk presence Nowly.
+---
+
+## Susun Atur Folder
+
+Presence berada di bawah `src`, dikumpulkan mengikut huruf pertama namanya:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+`-- assets/
+    |-- logo.png
+    |-- icon.png
+    `-- thumbnail.jpg
+```
+
+## metadata.json
+
+`metadata.json` menerangkan platform, URL disokong, pengarang, kategori, penerangan tempatan, aset marketplace dan bendera pilihan seperti `discordNative`.
+
+## presence.ts
+
+`presence.ts` mengandungi logik runtime. Ia mengesan keadaan halaman dan memanggil Presence API.
+
+## utils/
+
+Untuk presence yang kompleks, pisahkan logik anda ke dalam fail khusus di bawah folder `utils/`. Presence YouTube, sebagai contoh, menyusun pembantu DOM, penghuraian saluran dan penyelesaian Shorts ke dalam modul berasingan:
+
+```txt
+src/Y/YouTube/
+|-- metadata.json
+|-- presence.ts
+|-- assets/
+|   |-- logo.png
+|   |-- icon.png
+|   `-- thumbnail.jpg
+`-- utils/
+    |-- categories.ts
+    |-- dom.ts
+    |-- channel.ts
+    |-- text.ts
+    |-- bridge.ts
+    |-- shorts-dom.ts
+    |-- shorts-resolve.ts
+    `-- youtube-data.ts
+```
+
+Bundler menyelesaikan import tempatan daripada `presence.ts`, jadi anda boleh mengimport fail utiliti seperti biasa:
+
+```ts filename="presence.ts"
+import { findVideo } from "./utils/dom"
+import { getChannelInfo } from "./utils/channel"
+```
+
+## assets
+
+Aset digunakan oleh marketplace, pakej presence yang dipasang, muatan aktiviti Discord dan imej Open Graph.
+
+Fail yang diperlukan:
+
+<TypeTable
+  properties={[
+    { name: "logo.png", type: "PNG, 300×300", description: "Tanda jenama lebar untuk pengepala marketplace, halaman presence dan imej OG yang dijana.", required: true },
+    { name: "icon.png", type: "PNG, 128×128", description: "Ikon segi empat sama untuk permukaan UI padat dan kunci imej aktiviti Discord.", required: true },
+    { name: "thumbnail.jpg", type: "JPG, 1920×1080", description: "Imej pratonton yang digunakan apabila presence memerlukan visual yang lebih besar.", required: true }
+  ]}
+/>
+
+Dimensi ini adalah keperluan tepat, disemak oleh CI pada setiap PR presence - lihat [Assets](/presence-development/assets) untuk butiran.

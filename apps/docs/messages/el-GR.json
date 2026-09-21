@@ -1,0 +1,63 @@
+{
+  "navbar": {
+    "docs": "Τεκμηρίωση",
+    "library": "Βιβλιοθήκη",
+    "open-menu": "Άνοιγμα μενού"
+  },
+  "store": {
+    "download-chrome": "Λήψη για Chrome",
+    "download-firefox": "Λήψη για Firefox"
+  },
+  "theme": {
+    "toggle": "Εναλλαγή θέματος χρώματος",
+    "light": "Φωτεινό",
+    "dark": "Σκοτεινό"
+  },
+  "footer": {
+    "tagline": "Μοιράσου ό,τι κάνεις.",
+    "copyright": "© 2026 Nowly. Με επιφύλαξη παντός δικαιώματος.",
+    "trademark": "Το Discord είναι σήμα κατατεθέν της <inc>Discord Inc.</inc>",
+    "language-label": "Γλώσσα",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português (Brasil)",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "Προϊόν",
+    "home": "Αρχική",
+    "library": "Βιβλιοθήκη",
+    "host": "Εφαρμογή υπολογιστή",
+    "resources": "Πόροι",
+    "docs": "Τεκμηρίωση",
+    "changelog": "Σημειώσεις έκδοσης",
+    "canary": "Canary",
+    "support": "Υποστήριξη",
+    "community": "Κοινότητα",
+    "discord": "Discord",
+    "github": "GitHub",
+    "tos": "Όροι χρήσης",
+    "privacy": "Απόρρητο",
+    "cookies": "Cookies",
+    "legal-notice": "Νομική σημείωση"
+  },
+  "cookie-banner": {
+    "message": "Αυτός ο ιστότοπος χρησιμοποιεί ένα απολύτως απαραίτητο cookie γλώσσας. Αν αργότερα ενεργοποιηθούν διαφημίσεις, η Google ενδέχεται να χρησιμοποιήσει και διαφημιστικές τεχνολογίες.",
+    "learn-more": "Μάθε περισσότερα",
+    "dismiss": "Το κατάλαβα"
+  },
+  "docs": {
+    "documentation": "Τεκμηρίωση",
+    "on-this-page": "Σε αυτή τη σελίδα",
+    "toc": "Περιεχόμενα",
+    "open-table-of-contents": "Άνοιγμα πίνακα περιεχομένων",
+    "previous": "Προηγούμενο",
+    "next": "Επόμενο",
+    "menu": "Μενού"
+  }
+}

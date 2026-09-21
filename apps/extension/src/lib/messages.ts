@@ -1,11 +1,7 @@
-import type { ExtensionMessageType } from "@/shared/types";
+import type { PayloadOf, ResponseOf, RouterMessageType } from "@/background/router/contracts"
 
-export type NativeStatus = {
-  connected: boolean;
-  status: string;
-  version?: string;
-  discordConnected?: boolean;
-};
-
-export const sendMessage = <T,>(type: ExtensionMessageType, payload?: unknown): Promise<T> =>
-  chrome.runtime.sendMessage({ source: "PRESENCES_POPUP", type, payload });
+// Typed client for the background router: the payload and return type are
+// both derived from RouterMessageMap for the given message type, so passing
+// the wrong shape - or expecting the wrong response - is a compile error.
+export const sendMessage = <K extends RouterMessageType>(type: K, payload?: PayloadOf<K>): Promise<ResponseOf<K>> =>
+  chrome.runtime.sendMessage({ source: "PRESENCES_POPUP", type, payload })

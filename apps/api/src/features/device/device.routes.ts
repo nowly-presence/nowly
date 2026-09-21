@@ -4,13 +4,23 @@ import { deriveDeviceToken, requireDeviceAccess } from "./device-token"
 import { deleteDeviceData, exportDeviceData, syncDevice } from "./device.service"
 
 export const deviceRoutes = async (fastify: FastifyInstance) => {
-  fastify.post("/sync", async (request, reply) => {
-    const parsed = deviceSyncBodySchema.safeParse(request.body)
-    if (!parsed.success) return reply.status(400).send({ error: "Invalid request body" })
+  fastify.post(
+    "/sync",
+    {
+      config: {
+        // Every call here can mint a fresh, valid device token - keep this tighter
+        // than the global limit so spamming new deviceIds is slow to pay off.
+        rateLimit: { max: 20, timeWindow: "1 minute" },
+      },
+    },
+    async (request, reply) => {
+      const parsed = deviceSyncBodySchema.safeParse(request.body)
+      if (!parsed.success) return reply.status(400).send({ error: "INVALID_REQUEST_BODY" })
 
-    await syncDevice(parsed.data)
-    return { ok: true, deviceToken: deriveDeviceToken(parsed.data.deviceId) }
-  })
+      await syncDevice(parsed.data)
+      return { ok: true, deviceToken: deriveDeviceToken(parsed.data.deviceId) }
+    },
+  )
 
   // Right to access: everything Nowly has stored for this device.
   fastify.get<{ Params: { deviceId: string }; Querystring: { token?: string } }>(
@@ -20,7 +30,7 @@ export const deviceRoutes = async (fastify: FastifyInstance) => {
       if (!requireDeviceAccess(request, reply, deviceId)) return
 
       const data = await exportDeviceData(deviceId)
-      if (!data) return reply.status(404).send({ error: "Device not found" })
+      if (!data) return reply.status(404).send({ error: "DEVICE_NOT_FOUND" })
       return data
     },
   )

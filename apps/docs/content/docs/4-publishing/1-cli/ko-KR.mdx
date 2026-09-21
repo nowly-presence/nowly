@@ -1,0 +1,116 @@
+---
+title: CLI
+description: Nowly CLI로 프레즌스를 로컬에서 생성, 빌드, 검증, 테스트하세요.
+---
+
+Nowly CLI는 npm에 `@nowly/cli`로 배포되어 있습니다. 전역으로 설치하세요:
+```bash
+pnpm i -g @nowly/cli
+```
+
+## 대화형 모드
+
+인수 없이 CLI를 실행하면 대화형 메뉴가 열립니다:
+
+```bash
+nowly
+```
+
+## 프레즌스 만들기
+
+```bash
+nowly init "Netflix"
+```
+
+대화형 프롬프트는 사용자가 계정을 연결할 경우 Discord가 이미 해당 플랫폼을 지원하는지 묻습니다. 그러면 `metadata.json`에 `discordNative`가 기록됩니다. 직접 전달할 수도 있습니다:
+
+```bash
+nowly init "Spotify" --discord-native
+```
+
+## 프레즌스 빌드
+
+모든 프레즌스 빌드:
+
+```bash
+nowly build
+```
+
+프레즌스 하나 빌드:
+
+```bash
+nowly build youtube
+```
+
+파일이 변경되면 다시 빌드하세요(`pack`을 사용하는 경우, 재빌드마다 압축 해제된 확장 프로그램을 다시 로드하거나 zip을 다시 드롭하세요):
+
+```bash
+nowly build youtube --watch
+nowly pack youtube --watch
+```
+
+## 프레즌스를 로컬에서 테스트
+
+Nowly API 없이 빌드된 프레즌스를 로드하는 방법은 두 가지입니다. 전체 가이드: [로컬에서 로드 및 테스트](/presence-development/load-and-test).
+
+### 미리 빌드된 확장 프로그램
+
+`presences` 저장소만 클론한 경우(기여자의 일반적인 경우), `nowly extension`을 사용하여 전체 `nowly` 모노레포 없이 바로 로드할 수 있는 개발 빌드를 받으세요:
+
+```bash
+nowly build youtube
+nowly extension youtube
+```
+
+최신 개발용 확장 프로그램 빌드를 CDN에서 다운로드하고, 지정한 프레즌스를 번들링하고, `dev-presences.json` 파일을 작성합니다. 그런 다음:
+
+1. `chrome://extensions`를 열고 **개발자 모드**를 활성화하세요
+2. **압축 해제된 확장 프로그램 로드** → 생성된 `dist/extension-dev` 폴더를 선택하세요
+3. 프레즌스가 자동으로 설치됩니다 - API 서버, 설치 페이지, 커스텀 API URL이 필요 없습니다
+
+프레즌스를 수정한 후 다시 빌드하고 `nowly extension <slug>`를 다시 실행한 다음, 확장 프로그램을 다시 로드하세요.
+
+CDN 빌드 대신 특정 로컬 확장 프로그램 빌드를 사용하려면 `--from`을 전달하세요:
+
+```bash
+nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+```
+
+### zip 드롭
+
+Nowly가 이미 **압축 해제된** 개발 빌드로 로드되어 있다면, 프레즌스를 패키징하고 디버그 패널에 드롭하세요:
+
+```bash
+nowly pack youtube
+```
+
+zip은 `dist/packs/youtube.zip`에 기록됩니다. **설정 → 고급 → 디버그**에 드롭하세요. 서명되지 않은 zip은 압축 해제된 빌드에서만 작동하며 Chrome 웹 스토어 설치에서는 작동하지 않습니다. 디버그 UI는 개발자 모드에서만 표시됩니다.
+
+### 전체 모노레포가 있는 경우
+
+`nowly` 자체를 클론했다면(`presences`를 서브모듈로 포함), 모든 프레즌스가 포함된 확장 프로그램을 바로 빌드할 수 있습니다:
+
+```bash
+pnpm build:extension:dev
+```
+
+변경할 때마다 변경된 프레즌스를 다시 빌드한 다음 확장 프로그램을 다시 빌드하세요:
+
+```bash
+nowly build youtube
+pnpm build:extension:dev
+```
+
+`chrome://extensions`에서 다시 로드하세요 - 프레즌스는 이미 설치되어 사용할 준비가 되었습니다.
+
+## 프레즌스 목록
+
+```bash
+nowly list
+```
+
+## 메타데이터 검증
+
+```bash
+nowly validate
+```

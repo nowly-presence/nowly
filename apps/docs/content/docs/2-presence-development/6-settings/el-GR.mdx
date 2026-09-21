@@ -1,0 +1,58 @@
+---
+title: Ρυθμίσεις
+description: Πρόσθεσε ρυθμίσεις τύπου ανά presence με στοιχεία ελέγχου boolean, input, select και slider.
+---
+
+## Τι Είναι οι Ρυθμίσεις
+
+Οι ρυθμίσεις επιτρέπουν στους χρήστες να προσαρμόζουν πώς συμπεριφέρεται ένα presence χωρίς να επεξεργάζονται κώδικα.
+
+## Υποστηριζόμενοι Τύποι Ρυθμίσεων
+
+Το Nowly υποστηρίζει ρυθμίσεις τύπου boolean, input, select και slider.
+
+<TypeTable
+  properties={[
+    { name: "boolean", type: "boolean", description: "Διακόπτης για ενεργοποιημένες/απενεργοποιημένες επιλογές." },
+    { name: "input", type: "string", description: "Τιμή ελεύθερου κειμένου." },
+    { name: "select", type: "string", description: "Μία τιμή επιλεγμένη από προκαθορισμένες επιλογές." },
+    { name: "slider", type: "number", description: "Αριθμητική τιμή με προαιρετικό min, max και step." }
+  ]}
+/>
+
+## Ορισμός Ρυθμίσεων
+
+Χρησιμοποίησε το [`Presence.Settings`](/presence-development/presence-api) για να ορίσεις ρυθμίσεις τύπου:
+
+```ts filename="presence.ts"
+const settings = Presence.Settings({
+  showButtons: {
+    type: "boolean",
+    default: true,
+    label: {
+      "en-US": "Show buttons"
+    }
+  }
+})
+```
+
+## Ανάγνωση Ρυθμίσεων
+
+Χρησιμοποίησε το `getSetting` κατά την εκτέλεση. Οι τιμές προέρχονται από τις αποθηκευμένες ρυθμίσεις του χρήστη, επιστρέφοντας στις προεπιλογές από το `Presence.Settings`. Οι ζωντανές αλλαγές από το πλαϊνό πλαίσιο φτάνουν ως `SETTINGS_UPDATED` και ενημερώνουν τον ίδιο χάρτη.
+
+Μπορείς επίσης να διαβάσεις τον τρέχοντα χάρτη από το `ctx.settings` στο `UpdateData`:
+
+```ts filename="presence.ts"
+presence.on("UpdateData", async (ctx) => {
+  const showButtons = await presence.getSetting<boolean>("showButtons")
+  // ίδια τιμή: ctx.settings.showButtons
+})
+```
+
+## Μεταφρασμένες Ετικέτες
+
+Οι ετικέτες και οι περιγραφές των ρυθμίσεων χρησιμοποιούν τα ίδια κλειδιά locale που χρησιμοποιούνται στα metadata.
+
+## Προεπιλογές
+
+Επίλεξε ασφαλείς προεπιλογές. Ένα presence θα πρέπει να λειτουργεί αμέσως μετά την εγκατάσταση χωρίς να απαιτείται ρύθμιση.

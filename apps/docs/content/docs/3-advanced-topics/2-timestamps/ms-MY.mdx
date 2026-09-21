@@ -1,0 +1,34 @@
+---
+title: Cap Masa
+description: Paparkan kemajuan main balik dalam Discord Rich Presence dengan cap masa media.
+---
+
+## Mengapa Cap Masa Penting
+
+Cap masa membuat aktiviti Discord terasa hidup. Ia menunjukkan berapa lama pengguna telah menonton atau berapa banyak masa yang tinggal.
+
+## Menggunakan createMediaTimestamps
+
+`document` ialah API DOM pelayar (tersedia kerana presence berjalan sebagai skrip kandungan). `Assets` disediakan oleh runtime (lihat [Assets](/presence-development/assets)).
+
+```ts filename="presence.ts"
+import { createMediaTimestamps } from "@nowly/sdk"
+
+const video = document.querySelector("video")
+
+if (video) {
+  await presence.setActivity({
+    details: document.title,
+    largeImageKey: Assets.Logo,
+    ...createMediaTimestamps(video),
+  })
+}
+```
+
+## Media Dijeda
+
+Apabila media dijeda, `createMediaTimestamps` tidak mengembalikan cap masa. Ini mengelakkan paparan kemajuan main balik yang salah.
+
+## Strim Langsung
+
+Strim langsung selalunya tidak mempunyai jangka masa tetap. Gunakan hanya cap masa permulaan atau langkau cap masa bergantung pada kelakuan platform.
