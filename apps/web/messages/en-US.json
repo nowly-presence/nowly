@@ -345,6 +345,7 @@
     "chromeos-email-placeholder": "you@example.com",
     "chromeos-submit": "Notify me",
     "chromeos-success": "Thanks, we'll let you know.",
+    "chromeos-error": "Something went wrong. Please try again.",
     "version": "Version {version}",
     "card-title": "Download for {platform}",
     "platforms": {
@@ -598,6 +599,23 @@
     "eyebrow": "Support",
     "title": "Need help?",
     "description": "Pick the channel that matches your issue. Discord is fastest for a conversation. GitHub keeps a public trail.",
+    "contact": {
+      "title": "Contact the team",
+      "description": "Send us a private message and we will get back to you by email.",
+      "required-note": "Fields marked with * are required.",
+      "name": "Name (optional)",
+      "name-placeholder": "Your name",
+      "email": "Email",
+      "email-placeholder": "you@example.com",
+      "subject": "Subject",
+      "subject-placeholder": "How can we help?",
+      "message": "Message",
+      "message-placeholder": "Tell us what you need help with...",
+      "submit": "Send message",
+      "sending": "Sending...",
+      "success": "Your message was sent.",
+      "error": "We could not send your message. Please try again."
+    },
     "open": "Open",
     "donate": "Nowly stays free. If you want to help the project, you can use <kofi>Ko-fi</kofi> or <sponsors>GitHub Sponsors</sponsors>.",
     "sections": {
@@ -726,7 +744,7 @@
     "badge": "Privacy",
     "title": "Privacy Policy",
     "description": "How Nowly handles your data, what stays on your device, and what depends on your consent.",
-    "last-updated": "Last updated: 17 September 2026.",
+     "last-updated": "Last updated: 21 September 2026.",
     "intro": "This policy describes how <strong>{publisherName}</strong> (“we”), as data controller, processes personal data in connection with Nowly. Rich Presence activity is sent from your browser to the Discord client <strong>on your machine</strong>. It does not pass through our servers. Optional usage statistics and a few website features do involve our API or processors, as described below.",
     "sections": [
       {
@@ -920,7 +938,7 @@
       },
       {
         "title": "Contact",
-        "body": "Email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> or see the <a href=\"/legal-notice\">legal notice</a>."
+        "body": "Email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> or use the private contact form on the <a href=\"/support\">support page</a>. See the <a href=\"/legal-notice\">legal notice</a>."
       }
     ]
   },

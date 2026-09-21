@@ -345,6 +345,7 @@
     "chromeos-email-placeholder": "you@example.com",
     "chromeos-submit": "通知を受け取る",
     "chromeos-success": "ありがとうございます。お知らせします。",
+    "chromeos-error": "問題が発生しました。もう一度お試しください。",
     "version": "バージョン {version}",
     "card-title": "{platform}用をダウンロード",
     "platforms": {
@@ -596,6 +597,23 @@
   },
   "supportPage": {
     "eyebrow": "サポート",
+    "contact": {
+      "title": "チームに連絡する",
+      "description": "非公開のメッセージを送信してください。メールで返信します。",
+      "required-note": "* の付いた項目は必須です。",
+      "name": "名前（任意）",
+      "name-placeholder": "お名前",
+      "email": "メールアドレス",
+      "email-placeholder": "you@example.com",
+      "subject": "件名",
+      "subject-placeholder": "どのようなご用件ですか？",
+      "message": "メッセージ",
+      "message-placeholder": "ご相談内容を入力してください...",
+      "submit": "メッセージを送信",
+      "sending": "送信中...",
+      "success": "メッセージを送信しました。",
+      "error": "メッセージを送信できませんでした。もう一度お試しください。"
+    },
     "title": "お困りですか？",
     "description": "問題に合ったチャンネルを選んでください。会話にはDiscordが最速です。GitHubは公開の記録を残します。",
     "open": "開く",

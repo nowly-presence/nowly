@@ -345,6 +345,7 @@
     "chromeos-email-placeholder": "anda@contoh.com",
     "chromeos-submit": "Maklumkan saya",
     "chromeos-success": "Terima kasih, kami akan maklumkan anda.",
+    "chromeos-error": "Sesuatu tidak berjaya. Sila cuba lagi.",
     "version": "Versi {version}",
     "card-title": "Muat turun untuk {platform}",
     "platforms": {
@@ -596,6 +597,23 @@
   },
   "supportPage": {
     "eyebrow": "Sokongan",
+    "contact": {
+      "title": "Hubungi pasukan",
+      "description": "Hantar mesej peribadi kepada kami dan kami akan membalas melalui e-mel.",
+      "required-note": "Medan bertanda * adalah wajib.",
+      "name": "Nama (pilihan)",
+      "name-placeholder": "Nama anda",
+      "email": "E-mel",
+      "email-placeholder": "anda@contoh.com",
+      "subject": "Subjek",
+      "subject-placeholder": "Bagaimana kami boleh membantu?",
+      "message": "Mesej",
+      "message-placeholder": "Beritahu kami perkara yang anda perlukan bantuan...",
+      "submit": "Hantar mesej",
+      "sending": "Menghantar...",
+      "success": "Mesej anda telah dihantar.",
+      "error": "Mesej anda tidak dapat dihantar. Sila cuba lagi."
+    },
     "title": "Perlukan bantuan?",
     "description": "Pilih saluran yang sepadan dengan isu anda. Discord adalah paling pantas untuk perbualan. GitHub menyimpan rekod awam.",
     "open": "Buka",

@@ -345,6 +345,7 @@
     "chromeos-email-placeholder": "du@beispiel.de",
     "chromeos-submit": "Benachrichtigen",
     "chromeos-success": "Danke, wir melden uns.",
+    "chromeos-error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     "version": "Version {version}",
     "card-title": "Für {platform} herunterladen",
     "platforms": {
@@ -596,6 +597,23 @@
   },
   "supportPage": {
     "eyebrow": "Support",
+    "contact": {
+      "title": "Das Team kontaktieren",
+      "description": "Senden Sie uns eine private Nachricht. Wir antworten per E-Mail.",
+      "required-note": "Mit * markierte Felder sind Pflichtfelder.",
+      "name": "Name (optional)",
+      "name-placeholder": "Ihr Name",
+      "email": "E-Mail",
+      "email-placeholder": "sie@beispiel.de",
+      "subject": "Betreff",
+      "subject-placeholder": "Wie können wir helfen?",
+      "message": "Nachricht",
+      "message-placeholder": "Beschreiben Sie Ihr Anliegen...",
+      "submit": "Nachricht senden",
+      "sending": "Wird gesendet...",
+      "success": "Ihre Nachricht wurde gesendet.",
+      "error": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
+    },
     "title": "Brauchst du Hilfe?",
     "description": "Wähle den Kanal, der zu deinem Anliegen passt. Discord ist am schnellsten für ein Gespräch. GitHub behält eine öffentliche Spur.",
     "open": "Öffnen",

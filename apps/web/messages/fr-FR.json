@@ -345,6 +345,7 @@
     "chromeos-email-placeholder": "vous@exemple.com",
     "chromeos-submit": "Me prévenir",
     "chromeos-success": "Merci, on vous tiendra au courant.",
+    "chromeos-error": "Une erreur est survenue. Veuillez réessayer.",
     "version": "Version {version}",
     "card-title": "Télécharger pour {platform}",
     "platforms": {
@@ -598,6 +599,23 @@
     "eyebrow": "Support",
     "title": "Besoin d’aide ?",
     "description": "Choisissez le canal qui correspond à votre problème. Discord est le plus rapide pour en parler. GitHub garde une trace publique.",
+    "contact": {
+      "title": "Contacter l’équipe",
+      "description": "Envoyez-nous un message privé et nous vous répondrons par email.",
+      "required-note": "Les champs marqués d’un * sont obligatoires.",
+      "name": "Nom (facultatif)",
+      "name-placeholder": "Votre nom",
+      "email": "Email",
+      "email-placeholder": "vous@exemple.com",
+      "subject": "Sujet",
+      "subject-placeholder": "Comment pouvons-nous vous aider ?",
+      "message": "Message",
+      "message-placeholder": "Décrivez-nous votre problème...",
+      "submit": "Envoyer le message",
+      "sending": "Envoi...",
+      "success": "Votre message a été envoyé.",
+      "error": "Impossible d’envoyer votre message. Veuillez réessayer."
+    },
     "open": "Ouvrir",
     "donate": "Nowly reste gratuit. Si vous voulez aider le projet, vous pouvez passer par <kofi>Ko-fi</kofi> ou <sponsors>GitHub Sponsors</sponsors>.",
     "sections": {
@@ -726,7 +744,7 @@
     "badge": "Confidentialité",
     "title": "Politique de confidentialité",
     "description": "Comment Nowly traite vos données, ce qui reste sur votre appareil et ce qui dépend de votre consentement.",
-    "last-updated": "Dernière mise à jour : 17 septembre 2026.",
+     "last-updated": "Dernière mise à jour : 21 septembre 2026.",
     "intro": "La présente politique décrit les traitements de données personnelles effectués par <strong>{publisherName}</strong> (« nous »), responsable de traitement, dans le cadre de Nowly. L’activité Rich Presence est transmise du navigateur au client Discord <strong>sur votre machine</strong>. Elle ne transite pas par nos serveurs. Les statistiques d’usage optionnelles et quelques fonctions du site font en revanche appel à notre API ou à des sous-traitants, comme indiqué ci-dessous.",
     "sections": [
       {
@@ -920,7 +938,7 @@
       },
       {
         "title": "Contact",
-        "body": "Courriel : <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Voir les <a href=\"/legal-notice\">mentions légales</a>."
+        "body": "Courriel : <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> ou utilisez le formulaire privé de la <a href=\"/support\">page support</a>. Voir les <a href=\"/legal-notice\">mentions légales</a>."
       }
     ]
   },

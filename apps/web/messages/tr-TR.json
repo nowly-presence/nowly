@@ -345,6 +345,7 @@
     "chromeos-email-placeholder": "sen@ornek.com",
     "chromeos-submit": "Beni bilgilendir",
     "chromeos-success": "Teşekkürler, sana haber vereceğiz.",
+    "chromeos-error": "Bir sorun oluştu. Lütfen tekrar deneyin.",
     "version": "Sürüm {version}",
     "card-title": "{platform} için indir",
     "platforms": {
@@ -596,6 +597,23 @@
   },
   "supportPage": {
     "eyebrow": "Destek",
+    "contact": {
+      "title": "Ekiple iletişime geçin",
+      "description": "Bize özel bir mesaj gönderin, size e-posta ile yanıt verelim.",
+      "required-note": "* ile işaretlenen alanlar zorunludur.",
+      "name": "Ad (isteğe bağlı)",
+      "name-placeholder": "Adınız",
+      "email": "E-posta",
+      "email-placeholder": "siz@ornek.com",
+      "subject": "Konu",
+      "subject-placeholder": "Nasıl yardımcı olabiliriz?",
+      "message": "Mesaj",
+      "message-placeholder": "Hangi konuda yardıma ihtiyacınız olduğunu anlatın...",
+      "submit": "Mesaj gönder",
+      "sending": "Gönderiliyor...",
+      "success": "Mesajınız gönderildi.",
+      "error": "Mesajınız gönderilemedi. Lütfen tekrar deneyin."
+    },
     "title": "Yardıma mı ihtiyacın var?",
     "description": "Sorununla eşleşen kanalı seç. Bir sohbet için en hızlısı Discord'dur. GitHub herkese açık bir kayıt tutar.",
     "open": "Aç",

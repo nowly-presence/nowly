@@ -345,6 +345,7 @@
     "chromeos-email-placeholder": "you@example.com",
     "chromeos-submit": "알림 받기",
     "chromeos-success": "감사합니다. 알려드리겠습니다.",
+    "chromeos-error": "문제가 발생했습니다. 다시 시도해 주세요.",
     "version": "버전 {version}",
     "card-title": "{platform}용 다운로드",
     "platforms": {
@@ -596,6 +597,23 @@
   },
   "supportPage": {
     "eyebrow": "지원",
+    "contact": {
+      "title": "팀에 문의하기",
+      "description": "비공개 메시지를 보내주시면 이메일로 답변해 드립니다.",
+      "required-note": "* 표시가 있는 항목은 필수입니다.",
+      "name": "이름 (선택 사항)",
+      "name-placeholder": "이름",
+      "email": "이메일",
+      "email-placeholder": "you@example.com",
+      "subject": "제목",
+      "subject-placeholder": "무엇을 도와드릴까요?",
+      "message": "메시지",
+      "message-placeholder": "도움이 필요한 내용을 알려주세요...",
+      "submit": "메시지 보내기",
+      "sending": "전송 중...",
+      "success": "메시지를 보냈습니다.",
+      "error": "메시지를 보내지 못했습니다. 다시 시도해 주세요."
+    },
     "title": "도움이 필요하신가요?",
     "description": "문제에 맞는 채널을 선택하세요. 대화하기에는 Discord가 가장 빠릅니다. GitHub는 공개 기록을 남깁니다.",
     "open": "열기",

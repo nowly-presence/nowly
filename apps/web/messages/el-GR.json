@@ -345,6 +345,7 @@
     "chromeos-email-placeholder": "esy@paradeigma.com",
     "chromeos-submit": "Ειδοποίησέ με",
     "chromeos-success": "Ευχαριστούμε, θα σε ενημερώσουμε.",
+    "chromeos-error": "Κάτι πήγε στραβά. Δοκίμασε ξανά.",
     "version": "Έκδοση {version}",
     "card-title": "Λήψη για {platform}",
     "platforms": {
@@ -596,6 +597,23 @@
   },
   "supportPage": {
     "eyebrow": "Υποστήριξη",
+    "contact": {
+      "title": "Επικοινωνία με την ομάδα",
+      "description": "Στείλε μας ένα ιδιωτικό μήνυμα και θα σου απαντήσουμε μέσω email.",
+      "required-note": "Τα πεδία με * είναι υποχρεωτικά.",
+      "name": "Όνομα (προαιρετικό)",
+      "name-placeholder": "Το όνομά σου",
+      "email": "Email",
+      "email-placeholder": "you@example.com",
+      "subject": "Θέμα",
+      "subject-placeholder": "Πώς μπορούμε να βοηθήσουμε;",
+      "message": "Μήνυμα",
+      "message-placeholder": "Πες μας με τι χρειάζεσαι βοήθεια...",
+      "submit": "Αποστολή μηνύματος",
+      "sending": "Αποστολή...",
+      "success": "Το μήνυμά σου στάλθηκε.",
+      "error": "Δεν ήταν δυνατή η αποστολή του μηνύματος. Δοκίμασε ξανά."
+    },
     "title": "Χρειάζεσαι βοήθεια;",
     "description": "Επίλεξε το κανάλι που ταιριάζει στο ζήτημά σου. Το Discord είναι το πιο γρήγορο για μια συζήτηση. Το GitHub κρατά δημόσιο ιστορικό.",
     "open": "Άνοιγμα",
