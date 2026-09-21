@@ -328,7 +328,12 @@
     "report-thanks-description": "Recebemos sua mensagem sobre {name}. Isso nos ajuda a manter a biblioteca em bom estado.",
     "report-error": "Não foi possível enviar o relato. Tente novamente em instantes.",
     "discord-native-title": "Já no Discord",
-    "discord-native-description": "O Discord mostra {name} se você vincular sua conta. O Nowly faz o mesmo sem essa vinculação."
+    "discord-native-description": "O Discord mostra {name} se você vincular sua conta. O Nowly faz o mesmo sem essa vinculação.",
+    "like": "Curtir",
+    "unlike": "Descurtir",
+    "stats": "Estatísticas",
+    "stat-installs": "{count} instalações",
+    "stat-active": "{count} ativos"
   },
   "desktopPage": {
     "eyebrow": "App de desktop",
@@ -473,7 +478,6 @@
     "eyebrow": "Notas de versão",
     "title": "O que mudou",
     "description": "Cada lançamento do Nowly, do build mais recente da loja até a primeira versão pública.",
-    "latest": "Mais recente",
     "read": "Ler as notas",
     "banner-alt": "Site do Nowly {version}",
     "docs": "Notas completas",

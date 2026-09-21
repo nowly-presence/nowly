@@ -328,7 +328,12 @@
     "report-thanks-description": "{name} hakkındaki notunu aldık. Bu, kitaplığı iyi durumda tutmamıza yardımcı oluyor.",
     "report-error": "Rapor gönderilemedi. Biraz sonra tekrar dene.",
     "discord-native-title": "Zaten Discord'da",
-    "discord-native-description": "Hesabını bağlarsan Discord {name}'i gösterir. Nowly bunu o bağlantı olmadan da yapar."
+    "discord-native-description": "Hesabını bağlarsan Discord {name}'i gösterir. Nowly bunu o bağlantı olmadan da yapar.",
+    "like": "Beğen",
+    "unlike": "Beğenmekten vazgeç",
+    "stats": "İstatistikler",
+    "stat-installs": "{count} kurulum",
+    "stat-active": "{count} aktif"
   },
   "desktopPage": {
     "eyebrow": "Masaüstü uygulaması",
@@ -473,7 +478,6 @@
     "eyebrow": "Sürüm notları",
     "title": "Neler değişti",
     "description": "En son mağaza derlemesinden ilk genel sürüme kadar her Nowly sürümü.",
-    "latest": "En son",
     "read": "Notları oku",
     "banner-alt": "Nowly {version} web sitesi",
     "docs": "Tam notlar",

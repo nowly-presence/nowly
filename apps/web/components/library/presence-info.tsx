@@ -8,8 +8,8 @@ import {
   type LibraryPresence,
   type PresencePerson,
 } from "@/lib/library-catalog";
-import type { PresenceCommit } from "@/lib/presence-api";
-import { RiGithubLine } from "@nowly/ui/icons";
+import type { PresenceCommit, PresenceStats } from "@/lib/presence-api";
+import { RiDownloadLine, RiGithubLine, RiUserLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
@@ -54,16 +54,32 @@ export const PresenceInfo = async ({
   presence,
   commit,
   changelog,
+  stats,
 }: {
   presence: LibraryPresence
   commit: PresenceCommit | null
   changelog?: string
+  stats: PresenceStats
 }) => {
   const t = await getTranslations("presencePage");
   const people = [presence.author, ...presence.contributors];
 
   return (
     <div className="flex flex-col gap-4">
+      <Card size="sm">
+        <CardContent className="flex flex-col gap-3">
+          <CardTitle>{t("stats")}</CardTitle>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <RiDownloadLine className="size-4 shrink-0" />
+            <span>{t("stat-installs", { count: stats.totalInstalls })}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <RiUserLine className="size-4 shrink-0" />
+            <span>{t("stat-active", { count: stats.activeUsers })}</span>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card size="sm">
         <CardContent className="flex flex-col gap-4">
           <CardTitle>{t("contributors")}</CardTitle>

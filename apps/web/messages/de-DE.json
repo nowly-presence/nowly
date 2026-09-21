@@ -328,7 +328,12 @@
     "report-thanks-description": "Wir haben deine Nachricht zu {name} erhalten. Das hilft uns, die Bibliothek in gutem Zustand zu halten.",
     "report-error": "Die Meldung konnte nicht gesendet werden. Versuche es gleich noch einmal.",
     "discord-native-title": "Bereits auf Discord",
-    "discord-native-description": "Discord zeigt {name} an, wenn du dein Konto verknüpfst. Nowly macht dasselbe ohne diese Verknüpfung."
+    "discord-native-description": "Discord zeigt {name} an, wenn du dein Konto verknüpfst. Nowly macht dasselbe ohne diese Verknüpfung.",
+    "like": "Gefällt mir",
+    "unlike": "Gefällt mir nicht mehr",
+    "stats": "Statistiken",
+    "stat-installs": "{count} Installationen",
+    "stat-active": "{count} aktiv"
   },
   "desktopPage": {
     "eyebrow": "Desktop-App",
@@ -473,7 +478,6 @@
     "eyebrow": "Versionshinweise",
     "title": "Was sich geändert hat",
     "description": "Jedes Nowly-Release, vom neuesten Store-Build bis zur ersten öffentlichen Version.",
-    "latest": "Neueste",
     "read": "Hinweise lesen",
     "banner-alt": "Nowly {version} Website",
     "docs": "Vollständige Hinweise",

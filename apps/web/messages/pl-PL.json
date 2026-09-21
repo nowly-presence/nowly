@@ -328,7 +328,12 @@
     "report-thanks-description": "Otrzymaliśmy Twoją notatkę o {name}. To pomaga nam utrzymać bibliotekę w dobrym stanie.",
     "report-error": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę.",
     "discord-native-title": "Już na Discordzie",
-    "discord-native-description": "Discord pokazuje {name}, jeśli połączysz swoje konto. Nowly robi to samo bez tego połączenia."
+    "discord-native-description": "Discord pokazuje {name}, jeśli połączysz swoje konto. Nowly robi to samo bez tego połączenia.",
+    "like": "Polub",
+    "unlike": "Cofnij polubienie",
+    "stats": "Statystyki",
+    "stat-installs": "{count} instalacji",
+    "stat-active": "{count} aktywnych"
   },
   "desktopPage": {
     "eyebrow": "Aplikacja desktopowa",
@@ -473,7 +478,6 @@
     "eyebrow": "Informacje o wydaniu",
     "title": "Co się zmieniło",
     "description": "Każde wydanie Nowly, od najnowszego builda w sklepie po pierwszą publiczną wersję.",
-    "latest": "Najnowsze",
     "read": "Przeczytaj informacje",
     "banner-alt": "Strona Nowly {version}",
     "docs": "Pełne informacje",

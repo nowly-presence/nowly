@@ -1,6 +1,7 @@
 "use client";
 
 import { ExtensionStoreButton } from "@/components/extension-store-button";
+import { PresenceLikeButton } from "@/components/library/presence-like-button";
 import { PresenceReportDialog } from "@/components/library/presence-report-dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, Button, Spinner, toast } from "@nowly/ui";
 import { usePresenceExtension } from "@/hooks/use-extension";
@@ -13,9 +14,10 @@ type PresenceActionsProps = {
   slug: string
   name: string
   version: string | null
+  likeCount: number
 };
 
-export const PresenceActions = ({ slug, name, version }: PresenceActionsProps) => {
+export const PresenceActions = ({ slug, name, version, likeCount }: PresenceActionsProps) => {
   const t = useTranslations("presencePage");
   const locale = useLocale();
   const {
@@ -100,6 +102,7 @@ export const PresenceActions = ({ slug, name, version }: PresenceActionsProps) =
         ) : null}
 
         <PresenceReportDialog slug={slug} name={name} disabled={checking || !detected} />
+        <PresenceLikeButton slug={slug} initialCount={likeCount} disabled={checking || !detected} />
       </div>
 
       {!checking && !detected ? (

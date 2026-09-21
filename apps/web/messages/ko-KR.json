@@ -328,7 +328,12 @@
     "report-thanks-description": "{name}에 대한 내용을 받았습니다. 라이브러리를 좋은 상태로 유지하는 데 도움이 됩니다.",
     "report-error": "신고를 보낼 수 없습니다. 잠시 후 다시 시도하세요.",
     "discord-native-title": "이미 Discord에서 지원됨",
-    "discord-native-description": "계정을 연동하면 Discord가 {name}을(를) 표시합니다. Nowly는 그 연동 없이도 동일하게 작동합니다."
+    "discord-native-description": "계정을 연동하면 Discord가 {name}을(를) 표시합니다. Nowly는 그 연동 없이도 동일하게 작동합니다.",
+    "like": "좋아요",
+    "unlike": "좋아요 취소",
+    "stats": "통계",
+    "stat-installs": "설치 {count}회",
+    "stat-active": "활성 사용자 {count}명"
   },
   "desktopPage": {
     "eyebrow": "데스크톱 앱",
@@ -473,7 +478,6 @@
     "eyebrow": "릴리스 노트",
     "title": "변경 사항",
     "description": "최신 스토어 빌드부터 최초 공개 버전까지, Nowly의 모든 릴리스.",
-    "latest": "최신",
     "read": "노트 읽기",
     "banner-alt": "Nowly {version} 웹사이트",
     "docs": "전체 노트",

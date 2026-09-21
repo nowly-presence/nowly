@@ -328,7 +328,12 @@
     "report-thanks-description": "{name}についてのメモを受け取りました。ライブラリを良い状態に保つのに役立ちます。",
     "report-error": "報告を送信できませんでした。しばらくしてから再試行してください。",
     "discord-native-title": "すでにDiscordに対応",
-    "discord-native-description": "アカウントを連携すると、Discordは{name}を表示します。Nowlyはその連携なしで同じことを行います。"
+    "discord-native-description": "アカウントを連携すると、Discordは{name}を表示します。Nowlyはその連携なしで同じことを行います。",
+    "like": "いいね",
+    "unlike": "いいね解除",
+    "stats": "統計",
+    "stat-installs": "{count} 件インストール",
+    "stat-active": "{count} 人が利用中"
   },
   "desktopPage": {
     "eyebrow": "デスクトップアプリ",
@@ -473,7 +478,6 @@
     "eyebrow": "リリースノート",
     "title": "変更内容",
     "description": "最新のストアビルドから最初の公開バージョンまで、Nowlyの各リリース。",
-    "latest": "最新",
     "read": "ノートを読む",
     "banner-alt": "Nowly {version} ウェブサイト",
     "docs": "完全なノート",

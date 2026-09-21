@@ -328,7 +328,12 @@
     "report-thanks-description": "Kami telah menerima nota anda tentang {name}. Ini membantu kami mengekalkan perpustakaan dalam keadaan baik.",
     "report-error": "Tidak dapat menghantar laporan. Cuba lagi sebentar lagi.",
     "discord-native-title": "Sudah ada di Discord",
-    "discord-native-description": "Discord memaparkan {name} jika anda menghubungkan akaun anda. Nowly melakukan perkara yang sama tanpa penghubungan itu."
+    "discord-native-description": "Discord memaparkan {name} jika anda menghubungkan akaun anda. Nowly melakukan perkara yang sama tanpa penghubungan itu.",
+    "like": "Suka",
+    "unlike": "Nyahsuka",
+    "stats": "Statistik",
+    "stat-installs": "{count} pemasangan",
+    "stat-active": "{count} aktif"
   },
   "desktopPage": {
     "eyebrow": "Aplikasi desktop",
@@ -473,7 +478,6 @@
     "eyebrow": "Nota keluaran",
     "title": "Apa yang berubah",
     "description": "Setiap keluaran Nowly, daripada pembinaan kedai terkini hingga versi awam pertama.",
-    "latest": "Terkini",
     "read": "Baca nota",
     "banner-alt": "Laman web Nowly {version}",
     "docs": "Nota penuh",
