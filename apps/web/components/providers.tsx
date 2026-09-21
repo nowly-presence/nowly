@@ -2,10 +2,10 @@
 
 import { Toaster, TooltipProvider } from "@nowly/ui";
 
-
 import { ThemeProvider } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { PropsWithChildren } from "react";
+import { ThemeUrlOverride } from "./theme-url-override";
 
 export const AppProviders = ({ children }: PropsWithChildren) => (
   <NuqsAdapter>
@@ -15,6 +15,7 @@ export const AppProviders = ({ children }: PropsWithChildren) => (
       enableSystem
       disableTransitionOnChange
     >
+      <ThemeUrlOverride />
       <TooltipProvider>
         {children}
         <Toaster />
