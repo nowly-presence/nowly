@@ -6,7 +6,7 @@ const requireCronAuth = async (request: FastifyRequest, reply: FastifyReply): Pr
   const secret = serverEnv.STATUS_CRON_SECRET
 
   if (!secret && process.env.NODE_ENV === "production") {
-    reply.status(500).send({ error: "Missing STATUS_CRON_SECRET" })
+    reply.status(500).send({ error: "STATUS_CRON_SECRET_MISSING" })
     return
   }
 
@@ -14,7 +14,7 @@ const requireCronAuth = async (request: FastifyRequest, reply: FastifyReply): Pr
 
   const auth = request.headers.authorization
   if (!auth || auth !== `Bearer ${secret}`) {
-    reply.status(401).send({ error: "Unauthorized" })
+    reply.status(401).send({ error: "UNAUTHORIZED" })
   }
 }
 

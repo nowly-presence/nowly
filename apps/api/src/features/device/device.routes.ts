@@ -15,7 +15,7 @@ export const deviceRoutes = async (fastify: FastifyInstance) => {
     },
     async (request, reply) => {
       const parsed = deviceSyncBodySchema.safeParse(request.body)
-      if (!parsed.success) return reply.status(400).send({ error: "Invalid request body" })
+      if (!parsed.success) return reply.status(400).send({ error: "INVALID_REQUEST_BODY" })
 
       await syncDevice(parsed.data)
       return { ok: true, deviceToken: deriveDeviceToken(parsed.data.deviceId) }
@@ -30,7 +30,7 @@ export const deviceRoutes = async (fastify: FastifyInstance) => {
       if (!requireDeviceAccess(request, reply, deviceId)) return
 
       const data = await exportDeviceData(deviceId)
-      if (!data) return reply.status(404).send({ error: "Device not found" })
+      if (!data) return reply.status(404).send({ error: "DEVICE_NOT_FOUND" })
       return data
     },
   )

@@ -34,7 +34,7 @@ const sendArchivedNotFound = async (
 ): Promise<boolean> => {
   const stats = await getPresenceStats(slug)
   if (!stats?.archived || hasAdminAuth(request)) return false
-  reply.status(404).send({ error: "Presence not found" })
+  reply.status(404).send({ error: "PRESENCE_NOT_FOUND" })
   return true
 }
 
@@ -85,7 +85,7 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
     const release = await buildRelease(slug)
 
     if (!release) {
-      return reply.status(404).send({ error: "Presence not found" })
+      return reply.status(404).send({ error: "PRESENCE_NOT_FOUND" })
     }
 
     return reply
@@ -106,17 +106,17 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
 
     const parsed = presenceReportBodySchema.safeParse(request.body)
     if (!parsed.success) {
-      return reply.status(400).send({ error: "Invalid request body" })
+      return reply.status(400).send({ error: "INVALID_REQUEST_BODY" })
     }
 
     const meta = await getPresenceMeta(slug)
     if (!meta) {
-      return reply.status(404).send({ error: "Presence not found" })
+      return reply.status(404).send({ error: "PRESENCE_NOT_FOUND" })
     }
 
     const message = sanitizeReportMessage(parsed.data.message)
     if (!message) {
-      return reply.status(400).send({ error: "Invalid request body" })
+      return reply.status(400).send({ error: "INVALID_REQUEST_BODY" })
     }
 
     const result = await submitPresenceReport({
@@ -127,10 +127,10 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
     })
 
     if (result === "unconfigured") {
-      return reply.status(503).send({ error: "Reports are temporarily unavailable" })
+      return reply.status(503).send({ error: "REPORTS_UNAVAILABLE" })
     }
     if (result === "failed") {
-      return reply.status(502).send({ error: "Could not send the report" })
+      return reply.status(502).send({ error: "REPORT_SEND_FAILED" })
     }
 
     return { ok: true }
@@ -152,7 +152,7 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
     const release = await buildRelease(slug, version)
 
     if (!release) {
-      return reply.status(404).send({ error: "Version not found" })
+      return reply.status(404).send({ error: "VERSION_NOT_FOUND" })
     }
 
     return reply
@@ -167,7 +167,7 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
       const slug = request.params.slug.toLowerCase()
       const parsedBody = presencePutBodySchema.safeParse(request.body)
       if (!parsedBody.success) {
-        return reply.status(400).send({ error: "Invalid request body" })
+        return reply.status(400).send({ error: "INVALID_REQUEST_BODY" })
       }
       const body = parsedBody.data
 
@@ -209,14 +209,14 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
     async (request, reply) => {
       const parsed = presenceActiveBodySchema.safeParse(request.body)
       if (!parsed.success || !parsed.data.deviceId) {
-        return reply.status(400).send({ error: "deviceId is required" })
+        return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" })
       }
 
       const { presences: slugs, deviceId } = parsed.data
       // Marking active requires an already-registered device (via /devices/sync)
       // so activeUsers can't be inflated with throwaway deviceIds that never sync.
       if (!(await deviceExists(deviceId))) {
-        return reply.status(404).send({ error: "Unknown device" })
+        return reply.status(404).send({ error: "DEVICE_NOT_FOUND" })
       }
 
       for (const slug of slugs) {
@@ -232,7 +232,7 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
     const slug = request.params.slug?.trim()
 
     if (!deviceId) {
-      return { ok: false, error: "deviceId is required" }
+      return { ok: false, error: "DEVICE_ID_REQUIRED" }
     }
 
     if (slug) {
@@ -250,7 +250,7 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
       const slug = request.params.slug.toLowerCase()
       const parsed = presenceLikeQuerySchema.safeParse(request.query)
       if (!parsed.success) {
-        return reply.status(400).send({ error: "deviceId is required" })
+        return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" })
       }
 
       return { liked: await hasLikedPresence(slug, parsed.data.deviceId), count: await getLikeCount(slug) }
@@ -263,7 +263,7 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
       const slug = request.params.slug.toLowerCase()
       const parsed = presenceLikeBodySchema.safeParse(request.body)
       if (!parsed.success) {
-        return reply.status(400).send({ error: "deviceId is required" })
+        return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" })
       }
       if (!requireDeviceAccess(request, reply, parsed.data.deviceId)) return
 
@@ -278,7 +278,7 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
       const slug = request.params.slug.toLowerCase()
       const parsed = presenceLikeQuerySchema.safeParse(request.query)
       if (!parsed.success) {
-        return reply.status(400).send({ error: "deviceId is required" })
+        return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" })
       }
       if (!requireDeviceAccess(request, reply, parsed.data.deviceId)) return
 

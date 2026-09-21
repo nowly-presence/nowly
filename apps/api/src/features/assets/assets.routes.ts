@@ -7,12 +7,12 @@ export const assetsRoutes = async (fastify: FastifyInstance) => {
     const slug = raw.toLowerCase()
 
     if (!["logo", "icon", "thumbnail"].includes(type)) {
-      return reply.status(400).send({ error: "Invalid asset type" })
+      return reply.status(400).send({ error: "INVALID_ASSET_TYPE" })
     }
 
     const asset = await fetchAssetFromCdn(slug, type)
     if (!asset) {
-      return reply.status(404).send({ error: "Asset not found" })
+      return reply.status(404).send({ error: "ASSET_NOT_FOUND" })
     }
 
     return reply

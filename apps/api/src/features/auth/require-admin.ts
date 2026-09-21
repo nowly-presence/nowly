@@ -6,6 +6,6 @@ export const requireAdmin = async (request: FastifyRequest, reply: FastifyReply)
   const session = await getAuth().api.getSession({ headers: fromNodeHeaders(request.headers) })
 
   if (!session || session.user.role !== "admin") {
-    reply.status(401).send({ error: "Admin authentication required" })
+    reply.status(401).send({ error: "ADMIN_AUTH_REQUIRED" })
   }
 }

@@ -21,7 +21,7 @@ export const imageProxyRoutes = async (fastify: FastifyInstance) => {
   fastify.post<{ Body: { service?: string; url?: string } }>("/images-proxy", async (request, reply) => {
     const target = await parseProxyUrl(request.body?.url, request.body?.service)
     if (!target) {
-      return withPublicCors(reply).status(400).send({ error: "Invalid image URL" })
+       return withPublicCors(reply).status(400).send({ error: "INVALID_IMAGE_URL" })
     }
 
     logImageProxyCall(target.service)
@@ -54,12 +54,12 @@ export const imageProxyRoutes = async (fastify: FastifyInstance) => {
   fastify.get<{ Params: { id: string } }>("/images-proxy/:id", async (request, reply) => {
     const { id } = request.params
     if (!/^[a-zA-Z0-9_-]{16,64}$/.test(id)) {
-      return reply.status(400).send({ error: "Invalid image id" })
+       return reply.status(400).send({ error: "INVALID_IMAGE_ID" })
     }
 
     const cached = getCached(id)
     if (!cached) {
-      return reply.status(404).send({ error: "Image not found" })
+       return reply.status(404).send({ error: "IMAGE_NOT_FOUND" })
     }
 
     return imageResponse(reply, {
@@ -73,8 +73,7 @@ export const imageProxyRoutes = async (fastify: FastifyInstance) => {
     const extraParams = Object.keys(request.query).filter((key) => key !== "u")
     if (extraParams.length > 0) {
       return reply.status(400).send({
-        error: "Image URL must be encoded",
-        message: "Encode the full image URL with encodeURIComponent before passing it to the u parameter.",
+         error: "IMAGE_URL_NOT_ENCODED",
       })
     }
 
@@ -85,8 +84,7 @@ export const imageProxyRoutes = async (fastify: FastifyInstance) => {
     const extraParams = Object.keys(request.query).filter((key) => key !== "url" && key !== "service")
     if (extraParams.length > 0) {
       return reply.status(400).send({
-        error: "Image URL must be encoded",
-        message: "Encode the full image URL with encodeURIComponent before passing it to the url parameter.",
+         error: "IMAGE_URL_NOT_ENCODED",
       })
     }
 

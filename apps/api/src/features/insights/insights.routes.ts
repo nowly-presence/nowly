@@ -55,7 +55,7 @@ export const insightsRoutes = async (fastify: FastifyInstance) => {
   // Ingestion stays public - it's the extension reporting events, not an admin reading them.
   fastify.post("/events", async (request, reply) => {
     const parsed = parseIngestBody(request.body)
-    if (!parsed.success) return reply.status(400).send({ error: "Invalid request body" })
+    if (!parsed.success) return reply.status(400).send({ error: "INVALID_REQUEST_BODY" })
     const result = await recordInsightEvents(parsed.data.events, countryFromRequest(request))
     return { ok: true, ...result }
   })
@@ -73,10 +73,10 @@ export const insightsRoutes = async (fastify: FastifyInstance) => {
     { preHandler: requireAdmin },
     async (request, reply) => {
       const metric = request.query.metric?.trim()
-      if (!metric) return reply.status(400).send({ error: "metric is required" })
+      if (!metric) return reply.status(400).send({ error: "METRIC_REQUIRED" })
       const compare = request.query.compare === "true"
       const series = await getSeries(metric, windowFromQuery(request.query), request.query.granularity, filtersFromQuery(request.query), compare)
-      if (!series) return reply.status(404).send({ error: "Metric not found" })
+      if (!series) return reply.status(404).send({ error: "METRIC_NOT_FOUND" })
       return series
     },
   )
@@ -93,7 +93,7 @@ export const insightsRoutes = async (fastify: FastifyInstance) => {
     "/funnels/:id",
     { preHandler: requireAdmin },
     async (request, reply) => {
-      if (!getFunnel(request.params.id)) return reply.status(404).send({ error: "Funnel not found" })
+       if (!getFunnel(request.params.id)) return reply.status(404).send({ error: "FUNNEL_NOT_FOUND" })
       return getFunnelMeasurement(request.params.id, windowFromQuery(request.query), filtersFromQuery(request.query))
     },
   )
@@ -107,14 +107,14 @@ export const insightsRoutes = async (fastify: FastifyInstance) => {
     { preHandler: requireAdmin },
     async (request, reply) => {
       const session = await getAuth().api.getSession({ headers: fromNodeHeaders(request.headers) })
-      if (!session) return reply.status(401).send({ error: "Admin authentication required" })
+       if (!session) return reply.status(401).send({ error: "ADMIN_AUTH_REQUIRED" })
       return createView(session.user.id, request.body.name, request.body.widgets)
     },
   )
 
   fastify.get<{ Params: { id: string } }>("/views/:id", { preHandler: requireAdmin }, async (request, reply) => {
     const view = await getView(request.params.id)
-    if (!view) return reply.status(404).send({ error: "View not found" })
+    if (!view) return reply.status(404).send({ error: "VIEW_NOT_FOUND" })
     return view
   })
 
@@ -123,14 +123,14 @@ export const insightsRoutes = async (fastify: FastifyInstance) => {
     { preHandler: requireAdmin },
     async (request, reply) => {
       const { count } = await updateView(request.params.id, request.body.name, request.body.widgets)
-      if (!count) return reply.status(404).send({ error: "View not found" })
+      if (!count) return reply.status(404).send({ error: "VIEW_NOT_FOUND" })
       return { ok: true }
     },
   )
 
   fastify.delete<{ Params: { id: string } }>("/views/:id", { preHandler: requireAdmin }, async (request, reply) => {
     const { count } = await deleteView(request.params.id)
-    if (!count) return reply.status(404).send({ error: "View not found" })
+    if (!count) return reply.status(404).send({ error: "VIEW_NOT_FOUND" })
     return { ok: true }
   })
 
@@ -140,7 +140,7 @@ export const insightsRoutes = async (fastify: FastifyInstance) => {
     "/dev/seed",
     { preHandler: requireAdmin },
     async (request, reply) => {
-      if (process.env.NODE_ENV === "production") return reply.status(403).send({ error: "Not available in production" })
+      if (process.env.NODE_ENV === "production") return reply.status(403).send({ error: "UNAVAILABLE_IN_PRODUCTION" })
       return seedFakeAnalytics(request.body?.days)
     },
   )
@@ -149,7 +149,7 @@ export const insightsRoutes = async (fastify: FastifyInstance) => {
     "/dev/clear",
     { preHandler: requireAdmin },
     async (_request, reply) => {
-      if (process.env.NODE_ENV === "production") return reply.status(403).send({ error: "Not available in production" })
+      if (process.env.NODE_ENV === "production") return reply.status(403).send({ error: "UNAVAILABLE_IN_PRODUCTION" })
       return clearFakeAnalytics()
     },
   )

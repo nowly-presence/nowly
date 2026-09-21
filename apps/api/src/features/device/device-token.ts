@@ -33,6 +33,6 @@ const extractToken = (request: FastifyRequest): string | undefined => {
 
 export const requireDeviceAccess = (request: FastifyRequest, reply: FastifyReply, deviceId: string): boolean => {
   if (verifyDeviceToken(deviceId, extractToken(request))) return true
-  reply.status(401).send({ error: "Invalid or missing device token" })
+  reply.status(401).send({ error: "INVALID_DEVICE_TOKEN" })
   return false
 }
