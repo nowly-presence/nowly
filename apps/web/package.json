@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@nowly/analytics": "workspace:*",
+    "@nowly/changelog": "workspace:*",
     "@nowly/env": "workspace:*",
     "@nowly/locales": "workspace:*",
     "@nowly/ui": "workspace:*",
