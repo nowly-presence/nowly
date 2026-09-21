@@ -16,4 +16,5 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @nowly/api prisma:generate
       - run: pnpm --filter @nowly/api test

@@ -1,3 +1,4 @@
+process.env.SKIP_ENV_VALIDATION ??= "true"
 process.env.JWT_SECRET ??= "test-jwt-secret"
 process.env.ANONYMOUS_HASH_SECRET ??= "test-anonymous-hash-secret"
 process.env.DISCORD_CLIENT_ID ??= "test-discord-client-id"
