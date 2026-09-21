@@ -9,11 +9,11 @@ type Props = {
 export const BackButton = ({ onClick, label }: Props): React.JSX.Element => (
   <Button
     variant="ghost"
-    size="sm"
+    size="icon-sm"
     onClick={onClick}
-    className="w-fit"
+    aria-label={label}
+    className="-ml-1 shrink-0"
   >
     <RiArrowLeftSLine className="size-4" />
-    {label}
   </Button>
 )
