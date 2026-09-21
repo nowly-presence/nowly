@@ -75,9 +75,10 @@ type StoreScreenProps = {
   seed: StoreSeed
   selectedSlug: string | null
   onSelectPresence: (slug: string | null) => void
+  onOpenInstalled: (slug: string) => void
 }
 
-const StoreScreen = ({ seed, selectedSlug, onSelectPresence }: StoreScreenProps): React.JSX.Element => {
+const StoreScreen = ({ seed, selectedSlug, onSelectPresence, onOpenInstalled }: StoreScreenProps): React.JSX.Element => {
   const state = useExtensionState()
   const [installingSlug, setInstallingSlug] = useState<string | null>(null)
   const [installFeedback, setInstallFeedback] = useState<"error" | "queued" | null>(null)
@@ -101,6 +102,7 @@ const StoreScreen = ({ seed, selectedSlug, onSelectPresence }: StoreScreenProps)
         onOpenWebsite={(slug) => void chrome.tabs.create({ url: `${WEB_BASE_URL}/library/${slug}` })}
         onRetryQueue={() => void state.retryInstallQueue()}
         onSelectPresence={onSelectPresence}
+        onOpenInstalled={onOpenInstalled}
         presences={state.presences}
         updates={state.updates}
         seedQuery={seed.query}
@@ -168,6 +170,8 @@ const ActivityScreen = ({ selectedSlug, onSelectPresence }: ActivityScreenProps)
         onSelectPresence={onSelectPresence}
         onToggle={state.togglePresence}
         onRemove={state.removePresence}
+        onBulkToggle={state.bulkTogglePresences}
+        onBulkRemove={state.bulkRemovePresences}
         onSchedule={setScheduleSlug}
         onSnooze={setSnoozeSlug}
         onUpdatePresence={handleUpdate}
@@ -388,6 +392,11 @@ const Shell = ({ initialView }: ShellProps): React.JSX.Element => {
                     seed={storeSeed}
                     selectedSlug={storeSelectedSlug}
                     onSelectPresence={setStoreSelectedSlug}
+                    onOpenInstalled={(slug) => {
+                      setStoreSelectedSlug(null)
+                      setSelectedSlug(slug)
+                      changeView("activity")
+                    }}
                   />
                 ) : (
                   <SettingsScreen

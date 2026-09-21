@@ -8,6 +8,8 @@ type Props = {
   isLoading: boolean
   onOpenWebsite: (slug: string) => void
   onRemove: (slug: string) => void
+  onBulkRemove: (slugs: string[]) => void
+  onBulkToggle: (slugs: string[], enabled: boolean) => void
   onSchedule: (slug: string) => void
   onSelectPresence: (slug: string | null) => void
   onSnooze: (slug: string) => void
@@ -26,6 +28,8 @@ export const ActivityView = ({
   isLoading,
   onOpenWebsite,
   onRemove,
+  onBulkRemove,
+  onBulkToggle,
   onSchedule,
   onSelectPresence,
   onSnooze,
@@ -74,6 +78,8 @@ export const ActivityView = ({
       onOpen={onSelectPresence}
       onOpenWebsite={onOpenWebsite}
       onRemove={onRemove}
+      onBulkRemove={onBulkRemove}
+      onBulkToggle={onBulkToggle}
       onSchedule={onSchedule}
       onSnooze={onSnooze}
       onToggle={onToggle}

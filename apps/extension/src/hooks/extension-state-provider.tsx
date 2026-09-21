@@ -21,6 +21,8 @@ type ExtensionState = {
   isConnectingNative: boolean
   removePresence: (slug: string) => void
   togglePresence: (slug: string, enabled: boolean) => void
+  bulkRemovePresences: (slugs: string[]) => void
+  bulkTogglePresences: (slugs: string[], enabled: boolean) => void
   installPresenceFromApi: (slug: string) => Promise<{ ok: boolean; queued: boolean }>
   retryInstallQueue: () => Promise<void>
   setPresencePaused: (paused: boolean) => void
@@ -138,6 +140,14 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }): R
     })
   }, [])
 
+  const bulkTogglePresences = useCallback((slugs: string[], enabled: boolean): void => {
+    void sendMessage("BULK_TOGGLE_PRESENCE", { slugs, enabled }).then(() => refresh())
+  }, [refresh])
+
+  const bulkRemovePresences = useCallback((slugs: string[]): void => {
+    void sendMessage("BULK_UNINSTALL_PRESENCE", { slugs }).then(() => refresh())
+  }, [refresh])
+
   const installPresenceFromApi = useCallback(
     (slug: string): Promise<{ ok: boolean; queued: boolean }> =>
       sendMessage("INSTALL_PRESENCE_FROM_API", { slug }).then((result) => ({ ok: result?.ok === true, queued: result?.queued === true })),
@@ -205,6 +215,8 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }): R
     isConnectingNative,
     removePresence,
     togglePresence,
+    bulkRemovePresences,
+    bulkTogglePresences,
     installPresenceFromApi,
     retryInstallQueue,
     setPresencePaused,

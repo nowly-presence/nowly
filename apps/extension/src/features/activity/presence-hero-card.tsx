@@ -1,14 +1,18 @@
+import { RiArrowLeftSLine } from "@remixicon/react"
 import { useState, type ReactNode } from "react"
 import { assetUrl } from "@/shared/api"
+import { Button } from "@/ui/button"
 
 type Props = {
   children: ReactNode
   color: string
   footer?: ReactNode
+  onBack: () => void
+  onBackLabel: string
   slug: string
 }
 
-export const PresenceHeroCard = ({ children, footer, slug }: Props): React.JSX.Element => {
+export const PresenceHeroCard = ({ children, footer, onBack, onBackLabel, slug }: Props): React.JSX.Element => {
   const [banner, setBanner] = useState(true)
 
   return (
@@ -25,7 +29,16 @@ export const PresenceHeroCard = ({ children, footer, slug }: Props): React.JSX.E
           <div className="absolute inset-0 bg-linear-to-b from-transparent via-card/75 to-card" />
         </div>
       ) : null}
-      <div className={banner ? "relative z-10 p-4 pt-16" : "relative z-10 p-4"}>{children}</div>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={onBack}
+        className="absolute top-3 left-3 z-20 bg-card/70 backdrop-blur-sm hover:bg-card"
+      >
+        <RiArrowLeftSLine className="size-4" />
+        {onBackLabel}
+      </Button>
+      <div className={banner ? "relative z-10 p-4 pt-16" : "relative z-10 p-4 pt-12"}>{children}</div>
       {footer}
     </section>
   )

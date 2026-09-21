@@ -1,11 +1,15 @@
 import { resumeStoredActivityIfAllowed } from "@/background/managers/activity-manager"
 import {
+  bulkTogglePresences,
+  bulkUninstallPresences,
   checkUpdates,
   drainInstallQueue,
   fetchPresenceCatalog,
+  fetchPresenceEngagement,
   installLocalPresenceZip,
   installPresence,
   installPresenceFromApi,
+  setPresenceLike,
   togglePresence,
   uninstallPresence,
 } from "@/background/managers/presence-manager"
@@ -34,6 +38,10 @@ export const handleToggle: Handler<"TOGGLE_PRESENCE"> = (payload) => togglePrese
 
 export const handleUninstall: Handler<"UNINSTALL_PRESENCE"> = (payload) => uninstallPresence(payload)
 
+export const handleBulkToggle: Handler<"BULK_TOGGLE_PRESENCE"> = ({ slugs, enabled }) => bulkTogglePresences(slugs, enabled)
+
+export const handleBulkUninstall: Handler<"BULK_UNINSTALL_PRESENCE"> = ({ slugs }) => bulkUninstallPresences(slugs)
+
 export const handleInstall: Handler<"INSTALL_PRESENCE"> = (payload) =>
   installPresence(payload).catch((error) => toError(error, "presence install failed"))
 
@@ -50,6 +58,10 @@ export const handleFetchCatalog: Handler<"FETCH_PRESENCE_CATALOG"> = () =>
   fetchPresenceCatalog()
     .then((items) => ({ ok: true as const, items }))
     .catch((error) => toError(error, "catalog request failed"))
+
+export const handleGetPresenceEngagement: Handler<"GET_PRESENCE_ENGAGEMENT"> = ({ slug }) => fetchPresenceEngagement(slug)
+
+export const handleSetPresenceLike: Handler<"SET_PRESENCE_LIKE"> = ({ slug, liked }) => setPresenceLike(slug, liked)
 
 export const handleGetInstallQueue: Handler<"GET_INSTALL_QUEUE"> = async () => ({ items: await getInstallQueue() })
 

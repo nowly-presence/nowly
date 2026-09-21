@@ -1,6 +1,5 @@
-import { RiCalendarLine, RiDeleteBinLine, RiExternalLinkLine, RiLoader2Line } from "@remixicon/react"
+import { RiCalendarLine, RiDeleteBinLine, RiDownloadLine, RiExternalLinkLine, RiHeartFill, RiHeartLine, RiLoader2Line, RiUserLine } from "@remixicon/react"
 import { useEffect, type MouseEvent } from "react"
-import { BackButton } from "@/components/shared/back-button"
 import { PresenceTile } from "@/components/shared/presence-tile"
 import { DiscordNativeNotice } from "@/features/activity/discord-native-notice"
 import { getCategoryLabel } from "@/features/activity/presence-list.model"
@@ -9,6 +8,7 @@ import { PresenceHeroCard } from "@/features/activity/presence-hero-card"
 import { PresenceSettingsFields } from "@/features/activity/presence-settings-fields"
 import { PresenceSettingsPreview } from "@/features/activity/presence-settings-preview"
 import { resolveLocaleList, resolveLocaleString } from "@/features/activity/presence-locale"
+import { usePresenceEngagement } from "@/features/activity/use-presence-engagement"
 import { t } from "@/shared/i18n"
 import type { StoredPresence } from "@/shared/types"
 import {
@@ -76,6 +76,7 @@ const uninstallActionClassName =
 export const PresenceDetailView = (props: Props): React.JSX.Element => {
   const { data, onBack, onOpenWebsite } = props
   const description = data.longDescription ?? data.description
+  const engagement = usePresenceEngagement(data.slug)
 
   useEffect(() => {
     document.getElementById("sidepanel-tabpanel")?.scrollTo(0, 0)
@@ -90,15 +91,12 @@ export const PresenceDetailView = (props: Props): React.JSX.Element => {
 
   return (
     <div className="flex flex-col gap-3">
-      <BackButton
-        onClick={onBack}
-        label={t("back")}
-      />
-
       <PresenceHeroCard
         key={data.slug}
         slug={data.slug}
         color={data.color}
+        onBack={onBack}
+        onBackLabel={t("back")}
         footer={
           props.mode === "installed" && props.updateAvailable ? (
             <button
@@ -134,10 +132,38 @@ export const PresenceDetailView = (props: Props): React.JSX.Element => {
           {props.mode === "installed" ? (
             <Switch
               checked={props.presence.enabled}
-              onCheckedChange={(checked) => props.onToggle(data.slug, checked)}
+              onCheckedChange={(checked) => {
+                props.onToggle(data.slug, checked)
+                // TOGGLE_PRESENCE syncs the device asynchronously - give it time before refetching stats.
+                window.setTimeout(engagement.refetch, 1500)
+              }}
               aria-label={props.presence.enabled ? t("disable") : t("enable")}
             />
           ) : null}
+        </div>
+
+        <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
+          <button
+            type="button"
+            onClick={engagement.toggleLike}
+            aria-label={engagement.liked ? t("presence-unlike") : t("presence-like")}
+            className="flex items-center gap-1.5 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            {engagement.liked ? (
+              <RiHeartFill className="size-4 text-destructive" />
+            ) : (
+              <RiHeartLine className="size-4" />
+            )}
+            <span>{engagement.likeCount}</span>
+          </button>
+          <span className="flex items-center gap-1.5">
+            <RiDownloadLine className="size-4" />
+            {t("presence-stat-installs", { count: String(engagement.totalInstalls) })}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <RiUserLine className="size-4" />
+            {t("presence-stat-active", { count: String(engagement.activeUsers) })}
+          </span>
         </div>
       </PresenceHeroCard>
 

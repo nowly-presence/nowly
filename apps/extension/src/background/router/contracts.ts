@@ -27,6 +27,7 @@ export type InstallFromApiResult = { ok: boolean; error?: string; queued?: boole
 export type InstallLocalZipResult = { ok: boolean; error?: string; slug?: string }
 export type InstallLocalZipPayload = { fileName: string; bytes: string }
 export type CatalogResponse = { ok: true; items: PresenceCatalogItem[] } | { ok: false; error: string }
+export type PresenceEngagement = { liked: boolean; likeCount: number; totalInstalls: number; activeUsers: number }
 
 // Source that popup/sidepanel and content-script messages are tagged with -
 // the router only dispatches messages carrying one of these.
@@ -47,6 +48,8 @@ export type RouterMessageMap = {
   GET_DEBUG: { payload: void; response: PresenceDebug | null }
   TOGGLE_PRESENCE: { payload: { slug: string; enabled: boolean }; response: { ok: boolean; error?: string } }
   UNINSTALL_PRESENCE: { payload: { slug: string }; response: { ok: boolean } }
+  BULK_TOGGLE_PRESENCE: { payload: { slugs: string[]; enabled: boolean }; response: { ok: boolean } }
+  BULK_UNINSTALL_PRESENCE: { payload: { slugs: string[] }; response: { ok: boolean } }
   ACTIVITY_UPDATE: { payload: { slug: string; activity: PresenceData }; response: { ok: boolean } }
   CLEAR_ACTIVITY: { payload: void; response: { ok: boolean } }
   INSTALL_PRESENCE: { payload: unknown; response: InstallResult }
@@ -54,6 +57,8 @@ export type RouterMessageMap = {
   INSTALL_PRESENCE_FROM_API: { payload: { slug: string }; response: InstallFromApiResult }
   INSTALL_LOCAL_PRESENCE_ZIP: { payload: InstallLocalZipPayload; response: InstallLocalZipResult }
   FETCH_PRESENCE_CATALOG: { payload: void; response: CatalogResponse }
+  GET_PRESENCE_ENGAGEMENT: { payload: { slug: string }; response: PresenceEngagement }
+  SET_PRESENCE_LIKE: { payload: { slug: string; liked: boolean }; response: { ok: boolean; count: number } }
   SET_PRESENCE_PAUSE: { payload: { paused: boolean }; response: { ok: boolean; paused?: boolean } }
   GET_INSTALL_QUEUE: { payload: void; response: { items: { slug: string }[] } }
   RETRY_INSTALL_QUEUE: { payload: void; response: { slugs: string[] } }

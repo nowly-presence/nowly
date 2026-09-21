@@ -18,6 +18,7 @@ type Props = {
   installingSlug: string | null
   installQueueCount: number
   onInstall: (slug: string) => void
+  onOpenInstalled: (slug: string) => void
   onOpenWebsite: (slug: string) => void
   onRetryQueue: () => void
   onSelectPresence: (slug: string | null) => void
@@ -63,6 +64,7 @@ export const StoreView = ({
   installingSlug,
   installQueueCount,
   onInstall,
+  onOpenInstalled,
   onOpenWebsite,
   onRetryQueue,
   onSelectPresence,
@@ -83,6 +85,18 @@ export const StoreView = ({
   const filtered = useMemo(() => filterStorePresences(items, query, category), [category, items, query])
   const selected = selectedSlug ? (items.find((item) => item.slug === selectedSlug) ?? null) : null
 
+  const openPresence = (slug: string): void => {
+    if (presences[slug]) {
+      onOpenInstalled(slug)
+      return
+    }
+    onSelectPresence(slug)
+  }
+
+  useEffect(() => {
+    if (selected && presences[selected.slug]) onOpenInstalled(selected.slug)
+  }, [selected, presences, onOpenInstalled])
+
   if (isLoading) return <StoreSkeleton />
 
   if (isError) {
@@ -100,7 +114,7 @@ export const StoreView = ({
     )
   }
 
-  if (selected) {
+  if (selected && !presences[selected.slug]) {
     return (
       <StoreDetail
         action={storeAction(selected.slug, presences, updates)}
@@ -162,7 +176,7 @@ export const StoreView = ({
               action={storeAction(presence.slug, presences, updates)}
               installing={installingSlug === presence.slug}
               onInstall={onInstall}
-              onOpen={onSelectPresence}
+              onOpen={openPresence}
               onOpenWebsite={onOpenWebsite}
               presence={presence}
             />

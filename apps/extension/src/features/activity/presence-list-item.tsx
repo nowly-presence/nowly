@@ -6,6 +6,7 @@ import { t } from "@/shared/i18n"
 import type { StoredPresence } from "@/shared/types"
 import { Badge } from "@/ui/badge"
 import { Button } from "@/ui/button"
+import { Checkbox } from "@/ui/checkbox"
 import { Switch } from "@/ui/switch"
 
 type Props = {
@@ -21,6 +22,9 @@ type Props = {
   showSchedule: boolean
   slug: string
   updateAvailable?: string
+  selectMode?: boolean
+  selected?: boolean
+  onToggleSelected?: (slug: string) => void
 }
 
 export const PresenceListItem = ({
@@ -36,6 +40,9 @@ export const PresenceListItem = ({
   showSchedule,
   slug,
   updateAvailable,
+  selectMode = false,
+  selected = false,
+  onToggleSelected,
 }: Props): React.JSX.Element | null => {
   if (!presence?.metadata) return null
 
@@ -43,6 +50,88 @@ export const PresenceListItem = ({
     event.stopPropagation()
     if (updating) return
     onUpdatePresence(slug)
+  }
+
+  const content = (
+    <div className="flex items-center gap-3 px-3 py-3">
+      <button
+        type="button"
+        onClick={() => (selectMode ? onToggleSelected?.(slug) : onOpen(slug))}
+        className="flex min-w-0 flex-1 items-center gap-3 text-left"
+      >
+        {selectMode ? (
+          <Checkbox
+            checked={selected}
+            onCheckedChange={() => onToggleSelected?.(slug)}
+            aria-label={presence.metadata.name}
+          />
+        ) : (
+          <PresenceTile
+            slug={slug}
+            name={presence.metadata.name}
+            dimmed={!presence.enabled}
+            className="size-10"
+          />
+        )}
+
+        <div className="min-w-0 flex-1">
+          <p
+            className={
+              presence.enabled ? "truncate text-sm font-medium text-foreground" : "truncate text-sm font-medium text-muted-foreground/80"
+            }
+          >
+            {presence.metadata.name}
+          </p>
+          <div className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
+            <span
+              className="h-1.5 w-1.5 rounded-full"
+              style={{ backgroundColor: presence.enabled ? presence.metadata.color : "var(--muted-foreground)" }}
+            />
+            <span className="truncate">{presence.enabled ? t("enabled") : t("disabled")}</span>
+            {presence.metadata.version ? <Badge variant="outline">{t("version", { version: presence.metadata.version })}</Badge> : null}
+          </div>
+        </div>
+      </button>
+
+      {selectMode ? null : (
+        <>
+          <Switch
+            checked={presence.enabled}
+            onCheckedChange={(checked) => onToggle(slug, checked)}
+            aria-label={presence.enabled ? t("disable") : t("enable")}
+          />
+
+          {showSchedule ? (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => onSchedule(slug)}
+              aria-label={t("schedule")}
+            >
+              <RiCalendarLine />
+            </Button>
+          ) : null}
+
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => onOpen(slug)}
+            aria-label={t("settings")}
+            title={t("settings")}
+          >
+            <RiSettings3Line />
+          </Button>
+        </>
+      )}
+    </div>
+  )
+
+  if (selectMode) {
+    return (
+      <article className="relative bg-card transition-colors first:rounded-t-xl last:rounded-b-xl hover:bg-secondary">
+        {content}
+      </article>
+    )
   }
 
   return (
@@ -87,65 +176,7 @@ export const PresenceListItem = ({
           </Button>
         </div>
       ) : null}
-      <div className="flex items-center gap-3 px-3 py-3">
-        <button
-          type="button"
-          onClick={() => onOpen(slug)}
-          className="flex min-w-0 flex-1 items-center gap-3 text-left"
-        >
-          <PresenceTile
-            slug={slug}
-            name={presence.metadata.name}
-            dimmed={!presence.enabled}
-            className="size-10"
-          />
-
-          <div className="min-w-0 flex-1">
-            <p
-              className={
-                presence.enabled ? "truncate text-sm font-medium text-foreground" : "truncate text-sm font-medium text-muted-foreground/80"
-              }
-            >
-              {presence.metadata.name}
-            </p>
-            <div className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
-              <span
-                className="h-1.5 w-1.5 rounded-full"
-                style={{ backgroundColor: presence.enabled ? presence.metadata.color : "var(--muted-foreground)" }}
-              />
-              <span className="truncate">{presence.enabled ? t("enabled") : t("disabled")}</span>
-              {presence.metadata.version ? <Badge variant="outline">{t("version", { version: presence.metadata.version })}</Badge> : null}
-            </div>
-          </div>
-        </button>
-
-        <Switch
-          checked={presence.enabled}
-          onCheckedChange={(checked) => onToggle(slug, checked)}
-          aria-label={presence.enabled ? t("disable") : t("enable")}
-        />
-
-        {showSchedule ? (
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={() => onSchedule(slug)}
-            aria-label={t("schedule")}
-          >
-            <RiCalendarLine />
-          </Button>
-        ) : null}
-
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => onOpen(slug)}
-          aria-label={t("settings")}
-          title={t("settings")}
-        >
-          <RiSettings3Line />
-        </Button>
-      </div>
+      {content}
     </PresenceContextMenu>
   )
 }
