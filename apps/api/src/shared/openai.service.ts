@@ -1,5 +1,5 @@
 import { serverEnv } from "@nowly/env/server"
-import { buildLocaleObject, LocaleRecordSchema } from "@nowly/locales"
+import { buildLocalizedValue, buildLocaleObject, LocaleRecordSchema } from "@nowly/locales"
 import { z } from "zod"
 
 const ChangelogSchema = LocaleRecordSchema(z.string().min(1))
@@ -33,11 +33,14 @@ const sameChangelogInAllLocales = (text: string): z.infer<typeof ChangelogSchema
 const fallbackChangelogs = (ctx: ChangelogContext): z.infer<typeof ChangelogSchema> => {
   if (ctx.type === "new") {
     const desc = ctx.description || ""
-    return {
-      "en-US": `Add ${ctx.names?.["en-US"] || ctx.name} presence${desc ? ` - ${desc}` : ""}`,
-      "fr-FR": `Ajout de ${ctx.names?.["fr-FR"] || ctx.name}${desc ? ` - ${desc}` : ""}`,
-      "es-ES": `Añadir ${ctx.names?.["es-ES"] || ctx.name}${desc ? ` - ${desc}` : ""}`,
-    }
+    return buildLocalizedValue(
+      {
+        "en-US": `Add ${ctx.names?.["en-US"] || ctx.name} presence${desc ? ` - ${desc}` : ""}`,
+        "fr-FR": `Ajout de ${ctx.names?.["fr-FR"] || ctx.name}${desc ? ` - ${desc}` : ""}`,
+        "es-ES": `Añadir ${ctx.names?.["es-ES"] || ctx.name}${desc ? ` - ${desc}` : ""}`,
+      },
+      `Add ${ctx.names?.["en-US"] || ctx.name} presence${desc ? ` - ${desc}` : ""}`,
+    )
   }
 
   const title = `Update ${ctx.name} presence`
