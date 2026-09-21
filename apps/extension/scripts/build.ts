@@ -93,7 +93,10 @@ const run = async (): Promise<void> => {
   if (channel === "canary") generateBundledPresences()
   else resetBundledPresences()
 
-  const { version } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf-8")) as { version: string }
+  const { version: packageVersion } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf-8")) as { version: string }
+  // Lets one browser's store submission carry a different version than package.json,
+  // e.g. when only one browser needs a hotfix bump because the other was never published.
+  const version = process.env.EXTENSION_VERSION ?? packageVersion
   generateManifest(browser, channel, version, DIST)
   await copyStatic()
   if (channel === "canary") copyPresenceAssets(DIST)
