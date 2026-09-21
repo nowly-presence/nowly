@@ -54,6 +54,7 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }): R
   const [isCheckingUpdates, setIsCheckingUpdates] = useState(false)
   const [isConnectingNative, setIsConnectingNative] = useState(false)
   const connectingNativeRef = useRef(false)
+  const visibleTriggeredRef = useRef(false)
 
   useEffect(() => {
     try {
@@ -66,8 +67,6 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }): R
   const entries = useMemo(() => Object.entries(presences), [presences])
 
   const refresh = useCallback((): void => {
-    // Read the complete snapshot in one batch so the panel does not render a
-    // mixture of old and new presence/settings data after a background update.
     void Promise.all([
       sendMessage("GET_PRESENCES"),
       sendMessage("GET_CURRENT_ACTIVITY"),
@@ -109,6 +108,13 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }): R
 
     const onVisible = (): void => {
       if (document.visibilityState !== "visible") return
+      // "visibilitychange" and "focus" both fire for the same real event (panel regaining
+      // focus), which duplicated the native heartbeat request — dedupe within a short window.
+      if (visibleTriggeredRef.current) return
+      visibleTriggeredRef.current = true
+      window.setTimeout(() => {
+        visibleTriggeredRef.current = false
+      }, 300)
       void sendMessage("CONNECT_NATIVE").then((status) => setNativeStatus(status ?? FALLBACK_NATIVE_STATUS))
       refresh()
     }
@@ -170,8 +176,10 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }): R
     connectingNativeRef.current = true
     setIsConnectingNative(true)
     setNativeStatus((current) => ({ ...current, status: "connecting" }))
-    void sendMessage("CONNECT_NATIVE")
-      .then((status) => setNativeStatus(status ?? FALLBACK_NATIVE_STATUS))
+    // CONNECT_NATIVE resolves almost instantly (the real handshake continues in the
+    // background), so a minimum delay keeps the spinner visible long enough to register.
+    void Promise.all([sendMessage("CONNECT_NATIVE"), new Promise((resolve) => setTimeout(resolve, 500))])
+      .then(([status]) => setNativeStatus(status ?? FALLBACK_NATIVE_STATUS))
       .finally(() => {
         connectingNativeRef.current = false
         setIsConnectingNative(false)
