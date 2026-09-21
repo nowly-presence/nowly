@@ -1,7 +1,6 @@
 {
   "name": "Nowly",
   "short_name": "Nowly",
-  "description": "Automatic Discord Rich Presence for your favorite platforms.",
   "id": "https://nowly.me/",
   "start_url": "https://nowly.me/",
   "scope": "https://nowly.me/",
