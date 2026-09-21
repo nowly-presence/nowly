@@ -62,11 +62,8 @@ const registerNativeResponseHandler = (): void => {
         nativeVersion: message.version,
       })
       // ponytail: track only on state change, not every tick, to keep insights volume sane
-      if (message.connected !== lastHeartbeatConnected) {
-        trackAnalytics(
-          message.connected ? "native_heartbeat_ok" : "native_heartbeat_failed",
-          message.connected ? undefined : { payload: { reason: message.status } },
-        )
+      if (!message.connected && lastHeartbeatConnected !== false) {
+        trackAnalytics("native_heartbeat_failed", { payload: { reason: message.status } })
       }
       lastHeartbeatConnected = message.connected
     }

@@ -23,7 +23,6 @@ const SEED_METRICS: Array<{ key: string; withSlug?: boolean; withSource?: boolea
   { key: "marketplace_page_view", withSlug: true, withSource: true, dailyRange: [20, 60] },
   { key: "marketplace_install_click", withSlug: true, withSource: true, dailyRange: [5, 20] },
   { key: "native_connected", dailyRange: [15, 40] },
-  { key: "native_heartbeat_ok", dailyRange: [100, 300] },
 ]
 
 const randomInt = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1)) + min
