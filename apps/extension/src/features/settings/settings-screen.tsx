@@ -99,11 +99,11 @@ export const SettingsScreen = ({ section, onSectionChange }: Props): React.JSX.E
 
   if (state.isLoading) {
     return (
-      <div className="flex flex-col gap-2">
-        {Array.from({ length: 4 }, (_, index) => (
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
+        {Array.from({ length: SECTIONS.length }, (_, index) => (
           <Skeleton
             key={index}
-            className="h-16 rounded-xl"
+            className="m-3 h-14 rounded-lg"
           />
         ))}
       </div>
