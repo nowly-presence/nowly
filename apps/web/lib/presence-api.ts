@@ -167,25 +167,27 @@ export const getPresenceCatalog = cache(async (): Promise<LibraryPresence[]> => 
       const description = localizedCopy(item.description, name);
 
       return [{
-        slug,
-        name,
-        category: typeof item.category === "string" && isLibraryCategory(item.category)
-          ? item.category
-          : "other",
-        color: typeof item.color === "string" && item.color.trim() ? item.color.trim() : "#111111",
-        description,
-        longDescription: localizedCopy(item.longDescription, description["en-US"]),
-        features: localizedList(item.features),
-        urls: parseUrls(item.url),
-        author: parsePerson(item.author, name),
-        contributors: parsePeople(item.contributors, name),
-        version: typeof item.version === "string" && item.version.trim() ? item.version.trim() : null,
-        discordNative: item.discordNative === true,
+        presence: {
+          slug,
+          name,
+          category: typeof item.category === "string" && isLibraryCategory(item.category)
+            ? item.category
+            : "other",
+          color: typeof item.color === "string" && item.color.trim() ? item.color.trim() : "#111111",
+          description,
+          longDescription: localizedCopy(item.longDescription, description["en-US"]),
+          features: localizedList(item.features),
+          urls: parseUrls(item.url),
+          author: parsePerson(item.author, name),
+          contributors: parsePeople(item.contributors, name),
+          version: typeof item.version === "string" && item.version.trim() ? item.version.trim() : null,
+          discordNative: item.discordNative === true,
+        },
         totalInstalls: typeof item.totalInstalls === "number" ? item.totalInstalls : 0,
       }];
     })
-    .toSorted((a, b) => b.totalInstalls - a.totalInstalls || a.name.localeCompare(b.name))
-    .map(({ totalInstalls: _installs, ...presence }) => presence);
+    .toSorted((a, b) => b.totalInstalls - a.totalInstalls || a.presence.name.localeCompare(b.presence.name))
+    .map(({ presence }) => presence);
 });
 
 export const getPresencePlatforms = cache(async (): Promise<PresencePlatform[]> => {

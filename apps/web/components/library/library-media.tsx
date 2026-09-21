@@ -20,7 +20,6 @@ export const LibraryMedia = ({ slug, name, variant = "card" }: LibraryMediaProps
     <div className={cn("relative", bannerFailed ? (isHero ? "px-6 pt-6 sm:px-8 sm:pt-8" : "px-6 pt-6") : isHero ? "mb-12 sm:mb-14" : "mb-7")}>
       {bannerFailed ? null : (
         <div className={cn("overflow-hidden", isHero ? "h-52 sm:h-72" : "h-36")}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={libraryThumbnailUrl(slug)}
             alt=""
