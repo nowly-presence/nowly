@@ -1,10 +1,13 @@
-import { RiCheckLine, RiDeleteBinLine, RiFileCopyLine } from "@remixicon/react"
+import { RiCheckLine, RiDeleteBinLine, RiFileCopyLine, RiTerminalLine } from "@remixicon/react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { filters, formatTime, levelClass, type RuntimeLogFeedback, type RuntimeLogFilter } from "@/features/runtime-logs/runtime-logs.model"
 import { sendMessage } from "@/lib/messages"
 import { t } from "@/shared/i18n"
 import type { RuntimeLogEntry } from "@/shared/types"
+import { Badge } from "@/ui/badge"
 import { Button } from "@/ui/button"
+import { Empty, EmptyMedia, EmptyTitle } from "@/ui/empty"
+import { Tabs, TabsList, TabsTrigger } from "@/ui/tabs"
 import { cn } from "@/ui/utils"
 
 const RuntimeLogRow = ({ log }: { log: RuntimeLogEntry }): React.JSX.Element => (
@@ -12,17 +15,20 @@ const RuntimeLogRow = ({ log }: { log: RuntimeLogEntry }): React.JSX.Element => 
     <div className="flex items-start justify-between gap-2">
       <div className="min-w-0">
         <p className="truncate text-xs font-semibold text-foreground">{log.message}</p>
-        <p className="flex items-center gap-2 text-[11px] text-muted-foreground">
+        <p className="flex items-center gap-2 text-xs text-muted-foreground">
           <span>{formatTime(log.at)}</span>
           <span>{log.type}</span>
         </p>
       </div>
-      <span className={cn("shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase", levelClass[log.level])}>
+      <Badge
+        variant="outline"
+        className={cn("shrink-0 uppercase", levelClass[log.level])}
+      >
         {log.level}
-      </span>
+      </Badge>
     </div>
     {log.payload ? (
-      <pre className="max-h-24 overflow-auto rounded-md bg-background p-2 text-[11px] leading-relaxed text-muted-foreground">
+      <pre className="max-h-24 overflow-auto rounded-md bg-background p-2 text-xs leading-relaxed text-muted-foreground">
         {JSON.stringify(log.payload, null, 2)}
       </pre>
     ) : null}
@@ -108,29 +114,33 @@ export const RuntimeLogsView = (): React.JSX.Element => {
         </Button>
       </div>
 
-      <div
-        role="tablist"
-        className="flex gap-1 overflow-x-auto"
+      <Tabs
+        value={filter}
+        onValueChange={(value) => setFilter(value as RuntimeLogFilter)}
       >
-        {filters.map((item) => (
-          <Button
-            key={item}
-            role="tab"
-            aria-selected={filter === item}
-            variant={filter === item ? "default" : "outline"}
-            size="xs"
-            onClick={() => setFilter(item)}
-          >
-            {item}
-          </Button>
-        ))}
-      </div>
+        <TabsList
+          variant="line"
+          className="w-full justify-start overflow-x-auto"
+        >
+          {filters.map((item) => (
+            <TabsTrigger
+              key={item}
+              value={item}
+            >
+              {item}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
 
       <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-border bg-card">
         {visibleLogs.length === 0 ? (
-          <div className="flex h-full min-h-48 items-center justify-center p-6 text-center text-xs text-muted-foreground">
-            {t("runtime-logs-empty")}
-          </div>
+          <Empty className="h-full min-h-48 border-none">
+            <EmptyMedia variant="icon">
+              <RiTerminalLine />
+            </EmptyMedia>
+            <EmptyTitle>{t("runtime-logs-empty")}</EmptyTitle>
+          </Empty>
         ) : (
           <div className="divide-y divide-border">
             {visibleLogs.map((log) => (
