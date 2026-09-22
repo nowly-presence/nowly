@@ -16,17 +16,16 @@ type OpenInProps = {
   locale: string;
 };
 
-const buildSearchUrl = (url: string, prompt: string) => prompt.replace("{url}", url);
-
 export const OpenIn: FC<OpenInProps> = ({ slug, locale }) => {
   const githubUrl = `${PROJECT_REPOSITORY_URL}/blob/stable/apps/docs/content/docs/${slug}/${locale}.mdx`;
   const markdownUrl = `${DOCS_URL}${docHref(slug)}`;
   const t = useTranslations("docsUi");
+  const askAbout = t("ask-about", { url: markdownUrl });
 
   const services = [
     { name: "GitHub", url: githubUrl, icon: <GitHubIcon className="size-4" /> },
-    { name: "ChatGPT", url: `https://chatgpt.com/?q=${encodeURIComponent(buildSearchUrl(markdownUrl, t("ask-about")))}`, icon: <OpenAIIcon className="size-4" /> },
-    { name: "Claude", url: `https://claude.ai/new?q=${encodeURIComponent(buildSearchUrl(markdownUrl, t("ask-about")))}`, icon: <ClaudeIcon /> },
+    { name: "ChatGPT", url: `https://chatgpt.com/?q=${encodeURIComponent(askAbout)}`, icon: <OpenAIIcon className="size-4" /> },
+    { name: "Claude", url: `https://claude.ai/new?q=${encodeURIComponent(askAbout)}`, icon: <ClaudeIcon /> },
   ];
 
   const openInService = (url: string) => window.open(url, "_blank", "noopener,noreferrer");

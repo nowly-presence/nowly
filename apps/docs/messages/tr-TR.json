@@ -44,7 +44,11 @@
     "tos": "Kullanım koşulları",
     "privacy": "Gizlilik",
     "cookies": "Çerezler",
-    "legal-notice": "Yasal bildirim"
+    "legal-notice": "Yasal bildirim",
+    "branding": "Marka kimliği",
+    "consent": "Verilerin",
+    "status": "Durum",
+    "twitter": "X / Twitter"
   },
   "cookie-banner": {
     "message": "Bu site, kesinlikle gerekli bir dil çerezi kullanır. İleride reklamlar etkinleştirilirse Google reklam teknolojilerini de kullanabilir.",
@@ -59,5 +63,43 @@
     "previous": "Önceki",
     "next": "Sonraki",
     "menu": "Menü"
+  },
+  "docsUi": {
+    "search-placeholder": "Belgelerde ara...",
+    "searching": "Aranıyor...",
+    "no-results": "Sonuç bulunamadı.",
+    "type-to-search": "Aramak için yazın...",
+    "results": "{count, plural, one {# sonuç} other {# sonuç}}",
+    "field": "Alan",
+    "type": "Tür",
+    "description": "Açıklama",
+    "default": "Varsayılan",
+    "language": "Dil",
+    "code": "Kod",
+    "yes": "Evet",
+    "method": "Yöntem",
+    "returns": "Döndürür",
+    "status": "Durum",
+    "error": "Hata",
+    "solution": "Çözüm",
+    "no-data": "Kullanılabilir veri yok.",
+    "edit-on-github": "GitHub'da düzenle",
+    "open-in": "Şurada aç",
+    "open-in-service": "{service} içinde aç",
+    "ask-about": "{url} adresini oku, bu konuda sorular sormak istiyorum.",
+    "copied": "Kopyalandı",
+    "copy-code": "Kodu kopyala"
+  },
+  "docsMetadata": {
+    "title": "Nowly Belgeleri",
+    "description": "Nowly'yi kurun, presence oluşturun ve Discord Rich Presence entegrasyonları yayınlayın.",
+    "not-found": "Bulunamadı",
+    "changelog": "Değişiklik günlüğü",
+    "changelog-description": "Nowly için sürüm notları.",
+    "documentation": "Belgeler",
+    "documentation-description": "Discord Rich Presence kurulumu ve presence geliştirme için Nowly belgeleri.",
+    "resources": "Kaynaklar",
+    "github": "GitHub Deposu",
+    "doc-description": "{title} için belgeler"
   }
 }

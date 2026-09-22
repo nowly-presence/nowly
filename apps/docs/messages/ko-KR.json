@@ -44,7 +44,11 @@
     "tos": "이용약관",
     "privacy": "개인정보처리방침",
     "cookies": "쿠키",
-    "legal-notice": "법적 고지"
+    "legal-notice": "법적 고지",
+    "branding": "브랜딩",
+    "consent": "내 데이터",
+    "status": "상태",
+    "twitter": "X / Twitter"
   },
   "cookie-banner": {
     "message": "이 사이트는 반드시 필요한 언어 설정 쿠키를 사용합니다. 이후 광고 기능이 활성화되면 Google이 광고 기술을 사용할 수 있습니다.",
@@ -59,5 +63,43 @@
     "previous": "이전",
     "next": "다음",
     "menu": "메뉴"
+  },
+  "docsUi": {
+    "search-placeholder": "문서 검색...",
+    "searching": "검색 중...",
+    "no-results": "검색 결과가 없습니다.",
+    "type-to-search": "입력하여 검색...",
+    "results": "{count, plural, other {검색결과 #개}}",
+    "field": "필드",
+    "type": "유형",
+    "description": "설명",
+    "default": "기본값",
+    "language": "언어",
+    "code": "코드",
+    "yes": "예",
+    "method": "메서드",
+    "returns": "반환값",
+    "status": "상태",
+    "error": "오류",
+    "solution": "해결 방법",
+    "no-data": "사용 가능한 데이터가 없습니다.",
+    "edit-on-github": "GitHub에서 편집",
+    "open-in": "열기",
+    "open-in-service": "{service}에서 열기",
+    "ask-about": "{url}을(를) 읽고 이에 대해 질문하고 싶습니다.",
+    "copied": "복사됨",
+    "copy-code": "코드 복사"
+  },
+  "docsMetadata": {
+    "title": "Nowly 문서",
+    "description": "Nowly를 설치하고, presence를 만들고, Discord Rich Presence 통합을 게시하세요.",
+    "not-found": "찾을 수 없음",
+    "changelog": "변경 이력",
+    "changelog-description": "Nowly 릴리스 노트.",
+    "documentation": "문서",
+    "documentation-description": "Discord Rich Presence 설정 및 presence 개발을 위한 Nowly 문서.",
+    "resources": "리소스",
+    "github": "GitHub 저장소",
+    "doc-description": "{title} 문서"
   }
 }

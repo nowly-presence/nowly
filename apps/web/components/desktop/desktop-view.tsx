@@ -1,12 +1,12 @@
 "use client";
 
+import { ButtonLink } from "@/components/button-link";
 import { CampaignSignupForm } from "@/components/campaigns/campaign-signup-form";
 import {
   Alert,
   AlertDescription,
   AlertTitle,
   ButtonAnchor,
-  ButtonLink,
   Card,
   CardContent,
   CardDescription,

@@ -1,6 +1,7 @@
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { homeSectionAltClass, SectionHeading } from "@/components/home/section-heading";
-import { ButtonLink, cn } from "@nowly/ui";
+import { ButtonLink } from "@/components/button-link";
+import { cn } from "@nowly/ui";
 
 
 import { RiBookShelfFill, RiWindow2Fill } from "@nowly/ui/icons";

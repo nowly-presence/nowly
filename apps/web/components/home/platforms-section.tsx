@@ -1,10 +1,10 @@
 import { homeSectionAltClass, SectionHeading } from "@/components/home/section-heading";
 import { PresenceTile } from "@/components/presence-tile";
+import { Link } from "@/i18n/navigation";
 import { getPresencePlatforms, type PresencePlatform } from "@/lib/presence-api";
 import { cn } from "@nowly/ui";
 
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
 
 const LogoTrack = ({
   platforms,

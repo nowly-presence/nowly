@@ -1,9 +1,9 @@
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { homeSectionAltClass } from "@/components/home/section-heading";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@nowly/ui";
 
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
 
 export const CtaSection = async () => {
   const t = await getTranslations("cta");

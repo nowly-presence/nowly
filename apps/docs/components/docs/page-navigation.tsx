@@ -4,8 +4,8 @@ import { RiArrowLeftSLine, RiArrowRightSLine } from "@nowly/ui/icons";
 import type { DocNavigationItem } from "@/lib/docs/types";
 import { docHref } from "@/lib/docs/href";
 
+import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import type { FC } from "react";
 
 type PageNavigationProps = {

@@ -44,7 +44,11 @@
     "tos": "Terma perkhidmatan",
     "privacy": "Privasi",
     "cookies": "Kuki",
-    "legal-notice": "Notis undang-undang"
+    "legal-notice": "Notis undang-undang",
+    "branding": "Penjenamaan",
+    "consent": "Data anda",
+    "status": "Status",
+    "twitter": "X / Twitter"
   },
   "cookie-banner": {
     "message": "Laman ini menggunakan kuki bahasa yang benar-benar diperlukan. Jika iklan diaktifkan kelak, Google turut boleh menggunakan teknologi pengiklanan.",
@@ -59,5 +63,43 @@
     "previous": "Sebelumnya",
     "next": "Seterusnya",
     "menu": "Menu"
+  },
+  "docsUi": {
+    "search-placeholder": "Cari dokumentasi...",
+    "searching": "Mencari...",
+    "no-results": "Tiada hasil ditemui.",
+    "type-to-search": "Taip untuk mencari...",
+    "results": "{count, plural, other {# hasil}}",
+    "field": "Medan",
+    "type": "Jenis",
+    "description": "Penerangan",
+    "default": "Lalai",
+    "language": "Bahasa",
+    "code": "Kod",
+    "yes": "Ya",
+    "method": "Kaedah",
+    "returns": "Mengembalikan",
+    "status": "Status",
+    "error": "Ralat",
+    "solution": "Penyelesaian",
+    "no-data": "Tiada data tersedia.",
+    "edit-on-github": "Edit di GitHub",
+    "open-in": "Buka dalam",
+    "open-in-service": "Buka dalam {service}",
+    "ask-about": "Baca {url}, saya ingin bertanya soalan mengenainya.",
+    "copied": "Disalin",
+    "copy-code": "Salin kod"
+  },
+  "docsMetadata": {
+    "title": "Dokumentasi Nowly",
+    "description": "Pasang Nowly, bina presence, dan terbitkan integrasi Discord Rich Presence.",
+    "not-found": "Tidak Ditemui",
+    "changelog": "Log Perubahan",
+    "changelog-description": "Nota keluaran untuk Nowly.",
+    "documentation": "Dokumentasi",
+    "documentation-description": "Dokumentasi Nowly untuk persediaan Discord Rich Presence dan pembangunan presence.",
+    "resources": "Sumber",
+    "github": "Repositori GitHub",
+    "doc-description": "Dokumentasi untuk {title}"
   }
 }

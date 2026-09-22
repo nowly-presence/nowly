@@ -1,7 +1,8 @@
 "use client";
 
 import { PaginatedLibraryGrid } from "@/components/library/paginated-library-grid";
-import { Button, ButtonLink, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, Input, cn } from "@nowly/ui";
+import { ButtonLink } from "@/components/button-link";
+import { Button, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, Input, cn } from "@nowly/ui";
 
 
 
@@ -15,9 +16,9 @@ import {
 } from "@/lib/library-catalog";
 
 import { trackPublicAnalytics } from "@/lib/analytics";
+import { Link } from "@/i18n/navigation";
 import { RiCloseLine, RiSearchLine } from "@nowly/ui/icons";
 import { useLocale, useTranslations } from "next-intl";
-import Link from "next/link";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
 const navJoinOffset = () =>

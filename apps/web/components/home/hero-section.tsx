@@ -1,7 +1,7 @@
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { HeroCards } from "@/components/home/hero-cards";
+import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
 
 export const HeroSection = async () => {
   const t = await getTranslations("hero");

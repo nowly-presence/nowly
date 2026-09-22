@@ -7,8 +7,7 @@ import { CANONICAL_ORIGIN, organizationJsonLd, SITE_NAME } from "@/lib/seo";
 import { getTranslations } from "next-intl/server";
 
 export const HomeJsonLd = async () => {
-  const [meta, faq] = await Promise.all([getTranslations("metadata"), getTranslations("faq")]);
-  const items = faq.raw("items") as Array<{ question: string; answer: string }>;
+  const meta = await getTranslations("metadata");
   const organization = organizationJsonLd();
 
   return (
@@ -41,17 +40,6 @@ export const HomeJsonLd = async () => {
               priceCurrency: "USD",
             },
             publisher: { "@id": `${CANONICAL_ORIGIN}/#organization` },
-          },
-          {
-            "@type": "FAQPage",
-            mainEntity: items.map((item) => ({
-              "@type": "Question",
-              name: item.question,
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: item.answer,
-              },
-            })),
           },
         ],
       }}

@@ -1,9 +1,9 @@
 "use client";
 
+import { Link } from "@/i18n/navigation";
 import { Button } from "@nowly/ui";
 
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "nowly_cookie_dismissed";

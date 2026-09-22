@@ -6,11 +6,10 @@ import { BrandLockup } from "@/components/layout/brand-lockup";
 import { Button, Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@nowly/ui";
 
 
+import { Link, usePathname } from "@/i18n/navigation";
 import { CANARY_ACCENT, CANARY_INK } from "@/lib/brand";
 import { docsHref } from "@/lib/seo";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 export const Navbar = () => {
@@ -44,16 +43,27 @@ export const Navbar = () => {
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm text-foreground transition-opacity hover:opacity-80"
-              {...(link.external ? { rel: "noreferrer", target: "_blank" } : {})}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link) =>
+            link.external ? (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-sm text-foreground transition-opacity hover:opacity-80"
+                rel="noreferrer"
+                target="_blank"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm text-foreground transition-opacity hover:opacity-80"
+              >
+                {link.label}
+              </Link>
+            ),
+          )}
           <ExtensionStoreButton {...storeButtonProps} />
         </nav>
 
@@ -76,17 +86,29 @@ export const Navbar = () => {
               <SheetTitle>{t("open-menu")}</SheetTitle>
             </SheetHeader>
             <nav className="flex flex-col gap-3 px-4 pb-6">
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm text-foreground"
-                  onClick={() => setOpen(false)}
-                  {...(link.external ? { rel: "noreferrer", target: "_blank" } : {})}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {links.map((link) =>
+                link.external ? (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="text-sm text-foreground"
+                    onClick={() => setOpen(false)}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-sm text-foreground"
+                    onClick={() => setOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ),
+              )}
               <ExtensionStoreButton {...storeButtonProps} />
             </nav>
           </SheetContent>

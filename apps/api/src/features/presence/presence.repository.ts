@@ -204,6 +204,50 @@ export const getPresenceMeta = async (slug: string): Promise<PresenceMeta | null
   return (row?.metadata as PresenceMeta | null) ?? null
 }
 
+export type PresenceListItem = PresenceMeta & {
+  version: string
+  totalInstalls: number
+  activeUsers: number
+  likes: number
+}
+
+// Bulk equivalent of calling getPresenceMeta + getPresenceStats per slug: the list route
+// used to do ~5 queries per presence (meta lookup, then 4 sequential stats queries each),
+// which is what made /presences slow under status-check load. This does 4 queries total.
+export const getPresenceListData = async (): Promise<PresenceListItem[]> => {
+  const prisma = getPrisma()
+
+  await prisma.presenceActiveDevice.deleteMany({
+    where: { lastSeenAt: { lt: new Date(Date.now() - ACTIVE_DEVICE_STALE_MS) } },
+  })
+
+  const [presences, installCounts, activeCounts, likeCounts] = await Promise.all([
+    prisma.presence.findMany({
+      where: { archived: false },
+      select: { slug: true, metadata: true, version: true },
+    }),
+    prisma.devicePresence.groupBy({ by: ["slug"], where: { installed: true }, _count: { _all: true } }),
+    prisma.presenceActiveDevice.groupBy({ by: ["slug"], _count: { _all: true } }),
+    prisma.presenceLike.groupBy({ by: ["slug"], _count: { _all: true } }),
+  ])
+
+  const toMap = (rows: Array<{ slug: string; _count: { _all: number } }>) =>
+    new Map(rows.map((row) => [row.slug, row._count._all]))
+  const installMap = toMap(installCounts)
+  const activeMap = toMap(activeCounts)
+  const likeMap = toMap(likeCounts)
+
+  return presences
+    .filter((presence): presence is typeof presence & { metadata: PresenceMeta } => Boolean(presence.metadata))
+    .map((presence) => ({
+      ...(presence.metadata as PresenceMeta),
+      version: presence.version || "",
+      totalInstalls: installMap.get(presence.slug) ?? 0,
+      activeUsers: activeMap.get(presence.slug) ?? 0,
+      likes: likeMap.get(presence.slug) ?? 0,
+    }))
+}
+
 export const getAllPresenceSlugs = async (options: { includeArchived?: boolean } = {}): Promise<string[]> => {
   const rows = await getPrisma().presence.findMany({
     where: options.includeArchived ? undefined : { archived: false },

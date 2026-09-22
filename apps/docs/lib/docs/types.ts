@@ -70,12 +70,16 @@ export const createHeadingId = (value: string): string =>
 export const extractTocItems = (content: string): TocItem[] => {
   const headingRegex = /^(#{2,3})\s+(.+)$/gm;
   const items: TocItem[] = [];
+  const seen = new Map<string, number>();
   let match: RegExpExecArray | null;
 
   while ((match = headingRegex.exec(content)) !== null) {
     const level = match[1].length;
     const text = normalizeHeadingText(match[2]);
-    const id = createHeadingId(text);
+    const baseId = createHeadingId(text) || "section";
+    const occurrence = seen.get(baseId) ?? 0;
+    seen.set(baseId, occurrence + 1);
+    const id = occurrence === 0 ? baseId : `${baseId}-${occurrence + 1}`;
 
     items.push({ id, text, level });
   }

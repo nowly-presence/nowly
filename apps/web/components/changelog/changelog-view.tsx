@@ -1,4 +1,6 @@
-import { ButtonAnchor, ButtonLink } from "@nowly/ui";
+import { ButtonLink } from "@/components/button-link";
+import { Link } from "@/i18n/navigation";
+import { ButtonAnchor } from "@nowly/ui";
 
 
 import {
@@ -10,7 +12,6 @@ import { docsHref } from "@/lib/seo";
 import { RiArrowLeftLine } from "@nowly/ui/icons";
 import { getLocale, getTranslations } from "next-intl/server";
 import Image from "next/image";
-import Link from "next/link";
 
 export const ChangelogView = async () => {
   const [t, locale] = await Promise.all([

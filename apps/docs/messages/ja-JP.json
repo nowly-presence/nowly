@@ -44,7 +44,11 @@
     "tos": "利用規約",
     "privacy": "プライバシー",
     "cookies": "Cookie",
-    "legal-notice": "特定商取引法に基づく表記"
+    "legal-notice": "特定商取引法に基づく表記",
+    "branding": "ブランディング",
+    "consent": "あなたのデータ",
+    "status": "ステータス",
+    "twitter": "X / Twitter"
   },
   "cookie-banner": {
     "message": "このサイトでは、必要最小限の言語設定用Cookieを使用しています。今後広告機能が有効になった場合、Googleが広告技術を使用することがあります。",
@@ -59,5 +63,43 @@
     "previous": "前へ",
     "next": "次へ",
     "menu": "メニュー"
+  },
+  "docsUi": {
+    "search-placeholder": "ドキュメントを検索...",
+    "searching": "検索中...",
+    "no-results": "結果が見つかりませんでした。",
+    "type-to-search": "入力して検索...",
+    "results": "{count, plural, other {#件の結果}}",
+    "field": "フィールド",
+    "type": "タイプ",
+    "description": "説明",
+    "default": "デフォルト",
+    "language": "言語",
+    "code": "コード",
+    "yes": "はい",
+    "method": "メソッド",
+    "returns": "戻り値",
+    "status": "ステータス",
+    "error": "エラー",
+    "solution": "解決方法",
+    "no-data": "利用可能なデータがありません。",
+    "edit-on-github": "GitHubで編集",
+    "open-in": "開く",
+    "open-in-service": "{service}で開く",
+    "ask-about": "{url} を読んで、これについて質問したいです。",
+    "copied": "コピーしました",
+    "copy-code": "コードをコピー"
+  },
+  "docsMetadata": {
+    "title": "Nowly ドキュメント",
+    "description": "Nowlyをインストールし、presenceを作成して、Discord Rich Presenceの統合を公開しましょう。",
+    "not-found": "見つかりません",
+    "changelog": "変更履歴",
+    "changelog-description": "Nowlyのリリースノート。",
+    "documentation": "ドキュメント",
+    "documentation-description": "Discord Rich Presenceの設定とpresence開発のためのNowlyドキュメント。",
+    "resources": "リソース",
+    "github": "GitHubリポジトリ",
+    "doc-description": "{title}のドキュメント"
   }
 }

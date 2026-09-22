@@ -1,3 +1,4 @@
+import { Link } from "@/i18n/navigation";
 import { Avatar, AvatarFallback, AvatarImage, ButtonAnchor, Card, CardContent, CardTitle } from "@nowly/ui";
 
 
@@ -11,7 +12,6 @@ import {
 import type { PresenceCommit, PresenceStats } from "@/lib/presence-api";
 import { RiDownloadLine, RiGithubLine, RiUserLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
 
 const githubAvatar = (github: string): string =>
   `https://github.com/${encodeURIComponent(github)}.png?size=80`;

@@ -1,6 +1,6 @@
+import { Link } from "@/i18n/navigation";
 import { RiLockLine, RiPuzzleLine, RiBarChartLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
 
 const icons = [RiLockLine, RiBarChartLine, RiPuzzleLine];
 

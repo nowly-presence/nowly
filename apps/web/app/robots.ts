@@ -12,8 +12,8 @@ const robots = (): MetadataRoute.Robots => {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        disallow: ["/api/", "/host/"],
+        allow: ["/", "/api/og"],
+        disallow: ["/api/", "/host/", "/test/"],
       },
     ],
     sitemap: `${CANONICAL_ORIGIN}/sitemap.xml`,

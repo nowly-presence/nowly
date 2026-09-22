@@ -2,7 +2,8 @@ import { LibraryCard } from "@/components/library/library-card";
 import { LibraryMedia } from "@/components/library/library-media";
 import { PresenceActions } from "@/components/library/presence-actions";
 import { PresenceInfo } from "@/components/library/presence-info";
-import { Alert, AlertDescription, AlertTitle, ButtonLink, Card, CardContent, CardTitle } from "@nowly/ui";
+import { ButtonLink } from "@/components/button-link";
+import { Alert, AlertDescription, AlertTitle, Card, CardContent, CardTitle } from "@nowly/ui";
 
 
 

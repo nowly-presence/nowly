@@ -1,6 +1,7 @@
 import { AuthorViewTracker } from "@/components/library/author-view-tracker";
 import { PaginatedLibraryGrid } from "@/components/library/paginated-library-grid";
-import { Avatar, AvatarFallback, AvatarImage, ButtonAnchor, ButtonLink } from "@nowly/ui";
+import { ButtonLink } from "@/components/button-link";
+import { Avatar, AvatarFallback, AvatarImage, ButtonAnchor } from "@nowly/ui";
 
 
 import {

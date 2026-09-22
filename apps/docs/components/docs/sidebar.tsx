@@ -1,13 +1,12 @@
 "use client";
 
 import { useSidebar } from "@/components/sidebar-context";
+import { Link, usePathname } from "@/i18n/navigation";
 import { docHref } from "@/lib/docs/href";
 import type { DocNavigationItem } from "@/lib/docs/types";
 import { cn } from "@nowly/ui";
 import { RiCloseLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import type { FC } from "react";
 
 type AppSidebarProps = {

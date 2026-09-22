@@ -1,10 +1,13 @@
-import { BRAND_LOCKUP_BLUE, BRAND_LOCKUP_BLUE_PNG } from "@/lib/brand";
+import { getPathname } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
+import { BRAND_LOCKUP_BLUE } from "@/lib/brand";
 import {
   DISCORD_INVITE_URL,
   KOFI_URL,
   PROJECT_REPOSITORY_URL,
   TWITTER_URL,
 } from "@/lib/constants";
+import type { LocaleString } from "@nowly/locales";
 import type { Metadata } from "next";
 
 export const CANONICAL_ORIGIN = "https://nowly.me";
@@ -23,7 +26,7 @@ const hostnameOf = (value: string): string => {
 export const SITE_URL = trimOrigin(process.env.NEXT_PUBLIC_BASE_URL ?? CANONICAL_ORIGIN);
 export const DOCS_URL = DOCS_ORIGIN;
 export const SITE_NAME = "Nowly";
-export const DEFAULT_OG_IMAGE = BRAND_LOCKUP_BLUE_PNG;
+export const OG_IMAGE_VERSION = "1";
 
 const seoHost = hostnameOf(SITE_URL);
 export const isSeoPreview =
@@ -44,26 +47,68 @@ export const absoluteUrl = (path = "/", origin = CANONICAL_ORIGIN): string => {
 
 export const seoUrl = (path = "/"): string => absoluteUrl(path, CANONICAL_ORIGIN);
 
+export const webOgImage = (params: {
+  title: string
+  description: string
+  badge?: string
+  accent?: string
+  logo?: string
+}): string => {
+  const search = new URLSearchParams({
+    title: params.title,
+    description: params.description,
+    v: OG_IMAGE_VERSION,
+  });
+  if (params.badge) search.set("badge", params.badge);
+  if (params.accent) search.set("accent", params.accent);
+  if (params.logo) search.set("logo", params.logo);
+  return `/api/og?${search.toString()}`;
+};
+
 type SeoOptions = {
   title: string
   description: string
+  // Widened to `string` since `getLocale()` isn't narrowed to `LocaleString` - the routing
+  // integration guarantees it's always one of `routing.locales` at runtime.
+  locale: string
   path?: string
   keywords?: string[]
   image?: string
+  badge?: string
+  accent?: string
+  logo?: string
   noIndex?: boolean
 };
+
+// The <title> tag reads well with a "Nowly | X" / "X | Nowly" pattern, but repeating that
+// pipe as the OG image's giant headline looks broken next to the logo that already says "Nowly".
+export const ogHeadline = (title: string): string =>
+  title
+    .replace(new RegExp(`^${SITE_NAME}\\s*\\|\\s*`, "i"), "")
+    .replace(new RegExp(`\\s*\\|\\s*${SITE_NAME}$`, "i"), "");
 
 export const createMetadata = ({
   title,
   description,
+  locale,
   path = "/",
   keywords = [],
-  image = DEFAULT_OG_IMAGE,
+  image,
+  badge,
+  accent,
+  logo,
   noIndex = false,
 }: SeoOptions): Metadata => {
-  const url = seoUrl(path);
-  const imageUrl = absoluteUrl(image, CANONICAL_ORIGIN);
+  const localeString = locale as LocaleString;
+  const url = absoluteUrl(getPathname({ locale: localeString, href: path }), CANONICAL_ORIGIN);
+  const languages: Record<string, string> = {
+    "x-default": absoluteUrl(getPathname({ locale: routing.defaultLocale, href: path }), CANONICAL_ORIGIN),
+  };
+  for (const target of routing.locales) {
+    languages[target] = absoluteUrl(getPathname({ locale: target, href: path }), CANONICAL_ORIGIN);
+  }
   const resolvedTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+  const imageUrl = absoluteUrl(image ?? webOgImage({ title: ogHeadline(resolvedTitle), description, badge, accent, logo }), CANONICAL_ORIGIN);
   const hideFromIndex = noIndex || isSeoPreview;
 
   return {
@@ -71,7 +116,7 @@ export const createMetadata = ({
     title: { absolute: resolvedTitle },
     description,
     keywords,
-    alternates: { canonical: url },
+    alternates: { canonical: url, languages },
     robots: hideFromIndex
       ? { index: false, follow: false, nocache: true }
       : { index: true, follow: true },
@@ -85,7 +130,7 @@ export const createMetadata = ({
     },
     twitter: {
       card: "summary_large_image",
-      site: "@nowly",
+      site: "@nowlyme",
       title: resolvedTitle,
       description,
       images: [imageUrl],

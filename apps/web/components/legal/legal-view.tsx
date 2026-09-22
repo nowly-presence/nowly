@@ -1,7 +1,7 @@
 import { LegalHtml } from "@/components/legal/legal-html";
+import { Link } from "@/i18n/navigation";
 import { LEGAL_DATA_REGION } from "@/lib/constants";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
-import Link from "next/link";
 
 export const LEGAL_PAGE_KEYS = ["privacy", "tos", "cookies", "legal-notice"] as const;
 

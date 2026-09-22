@@ -1,41 +1,49 @@
-import { getNavigationItems } from "@/lib/docs/content";
+import { getPathname } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { DOCS_URL, isSeoPreview } from "@/lib/constants";
+import { getNavigationItems } from "@/lib/docs/content";
 import type { MetadataRoute } from "next";
+
+const absoluteUrl = (locale: string, href: string): string => `${DOCS_URL}${getPathname({ locale, href })}`;
+
+const languageAlternates = (href: string): Record<string, string> =>
+  Object.fromEntries(routing.locales.map((locale) => [locale, absoluteUrl(locale, href)]));
+
+type DocPath = {
+  href: string
+  changeFrequency: "monthly"
+  priority: number
+};
 
 const sitemap = (): MetadataRoute.Sitemap => {
   if (isSeoPreview) return [];
 
   const docs = getNavigationItems("en-US");
-  const docPages = docs.flatMap((section) => {
-    const pages = section.children.map((page) => ({
-      url: `${DOCS_URL}/${page.path}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: section.slug === "changelog" ? 0.65 : 0.8,
-    }));
+  const paths: DocPath[] = [];
 
-    return section.slug === "changelog"
-      ? [
-          {
-            url: `${DOCS_URL}/changelog`,
-            lastModified: new Date(),
-            changeFrequency: "monthly" as const,
-            priority: 0.7,
-          },
-          ...pages,
-        ]
-      : pages;
-  });
+  for (const section of docs) {
+    if (section.slug === "changelog") {
+      paths.push({ href: "/changelog", changeFrequency: "monthly", priority: 0.7 });
+    }
 
-  return [
-    {
-      url: `${DOCS_URL}/`,
+    for (const page of section.children) {
+      paths.push({
+        href: `/${page.path}`,
+        changeFrequency: "monthly",
+        priority: section.slug === "changelog" ? 0.65 : 0.8,
+      });
+    }
+  }
+
+  return routing.locales.flatMap((locale) =>
+    paths.map(({ href, changeFrequency, priority }) => ({
+      url: absoluteUrl(locale, href),
       lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    ...docPages,
-  ];
+      changeFrequency,
+      priority,
+      alternates: { languages: languageAlternates(href) },
+    })),
+  );
 };
 
 export default sitemap;

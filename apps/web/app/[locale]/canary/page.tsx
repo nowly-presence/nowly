@@ -1,0 +1,29 @@
+import { CanaryView } from "@/components/canary/canary-view";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
+import { BRAND_LOCKUP_CANARY_PNG } from "@/lib/brand";
+import { createMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
+
+export const generateMetadata = async (): Promise<Metadata> => {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations("pages.canary")]);
+  return createMetadata({
+    title: t("title"),
+    description: t("description"),
+    locale,
+    path: "/canary",
+    image: BRAND_LOCKUP_CANARY_PNG,
+  });
+};
+
+const Page = async () => {
+  const t = await getTranslations("pages.canary");
+  return (
+    <>
+      <WebPageJsonLd name={t("title")} description={t("description")} path="/canary" />
+      <CanaryView />
+    </>
+  );
+};
+
+export default Page;

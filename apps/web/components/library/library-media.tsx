@@ -3,6 +3,7 @@
 import { PresenceTile } from "@/components/presence-tile";
 import { libraryLogoUrl, libraryThumbnailUrl } from "@/lib/library-catalog";
 import { cn } from "@nowly/ui";
+import Image from "next/image";
 
 import { useState } from "react";
 
@@ -19,11 +20,13 @@ export const LibraryMedia = ({ slug, name, variant = "card" }: LibraryMediaProps
   return (
     <div className={cn("relative", bannerFailed ? (isHero ? "px-6 pt-6 sm:px-8 sm:pt-8" : "px-6 pt-6") : isHero ? "mb-12 sm:mb-14" : "mb-7")}>
       {bannerFailed ? null : (
-        <div className={cn("overflow-hidden", isHero ? "h-52 sm:h-72" : "h-36")}>
-          <img
+        <div className={cn("relative overflow-hidden", isHero ? "h-52 sm:h-72" : "h-36")}>
+          <Image
             src={libraryThumbnailUrl(slug)}
-            alt=""
-            className="size-full object-cover"
+            alt={name}
+            fill
+            sizes={isHero ? "(min-width: 640px) 640px, 100vw" : "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
+            className="object-cover"
             onError={() => setBannerFailed(true)}
           />
         </div>
