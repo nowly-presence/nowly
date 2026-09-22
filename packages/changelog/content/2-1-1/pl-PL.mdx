@@ -2,6 +2,7 @@
 title: 2.1.1
 date: 2026-09-22
 description: Naprawia sygnał aktywności użytkowników w rozszerzeniu, który po restarcie procesu service worker mógł przestać zgłaszać obecność jako aktywną.
+stores: [chrome]
 ---
 
 `2.1.1` to wydanie konserwacyjne naprawiające błąd, w którym obecność mogła być faktycznie aktywna - Discord Rich Presence aktualizował się normalnie - podczas gdy licznik „aktywnych użytkowników” na jej stronie nowly.me pozostawał na 0 przez dłuższy czas.

@@ -1,0 +1,14 @@
+---
+title: 2.1.2
+date: 22 de septiembre de 2026
+description: Corrige el seguimiento de usuarios activos tras cerrar una pestaña, una alarma de heartbeat retrasada y una race de inicialización en segundo plano.
+stores: [firefox]
+---
+
+## Correcciones de errores
+
+- Corregido el seguimiento de usuarios activos: la extensión podía seguir mostrando 0 usuarios activos en la página de una presencia aunque estuviera realmente activa, porque el estado en memoria del service worker en segundo plano se perdía cada vez que Chrome/Firefox lo desalojaba (un comportamiento habitual de MV3). El seguimiento de presencias activas ahora sobrevive a los reinicios del service worker.
+- Corregida la alarma de heartbeat periódica, que podía quedar perpetuamente retrasada bajo actividad continua, impidiendo a veces que llegara a dispararse.
+- Cerrar una pestaña ahora detiene correctamente el reporte de su presencia como activa (antes podía quedar "activa" en el servidor indefinidamente).
+- Corregida una race en la que un inicio del navegador o una instalación/actualización de la extensión podía ejecutar la inicialización en segundo plano dos veces a la vez.
+- Pequeñas mejoras de fiabilidad en la activación/desactivación/desinstalación de presencias y en la comprobación de actualizaciones.

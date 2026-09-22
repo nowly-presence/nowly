@@ -478,7 +478,7 @@
   "changelogPage": {
     "eyebrow": "Notes de mise à jour",
     "title": "Ce qui a changé",
-    "description": "Chaque version de Nowly, de la dernière build store jusqu’à la première version publique.",
+    "description": "Chaque version de Nowly, de la dernière build store jusqu’à la première version publique.",
     "read": "Lire les notes",
     "banner-alt": "Site Nowly {version}",
     "docs": "Notes complètes",
@@ -488,7 +488,9 @@
     "update-title": "Nowly {version} est installé",
     "update-description": "Voici ce qui change dans cette version.",
     "meta-title": "Nowly {version}",
-    "missing": "Les notes de cette version ne sont pas encore sur le site. Le changelog complet reste dans la doc."
+    "missing": "Les notes de cette version ne sont pas encore sur le site. Le changelog complet reste dans la doc.",
+    "current-on-chrome": "Actuellement en ligne sur le Chrome Web Store",
+    "current-on-firefox": "Actuellement en ligne sur Firefox Add-ons"
   },
   "canaryPage": {
     "eyebrow": "Canary",
@@ -744,7 +746,7 @@
     "badge": "Confidentialité",
     "title": "Politique de confidentialité",
     "description": "Comment Nowly traite vos données, ce qui reste sur votre appareil et ce qui dépend de votre consentement.",
-     "last-updated": "Dernière mise à jour : 21 septembre 2026.",
+    "last-updated": "Dernière mise à jour : 21 septembre 2026.",
     "intro": "La présente politique décrit les traitements de données personnelles effectués par <strong>{publisherName}</strong> (« nous »), responsable de traitement, dans le cadre de Nowly. L’activité Rich Presence est transmise du navigateur au client Discord <strong>sur votre machine</strong>. Elle ne transite pas par nos serveurs. Les statistiques d’usage optionnelles et quelques fonctions du site font en revanche appel à notre API ou à des sous-traitants, comme indiqué ci-dessous.",
     "sections": [
       {

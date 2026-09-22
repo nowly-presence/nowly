@@ -2,6 +2,7 @@
 title: 2.1.1
 date: 2026-09-22
 description: Fixes the extension's active-user heartbeat, which could silently stop reporting a presence as active after the background service worker restarted.
+stores: [chrome]
 ---
 
 `2.1.1` is a maintenance release fixing a bug where a presence could be genuinely active - Discord Rich Presence updating normally - while the "active users" count on its nowly.me page stayed at 0 for extended periods.

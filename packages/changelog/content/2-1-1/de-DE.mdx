@@ -2,6 +2,7 @@
 title: 2.1.1
 date: 2026-09-22
 description: Behebt den Heartbeat für aktive Nutzer der Erweiterung, der nach einem Neustart des Hintergrund-Service-Workers stillschweigend aufhören konnte, eine Presence als aktiv zu melden.
+stores: [chrome]
 ---
 
 `2.1.1` ist eine Wartungsversion, die einen Fehler behebt, bei dem eine Presence tatsächlich aktiv sein konnte - Discord Rich Presence wurde normal aktualisiert -, während der Zähler „aktive Nutzer" auf ihrer nowly.me-Seite über längere Zeit bei 0 blieb.

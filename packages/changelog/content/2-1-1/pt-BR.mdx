@@ -2,6 +2,7 @@
 title: 2.1.1
 date: 2026-09-22
 description: Corrige o heartbeat de usuários ativos da extensão, que podia parar de reportar uma presence como ativa após o service worker em segundo plano reiniciar.
+stores: [chrome]
 ---
 
 `2.1.1` é uma versão de manutenção que corrige um bug em que uma presence podia estar genuinamente ativa - com o Discord Rich Presence atualizando normalmente - enquanto o contador de "usuários ativos" em sua página no nowly.me permanecia em 0 por longos períodos.

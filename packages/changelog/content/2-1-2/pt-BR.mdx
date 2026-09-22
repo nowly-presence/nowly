@@ -1,0 +1,14 @@
+---
+title: 2.1.2
+date: 22 de setembro de 2026
+description: Corrige o rastreamento de usuários ativos após fechar uma aba, um alarme de heartbeat atrasado e uma race de inicialização em segundo plano.
+stores: [firefox]
+---
+
+## Correções de bugs
+
+- Corrigido o rastreamento de usuários ativos: a extensão podia continuar reportando 0 usuários ativos na página de uma presence mesmo estando realmente ativa, pois o estado em memória do service worker em segundo plano era perdido sempre que o Chrome/Firefox o descartava (um comportamento rotineiro do MV3). O rastreamento de presences ativas agora sobrevive a reinícios do service worker.
+- Corrigido o alarme de heartbeat periódico, que podia ficar perpetuamente atrasado sob atividade contínua, às vezes impedindo que ele disparasse.
+- Fechar uma aba agora para corretamente de reportar sua presence como ativa (antes ela podia ficar "ativa" no servidor indefinidamente).
+- Corrigida uma race em que um início do navegador ou uma instalação/atualização da extensão podia executar a inicialização em segundo plano duas vezes simultaneamente.
+- Pequenas melhorias de confiabilidade na ativação/desativação/desinstalação de presences e nas verificações de atualização.

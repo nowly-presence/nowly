@@ -5,11 +5,14 @@ import { fileURLToPath } from "node:url"
 
 const CONTENT_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "content")
 
+export type ChangelogStore = "chrome" | "firefox"
+
 export type ChangelogFrontmatter = {
   title: string
   date: string | null
   description: string
   banner?: string
+  stores?: ChangelogStore[]
 }
 
 export type ChangelogEntry = ChangelogFrontmatter & {
@@ -17,16 +20,18 @@ export type ChangelogEntry = ChangelogFrontmatter & {
   version: string
 }
 
-type ParsedSlug = { raw: string; parts: [number, number, number] }
+type ParsedSlug = { raw: string; parts: [number, number, number, number] }
 
+// A 4th segment covers store-specific patch resubmissions (e.g. a Firefox-only
+// AMO resubmission like 2.1.0.1) that never got a matching Chrome release.
 const parseSlug = (name: string): ParsedSlug | null => {
-  const match = /^(\d+)-(\d+)-(\d+)$/.exec(name)
+  const match = /^(\d+)-(\d+)-(\d+)(?:-(\d+))?$/.exec(name)
   if (!match) return null
-  return { raw: name, parts: [Number(match[1]), Number(match[2]), Number(match[3])] }
+  return { raw: name, parts: [Number(match[1]), Number(match[2]), Number(match[3]), Number(match[4] ?? 0)] }
 }
 
 const compareDesc = (a: ParsedSlug, b: ParsedSlug): number =>
-  b.parts[0] - a.parts[0] || b.parts[1] - a.parts[1] || b.parts[2] - a.parts[2]
+  b.parts[0] - a.parts[0] || b.parts[1] - a.parts[1] || b.parts[2] - a.parts[2] || b.parts[3] - a.parts[3]
 
 /** Every version slug found in content/, newest first. Add a version = add a folder here. */
 export const getChangelogSlugs = (): string[] => {
@@ -62,11 +67,14 @@ const toDateString = (value: unknown): string | null => {
   return null
 }
 
+const isChangelogStore = (value: unknown): value is ChangelogStore => value === "chrome" || value === "firefox"
+
 const toFrontmatter = (data: Record<string, unknown>, fallbackTitle: string): ChangelogFrontmatter => ({
   title: typeof data.title === "string" ? data.title : fallbackTitle,
   date: toDateString(data.date),
   description: typeof data.description === "string" ? data.description : "",
   banner: typeof data.banner === "string" ? data.banner : undefined,
+  stores: Array.isArray(data.stores) ? data.stores.filter(isChangelogStore) : undefined,
 })
 
 export const getChangelogFrontmatter = (slug: string, locale: string): ChangelogFrontmatter | null => {
@@ -91,9 +99,10 @@ export const getChangelogList = (locale: string): ChangelogEntry[] =>
 export const getLatestChangelogEntry = (locale: string): ChangelogEntry | null => getChangelogList(locale)[0] ?? null
 
 export const parseChangelogVersion = (value: string): { version: string; slug: string } | null => {
-  const match = /^v?(\d+)[.-](\d+)[.-](\d+)$/i.exec(value.trim())
+  const match = /^v?(\d+)[.-](\d+)[.-](\d+)(?:[.-](\d+))?$/i.exec(value.trim())
   if (!match) return null
-  return { version: `${match[1]}.${match[2]}.${match[3]}`, slug: `${match[1]}-${match[2]}-${match[3]}` }
+  const parts = [match[1], match[2], match[3], match[4]].filter((part): part is string => Boolean(part))
+  return { version: parts.join("."), slug: parts.join("-") }
 }
 
 export const getChangelogEntry = (versionOrSlug: string, locale: string): ChangelogEntry | null => {

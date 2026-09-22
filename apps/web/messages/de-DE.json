@@ -488,7 +488,9 @@
     "update-title": "Nowly {version} ist installiert",
     "update-description": "Das hat sich in diesem Release geändert.",
     "meta-title": "Nowly {version}",
-    "missing": "Hinweise für diese Version stehen noch nicht auf der Website. Du kannst den vollständigen Changelog trotzdem in den Docs durchsuchen."
+    "missing": "Hinweise für diese Version stehen noch nicht auf der Website. Du kannst den vollständigen Changelog trotzdem in den Docs durchsuchen.",
+    "current-on-chrome": "Derzeit im Chrome Web Store verfügbar",
+    "current-on-firefox": "Derzeit bei Firefox Add-ons verfügbar"
   },
   "canaryPage": {
     "eyebrow": "Canary",

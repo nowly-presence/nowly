@@ -1,0 +1,14 @@
+---
+title: 2.1.2
+date: 2026-09-22
+description: Fixes active-user tracking after closing a tab, a delayed heartbeat alarm, and a background-initialization race.
+stores: [firefox]
+---
+
+## Bug fixes
+
+- Fixed active-user tracking: the extension could keep reporting 0 active users on a presence's page even while it was genuinely active, because the background service worker's in-memory state was lost every time Chrome/Firefox evicted it (a routine MV3 behavior). Active-presence tracking now survives service worker restarts.
+- Fixed the periodic heartbeat alarm being perpetually delayed under continuous activity, sometimes preventing it from ever firing.
+- Closing a tab now correctly stops reporting its presence as active (previously it could stay "active" server-side indefinitely).
+- Fixed a race where a fresh browser start or extension install/update could run background initialization twice concurrently.
+- Minor reliability improvements to presence enable/disable/uninstall and update checks.

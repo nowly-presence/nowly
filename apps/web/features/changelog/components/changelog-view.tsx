@@ -1,11 +1,12 @@
 import { ButtonLink } from "@/components/button-link";
-import { Link } from "@/i18n/navigation";
 import { ButtonAnchor } from "@nowly/ui";
 
 
+import { ChangelogList } from "@/features/changelog/components/changelog-list";
 import {
   formatChangelogDate,
   getChangelogReleases,
+  latestReleaseSlugByStore,
   type ChangelogRelease,
 } from "@/features/changelog/lib/changelog-releases";
 import { docsHref } from "@/features/seo/lib/seo";
@@ -19,6 +20,7 @@ export const ChangelogView = async () => {
     getLocale(),
   ]);
   const releases = getChangelogReleases(locale);
+  const latestByStore = latestReleaseSlugByStore(releases);
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
@@ -36,29 +38,7 @@ export const ChangelogView = async () => {
         </header>
 
         <div className="mt-12 max-w-3xl">
-          <ol>
-            {releases.map((release, index) => (
-              <li key={release.slug} className={index > 0 ? "border-t border-border" : undefined}>
-                <Link
-                  href={`/changelog/${release.version}`}
-                  className="group flex flex-col gap-2 py-6 outline-offset-4 sm:flex-row sm:items-baseline sm:gap-8"
-                >
-                  <span className="shrink-0 font-mono text-sm font-medium text-foreground sm:w-36">
-                    {release.version}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    {release.date ? (
-                      <p className="text-xs text-muted-foreground">{formatChangelogDate(release.date, locale)}</p>
-                    ) : null}
-                    <p className="mt-1 text-[0.95rem] leading-relaxed text-foreground/75 group-hover:text-foreground">
-                      {release.summary}
-                    </p>
-                    <p className="mt-2 text-sm font-medium text-accent">{t("read")}</p>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ol>
+          <ChangelogList releases={releases} latestByStore={latestByStore} locale={locale} />
         </div>
 
         <div className="mt-10">

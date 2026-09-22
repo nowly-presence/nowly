@@ -1,0 +1,14 @@
+---
+title: 2.1.2
+date: 22 September 2026
+description: Membetulkan penjejakan pengguna aktif selepas menutup tab, penggera heartbeat yang tertangguh, dan perlumbaan permulaan latar belakang.
+stores: [firefox]
+---
+
+## Pembetulan pepijat
+
+- Dibetulkan penjejakan pengguna aktif: sambungan boleh terus melaporkan 0 pengguna aktif pada halaman presence walaupun ia benar-benar aktif, kerana keadaan dalam memori service worker latar belakang hilang setiap kali Chrome/Firefox mengusirnya (kelakuan rutin MV3). Penjejakan presence aktif kini bertahan daripada permulaan semula service worker.
+- Dibetulkan penggera heartbeat berkala yang boleh tertangguh secara berterusan di bawah aktiviti berterusan, kadangkala menghalangnya daripada dicetuskan langsung.
+- Menutup tab kini betul-betul berhenti melaporkan presencenya sebagai aktif (sebelum ini ia boleh kekal "aktif" di pelayan tanpa had).
+- Dibetulkan perlumbaan di mana permulaan pelayar baharu atau pemasangan/kemas kini sambungan boleh menjalankan permulaan latar belakang dua kali serentak.
+- Penambahbaikan kebolehpercayaan kecil pada pengaktifan/penyahaktifan/penyahpasangan presence dan semakan kemas kini.

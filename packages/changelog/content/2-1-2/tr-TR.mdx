@@ -1,0 +1,14 @@
+---
+title: 2.1.2
+date: 22 Eylül 2026
+description: Bir sekme kapatıldıktan sonra etkin kullanıcı takibini, gecikmeli bir heartbeat alarmını ve arka plan başlatma yarış durumunu düzeltir.
+stores: [firefox]
+---
+
+## Hata düzeltmeleri
+
+- Etkin kullanıcı takibi düzeltildi: bir presence gerçekten etkin olsa bile uzantı, sayfasında 0 etkin kullanıcı bildirmeye devam edebiliyordu; çünkü arka plan servis çalışanının bellek içi durumu, Chrome/Firefox onu her tahliye ettiğinde (rutin bir MV3 davranışı) kayboluyordu. Etkin presence takibi artık servis çalışanı yeniden başlatmalarından sağ çıkıyor.
+- Sürekli etkinlik altında periyodik heartbeat alarmının sürekli gecikmesi ve bazen hiç tetiklenmemesi sorunu düzeltildi.
+- Bir sekmeyi kapatmak artık presence'ı etkin olarak bildirmeyi doğru şekilde durduruyor (daha önce sunucu tarafında süresiz olarak "etkin" kalabiliyordu).
+- Yeni bir tarayıcı başlatmanın veya uzantı kurulumu/güncellemesinin arka plan başlatmasını aynı anda iki kez çalıştırabildiği bir yarış durumu düzeltildi.
+- Presence etkinleştirme/devre dışı bırakma/kaldırma ve güncelleme kontrollerinde küçük güvenilirlik iyileştirmeleri.

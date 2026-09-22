@@ -488,7 +488,9 @@
     "update-title": "Nowly {version} yüklendi",
     "update-description": "Bu sürümde değişenler şunlar.",
     "meta-title": "Nowly {version}",
-    "missing": "Bu sürümün notları henüz sitede değil. Dokümantasyonda tam değişiklik günlüğüne yine de göz atabilirsin."
+    "missing": "Bu sürümün notları henüz sitede değil. Dokümantasyonda tam değişiklik günlüğüne yine de göz atabilirsin.",
+    "current-on-chrome": "Şu anda Chrome Web Mağazası'nda yayında",
+    "current-on-firefox": "Şu anda Firefox Add-ons'ta yayında"
   },
   "canaryPage": {
     "eyebrow": "Canary",

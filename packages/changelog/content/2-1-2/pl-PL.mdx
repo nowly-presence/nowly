@@ -1,0 +1,14 @@
+---
+title: 2.1.2
+date: 22 września 2026
+description: Naprawia śledzenie aktywnych użytkowników po zamknięciu karty, opóźniony alarm heartbeat oraz wyścig przy inicjalizacji w tle.
+stores: [firefox]
+---
+
+## Poprawki błędów
+
+- Naprawiono śledzenie aktywnych użytkowników: rozszerzenie mogło nadal zgłaszać 0 aktywnych użytkowników na stronie obecności, mimo że była ona rzeczywiście aktywna, ponieważ stan w pamięci service workera w tle był tracony za każdym razem, gdy Chrome/Firefox go usuwał (rutynowe zachowanie MV3). Śledzenie aktywnych obecności przetrwa teraz restarty service workera.
+- Naprawiono okresowy alarm heartbeat, który mógł być stale opóźniany przy ciągłej aktywności, czasem uniemożliwiając jego uruchomienie.
+- Zamknięcie karty teraz poprawnie zatrzymuje zgłaszanie obecności jako aktywnej (wcześniej mogła pozostać "aktywna" po stronie serwera bezterminowo).
+- Naprawiono wyścig, w którym świeże uruchomienie przeglądarki lub instalacja/aktualizacja rozszerzenia mogły uruchomić inicjalizację w tle dwukrotnie jednocześnie.
+- Drobne poprawki niezawodności przy włączaniu/wyłączaniu/odinstalowywaniu obecności oraz sprawdzaniu aktualizacji.

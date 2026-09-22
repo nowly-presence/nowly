@@ -1,0 +1,14 @@
+---
+title: 2.1.2
+date: 22. September 2026
+description: Behebt die Nachverfolgung aktiver Nutzer nach dem Schließen eines Tabs, einen verzögerten Heartbeat-Alarm und eine Race-Condition bei der Hintergrundinitialisierung.
+stores: [firefox]
+---
+
+## Fehlerbehebungen
+
+- Nachverfolgung aktiver Nutzer korrigiert: Die Erweiterung konnte weiterhin 0 aktive Nutzer auf der Seite einer Presence melden, obwohl sie tatsächlich aktiv war, da der Speicherzustand des Hintergrund-Service-Workers jedes Mal verloren ging, wenn Chrome/Firefox ihn beendete (ein routinemäßiges MV3-Verhalten). Die Nachverfolgung aktiver Presences übersteht jetzt Neustarts des Service Workers.
+- Der periodische Heartbeat-Alarm, der unter kontinuierlicher Aktivität dauerhaft verzögert werden und dadurch manchmal nie auslösen konnte, wurde behoben.
+- Das Schließen eines Tabs stoppt jetzt korrekt die Meldung seiner Presence als aktiv (zuvor konnte sie serverseitig unbegrenzt "aktiv" bleiben).
+- Eine Race-Condition behoben, bei der ein frischer Browserstart oder eine Installation/Aktualisierung der Erweiterung die Hintergrundinitialisierung zweimal gleichzeitig ausführen konnte.
+- Kleinere Zuverlässigkeitsverbesserungen bei Aktivierung/Deaktivierung/Deinstallation von Presences und bei Update-Prüfungen.

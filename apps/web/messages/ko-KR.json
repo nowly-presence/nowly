@@ -488,7 +488,9 @@
     "update-title": "Nowly {version}이(가) 설치되었습니다",
     "update-description": "이번 릴리스에서 변경된 내용입니다.",
     "meta-title": "Nowly {version}",
-    "missing": "이 버전에 대한 노트는 아직 사이트에 없습니다. 문서에서 전체 변경 로그를 확인할 수 있습니다."
+    "missing": "이 버전에 대한 노트는 아직 사이트에 없습니다. 문서에서 전체 변경 로그를 확인할 수 있습니다.",
+    "current-on-chrome": "현재 Chrome 웹 스토어에 게시됨",
+    "current-on-firefox": "현재 Firefox Add-ons에 게시됨"
   },
   "canaryPage": {
     "eyebrow": "Canary",

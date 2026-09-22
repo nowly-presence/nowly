@@ -1,0 +1,14 @@
+---
+title: 2.1.2
+date: 22 septembre 2026
+description: Corrige le suivi des utilisateurs actifs après fermeture d'un onglet, une alarme de heartbeat retardée, et une race d'initialisation en arrière-plan.
+stores: [firefox]
+---
+
+## Corrections de bugs
+
+- Correction du suivi des utilisateurs actifs : l'extension pouvait continuer à afficher 0 utilisateur actif sur la page d'une présence alors qu'elle était réellement active, car l'état en mémoire du service worker en arrière-plan était perdu à chaque fois que Chrome/Firefox l'évinçait (un comportement MV3 courant). Le suivi des présences actives survit désormais aux redémarrages du service worker.
+- Correction de l'alarme de heartbeat périodique qui pouvait être perpétuellement retardée sous activité continue, l'empêchant parfois de se déclencher.
+- Fermer un onglet arrête désormais correctement de signaler sa présence comme active (elle pouvait auparavant rester "active" côté serveur indéfiniment).
+- Correction d'une race où un démarrage du navigateur ou une installation/mise à jour de l'extension pouvait lancer l'initialisation en arrière-plan deux fois en parallèle.
+- Petites améliorations de fiabilité sur l'activation/désactivation/désinstallation des présences et la vérification des mises à jour.

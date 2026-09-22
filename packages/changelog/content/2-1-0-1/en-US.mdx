@@ -1,0 +1,8 @@
+---
+title: 2.1.0.1
+date: 2026-09-21
+description: "Critical hotfix: the 2.1.0 build accidentally shipped with a local development API address instead of production, breaking the connection to Nowly's servers."
+stores: [firefox]
+---
+
+`2.1.0.1` is a critical hotfix. The `2.1.0` build's API endpoint was accidentally baked in as a local development address instead of the production API, breaking the connection to Nowly's servers. This release corrects the build so the extension talks to the real API again. No functional or UI changes beyond that.

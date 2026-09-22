@@ -488,7 +488,9 @@
     "update-title": "Nowly {version} をインストールしました",
     "update-description": "このリリースでの変更点はこちらです。",
     "meta-title": "Nowly {version}",
-    "missing": "このバージョンのノートはまだサイトに掲載されていません。ドキュメントで完全なチェンジログを確認できます。"
+    "missing": "このバージョンのノートはまだサイトに掲載されていません。ドキュメントで完全なチェンジログを確認できます。",
+    "current-on-chrome": "現在Chromeウェブストアで公開中",
+    "current-on-firefox": "現在Firefox Add-onsで公開中"
   },
   "canaryPage": {
     "eyebrow": "Canary",

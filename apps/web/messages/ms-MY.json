@@ -488,7 +488,9 @@
     "update-title": "Nowly {version} telah dipasang",
     "update-description": "Ini yang berubah dalam keluaran ini.",
     "meta-title": "Nowly {version}",
-    "missing": "Nota untuk versi ini belum lagi ada di laman web. Anda masih boleh melayari log perubahan penuh dalam dokumentasi."
+    "missing": "Nota untuk versi ini belum lagi ada di laman web. Anda masih boleh melayari log perubahan penuh dalam dokumentasi.",
+    "current-on-chrome": "Kini tersedia di Chrome Web Store",
+    "current-on-firefox": "Kini tersedia di Firefox Add-ons"
   },
   "canaryPage": {
     "eyebrow": "Canary",
