@@ -1,4 +1,3 @@
-@import url("https://api.fontshare.com/v2/css?f[]=satoshi@variable&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -94,7 +93,7 @@
 }
 
 @theme inline {
-  --font-sans: "Satoshi", system-ui, sans-serif;
+  --font-sans: var(--font-satoshi), system-ui, sans-serif;
   --font-heading: var(--font-sans);
   --color-background: var(--background);
   --color-foreground: var(--foreground);

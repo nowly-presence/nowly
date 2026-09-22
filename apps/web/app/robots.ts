@@ -1,4 +1,4 @@
-import { CANONICAL_ORIGIN, isSeoPreview } from "@/lib/seo";
+import { CANONICAL_ORIGIN, isSeoPreview } from "@/features/seo/lib/seo";
 import type { MetadataRoute } from "next";
 
 const robots = (): MetadataRoute.Robots => {
@@ -12,8 +12,8 @@ const robots = (): MetadataRoute.Robots => {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        disallow: ["/api/", "/host/"],
+        allow: ["/", "/api/og"],
+        disallow: ["/api/", "/host/", "/test/"],
       },
     ],
     sitemap: `${CANONICAL_ORIGIN}/sitemap.xml`,

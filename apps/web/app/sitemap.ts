@@ -1,7 +1,9 @@
-import { getChangelogReleases } from "@/lib/changelog-releases";
+import { getPathname } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
+import { getChangelogReleases } from "@/features/changelog/lib/changelog-releases";
 import { catalogGithubHandles } from "@/lib/library-catalog";
 import { getPresenceCatalog } from "@/lib/presence-api";
-import { DOCS_ORIGIN, isSeoPreview, seoUrl } from "@/lib/seo";
+import { isSeoPreview, seoUrl } from "@/features/seo/lib/seo";
 import type { MetadataRoute } from "next";
 
 // Some changelog entries carry a non-date placeholder (e.g. "To be determined")
@@ -12,17 +14,22 @@ const parseReleaseDate = (value: string | null): Date | undefined => {
   return Number.isNaN(parsed.getTime()) ? undefined : parsed;
 };
 
+const languageAlternates = (href: string): Record<string, string> =>
+  Object.fromEntries(routing.locales.map((locale) => [locale, seoUrl(getPathname({ locale, href }))]));
+
+type Entry = {
+  href: string
+  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]
+  priority: number
+  lastModified?: Date
+};
+
 const entry = (
-  path: string,
-  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"],
+  href: string,
+  changeFrequency: Entry["changeFrequency"],
   priority: number,
   lastModified?: Date,
-): MetadataRoute.Sitemap[number] => ({
-  url: path.startsWith("http") ? path : seoUrl(path),
-  lastModified: lastModified ?? new Date(),
-  changeFrequency,
-  priority,
-});
+): Entry => ({ href, changeFrequency, priority, lastModified });
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   if (isSeoPreview) return [];
@@ -30,18 +37,13 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const catalog = await getPresenceCatalog().catch(() => []);
   const authors = catalogGithubHandles(catalog);
 
-  return [
+  const entries: Entry[] = [
     entry("/", "weekly", 1),
     entry("/library", "weekly", 0.9),
-    {
-      url: `${DOCS_ORIGIN}/`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.85,
-    },
     entry("/desktop", "monthly", 0.7),
     entry("/extension", "monthly", 0.7),
     entry("/canary", "weekly", 0.55),
+    entry("/branding", "monthly", 0.4),
     entry("/changelog", "monthly", 0.6),
     ...getChangelogReleases("en-US").map((release) =>
       entry(
@@ -61,6 +63,16 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     entry("/cookies", "yearly", 0.3),
     entry("/legal-notice", "yearly", 0.3),
   ];
+
+  return routing.locales.flatMap((locale) =>
+    entries.map(({ href, changeFrequency, priority, lastModified }) => ({
+      url: seoUrl(getPathname({ locale, href })),
+      lastModified: lastModified ?? new Date(),
+      changeFrequency,
+      priority,
+      alternates: { languages: languageAlternates(href) },
+    })),
+  );
 };
 
 export default sitemap;

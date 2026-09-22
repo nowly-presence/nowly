@@ -13,7 +13,7 @@ import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
 import {
   addVersion,
   clearActiveDevice, clearActiveDevicesForDevice,
-  getAllPresenceSlugs, getGlobalPresenceStats, getLikeCount, getPresenceMeta, getPresenceStats, getVersionHistory,
+  getGlobalPresenceStats, getLikeCount, getPresenceListData, getPresenceMeta, getPresenceStats, getVersionHistory,
   hasLikedPresence, likePresence,
   markActiveDevice,
   setAdded, setUpdated, setVersion,
@@ -40,25 +40,7 @@ const sendArchivedNotFound = async (
 
 export const presenceRoutes = async (fastify: FastifyInstance) => {
   fastify.get("", async (_request, _reply) => {
-    const slugs = await getAllPresenceSlugs()
-    const results = await Promise.all(slugs.map(async (slug) => {
-      const [meta, stats] = await Promise.all([
-        getPresenceMeta(slug),
-        getPresenceStats(slug),
-      ])
-
-      if (!meta) return null
-
-      return {
-        ...meta,
-        version: stats.version || "",
-        totalInstalls: stats.totalInstalls,
-        activeUsers: stats.activeUsers,
-        likes: stats.likes,
-      }
-    }))
-
-    return results.filter((result) => result !== null)
+    return getPresenceListData()
   })
 
   fastify.get("/stats", async (_request, reply) => {

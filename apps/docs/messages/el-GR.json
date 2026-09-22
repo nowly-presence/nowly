@@ -44,7 +44,11 @@
     "tos": "Όροι χρήσης",
     "privacy": "Απόρρητο",
     "cookies": "Cookies",
-    "legal-notice": "Νομική σημείωση"
+    "legal-notice": "Νομική σημείωση",
+    "branding": "Ταυτότητα",
+    "consent": "Τα δεδομένα σου",
+    "status": "Κατάσταση",
+    "twitter": "X / Twitter"
   },
   "cookie-banner": {
     "message": "Αυτός ο ιστότοπος χρησιμοποιεί ένα απολύτως απαραίτητο cookie γλώσσας. Αν αργότερα ενεργοποιηθούν διαφημίσεις, η Google ενδέχεται να χρησιμοποιήσει και διαφημιστικές τεχνολογίες.",
@@ -59,5 +63,43 @@
     "previous": "Προηγούμενο",
     "next": "Επόμενο",
     "menu": "Μενού"
+  },
+  "docsUi": {
+    "search-placeholder": "Αναζήτηση τεκμηρίωσης...",
+    "searching": "Αναζήτηση...",
+    "no-results": "Δεν βρέθηκαν αποτελέσματα.",
+    "type-to-search": "Πληκτρολογήστε για αναζήτηση...",
+    "results": "{count, plural, one {# αποτέλεσμα} other {# αποτελέσματα}}",
+    "field": "Πεδίο",
+    "type": "Τύπος",
+    "description": "Περιγραφή",
+    "default": "Προεπιλογή",
+    "language": "Γλώσσα",
+    "code": "Κώδικας",
+    "yes": "Ναι",
+    "method": "Μέθοδος",
+    "returns": "Επιστρέφει",
+    "status": "Κατάσταση",
+    "error": "Σφάλμα",
+    "solution": "Λύση",
+    "no-data": "Δεν υπάρχουν διαθέσιμα δεδομένα.",
+    "edit-on-github": "Επεξεργασία στο GitHub",
+    "open-in": "Άνοιγμα σε",
+    "open-in-service": "Άνοιγμα σε {service}",
+    "ask-about": "Διάβασε {url}, θέλω να κάνω ερωτήσεις σχετικά με αυτό.",
+    "copied": "Αντιγράφηκε",
+    "copy-code": "Αντιγραφή κώδικα"
+  },
+  "docsMetadata": {
+    "title": "Τεκμηρίωση Nowly",
+    "description": "Εγκαταστήστε το Nowly, δημιουργήστε presences και δημοσιεύστε ενσωματώσεις Discord Rich Presence.",
+    "not-found": "Δεν βρέθηκε",
+    "changelog": "Αρχείο αλλαγών",
+    "changelog-description": "Σημειώσεις έκδοσης για το Nowly.",
+    "documentation": "Τεκμηρίωση",
+    "documentation-description": "Τεκμηρίωση Nowly για τη ρύθμιση του Discord Rich Presence και την ανάπτυξη presences.",
+    "resources": "Πόροι",
+    "github": "Αποθετήριο GitHub",
+    "doc-description": "Τεκμηρίωση για {title}"
   }
 }

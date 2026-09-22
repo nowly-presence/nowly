@@ -44,7 +44,11 @@
     "tos": "Términos del servicio",
     "privacy": "Privacidad",
     "cookies": "Cookies",
-    "legal-notice": "Aviso legal"
+    "legal-notice": "Aviso legal",
+    "branding": "Identidad de marca",
+    "consent": "Tus datos",
+    "status": "Estado",
+    "twitter": "X / Twitter"
   },
   "cookie-banner": {
     "message": "Este sitio usa una cookie de idioma estrictamente necesaria. Si más adelante se activan anuncios, Google también podrá usar tecnologías publicitarias.",
@@ -59,5 +63,43 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "menu": "Menú"
+  },
+  "docsUi": {
+    "search-placeholder": "Buscar en la documentación...",
+    "searching": "Buscando...",
+    "no-results": "No se encontraron resultados.",
+    "type-to-search": "Escribe para buscar...",
+    "results": "{count, plural, one {# resultado} other {# resultados}}",
+    "field": "Campo",
+    "type": "Tipo",
+    "description": "Descripción",
+    "default": "Predeterminado",
+    "language": "Idioma",
+    "code": "Código",
+    "yes": "Sí",
+    "method": "Método",
+    "returns": "Devuelve",
+    "status": "Estado",
+    "error": "Error",
+    "solution": "Solución",
+    "no-data": "No hay datos disponibles.",
+    "edit-on-github": "Editar en GitHub",
+    "open-in": "Abrir en",
+    "open-in-service": "Abrir en {service}",
+    "ask-about": "Lee {url}, quiero hacer preguntas sobre esto.",
+    "copied": "Copiado",
+    "copy-code": "Copiar código"
+  },
+  "docsMetadata": {
+    "title": "Documentación de Nowly",
+    "description": "Instala Nowly, crea presences y publica integraciones de Discord Rich Presence.",
+    "not-found": "No encontrado",
+    "changelog": "Registro de cambios",
+    "changelog-description": "Notas de versión de Nowly.",
+    "documentation": "Documentación",
+    "documentation-description": "Documentación de Nowly para configurar Discord Rich Presence y desarrollar presences.",
+    "resources": "Recursos",
+    "github": "Repositorio de GitHub",
+    "doc-description": "Documentación de {title}"
   }
 }

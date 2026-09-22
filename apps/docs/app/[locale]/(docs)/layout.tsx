@@ -1,0 +1,29 @@
+import { MobileSidebarToggle } from "@/features/docs-content/components/mobile-sidebar-toggle";
+import { SearchProvider } from "@/features/docs-content/components/search-provider";
+import { AppSidebar } from "@/features/docs-content/components/sidebar";
+import { SidebarProvider } from "@/components/sidebar-context";
+import { getNavigationItems } from "@/features/docs-content/lib/content";
+import { getLocale } from "next-intl/server";
+import type { PropsWithChildren, ReactElement } from "react";
+
+const Layout = async ({ children }: PropsWithChildren): Promise<ReactElement> => {
+  const locale = await getLocale();
+  const navItems = getNavigationItems(locale);
+
+  return (
+    <SidebarProvider>
+      <SearchProvider>
+        <div className="mx-auto flex w-full max-w-screen-2xl flex-1 gap-8 px-6 py-8">
+          <AppSidebar items={navItems} />
+
+          <main className="flex-1 min-w-0 max-w-3xl">
+            <MobileSidebarToggle />
+            {children}
+          </main>
+        </div>
+      </SearchProvider>
+    </SidebarProvider>
+  );
+};
+
+export default Layout;

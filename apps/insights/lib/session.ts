@@ -1,4 +1,4 @@
-import { apiBaseUrlFor, resolveApiTarget, type ApiTarget } from "@/lib/api-target";
+import { apiBaseUrlFor, resolveApiTarget, type ApiTarget } from "@/features/api-target/lib/api-target";
 
 export type Session = {
   user: {

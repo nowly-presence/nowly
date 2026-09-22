@@ -1,4 +1,4 @@
-import { ViewEditor } from "@/components/views/view-editor";
+import { ViewEditor } from "@/features/views/components/view-editor";
 
 const Page = () => (
   <div className="space-y-6">

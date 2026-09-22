@@ -44,7 +44,11 @@
     "tos": "Warunki korzystania",
     "privacy": "Prywatność",
     "cookies": "Pliki cookie",
-    "legal-notice": "Nota prawna"
+    "legal-notice": "Nota prawna",
+    "branding": "Branding",
+    "consent": "Twoje dane",
+    "status": "Status",
+    "twitter": "X / Twitter"
   },
   "cookie-banner": {
     "message": "Ta strona używa wyłącznie niezbędnego pliku cookie językowego. Jeśli w przyszłości zostaną włączone reklamy, Google może również wykorzystywać technologie reklamowe.",
@@ -59,5 +63,43 @@
     "previous": "Poprzedni",
     "next": "Następny",
     "menu": "Menu"
+  },
+  "docsUi": {
+    "search-placeholder": "Przeszukaj dokumentację...",
+    "searching": "Wyszukiwanie...",
+    "no-results": "Nie znaleziono wyników.",
+    "type-to-search": "Wpisz, aby wyszukać...",
+    "results": "{count, plural, one {# wynik} few {# wyniki} many {# wyników} other {# wyniku}}",
+    "field": "Pole",
+    "type": "Typ",
+    "description": "Opis",
+    "default": "Domyślny",
+    "language": "Język",
+    "code": "Kod",
+    "yes": "Tak",
+    "method": "Metoda",
+    "returns": "Zwraca",
+    "status": "Status",
+    "error": "Błąd",
+    "solution": "Rozwiązanie",
+    "no-data": "Brak dostępnych danych.",
+    "edit-on-github": "Edytuj na GitHub",
+    "open-in": "Otwórz w",
+    "open-in-service": "Otwórz w {service}",
+    "ask-about": "Przeczytaj {url}, chcę zadać pytania na ten temat.",
+    "copied": "Skopiowano",
+    "copy-code": "Kopiuj kod"
+  },
+  "docsMetadata": {
+    "title": "Dokumentacja Nowly",
+    "description": "Zainstaluj Nowly, twórz presence i publikuj integracje Discord Rich Presence.",
+    "not-found": "Nie znaleziono",
+    "changelog": "Dziennik zmian",
+    "changelog-description": "Informacje o wydaniach Nowly.",
+    "documentation": "Dokumentacja",
+    "documentation-description": "Dokumentacja Nowly dotycząca konfiguracji Discord Rich Presence i tworzenia presence.",
+    "resources": "Zasoby",
+    "github": "Repozytorium GitHub",
+    "doc-description": "Dokumentacja dla {title}"
   }
 }

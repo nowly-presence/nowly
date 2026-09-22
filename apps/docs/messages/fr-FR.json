@@ -44,7 +44,11 @@
     "tos": "Conditions d'utilisation",
     "privacy": "Confidentialité",
     "cookies": "Cookies",
-    "legal-notice": "Mentions légales"
+    "legal-notice": "Mentions légales",
+    "branding": "Charte graphique",
+    "consent": "Vos données",
+    "status": "Statut des services",
+    "twitter": "X / Twitter"
   },
   "cookie-banner": {
     "message": "Ce site utilise un cookie de langue strictement nécessaire. Si la publicité est activée plus tard, Google pourra aussi utiliser des technologies publicitaires.",

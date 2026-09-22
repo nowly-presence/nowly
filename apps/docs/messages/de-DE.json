@@ -44,7 +44,11 @@
     "tos": "Nutzungsbedingungen",
     "privacy": "Datenschutz",
     "cookies": "Cookies",
-    "legal-notice": "Impressum"
+    "legal-notice": "Impressum",
+    "branding": "Branding",
+    "consent": "Deine Daten",
+    "status": "Status",
+    "twitter": "X / Twitter"
   },
   "cookie-banner": {
     "message": "Diese Website verwendet ein unbedingt erforderliches Sprach-Cookie. Sollte später Werbung aktiviert werden, kann Google auch Werbetechnologien einsetzen.",
@@ -59,5 +63,43 @@
     "previous": "Zurück",
     "next": "Weiter",
     "menu": "Menü"
+  },
+  "docsUi": {
+    "search-placeholder": "Dokumentation durchsuchen...",
+    "searching": "Suche läuft...",
+    "no-results": "Keine Ergebnisse gefunden.",
+    "type-to-search": "Zum Suchen tippen...",
+    "results": "{count, plural, one {# Ergebnis} other {# Ergebnisse}}",
+    "field": "Feld",
+    "type": "Typ",
+    "description": "Beschreibung",
+    "default": "Standard",
+    "language": "Sprache",
+    "code": "Code",
+    "yes": "Ja",
+    "method": "Methode",
+    "returns": "Rückgabewert",
+    "status": "Status",
+    "error": "Fehler",
+    "solution": "Lösung",
+    "no-data": "Keine Daten verfügbar.",
+    "edit-on-github": "Auf GitHub bearbeiten",
+    "open-in": "Öffnen in",
+    "open-in-service": "In {service} öffnen",
+    "ask-about": "Lies {url}, ich möchte dazu Fragen stellen.",
+    "copied": "Kopiert",
+    "copy-code": "Code kopieren"
+  },
+  "docsMetadata": {
+    "title": "Nowly Dokumentation",
+    "description": "Installiere Nowly, erstelle Presences und veröffentliche Discord Rich Presence-Integrationen.",
+    "not-found": "Nicht gefunden",
+    "changelog": "Änderungsprotokoll",
+    "changelog-description": "Versionshinweise für Nowly.",
+    "documentation": "Dokumentation",
+    "documentation-description": "Nowly-Dokumentation für die Einrichtung von Discord Rich Presence und die Presence-Entwicklung.",
+    "resources": "Ressourcen",
+    "github": "GitHub-Repository",
+    "doc-description": "Dokumentation für {title}"
   }
 }

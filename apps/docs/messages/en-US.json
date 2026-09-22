@@ -44,7 +44,11 @@
     "tos": "Terms of Service",
     "privacy": "Privacy",
     "cookies": "Cookies",
-    "legal-notice": "Legal notice"
+    "legal-notice": "Legal notice",
+    "branding": "Branding",
+    "consent": "Your data",
+    "status": "Status",
+    "twitter": "X / Twitter"
   },
   "cookie-banner": {
     "message": "This site uses a strictly necessary language cookie. If advertising is later enabled, Google may also use advertising technologies.",

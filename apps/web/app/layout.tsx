@@ -1,40 +1,22 @@
-import { CookieBanner } from "@/components/layout/cookie-banner";
-import { Footer } from "@/components/layout/footer";
-import { Navbar } from "@/components/layout/navbar";
 import { AppProviders } from "@/components/providers";
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
+import { LOCALE_SHORT_MAP, type LocaleString } from "@nowly/locales";
+import { getLocale } from "next-intl/server";
 import type { PropsWithChildren } from "react";
 import "./globals.css";
-import { generateMetadata, viewport } from "./metadata";
+import { satoshi } from "./fonts";
 
-export { generateMetadata, viewport };
-
-const localeToHtmlLang: Record<string, string> = {
-  "en-US": "en",
-  "fr-FR": "fr",
-  "es-ES": "es",
-};
-
-const Layout = async ({ children }: PropsWithChildren) => {
-  const [messages, locale] = await Promise.all([getMessages(), getLocale()]);
+// Sits above app/[locale] so ThemeProvider (and its FOUC-prevention script tag) stays
+// mounted across locale switches instead of remounting every time [locale] changes.
+const RootLayout = async ({ children }: PropsWithChildren) => {
+  const locale = await getLocale();
 
   return (
-    <html lang={localeToHtmlLang[locale] ?? "en"} suppressHydrationWarning>
+    <html lang={LOCALE_SHORT_MAP[locale as LocaleString] ?? "en"} className={satoshi.variable} suppressHydrationWarning>
       <body className="min-h-dvh bg-background font-sans antialiased" suppressHydrationWarning>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <AppProviders>
-            <div className="flex min-h-dvh flex-col">
-              <Navbar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-            <CookieBanner />
-          </AppProviders>
-        </NextIntlClientProvider>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );
 };
 
-export default Layout;
+export default RootLayout;

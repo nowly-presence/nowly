@@ -1,8 +1,8 @@
 "use client";
 
-import { ApiTargetSwitcher } from "@/components/api-target-switcher";
+import { ApiTargetSwitcher } from "@/features/api-target/components/api-target-switcher";
 import { Button, Card, CardContent } from "@nowly/ui";
-import { apiBaseUrlFor, getClientApiTarget } from "@/lib/api-target";
+import { apiBaseUrlFor, getClientApiTarget } from "@/features/api-target/lib/api-target";
 import { RiDiscordFill } from "@nowly/ui/icons";
 import { useState } from "react";
 

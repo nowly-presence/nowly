@@ -5,10 +5,11 @@ const docsBase = "https://docs.nowly.me";
 
 const nextConfig: NextConfig = {
   compress: true,
-  transpilePackages: ["@nowly/analytics", "@nowly/ui"],
+  transpilePackages: ["@nowly/analytics", "@nowly/ui", "@nowly/locales"],
   poweredByHeader: false,
   experimental: {
     optimizePackageImports: ["@nowly/ui"],
+    globalNotFound: true,
   },
   images: {
     remotePatterns: [
@@ -40,12 +41,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/redem",
-        destination: "/redeem",
+        destination: "/support",
         permanent: true,
       },
       {
         source: "/support/redeem",
-        destination: "/redeem",
+        destination: "/support",
         permanent: true,
       },
     ];

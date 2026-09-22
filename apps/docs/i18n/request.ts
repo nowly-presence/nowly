@@ -1,6 +1,4 @@
-import { SUPPORTED_LOCALES, type LocaleString as Locale } from "@nowly/locales";
-import { getRequestConfig } from "next-intl/server";
-import { cookies, headers } from "next/headers";
+import { createRequestConfig } from "@nowly/locales/request";
 import englishMessages from "../messages/en-US.json";
 
 const withEnglishFallback = (messages: Record<string, unknown>): Record<string, unknown> => ({
@@ -10,54 +8,6 @@ const withEnglishFallback = (messages: Record<string, unknown>): Record<string, 
   docsMetadata: { ...englishMessages.docsMetadata, ...(messages.docsMetadata as Record<string, unknown> | undefined) },
 });
 
-const parseAcceptLanguage = (acceptLanguage: string | null): Locale | null => {
-  if (!acceptLanguage) return null;
-
-  const locales = acceptLanguage
-    .split(",")
-    .map((entry) => {
-      const [lang, q = "q=1"] = entry.trim().split(";");
-      return { lang: lang.trim(), q: parseFloat(q.split("=")[1] || "1") };
-    })
-    .sort((a, b) => b.q - a.q);
-
-  for (const { lang } of locales) {
-    const normalized = lang.replace("-", "_").toLowerCase();
-    const match = SUPPORTED_LOCALES.find(
-      (s) => s.toLowerCase() === normalized || s.split("-")[0].toLowerCase() === normalized
-    );
-    if (match) return match;
-
-    const langPrefix = lang.split("-")[0].toLowerCase();
-    const matchByPrefix = SUPPORTED_LOCALES.find(
-      (s) => s.split("-")[0].toLowerCase() === langPrefix
-    );
-    if (matchByPrefix) return matchByPrefix;
-  }
-
-  return null;
-};
-
-export default getRequestConfig(async () => {
-  const store = await cookies();
-  const cookieLocale = store.get("locale")?.value;
-  const validCookie = SUPPORTED_LOCALES.find((locale) => locale === cookieLocale);
-
-  if (validCookie) {
-    return {
-      locale: validCookie,
-      messages: withEnglishFallback((await import(`../messages/${validCookie}.json`)).default),
-    };
-  }
-
-  const headersList = await headers();
-  const acceptLanguage = headersList.get("accept-language");
-  const detected = parseAcceptLanguage(acceptLanguage);
-
-  const locale = detected ?? "en-US";
-
-  return {
-    locale,
-    messages: withEnglishFallback((await import(`../messages/${locale}.json`)).default),
-  };
-});
+export default createRequestConfig(
+  async (locale) => withEnglishFallback((await import(`../messages/${locale}.json`)).default),
+);

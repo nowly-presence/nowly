@@ -1,6 +1,6 @@
 import { RiCheckboxCircleFill } from "@remixicon/react"
 import { useEffect, useRef, useState } from "react"
-import { Header } from "@/components/layout/header"
+import { Header } from "@/features/layout/components/header"
 import { trackUiEvent } from "@/lib/analytics"
 import { sendMessage } from "@/lib/messages"
 import { LocalePicker } from "@/features/onboarding/locale-picker"

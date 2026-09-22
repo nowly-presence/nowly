@@ -1,6 +1,6 @@
-import { insightsTools } from "@/ai/tools";
-import { buildInstructions } from "@/ai/instructions";
-import { API_TARGET_COOKIE, apiBaseUrlFor, resolveApiTarget } from "@/lib/api-target";
+import { insightsTools } from "@/features/chat/lib/tools";
+import { buildInstructions } from "@/features/chat/lib/instructions";
+import { API_TARGET_COOKIE, apiBaseUrlFor, resolveApiTarget } from "@/features/api-target/lib/api-target";
 import { openai } from "@ai-sdk/openai";
 import { createAgentUIStreamResponse, stepCountIs, ToolLoopAgent, validateUIMessages, type InferAgentUIMessage } from "ai";
 

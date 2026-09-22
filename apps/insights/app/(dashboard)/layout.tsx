@@ -1,6 +1,6 @@
-import { AppSidebar } from "@/components/app-sidebar";
-import { DashboardShell } from "@/components/dashboard-shell";
-import { API_TARGET_COOKIE, apiBaseUrlFor, resolveApiTarget } from "@/lib/api-target";
+import { AppSidebar } from "@/features/layout/components/app-sidebar";
+import { DashboardShell } from "@/features/layout/components/dashboard-shell";
+import { API_TARGET_COOKIE, apiBaseUrlFor, resolveApiTarget } from "@/features/api-target/lib/api-target";
 import { getSession } from "@/lib/session";
 import { SidebarProvider } from "@nowly/ui";
 import { cookies, headers } from "next/headers";

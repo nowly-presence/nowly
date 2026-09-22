@@ -8,6 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 const mockPresenceRepo = vi.hoisted(() => ({
   getAllPresenceSlugs: vi.fn(),
   getAllPresenceMetas: vi.fn(),
+  getPresenceListData: vi.fn(),
   getPresenceMeta: vi.fn(),
   getVersion: vi.fn(),
   getPresenceStats: vi.fn(),
@@ -86,7 +87,7 @@ describe("Registry Routes", () => {
   })
 
   it("GET /presences returns empty array when no slugs", async () => {
-    mockPresenceRepo.getAllPresenceSlugs.mockResolvedValue([])
+    mockPresenceRepo.getPresenceListData.mockResolvedValue([])
 
     const res = await app.inject({ method: "GET", url: "/presences" })
 
@@ -95,7 +96,7 @@ describe("Registry Routes", () => {
   })
 
   it("GET /presences returns registry with metadata and stats", async () => {
-    const meta = {
+    mockPresenceRepo.getPresenceListData.mockResolvedValue([{
       name: "YouTube",
       slug: "youtube",
       author: { name: "Gaëtan H", github: "steellgold" },
@@ -105,15 +106,11 @@ describe("Registry Routes", () => {
       url: ["youtube.com"],
       assets: { logo: "logo.png", icon: "icon.png", thumbnail: "thumbnail.jpg" },
       tags: ["video"],
-    }
-    const stats = {
-      totalInstalls: 500, activeUsers: 42,
-      version: "1.0.0", addedAt: null, lastUpdated: null,
-    }
-
-    mockPresenceRepo.getAllPresenceSlugs.mockResolvedValue(["youtube"])
-    mockPresenceRepo.getPresenceMeta.mockResolvedValue(meta)
-    mockPresenceRepo.getPresenceStats.mockResolvedValue(stats)
+      version: "1.0.0",
+      totalInstalls: 500,
+      activeUsers: 42,
+      likes: 0,
+    }])
 
     const res = await app.inject({ method: "GET", url: "/presences" })
 

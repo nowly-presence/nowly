@@ -1,4 +1,4 @@
-import { API_TARGET_COOKIE, resolveApiTarget } from "@/lib/api-target";
+import { API_TARGET_COOKIE, resolveApiTarget } from "@/features/api-target/lib/api-target";
 import { getSession } from "@/lib/session";
 import { NextResponse, type NextRequest } from "next/server";
 

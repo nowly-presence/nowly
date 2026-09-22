@@ -1,7 +1,7 @@
 import { DESKTOP_LATEST_MANIFEST_URL } from "@/lib/constants";
 import { NextResponse } from "next/server";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 type Manifest = { version?: unknown };
 
