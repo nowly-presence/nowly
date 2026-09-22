@@ -1,6 +1,6 @@
-import { UninstallView } from "@/components/uninstall/uninstall-view";
-import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
-import { createMetadata } from "@/lib/seo";
+import { UninstallView } from "@/features/uninstall/components/uninstall-view";
+import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
+import { createMetadata } from "@/features/seo/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";

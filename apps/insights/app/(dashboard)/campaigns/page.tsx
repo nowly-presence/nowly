@@ -1,4 +1,4 @@
-import { CampaignsManager } from "@/components/campaigns/campaigns-manager";
+import { CampaignsManager } from "@/features/campaigns/components/campaigns-manager";
 
 const Page = () => (
   <div className="space-y-6">

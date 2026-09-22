@@ -1,18 +1,18 @@
-import { EditOnGitHub } from "@/components/docs/edit-on-github";
-import { mdxComponents } from "@/components/docs/mdx-components";
-import { OpenIn } from "@/components/docs/open-in";
-import { PageNavigation } from "@/components/docs/page-navigation";
-import { TableOfContents } from "@/components/docs/table-of-contents";
-import { getAdjacentPages, getCategoryForPath, getDocContent } from "@/lib/docs/content";
-import { docHref } from "@/lib/docs/href";
-import { extractTocItems } from "@/lib/docs/types";
-import { createMetadata, docsOgImage } from "@/lib/seo";
+import { EditOnGitHub } from "@/features/docs-content/components/edit-on-github";
+import { mdxComponents } from "@/features/docs-content/components/mdx-components";
+import { OpenIn } from "@/features/docs-content/components/open-in";
+import { PageNavigation } from "@/features/docs-content/components/page-navigation";
+import { TableOfContents } from "@/features/docs-content/components/table-of-contents";
+import { getAdjacentPages, getCategoryForPath, getDocContent } from "@/features/docs-content/lib/content";
+import { docHref } from "@/features/docs-content/lib/href";
+import { extractTocItems } from "@/features/docs-content/lib/types";
+import { createMetadata, docsOgImage } from "@/features/seo/lib/seo";
 import type { LocaleString } from "@nowly/locales";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
-import { ScrollToTop } from "@/components/docs/scroll-to-top";
+import { ScrollToTop } from "@/features/docs-content/components/scroll-to-top";
 import type { ReactElement } from "react";
 
 type Props = {

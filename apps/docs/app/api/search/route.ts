@@ -1,5 +1,5 @@
 import { SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
-import { getDocContent, getNavigationItems } from "@/lib/docs/content";
+import { getDocContent, getNavigationItems } from "@/features/docs-content/lib/content";
 import { NextRequest, NextResponse } from "next/server";
 
 type SearchResult = {

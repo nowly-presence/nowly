@@ -1,4 +1,4 @@
-import { getDocContent, getNavigationItems } from "@/lib/docs/content";
+import { getDocContent, getNavigationItems } from "@/features/docs-content/lib/content";
 import { DOCS_URL } from "@/lib/constants";
 import { NextResponse } from "next/server";
 import { getTranslations } from "next-intl/server";

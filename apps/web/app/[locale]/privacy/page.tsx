@@ -1,6 +1,6 @@
-import { LegalView } from "@/components/legal/legal-view";
-import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
-import { createMetadata } from "@/lib/seo";
+import { LegalView } from "@/features/legal/components/legal-view";
+import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
+import { createMetadata } from "@/features/seo/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 

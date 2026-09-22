@@ -1,5 +1,5 @@
 import { BRAND_LOCKUP_BLUE_PNG, BRAND_LOCKUP_DARK_PNG } from "@/lib/brand";
-import { getDocOgMetadata } from "@/lib/docs/og-metadata";
+import { getDocOgMetadata } from "@/features/docs-content/lib/og-metadata";
 import { ImageResponse } from "next/og";
 import { getLocale, getTranslations } from "next-intl/server";
 

@@ -1,5 +1,5 @@
-import { ViewEditor } from "@/components/views/view-editor";
-import { API_TARGET_COOKIE, apiBaseUrlFor, resolveApiTarget } from "@/lib/api-target";
+import { ViewEditor } from "@/features/views/components/view-editor";
+import { API_TARGET_COOKIE, apiBaseUrlFor, resolveApiTarget } from "@/features/api-target/lib/api-target";
 import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
 import type { ViewConfig } from "@nowly/analytics";

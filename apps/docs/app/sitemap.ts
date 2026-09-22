@@ -1,7 +1,7 @@
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { DOCS_URL, isSeoPreview } from "@/lib/constants";
-import { getNavigationItems } from "@/lib/docs/content";
+import { getNavigationItems } from "@/features/docs-content/lib/content";
 import type { MetadataRoute } from "next";
 
 const absoluteUrl = (locale: string, href: string): string => `${DOCS_URL}${getPathname({ locale, href })}`;

@@ -1,6 +1,6 @@
-import { CookieBanner } from "@/components/layout/cookie-banner";
-import { Footer } from "@/components/layout/footer";
-import { Navbar } from "@/components/layout/navbar";
+import { CookieBanner } from "@/features/layout/components/cookie-banner";
+import { Footer } from "@/features/layout/components/footer";
+import { Navbar } from "@/features/layout/components/navbar";
 import { routing } from "@/i18n/routing";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";

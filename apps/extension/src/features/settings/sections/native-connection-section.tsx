@@ -1,6 +1,6 @@
 import { RiClipboardLine, RiExternalLinkLine, RiRefreshLine, RiStethoscopeLine } from "@remixicon/react"
 import { useMemo } from "react"
-import { isConnectionHealthy } from "@/components/layout/connection-status-bar"
+import { isConnectionHealthy } from "@/features/layout/components/connection-status-bar"
 import { buildDiagnosticSnapshot } from "@/features/diagnostics/diagnostic-status"
 import { UserDiagnosticCard } from "@/features/diagnostics/user-diagnostic-card"
 import { useSupportDiagnostic } from "@/features/diagnostics/use-support-diagnostic"

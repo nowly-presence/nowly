@@ -1,13 +1,13 @@
-import { CtaSection } from "@/components/home/cta-section";
-import { FaqSection } from "@/components/home/faq-section";
-import { FeaturesSection } from "@/components/home/features-section";
-import { HeroSection } from "@/components/home/hero-section";
-import { HomeJsonLd } from "@/components/home/home-json-ld";
-import { OpenSourceSection } from "@/components/home/open-source-section";
-import { PlatformsSection } from "@/components/home/platforms-section";
-import { PrivacySection } from "@/components/home/privacy-section";
-import { StepsSection } from "@/components/home/steps-section";
-import { createMetadata } from "@/lib/seo";
+import { CtaSection } from "@/features/home/components/cta-section";
+import { FaqSection } from "@/features/home/components/faq-section";
+import { FeaturesSection } from "@/features/home/components/features-section";
+import { HeroSection } from "@/features/home/components/hero-section";
+import { HomeJsonLd } from "@/features/home/components/home-json-ld";
+import { OpenSourceSection } from "@/features/home/components/open-source-section";
+import { PlatformsSection } from "@/features/home/components/platforms-section";
+import { PrivacySection } from "@/features/home/components/privacy-section";
+import { StepsSection } from "@/features/home/components/steps-section";
+import { createMetadata } from "@/features/seo/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 

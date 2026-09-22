@@ -8,7 +8,7 @@ import {
   ogHeadline,
   SITE_NAME,
   webOgImage,
-} from "@/lib/seo";
+} from "@/features/seo/lib/seo";
 import type { LocaleString } from "@nowly/locales";
 import type { Metadata, Viewport } from "next";
 import { getTranslations } from "next-intl/server";

@@ -1,5 +1,5 @@
-import { ViewPage } from "@/components/views/view-page";
-import { API_TARGET_COOKIE, apiBaseUrlFor, resolveApiTarget } from "@/lib/api-target";
+import { ViewPage } from "@/features/views/components/view-page";
+import { API_TARGET_COOKIE, apiBaseUrlFor, resolveApiTarget } from "@/features/api-target/lib/api-target";
 import { ButtonLink } from "@nowly/ui";
 import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";

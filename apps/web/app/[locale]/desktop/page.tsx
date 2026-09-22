@@ -1,7 +1,7 @@
-import { DesktopView } from "@/components/desktop/desktop-view";
-import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
-import { getDesktopRelease } from "@/lib/desktop-release";
-import { createMetadata } from "@/lib/seo";
+import { DesktopView } from "@/features/desktop/components/desktop-view";
+import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
+import { getDesktopRelease } from "@/features/desktop/lib/desktop-release";
+import { createMetadata } from "@/features/seo/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 

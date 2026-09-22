@@ -1,12 +1,12 @@
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { CookieBanner } from "@/components/layout/cookie-banner";
-import { Footer } from "@/components/layout/footer";
-import { Navbar } from "@/components/layout/navbar";
+import { CookieBanner } from "@/features/layout/components/cookie-banner";
+import { Footer } from "@/features/layout/components/footer";
+import { Navbar } from "@/features/layout/components/navbar";
 import { AppProviders } from "@/components/providers";
 import { BRAND_FAVICON_32, BRAND_METADATA_ICONS } from "@/lib/brand";
 import { isSeoPreview } from "@/lib/constants";
-import { OG_IMAGE_VERSION } from "@/lib/seo";
+import { OG_IMAGE_VERSION } from "@/features/seo/lib/seo";
 import { LOCALE_SHORT_MAP, type LocaleString } from "@nowly/locales";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";

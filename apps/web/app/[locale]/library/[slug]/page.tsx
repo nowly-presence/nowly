@@ -1,8 +1,8 @@
-import { PresenceView } from "@/components/library/presence-view";
-import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
+import { PresenceView } from "@/features/library/components/presence-view";
+import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
 import { localizedDescription } from "@/lib/library-catalog";
 import { getPresenceBySlug, getPresenceCatalog, getPresenceStats, getPresenceVersionHistory, presenceLogoUrl } from "@/lib/presence-api";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata } from "@/features/seo/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";

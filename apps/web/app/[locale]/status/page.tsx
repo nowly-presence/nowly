@@ -1,6 +1,6 @@
-import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
-import { StatusView } from "@/components/status/status-view";
-import { createMetadata } from "@/lib/seo";
+import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
+import { StatusView } from "@/features/status/components/status-view";
+import { createMetadata } from "@/features/seo/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 

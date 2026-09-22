@@ -1,7 +1,7 @@
-import { ChangelogReleaseView } from "@/components/changelog/changelog-view";
-import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
-import { getChangelogRelease, parseChangelogVersion } from "@/lib/changelog-releases";
-import { createMetadata } from "@/lib/seo";
+import { ChangelogReleaseView } from "@/features/changelog/components/changelog-view";
+import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
+import { getChangelogRelease, parseChangelogVersion } from "@/features/changelog/lib/changelog-releases";
+import { createMetadata } from "@/features/seo/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";

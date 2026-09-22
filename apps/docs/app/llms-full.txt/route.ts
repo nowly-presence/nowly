@@ -1,4 +1,4 @@
-import { getDocContent, getNavigationItems } from "@/lib/docs/content";
+import { getDocContent, getNavigationItems } from "@/features/docs-content/lib/content";
 import { NextResponse } from "next/server";
 
 const stripMdx = (content: string): string => {

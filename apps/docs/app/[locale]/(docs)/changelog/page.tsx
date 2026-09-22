@@ -1,11 +1,11 @@
-import { EditOnGitHub } from "@/components/docs/edit-on-github";
-import { mdxComponents } from "@/components/docs/mdx-components";
-import { ScrollToTop } from "@/components/docs/scroll-to-top";
-import { TableOfContents } from "@/components/docs/table-of-contents";
+import { EditOnGitHub } from "@/features/docs-content/components/edit-on-github";
+import { mdxComponents } from "@/features/docs-content/components/mdx-components";
+import { ScrollToTop } from "@/features/docs-content/components/scroll-to-top";
+import { TableOfContents } from "@/features/docs-content/components/table-of-contents";
 import { Link } from "@/i18n/navigation";
-import { getDocContent } from "@/lib/docs/content";
-import { extractTocItems } from "@/lib/docs/types";
-import { createMetadata, docsOgImage } from "@/lib/seo";
+import { getDocContent } from "@/features/docs-content/lib/content";
+import { extractTocItems } from "@/features/docs-content/lib/types";
+import { createMetadata, docsOgImage } from "@/features/seo/lib/seo";
 import { getChangelogList } from "@nowly/changelog";
 import type { LocaleString } from "@nowly/locales";
 import type { Metadata } from "next";

@@ -1,6 +1,6 @@
-import { ExtensionView } from "@/components/extension/extension-view";
-import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
-import { createMetadata } from "@/lib/seo";
+import { ExtensionView } from "@/features/extension/components/extension-view";
+import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
+import { createMetadata } from "@/features/seo/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 

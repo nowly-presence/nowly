@@ -1,8 +1,8 @@
-import { LibraryView } from "@/components/library/library-view";
-import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
+import { LibraryView } from "@/features/library/components/library-view";
+import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
 import { normalizeGithub } from "@/lib/library-catalog";
 import { getPresenceCatalog } from "@/lib/presence-api";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata } from "@/features/seo/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 

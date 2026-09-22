@@ -1,9 +1,9 @@
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { getChangelogReleases } from "@/lib/changelog-releases";
+import { getChangelogReleases } from "@/features/changelog/lib/changelog-releases";
 import { catalogGithubHandles } from "@/lib/library-catalog";
 import { getPresenceCatalog } from "@/lib/presence-api";
-import { isSeoPreview, seoUrl } from "@/lib/seo";
+import { isSeoPreview, seoUrl } from "@/features/seo/lib/seo";
 import type { MetadataRoute } from "next";
 
 // Some changelog entries carry a non-date placeholder (e.g. "To be determined")

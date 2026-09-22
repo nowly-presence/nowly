@@ -1,5 +1,5 @@
 import { BRAND_LOCKUP_WHITE_PNG } from "@/lib/brand";
-import { SITE_NAME } from "@/lib/seo";
+import { SITE_NAME } from "@/features/seo/lib/seo";
 import { ImageResponse } from "next/og";
 
 export const runtime = "nodejs";

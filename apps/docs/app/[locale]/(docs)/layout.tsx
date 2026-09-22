@@ -1,8 +1,8 @@
-import { MobileSidebarToggle } from "@/components/docs/mobile-sidebar-toggle";
-import { SearchProvider } from "@/components/docs/search-provider";
-import { AppSidebar } from "@/components/docs/sidebar";
+import { MobileSidebarToggle } from "@/features/docs-content/components/mobile-sidebar-toggle";
+import { SearchProvider } from "@/features/docs-content/components/search-provider";
+import { AppSidebar } from "@/features/docs-content/components/sidebar";
 import { SidebarProvider } from "@/components/sidebar-context";
-import { getNavigationItems } from "@/lib/docs/content";
+import { getNavigationItems } from "@/features/docs-content/lib/content";
 import { getLocale } from "next-intl/server";
 import type { PropsWithChildren, ReactElement } from "react";
 
