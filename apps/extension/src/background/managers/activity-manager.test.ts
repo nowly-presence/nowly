@@ -14,51 +14,52 @@ const baseSettings: ExtensionSettings = {
 }
 
 describe("pickBroadcastEntry", () => {
-  beforeEach(() => {
-    clearTabPresences()
+  beforeEach(async () => {
+    installChromeMock()
+    await clearTabPresences()
     setFocusedTabId(null)
   })
 
   it("returns null when no tab has an active presence", async () => {
     const { pickBroadcastEntry } = await import("@/background/managers/activity-manager")
-    expect(pickBroadcastEntry(baseSettings)).toBeNull()
+    expect(await pickBroadcastEntry(baseSettings)).toBeNull()
   })
 
   it("focused mode broadcasts the focused tab's presence when one exists", async () => {
     const { pickBroadcastEntry } = await import("@/background/managers/activity-manager")
-    upsertTabPresence(1, presence("youtube", 1000))
-    upsertTabPresence(2, presence("twitch", 2000))
+    await upsertTabPresence(1, presence("youtube", 1000))
+    await upsertTabPresence(2, presence("twitch", 2000))
     setFocusedTabId(1)
 
-    expect(pickBroadcastEntry(baseSettings)?.slug).toBe("youtube")
+    expect((await pickBroadcastEntry(baseSettings))?.slug).toBe("youtube")
   })
 
   it("focused mode falls back to the most recently updated tab when nothing is focused", async () => {
     const { pickBroadcastEntry } = await import("@/background/managers/activity-manager")
-    upsertTabPresence(1, presence("youtube", 1000))
-    upsertTabPresence(2, presence("twitch", 2000))
+    await upsertTabPresence(1, presence("youtube", 1000))
+    await upsertTabPresence(2, presence("twitch", 2000))
     setFocusedTabId(null)
 
-    expect(pickBroadcastEntry(baseSettings)?.slug).toBe("twitch")
+    expect((await pickBroadcastEntry(baseSettings))?.slug).toBe("twitch")
   })
 
   it("priority mode picks the entry earliest in activityPriorityOrder", async () => {
     const { pickBroadcastEntry } = await import("@/background/managers/activity-manager")
-    upsertTabPresence(1, presence("youtube", 1000))
-    upsertTabPresence(2, presence("twitch", 2000))
+    await upsertTabPresence(1, presence("youtube", 1000))
+    await upsertTabPresence(2, presence("twitch", 2000))
     setFocusedTabId(2)
 
     const settings: ExtensionSettings = { ...baseSettings, activitySelectionMode: "priority", activityPriorityOrder: ["youtube", "twitch"] }
-    expect(pickBroadcastEntry(settings)?.slug).toBe("youtube")
+    expect((await pickBroadcastEntry(settings))?.slug).toBe("youtube")
   })
 
   it("priority mode puts slugs absent from the order last", async () => {
     const { pickBroadcastEntry } = await import("@/background/managers/activity-manager")
-    upsertTabPresence(1, presence("unranked", 1000))
-    upsertTabPresence(2, presence("ranked", 2000))
+    await upsertTabPresence(1, presence("unranked", 1000))
+    await upsertTabPresence(2, presence("ranked", 2000))
 
     const settings: ExtensionSettings = { ...baseSettings, activitySelectionMode: "priority", activityPriorityOrder: ["ranked"] }
-    expect(pickBroadcastEntry(settings)?.slug).toBe("ranked")
+    expect((await pickBroadcastEntry(settings))?.slug).toBe("ranked")
   })
 })
 

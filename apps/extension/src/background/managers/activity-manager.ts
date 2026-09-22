@@ -12,13 +12,16 @@ import {
   isTabMuted,
   notifyBroadcastStateChanged,
   removeActiveSession,
+  removeActiveSessions,
   removeActiveSlugFromState,
+  removeActiveSlugsFromState,
   removeTabPresence,
   removeTabPresencesBySlug,
   setActiveSessionStartedAt,
   setTabMuted,
   upsertTabPresence,
 } from "@/background/services/background-context"
+import { sendActiveHeartbeat } from "@/background/services/active-heartbeat"
 import { mapPresenceData, postNative } from "@/background/services/native"
 import { verifyPresenceRelease } from "@/background/services/release-security"
 import { getCurrentActivity, getPresences, setCurrentActivity, setDebug } from "@/background/storage/presences.store"
@@ -136,8 +139,8 @@ export const shouldHoldDiscord = async (presence: StoredPresence): Promise<boole
   return false
 }
 
-export const pickBroadcastEntry = (settings: ExtensionSettings) => {
-  const entries = getTabPresencesSnapshot()
+export const pickBroadcastEntry = async (settings: ExtensionSettings) => {
+  const entries = await getTabPresencesSnapshot()
   if (entries.length === 0) return null
 
   if (settings.activitySelectionMode === "priority") {
@@ -150,13 +153,13 @@ export const pickBroadcastEntry = (settings: ExtensionSettings) => {
   }
 
   const focusedTabId = getFocusedTabId()
-  const focused = focusedTabId != null ? getTabPresence(focusedTabId) : undefined
+  const focused = focusedTabId != null ? await getTabPresence(focusedTabId) : undefined
   return focused ?? entries.reduce((latest, entry) => (entry.updatedAt > latest.updatedAt ? entry : latest))
 }
 
 export const broadcastActiveTab = async (): Promise<void> => {
   const settings = await getSettings()
-  const entry = pickBroadcastEntry(settings)
+  const entry = await pickBroadcastEntry(settings)
   if (!entry) {
     postNative({ type: "CLEAR_ACTIVITY" })
     await setCurrentActivity(null)
@@ -195,21 +198,42 @@ export const getPresenceVersion = async (slug: string): Promise<string | undefin
 
 export const addActiveSlug = async (slug: string): Promise<void> => {
   await addActiveSlugToState(slug)
-  if (hasActiveSession(slug)) return
-  setActiveSessionStartedAt(slug, Date.now())
+  if (await hasActiveSession(slug)) return
+  await setActiveSessionStartedAt(slug, Date.now())
   trackAnalytics("presence_session_start", { slug, version: await getPresenceVersion(slug) })
+  // Don't wait for the next 5min api-heartbeat alarm - a freshly
+  // installed/activated presence should count as "active" right away.
+  void sendActiveHeartbeat([slug])
 }
 
 export const removeActiveSlug = async (slug: string, reason: string): Promise<void> => {
   await removeActiveSlugFromState(slug)
-  const startedAt = getActiveSessionStartedAt(slug)
-  removeActiveSession(slug)
+  const startedAt = await getActiveSessionStartedAt(slug)
+  await removeActiveSession(slug)
   if (!startedAt) return
   trackAnalytics("presence_session_end", {
     slug,
     version: await getPresenceVersion(slug),
     payload: { durationMs: Date.now() - startedAt, reason },
   })
+}
+
+// Bulk equivalent of calling removeActiveSlug per slug - a single
+// read-modify-write against chrome.storage.session instead of N concurrent
+// ones (see removeActiveSlugsFromState for why concurrent per-slug writes race).
+export const removeActiveSlugs = async (slugs: string[], reason: string): Promise<void> => {
+  await Promise.all(
+    slugs.map(async (slug) => {
+      const startedAt = await getActiveSessionStartedAt(slug)
+      if (!startedAt) return
+      trackAnalytics("presence_session_end", {
+        slug,
+        version: await getPresenceVersion(slug),
+        payload: { durationMs: Date.now() - startedAt, reason },
+      })
+    }),
+  )
+  await Promise.all([removeActiveSlugsFromState(slugs), removeActiveSessions(slugs)])
 }
 
 export const clearActiveSlugs = async (reason: string): Promise<void> => {
@@ -236,7 +260,7 @@ export const handleActivityUpdate = async (slug: string, activity: PresenceData,
   }
 
   if (await shouldHoldDiscord(stored)) {
-    removeTabPresence(resolvedTabId)
+    await removeTabPresence(resolvedTabId)
     // Keep the Nowly state updated so resume sends the latest activity.
     const appName = activity.appName ?? stored.release.metadata.name
     const normalizedActivity = normalizeActivity(activity, appName)
@@ -265,7 +289,7 @@ export const handleActivityUpdate = async (slug: string, activity: PresenceData,
   const normalizedActivity = normalizeActivity(activity, appName)
   const presence = mapPresenceData(normalizedActivity)
 
-  upsertTabPresence(resolvedTabId, { slug, presence, updatedAt: Date.now() })
+  await upsertTabPresence(resolvedTabId, { slug, presence, updatedAt: Date.now() })
   await addActiveSlug(slug)
   await broadcastActiveTab()
 
@@ -276,10 +300,10 @@ export const handleActivityUpdate = async (slug: string, activity: PresenceData,
 
 export const handleClearActivity = async (slug?: string): Promise<{ ok: boolean }> => {
   if (slug) {
-    removeTabPresencesBySlug(slug)
+    await removeTabPresencesBySlug(slug)
     await removeActiveSlug(slug, "clear")
   } else {
-    clearTabPresences()
+    await clearTabPresences()
     await clearActiveSlugs("clear")
   }
   await broadcastActiveTab()
@@ -289,10 +313,18 @@ export const handleClearActivity = async (slug?: string): Promise<{ ok: boolean 
   return { ok: true }
 }
 
-export const handleRemovedTab = (tabId: number): void => {
-  const hadPresence = Boolean(getTabPresence(tabId))
-  removeTabPresence(tabId)
+export const handleRemovedTab = async (tabId: number): Promise<void> => {
+  const closedEntry = await getTabPresence(tabId)
+  await removeTabPresence(tabId)
   void setTabMuted(tabId, false)
+
+  // Only drop the heartbeat for this slug if no other open tab still serves
+  // it (e.g. YouTube open in two tabs) - otherwise the still-open tab's
+  // presence would stop reporting as active too.
+  if (closedEntry && !(await getTabPresencesSnapshot()).some((entry) => entry.slug === closedEntry.slug)) {
+    await removeActiveSlug(closedEntry.slug, "tab-closed")
+  }
+
   void broadcastActiveTab()
-  if (hadPresence) void setDebug({ stage: "clear", message: "activity cleared (tab closed)", updatedAt: Date.now() })
+  if (closedEntry) void setDebug({ stage: "clear", message: "activity cleared (tab closed)", updatedAt: Date.now() })
 }

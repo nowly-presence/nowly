@@ -80,7 +80,7 @@ const toggleTabMute = async (tabId: number): Promise<void> => {
   const muted = !(await isTabMuted(tabId))
   await setTabMuted(tabId, muted)
   if (muted) {
-    removeTabPresence(tabId)
+    await removeTabPresence(tabId)
   } else {
     void requestImmediateTick(tabId)
   }
@@ -92,7 +92,7 @@ const toggleTabMute = async (tabId: number): Promise<void> => {
 const syncMuteMenuItem = async (): Promise<void> => {
   const tabId = getFocusedTabId()
   const muted = tabId != null && (await isTabMuted(tabId))
-  const hasActivePresence = tabId != null && Boolean(getTabPresence(tabId))
+  const hasActivePresence = tabId != null && Boolean(await getTabPresence(tabId))
 
   chrome.contextMenus.update(MUTE_MENU_ID, {
     title: muted ? unmuteTitle() : muteTitle(),
