@@ -1,0 +1,11 @@
+---
+title: 2.1.1
+date: 2026-09-22
+description: Naprawia sygnał aktywności użytkowników w rozszerzeniu, który po restarcie procesu service worker mógł przestać zgłaszać obecność jako aktywną.
+---
+
+`2.1.1` to wydanie konserwacyjne naprawiające błąd, w którym obecność mogła być faktycznie aktywna - Discord Rich Presence aktualizował się normalnie - podczas gdy licznik „aktywnych użytkowników” na jej stronie nowly.me pozostawał na 0 przez dłuższy czas.
+
+## Sygnał aktywności użytkowników
+
+Rozszerzenie śledziło aktywne obecności w zwykłej zmiennej w pamięci wewnątrz service workera działającego w tle. Chrome regularnie zamyka i restartuje ten service worker, gdy jest bezczynny, co bezgłośnie zerowało ten stan - okresowe żądanie heartbeat wysyłane do API mogło więc zgłaszać zero aktywnych obecności, mimo że karta była faktycznie aktywna, a licznik „aktywnych użytkowników” mógł potrzebować kilku minut, by odzwierciedlić rzeczywistość po wyłączeniu obecności. Śledzenie aktywnych obecności jest teraz przechowywane w `chrome.storage.session`, które przetrwa restarty service workera, dzięki czemu sygnał aktywności pozostaje wiarygodny.

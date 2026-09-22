@@ -194,14 +194,14 @@ export const getPresenceVersion = async (slug: string): Promise<string | undefin
 }
 
 export const addActiveSlug = async (slug: string): Promise<void> => {
-  addActiveSlugToState(slug)
+  await addActiveSlugToState(slug)
   if (hasActiveSession(slug)) return
   setActiveSessionStartedAt(slug, Date.now())
   trackAnalytics("presence_session_start", { slug, version: await getPresenceVersion(slug) })
 }
 
 export const removeActiveSlug = async (slug: string, reason: string): Promise<void> => {
-  removeActiveSlugFromState(slug)
+  await removeActiveSlugFromState(slug)
   const startedAt = getActiveSessionStartedAt(slug)
   removeActiveSession(slug)
   if (!startedAt) return
@@ -213,9 +213,9 @@ export const removeActiveSlug = async (slug: string, reason: string): Promise<vo
 }
 
 export const clearActiveSlugs = async (reason: string): Promise<void> => {
-  const slugs = getActiveSlugsSnapshot()
+  const slugs = await getActiveSlugsSnapshot()
   await Promise.all(slugs.map((slug) => removeActiveSlug(slug, reason)))
-  clearActiveSlugsFromState()
+  await clearActiveSlugsFromState()
 }
 
 // Content scripts always run in a tab, but the message shape allows tabId to be

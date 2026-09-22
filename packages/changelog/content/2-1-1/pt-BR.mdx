@@ -1,0 +1,11 @@
+---
+title: 2.1.1
+date: 2026-09-22
+description: Corrige o heartbeat de usuários ativos da extensão, que podia parar de reportar uma presence como ativa após o service worker em segundo plano reiniciar.
+---
+
+`2.1.1` é uma versão de manutenção que corrige um bug em que uma presence podia estar genuinamente ativa - com o Discord Rich Presence atualizando normalmente - enquanto o contador de "usuários ativos" em sua página no nowly.me permanecia em 0 por longos períodos.
+
+## Heartbeat de usuários ativos
+
+A extensão rastreava quais presences estavam ativas em uma simples variável em memória dentro do service worker em segundo plano. O Chrome encerra e reinicia esse service worker regularmente quando ocioso, o que reiniciava silenciosamente esse estado - a requisição periódica de heartbeat para a API podia reportar zero presences ativas mesmo com uma aba genuinamente ativa, e o contador de "usuários ativos" podia levar vários minutos para refletir a realidade após desativar uma presence. O rastreamento de presences ativas agora persiste em `chrome.storage.session`, que sobrevive a reinícios do service worker, mantendo o heartbeat confiável.

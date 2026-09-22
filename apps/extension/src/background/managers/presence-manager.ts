@@ -212,7 +212,7 @@ export const uninstallPresence = async (payload: unknown): Promise<{ ok: boolean
   await unregisterPresenceScript(slug)
   await removeActiveSlug(slug, "uninstall")
   await deleteActivePresence(deviceId, slug)
-  if (!hasActiveSlugs()) await handleClearActivity()
+  if (!(await hasActiveSlugs())) await handleClearActivity()
   return { ok: true }
 }
 
@@ -241,7 +241,7 @@ export const togglePresence = async (payload: unknown): Promise<{ ok: boolean; e
   await unregisterPresenceScript(slug)
   await removeActiveSlug(slug, "disabled")
   const current = await getCurrentActivity()
-  if (current?.slug === slug || !hasActiveSlugs()) await handleClearActivity(slug)
+  if (current?.slug === slug || !(await hasActiveSlugs())) await handleClearActivity(slug)
   addRuntimeLog("info", "presence", "presence disabled", { slug })
   await deleteActivePresence(deviceId, slug)
   return { ok: true }
@@ -277,7 +277,7 @@ export const bulkTogglePresences = async (slugs: string[], enabled: boolean): Pr
 
   if (!enabled) {
     const current = await getCurrentActivity()
-    if (!current || targets.includes(current.slug) || !hasActiveSlugs()) await handleClearActivity()
+    if (!current || targets.includes(current.slug) || !(await hasActiveSlugs())) await handleClearActivity()
   }
 
   return { ok: true }
@@ -319,7 +319,7 @@ export const bulkUninstallPresences = async (slugs: string[]): Promise<{ ok: boo
     await deleteActivePresence(deviceId, slug)
   }
 
-  if (!hasActiveSlugs()) await handleClearActivity()
+  if (!(await hasActiveSlugs())) await handleClearActivity()
   return { ok: true }
 }
 

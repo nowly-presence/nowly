@@ -14,9 +14,10 @@ export const registerAlarmHandlers = (): void => {
 
   chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === "native-heartbeat") postNative({ type: "PING" })
-    if (alarm.name === "api-heartbeat" && hasActiveSlugs()) {
+    if (alarm.name === "api-heartbeat") {
       void (async () => {
-        const slugs = getActiveSlugsSnapshot()
+        if (!(await hasActiveSlugs())) return
+        const slugs = await getActiveSlugsSnapshot()
         const deviceId = await getActiveDeviceId()
         addRuntimeLog("info", "api", "POST /presences/active", { count: slugs.length })
         const presences = await getPresences()

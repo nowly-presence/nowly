@@ -1,6 +1,7 @@
 import type { PresencePayload } from "@/shared/types"
 
 const MUTED_TABS_SESSION_KEY = "mutedTabIds"
+const ACTIVE_SLUGS_SESSION_KEY = "activeSlugs"
 
 export type TabPresenceEntry = { slug: string; presence: PresencePayload; updatedAt: number }
 export type TabPresenceRecord = TabPresenceEntry & { tabId: number }
@@ -9,7 +10,6 @@ let customApiUrl: string | undefined
 let cachedDeviceId: string | null = null
 let focusedTabId: number | null = null
 const tabPresences = new Map<number, TabPresenceEntry>()
-const activeSlugs = new Set<string>()
 const activeSessions = new Map<string, number>()
 
 export const getCustomApiUrl = (): string | undefined => customApiUrl
@@ -52,10 +52,6 @@ export const removeTabPresencesBySlug = (slug: string): void => {
   }
 }
 
-// No in-memory cache here: the service worker can restart between two clicks
-// on the context menu (idle timeout), and hydrating a cache asynchronously on
-// each restart raced with the click handler, silently flipping mute the wrong
-// way. Reading/writing chrome.storage.session directly removes the race.
 const getMutedTabIds = async (): Promise<number[]> => {
   const stored = await chrome.storage.session.get(MUTED_TABS_SESSION_KEY)
   const ids = stored[MUTED_TABS_SESSION_KEY]
@@ -70,21 +66,28 @@ export const setTabMuted = async (tabId: number, muted: boolean): Promise<void> 
   await chrome.storage.session.set({ [MUTED_TABS_SESSION_KEY]: next })
 }
 
-export const addActiveSlugToState = (slug: string): void => {
-  activeSlugs.add(slug)
+export const getActiveSlugsSnapshot = async (): Promise<string[]> => {
+  const stored = await chrome.storage.session.get(ACTIVE_SLUGS_SESSION_KEY)
+  const slugs = stored[ACTIVE_SLUGS_SESSION_KEY]
+  return Array.isArray(slugs) ? slugs.filter((slug): slug is string => typeof slug === "string") : []
 }
 
-export const removeActiveSlugFromState = (slug: string): void => {
-  activeSlugs.delete(slug)
+export const addActiveSlugToState = async (slug: string): Promise<void> => {
+  const slugs = await getActiveSlugsSnapshot()
+  if (slugs.includes(slug)) return
+  await chrome.storage.session.set({ [ACTIVE_SLUGS_SESSION_KEY]: [...slugs, slug] })
 }
 
-export const clearActiveSlugsFromState = (): void => {
-  activeSlugs.clear()
+export const removeActiveSlugFromState = async (slug: string): Promise<void> => {
+  const slugs = await getActiveSlugsSnapshot()
+  await chrome.storage.session.set({ [ACTIVE_SLUGS_SESSION_KEY]: slugs.filter((entry) => entry !== slug) })
 }
 
-export const hasActiveSlugs = (): boolean => activeSlugs.size > 0
+export const clearActiveSlugsFromState = async (): Promise<void> => {
+  await chrome.storage.session.set({ [ACTIVE_SLUGS_SESSION_KEY]: [] })
+}
 
-export const getActiveSlugsSnapshot = (): string[] => [...activeSlugs]
+export const hasActiveSlugs = async (): Promise<boolean> => (await getActiveSlugsSnapshot()).length > 0
 
 export const hasActiveSession = (slug: string): boolean => activeSessions.has(slug)
 

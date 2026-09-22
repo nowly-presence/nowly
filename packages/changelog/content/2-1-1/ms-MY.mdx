@@ -1,0 +1,11 @@
+---
+title: 2.1.1
+date: 2026-09-22
+description: Membaiki heartbeat pengguna aktif sambungan, yang boleh terhenti secara senyap melaporkan kehadiran sebagai aktif selepas service worker latar belakang dimulakan semula.
+---
+
+`2.1.1` ialah keluaran penyelenggaraan yang membaiki pepijat di mana kehadiran boleh benar-benar aktif - Discord Rich Presence dikemas kini seperti biasa - sedangkan kiraan "pengguna aktif" pada halaman nowly.me-nya kekal pada 0 untuk tempoh yang lama.
+
+## Heartbeat pengguna aktif
+
+Sambungan menjejaki kehadiran mana yang sedang aktif dalam pemboleh ubah memori ringkas di dalam service worker latar belakang. Chrome kerap menamatkan dan memulakan semula service worker ini apabila melahu, yang menetapkan semula keadaan tersebut secara senyap - permintaan heartbeat berkala ke API boleh melaporkan sifar kehadiran aktif walaupun tab benar-benar aktif, dan kiraan "pengguna aktif" boleh mengambil masa beberapa minit untuk mencerminkan keadaan sebenar selepas kehadiran dinyahaktifkan. Penjejakan kehadiran aktif kini disimpan dalam `chrome.storage.session`, yang kekal walaupun service worker dimulakan semula, jadi heartbeat kekal tepat.
