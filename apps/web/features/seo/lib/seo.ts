@@ -108,7 +108,10 @@ export const createMetadata = ({
     languages[target] = absoluteUrl(getPathname({ locale: target, href: path }), CANONICAL_ORIGIN);
   }
   const resolvedTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
-  const imageUrl = absoluteUrl(image ?? webOgImage({ title: ogHeadline(resolvedTitle), description, badge, accent, logo }), CANONICAL_ORIGIN);
+  // Unlike the canonical/alternates URLs above (which must always point at production for SEO),
+  // the OG image is fetched directly by whatever crawler renders the page (Discord, Slack, ...) -
+  // it has to resolve on the host actually serving the page, not on production when previewing.
+  const imageUrl = absoluteUrl(image ?? webOgImage({ title: ogHeadline(resolvedTitle), description, badge, accent, logo }), SITE_URL);
   const hideFromIndex = noIndex || isSeoPreview;
 
   return {
