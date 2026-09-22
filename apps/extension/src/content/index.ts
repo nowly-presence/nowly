@@ -1,14 +1,14 @@
+import { IS_CANARY } from "@/shared/brand"
 import { EXT_WEB_SOURCE, WEB_BASE_URL } from "@/shared/constants"
 import type { WebMessage } from "@/shared/types"
 
 const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE"
-const IS_UNPACKED = !chrome.runtime.getManifest().update_url
 const DEVICE_KEY = "deviceId"
 const DEVICE_TOKEN_KEY = "deviceToken"
 let MARKETPLACE_ORIGIN = new URL(WEB_BASE_URL).origin
 
 const isAllowedWebOrigin = (origin: string): boolean => {
-  if (IS_UNPACKED) {
+  if (IS_CANARY) {
     return origin === MARKETPLACE_ORIGIN || /^https?:\/\/(localhost|127\.0\.0\.1):3000$/.test(origin)
   }
   return origin === MARKETPLACE_ORIGIN

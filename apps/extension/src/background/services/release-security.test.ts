@@ -56,6 +56,7 @@ const buildRelease = async (privateKey: CryptoKey, overrides: Partial<PresenceRe
 describe("verifyPresenceRelease", () => {
   beforeEach(() => {
     vi.resetModules()
+    vi.unstubAllEnvs()
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("network disabled in tests")))
   })
 
@@ -94,16 +95,22 @@ describe("verifyPresenceRelease", () => {
     expect(result).toEqual({ ok: false, error: "METADATA_HASH_MISMATCH" })
   })
 
-  it("accepts an unsigned release only on an unpacked build", async () => {
-    installChromeMock({ unpacked: true })
+  it("accepts an unsigned release only on a canary build", async () => {
+    installChromeMock()
+    // Whether an unsigned release is trusted is a build-time channel flag
+    // (IS_CANARY), not a runtime manifest check - update_url is Chrome-only
+    // and Firefox never sets it even on real store installs, so gating on it
+    // used to bypass signature verification for every Firefox user.
+    vi.stubEnv("VITE_NOWLY_CHANNEL", "canary")
     const { verifyPresenceRelease } = await import("@/background/services/release-security")
     const { privateKey } = await generateKeyPair()
     const release = await buildRelease(privateKey, { signature: "" })
     expect(await verifyPresenceRelease(release)).toEqual({ ok: true })
   })
 
-  it("rejects an unsigned release on a store (packaged) build", async () => {
-    installChromeMock({ unpacked: false })
+  it("rejects an unsigned release on a stable (store) build", async () => {
+    installChromeMock()
+    vi.stubEnv("VITE_NOWLY_CHANNEL", "stable")
     const { verifyPresenceRelease } = await import("@/background/services/release-security")
     const { privateKey } = await generateKeyPair()
     const release = await buildRelease(privateKey, { signature: "" })

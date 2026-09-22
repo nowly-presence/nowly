@@ -9,6 +9,7 @@ import { registerContextMenu } from "@/background/services/context-menu"
 import { syncDeviceState, syncUninstallUrl } from "@/background/services/device-sync"
 import { connectNative, onNativeResponse } from "@/background/services/native"
 import { getPresences, setDebug } from "@/background/storage/presences.store"
+import { IS_CANARY } from "@/shared/brand"
 import { WEB_BASE_URL } from "@/shared/constants"
 import type { InstalledPresences } from "@/shared/types"
 
@@ -76,7 +77,7 @@ const registerNativeResponseHandler = (): void => {
 
 const openChangelogOnUpdate = (details: chrome.runtime.InstalledDetails): void => {
   if (details.reason !== "update") return
-  if (!chrome.runtime.getManifest().update_url) return
+  if (IS_CANARY) return
 
   const version = chrome.runtime.getManifest().version
   const webBaseUrl = WEB_BASE_URL.replace(/\/$/, "")
@@ -88,7 +89,13 @@ const detectFocusedTab = async (): Promise<void> => {
   if (tab?.id != null) setFocusedTabId(tab.id)
 }
 
-const bootBackground = async (options: { restoreBadge?: boolean; syncScripts?: boolean } = {}): Promise<InstalledPresences> => {
+// onStartup/onInstalled and the unconditional initializeBackground() call at
+// module load can all fire within the same tick on a real browser start or
+// install - memoizing the in-flight promise stops them from racing (double
+// /devices/sync, concurrent read-modify-write of installed presences).
+let bootPromise: Promise<InstalledPresences> | null = null
+
+const runBootBackground = async (options: { restoreBadge?: boolean; syncScripts?: boolean }): Promise<InstalledPresences> => {
   await detectFocusedTab()
   await handleClearActivity()
   connectNative()
@@ -101,6 +108,11 @@ const bootBackground = async (options: { restoreBadge?: boolean; syncScripts?: b
   if (options.restoreBadge) await restoreActivityBadge()
   if (options.syncScripts !== false) await syncPresenceScripts(presences)
   return presences
+}
+
+const bootBackground = (options: { restoreBadge?: boolean; syncScripts?: boolean } = {}): Promise<InstalledPresences> => {
+  bootPromise ??= runBootBackground(options)
+  return bootPromise
 }
 
 export const registerLifecycleHandlers = (): void => {

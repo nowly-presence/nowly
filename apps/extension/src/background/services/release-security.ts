@@ -1,14 +1,7 @@
 import { canonicalJson } from "@nowly/shared"
+import { IS_CANARY } from "@/shared/brand"
 import { API_BASE_URL } from "@/shared/constants"
 import type { PresenceRelease } from "@/shared/types"
-
-const IS_UNPACKED = (): boolean => {
-  try {
-    return !chrome.runtime.getManifest().update_url
-  } catch {
-    return false
-  }
-}
 
 const FALLBACK_PRESENCE_SIGNING_PUBLIC_KEY =
   "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE5ai7_TuIx7BJF-wAGWidRzj8EVf0OxL-QUp8Ta2m-L91HRVljUTwYfF_ijWVyGF3-5gQvQ4GsQGiSVDknDe_LA"
@@ -142,6 +135,6 @@ export const verifyPresenceRelease = async (release: PresenceRelease, expectedSl
     return { ok: true }
   }
 
-  if (IS_UNPACKED()) return { ok: true }
+  if (IS_CANARY) return { ok: true }
   return { ok: false, error: "RELEASE_SIGNATURE_MISSING" }
 }
