@@ -7,8 +7,8 @@ import { join, extname } from "node:path";
 const ROOT = process.cwd();
 
 const APPS = [
-  { name: "web", mode: "nested", messagesDir: "apps/web/messages", base: "en-US.json", srcDirs: ["apps/web/app", "apps/web/components", "apps/web/lib", "apps/web/hooks"] },
-  { name: "docs", mode: "nested", messagesDir: "apps/docs/messages", base: "en-US.json", srcDirs: ["apps/docs/app", "apps/docs/components", "apps/docs/lib", "apps/docs/hooks"] },
+  { name: "web", mode: "nested", messagesDir: "apps/web/messages", base: "en-US.json", srcDirs: ["apps/web/app", "apps/web/components", "apps/web/features", "apps/web/lib", "apps/web/hooks", "packages/ui/src"] },
+  { name: "docs", mode: "nested", messagesDir: "apps/docs/messages", base: "en-US.json", srcDirs: ["apps/docs/app", "apps/docs/components", "apps/docs/features", "apps/docs/lib", "apps/docs/hooks", "packages/ui/src"] },
   { name: "extension", mode: "flat", messagesDir: "apps/extension/messages", base: "en.json", srcDirs: ["apps/extension/src"] },
 ];
 
