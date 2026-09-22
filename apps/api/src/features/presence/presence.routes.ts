@@ -1,6 +1,7 @@
 import { hasAdminAuth, requireAuth } from "@/features/auth/auth.middleware"
 import { requireDeviceAccess } from "@/features/device/device-token"
 import { deviceExists } from "@/features/device/device.service"
+import { deviceRateLimitKey } from "@/shared/rate-limit"
 import { buildLocaleObject } from "@nowly/locales"
 import {
   presenceActiveBodySchema,
@@ -46,7 +47,7 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
   fastify.get("/stats", async (_request, reply) => {
     const stats = await getGlobalPresenceStats()
     return reply
-      .header("Cache-Control", "public, max-age=60, stale-while-revalidate=120")
+      .header("Cache-Control", "public, max-age=5, stale-while-revalidate=10")
       .send(stats)
   })
 
@@ -56,7 +57,7 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
 
     const stats = await getPresenceStats(slug)
     return reply
-      .header("Cache-Control", "public, max-age=60, stale-while-revalidate=120")
+      .header("Cache-Control", "public, max-age=5, stale-while-revalidate=10")
       .send(stats)
   })
 
@@ -187,7 +188,9 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
 
   fastify.post(
     "/active",
-    { config: { rateLimit: { max: 30, timeWindow: "1 minute" } } },
+    // Keyed by deviceId (not IP) so a shared NAT with several real users
+    // doesn't get capped as if it were one client.
+    { config: { rateLimit: { max: 30, timeWindow: "1 minute", hook: "preHandler", keyGenerator: deviceRateLimitKey } } },
     async (request, reply) => {
       const parsed = presenceActiveBodySchema.safeParse(request.body)
       if (!parsed.success || !parsed.data.deviceId) {

@@ -374,14 +374,14 @@ describe("Stats Routes", () => {
     const res = await app.inject({
       method: "POST",
       url: "/presences/active",
-      payload: { presences: ["youtube", "twitch"], deviceId: "device-123" },
+      payload: { presences: ["youtube", "twitch"], deviceId: "22222222-2222-4222-8222-222222222222" },
     })
 
     expect(res.statusCode).toBe(200)
     expect(JSON.parse(res.body)).toEqual({ ok: true, count: 2 })
     expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledTimes(2)
-    expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith("youtube", "device-123")
-    expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith("twitch", "device-123")
+    expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith("youtube", "22222222-2222-4222-8222-222222222222")
+    expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith("twitch", "22222222-2222-4222-8222-222222222222")
   })
 
   it("DELETE /presences/active/:deviceId/:slug clears one tracked presence", async () => {
@@ -751,7 +751,7 @@ describe("Presence Likes", () => {
     const res = await app.inject({
       method: "POST",
       url: "/presences/youtube/like",
-      payload: { deviceId: "device-1" },
+      payload: { deviceId: "11111111-1111-4111-8111-111111111111" },
     })
 
     expect(res.statusCode).toBe(401)
@@ -764,13 +764,13 @@ describe("Presence Likes", () => {
     const res = await app.inject({
       method: "POST",
       url: "/presences/youtube/like",
-      payload: { deviceId: "device-1" },
-      headers: { "x-device-token": deriveDeviceToken("device-1") },
+      payload: { deviceId: "11111111-1111-4111-8111-111111111111" },
+      headers: { "x-device-token": deriveDeviceToken("11111111-1111-4111-8111-111111111111") },
     })
 
     expect(res.statusCode).toBe(200)
     expect(JSON.parse(res.body)).toEqual({ ok: true, count: 3 })
-    expect(mockPresenceRepo.likePresence).toHaveBeenCalledWith("youtube", "device-1")
+    expect(mockPresenceRepo.likePresence).toHaveBeenCalledWith("youtube", "11111111-1111-4111-8111-111111111111")
   })
 
   it("DELETE /presences/:slug/like requires a deviceId", async () => {
@@ -783,7 +783,7 @@ describe("Presence Likes", () => {
   it("DELETE /presences/:slug/like rejects a missing/invalid device token", async () => {
     const res = await app.inject({
       method: "DELETE",
-      url: "/presences/youtube/like?deviceId=device-1",
+      url: "/presences/youtube/like?deviceId=11111111-1111-4111-8111-111111111111",
     })
 
     expect(res.statusCode).toBe(401)
@@ -795,24 +795,24 @@ describe("Presence Likes", () => {
 
     const res = await app.inject({
       method: "DELETE",
-      url: "/presences/youtube/like?deviceId=device-1",
-      headers: { "x-device-token": deriveDeviceToken("device-1") },
+      url: "/presences/youtube/like?deviceId=11111111-1111-4111-8111-111111111111",
+      headers: { "x-device-token": deriveDeviceToken("11111111-1111-4111-8111-111111111111") },
     })
 
     expect(res.statusCode).toBe(200)
     expect(JSON.parse(res.body)).toEqual({ ok: true, count: 2 })
-    expect(mockPresenceRepo.unlikePresence).toHaveBeenCalledWith("youtube", "device-1")
+    expect(mockPresenceRepo.unlikePresence).toHaveBeenCalledWith("youtube", "11111111-1111-4111-8111-111111111111")
   })
 
   it("GET /presences/:slug/like reports whether a device has liked it", async () => {
     mockPresenceRepo.hasLikedPresence.mockResolvedValue(true)
     mockPresenceRepo.getLikeCount.mockResolvedValue(5)
 
-    const res = await app.inject({ method: "GET", url: "/presences/youtube/like?deviceId=device-1" })
+    const res = await app.inject({ method: "GET", url: "/presences/youtube/like?deviceId=11111111-1111-4111-8111-111111111111" })
 
     expect(res.statusCode).toBe(200)
     expect(JSON.parse(res.body)).toEqual({ liked: true, count: 5 })
-    expect(mockPresenceRepo.hasLikedPresence).toHaveBeenCalledWith("youtube", "device-1")
+    expect(mockPresenceRepo.hasLikedPresence).toHaveBeenCalledWith("youtube", "11111111-1111-4111-8111-111111111111")
   })
 
   it("GET /presences/:slug/like requires a deviceId", async () => {

@@ -1,5 +1,6 @@
 import { deviceSyncBodySchema } from "@nowly/shared/schemas"
 import type { FastifyInstance } from "fastify"
+import { deviceRateLimitKey } from "@/shared/rate-limit"
 import { deriveDeviceToken, requireDeviceAccess } from "./device-token"
 import { deleteDeviceData, exportDeviceData, syncDevice } from "./device.service"
 
@@ -10,7 +11,9 @@ export const deviceRoutes = async (fastify: FastifyInstance) => {
       config: {
         // Every call here can mint a fresh, valid device token - keep this tighter
         // than the global limit so spamming new deviceIds is slow to pay off.
-        rateLimit: { max: 20, timeWindow: "1 minute" },
+        // Keyed by deviceId (not IP) so a shared NAT with several real users
+        // doesn't get capped as if it were one client.
+        rateLimit: { max: 20, timeWindow: "1 minute", hook: "preHandler", keyGenerator: deviceRateLimitKey },
       },
     },
     async (request, reply) => {

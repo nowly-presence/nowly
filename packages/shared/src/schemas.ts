@@ -15,10 +15,12 @@ export const slugSchema = z.string().trim().min(1).max(SLUG_MAX_LENGTH)
 
 export const localeRecordSchema = z.record(z.string(), z.string())
 
+export const deviceIdSchema = z.uuid()
+
 /** POST /presences/active */
 export const presenceActiveBodySchema = z.object({
   presences: z.array(slugSchema).max(500).default([]),
-  deviceId: z.string().trim().min(1).max(120).optional(),
+  deviceId: deviceIdSchema.optional(),
 })
 export type PresenceActiveBody = z.infer<typeof presenceActiveBodySchema>
 
@@ -32,7 +34,7 @@ export const deviceSyncPresenceSchema = z.object({
 
 /** POST /devices/sync */
 export const deviceSyncBodySchema = z.object({
-  deviceId: z.string().trim().min(1).max(120),
+  deviceId: deviceIdSchema,
   extensionVersion: z.string().trim().max(40).optional(),
   nativeVersion: z.string().trim().max(40).optional(),
   browser: z.string().trim().max(60).optional(),
@@ -63,11 +65,11 @@ export type PresenceReportBody = z.infer<typeof presenceReportBodySchema>
 
 /** POST/DELETE /presences/:slug/like, GET /presences/:slug/like */
 export const presenceLikeBodySchema = z.object({
-  deviceId: z.string().trim().min(1).max(120),
+  deviceId: deviceIdSchema,
 })
 export type PresenceLikeBody = z.infer<typeof presenceLikeBodySchema>
 
 export const presenceLikeQuerySchema = z.object({
-  deviceId: z.string().trim().min(1).max(120),
+  deviceId: deviceIdSchema,
 })
 export type PresenceLikeQuery = z.infer<typeof presenceLikeQuerySchema>
