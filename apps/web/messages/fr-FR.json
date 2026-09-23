@@ -210,6 +210,7 @@
     "download-firefox": "Télécharger pour Firefox"
   },
   "footer": {
+    "funds": "Financements",
     "tagline": "Partagez ce que vous faites.",
     "copyright": "© 2026 Nowly. Tous droits réservés.",
     "trademark": "Discord est une marque déposée de <inc>Discord Inc.</inc>",
@@ -691,6 +692,10 @@
     }
   },
   "pages": {
+    "funds": {
+      "title": "Transparence financière",
+      "description": "Où va l’argent que reçoit Nowly — en toute transparence, jusqu’au dernier centime."
+    },
     "library": {
       "title": "Bibliothèque",
       "description": "Parcourez les plateformes que Nowly peut afficher sur Discord."
@@ -976,5 +981,60 @@
     "export-success": "Vos données ont été téléchargées.",
     "delete-success": "Vos données ont été supprimées.",
     "action-error": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "fundsPage": {
+    "eyebrow": "Transparence",
+    "title": "Où va votre argent",
+    "description": "Nowly fonctionne grâce aux dons et au soutien de ses utilisateurs. Cette page montre exactement où va cet argent, et elle est mise à jour dès que quelque chose change.",
+    "updated-at": "Dernière mise à jour : {date}",
+    "period": "Période couverte : {period}",
+    "no-data": "Pas encore de données disponibles.",
+    "summary": {
+      "income": "Revenus",
+      "income-description": "Dons et soutiens reçus",
+      "expenses": "Dépenses",
+      "expenses-description": "Le coût de fonctionnement de Nowly",
+      "balance": "Solde",
+      "balance-description": "Solde après revenus et dépenses de la période"
+    },
+    "expenses": {
+      "title": "Où va cet argent",
+      "description": "Chaque centime est dépensé pour faire tourner Nowly pour tout le monde.",
+      "breakdown": "Répartition",
+      "breakdown-description": "Part de chaque dépense dans le total.",
+      "by-line": "Par poste",
+      "by-line-description": "Montant et part de chaque dépense."
+    },
+    "detail": {
+      "title": "Ligne par ligne",
+      "description": "Chaque source de revenu et chaque dépense, sans arrondi.",
+      "income": "Revenus",
+      "income-description": "Tout ce qui est reçu.",
+      "expenses": "Dépenses",
+      "expenses-description": "Tout ce qui est dépensé.",
+      "columns": {
+        "label": "Poste",
+        "amount": "Montant",
+        "share": "Part"
+      },
+      "total": "Total"
+    },
+    "history": {
+      "title": "Historique par période",
+      "description": "Revenus et dépenses par période, pour que la tendance reste visible.",
+      "chart": "Tendance",
+      "chart-description": "Revenus comparés aux dépenses.",
+      "periods": "Périodes",
+      "periods-description": "Les chiffres exacts, période par période.",
+      "period": "Période",
+      "income": "Revenus",
+      "expenses": "Dépenses",
+      "balance": "Solde"
+    },
+    "raw": {
+      "title": "Vérifiez les chiffres bruts",
+      "description": "Cette page lit ses chiffres dans un unique fichier JSON sur notre CDN. N’importe qui peut l’ouvrir et vérifier.",
+      "open": "Ouvrir funds.json"
+    }
   }
 }

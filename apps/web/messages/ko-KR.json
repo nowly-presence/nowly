@@ -210,6 +210,7 @@
     "download-firefox": "Firefox용 다운로드"
   },
   "footer": {
+    "funds": "재정",
     "tagline": "지금 하는 일을 공유하세요.",
     "copyright": "© 2026 Nowly. All rights reserved.",
     "trademark": "Discord는 <inc>Discord Inc.</inc>의 등록 상표입니다.",
@@ -691,6 +692,10 @@
     }
   },
   "pages": {
+    "funds": {
+      "title": "재정 투명성",
+      "description": "Nowly가 받은 돈이 어디로 가는지 — 마지막 한 푼까지 투명하게."
+    },
     "library": {
       "title": "라이브러리",
       "description": "Nowly가 Discord에서 공유할 수 있는 플랫폼을 살펴보세요."
@@ -976,5 +981,60 @@
     "export-success": "귀하의 데이터가 다운로드되었습니다.",
     "delete-success": "귀하의 데이터가 삭제되었습니다.",
     "action-error": "문제가 발생했습니다. 다시 시도해 주세요."
+  },
+  "fundsPage": {
+    "eyebrow": "투명성",
+    "title": "돈이 가는 곳",
+    "description": "Nowly는 사용자들의 기부와 지원으로 운영됩니다. 이 페이지는 그 돈이 정확히 어디에 쓰이는지 보여주며, 무언가 바뀔 때마다 업데이트됩니다.",
+    "updated-at": "마지막 업데이트: {date}",
+    "period": "{period} 대상",
+    "no-data": "아직 데이터가 없습니다.",
+    "summary": {
+      "income": "수입",
+      "income-description": "받은 기부와 지원",
+      "expenses": "지출",
+      "expenses-description": "Nowly 운영 비용",
+      "balance": "잔액",
+      "balance-description": "기간의 수입과 지출을 반영한 잔액"
+    },
+    "expenses": {
+      "title": "어디에 쓰이나",
+      "description": "모든 돈은 모두를 위해 Nowly를 운영하는 데 쓰입니다.",
+      "breakdown": "구성",
+      "breakdown-description": "총액에서 각 지출이 차지하는 비율.",
+      "by-line": "항목별",
+      "by-line-description": "각 지출의 금액과 비율."
+    },
+    "detail": {
+      "title": "항목별 상세",
+      "description": "모든 수입원과 지출을 반올림 없이 보여줍니다.",
+      "income": "수입",
+      "income-description": "받은 전부.",
+      "expenses": "지출",
+      "expenses-description": "쓴 전부.",
+      "columns": {
+        "label": "항목",
+        "amount": "금액",
+        "share": "비율"
+      },
+      "total": "합계"
+    },
+    "history": {
+      "title": "기간별 기록",
+      "description": "기간별 수입과 지출로 추세를 한눈에 볼 수 있습니다.",
+      "chart": "추세",
+      "chart-description": "지출 대비 수입.",
+      "periods": "기간",
+      "periods-description": "기간별 정확한 수치.",
+      "period": "기간",
+      "income": "수입",
+      "expenses": "지출",
+      "balance": "잔액"
+    },
+    "raw": {
+      "title": "원본 숫자 확인",
+      "description": "이 페이지의 숫자는 CDN에 있는 단일 JSON 파일에서 읽어옵니다. 누구나 열어서 확인할 수 있습니다.",
+      "open": "funds.json 열기"
+    }
   }
 }

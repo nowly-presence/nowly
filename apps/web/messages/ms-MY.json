@@ -210,6 +210,7 @@
     "download-firefox": "Muat turun untuk Firefox"
   },
   "footer": {
+    "funds": "Kewangan",
     "tagline": "Kongsi apa yang anda lakukan.",
     "copyright": "© 2026 Nowly. Hak cipta terpelihara.",
     "trademark": "Discord ialah tanda dagangan berdaftar <inc>Discord Inc.</inc>",
@@ -691,6 +692,10 @@
     }
   },
   "pages": {
+    "funds": {
+      "title": "Ketelusan kewangan",
+      "description": "Ke mana wang yang diterima Nowly pergi — secara terbuka, hingga wang terakhir."
+    },
     "library": {
       "title": "Perpustakaan",
       "description": "Semak imbas platform yang boleh dikongsi Nowly di Discord."
@@ -976,5 +981,60 @@
     "export-success": "Data anda telah dimuat turun.",
     "delete-success": "Data anda telah dipadamkan.",
     "action-error": "Sesuatu telah tidak kena. Sila cuba lagi."
+  },
+  "fundsPage": {
+    "eyebrow": "Ketelusan",
+    "title": "Ke mana wang itu pergi",
+    "description": "Nowly beroperasi atas derma dan sokongan penggunanya. Halaman ini menunjukkan dengan tepat ke mana wang itu pergi dan dikemas kini sebaik sahaja ada perubahan.",
+    "updated-at": "Kemas kini terakhir: {date}",
+    "period": "Merangkumi {period}",
+    "no-data": "Belum ada data tersedia.",
+    "summary": {
+      "income": "Pendapatan",
+      "income-description": "Derma dan sokongan yang diterima",
+      "expenses": "Perbelanjaan",
+      "expenses-description": "Kos untuk mengendalikan Nowly",
+      "balance": "Baki",
+      "balance-description": "Baki selepas pendapatan dan perbelanjaan bagi tempoh tersebut"
+    },
+    "expenses": {
+      "title": "Ke mana ia pergi",
+      "description": "Setiap sen dibelanjakan untuk memastikan Nowly terus berjalan untuk semua.",
+      "breakdown": "Pecahan",
+      "breakdown-description": "Bahagian setiap perbelanjaan dalam jumlah keseluruhan.",
+      "by-line": "Mengikut baris",
+      "by-line-description": "Amaun dan bahagian setiap perbelanjaan."
+    },
+    "detail": {
+      "title": "Baris demi baris",
+      "description": "Setiap sumber pendapatan dan setiap perbelanjaan, tanpa pembundaran.",
+      "income": "Pendapatan",
+      "income-description": "Semua yang diterima.",
+      "expenses": "Perbelanjaan",
+      "expenses-description": "Semua yang dibelanjakan.",
+      "columns": {
+        "label": "Item",
+        "amount": "Amaun",
+        "share": "Bahagian"
+      },
+      "total": "Jumlah"
+    },
+    "history": {
+      "title": "Sejarah mengikut tempoh",
+      "description": "Pendapatan dan perbelanjaan bagi setiap tempoh, supaya trend kekal kelihatan.",
+      "chart": "Trend",
+      "chart-description": "Pendapatan berbanding perbelanjaan.",
+      "periods": "Tempoh",
+      "periods-description": "Angka tepat, tempoh demi tempoh.",
+      "period": "Tempoh",
+      "income": "Pendapatan",
+      "expenses": "Perbelanjaan",
+      "balance": "Baki"
+    },
+    "raw": {
+      "title": "Semak angka mentah",
+      "description": "Halaman ini membaca angkanya daripada satu fail JSON di CDN kami. Sesiapa sahaja boleh membukanya dan menyemak.",
+      "open": "Buka funds.json"
+    }
   }
 }

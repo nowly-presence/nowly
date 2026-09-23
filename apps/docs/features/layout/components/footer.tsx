@@ -29,6 +29,7 @@ export const Footer = async () => {
         canary: t("canary"),
         support: t("support"),
         status: t("status"),
+        funds: t("funds"),
         branding: t("branding"),
         community: t("community"),
         discord: t("discord"),

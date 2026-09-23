@@ -210,6 +210,7 @@
     "download-firefox": "Für Firefox herunterladen"
   },
   "footer": {
+    "funds": "Finanzen",
     "tagline": "Teile, was du tust.",
     "copyright": "© 2026 Nowly. Alle Rechte vorbehalten.",
     "trademark": "Discord ist eine eingetragene Marke von <inc>Discord Inc.</inc>",
@@ -691,6 +692,10 @@
     }
   },
   "pages": {
+    "funds": {
+      "title": "Finanzielle Transparenz",
+      "description": "Wohin das Geld fließt, das Nowly erhält – offen, bis auf den letzten Cent."
+    },
     "library": {
       "title": "Bibliothek",
       "description": "Durchsuche die Plattformen, die Nowly auf Discord teilen kann."
@@ -976,5 +981,60 @@
     "export-success": "Deine Daten wurden heruntergeladen.",
     "delete-success": "Deine Daten wurden gelöscht.",
     "action-error": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+  },
+  "fundsPage": {
+    "eyebrow": "Transparenz",
+    "title": "Wohin das Geld fließt",
+    "description": "Nowly wird durch Spenden und Unterstützung seiner Nutzer finanziert. Diese Seite zeigt genau, wohin dieses Geld fließt, und wird aktualisiert, sobald sich etwas ändert.",
+    "updated-at": "Zuletzt aktualisiert: {date}",
+    "period": "Umfasst {period}",
+    "no-data": "Noch keine Daten verfügbar.",
+    "summary": {
+      "income": "Einnahmen",
+      "income-description": "Erhaltene Spenden und Unterstützung",
+      "expenses": "Ausgaben",
+      "expenses-description": "Was der Betrieb von Nowly kostet",
+      "balance": "Saldo",
+      "balance-description": "Saldo nach Einnahmen und Ausgaben des Zeitraums"
+    },
+    "expenses": {
+      "title": "Wohin es geht",
+      "description": "Jeder Cent fließt in den Betrieb von Nowly für alle.",
+      "breakdown": "Aufschlüsselung",
+      "breakdown-description": "Anteil jeder Ausgabe am Gesamtbetrag.",
+      "by-line": "Nach Posten",
+      "by-line-description": "Betrag und Anteil jeder Ausgabe."
+    },
+    "detail": {
+      "title": "Position für Position",
+      "description": "Jede Einnahmequelle und jede Ausgabe, ohne Rundung.",
+      "income": "Einnahmen",
+      "income-description": "Alles, was hereinkommt.",
+      "expenses": "Ausgaben",
+      "expenses-description": "Alles, was ausgegeben wird.",
+      "columns": {
+        "label": "Posten",
+        "amount": "Betrag",
+        "share": "Anteil"
+      },
+      "total": "Gesamt"
+    },
+    "history": {
+      "title": "Verlauf nach Zeitraum",
+      "description": "Einnahmen und Ausgaben pro Zeitraum, damit der Trend sichtbar bleibt.",
+      "chart": "Trend",
+      "chart-description": "Einnahmen im Vergleich zu Ausgaben.",
+      "periods": "Zeiträume",
+      "periods-description": "Die genauen Zahlen, Zeitraum für Zeitraum.",
+      "period": "Zeitraum",
+      "income": "Einnahmen",
+      "expenses": "Ausgaben",
+      "balance": "Saldo"
+    },
+    "raw": {
+      "title": "Rohdaten prüfen",
+      "description": "Diese Seite liest ihre Zahlen aus einer einzigen JSON-Datei auf unserem CDN. Jeder kann sie öffnen und prüfen.",
+      "open": "funds.json öffnen"
+    }
   }
 }
