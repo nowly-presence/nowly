@@ -210,6 +210,7 @@
     "download-firefox": "Firefox için indir"
   },
   "footer": {
+    "funds": "Finans",
     "tagline": "Yaptığın şeyi paylaş.",
     "copyright": "© 2026 Nowly. Tüm hakları saklıdır.",
     "trademark": "Discord, <inc>Discord Inc.</inc>'in tescilli ticari markasıdır.",
@@ -691,6 +692,10 @@
     }
   },
   "pages": {
+    "funds": {
+      "title": "Finansal şeffaflık",
+      "description": "Nowly'nin aldığı para nereye gidiyor — son kuruşuna kadar açıkça."
+    },
     "library": {
       "title": "Kitaplık",
       "description": "Nowly'nin Discord'da paylaşabileceği platformlara göz at."
@@ -976,5 +981,60 @@
     "export-success": "Verilerin indirildi.",
     "delete-success": "Verilerin silindi.",
     "action-error": "Bir şeyler ters gitti. Lütfen tekrar dene."
+  },
+  "fundsPage": {
+    "eyebrow": "Şeffaflık",
+    "title": "Para nereye gidiyor",
+    "description": "Nowly, kullanıcılarının bağışları ve desteğiyle ayakta duruyor. Bu sayfa, bu paranın tam olarak nereye gittiğini gösterir ve bir şey değiştiğinde hemen güncellenir.",
+    "updated-at": "Son güncelleme: {date}",
+    "period": "{period} dönemini kapsar",
+    "no-data": "Henüz veri yok.",
+    "summary": {
+      "income": "Gelir",
+      "income-description": "Alınan bağışlar ve destek",
+      "expenses": "Giderler",
+      "expenses-description": "Nowly'yi ayakta tutmanın maliyeti",
+      "balance": "Bakiye",
+      "balance-description": "Dönemin gelir ve giderleri sonrası bakiye"
+    },
+    "expenses": {
+      "title": "Nereye gidiyor",
+      "description": "Her kuruş, Nowly'yi herkes için ayakta tutmak için harcanıyor.",
+      "breakdown": "Dağılım",
+      "breakdown-description": "Her giderin toplam içindeki payı.",
+      "by-line": "Kalem kalem",
+      "by-line-description": "Her giderin tutarı ve payı."
+    },
+    "detail": {
+      "title": "Kalem kalem",
+      "description": "Her gelir kaynağı ve her gider, yuvarlama olmadan.",
+      "income": "Gelir",
+      "income-description": "Alınan her şey.",
+      "expenses": "Giderler",
+      "expenses-description": "Harcanan her şey.",
+      "columns": {
+        "label": "Kalem",
+        "amount": "Tutar",
+        "share": "Pay"
+      },
+      "total": "Toplam"
+    },
+    "history": {
+      "title": "Dönem bazında geçmiş",
+      "description": "Dönem başına gelir ve giderler, böylece eğilim görünür kalır.",
+      "chart": "Eğilim",
+      "chart-description": "Gelirin giderlerle karşılaştırması.",
+      "periods": "Dönemler",
+      "periods-description": "Dönem dönem tam rakamlar.",
+      "period": "Dönem",
+      "income": "Gelir",
+      "expenses": "Giderler",
+      "balance": "Bakiye"
+    },
+    "raw": {
+      "title": "Ham rakamları incele",
+      "description": "Bu sayfa rakamlarını CDN'imizdeki tek bir JSON dosyasından okur. Herkes açıp doğrulayabilir.",
+      "open": "funds.json'u aç"
+    }
   }
 }

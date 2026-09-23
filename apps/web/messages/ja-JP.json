@@ -210,6 +210,7 @@
     "download-firefox": "Firefox版をダウンロード"
   },
   "footer": {
+    "funds": "資金",
     "tagline": "あなたの「今」を共有。",
     "copyright": "© 2026 Nowly. All rights reserved.",
     "trademark": "Discordは<inc>Discord Inc.</inc>の登録商標です。",
@@ -691,6 +692,10 @@
     }
   },
   "pages": {
+    "funds": {
+      "title": "資金の透明性",
+      "description": "Nowly が受け取ったお金がどこへ行くのか — 最後の1円までオープンに。"
+    },
     "library": {
       "title": "ライブラリ",
       "description": "NowlyがDiscordで共有できるプラットフォームを見てみましょう。"
@@ -976,5 +981,60 @@
     "export-success": "データがダウンロードされました。",
     "delete-success": "データが削除されました。",
     "action-error": "問題が発生しました。もう一度お試しください。"
+  },
+  "fundsPage": {
+    "eyebrow": "透明性",
+    "title": "お金の行方",
+    "description": "Nowly はユーザーからの寄付と支援で運営されています。このページでは、そのお金が正確にどこへ使われているかを示し、何かが変わるたびに更新されます。",
+    "updated-at": "最終更新: {date}",
+    "period": "{period} を対象",
+    "no-data": "まだデータがありません。",
+    "summary": {
+      "income": "収入",
+      "income-description": "受け取った寄付・支援",
+      "expenses": "支出",
+      "expenses-description": "Nowly の運営コスト",
+      "balance": "残高",
+      "balance-description": "期間中の収入と支出を差し引いた残高"
+    },
+    "expenses": {
+      "title": "どこへ使われるか",
+      "description": "すべての1円が、みんなのための Nowly を動かすために使われます。",
+      "breakdown": "内訳",
+      "breakdown-description": "総額に占める各支出の割合。",
+      "by-line": "項目別",
+      "by-line-description": "各支出の金額と割合。"
+    },
+    "detail": {
+      "title": "項目ごとに",
+      "description": "すべての収入源と支出を、丸めずに表示します。",
+      "income": "収入",
+      "income-description": "受け取ったすべて。",
+      "expenses": "支出",
+      "expenses-description": "使ったすべて。",
+      "columns": {
+        "label": "項目",
+        "amount": "金額",
+        "share": "割合"
+      },
+      "total": "合計"
+    },
+    "history": {
+      "title": "期間ごとの履歴",
+      "description": "期間ごとの収入と支出を表示し、傾向を把握しやすくします。",
+      "chart": "トレンド",
+      "chart-description": "収入と支出の比較。",
+      "periods": "期間",
+      "periods-description": "期間ごとの正確な数字。",
+      "period": "期間",
+      "income": "収入",
+      "expenses": "支出",
+      "balance": "残高"
+    },
+    "raw": {
+      "title": "生データを確認",
+      "description": "このページの数字は、当社 CDN 上の1つの JSON ファイルから読み取られています。誰でも開いて確認できます。",
+      "open": "funds.json を開く"
+    }
   }
 }

@@ -2,7 +2,7 @@ import { FALLBACK_LOCALE, LOCALE_SHORT_MAP, type LocaleString } from "@nowly/loc
 import { Separator } from "./separator";
 import type { ReactNode } from "react";
 
-const WEB_ORIGIN = "https://nowly.me";
+export const WEB_ORIGIN = "https://nowly.me";
 const DOCS_ORIGIN = "https://docs.nowly.me";
 const DISCORD_INVITE_URL = "https://discord.gg/MnZap7czgB";
 const DISCORD_SITE_URL = "https://discord.com";
@@ -28,6 +28,7 @@ export type FooterLabels = {
   canary: string
   support: string
   status: string
+  funds: string
   branding: string
   community: string
   discord: string
@@ -48,6 +49,11 @@ export type FooterProps = {
   brand: ReactNode
   actions?: ReactNode
   labels: FooterLabels
+  // Origin the `web(path)` links point to. Defaults to the production site so both
+  // apps render identical links; `apps/web` overrides it with the current request
+  // origin so footer links stay on localhost/preview hosts during dev instead of
+  // jumping to https://nowly.me.
+  webOrigin?: string
 };
 
 type Link = { href: string; label: string; external?: boolean };
@@ -58,8 +64,8 @@ const FooterAnchor = ({ link, className }: { link: Link; className: string }) =>
   </a>
 );
 
-export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
-  const web = (path: string) => localizedUrl(WEB_ORIGIN, locale, path);
+export const Footer = ({ locale, brand, actions, labels, webOrigin = WEB_ORIGIN }: FooterProps) => {
+  const web = (path: string) => localizedUrl(webOrigin, locale, path);
   const docs = () => localizedUrl(DOCS_ORIGIN, locale, "/");
 
   const columns: { title: string; links: Link[] }[] = [
@@ -79,6 +85,7 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
         { href: web("/canary"), label: labels.canary },
         { href: web("/support"), label: labels.support },
         { href: web("/status"), label: labels.status },
+        { href: web("/funds"), label: labels.funds },
         { href: web("/branding"), label: labels.branding },
       ],
     },

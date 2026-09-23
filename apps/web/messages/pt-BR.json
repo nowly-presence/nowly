@@ -210,6 +210,7 @@
     "download-firefox": "Baixar para Firefox"
   },
   "footer": {
+    "funds": "Finanças",
     "tagline": "Compartilhe o que você faz.",
     "copyright": "© 2026 Nowly. Todos os direitos reservados.",
     "trademark": "Discord é uma marca registrada da <inc>Discord Inc.</inc>",
@@ -691,6 +692,10 @@
     }
   },
   "pages": {
+    "funds": {
+      "title": "Transparência financeira",
+      "description": "Para onde vai o dinheiro que a Nowly recebe — de forma aberta, até o último centavo."
+    },
     "library": {
       "title": "Biblioteca",
       "description": "Explore as plataformas que o Nowly pode compartilhar no Discord."
@@ -976,5 +981,60 @@
     "export-success": "Seus dados foram baixados.",
     "delete-success": "Seus dados foram apagados.",
     "action-error": "Algo deu errado. Tente novamente."
+  },
+  "fundsPage": {
+    "eyebrow": "Transparência",
+    "title": "Para onde vai o dinheiro",
+    "description": "A Nowly é mantida por doações e pelo apoio de seus usuários. Esta página mostra exatamente para onde vai esse dinheiro e é atualizada assim que algo muda.",
+    "updated-at": "Última atualização: {date}",
+    "period": "Cobre {period}",
+    "no-data": "Ainda não há dados disponíveis.",
+    "summary": {
+      "income": "Receitas",
+      "income-description": "Doações e apoios recebidos",
+      "expenses": "Despesas",
+      "expenses-description": "O custo de manter a Nowly",
+      "balance": "Saldo",
+      "balance-description": "Saldo após receitas e despesas do período"
+    },
+    "expenses": {
+      "title": "Para onde vai",
+      "description": "Cada centavo é gasto para manter a Nowly funcionando para todos.",
+      "breakdown": "Detalhamento",
+      "breakdown-description": "Participação de cada despesa no total.",
+      "by-line": "Por item",
+      "by-line-description": "Valor e participação de cada despesa."
+    },
+    "detail": {
+      "title": "Item por item",
+      "description": "Cada fonte de receita e cada despesa, sem arredondamentos.",
+      "income": "Receitas",
+      "income-description": "Tudo o que entra.",
+      "expenses": "Despesas",
+      "expenses-description": "Tudo o que sai.",
+      "columns": {
+        "label": "Item",
+        "amount": "Valor",
+        "share": "Participação"
+      },
+      "total": "Total"
+    },
+    "history": {
+      "title": "Histórico por período",
+      "description": "Receitas e despesas por período, para a tendência ficar visível.",
+      "chart": "Tendência",
+      "chart-description": "Receitas em comparação com despesas.",
+      "periods": "Períodos",
+      "periods-description": "Os números exatos, período a período.",
+      "period": "Período",
+      "income": "Receitas",
+      "expenses": "Despesas",
+      "balance": "Saldo"
+    },
+    "raw": {
+      "title": "Confira os números brutos",
+      "description": "Esta página lê seus números de um único arquivo JSON em nosso CDN. Qualquer pessoa pode abri-lo e verificar.",
+      "open": "Abrir funds.json"
+    }
   }
 }

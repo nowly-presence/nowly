@@ -210,6 +210,7 @@
     "download-firefox": "Pobierz dla Firefox"
   },
   "footer": {
+    "funds": "Finanse",
     "tagline": "Dziel się tym, co robisz.",
     "copyright": "© 2026 Nowly. Wszelkie prawa zastrzeżone.",
     "trademark": "Discord jest zastrzeżonym znakiem towarowym <inc>Discord Inc.</inc>",
@@ -691,6 +692,10 @@
     }
   },
   "pages": {
+    "funds": {
+      "title": "Przejrzystość finansowa",
+      "description": "Dokąd trafiają pieniądze otrzymywane przez Nowly — otwarcie, co do grosza."
+    },
     "library": {
       "title": "Biblioteka",
       "description": "Przeglądaj platformy, którymi Nowly może dzielić się na Discordzie."
@@ -976,5 +981,60 @@
     "export-success": "Twoje dane zostały pobrane.",
     "delete-success": "Twoje dane zostały usunięte.",
     "action-error": "Coś poszło nie tak. Spróbuj ponownie."
+  },
+  "fundsPage": {
+    "eyebrow": "Przejrzystość",
+    "title": "Dokąd trafiają pieniądze",
+    "description": "Nowly działa dzięki darowiznom i wsparciu użytkowników. Ta strona pokazuje dokładnie, dokąd trafiają te pieniądze, i jest aktualizowana, gdy tylko coś się zmienia.",
+    "updated-at": "Ostatnia aktualizacja: {date}",
+    "period": "Obejmuje {period}",
+    "no-data": "Brak jeszcze dostępnych danych.",
+    "summary": {
+      "income": "Przychody",
+      "income-description": "Otrzymane darowizny i wsparcie",
+      "expenses": "Wydatki",
+      "expenses-description": "Koszt utrzymania Nowly",
+      "balance": "Saldo",
+      "balance-description": "Saldo po przychodach i wydatkach w danym okresie"
+    },
+    "expenses": {
+      "title": "Na co idzie",
+      "description": "Każdy grosz jest wydawany na utrzymanie Nowly dla wszystkich.",
+      "breakdown": "Podział",
+      "breakdown-description": "Udział każdego wydatku w całości.",
+      "by-line": "Pozycje",
+      "by-line-description": "Kwota i udział każdego wydatku."
+    },
+    "detail": {
+      "title": "Pozycja po pozycji",
+      "description": "Każde źródło przychodów i każdy wydatek, bez zaokrągleń.",
+      "income": "Przychody",
+      "income-description": "Wszystko, co wpływa.",
+      "expenses": "Wydatki",
+      "expenses-description": "Wszystko, co jest wydawane.",
+      "columns": {
+        "label": "Pozycja",
+        "amount": "Kwota",
+        "share": "Udział"
+      },
+      "total": "Razem"
+    },
+    "history": {
+      "title": "Historia wg okresów",
+      "description": "Przychody i wydatki w każdym okresie, aby trend był widoczny.",
+      "chart": "Trend",
+      "chart-description": "Przychody zestawione z wydatkami.",
+      "periods": "Okresy",
+      "periods-description": "Dokładne liczby, okres po okresie.",
+      "period": "Okres",
+      "income": "Przychody",
+      "expenses": "Wydatki",
+      "balance": "Saldo"
+    },
+    "raw": {
+      "title": "Sprawdź surowe liczby",
+      "description": "Ta strona czyta swoje liczby z jednego pliku JSON na naszym CDN. Każdy może go otworzyć i zweryfikować.",
+      "open": "Otwórz funds.json"
+    }
   }
 }

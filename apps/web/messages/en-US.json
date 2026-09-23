@@ -210,6 +210,7 @@
     "download-firefox": "Download for Firefox"
   },
   "footer": {
+    "funds": "Funds",
     "tagline": "Share what you do.",
     "copyright": "© 2026 Nowly. All rights reserved.",
     "trademark": "Discord is a registered trademark of <inc>Discord Inc.</inc>",
@@ -691,6 +692,10 @@
     }
   },
   "pages": {
+    "funds": {
+      "title": "Funds transparency",
+      "description": "Where the money Nowly receives goes — openly, down to the last cent."
+    },
     "library": {
       "title": "Library",
       "description": "Browse the platforms Nowly can share on Discord."
@@ -976,5 +981,60 @@
     "export-success": "Your data was downloaded.",
     "delete-success": "Your data has been deleted.",
     "action-error": "Something went wrong. Please try again."
+  },
+  "fundsPage": {
+    "eyebrow": "Transparency",
+    "title": "Where the money goes",
+    "description": "Nowly is run on donations and support from its users. This page shows exactly where that money goes, and it is updated as soon as anything changes.",
+    "updated-at": "Last updated {date}",
+    "period": "Covers {period}",
+    "no-data": "No data available yet.",
+    "summary": {
+      "income": "Income",
+      "income-description": "Donations and support received",
+      "expenses": "Expenses",
+      "expenses-description": "What it costs to run Nowly",
+      "balance": "Balance",
+      "balance-description": "Balance after income and expenses for the period"
+    },
+    "expenses": {
+      "title": "Where it goes",
+      "description": "Every cent is spent on keeping Nowly running for everyone.",
+      "breakdown": "Breakdown",
+      "breakdown-description": "Share of each expense in the total.",
+      "by-line": "By line",
+      "by-line-description": "Amount and share of every expense."
+    },
+    "detail": {
+      "title": "Line by line",
+      "description": "Every source of income and every expense, with no rounding.",
+      "income": "Income",
+      "income-description": "Everything received.",
+      "expenses": "Expenses",
+      "expenses-description": "Everything spent.",
+      "columns": {
+        "label": "Item",
+        "amount": "Amount",
+        "share": "Share"
+      },
+      "total": "Total"
+    },
+    "history": {
+      "title": "History by period",
+      "description": "Income and expenses per period, so the trend stays visible.",
+      "chart": "Trend",
+      "chart-description": "Income compared with expenses.",
+      "periods": "Periods",
+      "periods-description": "The exact numbers, period by period.",
+      "period": "Period",
+      "income": "Income",
+      "expenses": "Expenses",
+      "balance": "Balance"
+    },
+    "raw": {
+      "title": "Check the raw numbers",
+      "description": "This page reads its numbers from a single JSON file on our CDN. Anyone can open it and verify.",
+      "open": "Open funds.json"
+    }
   }
 }
