@@ -34,6 +34,7 @@ export const Footer = async () => {
         discord: t("discord"),
         github: t("github"),
         twitter: t("twitter"),
+        bluesky: t("bluesky"),
         legalNotice: t("legal-notice"),
         cookies: t("cookies"),
         privacy: t("privacy"),

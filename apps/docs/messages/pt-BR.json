@@ -48,7 +48,8 @@
     "branding": "Identidade visual",
     "consent": "Seus dados",
     "status": "Status",
-    "twitter": "X / Twitter"
+    "twitter": "X / Twitter",
+    "bluesky": "Bluesky"
   },
   "cookie-banner": {
     "message": "Este site usa um cookie de idioma estritamente necessário. Se a publicidade for ativada futuramente, o Google também poderá usar tecnologias de publicidade.",

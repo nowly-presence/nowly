@@ -48,7 +48,8 @@
     "branding": "Charte graphique",
     "consent": "Vos données",
     "status": "Statut des services",
-    "twitter": "X / Twitter"
+    "twitter": "X / Twitter",
+    "bluesky": "Bluesky"
   },
   "cookie-banner": {
     "message": "Ce site utilise un cookie de langue strictement nécessaire. Si la publicité est activée plus tard, Google pourra aussi utiliser des technologies publicitaires.",

@@ -8,6 +8,7 @@ const DISCORD_INVITE_URL = "https://discord.gg/MnZap7czgB";
 const DISCORD_SITE_URL = "https://discord.com";
 const PROJECT_REPOSITORY_URL = "https://github.com/nowly-presence/nowly";
 const TWITTER_URL = "https://x.com/nowlyme";
+const BLUESKY_URL = "https://bsky.app/profile/nowlyme.bsky.social";
 
 // Same prefix scheme as each app's own i18n/routing.ts (short codes, default locale unprefixed) -
 // duplicated here (not imported) because this is the one piece both apps' routers must agree on
@@ -33,6 +34,7 @@ export type FooterLabels = {
   discord: string
   github: string
   twitter: string
+  bluesky: string
   legalNotice: string
   cookies: string
   privacy: string
@@ -88,6 +90,7 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
         { href: DISCORD_INVITE_URL, label: labels.discord, external: true },
         { href: PROJECT_REPOSITORY_URL, label: labels.github, external: true },
         { href: TWITTER_URL, label: labels.twitter, external: true },
+        { href: BLUESKY_URL, label: labels.bluesky, external: true },
       ],
     },
   ];

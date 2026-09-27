@@ -48,7 +48,8 @@
     "branding": "Marka kimliği",
     "consent": "Verilerin",
     "status": "Durum",
-    "twitter": "X / Twitter"
+    "twitter": "X / Twitter",
+    "bluesky": "Bluesky"
   },
   "cookie-banner": {
     "message": "Bu site, kesinlikle gerekli bir dil çerezi kullanır. İleride reklamlar etkinleştirilirse Google reklam teknolojilerini de kullanabilir.",
