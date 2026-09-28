@@ -1,0 +1,46 @@
+name: Presence Date Backfill
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Apply the dry-run dates after review"
+        required: true
+        default: false
+        type: boolean
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    env:
+      API_URL: ${{ secrets.API_URL || 'https://api.nowly.me' }}
+      API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SUBMODULE_TOKEN || github.token }}
+
+      - name: Initialize private presence submodules
+        env:
+          SUBMODULE_TOKEN: ${{ secrets.SUBMODULE_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$SUBMODULE_TOKEN" ]; then
+            echo "::warning::SUBMODULE_TOKEN is not configured; private submodule initialization may fail"
+          fi
+          git submodule update --init --recursive packages/sdk packages/presences packages/internal-cli
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+
+      - name: Preview publication dates
+        run: pnpm admin presence backfill-dates --dry-run
+
+      - name: Apply publication dates
+        if: inputs.apply == true
+        run: pnpm admin presence backfill-dates

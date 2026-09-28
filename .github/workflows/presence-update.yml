@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [closed]
     paths:
-      - "packages/websites/src/*/*/**"
+      - "packages/presences/src/*/*/**"
 
 jobs:
   update:
@@ -17,27 +17,28 @@ jobs:
         with:
           fetch-depth: 0
 
+      - run: git submodule update --init --recursive packages/sdk packages/cli packages/presences packages/internal-cli
+
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
       - run: pnpm install
-      - run: pnpm build:websites
 
       - name: Detect changed presences
         id: changed
         run: |
           BASE="${{ github.event.pull_request.base.sha }}"
           HEAD="${{ github.event.pull_request.head.sha }}"
-          FILES=$(git diff --name-only --diff-filter=AMR "$BASE"..."$HEAD" -- "packages/websites/src/*/*/**" 2>/dev/null)
+          FILES=$(git diff --name-only --diff-filter=AMR "$BASE"..."$HEAD" -- "packages/presences/src/*/*/**" 2>/dev/null)
           SLUGS=""
 
           while IFS= read -r file; do
             [ -z "$file" ] && continue
             letter=$(echo "$file" | cut -d'/' -f4)
             name=$(echo "$file" | cut -d'/' -f5)
-            meta_path="packages/websites/src/$letter/$name/metadata.json"
+            meta_path="packages/presences/src/$letter/$name/metadata.json"
             [ -f "$meta_path" ] || continue
 
             slug=$(echo "$name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')

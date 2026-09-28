@@ -1,5 +1,5 @@
 import { getPrisma } from "@/db/client"
-import type { GlobalPresenceStats, PresenceMeta, PresenceStats, VersionEntry } from "./presence.types"
+import type { GlobalPresenceStats, PresenceListItem, PresenceMeta, PresenceStats, VersionEntry } from "./presence.types"
 
 const ACTIVE_DEVICE_STALE_MS = 12 * 60 * 1000
 
@@ -112,28 +112,32 @@ export const setActiveUsers = async (_slug: string, _count: number): Promise<voi
   return
 }
 
-export const setUpdated = async (slug: string, date?: string): Promise<void> => {
+const toDate = (value?: Date | string): Date => value instanceof Date ? value : value ? new Date(value) : new Date()
+
+export const setUpdated = async (slug: string, date?: Date | string): Promise<void> => {
+  const value = toDate(date)
   await getPrisma().presence.upsert({
     where: { slug },
-    create: { slug, updatedAt: date ? new Date(date) : new Date() },
-    update: { updatedAt: date ? new Date(date) : new Date() },
+    create: { slug, updatedAt: value },
+    update: { updatedAt: value },
   })
 }
 
-export const setAdded = async (slug: string, date?: string): Promise<void> => {
-  const value = date ? new Date(date) : new Date()
+export const setAdded = async (slug: string, date?: Date | string): Promise<void> => {
+  const value = toDate(date)
   await getPrisma().presence.upsert({
     where: { slug },
     create: { slug, addedAt: value },
-    update: { addedAt: value },
+    update: {},
   })
 }
 
-export const setVersion = async (slug: string, version: string): Promise<void> => {
+export const setVersion = async (slug: string, version: string, publishedAt?: Date): Promise<void> => {
+  const updatedAt = publishedAt ?? new Date()
   await getPrisma().presence.upsert({
     where: { slug },
-    create: { slug, version, updatedAt: new Date() },
-    update: { version, updatedAt: new Date() },
+    create: { slug, version, updatedAt },
+    update: { version, updatedAt },
   })
 }
 
@@ -204,12 +208,6 @@ export const getPresenceMeta = async (slug: string): Promise<PresenceMeta | null
   return (row?.metadata as PresenceMeta | null) ?? null
 }
 
-export type PresenceListItem = PresenceMeta & {
-  version: string
-  totalInstalls: number
-  activeUsers: number
-  likes: number
-}
 
 // Bulk equivalent of calling getPresenceMeta + getPresenceStats per slug: the list route
 // used to do ~5 queries per presence (meta lookup, then 4 sequential stats queries each),
@@ -224,7 +222,7 @@ export const getPresenceListData = async (): Promise<PresenceListItem[]> => {
   const [presences, installCounts, activeCounts, likeCounts] = await Promise.all([
     prisma.presence.findMany({
       where: { archived: false },
-      select: { slug: true, metadata: true, version: true },
+      select: { slug: true, metadata: true, version: true, addedAt: true, updatedAt: true },
     }),
     prisma.devicePresence.groupBy({ by: ["slug"], where: { installed: true }, _count: { _all: true } }),
     prisma.presenceActiveDevice.groupBy({ by: ["slug"], _count: { _all: true } }),
@@ -242,6 +240,8 @@ export const getPresenceListData = async (): Promise<PresenceListItem[]> => {
     .map((presence) => ({
       ...(presence.metadata as PresenceMeta),
       version: presence.version || "",
+      addedAt: iso(presence.addedAt),
+      lastUpdated: iso(presence.updatedAt),
       totalInstalls: installMap.get(presence.slug) ?? 0,
       activeUsers: activeMap.get(presence.slug) ?? 0,
       likes: likeMap.get(presence.slug) ?? 0,

@@ -17,17 +17,20 @@ const mockPrisma = vi.hoisted(() => ({
   devicePresence: {
     upsert: vi.fn(),
     count: vi.fn(),
+    groupBy: vi.fn(),
   },
   presenceActiveDevice: {
     upsert: vi.fn(),
     deleteMany: vi.fn(),
     count: vi.fn(),
+    groupBy: vi.fn(),
   },
   presenceLike: {
     upsert: vi.fn(),
     deleteMany: vi.fn(),
     findUnique: vi.fn(),
     count: vi.fn(),
+    groupBy: vi.fn(),
   },
 }))
 
@@ -38,6 +41,7 @@ vi.mock("@/db/client", () => ({
 
 import {
   getPresenceStats,
+  getPresenceListData,
   incrementInstalls,
   setActiveUsers,
   markActiveDevice,
@@ -106,6 +110,40 @@ describe("getPresenceStats", () => {
     expect(stats.activeUsers).toBe(7)
     expect(mockPrisma.presenceActiveDevice.deleteMany).toHaveBeenCalled()
     expect(mockPrisma.presenceActiveDevice.count).toHaveBeenCalledWith({ where: { slug: "youtube" } })
+  })
+})
+
+describe("getPresenceListData", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("returns publication dates from the bulk presence query", async () => {
+    const addedAt = new Date("2024-01-01T00:00:00.000Z")
+    const updatedAt = new Date("2024-06-01T00:00:00.000Z")
+    mockPrisma.presence.findMany.mockResolvedValue([{
+      slug: "youtube",
+      metadata: { name: "YouTube" },
+      version: "1.2.3",
+      addedAt,
+      updatedAt,
+    }])
+    mockPrisma.devicePresence.groupBy.mockResolvedValue([])
+    mockPrisma.presenceActiveDevice.groupBy.mockResolvedValue([])
+    mockPrisma.presenceLike.groupBy.mockResolvedValue([])
+
+    const result = await getPresenceListData()
+
+    expect(result[0]).toMatchObject({
+      name: "YouTube",
+      version: "1.2.3",
+      addedAt: addedAt.toISOString(),
+      lastUpdated: updatedAt.toISOString(),
+    })
+    expect(mockPrisma.presence.findMany).toHaveBeenCalledWith({
+      where: { archived: false },
+      select: { slug: true, metadata: true, version: true, addedAt: true, updatedAt: true },
+    })
+    expect(mockPrisma.presence.findUnique).not.toHaveBeenCalled()
+    expect(mockPrisma.devicePresence.count).not.toHaveBeenCalled()
   })
 })
 
@@ -185,37 +223,45 @@ describe("setUpdated / setAdded", () => {
     expect(call.create.updatedAt.getTime()).toBeGreaterThanOrEqual(before)
   })
 
-  it("upserts added with provided date", async () => {
+  it("sets added only when creating a presence", async () => {
     mockPrisma.presence.upsert.mockResolvedValue({})
     await setAdded("yt", "2024-01-01")
     expect(mockPrisma.presence.upsert).toHaveBeenCalledWith({
       where: { slug: "yt" },
       create: { slug: "yt", addedAt: new Date("2024-01-01") },
-      update: { addedAt: new Date("2024-01-01") },
+      update: {},
     })
   })
 
-  it("upserts added with auto date when not provided", async () => {
+  it("uses one provided Date without recomputing it", async () => {
     mockPrisma.presence.upsert.mockResolvedValue({})
-    await setAdded("yt")
-    expect(mockPrisma.presence.upsert).toHaveBeenCalledWith({
-      where: { slug: "yt" },
-      create: { slug: "yt", addedAt: expect.any(Date) },
-      update: { addedAt: expect.any(Date) },
-    })
+    const publishedAt = new Date("2024-01-01T00:00:00.000Z")
+    await setAdded("yt", publishedAt)
+    expect(mockPrisma.presence.upsert.mock.calls[0][0].create.addedAt).toBe(publishedAt)
   })
 })
 
 describe("setVersion / getVersion", () => {
   beforeEach(() => vi.clearAllMocks())
 
-  it("upserts version", async () => {
+  it("upserts version with an automatic date", async () => {
     mockPrisma.presence.upsert.mockResolvedValue({})
     await setVersion("yt", "1.0.0")
     expect(mockPrisma.presence.upsert).toHaveBeenCalledWith({
       where: { slug: "yt" },
       create: { slug: "yt", version: "1.0.0", updatedAt: expect.any(Date) },
       update: { version: "1.0.0", updatedAt: expect.any(Date) },
+    })
+  })
+
+  it("uses the provided publication date for updatedAt", async () => {
+    mockPrisma.presence.upsert.mockResolvedValue({})
+    const publishedAt = new Date("2024-06-01T00:00:00.000Z")
+    await setVersion("yt", "1.0.0", publishedAt)
+    expect(mockPrisma.presence.upsert).toHaveBeenCalledWith({
+      where: { slug: "yt" },
+      create: { slug: "yt", version: "1.0.0", updatedAt: publishedAt },
+      update: { version: "1.0.0", updatedAt: publishedAt },
     })
   })
 

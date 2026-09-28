@@ -155,7 +155,8 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
       const body = parsedBody.data
 
       if (body.version) {
-        await setVersion(slug, body.version)
+        const publishedAt = new Date()
+        await setVersion(slug, body.version, publishedAt)
         if (body.changelog || body.author) {
           await addVersion(slug, {
             version: body.version,
@@ -165,7 +166,7 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
             author: body.author ?? "unknown",
             authorGithub: body.authorGithub,
             pr: body.pr,
-            timestamp: Date.now(),
+            timestamp: publishedAt.getTime(),
           })
         }
       }

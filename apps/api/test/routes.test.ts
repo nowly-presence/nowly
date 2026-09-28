@@ -107,6 +107,8 @@ describe("Registry Routes", () => {
       assets: { logo: "logo.png", icon: "icon.png", thumbnail: "thumbnail.jpg" },
       tags: ["video"],
       version: "1.0.0",
+      addedAt: "2024-01-01T00:00:00.000Z",
+      lastUpdated: "2024-06-01T00:00:00.000Z",
       totalInstalls: 500,
       activeUsers: 42,
       likes: 0,
@@ -117,11 +119,12 @@ describe("Registry Routes", () => {
     expect(res.statusCode).toBe(200)
     const body = JSON.parse(res.body)
     expect(body).toHaveLength(1)
-    expect(body[0].slug).toBe("youtube")
-    expect(body[0].name).toBe("YouTube")
     expect(body[0].version).toBe("1.0.0")
+    expect(body[0].addedAt).toBe("2024-01-01T00:00:00.000Z")
+    expect(body[0].lastUpdated).toBe("2024-06-01T00:00:00.000Z")
     expect(body[0].totalInstalls).toBe(500)
     expect(body[0].activeUsers).toBe(42)
+
   })
 
   it("GET /presences/stats returns global public stats", async () => {
@@ -271,8 +274,9 @@ describe("Presence Routes", () => {
 
     expect(res.statusCode).toBe(200)
     expect(JSON.parse(res.body)).toEqual({ ok: true })
-    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "2.0.0")
-    expect(mockPresenceRepo.addVersion).toHaveBeenCalled()
+    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "2.0.0", expect.any(Date))
+    const publishedAt = mockPresenceRepo.setVersion.mock.calls[0][2]
+    expect(mockPresenceRepo.addVersion.mock.calls[0][1].timestamp).toBe(publishedAt.getTime())
     expect(mockPresenceRepo.setAdded).toHaveBeenCalledWith("youtube", "2024-01-01")
     expect(mockPresenceRepo.setUpdated).toHaveBeenCalledWith("youtube", "2024-06-01")
   })
@@ -323,12 +327,47 @@ describe("Presence Routes", () => {
     expect(body.results[0].slug).toBe("youtube")
     expect(body.results[0].version).toBe("1.0.0")
     expect(body.results[0].changelog).toBeTruthy()
-    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "1.0.0")
-    expect(mockPresenceRepo.setAdded).toHaveBeenCalledWith("youtube")
+    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "1.0.0", expect.any(Date))
+    const publishedAt = mockPresenceRepo.setVersion.mock.calls[0][2]
+    expect(mockPresenceRepo.setAdded).toHaveBeenCalledWith("youtube", publishedAt)
+    expect(mockPresenceRepo.addVersion.mock.calls[0][1].timestamp).toBe(publishedAt.getTime())
+    expect(mockPresenceRepo.setUpdated).not.toHaveBeenCalled()
     expect(mockPresenceRepo.setPresenceMeta).toHaveBeenCalledWith("youtube", expect.objectContaining({
       slug: "youtube", name: "YouTube", author: "dev", category: "video",
     }))
     expect(mockPresenceRepo.setArchived).toHaveBeenCalledWith("youtube", false)
+  })
+
+  it("POST /presences/sync preserves addedAt for modified publications", async () => {
+    mockPresenceRepo.getPresenceStats.mockResolvedValue({
+      totalInstalls: 0,
+      activeUsers: 0,
+      version: "1.0.0",
+      addedAt: "2024-01-01T00:00:00.000Z",
+      lastUpdated: "2024-02-01T00:00:00.000Z",
+    })
+    mockPresenceRepo.setVersion.mockResolvedValue(undefined)
+    mockPresenceRepo.setPresenceMeta.mockResolvedValue(undefined)
+    mockPresenceRepo.addVersion.mockResolvedValue(undefined)
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/sync",
+      payload: {
+        presences: [{
+          slug: "youtube",
+          type: "modified",
+          name: "YouTube",
+          author: "dev",
+          changelog: "Fix playback status",
+        }],
+      },
+    })
+
+    expect(res.statusCode).toBe(200)
+    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "1.0.1", expect.any(Date))
+    expect(mockPresenceRepo.setAdded).not.toHaveBeenCalled()
+    expect(mockPresenceRepo.setUpdated).not.toHaveBeenCalled()
   })
 
   it("POST /presences/sync archives removed slugs", async () => {

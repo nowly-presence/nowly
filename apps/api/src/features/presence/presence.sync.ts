@@ -4,7 +4,7 @@ import { sha256Base64Url } from "@/shared/crypto.service"
 import { serializeJsonField } from "./presence.service"
 import {
   addVersion, getAllPresenceSlugs, getPresenceStats, getVersionHistory,
-  setAdded, setArchived, setPresenceMeta, setUpdated, setVersion,
+  setAdded, setArchived, setPresenceMeta, setVersion,
 } from "./presence.repository"
 
 type ReleasePerson = {
@@ -91,8 +91,9 @@ export const processPresenceSync = async (body: PresenceSyncBody): Promise<Prese
       })
     const changelog = JSON.stringify(changelogs)
     const displayChangelog = changelogs["en-US"] || ""
-    const timestamp = Date.now()
-    const createdAt = new Date(timestamp).toISOString()
+    const publishedAt = new Date()
+    const timestamp = publishedAt.getTime()
+    const createdAt = publishedAt.toISOString()
     const bundleSizeBytes = p.bundle ? Buffer.byteLength(p.bundle, "utf-8") : undefined
     const bundleSha256 = p.bundle ? sha256Base64Url(p.bundle) : undefined
     const versionEntryMeta = {
@@ -117,8 +118,8 @@ export const processPresenceSync = async (body: PresenceSyncBody): Promise<Prese
     if (p.type === "new" || !currentVersion) {
       const version = p.version ?? "1.0.0"
 
-      await setVersion(p.slug, version)
-      await setAdded(p.slug)
+      await setVersion(p.slug, version, publishedAt)
+      await setAdded(p.slug, publishedAt)
       await addVersion(p.slug, {
         version,
         ...versionEntryMeta,
@@ -129,8 +130,7 @@ export const processPresenceSync = async (body: PresenceSyncBody): Promise<Prese
     } else {
       const nextVersion = p.version ?? bumpPatch(currentVersion)
 
-      await setVersion(p.slug, nextVersion)
-      await setUpdated(p.slug)
+      await setVersion(p.slug, nextVersion, publishedAt)
       await addVersion(p.slug, {
         version: nextVersion,
         ...versionEntryMeta,

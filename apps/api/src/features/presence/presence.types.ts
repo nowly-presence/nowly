@@ -36,3 +36,12 @@ export interface VersionEntry {
 }
 
 export type PresenceMeta = Record<string, any>
+
+export type PresenceListItem = PresenceMeta & {
+  version: string
+  addedAt: string | null
+  lastUpdated: string | null
+  totalInstalls: number
+  activeUsers: number
+  likes: number
+}
