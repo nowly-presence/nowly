@@ -36,7 +36,7 @@ export const FaqPageView = async () => {
       />
 
       <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
-        <header className="mx-auto w-full max-w-4xl px-5 sm:px-10">
+        <header className="mx-auto w-full max-w-7xl px-5 sm:px-10">
           <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
             {t("eyebrow")}
           </p>
@@ -59,33 +59,41 @@ export const FaqPageView = async () => {
           </nav>
         </header>
 
-        <main className="mx-auto mt-16 w-full max-w-4xl space-y-14 px-5 sm:mt-24 sm:px-10">
-          {categories.map((category) => {
-            const categoryItems = items.filter((item) => item.category === category);
-            if (categoryItems.length === 0) return null;
+        <main className="mx-auto mt-16 w-full max-w-7xl px-5 sm:mt-24 sm:px-10">
+          <div className="max-w-4xl space-y-14">
+            {categories.map((category) => {
+              const categoryItems = items.filter((item) => item.category === category);
+              if (categoryItems.length === 0) return null;
 
-            return (
-              <section key={category} aria-labelledby={`faq-${category}`}>
-                <h2 id={`faq-${category}`} className="mb-5 text-2xl font-medium tracking-tight text-foreground sm:text-3xl">
-                  {t(`categories.${category}`)}
-                </h2>
-                <div className="divide-y divide-border rounded-2xl border border-border bg-card">
-                  {categoryItems.map((item) => (
-                    <details key={item.question} className="group px-5 py-5 first:rounded-t-2xl last:rounded-b-2xl sm:px-7">
-                      <summary className="cursor-pointer list-none pr-8 text-lg font-medium text-foreground marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent">
-                        <span className="relative after:absolute after:right-0 after:content-['+'] group-open:after:content-['−']">
-                          {item.question}
-                        </span>
-                      </summary>
-                      <p className="max-w-3xl pt-4 text-base leading-relaxed text-muted-foreground">
-                        {item.answer}
-                      </p>
-                    </details>
-                  ))}
-                </div>
-              </section>
-            );
-          })}
+              return (
+                <section key={category} aria-labelledby={`faq-${category}`}>
+                  <h2 id={`faq-${category}`} className="mb-5 text-2xl font-medium tracking-tight text-foreground sm:text-3xl">
+                    {t(`categories.${category}`)}
+                  </h2>
+                  <div className="divide-y divide-border rounded-2xl border border-border bg-card">
+                    {categoryItems.map((item) => (
+                      <details
+                        key={item.question}
+                        suppressHydrationWarning
+                        className="group px-5 py-5 first:rounded-t-2xl last:rounded-b-2xl sm:px-7"
+                      >
+                        <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-lg font-medium text-foreground marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent [&::-webkit-details-marker]:hidden">
+                          <span>{item.question}</span>
+                          <span aria-hidden className="shrink-0 text-2xl font-normal leading-none text-accent">
+                            <span className="group-open:hidden">+</span>
+                            <span className="hidden group-open:inline">−</span>
+                          </span>
+                        </summary>
+                        <p className="max-w-3xl pt-4 text-base leading-relaxed text-muted-foreground">
+                          {item.answer}
+                        </p>
+                      </details>
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
         </main>
       </div>
     </>

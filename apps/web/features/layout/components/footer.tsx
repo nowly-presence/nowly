@@ -21,6 +21,7 @@ export const Footer = async () => {
         docs: t("docs"),
         changelog: t("changelog"),
         canary: t("canary"),
+        faq: t("faq"),
         support: t("support"),
         status: t("status"),
         branding: t("branding"),

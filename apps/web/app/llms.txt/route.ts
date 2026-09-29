@@ -9,7 +9,7 @@ export const runtime = "nodejs";
 const pageDefinitions = [
   ["/", "metadata"],
   ["/library", "pages.library"],
-  ["/faq", "faq"],
+  ["/faq", "faqPage"],
   ["/desktop", "pages.desktop"],
   ["/extension", "pages.extension"],
   ["/changelog", "pages.changelog"],

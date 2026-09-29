@@ -245,7 +245,8 @@
     "privacy": "Confidentialité",
     "consent": "Vos données",
     "cookies": "Cookies",
-    "legal-notice": "Mentions légales"
+    "legal-notice": "Mentions légales",
+    "faq": "Foire aux questions"
   },
   "libraryPage": {
     "eyebrow": "Bibliothèque",
@@ -980,7 +981,7 @@
   },
   "faqPage": {
     "eyebrow": "FAQ",
-    "title": "Tout savoir sur Nowly",
+    "title": "On vous dit tout sur Nowly",
     "description": "Découvrez comment Nowly ajoute une Rich Presence Discord aux sites compatibles, comment l’installer et comment votre activité reste sous votre contrôle.",
     "categories": {
       "discover": "Découvrir Nowly",

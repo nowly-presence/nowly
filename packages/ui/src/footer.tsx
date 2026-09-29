@@ -28,6 +28,7 @@ export type FooterLabels = {
   changelog: string
   canary: string
   support: string
+  faq: string
   status: string
   branding: string
   community: string
@@ -78,8 +79,8 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
       links: [
         { href: docs(), label: labels.docs },
         { href: web("/changelog"), label: labels.changelog },
-        { href: web("/canary"), label: labels.canary },
         { href: web("/support"), label: labels.support },
+        { href: web("/faq"), label: labels.faq },
         { href: web("/status"), label: labels.status },
         { href: web("/branding"), label: labels.branding },
       ],
