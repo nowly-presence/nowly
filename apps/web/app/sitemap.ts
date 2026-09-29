@@ -40,6 +40,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const entries: Entry[] = [
     entry("/", "weekly", 1),
     entry("/library", "weekly", 0.9),
+    entry("/faq", "monthly", 0.75),
     entry("/desktop", "monthly", 0.7),
     entry("/extension", "monthly", 0.7),
     entry("/canary", "weekly", 0.55),

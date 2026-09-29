@@ -34,6 +34,21 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/about",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/:slug-discord-rich-presence",
+        destination: "/library/:slug",
+        permanent: true,
+      },
+      {
+        source: "/:slug-rich-presence",
+        destination: "/library/:slug",
+        permanent: true,
+      },
+      {
         source: "/host",
         destination: "/desktop",
         permanent: true,
