@@ -977,5 +977,30 @@
     "export-success": "Seus dados foram baixados.",
     "delete-success": "Seus dados foram apagados.",
     "action-error": "Algo deu errado. Tente novamente."
+  },
+  "faqPage": {
+    "eyebrow": "Perguntas frequentes",
+    "title": "Respostas rápidas",
+    "description": "O essencial sobre instalação, dados e Discord. Docs e Discord vão mais fundo.",
+    "categories": {
+      "general": "Perguntas frequentes"
+    },
+    "items": [
+      {
+        "question": "O que é o Nowly?",
+        "answer": "O Nowly mostra o que você assiste, ouve ou joga como Discord Rich Presence. É uma extensão de navegador, um app de desktop e uma biblioteca de scripts de plataformas.",
+        "category": "general"
+      },
+      {
+        "question": "Minha atividade passa pelos seus servidores?",
+        "answer": "Não. A atividade fica local e é enviada ao Discord a partir da sua máquina. Analytics são opcionais e desativados por padrão.",
+        "category": "general"
+      },
+      {
+        "question": "Quais plataformas são suportadas?",
+        "answer": "A lista atualizada é a biblioteca. Novas presenças podem ser adicionadas sem atualizar a extensão, então instale as que você realmente usa.",
+        "category": "general"
+      }
+    ]
   }
 }

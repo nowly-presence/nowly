@@ -977,5 +977,114 @@
     "export-success": "Your data was downloaded.",
     "delete-success": "Your data has been deleted.",
     "action-error": "Something went wrong. Please try again."
+  },
+  "faqPage": {
+    "eyebrow": "FAQ",
+    "title": "Everything you need to know about Nowly",
+    "description": "Learn how Nowly adds Discord Rich Presence to supported websites, how to install it, and how your activity stays under your control.",
+    "categories": {
+      "discover": "Discover Nowly",
+      "setup": "Installation and use",
+      "privacy": "Privacy and safety",
+      "compare": "Comparison and limits",
+      "develop": "Development"
+    },
+    "items": [
+      {
+        "category": "discover",
+        "question": "What is Nowly?",
+        "answer": "Nowly turns activity from supported websites into a Discord Rich Presence. It can show what you are watching, listening to, or viewing, including the platform, title, artwork, and playback progress when available. Nowly combines a browser extension, a desktop app, and installable presences from its library."
+      },
+      {
+        "category": "discover",
+        "question": "How does Nowly work?",
+        "answer": "The browser extension detects activity on a supported site. The installed presence prepares the information to display, then the desktop app sends that activity to Discord locally. Nowly does not replace Discord: it prepares and delivers your activity to the Discord app installed on your computer."
+      },
+      {
+        "category": "discover",
+        "question": "Why do I need both the browser extension and the desktop app?",
+        "answer": "The extension can read activity from your browser tab, while Discord needs a local connection with its desktop app to receive Rich Presence updates. The extension detects your activity and the desktop app acts as the local bridge to Discord."
+      },
+      {
+        "category": "discover",
+        "question": "Does Discord need to be installed on my computer?",
+        "answer": "Yes. Nowly requires Discord Desktop to be open so the local bridge can send your Rich Presence. Discord in a browser or on mobile is not enough to use Nowly's local bridge."
+      },
+      {
+        "category": "discover",
+        "question": "Which websites work with Nowly?",
+        "answer": "Supported websites are listed in the Nowly library. Each presence is made for a specific platform. The library can grow independently from the extension, so new presences can be published without reinstalling Nowly."
+      },
+      {
+        "category": "discover",
+        "question": "Does Nowly work with Netflix, YouTube, Spotify, or Apple TV+?",
+        "answer": "Yes, when a dedicated presence is available in the library. Compatibility depends on the presence and the information that the platform makes available in the browser."
+      },
+      {
+        "category": "setup",
+        "question": "How do I show my activity on Discord with Nowly?",
+        "answer": "Install the Nowly extension, install the desktop app, open Discord Desktop, install a presence from the library, and then open the supported website in your browser. Your activity can be displayed once the extension, desktop app, presence, and Discord are all ready."
+      },
+      {
+        "category": "setup",
+        "question": "Why is my Discord Rich Presence not showing?",
+        "answer": "Check that Discord Desktop and the Nowly desktop app are open, the extension is installed in the browser you are using, the presence is installed and enabled, and the page matches a supported URL. If your browser asks for user-script permission, allow it and reload the page after installation."
+      },
+      {
+        "category": "setup",
+        "question": "Which browsers and operating systems are supported?",
+        "answer": "The extension works with Chrome, Firefox, and Chromium-based browsers such as Edge, Brave, and Opera. The desktop app is available for Windows, macOS, and Linux."
+      },
+      {
+        "category": "setup",
+        "question": "Is Nowly free?",
+        "answer": "Yes. Nowly's main features, browser extension, desktop app, and presence library are free to use. You can support the project voluntarily through the funding links available on the website."
+      },
+      {
+        "category": "setup",
+        "question": "Can I install only one presence?",
+        "answer": "A presence does not run by itself: you need the Nowly extension and desktop app first. Once Nowly is configured, install only the presences for the platforms you actually use."
+      },
+      {
+        "category": "privacy",
+        "question": "Is my activity sent to Nowly's servers?",
+        "answer": "Rich Presence activity is sent locally from the extension to the desktop app and then to Discord. It does not pass through Nowly's servers. Optional usage statistics are disabled by default and can be controlled in the available settings."
+      },
+      {
+        "category": "privacy",
+        "question": "What does Nowly read in my browser?",
+        "answer": "A presence reads only the information it needs from the supported site, such as a video title, channel name, page, or playback state. Presences run only on sites for which they have been installed. Official presences are checked and signed before distribution."
+      },
+      {
+        "category": "privacy",
+        "question": "Who can see my Discord activity?",
+        "answer": "A Rich Presence can be visible to people who are allowed to see your activity on Discord. What appears depends on your Discord settings and the information provided by the presence. Avoid displaying sensitive information in a public activity."
+      },
+      {
+        "category": "privacy",
+        "question": "Is Nowly safe?",
+        "answer": "Nowly is designed around local processing: activity is not sent to Nowly's servers, statistics are disabled by default, official presences are checked and signed, and the project code is public. As with any browser extension, install Nowly from official sources and review the permissions it requests."
+      },
+      {
+        "category": "compare",
+        "question": "What is the difference between Nowly and PreMiD?",
+        "answer": "Nowly and PreMiD have a similar goal: showing website activity in Discord Rich Presence. Nowly uses a dedicated desktop app as a local bridge, an installable presence library, signed official presences, and optional analytics disabled by default. The right choice depends on the platforms you need and the workflow you prefer."
+      },
+      {
+        "category": "compare",
+        "question": "Can I use Nowly and another Rich Presence tool at the same time?",
+        "answer": "It is not recommended. Several applications can try to update your Discord activity at the same time, causing unexpected changes or making the activity disappear. Disable other Rich Presence tools while testing Nowly."
+      },
+      {
+        "category": "develop",
+        "question": "Can I create a new presence for Nowly?",
+        "answer": "Yes. Presences are JavaScript integrations dedicated to a platform. The SDK, CLI, and documentation explain how to create, test, validate, and propose a new presence. The project code and contribution workflow are available on GitHub."
+      },
+      {
+        "category": "develop",
+        "question": "Is Nowly open source?",
+        "answer": "The project code is public and available on GitHub. It is currently distributed under the BUSL-1.1 license, a source-available license that is not an OSI-approved open-source license. The presences, SDK, and development tools are documented separately."
+      }
+    ]
   }
 }
