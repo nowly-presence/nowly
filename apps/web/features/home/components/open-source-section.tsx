@@ -1,12 +1,12 @@
-import { ButtonAnchor } from "@nowly/ui";
+import { ButtonAnchor } from "@nowly/ui/button-link";
 
 import { docsHref } from "@/features/seo/lib/seo";
-import { RiArrowRightLine } from "@nowly/ui/icons";
+import { RiArrowRightLine } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
 const kw = "text-accent";
 const fn = "text-foreground";
-const str = "text-foreground/55";
+const str = "text-foreground/80";
 const muted = "text-muted-foreground";
 
 export const OpenSourceSection = async () => {

@@ -15,7 +15,15 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./icons": "./src/icons.ts"
+    "./button": "./src/button.tsx",
+    "./button-link": "./src/button-link.tsx",
+    "./button-variants": "./src/button-variants.ts",
+    "./card": "./src/card.tsx",
+    "./footer": "./src/footer.tsx",
+    "./icons": "./src/icons.ts",
+    "./locale-selector": "./src/locale-selector.tsx",
+    "./sheet": "./src/sheet.tsx",
+    "./utils": "./src/utils.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

@@ -1,10 +1,10 @@
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { homeSectionAltClass, SectionHeading } from "@/features/home/components/section-heading";
 import { ButtonLink } from "@/components/button-link";
-import { cn } from "@nowly/ui";
+import { cn } from "@nowly/ui/utils";
 
 
-import { RiBookShelfFill, RiWindow2Fill } from "@nowly/ui/icons";
+import { RiBookShelfFill, RiWindow2Fill } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
 type StepItem = {

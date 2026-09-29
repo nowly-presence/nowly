@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@nowly/analytics", "@nowly/ui", "@nowly/locales"],
   poweredByHeader: false,
   experimental: {
-    optimizePackageImports: ["@nowly/ui"],
     globalNotFound: true,
   },
   images: {

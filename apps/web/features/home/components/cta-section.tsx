@@ -1,7 +1,7 @@
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { homeSectionAltClass } from "@/features/home/components/section-heading";
 import { Link } from "@/i18n/navigation";
-import { cn } from "@nowly/ui";
+import { cn } from "@nowly/ui/utils";
 
 import { getTranslations } from "next-intl/server";
 

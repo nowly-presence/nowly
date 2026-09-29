@@ -1,7 +1,6 @@
 import { BrandLockup } from "@/features/layout/components/brand-lockup";
-import { ThemeToggle } from "@/features/layout/components/theme-toggle";
-import { Footer as SharedFooter, FOOTER_DISCORD_SITE_URL, LocaleSelector } from "@nowly/ui";
-
+import { FooterActions } from "@/features/layout/components/footer-actions";
+import { Footer as SharedFooter, FOOTER_DISCORD_SITE_URL } from "@nowly/ui/footer";
 import type { LocaleString } from "@nowly/locales";
 import { getLocale, getTranslations } from "next-intl/server";
 
@@ -12,12 +11,7 @@ export const Footer = async () => {
     <SharedFooter
       locale={locale as LocaleString}
       brand={<BrandLockup width={119} height={48} className="h-14 w-auto" />}
-      actions={
-        <>
-          <LocaleSelector />
-          <ThemeToggle />
-        </>
-      }
+      actions={<FooterActions />}
       labels={{
         product: t("product"),
         home: t("home"),

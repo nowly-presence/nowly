@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
-import { ButtonLink as BaseButtonLink } from "@nowly/ui";
+import { ButtonLink as BaseButtonLink } from "@nowly/ui/button-link";
 import type { ComponentProps } from "react";
 
 // Binds @nowly/ui's ButtonLink to next-intl's locale-aware Link so button-styled

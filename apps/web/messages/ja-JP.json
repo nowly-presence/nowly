@@ -740,7 +740,7 @@
   },
   "cookie-banner": {
     "message": "このサイトは必須の言語Cookieを使用しています。将来広告が有効化された場合、Googleが広告技術を使用する可能性もあります。",
-    "learn-more": "詳しく見る",
+    "learn-more": "Cookieポリシーを読む",
     "dismiss": "了解しました"
   },
   "privacy-page": {

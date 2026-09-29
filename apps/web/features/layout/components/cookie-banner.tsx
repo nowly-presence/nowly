@@ -1,7 +1,8 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
-import { Button } from "@nowly/ui";
+import { buttonVariants } from "@nowly/ui/button-variants";
+import { cn } from "@nowly/ui/utils";
 
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
@@ -46,9 +47,13 @@ export const CookieBanner = () => {
           </Link>
         </p>
 
-        <Button type="button" variant="inverted" className="shrink-0" onClick={dismiss}>
+        <button
+          type="button"
+          className={cn(buttonVariants({ variant: "inverted" }), "shrink-0")}
+          onClick={dismiss}
+        >
           {t("dismiss")}
-        </Button>
+        </button>
       </div>
     </div>
   );

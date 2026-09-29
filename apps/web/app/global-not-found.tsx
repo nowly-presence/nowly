@@ -1,4 +1,4 @@
-import { ButtonLink } from "@nowly/ui";
+import { ButtonLink } from "@nowly/ui/button-link";
 import type { Metadata } from "next";
 import "./globals.css";
 import { satoshi } from "./fonts";

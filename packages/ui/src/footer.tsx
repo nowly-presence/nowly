@@ -132,7 +132,7 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
       <div className="mx-auto mt-5 flex max-w-[1280px] flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-1">
           <p>{labels.copyright}</p>
-          <p className="text-muted-foreground/55">{labels.trademark}</p>
+          <p className="text-muted-foreground/70">{labels.trademark}</p>
         </div>
         <nav className="flex flex-wrap gap-x-4 gap-y-1 sm:justify-end">
           {legalLinks.map((link) => (
