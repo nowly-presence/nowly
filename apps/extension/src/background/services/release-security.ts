@@ -48,14 +48,11 @@ const fetchPublicKey = async (): Promise<string | null> => {
       return data.publicKey
     }
   } catch {
-    /* fallback */
   }
   return null
 }
 
 const ensurePublicKey = async (refresh = false): Promise<string> => {
-  // Prefer memory, then persisted storage, and only contact the API as a last
-  // resort. This keeps verification available during temporary API outages.
   if (cachedRemoteKey && !refresh) return cachedRemoteKey
 
   if (!refresh) {
@@ -67,7 +64,6 @@ const ensurePublicKey = async (refresh = false): Promise<string> => {
         return cachedRemoteKey
       }
     } catch {
-      // fall through to remote fetch
     }
   }
 
@@ -93,8 +89,6 @@ const verifyWithKey = async (keyB64: string, release: PresenceRelease): Promise<
 }
 
 const verifySignature = async (release: PresenceRelease): Promise<boolean> => {
-  // Key rotation is intentionally fail-closed: try the cached/current key,
-  // then the bundled fallback, and refresh once before rejecting the release.
   const primaryKey = await ensurePublicKey()
 
   if (await verifyWithKey(primaryKey, release)) return true

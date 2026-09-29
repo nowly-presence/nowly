@@ -30,10 +30,6 @@ export const setFocusedTabId = (value: number | null): void => {
   focusedTabId = value
 }
 
-// Persisted (not an in-memory Map) because the MV3 service worker is routinely killed
-// after ~30s idle and respawns on the next event. An in-memory map would reset to empty
-// on respawn while a presence tab stays open; a later chrome.tabs.onRemoved for that tab
-// would then find no entry to clean up, permanently orphaning its active-slug/heartbeat.
 const getTabPresencesMap = async (): Promise<Record<number, TabPresenceEntry>> => {
   const stored = await chrome.storage.session.get(TAB_PRESENCES_SESSION_KEY)
   const map = stored[TAB_PRESENCES_SESSION_KEY]
@@ -100,10 +96,6 @@ export const removeActiveSlugFromState = async (slug: string): Promise<void> => 
   await chrome.storage.session.set({ [ACTIVE_SLUGS_SESSION_KEY]: slugs.filter((entry) => entry !== slug) })
 }
 
-// Removes multiple slugs in a single read-modify-write pass. Calling
-// removeActiveSlugFromState concurrently (e.g. Promise.all over a bulk
-// action) would race - each call reads the same "before" snapshot and the
-// last write wins, silently un-removing whichever slug lost the race.
 export const removeActiveSlugsFromState = async (slugsToRemove: string[]): Promise<void> => {
   const slugs = await getActiveSlugsSnapshot()
   const remaining = new Set(slugsToRemove)
@@ -116,10 +108,6 @@ export const clearActiveSlugsFromState = async (): Promise<void> => {
 
 export const hasActiveSlugs = async (): Promise<boolean> => (await getActiveSlugsSnapshot()).length > 0
 
-// Persisted like activeSlugs (chrome.storage.session) so a mid-viewing SW
-// respawn doesn't treat a still-open tab's continuous session as ended -
-// otherwise every eviction fragments one viewing session into many short
-// presence_session_start/end analytics pairs.
 const getActiveSessions = async (): Promise<Record<string, number>> => {
   const stored = await chrome.storage.session.get(ACTIVE_SESSIONS_SESSION_KEY)
   const sessions = stored[ACTIVE_SESSIONS_SESSION_KEY]
@@ -141,18 +129,12 @@ export const removeActiveSession = async (slug: string): Promise<void> => {
   await chrome.storage.session.set({ [ACTIVE_SESSIONS_SESSION_KEY]: sessions })
 }
 
-// Bulk equivalent - see removeActiveSlugsFromState for why concurrent
-// per-slug writes to the same storage key race.
 export const removeActiveSessions = async (slugs: string[]): Promise<void> => {
   const sessions = await getActiveSessions()
   for (const slug of slugs) delete sessions[slug]
   await chrome.storage.session.set({ [ACTIVE_SESSIONS_SESSION_KEY]: sessions })
 }
 
-// Chrome's contextMenus API has no "about to be shown" event, so a dynamic
-// per-tab label/enabled state has to be kept in sync eagerly instead. This is
-// the single choke point every tab-presence/focus mutation already goes
-// through (see broadcastActiveTab), so listeners here stay accurate for free.
 const broadcastListeners = new Set<() => void>()
 
 export const onBroadcastStateChanged = (listener: () => void): void => {

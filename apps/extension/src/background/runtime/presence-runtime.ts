@@ -25,7 +25,6 @@ export const createPresenceRuntime = (
   const listeners = new Map();
   const instances = [];
   const storage = new Map();
-  // Mutable settings object: extension-injected values take priority, missing keys fall back to presence defaults
   const ctxSettings = Object.assign({}, NOWLY_SETTINGS);
   const ctxStrings = Object.assign({}, NOWLY_STRINGS);
   const localizeText = (value) => {
@@ -68,7 +67,6 @@ export const createPresenceRuntime = (
         __PRESENCE_SETTINGS__ = definitions;
       }
       if (typeof definitions !== "object" || definitions === null) return ctxSettings;
-      // User settings override script defaults; missing values still receive the script default.
       for (const [key, value] of Object.entries(definitions)) {
         if (!(key in ctxSettings)) {
           ctxSettings[key] = typeof value === "object" && value !== null && "default" in value
@@ -162,8 +160,6 @@ export const createPresenceRuntime = (
     factory?.init?.(ctx);
 
     const tick = () => {
-      // A presence can register multiple UpdateData listeners. Each callback is
-      // isolated so one rejected listener cannot stop the remaining callbacks.
       try {
         factory?.tick?.(ctx);
 
@@ -219,9 +215,6 @@ export const createPresenceRuntime = (
     window.addEventListener("popstate", scheduleTick);
     window.addEventListener("hashchange", scheduleTick);
     const observer = new MutationObserver(() => {
-      // SPAs replace media and content without navigation events; rescan and
-      // debounce here to keep timestamps/activity data current without ticking
-      // once for every individual DOM mutation.
       scanMedia();
       scheduleTick();
     });

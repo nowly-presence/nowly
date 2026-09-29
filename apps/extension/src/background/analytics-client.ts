@@ -1,11 +1,11 @@
-import { createAnalyticsClient, type ConsentState, type TrackInput } from "@nowly/analytics"
+import { createAnalyticsClient, type TrackInput } from "@nowly/analytics"
 import { getEffectiveApiUrl } from "@/background/services/api-state"
 import { getActiveDeviceId } from "@/background/services/device-sync"
 import { getAnalyticsConsent } from "@/background/storage/device.store"
 
 const client = createAnalyticsClient({
   transport: {
-    async send(events) {
+    send: async (events) => {
       const response = await fetch(`${getEffectiveApiUrl()}/insights/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -14,9 +14,8 @@ const client = createAnalyticsClient({
       if (!response.ok) throw new Error(`analytics transport failed: ${response.status}`)
     },
   },
-  // Opt-in: nothing is sent until the user explicitly grants consent in settings.
   consent: {
-    get: async (): Promise<ConsentState> => ((await getAnalyticsConsent()) ? "granted" : "denied"),
+    get: async () => ((await getAnalyticsConsent()) ? "granted" : "denied"),
   },
   identity: {
     getDeviceId: () => getActiveDeviceId(),
@@ -26,6 +25,5 @@ const client = createAnalyticsClient({
 
 export const trackAnalytics = (key: string, input: TrackInput = {}): void => {
   void client.track(key, input).catch(() => {
-    // Best-effort ingest.
   })
 }

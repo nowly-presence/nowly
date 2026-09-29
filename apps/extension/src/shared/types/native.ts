@@ -44,7 +44,5 @@ export type NativeStatus = {
 export type UserScriptsStatus = {
   enabled: boolean
   reason?: string
-  // Chrome requires an explicit user toggle in the extension details UI.
-  // Surfaced so onboarding can explain what to do.
   requiresUserToggle?: boolean
 }

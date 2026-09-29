@@ -1,12 +1,3 @@
-import * as React from "react"
-import { cn } from "@/ui/utils"
+import { cn } from "@/ui/cn"
 
-const Skeleton = ({ className, ...props }: React.ComponentProps<"div">) => (
-  <div
-    data-slot="skeleton"
-    className={cn("animate-pulse rounded-md bg-secondary", className)}
-    {...props}
-  />
-)
-
-export { Skeleton }
+export const Skeleton = ({ className }: { className?: string }) => <div className={cn("animate-pulse rounded-sm bg-hover", className)} />

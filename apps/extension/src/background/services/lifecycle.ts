@@ -1,8 +1,8 @@
 import { broadcastActiveTab, handleClearActivity, handleRemovedTab, restoreActivityBadge } from "@/background/managers/activity-manager"
-import { installBundledPresences, drainInstallQueue } from "@/background/managers/presence-manager"
+import { drainInstallQueue, installBundledPresences } from "@/background/managers/presence-manager"
 import { trackAnalytics } from "@/background/analytics-client"
 import { addRuntimeLog } from "@/background/runtime-logs"
-import { syncPresenceScripts } from "@/background/runtime/presence-scripts"
+import { refreshPresenceLanguage, syncPresenceScripts } from "@/background/runtime/presence-scripts"
 import { initializeCustomApiUrl } from "@/background/services/api-state"
 import { setFocusedTabId } from "@/background/services/background-context"
 import { registerContextMenu } from "@/background/services/context-menu"
@@ -11,6 +11,7 @@ import { connectNative, onNativeResponse } from "@/background/services/native"
 import { getPresences, setDebug } from "@/background/storage/presences.store"
 import { IS_CANARY } from "@/shared/brand"
 import { WEB_BASE_URL } from "@/shared/constants"
+import { LOCALE_PREFERENCE_KEY } from "@/shared/locales"
 import type { InstalledPresences } from "@/shared/types"
 
 type ChromeWithSidePanel = typeof chrome & {
@@ -33,7 +34,6 @@ const enableSidePanelAction = (): void => {
   if (!sidePanel) return
 
   void sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {
-    // Some Chromium builds expose sidePanel without action-click behavior.
   })
 }
 
@@ -62,7 +62,6 @@ const registerNativeResponseHandler = (): void => {
         status: message.status,
         nativeVersion: message.version,
       })
-      // ponytail: track only on state change, not every tick, to keep insights volume sane
       if (!message.connected && lastHeartbeatConnected !== false) {
         trackAnalytics("native_heartbeat_failed", { payload: { reason: message.status } })
       }
@@ -89,10 +88,6 @@ const detectFocusedTab = async (): Promise<void> => {
   if (tab?.id != null) setFocusedTabId(tab.id)
 }
 
-// onStartup/onInstalled and the unconditional initializeBackground() call at
-// module load can all fire within the same tick on a real browser start or
-// install - memoizing the in-flight promise stops them from racing (double
-// /devices/sync, concurrent read-modify-write of installed presences).
 let bootPromise: Promise<InstalledPresences> | null = null
 
 const runBootBackground = async (options: { restoreBadge?: boolean; syncScripts?: boolean }): Promise<InstalledPresences> => {
@@ -140,6 +135,10 @@ export const registerLifecycleHandlers = (): void => {
       void getPresences().then((presences) => syncPresenceScripts(presences))
     })
   }
+
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && LOCALE_PREFERENCE_KEY in changes) void refreshPresenceLanguage()
+  })
 
   chrome.tabs.onRemoved.addListener(handleRemovedTab)
 

@@ -1,7 +1,5 @@
 import type { InstalledPresences } from "@/shared/types"
 
-/** Types and pure helpers for the `chrome.userScripts` presence registration. */
-
 export type UserScriptSource = {
   code?: string
   file?: string
@@ -32,28 +30,3 @@ export const visiblePresences = (presences: InstalledPresences): InstalledPresen
       ([, presence]) => presence?.metadata?.slug && presence.metadata.name && Array.isArray(presence.metadata.url),
     ),
   ) as InstalledPresences
-
-export const toMatchPatterns = (urls: string[]): string[] => {
-  const patterns = new Set<string>()
-
-  for (const rawUrl of urls) {
-    const raw = rawUrl.trim()
-    if (!raw) continue
-
-    if (raw.includes("://")) {
-      const withPath = raw.endsWith("/*") || raw.includes("/", raw.indexOf("://") + 3) ? raw : `${raw}/*`
-      patterns.add(withPath)
-      continue
-    }
-
-    const host = raw.replace(/^https?:\/\//, "").replace(/\/.*$/, "")
-    if (host === "*" || host === "*.*" || host === "<all_urls>") continue
-    patterns.add(`*://${host}/*`)
-
-    if (!host.startsWith("*.") && !host.startsWith("*.")) {
-      patterns.add(`*://*.${host}/*`)
-    }
-  }
-
-  return [...patterns]
-}

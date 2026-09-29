@@ -6,10 +6,6 @@ const openForWindow = (sidePanel: typeof chrome.sidePanel, windowId: number): vo
   void sidePanel.open({ windowId }).catch(() => {})
 }
 
-/**
- * chrome.sidePanel.open() must run in the same user-gesture turn.
- * Do not await other APIs (storage, windows.getLastFocused as a Promise) first.
- */
 export const openNowlyPanel = (tab?: chrome.tabs.Tab): void => {
   if (import.meta.env.BROWSER === "firefox") {
     void (chrome as ChromeWithSidebarAction).sidebarAction?.open()?.catch(() => {})

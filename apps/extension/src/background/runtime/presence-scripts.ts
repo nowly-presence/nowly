@@ -1,35 +1,34 @@
 import { addRuntimeLog } from "@/background/runtime-logs"
 import { presenceInjector } from "@/background/runtime/presence-injection"
 import { createPresenceRuntime } from "@/background/runtime/presence-runtime"
-import { RegisteredUserScript, toMatchPatterns, userScriptId } from "@/background/runtime/user-scripts"
+import { type RegisteredUserScript, userScriptId } from "@/background/runtime/user-scripts"
+import { toMatchPatterns } from "@/shared/url-patterns"
 import { getEffectiveApiUrl } from "@/background/services/api-state"
 import { verifyPresenceRelease } from "@/background/services/release-security"
-import { getPresenceSettings, setDebug } from "@/background/storage/presences.store"
+import { getPresences, getPresenceSettings, setDebug } from "@/background/storage/presences.store"
 import { getSettings } from "@/background/storage/settings.store"
 import { CDN_BASE_URL } from "@/shared/constants"
+import { loadLocale, type Locale } from "@/shared/locales"
+import { configuredPresenceLocale } from "@/shared/presence-language"
 import type { ExtensionSettings, InstalledPresences, PresenceMetadata, StoredPresence } from "@/shared/types"
 
 export const unregisterPresenceScript = async (slug: string): Promise<void> => {
   try {
     await presenceInjector.unregister(userScriptId(slug))
   } catch {
-    // The script may not be registered yet.
   }
 }
 
-export const getPresenceStrings = (slug: string, metadata: PresenceMetadata, settings: ExtensionSettings): Record<string, string> => {
+export const getPresenceStrings = (slug: string, metadata: PresenceMetadata, settings: ExtensionSettings, uiLocale: Locale): Record<string, string> => {
   if (!metadata.locales) return {}
-  const configured =
-    settings.presenceLanguage === "per-presence" || !settings.presenceLanguage
-      ? (settings.presenceLanguages?.[slug] ?? "en-US")
-      : settings.presenceLanguage
+  const configured = configuredPresenceLocale(settings, slug, metadata.locales, uiLocale)
   return metadata.locales[configured] ?? metadata.locales["en-US"] ?? {}
 }
 
 export const getPresenceRuntime = async (slug: string, metadata: PresenceMetadata, bundle: string): Promise<string> => {
-  const [allSettings, extensionSettings] = await Promise.all([getPresenceSettings(), getSettings()])
+  const [allSettings, extensionSettings, uiLocale] = await Promise.all([getPresenceSettings(), getSettings(), loadLocale()])
   const presenceSettings = allSettings[slug] ?? {}
-  const strings = getPresenceStrings(slug, metadata, extensionSettings)
+  const strings = getPresenceStrings(slug, metadata, extensionSettings, uiLocale)
   return createPresenceRuntime(slug, metadata.name, bundle, presenceSettings, strings, getEffectiveApiUrl(), CDN_BASE_URL)
 }
 
@@ -78,5 +77,25 @@ export const syncPresenceScripts = async (presences: InstalledPresences): Promis
     if (!result.ok) {
       await setDebug({ stage: "userScripts", message: `[${slug}] ${result.error ?? "failed to register presence"}`, updatedAt: Date.now() })
     }
+  }
+}
+
+export const refreshPresenceLanguage = async (): Promise<void> => {
+  const [presences, presenceSettings, settings, uiLocale] = await Promise.all([getPresences(), getPresenceSettings(), getSettings(), loadLocale()])
+  await syncPresenceScripts(presences)
+
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+  if (!tab?.id) return
+
+  for (const [slug, stored] of Object.entries(presences)) {
+    if (!stored.enabled || !stored.metadata.locales) continue
+    chrome.tabs
+      .sendMessage(tab.id, {
+        type: "PRESENCE_SETTINGS_UPDATED",
+        slug,
+        settings: presenceSettings[slug] ?? {},
+        strings: getPresenceStrings(slug, stored.metadata, settings, uiLocale),
+      })
+      .catch(() => {})
   }
 }

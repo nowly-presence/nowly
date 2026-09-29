@@ -1,239 +1,85 @@
-import { RiComputerLine, RiGlobalLine, RiMoonLine, RiSunLine } from "@remixicon/react"
-import { LocaleFlag } from "@/components/shared/locale-flag"
-import { SettingRow } from "@/features/settings/setting-row"
-import { SettingsSectionHeader } from "@/features/settings/settings-section-header"
-import { t, type LocalePreference } from "@/shared/i18n"
-import type { AppearanceMode, ExtensionSettings } from "@/shared/types"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select"
-import { Switch } from "@/ui/switch"
+import { useMemo } from "react"
+import { RiGlobalLine, RiTranslate2 } from "@remixicon/react"
+import { useExtensionState } from "@/hooks/extension-state-provider"
+import { useI18n } from "@/hooks/i18n-provider"
+import { track } from "@/lib/messages"
+import { commonPresenceLocales } from "@/lib/presence-locales"
+import { isLocale, isLongLocale, LOCALE_LONG_MAP, LOCALE_NAMES, longLocaleName, PRESENCE_LOCALES, UI_LOCALES } from "@/shared/locales"
+import type { AppearanceMode } from "@/shared/types"
+import { Group } from "@/ui/card"
+import { FieldRow } from "@/ui/field-row"
+import { LocaleFlag } from "@/ui/locale-flag"
+import { Section } from "@/ui/section"
+import { Segmented } from "@/ui/segmented"
+import { Select, type SelectOption } from "@/ui/select"
 
-type Props = {
-  localePreference: LocalePreference
-  onLocaleChange: (preference: LocalePreference) => void
-  settings: ExtensionSettings
-  onSettingsChange: (partial: Partial<ExtensionSettings>) => void
-  onBack: () => void
-}
+const PER_PRESENCE = "per-presence"
 
-export const AppearanceSection = ({ localePreference, onLocaleChange, settings, onSettingsChange, onBack }: Props): React.JSX.Element => (
-  <div className="flex flex-col gap-3">
-    <SettingsSectionHeader
-      title={t("settings-group-appearance")}
-      onBack={onBack}
-    />
-    <div className="overflow-hidden rounded-xl border border-border bg-card divide-y divide-border">
-      <SettingRow
-        title={t("language")}
-        description={t("language-description")}
-        controlId="language-select"
-        control={
-          <Select
-            value={localePreference}
-            onValueChange={(value) => onLocaleChange(value as LocalePreference)}
-            items={{
-              browser: (
-                <>
-                  <RiGlobalLine className="size-4 text-muted-foreground" />
-                  {t("locale-auto")}
-                </>
-              ),
-              fr: (
-                <>
-                  <LocaleFlag locale="fr-FR" />
-                  {t("locale-fr")}
-                </>
-              ),
-              en: (
-                <>
-                  <LocaleFlag locale="en-US" />
-                  {t("locale-en")}
-                </>
-              ),
-              es: (
-                <>
-                  <LocaleFlag locale="es-ES" />
-                  {t("locale-es")}
-                </>
-              ),
-              de: (
-                <>
-                  <LocaleFlag locale="de-DE" />
-                  {t("locale-de")}
-                </>
-              ),
-              "pt-BR": (
-                <>
-                  <LocaleFlag locale="pt-BR" />
-                  {t("locale-pt-br")}
-                </>
-              ),
-              pl: (
-                <>
-                  <LocaleFlag locale="pl-PL" />
-                  {t("locale-pl")}
-                </>
-              ),
-              ja: (
-                <>
-                  <LocaleFlag locale="ja-JP" />
-                  {t("locale-ja")}
-                </>
-              ),
-              ko: (
-                <>
-                  <LocaleFlag locale="ko-KR" />
-                  {t("locale-ko")}
-                </>
-              ),
-              tr: (
-                <>
-                  <LocaleFlag locale="tr-TR" />
-                  {t("locale-tr")}
-                </>
-              ),
-              ms: (
-                <>
-                  <LocaleFlag locale="ms-MY" />
-                  {t("locale-ms")}
-                </>
-              ),
-              el: (
-                <>
-                  <LocaleFlag locale="el-GR" />
-                  {t("locale-el")}
-                </>
-              ),
-            }}
-          >
-            <SelectTrigger
-              id="language-select"
-              size="sm"
-              className="w-36"
-              aria-label={t("language")}
-            >
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="browser">
-                <RiGlobalLine className="size-4 text-muted-foreground" />
-                {t("locale-auto")}
-              </SelectItem>
-              <SelectItem value="fr">
-                <LocaleFlag locale="fr-FR" />
-                {t("locale-fr")}
-              </SelectItem>
-              <SelectItem value="en">
-                <LocaleFlag locale="en-US" />
-                {t("locale-en")}
-              </SelectItem>
-              <SelectItem value="es">
-                <LocaleFlag locale="es-ES" />
-                {t("locale-es")}
-              </SelectItem>
-              <SelectItem value="de">
-                <LocaleFlag locale="de-DE" />
-                {t("locale-de")}
-              </SelectItem>
-              <SelectItem value="pt-BR">
-                <LocaleFlag locale="pt-BR" />
-                {t("locale-pt-br")}
-              </SelectItem>
-              <SelectItem value="pl">
-                <LocaleFlag locale="pl-PL" />
-                {t("locale-pl")}
-              </SelectItem>
-              <SelectItem value="ja">
-                <LocaleFlag locale="ja-JP" />
-                {t("locale-ja")}
-              </SelectItem>
-              <SelectItem value="ko">
-                <LocaleFlag locale="ko-KR" />
-                {t("locale-ko")}
-              </SelectItem>
-              <SelectItem value="tr">
-                <LocaleFlag locale="tr-TR" />
-                {t("locale-tr")}
-              </SelectItem>
-              <SelectItem value="ms">
-                <LocaleFlag locale="ms-MY" />
-                {t("locale-ms")}
-              </SelectItem>
-              <SelectItem value="el">
-                <LocaleFlag locale="el-GR" />
-                {t("locale-el")}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        }
-      />
+const optionIconClass = "size-4 shrink-0 text-muted"
 
-      <SettingRow
-        title={t("appearance")}
-        description={t("appearance-description")}
-        controlId="appearance-select"
-        control={
-          <Select
+export const AppearanceSection = () => {
+  const { state, updateSettings } = useExtensionState()
+  const { t, preference, setPreference } = useI18n()
+  const { settings } = state
+  const presenceLanguage = settings.presenceLanguage ?? PER_PRESENCE
+  const common = useMemo(() => commonPresenceLocales(state.presences), [state.presences])
+  const restricted = common.length < PRESENCE_LOCALES.length
+
+  const presenceLanguageOptions: SelectOption[] = [
+    { value: PER_PRESENCE, label: t("settings.perPresence"), icon: <RiTranslate2 className={optionIconClass} /> },
+    ...PRESENCE_LOCALES.filter((code) => common.includes(code) || code === presenceLanguage).map((code) => ({
+      value: code,
+      label: longLocaleName(code),
+      hint: common.includes(code) ? undefined : t("settings.presenceLanguagePartial"),
+      icon: <LocaleFlag locale={code} />,
+    })),
+  ]
+
+  return (
+    <Section title={t("settings.appearance")}>
+      <Group>
+        <FieldRow title={t("settings.theme")} layout="stacked">
+          <Segmented<AppearanceMode>
+            label={t("settings.theme")}
             value={settings.appearance ?? "system"}
-            onValueChange={(value) => onSettingsChange({ appearance: value as AppearanceMode })}
-            items={{
-              system: (
-                <>
-                  <RiComputerLine className="size-4 text-muted-foreground" />
-                  {t("appearance-system")}
-                </>
-              ),
-              light: (
-                <>
-                  <RiSunLine className="size-4 text-muted-foreground" />
-                  {t("appearance-light")}
-                </>
-              ),
-              dark: (
-                <>
-                  <RiMoonLine className="size-4 text-muted-foreground" />
-                  {t("appearance-dark")}
-                </>
-              ),
-            }}
-          >
-            <SelectTrigger
-              id="appearance-select"
-              size="sm"
-              className="w-36"
-              aria-label={t("appearance")}
-            >
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="system">
-                <RiComputerLine className="size-4 text-muted-foreground" />
-                {t("appearance-system")}
-              </SelectItem>
-              <SelectItem value="light">
-                <RiSunLine className="size-4 text-muted-foreground" />
-                {t("appearance-light")}
-              </SelectItem>
-              <SelectItem value="dark">
-                <RiMoonLine className="size-4 text-muted-foreground" />
-                {t("appearance-dark")}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        }
-      />
-
-      <SettingRow
-        title={t("bg-animation")}
-        description={t("bg-animation-description")}
-        controlId="bg-animation-toggle"
-        control={
-          <Switch
-            id="bg-animation-toggle"
-            checked={settings.backgroundAnimation !== false}
-            onCheckedChange={(checked) => onSettingsChange({ backgroundAnimation: checked })}
+            onChange={(value) => void updateSettings({ appearance: value })}
+            options={[
+              { value: "system", label: t("settings.themeSystem") },
+              { value: "light", label: t("settings.themeLight") },
+              { value: "dark", label: t("settings.themeDark") },
+            ]}
           />
-        }
-      />
-    </div>
-  </div>
-)
+        </FieldRow>
+        <FieldRow title={t("settings.language")} controlClassName="w-44">
+          <Select
+            aria-label={t("settings.language")}
+            value={preference}
+            onChange={(value) => {
+              setPreference(isLocale(value) ? value : "browser")
+              track("settings_language_changed")
+            }}
+            options={[
+              { value: "browser", label: t("settings.languageBrowser"), icon: <RiGlobalLine className={optionIconClass} /> },
+              ...UI_LOCALES.map((code) => ({ value: code, label: LOCALE_NAMES[code], icon: <LocaleFlag locale={LOCALE_LONG_MAP[code]} /> })),
+            ]}
+          />
+        </FieldRow>
+        <FieldRow
+          title={t("settings.presenceLanguage")}
+          description={t("settings.presenceLanguageHint")}
+          note={restricted ? t("settings.presenceLanguageNote", { perPresence: t("settings.perPresence") }) : undefined}
+          controlClassName="w-44"
+        >
+          <Select
+            aria-label={t("settings.presenceLanguage")}
+            value={presenceLanguage}
+            onChange={(value) => {
+              if (value === PER_PRESENCE || isLongLocale(value)) void updateSettings({ presenceLanguage: value })
+            }}
+            options={presenceLanguageOptions}
+          />
+        </FieldRow>
+      </Group>
+    </Section>
+  )
+}

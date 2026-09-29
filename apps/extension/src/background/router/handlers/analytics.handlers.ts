@@ -7,9 +7,6 @@ export const handleGetAnalyticsConsent: Handler<"GET_ANALYTICS_CONSENT"> = async
 
 export const handleSetAnalyticsConsent: Handler<"SET_ANALYTICS_CONSENT"> = async ({ granted }) => {
   const next = await setAnalyticsConsent(granted)
-  // Only the acceptance itself is worth recording - a decline must not send
-  // anything (consent is denied by the time this resolves, so the client's
-  // own gate would drop it anyway).
   if (next) trackAnalytics("analytics_consent_accepted", { source: "extension_settings" })
   return { granted: next }
 }

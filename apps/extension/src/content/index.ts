@@ -25,9 +25,6 @@ const WEB_MESSAGE_TYPES = new Set([
   "SET_ANALYTICS_CONSENT",
 ])
 
-// The external web protocol keeps its own message names (a stable contract
-// with nowly.me) - only "GET_INSTALLED" doesn't match the internal router's
-// vocabulary (GET_PRESENCES), so it's translated at the boundary.
 const toRouterMessageType = (type: string): string => (type === "GET_INSTALLED" ? "GET_PRESENCES" : type)
 
 const sendRuntimeMessage = async <T = unknown>(message: Record<string, unknown>): Promise<T | null> => {

@@ -1,242 +1,240 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react"
+import type { OnboardingState } from "@/background/storage/onboarding.store"
 import { sendMessage } from "@/lib/messages"
-import type { CurrentActivity, ExtensionSettings, InstalledPresences, NativeStatus, PresenceDebug } from "@/shared/types"
+import type {
+  CurrentActivity,
+  ExtensionSettings,
+  InstalledPresences,
+  NativeStatus,
+  PresenceCatalogItem,
+  TabState,
+  UserScriptsStatus,
+} from "@/shared/types"
 
-type ExtensionState = {
-  activity: CurrentActivity | null
-  debug: PresenceDebug | null
-  entries: Array<[string, InstalledPresences[string]]>
-  installQueue: string[]
-  isLoading: boolean
-  isUnpacked: boolean
-  nativeStatus: NativeStatus
+export type CatalogState =
+  | { status: "idle" | "loading"; items: PresenceCatalogItem[] }
+  | { status: "ready"; items: PresenceCatalogItem[] }
+  | { status: "error"; items: PresenceCatalogItem[]; error: string }
+
+export type ExtensionState = {
+  ready: boolean
   presences: InstalledPresences
-  analyticsConsent: boolean
   settings: ExtensionSettings
+  activity: CurrentActivity | null
+  native: NativeStatus
+  userScripts: UserScriptsStatus
+  onboarding: OnboardingState
+  tab: TabState
+  presenceSettings: Record<string, Record<string, unknown>>
+  analyticsConsent: boolean
   updates: Record<string, string>
-  isCheckingUpdates: boolean
-  checkUpdates: () => void
-  refresh: () => void
-  connectNative: () => void
-  isConnectingNative: boolean
-  removePresence: (slug: string) => void
-  togglePresence: (slug: string, enabled: boolean) => void
-  bulkRemovePresences: (slugs: string[]) => void
-  bulkTogglePresences: (slugs: string[], enabled: boolean) => void
-  installPresenceFromApi: (slug: string) => Promise<{ ok: boolean; queued: boolean }>
-  retryInstallQueue: () => Promise<void>
-  setPresencePaused: (paused: boolean) => void
-  setSettings: (partial: Partial<ExtensionSettings>) => void
-  setAnalyticsConsent: (granted: boolean) => void
+  catalog: CatalogState
 }
 
-const FALLBACK_NATIVE_STATUS: NativeStatus = { connected: false, status: "unknown", discordConnected: false }
-
-const FALLBACK_SETTINGS: ExtensionSettings = {
-  presenceDisplayMode: "category",
-  showPlayer: true,
-  scheduleEnabled: false,
+const INITIAL: ExtensionState = {
+  ready: false,
+  presences: {},
+  settings: { presenceDisplayMode: "category", showPlayer: true },
+  activity: null,
+  native: { connected: false, status: "connecting" },
+  userScripts: { enabled: true },
+  onboarding: { devReplayOnboarding: false, onboardingCompleted: true, nativeSeenConnectedOnce: false, nativeProfile: null },
+  tab: { tabId: null, hostname: null, muted: false, installedSlug: null, activities: [] },
+  presenceSettings: {},
+  analyticsConsent: false,
+  updates: {},
+  catalog: { status: "idle", items: [] },
 }
 
-const ExtensionStateContext = createContext<ExtensionState | null>(null)
+type Refreshers = {
+  presences: () => Promise<void>
+  settings: () => Promise<void>
+  activity: () => Promise<void>
+  native: () => Promise<void>
+  userScripts: () => Promise<void>
+  onboarding: () => Promise<void>
+  tab: () => Promise<void>
+  presenceSettings: () => Promise<void>
+  consent: () => Promise<void>
+  updates: () => Promise<void>
+  catalog: (force?: boolean) => Promise<void>
+}
 
-export const ExtensionStateProvider = ({ children }: { children: ReactNode }): React.JSX.Element => {
-  const [presences, setPresences] = useState<InstalledPresences>({})
-  const [activity, setActivity] = useState<CurrentActivity | null>(null)
-  const [debug, setDebugState] = useState<PresenceDebug | null>(null)
-  const [nativeStatus, setNativeStatus] = useState<NativeStatus>(FALLBACK_NATIVE_STATUS)
-  const [settings, setSettingsState] = useState<ExtensionSettings>(FALLBACK_SETTINGS)
-  const [analyticsConsent, setAnalyticsConsentState] = useState(false)
-  const [installQueue, setInstallQueue] = useState<string[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isUnpacked, setIsUnpacked] = useState(false)
-  const [updates, setUpdates] = useState<Record<string, string>>({})
-  const [isCheckingUpdates, setIsCheckingUpdates] = useState(false)
-  const [isConnectingNative, setIsConnectingNative] = useState(false)
-  const connectingNativeRef = useRef(false)
-  const visibleTriggeredRef = useRef(false)
+type ExtensionStateValue = {
+  state: ExtensionState
+  refresh: Refreshers
+  patch: (partial: Partial<ExtensionState>) => void
+  updateSettings: (partial: Partial<ExtensionSettings>) => Promise<ExtensionSettings>
+}
+
+const ExtensionStateContext = createContext<ExtensionStateValue | null>(null)
+
+const NATIVE_POLL_MS = 3000
+
+export const ExtensionStateProvider = ({ children }: { children: ReactNode }) => {
+  const [state, setState] = useState<ExtensionState>(INITIAL)
+  const catalogInFlight = useRef<Promise<void> | null>(null)
+
+  const patch = useCallback((partial: Partial<ExtensionState>) => setState((current) => ({ ...current, ...partial })), [])
+
+  const refresh = useMemo<Refreshers>(() => {
+    const safe = <T,>(loader: () => Promise<T>, apply: (value: T) => void) => async () => {
+      try {
+        const value = await loader()
+        if (value !== undefined) apply(value)
+      } catch {
+      }
+    }
+
+    return {
+      presences: safe(() => sendMessage("GET_PRESENCES"), (presences) => patch({ presences })),
+      settings: safe(() => sendMessage("GET_SETTINGS"), (settings) => patch({ settings })),
+      activity: safe(() => sendMessage("GET_CURRENT_ACTIVITY"), (activity) => patch({ activity })),
+      native: safe(() => sendMessage("GET_NATIVE_STATUS"), (native) => patch({ native })),
+      userScripts: safe(
+        () => sendMessage("GET_USER_SCRIPTS_STATUS"),
+        (userScripts) =>
+          setState((current) => {
+            if (userScripts.enabled && !current.userScripts.enabled) void sendMessage("SYNC_PRESENCE_SCRIPTS").catch(() => {})
+            return { ...current, userScripts }
+          }),
+      ),
+      onboarding: safe(() => sendMessage("GET_ONBOARDING"), (onboarding) => patch({ onboarding })),
+      tab: safe(() => sendMessage("GET_TAB_STATE"), (tab) => patch({ tab })),
+      presenceSettings: safe(() => sendMessage("GET_PRESENCE_SETTINGS"), (presenceSettings) => patch({ presenceSettings })),
+      consent: safe(() => sendMessage("GET_ANALYTICS_CONSENT"), ({ granted }) => patch({ analyticsConsent: granted })),
+      updates: safe(() => sendMessage("CHECK_UPDATES"), (updates) => patch({ updates })),
+      catalog: async (force = false) => {
+        if (catalogInFlight.current) return catalogInFlight.current
+        let skip = false
+        setState((current) => {
+          if (!force && current.catalog.status === "ready") {
+            skip = true
+            return current
+          }
+          return { ...current, catalog: { status: "loading", items: current.catalog.items } }
+        })
+        if (skip) return
+        catalogInFlight.current = (async () => {
+          try {
+            const response = await sendMessage("FETCH_PRESENCE_CATALOG")
+            setState((current) => ({
+              ...current,
+              catalog: response.ok
+                ? { status: "ready", items: response.items }
+                : { status: "error", items: current.catalog.items, error: response.error },
+            }))
+          } catch (error) {
+            setState((current) => ({
+              ...current,
+              catalog: { status: "error", items: current.catalog.items, error: error instanceof Error ? error.message : "CATALOG_REQUEST_FAILED" },
+            }))
+          } finally {
+            catalogInFlight.current = null
+          }
+        })()
+        return catalogInFlight.current
+      },
+    }
+  }, [patch])
 
   useEffect(() => {
-    try {
-      setIsUnpacked(!chrome.runtime.getManifest().update_url)
-    } catch {
-      setIsUnpacked(false)
-    }
-  }, [])
-
-  const entries = useMemo(() => Object.entries(presences), [presences])
-
-  const refresh = useCallback((): void => {
-    void Promise.all([
-      sendMessage("GET_PRESENCES"),
-      sendMessage("GET_CURRENT_ACTIVITY"),
-      sendMessage("GET_NATIVE_STATUS"),
-      sendMessage("GET_DEBUG"),
-      sendMessage("GET_SETTINGS"),
-      sendMessage("GET_INSTALL_QUEUE"),
-      sendMessage("GET_ANALYTICS_CONSENT"),
-    ])
-      .then(([nextPresences, nextActivity, nextNativeStatus, nextDebug, nextSettings, nextQueue, nextConsent]) => {
-        setPresences(nextPresences ?? {})
-        setActivity(nextActivity ?? null)
-        setNativeStatus(nextNativeStatus ?? FALLBACK_NATIVE_STATUS)
-        setDebugState(nextDebug ?? null)
-        setSettingsState(nextSettings ?? FALLBACK_SETTINGS)
-        setInstallQueue((nextQueue?.items ?? []).map((item) => item.slug))
-        setAnalyticsConsentState(nextConsent?.granted === true)
-      })
-      .finally(() => setIsLoading(false))
-  }, [])
-
-  useEffect(() => {
-    refresh()
-    // Safety net: chrome.storage.onChanged / the PRESENCES_CHANGED broadcast
-    // cover normal mutations, this just guards against a missed event.
-    const interval = window.setInterval(refresh, 3_600_000)
-
-    const onStorageChanged = (changes: Record<string, chrome.storage.StorageChange>, areaName: string): void => {
-      if (areaName !== "local") return
-      if (changes.presences || changes.settings || changes.currentActivity || changes.presenceDebug || changes.presenceInstallQueue)
-        refresh()
-    }
-    chrome.storage.onChanged.addListener(onStorageChanged)
-
-    const onRuntimeMessage = (message: Record<string, unknown>): void => {
-      if (message.source === "PRESENCES_BACKGROUND" && message.type === "PRESENCES_CHANGED") refresh()
-    }
-    chrome.runtime.onMessage.addListener(onRuntimeMessage)
-
-    const onVisible = (): void => {
-      if (document.visibilityState !== "visible") return
-      // "visibilitychange" and "focus" both fire for the same real event (panel regaining
-      // focus), which duplicated the native heartbeat request — dedupe within a short window.
-      if (visibleTriggeredRef.current) return
-      visibleTriggeredRef.current = true
-      window.setTimeout(() => {
-        visibleTriggeredRef.current = false
-      }, 300)
-      void sendMessage("CONNECT_NATIVE").then((status) => setNativeStatus(status ?? FALLBACK_NATIVE_STATUS))
-      refresh()
-    }
-    document.addEventListener("visibilitychange", onVisible)
-    window.addEventListener("focus", onVisible)
-
+    let cancelled = false
+    void (async () => {
+      await Promise.all([
+        refresh.presences(),
+        refresh.settings(),
+        refresh.activity(),
+        refresh.native(),
+        refresh.userScripts(),
+        refresh.onboarding(),
+        refresh.tab(),
+        refresh.presenceSettings(),
+        refresh.consent(),
+      ])
+      if (!cancelled) patch({ ready: true })
+      void refresh.catalog()
+      void refresh.updates()
+      void sendMessage("TRACK_EVENT", { key: "extension_open", payload: { surface: "sidepanel" } }).catch(() => {})
+    })()
     return () => {
-      window.clearInterval(interval)
-      chrome.storage.onChanged.removeListener(onStorageChanged)
-      chrome.runtime.onMessage.removeListener(onRuntimeMessage)
-      document.removeEventListener("visibilitychange", onVisible)
-      window.removeEventListener("focus", onVisible)
+      cancelled = true
+    }
+  }, [patch, refresh])
+
+  useEffect(() => {
+    const onChanged = (changes: Record<string, chrome.storage.StorageChange>, area: string) => {
+      if (area === "session") {
+        if ("tabPresences" in changes || "mutedTabIds" in changes) void refresh.tab()
+        return
+      }
+      if (area !== "local") return
+      if ("presences" in changes) {
+        void refresh.presences()
+        void refresh.tab()
+      }
+      if ("settings" in changes) void refresh.settings()
+      if ("currentActivity" in changes) void refresh.activity()
+      if ("presenceSettings" in changes) void refresh.presenceSettings()
+      if ("onboarding" in changes) void refresh.onboarding()
+      if ("analyticsConsent" in changes) void refresh.consent()
+    }
+    chrome.storage.onChanged.addListener(onChanged)
+    return () => chrome.storage.onChanged.removeListener(onChanged)
+  }, [refresh])
+
+  useEffect(() => {
+    const onMessage = (message: { source?: string; type?: string }) => {
+      if (message?.source === "PRESENCES_BACKGROUND" && message.type === "PRESENCES_CHANGED") void refresh.presences()
+    }
+    chrome.runtime.onMessage.addListener(onMessage)
+
+    const onTab = () => void refresh.tab()
+    const onTabUpdated = (_id: number, info: { url?: string; status?: string }) => {
+      if (info.url || info.status === "complete") void refresh.tab()
+    }
+    chrome.tabs?.onActivated?.addListener(onTab)
+    chrome.tabs?.onUpdated?.addListener(onTabUpdated)
+    chrome.windows?.onFocusChanged?.addListener(onTab)
+    return () => {
+      chrome.runtime.onMessage.removeListener(onMessage)
+      chrome.tabs?.onActivated?.removeListener(onTab)
+      chrome.tabs?.onUpdated?.removeListener(onTabUpdated)
+      chrome.windows?.onFocusChanged?.removeListener(onTab)
     }
   }, [refresh])
 
-  const togglePresence = useCallback((slug: string, enabled: boolean): void => {
-    void sendMessage("TOGGLE_PRESENCE", { slug, enabled }).then(() => {
-      setPresences((current) => (current[slug] ? { ...current, [slug]: { ...current[slug], enabled } } : current))
-    })
-  }, [])
-
-  const removePresence = useCallback((slug: string): void => {
-    void sendMessage("UNINSTALL_PRESENCE", { slug }).then(() => {
-      setPresences((current) => {
-        const next = { ...current }
-        delete next[slug]
-        return next
-      })
-    })
-  }, [])
-
-  const bulkTogglePresences = useCallback((slugs: string[], enabled: boolean): void => {
-    void sendMessage("BULK_TOGGLE_PRESENCE", { slugs, enabled }).then(() => refresh())
+  useEffect(() => {
+    let ticks = 0
+    const tick = () => {
+      if (document.visibilityState !== "visible") return
+      void refresh.native()
+      if (ticks++ % 2 === 0) void refresh.userScripts()
+    }
+    const id = window.setInterval(tick, NATIVE_POLL_MS)
+    document.addEventListener("visibilitychange", tick)
+    return () => {
+      window.clearInterval(id)
+      document.removeEventListener("visibilitychange", tick)
+    }
   }, [refresh])
 
-  const bulkRemovePresences = useCallback((slugs: string[]): void => {
-    void sendMessage("BULK_UNINSTALL_PRESENCE", { slugs }).then(() => refresh())
-  }, [refresh])
-
-  const installPresenceFromApi = useCallback(
-    (slug: string): Promise<{ ok: boolean; queued: boolean }> =>
-      sendMessage("INSTALL_PRESENCE_FROM_API", { slug }).then((result) => ({ ok: result?.ok === true, queued: result?.queued === true })),
-    [],
+  const updateSettings = useCallback(
+    async (partial: Partial<ExtensionSettings>) => {
+      setState((current) => ({ ...current, settings: { ...current.settings, ...partial } }))
+      const next = await sendMessage("SET_SETTINGS", partial)
+      patch({ settings: next })
+      return next
+    },
+    [patch],
   )
 
-  const retryInstallQueue = useCallback(async (): Promise<void> => {
-    await sendMessage("RETRY_INSTALL_QUEUE")
-    refresh()
-  }, [refresh])
-
-  const setPresencePaused = useCallback((paused: boolean): void => {
-    void sendMessage("SET_PRESENCE_PAUSE", { paused }).then((result) => {
-      if (typeof result?.paused === "boolean") setSettingsState((current) => ({ ...current, presencePaused: result.paused }))
-    })
-  }, [])
-
-  const connectNative = useCallback((): void => {
-    if (connectingNativeRef.current) return
-    connectingNativeRef.current = true
-    setIsConnectingNative(true)
-    setNativeStatus((current) => ({ ...current, status: "connecting" }))
-    // CONNECT_NATIVE resolves almost instantly (the real handshake continues in the
-    // background), so a minimum delay keeps the spinner visible long enough to register.
-    void Promise.all([sendMessage("CONNECT_NATIVE"), new Promise((resolve) => setTimeout(resolve, 500))])
-      .then(([status]) => setNativeStatus(status ?? FALLBACK_NATIVE_STATUS))
-      .finally(() => {
-        connectingNativeRef.current = false
-        setIsConnectingNative(false)
-      })
-  }, [])
-
-  const setSettings = useCallback((partial: Partial<ExtensionSettings>): void => {
-    void sendMessage("SET_SETTINGS", partial).then((next) => {
-      if (next) setSettingsState(next)
-    })
-  }, [])
-
-  const setAnalyticsConsent = useCallback((granted: boolean): void => {
-    void sendMessage("SET_ANALYTICS_CONSENT", { granted }).then((next) => setAnalyticsConsentState(next?.granted === true))
-  }, [])
-
-  const checkUpdates = useCallback((): void => {
-    if (isUnpacked) return
-    setIsCheckingUpdates(true)
-    void sendMessage("CHECK_UPDATES")
-      .then((next) => setUpdates(next ?? {}))
-      .finally(() => setIsCheckingUpdates(false))
-  }, [isUnpacked])
-
-  const value: ExtensionState = {
-    activity,
-    debug,
-    entries,
-    installQueue,
-    isLoading,
-    isUnpacked,
-    nativeStatus,
-    presences,
-    analyticsConsent,
-    settings,
-    updates,
-    isCheckingUpdates,
-    checkUpdates,
-    refresh,
-    connectNative,
-    isConnectingNative,
-    removePresence,
-    togglePresence,
-    bulkRemovePresences,
-    bulkTogglePresences,
-    installPresenceFromApi,
-    retryInstallQueue,
-    setPresencePaused,
-    setSettings,
-    setAnalyticsConsent,
-  }
-
+  const value = useMemo(() => ({ state, refresh, patch, updateSettings }), [state, refresh, patch, updateSettings])
   return <ExtensionStateContext.Provider value={value}>{children}</ExtensionStateContext.Provider>
 }
 
-export const useExtensionState = (): ExtensionState => {
-  const context = useContext(ExtensionStateContext)
-  if (!context) throw new Error("useExtensionState must be used within an ExtensionStateProvider")
-  return context
+export const useExtensionState = (): ExtensionStateValue => {
+  const value = useContext(ExtensionStateContext)
+  if (!value) throw new Error("useExtensionState must be used inside <ExtensionStateProvider>")
+  return value
 }
