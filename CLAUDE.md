@@ -138,11 +138,12 @@ pnpm --filter @nowly/internal-cli host:publish                # publish native h
 - Metadata schema (`Metadata` type in `packages/sdk/src/metadata.ts`, validated against `packages/presences/metadata.schema.json`) — see format below
 
 ### Extension Architecture (@nowly/extension)
-- **Entrypoints** (`src/entrypoints/{background,content,sidepanel}`) - extension entry points built by `scripts/build.ts`
-- **Background** (`src/background/`) - `router/` (message router + contracts), `managers/`, `services/`, `storage/`, `runtime/` - the persistent presence runtime and native-host bridge
-- **Features** (`src/features/`) - UI feature modules: `activity` (presence tiles, detail view, context menu, scheduling/snooze), `store` (catalog browsing/install), `settings`, `onboarding`, `diagnostics`, `runtime-logs`
-- **Content script** (`src/content/`) - lightweight page-context listener injected into matched sites
-- Built via `tsx scripts/build.ts <chrome|firefox> [--canary] [--watch]`, packaged via `scripts/package.ts`. The npm scripts `build:chrome`/`build:firefox` always pass `--canary` (dev/canary builds, installable side-by-side with prod); the plain `build` script (used by root `build:extension`) builds both browsers without `--canary` for production.
+- **Entrypoints** (`src/entrypoints/{background,content,sidepanel}`) build the background worker, content script and side panel through `scripts/build.ts`.
+- **Background** (`src/background/`) contains `router/`, `managers/`, `services/`, `storage/` and `runtime/` for presence execution, API sync and the native host bridge.
+- **Features** (`src/features/`) are organized as `activity`, `diagnostics`, `layout`, `library`, `onboarding`, `presence`, `review`, `runtime-logs` and `settings`.
+- **UI** (`src/ui/`) is the local design system. `hooks/` contains providers and app-wide hooks, `lib/` contains pure UI helpers, and `shared/` contains code shared by background, content and UI.
+- **Preview** (`src/preview/`) provides a mocked runtime for `pnpm --filter @nowly/extension preview`. It scans `packages/presences/src` by default and accepts `NOWLY_PRESENCES_DIR`.
+- Built via `tsx scripts/build.ts <chrome|firefox> [--canary] [--watch]`, packaged via `scripts/package.ts` and `scripts/package-source.ts`. The `build:chrome` and `build:firefox` scripts build canary extensions. The plain `build` script builds both browsers for production.
 
 ### API Architecture (@nowly/api/src)
 - Organized by **feature**, not by route file: `src/features/{admin,assets,auth,campaigns,custom-presets,device,image-proxy,insights,presence,security,status}`, each typically with its own `*.routes.ts` + `*.service.ts`
