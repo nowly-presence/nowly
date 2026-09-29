@@ -7,17 +7,13 @@ import { zipSync } from "fflate"
 const root = join(fileURLToPath(new URL(".", import.meta.url)), "..")
 const repoRoot = join(root, "..", "..")
 const artifactsDir = join(root, "artifacts")
-
 const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf-8")) as { version: string }
-
-// Tracked + new-but-not-gitignored files, read straight off disk so this
-// captures the exact code that produced the build (not just the last commit).
 const fileList = execSync("git ls-files --cached --others --exclude-standard", { cwd: repoRoot })
   .toString()
   .split("\n")
   .filter(Boolean)
-
 const entries: Record<string, Uint8Array> = {}
+
 for (const relativePath of fileList) {
   const fullPath = join(repoRoot, relativePath)
   if (!statSync(fullPath, { throwIfNoEntry: false })?.isFile()) continue

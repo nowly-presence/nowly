@@ -1,5 +1,5 @@
+import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
-import "dotenv/config"
 import { cpSync, existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from "fs"
 import { join } from "path"
 import { build } from "vite"
@@ -8,36 +8,44 @@ import { alias, buildDefine, ROOT } from "./config"
 import type { Browser, Channel } from "./config"
 import { fetchBrandIcons } from "./fetch-brand-icons"
 import { generateManifest } from "./generate-manifest"
+import { writeIcons } from "./icons"
+
+const loadEnvFile = (): void => {
+  const path = join(ROOT, ".env")
+  if (!existsSync(path)) return
+  for (const line of readFileSync(path, "utf-8").split("\n")) {
+    const match = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/)
+    if (match && process.env[match[1]] === undefined) process.env[match[1]] = match[2].replace(/^["']|["']$/g, "")
+  }
+}
+loadEnvFile()
 
 const args = process.argv.slice(2)
 const browser = (args.find((a) => !a.startsWith("--")) ?? "chrome") as Browser
 const channel: Channel = args.includes("--canary") ? "canary" : "stable"
 const watch = args.includes("--watch")
 
-if (browser !== "chrome" && browser !== "firefox") {
-  throw new Error(`Unknown browser "${browser}". Use chrome or firefox.`)
-}
+if (browser !== "chrome" && browser !== "firefox") throw new Error(`Unknown browser "${browser}". Use chrome or firefox.`)
 
 const DIST = join(ROOT, "dist", browser)
 const define = buildDefine(browser, channel)
 
-const buildPage = (name: string, source = name) =>
+const buildSidepanel = () =>
   build({
-    root: join(ROOT, "src", source),
+    root: join(ROOT, "src", "entrypoints", "sidepanel"),
     base: "./",
-    plugins: [react()],
+    plugins: [react(), tailwindcss()],
     define,
     resolve: { alias },
     build: {
-      outDir: join(DIST, name),
+      outDir: join(DIST, "sidepanel"),
       emptyOutDir: true,
-      rollupOptions: { input: join(ROOT, "src", source, "index.html") },
+      rollupOptions: { input: join(ROOT, "src", "entrypoints", "sidepanel", "index.html") },
       watch: watch ? {} : null,
-      // Loaded from local disk by the browser, not over the network - the
-      // default 500kB budget targets page-load perf, which doesn't apply here.
       chunkSizeWarningLimit: 1000,
     },
     configFile: false,
+    logLevel: "warn",
   })
 
 const buildScript = (name: string, entry: string) =>
@@ -52,38 +60,17 @@ const buildScript = (name: string, entry: string) =>
       watch: watch ? {} : null,
     },
     configFile: false,
+    logLevel: "warn",
   })
 
-// Canary channel renames the extension in-place so it can be installed
-// side-by-side with the stable build during local/dogfood testing.
 const applyCanaryLocales = (localesDir: string): void => {
-  const names: Record<string, { commandOpenPanel: string; contextMenuPage: string }> = {
-    en: { commandOpenPanel: "Open Nowly Canary", contextMenuPage: "Nowly Canary presence for this page" },
-    fr: { commandOpenPanel: "Ouvrir Nowly Canary", contextMenuPage: "Présence Nowly Canary pour cette page" },
-    es: { commandOpenPanel: "Abrir Nowly Canary", contextMenuPage: "Presencia Nowly Canary para esta página" },
-  }
   for (const locale of readdirSync(localesDir, { withFileTypes: true })) {
     if (!locale.isDirectory()) continue
-    const messagesPath = join(localesDir, locale.name, "messages.json")
-    if (!existsSync(messagesPath)) continue
-    const messages = JSON.parse(readFileSync(messagesPath, "utf-8")) as Record<string, { message?: string }>
+    const path = join(localesDir, locale.name, "messages.json")
+    if (!existsSync(path)) continue
+    const messages = JSON.parse(readFileSync(path, "utf-8")) as Record<string, { message: string }>
     messages.extensionName = { message: "Nowly Canary" }
-    const localized = names[locale.name]
-    if (localized) {
-      messages.commandOpenPanel = { message: localized.commandOpenPanel }
-      messages.contextMenuPage = { message: localized.contextMenuPage }
-    }
-    writeFileSync(messagesPath, `${JSON.stringify(messages, null, 2)}\n`)
-  }
-}
-
-const copyStatic = async () => {
-  cpSync(join(ROOT, "_locales"), join(DIST, "_locales"), { recursive: true })
-  if (channel === "canary") applyCanaryLocales(join(DIST, "_locales"))
-  try {
-    await fetchBrandIcons(join(DIST, "icons"), channel === "canary" ? "canary" : "stable")
-  } catch (error) {
-    console.warn("  ⚠ Could not fetch brand icons from CDN - load the unpacked build anyway.", error)
+    writeFileSync(path, `${JSON.stringify(messages, null, 2)}\n`)
   }
 }
 
@@ -94,20 +81,23 @@ const run = async (): Promise<void> => {
   else resetBundledPresences()
 
   const { version: packageVersion } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf-8")) as { version: string }
-  // Lets one browser's store submission carry a different version than package.json,
-  // e.g. when only one browser needs a hotfix bump because the other was never published.
-  const version = process.env.EXTENSION_VERSION ?? packageVersion
-  generateManifest(browser, channel, version, DIST)
-  await copyStatic()
+  generateManifest(browser, channel, process.env.EXTENSION_VERSION ?? packageVersion, DIST)
+
+  cpSync(join(ROOT, "_locales"), join(DIST, "_locales"), { recursive: true })
+  if (channel === "canary") applyCanaryLocales(join(DIST, "_locales"))
+  if (channel === "canary") await writeIcons(join(DIST, "icons"), channel)
+  else await fetchBrandIcons(join(DIST, "icons"), channel)
   if (channel === "canary") copyPresenceAssets(DIST)
 
   await Promise.all([
-    buildPage("sidepanel", "entrypoints/sidepanel"),
+    buildSidepanel(),
     buildScript("background", join(ROOT, "src", "entrypoints", "background", "index.ts")),
     buildScript("content", join(ROOT, "src", "entrypoints", "content", "index.ts")),
   ])
 
-  console.log(watch ? `  ✔ Watching ${browser} (${channel}) - reload the unpacked extension after each rebuild` : `  ✔ Built ${browser} (${channel})`)
+  console.log(
+    watch ? `  ✔ Watching ${browser} (${channel}) - reload the unpacked extension after each rebuild` : `  ✔ Built ${browser} (${channel})`,
+  )
 }
 
 await run()

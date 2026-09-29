@@ -3,9 +3,6 @@ import { join } from "path"
 import { DEV_CHROME_EXTENSION_ID, manifestConfig } from "../manifest.config"
 import type { Browser, Channel } from "./config"
 
-// Chrome extension IDs are 16 bytes encoded as base-a-p (a=0…p=15). This
-// derives the equivalent Firefox UUID from a Chrome ID so both browsers
-// share the same underlying identity during local/canary testing.
 const chromeIdToFirefoxUuid = (chromeId: string): string => {
   const hex = Array.from({ length: chromeId.length / 2 }, (_, i) => {
     const hi = chromeId.charCodeAt(i * 2) - 0x61
@@ -22,8 +19,6 @@ export const generateManifest = (browser: Browser, channel: Channel, version: st
     manifest.background = { scripts: ["background.js"] }
     delete manifest.minimum_chrome_version
     delete manifest.key
-    // userScripts is an optional-only permission on Firefox - declare it in
-    // optional_permissions and request it at runtime (Firefox 136+ MV3 userScripts API).
     manifest.permissions = manifest.permissions.filter((p: string) => p !== "userScripts" && p !== "sidePanel")
     manifest.optional_permissions = ["userScripts"]
     manifest.sidebar_action = {
@@ -40,7 +35,6 @@ export const generateManifest = (browser: Browser, channel: Channel, version: st
             gecko: {
               id: chromeIdToFirefoxUuid(DEV_CHROME_EXTENSION_ID),
               strict_min_version: "136.0",
-              // Required by AMO - declare data collection practices.
               data_collection_permissions: { required: ["none"] },
             },
           }
