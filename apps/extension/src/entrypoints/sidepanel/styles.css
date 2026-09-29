@@ -1,0 +1,52 @@
+@import "tailwindcss" source(none);
+@import "../../ui/tokens.css";
+@source "../../";
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-canvas text-ink font-sans text-body-sm antialiased;
+    min-width: 320px;
+    font-feature-settings: "ss01" on;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  ::selection {
+    background: var(--primary-soft);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: default;
+  }
+
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    opacity: 0.5;
+    cursor: pointer;
+  }
+  .dark input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+}
+
+html body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--on-surface);
+  background-color: var(--neutral);
+}
+

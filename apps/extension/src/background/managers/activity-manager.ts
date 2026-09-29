@@ -201,8 +201,6 @@ export const addActiveSlug = async (slug: string): Promise<void> => {
   if (await hasActiveSession(slug)) return
   await setActiveSessionStartedAt(slug, Date.now())
   trackAnalytics("presence_session_start", { slug, version: await getPresenceVersion(slug) })
-  // Don't wait for the next 5min api-heartbeat alarm - a freshly
-  // installed/activated presence should count as "active" right away.
   void sendActiveHeartbeat([slug])
 }
 
@@ -218,9 +216,6 @@ export const removeActiveSlug = async (slug: string, reason: string): Promise<vo
   })
 }
 
-// Bulk equivalent of calling removeActiveSlug per slug - a single
-// read-modify-write against chrome.storage.session instead of N concurrent
-// ones (see removeActiveSlugsFromState for why concurrent per-slug writes race).
 export const removeActiveSlugs = async (slugs: string[], reason: string): Promise<void> => {
   await Promise.all(
     slugs.map(async (slug) => {
@@ -242,8 +237,6 @@ export const clearActiveSlugs = async (reason: string): Promise<void> => {
   await clearActiveSlugsFromState()
 }
 
-// Content scripts always run in a tab, but the message shape allows tabId to be
-// missing (e.g. a stray call) - fall back to a sentinel so the tab map stays keyed by number.
 const NO_TAB_ID = -1
 
 export const handleActivityUpdate = async (slug: string, activity: PresenceData, tabId?: number): Promise<{ ok: boolean }> => {
@@ -261,7 +254,6 @@ export const handleActivityUpdate = async (slug: string, activity: PresenceData,
 
   if (await shouldHoldDiscord(stored)) {
     await removeTabPresence(resolvedTabId)
-    // Keep the Nowly state updated so resume sends the latest activity.
     const appName = activity.appName ?? stored.release.metadata.name
     const normalizedActivity = normalizeActivity(activity, appName)
     const presence = mapPresenceData(normalizedActivity)
@@ -318,9 +310,6 @@ export const handleRemovedTab = async (tabId: number): Promise<void> => {
   await removeTabPresence(tabId)
   void setTabMuted(tabId, false)
 
-  // Only drop the heartbeat for this slug if no other open tab still serves
-  // it (e.g. YouTube open in two tabs) - otherwise the still-open tab's
-  // presence would stop reporting as active too.
   if (closedEntry && !(await getTabPresencesSnapshot()).some((entry) => entry.slug === closedEntry.slug)) {
     await removeActiveSlug(closedEntry.slug, "tab-closed")
   }

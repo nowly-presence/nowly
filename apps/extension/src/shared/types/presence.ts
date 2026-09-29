@@ -46,8 +46,6 @@ export type PresenceRelease = {
   metadataHash: string
   signature: string
   signedAt: string
-  // Present on API responses (GET /presences/:slug), absent on locally built
-  // (zip/bundled) releases that never round-tripped through the API.
   totalInstalls?: number
   activeUsers?: number
   addedAt?: string | null
@@ -100,7 +98,23 @@ export type PresenceCatalogItem = {
   locales?: Record<string, Record<string, string>>
   totalInstalls?: number
   activeUsers?: number
-  addedAt?: string | null
-  lastUpdated?: string | null
+  likes?: number
+  addedAt: string | null
+  lastUpdated: string | null
   discordNative?: boolean
+}
+
+export type TabActivity = {
+  tabId: number
+  slug: string
+  presence: PresencePayload
+  updatedAt: number
+}
+
+export type TabState = {
+  tabId: number | null
+  hostname: string | null
+  muted: boolean
+  installedSlug: string | null
+  activities: TabActivity[]
 }

@@ -4,11 +4,11 @@
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "types": ["chrome", "node"],
-    "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
+    "noUnusedLocals": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
@@ -21,6 +21,6 @@
       "@messages/*": ["./messages/*"]
     }
   },
-  "include": ["src", "manifest.config.ts", "vite-env.d.ts"],
-  "exclude": ["cache"]
+  "include": ["src", "messages", "scripts", "manifest.config.ts", "vite-env.d.ts", "vitest.config.ts"],
+  "exclude": ["dist", "node_modules"]
 }

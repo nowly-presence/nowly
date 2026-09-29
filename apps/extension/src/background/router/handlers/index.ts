@@ -43,6 +43,16 @@ import {
   handleUpdate,
 } from "@/background/router/handlers/presences.handlers"
 import { handleGetSettings, handleResetOnboardingForDev, handleSetSettings } from "@/background/router/handlers/settings.handlers"
+import {
+  handleDeleteDeviceData,
+  handleExportDeviceData,
+  handleGetOnboarding,
+  handleGetTabState,
+  handleReportPresence,
+  handleSetOnboarding,
+  handleSetTabMuted,
+  handleSyncPresenceScripts,
+} from "@/background/router/handlers/extra.handlers"
 import type { HandlerRegistry } from "@/background/router/router"
 
 export const buildHandlerRegistry = (): HandlerRegistry => ({
@@ -85,4 +95,12 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   CLEAR_RUNTIME_LOGS: handleClearRuntimeLogs,
   TRACK_EVENT: handleTrackEvent,
   DEBUG: handleDebug,
+  GET_ONBOARDING: handleGetOnboarding,
+  SET_ONBOARDING: handleSetOnboarding,
+  GET_TAB_STATE: handleGetTabState,
+  SET_TAB_MUTED: handleSetTabMuted,
+  REPORT_PRESENCE: handleReportPresence,
+  EXPORT_DEVICE_DATA: handleExportDeviceData,
+  DELETE_DEVICE_DATA: handleDeleteDeviceData,
+  SYNC_PRESENCE_SCRIPTS: handleSyncPresenceScripts,
 })

@@ -1,28 +1,22 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import type { AppearanceMode } from "@/shared/types"
 
-const MEDIA_QUERY = "(prefers-color-scheme: dark)"
+const prefersDark = () => window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false
 
-// Applies apps/web's light/dark convention (:root = light, .dark = override)
-// to the side panel root. "system" follows the OS preference live.
-export const useTheme = (appearance: AppearanceMode = "system"): void => {
+export const useResolvedTheme = (appearance: AppearanceMode | undefined): "light" | "dark" => {
+  const [systemDark, setSystemDark] = useState(prefersDark)
   useEffect(() => {
-    const root = document.documentElement
-
-    const apply = (isDark: boolean): void => {
-      root.classList.toggle("dark", isDark)
-    }
-
-    if (appearance !== "system") {
-      apply(appearance === "dark")
-      return
-    }
-
-    const media = window.matchMedia(MEDIA_QUERY)
-    apply(media.matches)
-
-    const onChange = (event: MediaQueryListEvent): void => apply(event.matches)
+    const media = window.matchMedia?.("(prefers-color-scheme: dark)")
+    if (!media) return
+    const onChange = () => setSystemDark(media.matches)
     media.addEventListener("change", onChange)
     return () => media.removeEventListener("change", onChange)
-  }, [appearance])
+  }, [])
+  const theme = appearance === "dark" || (appearance !== "light" && systemDark) ? "dark" : "light"
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark")
+  }, [theme])
+
+  return theme
 }

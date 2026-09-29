@@ -23,8 +23,6 @@ describe("getSettings migration", () => {
     expect(settings).not.toHaveProperty("canaryTheme")
     expect(settings.presenceDisplayMode).toBe("grid")
 
-    // The migration writes the cleaned object back so the legacy keys don't
-    // reappear on the next read.
     const stored = chrome.local.settings as Record<string, unknown>
     expect(stored).not.toHaveProperty("separateActivePresence")
   })

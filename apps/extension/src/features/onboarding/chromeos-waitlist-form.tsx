@@ -1,49 +1,74 @@
 import { useState } from "react"
+import { RiMailLine } from "@remixicon/react"
 import { API_BASE_URL, CHROMEOS_WAITLIST_CAMPAIGN_ID } from "@/shared/constants"
-import { t } from "@/shared/i18n"
+import { useI18n } from "@/hooks/i18n-provider"
 import { Button } from "@/ui/button"
+import { Card } from "@/ui/card"
 import { Input } from "@/ui/input"
 
 export const ChromeOsWaitlistForm = (): React.JSX.Element | null => {
+  const { t } = useI18n()
   const [email, setEmail] = useState("")
-  const [status, setStatus] = useState<"idle" | "sending" | "done">("idle")
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
 
   if (!CHROMEOS_WAITLIST_CAMPAIGN_ID) return null
-  if (status === "done") {
-    return <p className="mt-3 text-sm leading-5 text-muted-foreground">{t("chromeos-waitlist-success")}</p>
-  }
 
   const submit = async (): Promise<void> => {
-    if (!email.trim()) return
+    const trimmedEmail = email.trim()
+    if (!trimmedEmail || status === "sending") return
     setStatus("sending")
+
     try {
-      await fetch(`${API_BASE_URL}/campaigns/${CHROMEOS_WAITLIST_CAMPAIGN_ID}/signups`, {
+      const response = await fetch(`${API_BASE_URL}/campaigns/${CHROMEOS_WAITLIST_CAMPAIGN_ID}/signups`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ email: trimmedEmail }),
       })
-    } finally {
-      setStatus("done")
+      if (!response.ok) {
+        setStatus("error")
+        return
+      }
+      setStatus("success")
+    } catch {
+      setStatus("error")
     }
   }
 
   return (
-    <div className="mt-4 flex flex-wrap justify-center gap-2">
-      <Input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder={t("chromeos-waitlist-placeholder")}
-        className="max-w-56"
-      />
-      <Button
-        variant="outline"
-        size="sm"
-        disabled={status === "sending"}
-        onClick={() => void submit()}
-      >
-        {t("chromeos-waitlist-submit")}
-      </Button>
-    </div>
+    <Card className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-1">
+        <span className="text-label-lg font-medium">{t("onboarding.chromeOsWaitlistTitle")}</span>
+        <span className="text-body-sm text-muted">{t("onboarding.chromeOsWaitlistDescription")}</span>
+      </div>
+      {status === "success" ? (
+        <p className="text-body-sm text-success">{t("onboarding.chromeOsWaitlistSuccess")}</p>
+      ) : (
+        <form
+          className="flex flex-col gap-2"
+          onSubmit={(event) => {
+            event.preventDefault()
+            void submit()
+          }}
+        >
+          <label className="text-label-md text-muted" htmlFor="chromeos-waitlist-email">
+            {t("onboarding.chromeOsWaitlistEmail")}
+          </label>
+          <Input
+            id="chromeos-waitlist-email"
+            type="email"
+            required
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder={t("onboarding.chromeOsWaitlistPlaceholder")}
+            leading={<RiMailLine className="size-4" />}
+            aria-invalid={status === "error"}
+          />
+          {status === "error" && <p className="text-body-sm text-danger">{t("onboarding.chromeOsWaitlistError")}</p>}
+          <Button type="submit" loading={status === "sending"}>
+            {t("onboarding.chromeOsWaitlistSubmit")}
+          </Button>
+        </form>
+      )}
+    </Card>
   )
 }

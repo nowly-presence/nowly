@@ -97,10 +97,6 @@ describe("verifyPresenceRelease", () => {
 
   it("accepts an unsigned release only on a canary build", async () => {
     installChromeMock()
-    // Whether an unsigned release is trusted is a build-time channel flag
-    // (IS_CANARY), not a runtime manifest check - update_url is Chrome-only
-    // and Firefox never sets it even on real store installs, so gating on it
-    // used to bypass signature verification for every Firefox user.
     vi.stubEnv("VITE_NOWLY_CHANNEL", "canary")
     const { verifyPresenceRelease } = await import("@/background/services/release-security")
     const { privateKey } = await generateKeyPair()

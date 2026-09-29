@@ -4,8 +4,7 @@ import { getEffectiveApiUrl } from "@/background/services/api-state"
 import { browserName, osName } from "@/background/services/device-info"
 import { getDeviceId, getDeviceToken, setDeviceToken } from "@/background/storage/device.store"
 import { getPresences } from "@/background/storage/presences.store"
-import { getLocale } from "@/shared/i18n"
-import { LOCALE_LONG_MAP } from "@nowly/locales"
+import { LOCALE_LONG_MAP, loadLocale } from "@/shared/locales"
 import { WEB_BASE_URL } from "@/shared/constants"
 
 type SyncPresence = {
@@ -35,7 +34,6 @@ export const syncUninstallUrl = async (): Promise<void> => {
   try {
     chrome.runtime.setUninstallURL(await buildDeviceUrl("/uninstall"))
   } catch {
-    // Best effort only.
   }
 }
 
@@ -63,7 +61,7 @@ export const syncDeviceState = async (extraPresences: SyncPresence[] = []): Prom
         extensionVersion: chrome.runtime.getManifest().version,
         browser: browserName(),
         os: osName(),
-        locale: LOCALE_LONG_MAP[getLocale()],
+        locale: LOCALE_LONG_MAP[await loadLocale()],
         presences: syncedPresences,
       }),
     })
@@ -75,12 +73,10 @@ export const syncDeviceState = async (extraPresences: SyncPresence[] = []): Prom
           const existing = await getDeviceToken()
           if (existing !== data.deviceToken) {
             await setDeviceToken(data.deviceToken)
-            // Refresh the uninstall URL so the cleanup request carries the token.
             await syncUninstallUrl()
           }
         }
       } catch {
-        // Response body is best-effort; ignore parse failures.
       }
     }
   } catch (error) {

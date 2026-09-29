@@ -1,97 +1,38 @@
-import { PresenceTile } from "@/components/shared/presence-tile"
-import { PresenceContextMenu } from "@/features/activity/presence-context-menu"
-import { t } from "@/shared/i18n"
+import { PresenceIcon } from "@/components/shared/presence-icon"
+import type { PresenceStatus } from "@/lib/presence-status"
 import type { StoredPresence } from "@/shared/types"
-import { Badge } from "@/ui/badge"
+import { cn } from "@/ui/cn"
+import { Switch } from "@/ui/switch"
+import type { StatusLine } from "@/features/activity/presence-status-text"
+import { PresenceStatusLabel } from "@/features/activity/presence-status-label"
 
-type Props = {
-  onOpen: (slug: string) => void
-  onOpenWebsite: (slug: string) => void
-  onRemove: (slug: string) => void
-  onSchedule: (slug: string) => void
-  onSnooze: (slug: string) => void
-  onToggle: (slug: string, enabled: boolean) => void
-  onUpdatePresence: (slug: string) => void
-  presence: StoredPresence
-  showSchedule: boolean
+type PresenceGridCardProps = {
   slug: string
-  updateAvailable?: string
+  stored: StoredPresence
+  status: PresenceStatus
+  line: StatusLine
+  onOpen: () => void
+  onToggle: (enabled: boolean) => void
 }
 
-export const PresenceGridCard = ({
-  onOpen,
-  onOpenWebsite,
-  onRemove,
-  onSchedule,
-  onSnooze,
-  onToggle,
-  onUpdatePresence,
-  presence,
-  showSchedule,
-  slug,
-  updateAvailable,
-}: Props): React.JSX.Element | null => {
-  if (!presence?.metadata) return null
-
-  const status = presence.enabled ? t("enabled") : t("disabled")
-
-  return (
-    <PresenceContextMenu
-      slug={slug}
-      name={presence.metadata.name}
-      enabled={presence.enabled}
-      showSchedule={showSchedule}
-      updateAvailable={updateAvailable}
-      onOpenWebsite={onOpenWebsite}
-      onRemove={onRemove}
-      onSchedule={onSchedule}
-      onSnooze={onSnooze}
-      onToggle={onToggle}
-      onUpdatePresence={onUpdatePresence}
-      render={
-        <button
-          type="button"
-          onClick={() => onOpen(slug)}
-          aria-label={`${presence.metadata.name}. ${status}`}
-          className="relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card p-3 text-left outline-none transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-accent/50"
-        />
-      }
-    >
-      {updateAvailable ? (
-        <Badge
-          variant="default"
-          className="mb-2 w-full justify-start bg-accent/10 text-accent"
-        >
-          <span className="min-w-0 flex-1 truncate">{t("presence-update-available")}</span>
-        </Badge>
-      ) : null}
-
-      <span className="flex min-w-0 items-start gap-2.5">
-        <PresenceTile
-          slug={slug}
-          name={presence.metadata.name}
-          dimmed={!presence.enabled}
-          className="size-11"
-        />
-        <span className="min-w-0 flex-1">
-          <span
-            className={
-              presence.enabled
-                ? "block truncate text-sm font-semibold text-foreground"
-                : "block truncate text-sm font-semibold text-muted-foreground"
-            }
-          >
-            {presence.metadata.name}
-          </span>
-          <span className="mt-0.5 flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
-            <span
-              className="h-1.5 w-1.5 shrink-0 rounded-full"
-              style={{ backgroundColor: presence.enabled ? presence.metadata.color : "var(--muted-foreground)" }}
-            />
-            <span className="truncate">{status}</span>
-          </span>
-        </span>
-      </span>
-    </PresenceContextMenu>
-  )
-}
+export const PresenceGridCard = ({ slug, stored, status, line, onOpen, onToggle }: PresenceGridCardProps) => (
+  <div
+    role="button"
+    tabIndex={0}
+    onClick={onOpen}
+    onKeyDown={(event) => event.key === "Enter" && onOpen()}
+    className={cn(
+      "flex cursor-pointer flex-col gap-3 rounded-sm border border-line bg-surface p-3 transition-colors hover:border-line-strong",
+      !stored.enabled && "opacity-60",
+    )}
+  >
+    <div className="flex items-start justify-between">
+      <PresenceIcon slug={slug} name={stored.metadata.name} color={stored.metadata.color} size={36} />
+      <Switch size="sm" checked={stored.enabled} label={stored.metadata.name} onChange={onToggle} />
+    </div>
+    <div className="flex min-w-0 flex-col">
+      <span className="truncate text-label-lg font-medium">{stored.metadata.name}</span>
+      <PresenceStatusLabel status={status} line={line} className="truncate text-label-md" />
+    </div>
+  </div>
+)

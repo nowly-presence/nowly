@@ -21,11 +21,11 @@ import { getCurrentActivity, getPresences, setPresences } from "@/background/sto
 import { BUNDLED_PRESENCES } from "@/generated/bundled-presences"
 import type { BundledPresence } from "@/generated/bundled-presences"
 import { IS_CANARY } from "@/shared/brand"
+import { normalizeCatalog } from "@/shared/presence-catalog"
 import type { PresenceCatalogItem, PresenceRelease, StoredPresence } from "@/shared/types"
 
 export const broadcastPresencesChanged = (): void => {
   chrome.runtime.sendMessage({ source: "PRESENCES_BACKGROUND", type: "PRESENCES_CHANGED" }).catch(() => {
-    // No extension pages (popup/sidepanel) are open - that's fine.
   })
 }
 
@@ -109,8 +109,6 @@ const attemptDeleteActivePresence = async (deviceId: string, slug: string): Prom
   return response.ok
 }
 
-// One retry with a short backoff - a bare network blip shouldn't leave the
-// device marked "active" server-side until the 12min TTL clears it.
 const deleteActivePresence = async (deviceId: string, slug: string): Promise<void> => {
   for (const attempt of [1, 2]) {
     try {
@@ -131,13 +129,7 @@ const deleteActivePresence = async (deviceId: string, slug: string): Promise<voi
 export const fetchPresenceCatalog = async (): Promise<PresenceCatalogItem[]> => {
   const response = await fetch(`${getEffectiveApiUrl()}/presences`, { cache: "no-store" })
   if (!response.ok) throw new Error(`catalog request failed: ${response.status}`)
-  const data: unknown = await response.json()
-  if (!Array.isArray(data)) throw new Error("INVALID_CATALOG")
-  return data.filter((item): item is PresenceCatalogItem => {
-    if (!item || typeof item !== "object") return false
-    const slug = (item as PresenceCatalogItem).slug
-    return typeof slug === "string" && slug.length > 0
-  })
+  return normalizeCatalog(await response.json())
 }
 
 export type InstallFromApiResult = {
@@ -259,7 +251,6 @@ export const togglePresence = async (payload: unknown): Promise<{ ok: boolean; e
   return { ok: true }
 }
 
-// Single read/mutate/write pass - looping the per-slug helpers above races on getPresences()/setPresences().
 export const bulkTogglePresences = async (slugs: string[], enabled: boolean): Promise<{ ok: boolean }> => {
   const presences = await getPresences()
   const deviceId = await getActiveDeviceId()
@@ -371,38 +362,6 @@ export const checkUpdates = async (): Promise<Record<string, string>> => {
   return updates
 }
 
-const installDevPresences = async (presences: Record<string, StoredPresence>): Promise<string[]> => {
-  if (!IS_CANARY) return []
-
-  try {
-    const res = await fetch(chrome.runtime.getURL("dev-presences.json"))
-    if (!res.ok) return []
-
-    const devPresences: BundledPresence[] = await res.json()
-    if (devPresences.length === 0) return []
-
-    const slugs: string[] = []
-
-    for (const dp of devPresences) {
-      const existing = presences[dp.slug]
-      if (existing?.release?.version && existing?.release?.version === dp.release.version) continue
-
-      presences[dp.slug] = {
-        metadata: dp.release.metadata,
-        release: dp.release,
-        enabled: true,
-        installedAt: existing?.installedAt ?? Date.now(),
-        updatedAt: Date.now(),
-      }
-      slugs.push(dp.slug)
-    }
-
-    return slugs
-  } catch {
-    return []
-  }
-}
-
 export const installLocalPresenceZip = async (payload: unknown): Promise<{ ok: boolean; error?: string; slug?: string }> => {
   if (!IS_CANARY) {
     return { ok: false, error: "UNPACKED_BUILD_ONLY" }
@@ -423,23 +382,49 @@ export const installLocalPresenceZip = async (payload: unknown): Promise<{ ok: b
   return { ok: true, slug: parsed.slug }
 }
 
+const installDevPresences = async (presences: Record<string, StoredPresence>): Promise<string[]> => {
+  if (!IS_CANARY) return []
+
+  try {
+    const response = await fetch(chrome.runtime.getURL("dev-presences.json"))
+    if (!response.ok) return []
+    const devPresences: BundledPresence[] = await response.json()
+    const slugs: string[] = []
+
+    for (const devPresence of devPresences) {
+      const existing = presences[devPresence.slug]
+      if (existing?.release?.version === devPresence.release.version) continue
+      presences[devPresence.slug] = {
+        metadata: devPresence.release.metadata,
+        release: devPresence.release,
+        enabled: true,
+        installedAt: existing?.installedAt ?? Date.now(),
+        updatedAt: Date.now(),
+      }
+      slugs.push(devPresence.slug)
+    }
+
+    return slugs
+  } catch {
+    return []
+  }
+}
+
 export const installBundledPresences = async (): Promise<void> => {
-  if (!BUNDLED_PRESENCES?.length && !IS_CANARY) return
+  if (!BUNDLED_PRESENCES.length && !IS_CANARY) return
   const presences = await getPresences()
-  const bundledSlugs = new Set(BUNDLED_PRESENCES.map((bp) => bp.slug))
+  const bundledSlugs = new Set(BUNDLED_PRESENCES.map((presence) => presence.slug))
   let changed = false
 
   const devSlugs = await installDevPresences(presences)
   if (devSlugs.length > 0) {
     for (const slug of devSlugs) bundledSlugs.add(slug)
-    for (const dp of BUNDLED_PRESENCES) bundledSlugs.add(dp.slug)
     changed = true
   }
 
   if (IS_CANARY) {
     for (const slug of Object.keys(presences)) {
-      if (bundledSlugs.has(slug)) continue
-      if (presences[slug].source === "local") continue
+      if (bundledSlugs.has(slug) || presences[slug].source === "local") continue
       delete presences[slug]
       await unregisterPresenceScript(slug)
       await removeActiveSlug(slug, "dev-bundle-prune")
@@ -447,26 +432,26 @@ export const installBundledPresences = async (): Promise<void> => {
     }
   }
 
-  for (const bp of BUNDLED_PRESENCES) {
-    const existing = presences[bp.slug]
-    if (existing?.release?.version && existing?.release?.version === bp.release.version) continue
-
-    presences[bp.slug] = {
-      metadata: bp.release.metadata,
-      release: bp.release,
+  for (const bundled of BUNDLED_PRESENCES) {
+    const existing = presences[bundled.slug]
+    if (existing?.release?.version === bundled.release.version) continue
+    presences[bundled.slug] = {
+      metadata: bundled.release.metadata,
+      release: bundled.release,
       enabled: true,
       installedAt: existing?.installedAt ?? Date.now(),
       updatedAt: Date.now(),
+      source: "bundle",
     }
     changed = true
   }
 
-  if (changed) {
-    await setPresences(presences)
-    await syncDeviceState()
-    broadcastPresencesChanged()
-  }
+  if (!changed) return
+  await setPresences(presences)
+  await syncDeviceState()
+  broadcastPresencesChanged()
 }
+
 
 export type PresenceEngagement = {
   liked: boolean

@@ -1,157 +1,111 @@
-import { RiCheckLine, RiDeleteBinLine, RiFileCopyLine, RiTerminalLine } from "@remixicon/react"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { filters, formatTime, levelClass, type RuntimeLogFeedback, type RuntimeLogFilter } from "@/features/runtime-logs/runtime-logs.model"
+import { useEffect, useMemo, useState } from "react"
+import { RiDeleteBin6Line, RiFileCopyLine } from "@remixicon/react"
+import type { RuntimeLogEntry, RuntimeLogType } from "@/shared/types"
+import { Chip } from "@/ui/chip"
+import { HScroll } from "@/ui/horizontal-scroller"
+import { BackHeader, ScreenBody } from "@/components/shared/screen"
+import { Card } from "@/ui/card"
+import { EmptyState } from "@/ui/empty-state"
+import { useToast } from "@/ui/toast"
+import { cn } from "@/ui/cn"
+import { useI18n } from "@/hooks/i18n-provider"
 import { sendMessage } from "@/lib/messages"
-import { t } from "@/shared/i18n"
-import type { RuntimeLogEntry } from "@/shared/types"
-import { Badge } from "@/ui/badge"
-import { Button } from "@/ui/button"
-import { Empty, EmptyMedia, EmptyTitle } from "@/ui/empty"
-import { Tabs, TabsList, TabsTrigger } from "@/ui/tabs"
-import { cn } from "@/ui/utils"
+import { useNav } from "@/hooks/navigation-provider"
+import { LOCALE_LONG_MAP } from "@/shared/locales"
 
-const RuntimeLogRow = ({ log }: { log: RuntimeLogEntry }): React.JSX.Element => (
-  <article className="flex flex-col gap-2 p-3">
-    <div className="flex items-start justify-between gap-2">
-      <div className="min-w-0">
-        <p className="truncate text-xs font-semibold text-foreground">{log.message}</p>
-        <p className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span>{formatTime(log.at)}</span>
-          <span>{log.type}</span>
-        </p>
-      </div>
-      <Badge
-        variant="outline"
-        className={cn("shrink-0 uppercase", levelClass[log.level])}
-      >
-        {log.level}
-      </Badge>
-    </div>
-    {log.payload ? (
-      <pre className="max-h-24 overflow-auto rounded-md bg-background p-2 text-xs leading-relaxed text-muted-foreground">
-        {JSON.stringify(log.payload, null, 2)}
-      </pre>
-    ) : null}
-  </article>
-)
+const levelDot: Record<RuntimeLogEntry["level"], string> = {
+  info: "bg-line-strong",
+  success: "bg-success",
+  warn: "bg-muted",
+  error: "bg-danger",
+}
 
-export const RuntimeLogsView = (): React.JSX.Element => {
+const MAX_LOGS = 500
+
+export const RuntimeLogsView = () => {
+  const { t, locale } = useI18n()
+  const { pop } = useNav()
+  const { toast } = useToast()
   const [logs, setLogs] = useState<RuntimeLogEntry[]>([])
-  const [filter, setFilter] = useState<RuntimeLogFilter>("all")
-  const [feedback, setFeedback] = useState<RuntimeLogFeedback>(null)
-  const feedbackTimerRef = useRef<number | null>(null)
+  const [filter, setFilter] = useState<RuntimeLogType | "all">("all")
 
   useEffect(() => {
-    void sendMessage("GET_RUNTIME_LOGS").then((entries) => setLogs(entries ?? []))
-
-    const onRuntimeMessage = (message: Record<string, unknown>): void => {
-      if (message.source !== "PRESENCES_BACKGROUND" || message.type !== "RUNTIME_LOGS_ADDED") return
-      const entry = message.payload as RuntimeLogEntry | undefined
-      if (!entry?.id) return
-      setLogs((current) => [...current, entry].slice(-500))
+    void sendMessage("GET_RUNTIME_LOGS").then(setLogs).catch(() => {})
+    const onMessage = (message: { source?: string; type?: string; payload?: RuntimeLogEntry }) => {
+      const entry = message?.payload
+      if (message?.source !== "PRESENCES_BACKGROUND" || message.type !== "RUNTIME_LOGS_ADDED" || !entry) return
+      setLogs((current) => [...current.slice(-(MAX_LOGS - 1)), entry])
     }
-
-    chrome.runtime.onMessage.addListener(onRuntimeMessage)
-    return () => chrome.runtime.onMessage.removeListener(onRuntimeMessage)
+    chrome.runtime.onMessage.addListener(onMessage)
+    return () => chrome.runtime.onMessage.removeListener(onMessage)
   }, [])
 
-  useEffect(
-    () => () => {
-      if (feedbackTimerRef.current) window.clearTimeout(feedbackTimerRef.current)
-    },
-    [],
-  )
+  const visible = useMemo(() => [...logs].reverse().filter((entry) => filter === "all" || entry.type === filter), [logs, filter])
+  const time = (at: number) => new Intl.DateTimeFormat(LOCALE_LONG_MAP[locale], { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(at)
 
-  const visibleLogs = useMemo(
-    () =>
-      logs
-        .filter((log) => filter === "all" || log.type === filter)
-        .slice()
-        .reverse(),
-    [filter, logs],
-  )
-
-  const showFeedback = useCallback((nextFeedback: Exclude<RuntimeLogFeedback, null>): void => {
-    if (feedbackTimerRef.current) window.clearTimeout(feedbackTimerRef.current)
-    setFeedback(nextFeedback)
-    feedbackTimerRef.current = window.setTimeout(() => setFeedback(null), 1400)
-  }, [])
-
-  const clearLogs = useCallback((): void => {
-    void sendMessage("CLEAR_RUNTIME_LOGS").then(() => {
-      setLogs([])
-      showFeedback("cleared")
-    })
-  }, [showFeedback])
-
-  const copyLogs = useCallback((): void => {
-    if (!navigator.clipboard?.writeText) return
-    void navigator.clipboard.writeText(JSON.stringify(visibleLogs, null, 2)).then(() => showFeedback("copied"))
-  }, [showFeedback, visibleLogs])
+  const copy = async () => {
+    const text = visible.map((entry) => `${new Date(entry.at).toISOString()} [${entry.level}] ${entry.type}: ${entry.message} ${entry.payload ? JSON.stringify(entry.payload) : ""}`).join("\n")
+    await navigator.clipboard.writeText(text)
+    toast(t("toast.copied"))
+  }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-3">
-      <div className="flex items-center justify-end gap-1">
-        <Button
-          variant="outline"
-          size="xs"
-          onClick={copyLogs}
-          title={t("runtime-logs-copy-title")}
-          className={cn(feedback === "copied" && "border-success/40 bg-success/10 text-success")}
-        >
-          {feedback === "copied" ? <RiCheckLine /> : <RiFileCopyLine />}
-          {feedback === "copied" ? t("runtime-logs-copied") : t("runtime-logs-copy-json")}
-        </Button>
-        <Button
-          variant="outline"
-          size="xs"
-          onClick={clearLogs}
-          title={t("runtime-logs-clear-title")}
-          className={cn(feedback === "cleared" && "border-success/40 bg-success/10 text-success")}
-        >
-          {feedback === "cleared" ? <RiCheckLine /> : <RiDeleteBinLine />}
-          {feedback === "cleared" ? t("runtime-logs-cleared") : t("runtime-logs-clear")}
-        </Button>
-      </div>
-
-      <Tabs
-        value={filter}
-        onValueChange={(value) => setFilter(value as RuntimeLogFilter)}
-      >
-        <TabsList
-          variant="line"
-          className="w-full justify-start overflow-x-auto"
-        >
-          {filters.map((item) => (
-            <TabsTrigger
-              key={item}
-              value={item}
+    <div className="flex min-h-full flex-col">
+      <BackHeader
+        title={t("logs.title")}
+        onBack={pop}
+        backLabel={t("action.back")}
+        action={
+          <div className="flex">
+            <button type="button" aria-label={t("logs.copy")} title={t("logs.copy")} onClick={() => void copy()} className="flex size-9 items-center justify-center rounded-md text-muted hover:bg-hover hover:text-ink">
+              <RiFileCopyLine className="size-[18px]" />
+            </button>
+            <button
+              type="button"
+              aria-label={t("logs.clear")}
+              title={t("logs.clear")}
+              onClick={() => void sendMessage("CLEAR_RUNTIME_LOGS").then(() => setLogs([]))}
+              className="flex size-9 items-center justify-center rounded-md text-muted hover:bg-hover hover:text-ink"
             >
-              {item}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
-
-      <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-border bg-card">
-        {visibleLogs.length === 0 ? (
-          <Empty className="h-full min-h-48 border-none">
-            <EmptyMedia variant="icon">
-              <RiTerminalLine />
-            </EmptyMedia>
-            <EmptyTitle>{t("runtime-logs-empty")}</EmptyTitle>
-          </Empty>
-        ) : (
-          <div className="divide-y divide-border">
-            {visibleLogs.map((log) => (
-              <RuntimeLogRow
-                key={log.id}
-                log={log}
-              />
-            ))}
+              <RiDeleteBin6Line className="size-[18px]" />
+            </button>
           </div>
+        }
+      />
+      <ScreenBody className="gap-3 pt-1">
+        <HScroll className="gap-1.5">
+          {(["all", "presence", "native", "api", "settings"] as const).map((value) => (
+            <Chip key={value} active={filter === value} onClick={() => setFilter(value)}>
+              {t(`logs.filter.${value}`)}
+            </Chip>
+          ))}
+        </HScroll>
+        {visible.length === 0 ? (
+          <Card>
+            <EmptyState title={t("logs.empty")} description={t("logs.emptyHint")} />
+          </Card>
+        ) : (
+          <Card className="divide-y divide-line overflow-hidden font-mono">
+            {visible.map((entry) => (
+              <div key={entry.id} className="flex flex-col gap-1 px-3 py-2.5">
+                <div className="flex items-center gap-2 text-label-sm">
+                  <span className={cn("size-1.5 shrink-0 rounded-full", levelDot[entry.level])} />
+                  <span className="text-muted tabular-nums">{time(entry.at)}</span>
+                  <span className="rounded-full bg-hover px-1.5 py-px text-muted">{entry.type}</span>
+                </div>
+                <span className={cn("font-sans text-label-md", entry.level === "error" ? "text-danger" : "text-ink")}>{entry.message}</span>
+                {entry.payload && Object.keys(entry.payload).length > 0 && (
+                  <span className="text-[11px] leading-4 break-all text-muted">
+                    {Object.entries(entry.payload)
+                      .map(([key, value]) => `${key}=${value}`)
+                      .join("  ")}
+                  </span>
+                )}
+              </div>
+            ))}
+          </Card>
         )}
-      </div>
+      </ScreenBody>
     </div>
   )
 }

@@ -1,9 +1,6 @@
 import { STORAGE_KEYS } from "@/background/storage/keys"
 import type { DiscordProfileSnapshot } from "@/shared/types"
 
-// Sole definition of OnboardingState/DEFAULT_ONBOARDING - the old extension
-// duplicated this type between storage.ts and the UI hook, letting the two
-// drift silently. Everything (background and UI) imports from here.
 export type OnboardingState = {
   devReplayOnboarding: boolean
   onboardingCompleted: boolean

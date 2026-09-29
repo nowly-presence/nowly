@@ -4,6 +4,7 @@ import type { ExtensionSettings } from "@/shared/types"
 export const DEFAULT_SETTINGS: ExtensionSettings = {
   presenceDisplayMode: "category",
   showPlayer: true,
+  suggestPresences: true,
   scheduleEnabled: false,
   appearance: "system",
   presenceLanguage: "per-presence",
@@ -12,13 +13,6 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   activityPriorityOrder: [],
 }
 
-// One-off cleanup for settings blobs written before `separateActivePresence`,
-// `theme` and `canaryTheme` were dropped from the schema (the 6-way accent
-// theme system was replaced by a single design-system accent, and
-// separateActivePresence was dead). Object spread wouldn't strip these on its
-// own, so a stale value would otherwise sit in storage forever.
-// ponytail: single hand-written migration - promote to a versioned migration
-// table if more than one legacy key needs stripping at once.
 const LEGACY_SETTINGS_KEYS = ["separateActivePresence", "theme", "canaryTheme"] as const
 
 const migrateStoredSettings = (stored: Record<string, unknown>): { settings: Partial<ExtensionSettings>; changed: boolean } => {

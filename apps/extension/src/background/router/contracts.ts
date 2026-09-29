@@ -10,8 +10,10 @@ import type {
   PresenceSchedule,
   RuntimeLogEntry,
   StoredPresence,
+  TabState,
   UserScriptsStatus,
 } from "@/shared/types"
+import type { OnboardingState } from "@/background/storage/onboarding.store"
 
 export type DiagnosticSnapshot = {
   extensionInstalled: boolean
@@ -29,14 +31,8 @@ export type InstallLocalZipPayload = { fileName: string; bytes: string }
 export type CatalogResponse = { ok: true; items: PresenceCatalogItem[] } | { ok: false; error: string }
 export type PresenceEngagement = { liked: boolean; likeCount: number; totalInstalls: number; activeUsers: number }
 
-// Source that popup/sidepanel and content-script messages are tagged with -
-// the router only dispatches messages carrying one of these.
 export type RouterSource = "PRESENCES_POPUP" | "PRESENCES_CONTENT"
 
-// One entry per message type: request payload in, response out. The registry
-// built from this in router/handlers/index.ts must cover every key, so
-// TypeScript catches a forgotten handler at compile time instead of the
-// router silently falling through to a default case.
 export type RouterMessageMap = {
   GET_PRESENCES: { payload: void; response: InstalledPresences }
   GET_NATIVE_STATUS: { payload: void; response: NativeStatus }
@@ -77,6 +73,14 @@ export type RouterMessageMap = {
   CLEAR_RUNTIME_LOGS: { payload: void; response: { ok: boolean } }
   TRACK_EVENT: { payload: { key: string } & TrackInput; response: { ok: boolean } }
   DEBUG: { payload: PresenceDebug; response: { ok: boolean } }
+  GET_ONBOARDING: { payload: void; response: OnboardingState }
+  SET_ONBOARDING: { payload: Partial<OnboardingState>; response: OnboardingState }
+  GET_TAB_STATE: { payload: void; response: TabState }
+  SET_TAB_MUTED: { payload: { tabId: number; muted: boolean }; response: TabState }
+  REPORT_PRESENCE: { payload: { slug: string; message: string; locale?: string }; response: { ok: boolean; error?: string } }
+  EXPORT_DEVICE_DATA: { payload: void; response: { ok: boolean; data?: unknown; error?: string } }
+  DELETE_DEVICE_DATA: { payload: void; response: { ok: boolean; error?: string } }
+  SYNC_PRESENCE_SCRIPTS: { payload: void; response: { ok: boolean } }
 }
 
 export type RouterMessageType = keyof RouterMessageMap

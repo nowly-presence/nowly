@@ -1,4 +1,4 @@
-export type { LocaleShort as Locale } from "@nowly/locales"
+export type { Locale } from "@/shared/locales"
 
 export * from "@/shared/types/native"
 export * from "@/shared/types/navigation"

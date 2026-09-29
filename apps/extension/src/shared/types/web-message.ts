@@ -1,5 +1,3 @@
-// External protocol between nowly.me and the content script (window.postMessage),
-// distinct from the internal background router's RouterMessageMap.
 export type WebMessageType =
   | "INSTALL_PRESENCE"
   | "UPDATE_PRESENCE"

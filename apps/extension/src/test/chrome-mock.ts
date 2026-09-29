@@ -1,6 +1,3 @@
-// Minimal hand-rolled stand-in for the handful of chrome.* calls these unit
-// tests touch - not a full chrome API mock, just enough to exercise pure
-// logic that happens to read/write chrome.storage.local or getManifest().
 export const installChromeMock = (): { local: Record<string, unknown>; session: Record<string, unknown> } => {
   const local: Record<string, unknown> = {}
   const session: Record<string, unknown> = {}

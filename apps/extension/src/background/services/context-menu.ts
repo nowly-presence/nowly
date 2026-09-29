@@ -1,6 +1,6 @@
 import { broadcastActiveTab } from "@/background/managers/activity-manager"
 import { fetchPresenceCatalog } from "@/background/managers/presence-manager"
-import { urlMatchesPresence } from "@/background/runtime/url-match"
+import { urlMatchesPresence } from "@/shared/url-patterns"
 import {
   getFocusedTabId,
   getTabPresence,
@@ -54,18 +54,13 @@ const resolveContextMenuNav = async (info: chrome.contextMenus.OnClickData, tab?
       return
     }
   } catch {
-    // If the catalog is unavailable, the hostname remains useful as a store search query.
   }
 
   await setPendingSidepanelNav({ view: "store", query: hostnameQuery(href) })
   persistAppView("store")
 }
 
-// Forces the injected presence script(s) to re-tick immediately instead of
-// waiting up to 5s for their next natural interval, by reusing the same
-// "settings updated" bridge the router sends on settings changes
-// (presence-runtime.ts calls tick() unconditionally on receipt).
-const requestImmediateTick = async (tabId: number): Promise<void> => {
+export const requestImmediateTick = async (tabId: number): Promise<void> => {
   const tab = await chrome.tabs.get(tabId).catch(() => undefined)
   if (!tab?.url) return
 
@@ -76,8 +71,7 @@ const requestImmediateTick = async (tabId: number): Promise<void> => {
   }
 }
 
-const toggleTabMute = async (tabId: number): Promise<void> => {
-  const muted = !(await isTabMuted(tabId))
+export const setTabMuteState = async (tabId: number, muted: boolean): Promise<void> => {
   await setTabMuted(tabId, muted)
   if (muted) {
     await removeTabPresence(tabId)
@@ -87,8 +81,8 @@ const toggleTabMute = async (tabId: number): Promise<void> => {
   await broadcastActiveTab()
 }
 
-// Reflects the currently focused tab's mute/presence state on the single menu
-// item, since Chrome has no per-tab dynamic menu rendering to hook into.
+const toggleTabMute = async (tabId: number): Promise<void> => setTabMuteState(tabId, !(await isTabMuted(tabId)))
+
 const syncMuteMenuItem = async (): Promise<void> => {
   const tabId = getFocusedTabId()
   const muted = tabId != null && (await isTabMuted(tabId))

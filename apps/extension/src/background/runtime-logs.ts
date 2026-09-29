@@ -52,7 +52,6 @@ export const addRuntimeLog = (
   if (logs.length > MAX_LOGS) logs.splice(0, logs.length - MAX_LOGS)
 
   chrome.runtime.sendMessage({ source: "PRESENCES_BACKGROUND", type: "RUNTIME_LOGS_ADDED", payload: entry }).catch(() => {
-    // No extension page is open.
   })
 
   return entry

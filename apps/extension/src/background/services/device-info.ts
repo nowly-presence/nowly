@@ -1,5 +1,3 @@
-// Browser/OS detection helpers for analytics and device-sync payloads.
-
 export const browserName = (): string => {
   const ua = navigator.userAgent
   if (ua.includes("Edg/")) return "edge"

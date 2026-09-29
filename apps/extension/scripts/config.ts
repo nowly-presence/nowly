@@ -7,10 +7,7 @@ export type Channel = "stable" | "canary"
 const __dirname = dirname(fileURLToPath(import.meta.url))
 export const ROOT = join(__dirname, "..")
 
-export const alias = {
-  "@": resolve(ROOT, "src"),
-  "@messages": resolve(ROOT, "messages"),
-}
+export const alias = { "@": resolve(ROOT, "src"), "@messages": resolve(ROOT, "messages") }
 
 const resolveEnv = (channel: Channel, value: string | undefined, fallback: string): string =>
   channel === "canary" && value ? value : fallback
@@ -18,12 +15,8 @@ const resolveEnv = (channel: Channel, value: string | undefined, fallback: strin
 export const buildDefine = (browser: Browser, channel: Channel): Record<string, string> => ({
   "import.meta.env.VITE_WEB_BASE_URL": JSON.stringify(resolveEnv(channel, process.env.VITE_WEB_BASE_URL, "https://nowly.me")),
   "import.meta.env.VITE_API_BASE_URL": JSON.stringify(resolveEnv(channel, process.env.VITE_API_BASE_URL, "https://api.nowly.me")),
-  "import.meta.env.VITE_CDN_BASE_URL": JSON.stringify(
-    resolveEnv(channel, process.env.VITE_CDN_BASE_URL, channel === "canary" ? "" : "https://cdn.nowly.me"),
-  ),
-  "import.meta.env.VITE_CHROMEOS_WAITLIST_CAMPAIGN_ID": JSON.stringify(
-    resolveEnv(channel, process.env.VITE_CHROMEOS_WAITLIST_CAMPAIGN_ID, ""),
-  ),
+  "import.meta.env.VITE_CDN_BASE_URL": JSON.stringify(resolveEnv(channel, process.env.VITE_CDN_BASE_URL, "https://cdn.nowly.me")),
   "import.meta.env.VITE_NOWLY_CHANNEL": JSON.stringify(channel),
+  "import.meta.env.VITE_PREVIEW": JSON.stringify(""),
   "import.meta.env.BROWSER": JSON.stringify(browser),
 })

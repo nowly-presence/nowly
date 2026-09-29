@@ -20,7 +20,6 @@ export const unpackedUserScriptsStatus = (): UserScriptsStatus => {
 export const handleGetUserScriptsStatus: Handler<"GET_USER_SCRIPTS_STATUS"> = async () => {
   if (import.meta.env.BROWSER !== "firefox") return unpackedUserScriptsStatus()
 
-  // userScripts is an optional permission on Firefox - reflect the actual grant state.
   const granted = await chrome.permissions.contains({ permissions: ["userScripts"] })
   return {
     enabled: granted,
