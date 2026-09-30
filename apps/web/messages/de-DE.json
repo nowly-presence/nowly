@@ -765,6 +765,10 @@
           {
             "title": "Benutzerdefinierte Status",
             "description": "Erstelle und nutze eigene Status, um genauer zu steuern, was auf Discord angezeigt wird."
+          },
+          {
+            "title": "Saisonale Themen",
+            "description": "Das erste saisonale Thema: ein Oktober-Thema für Halloween."
           }
         ]
       },

@@ -15,6 +15,7 @@ import { SettingsView } from "@/features/settings/settings-view"
 import { Header } from "@/features/layout/header"
 import { Layer } from "@/features/layout/layer"
 import { ReviewPrompt } from "@/features/review/review-prompt"
+import { HalloweenPrank } from "@/features/seasonal/halloween-prank"
 
 const TABS: Tab[] = ["activity", "store", "settings"]
 
@@ -80,6 +81,7 @@ export const App = () => {
         ]}
       />
       <ReviewPrompt />
+      <HalloweenPrank />
     </main>
   )
 }

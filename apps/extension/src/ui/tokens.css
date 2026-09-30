@@ -31,6 +31,13 @@
   --primary-soft: rgb(8 145 178 / 0.1);
   --success-soft: rgb(34 197 94 / 0.12);
   --error-soft: rgb(239 68 68 / 0.1);
+  --season-accent: transparent;
+  --season-shape: transparent;
+  --door: #4a3024;
+  --door-panel: #57392b;
+  --door-edge: #2c1b13;
+  --door-handle: #f5a524;
+  --doorway: #07050a;
 
   color-scheme: light;
 }
@@ -62,6 +69,62 @@
   color-scheme: dark;
 }
 
+.season-halloween {
+  --primary: #c2410c;
+  --secondary: #5f544b;
+  --tertiary: #150d08;
+  --neutral: #fbf5ef;
+  --surface: #ffffff;
+  --on-surface: #150d08;
+  --muted-border: #efe4d8;
+  --subtle-border: #150d0821;
+
+  --on-tertiary: #fbf1e6;
+  --on-tertiary-muted: rgb(251 241 230 / 0.58);
+  --tertiary-line: rgb(251 241 230 / 0.1);
+  --tertiary-accent: #fb923c;
+  --hover: rgb(21 13 8 / 0.04);
+  --press: rgb(21 13 8 / 0.07);
+  --primary-soft: rgb(194 65 12 / 0.1);
+
+  --season-accent: #7c5a93;
+  --season-shape: rgb(194 65 12 / 0.3);
+}
+
+.dark.season-halloween {
+  --primary: #fb923c;
+  --secondary: #a39286;
+  --tertiary: #140d09;
+  --neutral: #0b0705;
+  --surface: #140d09;
+  --on-surface: #fbeee2;
+  --muted-border: rgba(251, 238, 226, 0.08);
+  --subtle-border: rgba(251, 238, 226, 0.12);
+
+  --on-tertiary: #fbeee2;
+  --on-tertiary-muted: rgb(251 238 226 / 0.55);
+  --tertiary-line: rgba(251, 238, 226, 0.08);
+  --tertiary-accent: #fb923c;
+  --tertiary-edge: rgba(251, 238, 226, 0.08);
+  --hover: rgb(251 238 226 / 0.04);
+  --press: rgb(251 238 226 / 0.07);
+  --primary-soft: rgb(251 146 60 / 0.12);
+
+  --season-accent: #b79bd0;
+  --season-shape: rgb(251 146 60 / 0.32);
+}
+
+.nolo-costume-halloween {
+  --primary: #f97316;
+  --nolo-hat: #2b2233;
+  --nolo-hat-band: #9b7bb8;
+}
+
+.dark .nolo-costume-halloween {
+  --nolo-hat: #3b2f47;
+  --nolo-hat-band: #b79bd0;
+}
+
 @theme inline {
   --font-sans: "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
@@ -87,6 +150,13 @@
   --color-danger-soft: var(--error-soft);
   --color-hover: var(--hover);
   --color-press: var(--press);
+  --color-season-accent: var(--season-accent);
+  --color-season-shape: var(--season-shape);
+  --color-door: var(--door);
+  --color-door-panel: var(--door-panel);
+  --color-door-edge: var(--door-edge);
+  --color-door-handle: var(--door-handle);
+  --color-doorway: var(--doorway);
 
   --radius-sm: 8px;
   --radius-md: 10px;
@@ -117,6 +187,7 @@
   --animate-push: push 300ms var(--ease-out-soft) both;
   --animate-fade: fade 200ms ease-out both;
   --animate-live: live 2.4s ease-in-out infinite;
+  --animate-season-float: season-float 4.8s ease-in-out infinite;
 }
 
 @keyframes enter {
@@ -134,6 +205,10 @@
 @keyframes fade {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+@keyframes season-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
 @keyframes live {
   0%, 100% { box-shadow: 0 0 0 0 rgb(34 197 94 / 0.45); }

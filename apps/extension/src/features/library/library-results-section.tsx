@@ -1,4 +1,5 @@
 import { RiDiscordLine, RiSearchLine } from "@remixicon/react"
+import { SeasonalDecor } from "@/components/shared/seasonal-decor"
 import { useExtensionState } from "@/hooks/extension-state-provider"
 import { useI18n } from "@/hooks/i18n-provider"
 import { useNav } from "@/hooks/navigation-provider"
@@ -51,6 +52,7 @@ export const LibraryResultsSection = ({ results, newSlugs, browsing, query, cate
       {results.length === 0 ? (
         <Card>
           <EmptyState
+            decoration={<SeasonalDecor />}
             icon={<RiSearchLine className="size-5" />}
             title={t("library.noResults", { query: query.trim() || t(categoryKey(category === "all" ? "other" : category)) })}
             description={t("library.noResultsDescription")}

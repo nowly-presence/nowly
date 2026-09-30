@@ -3,6 +3,7 @@ import { useExtensionState } from "@/hooks/extension-state-provider"
 import { useI18n } from "@/hooks/i18n-provider"
 import { keyboardShortcuts } from "@/lib/keyboard-shortcuts"
 import type { ActivitySelectionMode } from "@/shared/types"
+import { Button } from "@/ui/button"
 import { Group } from "@/ui/card"
 import { FieldRow } from "@/ui/field-row"
 import { SwitchRow } from "@/ui/row"
@@ -41,6 +42,13 @@ export const SharingSection = () => {
           label={t("settings.suggestPresences")}
           onChange={(checked) => void updateSettings({ suggestPresences: checked })}
         />
+        {settings.suggestPresences !== false && (settings.hiddenSuggestions?.length ?? 0) > 0 && (
+          <FieldRow title={t("settings.hiddenSuggestions", { count: settings.hiddenSuggestions?.length ?? 0 })} description={t("settings.hiddenSuggestionsHint")}>
+            <Button size="sm" variant="secondary" onClick={() => void updateSettings({ hiddenSuggestions: [] })}>
+              {t("settings.showHiddenSuggestions")}
+            </Button>
+          </FieldRow>
+        )}
         <FieldRow title={t("settings.selection")} description={t("settings.selectionHint")} layout="stacked" spacing="relaxed" controlClassName="flex flex-col gap-3">
           <Segmented<ActivitySelectionMode>
             label={t("settings.selection")}

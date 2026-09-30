@@ -48,16 +48,23 @@ export const RoadmapView = async () => {
                 <section key={column.title} className="relative pl-9 sm:pl-14">
                   {nextColumn ? (
                     <div
-                      className={cn(
-                        "absolute top-4 bottom-[-3rem] left-[11px] w-px sm:left-[15px]",
-                        isBrokenBridge
-                          ? "border-l border-dashed border-foreground/30"
-                          : isCompleted && nextIsCompleted
-                            ? "bg-accent"
-                            : "bg-border",
-                      )}
+                      className="absolute top-4 bottom-[-3rem] left-[11px] w-px sm:left-[15px]"
                       aria-hidden
-                    />
+                    >
+                      {isBrokenBridge ? (
+                        <>
+                          <div className="h-1/2 border-l border-dashed border-foreground/30" />
+                          <div className="h-1/2 bg-accent" />
+                        </>
+                      ) : (
+                        <div
+                          className={cn(
+                            "h-full",
+                            isCompleted && nextIsCompleted ? "bg-accent" : "bg-border",
+                          )}
+                        />
+                      )}
+                    </div>
                   ) : null}
                   <span
                     className={cn(

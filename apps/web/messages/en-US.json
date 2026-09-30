@@ -765,6 +765,10 @@
           {
             "title": "Custom statuses",
             "description": "Create and use custom statuses to control more precisely what appears on Discord."
+          },
+          {
+            "title": "Seasonal themes",
+            "description": "The first seasonal theme: an October theme for Halloween."
           }
         ]
       },

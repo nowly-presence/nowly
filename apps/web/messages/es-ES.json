@@ -765,6 +765,10 @@
           {
             "title": "Estados personalizados",
             "description": "Crear y usar estados personalizados para controlar mejor lo que aparece en Discord."
+          },
+          {
+            "title": "Temas de temporada",
+            "description": "El primer tema de temporada: un tema de octubre para Halloween."
           }
         ]
       },

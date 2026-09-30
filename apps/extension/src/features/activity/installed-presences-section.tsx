@@ -1,4 +1,5 @@
 import { RiApps2AddLine, RiFunctionLine, RiListCheck } from "@remixicon/react"
+import { SeasonalDecor } from "@/components/shared/seasonal-decor"
 import { useExtensionState } from "@/hooks/extension-state-provider"
 import { useI18n } from "@/hooks/i18n-provider"
 import { useNav } from "@/hooks/navigation-provider"
@@ -52,6 +53,7 @@ export const InstalledPresencesSection = ({ presences, detectedSlugs, now }: Ins
       {presences.length === 0 ? (
         <Card>
           <EmptyState
+            decoration={<SeasonalDecor />}
             icon={<RiApps2AddLine className="size-5" />}
             title={t("activity.emptyTitle")}
             description={t("activity.emptyDescription")}

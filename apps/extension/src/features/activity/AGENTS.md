@@ -12,5 +12,9 @@ Home tab: live Discord card, the focused tab, other tabs reporting an activity, 
 1. Add the variant to `PresenceStatus` and its rule to `presenceStatus` in `lib/presence-status.ts` (keep it aligned with `shouldHoldDiscord` in `background/managers/activity-manager.ts`).
 2. Map it to a label and tone in `presence-status-text.ts`; add the `status.*` key to every `messages/*.json`.
 
+## Gotchas
+
+- The "supported site" suggestion in `current-tab-section.tsx` has a bottom text link "Don't show again" (never next to "Install") that adds the slug to `settings.hiddenSuggestions`; the reset lives in Settings (sharing section).
+
 ## Notable dependencies
 `components/shared/live-activity-card`, `hooks/use-presence-actions`, `shared/url-patterns` (catalog suggestion for the focused tab), background messages `SET_TAB_MUTED`, `GET_TAB_STATE`.

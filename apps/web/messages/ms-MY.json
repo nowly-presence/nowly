@@ -765,6 +765,10 @@
           {
             "title": "Status tersuai",
             "description": "Cipta dan gunakan status tersuai untuk mengawal dengan lebih tepat perkara yang dipaparkan di Discord."
+          },
+          {
+            "title": "Tema bermusim",
+            "description": "Tema bermusim pertama: tema Oktober untuk Halloween."
           }
         ]
       },
