@@ -49,7 +49,8 @@
     "consent": "Vos données",
     "status": "Statut des services",
     "twitter": "X / Twitter",
-    "bluesky": "Bluesky"
+    "bluesky": "Bluesky",
+    "faq": "Foire aux questions"
   },
   "cookie-banner": {
     "message": "Ce site utilise un cookie de langue strictement nécessaire. Si la publicité est activée plus tard, Google pourra aussi utiliser des technologies publicitaires.",

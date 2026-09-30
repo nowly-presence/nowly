@@ -49,7 +49,8 @@
     "consent": "Your data",
     "status": "Status",
     "twitter": "X / Twitter",
-    "bluesky": "Bluesky"
+    "bluesky": "Bluesky",
+    "faq": "FAQ"
   },
   "cookie-banner": {
     "message": "This site uses a strictly necessary language cookie. If advertising is later enabled, Google may also use advertising technologies.",

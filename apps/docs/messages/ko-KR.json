@@ -49,7 +49,8 @@
     "consent": "내 데이터",
     "status": "상태",
     "twitter": "X / Twitter",
-    "bluesky": "Bluesky"
+    "bluesky": "Bluesky",
+    "faq": "자주 묻는 질문"
   },
   "cookie-banner": {
     "message": "이 사이트는 반드시 필요한 언어 설정 쿠키를 사용합니다. 이후 광고 기능이 활성화되면 Google이 광고 기술을 사용할 수 있습니다.",
