@@ -35,39 +35,49 @@ describe("getSettings migration", () => {
     const settings = await getSettings()
 
     expect(settings.presenceDisplayMode).toBe("category")
-    expect(settings.appearance).toBe("seasonal")
+    expect(settings.appearance).toBe("system")
   })
 })
 
-describe("getSettings seasonal theme migration", () => {
+describe("getSettings seasonal themes migration", () => {
   beforeEach(() => {
     vi.resetModules()
   })
 
-  it("moves users on the old System default to Seasonal once", async () => {
-    const chrome = installChromeMock()
-    chrome.local.settings = { presenceDisplayMode: "category", appearance: "system" }
-
-    const { getSettings, setSettings } = await import("@/background/storage/settings.store")
-    expect((await getSettings()).appearance).toBe("seasonal")
-    expect(chrome.local.settings).toMatchObject({ appearance: "seasonal", seasonalThemeMigrated: true })
-
-    await setSettings({ appearance: "system" })
-    expect((await getSettings()).appearance).toBe("system")
-  })
-
-  it("keeps an explicit Light or Dark choice", async () => {
+  it("turns seasonal themes on for users coming from 2.2.0 and keeps their theme", async () => {
     const chrome = installChromeMock()
     chrome.local.settings = { presenceDisplayMode: "category", appearance: "dark" }
 
-    const { getSettings } = await import("@/background/storage/settings.store")
-    expect((await getSettings()).appearance).toBe("dark")
-    expect(chrome.local.settings).toMatchObject({ appearance: "dark", seasonalThemeMigrated: true })
+    const { getSettings, setSettings } = await import("@/background/storage/settings.store")
+    expect(await getSettings()).toMatchObject({ appearance: "dark", seasonalThemes: true })
+    expect(chrome.local.settings).toMatchObject({ appearance: "dark", seasonalThemes: true })
+
+    await setSettings({ seasonalThemes: false })
+    expect((await getSettings()).seasonalThemes).toBe(false)
   })
 
-  it("starts fresh installs on Seasonal", async () => {
+  it("splits the 2.2.1 Seasonal appearance into System with seasonal themes on", async () => {
+    const chrome = installChromeMock()
+    chrome.local.settings = { presenceDisplayMode: "category", appearance: "seasonal", seasonalThemeMigrated: true }
+
+    const { getSettings } = await import("@/background/storage/settings.store")
+    const settings = await getSettings()
+    expect(settings).toMatchObject({ appearance: "system", seasonalThemes: true })
+    expect(settings).not.toHaveProperty("seasonalThemeMigrated")
+    expect(chrome.local.settings).not.toHaveProperty("seasonalThemeMigrated")
+  })
+
+  it("keeps seasonal themes off for 2.2.1 users who had left Seasonal", async () => {
+    const chrome = installChromeMock()
+    chrome.local.settings = { presenceDisplayMode: "category", appearance: "light", seasonalThemeMigrated: true }
+
+    const { getSettings } = await import("@/background/storage/settings.store")
+    expect(await getSettings()).toMatchObject({ appearance: "light", seasonalThemes: false })
+  })
+
+  it("starts fresh installs on System with seasonal themes on", async () => {
     installChromeMock()
     const { getSettings } = await import("@/background/storage/settings.store")
-    expect((await getSettings()).appearance).toBe("seasonal")
+    expect(await getSettings()).toMatchObject({ appearance: "system", seasonalThemes: true })
   })
 })

@@ -8,11 +8,26 @@ const SeasonContext = createContext<SeasonValue>({ season: null, seasonal: false
 
 const MIDNIGHT_MARGIN_MS = 1000
 
+const sameDay = (a: Date, b: Date): boolean => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+
 const useToday = (): Date => {
   const [today, setToday] = useState(() => new Date())
   useEffect(() => {
-    const timer = window.setTimeout(() => setToday(new Date()), msUntilNextDay(today) + MIDNIGHT_MARGIN_MS)
-    return () => window.clearTimeout(timer)
+    const refresh = () => setToday((current) => {
+      const now = new Date()
+      return sameDay(current, now) ? current : now
+    })
+    const onVisible = () => {
+      if (document.visibilityState === "visible") refresh()
+    }
+    const timer = window.setTimeout(refresh, msUntilNextDay(today) + MIDNIGHT_MARGIN_MS)
+    document.addEventListener("visibilitychange", onVisible)
+    window.addEventListener("focus", refresh)
+    return () => {
+      window.clearTimeout(timer)
+      document.removeEventListener("visibilitychange", onVisible)
+      window.removeEventListener("focus", refresh)
+    }
   }, [today])
   return today
 }
@@ -37,15 +52,15 @@ export const SeasonProvider = ({ children }: { children: ReactNode }) => {
   const { state } = useExtensionState()
   const today = useToday()
   const override = useSeasonOverride()
-  const appearance = state.ready ? state.settings.appearance : undefined
-  const season = resolveSeason({ appearance, date: today, override })
+  const seasonal = state.ready && state.settings.seasonalThemes !== false
+  const season = resolveSeason({ enabled: seasonal, date: today, override })
 
   useEffect(() => {
     const root = document.documentElement
     for (const period of SEASON_PERIODS) root.classList.toggle(`season-${period.season}`, period.season === season)
   }, [season])
 
-  const value = useMemo(() => ({ season, seasonal: appearance === "seasonal", today, override }), [season, appearance, today, override])
+  const value = useMemo(() => ({ season, seasonal, today, override }), [season, seasonal, today, override])
 
   return <SeasonContext.Provider value={value}>{children}</SeasonContext.Provider>
 }

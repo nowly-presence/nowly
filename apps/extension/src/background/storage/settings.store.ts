@@ -6,29 +6,33 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   showPlayer: true,
   suggestPresences: true,
   scheduleEnabled: false,
-  appearance: "seasonal",
-  seasonalThemeMigrated: true,
+  appearance: "system",
+  seasonalThemes: true,
   presenceLanguage: "per-presence",
   presenceLanguages: {},
   activitySelectionMode: "focused",
   activityPriorityOrder: [],
 }
 
-const LEGACY_SETTINGS_KEYS = ["separateActivePresence", "theme", "canaryTheme"] as const
+const LEGACY_SETTINGS_KEYS = ["separateActivePresence", "theme", "canaryTheme", "seasonalThemeMigrated"] as const
+const LEGACY_SEASONAL_APPEARANCE = "seasonal"
 
 const migrateStoredSettings = (stored: Record<string, unknown>): { settings: Partial<ExtensionSettings>; changed: boolean } => {
   let changed = false
   const next = { ...stored }
+  if (next.appearance === LEGACY_SEASONAL_APPEARANCE) {
+    next.appearance = "system"
+    next.seasonalThemes = true
+    changed = true
+  } else if (typeof next.seasonalThemes !== "boolean") {
+    next.seasonalThemes = next.seasonalThemeMigrated !== true
+    changed = true
+  }
   for (const key of LEGACY_SETTINGS_KEYS) {
     if (key in next) {
       delete next[key]
       changed = true
     }
-  }
-  if (next.seasonalThemeMigrated !== true) {
-    if (next.appearance === undefined || next.appearance === "system") next.appearance = "seasonal"
-    next.seasonalThemeMigrated = true
-    changed = true
   }
   return { settings: next as Partial<ExtensionSettings>, changed }
 }

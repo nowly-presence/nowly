@@ -2,7 +2,7 @@ import type { LongLocale } from "@/shared/locales"
 import type { PresenceSchedule } from "@/shared/types/presence"
 
 export type PresenceDisplayMode = "category" | "grid"
-export type AppearanceMode = "seasonal" | "system" | "light" | "dark"
+export type AppearanceMode = "system" | "light" | "dark"
 export type PresenceLocale = LongLocale
 export type PresenceLanguageMode = "per-presence" | PresenceLocale
 export type ActivitySelectionMode = "focused" | "priority"
@@ -18,7 +18,7 @@ export type ExtensionSettings = {
   scheduleEnabled?: boolean
   globalSchedule?: PresenceSchedule
   appearance?: AppearanceMode
-  seasonalThemeMigrated?: boolean
+  seasonalThemes?: boolean
   backgroundAnimation?: boolean
   presenceLanguage?: PresenceLanguageMode
   presenceLanguages?: Record<string, PresenceLocale>

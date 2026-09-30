@@ -25,17 +25,15 @@ describe("seasonForDate", () => {
 describe("resolveSeason", () => {
   const october = local(2026, 10, 12)
 
-  it("only applies to the Seasonal theme", () => {
-    expect(resolveSeason({ appearance: "seasonal", date: october })).toBe("halloween")
-    expect(resolveSeason({ appearance: "system", date: october })).toBeNull()
-    expect(resolveSeason({ appearance: "light", date: october })).toBeNull()
-    expect(resolveSeason({ appearance: "dark", date: october })).toBeNull()
+  it("only applies when seasonal themes are on", () => {
+    expect(resolveSeason({ enabled: true, date: october })).toBe("halloween")
+    expect(resolveSeason({ enabled: false, date: october })).toBeNull()
   })
 
   it("lets an override force or silence the period", () => {
-    expect(resolveSeason({ appearance: "seasonal", date: local(2026, 6, 1), override: "halloween" })).toBe("halloween")
-    expect(resolveSeason({ appearance: "seasonal", date: october, override: "none" })).toBeNull()
-    expect(resolveSeason({ appearance: "light", date: october, override: "halloween" })).toBeNull()
+    expect(resolveSeason({ enabled: true, date: local(2026, 6, 1), override: "halloween" })).toBe("halloween")
+    expect(resolveSeason({ enabled: true, date: october, override: "none" })).toBeNull()
+    expect(resolveSeason({ enabled: false, date: october, override: "halloween" })).toBeNull()
   })
 })
 

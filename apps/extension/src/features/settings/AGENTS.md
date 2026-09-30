@@ -17,7 +17,7 @@ Create `sections/<name>-section.tsx` and render it in `settings-view.tsx`.
 - Language selects show a `LocaleFlag` per locale with native names (`LOCALE_NAMES` / `longLocaleName`), never translated names.
 - `FieldRow` `note` is the full-width italic line under a row, for constraints the user must know (e.g. the shared-languages rule on "Discord language").
 
-- Theme: System, Light, Dark, then Seasonal on the right (`AppearanceMode`). Seasonal is the default and shows its hint only while selected. See "Seasonal themes" in the root `AGENTS.md` for the migration from System.
+- Theme: System, Light, Dark (`AppearanceMode`), then the "Show seasonal themes" switch (`seasonalThemes`, on by default) that lays the active season on top. See "Seasonal themes" in the root `AGENTS.md` for the migration.
 
 - `suggestPresences` (default on) only hides the "supported site" row of the Activity tab's current-tab section; no background behaviour depends on it. `hiddenSuggestions` holds the slugs hidden one by one with the "Don't show again" link under that row (undo in the toast); the sharing section shows a "Hidden suggestions" row with a reset while it is non-empty.
 

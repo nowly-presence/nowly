@@ -1,5 +1,3 @@
-import type { AppearanceMode } from "@/shared/types/settings"
-
 export type Season = "halloween" | "winter"
 export type SeasonOverride = Season | "none"
 
@@ -29,8 +27,8 @@ export const seasonForDate = (date: Date, periods: readonly SeasonPeriod[] = SEA
   return match?.season ?? null
 }
 
-export const resolveSeason = ({ appearance, date, override }: { appearance: AppearanceMode | undefined; date: Date; override?: SeasonOverride | null }): Season | null => {
-  if (appearance !== "seasonal" || override === "none") return null
+export const resolveSeason = ({ enabled, date, override }: { enabled: boolean; date: Date; override?: SeasonOverride | null }): Season | null => {
+  if (!enabled || override === "none") return null
   return override ?? seasonForDate(date)
 }
 

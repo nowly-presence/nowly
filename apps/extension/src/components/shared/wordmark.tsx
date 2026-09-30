@@ -14,5 +14,5 @@ export const Wordmark = ({ theme, className }: { theme: "light" | "dark"; classN
       </span>
     )
   }
-  return <img src={brandLockup(variant)} alt="Nowly" className={cn("w-auto select-none", IS_CANARY ? "h-[30px]" : "h-[22px]", className)} draggable={false} onError={() => setFailed(true)} />
+  return <img src={brandLockup(variant)} alt="Nowly" className={cn("h-10 w-auto min-w-0 select-none", className)} draggable={false} onError={() => setFailed(true)} />
 }

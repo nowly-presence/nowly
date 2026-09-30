@@ -9,6 +9,7 @@ import type { AppearanceMode } from "@/shared/types"
 import { Group } from "@/ui/card"
 import { FieldRow } from "@/ui/field-row"
 import { LocaleFlag } from "@/ui/locale-flag"
+import { SwitchRow } from "@/ui/row"
 import { Section } from "@/ui/section"
 import { Segmented } from "@/ui/segmented"
 import { Select, type SelectOption } from "@/ui/select"
@@ -21,7 +22,6 @@ export const AppearanceSection = () => {
   const { state, updateSettings } = useExtensionState()
   const { t, preference, setPreference } = useI18n()
   const { settings } = state
-  const appearance = settings.appearance ?? "seasonal"
   const presenceLanguage = settings.presenceLanguage ?? PER_PRESENCE
   const common = useMemo(() => commonPresenceLocales(state.presences), [state.presences])
   const restricted = common.length < PRESENCE_LOCALES.length
@@ -39,19 +39,25 @@ export const AppearanceSection = () => {
   return (
     <Section title={t("settings.appearance")}>
       <Group>
-        <FieldRow title={t("settings.theme")} description={appearance === "seasonal" ? t("settings.themeSeasonalHint") : undefined} layout="stacked">
+        <FieldRow title={t("settings.theme")} layout="stacked">
           <Segmented<AppearanceMode>
             label={t("settings.theme")}
-            value={appearance}
+            value={settings.appearance ?? "system"}
             onChange={(value) => void updateSettings({ appearance: value })}
             options={[
               { value: "system", label: t("settings.themeSystem") },
               { value: "light", label: t("settings.themeLight") },
               { value: "dark", label: t("settings.themeDark") },
-              { value: "seasonal", label: t("settings.themeSeasonal") },
             ]}
           />
         </FieldRow>
+        <SwitchRow
+          title={t("settings.seasonalThemes")}
+          description={t("settings.seasonalThemesHint")}
+          checked={settings.seasonalThemes !== false}
+          label={t("settings.seasonalThemes")}
+          onChange={(checked) => void updateSettings({ seasonalThemes: checked })}
+        />
         <FieldRow title={t("settings.language")} controlClassName="w-44">
           <Select
             aria-label={t("settings.language")}
