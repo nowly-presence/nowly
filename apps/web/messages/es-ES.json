@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Documentación",
     "library": "Biblioteca",
+    "roadmap": "Hoja de ruta",
     "open-menu": "Abrir menú"
   },
   "theme": {
@@ -732,7 +733,65 @@
     "consent": {
       "title": "Tus datos",
       "description": "Gestiona el consentimiento analítico opcional, y consulta, exporta o elimina los datos que Nowly ha guardado de tu dispositivo."
+    },
+    "roadmap": {
+      "title": "Hoja de ruta",
+      "description": "Descubre lo que viene para Nowly y cuáles son nuestras prioridades."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Hoja de ruta",
+    "title": "Lo próximo para Nowly",
+    "description": "Una visión viva de nuestras prioridades. Las fechas pueden cambiar según los comentarios de la comunidad.",
+    "columns": [
+      {
+        "status": "En curso",
+        "title": "Ahora",
+        "description": "Trabajo que estamos diseñando o publicando.",
+        "items": [
+          {
+            "title": "Más plataformas compatibles",
+            "description": "Añadir más servicios a la biblioteca de presencias."
+          },
+          {
+            "title": "Una instalación más sencilla",
+            "description": "Hacer más clara y rápida la instalación de la extensión y la aplicación de escritorio."
+          }
+        ]
+      },
+      {
+        "status": "Siguiente",
+        "title": "Próximamente",
+        "description": "Mejoras previstas para la siguiente etapa.",
+        "items": [
+          {
+            "title": "Mejores herramientas para presencias",
+            "description": "Mejorar el SDK y el flujo de contribución para crear presencias."
+          },
+          {
+            "title": "Más detalles de actividad",
+            "description": "Ofrecer más formas de mostrar contexto útil en Discord."
+          }
+        ]
+      },
+      {
+        "status": "En exploración",
+        "title": "Ideas",
+        "description": "Direcciones que estamos evaluando con la comunidad.",
+        "items": [
+          {
+            "title": "Peticiones de la comunidad",
+            "description": "Convertir las peticiones populares de plataformas en un camino más claro."
+          },
+          {
+            "title": "Más personalización",
+            "description": "Explorar nuevas formas de ajustar cómo aparece tu actividad en Discord."
+          }
+        ]
+      }
+    ],
+    "note": "Esta hoja de ruta marca una dirección, no fechas garantizadas. Las prioridades pueden cambiar.",
+    "feedback": "Compartir comentarios"
   },
   "not-found": {
     "title": "Página no encontrada",

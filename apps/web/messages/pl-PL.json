@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Dokumentacja",
     "library": "Biblioteka",
+    "roadmap": "Mapa drogowa",
     "open-menu": "Otwórz menu"
   },
   "theme": {
@@ -732,7 +733,65 @@
     "consent": {
       "title": "Twoje dane",
       "description": "Zarządzaj opcjonalną zgodą na analitykę oraz przeglądaj, eksportuj lub usuwaj dane, które Nowly przechowuje dla Twojego urządzenia."
+    },
+    "roadmap": {
+      "title": "Mapa drogowa",
+      "description": "Zobacz, co nadchodzi w Nowly i jakie są nasze priorytety."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Mapa drogowa",
+    "title": "Co dalej z Nowly",
+    "description": "Przegląd naszych priorytetów. Terminy mogą się zmieniać na podstawie opinii społeczności.",
+    "columns": [
+      {
+        "status": "W trakcie",
+        "title": "Teraz",
+        "description": "Prace, które obecnie projektujemy lub wdrażamy.",
+        "items": [
+          {
+            "title": "Więcej obsługiwanych platform",
+            "description": "Dodajemy kolejne usługi do biblioteki presence."
+          },
+          {
+            "title": "Prostsza konfiguracja",
+            "description": "Ułatwiamy i przyspieszamy instalację rozszerzenia oraz aplikacji desktopowej."
+          }
+        ]
+      },
+      {
+        "status": "Następne",
+        "title": "Wkrótce",
+        "description": "Planowane usprawnienia na kolejny etap.",
+        "items": [
+          {
+            "title": "Lepsze narzędzia presence",
+            "description": "Ulepszamy SDK i proces współtworzenia presence."
+          },
+          {
+            "title": "Bogatsze szczegóły aktywności",
+            "description": "Więcej sposobów na pokazanie przydatnego kontekstu w Discordzie."
+          }
+        ]
+      },
+      {
+        "status": "W planach",
+        "title": "Pomysły",
+        "description": "Kierunki, które oceniamy razem ze społecznością.",
+        "items": [
+          {
+            "title": "Prośby społeczności",
+            "description": "Zmieniamy popularne prośby o platformy w wyraźniejszą ścieżkę realizacji."
+          },
+          {
+            "title": "Więcej personalizacji",
+            "description": "Szukamy nowych sposobów dostosowania wyglądu aktywności w Discordzie."
+          }
+        ]
+      }
+    ],
+    "note": "Mapa drogowa pokazuje kierunek, a nie gwarantowane terminy. Priorytety mogą się zmienić.",
+    "feedback": "Przekaż opinię"
   },
   "not-found": {
     "title": "Strona nie znaleziona",

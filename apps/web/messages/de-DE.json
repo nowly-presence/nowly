@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Dokumentation",
     "library": "Bibliothek",
+    "roadmap": "Roadmap",
     "open-menu": "Menü öffnen"
   },
   "theme": {
@@ -732,7 +733,65 @@
     "consent": {
       "title": "Deine Daten",
       "description": "Verwalte die optionale Analytics-Zustimmung und sieh, exportiere oder lösche die für dein Gerät gespeicherten Daten von Nowly."
+    },
+    "roadmap": {
+      "title": "Roadmap",
+      "description": "Sieh, was als Nächstes für Nowly kommt und woran wir arbeiten."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Roadmap",
+    "title": "Was kommt als Nächstes für Nowly?",
+    "description": "Ein Überblick über unsere Prioritäten. Zeitpläne können sich durch Feedback der Community ändern.",
+    "columns": [
+      {
+        "status": "In Arbeit",
+        "title": "Jetzt",
+        "description": "Themen, die gerade entwickelt oder veröffentlicht werden.",
+        "items": [
+          {
+            "title": "Mehr unterstützte Plattformen",
+            "description": "Weitere Dienste in die Presence-Bibliothek aufnehmen."
+          },
+          {
+            "title": "Ein einfacherer Einstieg",
+            "description": "Die Installation von Erweiterung und Desktop-App klarer und schneller machen."
+          }
+        ]
+      },
+      {
+        "status": "Als Nächstes",
+        "title": "Demnächst",
+        "description": "Geplante Verbesserungen für die nächste Phase.",
+        "items": [
+          {
+            "title": "Bessere Presence-Tools",
+            "description": "SDK und Beitragsworkflow für die Entwicklung von Presences verbessern."
+          },
+          {
+            "title": "Mehr Aktivitätsdetails",
+            "description": "Presences mehr Möglichkeiten geben, nützlichen Kontext in Discord anzuzeigen."
+          }
+        ]
+      },
+      {
+        "status": "In Prüfung",
+        "title": "Ideen",
+        "description": "Richtungen, die wir mit der Community prüfen.",
+        "items": [
+          {
+            "title": "Community-Anfragen",
+            "description": "Beliebte Plattformwünsche klarer von der Idee bis zur Presence führen."
+          },
+          {
+            "title": "Mehr Anpassung",
+            "description": "Neue Möglichkeiten erkunden, wie deine Aktivität in Discord erscheint."
+          }
+        ]
+      }
+    ],
+    "note": "Diese Roadmap ist eine Orientierung und kein Versprechen für bestimmte Termine. Prioritäten können sich ändern.",
+    "feedback": "Feedback teilen"
   },
   "not-found": {
     "title": "Seite nicht gefunden",

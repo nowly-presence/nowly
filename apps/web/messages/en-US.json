@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Documentation",
     "library": "Library",
+    "roadmap": "Roadmap",
     "open-menu": "Open menu"
   },
   "theme": {
@@ -732,7 +733,65 @@
     "consent": {
       "title": "Your data",
       "description": "Manage the optional analytics consent, and view, export, or delete the data Nowly has stored for your device."
+    },
+    "roadmap": {
+      "title": "Roadmap",
+      "description": "See what’s next for Nowly and the work we’re prioritising."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Roadmap",
+    "title": "What's next for Nowly",
+    "description": "A living view of the work we're prioritising. Dates can move as we learn from the community.",
+    "columns": [
+      {
+        "status": "In progress",
+        "title": "Now",
+        "description": "Work being actively shaped or shipped.",
+        "items": [
+          {
+            "title": "More supported platforms",
+            "description": "Bring more of the services you use into the presence library."
+          },
+          {
+            "title": "A smoother setup",
+            "description": "Make installing the extension and desktop app clearer and faster."
+          }
+        ]
+      },
+      {
+        "status": "Up next",
+        "title": "Coming soon",
+        "description": "Planned improvements for the next phase.",
+        "items": [
+          {
+            "title": "Better presence tools",
+            "description": "Improve the SDK and contributor workflow for building presences."
+          },
+          {
+            "title": "Richer activity details",
+            "description": "Give supported presences more ways to show useful context in Discord."
+          }
+        ]
+      },
+      {
+        "status": "Exploring",
+        "title": "Ideas",
+        "description": "Directions we are evaluating with the community.",
+        "items": [
+          {
+            "title": "Community requests",
+            "description": "Turn popular platform requests into a clearer path from idea to presence."
+          },
+          {
+            "title": "More customization",
+            "description": "Explore new ways to tune how your activity appears in Discord."
+          }
+        ]
+      }
+    ],
+    "note": "This roadmap is directional, not a promise of dates. Priorities may change as Nowly and its community grow.",
+    "feedback": "Share feedback"
   },
   "not-found": {
     "title": "Page not found",

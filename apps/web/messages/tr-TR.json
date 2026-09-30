@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Dokümantasyon",
     "library": "Kitaplık",
+    "roadmap": "Yol haritası",
     "open-menu": "Menüyü aç"
   },
   "theme": {
@@ -732,7 +733,65 @@
     "consent": {
       "title": "Verilerin",
       "description": "İsteğe bağlı analiz iznini yönet ve Nowly'nin cihazın için sakladığı verileri görüntüle, dışa aktar veya sil."
+    },
+    "roadmap": {
+      "title": "Yol haritası",
+      "description": "Nowly için sırada ne olduğunu ve önceliklerimizi görün."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Yol haritası",
+    "title": "Nowly için sırada ne var?",
+    "description": "Önceliklerimize güncel bir bakış. Topluluktan gelen geri bildirimlerle tarihler değişebilir.",
+    "columns": [
+      {
+        "status": "Devam ediyor",
+        "title": "Şimdi",
+        "description": "Şu anda geliştirilen veya yayınlanan çalışmalar.",
+        "items": [
+          {
+            "title": "Daha fazla desteklenen platform",
+            "description": "Daha fazla hizmeti presence kitaplığına ekliyoruz."
+          },
+          {
+            "title": "Daha kolay kurulum",
+            "description": "Uzantı ve masaüstü uygulamasının kurulumunu daha anlaşılır ve hızlı yapıyoruz."
+          }
+        ]
+      },
+      {
+        "status": "Sırada",
+        "title": "Yakında",
+        "description": "Bir sonraki aşama için planlanan iyileştirmeler.",
+        "items": [
+          {
+            "title": "Daha iyi presence araçları",
+            "description": "Presence oluşturmak için SDK'yı ve katkı sürecini geliştiriyoruz."
+          },
+          {
+            "title": "Daha zengin etkinlik ayrıntıları",
+            "description": "Discord'da yararlı bağlam göstermek için daha fazla seçenek sunuyoruz."
+          }
+        ]
+      },
+      {
+        "status": "İnceleniyor",
+        "title": "Fikirler",
+        "description": "Toplulukla birlikte değerlendirdiğimiz yönler.",
+        "items": [
+          {
+            "title": "Topluluk istekleri",
+            "description": "Popüler platform isteklerini fikirden presence'a daha net bir yola dönüştürüyoruz."
+          },
+          {
+            "title": "Daha fazla özelleştirme",
+            "description": "Discord'da etkinliğinizin nasıl göründüğünü ayarlamak için yeni yolları keşfediyoruz."
+          }
+        ]
+      }
+    ],
+    "note": "Bu yol haritası bir yön gösterir, kesin tarihler için söz vermez. Öncelikler değişebilir.",
+    "feedback": "Geri bildirim gönder"
   },
   "not-found": {
     "title": "Sayfa bulunamadı",

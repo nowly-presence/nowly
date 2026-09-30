@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Dokumentasi",
     "library": "Perpustakaan",
+    "roadmap": "Pelan hala tuju",
     "open-menu": "Buka menu"
   },
   "theme": {
@@ -732,7 +733,65 @@
     "consent": {
       "title": "Data anda",
       "description": "Urus persetujuan analitik pilihan, dan lihat, eksport, atau padam data yang disimpan Nowly untuk peranti anda."
+    },
+    "roadmap": {
+      "title": "Pelan hala tuju",
+      "description": "Lihat perkara seterusnya untuk Nowly dan keutamaan yang sedang kami usahakan."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Pelan hala tuju",
+    "title": "Apa yang seterusnya untuk Nowly",
+    "description": "Pandangan semasa tentang keutamaan kami. Tarikh boleh berubah berdasarkan maklum balas komuniti.",
+    "columns": [
+      {
+        "status": "Sedang berjalan",
+        "title": "Sekarang",
+        "description": "Kerja yang sedang dibentuk atau dilancarkan.",
+        "items": [
+          {
+            "title": "Lebih banyak platform disokong",
+            "description": "Menambah lebih banyak perkhidmatan ke perpustakaan presence."
+          },
+          {
+            "title": "Persediaan yang lebih mudah",
+            "description": "Menjadikan pemasangan sambungan dan aplikasi desktop lebih jelas dan pantas."
+          }
+        ]
+      },
+      {
+        "status": "Seterusnya",
+        "title": "Akan datang",
+        "description": "Penambahbaikan yang dirancang untuk fasa seterusnya.",
+        "items": [
+          {
+            "title": "Alat presence yang lebih baik",
+            "description": "Menambah baik SDK dan aliran sumbangan untuk membina presence."
+          },
+          {
+            "title": "Butiran aktiviti yang lebih kaya",
+            "description": "Memberi lebih banyak cara untuk memaparkan konteks berguna di Discord."
+          }
+        ]
+      },
+      {
+        "status": "Dalam penerokaan",
+        "title": "Idea",
+        "description": "Arah yang sedang kami nilai bersama komuniti.",
+        "items": [
+          {
+            "title": "Permintaan komuniti",
+            "description": "Menjadikan permintaan platform popular lebih jelas dari idea hingga presence."
+          },
+          {
+            "title": "Lebih banyak penyesuaian",
+            "description": "Meneroka cara baharu untuk melaraskan paparan aktiviti anda di Discord."
+          }
+        ]
+      }
+    ],
+    "note": "Pelan hala tuju ini menunjukkan arah, bukan janji tarikh. Keutamaan boleh berubah.",
+    "feedback": "Kongsi maklum balas"
   },
   "not-found": {
     "title": "Halaman tidak dijumpai",

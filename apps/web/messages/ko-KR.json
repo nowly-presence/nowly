@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "문서",
     "library": "라이브러리",
+    "roadmap": "로드맵",
     "open-menu": "메뉴 열기"
   },
   "theme": {
@@ -732,7 +733,65 @@
     "consent": {
       "title": "내 데이터",
       "description": "선택적 분석 동의를 관리하고, Nowly가 당신의 기기를 위해 저장한 데이터를 보거나, 내보내거나, 삭제하세요."
+    },
+    "roadmap": {
+      "title": "로드맵",
+      "description": "Nowly의 다음 단계와 현재 우선순위를 확인하세요."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "로드맵",
+    "title": "Nowly의 다음 단계",
+    "description": "앞으로의 우선순위를 한눈에 확인하세요. 커뮤니티 의견에 따라 일정은 달라질 수 있습니다.",
+    "columns": [
+      {
+        "status": "진행 중",
+        "title": "현재",
+        "description": "현재 설계하거나 출시 중인 작업입니다.",
+        "items": [
+          {
+            "title": "지원 플랫폼 확대",
+            "description": "더 많은 서비스를 프레즌스 라이브러리에 추가합니다."
+          },
+          {
+            "title": "더 쉬운 설정",
+            "description": "확장 프로그램과 데스크톱 앱 설치를 더 명확하고 빠르게 만듭니다."
+          }
+        ]
+      },
+      {
+        "status": "다음 단계",
+        "title": "곧 출시",
+        "description": "다음 단계에서 계획된 개선 사항입니다.",
+        "items": [
+          {
+            "title": "더 나은 프레즌스 도구",
+            "description": "프레즌스 제작을 위한 SDK와 기여 과정을 개선합니다."
+          },
+          {
+            "title": "풍부한 활동 정보",
+            "description": "Discord에 유용한 맥락을 표시하는 방법을 늘립니다."
+          }
+        ]
+      },
+      {
+        "status": "검토 중",
+        "title": "아이디어",
+        "description": "커뮤니티와 함께 검토 중인 방향입니다.",
+        "items": [
+          {
+            "title": "커뮤니티 요청",
+            "description": "인기 플랫폼 요청을 아이디어에서 프레즌스로 이어지는 명확한 경로로 만듭니다."
+          },
+          {
+            "title": "더 많은 사용자 설정",
+            "description": "Discord에 표시되는 활동을 조정하는 새로운 방법을 살펴봅니다."
+          }
+        ]
+      }
+    ],
+    "note": "이 로드맵은 방향을 보여주며 특정 일정을 보장하지 않습니다. 우선순위는 변경될 수 있습니다.",
+    "feedback": "의견 보내기"
   },
   "not-found": {
     "title": "페이지를 찾을 수 없습니다",

@@ -27,6 +27,7 @@ export const Navbar = () => {
   const links = [
     { href: docsHref("/"), label: t("docs"), external: true },
     { href: "/library", label: t("library"), external: false },
+    { href: "/roadmap", label: t("roadmap"), external: false },
   ];
 
   return (

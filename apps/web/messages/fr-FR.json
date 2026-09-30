@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Documentation",
     "library": "Bibliothèque",
+    "roadmap": "Feuille de route",
     "open-menu": "Ouvrir le menu"
   },
   "theme": {
@@ -732,7 +733,65 @@
     "consent": {
       "title": "Vos données",
       "description": "Gérez le consentement analytics optionnel, et consultez, exportez ou supprimez les données que Nowly a stockées pour votre appareil."
+    },
+    "roadmap": {
+      "title": "Feuille de route",
+      "description": "Découvrez ce qui arrive pour Nowly et les priorités sur lesquelles nous travaillons."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Feuille de route",
+    "title": "La suite pour Nowly",
+    "description": "Une vue d’ensemble du travail que nous priorisons. Les échéances peuvent évoluer avec les retours de la communauté.",
+    "columns": [
+      {
+        "status": "En cours",
+        "title": "Maintenant",
+        "description": "Les sujets actuellement conçus ou livrés.",
+        "items": [
+          {
+            "title": "Davantage de plateformes",
+            "description": "Ajouter à la bibliothèque les services que vous utilisez au quotidien."
+          },
+          {
+            "title": "Une installation plus simple",
+            "description": "Rendre l’installation de l’extension et de l’application desktop plus claire et plus rapide."
+          }
+        ]
+      },
+      {
+        "status": "À venir",
+        "title": "Prochainement",
+        "description": "Les améliorations prévues pour la prochaine étape.",
+        "items": [
+          {
+            "title": "De meilleurs outils pour les présences",
+            "description": "Améliorer le SDK et le parcours de contribution pour créer des présences."
+          },
+          {
+            "title": "Des activités plus détaillées",
+            "description": "Donner aux présences davantage de façons d’afficher un contexte utile sur Discord."
+          }
+        ]
+      },
+      {
+        "status": "Exploration",
+        "title": "Idées",
+        "description": "Les directions que nous évaluons avec la communauté.",
+        "items": [
+          {
+            "title": "Les demandes de la communauté",
+            "description": "Transformer les demandes populaires en chemin plus clair, de l’idée à la présence."
+          },
+          {
+            "title": "Plus de personnalisation",
+            "description": "Explorer de nouvelles façons d’ajuster l’affichage de votre activité sur Discord."
+          }
+        ]
+      }
+    ],
+    "note": "Cette feuille de route donne une direction, pas des dates garanties. Les priorités peuvent changer avec l’évolution de Nowly et de sa communauté.",
+    "feedback": "Partager un avis"
   },
   "not-found": {
     "title": "Page introuvable",
