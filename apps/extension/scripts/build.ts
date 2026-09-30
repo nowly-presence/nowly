@@ -23,6 +23,7 @@ loadEnvFile()
 const args = process.argv.slice(2)
 const browser = (args.find((a) => !a.startsWith("--")) ?? "chrome") as Browser
 const channel: Channel = args.includes("--canary") ? "canary" : "stable"
+const bundled = channel === "canary" && args.includes("--bundled")
 const watch = args.includes("--watch")
 
 if (browser !== "chrome" && browser !== "firefox") throw new Error(`Unknown browser "${browser}". Use chrome or firefox.`)
@@ -77,7 +78,7 @@ const applyCanaryLocales = (localesDir: string): void => {
 const run = async (): Promise<void> => {
   rmSync(DIST, { recursive: true, force: true })
 
-  if (channel === "canary") generateBundledPresences()
+  if (bundled) generateBundledPresences()
   else resetBundledPresences()
 
   const { version: packageVersion } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf-8")) as { version: string }
@@ -87,8 +88,7 @@ const run = async (): Promise<void> => {
   if (channel === "canary") applyCanaryLocales(join(DIST, "_locales"))
   if (channel === "canary") await writeIcons(join(DIST, "icons"), channel)
   else await fetchBrandIcons(join(DIST, "icons"), channel)
-  if (channel === "canary") copyPresenceAssets(DIST)
-
+  if (bundled) copyPresenceAssets(DIST)
   await Promise.all([
     buildSidepanel(),
     buildScript("background", join(ROOT, "src", "entrypoints", "background", "index.ts")),
@@ -96,7 +96,7 @@ const run = async (): Promise<void> => {
   ])
 
   console.log(
-    watch ? `  ✔ Watching ${browser} (${channel}) - reload the unpacked extension after each rebuild` : `  ✔ Built ${browser} (${channel})`,
+    watch ? `  ✔ Watching ${browser} (${channel}${bundled ? ", bundled" : ""}) - reload the unpacked extension after each rebuild` : `  ✔ Built ${browser} (${channel}${bundled ? ", bundled" : ""})`,
   )
 }
 
