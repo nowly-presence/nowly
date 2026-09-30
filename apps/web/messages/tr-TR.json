@@ -245,7 +245,8 @@
     "privacy": "Gizlilik",
     "consent": "Verilerin",
     "cookies": "Çerezler",
-    "legal-notice": "Yasal bildirim"
+    "legal-notice": "Yasal bildirim",
+    "faq": "Sık sorulan sorular"
   },
   "libraryPage": {
     "eyebrow": "Kitaplık",
@@ -740,7 +741,7 @@
   },
   "cookie-banner": {
     "message": "Bu site, kesinlikle gerekli bir dil çerezi kullanır. Reklamlar daha sonra etkinleştirilirse, Google reklam teknolojileri de kullanabilir.",
-    "learn-more": "Daha fazla bilgi",
+    "learn-more": "Çerez politikasını okuyun",
     "dismiss": "Anladım"
   },
   "privacy-page": {
@@ -977,5 +978,30 @@
     "export-success": "Verilerin indirildi.",
     "delete-success": "Verilerin silindi.",
     "action-error": "Bir şeyler ters gitti. Lütfen tekrar dene."
+  },
+  "faqPage": {
+    "eyebrow": "SSS",
+    "title": "Hızlıca yanıtlanan sorular",
+    "description": "Kurulum, veri ve Discord hakkında temel bilgiler. Dokümantasyon ve Discord daha derine iner.",
+    "categories": {
+      "general": "SSS"
+    },
+    "items": [
+      {
+        "question": "Nowly nedir?",
+        "answer": "Nowly, izlediğin, dinlediğin veya oynadığın şeyi Discord Rich Presence olarak gösterir. Bir tarayıcı uzantısı, bir masaüstü uygulaması ve platform betiklerinden oluşan bir kitaplıktır.",
+        "category": "general"
+      },
+      {
+        "question": "Etkinliğim sunucularınızdan geçiyor mu?",
+        "answer": "Hayır. Etkinlik yerel kalır ve cihazından Discord'a gönderilir. Analizler isteğe bağlıdır ve varsayılan olarak kapalıdır.",
+        "category": "general"
+      },
+      {
+        "question": "Hangi platformlar destekleniyor?",
+        "answer": "Güncel liste kitaplıktadır. Uzantıyı güncellemeden yeni varlıklar eklenebilir, bu yüzden gerçekten kullandıklarını yükle.",
+        "category": "general"
+      }
+    ]
   }
 }

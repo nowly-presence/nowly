@@ -30,8 +30,10 @@ export const generateMetadata = async ({ params }: PresencePageProps): Promise<M
     });
   }
 
+  const seoTitle = `${presence.name} Discord Rich Presence`;
+
   return createMetadata({
-    title: presence.name,
+    title: seoTitle,
     description: localizedDescription(presence, locale),
     locale,
     path: `/library/${presence.slug}`,
@@ -58,7 +60,7 @@ const Page = async ({ params }: PresencePageProps) => {
   return (
     <>
       <WebPageJsonLd
-        name={presence.name}
+        name={`${presence.name} Discord Rich Presence`}
         description={localizedDescription(presence, locale)}
         path={`/library/${presence.slug}`}
         crumbs={[

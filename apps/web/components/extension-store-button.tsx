@@ -1,7 +1,9 @@
 "use client";
 
-import { RiChromeFill, RiFirefoxBrowserFill } from "@nowly/ui/icons";
-import { ButtonVariantProps, buttonVariants, cn } from "@nowly/ui";
+import { RiChromeFill, RiFirefoxBrowserFill } from "@remixicon/react";
+import type { ButtonVariantProps } from "@nowly/ui/button-variants";
+import { buttonVariants } from "@nowly/ui/button-variants";
+import { cn } from "@nowly/ui/utils";
 
 import { detectExtensionBrowser, getExtensionDownloadUrl } from "@/lib/extension-store";
 import type { ExtensionBrowser } from "@/lib/extension-store";

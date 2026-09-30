@@ -2,7 +2,7 @@ import { homeSectionAltClass, SectionHeading } from "@/features/home/components/
 import { PresenceTile } from "@/components/presence-tile";
 import { Link } from "@/i18n/navigation";
 import { getPresencePlatforms, type PresencePlatform } from "@/lib/presence-api";
-import { cn } from "@nowly/ui";
+import { cn } from "@nowly/ui/utils";
 
 import { getTranslations } from "next-intl/server";
 

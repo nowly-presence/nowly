@@ -245,7 +245,8 @@
     "privacy": "プライバシー",
     "consent": "あなたのデータ",
     "cookies": "Cookie",
-    "legal-notice": "法的表示"
+    "legal-notice": "法的表示",
+    "faq": "よくある質問"
   },
   "libraryPage": {
     "eyebrow": "ライブラリ",
@@ -740,7 +741,7 @@
   },
   "cookie-banner": {
     "message": "このサイトは必須の言語Cookieを使用しています。将来広告が有効化された場合、Googleが広告技術を使用する可能性もあります。",
-    "learn-more": "詳しく見る",
+    "learn-more": "Cookieポリシーを読む",
     "dismiss": "了解しました"
   },
   "privacy-page": {
@@ -977,5 +978,30 @@
     "export-success": "データがダウンロードされました。",
     "delete-success": "データが削除されました。",
     "action-error": "問題が発生しました。もう一度お試しください。"
+  },
+  "faqPage": {
+    "eyebrow": "よくある質問",
+    "title": "すぐわかる質問と回答",
+    "description": "インストール、データ、Discordに関する要点。詳細はドキュメントとDiscordで。",
+    "categories": {
+      "general": "よくある質問"
+    },
+    "items": [
+      {
+        "question": "Nowlyとは何ですか？",
+        "answer": "Nowlyは、あなたが見ている、聴いている、プレイしているものをDiscord Rich Presenceとして表示します。ブラウザ拡張機能、デスクトップアプリ、プラットフォームスクリプトのライブラリで構成されています。",
+        "category": "general"
+      },
+      {
+        "question": "自分のアクティビティは御社のサーバーを経由しますか？",
+        "answer": "いいえ。アクティビティはローカルに留まり、あなたのマシンからDiscordに送信されます。アナリティクスは任意でデフォルトではオフです。",
+        "category": "general"
+      },
+      {
+        "question": "どのプラットフォームに対応していますか？",
+        "answer": "最新のリストはライブラリにあります。拡張機能を更新せずに新しいプレゼンスを追加できるため、実際に使うものをインストールしてください。",
+        "category": "general"
+      }
+    ]
   }
 }

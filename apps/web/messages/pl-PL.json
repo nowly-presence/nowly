@@ -245,7 +245,8 @@
     "privacy": "Prywatność",
     "consent": "Twoje dane",
     "cookies": "Pliki cookie",
-    "legal-notice": "Nota prawna"
+    "legal-notice": "Nota prawna",
+    "faq": "Najczęściej zadawane pytania"
   },
   "libraryPage": {
     "eyebrow": "Biblioteka",
@@ -740,7 +741,7 @@
   },
   "cookie-banner": {
     "message": "Ta strona używa niezbędnego pliku cookie dotyczącego języka. Jeśli reklamy zostaną później włączone, Google może również używać technologii reklamowych.",
-    "learn-more": "Dowiedz się więcej",
+    "learn-more": "Przeczytaj politykę cookies",
     "dismiss": "Rozumiem"
   },
   "privacy-page": {
@@ -977,5 +978,30 @@
     "export-success": "Twoje dane zostały pobrane.",
     "delete-success": "Twoje dane zostały usunięte.",
     "action-error": "Coś poszło nie tak. Spróbuj ponownie."
+  },
+  "faqPage": {
+    "eyebrow": "FAQ",
+    "title": "Szybkie odpowiedzi na pytania",
+    "description": "To, co najważniejsze o instalacji, danych i Discordzie. Dokumentacja i Discord idą dalej.",
+    "categories": {
+      "general": "FAQ"
+    },
+    "items": [
+      {
+        "question": "Czym jest Nowly?",
+        "answer": "Nowly pokazuje to, co oglądasz, słuchasz lub w co grasz, jako Discord Rich Presence. To rozszerzenie przeglądarki, aplikacja desktopowa i biblioteka skryptów platform.",
+        "category": "general"
+      },
+      {
+        "question": "Czy moja aktywność przechodzi przez wasze serwery?",
+        "answer": "Nie. Aktywność zostaje lokalnie i jest wysyłana do Discorda z Twojego urządzenia. Analityka jest opcjonalna i domyślnie wyłączona.",
+        "category": "general"
+      },
+      {
+        "question": "Jakie platformy są obsługiwane?",
+        "answer": "Aktualna lista to biblioteka. Nowe obecności mogą być dodawane bez aktualizacji rozszerzenia, więc instaluj te, których faktycznie używasz.",
+        "category": "general"
+      }
+    ]
   }
 }

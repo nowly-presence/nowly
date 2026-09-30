@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@nowly/analytics", "@nowly/ui", "@nowly/locales"],
   poweredByHeader: false,
   experimental: {
-    optimizePackageImports: ["@nowly/ui"],
     globalNotFound: true,
   },
   images: {
@@ -32,6 +31,21 @@ const nextConfig: NextConfig = {
       {
         source: "/docs/:path*",
         destination: `${docsBase}/:path*`,
+        permanent: true,
+      },
+      {
+        source: "/about",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/:slug-discord-rich-presence",
+        destination: "/library/:slug",
+        permanent: true,
+      },
+      {
+        source: "/:slug-rich-presence",
+        destination: "/library/:slug",
         permanent: true,
       },
       {

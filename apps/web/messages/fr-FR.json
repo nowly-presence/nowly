@@ -245,7 +245,8 @@
     "privacy": "Confidentialité",
     "consent": "Vos données",
     "cookies": "Cookies",
-    "legal-notice": "Mentions légales"
+    "legal-notice": "Mentions légales",
+    "faq": "Foire aux questions"
   },
   "libraryPage": {
     "eyebrow": "Bibliothèque",
@@ -740,7 +741,7 @@
   },
   "cookie-banner": {
     "message": "Ce site utilise un cookie de langue strictement nécessaire. Si la publicité est activée plus tard, Google pourra aussi utiliser des technologies publicitaires.",
-    "learn-more": "En savoir plus",
+    "learn-more": "Lire la politique relative aux cookies",
     "dismiss": "Compris"
   },
   "privacy-page": {
@@ -977,5 +978,114 @@
     "export-success": "Vos données ont été téléchargées.",
     "delete-success": "Vos données ont été supprimées.",
     "action-error": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "faqPage": {
+    "eyebrow": "FAQ",
+    "title": "On vous dit tout sur Nowly",
+    "description": "Découvrez comment Nowly ajoute une Rich Presence Discord aux sites compatibles, comment l’installer et comment votre activité reste sous votre contrôle.",
+    "categories": {
+      "discover": "Découvrir Nowly",
+      "setup": "Installation et utilisation",
+      "privacy": "Confidentialité et sécurité",
+      "compare": "Comparaison et limites",
+      "develop": "Développement"
+    },
+    "items": [
+      {
+        "category": "discover",
+        "question": "Qu’est-ce que Nowly ?",
+        "answer": "Nowly transforme l’activité des sites compatibles en Rich Presence Discord. Il peut afficher ce que vous regardez, écoutez ou consultez, avec la plateforme, le titre, le visuel et la progression lorsque ces informations sont disponibles. Nowly combine une extension navigateur, une application bureau et des présences installables depuis sa bibliothèque."
+      },
+      {
+        "category": "discover",
+        "question": "Comment fonctionne Nowly ?",
+        "answer": "L’extension navigateur détecte l’activité sur un site compatible. La présence installée prépare les informations à afficher, puis l’application bureau envoie cette activité à Discord localement. Nowly ne remplace pas Discord : il prépare et transmet votre activité à l’application Discord installée sur votre ordinateur."
+      },
+      {
+        "category": "discover",
+        "question": "Pourquoi faut-il installer une extension et une application bureau ?",
+        "answer": "L’extension lit l’activité de votre onglet, tandis que Discord a besoin d’une connexion locale avec son application bureau pour recevoir les mises à jour Rich Presence. L’extension détecte votre activité et l’application bureau sert de pont local vers Discord."
+      },
+      {
+        "category": "discover",
+        "question": "Discord doit-il être installé sur l’ordinateur ?",
+        "answer": "Oui. Nowly nécessite Discord Desktop ouvert pour que le pont local puisse envoyer votre Rich Presence. Discord dans un navigateur ou sur mobile ne suffit pas pour utiliser le pont local de Nowly."
+      },
+      {
+        "category": "discover",
+        "question": "Quels sites fonctionnent avec Nowly ?",
+        "answer": "Les sites compatibles sont listés dans la bibliothèque Nowly. Chaque présence est conçue pour une plateforme précise. La bibliothèque peut évoluer indépendamment de l’extension : de nouvelles présences peuvent être publiées sans réinstaller Nowly."
+      },
+      {
+        "category": "discover",
+        "question": "Nowly fonctionne-t-il avec Netflix, YouTube, Spotify ou Apple TV+ ?",
+        "answer": "Oui, lorsqu’une présence dédiée est disponible dans la bibliothèque. La compatibilité dépend de la présence et des informations que la plateforme rend accessibles dans le navigateur."
+      },
+      {
+        "category": "setup",
+        "question": "Comment afficher mon activité sur Discord avec Nowly ?",
+        "answer": "Installez l’extension Nowly, installez l’application bureau, ouvrez Discord Desktop, installez une présence depuis la bibliothèque, puis ouvrez le site compatible dans votre navigateur. Votre activité peut s’afficher lorsque l’extension, l’application bureau, la présence et Discord sont prêts."
+      },
+      {
+        "category": "setup",
+        "question": "Pourquoi ma Rich Presence Discord ne s’affiche-t-elle pas ?",
+        "answer": "Vérifiez que Discord Desktop et l’application bureau Nowly sont ouverts, que l’extension est installée dans le navigateur utilisé, que la présence est installée et activée et que la page correspond à une URL compatible. Si le navigateur demande l’autorisation des scripts utilisateur, acceptez-la puis rechargez la page après l’installation."
+      },
+      {
+        "category": "setup",
+        "question": "Quels navigateurs et systèmes sont compatibles ?",
+        "answer": "L’extension fonctionne avec Chrome, Firefox et les navigateurs basés sur Chromium, comme Edge, Brave et Opera. L’application bureau est disponible pour Windows, macOS et Linux."
+      },
+      {
+        "category": "setup",
+        "question": "Nowly est-il gratuit ?",
+        "answer": "Oui. Les fonctionnalités principales de Nowly, l’extension navigateur, l’application bureau et la bibliothèque de présences sont gratuites. Vous pouvez soutenir volontairement le projet via les liens de financement disponibles sur le site."
+      },
+      {
+        "category": "setup",
+        "question": "Puis-je installer une seule présence ?",
+        "answer": "Une présence ne fonctionne pas seule : l’extension Nowly et l’application bureau sont nécessaires. Une fois Nowly configuré, installez uniquement les présences correspondant aux plateformes que vous utilisez."
+      },
+      {
+        "category": "privacy",
+        "question": "Mon activité est-elle envoyée aux serveurs Nowly ?",
+        "answer": "L’activité Rich Presence est envoyée localement de l’extension vers l’application bureau, puis vers Discord. Elle ne transite pas par les serveurs Nowly. Les statistiques d’utilisation sont optionnelles, désactivées par défaut et contrôlables depuis les réglages disponibles."
+      },
+      {
+        "category": "privacy",
+        "question": "Que lit Nowly dans mon navigateur ?",
+        "answer": "Une présence lit uniquement les informations nécessaires sur le site compatible, comme le titre d’une vidéo, le nom d’une chaîne, une page ou l’état de lecture. Les présences ne s’exécutent que sur les sites pour lesquels elles ont été installées. Les présences officielles sont vérifiées et signées avant leur distribution."
+      },
+      {
+        "category": "privacy",
+        "question": "Qui peut voir mon activité Discord ?",
+        "answer": "Une Rich Presence peut être visible par les personnes autorisées à voir votre activité sur Discord. Le contenu affiché dépend de vos réglages Discord et des informations fournies par la présence. Évitez d’afficher des informations sensibles dans une activité publique."
+      },
+      {
+        "category": "privacy",
+        "question": "Nowly est-il sûr ?",
+        "answer": "Nowly est conçu autour d’un fonctionnement local : l’activité n’est pas envoyée aux serveurs Nowly, les statistiques sont désactivées par défaut, les présences officielles sont vérifiées et signées et le code du projet est public. Comme pour toute extension navigateur, installez Nowly depuis ses sources officielles et vérifiez les permissions demandées."
+      },
+      {
+        "category": "compare",
+        "question": "Quelle est la différence entre Nowly et PreMiD ?",
+        "answer": "Nowly et PreMiD ont un objectif similaire : afficher l’activité des sites web dans une Rich Presence Discord. Nowly utilise une application bureau dédiée comme pont local, une bibliothèque de présences installables, des présences officielles signées et des analytics optionnelles désactivées par défaut. Le choix dépend des plateformes dont vous avez besoin et du fonctionnement que vous préférez."
+      },
+      {
+        "category": "compare",
+        "question": "Puis-je utiliser Nowly et un autre outil de Rich Presence en même temps ?",
+        "answer": "Ce n’est pas recommandé. Plusieurs applications peuvent essayer de modifier votre activité Discord en même temps et provoquer des changements inattendus ou faire disparaître l’activité. Désactivez les autres outils de Rich Presence pendant vos tests avec Nowly."
+      },
+      {
+        "category": "develop",
+        "question": "Puis-je créer une nouvelle présence pour Nowly ?",
+        "answer": "Oui. Les présences sont des intégrations JavaScript dédiées à une plateforme. Le SDK, la CLI et la documentation expliquent comment créer, tester, valider et proposer une nouvelle présence. Le code du projet et le processus de contribution sont disponibles sur GitHub."
+      },
+      {
+        "category": "develop",
+        "question": "Nowly est-il open source ?",
+        "answer": "Le code du projet est public et disponible sur GitHub. Il est actuellement distribué sous licence BUSL-1.1, une licence source-available qui n’est pas une licence open source approuvée par l’OSI. Les présences, le SDK et les outils de développement sont documentés séparément."
+      }
+    ]
   }
 }

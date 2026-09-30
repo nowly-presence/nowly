@@ -245,7 +245,8 @@
     "privacy": "Privasi",
     "consent": "Data anda",
     "cookies": "Kuki",
-    "legal-notice": "Notis undang-undang"
+    "legal-notice": "Notis undang-undang",
+    "faq": "Soalan lazim"
   },
   "libraryPage": {
     "eyebrow": "Perpustakaan",
@@ -740,7 +741,7 @@
   },
   "cookie-banner": {
     "message": "Laman ini menggunakan kuki bahasa yang benar-benar perlu. Jika iklan diaktifkan kemudian, Google mungkin juga menggunakan teknologi pengiklanan.",
-    "learn-more": "Ketahui lebih lanjut",
+    "learn-more": "Baca dasar kuki",
     "dismiss": "Faham"
   },
   "privacy-page": {
@@ -977,5 +978,30 @@
     "export-success": "Data anda telah dimuat turun.",
     "delete-success": "Data anda telah dipadamkan.",
     "action-error": "Sesuatu telah tidak kena. Sila cuba lagi."
+  },
+  "faqPage": {
+    "eyebrow": "Soalan Lazim",
+    "title": "Soalan, dijawab dengan cepat",
+    "description": "Perkara asas tentang pemasangan, data dan Discord. Dokumentasi dan Discord pergi lebih jauh.",
+    "categories": {
+      "general": "Soalan Lazim"
+    },
+    "items": [
+      {
+        "question": "Apakah Nowly?",
+        "answer": "Nowly menunjukkan apa yang anda tonton, dengar atau main sebagai Discord Rich Presence. Ia adalah sambungan pelayar, aplikasi desktop, dan perpustakaan skrip platform.",
+        "category": "general"
+      },
+      {
+        "question": "Adakah aktiviti saya melalui pelayan anda?",
+        "answer": "Tidak. Aktiviti kekal setempat dan dihantar ke Discord daripada mesin anda. Analitik adalah pilihan dan dimatikan secara lalai.",
+        "category": "general"
+      },
+      {
+        "question": "Platform apakah yang disokong?",
+        "answer": "Senarai terkini ialah perpustakaan. Kehadiran baharu boleh ditambah tanpa mengemas kini sambungan, jadi pasang yang anda benar-benar gunakan.",
+        "category": "general"
+      }
+    ]
   }
 }

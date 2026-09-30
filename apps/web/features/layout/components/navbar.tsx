@@ -1,16 +1,19 @@
 "use client";
 
-import { RiMenuLine } from "@nowly/ui/icons";
+import { RiMenuLine } from "@remixicon/react";
+import { lazy, Suspense, useState } from "react";
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { BrandLockup } from "@/features/layout/components/brand-lockup";
-import { Button, Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@nowly/ui";
+import { buttonVariants } from "@nowly/ui/button-variants";
+import { cn } from "@nowly/ui/utils";
+
+const MobileNav = lazy(() => import("@/features/layout/components/mobile-nav").then(({ MobileNav: Component }) => ({ default: Component })));
 
 
 import { Link, usePathname } from "@/i18n/navigation";
 import { CANARY_ACCENT, CANARY_INK } from "@/lib/brand";
 import { docsHref } from "@/features/seo/lib/seo";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 
 export const Navbar = () => {
   const t = useTranslations("navbar");
@@ -67,52 +70,25 @@ export const Navbar = () => {
           <ExtensionStoreButton {...storeButtonProps} />
         </nav>
 
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger
-            render={
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="lg:hidden"
-                aria-label={t("open-menu")}
-              />
-            }
-          >
-            <RiMenuLine />
-          </SheetTrigger>
-          <SheetContent side="right" className="w-[min(100%,20rem)] bg-background p-0 lg:hidden">
-            <SheetHeader>
-              <SheetTitle>{t("open-menu")}</SheetTitle>
-            </SheetHeader>
-            <nav className="flex flex-col gap-3 px-4 pb-6">
-              {links.map((link) =>
-                link.external ? (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className="text-sm text-foreground"
-                    onClick={() => setOpen(false)}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    {link.label}
-                  </a>
-                ) : (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-sm text-foreground"
-                    onClick={() => setOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ),
-              )}
-              <ExtensionStoreButton {...storeButtonProps} />
-            </nav>
-          </SheetContent>
-        </Sheet>
+        <button
+          type="button"
+          className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "lg:hidden")}
+          aria-label={t("open-menu")}
+          onClick={() => setOpen(true)}
+        >
+          <RiMenuLine />
+        </button>
+        {open ? (
+          <Suspense fallback={null}>
+            <MobileNav
+              open={open}
+              onOpenChange={setOpen}
+              links={links}
+              canary={canary}
+              menuLabel={t("open-menu")}
+            />
+          </Suspense>
+        ) : null}
       </div>
     </header>
   );

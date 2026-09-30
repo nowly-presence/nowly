@@ -1,5 +1,6 @@
 "use client";
 
+import { Toaster } from "@nowly/ui";
 import { PaginatedLibraryGrid } from "@/features/library/components/paginated-library-grid";
 import { ButtonLink } from "@/components/button-link";
 import { Button, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, Input, cn } from "@nowly/ui";
@@ -284,6 +285,7 @@ export const LibraryView = ({
           </Empty>
         )}
       </div>
+      <Toaster />
     </div>
   );
 };

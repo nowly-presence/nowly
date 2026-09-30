@@ -245,7 +245,8 @@
     "privacy": "Datenschutz",
     "consent": "Deine Daten",
     "cookies": "Cookies",
-    "legal-notice": "Impressum"
+    "legal-notice": "Impressum",
+    "faq": "FAQ"
   },
   "libraryPage": {
     "eyebrow": "Bibliothek",
@@ -740,7 +741,7 @@
   },
   "cookie-banner": {
     "message": "Diese Website verwendet ein unbedingt erforderliches Sprach-Cookie. Falls Werbung später aktiviert wird, kann Google auch Werbetechnologien nutzen.",
-    "learn-more": "Mehr erfahren",
+    "learn-more": "Cookie-Richtlinie lesen",
     "dismiss": "Verstanden"
   },
   "privacy-page": {
@@ -977,5 +978,30 @@
     "export-success": "Deine Daten wurden heruntergeladen.",
     "delete-success": "Deine Daten wurden gelöscht.",
     "action-error": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+  },
+  "faqPage": {
+    "eyebrow": "FAQ",
+    "title": "Fragen, schnell beantwortet",
+    "description": "Das Wichtigste zu Installation, Daten und Discord. Docs und Discord gehen weiter ins Detail.",
+    "categories": {
+      "general": "FAQ"
+    },
+    "items": [
+      {
+        "question": "Was ist Nowly?",
+        "answer": "Nowly zeigt, was du schaust, hörst oder spielst, als Discord Rich Presence. Es besteht aus einer Browser-Erweiterung, einer Desktop-App und einer Bibliothek von Plattform-Skripten.",
+        "category": "general"
+      },
+      {
+        "question": "Läuft meine Aktivität über eure Server?",
+        "answer": "Nein. Die Aktivität bleibt lokal und wird von deinem Rechner aus an Discord gesendet. Analytics sind optional und standardmäßig deaktiviert.",
+        "category": "general"
+      },
+      {
+        "question": "Welche Plattformen werden unterstützt?",
+        "answer": "Die aktuelle Liste ist die Bibliothek. Neue Präsenzen können hinzugefügt werden, ohne die Erweiterung zu aktualisieren, also installiere die, die du wirklich nutzt.",
+        "category": "general"
+      }
+    ]
   }
 }
