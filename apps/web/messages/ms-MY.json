@@ -745,47 +745,78 @@
     "description": "Pandangan semasa tentang keutamaan kami. Tarikh boleh berubah berdasarkan maklum balas komuniti.",
     "columns": [
       {
-        "status": "Sedang berjalan",
-        "title": "Sekarang",
-        "description": "Kerja yang sedang dibentuk atau dilancarkan.",
+        "status": "Akan datang",
+        "title": "November 2026",
+        "completed": false,
+        "description": "Langkah seterusnya menjadikan penciptaan presence boleh diakses oleh lebih ramai orang.",
         "items": [
           {
-            "title": "Lebih banyak platform disokong",
-            "description": "Menambah lebih banyak perkhidmatan ke perpustakaan presence."
-          },
-          {
-            "title": "Persediaan yang lebih mudah",
-            "description": "Menjadikan pemasangan sambungan dan aplikasi desktop lebih jelas dan pantas."
+            "title": "Pencipta presence tanpa kod",
+            "description": "Bina presence tanpa menulis kod melalui aliran berpandu dengan pilihan konfigurasi yang mudah."
           }
         ]
       },
       {
-        "status": "Seterusnya",
-        "title": "Akan datang",
-        "description": "Penambahbaikan yang dirancang untuk fasa seterusnya.",
+        "status": "Akan datang",
+        "title": "Oktober 2026",
+        "completed": false,
+        "description": "Langkah seterusnya untuk memperibadikan aktiviti Discord.",
         "items": [
           {
-            "title": "Alat presence yang lebih baik",
-            "description": "Menambah baik SDK dan aliran sumbangan untuk membina presence."
-          },
-          {
-            "title": "Butiran aktiviti yang lebih kaya",
-            "description": "Memberi lebih banyak cara untuk memaparkan konteks berguna di Discord."
+            "title": "Status tersuai",
+            "description": "Cipta dan gunakan status tersuai untuk mengawal dengan lebih tepat perkara yang dipaparkan di Discord."
           }
         ]
       },
       {
-        "status": "Dalam penerokaan",
-        "title": "Idea",
-        "description": "Arah yang sedang kami nilai bersama komuniti.",
+        "status": "Telah siap",
+        "title": "September 2026",
+        "completed": true,
+        "description": "Asas baharu untuk laman web, perpustakaan dan pengalaman produk.",
         "items": [
           {
-            "title": "Permintaan komuniti",
-            "description": "Menjadikan permintaan platform popular lebih jelas dari idea hingga presence."
+            "title": "nowly.me dibina semula",
+            "description": "Laman web baharu, perpustakaan awam, halaman presence, aplikasi desktop, halaman undang-undang serta sokongan Chrome dan Firefox."
           },
           {
-            "title": "Lebih banyak penyesuaian",
-            "description": "Meneroka cara baharu untuk melaraskan paparan aktiviti anda di Discord."
+            "title": "Antara muka sambungan baharu",
+            "description": "Panel sisi, perpustakaan, aktiviti, tetapan, onboarding dan diagnostik dibina semula untuk aliran yang lebih lancar dan selaras dengan laman web."
+          },
+          {
+            "title": "Aktiviti presence yang lebih kaya",
+            "description": "Statistik, suka, penjadualan, jeda sementara, pengisihan, tindakan pukal dan diagnostik kini menjadi sebahagian daripada pengalaman."
+          }
+        ]
+      },
+      {
+        "status": "Telah siap",
+        "title": "Julai 2026",
+        "completed": true,
+        "description": "Alat pembangunan dan teks aktiviti setempat mencapai tahap baharu.",
+        "items": [
+          {
+            "title": "SDK dan CLI 1.0",
+            "description": "Alat bertaip dan disahkan untuk mencipta, menguji, membungkus dan menerbitkan presence."
+          },
+          {
+            "title": "Presence setempat",
+            "description": "Teks aktiviti boleh mengikut bahasa yang dipilih melalui kamus bertaip dan ditandatangani."
+          }
+        ]
+      },
+      {
+        "status": "Telah siap",
+        "title": "Sejak Nowly bermula",
+        "completed": true,
+        "description": "Asas yang membina ekosistem Nowly.",
+        "items": [
+          {
+            "title": "Ekosistem Nowly",
+            "description": "Sambungan pelayar, aplikasi desktop tempatan, SDK, CLI dan perpustakaan presence."
+          },
+          {
+            "title": "Platform lengkap",
+            "description": "Laman web awam, perpustakaan presence, dokumentasi, muat turun, sokongan dan status perkhidmatan langsung."
           }
         ]
       }

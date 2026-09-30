@@ -745,47 +745,78 @@
     "description": "Uma visão atual das nossas prioridades. As datas podem mudar conforme ouvimos a comunidade.",
     "columns": [
       {
-        "status": "Em andamento",
-        "title": "Agora",
-        "description": "Trabalho sendo desenvolvido ou lançado neste momento.",
+        "status": "Em breve",
+        "title": "Novembro de 2026",
+        "completed": false,
+        "description": "O próximo passo vai tornar a criação de presenças acessível a mais pessoas.",
         "items": [
           {
-            "title": "Mais plataformas compatíveis",
-            "description": "Adicionar mais serviços à biblioteca de presenças."
-          },
-          {
-            "title": "Configuração mais simples",
-            "description": "Deixar a instalação da extensão e do aplicativo desktop mais clara e rápida."
+            "title": "Criador de presenças sem código",
+            "description": "Crie uma presença sem escrever código por meio de um fluxo guiado com opções simples de configuração."
           }
         ]
       },
       {
-        "status": "Próximo",
-        "title": "Em breve",
-        "description": "Melhorias planejadas para a próxima etapa.",
+        "status": "Em breve",
+        "title": "Outubro de 2026",
+        "completed": false,
+        "description": "O próximo passo para personalizar a atividade no Discord.",
         "items": [
           {
-            "title": "Melhores ferramentas de presenças",
-            "description": "Melhorar o SDK e o fluxo de contribuição para criar presenças."
-          },
-          {
-            "title": "Mais detalhes de atividade",
-            "description": "Oferecer mais formas de mostrar contexto útil no Discord."
+            "title": "Status personalizados",
+            "description": "Crie e use status personalizados para controlar melhor o que aparece no Discord."
           }
         ]
       },
       {
-        "status": "Em exploração",
-        "title": "Ideias",
-        "description": "Direções que estamos avaliando com a comunidade.",
+        "status": "Lançado",
+        "title": "Setembro de 2026",
+        "completed": true,
+        "description": "Uma nova base para o site, a biblioteca e a experiência do produto.",
         "items": [
           {
-            "title": "Pedidos da comunidade",
-            "description": "Transformar pedidos populares de plataformas em um caminho mais claro."
+            "title": "nowly.me reformulado",
+            "description": "Novo site, biblioteca pública, páginas de presenças, aplicativo desktop, páginas legais e suporte para Chrome e Firefox."
           },
           {
-            "title": "Mais personalização",
-            "description": "Explorar novas formas de ajustar como sua atividade aparece no Discord."
+            "title": "Nova interface da extensão",
+            "description": "O painel lateral, a biblioteca, a atividade, as configurações, o onboarding e os diagnósticos foram refeitos para um fluxo mais fluido."
+          },
+          {
+            "title": "Atividade de presença mais completa",
+            "description": "Estatísticas, curtidas, agendamento, pausas temporárias, ordenação, ações em massa e diagnósticos agora fazem parte da experiência."
+          }
+        ]
+      },
+      {
+        "status": "Lançado",
+        "title": "Julho de 2026",
+        "completed": true,
+        "description": "As ferramentas de desenvolvimento e os textos de atividade localizados chegaram a uma nova etapa.",
+        "items": [
+          {
+            "title": "SDK e CLI 1.0",
+            "description": "Ferramentas tipadas e validadas para criar, testar, empacotar e publicar presenças."
+          },
+          {
+            "title": "Presenças localizadas",
+            "description": "Os textos de atividade podem seguir o idioma selecionado por meio de dicionários tipados e assinados."
+          }
+        ]
+      },
+      {
+        "status": "Lançado",
+        "title": "Desde o início do Nowly",
+        "completed": true,
+        "description": "As bases que construíram o ecossistema Nowly.",
+        "items": [
+          {
+            "title": "O ecossistema Nowly",
+            "description": "Extensão de navegador, aplicativo desktop local, SDK, CLI e biblioteca de presenças."
+          },
+          {
+            "title": "Uma plataforma completa",
+            "description": "Site público, biblioteca de presenças, documentação, downloads, suporte e status do serviço em tempo real."
           }
         ]
       }

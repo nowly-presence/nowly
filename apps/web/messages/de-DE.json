@@ -745,47 +745,78 @@
     "description": "Ein Überblick über unsere Prioritäten. Zeitpläne können sich durch Feedback der Community ändern.",
     "columns": [
       {
-        "status": "In Arbeit",
-        "title": "Jetzt",
-        "description": "Themen, die gerade entwickelt oder veröffentlicht werden.",
+        "status": "Als Nächstes",
+        "title": "November 2026",
+        "completed": false,
+        "description": "Die nächste Phase macht die Erstellung von Presences für mehr Menschen zugänglich.",
         "items": [
           {
-            "title": "Mehr unterstützte Plattformen",
-            "description": "Weitere Dienste in die Presence-Bibliothek aufnehmen."
-          },
-          {
-            "title": "Ein einfacherer Einstieg",
-            "description": "Die Installation von Erweiterung und Desktop-App klarer und schneller machen."
+            "title": "No-Code-Editor für Presences",
+            "description": "Erstelle eine Presence ohne Code mit einem geführten Ablauf und einfachen Konfigurationsoptionen."
           }
         ]
       },
       {
         "status": "Als Nächstes",
-        "title": "Demnächst",
-        "description": "Geplante Verbesserungen für die nächste Phase.",
+        "title": "Oktober 2026",
+        "completed": false,
+        "description": "Der nächste Schritt für eine persönlichere Discord-Aktivität.",
         "items": [
           {
-            "title": "Bessere Presence-Tools",
-            "description": "SDK und Beitragsworkflow für die Entwicklung von Presences verbessern."
-          },
-          {
-            "title": "Mehr Aktivitätsdetails",
-            "description": "Presences mehr Möglichkeiten geben, nützlichen Kontext in Discord anzuzeigen."
+            "title": "Benutzerdefinierte Status",
+            "description": "Erstelle und nutze eigene Status, um genauer zu steuern, was auf Discord angezeigt wird."
           }
         ]
       },
       {
-        "status": "In Prüfung",
-        "title": "Ideen",
-        "description": "Richtungen, die wir mit der Community prüfen.",
+        "status": "Bereits umgesetzt",
+        "title": "September 2026",
+        "completed": true,
+        "description": "Eine neue Grundlage für Website, Bibliothek und Produkterlebnis.",
         "items": [
           {
-            "title": "Community-Anfragen",
-            "description": "Beliebte Plattformwünsche klarer von der Idee bis zur Presence führen."
+            "title": "nowly.me neu aufgebaut",
+            "description": "Neue Website, öffentliche Bibliothek, Presence-Seiten, Desktop-App, rechtliche Seiten sowie Chrome- und Firefox-Unterstützung."
           },
           {
-            "title": "Mehr Anpassung",
-            "description": "Neue Möglichkeiten erkunden, wie deine Aktivität in Discord erscheint."
+            "title": "Neue Erweiterungsoberfläche",
+            "description": "Sidepanel, Bibliothek, Aktivität, Einstellungen, Onboarding und Diagnosen wurden für einen reibungsloseren Ablauf neu gestaltet."
+          },
+          {
+            "title": "Reichhaltigere Presence-Aktivität",
+            "description": "Statistiken, Likes, Planung, temporäre Pausen, Sortierung, Sammelaktionen und Diagnosen sind jetzt Teil des Erlebnisses."
+          }
+        ]
+      },
+      {
+        "status": "Bereits umgesetzt",
+        "title": "Juli 2026",
+        "completed": true,
+        "description": "Entwicklerwerkzeuge und lokalisierte Aktivitätstexte haben eine neue Stufe erreicht.",
+        "items": [
+          {
+            "title": "SDK und CLI 1.0",
+            "description": "Typisierte und validierte Werkzeuge zum Erstellen, Testen, Packen und Veröffentlichen von Presences."
+          },
+          {
+            "title": "Lokalisierte Presences",
+            "description": "Aktivitätstexte können mit typisierten und signierten Wörterbüchern der ausgewählten Sprache folgen."
+          }
+        ]
+      },
+      {
+        "status": "Bereits umgesetzt",
+        "title": "Seit dem Start von Nowly",
+        "completed": true,
+        "description": "Die Grundlagen, auf denen das Nowly-Ökosystem aufgebaut wurde.",
+        "items": [
+          {
+            "title": "Das Nowly-Ökosystem",
+            "description": "Browser-Erweiterung, lokale Desktop-App, SDK, CLI und Presence-Bibliothek."
+          },
+          {
+            "title": "Eine vollständige Plattform",
+            "description": "Öffentliche Website, Presence-Bibliothek, Dokumentation, Downloads, Support und Live-Status."
           }
         ]
       }

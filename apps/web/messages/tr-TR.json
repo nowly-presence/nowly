@@ -745,47 +745,78 @@
     "description": "Önceliklerimize güncel bir bakış. Topluluktan gelen geri bildirimlerle tarihler değişebilir.",
     "columns": [
       {
-        "status": "Devam ediyor",
-        "title": "Şimdi",
-        "description": "Şu anda geliştirilen veya yayınlanan çalışmalar.",
+        "status": "Yaklaşan",
+        "title": "Kasım 2026",
+        "completed": false,
+        "description": "Sıradaki adım, presence oluşturmayı daha fazla kişi için erişilebilir hale getirecek.",
         "items": [
           {
-            "title": "Daha fazla desteklenen platform",
-            "description": "Daha fazla hizmeti presence kitaplığına ekliyoruz."
-          },
-          {
-            "title": "Daha kolay kurulum",
-            "description": "Uzantı ve masaüstü uygulamasının kurulumunu daha anlaşılır ve hızlı yapıyoruz."
+            "title": "Kodsuz presence oluşturucu",
+            "description": "Basit yapılandırma seçenekleri ve yönlendirmeli bir akışla kod yazmadan presence oluşturun."
           }
         ]
       },
       {
-        "status": "Sırada",
-        "title": "Yakında",
-        "description": "Bir sonraki aşama için planlanan iyileştirmeler.",
+        "status": "Yaklaşan",
+        "title": "Ekim 2026",
+        "completed": false,
+        "description": "Discord etkinliğini kişiselleştirmek için sıradaki adım.",
         "items": [
           {
-            "title": "Daha iyi presence araçları",
-            "description": "Presence oluşturmak için SDK'yı ve katkı sürecini geliştiriyoruz."
-          },
-          {
-            "title": "Daha zengin etkinlik ayrıntıları",
-            "description": "Discord'da yararlı bağlam göstermek için daha fazla seçenek sunuyoruz."
+            "title": "Özel durumlar",
+            "description": "Discord'da görünenleri daha iyi kontrol etmek için özel durumlar oluşturun ve kullanın."
           }
         ]
       },
       {
-        "status": "İnceleniyor",
-        "title": "Fikirler",
-        "description": "Toplulukla birlikte değerlendirdiğimiz yönler.",
+        "status": "Yayınlandı",
+        "title": "Eylül 2026",
+        "completed": true,
+        "description": "Site, kütüphane ve ürün deneyimi için yeni bir temel.",
         "items": [
           {
-            "title": "Topluluk istekleri",
-            "description": "Popüler platform isteklerini fikirden presence'a daha net bir yola dönüştürüyoruz."
+            "title": "nowly.me yenilendi",
+            "description": "Yeni site, herkese açık kütüphane, presence sayfaları, masaüstü uygulaması, yasal sayfalar ve Chrome ile Firefox desteği."
           },
           {
-            "title": "Daha fazla özelleştirme",
-            "description": "Discord'da etkinliğinizin nasıl göründüğünü ayarlamak için yeni yolları keşfediyoruz."
+            "title": "Yeni uzantı arayüzü",
+            "description": "Yan panel, kütüphane, etkinlik, ayarlar, onboarding ve tanılama daha akıcı bir akış için yeniden tasarlandı."
+          },
+          {
+            "title": "Daha zengin presence etkinliği",
+            "description": "İstatistikler, beğeniler, zamanlama, geçici duraklatmalar, sıralama, toplu işlemler ve tanılama artık deneyimin bir parçası."
+          }
+        ]
+      },
+      {
+        "status": "Yayınlandı",
+        "title": "Temmuz 2026",
+        "completed": true,
+        "description": "Geliştirici araçları ve yerelleştirilmiş etkinlik metinleri yeni bir aşamaya ulaştı.",
+        "items": [
+          {
+            "title": "SDK ve CLI 1.0",
+            "description": "Presence oluşturmak, test etmek, paketlemek ve yayınlamak için tür güvenli ve doğrulanmış araçlar."
+          },
+          {
+            "title": "Yerelleştirilmiş presencelar",
+            "description": "Etkinlik metinleri, tür güvenli ve imzalı sözlüklerle seçilen dili takip edebilir."
+          }
+        ]
+      },
+      {
+        "status": "Yayınlandı",
+        "title": "Nowly'nin başlangıcından beri",
+        "completed": true,
+        "description": "Nowly ekosistemini oluşturan temeller.",
+        "items": [
+          {
+            "title": "Nowly ekosistemi",
+            "description": "Tarayıcı uzantısı, yerel masaüstü uygulaması, SDK, CLI ve presence kitaplığı."
+          },
+          {
+            "title": "Eksiksiz bir platform",
+            "description": "Herkese açık site, presence kitaplığı, dokümantasyon, indirmeler, destek ve canlı hizmet durumu."
           }
         ]
       }
