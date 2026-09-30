@@ -746,18 +746,6 @@
     "columns": [
       {
         "status": "Coming up",
-        "title": "October 2026",
-        "completed": false,
-        "description": "The next step for personalising Discord activity.",
-        "items": [
-          {
-            "title": "Custom statuses",
-            "description": "Create and use custom statuses to control more precisely what appears on Discord."
-          }
-        ]
-      },
-      {
-        "status": "Coming up",
         "title": "November 2026",
         "completed": false,
         "description": "Make presence creation accessible to more people.",
@@ -765,6 +753,18 @@
           {
             "title": "No-code presence creator",
             "description": "Build a presence without writing code through a guided flow with simple configuration options."
+          }
+        ]
+      },
+      {
+        "status": "Coming up",
+        "title": "October 2026",
+        "completed": false,
+        "description": "The next step for personalising Discord activity.",
+        "items": [
+          {
+            "title": "Custom statuses",
+            "description": "Create and use custom statuses to control more precisely what appears on Discord."
           }
         ]
       },

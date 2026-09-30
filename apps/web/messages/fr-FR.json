@@ -746,18 +746,6 @@
     "columns": [
       {
         "status": "À venir",
-        "title": "Octobre 2026",
-        "completed": false,
-        "description": "La prochaine étape côté personnalisation de l’activité Discord.",
-        "items": [
-          {
-            "title": "Statuts personnalisés",
-            "description": "Créer et utiliser des statuts personnalisés pour mieux contrôler ce qui apparaît sur Discord."
-          }
-        ]
-      },
-      {
-        "status": "À venir",
         "title": "Novembre 2026",
         "completed": false,
         "description": "Rendre la création de présences accessible à davantage de personnes.",
@@ -765,6 +753,18 @@
           {
             "title": "Créateur de présences no-code",
             "description": "Construire une présence sans écrire de code, avec un parcours guidé et des options simples à configurer."
+          }
+        ]
+      },
+      {
+        "status": "À venir",
+        "title": "Octobre 2026",
+        "completed": false,
+        "description": "La prochaine étape côté personnalisation de l’activité Discord.",
+        "items": [
+          {
+            "title": "Statuts personnalisés",
+            "description": "Créer et utiliser des statuts personnalisés pour mieux contrôler ce qui apparaît sur Discord."
           }
         ]
       },
