@@ -18,7 +18,7 @@ export const FeaturesSection = async () => {
   const items = t.raw("items") as Array<{ title: string; description: string }>;
 
   return (
-    <section className="px-5 py-28 sm:px-10 sm:py-36">
+    <section className="home-section-deferred px-5 py-28 sm:px-10 sm:py-36">
       <SectionHeading eyebrow={t("eyebrow")} title={t("title")} description={t("description")} />
       <div className="mx-auto mt-12 grid max-w-[1200px] gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item, index) => {

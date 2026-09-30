@@ -207,3 +207,8 @@
     animation: none;
   }
 }
+
+.home-section-deferred {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}

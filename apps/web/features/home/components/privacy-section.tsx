@@ -9,7 +9,7 @@ export const PrivacySection = async () => {
   const items = t.raw("items") as Array<{ title: string; description: string }>;
 
   return (
-    <section className="px-5 py-28 sm:px-10 sm:py-36">
+    <section className="home-section-deferred px-5 py-28 sm:px-10 sm:py-36">
       <div className="mx-auto grid w-full max-w-300 items-start gap-12 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:gap-20">
         <div>
           <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>

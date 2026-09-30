@@ -44,7 +44,7 @@ export const StepsSection = async () => {
   const items = t.raw("items") as StepItem[];
 
   return (
-    <section className={cn("px-5 py-28 sm:px-6 sm:py-36", homeSectionAltClass)}>
+    <section className={cn("home-section-deferred px-5 py-28 sm:px-6 sm:py-36", homeSectionAltClass)}>
       <SectionHeading eyebrow={t("eyebrow")} title={t("title")} description={t("description")} />
 
       <div className="mx-auto mt-12 grid max-w-[1200px] gap-5 md:grid-cols-3">

@@ -33,7 +33,6 @@ export const ExtensionStoreButton = ({
 }: ExtensionStoreButtonProps) => {
   const t = useTranslations("store");
   const browser = useExtensionBrowser();
-  const Icon = browser === "firefox" ? RiFirefoxBrowserFill : RiChromeFill;
 
   return (
     <a
@@ -43,7 +42,11 @@ export const ExtensionStoreButton = ({
       className={cn(buttonVariants({ variant, size }), className)}
       {...props}
     >
-      <Icon data-icon="inline-start" />
+      {browser === "firefox" ? (
+        <RiFirefoxBrowserFill data-icon="inline-start" />
+      ) : (
+        <RiChromeFill data-icon="inline-start" />
+      )}
       {children ?? t(browser === "firefox" ? "download-firefox" : "download-chrome")}
     </a>
   );

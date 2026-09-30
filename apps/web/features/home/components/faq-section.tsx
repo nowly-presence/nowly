@@ -31,7 +31,7 @@ export const FaqSection = async () => {
           })),
         }}
       />
-      <section id="faq" className={cn("px-5 py-28 sm:px-10 sm:py-36", homeSectionAltClass)}>
+      <section id="faq" className={cn("home-section-deferred px-5 py-28 sm:px-10 sm:py-36", homeSectionAltClass)}>
         <div className="mx-auto grid w-full max-w-[1200px] items-start gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-16">
           <div>
             <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
