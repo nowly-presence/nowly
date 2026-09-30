@@ -745,38 +745,33 @@
     "description": "A timeline of Nowly’s most important milestones and what we’re building next.",
     "columns": [
       {
-        "status": "Shipped",
-        "title": "Since Nowly began",
-        "description": "The foundations that built the Nowly ecosystem.",
+        "status": "Coming up",
+        "title": "Mid-October 2026",
+        "completed": false,
+        "description": "The next step for personalising Discord activity.",
         "items": [
           {
-            "title": "The Nowly ecosystem",
-            "description": "A browser extension, local desktop app, SDK, CLI, and presence library."
-          },
-          {
-            "title": "A complete platform",
-            "description": "A public website, presence library, documentation, downloads, support, and live service status."
+            "title": "Custom statuses",
+            "description": "Create and use custom statuses to control more precisely what appears on Discord."
           }
         ]
       },
       {
-        "status": "Shipped",
-        "title": "July 2026",
-        "description": "Developer tooling and localized activity text reached a new stage.",
+        "status": "Coming up",
+        "title": "Early November 2026",
+        "completed": false,
+        "description": "Make presence creation accessible to more people.",
         "items": [
           {
-            "title": "SDK and CLI 1.0",
-            "description": "Typed and validated tools for creating, testing, packaging, and publishing presences."
-          },
-          {
-            "title": "Localized presences",
-            "description": "Activity text can follow the selected language through typed, signed dictionaries."
+            "title": "No-code presence creator",
+            "description": "Build a presence without writing code through a guided flow with simple configuration options."
           }
         ]
       },
       {
         "status": "Shipped",
         "title": "17–30 September 2026",
+        "completed": true,
         "description": "A new foundation for the website, library, and product experience.",
         "items": [
           {
@@ -794,24 +789,34 @@
         ]
       },
       {
-        "status": "Coming up",
-        "title": "Mid-October 2026",
-        "description": "The next step for personalising Discord activity.",
+        "status": "Shipped",
+        "title": "July 2026",
+        "completed": true,
+        "description": "Developer tooling and localized activity text reached a new stage.",
         "items": [
           {
-            "title": "Custom statuses",
-            "description": "Create and use custom statuses to control more precisely what appears on Discord."
+            "title": "SDK and CLI 1.0",
+            "description": "Typed and validated tools for creating, testing, packaging, and publishing presences."
+          },
+          {
+            "title": "Localized presences",
+            "description": "Activity text can follow the selected language through typed, signed dictionaries."
           }
         ]
       },
       {
-        "status": "Coming up",
-        "title": "Early November 2026",
-        "description": "Make presence creation accessible to more people.",
+        "status": "Shipped",
+        "title": "Since Nowly began",
+        "completed": true,
+        "description": "The foundations that built the Nowly ecosystem.",
         "items": [
           {
-            "title": "No-code presence creator",
-            "description": "Build a presence without writing code through a guided flow with simple configuration options."
+            "title": "The Nowly ecosystem",
+            "description": "A browser extension, local desktop app, SDK, CLI, and presence library."
+          },
+          {
+            "title": "A complete platform",
+            "description": "A public website, presence library, documentation, downloads, support, and live service status."
           }
         ]
       }

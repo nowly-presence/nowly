@@ -745,38 +745,33 @@
     "description": "Une chronologie des étapes importantes déjà franchies et des prochaines évolutions de Nowly.",
     "columns": [
       {
-        "status": "Déjà fait",
-        "title": "Depuis la création de Nowly",
-        "description": "Les fondations qui ont construit l’écosystème Nowly.",
+        "status": "À venir",
+        "title": "Mi-octobre 2026",
+        "completed": false,
+        "description": "La prochaine étape côté personnalisation de l’activité Discord.",
         "items": [
           {
-            "title": "L’écosystème Nowly",
-            "description": "Une extension navigateur, une application desktop locale, un SDK, un CLI et une bibliothèque de présences."
-          },
-          {
-            "title": "Une plateforme complète",
-            "description": "Un site public, une bibliothèque de présences, de la documentation, des téléchargements, du support et un suivi de statut."
+            "title": "Statuts personnalisés",
+            "description": "Créer et utiliser des statuts personnalisés pour mieux contrôler ce qui apparaît sur Discord."
           }
         ]
       },
       {
-        "status": "Déjà fait",
-        "title": "Juillet 2026",
-        "description": "Les outils de développement et la localisation des activités ont atteint un nouveau niveau.",
+        "status": "À venir",
+        "title": "Début novembre 2026",
+        "completed": false,
+        "description": "Rendre la création de présences accessible à davantage de personnes.",
         "items": [
           {
-            "title": "SDK et CLI 1.0",
-            "description": "Des outils typés et validés pour créer, tester, packager et publier des présences."
-          },
-          {
-            "title": "Présences localisées",
-            "description": "Les textes d’activité peuvent suivre la langue choisie, avec des dictionnaires typés et signés."
+            "title": "Créateur de présences no-code",
+            "description": "Construire une présence sans écrire de code, avec un parcours guidé et des options simples à configurer."
           }
         ]
       },
       {
         "status": "Déjà fait",
         "title": "17–30 septembre 2026",
+        "completed": true,
         "description": "Une nouvelle base pour le site, la bibliothèque et l’expérience d’utilisation.",
         "items": [
           {
@@ -794,24 +789,34 @@
         ]
       },
       {
-        "status": "À venir",
-        "title": "Mi-octobre 2026",
-        "description": "La prochaine étape côté personnalisation de l’activité Discord.",
+        "status": "Déjà fait",
+        "title": "Juillet 2026",
+        "completed": true,
+        "description": "Les outils de développement et la localisation des activités ont atteint un nouveau niveau.",
         "items": [
           {
-            "title": "Statuts personnalisés",
-            "description": "Créer et utiliser des statuts personnalisés pour mieux contrôler ce qui apparaît sur Discord."
+            "title": "SDK et CLI 1.0",
+            "description": "Des outils typés et validés pour créer, tester, packager et publier des présences."
+          },
+          {
+            "title": "Présences localisées",
+            "description": "Les textes d’activité peuvent suivre la langue choisie, avec des dictionnaires typés et signés."
           }
         ]
       },
       {
-        "status": "À venir",
-        "title": "Début novembre 2026",
-        "description": "Rendre la création de présences accessible à davantage de personnes.",
+        "status": "Déjà fait",
+        "title": "Depuis la création de Nowly",
+        "completed": true,
+        "description": "Les fondations qui ont construit l’écosystème Nowly.",
         "items": [
           {
-            "title": "Créateur de présences no-code",
-            "description": "Construire une présence sans écrire de code, avec un parcours guidé et des options simples à configurer."
+            "title": "L’écosystème Nowly",
+            "description": "Une extension navigateur, une application desktop locale, un SDK, un CLI et une bibliothèque de présences."
+          },
+          {
+            "title": "Une plateforme complète",
+            "description": "Un site public, une bibliothèque de présences, de la documentation, des téléchargements, du support et un suivi de statut."
           }
         ]
       }
