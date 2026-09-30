@@ -15,12 +15,6 @@ type RoadmapColumn = {
   items: RoadmapItem[]
 };
 
-const columnAccents = [
-  "border-accent/35 bg-accent/6",
-  "border-foreground/12 bg-foreground/[0.03]",
-  "border-foreground/8 bg-foreground/[0.02]",
-];
-
 export const RoadmapView = async () => {
   const t = await getTranslations("roadmapPage");
   const columns = t.raw("columns") as RoadmapColumn[];
@@ -40,34 +34,43 @@ export const RoadmapView = async () => {
           </p>
         </header>
 
-        <div className="mt-12 grid gap-5 lg:grid-cols-3">
-          {columns.map((column, index) => (
-            <section
-              key={column.title}
-              className={cn(
-                "rounded-[16px] border p-5 sm:p-6",
-                columnAccents[index] ?? columnAccents[columnAccents.length - 1],
-              )}
-            >
-              <p className="text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{column.status}</p>
-              <h2 className="mt-3 text-xl font-medium text-foreground">{column.title}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{column.description}</p>
+        <div className="relative mt-14 max-w-4xl">
+          <div className="absolute top-2 bottom-2 left-[11px] w-px bg-border sm:left-[15px]" aria-hidden />
+          <div className="grid gap-12">
+            {columns.map((column, index) => (
+              <section key={column.title} className="relative pl-9 sm:pl-14">
+                <span
+                  className={cn(
+                    "absolute top-1 left-0 flex size-6 items-center justify-center rounded-full border-4 border-background bg-accent sm:size-8",
+                    index > 0 && "bg-foreground/35",
+                  )}
+                  aria-hidden
+                >
+                  <span className="size-1.5 rounded-full bg-background sm:size-2" />
+                </span>
 
-              <div className="mt-6 grid gap-3">
-                {column.items.map((item) => (
-                  <Card key={item.title} size="sm" className="bg-background/55">
-                    <CardContent>
-                      <CardTitle>{item.title}</CardTitle>
-                      <CardDescription className="mt-2">{item.description}</CardDescription>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </section>
-          ))}
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <p className="text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{column.status}</p>
+                  <h2 className="text-2xl font-medium tracking-tight text-foreground">{column.title}</h2>
+                </div>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">{column.description}</p>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {column.items.map((item) => (
+                    <Card key={item.title} size="sm" className="bg-foreground/[0.035]">
+                      <CardContent>
+                        <CardTitle>{item.title}</CardTitle>
+                        <CardDescription className="mt-2">{item.description}</CardDescription>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-start gap-4 rounded-[16px] bg-foreground/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="mt-14 flex flex-col items-start gap-4 rounded-[16px] bg-foreground/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">{t("note")}</p>
           <ButtonLink href="/support" variant="inverted" className="shrink-0">
             {t("feedback")}
@@ -77,3 +80,4 @@ export const RoadmapView = async () => {
     </div>
   );
 };
+

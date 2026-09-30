@@ -742,50 +742,76 @@
   "roadmapPage": {
     "eyebrow": "Roadmap",
     "title": "What's next for Nowly",
-    "description": "A living view of the work we're prioritising. Dates can move as we learn from the community.",
+    "description": "A timeline of Nowly’s most important milestones and what we’re building next.",
     "columns": [
       {
-        "status": "In progress",
-        "title": "Now",
-        "description": "Work being actively shaped or shipped.",
+        "status": "Shipped",
+        "title": "Since Nowly began",
+        "description": "The foundations that built the Nowly ecosystem.",
         "items": [
           {
-            "title": "More supported platforms",
-            "description": "Bring more of the services you use into the presence library."
+            "title": "The Nowly ecosystem",
+            "description": "A browser extension, local desktop app, SDK, CLI, and presence library."
           },
           {
-            "title": "A smoother setup",
-            "description": "Make installing the extension and desktop app clearer and faster."
+            "title": "A complete platform",
+            "description": "A public website, presence library, documentation, downloads, support, and live service status."
           }
         ]
       },
       {
-        "status": "Up next",
-        "title": "Coming soon",
-        "description": "Planned improvements for the next phase.",
+        "status": "Shipped",
+        "title": "July 2026",
+        "description": "Developer tooling and localized activity text reached a new stage.",
         "items": [
           {
-            "title": "Better presence tools",
-            "description": "Improve the SDK and contributor workflow for building presences."
+            "title": "SDK and CLI 1.0",
+            "description": "Typed and validated tools for creating, testing, packaging, and publishing presences."
           },
           {
-            "title": "Richer activity details",
-            "description": "Give supported presences more ways to show useful context in Discord."
+            "title": "Localized presences",
+            "description": "Activity text can follow the selected language through typed, signed dictionaries."
           }
         ]
       },
       {
-        "status": "Exploring",
-        "title": "Ideas",
-        "description": "Directions we are evaluating with the community.",
+        "status": "Shipped",
+        "title": "17–30 September 2026",
+        "description": "A new foundation for the website, library, and product experience.",
         "items": [
           {
-            "title": "Community requests",
-            "description": "Turn popular platform requests into a clearer path from idea to presence."
+            "title": "nowly.me rebuilt",
+            "description": "New website, public library, presence pages, desktop app, legal pages, and Chrome plus Firefox support."
           },
           {
-            "title": "More customization",
-            "description": "Explore new ways to tune how your activity appears in Discord."
+            "title": "New extension interface",
+            "description": "The side panel, library, activity, settings, onboarding, and diagnostics were rebuilt for a smoother flow aligned with the website."
+          },
+          {
+            "title": "Richer presence activity",
+            "description": "Stats, likes, scheduling, temporary pauses, sorting, bulk actions, and diagnostics are now part of the experience."
+          }
+        ]
+      },
+      {
+        "status": "Coming up",
+        "title": "Mid-October 2026",
+        "description": "The next step for personalising Discord activity.",
+        "items": [
+          {
+            "title": "Custom statuses",
+            "description": "Create and use custom statuses to control more precisely what appears on Discord."
+          }
+        ]
+      },
+      {
+        "status": "Coming up",
+        "title": "Early November 2026",
+        "description": "Make presence creation accessible to more people.",
+        "items": [
+          {
+            "title": "No-code presence creator",
+            "description": "Build a presence without writing code through a guided flow with simple configuration options."
           }
         ]
       }
