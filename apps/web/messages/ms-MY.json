@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Dokumentasi",
     "library": "Perpustakaan",
+    "roadmap": "Pelan hala tuju",
     "open-menu": "Buka menu"
   },
   "theme": {
@@ -732,7 +733,96 @@
     "consent": {
       "title": "Data anda",
       "description": "Urus persetujuan analitik pilihan, dan lihat, eksport, atau padam data yang disimpan Nowly untuk peranti anda."
+    },
+    "roadmap": {
+      "title": "Pelan hala tuju",
+      "description": "Lihat perkara seterusnya untuk Nowly dan keutamaan yang sedang kami usahakan."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Pelan hala tuju",
+    "title": "Apa yang seterusnya untuk Nowly",
+    "description": "Pandangan semasa tentang keutamaan kami. Tarikh boleh berubah berdasarkan maklum balas komuniti.",
+    "columns": [
+      {
+        "status": "Akan datang",
+        "title": "November 2026",
+        "completed": false,
+        "description": "Langkah seterusnya menjadikan penciptaan presence boleh diakses oleh lebih ramai orang.",
+        "items": [
+          {
+            "title": "Pencipta presence tanpa kod",
+            "description": "Bina presence tanpa menulis kod melalui aliran berpandu dengan pilihan konfigurasi yang mudah."
+          }
+        ]
+      },
+      {
+        "status": "Akan datang",
+        "title": "Oktober 2026",
+        "completed": false,
+        "description": "Langkah seterusnya untuk memperibadikan aktiviti Discord.",
+        "items": [
+          {
+            "title": "Status tersuai",
+            "description": "Cipta dan gunakan status tersuai untuk mengawal dengan lebih tepat perkara yang dipaparkan di Discord."
+          }
+        ]
+      },
+      {
+        "status": "Telah siap",
+        "title": "September 2026",
+        "completed": true,
+        "description": "Asas baharu untuk laman web, perpustakaan dan pengalaman produk.",
+        "items": [
+          {
+            "title": "nowly.me dibina semula",
+            "description": "Laman web baharu, perpustakaan awam, halaman presence, aplikasi desktop, halaman undang-undang serta sokongan Chrome dan Firefox."
+          },
+          {
+            "title": "Antara muka sambungan baharu",
+            "description": "Panel sisi, perpustakaan, aktiviti, tetapan, onboarding dan diagnostik dibina semula untuk aliran yang lebih lancar dan selaras dengan laman web."
+          },
+          {
+            "title": "Aktiviti presence yang lebih kaya",
+            "description": "Statistik, suka, penjadualan, jeda sementara, pengisihan, tindakan pukal dan diagnostik kini menjadi sebahagian daripada pengalaman."
+          }
+        ]
+      },
+      {
+        "status": "Telah siap",
+        "title": "Julai 2026",
+        "completed": true,
+        "description": "Alat pembangunan dan teks aktiviti setempat mencapai tahap baharu.",
+        "items": [
+          {
+            "title": "SDK dan CLI 1.0",
+            "description": "Alat bertaip dan disahkan untuk mencipta, menguji, membungkus dan menerbitkan presence."
+          },
+          {
+            "title": "Presence setempat",
+            "description": "Teks aktiviti boleh mengikut bahasa yang dipilih melalui kamus bertaip dan ditandatangani."
+          }
+        ]
+      },
+      {
+        "status": "Telah siap",
+        "title": "Sejak Nowly bermula",
+        "completed": true,
+        "description": "Asas yang membina ekosistem Nowly.",
+        "items": [
+          {
+            "title": "Ekosistem Nowly",
+            "description": "Sambungan pelayar, aplikasi desktop tempatan, SDK, CLI dan perpustakaan presence."
+          },
+          {
+            "title": "Platform lengkap",
+            "description": "Laman web awam, perpustakaan presence, dokumentasi, muat turun, sokongan dan status perkhidmatan langsung."
+          }
+        ]
+      }
+    ],
+    "note": "Pelan hala tuju ini menunjukkan arah, bukan janji tarikh. Keutamaan boleh berubah.",
+    "feedback": "Kongsi maklum balas"
   },
   "not-found": {
     "title": "Halaman tidak dijumpai",

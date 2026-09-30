@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Documentación",
     "library": "Biblioteca",
+    "roadmap": "Hoja de ruta",
     "open-menu": "Abrir menú"
   },
   "theme": {
@@ -732,7 +733,96 @@
     "consent": {
       "title": "Tus datos",
       "description": "Gestiona el consentimiento analítico opcional, y consulta, exporta o elimina los datos que Nowly ha guardado de tu dispositivo."
+    },
+    "roadmap": {
+      "title": "Hoja de ruta",
+      "description": "Descubre lo que viene para Nowly y cuáles son nuestras prioridades."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Hoja de ruta",
+    "title": "Lo próximo para Nowly",
+    "description": "Una visión viva de nuestras prioridades. Las fechas pueden cambiar según los comentarios de la comunidad.",
+    "columns": [
+      {
+        "status": "Próximamente",
+        "title": "Noviembre de 2026",
+        "completed": false,
+        "description": "El siguiente paso hará que crear presencias sea accesible para más personas.",
+        "items": [
+          {
+            "title": "Creador de presencias sin código",
+            "description": "Crear una presencia sin escribir código mediante un flujo guiado con opciones de configuración sencillas."
+          }
+        ]
+      },
+      {
+        "status": "Próximamente",
+        "title": "Octubre de 2026",
+        "completed": false,
+        "description": "El siguiente paso para personalizar la actividad de Discord.",
+        "items": [
+          {
+            "title": "Estados personalizados",
+            "description": "Crear y usar estados personalizados para controlar mejor lo que aparece en Discord."
+          }
+        ]
+      },
+      {
+        "status": "Publicado",
+        "title": "Septiembre de 2026",
+        "completed": true,
+        "description": "Una nueva base para el sitio web, la biblioteca y la experiencia del producto.",
+        "items": [
+          {
+            "title": "nowly.me renovado",
+            "description": "Nuevo sitio web, biblioteca pública, páginas de presencias, aplicación de escritorio, páginas legales y compatibilidad con Chrome y Firefox."
+          },
+          {
+            "title": "Nueva interfaz de la extensión",
+            "description": "El panel lateral, la biblioteca, la actividad, los ajustes, la incorporación y los diagnósticos se han rediseñado para ofrecer un flujo más fluido."
+          },
+          {
+            "title": "Actividad de presencia más completa",
+            "description": "Estadísticas, me gusta, programación, pausas temporales, ordenación, acciones en bloque y diagnósticos forman ahora parte de la experiencia."
+          }
+        ]
+      },
+      {
+        "status": "Publicado",
+        "title": "Julio de 2026",
+        "completed": true,
+        "description": "Las herramientas de desarrollo y los textos de actividad localizados alcanzaron una nueva etapa.",
+        "items": [
+          {
+            "title": "SDK y CLI 1.0",
+            "description": "Herramientas tipadas y validadas para crear, probar, empaquetar y publicar presencias."
+          },
+          {
+            "title": "Presencias localizadas",
+            "description": "Los textos de actividad siguen el idioma seleccionado mediante diccionarios tipados y firmados."
+          }
+        ]
+      },
+      {
+        "status": "Publicado",
+        "title": "Desde el inicio de Nowly",
+        "completed": true,
+        "description": "Los cimientos sobre los que se construyó el ecosistema de Nowly.",
+        "items": [
+          {
+            "title": "El ecosistema de Nowly",
+            "description": "Extensión de navegador, aplicación de escritorio local, SDK, CLI y biblioteca de presencias."
+          },
+          {
+            "title": "Una plataforma completa",
+            "description": "Sitio público, biblioteca de presencias, documentación, descargas, soporte y estado del servicio en directo."
+          }
+        ]
+      }
+    ],
+    "note": "Esta hoja de ruta marca una dirección, no fechas garantizadas. Las prioridades pueden cambiar.",
+    "feedback": "Compartir comentarios"
   },
   "not-found": {
     "title": "Página no encontrada",

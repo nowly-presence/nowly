@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Documentação",
     "library": "Biblioteca",
+    "roadmap": "Roteiro",
     "open-menu": "Abrir menu"
   },
   "theme": {
@@ -732,7 +733,96 @@
     "consent": {
       "title": "Seus dados",
       "description": "Gerencie o consentimento opcional de analytics e veja, exporte ou apague os dados que o Nowly guardou para o seu dispositivo."
+    },
+    "roadmap": {
+      "title": "Roteiro",
+      "description": "Veja o que vem a seguir no Nowly e quais são nossas prioridades."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Roteiro",
+    "title": "O que vem a seguir no Nowly",
+    "description": "Uma visão atual das nossas prioridades. As datas podem mudar conforme ouvimos a comunidade.",
+    "columns": [
+      {
+        "status": "Em breve",
+        "title": "Novembro de 2026",
+        "completed": false,
+        "description": "O próximo passo vai tornar a criação de presenças acessível a mais pessoas.",
+        "items": [
+          {
+            "title": "Criador de presenças sem código",
+            "description": "Crie uma presença sem escrever código por meio de um fluxo guiado com opções simples de configuração."
+          }
+        ]
+      },
+      {
+        "status": "Em breve",
+        "title": "Outubro de 2026",
+        "completed": false,
+        "description": "O próximo passo para personalizar a atividade no Discord.",
+        "items": [
+          {
+            "title": "Status personalizados",
+            "description": "Crie e use status personalizados para controlar melhor o que aparece no Discord."
+          }
+        ]
+      },
+      {
+        "status": "Lançado",
+        "title": "Setembro de 2026",
+        "completed": true,
+        "description": "Uma nova base para o site, a biblioteca e a experiência do produto.",
+        "items": [
+          {
+            "title": "nowly.me reformulado",
+            "description": "Novo site, biblioteca pública, páginas de presenças, aplicativo desktop, páginas legais e suporte para Chrome e Firefox."
+          },
+          {
+            "title": "Nova interface da extensão",
+            "description": "O painel lateral, a biblioteca, a atividade, as configurações, o onboarding e os diagnósticos foram refeitos para um fluxo mais fluido."
+          },
+          {
+            "title": "Atividade de presença mais completa",
+            "description": "Estatísticas, curtidas, agendamento, pausas temporárias, ordenação, ações em massa e diagnósticos agora fazem parte da experiência."
+          }
+        ]
+      },
+      {
+        "status": "Lançado",
+        "title": "Julho de 2026",
+        "completed": true,
+        "description": "As ferramentas de desenvolvimento e os textos de atividade localizados chegaram a uma nova etapa.",
+        "items": [
+          {
+            "title": "SDK e CLI 1.0",
+            "description": "Ferramentas tipadas e validadas para criar, testar, empacotar e publicar presenças."
+          },
+          {
+            "title": "Presenças localizadas",
+            "description": "Os textos de atividade podem seguir o idioma selecionado por meio de dicionários tipados e assinados."
+          }
+        ]
+      },
+      {
+        "status": "Lançado",
+        "title": "Desde o início do Nowly",
+        "completed": true,
+        "description": "As bases que construíram o ecossistema Nowly.",
+        "items": [
+          {
+            "title": "O ecossistema Nowly",
+            "description": "Extensão de navegador, aplicativo desktop local, SDK, CLI e biblioteca de presenças."
+          },
+          {
+            "title": "Uma plataforma completa",
+            "description": "Site público, biblioteca de presenças, documentação, downloads, suporte e status do serviço em tempo real."
+          }
+        ]
+      }
+    ],
+    "note": "Este roteiro indica uma direção, não datas garantidas. As prioridades podem mudar.",
+    "feedback": "Enviar feedback"
   },
   "not-found": {
     "title": "Página não encontrada",

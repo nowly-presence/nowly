@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Dokumentation",
     "library": "Bibliothek",
+    "roadmap": "Roadmap",
     "open-menu": "Menü öffnen"
   },
   "theme": {
@@ -732,7 +733,96 @@
     "consent": {
       "title": "Deine Daten",
       "description": "Verwalte die optionale Analytics-Zustimmung und sieh, exportiere oder lösche die für dein Gerät gespeicherten Daten von Nowly."
+    },
+    "roadmap": {
+      "title": "Roadmap",
+      "description": "Sieh, was als Nächstes für Nowly kommt und woran wir arbeiten."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Roadmap",
+    "title": "Was kommt als Nächstes für Nowly?",
+    "description": "Ein Überblick über unsere Prioritäten. Zeitpläne können sich durch Feedback der Community ändern.",
+    "columns": [
+      {
+        "status": "Als Nächstes",
+        "title": "November 2026",
+        "completed": false,
+        "description": "Die nächste Phase macht die Erstellung von Presences für mehr Menschen zugänglich.",
+        "items": [
+          {
+            "title": "No-Code-Editor für Presences",
+            "description": "Erstelle eine Presence ohne Code mit einem geführten Ablauf und einfachen Konfigurationsoptionen."
+          }
+        ]
+      },
+      {
+        "status": "Als Nächstes",
+        "title": "Oktober 2026",
+        "completed": false,
+        "description": "Der nächste Schritt für eine persönlichere Discord-Aktivität.",
+        "items": [
+          {
+            "title": "Benutzerdefinierte Status",
+            "description": "Erstelle und nutze eigene Status, um genauer zu steuern, was auf Discord angezeigt wird."
+          }
+        ]
+      },
+      {
+        "status": "Bereits umgesetzt",
+        "title": "September 2026",
+        "completed": true,
+        "description": "Eine neue Grundlage für Website, Bibliothek und Produkterlebnis.",
+        "items": [
+          {
+            "title": "nowly.me neu aufgebaut",
+            "description": "Neue Website, öffentliche Bibliothek, Presence-Seiten, Desktop-App, rechtliche Seiten sowie Chrome- und Firefox-Unterstützung."
+          },
+          {
+            "title": "Neue Erweiterungsoberfläche",
+            "description": "Sidepanel, Bibliothek, Aktivität, Einstellungen, Onboarding und Diagnosen wurden für einen reibungsloseren Ablauf neu gestaltet."
+          },
+          {
+            "title": "Reichhaltigere Presence-Aktivität",
+            "description": "Statistiken, Likes, Planung, temporäre Pausen, Sortierung, Sammelaktionen und Diagnosen sind jetzt Teil des Erlebnisses."
+          }
+        ]
+      },
+      {
+        "status": "Bereits umgesetzt",
+        "title": "Juli 2026",
+        "completed": true,
+        "description": "Entwicklerwerkzeuge und lokalisierte Aktivitätstexte haben eine neue Stufe erreicht.",
+        "items": [
+          {
+            "title": "SDK und CLI 1.0",
+            "description": "Typisierte und validierte Werkzeuge zum Erstellen, Testen, Packen und Veröffentlichen von Presences."
+          },
+          {
+            "title": "Lokalisierte Presences",
+            "description": "Aktivitätstexte können mit typisierten und signierten Wörterbüchern der ausgewählten Sprache folgen."
+          }
+        ]
+      },
+      {
+        "status": "Bereits umgesetzt",
+        "title": "Seit dem Start von Nowly",
+        "completed": true,
+        "description": "Die Grundlagen, auf denen das Nowly-Ökosystem aufgebaut wurde.",
+        "items": [
+          {
+            "title": "Das Nowly-Ökosystem",
+            "description": "Browser-Erweiterung, lokale Desktop-App, SDK, CLI und Presence-Bibliothek."
+          },
+          {
+            "title": "Eine vollständige Plattform",
+            "description": "Öffentliche Website, Presence-Bibliothek, Dokumentation, Downloads, Support und Live-Status."
+          }
+        ]
+      }
+    ],
+    "note": "Diese Roadmap ist eine Orientierung und kein Versprechen für bestimmte Termine. Prioritäten können sich ändern.",
+    "feedback": "Feedback teilen"
   },
   "not-found": {
     "title": "Seite nicht gefunden",

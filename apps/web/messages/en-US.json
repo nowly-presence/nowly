@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Documentation",
     "library": "Library",
+    "roadmap": "Roadmap",
     "open-menu": "Open menu"
   },
   "theme": {
@@ -732,7 +733,96 @@
     "consent": {
       "title": "Your data",
       "description": "Manage the optional analytics consent, and view, export, or delete the data Nowly has stored for your device."
+    },
+    "roadmap": {
+      "title": "Roadmap",
+      "description": "See what’s next for Nowly and the work we’re prioritising."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Roadmap",
+    "title": "What's next for Nowly",
+    "description": "A timeline of Nowly’s most important milestones and what we’re building next.",
+    "columns": [
+      {
+        "status": "Coming up",
+        "title": "November 2026",
+        "completed": false,
+        "description": "Make presence creation accessible to more people.",
+        "items": [
+          {
+            "title": "No-code presence creator",
+            "description": "Build a presence without writing code through a guided flow with simple configuration options."
+          }
+        ]
+      },
+      {
+        "status": "Coming up",
+        "title": "October 2026",
+        "completed": false,
+        "description": "The next step for personalising Discord activity.",
+        "items": [
+          {
+            "title": "Custom statuses",
+            "description": "Create and use custom statuses to control more precisely what appears on Discord."
+          }
+        ]
+      },
+      {
+        "status": "Shipped",
+        "title": "September 2026",
+        "completed": true,
+        "description": "A new foundation for the website, library, and product experience.",
+        "items": [
+          {
+            "title": "nowly.me rebuilt",
+            "description": "New website, public library, presence pages, desktop app, legal pages, and Chrome plus Firefox support."
+          },
+          {
+            "title": "New extension interface",
+            "description": "The side panel, library, activity, settings, onboarding, and diagnostics were rebuilt for a smoother flow aligned with the website."
+          },
+          {
+            "title": "Richer presence activity",
+            "description": "Stats, likes, scheduling, temporary pauses, sorting, bulk actions, and diagnostics are now part of the experience."
+          }
+        ]
+      },
+      {
+        "status": "Shipped",
+        "title": "July 2026",
+        "completed": true,
+        "description": "Developer tooling and localized activity text reached a new stage.",
+        "items": [
+          {
+            "title": "SDK and CLI 1.0",
+            "description": "Typed and validated tools for creating, testing, packaging, and publishing presences."
+          },
+          {
+            "title": "Localized presences",
+            "description": "Activity text can follow the selected language through typed, signed dictionaries."
+          }
+        ]
+      },
+      {
+        "status": "Shipped",
+        "title": "Since Nowly began",
+        "completed": true,
+        "description": "The foundations that built the Nowly ecosystem.",
+        "items": [
+          {
+            "title": "The Nowly ecosystem",
+            "description": "A browser extension, local desktop app, SDK, CLI, and presence library."
+          },
+          {
+            "title": "A complete platform",
+            "description": "A public website, presence library, documentation, downloads, support, and live service status."
+          }
+        ]
+      }
+    ],
+    "note": "This roadmap is directional, not a promise of dates. Priorities may change as Nowly and its community grow.",
+    "feedback": "Share feedback"
   },
   "not-found": {
     "title": "Page not found",

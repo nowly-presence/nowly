@@ -15,6 +15,7 @@
   "navbar": {
     "docs": "Dokumentacja",
     "library": "Biblioteka",
+    "roadmap": "Mapa drogowa",
     "open-menu": "Otwórz menu"
   },
   "theme": {
@@ -732,7 +733,96 @@
     "consent": {
       "title": "Twoje dane",
       "description": "Zarządzaj opcjonalną zgodą na analitykę oraz przeglądaj, eksportuj lub usuwaj dane, które Nowly przechowuje dla Twojego urządzenia."
+    },
+    "roadmap": {
+      "title": "Mapa drogowa",
+      "description": "Zobacz, co nadchodzi w Nowly i jakie są nasze priorytety."
     }
+  },
+  "roadmapPage": {
+    "eyebrow": "Mapa drogowa",
+    "title": "Co dalej z Nowly",
+    "description": "Przegląd naszych priorytetów. Terminy mogą się zmieniać na podstawie opinii społeczności.",
+    "columns": [
+      {
+        "status": "Nadchodzące",
+        "title": "Listopad 2026",
+        "completed": false,
+        "description": "Kolejny krok ułatwi tworzenie presence większej liczbie osób.",
+        "items": [
+          {
+            "title": "Kreator presence bez kodu",
+            "description": "Twórz presence bez pisania kodu dzięki prowadzonemu procesowi i prostym opcjom konfiguracji."
+          }
+        ]
+      },
+      {
+        "status": "Nadchodzące",
+        "title": "Październik 2026",
+        "completed": false,
+        "description": "Kolejny krok w personalizacji aktywności Discorda.",
+        "items": [
+          {
+            "title": "Niestandardowe statusy",
+            "description": "Twórz i używaj niestandardowych statusów, aby dokładniej kontrolować to, co pojawia się na Discordzie."
+          }
+        ]
+      },
+      {
+        "status": "Wydane",
+        "title": "Wrzesień 2026",
+        "completed": true,
+        "description": "Nowa podstawa strony, biblioteki i doświadczenia produktu.",
+        "items": [
+          {
+            "title": "Przebudowane nowly.me",
+            "description": "Nowa strona, publiczna biblioteka, strony presence, aplikacja desktopowa, strony prawne oraz obsługa Chrome i Firefoksa."
+          },
+          {
+            "title": "Nowy interfejs rozszerzenia",
+            "description": "Panel boczny, biblioteka, aktywność, ustawienia, onboarding i diagnostyka zostały przebudowane dla płynniejszego przepływu."
+          },
+          {
+            "title": "Bogatsza aktywność presence",
+            "description": "Statystyki, polubienia, harmonogram, tymczasowe pauzy, sortowanie, działania zbiorcze i diagnostyka są teraz częścią doświadczenia."
+          }
+        ]
+      },
+      {
+        "status": "Wydane",
+        "title": "Lipiec 2026",
+        "completed": true,
+        "description": "Narzędzia deweloperskie i zlokalizowane teksty aktywności osiągnęły nowy etap.",
+        "items": [
+          {
+            "title": "SDK i CLI 1.0",
+            "description": "Typowane i zweryfikowane narzędzia do tworzenia, testowania, pakowania i publikowania presence."
+          },
+          {
+            "title": "Zlokalizowane presence",
+            "description": "Teksty aktywności mogą używać wybranego języka dzięki typowanym i podpisanym słownikom."
+          }
+        ]
+      },
+      {
+        "status": "Wydane",
+        "title": "Od początku Nowly",
+        "completed": true,
+        "description": "Fundamenty, na których zbudowano ekosystem Nowly.",
+        "items": [
+          {
+            "title": "Ekosystem Nowly",
+            "description": "Rozszerzenie przeglądarki, lokalna aplikacja desktopowa, SDK, CLI i biblioteka presence."
+          },
+          {
+            "title": "Kompletna platforma",
+            "description": "Publiczna strona, biblioteka presence, dokumentacja, pliki do pobrania, wsparcie i bieżący status usług."
+          }
+        ]
+      }
+    ],
+    "note": "Mapa drogowa pokazuje kierunek, a nie gwarantowane terminy. Priorytety mogą się zmienić.",
+    "feedback": "Przekaż opinię"
   },
   "not-found": {
     "title": "Strona nie znaleziona",
