@@ -746,7 +746,7 @@
     "columns": [
       {
         "status": "À venir",
-        "title": "Mi-octobre 2026",
+        "title": "Octobre 2026",
         "completed": false,
         "description": "La prochaine étape côté personnalisation de l’activité Discord.",
         "items": [
@@ -758,7 +758,7 @@
       },
       {
         "status": "À venir",
-        "title": "Début novembre 2026",
+        "title": "Novembre 2026",
         "completed": false,
         "description": "Rendre la création de présences accessible à davantage de personnes.",
         "items": [
@@ -770,7 +770,7 @@
       },
       {
         "status": "Déjà fait",
-        "title": "17–30 septembre 2026",
+        "title": "Septembre 2026",
         "completed": true,
         "description": "Une nouvelle base pour le site, la bibliothèque et l’expérience d’utilisation.",
         "items": [

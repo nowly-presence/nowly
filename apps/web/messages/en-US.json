@@ -746,7 +746,7 @@
     "columns": [
       {
         "status": "Coming up",
-        "title": "Mid-October 2026",
+        "title": "October 2026",
         "completed": false,
         "description": "The next step for personalising Discord activity.",
         "items": [
@@ -758,7 +758,7 @@
       },
       {
         "status": "Coming up",
-        "title": "Early November 2026",
+        "title": "November 2026",
         "completed": false,
         "description": "Make presence creation accessible to more people.",
         "items": [
@@ -770,7 +770,7 @@
       },
       {
         "status": "Shipped",
-        "title": "17–30 September 2026",
+        "title": "September 2026",
         "completed": true,
         "description": "A new foundation for the website, library, and product experience.",
         "items": [
