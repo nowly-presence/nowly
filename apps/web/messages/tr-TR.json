@@ -765,6 +765,10 @@
           {
             "title": "Özel durumlar",
             "description": "Discord'da görünenleri daha iyi kontrol etmek için özel durumlar oluşturun ve kullanın."
+          },
+          {
+            "title": "Mevsim teması",
+            "description": "Nowly deneyimi için mevsimsel bir görsel tema."
           }
         ]
       },

@@ -765,6 +765,10 @@
           {
             "title": "Benutzerdefinierte Status",
             "description": "Erstelle und nutze eigene Status, um genauer zu steuern, was auf Discord angezeigt wird."
+          },
+          {
+            "title": "Saisonales Thema",
+            "description": "Eine saisonale Gestaltung für die Nowly-Erfahrung."
           }
         ]
       },

@@ -765,6 +765,10 @@
           {
             "title": "Niestandardowe statusy",
             "description": "Twórz i używaj niestandardowych statusów, aby dokładniej kontrolować to, co pojawia się na Discordzie."
+          },
+          {
+            "title": "Motyw sezonowy",
+            "description": "Sezonowy wygląd doświadczenia Nowly."
           }
         ]
       },

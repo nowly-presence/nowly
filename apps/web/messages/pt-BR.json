@@ -765,6 +765,10 @@
           {
             "title": "Status personalizados",
             "description": "Crie e use status personalizados para controlar melhor o que aparece no Discord."
+          },
+          {
+            "title": "Tema sazonal",
+            "description": "Um tema visual sazonal para a experiência do Nowly."
           }
         ]
       },

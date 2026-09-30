@@ -765,6 +765,10 @@
           {
             "title": "Statuts personnalisés",
             "description": "Créer et utiliser des statuts personnalisés pour mieux contrôler ce qui apparaît sur Discord."
+          },
+          {
+            "title": "Thème de saison",
+            "description": "Ajouter un thème saisonnier à l’expérience Nowly."
           }
         ]
       },

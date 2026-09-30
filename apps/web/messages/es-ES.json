@@ -765,6 +765,10 @@
           {
             "title": "Estados personalizados",
             "description": "Crear y usar estados personalizados para controlar mejor lo que aparece en Discord."
+          },
+          {
+            "title": "Tema de temporada",
+            "description": "Una apariencia de temporada para la experiencia de Nowly."
           }
         ]
       },
