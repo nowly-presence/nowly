@@ -16,7 +16,7 @@ export const FaqPageView = async () => {
     getTranslations("pages.support"),
   ]);
   const items = t.raw("items") as FaqItem[];
-  const categories = Object.keys(t.raw("categories") as Record<string, string>);
+  const categories = [...new Set(items.map((item) => item.category))];
 
   return (
     <>
