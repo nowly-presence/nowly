@@ -6,15 +6,18 @@ export const EmptyState = ({
   title,
   description,
   action,
+  decoration,
   className,
 }: {
   icon?: ReactNode
   title: string
   description?: string
   action?: ReactNode
+  decoration?: ReactNode
   className?: string
 }) => (
-  <div className={cn("flex flex-col items-center gap-3 px-6 py-8 text-center", className)}>
+  <div className={cn("relative flex flex-col items-center gap-3 px-6 py-8 text-center", className)}>
+    {decoration}
     {icon && <span className="flex size-10 items-center justify-center rounded-md bg-hover text-muted">{icon}</span>}
     <div className="flex flex-col gap-1">
       <p className="text-label-lg font-medium text-ink">{title}</p>

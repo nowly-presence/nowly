@@ -1,26 +1,37 @@
 import { useRef, useState } from "react"
 import { RiUploadCloud2Line } from "@remixicon/react"
 import { useExtensionState } from "@/hooks/extension-state-provider"
-import { useI18n } from "@/hooks/i18n-provider"
+import { useI18n, type MessageKey } from "@/hooks/i18n-provider"
 import { useNav } from "@/hooks/navigation-provider"
+import { useSeason } from "@/hooks/season-provider"
 import { sendMessage } from "@/lib/messages"
 import { IS_CANARY } from "@/shared/brand"
 import { API_BASE_URL } from "@/shared/constants"
+import { replayHalloweenPrank } from "@/shared/halloween-prank"
 import { saveReviewPrompt } from "@/shared/review-prompt"
+import { ENABLED_SEASONS, isSeasonOverride, saveSeasonOverride, type Season } from "@/shared/seasonal-themes"
 import { bytesToBase64 } from "@/shared/zip-bytes"
 import { Button } from "@/ui/button"
 import { FieldRow } from "@/ui/field-row"
 import { Input } from "@/ui/input"
 import { Row } from "@/ui/row"
+import { Select } from "@/ui/select"
 import { useToast } from "@/ui/toast"
 
 const HTTP_URL = /^https?:\/\/.+/
+const SEASON_AUTO = "auto"
+
+const SEASON_LABELS: Record<Season, MessageKey> = {
+  halloween: "settings.seasonHalloween",
+  winter: "settings.seasonWinter",
+}
 
 export const DeveloperTools = () => {
   const { state, refresh, updateSettings } = useExtensionState()
   const { t } = useI18n()
   const { push } = useNav()
   const { toast } = useToast()
+  const { override } = useSeason()
   const [apiDraft, setApiDraft] = useState(state.settings.customApiBaseUrl ?? "")
   const [busy, setBusy] = useState<"zip" | "updates" | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -87,6 +98,30 @@ export const DeveloperTools = () => {
             </>
           }
         />
+      )}
+      {IS_CANARY && (
+        <>
+          <FieldRow title={t("settings.forceSeason")} controlClassName="w-44">
+            <Select
+              aria-label={t("settings.forceSeason")}
+              value={override ?? SEASON_AUTO}
+              onChange={(value) => void saveSeasonOverride(isSeasonOverride(value) ? value : null)}
+              options={[
+                { value: SEASON_AUTO, label: t("settings.seasonAuto") },
+                ...ENABLED_SEASONS.map((season) => ({ value: season, label: t(SEASON_LABELS[season]) })),
+                { value: "none", label: t("settings.seasonNone") },
+              ]}
+            />
+          </FieldRow>
+          <Row
+            title={t("settings.replayPrank")}
+            trailing={
+              <Button size="sm" variant="secondary" onClick={() => void replayHalloweenPrank()}>
+                {t("action.replay")}
+              </Button>
+            }
+          />
+        </>
       )}
       <Row
         title={t("settings.replayReview")}

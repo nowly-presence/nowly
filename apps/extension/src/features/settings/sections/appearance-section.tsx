@@ -21,6 +21,7 @@ export const AppearanceSection = () => {
   const { state, updateSettings } = useExtensionState()
   const { t, preference, setPreference } = useI18n()
   const { settings } = state
+  const appearance = settings.appearance ?? "seasonal"
   const presenceLanguage = settings.presenceLanguage ?? PER_PRESENCE
   const common = useMemo(() => commonPresenceLocales(state.presences), [state.presences])
   const restricted = common.length < PRESENCE_LOCALES.length
@@ -38,15 +39,16 @@ export const AppearanceSection = () => {
   return (
     <Section title={t("settings.appearance")}>
       <Group>
-        <FieldRow title={t("settings.theme")} layout="stacked">
+        <FieldRow title={t("settings.theme")} description={appearance === "seasonal" ? t("settings.themeSeasonalHint") : undefined} layout="stacked">
           <Segmented<AppearanceMode>
             label={t("settings.theme")}
-            value={settings.appearance ?? "system"}
+            value={appearance}
             onChange={(value) => void updateSettings({ appearance: value })}
             options={[
               { value: "system", label: t("settings.themeSystem") },
               { value: "light", label: t("settings.themeLight") },
               { value: "dark", label: t("settings.themeDark") },
+              { value: "seasonal", label: t("settings.themeSeasonal") },
             ]}
           />
         </FieldRow>

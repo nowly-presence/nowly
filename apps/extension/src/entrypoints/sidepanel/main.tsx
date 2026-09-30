@@ -5,6 +5,7 @@ import { ToastProvider } from "@/ui/toast"
 import { I18nProvider } from "@/hooks/i18n-provider"
 import { NavigationProvider } from "@/hooks/navigation-provider"
 import { ExtensionStateProvider } from "@/hooks/extension-state-provider"
+import { SeasonProvider } from "@/hooks/season-provider"
 import "@/entrypoints/sidepanel/styles.css"
 
 const rootElement = document.getElementById("root")
@@ -14,11 +15,13 @@ createRoot(rootElement).render(
   <StrictMode>
     <I18nProvider>
       <ExtensionStateProvider>
-        <NavigationProvider>
-          <ToastProvider>
-            <App />
-          </ToastProvider>
-        </NavigationProvider>
+        <SeasonProvider>
+          <NavigationProvider>
+            <ToastProvider>
+              <App />
+            </ToastProvider>
+          </NavigationProvider>
+        </SeasonProvider>
       </ExtensionStateProvider>
     </I18nProvider>
   </StrictMode>,

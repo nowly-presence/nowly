@@ -6,7 +6,8 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   showPlayer: true,
   suggestPresences: true,
   scheduleEnabled: false,
-  appearance: "system",
+  appearance: "seasonal",
+  seasonalThemeMigrated: true,
   presenceLanguage: "per-presence",
   presenceLanguages: {},
   activitySelectionMode: "focused",
@@ -23,6 +24,11 @@ const migrateStoredSettings = (stored: Record<string, unknown>): { settings: Par
       delete next[key]
       changed = true
     }
+  }
+  if (next.seasonalThemeMigrated !== true) {
+    if (next.appearance === undefined || next.appearance === "system") next.appearance = "seasonal"
+    next.seasonalThemeMigrated = true
+    changed = true
   }
   return { settings: next as Partial<ExtensionSettings>, changed }
 }

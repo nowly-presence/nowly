@@ -5,6 +5,8 @@ const SCENARIOS: readonly PreviewScenario[] = ["live", "idle", "nohost", "nodisc
 const params = new URLSearchParams(location.search)
 
 const scenarioParam = params.get("scenario")
+const seasonParam = params.get("season")
+const prank = params.get("prank") === "1"
 
 export const previewParams = {
   scenario: SCENARIOS.find((value) => value === scenarioParam) ?? "live",
@@ -17,4 +19,6 @@ export const previewParams = {
   scriptsDenied: params.get("scripts") === "0",
   developer: params.get("dev") === "1",
   review: params.get("review") === "1",
+  season: seasonParam ?? (prank ? "halloween" : null),
+  prank,
 }

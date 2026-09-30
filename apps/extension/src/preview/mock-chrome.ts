@@ -8,9 +8,21 @@ import { previewParams } from "@/preview/preview-params"
 import type { TabActivity } from "@/shared/types"
 
 const SECOND_TAB_OFFSET_MS = 20_000
+const FORCED_SCHEMES = ["light", "dark"]
+
+const forceColorScheme = (scheme: string): void => {
+  const native = window.matchMedia.bind(window)
+  window.matchMedia = (query: string) => {
+    const result = native(query)
+    if (!query.includes("prefers-color-scheme")) return result
+    return Object.defineProperty(result, "matches", { value: query.includes(scheme) })
+  }
+}
 
 export const installMockChrome = async (): Promise<void> => {
   const now = Date.now()
+  const seasonal = Boolean(previewParams.season)
+  if (seasonal && FORCED_SCHEMES.includes(previewParams.theme)) forceColorScheme(previewParams.theme)
   const storageChanged = createMockEvent<[StorageChanges, string]>()
   const runtimeMessage = createMockEvent<[unknown]>()
   const local = createMockStorageArea("local", storageChanged)
@@ -39,7 +51,8 @@ export const installMockChrome = async (): Promise<void> => {
       showPlayer: true,
       suggestPresences: true,
       scheduleEnabled: false,
-      appearance: previewParams.theme,
+      appearance: seasonal ? "seasonal" : previewParams.theme,
+      seasonalThemeMigrated: true,
       presenceLanguage: "per-presence",
       presenceLanguages: {},
       activitySelectionMode: "focused",
@@ -58,6 +71,8 @@ export const installMockChrome = async (): Promise<void> => {
     localePreference: previewParams.lang ?? "browser",
     sidepanelActiveView: previewParams.view,
     reviewPrompt: { firstSeenAt: previewParams.review ? 0 : now },
+    ...(previewParams.season ? { seasonOverride: previewParams.season } : {}),
+    ...(previewParams.prank ? { halloweenPrank: { replay: true } } : {}),
     ...(previewParams.slug ? { sidepanelPendingNav: { view: previewParams.view, slug: previewParams.slug, at: now } } : {}),
   })
 

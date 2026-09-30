@@ -30,7 +30,7 @@ messages/<locale>.json   UI strings, 11 locales (same set as nowly.me)
 ## Where does new code go
 
 - New screen or user-facing domain: `features/<name>/`, entry component `<name>-view.tsx`, registered in `entrypoints/sidepanel/app.tsx` (tab) or as a `Route` in `hooks/navigation-provider.tsx` (pushed screen).
-- App-wide overlay without its own screen (e.g. the one-time review prompt in `features/review/`): a component mounted once at the end of `entrypoints/sidepanel/app.tsx`.
+- App-wide overlay without its own screen (e.g. the one-time review prompt in `features/review/`, the Halloween prank in `features/seasonal/`): a component mounted once at the end of `entrypoints/sidepanel/app.tsx`.
 - New piece of a screen: next to it in the same feature. Split a file when it passes ~200 lines or mixes responsibilities.
 - Generic, styling-only component: `ui/<name>.tsx`. Check `ui/` first; never re-create a button, row, select, sheet or chip locally.
 - New background capability: add the message to `RouterMessageMap` (`background/router/contracts.ts`) and its handler to `buildHandlerRegistry` (`background/router/handlers/index.ts`) - a missing handler is a compile error by design.
@@ -46,6 +46,16 @@ messages/<locale>.json   UI strings, 11 locales (same set as nowly.me)
 - UI strings: add the key to every `messages/*.json` (the `Record<MessageKey, string>` in `hooks/i18n-provider.tsx` fails the build if one locale misses a key). Keys are `area.name` (`library.sortNew`).
 - No em dash, en dash, spaced hyphen used as a dash, or middle dot in any text: UI strings, code, docs, commits. Rewrite with a period, comma, colon or parentheses. Visual separators between inline items use `ui/dot-separator.tsx`. Ranges use a plain hyphen (`A-Z`).
 - Visual design follows https://nowly.me/design.md: tokens live in `ui/tokens.css` and are the only colours/radii/type sizes allowed. No heavy shadows, no saturated secondary colours, Satoshi only.
+
+## Seasonal themes
+
+- Appearance has four modes: `seasonal` (default), `system`, `light`, `dark`. Seasonal follows the system's light or dark mode and adds the active season on top; outside a period it is exactly the base theme. System, Light and Dark never show a season.
+- Periods are computed on the device's local date, no server (`shared/seasonal-themes.ts`, tested): `halloween` is October 1-31, `winter` (December) is declared but `enabled: false` until its content ships. `resolveSeason` is the single rule (Seasonal only, then the override, then the date).
+- `SeasonProvider` (`hooks/season-provider.tsx`, mounted in `main.tsx`) resolves the season once the state is ready, sets `season-<id>` on `<html>` and re-resolves at local midnight. Read it with `useSeason()` (`season`, `seasonal`, `today`, `override`).
+- A season is only a token override in `ui/tokens.css` (`.season-halloween`, `.dark.season-halloween`), never colours in components. Seasonal decor (`components/shared/seasonal-decor.tsx`, passed to `EmptyState` as `decoration`) is hidden under reduced motion.
+- Migration: `getSettings` moves stored `appearance: "system"` (the old default) or a missing value to `seasonal` once, flagged by `seasonalThemeMigrated`; explicit Light or Dark are kept, and choosing System afterwards sticks.
+- Nolo: `nolo-mascot.tsx`, `nolo-paths.ts`, `src/assets/nolo/` and `ui/streaming-text.tsx` are byte-for-byte copies from the 2.3.0 branch, do not edit them here. Costumes wrap him instead: `CostumedNolo` (`components/shared/nolo-costumed.tsx`) with `costume="halloween"`, accessory paths in `nolo-costume-paths.ts` (viewBox 512, same as Nolo; `overhang` is the share of `size` the accessory sticks out above the disc) and colours in `ui/tokens.css` (`.nolo-costume-<id>`, which also recolours the disc through `--primary`). To use a designer's drawing, replace that costume's `layers` and `transform`, nothing else.
+- Canary developer settings have "Force the season" (`seasonOverride` in `chrome.storage.local`: a season, `none`, or removed for automatic) and "Replay the Halloween prank". The preview takes `?season=halloween|none` (turns Seasonal on, `theme=light|dark` then forces the system scheme) and `?prank=1`.
 
 ## Validation
 
