@@ -982,7 +982,7 @@
       },
       {
         "title": "Directeur de la publication",
-        "body": "<strong>{publisherName}</strong>, en qualité d’éditeur personne physique. Le droit français ne prévoit <strong>qu’un</strong> directeur de la publication (loi du 29 juillet 1881, applicable en ligne). Les contributeurs ou développeurs ne sont pas des directeurs de publication supplémentaires."
+        "body": "<strong>{publisherName}</strong>, en qualité de représentant de l’entreprise individuelle K.Ring. Le droit français ne prévoit <strong>qu’un</strong> directeur de la publication (loi du 29 juillet 1881, applicable en ligne). Les contributeurs ou développeurs ne sont pas des directeurs de publication supplémentaires."
       },
       {
         "title": "Hébergement (site, API, base de données)",
