@@ -86,7 +86,9 @@ Two optional fields control how and when your presence script runs in the browse
 <TypeTable
   properties={[
     { name: "world", type: "\"main\" | \"isolated\"", description: "Execution world. Defaults to isolated.", required: false },
-    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "When the script is injected. Defaults to document_idle.", required: false }
+    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "When the script is injected. Defaults to document_idle.", required: false },
+    { name: "iframe", type: "boolean", description: "Opt in to building and injecting iframe.ts into nested frames.", required: false },
+    { name: "iFrameRegExp", type: "string", description: "Regex matched against nested frame URLs. Required when iframe is true.", required: false }
   ]}
 />
 
@@ -117,6 +119,10 @@ A `fetch` from the isolated world is not treated as a first-party request, so au
 <CalloutInfo>
 The declaration lives entirely in `metadata.json` - the extension reads it at registration time. No changes to the extension are needed to add a new page-context presence.
 </CalloutInfo>
+
+## Nested frames
+
+Set `"iframe": true` and add `"iFrameRegExp"` when the presence needs a separate `iframe.ts` script. The regular expression is evaluated against each nested frame URL. The main `presence.ts` receives data sent by the frame through `presence.on("iFrameData", ...)`.
 
 ## Category
 

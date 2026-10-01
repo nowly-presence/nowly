@@ -34,10 +34,19 @@ const buildRelease = async (privateKey: CryptoKey, overrides: Partial<PresenceRe
   }
   const bundle = "console.log('bundle')"
   const sha256 = await sha256Base64Url(bundle)
+  const iframeBundle = overrides.iframeBundle
+  const iframeSha256 = overrides.iframeSha256 ?? (iframeBundle ? await sha256Base64Url(iframeBundle) : undefined)
   const metadataHash = await sha256Base64Url(canonicalJson(metadata))
   const signedAt = new Date().toISOString()
 
-  const signedPayload = canonicalJson({ metadataHash, sha256, signedAt, slug: metadata.slug, version: "1.0.0" })
+  const signedPayload = canonicalJson({
+    iframeSha256,
+    metadataHash,
+    sha256,
+    signedAt,
+    slug: metadata.slug,
+    version: "1.0.0",
+  })
   const signatureBuffer = await crypto.subtle.sign({ name: "ECDSA", hash: "SHA-256" }, privateKey, new TextEncoder().encode(signedPayload))
 
   return {
@@ -47,6 +56,7 @@ const buildRelease = async (privateKey: CryptoKey, overrides: Partial<PresenceRe
     bundle,
     sha256,
     metadataHash,
+    ...(iframeBundle ? { iframeBundle, iframeSha256 } : {}),
     signature: arrayBufferToBase64Url(signatureBuffer),
     signedAt,
     ...overrides,
@@ -74,6 +84,15 @@ describe("verifyPresenceRelease", () => {
     const release = await buildRelease(privateKey, { bundle: "tampered bundle" })
     const result = await verifyPresenceRelease(release)
     expect(result).toEqual({ ok: false, error: "BUNDLE_HASH_MISMATCH" })
+  })
+
+  it("rejects a release whose iframe bundle was tampered with", async () => {
+    installChromeMock()
+    const { verifyPresenceRelease } = await import("@/background/services/release-security")
+    const { privateKey } = await generateKeyPair()
+    const release = await buildRelease(privateKey, { iframeBundle: "iframe bundle" })
+    const result = await verifyPresenceRelease({ ...release, iframeBundle: "tampered iframe bundle" })
+    expect(result).toEqual({ ok: false, error: "IFRAME_BUNDLE_HASH_MISMATCH" })
   })
 
   it("rejects a release whose metadata was tampered with", async () => {

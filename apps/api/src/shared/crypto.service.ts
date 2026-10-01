@@ -12,6 +12,7 @@ export const signedPayload = (input: {
   version: string
   sha256: string
   metadataHash: string
+  iframeSha256?: string
   signedAt: string
 }): string => canonicalJson(input)
 

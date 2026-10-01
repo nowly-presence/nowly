@@ -3,27 +3,51 @@ title: iFrames
 description: Handle activity data that lives inside embedded frames.
 ---
 
-<CalloutWarning>
-iFrame presence scripts are **not implemented** in the Nowly extension runtime yet. `presence.on("iFrameData")` is reserved in the SDK types, but the extension does not inject into nested frames or emit that event. Prefer reading the top-level page (DOM, `<audio>` / `<video>`, public page state) until this ships.
-</CalloutWarning>
+<CalloutInfo>
+iFrame presence scripts are supported as an opt-in feature. Set `iframe` to `true` and provide `iFrameRegExp` in `metadata.json`.
+</CalloutInfo>
 
-## When iFrames Matter
+## Configure an iFrame presence
 
-Some websites render media players or important state inside iframes. A normal presence script may not be able to read everything from the top-level page.
+Add the nested-frame URL pattern to `metadata.json`:
 
-Until iframe support exists, skip sites that only expose activity inside a cross-origin frame, or document the limitation in the presence description.
+```json
+{
+  "iframe": true,
+  "iFrameRegExp": "player\\.example\\.com/embed/"
+}
+```
 
-## Planned API
+Create an `iframe.ts` file next to `presence.ts`. It runs inside matching nested frames:
 
-The Presence API reserves an `iFrameData` event for future frame-level communication:
+```ts filename="iframe.ts"
+const iframe = new iFrame()
 
-```ts filename="presence.ts"
-presence.on("iFrameData", async (...args) => {
-  presence.info("Received iframe data")
+iframe.on("UpdateData", () => {
+  const video = document.querySelector("video")
+  if (!video) return
+
+  iframe.send({
+    video: {
+      paused: video.paused,
+      currentTime: video.currentTime,
+      duration: video.duration,
+      title: document.querySelector(".video-title")?.textContent,
+    },
+  })
 })
 ```
 
-Do not rely on this listener in production presences today.
+Receive the data in `presence.ts`:
+
+```ts
+presence.on("iFrameData", (data) => {
+  // Merge or replace data from the matching frame.
+  iFrameData = data
+})
+```
+
+`iFrameData` is emitted once per message. When multiple frames are present, identify or merge their payloads in the main presence. `iFrameRegExp` is matched against the nested frame URL.
 
 ## Recommended Approach
 

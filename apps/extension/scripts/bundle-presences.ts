@@ -16,6 +16,8 @@ type BundledEntry = {
     bundle: string
     sha256: string
     metadataHash: string
+    iframeBundle?: string
+    iframeSha256?: string
     signature: string
     signedAt: string
   }
@@ -49,6 +51,11 @@ export const generateBundledPresences = (): void => {
       const metadata: Record<string, unknown> = { ...JSON.parse(readFileSync(metadataPath, "utf-8")), slug }
       const settingsPath = join(PRESENCES_DIR, slug, "settings.json")
       if (existsSync(settingsPath)) metadata.settings = JSON.parse(readFileSync(settingsPath, "utf-8"))
+      const iframeBundlePath = join(PRESENCES_DIR, slug, "iframe.js")
+      const iframeBundle = existsSync(iframeBundlePath) ? readFileSync(iframeBundlePath, "utf-8") : undefined
+      if (metadata.iframe === true && !iframeBundle) {
+        throw new Error(`Built iframe bundle not found for "${slug}"`)
+      }
       entries.push({
         slug,
         release: {
@@ -58,6 +65,9 @@ export const generateBundledPresences = (): void => {
           bundle,
           sha256: sha256Base64Url(bundle),
           metadataHash: sha256Base64Url(canonicalJson(metadata)),
+          ...(iframeBundle
+            ? { iframeBundle, iframeSha256: sha256Base64Url(iframeBundle) }
+            : {}),
           signature: "",
           signedAt: new Date().toISOString(),
         },

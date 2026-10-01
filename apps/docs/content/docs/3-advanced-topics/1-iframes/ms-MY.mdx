@@ -3,27 +3,50 @@ title: iFrames
 description: Kendalikan data aktiviti yang berada di dalam bingkai terbenam.
 ---
 
-<CalloutWarning>
-Skrip presence iFrame **belum dilaksanakan** dalam runtime sambungan Nowly. `presence.on("iFrameData")` diketepikan dalam jenis SDK, tetapi sambungan tidak menyuntik ke dalam bingkai bersarang atau memancarkan peristiwa tersebut. Lebih suka membaca halaman peringkat atas (DOM, `<audio>` / `<video>`, keadaan halaman awam) sehingga ciri ini dilancarkan.
-</CalloutWarning>
+<CalloutInfo>
+Skrip presence iFrame disokong sebagai ciri pilihan. Tetapkan `iframe` kepada `true` dan nyatakan `iFrameRegExp` dalam `metadata.json`.
+</CalloutInfo>
 
-## Bila iFrame Penting
+## Konfigurasi presence iFrame
 
-Sesetengah laman web menjadikan pemain media atau keadaan penting di dalam iframe. Skrip presence biasa mungkin tidak dapat membaca segala sesuatu daripada halaman peringkat atas.
+Tambah corak URL bingkai bersarang dalam `metadata.json`:
 
-Sehingga sokongan iframe wujud, langkau laman yang hanya mendedahkan aktiviti di dalam bingkai asal silang (cross-origin), atau dokumentasikan had tersebut dalam penerangan presence.
+```json
+{
+  "iframe": true,
+  "iFrameRegExp": "player\\.example\\.com/embed/"
+}
+```
 
-## API Dirancang
+Cipta fail `iframe.ts` di sebelah `presence.ts`. Ia berjalan dalam bingkai bersarang yang sepadan:
 
-Presence API mengetepikan peristiwa `iFrameData` untuk komunikasi peringkat bingkai pada masa hadapan:
+```ts filename="iframe.ts"
+const iframe = new iFrame()
 
-```ts filename="presence.ts"
-presence.on("iFrameData", async (...args) => {
-  presence.info("Received iframe data")
+iframe.on("UpdateData", () => {
+  const video = document.querySelector("video")
+  if (!video) return
+
+  iframe.send({
+    video: {
+      paused: video.paused,
+      currentTime: video.currentTime,
+      duration: video.duration,
+      title: document.querySelector(".video-title")?.textContent,
+    },
+  })
 })
 ```
 
-Jangan harap pada pendengar ini dalam presence produksi buat masa ini.
+Terima data dalam `presence.ts`:
+
+```ts
+presence.on("iFrameData", (data) => {
+  iFrameData = data
+})
+```
+
+`iFrameData` dipancarkan sekali bagi setiap mesej. Untuk beberapa bingkai, kenal pasti atau gabungkan data dalam presence utama. `iFrameRegExp` dibandingkan dengan URL bingkai bersarang.
 
 ## Pendekatan Disyorkan
 

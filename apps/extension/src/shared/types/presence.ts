@@ -33,6 +33,8 @@ export type PresenceMetadata = {
   locales?: Record<string, Record<string, string>>
   world?: "main" | "isolated"
   runAt?: "document_start" | "document_end" | "document_idle"
+  iframe?: boolean
+  iFrameRegExp?: string
   discordNative?: boolean
   imageProxy?: { hostSuffixes: string[]; headers?: Record<string, string> }
 }
@@ -44,6 +46,8 @@ export type PresenceRelease = {
   bundle: string
   sha256: string
   metadataHash: string
+  iframeBundle?: string
+  iframeSha256?: string
   signature: string
   signedAt: string
   totalInstalls?: number

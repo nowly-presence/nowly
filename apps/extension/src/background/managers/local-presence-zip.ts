@@ -69,6 +69,8 @@ export const normalizeLocalMetadata = (raw: unknown, slug: string): PresenceMeta
     runAt:
       data.runAt === "document_start" || data.runAt === "document_end" || data.runAt === "document_idle" ? data.runAt : "document_idle",
     ...(typeof data.regExp === "string" ? { regExp: data.regExp } : {}),
+    ...(data.iframe === true ? { iframe: true } : {}),
+    ...(typeof data.iFrameRegExp === "string" ? { iFrameRegExp: data.iFrameRegExp } : {}),
     ...(data.longDescription && typeof data.longDescription === "object"
       ? { longDescription: data.longDescription as Record<string, string> }
       : {}),
@@ -120,6 +122,10 @@ const findBundle = (lookup: Map<string, Uint8Array>, metadataPath: string): Uint
     .sort((left, right) => left[0].split("/").length - right[0].split("/").length)
   return matches[0]?.[1]
 }
+const findIframeBundle = (lookup: Map<string, Uint8Array>, metadataPath: string): Uint8Array | undefined => {
+  const dir = metadataPath.includes("/") ? metadataPath.slice(0, metadataPath.lastIndexOf("/") + 1) : ""
+  return fileAt(lookup, `${dir}iframe.js`)
+}
 
 const hasSourceScript = (lookup: Map<string, Uint8Array>): boolean =>
   [...lookup.keys()].some((path) => path.endsWith("/presence.ts") || path === "presence.ts")
@@ -127,7 +133,7 @@ const hasSourceScript = (lookup: Map<string, Uint8Array>): boolean =>
 export const parsePresenceZip = async (
   payload: unknown,
   fileName = "presence.zip",
-): Promise<{ ok: true; slug: string; metadata: PresenceMetadata; bundle: string } | { ok: false; error: string }> => {
+): Promise<{ ok: true; slug: string; metadata: PresenceMetadata; bundle: string; iframeBundle?: string } | { ok: false; error: string }> => {
   const raw = toZipBytes(payload)
   if (!raw) return { ok: false, error: "INVALID_ZIP" }
   if (raw.byteLength === 0 || raw.byteLength > MAX_ZIP_BYTES) return { ok: false, error: "ZIP_TOO_LARGE" }
@@ -170,13 +176,23 @@ export const parsePresenceZip = async (
   const slug = rawSlug.toLowerCase().replace(/\s+/g, "-")
   const metadata = normalizeLocalMetadata({ ...(parsed as object), slug }, slug)
   if (!metadata) return { ok: false, error: "URLS_MISSING" }
+  const iframeBundleBytes = findIframeBundle(lookup, metadataPath)
+  if (metadata.iframe === true && !iframeBundleBytes) return { ok: false, error: "IFRAME_BUNDLE_MISSING" }
+  const iframeBundle = iframeBundleBytes ? strFromU8(iframeBundleBytes).trim() : undefined
+  if (metadata.iframe === true && !iframeBundle) return { ok: false, error: "IFRAME_BUNDLE_EMPTY" }
+
   const bundle = strFromU8(bundleBytes).trim()
   if (!bundle) return { ok: false, error: "BUNDLE_EMPTY" }
 
-  return { ok: true, slug, metadata, bundle }
+  return { ok: true, slug, metadata, bundle, ...(iframeBundle ? { iframeBundle } : {}) }
 }
 
-export const toLocalRelease = async (slug: string, metadata: PresenceMetadata, bundle: string): Promise<PresenceRelease> => {
+export const toLocalRelease = async (
+  slug: string,
+  metadata: PresenceMetadata,
+  bundle: string,
+  iframeBundle?: string,
+): Promise<PresenceRelease> => {
   const version = metadata.version && metadata.version.length > 0 ? metadata.version : `0.0.0-dev.${Date.now()}`
   const nextMetadata = { ...metadata, slug, version }
   return {
@@ -185,6 +201,9 @@ export const toLocalRelease = async (slug: string, metadata: PresenceMetadata, b
     metadata: nextMetadata,
     bundle,
     sha256: await sha256Base64Url(bundle),
+    ...(iframeBundle
+      ? { iframeBundle, iframeSha256: await sha256Base64Url(iframeBundle) }
+      : {}),
     metadataHash: await sha256Base64Url(canonicalJson(nextMetadata)),
     signature: "",
     signedAt: new Date().toISOString(),

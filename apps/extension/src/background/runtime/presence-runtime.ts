@@ -8,7 +8,10 @@ export const createPresenceRuntime = (
   strings: Record<string, string> = {},
   apiBaseUrl = "https://api.nowly.me",
   cdnBaseUrl?: string,
+  options: { mode?: "main" | "iframe"; iframeRegExp?: string } = {},
 ): string => {
+  const mode = options.mode ?? "main"
+  const iframeRegExp = options.iframeRegExp ?? ""
   const assetsBase = cdnBaseUrl
     ? `${cdnBaseUrl.replace(/\/+$/, "")}/presences/${slug}/assets`
     : chrome.runtime.getURL(`presences/${slug}/assets`)
@@ -22,8 +25,12 @@ export const createPresenceRuntime = (
   const NOWLY_SETTINGS = ${JSON.stringify(settings)};
   const NOWLY_STRINGS = ${JSON.stringify(strings)};
   const NOWLY_ASSETS_BASE = ${JSON.stringify(assetsBase)};
+  const NOWLY_MODE = ${JSON.stringify(mode)};
+  const NOWLY_IFRAME_REGEXP = ${JSON.stringify(iframeRegExp)};
   const listeners = new Map();
   const instances = [];
+  const iframeListeners = new Map();
+  const iframeInstances = [];
   const storage = new Map();
   const ctxSettings = Object.assign({}, NOWLY_SETTINGS);
   const ctxStrings = Object.assign({}, NOWLY_STRINGS);
@@ -150,6 +157,112 @@ export const createPresenceRuntime = (
     settings: ctxSettings,
   };
 
+  if (NOWLY_MODE === "iframe") {
+    if (window.top === window) return;
+
+    let matchesIframe = false;
+    try {
+      matchesIframe = Boolean(NOWLY_IFRAME_REGEXP) && new RegExp(NOWLY_IFRAME_REGEXP).test(window.location.href);
+    } catch {
+      matchesIframe = false;
+    }
+    if (!matchesIframe) return;
+
+    class IFrame {
+      constructor() {
+        iframeInstances.push(this);
+      }
+
+      on(eventName, listener) {
+        if (eventName !== "UpdateData") return;
+        const callbacks = iframeListeners.get(this) ?? [];
+        callbacks.push(listener);
+        iframeListeners.set(this, callbacks);
+      }
+
+      send(data) {
+        if (!data || typeof data !== "object" || Array.isArray(data)) return;
+        try {
+          window.top.postMessage({
+            source: "NOWLY_IFRAME",
+            type: "DATA",
+            slug: NOWLY_SLUG,
+            frameUrl: window.location.href,
+            payload: data,
+          }, "*");
+        } catch {
+        }
+      }
+
+      getUrl() {
+        return Promise.resolve(window.location.href);
+      }
+    }
+
+    globalThis.iFrame = IFrame;
+
+    try {
+      ${bundle}
+
+      const factory = typeof __PRESENCE__ !== "undefined" && __PRESENCE__?.default
+        ? __PRESENCE__.default
+        : undefined;
+      factory?.init?.(ctx);
+
+      const tick = () => {
+        try {
+          factory?.tick?.(ctx);
+          for (const instance of iframeInstances) {
+            const callbacks = iframeListeners.get(instance) ?? [];
+            for (const callback of callbacks) {
+              Promise.resolve(callback()).catch(() => {});
+            }
+          }
+        } catch {
+        }
+      };
+
+      tick();
+      const timer = setInterval(tick, 5000);
+      let tickDebounce;
+      const scheduleTick = () => {
+        clearTimeout(tickDebounce);
+        tickDebounce = setTimeout(tick, 250);
+      };
+      const boundMedia = new WeakSet();
+      const bindMedia = (element) => {
+        if (boundMedia.has(element)) return;
+        boundMedia.add(element);
+        element.addEventListener("play", scheduleTick);
+        element.addEventListener("pause", scheduleTick);
+        element.addEventListener("ended", scheduleTick);
+        element.addEventListener("seeked", scheduleTick);
+        element.addEventListener("timeupdate", scheduleTick);
+      };
+      const scanMedia = () => document.querySelectorAll("audio, video").forEach(bindMedia);
+      const observeDocument = () => {
+        scanMedia();
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+      };
+      const observer = new MutationObserver(() => {
+        scanMedia();
+        scheduleTick();
+      });
+      if (document.documentElement) observeDocument();
+      else window.addEventListener("DOMContentLoaded", observeDocument, { once: true });
+      window.addEventListener("popstate", scheduleTick);
+      window.addEventListener("hashchange", scheduleTick);
+      window.addEventListener("pagehide", () => {
+        clearInterval(timer);
+        clearTimeout(tickDebounce);
+        observer.disconnect();
+        factory?.destroy?.();
+      });
+    } catch {
+    }
+    return;
+  }
+
   try {
     ${bundle}
 
@@ -239,6 +352,36 @@ export const createPresenceRuntime = (
       }
       tick();
     });
+    window.addEventListener("message", (event) => {
+      if (NOWLY_MODE !== "main") return;
+      if (!NOWLY_IFRAME_REGEXP) return;
+      if (event.source === window) return;
+      const message = event.data;
+      if (message?.source !== "NOWLY_IFRAME" || message.type !== "DATA" || message.slug !== NOWLY_SLUG) return;
+      if (!message.payload || typeof message.payload !== "object" || Array.isArray(message.payload)) return;
+
+      if (NOWLY_IFRAME_REGEXP) {
+        try {
+          if (typeof message.frameUrl !== "string" || !new RegExp(NOWLY_IFRAME_REGEXP).test(message.frameUrl)) return;
+        } catch {
+          return;
+        }
+      }
+
+      for (const instance of instances) {
+        const eventListeners = listeners.get(instance);
+        const callbacks = eventListeners?.get("iFrameData") ?? [];
+        for (const callback of callbacks) {
+          Promise.resolve(callback(message.payload)).catch((error) => {
+            post("DEBUG", {
+              stage: "presence-error",
+              message: error instanceof Error ? error.message : "iFrameData failed",
+            });
+          });
+        }
+      }
+    });
+
   } catch (error) {
     post("DEBUG", {
       stage: "presence-error",

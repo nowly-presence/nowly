@@ -30,6 +30,7 @@ const sha256Base64Url = async (input: string): Promise<string> => {
 
 const signedPayload = (release: PresenceRelease): string =>
   canonicalJson({
+    iframeSha256: release.iframeSha256,
     metadataHash: release.metadataHash,
     sha256: release.sha256,
     signedAt: release.signedAt,
@@ -120,6 +121,12 @@ export const verifyPresenceRelease = async (release: PresenceRelease, expectedSl
 
   const bundleHash = await sha256Base64Url(release.bundle)
   if (bundleHash !== release.sha256) return { ok: false, error: "BUNDLE_HASH_MISMATCH" }
+  if (release.iframeBundle != null || release.iframeSha256 != null) {
+    if (!release.iframeBundle?.trim()) return { ok: false, error: "IFRAME_BUNDLE_MISSING" }
+    if (typeof release.iframeSha256 !== "string") return { ok: false, error: "IFRAME_HASH_MISSING" }
+    const iframeBundleHash = await sha256Base64Url(release.iframeBundle)
+    if (iframeBundleHash !== release.iframeSha256) return { ok: false, error: "IFRAME_BUNDLE_HASH_MISMATCH" }
+  }
 
   const metadataHash = await sha256Base64Url(canonicalJson(release.metadata))
   if (metadataHash !== release.metadataHash) return { ok: false, error: "METADATA_HASH_MISMATCH" }

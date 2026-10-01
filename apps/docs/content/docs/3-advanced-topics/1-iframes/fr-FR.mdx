@@ -3,27 +3,51 @@ title: iFrames
 description: Gérez les données d'activité qui se trouvent dans des cadres intégrés.
 ---
 
-<CalloutWarning>
-Les scripts de présence dans les iFrames **ne sont pas encore implémentés** dans le runtime de l'extension Nowly. `presence.on("iFrameData")` est réservé dans les types SDK, mais l'extension n'injecte pas dans les cadres imbriqués et n'émet pas cet événement. Préférez la page de niveau supérieur (DOM, `<audio>` / `<video>`, état public) jusqu'à la livraison de cette fonctionnalité.
-</CalloutWarning>
+<CalloutInfo>
+Les scripts de présence dans les iFrames sont disponibles en option. Définissez `iframe` à `true` et fournissez `iFrameRegExp` dans `metadata.json`.
+</CalloutInfo>
 
-## Quand les iFrames comptent
+## Configurer une présence iFrame
 
-Certains sites affichent des lecteurs multimédias ou un état important dans des iframes. Un script de présence normal peut ne pas pouvoir tout lire depuis la page de niveau supérieur.
+Ajoutez le motif d'URL des cadres imbriqués dans `metadata.json` :
 
-Tant que le support iframe n'existe pas, évitez les sites dont l'activité n'est exposée que dans un cadre cross-origin, ou documentez la limite dans la description de la présence.
+```json
+{
+  "iframe": true,
+  "iFrameRegExp": "player\\.example\\.com/embed/"
+}
+```
 
-## API prévue
+Créez un fichier `iframe.ts` à côté de `presence.ts`. Il s'exécute dans les cadres imbriqués correspondants :
 
-L'API Presence réserve un événement `iFrameData` pour une communication future au niveau du cadre&nbsp;:
+```ts filename="iframe.ts"
+const iframe = new iFrame()
 
-```ts filename="presence.ts"
-presence.on("iFrameData", async (...args) => {
-  presence.info("Données iframe reçues")
+iframe.on("UpdateData", () => {
+  const video = document.querySelector("video")
+  if (!video) return
+
+  iframe.send({
+    video: {
+      paused: video.paused,
+      currentTime: video.currentTime,
+      duration: video.duration,
+      title: document.querySelector(".video-title")?.textContent,
+    },
+  })
 })
 ```
 
-Ne vous appuyez pas sur ce listener dans une présence en production aujourd'hui.
+Recevez les données dans `presence.ts` :
+
+```ts
+presence.on("iFrameData", (data) => {
+  // Fusionnez ou remplacez les données du cadre correspondant.
+  iFrameData = data
+})
+```
+
+`iFrameData` est émis pour chaque message. Si plusieurs cadres sont présents, identifiez ou fusionnez leurs données dans la présence principale. `iFrameRegExp` est comparé à l'URL du cadre imbriqué.
 
 ## Approche recommandée
 
