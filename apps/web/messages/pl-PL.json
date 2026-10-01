@@ -182,7 +182,7 @@
     "eyebrow": "FAQ",
     "title": "Szybkie odpowiedzi na pytania",
     "description": "To, co najważniejsze o instalacji, danych i Discordzie. Dokumentacja i Discord idą dalej.",
-    "docs": "Otwórz dokumentację",
+    "faq": "Otwórz FAQ",
     "discord": "Dołącz do Discorda",
     "items": [
       {
@@ -320,6 +320,8 @@
     "report": "Zgłoś problem",
     "report-title": "Zgłoś problem",
     "report-description": "Powiedz nam, co jest nie tak z {name}. Czytamy każde zgłoszenie.",
+    "report-data-notice": "Po wysłaniu Twoja wiadomość, język oraz nazwa i wersja przeglądarki trafiają do Nowly i naszego kanału pomocy na Discordzie.",
+    "report-privacy-link": "Więcej w polityce prywatności",
     "report-label": "Opis",
     "report-placeholder": "Co się stało? Która strona lub akcja zawiodła?",
     "report-count": "{count}/{max}",
@@ -328,7 +330,8 @@
     "report-cancel": "Anuluj",
     "report-close": "Zamknij",
     "report-thanks-title": "Dziękujemy za zgłoszenie",
-    "report-thanks-description": "Otrzymaliśmy Twoją notatkę o {name}. To pomaga nam utrzymać bibliotekę w dobrym stanie.",
+    "report-thanks-description": "Otrzymaliśmy Twoją notatkę o {name}. Jeśli chcesz dodać informacje lub omówić problem, dołącz do Discorda.",
+    "report-discord": "Dołącz do Discorda",
     "report-error": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę.",
     "discord-native-title": "Już na Discordzie",
     "discord-native-description": "Discord pokazuje {name}, jeśli połączysz swoje konto. Nowly robi to samo bez tego połączenia.",
@@ -900,6 +903,10 @@
       {
         "title": "Twoje prawa",
         "body": "Jeśli RODO ma zastosowanie, możesz żądać dostępu, sprostowania, usunięcia, ograniczenia, sprzeciwu i przenoszenia danych oraz możesz wycofać zgodę na analitykę. Diagnostyka deweloperska w rozszerzeniu może pokazywać zdarzenia wciąż oczekujące na Twoim urządzeniu; nie jest to pełny eksport naszych serwerów. Aby skorzystać z praw, napisz na <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> lub skorzystaj z <a href=\"https://github.com/nowly-presence/nowly\">repozytorium GitHub</a>. Możesz też złożyć skargę do <a href=\"https://www.cnil.fr\">CNIL</a> (Francja) lub lokalnego organu nadzorczego."
+      },
+      {
+        "title": "Zgłoszenia problemów z obecnością",
+        "body": "Po wysłaniu zgłoszenia problemu z obecnością przetwarzamy Twoją wiadomość, slug obecności, język oraz nazwę i wersję przeglądarki. Informacje te trafiają do naszego API i kanału pomocy na Discordzie używanego przez opiekunów. API może również przetwarzać techniczne dane żądania, takie jak adres IP, w celu bezpieczeństwa i ograniczania liczby żądań. Nie umieszczaj w zgłoszeniu poufnych informacji."
       },
       {
         "title": "Kontakt",

@@ -457,7 +457,12 @@ describe("Stats Routes", () => {
     const res = await app.inject({
       method: "POST",
       url: "/presences/youtube/report",
-      payload: { message: "The presence stays idle on the watch page.", locale: "fr-FR" },
+      payload: {
+        message: "The presence stays idle on the watch page.",
+        locale: "fr-FR",
+        browser: "Firefox",
+        browserVersion: "141.0",
+      },
     })
 
     expect(res.statusCode).toBe(200)
@@ -467,6 +472,8 @@ describe("Stats Routes", () => {
       name: "YouTube",
       message: "The presence stays idle on the watch page.",
       locale: "fr-FR",
+      browser: "Firefox",
+      browserVersion: "141.0",
     })
   })
 

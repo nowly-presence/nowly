@@ -182,7 +182,7 @@
     "eyebrow": "Soalan Lazim",
     "title": "Soalan, dijawab dengan cepat",
     "description": "Perkara asas tentang pemasangan, data dan Discord. Dokumentasi dan Discord pergi lebih jauh.",
-    "docs": "Buka dokumentasi",
+    "faq": "Buka FAQ",
     "discord": "Sertai Discord",
     "items": [
       {
@@ -320,6 +320,8 @@
     "report": "Laporkan masalah",
     "report-title": "Laporkan masalah",
     "report-description": "Beritahu kami apa yang tidak kena dengan {name}. Kami membaca setiap laporan.",
+    "report-data-notice": "Apabila dihantar, mesej, bahasa, nama pelayar dan versi pelayar anda dihantar kepada Nowly dan saluran sokongan Discord kami.",
+    "report-privacy-link": "Ketahui lebih lanjut dalam dasar privasi",
     "report-label": "Penerangan",
     "report-placeholder": "Apa yang berlaku? Halaman atau tindakan mana yang gagal?",
     "report-count": "{count}/{max}",
@@ -328,7 +330,8 @@
     "report-cancel": "Batal",
     "report-close": "Tutup",
     "report-thanks-title": "Terima kasih atas laporan",
-    "report-thanks-description": "Kami telah menerima nota anda tentang {name}. Ini membantu kami mengekalkan perpustakaan dalam keadaan baik.",
+    "report-thanks-description": "Kami telah menerima nota anda tentang {name}. Jika anda mahu menambah maklumat atau berbincang tentang masalah ini, sertai Discord.",
+    "report-discord": "Sertai Discord",
     "report-error": "Tidak dapat menghantar laporan. Cuba lagi sebentar lagi.",
     "discord-native-title": "Sudah ada di Discord",
     "discord-native-description": "Discord memaparkan {name} jika anda menghubungkan akaun anda. Nowly melakukan perkara yang sama tanpa penghubungan itu.",
@@ -900,6 +903,10 @@
       {
         "title": "Hak anda",
         "body": "Jika GDPR terpakai, anda boleh meminta akses, pembetulan, pemadaman, sekatan, bantahan, dan kemudahalihan, dan anda boleh menarik balik persetujuan untuk analitik. Diagnostik pembangun dalam sambungan mungkin menunjukkan peristiwa yang masih beratur pada peranti anda; ia bukan eksport lengkap pelayan kami. Untuk menggunakan hak, e-mel <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> atau gunakan <a href=\"https://github.com/nowly-presence/nowly\">repositori GitHub</a>. Anda juga boleh mengemukakan aduan kepada <a href=\"https://www.cnil.fr\">CNIL</a> (Perancis) atau pihak berkuasa penyeliaan tempatan anda."
+      },
+      {
+        "title": "Laporan masalah kehadiran",
+        "body": "Apabila anda menghantar laporan masalah kehadiran, kami memproses mesej anda, slug kehadiran, bahasa anda, serta nama dan versi pelayar anda. Maklumat ini dihantar kepada API kami dan saluran sokongan Discord yang digunakan oleh penyelenggara. API juga mungkin memproses data teknikal permintaan seperti alamat IP anda untuk keselamatan dan had kadar. Jangan sertakan maklumat sensitif dalam laporan."
       },
       {
         "title": "Hubungi kami",

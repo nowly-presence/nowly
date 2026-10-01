@@ -107,6 +107,8 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
       name: presenceDisplayName(meta, slug, parsed.data.locale),
       message,
       locale: parsed.data.locale,
+      browser: parsed.data.browser,
+      browserVersion: parsed.data.browserVersion,
     })
 
     if (result === "unconfigured") {

@@ -37,6 +37,8 @@ describe("presence reports", () => {
       name: "YouTube",
       message: "Idle on /watch",
       locale: "fr-FR",
+      browser: "Firefox",
+      browserVersion: "141.0",
     })
 
     expect(result).toBe("sent")
@@ -51,6 +53,8 @@ describe("presence reports", () => {
         expect.objectContaining({ name: "Slug", value: "`youtube`" }),
         expect.objectContaining({ name: "Problem", value: "Idle on /watch" }),
         expect.objectContaining({ name: "Locale", value: "fr-FR" }),
+        expect.objectContaining({ name: "Browser", value: "Firefox" }),
+        expect.objectContaining({ name: "Browser version", value: "141.0" }),
       ]),
     )
   })

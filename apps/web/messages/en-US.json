@@ -182,7 +182,7 @@
     "eyebrow": "FAQ",
     "title": "Questions, answered quickly",
     "description": "The essentials on install, data, and Discord. Docs and Discord go further.",
-    "docs": "Open the docs",
+    "faq": "Open the FAQ",
     "discord": "Join the Discord",
     "items": [
       {
@@ -320,6 +320,8 @@
     "report": "Report a problem",
     "report-title": "Report a problem",
     "report-description": "Tell us what is wrong with {name}. We read every report.",
+    "report-data-notice": "Submitting sends your message, locale, browser name, and browser version to Nowly and our Discord support channel.",
+    "report-privacy-link": "Learn more in the privacy policy",
     "report-label": "Description",
     "report-placeholder": "What happened? Which page or action failed?",
     "report-count": "{count}/{max}",
@@ -328,7 +330,8 @@
     "report-cancel": "Cancel",
     "report-close": "Close",
     "report-thanks-title": "Thanks for the report",
-    "report-thanks-description": "We received your note about {name}. That helps us keep the library in good shape.",
+    "report-thanks-description": "We received your note about {name}. If you want to add more information or discuss the issue, join us on Discord.",
+    "report-discord": "Join the Discord",
     "report-error": "Could not send the report. Try again in a moment.",
     "discord-native-title": "Already on Discord",
     "discord-native-description": "Discord shows {name} if you link your account. Nowly does the same without that link.",
@@ -900,6 +903,10 @@
       {
         "title": "Your rights",
         "body": "If the GDPR applies, you may request access, rectification, erasure, restriction, objection, and portability, and you may withdraw consent for analytics. Developer diagnostics in the extension may show events still queued on your device; they are not a complete export of our servers. To exercise rights, email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> or use the <a href=\"https://github.com/nowly-presence/nowly\">GitHub repository</a>. You may also lodge a complaint with the <a href=\"https://www.cnil.fr\">CNIL</a> (France) or your local supervisory authority."
+      },
+      {
+        "title": "Presence issue reports",
+        "body": "When you submit a presence issue report, we process the message you write, the presence slug, your language, and your browser name and version. We send this information to our API and to the Discord support channel used by the maintainers. The API may also process technical request data such as your IP address for security and rate limiting. Do not include sensitive information in a report."
       },
       {
         "title": "Contact",

@@ -182,7 +182,7 @@
     "eyebrow": "FAQ",
     "title": "Fragen, schnell beantwortet",
     "description": "Das Wichtigste zu Installation, Daten und Discord. Docs und Discord gehen weiter ins Detail.",
-    "docs": "Docs öffnen",
+    "faq": "FAQ öffnen",
     "discord": "Discord beitreten",
     "items": [
       {
@@ -320,6 +320,8 @@
     "report": "Problem melden",
     "report-title": "Problem melden",
     "report-description": "Sag uns, was mit {name} nicht stimmt. Wir lesen jede Meldung.",
+    "report-data-notice": "Beim Absenden werden deine Nachricht, Sprache sowie Browsername und -version an Nowly und unseren Discord-Supportkanal übermittelt.",
+    "report-privacy-link": "Mehr in der Datenschutzerklärung",
     "report-label": "Beschreibung",
     "report-placeholder": "Was ist passiert? Welche Seite oder Aktion ist fehlgeschlagen?",
     "report-count": "{count}/{max}",
@@ -328,7 +330,8 @@
     "report-cancel": "Abbrechen",
     "report-close": "Schließen",
     "report-thanks-title": "Danke für die Meldung",
-    "report-thanks-description": "Wir haben deine Nachricht zu {name} erhalten. Das hilft uns, die Bibliothek in gutem Zustand zu halten.",
+    "report-thanks-description": "Wir haben deine Nachricht zu {name} erhalten. Wenn du weitere Informationen hinzufügen oder das Problem besprechen möchtest, komm auf Discord.",
+    "report-discord": "Discord beitreten",
     "report-error": "Die Meldung konnte nicht gesendet werden. Versuche es gleich noch einmal.",
     "discord-native-title": "Bereits auf Discord",
     "discord-native-description": "Discord zeigt {name} an, wenn du dein Konto verknüpfst. Nowly macht dasselbe ohne diese Verknüpfung.",
@@ -900,6 +903,10 @@
       {
         "title": "Deine Rechte",
         "body": "Sofern die DSGVO gilt, kannst du Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch und Datenübertragbarkeit verlangen und die Einwilligung für Analytics widerrufen. Entwickler-Diagnosen in der Erweiterung können noch auf deinem Gerät wartende Ereignisse zeigen; sie sind kein vollständiger Export unserer Server. Um Rechte auszuüben, schreibe an <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> oder nutze das <a href=\"https://github.com/nowly-presence/nowly\">GitHub-Repository</a>. Du kannst auch Beschwerde bei der <a href=\"https://www.cnil.fr\">CNIL</a> (Frankreich) oder deiner örtlichen Aufsichtsbehörde einreichen."
+      },
+      {
+        "title": "Meldungen zu Präsenzproblemen",
+        "body": "Wenn du ein Präsenzproblem meldest, verarbeiten wir deine Nachricht, den Slug der Präsenz, deine Sprache sowie den Namen und die Version deines Browsers. Diese Informationen werden an unsere API und den von den Maintainer verwendeten Discord-Supportkanal übermittelt. Die API kann außerdem technische Anfrageinformationen wie deine IP-Adresse für Sicherheit und Ratenbegrenzung verarbeiten. Füge keine sensiblen Informationen in eine Meldung ein."
       },
       {
         "title": "Kontakt",

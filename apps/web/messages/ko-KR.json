@@ -182,7 +182,7 @@
     "eyebrow": "자주 묻는 질문",
     "title": "빠르게 답하는 질문들",
     "description": "설치, 데이터, Discord에 관한 핵심 정보입니다. 문서와 Discord에서 더 자세히 알아보세요.",
-    "docs": "문서 열기",
+    "faq": "FAQ 열기",
     "discord": "Discord 참여하기",
     "items": [
       {
@@ -320,6 +320,8 @@
     "report": "문제 신고",
     "report-title": "문제 신고",
     "report-description": "{name}에 무엇이 잘못되었는지 알려주세요. 모든 신고를 읽습니다.",
+    "report-data-notice": "제출하면 메시지, 언어, 브라우저 이름과 버전이 Nowly 및 Discord 지원 채널로 전송됩니다.",
+    "report-privacy-link": "개인정보처리방침에서 자세히 알아보기",
     "report-label": "설명",
     "report-placeholder": "무슨 일이 있었나요? 어떤 페이지나 동작이 실패했나요?",
     "report-count": "{count}/{max}",
@@ -328,7 +330,8 @@
     "report-cancel": "취소",
     "report-close": "닫기",
     "report-thanks-title": "신고해 주셔서 감사합니다",
-    "report-thanks-description": "{name}에 대한 내용을 받았습니다. 라이브러리를 좋은 상태로 유지하는 데 도움이 됩니다.",
+    "report-thanks-description": "{name}에 대한 내용을 받았습니다. 정보를 추가하거나 문제를 논의하고 싶다면 Discord에 참여해 주세요.",
+    "report-discord": "Discord 참여하기",
     "report-error": "신고를 보낼 수 없습니다. 잠시 후 다시 시도하세요.",
     "discord-native-title": "이미 Discord에서 지원됨",
     "discord-native-description": "계정을 연동하면 Discord가 {name}을(를) 표시합니다. Nowly는 그 연동 없이도 동일하게 작동합니다.",
@@ -900,6 +903,10 @@
       {
         "title": "귀하의 권리",
         "body": "GDPR이 적용되는 경우 접근, 정정, 삭제, 제한, 이의 제기, 이동성을 요청할 수 있으며 분석 동의를 철회할 수 있습니다. 확장 프로그램의 개발자 진단은 기기에 여전히 대기 중인 이벤트를 표시할 수 있지만, 당사 서버의 완전한 내보내기는 아닙니다. 권리를 행사하려면 <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>로 이메일을 보내거나 <a href=\"https://github.com/nowly-presence/nowly\">GitHub 저장소</a>를 이용하세요. <a href=\"https://www.cnil.fr\">CNIL</a>(프랑스) 또는 현지 감독 기관에 민원을 제기할 수도 있습니다."
+      },
+      {
+        "title": "프레즌스 문제 신고",
+        "body": "프레즌스 문제를 신고하면 작성한 메시지, 프레즌스 slug, 언어, 브라우저 이름과 버전을 처리합니다. 이 정보는 당사 API와 관리자가 사용하는 Discord 지원 채널로 전송됩니다. API는 보안 및 속도 제한을 위해 IP 주소와 같은 기술적 요청 데이터를 처리할 수도 있습니다. 신고에 민감한 정보를 포함하지 마세요."
       },
       {
         "title": "문의",

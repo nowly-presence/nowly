@@ -60,6 +60,8 @@ export type PresencePutBody = z.infer<typeof presencePutBodySchema>
 export const presenceReportBodySchema = z.object({
   message: z.string().trim().min(1).max(PRESENCE_REPORT_MAX_LENGTH),
   locale: z.string().trim().max(20).optional(),
+  browser: z.string().trim().max(60).optional(),
+  browserVersion: z.string().trim().max(40).optional(),
 })
 export type PresenceReportBody = z.infer<typeof presenceReportBodySchema>
 

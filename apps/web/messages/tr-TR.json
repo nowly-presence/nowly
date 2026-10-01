@@ -182,7 +182,7 @@
     "eyebrow": "SSS",
     "title": "Hızlıca yanıtlanan sorular",
     "description": "Kurulum, veri ve Discord hakkında temel bilgiler. Dokümantasyon ve Discord daha derine iner.",
-    "docs": "Dokümanları aç",
+    "faq": "SSS’yi aç",
     "discord": "Discord'a katıl",
     "items": [
       {
@@ -320,6 +320,8 @@
     "report": "Sorun bildir",
     "report-title": "Sorun bildir",
     "report-description": "{name} ile ilgili neyin yanlış olduğunu bize söyle. Her raporu okuyoruz.",
+    "report-data-notice": "Gönderdiğinizde mesajınız, diliniz, tarayıcı adınız ve sürümünüz Nowly'ye ve Discord destek kanalımıza iletilir.",
+    "report-privacy-link": "Gizlilik politikasında daha fazla bilgi",
     "report-label": "Açıklama",
     "report-placeholder": "Ne oldu? Hangi sayfa veya işlem başarısız oldu?",
     "report-count": "{count}/{max}",
@@ -328,7 +330,8 @@
     "report-cancel": "İptal",
     "report-close": "Kapat",
     "report-thanks-title": "Rapor için teşekkürler",
-    "report-thanks-description": "{name} hakkındaki notunu aldık. Bu, kitaplığı iyi durumda tutmamıza yardımcı oluyor.",
+    "report-thanks-description": "{name} hakkındaki notunu aldık. Bilgi eklemek veya sorunu tartışmak istersen Discord'a katıl.",
+    "report-discord": "Discord'a katıl",
     "report-error": "Rapor gönderilemedi. Biraz sonra tekrar dene.",
     "discord-native-title": "Zaten Discord'da",
     "discord-native-description": "Hesabını bağlarsan Discord {name}'i gösterir. Nowly bunu o bağlantı olmadan da yapar.",
@@ -900,6 +903,10 @@
       {
         "title": "Haklarınız",
         "body": "GDPR geçerliyse, erişim, düzeltme, silme, kısıtlama, itiraz ve taşınabilirlik talep edebilir ve analizler için rızanı geri çekebilirsin. Uzantıdaki geliştirici tanılamaları, cihazında hâlâ bekleyen olayları gösterebilir; bunlar sunucularımızın tam bir dışa aktarımı değildir. Haklarını kullanmak için <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> adresine e-posta gönder veya <a href=\"https://github.com/nowly-presence/nowly\">GitHub deposunu</a> kullan. Ayrıca <a href=\"https://www.cnil.fr\">CNIL</a>'e (Fransa) veya yerel denetim makamına şikayette bulunabilirsin."
+      },
+      {
+        "title": "Varlık sorun bildirimleri",
+        "body": "Bir varlık sorunu bildirdiğinizde mesajınızı, varlık slug'ını, dilinizi ve tarayıcı adınızı ve sürümünüzü işleriz. Bu bilgiler API'mize ve bakımcıların kullandığı Discord destek kanalına gönderilir. API, güvenlik ve hız sınırlaması için IP adresiniz gibi teknik istek verilerini de işleyebilir. Bildirime hassas bilgiler eklemeyin."
       },
       {
         "title": "İletişim",

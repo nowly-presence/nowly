@@ -35,6 +35,8 @@ export const submitPresenceReport = async (input: {
   name: string
   message: string
   locale?: string
+  browser?: string
+  browserVersion?: string
 }): Promise<"sent" | "unconfigured" | "failed"> => {
   const webhookUrl = serverEnv.DISCORD_WEBHOOK_REPORT_URL
   if (!webhookUrl) return "unconfigured"
@@ -66,6 +68,12 @@ export const submitPresenceReport = async (input: {
               },
               ...(input.locale
                 ? [{ name: "Locale", value: input.locale, inline: true }]
+                : []),
+              ...(input.browser
+                ? [{ name: "Browser", value: input.browser, inline: true }]
+                : []),
+              ...(input.browserVersion
+                ? [{ name: "Browser version", value: input.browserVersion, inline: true }]
                 : []),
               {
                 name: "Reported at",

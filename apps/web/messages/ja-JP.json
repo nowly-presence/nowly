@@ -182,7 +182,7 @@
     "eyebrow": "よくある質問",
     "title": "すぐわかる質問と回答",
     "description": "インストール、データ、Discordに関する要点。詳細はドキュメントとDiscordで。",
-    "docs": "ドキュメントを開く",
+    "faq": "FAQを開く",
     "discord": "Discordに参加",
     "items": [
       {
@@ -320,6 +320,8 @@
     "report": "問題を報告",
     "report-title": "問題を報告",
     "report-description": "{name}の何が問題か教えてください。すべての報告に目を通しています。",
+    "report-data-notice": "送信すると、メッセージ、言語、ブラウザ名、ブラウザのバージョンがNowlyとDiscordのサポートチャンネルに送られます。",
+    "report-privacy-link": "プライバシーポリシーで詳しく見る",
     "report-label": "説明",
     "report-placeholder": "何が起きましたか？どのページまたは操作が失敗しましたか？",
     "report-count": "{count}/{max}",
@@ -328,7 +330,8 @@
     "report-cancel": "キャンセル",
     "report-close": "閉じる",
     "report-thanks-title": "ご報告ありがとうございます",
-    "report-thanks-description": "{name}についてのメモを受け取りました。ライブラリを良い状態に保つのに役立ちます。",
+    "report-thanks-description": "{name}についてのメモを受け取りました。情報を追加したり問題について話し合ったりする場合は、Discordに参加してください。",
+    "report-discord": "Discordに参加",
     "report-error": "報告を送信できませんでした。しばらくしてから再試行してください。",
     "discord-native-title": "すでにDiscordに対応",
     "discord-native-description": "アカウントを連携すると、Discordは{name}を表示します。Nowlyはその連携なしで同じことを行います。",
@@ -900,6 +903,10 @@
       {
         "title": "あなたの権利",
         "body": "GDPRが適用される場合、アクセス、訂正、削除、制限、異議、データポータビリティを要求でき、アナリティクスへの同意を撤回できます。拡張機能内の開発者診断は、あなたのデバイスにまだキューされているイベントを表示することがありますが、当社サーバーの完全なエクスポートではありません。権利を行使するには、<a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>にメールするか、<a href=\"https://github.com/nowly-presence/nowly\">GitHubリポジトリ</a>を利用してください。<a href=\"https://www.cnil.fr\">CNIL</a>（フランス）または現地の監督機関に苦情を申し立てることもできます。"
+      },
+      {
+        "title": "プレゼンスの問題報告",
+        "body": "プレゼンスの問題を報告すると、入力したメッセージ、プレゼンスのslug、言語、ブラウザ名とバージョンを処理します。この情報は、当社のAPIとメンテナーが使用するDiscordサポートチャンネルに送信されます。APIはセキュリティとレート制限のため、IPアドレスなどの技術的なリクエストデータを処理する場合もあります。報告には機密情報を含めないでください。"
       },
       {
         "title": "お問い合わせ",

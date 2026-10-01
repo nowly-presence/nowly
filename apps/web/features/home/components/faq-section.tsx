@@ -1,13 +1,10 @@
-import { JsonLd } from "@/features/seo/components/json-ld";
+import { ButtonLink } from "@/components/button-link";
+import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { homeSectionAltClass } from "@/features/home/components/section-heading";
+import { JsonLd } from "@/features/seo/components/json-ld";
 import { ButtonAnchor } from "@nowly/ui/button-link";
 import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui/card";
 import { cn } from "@nowly/ui/utils";
-
-
-import { DISCORD_INVITE_URL } from "@/lib/constants";
-import { docsHref } from "@/features/seo/lib/seo";
-
 import { RiArrowRightLine, RiDiscordFill } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
@@ -40,10 +37,10 @@ export const FaqSection = async () => {
             </h2>
             <p className="mt-2 text-base leading-relaxed text-muted-foreground sm:text-lg">{t("description")}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonAnchor href={docsHref("/")} rel="noreferrer" target="_blank" variant="inverted">
-                {t("docs")}
+              <ButtonLink href="/faq" variant="inverted">
+                {t("faq")}
                 <RiArrowRightLine data-icon="inline-end" />
-              </ButtonAnchor>
+              </ButtonLink>
               <ButtonAnchor href={DISCORD_INVITE_URL} rel="noreferrer" target="_blank" variant="ghost">
                 <RiDiscordFill data-icon="inline-start" />
                 {t("discord")}

@@ -182,7 +182,7 @@
     "eyebrow": "FAQ",
     "title": "Preguntas, sin rodeos",
     "description": "Lo esencial sobre instalación, datos y Discord. La documentación y Discord van más allá.",
-    "docs": "Abrir la documentación",
+    "faq": "Abrir las FAQ",
     "discord": "Unirse al Discord",
     "items": [
       {
@@ -320,6 +320,8 @@
     "report": "Informar de un problema",
     "report-title": "Informar de un problema",
     "report-description": "Cuéntanos qué falla en {name}. Leemos cada informe.",
+    "report-data-notice": "Al enviarlo, tu mensaje, idioma, nombre y versión del navegador se transmiten a Nowly y a nuestro canal de soporte de Discord.",
+    "report-privacy-link": "Más información en la política de privacidad",
     "report-label": "Descripción",
     "report-placeholder": "¿Qué ocurrió? ¿En qué página o acción?",
     "report-count": "{count}/{max}",
@@ -328,7 +330,8 @@
     "report-cancel": "Cancelar",
     "report-close": "Cerrar",
     "report-thanks-title": "Gracias por el aviso",
-    "report-thanks-description": "Hemos recibido tu nota sobre {name}. Eso nos ayuda a cuidar la biblioteca.",
+    "report-thanks-description": "Hemos recibido tu nota sobre {name}. Si quieres añadir información o hablar del problema, únete a Discord.",
+    "report-discord": "Unirse al Discord",
     "report-error": "No se pudo enviar el informe. Inténtalo de nuevo en un momento.",
     "discord-native-title": "Ya en Discord",
     "discord-native-description": "Discord muestra {name} si vinculas tu cuenta. Nowly lo hace sin esa vinculación.",
@@ -900,6 +903,10 @@
       {
         "title": "Tus derechos",
         "body": "Si aplica el RGPD, puedes solicitar acceso, rectificación, supresión, limitación, oposición y portabilidad, y retirar el consentimiento de las estadísticas. Los diagnósticos de desarrollador de la extensión pueden mostrar eventos aún en el dispositivo; no son una exportación completa de nuestros servidores. Para ejercer derechos, escribe a <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> o usa el <a href=\"https://github.com/nowly-presence/nowly\">repositorio de GitHub</a>. También puedes reclamar ante la <a href=\"https://www.cnil.fr\">CNIL</a> (Francia) o tu autoridad de control."
+      },
+      {
+        "title": "Informes de problemas",
+        "body": "Al enviar un informe sobre una presencia, tratamos tu mensaje, el slug de la presencia, tu idioma y el nombre y la versión de tu navegador. Enviamos esta información a nuestra API y al canal de soporte de Discord que usan los responsables. La API también puede tratar datos técnicos de la solicitud, como tu dirección IP, por seguridad y para limitar la velocidad. No incluyas información sensible en el informe."
       },
       {
         "title": "Contacto",

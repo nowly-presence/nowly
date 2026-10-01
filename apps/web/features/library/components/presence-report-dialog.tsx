@@ -1,24 +1,44 @@
 "use client";
 
+import { DISCORD_INVITE_URL } from "@/lib/constants";
+import { Link } from "@/i18n/navigation";
+import { ButtonAnchor } from "@nowly/ui/button-link";
 import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Field, FieldError, FieldLabel, InputGroup, InputGroupAddon, InputGroupText, InputGroupTextarea, Spinner } from "@nowly/ui";
-
-
-
-
-
 import {
   getExtensionDetected,
   requestExtension,
   subscribeExtensionDetected,
   type ExtensionDiagnostic,
 } from "@/lib/extension-bridge";
-import { RiCheckboxCircleLine, RiFlagLine } from "@nowly/ui/icons";
+import { RiCheckboxCircleLine, RiDiscordFill, RiFlagLine } from "@nowly/ui/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, type FormEvent } from "react";
 
 const REPORT_MAX_LENGTH = 750;
 const PRODUCTION_API_URL = "https://api.nowly.me";
 
+type ReportBrowser = {
+  name: string
+  version: string
+};
+
+const getReportBrowser = (): ReportBrowser => {
+  const userAgent = navigator.userAgent;
+  const matchers: Array<[string, RegExp]> = [
+    ["Microsoft Edge", /(?:Edg|Edge|EdgA|EdgiOS)\/([\d.]+)/i],
+    ["Opera", /(?:OPR|Opera Mini)\/([\d.]+)/i],
+    ["Firefox", /(?:Firefox|FxiOS)\/([\d.]+)/i],
+    ["Chrome", /(?:Chrome|CriOS)\/([\d.]+)/i],
+    ["Safari", /Version\/([\d.]+).*Safari\//i],
+  ];
+
+  for (const [name, matcher] of matchers) {
+    const match = userAgent.match(matcher);
+    if (match?.[1]) return { name, version: match[1] };
+  }
+
+  return { name: "Unknown", version: "Unknown" };
+};
 type PresenceReportDialogProps = {
   slug: string
   name: string
@@ -84,6 +104,7 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
 
     setBusy(true);
     setError(false);
+    const browser = getReportBrowser();
 
     try {
       if (!(await extensionIsPresent())) {
@@ -95,7 +116,12 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
       const response = await fetch(reportApiUrl(slug), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: trimmed, locale }),
+        body: JSON.stringify({
+          message: trimmed,
+          locale,
+          browser: browser.name,
+          browserVersion: browser.version,
+        }),
       });
 
       if (!response.ok) {
@@ -136,6 +162,10 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
                 <DialogDescription>{t("report-thanks-description", { name })}</DialogDescription>
               </DialogHeader>
               <DialogFooter>
+                <ButtonAnchor href={DISCORD_INVITE_URL} rel="noreferrer" target="_blank" variant="outline">
+                  <RiDiscordFill data-icon="inline-start" />
+                  {t("report-discord")}
+                </ButtonAnchor>
                 <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                   {t("report-close")}
                 </Button>
@@ -146,6 +176,12 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
               <DialogHeader>
                 <DialogTitle>{t("report-title")}</DialogTitle>
                 <DialogDescription>{t("report-description", { name })}</DialogDescription>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {t("report-data-notice")}{" "}
+                  <Link href="/privacy" className="underline underline-offset-4 hover:text-foreground">
+                    {t("report-privacy-link")}
+                  </Link>
+                </p>
               </DialogHeader>
 
               <Field data-invalid={error || undefined}>
