@@ -1,0 +1,114 @@
+name: Production Extension
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: production-extension
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Require stable branch
+        if: github.ref != 'refs/heads/stable'
+        run: |
+          echo "Production extension publishing is only allowed from stable (got ${GITHUB_REF})."
+          exit 1
+
+      - name: Configure access to private submodule
+        run: git config --global url."https://x-access-token:${{ secrets.INTERNAL_CLI_PAT }}@github.com/".insteadOf "https://github.com/"
+
+      - run: git submodule init && git submodule update packages/sdk packages/cli packages/presences packages/internal-cli
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build production extension
+        run: pnpm --filter @nowly/extension build
+
+      - name: Package production archives
+        id: package
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          version=$(node -p "require('./apps/extension/package.json').version")
+          root="$GITHUB_WORKSPACE"
+          output_dir="$RUNNER_TEMP/production-extension"
+          mkdir -p "$output_dir"
+
+          package_dist() {
+            local browser="$1"
+            local output="$2"
+            (cd "$root/apps/extension/dist/$browser" && zip -qr "$output" .)
+          }
+
+          package_dist chrome "$output_dir/chrome-${version}.zip"
+          package_dist firefox "$output_dir/firefox-${version}.zip"
+
+          pnpm --filter @nowly/extension package:source
+          source_zip="$root/apps/extension/artifacts/nowly-source-v${version}.zip"
+          test -s "$source_zip"
+          cp "$source_zip" "$output_dir/firefox-${version}-source.zip"
+
+          for archive in "$output_dir"/*.zip; do
+            test -s "$archive"
+            echo "$(basename "$archive") $(stat -c '%s' "$archive") bytes"
+          done
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "output_dir=$output_dir" >> "$GITHUB_OUTPUT"
+
+      - name: Upload production archives to CDN
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET || 'nowly' }}
+          R2_PUBLIC_URL: ${{ secrets.R2_PUBLIC_URL || 'https://cdn.nowly.me' }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          cdn_base="${R2_PUBLIC_URL%/}"
+          files=()
+
+          for archive in "${{ steps.package.outputs.output_dir }}"/*.zip; do
+            filename=$(basename "$archive")
+            aws s3 cp "$archive" "s3://${R2_BUCKET}/extension/${filename}" \
+              --endpoint-url "$endpoint" \
+              --cache-control "public, max-age=31536000, immutable" \
+              --content-type "application/zip"
+            files+=("${cdn_base}/extension/${filename}")
+            echo "Uploaded ${cdn_base}/extension/${filename}"
+          done
+
+          if [[ -n "${CLOUDFLARE_API_TOKEN:-}" && -n "${CLOUDFLARE_ZONE_ID:-}" ]]; then
+            payload=$(printf '%s\n' "${files[@]}" | jq -Rsc '{files: split("\n") | map(select(length > 0))}')
+            curl --fail-with-body --silent --show-error \
+              -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache" \
+              -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              -H "Content-Type: application/json" \
+              --data "$payload" \
+              | jq -e '.success == true' >/dev/null
+            echo "Cloudflare cache purged"
+          else
+            echo "Cloudflare cache purge skipped"
+          fi

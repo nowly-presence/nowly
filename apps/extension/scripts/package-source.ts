@@ -8,10 +8,19 @@ const root = join(fileURLToPath(new URL(".", import.meta.url)), "..")
 const repoRoot = join(root, "..", "..")
 const artifactsDir = join(root, "artifacts")
 const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf-8")) as { version: string }
-const fileList = execSync("git ls-files --cached --others --exclude-standard", { cwd: repoRoot })
-  .toString()
-  .split("\n")
-  .filter(Boolean)
+const listFiles = (cwd: string): string[] =>
+  execSync("git ls-files --cached --others --exclude-standard", { cwd })
+    .toString()
+    .split("\n")
+    .filter(Boolean)
+
+const submodulePaths = ["packages/sdk", "packages/cli", "packages/presences", "packages/internal-cli"]
+const fileList = [
+  ...listFiles(repoRoot),
+  ...submodulePaths.flatMap((submodulePath) =>
+    listFiles(join(repoRoot, submodulePath)).map((relativePath) => join(submodulePath, relativePath)),
+  ),
+]
 const entries: Record<string, Uint8Array> = {}
 
 for (const relativePath of fileList) {
