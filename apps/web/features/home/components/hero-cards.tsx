@@ -39,6 +39,11 @@ export const HeroCards = () => {
     let roomRight = 0;
     let frame = 0;
     let origin = 0;
+    let spin = Math.PI;
+    let dragging = false;
+    let pointerId: number | null = null;
+    let dragStartY = 0;
+    let dragStartSpin = spin;
 
     const measure = () => {
       const rect = stage.getBoundingClientRect();
@@ -89,31 +94,82 @@ export const HeroCards = () => {
       frame = 0;
     };
 
+    const render = () => {
+      layout(spin);
+    };
+
     const tick = (now: number) => {
-      if (!desktop.matches) {
+      if (!desktop.matches || dragging) {
         stop();
         return;
       }
-      layout(Math.PI + ((now - origin) / PERIOD_MS) * Math.PI * 2);
+      spin = Math.PI + ((now - origin) / PERIOD_MS) * Math.PI * 2;
+      render();
       frame = requestAnimationFrame(tick);
     };
 
     const start = () => {
-      if (!desktop.matches) return;
+      if (!desktop.matches || dragging) return;
       measure();
       if (reduced) {
-        layout(Math.PI);
+        spin = Math.PI;
+        render();
         return;
       }
       stop();
-      origin = performance.now();
+      origin = performance.now() - ((spin - Math.PI) / (Math.PI * 2)) * PERIOD_MS;
       frame = requestAnimationFrame(tick);
+    };
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (!desktop.matches || event.button !== 0) return;
+      dragging = true;
+      pointerId = event.pointerId;
+      dragStartY = event.clientY;
+      dragStartSpin = spin;
+      stop();
+      stage.setPointerCapture(event.pointerId);
+      stage.classList.add("cursor-grabbing");
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      if (!dragging || event.pointerId !== pointerId) return;
+      spin = dragStartSpin - (event.clientY - dragStartY) / 300;
+      render();
+    };
+
+    const onPointerUp = (event: PointerEvent) => {
+      if (!dragging || event.pointerId !== pointerId) return;
+      dragging = false;
+      pointerId = null;
+      stage.releasePointerCapture(event.pointerId);
+      stage.classList.remove("cursor-grabbing");
+      start();
+    };
+
+    const onWheel = (event: WheelEvent) => {
+      if (!desktop.matches) return;
+      event.preventDefault();
+      stop();
+      spin += event.deltaY / 900;
+      render();
+      if (!reduced) {
+        origin = performance.now() - ((spin - Math.PI) / (Math.PI * 2)) * PERIOD_MS;
+        frame = requestAnimationFrame(tick);
+      }
     };
 
     const observer = new ResizeObserver(() => {
       measure();
       if (desktop.matches && reduced) layout(Math.PI);
     });
+    stage.addEventListener("pointerdown", onPointerDown);
+    stage.addEventListener("pointermove", onPointerMove);
+    stage.addEventListener("pointerup", onPointerUp);
+    stage.addEventListener("pointercancel", onPointerUp);
+    stage.addEventListener("wheel", onWheel, { passive: false });
+    stage.classList.add("cursor-grab", "touch-none", "select-none");
+
     observer.observe(stage);
     window.addEventListener("resize", measure);
     desktop.addEventListener("change", start);
@@ -135,8 +191,14 @@ export const HeroCards = () => {
       window.removeEventListener("resize", measure);
       desktop.removeEventListener("change", start);
       document.removeEventListener("visibilitychange", onVisibility);
+      stage.removeEventListener("pointerdown", onPointerDown);
+      stage.removeEventListener("pointermove", onPointerMove);
+      stage.removeEventListener("pointerup", onPointerUp);
+      stage.removeEventListener("pointercancel", onPointerUp);
+      stage.removeEventListener("wheel", onWheel);
     };
   }, []);
+
 
   return (
     <div ref={stageRef} className="relative isolate hidden h-[min(58vh,560px)] w-full overflow-visible lg:block">
