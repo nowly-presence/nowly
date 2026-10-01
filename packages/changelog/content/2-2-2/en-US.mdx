@@ -1,11 +1,16 @@
 ---
 title: 2.2.2
-date: 2026-10-01
-description: Quieter runtime logs and safer Discord activity payloads.
+date: 2026-10-02
+description: Safer Discord activity payloads, a clearer light theme, and quieter runtime logs.
 stores: [chrome, firefox]
 ---
 
 ## Fixes
 
 - Repeated native heartbeat responses no longer fill Runtime logs. Nowly records a heartbeat when the connection state, status, or native version changes, while keeping errors visible.
-- Very short Discord asset tooltips are ignored before an activity is sent, avoiding invalid RPC payloads.
+- Very short Discord asset tooltips are trimmed and omitted in both the extension and native host before an activity is sent, avoiding invalid RPC payloads.
+
+## Improvements
+
+- The light theme now uses the dark Nowly wordmark for better contrast.
+- The Presence API documentation now explains Discord's two-character tooltip requirement and Nowly's automatic sanitization.

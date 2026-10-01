@@ -1,11 +1,16 @@
 ---
 title: 2.2.2
-date: 2026-10-01
-description: Logs de execução mais limpos e atividades do Discord mais confiáveis.
+date: 2026-10-02
+description: Atividades do Discord mais confiáveis, tema claro mais legível e logs de execução mais limpos.
 stores: [chrome, firefox]
 ---
 
 ## Correções
 
+- Tooltips de assets do Discord curtos demais são limpos e ignorados tanto na extensão quanto no host nativo antes do envio da atividade, evitando payloads RPC inválidos.
 - As respostas repetidas do heartbeat nativo não ocupam mais os logs de execução. O Nowly registra um heartbeat quando o estado da conexão, o status ou a versão nativa muda, mantendo os erros visíveis.
-- Tooltips de assets do Discord curtos demais são ignorados antes do envio da atividade para evitar payloads RPC inválidos.
+
+## Melhorias
+
+- O tema claro agora usa o wordmark escuro do Nowly para melhorar o contraste.
+- A documentação da Presence API agora explica a exigência do Discord de dois caracteres para tooltips e a limpeza automática feita pelo Nowly.

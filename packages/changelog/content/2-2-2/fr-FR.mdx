@@ -1,11 +1,16 @@
 ---
 title: 2.2.2
-date: 2026-10-01
-description: Des journaux d’exécution plus calmes et des activités Discord plus fiables.
+date: 2026-10-02
+description: Des activités Discord plus fiables, un thème clair plus lisible et des journaux d’exécution plus calmes.
 stores: [chrome, firefox]
 ---
 
 ## Correctifs
 
 - Les réponses répétées du heartbeat natif ne remplissent plus les journaux d’exécution. Nowly enregistre un heartbeat lorsque l’état de connexion, le statut ou la version native change, tout en conservant les erreurs.
-- Les infobulles d’assets Discord trop courtes sont ignorées avant l’envoi d’une activité afin d’éviter les payloads RPC invalides.
+- Les infobulles d’assets Discord trop courtes sont nettoyées puis omises dans l’extension et le host natif avant l’envoi d’une activité afin d’éviter les payloads RPC invalides.
+
+## Améliorations
+
+- Le thème clair utilise maintenant le wordmark sombre de Nowly pour un meilleur contraste.
+- La documentation de l’API Presence explique désormais la limite de deux caractères de Discord et le nettoyage automatique effectué par Nowly.

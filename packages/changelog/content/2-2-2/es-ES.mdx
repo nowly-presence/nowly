@@ -1,11 +1,16 @@
 ---
 title: 2.2.2
-date: 2026-10-01
-description: Registros de ejecución más limpios y actividades de Discord más fiables.
+date: 2026-10-02
+description: Actividades de Discord más fiables, un tema claro más legible y registros de ejecución más limpios.
 stores: [chrome, firefox]
 ---
 
 ## Correcciones
 
+- Las descripciones emergentes de assets de Discord demasiado cortas se limpian y se omiten tanto en la extensión como en el host nativo antes de enviar una actividad para evitar payloads RPC no válidos.
 - Las respuestas repetidas del heartbeat nativo ya no llenan los registros de ejecución. Nowly registra un heartbeat cuando cambia el estado de conexión, el estado o la versión nativa, y mantiene visibles los errores.
-- Las descripciones emergentes de assets de Discord demasiado cortas se ignoran antes de enviar una actividad para evitar payloads RPC no válidos.
+
+## Mejoras
+
+- El tema claro ahora usa el logotipo oscuro de Nowly para mejorar el contraste.
+- La documentación de la Presence API explica ahora el requisito de Discord de dos caracteres para las descripciones emergentes y la limpieza automática de Nowly.

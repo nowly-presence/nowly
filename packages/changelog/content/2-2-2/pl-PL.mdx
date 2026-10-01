@@ -1,11 +1,16 @@
 ---
 title: 2.2.2
-date: 2026-10-01
-description: Czytelniejsze logi działania i bardziej niezawodne aktywności Discorda.
+date: 2026-10-02
+description: Czytelniejsze logi działania, bardziej niezawodne aktywności Discorda i lepiej widoczny jasny motyw.
 stores: [chrome, firefox]
 ---
 
 ## Poprawki
 
+- Zbyt krótkie podpowiedzi tekstowe assetów Discorda są oczyszczane i pomijane zarówno w rozszerzeniu, jak i w hoście natywnym przed wysłaniem aktywności, aby uniknąć nieprawidłowych payloadów RPC.
 - Powtarzające się odpowiedzi natywnego heartbeat nie zapełniają już logów działania. Nowly zapisuje heartbeat tylko wtedy, gdy zmieni się stan połączenia, status lub wersja natywna, a błędy nadal pozostają widoczne.
-- Zbyt krótkie podpowiedzi tekstowe assetów Discorda są pomijane przed wysłaniem aktywności, aby uniknąć nieprawidłowych payloadów RPC.
+
+## Ulepszenia
+
+- Jasny motyw używa teraz ciemnego logotypu Nowly dla lepszego kontrastu.
+- Dokumentacja Presence API wyjaśnia teraz wymaganie Discorda dotyczące co najmniej dwóch znaków w podpowiedziach oraz automatyczne oczyszczanie przez Nowly.

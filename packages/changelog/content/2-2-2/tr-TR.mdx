@@ -1,11 +1,16 @@
 ---
 title: 2.2.2
-date: 2026-10-01
-description: Daha temiz çalışma zamanı günlükleri ve daha güvenilir Discord etkinlikleri.
+date: 2026-10-02
+description: Daha güvenilir Discord etkinlikleri, daha okunaklı açık tema ve daha temiz çalışma zamanı günlükleri.
 stores: [chrome, firefox]
 ---
 
 ## Düzeltmeler
 
+- Çok kısa Discord asset araç ipuçları hem uzantıda hem de yerel ana bilgisayarda temizlenip etkinlik gönderilmeden önce yok sayılarak geçersiz RPC payload'ları önleniyor.
 - Tekrarlanan yerel heartbeat yanıtları artık çalışma zamanı günlüklerini doldurmuyor. Nowly yalnızca bağlantı durumu, durum veya yerel sürüm değiştiğinde heartbeat kaydediyor; hatalar görünür kalmaya devam ediyor.
-- Çok kısa Discord asset araç ipuçları etkinlik gönderilmeden önce yok sayılarak geçersiz RPC payload'ları önleniyor.
+
+## İyileştirmeler
+
+- Açık tema, daha iyi kontrast için artık koyu Nowly wordmark'ını kullanıyor.
+- Presence API belgeleri, Discord'un araç ipuçları için en az iki karakter gerektirdiğini ve Nowly'nin otomatik temizleme yaptığını açıklıyor.
