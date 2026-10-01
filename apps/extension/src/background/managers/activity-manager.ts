@@ -36,6 +36,11 @@ const clampText = (value: string | undefined, maxLength: number): string | undef
   return trimmed.length > maxLength ? trimmed.slice(0, maxLength) : trimmed
 }
 
+const normalizeAssetText = (value: string | undefined): string | undefined => {
+  const normalized = clampText(value, 128)
+  return normalized && normalized.length >= 2 ? normalized : undefined
+}
+
 const normalizeTimestamp = (value: number | undefined): number | undefined => {
   if (!Number.isFinite(value)) return undefined
   if (!value || value <= 0) return undefined
@@ -99,9 +104,9 @@ export const normalizeActivity = (activity: PresenceData, fallbackName: string):
     startTimestamp: normalizeTimestamp(activity.startTimestamp),
     endTimestamp: normalizeTimestamp(activity.endTimestamp),
     largeImageKey: normalizeImage(activity.largeImageKey),
-    largeImageText: clampText(activity.largeImageText, 128),
+    largeImageText: normalizeAssetText(activity.largeImageText),
     smallImageKey: normalizeImage(activity.smallImageKey),
-    smallImageText: clampText(activity.smallImageText, 128),
+    smallImageText: normalizeAssetText(activity.smallImageText),
     type: allowedTypes.has(activity.type ?? 0) ? activity.type : 0,
     buttons: activity.buttons
       ?.filter((button) => button.url.startsWith("https://"))

@@ -44,6 +44,10 @@ presence.on("UpdateData", async () => {
   ]}
 />
 
+<Callout type="error">
+Discord menolak payload Rich Presence apabila `largeImageText` atau `smallImageText` mengandungi kurang daripada dua aksara. Nowly membersihkan tooltip pilihan ini dan mengabaikannya apabila hasilnya kurang daripada dua aksara; imej masih tersedia.
+</Callout>
+
 ## clearActivity
 
 Panggil `clearActivity` apabila tiada apa yang berbaloi untuk dipaparkan:

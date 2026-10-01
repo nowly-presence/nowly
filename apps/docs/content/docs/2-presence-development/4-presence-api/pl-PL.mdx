@@ -44,6 +44,10 @@ presence.on("UpdateData", async () => {
   ]}
 />
 
+<Callout type="error">
+Discord odrzuca payload Rich Presence, gdy `largeImageText` lub `smallImageText` zawiera mniej niż dwa znaki. Nowly przycina te opcjonalne podpowiedzi i pomija je, gdy wynik ma mniej niż dwa znaki; obraz pozostaje dostępny.
+</Callout>
+
 ## clearActivity
 
 Wywołaj `clearActivity`, gdy nie ma nic wartego pokazania:

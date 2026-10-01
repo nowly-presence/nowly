@@ -1,6 +1,11 @@
 package discord
 
-import "nowly.client/native/internal/contract"
+import (
+	"strings"
+	"unicode/utf8"
+
+	"nowly.client/native/internal/contract"
+)
 
 type Activity struct {
 	Name       string      `json:"name,omitempty"`
@@ -29,7 +34,17 @@ type Button struct {
 	URL   string `json:"url"`
 }
 
+func sanitizeAssetText(value string) string {
+	value = strings.TrimSpace(value)
+	if utf8.RuneCountInString(value) < 2 {
+		return ""
+	}
+	return value
+}
+
 func ActivityFromPresence(p contract.PresencePayload) Activity {
+	largeText := sanitizeAssetText(p.LargeText)
+	smallText := sanitizeAssetText(p.SmallText)
 	activity := Activity{
 		Name:    p.Name,
 		Type:    p.Type,
@@ -48,19 +63,19 @@ func ActivityFromPresence(p contract.PresencePayload) Activity {
 		activity.Timestamps = ts
 	}
 
-	if p.LargeImage != "" || p.LargeText != "" || p.SmallImage != "" || p.SmallText != "" {
+	if p.LargeImage != "" || largeText != "" || p.SmallImage != "" || smallText != "" {
 		assets := &Assets{}
 		if p.LargeImage != "" {
 			assets.LargeImage = p.LargeImage
 		}
-		if p.LargeText != "" {
-			assets.LargeText = p.LargeText
+		if largeText != "" {
+			assets.LargeText = largeText
 		}
 		if p.SmallImage != "" {
 			assets.SmallImage = p.SmallImage
 		}
-		if p.SmallText != "" {
-			assets.SmallText = p.SmallText
+		if smallText != "" {
+			assets.SmallText = smallText
 		}
 		activity.Assets = assets
 	}

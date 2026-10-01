@@ -55,4 +55,26 @@ func TestActivityFromPresenceSkipsEmptyButtons(t *testing.T) {
 	}
 }
 
+func TestActivityFromPresenceSkipsShortAssetText(t *testing.T) {
+	activity := ActivityFromPresence(contract.PresencePayload{
+		LargeText: "X",
+		SmallText: "Y",
+	})
 
+	if activity.Assets != nil {
+		t.Fatalf("expected short asset text to be omitted: %+v", activity.Assets)
+	}
+}
+
+func TestActivityFromPresenceTrimsValidAssetText(t *testing.T) {
+	activity := ActivityFromPresence(contract.PresencePayload{
+		LargeImage: "large",
+		LargeText:  " OK ",
+		SmallImage: "small",
+		SmallText:  " go ",
+	})
+
+	if activity.Assets == nil || activity.Assets.LargeText != "OK" || activity.Assets.SmallText != "go" {
+		t.Fatalf("expected trimmed asset text: %+v", activity.Assets)
+	}
+}

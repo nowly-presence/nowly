@@ -44,6 +44,10 @@ presence.on("UpdateData", async () => {
   ]}
 />
 
+<Callout type="error">
+Discord rechaza los payloads de Rich Presence cuando `largeImageText` o `smallImageText` contiene menos de dos caracteres. Nowly limpia estos tooltips opcionales y los omite cuando el resultado tiene menos de dos caracteres; la imagen sigue disponible.
+</Callout>
+
 ## clearActivity
 
 Llama a `clearActivity` cuando no haya nada que mostrar:

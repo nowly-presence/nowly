@@ -44,6 +44,10 @@ presence.on("UpdateData", async () => {
   ]}
 />
 
+<Callout type="error">
+Discord는 `largeImageText` 또는 `smallImageText`가 2자 미만인 Rich Presence 페이로드를 거부합니다. Nowly는 이러한 선택적 툴팁을 정리하고 결과가 2자 미만이면 생략합니다. 이미지는 계속 사용할 수 있습니다.
+</Callout>
+
 ## clearActivity
 
 표시할 만한 것이 없을 때는 `clearActivity`를 호출하세요.
