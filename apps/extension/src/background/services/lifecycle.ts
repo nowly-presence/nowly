@@ -37,7 +37,22 @@ const enableSidePanelAction = (): void => {
   })
 }
 
+type HeartbeatLogState = {
+  connected: boolean
+  status: string
+  version?: string
+}
+export const hasHeartbeatLogChanged = (
+  previous: HeartbeatLogState | undefined,
+  current: HeartbeatLogState,
+): boolean =>
+  !previous ||
+  previous.connected !== current.connected ||
+  previous.status !== current.status ||
+  previous.version !== current.version
+
 let lastHeartbeatConnected: boolean | undefined
+let lastHeartbeatLogState: HeartbeatLogState | undefined
 
 const registerNativeResponseHandler = (): void => {
   onNativeResponse((message) => {
@@ -57,11 +72,20 @@ const registerNativeResponseHandler = (): void => {
     }
 
     if (message.type === "PONG") {
-      addRuntimeLog(message.connected ? "success" : "warn", "native", "native heartbeat", {
+      const heartbeatState: HeartbeatLogState = {
         connected: message.connected,
         status: message.status,
-        nativeVersion: message.version,
-      })
+        version: message.version,
+      }
+      if (hasHeartbeatLogChanged(lastHeartbeatLogState, heartbeatState)) {
+        addRuntimeLog(message.connected ? "success" : "warn", "native", "native heartbeat", {
+          connected: message.connected,
+          status: message.status,
+          nativeVersion: message.version,
+        })
+        lastHeartbeatLogState = heartbeatState
+      }
+
       if (!message.connected && lastHeartbeatConnected !== false) {
         trackAnalytics("native_heartbeat_failed", { payload: { reason: message.status } })
       }
