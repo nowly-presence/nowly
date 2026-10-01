@@ -4,7 +4,7 @@ import { cn } from "@/ui/cn"
 
 export const Wordmark = ({ theme, className }: { theme: "light" | "dark"; className?: string }) => {
   const [failed, setFailed] = useState(false)
-  const variant = IS_CANARY ? "canary" : theme === "dark" ? "white" : "blue"
+  const variant = IS_CANARY ? "canary" : theme === "dark" ? "white" : "dark"
 
   if (failed) {
     return (
