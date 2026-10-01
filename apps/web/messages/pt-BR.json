@@ -982,7 +982,7 @@
       },
       {
         "title": "Diretor de publicação",
-        "body": "<strong>{publisherName}</strong>, como pessoa física publisher. A lei francesa prevê um <strong>único</strong> diretor de publicação (loi du 29 juillet 1881, aplicada online). Colaboradores ou desenvolvedores não são diretores de publicação adicionais."
+        "body": "<strong>{publisherName}</strong>, como representante da empresa individual K.Ring. A lei francesa prevê um <strong>único</strong> diretor de publicação (loi du 29 juillet 1881, aplicada online). Colaboradores ou desenvolvedores não são diretores de publicação adicionais."
       },
       {
         "title": "Hospedagem (site, API, banco de dados)",

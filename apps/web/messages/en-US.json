@@ -982,7 +982,7 @@
       },
       {
         "title": "Publication director",
-        "body": "<strong>{publisherName}</strong>, as natural-person publisher. French law provides for a <strong>single</strong> publication director (loi du 29 juillet 1881, applied online). Contributors or developers are not additional publication directors."
+        "body": "<strong>{publisherName}</strong>, acting on behalf of the K.Ring sole proprietorship. French law provides for a <strong>single</strong> publication director (loi du 29 juillet 1881, applied online). Contributors or developers are not additional publication directors."
       },
       {
         "title": "Hosting (website, API, database)",

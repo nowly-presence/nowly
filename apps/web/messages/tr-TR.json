@@ -982,7 +982,7 @@
       },
       {
         "title": "Yayın yönetmeni",
-        "body": "Gerçek kişi yayıncı olarak <strong>{publisherName}</strong>. Fransız hukuku <strong>tek bir</strong> yayın yönetmeni öngörür (29 Temmuz 1881 tarihli yasa, çevrimiçi olarak uygulanır). Katkıda bulunanlar veya geliştiriciler ek yayın yönetmenleri değildir."
+        "body": "<strong>{publisherName}</strong>, K.Ring şahıs işletmesinin temsilcisidir. Fransız hukuku <strong>tek</strong> bir yayın sorumlusu öngörür (çevrimiçi uygulanan 29 Temmuz 1881 tarihli yasa). Katkıda bulunanlar veya geliştiriciler ek yayın sorumluları değildir."
       },
       {
         "title": "Barındırma (web sitesi, API, veritabanı)",

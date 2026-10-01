@@ -982,7 +982,7 @@
       },
       {
         "title": "Dyrektor publikacji",
-        "body": "<strong>{publisherName}</strong>, jako osoba fizyczna publisher. Prawo francuskie przewiduje <strong>jednego</strong> dyrektora publikacji (loi du 29 juillet 1881, stosowana online). Współtwórcy lub deweloperzy nie są dodatkowymi dyrektorami publikacji."
+        "body": "<strong>{publisherName}</strong>, jako przedstawiciel jednoosobowej działalności K.Ring. Prawo francuskie przewiduje <strong>jednego</strong> dyrektora publikacji (loi du 29 juillet 1881, stosowana online). Współtwórcy lub deweloperzy nie są dodatkowymi dyrektorami publikacji."
       },
       {
         "title": "Hosting (strona, API, baza danych)",
