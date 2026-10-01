@@ -1,0 +1,11 @@
+---
+title: 2.2.2
+date: 2026-10-01
+description: Logs de execução mais limpos e atividades do Discord mais confiáveis.
+stores: [chrome, firefox]
+---
+
+## Correções
+
+- As respostas repetidas do heartbeat nativo não ocupam mais os logs de execução. O Nowly registra um heartbeat quando o estado da conexão, o status ou a versão nativa muda, mantendo os erros visíveis.
+- Tooltips de assets do Discord curtos demais são ignorados antes do envio da atividade para evitar payloads RPC inválidos.

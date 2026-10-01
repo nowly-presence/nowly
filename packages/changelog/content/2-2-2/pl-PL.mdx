@@ -1,0 +1,11 @@
+---
+title: 2.2.2
+date: 2026-10-01
+description: Czytelniejsze logi działania i bardziej niezawodne aktywności Discorda.
+stores: [chrome, firefox]
+---
+
+## Poprawki
+
+- Powtarzające się odpowiedzi natywnego heartbeat nie zapełniają już logów działania. Nowly zapisuje heartbeat tylko wtedy, gdy zmieni się stan połączenia, status lub wersja natywna, a błędy nadal pozostają widoczne.
+- Zbyt krótkie podpowiedzi tekstowe assetów Discorda są pomijane przed wysłaniem aktywności, aby uniknąć nieprawidłowych payloadów RPC.

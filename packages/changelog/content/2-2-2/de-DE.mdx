@@ -1,0 +1,11 @@
+---
+title: 2.2.2
+date: 2026-10-01
+description: Ruhigere Laufzeitprotokolle und zuverlässigere Discord-Aktivitäten.
+stores: [chrome, firefox]
+---
+
+## Fehlerbehebungen
+
+- Wiederholte native Heartbeat-Antworten füllen die Laufzeitprotokolle nicht mehr. Nowly protokolliert einen Heartbeat nur noch, wenn sich Verbindungsstatus, Status oder native Version ändern; Fehler bleiben sichtbar.
+- Sehr kurze Discord-Asset-Tooltips werden vor dem Senden einer Aktivität ignoriert, damit keine ungültigen RPC-Payloads entstehen.

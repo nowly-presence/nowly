@@ -1,0 +1,11 @@
+---
+title: 2.2.2
+date: 2026-10-01
+description: Registros de ejecución más limpios y actividades de Discord más fiables.
+stores: [chrome, firefox]
+---
+
+## Correcciones
+
+- Las respuestas repetidas del heartbeat nativo ya no llenan los registros de ejecución. Nowly registra un heartbeat cuando cambia el estado de conexión, el estado o la versión nativa, y mantiene visibles los errores.
+- Las descripciones emergentes de assets de Discord demasiado cortas se ignoran antes de enviar una actividad para evitar payloads RPC no válidos.

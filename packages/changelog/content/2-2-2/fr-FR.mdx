@@ -1,0 +1,11 @@
+---
+title: 2.2.2
+date: 2026-10-01
+description: Des journaux d’exécution plus calmes et des activités Discord plus fiables.
+stores: [chrome, firefox]
+---
+
+## Correctifs
+
+- Les réponses répétées du heartbeat natif ne remplissent plus les journaux d’exécution. Nowly enregistre un heartbeat lorsque l’état de connexion, le statut ou la version native change, tout en conservant les erreurs.
+- Les infobulles d’assets Discord trop courtes sont ignorées avant l’envoi d’une activité afin d’éviter les payloads RPC invalides.

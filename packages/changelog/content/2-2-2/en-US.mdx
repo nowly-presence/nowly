@@ -1,0 +1,11 @@
+---
+title: 2.2.2
+date: 2026-10-01
+description: Quieter runtime logs and safer Discord activity payloads.
+stores: [chrome, firefox]
+---
+
+## Fixes
+
+- Repeated native heartbeat responses no longer fill Runtime logs. Nowly records a heartbeat when the connection state, status, or native version changes, while keeping errors visible.
+- Very short Discord asset tooltips are ignored before an activity is sent, avoiding invalid RPC payloads.

@@ -1,0 +1,11 @@
+---
+title: 2.2.2
+date: 2026-10-01
+description: 런타임 로그를 더 깔끔하게 만들고 Discord 활동의 안정성을 높였습니다.
+stores: [chrome, firefox]
+---
+
+## 수정 사항
+
+- 반복되는 네이티브 heartbeat 응답이 더 이상 런타임 로그를 가득 채우지 않습니다. 연결 상태, 상태 또는 네이티브 버전이 변경될 때만 heartbeat를 기록하며 오류는 계속 표시합니다.
+- 너무 짧은 Discord asset 툴팁은 활동을 보내기 전에 무시하여 잘못된 RPC payload를 방지합니다.
