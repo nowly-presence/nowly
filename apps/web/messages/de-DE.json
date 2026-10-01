@@ -982,7 +982,7 @@
       },
       {
         "title": "Publikationsleiter",
-        "body": "<strong>{publisherName}</strong>, als natürliche Person und Publisher. Französisches Recht sieht einen <strong>einzigen</strong> Publikationsleiter vor (loi du 29 juillet 1881, online angewandt). Mitwirkende oder Entwickler sind keine zusätzlichen Publikationsleiter."
+        "body": "<strong>{publisherName}</strong>, als Vertreter des Einzelunternehmens K.Ring. Französisches Recht sieht einen <strong>einzigen</strong> Publikationsleiter vor (loi du 29 juillet 1881, online angewandt). Mitwirkende oder Entwickler sind keine zusätzlichen Publikationsleiter."
       },
       {
         "title": "Hosting (Website, API, Datenbank)",

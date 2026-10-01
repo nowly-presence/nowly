@@ -18,10 +18,10 @@ export const PROJECT_EXTENSION_DOWNLOAD_URL = `https://chromewebstore.google.com
 export const FIREFOX_EXTENSION_DOWNLOAD_URL = "https://addons.mozilla.org/en-US/firefox/addon/nowly-presence/";
 
 export const LEGAL_PUBLISHER = {
-  name: "Anthony Lejeune",
+  name: "K.Ring",
   siren: "105 793 194",
-  address: "7 rue d'Arras, 62450 Bapaume, France",
-  email: "contact@qkimi.fr",
+  address: "62450 Bapaume, France",
+  email: "contact@nowly.me",
 } as const;
 
 export const LEGAL_DATA_REGION: Record<"en-US" | "fr-FR" | "es-ES", string> = {
