@@ -19,6 +19,35 @@ const muteTitle = (): string => chrome.i18n.getMessage("contextMenuMuteTab") || 
 const unmuteTitle = (): string => chrome.i18n.getMessage("contextMenuUnmuteTab") || "Share this tab"
 
 let clickListenerBound = false
+let menuRegistrationPromise: Promise<void> | null = null
+
+const removeAllContextMenus = (): Promise<void> =>
+  new Promise((resolve, reject) => {
+    chrome.contextMenus.removeAll(() => {
+      const error = chrome.runtime.lastError
+      if (error) {
+        reject(new Error(error.message))
+        return
+      }
+      resolve()
+    })
+  })
+
+const createContextMenu = (properties: chrome.contextMenus.CreateProperties): Promise<void> =>
+  new Promise((resolve, reject) => {
+    try {
+      chrome.contextMenus.create(properties, () => {
+        const error = chrome.runtime.lastError
+        if (error) {
+          reject(new Error(error.message))
+          return
+        }
+        resolve()
+      })
+    } catch (error) {
+      reject(error)
+    }
+  })
 
 const hostnameQuery = (href: string): string => {
   try {
@@ -106,21 +135,29 @@ const handleContextMenuClick = (info: chrome.contextMenus.OnClickData, tab?: chr
   void resolveContextMenuNav(info, tab)
 }
 
-export const registerContextMenu = (): void => {
-  chrome.contextMenus.removeAll(() => {
-    chrome.contextMenus.create({
-      id: MENU_ID,
-      title: chrome.i18n.getMessage("contextMenuPage") || "Nowly",
-      contexts: ["page", "video", "audio"],
-    })
-    chrome.contextMenus.create({
-      id: MUTE_MENU_ID,
-      title: muteTitle(),
-      contexts: ["page", "video", "audio"],
-      enabled: false,
-    })
-    void syncMuteMenuItem()
+const registerMenus = async (): Promise<void> => {
+  await removeAllContextMenus()
+  await createContextMenu({
+    id: MENU_ID,
+    title: chrome.i18n.getMessage("contextMenuPage") || "Nowly",
+    contexts: ["page", "video", "audio"],
   })
+  await createContextMenu({
+    id: MUTE_MENU_ID,
+    title: muteTitle(),
+    contexts: ["page", "video", "audio"],
+    enabled: false,
+  })
+  await syncMuteMenuItem()
+}
+
+export const registerContextMenu = (): void => {
+  if (!menuRegistrationPromise) {
+    menuRegistrationPromise = registerMenus().catch((error: unknown) => {
+      menuRegistrationPromise = null
+      console.error("Failed to register context menus", error)
+    })
+  }
 
   if (clickListenerBound) return
   clickListenerBound = true
