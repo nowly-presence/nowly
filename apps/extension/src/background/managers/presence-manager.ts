@@ -376,7 +376,7 @@ export const installLocalPresenceZip = async (payload: unknown): Promise<{ ok: b
   const parsed = await parsePresenceZip(bytes, fileName)
   if (!parsed.ok) return parsed
 
-  const release = await toLocalRelease(parsed.slug, parsed.metadata, parsed.bundle)
+  const release = await toLocalRelease(parsed.slug, parsed.metadata, parsed.bundle, parsed.iframeBundle)
   const installed = await installPresence({ slug: parsed.slug, release, source: "local" })
   if (!installed.ok) return installed
   return { ok: true, slug: parsed.slug }

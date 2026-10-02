@@ -3,27 +3,50 @@ title: iFrames
 description: Trate dados de atividade que vivem dentro de quadros incorporados.
 ---
 
-<CalloutWarning>
-Scripts de presença em iFrames **ainda não foram implementados** no runtime da extensão Nowly. `presence.on("iFrameData")` está reservado nos tipos do SDK, mas a extensão não injeta em frames aninhados nem emite esse evento. Prefira ler a página de nível superior (DOM, `<audio>` / `<video>`, estado público da página) até que isso seja lançado.
-</CalloutWarning>
+<CalloutInfo>
+Os scripts de presença em iFrames são suportados como um recurso opcional. Defina `iframe` como `true` e informe `iFrameRegExp` em `metadata.json`.
+</CalloutInfo>
 
-## Quando iFrames importam
+## Configurar uma presença em iFrame
 
-Alguns sites renderizam players de mídia ou estados importantes dentro de iframes. Um script de presença normal pode não conseguir ler tudo da página de nível superior.
+Adicione o padrão de URL dos frames aninhados em `metadata.json`:
 
-Até que haja suporte a iframes, evite sites que só expõem atividade dentro de um frame de origem cruzada, ou documente a limitação na descrição da presença.
+```json
+{
+  "iframe": true,
+  "iFrameRegExp": "player\\.example\\.com/embed/"
+}
+```
 
-## API planejada
+Crie um arquivo `iframe.ts` ao lado de `presence.ts`. Ele será executado nos frames aninhados correspondentes:
 
-A Presence API reserva um evento `iFrameData` para futura comunicação no nível do frame:
+```ts filename="iframe.ts"
+const iframe = new iFrame()
 
-```ts filename="presence.ts"
-presence.on("iFrameData", async (...args) => {
-  presence.info("Received iframe data")
+iframe.on("UpdateData", () => {
+  const video = document.querySelector("video")
+  if (!video) return
+
+  iframe.send({
+    video: {
+      paused: video.paused,
+      currentTime: video.currentTime,
+      duration: video.duration,
+      title: document.querySelector(".video-title")?.textContent,
+    },
+  })
 })
 ```
 
-Não dependa deste listener em presenças de produção hoje.
+Receba os dados em `presence.ts`:
+
+```ts
+presence.on("iFrameData", (data) => {
+  iFrameData = data
+})
+```
+
+`iFrameData` é emitido uma vez por mensagem. Com vários frames, identifique ou combine os dados na presença principal. `iFrameRegExp` é comparado com a URL do frame aninhado.
 
 ## Abordagem recomendada
 

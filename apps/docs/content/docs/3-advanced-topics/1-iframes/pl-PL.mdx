@@ -3,27 +3,50 @@ title: iFrames
 description: Obsługuj dane aktywności znajdujące się w osadzonych ramkach.
 ---
 
-<CalloutWarning>
-Skrypty obecności w iFrame **nie są jeszcze zaimplementowane** w środowisku uruchomieniowym rozszerzenia Nowly. `presence.on("iFrameData")` jest zarezerwowane w typach SDK, ale rozszerzenie nie wstrzykuje się do zagnieżdżonych ramek ani nie emituje tego zdarzenia. Do czasu premiery wolisz czytać najwyższy poziom strony (DOM, `<audio>` / `<video>`, publiczny stan strony).
-</CalloutWarning>
+<CalloutInfo>
+Skrypty obecności w iFrame są obsługiwane jako funkcja opcjonalna. Ustaw `iframe` na `true` i podaj `iFrameRegExp` w `metadata.json`.
+</CalloutInfo>
 
-## Kiedy iFrame mają znaczenie
+## Konfigurowanie obecności iFrame
 
-Niektóre strony renderują odtwarzacze multimediów lub ważny stan wewnątrz iframe. Zwykły skrypt obecności może nie być w stanie odczytać wszystkiego z najwyższego poziomu strony.
+Dodaj wzorzec URL zagnieżdżonych ramek do `metadata.json`:
 
-Dopóki nie będzie wsparcia dla iframe, pomiń strony, które udostępniają aktywność tylko w ramce innego pochodzenia, albo opisz to ograniczenie w opisie obecności.
+```json
+{
+  "iframe": true,
+  "iFrameRegExp": "player\\.example\\.com/embed/"
+}
+```
 
-## Planowane API
+Utwórz plik `iframe.ts` obok `presence.ts`. Będzie uruchamiany w pasujących zagnieżdżonych ramkach:
 
-Presence API rezerwuje zdarzenie `iFrameData` dla przyszłej komunikacji na poziomie ramek:
+```ts filename="iframe.ts"
+const iframe = new iFrame()
 
-```ts filename="presence.ts"
-presence.on("iFrameData", async (...args) => {
-  presence.info("Received iframe data")
+iframe.on("UpdateData", () => {
+  const video = document.querySelector("video")
+  if (!video) return
+
+  iframe.send({
+    video: {
+      paused: video.paused,
+      currentTime: video.currentTime,
+      duration: video.duration,
+      title: document.querySelector(".video-title")?.textContent,
+    },
+  })
 })
 ```
 
-Nie polegaj dziś na tym nasłuchiwaczu w produkcyjnych obecnościach.
+Odbierz dane w `presence.ts`:
+
+```ts
+presence.on("iFrameData", (data) => {
+  iFrameData = data
+})
+```
+
+`iFrameData` jest emitowane raz dla każdej wiadomości. Przy wielu ramkach rozpoznaj lub scal ich dane w głównej obecności. `iFrameRegExp` jest porównywany z URL-em zagnieżdżonej ramki.
 
 ## Zalecane podejście
 

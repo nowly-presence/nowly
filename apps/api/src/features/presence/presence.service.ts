@@ -31,6 +31,13 @@ export const buildRelease = async (slug: string, version?: string) => {
     ?? await fetchText(`https://cdn.nowly.me/presences/${slug}/bundle.js`)
 
   if (!bundle) return null
+  let iframeBundle: string | null = null
+  if (metadata.iframe === true) {
+    iframeBundle = await fetchText(`https://cdn.nowly.me/presences/${slug}/versions/${resolvedVersion}/iframe.js`)
+      ?? await fetchText(`https://cdn.nowly.me/presences/${slug}/iframe.js?v=${encodeURIComponent(String(resolvedVersion))}`)
+      ?? await fetchText(`https://cdn.nowly.me/presences/${slug}/iframe.js`)
+    if (!iframeBundle?.trim()) return null
+  }
 
   if (!metadata.settings) {
     try {
@@ -54,6 +61,7 @@ export const buildRelease = async (slug: string, version?: string) => {
   }
 
   const sha256 = sha256Base64Url(bundle)
+  const iframeSha256 = iframeBundle ? sha256Base64Url(iframeBundle) : undefined
   const metadataHash = sha256Base64Url(canonicalJson(releaseMetadata))
   const signedAt = new Date().toISOString()
   const payload = signedPayload({
@@ -61,6 +69,7 @@ export const buildRelease = async (slug: string, version?: string) => {
     version: String(resolvedVersion),
     sha256,
     metadataHash,
+    ...(iframeSha256 ? { iframeSha256 } : {}),
     signedAt
   })
 
@@ -71,6 +80,7 @@ export const buildRelease = async (slug: string, version?: string) => {
     bundle,
     sha256,
     metadataHash,
+    ...(iframeBundle && iframeSha256 ? { iframeBundle, iframeSha256 } : {}),
     signature: signPresenceRelease(payload),
     signedAt,
     totalInstalls: stats.totalInstalls,

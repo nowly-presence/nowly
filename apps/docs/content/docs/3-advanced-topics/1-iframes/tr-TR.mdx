@@ -3,27 +3,50 @@ title: iFrames
 description: Gömülü çerçevelerin (frame) içindeki etkinlik verilerini işleyin.
 ---
 
-<CalloutWarning>
-iFrame presence betikleri henüz Nowly uzantı runtime'ında **uygulanmamıştır**. `presence.on("iFrameData")` SDK türlerinde ayrılmıştır, ancak uzantı iç içe çerçevelere enjekte etmez veya bu olayı yayınlamaz. Bu özellik çıkana kadar üst düzey sayfayı (DOM, `<audio>` / `<video>`, genel sayfa durumu) okumayı tercih edin.
-</CalloutWarning>
+<CalloutInfo>
+iFrame presence betikleri isteğe bağlı bir özellik olarak desteklenir. `metadata.json` içinde `iframe` değerini `true` yapın ve `iFrameRegExp` belirtin.
+</CalloutInfo>
 
-## iFrame'ler Ne Zaman Önemlidir
+## iFrame presence yapılandırma
 
-Bazı web siteleri medya oynatıcılarını veya önemli durumları iframe içinde işler. Normal bir presence betiği, üst düzey sayfadaki her şeyi okuyamayabilir.
+İç içe çerçevelerin URL desenini `metadata.json` içine ekleyin:
 
-iframe desteği gelene kadar, etkinliği yalnızca çapraz kaynaklı (cross-origin) bir çerçeve içinde sunan siteleri atlayın veya bu sınırlamayı presence açıklamasında belirtin.
+```json
+{
+  "iframe": true,
+  "iFrameRegExp": "player\\.example\\.com/embed/"
+}
+```
 
-## Planlanan API
+`presence.ts` dosyasının yanında `iframe.ts` oluşturun. Eşleşen iç içe çerçevelerde çalışır:
 
-Presence API, gelecekteki çerçeve düzeyi iletişim için bir `iFrameData` olayı ayırır:
+```ts filename="iframe.ts"
+const iframe = new iFrame()
 
-```ts filename="presence.ts"
-presence.on("iFrameData", async (...args) => {
-  presence.info("Received iframe data")
+iframe.on("UpdateData", () => {
+  const video = document.querySelector("video")
+  if (!video) return
+
+  iframe.send({
+    video: {
+      paused: video.paused,
+      currentTime: video.currentTime,
+      duration: video.duration,
+      title: document.querySelector(".video-title")?.textContent,
+    },
+  })
 })
 ```
 
-Bugün üretimdeki presence'larda bu dinleyiciye güvenmeyin.
+Verileri `presence.ts` içinde alın:
+
+```ts
+presence.on("iFrameData", (data) => {
+  iFrameData = data
+})
+```
+
+`iFrameData` her mesaj için bir kez yayınlanır. Birden fazla çerçeve varsa verileri ana presence içinde tanımlayın veya birleştirin. `iFrameRegExp`, iç içe çerçevenin URL'siyle eşleştirilir.
 
 ## Önerilen Yaklaşım
 

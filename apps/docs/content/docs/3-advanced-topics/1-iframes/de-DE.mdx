@@ -3,27 +3,50 @@ title: iFrames
 description: Verarbeite Aktivitätsdaten, die in eingebetteten Frames leben.
 ---
 
-<CalloutWarning>
-iFrame-Presence-Skripte sind in der Nowly-Erweiterungslaufzeit **noch nicht implementiert**. `presence.on("iFrameData")` ist in den SDK-Typen reserviert, aber die Erweiterung injiziert nichts in verschachtelte Frames und löst dieses Event nicht aus. Bevorzuge das Lesen der Top-Level-Seite (DOM, `<audio>` / `<video>`, öffentlicher Seitenzustand), bis dieses Feature erscheint.
-</CalloutWarning>
+<CalloutInfo>
+iFrame-Presence-Skripte werden optional unterstützt. Setze `iframe` auf `true` und gib `iFrameRegExp` in `metadata.json` an.
+</CalloutInfo>
 
-## Wann iFrames wichtig sind
+## Eine iFrame-Presence konfigurieren
 
-Einige Websites rendern Mediaplayer oder wichtige Zustände in iframes. Ein normales Presence-Skript kann möglicherweise nicht alles von der Top-Level-Seite lesen.
+Füge das URL-Muster der verschachtelten Frames in `metadata.json` ein:
 
-Solange es keine iframe-Unterstützung gibt, überspringe Websites, die Aktivität nur in einem Cross-Origin-Frame preisgeben, oder dokumentiere die Einschränkung in der Presence-Beschreibung.
+```json
+{
+  "iframe": true,
+  "iFrameRegExp": "player\\.example\\.com/embed/"
+}
+```
 
-## Geplante API
+Erstelle neben `presence.ts` eine `iframe.ts`-Datei. Sie läuft in passenden verschachtelten Frames:
 
-Die Presence-API reserviert ein `iFrameData`-Event für zukünftige Kommunikation auf Frame-Ebene:
+```ts filename="iframe.ts"
+const iframe = new iFrame()
 
-```ts filename="presence.ts"
-presence.on("iFrameData", async (...args) => {
-  presence.info("Received iframe data")
+iframe.on("UpdateData", () => {
+  const video = document.querySelector("video")
+  if (!video) return
+
+  iframe.send({
+    video: {
+      paused: video.paused,
+      currentTime: video.currentTime,
+      duration: video.duration,
+      title: document.querySelector(".video-title")?.textContent,
+    },
+  })
 })
 ```
 
-Verlasse dich heute nicht auf diesen Listener in Produktions-Presences.
+Empfange die Daten in `presence.ts`:
+
+```ts
+presence.on("iFrameData", (data) => {
+  iFrameData = data
+})
+```
+
+`iFrameData` wird einmal pro Nachricht ausgelöst. Bei mehreren Frames musst du die Daten in der Haupt-Presence identifizieren oder zusammenführen. `iFrameRegExp` wird gegen die URL des verschachtelten Frames geprüft.
 
 ## Empfohlener Ansatz
 

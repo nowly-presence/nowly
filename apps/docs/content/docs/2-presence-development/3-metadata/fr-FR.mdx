@@ -86,7 +86,9 @@ Deux champs facultatifs contrôlent comment et quand le script de votre présenc
 <TypeTable
   properties={[
     { name: "world", type: "\"main\" | \"isolated\"", description: "Monde d'exécution. Par défaut : isolated.", required: false },
-    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "Moment d'injection du script. Par défaut : document_idle.", required: false }
+    { name: "runAt", type: "\"document_start\" | \"document_end\" | \"document_idle\"", description: "Moment d'injection du script. Par défaut : document_idle.", required: false },
+    { name: "iframe", type: "boolean", description: "Active la compilation et l'injection de iframe.ts dans les cadres imbriqués.", required: false },
+    { name: "iFrameRegExp", type: "string", description: "Expression régulière comparée aux URL des cadres imbriqués. Requise lorsque iframe vaut true.", required: false }
   ]}
 />
 
@@ -117,6 +119,10 @@ Un `fetch` depuis le monde isolé n'est pas considéré comme une requête first
 <CalloutInfo>
 La déclaration se trouve entièrement dans `metadata.json` - l'extension la lit au moment de l'enregistrement. Aucune modification de l'extension n'est nécessaire pour ajouter une nouvelle présence en contexte page.
 </CalloutInfo>
+
+## Cadres imbriqués
+
+Définissez `"iframe": true` et ajoutez `"iFrameRegExp"` lorsque la présence a besoin d'un fichier `iframe.ts` séparé. L'expression régulière est évaluée sur chaque URL de cadre imbriqué. La présence principale reçoit les données envoyées par le cadre via `presence.on("iFrameData", ...)`.
 
 ## Catégorie
 

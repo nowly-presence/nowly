@@ -3,27 +3,50 @@ title: iFrames
 description: 埋め込みフレーム内にあるアクティビティデータを扱います。
 ---
 
-<CalloutWarning>
-iFrameプレゼンススクリプトは、Nowly拡張機能のランタイムでは**まだ実装されていません**。`presence.on("iFrameData")` はSDKの型で予約されていますが、拡張機能はネストされたフレームに注入せず、このイベントも発行しません。この機能が提供されるまでは、トップレベルのページ(DOM、`<audio>` / `<video>`、公開されているページの状態)を読み取るようにしてください。
-</CalloutWarning>
+<CalloutInfo>
+iFrameプレゼンススクリプトはオプトイン機能として利用できます。`metadata.json`で`iframe`を`true`に設定し、`iFrameRegExp`を指定してください。
+</CalloutInfo>
 
-## iFrameが重要になる場面
+## iFrameプレゼンスの設定
 
-一部のウェブサイトでは、メディアプレイヤーや重要な状態をiframe内に描画します。通常のプレゼンススクリプトでは、トップレベルのページからすべてを読み取れない場合があります。
+ネストされたフレームのURLパターンを`metadata.json`に追加します。
 
-iframeサポートが実装されるまでは、クロスオリジンのフレーム内にしかアクティビティがないサイトはスキップするか、プレゼンスの説明にその制限を記載してください。
+```json
+{
+  "iframe": true,
+  "iFrameRegExp": "player\\.example\\.com/embed/"
+}
+```
 
-## 予定されているAPI
+`presence.ts`の隣に`iframe.ts`を作成します。該当するネストされたフレーム内で実行されます。
 
-Presence APIは、将来のフレームレベル通信のために `iFrameData` イベントを予約しています:
+```ts filename="iframe.ts"
+const iframe = new iFrame()
 
-```ts filename="presence.ts"
-presence.on("iFrameData", async (...args) => {
-  presence.info("Received iframe data")
+iframe.on("UpdateData", () => {
+  const video = document.querySelector("video")
+  if (!video) return
+
+  iframe.send({
+    video: {
+      paused: video.paused,
+      currentTime: video.currentTime,
+      duration: video.duration,
+      title: document.querySelector(".video-title")?.textContent,
+    },
+  })
 })
 ```
 
-現在の本番プレゼンスでは、このリスナーに依存しないでください。
+`presence.ts`でデータを受け取ります。
+
+```ts
+presence.on("iFrameData", (data) => {
+  iFrameData = data
+})
+```
+
+`iFrameData`はメッセージごとに1回発行されます。複数のフレームがある場合は、メインのプレゼンスでデータを識別または統合してください。`iFrameRegExp`はネストされたフレームのURLに対して評価されます。
 
 ## 推奨されるアプローチ
 

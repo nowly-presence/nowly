@@ -23,6 +23,7 @@ export type ChromeWithUserScripts = typeof chrome & {
 }
 
 export const userScriptId = (slug: string): string => `nowly-presence-${slug}`
+export const iframeUserScriptId = (slug: string): string => `${userScriptId(slug)}-iframe`
 
 export const visiblePresences = (presences: InstalledPresences): InstalledPresences =>
   Object.fromEntries(

@@ -1,7 +1,7 @@
 import { addRuntimeLog } from "@/background/runtime-logs"
 import { presenceInjector } from "@/background/runtime/presence-injection"
 import { createPresenceRuntime } from "@/background/runtime/presence-runtime"
-import { type RegisteredUserScript, userScriptId } from "@/background/runtime/user-scripts"
+import { type RegisteredUserScript, iframeUserScriptId, userScriptId } from "@/background/runtime/user-scripts"
 import { toMatchPatterns } from "@/shared/url-patterns"
 import { getEffectiveApiUrl } from "@/background/services/api-state"
 import { verifyPresenceRelease } from "@/background/services/release-security"
@@ -13,23 +13,38 @@ import { configuredPresenceLocale } from "@/shared/presence-language"
 import type { ExtensionSettings, InstalledPresences, PresenceMetadata, StoredPresence } from "@/shared/types"
 
 export const unregisterPresenceScript = async (slug: string): Promise<void> => {
-  try {
-    await presenceInjector.unregister(userScriptId(slug))
-  } catch {
+  for (const id of [userScriptId(slug), iframeUserScriptId(slug)]) {
+    try {
+      await presenceInjector.unregister(id)
+    } catch {
+    }
   }
 }
-
 export const getPresenceStrings = (slug: string, metadata: PresenceMetadata, settings: ExtensionSettings, uiLocale: Locale): Record<string, string> => {
   if (!metadata.locales) return {}
   const configured = configuredPresenceLocale(settings, slug, metadata.locales, uiLocale)
   return metadata.locales[configured] ?? metadata.locales["en-US"] ?? {}
 }
 
-export const getPresenceRuntime = async (slug: string, metadata: PresenceMetadata, bundle: string): Promise<string> => {
+export const getPresenceRuntime = async (
+  slug: string,
+  metadata: PresenceMetadata,
+  bundle: string,
+  options: { mode?: "main" | "iframe"; iframeRegExp?: string } = {},
+): Promise<string> => {
   const [allSettings, extensionSettings, uiLocale] = await Promise.all([getPresenceSettings(), getSettings(), loadLocale()])
   const presenceSettings = allSettings[slug] ?? {}
   const strings = getPresenceStrings(slug, metadata, extensionSettings, uiLocale)
-  return createPresenceRuntime(slug, metadata.name, bundle, presenceSettings, strings, getEffectiveApiUrl(), CDN_BASE_URL)
+  return createPresenceRuntime(
+    slug,
+    metadata.name,
+    bundle,
+    presenceSettings,
+    strings,
+    getEffectiveApiUrl(),
+    CDN_BASE_URL,
+    options,
+  )
 }
 
 export const registerPresenceScript = async (slug: string, presence: StoredPresence): Promise<{ ok: boolean; error?: string }> => {
@@ -42,22 +57,55 @@ export const registerPresenceScript = async (slug: string, presence: StoredPrese
   if (!matches.length) return { ok: false, error: "PRESENCE_NO_VALID_URL_PATTERNS" }
   if (!presence.release.bundle?.trim()) return { ok: false, error: "PRESENCE_NO_BUNDLE" }
 
+  const iframeEnabled = metadata.iframe === true
+  const iframeRegExp = metadata.iFrameRegExp
+  const iframeBundle = presence.release.iframeBundle
+  if (iframeEnabled && (!iframeRegExp?.trim() || !iframeBundle?.trim())) {
+    return { ok: false, error: !iframeRegExp?.trim() ? "PRESENCE_IFRAME_PATTERN_MISSING" : "PRESENCE_IFRAME_BUNDLE_MISSING" }
+  }
+  if (iframeEnabled) {
+    try {
+      new RegExp(iframeRegExp!)
+    } catch {
+      return { ok: false, error: "PRESENCE_IFRAME_PATTERN_INVALID" }
+    }
+  }
+
   try {
     addRuntimeLog("info", "presence", "register presence script", { slug, version: presence.release.version })
     await unregisterPresenceScript(slug)
-    const code = await getPresenceRuntime(slug, metadata, presence.release.bundle)
 
-    const script: RegisteredUserScript = {
+    const mainCode = await getPresenceRuntime(slug, metadata, presence.release.bundle, {
+      iframeRegExp: iframeRegExp ?? "",
+    })
+    await presenceInjector.register({
       id: userScriptId(slug),
       matches,
-      js: [{ code }],
+      js: [{ code: mainCode }],
       runAt: metadata.runAt ?? "document_idle",
       allFrames: false,
       world: metadata.world === "main" ? "MAIN" : "USER_SCRIPT",
+    })
+
+    if (iframeEnabled) {
+      const iframeCode = await getPresenceRuntime(slug, metadata, iframeBundle!, {
+        mode: "iframe",
+        iframeRegExp: iframeRegExp!,
+      })
+      const iframeScript: RegisteredUserScript = {
+        id: iframeUserScriptId(slug),
+        matches: ["<all_urls>"],
+        js: [{ code: iframeCode }],
+        runAt: metadata.runAt ?? "document_idle",
+        allFrames: true,
+        world: metadata.world === "main" ? "MAIN" : "USER_SCRIPT",
+      }
+      await presenceInjector.register(iframeScript)
     }
-    await presenceInjector.register(script)
+
     return { ok: true }
   } catch (error) {
+    await unregisterPresenceScript(slug)
     addRuntimeLog("error", "presence", "register presence script failed", {
       slug,
       error: error instanceof Error ? error.message : "FAILED_TO_REGISTER_PRESENCE_USER_SCRIPT",
