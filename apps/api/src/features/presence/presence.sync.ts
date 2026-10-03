@@ -1,5 +1,5 @@
 import { formatBytes } from "@nowly/shared"
-import { generateChangelog, translateChangelog } from "@/shared/openai.service"
+import { generateChangelog, translateChangelog } from "@/shared/changelog.service"
 import { sha256Base64Url } from "@/shared/crypto.service"
 import { serializeJsonField } from "./presence.service"
 import {
