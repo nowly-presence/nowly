@@ -30,6 +30,7 @@ export const Footer = async () => {
         github: t("github"),
         twitter: t("twitter"),
         bluesky: t("bluesky"),
+        tiktok: "TikTok",
         legalNotice: t("legal-notice"),
         cookies: t("cookies"),
         privacy: t("privacy"),
