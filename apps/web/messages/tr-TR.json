@@ -811,6 +811,10 @@
           {
             "title": "Mevsim temaları",
             "description": "İlk mevsim teması: Cadılar Bayramı için bir Ekim teması."
+          },
+          {
+            "title": "İsteğe bağlı hesap eşitleme",
+            "description": "Presence'larını ve ayarlarını tarayıcıların arasında eşitlemek için Discord ile giriş yap."
           }
         ]
       },

@@ -811,6 +811,10 @@
           {
             "title": "Temas sazonais",
             "description": "O primeiro tema sazonal: um tema de outubro para o Halloween."
+          },
+          {
+            "title": "Sincronização opcional da conta",
+            "description": "Entre com o Discord para sincronizar suas presenças e configurações entre navegadores."
           }
         ]
       },

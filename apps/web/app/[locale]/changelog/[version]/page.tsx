@@ -6,6 +6,8 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+export const revalidate = 3600;
+
 type ChangelogVersionPageProps = {
   params: Promise<{ version: string }>
 };

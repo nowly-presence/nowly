@@ -811,6 +811,10 @@
           {
             "title": "Seasonal themes",
             "description": "The first seasonal theme: an October theme for Halloween."
+          },
+          {
+            "title": "Optional account sync",
+            "description": "Sign in with Discord to sync your presences and settings across browsers."
           }
         ]
       },

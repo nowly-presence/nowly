@@ -4,6 +4,8 @@ import { createMetadata } from "@/features/seo/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
+export const revalidate = 3600;
+
 export const generateMetadata = async (): Promise<Metadata> => {
   const [locale, t] = await Promise.all([getLocale(), getTranslations("pages.changelog")]);
   return createMetadata({

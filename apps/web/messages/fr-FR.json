@@ -811,6 +811,10 @@
           {
             "title": "Thèmes saisonniers",
             "description": "Premier thème saisonnier : celui d’octobre pour Halloween."
+          },
+          {
+            "title": "Synchronisation facultative du compte",
+            "description": "Connectez-vous avec Discord pour synchroniser vos présences et réglages entre navigateurs."
           }
         ]
       },

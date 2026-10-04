@@ -811,6 +811,10 @@
           {
             "title": "Tema bermusim",
             "description": "Tema bermusim pertama: tema Oktober untuk Halloween."
+          },
+          {
+            "title": "Penyegerakan akaun pilihan",
+            "description": "Log masuk dengan Discord untuk menyegerakkan presence dan tetapan antara pelayar."
           }
         ]
       },

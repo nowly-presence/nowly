@@ -811,6 +811,10 @@
           {
             "title": "Motywy sezonowe",
             "description": "Pierwszy motyw sezonowy: październikowy motyw na Halloween."
+          },
+          {
+            "title": "Opcjonalna synchronizacja konta",
+            "description": "Zaloguj się przez Discord, aby synchronizować obecności i ustawienia między przeglądarkami."
           }
         ]
       },

@@ -811,6 +811,10 @@
           {
             "title": "Temas de temporada",
             "description": "El primer tema de temporada: un tema de octubre para Halloween."
+          },
+          {
+            "title": "Sincronización opcional de la cuenta",
+            "description": "Inicia sesión con Discord para sincronizar tus presencias y ajustes entre navegadores."
           }
         ]
       },
