@@ -1,6 +1,8 @@
+import { homeSectionAltClass } from "@/features/home/components/section-heading";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { getDiscordCommunity } from "@/lib/discord";
 import { ButtonAnchor } from "@nowly/ui/button-link";
+import { cn } from "@nowly/ui/utils";
 import { RiArrowRightUpLine, RiCustomerService2Line, RiDiscordFill, RiLightbulbLine, RiTeamLine } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
@@ -11,8 +13,8 @@ export const CommunitySection = async () => {
   const items = t.raw("items") as Array<{ title: string; description: string }>;
 
   return (
-    <section id="community" className="home-section-deferred px-5 pb-28 sm:px-10 sm:pb-36">
-      <div className="mx-auto grid w-full max-w-[1200px] items-center gap-10 rounded-[24px] bg-section-alt px-6 py-12 shadow-[0_0_0_1px_var(--border)] sm:px-12 sm:py-16 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:gap-16">
+    <section id="community" className={cn("home-section-deferred px-5 py-28 sm:px-10 sm:py-36", homeSectionAltClass)}>
+      <div className="mx-auto grid w-full max-w-[1200px] items-center gap-12 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:gap-16">
         <div>
           <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
           <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[2.15rem]">
@@ -40,11 +42,11 @@ export const CommunitySection = async () => {
           </div>
         </div>
 
-        <ul className="divide-y divide-foreground/8">
+        <ul className="divide-y divide-foreground/8 rounded-[16px] bg-foreground/4 shadow-[0_0_0_1px_rgba(228,242,255,0.06)]">
           {items.map((item, index) => {
             const Icon = icons[index] ?? RiTeamLine;
             return (
-              <li key={item.title} className="flex gap-4 py-5 first:pt-0 last:pb-0">
+              <li key={item.title} className="flex gap-4 px-6 py-6">
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-accent/12 text-accent">
                   <Icon className="size-5" />
                 </div>
