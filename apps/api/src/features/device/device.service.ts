@@ -56,6 +56,8 @@ export type DeviceExport = {
   } | null
   presences: Array<{ slug: string; installed: boolean; enabled: boolean; installedVersion: string | null }>
   analyticsEvents: Array<{ key: string; slug: string | null; source: string | null; country: string | null; createdAt: string }>
+  presenceLikes: Array<{ slug: string; likedAt: string }>
+  linkedToAccount: boolean
 }
 
 export const deviceExists = async (deviceId: string): Promise<boolean> => {
@@ -68,10 +70,11 @@ export const exportDeviceData = async (deviceId: string): Promise<DeviceExport |
   if (!hasDatabase()) return null
 
   const prisma = getPrisma()
-  const [device, presences, analyticsEvents] = await Promise.all([
+  const [device, presences, analyticsEvents, presenceLikes] = await Promise.all([
     prisma.device.findUnique({ where: { deviceId } }),
     prisma.devicePresence.findMany({ where: { deviceId } }),
     prisma.analyticsEvent.findMany({ where: { deviceId } }),
+    prisma.presenceLike.findMany({ where: { deviceId } }),
   ])
 
   if (!device) return null
@@ -100,6 +103,8 @@ export const exportDeviceData = async (deviceId: string): Promise<DeviceExport |
       country: event.country,
       createdAt: event.createdAt.toISOString(),
     })),
+    presenceLikes: presenceLikes.map((like) => ({ slug: like.slug, likedAt: like.likedAt.toISOString() })),
+    linkedToAccount: device.userId !== null,
   }
 }
 
@@ -109,6 +114,7 @@ export const deleteDeviceData = async (deviceId: string): Promise<void> => {
   const prisma = getPrisma()
   await prisma.$transaction([
     prisma.analyticsEvent.deleteMany({ where: { deviceId } }),
+    prisma.presenceLike.deleteMany({ where: { deviceId } }),
     prisma.devicePresence.deleteMany({ where: { deviceId } }),
     prisma.presenceActiveDevice.deleteMany({ where: { deviceId } }),
     prisma.presenceActiveSession.deleteMany({ where: { deviceId } }),
@@ -147,4 +153,30 @@ export const syncDevice = async (input: DeviceSyncInput): Promise<void> => {
       },
     })
   }
+}
+
+export const linkDeviceToUser = async (deviceId: string, userId: string): Promise<void> => {
+  const prisma = getPrisma()
+  await prisma.device.upsert({
+    where: { deviceId },
+    create: { deviceId, userId },
+    update: { userId },
+  })
+  await prisma.presenceLike.updateMany({ where: { deviceId }, data: { userId } })
+
+  const likes = await prisma.presenceLike.findMany({
+    where: { userId },
+    orderBy: { likedAt: "asc" },
+    select: { slug: true, deviceId: true },
+  })
+  const kept = new Set<string>()
+  const duplicates = likes.filter((like) => {
+    if (kept.has(like.slug)) return true
+    kept.add(like.slug)
+    return false
+  })
+  if (duplicates.length === 0) return
+  await prisma.presenceLike.deleteMany({
+    where: { OR: duplicates.map((like) => ({ slug: like.slug, deviceId: like.deviceId })) },
+  })
 }

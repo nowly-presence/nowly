@@ -3,6 +3,7 @@ import { createPortal } from "react-dom"
 import { AnimatePresence, domAnimation, LazyMotion, m, useReducedMotion } from "motion/react"
 import { CostumedNolo } from "@/components/shared/nolo-costumed"
 import { useExtensionState } from "@/hooks/extension-state-provider"
+import { useFeatureReveals } from "@/hooks/feature-reveal-provider"
 import { useI18n } from "@/hooks/i18n-provider"
 import { useSeason } from "@/hooks/season-provider"
 import { Button } from "@/ui/button"
@@ -148,7 +149,8 @@ const PrankScene = ({ onClose }: { onClose: () => void }) => {
 export const HalloweenPrank = () => {
   const { state } = useExtensionState()
   const { seasonal } = useSeason()
-  const { open, close } = useHalloweenPrank(state.ready && seasonal)
+  const { activeId } = useFeatureReveals()
+  const { open, close } = useHalloweenPrank(state.ready && seasonal && activeId === null)
 
   return createPortal(<AnimatePresence>{open && <PrankScene key="prank" onClose={close} />}</AnimatePresence>, document.body)
 }

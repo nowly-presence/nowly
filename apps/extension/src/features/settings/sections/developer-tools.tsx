@@ -1,6 +1,7 @@
 import { useRef, useState } from "react"
 import { RiUploadCloud2Line } from "@remixicon/react"
 import { useExtensionState } from "@/hooks/extension-state-provider"
+import { useFeatureReveals } from "@/hooks/feature-reveal-provider"
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider"
 import { useNav } from "@/hooks/navigation-provider"
 import { useSeason } from "@/hooks/season-provider"
@@ -32,6 +33,7 @@ export const DeveloperTools = () => {
   const { push } = useNav()
   const { toast } = useToast()
   const { override } = useSeason()
+  const reveals = useFeatureReveals()
   const [apiDraft, setApiDraft] = useState(state.settings.customApiBaseUrl ?? "")
   const [busy, setBusy] = useState<"zip" | "updates" | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -117,6 +119,15 @@ export const DeveloperTools = () => {
             title={t("settings.replayPrank")}
             trailing={
               <Button size="sm" variant="secondary" onClick={() => void replayHalloweenPrank()}>
+                {t("action.replay")}
+              </Button>
+            }
+          />
+          <Row
+            title={t("settings.replayReveals")}
+            description={t("settings.replayRevealsHint")}
+            trailing={
+              <Button size="sm" variant="secondary" onClick={reveals.replay}>
                 {t("action.replay")}
               </Button>
             }

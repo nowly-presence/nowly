@@ -1,5 +1,6 @@
+import { accountRoutes } from "@/features/account/account.routes"
 import { assetsRoutes } from "@/features/assets/assets.routes"
-import { getAuth } from "@/features/auth/better-auth"
+import { authTrustedOrigins, getAuth } from "@/features/auth/better-auth"
 import { campaignsRoutes } from "@/features/campaigns/campaigns.routes"
 import { contactRoutes } from "@/features/contact/contact.routes"
 import { deviceRoutes } from "@/features/device/device.routes"
@@ -9,6 +10,7 @@ import { presenceRoutes } from "@/features/presence/presence.routes"
 
 import { securityRoutes } from "@/features/security/security.routes"
 import { statusRoutes } from "@/features/status/status.routes"
+import { syncRoutes } from "@/features/sync/sync.routes"
 import { ApiError } from "@/shared/errors"
 import cors from "@fastify/cors"
 import rateLimit from "@fastify/rate-limit"
@@ -20,7 +22,7 @@ const server = Fastify({ logger: true, trustProxy: true })
 
 await server.register(rateLimit, { max: 100, timeWindow: "1 minute" })
 
-const allowedOrigins = [serverEnv.FRONTEND_URL, serverEnv.INSIGHTS_URL]
+const allowedOrigins = authTrustedOrigins()
 
 const isAllowedOrigin = (origin: string | undefined): boolean =>
   !origin || allowedOrigins.includes(origin) || origin.startsWith("chrome-extension://") || origin.startsWith("moz-extension://")
@@ -76,6 +78,8 @@ await server.register(insightsRoutes, { prefix: "/insights" })
 await server.register(campaignsRoutes, { prefix: "/campaigns" })
 await server.register(contactRoutes, { prefix: "/contact" })
 await server.register(deviceRoutes, { prefix: "/devices" })
+await server.register(accountRoutes)
+await server.register(syncRoutes, { prefix: "/sync" })
 await server.register(statusRoutes)
 await server.register(imageProxyRoutes)
 await server.register(assetsRoutes, { prefix: "/presences" })

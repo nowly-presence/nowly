@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { OnboardingState } from "@/background/storage/onboarding.store"
 import { sendMessage } from "@/lib/messages"
 import type {
+  AccountSnapshot,
   CurrentActivity,
   ExtensionSettings,
   InstalledPresences,
@@ -29,6 +30,7 @@ export type ExtensionState = {
   analyticsConsent: boolean
   updates: Record<string, string>
   catalog: CatalogState
+  account: AccountSnapshot
 }
 
 const INITIAL: ExtensionState = {
@@ -44,6 +46,7 @@ const INITIAL: ExtensionState = {
   analyticsConsent: false,
   updates: {},
   catalog: { status: "idle", items: [] },
+  account: { signedIn: false },
 }
 
 type Refreshers = {
@@ -58,6 +61,7 @@ type Refreshers = {
   consent: () => Promise<void>
   updates: () => Promise<void>
   catalog: (force?: boolean) => Promise<void>
+  account: () => Promise<void>
 }
 
 type ExtensionStateValue = {
@@ -104,6 +108,7 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }) =>
       presenceSettings: safe(() => sendMessage("GET_PRESENCE_SETTINGS"), (presenceSettings) => patch({ presenceSettings })),
       consent: safe(() => sendMessage("GET_ANALYTICS_CONSENT"), ({ granted }) => patch({ analyticsConsent: granted })),
       updates: safe(() => sendMessage("CHECK_UPDATES"), (updates) => patch({ updates })),
+      account: safe(() => sendMessage("GET_ACCOUNT"), (account) => patch({ account })),
       catalog: async (force = false) => {
         if (catalogInFlight.current) return catalogInFlight.current
         let skip = false
@@ -151,8 +156,12 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }) =>
         refresh.tab(),
         refresh.presenceSettings(),
         refresh.consent(),
+        refresh.account(),
       ])
       if (!cancelled) patch({ ready: true })
+      void sendMessage("SYNC_ACCOUNT")
+        .then((account) => patch({ account }))
+        .catch(() => {})
       void refresh.catalog()
       void refresh.updates()
       void sendMessage("TRACK_EVENT", { key: "extension_open", payload: { surface: "sidepanel" } }).catch(() => {})
@@ -178,6 +187,7 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }) =>
       if ("presenceSettings" in changes) void refresh.presenceSettings()
       if ("onboarding" in changes) void refresh.onboarding()
       if ("analyticsConsent" in changes) void refresh.consent()
+      if ("account" in changes || "syncState" in changes) void refresh.account()
     }
     chrome.storage.onChanged.addListener(onChanged)
     return () => chrome.storage.onChanged.removeListener(onChanged)

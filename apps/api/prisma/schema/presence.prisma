@@ -41,9 +41,13 @@ model PresenceVersion {
 model PresenceLike {
   slug     String
   deviceId String   @map("device_id")
+  userId   String?  @map("user_id")
   likedAt  DateTime @default(now()) @map("liked_at") @db.Timestamptz(6)
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@id([slug, deviceId])
   @@index([slug])
+  @@index([userId])
   @@map("presence_likes")
 }

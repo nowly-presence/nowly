@@ -1,6 +1,6 @@
 {
   "name": "@nowly/extension",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "Nowly browser extension (side panel) - share your web activity on Discord.",
   "private": true,
   "type": "module",

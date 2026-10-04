@@ -1,5 +1,5 @@
-// Better Auth core tables. Not wired into the extension or web app yet -
-// this is groundwork for a future cloud-synced account system and admin panel.
+// Better Auth core tables, shared by apps/insights, apps/web and the extension
+// (through ExtensionToken).
 model User {
   id            String   @id
   name          String
@@ -7,11 +7,16 @@ model User {
   emailVerified Boolean  @default(false) @map("email_verified")
   image         String?
   role          String   @default("user")
+  discordId     String?  @unique @map("discord_id")
   createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt     DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
 
-  sessions Session[]
-  accounts Account[]
+  sessions        Session[]
+  accounts        Account[]
+  extensionTokens ExtensionToken[]
+  syncDocuments   SyncDocument[]
+  devices         Device[]
+  presenceLikes   PresenceLike[]
 
   @@map("users")
 }

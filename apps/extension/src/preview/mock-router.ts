@@ -1,6 +1,15 @@
 import type { PayloadOf, ResponseOf, RouterMessageType } from "@/background/router/contracts"
 import type { OnboardingState } from "@/background/storage/onboarding.store"
-import type { CurrentActivity, ExtensionSettings, InstalledPresences, NativeStatus, RuntimeLogEntry, TabActivity, TabState } from "@/shared/types"
+import type {
+  AccountSnapshot,
+  CurrentActivity,
+  ExtensionSettings,
+  InstalledPresences,
+  NativeStatus,
+  RuntimeLogEntry,
+  TabActivity,
+  TabState,
+} from "@/shared/types"
 import type { MockStorageArea } from "@/preview/mock-storage"
 import { toStoredPresence, type CatalogFixture } from "@/preview/preview-fixtures"
 import { previewParams } from "@/preview/preview-params"
@@ -23,6 +32,21 @@ const CATALOG_LATENCY_MS = 250
 const INSTALL_LATENCY_MS = 600
 const REPORT_LATENCY_MS = 500
 const SCRIPTS_GRANT_DELAY_MS = 4000
+const SYNC_LATENCY_MS = 700
+const LAST_SYNC_AGE_MS = 4 * 60_000
+const PREVIEW_USER = { id: "preview-user", name: "Gaëtan", image: null, discordId: "1" }
+
+const initialAccount = (): AccountSnapshot => {
+  const { account } = previewParams
+  if (account === "out") return { signedIn: false }
+  return {
+    signedIn: true,
+    user: PREVIEW_USER,
+    lastSyncedAt: account === "choice" ? null : Date.now() - LAST_SYNC_AGE_MS,
+    error: account === "error" ? "NETWORK" : null,
+    pendingChoice: account === "choice",
+  }
+}
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -32,6 +56,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
   const [firstSlug, secondSlug] = installedSlugs
   const likes = new Map<string, boolean>()
   let muted = false
+  let account = initialAccount()
   let userScriptsEnabled = !previewParams.scriptsDenied
   let native: NativeStatus = {
     connected: scenario !== "nohost",
@@ -169,6 +194,28 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
     SYNC_PRESENCE_SCRIPTS: () => ({ ok: true }),
     TRACK_EVENT: () => ({ ok: true }),
     INSTALL_LOCAL_PRESENCE_ZIP: () => ({ ok: false, error: "PREVIEW" }),
+    GET_ACCOUNT: () => account,
+    START_ACCOUNT_CONNECT: () => {
+      account = { signedIn: true, user: PREVIEW_USER, lastSyncedAt: null, error: null, pendingChoice: true }
+      return { ok: true }
+    },
+    NOWLY_SESSION: () => ({ ok: true }),
+    SYNC_ACCOUNT: async () => {
+      await delay(SYNC_LATENCY_MS)
+      if (account.signedIn && !account.pendingChoice && !account.error) account = { ...account, lastSyncedAt: Date.now() }
+      return account
+    },
+    RESOLVE_SYNC_CHOICE: async () => {
+      await delay(SYNC_LATENCY_MS)
+      if (account.signedIn) account = { ...account, pendingChoice: false, lastSyncedAt: Date.now(), error: null }
+      return account
+    },
+    SIGN_OUT_ACCOUNT: () => (account = { signedIn: false }),
+    STOP_ACCOUNT_SYNC: async () => {
+      await delay(SYNC_LATENCY_MS)
+      account = { signedIn: false }
+      return { ok: true }
+    },
   }
 
   const dispatch = async <K extends RouterMessageType>(type: K, payload: PayloadOf<K>): Promise<ResponseOf<K> | undefined> => {

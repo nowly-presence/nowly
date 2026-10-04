@@ -1,5 +1,6 @@
 import { RiStarFill } from "@remixicon/react"
 import { useExtensionState } from "@/hooks/extension-state-provider"
+import { useFeatureReveals } from "@/hooks/feature-reveal-provider"
 import { useI18n } from "@/hooks/i18n-provider"
 import { useNav } from "@/hooks/navigation-provider"
 import { openUrl, storeReviews } from "@/shared/browser-links"
@@ -13,7 +14,8 @@ export const ReviewPrompt = () => {
   const { state } = useExtensionState()
   const { t } = useI18n()
   const { stack } = useNav()
-  const eligible = state.ready && Object.keys(state.presences).length > 0 && stack.length === 0
+  const { activeId } = useFeatureReveals()
+  const eligible = state.ready && Object.keys(state.presences).length > 0 && stack.length === 0 && activeId === null
   const { open, dismiss } = useReviewPrompt(eligible)
   const { store, url } = storeReviews()
 

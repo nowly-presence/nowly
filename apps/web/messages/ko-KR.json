@@ -771,6 +771,14 @@
     "roadmap": {
       "title": "로드맵",
       "description": "Nowly의 다음 단계와 현재 우선순위를 확인하세요."
+    },
+    "extensionConnect": {
+      "title": "확장 프로그램 연결",
+      "description": "Discord로 로그인해 브라우저 사이에서 Nowly를 동기화하세요."
+    },
+    "account": {
+      "title": "Nowly 계정",
+      "description": "연결된 기기, 내 데이터, 로그인."
     }
   },
   "roadmapPage": {
@@ -876,7 +884,7 @@
     "badge": "개인정보 보호",
     "title": "개인정보처리방침",
     "description": "Nowly가 당신의 데이터를 어떻게 처리하는지, 무엇이 기기에 남는지, 무엇이 동의에 달려 있는지.",
-    "last-updated": "최종 업데이트: 2026년 9월 17일.",
+    "last-updated": "최종 업데이트: 2026년 10월 4일.",
     "intro": "본 방침은 데이터 관리자인 <strong>{publisherName}</strong>(\"당사\")가 Nowly와 관련하여 개인 데이터를 어떻게 처리하는지 설명합니다. Rich Presence 활동은 사용자의 브라우저에서 <strong>사용자의 기기에 있는</strong> Discord 클라이언트로 전송됩니다. 당사 서버를 거치지 않습니다. 선택적 이용 통계와 일부 웹사이트 기능은 아래 설명대로 당사 API 또는 처리자가 관여합니다.",
     "sections": [
       {
@@ -902,6 +910,10 @@
       {
         "title": "이용 통계 (선택 가입)",
         "body": "분석은 <strong>기본적으로 꺼져 있습니다</strong>. 온보딩 중 또는 이후 확장 프로그램 설정에서 활성화하면 당사 API가 다음을 받을 수 있습니다:<ul><li>기기 UUID(가명: Discord나 Google 계정은 아니지만, 설치를 식별할 수 있으므로 GDPR상 개인 데이터로 간주됨).</li><li>브라우저, 운영체제, 언어, 확장 프로그램 버전, 데스크톱 앱 버전.</li><li>설치된 프레즌스 슬러그/버전 및 제한된 페이로드의 이용 이벤트(예: 설치, 하트비트, 평가).</li></ul>이는 Nowly를 개선하고 프레즌스의 인기를 보여주는 데 사용됩니다. 이 설정을 끄면 <strong>추가 수집이 중단</strong>되고 동의 철회가 기록됩니다. 이미 저장된 이벤트가 자동으로 삭제되지는 <strong>않습니다</strong>. 서버 측 기록 삭제를 원하시면 기기 ID(확장 프로그램에서 확인 가능) 또는 기록을 찾을 수 있는 다른 정보와 함께 <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>로 이메일을 보내주세요."
+      },
+      {
+        "title": "Nowly 계정과 동기화 (선택 사항)",
+        "body": "로그인은 <strong>선택 사항</strong>입니다. 계정이 없어도 확장 프로그램은 이전과 똑같이 동작합니다. nowly.me 또는 확장 프로그램 설정에서 Discord로 로그인하면 Discord 사용자 ID, 이름, 아바타, 이메일 주소를 받아 Nowly 계정을 만듭니다. 브라우저 사이에서 확장 프로그램을 동기화하기 위해 API는 다음 데이터의 사본을 보관합니다.<ul><li>확장 프로그램 설정(테마, 언어, 일정, 우선순위). 개발자 설정은 제외합니다.</li><li>설치한 프레즌스 목록, 켜짐 여부와 일정.</li><li>각 프레즌스의 설정.</li><li>이미 확인한 새 기능.</li></ul>현재 활동, 탭, 방문한 페이지, 기록은 <strong>절대</strong> 보관하지 않습니다. 연결한 기기는 그 기기에서 누른 좋아요와 함께 계정에 연결됩니다. 법적 근거: 요청하신 서비스의 제공(GDPR 제6조 제1항 b호). 이 데이터는 계정이 존재하는 동안 보관됩니다. 확장 프로그램에서 “동기화 중지”를 누르면 동기화된 사본이 지워집니다. <a href=\"/account\">계정 페이지</a>에서 데이터를 다운로드하거나, 기기 연결을 해제하거나, 모든 데이터를 지우는 계정 삭제를 할 수 있습니다."
       },
       {
         "title": "Discord",
@@ -1135,5 +1147,54 @@
         "category": "general"
       }
     ]
+  },
+  "extensionConnectPage": {
+    "eyebrow": "확장 프로그램",
+    "title": "확장 프로그램 연결",
+    "description": "Discord로 로그인하면 프레즌스와 설정을 브라우저 사이에서 동기화할 수 있습니다. 선택 사항이며, 계정이 없어도 Nowly는 지금처럼 동작합니다.",
+    "checking": "계정을 확인하는 중...",
+    "sign-in-title": "Discord로 로그인",
+    "sign-in-description": "Nowly는 Discord 이름, 아바타, 이메일 주소만 읽습니다. 활동은 절대 Nowly 서버를 거치지 않습니다.",
+    "sign-in": "Discord로 계속하기",
+    "connect-title": "이 브라우저 연결",
+    "connect-description": "Nowly 확장 프로그램이 {name} 계정에 연결됩니다.",
+    "connect": "확장 프로그램 연결",
+    "connecting": "확장 프로그램을 연결하는 중...",
+    "done-title": "완료되었습니다",
+    "done-description": "확장 프로그램이 연결되었습니다. 이 탭을 닫고 Nowly로 돌아가세요.",
+    "not-detected-title": "확장 프로그램을 찾을 수 없음",
+    "not-detected-description": "Nowly가 설치된 브라우저에서 이 페이지를 열거나 먼저 확장 프로그램을 설치하세요.",
+    "error-title": "문제가 발생했습니다",
+    "error-description": "확장 프로그램을 연결하지 못했습니다. 다시 시도하거나 확장 프로그램 설정에서 다시 시작하세요.",
+    "retry": "다시 시도",
+    "signed-in-as": "{name}(으)로 로그인했습니다.",
+    "switch-account": "본인이 아닌가요? 계정 전환"
+  },
+  "accountPage": {
+    "eyebrow": "계정",
+    "title": "Nowly 계정",
+    "description": "계정에 연결된 기기, 데이터, 로그인을 관리합니다.",
+    "checking": "계정을 불러오는 중...",
+    "sign-in-title": "Discord로 로그인",
+    "sign-in-description": "계정은 선택 사항입니다. 확장 프로그램이 프레즌스와 설정을 브라우저 사이에서 동기화할 수 있게 해 줍니다.",
+    "sign-in": "Discord로 계속하기",
+    "provider-discord": "Discord로 로그인됨",
+    "sign-out": "로그아웃",
+    "devices-title": "연결된 기기",
+    "devices-description": "이 계정에 확장 프로그램이 연결된 브라우저입니다.",
+    "devices-empty": "아직 연결된 기기가 없습니다.",
+    "device-unknown": "알 수 없는 브라우저",
+    "device-last-seen": "마지막 확인: {date}",
+    "unlink": "연결 해제",
+    "unlink-confirm": "이 브라우저는 더 이상 계정과 동기화되지 않습니다. 로컬 데이터는 그대로 남습니다.",
+    "data-title": "내 데이터",
+    "data-description": "Nowly가 이 계정에 보관하는 모든 데이터를 다운로드하거나 계정을 삭제하세요. 삭제하면 동기화된 사본이 지워지고 기기 연결도 해제됩니다.",
+    "export": "내 데이터 다운로드",
+    "export-success": "데이터를 다운로드했습니다.",
+    "delete": "계정 삭제",
+    "delete-confirm": "Nowly 계정과 확장 프로그램의 동기화된 사본이 영구적으로 삭제됩니다. 되돌릴 수 없습니다.",
+    "delete-success": "계정이 삭제되었습니다.",
+    "local-note": "확장 프로그램이 기기에 저장한 데이터는 영향을 받지 않습니다. 확장 프로그램 설정에서 지울 수 있습니다.",
+    "action-error": "문제가 발생했습니다. 다시 시도해 주세요."
   }
 }

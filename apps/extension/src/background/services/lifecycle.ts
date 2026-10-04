@@ -3,6 +3,7 @@ import { drainInstallQueue, installBundledPresences } from "@/background/manager
 import { trackAnalytics } from "@/background/analytics-client"
 import { addRuntimeLog } from "@/background/runtime-logs"
 import { refreshPresenceLanguage, syncPresenceScripts } from "@/background/runtime/presence-scripts"
+import { runAccountSync } from "@/background/services/account-sync"
 import { initializeCustomApiUrl } from "@/background/services/api-state"
 import { setFocusedTabId } from "@/background/services/background-context"
 import { registerContextMenu } from "@/background/services/context-menu"
@@ -126,6 +127,7 @@ const runBootBackground = async (options: { restoreBadge?: boolean; syncScripts?
   void drainInstallQueue()
   if (options.restoreBadge) await restoreActivityBadge()
   if (options.syncScripts !== false) await syncPresenceScripts(presences)
+  void runAccountSync("full")
   return presences
 }
 

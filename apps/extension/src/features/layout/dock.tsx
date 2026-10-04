@@ -1,7 +1,7 @@
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react"
+import { Fragment, useLayoutEffect, useRef, useState, type ReactNode } from "react"
 import { cn } from "@/ui/cn"
 
-type DockItem<T extends string> = { value: T; label: string; icon: ReactNode; activeIcon: ReactNode; badge?: "live" | number }
+type DockItem<T extends string> = { value: T; label: string; icon: ReactNode; activeIcon: ReactNode; badge?: "live" | number; wrap?: (button: ReactNode) => ReactNode }
 
 const ITEM_CHROME = 18 + 8 + 28
 
@@ -40,7 +40,7 @@ export const Dock = <T extends string>({ items, value, onChange, label }: { item
         {items.map((item) => {
           const active = item.value === value
           const showLabel = active || !compact
-          return (
+          const button = (
             <button
               key={item.value}
               type="button"
@@ -66,6 +66,7 @@ export const Dock = <T extends string>({ items, value, onChange, label }: { item
               {showLabel && <span className="min-w-0 truncate">{item.label}</span>}
             </button>
           )
+          return item.wrap ? <Fragment key={item.value}>{item.wrap(button)}</Fragment> : button
         })}
       </div>
     </nav>

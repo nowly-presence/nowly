@@ -71,21 +71,35 @@ export const getPresenceStats = async (slug: string): Promise<PresenceStats> => 
   }
 }
 
+const linkedUserId = async (deviceId: string): Promise<string | null> => {
+  const device = await getPrisma().device.findUnique({ where: { deviceId }, select: { userId: true } })
+  return device?.userId ?? null
+}
+
 export const likePresence = async (slug: string, deviceId: string): Promise<void> => {
-  await getPrisma().presenceLike.upsert({
+  const prisma = getPrisma()
+  const userId = await linkedUserId(deviceId)
+  if (userId && (await prisma.presenceLike.count({ where: { slug, userId } })) > 0) return
+  await prisma.presenceLike.upsert({
     where: { slug_deviceId: { slug, deviceId } },
-    create: { slug, deviceId },
+    create: { slug, deviceId, userId },
     update: {},
   })
 }
 
 export const unlikePresence = async (slug: string, deviceId: string): Promise<void> => {
-  await getPrisma().presenceLike.deleteMany({ where: { slug, deviceId } })
+  const userId = await linkedUserId(deviceId)
+  await getPrisma().presenceLike.deleteMany({
+    where: userId ? { slug, OR: [{ deviceId }, { userId }] } : { slug, deviceId },
+  })
 }
 
 export const hasLikedPresence = async (slug: string, deviceId: string): Promise<boolean> => {
-  const like = await getPrisma().presenceLike.findUnique({ where: { slug_deviceId: { slug, deviceId } } })
-  return like !== null
+  const userId = await linkedUserId(deviceId)
+  const count = await getPrisma().presenceLike.count({
+    where: userId ? { slug, OR: [{ deviceId }, { userId }] } : { slug, deviceId },
+  })
+  return count > 0
 }
 
 export const getLikeCount = async (slug: string): Promise<number> => {

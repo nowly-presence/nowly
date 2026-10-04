@@ -7,3 +7,4 @@
 export * from "./constants"
 export * from "./format"
 export * from "./json"
+export * from "./sync"

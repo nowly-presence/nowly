@@ -771,6 +771,14 @@
     "roadmap": {
       "title": "Hoja de ruta",
       "description": "Descubre lo que viene para Nowly y cuáles son nuestras prioridades."
+    },
+    "extensionConnect": {
+      "title": "Conectar la extensión",
+      "description": "Inicia sesión con Discord para sincronizar Nowly entre tus navegadores."
+    },
+    "account": {
+      "title": "Tu cuenta de Nowly",
+      "description": "Dispositivos vinculados, tus datos y tu sesión."
     }
   },
   "roadmapPage": {
@@ -876,7 +884,7 @@
     "badge": "Privacidad",
     "title": "Política de privacidad",
     "description": "Cómo trata Nowly tus datos, qué permanece en tu dispositivo y qué depende de tu consentimiento.",
-    "last-updated": "Última actualización: 17 de septiembre de 2026.",
+    "last-updated": "Última actualización: 4 de octubre de 2026.",
     "intro": "Esta política describe cómo <strong>{publisherName}</strong> («nosotros»), como responsable del tratamiento, trata datos personales en relación con Nowly. La actividad de Rich Presence se envía del navegador al cliente de Discord <strong>en tu equipo</strong>. No pasa por nuestros servidores. Las estadísticas de uso opcionales y algunas funciones del sitio sí implican nuestra API o encargados del tratamiento, como se indica a continuación.",
     "sections": [
       {
@@ -902,6 +910,10 @@
       {
         "title": "Estadísticas de uso (opt-in)",
         "body": "Las estadísticas están <strong>desactivadas por defecto</strong>. Si las activas en la bienvenida o más tarde en ajustes, nuestra API puede recibir:<ul><li>Tu UUID de dispositivo (seudónimo: no es tu cuenta de Discord o Google, pero sigue siendo un dato personal a efectos del RGPD porque identifica tu instalación).</li><li>Navegador, sistema, idioma, versiones de la extensión y de la app de escritorio.</li><li>Identificadores/versiones de presencias instaladas y eventos de uso (instalaciones, latidos, valoraciones) con una carga útil limitada.</li></ul>Las usamos para mejorar Nowly y mostrar la popularidad de las presencias. Desactivar la opción <strong>detiene la recogida</strong> y registra la retirada del consentimiento. <strong>No borra por sí sola</strong> los eventos ya almacenados. Para la supresión en el servidor, escribe a <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> con el ID de dispositivo (visible en la extensión) u otro dato que permita localizar el registro."
+      },
+      {
+        "title": "Cuenta de Nowly y sincronización (opcionales)",
+        "body": "Iniciar sesión es <strong>opcional</strong>: sin cuenta, la extensión funciona exactamente igual que antes. Si inicias sesión con Discord, en nowly.me o desde los ajustes de la extensión, recibimos tu ID de usuario de Discord, tu nombre, tu avatar y tu correo electrónico, y creamos una cuenta de Nowly. Para sincronizar la extensión entre tus navegadores, nuestra API guarda una copia de:<ul><li>los ajustes de la extensión (tema, idiomas, horarios, orden de prioridad), salvo los ajustes de desarrollador;</li><li>la lista de presencias instaladas, si están activadas y sus horarios;</li><li>tus ajustes de cada presencia;</li><li>las novedades que ya has descubierto.</li></ul><strong>Nunca</strong> guardamos tu actividad actual, tus pestañas, las páginas que visitas ni tu historial. Los dispositivos que conectas quedan vinculados a tu cuenta, junto con los «me gusta» que han dado. Base jurídica: la prestación del servicio que solicitas (art. 6.1.b). Estos datos se conservan mientras exista tu cuenta. En la extensión, «Dejar de sincronizar» borra la copia sincronizada. En la <a href=\"/account\">página de tu cuenta</a> puedes descargar tus datos, desvincular un dispositivo o eliminar tu cuenta, lo que lo borra todo."
       },
       {
         "title": "Discord",
@@ -1135,5 +1147,54 @@
         "category": "general"
       }
     ]
+  },
+  "extensionConnectPage": {
+    "eyebrow": "Extensión",
+    "title": "Conectar la extensión",
+    "description": "Inicia sesión con Discord para sincronizar tus presencias y tus ajustes entre tus navegadores. Es opcional: sin cuenta, Nowly funciona como siempre.",
+    "checking": "Comprobando tu cuenta...",
+    "sign-in-title": "Iniciar sesión con Discord",
+    "sign-in-description": "Nowly solo lee tu nombre, tu avatar y tu correo electrónico de Discord. Tu actividad nunca pasa por nuestros servidores.",
+    "sign-in": "Continuar con Discord",
+    "connect-title": "Conectar este navegador",
+    "connect-description": "Tu extensión de Nowly se vinculará a la cuenta {name}.",
+    "connect": "Conectar la extensión",
+    "connecting": "Conectando la extensión...",
+    "done-title": "Listo",
+    "done-description": "Tu extensión está conectada. Puedes cerrar esta pestaña y volver a Nowly.",
+    "not-detected-title": "Extensión no detectada",
+    "not-detected-description": "Abre esta página en el navegador donde está instalado Nowly, o instala primero la extensión.",
+    "error-title": "Algo salió mal",
+    "error-description": "No se pudo conectar la extensión. Inténtalo de nuevo o vuelve a empezar desde los ajustes de la extensión.",
+    "retry": "Reintentar",
+    "signed-in-as": "Sesión iniciada como {name}.",
+    "switch-account": "¿No eres tú? Cambiar de cuenta"
+  },
+  "accountPage": {
+    "eyebrow": "Cuenta",
+    "title": "Tu cuenta de Nowly",
+    "description": "Gestiona los dispositivos vinculados a tu cuenta, tus datos y tu sesión.",
+    "checking": "Cargando tu cuenta...",
+    "sign-in-title": "Iniciar sesión con Discord",
+    "sign-in-description": "La cuenta es opcional. Permite que la extensión sincronice tus presencias y tus ajustes entre tus navegadores.",
+    "sign-in": "Continuar con Discord",
+    "provider-discord": "Sesión iniciada con Discord",
+    "sign-out": "Cerrar sesión",
+    "devices-title": "Dispositivos vinculados",
+    "devices-description": "Los navegadores donde la extensión está conectada a esta cuenta.",
+    "devices-empty": "Todavía no hay ningún dispositivo vinculado.",
+    "device-unknown": "Navegador desconocido",
+    "device-last-seen": "Visto por última vez el {date}",
+    "unlink": "Desvincular",
+    "unlink-confirm": "Este navegador dejará de sincronizarse con tu cuenta. Sus datos locales se quedan en él.",
+    "data-title": "Tus datos",
+    "data-description": "Descarga todo lo que Nowly guarda para esta cuenta o elimina la cuenta. Al eliminarla se borra la copia sincronizada y se desvinculan tus dispositivos.",
+    "export": "Descargar mis datos",
+    "export-success": "Tus datos se han descargado.",
+    "delete": "Eliminar mi cuenta",
+    "delete-confirm": "Esto elimina de forma permanente tu cuenta de Nowly y la copia sincronizada de tu extensión. No se puede deshacer.",
+    "delete-success": "Tu cuenta se ha eliminado.",
+    "local-note": "Los datos que la extensión guarda en tus dispositivos no se ven afectados. Puedes borrarlos desde los ajustes de la extensión.",
+    "action-error": "Se ha producido un error. Inténtalo de nuevo."
   }
 }

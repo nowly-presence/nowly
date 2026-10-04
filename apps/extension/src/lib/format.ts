@@ -20,6 +20,21 @@ export const formatTime = (timestamp: number, locale: Locale): string =>
 export const formatDateTime = (timestamp: number, locale: Locale): string =>
   new Intl.DateTimeFormat(LOCALE_LONG_MAP[locale], { dateStyle: "medium", timeStyle: "short" }).format(timestamp)
 
+const RELATIVE_UNITS: ReadonlyArray<[Intl.RelativeTimeFormatUnit, number]> = [
+  ["day", 86_400_000],
+  ["hour", 3_600_000],
+  ["minute", 60_000],
+]
+
+export const formatRelative = (timestamp: number, now: number, locale: Locale): string => {
+  const format = new Intl.RelativeTimeFormat(LOCALE_LONG_MAP[locale], { numeric: "auto" })
+  const elapsed = timestamp - now
+  for (const [unit, size] of RELATIVE_UNITS) {
+    if (Math.abs(elapsed) >= size) return format.format(Math.round(elapsed / size), unit)
+  }
+  return format.format(0, "minute")
+}
+
 export const formatDate = (value: string | number | null | undefined, locale: Locale): string | null => {
   if (!value) return null
   const date = new Date(value)
