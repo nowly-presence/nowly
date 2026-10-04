@@ -4,6 +4,7 @@ import { RiMenuLine } from "@remixicon/react";
 import { lazy, Suspense, useState } from "react";
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { BrandLockup } from "@/features/layout/components/brand-lockup";
+import { NavbarLinks } from "@/features/layout/components/navbar-links";
 import { buttonVariants } from "@nowly/ui/button-variants";
 import { cn } from "@nowly/ui/utils";
 
@@ -46,28 +47,8 @@ export const Navbar = () => {
           />
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
-          {links.map((link) =>
-            link.external ? (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-sm text-foreground transition-opacity hover:opacity-80"
-                rel="noreferrer"
-                target="_blank"
-              >
-                {link.label}
-              </a>
-            ) : (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm text-foreground transition-opacity hover:opacity-80"
-              >
-                {link.label}
-              </Link>
-            ),
-          )}
+        <nav className="hidden items-center gap-5 lg:flex">
+          <NavbarLinks links={links} />
           <ExtensionStoreButton {...storeButtonProps} />
         </nav>
 
