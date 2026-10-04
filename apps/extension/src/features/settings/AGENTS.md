@@ -21,5 +21,7 @@ Create `sections/<name>-section.tsx` and render it in `settings-view.tsx`.
 
 - `suggestPresences` (default on) only hides the "supported site" row of the Activity tab's current-tab section; no background behaviour depends on it. `hiddenSuggestions` holds the slugs hidden one by one with the "Don't show again" link under that row (undo in the toast); the sharing section shows a "Hidden suggestions" row with a reset while it is non-empty.
 
+- Account and sync (`sections/account-section.tsx`, between Appearance and Privacy): signed out, one explanatory row and "Sign in with Discord" (`START_ACCOUNT_CONNECT` opens nowly.me). Signed in: avatar, name and last sync (relative time, `formatRelative`), "Sync", "Manage your account on nowly.me" (`/account`), "Sign out" (keeps local data) and "Stop syncing and erase the online copy" behind a confirmation sheet. While the first-sync choice is pending, the first row offers "Choose", which opens `account-choice-sheet.tsx` (also mounted app-wide as `AccountChoicePrompt`).
+
 ## Notable dependencies
-`EXPORT_DEVICE_DATA` / `DELETE_DEVICE_DATA` (`/devices/:deviceId`, need the device token minted by `/devices/sync`), `INSTALL_LOCAL_PRESENCE_ZIP` (canary only), `ui/sortable-list` (priority order).
+`EXPORT_DEVICE_DATA` / `DELETE_DEVICE_DATA` (`/devices/:deviceId`, need the device token minted by `/devices/sync`), `INSTALL_LOCAL_PRESENCE_ZIP` (canary only), `ui/sortable-list` (priority order), account messages (`GET_ACCOUNT`, `START_ACCOUNT_CONNECT`, `SYNC_ACCOUNT`, `RESOLVE_SYNC_CHOICE`, `SIGN_OUT_ACCOUNT`, `STOP_ACCOUNT_SYNC`). Canary developer tools also have "Replay Nolo" (`useFeatureReveals().replay`).
