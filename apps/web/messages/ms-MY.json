@@ -29,6 +29,8 @@
     "description": "Nowly mengubah aktiviti anda menjadi kehadiran Discord yang kaya dan dinamik.",
     "install": "Pasang Nowly",
     "library": "Semak imbas perpustakaan",
+    "discord": "Sertai komuniti Discord",
+    "discord-members": "{count, plural, other {# ahli}}",
     "cards": {
       "netflix": {
         "app-label": "Menonton Netflix",
@@ -206,6 +208,28 @@
     "docs": "Baca dokumentasi",
     "file": "presence.ts"
   },
+  "community": {
+    "eyebrow": "Komuniti",
+    "title": "Sertai komuniti Nowly",
+    "description": "Tanya soalan, cadangkan platform baharu dan kongsi petua dengan pengguna Nowly yang lain.",
+    "cta": "Sertai Discord",
+    "members": "{count, plural, other {# ahli}}",
+    "online": "{count, number} dalam talian",
+    "items": [
+      {
+        "title": "Bantuan daripada insan sebenar",
+        "description": "Masalah pemasangan atau kehadiran yang tidak muncul? Buka tiket dan bercakap terus dengan pasukan."
+      },
+      {
+        "title": "Bentuk apa yang seterusnya",
+        "description": "Platform tiada, kehadiran rosak atau ada idea bagus? Beritahu kami terus di Discord."
+      },
+      {
+        "title": "Kenali pengguna lain",
+        "description": "Kongsi persediaan anda, tukar petua dan ikuti perkembangan terkini Nowly."
+      }
+    ]
+  },
   "store": {
     "download-chrome": "Muat turun untuk Chrome",
     "download-firefox": "Muat turun untuk Firefox"
@@ -276,7 +300,8 @@
       "tools": "Alat",
       "learning": "Pembelajaran",
       "other": "Lain-lain"
-    }
+    },
+    "discord-cta": "Minta di Discord"
   },
   "authorPage": {
     "badge": "Penulis",
@@ -339,7 +364,10 @@
     "unlike": "Nyahsuka",
     "stats": "Statistik",
     "stat-installs": "{count} pemasangan",
-    "stat-active": "{count} aktif"
+    "stat-active": "{count} aktif",
+    "community-title": "Perlukan bantuan dengan {name}?",
+    "community-description": "Tanya soalan atau kongsi idea dengan komuniti Nowly di Discord.",
+    "community-cta": "Sertai Discord"
   },
   "desktopPage": {
     "eyebrow": "Aplikasi desktop",
@@ -496,7 +524,10 @@
     "meta-title": "Nowly {version}",
     "missing": "Nota untuk versi ini belum lagi ada di laman web. Anda masih boleh melayari log perubahan penuh dalam dokumentasi.",
     "current-on-chrome": "Kini tersedia di Chrome Web Store",
-    "current-on-firefox": "Kini tersedia di Firefox Add-ons"
+    "current-on-firefox": "Kini tersedia di Firefox Add-ons",
+    "discord-title": "Ada maklum balas tentang kemas kini ini?",
+    "discord-description": "Pepijat, idea atau sekadar pendapat: beritahu kami terus di Discord.",
+    "discord-cta": "Sertai Discord"
   },
   "canaryPage": {
     "eyebrow": "Canary",

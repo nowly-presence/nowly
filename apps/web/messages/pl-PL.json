@@ -29,6 +29,8 @@
     "description": "Nowly zamienia Twoją aktywność w bogatą, dynamiczną obecność na Discordzie.",
     "install": "Zainstaluj Nowly",
     "library": "Przeglądaj bibliotekę",
+    "discord": "Dołącz do społeczności na Discordzie",
+    "discord-members": "{count, plural, one {# członek} few {# członków} many {# członków} other {# członków}}",
     "cards": {
       "netflix": {
         "app-label": "Ogląda Netflix",
@@ -206,6 +208,28 @@
     "docs": "Przeczytaj dokumentację",
     "file": "presence.ts"
   },
+  "community": {
+    "eyebrow": "Społeczność",
+    "title": "Dołącz do społeczności Nowly",
+    "description": "Zadawaj pytania, proponuj nowe platformy i wymieniaj się wskazówkami z innymi użytkownikami Nowly.",
+    "cta": "Dołącz do Discorda",
+    "members": "{count, plural, one {# członek} few {# członków} many {# członków} other {# członków}}",
+    "online": "{count, number} online",
+    "items": [
+      {
+        "title": "Pomoc od prawdziwych ludzi",
+        "description": "Problem z instalacją albo obecność się nie wyświetla? Otwórz zgłoszenie i porozmawiaj bezpośrednio z zespołem."
+      },
+      {
+        "title": "Wpływaj na to, co dalej",
+        "description": "Brakuje platformy, obecność nie działa albo masz dobry pomysł? Napisz do nas bezpośrednio na Discordzie."
+      },
+      {
+        "title": "Poznaj innych użytkowników",
+        "description": "Pokaż swoją konfigurację, wymieniaj się wskazówkami i bądź na bieżąco z nowościami w Nowly."
+      }
+    ]
+  },
   "store": {
     "download-chrome": "Pobierz dla Chrome",
     "download-firefox": "Pobierz dla Firefox"
@@ -276,7 +300,8 @@
       "tools": "Narzędzia",
       "learning": "Nauka",
       "other": "Inne"
-    }
+    },
+    "discord-cta": "Zapytaj na Discordzie"
   },
   "authorPage": {
     "badge": "Autor",
@@ -339,7 +364,10 @@
     "unlike": "Cofnij polubienie",
     "stats": "Statystyki",
     "stat-installs": "{count} instalacji",
-    "stat-active": "{count} aktywnych"
+    "stat-active": "{count} aktywnych",
+    "community-title": "Potrzebujesz pomocy z {name}?",
+    "community-description": "Zadaj pytanie lub podziel się pomysłem ze społecznością Nowly na Discordzie.",
+    "community-cta": "Dołącz do Discorda"
   },
   "desktopPage": {
     "eyebrow": "Aplikacja desktopowa",
@@ -496,7 +524,10 @@
     "meta-title": "Nowly {version}",
     "missing": "Informacje o tej wersji nie są jeszcze na stronie. Możesz jednak przejrzeć pełny changelog w dokumentacji.",
     "current-on-chrome": "Aktualnie dostępne w Chrome Web Store",
-    "current-on-firefox": "Aktualnie dostępne w Firefox Add-ons"
+    "current-on-firefox": "Aktualnie dostępne w Firefox Add-ons",
+    "discord-title": "Masz uwagi do tej aktualizacji?",
+    "discord-description": "Błąd, pomysł albo po prostu opinia: napisz do nas bezpośrednio na Discordzie.",
+    "discord-cta": "Dołącz do Discorda"
   },
   "canaryPage": {
     "eyebrow": "Canary",

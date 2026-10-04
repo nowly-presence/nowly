@@ -29,6 +29,8 @@
     "description": "Το Nowly μετατρέπει τη δραστηριότητά σου σε μια πλούσια, δυναμική παρουσία στο Discord.",
     "install": "Εγκατάσταση Nowly",
     "library": "Περιήγηση στη βιβλιοθήκη",
+    "discord": "Γίνε μέλος της κοινότητας στο Discord",
+    "discord-members": "{count, plural, one {# μέλος} other {# μέλη}}",
     "cards": {
       "netflix": {
         "app-label": "Βλέπει Netflix",
@@ -206,6 +208,28 @@
     "docs": "Διάβασε την τεκμηρίωση",
     "file": "presence.ts"
   },
+  "community": {
+    "eyebrow": "Κοινότητα",
+    "title": "Γίνε μέλος της κοινότητας του Nowly",
+    "description": "Κάνε ερωτήσεις, πρότεινε νέες πλατφόρμες και αντάλλαξε συμβουλές με άλλους χρήστες του Nowly.",
+    "cta": "Συμμετοχή στο Discord",
+    "members": "{count, plural, one {# μέλος} other {# μέλη}}",
+    "online": "{count, number} online",
+    "items": [
+      {
+        "title": "Βοήθεια από πραγματικούς ανθρώπους",
+        "description": "Πρόβλημα στην εγκατάσταση ή μια παρουσία που δεν εμφανίζεται; Άνοιξε ένα ticket και μίλησε απευθείας με την ομάδα."
+      },
+      {
+        "title": "Διαμόρφωσε τι έρχεται",
+        "description": "Λείπει μια πλατφόρμα, χάλασε μια παρουσία ή έχεις μια καλή ιδέα; Πες μας το απευθείας στο Discord."
+      },
+      {
+        "title": "Γνώρισε άλλους χρήστες",
+        "description": "Μοιράσου τη ρύθμισή σου, αντάλλαξε συμβουλές και μάθε τα νέα του Nowly."
+      }
+    ]
+  },
   "store": {
     "download-chrome": "Λήψη για Chrome",
     "download-firefox": "Λήψη για Firefox"
@@ -276,7 +300,8 @@
       "tools": "Εργαλεία",
       "learning": "Εκμάθηση",
       "other": "Άλλα"
-    }
+    },
+    "discord-cta": "Ζήτα την στο Discord"
   },
   "authorPage": {
     "badge": "Δημιουργός",
@@ -339,7 +364,10 @@
     "unlike": "Δεν μου αρέσει πια",
     "stats": "Στατιστικά",
     "stat-installs": "{count} εγκαταστάσεις",
-    "stat-active": "{count} ενεργοί"
+    "stat-active": "{count} ενεργοί",
+    "community-title": "Χρειάζεσαι βοήθεια με το {name};",
+    "community-description": "Κάνε μια ερώτηση ή μοιράσου μια ιδέα με την κοινότητα του Nowly στο Discord.",
+    "community-cta": "Συμμετοχή στο Discord"
   },
   "desktopPage": {
     "eyebrow": "Εφαρμογή desktop",
@@ -496,7 +524,10 @@
     "meta-title": "Nowly {version}",
     "missing": "Οι σημειώσεις για αυτή την έκδοση δεν είναι ακόμη στον ιστότοπο. Μπορείς πάντα να δεις το πλήρες ιστορικό αλλαγών στην τεκμηρίωση.",
     "current-on-chrome": "Διαθέσιμο τώρα στο Chrome Web Store",
-    "current-on-firefox": "Διαθέσιμο τώρα στο Firefox Add-ons"
+    "current-on-firefox": "Διαθέσιμο τώρα στο Firefox Add-ons",
+    "discord-title": "Έχεις σχόλια για αυτή την ενημέρωση;",
+    "discord-description": "Ένα σφάλμα, μια ιδέα ή απλώς μια σκέψη: πες μας το απευθείας στο Discord.",
+    "discord-cta": "Συμμετοχή στο Discord"
   },
   "canaryPage": {
     "eyebrow": "Canary",

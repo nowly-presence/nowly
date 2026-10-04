@@ -1,4 +1,5 @@
 import { ButtonLink } from "@/components/button-link";
+import { DiscordCallout } from "@/components/discord-callout";
 import { ButtonAnchor } from "@nowly/ui";
 
 
@@ -118,6 +119,16 @@ export const ChangelogReleaseView = async ({
             {t("library")}
           </ButtonLink>
         </div>
+
+        {release ? (
+          <DiscordCallout
+            layout="row"
+            className="mt-12 max-w-3xl"
+            title={t("discord-title")}
+            description={t("discord-description")}
+            cta={t("discord-cta")}
+          />
+        ) : null}
       </div>
     </div>
   );

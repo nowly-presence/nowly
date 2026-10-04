@@ -3,7 +3,7 @@
 import { Toaster } from "@nowly/ui";
 import { PaginatedLibraryGrid } from "@/features/library/components/paginated-library-grid";
 import { ButtonLink } from "@/components/button-link";
-import { Button, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, Input, cn } from "@nowly/ui";
+import { Button, ButtonAnchor, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, Input, cn } from "@nowly/ui";
 
 
 
@@ -17,8 +17,9 @@ import {
 } from "@/lib/library-catalog";
 
 import { trackPublicAnalytics } from "@/lib/analytics";
+import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { Link } from "@/i18n/navigation";
-import { RiCloseLine, RiSearchLine } from "@nowly/ui/icons";
+import { RiCloseLine, RiDiscordFill, RiSearchLine } from "@nowly/ui/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
@@ -281,6 +282,10 @@ export const LibraryView = ({
                   {t("clear")}
                 </Button>
               )}
+              <ButtonAnchor href={DISCORD_INVITE_URL} rel="noreferrer" target="_blank" variant="ghost">
+                <RiDiscordFill data-icon="inline-start" />
+                {t("discord-cta")}
+              </ButtonAnchor>
             </EmptyContent>
           </Empty>
         )}

@@ -1,6 +1,6 @@
 # Layout
 
-Visual shell mounted around `{children}` in `app/[locale]/layout.tsx`: `navbar.tsx`, `footer.tsx`, `cookie-banner.tsx`, `theme-toggle.tsx`, `theme-url-override.tsx` (lets `?theme=dark` force a theme, used by `components/providers.tsx`), `brand-lockup.tsx` (the logo, used by both navbar and footer).
+Visual shell mounted around `{children}` in `app/[locale]/layout.tsx`: `navbar.tsx`, `navbar-links.tsx`, `footer.tsx`, `cookie-banner.tsx`, `theme-toggle.tsx`, `theme-url-override.tsx` (lets `?theme=dark` force a theme, used by `components/providers.tsx`), `brand-lockup.tsx` (the logo, used by both navbar and footer).
 
 ## Add a link to the footer
 
@@ -13,7 +13,7 @@ Don't edit `footer.tsx` in this folder — it's a thin wrapper. The actual link 
 1. Open `apps/web/features/layout/components/navbar.tsx`.
 2. Add an entry to the `links` array (around line 24): `{ href: "/your-path", label: t("your-key"), external: false }` (use `external: true` and a full URL for off-domain links, e.g. `docsHref("/")` for a docs link).
 3. Add the translation key `your-key` to the `navbar` namespace in all 11 files under `apps/web/messages/*.json`.
-4. The array is rendered twice (desktop nav and mobile `Sheet`) — no extra step needed, both read the same `links` array.
+4. The array is rendered twice (desktop nav via `navbar-links.tsx`, which owns the sliding hover pill, and the mobile `Sheet`) — no extra step needed, both read the same `links` array.
 
 ## Gotchas
 

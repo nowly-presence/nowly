@@ -3,6 +3,7 @@ import { LibraryMedia } from "@/features/library/components/library-media";
 import { PresenceActions } from "@/features/library/components/presence-actions";
 import { PresenceInfo } from "@/features/library/components/presence-info";
 import { ButtonLink } from "@/components/button-link";
+import { DiscordCallout } from "@/components/discord-callout";
 import { Alert, AlertDescription, AlertTitle, Card, CardContent, CardTitle } from "@nowly/ui";
 
 
@@ -100,6 +101,11 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats 
                 </CardContent>
               </Card>
             ) : null}
+            <DiscordCallout
+              title={t("community-title", { name: presence.name })}
+              description={t("community-description")}
+              cta={t("community-cta")}
+            />
           </div>
         </div>
 

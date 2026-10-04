@@ -29,6 +29,8 @@
     "description": "NowlyはあなたのアクティビティをリッチでダイナミックなDiscordプレゼンスに変えます。",
     "install": "Nowlyをインストール",
     "library": "ライブラリを見る",
+    "discord": "Discordコミュニティに参加",
+    "discord-members": "{count, plural, other {#人のメンバー}}",
     "cards": {
       "netflix": {
         "app-label": "Netflixを視聴中",
@@ -206,6 +208,28 @@
     "docs": "ドキュメントを読む",
     "file": "presence.ts"
   },
+  "community": {
+    "eyebrow": "コミュニティ",
+    "title": "Nowlyコミュニティに参加しよう",
+    "description": "質問したり、新しいプラットフォームを提案したり、Nowlyユーザー同士でヒントを共有できます。",
+    "cta": "Discordに参加",
+    "members": "{count, plural, other {#人のメンバー}}",
+    "online": "{count, number}人がオンライン",
+    "items": [
+      {
+        "title": "人から直接サポート",
+        "description": "インストールのトラブルや、プレゼンスが表示されない場合は、チケットを作成してチームに直接相談できます。"
+      },
+      {
+        "title": "次の機能づくりに参加",
+        "description": "足りないプラットフォーム、動かなくなったプレゼンス、アイデアがあればDiscordで直接教えてください。"
+      },
+      {
+        "title": "他のユーザーと交流",
+        "description": "セットアップを共有したり、ヒントを交換したり、Nowlyの最新情報をチェックできます。"
+      }
+    ]
+  },
   "store": {
     "download-chrome": "Chrome版をダウンロード",
     "download-firefox": "Firefox版をダウンロード"
@@ -276,7 +300,8 @@
       "tools": "ツール",
       "learning": "学習",
       "other": "その他"
-    }
+    },
+    "discord-cta": "Discordでリクエスト"
   },
   "authorPage": {
     "badge": "作者",
@@ -339,7 +364,10 @@
     "unlike": "いいね解除",
     "stats": "統計",
     "stat-installs": "{count} 件インストール",
-    "stat-active": "{count} 人が利用中"
+    "stat-active": "{count} 人が利用中",
+    "community-title": "{name}でお困りですか？",
+    "community-description": "NowlyコミュニティにDiscordで質問したり、アイデアを共有したりできます。",
+    "community-cta": "Discordに参加"
   },
   "desktopPage": {
     "eyebrow": "デスクトップアプリ",
@@ -496,7 +524,10 @@
     "meta-title": "Nowly {version}",
     "missing": "このバージョンのノートはまだサイトに掲載されていません。ドキュメントで完全なチェンジログを確認できます。",
     "current-on-chrome": "現在Chromeウェブストアで公開中",
-    "current-on-firefox": "現在Firefox Add-onsで公開中"
+    "current-on-firefox": "現在Firefox Add-onsで公開中",
+    "discord-title": "このアップデートへのご意見は？",
+    "discord-description": "バグ、アイデア、ちょっとした感想など、Discordで直接お聞かせください。",
+    "discord-cta": "Discordに参加"
   },
   "canaryPage": {
     "eyebrow": "Canary",
