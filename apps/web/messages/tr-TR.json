@@ -29,6 +29,8 @@
     "description": "Nowly, etkinliğini zengin ve dinamik bir Discord varlığına dönüştürür.",
     "install": "Nowly'yi Yükle",
     "library": "Kitaplığa göz at",
+    "discord": "Discord topluluğuna katıl",
+    "discord-members": "{count, plural, one {# üye} other {# üye}}",
     "cards": {
       "netflix": {
         "app-label": "Netflix izliyor",
@@ -206,6 +208,28 @@
     "docs": "Dokümanları oku",
     "file": "presence.ts"
   },
+  "community": {
+    "eyebrow": "Topluluk",
+    "title": "Nowly topluluğuna katıl",
+    "description": "Sorular sor, yeni platformlar öner ve Nowly kullanan diğer kişilerle ipuçlarını paylaş.",
+    "cta": "Discord'a katıl",
+    "members": "{count, plural, one {# üye} other {# üye}}",
+    "online": "{count, number} çevrimiçi",
+    "items": [
+      {
+        "title": "Gerçek insanlardan yardım",
+        "description": "Kurulumda sorun mu var ya da bir varlık görünmüyor mu? Bir bilet aç ve doğrudan ekiple konuş."
+      },
+      {
+        "title": "Sıradakini şekillendir",
+        "description": "Eksik bir platform, bozuk bir varlık ya da iyi bir fikir mi var? Bize doğrudan Discord'da yaz."
+      },
+      {
+        "title": "Diğer kullanıcılarla tanış",
+        "description": "Kurulumunu paylaş, ipuçlarını değiş tokuş et ve Nowly'deki yenilikleri takip et."
+      }
+    ]
+  },
   "store": {
     "download-chrome": "Chrome için indir",
     "download-firefox": "Firefox için indir"
@@ -276,7 +300,10 @@
       "tools": "Araçlar",
       "learning": "Öğrenme",
       "other": "Diğer"
-    }
+    },
+    "discord-title": "Platformunu bulamadın mı?",
+    "discord-description": "Ekibe ve topluluğa Discord'da öner.",
+    "discord-cta": "Discord'da iste"
   },
   "authorPage": {
     "badge": "Yazar",
@@ -339,7 +366,10 @@
     "unlike": "Beğenmekten vazgeç",
     "stats": "İstatistikler",
     "stat-installs": "{count} kurulum",
-    "stat-active": "{count} aktif"
+    "stat-active": "{count} aktif",
+    "community-title": "{name} için yardıma mı ihtiyacın var?",
+    "community-description": "Nowly topluluğuna Discord'da bir soru sor ya da fikrini paylaş.",
+    "community-cta": "Discord'a katıl"
   },
   "desktopPage": {
     "eyebrow": "Masaüstü uygulaması",
@@ -496,7 +526,10 @@
     "meta-title": "Nowly {version}",
     "missing": "Bu sürümün notları henüz sitede değil. Dokümantasyonda tam değişiklik günlüğüne yine de göz atabilirsin.",
     "current-on-chrome": "Şu anda Chrome Web Mağazası'nda yayında",
-    "current-on-firefox": "Şu anda Firefox Add-ons'ta yayında"
+    "current-on-firefox": "Şu anda Firefox Add-ons'ta yayında",
+    "discord-title": "Bu güncelleme hakkında geri bildirimin var mı?",
+    "discord-description": "Bir hata, bir fikir ya da sadece bir düşünce: bize doğrudan Discord'da yaz.",
+    "discord-cta": "Discord'a katıl"
   },
   "canaryPage": {
     "eyebrow": "Canary",

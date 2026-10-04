@@ -1,3 +1,4 @@
+import { CommunitySection } from "@/features/home/components/community-section";
 import { CtaSection } from "@/features/home/components/cta-section";
 import { FaqSection } from "@/features/home/components/faq-section";
 import { FeaturesSection } from "@/features/home/components/features-section";
@@ -33,6 +34,7 @@ const HomePage = async () => {
       <PrivacySection />
       <FaqSection />
       <OpenSourceSection />
+      <CommunitySection />
       <CtaSection />
     </>
   );
