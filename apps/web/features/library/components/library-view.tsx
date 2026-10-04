@@ -3,7 +3,6 @@
 import { Toaster } from "@nowly/ui";
 import { PaginatedLibraryGrid } from "@/features/library/components/paginated-library-grid";
 import { ButtonLink } from "@/components/button-link";
-import { DiscordCallout } from "@/components/discord-callout";
 import { Button, ButtonAnchor, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, Input, cn } from "@nowly/ui";
 
 
@@ -252,20 +251,11 @@ export const LibraryView = ({
         </p>
 
         {results.length > 0 ? (
-          <>
-            <PaginatedLibraryGrid
-              items={results}
-              resetKey={`${effectiveAuthorHandle ?? ""}:${category}:${normalizedQuery}`}
-              className={isStale ? "opacity-70" : undefined}
-            />
-            <DiscordCallout
-              layout="row"
-              className="mt-12"
-              title={t("discord-title")}
-              description={t("discord-description")}
-              cta={t("discord-cta")}
-            />
-          </>
+          <PaginatedLibraryGrid
+            items={results}
+            resetKey={`${effectiveAuthorHandle ?? ""}:${category}:${normalizedQuery}`}
+            className={isStale ? "opacity-70" : undefined}
+          />
         ) : (
           <Empty className="mt-16 border">
             <EmptyHeader>
