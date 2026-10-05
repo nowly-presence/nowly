@@ -9,6 +9,8 @@ import { useExtensionState } from "@/hooks/extension-state-provider"
 import { FeatureRevealProvider } from "@/hooks/feature-reveal-provider"
 import { ActivityView } from "@/features/activity/activity-view"
 import { ConnectionView } from "@/features/diagnostics/connection-view"
+import { DiscordIpcPrompt } from "@/features/discord-ipc/discord-ipc-prompt"
+import { DiscordIpcView } from "@/features/discord-ipc/discord-ipc-view"
 import { LibraryView } from "@/features/library/library-view"
 import { RuntimeLogsView } from "@/features/runtime-logs/runtime-logs-view"
 import { OnboardingView } from "@/features/onboarding/onboarding-view"
@@ -73,6 +75,7 @@ export const App = () => {
             {route.name === "presence" && <PresenceDetailView slug={route.slug} />}
             {route.name === "connection" && <ConnectionView />}
             {route.name === "logs" && <RuntimeLogsView />}
+            {route.name === "discord-ipc" && <DiscordIpcView />}
           </Layer>
         ))}
         <Dock<Tab>
@@ -96,6 +99,7 @@ export const App = () => {
           ]}
         />
         <ReviewPrompt />
+        <DiscordIpcPrompt />
         <HalloweenPrank />
         <AccountChoicePrompt />
       </main>

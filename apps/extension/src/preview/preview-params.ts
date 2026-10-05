@@ -6,10 +6,15 @@ export type PreviewScenario = "live" | "idle" | "nohost" | "nodiscord" | "paused
 
 const SCENARIOS: readonly PreviewScenario[] = ["live", "idle", "nohost", "nodiscord", "paused", "empty"]
 
+export type PreviewNative = "ok" | "ipc-denied"
+
+const NATIVE_STATES: readonly PreviewNative[] = ["ok", "ipc-denied"]
+
 const params = new URLSearchParams(location.search)
 
 const scenarioParam = params.get("scenario")
 const accountParam = params.get("account")
+const nativeParam = params.get("native")
 const seasonParam = params.get("season")
 const prank = params.get("prank") === "1"
 
@@ -28,4 +33,5 @@ export const previewParams = {
   prank,
   reveal: params.get("reveal") === "1",
   account: ACCOUNTS.find((value) => value === accountParam) ?? "out",
+  native: NATIVE_STATES.find((value) => value === nativeParam) ?? "ok",
 }

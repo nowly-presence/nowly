@@ -378,5 +378,19 @@
   "reveal.accountSync": "Merhaba, ben Nolo! Yeni: artık presence'larını ve ayarlarını cihazların arasında eşitleyebilirsin. Bu isteğe bağlıdır ve Ayarlar'da bulunur.",
   "reveal.accountSyncHint": "Ayarlar'da yeni bir şey var. Buraya dokun!",
   "account.syncedJustNow": "Az önce eşitlendi",
-  "account.signOutTitle": "Bu tarayıcıdan çıkış yap"
+  "account.signOutTitle": "Bu tarayıcıdan çıkış yap",
+  "discordIpc.title": "Discord bağlantıyı engelliyor",
+  "discordIpc.description": "Discord büyük olasılıkla yönetici olarak başlatıldı, tarayıcın ve Nowly Desktop ise değil. Bu durumda Windows, Nowly'nin Discord ile iletişim kurmasını engeller ve etkinliğin artık görünmez.",
+  "discordIpc.stepsTitle": "Windows'ta düzelt",
+  "discordIpc.step1": "Bildirim alanındaki simgesi dahil Discord'u tamamen kapat.",
+  "discordIpc.step2": "Discord kısayoluna sağ tıkla, Özellikler'i aç, ardından Uyumluluk sekmesinde \"Bu programı yönetici olarak çalıştır\" işaretini kaldır.",
+  "discordIpc.step3": "Discord'u normal şekilde başlat, ardından Yeniden bağlan'a tıkla.",
+  "discordIpc.safety": "Tarayıcını veya Nowly'yi yönetici olarak çalıştırmana gerek yok: işe yaramaz ve daha az güvenlidir.",
+  "discordIpc.learnMore": "Daha fazla bilgi",
+  "discordIpc.stillBlocked": "Discord hâlâ bağlantıyı engelliyor. Tamamen kapandığından emin ol, sonra normal şekilde başlat.",
+  "discordIpc.resolvedTitle": "Discord yeniden bağlandı",
+  "discordIpc.resolvedDescription": "Her şey yolunda. Nowly etkinliğini yeniden Discord'da gösterebilir.",
+  "discordIpc.alertDescription": "Discord yönetici olarak çalışıyor. Nasıl düzelteceğini gör.",
+  "discordIpc.checkHint": "Discord yönetici olarak çalışıyor ve Nowly'yi engelliyor.",
+  "discordIpc.fix": "Düzelt"
 }

@@ -1,5 +1,5 @@
 import type { Handler } from "@/background/router/router"
-import { reconnectNative, refreshNativeStatus, restartNative } from "@/background/services/native"
+import { acknowledgeDiscordIpcIssue, reconnectNative, refreshNativeStatus, restartNative } from "@/background/services/native"
 import type { UserScriptsStatus } from "@/shared/types"
 
 export const handleGetNativeStatus: Handler<"GET_NATIVE_STATUS"> = () => refreshNativeStatus()
@@ -7,6 +7,8 @@ export const handleGetNativeStatus: Handler<"GET_NATIVE_STATUS"> = () => refresh
 export const handleConnectNative: Handler<"CONNECT_NATIVE"> = () => reconnectNative()
 
 export const handleRestartNative: Handler<"RESTART_NATIVE"> = () => restartNative()
+
+export const handleAcknowledgeDiscordIpcIssue: Handler<"ACKNOWLEDGE_DISCORD_IPC_ISSUE"> = () => acknowledgeDiscordIpcIssue()
 
 export const unpackedUserScriptsStatus = (): UserScriptsStatus => {
   const available = Boolean((chrome as unknown as { userScripts?: unknown }).userScripts)

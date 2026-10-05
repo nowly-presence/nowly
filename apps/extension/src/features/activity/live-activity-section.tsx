@@ -5,9 +5,11 @@ import { useExtensionState } from "@/hooks/extension-state-provider"
 import { useI18n } from "@/hooks/i18n-provider"
 import { useNav } from "@/hooks/navigation-provider"
 import { connectionOf } from "@/lib/presence-status"
+import { discordIpcIssueOf } from "@/shared/discord-ipc-prompt"
 import type { TabActivity } from "@/shared/types"
 import { Button } from "@/ui/button"
 import { Section } from "@/ui/section"
+import { DiscordIpcAlert } from "@/features/activity/discord-ipc-alert"
 import { IdleCard } from "@/features/activity/idle-activity-card"
 import { useTabSharing } from "@/features/activity/use-tab-sharing"
 
@@ -26,9 +28,12 @@ export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences 
   const paused = settings.presencePaused === true
   const liveStored = activity ? presences[activity.slug] : undefined
   const resume = () => void updateSettings({ presencePaused: false })
+  const connection = connectionOf(state.native)
+  const ipcBlocked = discordIpcIssueOf(state.native).active
 
   return (
     <Section title={t("activity.now")}>
+      {ipcBlocked && <DiscordIpcAlert />}
       {activity && liveStored && settings.showPlayer !== false ? (
         <LiveCard
           slug={activity.slug}
@@ -64,8 +69,8 @@ export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences 
             </div>
           }
         />
-      ) : (
-        <IdleCard connection={connectionOf(state.native)} paused={paused} onResume={resume} hasPresences={hasPresences} />
+      ) : ipcBlocked && !paused && connection === "no-discord" ? null : (
+        <IdleCard connection={connection} paused={paused} onResume={resume} hasPresences={hasPresences} />
       )}
     </Section>
   )

@@ -24,6 +24,7 @@ import {
 } from "@/background/router/handlers/analytics.handlers"
 import { handleGetDiagnostic } from "@/background/router/handlers/diagnostics.handlers"
 import {
+  handleAcknowledgeDiscordIpcIssue,
   handleConnectNative,
   handleGetNativeStatus,
   handleGetUserScriptsStatus,
@@ -71,6 +72,7 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   GET_DIAGNOSTIC: handleGetDiagnostic,
   CONNECT_NATIVE: handleConnectNative,
   RESTART_NATIVE: handleRestartNative,
+  ACKNOWLEDGE_DISCORD_IPC_ISSUE: handleAcknowledgeDiscordIpcIssue,
   GET_CURRENT_ACTIVITY: handleGetCurrentActivity,
   GET_DEBUG: handleGetDebug,
   TOGGLE_PRESENCE: handleToggle,

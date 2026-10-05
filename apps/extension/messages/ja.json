@@ -378,5 +378,19 @@
   "reveal.accountSync": "こんにちは、Noloだよ！新機能：プレゼンスと設定をデバイス間で同期できるようになりました。任意の機能で、設定画面にあります。",
   "reveal.accountSyncHint": "設定に新機能があります。ここをタップ！",
   "account.syncedJustNow": "たった今同期しました",
-  "account.signOutTitle": "このブラウザからログアウト"
+  "account.signOutTitle": "このブラウザからログアウト",
+  "discordIpc.title": "Discord が接続をブロックしています",
+  "discordIpc.description": "Discord が管理者として起動されている一方で、ブラウザーと Nowly Desktop はそうではない可能性があります。この場合 Windows が Nowly と Discord の通信を止めるため、アクティビティが表示されなくなります。",
+  "discordIpc.stepsTitle": "Windows での直し方",
+  "discordIpc.step1": "通知領域のアイコンからも含めて、Discord を完全に終了します。",
+  "discordIpc.step2": "Discord のショートカットを右クリックして [プロパティ] を開き、[互換性] タブで「管理者としてこのプログラムを実行する」のチェックを外します。",
+  "discordIpc.step3": "Discord を通常どおり起動し、[再接続] をクリックします。",
+  "discordIpc.safety": "ブラウザーや Nowly を管理者として起動する必要はありません。解決にはならず、安全性も下がります。",
+  "discordIpc.learnMore": "詳しく見る",
+  "discordIpc.stillBlocked": "Discord がまだ接続をブロックしています。完全に終了していることを確認してから、通常どおり起動してください。",
+  "discordIpc.resolvedTitle": "Discord に再接続しました",
+  "discordIpc.resolvedDescription": "問題は解決しました。Nowly が再び Discord にアクティビティを表示できます。",
+  "discordIpc.alertDescription": "Discord が管理者として実行されています。直し方を確認しましょう。",
+  "discordIpc.checkHint": "Discord が管理者として実行され、Nowly をブロックしています。",
+  "discordIpc.fix": "直す"
 }

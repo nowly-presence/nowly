@@ -378,5 +378,19 @@
   "reveal.accountSync": "Hai, saya Nolo! Baharu: kini anda boleh menyegerakkan presence dan tetapan anda antara peranti. Ini pilihan, dan ia ada dalam Tetapan.",
   "reveal.accountSyncHint": "Baharu dalam Tetapan. Ketik di sini!",
   "account.syncedJustNow": "Baru sahaja disegerakkan",
-  "account.signOutTitle": "Log keluar daripada pelayar ini"
+  "account.signOutTitle": "Log keluar daripada pelayar ini",
+  "discordIpc.title": "Discord menyekat sambungan",
+  "discordIpc.description": "Discord mungkin dijalankan sebagai pentadbir, manakala pelayar dan Nowly Desktop anda tidak. Windows kemudian menghalang Nowly daripada berhubung dengan Discord, jadi aktiviti anda tidak lagi dipaparkan.",
+  "discordIpc.stepsTitle": "Betulkan pada Windows",
+  "discordIpc.step1": "Tutup Discord sepenuhnya, termasuk daripada ikonnya di kawasan pemberitahuan.",
+  "discordIpc.step2": "Klik kanan pintasan Discord, buka \"Properties\", kemudian tab \"Compatibility\", dan nyahtanda \"Run this program as an administrator\".",
+  "discordIpc.step3": "Jalankan Discord seperti biasa, kemudian klik Sambung semula.",
+  "discordIpc.safety": "Tidak perlu menjalankan pelayar atau Nowly sebagai pentadbir: ia tidak membantu dan kurang selamat.",
+  "discordIpc.learnMore": "Ketahui lebih lanjut",
+  "discordIpc.stillBlocked": "Discord masih menyekat sambungan. Pastikan ia ditutup sepenuhnya, kemudian jalankannya seperti biasa.",
+  "discordIpc.resolvedTitle": "Discord disambungkan semula",
+  "discordIpc.resolvedDescription": "Semuanya beres. Nowly boleh memaparkan aktiviti anda di Discord semula.",
+  "discordIpc.alertDescription": "Discord berjalan sebagai pentadbir. Lihat cara membetulkannya.",
+  "discordIpc.checkHint": "Discord berjalan sebagai pentadbir dan menyekat Nowly.",
+  "discordIpc.fix": "Betulkan"
 }

@@ -1,6 +1,14 @@
 import { trackAnalytics } from "@/background/analytics-client"
+import { getDiscordIpcIssue, setDiscordIpcIssue } from "@/background/storage/discord-ipc-issue.store"
 import { setNativeProfile, setNativeSeenConnectedOnce } from "@/background/storage/onboarding.store"
 import { NATIVE_HOST } from "@/shared/constants"
+import {
+  discordIpcIssueCode,
+  markDiscordIpcIssuePrompted,
+  NO_DISCORD_IPC_ISSUE,
+  trackDiscordIpcIssue,
+  type DiscordIpcIssue,
+} from "@/shared/discord-ipc-prompt"
 import type { NativeMessage, NativeResponse, NativeStatus, PresenceData, PresencePayload } from "@/shared/types"
 
 let nativePort: chrome.runtime.Port | null = null
@@ -12,6 +20,30 @@ let version: string | undefined
 let lastAutoConnectAttemptAt = 0
 const AUTO_CONNECT_RETRY_MS = 5000
 const responseListeners = new Set<(message: NativeResponse) => void>()
+let discordIpcIssue: DiscordIpcIssue = NO_DISCORD_IPC_ISSUE
+let discordIpcIssueQueue: Promise<void> | null = null
+
+const hydrateDiscordIpcIssue = (): Promise<void> =>
+  (discordIpcIssueQueue ??= getDiscordIpcIssue()
+    .then((stored) => {
+      discordIpcIssue = stored
+    })
+    .catch(() => {}))
+
+const updateDiscordIpcIssue = (update: (issue: DiscordIpcIssue) => DiscordIpcIssue): Promise<void> => {
+  discordIpcIssueQueue = hydrateDiscordIpcIssue()
+    .then(async () => {
+      const next = update(discordIpcIssue)
+      if (next === discordIpcIssue) return
+      discordIpcIssue = next
+      await setDiscordIpcIssue(next)
+    })
+    .catch(() => {})
+  return discordIpcIssueQueue
+}
+
+const discordIpcIssueStatus = (): Pick<NativeStatus, "code" | "codePrompted"> =>
+  connected && discordIpcIssue.active ? { code: discordIpcIssueCode(discordIpcIssue), codePrompted: discordIpcIssue.prompted } : {}
 
 export const mapPresenceData = (data: PresenceData): PresencePayload => ({
   name: data.name,
@@ -27,14 +59,20 @@ export const mapPresenceData = (data: PresenceData): PresencePayload => ({
   buttons: data.buttons?.slice(0, 2),
 })
 
-export const getNativeStatus = (): NativeStatus => ({ connected, status, discordConnected, version })
+export const getNativeStatus = (): NativeStatus => ({ connected, status, discordConnected, version, ...discordIpcIssueStatus() })
 
 export const onNativeResponse = (listener: (message: NativeResponse) => void): (() => void) => {
   responseListeners.add(listener)
   return () => responseListeners.delete(listener)
 }
 
+export const acknowledgeDiscordIpcIssue = async (): Promise<NativeStatus> => {
+  await updateDiscordIpcIssue(markDiscordIpcIssuePrompted)
+  return getNativeStatus()
+}
+
 export const refreshNativeStatus = (): NativeStatus => {
+  void hydrateDiscordIpcIssue()
   if (nativePort) {
     postNative({ type: "PING" })
   } else if (!connecting && Date.now() - lastAutoConnectAttemptAt >= AUTO_CONNECT_RETRY_MS) {
@@ -103,6 +141,7 @@ export const connectNative = (options: { silent?: boolean } = {}): void => {
 
   nativePort.onMessage.addListener((message: NativeResponse) => {
     for (const listener of responseListeners) listener(message)
+    void updateDiscordIpcIssue((issue) => trackDiscordIpcIssue(issue, message))
 
     if (message.type === "CONNECTED") {
       connecting = false

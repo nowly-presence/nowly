@@ -50,6 +50,8 @@ export type NativeStatus = {
   status: string
   version?: string
   discordConnected?: boolean
+  code?: NativeErrorCode
+  codePrompted?: boolean
 }
 
 export type UserScriptsStatus = {
