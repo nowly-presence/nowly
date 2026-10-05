@@ -1,0 +1,48 @@
+import type { Season } from "@/shared/seasonal-themes"
+
+export const LEAF_PATH = "M12 2.6c4.5 2.2 7.2 6 7.2 10.1 0 4.1-3 7.3-6.4 8.5V22h-1.6v-.8c-3.4-1.2-6.4-4.4-6.4-8.5 0-4.1 2.7-7.9 7.2-10.1z"
+export const ROUND_LEAF_PATH = "M12 3.2c4.3 0 7 3.3 7 7.4 0 4.4-3.3 8-6.2 9.6V22h-1.6v-1.8C8.3 18.6 5 15 5 10.6c0-4.1 2.7-7.4 7-7.4z"
+export const MAPLE_PATH = "M12 2.4L13.9 6.2L17.2 4.9L16.6 8.8L20.4 9.4L17.8 12.3L20 14L16.1 15.2L16.5 17.9L12.8 16.7L12.8 21.6L11.2 21.6L11.2 16.7L7.5 17.9L7.9 15.2L4 14L6.2 12.3L3.6 9.4L7.4 8.8L6.8 4.9L10.1 6.2Z"
+export const PETAL_PATH = "M12 3.4c3.2.4 5.6 3.6 5.6 7.6 0 4.6-3 8.4-5.6 9.6-2.6-1.2-5.6-5-5.6-9.6 0-4 2.4-7.2 5.6-7.6z"
+export const BLOSSOM_PATH = "M8.3 7.2a3.7 3.7 0 1 0 7.4 0a3.7 3.7 0 1 0 -7.4 0zM12.87 10.52a3.7 3.7 0 1 0 7.4 0a3.7 3.7 0 1 0 -7.4 0zM11.12 15.88a3.7 3.7 0 1 0 7.4 0a3.7 3.7 0 1 0 -7.4 0zM5.48 15.88a3.7 3.7 0 1 0 7.4 0a3.7 3.7 0 1 0 -7.4 0zM3.73 10.52a3.7 3.7 0 1 0 7.4 0a3.7 3.7 0 1 0 -7.4 0z"
+export const SNOWFLAKE_PATH = "M11.2 3.2L11.2 20.8L12.8 20.8L12.8 3.2ZM19.22 6.91L3.98 15.71L4.78 17.09L20.02 8.29ZM20.02 15.71L4.78 6.91L3.98 8.29L19.22 17.09ZM12.44 6.12L10.04 3.92L9.16 4.88L11.56 7.08ZM12.44 7.08L14.84 4.88L13.96 3.92L11.56 6.12ZM17.31 9.44L18.02 6.26L16.75 5.98L16.04 9.16ZM16.48 9.92L19.59 10.9L19.98 9.66L16.87 8.68ZM16.87 15.32L19.98 14.34L19.59 13.1L16.48 14.08ZM16.04 14.84L16.75 18.02L18.02 17.74L17.31 14.56ZM11.56 17.88L13.96 20.08L14.84 19.12L12.44 16.92ZM11.56 16.92L9.16 19.12L10.04 20.08L12.44 17.88ZM6.69 14.56L5.98 17.74L7.25 18.02L7.96 14.84ZM7.52 14.08L4.41 13.1L4.02 14.34L7.13 15.32ZM7.13 8.68L4.02 9.66L4.41 10.9L7.52 9.92ZM7.96 9.16L7.25 5.98L5.98 6.26L6.69 9.44Z"
+export const SPARKLE_PATH = "M12 3C12.9 8.1 15.9 11.1 21 12C15.9 12.9 12.9 15.9 12 21C11.1 15.9 8.1 12.9 3 12C8.1 11.1 11.1 8.1 12 3Z"
+export const SUN_PATH = "M7.4 12a4.6 4.6 0 1 0 9.2 0a4.6 4.6 0 1 0 -9.2 0zM11.1 2.6L11.1 5.4L12.9 5.4L12.9 2.6ZM18.01 4.72L16.03 6.7L17.3 7.97L19.28 5.99ZM21.4 11.1L18.6 11.1L18.6 12.9L21.4 12.9ZM19.28 18.01L17.3 16.03L16.03 17.3L18.01 19.28ZM12.9 21.4L12.9 18.6L11.1 18.6L11.1 21.4ZM5.99 19.28L7.97 17.3L6.7 16.03L4.72 18.01ZM2.6 12.9L5.4 12.9L5.4 11.1L2.6 11.1ZM4.72 5.99L6.7 7.97L7.97 6.7L5.99 4.72Z"
+export const STAR_PATH = "M12 3.6L14.35 9.36L20.56 9.82L15.8 13.84L17.29 19.88L12 16.6L6.71 19.88L8.2 13.84L3.44 9.82L9.65 9.36Z"
+export const CONFETTI_PATH = "M7.5 9.6h9a2.4 2.4 0 0 1 0 4.8h-9a2.4 2.4 0 0 1 0-4.8z"
+export const DOT_PATH = "M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0z"
+
+export type SeasonShape = { d: string; fill: string }
+
+export const SEASON_SHAPES = {
+  spring: [
+    { d: PETAL_PATH, fill: "var(--season-accent)" },
+    { d: BLOSSOM_PATH, fill: "var(--season-shape)" },
+    { d: ROUND_LEAF_PATH, fill: "var(--primary)" },
+  ],
+  summer: [
+    { d: SUN_PATH, fill: "var(--season-shape)" },
+    { d: SPARKLE_PATH, fill: "var(--primary)" },
+    { d: DOT_PATH, fill: "var(--season-accent)" },
+  ],
+  autumn: [
+    { d: MAPLE_PATH, fill: "var(--primary)" },
+    { d: LEAF_PATH, fill: "var(--season-accent)" },
+    { d: ROUND_LEAF_PATH, fill: "var(--season-shape)" },
+  ],
+  winter: [
+    { d: SNOWFLAKE_PATH, fill: "var(--season-accent)" },
+    { d: SPARKLE_PATH, fill: "var(--season-shape)" },
+    { d: DOT_PATH, fill: "var(--primary)" },
+  ],
+  "new-year": [
+    { d: STAR_PATH, fill: "var(--primary)" },
+    { d: CONFETTI_PATH, fill: "var(--season-accent)" },
+    { d: SPARKLE_PATH, fill: "var(--season-shape)" },
+  ],
+  halloween: [
+    { d: MAPLE_PATH, fill: "var(--primary)" },
+    { d: LEAF_PATH, fill: "var(--season-accent)" },
+    { d: STAR_PATH, fill: "var(--season-shape)" },
+  ],
+} as const satisfies Record<Season, readonly SeasonShape[]>

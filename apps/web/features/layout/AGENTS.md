@@ -17,6 +17,8 @@ Don't edit `footer.tsx` in this folder — it's a thin wrapper. The actual link 
 
 ## Gotchas
 
+- `app/[locale]/layout.tsx` also mounts the seasonal theme (`SeasonBootScript` before the shell, `SeasonProvider` inside the `relative` wrapper, which positions the decor layer). Keep both; see `features/seasonal/AGENTS.md`.
+
 - `navbar.tsx` special-cases `/canary`: on that route the `ExtensionStoreButton` gets canary-branded colors (`CANARY_ACCENT`/`CANARY_INK` from `lib/brand.ts`, root). If you add another route with a distinct navbar look, follow the same `pathname === "..."` pattern rather than adding a new prop.
 - `theme-url-override.tsx` only reads the URL once on mount — it's meant for one-off links (e.g. marketing emails), not a persistent theme switch mechanism.
 

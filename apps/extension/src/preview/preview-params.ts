@@ -17,6 +17,7 @@ const accountParam = params.get("account")
 const nativeParam = params.get("native")
 const seasonParam = params.get("season")
 const prank = params.get("prank") === "1"
+const moment = params.get("moment") === "1"
 const support = params.get("support") === "1"
 
 export const previewParams = {
@@ -30,8 +31,9 @@ export const previewParams = {
   scriptsDenied: params.get("scripts") === "0",
   developer: params.get("dev") === "1",
   review: params.get("review") === "1",
-  season: seasonParam ?? (prank ? "halloween" : null),
+  season: seasonParam ?? (prank ? "halloween" : moment ? "spring" : null),
   prank,
+  moment,
   reveal: params.get("reveal") === "1",
   support,
   account: ACCOUNTS.find((value) => value === accountParam) ?? "out",

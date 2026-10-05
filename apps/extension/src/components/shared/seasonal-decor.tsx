@@ -1,4 +1,5 @@
 import { useSeason } from "@/hooks/season-provider"
+import { SEASON_SHAPES, type SeasonShape } from "@/components/shared/season-shapes"
 import { cn } from "@/ui/cn"
 
 const BAT =
@@ -7,23 +8,41 @@ const PUMPKIN =
   "M12 7.4c-1.2-.8-3.2-.9-4.6-.2C5.3 8.1 4 10.2 4 12.9s1.6 5.1 4 5.7c1.3.4 2.8.2 4-.3 1.2.5 2.7.7 4 .3 2.4-.6 4-3.1 4-5.7s-1.3-4.8-3.4-5.7c-1.4-.7-3.4-.6-4.6.2z"
 const STEM = "M11.3 7.6c-.1-1.6.4-3 1.7-3.9l1 1c-.9.6-1.3 1.6-1.2 2.9z"
 
+const PLACEMENTS = ["top-3 left-4 size-6 -rotate-12", "top-7 right-6 size-5 rotate-12 [animation-delay:1.2s]", "bottom-3 left-5 size-7 rotate-6 [animation-delay:2.1s]"] as const
+
 const Bat = ({ className }: { className: string }) => (
   <svg viewBox="0 0 24 24" className={cn("absolute text-season-accent motion-safe:animate-season-float", className)} fill="currentColor">
     <path d={BAT} />
   </svg>
 )
 
+const Shape = ({ shape, className }: { shape: SeasonShape; className: string }) => (
+  <svg viewBox="0 0 24 24" className={cn("absolute motion-safe:animate-season-float", className)}>
+    <path d={shape.d} fill={shape.fill} stroke={shape.fill} strokeWidth={1} strokeLinejoin="round" />
+  </svg>
+)
+
+const HalloweenDecor = () => (
+  <>
+    <Bat className="top-3 left-4 size-7 -rotate-12" />
+    <Bat className="top-7 right-6 size-5 rotate-6 [animation-delay:1.2s]" />
+    <svg viewBox="0 0 24 24" className="absolute bottom-3 left-4 size-8">
+      <path d={PUMPKIN} fill="var(--season-shape)" />
+      <path d={STEM} fill="var(--season-accent)" />
+    </svg>
+  </>
+)
+
 export const SeasonalDecor = () => {
   const { season } = useSeason()
-  if (season !== "halloween") return null
+  if (!season) return null
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden motion-reduce:hidden">
-      <Bat className="top-3 left-4 size-7 -rotate-12" />
-      <Bat className="top-7 right-6 size-5 rotate-6 [animation-delay:1.2s]" />
-      <svg viewBox="0 0 24 24" className="absolute bottom-3 left-4 size-8">
-        <path d={PUMPKIN} fill="var(--season-shape)" />
-        <path d={STEM} fill="var(--season-accent)" />
-      </svg>
+      {season === "halloween" ? (
+        <HalloweenDecor />
+      ) : (
+        SEASON_SHAPES[season].map((shape, index) => <Shape key={shape.d.slice(0, 24)} shape={shape} className={PLACEMENTS[index % PLACEMENTS.length]} />)
+      )}
     </div>
   )
 }

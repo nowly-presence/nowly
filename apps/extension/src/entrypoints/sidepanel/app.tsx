@@ -21,6 +21,7 @@ import { Header } from "@/features/layout/header"
 import { Layer } from "@/features/layout/layer"
 import { ReviewPrompt } from "@/features/review/review-prompt"
 import { HalloweenPrank } from "@/features/seasonal/halloween-prank"
+import { SeasonMoment } from "@/features/seasonal/season-moment"
 
 const TABS: Tab[] = ["activity", "store", "settings"]
 const ACCOUNT_SYNC_REVEAL = { id: "account-sync", version: "2.3.0" } as const
@@ -101,6 +102,7 @@ export const App = () => {
         <ReviewPrompt />
         <DiscordIpcPrompt />
         <HalloweenPrank />
+        <SeasonMoment />
         <AccountChoicePrompt />
       </main>
     </FeatureRevealProvider>

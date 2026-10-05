@@ -1,0 +1,253 @@
+.season-decor {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout paint;
+  animation: season-decor-in 1.2s ease-out both;
+}
+
+.season-leaving .season-decor {
+  animation: season-decor-out 0.6s ease-in both;
+}
+
+.season-glow {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.season-glow-top {
+  top: 0;
+  height: min(70vh, 640px);
+  background: radial-gradient(ellipse 60% 70% at 78% 0%, var(--season-glow), transparent 70%);
+}
+
+.season-glow-bottom {
+  bottom: 0;
+  height: min(50vh, 460px);
+  background: radial-gradient(ellipse 55% 70% at 18% 100%, var(--season-glow), transparent 70%);
+}
+
+.season-frost {
+  position: absolute;
+  inset: 0 0 auto;
+  height: min(60vh, 520px);
+  background:
+    radial-gradient(circle at 0% 0%, var(--season-frost), transparent 28%),
+    radial-gradient(circle at 100% 0%, var(--season-frost), transparent 24%);
+}
+
+.season-rest {
+  position: absolute;
+  display: none;
+  color: var(--season-tone-1);
+  opacity: 0.55;
+}
+
+.season-rest-a {
+  top: 8.5rem;
+  left: max(1.5rem, calc((100vw - 82rem) / 2));
+  width: 2.25rem;
+  height: 2.25rem;
+  transform: rotate(-24deg);
+}
+
+.season-rest-b {
+  top: 11rem;
+  left: max(3.5rem, calc((100vw - 82rem) / 2 + 2.25rem));
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--season-tone-2);
+  transform: rotate(32deg);
+}
+
+.season-rest-c {
+  bottom: 22rem;
+  right: max(1.5rem, calc((100vw - 82rem) / 2));
+  width: 1.9rem;
+  height: 1.9rem;
+  color: var(--season-tone-3);
+  transform: rotate(18deg);
+}
+
+.season-sky {
+  --gutter: max(2.5rem, (100vw - 80rem) / 2);
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.season-particle {
+  position: absolute;
+  top: 0;
+  width: var(--size);
+  height: var(--size);
+  color: var(--tone);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation:
+    season-fall var(--duration) linear var(--delay) infinite,
+    season-fade var(--duration) linear var(--delay) infinite;
+}
+
+.season-sky-rise .season-particle {
+  animation-name: season-rise, season-fade;
+}
+
+.season-particle-left {
+  left: calc(var(--sway) + var(--offset) * max(0px, var(--gutter) - var(--size) - 2 * var(--sway)));
+}
+
+.season-particle-right {
+  right: calc(var(--sway) + var(--offset) * max(0px, var(--gutter) - var(--size) - 2 * var(--sway)));
+}
+
+.season-particle-sway {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: season-sway calc(var(--duration) / 3) ease-in-out var(--delay) infinite;
+}
+
+.season-particle-shape {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.season-decor[data-paused] .season-particle,
+.season-decor[data-paused] .season-particle-sway {
+  animation-play-state: paused;
+}
+
+.season-leaving,
+.season-leaving body,
+.season-leaving *,
+.season-leaving *::before,
+.season-leaving *::after {
+  transition:
+    background-color 0.6s ease,
+    border-color 0.6s ease,
+    color 0.6s ease,
+    fill 0.6s ease !important;
+}
+
+@keyframes season-decor-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes season-decor-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes season-fall {
+  from {
+    transform: translate3d(0, -10vh, 0);
+  }
+  to {
+    transform: translate3d(0, 110vh, 0);
+  }
+}
+
+@keyframes season-rise {
+  from {
+    transform: translate3d(0, 110vh, 0);
+  }
+  to {
+    transform: translate3d(0, -10vh, 0);
+  }
+}
+
+@keyframes season-fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  8%,
+  88% {
+    opacity: var(--season-particle-opacity);
+  }
+}
+
+@keyframes season-sway {
+  0%,
+  100% {
+    transform: translate3d(calc(var(--sway) * -1), 0, 0) rotate(calc(var(--spin) * -1));
+  }
+  50% {
+    transform: translate3d(var(--sway), 0, 0) rotate(var(--spin));
+  }
+}
+
+@media (min-width: 64rem) {
+  .season-rest {
+    display: block;
+  }
+}
+
+@media (min-width: 40rem) and (max-width: 88rem) {
+  .season-particle {
+    --sway: 5px;
+    width: calc(var(--size) * 0.7);
+    height: calc(var(--size) * 0.7);
+  }
+
+  .season-particle-left {
+    left: calc(var(--offset) * 0.6rem);
+  }
+
+  .season-particle-right {
+    right: calc(var(--offset) * 0.6rem);
+  }
+}
+
+@media (max-width: 40rem) {
+  .season-particle {
+    --sway: 4px;
+    width: calc(var(--size) * 0.7);
+    height: calc(var(--size) * 0.7);
+  }
+
+  .season-particle-left {
+    left: calc(var(--offset) * 0.5rem - var(--size) * 0.25);
+  }
+
+  .season-particle-right {
+    right: calc(var(--offset) * 0.5rem - var(--size) * 0.25);
+  }
+
+  .season-particle:nth-child(n + 8) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .season-decor,
+  .season-leaving .season-decor {
+    animation: none;
+  }
+
+  .season-sky {
+    display: none;
+  }
+
+  .season-leaving,
+  .season-leaving body,
+  .season-leaving *,
+  .season-leaving *::before,
+  .season-leaving *::after {
+    transition: none !important;
+  }
+}

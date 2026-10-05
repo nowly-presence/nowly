@@ -10,6 +10,7 @@ import { IS_CANARY } from "@/shared/brand"
 import { API_BASE_URL } from "@/shared/constants"
 import { replayHalloweenPrank } from "@/shared/halloween-prank"
 import { saveReviewPrompt } from "@/shared/review-prompt"
+import { replaySeasonMoment } from "@/shared/season-moments"
 import { ENABLED_SEASONS, isSeasonOverride, saveSeasonOverride, type Season } from "@/shared/seasonal-themes"
 import { bytesToBase64 } from "@/shared/zip-bytes"
 import { Button } from "@/ui/button"
@@ -23,8 +24,12 @@ const HTTP_URL = /^https?:\/\/.+/
 const SEASON_AUTO = "auto"
 
 const SEASON_LABELS: Record<Season, MessageKey> = {
-  halloween: "settings.seasonHalloween",
+  spring: "settings.seasonSpring",
+  summer: "settings.seasonSummer",
+  autumn: "settings.seasonAutumn",
   winter: "settings.seasonWinter",
+  halloween: "settings.seasonHalloween",
+  "new-year": "settings.seasonNewYear",
 }
 
 export const DeveloperTools = () => {
@@ -119,6 +124,15 @@ export const DeveloperTools = () => {
             title={t("settings.replayPrank")}
             trailing={
               <Button size="sm" variant="secondary" onClick={() => void replayHalloweenPrank()}>
+                {t("action.replay")}
+              </Button>
+            }
+          />
+          <Row
+            title={t("settings.replayMoment")}
+            description={t("settings.replayMomentHint")}
+            trailing={
+              <Button size="sm" variant="secondary" onClick={() => void replaySeasonMoment()}>
                 {t("action.replay")}
               </Button>
             }

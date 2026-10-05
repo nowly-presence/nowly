@@ -19,7 +19,7 @@ const ARROW_SIZE = 12
 const BUBBLE_DELAY_S = 0.35
 const DOCK_CLEARANCE = 84
 
-const useCostume = (): NoloCostume | null => (useSeason().season === "halloween" ? "halloween" : null)
+const useCostume = (): NoloCostume | null => useSeason().season
 
 const BACKDROP = "fixed inset-0 z-[60] bg-tertiary/40 backdrop-blur-[3px] dark:bg-overlay/65"
 const SPRING = { type: "spring", stiffness: 380, damping: 28 } as const

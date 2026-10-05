@@ -1,6 +1,7 @@
 import { IS_CANARY } from "@/shared/brand"
 import { EXT_WEB_SOURCE, WEB_BASE_URL } from "@/shared/constants"
 import type { WebMessage } from "@/shared/types"
+import { startWebSeason } from "@/content/web-season"
 
 const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE"
 const DEVICE_KEY = "deviceId"
@@ -118,3 +119,4 @@ chrome.runtime.onMessage.addListener((message) => {
 })
 
 broadcastDetected()
+startWebSeason({ target: window, storage: { get: (keys) => chrome.storage.local.get(keys), onChanged: chrome.storage.onChanged }, isAllowedOrigin: isAllowedWebOrigin })

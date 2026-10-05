@@ -64,6 +64,7 @@ export const installMockChrome = async (): Promise<void> => {
     featureReveals: previewParams.reveal ? {} : { "account-sync": now },
     ...(previewParams.season ? { seasonOverride: previewParams.season } : {}),
     ...(previewParams.prank ? { halloweenPrank: { replay: true } } : {}),
+    ...(previewParams.moment ? { seasonMoments: { replay: true } } : {}),
     ...(previewParams.slug ? { sidepanelPendingNav: { view: previewParams.view, slug: previewParams.slug, at: now } } : {}),
   })
 
