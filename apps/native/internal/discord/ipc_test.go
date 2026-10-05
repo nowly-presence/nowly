@@ -11,6 +11,7 @@ func TestIsAccessDenied(t *testing.T) {
 		name string
 		err  error
 		want bool
+	}{
 		{name: "permission sentinel", err: errors.Join(errors.New("open failed"), os.ErrPermission), want: true},
 		{name: "windows message", err: errors.New(`open \\.\pipe\discord-ipc-0: Access is denied.`), want: true},
 		{name: "other error", err: errors.New("The system cannot find the file specified."), want: false},
