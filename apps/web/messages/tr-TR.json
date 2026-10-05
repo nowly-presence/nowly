@@ -1061,7 +1061,7 @@
     "badge": "Çerezler",
     "title": "Çerez Politikası",
     "description": "nowly.me ve docs.nowly.me üzerinde kullanılan çerezler ve yerel depolama.",
-    "last-updated": "Son güncelleme: 17 Eylül 2026.",
+    "last-updated": "Son güncelleme: 5 Ekim 2026.",
     "intro": "Bu sayfa, <strong>nowly.me</strong> ve <strong>docs.nowly.me</strong> üzerindeki çerezleri ve benzer teknolojileri açıklar. Bir dil çerezi ayarlıyoruz. Tema ve çerez bildirimi yerel depolama kullanır. Reklamlar etkinleştirilmediği sürece Google AdSense yüklenmez.",
     "sections": [
       {
@@ -1078,7 +1078,7 @@
       },
       {
         "title": "Analiz çerezleri",
-        "body": "Web siteleri üçüncü taraf analiz çerezleri ayarla<strong>maz</strong>. İsteğe bağlı kullanım istatistikleri, etkinleştirirsen, bir web sitesi çerezi yerine bir cihaz kimliğiyle <strong>uzantı</strong> tarafından toplanır."
+        "body": "Web siteleri üçüncü taraf analiz çerezleri ayarla<strong>maz</strong>. Nowly sitesi, çerez veya kalıcı ziyaretçi tanımlayıcıları kullanmadan toplu sayfa görüntülemelerini ölçmek için <code>stats.nowly.me</code> adresinde kendi barındırdığı <strong>Plausible Analytics</strong>'i kullanır. Uzantının isteğe bağlı kullanım istatistikleri ayrıdır ve etkinleştirildiğinde cihaz kimliği kullanır."
       },
       {
         "title": "Reklamcılık",

@@ -1061,7 +1061,7 @@
     "badge": "Cookies",
     "title": "Cookie-Richtlinie",
     "description": "Cookies und lokaler Speicher, genutzt auf nowly.me und docs.nowly.me.",
-    "last-updated": "Zuletzt aktualisiert: 17. September 2026.",
+    "last-updated": "Zuletzt aktualisiert: 5. Oktober 2026.",
     "intro": "Diese Seite beschreibt Cookies und ähnliche Technologien auf <strong>nowly.me</strong> und <strong>docs.nowly.me</strong>. Wir setzen ein Sprach-Cookie. Theme und Cookie-Hinweis nutzen lokalen Speicher. Google AdSense wird nicht geladen, sofern Werbung nicht aktiviert ist.",
     "sections": [
       {
@@ -1078,7 +1078,7 @@
       },
       {
         "title": "Analytics-Cookies",
-        "body": "Die Websites setzen <strong>keine</strong> Analytics-Cookies von Drittanbietern. Optionale Nutzungsstatistiken, falls du sie aktivierst, werden von der <strong>Erweiterung</strong> mit einer Geräte-ID erhoben, nicht mit einem Website-Cookie."
+        "body": "Die Websites setzen <strong>keine</strong> Analytics-Cookies von Drittanbietern. Die Nowly-Website nutzt selbst gehostetes <strong>Plausible Analytics</strong> unter <code>stats.nowly.me</code>, um aggregierte Seitenaufrufe ohne Cookies oder dauerhafte Besucherkennungen zu messen. Die optionalen Nutzungsstatistiken der Erweiterung sind davon getrennt und verwenden bei Aktivierung eine Geräte-ID."
       },
       {
         "title": "Werbung",

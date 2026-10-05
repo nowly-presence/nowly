@@ -1061,7 +1061,7 @@
     "badge": "Pliki cookie",
     "title": "Polityka plików cookie",
     "description": "Pliki cookie i pamięć lokalna używane na nowly.me i docs.nowly.me.",
-    "last-updated": "Ostatnia aktualizacja: 17 września 2026.",
+    "last-updated": "Ostatnia aktualizacja: 5 października 2026.",
     "intro": "Ta strona opisuje pliki cookie i podobne technologie na <strong>nowly.me</strong> i <strong>docs.nowly.me</strong>. Ustawiamy plik cookie języka. Motyw i powiadomienie o cookies używają pamięci lokalnej. Google AdSense nie jest ładowany, chyba że reklamy są włączone.",
     "sections": [
       {
@@ -1078,7 +1078,7 @@
       },
       {
         "title": "Pliki cookie analityczne",
-        "body": "Strony <strong>nie</strong> ustawiają analitycznych plików cookie stron trzecich. Opcjonalne statystyki użytkowania, jeśli je włączysz, są zbierane przez <strong>rozszerzenie</strong> z identyfikatorem urządzenia, a nie plikiem cookie strony."
+        "body": "Strony <strong>nie</strong> ustawiają analitycznych plików cookie stron trzecich. Witryna Nowly korzysta z samodzielnie hostowanego <strong>Plausible Analytics</strong> pod adresem <code>stats.nowly.me</code>, aby mierzyć łączną liczbę wyświetleń stron bez plików cookie i trwałych identyfikatorów odwiedzających. Opcjonalne statystyki rozszerzenia są oddzielne i po włączeniu wykorzystują identyfikator urządzenia."
       },
       {
         "title": "Reklamy",

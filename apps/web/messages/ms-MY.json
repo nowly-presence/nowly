@@ -1061,7 +1061,7 @@
     "badge": "Kuki",
     "title": "Dasar Kuki",
     "description": "Kuki dan storan setempat yang digunakan pada nowly.me dan docs.nowly.me.",
-    "last-updated": "Kemas kini terakhir: 17 September 2026.",
+    "last-updated": "Kemas kini terakhir: 5 Oktober 2026.",
     "intro": "Halaman ini menerangkan kuki dan teknologi serupa pada <strong>nowly.me</strong> dan <strong>docs.nowly.me</strong>. Kami menetapkan kuki bahasa. Tema dan notis kuki menggunakan storan setempat. Google AdSense tidak dimuatkan melainkan pengiklanan diaktifkan.",
     "sections": [
       {
@@ -1078,7 +1078,7 @@
       },
       {
         "title": "Kuki analitik",
-        "body": "Laman web <strong>tidak</strong> menetapkan kuki analitik pihak ketiga. Statistik penggunaan pilihan, jika anda mengaktifkannya, dikumpul oleh <strong>sambungan</strong> dengan ID peranti, bukan dengan kuki laman web."
+        "body": "Laman web <strong>tidak</strong> menetapkan kuki analitik pihak ketiga. Laman Nowly menggunakan <strong>Plausible Analytics</strong> yang dihoskan sendiri di <code>stats.nowly.me</code> untuk mengukur paparan halaman agregat tanpa kuki atau pengecam pelawat yang berterusan. Statistik penggunaan pilihan sambungan adalah berasingan dan menggunakan ID peranti jika anda mengaktifkannya."
       },
       {
         "title": "Pengiklanan",

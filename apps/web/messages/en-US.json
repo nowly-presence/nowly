@@ -1061,7 +1061,7 @@
     "badge": "Cookies",
     "title": "Cookie Policy",
     "description": "Cookies and local storage used on nowly.me and docs.nowly.me.",
-    "last-updated": "Last updated: 17 September 2026.",
+    "last-updated": "Last updated: 5 October 2026.",
     "intro": "This page describes cookies and similar technologies on <strong>nowly.me</strong> and <strong>docs.nowly.me</strong>. We set a language cookie. Theme and the cookie notice use local storage. Google AdSense is not loaded unless advertising is enabled.",
     "sections": [
       {
@@ -1078,7 +1078,7 @@
       },
       {
         "title": "Analytics cookies",
-        "body": "The websites do <strong>not</strong> set third-party analytics cookies. Optional usage statistics, if you enable them, are collected by the <strong>extension</strong> with a device ID, not with a website cookie."
+        "body": "The websites do <strong>not</strong> set third-party analytics cookies. The Nowly site uses self-hosted <strong>Plausible Analytics</strong> at <code>stats.nowly.me</code> to measure aggregate page views without cookies or persistent visitor identifiers. The extension’s optional usage statistics are separate and, if enabled, use a device ID."
       },
       {
         "title": "Advertising",

@@ -1061,7 +1061,7 @@
     "badge": "쿠키",
     "title": "쿠키 정책",
     "description": "nowly.me 및 docs.nowly.me에서 사용되는 쿠키와 로컬 저장소.",
-    "last-updated": "최종 업데이트: 2026년 9월 17일.",
+    "last-updated": "최종 업데이트: 2026년 10월 5일.",
     "intro": "이 페이지는 <strong>nowly.me</strong> 및 <strong>docs.nowly.me</strong>에서 사용되는 쿠키 및 유사 기술을 설명합니다. 당사는 언어 쿠키를 설정합니다. 테마와 쿠키 알림은 로컬 저장소를 사용합니다. 광고가 활성화되지 않는 한 Google AdSense는 로드되지 않습니다.",
     "sections": [
       {
@@ -1078,7 +1078,7 @@
       },
       {
         "title": "분석 쿠키",
-        "body": "웹사이트는 타사 분석 쿠키를 설정하지 <strong>않습니다</strong>. 선택적 이용 통계는 활성화한 경우, 웹사이트 쿠키가 아니라 기기 ID를 사용하여 <strong>확장 프로그램</strong>에 의해 수집됩니다."
+        "body": "웹사이트는 타사 분석 쿠키를 설정하지 <strong>않습니다</strong>. Nowly 사이트는 <code>stats.nowly.me</code>에서 자체 호스팅하는 <strong>Plausible Analytics</strong>를 사용해 쿠키나 지속적인 방문자 식별자 없이 집계된 페이지 조회수를 측정합니다. 확장 프로그램의 선택적 이용 통계는 별도로 수집되며, 활성화하면 기기 ID를 사용합니다."
       },
       {
         "title": "광고",

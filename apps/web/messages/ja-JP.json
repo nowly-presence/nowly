@@ -1061,7 +1061,7 @@
     "badge": "Cookie",
     "title": "Cookieポリシー",
     "description": "nowly.meおよびdocs.nowly.meで使用されるCookieとローカルストレージ。",
-    "last-updated": "最終更新日：2026年9月17日。",
+    "last-updated": "最終更新日：2026年10月5日。",
     "intro": "このページは、<strong>nowly.me</strong>および<strong>docs.nowly.me</strong>上のCookieおよび類似技術について説明します。当社は言語Cookieを設定します。テーマとCookie通知はローカルストレージを使用します。Google AdSenseは、広告が有効化されない限り読み込まれません。",
     "sections": [
       {
@@ -1078,7 +1078,7 @@
       },
       {
         "title": "アナリティクスCookie",
-        "body": "ウェブサイトはサードパーティのアナリティクスCookieを設定<strong>しません</strong>。任意の利用統計を有効にした場合、それはウェブサイトのCookieではなく、デバイスIDを用いて<strong>拡張機能</strong>によって収集されます。"
+        "body": "ウェブサイトはサードパーティのアナリティクスCookieを設定<strong>しません</strong>。Nowlyのサイトでは、<code>stats.nowly.me</code>で自社ホストしている<strong>Plausible Analytics</strong>を使用し、Cookieや永続的な訪問者識別子を使わずにページ閲覧数を集計します。拡張機能の任意の利用統計は別個のもので、有効にした場合はデバイスIDを使用します。"
       },
       {
         "title": "広告",
