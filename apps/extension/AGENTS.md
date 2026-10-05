@@ -77,6 +77,11 @@ messages/<locale>.json   UI strings, 11 locales (same set as nowly.me)
 - UI: `state.account` (`AccountSnapshot`) in `useExtensionState`; messages `GET_ACCOUNT`, `START_ACCOUNT_CONNECT`, `SYNC_ACCOUNT`, `RESOLVE_SYNC_CHOICE`, `SIGN_OUT_ACCOUNT`, `STOP_ACCOUNT_SYNC`. Opening the panel triggers a silent `SYNC_ACCOUNT`. The first-sync choice sheet (`features/settings/account-choice-sheet.tsx`) is mounted in `app.tsx` and reachable again from the account section.
 - The preview takes `?account=out|in|choice|error`.
 
+## Discord IPC access denied (2.3.0)
+
+- When the native host reports `DISCORD_IPC_ACCESS_DENIED` (Discord running as administrator), a page opens once per episode and explains how to fix it on Windows. Details in `features/discord-ipc/AGENTS.md`.
+- The preview takes `?native=ipc-denied`.
+
 ## Validation
 
 `npm run lint` (tsc), `npm test` (vitest), `npm run build` (Chrome + Firefox store builds). Visual check: `npm run preview` (http://127.0.0.1:5173, query params in README). Real check: load `dist/chrome` unpacked.

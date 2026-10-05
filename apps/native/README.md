@@ -23,6 +23,19 @@ Nowly Host bridges the Chromium extension with Discord Rich Presence.
 | `OK` | Host → Extension | - |
 | `ERROR` | Host → Extension | `error` string |
 
+When Discord's local IPC endpoint is blocked by a permission mismatch, the
+host includes `code: "DISCORD_IPC_ACCESS_DENIED"` in the `PONG` or `ERROR`
+response. Consumers should use this code instead of matching the localized
+error text.
+
+## Discord connection notifications
+
+When the host cannot access Discord's local IPC endpoint because of a desktop
+permission mismatch, it shows a native OS notification with the corrective
+action. Windows uses a tray balloon notification; macOS uses Notification
+Center; Linux uses `notify-send` when a desktop notification daemon is
+available. Notifications are deduplicated for the host session.
+
 ## Build
 
 ### Prerequisites

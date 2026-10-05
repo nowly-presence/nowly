@@ -9,6 +9,7 @@ describe("hasHeartbeatLogChanged", () => {
     expect(hasHeartbeatLogChanged(connected, connected)).toBe(false)
     expect(hasHeartbeatLogChanged(connected, { ...connected, status: "discord disconnected" })).toBe(true)
     expect(hasHeartbeatLogChanged(connected, { ...connected, version: "1.4.5" })).toBe(true)
+    expect(hasHeartbeatLogChanged(connected, { ...connected, code: "DISCORD_IPC_ACCESS_DENIED" })).toBe(true)
     expect(hasHeartbeatLogChanged(connected, { connected: false, status: "discord disconnected" })).toBe(true)
   })
 })

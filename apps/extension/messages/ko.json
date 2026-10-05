@@ -378,5 +378,19 @@
   "reveal.accountSync": "안녕, 나는 Nolo야! 새 기능: 이제 프레즌스와 설정을 기기 간에 동기화할 수 있어요. 선택 사항이며 설정에 있어요.",
   "reveal.accountSyncHint": "설정에 새 기능이 있어요. 여기를 탭하세요!",
   "account.syncedJustNow": "방금 동기화됨",
-  "account.signOutTitle": "이 브라우저에서 로그아웃"
+  "account.signOutTitle": "이 브라우저에서 로그아웃",
+  "discordIpc.title": "Discord가 연결을 막고 있어요",
+  "discordIpc.description": "Discord가 관리자 권한으로 실행됐지만 브라우저와 Nowly Desktop은 그렇지 않은 것 같아요. 이 경우 Windows가 Nowly와 Discord의 통신을 막아서 활동이 더 이상 표시되지 않아요.",
+  "discordIpc.stepsTitle": "Windows에서 해결하기",
+  "discordIpc.step1": "알림 영역의 아이콘까지 포함해 Discord를 완전히 종료하세요.",
+  "discordIpc.step2": "Discord 바로 가기를 마우스 오른쪽 버튼으로 클릭해 속성을 열고, 호환성 탭에서 '관리자 권한으로 이 프로그램 실행' 체크를 해제하세요.",
+  "discordIpc.step3": "Discord를 평소처럼 실행한 다음 다시 연결을 누르세요.",
+  "discordIpc.safety": "브라우저나 Nowly를 관리자 권한으로 실행할 필요는 없어요. 도움이 되지 않고 덜 안전해요.",
+  "discordIpc.learnMore": "자세히 알아보기",
+  "discordIpc.stillBlocked": "Discord가 아직 연결을 막고 있어요. 완전히 종료됐는지 확인한 뒤 평소처럼 실행하세요.",
+  "discordIpc.resolvedTitle": "Discord에 다시 연결됐어요",
+  "discordIpc.resolvedDescription": "모두 해결됐어요. 이제 Nowly가 다시 Discord에 활동을 표시할 수 있어요.",
+  "discordIpc.alertDescription": "Discord가 관리자 권한으로 실행 중이에요. 해결 방법을 확인하세요.",
+  "discordIpc.checkHint": "Discord가 관리자 권한으로 실행 중이라 Nowly를 막고 있어요.",
+  "discordIpc.fix": "해결"
 }

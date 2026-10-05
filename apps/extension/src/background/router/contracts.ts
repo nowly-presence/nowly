@@ -42,6 +42,7 @@ export type RouterMessageMap = {
   GET_DIAGNOSTIC: { payload: void; response: DiagnosticSnapshot }
   CONNECT_NATIVE: { payload: void; response: NativeStatus }
   RESTART_NATIVE: { payload: void; response: NativeStatus }
+  ACKNOWLEDGE_DISCORD_IPC_ISSUE: { payload: void; response: NativeStatus }
   GET_CURRENT_ACTIVITY: { payload: void; response: CurrentActivity | null }
   GET_DEBUG: { payload: void; response: PresenceDebug | null }
   TOGGLE_PRESENCE: { payload: { slug: string; enabled: boolean }; response: { ok: boolean; error?: string } }

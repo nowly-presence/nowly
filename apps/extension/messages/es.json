@@ -378,5 +378,19 @@
   "reveal.accountSync": "¡Hola, soy Nolo! Novedad: ahora puedes sincronizar tus presencias y tus ajustes entre tus dispositivos. Es opcional y está en los Ajustes.",
   "reveal.accountSyncHint": "Novedad en los Ajustes. ¡Toca aquí!",
   "account.syncedJustNow": "Sincronizado hace un momento",
-  "account.signOutTitle": "Cerrar sesión en este navegador"
+  "account.signOutTitle": "Cerrar sesión en este navegador",
+  "discordIpc.title": "Discord bloquea la conexión",
+  "discordIpc.description": "Probablemente Discord se abrió como administrador, mientras que tu navegador y Nowly Desktop no. Windows impide entonces que Nowly se comunique con Discord y tu actividad deja de mostrarse.",
+  "discordIpc.stepsTitle": "Solucionarlo en Windows",
+  "discordIpc.step1": "Cierra Discord por completo, también desde su icono en el área de notificación.",
+  "discordIpc.step2": "Haz clic derecho en el acceso directo de Discord, abre Propiedades, luego la pestaña Compatibilidad, y desmarca «Ejecutar este programa como administrador».",
+  "discordIpc.step3": "Abre Discord normalmente y pulsa Reconectar.",
+  "discordIpc.safety": "No hace falta abrir el navegador ni Nowly como administrador: no ayuda y es menos seguro.",
+  "discordIpc.learnMore": "Más información",
+  "discordIpc.stillBlocked": "Discord sigue bloqueando la conexión. Asegúrate de que esté cerrado por completo y vuelve a abrirlo normalmente.",
+  "discordIpc.resolvedTitle": "Discord vuelve a estar conectado",
+  "discordIpc.resolvedDescription": "Todo en orden. Nowly puede volver a mostrar tu actividad en Discord.",
+  "discordIpc.alertDescription": "Discord se ejecuta como administrador. Mira cómo solucionarlo.",
+  "discordIpc.checkHint": "Discord se ejecuta como administrador y bloquea Nowly.",
+  "discordIpc.fix": "Solucionar"
 }

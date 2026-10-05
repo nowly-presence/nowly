@@ -378,5 +378,19 @@
   "reveal.accountSync": "Γεια, είμαι ο Nolo! Νέο: τώρα μπορείς να συγχρονίζεις τα presences και τις ρυθμίσεις σου ανάμεσα στις συσκευές σου. Είναι προαιρετικό και βρίσκεται στις Ρυθμίσεις.",
   "reveal.accountSyncHint": "Νέο στις Ρυθμίσεις. Πάτα εδώ!",
   "account.syncedJustNow": "Συγχρονίστηκε μόλις τώρα",
-  "account.signOutTitle": "Αποσύνδεση από αυτόν τον περιηγητή"
+  "account.signOutTitle": "Αποσύνδεση από αυτόν τον περιηγητή",
+  "discordIpc.title": "Το Discord μπλοκάρει τη σύνδεση",
+  "discordIpc.description": "Το Discord πιθανότατα εκτελείται ως διαχειριστής, ενώ ο browser σου και το Nowly Desktop όχι. Τότε τα Windows εμποδίζουν το Nowly να επικοινωνήσει με το Discord και η δραστηριότητά σου δεν εμφανίζεται πια.",
+  "discordIpc.stepsTitle": "Διόρθωση στα Windows",
+  "discordIpc.step1": "Κλείσε εντελώς το Discord, και από το εικονίδιό του στην περιοχή ειδοποιήσεων.",
+  "discordIpc.step2": "Κάνε δεξί κλικ στη συντόμευση του Discord, άνοιξε \"Properties\", μετά την καρτέλα \"Compatibility\", και ξετσέκαρε το \"Run this program as an administrator\".",
+  "discordIpc.step3": "Άνοιξε το Discord κανονικά και πάτησε Επανασύνδεση.",
+  "discordIpc.safety": "Δεν χρειάζεται να ανοίξεις τον browser ή το Nowly ως διαχειριστής: δεν βοηθά και είναι λιγότερο ασφαλές.",
+  "discordIpc.learnMore": "Μάθε περισσότερα",
+  "discordIpc.stillBlocked": "Το Discord εξακολουθεί να μπλοκάρει τη σύνδεση. Βεβαιώσου ότι έχει κλείσει εντελώς και άνοιξέ το κανονικά.",
+  "discordIpc.resolvedTitle": "Το Discord συνδέθηκε ξανά",
+  "discordIpc.resolvedDescription": "Όλα εντάξει. Το Nowly μπορεί ξανά να δείχνει τη δραστηριότητά σου στο Discord.",
+  "discordIpc.alertDescription": "Το Discord εκτελείται ως διαχειριστής. Δες πώς να το διορθώσεις.",
+  "discordIpc.checkHint": "Το Discord εκτελείται ως διαχειριστής και μπλοκάρει το Nowly.",
+  "discordIpc.fix": "Διόρθωση"
 }

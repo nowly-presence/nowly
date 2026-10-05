@@ -24,6 +24,7 @@ import { useI18n } from "@/hooks/i18n-provider"
 import { sendMessage } from "@/lib/messages"
 import { useNav } from "@/hooks/navigation-provider"
 import { connectionOf } from "@/lib/presence-status"
+import { discordIpcIssueOf } from "@/shared/discord-ipc-prompt"
 import { useExtensionState } from "@/hooks/extension-state-provider"
 
 const CHECKS: { key: keyof DiagnosticSnapshot; label: MessageKey; hint: MessageKey }[] = [
@@ -43,6 +44,7 @@ export const ConnectionView = () => {
   const [busy, setBusy] = useState<"reconnect" | "restart" | null>(null)
   const connection = connectionOf(state.native)
   const profile = state.onboarding.nativeProfile
+  const ipcBlocked = discordIpcIssueOf(state.native).active
 
   const load = useCallback(() => {
     void sendMessage("GET_DIAGNOSTIC").then(setDiagnostic).catch(() => {})
@@ -66,6 +68,7 @@ export const ConnectionView = () => {
   const fix = (key: keyof DiagnosticSnapshot) => {
     if (key === "userScriptsActive") return <Button size="sm" variant="secondary" onClick={() => openUrl(extensionDetailsUrl({ useFirefoxAddonsPage: true }))}>{t("action.open")}</Button>
     if (key === "hostDetected") return <Button size="sm" variant="secondary" onClick={() => openUrl(HOST_DOWNLOAD_URL)}>{t("action.download")}</Button>
+    if (key === "discordConnected" && ipcBlocked) return <Button size="sm" variant="secondary" onClick={() => push({ name: "discord-ipc" })}>{t("discordIpc.fix")}</Button>
     if (key === "presenceInstalled") return <Button size="sm" variant="secondary" onClick={() => setTab("store")}>{t("action.browse")}</Button>
     return null
   }
@@ -144,7 +147,7 @@ export const ConnectionView = () => {
                     )
                   }
                   title={t(check.label)}
-                  description={ok ? undefined : t(check.hint)}
+                  description={ok ? undefined : check.key === "discordConnected" && ipcBlocked ? t("discordIpc.checkHint") : t(check.hint)}
                   trailing={!ok && fix(check.key)}
                 />
               )

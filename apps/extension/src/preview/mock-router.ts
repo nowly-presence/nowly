@@ -12,6 +12,7 @@ import type {
 } from "@/shared/types"
 import type { MockStorageArea } from "@/preview/mock-storage"
 import { toStoredPresence, type CatalogFixture } from "@/preview/preview-fixtures"
+import { discordIpcIssueCode, markDiscordIpcIssuePrompted, NO_DISCORD_IPC_ISSUE, type DiscordIpcIssue } from "@/shared/discord-ipc-prompt"
 import { previewParams } from "@/preview/preview-params"
 
 export type MockHandlers = { [K in RouterMessageType]?: (payload: PayloadOf<K>) => ResponseOf<K> | Promise<ResponseOf<K>> }
@@ -34,6 +35,7 @@ const REPORT_LATENCY_MS = 500
 const SCRIPTS_GRANT_DELAY_MS = 4000
 const SYNC_LATENCY_MS = 700
 const LAST_SYNC_AGE_MS = 4 * 60_000
+const IPC_DENIED_RECONNECTS = 2
 const PREVIEW_USER = { id: "preview-user", name: "Gaëtan", image: null, discordId: "1" }
 
 const initialAccount = (): AccountSnapshot => {
@@ -58,11 +60,27 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
   let muted = false
   let account = initialAccount()
   let userScriptsEnabled = !previewParams.scriptsDenied
+  const ipcDenied = previewParams.native === "ipc-denied"
   let native: NativeStatus = {
     connected: scenario !== "nohost",
-    discordConnected: scenario !== "nohost" && scenario !== "nodiscord",
+    discordConnected: scenario !== "nohost" && scenario !== "nodiscord" && !ipcDenied,
     status: scenario === "nohost" ? "Specified native messaging host not found." : "connected",
     version: "1.4.2",
+  }
+  let discordIpcIssue: DiscordIpcIssue = ipcDenied ? { active: true, prompted: false } : NO_DISCORD_IPC_ISSUE
+  let reconnectsLeft = IPC_DENIED_RECONNECTS
+
+  const nativeStatus = (): NativeStatus =>
+    native.connected && discordIpcIssue.active
+      ? { ...native, code: discordIpcIssueCode(discordIpcIssue), codePrompted: discordIpcIssue.prompted }
+      : native
+
+  const reconnectNative = (): NativeStatus => {
+    if (discordIpcIssue.active && --reconnectsLeft <= 0) {
+      discordIpcIssue = NO_DISCORD_IPC_ISSUE
+      native = { ...native, discordConnected: true, status: "discord connected" }
+    }
+    return nativeStatus()
   }
 
   if (previewParams.scriptsDenied) setTimeout(() => (userScriptsEnabled = true), SCRIPTS_GRANT_DELAY_MS)
@@ -101,9 +119,16 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
       return next
     },
     GET_CURRENT_ACTIVITY: () => local.read<CurrentActivity | null>("currentActivity", null),
-    GET_NATIVE_STATUS: () => native,
-    CONNECT_NATIVE: () => native,
-    RESTART_NATIVE: () => (native = { ...native, status: "connected" }),
+    GET_NATIVE_STATUS: nativeStatus,
+    CONNECT_NATIVE: reconnectNative,
+    RESTART_NATIVE: () => {
+      native = { ...native, status: "connected" }
+      return reconnectNative()
+    },
+    ACKNOWLEDGE_DISCORD_IPC_ISSUE: () => {
+      discordIpcIssue = markDiscordIpcIssuePrompted(discordIpcIssue)
+      return nativeStatus()
+    },
     GET_USER_SCRIPTS_STATUS: () => ({ enabled: userScriptsEnabled, requiresUserToggle: true }),
     GET_ONBOARDING: readOnboarding,
     SET_ONBOARDING: async (partial) => {

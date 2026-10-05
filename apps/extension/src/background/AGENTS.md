@@ -15,6 +15,7 @@ MV3 service worker: message router, presence lifecycle, native host bridge, pres
 - `onStartup`, `onInstalled` and module load can fire in the same tick: `bootBackground` memoises its promise so boot runs once (`services/lifecycle.ts`).
 - The router returns `true` from `onMessage` to keep the response channel open while handlers await (`router/router.ts`).
 - Native status is re-validated with a `PING` on every `GET_NATIVE_STATUS` because the worker may have slept; a disconnect resets every connection field together (`services/native.ts`).
+- The Discord IPC access-denied episode (`shared/discord-ipc-prompt.ts`) lives in `chrome.storage.session` (`discordIpcIssue`), not in module memory, so the page is not shown again after a respawn. It is only reported on `NativeStatus` (`code`, `codePrompted`) while the host is connected; a disconnect hides it without ending the episode.
 - Release verification is fail-closed: bundle SHA-256 + metadata hash + ECDSA P-256 signature. Key rotation tries the cached key, then the bundled fallback, then refreshes once. Unsigned releases are accepted on canary builds only (`services/release-security.ts`).
 - `@nowly/shared` provides `canonicalJson`, which must stay byte-identical to the API's, or every hash and signature check fails.
 - Analytics use `@nowly/analytics`. Events are opt-in and dropped until consent is `true`; unknown payload keys are rejected by the API.

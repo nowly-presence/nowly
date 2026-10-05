@@ -378,5 +378,19 @@
   "reveal.accountSync": "Hi, I'm Nolo! New: you can now sync your presences and settings between your devices. It is optional, and it lives in the Settings.",
   "reveal.accountSyncHint": "New in the Settings. Tap here!",
   "account.syncedJustNow": "Synced just now",
-  "account.signOutTitle": "Sign out of this browser"
+  "account.signOutTitle": "Sign out of this browser",
+  "discordIpc.title": "Discord is blocking the connection",
+  "discordIpc.description": "Discord was probably started as administrator, while your browser and Nowly Desktop were not. Windows then stops Nowly from talking to Discord, so your activity no longer shows.",
+  "discordIpc.stepsTitle": "Fix it on Windows",
+  "discordIpc.step1": "Quit Discord completely, including from its icon in the notification area.",
+  "discordIpc.step2": "Right-click the Discord shortcut, open Properties, then the Compatibility tab, and untick \"Run this program as an administrator\".",
+  "discordIpc.step3": "Start Discord normally, then click Reconnect.",
+  "discordIpc.safety": "No need to run your browser or Nowly as administrator: it would not help and it is less safe.",
+  "discordIpc.learnMore": "Learn more",
+  "discordIpc.stillBlocked": "Discord is still blocking the connection. Make sure it is fully closed, then start it normally.",
+  "discordIpc.resolvedTitle": "Discord is connected again",
+  "discordIpc.resolvedDescription": "All good. Nowly can show your activity on Discord again.",
+  "discordIpc.alertDescription": "Discord is running as administrator. See how to fix it.",
+  "discordIpc.checkHint": "Discord is running as administrator and blocks Nowly.",
+  "discordIpc.fix": "Fix"
 }

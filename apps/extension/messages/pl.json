@@ -378,5 +378,19 @@
   "reveal.accountSync": "Cześć, jestem Nolo! Nowość: możesz teraz synchronizować obecności i ustawienia między urządzeniami. To opcjonalne, a znajdziesz to w Ustawieniach.",
   "reveal.accountSyncHint": "Nowość w Ustawieniach. Dotknij tutaj!",
   "account.syncedJustNow": "Zsynchronizowano przed chwilą",
-  "account.signOutTitle": "Wylogowanie z tej przeglądarki"
+  "account.signOutTitle": "Wylogowanie z tej przeglądarki",
+  "discordIpc.title": "Discord blokuje połączenie",
+  "discordIpc.description": "Discord został prawdopodobnie uruchomiony jako administrator, a przeglądarka i Nowly Desktop nie. Windows blokuje wtedy komunikację Nowly z Discordem i twoja aktywność przestaje być widoczna.",
+  "discordIpc.stepsTitle": "Napraw w systemie Windows",
+  "discordIpc.step1": "Całkowicie zamknij Discorda, także z jego ikony w obszarze powiadomień.",
+  "discordIpc.step2": "Kliknij prawym przyciskiem skrót Discorda, otwórz Właściwości, potem kartę Zgodność, i odznacz „Uruchom ten program jako administrator”.",
+  "discordIpc.step3": "Uruchom Discorda normalnie, a potem kliknij Połącz ponownie.",
+  "discordIpc.safety": "Nie uruchamiaj przeglądarki ani Nowly jako administrator: to nie pomoże i jest mniej bezpieczne.",
+  "discordIpc.learnMore": "Dowiedz się więcej",
+  "discordIpc.stillBlocked": "Discord nadal blokuje połączenie. Upewnij się, że jest całkowicie zamknięty, i uruchom go normalnie.",
+  "discordIpc.resolvedTitle": "Discord znów jest połączony",
+  "discordIpc.resolvedDescription": "Wszystko gra. Nowly znów może pokazywać twoją aktywność na Discordzie.",
+  "discordIpc.alertDescription": "Discord działa jako administrator. Zobacz, jak to naprawić.",
+  "discordIpc.checkHint": "Discord działa jako administrator i blokuje Nowly.",
+  "discordIpc.fix": "Napraw"
 }

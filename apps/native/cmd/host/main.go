@@ -12,6 +12,7 @@ import (
 	"nowly.client/native/internal/contract"
 	"nowly.client/native/internal/discord"
 	"nowly.client/native/internal/logging"
+	"nowly.client/native/internal/notifications"
 	nativeprotocol "nowly.client/native/internal/native"
 )
 
@@ -101,6 +102,34 @@ func installManifests(logger *logging.Logger) {
 	logger.Printf("install: registered for %d Chromium-based browsers + Firefox", installed)
 }
 
+func shouldNotifyDiscordAccessDenied(err error, notified bool) bool {
+	return !notified && discord.IsAccessDenied(err)
+}
+
+func discordErrorCode(err error) contract.ErrorCode {
+	if discord.IsAccessDenied(err) {
+		return contract.ErrorDiscordIPCAccessDenied
+	}
+	return ""
+}
+
+func discordErrorResponse(err error) contract.NativeResponse {
+	if code := discordErrorCode(err); code != "" {
+		return contract.ErrorWithCode(code, err.Error())
+	}
+	return contract.Error(err.Error())
+}
+
+func maybeNotifyDiscordAccessDenied(logger *logging.Logger, err error, notified *bool) {
+	if !shouldNotifyDiscordAccessDenied(err, *notified) {
+		return
+	}
+	*notified = true
+	if notifyErr := notifications.DiscordAccessDenied(); notifyErr != nil {
+		logger.Printf("notification: failed to show Discord permission warning: %v", notifyErr)
+	}
+}
+
 func main() {
 	logger, _ := logging.New()
 	defer logger.Close()
@@ -117,6 +146,7 @@ func main() {
 
 	lastActivityLogKey := ""
 	lastLoggedClear := false
+	accessDeniedNotified := false
 
 	for {
 		var message contract.NativeMessage
@@ -132,7 +162,12 @@ func main() {
 		case contract.MessagePing:
 			// Best-effort attempt to connect to Discord so the extension can detect
 			// a successful setup without requiring an activity update first.
-			_ = client.Connect()
+			connectErr := client.Connect()
+			if connectErr != nil {
+				maybeNotifyDiscordAccessDenied(logger, connectErr, &accessDeniedNotified)
+			} else {
+				accessDeniedNotified = false
+			}
 			status := "connected"
 			discordConnected := client.Connected()
 			if discordConnected {
@@ -144,7 +179,9 @@ func main() {
 				profile = &contract.DiscordProfile{ID: p.ID, Username: p.Username, GlobalName: p.GlobalName, Avatar: p.Avatar}
 			}
 
-			_ = protocol.Write(contract.PongWithProfile(true, discordConnected, status, profile))
+			pong := contract.PongWithProfile(true, discordConnected, status, profile)
+			pong.Code = discordErrorCode(connectErr)
+			_ = protocol.Write(pong)
 
 		case contract.MessageSetActivity:
 			if message.Presence == nil {
@@ -162,7 +199,8 @@ func main() {
 			activity := discord.ActivityFromPresence(*message.Presence)
 			if err := client.SetActivity(activity); err != nil {
 				logger.Printf("native -> ERROR %v", err)
-				_ = protocol.Write(contract.Error(err.Error()))
+				maybeNotifyDiscordAccessDenied(logger, err, &accessDeniedNotified)
+				_ = protocol.Write(discordErrorResponse(err))
 				continue
 			}
 			_ = protocol.Write(contract.OK())
@@ -176,7 +214,8 @@ func main() {
 
 			if err := client.ClearActivity(); err != nil {
 				logger.Printf("native -> ERROR %v", err)
-				_ = protocol.Write(contract.Error(err.Error()))
+				maybeNotifyDiscordAccessDenied(logger, err, &accessDeniedNotified)
+				_ = protocol.Write(discordErrorResponse(err))
 				continue
 			}
 			_ = protocol.Write(contract.OK())

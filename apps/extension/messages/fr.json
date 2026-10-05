@@ -378,5 +378,19 @@
   "reveal.accountSync": "Salut, moi c'est Nolo ! Nouveau : vous pouvez synchroniser vos présences et vos réglages entre vos appareils. C'est facultatif, et ça se trouve dans les Réglages.",
   "reveal.accountSyncHint": "Nouveau dans les Réglages. Touchez ici !",
   "account.syncedJustNow": "Synchronisé à l'instant",
-  "account.signOutTitle": "Déconnexion de ce navigateur"
+  "account.signOutTitle": "Déconnexion de ce navigateur",
+  "discordIpc.title": "Discord bloque la connexion",
+  "discordIpc.description": "Discord est probablement lancé en administrateur, alors que votre navigateur et Nowly Desktop ne le sont pas. Windows empêche alors Nowly de communiquer avec Discord, et votre activité ne s'affiche plus.",
+  "discordIpc.stepsTitle": "Corriger sur Windows",
+  "discordIpc.step1": "Fermez complètement Discord, y compris depuis son icône dans la zone de notification.",
+  "discordIpc.step2": "Faites un clic droit sur le raccourci Discord, ouvrez Propriétés, puis l'onglet Compatibilité, et décochez « Exécuter ce programme en tant qu'administrateur ».",
+  "discordIpc.step3": "Relancez Discord normalement, puis cliquez sur Reconnecter.",
+  "discordIpc.safety": "Inutile de lancer votre navigateur ou Nowly en administrateur : ça n'aide pas et c'est moins sûr.",
+  "discordIpc.learnMore": "En savoir plus",
+  "discordIpc.stillBlocked": "Discord bloque toujours la connexion. Vérifiez qu'il est bien fermé, puis relancez-le normalement.",
+  "discordIpc.resolvedTitle": "Discord est reconnecté",
+  "discordIpc.resolvedDescription": "Tout est rentré dans l'ordre. Nowly peut de nouveau afficher votre activité sur Discord.",
+  "discordIpc.alertDescription": "Discord est lancé en administrateur. Voir comment corriger.",
+  "discordIpc.checkHint": "Discord est lancé en administrateur et bloque Nowly.",
+  "discordIpc.fix": "Corriger"
 }

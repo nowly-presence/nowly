@@ -42,6 +42,7 @@ type HeartbeatLogState = {
   connected: boolean
   status: string
   version?: string
+  code?: string
 }
 export const hasHeartbeatLogChanged = (
   previous: HeartbeatLogState | undefined,
@@ -50,7 +51,8 @@ export const hasHeartbeatLogChanged = (
   !previous ||
   previous.connected !== current.connected ||
   previous.status !== current.status ||
-  previous.version !== current.version
+  previous.version !== current.version ||
+  previous.code !== current.code
 
 let lastHeartbeatConnected: boolean | undefined
 let lastHeartbeatLogState: HeartbeatLogState | undefined
@@ -58,7 +60,7 @@ let lastHeartbeatLogState: HeartbeatLogState | undefined
 const registerNativeResponseHandler = (): void => {
   onNativeResponse((message) => {
     if (message.type === "ERROR") {
-      addRuntimeLog("error", "native", "native error", { reason: message.error })
+      addRuntimeLog("error", "native", "native error", { code: message.code, reason: message.error })
       if (lastHeartbeatConnected !== false) {
         trackAnalytics("native_heartbeat_failed", { payload: { reason: message.error } })
       }
@@ -77,9 +79,11 @@ const registerNativeResponseHandler = (): void => {
         connected: message.connected,
         status: message.status,
         version: message.version,
+        code: message.code,
       }
       if (hasHeartbeatLogChanged(lastHeartbeatLogState, heartbeatState)) {
-        addRuntimeLog(message.connected ? "success" : "warn", "native", "native heartbeat", {
+        addRuntimeLog(message.code ? "error" : message.connected ? "success" : "warn", "native", "native heartbeat", {
+          code: message.code,
           connected: message.connected,
           status: message.status,
           nativeVersion: message.version,

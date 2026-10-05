@@ -55,6 +55,30 @@ Open your browser extension settings and check:
 
 After you change permissions, reload the website tab and reopen the extension side panel.
 
+## Discord IPC: "Access is denied"
+
+Runtime logs may show:
+
+```text
+reason=open \\.\pipe\discord-ipc-0: Access is denied.
+```
+
+For integrations, use the stable native response code `DISCORD_IPC_ACCESS_DENIED` instead of matching this localized log text.
+
+This means the desktop app can reach the host, but Windows is refusing access to Discord's local IPC pipe. The most common cause is Discord being started with **Run as administrator** while the browser and Nowly Host run normally.
+
+Fix it in this order:
+
+1. Quit Discord completely, including its notification-area icon.
+2. In Task Manager, close any remaining `Discord.exe` processes.
+3. Open Discord's properties and disable **Run this program as an administrator** under **Compatibility**.
+4. Start Discord normally.
+5. Restart the browser or click **Reconnect** in Nowly.
+
+Do not run the browser or Nowly as administrator as a workaround. Native messaging is launched by the browser, and forcing an elevated host would require an unsafe privileged relay. Nowly Host can show a native notification when it detects this permission mismatch: a Windows tray notification, macOS Notification Center notification, or Linux desktop notification when `notify-send` is available.
+
+If the diagnostics page looks healthy but the log contains this error, clear the runtime logs and reproduce the problem. The diagnostics can reflect the native host connection while Discord's IPC connection is still denied.
+
 ## Linux: "Update Available" After Installing the .deb
 
 Message shown: **update available**, even though the `.deb` package was just installed.
