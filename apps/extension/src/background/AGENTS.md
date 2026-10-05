@@ -23,7 +23,17 @@ MV3 service worker: message router, presence lifecycle, native host bridge, pres
 - `chrome.sidePanel.open()` must run in the same user-gesture turn: never `await` before it (`services/open-panel.ts`).
 - The context menu has no "about to show" event, so the mute item is re-synced on every broadcast (`services/context-menu.ts`).
 - Failed installs with 408/429/5xx/network errors are queued and retried every minute (`managers/install-queue.ts`); `DELETE /presences/active` retries once so a blip doesn't leave a device "active" until the server's 12 min TTL.
-- The nowly.me web protocol keeps its own message names; only `GET_INSTALLED` is translated to `GET_PRESENCES` (`content/index.ts`).
+- The nowly.me web protocol keeps its own message names; only `GET_INSTALLED` is translated to `GET_PRESENCES` (`content/index.ts`). `NOWLY_SESSION` (from `nowly.me/extension/connect`) answers `NOWLY_SESSION_RESULT`.
+
+## Account sync
+
+- `services/account-sync.ts` orchestrates, `services/account-sync-local.ts` reads and applies local values, `services/account-api.ts` talks to `/me`, `/sync*`, `/devices/:deviceId/link` and `/extension/tokens/current` with `Authorization: Bearer <nxt_ token>`. State: `account` (token, user) and `syncState` (per key: last synced `version` and `base`, `cursor` = previous `serverTime`, `lastSyncedAt`, `error`, `pendingChoice`, `pendingPresences`) in `chrome.storage.local`.
+- Triggers: boot, the `account-sync` alarm (5 min), `SYNC_ACCOUNT` when the panel opens, and any change of `settings`, `presences`, `presenceSettings` or `featureReveals` in storage (3 s debounce, push only). Runs are serialized (`runAccountSync` queues one follow-up run); a push with nothing different from `base` makes no request, so applying a remote value never loops.
+- First sync (`cursor === null`): empty account, or identical data, or a device without presences and presence settings: adopt and upload silently. Otherwise set `pendingChoice` and wait for `RESOLVE_SYNC_CHOICE` (`account`: apply the account's documents, `device`: overwrite them with `baseVersion` = their current version). Nothing syncs while a choice is pending.
+- Pull uses `GET /sync/changes?since=<cursor>` and only takes documents with a higher version. Push uses `PUT /sync/:key` with `baseVersion`; a `409` merges with the returned value, applies the result locally and retries (3 attempts).
+- Presences received from another device go through `installPresenceFromApi` (same verification and install queue as the library). Until they install, they stay in `pendingPresences` so they are not seen as uninstalled here; `reconcilePendingPresences` applies their `enabled`, `schedule` and `installedAt` once installed.
+- `401` from any sync call signs out locally (account and sync state removed, local data kept). Network or server errors only set `error` and the next trigger retries.
+- "Stop syncing" (`STOP_ACCOUNT_SYNC`) calls `DELETE /sync`, which also revokes every token of the account on the server, then signs out locally.
 
 ## Notable dependencies
 `shared/` (types, constants, URL patterns, analytics catalog), Nowly API (`/presences`, `/devices`, `/insights/events`, `/security/public-key`), native host `nowly.client`.

@@ -9,6 +9,15 @@ export type ChangelogRelease = {
   stores?: ChangelogStore[]
 };
 
+export const isChangelogReleasePublished = (date: string | null, now = new Date()): boolean => {
+  if (date === null) return true;
+
+  const releaseDate = new Date(`${date}T00:00:00.000Z`);
+  if (Number.isNaN(releaseDate.getTime()) || releaseDate.toISOString().slice(0, 10) !== date) return false;
+
+  return date <= now.toISOString().slice(0, 10);
+};
+
 const toRelease = (entry: { slug: string; version: string; date: string | null; description: string; banner?: string; stores?: ChangelogStore[] }): ChangelogRelease => ({
   version: entry.version,
   slug: entry.slug,
@@ -32,11 +41,17 @@ export const latestReleaseSlugByStore = (releases: ChangelogRelease[]): Partial<
   return latest;
 };
 
-export const getChangelogReleases = (locale: string): ChangelogRelease[] => getChangelogList(locale).map(toRelease);
+export const getChangelogReleases = (locale: string): ChangelogRelease[] =>
+  getChangelogList(locale)
+    .map(toRelease)
+    .filter((release) => isChangelogReleasePublished(release.date));
 
 export const getChangelogRelease = (value: string, locale: string): ChangelogRelease | null => {
   const entry = getChangelogEntry(value, locale);
-  return entry ? toRelease(entry) : null;
+  if (!entry) return null;
+
+  const release = toRelease(entry);
+  return isChangelogReleasePublished(release.date) ? release : null;
 };
 
 export { parseChangelogVersion };

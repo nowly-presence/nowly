@@ -1,5 +1,6 @@
 import type { TrackInput } from "@nowly/analytics"
 import type {
+  AccountSnapshot,
   CurrentActivity,
   ExtensionSettings,
   InstalledPresences,
@@ -10,6 +11,7 @@ import type {
   PresenceSchedule,
   RuntimeLogEntry,
   StoredPresence,
+  SyncChoice,
   TabState,
   UserScriptsStatus,
 } from "@/shared/types"
@@ -81,6 +83,13 @@ export type RouterMessageMap = {
   EXPORT_DEVICE_DATA: { payload: void; response: { ok: boolean; data?: unknown; error?: string } }
   DELETE_DEVICE_DATA: { payload: void; response: { ok: boolean; error?: string } }
   SYNC_PRESENCE_SCRIPTS: { payload: void; response: { ok: boolean } }
+  GET_ACCOUNT: { payload: void; response: AccountSnapshot }
+  START_ACCOUNT_CONNECT: { payload: void; response: { ok: boolean } }
+  NOWLY_SESSION: { payload: unknown; response: { ok: boolean; error?: string } }
+  SYNC_ACCOUNT: { payload: void; response: AccountSnapshot }
+  RESOLVE_SYNC_CHOICE: { payload: { choice: SyncChoice }; response: AccountSnapshot }
+  SIGN_OUT_ACCOUNT: { payload: void; response: AccountSnapshot }
+  STOP_ACCOUNT_SYNC: { payload: void; response: { ok: boolean; error?: string } }
 }
 
 export type RouterMessageType = keyof RouterMessageMap

@@ -9,7 +9,8 @@ export type ExtensionRequestType =
   | "UNINSTALL_PRESENCE"
   | "GET_DEVICE_INFO"
   | "GET_ANALYTICS_CONSENT"
-  | "SET_ANALYTICS_CONSENT";
+  | "SET_ANALYTICS_CONSENT"
+  | "NOWLY_SESSION";
 
 export type ExtensionDeviceInfo = {
   deviceId: string | null

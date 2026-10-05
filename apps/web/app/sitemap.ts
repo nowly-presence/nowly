@@ -6,6 +6,8 @@ import { getPresenceCatalog } from "@/lib/presence-api";
 import { isSeoPreview, seoUrl } from "@/features/seo/lib/seo";
 import type { MetadataRoute } from "next";
 
+export const revalidate = 3600;
+
 // Some changelog entries carry a non-date placeholder (e.g. "To be determined")
 // instead of a real release date - fall back rather than crash the sitemap build.
 const parseReleaseDate = (value: string | null): Date | undefined => {

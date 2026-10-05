@@ -13,6 +13,7 @@ const mockPrisma = vi.hoisted(() => ({
   },
   device: {
     upsert: vi.fn(),
+    findUnique: vi.fn(),
   },
   devicePresence: {
     upsert: vi.fn(),
@@ -425,14 +426,17 @@ describe("getVersionHistory", () => {
 })
 
 describe("likePresence / unlikePresence / hasLikedPresence / getLikeCount", () => {
-  beforeEach(() => { vi.clearAllMocks() })
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockPrisma.device.findUnique.mockResolvedValue(null)
+  })
 
   it("upserts a like", async () => {
     await likePresence("youtube", "device-1")
 
     expect(mockPrisma.presenceLike.upsert).toHaveBeenCalledWith({
       where: { slug_deviceId: { slug: "youtube", deviceId: "device-1" } },
-      create: { slug: "youtube", deviceId: "device-1" },
+      create: { slug: "youtube", deviceId: "device-1", userId: null },
       update: {},
     })
   })
@@ -446,13 +450,14 @@ describe("likePresence / unlikePresence / hasLikedPresence / getLikeCount", () =
   })
 
   it("reports true when a like exists", async () => {
-    mockPrisma.presenceLike.findUnique.mockResolvedValue({ slug: "youtube", deviceId: "device-1" })
+    mockPrisma.presenceLike.count.mockResolvedValue(1)
 
     expect(await hasLikedPresence("youtube", "device-1")).toBe(true)
+    expect(mockPrisma.presenceLike.count).toHaveBeenCalledWith({ where: { slug: "youtube", deviceId: "device-1" } })
   })
 
   it("reports false when no like exists", async () => {
-    mockPrisma.presenceLike.findUnique.mockResolvedValue(null)
+    mockPrisma.presenceLike.count.mockResolvedValue(0)
 
     expect(await hasLikedPresence("youtube", "device-1")).toBe(false)
   })

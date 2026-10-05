@@ -3,11 +3,19 @@ import { serverEnv } from "@nowly/env/server"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 
+const DEV_WEB_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
+
+export const authTrustedOrigins = (): string[] => [
+  serverEnv.FRONTEND_URL,
+  serverEnv.INSIGHTS_URL,
+  ...(process.env.NODE_ENV === "production" ? [] : DEV_WEB_ORIGINS),
+]
+
 const createAuth = () => betterAuth({
   secret: serverEnv.BETTER_AUTH_SECRET,
   baseURL: serverEnv.BETTER_AUTH_URL,
   basePath: "/auth",
-  trustedOrigins: [serverEnv.FRONTEND_URL, serverEnv.INSIGHTS_URL],
+  trustedOrigins: authTrustedOrigins(),
   database: prismaAdapter(getPrisma(), { provider: "postgresql" }),
   advanced: {
     crossSubDomainCookies: {
@@ -19,6 +27,7 @@ const createAuth = () => betterAuth({
     discord: {
       clientId: serverEnv.DISCORD_CLIENT_ID,
       clientSecret: serverEnv.DISCORD_CLIENT_SECRET,
+      mapProfileToUser: (profile) => ({ discordId: profile.id }),
     },
   },
   user: {
@@ -28,17 +37,17 @@ const createAuth = () => betterAuth({
         input: false,
         defaultValue: "user",
       },
+      discordId: {
+        type: "string",
+        required: false,
+        input: false,
+      },
     },
   },
 })
 
 let instance: ReturnType<typeof createAuth> | undefined
 
-// Used by require-admin.ts to gate /insights/*. Sign-in UI lives in apps/insights,
-// which talks to this instance's /auth/* endpoints across origins (see
-// trustedOrigins/CORS credentials). Not wired into the extension or web app.
-// Lazy singleton like `getPrisma()`: the rest of the API must keep starting
-// fine without DATABASE_URL, so nothing here should run at import time.
 export const getAuth = () => {
   instance ??= createAuth()
   return instance

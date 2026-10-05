@@ -1,8 +1,10 @@
 import { deviceSyncBodySchema } from "@nowly/shared/schemas"
 import type { FastifyInstance } from "fastify"
+import { accountOf, requireExtensionToken } from "@/features/account/extension-token.middleware"
+import { attachTokenToDevice } from "@/features/account/extension-token.service"
 import { deviceRateLimitKey } from "@/shared/rate-limit"
 import { deriveDeviceToken, requireDeviceAccess } from "./device-token"
-import { deleteDeviceData, exportDeviceData, syncDevice } from "./device.service"
+import { deleteDeviceData, exportDeviceData, linkDeviceToUser, syncDevice } from "./device.service"
 
 export const deviceRoutes = async (fastify: FastifyInstance) => {
   fastify.post(
@@ -46,6 +48,22 @@ export const deviceRoutes = async (fastify: FastifyInstance) => {
       if (!requireDeviceAccess(request, reply, deviceId)) return
 
       await deleteDeviceData(deviceId)
+      return { ok: true }
+    },
+  )
+
+  fastify.post<{ Params: { deviceId: string } }>(
+    "/:deviceId/link",
+    { preHandler: requireExtensionToken("sync") },
+    async (request, reply) => {
+      const deviceId = request.params.deviceId.trim()
+      if (!requireDeviceAccess(request, reply, deviceId)) return
+
+      const account = accountOf(request)
+      if (account.deviceId && account.deviceId !== deviceId) return reply.status(403).send({ error: "DEVICE_MISMATCH" })
+
+      await linkDeviceToUser(deviceId, account.userId)
+      if (account.tokenId && !account.deviceId) await attachTokenToDevice(account.tokenId, deviceId)
       return { ok: true }
     },
   )

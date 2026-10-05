@@ -771,6 +771,14 @@
     "roadmap": {
       "title": "Roadmap",
       "description": "See what’s next for Nowly and the work we’re prioritising."
+    },
+    "extensionConnect": {
+      "title": "Connect the extension",
+      "description": "Sign in with Discord to sync Nowly between your browsers."
+    },
+    "account": {
+      "title": "Your Nowly account",
+      "description": "Linked devices, your data and your sign-in."
     }
   },
   "roadmapPage": {
@@ -803,6 +811,10 @@
           {
             "title": "Seasonal themes",
             "description": "The first seasonal theme: an October theme for Halloween."
+          },
+          {
+            "title": "Optional account sync",
+            "description": "Sign in with Discord to sync your presences and settings across browsers."
           }
         ]
       },
@@ -876,7 +888,7 @@
     "badge": "Privacy",
     "title": "Privacy Policy",
     "description": "How Nowly handles your data, what stays on your device, and what depends on your consent.",
-    "last-updated": "Last updated: 21 September 2026.",
+    "last-updated": "Last updated: 4 October 2026.",
     "intro": "This policy describes how <strong>{publisherName}</strong> (“we”), as data controller, processes personal data in connection with Nowly. Rich Presence activity is sent from your browser to the Discord client <strong>on your machine</strong>. It does not pass through our servers. Optional usage statistics and a few website features do involve our API or processors, as described below.",
     "sections": [
       {
@@ -902,6 +914,10 @@
       {
         "title": "Usage statistics (opt-in)",
         "body": "Analytics are <strong>off by default</strong>. If you enable them during onboarding or later in extension settings, our API may receive:<ul><li>Your device UUID (pseudonymous: it is not your Discord or Google account, but it is still personal data under the GDPR because it can identify your installation).</li><li>Browser, OS, language, extension version, and desktop app version.</li><li>Installed presence slugs/versions and usage events (for example installs, heartbeats, ratings) with a limited payload.</li></ul>We use this to improve Nowly and to show how popular presences are. Turning the setting off <strong>stops further collection</strong> and records that consent is withdrawn. It does <strong>not</strong> by itself erase events already stored. To have server-side records deleted, email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> with your device ID (visible in the extension) or another element that lets us locate the record."
+      },
+      {
+        "title": "Nowly account and sync (optional)",
+        "body": "Signing in is <strong>optional</strong>: without an account, the extension works exactly as before. If you sign in with Discord, on nowly.me or from the extension settings, we receive your Discord user ID, name, avatar and email address, and we create a Nowly account. To sync the extension between your browsers, our API then stores a copy of:<ul><li>your extension settings (theme, languages, schedules, priority order), except developer settings;</li><li>the list of presences you installed, whether they are on, and their schedules;</li><li>your settings for each presence;</li><li>the new features you have already discovered.</li></ul>We <strong>never</strong> store your current activity, your tabs, the pages you visit or your history. The devices you connect are linked to your account, together with the likes they gave. Legal basis: providing the service you ask for (Art. 6(1)(b)). This data is kept as long as your account exists. In the extension, “Stop syncing” erases the synced copy. On the <a href=\"/account\">account page</a> you can download your data, unlink a device or delete your account, which erases all of it."
       },
       {
         "title": "Discord",
@@ -1219,5 +1235,54 @@
         "answer": "The project code is public and available on GitHub. It is currently distributed under the BUSL-1.1 license, a source-available license that is not an OSI-approved open-source license. The presences, SDK, and development tools are documented separately."
       }
     ]
+  },
+  "extensionConnectPage": {
+    "eyebrow": "Extension",
+    "title": "Connect the extension",
+    "description": "Sign in with Discord to sync your presences and settings between your browsers. It is optional: without an account, Nowly works just like before.",
+    "checking": "Checking your account...",
+    "sign-in-title": "Sign in with Discord",
+    "sign-in-description": "Nowly only reads your Discord name, avatar and email address. Your activity never goes through our servers.",
+    "sign-in": "Continue with Discord",
+    "connect-title": "Connect this browser",
+    "connect-description": "Your Nowly extension will be linked to the account {name}.",
+    "connect": "Connect the extension",
+    "connecting": "Connecting the extension...",
+    "done-title": "All set",
+    "done-description": "Your extension is connected. You can close this tab and go back to Nowly.",
+    "not-detected-title": "Extension not detected",
+    "not-detected-description": "Open this page in the browser where Nowly is installed, or install the extension first.",
+    "error-title": "Something went wrong",
+    "error-description": "The extension could not be connected. Try again, or start again from the extension settings.",
+    "retry": "Try again",
+    "signed-in-as": "Signed in as {name}.",
+    "switch-account": "Not you? Switch account"
+  },
+  "accountPage": {
+    "eyebrow": "Account",
+    "title": "Your Nowly account",
+    "description": "Manage the devices linked to your account, your data and your sign-in.",
+    "checking": "Loading your account...",
+    "sign-in-title": "Sign in with Discord",
+    "sign-in-description": "An account is optional. It lets the extension sync your presences and settings between your browsers.",
+    "sign-in": "Continue with Discord",
+    "provider-discord": "Signed in with Discord",
+    "sign-out": "Sign out",
+    "devices-title": "Linked devices",
+    "devices-description": "Browsers where the extension is connected to this account.",
+    "devices-empty": "No linked device yet.",
+    "device-unknown": "Unknown browser",
+    "device-last-seen": "Last seen on {date}",
+    "unlink": "Unlink",
+    "unlink-confirm": "This browser will stop syncing with your account. Its local data stays on it.",
+    "data-title": "Your data",
+    "data-description": "Download everything Nowly keeps for this account, or delete the account. Deleting it erases the synced copy and unlinks your devices.",
+    "export": "Download my data",
+    "export-success": "Your data was downloaded.",
+    "delete": "Delete my account",
+    "delete-confirm": "This permanently deletes your Nowly account and the synced copy of your extension. This cannot be undone.",
+    "delete-success": "Your account was deleted.",
+    "local-note": "Data stored by the extension on your devices is not affected. You can erase it from the extension settings.",
+    "action-error": "Something went wrong. Please try again."
   }
 }

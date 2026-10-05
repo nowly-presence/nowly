@@ -1,4 +1,13 @@
 import {
+  handleGetAccount,
+  handleNowlySession,
+  handleResolveSyncChoice,
+  handleSignOutAccount,
+  handleStartAccountConnect,
+  handleStopAccountSync,
+  handleSyncAccount,
+} from "@/background/router/handlers/account.handlers"
+import {
   handleClearActivityMessage,
   handleDebug,
   handleGetCurrentActivity,
@@ -103,4 +112,11 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   EXPORT_DEVICE_DATA: handleExportDeviceData,
   DELETE_DEVICE_DATA: handleDeleteDeviceData,
   SYNC_PRESENCE_SCRIPTS: handleSyncPresenceScripts,
+  GET_ACCOUNT: handleGetAccount,
+  START_ACCOUNT_CONNECT: handleStartAccountConnect,
+  NOWLY_SESSION: handleNowlySession,
+  SYNC_ACCOUNT: handleSyncAccount,
+  RESOLVE_SYNC_CHOICE: handleResolveSyncChoice,
+  SIGN_OUT_ACCOUNT: handleSignOutAccount,
+  STOP_ACCOUNT_SYNC: handleStopAccountSync,
 })

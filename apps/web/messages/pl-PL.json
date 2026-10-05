@@ -771,6 +771,14 @@
     "roadmap": {
       "title": "Mapa drogowa",
       "description": "Zobacz, co nadchodzi w Nowly i jakie są nasze priorytety."
+    },
+    "extensionConnect": {
+      "title": "Połącz rozszerzenie",
+      "description": "Zaloguj się przez Discord, aby synchronizować Nowly między przeglądarkami."
+    },
+    "account": {
+      "title": "Twoje konto Nowly",
+      "description": "Połączone urządzenia, twoje dane i logowanie."
     }
   },
   "roadmapPage": {
@@ -803,6 +811,10 @@
           {
             "title": "Motywy sezonowe",
             "description": "Pierwszy motyw sezonowy: październikowy motyw na Halloween."
+          },
+          {
+            "title": "Opcjonalna synchronizacja konta",
+            "description": "Zaloguj się przez Discord, aby synchronizować obecności i ustawienia między przeglądarkami."
           }
         ]
       },
@@ -876,7 +888,7 @@
     "badge": "Prywatność",
     "title": "Polityka prywatności",
     "description": "Jak Nowly traktuje Twoje dane, co zostaje na Twoim urządzeniu, a co zależy od Twojej zgody.",
-    "last-updated": "Ostatnia aktualizacja: 17 września 2026.",
+    "last-updated": "Ostatnia aktualizacja: 4 października 2026.",
     "intro": "Ta polityka opisuje, jak <strong>{publisherName}</strong> („my”), jako administrator danych, przetwarza dane osobowe w związku z Nowly. Aktywność Rich Presence jest wysyłana z Twojej przeglądarki do klienta Discord <strong>na Twoim urządzeniu</strong>. Nie przechodzi przez nasze serwery. Opcjonalne statystyki użytkowania i kilka funkcji strony wymagają naszego API lub podmiotów przetwarzających, jak opisano poniżej.",
     "sections": [
       {
@@ -902,6 +914,10 @@
       {
         "title": "Statystyki użytkowania (opt-in)",
         "body": "Analityka jest <strong>domyślnie wyłączona</strong>. Jeśli włączysz ją podczas onboardingu lub później w ustawieniach rozszerzenia, nasze API może otrzymać:<ul><li>UUID Twojego urządzenia (pseudonimowe: to nie Twoje konto Discord ani Google, ale nadal dane osobowe w rozumieniu RODO, ponieważ mogą identyfikować Twoją instalację).</li><li>Przeglądarkę, system operacyjny, język, wersję rozszerzenia i wersję aplikacji desktopowej.</li><li>Slugi/wersje zainstalowanych obecności oraz zdarzenia użytkowania (np. instalacje, heartbeaty, oceny) z ograniczonym ładunkiem.</li></ul>Używamy tego do ulepszania Nowly i pokazywania popularności obecności. Wyłączenie tego ustawienia <strong>zatrzymuje dalsze zbieranie</strong> i odnotowuje wycofanie zgody. <strong>Nie</strong> usuwa to automatycznie już zapisanych zdarzeń. Aby zażądać usunięcia zapisów po stronie serwera, napisz na <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>, podając identyfikator urządzenia (widoczny w rozszerzeniu) lub inny element pozwalający zlokalizować zapis."
+      },
+      {
+        "title": "Konto Nowly i synchronizacja (opcjonalne)",
+        "body": "Logowanie jest <strong>opcjonalne</strong>: bez konta rozszerzenie działa dokładnie tak jak wcześniej. Jeśli zalogujesz się przez Discord, na nowly.me lub w ustawieniach rozszerzenia, otrzymujemy twój identyfikator użytkownika Discord, nazwę, awatar i adres e-mail oraz tworzymy konto Nowly. Aby synchronizować rozszerzenie między przeglądarkami, nasze API przechowuje kopię:<ul><li>ustawień rozszerzenia (motyw, języki, harmonogramy, kolejność priorytetów), z wyjątkiem ustawień deweloperskich;</li><li>listy zainstalowanych obecności, informacji, czy są włączone, i ich harmonogramów;</li><li>twoich ustawień każdej obecności;</li><li>nowości, które już odkryłeś.</li></ul><strong>Nigdy</strong> nie przechowujemy twojej bieżącej aktywności, kart, odwiedzanych stron ani historii. Urządzenia, które połączysz, są powiązane z twoim kontem, razem z polubieniami, które dały. Podstawa prawna: świadczenie usługi, o którą prosisz (art. 6 ust. 1 lit. b RODO). Dane są przechowywane, dopóki istnieje twoje konto. W rozszerzeniu opcja „Wyłącz synchronizację” usuwa zsynchronizowaną kopię. Na <a href=\"/account\">stronie konta</a> możesz pobrać swoje dane, odłączyć urządzenie lub usunąć konto, co usuwa wszystko."
       },
       {
         "title": "Discord",
@@ -1135,5 +1151,54 @@
         "category": "general"
       }
     ]
+  },
+  "extensionConnectPage": {
+    "eyebrow": "Rozszerzenie",
+    "title": "Połącz rozszerzenie",
+    "description": "Zaloguj się przez Discord, aby synchronizować obecności i ustawienia między przeglądarkami. To opcjonalne: bez konta Nowly działa tak jak wcześniej.",
+    "checking": "Sprawdzanie konta...",
+    "sign-in-title": "Zaloguj się przez Discord",
+    "sign-in-description": "Nowly odczytuje tylko twoją nazwę, awatar i adres e-mail z Discorda. Twoja aktywność nigdy nie przechodzi przez nasze serwery.",
+    "sign-in": "Kontynuuj z Discordem",
+    "connect-title": "Połącz tę przeglądarkę",
+    "connect-description": "Twoje rozszerzenie Nowly zostanie połączone z kontem {name}.",
+    "connect": "Połącz rozszerzenie",
+    "connecting": "Łączenie rozszerzenia...",
+    "done-title": "Gotowe",
+    "done-description": "Rozszerzenie jest połączone. Możesz zamknąć tę kartę i wrócić do Nowly.",
+    "not-detected-title": "Nie wykryto rozszerzenia",
+    "not-detected-description": "Otwórz tę stronę w przeglądarce, w której zainstalowano Nowly, albo najpierw zainstaluj rozszerzenie.",
+    "error-title": "Coś poszło nie tak",
+    "error-description": "Nie udało się połączyć rozszerzenia. Spróbuj ponownie albo zacznij od nowa w ustawieniach rozszerzenia.",
+    "retry": "Spróbuj ponownie",
+    "signed-in-as": "Zalogowano jako {name}.",
+    "switch-account": "To nie ty? Zmień konto"
+  },
+  "accountPage": {
+    "eyebrow": "Konto",
+    "title": "Twoje konto Nowly",
+    "description": "Zarządzaj urządzeniami połączonymi z kontem, swoimi danymi i logowaniem.",
+    "checking": "Wczytywanie konta...",
+    "sign-in-title": "Zaloguj się przez Discord",
+    "sign-in-description": "Konto jest opcjonalne. Pozwala rozszerzeniu synchronizować obecności i ustawienia między przeglądarkami.",
+    "sign-in": "Kontynuuj z Discordem",
+    "provider-discord": "Zalogowano przez Discord",
+    "sign-out": "Wyloguj się",
+    "devices-title": "Połączone urządzenia",
+    "devices-description": "Przeglądarki, w których rozszerzenie jest połączone z tym kontem.",
+    "devices-empty": "Nie połączono jeszcze żadnego urządzenia.",
+    "device-unknown": "Nieznana przeglądarka",
+    "device-last-seen": "Ostatnio widziane {date}",
+    "unlink": "Odłącz",
+    "unlink-confirm": "Ta przeglądarka przestanie synchronizować się z twoim kontem. Jej dane lokalne pozostaną na urządzeniu.",
+    "data-title": "Twoje dane",
+    "data-description": "Pobierz wszystko, co Nowly przechowuje dla tego konta, albo usuń konto. Usunięcie kasuje zsynchronizowaną kopię i odłącza twoje urządzenia.",
+    "export": "Pobierz moje dane",
+    "export-success": "Twoje dane zostały pobrane.",
+    "delete": "Usuń moje konto",
+    "delete-confirm": "To trwale usuwa twoje konto Nowly i zsynchronizowaną kopię rozszerzenia. Tej operacji nie można cofnąć.",
+    "delete-success": "Twoje konto zostało usunięte.",
+    "local-note": "Dane zapisane przez rozszerzenie na twoich urządzeniach pozostają bez zmian. Możesz je usunąć w ustawieniach rozszerzenia.",
+    "action-error": "Coś poszło nie tak. Spróbuj ponownie."
   }
 }

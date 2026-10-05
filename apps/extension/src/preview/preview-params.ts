@@ -1,3 +1,7 @@
+export type PreviewAccount = "out" | "in" | "choice" | "error"
+
+const ACCOUNTS: readonly PreviewAccount[] = ["out", "in", "choice", "error"]
+
 export type PreviewScenario = "live" | "idle" | "nohost" | "nodiscord" | "paused" | "empty"
 
 const SCENARIOS: readonly PreviewScenario[] = ["live", "idle", "nohost", "nodiscord", "paused", "empty"]
@@ -5,6 +9,7 @@ const SCENARIOS: readonly PreviewScenario[] = ["live", "idle", "nohost", "nodisc
 const params = new URLSearchParams(location.search)
 
 const scenarioParam = params.get("scenario")
+const accountParam = params.get("account")
 const seasonParam = params.get("season")
 const prank = params.get("prank") === "1"
 
@@ -21,4 +26,6 @@ export const previewParams = {
   review: params.get("review") === "1",
   season: seasonParam ?? (prank ? "halloween" : null),
   prank,
+  reveal: params.get("reveal") === "1",
+  account: ACCOUNTS.find((value) => value === accountParam) ?? "out",
 }

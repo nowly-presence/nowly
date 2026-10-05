@@ -1,0 +1,32 @@
+model ExtensionToken {
+  id         String    @id
+  userId     String    @map("user_id")
+  deviceId   String?   @map("device_id")
+  tokenHash  String    @unique @map("token_hash")
+  scopes     String[]
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  expiresAt  DateTime  @map("expires_at") @db.Timestamptz(6)
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz(6)
+  lastUsedAt DateTime? @map("last_used_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([deviceId])
+  @@map("extension_tokens")
+}
+
+model SyncDocument {
+  userId            String   @map("user_id")
+  key               String
+  value             Json
+  version           Int
+  updatedAt         DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+  updatedByDeviceId String?  @map("updated_by_device_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, key])
+  @@index([userId, updatedAt])
+  @@map("sync_documents")
+}

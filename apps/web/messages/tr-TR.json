@@ -771,6 +771,14 @@
     "roadmap": {
       "title": "Yol haritası",
       "description": "Nowly için sırada ne olduğunu ve önceliklerimizi görün."
+    },
+    "extensionConnect": {
+      "title": "Uzantıyı bağla",
+      "description": "Nowly'yi tarayıcıların arasında eşitlemek için Discord ile giriş yap."
+    },
+    "account": {
+      "title": "Nowly hesabın",
+      "description": "Bağlı cihazlar, verilerin ve oturumun."
     }
   },
   "roadmapPage": {
@@ -803,6 +811,10 @@
           {
             "title": "Mevsim temaları",
             "description": "İlk mevsim teması: Cadılar Bayramı için bir Ekim teması."
+          },
+          {
+            "title": "İsteğe bağlı hesap eşitleme",
+            "description": "Presence'larını ve ayarlarını tarayıcıların arasında eşitlemek için Discord ile giriş yap."
           }
         ]
       },
@@ -876,7 +888,7 @@
     "badge": "Gizlilik",
     "title": "Gizlilik Politikası",
     "description": "Nowly'nin verilerini nasıl işlediği, cihazında ne kaldığı ve neyin iznine bağlı olduğu.",
-    "last-updated": "Son güncelleme: 17 Eylül 2026.",
+    "last-updated": "Son güncelleme: 4 Ekim 2026.",
     "intro": "Bu politika, veri sorumlusu olarak <strong>{publisherName}</strong>'in (\"biz\") Nowly ile bağlantılı kişisel verileri nasıl işlediğini açıklar. Rich Presence etkinliği tarayıcından <strong>cihazındaki</strong> Discord istemcisine gönderilir. Sunucularımızdan geçmez. İsteğe bağlı kullanım istatistikleri ve birkaç web sitesi özelliği, aşağıda açıklandığı gibi API'mizi veya işleyicilerimizi içerir.",
     "sections": [
       {
@@ -902,6 +914,10 @@
       {
         "title": "Kullanım istatistikleri (isteğe bağlı katılım)",
         "body": "Analizler <strong>varsayılan olarak kapalıdır</strong>. Kurulum sırasında veya daha sonra uzantı ayarlarında etkinleştirirsen, API'miz şunları alabilir:<ul><li>Cihaz UUID'in (takma ad: Discord veya Google hesabın değil, ancak kurulumunu tanımlayabildiği için GDPR kapsamında yine de kişisel veridir).</li><li>Tarayıcı, işletim sistemi, dil, uzantı sürümü ve masaüstü uygulaması sürümü.</li><li>Yüklenen varlık slug'ları/sürümleri ve sınırlı yükle kullanım olayları (örneğin yüklemeler, kalp atışları, değerlendirmeler).</li></ul>Bunu Nowly'yi geliştirmek ve varlıkların ne kadar popüler olduğunu göstermek için kullanıyoruz. Bu ayarı kapatmak <strong>daha fazla toplamayı durdurur</strong> ve rızanın geri çekildiğini kaydeder. Bu, zaten depolanmış olayları otomatik olarak <strong>silmez</strong>. Sunucu tarafı kayıtların silinmesini istemek için, cihaz kimliğinle (uzantıda görünür) veya kaydı bulmamıza yardımcı olacak başka bir bilgiyle <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> adresine e-posta gönder."
+      },
+      {
+        "title": "Nowly hesabı ve eşitleme (isteğe bağlı)",
+        "body": "Giriş yapmak <strong>isteğe bağlıdır</strong>: hesap olmadan uzantı tam olarak eskisi gibi çalışır. nowly.me üzerinde ya da uzantı ayarlarından Discord ile giriş yaparsan Discord kullanıcı kimliğini, adını, avatarını ve e-posta adresini alır ve bir Nowly hesabı oluştururuz. Uzantıyı tarayıcıların arasında eşitlemek için API'miz şunların bir kopyasını saklar:<ul><li>uzantı ayarların (tema, diller, zamanlamalar, öncelik sırası), geliştirici ayarları hariç;</li><li>kurulu presence'ların listesi, açık olup olmadıkları ve zamanlamaları;</li><li>her presence için ayarların;</li><li>keşfettiğin yenilikler.</li></ul>Mevcut etkinliğini, sekmelerini, ziyaret ettiğin sayfaları ya da geçmişini <strong>asla</strong> saklamayız. Bağladığın cihazlar, verdikleri beğenilerle birlikte hesabına bağlanır. Hukuki dayanak: talep ettiğin hizmetin sunulması (GVKT md. 6(1)(b)). Bu veriler hesabın var olduğu sürece saklanır. Uzantıda “Eşitlemeyi durdur” eşitlenmiş kopyayı siler. <a href=\"/account\">Hesap sayfasında</a> verilerini indirebilir, bir cihazın bağlantısını kaldırabilir ya da her şeyi silen hesap silme işlemini yapabilirsin."
       },
       {
         "title": "Discord",
@@ -1135,5 +1151,54 @@
         "category": "general"
       }
     ]
+  },
+  "extensionConnectPage": {
+    "eyebrow": "Uzantı",
+    "title": "Uzantıyı bağla",
+    "description": "Presence'larını ve ayarlarını tarayıcıların arasında eşitlemek için Discord ile giriş yap. Bu isteğe bağlıdır: hesap olmadan Nowly eskisi gibi çalışır.",
+    "checking": "Hesabın kontrol ediliyor...",
+    "sign-in-title": "Discord ile giriş yap",
+    "sign-in-description": "Nowly yalnızca Discord adını, avatarını ve e-posta adresini okur. Etkinliğin asla sunucularımızdan geçmez.",
+    "sign-in": "Discord ile devam et",
+    "connect-title": "Bu tarayıcıyı bağla",
+    "connect-description": "Nowly uzantın {name} hesabına bağlanacak.",
+    "connect": "Uzantıyı bağla",
+    "connecting": "Uzantı bağlanıyor...",
+    "done-title": "Hazır",
+    "done-description": "Uzantın bağlandı. Bu sekmeyi kapatıp Nowly'ye dönebilirsin.",
+    "not-detected-title": "Uzantı algılanmadı",
+    "not-detected-description": "Bu sayfayı Nowly'nin kurulu olduğu tarayıcıda aç ya da önce uzantıyı kur.",
+    "error-title": "Bir sorun oluştu",
+    "error-description": "Uzantı bağlanamadı. Tekrar dene ya da uzantı ayarlarından yeniden başla.",
+    "retry": "Tekrar dene",
+    "signed-in-as": "{name} olarak giriş yapıldı.",
+    "switch-account": "Sen değil misin? Hesap değiştir"
+  },
+  "accountPage": {
+    "eyebrow": "Hesap",
+    "title": "Nowly hesabın",
+    "description": "Hesabına bağlı cihazları, verilerini ve oturumunu yönet.",
+    "checking": "Hesabın yükleniyor...",
+    "sign-in-title": "Discord ile giriş yap",
+    "sign-in-description": "Hesap isteğe bağlıdır. Uzantının presence'larını ve ayarlarını tarayıcıların arasında eşitlemesini sağlar.",
+    "sign-in": "Discord ile devam et",
+    "provider-discord": "Discord ile giriş yapıldı",
+    "sign-out": "Çıkış yap",
+    "devices-title": "Bağlı cihazlar",
+    "devices-description": "Uzantının bu hesaba bağlı olduğu tarayıcılar.",
+    "devices-empty": "Henüz bağlı cihaz yok.",
+    "device-unknown": "Bilinmeyen tarayıcı",
+    "device-last-seen": "Son görülme: {date}",
+    "unlink": "Bağlantıyı kaldır",
+    "unlink-confirm": "Bu tarayıcı artık hesabınla eşitlenmeyecek. Yerel verileri cihazda kalır.",
+    "data-title": "Verilerin",
+    "data-description": "Nowly'nin bu hesap için sakladığı her şeyi indir ya da hesabı sil. Silme işlemi eşitlenmiş kopyayı siler ve cihazlarının bağlantısını kaldırır.",
+    "export": "Verilerimi indir",
+    "export-success": "Verilerin indirildi.",
+    "delete": "Hesabımı sil",
+    "delete-confirm": "Bu işlem Nowly hesabını ve uzantının eşitlenmiş kopyasını kalıcı olarak siler. Geri alınamaz.",
+    "delete-success": "Hesabın silindi.",
+    "local-note": "Uzantının cihazlarında sakladığı veriler etkilenmez. Bunları uzantı ayarlarından silebilirsin.",
+    "action-error": "Bir sorun oluştu. Lütfen tekrar dene."
   }
 }

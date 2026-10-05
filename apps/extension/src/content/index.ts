@@ -23,6 +23,7 @@ const WEB_MESSAGE_TYPES = new Set([
   "GET_DEVICE_INFO",
   "GET_ANALYTICS_CONSENT",
   "SET_ANALYTICS_CONSENT",
+  "NOWLY_SESSION",
 ])
 
 const toRouterMessageType = (type: string): string => (type === "GET_INSTALLED" ? "GET_PRESENCES" : type)

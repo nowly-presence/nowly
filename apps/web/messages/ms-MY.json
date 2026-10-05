@@ -771,6 +771,14 @@
     "roadmap": {
       "title": "Pelan hala tuju",
       "description": "Lihat perkara seterusnya untuk Nowly dan keutamaan yang sedang kami usahakan."
+    },
+    "extensionConnect": {
+      "title": "Sambungkan sambungan",
+      "description": "Log masuk dengan Discord untuk menyegerakkan Nowly antara pelayar anda."
+    },
+    "account": {
+      "title": "Akaun Nowly anda",
+      "description": "Peranti yang dipautkan, data anda dan log masuk anda."
     }
   },
   "roadmapPage": {
@@ -803,6 +811,10 @@
           {
             "title": "Tema bermusim",
             "description": "Tema bermusim pertama: tema Oktober untuk Halloween."
+          },
+          {
+            "title": "Penyegerakan akaun pilihan",
+            "description": "Log masuk dengan Discord untuk menyegerakkan presence dan tetapan antara pelayar."
           }
         ]
       },
@@ -876,7 +888,7 @@
     "badge": "Privasi",
     "title": "Dasar Privasi",
     "description": "Cara Nowly mengendalikan data anda, apa yang kekal pada peranti anda, dan apa yang bergantung pada persetujuan anda.",
-    "last-updated": "Kemas kini terakhir: 17 September 2026.",
+    "last-updated": "Kemas kini terakhir: 4 Oktober 2026.",
     "intro": "Dasar ini menerangkan bagaimana <strong>{publisherName}</strong> (\"kami\"), sebagai pengawal data, memproses data peribadi berkaitan Nowly. Aktiviti Rich Presence dihantar daripada pelayar anda ke klien Discord <strong>pada mesin anda</strong>. Ia tidak melalui pelayan kami. Statistik penggunaan pilihan dan beberapa ciri laman web melibatkan API atau pemproses kami, seperti yang diterangkan di bawah.",
     "sections": [
       {
@@ -902,6 +914,10 @@
       {
         "title": "Statistik penggunaan (pilih masuk)",
         "body": "Analitik <strong>dimatikan secara lalai</strong>. Jika anda mengaktifkannya semasa onboarding atau kemudian dalam tetapan sambungan, API kami mungkin menerima:<ul><li>UUID peranti anda (nama samaran: bukan akaun Discord atau Google anda, tetapi masih data peribadi di bawah GDPR kerana ia boleh mengenal pasti pemasangan anda).</li><li>Pelayar, OS, bahasa, versi sambungan, dan versi aplikasi desktop.</li><li>Slug/versi kehadiran yang dipasang dan peristiwa penggunaan (contohnya pemasangan, degupan jantung, penilaian) dengan muatan yang terhad.</li></ul>Kami menggunakan ini untuk menambah baik Nowly dan menunjukkan betapa popularnya kehadiran. Mematikan tetapan ini <strong>menghentikan pengumpulan selanjutnya</strong> dan merekodkan penarikan balik persetujuan. Ia <strong>tidak</strong> memadamkan peristiwa yang telah disimpan dengan sendirinya. Untuk meminta rekod sisi pelayan dipadamkan, e-mel <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> dengan ID peranti anda (kelihatan dalam sambungan) atau elemen lain yang membolehkan kami mencari rekod tersebut."
+      },
+      {
+        "title": "Akaun Nowly dan penyegerakan (pilihan)",
+        "body": "Log masuk adalah <strong>pilihan</strong>: tanpa akaun, sambungan berfungsi sama seperti sebelum ini. Jika anda log masuk dengan Discord, di nowly.me atau dari tetapan sambungan, kami menerima ID pengguna Discord, nama, avatar dan alamat e-mel anda, dan kami mencipta akaun Nowly. Untuk menyegerakkan sambungan antara pelayar anda, API kami menyimpan salinan:<ul><li>tetapan sambungan anda (tema, bahasa, jadual, susunan keutamaan), kecuali tetapan pembangun;</li><li>senarai presence yang dipasang, sama ada ia dihidupkan, dan jadualnya;</li><li>tetapan anda bagi setiap presence;</li><li>ciri baharu yang telah anda temui.</li></ul>Kami <strong>tidak pernah</strong> menyimpan aktiviti semasa, tab, halaman yang anda lawati atau sejarah anda. Peranti yang anda sambungkan dipautkan kepada akaun anda, bersama suka yang telah diberikan. Asas undang-undang: penyediaan perkhidmatan yang anda minta (Perkara 6(1)(b) GDPR). Data ini disimpan selagi akaun anda wujud. Dalam sambungan, “Berhenti menyegerak” memadam salinan yang disegerakkan. Di <a href=\"/account\">halaman akaun</a>, anda boleh memuat turun data anda, menyahpaut peranti atau memadam akaun anda, yang memadam semuanya."
       },
       {
         "title": "Discord",
@@ -1135,5 +1151,54 @@
         "category": "general"
       }
     ]
+  },
+  "extensionConnectPage": {
+    "eyebrow": "Sambungan",
+    "title": "Sambungkan sambungan",
+    "description": "Log masuk dengan Discord untuk menyegerakkan presence dan tetapan anda antara pelayar anda. Ini pilihan: tanpa akaun, Nowly berfungsi seperti biasa.",
+    "checking": "Menyemak akaun anda...",
+    "sign-in-title": "Log masuk dengan Discord",
+    "sign-in-description": "Nowly hanya membaca nama, avatar dan alamat e-mel Discord anda. Aktiviti anda tidak pernah melalui pelayan kami.",
+    "sign-in": "Teruskan dengan Discord",
+    "connect-title": "Sambungkan pelayar ini",
+    "connect-description": "Sambungan Nowly anda akan dipautkan kepada akaun {name}.",
+    "connect": "Sambungkan sambungan",
+    "connecting": "Menyambungkan sambungan...",
+    "done-title": "Selesai",
+    "done-description": "Sambungan anda telah disambungkan. Anda boleh menutup tab ini dan kembali ke Nowly.",
+    "not-detected-title": "Sambungan tidak dikesan",
+    "not-detected-description": "Buka halaman ini dalam pelayar yang telah memasang Nowly, atau pasang sambungan terlebih dahulu.",
+    "error-title": "Ada masalah",
+    "error-description": "Sambungan tidak dapat disambungkan. Cuba lagi, atau mula semula dari tetapan sambungan.",
+    "retry": "Cuba lagi",
+    "signed-in-as": "Log masuk sebagai {name}.",
+    "switch-account": "Bukan anda? Tukar akaun"
+  },
+  "accountPage": {
+    "eyebrow": "Akaun",
+    "title": "Akaun Nowly anda",
+    "description": "Urus peranti yang dipautkan kepada akaun anda, data anda dan log masuk anda.",
+    "checking": "Memuatkan akaun anda...",
+    "sign-in-title": "Log masuk dengan Discord",
+    "sign-in-description": "Akaun adalah pilihan. Ia membolehkan sambungan menyegerakkan presence dan tetapan anda antara pelayar anda.",
+    "sign-in": "Teruskan dengan Discord",
+    "provider-discord": "Log masuk dengan Discord",
+    "sign-out": "Log keluar",
+    "devices-title": "Peranti yang dipautkan",
+    "devices-description": "Pelayar tempat sambungan disambungkan kepada akaun ini.",
+    "devices-empty": "Belum ada peranti yang dipautkan.",
+    "device-unknown": "Pelayar tidak diketahui",
+    "device-last-seen": "Kali terakhir dilihat pada {date}",
+    "unlink": "Nyahpaut",
+    "unlink-confirm": "Pelayar ini tidak lagi akan disegerakkan dengan akaun anda. Data setempatnya kekal padanya.",
+    "data-title": "Data anda",
+    "data-description": "Muat turun semua yang disimpan oleh Nowly untuk akaun ini, atau padam akaun. Pemadaman akan memadam salinan yang disegerakkan dan menyahpaut peranti anda.",
+    "export": "Muat turun data saya",
+    "export-success": "Data anda telah dimuat turun.",
+    "delete": "Padam akaun saya",
+    "delete-confirm": "Ini memadam akaun Nowly anda dan salinan sambungan yang disegerakkan secara kekal. Tindakan ini tidak boleh dibatalkan.",
+    "delete-success": "Akaun anda telah dipadam.",
+    "local-note": "Data yang disimpan oleh sambungan pada peranti anda tidak terjejas. Anda boleh memadamnya daripada tetapan sambungan.",
+    "action-error": "Ada masalah. Sila cuba lagi."
   }
 }
