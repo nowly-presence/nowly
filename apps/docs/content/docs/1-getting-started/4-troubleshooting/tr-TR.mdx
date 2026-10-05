@@ -55,6 +55,30 @@ Tarayıcınızın uzantı ayarlarını açın ve şunları kontrol edin:
 
 İzinleri değiştirdikten sonra web sitesi sekmesini yeniden yükleyin ve uzantının yan panelini yeniden açın.
 
+## Discord IPC: "Access is denied"
+
+Çalışma zamanı günlüklerinde şu görünebilir:
+
+```text
+reason=open \\.\pipe\discord-ipc-0: Access is denied.
+```
+
+Entegrasyonlarda, çevrilmiş olabilecek bu günlük metnini eşleştirmek yerine kararlı yerel yanıt kodu `DISCORD_IPC_ACCESS_DENIED` kullanın.
+
+Bu, masaüstü uygulamasının host'a ulaşabildiği ancak Windows'un Discord'un yerel IPC kanalına erişimi reddettiği anlamına gelir. En yaygın neden, tarayıcı ve Nowly Host normal çalışırken Discord'un **Yönetici olarak çalıştır** ile başlatılmasıdır.
+
+Şu sırayla düzeltin:
+
+1. Bildirim alanındaki simgesi dahil Discord'u tamamen kapatın.
+2. Görev Yöneticisi'nde kalan `Discord.exe` işlemlerini kapatın.
+3. Discord'un özelliklerini açın ve **Uyumluluk** sekmesinde **Bu programı yönetici olarak çalıştır** seçeneğini kapatın.
+4. Discord'u normal şekilde başlatın.
+5. Tarayıcıyı yeniden başlatın veya Nowly'de **Yeniden bağlan**'a tıklayın.
+
+Sorunu aşmak için tarayıcıyı veya Nowly'yi yönetici olarak çalıştırmayın. Native Messaging tarayıcı tarafından başlatılır ve yükseltilmiş bir host'u zorlamak güvensiz, ayrıcalıklı bir aracı gerektirir. Nowly Host bu izin uyuşmazlığını algıladığında bir sistem bildirimi gösterebilir: Windows'ta bildirim alanında, macOS'ta Bildirim Merkezi'nde veya `notify-send` kullanılabiliyorsa Linux masaüstü bildirimi olarak.
+
+Tanılama sayfası sorunsuz görünüyor ama günlükte bu hata varsa çalışma zamanı günlüklerini temizleyin ve sorunu yeniden oluşturun. Tanılama, Discord'un IPC bağlantısına erişim hâlâ reddedilirken yerel host bağlantısını gösterebilir.
+
 ## Linux: .deb Kurulduktan Sonra "Güncelleme Mevcut"
 
 Gösterilen mesaj: `.deb` paketi yeni kurulmuş olsa bile **güncelleme mevcut**.

@@ -55,6 +55,30 @@ Otwórz ustawienia rozszerzeń w przeglądarce i sprawdź:
 
 Po zmianie uprawnień odśwież kartę witryny i otwórz ponownie panel boczny rozszerzenia.
 
+## Discord IPC: „Access is denied”
+
+Dzienniki działania mogą pokazywać:
+
+```text
+reason=open \\.\pipe\discord-ipc-0: Access is denied.
+```
+
+W integracjach używaj stabilnego natywnego kodu odpowiedzi `DISCORD_IPC_ACCESS_DENIED` zamiast dopasowywać ten tekst dziennika, który może być przetłumaczony.
+
+Oznacza to, że aplikacja desktopowa łączy się z hostem, ale Windows odmawia dostępu do lokalnego kanału IPC Discorda. Najczęstsza przyczyna to Discord uruchomiony z opcją **Uruchom jako administrator**, podczas gdy przeglądarka i Nowly Host działają normalnie.
+
+Napraw to w tej kolejności:
+
+1. Całkowicie zamknij Discorda, także z jego ikony w obszarze powiadomień.
+2. W Menedżerze zadań zamknij pozostałe procesy `Discord.exe`.
+3. Otwórz właściwości Discorda i na karcie **Zgodność** wyłącz **Uruchom ten program jako administrator**.
+4. Uruchom Discorda normalnie.
+5. Uruchom ponownie przeglądarkę albo kliknij **Połącz ponownie** w Nowly.
+
+Nie uruchamiaj przeglądarki ani Nowly jako administrator, aby obejść problem. Native Messaging jest uruchamiany przez przeglądarkę, a wymuszenie hosta z podwyższonymi uprawnieniami wymagałoby niebezpiecznego uprzywilejowanego pośrednika. Nowly Host może wyświetlić powiadomienie systemowe, gdy wykryje ten konflikt uprawnień: w obszarze powiadomień w Windows, w Centrum powiadomień w macOS lub jako powiadomienie pulpitu w Linuksie, jeśli dostępny jest `notify-send`.
+
+Jeśli strona diagnostyki wygląda poprawnie, a dziennik zawiera ten błąd, wyczyść dzienniki działania i odtwórz problem. Diagnostyka może pokazywać połączenie z natywnym hostem, podczas gdy dostęp do kanału IPC Discorda nadal jest blokowany.
+
 ## Linux: „Dostępna aktualizacja” po instalacji pliku .deb
 
 Wyświetlany komunikat: **dostępna aktualizacja**, mimo że pakiet `.deb` został właśnie zainstalowany.

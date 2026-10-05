@@ -55,6 +55,30 @@ Abre los ajustes de extensiones de tu navegador y comprueba que:
 
 Después de cambiar permisos, recarga la pestaña del sitio y vuelve a abrir el panel lateral de la extensión.
 
+## Discord IPC: "Access is denied"
+
+Los registros de ejecución pueden mostrar:
+
+```text
+reason=open \\.\pipe\discord-ipc-0: Access is denied.
+```
+
+Para integraciones, usa el código de respuesta nativo estable `DISCORD_IPC_ACCESS_DENIED` en lugar de buscar este texto de registro, que puede estar traducido.
+
+Significa que la app de escritorio llega al host, pero Windows deniega el acceso al canal IPC local de Discord. La causa más habitual es Discord abierto con **Ejecutar como administrador**, mientras que el navegador y Nowly Host se ejecutan con normalidad.
+
+Soluciónalo en este orden:
+
+1. Cierra Discord por completo, también desde su icono en el área de notificación.
+2. En el Administrador de tareas, cierra los procesos `Discord.exe` que queden.
+3. Abre las propiedades de Discord y desactiva **Ejecutar este programa como administrador** en la pestaña **Compatibilidad**.
+4. Abre Discord normalmente.
+5. Reinicia el navegador o haz clic en **Reconectar** en Nowly.
+
+No abras el navegador ni Nowly como administrador para sortear el problema. El navegador es quien lanza el Native Messaging, y forzar un host con privilegios elevados requeriría un relé privilegiado inseguro. Nowly Host puede mostrar una notificación del sistema cuando detecta este conflicto de permisos: en el área de notificación en Windows, en el Centro de notificaciones en macOS o como notificación de escritorio en Linux si `notify-send` está disponible.
+
+Si la página de diagnóstico parece correcta pero el registro contiene este error, borra los registros de ejecución y reproduce el problema. El diagnóstico puede reflejar la conexión con el host nativo mientras el acceso al canal IPC de Discord sigue denegado.
+
 ## Linux: "Actualización disponible" tras instalar el .deb
 
 Mensaje mostrado: **actualización disponible**, aunque el paquete `.deb` se acaba de instalar.

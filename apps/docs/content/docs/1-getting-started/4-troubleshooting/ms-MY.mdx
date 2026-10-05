@@ -55,6 +55,30 @@ Buka tetapan sambungan pelayar anda dan semak:
 
 Selepas menukar kebenaran, muat semula tab laman web dan buka semula panel sisi sambungan.
 
+## Discord IPC: "Access is denied"
+
+Log masa jalan mungkin menunjukkan:
+
+```text
+reason=open \\.\pipe\discord-ipc-0: Access is denied.
+```
+
+Untuk integrasi, gunakan kod respons natif yang stabil `DISCORD_IPC_ACCESS_DENIED` dan bukannya memadankan teks log ini, yang mungkin diterjemahkan.
+
+Ini bermaksud aplikasi desktop dapat mencapai host, tetapi Windows menolak akses kepada saluran IPC tempatan Discord. Punca paling biasa ialah Discord dijalankan dengan **Run as administrator** manakala pelayar dan Nowly Host berjalan seperti biasa.
+
+Betulkan mengikut urutan ini:
+
+1. Tutup Discord sepenuhnya, termasuk daripada ikonnya di kawasan pemberitahuan.
+2. Dalam "Task Manager", tutup sebarang proses `Discord.exe` yang masih berjalan.
+3. Buka "Properties" Discord dan nyahtanda **Run this program as an administrator** dalam tab **Compatibility**.
+4. Jalankan Discord seperti biasa.
+5. Mulakan semula pelayar atau klik **Sambung semula** dalam Nowly.
+
+Jangan jalankan pelayar atau Nowly sebagai pentadbir untuk mengelak masalah ini. Native Messaging dilancarkan oleh pelayar, dan memaksa host dengan keistimewaan tinggi memerlukan geganti berkeistimewaan yang tidak selamat. Nowly Host boleh memaparkan pemberitahuan sistem apabila ia mengesan konflik kebenaran ini: pemberitahuan di kawasan pemberitahuan pada Windows, Pusat Pemberitahuan pada macOS, atau pemberitahuan desktop Linux apabila `notify-send` tersedia.
+
+Jika halaman diagnostik kelihatan baik tetapi log mengandungi ralat ini, kosongkan log masa jalan dan hasilkan semula masalah itu. Diagnostik boleh menunjukkan sambungan host natif walaupun akses kepada sambungan IPC Discord masih ditolak.
+
 ## Linux: "Kemas Kini Tersedia" Selepas Memasang .deb
 
 Mesej yang dipaparkan: **kemas kini tersedia**, walaupun pakej `.deb` baru sahaja dipasang.

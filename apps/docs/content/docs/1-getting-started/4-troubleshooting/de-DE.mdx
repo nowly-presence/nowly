@@ -55,6 +55,30 @@ Stelle sicher, dass:
 
 Nachdem du die Berechtigungen geändert hast, lade den Website-Tab neu und öffne das Seitenpanel der Erweiterung erneut.
 
+## Discord IPC: „Access is denied“
+
+Die Laufzeitprotokolle können Folgendes anzeigen:
+
+```text
+reason=open \\.\pipe\discord-ipc-0: Access is denied.
+```
+
+Verwende für Integrationen den stabilen nativen Antwortcode `DISCORD_IPC_ACCESS_DENIED`, statt diesen lokalisierten Protokolltext abzugleichen.
+
+Das bedeutet, dass die Desktop-App den Host erreicht, Windows aber den Zugriff auf Discords lokale IPC-Pipe verweigert. Die häufigste Ursache: Discord wurde mit **Als Administrator ausführen** gestartet, während der Browser und Nowly Host normal laufen.
+
+Behebe es in dieser Reihenfolge:
+
+1. Beende Discord vollständig, auch über sein Symbol im Infobereich der Taskleiste.
+2. Schließe im Task-Manager alle verbleibenden `Discord.exe`-Prozesse.
+3. Öffne die Eigenschaften von Discord und deaktiviere unter **Kompatibilität** die Option **Programm als Administrator ausführen**.
+4. Starte Discord normal.
+5. Starte den Browser neu oder klicke in Nowly auf **Neu verbinden**.
+
+Starte den Browser oder Nowly nicht als Administrator, um das Problem zu umgehen. Native Messaging wird vom Browser gestartet, und ein Host mit erhöhten Rechten würde ein unsicheres privilegiertes Relay erfordern. Nowly Host kann eine Systembenachrichtigung anzeigen, wenn es diesen Berechtigungskonflikt erkennt: eine Benachrichtigung im Infobereich unter Windows, in der Mitteilungszentrale unter macOS oder eine Linux-Desktopbenachrichtigung, wenn `notify-send` verfügbar ist.
+
+Wenn die Diagnoseseite in Ordnung aussieht, das Protokoll aber diesen Fehler enthält, leere die Laufzeitprotokolle und reproduziere das Problem. Die Diagnose kann die Verbindung zum nativen Host widerspiegeln, während der Zugriff auf Discords IPC-Verbindung weiterhin verweigert wird.
+
 ## Linux: „Update verfügbar" nach Installation der .deb
 
 Angezeigte Meldung: **update verfügbar**, obwohl das `.deb`-Paket gerade erst installiert wurde.

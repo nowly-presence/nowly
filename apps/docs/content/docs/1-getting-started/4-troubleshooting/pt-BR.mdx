@@ -55,6 +55,30 @@ Abra as configurações de extensões do seu navegador e verifique:
 
 Depois de alterar as permissões, recarregue a aba do site e reabra o painel lateral da extensão.
 
+## Discord IPC: "Access is denied"
+
+Os logs de execução podem mostrar:
+
+```text
+reason=open \\.\pipe\discord-ipc-0: Access is denied.
+```
+
+Para integrações, use o código de resposta nativo estável `DISCORD_IPC_ACCESS_DENIED` em vez de procurar este texto de log, que pode estar traduzido.
+
+Isso significa que o app de desktop alcança o host, mas o Windows está negando acesso ao canal IPC local do Discord. A causa mais comum é o Discord aberto com **Executar como administrador**, enquanto o navegador e o Nowly Host rodam normalmente.
+
+Corrija nesta ordem:
+
+1. Feche o Discord por completo, inclusive pelo ícone na área de notificação.
+2. No Gerenciador de Tarefas, feche os processos `Discord.exe` que restarem.
+3. Abra as propriedades do Discord e desative **Executar este programa como administrador** na guia **Compatibilidade**.
+4. Abra o Discord normalmente.
+5. Reinicie o navegador ou clique em **Reconectar** no Nowly.
+
+Não abra o navegador nem o Nowly como administrador para contornar o problema. O Native Messaging é iniciado pelo navegador, e forçar um host com privilégios elevados exigiria um relé privilegiado inseguro. O Nowly Host pode mostrar uma notificação do sistema quando detecta esse conflito de permissões: na área de notificação no Windows, na Central de Notificações no macOS ou como notificação de desktop no Linux quando o `notify-send` está disponível.
+
+Se a página de diagnóstico parecer normal, mas o log contiver esse erro, limpe os logs de execução e reproduza o problema. O diagnóstico pode refletir a conexão com o host nativo enquanto o acesso ao canal IPC do Discord continua negado.
+
 ## Linux: "Atualização disponível" após instalar o .deb
 
 Mensagem exibida: **atualização disponível**, mesmo com o pacote `.deb` recém-instalado.
