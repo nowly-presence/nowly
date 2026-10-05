@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"time"
 
 	"nowly.client/native/internal/logging"
@@ -229,6 +230,15 @@ func (c *Client) log(format string, args ...any) {
 		return
 	}
 	c.logger.Printf(format, args...)
+}
+
+// IsAccessDenied reports the Windows named-pipe error produced when Discord
+// runs at a higher integrity level than the native host.
+func IsAccessDenied(err error) bool {
+	if err == nil {
+		return false
+	}
+	return errors.Is(err, os.ErrPermission) || strings.Contains(strings.ToLower(err.Error()), "access is denied")
 }
 
 // dialIPC connects to the Discord IPC endpoint. On Windows it is a named pipe

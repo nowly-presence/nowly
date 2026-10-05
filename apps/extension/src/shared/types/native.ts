@@ -5,6 +5,13 @@ export type DiscordProfileSnapshot = {
   avatar?: string
 }
 
+export const NATIVE_ERROR_CODES = {
+  discordIpcAccessDenied: "DISCORD_IPC_ACCESS_DENIED",
+} as const
+
+export type NativeErrorCode = (typeof NATIVE_ERROR_CODES)[keyof typeof NATIVE_ERROR_CODES]
+
+
 export type PresencePayload = {
   name?: string
   details?: string
@@ -28,11 +35,15 @@ export type NativeResponse =
       status: string
       version?: string
       discordConnected?: boolean
+      code?: NativeErrorCode
       profile?: DiscordProfileSnapshot | null
     }
   | { type: "CONNECTED"; version?: string }
   | { type: "OK" }
-  | { type: "ERROR"; error: string }
+  | { type: "ERROR"; error: string; code?: NativeErrorCode }
+
+export const isNativeErrorCode = (message: NativeResponse, code: NativeErrorCode): boolean =>
+  "code" in message && message.code === code
 
 export type NativeStatus = {
   connected: boolean

@@ -27,6 +27,12 @@ const (
 	MessageClearActivity MessageType = "CLEAR_ACTIVITY"
 )
 
+type ErrorCode string
+
+const (
+	ErrorDiscordIPCAccessDenied ErrorCode = "DISCORD_IPC_ACCESS_DENIED"
+)
+
 type ResponseType string
 
 const (
@@ -67,6 +73,7 @@ type NativeResponse struct {
 	Status    string          `json:"status,omitempty"`
 	Version   string          `json:"version,omitempty"`
 	Profile   *DiscordProfile `json:"profile,omitempty"`
+	Code      ErrorCode       `json:"code,omitempty"`
 	Error     string          `json:"error,omitempty"`
 }
 
@@ -95,4 +102,8 @@ func OK() NativeResponse {
 
 func Error(message string) NativeResponse {
 	return NativeResponse{Type: ResponseError, Error: message}
+}
+
+func ErrorWithCode(code ErrorCode, message string) NativeResponse {
+	return NativeResponse{Type: ResponseError, Code: code, Error: message}
 }

@@ -55,6 +55,30 @@ Ouvrez les paramètres d'extension de votre navigateur et vérifiez que :
 
 Après une modification de permission, rechargez l'onglet du site et rouvrez le panneau latéral de l'extension.
 
+## Discord IPC : « Access is denied »
+
+Les journaux d'exécution peuvent afficher :
+
+```text
+reason=open \\.\pipe\discord-ipc-0: Access is denied.
+```
+
+Pour les intégrations, utilisez le code de réponse natif stable `DISCORD_IPC_ACCESS_DENIED` au lieu de rechercher ce texte de journal, qui peut être traduit.
+
+Cela signifie que l'application bureau atteint bien le host Nowly, mais que Windows refuse l'accès au canal IPC local de Discord. La cause la plus fréquente est Discord lancé avec **Exécuter ce programme en tant qu'administrateur**, alors que le navigateur et le host Nowly sont lancés normalement.
+
+Corrigez le problème dans cet ordre :
+
+1. Quittez complètement Discord, y compris depuis son icône dans la zone de notification.
+2. Dans le Gestionnaire des tâches, fermez les processus `Discord.exe` restants.
+3. Ouvrez les propriétés de Discord et désactivez **Exécuter ce programme en tant qu'administrateur** dans l'onglet **Compatibilité**.
+4. Relancez Discord normalement.
+5. Redémarrez le navigateur ou cliquez sur **Reconnecter** dans Nowly.
+
+Ne lancez pas le navigateur ou Nowly en tant qu'administrateur pour contourner le problème. Le Native Messaging est lancé par le navigateur et forcer un host élevé nécessiterait un relais privilégié risqué. Le host Nowly peut afficher une notification système lorsqu'il détecte ce conflit de permissions : notification dans la zone système sous Windows, dans le Centre de notifications sous macOS, ou notification Linux si `notify-send` est disponible.
+
+Si la page de diagnostic semble correcte alors que les journaux contiennent cette erreur, effacez les journaux puis reproduisez le problème. Le diagnostic peut confirmer la connexion du host natif alors que l'accès au canal IPC de Discord reste refusé.
+
 ## Linux : « Mise à jour disponible » après avoir installé le .deb
 
 Message affiché : **mise à jour disponible**, alors que le paquet `.deb` vient d'être installé.
