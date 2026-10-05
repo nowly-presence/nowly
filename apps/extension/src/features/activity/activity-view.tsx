@@ -5,6 +5,7 @@ import { CurrentTabSection } from "@/features/activity/current-tab-section"
 import { InstalledPresencesSection } from "@/features/activity/installed-presences-section"
 import { LiveActivitySection } from "@/features/activity/live-activity-section"
 import { QueuedActivitiesSection } from "@/features/activity/queued-activities-section"
+import { SupportCard } from "@/features/activity/support-card"
 import { useActivityOverview } from "@/features/activity/use-activity-overview"
 
 export const ActivityView = () => {
@@ -27,6 +28,7 @@ export const ActivityView = () => {
       <CurrentTabSection />
       <QueuedActivitiesSection activities={otherActivities} />
       <InstalledPresencesSection presences={sortedPresences} detectedSlugs={detectedSlugs} now={now} />
+      <SupportCard />
     </ScreenBody>
   )
 }

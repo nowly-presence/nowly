@@ -215,6 +215,7 @@
     "cta": "Unirse al Discord",
     "members": "{count, plural, one {# miembro} other {# miembros}}",
     "online": "{count, number} en línea",
+    "support": "Nowly es gratis y de código abierto. <link>Apoyar el proyecto</link>",
     "items": [
       {
         "title": "Ayuda de personas reales",
@@ -656,7 +657,10 @@
     "title": "¿Necesitas ayuda?",
     "description": "Elige el canal que encaje con tu problema. Discord es lo más rápido para hablar. GitHub deja un rastro público.",
     "open": "Abrir",
-    "donate": "Nowly sigue siendo gratis. Si quieres ayudar al proyecto, puedes usar <kofi>Ko-fi</kofi> o <sponsors>GitHub Sponsors</sponsors>.",
+    "donate": {
+      "title": "Apoyar a Nowly",
+      "description": "Nowly es gratis, sin anuncios ni suscripciones. Las donaciones pagan los servidores, la CDN y el tiempo de desarrollo para que siga así."
+    },
     "sections": {
       "community": "Comunidad",
       "presences": "Presencias",

@@ -23,5 +23,7 @@ Create `sections/<name>-section.tsx` and render it in `settings-view.tsx`.
 
 - Account and sync (`sections/account-section.tsx`, between Appearance and Privacy): signed out, one explanatory row and "Sign in with Discord" (`START_ACCOUNT_CONNECT` opens nowly.me). Signed in: avatar, name and last sync (relative time, `formatRelative`), "Sync", "Manage your account on nowly.me" (`/account`), "Sign out" (keeps local data) and "Stop syncing and erase the online copy" behind a confirmation sheet. While the first-sync choice is pending, the first row offers "Choose", which opens `account-choice-sheet.tsx` (also mounted app-wide as `AccountChoicePrompt`).
 
+- About: "Support Nowly" opens `support-sheet.tsx`, a sheet with two rows (Ko-fi and GitHub Sponsors, `KOFI_URL` and `GITHUB_SPONSORS_URL` in `shared/constants.ts`, same URLs as nowly.me).
+
 ## Notable dependencies
 `EXPORT_DEVICE_DATA` / `DELETE_DEVICE_DATA` (`/devices/:deviceId`, need the device token minted by `/devices/sync`), `INSTALL_LOCAL_PRESENCE_ZIP` (canary only), `ui/sortable-list` (priority order), account messages (`GET_ACCOUNT`, `START_ACCOUNT_CONNECT`, `SYNC_ACCOUNT`, `RESOLVE_SYNC_CHOICE`, `SIGN_OUT_ACCOUNT`, `STOP_ACCOUNT_SYNC`). Canary developer tools also have "Replay Nolo" (`useFeatureReveals().replay`).

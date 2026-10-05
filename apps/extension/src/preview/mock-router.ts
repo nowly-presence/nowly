@@ -14,6 +14,7 @@ import type { MockStorageArea } from "@/preview/mock-storage"
 import { toStoredPresence, type CatalogFixture } from "@/preview/preview-fixtures"
 import { discordIpcIssueCode, markDiscordIpcIssuePrompted, NO_DISCORD_IPC_ISSUE, type DiscordIpcIssue } from "@/shared/discord-ipc-prompt"
 import { previewParams } from "@/preview/preview-params"
+import { DEFAULT_SUPPORT_PROMPT, SUPPORT_PROMPT_KEY, withSnooze, type SupportPromptState } from "@/shared/support-prompt"
 
 export type MockHandlers = { [K in RouterMessageType]?: (payload: PayloadOf<K>) => ResponseOf<K> | Promise<ResponseOf<K>> }
 
@@ -137,6 +138,12 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
       return next
     },
     GET_TAB_STATE: tabState,
+    RECORD_USAGE_DAY: () => ({ ok: true }),
+    SNOOZE_SUPPORT_PROMPT: async ({ action }) => {
+      const next = withSnooze(await local.read<SupportPromptState>(SUPPORT_PROMPT_KEY, DEFAULT_SUPPORT_PROMPT), action, Date.now())
+      await local.set({ [SUPPORT_PROMPT_KEY]: next })
+      return next
+    },
     SET_TAB_MUTED: async ({ muted: next }) => {
       muted = next
       await session.set({ mutedTabIds: next ? [MUTABLE_TAB_ID] : [] })

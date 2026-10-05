@@ -63,6 +63,7 @@ import {
   handleSetTabMuted,
   handleSyncPresenceScripts,
 } from "@/background/router/handlers/extra.handlers"
+import { handleRecordUsageDay, handleSnoozeSupportPrompt } from "@/background/router/handlers/support.handlers"
 import type { HandlerRegistry } from "@/background/router/router"
 
 export const buildHandlerRegistry = (): HandlerRegistry => ({
@@ -121,4 +122,6 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   RESOLVE_SYNC_CHOICE: handleResolveSyncChoice,
   SIGN_OUT_ACCOUNT: handleSignOutAccount,
   STOP_ACCOUNT_SYNC: handleStopAccountSync,
+  RECORD_USAGE_DAY: handleRecordUsageDay,
+  SNOOZE_SUPPORT_PROMPT: handleSnoozeSupportPrompt,
 })

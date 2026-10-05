@@ -1,6 +1,6 @@
 # Support
 
-Rendered by `app/[locale]/support`: `support-view.tsx` (help links), `contact-form.tsx` (posts to `apps/api`'s `contact` feature).
+Rendered by `app/[locale]/support`: `support-view.tsx` (help links), `contact-form.tsx` (posts to `apps/api`'s `contact` feature), `donate-card.tsx` (Ko-fi and GitHub Sponsors, anchor `#donate`).
 
 ## Add a new support link (e.g. a new GitHub issue template)
 
@@ -9,6 +9,7 @@ Rendered by `app/[locale]/support`: `support-view.tsx` (help links), `contact-fo
 3. If it points at a new issue template file, that file must exist in the target repo's `.github/ISSUE_TEMPLATE/` (e.g. `nowly-presence/nowly` or `nowly-presence/presences`, see `PROJECT_REPOSITORY_URL`/`PRESENCES_REPOSITORY_URL` in `lib/constants.ts`) — this feature doesn't create it.
 
 ## Gotchas
+- `#donate` is a public anchor: the extension's support card opens `nowly.me/support#donate` and the home community section links to it. Keep the id when reworking the page.
 - `githubIssueUrl` doesn't validate the template name — a typo silently produces a working-looking link that lands on GitHub's generic "no such template" state instead of erroring at build time. Double-check the template filename against the target repo.
 
 ## Notable dependencies

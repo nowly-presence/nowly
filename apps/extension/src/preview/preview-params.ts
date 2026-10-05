@@ -17,9 +17,10 @@ const accountParam = params.get("account")
 const nativeParam = params.get("native")
 const seasonParam = params.get("season")
 const prank = params.get("prank") === "1"
+const support = params.get("support") === "1"
 
 export const previewParams = {
-  scenario: SCENARIOS.find((value) => value === scenarioParam) ?? "live",
+  scenario: SCENARIOS.find((value) => value === scenarioParam) ?? (support ? "idle" : "live"),
   lang: params.get("lang"),
   theme: params.get("theme") ?? "light",
   view: params.get("view") ?? "activity",
@@ -32,6 +33,7 @@ export const previewParams = {
   season: seasonParam ?? (prank ? "halloween" : null),
   prank,
   reveal: params.get("reveal") === "1",
+  support,
   account: ACCOUNTS.find((value) => value === accountParam) ?? "out",
   native: NATIVE_STATES.find((value) => value === nativeParam) ?? "ok",
 }

@@ -1,4 +1,5 @@
 import { homeSectionAltClass } from "@/features/home/components/section-heading";
+import { Link } from "@/i18n/navigation";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { getDiscordCommunity } from "@/lib/discord";
 import { ButtonAnchor } from "@nowly/ui/button-link";
@@ -40,6 +41,15 @@ export const CommunitySection = async () => {
               </p>
             ) : null}
           </div>
+          <p className="mt-6 text-sm text-muted-foreground">
+            {t.rich("support", {
+              link: (chunks) => (
+                <Link href="/support#donate" className="underline underline-offset-4 transition-colors hover:text-foreground">
+                  {chunks}
+                </Link>
+              ),
+            })}
+          </p>
         </div>
 
         <ul className="divide-y divide-foreground/8 rounded-[16px] bg-foreground/4 shadow-[0_0_0_1px_rgba(228,242,255,0.06)]">

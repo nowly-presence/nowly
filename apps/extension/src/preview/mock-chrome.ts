@@ -5,6 +5,7 @@ import { createMockRouter } from "@/preview/mock-router"
 import { createMockStorageArea, type StorageChanges } from "@/preview/mock-storage"
 import { buildInstalledPresences, buildLiveActivity, buildRuntimeLogs, loadCatalogFixture, pickInstalledSlugs } from "@/preview/preview-fixtures"
 import { previewParams } from "@/preview/preview-params"
+import { SUPPORT_PROMPT_MIN_USAGE_DAYS } from "@/shared/support-prompt"
 import type { TabActivity } from "@/shared/types"
 
 const SECOND_TAB_OFFSET_MS = 20_000
@@ -59,6 +60,7 @@ export const installMockChrome = async (): Promise<void> => {
     localePreference: previewParams.lang ?? "browser",
     sidepanelActiveView: previewParams.view,
     reviewPrompt: { firstSeenAt: previewParams.review ? 0 : now },
+    supportPrompt: { usageDays: previewParams.support ? SUPPORT_PROMPT_MIN_USAGE_DAYS : 0 },
     featureReveals: previewParams.reveal ? {} : { "account-sync": now },
     ...(previewParams.season ? { seasonOverride: previewParams.season } : {}),
     ...(previewParams.prank ? { halloweenPrank: { replay: true } } : {}),

@@ -215,6 +215,7 @@
     "cta": "Discord 참여하기",
     "members": "{count, plural, other {멤버 #명}}",
     "online": "{count, number}명 온라인",
+    "support": "Nowly는 무료 오픈 소스예요. <link>프로젝트 후원하기</link>",
     "items": [
       {
         "title": "사람이 직접 도와드려요",
@@ -656,7 +657,10 @@
     "title": "도움이 필요하신가요?",
     "description": "문제에 맞는 채널을 선택하세요. 대화하기에는 Discord가 가장 빠릅니다. GitHub는 공개 기록을 남깁니다.",
     "open": "열기",
-    "donate": "Nowly는 계속 무료로 유지됩니다. 프로젝트를 돕고 싶다면 <kofi>Ko-fi</kofi> 또는 <sponsors>GitHub Sponsors</sponsors>를 이용해 주세요.",
+    "donate": {
+      "title": "Nowly 후원하기",
+      "description": "Nowly는 광고도 구독도 없는 무료 서비스예요. 후원금은 서버, CDN, 개발 시간에 쓰여 지금처럼 유지하는 데 도움이 돼요."
+    },
     "sections": {
       "community": "커뮤니티",
       "presences": "프레즌스",

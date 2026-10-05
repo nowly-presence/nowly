@@ -215,6 +215,7 @@
     "cta": "Discord'a katıl",
     "members": "{count, plural, one {# üye} other {# üye}}",
     "online": "{count, number} çevrimiçi",
+    "support": "Nowly ücretsiz ve açık kaynaklıdır. <link>Projeyi destekle</link>",
     "items": [
       {
         "title": "Gerçek insanlardan yardım",
@@ -656,7 +657,10 @@
     "title": "Yardıma mı ihtiyacın var?",
     "description": "Sorununla eşleşen kanalı seç. Bir sohbet için en hızlısı Discord'dur. GitHub herkese açık bir kayıt tutar.",
     "open": "Aç",
-    "donate": "Nowly ücretsiz kalmaya devam ediyor. Projeye yardım etmek istersen <kofi>Ko-fi</kofi> veya <sponsors>GitHub Sponsors</sponsors>'ı kullanabilirsin.",
+    "donate": {
+      "title": "Nowly'yi destekle",
+      "description": "Nowly ücretsizdir, reklam ve abonelik yoktur. Bağışlar sunucuları, CDN'i ve geliştirme zamanını karşılar, böylece bu şekilde kalır."
+    },
     "sections": {
       "community": "Topluluk",
       "presences": "Varlıklar",

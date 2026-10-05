@@ -16,6 +16,7 @@ import type {
   UserScriptsStatus,
 } from "@/shared/types"
 import type { OnboardingState } from "@/background/storage/onboarding.store"
+import type { SupportPromptAction, SupportPromptState } from "@/shared/support-prompt"
 
 export type DiagnosticSnapshot = {
   extensionInstalled: boolean
@@ -91,6 +92,8 @@ export type RouterMessageMap = {
   RESOLVE_SYNC_CHOICE: { payload: { choice: SyncChoice }; response: AccountSnapshot }
   SIGN_OUT_ACCOUNT: { payload: void; response: AccountSnapshot }
   STOP_ACCOUNT_SYNC: { payload: void; response: { ok: boolean; error?: string } }
+  RECORD_USAGE_DAY: { payload: void; response: { ok: boolean } }
+  SNOOZE_SUPPORT_PROMPT: { payload: { action: SupportPromptAction }; response: SupportPromptState }
 }
 
 export type RouterMessageType = keyof RouterMessageMap

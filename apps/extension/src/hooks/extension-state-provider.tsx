@@ -165,6 +165,7 @@ export const ExtensionStateProvider = ({ children }: { children: ReactNode }) =>
       void refresh.catalog()
       void refresh.updates()
       void sendMessage("TRACK_EVENT", { key: "extension_open", payload: { surface: "sidepanel" } }).catch(() => {})
+      void sendMessage("RECORD_USAGE_DAY").catch(() => {})
     })()
     return () => {
       cancelled = true

@@ -215,6 +215,7 @@
     "cta": "Rejoindre le Discord",
     "members": "{count, plural, one {# membre} other {# membres}}",
     "online": "{count, number} en ligne",
+    "support": "Nowly est gratuit et open source. <link>Soutenir le projet</link>",
     "items": [
       {
         "title": "Une aide humaine",
@@ -656,7 +657,10 @@
       "error": "Impossible d’envoyer votre message. Veuillez réessayer."
     },
     "open": "Ouvrir",
-    "donate": "Nowly reste gratuit. Si vous voulez aider le projet, vous pouvez passer par <kofi>Ko-fi</kofi> ou <sponsors>GitHub Sponsors</sponsors>.",
+    "donate": {
+      "title": "Soutenir Nowly",
+      "description": "Nowly est gratuit, sans pub ni abonnement. Les dons financent les serveurs, le CDN et le temps de développement, pour que ça reste ainsi."
+    },
     "sections": {
       "community": "Communauté",
       "presences": "Présences",

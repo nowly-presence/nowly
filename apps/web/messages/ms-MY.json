@@ -215,6 +215,7 @@
     "cta": "Sertai Discord",
     "members": "{count, plural, other {# ahli}}",
     "online": "{count, number} dalam talian",
+    "support": "Nowly percuma dan sumber terbuka. <link>Sokong projek ini</link>",
     "items": [
       {
         "title": "Bantuan daripada insan sebenar",
@@ -656,7 +657,10 @@
     "title": "Perlukan bantuan?",
     "description": "Pilih saluran yang sepadan dengan isu anda. Discord adalah paling pantas untuk perbualan. GitHub menyimpan rekod awam.",
     "open": "Buka",
-    "donate": "Nowly kekal percuma. Jika anda mahu membantu projek ini, anda boleh menggunakan <kofi>Ko-fi</kofi> atau <sponsors>GitHub Sponsors</sponsors>.",
+    "donate": {
+      "title": "Sokong Nowly",
+      "description": "Nowly percuma, tanpa iklan atau langganan. Derma membiayai pelayan, CDN dan masa pembangunan supaya ia kekal begitu."
+    },
     "sections": {
       "community": "Komuniti",
       "presences": "Kehadiran",

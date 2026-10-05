@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
 
 import { ContactForm } from "@/features/support/components/contact-form";
+import { DonateCard } from "@/features/support/components/donate-card";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { docsHref } from "@/features/seo/lib/seo";
 import { SUPPORT_LINKS } from "@/features/support/lib/support-links";
@@ -122,30 +123,7 @@ export const SupportView = async () => {
           </div>
         </div>
 
-        <p className="mt-16 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          {t.rich("donate", {
-            kofi: (chunks) => (
-              <a
-                href={SUPPORT_LINKS.kofi}
-                rel="noreferrer"
-                target="_blank"
-                className="whitespace-nowrap underline underline-offset-4 hover:text-foreground"
-              >
-                {chunks}
-              </a>
-            ),
-            sponsors: (chunks) => (
-              <a
-                href={SUPPORT_LINKS.sponsors}
-                rel="noreferrer"
-                target="_blank"
-                className="whitespace-nowrap underline underline-offset-4 hover:text-foreground"
-              >
-                {chunks}
-              </a>
-            ),
-          })}
-        </p>
+        <DonateCard />
       </div>
     </div>
   );

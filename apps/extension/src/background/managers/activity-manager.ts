@@ -26,6 +26,7 @@ import { mapPresenceData, postNative } from "@/background/services/native"
 import { verifyPresenceRelease } from "@/background/services/release-security"
 import { getCurrentActivity, getPresences, setCurrentActivity, setDebug } from "@/background/storage/presences.store"
 import { getSettings } from "@/background/storage/settings.store"
+import { recordUsageDay } from "@/background/storage/support.store"
 import { CDN_BASE_URL } from "@/shared/constants"
 import type { ExtensionSettings, PresenceData, StoredPresence } from "@/shared/types"
 
@@ -171,6 +172,7 @@ export const broadcastActiveTab = async (): Promise<void> => {
   } else {
     postNative({ type: "SET_ACTIVITY", presence: entry.presence })
     await setCurrentActivity({ slug: entry.slug, presence: entry.presence, updatedAt: entry.updatedAt })
+    void recordUsageDay().catch(() => {})
   }
   await refreshToolbarBadge()
   notifyBroadcastStateChanged()
