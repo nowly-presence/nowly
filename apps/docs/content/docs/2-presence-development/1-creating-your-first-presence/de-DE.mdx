@@ -92,10 +92,11 @@ Siehe [Lokal laden und testen](/presence-development/load-and-test) für den vol
 **Beim ersten Mal** (kein Nowly im Browser): backe die Presence in eine fertige Erweiterung ein.
 
 ```bash
-nowly extension example
+nowly extension example             # Chrome (standardmäßig)
+nowly extension example --firefox
 ```
 
-Lade `dist/extension-dev` als entpackte Erweiterung unter `chrome://extensions`.
+Lade `dist/extension-dev` als entpackte Erweiterung unter `chrome://extensions` für Chrome. Für Firefox verwende `about:debugging#/runtime/this-firefox` und lade `dist/extension-dev-firefox/manifest.json` als **Load Temporary Add-on**.
 
 **Nowly ist bereits entpackt geladen:** packe ein Zip und lege es unter Einstellungen → Erweitert → Debug ab. Store-Installationen lehnen unsignierte Zips ab.
 

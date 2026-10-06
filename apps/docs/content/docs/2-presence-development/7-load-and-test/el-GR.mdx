@@ -7,35 +7,39 @@ description: Φορτώστε μια έτοιμη presence στην επέκτα
 
 ## 1. Προκατασκευασμένη επέκταση (`nowly extension`)
 
-Αυτή είναι η συνήθης διαδρομή για την πρώτη φορά, ειδικά αν κλωνοποιήσατε μόνο το αποθετήριο `presences`. Η CLI κατεβάζει ένα έτοιμο chrome dev build (ή αντιγράφει ένα τοπικό) και στη συνέχεια ενσωματώνει την μεταγλωττισμένη presence σε αυτό.
+Αυτή είναι η συνήθης διαδρομή για την πρώτη φορά. Η CLI κατεβάζει ένα έτοιμο dev build Chrome ή Firefox και ενσωματώνει τη μεταγλωττισμένη presence.
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (προεπιλογή)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Ψευδώνυμο Firefox
 ```
 
 Μπορείτε να περάσετε πολλά slugs:
 
 ```bash
-nowly extension youtube github figma
+nowly extension youtube github figma --firefox
 ```
+
+Οι επιλογές browser είναι αμοιβαία αποκλειόμενες. Χρησιμοποιήστε `--chrome` / `--c` για ρητή επιλογή Chrome.
 
 Στη συνέχεια:
 
-1. Ανοίξτε το `chrome://extensions` και ενεργοποιήστε τη **Λειτουργία προγραμματιστή**
-2. **Φόρτωση αποσυμπιεσμένης** και επιλέξτε `dist/extension-dev`
-3. Ανοίξτε τον ιστότοπο-στόχο με το Discord Desktop και το Nowly Host σε λειτουργία
+- **Chrome:** Ανοίξτε `chrome://extensions`, ενεργοποιήστε τη **Λειτουργία προγραμματιστή** και επιλέξτε **Φόρτωση ασυσκεύαστου** → `dist/extension-dev`
+- **Firefox:** Ανοίξτε `about:debugging#/runtime/this-firefox`, επιλέξτε **This Firefox**, πατήστε **Load Temporary Add-on...** και επιλέξτε `dist/extension-dev-firefox/manifest.json`
 
-Η presence εγκαθίσταται από το `dev-presences.json` μόλις ξεκινήσει η επέκταση. Αφού αλλάξετε τον κώδικα, κάνετε rebuild, ξανατρέχετε το `nowly extension <slug>` και φορτώνετε ξανά την αποσυμπιεσμένη επέκταση.
+Η presence εγκαθίσταται από το `dev-presences.json` κατά την εκκίνηση. Μετά από αλλαγή, κάντε rebuild, εκτελέστε ξανά `nowly extension <slug>` και φορτώστε ξανά την επέκταση.
 
-Για να χρησιμοποιήσετε ένα τοπικό build επέκτασης αντί για το zip από το CDN:
+Για τοπικό build αντί για το CDN:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 <CalloutInfo>
-Η εντολή `nowly extension` γράφει έναν αποσυμπιεσμένο φάκελο. Είναι το σωστό εργαλείο όταν δεν έχετε ήδη φορτώσει το Nowly στο πρόγραμμα περιήγησης.
+Η εντολή `nowly extension` γράφει έναν αποσυμπιεσμένο φάκελο. Είναι το σωστό εργαλείο όταν δεν έχετε ήδη φορτώσει το Nowly.
 </CalloutInfo>
 
 ### Πλήρες monorepo του Nowly

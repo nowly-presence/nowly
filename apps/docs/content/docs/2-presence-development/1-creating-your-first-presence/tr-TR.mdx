@@ -92,10 +92,11 @@ Tam karşılaştırma için bkz. [Yerel Olarak Yükleme ve Test Etme](/presence-
 **İlk kez** (tarayıcıda Nowly yok): presence'ı hazır bir uzantıya gömün.
 
 ```bash
-nowly extension example
+nowly extension example             # Chrome (varsayılan)
+nowly extension example --firefox
 ```
 
-`chrome://extensions` adresinde `dist/extension-dev` klasörünü paketlenmemiş olarak yükleyin.
+Chrome için `dist/extension-dev` klasörünü `chrome://extensions` adresinde paketlenmemiş olarak yükleyin. Firefox için `about:debugging#/runtime/this-firefox` adresini açın ve **Load Temporary Add-on** ile `dist/extension-dev-firefox/manifest.json` dosyasını yükleyin.
 
 **Nowly zaten paketlenmemiş olarak yüklüyse:** bir zip paketleyin ve Ayarlar → Gelişmiş → Hata Ayıklama'ya bırakın. Mağaza kurulumları imzasız zip'leri reddeder.
 

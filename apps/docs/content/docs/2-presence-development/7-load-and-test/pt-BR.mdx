@@ -7,35 +7,39 @@ Depois de `nowly build <slug>`, você ainda precisa colocar esse pacote em um na
 
 ## 1. Extensão pré-compilada (`nowly extension`)
 
-Este é o caminho usual na primeira vez, especialmente se você clonou apenas o repositório `presences`. A CLI baixa um build de desenvolvimento pronto do Chrome (ou copia um local) e então incorpora sua presença compilada nele.
+Este é o caminho usual para a primeira configuração. A CLI baixa um build de desenvolvimento do Chrome ou Firefox e incorpora a presence compilada.
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (padrão)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Alias do Firefox
 ```
 
 Você pode passar vários slugs:
 
 ```bash
-nowly extension youtube github figma
+nowly extension youtube github figma --firefox
 ```
+
+As opções de navegador são mutuamente exclusivas. Use `--chrome` / `--c` para selecionar o Chrome explicitamente.
 
 Depois:
 
-1. Abra `chrome://extensions` e ative o **Modo desenvolvedor**
-2. **Carregar sem compactação** e selecione `dist/extension-dev`
-3. Abra o site de destino com o Discord Desktop e o Nowly Host em execução
+- **Chrome:** abra `chrome://extensions`, ative o **Modo desenvolvedor** e escolha **Carregar sem compactação** → `dist/extension-dev`
+- **Firefox:** abra `about:debugging#/runtime/this-firefox`, escolha **This Firefox**, clique em **Load Temporary Add-on...** e selecione `dist/extension-dev-firefox/manifest.json`
 
-A presença é instalada a partir de `dev-presences.json` assim que a extensão inicia. Depois de alterar o código, recompile, execute novamente `nowly extension <slug>` e recarregue a extensão não compactada.
+A presence é instalada a partir de `dev-presences.json` quando a extensão inicia. Depois de alterar o código, recompile, execute `nowly extension <slug>` novamente e recarregue a extensão.
 
-Para usar um build de extensão local em vez do zip da CDN:
+Para usar um build local em vez do zip do CDN:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 <CalloutInfo>
-`nowly extension` grava uma pasta não compactada. É a ferramenta certa quando você ainda não tem o Nowly carregado no navegador.
+`nowly extension` grava uma pasta não compactada. Use-o quando o Nowly ainda não estiver carregado no navegador.
 </CalloutInfo>
 
 ### Monorepo completo do Nowly

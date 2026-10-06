@@ -55,25 +55,29 @@ There are two ways to load a built presence without the Nowly API. Full walkthro
 
 ### Pre-built extension
 
-If you only cloned the `presences` repository (the common case for contributors), use `nowly extension` to get a ready-to-load dev build without the full `nowly` monorepo:
+If you only cloned the `presences` repository (the common case for contributors), use `nowly extension` to get a ready-to-load browser-specific dev build without the full `nowly` monorepo:
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (default)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Firefox alias
 ```
 
-This downloads the latest dev extension build from the CDN, bundles the presence(s) you list, and writes a `dev-presences.json` file into it. Then:
+This downloads the matching Chrome or Firefox dev extension from the CDN, bundles the presence(s) you list, and writes a `dev-presences.json` file into it.
 
-1. Open `chrome://extensions`, enable **Developer mode**
-2. **Load unpacked** → select the generated `dist/extension-dev` folder
-3. The presence installs automatically - no API server, no install page, no Custom API URL needed
+For Chrome, load `dist/extension-dev` unpacked at `chrome://extensions`.
+For Firefox, load `dist/extension-dev-firefox/manifest.json` from `about:debugging#/runtime/this-firefox` with **Load Temporary Add-on**.
 
 After editing the presence, rebuild and rerun `nowly extension <slug>`, then reload the extension.
+
+Use `--chrome` / `--c` to select Chrome explicitly. Use `--firefox` / `--f` to select Firefox. The options are mutually exclusive.
 
 To use a specific local extension build instead of the CDN one, pass `--from`:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 ### Zip drop

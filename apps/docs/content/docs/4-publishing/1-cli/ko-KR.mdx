@@ -59,21 +59,25 @@ Nowly API 없이 빌드된 프레즌스를 로드하는 방법은 두 가지입�
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (기본값)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Firefox 별칭
 ```
 
-최신 개발용 확장 프로그램 빌드를 CDN에서 다운로드하고, 지정한 프레즌스를 번들링하고, `dev-presences.json` 파일을 작성합니다. 그런 다음:
+CDN에서 해당 Chrome 또는 Firefox 개발용 확장 프로그램을 다운로드하고, 지정한 프레즌스를 번들링한 뒤 `dev-presences.json`을 작성합니다. 그런 다음:
 
-1. `chrome://extensions`를 열고 **개발자 모드**를 활성화하세요
-2. **압축 해제된 확장 프로그램 로드** → 생성된 `dist/extension-dev` 폴더를 선택하세요
-3. 프레즌스가 자동으로 설치됩니다 - API 서버, 설치 페이지, 커스텀 API URL이 필요 없습니다
+1. **Chrome:** `chrome://extensions`를 열고 **개발자 모드**를 활성화한 뒤 **압축 해제된 확장 프로그램 로드** → `dist/extension-dev`를 선택하세요
+2. **Firefox:** `about:debugging#/runtime/this-firefox`를 열고 **This Firefox**를 선택한 뒤 **Load Temporary Add-on...**을 클릭하고 `dist/extension-dev-firefox/manifest.json`을 선택하세요
 
-프레즌스를 수정한 후 다시 빌드하고 `nowly extension <slug>`를 다시 실행한 다음, 확장 프로그램을 다시 로드하세요.
+프레즌스를 수정한 후 다시 빌드하고 `nowly extension <slug>`를 다시 실행한 다음 확장 프로그램을 다시 로드하세요.
 
-CDN 빌드 대신 특정 로컬 확장 프로그램 빌드를 사용하려면 `--from`을 전달하세요:
+Chrome에는 `--chrome` / `--c`, Firefox에는 `--firefox` / `--f`를 사용하세요. 두 옵션은 함께 사용할 수 없습니다.
+
+CDN 대신 특정 로컬 확장 프로그램 빌드를 사용하려면 `--from`을 전달하세요:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 ### zip 드롭

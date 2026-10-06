@@ -7,31 +7,34 @@ After `nowly build <slug>`, you still need to get that bundle into a browser. Th
 
 ## 1. Pre-built extension (`nowly extension`)
 
-This is the usual first-time path, especially if you only cloned the `presences` repository. The CLI downloads a ready-made Chrome dev build (or copies a local one), then bakes your compiled presence into it.
+This is the usual first-time path, especially if you only cloned the `presences` repository. The CLI downloads a ready-made Chrome or Firefox dev build, then bakes your compiled presence into it.
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (default)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Firefox alias
 ```
-
 You can pass several slugs:
 
 ```bash
-nowly extension youtube github figma
+nowly extension youtube github figma --firefox
 ```
+
+The browser options are mutually exclusive. Use `--chrome` / `--c` to select Chrome explicitly.
 
 Then:
 
-1. Open `chrome://extensions` and enable **Developer mode**
-2. **Load unpacked** and select `dist/extension-dev`
-3. Open the target site with Discord Desktop and Nowly Host running
+- **Chrome:** open `chrome://extensions`, enable **Developer mode**, and **Load unpacked** → `dist/extension-dev`.
+- **Firefox:** open `about:debugging#/runtime/this-firefox`, choose **This Firefox**, click **Load Temporary Add-on...**, and select `dist/extension-dev-firefox/manifest.json`.
 
-The presence is installed from `dev-presences.json` as soon as the extension starts. After you change code, rebuild, rerun `nowly extension <slug>`, and reload the unpacked extension.
+The presence is installed from `dev-presences.json` as soon as the extension starts. After you change code, rebuild, rerun `nowly extension <slug>`, and reload the extension.
 
 To use a local extension build instead of the CDN zip:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 <CalloutInfo>

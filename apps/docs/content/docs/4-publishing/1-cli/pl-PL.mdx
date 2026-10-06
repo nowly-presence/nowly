@@ -59,21 +59,25 @@ Jeśli tylko sklonowałeś repozytorium `presences` (typowy przypadek dla wspó�
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (domyślnie)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Alias Firefox
 ```
 
-Pobierane jest najnowsze deweloperskie wydanie rozszerzenia z CDN, wbudowywane są wymienione przez Ciebie obecności i zapisywany jest plik `dev-presences.json`. Następnie:
+Pobierany jest odpowiedni deweloperski build Chrome lub Firefox z CDN, wbudowywane są wymienione obecności i zapisywany jest plik `dev-presences.json`. Następnie:
 
-1. Otwórz `chrome://extensions` i włącz **Tryb programisty**
-2. **Wczytaj rozpakowane** → wybierz wygenerowany folder `dist/extension-dev`
-3. Obecność instaluje się automatycznie - bez serwera API, bez strony instalacji, bez adresu URL Custom API
+1. **Chrome:** Otwórz `chrome://extensions`, włącz **Tryb programisty** i wybierz **Wczytaj rozpakowane** → `dist/extension-dev`
+2. **Firefox:** Otwórz `about:debugging#/runtime/this-firefox`, wybierz **This Firefox**, kliknij **Load Temporary Add-on...** i wybierz `dist/extension-dev-firefox/manifest.json`
 
 Po edycji obecności przebuduj ją, uruchom ponownie `nowly extension <slug>` i przeładuj rozszerzenie.
 
-Aby użyć konkretnego lokalnego builda rozszerzenia zamiast wersji z CDN, przekaż `--from`:
+Użyj `--chrome` / `--c` dla Chrome lub `--firefox` / `--f` dla Firefoksa. Opcji nie można używać jednocześnie.
+
+Aby użyć konkretnego lokalnego buildu rozszerzenia zamiast wersji z CDN, przekaż `--from`:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 ### Upuszczenie pliku zip

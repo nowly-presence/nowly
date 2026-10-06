@@ -92,10 +92,11 @@ Lihat [Muat dan Uji Secara Tempatan](/presence-development/load-and-test) untuk 
 **Kali pertama** (tiada Nowly dalam pelayar): bina presence terus ke dalam sambungan yang sedia dibuat.
 
 ```bash
-nowly extension example
+nowly extension example             # Chrome (lalai)
+nowly extension example --firefox
 ```
 
-Muatkan `dist/extension-dev` tanpa pek di `chrome://extensions`.
+Muatkan `dist/extension-dev` tanpa pek di `chrome://extensions` untuk Chrome. Untuk Firefox, buka `about:debugging#/runtime/this-firefox` dan muatkan `dist/extension-dev-firefox/manifest.json` dengan **Load Temporary Add-on**.
 
 **Sudah ada Nowly dimuatkan tanpa pek:** pek satu zip dan jatuhkannya di Tetapan → Lanjutan → Nyahpepijat. Pemasangan Store menolak zip yang tidak ditandatangani.
 

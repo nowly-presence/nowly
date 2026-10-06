@@ -92,10 +92,11 @@ See [Load and Test Locally](/presence-development/load-and-test) for the full co
 **First time** (no Nowly in the browser): bake the presence into a ready-made extension.
 
 ```bash
-nowly extension example
+nowly extension example             # Chrome (default)
+nowly extension example --firefox
 ```
 
-Load `dist/extension-dev` unpacked at `chrome://extensions`.
+Load `dist/extension-dev` unpacked at `chrome://extensions` for Chrome. For Firefox, open `about:debugging#/runtime/this-firefox` and load `dist/extension-dev-firefox/manifest.json` with **Load Temporary Add-on**.
 
 **Already have Nowly loaded unpacked:** pack a zip and drop it in Settings → Advanced → Debug. Store installs reject unsigned zips.
 

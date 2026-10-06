@@ -92,10 +92,11 @@ Zobacz [Wczytywanie i testowanie lokalne](/presence-development/load-and-test), 
 **Za pierwszym razem** (bez Nowly w przeglądarce): wbuduj obecność w gotowe rozszerzenie.
 
 ```bash
-nowly extension example
+nowly extension example             # Chrome (domyślnie)
+nowly extension example --firefox
 ```
 
-Wczytaj `dist/extension-dev` jako rozpakowane rozszerzenie w `chrome://extensions`.
+Wczytaj `dist/extension-dev` jako rozpakowane rozszerzenie w `chrome://extensions` dla Chrome. W Firefoksie otwórz `about:debugging#/runtime/this-firefox` i wczytaj `dist/extension-dev-firefox/manifest.json` przez **Load Temporary Add-on**.
 
 **Masz już wczytane rozpakowane Nowly:** spakuj plik zip i upuść go w Ustawienia → Zaawansowane → Debugowanie. Instalacje ze sklepu odrzucają niepodpisane pliki zip.
 

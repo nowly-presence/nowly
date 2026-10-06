@@ -7,35 +7,39 @@ Po `nowly build <slug>` nadal musisz umieścić ten pakiet w przeglądarce. Istn
 
 ## 1. Gotowe rozszerzenie (`nowly extension`)
 
-To zwykła ścieżka za pierwszym razem, zwłaszcza jeśli sklonowano tylko repozytorium `presences`. CLI pobiera gotowy build deweloperski Chrome (lub kopiuje lokalny), a następnie wbudowuje w niego Twoją skompilowaną obecność.
+To zwykła ścieżka pierwszej konfiguracji. CLI pobiera deweloperski build Chrome lub Firefoksa i wbudowuje w niego skompilowaną obecność.
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (domyślnie)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Alias Firefox
 ```
 
 Możesz podać kilka slugów:
 
 ```bash
-nowly extension youtube github figma
+nowly extension youtube github figma --firefox
 ```
+
+Opcji przeglądarki nie można używać jednocześnie. Użyj `--chrome` / `--c`, aby jawnie wybrać Chrome.
 
 Następnie:
 
-1. Otwórz `chrome://extensions` i włącz **Tryb dewelopera**
-2. Kliknij **Załaduj rozpakowane** i wybierz `dist/extension-dev`
-3. Otwórz docelową stronę przy uruchomionym Discord Desktop i Nowly Host
+- **Chrome:** Otwórz `chrome://extensions`, włącz **Tryb dewelopera** i wybierz **Załaduj rozpakowane** → `dist/extension-dev`
+- **Firefox:** Otwórz `about:debugging#/runtime/this-firefox`, wybierz **This Firefox**, kliknij **Load Temporary Add-on...** i wybierz `dist/extension-dev-firefox/manifest.json`
 
-Obecność jest instalowana z `dev-presences.json` zaraz po uruchomieniu rozszerzenia. Po zmianie kodu: zbuduj ponownie, uruchom ponownie `nowly extension <slug>` i odśwież rozpakowane rozszerzenie.
+Obecność jest instalowana z `dev-presences.json` po uruchomieniu rozszerzenia. Po zmianie kodu przebuduj ją, uruchom ponownie `nowly extension <slug>` i przeładuj rozszerzenie.
 
-Aby użyć lokalnego builda rozszerzenia zamiast zipa z CDN:
+Aby użyć lokalnego buildu zamiast zipa z CDN:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 <CalloutInfo>
-`nowly extension` zapisuje rozpakowany folder. To odpowiednie narzędzie, gdy nie masz jeszcze wczytanego Nowly w przeglądarce.
+`nowly extension` zapisuje rozpakowany folder. Użyj go, gdy Nowly nie jest jeszcze wczytane w przeglądarce.
 </CalloutInfo>
 
 ### Pełne monorepo Nowly

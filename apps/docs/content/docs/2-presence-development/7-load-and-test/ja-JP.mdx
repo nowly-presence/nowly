@@ -7,35 +7,39 @@ description: ビルド済みのプレゼンスを、事前ビルド済みの開�
 
 ## 1. ビルド済み拡張機能(`nowly extension`)
 
-これは、特に `presences` リポジトリのみをクローンした場合の、通常の初回手順です。CLIは既製のChrome開発ビルドをダウンロードし(またはローカルのものをコピーし)、コンパイル済みのプレゼンスをそこに組み込みます。
+これは初回セットアップに適した方法です。CLIはChromeまたはFirefoxの開発ビルドをダウンロードし、コンパイル済みのプレゼンスを組み込みます。
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome（デフォルト）
+nowly extension youtube --firefox
+nowly extension youtube --f         # Firefoxエイリアス
 ```
 
-複数のスラッグを渡すこともできます。
+複数のスラッグを渡せます:
 
 ```bash
-nowly extension youtube github figma
+nowly extension youtube github figma --firefox
 ```
+
+ブラウザオプションは同時に使用できません。Chromeを明示するには`--chrome` / `--c`を使用します。
 
 その後:
 
-1. `chrome://extensions` を開き、**デベロッパーモード**を有効にする
-2. **パッケージ化されていない拡張機能を読み込む**を選び、`dist/extension-dev` を選択する
-3. Discord DesktopとNowly Hostを起動した状態で対象サイトを開く
+- **Chrome:** `chrome://extensions`を開き、**デベロッパーモード**を有効にして、`dist/extension-dev`を読み込みます
+- **Firefox:** `about:debugging#/runtime/this-firefox`を開き、**This Firefox** → **Load Temporary Add-on...**を選択し、`dist/extension-dev-firefox/manifest.json`を指定します
 
-プレゼンスは、拡張機能の起動時に `dev-presences.json` からインストールされます。コードを変更した後は、再ビルドし、`nowly extension <slug>` を再実行し、パッケージ化されていない拡張機能を再読み込みしてください。
+プレゼンスは起動時に`dev-presences.json`からインストールされます。コードを変更したら再ビルドし、`nowly extension <slug>`を再実行して拡張機能を再読み込みします。
 
-CDNのzipの代わりにローカルの拡張機能ビルドを使用するには:
+CDN版の代わりにローカルビルドを使用するには:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 <CalloutInfo>
-`nowly extension` はパッケージ化されていないフォルダを書き出します。ブラウザにまだNowlyを読み込んでいない場合に適したツールです。
+`nowly extension`はunpackedフォルダを書き出します。ブラウザにNowlyをまだ読み込んでいない場合に使用してください。
 </CalloutInfo>
 
 ### 完全なNowlyモノレポ

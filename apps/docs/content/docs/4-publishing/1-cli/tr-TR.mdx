@@ -59,21 +59,25 @@ Yalnızca `presences` deposunu klonladıysanız (katkıda bulunanlar için yayg�
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (varsayılan)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Firefox takma adı
 ```
 
-En son geliştirme uzantısı derlemesini CDN'den indirir, listelediğiniz presences'ları paketler ve içine bir `dev-presences.json` dosyası yazar. Sonra:
+Bu, CDN'den ilgili Chrome veya Firefox geliştirme derlemesini indirir, listelenen presences'ları paketler ve `dev-presences.json` dosyasını yazar. Ardından:
 
-1. `chrome://extensions` adresini açın ve **Geliştirici modunu** etkinleştirin
-2. **Paketlenmemiş yükle** → oluşturulan `dist/extension-dev` klasörünü seçin
-3. Presence otomatik olarak kurulur - API sunucusu, kurulum sayfası veya Özel API URL'si gerekmez
+1. **Chrome:** `chrome://extensions` adresini açın, **Geliştirici modunu** etkinleştirin ve **Paketlenmemiş yükle** → `dist/extension-dev` seçin
+2. **Firefox:** `about:debugging#/runtime/this-firefox` adresini açın, **This Firefox** seçin, **Load Temporary Add-on...** tıklayın ve `dist/extension-dev-firefox/manifest.json` seçin
 
-Presence'ı düzenledikten sonra yeniden derleyin ve `nowly extension <slug>` komutunu yeniden çalıştırın, ardından uzantıyı yeniden yükleyin.
+Presence'ı düzenledikten sonra yeniden derleyin, `nowly extension <slug>` komutunu tekrar çalıştırın ve uzantıyı yeniden yükleyin.
 
-CDN derlemesi yerine belirli bir yerel uzantı derlemesi kullanmak için `--from` değerini iletin:
+Chrome için `--chrome` / `--c`, Firefox için `--firefox` / `--f` kullanın. Seçenekler birlikte kullanılamaz.
+
+CDN yerine belirli bir yerel uzantı derlemesi kullanmak için `--from` değerini iletin:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 ### Zip bırakma

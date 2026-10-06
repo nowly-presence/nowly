@@ -7,35 +7,39 @@ description: Önceden derlenmiş bir geliştirme paketi veya zip bırakma ile de
 
 ## 1. Önceden derlenmiş uzantı (`nowly extension`)
 
-Özellikle yalnızca `presences` deposunu klonladıysanız, bu genellikle ilk seferdeki yoldur. CLI, hazır bir Chrome geliştirme derlemesini indirir (veya yerel birini kopyalar), ardından derlenmiş presence'ınızı içine gömer.
+İlk kurulum için kullanılan yol budur. CLI, Chrome veya Firefox geliştirme derlemesini indirir ve derlenmiş presence'ınızı içine gömer.
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (varsayılan)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Firefox takma adı
 ```
 
 Birden fazla slug geçebilirsiniz:
 
 ```bash
-nowly extension youtube github figma
+nowly extension youtube github figma --firefox
 ```
+
+Tarayıcı seçenekleri birlikte kullanılamaz. Chrome'u açıkça seçmek için `--chrome` / `--c` kullanın.
 
 Ardından:
 
-1. `chrome://extensions` sayfasını açın ve **Geliştirici modunu** etkinleştirin
-2. **Paketlenmemişi yükle**'ye tıklayın ve `dist/extension-dev` klasörünü seçin
-3. Discord Desktop ve Nowly Host çalışırken hedef siteyi açın
+- **Chrome:** `chrome://extensions` adresini açın, **Geliştirici modunu** etkinleştirin ve **Paketlenmemişi yükle** → `dist/extension-dev` seçin
+- **Firefox:** `about:debugging#/runtime/this-firefox` adresini açın, **This Firefox** seçin, **Load Temporary Add-on...** tıklayın ve `dist/extension-dev-firefox/manifest.json` seçin
 
-Uzantı başlar başlamaz presence, `dev-presences.json`'dan kurulur. Kodu değiştirdikten sonra yeniden derleyin, `nowly extension <slug>`'ı tekrar çalıştırın ve paketlenmemiş uzantıyı yeniden yükleyin.
+Presence, uzantı başlatıldığında `dev-presences.json` dosyasından kurulur. Kodu değiştirdikten sonra yeniden derleyin, `nowly extension <slug>` komutunu tekrar çalıştırın ve uzantıyı yeniden yükleyin.
 
-CDN zip'i yerine yerel bir uzantı derlemesi kullanmak için:
+CDN yerine yerel bir derleme kullanmak için:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 <CalloutInfo>
-`nowly extension`, paketlenmemiş bir klasör yazar. Tarayıcınızda henüz Nowly yüklü değilse doğru araçtır.
+`nowly extension` paketlenmemiş bir klasör yazar. Nowly tarayıcıda henüz yüklü değilse kullanın.
 </CalloutInfo>
 
 ### Tam Nowly Monorepo'su

@@ -7,35 +7,39 @@ Selepas `nowly build <slug>`, anda masih perlu membawa bundle tersebut ke pelaya
 
 ## 1. Sambungan pra-bina (`nowly extension`)
 
-Ini adalah laluan biasa untuk kali pertama, terutamanya jika anda hanya menyalin repositori `presences`. CLI memuat turun build dev Chrome yang sedia (atau menyalin satu lokal), kemudian membakar presence anda yang telah dikompil ke dalamnya.
+Ini ialah laluan biasa untuk kali pertama. CLI memuat turun binaan pembangunan Chrome atau Firefox dan membakar presence yang telah dikompil ke dalamnya.
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (lalai)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Alias Firefox
 ```
 
 Anda boleh hantar beberapa slug:
 
 ```bash
-nowly extension youtube github figma
+nowly extension youtube github figma --firefox
 ```
+
+Pilihan pelayar tidak boleh digunakan bersama. Gunakan `--chrome` / `--c` untuk memilih Chrome secara jelas.
 
 Kemudian:
 
-1. Buka `chrome://extensions` dan aktifkan **Mod pembangun**
-2. **Muat tanpa zip** dan pilih `dist/extension-dev`
-3. Buka tapak sasaran dengan Discord Desktop dan Nowly Host berjalan
+- **Chrome:** Buka `chrome://extensions`, hidupkan **Mod pembangun**, kemudian pilih **Muat tanpa pek** → `dist/extension-dev`
+- **Firefox:** Buka `about:debugging#/runtime/this-firefox`, pilih **This Firefox**, klik **Load Temporary Add-on...**, kemudian pilih `dist/extension-dev-firefox/manifest.json`
 
-Presence dipasang daripada `dev-presences.json` sebaik sahaja sambungan dimulakan. Selepas anda menukar kod, bina semula, jalankan `nowly extension <slug>` sekali lagi, dan muat semula sambungan tanpa zip.
+Presence dipasang daripada `dev-presences.json` apabila sambungan bermula. Selepas mengubah kod, bina semula, jalankan `nowly extension <slug>` sekali lagi dan muat semula sambungan.
 
-Untuk menggunakan build sambungan lokal dan bukannya zip CDN:
+Untuk menggunakan binaan tempatan dan bukannya zip CDN:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 <CalloutInfo>
-`nowly extension` menulis folder tanpa zip. Ia adalah alat yang tepat apabila anda belum memuatkan Nowly ke dalam pelayar.
+`nowly extension` menulis folder tanpa zip. Gunakannya apabila Nowly belum dimuatkan dalam pelayar.
 </CalloutInfo>
 
 ### Repositori monorepo penuh Nowly

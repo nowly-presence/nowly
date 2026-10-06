@@ -59,21 +59,25 @@ nowly pack youtube --watch
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (προεπιλογή)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Ψευδώνυμο Firefox
 ```
 
-Αυτό κατεβάζει το τελευταίο dev build της επέκτασης από το CDN, ενσωματώνει τα presences που αναφέρεις και γράφει ένα αρχείο `dev-presences.json` μέσα σε αυτό. Μετά:
+Αυτό κατεβάζει το αντίστοιχο dev build Chrome ή Firefox από το CDN, ενσωματώνει τα presences που αναφέρεις και γράφει το `dev-presences.json`. Μετά:
 
-1. Άνοιξε το `chrome://extensions` και ενεργοποίησε τη **Λειτουργία προγραμματιστή**
-2. **Φόρτωση ασυσκεύαστου** → επέλεξε τον φάκελο `dist/extension-dev` που δημιουργήθηκε
-3. Το presence εγκαθίσταται αυτόματα - χωρίς διακομιστή API, χωρίς σελίδα εγκατάστασης, χωρίς Custom API URL
+1. **Chrome:** Άνοιξε `chrome://extensions`, ενεργοποίησε τη **Λειτουργία προγραμματιστή** και επίλεξε **Φόρτωση ασυσκεύαστου** → `dist/extension-dev`
+2. **Firefox:** Άνοιξε `about:debugging#/runtime/this-firefox`, επίλεξε **This Firefox**, πάτησε **Load Temporary Add-on...** και επίλεξε `dist/extension-dev-firefox/manifest.json`
 
-Αφού επεξεργαστείς το presence, ξαναχτίσε το και εκτέλεσε ξανά το `nowly extension <slug>`, μετά φόρτωσε ξανά την επέκταση.
+Μετά από αλλαγές, ξαναχτίσε το presence, εκτέλεσε ξανά `nowly extension <slug>` και φόρτωσε ξανά την επέκταση.
 
-Για να χρησιμοποιήσεις ένα συγκεκριμένο τοπικό build της επέκτασης αντί για το CDN, πέρασε το `--from`:
+Χρησιμοποίησε `--chrome` / `--c` για Chrome και `--firefox` / `--f` για Firefox. Οι επιλογές δεν μπορούν να χρησιμοποιηθούν μαζί.
+
+Για συγκεκριμένο τοπικό build αντί για το CDN, πέρασε `--from`:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 ### Zip drop

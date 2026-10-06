@@ -7,31 +7,35 @@ Nach `nowly build <slug>` musst du das Bundle immer noch in einen Browser bekomm
 
 ## 1. Vorgefertigte Erweiterung (`nowly extension`)
 
-Dies ist der übliche Weg beim ersten Mal, besonders wenn du nur das `presences`-Repository geklont hast. Die CLI lädt einen fertigen Chrome-Dev-Build herunter (oder kopiert einen lokalen) und bäckt deine kompilierte Presence hinein.
+Dies ist der übliche Weg beim ersten Mal, besonders wenn du nur das `presences`-Repository geklont hast. Die CLI lädt einen fertigen Chrome- oder Firefox-Dev-Build herunter und bäckt deine kompilierte Presence hinein.
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (standardmäßig)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Firefox-Alias
 ```
 
 Du kannst mehrere Slugs übergeben:
 
 ```bash
-nowly extension youtube github figma
+nowly extension youtube github figma --firefox
 ```
 
-Dann:
+Die Browseroptionen können nicht gemeinsam verwendet werden. Verwende `--chrome` / `--c`, um Chrome explizit auszuwählen.
 
-1. Öffne `chrome://extensions` und aktiviere den **Entwicklermodus**
-2. **Entpackt laden** und wähle `dist/extension-dev` aus
-3. Öffne die Zielseite bei laufendem Discord Desktop und Nowly Host
+Danach:
 
-Die Presence wird aus `dev-presences.json` installiert, sobald die Erweiterung startet. Nachdem du Code geändert hast: neu bauen, `nowly extension <slug>` erneut ausführen und die entpackte Erweiterung neu laden.
+- **Chrome:** Öffne `chrome://extensions`, aktiviere den **Entwicklermodus** und wähle **Entpackte Erweiterung laden** → `dist/extension-dev`
+- **Firefox:** Öffne `about:debugging#/runtime/this-firefox`, wähle **This Firefox**, klicke auf **Load Temporary Add-on...** und wähle `dist/extension-dev-firefox/manifest.json`
+
+Die Presence wird aus `dev-presences.json` installiert, sobald die Erweiterung startet. Nachdem du Code geändert hast: neu bauen, `nowly extension <slug>` erneut ausführen und die Erweiterung neu laden.
 
 Um einen lokalen Erweiterungs-Build anstelle des CDN-Zips zu verwenden:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 <CalloutInfo>

@@ -7,31 +7,35 @@ Après `nowly build <slug>`, il faut encore injecter ce bundle dans un navigateu
 
 ## 1. Extension précompilée (`nowly extension`)
 
-C'est le chemin habituel la première fois, surtout si vous n'avez cloné que le dépôt `presences`. La CLI télécharge un build Chrome de développement prêt à l'emploi (ou copie un build local), puis y intègre votre présence compilée.
+C'est le chemin habituel la première fois, surtout si vous n'avez cloné que le dépôt `presences`. La CLI télécharge un build de développement Chrome ou Firefox, puis y intègre votre présence compilée.
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (par défaut)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Alias Firefox
 ```
 
 Vous pouvez passer plusieurs slugs&nbsp;:
 
 ```bash
-nowly extension youtube github figma
+nowly extension youtube github figma --firefox
 ```
+
+Les options de navigateur sont mutuellement exclusives. Utilisez `--chrome` / `--c` pour sélectionner explicitement Chrome.
 
 Ensuite&nbsp;:
 
-1. Ouvrez `chrome://extensions` et activez le **mode développeur**
-2. **Charger l'extension non empaquetée** et sélectionnez `dist/extension-dev`
-3. Ouvrez le site cible avec Discord Desktop et Nowly Host
+- **Chrome :** ouvrez `chrome://extensions`, activez le **mode développeur**, puis **Charger l'extension non empaquetée** → `dist/extension-dev`.
+- **Firefox :** ouvrez `about:debugging#/runtime/this-firefox`, choisissez **This Firefox**, cliquez sur **Load Temporary Add-on...**, puis sélectionnez `dist/extension-dev-firefox/manifest.json`.
 
-La présence s'installe depuis `dev-presences.json` dès le démarrage de l'extension. Après une modification, recompilez, relancez `nowly extension <slug>`, puis rechargez l'extension unpacked.
+La présence s'installe depuis `dev-presences.json` dès le démarrage de l'extension. Après une modification, recompilez, relancez `nowly extension <slug>`, puis rechargez l'extension.
 
 Pour utiliser un build local d'extension plutôt que le zip CDN&nbsp;:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 <CalloutInfo>

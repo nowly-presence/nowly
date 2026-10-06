@@ -92,12 +92,13 @@ nowly build example
 **初回**(ブラウザにNowlyがない場合): プレゼンスを組み込んだ拡張機能一式を作成します。
 
 ```bash
-nowly extension example
+nowly extension example             # Chrome（デフォルト）
+nowly extension example --firefox
 ```
 
-`chrome://extensions` で `dist/extension-dev` をパッケージ化されていない拡張機能として読み込みます。
+Chromeでは`dist/extension-dev`を`chrome://extensions`で読み込みます。Firefoxでは`about:debugging#/runtime/this-firefox`を開き、**Load Temporary Add-on**で`dist/extension-dev-firefox/manifest.json`を読み込みます。
 
-**すでにNowlyをパッケージ化されていない状態で読み込んでいる場合:** zipにパッケージ化し、設定 → 高度な設定 → デバッグにドロップします。ストアからのインストールでは署名なしのzipは拒否されます。
+**すでにNowlyをunpackedで読み込んでいる場合:** zipを作成し、設定 → 高度な設定 → デバッグにドロップします。ストア版では署名なしzipは拒否されます。
 
 ```bash
 nowly pack example

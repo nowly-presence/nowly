@@ -92,12 +92,13 @@ nowly build example
 **Πρώτη φορά** (χωρίς Nowly στον browser): ενσωμάτωσε το presence σε μια έτοιμη επέκταση.
 
 ```bash
-nowly extension example
+nowly extension example             # Chrome (προεπιλογή)
+nowly extension example --firefox
 ```
 
-Φόρτωσε το `dist/extension-dev` ασυσκεύαστο στο `chrome://extensions`.
+Φόρτωσε το `dist/extension-dev` ασυσκεύαστο στο `chrome://extensions` για Chrome. Για Firefox, άνοιξε `about:debugging#/runtime/this-firefox` και φόρτωσε το `dist/extension-dev-firefox/manifest.json` με **Load Temporary Add-on**.
 
-**Έχεις ήδη φορτωμένο το Nowly ασυσκεύαστο:** πακετάρισε ένα zip και ρίξε το στις Ρυθμίσεις → Προχωρημένες → Debug. Οι εγκαταστάσεις από το Store απορρίπτουν μη υπογεγραμμένα zip.
+**Έχεις ήδη φορτωμένο το Nowly ασυσκεύαστο:** πακέταρε ένα zip και ρίξ' το στις Ρυθμίσεις → Προχωρημένες → Debug. Οι εγκαταστάσεις από το Store απορρίπτουν μη υπογεγραμμένα zip.
 
 ```bash
 nowly pack example

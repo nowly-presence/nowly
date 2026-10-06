@@ -59,21 +59,25 @@ Nowly APIなしでビルド済みプレゼンスを読み込むには、2つの�
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome（デフォルト）
+nowly extension youtube --firefox
+nowly extension youtube --f         # Firefoxエイリアス
 ```
 
-最新の開発版拡張機能ビルドがCDNからダウンロードされ、指定したプレゼンスがバンドルされ、`dev-presences.json` ファイルが書き込まれます。その後:
+CDNから対応するChromeまたはFirefoxの開発版をダウンロードし、指定したプレゼンスをバンドルして`dev-presences.json`を書き込みます。その後:
 
-1. `chrome://extensions` を開き、**デベロッパーモード**を有効にします
-2. **パッケージ化されていないものを読み込み** → 生成された `dist/extension-dev` フォルダを選択します
-3. プレゼンスが自動的にインストールされます - APIサーバーも、インストールページも、カスタムAPI URLも必要ありません
+1. **Chrome:** `chrome://extensions`を開き、**デベロッパーモード**を有効にして、**パッケージ化されていないものを読み込み** → `dist/extension-dev`を選択します
+2. **Firefox:** `about:debugging#/runtime/this-firefox`を開き、**This Firefox**を選択し、**Load Temporary Add-on...**をクリックして`dist/extension-dev-firefox/manifest.json`を選択します
 
-プレゼンスを編集したら、再ビルドして `nowly extension <slug>` を再実行し、拡張機能を再読み込みします。
+プレゼンスを編集したら、再ビルドして`nowly extension <slug>`を再実行し、拡張機能を再読み込みします。
 
-CDN版の代わりに特定のローカル拡張機能ビルドを使用するには、`--from` を渡します:
+Chromeには`--chrome` / `--c`、Firefoxには`--firefox` / `--f`を使用します。これらのオプションは同時に使用できません。
+
+CDN版の代わりに特定のローカル拡張機能ビルドを使用するには、`--from`を渡します:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 ### zipドロップ

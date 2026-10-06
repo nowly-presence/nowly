@@ -7,35 +7,39 @@ description: 사전 빌드된 개발 패키지 또는 zip 드롭으로 빌드한
 
 ## 1. 사전 빌드된 확장 프로그램(`nowly extension`)
 
-특히 `presences` 저장소만 클론한 경우, 이것이 일반적인 첫 경로입니다. CLI는 준비된 Chrome 개발 빌드를 다운로드하거나(또는 로컬 빌드를 복사) 컴파일된 프레즌스를 그 안에 포함시킵니다.
+처음 설정할 때 사용하는 방법입니다. CLI는 Chrome 또는 Firefox 개발 빌드를 다운로드하고 컴파일된 프레즌스를 포함합니다.
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (기본값)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Firefox 별칭
 ```
 
 여러 슬러그를 전달할 수 있습니다.
 
 ```bash
-nowly extension youtube github figma
+nowly extension youtube github figma --firefox
 ```
+
+브라우저 옵션은 함께 사용할 수 없습니다. Chrome을 명시적으로 선택하려면 `--chrome` / `--c`를 사용하세요.
 
 그런 다음:
 
-1. `chrome://extensions`를 열고 **개발자 모드**를 활성화하세요
-2. **압축 해제된 확장 프로그램 로드**를 선택하고 `dist/extension-dev`를 선택하세요
-3. Discord Desktop과 Nowly Host가 실행 중인 상태에서 대상 사이트를 여세요
+- **Chrome:** `chrome://extensions`를 열고 **개발자 모드**를 활성화한 뒤 `dist/extension-dev`를 압축 해제된 확장 프로그램으로 로드하세요
+- **Firefox:** `about:debugging#/runtime/this-firefox`를 열고 **This Firefox** → **Load Temporary Add-on...**을 선택한 뒤 `dist/extension-dev-firefox/manifest.json`을 선택하세요
 
-확장 프로그램이 시작되면 `dev-presences.json`에서 프레즌스가 설치됩니다. 코드를 변경한 후에는 다시 빌드하고, `nowly extension <slug>`를 다시 실행한 다음, 압축 해제된 확장 프로그램을 새로고침하세요.
+프레즌스는 확장 프로그램 시작 시 `dev-presences.json`에서 설치됩니다. 코드를 변경한 후 다시 빌드하고 `nowly extension <slug>`를 다시 실행한 다음 확장 프로그램을 새로고침하세요.
 
-CDN zip 대신 로컬 확장 프로그램 빌드를 사용하려면:
+CDN 대신 로컬 빌드를 사용하려면:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 <CalloutInfo>
-`nowly extension`은 압축 해제된 폴더를 생성합니다. 브라우저에 아직 Nowly가 로드되어 있지 않을 때 사용하기 적합한 도구입니다.
+`nowly extension`은 압축 해제된 폴더를 생성합니다. 브라우저에 Nowly가 아직 로드되지 않은 경우 사용하세요.
 </CalloutInfo>
 
 ### 전체 Nowly 모노레포

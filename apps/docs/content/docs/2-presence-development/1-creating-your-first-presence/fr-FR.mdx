@@ -92,12 +92,13 @@ Voir [Charger et tester en local](/presence-development/load-and-test) pour le c
 **Première fois** (Nowly pas encore dans le navigateur)&nbsp;: intégrez la présence dans une extension prête à charger.
 
 ```bash
-nowly extension exemple
+nowly extension exemple             # Chrome (par défaut)
+nowly extension exemple --firefox
 ```
 
-Chargez `dist/extension-dev` en unpacked dans `chrome://extensions`.
+Chargez `dist/extension-dev` en unpacked dans `chrome://extensions` pour Chrome. Pour Firefox, ouvrez `about:debugging#/runtime/this-firefox` et chargez `dist/extension-dev-firefox/manifest.json` avec **Load Temporary Add-on**.
 
-**Nowly déjà chargé unpacked&nbsp;:** créez un zip et déposez-le dans Réglages → Avancé → Debug. Les installations du store refusent les zips non signés.
+**Nowly déjà chargé en unpacked&nbsp;:** créez un zip et déposez-le dans Réglages → Avancé → Debug. Les installations du store refusent les zips non signés.
 
 ```bash
 nowly pack exemple

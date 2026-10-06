@@ -59,21 +59,25 @@ Jika anda hanya mengklon repositori `presences` (kes biasa untuk penyumbang), gu
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (lalai)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Alias Firefox
 ```
 
-Ini memuat turun binaan sambungan pembangunan terkini daripada CDN, membundel presence yang anda senaraikan dan menulis fail `dev-presences.json` ke dalamnya. Kemudian:
+Ini memuat turun binaan pembangunan Chrome atau Firefox yang sepadan daripada CDN, membundel presence yang disenaraikan dan menulis `dev-presences.json`. Kemudian:
 
-1. Buka `chrome://extensions` dan hidupkan **Mod pembangun**
-2. **Muat tanpa pek** → pilih folder `dist/extension-dev` yang dijana
-3. Presence dipasang secara automatik - tiada pelayan API, tiada halaman pemasangan, tiada URL API Tersuai diperlukan
+1. **Chrome:** Buka `chrome://extensions`, hidupkan **Mod pembangun**, kemudian pilih **Muat tanpa pek** → `dist/extension-dev`
+2. **Firefox:** Buka `about:debugging#/runtime/this-firefox`, pilih **This Firefox**, klik **Load Temporary Add-on...**, kemudian pilih `dist/extension-dev-firefox/manifest.json`
 
-Selepas menyunting presence, bina semula dan jalankan semula `nowly extension <slug>`, kemudian muat semula sambungan.
+Selepas menyunting presence, bina semula, jalankan semula `nowly extension <slug>` dan muat semula sambungan.
+
+Gunakan `--chrome` / `--c` untuk Chrome dan `--firefox` / `--f` untuk Firefox. Pilihan ini tidak boleh digunakan bersama.
 
 Untuk menggunakan binaan sambungan tempatan tertentu dan bukannya daripada CDN, hantar `--from`:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 ### Jatuhan zip

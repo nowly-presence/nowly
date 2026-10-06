@@ -55,25 +55,29 @@ Deux façons de charger une présence compilée sans passer par l'API Nowly. Gui
 
 ### Extension précompilée
 
-Si vous n'avez cloné que le dépôt `presences` (le cas le plus courant pour les contributeurs), utilisez `nowly extension` pour obtenir un build de développement prêt à charger, sans le monorepo `nowly` complet&nbsp;:
+Si vous n'avez cloné que le dépôt `presences` (le cas le plus courant pour les contributeurs), utilisez `nowly extension` pour obtenir un build de développement adapté au navigateur, sans le monorepo `nowly` complet&nbsp;:
 
 ```bash
 nowly build youtube
-nowly extension youtube
+nowly extension youtube             # Chrome (par défaut)
+nowly extension youtube --firefox
+nowly extension youtube --f         # Alias Firefox
 ```
 
-Ceci télécharge le dernier build de développement de l'extension depuis le CDN, y empaquette la ou les présences listées, et écrit un fichier `dev-presences.json` dedans. Ensuite&nbsp;:
+Ceci télécharge le build de développement Chrome ou Firefox correspondant, y empaquette la ou les présences listées, et écrit un fichier `dev-presences.json` dedans.
 
-1. Ouvrez `chrome://extensions`, activez le **mode développeur**
-2. **Charger l'extension non empaquetée** → sélectionnez le dossier généré `dist/extension-dev`
-3. La présence s'installe automatiquement - pas de serveur API, pas de page d'installation, pas d'URL API personnalisée
+Pour Chrome, chargez `dist/extension-dev` en unpacked dans `chrome://extensions`.
+Pour Firefox, chargez `dist/extension-dev-firefox/manifest.json` depuis `about:debugging#/runtime/this-firefox` avec **Load Temporary Add-on**.
 
 Après avoir modifié la présence, recompilez-la puis relancez `nowly extension <slug>`, et rechargez l'extension.
+
+Utilisez `--chrome` / `--c` pour sélectionner explicitement Chrome, et `--firefox` / `--f` pour Firefox. Ces options sont mutuellement exclusives.
 
 Pour utiliser un build local précis plutôt que celui du CDN, passez `--from`&nbsp;:
 
 ```bash
-nowly extension youtube --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --chrome --from ../nowly/apps/extension/dist/chrome
+nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 ```
 
 ### Dépôt d'un zip

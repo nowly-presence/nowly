@@ -92,12 +92,13 @@ Veja [Carregar e testar localmente](/presence-development/load-and-test) para a 
 **Primeira vez** (sem Nowly no navegador): incorpore a presença em uma extensão pronta.
 
 ```bash
-nowly extension example
+nowly extension example             # Chrome (padrão)
+nowly extension example --firefox
 ```
 
-Carregue `dist/extension-dev` como extensão não compactada em `chrome://extensions`.
+Carregue `dist/extension-dev` sem compactação em `chrome://extensions` para o Chrome. No Firefox, abra `about:debugging#/runtime/this-firefox` e carregue `dist/extension-dev-firefox/manifest.json` usando **Load Temporary Add-on**.
 
-**Já tem o Nowly carregado como não compactado:** empacote um zip e solte-o em Configurações → Avançado → Depuração. As instalações da Store rejeitam zips não assinados.
+**Já tem o Nowly carregado sem compactação:** empacote um zip e solte-o em Configurações → Avançado → Depuração. As instalações da Store rejeitam zips não assinados.
 
 ```bash
 nowly pack example
