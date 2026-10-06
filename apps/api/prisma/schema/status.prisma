@@ -1,0 +1,12 @@
+model StatusSample {
+  id         Int      @id @default(autoincrement())
+  serviceId  String   @map("service_id")
+  checkedAt  DateTime @map("checked_at") @db.Timestamptz(6)
+  status     String
+  responseMs Int?     @map("response_ms")
+  httpStatus Int?     @map("http_status")
+  error      String?
+
+  @@index([serviceId, checkedAt, id])
+  @@map("status_samples")
+}

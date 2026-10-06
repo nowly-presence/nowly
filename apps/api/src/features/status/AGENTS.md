@@ -14,9 +14,9 @@ Health checks for Nowly's services: `GET /status` (last known report), `GET /sta
 Edit `classifyResponse()`: `operational` ≤750ms, `slow` ≤2000ms, `degraded` above that, `down` on non-2xx/timeout/no response. Change the thresholds here, not per-caller.
 
 ## Gotchas
-- Samples are kept in an in-memory `Map` (`sampleStore`), not persisted to a database — a restart or a second API instance behind a load balancer resets/fragments history. If status history looks inconsistent across requests, this is why; don't assume there's a DB-backed bug to chase.
+- When `DATABASE_URL` is configured, status samples are stored in PostgreSQL and shared across API restarts/instances. Without a database URL, the service falls back to an in-memory `Map`, which resets on restart.
 - The `"library"` service checks `${API_BASE_URL}/presences` — i.e. the `presence` feature's `GET /` (see that feature's `AGENTS.md`). If this check gets slow, the bug is almost always inside `getPresenceListData` (`presence.repository.ts`), not in this file — that's exactly what caused the "Bibliothèque de présences: 2067ms Dégradé" incident this status page was built to catch.
-- `runStatusCheck` is meant to be called on a schedule (cron) via the guarded `POST /status/check`, not on every `GET /status` — don't make `GET /status` trigger a fresh check itself, it should only read `sampleStore`.
+- `runStatusCheck` is meant to be called on a schedule (cron) via the guarded `POST /status/check`, not on every `GET /status` — don't make `GET /status` trigger a fresh check itself; it should only read the stored samples.
 
 ## Notable dependencies
 `presence` feature (one of the status sources), `auth` feature (shared fail-closed guard pattern used by the cron endpoint).

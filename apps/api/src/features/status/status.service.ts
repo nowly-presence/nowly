@@ -1,3 +1,6 @@
+import { getPrisma, hasDatabase } from "@/db/client"
+import { serverEnv } from "@nowly/env/server"
+
 export type ServiceStatus = "operational" | "slow" | "degraded" | "down" | "unknown"
 
 export type StatusServiceId = "website" | "api" | "library" | "cdn"
@@ -34,13 +37,10 @@ type StatusService = {
   url: string
 }
 
-import { serverEnv } from "@nowly/env/server"
-
 const REQUEST_TIMEOUT_MS = 5000
 const RECENT_SAMPLE_COUNT = 10
 
 const sampleStore = new Map<StatusServiceId, StatusSample[]>()
-let lastCheckTimestamp: string | null = null
 
 const services: StatusService[] = [
   { id: "website", url: process.env.NEXT_PUBLIC_BASE_URL || "https://nowly.me" },
@@ -108,10 +108,24 @@ const measureService = async (id: StatusServiceId, url: string): Promise<StatusS
 }
 
 export const getStatusReport = async (): Promise<StatusReport> => {
-  const reports = services.map((svc) => {
-    const samples = sampleStore.get(svc.id) ?? []
+  const reports = await Promise.all(services.map(async (svc) => {
+    const samples = hasDatabase()
+      ? await getPrisma().statusSample.findMany({
+        where: { serviceId: svc.id },
+        orderBy: [{ checkedAt: "desc" }, { id: "desc" }],
+        take: RECENT_SAMPLE_COUNT,
+      }).then((rows) => rows.map((row): StatusSample => ({
+        serviceId: row.serviceId as StatusServiceId,
+        checkedAt: row.checkedAt.toISOString(),
+        status: row.status as StatusSample["status"],
+        responseMs: row.responseMs,
+        httpStatus: row.httpStatus,
+        error: row.error,
+      })))
+      : sampleStore.get(svc.id) ?? []
+
     return { id: svc.id, current: samples[0] ?? null, samples: samples.slice(0, RECENT_SAMPLE_COUNT) }
-  })
+  }))
 
   return {
     generatedAt: new Date().toISOString(),
@@ -126,14 +140,49 @@ export const runStatusCheck = async (): Promise<StatusCheckResult> => {
     services.map((svc) => measureService(svc.id, svc.url)),
   )
 
-  const sampleLimit = getSampleLimit()
-  lastCheckTimestamp = new Date().toISOString()
+  if (hasDatabase()) {
+    const prisma = getPrisma()
+    await prisma.statusSample.createMany({
+      data: samples.map((sample) => ({
+        serviceId: sample.serviceId,
+        checkedAt: new Date(sample.checkedAt),
+        status: sample.status,
+        responseMs: sample.responseMs,
+        httpStatus: sample.httpStatus,
+        error: sample.error,
+      })),
+    })
 
-  for (const sample of samples) {
-    const existing = sampleStore.get(sample.serviceId) ?? []
-    existing.unshift(sample)
-    if (existing.length > sampleLimit) existing.length = sampleLimit
-    sampleStore.set(sample.serviceId, existing)
+    const sampleLimit = getSampleLimit()
+    await Promise.all(services.map(async (svc) => {
+      const [oldestExcessSample] = await prisma.statusSample.findMany({
+        where: { serviceId: svc.id },
+        orderBy: [{ checkedAt: "desc" }, { id: "desc" }],
+        skip: sampleLimit,
+        take: 1,
+        select: { id: true, checkedAt: true },
+      })
+
+      if (oldestExcessSample) {
+        await prisma.statusSample.deleteMany({
+          where: {
+            serviceId: svc.id,
+            OR: [
+              { checkedAt: { lt: oldestExcessSample.checkedAt } },
+              { checkedAt: oldestExcessSample.checkedAt, id: { lte: oldestExcessSample.id } },
+            ],
+          },
+        })
+      }
+    }))
+  } else {
+    const sampleLimit = getSampleLimit()
+    for (const sample of samples) {
+      const existing = sampleStore.get(sample.serviceId) ?? []
+      existing.unshift(sample)
+      if (existing.length > sampleLimit) existing.length = sampleLimit
+      sampleStore.set(sample.serviceId, existing)
+    }
   }
 
   return {
