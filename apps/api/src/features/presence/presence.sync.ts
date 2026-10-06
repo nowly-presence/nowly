@@ -31,7 +31,6 @@ export type PresenceSyncEntry = {
   source?: "cli" | "pr"
   commitSha?: string
   changedFiles?: string[]
-  diffSummary?: string
   metadata?: Record<string, any>
 }
 
@@ -79,14 +78,12 @@ export const processPresenceSync = async (body: PresenceSyncBody): Promise<Prese
     const stats = await getPresenceStats(p.slug)
     const currentVersion = stats.version
     const author = p.author || (stats.version ? (await getVersionHistory(p.slug))[0]?.author || "unknown" : "unknown")
-    const aiGeneratedChangelog = !p.changelog
     const changelogs = p.changelog
-      ? await translateChangelog(p.changelog)
+      ? translateChangelog(p.changelog)
       : await generateChangelog({
         type: p.type,
         name: p.name,
         changedFiles: p.changedFiles,
-        diffSummary: p.diffSummary,
         ...(p.type === "new" ? { descriptions: p.description } : {}),
       })
     const changelog = JSON.stringify(changelogs)
@@ -110,7 +107,7 @@ export const processPresenceSync = async (body: PresenceSyncBody): Promise<Prese
       bundleSizeLabel: bundleSizeBytes != null ? formatBytes(bundleSizeBytes) : undefined,
       bundleSha256,
       versionType: p.versionType,
-      aiGeneratedChangelog,
+      aiGeneratedChangelog: false,
       createdAt,
       timestamp,
     }

@@ -116,12 +116,10 @@ jobs:
             RELEASE_AUTHORS="$PR_RELEASE_AUTHOR"
           fi
 
-          # --ai delegates trilingual changelog generation to the API's Gemini provider.
           while IFS= read -r slug; do
             [ -z "$slug" ] && continue
             pnpm admin push "$slug" \
               --patch \
-              --ai \
               --source pr \
               --base "$BASE" \
               --head "$HEAD" \

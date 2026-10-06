@@ -121,7 +121,7 @@ pnpm --filter @nowly/internal-cli r2:minify-version-bundles
 pnpm --filter @nowly/internal-cli r2:optimize-assets
 pnpm --filter @nowly/internal-cli host:publish                # publish native host binaries/installer to CDN
 ```
-`internal-cli` also exposes `push`/`archive` presence commands (`packages/internal-cli/src/commands`), used by `presence-update.yml` as `pnpm admin push <slug> --patch --ai ...`.
+`internal-cli` also exposes `push`/`archive` presence commands (`packages/internal-cli/src/commands`), used by `presence-update.yml` as `pnpm admin push <slug> --patch ...`. Changelog text is generated deterministically from the changed files when `--changelog` is not provided.
 
 ## Key Architectural Patterns
 
