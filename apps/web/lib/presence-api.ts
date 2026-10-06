@@ -6,6 +6,8 @@ import {
   type PresencePerson,
 } from "@/lib/library-catalog";
 import { PRESENCES_REPOSITORY_URL } from "@/lib/constants";
+import { SUPPORTED_LOCALES } from "@nowly/locales";
+
 import { cache } from "react";
 
 const CDN_BASE_URL = "https://cdn.nowly.me";
@@ -37,44 +39,38 @@ const displayName = (name: unknown, slug: string): string => {
   return slug;
 };
 
-const emptyCopy = (): LocalizedCopy => ({
-  "en-US": "",
-  "fr-FR": "",
-  "es-ES": "",
-});
+const emptyCopy = (): LocalizedCopy =>
+  Object.fromEntries(SUPPORTED_LOCALES.map((locale) => [locale, ""])) as LocalizedCopy;
 
 const localizedCopy = (value: unknown, fallback: string): LocalizedCopy => {
   const copy = emptyCopy();
   if (typeof value === "string" && value.trim()) {
-    copy["en-US"] = value.trim();
-    copy["fr-FR"] = value.trim();
-    copy["es-ES"] = value.trim();
+    for (const locale of SUPPORTED_LOCALES) copy[locale] = value.trim();
     return copy;
   }
   if (value && typeof value === "object") {
     const localized = value as Record<string, unknown>;
-    for (const locale of ["en-US", "fr-FR", "es-ES"] as const) {
+    for (const locale of SUPPORTED_LOCALES) {
       const text = localized[locale];
       if (typeof text === "string" && text.trim()) copy[locale] = text.trim();
     }
     const first = Object.values(localized).find((text) => typeof text === "string" && text.trim());
     if (typeof first === "string") {
-      if (!copy["en-US"]) copy["en-US"] = first.trim();
-      if (!copy["fr-FR"]) copy["fr-FR"] = first.trim();
-      if (!copy["es-ES"]) copy["es-ES"] = first.trim();
+      for (const locale of SUPPORTED_LOCALES) {
+        if (!copy[locale]) copy[locale] = first.trim();
+      }
     }
   }
-  if (!copy["en-US"]) copy["en-US"] = fallback;
-  if (!copy["fr-FR"]) copy["fr-FR"] = fallback;
-  if (!copy["es-ES"]) copy["es-ES"] = fallback;
+
+  for (const locale of SUPPORTED_LOCALES) {
+    if (!copy[locale]) copy[locale] = fallback;
+  }
   return copy;
 };
 
-const emptyList = (): LocalizedList => ({
-  "en-US": [],
-  "fr-FR": [],
-  "es-ES": [],
-});
+const emptyList = (): LocalizedList =>
+  Object.fromEntries(SUPPORTED_LOCALES.map((locale) => [locale, [] as string[]])) as LocalizedList;
+
 
 const stringList = (value: unknown): string[] => {
   if (!Array.isArray(value)) return [];
@@ -85,13 +81,13 @@ const localizedList = (value: unknown): LocalizedList => {
   const list = emptyList();
   if (!value || typeof value !== "object" || Array.isArray(value)) return list;
   const localized = value as Record<string, unknown>;
-  for (const locale of ["en-US", "fr-FR", "es-ES"] as const) {
+  for (const locale of SUPPORTED_LOCALES) {
     list[locale] = stringList(localized[locale]);
   }
   const first = Object.values(localized).map(stringList).find((items) => items.length > 0) ?? [];
-  if (list["en-US"].length === 0) list["en-US"] = first;
-  if (list["fr-FR"].length === 0) list["fr-FR"] = first;
-  if (list["es-ES"].length === 0) list["es-ES"] = first;
+  for (const locale of SUPPORTED_LOCALES) {
+    if (list[locale].length === 0) list[locale] = first;
+  }
   return list;
 };
 

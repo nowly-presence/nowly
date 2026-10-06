@@ -1,4 +1,5 @@
 import { presenceLogoUrl, presenceThumbnailUrl } from "@/lib/presence-api";
+import type { LocaleString } from "@nowly/locales";
 
 export const LIBRARY_CATEGORIES = [
   "streaming",
@@ -14,17 +15,9 @@ export const LIBRARY_CATEGORIES = [
 
 export type LibraryCategory = (typeof LIBRARY_CATEGORIES)[number];
 
-export type LocalizedCopy = {
-  "en-US": string
-  "fr-FR": string
-  "es-ES": string
-};
+export type LocalizedCopy = Record<LocaleString, string>;
 
-export type LocalizedList = {
-  "en-US": string[]
-  "fr-FR": string[]
-  "es-ES": string[]
-};
+export type LocalizedList = Record<LocaleString, string[]>;
 
 export type PresencePerson = {
   name: string
@@ -89,12 +82,8 @@ export const presenceSearchText = (presence: LibraryPresence): string =>
     presence.author.github ?? "",
     ...presence.contributors.flatMap((person) => [person.name, person.github ?? ""]),
     ...presence.urls,
-    presence.description["en-US"],
-    presence.description["fr-FR"],
-    presence.description["es-ES"],
-    presence.longDescription["en-US"],
-    presence.longDescription["fr-FR"],
-    presence.longDescription["es-ES"],
+    ...Object.values(presence.description),
+    ...Object.values(presence.longDescription),
   ]
     .join(" ")
     .toLowerCase();
