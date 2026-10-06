@@ -12,6 +12,12 @@
       "Netflix Discord"
     ]
   },
+  "legal": {
+    "publisher-name": "K.Ring",
+    "publisher-siren": "105 793 194",
+    "publisher-address": "62450 Bapaume, France",
+    "publisher-email": "contact@nowly.me"
+  },
   "navbar": {
     "docs": "Dokumentasi",
     "library": "Perpustakaan",
@@ -893,6 +899,7 @@
     "title": "Dasar Privasi",
     "description": "Cara Nowly mengendalikan data anda, apa yang kekal pada peranti anda, dan apa yang bergantung pada persetujuan anda.",
     "last-updated": "Kemas kini terakhir: 4 Oktober 2026.",
+    "data-region": "Kesatuan Eropah (VPS disediakan oleh Contabo GmbH, Jerman)",
     "intro": "Dasar ini menerangkan bagaimana <strong>{publisherName}</strong> (\"kami\"), sebagai pengawal data, memproses data peribadi berkaitan Nowly. Aktiviti Rich Presence dihantar daripada pelayar anda ke klien Discord <strong>pada mesin anda</strong>. Ia tidak melalui pelayan kami. Statistik penggunaan pilihan dan beberapa ciri laman web melibatkan API atau pemproses kami, seperti yang diterangkan di bawah.",
     "sections": [
       {
@@ -1026,6 +1033,7 @@
     "title": "Notis Undang-undang",
     "description": "Maklumat penerbit, hosting, dan harta intelek yang diperlukan di bawah undang-undang Perancis.",
     "last-updated": "Berkuat kuasa 17 September 2026. Diperlukan di bawah LCEN Perancis, artikel 6-III.",
+    "data-region": "Kesatuan Eropah (VPS disediakan oleh Contabo GmbH, Jerman)",
     "sections": [
       {
         "title": "Penerbit",

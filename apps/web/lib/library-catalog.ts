@@ -1,5 +1,5 @@
 import { presenceLogoUrl, presenceThumbnailUrl } from "@/lib/presence-api";
-import type { LocaleString } from "@nowly/locales";
+import { FALLBACK_LOCALE, getValidLocale, type LocaleString } from "@nowly/locales";
 
 export const LIBRARY_CATEGORIES = [
   "streaming",
@@ -54,24 +54,30 @@ export const catalogCategories = (items: LibraryPresence[]): LibraryCategory[] =
 export const localizedDescription = (
   presence: LibraryPresence,
   locale: string,
-): string =>
-  presence.description[locale as keyof LocalizedCopy] ?? presence.description["en-US"];
+): string => {
+  const localeKey = getValidLocale(locale);
+  return presence.description[localeKey] ?? presence.description[FALLBACK_LOCALE];
+};
 
 export const localizedLongDescription = (
   presence: LibraryPresence,
   locale: string,
-): string =>
-  presence.longDescription[locale as keyof LocalizedCopy] ??
-  presence.longDescription["en-US"] ??
-  localizedDescription(presence, locale);
+): string => {
+  const localeKey = getValidLocale(locale);
+  return (
+    presence.longDescription[localeKey] ??
+    presence.longDescription[FALLBACK_LOCALE] ??
+    localizedDescription(presence, locale)
+  );
+};
 
 export const localizedFeatures = (
   presence: LibraryPresence,
   locale: string,
-): string[] =>
-  presence.features[locale as keyof LocalizedList] ??
-  presence.features["en-US"] ??
-  [];
+): string[] => {
+  const localeKey = getValidLocale(locale);
+  return presence.features[localeKey] ?? presence.features[FALLBACK_LOCALE] ?? [];
+};
 
 export const presenceSearchText = (presence: LibraryPresence): string =>
   [

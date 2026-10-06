@@ -6,7 +6,7 @@ import {
   type PresencePerson,
 } from "@/lib/library-catalog";
 import { PRESENCES_REPOSITORY_URL } from "@/lib/constants";
-import { SUPPORTED_LOCALES } from "@nowly/locales";
+import { FALLBACK_LOCALE, SUPPORTED_LOCALES } from "@nowly/locales";
 
 import { cache } from "react";
 
@@ -33,7 +33,7 @@ const displayName = (name: unknown, slug: string): string => {
   if (typeof name === "string" && name.trim()) return name.trim();
   if (name && typeof name === "object") {
     const localized = name as Record<string, unknown>;
-    const value = localized["en-US"] ?? Object.values(localized)[0];
+    const value = localized[FALLBACK_LOCALE] ?? Object.values(localized)[0];
     if (typeof value === "string" && value.trim()) return value.trim();
   }
   return slug;
@@ -171,7 +171,7 @@ export const getPresenceCatalog = cache(async (): Promise<LibraryPresence[]> => 
             : "other",
           color: typeof item.color === "string" && item.color.trim() ? item.color.trim() : "#111111",
           description,
-          longDescription: localizedCopy(item.longDescription, description["en-US"]),
+          longDescription: localizedCopy(item.longDescription, description[FALLBACK_LOCALE]),
           features: localizedList(item.features),
           urls: parseUrls(item.url),
           author: parsePerson(item.author, name),

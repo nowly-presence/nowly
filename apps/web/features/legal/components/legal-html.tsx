@@ -1,20 +1,12 @@
-import { LEGAL_PUBLISHER } from "@/lib/constants";
 
 const ALLOWED_HREF = /^(https?:\/\/|mailto:|\/)/i;
 
 export const interpolateLegalHtml = (html: string, extras: Record<string, string> = {}): string => {
-  const values = {
-    publisherName: LEGAL_PUBLISHER.name,
-    publisherSiren: LEGAL_PUBLISHER.siren,
-    publisherAddress: LEGAL_PUBLISHER.address,
-    publisherEmail: LEGAL_PUBLISHER.email,
-    ...extras,
-  };
-
   let out = html;
-  for (const [key, value] of Object.entries(values)) {
+  for (const [key, value] of Object.entries(extras)) {
     out = out.replaceAll(`{${key}}`, value);
   }
+
 
   return out
     .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")

@@ -1,3 +1,4 @@
+import { FALLBACK_LOCALE, LOCALE_SHORT_MAP } from "@nowly/locales"
 import { serverEnv } from "@nowly/env/server"
 import type { PresenceMeta } from "./presence.types"
 
@@ -13,8 +14,8 @@ const localizedName = (value: unknown, locale: string | undefined, fallback: str
     const candidates = [
       locale,
       locale?.replace("_", "-"),
-      "en-US",
-      "en",
+      FALLBACK_LOCALE,
+      LOCALE_SHORT_MAP[FALLBACK_LOCALE],
     ]
     for (const key of candidates) {
       if (!key) continue

@@ -1,3 +1,5 @@
+import { FALLBACK_LOCALE } from "@nowly/locales"
+
 import { formatBytes } from "@nowly/shared"
 import { generateChangelog, translateChangelog } from "@/shared/changelog.service"
 import { sha256Base64Url } from "@/shared/crypto.service"
@@ -87,7 +89,7 @@ export const processPresenceSync = async (body: PresenceSyncBody): Promise<Prese
         ...(p.type === "new" ? { descriptions: p.description } : {}),
       })
     const changelog = JSON.stringify(changelogs)
-    const displayChangelog = changelogs["en-US"] || ""
+    const displayChangelog = changelogs[FALLBACK_LOCALE] || ""
     const publishedAt = new Date()
     const timestamp = publishedAt.getTime()
     const createdAt = publishedAt.toISOString()

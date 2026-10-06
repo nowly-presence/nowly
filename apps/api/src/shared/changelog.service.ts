@@ -1,4 +1,4 @@
-import { buildLocalizedValue, buildLocaleObject, LocaleRecordSchema, SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales"
+import { buildLocalizedValue, buildLocaleObject, FALLBACK_LOCALE, LocaleRecordSchema, SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales"
 import { z } from "zod"
 
 const ChangelogSchema = LocaleRecordSchema(z.string().min(1))
@@ -24,10 +24,10 @@ type ModifiedChange =
   | "generic"
 
 const localeName = (ctx: ChangelogContext, locale: string): string =>
-  ctx.names?.[locale] || ctx.names?.["en-US"] || ctx.name
+  ctx.names?.[locale] || ctx.names?.[FALLBACK_LOCALE] || ctx.name
 
 const description = (ctx: ChangelogContext, locale: string): string =>
-  (ctx.descriptions?.[locale] || ctx.descriptions?.["en-US"] || ctx.description || "")
+  (ctx.descriptions?.[locale] || ctx.descriptions?.[FALLBACK_LOCALE] || ctx.description || "")
     .replace(/\s+/g, " ")
     .trim()
     .slice(0, 160)
@@ -162,11 +162,11 @@ const fallbackChangelogs = (ctx: ChangelogContext): Changelog => {
         newMessage(locale, localeName(ctx, locale), description(ctx, locale)),
       ]),
     ) as LocalizedText
-    return buildLocalizedValue(localized, localized["en-US"])
+    return buildLocalizedValue(localized, localized[FALLBACK_LOCALE])
   }
 
   const messages = modifiedMessage(modifiedChange(ctx.changedFiles || []), ctx.name)
-  return buildLocalizedValue(messages, messages["en-US"])
+  return buildLocalizedValue(messages, messages[FALLBACK_LOCALE])
 }
 
 /**

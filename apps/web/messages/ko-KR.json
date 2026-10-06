@@ -12,6 +12,12 @@
       "Netflix Discord"
     ]
   },
+  "legal": {
+    "publisher-name": "K.Ring",
+    "publisher-siren": "105 793 194",
+    "publisher-address": "62450 Bapaume, France",
+    "publisher-email": "contact@nowly.me"
+  },
   "navbar": {
     "docs": "문서",
     "library": "라이브러리",
@@ -893,6 +899,7 @@
     "title": "개인정보처리방침",
     "description": "Nowly가 당신의 데이터를 어떻게 처리하는지, 무엇이 기기에 남는지, 무엇이 동의에 달려 있는지.",
     "last-updated": "최종 업데이트: 2026년 10월 4일.",
+    "data-region": "유럽연합(Contabo GmbH가 제공하는 VPS, 독일)",
     "intro": "본 방침은 데이터 관리자인 <strong>{publisherName}</strong>(\"당사\")가 Nowly와 관련하여 개인 데이터를 어떻게 처리하는지 설명합니다. Rich Presence 활동은 사용자의 브라우저에서 <strong>사용자의 기기에 있는</strong> Discord 클라이언트로 전송됩니다. 당사 서버를 거치지 않습니다. 선택적 이용 통계와 일부 웹사이트 기능은 아래 설명대로 당사 API 또는 처리자가 관여합니다.",
     "sections": [
       {
@@ -1026,6 +1033,7 @@
     "title": "법적 고지",
     "description": "프랑스 법에 따라 요구되는 발행인, 호스팅, 지적 재산권 정보.",
     "last-updated": "2026년 9월 17일 발효. 프랑스 LCEN 제6-III조에 따라 요구됨.",
+    "data-region": "유럽연합(Contabo GmbH가 제공하는 VPS, 독일)",
     "sections": [
       {
         "title": "발행인",

@@ -1,3 +1,4 @@
+import { FALLBACK_LOCALE } from "@nowly/locales";
 import { getTranslations } from "next-intl/server";
 import { NextResponse } from "next/server";
 
@@ -28,7 +29,7 @@ const markdownText = (value: string): string => value.replace(/[\r\n]+/g, " ").t
 
 export const GET = async () => {
   const [t, catalog] = await Promise.all([
-    getTranslations({ locale: "en-US" }),
+    getTranslations({ locale: FALLBACK_LOCALE }),
     getPresenceCatalog().catch(() => []),
   ]);
   const lines: string[] = [
@@ -55,7 +56,7 @@ export const GET = async () => {
 
   for (const presence of catalog) {
     lines.push(
-      `- [${markdownText(presence.name)}](${CANONICAL_ORIGIN}/library/${encodeURIComponent(presence.slug)}): ${markdownText(presence.description["en-US"])}`,
+      `- [${markdownText(presence.name)}](${CANONICAL_ORIGIN}/library/${encodeURIComponent(presence.slug)}): ${markdownText(presence.description[FALLBACK_LOCALE])}`,
     );
   }
 

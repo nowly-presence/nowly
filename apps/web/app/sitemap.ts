@@ -1,3 +1,4 @@
+import { FALLBACK_LOCALE } from "@nowly/locales";
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { getChangelogReleases } from "@/features/changelog/lib/changelog-releases";
@@ -48,7 +49,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     entry("/canary", "weekly", 0.55),
     entry("/branding", "monthly", 0.4),
     entry("/changelog", "monthly", 0.6),
-    ...getChangelogReleases("en-US").map((release) =>
+    ...getChangelogReleases(FALLBACK_LOCALE).map((release) =>
       entry(
         `/changelog/${release.version}`,
         "monthly",

@@ -12,6 +12,12 @@
       "Netflix Discord"
     ]
   },
+  "legal": {
+    "publisher-name": "K.Ring",
+    "publisher-siren": "105 793 194",
+    "publisher-address": "62450 Bapaume, France",
+    "publisher-email": "contact@nowly.me"
+  },
   "navbar": {
     "docs": "Documentación",
     "library": "Biblioteca",
@@ -893,6 +899,7 @@
     "title": "Política de privacidad",
     "description": "Cómo trata Nowly tus datos, qué permanece en tu dispositivo y qué depende de tu consentimiento.",
     "last-updated": "Última actualización: 4 de octubre de 2026.",
+    "data-region": "Unión Europea (VPS proporcionado por Contabo GmbH, Alemania)",
     "intro": "Esta política describe cómo <strong>{publisherName}</strong> («nosotros»), como responsable del tratamiento, trata datos personales en relación con Nowly. La actividad de Rich Presence se envía del navegador al cliente de Discord <strong>en tu equipo</strong>. No pasa por nuestros servidores. Las estadísticas de uso opcionales y algunas funciones del sitio sí implican nuestra API o encargados del tratamiento, como se indica a continuación.",
     "sections": [
       {
@@ -1026,6 +1033,7 @@
     "title": "Aviso legal",
     "description": "Editor, alojamiento y propiedad intelectual, información exigida por la ley francesa.",
     "last-updated": "En vigor desde el 17 de septiembre de 2026. Exigido por la LCEN francesa, art. 6-III.",
+    "data-region": "Unión Europea (VPS proporcionado por Contabo GmbH, Alemania)",
     "sections": [
       {
         "title": "Editor",

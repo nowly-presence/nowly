@@ -18,8 +18,8 @@ Categories are duplicated in two places that must stay in sync:
 
 ## Gotchas
 
-- `LocalizedCopy`/`LocalizedList` in `library-catalog.ts` only type `en-US`/`fr-FR`/`es-ES` even though the site supports 11 locales — `localizedDescription`/`localizedFeatures` fall back to `en-US` for every other locale. This mirrors what presence authors actually provide in `packages/presences` metadata (`description`/`longDescription`/`features` are rarely translated beyond these three) — don't assume every locale is available here the way UI strings are.
-- `presenceSearchText` only indexes `en-US`/`fr-FR`/`es-ES` copy for the same reason — a search feature added for another locale won't match on that locale's description even if a translation existed.
+- `LocalizedCopy`/`LocalizedList` in `library-catalog.ts` cover all 11 supported locales. Presence metadata may still omit translations, so `localizedDescription`/`localizedFeatures` fall back to the shared default locale.
+- `presenceSearchText` indexes every localized description and long description returned by the API, so translated copy remains searchable.
 
 ## Notable dependencies
 `lib/library-catalog.ts`, `lib/analytics.ts`, `lib/presence-api.ts` (root, shared), `components/extension-store-button.tsx`, `components/presence-tile.tsx`, `presence` feature of `apps/api`.

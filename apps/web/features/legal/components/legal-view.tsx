@@ -1,7 +1,6 @@
 import { LegalHtml } from "@/features/legal/components/legal-html";
 import { Link } from "@/i18n/navigation";
-import { LEGAL_DATA_REGION } from "@/lib/constants";
-import { getLocale, getMessages, getTranslations } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 
 export const LEGAL_PAGE_KEYS = ["privacy", "tos", "cookies", "legal-notice"] as const;
 
@@ -25,21 +24,31 @@ const proseClassName =
   "legal-prose text-[0.98rem] leading-relaxed text-foreground/78 [&_a]:text-foreground [&_a]:underline [&_a]:decoration-foreground/20 [&_a]:underline-offset-4 [&_a]:transition-colors [&_a:hover]:decoration-foreground/50 [&_code]:rounded-md [&_code]:bg-code-surface [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.86em] [&_li]:mt-1.5 [&_strong]:font-medium [&_strong]:text-foreground [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5";
 
 export const LegalView = async ({ page }: { page: LegalPageKey }) => {
-  const [footer, locale, messages] = await Promise.all([
+  const [footer, messages] = await Promise.all([
     getTranslations("footer"),
-    getLocale(),
     getMessages(),
   ]);
+  const legal = messages.legal as {
+    "publisher-name": string
+    "publisher-siren": string
+    "publisher-address": string
+    "publisher-email": string
+  };
   const copy = messages[MESSAGE_NS[page]] as {
     badge: string
     title: string
     description: string
     "last-updated": string
+    "data-region"?: string
     intro?: string
     sections: Array<{ title: string; body: string }>
   };
   const extras = {
-    dataRegion: LEGAL_DATA_REGION[locale as keyof typeof LEGAL_DATA_REGION] ?? LEGAL_DATA_REGION["en-US"],
+    publisherName: legal["publisher-name"],
+    publisherSiren: legal["publisher-siren"],
+    publisherAddress: legal["publisher-address"],
+    publisherEmail: legal["publisher-email"],
+    dataRegion: copy["data-region"] ?? "",
   };
   const intro = copy.intro ?? "";
   const sections = copy.sections;

@@ -5,6 +5,7 @@ import { PresenceInfo } from "@/features/library/components/presence-info";
 import { ButtonLink } from "@/components/button-link";
 import { DiscordCallout } from "@/components/discord-callout";
 import { Alert, AlertDescription, AlertTitle, Card, CardContent, CardTitle } from "@nowly/ui";
+import { FALLBACK_LOCALE, getValidLocale } from "@nowly/locales";
 
 
 
@@ -35,7 +36,7 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats 
   const features = localizedFeatures(presence, locale);
   const related = relatedPresences(catalog, presence);
   const currentVersion = versions.find((entry) => entry.version === presence.version) ?? versions[0] ?? null;
-  const currentNote = currentVersion?.note[locale as keyof typeof currentVersion.note] || currentVersion?.note["en-US"] || "";
+  const currentNote = currentVersion?.note[getValidLocale(locale)] || currentVersion?.note[FALLBACK_LOCALE] || "";
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
