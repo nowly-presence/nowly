@@ -17,7 +17,10 @@ type OpenInProps = {
 };
 
 export const OpenIn: FC<OpenInProps> = ({ slug, locale }) => {
-  const githubUrl = `${PROJECT_REPOSITORY_URL}/blob/stable/apps/docs/content/docs/${slug}/${locale}.mdx`;
+  const sourcePath = slug.startsWith("changelog/")
+    ? `packages/changelog/content/${slug.slice("changelog/".length)}`
+    : `apps/docs/content/docs/${slug}`;
+  const githubUrl = `${PROJECT_REPOSITORY_URL}/blob/stable/${sourcePath}/${locale}.mdx`;
   const markdownUrl = `${DOCS_URL}${docHref(slug)}`;
   const t = useTranslations("docsUi");
   const askAbout = t("ask-about", { url: markdownUrl });
