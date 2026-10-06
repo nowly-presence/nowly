@@ -7,6 +7,7 @@ Nowly is a monorepo for the website, API, browser extension, native host, and re
 ## Before You Start
 
 - Check existing issues and pull requests before starting a larger change.
+- Please follow the [Code of Conduct](./CODE_OF_CONDUCT.md) in all project spaces.
 - For a security vulnerability, do not open a public issue. Follow [SECURITY.md](./SECURITY.md).
 - Open issues and pull requests in the repository that owns the component you are changing.
 
