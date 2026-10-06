@@ -53,14 +53,6 @@ Developers interested in creating presences should start here:
 
 ---
 
-## Contributing
-
-Contributions are welcome.
-
-Please open issues and pull requests in the repository related to the component you're modifying.
-
----
-
 ## Supporters
 
 Nowly is free and always will be. If you want to support the project, you can do it on [Ko-fi](https://ko-fi.com/nowly).
