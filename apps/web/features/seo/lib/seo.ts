@@ -78,6 +78,8 @@ type SeoOptions = {
   accent?: string
   logo?: string
   noIndex?: boolean
+  alternateLocales?: readonly string[]
+  canonicalLocale?: string
 };
 
 // The <title> tag reads well with a "Nowly | X" / "X | Nowly" pattern, but repeating that
@@ -98,13 +100,19 @@ export const createMetadata = ({
   accent,
   logo,
   noIndex = false,
+  alternateLocales,
+  canonicalLocale,
 }: SeoOptions): Metadata => {
   const localeString = locale as LocaleString;
   const url = absoluteUrl(getPathname({ locale: localeString, href: path }), CANONICAL_ORIGIN);
+  const canonical = canonicalLocale
+    ? absoluteUrl(getPathname({ locale: canonicalLocale as LocaleString, href: path }), CANONICAL_ORIGIN)
+    : url;
   const languages: Record<string, string> = {
     "x-default": absoluteUrl(getPathname({ locale: routing.defaultLocale, href: path }), CANONICAL_ORIGIN),
   };
   for (const target of routing.locales) {
+    if (alternateLocales && !alternateLocales.includes(target)) continue;
     languages[target] = absoluteUrl(getPathname({ locale: target, href: path }), CANONICAL_ORIGIN);
   }
   const resolvedTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
@@ -119,7 +127,7 @@ export const createMetadata = ({
     title: { absolute: resolvedTitle },
     description,
     keywords,
-    alternates: { canonical: url, languages },
+    alternates: { canonical, languages },
     robots: hideFromIndex
       ? { index: false, follow: false, nocache: true }
       : { index: true, follow: true },

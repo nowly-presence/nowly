@@ -2,14 +2,16 @@ import { FALLBACK_LOCALE } from "@nowly/locales";
 import { getTranslations } from "next-intl/server";
 import { NextResponse } from "next/server";
 
+import { getGuides } from "@/features/guides/lib/guides";
 import { getPresenceCatalog } from "@/lib/presence-api";
-import { CANONICAL_ORIGIN } from "@/features/seo/lib/seo";
+import { CANONICAL_ORIGIN, DOCS_ORIGIN } from "@/features/seo/lib/seo";
 
 export const runtime = "nodejs";
 
 const pageDefinitions = [
   ["/", "metadata"],
   ["/library", "pages.library"],
+  ["/guides", "pages.guides"],
   ["/faq", "faqPage"],
   ["/desktop", "pages.desktop"],
   ["/extension", "pages.extension"],
@@ -18,6 +20,7 @@ const pageDefinitions = [
   ["/support", "pages.support"],
   ["/status", "pages.status"],
   ["/branding", "pages.branding"],
+  ["/about", "pages.about"],
   ["/privacy", "privacy-page"],
   ["/consent", "pages.consent"],
   ["/tos", "tos-page"],
@@ -47,6 +50,11 @@ export const GET = async () => {
     lines.push(`- [${markdownText(title)}](${CANONICAL_ORIGIN}${path}): ${markdownText(description)}`);
   }
 
+  lines.push("", "## Guides", "");
+  for (const guide of getGuides(FALLBACK_LOCALE)) {
+    lines.push(`- [${markdownText(guide.title)}](${CANONICAL_ORIGIN}/guides/${guide.slug}): ${markdownText(guide.description)}`);
+  }
+
   lines.push(
     "",
     "## Presence library",
@@ -64,8 +72,8 @@ export const GET = async () => {
     "",
     "## Documentation and resources",
     "",
-    "- [Nowly documentation](https://docs.nowly.me/): Build, test, and publish presence scripts.",
-    "- [Documentation llms.txt](https://docs.nowly.me/llms.txt): Documentation index for language models.",
+    `- [Nowly documentation](${DOCS_ORIGIN}/): Build, test, and publish presence scripts.`,
+    `- [Documentation llms.txt](${DOCS_ORIGIN}/llms.txt): Documentation index for language models.`,
     "- [GitHub repository](https://github.com/nowly-presence/nowly): Source code and issue tracker.",
     "- [Discord Rich Presence](https://discord.com/rich-presence): Discord's Rich Presence reference.",
   );
