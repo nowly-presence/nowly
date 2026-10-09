@@ -51,11 +51,6 @@ const nextConfig: NextConfig = {
       },
       ...docsRedirects,
       {
-        source: "/about",
-        destination: "/",
-        permanent: true,
-      },
-      {
         source: "/:slug-discord-rich-presence",
         destination: "/library/:slug",
         permanent: true,
