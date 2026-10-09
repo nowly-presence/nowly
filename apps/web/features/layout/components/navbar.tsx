@@ -1,19 +1,19 @@
 "use client";
 
-import { RiMenuLine } from "@remixicon/react";
-import { lazy, Suspense, useState } from "react";
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { BrandLockup } from "@/features/layout/components/brand-lockup";
 import { NavbarLinks } from "@/features/layout/components/navbar-links";
 import { buttonVariants } from "@nowly/ui/button-variants";
 import { cn } from "@nowly/ui/utils";
+import { RiMenuLine } from "@remixicon/react";
+import { lazy, Suspense, useState } from "react";
 
 const MobileNav = lazy(() => import("@/features/layout/components/mobile-nav").then(({ MobileNav: Component }) => ({ default: Component })));
 
 
+import { docsHref } from "@/features/seo/lib/seo";
 import { Link, usePathname } from "@/i18n/navigation";
 import { CANARY_ACCENT, CANARY_INK } from "@/lib/brand";
-import { docsHref } from "@/features/seo/lib/seo";
 import { useTranslations } from "next-intl";
 
 export const Navbar = () => {
@@ -28,6 +28,7 @@ export const Navbar = () => {
   const links = [
     { href: "/roadmap", label: t("roadmap"), external: false },
     { href: docsHref("/"), label: t("docs"), external: true },
+    { href: "/guides", label: t("guides"), external: false },
     { href: "/library", label: t("library"), external: false },
   ];
 
@@ -35,11 +36,11 @@ export const Navbar = () => {
     <header className="pointer-events-none relative sticky top-0 z-50 px-4 pt-4 sm:px-6 sm:pt-8 lg:px-10">
       <div
         aria-hidden
-        className="pointer-events-none absolute top-4 right-4 left-4 mx-auto max-w-[1200px] rounded-[12px] bg-background/50 opacity-0 backdrop-blur-xl transition-opacity duration-200 sm:top-8 sm:right-6 sm:left-6 lg:right-10 lg:left-10 [[data-nav-join]_&]:opacity-100"
+        className="pointer-events-none absolute top-4 right-4 left-4 mx-auto max-w-300 rounded-[12px] bg-background/50 opacity-0 backdrop-blur-xl transition-opacity duration-200 sm:top-8 sm:right-6 sm:left-6 lg:right-10 lg:left-10 in-data-nav-join:opacity-100"
         style={{ height: "var(--nav-join-panel, 0px)" }}
       />
-      <div className="pointer-events-auto relative mx-auto flex h-[68px] max-w-[1200px] items-center justify-between gap-4 rounded-[12px] bg-background/50 px-3 backdrop-blur-xl transition-[background-color,border-radius,backdrop-filter] duration-200 sm:h-[84px] sm:px-4 [[data-nav-join]_&]:rounded-b-none [[data-nav-join]_&]:bg-transparent [[data-nav-join]_&]:backdrop-blur-none">
-        <Link href="/" className="relative flex h-11 w-[120px] shrink-0 items-center sm:h-[60px] sm:w-[148px]">
+      <div className="pointer-events-auto relative mx-auto flex h-17 max-w-300 items-center justify-between gap-4 rounded-[12px] bg-background/50 px-3 backdrop-blur-xl transition-[background-color,border-radius,backdrop-filter] duration-200 sm:h-21 sm:px-4 in-data-nav-join:rounded-b-none in-data-nav-join:bg-transparent in-data-nav-join:backdrop-blur-none">
+        <Link href="/" className="relative flex h-11 w-30 shrink-0 items-center sm:h-15 sm:w-37">
           <BrandLockup
             width={148}
             height={60}
