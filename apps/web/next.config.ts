@@ -3,6 +3,23 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const docsBase = "https://docs.nowly.me";
 
+const docsZone = (process.env.DOCS_ZONE_URL ?? "").replace(/\/$/, "");
+
+const docsRedirects = docsZone
+  ? []
+  : [
+    {
+      source: "/docs",
+      destination: `${docsBase}/`,
+      permanent: true,
+    },
+    {
+      source: "/docs/:path*",
+      destination: `${docsBase}/:path*`,
+      permanent: true,
+    },
+  ];
+
 const nextConfig: NextConfig = {
   compress: true,
   transpilePackages: ["@nowly/analytics", "@nowly/ui", "@nowly/locales"],
@@ -15,6 +32,15 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn.nowly.me" },
     ],
   },
+  async rewrites() {
+    if (!docsZone) return [];
+    return {
+      beforeFiles: [
+        { source: "/docs", destination: `${docsZone}/docs` },
+        { source: "/docs/:path+", destination: `${docsZone}/docs/:path+` },
+      ],
+    };
+  },
   async redirects() {
     return [
       {
@@ -23,16 +49,7 @@ const nextConfig: NextConfig = {
         destination: "https://nowly.me/:path*",
         permanent: true,
       },
-      {
-        source: "/docs",
-        destination: `${docsBase}/`,
-        permanent: true,
-      },
-      {
-        source: "/docs/:path*",
-        destination: `${docsBase}/:path*`,
-        permanent: true,
-      },
+      ...docsRedirects,
       {
         source: "/about",
         destination: "/",

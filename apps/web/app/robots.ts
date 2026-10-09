@@ -1,4 +1,4 @@
-import { CANONICAL_ORIGIN, isSeoPreview } from "@/features/seo/lib/seo";
+import { CANONICAL_ORIGIN, DOCS_ORIGIN, isSeoPreview } from "@/features/seo/lib/seo";
 import type { MetadataRoute } from "next";
 
 const robots = (): MetadataRoute.Robots => {
@@ -16,7 +16,9 @@ const robots = (): MetadataRoute.Robots => {
         disallow: ["/api/", "/host/", "/test/"],
       },
     ],
-    sitemap: `${CANONICAL_ORIGIN}/sitemap.xml`,
+    sitemap: DOCS_ORIGIN.startsWith(`${CANONICAL_ORIGIN}/`)
+      ? [`${CANONICAL_ORIGIN}/sitemap.xml`, `${DOCS_ORIGIN}/sitemap.xml`]
+      : `${CANONICAL_ORIGIN}/sitemap.xml`,
     host: CANONICAL_ORIGIN,
   };
 };

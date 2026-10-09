@@ -8,6 +8,6 @@ export default appProxy;
 // unresolved (getLocale() silently falls back to the default locale) for those.
 export const config = {
   matcher: [
-    "/((?!api|host|test|_next|_vercel|.*\\.(?:ico|png|jpg|jpeg|gif|svg|webp|css|js|mjs|json|md|txt|xml|webmanifest|woff|woff2|ttf)$).*)",
+    "/((?!api|host|test|docs|_next|_vercel|.*\\.(?:ico|png|jpg|jpeg|gif|svg|webp|css|js|mjs|json|md|txt|xml|webmanifest|woff|woff2|ttf)$).*)",
   ],
 };

@@ -11,7 +11,7 @@ import type { LocaleString } from "@nowly/locales";
 import type { Metadata } from "next";
 
 export const CANONICAL_ORIGIN = "https://nowly.me";
-export const DOCS_ORIGIN = "https://docs.nowly.me";
+export const DOCS_ORIGIN = (process.env.NEXT_PUBLIC_DOCS_BASE_URL || "https://docs.nowly.me").replace(/\/$/, "");
 
 const trimOrigin = (value: string): string => value.replace(/\/$/, "");
 
