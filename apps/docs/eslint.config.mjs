@@ -6,6 +6,11 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    languageOptions: {
+      parserOptions: {
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
     plugins: { "@stylistic": stylistic },
     rules: {
       "@stylistic/semi": ["error", "always"],
