@@ -1,61 +1,68 @@
-import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
-
+import { docsHref } from "@/features/seo/lib/seo";
 import { ContactForm } from "@/features/support/components/contact-form";
 import { DonateCard } from "@/features/support/components/donate-card";
-import { DISCORD_INVITE_URL } from "@/lib/constants";
-import { docsHref } from "@/features/seo/lib/seo";
 import { SUPPORT_LINKS } from "@/features/support/lib/support-links";
+import { Link } from "@/i18n/navigation";
+import { DISCORD_INVITE_URL } from "@/lib/constants";
 import {
   RiAddLine,
   RiAlertLine,
+  RiArrowRightUpLine,
   RiBookOpenLine,
   RiBugLine,
   RiDiscordFill,
   RiGithubLine,
   RiLightbulbLine,
 } from "@nowly/ui/icons";
-import { getTranslations } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
+import type { ReactNode } from "react";
 
-type SupportCard = {
+type SupportLink = {
   key: "discord" | "docs" | "broken" | "request" | "bug" | "feature" | "other"
   href: string
   icon: typeof RiDiscordFill
 };
 
-const sections: Array<{ id: "community" | "presences" | "technical"; cards: SupportCard[] }> = [
+const sections: Array<{ id: "community" | "presences" | "technical"; links: SupportLink[] }> = [
   {
     id: "community",
-    cards: [
+    links: [
       { key: "discord", href: DISCORD_INVITE_URL, icon: RiDiscordFill },
       { key: "docs", href: docsHref("/getting-started/troubleshooting"), icon: RiBookOpenLine },
     ],
   },
   {
     id: "presences",
-    cards: [
+    links: [
       { key: "broken", href: SUPPORT_LINKS.brokenPresence, icon: RiAlertLine },
       { key: "request", href: SUPPORT_LINKS.newPresence, icon: RiAddLine },
     ],
   },
   {
     id: "technical",
-    cards: [
+    links: [
       { key: "bug", href: SUPPORT_LINKS.bugReport, icon: RiBugLine },
       { key: "feature", href: SUPPORT_LINKS.featureRequest, icon: RiLightbulbLine },
+      { key: "other", href: SUPPORT_LINKS.blankIssue, icon: RiGithubLine },
     ],
   },
 ];
 
-const otherCard: SupportCard = { key: "other", href: SUPPORT_LINKS.blankIssue, icon: RiGithubLine };
-const OtherIcon = otherCard.icon;
+const INLINE_LINK = "underline underline-offset-4 transition-colors hover:text-foreground";
 
 export const SupportView = async () => {
-  const t = await getTranslations("supportPage");
+  const [t, messages] = await Promise.all([getTranslations("supportPage"), getMessages()]);
+  const email = (messages.legal as { "publisher-email": string })["publisher-email"];
+  const internalLink = (href: string) => (chunks: ReactNode) => (
+    <Link href={href} className={INLINE_LINK}>
+      {chunks}
+    </Link>
+  );
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
-        <header className="max-w-xl">
+        <header className="max-w-2xl">
           <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
             {t("eyebrow")}
           </p>
@@ -67,63 +74,64 @@ export const SupportView = async () => {
           </p>
         </header>
 
-        <div className="mt-14 grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.8fr)]">
-          <div className="space-y-12">
+        <div className="mt-14 grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.75fr)] lg:gap-16">
+          <div className="space-y-10">
             {sections.map((section) => (
               <section key={section.id}>
                 <h2 className="text-sm font-medium uppercase tracking-[0.16em] text-muted-foreground">
                   {t(`sections.${section.id}`)}
                 </h2>
-                <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
-                  {section.cards.map((card) => {
-                    const Icon = card.icon;
+                <ul className="mt-4 divide-y divide-border overflow-hidden rounded-[16px] border border-border">
+                  {section.links.map((link) => {
+                    const Icon = link.icon;
                     return (
-                      <a
-                        key={card.key}
-                        href={card.href}
-                        rel="noreferrer"
-                        target="_blank"
-                        className="block rounded-[16px] outline-offset-4"
-                      >
-                        <Card className="h-full transition-colors hover:bg-foreground/6">
-                          <CardContent>
-                            <Icon className="size-5 text-accent" />
-                            <CardTitle className="mt-4 text-lg">{t(`${card.key}.title`)}</CardTitle>
-                            <CardDescription className="mt-2">
-                              {t(`${card.key}.description`)}
-                            </CardDescription>
-                            <p className="mt-5 text-sm font-medium text-accent">{t("open")}</p>
-                          </CardContent>
-                        </Card>
-                      </a>
+                      <li key={link.key}>
+                        <a
+                          href={link.href}
+                          rel="noreferrer"
+                          target="_blank"
+                          className="group flex items-start gap-4 px-5 py-4 -outline-offset-2 transition-colors hover:bg-foreground/4"
+                        >
+                          <Icon className="mt-0.5 size-5 shrink-0 text-accent" />
+                          <span className="min-w-0 flex-1">
+                            <span className="block font-medium text-foreground">{t(`${link.key}.title`)}</span>
+                            <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">
+                              {t(`${link.key}.description`)}
+                            </span>
+                          </span>
+                          <RiArrowRightUpLine className="mt-0.5 size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
+                        </a>
+                      </li>
                     );
                   })}
-                </div>
+                </ul>
               </section>
             ))}
           </div>
-          
-          <div>
+
+          <div id="contact" className="scroll-mt-32 lg:sticky lg:top-32">
             <ContactForm />
-            <a
-              href={otherCard.href}
-              rel="noreferrer"
-              target="_blank"
-              className="mt-5 block rounded-[16px] outline-offset-4"
-            >
-              <Card className="transition-colors hover:bg-foreground/6">
-                <CardContent>
-                  <OtherIcon className="size-5 text-accent" />
-                  <CardTitle className="mt-4 text-lg">{t(`${otherCard.key}.title`)}</CardTitle>
-                  <CardDescription className="mt-2">{t(`${otherCard.key}.description`)}</CardDescription>
-                  <p className="mt-5 text-sm font-medium text-accent">{t("open")}</p>
-                </CardContent>
-              </Card>
-            </a>
+            <div className="mt-5 space-y-2 px-1 text-sm leading-relaxed text-muted-foreground">
+              <p>
+                {t.rich("email", {
+                  email,
+                  link: (chunks) => (
+                    <a href={`mailto:${email}`} className={INLINE_LINK}>
+                      {chunks}
+                    </a>
+                  ),
+                })}
+              </p>
+              <p>{t.rich("privacy", { link: internalLink("/consent") })}</p>
+            </div>
           </div>
         </div>
 
         <DonateCard />
+
+        <p className="mt-10 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          {t.rich("publisher", { link: internalLink("/legal-notice") })}
+        </p>
       </div>
     </div>
   );

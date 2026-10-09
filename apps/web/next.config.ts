@@ -75,6 +75,17 @@ const nextConfig: NextConfig = {
         destination: "/support",
         permanent: true,
       },
+      // Help and contact share one page: /support (the form is #contact).
+      {
+        source: "/contact",
+        destination: "/support",
+        permanent: true,
+      },
+      {
+        source: "/:locale(fr|es|de|pt-BR|pl|ja|ko|tr|ms|el)/contact",
+        destination: "/:locale/support",
+        permanent: true,
+      },
     ];
   },
 };
