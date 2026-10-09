@@ -1,6 +1,7 @@
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { BRAND_METADATA_ICONS } from "@/lib/brand";
+import { adsenseClientId } from "@/features/ads/lib/adsense";
 import {
   absoluteUrl,
   CANONICAL_ORIGIN,
@@ -29,6 +30,7 @@ export const generateMetadata = async ({ params }: LayoutProps): Promise<Metadat
   for (const target of routing.locales) {
     languages[target] = absoluteUrl(getPathname({ locale: target, href: "/" }), CANONICAL_ORIGIN);
   }
+  const adsenseClient = adsenseClientId();
 
   return {
     metadataBase: new URL(CANONICAL_ORIGIN),
@@ -63,6 +65,8 @@ export const generateMetadata = async ({ params }: LayoutProps): Promise<Metadat
       description,
       images: [imageUrl],
     },
+    // Site ownership for AdSense review. A meta tag only: no script, no cookie.
+    ...(adsenseClient ? { other: { "google-adsense-account": adsenseClient } } : {}),
   };
 };
 
