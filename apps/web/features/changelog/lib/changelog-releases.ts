@@ -1,4 +1,5 @@
-import { getChangelogEntry, getChangelogList, parseChangelogVersion, type ChangelogStore } from "@nowly/changelog";
+import { frenchSpacing, mapBlockText, parseMarkdown, type Block } from "@/features/content/lib/markdown";
+import { getChangelogBody, getChangelogEntry, getChangelogList, parseChangelogVersion, type ChangelogStore } from "@nowly/changelog";
 
 export type ChangelogRelease = {
   version: string
@@ -54,5 +55,13 @@ export const getChangelogRelease = (value: string, locale: string): ChangelogRel
   return isChangelogReleasePublished(release.date) ? release : null;
 };
 
-export { parseChangelogVersion };
+export const getChangelogNotes = (slug: string, locale: string): Block[] => {
+  const body = getChangelogBody(slug, locale) ?? getChangelogBody(slug, "en-US");
+  if (!body) return [];
+  const blocks = parseMarkdown(body.content);
+  return locale === "fr-FR" ? mapBlockText(blocks, frenchSpacing) : blocks;
+};
+
 export { formatChangelogDate } from "@/features/changelog/lib/format-changelog-date";
+export { parseChangelogVersion };
+

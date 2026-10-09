@@ -18,3 +18,7 @@ The actual content lives in `packages/changelog/content/<version>/`, not in this
 
 ## Notable dependencies
 `@nowly/changelog` (content package, `packages/changelog`), `app/sitemap.ts` (root, depends on this feature's `lib/changelog-releases.ts`).
+
+## Full notes on the site
+
+`/changelog/<version>` renders the release's whole body under its summary, through `getChangelogNotes` (`lib/changelog-releases.ts`) and the site's Markdown engine (`features/content`). Only the Markdown subset is rendered: MDX components in a release file are skipped, so keep release notes in plain Markdown. The "Full notes" link to the docs only shows when a release has no body.

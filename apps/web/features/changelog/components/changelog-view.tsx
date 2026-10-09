@@ -4,8 +4,10 @@ import { ButtonAnchor } from "@nowly/ui";
 
 
 import { ChangelogList } from "@/features/changelog/components/changelog-list";
+import { MarkdownBody } from "@/features/content/components/markdown-body";
 import {
   formatChangelogDate,
+  getChangelogNotes,
   getChangelogReleases,
   latestReleaseSlugByStore,
   type ChangelogRelease,
@@ -66,6 +68,7 @@ export const ChangelogReleaseView = async ({
   const notesHref = release
     ? docsHref(`/changelog/${release.slug}`)
     : docsHref("/changelog");
+  const notes = release ? getChangelogNotes(release.slug, locale) : [];
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
@@ -111,11 +114,15 @@ export const ChangelogReleaseView = async ({
           </p>
         ) : null}
 
-        <div className="mt-8 flex flex-wrap gap-2">
-          <ButtonAnchor href={notesHref} rel="noreferrer" target="_blank" variant="inverted">
-            {t("docs")}
-          </ButtonAnchor>
-          <ButtonLink href="/library" variant="outline">
+        {notes.length > 0 ? <MarkdownBody blocks={notes} className="mt-10 max-w-3xl" /> : null}
+
+        <div className="mt-10 flex flex-wrap gap-2">
+          {notes.length === 0 ? (
+            <ButtonAnchor href={notesHref} rel="noreferrer" target="_blank" variant="inverted">
+              {t("docs")}
+            </ButtonAnchor>
+          ) : null}
+          <ButtonLink href="/library" variant={notes.length === 0 ? "outline" : "inverted"}>
             {t("library")}
           </ButtonLink>
         </div>
