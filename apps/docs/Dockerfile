@@ -12,6 +12,12 @@ RUN rm -rf packages/sdk && \
     rm -rf packages/sdk/.git && \
     rm -rf packages/cli packages/presences packages/internal-cli
 
+ARG NEXT_PUBLIC_DOCS_BASE_PATH=
+ARG NEXT_PUBLIC_DOCS_BASE_URL=https://docs.nowly.me
+
+ENV NEXT_PUBLIC_DOCS_BASE_PATH=$NEXT_PUBLIC_DOCS_BASE_PATH \
+    NEXT_PUBLIC_DOCS_BASE_URL=$NEXT_PUBLIC_DOCS_BASE_URL
+
 RUN pnpm install --no-frozen-lockfile && \
     pnpm --filter @nowly/sdk build && \
     pnpm --filter @nowly/docs build

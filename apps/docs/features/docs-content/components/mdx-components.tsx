@@ -1,3 +1,5 @@
+import { Link } from "@/i18n/navigation";
+import { SITE_URL } from "@/lib/constants";
 import type { ComponentType, FC, ReactNode } from "react";
 import { Callout } from "./callout";
 import { CodeBlock } from "./code-block";
@@ -7,6 +9,8 @@ import { Step, Steps } from "./steps";
 import { LanguageTable, TypeTable } from "./type-table";
 
 type MDXComponents = Record<string, ComponentType<Record<string, unknown>>>;
+
+const WEBSITE_PATHS = ["/library"];
 
 type CodeProps = {
   className?: string;
@@ -106,13 +110,22 @@ export const mdxComponents: MDXComponents = {
 
   a: (({ href, children }) => {
     const isExternal = href?.startsWith("http");
+    const className = "text-accent underline underline-offset-2 decoration-accent/30 hover:decoration-accent transition-colors";
+
+    if (href && WEBSITE_PATHS.some((path) => href === path || href.startsWith(`${path}/`))) {
+      return <a href={`${SITE_URL}${href}`} className={className}>{children}</a>;
+    }
+
+    if (href?.startsWith("/")) {
+      return <Link href={href} className={className}>{children}</Link>;
+    }
 
     return (
       <a
         href={href}
         target={isExternal ? "_blank" : undefined}
         rel={isExternal ? "noopener noreferrer" : undefined}
-        className="text-accent underline underline-offset-2 decoration-accent/30 hover:decoration-accent transition-colors"
+        className={className}
       >
         {children}
       </a>

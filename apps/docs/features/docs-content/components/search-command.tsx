@@ -3,6 +3,7 @@
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@nowly/ui";
 
 import { useRouter } from "@/i18n/navigation";
+import { DOCS_BASE_PATH } from "@/lib/constants";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, type FC } from "react";
 import { Spinner } from "@nowly/ui";
@@ -45,7 +46,7 @@ export const SearchCommand: FC<SearchCommandProps> = ({ open, onOpenChange }) =>
     setIsSearching(true);
     const timeoutId = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&locale=${locale}`);
+        const res = await fetch(`${DOCS_BASE_PATH}/api/search?q=${encodeURIComponent(query)}&locale=${locale}`);
         if (!res.ok) throw new Error("Search failed");
         const data = await res.json();
         setResults(data);

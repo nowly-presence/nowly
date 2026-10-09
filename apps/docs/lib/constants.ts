@@ -1,5 +1,7 @@
 export const MARKETING_ORIGIN = "https://nowly.me";
-export const DOCS_ORIGIN = "https://docs.nowly.me";
+
+export const DOCS_BASE_PATH = (process.env.NEXT_PUBLIC_DOCS_BASE_PATH ?? "").replace(/\/$/, "");
+export const DOCS_ORIGIN = DOCS_BASE_PATH ? `${MARKETING_ORIGIN}${DOCS_BASE_PATH}` : "https://docs.nowly.me";
 
 export const SITE_URL = MARKETING_ORIGIN;
 export const DOCS_URL = DOCS_ORIGIN;
@@ -24,4 +26,4 @@ const deployDocsHost = hostnameOf(
 );
 
 export const isSeoPreview =
-  deployDocsHost !== "" && deployDocsHost !== "docs.nowly.me";
+  deployDocsHost !== "" && deployDocsHost !== "docs.nowly.me" && deployDocsHost !== "nowly.me";

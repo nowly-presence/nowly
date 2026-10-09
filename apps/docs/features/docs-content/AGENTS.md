@@ -24,3 +24,7 @@ Content lives under `content/docs/<N-category>/<M-page>/`, ordered by number pre
 
 ## Notable dependencies
 `next-mdx-remote`, `gray-matter`, `@nowly/changelog` (changelog integration), `features/seo` (metadata), `@nowly/ui`.
+
+## Links inside MDX
+
+Write links to other doc pages root-relative and without locale (`[Metadata](/presence-development/metadata)`): `mdx-components.tsx` renders them with next-intl's `Link`, which adds the reader's locale prefix and the docs base path. Links to the presence library (`/library...`, listed in `WEBSITE_PATHS`) go to nowly.me. Anything else external stays a plain link.
