@@ -1,12 +1,14 @@
 import { ButtonLink } from "@/components/button-link";
-import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { homeSectionAltClass } from "@/features/home/components/section-heading";
 import { JsonLd } from "@/features/seo/components/json-ld";
-import { ButtonAnchor } from "@nowly/ui/button-link";
+import { Link } from "@/i18n/navigation";
+import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui/card";
 import { cn } from "@nowly/ui/utils";
-import { RiArrowRightLine, RiDiscordFill } from "@remixicon/react";
+import { RiArrowRightLine } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
+
+const INLINE_LINK = "underline underline-offset-4 transition-colors hover:text-foreground";
 
 export const FaqSection = async () => {
   const t = await getTranslations("faq");
@@ -29,23 +31,33 @@ export const FaqSection = async () => {
         }}
       />
       <section id="faq" className={cn("home-section-deferred px-5 py-28 sm:px-10 sm:py-36", homeSectionAltClass)}>
-        <div className="mx-auto grid w-full max-w-[1200px] items-start gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-16">
+        <div className="mx-auto grid w-full max-w-300 items-start gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-16">
           <div>
             <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
             <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[2.15rem]">
               {t("title")}
             </h2>
             <p className="mt-2 text-base leading-relaxed text-muted-foreground sm:text-lg">{t("description")}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8">
               <ButtonLink href="/faq" variant="inverted">
                 {t("faq")}
                 <RiArrowRightLine data-icon="inline-end" />
               </ButtonLink>
-              <ButtonAnchor href={DISCORD_INVITE_URL} rel="noreferrer" target="_blank" variant="ghost">
-                <RiDiscordFill data-icon="inline-start" />
-                {t("discord")}
-              </ButtonAnchor>
             </div>
+            <p className="mt-6 text-sm text-muted-foreground">
+              {t.rich("more", {
+                guides: (chunks) => (
+                  <Link href="/guides" className={INLINE_LINK}>
+                    {chunks}
+                  </Link>
+                ),
+                discord: (chunks) => (
+                  <a href={DISCORD_INVITE_URL} rel="noreferrer" target="_blank" className={INLINE_LINK}>
+                    {chunks}
+                  </a>
+                ),
+              })}
+            </p>
           </div>
 
           <div className="grid gap-4">
