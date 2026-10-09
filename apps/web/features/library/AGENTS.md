@@ -23,3 +23,9 @@ Categories are duplicated in two places that must stay in sync:
 
 ## Notable dependencies
 `lib/library-catalog.ts`, `lib/analytics.ts`, `lib/presence-api.ts` (root, shared), `components/extension-store-button.tsx`, `components/presence-tile.tsx`, `presence` feature of `apps/api`.
+
+## Presence pages and indexing
+
+- No presence-specific guide is published while `apps/web/content/presences` is absent. Original Markdown files are preserved at the repository root in `presence-guides-backup/apps/web/content/presences`. To republish them without code changes, copy that archived `presences` folder into `apps/web/content/`; `getPresenceGuide` then loads matching `<slug>/<locale>.md` files and `presence-view.tsx` displays them folded with `ExpandableContent`.
+- `LibraryPresence.locales` lists the locales a presence really ships a description for (`lib/presence-api.ts`). `presenceIndexLocales` includes locales with either a translated description or a published guide in hreflang and the sitemap; the others point their canonical to the English page. With the folder absent, guide locales add nothing.
+- Presence pages and the library listing do not contain ad placements. Ads are limited to general guide articles under `/guides`.

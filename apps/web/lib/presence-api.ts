@@ -6,7 +6,7 @@ import {
   type PresencePerson,
 } from "@/lib/library-catalog";
 import { PRESENCES_REPOSITORY_URL } from "@/lib/constants";
-import { FALLBACK_LOCALE, SUPPORTED_LOCALES } from "@nowly/locales";
+import { FALLBACK_LOCALE, SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
 
 import { cache } from "react";
 
@@ -66,6 +66,16 @@ const localizedCopy = (value: unknown, fallback: string): LocalizedCopy => {
     if (!copy[locale]) copy[locale] = fallback;
   }
   return copy;
+};
+
+const writtenLocales = (value: unknown): LocaleString[] => {
+  if (typeof value === "string") return value.trim() ? [FALLBACK_LOCALE] : [];
+  if (!value || typeof value !== "object") return [];
+  const localized = value as Record<string, unknown>;
+  return SUPPORTED_LOCALES.filter((locale) => {
+    const text = localized[locale];
+    return typeof text === "string" && text.trim().length > 0;
+  });
 };
 
 const emptyList = (): LocalizedList =>
@@ -178,6 +188,7 @@ export const getPresenceCatalog = cache(async (): Promise<LibraryPresence[]> => 
           contributors: parsePeople(item.contributors, name),
           version: typeof item.version === "string" && item.version.trim() ? item.version.trim() : null,
           discordNative: item.discordNative === true,
+          locales: writtenLocales(item.description),
         },
         totalInstalls: typeof item.totalInstalls === "number" ? item.totalInstalls : 0,
       }];

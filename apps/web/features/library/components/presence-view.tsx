@@ -4,10 +4,12 @@ import { PresenceActions } from "@/features/library/components/presence-actions"
 import { PresenceInfo } from "@/features/library/components/presence-info";
 import { ButtonLink } from "@/components/button-link";
 import { DiscordCallout } from "@/components/discord-callout";
+import { ExpandableContent } from "@/features/content/components/expandable-content";
+import { MarkdownBody } from "@/features/content/components/markdown-body";
+import type { ContentEntry } from "@/features/content/lib/content-files";
+import { formatChangelogDate } from "@/features/changelog/lib/format-changelog-date";
 import { Alert, AlertDescription, AlertTitle, Card, CardContent, CardTitle } from "@nowly/ui";
 import { FALLBACK_LOCALE, getValidLocale } from "@nowly/locales";
-
-
 
 import {
   localizedDescription,
@@ -17,7 +19,7 @@ import {
   type LibraryPresence,
 } from "@/lib/library-catalog";
 import type { PresenceStats, PresenceVersionNote } from "@/lib/presence-api";
-import { RiArrowLeftLine, RiCheckboxCircleLine, RiInformationLine } from "@nowly/ui/icons";
+import { RiArrowLeftLine, RiCheckboxCircleLine, RiInformationLine, RiTranslate2 } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
 type PresenceViewProps = {
@@ -26,9 +28,10 @@ type PresenceViewProps = {
   locale: string
   versions: PresenceVersionNote[]
   stats: PresenceStats
+  guide?: ContentEntry | null
 };
 
-export const PresenceView = async ({ presence, catalog, locale, versions, stats }: PresenceViewProps) => {
+export const PresenceView = async ({ presence, catalog, locale, versions, stats, guide }: PresenceViewProps) => {
   const t = await getTranslations("presencePage");
   const library = await getTranslations("libraryPage");
   const description = localizedDescription(presence, locale);
@@ -75,7 +78,7 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats 
                   version={presence.version}
                   likeCount={stats.likes}
                 />
-            {about && about !== description ? (
+                {about && about !== description ? (
                   <div className="mt-8 border-t border-foreground/8 pt-8">
                     <CardTitle>{t("about")}</CardTitle>
                     <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{about}</p>
@@ -83,6 +86,30 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats 
                 ) : null}
               </CardContent>
             </Card>
+            {guide ? (
+              <Card className="gap-0 py-0">
+                <CardContent className="pt-7 pb-8 sm:px-8 sm:pt-8">
+                  <p className="text-[0.7rem] font-medium uppercase tracking-[0.16em] text-accent">{t("guide-eyebrow")}</p>
+                  <h2 className="mt-2 text-pretty text-[1.6rem] font-medium leading-tight tracking-tight text-foreground">
+                    {guide.meta.title ?? presence.name}
+                  </h2>
+                  {guide.meta.updated ? (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {t("guide-updated", { date: formatChangelogDate(guide.meta.updated, locale) })}
+                    </p>
+                  ) : null}
+                  {!guide.translated ? (
+                    <Alert className="mt-6 rounded-[16px]">
+                      <RiTranslate2 />
+                      <AlertDescription>{t("guide-fallback")}</AlertDescription>
+                    </Alert>
+                  ) : null}
+                  <ExpandableContent className="mt-6" openLabel={t("guide-open")} closeLabel={t("guide-close")}>
+                    <MarkdownBody blocks={guide.blocks} />
+                  </ExpandableContent>
+                </CardContent>
+              </Card>
+            ) : null}
           </div>
 
           <div className="flex flex-col gap-4">

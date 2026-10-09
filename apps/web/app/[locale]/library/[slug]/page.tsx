@@ -1,8 +1,10 @@
 import { PresenceView } from "@/features/library/components/presence-view";
+import { getPresenceGuide } from "@/features/library/lib/presence-guide";
+import { localizedDescription, presenceIndexLocales } from "@/lib/library-catalog";
 import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
-import { localizedDescription } from "@/lib/library-catalog";
 import { getPresenceBySlug, getPresenceCatalog, getPresenceStats, getPresenceVersionHistory, presenceLogoUrl } from "@/lib/presence-api";
 import { createMetadata } from "@/features/seo/lib/seo";
+import { FALLBACK_LOCALE, getValidLocale } from "@nowly/locales";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -31,12 +33,16 @@ export const generateMetadata = async ({ params }: PresencePageProps): Promise<M
   }
 
   const seoTitle = `${presence.name} Discord Rich Presence`;
+  const guide = getPresenceGuide(presence.slug, locale);
+  const indexLocales = presenceIndexLocales(presence);
 
   return createMetadata({
     title: seoTitle,
-    description: localizedDescription(presence, locale),
     locale,
+    description: guide?.translated && guide.meta.description ? guide.meta.description : localizedDescription(presence, locale),
     path: `/library/${presence.slug}`,
+    alternateLocales: indexLocales,
+    canonicalLocale: indexLocales.includes(getValidLocale(locale)) ? undefined : FALLBACK_LOCALE,
     badge: categoryLabels(`categories.${presence.category}`),
     accent: presence.color,
     logo: presenceLogoUrl(presence.slug),
@@ -56,7 +62,7 @@ const Page = async ({ params }: PresencePageProps) => {
   if (!presence) notFound();
 
   const library = await getTranslations("pages.library");
-
+  const guide = getPresenceGuide(presence.slug, locale);
   return (
     <>
       <WebPageJsonLd
@@ -69,7 +75,14 @@ const Page = async ({ params }: PresencePageProps) => {
           { name: presence.name, path: `/library/${presence.slug}` },
         ]}
       />
-      <PresenceView presence={presence} catalog={catalog} locale={locale} versions={versions} stats={stats} />
+      <PresenceView
+        presence={presence}
+        catalog={catalog}
+        locale={locale}
+        versions={versions}
+        stats={stats}
+        guide={guide}
+      />
     </>
   );
 };
