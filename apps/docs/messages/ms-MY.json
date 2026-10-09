@@ -50,7 +50,11 @@
     "status": "Status",
     "twitter": "X / Twitter",
     "bluesky": "Bluesky",
-    "faq": "Soalan lazim"
+    "faq": "Soalan lazim",
+    "guides": "Panduan",
+    "company": "Nowly",
+    "about": "Perihal",
+    "contact": "Hubungi"
   },
   "cookie-banner": {
     "message": "Laman ini menggunakan kuki bahasa yang benar-benar diperlukan. Jika iklan diaktifkan kelak, Google turut boleh menggunakan teknologi pengiklanan.",

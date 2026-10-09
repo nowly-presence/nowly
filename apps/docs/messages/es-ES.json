@@ -50,7 +50,11 @@
     "status": "Estado",
     "twitter": "X / Twitter",
     "bluesky": "Bluesky",
-    "faq": "Preguntas frecuentes"
+    "faq": "Preguntas frecuentes",
+    "guides": "Guías",
+    "company": "Nowly",
+    "about": "Acerca de",
+    "contact": "Contacto"
   },
   "cookie-banner": {
     "message": "Este sitio usa una cookie de idioma estrictamente necesaria. Si más adelante se activan anuncios, Google también podrá usar tecnologías publicitarias.",
