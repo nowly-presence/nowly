@@ -1,9 +1,9 @@
 import { FALLBACK_LOCALE, LOCALE_SHORT_MAP, type LocaleString } from "@nowly/locales";
-import { Separator } from "./separator";
 import type { ReactNode } from "react";
+import { Separator } from "./separator";
 
 const WEB_ORIGIN = "https://nowly.me";
-const DOCS_ORIGIN = "https://docs.nowly.me";
+const DOCS_ORIGIN = (process.env.NEXT_PUBLIC_DOCS_BASE_URL || "https://docs.nowly.me").replace(/\/$/, "");
 const DISCORD_INVITE_URL = "https://discord.gg/MnZap7czgB";
 const DISCORD_SITE_URL = "https://discord.com";
 const PROJECT_REPOSITORY_URL = "https://github.com/nowly-presence/nowly";
@@ -26,6 +26,7 @@ export type FooterLabels = {
   host: string
   resources: string
   docs: string
+  guides: string
   changelog: string
   canary: string
   support: string
@@ -34,6 +35,9 @@ export type FooterLabels = {
   branding: string
   community: string
   discord: string
+  company: string
+  about: string
+  contact: string
   github: string
   twitter: string
   bluesky: string
@@ -80,6 +84,7 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
       title: labels.resources,
       links: [
         { href: docs(), label: labels.docs },
+        { href: web("/guides"), label: labels.guides },
         { href: web("/changelog"), label: labels.changelog },
         { href: web("/support"), label: labels.support },
         { href: web("/faq"), label: labels.faq },
@@ -95,6 +100,13 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
         { href: TWITTER_URL, label: labels.twitter, external: true },
         { href: BLUESKY_URL, label: labels.bluesky, external: true },
         { href: TIKTOK_URL, label: labels.tiktok, external: true },
+      ],
+    },
+    {
+      title: labels.company,
+      links: [
+        { href: web("/about"), label: labels.about },
+        { href: web("/support#contact"), label: labels.contact },
       ],
     },
   ];
@@ -116,7 +128,7 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
           {actions ? <div className="mt-5 flex items-center gap-2">{actions}</div> : null}
         </div>
 
-        <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:gap-16">
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-4 lg:gap-16">
           {columns.map((column) => (
             <div key={column.title} className="text-sm leading-relaxed text-muted-foreground">
               <p className="font-bold">{column.title}</p>
@@ -149,3 +161,4 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
 };
 
 export { DISCORD_SITE_URL as FOOTER_DISCORD_SITE_URL };
+
