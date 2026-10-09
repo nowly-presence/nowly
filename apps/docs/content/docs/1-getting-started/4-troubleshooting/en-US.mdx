@@ -1,99 +1,85 @@
 ---
 title: Troubleshooting
-description: Fix a missing desktop app, closed Discord Desktop, missing presences, missing activity, unsupported URLs, and permission issues.
+description: Fix a missing desktop app, a Discord connection denied on Windows, missing permissions, a presence that detects nothing, and Linux installation issues.
 ---
 
-## Start With the Diagnostic
+## Start with the diagnostic
 
-Open the extension side panel and read each row on its own:
+Open the side panel on the tab you want to share and read each row on its own:
 
 - Extension installed
-- User scripts active
-- Desktop app detected
+- User scripts allowed
+- Nowly Desktop detected
 - Discord connected
-- Presence installed
+- A presence is installed
 - Activity detected
 
-Do not rely on a single global status. The missing row is the next thing to fix.
+The first row that is not green is the next thing to fix.
 
-## Desktop app is not detected
+## Nowly Desktop is not detected
 
-Message shown: **The desktop app is not detected.**
+Install the desktop app from the [desktop app page](https://nowly.me/desktop), then click **Check connection**. If you just installed it, restart the browser so it finds the app. The app must be installed on the same computer as the browser.
 
-Install the desktop app from the [desktop app page](https://nowly.me/desktop), then click **Check connection** in the extension. If you just installed it, close and reopen the extension side panel.
+On Linux, a browser installed from Flatpak or Snap may block native messaging entirely. Use a browser installed from your distribution's repositories or from the vendor's own package.
 
-## Discord Desktop Is Closed
+## Discord is not connected
 
-Message shown: **The desktop app is installed but Discord Desktop is not open.**
+Open the Discord desktop app, wait until it has loaded, then click **Check connection**. Discord in a browser tab cannot receive local Rich Presence.
 
-Open Discord Desktop, wait a few seconds, then click **Check connection**. Discord in the browser cannot receive local Rich Presence updates.
+If you run Discord Stable next to Discord PTB or Canary, keep only one open: on Windows, the desktop app connects to the first Discord pipe.
 
-## No Presence Is Installed
+## Discord IPC: "Access is denied" (Windows)
 
-Install a presence from the library. For the fastest test, install the [YouTube presence](/library/youtube), then open YouTube.
-
-## No Activity Is Detected
-
-Make sure:
-
-- the matching presence is installed and enabled
-- the current URL is supported by that presence
-- user scripts are active
-- the page was reloaded after you installed the presence
-
-## URL Is Not Supported
-
-Open the presence detail page and compare your current URL with the **Supported URLs** list. If the site changed its address or layout, report the presence from the support page.
-
-## Permissions Are Missing
-
-Open your browser extension settings and check:
-
-- Nowly is enabled
-- user scripts are allowed
-- site access is allowed for the current site
-
-After you change permissions, reload the website tab and reopen the extension side panel.
-
-## Discord IPC: "Access is denied"
-
-Runtime logs may show:
+The runtime logs may show:
 
 ```text
 reason=open \\.\pipe\discord-ipc-0: Access is denied.
 ```
 
-For integrations, use the stable native response code `DISCORD_IPC_ACCESS_DENIED` instead of matching this localized log text.
+Integrations should rely on the stable native response code `DISCORD_IPC_ACCESS_DENIED` rather than on this localized text.
 
-This means the desktop app can reach the host, but Windows is refusing access to Discord's local IPC pipe. The most common cause is Discord being started with **Run as administrator** while the browser and Nowly Host run normally.
-
-Fix it in this order:
+Windows refuses access to Discord's local pipe because Discord runs as administrator while the browser and the desktop app do not. Fix it in this order:
 
 1. Quit Discord completely, including its notification-area icon.
-2. In Task Manager, close any remaining `Discord.exe` processes.
-3. Open Discord's properties and disable **Run this program as an administrator** under **Compatibility**.
+2. In Task Manager, end any remaining `Discord.exe` process.
+3. In the properties of the Discord shortcut, uncheck **Run this program as an administrator** (Compatibility tab) and **Run as administrator** (Shortcut tab, Advanced).
 4. Start Discord normally.
-5. Restart the browser or click **Reconnect** in Nowly.
+5. Click **Reconnect** in Nowly, or restart the browser.
 
-Do not run the browser or Nowly as administrator as a workaround. Native messaging is launched by the browser, and forcing an elevated host would require an unsafe privileged relay. Nowly Host can show a native notification when it detects this permission mismatch: a Windows tray notification, macOS Notification Center notification, or Linux desktop notification when `notify-send` is available.
+Do not run the browser or the desktop app as administrator instead: native messaging is launched by the browser, and an elevated browser is a security risk. The desktop app can show a system notification when it detects this mismatch: a Windows tray notification, a macOS Notification Center notification, or a Linux notification when `notify-send` is available.
 
-If the diagnostics page looks healthy but the log contains this error, clear the runtime logs and reproduce the problem. The diagnostics can reflect the native host connection while Discord's IPC connection is still denied.
+## User scripts are not allowed
 
-## Linux: "Update Available" After Installing the .deb
+Turn on **Allow user scripts** in Nowly's details page (Chromium browsers), or **Developer mode** on older versions of Chrome. In Firefox, allow the user scripts permission from `about:addons`. Then reload the tab and reopen the side panel.
 
-Message shown: **update available**, even though the `.deb` package was just installed.
+## No activity is detected
 
-Two common causes, check them in order:
+Check that:
 
-1. **The `.deb` was never actually installed.** On some desktop environments (XFCE with Thunar, for example), double-clicking a `.deb` does nothing if no graphical package manager is associated with it (like GDebi). Install it from a terminal instead:
+- the presence for this website is installed and turned on,
+- sharing is not paused (**Ctrl+Shift+U** toggles it) and the presence is not snoozed or outside its schedule,
+- the tab is not hidden from the Activity tab,
+- something is actually playing: most presences show nothing while you browse unless **Show browsing activity** is on,
+- the address matches the presence's supported sites, shown on its library page,
+- the tab was reloaded after the presence was installed.
+
+If the website changed and the presence shows wrong or no information, use **Report a problem** on its library page.
+
+## Another Rich Presence tool interferes
+
+Other tools that set your Discord activity, such as PreMiD or a music player with its own Rich Presence, can replace or clear what Nowly sends. Turn them off while you test.
+
+## Linux: "update available" right after installing the .deb
+
+1. **The `.deb` was never installed.** Double-clicking a `.deb` does nothing on some desktops (XFCE with Thunar, for example). Install it from a terminal:
 
    ```bash
    sudo dpkg -i ~/Downloads/nowly-host.deb
    ```
 
-   Then confirm it is registered: `dpkg -L nowly-host` should list `/usr/lib/nowly-client/nowly-host`.
+   `dpkg -L nowly-host` should then list `/usr/lib/nowly-client/nowly-host`.
 
-2. **An old per-user manifest is overriding the one from the .deb.** If you previously installed the desktop app from the `.tar.gz` archive (the `install-linux.sh` script) before switching to the `.deb`, a leftover manifest in your home directory can still point to the old binary. Remove it:
+2. **An old per-user installation takes priority.** If you used the `.tar.gz` archive before, remove its leftovers:
 
    ```bash
    rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
@@ -101,8 +87,21 @@ Two common causes, check them in order:
    rm -f ~/.local/share/NowlyClient/nowly-host
    ```
 
-   Then fully restart the browser (not just the extension) so it relaunches the native process with the updated binary.
+   Then quit the browser completely and open it again.
 
-## Copy a Support Diagnostic
+## Linux: Discord from Flatpak or Snap
 
-The extension diagnostic includes a **Copy support** button. It copies the state of the desktop app, Discord, presences, and activity without exposing technical logs.
+Sandboxed Discord creates its socket in its own folder. The desktop app looks for `discord-ipc-0` to `discord-ipc-9` in `$XDG_RUNTIME_DIR`, `$TMPDIR` and `/tmp`. Link the real socket to the expected place, for example for Flathub:
+
+```bash
+ln -sf "$XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0" "$XDG_RUNTIME_DIR/discord-ipc-0"
+```
+
+The step-by-step guide, including a link that survives reboots and the Snap path, is [Nowly on Linux](https://nowly.me/guides/nowly-on-linux).
+
+## Logs
+
+- The extension keeps runtime logs you can copy from the side panel with **Copy logs**. They can contain the addresses of supported pages you visited: read them before sharing.
+- The desktop app writes `nowly-host.log` in `%LOCALAPPDATA%\NowlyClient\` (Windows), `~/Library/Caches/NowlyClient/` (macOS) or `~/.cache/NowlyClient/` (Linux).
+
+Still stuck? Open a ticket on the Nowly Discord server with the failing diagnostic row and your system.

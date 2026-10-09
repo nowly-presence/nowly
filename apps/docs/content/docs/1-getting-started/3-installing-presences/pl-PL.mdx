@@ -1,30 +1,45 @@
 ---
 title: Instalowanie obecności
-description: Zainstaluj integracje ze stronami internetowymi z biblioteki Nowly i przetestuj wykrywanie aktywności na obsługiwanej stronie.
+description: Instaluj, konfiguruj, aktualizuj i usuwaj obecności ze strony internetowej lub z panelu bocznego rozszerzenia oraz sprawdź, czy aktywność jest wykrywana.
 ---
 
 ## Co robią obecności
 
-Obecności informują Nowly, jak wykrywać aktywność na obsługiwanej stronie internetowej. Rozszerzenie uruchamia obecność, a aplikacja desktopowa wysyła tę aktywność do Discord Desktop.
+Obecność mówi Nowly, jak odczytywać jedną stronę. Działa tylko pod adresami, które ma przypisane, i dopiero po zainstalowaniu. Rozszerzenie uruchamia obecność, a aplikacja desktopowa wysyła wynik do aplikacji Discord.
 
 ## Zainstaluj obecność
 
+Ze strony internetowej:
+
 1. Otwórz stronę obecności w [bibliotece](/library).
-2. Upewnij się, że strona wskazuje, iż rozszerzenie Nowly zostało wykryte.
+2. Poczekaj, aż strona wykryje rozszerzenie.
 3. Kliknij **Zainstaluj**.
-4. Otwórz obsługiwany adres URL dla tej obecności.
-5. Sprawdź diagnostykę rozszerzenia i Discorda.
 
-Jeśli rozszerzenie nie zostanie wykryte, zainstaluj je lub włącz, a następnie odśwież stronę.
+Z rozszerzenia: otwórz kartę **Biblioteka** w panelu bocznym, wyszukaj platformę i zainstaluj obecność bezpośrednio tam.
 
-## Zalecany pierwszy test: YouTube
+Oba sposoby pobierają ten sam podpisany pakiet. Rozszerzenie sprawdza jego podpis i skróty kryptograficzne przed zarejestrowaniem i odrzuca pakiet, który został zmodyfikowany.
 
-Użyj [YouTube](/library/youtube) do pierwszego testu.
+Po instalacji odśwież raz karty tej strony: karta otwarta przed instalacją nie uruchamia jeszcze obecności.
 
-Po zainstalowaniu obecności YouTube otwórz [youtube.com](https://youtube.com). Rozszerzenie powinno pokazać **Wykryto aktywność**, a Discord powinien się zaktualizować.
+## Pierwszy test: YouTube
 
-## Aktualizowanie lub usuwanie obecności
+Zainstaluj [obecność YouTube](/library/youtube), otwórz film na youtube.com i uruchom odtwarzanie. Panel boczny pokaże **Wykryto aktywność**, a po kilku sekundach zaktualizuje się Twój profil na Discordzie.
 
-Gdy dostępna jest nowa wersja, strona obecności pokazuje akcję aktualizacji. Możesz też usunąć obecność z jej strony szczegółów lub z panelu bocznego rozszerzenia.
+## Ustawienia obecności
 
-Usunięcie obecności powoduje, że Nowly przestaje ją uruchamiać na pasujących stronach.
+Otwórz obecność w panelu bocznym, aby zobaczyć jej ustawienia. Zależą one od strony. Najczęstsze to:
+
+- **Pokazuj aktywność przeglądania**: domyślnie wyłączone w większości obecności, które wtedy udostępniają tylko to, co faktycznie oglądasz lub czego słuchasz.
+- **Tryb prywatny**: ukrywa tytuły, wykonawców lub nazwy, więc Discord pokazuje tylko platformę.
+- **Pokazuj przyciski**: usuwa przyciski, które pozwalają znajomym otworzyć tę samą stronę.
+- **Język**: język tekstu wyświetlanego na Discordzie, gdy obecność oferuje kilka.
+
+Możesz też wstrzymać obecność (na 1 godzinę, 4 godziny lub do jutra) albo nadać jej własny harmonogram udostępniania.
+
+## Zaktualizuj lub usuń obecność
+
+Aktualizacje są proponowane w panelu bocznym i na stronie obecności. Obecność możesz usunąć z panelu bocznego lub z jej strony w bibliotece. Po usunięciu Nowly przestaje cokolwiek uruchamiać na tej stronie.
+
+## Przetestuj obecność, którą piszesz
+
+Obecności w trakcie tworzenia są wczytywane lokalnie, bez biblioteki. Zobacz [Wczytywanie i testowanie lokalne](/presence-development/load-and-test).

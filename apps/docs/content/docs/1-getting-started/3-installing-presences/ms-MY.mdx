@@ -1,30 +1,45 @@
 ---
 title: Memasang Presence
-description: Pasang integrasi laman web daripada pustaka Nowly dan uji pengesanan aktiviti pada laman yang disokong.
+description: Pasang, konfigurasikan, kemas kini dan buang presence daripada laman web atau panel sisi sambungan, dan uji bahawa aktiviti dikesan.
 ---
 
-## Apa yang Dilakukan Presence
+## Apa yang dilakukan oleh presence
 
-Presence memberitahu Nowly cara mengesan aktiviti pada laman web yang disokong. Sambungan menjalankan presence, dan aplikasi desktop menghantar aktiviti itu ke Discord Desktop.
+Presence memberitahu Nowly cara membaca satu laman web. Ia hanya berjalan pada alamat yang disenaraikan untuknya, dan hanya selepas anda memasangnya. Sambungan menjalankan presence, dan aplikasi desktop menghantar hasilnya kepada aplikasi Discord.
 
-## Pasang Presence
+## Pasang presence
+
+Daripada laman web:
 
 1. Buka halaman presence dalam [pustaka](/library).
-2. Pastikan halaman menyatakan sambungan Nowly telah dikesan.
+2. Tunggu sehingga halaman mengesan sambungan.
 3. Klik **Pasang**.
-4. Buka URL yang disokong untuk presence tersebut.
-5. Semak diagnostik sambungan dan Discord.
 
-Jika sambungan tidak dikesan, pasang atau dayakannya, kemudian muat semula halaman.
+Daripada sambungan: buka tab **Pustaka** dalam panel sisi, cari platform tersebut dan pasang presence di situ.
 
-## Ujian Pertama yang Disyorkan: YouTube
+Kedua-dua cara memuat turun pakej bertandatangan yang sama. Sambungan menyemak tandatangan dan cincangnya sebelum mendaftarkannya, dan menolak pakej yang telah diubah suai.
 
-Gunakan [YouTube](/library/youtube) untuk ujian pertama.
+Selepas memasang, muat semula tab laman web itu sekali: tab yang dibuka sebelum pemasangan belum menjalankan presence tersebut.
 
-Selepas anda memasang presence YouTube, buka [youtube.com](https://youtube.com). Sambungan sepatutnya menunjukkan **Aktiviti dikesan**, dan Discord sepatutnya dikemas kini.
+## Ujian pertama: YouTube
 
-## Kemas Kini atau Buang Presence
+Pasang [presence YouTube](/library/youtube), buka video di youtube.com dan mainkannya. Panel sisi memaparkan **Aktiviti dikesan**, kemudian profil Discord anda dikemas kini dalam beberapa saat.
 
-Apabila versi baharu tersedia, halaman presence memaparkan tindakan kemas kini. Anda juga boleh membuang presence daripada halaman butirannya atau daripada panel sisi sambungan.
+## Tetapan presence
 
-Membuang presence menghentikan Nowly daripada menjalankannya pada laman web yang sepadan.
+Buka presence dalam panel sisi untuk melihat tetapannya. Tetapan ini bergantung pada laman web. Yang paling biasa ialah:
+
+- **Tunjukkan aktiviti pelayaran**: dimatikan secara lalai pada kebanyakan presence, yang kemudiannya hanya berkongsi apa yang anda benar-benar tonton atau dengar.
+- **Mod privasi**: menyembunyikan tajuk, artis atau nama, supaya Discord hanya memaparkan platform.
+- **Tunjukkan butang**: membuang butang yang membolehkan rakan anda membuka halaman yang sama.
+- **Bahasa**: bahasa teks yang dipaparkan di Discord, apabila presence menyediakan beberapa bahasa.
+
+Anda juga boleh menunda presence (1 jam, 4 jam atau hingga esok) atau memberikannya jadual perkongsiannya sendiri.
+
+## Kemas kini atau buang presence
+
+Kemas kini ditawarkan dalam panel sisi dan pada halaman presence. Anda boleh membuang presence daripada panel sisi atau daripada halamannya dalam pustaka. Membuangnya menghentikan Nowly daripada menjalankan apa-apa pada laman web itu.
+
+## Uji presence yang anda tulis
+
+Presence yang sedang dibangunkan dimuatkan secara lokal, tanpa pustaka. Lihat [Muat dan Uji Secara Lokal](/presence-development/load-and-test).

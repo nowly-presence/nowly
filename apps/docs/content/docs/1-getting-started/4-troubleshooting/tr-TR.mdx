@@ -1,99 +1,85 @@
 ---
 title: Sorun Giderme
-description: Eksik masaüstü uygulaması, kapalı Discord Desktop, eksik presence'lar, algılanmayan etkinlik, desteklenmeyen URL'ler ve izin sorunlarını çözün.
+description: Bulunamayan masaüstü uygulamasını, Windows'ta reddedilen Discord bağlantısını, eksik izinleri, hiçbir şey algılamayan bir presence'ı ve Linux kurulum sorunlarını düzeltin.
 ---
 
-## Tanılama ile Başlayın
+## Tanılama ile başlayın
 
-Uzantının yan panelini açın ve her satırı ayrı ayrı okuyun:
+Paylaşmak istediğiniz sekmede yan paneli açın ve her satırı ayrı ayrı okuyun:
 
-- Uzantı kuruldu
-- Kullanıcı komut dosyaları etkin
-- Masaüstü uygulaması algılandı
-- Discord bağlandı
-- Presence kuruldu
+- Uzantı yüklü
+- Kullanıcı betiklerine izin verildi
+- Nowly Desktop bulundu
+- Discord bağlı
+- Bir varlık yüklü
 - Etkinlik algılandı
 
-Tek bir genel duruma güvenmeyin. Eksik satır, düzeltilmesi gereken bir sonraki şeydir.
+Yeşil olmayan ilk satır, düzeltilmesi gereken bir sonraki şeydir.
 
-## Masaüstü Uygulaması Algılanmıyor
+## Nowly Desktop bulunamadı
 
-Gösterilen mesaj: **Masaüstü uygulaması algılanmadı.**
+Masaüstü uygulamasını [masaüstü uygulaması sayfasından](https://nowly.me/desktop) yükleyin, ardından **Bağlantıyı denetle**'ye tıklayın. Uygulamayı yeni yüklediyseniz, tarayıcının onu bulması için tarayıcıyı yeniden başlatın. Uygulama, tarayıcıyla aynı bilgisayarda yüklü olmalıdır.
 
-Masaüstü uygulamasını [masaüstü uygulaması sayfasından](https://nowly.me/desktop) kurun, ardından uzantıda **Bağlantıyı kontrol et**'e tıklayın. Yeni kurduysanız uzantının yan panelini kapatıp yeniden açın.
+Linux'ta Flatpak veya Snap ile yüklenmiş bir tarayıcı native messaging'i tamamen engelleyebilir. Dağıtımınızın depolarından veya üreticinin kendi paketinden yüklenmiş bir tarayıcı kullanın.
 
-## Discord Desktop Kapalı
+## Discord bağlı değil
 
-Gösterilen mesaj: **Masaüstü uygulaması kurulu ama Discord Desktop açık değil.**
+Discord masaüstü uygulamasını açın, yüklenmesini bekleyin, ardından **Bağlantıyı denetle**'ye tıklayın. Bir tarayıcı sekmesindeki Discord, yerel Rich Presence alamaz.
 
-Discord Desktop'ı açın, birkaç saniye bekleyin, ardından **Bağlantıyı kontrol et**'e tıklayın. Tarayıcıdaki Discord, yerel Rich Presence güncellemelerini alamaz.
+Discord Stable'ı Discord PTB veya Canary ile birlikte çalıştırıyorsanız yalnızca birini açık tutun: Windows'ta masaüstü uygulaması ilk Discord kanalına (pipe) bağlanır.
 
-## Hiçbir Presence Kurulu Değil
+## Discord IPC: "Access is denied" (Windows)
 
-Kitaplıktan bir presence kurun. En hızlı test için [YouTube presence'ını](/library/youtube) kurun, ardından YouTube'u açın.
-
-## Hiçbir Etkinlik Algılanmıyor
-
-Şunlardan emin olun:
-
-- eşleşen presence kurulu ve etkin
-- geçerli URL o presence tarafından destekleniyor
-- kullanıcı komut dosyaları etkin
-- presence'ı kurduktan sonra sayfa yeniden yüklendi
-
-## URL Desteklenmiyor
-
-Presence ayrıntı sayfasını açın ve geçerli URL'nizi **Desteklenen URL'ler** listesiyle karşılaştırın. Site adresini veya düzenini değiştirdiyse, presence'ı destek sayfasından bildirin.
-
-## İzinler Eksik
-
-Tarayıcınızın uzantı ayarlarını açın ve şunları kontrol edin:
-
-- Nowly etkin
-- kullanıcı komut dosyalarına izin verildi
-- geçerli site için site erişimine izin verildi
-
-İzinleri değiştirdikten sonra web sitesi sekmesini yeniden yükleyin ve uzantının yan panelini yeniden açın.
-
-## Discord IPC: "Access is denied"
-
-Çalışma zamanı günlüklerinde şu görünebilir:
+Çalışma günlüklerinde şu görünebilir:
 
 ```text
 reason=open \\.\pipe\discord-ipc-0: Access is denied.
 ```
 
-Entegrasyonlarda, çevrilmiş olabilecek bu günlük metnini eşleştirmek yerine kararlı yerel yanıt kodu `DISCORD_IPC_ACCESS_DENIED` kullanın.
+Entegrasyonlar, bu yerelleştirilmiş metin yerine kararlı native yanıt kodu `DISCORD_IPC_ACCESS_DENIED` üzerine kurulmalıdır.
 
-Bu, masaüstü uygulamasının host'a ulaşabildiği ancak Windows'un Discord'un yerel IPC kanalına erişimi reddettiği anlamına gelir. En yaygın neden, tarayıcı ve Nowly Host normal çalışırken Discord'un **Yönetici olarak çalıştır** ile başlatılmasıdır.
+Windows, Discord'un yerel kanalına erişimi reddeder çünkü Discord yönetici olarak çalışırken tarayıcı ve masaüstü uygulaması yönetici olarak çalışmaz. Şu sırayla düzeltin:
 
-Şu sırayla düzeltin:
-
-1. Bildirim alanındaki simgesi dahil Discord'u tamamen kapatın.
-2. Görev Yöneticisi'nde kalan `Discord.exe` işlemlerini kapatın.
-3. Discord'un özelliklerini açın ve **Uyumluluk** sekmesinde **Bu programı yönetici olarak çalıştır** seçeneğini kapatın.
+1. Bildirim alanındaki simgesi dahil Discord'dan tamamen çıkın.
+2. Görev Yöneticisi'nde kalan tüm `Discord.exe` işlemlerini sonlandırın.
+3. Discord kısayolunun özelliklerinde **Bu programı yönetici olarak çalıştır** (Uyumluluk sekmesi) ve **Yönetici olarak çalıştır** (Kısayol sekmesi, Gelişmiş) seçeneklerinin işaretini kaldırın.
 4. Discord'u normal şekilde başlatın.
-5. Tarayıcıyı yeniden başlatın veya Nowly'de **Yeniden bağlan**'a tıklayın.
+5. Nowly'de **Yeniden bağlan**'a tıklayın veya tarayıcıyı yeniden başlatın.
 
-Sorunu aşmak için tarayıcıyı veya Nowly'yi yönetici olarak çalıştırmayın. Native Messaging tarayıcı tarafından başlatılır ve yükseltilmiş bir host'u zorlamak güvensiz, ayrıcalıklı bir aracı gerektirir. Nowly Host bu izin uyuşmazlığını algıladığında bir sistem bildirimi gösterebilir: Windows'ta bildirim alanında, macOS'ta Bildirim Merkezi'nde veya `notify-send` kullanılabiliyorsa Linux masaüstü bildirimi olarak.
+Bunun yerine tarayıcıyı veya masaüstü uygulamasını yönetici olarak çalıştırmayın: native messaging tarayıcı tarafından başlatılır ve yükseltilmiş yetkilerle çalışan bir tarayıcı bir güvenlik riskidir. Masaüstü uygulaması bu uyuşmazlığı algıladığında bir sistem bildirimi gösterebilir: Windows'ta bildirim alanında bir bildirim, macOS'te Bildirim Merkezi'nde bir bildirim veya `notify-send` kullanılabiliyorsa Linux'ta bir bildirim.
 
-Tanılama sayfası sorunsuz görünüyor ama günlükte bu hata varsa çalışma zamanı günlüklerini temizleyin ve sorunu yeniden oluşturun. Tanılama, Discord'un IPC bağlantısına erişim hâlâ reddedilirken yerel host bağlantısını gösterebilir.
+## Kullanıcı betiklerine izin verilmiyor
 
-## Linux: .deb Kurulduktan Sonra "Güncelleme Mevcut"
+Nowly'nin ayrıntılar sayfasında **Kullanıcı betiklerine izin ver** seçeneğini (Chromium tarayıcıları) veya Chrome'un eski sürümlerinde **Geliştirici modu**'nu açın. Firefox'ta kullanıcı betikleri iznini `about:addons` üzerinden verin. Ardından sekmeyi yenileyin ve yan paneli yeniden açın.
 
-Gösterilen mesaj: `.deb` paketi yeni kurulmuş olsa bile **güncelleme mevcut**.
+## Hiçbir etkinlik algılanmıyor
 
-İki yaygın neden, bunları sırayla kontrol edin:
+Şunları kontrol edin:
 
-1. **`.deb` aslında hiç kurulmamış.** Bazı masaüstü ortamlarında (örneğin Thunar ile XFCE), grafiksel bir paket yöneticisi (GDebi gibi) ilişkilendirilmemişse bir `.deb` dosyasına çift tıklamak hiçbir şey yapmaz. Bunun yerine bir terminalden kurun:
+- bu web sitesinin presence'ı yüklü ve açık,
+- paylaşım duraklatılmamış (**Ctrl+Shift+U** ile açılıp kapatılır) ve presence ertelenmemiş ya da zamanlamasının dışında değil,
+- sekme, Etkinlik sekmesinden gizlenmemiş,
+- gerçekten bir şey oynatılıyor: çoğu presence, **Gezinme etkinliğini göster** açık değilse siz gezinirken hiçbir şey göstermez,
+- adres, presence'ın kitaplık sayfasında gösterilen desteklenen sitelerle eşleşiyor,
+- presence yüklendikten sonra sekme yenilenmiş.
+
+Web sitesi değiştiyse ve presence yanlış bilgi gösteriyor ya da hiç bilgi göstermiyorsa, kitaplık sayfasındaki **Sorun bildir** seçeneğini kullanın.
+
+## Başka bir Rich Presence aracı müdahale ediyor
+
+PreMiD veya kendi Rich Presence'ı olan bir müzik çalar gibi Discord etkinliğinizi ayarlayan başka araçlar, Nowly'nin gönderdiğini değiştirebilir veya silebilir. Test ederken bunları kapatın.
+
+## Linux: .deb yüklendikten hemen sonra "güncelleme mevcut"
+
+1. **`.deb` hiç yüklenmemiş.** Bazı masaüstü ortamlarında (örneğin Thunar ile XFCE) bir `.deb` dosyasına çift tıklamak hiçbir şey yapmaz. Paketi bir terminalden yükleyin:
 
    ```bash
    sudo dpkg -i ~/Downloads/nowly-host.deb
    ```
 
-   Ardından kayıtlı olduğunu doğrulayın: `dpkg -L nowly-host`, `/usr/lib/nowly-client/nowly-host` yolunu listelemelidir.
+   Ardından `dpkg -L nowly-host`, `/usr/lib/nowly-client/nowly-host` yolunu listelemelidir.
 
-2. **Eski, kullanıcı başına bir manifest, .deb'den geleni geçersiz kılıyor.** `.deb`'e geçmeden önce masaüstü uygulamasını `.tar.gz` arşivinden (`install-linux.sh` betiği) kurduysanız, ev dizininizde kalan bir manifest hâlâ eski ikili dosyayı gösteriyor olabilir. Kaldırın:
+2. **Eski, kullanıcıya özel bir kurulum öncelik alıyor.** Daha önce `.tar.gz` arşivini kullandıysanız, ondan kalanları silin:
 
    ```bash
    rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
@@ -101,8 +87,21 @@ Gösterilen mesaj: `.deb` paketi yeni kurulmuş olsa bile **güncelleme mevcut**
    rm -f ~/.local/share/NowlyClient/nowly-host
    ```
 
-   Ardından tarayıcıyı (yalnızca uzantıyı değil) tamamen yeniden başlatın, böylece güncellenmiş ikili dosyayla yerel süreci yeniden başlatır.
+   Ardından tarayıcıdan tamamen çıkın ve yeniden açın.
 
-## Destek Tanılaması Kopyalama
+## Linux: Flatpak veya Snap ile yüklenmiş Discord
 
-Uzantı tanılaması bir **Destek bilgisini kopyala** düğmesi içerir. Teknik günlükleri ifşa etmeden masaüstü uygulaması, Discord, presence'lar ve etkinliğin durumunu kopyalar.
+Korumalı alanda (sandbox) çalışan Discord, soketini kendi klasöründe oluşturur. Masaüstü uygulaması `$XDG_RUNTIME_DIR`, `$TMPDIR` ve `/tmp` içinde `discord-ipc-0` ile `discord-ipc-9` arasındaki soketleri arar. Gerçek soketi beklenen konuma bağlayın, örneğin Flathub için:
+
+```bash
+ln -sf "$XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0" "$XDG_RUNTIME_DIR/discord-ipc-0"
+```
+
+Yeniden başlatmalardan sonra da kalıcı olan bir bağlantıyı ve Snap yolunu içeren adım adım rehber: [Linux'ta Nowly](https://nowly.me/guides/nowly-on-linux).
+
+## Günlükler
+
+- Uzantı, yan panelden **Günlükleri kopyala** ile kopyalayabileceğiniz çalışma günlükleri tutar. Bu günlükler ziyaret ettiğiniz desteklenen sayfaların adreslerini içerebilir: paylaşmadan önce okuyun.
+- Masaüstü uygulaması `nowly-host.log` dosyasını `%LOCALAPPDATA%\NowlyClient\` (Windows), `~/Library/Caches/NowlyClient/` (macOS) veya `~/.cache/NowlyClient/` (Linux) konumuna yazar.
+
+Hâlâ çözemediniz mi? Nowly Discord sunucusunda, başarısız olan tanılama satırını ve sisteminizi belirterek bir destek talebi açın.

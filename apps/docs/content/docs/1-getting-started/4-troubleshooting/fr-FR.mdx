@@ -1,99 +1,85 @@
 ---
 title: Dépannage
-description: Corrigez l'application bureau manquante, Discord Desktop fermé, présence absente, activité absente, URL non compatible et permissions manquantes.
+description: Corriger une application de bureau introuvable, une connexion à Discord refusée sous Windows, des autorisations manquantes, une présence qui ne détecte rien et les problèmes d'installation sous Linux.
 ---
 
 ## Commencer par le diagnostic
 
-Ouvrez le panneau latéral de l'extension et lisez chaque ligne séparément :
+Ouvrez le panneau latéral sur l'onglet à partager et lisez chaque ligne séparément :
 
 - Extension installée
-- Scripts utilisateur actifs
-- Application bureau détectée
+- Scripts utilisateur autorisés
+- Nowly Desktop détecté
 - Discord connecté
-- Présence installée
+- Une présence est installée
 - Activité détectée
 
-Ne vous fiez pas à un statut global. La ligne manquante indique la prochaine action.
+La première ligne qui n'est pas verte est la prochaine chose à corriger.
 
-## L'application bureau n'est pas détectée
+## Nowly Desktop n'est pas détecté
 
-Message affiché : **l'application bureau n'est pas détectée.**
+Installez l'application de bureau depuis la [page de l'application de bureau](https://nowly.me/fr/desktop), puis cliquez sur **Vérifier la connexion**. Si vous venez de l'installer, redémarrez le navigateur pour qu'il la trouve. L'application doit être installée sur le même ordinateur que le navigateur.
 
-Installez l’application bureau depuis la [page Application bureau](https://nowly.me/desktop), puis cliquez sur **Vérifier la connexion** dans l'extension. Si vous venez de l'installer, fermez et rouvrez le panneau latéral.
+Sous Linux, un navigateur installé via Flatpak ou Snap peut bloquer complètement le native messaging. Utilisez un navigateur installé depuis les dépôts de votre distribution ou depuis le paquet de l'éditeur.
 
-## Discord Desktop est fermé
+## Discord n'est pas connecté
 
-Message affiché : **l'application bureau est installée mais Discord Desktop n'est pas ouvert.**
+Ouvrez l'application Discord, attendez qu'elle soit chargée, puis cliquez sur **Vérifier la connexion**. Discord dans un onglet ne peut pas recevoir de Rich Presence locale.
 
-Ouvrez Discord Desktop, attendez quelques secondes, puis cliquez sur **Vérifier la connexion**. Discord dans le navigateur ne peut pas recevoir les mises à jour Rich Presence locales.
+Si vous lancez Discord classique à côté de Discord PTB ou Canary, n'en gardez qu'un seul ouvert : sous Windows, l'application de bureau se connecte au premier canal de Discord.
 
-## Aucune présence n'est installée
+## IPC Discord : « Accès refusé » (Windows)
 
-Installez une présence depuis la bibliothèque. Pour le test le plus rapide, installez la [présence YouTube](/library/youtube), puis ouvrez YouTube.
-
-## Aucune activité n'est détectée
-
-Vérifiez que :
-
-- la présence correspondante est installée et activée
-- l'URL actuelle est compatible avec cette présence
-- les scripts utilisateur sont actifs
-- la page a été rechargée après l'installation de la présence
-
-## URL non compatible
-
-Ouvrez la page de détail de la présence et comparez votre URL actuelle avec la liste **URL compatibles**. Si le site a changé d'adresse ou de structure, signalez la présence depuis la page support.
-
-## Permissions manquantes
-
-Ouvrez les paramètres d'extension de votre navigateur et vérifiez que :
-
-- Nowly est activée
-- les scripts utilisateur sont autorisés
-- l'accès au site est autorisé pour le site actuel
-
-Après une modification de permission, rechargez l'onglet du site et rouvrez le panneau latéral de l'extension.
-
-## Discord IPC : « Access is denied »
-
-Les journaux d'exécution peuvent afficher :
+Les journaux peuvent afficher :
 
 ```text
 reason=open \\.\pipe\discord-ipc-0: Access is denied.
 ```
 
-Pour les intégrations, utilisez le code de réponse natif stable `DISCORD_IPC_ACCESS_DENIED` au lieu de rechercher ce texte de journal, qui peut être traduit.
+Les intégrations doivent s'appuyer sur le code de réponse natif stable `DISCORD_IPC_ACCESS_DENIED` plutôt que sur ce texte traduit.
 
-Cela signifie que l'application bureau atteint bien le host Nowly, mais que Windows refuse l'accès au canal IPC local de Discord. La cause la plus fréquente est Discord lancé avec **Exécuter ce programme en tant qu'administrateur**, alors que le navigateur et le host Nowly sont lancés normalement.
+Windows refuse l'accès au canal local de Discord parce que Discord tourne en administrateur alors que le navigateur et l'application de bureau non. Corrigez dans cet ordre :
 
-Corrigez le problème dans cet ordre :
-
-1. Quittez complètement Discord, y compris depuis son icône dans la zone de notification.
-2. Dans le Gestionnaire des tâches, fermez les processus `Discord.exe` restants.
-3. Ouvrez les propriétés de Discord et désactivez **Exécuter ce programme en tant qu'administrateur** dans l'onglet **Compatibilité**.
+1. Quittez complètement Discord, y compris son icône dans la zone de notification.
+2. Dans le Gestionnaire des tâches, terminez tout processus `Discord.exe` restant.
+3. Dans les propriétés du raccourci Discord, décochez **Exécuter ce programme en tant qu'administrateur** (onglet Compatibilité) et **Exécuter en tant qu'administrateur** (onglet Raccourci, Avancé).
 4. Relancez Discord normalement.
-5. Redémarrez le navigateur ou cliquez sur **Reconnecter** dans Nowly.
+5. Cliquez sur **Reconnecter** dans Nowly, ou redémarrez le navigateur.
 
-Ne lancez pas le navigateur ou Nowly en tant qu'administrateur pour contourner le problème. Le Native Messaging est lancé par le navigateur et forcer un host élevé nécessiterait un relais privilégié risqué. Le host Nowly peut afficher une notification système lorsqu'il détecte ce conflit de permissions : notification dans la zone système sous Windows, dans le Centre de notifications sous macOS, ou notification Linux si `notify-send` est disponible.
+Ne lancez pas le navigateur ou l'application de bureau en administrateur à la place : le native messaging est lancé par le navigateur, et un navigateur élevé est un risque de sécurité. L'application de bureau peut afficher une notification système quand elle détecte ce problème : une notification de la zone de notification sous Windows, du Centre de notifications sous macOS, ou une notification Linux quand `notify-send` est disponible.
 
-Si la page de diagnostic semble correcte alors que les journaux contiennent cette erreur, effacez les journaux puis reproduisez le problème. Le diagnostic peut confirmer la connexion du host natif alors que l'accès au canal IPC de Discord reste refusé.
+## Les scripts utilisateur ne sont pas autorisés
 
-## Linux : « Mise à jour disponible » après avoir installé le .deb
+Activez **Autoriser les scripts utilisateur** dans la page de détails de Nowly (navigateurs Chromium), ou le **Mode développeur** sur les anciennes versions de Chrome. Dans Firefox, autorisez les scripts utilisateur depuis `about:addons`. Rechargez ensuite l'onglet et rouvrez le panneau latéral.
 
-Message affiché : **mise à jour disponible**, alors que le paquet `.deb` vient d'être installé.
+## Aucune activité n'est détectée
 
-Deux causes fréquentes, à vérifier dans l'ordre :
+Vérifiez que :
 
-1. **Le `.deb` n'a jamais été installé.** Sur certains environnements de bureau (XFCE avec Thunar, par exemple), double-cliquer sur un `.deb` ne fait rien si aucun gestionnaire de paquets graphique n'est associé (comme GDebi). Installez-le depuis un terminal pour être sûr :
+- la présence de ce site est installée et activée,
+- le partage n'est pas en pause (**Ctrl+Maj+U** l'active ou le coupe) et que la présence n'est ni en veille ni hors de ses horaires,
+- l'onglet n'est pas masqué depuis l'onglet Activité,
+- quelque chose joue vraiment : la plupart des présences n'affichent rien pendant la navigation, sauf si **Afficher l'activité de navigation** est activé,
+- l'adresse correspond aux sites compatibles de la présence, affichés sur sa page de la bibliothèque,
+- l'onglet a été rechargé après l'installation de la présence.
+
+Si le site a changé et que la présence affiche des informations fausses ou rien du tout, utilisez **Signaler un problème** sur sa page de la bibliothèque.
+
+## Un autre outil de Rich Presence interfère
+
+D'autres outils qui modifient votre activité Discord, comme PreMiD ou un lecteur de musique avec sa propre Rich Presence, peuvent remplacer ou effacer ce que Nowly envoie. Coupez-les pendant vos tests.
+
+## Linux : « mise à jour disponible » juste après l'installation du .deb
+
+1. **Le `.deb` n'a jamais été installé.** Un double-clic sur un `.deb` ne fait rien sur certains bureaux (XFCE avec Thunar, par exemple). Installez-le depuis un terminal :
 
    ```bash
    sudo dpkg -i ~/Téléchargements/nowly-host.deb
    ```
 
-   Vérifiez ensuite que le paquet est bien enregistré : `dpkg -L nowly-host` doit lister `/usr/lib/nowly-client/nowly-host`.
+   `dpkg -L nowly-host` doit ensuite lister `/usr/lib/nowly-client/nowly-host`.
 
-2. **Un ancien manifest par utilisateur prend le pas sur celui du `.deb`.** Si vous aviez déjà installé l'application bureau via l'archive `.tar.gz` (script `install-linux.sh`) avant de passer au `.deb`, un manifest resté dans votre dossier personnel peut continuer à pointer vers l'ancien binaire. Supprimez-le :
+2. **Une ancienne installation par utilisateur passe en priorité.** Si vous avez utilisé l'archive `.tar.gz` auparavant, supprimez ses restes :
 
    ```bash
    rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
@@ -101,8 +87,21 @@ Deux causes fréquentes, à vérifier dans l'ordre :
    rm -f ~/.local/share/NowlyClient/nowly-host
    ```
 
-   Puis redémarrez complètement le navigateur (pas seulement l'extension) pour qu'il relance le processus natif à jour.
+   Quittez ensuite complètement le navigateur et rouvrez-le.
 
-## Copier un diagnostic support
+## Linux : Discord via Flatpak ou Snap
 
-Le diagnostic de l'extension contient un bouton **Copier support**. Il copie l'état de l'application bureau, Discord, des présences et de l'activité, sans exposer de journaux techniques.
+Un Discord isolé crée son socket dans son propre dossier. L'application de bureau cherche `discord-ipc-0` à `discord-ipc-9` dans `$XDG_RUNTIME_DIR`, `$TMPDIR` et `/tmp`. Liez le vrai socket à l'emplacement attendu, par exemple pour Flathub :
+
+```bash
+ln -sf "$XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0" "$XDG_RUNTIME_DIR/discord-ipc-0"
+```
+
+Le guide pas à pas, avec un lien qui survit aux redémarrages et le chemin pour Snap, est [Nowly sous Linux](https://nowly.me/fr/guides/nowly-on-linux).
+
+## Journaux
+
+- L'extension conserve des journaux que vous pouvez copier depuis le panneau latéral avec **Copier les journaux**. Ils peuvent contenir les adresses des pages compatibles visitées : relisez-les avant de les partager.
+- L'application de bureau écrit `nowly-host.log` dans `%LOCALAPPDATA%\NowlyClient\` (Windows), `~/Library/Caches/NowlyClient/` (macOS) ou `~/.cache/NowlyClient/` (Linux).
+
+Toujours bloqué ? Ouvrez un ticket sur le serveur Discord de Nowly en indiquant la ligne du diagnostic en échec et votre système.

@@ -1,99 +1,85 @@
 ---
 title: Rozwiązywanie problemów
-description: Napraw brakującą aplikację desktopową, zamknięty Discord Desktop, brakujące obecności, brak aktywności, nieobsługiwane adresy URL i problemy z uprawnieniami.
+description: Napraw niewykrytą aplikację desktopową, odmowę połączenia z Discordem w systemie Windows, brakujące uprawnienia, obecność, która niczego nie wykrywa, oraz problemy z instalacją w Linuksie.
 ---
 
 ## Zacznij od diagnostyki
 
-Otwórz panel boczny rozszerzenia i przeanalizuj każdy wiersz osobno:
+Otwórz panel boczny na karcie, którą chcesz udostępnić, i przeczytaj każdy wiersz osobno:
 
 - Rozszerzenie zainstalowane
-- Skrypty użytkownika aktywne
-- Wykryto aplikację desktopową
+- Skrypty użytkownika dozwolone
+- Wykryto Nowly Desktop
 - Discord połączony
-- Obecność zainstalowana
+- Zainstalowano obecność
 - Wykryto aktywność
 
-Nie polegaj na jednym ogólnym statusie. Brakujący wiersz to następna rzecz do naprawienia.
+Pierwszy wiersz, który nie jest zielony, to następna rzecz do naprawienia.
 
-## Nie wykryto aplikacji desktopowej
+## Nie wykryto Nowly Desktop
 
-Wyświetlany komunikat: **Nie wykryto aplikacji desktopowej.**
+Zainstaluj aplikację desktopową ze [strony aplikacji desktopowej](https://nowly.me/desktop), a następnie kliknij **Sprawdź połączenie**. Tuż po instalacji uruchom ponownie przeglądarkę, aby znalazła aplikację. Aplikacja musi być zainstalowana na tym samym komputerze co przeglądarka.
 
-Zainstaluj aplikację desktopową ze [strony aplikacji desktopowej](https://nowly.me/desktop), a następnie kliknij **Sprawdź połączenie** w rozszerzeniu. Jeśli właśnie ją zainstalowano, zamknij i otwórz ponownie panel boczny rozszerzenia.
+W Linuksie przeglądarka zainstalowana z Flatpaka lub Snapa może całkowicie blokować native messaging. Użyj przeglądarki zainstalowanej z repozytoriów Twojej dystrybucji lub z pakietu dostarczanego przez jej producenta.
 
-## Discord Desktop jest zamknięty
+## Discord nie jest połączony
 
-Wyświetlany komunikat: **Aplikacja desktopowa jest zainstalowana, ale Discord Desktop nie jest otwarty.**
+Otwórz aplikację desktopową Discord, poczekaj, aż się wczyta, a następnie kliknij **Sprawdź połączenie**. Discord w karcie przeglądarki nie może odbierać lokalnego Rich Presence.
 
-Otwórz Discord Desktop, poczekaj kilka sekund, a następnie kliknij **Sprawdź połączenie**. Discord w przeglądarce nie może odbierać lokalnych aktualizacji Rich Presence.
+Jeśli używasz Discorda Stable obok Discorda PTB lub Canary, zostaw otwarty tylko jeden: w systemie Windows aplikacja desktopowa łączy się z pierwszym potokiem Discorda.
 
-## Nie zainstalowano żadnej obecności
+## Discord IPC: „Access is denied” (Windows)
 
-Zainstaluj obecność z biblioteki. Aby najszybciej przetestować, zainstaluj [obecność YouTube](/library/youtube), a następnie otwórz YouTube.
-
-## Nie wykryto aktywności
-
-Upewnij się, że:
-
-- odpowiednia obecność jest zainstalowana i włączona
-- bieżący adres URL jest obsługiwany przez tę obecność
-- skrypty użytkownika są aktywne
-- strona została odświeżona po zainstalowaniu obecności
-
-## Adres URL nie jest obsługiwany
-
-Otwórz stronę szczegółów obecności i porównaj bieżący adres URL z listą **Obsługiwane adresy URL**. Jeśli strona zmieniła adres lub układ, zgłoś obecność ze strony pomocy technicznej.
-
-## Brakujące uprawnienia
-
-Otwórz ustawienia rozszerzeń w przeglądarce i sprawdź:
-
-- czy Nowly jest włączone
-- czy skrypty użytkownika są dozwolone
-- czy dostęp do witryny jest dozwolony dla bieżącej strony
-
-Po zmianie uprawnień odśwież kartę witryny i otwórz ponownie panel boczny rozszerzenia.
-
-## Discord IPC: „Access is denied”
-
-Dzienniki działania mogą pokazywać:
+Logi działania mogą pokazywać:
 
 ```text
 reason=open \\.\pipe\discord-ipc-0: Access is denied.
 ```
 
-W integracjach używaj stabilnego natywnego kodu odpowiedzi `DISCORD_IPC_ACCESS_DENIED` zamiast dopasowywać ten tekst dziennika, który może być przetłumaczony.
+Integracje powinny opierać się na stabilnym natywnym kodzie odpowiedzi `DISCORD_IPC_ACCESS_DENIED`, a nie na tym zlokalizowanym tekście.
 
-Oznacza to, że aplikacja desktopowa łączy się z hostem, ale Windows odmawia dostępu do lokalnego kanału IPC Discorda. Najczęstsza przyczyna to Discord uruchomiony z opcją **Uruchom jako administrator**, podczas gdy przeglądarka i Nowly Host działają normalnie.
+Windows odmawia dostępu do lokalnego potoku Discorda, ponieważ Discord działa jako administrator, a przeglądarka i aplikacja desktopowa nie. Napraw to w tej kolejności:
 
-Napraw to w tej kolejności:
-
-1. Całkowicie zamknij Discorda, także z jego ikony w obszarze powiadomień.
-2. W Menedżerze zadań zamknij pozostałe procesy `Discord.exe`.
-3. Otwórz właściwości Discorda i na karcie **Zgodność** wyłącz **Uruchom ten program jako administrator**.
+1. Całkowicie zamknij Discorda, także jego ikonę w obszarze powiadomień.
+2. W Menedżerze zadań zakończ wszystkie pozostałe procesy `Discord.exe`.
+3. We właściwościach skrótu Discorda odznacz **Uruchom ten program jako administrator** (karta Zgodność) oraz **Uruchom jako administrator** (karta Skrót, Zaawansowane).
 4. Uruchom Discorda normalnie.
-5. Uruchom ponownie przeglądarkę albo kliknij **Połącz ponownie** w Nowly.
+5. Kliknij **Połącz ponownie** w Nowly albo uruchom ponownie przeglądarkę.
 
-Nie uruchamiaj przeglądarki ani Nowly jako administrator, aby obejść problem. Native Messaging jest uruchamiany przez przeglądarkę, a wymuszenie hosta z podwyższonymi uprawnieniami wymagałoby niebezpiecznego uprzywilejowanego pośrednika. Nowly Host może wyświetlić powiadomienie systemowe, gdy wykryje ten konflikt uprawnień: w obszarze powiadomień w Windows, w Centrum powiadomień w macOS lub jako powiadomienie pulpitu w Linuksie, jeśli dostępny jest `notify-send`.
+Nie uruchamiaj zamiast tego przeglądarki ani aplikacji desktopowej jako administrator: native messaging jest uruchamiane przez przeglądarkę, a przeglądarka z podwyższonymi uprawnieniami stanowi zagrożenie dla bezpieczeństwa. Aplikacja desktopowa może wyświetlić powiadomienie systemowe, gdy wykryje tę niezgodność: powiadomienie w obszarze powiadomień Windows, powiadomienie w Centrum powiadomień macOS lub powiadomienie w Linuksie, gdy dostępne jest `notify-send`.
 
-Jeśli strona diagnostyki wygląda poprawnie, a dziennik zawiera ten błąd, wyczyść dzienniki działania i odtwórz problem. Diagnostyka może pokazywać połączenie z natywnym hostem, podczas gdy dostęp do kanału IPC Discorda nadal jest blokowany.
+## Skrypty użytkownika nie są dozwolone
 
-## Linux: „Dostępna aktualizacja” po instalacji pliku .deb
+Włącz **Zezwalaj na skrypty użytkownika** na stronie szczegółów Nowly (przeglądarki Chromium) lub **Tryb programisty** w starszych wersjach Chrome. W Firefoksie zezwól na uprawnienie skryptów użytkownika w `about:addons`. Następnie odśwież kartę i ponownie otwórz panel boczny.
 
-Wyświetlany komunikat: **dostępna aktualizacja**, mimo że pakiet `.deb` został właśnie zainstalowany.
+## Nie wykryto aktywności
 
-Dwie częste przyczyny, sprawdź je po kolei:
+Sprawdź, czy:
 
-1. **Plik `.deb` nigdy nie został faktycznie zainstalowany.** W niektórych środowiskach graficznych (np. XFCE z Thunarem) dwukrotne kliknięcie pliku `.deb` nic nie robi, jeśli nie jest z nim powiązany graficzny menedżer pakietów (np. GDebi). Zainstaluj go z terminala:
+- obecność dla tej strony jest zainstalowana i włączona,
+- udostępnianie nie jest wstrzymane (**Ctrl+Shift+U** je przełącza), a obecność nie jest czasowo wstrzymana ani poza swoim harmonogramem,
+- karta przeglądarki nie jest ukryta w karcie Aktywność,
+- coś faktycznie jest odtwarzane: większość obecności nic nie pokazuje podczas przeglądania, chyba że włączono **Pokazuj aktywność przeglądania**,
+- adres pasuje do obsługiwanych stron obecności, wymienionych na jej stronie w bibliotece,
+- karta została odświeżona po zainstalowaniu obecności.
+
+Jeśli strona się zmieniła, a obecność pokazuje błędne informacje lub nie pokazuje żadnych, użyj opcji **Zgłoś problem** na jej stronie w bibliotece.
+
+## Inne narzędzie Rich Presence zakłóca działanie
+
+Inne narzędzia ustawiające Twoją aktywność na Discordzie, takie jak PreMiD lub odtwarzacz muzyki z własnym Rich Presence, mogą zastąpić lub wyczyścić to, co wysyła Nowly. Wyłącz je na czas testów.
+
+## Linux: „dostępna aktualizacja” zaraz po instalacji pakietu .deb
+
+1. **Pakiet `.deb` nigdy nie został zainstalowany.** W niektórych środowiskach graficznych (na przykład XFCE z Thunarem) dwukrotne kliknięcie pliku `.deb` nic nie robi. Zainstaluj go z terminala:
 
    ```bash
    sudo dpkg -i ~/Downloads/nowly-host.deb
    ```
 
-   Następnie potwierdź, że jest zarejestrowany: `dpkg -L nowly-host` powinno wyświetlić `/usr/lib/nowly-client/nowly-host`.
+   `dpkg -L nowly-host` powinno wtedy wyświetlić `/usr/lib/nowly-client/nowly-host`.
 
-2. **Stary manifest per-użytkownik nadpisuje ten z pliku .deb.** Jeśli wcześniej zainstalowano aplikację desktopową z archiwum `.tar.gz` (skrypt `install-linux.sh`) przed przejściem na plik `.deb`, pozostały manifest w katalogu domowym może nadal wskazywać na stary plik binarny. Usuń go:
+2. **Pierwszeństwo ma stara instalacja dla pojedynczego użytkownika.** Jeśli wcześniej używano archiwum `.tar.gz`, usuń jego pozostałości:
 
    ```bash
    rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
@@ -101,8 +87,21 @@ Dwie częste przyczyny, sprawdź je po kolei:
    rm -f ~/.local/share/NowlyClient/nowly-host
    ```
 
-   Następnie całkowicie uruchom ponownie przeglądarkę (nie tylko rozszerzenie), aby ponownie uruchomiła proces natywny ze zaktualizowanym plikiem binarnym.
+   Następnie całkowicie zamknij przeglądarkę i otwórz ją ponownie.
 
-## Kopiowanie diagnostyki pomocy technicznej
+## Linux: Discord z Flatpaka lub Snapa
 
-Diagnostyka rozszerzenia zawiera przycisk **Kopiuj dane pomocy**. Kopiuje stan aplikacji desktopowej, Discorda, obecności i aktywności bez ujawniania dzienników technicznych.
+Discord działający w piaskownicy tworzy swoje gniazdo we własnym folderze. Aplikacja desktopowa szuka gniazd od `discord-ipc-0` do `discord-ipc-9` w `$XDG_RUNTIME_DIR`, `$TMPDIR` i `/tmp`. Utwórz w oczekiwanym miejscu dowiązanie do prawdziwego gniazda, na przykład dla Flathub:
+
+```bash
+ln -sf "$XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0" "$XDG_RUNTIME_DIR/discord-ipc-0"
+```
+
+Instrukcję krok po kroku, w tym dowiązanie, które przetrwa ponowne uruchomienie komputera, oraz ścieżkę dla Snapa, znajdziesz w przewodniku [Nowly w Linuksie](https://nowly.me/guides/nowly-on-linux).
+
+## Logi
+
+- Rozszerzenie przechowuje logi działania, które możesz skopiować z panelu bocznego przyciskiem **Kopiuj logi**. Mogą zawierać adresy odwiedzonych obsługiwanych stron: przejrzyj je przed udostępnieniem.
+- Aplikacja desktopowa zapisuje `nowly-host.log` w `%LOCALAPPDATA%\NowlyClient\` (Windows), `~/Library/Caches/NowlyClient/` (macOS) lub `~/.cache/NowlyClient/` (Linux).
+
+Nadal nie działa? Otwórz zgłoszenie na serwerze Discord Nowly i podaj niezaliczony wiersz diagnostyki oraz swój system.

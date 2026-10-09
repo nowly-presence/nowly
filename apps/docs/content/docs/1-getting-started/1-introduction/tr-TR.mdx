@@ -1,44 +1,47 @@
 ---
 title: Giriş
-description: Nowly'nin ne olduğunu, Discord Rich Presence'ın nasıl çalıştığını ve masaüstü uygulamasının desteklenen siteleri Discord'a nasıl bağladığını öğrenin.
+description: Nowly'nin ne olduğu, tarayıcı etkinliğinizi Discord'da gösteren üç parça, bir presence'ın neler gösterebileceği ve verilerinizin nereye gittiği.
 ---
 
-## Nowly Nedir?
+## Nowly nedir?
 
-Nowly, desteklenen sitelerdeki etkinliği Discord Rich Presence'ta gösterir. Üç parça kullanacaksınız:
+Nowly, web sitelerinde izlediğiniz, dinlediğiniz veya göz attığınız şeyleri Discord Rich Presence olarak gösterir: adınızın altında başlık, görsel, ilerleme çubuğu ve bazen bir düğme içeren kart. Ücretsizdir ve bir hesaba ihtiyacınız yoktur.
 
-- Chrome, Chromium, Brave ve Edge için Nowly tarayıcı uzantısı
-- Windows veya Linux için masaüstü uygulaması
-- Nowly kitaplığından kurulabilir presence'lar
+Nowly üç parçadan oluşur:
 
-## Presence Nedir?
+- **Tarayıcı uzantısı**, Chrome, Edge, Brave, Opera ve diğer Chromium tarayıcıları ile Firefox için. Tarayıcının yan panelinde yer alır.
+- **Masaüstü uygulaması**, Windows, macOS ve Linux için. Discord uygulamasına giden yerel köprüdür. Uzantı ona Nowly Desktop adını verir.
+- **Presence'lar**, [kitaplıktan](/library) yüklenir: YouTube, Netflix, Twitch veya Spotify gibi her web sitesi için küçük bir betik.
 
-Presence, tek bir site için küçük bir JavaScript entegrasyonudur. Desteklenen bir URL'yi ziyaret ettiğinizde çalışır, sayfada ne yaptığınızı okur ve etkinlik verilerini uzantıya gönderir.
+## Presence nedir?
 
-Presence'lar şunları gösterebilir:
+Presence, tek bir web sitesi için yazılmış bir betiktir. Yalnızca kendisi için listelenen adreslerde çalışır, sayfadan ihtiyaç duyduğu bilgileri okur ve Discord'un göstereceği etkinliği hazırlar. Her resmî presence yayımlanmadan önce incelenir ve imzalanır; uzantı da onu çalıştırmadan önce bu imzayı doğrular.
 
-- platform adı
-- geçerli video, yayın, dizi, depo veya sayfa başlığı
-- yazar, kanal, içerik üreticisi veya proje adları
-- oynatma zaman damgaları
-- platform görselleri
-- içeriğe geri dönen butonlar
+Web sitesine bağlı olarak bir presence şunları gösterebilir:
 
-## Nowly Nasıl Çalışır?
+- platform adı ve etkinlik türü (izliyor, dinliyor, oynuyor),
+- videonun, bölümün, parçanın, yayının veya sayfanın başlığı,
+- kanal, sanatçı veya bölüm numarası gibi ikinci bir satır,
+- oynatma veya duraklatma rozetiyle birlikte bir görsel ya da küçük resim,
+- geçen süre veya kalan süreyi gösteren bir ilerleme çubuğu,
+- arkadaşlarınızın aynı sayfayı açmasını sağlayan en fazla iki düğme.
 
-Tarayıcı uzantısı desteklenen siteleri algılar ve kurulu presence'larınızı yükler. Bir presence, Discord etkinlik verisini hazırlar.
+Çoğu presence'ın ayrıca, göz atarken etkinliği gösterme veya başlıkları gizleyen bir gizlilik modu gibi ayarları vardır.
 
-Masaüstü uygulaması, tarayıcı ile Discord Desktop arasındaki yerel köprüdür. Uzantıdan gelen etkinlik verilerini alır ve bilgisayarınızdaki Discord'a gönderir.
+## Nasıl çalışır?
 
-## Buradan Başlayın
+1. Desteklenen bir sayfa açarsınız. Eşleşen presence, sayfayı tarayıcı sekmenizde okur.
+2. Uzantı ayarlarınızı uygular: duraklatma, zamanlamalar, gizli sekmeler, dil.
+3. Etkinliği native messaging aracılığıyla bilgisayarınızdaki masaüstü uygulamasına gönderir.
+4. Masaüstü uygulaması, etkinliği Discord'un yerel bağlantısı üzerinden Discord uygulamasına iletir.
+5. Discord bunu profilinizde gösterir.
 
-Kurulumu şu sırayla izleyin:
+Etkinlik hiçbir zaman Nowly'nin sunucularından geçmez. Bir tarayıcı sekmesindeki veya telefondaki Discord bunu alamaz: Discord masaüstü uygulamasının aynı bilgisayarda çalışıyor olması gerekir.
 
-1. Uzantıyı yükleyin.
-2. Kullanıcı komut dosyalarını etkinleştirin.
-3. Masaüstü uygulamasını yükleyin.
-4. Discord Desktop'ı açın.
-5. Bir presence yükleyin.
-6. YouTube gibi uyumlu bir sitede test edin.
+## Buradan başlayın
 
-Eksik bir şey varsa uzantının yan panelini açın. Tanılama, her kontrolü ayrı ayrı listeler, böylece tam olarak neyi düzeltmeniz gerektiğini görürsünüz.
+1. [Kurulum](/getting-started/installation) adımlarını izleyin: uzantı, kullanıcı betikleri, masaüstü uygulaması, Discord.
+2. [Presence Yükleme](/getting-started/installing-presences) sayfasında anlatıldığı gibi ilk presence'ınızı yükleyin.
+3. Bir şey boş kalırsa [Sorun Giderme](/getting-started/troubleshooting) adımlarını uygulayın.
+
+Bir web sitesi eklemek mi istiyorsunuz? [Presence Geliştirme](/presence-development/prerequisites) bölümü, kendi presence'ınızı nasıl yazacağınızı, test edeceğinizi ve yayımlayacağınızı açıklar.

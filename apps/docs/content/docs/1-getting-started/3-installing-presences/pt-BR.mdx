@@ -1,30 +1,45 @@
 ---
 title: Instalando presenças
-description: Instale integrações de sites da biblioteca Nowly e teste a detecção de atividade em um site compatível.
+description: Instale, configure, atualize e remova presenças pelo site ou pelo painel lateral da extensão, e teste se a atividade é detectada.
 ---
 
 ## O que as presenças fazem
 
-As presenças dizem ao Nowly como detectar atividade em um site compatível. A extensão executa a presença, e o app de desktop envia essa atividade para o Discord Desktop.
+Uma presença diz ao Nowly como ler um site específico. Ela só é executada nos endereços previstos para ela, e só depois que você a instala. A extensão executa a presença, e o app de desktop envia o resultado ao app do Discord.
 
 ## Instale uma presença
 
-1. Abra uma página de presença na [biblioteca](/library).
-2. Verifique se a página indica que a extensão Nowly foi detectada.
+Pelo site:
+
+1. Abra a página de uma presença na [biblioteca](/library).
+2. Espere até a página detectar a extensão.
 3. Clique em **Instalar**.
-4. Abra uma URL compatível para essa presença.
-5. Verifique o diagnóstico da extensão e o Discord.
 
-Se a extensão não for detectada, instale-a ou ative-a e recarregue a página.
+Pela extensão: abra a aba **Biblioteca** do painel lateral, procure a plataforma e instale-a por lá.
 
-## Primeiro teste recomendado: YouTube
+Os dois caminhos baixam o mesmo pacote assinado. A extensão verifica a assinatura e os hashes dele antes de registrá-lo, e recusa um pacote modificado.
 
-Use o [YouTube](/library/youtube) para o primeiro teste.
+Depois de instalar, recarregue uma vez as abas desse site: uma aba aberta antes da instalação ainda não executa a presença.
 
-Depois de instalar a presença do YouTube, abra [youtube.com](https://youtube.com). A extensão deve mostrar **Atividade detectada**, e o Discord deve ser atualizado.
+## Primeiro teste: YouTube
+
+Instale a [presença do YouTube](/library/youtube), abra um vídeo em youtube.com e dê play. O painel lateral mostra **Atividade detectada**, e depois seu perfil do Discord é atualizado em poucos segundos.
+
+## Configurações das presenças
+
+Abra uma presença no painel lateral para ver as configurações dela. Elas dependem do site. As mais comuns são:
+
+- **Mostrar atividade de navegação**: desativada por padrão na maioria das presenças, que então só compartilham o que você está realmente assistindo ou ouvindo.
+- **Modo de privacidade**: oculta títulos, artistas ou nomes, para que o Discord mostre apenas a plataforma.
+- **Mostrar botões**: remove os botões que permitem que seus amigos abram a mesma página.
+- **Idioma**: o idioma do texto exibido no Discord, quando a presença oferece vários.
+
+Você também pode pausar uma presença por um tempo (1 hora, 4 horas ou até amanhã) ou dar a ela uma agenda de compartilhamento própria.
 
 ## Atualize ou remova uma presença
 
-Quando uma nova versão estiver disponível, a página da presença mostra uma ação de atualização. Você também pode remover uma presença na página de detalhes dela ou no painel lateral da extensão.
+As atualizações são oferecidas no painel lateral e na página da presença. Você pode remover uma presença pelo painel lateral ou pela página dela na biblioteca. Ao removê-la, o Nowly para de executar qualquer coisa nesse site.
 
-Remover uma presença faz o Nowly parar de executá-la nos sites correspondentes.
+## Teste uma presença que você está escrevendo
+
+As presenças em desenvolvimento são carregadas localmente, sem a biblioteca. Veja [Carregar e testar localmente](/presence-development/load-and-test).

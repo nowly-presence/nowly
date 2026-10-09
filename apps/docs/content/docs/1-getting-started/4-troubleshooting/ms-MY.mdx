@@ -1,61 +1,34 @@
 ---
 title: Penyelesaian Masalah
-description: Betulkan aplikasi desktop yang hilang, Discord Desktop tertutup, presence yang hilang, aktiviti tidak dikesan, URL tidak disokong, dan isu kebenaran.
+description: Betulkan aplikasi desktop yang tidak dikesan, sambungan Discord yang ditolak pada Windows, kebenaran yang hilang, presence yang tidak mengesan apa-apa, dan isu pemasangan Linux.
 ---
 
-## Mula Dengan Diagnostik
+## Mula dengan diagnostik
 
-Buka panel sisi sambungan dan baca setiap baris secara berasingan:
+Buka panel sisi pada tab yang ingin anda kongsi dan baca setiap baris secara berasingan:
 
 - Sambungan dipasang
-- Skrip pengguna aktif
-- Aplikasi desktop dikesan
+- Skrip pengguna dibenarkan
+- Nowly Desktop dikesan
 - Discord disambungkan
-- Presence dipasang
+- Satu kehadiran dipasang
 - Aktiviti dikesan
 
-Jangan bergantung pada satu status global sahaja. Baris yang hilang ialah perkara seterusnya untuk dibetulkan.
+Baris pertama yang tidak hijau ialah perkara seterusnya yang perlu dibetulkan.
 
-## Aplikasi desktop tidak dikesan
+## Nowly Desktop tidak dikesan
 
-Mesej yang dipaparkan: **Aplikasi desktop tidak dikesan.**
+Pasang aplikasi desktop daripada [halaman aplikasi desktop](https://nowly.me/desktop), kemudian klik **Semak sambungan**. Jika anda baru sahaja memasangnya, mulakan semula pelayar supaya ia menemui aplikasi itu. Aplikasi mesti dipasang pada komputer yang sama dengan pelayar.
 
-Pasang aplikasi desktop daripada [halaman aplikasi desktop](https://nowly.me/desktop), kemudian klik **Semak sambungan** dalam sambungan. Jika anda baru sahaja memasangnya, tutup dan buka semula panel sisi sambungan.
+Pada Linux, pelayar yang dipasang daripada Flatpak atau Snap mungkin menyekat native messaging sepenuhnya. Gunakan pelayar yang dipasang daripada repositori distribusi anda atau daripada pakej pembekalnya sendiri.
 
-## Discord Desktop Tertutup
+## Discord tidak disambungkan
 
-Mesej yang dipaparkan: **Aplikasi desktop dipasang tetapi Discord Desktop tidak dibuka.**
+Buka aplikasi desktop Discord, tunggu sehingga ia selesai dimuatkan, kemudian klik **Semak sambungan**. Discord dalam tab pelayar tidak dapat menerima Rich Presence tempatan.
 
-Buka Discord Desktop, tunggu beberapa saat, kemudian klik **Semak sambungan**. Discord dalam pelayar tidak dapat menerima kemas kini Rich Presence tempatan.
+Jika anda menjalankan Discord Stable bersama Discord PTB atau Canary, biarkan hanya satu dibuka: pada Windows, aplikasi desktop bersambung ke paip Discord yang pertama.
 
-## Tiada Presence Dipasang
-
-Pasang presence daripada pustaka. Untuk ujian paling pantas, pasang [presence YouTube](/library/youtube), kemudian buka YouTube.
-
-## Tiada Aktiviti Dikesan
-
-Pastikan:
-
-- presence yang sepadan dipasang dan didayakan
-- URL semasa disokong oleh presence tersebut
-- skrip pengguna aktif
-- halaman telah dimuat semula selepas anda memasang presence
-
-## URL Tidak Disokong
-
-Buka halaman butiran presence dan bandingkan URL semasa anda dengan senarai **URL Disokong**. Jika laman itu menukar alamat atau susun aturnya, laporkan presence tersebut daripada halaman sokongan.
-
-## Kebenaran Hilang
-
-Buka tetapan sambungan pelayar anda dan semak:
-
-- Nowly didayakan
-- skrip pengguna dibenarkan
-- akses laman dibenarkan untuk laman semasa
-
-Selepas menukar kebenaran, muat semula tab laman web dan buka semula panel sisi sambungan.
-
-## Discord IPC: "Access is denied"
+## Discord IPC: "Access is denied" (Windows)
 
 Log masa jalan mungkin menunjukkan:
 
@@ -63,37 +36,50 @@ Log masa jalan mungkin menunjukkan:
 reason=open \\.\pipe\discord-ipc-0: Access is denied.
 ```
 
-Untuk integrasi, gunakan kod respons natif yang stabil `DISCORD_IPC_ACCESS_DENIED` dan bukannya memadankan teks log ini, yang mungkin diterjemahkan.
+Integrasi harus bergantung pada kod respons natif yang stabil `DISCORD_IPC_ACCESS_DENIED` dan bukannya pada teks yang diterjemahkan ini.
 
-Ini bermaksud aplikasi desktop dapat mencapai host, tetapi Windows menolak akses kepada saluran IPC tempatan Discord. Punca paling biasa ialah Discord dijalankan dengan **Run as administrator** manakala pelayar dan Nowly Host berjalan seperti biasa.
+Windows menolak akses kepada paip tempatan Discord kerana Discord berjalan sebagai pentadbir manakala pelayar dan aplikasi desktop tidak. Betulkan mengikut urutan ini:
 
-Betulkan mengikut urutan ini:
+1. Tutup Discord sepenuhnya, termasuk ikonnya di kawasan pemberitahuan.
+2. Dalam Task Manager, tamatkan sebarang proses `Discord.exe` yang masih berjalan.
+3. Dalam Properties pintasan Discord, nyahtanda **Run this program as an administrator** (tab Compatibility) dan **Run as administrator** (tab Shortcut, Advanced).
+4. Mulakan Discord seperti biasa.
+5. Klik **Sambung semula** dalam Nowly, atau mulakan semula pelayar.
 
-1. Tutup Discord sepenuhnya, termasuk daripada ikonnya di kawasan pemberitahuan.
-2. Dalam "Task Manager", tutup sebarang proses `Discord.exe` yang masih berjalan.
-3. Buka "Properties" Discord dan nyahtanda **Run this program as an administrator** dalam tab **Compatibility**.
-4. Jalankan Discord seperti biasa.
-5. Mulakan semula pelayar atau klik **Sambung semula** dalam Nowly.
+Jangan jalankan pelayar atau aplikasi desktop sebagai pentadbir sebagai gantinya: native messaging dilancarkan oleh pelayar, dan pelayar dengan keistimewaan tinggi merupakan risiko keselamatan. Aplikasi desktop boleh memaparkan pemberitahuan sistem apabila ia mengesan ketidakpadanan ini: pemberitahuan di kawasan pemberitahuan Windows, pemberitahuan Pusat Pemberitahuan macOS, atau pemberitahuan Linux apabila `notify-send` tersedia.
 
-Jangan jalankan pelayar atau Nowly sebagai pentadbir untuk mengelak masalah ini. Native Messaging dilancarkan oleh pelayar, dan memaksa host dengan keistimewaan tinggi memerlukan geganti berkeistimewaan yang tidak selamat. Nowly Host boleh memaparkan pemberitahuan sistem apabila ia mengesan konflik kebenaran ini: pemberitahuan di kawasan pemberitahuan pada Windows, Pusat Pemberitahuan pada macOS, atau pemberitahuan desktop Linux apabila `notify-send` tersedia.
+## Skrip pengguna tidak dibenarkan
 
-Jika halaman diagnostik kelihatan baik tetapi log mengandungi ralat ini, kosongkan log masa jalan dan hasilkan semula masalah itu. Diagnostik boleh menunjukkan sambungan host natif walaupun akses kepada sambungan IPC Discord masih ditolak.
+Hidupkan **Benarkan skrip pengguna** dalam halaman butiran Nowly (pelayar Chromium), atau **Mod pembangun** pada versi Chrome yang lebih lama. Dalam Firefox, berikan kebenaran skrip pengguna daripada `about:addons`. Kemudian muat semula tab dan buka semula panel sisi.
 
-## Linux: "Kemas Kini Tersedia" Selepas Memasang .deb
+## Tiada aktiviti dikesan
 
-Mesej yang dipaparkan: **kemas kini tersedia**, walaupun pakej `.deb` baru sahaja dipasang.
+Semak bahawa:
 
-Dua punca biasa, semak mengikut susunan:
+- presence untuk laman web ini dipasang dan dihidupkan,
+- perkongsian tidak dijeda (**Ctrl+Shift+U** menogolkannya) dan presence tidak ditunda atau berada di luar jadualnya,
+- tab tidak disembunyikan daripada tab Aktiviti,
+- sesuatu benar-benar sedang dimainkan: kebanyakan presence tidak memaparkan apa-apa semasa anda melayari kecuali **Tunjukkan aktiviti pelayaran** dihidupkan,
+- alamat sepadan dengan laman yang disokong oleh presence, yang dipaparkan pada halamannya dalam pustaka,
+- tab telah dimuat semula selepas presence dipasang.
 
-1. **`.deb` sebenarnya tidak pernah dipasang.** Pada sesetengah persekitaran desktop (XFCE dengan Thunar, sebagai contoh), dwi-klik fail `.deb` tidak melakukan apa-apa jika tiada pengurus pakej grafik yang dikaitkan dengannya (seperti GDebi). Pasang daripada terminal sebaliknya:
+Jika laman web itu berubah dan presence memaparkan maklumat yang salah atau tiada maklumat langsung, gunakan **Laporkan masalah** pada halamannya dalam pustaka.
+
+## Alat Rich Presence lain mengganggu
+
+Alat lain yang menetapkan aktiviti Discord anda, seperti PreMiD atau pemain muzik dengan Rich Presence sendiri, boleh menggantikan atau mengosongkan apa yang dihantar oleh Nowly. Matikan alat tersebut semasa anda menguji.
+
+## Linux: "kemas kini tersedia" sejurus selepas memasang .deb
+
+1. **`.deb` tidak pernah dipasang.** Dwiklik pada `.deb` tidak melakukan apa-apa pada sesetengah desktop (contohnya XFCE dengan Thunar). Pasangnya daripada terminal:
 
    ```bash
    sudo dpkg -i ~/Downloads/nowly-host.deb
    ```
 
-   Kemudian sahkan ia telah didaftarkan: `dpkg -L nowly-host` sepatutnya menyenaraikan `/usr/lib/nowly-client/nowly-host`.
+   `dpkg -L nowly-host` kemudiannya sepatutnya menyenaraikan `/usr/lib/nowly-client/nowly-host`.
 
-2. **Manifest lama setiap pengguna mengatasi yang daripada .deb.** Jika anda sebelum ini memasang aplikasi desktop daripada arkib `.tar.gz` (skrip `install-linux.sh`) sebelum beralih kepada `.deb`, manifest yang tertinggal dalam direktori rumah anda mungkin masih menunjuk kepada binari lama. Buangnya:
+2. **Pemasangan lama bagi setiap pengguna diutamakan.** Jika anda pernah menggunakan arkib `.tar.gz` sebelum ini, buang sisanya:
 
    ```bash
    rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
@@ -101,8 +87,21 @@ Dua punca biasa, semak mengikut susunan:
    rm -f ~/.local/share/NowlyClient/nowly-host
    ```
 
-   Kemudian mulakan semula pelayar sepenuhnya (bukan sekadar sambungan) supaya ia melancarkan semula proses natif dengan binari yang dikemas kini.
+   Kemudian tutup pelayar sepenuhnya dan bukanya semula.
 
-## Salin Diagnostik Sokongan
+## Linux: Discord daripada Flatpak atau Snap
 
-Diagnostik sambungan mengandungi butang **Salin sokongan**. Ia menyalin keadaan aplikasi desktop, Discord, presence dan aktiviti tanpa mendedahkan log teknikal.
+Discord dalam kotak pasir mencipta soketnya dalam foldernya sendiri. Aplikasi desktop mencari `discord-ipc-0` hingga `discord-ipc-9` dalam `$XDG_RUNTIME_DIR`, `$TMPDIR` dan `/tmp`. Pautkan soket sebenar ke lokasi yang dijangka, contohnya untuk Flathub:
+
+```bash
+ln -sf "$XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0" "$XDG_RUNTIME_DIR/discord-ipc-0"
+```
+
+Panduan langkah demi langkah, termasuk pautan yang kekal selepas but semula dan laluan Snap, ialah [Nowly di Linux](https://nowly.me/guides/nowly-on-linux).
+
+## Log
+
+- Sambungan menyimpan log masa jalan yang boleh anda salin daripada panel sisi dengan **Salin log**. Log ini mungkin mengandungi alamat halaman disokong yang anda lawati: bacanya sebelum berkongsi.
+- Aplikasi desktop menulis `nowly-host.log` dalam `%LOCALAPPDATA%\NowlyClient\` (Windows), `~/Library/Caches/NowlyClient/` (macOS) atau `~/.cache/NowlyClient/` (Linux).
+
+Masih buntu? Buka tiket di pelayan Discord Nowly dengan menyatakan baris diagnostik yang gagal dan sistem anda.

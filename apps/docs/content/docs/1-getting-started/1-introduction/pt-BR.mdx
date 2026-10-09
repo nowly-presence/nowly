@@ -1,44 +1,47 @@
 ---
 title: Introdução
-description: Saiba o que é o Nowly, como funciona o Discord Rich Presence e como o app de desktop conecta sites compatíveis ao Discord.
+description: O que é o Nowly, as três partes que mostram sua atividade do navegador no Discord, o que uma presença pode exibir e para onde vão seus dados.
 ---
 
 ## O que é o Nowly?
 
-O Nowly exibe a atividade de sites compatíveis no Discord Rich Presence. Você vai usar três partes:
+O Nowly mostra o que você assiste, ouve ou navega em sites como Rich Presence do Discord: o cartão abaixo do seu nome com um título, uma imagem, uma barra de progresso e, às vezes, um botão. É gratuito, e você não precisa de conta.
 
-- a extensão Nowly para Chrome, Chromium, Brave e Edge
-- o app de desktop no Windows ou Linux
-- presenças instaláveis da biblioteca Nowly
+O Nowly é formado por três partes:
+
+- **A extensão do navegador**, para Chrome, Edge, Brave, Opera e outros navegadores Chromium, e para Firefox. Ela fica no painel lateral do navegador.
+- **O app de desktop**, para Windows, macOS e Linux. É a ponte local até o app do Discord. A extensão o chama de Nowly Desktop.
+- **As presenças**, instaladas pela [biblioteca](/library): um pequeno script por site, como YouTube, Netflix, Twitch ou Spotify.
 
 ## O que é uma presença?
 
-Uma presença é uma pequena integração em JavaScript para um site. Ela é executada quando você visita uma URL compatível, lê o que você está fazendo na página e envia os dados de atividade para a extensão.
+Uma presença é um script escrito para um site específico. Ela só é executada nos endereços previstos para ela, lê o que precisa da página e prepara a atividade que o Discord vai mostrar. Toda presença oficial é revisada e assinada antes de ser publicada, e a extensão verifica essa assinatura antes de executá-la.
 
-As presenças podem exibir:
+Dependendo do site, uma presença pode mostrar:
 
-- o nome da plataforma
-- o vídeo, transmissão, programa, repositório ou título de página atual
-- nomes de autor, canal, criador ou projeto
-- marcações de tempo de reprodução
-- recursos visuais da plataforma
-- botões que levam de volta ao conteúdo
+- o nome da plataforma e o tipo de atividade (assistindo, ouvindo, jogando),
+- o título do vídeo, episódio, faixa, transmissão ou página,
+- uma segunda linha, como o canal, o artista ou o número do episódio,
+- uma imagem ou miniatura, com um selo de reprodução ou pausa,
+- o tempo decorrido ou uma barra de progresso com o tempo restante,
+- até dois botões que permitem que seus amigos abram a mesma página.
 
-## Como o Nowly funciona
+A maioria das presenças também tem configurações, como mostrar a atividade enquanto você navega ou um modo de privacidade que oculta os títulos.
 
-A extensão do navegador detecta sites compatíveis e carrega suas presenças instaladas. Uma presença prepara os dados de atividade do Discord.
+## Como funciona
 
-O app de desktop é a ponte local entre o navegador e o Discord Desktop. Ele recebe os dados de atividade da extensão e os envia ao Discord na sua máquina.
+1. Você abre uma página compatível. A presença correspondente a lê na aba do seu navegador.
+2. A extensão aplica suas configurações: pausa, agendas, abas ocultas, idioma.
+3. Ela envia a atividade ao app de desktop no seu computador por Native Messaging.
+4. O app de desktop a repassa ao app do Discord pela conexão local do Discord.
+5. O Discord a exibe no seu perfil.
+
+A atividade nunca passa pelos servidores do Nowly. O Discord em uma aba do navegador ou no celular não consegue recebê-la: o app de desktop do Discord precisa estar aberto no mesmo computador.
 
 ## Comece por aqui
 
-Siga a configuração nesta ordem:
+1. Siga a [Instalação](/getting-started/installation): extensão, scripts de usuário, app de desktop, Discord.
+2. Instale uma primeira presença, como descrito em [Instalando presenças](/getting-started/installing-presences).
+3. Se algo continuar vazio, siga a [Solução de problemas](/getting-started/troubleshooting).
 
-1. Instale a extensão.
-2. Ative os scripts de usuário.
-3. Instale o app de desktop.
-4. Abra o Discord Desktop.
-5. Instale uma presença.
-6. Teste em um site compatível, como o YouTube.
-
-Se algo estiver faltando, abra o painel lateral da extensão. O diagnóstico lista cada verificação separadamente, para que você veja exatamente o que corrigir.
+Quer adicionar um site? A seção [Desenvolvimento de presenças](/presence-development/prerequisites) explica como escrever, testar e publicar sua própria presença.

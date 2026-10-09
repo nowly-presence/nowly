@@ -1,30 +1,45 @@
 ---
 title: Presences installieren
-description: Installiere Website-Integrationen aus der Nowly-Bibliothek und teste die Aktivitätserkennung auf einer unterstützten Seite.
+description: Installiere, konfiguriere, aktualisiere und entferne Presences über die Website oder das Seitenpanel der Erweiterung und prüfe, ob Aktivität erkannt wird.
 ---
 
 ## Was Presences tun
 
-Presences teilen Nowly mit, wie Aktivität auf einer unterstützten Website erkannt wird. Die Erweiterung führt die Presence aus, und die Desktop-App sendet diese Aktivität an Discord Desktop.
+Eine Presence sagt Nowly, wie eine bestimmte Website zu lesen ist. Sie läuft nur auf den Adressen, die für sie hinterlegt sind, und erst, nachdem du sie installiert hast. Die Erweiterung führt die Presence aus, und die Desktop-App sendet das Ergebnis an die Discord-App.
 
 ## Eine Presence installieren
 
+Über die Website:
+
 1. Öffne eine Presence-Seite in der [Bibliothek](/library).
-2. Stelle sicher, dass die Seite anzeigt, dass die Nowly-Erweiterung erkannt wurde.
+2. Warte, bis die Seite die Erweiterung erkennt.
 3. Klicke auf **Installieren**.
-4. Öffne eine unterstützte URL für diese Presence.
-5. Prüfe die Diagnose der Erweiterung und Discord.
 
-Wenn die Erweiterung nicht erkannt wird, installiere oder aktiviere sie und lade die Seite neu.
+Über die Erweiterung: Öffne den Tab **Bibliothek** im Seitenpanel, suche nach der Plattform und installiere sie dort.
 
-## Empfohlener erster Test: YouTube
+Beide Wege laden dasselbe signierte Paket herunter. Die Erweiterung prüft seine Signatur und Hashes, bevor sie es registriert, und lehnt ein verändertes Paket ab.
 
-Verwende [YouTube](/library/youtube) für den ersten Test.
+Lade nach der Installation die Tabs dieser Website einmal neu: Ein Tab, der vor der Installation geöffnet wurde, führt die Presence noch nicht aus.
 
-Nachdem du die YouTube-Presence installiert hast, öffne [youtube.com](https://youtube.com). Die Erweiterung sollte **Aktivität erkannt** anzeigen, und Discord sollte sich aktualisieren.
+## Erster Test: YouTube
+
+Installiere die [YouTube-Presence](/library/youtube), öffne ein Video auf youtube.com und starte die Wiedergabe. Das Seitenpanel zeigt **Aktivität erkannt**, danach aktualisiert sich dein Discord-Profil innerhalb weniger Sekunden.
+
+## Presence-Einstellungen
+
+Öffne eine Presence im Seitenpanel, um ihre Einstellungen zu sehen. Sie hängen von der Website ab. Die häufigsten sind:
+
+- **Browsing-Aktivität anzeigen**: bei den meisten Presences standardmäßig aus; sie teilen dann nur, was du tatsächlich schaust oder hörst.
+- **Datenschutzmodus**: blendet Titel, Künstler oder Namen aus, sodass Discord nur die Plattform anzeigt.
+- **Buttons anzeigen**: entfernt die Buttons, mit denen deine Freunde dieselbe Seite öffnen können.
+- **Sprache**: die Sprache des Textes, der auf Discord angezeigt wird, wenn die Presence mehrere mitbringt.
+
+Du kannst eine Presence auch vorübergehend pausieren (1 Stunde, 4 Stunden oder bis morgen) oder ihr einen eigenen Zeitplan zum Teilen geben.
 
 ## Eine Presence aktualisieren oder entfernen
 
-Wenn eine neue Version verfügbar ist, zeigt die Presence-Seite eine Update-Aktion an. Du kannst eine Presence auch von ihrer Detailseite oder im Seitenpanel der Erweiterung entfernen.
+Updates werden im Seitenpanel und auf der Presence-Seite angeboten. Du kannst eine Presence im Seitenpanel oder auf ihrer Seite in der Bibliothek entfernen. Danach führt Nowly auf dieser Website nichts mehr aus.
 
-Das Entfernen einer Presence stoppt Nowly daran, sie auf passenden Websites auszuführen.
+## Eine Presence testen, die du gerade schreibst
+
+Presences in Entwicklung werden lokal geladen, ohne die Bibliothek. Siehe [Lokal laden und testen](/presence-development/load-and-test).

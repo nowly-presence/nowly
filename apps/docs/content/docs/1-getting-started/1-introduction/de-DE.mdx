@@ -1,44 +1,47 @@
 ---
 title: Einführung
-description: Erfahre, was Nowly ist, wie Discord Rich Presence funktioniert und wie die Desktop-App unterstützte Websites mit Discord verbindet.
+description: Was Nowly ist, die drei Teile, die deine Browser-Aktivität auf Discord anzeigen, was eine Presence anzeigen kann und wohin deine Daten gehen.
 ---
 
 ## Was ist Nowly?
 
-Nowly zeigt Aktivitäten von unterstützten Websites in Discord Rich Presence an. Du brauchst dafür drei Teile:
+Nowly zeigt, was du auf Websites schaust, hörst oder durchstöberst, als Discord Rich Presence an: die Karte unter deinem Namen mit einem Titel, einem Bild, einem Fortschrittsbalken und manchmal einem Button. Nowly ist kostenlos, und du brauchst kein Konto.
 
-- die Nowly-Browser-Erweiterung für Chrome, Chromium, Brave und Edge
-- die Desktop-App für Windows oder Linux
-- installierbare Presences aus der Nowly-Bibliothek
+Nowly besteht aus drei Teilen:
+
+- **Die Browser-Erweiterung** für Chrome, Edge, Brave, Opera und andere Chromium-Browser sowie für Firefox. Sie befindet sich im Seitenpanel des Browsers.
+- **Die Desktop-App** für Windows, macOS und Linux. Sie ist die lokale Brücke zur Discord-App. Die Erweiterung nennt sie Nowly Desktop.
+- **Presences**, installiert aus der [Bibliothek](/library): ein kleines Skript pro Website, etwa für YouTube, Netflix, Twitch oder Spotify.
 
 ## Was ist eine Presence?
 
-Eine Presence ist eine kleine JavaScript-Integration für eine Website. Sie wird ausgeführt, wenn du eine unterstützte URL besuchst, liest, was du auf der Seite tust, und sendet die Aktivitätsdaten an die Erweiterung.
+Eine Presence ist ein Skript, das für eine bestimmte Website geschrieben wurde. Sie läuft nur auf den Adressen, die für sie hinterlegt sind, liest aus der Seite, was sie braucht, und bereitet die Aktivität vor, die Discord anzeigt. Jede offizielle Presence wird vor der Veröffentlichung geprüft und signiert, und die Erweiterung prüft diese Signatur, bevor sie die Presence ausführt.
 
-Presences können Folgendes anzeigen:
+Je nach Website kann eine Presence Folgendes anzeigen:
 
-- den Plattformnamen
-- das aktuelle Video, den Stream, die Sendung, das Repository oder den Seitentitel
-- Namen von Autor, Kanal, Ersteller oder Projekt
-- Wiedergabe-Zeitstempel
-- Plattform-Assets
-- Buttons, die zum Inhalt zurückführen
+- den Namen der Plattform und die Art der Aktivität (schaut, hört, spielt),
+- den Titel des Videos, der Folge, des Tracks, des Streams oder der Seite,
+- eine zweite Zeile, etwa den Kanal, den Künstler oder die Folgennummer,
+- ein Bild oder ein Vorschaubild mit einem Wiedergabe- oder Pause-Symbol,
+- die vergangene Zeit oder einen Fortschrittsbalken mit der verbleibenden Zeit,
+- bis zu zwei Buttons, mit denen deine Freunde dieselbe Seite öffnen können.
 
-## Wie Nowly funktioniert
+Die meisten Presences haben außerdem Einstellungen, etwa um Aktivität beim Surfen anzuzeigen, oder einen Datenschutzmodus, der Titel ausblendet.
 
-Die Browser-Erweiterung erkennt unterstützte Websites und lädt deine installierten Presences. Eine Presence bereitet die Discord-Activity-Payload vor.
+## So funktioniert es
 
-Die Desktop-App ist die lokale Brücke zwischen dem Browser und Discord Desktop. Sie empfängt Aktivitätsdaten von der Erweiterung und sendet sie auf deinem Rechner an Discord.
+1. Du öffnest eine unterstützte Seite. Die passende Presence liest sie in deinem Browser-Tab.
+2. Die Erweiterung wendet deine Einstellungen an: Pause, Zeitpläne, ausgeblendete Tabs, Sprache.
+3. Sie sendet die Aktivität per Native Messaging an die Desktop-App auf deinem Computer.
+4. Die Desktop-App übergibt sie über die lokale Verbindung von Discord an die Discord-App.
+5. Discord zeigt sie in deinem Profil an.
+
+Die Aktivität läuft nie über die Server von Nowly. Discord in einem Browser-Tab oder auf dem Smartphone kann sie nicht empfangen: Die Discord-Desktop-App muss auf demselben Computer laufen.
 
 ## Hier starten
 
-Folge der Einrichtung in dieser Reihenfolge:
+1. Folge der [Installation](/getting-started/installation): Erweiterung, Benutzerskripte, Desktop-App, Discord.
+2. Installiere eine erste Presence, wie in [Presences installieren](/getting-started/installing-presences) beschrieben.
+3. Wenn etwas leer bleibt, geh die [Fehlerbehebung](/getting-started/troubleshooting) durch.
 
-1. Erweiterung installieren.
-2. Benutzerskripte aktivieren.
-3. Desktop-App installieren.
-4. Discord Desktop öffnen.
-5. Eine Presence installieren.
-6. Auf einer kompatiblen Seite testen, z. B. YouTube.
-
-Falls etwas fehlt, öffne das Seitenpanel der Erweiterung. Die Diagnose listet jede Prüfung einzeln auf, sodass du genau siehst, was zu beheben ist.
+Möchtest du eine Website hinzufügen? Der Bereich [Presence-Entwicklung](/presence-development/prerequisites) erklärt, wie du deine eigene Presence schreibst, testest und veröffentlichst.

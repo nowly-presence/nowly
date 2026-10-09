@@ -1,44 +1,47 @@
 ---
 title: Introduction
-description: Learn what Nowly is, how Discord Rich Presence works, and how the desktop app connects supported websites to Discord.
+description: What Nowly is, the three pieces that show your browser activity on Discord, what a presence can display, and where your data goes.
 ---
 
 ## What is Nowly?
 
-Nowly shows activity from supported websites in Discord Rich Presence. You will use three parts:
+Nowly shows what you watch, listen to or browse on websites as a Discord Rich Presence: the card under your name with a title, artwork, a progress bar and sometimes a button. It is free, and you don't need an account.
 
-- the Nowly browser extension for Chrome, Chromium, Brave, and Edge
-- the desktop app on Windows or Linux
-- installable presences from the Nowly library
+Nowly is made of three pieces:
 
-## What is a Presence?
+- **The browser extension**, for Chrome, Edge, Brave, Opera and other Chromium browsers, and for Firefox. It lives in the browser's side panel.
+- **The desktop app**, for Windows, macOS and Linux. It is the local bridge to the Discord app. The extension calls it Nowly Desktop.
+- **Presences**, installed from the [library](/library): one small script per website, such as YouTube, Netflix, Twitch or Spotify.
 
-A presence is a small JavaScript integration for one website. It runs when you visit a supported URL, reads what you are doing on the page, and sends activity data to the extension.
+## What is a presence?
 
-Presences can display:
+A presence is a script written for one website. It runs only on the addresses listed for it, reads what it needs from the page, and prepares the activity Discord will show. Every official presence is reviewed and signed before it is published, and the extension checks that signature before running it.
 
-- the platform name
-- the current video, stream, show, repository, or page title
-- author, channel, creator, or project names
-- playback timestamps
-- platform assets
-- buttons that link back to content
+Depending on the website, a presence can show:
 
-## How Nowly Works
+- the platform name and the type of activity (watching, listening, playing),
+- the title of the video, episode, track, stream or page,
+- a second line such as the channel, the artist or the episode number,
+- artwork or a thumbnail, with a play or pause badge,
+- the time elapsed, or a progress bar with the time remaining,
+- up to two buttons that let your friends open the same page.
 
-The browser extension detects supported websites and loads your installed presences. A presence prepares the Discord activity payload.
+Most presences also have settings, such as showing activity while browsing or a privacy mode that hides titles.
 
-The desktop app is the local bridge between the browser and Discord Desktop. It receives activity data from the extension and sends it to Discord on your machine.
+## How it works
 
-## Start Here
+1. You open a supported page. The matching presence reads it in your browser tab.
+2. The extension applies your settings: pause, schedules, hidden tabs, language.
+3. It sends the activity to the desktop app on your computer through native messaging.
+4. The desktop app hands it to the Discord app through Discord's local connection.
+5. Discord shows it on your profile.
 
-Follow setup in this order:
+The activity never goes through Nowly's servers. Discord in a browser tab or on a phone cannot receive it: the Discord desktop app must be running on the same computer.
 
-1. Install the extension.
-2. Enable user scripts.
-3. Install the desktop app.
-4. Open Discord Desktop.
-5. Install a presence.
-6. Test on a compatible site, such as YouTube.
+## Start here
 
-If anything is missing, open the extension side panel. The diagnostic lists each check on its own, so you can see exactly what to fix.
+1. Follow [Installation](/getting-started/installation): extension, user scripts, desktop app, Discord.
+2. Install a first presence, as described in [Installing Presences](/getting-started/installing-presences).
+3. If something stays empty, go through [Troubleshooting](/getting-started/troubleshooting).
+
+Want to add a website? The [Presence Development](/presence-development/prerequisites) section explains how to write, test and publish your own presence.

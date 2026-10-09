@@ -1,44 +1,47 @@
 ---
 title: Introduction
-description: Découvrez Nowly, le fonctionnement de Discord Rich Presence et le rôle de l'application bureau pour relier les sites compatibles à Discord.
+description: Ce qu'est Nowly, les trois éléments qui affichent votre activité de navigateur sur Discord, ce qu'une présence peut afficher et où vont vos données.
 ---
 
 ## Qu'est-ce que Nowly ?
 
-Nowly affiche l'activité des sites compatibles dans Discord Rich Presence. Vous utiliserez trois éléments :
+Nowly affiche ce que vous regardez, écoutez ou consultez sur des sites web sous forme de Rich Presence Discord : la carte sous votre pseudo avec un titre, une image, une barre de progression et parfois un bouton. C'est gratuit, et aucun compte n'est nécessaire.
 
-- l'extension Nowly pour Chrome, Chromium, Brave et Edge
-- l'application bureau sur Windows ou Linux
-- des présences installables depuis la bibliothèque Nowly
+Nowly se compose de trois éléments :
+
+- **L'extension de navigateur**, pour Chrome, Edge, Brave, Opera et les autres navigateurs Chromium, et pour Firefox. Elle s'ouvre dans le panneau latéral du navigateur.
+- **L'application de bureau**, pour Windows, macOS et Linux. C'est le pont local vers l'application Discord. L'extension l'appelle Nowly Desktop.
+- **Les présences**, installées depuis la [bibliothèque](/library) : un petit script par site, comme YouTube, Netflix, Twitch ou Spotify.
 
 ## Qu'est-ce qu'une présence ?
 
-Une présence est une petite intégration JavaScript dédiée à un site. Elle s'exécute lorsque vous visitez une URL compatible, lit ce que vous faites sur la page et envoie l'activité à l'extension.
+Une présence est un script écrit pour un site. Elle ne s'exécute que sur les adresses prévues pour elle, lit ce dont elle a besoin dans la page et prépare l'activité que Discord affichera. Chaque présence officielle est relue et signée avant sa publication, et l'extension vérifie cette signature avant de l'exécuter.
 
-Une présence peut afficher :
+Selon le site, une présence peut afficher :
 
-- le nom de la plateforme
-- la vidéo, le stream, l'émission, le dépôt ou le titre de page en cours
-- les noms de l'auteur, de la chaîne, du créateur ou du projet
-- les horodatages de lecture
-- les visuels de la plateforme
-- des boutons qui renvoient vers le contenu
+- le nom de la plateforme et le type d'activité (regarde, écoute, joue),
+- le titre de la vidéo, de l'épisode, du morceau, du live ou de la page,
+- une deuxième ligne comme la chaîne, l'artiste ou le numéro d'épisode,
+- une image ou une miniature, avec un badge lecture ou pause,
+- le temps écoulé, ou une barre de progression avec le temps restant,
+- jusqu'à deux boutons qui permettent à vos amis d'ouvrir la même page.
 
-## Comment fonctionne Nowly
+La plupart des présences ont aussi des réglages, comme afficher l'activité pendant la navigation ou un mode privé qui masque les titres.
 
-L'extension détecte les sites compatibles et charge vos présences installées. La présence prépare les données d'activité destinées à Discord.
+## Comment ça marche
 
-L'application bureau est le pont local entre le navigateur et Discord Desktop. Elle reçoit les données d'activité de l'extension et les envoie à Discord sur votre machine.
+1. Vous ouvrez une page prise en charge. La présence correspondante la lit dans votre onglet.
+2. L'extension applique vos réglages : pause, horaires, onglets masqués, langue.
+3. Elle envoie l'activité à l'application de bureau de votre ordinateur par le native messaging.
+4. L'application de bureau la transmet à l'application Discord par la connexion locale de Discord.
+5. Discord l'affiche sur votre profil.
 
-## Commencer
+L'activité ne passe jamais par les serveurs de Nowly. Discord dans un onglet ou sur un téléphone ne peut pas la recevoir : l'application Discord doit tourner sur le même ordinateur.
 
-Suivez les étapes dans cet ordre :
+## Par où commencer
 
-1. Installer l'extension.
-2. Activer les scripts utilisateur.
-3. Installer l'application bureau.
-4. Ouvrir Discord Desktop.
-5. Installer une présence.
-6. Tester sur un site compatible, par exemple YouTube.
+1. Suivez l'[Installation](/getting-started/installation) : extension, scripts utilisateur, application de bureau, Discord.
+2. Installez une première présence, comme décrit dans [Installation des présences](/getting-started/installing-presences).
+3. Si rien ne s'affiche, suivez le [Dépannage](/getting-started/troubleshooting).
 
-Si un élément manque, ouvrez le panneau latéral de l'extension. Le diagnostic affiche chaque contrôle séparément, pour que vous sachiez exactement quoi corriger.
+Vous voulez ajouter un site ? La section [Développement de présences](/presence-development/prerequisites) explique comment écrire, tester et publier votre propre présence.

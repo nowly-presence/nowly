@@ -1,61 +1,65 @@
 ---
 title: Installation
-description: Installiere die Nowly-Erweiterung, aktiviere Benutzerskripte, installiere die Desktop-App, öffne Discord Desktop und führe deinen ersten Test durch.
+description: Installiere die Nowly-Erweiterung in Chrome oder Firefox, erlaube Benutzerskripte, installiere die Desktop-App unter Windows, macOS oder Linux und prüfe, ob sich Discord aktualisiert.
 ---
 
 ## Voraussetzungen
 
-Bevor du beginnst, benötigst du:
-
-- Chrome, Chromium, Brave oder Edge
-- Discord Desktop
-- Windows oder Linux für die Desktop-App
+- **System**: Windows 10 oder 11, macOS 11 Big Sur oder neuer oder 64-Bit-Linux (glibc 2.17 oder neuer).
+- **Browser**: Chrome, Edge, Brave, Opera oder ein anderer Chromium-Browser oder Firefox.
+- **Discord**: die Discord-Desktop-App, installiert und angemeldet, auf demselben Computer.
 
 ## 1. Erweiterung installieren
 
-Installiere die Nowly-Erweiterung aus dem Chrome Web Store. Lade nach der Installation alle geöffneten Nowly-Seiten neu, damit die Website die Erweiterung erkennen kann.
+Installiere Nowly aus dem Chrome Web Store (Chrome, Edge, Brave, Opera) oder bei Firefox Add-ons. Die [Erweiterungsseite](https://nowly.me/extension) verlinkt den passenden Store für deinen Browser.
 
-## 2. Benutzerskripte aktivieren
+Öffne das Seitenpanel über das Symbol in der Symbolleiste oder mit **Ctrl+Shift+Y** (**Cmd+Shift+Y** unter macOS). Beim ersten Start zeigt Nowly ein kurzes Onboarding mit denselben Schritten wie auf dieser Seite.
 
-Öffne die Details-Seite der Erweiterung in deinem Browser und aktiviere Benutzerskripte für Nowly. Diese Berechtigung ermöglicht es Nowly, installierte Presences auf kompatiblen Websites auszuführen.
+## 2. Benutzerskripte erlauben
 
-Im Seitenpanel der Erweiterung sollte die Diagnosezeile **Benutzerskripte aktiv** grün werden.
+Presences laufen als Benutzerskripte, deshalb fragt der Browser einmalig nach deiner Erlaubnis.
+
+- **Chromium-Browser**: Öffne die Erweiterungsseite (`chrome://extensions`, `edge://extensions`, `brave://extensions` oder `opera://extensions`), klicke bei Nowly auf **Details** und aktiviere **Benutzerskripte zulassen**. In älteren Chrome-Versionen aktivierst du stattdessen den **Entwicklermodus** oben rechts auf der Seite.
+- **Firefox**: Akzeptiere die Berechtigungsanfrage, die während des Onboardings erscheint. Falls du sie geschlossen hast, erlaube die Berechtigung für Benutzerskripte über `about:addons`, Nowly, **Berechtigungen**.
+
+In der Diagnose im Seitenpanel wird **Benutzerskripte erlaubt** grün.
 
 ## 3. Desktop-App installieren
 
-Lade die Desktop-App von der [Desktop-App-Seite](https://nowly.me/desktop) herunter.
+Lade sie von der [Desktop-App-Seite](https://nowly.me/desktop) herunter, die dein System erkennt.
 
-- Windows: Verwende zuerst das Installationsprogramm. Das portable ZIP-Archiv ist für fortgeschrittene oder manuelle Einrichtungen gedacht.
-- Linux: Installiere unter Debian, Ubuntu oder Mint das `.deb`-Paket (`sudo dpkg -i nowly-host.deb`). Lade bei anderen Distributionen das `.tar.gz`-Archiv herunter und folge dem enthaltenen Installationsskript.
+- **Windows**: Führe das Installationsprogramm aus. Der Build ist noch nicht mit einem kommerziellen Zertifikat signiert, daher kann SmartScreen eine Warnung anzeigen: Wähle **Weitere Informationen** und dann **Trotzdem ausführen**, aber nur bei einer Datei, die du von nowly.me heruntergeladen hast. Für manuelle Einrichtungen gibt es ein portables ZIP-Archiv.
+- **macOS**: Öffne das Disk-Image. Die App ist von Apple notarisiert.
+- **Linux**: Installiere unter Debian, Ubuntu oder Mint das `.deb`-Paket (`sudo dpkg -i nowly-host.deb` in einem Terminal, falls ein Doppelklick nichts bewirkt). Entpacke bei anderen Distributionen das `.tar.gz`-Archiv und führe das darin enthaltene Installationsskript aus.
 
-Installiere die Desktop-App auf demselben Rechner wie Discord Desktop.
+Die Desktop-App hat kein Fenster. Der Browser startet sie, wenn Nowly sie braucht. Starte den Browser nach der Installation neu.
 
-## 4. Discord Desktop öffnen
+## 4. Discord öffnen
 
-Starte Discord Desktop, bevor du testest. Discord im Browser reicht nicht aus: Rich Presence wird an den lokalen Discord-Desktop-Client gesendet.
+Starte die Discord-Desktop-App. Stelle in den **Benutzereinstellungen** von Discord unter **Activity Privacy** sicher, dass das Teilen deiner aktuellen Aktivität aktiviert ist. Im Status **Unsichtbar** sieht niemand deine Aktivität.
 
-Die Erweiterung behandelt diese beiden Fälle getrennt:
+Die Erweiterung unterscheidet zwei Fälle:
 
-- **Die Desktop-App wird nicht erkannt.** Installiere die Desktop-App und klicke dann auf **Verbindung prüfen**.
-- **Die Desktop-App ist installiert, aber Discord Desktop ist nicht geöffnet.** Öffne Discord Desktop und klicke dann auf **Verbindung prüfen**.
+- **Nowly Desktop wird nicht gefunden**: Installiere die Desktop-App und klicke dann auf **Verbindung prüfen**.
+- **Nowly Desktop wird gefunden, aber Discord ist nicht verbunden**: Öffne die Discord-App und klicke dann auf **Verbindung prüfen**.
 
 ## 5. Eine Presence installieren
 
-Öffne die [YouTube-Presence](/library/youtube) und klicke auf **Installieren**. YouTube eignet sich am besten für den ersten Test, weil es schnell zu überprüfen ist.
+Öffne die [YouTube-Presence](/library/youtube) und klicke auf **Installieren**, oder installiere sie im Tab **Bibliothek** des Seitenpanels. YouTube ist der schnellste erste Test.
 
-## 6. Auf YouTube testen
+## 6. Testen
 
-Öffne [YouTube](https://youtube.com) und dann das Seitenpanel der Erweiterung. Die Zeile **Aktivität erkannt** sollte grün werden, und Discord sollte deine Aktivität anzeigen.
+Öffne ein Video auf YouTube und starte die Wiedergabe. Dein Discord-Profil sollte **Schaut YouTube** mit dem Videotitel, dem Kanal und einem Fortschrittsbalken anzeigen.
 
 ## Prüfen, ob alles funktioniert
 
-Verwende diese Checkliste in der Erweiterungsdiagnose:
+Die Diagnose im Seitenpanel listet sechs Prüfungen auf. Wenn alle grün sind, ist Nowly bereit:
 
 - Erweiterung installiert
-- Benutzerskripte aktiv
-- Desktop-App erkannt
+- Benutzerskripte erlaubt
+- Nowly Desktop gefunden
 - Discord verbunden
-- Presence installiert
+- Eine Präsenz ist installiert
 - Aktivität erkannt
 
-Wenn alle sechs Zeilen grün sind, ist Nowly bereit für den täglichen Gebrauch.
+Die erste Zeile, die nicht grün ist, ist das Nächste, was du beheben musst. Siehe [Fehlerbehebung](/getting-started/troubleshooting).

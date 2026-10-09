@@ -1,30 +1,45 @@
 ---
 title: Installing Presences
-description: Install website integrations from the Nowly library and test activity detection on a supported site.
+description: Install, configure, update and remove presences from the website or the extension side panel, and test that activity is detected.
 ---
 
-## What Presences Do
+## What presences do
 
-Presences tell Nowly how to detect activity on a supported website. The extension runs the presence, and the desktop app sends that activity to Discord Desktop.
+A presence tells Nowly how to read one website. It runs only on the addresses listed for it, and only after you install it. The extension runs the presence, and the desktop app sends the result to the Discord app.
 
-## Install a Presence
+## Install a presence
+
+From the website:
 
 1. Open a presence page in the [library](/library).
-2. Make sure the page says the Nowly extension is detected.
+2. Wait until the page detects the extension.
 3. Click **Install**.
-4. Open a supported URL for that presence.
-5. Check the extension diagnostic and Discord.
 
-If the extension is not detected, install or enable it, then reload the page.
+From the extension: open the **Library** tab of the side panel, search for the platform and install it there.
 
-## Recommended First Test: YouTube
+Both ways download the same signed package. The extension checks its signature and hashes before registering it, and refuses a package that was modified.
 
-Use [YouTube](/library/youtube) for the first test.
+After installing, reload the tabs of that website once: a tab opened before the installation does not run the presence yet.
 
-After you install the YouTube presence, open [youtube.com](https://youtube.com). The extension should show **Activity detected**, then Discord should update.
+## First test: YouTube
 
-## Update or Remove a Presence
+Install the [YouTube presence](/library/youtube), open a video on youtube.com and press play. The side panel shows **Activity detected**, then your Discord profile updates within a few seconds.
 
-When a new version is available, the presence page shows an update action. You can also remove a presence from its detail page or from the extension side panel.
+## Presence settings
 
-Removing a presence stops Nowly from running it on matching websites.
+Open a presence in the side panel to see its settings. They depend on the website. The most common ones are:
+
+- **Show browsing activity**: off by default on most presences, which then only share what you are actually watching or listening to.
+- **Privacy mode**: hides titles, artists or names, so Discord only shows the platform.
+- **Show buttons**: removes the buttons that let your friends open the same page.
+- **Language**: the language of the text shown on Discord, when the presence ships several.
+
+You can also snooze a presence (1 hour, 4 hours or until tomorrow) or give it its own sharing schedule.
+
+## Update or remove a presence
+
+Updates are offered in the side panel and on the presence page. You can remove a presence from the side panel or from its library page. Removing it stops Nowly from running anything on that website.
+
+## Test a presence you are writing
+
+Presences in development are loaded locally, without the library. See [Load and Test Locally](/presence-development/load-and-test).

@@ -1,30 +1,45 @@
 ---
-title: Presence Kurma
-description: Nowly kitaplığından web sitesi entegrasyonlarını kurun ve desteklenen bir sitede etkinlik algılamayı test edin.
+title: Presence Yükleme
+description: Presence'ları web sitesinden veya uzantının yan panelinden yükleyin, ayarlayın, güncelleyin ve kaldırın; ardından etkinliğin algılandığını test edin.
 ---
 
-## Presence'lar Ne Yapar
+## Presence'lar ne yapar?
 
-Presence'lar, desteklenen bir web sitesinde etkinliğin nasıl algılanacağını Nowly'ye bildirir. Uzantı presence'ı çalıştırır ve masaüstü uygulaması bu etkinliği Discord Desktop'a gönderir.
+Bir presence, Nowly'ye tek bir web sitesini nasıl okuyacağını söyler. Yalnızca kendisi için listelenen adreslerde ve yalnızca siz onu yükledikten sonra çalışır. Uzantı presence'ı çalıştırır, masaüstü uygulaması da sonucu Discord uygulamasına gönderir.
 
-## Bir Presence Kurun
+## Bir presence yükleyin
+
+Web sitesinden:
 
 1. [Kitaplıkta](/library) bir presence sayfası açın.
-2. Sayfanın Nowly uzantısının algılandığını gösterdiğinden emin olun.
-3. **Kur**'a tıklayın.
-4. Bu presence için desteklenen bir URL açın.
-5. Uzantı tanılamasını ve Discord'u kontrol edin.
+2. Sayfanın uzantıyı algılamasını bekleyin.
+3. **Yükle**'ye tıklayın.
 
-Uzantı algılanmazsa kurun veya etkinleştirin, ardından sayfayı yeniden yükleyin.
+Uzantıdan: yan panelin **Kitaplık** sekmesini açın, platformu arayın ve presence'ı oradan yükleyin.
 
-## Önerilen İlk Test: YouTube
+İki yol da aynı imzalı paketi indirir. Uzantı, paketi kaydetmeden önce imzasını ve hash değerlerini doğrular ve değiştirilmiş bir paketi reddeder.
 
-İlk testiniz için [YouTube'u](/library/youtube) kullanın.
+Yükledikten sonra o web sitesinin sekmelerini bir kez yenileyin: yüklemeden önce açılmış bir sekme presence'ı henüz çalıştırmaz.
 
-YouTube presence'ını kurduktan sonra [youtube.com](https://youtube.com) adresini açın. Uzantı **Etkinlik algılandı** göstermeli ve Discord güncellenmelidir.
+## İlk test: YouTube
 
-## Bir Presence'ı Güncelleyin veya Kaldırın
+[YouTube presence'ını](/library/youtube) yükleyin, youtube.com'da bir video açın ve oynatın. Yan panel **Etkinlik algılandı** gösterir, ardından Discord profiliniz birkaç saniye içinde güncellenir.
 
-Yeni bir sürüm mevcut olduğunda, presence sayfası bir güncelleme eylemi gösterir. Bir presence'ı ayrıntı sayfasından veya uzantının yan panelinden de kaldırabilirsiniz.
+## Presence ayarları
 
-Bir presence'ı kaldırmak, Nowly'nin onu eşleşen web sitelerinde çalıştırmasını durdurur.
+Ayarlarını görmek için yan panelde bir presence açın. Ayarlar web sitesine göre değişir. En yaygın olanlar şunlardır:
+
+- **Gezinme etkinliğini göster**: çoğu presence'ta varsayılan olarak kapalıdır; bu durumda presence yalnızca gerçekten izlediğiniz veya dinlediğiniz şeyi paylaşır.
+- **Gizlilik modu**: başlıkları, sanatçıları veya adları gizler, böylece Discord yalnızca platformu gösterir.
+- **Düğmeleri göster**: arkadaşlarınızın aynı sayfayı açmasını sağlayan düğmeleri kaldırır.
+- **Dil**: presence birden fazla dil sunuyorsa Discord'da gösterilen metnin dili.
+
+Ayrıca bir presence'ı erteleyebilir (1 saat, 4 saat veya yarına kadar) ya da ona kendi paylaşım zamanlamasını atayabilirsiniz.
+
+## Bir presence'ı güncelleyin veya kaldırın
+
+Güncellemeler yan panelde ve presence sayfasında sunulur. Bir presence'ı yan panelden veya kitaplık sayfasından kaldırabilirsiniz. Kaldırıldığında Nowly o web sitesinde hiçbir şey çalıştırmaz.
+
+## Yazdığınız bir presence'ı test edin
+
+Geliştirme aşamasındaki presence'lar, kitaplık kullanılmadan yerel olarak yüklenir. Bkz. [Yerel Olarak Yükleme ve Test Etme](/presence-development/load-and-test).

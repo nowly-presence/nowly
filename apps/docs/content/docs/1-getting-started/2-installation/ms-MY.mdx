@@ -1,61 +1,65 @@
 ---
 title: Pemasangan
-description: Pasang sambungan Nowly, dayakan skrip pengguna, pasang aplikasi desktop, buka Discord Desktop dan jalankan ujian pertama anda.
+description: Pasang sambungan Nowly dalam Chrome atau Firefox, benarkan skrip pengguna, pasang aplikasi desktop pada Windows, macOS atau Linux, dan semak bahawa Discord dikemas kini.
 ---
 
 ## Keperluan
 
-Sebelum anda mula, anda memerlukan:
+- **Sistem**: Windows 10 atau 11, macOS 11 Big Sur atau lebih baharu, atau Linux 64-bit (glibc 2.17 atau lebih baharu).
+- **Pelayar**: Chrome, Edge, Brave, Opera atau pelayar Chromium lain, atau Firefox.
+- **Discord**: aplikasi desktop Discord, dipasang dan telah log masuk, pada komputer yang sama.
 
-- Chrome, Chromium, Brave atau Edge
-- Discord Desktop
-- Windows atau Linux untuk aplikasi desktop
+## 1. Pasang sambungan
 
-## 1. Pasang Sambungan
+Pasang Nowly daripada Chrome Web Store (Chrome, Edge, Brave, Opera) atau daripada Firefox Add-ons. [Halaman sambungan](https://nowly.me/extension) memaut ke kedai yang betul untuk pelayar anda.
 
-Pasang sambungan Nowly daripada Chrome Web Store. Selepas pemasangan, muat semula mana-mana halaman Nowly yang terbuka supaya laman web dapat mengesan sambungan tersebut.
+Buka panel sisi dengan ikon bar alat atau **Ctrl+Shift+Y** (**Cmd+Shift+Y** pada macOS). Pelancaran pertama memaparkan pengenalan ringkas dengan langkah yang sama seperti halaman ini.
 
-## 2. Dayakan Skrip Pengguna
+## 2. Benarkan skrip pengguna
 
-Buka halaman butiran sambungan dalam pelayar anda dan dayakan skrip pengguna untuk Nowly. Kebenaran ini membolehkan Nowly menjalankan presence yang dipasang pada laman web yang serasi.
+Presence berjalan sebagai skrip pengguna, jadi pelayar meminta kebenaran anda sekali sahaja.
 
-Dalam panel sisi sambungan, baris diagnostik **Skrip pengguna aktif** sepatutnya bertukar hijau.
+- **Pelayar Chromium**: buka halaman sambungan (`chrome://extensions`, `edge://extensions`, `brave://extensions` atau `opera://extensions`), klik **Butiran** pada Nowly dan hidupkan **Benarkan skrip pengguna**. Pada versi Chrome yang lebih lama, hidupkan **Mod pembangun** di bahagian atas sebelah kanan halaman sebagai gantinya.
+- **Firefox**: terima gesaan kebenaran yang dipaparkan semasa pengenalan. Jika anda telah menolaknya, berikan kebenaran skrip pengguna daripada `about:addons`, Nowly, **Permissions**.
+
+Dalam diagnostik panel sisi, **Skrip pengguna dibenarkan** bertukar hijau.
 
 ## 3. Pasang aplikasi desktop
 
-Muat turun aplikasi desktop daripada [halaman aplikasi desktop](https://nowly.me/desktop).
+Muat turun daripada [halaman aplikasi desktop](https://nowly.me/desktop), yang mengesan sistem anda.
 
-- Windows: gunakan pemasang dahulu. Zip mudah alih adalah untuk persediaan lanjutan atau manual.
-- Linux: pada Debian, Ubuntu atau Mint, pasang pakej `.deb` (`sudo dpkg -i nowly-host.deb`). Pada distro lain, muat turun arkib `.tar.gz` dan ikut skrip pemasangan yang disertakan.
+- **Windows**: jalankan pemasang. Binaan ini belum ditandatangani dengan sijil komersial, jadi SmartScreen mungkin memberi amaran: pilih **More info**, kemudian **Run anyway**, hanya untuk fail yang dimuat turun dari nowly.me. Zip mudah alih tersedia untuk persediaan manual.
+- **macOS**: buka imej cakera. Aplikasi ini dinotarikan oleh Apple.
+- **Linux**: pada Debian, Ubuntu atau Mint, pasang pakej `.deb` (`sudo dpkg -i nowly-host.deb` daripada terminal jika dwiklik tidak melakukan apa-apa). Pada distribusi lain, ekstrak arkib `.tar.gz` dan jalankan skrip pemasangan di dalamnya.
 
-Pasang aplikasi desktop pada komputer yang sama dengan Discord Desktop.
+Aplikasi desktop tidak mempunyai tetingkap. Pelayar memulakannya apabila Nowly memerlukannya. Mulakan semula pelayar selepas memasangnya.
 
-## 4. Buka Discord Desktop
+## 4. Buka Discord
 
-Mulakan Discord Desktop sebelum anda menguji. Discord dalam pelayar tidak mencukupi: Rich Presence dihantar kepada klien Discord Desktop tempatan.
+Mulakan aplikasi desktop Discord. Dalam **User Settings** Discord, **Activity Privacy**, pastikan perkongsian aktiviti semasa anda dihidupkan. Dengan status **Invisible**, tiada sesiapa yang dapat melihat aktiviti anda.
 
-Sambungan mengendalikan kedua-dua kes ini secara berasingan:
+Sambungan membezakan dua kes:
 
-- **Aplikasi desktop tidak dikesan.** Pasang aplikasi desktop, kemudian klik **Semak sambungan**.
-- **Aplikasi desktop dipasang tetapi Discord Desktop tidak dibuka.** Buka Discord Desktop, kemudian klik **Semak sambungan**.
+- **Nowly Desktop tidak dikesan**: pasang aplikasi desktop, kemudian klik **Semak sambungan**.
+- **Nowly Desktop dikesan tetapi Discord tidak disambungkan**: buka aplikasi Discord, kemudian klik **Semak sambungan**.
 
-## 5. Pasang Presence
+## 5. Pasang presence
 
-Buka [presence YouTube](/library/youtube) dan klik **Pasang**. YouTube adalah ujian pertama terbaik kerana ia cepat untuk disahkan.
+Buka [presence YouTube](/library/youtube) dan klik **Pasang**, atau pasangnya daripada tab **Pustaka** dalam panel sisi. YouTube ialah ujian pertama yang paling pantas.
 
-## 6. Uji pada YouTube
+## 6. Uji
 
-Buka [YouTube](https://youtube.com), kemudian buka panel sisi sambungan. Baris **Aktiviti dikesan** sepatutnya bertukar hijau, dan Discord sepatutnya memaparkan aktiviti anda.
+Buka video di YouTube dan mainkannya. Profil Discord anda sepatutnya memaparkan **Watching YouTube** dengan tajuk video, saluran dan bar kemajuan.
 
-## Semak Semuanya Berfungsi
+## Semak bahawa semuanya berfungsi
 
-Gunakan senarai semak ini dalam diagnostik sambungan:
+Diagnostik panel sisi menyenaraikan enam semakan. Apabila semuanya hijau, Nowly sedia digunakan:
 
 - Sambungan dipasang
-- Skrip pengguna aktif
-- Aplikasi desktop dikesan
+- Skrip pengguna dibenarkan
+- Nowly Desktop dikesan
 - Discord disambungkan
-- Presence dipasang
+- Satu kehadiran dipasang
 - Aktiviti dikesan
 
-Apabila keenam-enam baris hijau, Nowly sedia untuk kegunaan harian.
+Baris pertama yang tidak hijau ialah perkara seterusnya yang perlu dibetulkan. Lihat [Penyelesaian Masalah](/getting-started/troubleshooting).

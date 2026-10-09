@@ -1,61 +1,65 @@
 ---
 title: Kurulum
-description: Nowly uzantısını kurun, kullanıcı komut dosyalarını etkinleştirin, masaüstü uygulamasını kurun, Discord Desktop'ı açın ve ilk testinizi yapın.
+description: Nowly uzantısını Chrome veya Firefox'a yükleyin, kullanıcı betiklerine izin verin, masaüstü uygulamasını Windows, macOS veya Linux'a yükleyin ve Discord'un güncellendiğini kontrol edin.
 ---
 
 ## Gereksinimler
 
-Başlamadan önce şunlara ihtiyacınız var:
+- **Sistem**: Windows 10 veya 11, macOS 11 Big Sur veya üzeri ya da 64 bit Linux (glibc 2.17 veya üzeri).
+- **Tarayıcı**: Chrome, Edge, Brave, Opera veya başka bir Chromium tarayıcısı ya da Firefox.
+- **Discord**: aynı bilgisayarda yüklü ve oturum açılmış Discord masaüstü uygulaması.
 
-- Chrome, Chromium, Brave veya Edge
-- Discord Desktop
-- Masaüstü uygulaması için Windows veya Linux
+## 1. Uzantıyı yükleyin
 
-## 1. Uzantıyı Kurun
+Nowly'yi Chrome Web Mağazası'ndan (Chrome, Edge, Brave, Opera) veya Firefox Eklentileri'nden yükleyin. [Uzantı sayfası](https://nowly.me/extension), tarayıcınız için doğru mağazaya yönlendirir.
 
-Nowly uzantısını Chrome Web Mağazası'ndan kurun. Kurulumdan sonra, sitenin uzantıyı algılayabilmesi için açık olan Nowly sayfalarını yeniden yükleyin.
+Yan paneli araç çubuğu simgesiyle veya **Ctrl+Shift+Y** (macOS'te **Cmd+Shift+Y**) ile açın. İlk açılışta, bu sayfadaki adımların aynısını içeren kısa bir tanıtım gösterilir.
 
-## 2. Kullanıcı Komut Dosyalarını Etkinleştirin
+## 2. Kullanıcı betiklerine izin verin
 
-Tarayıcınızda uzantı ayrıntıları sayfasını açın ve Nowly için kullanıcı komut dosyalarını etkinleştirin. Bu izin, Nowly'nin uyumlu web sitelerinde kurulu presence'ları çalıştırmasını sağlar.
+Presence'lar kullanıcı betiği olarak çalışır, bu yüzden tarayıcı bir kez izninizi ister.
 
-Uzantının yan panelinde **Kullanıcı komut dosyaları etkin** tanılama satırı yeşile dönmelidir.
+- **Chromium tarayıcıları**: uzantılar sayfasını açın (`chrome://extensions`, `edge://extensions`, `brave://extensions` veya `opera://extensions`), Nowly'de **Ayrıntılar**'a tıklayın ve **Kullanıcı betiklerine izin ver** seçeneğini açın. Chrome'un eski sürümlerinde bunun yerine sayfanın sağ üstündeki **Geliştirici modu**'nu açın.
+- **Firefox**: tanıtım sırasında gösterilen izin isteğini kabul edin. İsteği kapattıysanız kullanıcı betikleri iznini `about:addons`, Nowly, **İzinler** bölümünden verin.
 
-## 3. Masaüstü Uygulamasını Kurun
+Yan panel tanılamasında **Kullanıcı betiklerine izin verildi** yeşile döner.
 
-Masaüstü uygulamasını [masaüstü uygulaması sayfasından](https://nowly.me/desktop) indirin.
+## 3. Masaüstü uygulamasını yükleyin
 
-- Windows: Önce yükleyiciyi kullanın. Taşınabilir zip, gelişmiş veya manuel kurulumlar içindir.
-- Linux: Debian, Ubuntu veya Mint'te `.deb` paketini kurun (`sudo dpkg -i nowly-host.deb`). Diğer dağıtımlarda `.tar.gz` arşivini indirin ve birlikte gelen kurulum betiğini izleyin.
+Uygulamayı, sisteminizi algılayan [masaüstü uygulaması sayfasından](https://nowly.me/desktop) indirin.
 
-Masaüstü uygulamasını Discord Desktop ile aynı makineye kurun.
+- **Windows**: yükleyiciyi çalıştırın. Uygulama henüz ticari bir sertifikayla imzalanmadığı için SmartScreen sizi uyarabilir: yalnızca nowly.me'den indirilmiş bir dosya için **Ek bilgi**'yi, ardından **Yine de çalıştır**'ı seçin. Manuel kurulumlar için taşınabilir bir zip de vardır.
+- **macOS**: disk görüntüsünü açın. Uygulama, Apple'ın noter onayından geçmiştir.
+- **Linux**: Debian, Ubuntu veya Mint'te `.deb` paketini yükleyin (çift tıklamak bir şey yapmazsa bir terminalden `sudo dpkg -i nowly-host.deb`). Diğer dağıtımlarda `.tar.gz` arşivini çıkarın ve içindeki kurulum betiğini çalıştırın.
 
-## 4. Discord Desktop'ı Açın
+Masaüstü uygulamasının penceresi yoktur. Nowly'nin ihtiyacı olduğunda tarayıcı onu başlatır. Yükledikten sonra tarayıcıyı yeniden başlatın.
 
-Test etmeden önce Discord Desktop'ı başlatın. Tarayıcıdaki Discord yeterli değildir: Rich Presence, yerel Discord Desktop istemcisine gönderilir.
+## 4. Discord'u açın
 
-Uzantı bu iki durumu ayrı ayrı ele alır:
+Discord masaüstü uygulamasını başlatın. Discord'un **Kullanıcı Ayarları**, **Etkinlik Gizliliği** bölümünde mevcut etkinliğinizin paylaşımının açık olduğundan emin olun. **Görünmez** durumundayken etkinliğinizi kimse göremez.
 
-- **Masaüstü uygulaması algılanmadı.** Masaüstü uygulamasını kurun, ardından **Bağlantıyı kontrol et**'e tıklayın.
-- **Masaüstü uygulaması kurulu ama Discord Desktop açık değil.** Discord Desktop'ı açın, ardından **Bağlantıyı kontrol et**'e tıklayın.
+Uzantı iki durumu birbirinden ayırır:
 
-## 5. Bir Presence Kurun
+- **Nowly Desktop bulunamadı**: masaüstü uygulamasını yükleyin, ardından **Bağlantıyı denetle**'ye tıklayın.
+- **Nowly Desktop bulundu ama Discord bağlı değil**: Discord uygulamasını açın, ardından **Bağlantıyı denetle**'ye tıklayın.
 
-[YouTube presence'ını](/library/youtube) açın ve **Kur**'a tıklayın. YouTube, hızlıca doğrulanabildiği için en iyi ilk testtir.
+## 5. Bir presence yükleyin
 
-## 6. YouTube'da Test Edin
+[YouTube presence'ını](/library/youtube) açın ve **Yükle**'ye tıklayın ya da presence'ı yan panelin **Kitaplık** sekmesinden yükleyin. YouTube, en hızlı ilk testtir.
 
-[YouTube'u](https://youtube.com) açın, ardından uzantının yan panelini açın. **Etkinlik algılandı** satırı yeşile dönmeli ve Discord etkinliğinizi göstermelidir.
+## 6. Test edin
 
-## Her Şeyin Çalıştığını Kontrol Edin
+YouTube'da bir video açın ve oynatın. Discord profilinizde video başlığı, kanal ve bir ilerleme çubuğuyla birlikte **YouTube izliyor** görünmelidir.
 
-Uzantı tanılamasında şu kontrol listesini kullanın:
+## Her şeyin çalıştığını kontrol edin
 
-- Uzantı kuruldu
-- Kullanıcı komut dosyaları etkin
-- Masaüstü uygulaması algılandı
-- Discord bağlandı
-- Presence kuruldu
+Yan panel tanılaması altı kontrol listeler. Hepsi yeşil olduğunda Nowly hazırdır:
+
+- Uzantı yüklü
+- Kullanıcı betiklerine izin verildi
+- Nowly Desktop bulundu
+- Discord bağlı
+- Bir varlık yüklü
 - Etkinlik algılandı
 
-Altı satırın tamamı yeşil olduğunda Nowly günlük kullanıma hazırdır.
+Yeşil olmayan ilk satır, düzeltilmesi gereken bir sonraki şeydir. Bkz. [Sorun Giderme](/getting-started/troubleshooting).

@@ -1,99 +1,85 @@
 ---
 title: Fehlerbehebung
-description: Behebe eine fehlende Desktop-App, geschlossenes Discord Desktop, fehlende Presences, fehlende Aktivität, nicht unterstützte URLs und Berechtigungsprobleme.
+description: Behebe eine fehlende Desktop-App, eine unter Windows verweigerte Verbindung zu Discord, fehlende Berechtigungen, eine Presence, die nichts erkennt, und Installationsprobleme unter Linux.
 ---
 
-## Beginne mit der Diagnose
+## Mit der Diagnose beginnen
 
-Öffne das Seitenpanel der Erweiterung und lies jede Zeile einzeln:
+Öffne das Seitenpanel in dem Tab, den du teilen möchtest, und lies jede Zeile einzeln:
 
 - Erweiterung installiert
-- Benutzerskripte aktiv
-- Desktop-App erkannt
+- Benutzerskripte erlaubt
+- Nowly Desktop gefunden
 - Discord verbunden
-- Presence installiert
+- Eine Präsenz ist installiert
 - Aktivität erkannt
 
-Verlasse dich nicht auf einen einzigen Gesamtstatus. Die fehlende Zeile ist der nächste Punkt, den du beheben musst.
+Die erste Zeile, die nicht grün ist, ist das Nächste, was du beheben musst.
 
-## Desktop-App wird nicht erkannt
+## Nowly Desktop wird nicht gefunden
 
-Angezeigte Meldung: **Die Desktop-App wird nicht erkannt.**
+Installiere die Desktop-App von der [Desktop-App-Seite](https://nowly.me/desktop) und klicke dann auf **Verbindung prüfen**. Wenn du sie gerade installiert hast, starte den Browser neu, damit er die App findet. Die App muss auf demselben Computer wie der Browser installiert sein.
 
-Installiere die Desktop-App von der [Desktop-App-Seite](https://nowly.me/desktop) und klicke dann in der Erweiterung auf **Verbindung prüfen**. Wenn du sie gerade installiert hast, schließe und öffne das Seitenpanel der Erweiterung erneut.
+Unter Linux kann ein über Flatpak oder Snap installierter Browser Native Messaging komplett blockieren. Verwende einen Browser aus den Paketquellen deiner Distribution oder aus dem eigenen Paket des Herstellers.
 
-## Discord Desktop ist geschlossen
+## Discord ist nicht verbunden
 
-Angezeigte Meldung: **Die Desktop-App ist installiert, aber Discord Desktop ist nicht geöffnet.**
+Öffne die Discord-Desktop-App, warte, bis sie geladen ist, und klicke dann auf **Verbindung prüfen**. Discord in einem Browser-Tab kann keine lokale Rich Presence empfangen.
 
-Öffne Discord Desktop, warte ein paar Sekunden und klicke dann auf **Verbindung prüfen**. Discord im Browser kann keine lokalen Rich-Presence-Updates empfangen.
+Wenn du Discord Stable neben Discord PTB oder Canary nutzt, lass nur eine Version geöffnet: Unter Windows verbindet sich die Desktop-App mit der ersten Discord-Pipe.
 
-## Keine Presence Installiert
+## Discord IPC: „Access is denied“ (Windows)
 
-Installiere eine Presence aus der Bibliothek. Für den schnellsten Test installiere die [YouTube-Presence](/library/youtube) und öffne dann YouTube.
-
-## Keine Aktivität Erkannt
-
-Stelle sicher, dass:
-
-- die passende Presence installiert und aktiviert ist
-- die aktuelle URL von dieser Presence unterstützt wird
-- Benutzerskripte aktiv sind
-- die Seite nach der Installation der Presence neu geladen wurde
-
-## URL Wird Nicht Unterstützt
-
-Öffne die Detailseite der Presence und vergleiche deine aktuelle URL mit der Liste **Unterstützte URLs**. Falls die Website ihre Adresse oder ihr Layout geändert hat, melde die Presence über die Support-Seite.
-
-## Berechtigungen Fehlen
-
-Öffne die Erweiterungseinstellungen deines Browsers und prüfe:
-
-- Nowly ist aktiviert
-- Benutzerskripte sind erlaubt
-- der Website-Zugriff ist für die aktuelle Seite erlaubt
-
-Nachdem du die Berechtigungen geändert hast, lade den Website-Tab neu und öffne das Seitenpanel der Erweiterung erneut.
-
-## Discord IPC: „Access is denied“
-
-Die Laufzeitprotokolle können Folgendes anzeigen:
+Die Laufzeitprotokolle können Folgendes zeigen:
 
 ```text
 reason=open \\.\pipe\discord-ipc-0: Access is denied.
 ```
 
-Verwende für Integrationen den stabilen nativen Antwortcode `DISCORD_IPC_ACCESS_DENIED`, statt diesen lokalisierten Protokolltext abzugleichen.
+Integrationen sollten sich auf den stabilen nativen Antwortcode `DISCORD_IPC_ACCESS_DENIED` stützen statt auf diesen lokalisierten Text.
 
-Das bedeutet, dass die Desktop-App den Host erreicht, Windows aber den Zugriff auf Discords lokale IPC-Pipe verweigert. Die häufigste Ursache: Discord wurde mit **Als Administrator ausführen** gestartet, während der Browser und Nowly Host normal laufen.
+Windows verweigert den Zugriff auf die lokale Pipe von Discord, weil Discord als Administrator läuft, der Browser und die Desktop-App aber nicht. Behebe es in dieser Reihenfolge:
 
-Behebe es in dieser Reihenfolge:
-
-1. Beende Discord vollständig, auch über sein Symbol im Infobereich der Taskleiste.
-2. Schließe im Task-Manager alle verbleibenden `Discord.exe`-Prozesse.
-3. Öffne die Eigenschaften von Discord und deaktiviere unter **Kompatibilität** die Option **Programm als Administrator ausführen**.
+1. Beende Discord vollständig, auch über sein Symbol im Infobereich.
+2. Beende im Task-Manager alle verbleibenden `Discord.exe`-Prozesse.
+3. Deaktiviere in den Eigenschaften der Discord-Verknüpfung **Programm als Administrator ausführen** (Registerkarte Kompatibilität) und **Als Administrator ausführen** (Registerkarte Verknüpfung, Erweitert).
 4. Starte Discord normal.
-5. Starte den Browser neu oder klicke in Nowly auf **Neu verbinden**.
+5. Klicke in Nowly auf **Neu verbinden** oder starte den Browser neu.
 
-Starte den Browser oder Nowly nicht als Administrator, um das Problem zu umgehen. Native Messaging wird vom Browser gestartet, und ein Host mit erhöhten Rechten würde ein unsicheres privilegiertes Relay erfordern. Nowly Host kann eine Systembenachrichtigung anzeigen, wenn es diesen Berechtigungskonflikt erkennt: eine Benachrichtigung im Infobereich unter Windows, in der Mitteilungszentrale unter macOS oder eine Linux-Desktopbenachrichtigung, wenn `notify-send` verfügbar ist.
+Starte stattdessen nicht den Browser oder die Desktop-App als Administrator: Native Messaging wird vom Browser gestartet, und ein Browser mit erhöhten Rechten ist ein Sicherheitsrisiko. Die Desktop-App kann eine Systembenachrichtigung anzeigen, wenn sie diesen Konflikt erkennt: eine Benachrichtigung im Infobereich unter Windows, eine Mitteilung in der Mitteilungszentrale unter macOS oder eine Linux-Benachrichtigung, wenn `notify-send` verfügbar ist.
 
-Wenn die Diagnoseseite in Ordnung aussieht, das Protokoll aber diesen Fehler enthält, leere die Laufzeitprotokolle und reproduziere das Problem. Die Diagnose kann die Verbindung zum nativen Host widerspiegeln, während der Zugriff auf Discords IPC-Verbindung weiterhin verweigert wird.
+## Benutzerskripte sind nicht erlaubt
 
-## Linux: „Update verfügbar" nach Installation der .deb
+Aktiviere **Benutzerskripte zulassen** auf der Detailseite von Nowly (Chromium-Browser) oder den **Entwicklermodus** in älteren Chrome-Versionen. Erlaube in Firefox die Berechtigung für Benutzerskripte über `about:addons`. Lade dann den Tab neu und öffne das Seitenpanel erneut.
 
-Angezeigte Meldung: **update verfügbar**, obwohl das `.deb`-Paket gerade erst installiert wurde.
+## Keine Aktivität erkannt
 
-Zwei häufige Ursachen, prüfe sie der Reihe nach:
+Prüfe, ob:
 
-1. **Die `.deb` wurde nie wirklich installiert.** In manchen Desktop-Umgebungen (z. B. XFCE mit Thunar) passiert beim Doppelklick auf eine `.deb`-Datei nichts, wenn kein grafischer Paketmanager damit verknüpft ist (wie GDebi). Installiere sie stattdessen über ein Terminal:
+- die Presence für diese Website installiert und aktiviert ist,
+- das Teilen nicht pausiert ist (**Ctrl+Shift+U** schaltet es ein und aus) und die Presence weder vorübergehend pausiert noch außerhalb ihres Zeitplans ist,
+- der Tab nicht über den Tab Aktivität ausgeblendet wurde,
+- wirklich etwas läuft: Die meisten Presences zeigen beim Surfen nichts an, außer **Browsing-Aktivität anzeigen** ist aktiviert,
+- die Adresse zu den unterstützten Seiten der Presence passt, die auf ihrer Seite in der Bibliothek aufgeführt sind,
+- der Tab nach der Installation der Presence neu geladen wurde.
+
+Wenn sich die Website geändert hat und die Presence falsche oder gar keine Informationen anzeigt, nutze **Problem melden** auf ihrer Seite in der Bibliothek.
+
+## Ein anderes Rich-Presence-Tool stört
+
+Andere Tools, die deine Discord-Aktivität setzen, etwa PreMiD oder ein Musikplayer mit eigener Rich Presence, können ersetzen oder löschen, was Nowly sendet. Schalte sie während des Tests aus.
+
+## Linux: „Update verfügbar“ direkt nach der Installation der .deb
+
+1. **Die `.deb` wurde nie installiert.** In manchen Desktop-Umgebungen (zum Beispiel XFCE mit Thunar) bewirkt ein Doppelklick auf eine `.deb` nichts. Installiere sie über ein Terminal:
 
    ```bash
    sudo dpkg -i ~/Downloads/nowly-host.deb
    ```
 
-   Bestätige anschließend, dass sie registriert ist: `dpkg -L nowly-host` sollte `/usr/lib/nowly-client/nowly-host` auflisten.
+   `dpkg -L nowly-host` sollte danach `/usr/lib/nowly-client/nowly-host` auflisten.
 
-2. **Ein altes benutzerspezifisches Manifest überschreibt das aus der .deb.** Wenn du die Desktop-App zuvor aus dem `.tar.gz`-Archiv (dem Skript `install-linux.sh`) installiert hast, bevor du zur `.deb` gewechselt bist, kann ein zurückgebliebenes Manifest in deinem Home-Verzeichnis noch auf die alte Binärdatei verweisen. Entferne es:
+2. **Eine alte benutzerspezifische Installation hat Vorrang.** Wenn du früher das `.tar.gz`-Archiv verwendet hast, entferne ihre Überreste:
 
    ```bash
    rm -f ~/.mozilla/native-messaging-hosts/nowly.client.json
@@ -101,8 +87,21 @@ Zwei häufige Ursachen, prüfe sie der Reihe nach:
    rm -f ~/.local/share/NowlyClient/nowly-host
    ```
 
-   Starte danach den Browser vollständig neu (nicht nur die Erweiterung), damit er den nativen Prozess mit der aktualisierten Binärdatei neu startet.
+   Beende den Browser danach vollständig und öffne ihn erneut.
 
-## Eine Support-Diagnose kopieren
+## Linux: Discord aus Flatpak oder Snap
 
-Die Diagnose der Erweiterung enthält eine Schaltfläche **Support-Info kopieren**. Sie kopiert den Status von Desktop-App, Discord, Presences und Aktivität, ohne technische Logs offenzulegen.
+Ein Discord in einer Sandbox legt seinen Socket in einem eigenen Ordner an. Die Desktop-App sucht `discord-ipc-0` bis `discord-ipc-9` in `$XDG_RUNTIME_DIR`, `$TMPDIR` und `/tmp`. Verlinke den echten Socket an den erwarteten Ort, zum Beispiel für Flathub:
+
+```bash
+ln -sf "$XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0" "$XDG_RUNTIME_DIR/discord-ipc-0"
+```
+
+Die Schritt-für-Schritt-Anleitung, mit einem Link, der Neustarts übersteht, und dem Pfad für Snap, findest du unter [Nowly unter Linux](https://nowly.me/guides/nowly-on-linux).
+
+## Protokolle
+
+- Die Erweiterung speichert Laufzeitprotokolle, die du im Seitenpanel mit **Protokolle kopieren** kopieren kannst. Sie können die Adressen besuchter unterstützter Seiten enthalten: Lies sie durch, bevor du sie teilst.
+- Die Desktop-App schreibt `nowly-host.log` in `%LOCALAPPDATA%\NowlyClient\` (Windows), `~/Library/Caches/NowlyClient/` (macOS) oder `~/.cache/NowlyClient/` (Linux).
+
+Kommst du immer noch nicht weiter? Eröffne auf dem Nowly-Discord-Server ein Ticket mit der fehlschlagenden Diagnosezeile und deinem System.

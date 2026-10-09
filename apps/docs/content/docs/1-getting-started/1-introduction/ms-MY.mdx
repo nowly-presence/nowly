@@ -1,44 +1,47 @@
 ---
 title: Pengenalan
-description: Ketahui apa itu Nowly, cara Discord Rich Presence berfungsi, dan cara aplikasi desktop menghubungkan laman web yang disokong dengan Discord.
+description: Apa itu Nowly, tiga bahagian yang memaparkan aktiviti pelayar anda di Discord, apa yang boleh dipaparkan oleh presence dan ke mana data anda pergi.
 ---
 
 ## Apakah Nowly?
 
-Nowly memaparkan aktiviti dari laman web yang disokong dalam Discord Rich Presence. Anda akan menggunakan tiga bahagian:
+Nowly memaparkan apa yang anda tonton, dengar atau layari di laman web sebagai Discord Rich Presence: kad di bawah nama anda dengan tajuk, gambar, bar kemajuan dan kadangkala butang. Ia percuma, dan anda tidak memerlukan akaun.
 
-- sambungan pelayar Nowly untuk Chrome, Chromium, Brave dan Edge
-- aplikasi desktop untuk Windows atau Linux
-- presence yang boleh dipasang daripada pustaka Nowly
+Nowly terdiri daripada tiga bahagian:
 
-## Apakah Presence?
+- **Sambungan pelayar**, untuk Chrome, Edge, Brave, Opera dan pelayar Chromium lain, serta untuk Firefox. Ia berada dalam panel sisi pelayar.
+- **Aplikasi desktop**, untuk Windows, macOS dan Linux. Ia ialah jambatan tempatan ke aplikasi Discord. Sambungan menamakannya Nowly Desktop.
+- **Presence**, dipasang daripada [pustaka](/library): satu skrip kecil bagi setiap laman web, seperti YouTube, Netflix, Twitch atau Spotify.
 
-Presence ialah integrasi JavaScript kecil untuk satu laman web. Ia berjalan apabila anda melawat URL yang disokong, membaca apa yang anda lakukan pada halaman itu, dan menghantar data aktiviti kepada sambungan.
+## Apakah presence?
 
-Presence boleh memaparkan:
+Presence ialah skrip yang ditulis untuk satu laman web. Ia hanya berjalan pada alamat yang disenaraikan untuknya, membaca apa yang diperlukannya daripada halaman, dan menyediakan aktiviti yang akan dipaparkan oleh Discord. Setiap presence rasmi disemak dan ditandatangani sebelum diterbitkan, dan sambungan mengesahkan tandatangan itu sebelum menjalankannya.
 
-- nama platform
-- video, siaran, rancangan, repositori atau tajuk halaman semasa
-- nama pengarang, saluran, pencipta atau projek
-- cap masa main balik
-- aset platform
-- butang yang membawa kembali ke kandungan
+Bergantung pada laman web, presence boleh memaparkan:
 
-## Cara Nowly Berfungsi
+- nama platform dan jenis aktiviti (menonton, mendengar, bermain),
+- tajuk video, episod, lagu, siaran langsung atau halaman,
+- baris kedua seperti saluran, artis atau nombor episod,
+- gambar atau lakaran kecil, dengan lencana main atau jeda,
+- masa yang telah berlalu, atau bar kemajuan dengan baki masa,
+- sehingga dua butang yang membolehkan rakan anda membuka halaman yang sama.
 
-Sambungan pelayar mengesan laman web yang disokong dan memuatkan presence yang dipasang. Presence menyediakan data aktiviti Discord.
+Kebanyakan presence juga mempunyai tetapan, seperti memaparkan aktiviti semasa melayari atau mod privasi yang menyembunyikan tajuk.
 
-Aplikasi desktop ialah jambatan tempatan antara pelayar dan Discord Desktop. Ia menerima data aktiviti daripada sambungan dan menghantarnya kepada Discord pada komputer anda.
+## Cara ia berfungsi
 
-## Mula Di Sini
+1. Anda membuka halaman yang disokong. Presence yang sepadan membacanya dalam tab pelayar anda.
+2. Sambungan menggunakan tetapan anda: jeda, jadual, tab tersembunyi, bahasa.
+3. Ia menghantar aktiviti kepada aplikasi desktop pada komputer anda melalui native messaging.
+4. Aplikasi desktop menyerahkannya kepada aplikasi Discord melalui sambungan tempatan Discord.
+5. Discord memaparkannya pada profil anda.
 
-Ikuti persediaan mengikut susunan ini:
+Aktiviti tidak pernah melalui pelayan Nowly. Discord dalam tab pelayar atau pada telefon tidak dapat menerimanya: aplikasi desktop Discord mesti berjalan pada komputer yang sama.
 
-1. Pasang sambungan.
-2. Dayakan skrip pengguna.
-3. Pasang aplikasi desktop.
-4. Buka Discord Desktop.
-5. Pasang satu presence.
-6. Uji pada laman yang serasi, seperti YouTube.
+## Mula di sini
 
-Jika ada yang tertinggal, buka panel sisi sambungan. Diagnostik menyenaraikan setiap semakan secara berasingan, supaya anda dapat lihat dengan tepat apa yang perlu dibetulkan.
+1. Ikuti [Pemasangan](/getting-started/installation): sambungan, skrip pengguna, aplikasi desktop, Discord.
+2. Pasang presence pertama anda, seperti yang diterangkan dalam [Memasang Presence](/getting-started/installing-presences).
+3. Jika ada yang kekal kosong, ikuti [Penyelesaian Masalah](/getting-started/troubleshooting).
+
+Mahu menambah laman web? Bahagian [Pembangunan Presence](/presence-development/prerequisites) menerangkan cara menulis, menguji dan menerbitkan presence anda sendiri.

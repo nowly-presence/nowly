@@ -1,30 +1,45 @@
 ---
 title: Installation des présences
-description: Installez des intégrations depuis la bibliothèque Nowly et testez la détection d'activité sur un site compatible.
+description: Installez, réglez, mettez à jour et retirez des présences depuis le site ou le panneau latéral de l'extension, et vérifiez que l'activité est détectée.
 ---
 
-## À quoi servent les présences
+## Ce que font les présences
 
-Les présences indiquent à Nowly comment détecter l'activité sur un site compatible. L'extension exécute la présence, puis l'application bureau envoie cette activité à Discord Desktop.
+Une présence indique à Nowly comment lire un site. Elle ne s'exécute que sur les adresses prévues pour elle, et seulement après son installation. L'extension exécute la présence, et l'application de bureau envoie le résultat à l'application Discord.
 
 ## Installer une présence
 
-1. Ouvrez une page de présence dans la [bibliothèque](/library).
-2. Vérifiez que la page indique que l'extension Nowly est détectée.
+Depuis le site :
+
+1. Ouvrez la page d'une présence dans la [bibliothèque](/library).
+2. Attendez que la page détecte l'extension.
 3. Cliquez sur **Installer**.
-4. Ouvrez une URL compatible avec cette présence.
-5. Vérifiez le diagnostic de l'extension et Discord.
 
-Si l'extension n'est pas détectée, installez-la ou activez-la, puis rechargez la page.
+Depuis l'extension : ouvrez l'onglet **Bibliothèque** du panneau latéral, cherchez la plateforme et installez-la.
 
-## Premier test recommandé : YouTube
+Les deux chemins téléchargent le même paquet signé. L'extension vérifie sa signature et ses empreintes avant de l'enregistrer, et refuse un paquet modifié.
 
-Utilisez [YouTube](/library/youtube) pour le premier test.
+Après l'installation, rechargez une fois les onglets de ce site : un onglet ouvert avant l'installation n'exécute pas encore la présence.
 
-Après l'installation de la présence YouTube, ouvrez [youtube.com](https://youtube.com). L'extension doit afficher **Activité détectée**, puis Discord doit se mettre à jour.
+## Premier test : YouTube
 
-## Mettre à jour ou supprimer une présence
+Installez la [présence YouTube](/library/youtube), ouvrez une vidéo sur youtube.com et lancez la lecture. Le panneau latéral affiche **Activité détectée**, puis votre profil Discord se met à jour en quelques secondes.
 
-Lorsqu'une nouvelle version est disponible, la page de présence affiche une action de mise à jour. Vous pouvez aussi supprimer une présence depuis sa page de détail ou depuis le panneau latéral de l'extension.
+## Réglages des présences
 
-Supprimer une présence empêche Nowly de l'exécuter sur les sites correspondants.
+Ouvrez une présence dans le panneau latéral pour voir ses réglages. Ils dépendent du site. Les plus courants :
+
+- **Afficher l'activité de navigation** : désactivé par défaut sur la plupart des présences, qui ne partagent alors que ce que vous regardez ou écoutez vraiment.
+- **Mode privé** : masque les titres, les artistes ou les noms, pour que Discord n'affiche que la plateforme.
+- **Afficher les boutons** : retire les boutons qui permettent à vos amis d'ouvrir la même page.
+- **Langue** : la langue du texte affiché sur Discord, quand la présence en propose plusieurs.
+
+Vous pouvez aussi mettre une présence en veille (1 heure, 4 heures ou jusqu'à demain) ou lui donner ses propres horaires de partage.
+
+## Mettre à jour ou retirer une présence
+
+Les mises à jour sont proposées dans le panneau latéral et sur la page de la présence. Vous pouvez retirer une présence depuis le panneau latéral ou depuis sa page de la bibliothèque. La retirer arrête toute exécution de Nowly sur ce site.
+
+## Tester une présence que vous écrivez
+
+Les présences en développement se chargent en local, sans la bibliothèque. Voir [Charger et tester en local](/presence-development/load-and-test).
