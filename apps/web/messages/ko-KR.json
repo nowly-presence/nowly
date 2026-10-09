@@ -22,7 +22,8 @@
     "docs": "문서",
     "library": "라이브러리",
     "roadmap": "로드맵",
-    "open-menu": "메뉴 열기"
+    "open-menu": "메뉴 열기",
+    "guides": "가이드"
   },
   "theme": {
     "toggle": "색상 테마 전환",
@@ -191,7 +192,6 @@
     "title": "빠르게 답하는 질문들",
     "description": "설치, 데이터, Discord에 관한 핵심 정보입니다. 문서와 Discord에서 더 자세히 알아보세요.",
     "faq": "FAQ 열기",
-    "discord": "Discord 참여하기",
     "items": [
       {
         "question": "Nowly란 무엇인가요?",
@@ -205,7 +205,8 @@
         "question": "어떤 플랫폼이 지원되나요?",
         "answer": "최신 목록은 라이브러리에서 확인할 수 있습니다. 확장 프로그램을 업데이트하지 않고도 새 프레즌스를 추가할 수 있으니, 실제로 사용하는 것을 설치하세요."
       }
-    ]
+    ],
+    "more": "단계별 안내가 필요하신가요? <guides>가이드</guides>를 읽거나 <discord>Discord</discord>에서 물어보세요."
   },
   "open-source": {
     "eyebrow": "오픈소스",
@@ -221,7 +222,7 @@
     "cta": "Discord 참여하기",
     "members": "{count, plural, other {멤버 #명}}",
     "online": "{count, number}명 온라인",
-    "support": "Nowly는 무료 오픈 소스예요. <link>프로젝트 후원하기</link>",
+    "support": "Nowly는 무료예요. <link>프로젝트 후원하기</link>",
     "items": [
       {
         "title": "사람이 직접 도와드려요",
@@ -278,7 +279,11 @@
     "consent": "내 데이터",
     "cookies": "쿠키",
     "legal-notice": "법적 고지",
-    "faq": "자주 묻는 질문"
+    "faq": "자주 묻는 질문",
+    "guides": "가이드",
+    "company": "Nowly",
+    "about": "소개",
+    "contact": "문의"
   },
   "libraryPage": {
     "eyebrow": "라이브러리",
@@ -374,7 +379,12 @@
     "stat-active": "활성 사용자 {count}명",
     "community-title": "{name} 관련 도움이 필요하세요?",
     "community-description": "Discord에서 Nowly 커뮤니티에 질문하거나 아이디어를 공유해 보세요.",
-    "community-cta": "Discord 참여하기"
+    "community-cta": "Discord 참여하기",
+    "guide-eyebrow": "가이드",
+    "guide-updated": "{date} 업데이트",
+    "guide-fallback": "이 가이드는 아직 번역되지 않아 영어 버전으로 표시돼요.",
+    "guide-open": "가이드 읽기",
+    "guide-close": "가이드 숨기기"
   },
   "desktopPage": {
     "eyebrow": "데스크톱 앱",
@@ -660,12 +670,11 @@
       "success": "메시지를 보냈습니다.",
       "error": "메시지를 보내지 못했습니다. 다시 시도해 주세요."
     },
-    "title": "도움이 필요하신가요?",
-    "description": "문제에 맞는 채널을 선택하세요. 대화하기에는 Discord가 가장 빠릅니다. GitHub는 공개 기록을 남깁니다.",
-    "open": "열기",
+    "title": "도움말 및 문의",
+    "description": "도움을 받으려면 Discord가 가장 빠릅니다. GitHub는 공개 기록을 남기고, 양식은 팀에 비공개로 전달됩니다.",
     "donate": {
       "title": "Nowly 후원하기",
-      "description": "Nowly는 광고도 구독도 없는 무료 서비스예요. 후원금은 서버, CDN, 개발 시간에 쓰여 지금처럼 유지하는 데 도움이 돼요."
+      "description": "확장 프로그램과 데스크톱 앱은 광고도 구독도 없는 무료예요. 후원금은 서버, CDN, 개발 시간에 쓰여 지금처럼 유지하는 데 도움이 돼요."
     },
     "sections": {
       "community": "커뮤니티",
@@ -699,7 +708,10 @@
     "other": {
       "title": "기타 요청",
       "description": "가이드된 양식 중 어느 것에도 맞지 않는다면 빈 이슈를 열어주세요."
-    }
+    },
+    "email": "이메일이 편하신가요? <link>{email}</link>로 보내 주세요.",
+    "privacy": "Nowly가 이 기기에 대해 저장한 데이터를 내보내거나 삭제하려면 <link>내 데이터</link>로 이동하세요.",
+    "publisher": "Nowly는 프랑스에 등록된 개인 사업체 K.Ring이 발행해요. 주소, 등록 번호, 호스팅 정보는 <link>법적 고지</link>에 있어요."
   },
   "statusPage": {
     "eyebrow": "상태",
@@ -759,8 +771,8 @@
       "description": "테스트용 패키징되지 않은 Chrome 또는 Firefox 빌드를 다운로드하세요."
     },
     "support": {
-      "title": "지원",
-      "description": "Nowly, 확장 프로그램, 프레즌스에 대한 도움을 받으세요."
+      "title": "도움말 및 문의",
+      "description": "Discord에서 Nowly 도움을 받고, GitHub에서 버그나 고장 난 프레즌스를 신고하거나, 팀에 비공개로 문의하세요."
     },
     "branding": {
       "title": "브랜딩",
@@ -789,6 +801,14 @@
     "account": {
       "title": "Nowly 계정",
       "description": "연결된 기기, 내 데이터, 로그인."
+    },
+    "guides": {
+      "title": "가이드",
+      "description": "Nowly 설정, Discord Rich Presence 문제 해결, 개인정보 관리, 나만의 프레즌스 만들기 가이드예요."
+    },
+    "about": {
+      "title": "소개",
+      "description": "Nowly를 만드는 사람, 만든 이유, 작동 방식과 운영 자금에 대해 알아보세요."
     }
   },
   "roadmapPage": {
@@ -1073,7 +1093,7 @@
     "badge": "쿠키",
     "title": "쿠키 정책",
     "description": "nowly.me 및 docs.nowly.me에서 사용되는 쿠키와 로컬 저장소.",
-    "last-updated": "최종 업데이트: 2026년 10월 5일.",
+    "last-updated": "최종 업데이트: 2026년 10월 9일.",
     "intro": "이 페이지는 <strong>nowly.me</strong> 및 <strong>docs.nowly.me</strong>에서 사용되는 쿠키 및 유사 기술을 설명합니다. 당사는 언어 쿠키를 설정합니다. 테마와 쿠키 알림은 로컬 저장소를 사용합니다. 광고가 활성화되지 않는 한 Google AdSense는 로드되지 않습니다.",
     "sections": [
       {
@@ -1082,7 +1102,7 @@
       },
       {
         "title": "locale 쿠키",
-        "body": "<strong><code>locale</code></strong> (nowly.me 및 별도로 docs.nowly.me)<br/>목적: 프랑스어, 영어 또는 스페인어 인터페이스.<br/>기간: 1년(<code>max-age</code> 31,536,000초), 언어를 변경할 때마다 갱신.<br/>속성: 1st-party, HttpOnly 아님, SameSite=Lax. 값은 로케일 코드입니다(예: <code>fr-FR</code>). 쿠키 자체는 언어 코드일 뿐이지만, 서버 로그의 IP 주소와 결합하면 방문자를 식별하는 데 기여할 수 있습니다."
+        "body": "<strong><code>locale</code></strong> (nowly.me 및 별도로 docs.nowly.me)<br/>목적: 인터페이스 언어 기억(11개 언어 지원).<br/>기간: 1년(<code>max-age</code> 31,536,000초), 언어를 변경할 때마다 갱신.<br/>속성: 1st-party, HttpOnly 아님, SameSite=Lax. 값은 로케일 코드입니다(예: <code>fr-FR</code>). 쿠키 자체는 언어 코드일 뿐이지만, 서버 로그의 IP 주소와 결합하면 방문자를 식별하는 데 기여할 수 있습니다."
       },
       {
         "title": "로컬 저장소",
@@ -1094,7 +1114,7 @@
       },
       {
         "title": "광고",
-        "body": "웹사이트에서 <strong>Google AdSense</strong>를 활성화하면 Google은 자체 정책에 따라 쿠키 또는 유사 기술을 설정할 수 있습니다. 그때까지 Nowly는 광고 쿠키를 배치하지 않습니다."
+        "body": "<strong>Google AdSense</strong>는 저희가 활성화하기 전까지 꺼져 있으며, Nowly 자체는 광고 쿠키를 설정하지 않습니다. 활성화하면 광고는 가이드 글에만 표시되며, 다운로드 페이지나 확장 프로그램에는 표시되지 않습니다. 이때 Google을 포함한 제3자 공급업체가 쿠키를 사용하여 nowly.me 또는 다른 웹사이트에 대한 사용자의 이전 방문을 기반으로 광고를 게재합니다. Google은 광고 쿠키를 사용하여 Google 및 파트너가 이 사이트와 인터넷의 다른 사이트 방문을 기반으로 광고를 게재할 수 있도록 합니다. EEA, 영국, 스위스에서는 Google의 동의 메시지가 먼저 사용자의 선택을 묻습니다. 맞춤 광고는 <a href=\"https://adssettings.google.com\">Google 광고 설정</a> 또는 <a href=\"https://www.aboutads.info/choices\">aboutads.info</a>에서 끌 수 있으며, <a href=\"https://policies.google.com/technologies/partner-sites\">Google이 서비스를 사용하는 사이트의 정보를 사용하는 방법</a>도 확인할 수 있습니다."
       },
       {
         "title": "삭제 방법",
@@ -1212,5 +1232,85 @@
     "delete-success": "계정이 삭제되었습니다.",
     "local-note": "확장 프로그램이 기기에 저장한 데이터는 영향을 받지 않습니다. 확장 프로그램 설정에서 지울 수 있습니다.",
     "action-error": "문제가 발생했습니다. 다시 시도해 주세요."
+  },
+  "ads": {
+    "label": "광고"
+  },
+  "guidesPage": {
+    "eyebrow": "가이드",
+    "title": "Nowly와 Discord Rich Presence 가이드",
+    "description": "Nowly 설정, 표시되지 않는 상태 해결, 친구에게 보여 줄 내용 선택, 나만의 프레즌스 만들기를 단계별로 안내해요.",
+    "categories": {
+      "start": "시작하기",
+      "troubleshooting": "문제 해결",
+      "privacy": "개인정보와 제어",
+      "discord": "Discord Rich Presence",
+      "developers": "개발자용"
+    },
+    "minutes": "{count, plural, other {#분 분량}}",
+    "updated": "{date} 업데이트",
+    "toc": "이 페이지의 내용",
+    "related": "더 읽어 보기",
+    "back": "모든 가이드",
+    "fallback": "이 가이드는 아직 번역되지 않아 영어 버전으로 표시돼요.",
+    "cta": {
+      "title": "사용해 볼까요?",
+      "description": "무료 확장 프로그램과 데스크톱 앱을 설치하고 라이브러리에서 프레즌스를 골라 보세요.",
+      "library": "라이브러리 보기"
+    },
+    "help": {
+      "title": "아직 해결되지 않았나요?",
+      "description": "Nowly Discord 서버에서 티켓을 열면 팀이 도와드려요.",
+      "cta": "Discord 참여하기"
+    }
+  },
+  "aboutPage": {
+    "eyebrow": "소개",
+    "title": "Nowly 소개",
+    "description": "Nowly는 보고, 듣고, 둘러보는 것을 Discord에 보여 줘요. 활동을 Discord 외의 어디에도 보내지 않아요. 누가 만드는지, 왜 만들었는지, 어떻게 운영되는지 소개할게요.",
+    "sections": [
+      {
+        "title": "Nowly를 만든 이유",
+        "body": "Discord는 플레이 중인 게임을 보여 주지만, 컴퓨터에서 하는 일의 상당수는 브라우저에서 일어나요. 드라마, 음악, 라이브 방송, 도구 같은 것들이죠. 이를 Discord에 보여 주는 도구는 이미 있었어요. 저희는 몇 분 만에 설정할 수 있고, 무엇을 하는지 설명하며, 여러분의 활동을 여러분의 것으로 다루는 도구를 원했어요. Nowly의 첫 안정 버전은 2026년 6월에 나왔어요."
+      },
+      {
+        "title": "만드는 사람",
+        "body": "Nowly는 프랑스의 작은 팀이 만드는 독립 프로젝트이고, 프레즌스는 커뮤니티 구성원들이 작성해요. 발행인은 프랑스의 개인 사업체인 K.Ring이며, 자세한 내용은 법적 고지에 있어요. 뒤에 투자자도 없고, 여러분의 데이터로 돈을 버는 사업도 없어요."
+      },
+      {
+        "title": "작동 방식",
+        "body": "브라우저 확장 프로그램이 사이트마다 하나씩 있는 프레즌스라는 작은 스크립트로 지원 페이지를 읽어요. 컴퓨터의 데스크톱 앱이 그 결과를 로컬 연결로 Discord 앱에 전달해요. 활동은 절대 Nowly 서버를 거치지 않아요. 서버는 웹사이트, 라이브러리, 계정 동기화 같은 선택 기능만 제공해요."
+      },
+      {
+        "title": "저희가 지키는 것",
+        "body": "기본값부터 개인정보 보호: 대부분의 프레즌스에서 둘러보기 활동은 꺼져 있고, 사용 통계는 직접 켜기 전까지 꺼져 있어요. 안전: 모든 공식 프레즌스는 검토와 서명을 거친 뒤 전달돼요. 정직함: 코드는 공개되어 있고, 개인정보 처리방침은 쉬운 말로 쓰여 있으며, 이 사이트의 가이드는 제품이 실제로 하는 일을 설명해요."
+      },
+      {
+        "title": "운영 자금",
+        "body": "확장 프로그램, 데스크톱 앱, 모든 프레즌스는 무료이고 광고가 없어요. 프로젝트를 자발적으로 돕고 싶다면 Ko-fi 또는 GitHub Sponsors에서 기부해 서버, CDN, 개발 비용을 지원할 수 있어요. 웹사이트의 가이드 글에는 명확히 표시된 광고가 일부 나올 수 있지만, 다운로드 페이지나 확장 프로그램에는 절대 나오지 않아요."
+      },
+      {
+        "title": "오픈 소스와 라이선스",
+        "body": "프레즌스는 MIT 라이선스의 오픈 소스라서 누구나 읽고, 고치고, 새로 만들 수 있어요. 확장 프로그램, 데스크톱 앱, 웹사이트는 Business Source License 1.1로 GitHub에 공개되어 있어요. 모든 줄을 읽고 검토할 수 있지만, OSI가 승인한 오픈 소스 라이선스가 아닌 소스 공개 라이선스예요."
+      }
+    ],
+    "facts": {
+      "title": "Nowly 한눈에 보기",
+      "presences": "라이브러리에 프레즌스 {count}개",
+      "languages": "웹사이트와 확장 프로그램 11개 언어 지원",
+      "systems": "Windows, macOS, Linux용 데스크톱 앱",
+      "browsers": "Chrome, Firefox, Edge, Brave, Opera용 확장 프로그램",
+      "launch": "2026년 6월 첫 안정 버전 출시",
+      "origin": "프랑스에서 제작"
+    },
+    "team": {
+      "title": "팀",
+      "community": "그리고 <link>라이브러리</link>의 각 페이지에 이름이 올라간 모든 프레즌스 제작자가 함께해요."
+    },
+    "links": {
+      "contact": "문의하기",
+      "roadmap": "로드맵",
+      "changelog": "릴리스 노트"
+    }
   }
 }

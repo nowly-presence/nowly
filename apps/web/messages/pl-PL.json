@@ -22,7 +22,8 @@
     "docs": "Dokumentacja",
     "library": "Biblioteka",
     "roadmap": "Mapa drogowa",
-    "open-menu": "Otwórz menu"
+    "open-menu": "Otwórz menu",
+    "guides": "Poradniki"
   },
   "theme": {
     "toggle": "Przełącz motyw kolorystyczny",
@@ -191,7 +192,6 @@
     "title": "Szybkie odpowiedzi na pytania",
     "description": "To, co najważniejsze o instalacji, danych i Discordzie. Dokumentacja i Discord idą dalej.",
     "faq": "Otwórz FAQ",
-    "discord": "Dołącz do Discorda",
     "items": [
       {
         "question": "Czym jest Nowly?",
@@ -205,7 +205,8 @@
         "question": "Jakie platformy są obsługiwane?",
         "answer": "Aktualna lista to biblioteka. Nowe obecności mogą być dodawane bez aktualizacji rozszerzenia, więc instaluj te, których faktycznie używasz."
       }
-    ]
+    ],
+    "more": "Wolisz instrukcję krok po kroku? Przeczytaj <guides>poradniki</guides> albo zapytaj na <discord>Discordzie</discord>."
   },
   "open-source": {
     "eyebrow": "Otwarte źródło",
@@ -221,7 +222,7 @@
     "cta": "Dołącz do Discorda",
     "members": "{count, plural, one {# członek} few {# członków} many {# członków} other {# członków}}",
     "online": "{count, number} online",
-    "support": "Nowly jest darmowe i open source. <link>Wesprzyj projekt</link>",
+    "support": "Nowly jest darmowe. <link>Wesprzyj projekt</link>",
     "items": [
       {
         "title": "Pomoc od prawdziwych ludzi",
@@ -278,7 +279,11 @@
     "consent": "Twoje dane",
     "cookies": "Pliki cookie",
     "legal-notice": "Nota prawna",
-    "faq": "Najczęściej zadawane pytania"
+    "faq": "Najczęściej zadawane pytania",
+    "guides": "Poradniki",
+    "company": "Nowly",
+    "about": "O nas",
+    "contact": "Kontakt"
   },
   "libraryPage": {
     "eyebrow": "Biblioteka",
@@ -374,7 +379,12 @@
     "stat-active": "{count} aktywnych",
     "community-title": "Potrzebujesz pomocy z {name}?",
     "community-description": "Zadaj pytanie lub podziel się pomysłem ze społecznością Nowly na Discordzie.",
-    "community-cta": "Dołącz do Discorda"
+    "community-cta": "Dołącz do Discorda",
+    "guide-eyebrow": "Poradnik",
+    "guide-updated": "Zaktualizowano {date}",
+    "guide-fallback": "Ten poradnik nie został jeszcze przetłumaczony, dlatego czytasz wersję angielską.",
+    "guide-open": "Czytaj poradnik",
+    "guide-close": "Ukryj poradnik"
   },
   "desktopPage": {
     "eyebrow": "Aplikacja desktopowa",
@@ -660,12 +670,11 @@
       "success": "Twoja wiadomość została wysłana.",
       "error": "Nie udało się wysłać wiadomości. Spróbuj ponownie."
     },
-    "title": "Potrzebujesz pomocy?",
-    "description": "Wybierz kanał odpowiadający Twojemu problemowi. Discord jest najszybszy do rozmowy. GitHub prowadzi publiczny ślad.",
-    "open": "Otwórz",
+    "title": "Pomoc i kontakt",
+    "description": "Na Discordzie najszybciej uzyskasz pomoc, GitHub prowadzi publiczny ślad, a formularz trafia prywatnie do zespołu.",
     "donate": {
       "title": "Wesprzyj Nowly",
-      "description": "Nowly jest darmowe, bez reklam i subskrypcji. Darowizny pokrywają koszty serwerów, CDN i czasu pracy, żeby tak zostało."
+      "description": "Rozszerzenie i aplikacja na komputer są darmowe, bez reklam i subskrypcji. Darowizny pokrywają koszty serwerów, CDN i czasu pracy, żeby tak zostało."
     },
     "sections": {
       "community": "Społeczność",
@@ -699,7 +708,10 @@
     "other": {
       "title": "Inna prośba",
       "description": "Otwórz puste zgłoszenie, jeśli Twój temat nie pasuje do żadnego z gotowych formularzy."
-    }
+    },
+    "email": "Wolisz e-mail? Napisz na <link>{email}</link>.",
+    "privacy": "Aby wyeksportować lub usunąć dane, które Nowly przechowuje dla Twojego urządzenia, przejdź do <link>Twoje dane</link>.",
+    "publisher": "Wydawcą Nowly jest K.Ring, jednoosobowa działalność gospodarcza zarejestrowana we Francji. Adres, numer rejestracyjny i dane hostingu znajdziesz w <link>nocie prawnej</link>."
   },
   "statusPage": {
     "eyebrow": "Status",
@@ -759,8 +771,8 @@
       "description": "Pobierz niepakowany build Chrome lub Firefox używany do testów."
     },
     "support": {
-      "title": "Wsparcie",
-      "description": "Uzyskaj pomoc dotyczącą Nowly, rozszerzenia lub obecności."
+      "title": "Pomoc i kontakt",
+      "description": "Uzyskaj pomoc z Nowly na Discordzie, zgłoś błąd lub niedziałającą obecność na GitHubie albo napisz prywatnie do zespołu."
     },
     "branding": {
       "title": "Branding",
@@ -789,6 +801,14 @@
     "account": {
       "title": "Twoje konto Nowly",
       "description": "Połączone urządzenia, twoje dane i logowanie."
+    },
+    "guides": {
+      "title": "Poradniki",
+      "description": "Poradniki o konfiguracji Nowly, naprawie Discord Rich Presence, kontroli prywatności i tworzeniu własnej integracji."
+    },
+    "about": {
+      "title": "O nas",
+      "description": "Kto tworzy Nowly, dlaczego istnieje, jak działa i jak jest finansowane."
     }
   },
   "roadmapPage": {
@@ -1073,7 +1093,7 @@
     "badge": "Pliki cookie",
     "title": "Polityka plików cookie",
     "description": "Pliki cookie i pamięć lokalna używane na nowly.me i docs.nowly.me.",
-    "last-updated": "Ostatnia aktualizacja: 5 października 2026.",
+    "last-updated": "Ostatnia aktualizacja: 9 października 2026.",
     "intro": "Ta strona opisuje pliki cookie i podobne technologie na <strong>nowly.me</strong> i <strong>docs.nowly.me</strong>. Ustawiamy plik cookie języka. Motyw i powiadomienie o cookies używają pamięci lokalnej. Google AdSense nie jest ładowany, chyba że reklamy są włączone.",
     "sections": [
       {
@@ -1082,7 +1102,7 @@
       },
       {
         "title": "Plik cookie locale",
-        "body": "<strong><code>locale</code></strong> (nowly.me i, osobno, docs.nowly.me)<br/>Cel: interfejs w języku francuskim, angielskim lub hiszpańskim.<br/>Czas trwania: 1 rok (<code>max-age</code> 31 536 000 sekund), odświeżany przy zmianie języka.<br/>Atrybuty: first-party, nie HttpOnly, SameSite=Lax. Wartość to kod języka (np. <code>fr-FR</code>). W połączeniu z Twoim adresem IP w dziennikach serwera może przyczynić się do identyfikacji odwiedzającego, nawet jeśli sam plik cookie to tylko kod języka."
+        "body": "<strong><code>locale</code></strong> (nowly.me i, osobno, docs.nowly.me)<br/>Cel: zapamiętanie języka interfejsu (dostępnych 11 języków).<br/>Czas trwania: 1 rok (<code>max-age</code> 31 536 000 sekund), odświeżany przy zmianie języka.<br/>Atrybuty: first-party, nie HttpOnly, SameSite=Lax. Wartość to kod języka (np. <code>fr-FR</code>). W połączeniu z Twoim adresem IP w dziennikach serwera może przyczynić się do identyfikacji odwiedzającego, nawet jeśli sam plik cookie to tylko kod języka."
       },
       {
         "title": "Pamięć lokalna",
@@ -1094,7 +1114,7 @@
       },
       {
         "title": "Reklamy",
-        "body": "Jeśli włączymy <strong>Google AdSense</strong> na stronie, Google może ustawiać pliki cookie lub podobne technologie zgodnie z własną polityką. Do tego czasu Nowly nie umieszcza plików cookie reklamowych."
+        "body": "<strong>Google AdSense</strong> jest wyłączony, dopóki go nie włączymy, a samo Nowly nie zapisuje żadnych reklamowych plików cookie. Po włączeniu reklamy pojawiają się tylko w artykułach poradnikowych, nigdy na stronach pobierania ani w rozszerzeniu. Zewnętrzni dostawcy, w tym Google, używają wtedy plików cookie, aby wyświetlać reklamy na podstawie twoich wcześniejszych wizyt na nowly.me lub innych stronach. Reklamowe pliki cookie Google pozwalają Google i jego partnerom wyświetlać reklamy na podstawie twoich wizyt na tej i innych stronach w internecie. W EOG, Wielkiej Brytanii i Szwajcarii komunikat o zgodzie Google najpierw pyta o twój wybór. Reklamy spersonalizowane możesz wyłączyć w <a href=\"https://adssettings.google.com\">ustawieniach reklam Google</a> lub na <a href=\"https://www.aboutads.info/choices\">aboutads.info</a>, a także przeczytać, <a href=\"https://policies.google.com/technologies/partner-sites\">jak Google wykorzystuje informacje ze stron korzystających z jego usług</a>."
       },
       {
         "title": "Jak je usunąć",
@@ -1212,5 +1232,85 @@
     "delete-success": "Twoje konto zostało usunięte.",
     "local-note": "Dane zapisane przez rozszerzenie na twoich urządzeniach pozostają bez zmian. Możesz je usunąć w ustawieniach rozszerzenia.",
     "action-error": "Coś poszło nie tak. Spróbuj ponownie."
+  },
+  "ads": {
+    "label": "Reklama"
+  },
+  "guidesPage": {
+    "eyebrow": "Poradniki",
+    "title": "Poradniki o Nowly i Discord Rich Presence",
+    "description": "Pomoc krok po kroku: konfiguracja Nowly, naprawa statusu, który się nie pokazuje, wybór tego, co widzą znajomi, i tworzenie własnej integracji.",
+    "categories": {
+      "start": "Pierwsze kroki",
+      "troubleshooting": "Rozwiązywanie problemów",
+      "privacy": "Prywatność i kontrola",
+      "discord": "Discord Rich Presence",
+      "developers": "Dla programistów"
+    },
+    "minutes": "{count, plural, one {# min czytania} few {# min czytania} many {# min czytania} other {# min czytania}}",
+    "updated": "Zaktualizowano {date}",
+    "toc": "Na tej stronie",
+    "related": "Czytaj dalej",
+    "back": "Wszystkie poradniki",
+    "fallback": "Ten poradnik nie został jeszcze przetłumaczony, dlatego czytasz wersję angielską.",
+    "cta": {
+      "title": "Chcesz spróbować?",
+      "description": "Zainstaluj darmowe rozszerzenie, dodaj aplikację na komputer i wybierz integrację z biblioteki.",
+      "library": "Przeglądaj bibliotekę"
+    },
+    "help": {
+      "title": "Nadal masz problem?",
+      "description": "Otwórz zgłoszenie na serwerze Discord Nowly, a zespół Ci pomoże.",
+      "cta": "Dołącz do Discorda"
+    }
+  },
+  "aboutPage": {
+    "eyebrow": "O nas",
+    "title": "O Nowly",
+    "description": "Nowly pokazuje na Discordzie, co oglądasz, czego słuchasz i co przeglądasz, nie wysyłając Twojej aktywności nikomu poza Discordem. Oto kto je tworzy, dlaczego i jak jest finansowane.",
+    "sections": [
+      {
+        "title": "Dlaczego powstało Nowly",
+        "body": "Discord pokazuje grę, w którą grasz, ale wiele z tego, co robimy na komputerze, dzieje się w przeglądarce: seriale, muzyka, transmisje, narzędzia. Narzędzia, które przenoszą to na Discorda, już istniały. Chcieliśmy takiego, które konfiguruje się w kilka minut, wyjaśnia, co robi, i traktuje Twoją aktywność jako Twoją. Pierwsza stabilna wersja Nowly ukazała się w czerwcu 2026 roku."
+      },
+      {
+        "title": "Kto je tworzy",
+        "body": "Nowly to niezależny projekt tworzony we Francji przez mały zespół, z integracjami pisanymi przez członków społeczności. Wydawcą jest K.Ring, francuska jednoosobowa działalność gospodarcza, a wszystkie szczegóły są w nocie prawnej. Nie stoją za nim inwestorzy ani żaden biznes oparty na Twoich danych."
+      },
+      {
+        "title": "Jak to działa",
+        "body": "Rozszerzenie przeglądarki odczytuje obsługiwane strony za pomocą małych skryptów zwanych integracjami (presences), po jednym na stronę. Aplikacja na komputerze przekazuje wynik do aplikacji Discord przez jej lokalne połączenie. Twoja aktywność nigdy nie przechodzi przez serwery Nowly: obsługują one tylko stronę, bibliotekę i opcjonalne funkcje, takie jak synchronizacja konta."
+      },
+      {
+        "title": "Nasze zasady",
+        "body": "Prywatność domyślnie: aktywność przeglądania jest wyłączona w większości integracji, a statystyki użycia są wyłączone, dopóki ich nie włączysz. Bezpieczeństwo: każda oficjalna integracja jest sprawdzana i podpisywana, zanim do Ciebie trafi. Uczciwość: kod jest publiczny, polityka prywatności jest napisana prostym językiem, a poradniki na tej stronie opisują, co produkt naprawdę robi."
+      },
+      {
+        "title": "Jak finansowane jest Nowly",
+        "body": "Rozszerzenie, aplikacja na komputer i wszystkie integracje są darmowe i bez reklam. Kto chce dobrowolnie wesprzeć projekt, może przekazać darowiznę przez Ko-fi lub GitHub Sponsors, pomagając pokryć koszty serwerów, CDN i rozwoju. Na stronie w artykułach poradnikowych może się też pojawić kilka wyraźnie oznaczonych reklam, nigdy na stronach pobierania ani w rozszerzeniu."
+      },
+      {
+        "title": "Open source i licencje",
+        "body": "Integracje są open source na licencji MIT, więc każdy może je czytać, poprawiać albo napisać własną. Rozszerzenie, aplikacja na komputer i strona są publiczne na GitHubie na licencji Business Source License 1.1: możesz przeczytać i sprawdzić każdą linię, ale to licencja typu source-available, a nie licencja open source zatwierdzona przez OSI."
+      }
+    ],
+    "facts": {
+      "title": "Nowly w skrócie",
+      "presences": "{count} integracji w bibliotece",
+      "languages": "Strona i rozszerzenie w 11 językach",
+      "systems": "Aplikacja na Windows, macOS i Linux",
+      "browsers": "Rozszerzenie dla Chrome, Firefoksa, Edge, Brave i Opery",
+      "launch": "Pierwsza stabilna wersja w czerwcu 2026",
+      "origin": "Stworzone we Francji"
+    },
+    "team": {
+      "title": "Zespół",
+      "community": "A także każdy autor integracji, wymieniony na jej stronie w <link>bibliotece</link>."
+    },
+    "links": {
+      "contact": "Kontakt",
+      "roadmap": "Plan rozwoju",
+      "changelog": "Informacje o wersjach"
+    }
   }
 }

@@ -22,7 +22,8 @@
     "docs": "Documentation",
     "library": "Library",
     "roadmap": "Roadmap",
-    "open-menu": "Open menu"
+    "open-menu": "Open menu",
+    "guides": "Guides"
   },
   "theme": {
     "toggle": "Toggle color theme",
@@ -191,7 +192,6 @@
     "title": "Questions, answered quickly",
     "description": "The essentials on install, data, and Discord. Docs and Discord go further.",
     "faq": "Open the FAQ",
-    "discord": "Join the Discord",
     "items": [
       {
         "question": "What is Nowly?",
@@ -205,7 +205,8 @@
         "question": "Which platforms are supported?",
         "answer": "The live list is the library. New presences can be added without updating the extension, so install the ones you actually use."
       }
-    ]
+    ],
+    "more": "Prefer a step-by-step walkthrough? Read the <guides>guides</guides> or ask on <discord>Discord</discord>."
   },
   "open-source": {
     "eyebrow": "Open source",
@@ -221,7 +222,7 @@
     "cta": "Join the Discord",
     "members": "{count, plural, one {# member} other {# members}}",
     "online": "{count, number} online",
-    "support": "Nowly is free and open source. <link>Support the project</link>",
+    "support": "Nowly is free to use. <link>Support the project</link>",
     "items": [
       {
         "title": "Help from real people",
@@ -278,7 +279,11 @@
     "consent": "Your data",
     "cookies": "Cookies",
     "legal-notice": "Legal notice",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "guides": "Guides",
+    "company": "Nowly",
+    "about": "About",
+    "contact": "Contact"
   },
   "libraryPage": {
     "eyebrow": "Library",
@@ -374,7 +379,12 @@
     "stat-active": "{count} active now",
     "community-title": "Need help with {name}?",
     "community-description": "Ask a question or share an idea with the Nowly community on Discord.",
-    "community-cta": "Join the Discord"
+    "community-cta": "Join the Discord",
+    "guide-eyebrow": "Guide",
+    "guide-updated": "Updated {date}",
+    "guide-fallback": "This guide hasn't been translated yet, so you're reading the English version.",
+    "guide-open": "Read the guide",
+    "guide-close": "Hide the guide"
   },
   "desktopPage": {
     "eyebrow": "Desktop app",
@@ -643,8 +653,8 @@
   },
   "supportPage": {
     "eyebrow": "Support",
-    "title": "Need help?",
-    "description": "Pick the channel that matches your issue. Discord is fastest for a conversation. GitHub keeps a public trail.",
+    "title": "Help and contact",
+    "description": "Discord is the fastest way to get help, GitHub keeps a public record, and the form reaches the team privately.",
     "contact": {
       "title": "Contact the team",
       "description": "Send us a private message and we will get back to you by email.",
@@ -662,10 +672,9 @@
       "success": "Your message was sent.",
       "error": "We could not send your message. Please try again."
     },
-    "open": "Open",
     "donate": {
       "title": "Support Nowly",
-      "description": "Nowly is free, with no ads or subscriptions. Donations pay for servers, the CDN and development time, so it can stay that way."
+      "description": "The extension and the desktop app are free, with no ads or subscriptions. Donations pay for servers, the CDN and development time, so they can stay that way."
     },
     "sections": {
       "community": "Community",
@@ -699,7 +708,10 @@
     "other": {
       "title": "Other request",
       "description": "Open a blank issue if your topic does not fit one of the guided forms."
-    }
+    },
+    "email": "Prefer email? Write to <link>{email}</link>.",
+    "privacy": "To export or delete the data Nowly stores for your device, go to <link>Your data</link>.",
+    "publisher": "Nowly is published by K.Ring, a sole proprietorship registered in France. The address, registration number and hosting details are in the <link>legal notice</link>."
   },
   "statusPage": {
     "eyebrow": "Status",
@@ -759,8 +771,8 @@
       "description": "Download the unpacked Chrome or Firefox build used for testing."
     },
     "support": {
-      "title": "Support",
-      "description": "Get help with Nowly, the extension, or a presence."
+      "title": "Help and contact",
+      "description": "Get help with Nowly on Discord, report a bug or a broken presence on GitHub, or write to the team privately."
     },
     "branding": {
       "title": "Branding",
@@ -789,6 +801,14 @@
     "account": {
       "title": "Your Nowly account",
       "description": "Linked devices, your data and your sign-in."
+    },
+    "guides": {
+      "title": "Guides",
+      "description": "Guides to set up Nowly, fix Discord Rich Presence, control your privacy and create your own presence."
+    },
+    "about": {
+      "title": "About",
+      "description": "Who makes Nowly, why it exists, how it works and how it is funded."
     }
   },
   "roadmapPage": {
@@ -1073,7 +1093,7 @@
     "badge": "Cookies",
     "title": "Cookie Policy",
     "description": "Cookies and local storage used on nowly.me and docs.nowly.me.",
-    "last-updated": "Last updated: 5 October 2026.",
+    "last-updated": "Last updated: 9 October 2026.",
     "intro": "This page describes cookies and similar technologies on <strong>nowly.me</strong> and <strong>docs.nowly.me</strong>. We set a language cookie. Theme and the cookie notice use local storage. Google AdSense is not loaded unless advertising is enabled.",
     "sections": [
       {
@@ -1082,7 +1102,7 @@
       },
       {
         "title": "locale cookie",
-        "body": "<strong><code>locale</code></strong> (nowly.me and, separately, docs.nowly.me)<br/>Purpose: French, English, or Spanish interface.<br/>Duration: 1 year (<code>max-age</code> 31,536,000 seconds), refreshed when you change language.<br/>Attributes: first-party, not HttpOnly, SameSite=Lax. The value is a locale code (for example <code>fr-FR</code>). Combined with your IP address in server logs it can contribute to identifying a visitor, even if the cookie itself is only a language code."
+        "body": "<strong><code>locale</code></strong> (nowly.me and, separately, docs.nowly.me)<br/>Purpose: remember the interface language (11 languages available).<br/>Duration: 1 year (<code>max-age</code> 31,536,000 seconds), refreshed when you change language.<br/>Attributes: first-party, not HttpOnly, SameSite=Lax. The value is a locale code (for example <code>fr-FR</code>). Combined with your IP address in server logs it can contribute to identifying a visitor, even if the cookie itself is only a language code."
       },
       {
         "title": "Local storage",
@@ -1094,7 +1114,7 @@
       },
       {
         "title": "Advertising",
-        "body": "If we enable <strong>Google AdSense</strong> on the website, Google may set cookies or similar technologies under its own policy. Until then, Nowly does not place advertising cookies."
+        "body": "<strong>Google AdSense</strong> is off until we enable it, and Nowly itself sets no advertising cookie. When it is on, ads appear only on guide articles, never on download pages or in the extension. Third-party vendors, including Google, then use cookies to serve ads based on your previous visits to nowly.me or other websites. Google's advertising cookies let it and its partners serve ads based on your visits to this site and other sites on the internet. In the EEA, the UK and Switzerland, Google's consent message asks for your choice first. You can turn off personalised ads in <a href=\"https://adssettings.google.com\">Google Ads Settings</a> or at <a href=\"https://www.aboutads.info/choices\">aboutads.info</a>, and read <a href=\"https://policies.google.com/technologies/partner-sites\">how Google uses information from sites that use its services</a>."
       },
       {
         "title": "How to delete them",
@@ -1296,5 +1316,85 @@
     "delete-success": "Your account was deleted.",
     "local-note": "Data stored by the extension on your devices is not affected. You can erase it from the extension settings.",
     "action-error": "Something went wrong. Please try again."
+  },
+  "ads": {
+    "label": "Advertisement"
+  },
+  "guidesPage": {
+    "eyebrow": "Guides",
+    "title": "Guides for Nowly and Discord Rich Presence",
+    "description": "Step-by-step help to set up Nowly, fix a status that won't show, choose what your friends see, and build your own presence.",
+    "categories": {
+      "start": "Getting started",
+      "troubleshooting": "Troubleshooting",
+      "privacy": "Privacy and control",
+      "discord": "Discord Rich Presence",
+      "developers": "For developers"
+    },
+    "minutes": "{count, plural, one {# min read} other {# min read}}",
+    "updated": "Updated {date}",
+    "toc": "On this page",
+    "related": "Keep reading",
+    "back": "All guides",
+    "fallback": "This guide hasn't been translated yet, so you're reading the English version.",
+    "cta": {
+      "title": "Ready to try it?",
+      "description": "Install the free extension, add the desktop app, and pick a presence from the library.",
+      "library": "Browse the library"
+    },
+    "help": {
+      "title": "Still stuck?",
+      "description": "Open a ticket on the Nowly Discord server and the team will help you.",
+      "cta": "Join the Discord"
+    }
+  },
+  "aboutPage": {
+    "eyebrow": "About",
+    "title": "About Nowly",
+    "description": "Nowly shows what you watch, listen to and browse on Discord, without sending your activity anywhere but Discord. Here is who makes it, why, and how it is funded.",
+    "sections": [
+      {
+        "title": "Why Nowly exists",
+        "body": "Discord shows the game you are playing, but a lot of what we do on a computer happens in a browser: series, music, live streams, tools. Tools that bring this to Discord already existed. We wanted one that takes minutes to set up, explains what it does, and treats your activity as yours. Nowly's first stable version came out in June 2026."
+      },
+      {
+        "title": "Who makes it",
+        "body": "Nowly is an independent project made in France by a small team, with presences written by people from its community. It is published by K.Ring, a French sole proprietorship, and the full details are in the legal notice. There is no investor behind it, and no business built on your data."
+      },
+      {
+        "title": "How it works",
+        "body": "A browser extension reads supported pages through small scripts called presences, one per website. A desktop app on your computer passes the result to the Discord app through its local connection. Your activity never goes through Nowly's servers: they only serve the website, the library and optional features such as account sync."
+      },
+      {
+        "title": "What we stand for",
+        "body": "Privacy by default: browsing activity is off on most presences, and usage statistics are off unless you turn them on. Safety: every official presence is reviewed and signed before it reaches you. Honesty: the code is public, the privacy policy is written in plain words, and the guides on this site describe what the product really does."
+      },
+      {
+        "title": "How Nowly is funded",
+        "body": "The extension, the desktop app and every presence are free and have no ads. Anyone who wants to support the project voluntarily can donate through Ko-fi or GitHub Sponsors, helping with server, CDN and development costs. On the website, a few clearly labelled ads may also appear on guide articles, never on download pages or in the extension."
+      },
+      {
+        "title": "Open source and licenses",
+        "body": "Presences are open source under the MIT license, so anyone can read, fix or write one. The extension, the desktop app and the website are public on GitHub under the Business Source License 1.1: you can read and audit every line, but it is a source-available license, not an OSI-approved open-source one."
+      }
+    ],
+    "facts": {
+      "title": "Nowly in brief",
+      "presences": "{count} presences in the library",
+      "languages": "Website and extension in 11 languages",
+      "systems": "Desktop app for Windows, macOS and Linux",
+      "browsers": "Extension for Chrome, Firefox, Edge, Brave and Opera",
+      "launch": "First stable release in June 2026",
+      "origin": "Made in France"
+    },
+    "team": {
+      "title": "The team",
+      "community": "Plus every presence author, credited on each page of the <link>library</link>."
+    },
+    "links": {
+      "contact": "Contact us",
+      "roadmap": "Roadmap",
+      "changelog": "Release notes"
+    }
   }
 }

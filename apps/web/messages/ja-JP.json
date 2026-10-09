@@ -22,7 +22,8 @@
     "docs": "ドキュメント",
     "library": "ライブラリ",
     "roadmap": "ロードマップ",
-    "open-menu": "メニューを開く"
+    "open-menu": "メニューを開く",
+    "guides": "ガイド"
   },
   "theme": {
     "toggle": "カラーテーマを切り替え",
@@ -191,7 +192,6 @@
     "title": "すぐわかる質問と回答",
     "description": "インストール、データ、Discordに関する要点。詳細はドキュメントとDiscordで。",
     "faq": "FAQを開く",
-    "discord": "Discordに参加",
     "items": [
       {
         "question": "Nowlyとは何ですか？",
@@ -205,7 +205,8 @@
         "question": "どのプラットフォームに対応していますか？",
         "answer": "最新のリストはライブラリにあります。拡張機能を更新せずに新しいプレゼンスを追加できるため、実際に使うものをインストールしてください。"
       }
-    ]
+    ],
+    "more": "手順を追って知りたいですか？ <guides>ガイド</guides>を読むか、<discord>Discord</discord> で質問してください。"
   },
   "open-source": {
     "eyebrow": "オープンソース",
@@ -221,7 +222,7 @@
     "cta": "Discordに参加",
     "members": "{count, plural, other {#人のメンバー}}",
     "online": "{count, number}人がオンライン",
-    "support": "Nowly は無料のオープンソースです。<link>プロジェクトを支援する</link>",
+    "support": "Nowly は無料です。<link>プロジェクトを支援する</link>",
     "items": [
       {
         "title": "人から直接サポート",
@@ -278,7 +279,11 @@
     "consent": "あなたのデータ",
     "cookies": "Cookie",
     "legal-notice": "法的表示",
-    "faq": "よくある質問"
+    "faq": "よくある質問",
+    "guides": "ガイド",
+    "company": "Nowly",
+    "about": "Nowly について",
+    "contact": "お問い合わせ"
   },
   "libraryPage": {
     "eyebrow": "ライブラリ",
@@ -374,7 +379,12 @@
     "stat-active": "{count} 人が利用中",
     "community-title": "{name}でお困りですか？",
     "community-description": "NowlyコミュニティにDiscordで質問したり、アイデアを共有したりできます。",
-    "community-cta": "Discordに参加"
+    "community-cta": "Discordに参加",
+    "guide-eyebrow": "ガイド",
+    "guide-updated": "{date} 更新",
+    "guide-fallback": "このガイドはまだ翻訳されていないため、英語版を表示しています。",
+    "guide-open": "ガイドを読む",
+    "guide-close": "ガイドを閉じる"
   },
   "desktopPage": {
     "eyebrow": "デスクトップアプリ",
@@ -660,12 +670,11 @@
       "success": "メッセージを送信しました。",
       "error": "メッセージを送信できませんでした。もう一度お試しください。"
     },
-    "title": "お困りですか？",
-    "description": "問題に合ったチャンネルを選んでください。会話にはDiscordが最速です。GitHubは公開の記録を残します。",
-    "open": "開く",
+    "title": "ヘルプとお問い合わせ",
+    "description": "ヘルプを得るなら Discord が最速です。GitHub は公開の記録を残し、フォームはチームに非公開で届きます。",
     "donate": {
       "title": "Nowly を支援",
-      "description": "Nowly は広告もサブスクもない無料のサービスです。寄付はサーバー、CDN、開発の時間に使われ、この形を続けるための支えになります。"
+      "description": "拡張機能とデスクトップアプリは広告もサブスクもなく無料です。寄付はサーバー、CDN、開発の時間に使われ、この形を続けるための支えになります。"
     },
     "sections": {
       "community": "コミュニティ",
@@ -699,7 +708,10 @@
     "other": {
       "title": "その他のリクエスト",
       "description": "内容がどのフォームにも当てはまらない場合は、空のissueを開いてください。"
-    }
+    },
+    "email": "メールをご希望ですか？ <link>{email}</link> までお送りください。",
+    "privacy": "Nowly がこのデバイスについて保存しているデータをエクスポートまたは削除するには、<link>あなたのデータ</link>をご利用ください。",
+    "publisher": "Nowly はフランスで登録された個人事業 K.Ring が発行しています。住所、登録番号、ホスティング情報は<link>法的表示</link>に記載しています。"
   },
   "statusPage": {
     "eyebrow": "ステータス",
@@ -759,8 +771,8 @@
       "description": "テスト用のパッケージ化されていないChromeまたはFirefoxビルドをダウンロード。"
     },
     "support": {
-      "title": "サポート",
-      "description": "Nowly、拡張機能、プレゼンスに関するヘルプを取得。"
+      "title": "ヘルプとお問い合わせ",
+      "description": "Discord で Nowly のヘルプを受けたり、GitHub でバグや動かないプレゼンスを報告したり、チームに非公開で連絡したりできます。"
     },
     "branding": {
       "title": "ブランディング",
@@ -789,6 +801,14 @@
     "account": {
       "title": "Nowlyアカウント",
       "description": "連携済みのデバイス、データ、ログイン。"
+    },
+    "guides": {
+      "title": "ガイド",
+      "description": "Nowly の設定、Discord Rich Presence のトラブル解決、プライバシーの管理、プレゼンスの作り方を解説するガイドです。"
+    },
+    "about": {
+      "title": "Nowly について",
+      "description": "Nowly を作っている人、存在する理由、仕組み、資金について。"
     }
   },
   "roadmapPage": {
@@ -1073,7 +1093,7 @@
     "badge": "Cookie",
     "title": "Cookieポリシー",
     "description": "nowly.meおよびdocs.nowly.meで使用されるCookieとローカルストレージ。",
-    "last-updated": "最終更新日：2026年10月5日。",
+    "last-updated": "最終更新日：2026年10月9日。",
     "intro": "このページは、<strong>nowly.me</strong>および<strong>docs.nowly.me</strong>上のCookieおよび類似技術について説明します。当社は言語Cookieを設定します。テーマとCookie通知はローカルストレージを使用します。Google AdSenseは、広告が有効化されない限り読み込まれません。",
     "sections": [
       {
@@ -1082,7 +1102,7 @@
       },
       {
         "title": "localeクッキー",
-        "body": "<strong><code>locale</code></strong>（nowly.meおよび個別にdocs.nowly.me）<br/>目的：フランス語、英語、またはスペイン語のインターフェース。<br/>有効期間：1年（<code>max-age</code> 31,536,000秒）、言語変更のたびに更新。<br/>属性：ファーストパーティ、HttpOnlyではない、SameSite=Lax。値はロケールコード（例：<code>fr-FR</code>）です。サーバーログ内のIPアドレスと組み合わせると、Cookie自体は単なる言語コードであっても、訪問者の特定に寄与する可能性があります。"
+        "body": "<strong><code>locale</code></strong>（nowly.meおよび個別にdocs.nowly.me）<br/>目的：インターフェースの言語を記憶すること（11 言語に対応）。<br/>有効期間：1年（<code>max-age</code> 31,536,000秒）、言語変更のたびに更新。<br/>属性：ファーストパーティ、HttpOnlyではない、SameSite=Lax。値はロケールコード（例：<code>fr-FR</code>）です。サーバーログ内のIPアドレスと組み合わせると、Cookie自体は単なる言語コードであっても、訪問者の特定に寄与する可能性があります。"
       },
       {
         "title": "ローカルストレージ",
@@ -1094,7 +1114,7 @@
       },
       {
         "title": "広告",
-        "body": "ウェブサイトで<strong>Google AdSense</strong>を有効にした場合、Googleは独自のポリシーに基づきCookieまたは類似の技術を設定する場合があります。それまでは、Nowlyは広告Cookieを設置しません。"
+        "body": "<strong>Google AdSense</strong> は私たちが有効にするまでオフになっており、Nowly 自身が広告 Cookie を設定することはありません。有効にした場合、広告はガイド記事にのみ表示され、ダウンロードページや拡張機能には表示されません。その際、Google を含む第三者配信事業者が Cookie を使用して、nowly.me や他のウェブサイトへの過去のアクセス情報に基づいて広告を配信します。Google が広告 Cookie を使用することにより、このサイトやインターネット上の他のサイトへのアクセス情報に基づいて、Google やそのパートナーが適切な広告を表示できます。EEA、英国、スイスでは、Google の同意メッセージが最初にあなたの選択を確認します。パーソナライズド広告は <a href=\"https://adssettings.google.com\">Google の広告設定</a>または <a href=\"https://www.aboutads.info/choices\">aboutads.info</a> で無効にできます。<a href=\"https://policies.google.com/technologies/partner-sites\">Google によるデータの使用方法</a>もご覧ください。"
       },
       {
         "title": "削除方法",
@@ -1212,5 +1232,85 @@
     "delete-success": "アカウントを削除しました。",
     "local-note": "拡張機能がデバイスに保存しているデータには影響しません。拡張機能の設定から消去できます。",
     "action-error": "問題が発生しました。もう一度お試しください。"
+  },
+  "ads": {
+    "label": "広告"
+  },
+  "guidesPage": {
+    "eyebrow": "ガイド",
+    "title": "Nowly と Discord Rich Presence のガイド",
+    "description": "Nowly の設定、表示されないステータスの直し方、友だちに見せる内容の選び方、プレゼンスの作り方を順を追って説明します。",
+    "categories": {
+      "start": "はじめに",
+      "troubleshooting": "トラブルシューティング",
+      "privacy": "プライバシーと管理",
+      "discord": "Discord Rich Presence",
+      "developers": "開発者向け"
+    },
+    "minutes": "{count, plural, other {# 分で読めます}}",
+    "updated": "{date} 更新",
+    "toc": "このページの内容",
+    "related": "関連ガイド",
+    "back": "ガイド一覧",
+    "fallback": "このガイドはまだ翻訳されていないため、英語版を表示しています。",
+    "cta": {
+      "title": "試してみませんか？",
+      "description": "無料の拡張機能とデスクトップアプリを入れて、ライブラリからプレゼンスを選びましょう。",
+      "library": "ライブラリを見る"
+    },
+    "help": {
+      "title": "まだ解決しませんか？",
+      "description": "Nowly の Discord サーバーでチケットを作成すれば、チームがお手伝いします。",
+      "cta": "Discord に参加"
+    }
+  },
+  "aboutPage": {
+    "eyebrow": "Nowly について",
+    "title": "Nowly について",
+    "description": "Nowly は、見ているもの、聴いているもの、閲覧しているものを Discord に表示します。アクティビティを Discord 以外に送ることはありません。誰が作っているのか、なぜ作ったのか、どう運営しているのかを紹介します。",
+    "sections": [
+      {
+        "title": "Nowly が生まれた理由",
+        "body": "Discord はプレイ中のゲームを表示しますが、パソコンでしていることの多くはブラウザの中で起きています。ドラマ、音楽、配信、ツールなどです。それを Discord に表示するツールはすでにありましたが、私たちは数分で設定でき、何をしているかを説明し、あなたのアクティビティをあなたのものとして扱うツールを作りたいと考えました。Nowly の最初の安定版は 2026 年 6 月に公開されました。"
+      },
+      {
+        "title": "作っている人",
+        "body": "Nowly はフランスの小さなチームが作る独立したプロジェクトで、プレゼンスはコミュニティのメンバーが書いています。発行者はフランスの個人事業である K.Ring で、詳細は法的表示に記載しています。投資家はおらず、あなたのデータで稼ぐビジネスもありません。"
+      },
+      {
+        "title": "仕組み",
+        "body": "ブラウザ拡張機能が、サイトごとに用意された「プレゼンス」という小さなスクリプトで対応ページを読み取ります。パソコン上のデスクトップアプリが、その結果をローカル接続で Discord アプリに渡します。アクティビティが Nowly のサーバーを通ることはありません。サーバーが提供するのは、ウェブサイト、ライブラリ、アカウント同期などの任意機能だけです。"
+      },
+      {
+        "title": "大切にしていること",
+        "body": "初期設定でプライバシーを守ること。ほとんどのプレゼンスでブラウジング中の表示はオフで、利用統計もあなたがオンにするまでオフです。安全性。公式プレゼンスはすべて確認と署名を経てから届きます。誠実さ。コードは公開され、プライバシーポリシーはわかりやすい言葉で書かれ、このサイトのガイドは製品が実際に行うことを説明しています。"
+      },
+      {
+        "title": "運営資金",
+        "body": "拡張機能、デスクトップアプリ、すべてのプレゼンスは無料で、広告もありません。プロジェクトを任意で支援したい方は、Ko-fi または GitHub Sponsors から寄付し、サーバーや CDN、開発にかかる費用を支えることができます。ウェブサイトでは、ガイド記事に明確に表示された広告がいくつか掲載されることがありますが、ダウンロードページや拡張機能に表示されることはありません。"
+      },
+      {
+        "title": "オープンソースとライセンス",
+        "body": "プレゼンスは MIT ライセンスのオープンソースなので、誰でも読んだり、修正したり、新しく書いたりできます。拡張機能、デスクトップアプリ、ウェブサイトは Business Source License 1.1 で GitHub に公開されています。すべての行を読んで確認できますが、これはソースアベイラブルのライセンスで、OSI が承認したオープンソースライセンスではありません。"
+      }
+    ],
+    "facts": {
+      "title": "Nowly の概要",
+      "presences": "ライブラリに {count} 件のプレゼンス",
+      "languages": "ウェブサイトと拡張機能は 11 言語に対応",
+      "systems": "Windows、macOS、Linux 用デスクトップアプリ",
+      "browsers": "Chrome、Firefox、Edge、Brave、Opera 用拡張機能",
+      "launch": "最初の安定版は 2026 年 6 月",
+      "origin": "フランス製"
+    },
+    "team": {
+      "title": "チーム",
+      "community": "さらに、<link>ライブラリ</link>の各ページに名前が載っているすべてのプレゼンス作者がいます。"
+    },
+    "links": {
+      "contact": "お問い合わせ",
+      "roadmap": "ロードマップ",
+      "changelog": "リリースノート"
+    }
   }
 }

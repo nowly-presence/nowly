@@ -22,7 +22,8 @@
     "docs": "Dokumentasi",
     "library": "Perpustakaan",
     "roadmap": "Pelan hala tuju",
-    "open-menu": "Buka menu"
+    "open-menu": "Buka menu",
+    "guides": "Panduan"
   },
   "theme": {
     "toggle": "Tukar tema warna",
@@ -191,7 +192,6 @@
     "title": "Soalan, dijawab dengan cepat",
     "description": "Perkara asas tentang pemasangan, data dan Discord. Dokumentasi dan Discord pergi lebih jauh.",
     "faq": "Buka FAQ",
-    "discord": "Sertai Discord",
     "items": [
       {
         "question": "Apakah Nowly?",
@@ -205,7 +205,8 @@
         "question": "Platform apakah yang disokong?",
         "answer": "Senarai terkini ialah perpustakaan. Kehadiran baharu boleh ditambah tanpa mengemas kini sambungan, jadi pasang yang anda benar-benar gunakan."
       }
-    ]
+    ],
+    "more": "Lebih suka panduan langkah demi langkah? Baca <guides>panduan</guides> atau tanya di <discord>Discord</discord>."
   },
   "open-source": {
     "eyebrow": "Sumber terbuka",
@@ -221,7 +222,7 @@
     "cta": "Sertai Discord",
     "members": "{count, plural, other {# ahli}}",
     "online": "{count, number} dalam talian",
-    "support": "Nowly percuma dan sumber terbuka. <link>Sokong projek ini</link>",
+    "support": "Nowly percuma. <link>Sokong projek ini</link>",
     "items": [
       {
         "title": "Bantuan daripada insan sebenar",
@@ -278,7 +279,11 @@
     "consent": "Data anda",
     "cookies": "Kuki",
     "legal-notice": "Notis undang-undang",
-    "faq": "Soalan lazim"
+    "faq": "Soalan lazim",
+    "guides": "Panduan",
+    "company": "Nowly",
+    "about": "Perihal",
+    "contact": "Hubungi"
   },
   "libraryPage": {
     "eyebrow": "Perpustakaan",
@@ -374,7 +379,12 @@
     "stat-active": "{count} aktif",
     "community-title": "Perlukan bantuan dengan {name}?",
     "community-description": "Tanya soalan atau kongsi idea dengan komuniti Nowly di Discord.",
-    "community-cta": "Sertai Discord"
+    "community-cta": "Sertai Discord",
+    "guide-eyebrow": "Panduan",
+    "guide-updated": "Dikemas kini pada {date}",
+    "guide-fallback": "Panduan ini belum diterjemahkan, jadi anda membaca versi bahasa Inggeris.",
+    "guide-open": "Baca panduan",
+    "guide-close": "Sembunyikan panduan"
   },
   "desktopPage": {
     "eyebrow": "Aplikasi desktop",
@@ -660,12 +670,11 @@
       "success": "Mesej anda telah dihantar.",
       "error": "Mesej anda tidak dapat dihantar. Sila cuba lagi."
     },
-    "title": "Perlukan bantuan?",
-    "description": "Pilih saluran yang sepadan dengan isu anda. Discord adalah paling pantas untuk perbualan. GitHub menyimpan rekod awam.",
-    "open": "Buka",
+    "title": "Bantuan dan hubungan",
+    "description": "Discord ialah cara paling pantas untuk mendapatkan bantuan, GitHub menyimpan rekod awam, dan borang ini sampai kepada pasukan secara peribadi.",
     "donate": {
       "title": "Sokong Nowly",
-      "description": "Nowly percuma, tanpa iklan atau langganan. Derma membiayai pelayan, CDN dan masa pembangunan supaya ia kekal begitu."
+      "description": "Sambungan dan aplikasi desktop adalah percuma, tanpa iklan atau langganan. Derma membiayai pelayan, CDN dan masa pembangunan supaya ia kekal begitu."
     },
     "sections": {
       "community": "Komuniti",
@@ -699,7 +708,10 @@
     "other": {
       "title": "Permintaan lain",
       "description": "Buka isu kosong jika topik anda tidak sepadan dengan mana-mana borang berpandu."
-    }
+    },
+    "email": "Lebih suka e-mel? Tulis kepada <link>{email}</link>.",
+    "privacy": "Untuk mengeksport atau memadam data yang disimpan oleh Nowly untuk peranti anda, pergi ke <link>Data anda</link>.",
+    "publisher": "Nowly diterbitkan oleh K.Ring, sebuah perniagaan milikan tunggal yang berdaftar di Perancis. Alamat, nombor pendaftaran dan butiran pengehosan ada dalam <link>notis undang-undang</link>."
   },
   "statusPage": {
     "eyebrow": "Status",
@@ -759,8 +771,8 @@
       "description": "Muat turun pembinaan Chrome atau Firefox yang tidak dibungkus digunakan untuk ujian."
     },
     "support": {
-      "title": "Sokongan",
-      "description": "Dapatkan bantuan dengan Nowly, sambungan, atau kehadiran."
+      "title": "Bantuan dan hubungan",
+      "description": "Dapatkan bantuan dengan Nowly di Discord, laporkan pepijat atau kehadiran yang rosak di GitHub, atau tulis kepada pasukan secara peribadi."
     },
     "branding": {
       "title": "Penjenamaan",
@@ -789,6 +801,14 @@
     "account": {
       "title": "Akaun Nowly anda",
       "description": "Peranti yang dipautkan, data anda dan log masuk anda."
+    },
+    "guides": {
+      "title": "Panduan",
+      "description": "Panduan untuk menyediakan Nowly, membaiki Discord Rich Presence, mengawal privasi anda dan mencipta presence anda sendiri."
+    },
+    "about": {
+      "title": "Perihal",
+      "description": "Siapa yang membina Nowly, mengapa ia wujud, cara ia berfungsi dan cara ia dibiayai."
     }
   },
   "roadmapPage": {
@@ -1073,7 +1093,7 @@
     "badge": "Kuki",
     "title": "Dasar Kuki",
     "description": "Kuki dan storan setempat yang digunakan pada nowly.me dan docs.nowly.me.",
-    "last-updated": "Kemas kini terakhir: 5 Oktober 2026.",
+    "last-updated": "Kemas kini terakhir: 9 Oktober 2026.",
     "intro": "Halaman ini menerangkan kuki dan teknologi serupa pada <strong>nowly.me</strong> dan <strong>docs.nowly.me</strong>. Kami menetapkan kuki bahasa. Tema dan notis kuki menggunakan storan setempat. Google AdSense tidak dimuatkan melainkan pengiklanan diaktifkan.",
     "sections": [
       {
@@ -1082,7 +1102,7 @@
       },
       {
         "title": "Kuki locale",
-        "body": "<strong><code>locale</code></strong> (nowly.me dan, secara berasingan, docs.nowly.me)<br/>Tujuan: antara muka Perancis, Inggeris, atau Sepanyol.<br/>Tempoh: 1 tahun (<code>max-age</code> 31,536,000 saat), disegarkan semula apabila anda menukar bahasa.<br/>Atribut: pihak pertama, bukan HttpOnly, SameSite=Lax. Nilai ialah kod lokal (contohnya <code>fr-FR</code>). Digabungkan dengan alamat IP anda dalam log pelayan, ia boleh menyumbang kepada mengenal pasti pelawat, walaupun kuki itu sendiri hanya kod bahasa."
+        "body": "<strong><code>locale</code></strong> (nowly.me dan, secara berasingan, docs.nowly.me)<br/>Tujuan: mengingati bahasa antara muka (11 bahasa tersedia).<br/>Tempoh: 1 tahun (<code>max-age</code> 31,536,000 saat), disegarkan semula apabila anda menukar bahasa.<br/>Atribut: pihak pertama, bukan HttpOnly, SameSite=Lax. Nilai ialah kod lokal (contohnya <code>fr-FR</code>). Digabungkan dengan alamat IP anda dalam log pelayan, ia boleh menyumbang kepada mengenal pasti pelawat, walaupun kuki itu sendiri hanya kod bahasa."
       },
       {
         "title": "Storan setempat",
@@ -1094,7 +1114,7 @@
       },
       {
         "title": "Pengiklanan",
-        "body": "Jika kami mengaktifkan <strong>Google AdSense</strong> pada laman web, Google mungkin menetapkan kuki atau teknologi serupa di bawah dasarnya sendiri. Sehingga itu, Nowly tidak meletakkan kuki pengiklanan."
+        "body": "<strong>Google AdSense</strong> dimatikan sehingga kami mengaktifkannya, dan Nowly sendiri tidak menetapkan sebarang kuki pengiklanan. Apabila diaktifkan, iklan hanya muncul pada artikel panduan, tidak sekali-kali pada halaman muat turun atau dalam sambungan. Vendor pihak ketiga, termasuk Google, kemudian menggunakan kuki untuk menyiarkan iklan berdasarkan lawatan anda sebelum ini ke nowly.me atau laman web lain. Kuki pengiklanan Google membolehkan Google dan rakan kongsinya menyiarkan iklan berdasarkan lawatan anda ke laman ini dan laman lain di internet. Di EEA, UK dan Switzerland, mesej persetujuan Google akan meminta pilihan anda terlebih dahulu. Anda boleh mematikan iklan diperibadikan dalam <a href=\"https://adssettings.google.com\">Tetapan Iklan Google</a> atau di <a href=\"https://www.aboutads.info/choices\">aboutads.info</a>, dan membaca <a href=\"https://policies.google.com/technologies/partner-sites\">cara Google menggunakan maklumat daripada laman yang menggunakan perkhidmatannya</a>."
       },
       {
         "title": "Cara memadamkannya",
@@ -1212,5 +1232,85 @@
     "delete-success": "Akaun anda telah dipadam.",
     "local-note": "Data yang disimpan oleh sambungan pada peranti anda tidak terjejas. Anda boleh memadamnya daripada tetapan sambungan.",
     "action-error": "Ada masalah. Sila cuba lagi."
+  },
+  "ads": {
+    "label": "Iklan"
+  },
+  "guidesPage": {
+    "eyebrow": "Panduan",
+    "title": "Panduan Nowly dan Discord Rich Presence",
+    "description": "Bantuan langkah demi langkah untuk menyediakan Nowly, membaiki status yang tidak muncul, memilih apa yang dilihat rakan anda dan membina presence anda sendiri.",
+    "categories": {
+      "start": "Bermula",
+      "troubleshooting": "Penyelesaian masalah",
+      "privacy": "Privasi dan kawalan",
+      "discord": "Discord Rich Presence",
+      "developers": "Untuk pembangun"
+    },
+    "minutes": "{count, plural, other {# min bacaan}}",
+    "updated": "Dikemas kini pada {date}",
+    "toc": "Dalam halaman ini",
+    "related": "Teruskan membaca",
+    "back": "Semua panduan",
+    "fallback": "Panduan ini belum diterjemahkan, jadi anda membaca versi bahasa Inggeris.",
+    "cta": {
+      "title": "Sedia untuk mencuba?",
+      "description": "Pasang sambungan percuma, tambah aplikasi desktop dan pilih presence daripada pustaka.",
+      "library": "Lihat pustaka"
+    },
+    "help": {
+      "title": "Masih buntu?",
+      "description": "Buka tiket di pelayan Discord Nowly dan pasukan kami akan membantu.",
+      "cta": "Sertai Discord"
+    }
+  },
+  "aboutPage": {
+    "eyebrow": "Perihal",
+    "title": "Perihal Nowly",
+    "description": "Nowly menunjukkan apa yang anda tonton, dengar dan layari di Discord, tanpa menghantar aktiviti anda ke mana-mana selain Discord. Inilah siapa yang membinanya, mengapa, dan cara ia dibiayai.",
+    "sections": [
+      {
+        "title": "Mengapa Nowly wujud",
+        "body": "Discord menunjukkan permainan yang anda mainkan, tetapi banyak perkara yang kita lakukan di komputer berlaku dalam pelayar: siri, muzik, siaran langsung, alatan. Alat yang membawa semua ini ke Discord sudah wujud. Kami mahukan satu yang boleh disediakan dalam beberapa minit, menerangkan apa yang dilakukannya, dan menganggap aktiviti anda sebagai milik anda. Versi stabil pertama Nowly dikeluarkan pada Jun 2026."
+      },
+      {
+        "title": "Siapa yang membinanya",
+        "body": "Nowly ialah projek bebas yang dibina di Perancis oleh pasukan kecil, dengan presence yang ditulis oleh ahli komunitinya. Ia diterbitkan oleh K.Ring, sebuah perniagaan milikan tunggal di Perancis, dan butiran penuhnya ada dalam notis undang-undang. Tiada pelabur di belakangnya, dan tiada perniagaan yang bergantung pada data anda."
+      },
+      {
+        "title": "Cara ia berfungsi",
+        "body": "Sambungan pelayar membaca halaman yang disokong melalui skrip kecil yang dipanggil presence, satu bagi setiap laman. Aplikasi desktop di komputer anda menghantar hasilnya kepada aplikasi Discord melalui sambungan setempatnya. Aktiviti anda tidak pernah melalui pelayan Nowly: pelayan hanya menyediakan laman web, pustaka dan ciri pilihan seperti penyegerakan akaun."
+      },
+      {
+        "title": "Prinsip kami",
+        "body": "Privasi secara lalai: aktiviti melayari dimatikan pada kebanyakan presence, dan statistik penggunaan dimatikan sehingga anda menghidupkannya. Keselamatan: setiap presence rasmi disemak dan ditandatangani sebelum sampai kepada anda. Kejujuran: kod adalah awam, dasar privasi ditulis dengan bahasa mudah, dan panduan di laman ini menerangkan apa yang benar-benar dilakukan oleh produk."
+      },
+      {
+        "title": "Cara Nowly dibiayai",
+        "body": "Sambungan, aplikasi desktop dan setiap presence adalah percuma dan tanpa iklan. Sesiapa yang ingin menyokong projek ini secara sukarela boleh menderma melalui Ko-fi atau GitHub Sponsors untuk membantu menampung kos pelayan, CDN dan pembangunan. Di laman web, beberapa iklan yang dilabel dengan jelas juga mungkin muncul pada artikel panduan, tetapi tidak sekali-kali pada halaman muat turun atau dalam sambungan."
+      },
+      {
+        "title": "Sumber terbuka dan lesen",
+        "body": "Presence ialah sumber terbuka di bawah lesen MIT, jadi sesiapa sahaja boleh membaca, membaiki atau menulisnya. Sambungan, aplikasi desktop dan laman web adalah awam di GitHub di bawah Business Source License 1.1: anda boleh membaca dan mengaudit setiap baris, tetapi ia ialah lesen sumber tersedia, bukan lesen sumber terbuka yang diluluskan oleh OSI."
+      }
+    ],
+    "facts": {
+      "title": "Nowly secara ringkas",
+      "presences": "{count} presence dalam pustaka",
+      "languages": "Laman web dan sambungan dalam 11 bahasa",
+      "systems": "Aplikasi desktop untuk Windows, macOS dan Linux",
+      "browsers": "Sambungan untuk Chrome, Firefox, Edge, Brave dan Opera",
+      "launch": "Versi stabil pertama pada Jun 2026",
+      "origin": "Dibina di Perancis"
+    },
+    "team": {
+      "title": "Pasukan",
+      "community": "Serta setiap pengarang presence, yang dikreditkan pada halamannya dalam <link>pustaka</link>."
+    },
+    "links": {
+      "contact": "Hubungi kami",
+      "roadmap": "Pelan hala tuju",
+      "changelog": "Nota keluaran"
+    }
   }
 }

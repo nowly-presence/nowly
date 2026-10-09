@@ -22,7 +22,8 @@
     "docs": "Dokumentation",
     "library": "Bibliothek",
     "roadmap": "Roadmap",
-    "open-menu": "Menü öffnen"
+    "open-menu": "Menü öffnen",
+    "guides": "Anleitungen"
   },
   "theme": {
     "toggle": "Farbthema wechseln",
@@ -191,7 +192,6 @@
     "title": "Fragen, schnell beantwortet",
     "description": "Das Wichtigste zu Installation, Daten und Discord. Docs und Discord gehen weiter ins Detail.",
     "faq": "FAQ öffnen",
-    "discord": "Discord beitreten",
     "items": [
       {
         "question": "Was ist Nowly?",
@@ -205,7 +205,8 @@
         "question": "Welche Plattformen werden unterstützt?",
         "answer": "Die aktuelle Liste ist die Bibliothek. Neue Präsenzen können hinzugefügt werden, ohne die Erweiterung zu aktualisieren, also installiere die, die du wirklich nutzt."
       }
-    ]
+    ],
+    "more": "Lieber Schritt für Schritt? Lies die <guides>Anleitungen</guides> oder frag auf <discord>Discord</discord>."
   },
   "open-source": {
     "eyebrow": "Open Source",
@@ -221,7 +222,7 @@
     "cta": "Discord beitreten",
     "members": "{count, plural, one {# Mitglied} other {# Mitglieder}}",
     "online": "{count, number} online",
-    "support": "Nowly ist kostenlos und Open Source. <link>Projekt unterstützen</link>",
+    "support": "Nowly ist kostenlos. <link>Projekt unterstützen</link>",
     "items": [
       {
         "title": "Hilfe von echten Menschen",
@@ -278,7 +279,11 @@
     "consent": "Deine Daten",
     "cookies": "Cookies",
     "legal-notice": "Impressum",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "guides": "Anleitungen",
+    "company": "Nowly",
+    "about": "Über uns",
+    "contact": "Kontakt"
   },
   "libraryPage": {
     "eyebrow": "Bibliothek",
@@ -374,7 +379,12 @@
     "stat-active": "{count} aktiv",
     "community-title": "Hilfe bei {name} nötig?",
     "community-description": "Stelle eine Frage oder teile eine Idee mit der Nowly-Community auf Discord.",
-    "community-cta": "Discord beitreten"
+    "community-cta": "Discord beitreten",
+    "guide-eyebrow": "Anleitung",
+    "guide-updated": "Aktualisiert am {date}",
+    "guide-fallback": "Diese Anleitung ist noch nicht übersetzt, deshalb liest du die englische Version.",
+    "guide-open": "Anleitung lesen",
+    "guide-close": "Anleitung ausblenden"
   },
   "desktopPage": {
     "eyebrow": "Desktop-App",
@@ -660,12 +670,11 @@
       "success": "Ihre Nachricht wurde gesendet.",
       "error": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
     },
-    "title": "Brauchst du Hilfe?",
-    "description": "Wähle den Kanal, der zu deinem Anliegen passt. Discord ist am schnellsten für ein Gespräch. GitHub behält eine öffentliche Spur.",
-    "open": "Öffnen",
+    "title": "Hilfe und Kontakt",
+    "description": "Auf Discord bekommst du am schnellsten Hilfe, GitHub behält eine öffentliche Spur, und über das Formular schreibst du dem Team privat.",
     "donate": {
       "title": "Nowly unterstützen",
-      "description": "Nowly ist kostenlos, ohne Werbung und ohne Abo. Spenden bezahlen Server, CDN und Entwicklungszeit, damit das so bleibt."
+      "description": "Erweiterung und Desktop-App sind kostenlos, ohne Werbung und ohne Abo. Spenden bezahlen Server, CDN und Entwicklungszeit, damit das so bleibt."
     },
     "sections": {
       "community": "Community",
@@ -699,7 +708,10 @@
     "other": {
       "title": "Andere Anfrage",
       "description": "Öffne ein leeres Issue, wenn dein Thema zu keinem der geführten Formulare passt."
-    }
+    },
+    "email": "Lieber per E-Mail? Schreib an <link>{email}</link>.",
+    "privacy": "Um die Daten zu exportieren oder zu löschen, die Nowly für dein Gerät speichert, geh zu <link>Deine Daten</link>.",
+    "publisher": "Nowly wird von K.Ring herausgegeben, einem in Frankreich eingetragenen Einzelunternehmen. Adresse, Registernummer und Hosting-Angaben stehen im <link>Impressum</link>."
   },
   "statusPage": {
     "eyebrow": "Status",
@@ -759,8 +771,8 @@
       "description": "Lade den ungepackten Chrome- oder Firefox-Build zum Testen herunter."
     },
     "support": {
-      "title": "Support",
-      "description": "Erhalte Hilfe zu Nowly, der Erweiterung oder einer Präsenz."
+      "title": "Hilfe und Kontakt",
+      "description": "Hol dir Hilfe zu Nowly auf Discord, melde einen Fehler oder eine defekte Präsenz auf GitHub oder schreib dem Team privat."
     },
     "branding": {
       "title": "Branding",
@@ -789,6 +801,14 @@
     "account": {
       "title": "Dein Nowly-Konto",
       "description": "Verknüpfte Geräte, deine Daten und deine Anmeldung."
+    },
+    "guides": {
+      "title": "Anleitungen",
+      "description": "Anleitungen, um Nowly einzurichten, Discord Rich Presence zu reparieren, deine Privatsphäre zu steuern und eigene Presences zu bauen."
+    },
+    "about": {
+      "title": "Über uns",
+      "description": "Wer Nowly macht, warum es existiert, wie es funktioniert und wie es finanziert wird."
     }
   },
   "roadmapPage": {
@@ -1073,7 +1093,7 @@
     "badge": "Cookies",
     "title": "Cookie-Richtlinie",
     "description": "Cookies und lokaler Speicher, genutzt auf nowly.me und docs.nowly.me.",
-    "last-updated": "Zuletzt aktualisiert: 5. Oktober 2026.",
+    "last-updated": "Zuletzt aktualisiert: 9. Oktober 2026.",
     "intro": "Diese Seite beschreibt Cookies und ähnliche Technologien auf <strong>nowly.me</strong> und <strong>docs.nowly.me</strong>. Wir setzen ein Sprach-Cookie. Theme und Cookie-Hinweis nutzen lokalen Speicher. Google AdSense wird nicht geladen, sofern Werbung nicht aktiviert ist.",
     "sections": [
       {
@@ -1082,7 +1102,7 @@
       },
       {
         "title": "locale-Cookie",
-        "body": "<strong><code>locale</code></strong> (nowly.me und, getrennt, docs.nowly.me)<br/>Zweck: französische, englische oder spanische Oberfläche.<br/>Dauer: 1 Jahr (<code>max-age</code> 31.536.000 Sekunden), aktualisiert bei Sprachwechsel.<br/>Attribute: First-Party, nicht HttpOnly, SameSite=Lax. Der Wert ist ein Sprachcode (z. B. <code>fr-FR</code>). Kombiniert mit deiner IP-Adresse in Server-Logs kann er zur Identifizierung eines Besuchers beitragen, auch wenn das Cookie selbst nur ein Sprachcode ist."
+        "body": "<strong><code>locale</code></strong> (nowly.me und, getrennt, docs.nowly.me)<br/>Zweck: Sprache der Oberfläche speichern (11 Sprachen verfügbar).<br/>Dauer: 1 Jahr (<code>max-age</code> 31.536.000 Sekunden), aktualisiert bei Sprachwechsel.<br/>Attribute: First-Party, nicht HttpOnly, SameSite=Lax. Der Wert ist ein Sprachcode (z. B. <code>fr-FR</code>). Kombiniert mit deiner IP-Adresse in Server-Logs kann er zur Identifizierung eines Besuchers beitragen, auch wenn das Cookie selbst nur ein Sprachcode ist."
       },
       {
         "title": "Lokaler Speicher",
@@ -1094,7 +1114,7 @@
       },
       {
         "title": "Werbung",
-        "body": "Aktivieren wir <strong>Google AdSense</strong> auf der Website, kann Google nach eigener Richtlinie Cookies oder ähnliche Technologien setzen. Bis dahin platziert Nowly keine Werbe-Cookies."
+        "body": "<strong>Google AdSense</strong> ist deaktiviert, bis wir es einschalten, und Nowly selbst setzt keine Werbe-Cookies. Ist es aktiv, erscheint Werbung nur in Ratgeberartikeln, nie auf Download-Seiten oder in der Erweiterung. Drittanbieter, einschließlich Google, verwenden dann Cookies, um Anzeigen auf Grundlage deiner früheren Besuche auf nowly.me oder anderen Websites auszuliefern. Mit den Werbe-Cookies von Google können Google und seine Partner Anzeigen auf Grundlage deiner Besuche auf dieser und anderen Websites im Internet schalten. Im EWR, im Vereinigten Königreich und in der Schweiz fragt dich die Einwilligungsmeldung von Google zuerst nach deiner Entscheidung. Du kannst personalisierte Werbung in den <a href=\"https://adssettings.google.com\">Google-Anzeigeneinstellungen</a> oder auf <a href=\"https://www.aboutads.info/choices\">aboutads.info</a> deaktivieren und nachlesen, <a href=\"https://policies.google.com/technologies/partner-sites\">wie Google Daten von Websites verwendet, auf denen Google-Dienste genutzt werden</a>."
       },
       {
         "title": "So löschst du sie",
@@ -1212,5 +1232,85 @@
     "delete-success": "Dein Konto wurde gelöscht.",
     "local-note": "Die Daten, die die Erweiterung auf deinen Geräten speichert, bleiben unberührt. Du kannst sie in den Einstellungen der Erweiterung löschen.",
     "action-error": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+  },
+  "ads": {
+    "label": "Werbung"
+  },
+  "guidesPage": {
+    "eyebrow": "Anleitungen",
+    "title": "Anleitungen zu Nowly und Discord Rich Presence",
+    "description": "Schritt für Schritt: Nowly einrichten, einen fehlenden Status reparieren, festlegen, was deine Freunde sehen, und eine eigene Presence bauen.",
+    "categories": {
+      "start": "Erste Schritte",
+      "troubleshooting": "Fehlerbehebung",
+      "privacy": "Privatsphäre und Kontrolle",
+      "discord": "Discord Rich Presence",
+      "developers": "Für Entwickler"
+    },
+    "minutes": "{count, plural, one {# Min. Lesezeit} other {# Min. Lesezeit}}",
+    "updated": "Aktualisiert am {date}",
+    "toc": "Auf dieser Seite",
+    "related": "Weiterlesen",
+    "back": "Alle Anleitungen",
+    "fallback": "Diese Anleitung ist noch nicht übersetzt, deshalb liest du die englische Version.",
+    "cta": {
+      "title": "Bereit zum Ausprobieren?",
+      "description": "Installiere die kostenlose Erweiterung, füge die Desktop-App hinzu und wähle eine Presence aus der Bibliothek.",
+      "library": "Zur Bibliothek"
+    },
+    "help": {
+      "title": "Kommst du nicht weiter?",
+      "description": "Eröffne ein Ticket auf dem Nowly-Discord-Server, das Team hilft dir.",
+      "cta": "Zum Discord"
+    }
+  },
+  "aboutPage": {
+    "eyebrow": "Über uns",
+    "title": "Über Nowly",
+    "description": "Nowly zeigt auf Discord, was du schaust, hörst und ansiehst, ohne deine Aktivität an jemand anderen als Discord zu senden. Hier erfährst du, wer es macht, warum und wie es finanziert wird.",
+    "sections": [
+      {
+        "title": "Warum es Nowly gibt",
+        "body": "Discord zeigt das Spiel, das du spielst, aber vieles, was wir am Computer tun, passiert im Browser: Serien, Musik, Livestreams, Tools. Werkzeuge, die das auf Discord bringen, gab es schon. Wir wollten eines, das in Minuten eingerichtet ist, erklärt, was es tut, und deine Aktivität als deine behandelt. Die erste stabile Version von Nowly erschien im Juni 2026."
+      },
+      {
+        "title": "Wer es macht",
+        "body": "Nowly ist ein unabhängiges Projekt aus Frankreich, gemacht von einem kleinen Team, mit Presences, die Menschen aus der Community schreiben. Herausgeber ist K.Ring, ein französisches Einzelunternehmen; alle Angaben stehen im Impressum. Dahinter stehen keine Investoren und kein Geschäft mit deinen Daten."
+      },
+      {
+        "title": "Wie es funktioniert",
+        "body": "Eine Browsererweiterung liest unterstützte Seiten über kleine Skripte, sogenannte Presences, eine pro Website. Eine Desktop-App auf deinem Computer gibt das Ergebnis über die lokale Verbindung an die Discord-App weiter. Deine Aktivität läuft nie über die Server von Nowly: Sie liefern nur die Website, die Bibliothek und optionale Funktionen wie die Kontosynchronisierung."
+      },
+      {
+        "title": "Wofür wir stehen",
+        "body": "Privatsphäre als Standard: Browsing-Aktivität ist bei den meisten Presences aus, und Nutzungsstatistiken sind aus, bis du sie einschaltest. Sicherheit: Jede offizielle Presence wird geprüft und signiert, bevor sie dich erreicht. Ehrlichkeit: Der Code ist öffentlich, die Datenschutzerklärung ist verständlich geschrieben, und die Anleitungen auf dieser Website beschreiben, was das Produkt wirklich tut."
+      },
+      {
+        "title": "Wie Nowly finanziert wird",
+        "body": "Die Erweiterung, die Desktop-App und alle Presences sind kostenlos und werbefrei. Wer das Projekt freiwillig unterstützen möchte, kann über Ko-fi oder GitHub Sponsors spenden und damit zu den Kosten für Server, CDN und Entwicklung beitragen. Auf der Website können außerdem einige klar gekennzeichnete Anzeigen in Ratgeberartikeln erscheinen, nie auf Download-Seiten oder in der Erweiterung."
+      },
+      {
+        "title": "Open Source und Lizenzen",
+        "body": "Presences sind Open Source unter der MIT-Lizenz, sodass jeder sie lesen, verbessern oder selbst schreiben kann. Erweiterung, Desktop-App und Website sind auf GitHub unter der Business Source License 1.1 öffentlich: Du kannst jede Zeile lesen und prüfen, aber es ist eine Source-Available-Lizenz, keine von der OSI anerkannte Open-Source-Lizenz."
+      }
+    ],
+    "facts": {
+      "title": "Nowly in Kürze",
+      "presences": "{count} Presences in der Bibliothek",
+      "languages": "Website und Erweiterung in 11 Sprachen",
+      "systems": "Desktop-App für Windows, macOS und Linux",
+      "browsers": "Erweiterung für Chrome, Firefox, Edge, Brave und Opera",
+      "launch": "Erste stabile Version im Juni 2026",
+      "origin": "Made in France"
+    },
+    "team": {
+      "title": "Das Team",
+      "community": "Dazu jede Person, die eine Presence geschrieben hat, genannt auf ihrer Seite in der <link>Bibliothek</link>."
+    },
+    "links": {
+      "contact": "Kontakt",
+      "roadmap": "Roadmap",
+      "changelog": "Versionshinweise"
+    }
   }
 }
