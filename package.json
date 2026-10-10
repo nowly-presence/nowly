@@ -9,7 +9,10 @@
     "url": "https://github.com/Steellgold"
   },
   "contributors": [
-    { "name": "KiMi", "url": "https://github.com/q-kimi" }
+    {
+      "name": "KiMi",
+      "url": "https://github.com/q-kimi"
+    }
   ],
   "description": "Presence monorepo",
   "scripts": {
@@ -25,5 +28,8 @@
     "build:macos": "cd apps/native && bash scripts/macos-release.sh",
     "admin": "pnpm --filter @nowly/internal-cli cli",
     "internal-cli": "pnpm --filter @nowly/internal-cli cli"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.9"
   }
 }
