@@ -7,7 +7,7 @@ import {
   createHttpTransport,
   type TrackInput,
 } from "@nowly/analytics";
-import { presenceApiBaseUrl } from "@/lib/presence-api";
+import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 
 const client = createAnalyticsClient({
   transport: createHttpTransport(presenceApiBaseUrl()),

@@ -3,7 +3,7 @@
 import { Button, Card, CardContent, CardDescription, CardTitle, Input, Label, Textarea } from "@nowly/ui";
 import { useState } from "react";
 
-import { presenceApiBaseUrl } from "@/lib/presence-api";
+import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { useTranslations } from "next-intl";
 
 type FormStatus = "idle" | "sending" | "success" | "error";

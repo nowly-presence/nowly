@@ -1,3 +1,5 @@
+import "server-only";
+
 import {
   isLibraryCategory,
   type LibraryPresence,
@@ -6,24 +8,18 @@ import {
   type PresencePerson,
 } from "@/lib/library-catalog";
 import { PRESENCES_REPOSITORY_URL } from "@/lib/constants";
+import { PRODUCTION_API_URL, presenceLogoUrl } from "@/lib/presence-api-client";
 import { FALLBACK_LOCALE, SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
 
 import { cache } from "react";
 
-const CDN_BASE_URL = "https://cdn.nowly.me";
-export const PRODUCTION_API_URL = "https://api.nowly.me";
+export { PRODUCTION_API_URL, presenceLogoUrl, presenceThumbnailUrl } from "@/lib/presence-api-client";
 
 export type PresencePlatform = {
   slug: string
   name: string
   logoUrl: string
 };
-
-export const presenceLogoUrl = (slug: string): string =>
-  `${CDN_BASE_URL}/presences/${encodeURIComponent(slug)}/assets/logo.png`;
-
-export const presenceThumbnailUrl = (slug: string): string =>
-  `${CDN_BASE_URL}/presences/${encodeURIComponent(slug)}/assets/thumbnail.jpg`;
 
 export const presenceApiBaseUrl = (): string =>
   (process.env.PRESENCE_API_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL ?? PRODUCTION_API_URL)
@@ -283,7 +279,6 @@ export const getPresenceVersionHistory = cache(async (slug: string): Promise<Pre
     return [];
   }
 });
-
 export type PresenceStats = {
   totalInstalls: number
   activeUsers: number
@@ -311,13 +306,3 @@ export const getPresenceStats = cache(async (slug: string): Promise<PresenceStat
     return fallback;
   }
 });
-
-export const fetchPresenceRelease = async (slug: string): Promise<unknown> => {
-  const response = await fetch(`/api/presences/${encodeURIComponent(slug)}`, {
-    cache: "no-store",
-  });
-  if (!response.ok) {
-    throw new Error(`release request failed: ${response.status}`);
-  }
-  return response.json();
-};

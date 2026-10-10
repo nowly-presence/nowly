@@ -1,7 +1,7 @@
 "use client";
 
 import { requestExtension, type ExtensionDeviceInfo } from "@/lib/extension-bridge";
-import { presenceApiBaseUrl } from "@/lib/presence-api";
+import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { Button } from "@nowly/ui";
 import { RiHeartFill, RiHeartLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";

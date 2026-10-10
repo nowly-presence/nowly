@@ -10,7 +10,7 @@ import {
   type ExtensionDiagnostic,
   type InstalledPresenceInfo,
 } from "@/lib/extension-bridge";
-import { fetchPresenceRelease } from "@/lib/presence-api";
+import { fetchPresenceRelease } from "@/lib/presence-api-client";
 import { useCallback, useEffect, useState } from "react";
 
 const isMobileBrowser = (): boolean =>

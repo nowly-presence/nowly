@@ -9,7 +9,7 @@ import {
   subscribeExtensionDetected,
   type ExtensionDeviceInfo,
 } from "@/lib/extension-bridge";
-import { presenceApiBaseUrl } from "@/lib/presence-api";
+import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { RiDownload2Line, RiDeleteBinLine, RiShieldCheckLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";

@@ -6,7 +6,7 @@ import { Button, ButtonAnchor, Card, CardContent, CardDescription, CardTitle, Se
 
 
 import { DISCORD_INVITE_URL } from "@/lib/constants";
-import { presenceApiBaseUrl } from "@/lib/presence-api";
+import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { RiDiscordFill, RiHeartLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";

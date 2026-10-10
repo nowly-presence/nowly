@@ -1,3 +1,5 @@
+import "server-only";
+
 import { FALLBACK_LOCALE, getValidLocale, type LocaleString } from "@nowly/locales";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";

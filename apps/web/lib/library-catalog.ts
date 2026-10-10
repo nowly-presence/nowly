@@ -1,6 +1,5 @@
-import { contentLocales } from "@/features/content/lib/content-files";
-import { presenceLogoUrl, presenceThumbnailUrl } from "@/lib/presence-api";
-import { FALLBACK_LOCALE, getValidLocale, SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
+import { presenceLogoUrl, presenceThumbnailUrl } from "@/lib/presence-api-client";
+import { FALLBACK_LOCALE, getValidLocale, type LocaleString } from "@nowly/locales";
 
 export const LIBRARY_CATEGORIES = [
   "streaming",
@@ -39,12 +38,6 @@ export type LibraryPresence = {
   version: string | null
   discordNative: boolean
   locales: LocaleString[]
-};
-
-export const presenceIndexLocales = (presence: LibraryPresence): LocaleString[] => {
-  const locales = new Set([...presence.locales, ...contentLocales("presences", presence.slug)]);
-  if (locales.size === 0) locales.add(FALLBACK_LOCALE);
-  return SUPPORTED_LOCALES.filter((locale) => locales.has(locale));
 };
 
 export const libraryLogoUrl = (slug: string): string => presenceLogoUrl(slug);

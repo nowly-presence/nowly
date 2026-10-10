@@ -1,6 +1,7 @@
 import { PresenceView } from "@/features/library/components/presence-view";
 import { getPresenceGuide } from "@/features/library/lib/presence-guide";
-import { localizedDescription, presenceIndexLocales } from "@/lib/library-catalog";
+import { localizedDescription } from "@/lib/library-catalog";
+import { presenceIndexLocales } from "@/lib/library-catalog-server";
 import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
 import { getPresenceBySlug, getPresenceCatalog, getPresenceStats, getPresenceVersionHistory, presenceLogoUrl } from "@/lib/presence-api";
 import { createMetadata } from "@/features/seo/lib/seo";

@@ -1,4 +1,4 @@
-import { presenceApiBaseUrl } from "@/lib/presence-api";
+import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 
 export type AccountUser = {
   id: string

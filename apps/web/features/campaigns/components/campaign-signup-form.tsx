@@ -1,6 +1,6 @@
 "use client";
 
-import { presenceApiBaseUrl } from "@/lib/presence-api";
+import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { Button, Input } from "@nowly/ui";
 import { useState } from "react";
 
