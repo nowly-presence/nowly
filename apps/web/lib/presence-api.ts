@@ -159,6 +159,7 @@ export const getPresenceCatalog = cache(async (): Promise<LibraryPresence[]> => 
         author?: unknown
         contributors?: unknown
         version?: unknown
+        lastUpdated?: unknown
         totalInstalls?: unknown
         discordNative?: unknown
       };
@@ -183,6 +184,9 @@ export const getPresenceCatalog = cache(async (): Promise<LibraryPresence[]> => 
           author: parsePerson(item.author, name),
           contributors: parsePeople(item.contributors, name),
           version: typeof item.version === "string" && item.version.trim() ? item.version.trim() : null,
+          lastUpdated: typeof item.lastUpdated === "string" && !Number.isNaN(Date.parse(item.lastUpdated))
+            ? item.lastUpdated
+            : null,
           discordNative: item.discordNative === true,
           locales: writtenLocales(item.description),
         },

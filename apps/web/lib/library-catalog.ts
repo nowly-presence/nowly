@@ -36,6 +36,7 @@ export type LibraryPresence = {
   author: PresencePerson
   contributors: PresencePerson[]
   version: string | null
+  lastUpdated: string | null
   discordNative: boolean
   locales: LocaleString[]
 };
