@@ -77,15 +77,27 @@ const toFrontmatter = (data: Record<string, unknown>, fallbackTitle: string): Ch
   stores: Array.isArray(data.stores) ? data.stores.filter(isChangelogStore) : undefined,
 })
 
+// Translated files may carry a human-readable date ("1er octobre 2026"). The release date is data,
+// not copy: always read it from en-US so the publication check and sitemap stay locale-independent.
+const releaseDate = (slug: string, data: Record<string, unknown>): string | null => {
+  const sourcePath = join(CONTENT_ROOT, slug, "en-US.mdx")
+  return toDateString(existsSync(sourcePath) ? matter(readFileSync(sourcePath, "utf-8")).data.date : data.date)
+}
+
+const toLocalizedFrontmatter = (slug: string, data: Record<string, unknown>): ChangelogFrontmatter => ({
+  ...toFrontmatter(data, slug.replace(/-/g, ".")),
+  date: releaseDate(slug, data),
+})
+
 export const getChangelogFrontmatter = (slug: string, locale: string): ChangelogFrontmatter | null => {
   const file = readFile(slug, locale)
-  return file ? toFrontmatter(file.data, slug.replace(/-/g, ".")) : null
+  return file ? toLocalizedFrontmatter(slug, file.data) : null
 }
 
 export const getChangelogBody = (slug: string, locale: string): { frontmatter: ChangelogFrontmatter; content: string } | null => {
   const file = readFile(slug, locale)
   if (!file) return null
-  return { frontmatter: toFrontmatter(file.data, slug.replace(/-/g, ".")), content: file.content }
+  return { frontmatter: toLocalizedFrontmatter(slug, file.data), content: file.content }
 }
 
 /** All releases, newest first, with frontmatter resolved for the given locale (falls back to en-US). */
