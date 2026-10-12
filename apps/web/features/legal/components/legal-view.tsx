@@ -28,7 +28,9 @@ export const LegalView = async ({ page }: { page: LegalPageKey }) => {
     getTranslations("footer"),
     getMessages(),
   ]);
-  const legal = messages.legal as {
+  // Namespace "legal" is accessed dynamically via getMessages() — the string literal
+  // is needed so the i18n-unused check can see that the namespace is consumed here.
+  const legal = messages["legal"] as {
     "publisher-name": string
     "publisher-siren": string
     "publisher-address": string
