@@ -13,7 +13,7 @@ const robots = (): MetadataRoute.Robots => {
       {
         userAgent: "*",
         allow: ["/", "/api/og"],
-        disallow: ["/api/", "/host/", "/test/"],
+        disallow: ["/api/", "/host/", "/test/", "/cdn-cgi/"],
       },
     ],
     sitemap: DOCS_ORIGIN.startsWith(`${CANONICAL_ORIGIN}/`)

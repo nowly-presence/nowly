@@ -23,7 +23,11 @@ const hostnameOf = (value: string): string => {
   }
 };
 
-export const SITE_URL = trimOrigin(process.env.NEXT_PUBLIC_BASE_URL ?? CANONICAL_ORIGIN);
+// Production is https-only; a plain-http base URL would leak into og:image / twitter:image and force a redirect.
+const forceHttpsOnProduction = (value: string): string =>
+  /^http:\/\/(www\.)?nowly\.me(?=\/|$)/.test(value) ? value.replace(/^http:/, "https:") : value;
+
+export const SITE_URL = forceHttpsOnProduction(trimOrigin(process.env.NEXT_PUBLIC_BASE_URL ?? CANONICAL_ORIGIN));
 export const DOCS_URL = DOCS_ORIGIN;
 export const SITE_NAME = "Nowly";
 export const OG_IMAGE_VERSION = "1";

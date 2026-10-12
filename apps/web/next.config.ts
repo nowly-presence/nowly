@@ -50,6 +50,17 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       ...docsRedirects,
+      // Crawlers guess these names; without a redirect they hit the catch-all and report a soft 404.
+      {
+        source: "/sitemap_index.xml",
+        destination: "/sitemap.xml",
+        permanent: true,
+      },
+      {
+        source: "/sitemap-index.xml",
+        destination: "/sitemap.xml",
+        permanent: true,
+      },
       {
         source: "/:slug-discord-rich-presence",
         destination: "/library/:slug",

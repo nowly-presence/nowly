@@ -68,7 +68,10 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     entry("/support", "monthly", 0.6),
     entry("/status", "hourly", 0.4),
     ...catalog.map((presence) =>
-      entry(`/library/${presence.slug}`, "weekly", 0.75, { locales: presenceIndexLocales(presence) }),
+      entry(`/library/${presence.slug}`, "weekly", 0.75, {
+        lastModified: parseDate(presence.lastUpdated),
+        locales: presenceIndexLocales(presence),
+      }),
     ),
     ...authors.map((github) => entry(`/author/${github}`, "weekly", 0.45, { locales: [FALLBACK_LOCALE] })),
     entry("/privacy", "yearly", 0.3),
