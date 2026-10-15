@@ -12,6 +12,7 @@ model Device {
   user      User?                   @relation(fields: [userId], references: [id], onDelete: SetNull)
   presences DevicePresence[]
   sessions  PresenceActiveSession[]
+  customAssets CustomAsset[]
 
   @@index([userId])
   @@map("devices")
@@ -61,4 +62,20 @@ model PresenceActiveSession {
   @@index([deviceId])
   @@index([startedAt])
   @@map("presence_active_sessions")
+}
+
+model CustomAsset {
+  deviceId   String   @map("device_id")
+  sha256     String
+  mime       String
+  size       Int
+  key        String
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  lastUsedAt DateTime @default(now()) @map("last_used_at") @db.Timestamptz(6)
+
+  device Device @relation(fields: [deviceId], references: [deviceId], onDelete: Cascade)
+
+  @@id([deviceId, sha256])
+  @@index([lastUsedAt])
+  @@map("custom_assets")
 }

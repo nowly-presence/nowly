@@ -27,6 +27,7 @@
     "db:reset-dev": "tsx scripts/reset-dev-data.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1131.0",
     "@fastify/cors": "^11.3.0",
     "@fastify/rate-limit": "^11.2.0",
     "@nowly/analytics": "workspace:*",

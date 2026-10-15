@@ -1,5 +1,7 @@
 import { getPrisma, hasDatabase } from "@/db/client"
 import { cleanText } from "@nowly/shared"
+import { serverEnv } from "@nowly/env/server"
+import { deleteCustomAssetFile } from "@/features/custom-assets/custom-assets.service"
 
 type DeviceSyncPresence = {
   slug: string
@@ -57,6 +59,7 @@ export type DeviceExport = {
   presences: Array<{ slug: string; installed: boolean; enabled: boolean; installedVersion: string | null }>
   analyticsEvents: Array<{ key: string; slug: string | null; source: string | null; country: string | null; createdAt: string }>
   presenceLikes: Array<{ slug: string; likedAt: string }>
+  customAssets: Array<{ sha256: string; url: string; mime: string; size: number; createdAt: string; lastUsedAt: string }>
   linkedToAccount: boolean
 }
 
@@ -70,11 +73,12 @@ export const exportDeviceData = async (deviceId: string): Promise<DeviceExport |
   if (!hasDatabase()) return null
 
   const prisma = getPrisma()
-  const [device, presences, analyticsEvents, presenceLikes] = await Promise.all([
+  const [device, presences, analyticsEvents, presenceLikes, customAssets] = await Promise.all([
     prisma.device.findUnique({ where: { deviceId } }),
     prisma.devicePresence.findMany({ where: { deviceId } }),
     prisma.analyticsEvent.findMany({ where: { deviceId } }),
     prisma.presenceLike.findMany({ where: { deviceId } }),
+    prisma.customAsset.findMany({ where: { deviceId } }),
   ])
 
   if (!device) return null
@@ -104,6 +108,14 @@ export const exportDeviceData = async (deviceId: string): Promise<DeviceExport |
       createdAt: event.createdAt.toISOString(),
     })),
     presenceLikes: presenceLikes.map((like) => ({ slug: like.slug, likedAt: like.likedAt.toISOString() })),
+    customAssets: customAssets.map((asset) => ({
+      sha256: asset.sha256,
+      url: `${serverEnv.R2_PUBLIC_URL.replace(/\/$/, "")}/${asset.key}`,
+      mime: asset.mime,
+      size: asset.size,
+      createdAt: asset.createdAt.toISOString(),
+      lastUsedAt: asset.lastUsedAt.toISOString(),
+    })),
     linkedToAccount: device.userId !== null,
   }
 }
@@ -112,7 +124,12 @@ export const deleteDeviceData = async (deviceId: string): Promise<void> => {
   if (!hasDatabase()) return
 
   const prisma = getPrisma()
+  const assets = await prisma.customAsset.findMany({ where: { deviceId } })
+  for (const asset of assets) {
+    await deleteCustomAssetFile(asset.key)
+  }
   await prisma.$transaction([
+    prisma.customAsset.deleteMany({ where: { deviceId } }),
     prisma.analyticsEvent.deleteMany({ where: { deviceId } }),
     prisma.presenceLike.deleteMany({ where: { deviceId } }),
     prisma.devicePresence.deleteMany({ where: { deviceId } }),

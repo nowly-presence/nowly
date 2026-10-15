@@ -25,6 +25,10 @@ const mockPrisma = vi.hoisted(() => ({
     findMany: vi.fn(),
     deleteMany: vi.fn(),
   },
+  customAsset: {
+    findMany: vi.fn().mockResolvedValue([]),
+    deleteMany: vi.fn(),
+  },
   $transaction: vi.fn((operations: unknown[]) => Promise.all(operations)),
 }))
 
@@ -124,5 +128,6 @@ describe("exportDeviceData / deleteDeviceData", () => {
     expect(mockPrisma.presenceActiveDevice.deleteMany).toHaveBeenCalledWith({ where: { deviceId: "device-1" } })
     expect(mockPrisma.presenceActiveSession.deleteMany).toHaveBeenCalledWith({ where: { deviceId: "device-1" } })
     expect(mockPrisma.device.deleteMany).toHaveBeenCalledWith({ where: { deviceId: "device-1" } })
+    expect(mockPrisma.customAsset.deleteMany).toHaveBeenCalledWith({ where: { deviceId: "device-1" } })
   })
 })
