@@ -22,6 +22,7 @@
     "lint:test": "tsc --noEmit -p tsconfig.test.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:watch": "vitest",
     "prisma:generate": "prisma generate",
     "db:reset-dev": "tsx scripts/reset-dev-data.ts"
