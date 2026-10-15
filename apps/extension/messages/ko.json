@@ -578,5 +578,8 @@
   "custom.template.break.state": "잠깐 쉬는 중",
   "custom.template.focus.name": "집중",
   "custom.template.focus.details": "방해 금지",
-  "custom.template.focus.state": "나중에 답할게요"
+  "custom.template.focus.state": "나중에 답할게요",
+  "settings.dockLayout": "내비게이션 바",
+  "settings.dockLayoutHint": "탭을 길게 눌러 밀면 순서를 바꿀 수 있고, 양옆 밖으로 빼면 새 바가 생겨요.",
+  "action.reset": "초기화"
 }

@@ -578,5 +578,8 @@
   "custom.template.break.state": "Só uma pausa rápida",
   "custom.template.focus.name": "Foco",
   "custom.template.focus.details": "Não perturbe",
-  "custom.template.focus.state": "Respondo depois"
+  "custom.template.focus.state": "Respondo depois",
+  "settings.dockLayout": "Barra de navegação",
+  "settings.dockLayoutHint": "Segure uma aba e deslize para movê-la, ou puxe para um lado para criar uma nova barra.",
+  "action.reset": "Redefinir"
 }

@@ -578,5 +578,8 @@
   "custom.template.break.state": "Just a short break",
   "custom.template.focus.name": "Focus",
   "custom.template.focus.details": "Do not disturb",
-  "custom.template.focus.state": "I will answer later"
+  "custom.template.focus.state": "I will answer later",
+  "settings.dockLayout": "Navigation bar",
+  "settings.dockLayoutHint": "Hold a tab, then slide it to reorder it or pull it out on either side to make a new bar.",
+  "action.reset": "Reset"
 }

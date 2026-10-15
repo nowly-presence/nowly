@@ -578,5 +578,8 @@
   "custom.template.break.state": "ちょっと休憩",
   "custom.template.focus.name": "集中",
   "custom.template.focus.details": "邪魔しないでね",
-  "custom.template.focus.state": "あとで返信します"
+  "custom.template.focus.state": "あとで返信します",
+  "settings.dockLayout": "ナビゲーションバー",
+  "settings.dockLayoutHint": "タブを長押ししてスライドすると並べ替えられます。左右の外に出すと新しいバーになります。",
+  "action.reset": "リセット"
 }

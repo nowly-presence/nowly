@@ -578,5 +578,8 @@
   "custom.template.break.state": "Tylko krótka przerwa",
   "custom.template.focus.name": "Skupienie",
   "custom.template.focus.details": "Nie przeszkadzać",
-  "custom.template.focus.state": "Odpiszę później"
+  "custom.template.focus.state": "Odpiszę później",
+  "settings.dockLayout": "Pasek nawigacji",
+  "settings.dockLayoutHint": "Przytrzymaj kartę i przesuń ją, aby zmienić kolejność, albo wyciągnij ją w bok, aby utworzyć nowy pasek.",
+  "action.reset": "Resetuj"
 }

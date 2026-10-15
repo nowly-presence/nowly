@@ -578,5 +578,8 @@
   "custom.template.break.state": "Ένα μικρό διάλειμμα",
   "custom.template.focus.name": "Συγκέντρωση",
   "custom.template.focus.details": "Μην ενοχλείτε",
-  "custom.template.focus.state": "Απαντώ αργότερα"
+  "custom.template.focus.state": "Απαντώ αργότερα",
+  "settings.dockLayout": "Γραμμή πλοήγησης",
+  "settings.dockLayoutHint": "Κράτησε πατημένη μια καρτέλα και σύρε τη για να την μετακινήσεις, ή βγάλ' τη στο πλάι για νέα γραμμή.",
+  "action.reset": "Επαναφορά"
 }

@@ -578,5 +578,8 @@
   "custom.template.break.state": "Juste une petite pause",
   "custom.template.focus.name": "Concentration",
   "custom.template.focus.details": "Ne pas déranger",
-  "custom.template.focus.state": "Je réponds plus tard"
+  "custom.template.focus.state": "Je réponds plus tard",
+  "settings.dockLayout": "Barre de navigation",
+  "settings.dockLayoutHint": "Restez appuyé sur un onglet puis glissez-le pour le déplacer, ou sortez-le d'un côté pour créer une nouvelle barre.",
+  "action.reset": "Réinitialiser"
 }

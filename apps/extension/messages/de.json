@@ -578,5 +578,8 @@
   "custom.template.break.state": "Nur eine kurze Pause",
   "custom.template.focus.name": "Fokus",
   "custom.template.focus.details": "Nicht stören",
-  "custom.template.focus.state": "Ich antworte später"
+  "custom.template.focus.state": "Ich antworte später",
+  "settings.dockLayout": "Navigationsleiste",
+  "settings.dockLayoutHint": "Halte einen Tab gedrückt und schieb ihn, um ihn zu verschieben, oder zieh ihn seitlich heraus für eine neue Leiste.",
+  "action.reset": "Zurücksetzen"
 }

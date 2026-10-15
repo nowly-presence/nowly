@@ -24,4 +24,5 @@ export type ExtensionSettings = {
   presenceLanguages?: Record<string, PresenceLocale>
   activitySelectionMode?: ActivitySelectionMode
   activityPriorityOrder?: string[]
+  dockLayout?: string[][]
 }

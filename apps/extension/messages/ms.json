@@ -578,5 +578,8 @@
   "custom.template.break.state": "Rehat sebentar",
   "custom.template.focus.name": "Fokus",
   "custom.template.focus.details": "Jangan ganggu",
-  "custom.template.focus.state": "Saya balas nanti"
+  "custom.template.focus.state": "Saya balas nanti",
+  "settings.dockLayout": "Bar navigasi",
+  "settings.dockLayoutHint": "Tekan lama pada tab dan leretkan untuk mengalihkannya, atau tariknya keluar ke tepi untuk mencipta bar baharu.",
+  "action.reset": "Tetapkan semula"
 }

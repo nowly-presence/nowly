@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line } from "@remixicon/react"
 import { FeatureReveal } from "@/components/shared/feature-reveal"
 import { Dock } from "@/features/layout/dock"
+import { normalizeDockLayout } from "@/shared/dock-layout"
 import { useResolvedTheme } from "@/hooks/use-theme"
 import { useI18n } from "@/hooks/i18n-provider"
 import { useNav, type Route, type Tab } from "@/hooks/navigation-provider"
@@ -32,7 +33,7 @@ const ACCOUNT_SYNC_REVEAL = { id: "account-sync", version: "2.3.0" } as const
 const routeKey = (route: Route, depth: number) => `${depth}:${JSON.stringify(route)}`
 
 export const App = () => {
-  const { state } = useExtensionState()
+  const { state, updateSettings } = useExtensionState()
   const { t } = useI18n()
   const { tab, stack, setTab } = useNav()
   const theme = useResolvedTheme(state.settings.appearance)
@@ -86,6 +87,8 @@ export const App = () => {
         ))}
         <Dock<Tab>
           label={t("nav.label")}
+          layout={normalizeDockLayout(state.settings.dockLayout, TABS)}
+          onLayoutChange={(dockLayout) => void updateSettings({ dockLayout })}
           value={tab}
           onChange={selectTab}
           items={[

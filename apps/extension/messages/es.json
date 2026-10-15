@@ -578,5 +578,8 @@
   "custom.template.break.state": "Solo una pausa corta",
   "custom.template.focus.name": "Concentración",
   "custom.template.focus.details": "No molestar",
-  "custom.template.focus.state": "Respondo más tarde"
+  "custom.template.focus.state": "Respondo más tarde",
+  "settings.dockLayout": "Barra de navegación",
+  "settings.dockLayoutHint": "Mantén pulsada una pestaña y deslízala para moverla, o sácala por un lado para crear una nueva barra.",
+  "action.reset": "Restablecer"
 }
