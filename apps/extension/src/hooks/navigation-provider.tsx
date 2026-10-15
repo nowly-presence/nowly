@@ -14,6 +14,7 @@ export type Route =
   | { name: "presence"; slug: string }
   | { name: "connection" }
   | { name: "logs" }
+  | { name: "custom-activity"; id: string | null; template?: string }
   | { name: "discord-ipc" }
 
 type NavValue = {

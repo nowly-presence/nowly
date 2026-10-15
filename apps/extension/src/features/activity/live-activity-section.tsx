@@ -1,10 +1,13 @@
 import { RiEyeOffLine } from "@remixicon/react"
+import { CustomActivityLiveCard } from "@/components/shared/custom-activity-live-card"
 import { LiveCard } from "@/components/shared/live-activity-card"
 import { PresenceIcon } from "@/components/shared/presence-icon"
 import { useExtensionState } from "@/hooks/extension-state-provider"
 import { useI18n } from "@/hooks/i18n-provider"
 import { useNav } from "@/hooks/navigation-provider"
 import { connectionOf } from "@/lib/presence-status"
+import { sendMessage } from "@/lib/messages"
+import { customActivityIdOf } from "@/shared/custom-activity"
 import { discordIpcIssueOf } from "@/shared/discord-ipc-prompt"
 import type { TabActivity } from "@/shared/types"
 import { Button } from "@/ui/button"
@@ -20,7 +23,7 @@ type LiveActivitySectionProps = {
 }
 
 export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences }: LiveActivitySectionProps) => {
-  const { state, updateSettings } = useExtensionState()
+  const { state, updateSettings, refresh } = useExtensionState()
   const { t } = useI18n()
   const { push } = useNav()
   const setTabMuted = useTabSharing()
@@ -28,13 +31,28 @@ export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences 
   const paused = settings.presencePaused === true
   const liveStored = activity ? presences[activity.slug] : undefined
   const resume = () => void updateSettings({ presencePaused: false })
+  const customId = customActivityIdOf(activity?.slug)
+  const custom = customId ? state.customActivities.items.find((item) => item.id === customId) : undefined
+  const stopCustom = async () => {
+    await sendMessage("SET_CUSTOM_ACTIVITY_ACTIVE", { id: null })
+    await Promise.all([refresh.customActivities(), refresh.activity()])
+  }
   const connection = connectionOf(state.native)
   const ipcBlocked = discordIpcIssueOf(state.native).active
 
   return (
     <Section title={t("activity.now")}>
       {ipcBlocked && <DiscordIpcAlert />}
-      {activity && liveStored && settings.showPlayer !== false ? (
+      {activity && custom && settings.showPlayer !== false ? (
+        <CustomActivityLiveCard
+          activity={custom}
+          presence={activity.presence}
+          paused={paused}
+          onOpen={() => push({ name: "custom-activity", id: custom.id })}
+          onStop={stopCustom}
+          onResume={resume}
+        />
+      ) : activity && liveStored && settings.showPlayer !== false ? (
         <LiveCard
           slug={activity.slug}
           presence={activity.presence}

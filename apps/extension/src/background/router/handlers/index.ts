@@ -63,6 +63,14 @@ import {
   handleSetTabMuted,
   handleSyncPresenceScripts,
 } from "@/background/router/handlers/extra.handlers"
+import {
+  handleDeleteCustomActivity,
+  handleGetCustomActivities,
+  handleGetCustomImages,
+  handleSaveCustomActivity,
+  handleSetCustomActivityActive,
+  handleUploadCustomImage,
+} from "@/background/router/handlers/custom-activity.handlers"
 import { handleRecordUsageDay, handleSnoozeSupportPrompt } from "@/background/router/handlers/support.handlers"
 import type { HandlerRegistry } from "@/background/router/router"
 
@@ -115,6 +123,12 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   EXPORT_DEVICE_DATA: handleExportDeviceData,
   DELETE_DEVICE_DATA: handleDeleteDeviceData,
   SYNC_PRESENCE_SCRIPTS: handleSyncPresenceScripts,
+  GET_CUSTOM_ACTIVITIES: handleGetCustomActivities,
+  SAVE_CUSTOM_ACTIVITY: handleSaveCustomActivity,
+  DELETE_CUSTOM_ACTIVITY: handleDeleteCustomActivity,
+  SET_CUSTOM_ACTIVITY_ACTIVE: handleSetCustomActivityActive,
+  UPLOAD_CUSTOM_IMAGE: handleUploadCustomImage,
+  GET_CUSTOM_IMAGES: handleGetCustomImages,
   GET_ACCOUNT: handleGetAccount,
   START_ACCOUNT_CONNECT: handleStartAccountConnect,
   NOWLY_SESSION: handleNowlySession,

@@ -2,6 +2,8 @@ import type { TrackInput } from "@nowly/analytics"
 import type {
   AccountSnapshot,
   CurrentActivity,
+  CustomActivitiesState,
+  CustomActivityDraft,
   ExtensionSettings,
   InstalledPresences,
   NativeStatus,
@@ -16,6 +18,7 @@ import type {
   UserScriptsStatus,
 } from "@/shared/types"
 import type { OnboardingState } from "@/background/storage/onboarding.store"
+import type { SaveCustomActivityResult, UploadCustomImageResult } from "@/background/managers/custom-activity-manager"
 import type { SupportPromptAction, SupportPromptState } from "@/shared/support-prompt"
 
 export type DiagnosticSnapshot = {
@@ -85,6 +88,12 @@ export type RouterMessageMap = {
   EXPORT_DEVICE_DATA: { payload: void; response: { ok: boolean; data?: unknown; error?: string } }
   DELETE_DEVICE_DATA: { payload: void; response: { ok: boolean; error?: string } }
   SYNC_PRESENCE_SCRIPTS: { payload: void; response: { ok: boolean } }
+  GET_CUSTOM_ACTIVITIES: { payload: void; response: CustomActivitiesState }
+  SAVE_CUSTOM_ACTIVITY: { payload: { draft: CustomActivityDraft }; response: SaveCustomActivityResult }
+  DELETE_CUSTOM_ACTIVITY: { payload: { id: string }; response: { ok: boolean } }
+  SET_CUSTOM_ACTIVITY_ACTIVE: { payload: { id: string | null }; response: CustomActivitiesState }
+  UPLOAD_CUSTOM_IMAGE: { payload: { dataUrl: string }; response: UploadCustomImageResult }
+  GET_CUSTOM_IMAGES: { payload: { hashes: string[] }; response: Record<string, string> }
   GET_ACCOUNT: { payload: void; response: AccountSnapshot }
   START_ACCOUNT_CONNECT: { payload: void; response: { ok: boolean } }
   NOWLY_SESSION: { payload: unknown; response: { ok: boolean; error?: string } }

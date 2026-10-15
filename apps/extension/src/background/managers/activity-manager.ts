@@ -24,10 +24,12 @@ import {
 import { sendActiveHeartbeat } from "@/background/services/active-heartbeat"
 import { mapPresenceData, postNative } from "@/background/services/native"
 import { verifyPresenceRelease } from "@/background/services/release-security"
+import { getActiveCustomPresence } from "@/background/storage/custom-activities.store"
 import { getCurrentActivity, getPresences, setCurrentActivity, setDebug } from "@/background/storage/presences.store"
 import { getSettings } from "@/background/storage/settings.store"
 import { recordUsageDay } from "@/background/storage/support.store"
 import { CDN_BASE_URL } from "@/shared/constants"
+import { customActivityIdOf } from "@/shared/custom-activity"
 import type { ExtensionSettings, PresenceData, StoredPresence } from "@/shared/types"
 
 const clampText = (value: string | undefined, maxLength: number): string | undefined => {
@@ -165,6 +167,14 @@ export const pickBroadcastEntry = async (settings: ExtensionSettings) => {
 
 export const broadcastActiveTab = async (): Promise<void> => {
   const settings = await getSettings()
+  const custom = await getActiveCustomPresence()
+  if (custom) {
+    postNative(settings.presencePaused ? { type: "CLEAR_ACTIVITY" } : { type: "SET_ACTIVITY", presence: custom.presence })
+    await setCurrentActivity({ slug: custom.slug, presence: custom.presence, updatedAt: Date.now() })
+    await refreshToolbarBadge()
+    notifyBroadcastStateChanged()
+    return
+  }
   const entry = await pickBroadcastEntry(settings)
   if (!entry) {
     postNative({ type: "CLEAR_ACTIVITY" })
@@ -184,6 +194,11 @@ export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
   if (settings.presencePaused || !current) {
     if (settings.presencePaused) postNative({ type: "CLEAR_ACTIVITY" })
     await refreshToolbarBadge()
+    return
+  }
+
+  if (customActivityIdOf(current.slug)) {
+    await broadcastActiveTab()
     return
   }
 

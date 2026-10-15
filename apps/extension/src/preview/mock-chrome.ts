@@ -3,7 +3,8 @@ import packageJson from "../../package.json"
 import { createMockEvent } from "@/preview/mock-events"
 import { createMockRouter } from "@/preview/mock-router"
 import { createMockStorageArea, type StorageChanges } from "@/preview/mock-storage"
-import { buildInstalledPresences, buildLiveActivity, buildRuntimeLogs, loadCatalogFixture, pickInstalledSlugs } from "@/preview/preview-fixtures"
+import { buildCustomActivities, buildInstalledPresences, buildLiveActivity, buildRuntimeLogs, loadCatalogFixture, pickInstalledSlugs } from "@/preview/preview-fixtures"
+import { buildCustomPresence, customActivitySlug } from "@/shared/custom-activity"
 import { previewParams } from "@/preview/preview-params"
 import { SUPPORT_PROMPT_MIN_USAGE_DAYS } from "@/shared/support-prompt"
 import type { TabActivity } from "@/shared/types"
@@ -24,6 +25,12 @@ export const installMockChrome = async (): Promise<void> => {
   const showsActivity = previewParams.scenario === "live" || previewParams.scenario === "paused"
   const liveActivity = showsActivity ? buildLiveActivity(firstSlug, presences, now) : null
 
+  const customActivities = buildCustomActivities(previewParams.scenario, previewParams.customLive, now)
+  const liveCustom = customActivities.items.find((item) => item.id === customActivities.activeId)
+  const currentActivity = liveCustom
+    ? { slug: customActivitySlug(liveCustom.id), presence: buildCustomPresence(liveCustom, customActivities.activatedAt ?? now), updatedAt: now }
+    : liveActivity
+
   const tabActivities: TabActivity[] =
     liveActivity && secondSlug && presences[secondSlug]
       ? [
@@ -34,7 +41,9 @@ export const installMockChrome = async (): Promise<void> => {
 
   await local.set({
     presences,
-    currentActivity: liveActivity,
+    currentActivity,
+    customActivities,
+    featureReveals: previewParams.reveal ? {} : { "custom-activity": now, "account-sync": now },
     settings: {
       presenceDisplayMode: "category",
       showPlayer: true,
@@ -61,7 +70,6 @@ export const installMockChrome = async (): Promise<void> => {
     sidepanelActiveView: previewParams.view,
     reviewPrompt: { firstSeenAt: previewParams.review ? 0 : now },
     supportPrompt: { usageDays: previewParams.support ? SUPPORT_PROMPT_MIN_USAGE_DAYS : 0 },
-    featureReveals: previewParams.reveal ? {} : { "account-sync": now },
     ...(previewParams.season ? { seasonOverride: previewParams.season } : {}),
     ...(previewParams.prank ? { halloweenPrank: { replay: true } } : {}),
     ...(previewParams.moment ? { seasonMoments: { replay: true } } : {}),

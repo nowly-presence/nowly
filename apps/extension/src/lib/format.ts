@@ -54,3 +54,13 @@ export const hostnameOf = (value: string): string => {
     return value
   }
 }
+
+const MINUTES_PER_HOUR = 60
+
+export const formatDuration = (totalMinutes: number, locale: Locale): string => {
+  const hours = Math.floor(totalMinutes / MINUTES_PER_HOUR)
+  const minutes = Math.round(totalMinutes % MINUTES_PER_HOUR)
+  const unit = (value: number, name: "hour" | "minute") =>
+    new Intl.NumberFormat(LOCALE_LONG_MAP[locale], { style: "unit", unit: name, unitDisplay: "short" }).format(value)
+  return [hours > 0 ? unit(hours, "hour") : null, minutes > 0 || hours === 0 ? unit(minutes, "minute") : null].filter(Boolean).join(" ")
+}

@@ -1,12 +1,16 @@
 import type { PayloadOf, ResponseOf, RouterMessageType } from "@/background/router/contracts"
 import type { OnboardingState } from "@/background/storage/onboarding.store"
+import { buildCustomPresence, customActivitySlug } from "@/shared/custom-activity"
+import { decodeImageDataUrl, sha256Hex } from "@/shared/custom-image"
 import type {
   AccountSnapshot,
   CurrentActivity,
+  CustomActivitiesState,
   ExtensionSettings,
   InstalledPresences,
   NativeStatus,
   RuntimeLogEntry,
+  StoredCustomImage,
   TabActivity,
   TabState,
 } from "@/shared/types"
@@ -34,6 +38,8 @@ const CATALOG_LATENCY_MS = 250
 const INSTALL_LATENCY_MS = 600
 const REPORT_LATENCY_MS = 500
 const SCRIPTS_GRANT_DELAY_MS = 4000
+const UPLOAD_LATENCY_MS = 700
+const PREVIEW_CDN = "https://cdn.nowly.me/custom"
 const SYNC_LATENCY_MS = 700
 const LAST_SYNC_AGE_MS = 4 * 60_000
 const IPC_DENIED_RECONNECTS = 2
@@ -89,6 +95,20 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
   const readPresences = () => local.read<InstalledPresences>("presences", {})
   const writePresences = (presences: InstalledPresences) => local.set({ presences })
   const readSettings = () => local.read<ExtensionSettings>("settings", { presenceDisplayMode: "category", showPlayer: true })
+  const readCustom = () => local.read<CustomActivitiesState>("customActivities", { items: [], activeId: null, activatedAt: null })
+  const readImages = () => local.read<Record<string, StoredCustomImage>>("customActivityImages", {})
+  const writeCustom = async (next: CustomActivitiesState) => {
+    await local.set({ customActivities: next })
+    const active = next.items.find((item) => item.id === next.activeId)
+    const previous = await local.read<CurrentActivity | null>("currentActivity", null)
+    if (active) {
+      const presence = buildCustomPresence(active, next.activatedAt ?? Date.now())
+      await local.set({ currentActivity: { slug: customActivitySlug(active.id), presence, updatedAt: Date.now() } })
+    } else if (previous?.slug.startsWith("custom:")) {
+      await local.set({ currentActivity: null })
+    }
+    return next
+  }
   const readOnboarding = () => local.read<OnboardingState>("onboarding", { devReplayOnboarding: false, onboardingCompleted: true, nativeSeenConnectedOnce: true })
 
   const updatePresence = async (slug: string, update: (presences: InstalledPresences) => void) => {
@@ -226,6 +246,39 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
     SYNC_PRESENCE_SCRIPTS: () => ({ ok: true }),
     TRACK_EVENT: () => ({ ok: true }),
     INSTALL_LOCAL_PRESENCE_ZIP: () => ({ ok: false, error: "PREVIEW" }),
+    GET_CUSTOM_ACTIVITIES: readCustom,
+    SAVE_CUSTOM_ACTIVITY: async ({ draft }) => {
+      const state = await readCustom()
+      const existing = draft.id ? state.items.find((item) => item.id === draft.id) : undefined
+      const now = Date.now()
+      const activity = { ...draft, id: existing?.id ?? crypto.randomUUID(), createdAt: existing?.createdAt ?? now, updatedAt: now }
+      await writeCustom({ ...state, items: existing ? state.items.map((item) => (item.id === activity.id ? activity : item)) : [activity, ...state.items] })
+      return { ok: true, activity }
+    },
+    DELETE_CUSTOM_ACTIVITY: async ({ id }) => {
+      const state = await readCustom()
+      const active = state.activeId === id
+      await writeCustom({ items: state.items.filter((item) => item.id !== id), activeId: active ? null : state.activeId, activatedAt: active ? null : state.activatedAt })
+      return { ok: true }
+    },
+    SET_CUSTOM_ACTIVITY_ACTIVE: async ({ id }) => {
+      const state = await readCustom()
+      const exists = id !== null && state.items.some((item) => item.id === id)
+      return writeCustom({ ...state, activeId: exists ? id : null, activatedAt: exists ? Date.now() : null })
+    },
+    UPLOAD_CUSTOM_IMAGE: async ({ dataUrl }) => {
+      await delay(UPLOAD_LATENCY_MS)
+      const decoded = decodeImageDataUrl(dataUrl)
+      if (!decoded.ok) return decoded
+      const hash = await sha256Hex(decoded.bytes)
+      const images = await readImages()
+      await local.set({ customActivityImages: { ...images, [hash]: { dataUrl, mime: decoded.mime, size: decoded.bytes.length, createdAt: Date.now() } } })
+      return { ok: true, image: { kind: "upload", hash, mime: decoded.mime, size: decoded.bytes.length, remoteId: hash, remoteUrl: `${PREVIEW_CDN}/${hash}`, lastUsedAt: Date.now() } }
+    },
+    GET_CUSTOM_IMAGES: async ({ hashes }) => {
+      const images = await readImages()
+      return Object.fromEntries(hashes.flatMap((hash) => (images[hash] ? [[hash, images[hash].dataUrl]] : [])))
+    },
     GET_ACCOUNT: () => account,
     START_ACCOUNT_CONNECT: () => {
       account = { signedIn: true, user: PREVIEW_USER, lastSyncedAt: null, error: null, pendingChoice: true }

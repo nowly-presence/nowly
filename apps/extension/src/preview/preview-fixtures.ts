@@ -1,4 +1,4 @@
-import type { CurrentActivity, InstalledPresences, PresenceCatalogItem, PresenceMetadata, RuntimeLogEntry, StoredPresence } from "@/shared/types"
+import type { CurrentActivity, CustomActivitiesState, CustomActivity, InstalledPresences, PresenceCatalogItem, PresenceMetadata, RuntimeLogEntry, StoredPresence } from "@/shared/types"
 import type { PreviewScenario } from "@/preview/preview-params"
 
 export type CatalogFixture = PresenceCatalogItem & { likes?: number }
@@ -138,3 +138,42 @@ export const buildRuntimeLogs = (firstSlug: string | undefined, presenceCount: n
   { id: "3", at: now - 40_000, level: "success", type: "presence", message: "register presence script", payload: { slug: firstSlug ?? "youtube", version: "1.2.3" } },
   { id: "4", at: now - 20_000, level: "warn", type: "api", message: "GET /presences/:slug failed (update check)", payload: { slug: "netflix", status: 503 } },
 ]
+
+const CUSTOM_LIVE_OFFSET_MS = 6 * 60_000
+
+export const buildCustomActivities = (scenario: PreviewScenario, live: boolean, now: number): CustomActivitiesState => {
+  if (scenario === "empty") return { items: [], activeId: null, activatedAt: null }
+  const items: CustomActivity[] = [
+    {
+      id: "preview-study",
+      name: "Studying for finals",
+      type: 0,
+      details: "Chapter 3: Thermodynamics",
+      state: "Pomodoro 2 of 4",
+      largeImage: { kind: "icon", icon: "book", color: "#5a6bb0" },
+      largeText: "",
+      smallImage: { kind: "none" },
+      smallText: "",
+      timestamp: { mode: "countdown", minutes: 25 },
+      buttons: [],
+      createdAt: now - 3 * DAY_MS,
+      updatedAt: now - DAY_MS,
+    },
+    {
+      id: "preview-code",
+      name: "Late night coding",
+      type: 0,
+      details: "Refactoring the side panel",
+      state: "Lo-fi on",
+      largeImage: { kind: "icon", icon: "code", color: "#3f7d6b" },
+      largeText: "",
+      smallImage: { kind: "icon", icon: "headphone", color: "#4a5560" },
+      smallText: "Lo-fi",
+      timestamp: { mode: "elapsed" },
+      buttons: [{ label: "My GitHub", url: "https://github.com/nowly-presence" }],
+      createdAt: now - 10 * DAY_MS,
+      updatedAt: now - 10 * DAY_MS,
+    },
+  ]
+  return { items, activeId: live ? items[0].id : null, activatedAt: live ? now - CUSTOM_LIVE_OFFSET_MS : null }
+}

@@ -20,11 +20,14 @@ type LiveCardProps = {
   footer?: ReactNode
   onOpen?: () => void
   compact?: boolean
+  artwork?: ReactNode
   className?: string
 }
 
-const typeKey = (type: number | undefined) =>
-  type === 2 ? "activity.type.listening" : type === 3 ? "activity.type.watching" : type === 5 ? "activity.type.competing" : "activity.type.playing"
+const NAMED_HEADER_TYPES = new Set([2, 3, 5])
+
+const headerKey = (type: number | undefined) =>
+  type === 2 ? "activity.header.listening" : type === 3 ? "activity.header.watching" : type === 5 ? "activity.header.competing" : "activity.header.playing"
 
 const imageSrc = (value: string | undefined, slug: string): string =>
   value && value.startsWith("https://") ? value : assetUrl(slug, "logo")
@@ -65,6 +68,7 @@ export const LiveCard = ({
   footer,
   onOpen,
   compact,
+  artwork,
   className,
 }: LiveCardProps) => {
   const start = toMs(presence.startTime)
@@ -76,6 +80,10 @@ export const LiveCard = ({
   const remaining = end && !start ? (end - now) / 1000 : undefined
   const small = presence.smallImage?.startsWith("https://") ? presence.smallImage : undefined
   const layers = Math.min(2, stackDepth)
+  const displayName = presence.name || presenceName
+  const namedHeader = NAMED_HEADER_TYPES.has(presence.type ?? 0)
+  const lines = (namedHeader ? [presence.details, presence.state] : [displayName, presence.details, presence.state]).filter((line): line is string => Boolean(line))
+  if (lines.length === 0) lines.push(displayName)
 
   return (
     <div className={cn("relative", layers === 1 && "pb-2", layers === 2 && "pb-4", className)}>
@@ -101,7 +109,7 @@ export const LiveCard = ({
         <div className="flex items-center justify-between gap-3">
           <span className="flex min-w-0 items-center gap-2 text-label-md font-medium text-on-tertiary-muted">
             {status === "live" ? <LiveDot /> : <RiPauseFill className="size-3.5" />}
-            <span className="truncate">{statusLabel ?? t(typeKey(presence.type))}</span>
+            <span className="truncate">{statusLabel ?? t(headerKey(presence.type), { name: displayName })}</span>
           </span>
           {status === "live" && elapsed !== undefined && !total && (
             <span className="text-label-md text-on-tertiary-muted tabular-nums">{formatClock(elapsed)}</span>
@@ -117,11 +125,13 @@ export const LiveCard = ({
           disabled={!onOpen}
           className="-m-1 flex items-center gap-3 rounded-md p-1 text-left transition-colors enabled:hover:bg-tertiary-line"
         >
-          <ActivityImage src={imageSrc(presence.largeImage, slug)} small={small} slug={slug} name={presence.name || presenceName} size={compact ? 48 : 64} />
+          {artwork ?? <ActivityImage src={imageSrc(presence.largeImage, slug)} small={small} slug={slug} name={presence.name || presenceName} size={compact ? 48 : 64} />}
           <span className="flex min-w-0 flex-1 flex-col">
-            <span className="truncate text-label-lg font-medium">{presence.name || presenceName}</span>
-            {presence.details && <span className="truncate text-body-sm text-on-tertiary/90">{presence.details}</span>}
-            {presence.state && <span className="truncate text-body-sm text-on-tertiary-muted">{presence.state}</span>}
+            {lines.map((line, index) => (
+              <span key={index} className={cn("truncate", index === 0 ? "text-label-lg font-medium" : index === 1 && lines.length === 3 ? "text-body-sm text-on-tertiary/90" : "text-body-sm text-on-tertiary-muted")}>
+                {line}
+              </span>
+            ))}
           </span>
         </button>
 

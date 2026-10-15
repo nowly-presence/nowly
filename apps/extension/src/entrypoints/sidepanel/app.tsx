@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { RiApps2Fill, RiApps2Line, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line } from "@remixicon/react"
+import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line } from "@remixicon/react"
 import { FeatureReveal } from "@/components/shared/feature-reveal"
 import { Dock } from "@/features/layout/dock"
 import { useResolvedTheme } from "@/hooks/use-theme"
@@ -8,6 +8,8 @@ import { useNav, type Route, type Tab } from "@/hooks/navigation-provider"
 import { useExtensionState } from "@/hooks/extension-state-provider"
 import { FeatureRevealProvider } from "@/hooks/feature-reveal-provider"
 import { ActivityView } from "@/features/activity/activity-view"
+import { CustomActivityEditorView } from "@/features/custom-activity/custom-activity-editor-view"
+import { CustomActivityView } from "@/features/custom-activity/custom-activity-view"
 import { ConnectionView } from "@/features/diagnostics/connection-view"
 import { DiscordIpcPrompt } from "@/features/discord-ipc/discord-ipc-prompt"
 import { DiscordIpcView } from "@/features/discord-ipc/discord-ipc-view"
@@ -23,7 +25,8 @@ import { ReviewPrompt } from "@/features/review/review-prompt"
 import { HalloweenPrank } from "@/features/seasonal/halloween-prank"
 import { SeasonMoment } from "@/features/seasonal/season-moment"
 
-const TABS: Tab[] = ["activity", "store", "settings"]
+const TABS: Tab[] = ["activity", "store", "custom", "settings"]
+const CUSTOM_ACTIVITY_REVEAL = { id: "custom-activity", version: "2.4.0" } as const
 const ACCOUNT_SYNC_REVEAL = { id: "account-sync", version: "2.3.0" } as const
 
 const routeKey = (route: Route, depth: number) => `${depth}:${JSON.stringify(route)}`
@@ -68,6 +71,7 @@ export const App = () => {
             <Header theme={theme} />
             {value === "activity" && <ActivityView />}
             {value === "store" && <LibraryView />}
+            {value === "custom" && <CustomActivityView />}
             {value === "settings" && <SettingsView />}
           </Layer>
         ))}
@@ -76,6 +80,7 @@ export const App = () => {
             {route.name === "presence" && <PresenceDetailView slug={route.slug} />}
             {route.name === "connection" && <ConnectionView />}
             {route.name === "logs" && <RuntimeLogsView />}
+            {route.name === "custom-activity" && <CustomActivityEditorView id={route.id} template={route.template} />}
             {route.name === "discord-ipc" && <DiscordIpcView />}
           </Layer>
         ))}
@@ -86,6 +91,17 @@ export const App = () => {
           items={[
             { value: "activity", label: t("nav.activity"), icon: <RiPulseLine className="size-[18px]" />, activeIcon: <RiPulseFill className="size-[18px]" />, badge: live ? "live" : undefined },
             { value: "store", label: t("nav.library"), icon: <RiApps2Line className="size-[18px]" />, activeIcon: <RiApps2Fill className="size-[18px]" /> },
+            {
+              value: "custom",
+              label: t("nav.custom"),
+              icon: <RiQuillPenLine className="size-[18px]" />,
+              activeIcon: <RiQuillPenFill className="size-[18px]" />,
+              wrap: (button) => (
+                <FeatureReveal {...CUSTOM_ACTIVITY_REVEAL} text={t("reveal.customActivity")} hint={t("reveal.customActivityHint")}>
+                  {button}
+                </FeatureReveal>
+              ),
+            },
             {
               value: "settings",
               label: t("nav.settings"),

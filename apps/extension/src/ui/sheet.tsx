@@ -33,7 +33,7 @@ export const Sheet = ({ open, onClose, title, description, children, footer, clo
   if (!open) return null
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-end justify-center">
+    <div className="fixed inset-0 z-50 flex items-end justify-center px-3 pb-3">
       <button type="button" aria-label={closeLabel} onClick={onClose} className="absolute inset-0 animate-fade bg-overlay/60 backdrop-blur-[2px]" />
       <div
         ref={panelRef}
@@ -41,7 +41,7 @@ export const Sheet = ({ open, onClose, title, description, children, footer, clo
         aria-modal="true"
         aria-label={title}
         tabIndex={-1}
-        className="relative flex max-h-[88vh] w-full max-w-lg animate-enter-up flex-col rounded-t-xl border-t border-line bg-surface outline-none"
+        className="relative flex max-h-[calc(100vh-24px)] w-full max-w-lg animate-enter-up flex-col overflow-hidden rounded-xl border border-line bg-surface outline-none"
       >
         <div className="flex items-start justify-between gap-4 px-4 pt-4 pb-3">
           <div className="flex flex-col gap-1">

@@ -1,5 +1,6 @@
 export type { Locale } from "@/shared/locales"
 
+export * from "@/shared/types/custom-activity"
 export * from "@/shared/types/native"
 export * from "@/shared/types/navigation"
 export * from "@/shared/types/presence"
