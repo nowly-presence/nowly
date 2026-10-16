@@ -156,20 +156,39 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
   const handlers: MockHandlers = {
     GET_LEGAL_STATE: async () => {
       const stored = await local.get("legalDocuments");
+
       if (stored.legalDocuments) return normalizeLegalState(stored.legalDocuments);
+
       const initial = emptyLegalState();
-      const receipt = { version: 1, recordedAt: new Date().toISOString() };
+      const receipt = {
+        version: 1,
+        recordedAt: new Date().toISOString()
+      };
       const mode = new URLSearchParams(window.location.search).get("legal");
+
       if (mode !== "first") {
         initial.tosAcceptance = receipt;
         initial.privacyAcknowledgement = receipt;
       }
+
       if (mode === "update") {
-        initial.manifest = { schemaVersion: 1, documents: {
-          tos: { ...initial.manifest.documents.tos, version: 2, requiredVersion: 2 },
-          privacy: { ...initial.manifest.documents.privacy, version: 2, requiredVersion: 2 }
-        } };
+        initial.manifest = {
+          schemaVersion: 1,
+          documents: {
+            tos: {
+              ...initial.manifest.documents.tos,
+              version: 2,
+              requiredVersion: 2
+            },
+            privacy: {
+              ...initial.manifest.documents.privacy,
+              version: 2,
+              requiredVersion: 2
+            }
+          }
+        };
       }
+
       await local.set({ legalDocuments: initial });
       return initial;
     },

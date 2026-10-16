@@ -39,7 +39,11 @@ const ACCOUNT_SYNC_REVEAL = {
 
 const routeKey = (route: Route, depth: number) => `${depth}:${JSON.stringify(route)}`;
 
-export const App = () => <LegalGate><AppContent /></LegalGate>;
+export const App = () => (
+  <LegalGate>
+    <AppContent />
+  </LegalGate>
+);
 
 const AppContent = () => {
   const { state, updateSettings } = useExtensionState();

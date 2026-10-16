@@ -169,6 +169,7 @@ export const broadcastActiveTab = async (): Promise<void> => {
     notifyBroadcastStateChanged();
     return;
   }
+
   const settings = await getSettings();
 
   const custom = await getActiveCustomPresence();
@@ -214,6 +215,7 @@ export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
     await refreshToolbarBadge();
     return;
   }
+
   const [current, presences, settings] = await Promise.all([
     getCurrentActivity(),
     getPresences(),

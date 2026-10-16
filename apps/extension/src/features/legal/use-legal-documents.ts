@@ -8,21 +8,32 @@ export const useLegalDocuments = () => {
   const revision = useRef(0);
   const load = useCallback(async () => {
     const currentRevision = revision.current;
+
     try {
       const cached = await sendMessage("GET_LEGAL_STATE");
       if (revision.current === currentRevision) setState(cached);
       setFailed(false);
       await sendMessage("CHECK_LEGAL_DOCUMENTS");
-    } catch { setFailed(true); }
+    } catch {
+      setFailed(true);
+    }
   }, []);
   useEffect(() => {
     const onChange = (changes: Record<string, chrome.storage.StorageChange>, area: string) => {
       if (area !== "local" || !("legalDocuments" in changes)) return;
+
       revision.current += 1;
       setState(normalizeLegalState(changes.legalDocuments.newValue));
     };
-    const onVisible = () => { if (document.visibilityState === "visible") void load(); };
-    const interval = window.setInterval(() => { if (document.visibilityState === "visible") void load(); }, 60 * 60 * 1000);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void load();
+    };
+    const interval = window.setInterval(
+      () => {
+        if (document.visibilityState === "visible") void load();
+      },
+      60 * 60 * 1000
+    );
     chrome.storage.onChanged.addListener(onChange);
     void load();
     document.addEventListener("visibilitychange", onVisible);
@@ -38,5 +49,10 @@ export const useLegalDocuments = () => {
     if (revision.current === currentRevision) setState(result.state);
     return result;
   };
-  return { state, failed, retry: load, confirm };
+  return {
+    state,
+    failed,
+    retry: load,
+    confirm
+  };
 };

@@ -174,7 +174,9 @@ const bootBackground = (options: {
 export const registerLifecycleHandlers = (): void => {
   void chrome.alarms.create("legal-documents-check", { periodInMinutes: 60 });
   chrome.alarms.onAlarm.addListener((alarm) => {
-    if (alarm.name === "legal-documents-check") void checkLegalDocuments().then(() => broadcastActiveTab()).catch(() => {});
+    if (alarm.name === "legal-documents-check") void checkLegalDocuments()
+      .then(() => broadcastActiveTab())
+      .catch(() => {});
   });
   registerNativeResponseHandler();
 
@@ -234,7 +236,9 @@ export const registerLifecycleHandlers = (): void => {
 };
 
 export const initializeBackground = (): void => {
-  void checkLegalDocuments().then(() => broadcastActiveTab()).catch(() => {});
+  void checkLegalDocuments()
+    .then(() => broadcastActiveTab())
+    .catch(() => {});
   enableSidePanelAction();
   registerContextMenu();
   void bootBackground();

@@ -8,7 +8,6 @@ import { deviceRoutes } from "@/features/device/device.routes";
 import { imageProxyRoutes } from "@/features/image-proxy/image-proxy.routes";
 import { insightsRoutes } from "@/features/insights/insights.routes";
 import { presenceRoutes } from "@/features/presence/presence.routes";
-
 import { securityRoutes } from "@/features/security/security.routes";
 import { statusRoutes } from "@/features/status/status.routes";
 import { syncRoutes } from "@/features/sync/sync.routes";

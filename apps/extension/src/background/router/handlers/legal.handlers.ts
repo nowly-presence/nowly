@@ -12,8 +12,13 @@ export const handleCheckLegalDocuments: Handler<"CHECK_LEGAL_DOCUMENTS"> = async
 
 export const handleAcceptLegalDocuments: Handler<"ACCEPT_LEGAL_DOCUMENTS"> = async (input, sender) => {
   if (sender.id !== chrome.runtime.id || sender.url !== chrome.runtime.getURL("sidepanel/index.html")) {
-    return { ok: false, state: await getLegalState(), error: "confirmationRequired" };
+    return {
+      ok: false,
+      state: await getLegalState(),
+      error: "confirmationRequired"
+    };
   }
+
   const result = await acceptLegalDocuments(input);
   if (result.ok) await broadcastActiveTab();
   return result;

@@ -50,9 +50,18 @@ export type PresenceEngagement = {
 export type RouterSource = "PRESENCES_POPUP" | "PRESENCES_CONTENT";
 
 export type RouterMessageMap = {
-  GET_LEGAL_STATE: { payload: void; response: LegalState };
-  CHECK_LEGAL_DOCUMENTS: { payload: void; response: LegalState };
-  ACCEPT_LEGAL_DOCUMENTS: { payload: LegalConfirmation; response: LegalConfirmationResult };
+  GET_LEGAL_STATE: {
+    payload: void;
+    response: LegalState;
+  };
+  CHECK_LEGAL_DOCUMENTS: {
+    payload: void;
+    response: LegalState;
+  };
+  ACCEPT_LEGAL_DOCUMENTS: {
+    payload: LegalConfirmation;
+    response: LegalConfirmationResult;
+  };
   GET_PRESENCES: {
     payload: void;
     response: InstalledPresences;
