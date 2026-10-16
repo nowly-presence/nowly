@@ -81,7 +81,7 @@ export default defineConfig({
   ],
   resolve: { alias },
   define: {
-    ...buildDefine("chrome", "canary"),
+    ...buildDefine("chrome", process.env.NOWLY_PREVIEW_CHANNEL === "stable" ? "stable" : "canary"),
     "import.meta.env.VITE_CDN_BASE_URL": JSON.stringify("http://127.0.0.1:5173/cdn"),
     "import.meta.env.VITE_PREVIEW": JSON.stringify("1")
   },
