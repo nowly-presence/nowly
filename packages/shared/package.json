@@ -15,7 +15,8 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./schemas": "./src/schemas.ts"
+    "./schemas": "./src/schemas.ts",
+    "./legal": "./src/legal.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

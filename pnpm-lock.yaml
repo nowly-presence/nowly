@@ -327,6 +327,9 @@ importers:
       '@nowly/locales':
         specifier: workspace:*
         version: link:../../packages/locales
+      '@nowly/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@nowly/ui':
         specifier: workspace:*
         version: link:../../packages/ui
