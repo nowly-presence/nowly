@@ -87,7 +87,7 @@ export const CustomActivityEditorView = ({ id, template }: {
       />
 
       <ScreenBody className="gap-6 pt-0">
-        <Section title={t("custom.editor.preview")}>
+        <Section title={t("custom.editor.preview")} className="sticky top-14 z-10 bg-canvas py-2">
           <LiveCard
             slug={customActivitySlug(draft.id ?? "draft")}
             presence={presence}

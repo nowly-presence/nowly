@@ -1,4 +1,5 @@
 {
+  "custom.image.listeningHint": "In Listening mode, Discord also shows this text on a third line, as an album name.",
   "legal.tos": "Terms of Service",
   "legal.privacy": "Privacy Policy",
   "legal.updated": "Updated {date}",
@@ -493,7 +494,7 @@
   "custom.image.modeNone": "None",
   "custom.image.choose": "Choose an image",
   "custom.image.replace": "Replace",
-  "custom.image.uploadHint": "PNG, JPEG, WebP or GIF, {size} MB max. Hosted by Nowly while you use it, removed after {days} days without use and sent again automatically.",
+  "custom.image.uploadHint": "PNG, JPEG, WebP or GIF, {size} MB max.",
   "custom.image.hoverLabel": "Text on hover",
   "custom.image.hoverPlaceholder": "Text on hover (optional)",
   "custom.image.errorTooLarge": "This image is too large, even after resizing.",

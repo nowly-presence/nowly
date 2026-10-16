@@ -1,4 +1,5 @@
 {
+  "custom.image.listeningHint": "듣는 중 모드에서는 Discord가 이 텍스트를 앨범 이름처럼 세 번째 줄에도 표시해요.",
   "legal.tos": "이용약관",
   "legal.privacy": "개인정보 처리방침",
   "legal.updated": "업데이트: {date}",
@@ -493,7 +494,7 @@
   "custom.image.modeNone": "없음",
   "custom.image.choose": "이미지 선택",
   "custom.image.replace": "바꾸기",
-  "custom.image.uploadHint": "PNG, JPEG, WebP, GIF, 최대 {size}MB. 사용하는 동안 Nowly가 호스팅하며, {days}일 동안 쓰지 않으면 삭제되고 다시 쓸 때 자동으로 재전송돼요.",
+  "custom.image.uploadHint": "PNG, JPEG, WebP, GIF, 최대 {size}MB.",
   "custom.image.hoverLabel": "마우스를 올렸을 때 텍스트",
   "custom.image.hoverPlaceholder": "마우스를 올렸을 때 텍스트 (선택 사항)",
   "custom.image.errorTooLarge": "크기를 줄여도 이미지가 너무 커요.",

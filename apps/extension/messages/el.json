@@ -1,4 +1,5 @@
 {
+  "custom.image.listeningHint": "Στη λειτουργία ακρόασης, το Discord εμφανίζει επίσης αυτό το κείμενο σε τρίτη γραμμή, ως όνομα άλμπουμ.",
   "legal.tos": "Όροι χρήσης",
   "legal.privacy": "Πολιτική απορρήτου",
   "legal.updated": "Ενημέρωση: {date}",
@@ -493,7 +494,7 @@
   "custom.image.modeNone": "Καμία",
   "custom.image.choose": "Επιλογή εικόνας",
   "custom.image.replace": "Αντικατάσταση",
-  "custom.image.uploadHint": "PNG, JPEG, WebP ή GIF, έως {size} MB. Φιλοξενείται από το Nowly όσο τη χρησιμοποιείς, διαγράφεται μετά από {days} ημέρες χωρίς χρήση και στέλνεται ξανά αυτόματα.",
+  "custom.image.uploadHint": "PNG, JPEG, WebP ή GIF, έως {size} MB.",
   "custom.image.hoverLabel": "Κείμενο κατά την κατάδειξη",
   "custom.image.hoverPlaceholder": "Κείμενο κατά την κατάδειξη (προαιρετικό)",
   "custom.image.errorTooLarge": "Η εικόνα είναι πολύ μεγάλη, ακόμη και μετά τη σμίκρυνση.",

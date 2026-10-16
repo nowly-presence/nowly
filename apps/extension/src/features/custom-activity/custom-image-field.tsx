@@ -1,13 +1,14 @@
-import { useRef, useState, type ChangeEvent } from "react";
-import { RiImageAddLine, RiLink } from "@remixicon/react";
+import { useId, useRef, useState, type ChangeEvent } from "react";
+import { RiImageAddLine, RiLink, RiPencilLine } from "@remixicon/react";
 import { useCustomImageSrc } from "@/hooks/use-custom-image-data";
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
-import { CUSTOM_IMAGE_MAX_BYTES, CUSTOM_IMAGE_MIMES, CUSTOM_IMAGE_RETENTION_DAYS, CUSTOM_TEXT_MAX_LENGTH, type CustomActivityError } from "@/shared/custom-activity";
+import { CUSTOM_IMAGE_MAX_BYTES, CUSTOM_IMAGE_MIMES, CUSTOM_TEXT_MAX_LENGTH, type CustomActivityError } from "@/shared/custom-activity";
 import type { CustomImage } from "@/shared/types";
-import { Button } from "@/ui/button";
+import { Button, Spinner } from "@/ui/button";
 import { cn } from "@/ui/cn";
 import { FieldRow } from "@/ui/field-row";
 import { Input } from "@/ui/input";
+import { InfoTooltip } from "@/ui/info-tooltip";
 import { Segmented } from "@/ui/segmented";
 import { useToast } from "@/ui/toast";
 import { CustomActivityArtwork } from "@/components/shared/custom-activity-artwork";
@@ -31,6 +32,7 @@ type CustomImageFieldProps = {
   uploading: boolean;
   round?: boolean;
   noneShowsNowly?: boolean;
+  listeningHint?: boolean;
 };
 
 const READ_ERRORS: Record<string, MessageKey> = {
@@ -85,10 +87,11 @@ const UrlThumb = ({ image, round }: {
 };
 
 export const CustomImageField =
-  ({ title, description, image, onImageChange, hoverText, onHoverTextChange, hoverError, imageError, upload, uploading, round, noneShowsNowly = false }: CustomImageFieldProps) => {
+  ({ title, description, image, onImageChange, hoverText, onHoverTextChange, hoverError, imageError, upload, uploading, round, noneShowsNowly = false, listeningHint = false }: CustomImageFieldProps) => {
     const { t } = useI18n();
     const { toast } = useToast();
     const inputRef = useRef<HTMLInputElement>(null);
+    const uploadHintId = useId();
     const [kept, setKept] = useState<Partial<Record<Mode, CustomImage>>>({ [image.kind]: image });
     const [mode, setMode] = useState<Mode>(image.kind);
 
@@ -143,25 +146,35 @@ export const CustomImageField =
           />
           {mode === "upload" && (
             <div className="flex items-center gap-3">
-              <Preview image={image} round={round} />
-              <div className="flex min-w-0 flex-col items-start gap-1.5">
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  loading={uploading}
-                  icon={<RiImageAddLine className="size-4" />}
-                  onClick={() => inputRef.current?.click()}
-                >
-                  {image.kind === "upload"
-                    ? t("custom.image.replace")
-                    : t("custom.image.choose")}
-                </Button>
-                <span className="text-label-sm text-muted">
-                  {t("custom.image.uploadHint", {
-                    size: CUSTOM_IMAGE_MAX_BYTES / MB,
-                    days: CUSTOM_IMAGE_RETENTION_DAYS
-                  })}
+              <Button
+                size="icon"
+                variant="ghost"
+                className={cn("group size-14! overflow-hidden", round && "rounded-full!")}
+                disabled={uploading}
+                aria-busy={uploading}
+                aria-label={image.kind === "upload" ? t("custom.image.replace") : t("custom.image.choose")}
+                title={image.kind === "upload" ? t("custom.image.replace") : t("custom.image.choose")}
+                aria-describedby={uploadHintId}
+                onClick={() => inputRef.current?.click()}
+              >
+                <span className={cn("transition-opacity", image.kind !== "upload" && "group-hover:opacity-0 group-focus-visible:opacity-0")}>
+                  <Preview image={image} round={round} />
                 </span>
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute inset-0 flex items-center justify-center bg-ink/65 text-canvas opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100",
+                    uploading && "opacity-100!"
+                  )}
+                >
+                  {uploading ? <Spinner className="size-5" /> : <RiPencilLine className="size-5" />}
+                </span>
+              </Button>
+              <div className="flex min-w-0 flex-col gap-1">
+                <span className="text-label-md font-medium">{image.kind === "upload" ? t("custom.image.replace") : t("custom.image.choose")}</span>
+                <p id={uploadHintId} className="text-label-sm text-muted">
+                  {t("custom.image.uploadHint", { size: CUSTOM_IMAGE_MAX_BYTES / MB })}
+                </p>
               </div>
               <input ref={inputRef} type="file" accept={CUSTOM_IMAGE_MIMES.join(",")} className="hidden" onChange={(event) => void pick(event)} />
             </div>
@@ -213,6 +226,7 @@ export const CustomImageField =
                 maxLength={CUSTOM_TEXT_MAX_LENGTH}
                 placeholder={t("custom.image.hoverPlaceholder")}
                 aria-label={t("custom.image.hoverLabel")}
+                trailing={listeningHint ? <InfoTooltip label={t("detail.information")} text={t("custom.image.listeningHint")} /> : undefined}
                 onChange={(event) => onHoverTextChange(event.target.value)}
               />
               <FieldError error={hoverError} />

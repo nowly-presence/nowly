@@ -1,4 +1,5 @@
 {
+  "custom.image.listeningHint": "「聴いている」モードでは、Discord はこのテキストをアルバム名として3行目にも表示します。",
   "legal.tos": "利用規約",
   "legal.privacy": "プライバシーポリシー",
   "legal.updated": "更新日: {date}",
@@ -493,7 +494,7 @@
   "custom.image.modeNone": "なし",
   "custom.image.choose": "画像を選択",
   "custom.image.replace": "置き換え",
-  "custom.image.uploadHint": "PNG、JPEG、WebP、GIF、最大 {size} MB。使っている間は Nowly がホストし、{days} 日間使われないと削除され、次に使うときに自動で再送信されます。",
+  "custom.image.uploadHint": "PNG、JPEG、WebP、GIF、最大 {size} MB。",
   "custom.image.hoverLabel": "ホバー時のテキスト",
   "custom.image.hoverPlaceholder": "ホバー時のテキスト (任意)",
   "custom.image.errorTooLarge": "縮小してもこの画像は大きすぎます。",

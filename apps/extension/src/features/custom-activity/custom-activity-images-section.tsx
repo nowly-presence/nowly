@@ -23,6 +23,7 @@ export const CustomActivityImagesSection = ({ draft, patch, errors, upload, uplo
           hoverText={draft.largeText}
           onHoverTextChange={(largeText) => patch({ largeText })}
           hoverError={errors.largeText}
+          listeningHint={draft.type === 2}
           imageError={errors.largeImage}
           upload={upload}
           uploading={uploading}

@@ -1,4 +1,5 @@
 {
+  "custom.image.listeningHint": "Dalam mod Mendengar, Discord turut memaparkan teks ini pada baris ketiga sebagai nama album.",
   "legal.tos": "Terma Perkhidmatan",
   "legal.privacy": "Dasar Privasi",
   "legal.updated": "Dikemas kini {date}",
@@ -493,7 +494,7 @@
   "custom.image.modeNone": "Tiada",
   "custom.image.choose": "Pilih imej",
   "custom.image.replace": "Ganti",
-  "custom.image.uploadHint": "PNG, JPEG, WebP atau GIF, maksimum {size} MB. Dihoskan oleh Nowly selagi anda menggunakannya, dipadam selepas {days} hari tidak digunakan dan dihantar semula secara automatik.",
+  "custom.image.uploadHint": "PNG, JPEG, WebP atau GIF, maksimum {size} MB.",
   "custom.image.hoverLabel": "Teks semasa tuding",
   "custom.image.hoverPlaceholder": "Teks semasa tuding (pilihan)",
   "custom.image.errorTooLarge": "Imej ini terlalu besar, walaupun selepas diubah saiz.",

@@ -1,4 +1,5 @@
 {
+  "custom.image.listeningHint": "W trybie Słuchanie Discord wyświetla ten tekst także w trzecim wierszu, jako nazwę albumu.",
   "legal.tos": "Warunki korzystania",
   "legal.privacy": "Polityka prywatności",
   "legal.updated": "Aktualizacja: {date}",
@@ -493,7 +494,7 @@
   "custom.image.modeNone": "Brak",
   "custom.image.choose": "Wybierz obraz",
   "custom.image.replace": "Zastąp",
-  "custom.image.uploadHint": "PNG, JPEG, WebP lub GIF, maks. {size} MB. Hostowany przez Nowly, dopóki go używasz, usuwany po {days} dniach bez użycia i automatycznie przesyłany ponownie.",
+  "custom.image.uploadHint": "PNG, JPEG, WebP lub GIF, maks. {size} MB.",
   "custom.image.hoverLabel": "Tekst po najechaniu",
   "custom.image.hoverPlaceholder": "Tekst po najechaniu (opcjonalnie)",
   "custom.image.errorTooLarge": "Ten obraz jest za duży, nawet po zmniejszeniu.",

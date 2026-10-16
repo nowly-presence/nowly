@@ -1,4 +1,5 @@
 {
+  "custom.image.listeningHint": "En mode Écoute, Discord affiche aussi ce texte en troisième ligne, comme un nom d'album.",
   "legal.tos": "Conditions d’utilisation",
   "legal.privacy": "Politique de confidentialité",
   "legal.updated": "Mise à jour le {date}",
@@ -431,7 +432,7 @@
   "discordIpc.alertDescription": "Discord est lancé en administrateur. Voir comment corriger.",
   "discordIpc.checkHint": "Discord est lancé en administrateur et bloque Nowly.",
   "discordIpc.fix": "Corriger",
-  "nav.custom": "Perso",
+  "nav.custom": "Personnalisés",
   "reveal.customActivity": "Salut, moi c'est Nolo ! Ici, vous créez vos activités personnalisées : choisissez un nom, écrivez vos propres lignes, ajoutez des images et des boutons, puis affichez le tout sur Discord d'un seul interrupteur. Aucune présence à installer, aucun vieux script à dénicher sur GitHub.",
   "reveal.customActivityHint": "Créez votre propre activité. Touchez ici !",
   "custom.title": "Activités personnalisées",
@@ -493,7 +494,7 @@
   "custom.image.modeNone": "Aucune",
   "custom.image.choose": "Choisir une image",
   "custom.image.replace": "Remplacer",
-  "custom.image.uploadHint": "PNG, JPEG, WebP ou GIF, {size} Mo max. Hébergée par Nowly tant que vous l'utilisez, supprimée après {days} jours sans utilisation puis renvoyée automatiquement.",
+  "custom.image.uploadHint": "PNG, JPEG, WebP ou GIF, {size} Mo max.",
   "custom.image.hoverLabel": "Texte au survol",
   "custom.image.hoverPlaceholder": "Texte au survol (facultatif)",
   "custom.image.errorTooLarge": "Cette image est trop lourde, même redimensionnée.",
