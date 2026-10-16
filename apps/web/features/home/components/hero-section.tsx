@@ -7,7 +7,10 @@ import { RiArrowRightLine, RiDiscordFill } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
 export const HeroSection = async () => {
-  const [t, community] = await Promise.all([getTranslations("hero"), getDiscordCommunity()]);
+  const [t, community] = await Promise.all([
+    getTranslations("hero"),
+    getDiscordCommunity(),
+  ]);
 
   return (
     <section className="overflow-x-clip px-5 pb-24 pt-28 sm:px-10 sm:pb-28 sm:pt-36 lg:pb-32 lg:pt-40">

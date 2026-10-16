@@ -17,7 +17,13 @@ import {
 import { RiFileCopyLine } from "@nowly/ui/icons";
 import { useEffect, useState } from "react";
 
-type Campaign = { id: string; name: string; active: boolean; createdAt: string; signupCount: number };
+type Campaign = {
+  id: string;
+  name: string;
+  active: boolean;
+  createdAt: string;
+  signupCount: number;
+};
 
 export const CampaignsManager = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -41,7 +47,10 @@ export const CampaignsManager = () => {
     }
     setCreating(true);
     try {
-      await apiFetch("/campaigns", { method: "POST", body: JSON.stringify({ name: name.trim() }) });
+      await apiFetch("/campaigns", {
+        method: "POST",
+        body: JSON.stringify({ name: name.trim() }),
+      });
       setName("");
       load();
     } catch {
@@ -102,7 +111,9 @@ export const CampaignsManager = () => {
                   </button>
                 </TableCell>
                 <TableCell>{campaign.signupCount}</TableCell>
-                <TableCell>{new Date(campaign.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  {new Date(campaign.createdAt).toLocaleDateString()}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

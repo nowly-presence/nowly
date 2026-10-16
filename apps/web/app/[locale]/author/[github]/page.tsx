@@ -12,10 +12,12 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 type AuthorPageProps = {
-  params: Promise<{ github: string }>
+  params: Promise<{ github: string }>;
 };
 
-export const generateMetadata = async ({ params }: AuthorPageProps): Promise<Metadata> => {
+export const generateMetadata = async ({
+  params,
+}: AuthorPageProps): Promise<Metadata> => {
   const { github } = await params;
   const handle = normalizeGithub(github);
   const [catalog, locale, t] = await Promise.all([
@@ -23,14 +25,16 @@ export const generateMetadata = async ({ params }: AuthorPageProps): Promise<Met
     getLocale(),
     getTranslations("authorPage"),
   ]);
-  const authored = catalog.filter((presence) => presenceMatchesGithub(presence, handle));
-  const name = authored[0] ? contributorDisplayName(authored[0], handle) : handle;
+  const authored = catalog.filter((presence) =>
+    presenceMatchesGithub(presence, handle),
+  );
+  const name = authored[0]
+    ? contributorDisplayName(authored[0], handle)
+    : handle;
 
   return createMetadata({
     title: name,
-    description: authored.length > 0
-      ? t("meta-description", { name })
-      : name,
+    description: authored.length > 0 ? t("meta-description", { name }) : name,
     locale,
     path: `/author/${handle}`,
     noIndex: authored.length === 0,
@@ -44,7 +48,9 @@ const Page = async ({ params }: AuthorPageProps) => {
 
   const catalog = await getPresenceCatalog();
 
-  const authored = catalog.filter((presence) => presenceMatchesGithub(presence, handle));
+  const authored = catalog.filter((presence) =>
+    presenceMatchesGithub(presence, handle),
+  );
   if (authored.length === 0) notFound();
 
   const t = await getTranslations("authorPage");

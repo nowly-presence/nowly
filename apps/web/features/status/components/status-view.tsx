@@ -1,7 +1,17 @@
 import { Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
 import { StatusHistory } from "@/features/status/components/status-history";
-import { fetchStatusReport, statusBadgeClasses, type ServiceStatus, type StatusServiceId } from "@/features/status/lib/status";
-import { RiDatabase2Line, RiGlobalLine, RiPulseLine, RiServerLine } from "@nowly/ui/icons";
+import {
+  fetchStatusReport,
+  statusBadgeClasses,
+  type ServiceStatus,
+  type StatusServiceId,
+} from "@/features/status/lib/status";
+import {
+  RiDatabase2Line,
+  RiGlobalLine,
+  RiPulseLine,
+  RiServerLine,
+} from "@nowly/ui/icons";
 import { getLocale, getTranslations } from "next-intl/server";
 
 const serviceIconMap: Record<StatusServiceId, typeof RiGlobalLine> = {
@@ -62,11 +72,19 @@ export const StatusView = async () => {
           </p>
 
           <div className="mt-5 inline-flex items-center gap-2 text-sm text-muted-foreground">
-            <span className={cn("size-2 shrink-0 rounded-full", overallDotClasses[report.overallStatus])} />
+            <span
+              className={cn(
+                "size-2 shrink-0 rounded-full",
+                overallDotClasses[report.overallStatus],
+              )}
+            />
             <span>{t(`overall.${report.overallStatus}`)}</span>
             {report.generatedAt ? (
               <span className="text-muted-foreground/60">
-                · {t("checked-history", { time: formatRelativeTime(locale, report.generatedAt) })}
+                ·{" "}
+                {t("checked-history", {
+                  time: formatRelativeTime(locale, report.generatedAt),
+                })}
               </span>
             ) : null}
           </div>
@@ -88,8 +106,12 @@ export const StatusView = async () => {
                     <Icon className="size-5" />
                   </div>
 
-                  <CardTitle className="mt-4">{t(`services.${service.id}.title`)}</CardTitle>
-                  <CardDescription className="mt-1">{latency ?? t("no-data")}</CardDescription>
+                  <CardTitle className="mt-4">
+                    {t(`services.${service.id}.title`)}
+                  </CardTitle>
+                  <CardDescription className="mt-1">
+                    {latency ?? t("no-data")}
+                  </CardDescription>
 
                   <span
                     className={cn(

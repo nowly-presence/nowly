@@ -3,14 +3,22 @@
 import { RiDownloadLine } from "@nowly/ui/icons";
 import { ButtonVariantProps, buttonVariants, cn } from "@nowly/ui";
 
-import { detectExtensionBrowser, getExtensionDownloadUrl } from "@/lib/extension-store";
+import {
+  detectExtensionBrowser,
+  getExtensionDownloadUrl,
+} from "@/lib/extension-store";
 import type { ExtensionBrowser } from "@/lib/extension-store";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useState, type ComponentProps, type ReactNode } from "react";
+import {
+  useEffect,
+  useState,
+  type ComponentProps,
+  type ReactNode,
+} from "react";
 
-
-type ExtensionStoreButtonProps = Omit<ComponentProps<"a">, "href"> & ButtonVariantProps;
+type ExtensionStoreButtonProps = Omit<ComponentProps<"a">, "href"> &
+  ButtonVariantProps;
 
 const useExtensionBrowser = () => {
   const [browser, setBrowser] = useState<ExtensionBrowser>("chrome");
@@ -41,7 +49,8 @@ export const ExtensionStoreButton = ({
       {...props}
     >
       <RiDownloadLine data-icon="inline-start" />
-      {children ?? t(browser === "firefox" ? "download-firefox" : "download-chrome")}
+      {children ??
+        t(browser === "firefox" ? "download-firefox" : "download-chrome")}
     </a>
   );
 };
@@ -50,8 +59,8 @@ export const ExtensionStoreLink = ({
   children,
   className,
 }: {
-  children: ReactNode
-  className?: string
+  children: ReactNode;
+  className?: string;
 }) => {
   const browser = useExtensionBrowser();
 

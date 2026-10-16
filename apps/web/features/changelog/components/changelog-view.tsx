@@ -2,7 +2,6 @@ import { ButtonLink } from "@/components/button-link";
 import { DiscordCallout } from "@/components/discord-callout";
 import { ButtonAnchor } from "@nowly/ui";
 
-
 import { ChangelogList } from "@/features/changelog/components/changelog-list";
 import { MarkdownBody } from "@/features/content/components/markdown-body";
 import {
@@ -41,11 +40,20 @@ export const ChangelogView = async () => {
         </header>
 
         <div className="mt-12 max-w-3xl">
-          <ChangelogList releases={releases} latestByStore={latestByStore} locale={locale} />
+          <ChangelogList
+            releases={releases}
+            latestByStore={latestByStore}
+            locale={locale}
+          />
         </div>
 
         <div className="mt-10">
-          <ButtonAnchor href={docsHref("/changelog")} rel="noreferrer" target="_blank" variant="outline">
+          <ButtonAnchor
+            href={docsHref("/changelog")}
+            rel="noreferrer"
+            target="_blank"
+            variant="outline"
+          >
             {t("docs")}
           </ButtonAnchor>
         </div>
@@ -58,8 +66,8 @@ export const ChangelogReleaseView = async ({
   version,
   release,
 }: {
-  version: string
-  release: ChangelogRelease | null
+  version: string;
+  release: ChangelogRelease | null;
 }) => {
   const [t, locale] = await Promise.all([
     getTranslations("changelogPage"),
@@ -114,15 +122,25 @@ export const ChangelogReleaseView = async ({
           </p>
         ) : null}
 
-        {notes.length > 0 ? <MarkdownBody blocks={notes} className="mt-10 max-w-3xl" /> : null}
+        {notes.length > 0 ? (
+          <MarkdownBody blocks={notes} className="mt-10 max-w-3xl" />
+        ) : null}
 
         <div className="mt-10 flex flex-wrap gap-2">
           {notes.length === 0 ? (
-            <ButtonAnchor href={notesHref} rel="noreferrer" target="_blank" variant="inverted">
+            <ButtonAnchor
+              href={notesHref}
+              rel="noreferrer"
+              target="_blank"
+              variant="inverted"
+            >
               {t("docs")}
             </ButtonAnchor>
           ) : null}
-          <ButtonLink href="/library" variant={notes.length === 0 ? "outline" : "inverted"}>
+          <ButtonLink
+            href="/library"
+            variant={notes.length === 0 ? "outline" : "inverted"}
+          >
             {t("library")}
           </ButtonLink>
         </div>

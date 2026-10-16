@@ -12,4 +12,4 @@ export const STORAGE_KEYS = {
   customActivityImages: "customActivityImages",
   account: "account",
   syncState: "syncState",
-} as const
+} as const;

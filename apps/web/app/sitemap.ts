@@ -20,12 +20,12 @@ const parseDate = (value: string | null): Date | undefined => {
 };
 
 type Entry = {
-  href: string
-  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]
-  priority: number
-  lastModified?: Date
+  href: string;
+  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"];
+  priority: number;
+  lastModified?: Date;
   // Locales with their own text. Defaults to every locale (fully translated pages).
-  locales?: readonly LocaleString[]
+  locales?: readonly LocaleString[];
 };
 
 const entry = (
@@ -35,8 +35,13 @@ const entry = (
   options: Pick<Entry, "lastModified" | "locales"> = {},
 ): Entry => ({ href, changeFrequency, priority, ...options });
 
-const languageAlternates = (href: string, locales: readonly LocaleString[]): Record<string, string> =>
-  Object.fromEntries(locales.map((locale) => [locale, seoUrl(getPathname({ locale, href }))]));
+const languageAlternates = (
+  href: string,
+  locales: readonly LocaleString[],
+): Record<string, string> =>
+  Object.fromEntries(
+    locales.map((locale) => [locale, seoUrl(getPathname({ locale, href }))]),
+  );
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   if (isSeoPreview) return [];
@@ -63,7 +68,9 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     entry("/branding", "monthly", 0.4),
     entry("/changelog", "monthly", 0.6),
     ...getChangelogReleases(FALLBACK_LOCALE).map((release) =>
-      entry(`/changelog/${release.version}`, "yearly", 0.5, { lastModified: parseDate(release.date) }),
+      entry(`/changelog/${release.version}`, "yearly", 0.5, {
+        lastModified: parseDate(release.date),
+      }),
     ),
     entry("/support", "monthly", 0.6),
     entry("/status", "hourly", 0.4),
@@ -73,7 +80,11 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
         locales: presenceIndexLocales(presence),
       }),
     ),
-    ...authors.map((github) => entry(`/author/${github}`, "weekly", 0.45, { locales: [FALLBACK_LOCALE] })),
+    ...authors.map((github) =>
+      entry(`/author/${github}`, "weekly", 0.45, {
+        locales: [FALLBACK_LOCALE],
+      }),
+    ),
     entry("/privacy", "yearly", 0.3),
     entry("/consent", "yearly", 0.3),
     entry("/tos", "yearly", 0.3),
@@ -81,14 +92,21 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     entry("/legal-notice", "yearly", 0.3),
   ];
 
-  return entries.flatMap(({ href, changeFrequency, priority, lastModified, locales = routing.locales }) =>
-    locales.map((locale) => ({
-      url: seoUrl(getPathname({ locale, href })),
-      ...(lastModified ? { lastModified } : {}),
+  return entries.flatMap(
+    ({
+      href,
       changeFrequency,
       priority,
-      alternates: { languages: languageAlternates(href, locales) },
-    })),
+      lastModified,
+      locales = routing.locales,
+    }) =>
+      locales.map((locale) => ({
+        url: seoUrl(getPathname({ locale, href })),
+        ...(lastModified ? { lastModified } : {}),
+        changeFrequency,
+        priority,
+        alternates: { languages: languageAlternates(href, locales) },
+      })),
   );
 };
 

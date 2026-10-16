@@ -62,7 +62,7 @@ export function HighlightedText({
           type: "spring",
           damping: 30,
           stiffness: 300,
-          delay
+          delay,
         }}
       />
 

@@ -1,8 +1,14 @@
 "use client";
 
 import { LibraryCard } from "@/features/library/components/library-card";
-import { Button, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, cn } from "@nowly/ui";
-
+import {
+  Button,
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  cn,
+} from "@nowly/ui";
 
 import type { LibraryPresence } from "@/lib/library-catalog";
 
@@ -14,7 +20,10 @@ import { useLayoutEffect, useRef, useState } from "react";
 const PAGE_SIZE = 9;
 const DOCK_ROOT_MARGIN = "0px 0px -96px 0px";
 
-const paginationRange = (current: number, total: number): Array<number | "ellipsis"> => {
+const paginationRange = (
+  current: number,
+  total: number,
+): Array<number | "ellipsis"> => {
   if (total <= 7) return Array.from({ length: total }, (_, index) => index + 1);
 
   const pages = new Set([1, total, current - 1, current, current + 1]);
@@ -29,11 +38,14 @@ const paginationRange = (current: number, total: number): Array<number | "ellips
     pages.add(total - 1);
   }
 
-  const sorted = [...pages].filter((page) => page >= 1 && page <= total).toSorted((a, b) => a - b);
+  const sorted = [...pages]
+    .filter((page) => page >= 1 && page <= total)
+    .toSorted((a, b) => a - b);
   const range: Array<number | "ellipsis"> = [];
   for (const page of sorted) {
     const previous = range[range.length - 1];
-    if (typeof previous === "number" && page - previous > 1) range.push("ellipsis");
+    if (typeof previous === "number" && page - previous > 1)
+      range.push("ellipsis");
     range.push(page);
   }
   return range;
@@ -45,10 +57,10 @@ const LibraryPaginationControls = ({
   onPage,
   docked = false,
 }: {
-  page: number
-  totalPages: number
-  onPage: (next: number) => void
-  docked?: boolean
+  page: number;
+  totalPages: number;
+  onPage: (next: number) => void;
+  docked?: boolean;
 }) => {
   const t = useTranslations("libraryPage");
 
@@ -119,16 +131,23 @@ const LibraryPaginationControls = ({
 };
 
 type PaginatedLibraryGridProps = {
-  items: LibraryPresence[]
-  resetKey?: string
-  className?: string
+  items: LibraryPresence[];
+  resetKey?: string;
+  className?: string;
 };
 
-export const PaginatedLibraryGrid = ({ items, resetKey, className }: PaginatedLibraryGridProps) => {
+export const PaginatedLibraryGrid = ({
+  items,
+  resetKey,
+  className,
+}: PaginatedLibraryGridProps) => {
   const locale = useLocale();
   const gridRef = useRef<HTMLElement>(null);
   const anchorRef = useRef<HTMLDivElement>(null);
-  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1).withOptions({ history: "push" }));
+  const [page, setPage] = useQueryState(
+    "page",
+    parseAsInteger.withDefault(1).withOptions({ history: "push" }),
+  );
   const [docked, setDocked] = useState(false);
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
@@ -175,10 +194,17 @@ export const PaginatedLibraryGrid = ({ items, resetKey, className }: PaginatedLi
     <div className={cn(docked && "pb-16")}>
       <section
         ref={gridRef}
-        className={cn("mt-8 grid scroll-mt-32 gap-4 sm:grid-cols-2 lg:grid-cols-3", className)}
+        className={cn(
+          "mt-8 grid scroll-mt-32 gap-4 sm:grid-cols-2 lg:grid-cols-3",
+          className,
+        )}
       >
         {slice.map((presence) => (
-          <LibraryCard key={presence.slug} presence={presence} locale={locale} />
+          <LibraryCard
+            key={presence.slug}
+            presence={presence}
+            locale={locale}
+          />
         ))}
       </section>
 

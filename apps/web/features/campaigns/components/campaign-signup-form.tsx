@@ -5,27 +5,38 @@ import { Button, Input } from "@nowly/ui";
 import { useState } from "react";
 
 type CampaignSignupFormProps = {
-  campaignId: string
-  placeholder: string
-  submitLabel: string
-  successLabel: string
-  errorLabel: string
+  campaignId: string;
+  placeholder: string;
+  submitLabel: string;
+  successLabel: string;
+  errorLabel: string;
 };
 
-export const CampaignSignupForm = ({ campaignId, placeholder, submitLabel, successLabel, errorLabel }: CampaignSignupFormProps) => {
+export const CampaignSignupForm = ({
+  campaignId,
+  placeholder,
+  submitLabel,
+  successLabel,
+  errorLabel,
+}: CampaignSignupFormProps) => {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">(
+    "idle",
+  );
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!email.trim()) return;
     setStatus("sending");
     try {
-      const response = await fetch(`${presenceApiBaseUrl()}/campaigns/${campaignId}/signups`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
-      });
+      const response = await fetch(
+        `${presenceApiBaseUrl()}/campaigns/${campaignId}/signups`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email.trim() }),
+        },
+      );
       if (!response.ok) throw new Error("signup failed");
       setStatus("done");
     } catch {
@@ -50,7 +61,9 @@ export const CampaignSignupForm = ({ campaignId, placeholder, submitLabel, succe
       <Button type="submit" variant="outline" disabled={status === "sending"}>
         {submitLabel}
       </Button>
-      {status === "error" ? <p className="w-full text-sm text-destructive">{errorLabel}</p> : null}
+      {status === "error" ? (
+        <p className="w-full text-sm text-destructive">{errorLabel}</p>
+      ) : null}
     </form>
   );
 };

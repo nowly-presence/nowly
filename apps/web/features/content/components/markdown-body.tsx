@@ -31,7 +31,10 @@ const renderInline = (nodes: Inline[], keyPrefix: string): ReactNode[] =>
         );
       case "code":
         return (
-          <code key={key} className="rounded-md bg-code-surface px-1.5 py-0.5 font-mono text-[0.86em] text-foreground">
+          <code
+            key={key}
+            className="rounded-md bg-code-surface px-1.5 py-0.5 font-mono text-[0.86em] text-foreground"
+          >
             {node.text}
           </code>
         );
@@ -52,7 +55,13 @@ const renderInline = (nodes: Inline[], keyPrefix: string): ReactNode[] =>
         }
         if (SAFE_EXTERNAL.test(node.href)) {
           return (
-            <a key={key} href={resolveHref(node.href)} rel="noreferrer" target="_blank" className={LINK_CLASS}>
+            <a
+              key={key}
+              href={resolveHref(node.href)}
+              rel="noreferrer"
+              target="_blank"
+              className={LINK_CLASS}
+            >
               {renderInline(node.children, key)}
             </a>
           );
@@ -66,11 +75,19 @@ const renderBlock = (block: Block, index: number): ReactNode => {
   switch (block.kind) {
     case "heading":
       return block.level === 2 ? (
-        <h2 key={key} id={block.id} className="mt-14 scroll-mt-32 text-[1.45rem] font-medium leading-snug tracking-tight text-foreground first:mt-0">
+        <h2
+          key={key}
+          id={block.id}
+          className="mt-14 scroll-mt-32 text-[1.45rem] font-medium leading-snug tracking-tight text-foreground first:mt-0"
+        >
           {renderInline(block.children, key)}
         </h2>
       ) : (
-        <h3 key={key} id={block.id} className="mt-9 scroll-mt-32 text-lg font-medium leading-snug text-foreground">
+        <h3
+          key={key}
+          id={block.id}
+          className="mt-9 scroll-mt-32 text-lg font-medium leading-snug text-foreground"
+        >
           {renderInline(block.children, key)}
         </h3>
       );
@@ -83,9 +100,18 @@ const renderBlock = (block: Block, index: number): ReactNode => {
     case "list": {
       const ListTag = block.ordered ? "ol" : "ul";
       return (
-        <ListTag key={key} className={cn("mt-4 flex flex-col gap-2 pl-5", block.ordered ? "list-decimal" : "list-disc")}>
+        <ListTag
+          key={key}
+          className={cn(
+            "mt-4 flex flex-col gap-2 pl-5",
+            block.ordered ? "list-decimal" : "list-disc",
+          )}
+        >
           {block.items.map((item, itemIndex) => (
-            <li key={`${key}-${itemIndex}`} className="pl-1 marker:text-muted-foreground">
+            <li
+              key={`${key}-${itemIndex}`}
+              className="pl-1 marker:text-muted-foreground"
+            >
               {renderInline(item, `${key}-${itemIndex}`)}
             </li>
           ))}
@@ -94,7 +120,10 @@ const renderBlock = (block: Block, index: number): ReactNode => {
     }
     case "note":
       return (
-        <aside key={key} className="mt-6 rounded-2xl border border-accent/20 bg-accent/8 px-5 py-4 text-[0.95rem]">
+        <aside
+          key={key}
+          className="mt-6 rounded-2xl border border-accent/20 bg-accent/8 px-5 py-4 text-[0.95rem]"
+        >
           {block.children.map((paragraph, paragraphIndex) => (
             <p key={`${key}-${paragraphIndex}`} className="mt-2 first:mt-0">
               {renderInline(paragraph, `${key}-${paragraphIndex}`)}
@@ -104,18 +133,28 @@ const renderBlock = (block: Block, index: number): ReactNode => {
       );
     case "code":
       return (
-        <pre key={key} className="mt-5 overflow-x-auto rounded-xl bg-code-surface p-4 font-mono text-[13px] leading-relaxed text-foreground">
+        <pre
+          key={key}
+          className="mt-5 overflow-x-auto rounded-xl bg-code-surface p-4 font-mono text-[13px] leading-relaxed text-foreground"
+        >
           <code>{block.text}</code>
         </pre>
       );
     case "table":
       return (
-        <div key={key} className="mt-6 overflow-x-auto rounded-xl border border-border">
+        <div
+          key={key}
+          className="mt-6 overflow-x-auto rounded-xl border border-border"
+        >
           <table className="w-full min-w-lg border-collapse text-left text-sm">
             <thead className="bg-foreground/4 text-foreground">
               <tr>
                 {block.head.map((cell, cellIndex) => (
-                  <th key={`${key}-h-${cellIndex}`} scope="col" className="px-4 py-3 font-medium">
+                  <th
+                    key={`${key}-h-${cellIndex}`}
+                    scope="col"
+                    className="px-4 py-3 font-medium"
+                  >
                     {renderInline(cell, `${key}-h-${cellIndex}`)}
                   </th>
                 ))}
@@ -123,9 +162,15 @@ const renderBlock = (block: Block, index: number): ReactNode => {
             </thead>
             <tbody>
               {block.rows.map((row, rowIndex) => (
-                <tr key={`${key}-r-${rowIndex}`} className="border-t border-border align-top">
+                <tr
+                  key={`${key}-r-${rowIndex}`}
+                  className="border-t border-border align-top"
+                >
                   {row.map((cell, cellIndex) => (
-                    <td key={`${key}-r-${rowIndex}-${cellIndex}`} className="px-4 py-3">
+                    <td
+                      key={`${key}-r-${rowIndex}-${cellIndex}`}
+                      className="px-4 py-3"
+                    >
                       {renderInline(cell, `${key}-r-${rowIndex}-${cellIndex}`)}
                     </td>
                   ))}
@@ -138,8 +183,19 @@ const renderBlock = (block: Block, index: number): ReactNode => {
   }
 };
 
-export const MarkdownBody = ({ blocks, className }: { blocks: Block[]; className?: string }) => (
-  <div className={cn("text-[1.02rem] leading-relaxed text-foreground/78", className)}>
+export const MarkdownBody = ({
+  blocks,
+  className,
+}: {
+  blocks: Block[];
+  className?: string;
+}) => (
+  <div
+    className={cn(
+      "text-[1.02rem] leading-relaxed text-foreground/78",
+      className,
+    )}
+  >
     {blocks.map(renderBlock)}
   </div>
 );

@@ -1,19 +1,34 @@
-import type { ReactNode } from "react"
-import { RiAddLine } from "@remixicon/react"
-import { CustomActivityGlyph } from "@/components/shared/custom-activity-artwork"
-import { useI18n } from "@/hooks/i18n-provider"
-import { Sheet } from "@/ui/sheet"
-import { CUSTOM_ACTIVITY_TEMPLATE_IDS, CUSTOM_ACTIVITY_TEMPLATES, templateText, type CustomActivityTemplateId } from "@/features/custom-activity/custom-activity-templates"
+import type { ReactNode } from "react";
+import { RiAddLine } from "@remixicon/react";
+import { CustomActivityGlyph } from "@/components/shared/custom-activity-artwork";
+import { useI18n } from "@/hooks/i18n-provider";
+import { Sheet } from "@/ui/sheet";
+import {
+  CUSTOM_ACTIVITY_TEMPLATE_IDS,
+  CUSTOM_ACTIVITY_TEMPLATES,
+  templateText,
+  type CustomActivityTemplateId,
+} from "@/features/custom-activity/custom-activity-templates";
 
 type CustomActivityTemplatesSheetProps = {
-  open: boolean
-  onClose: () => void
-  onPick: (template: CustomActivityTemplateId | null) => void
-}
+  open: boolean;
+  onClose: () => void;
+  onPick: (template: CustomActivityTemplateId | null) => void;
+};
 
-const GLYPH_SIZE = 36
+const GLYPH_SIZE = 36;
 
-const Tile = ({ icon, title, line, onClick }: { icon: ReactNode; title: string; line: string; onClick: () => void }) => (
+const Tile = ({
+  icon,
+  title,
+  line,
+  onClick,
+}: {
+  icon: ReactNode;
+  title: string;
+  line: string;
+  onClick: () => void;
+}) => (
   <button
     type="button"
     onClick={onClick}
@@ -21,16 +36,28 @@ const Tile = ({ icon, title, line, onClick }: { icon: ReactNode; title: string; 
   >
     {icon}
     <span className="flex min-w-0 flex-col">
-      <span className="truncate text-label-lg font-medium text-ink">{title}</span>
+      <span className="truncate text-label-lg font-medium text-ink">
+        {title}
+      </span>
       <span className="truncate text-label-md text-muted">{line}</span>
     </span>
   </button>
-)
+);
 
-export const CustomActivityTemplatesSheet = ({ open, onClose, onPick }: CustomActivityTemplatesSheetProps) => {
-  const { t } = useI18n()
+export const CustomActivityTemplatesSheet = ({
+  open,
+  onClose,
+  onPick,
+}: CustomActivityTemplatesSheetProps) => {
+  const { t } = useI18n();
   return (
-    <Sheet open={open} onClose={onClose} title={t("custom.templates.title")} description={t("custom.templates.description")} closeLabel={t("action.close")}>
+    <Sheet
+      open={open}
+      onClose={onClose}
+      title={t("custom.templates.title")}
+      description={t("custom.templates.description")}
+      closeLabel={t("action.close")}
+    >
       <div className="grid grid-cols-2 gap-2">
         <Tile
           icon={
@@ -43,19 +70,25 @@ export const CustomActivityTemplatesSheet = ({ open, onClose, onPick }: CustomAc
           onClick={() => onPick(null)}
         />
         {CUSTOM_ACTIVITY_TEMPLATE_IDS.map((id) => {
-          const template = CUSTOM_ACTIVITY_TEMPLATES[id]
-          const text = templateText(id, t)
+          const template = CUSTOM_ACTIVITY_TEMPLATES[id];
+          const text = templateText(id, t);
           return (
             <Tile
               key={id}
-              icon={<CustomActivityGlyph color={template.color} icon={template.icon} size={GLYPH_SIZE} />}
+              icon={
+                <CustomActivityGlyph
+                  color={template.color}
+                  icon={template.icon}
+                  size={GLYPH_SIZE}
+                />
+              }
               title={text.name}
               line={text.details}
               onClick={() => onPick(id)}
             />
-          )
+          );
         })}
       </div>
     </Sheet>
-  )
-}
+  );
+};

@@ -18,17 +18,24 @@ import { getMessages, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
 type SupportLink = {
-  key: "discord" | "docs" | "broken" | "request" | "bug" | "feature" | "other"
-  href: string
-  icon: typeof RiDiscordFill
+  key: "discord" | "docs" | "broken" | "request" | "bug" | "feature" | "other";
+  href: string;
+  icon: typeof RiDiscordFill;
 };
 
-const sections: Array<{ id: "community" | "presences" | "technical"; links: SupportLink[] }> = [
+const sections: Array<{
+  id: "community" | "presences" | "technical";
+  links: SupportLink[];
+}> = [
   {
     id: "community",
     links: [
       { key: "discord", href: DISCORD_INVITE_URL, icon: RiDiscordFill },
-      { key: "docs", href: docsHref("/getting-started/troubleshooting"), icon: RiBookOpenLine },
+      {
+        key: "docs",
+        href: docsHref("/getting-started/troubleshooting"),
+        icon: RiBookOpenLine,
+      },
     ],
   },
   {
@@ -42,17 +49,27 @@ const sections: Array<{ id: "community" | "presences" | "technical"; links: Supp
     id: "technical",
     links: [
       { key: "bug", href: SUPPORT_LINKS.bugReport, icon: RiBugLine },
-      { key: "feature", href: SUPPORT_LINKS.featureRequest, icon: RiLightbulbLine },
+      {
+        key: "feature",
+        href: SUPPORT_LINKS.featureRequest,
+        icon: RiLightbulbLine,
+      },
       { key: "other", href: SUPPORT_LINKS.blankIssue, icon: RiGithubLine },
     ],
   },
 ];
 
-const INLINE_LINK = "underline underline-offset-4 transition-colors hover:text-foreground";
+const INLINE_LINK =
+  "underline underline-offset-4 transition-colors hover:text-foreground";
 
 export const SupportView = async () => {
-  const [t, messages] = await Promise.all([getTranslations("supportPage"), getMessages()]);
-  const email = (messages.legal as { "publisher-email": string })["publisher-email"];
+  const [t, messages] = await Promise.all([
+    getTranslations("supportPage"),
+    getMessages(),
+  ]);
+  const email = (messages.legal as { "publisher-email": string })[
+    "publisher-email"
+  ];
   const internalLink = (href: string) => (chunks: ReactNode) => (
     <Link href={href} className={INLINE_LINK}>
       {chunks}
@@ -94,7 +111,9 @@ export const SupportView = async () => {
                         >
                           <Icon className="mt-0.5 size-5 shrink-0 text-accent" />
                           <span className="min-w-0 flex-1">
-                            <span className="block font-medium text-foreground">{t(`${link.key}.title`)}</span>
+                            <span className="block font-medium text-foreground">
+                              {t(`${link.key}.title`)}
+                            </span>
                             <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">
                               {t(`${link.key}.description`)}
                             </span>

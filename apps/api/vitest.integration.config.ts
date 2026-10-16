@@ -1,11 +1,17 @@
-import { resolve } from "node:path"
-import { defineConfig } from "vitest/config"
+import { resolve } from "node:path";
+import { defineConfig } from "vitest/config";
 
-const databaseUrl = process.env.NOWLY_TEST_DATABASE_URL
-if (!databaseUrl) throw new Error("NOWLY_TEST_DATABASE_URL is required for integration tests")
-const target = new URL(databaseUrl)
-if (!["localhost", "127.0.0.1", "[::1]"].includes(target.hostname) || !target.pathname.endsWith("_test")) {
-  throw new Error("Integration tests require a local database with a name ending in _test")
+const databaseUrl = process.env.NOWLY_TEST_DATABASE_URL;
+if (!databaseUrl)
+  throw new Error("NOWLY_TEST_DATABASE_URL is required for integration tests");
+const target = new URL(databaseUrl);
+if (
+  !["localhost", "127.0.0.1", "[::1]"].includes(target.hostname) ||
+  !target.pathname.endsWith("_test")
+) {
+  throw new Error(
+    "Integration tests require a local database with a name ending in _test",
+  );
 }
 
 export default defineConfig({
@@ -16,4 +22,4 @@ export default defineConfig({
     setupFiles: ["test/setup.ts"],
     env: { DATABASE_URL: databaseUrl },
   },
-})
+});

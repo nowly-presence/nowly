@@ -1,7 +1,14 @@
 "use client";
 
 import { LocaleFlag } from "./locale-flag";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./select";
 
 import { SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
 import { usePathname, useRouter } from "@nowly/locales/navigation";

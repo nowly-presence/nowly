@@ -4,15 +4,18 @@ import { DOCS_URL, isSeoPreview } from "@/lib/constants";
 import { getNavigationItems } from "@/features/docs-content/lib/content";
 import type { MetadataRoute } from "next";
 
-const absoluteUrl = (locale: string, href: string): string => `${DOCS_URL}${getPathname({ locale, href })}`;
+const absoluteUrl = (locale: string, href: string): string =>
+  `${DOCS_URL}${getPathname({ locale, href })}`;
 
 const languageAlternates = (href: string): Record<string, string> =>
-  Object.fromEntries(routing.locales.map((locale) => [locale, absoluteUrl(locale, href)]));
+  Object.fromEntries(
+    routing.locales.map((locale) => [locale, absoluteUrl(locale, href)]),
+  );
 
 type DocPath = {
-  href: string
-  changeFrequency: "monthly"
-  priority: number
+  href: string;
+  changeFrequency: "monthly";
+  priority: number;
 };
 
 const sitemap = (): MetadataRoute.Sitemap => {
@@ -23,7 +26,11 @@ const sitemap = (): MetadataRoute.Sitemap => {
 
   for (const section of docs) {
     if (section.slug === "changelog") {
-      paths.push({ href: "/changelog", changeFrequency: "monthly", priority: 0.7 });
+      paths.push({
+        href: "/changelog",
+        changeFrequency: "monthly",
+        priority: 0.7,
+      });
     }
 
     for (const page of section.children) {

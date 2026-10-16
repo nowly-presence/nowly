@@ -2,7 +2,10 @@
 
 import { ApiTargetSwitcher } from "@/features/api-target/components/api-target-switcher";
 import { DevTools } from "@/features/layout/components/dev-tools";
-import { DEFAULT_VIEW_LABELS, DEFAULT_VIEW_SLUGS } from "@/features/views/lib/default-views";
+import {
+  DEFAULT_VIEW_LABELS,
+  DEFAULT_VIEW_SLUGS,
+} from "@/features/views/lib/default-views";
 import type { Session } from "@/lib/session";
 import {
   Sidebar,
@@ -21,20 +24,31 @@ import { usePathname } from "next/navigation";
 
 type InsightsViewSummary = { id: string; name: string };
 
-export const AppSidebar = ({ views, user }: { views: InsightsViewSummary[]; user: NonNullable<Session>["user"] }) => {
+export const AppSidebar = ({
+  views,
+  user,
+}: {
+  views: InsightsViewSummary[];
+  user: NonNullable<Session>["user"];
+}) => {
   const pathname = usePathname();
 
   return (
     <Sidebar variant="inset">
       <SidebarHeader>
-        <span className="px-2 py-1 text-sm font-semibold text-foreground">Nowly Insights</span>
+        <span className="px-2 py-1 text-sm font-semibold text-foreground">
+          Nowly Insights
+        </span>
       </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton render={<Link href="/campaigns" />} isActive={pathname === "/campaigns"}>
+              <SidebarMenuButton
+                render={<Link href="/campaigns" />}
+                isActive={pathname === "/campaigns"}
+              >
                 <RiMailLine />
                 <span className="truncate">Campaigns</span>
               </SidebarMenuButton>
@@ -88,7 +102,9 @@ export const AppSidebar = ({ views, user }: { views: InsightsViewSummary[]; user
           {user.image ? (
             <img src={user.image} alt="" className="size-6 rounded-full" />
           ) : null}
-          <span className="truncate text-sm text-muted-foreground">{user.name}</span>
+          <span className="truncate text-sm text-muted-foreground">
+            {user.name}
+          </span>
         </div>
       </SidebarFooter>
     </Sidebar>

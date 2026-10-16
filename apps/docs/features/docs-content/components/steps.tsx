@@ -4,8 +4,6 @@ import { createContext, useContext, useRef, useMemo } from "react";
 import type { FC, ReactNode } from "react";
 import { Avatar, AvatarFallback, cn } from "@nowly/ui";
 
-
-
 type StepProps = {
   title: string;
   description?: string;
@@ -18,7 +16,9 @@ type StepsProps = {
   className?: string;
 };
 
-const StepsContext = createContext<{ getStepNumber: () => number } | null>(null);
+const StepsContext = createContext<{ getStepNumber: () => number } | null>(
+  null,
+);
 
 export const Steps: FC<StepsProps> = ({ children, className }) => {
   const stepCountRef = useRef(0);

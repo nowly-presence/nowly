@@ -38,10 +38,12 @@ export const AppSidebar: FC<AppSidebarProps> = ({ items }) => {
                       href={href}
                       onClick={() => setMobileOpen(false)}
                       className={cn(
-                        "block rounded-lg px-3 py-1.5 text-sm transition-colors", {
+                        "block rounded-lg px-3 py-1.5 text-sm transition-colors",
+                        {
                           "bg-accent/10 text-accent font-medium": isChildActive,
-                          "text-muted-foreground hover:bg-card-hover hover:text-foreground": !isChildActive,
-                        }
+                          "text-muted-foreground hover:bg-card-hover hover:text-foreground":
+                            !isChildActive,
+                        },
                       )}
                     >
                       {child.title}
@@ -72,7 +74,9 @@ export const AppSidebar: FC<AppSidebarProps> = ({ items }) => {
           />
           <div className="docs-sidebar-scroll absolute left-0 top-0 bottom-0 w-72 bg-card border-r border-border p-6 overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <p className="text-sm font-semibold text-foreground">{t("documentation")}</p>
+              <p className="text-sm font-semibold text-foreground">
+                {t("documentation")}
+              </p>
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}

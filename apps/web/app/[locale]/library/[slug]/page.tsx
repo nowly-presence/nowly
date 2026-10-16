@@ -3,7 +3,13 @@ import { getPresenceGuide } from "@/features/library/lib/presence-guide";
 import { localizedDescription } from "@/lib/library-catalog";
 import { presenceIndexLocales } from "@/lib/library-catalog-server";
 import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
-import { getPresenceBySlug, getPresenceCatalog, getPresenceStats, getPresenceVersionHistory, presenceLogoUrl } from "@/lib/presence-api";
+import {
+  getPresenceBySlug,
+  getPresenceCatalog,
+  getPresenceStats,
+  getPresenceVersionHistory,
+  presenceLogoUrl,
+} from "@/lib/presence-api";
 import { createMetadata } from "@/features/seo/lib/seo";
 import { FALLBACK_LOCALE, getValidLocale } from "@nowly/locales";
 import type { Metadata } from "next";
@@ -11,10 +17,12 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 type PresencePageProps = {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 };
 
-export const generateMetadata = async ({ params }: PresencePageProps): Promise<Metadata> => {
+export const generateMetadata = async ({
+  params,
+}: PresencePageProps): Promise<Metadata> => {
   const { slug } = await params;
   const [presence, locale, t, categoryLabels] = await Promise.all([
     getPresenceBySlug(slug),
@@ -40,10 +48,15 @@ export const generateMetadata = async ({ params }: PresencePageProps): Promise<M
   return createMetadata({
     title: seoTitle,
     locale,
-    description: guide?.translated && guide.meta.description ? guide.meta.description : localizedDescription(presence, locale),
+    description:
+      guide?.translated && guide.meta.description
+        ? guide.meta.description
+        : localizedDescription(presence, locale),
     path: `/library/${presence.slug}`,
     alternateLocales: indexLocales,
-    canonicalLocale: indexLocales.includes(getValidLocale(locale)) ? undefined : FALLBACK_LOCALE,
+    canonicalLocale: indexLocales.includes(getValidLocale(locale))
+      ? undefined
+      : FALLBACK_LOCALE,
     badge: categoryLabels(`categories.${presence.category}`),
     accent: presence.color,
     logo: presenceLogoUrl(presence.slug),

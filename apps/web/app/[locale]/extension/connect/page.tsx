@@ -5,7 +5,10 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("pages.extensionConnect")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("pages.extensionConnect"),
+  ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),

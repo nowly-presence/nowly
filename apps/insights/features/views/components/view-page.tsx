@@ -7,7 +7,13 @@ import type { ViewConfig } from "@nowly/analytics";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export const ViewPage = ({ view, canDuplicate = false }: { view: ViewConfig; canDuplicate?: boolean }) => {
+export const ViewPage = ({
+  view,
+  canDuplicate = false,
+}: {
+  view: ViewConfig;
+  canDuplicate?: boolean;
+}) => {
   const router = useRouter();
   const [duplicating, setDuplicating] = useState(false);
 
@@ -16,7 +22,10 @@ export const ViewPage = ({ view, canDuplicate = false }: { view: ViewConfig; can
     try {
       const created = await apiFetch<{ id: string }>("/insights/views", {
         method: "POST",
-        body: JSON.stringify({ name: `${view.name} (copy)`, widgets: view.widgets }),
+        body: JSON.stringify({
+          name: `${view.name} (copy)`,
+          widgets: view.widgets,
+        }),
       });
       router.push(`/views/custom/${created.id}/edit`);
     } catch {
@@ -28,9 +37,17 @@ export const ViewPage = ({ view, canDuplicate = false }: { view: ViewConfig; can
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="min-w-0 truncate text-lg font-semibold text-foreground">{view.name}</h1>
+        <h1 className="min-w-0 truncate text-lg font-semibold text-foreground">
+          {view.name}
+        </h1>
         {canDuplicate ? (
-          <Button variant="outline" size="sm" className="shrink-0" onClick={duplicate} disabled={duplicating}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="shrink-0"
+            onClick={duplicate}
+            disabled={duplicating}
+          >
             {duplicating ? "Duplicating..." : "Duplicate"}
           </Button>
         ) : null}

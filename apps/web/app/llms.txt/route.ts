@@ -28,7 +28,8 @@ const pageDefinitions = [
   ["/legal-notice", "legal-notice-page"],
 ] as const;
 
-const markdownText = (value: string): string => value.replace(/[\r\n]+/g, " ").trim();
+const markdownText = (value: string): string =>
+  value.replace(/[\r\n]+/g, " ").trim();
 
 export const GET = async () => {
   const [t, catalog] = await Promise.all([
@@ -47,12 +48,16 @@ export const GET = async () => {
   for (const [path, namespace] of pageDefinitions) {
     const title = t(`${namespace}.title`);
     const description = t(`${namespace}.description`);
-    lines.push(`- [${markdownText(title)}](${CANONICAL_ORIGIN}${path}): ${markdownText(description)}`);
+    lines.push(
+      `- [${markdownText(title)}](${CANONICAL_ORIGIN}${path}): ${markdownText(description)}`,
+    );
   }
 
   lines.push("", "## Guides", "");
   for (const guide of getGuides(FALLBACK_LOCALE)) {
-    lines.push(`- [${markdownText(guide.title)}](${CANONICAL_ORIGIN}/guides/${guide.slug}): ${markdownText(guide.description)}`);
+    lines.push(
+      `- [${markdownText(guide.title)}](${CANONICAL_ORIGIN}/guides/${guide.slug}): ${markdownText(guide.description)}`,
+    );
   }
 
   lines.push(

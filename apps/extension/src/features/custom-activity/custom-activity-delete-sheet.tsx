@@ -1,11 +1,23 @@
-import { useI18n } from "@/hooks/i18n-provider"
-import { Button } from "@/ui/button"
-import { Sheet } from "@/ui/sheet"
+import { useI18n } from "@/hooks/i18n-provider";
+import { Button } from "@/ui/button";
+import { Sheet } from "@/ui/sheet";
 
-type CustomActivityDeleteSheetProps = { name: string; open: boolean; pending: boolean; onClose: () => void; onConfirm: () => void }
+type CustomActivityDeleteSheetProps = {
+  name: string;
+  open: boolean;
+  pending: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+};
 
-export const CustomActivityDeleteSheet = ({ name, open, pending, onClose, onConfirm }: CustomActivityDeleteSheetProps) => {
-  const { t } = useI18n()
+export const CustomActivityDeleteSheet = ({
+  name,
+  open,
+  pending,
+  onClose,
+  onConfirm,
+}: CustomActivityDeleteSheetProps) => {
+  const { t } = useI18n();
   return (
     <Sheet
       open={open}
@@ -18,11 +30,16 @@ export const CustomActivityDeleteSheet = ({ name, open, pending, onClose, onConf
           <Button variant="secondary" className="flex-1" onClick={onClose}>
             {t("action.cancel")}
           </Button>
-          <Button variant="destructive" className="flex-1" loading={pending} onClick={onConfirm}>
+          <Button
+            variant="destructive"
+            className="flex-1"
+            loading={pending}
+            onClick={onConfirm}
+          >
             {t("action.delete")}
           </Button>
         </>
       }
     />
-  )
-}
+  );
+};

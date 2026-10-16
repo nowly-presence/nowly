@@ -1,6 +1,13 @@
 "use client";
 
-import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@nowly/ui";
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@nowly/ui";
 
 import { useRouter } from "@/i18n/navigation";
 import { DOCS_BASE_PATH } from "@/lib/constants";
@@ -22,7 +29,10 @@ type SearchCommandProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-export const SearchCommand: FC<SearchCommandProps> = ({ open, onOpenChange }) => {
+export const SearchCommand: FC<SearchCommandProps> = ({
+  open,
+  onOpenChange,
+}) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -46,7 +56,9 @@ export const SearchCommand: FC<SearchCommandProps> = ({ open, onOpenChange }) =>
     setIsSearching(true);
     const timeoutId = setTimeout(async () => {
       try {
-        const res = await fetch(`${DOCS_BASE_PATH}/api/search?q=${encodeURIComponent(query)}&locale=${locale}`);
+        const res = await fetch(
+          `${DOCS_BASE_PATH}/api/search?q=${encodeURIComponent(query)}&locale=${locale}`,
+        );
         if (!res.ok) throw new Error("Search failed");
         const data = await res.json();
         setResults(data);
@@ -68,7 +80,6 @@ export const SearchCommand: FC<SearchCommandProps> = ({ open, onOpenChange }) =>
   const hasQuery = query.trim().length > 0;
   const hasResults = results.length > 0;
 
-
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
       <CommandInput
@@ -82,31 +93,25 @@ export const SearchCommand: FC<SearchCommandProps> = ({ open, onOpenChange }) =>
           <CommandEmpty>
             <span className="inline-flex items-center justify-center gap-2">
               <Spinner className="size-4" />
-               {t("searching")}
+              {t("searching")}
             </span>
           </CommandEmpty>
         ) : null}
 
         {!isSearching && hasQuery && !hasResults ? (
-           <CommandEmpty>{t("no-results")}</CommandEmpty>
+          <CommandEmpty>{t("no-results")}</CommandEmpty>
         ) : null}
 
         {!isSearching && !hasQuery ? (
-           <CommandEmpty>{t("type-to-search")}</CommandEmpty>
+          <CommandEmpty>{t("type-to-search")}</CommandEmpty>
         ) : null}
 
         {!isSearching && hasResults ? (
-          <CommandGroup
-             heading={t("results", { count: results.length })}
-          >
+          <CommandGroup heading={t("results", { count: results.length })}>
             {results.map((result) => (
               <CommandItem
                 key={result.href}
-                value={[
-                  result.title,
-                  result.description,
-                  result.matchContext,
-                ]
+                value={[result.title, result.description, result.matchContext]
                   .filter(Boolean)
                   .join(" ")}
                 onSelect={() => handleSelect(result.href)}

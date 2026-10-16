@@ -1,19 +1,26 @@
-import { buildLocalizedValue, buildLocaleObject, FALLBACK_LOCALE, LocaleRecordSchema, SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales"
-import { z } from "zod"
+import {
+  buildLocalizedValue,
+  buildLocaleObject,
+  FALLBACK_LOCALE,
+  LocaleRecordSchema,
+  SUPPORTED_LOCALES,
+  type LocaleString,
+} from "@nowly/locales";
+import { z } from "zod";
 
-const ChangelogSchema = LocaleRecordSchema(z.string().min(1))
+const ChangelogSchema = LocaleRecordSchema(z.string().min(1));
 
 export interface ChangelogContext {
-  type: "new" | "modified"
-  name: string
-  names?: Record<string, string>
-  description?: string
-  descriptions?: Record<string, string>
-  changedFiles?: string[]
+  type: "new" | "modified";
+  name: string;
+  names?: Record<string, string>;
+  description?: string;
+  descriptions?: Record<string, string>;
+  changedFiles?: string[];
 }
 
-type Changelog = z.infer<typeof ChangelogSchema>
-type LocalizedText = Record<LocaleString, string>
+type Changelog = z.infer<typeof ChangelogSchema>;
+type LocalizedText = Record<LocaleString, string>;
 
 type ModifiedChange =
   | "localization"
@@ -21,38 +28,54 @@ type ModifiedChange =
   | "behavior"
   | "metadata"
   | "artwork"
-  | "generic"
+  | "generic";
 
 const localeName = (ctx: ChangelogContext, locale: string): string =>
-  ctx.names?.[locale] || ctx.names?.[FALLBACK_LOCALE] || ctx.name
+  ctx.names?.[locale] || ctx.names?.[FALLBACK_LOCALE] || ctx.name;
 
 const description = (ctx: ChangelogContext, locale: string): string =>
-  (ctx.descriptions?.[locale] || ctx.descriptions?.[FALLBACK_LOCALE] || ctx.description || "")
+  (
+    ctx.descriptions?.[locale] ||
+    ctx.descriptions?.[FALLBACK_LOCALE] ||
+    ctx.description ||
+    ""
+  )
     .replace(/\s+/g, " ")
     .trim()
-    .slice(0, 160)
+    .slice(0, 160);
 
 const changedFileFlags = (files: string[]) => {
-  const normalized = files.map((file) => file.replaceAll("\\", "/").toLowerCase())
+  const normalized = files.map((file) =>
+    file.replaceAll("\\", "/").toLowerCase(),
+  );
   return {
     locale: normalized.some((file) => file.includes("/locales/")),
-    behavior: normalized.some((file) => /\/presence\.(ts|tsx|js|jsx)$/.test(file) || file.includes("/utils/")),
+    behavior: normalized.some(
+      (file) =>
+        /\/presence\.(ts|tsx|js|jsx)$/.test(file) || file.includes("/utils/"),
+    ),
     metadata: normalized.some((file) => file.endsWith("/metadata.json")),
-    artwork: normalized.some((file) => file.includes("/assets/") || /(?:artwork|thumbnail|image)/.test(file)),
-  }
-}
+    artwork: normalized.some(
+      (file) =>
+        file.includes("/assets/") || /(?:artwork|thumbnail|image)/.test(file),
+    ),
+  };
+};
 
 const modifiedChange = (files: string[]): ModifiedChange => {
-  const flags = changedFileFlags(files)
-  if (flags.locale && flags.behavior) return "localizationAndBehavior"
-  if (flags.locale) return "localization"
-  if (flags.behavior) return "behavior"
-  if (flags.metadata) return "metadata"
-  if (flags.artwork) return "artwork"
-  return "generic"
-}
+  const flags = changedFileFlags(files);
+  if (flags.locale && flags.behavior) return "localizationAndBehavior";
+  if (flags.locale) return "localization";
+  if (flags.behavior) return "behavior";
+  if (flags.metadata) return "metadata";
+  if (flags.artwork) return "artwork";
+  return "generic";
+};
 
-const modifiedMessage = (change: ModifiedChange, name: string): LocalizedText => {
+const modifiedMessage = (
+  change: ModifiedChange,
+  name: string,
+): LocalizedText => {
   const messages: Record<ModifiedChange, LocalizedText> = {
     localization: {
       "en-US": `Added missing translations for ${name}.`,
@@ -132,12 +155,16 @@ const modifiedMessage = (change: ModifiedChange, name: string): LocalizedText =>
       "ms-MY": `Presence ${name} telah dikemas kini.`,
       "el-GR": `Ενημερώθηκε η παρουσία του ${name}.`,
     },
-  }
-  return messages[change]
-}
+  };
+  return messages[change];
+};
 
-const newMessage = (locale: LocaleString, name: string, text: string): string => {
-  const suffix = text ? ` - ${text}` : ""
+const newMessage = (
+  locale: LocaleString,
+  name: string,
+  text: string,
+): string => {
+  const suffix = text ? ` - ${text}` : "";
   const templates: Record<LocaleString, string> = {
     "en-US": `Add ${name} presence${suffix}`,
     "fr-FR": `Ajout de ${name}${suffix}`,
@@ -150,9 +177,9 @@ const newMessage = (locale: LocaleString, name: string, text: string): string =>
     "tr-TR": `${name} etkinliği eklendi${suffix}`,
     "ms-MY": `Tambah presence ${name}${suffix}`,
     "el-GR": `Προσθήκη παρουσίας ${name}${suffix}`,
-  }
-  return templates[locale]
-}
+  };
+  return templates[locale];
+};
 
 const fallbackChangelogs = (ctx: ChangelogContext): Changelog => {
   if (ctx.type === "new") {
@@ -161,24 +188,29 @@ const fallbackChangelogs = (ctx: ChangelogContext): Changelog => {
         locale,
         newMessage(locale, localeName(ctx, locale), description(ctx, locale)),
       ]),
-    ) as LocalizedText
-    return buildLocalizedValue(localized, localized[FALLBACK_LOCALE])
+    ) as LocalizedText;
+    return buildLocalizedValue(localized, localized[FALLBACK_LOCALE]);
   }
 
-  const messages = modifiedMessage(modifiedChange(ctx.changedFiles || []), ctx.name)
-  return buildLocalizedValue(messages, messages[FALLBACK_LOCALE])
-}
+  const messages = modifiedMessage(
+    modifiedChange(ctx.changedFiles || []),
+    ctx.name,
+  );
+  return buildLocalizedValue(messages, messages[FALLBACK_LOCALE]);
+};
 
 /**
  * User-provided changelogs stay authoritative. We intentionally do not call an
  * external translator here: release notes must remain deterministic and never
  * expose a provider failure or raw diff in the public library.
  */
-export const translateChangelog = (text: string): Changelog => buildLocaleObject(text)
+export const translateChangelog = (text: string): Changelog =>
+  buildLocaleObject(text);
 
 /**
  * Generate a short, deterministic note from changed file categories.
  * Raw diffs are never used as user-facing copy.
  */
-export const generateChangelog = async (ctx: ChangelogContext): Promise<Changelog> =>
-  fallbackChangelogs(ctx)
+export const generateChangelog = async (
+  ctx: ChangelogContext,
+): Promise<Changelog> => fallbackChangelogs(ctx);

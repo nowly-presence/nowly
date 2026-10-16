@@ -7,7 +7,10 @@ import { useId, useState, type FocusEvent } from "react";
 type NavbarLink = { href: string; label: string; external: boolean };
 
 // Loaded after hydration so the animation code stays out of every page's critical bundle.
-const loadMotionFeatures = () => import("@/features/layout/lib/motion-features").then((module) => module.default);
+const loadMotionFeatures = () =>
+  import("@/features/layout/lib/motion-features").then(
+    (module) => module.default,
+  );
 
 const LINK_CLASS = "relative rounded-lg px-3 py-1.5 text-sm text-foreground";
 
@@ -22,7 +25,8 @@ export const NavbarLinks = ({ links }: { links: NavbarLink[] }) => {
       if (event.currentTarget.matches(":focus-visible")) setHovered(href);
     },
     onBlur: (event: FocusEvent<HTMLElement>) => {
-      if (!event.currentTarget.parentElement?.matches(":hover")) setHovered((current) => (current === href ? null : current));
+      if (!event.currentTarget.parentElement?.matches(":hover"))
+        setHovered((current) => (current === href ? null : current));
     },
   });
 
@@ -48,14 +52,29 @@ export const NavbarLinks = ({ links }: { links: NavbarLink[] }) => {
   return (
     <LazyMotion features={loadMotionFeatures}>
       <MotionConfig reducedMotion="user">
-        <div className="flex items-center gap-2" onMouseLeave={() => setHovered(null)}>
+        <div
+          className="flex items-center gap-2"
+          onMouseLeave={() => setHovered(null)}
+        >
           {links.map((link) =>
             link.external ? (
-              <a key={link.href} href={link.href} className={LINK_CLASS} rel="noreferrer" target="_blank" {...handlers(link.href)}>
+              <a
+                key={link.href}
+                href={link.href}
+                className={LINK_CLASS}
+                rel="noreferrer"
+                target="_blank"
+                {...handlers(link.href)}
+              >
                 {content(link)}
               </a>
             ) : (
-              <Link key={link.href} href={link.href} className={LINK_CLASS} {...handlers(link.href)}>
+              <Link
+                key={link.href}
+                href={link.href}
+                className={LINK_CLASS}
+                {...handlers(link.href)}
+              >
                 {content(link)}
               </Link>
             ),

@@ -1,22 +1,29 @@
-import { RiStopFill } from "@remixicon/react"
-import { CustomActivityArtwork } from "@/components/shared/custom-activity-artwork"
-import { LiveCard } from "@/components/shared/live-activity-card"
-import { useI18n } from "@/hooks/i18n-provider"
-import { customActivitySlug } from "@/shared/custom-activity"
-import type { CustomActivity, PresencePayload } from "@/shared/types"
-import { Button } from "@/ui/button"
+import { RiStopFill } from "@remixicon/react";
+import { CustomActivityArtwork } from "@/components/shared/custom-activity-artwork";
+import { LiveCard } from "@/components/shared/live-activity-card";
+import { useI18n } from "@/hooks/i18n-provider";
+import { customActivitySlug } from "@/shared/custom-activity";
+import type { CustomActivity, PresencePayload } from "@/shared/types";
+import { Button } from "@/ui/button";
 
 type CustomActivityLiveCardProps = {
-  activity: CustomActivity
-  presence: PresencePayload
-  paused: boolean
-  onOpen: () => void
-  onStop: () => void
-  onResume: () => void
-}
+  activity: CustomActivity;
+  presence: PresencePayload;
+  paused: boolean;
+  onOpen: () => void;
+  onStop: () => void;
+  onResume: () => void;
+};
 
-export const CustomActivityLiveCard = ({ activity, presence, paused, onOpen, onStop, onResume }: CustomActivityLiveCardProps) => {
-  const { t } = useI18n()
+export const CustomActivityLiveCard = ({
+  activity,
+  presence,
+  paused,
+  onOpen,
+  onStop,
+  onResume,
+}: CustomActivityLiveCardProps) => {
+  const { t } = useI18n();
   return (
     <LiveCard
       slug={customActivitySlug(activity.id)}
@@ -26,11 +33,23 @@ export const CustomActivityLiveCard = ({ activity, presence, paused, onOpen, onS
       status={paused ? "paused" : "live"}
       statusLabel={paused ? t("activity.pausedLabel") : undefined}
       onOpen={onOpen}
-      artwork={<CustomActivityArtwork source={activity} size={64} rounded="rounded-md" showSmall ringClassName="border-tertiary bg-tertiary" />}
+      artwork={
+        <CustomActivityArtwork
+          source={activity}
+          size={64}
+          rounded="rounded-md"
+          showSmall
+          ringClassName="border-tertiary bg-tertiary"
+        />
+      }
       footer={
         <div className="flex items-center justify-between gap-3">
           <span className="flex min-w-0 items-center gap-2 text-label-md text-on-tertiary-muted">
-            <CustomActivityArtwork source={activity} size={18} rounded="rounded-[5px]" />
+            <CustomActivityArtwork
+              source={activity}
+              size={18}
+              rounded="rounded-[5px]"
+            />
             <span className="truncate">{t("custom.live.label")}</span>
           </span>
           {paused ? (
@@ -50,5 +69,5 @@ export const CustomActivityLiveCard = ({ activity, presence, paused, onOpen, onS
         </div>
       }
     />
-  )
-}
+  );
+};

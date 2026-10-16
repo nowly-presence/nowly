@@ -1,6 +1,9 @@
 "use client";
 
-import { requestExtension, type ExtensionDeviceInfo } from "@/lib/extension-bridge";
+import {
+  requestExtension,
+  type ExtensionDeviceInfo,
+} from "@/lib/extension-bridge";
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { Button } from "@nowly/ui";
 import { RiHeartFill, RiHeartLine } from "@nowly/ui/icons";
@@ -8,12 +11,16 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 type PresenceLikeButtonProps = {
-  slug: string
-  initialCount: number
-  disabled: boolean
+  slug: string;
+  initialCount: number;
+  disabled: boolean;
 };
 
-export const PresenceLikeButton = ({ slug, initialCount, disabled }: PresenceLikeButtonProps) => {
+export const PresenceLikeButton = ({
+  slug,
+  initialCount,
+  disabled,
+}: PresenceLikeButtonProps) => {
   const t = useTranslations("presencePage");
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(initialCount);
@@ -32,7 +39,9 @@ export const PresenceLikeButton = ({ slug, initialCount, disabled }: PresenceLik
       .then((info) => {
         if (cancelled || !info?.deviceId) return;
         setDevice(info);
-        return fetch(`${presenceApiBaseUrl()}/presences/${encodeURIComponent(slug)}/like?deviceId=${encodeURIComponent(info.deviceId)}`)
+        return fetch(
+          `${presenceApiBaseUrl()}/presences/${encodeURIComponent(slug)}/like?deviceId=${encodeURIComponent(info.deviceId)}`,
+        )
           .then((response) => (response.ok ? response.json() : null))
           .then((data: { liked?: boolean; count?: number } | null) => {
             if (cancelled || !data) return;
@@ -91,7 +100,11 @@ export const PresenceLikeButton = ({ slug, initialCount, disabled }: PresenceLik
       aria-pressed={liked}
       aria-label={liked ? t("unlike") : t("like")}
     >
-      {liked ? <RiHeartFill data-icon="inline-start" className="text-destructive" /> : <RiHeartLine data-icon="inline-start" />}
+      {liked ? (
+        <RiHeartFill data-icon="inline-start" className="text-destructive" />
+      ) : (
+        <RiHeartLine data-icon="inline-start" />
+      )}
       {count}
     </Button>
   );

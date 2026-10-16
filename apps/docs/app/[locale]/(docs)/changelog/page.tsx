@@ -36,7 +36,7 @@ const generateMetadata = async (): Promise<Metadata> => {
     image: docsOgImage("changelog", {
       title: doc.title,
       description,
-       category: t("changelog"),
+      category: t("changelog"),
     }),
   });
 };
@@ -57,9 +57,7 @@ const Page = async (): Promise<ReactElement> => {
       <ScrollToTop />
       <article className="py-8">
         <div className="flex items-start justify-between gap-4 mb-2">
-          <h1 className="text-3xl font-semibold font-heading">
-            {doc.title}
-          </h1>
+          <h1 className="text-3xl font-semibold font-heading">{doc.title}</h1>
         </div>
 
         {doc.description && (
@@ -68,16 +66,27 @@ const Page = async (): Promise<ReactElement> => {
           </p>
         )}
 
-        <MDXRemote source={doc.content} components={mdxComponents} options={{ blockJS: false }} />
+        <MDXRemote
+          source={doc.content}
+          components={mdxComponents}
+          options={{ blockJS: false }}
+        />
 
         {releases.map((release) => (
           <div key={release.slug} className="mb-2 [&+div]:mt-6">
             <h2 className="text-2xl font-semibold mt-10 mb-3">
-              <Link href={`/changelog/${release.slug}`} className="hover:underline">
+              <Link
+                href={`/changelog/${release.slug}`}
+                className="hover:underline"
+              >
                 {release.version}
               </Link>
             </h2>
-            {release.description && <p className="mb-4 leading-relaxed text-foreground/85">{release.description}</p>}
+            {release.description && (
+              <p className="mb-4 leading-relaxed text-foreground/85">
+                {release.description}
+              </p>
+            )}
           </div>
         ))}
 

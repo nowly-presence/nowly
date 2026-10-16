@@ -6,7 +6,7 @@ export type AnalyticsGroup =
   | "uninstall"
   | "settings"
   | "ratings"
-  | "release"
+  | "release";
 
 // Always available on every event via a dedicated column (source, country) or
 // a join on Device (browser/os/locale/extensionVersion/nativeVersion are
@@ -20,38 +20,38 @@ export const UNIVERSAL_DIMENSIONS = [
   "locale",
   "extensionVersion",
   "nativeVersion",
-] as const
+] as const;
 
 export type AnalyticsMetric = {
-  key: string
-  label: string
-  description: string
-  group: AnalyticsGroup
-  private?: boolean
-  dimensions: string[]
-  allowedPayloadKeys?: string[]
-  retentionDays?: number
-}
+  key: string;
+  label: string;
+  description: string;
+  group: AnalyticsGroup;
+  private?: boolean;
+  dimensions: string[];
+  allowedPayloadKeys?: string[];
+  retentionDays?: number;
+};
 
 export class Analytics {
-  readonly key: string
-  readonly label: string
-  readonly description: string
-  readonly group: AnalyticsGroup
-  readonly private: boolean
-  readonly dimensions: string[]
-  readonly allowedPayloadKeys: string[]
-  readonly retentionDays?: number
+  readonly key: string;
+  readonly label: string;
+  readonly description: string;
+  readonly group: AnalyticsGroup;
+  readonly private: boolean;
+  readonly dimensions: string[];
+  readonly allowedPayloadKeys: string[];
+  readonly retentionDays?: number;
 
   constructor(metric: AnalyticsMetric) {
-    this.key = metric.key
-    this.label = metric.label
-    this.description = metric.description
-    this.group = metric.group
-    this.private = metric.private ?? false
-    this.dimensions = metric.dimensions
-    this.allowedPayloadKeys = metric.allowedPayloadKeys ?? metric.dimensions
-    this.retentionDays = metric.retentionDays
+    this.key = metric.key;
+    this.label = metric.label;
+    this.description = metric.description;
+    this.group = metric.group;
+    this.private = metric.private ?? false;
+    this.dimensions = metric.dimensions;
+    this.allowedPayloadKeys = metric.allowedPayloadKeys ?? metric.dimensions;
+    this.retentionDays = metric.retentionDays;
   }
 
   toJSON(): AnalyticsMetric & { private: boolean } {
@@ -64,7 +64,7 @@ export class Analytics {
       dimensions: this.dimensions,
       allowedPayloadKeys: this.allowedPayloadKeys,
       retentionDays: this.retentionDays,
-    }
+    };
   }
 }
 
@@ -188,7 +188,8 @@ export const analyticsRegistry = [
   new Analytics({
     key: "image_proxy_call",
     label: "Image proxy call",
-    description: "Image proxy request by the presence (slug) that triggered it.",
+    description:
+      "Image proxy request by the presence (slug) that triggered it.",
     group: "presence",
     dimensions: ["slug", "service"],
   }),
@@ -241,7 +242,8 @@ export const analyticsRegistry = [
   new Analytics({
     key: "presence_error",
     label: "Presence error",
-    description: "Aggregated technical errors by presence, extension version, and runtime stage.",
+    description:
+      "Aggregated technical errors by presence, extension version, and runtime stage.",
     group: "presence",
     private: true,
     dimensions: ["slug", "version", "stage"],
@@ -250,7 +252,8 @@ export const analyticsRegistry = [
   new Analytics({
     key: "marketplace_page_view",
     label: "Marketplace page view",
-    description: "Public marketplace page view without URL, query, or user identity.",
+    description:
+      "Public marketplace page view without URL, query, or user identity.",
     group: "marketplace",
     dimensions: ["slug", "source", "locale"],
   }),
@@ -278,7 +281,8 @@ export const analyticsRegistry = [
   new Analytics({
     key: "marketplace_no_results",
     label: "Marketplace no results",
-    description: "Marketplace filter/search produced no results, without storing the search query.",
+    description:
+      "Marketplace filter/search produced no results, without storing the search query.",
     group: "marketplace",
     dimensions: ["source", "locale", "category", "sort"],
   }),
@@ -324,7 +328,8 @@ export const analyticsRegistry = [
   new Analytics({
     key: "uninstall_analytics_deleted",
     label: "Uninstall analytics deleted",
-    description: "Device-level analytics deletion was requested from uninstall page.",
+    description:
+      "Device-level analytics deletion was requested from uninstall page.",
     group: "uninstall",
     private: true,
     dimensions: ["source"],
@@ -354,7 +359,8 @@ export const analyticsRegistry = [
   new Analytics({
     key: "settings_custom_api_changed",
     label: "Custom API setting changed",
-    description: "Custom API setting was enabled or disabled, without storing the URL.",
+    description:
+      "Custom API setting was enabled or disabled, without storing the URL.",
     group: "settings",
     private: true,
     dimensions: ["enabled"],
@@ -363,7 +369,8 @@ export const analyticsRegistry = [
   new Analytics({
     key: "settings_presence_changed",
     label: "Presence settings changed",
-    description: "Per-presence settings changed without storing setting values.",
+    description:
+      "Per-presence settings changed without storing setting values.",
     group: "settings",
     dimensions: ["slug", "version", "settingCount"],
   }),
@@ -381,14 +388,15 @@ export const analyticsRegistry = [
     group: "release",
     dimensions: ["slug", "version"],
   }),
-] as const
+] as const;
 
-export type AnalyticsEventKey = (typeof analyticsRegistry)[number]["key"]
+export type AnalyticsEventKey = (typeof analyticsRegistry)[number]["key"];
 
 export const getAnalyticsMetric = (key: string): Analytics | undefined =>
-  analyticsRegistry.find((metric) => metric.key === key)
+  analyticsRegistry.find((metric) => metric.key === key);
 
 export const isAnalyticsEventKey = (key: string): key is AnalyticsEventKey =>
-  Boolean(getAnalyticsMetric(key))
+  Boolean(getAnalyticsMetric(key));
 
-export const catalogPublicJson = () => analyticsRegistry.map((metric) => metric.toJSON())
+export const catalogPublicJson = () =>
+  analyticsRegistry.map((metric) => metric.toJSON());

@@ -3,8 +3,14 @@
 import { RiMenuLine } from "@nowly/ui/icons";
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { BrandLockup } from "@/features/layout/components/brand-lockup";
-import { Button, Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@nowly/ui";
-
+import {
+  Button,
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@nowly/ui";
 
 import { Link } from "@/i18n/navigation";
 import { SITE_URL } from "@/lib/constants";
@@ -23,7 +29,10 @@ export const Navbar = () => {
   return (
     <header className="pointer-events-none relative sticky top-0 z-50 px-4 pt-4 sm:px-6 sm:pt-8 lg:px-10">
       <div className="pointer-events-auto relative mx-auto flex h-[68px] max-w-[1200px] items-center justify-between gap-4 rounded-[12px] bg-background/50 px-3 backdrop-blur-xl sm:h-[84px] sm:px-4">
-        <Link href="/" className="relative flex h-11 w-[120px] shrink-0 items-center sm:h-[60px] sm:w-[148px]">
+        <Link
+          href="/"
+          className="relative flex h-11 w-[120px] shrink-0 items-center sm:h-[60px] sm:w-[148px]"
+        >
           <BrandLockup
             width={148}
             height={60}
@@ -58,11 +67,22 @@ export const Navbar = () => {
 
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger
-            render={<Button type="button" variant="ghost" size="icon" className="lg:hidden" aria-label={t("open-menu")} />}
+            render={
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="lg:hidden"
+                aria-label={t("open-menu")}
+              />
+            }
           >
             <RiMenuLine />
           </SheetTrigger>
-          <SheetContent side="right" className="w-[min(100%,20rem)] bg-background p-0 lg:hidden">
+          <SheetContent
+            side="right"
+            className="w-[min(100%,20rem)] bg-background p-0 lg:hidden"
+          >
             <SheetHeader>
               <SheetTitle>{t("open-menu")}</SheetTitle>
             </SheetHeader>

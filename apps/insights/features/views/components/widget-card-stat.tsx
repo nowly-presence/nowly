@@ -1,13 +1,21 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardTitle, Skeleton } from "@nowly/ui";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+  Skeleton,
+} from "@nowly/ui";
 import { apiFetch, ApiError } from "@/features/api-target/lib/api-client";
 import type { WidgetConfig } from "@nowly/analytics";
 import { useEffect, useState } from "react";
 
 type SeriesResponse = { total: number };
 
-const buildQuery = (widget: Extract<WidgetConfig, { kind: "metric-total" }>): string => {
+const buildQuery = (
+  widget: Extract<WidgetConfig, { kind: "metric-total" }>,
+): string => {
   const params = new URLSearchParams({ metric: widget.metric });
   if (widget.range === "custom" && widget.from && widget.to) {
     params.set("from", widget.from);
@@ -21,7 +29,11 @@ const buildQuery = (widget: Extract<WidgetConfig, { kind: "metric-total" }>): st
   return params.toString();
 };
 
-export const WidgetCardStat = ({ widget }: { widget: Extract<WidgetConfig, { kind: "metric-total" }> }) => {
+export const WidgetCardStat = ({
+  widget,
+}: {
+  widget: Extract<WidgetConfig, { kind: "metric-total" }>;
+}) => {
   const [value, setValue] = useState<number | null>(null);
   const [error, setError] = useState(false);
 
@@ -35,7 +47,8 @@ export const WidgetCardStat = ({ widget }: { widget: Extract<WidgetConfig, { kin
         if (!cancelled) setValue(data.total);
       })
       .catch((err) => {
-        if (!cancelled) setError(!(err instanceof ApiError && err.status === 404));
+        if (!cancelled)
+          setError(!(err instanceof ApiError && err.status === 404));
       });
 
     return () => {

@@ -6,14 +6,19 @@ import { cn } from "@nowly/ui/utils";
 import { useId, useRef, useState, type ReactNode } from "react";
 
 type ExpandableContentProps = {
-  children: ReactNode
-  openLabel: string
-  closeLabel: string
-  className?: string
+  children: ReactNode;
+  openLabel: string;
+  closeLabel: string;
+  className?: string;
 };
 
 // Shows the start of a long text that fades into a blur, with a button to read the rest.
-export const ExpandableContent = ({ children, openLabel, closeLabel, className }: ExpandableContentProps) => {
+export const ExpandableContent = ({
+  children,
+  openLabel,
+  closeLabel,
+  className,
+}: ExpandableContentProps) => {
   const [open, setOpen] = useState(false);
   const contentId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -28,7 +33,8 @@ export const ExpandableContent = ({ children, openLabel, closeLabel, className }
       <div
         id={contentId}
         className={cn(
-          !open && "max-h-80 overflow-hidden mask-[linear-gradient(to_bottom,black_30%,transparent_92%)]",
+          !open &&
+            "max-h-80 overflow-hidden mask-[linear-gradient(to_bottom,black_30%,transparent_92%)]",
         )}
       >
         {children}
@@ -59,7 +65,10 @@ export const ExpandableContent = ({ children, openLabel, closeLabel, className }
               aria-controls={contentId}
               aria-expanded={false}
               onClick={() => setOpen(true)}
-              className={cn(buttonVariants({ variant: "inverted", size: "lg" }), "shadow-[0_8px_30px_rgba(7,8,12,0.18)]")}
+              className={cn(
+                buttonVariants({ variant: "inverted", size: "lg" }),
+                "shadow-[0_8px_30px_rgba(7,8,12,0.18)]",
+              )}
             >
               {openLabel}
               <RiArrowDownSLine data-icon="inline-end" />

@@ -16,7 +16,10 @@ const client = createAnalyticsClient({
   flushAt: 1,
 });
 
-export const trackPublicAnalytics = (key: string, input: TrackInput = {}): void => {
+export const trackPublicAnalytics = (
+  key: string,
+  input: TrackInput = {},
+): void => {
   void client.track(key, input).catch(() => {
     // Best-effort ingest.
   });

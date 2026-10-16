@@ -5,16 +5,23 @@ import { join } from "node:path";
 import { getDocsNav } from "./content";
 
 type DocOgMetadata = {
-  title: string
-  description: string
-  category: string
+  title: string;
+  description: string;
+  category: string;
 };
 
-const getLocalizedTitle = (title: Record<string, string>, locale: string, fallback: string): string => {
+const getLocalizedTitle = (
+  title: Record<string, string>,
+  locale: string,
+  fallback: string,
+): string => {
   return title[locale] ?? title["en-US"] ?? fallback;
 };
 
-const readDocFile = (pagePath: string, locale: string): { raw: string } | null => {
+const readDocFile = (
+  pagePath: string,
+  locale: string,
+): { raw: string } | null => {
   const validLocale = getValidLocale(locale);
   const localizedPath = join(pagePath, `${validLocale}.mdx`);
   const fallbackPath = join(pagePath, "en-US.mdx");
@@ -30,13 +37,19 @@ const readDocFile = (pagePath: string, locale: string): { raw: string } | null =
   return null;
 };
 
-export const getDocOgMetadata = (slug: string, locale: string = "en-US"): DocOgMetadata | null => {
+export const getDocOgMetadata = (
+  slug: string,
+  locale: string = "en-US",
+): DocOgMetadata | null => {
   const validLocale = getValidLocale(locale);
   const lastSegment = slug.split("/").at(-1) ?? slug;
 
   for (const category of getDocsNav()) {
     const page = category.children.find(
-      (child) => child.slug === slug || `${category.slug}/${child.slug}` === slug || child.slug === lastSegment,
+      (child) =>
+        child.slug === slug ||
+        `${category.slug}/${child.slug}` === slug ||
+        child.slug === lastSegment,
     );
     if (!page) continue;
 

@@ -1,25 +1,50 @@
-import { frenchSpacing, mapBlockText, parseMarkdown, type Block } from "@/features/content/lib/markdown";
-import { getChangelogBody, getChangelogEntry, getChangelogList, parseChangelogVersion, type ChangelogStore } from "@nowly/changelog";
+import {
+  frenchSpacing,
+  mapBlockText,
+  parseMarkdown,
+  type Block,
+} from "@/features/content/lib/markdown";
+import {
+  getChangelogBody,
+  getChangelogEntry,
+  getChangelogList,
+  parseChangelogVersion,
+  type ChangelogStore,
+} from "@nowly/changelog";
 
 export type ChangelogRelease = {
-  version: string
-  slug: string
-  date: string | null
-  summary: string
-  banner?: string
-  stores?: ChangelogStore[]
+  version: string;
+  slug: string;
+  date: string | null;
+  summary: string;
+  banner?: string;
+  stores?: ChangelogStore[];
 };
 
-export const isChangelogReleasePublished = (date: string | null, now = new Date()): boolean => {
+export const isChangelogReleasePublished = (
+  date: string | null,
+  now = new Date(),
+): boolean => {
   if (date === null) return true;
 
   const releaseDate = new Date(`${date}T00:00:00.000Z`);
-  if (Number.isNaN(releaseDate.getTime()) || releaseDate.toISOString().slice(0, 10) !== date) return false;
+  if (
+    Number.isNaN(releaseDate.getTime()) ||
+    releaseDate.toISOString().slice(0, 10) !== date
+  )
+    return false;
 
   return date <= now.toISOString().slice(0, 10);
 };
 
-const toRelease = (entry: { slug: string; version: string; date: string | null; description: string; banner?: string; stores?: ChangelogStore[] }): ChangelogRelease => ({
+const toRelease = (entry: {
+  slug: string;
+  version: string;
+  date: string | null;
+  description: string;
+  banner?: string;
+  stores?: ChangelogStore[];
+}): ChangelogRelease => ({
   version: entry.version,
   slug: entry.slug,
   date: entry.date,
@@ -32,7 +57,9 @@ const toRelease = (entry: { slug: string; version: string; date: string | null; 
 // store's badge - older releases stay unbadged even if their own frontmatter also
 // lists the store, since the badge means "this is what's currently live there", not
 // "this release was also available there at the time".
-export const latestReleaseSlugByStore = (releases: ChangelogRelease[]): Partial<Record<ChangelogStore, string>> => {
+export const latestReleaseSlugByStore = (
+  releases: ChangelogRelease[],
+): Partial<Record<ChangelogStore, string>> => {
   const latest: Partial<Record<ChangelogStore, string>> = {};
   for (const release of releases) {
     for (const store of release.stores ?? []) {
@@ -47,7 +74,10 @@ export const getChangelogReleases = (locale: string): ChangelogRelease[] =>
     .map(toRelease)
     .filter((release) => isChangelogReleasePublished(release.date));
 
-export const getChangelogRelease = (value: string, locale: string): ChangelogRelease | null => {
+export const getChangelogRelease = (
+  value: string,
+  locale: string,
+): ChangelogRelease | null => {
   const entry = getChangelogEntry(value, locale);
   if (!entry) return null;
 
@@ -56,7 +86,8 @@ export const getChangelogRelease = (value: string, locale: string): ChangelogRel
 };
 
 export const getChangelogNotes = (slug: string, locale: string): Block[] => {
-  const body = getChangelogBody(slug, locale) ?? getChangelogBody(slug, "en-US");
+  const body =
+    getChangelogBody(slug, locale) ?? getChangelogBody(slug, "en-US");
   if (!body) return [];
   const blocks = parseMarkdown(body.content);
   return locale === "fr-FR" ? mapBlockText(blocks, frenchSpacing) : blocks;
@@ -64,4 +95,3 @@ export const getChangelogNotes = (slug: string, locale: string): Block[] => {
 
 export { formatChangelogDate } from "@/features/changelog/lib/format-changelog-date";
 export { parseChangelogVersion };
-

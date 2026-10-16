@@ -1,4 +1,7 @@
-import { getDocContent, getNavigationItems } from "@/features/docs-content/lib/content";
+import {
+  getDocContent,
+  getNavigationItems,
+} from "@/features/docs-content/lib/content";
 import { DOCS_URL } from "@/lib/constants";
 import { NextResponse } from "next/server";
 import { getTranslations } from "next-intl/server";
@@ -6,7 +9,10 @@ import { getTranslations } from "next-intl/server";
 export const runtime = "nodejs";
 
 export const GET = async () => {
-  const t = await getTranslations({ locale: "en-US", namespace: "docsMetadata" });
+  const t = await getTranslations({
+    locale: "en-US",
+    namespace: "docsMetadata",
+  });
   const sections = getNavigationItems("en-US");
   const lines: string[] = [
     `# ${t("title")}`,
@@ -23,7 +29,9 @@ export const GET = async () => {
       const doc = getDocContent(page.path, "en-US");
       if (!doc) continue;
 
-       lines.push(`- [${doc.title}](${DOCS_URL}/${doc.path}): ${doc.description || t("doc-description", { title: doc.title })}`);
+      lines.push(
+        `- [${doc.title}](${DOCS_URL}/${doc.path}): ${doc.description || t("doc-description", { title: doc.title })}`,
+      );
     }
   }
 
@@ -35,11 +43,19 @@ export const GET = async () => {
       const doc = getDocContent(page.path, "en-US");
       if (!doc) continue;
 
-       lines.push(`- [${doc.title}](${DOCS_URL}/${doc.path}): ${doc.description || t("changelog-description")}`);
+      lines.push(
+        `- [${doc.title}](${DOCS_URL}/${doc.path}): ${doc.description || t("changelog-description")}`,
+      );
     }
   }
 
-  lines.push("", `## ${t("resources")}`, "", `- [${t("github")}](https://github.com/nowly-presence/nowly)`, "- [Discord Rich Presence](https://discord.com/rich-presence)");
+  lines.push(
+    "",
+    `## ${t("resources")}`,
+    "",
+    `- [${t("github")}](https://github.com/nowly-presence/nowly)`,
+    "- [Discord Rich Presence](https://discord.com/rich-presence)",
+  );
 
   return new NextResponse(lines.join("\n"), {
     headers: { "Content-Type": "text/plain; charset=utf-8" },

@@ -5,7 +5,7 @@ import Image from "next/image";
 import type { PresenceCardConfig } from "@/features/home/components/hero-presence-cards";
 
 type PresenceCardProps = {
-  config: PresenceCardConfig
+  config: PresenceCardConfig;
 };
 
 // All offsets below are expressed as cqw (percent of the card's own width),
@@ -20,7 +20,8 @@ const ELAPSED_COLOR = "#61bf67";
 export const PresenceCard = ({ config }: PresenceCardProps) => {
   const t = useTranslations(`hero.cards.${config.messageKey}`);
   const { timestamp } = config;
-  const buttonTop = timestamp.kind === "none" && !config.hasSubtitle ? 116 : 151;
+  const buttonTop =
+    timestamp.kind === "none" && !config.hasSubtitle ? 116 : 151;
 
   return (
     <div className="relative aspect-[646/221] w-full select-none [container-type:inline-size]">
@@ -37,32 +38,60 @@ export const PresenceCard = ({ config }: PresenceCardProps) => {
 
         <div
           className="absolute overflow-hidden"
-          style={{ left: qw(17), top: qw(53), width: qw(150), height: qw(150), borderRadius: qw(11) }}
+          style={{
+            left: qw(17),
+            top: qw(53),
+            width: qw(150),
+            height: qw(150),
+            borderRadius: qw(11),
+          }}
         >
           <Image
             src={config.largeImage}
             alt={t("title")}
             fill
             sizes="150px"
-            className={config.largeContain ? "object-contain p-[8%]" : "object-cover"}
+            className={
+              config.largeContain ? "object-contain p-[8%]" : "object-cover"
+            }
           />
         </div>
 
         {config.smallImage ? (
           <div
             className="absolute overflow-hidden rounded-full bg-[#050505] shadow-[0_0_0_3px_#050505]"
-            style={{ left: qw(132), top: qw(168), width: qw(41), height: qw(41) }}
+            style={{
+              left: qw(132),
+              top: qw(168),
+              width: qw(41),
+              height: qw(41),
+            }}
           >
-            <Image src={config.smallImage} alt="" fill sizes="41px" className="object-contain" />
+            <Image
+              src={config.smallImage}
+              alt=""
+              fill
+              sizes="41px"
+              className="object-contain"
+            />
           </div>
         ) : null}
 
-        <div className="absolute" style={{ left: qw(193), top: qw(62), right: qw(37) }}>
-          <p className="truncate font-medium text-[#e4f2ff]" style={{ fontSize: qw(16) }}>
+        <div
+          className="absolute"
+          style={{ left: qw(193), top: qw(62), right: qw(37) }}
+        >
+          <p
+            className="truncate font-medium text-[#e4f2ff]"
+            style={{ fontSize: qw(16) }}
+          >
             {t("title")}
           </p>
           {config.hasSubtitle ? (
-            <p className="mt-[0.4em] truncate font-black text-[#e4f2ff]" style={{ fontSize: qw(16) }}>
+            <p
+              className="mt-[0.4em] truncate font-black text-[#e4f2ff]"
+              style={{ fontSize: qw(16) }}
+            >
               {t("subtitle")}
             </p>
           ) : null}
@@ -71,28 +100,56 @@ export const PresenceCard = ({ config }: PresenceCardProps) => {
         {timestamp.kind === "progress" ? (
           <div
             className="absolute flex items-center"
-            style={{ left: qw(193), top: qw(116), right: qw(37), height: qw(22) }}
+            style={{
+              left: qw(193),
+              top: qw(116),
+              right: qw(37),
+              height: qw(22),
+            }}
           >
-            <span className="whitespace-nowrap font-medium text-[#e4f2ff]" style={{ fontSize: qw(16) }}>
+            <span
+              className="whitespace-nowrap font-medium text-[#e4f2ff]"
+              style={{ fontSize: qw(16) }}
+            >
               {t("elapsed")}
             </span>
             <div className="mx-[0.8cqw] h-[0.6cqw] flex-1 overflow-hidden rounded-full bg-[#212121]">
-              <div className="h-full rounded-full bg-[#e4f2ff]" style={{ width: `${timestamp.progress}%` }} />
+              <div
+                className="h-full rounded-full bg-[#e4f2ff]"
+                style={{ width: `${timestamp.progress}%` }}
+              />
             </div>
-            <span className="whitespace-nowrap font-medium text-[#e4f2ff]" style={{ fontSize: qw(16) }}>
+            <span
+              className="whitespace-nowrap font-medium text-[#e4f2ff]"
+              style={{ fontSize: qw(16) }}
+            >
               {t("duration")}
             </span>
           </div>
         ) : null}
 
         {timestamp.kind === "elapsed" ? (
-          <div className="absolute flex items-center gap-[0.6cqw]" style={{ left: qw(193), top: qw(116), height: qw(22) }}>
-            <div className="relative shrink-0" style={{ width: qw(18), height: qw(13) }}>
-              <Image src={timestamp.icon ?? ELAPSED_ICON} alt="" fill sizes="18px" />
+          <div
+            className="absolute flex items-center gap-[0.6cqw]"
+            style={{ left: qw(193), top: qw(116), height: qw(22) }}
+          >
+            <div
+              className="relative shrink-0"
+              style={{ width: qw(18), height: qw(13) }}
+            >
+              <Image
+                src={timestamp.icon ?? ELAPSED_ICON}
+                alt=""
+                fill
+                sizes="18px"
+              />
             </div>
             <span
               className="whitespace-nowrap font-medium"
-              style={{ fontSize: qw(16), color: timestamp.color ?? ELAPSED_COLOR }}
+              style={{
+                fontSize: qw(16),
+                color: timestamp.color ?? ELAPSED_COLOR,
+              }}
             >
               {t("timer")}
             </span>
@@ -106,18 +163,36 @@ export const PresenceCard = ({ config }: PresenceCardProps) => {
               rel="noreferrer"
               target="_blank"
               className="absolute flex items-center justify-center bg-[#212121] transition-colors hover:bg-[#2c2c2c]"
-              style={{ left: qw(193), top: qw(buttonTop), right: qw(37), height: qw(43), borderRadius: qw(10) }}
+              style={{
+                left: qw(193),
+                top: qw(buttonTop),
+                right: qw(37),
+                height: qw(43),
+                borderRadius: qw(10),
+              }}
             >
-              <span className="whitespace-nowrap font-medium text-[#fdfdfd]" style={{ fontSize: qw(17) }}>
+              <span
+                className="whitespace-nowrap font-medium text-[#fdfdfd]"
+                style={{ fontSize: qw(17) }}
+              >
                 {t("cta")}
               </span>
             </a>
           ) : (
             <div
               className="absolute flex items-center justify-center bg-[#212121]"
-              style={{ left: qw(193), top: qw(buttonTop), right: qw(37), height: qw(43), borderRadius: qw(10) }}
+              style={{
+                left: qw(193),
+                top: qw(buttonTop),
+                right: qw(37),
+                height: qw(43),
+                borderRadius: qw(10),
+              }}
             >
-              <span className="whitespace-nowrap font-medium text-[#fdfdfd]" style={{ fontSize: qw(17) }}>
+              <span
+                className="whitespace-nowrap font-medium text-[#fdfdfd]"
+                style={{ fontSize: qw(17) }}
+              >
                 {t("cta")}
               </span>
             </div>

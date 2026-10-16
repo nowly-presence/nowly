@@ -1,5 +1,9 @@
 import { ViewPage } from "@/features/views/components/view-page";
-import { API_TARGET_COOKIE, apiBaseUrlFor, resolveApiTarget } from "@/features/api-target/lib/api-target";
+import {
+  API_TARGET_COOKIE,
+  apiBaseUrlFor,
+  resolveApiTarget,
+} from "@/features/api-target/lib/api-target";
 import { ButtonLink } from "@nowly/ui";
 import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
@@ -21,7 +25,11 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <ButtonLink href={`/views/custom/${id}/edit`} variant="outline" size="sm">
+        <ButtonLink
+          href={`/views/custom/${id}/edit`}
+          variant="outline"
+          size="sm"
+        >
           Edit
         </ButtonLink>
       </div>

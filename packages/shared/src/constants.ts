@@ -7,11 +7,11 @@
  */
 
 /** Presence slug constraints. */
-export const SLUG_MAX_LENGTH = 80
-export const SLUG_PATTERN = /^[a-z0-9][a-z0-9-]*$/
+export const SLUG_MAX_LENGTH = 80;
+export const SLUG_PATTERN = /^[a-z0-9][a-z0-9-]*$/;
 
 /** Generic text field cap used when sanitizing free-text input. */
-export const DEFAULT_TEXT_MAX_LENGTH = 120
+export const DEFAULT_TEXT_MAX_LENGTH = 120;
 
 /** Public presence-issue reports from the library page. */
-export const PRESENCE_REPORT_MAX_LENGTH = 750
+export const PRESENCE_REPORT_MAX_LENGTH = 750;

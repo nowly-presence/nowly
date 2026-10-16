@@ -1,6 +1,15 @@
 "use client";
 
-import { Button, Card, CardContent, CardDescription, CardTitle, Input, Label, Textarea } from "@nowly/ui";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+  Input,
+  Label,
+  Textarea,
+} from "@nowly/ui";
 import { useState } from "react";
 
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
@@ -11,7 +20,13 @@ type FormStatus = "idle" | "sending" | "success" | "error";
 export const ContactForm = () => {
   const t = useTranslations("supportPage.contact");
   const [status, setStatus] = useState<FormStatus>("idle");
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "", website: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+    website: "",
+  });
 
   const updateField = (field: keyof typeof form, value: string) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -41,10 +56,15 @@ export const ContactForm = () => {
       <CardContent>
         <CardTitle>{t("title")}</CardTitle>
         <CardDescription className="mt-2">{t("description")}</CardDescription>
-        <p className="mt-4 text-xs text-muted-foreground">{t("required-note")}</p>
+        <p className="mt-4 text-xs text-muted-foreground">
+          {t("required-note")}
+        </p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <div className="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+          <div
+            className="absolute -left-[9999px] h-px w-px overflow-hidden"
+            aria-hidden="true"
+          >
             <Input
               id="contact-website"
               tabIndex={-1}
@@ -68,7 +88,10 @@ export const ContactForm = () => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="contact-email">
-                {t("email")} <span aria-hidden="true" className="text-destructive">*</span>
+                {t("email")}{" "}
+                <span aria-hidden="true" className="text-destructive">
+                  *
+                </span>
               </Label>
               <Input
                 id="contact-email"
@@ -85,7 +108,10 @@ export const ContactForm = () => {
 
           <div className="space-y-2">
             <Label htmlFor="contact-subject">
-              {t("subject")} <span aria-hidden="true" className="text-destructive">*</span>
+              {t("subject")}{" "}
+              <span aria-hidden="true" className="text-destructive">
+                *
+              </span>
             </Label>
             <Input
               id="contact-subject"
@@ -99,7 +125,10 @@ export const ContactForm = () => {
 
           <div className="space-y-2">
             <Label htmlFor="contact-message">
-              {t("message")} <span aria-hidden="true" className="text-destructive">*</span>
+              {t("message")}{" "}
+              <span aria-hidden="true" className="text-destructive">
+                *
+              </span>
             </Label>
             <Textarea
               id="contact-message"
@@ -117,8 +146,16 @@ export const ContactForm = () => {
             <Button type="submit" disabled={status === "sending"}>
               {status === "sending" ? t("sending") : t("submit")}
             </Button>
-            {status === "success" ? <p className="text-sm text-muted-foreground" aria-live="polite">{t("success")}</p> : null}
-            {status === "error" ? <p className="text-sm text-destructive" aria-live="polite">{t("error")}</p> : null}
+            {status === "success" ? (
+              <p className="text-sm text-muted-foreground" aria-live="polite">
+                {t("success")}
+              </p>
+            ) : null}
+            {status === "error" ? (
+              <p className="text-sm text-destructive" aria-live="polite">
+                {t("error")}
+              </p>
+            ) : null}
           </div>
         </form>
       </CardContent>

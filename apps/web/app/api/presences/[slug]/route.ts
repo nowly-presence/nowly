@@ -1,10 +1,13 @@
 import { presenceApiBaseUrl, PRODUCTION_API_URL } from "@/lib/presence-api";
 
 type RouteContext = {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 };
 
-const fetchRelease = async (baseUrl: string, slug: string): Promise<unknown | null> => {
+const fetchRelease = async (
+  baseUrl: string,
+  slug: string,
+): Promise<unknown | null> => {
   try {
     const response = await fetch(
       `${baseUrl}/presences/${encodeURIComponent(slug)}`,

@@ -1,6 +1,9 @@
 import { OverviewView } from "@/features/views/components/overview-view";
 import { ViewPage } from "@/features/views/components/view-page";
-import { DEFAULT_VIEWS, isDefaultViewSlug } from "@/features/views/lib/default-views";
+import {
+  DEFAULT_VIEWS,
+  isDefaultViewSlug,
+} from "@/features/views/lib/default-views";
 import { notFound } from "next/navigation";
 
 const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {

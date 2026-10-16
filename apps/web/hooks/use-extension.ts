@@ -17,8 +17,12 @@ const isMobileBrowser = (): boolean =>
   /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 
 export const useExtension = () => {
-  const [detected, setDetected] = useState<boolean | null>(() => getExtensionDetected());
-  const [diagnostic, setDiagnostic] = useState<ExtensionDiagnostic | null>(null);
+  const [detected, setDetected] = useState<boolean | null>(() =>
+    getExtensionDetected(),
+  );
+  const [diagnostic, setDiagnostic] = useState<ExtensionDiagnostic | null>(
+    null,
+  );
   const [mobile, setMobile] = useState(false);
 
   useEffect(() => subscribeExtensionDetected(setDetected), []);
@@ -56,20 +60,28 @@ export const useExtension = () => {
   };
 };
 
-export const usePresenceExtension = (slug: string, latestVersion?: string | null) => {
+export const usePresenceExtension = (
+  slug: string,
+  latestVersion?: string | null,
+) => {
   const { detected, diagnostic, mobile } = useExtension();
-  const [installed, setInstalled] = useState<InstalledPresenceInfo | null>(null);
+  const [installed, setInstalled] = useState<InstalledPresenceInfo | null>(
+    null,
+  );
   const [catalogReady, setCatalogReady] = useState(false);
   const [bridgeBlocked, setBridgeBlocked] = useState(false);
   const [busy, setBusy] = useState(false);
 
-  const refreshInstalled = useCallback(async (): Promise<InstalledPresenceInfo | null> => {
-    const map = parseInstalledMap(await requestExtension<unknown>("GET_INSTALLED", undefined, 4000));
-    const next = map[slug] ?? null;
-    setInstalled(next);
-    setBridgeBlocked(false);
-    return next;
-  }, [slug]);
+  const refreshInstalled =
+    useCallback(async (): Promise<InstalledPresenceInfo | null> => {
+      const map = parseInstalledMap(
+        await requestExtension<unknown>("GET_INSTALLED", undefined, 4000),
+      );
+      const next = map[slug] ?? null;
+      setInstalled(next);
+      setBridgeBlocked(false);
+      return next;
+    }, [slug]);
 
   useEffect(() => {
     if (detected === null) {
@@ -115,15 +127,22 @@ export const usePresenceExtension = (slug: string, latestVersion?: string | null
     installedVersion !== catalogVersion &&
     !isDevPresenceVersion(installedVersion);
 
-  const install = useCallback(async (): Promise<"ok" | "queued" | "blocked" | false> => {
-    if (!detected || mobile || bridgeBlocked) return bridgeBlocked ? "blocked" : false;
+  const install = useCallback(async (): Promise<
+    "ok" | "queued" | "blocked" | false
+  > => {
+    if (!detected || mobile || bridgeBlocked)
+      return bridgeBlocked ? "blocked" : false;
     setBusy(true);
     try {
       const release = await fetchPresenceRelease(slug);
-      const result = await requestExtension<{ ok?: boolean; queued?: boolean; error?: string }>(
-        needsUpdate ? "UPDATE_PRESENCE" : "INSTALL_PRESENCE",
-        { slug, release },
-      );
+      const result = await requestExtension<{
+        ok?: boolean;
+        queued?: boolean;
+        error?: string;
+      }>(needsUpdate ? "UPDATE_PRESENCE" : "INSTALL_PRESENCE", {
+        slug,
+        release,
+      });
       if (result?.ok === true) {
         const installedRelease = release as { version?: unknown };
         const version = normalizePresenceVersion(installedRelease.version);
@@ -134,7 +153,8 @@ export const usePresenceExtension = (slug: string, latestVersion?: string | null
       if (result?.ok === true) return "ok";
       return false;
     } catch (error) {
-      if (error instanceof Error && error.message.includes("timed out")) return "blocked";
+      if (error instanceof Error && error.message.includes("timed out"))
+        return "blocked";
       return false;
     } finally {
       setBusy(false);
@@ -145,7 +165,10 @@ export const usePresenceExtension = (slug: string, latestVersion?: string | null
     if (!detected || bridgeBlocked) return false;
     setBusy(true);
     try {
-      const result = await requestExtension<{ ok?: boolean }>("UNINSTALL_PRESENCE", { slug });
+      const result = await requestExtension<{ ok?: boolean }>(
+        "UNINSTALL_PRESENCE",
+        { slug },
+      );
       if (result?.ok === false) return false;
       setInstalled(null);
       return true;

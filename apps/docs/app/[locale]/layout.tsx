@@ -16,17 +16,22 @@ import type { PropsWithChildren, ReactElement } from "react";
 import "../globals.css";
 import { satoshi } from "../fonts";
 
-export const generateStaticParams = () => routing.locales.map((locale) => ({ locale }));
+export const generateStaticParams = () =>
+  routing.locales.map((locale) => ({ locale }));
 
 type LayoutProps = PropsWithChildren<{
-  params: Promise<{ locale: LocaleString }>
+  params: Promise<{ locale: LocaleString }>;
 }>;
 
-export const generateMetadata = async ({ params }: LayoutProps): Promise<Metadata> => {
+export const generateMetadata = async ({
+  params,
+}: LayoutProps): Promise<Metadata> => {
   const { locale } = await params;
   const t = await getTranslations("docsMetadata");
   const languages: Record<string, string> = {
-    "x-default": absoluteUrl(getPathname({ locale: routing.defaultLocale, href: "/" })),
+    "x-default": absoluteUrl(
+      getPathname({ locale: routing.defaultLocale, href: "/" }),
+    ),
   };
   for (const target of routing.locales) {
     languages[target] = absoluteUrl(getPathname({ locale: target, href: "/" }));
@@ -52,7 +57,14 @@ export const generateMetadata = async ({ params }: LayoutProps): Promise<Metadat
       shortcut: BRAND_FAVICON_32,
     },
     openGraph: {
-      images: [{ url: absoluteUrl(`/api/og/docs?mode=dark&v=${OG_IMAGE_VERSION}`), width: 1200, height: 630, alt: t("title") }],
+      images: [
+        {
+          url: absoluteUrl(`/api/og/docs?mode=dark&v=${OG_IMAGE_VERSION}`),
+          width: 1200,
+          height: 630,
+          alt: t("title"),
+        },
+      ],
     },
   };
 };
@@ -66,12 +78,21 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const Layout = async ({ children }: PropsWithChildren): Promise<ReactElement> => {
+const Layout = async ({
+  children,
+}: PropsWithChildren): Promise<ReactElement> => {
   const [messages, locale] = await Promise.all([getMessages(), getLocale()]);
 
   return (
-    <html lang={LOCALE_SHORT_MAP[locale as LocaleString] ?? "en"} className={satoshi.variable} suppressHydrationWarning>
-      <body className="min-h-dvh bg-background font-sans antialiased" suppressHydrationWarning>
+    <html
+      lang={LOCALE_SHORT_MAP[locale as LocaleString] ?? "en"}
+      className={satoshi.variable}
+      suppressHydrationWarning
+    >
+      <body
+        className="min-h-dvh bg-background font-sans antialiased"
+        suppressHydrationWarning
+      >
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AppProviders>
             <div className="flex min-h-dvh min-w-0 flex-col">

@@ -1,5 +1,9 @@
 import { FUNNEL_IDS } from "@/lib/catalog";
-import { ANALYTICS_RANGE_IDS, ANALYTICS_SOURCES, analyticsRegistry } from "@nowly/analytics";
+import {
+  ANALYTICS_RANGE_IDS,
+  ANALYTICS_SOURCES,
+  analyticsRegistry,
+} from "@nowly/analytics";
 import { tool } from "ai";
 import { z } from "zod";
 
@@ -13,21 +17,50 @@ const chartTypeEnum = z.enum(["line", "bar", "area"]);
 
 const filtersSchema = z
   .object({
-    slug: z.string().trim().min(1).optional().describe("Presence slug, e.g. 'youtube'"),
+    slug: z
+      .string()
+      .trim()
+      .min(1)
+      .optional()
+      .describe("Presence slug, e.g. 'youtube'"),
     source: sourceEnum.optional(),
-    country: z.string().length(2).optional().describe("ISO 3166-1 alpha-2 country code"),
-    browser: z.string().trim().min(1).optional().describe("e.g. 'firefox', 'chrome', 'edge'"),
-    os: z.string().trim().min(1).optional().describe("e.g. 'windows', 'macos', 'linux'"),
+    country: z
+      .string()
+      .length(2)
+      .optional()
+      .describe("ISO 3166-1 alpha-2 country code"),
+    browser: z
+      .string()
+      .trim()
+      .min(1)
+      .optional()
+      .describe("e.g. 'firefox', 'chrome', 'edge'"),
+    os: z
+      .string()
+      .trim()
+      .min(1)
+      .optional()
+      .describe("e.g. 'windows', 'macos', 'linux'"),
     locale: z.string().trim().min(1).optional(),
   })
-  .describe("All fields optional; omit any dimension the user did not mention.");
+  .describe(
+    "All fields optional; omit any dimension the user did not mention.",
+  );
 
 // Either a preset `range` (default "7d") OR an explicit `from`/`to` ISO
 // datetime pair for a custom window - from/to win when both are present.
 const windowFields = {
   range: rangeEnum.default("7d").describe("Ignored if from/to are both set."),
-  from: z.string().datetime().optional().describe("Custom window start, ISO datetime. Requires `to` too."),
-  to: z.string().datetime().optional().describe("Custom window end, ISO datetime. Requires `from` too."),
+  from: z
+    .string()
+    .datetime()
+    .optional()
+    .describe("Custom window start, ISO datetime. Requires `to` too."),
+  to: z
+    .string()
+    .datetime()
+    .optional()
+    .describe("Custom window end, ISO datetime. Requires `from` too."),
 };
 
 const widgetSchema = z.discriminatedUnion("kind", [
@@ -44,7 +77,12 @@ const widgetSchema = z.discriminatedUnion("kind", [
     ...windowFields,
     granularity: granularityEnum.optional(),
     chartType: chartTypeEnum.default("line"),
-    compare: z.boolean().optional().describe("Overlay the immediately preceding period of the same length for comparison."),
+    compare: z
+      .boolean()
+      .optional()
+      .describe(
+        "Overlay the immediately preceding period of the same length for comparison.",
+      ),
   }),
   z.object({
     kind: z.literal("funnel"),
@@ -55,16 +93,27 @@ const widgetSchema = z.discriminatedUnion("kind", [
 ]);
 
 const toQueryString = (filters?: Record<string, string | undefined>): string =>
-  new URLSearchParams(Object.entries(filters ?? {}).filter(([, v]) => v) as [string, string][]).toString();
+  new URLSearchParams(
+    Object.entries(filters ?? {}).filter(([, v]) => v) as [string, string][],
+  ).toString();
 
-const windowQueryString = (window: { range: string; from?: string; to?: string }): string =>
-  window.from && window.to ? `from=${encodeURIComponent(window.from)}&to=${encodeURIComponent(window.to)}` : `range=${window.range}`;
+const windowQueryString = (window: {
+  range: string;
+  from?: string;
+  to?: string;
+}): string =>
+  window.from && window.to
+    ? `from=${encodeURIComponent(window.from)}&to=${encodeURIComponent(window.to)}`
+    : `range=${window.range}`;
 
 export const insightsTools = (opts: { apiBaseUrl: string; cookie: string }) => {
   const call = async (path: string, init?: RequestInit) => {
     const res = await fetch(`${opts.apiBaseUrl}${path}`, {
       ...init,
-      headers: { cookie: opts.cookie, ...(init?.body ? { "Content-Type": "application/json" } : {}) },
+      headers: {
+        cookie: opts.cookie,
+        ...(init?.body ? { "Content-Type": "application/json" } : {}),
+      },
     });
     if (!res.ok) throw new Error(`Insights API ${path} failed: ${res.status}`);
     return res.json();
@@ -79,9 +128,16 @@ export const insightsTools = (opts: { apiBaseUrl: string; cookie: string }) => {
     }),
 
     getOverviewTotals: tool({
-      description: "Get total event count, unique devices, and top events for a time range and optional filters.",
-      inputSchema: z.object({ ...windowFields, filters: filtersSchema.optional() }),
-      execute: async ({ filters, ...window }) => call(`/insights/overview?${windowQueryString(window)}&${toQueryString(filters)}`),
+      description:
+        "Get total event count, unique devices, and top events for a time range and optional filters.",
+      inputSchema: z.object({
+        ...windowFields,
+        filters: filtersSchema.optional(),
+      }),
+      execute: async ({ filters, ...window }) =>
+        call(
+          `/insights/overview?${windowQueryString(window)}&${toQueryString(filters)}`,
+        ),
     }),
 
     getMetricSeries: tool({
@@ -89,7 +145,11 @@ export const insightsTools = (opts: { apiBaseUrl: string; cookie: string }) => {
         "Get a time series (bucketed counts) for one metric key, with optional dimension filters and an optional comparison " +
         "to the immediately preceding period of the same length. Use listCatalog first if unsure of the exact metric key.",
       inputSchema: z.object({
-        metric: z.enum(metricKeys).describe("Exact metric key from the catalog, e.g. 'presence_install'"),
+        metric: z
+          .enum(metricKeys)
+          .describe(
+            "Exact metric key from the catalog, e.g. 'presence_install'",
+          ),
         ...windowFields,
         granularity: granularityEnum.optional(),
         compare: z.boolean().optional(),
@@ -108,7 +168,10 @@ export const insightsTools = (opts: { apiBaseUrl: string; cookie: string }) => {
         ...windowFields,
         filters: filtersSchema.optional(),
       }),
-      execute: async ({ funnelId, filters, ...window }) => call(`/insights/funnels/${funnelId}?${windowQueryString(window)}&${toQueryString(filters)}`),
+      execute: async ({ funnelId, filters, ...window }) =>
+        call(
+          `/insights/funnels/${funnelId}?${windowQueryString(window)}&${toQueryString(filters)}`,
+        ),
     }),
 
     generateView: tool({
@@ -124,7 +187,8 @@ export const insightsTools = (opts: { apiBaseUrl: string; cookie: string }) => {
     }),
 
     listViews: tool({
-      description: "List the saved dashboard views (id and name only). Use this to find a view the user refers to by name before updating it.",
+      description:
+        "List the saved dashboard views (id and name only). Use this to find a view the user refers to by name before updating it.",
       inputSchema: z.object({}),
       execute: async () => call("/insights/views"),
     }),
@@ -141,7 +205,10 @@ export const insightsTools = (opts: { apiBaseUrl: string; cookie: string }) => {
       execute: async ({ name, title, widget }) =>
         call("/insights/views", {
           method: "POST",
-          body: JSON.stringify({ name, widgets: [{ id: crypto.randomUUID(), title, ...widget }] }),
+          body: JSON.stringify({
+            name,
+            widgets: [{ id: crypto.randomUUID(), title, ...widget }],
+          }),
         }),
     }),
 
@@ -156,8 +223,14 @@ export const insightsTools = (opts: { apiBaseUrl: string; cookie: string }) => {
       }),
       execute: async ({ viewId, title, widget }) => {
         const view = await call(`/insights/views/${viewId}`);
-        const widgets = [...view.widgets, { id: crypto.randomUUID(), title, ...widget }];
-        return call(`/insights/views/${viewId}`, { method: "PATCH", body: JSON.stringify({ name: view.name, widgets }) });
+        const widgets = [
+          ...view.widgets,
+          { id: crypto.randomUUID(), title, ...widget },
+        ];
+        return call(`/insights/views/${viewId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ name: view.name, widgets }),
+        });
       },
     }),
   };

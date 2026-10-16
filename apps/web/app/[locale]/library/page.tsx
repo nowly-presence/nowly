@@ -7,7 +7,10 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("pages.library")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("pages.library"),
+  ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
@@ -19,7 +22,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
 const Page = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ author?: string | string[] }>
+  searchParams: Promise<{ author?: string | string[] }>;
 }) => {
   const [{ author }, items, t] = await Promise.all([
     searchParams,
@@ -31,7 +34,11 @@ const Page = async ({
 
   return (
     <>
-      <WebPageJsonLd name={t("title")} description={t("description")} path="/library" />
+      <WebPageJsonLd
+        name={t("title")}
+        description={t("description")}
+        path="/library"
+      />
       <LibraryView items={items} authorHandle={authorHandle || null} />
     </>
   );

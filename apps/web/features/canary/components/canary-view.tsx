@@ -1,7 +1,13 @@
 "use client";
 
-import { ButtonAnchor, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
-
+import {
+  ButtonAnchor,
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+  cn,
+} from "@nowly/ui";
 
 import { BRAND_LOCKUP_CANARY, CANARY_ACCENT, CANARY_INK } from "@/lib/brand";
 import {
@@ -10,9 +16,17 @@ import {
   FIREFOX_EXTENSION_DOWNLOAD_URL,
   PROJECT_EXTENSION_DOWNLOAD_URL,
 } from "@/lib/constants";
-import { detectExtensionBrowser, type ExtensionBrowser } from "@/lib/extension-store";
+import {
+  detectExtensionBrowser,
+  type ExtensionBrowser,
+} from "@/lib/extension-store";
 
-import { RiCheckLine, RiChromeFill, RiDownloadLine, RiFirefoxFill } from "@nowly/ui/icons";
+import {
+  RiCheckLine,
+  RiChromeFill,
+  RiDownloadLine,
+  RiFirefoxFill,
+} from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useLayoutEffect, useState } from "react";
 
@@ -39,7 +53,10 @@ export const CanaryView = () => {
   const [detected, setDetected] = useState<ExtensionBrowser | null>(null);
   const Icon = browserIcons[browser];
   const notes = t.raw("notes") as Array<{ title: string; text: string }>;
-  const guideItems = t.raw(`guide.${browser}`) as Array<{ title: string; text: string }>;
+  const guideItems = t.raw(`guide.${browser}`) as Array<{
+    title: string;
+    text: string;
+  }>;
 
   useLayoutEffect(() => {
     const next = detectExtensionBrowser();
@@ -107,7 +124,9 @@ export const CanaryView = () => {
               <CardTitle className="text-xl">
                 {t("card-title", { browser: t(`browsers.${browser}`) })}
               </CardTitle>
-              <CardDescription className="mt-1">{t(`card-description.${browser}`)}</CardDescription>
+              <CardDescription className="mt-1">
+                {t(`card-description.${browser}`)}
+              </CardDescription>
             </div>
             <div className="flex w-full flex-col gap-2">
               <ButtonAnchor
@@ -132,36 +151,49 @@ export const CanaryView = () => {
                 {t(`stable.${browser}`)}
               </ButtonAnchor>
             </div>
-            <p className="text-sm leading-relaxed text-muted-foreground">{t(`store-note.${browser}`)}</p>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {t(`store-note.${browser}`)}
+            </p>
           </CardContent>
         </Card>
 
         <section className="mt-16 grid gap-10 lg:grid-cols-2">
           <div>
-            <h2 className="text-xl font-medium tracking-tight">{t("notes-title")}</h2>
+            <h2 className="text-xl font-medium tracking-tight">
+              {t("notes-title")}
+            </h2>
             <ul className="mt-6 space-y-5">
               {notes.map((item) => (
                 <li key={item.title}>
                   <p className="font-medium text-foreground">{item.title}</p>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    {item.text}
+                  </p>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h2 className="text-xl font-medium tracking-tight">{t(`guide-title.${browser}`)}</h2>
+            <h2 className="text-xl font-medium tracking-tight">
+              {t(`guide-title.${browser}`)}
+            </h2>
             <ol className="mt-6 space-y-5">
               {guideItems.map((item, index) => (
                 <li key={item.title} className="flex gap-4">
                   <span
                     className="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-md font-mono text-[0.65rem] font-medium"
-                    style={{ backgroundColor: CANARY_ACCENT, color: CANARY_INK }}
+                    style={{
+                      backgroundColor: CANARY_ACCENT,
+                      color: CANARY_INK,
+                    }}
                   >
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div>
                     <p className="font-medium text-foreground">{item.title}</p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                      {item.text}
+                    </p>
                   </div>
                 </li>
               ))}

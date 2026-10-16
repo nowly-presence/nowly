@@ -1,4 +1,8 @@
-import { RiAlertLine, RiErrorWarningLine, RiInformationLine } from "@nowly/ui/icons";
+import {
+  RiAlertLine,
+  RiErrorWarningLine,
+  RiInformationLine,
+} from "@nowly/ui/icons";
 
 import type { FC, ReactNode } from "react";
 
@@ -12,7 +16,12 @@ type CalloutProps = {
 const icons: Record<CalloutType, ReactNode> = {
   info: <RiInformationLine size={18} className="shrink-0 mt-0.5 text-accent" />,
   warning: <RiAlertLine size={18} className="shrink-0 mt-0.5 text-warning" />,
-  error: <RiErrorWarningLine size={18} className="shrink-0 mt-0.5 text-destructive" />,
+  error: (
+    <RiErrorWarningLine
+      size={18}
+      className="shrink-0 mt-0.5 text-destructive"
+    />
+  ),
 };
 
 const borders: Record<CalloutType, string> = {

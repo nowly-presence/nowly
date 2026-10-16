@@ -4,7 +4,6 @@ import { RiCloseLine, RiNodeTree } from "@nowly/ui/icons";
 import type { TocItem } from "@/features/docs-content/lib/types";
 import { cn } from "@nowly/ui";
 
-
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type FC } from "react";
 
@@ -26,7 +25,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
           }
         }
       },
-      { rootMargin: "-64px 0px -60% 0px", threshold: 0.1 }
+      { rootMargin: "-64px 0px -60% 0px", threshold: 0.1 },
     );
 
     const headings = document.querySelectorAll("h2, h3");
@@ -39,7 +38,10 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
 
   return (
     <>
-      <nav className="docs-sidebar-scroll hidden xl:block fixed top-16 w-56 max-h-[calc(100vh-4rem)] overflow-y-auto pt-8" style={{ right: "max(1rem, calc((100vw - 1280px) / 2 + 1rem))" }}>
+      <nav
+        className="docs-sidebar-scroll hidden xl:block fixed top-16 w-56 max-h-[calc(100vh-4rem)] overflow-y-auto pt-8"
+        style={{ right: "max(1rem, calc((100vw - 1280px) / 2 + 1rem))" }}
+      >
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
           {t("on-this-page")}
         </p>
@@ -53,7 +55,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
                   item.level === 3 && "pl-6",
                   activeId === item.id
                     ? "text-accent border-accent font-medium"
-                    : "text-muted-foreground border-transparent hover:text-foreground hover:border-border-light"
+                    : "text-muted-foreground border-transparent hover:text-foreground hover:border-border-light",
                 )}
               >
                 {item.text}
@@ -103,7 +105,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
                       item.level === 3 && "pl-6",
                       activeId === item.id
                         ? "text-accent border-accent"
-                        : "text-muted-foreground border-transparent hover:text-foreground"
+                        : "text-muted-foreground border-transparent hover:text-foreground",
                     )}
                   >
                     {item.text}

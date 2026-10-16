@@ -8,8 +8,11 @@ import { cn } from "@nowly/ui/utils";
 import { RiMenuLine } from "@remixicon/react";
 import { lazy, Suspense, useState } from "react";
 
-const MobileNav = lazy(() => import("@/features/layout/components/mobile-nav").then(({ MobileNav: Component }) => ({ default: Component })));
-
+const MobileNav = lazy(() =>
+  import("@/features/layout/components/mobile-nav").then(
+    ({ MobileNav: Component }) => ({ default: Component }),
+  ),
+);
 
 import { docsHref } from "@/features/seo/lib/seo";
 import { Link, usePathname } from "@/i18n/navigation";
@@ -22,7 +25,10 @@ export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const canary = pathname === "/canary";
   const storeButtonProps = canary
-    ? { className: "border-transparent hover:brightness-110", style: { backgroundColor: CANARY_ACCENT, color: CANARY_INK } }
+    ? {
+        className: "border-transparent hover:brightness-110",
+        style: { backgroundColor: CANARY_ACCENT, color: CANARY_INK },
+      }
     : {};
 
   const links = [
@@ -40,7 +46,10 @@ export const Navbar = () => {
         style={{ height: "var(--nav-join-panel, 0px)" }}
       />
       <div className="pointer-events-auto relative mx-auto flex h-17 max-w-300 items-center justify-between gap-4 rounded-[12px] bg-background/50 px-3 backdrop-blur-xl transition-[background-color,border-radius,backdrop-filter] duration-200 sm:h-21 sm:px-4 in-data-nav-join:rounded-b-none in-data-nav-join:bg-transparent in-data-nav-join:backdrop-blur-none">
-        <Link href="/" className="relative flex h-11 w-30 shrink-0 items-center sm:h-15 sm:w-37">
+        <Link
+          href="/"
+          className="relative flex h-11 w-30 shrink-0 items-center sm:h-15 sm:w-37"
+        >
           <BrandLockup
             width={148}
             height={60}
@@ -55,7 +64,10 @@ export const Navbar = () => {
 
         <button
           type="button"
-          className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "lg:hidden")}
+          className={cn(
+            buttonVariants({ variant: "ghost", size: "icon" }),
+            "lg:hidden",
+          )}
           aria-label={t("open-menu")}
           onClick={() => setOpen(true)}
         >

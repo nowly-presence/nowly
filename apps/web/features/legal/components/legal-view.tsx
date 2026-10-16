@@ -2,7 +2,12 @@ import { LegalHtml } from "@/features/legal/components/legal-html";
 import { Link } from "@/i18n/navigation";
 import { getMessages, getTranslations } from "next-intl/server";
 
-export const LEGAL_PAGE_KEYS = ["privacy", "tos", "cookies", "legal-notice"] as const;
+export const LEGAL_PAGE_KEYS = [
+  "privacy",
+  "tos",
+  "cookies",
+  "legal-notice",
+] as const;
 
 export type LegalPageKey = (typeof LEGAL_PAGE_KEYS)[number];
 
@@ -31,19 +36,19 @@ export const LegalView = async ({ page }: { page: LegalPageKey }) => {
   // Namespace "legal" is accessed dynamically via getMessages() — the string literal
   // is needed so the i18n-unused check can see that the namespace is consumed here.
   const legal = messages["legal"] as {
-    "publisher-name": string
-    "publisher-siren": string
-    "publisher-address": string
-    "publisher-email": string
+    "publisher-name": string;
+    "publisher-siren": string;
+    "publisher-address": string;
+    "publisher-email": string;
   };
   const copy = messages[MESSAGE_NS[page]] as {
-    badge: string
-    title: string
-    description: string
-    "last-updated": string
-    "data-region"?: string
-    intro?: string
-    sections: Array<{ title: string; body: string }>
+    badge: string;
+    title: string;
+    description: string;
+    "last-updated": string;
+    "data-region"?: string;
+    intro?: string;
+    sections: Array<{ title: string; body: string }>;
   };
   const extras = {
     publisherName: legal["publisher-name"],
@@ -59,21 +64,39 @@ export const LegalView = async ({ page }: { page: LegalPageKey }) => {
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
       <div className="mx-auto w-full max-w-3xl px-5 sm:px-10">
         <header>
-          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{copy.badge}</p>
+          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
+            {copy.badge}
+          </p>
           <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
             {copy.title}
           </h1>
-          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">{copy.description}</p>
-          <p className="mt-3 text-sm text-muted-foreground">{copy["last-updated"]}</p>
+          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">
+            {copy.description}
+          </p>
+          <p className="mt-3 text-sm text-muted-foreground">
+            {copy["last-updated"]}
+          </p>
         </header>
 
-        {intro ? <LegalHtml className={`mt-10 ${proseClassName}`} extras={extras} html={intro} /> : null}
+        {intro ? (
+          <LegalHtml
+            className={`mt-10 ${proseClassName}`}
+            extras={extras}
+            html={intro}
+          />
+        ) : null}
 
         <div className="mt-12 space-y-10">
           {sections.map((section) => (
             <section key={section.title}>
-              <h2 className="text-lg font-medium tracking-tight text-foreground">{section.title}</h2>
-              <LegalHtml className={`mt-3 ${proseClassName}`} extras={extras} html={section.body} />
+              <h2 className="text-lg font-medium tracking-tight text-foreground">
+                {section.title}
+              </h2>
+              <LegalHtml
+                className={`mt-3 ${proseClassName}`}
+                extras={extras}
+                html={section.body}
+              />
             </section>
           ))}
         </div>

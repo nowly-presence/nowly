@@ -5,9 +5,9 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 type BrandLockupProps = {
-  width: number
-  height: number
-  className?: string
+  width: number;
+  height: number;
+  className?: string;
 };
 
 export const BrandLockup = ({ width, height, className }: BrandLockupProps) => {
@@ -20,7 +20,11 @@ export const BrandLockup = ({ width, height, className }: BrandLockupProps) => {
 
   return (
     <img
-      src={mounted && resolvedTheme === "light" ? BRAND_LOCKUP_DARK : BRAND_LOCKUP_WHITE}
+      src={
+        mounted && resolvedTheme === "light"
+          ? BRAND_LOCKUP_DARK
+          : BRAND_LOCKUP_WHITE
+      }
       alt="Nowly"
       width={width}
       height={height}

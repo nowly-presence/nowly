@@ -61,7 +61,13 @@ const languageIcons: Record<string, ReactNode> = {
   markdown: <MarkdownDark className="size-3.5" />,
 };
 
-export const CodeBlock = async ({ className, children, filename, language, ["data-meta"]: dataMeta }: CodeBlockProps) => {
+export const CodeBlock = async ({
+  className,
+  children,
+  filename,
+  language,
+  ["data-meta"]: dataMeta,
+}: CodeBlockProps) => {
   const fromMeta = dataMeta?.match(/filename="([^"]+)"/)?.[1];
   const resolvedFilename = filename ?? fromMeta;
 
@@ -86,13 +92,12 @@ export const CodeBlock = async ({ className, children, filename, language, ["dat
     <div className="group relative my-6 overflow-hidden rounded-lg border border-border bg-card">
       <div className="bg-muted/50 flex min-w-0 items-center justify-between border-b border-border px-4 py-2">
         <div className="flex items-center gap-2 overflow-hidden">
-          {lang && (
-            languageIcons[normalizeLanguage(lang)] ?? (
+          {lang &&
+            (languageIcons[normalizeLanguage(lang)] ?? (
               <code className="text-muted-foreground/60 text-xs font-semibold">
                 {lang.toUpperCase()}
               </code>
-            )
-          )}
+            ))}
           {resolvedFilename && (
             <code className="text-muted-foreground truncate text-sm">
               {resolvedFilename}
@@ -107,7 +112,7 @@ export const CodeBlock = async ({ className, children, filename, language, ["dat
           className={cn(
             "overflow-x-auto text-sm leading-relaxed",
             "[&_pre]:m-0 [&_pre]:bg-transparent! [&_pre]:p-4",
-            "[&_code]:font-mono [&_code]:text-sm"
+            "[&_code]:font-mono [&_code]:text-sm",
           )}
           dangerouslySetInnerHTML={{ __html: highlightedCode }}
         />

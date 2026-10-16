@@ -2,13 +2,26 @@
 
 import { ButtonLink } from "@/components/button-link";
 import { Link } from "@/i18n/navigation";
-import { ButtonAnchor, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
+import {
+  ButtonAnchor,
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+  cn,
+} from "@nowly/ui";
 
-
-import { detectExtensionBrowser, getExtensionDownloadUrl } from "@/lib/extension-store";
+import {
+  detectExtensionBrowser,
+  getExtensionDownloadUrl,
+} from "@/lib/extension-store";
 import type { ExtensionBrowser } from "@/lib/extension-store";
 
-import { RiCheckLine, RiChromeFill, RiFirefoxBrowserFill } from "@nowly/ui/icons";
+import {
+  RiCheckLine,
+  RiChromeFill,
+  RiFirefoxBrowserFill,
+} from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useLayoutEffect, useState } from "react";
 
@@ -24,8 +37,14 @@ export const ExtensionView = () => {
   const [browser, setBrowser] = useState<ExtensionBrowser>("chrome");
   const [detected, setDetected] = useState<ExtensionBrowser | null>(null);
   const Icon = browserIcons[browser];
-  const trustItems = t.raw("trust-items") as Array<{ title: string; text: string }>;
-  const guideItems = t.raw("guide-items") as Array<{ title: string; text: string }>;
+  const trustItems = t.raw("trust-items") as Array<{
+    title: string;
+    text: string;
+  }>;
+  const guideItems = t.raw("guide-items") as Array<{
+    title: string;
+    text: string;
+  }>;
 
   useLayoutEffect(() => {
     const next = detectExtensionBrowser();
@@ -86,7 +105,9 @@ export const ExtensionView = () => {
               <CardTitle className="text-xl">
                 {t("card-title", { browser: t(`browsers.${browser}`) })}
               </CardTitle>
-              <CardDescription className="mt-1">{t(`card-description.${browser}`)}</CardDescription>
+              <CardDescription className="mt-1">
+                {t(`card-description.${browser}`)}
+              </CardDescription>
             </div>
             <div className="flex w-full flex-col gap-2">
               <ButtonAnchor
@@ -112,18 +133,24 @@ export const ExtensionView = () => {
 
         <section className="mt-16 grid gap-10 lg:grid-cols-2">
           <div>
-            <h2 className="text-xl font-medium tracking-tight">{t("trust-title")}</h2>
+            <h2 className="text-xl font-medium tracking-tight">
+              {t("trust-title")}
+            </h2>
             <ul className="mt-6 space-y-5">
               {trustItems.map((item) => (
                 <li key={item.title}>
                   <p className="font-medium text-foreground">{item.title}</p>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    {item.text}
+                  </p>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h2 className="text-xl font-medium tracking-tight">{t("guide-title")}</h2>
+            <h2 className="text-xl font-medium tracking-tight">
+              {t("guide-title")}
+            </h2>
             <ol className="mt-6 space-y-5">
               {guideItems.map((item, index) => (
                 <li key={item.title} className="flex gap-4">
@@ -132,14 +159,26 @@ export const ExtensionView = () => {
                   </span>
                   <div>
                     <p className="font-medium text-foreground">{item.title}</p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                      {item.text}
+                    </p>
                     {index === 1 ? (
-                      <ButtonLink href="/desktop" variant="link" size="sm" className="mt-2 h-auto px-0">
+                      <ButtonLink
+                        href="/desktop"
+                        variant="link"
+                        size="sm"
+                        className="mt-2 h-auto px-0"
+                      >
                         {t("guide-desktop")}
                       </ButtonLink>
                     ) : null}
                     {index === 2 ? (
-                      <ButtonLink href="/library" variant="link" size="sm" className="mt-2 h-auto px-0">
+                      <ButtonLink
+                        href="/library"
+                        variant="link"
+                        size="sm"
+                        className="mt-2 h-auto px-0"
+                      >
                         {t("guide-library")}
                       </ButtonLink>
                     ) : null}

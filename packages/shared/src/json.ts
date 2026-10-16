@@ -5,13 +5,13 @@
  * extension verifies) - the algorithm MUST stay byte-for-byte identical.
  */
 export const canonicalJson = (value: unknown): string => {
-  if (value === null || typeof value !== "object") return JSON.stringify(value)
-  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`
+  if (value === null || typeof value !== "object") return JSON.stringify(value);
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
 
-  const object = value as Record<string, unknown>
+  const object = value as Record<string, unknown>;
   return `{${Object.keys(object)
     .filter((key) => object[key] !== undefined)
     .sort()
     .map((key) => `${JSON.stringify(key)}:${canonicalJson(object[key])}`)
-    .join(",")}}`
-}
+    .join(",")}}`;
+};

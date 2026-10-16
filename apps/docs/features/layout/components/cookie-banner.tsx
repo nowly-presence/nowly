@@ -48,7 +48,12 @@ export const CookieBanner = () => {
           </a>
         </p>
 
-        <Button type="button" variant="inverted" className="shrink-0" onClick={dismiss}>
+        <Button
+          type="button"
+          variant="inverted"
+          className="shrink-0"
+          onClick={dismiss}
+        >
           {t("dismiss")}
         </Button>
       </div>

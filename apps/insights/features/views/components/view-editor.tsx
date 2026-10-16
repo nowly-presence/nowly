@@ -3,21 +3,37 @@
 import { WidgetEditorDialog } from "@/features/views/components/widget-editor-dialog";
 import { WidgetRenderer } from "@/features/views/components/widget-renderer";
 import { apiFetch } from "@/features/api-target/lib/api-client";
-import { Button, Card, CardContent, Field, FieldLabel, Input, toast } from "@nowly/ui";
+import {
+  Button,
+  Card,
+  CardContent,
+  Field,
+  FieldLabel,
+  Input,
+  toast,
+} from "@nowly/ui";
 import { RiAddLine, RiDeleteBinLine } from "@nowly/ui/icons";
 import type { ViewConfig, WidgetConfig } from "@nowly/analytics";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export const ViewEditor = ({ viewId, initial }: { viewId?: string; initial: ViewConfig }) => {
+export const ViewEditor = ({
+  viewId,
+  initial,
+}: {
+  viewId?: string;
+  initial: ViewConfig;
+}) => {
   const router = useRouter();
   const [name, setName] = useState(initial.name);
   const [widgets, setWidgets] = useState<WidgetConfig[]>(initial.widgets);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const addWidget = (widget: WidgetConfig) => setWidgets((current) => [...current, widget]);
-  const removeWidget = (id: string) => setWidgets((current) => current.filter((w) => w.id !== id));
+  const addWidget = (widget: WidgetConfig) =>
+    setWidgets((current) => [...current, widget]);
+  const removeWidget = (id: string) =>
+    setWidgets((current) => current.filter((w) => w.id !== id));
 
   const save = async () => {
     if (!name.trim()) {
@@ -28,9 +44,15 @@ export const ViewEditor = ({ viewId, initial }: { viewId?: string; initial: View
     setSaving(true);
     try {
       if (viewId) {
-        await apiFetch(`/insights/views/${viewId}`, { method: "PATCH", body: JSON.stringify({ name, widgets }) });
+        await apiFetch(`/insights/views/${viewId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ name, widgets }),
+        });
       } else {
-        const created = await apiFetch<{ id: string }>("/insights/views", { method: "POST", body: JSON.stringify({ name, widgets }) });
+        const created = await apiFetch<{ id: string }>("/insights/views", {
+          method: "POST",
+          body: JSON.stringify({ name, widgets }),
+        });
         router.push(`/views/custom/${created.id}/edit`);
         return;
       }
@@ -48,7 +70,11 @@ export const ViewEditor = ({ viewId, initial }: { viewId?: string; initial: View
       <div className="flex items-end justify-between gap-4">
         <Field className="max-w-sm">
           <FieldLabel>View name</FieldLabel>
-          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Number of installs" />
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Number of installs"
+          />
         </Field>
         <Button onClick={save} disabled={saving}>
           {saving ? "Saving..." : "Save view"}
@@ -81,7 +107,11 @@ export const ViewEditor = ({ viewId, initial }: { viewId?: string; initial: View
         </Card>
       </div>
 
-      <WidgetEditorDialog open={dialogOpen} onOpenChange={setDialogOpen} onSave={addWidget} />
+      <WidgetEditorDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onSave={addWidget}
+      />
     </div>
   );
 };

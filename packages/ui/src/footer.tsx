@@ -1,9 +1,15 @@
-import { FALLBACK_LOCALE, LOCALE_SHORT_MAP, type LocaleString } from "@nowly/locales";
+import {
+  FALLBACK_LOCALE,
+  LOCALE_SHORT_MAP,
+  type LocaleString,
+} from "@nowly/locales";
 import type { ReactNode } from "react";
 import { Separator } from "./separator";
 
 const WEB_ORIGIN = "https://nowly.me";
-const DOCS_ORIGIN = (process.env.NEXT_PUBLIC_DOCS_BASE_URL || "https://docs.nowly.me").replace(/\/$/, "");
+const DOCS_ORIGIN = (
+  process.env.NEXT_PUBLIC_DOCS_BASE_URL || "https://docs.nowly.me"
+).replace(/\/$/, "");
 const DISCORD_INVITE_URL = "https://discord.gg/MnZap7czgB";
 const DISCORD_SITE_URL = "https://discord.com";
 const PROJECT_REPOSITORY_URL = "https://github.com/nowly-presence/nowly";
@@ -14,55 +20,70 @@ const TIKTOK_URL = "https://www.tiktok.com/@nowlyme";
 // Same prefix scheme as each app's own i18n/routing.ts (short codes, default locale unprefixed) -
 // duplicated here (not imported) because this is the one piece both apps' routers must agree on
 // without this shared component depending on either app's routing config.
-const localizedUrl = (origin: string, locale: LocaleString, path: string): string => {
-  const prefix = locale === FALLBACK_LOCALE ? "" : `/${LOCALE_SHORT_MAP[locale]}`;
+const localizedUrl = (
+  origin: string,
+  locale: LocaleString,
+  path: string,
+): string => {
+  const prefix =
+    locale === FALLBACK_LOCALE ? "" : `/${LOCALE_SHORT_MAP[locale]}`;
   return `${origin}${prefix}${path}`;
 };
 
 export type FooterLabels = {
-  product: string
-  home: string
-  library: string
-  host: string
-  resources: string
-  docs: string
-  guides: string
-  changelog: string
-  canary: string
-  support: string
-  faq: string
-  status: string
-  branding: string
-  community: string
-  discord: string
-  company: string
-  about: string
-  contact: string
-  github: string
-  twitter: string
-  bluesky: string
-  tiktok: string
-  legalNotice: string
-  cookies: string
-  privacy: string
-  consent: string
-  tos: string
-  tagline: string
-  copyright: string
-  trademark: ReactNode
+  product: string;
+  home: string;
+  library: string;
+  host: string;
+  resources: string;
+  docs: string;
+  guides: string;
+  changelog: string;
+  canary: string;
+  support: string;
+  faq: string;
+  status: string;
+  branding: string;
+  community: string;
+  discord: string;
+  company: string;
+  about: string;
+  contact: string;
+  github: string;
+  twitter: string;
+  bluesky: string;
+  tiktok: string;
+  legalNotice: string;
+  cookies: string;
+  privacy: string;
+  consent: string;
+  tos: string;
+  tagline: string;
+  copyright: string;
+  trademark: ReactNode;
 };
 
 export type FooterProps = {
-  locale: LocaleString
-  brand: ReactNode
-  actions?: ReactNode
-  labels: FooterLabels
+  locale: LocaleString;
+  brand: ReactNode;
+  actions?: ReactNode;
+  labels: FooterLabels;
 };
 
 type Link = { href: string; label: string; external?: boolean };
 
-const FooterAnchor = ({ link, className }: { link: Link; className: string }) => (
-  <a href={link.href} className={className} {...(link.external ? { rel: "noreferrer", target: "_blank" } : {})}>
+const FooterAnchor = ({
+  link,
+  className,
+}: {
+  link: Link;
+  className: string;
+}) => (
+  <a
+    href={link.href}
+    className={className}
+    {...(link.external ? { rel: "noreferrer", target: "_blank" } : {})}
+  >
     {link.label}
   </a>
 );
@@ -124,18 +145,28 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
       <div className="mx-auto flex max-w-[1280px] flex-col gap-10 lg:flex-row lg:justify-between">
         <div className="max-w-xs">
           {brand}
-          <p className="mt-3 text-base text-muted-foreground">{labels.tagline}</p>
-          {actions ? <div className="mt-5 flex items-center gap-2">{actions}</div> : null}
+          <p className="mt-3 text-base text-muted-foreground">
+            {labels.tagline}
+          </p>
+          {actions ? (
+            <div className="mt-5 flex items-center gap-2">{actions}</div>
+          ) : null}
         </div>
 
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-4 lg:gap-16">
           {columns.map((column) => (
-            <div key={column.title} className="text-sm leading-relaxed text-muted-foreground">
+            <div
+              key={column.title}
+              className="text-sm leading-relaxed text-muted-foreground"
+            >
               <p className="font-bold">{column.title}</p>
               <ul className="mt-2 flex flex-col gap-1">
                 {column.links.map((link) => (
                   <li key={link.href}>
-                    <FooterAnchor link={link} className="transition-opacity hover:opacity-80" />
+                    <FooterAnchor
+                      link={link}
+                      className="transition-opacity hover:opacity-80"
+                    />
                   </li>
                 ))}
               </ul>
@@ -152,7 +183,11 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
         </div>
         <nav className="flex flex-wrap gap-x-4 gap-y-1 sm:justify-end">
           {legalLinks.map((link) => (
-            <FooterAnchor key={link.href} link={link} className="hover:opacity-80" />
+            <FooterAnchor
+              key={link.href}
+              link={link}
+              className="hover:opacity-80"
+            />
           ))}
         </nav>
       </div>
@@ -161,4 +196,3 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
 };
 
 export { DISCORD_SITE_URL as FOOTER_DISCORD_SITE_URL };
-

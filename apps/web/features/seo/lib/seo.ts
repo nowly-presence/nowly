@@ -11,7 +11,9 @@ import type { LocaleString } from "@nowly/locales";
 import type { Metadata } from "next";
 
 export const CANONICAL_ORIGIN = "https://nowly.me";
-export const DOCS_ORIGIN = (process.env.NEXT_PUBLIC_DOCS_BASE_URL || "https://docs.nowly.me").replace(/\/$/, "");
+export const DOCS_ORIGIN = (
+  process.env.NEXT_PUBLIC_DOCS_BASE_URL || "https://docs.nowly.me"
+).replace(/\/$/, "");
 
 const trimOrigin = (value: string): string => value.replace(/\/$/, "");
 
@@ -25,9 +27,13 @@ const hostnameOf = (value: string): string => {
 
 // Production is https-only; a plain-http base URL would leak into og:image / twitter:image and force a redirect.
 const forceHttpsOnProduction = (value: string): string =>
-  /^http:\/\/(www\.)?nowly\.me(?=\/|$)/.test(value) ? value.replace(/^http:/, "https:") : value;
+  /^http:\/\/(www\.)?nowly\.me(?=\/|$)/.test(value)
+    ? value.replace(/^http:/, "https:")
+    : value;
 
-export const SITE_URL = forceHttpsOnProduction(trimOrigin(process.env.NEXT_PUBLIC_BASE_URL ?? CANONICAL_ORIGIN));
+export const SITE_URL = forceHttpsOnProduction(
+  trimOrigin(process.env.NEXT_PUBLIC_BASE_URL ?? CANONICAL_ORIGIN),
+);
 export const DOCS_URL = DOCS_ORIGIN;
 export const SITE_NAME = "Nowly";
 export const OG_IMAGE_VERSION = "1";
@@ -40,7 +46,8 @@ export const docsHref = (path = "/"): string => {
   let normalized = path.trim() || "/";
   if (!normalized.startsWith("/")) normalized = `/${normalized}`;
   if (normalized === "/docs") normalized = "/";
-  else if (normalized.startsWith("/docs/")) normalized = normalized.slice("/docs".length);
+  else if (normalized.startsWith("/docs/"))
+    normalized = normalized.slice("/docs".length);
   return `${DOCS_ORIGIN}${normalized}`;
 };
 
@@ -49,14 +56,15 @@ export const absoluteUrl = (path = "/", origin = CANONICAL_ORIGIN): string => {
   return `${origin}${path.startsWith("/") ? path : `/${path}`}`;
 };
 
-export const seoUrl = (path = "/"): string => absoluteUrl(path, CANONICAL_ORIGIN);
+export const seoUrl = (path = "/"): string =>
+  absoluteUrl(path, CANONICAL_ORIGIN);
 
 export const webOgImage = (params: {
-  title: string
-  description: string
-  badge?: string
-  accent?: string
-  logo?: string
+  title: string;
+  description: string;
+  badge?: string;
+  accent?: string;
+  logo?: string;
 }): string => {
   const search = new URLSearchParams({
     title: params.title,
@@ -70,20 +78,20 @@ export const webOgImage = (params: {
 };
 
 type SeoOptions = {
-  title: string
-  description: string
+  title: string;
+  description: string;
   // Widened to `string` since `getLocale()` isn't narrowed to `LocaleString` - the routing
   // integration guarantees it's always one of `routing.locales` at runtime.
-  locale: string
-  path?: string
-  keywords?: string[]
-  image?: string
-  badge?: string
-  accent?: string
-  logo?: string
-  noIndex?: boolean
-  alternateLocales?: readonly string[]
-  canonicalLocale?: string
+  locale: string;
+  path?: string;
+  keywords?: string[];
+  image?: string;
+  badge?: string;
+  accent?: string;
+  logo?: string;
+  noIndex?: boolean;
+  alternateLocales?: readonly string[];
+  canonicalLocale?: string;
 };
 
 // The <title> tag reads well with a "Nowly | X" / "X | Nowly" pattern, but repeating that
@@ -108,22 +116,46 @@ export const createMetadata = ({
   canonicalLocale,
 }: SeoOptions): Metadata => {
   const localeString = locale as LocaleString;
-  const url = absoluteUrl(getPathname({ locale: localeString, href: path }), CANONICAL_ORIGIN);
+  const url = absoluteUrl(
+    getPathname({ locale: localeString, href: path }),
+    CANONICAL_ORIGIN,
+  );
   const canonical = canonicalLocale
-    ? absoluteUrl(getPathname({ locale: canonicalLocale as LocaleString, href: path }), CANONICAL_ORIGIN)
+    ? absoluteUrl(
+        getPathname({ locale: canonicalLocale as LocaleString, href: path }),
+        CANONICAL_ORIGIN,
+      )
     : url;
   const languages: Record<string, string> = {
-    "x-default": absoluteUrl(getPathname({ locale: routing.defaultLocale, href: path }), CANONICAL_ORIGIN),
+    "x-default": absoluteUrl(
+      getPathname({ locale: routing.defaultLocale, href: path }),
+      CANONICAL_ORIGIN,
+    ),
   };
   for (const target of routing.locales) {
     if (alternateLocales && !alternateLocales.includes(target)) continue;
-    languages[target] = absoluteUrl(getPathname({ locale: target, href: path }), CANONICAL_ORIGIN);
+    languages[target] = absoluteUrl(
+      getPathname({ locale: target, href: path }),
+      CANONICAL_ORIGIN,
+    );
   }
-  const resolvedTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+  const resolvedTitle = title.includes(SITE_NAME)
+    ? title
+    : `${title} | ${SITE_NAME}`;
   // Unlike the canonical/alternates URLs above (which must always point at production for SEO),
   // the OG image is fetched directly by whatever crawler renders the page (Discord, Slack, ...) -
   // it has to resolve on the host actually serving the page, not on production when previewing.
-  const imageUrl = absoluteUrl(image ?? webOgImage({ title: ogHeadline(resolvedTitle), description, badge, accent, logo }), SITE_URL);
+  const imageUrl = absoluteUrl(
+    image ??
+      webOgImage({
+        title: ogHeadline(resolvedTitle),
+        description,
+        badge,
+        accent,
+        logo,
+      }),
+    SITE_URL,
+  );
   const hideFromIndex = noIndex || isSeoPreview;
 
   return {
@@ -153,8 +185,9 @@ export const createMetadata = ({
   };
 };
 
-export const jsonLd = (data: Record<string, unknown> | Record<string, unknown>[]): string =>
-  JSON.stringify(data).replace(/</g, "\\u003c");
+export const jsonLd = (
+  data: Record<string, unknown> | Record<string, unknown>[],
+): string => JSON.stringify(data).replace(/</g, "\\u003c");
 
 export const organizationJsonLd = (): Record<string, unknown> => ({
   "@type": "Organization",

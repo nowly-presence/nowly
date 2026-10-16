@@ -38,7 +38,10 @@ export const ChatPanel = ({ open }: { open: boolean }) => {
   };
 
   return (
-    <div className="hidden md:block" data-state={open ? "expanded" : "collapsed"}>
+    <div
+      className="hidden md:block"
+      data-state={open ? "expanded" : "collapsed"}
+    >
       {/* Reserves the width in the flex row, exactly like the sidebar's own "gap" div. */}
       <div
         className={cn(
@@ -64,11 +67,15 @@ export const ChatPanel = ({ open }: { open: boolean }) => {
                 <MessageScrollerContent className="px-4 py-4">
                   {messages.length === 0 ? (
                     <p className="text-sm text-sidebar-foreground/60">
-                      Ask for a stat, e.g. "How many YouTube installs from the web library on Firefox on Windows?".
+                      Ask for a stat, e.g. "How many YouTube installs from the
+                      web library on Firefox on Windows?".
                     </p>
                   ) : null}
                   {messages.map((message) => (
-                    <Message key={message.id} align={message.role === "user" ? "end" : "start"}>
+                    <Message
+                      key={message.id}
+                      align={message.role === "user" ? "end" : "start"}
+                    >
                       <MessageContent className="flex flex-col gap-2">
                         {message.parts.map((part, index) => {
                           if (part.type === "text") {
@@ -80,11 +87,37 @@ export const ChatPanel = ({ open }: { open: boolean }) => {
                           }
 
                           if (part.type.startsWith("tool-")) {
-                            const toolPart = part as unknown as { type: string; state: string; output?: unknown };
-                            if (toolPart.type === "tool-generateView" && toolPart.state === "output-available") {
-                              return <ViewPreviewCard key={index} output={toolPart.output as { title: string; widget: Omit<WidgetConfig, "id" | "title"> }} />;
+                            const toolPart = part as unknown as {
+                              type: string;
+                              state: string;
+                              output?: unknown;
+                            };
+                            if (
+                              toolPart.type === "tool-generateView" &&
+                              toolPart.state === "output-available"
+                            ) {
+                              return (
+                                <ViewPreviewCard
+                                  key={index}
+                                  output={
+                                    toolPart.output as {
+                                      title: string;
+                                      widget: Omit<
+                                        WidgetConfig,
+                                        "id" | "title"
+                                      >;
+                                    }
+                                  }
+                                />
+                              );
                             }
-                            return <ToolCallCard key={index} toolName={toolPart.type.replace("tool-", "")} state={toolPart.state} />;
+                            return (
+                              <ToolCallCard
+                                key={index}
+                                toolName={toolPart.type.replace("tool-", "")}
+                                state={toolPart.state}
+                              />
+                            );
                           }
 
                           return null;
@@ -112,7 +145,11 @@ export const ChatPanel = ({ open }: { open: boolean }) => {
                 }}
               />
               <InputGroupAddon align="block-end">
-                <InputGroupButton size="icon-sm" className="ml-auto" onClick={submit}>
+                <InputGroupButton
+                  size="icon-sm"
+                  className="ml-auto"
+                  onClick={submit}
+                >
                   <RiSendPlaneLine />
                 </InputGroupButton>
               </InputGroupAddon>

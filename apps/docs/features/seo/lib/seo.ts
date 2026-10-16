@@ -10,9 +10,9 @@ export const OG_IMAGE_VERSION = "2";
 export const docsOgImage = (
   docPath: string,
   params: {
-    title: string
-    description: string
-    category: string
+    title: string;
+    description: string;
+    category: string;
   },
 ): string => {
   const search = new URLSearchParams({
@@ -34,13 +34,13 @@ export const absoluteUrl = (path = "/"): string => {
 };
 
 type SeoOptions = {
-  title: string
-  description: string
-  locale: LocaleString
-  path?: string
-  image?: string
-  type?: "website" | "article"
-  noIndex?: boolean
+  title: string;
+  description: string;
+  locale: LocaleString;
+  path?: string;
+  image?: string;
+  type?: "website" | "article";
+  noIndex?: boolean;
 };
 
 export const createMetadata = ({
@@ -54,13 +54,19 @@ export const createMetadata = ({
 }: SeoOptions): Metadata => {
   const url = absoluteUrl(getPathname({ locale, href: path }));
   const languages: Record<string, string> = {
-    "x-default": absoluteUrl(getPathname({ locale: routing.defaultLocale, href: path })),
+    "x-default": absoluteUrl(
+      getPathname({ locale: routing.defaultLocale, href: path }),
+    ),
   };
   for (const target of routing.locales) {
-    languages[target] = absoluteUrl(getPathname({ locale: target, href: path }));
+    languages[target] = absoluteUrl(
+      getPathname({ locale: target, href: path }),
+    );
   }
   const imageUrl = image ? absoluteUrl(image) : undefined;
-  const resolvedTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+  const resolvedTitle = title.includes(SITE_NAME)
+    ? title
+    : `${title} | ${SITE_NAME}`;
   const hideFromIndex = noIndex || isSeoPreview;
 
   return {

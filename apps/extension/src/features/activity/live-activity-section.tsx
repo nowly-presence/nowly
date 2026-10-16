@@ -1,44 +1,50 @@
-import { RiEyeOffLine } from "@remixicon/react"
-import { CustomActivityLiveCard } from "@/components/shared/custom-activity-live-card"
-import { LiveCard } from "@/components/shared/live-activity-card"
-import { PresenceIcon } from "@/components/shared/presence-icon"
-import { useExtensionState } from "@/hooks/extension-state-provider"
-import { useI18n } from "@/hooks/i18n-provider"
-import { useNav } from "@/hooks/navigation-provider"
-import { connectionOf } from "@/lib/presence-status"
-import { sendMessage } from "@/lib/messages"
-import { customActivityIdOf } from "@/shared/custom-activity"
-import { discordIpcIssueOf } from "@/shared/discord-ipc-prompt"
-import type { TabActivity } from "@/shared/types"
-import { Button } from "@/ui/button"
-import { Section } from "@/ui/section"
-import { DiscordIpcAlert } from "@/features/activity/discord-ipc-alert"
-import { IdleCard } from "@/features/activity/idle-activity-card"
-import { useTabSharing } from "@/features/activity/use-tab-sharing"
+import { RiEyeOffLine } from "@remixicon/react";
+import { CustomActivityLiveCard } from "@/components/shared/custom-activity-live-card";
+import { LiveCard } from "@/components/shared/live-activity-card";
+import { PresenceIcon } from "@/components/shared/presence-icon";
+import { useExtensionState } from "@/hooks/extension-state-provider";
+import { useI18n } from "@/hooks/i18n-provider";
+import { useNav } from "@/hooks/navigation-provider";
+import { connectionOf } from "@/lib/presence-status";
+import { sendMessage } from "@/lib/messages";
+import { customActivityIdOf } from "@/shared/custom-activity";
+import { discordIpcIssueOf } from "@/shared/discord-ipc-prompt";
+import type { TabActivity } from "@/shared/types";
+import { Button } from "@/ui/button";
+import { Section } from "@/ui/section";
+import { DiscordIpcAlert } from "@/features/activity/discord-ipc-alert";
+import { IdleCard } from "@/features/activity/idle-activity-card";
+import { useTabSharing } from "@/features/activity/use-tab-sharing";
 
 type LiveActivitySectionProps = {
-  liveTab: TabActivity | undefined
-  otherActivityCount: number
-  hasPresences: boolean
-}
+  liveTab: TabActivity | undefined;
+  otherActivityCount: number;
+  hasPresences: boolean;
+};
 
-export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences }: LiveActivitySectionProps) => {
-  const { state, updateSettings, refresh } = useExtensionState()
-  const { t } = useI18n()
-  const { push } = useNav()
-  const setTabMuted = useTabSharing()
-  const { activity, presences, settings } = state
-  const paused = settings.presencePaused === true
-  const liveStored = activity ? presences[activity.slug] : undefined
-  const resume = () => void updateSettings({ presencePaused: false })
-  const customId = customActivityIdOf(activity?.slug)
-  const custom = customId ? state.customActivities.items.find((item) => item.id === customId) : undefined
+export const LiveActivitySection = ({
+  liveTab,
+  otherActivityCount,
+  hasPresences,
+}: LiveActivitySectionProps) => {
+  const { state, updateSettings, refresh } = useExtensionState();
+  const { t } = useI18n();
+  const { push } = useNav();
+  const setTabMuted = useTabSharing();
+  const { activity, presences, settings } = state;
+  const paused = settings.presencePaused === true;
+  const liveStored = activity ? presences[activity.slug] : undefined;
+  const resume = () => void updateSettings({ presencePaused: false });
+  const customId = customActivityIdOf(activity?.slug);
+  const custom = customId
+    ? state.customActivities.items.find((item) => item.id === customId)
+    : undefined;
   const stopCustom = async () => {
-    await sendMessage("SET_CUSTOM_ACTIVITY_ACTIVE", { id: null })
-    await Promise.all([refresh.customActivities(), refresh.activity()])
-  }
-  const connection = connectionOf(state.native)
-  const ipcBlocked = discordIpcIssueOf(state.native).active
+    await sendMessage("SET_CUSTOM_ACTIVITY_ACTIVE", { id: null });
+    await Promise.all([refresh.customActivities(), refresh.activity()]);
+  };
+  const connection = connectionOf(state.native);
+  const ipcBlocked = discordIpcIssueOf(state.native).active;
 
   return (
     <Section title={t("activity.now")}>
@@ -65,7 +71,13 @@ export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences 
           footer={
             <div className="flex items-center justify-between gap-3">
               <span className="flex min-w-0 items-center gap-2 text-label-md text-on-tertiary-muted">
-                <PresenceIcon slug={activity.slug} name={liveStored.metadata.name} color={liveStored.metadata.color} size={18} rounded="rounded-[5px]" />
+                <PresenceIcon
+                  slug={activity.slug}
+                  name={liveStored.metadata.name}
+                  color={liveStored.metadata.color}
+                  size={18}
+                  rounded="rounded-[5px]"
+                />
                 <span className="truncate">{liveStored.metadata.name}</span>
               </span>
               {paused ? (
@@ -88,8 +100,13 @@ export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences 
           }
         />
       ) : ipcBlocked && !paused && connection === "no-discord" ? null : (
-        <IdleCard connection={connection} paused={paused} onResume={resume} hasPresences={hasPresences} />
+        <IdleCard
+          connection={connection}
+          paused={paused}
+          onResume={resume}
+          hasPresences={hasPresences}
+        />
       )}
     </Section>
-  )
-}
+  );
+};

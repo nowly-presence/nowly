@@ -1,44 +1,65 @@
-import type { Locale } from "@/shared/locales"
-import type { PresencePublicationDates } from "@/shared/presence-dates"
-import { LOCALE_LONG_MAP } from "@/shared/locales"
-import type { PresenceCatalogItem, PresenceMetadata } from "@/shared/types"
+import type { Locale } from "@/shared/locales";
+import type { PresencePublicationDates } from "@/shared/presence-dates";
+import { LOCALE_LONG_MAP } from "@/shared/locales";
+import type { PresenceCatalogItem, PresenceMetadata } from "@/shared/types";
 
-type Localized = string | Partial<Record<string, string>> | undefined | null
+type Localized = string | Partial<Record<string, string>> | undefined | null;
 
-export const localized = (value: Localized, locale: Locale, fallback = ""): string => {
-  if (!value) return fallback
-  if (typeof value === "string") return value
-  return value[LOCALE_LONG_MAP[locale]] ?? value["en-US"] ?? Object.values(value).find(Boolean) ?? fallback
-}
+export const localized = (
+  value: Localized,
+  locale: Locale,
+  fallback = "",
+): string => {
+  if (!value) return fallback;
+  if (typeof value === "string") return value;
+  return (
+    value[LOCALE_LONG_MAP[locale]] ??
+    value["en-US"] ??
+    Object.values(value).find(Boolean) ??
+    fallback
+  );
+};
 
-export const localizedList = (value: Record<string, string[]> | undefined, locale: Locale): string[] => {
-  if (!value) return []
-  return value[LOCALE_LONG_MAP[locale]] ?? value["en-US"] ?? Object.values(value)[0] ?? []
-}
+export const localizedList = (
+  value: Record<string, string[]> | undefined,
+  locale: Locale,
+): string[] => {
+  if (!value) return [];
+  return (
+    value[LOCALE_LONG_MAP[locale]] ??
+    value["en-US"] ??
+    Object.values(value)[0] ??
+    []
+  );
+};
 
 export type PresenceView = {
-  slug: string
-  name: string
-  description: string
-  longDescription: string
-  features: string[]
-  category: PresenceMetadata["category"]
-  color: string
-  author?: { name: string; github?: string }
-  contributors: { name: string; github?: string }[]
-  version?: string | null
-  urls: string[]
-  settings?: Record<string, unknown>
-  locales?: Record<string, Record<string, string>>
-  totalInstalls?: number
-  activeUsers?: number
-  likes?: number
-  addedAt: string | null
-  lastUpdated: string | null
-  discordNative?: boolean
-}
+  slug: string;
+  name: string;
+  description: string;
+  longDescription: string;
+  features: string[];
+  category: PresenceMetadata["category"];
+  color: string;
+  author?: { name: string; github?: string };
+  contributors: { name: string; github?: string }[];
+  version?: string | null;
+  urls: string[];
+  settings?: Record<string, unknown>;
+  locales?: Record<string, Record<string, string>>;
+  totalInstalls?: number;
+  activeUsers?: number;
+  likes?: number;
+  addedAt: string | null;
+  lastUpdated: string | null;
+  discordNative?: boolean;
+};
 
-export const fromMetadata = (metadata: PresenceMetadata, locale: Locale, dates: PresencePublicationDates): PresenceView => ({
+export const fromMetadata = (
+  metadata: PresenceMetadata,
+  locale: Locale,
+  dates: PresencePublicationDates,
+): PresenceView => ({
   slug: metadata.slug,
   name: metadata.name,
   description: localized(metadata.description, locale),
@@ -54,9 +75,12 @@ export const fromMetadata = (metadata: PresenceMetadata, locale: Locale, dates: 
   locales: metadata.locales,
   discordNative: metadata.discordNative,
   ...dates,
-})
+});
 
-export const fromCatalog = (item: PresenceCatalogItem, locale: Locale): PresenceView => ({
+export const fromCatalog = (
+  item: PresenceCatalogItem,
+  locale: Locale,
+): PresenceView => ({
   slug: item.slug,
   name: localized(item.name, locale, item.slug),
   description: localized(item.description, locale),
@@ -76,4 +100,4 @@ export const fromCatalog = (item: PresenceCatalogItem, locale: Locale): Presence
   addedAt: item.addedAt,
   lastUpdated: item.lastUpdated,
   discordNative: item.discordNative,
-})
+});

@@ -1,4 +1,4 @@
-import { trackAnalytics } from "@/background/analytics-client"
+import { trackAnalytics } from "@/background/analytics-client";
 import {
   addActiveSlugToState,
   clearActiveSlugsFromState,
@@ -20,86 +20,103 @@ import {
   setActiveSessionStartedAt,
   setTabMuted,
   upsertTabPresence,
-} from "@/background/services/background-context"
-import { sendActiveHeartbeat } from "@/background/services/active-heartbeat"
-import { mapPresenceData, postNative } from "@/background/services/native"
-import { verifyPresenceRelease } from "@/background/services/release-security"
-import { getActiveCustomPresence } from "@/background/storage/custom-activities.store"
-import { getCurrentActivity, getPresences, setCurrentActivity, setDebug } from "@/background/storage/presences.store"
-import { getSettings } from "@/background/storage/settings.store"
-import { recordUsageDay } from "@/background/storage/support.store"
-import { CDN_BASE_URL } from "@/shared/constants"
-import { customActivityIdOf } from "@/shared/custom-activity"
-import type { ExtensionSettings, PresenceData, StoredPresence } from "@/shared/types"
+} from "@/background/services/background-context";
+import { sendActiveHeartbeat } from "@/background/services/active-heartbeat";
+import { mapPresenceData, postNative } from "@/background/services/native";
+import { verifyPresenceRelease } from "@/background/services/release-security";
+import { getActiveCustomPresence } from "@/background/storage/custom-activities.store";
+import {
+  getCurrentActivity,
+  getPresences,
+  setCurrentActivity,
+  setDebug,
+} from "@/background/storage/presences.store";
+import { getSettings } from "@/background/storage/settings.store";
+import { recordUsageDay } from "@/background/storage/support.store";
+import { CDN_BASE_URL } from "@/shared/constants";
+import { customActivityIdOf } from "@/shared/custom-activity";
+import type {
+  ExtensionSettings,
+  PresenceData,
+  StoredPresence,
+} from "@/shared/types";
 
-const clampText = (value: string | undefined, maxLength: number): string | undefined => {
-  if (!value) return undefined
-  const trimmed = value.trim()
-  if (!trimmed) return undefined
-  return trimmed.length > maxLength ? trimmed.slice(0, maxLength) : trimmed
-}
+const clampText = (
+  value: string | undefined,
+  maxLength: number,
+): string | undefined => {
+  if (!value) return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  return trimmed.length > maxLength ? trimmed.slice(0, maxLength) : trimmed;
+};
 
 const normalizeAssetText = (value: string | undefined): string | undefined => {
-  const normalized = clampText(value, 128)
-  return normalized && normalized.length >= 2 ? normalized : undefined
-}
+  const normalized = clampText(value, 128);
+  return normalized && normalized.length >= 2 ? normalized : undefined;
+};
 
 const normalizeTimestamp = (value: number | undefined): number | undefined => {
-  if (!Number.isFinite(value)) return undefined
-  if (!value || value <= 0) return undefined
-  return Math.floor(value > 10_000_000_000 ? value / 1000 : value)
-}
+  if (!Number.isFinite(value)) return undefined;
+  if (!value || value <= 0) return undefined;
+  return Math.floor(value > 10_000_000_000 ? value / 1000 : value);
+};
 
 const normalizeImage = (value: string | undefined): string | undefined => {
-  if (!value) return undefined
-  if (value.startsWith("http://")) return undefined
+  if (!value) return undefined;
+  if (value.startsWith("http://")) return undefined;
 
-  const extensionAsset = value.match(/^chrome-extension:\/\/[^/]+\/presences\/([^/]+)\/assets\/(.+)$/i)
+  const extensionAsset = value.match(
+    /^chrome-extension:\/\/[^/]+\/presences\/([^/]+)\/assets\/(.+)$/i,
+  );
   if (extensionAsset?.[1] && extensionAsset[2] && CDN_BASE_URL) {
-    return `${CDN_BASE_URL.replace(/\/+$/, "")}/presences/${extensionAsset[1]}/assets/${extensionAsset[2]}`
+    return `${CDN_BASE_URL.replace(/\/+$/, "")}/presences/${extensionAsset[1]}/assets/${extensionAsset[2]}`;
   }
 
-  if (value.startsWith("https://")) return value
-  if (/^[a-z0-9_-]{1,64}$/i.test(value)) return value
-  return undefined
-}
+  if (value.startsWith("https://")) return value;
+  if (/^[a-z0-9_-]{1,64}$/i.test(value)) return value;
+  return undefined;
+};
 
 const setPausedBadge = (): void => {
-  chrome.action.setBadgeText({ text: "II" }).catch(() => {})
-  chrome.action.setBadgeBackgroundColor({ color: "#f59e0b" }).catch(() => {})
-}
+  chrome.action.setBadgeText({ text: "II" }).catch(() => {});
+  chrome.action.setBadgeBackgroundColor({ color: "#f59e0b" }).catch(() => {});
+};
 
 const setActivityBadge = (slug?: string): void => {
   if (!slug) {
-    chrome.action.setBadgeText({ text: "" }).catch(() => {})
-    return
+    chrome.action.setBadgeText({ text: "" }).catch(() => {});
+    return;
   }
-  chrome.action.setBadgeText({ text: "•" }).catch(() => {})
-  chrome.action.setBadgeBackgroundColor({ color: "#5865F2" }).catch(() => {})
-}
+  chrome.action.setBadgeText({ text: "•" }).catch(() => {});
+  chrome.action.setBadgeBackgroundColor({ color: "#5865F2" }).catch(() => {});
+};
 
 const clearActivityBadge = (): void => {
-  chrome.action.setBadgeText({ text: "" }).catch(() => {})
-}
+  chrome.action.setBadgeText({ text: "" }).catch(() => {});
+};
 
 export const refreshToolbarBadge = async (): Promise<void> => {
-  const settings = await getSettings()
+  const settings = await getSettings();
   if (settings.presencePaused) {
-    setPausedBadge()
-    return
+    setPausedBadge();
+    return;
   }
-  const activity = await getCurrentActivity()
+  const activity = await getCurrentActivity();
   if (activity) {
-    setActivityBadge(activity.slug)
-    return
+    setActivityBadge(activity.slug);
+    return;
   }
-  clearActivityBadge()
-}
+  clearActivityBadge();
+};
 
-export const restoreActivityBadge = (): Promise<void> => refreshToolbarBadge()
+export const restoreActivityBadge = (): Promise<void> => refreshToolbarBadge();
 
-export const normalizeActivity = (activity: PresenceData, fallbackName: string): PresenceData => {
-  const allowedTypes = new Set([0, 1, 2, 3, 5])
+export const normalizeActivity = (
+  activity: PresenceData,
+  fallbackName: string,
+): PresenceData => {
+  const allowedTypes = new Set([0, 1, 2, 3, 5]);
   return {
     name: clampText(activity.name, 128) ?? fallbackName,
     details: clampText(activity.details, 128),
@@ -118,224 +135,294 @@ export const normalizeActivity = (activity: PresenceData, fallbackName: string):
         label: clampText(button.label, 32) ?? "Open",
         url: button.url,
       })),
-  }
-}
+  };
+};
 
-export const shouldHoldDiscord = async (presence: StoredPresence): Promise<boolean> => {
-  const settings = await getSettings()
-  if (settings.presencePaused) return true
-  if (presence.snoozeUntil && presence.snoozeUntil > Date.now()) return true
-  if (settings.scheduleEnabled === false) return false
+export const shouldHoldDiscord = async (
+  presence: StoredPresence,
+): Promise<boolean> => {
+  const settings = await getSettings();
+  if (settings.presencePaused) return true;
+  if (presence.snoozeUntil && presence.snoozeUntil > Date.now()) return true;
+  if (settings.scheduleEnabled === false) return false;
 
-  const schedule = presence.schedule ?? settings.globalSchedule
+  const schedule = presence.schedule ?? settings.globalSchedule;
 
   if (schedule) {
-    const now = new Date()
-    const day = now.getDay()
-    if (!schedule.days.includes(day)) return true
+    const now = new Date();
+    const day = now.getDay();
+    if (!schedule.days.includes(day)) return true;
 
     if (schedule.start && schedule.end) {
-      const minutes = now.getHours() * 60 + now.getMinutes()
-      const [startH, startM] = schedule.start.split(":").map(Number)
-      const [endH, endM] = schedule.end.split(":").map(Number)
-      const startMinutes = startH * 60 + startM
-      const endMinutes = endH * 60 + endM
-      if (minutes < startMinutes || minutes > endMinutes) return true
+      const minutes = now.getHours() * 60 + now.getMinutes();
+      const [startH, startM] = schedule.start.split(":").map(Number);
+      const [endH, endM] = schedule.end.split(":").map(Number);
+      const startMinutes = startH * 60 + startM;
+      const endMinutes = endH * 60 + endM;
+      if (minutes < startMinutes || minutes > endMinutes) return true;
     }
   }
 
-  return false
-}
+  return false;
+};
 
 export const pickBroadcastEntry = async (settings: ExtensionSettings) => {
-  const entries = await getTabPresencesSnapshot()
-  if (entries.length === 0) return null
+  const entries = await getTabPresencesSnapshot();
+  if (entries.length === 0) return null;
 
   if (settings.activitySelectionMode === "priority") {
-    const order = settings.activityPriorityOrder ?? []
+    const order = settings.activityPriorityOrder ?? [];
     return [...entries].sort((a, b) => {
-      const ai = order.indexOf(a.slug)
-      const bi = order.indexOf(b.slug)
-      return (ai === -1 ? Infinity : ai) - (bi === -1 ? Infinity : bi)
-    })[0]
+      const ai = order.indexOf(a.slug);
+      const bi = order.indexOf(b.slug);
+      return (ai === -1 ? Infinity : ai) - (bi === -1 ? Infinity : bi);
+    })[0];
   }
 
-  const focusedTabId = getFocusedTabId()
-  const focused = focusedTabId != null ? await getTabPresence(focusedTabId) : undefined
-  return focused ?? entries.reduce((latest, entry) => (entry.updatedAt > latest.updatedAt ? entry : latest))
-}
+  const focusedTabId = getFocusedTabId();
+  const focused =
+    focusedTabId != null ? await getTabPresence(focusedTabId) : undefined;
+  return (
+    focused ??
+    entries.reduce((latest, entry) =>
+      entry.updatedAt > latest.updatedAt ? entry : latest,
+    )
+  );
+};
 
 export const broadcastActiveTab = async (): Promise<void> => {
-  const settings = await getSettings()
-  const custom = await getActiveCustomPresence()
+  const settings = await getSettings();
+  const custom = await getActiveCustomPresence();
   if (custom) {
-    postNative(settings.presencePaused ? { type: "CLEAR_ACTIVITY" } : { type: "SET_ACTIVITY", presence: custom.presence })
-    await setCurrentActivity({ slug: custom.slug, presence: custom.presence, updatedAt: Date.now() })
-    await refreshToolbarBadge()
-    notifyBroadcastStateChanged()
-    return
+    postNative(
+      settings.presencePaused
+        ? { type: "CLEAR_ACTIVITY" }
+        : { type: "SET_ACTIVITY", presence: custom.presence },
+    );
+    await setCurrentActivity({
+      slug: custom.slug,
+      presence: custom.presence,
+      updatedAt: Date.now(),
+    });
+    await refreshToolbarBadge();
+    notifyBroadcastStateChanged();
+    return;
   }
-  const entry = await pickBroadcastEntry(settings)
+  const entry = await pickBroadcastEntry(settings);
   if (!entry) {
-    postNative({ type: "CLEAR_ACTIVITY" })
-    await setCurrentActivity(null)
+    postNative({ type: "CLEAR_ACTIVITY" });
+    await setCurrentActivity(null);
   } else {
-    postNative({ type: "SET_ACTIVITY", presence: entry.presence })
-    await setCurrentActivity({ slug: entry.slug, presence: entry.presence, updatedAt: entry.updatedAt })
-    void recordUsageDay().catch(() => {})
+    postNative({ type: "SET_ACTIVITY", presence: entry.presence });
+    await setCurrentActivity({
+      slug: entry.slug,
+      presence: entry.presence,
+      updatedAt: entry.updatedAt,
+    });
+    void recordUsageDay().catch(() => {});
   }
-  await refreshToolbarBadge()
-  notifyBroadcastStateChanged()
-}
+  await refreshToolbarBadge();
+  notifyBroadcastStateChanged();
+};
 
 export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
-  const [current, presences, settings] = await Promise.all([getCurrentActivity(), getPresences(), getSettings()])
+  const [current, presences, settings] = await Promise.all([
+    getCurrentActivity(),
+    getPresences(),
+    getSettings(),
+  ]);
 
   if (settings.presencePaused || !current) {
-    if (settings.presencePaused) postNative({ type: "CLEAR_ACTIVITY" })
-    await refreshToolbarBadge()
-    return
+    if (settings.presencePaused) postNative({ type: "CLEAR_ACTIVITY" });
+    await refreshToolbarBadge();
+    return;
   }
 
   if (customActivityIdOf(current.slug)) {
-    await broadcastActiveTab()
-    return
+    await broadcastActiveTab();
+    return;
   }
 
-  const stored = presences[current.slug]
+  const stored = presences[current.slug];
   if (!stored || (await shouldHoldDiscord(stored))) {
-    postNative({ type: "CLEAR_ACTIVITY" })
-    await refreshToolbarBadge()
-    return
+    postNative({ type: "CLEAR_ACTIVITY" });
+    await refreshToolbarBadge();
+    return;
   }
 
-  postNative({ type: "SET_ACTIVITY", presence: current.presence })
-  await refreshToolbarBadge()
-}
+  postNative({ type: "SET_ACTIVITY", presence: current.presence });
+  await refreshToolbarBadge();
+};
 
-export const getPresenceVersion = async (slug: string): Promise<string | undefined> => {
-  const presences = await getPresences()
-  return presences[slug]?.release?.version ?? presences[slug]?.metadata?.version ?? undefined
-}
+export const getPresenceVersion = async (
+  slug: string,
+): Promise<string | undefined> => {
+  const presences = await getPresences();
+  return (
+    presences[slug]?.release?.version ??
+    presences[slug]?.metadata?.version ??
+    undefined
+  );
+};
 
 export const addActiveSlug = async (slug: string): Promise<void> => {
-  await addActiveSlugToState(slug)
-  if (await hasActiveSession(slug)) return
-  await setActiveSessionStartedAt(slug, Date.now())
-  trackAnalytics("presence_session_start", { slug, version: await getPresenceVersion(slug) })
-  void sendActiveHeartbeat([slug])
-}
+  await addActiveSlugToState(slug);
+  if (await hasActiveSession(slug)) return;
+  await setActiveSessionStartedAt(slug, Date.now());
+  trackAnalytics("presence_session_start", {
+    slug,
+    version: await getPresenceVersion(slug),
+  });
+  void sendActiveHeartbeat([slug]);
+};
 
-export const removeActiveSlug = async (slug: string, reason: string): Promise<void> => {
-  await removeActiveSlugFromState(slug)
-  const startedAt = await getActiveSessionStartedAt(slug)
-  await removeActiveSession(slug)
-  if (!startedAt) return
+export const removeActiveSlug = async (
+  slug: string,
+  reason: string,
+): Promise<void> => {
+  await removeActiveSlugFromState(slug);
+  const startedAt = await getActiveSessionStartedAt(slug);
+  await removeActiveSession(slug);
+  if (!startedAt) return;
   trackAnalytics("presence_session_end", {
     slug,
     version: await getPresenceVersion(slug),
     payload: { durationMs: Date.now() - startedAt, reason },
-  })
-}
+  });
+};
 
-export const removeActiveSlugs = async (slugs: string[], reason: string): Promise<void> => {
+export const removeActiveSlugs = async (
+  slugs: string[],
+  reason: string,
+): Promise<void> => {
   await Promise.all(
     slugs.map(async (slug) => {
-      const startedAt = await getActiveSessionStartedAt(slug)
-      if (!startedAt) return
+      const startedAt = await getActiveSessionStartedAt(slug);
+      if (!startedAt) return;
       trackAnalytics("presence_session_end", {
         slug,
         version: await getPresenceVersion(slug),
         payload: { durationMs: Date.now() - startedAt, reason },
-      })
+      });
     }),
-  )
-  await Promise.all([removeActiveSlugsFromState(slugs), removeActiveSessions(slugs)])
-}
+  );
+  await Promise.all([
+    removeActiveSlugsFromState(slugs),
+    removeActiveSessions(slugs),
+  ]);
+};
 
 export const clearActiveSlugs = async (reason: string): Promise<void> => {
-  const slugs = await getActiveSlugsSnapshot()
-  await Promise.all(slugs.map((slug) => removeActiveSlug(slug, reason)))
-  await clearActiveSlugsFromState()
-}
+  const slugs = await getActiveSlugsSnapshot();
+  await Promise.all(slugs.map((slug) => removeActiveSlug(slug, reason)));
+  await clearActiveSlugsFromState();
+};
 
-const NO_TAB_ID = -1
+const NO_TAB_ID = -1;
 
-export const handleActivityUpdate = async (slug: string, activity: PresenceData, tabId?: number): Promise<{ ok: boolean }> => {
-  const resolvedTabId = tabId ?? NO_TAB_ID
-  if (await isTabMuted(resolvedTabId)) return { ok: false }
+export const handleActivityUpdate = async (
+  slug: string,
+  activity: PresenceData,
+  tabId?: number,
+): Promise<{ ok: boolean }> => {
+  const resolvedTabId = tabId ?? NO_TAB_ID;
+  if (await isTabMuted(resolvedTabId)) return { ok: false };
 
-  const presences = await getPresences()
-  const stored = presences[slug]
-  if (!stored?.release) return { ok: false }
+  const presences = await getPresences();
+  const stored = presences[slug];
+  if (!stored?.release) return { ok: false };
   if (!stored.enabled) {
-    const current = await getCurrentActivity()
-    if (current?.slug === slug) await handleClearActivity(slug)
-    return { ok: false }
+    const current = await getCurrentActivity();
+    if (current?.slug === slug) await handleClearActivity(slug);
+    return { ok: false };
   }
 
   if (await shouldHoldDiscord(stored)) {
-    await removeTabPresence(resolvedTabId)
-    const appName = activity.appName ?? stored.release.metadata.name
-    const normalizedActivity = normalizeActivity(activity, appName)
-    const presence = mapPresenceData(normalizedActivity)
-    await setCurrentActivity({ slug, presence, updatedAt: Date.now() })
-    await broadcastActiveTab()
-    return { ok: true }
+    await removeTabPresence(resolvedTabId);
+    const appName = activity.appName ?? stored.release.metadata.name;
+    const normalizedActivity = normalizeActivity(activity, appName);
+    const presence = mapPresenceData(normalizedActivity);
+    await setCurrentActivity({ slug, presence, updatedAt: Date.now() });
+    await broadcastActiveTab();
+    return { ok: true };
   }
 
-  const verified = await verifyPresenceRelease(stored.release, slug)
+  const verified = await verifyPresenceRelease(stored.release, slug);
   if (!verified.ok) {
     await setDebug({
       stage: "security",
       message: `[${slug}] ${verified.error ?? "release verification failed"}`,
       updatedAt: Date.now(),
-    })
+    });
     trackAnalytics("presence_error", {
       slug,
       version: stored.release?.version ?? stored.metadata?.version,
       payload: { stage: "security" },
-    })
-    return { ok: false }
+    });
+    return { ok: false };
   }
 
-  const appName = activity.appName ?? stored.release.metadata.name
-  const normalizedActivity = normalizeActivity(activity, appName)
-  const presence = mapPresenceData(normalizedActivity)
+  const appName = activity.appName ?? stored.release.metadata.name;
+  const normalizedActivity = normalizeActivity(activity, appName);
+  const presence = mapPresenceData(normalizedActivity);
 
-  await upsertTabPresence(resolvedTabId, { slug, presence, updatedAt: Date.now() })
-  await addActiveSlug(slug)
-  await broadcastActiveTab()
+  await upsertTabPresence(resolvedTabId, {
+    slug,
+    presence,
+    updatedAt: Date.now(),
+  });
+  await addActiveSlug(slug);
+  await broadcastActiveTab();
 
-  await setDebug({ stage: "activity", message: presence.details ?? "activity received", updatedAt: Date.now() })
+  await setDebug({
+    stage: "activity",
+    message: presence.details ?? "activity received",
+    updatedAt: Date.now(),
+  });
 
-  return { ok: true }
-}
+  return { ok: true };
+};
 
-export const handleClearActivity = async (slug?: string): Promise<{ ok: boolean }> => {
+export const handleClearActivity = async (
+  slug?: string,
+): Promise<{ ok: boolean }> => {
   if (slug) {
-    await removeTabPresencesBySlug(slug)
-    await removeActiveSlug(slug, "clear")
+    await removeTabPresencesBySlug(slug);
+    await removeActiveSlug(slug, "clear");
   } else {
-    await clearTabPresences()
-    await clearActiveSlugs("clear")
+    await clearTabPresences();
+    await clearActiveSlugs("clear");
   }
-  await broadcastActiveTab()
+  await broadcastActiveTab();
 
-  await setDebug({ stage: "clear", message: "activity cleared", updatedAt: Date.now() })
+  await setDebug({
+    stage: "clear",
+    message: "activity cleared",
+    updatedAt: Date.now(),
+  });
 
-  return { ok: true }
-}
+  return { ok: true };
+};
 
 export const handleRemovedTab = async (tabId: number): Promise<void> => {
-  const closedEntry = await getTabPresence(tabId)
-  await removeTabPresence(tabId)
-  void setTabMuted(tabId, false)
+  const closedEntry = await getTabPresence(tabId);
+  await removeTabPresence(tabId);
+  void setTabMuted(tabId, false);
 
-  if (closedEntry && !(await getTabPresencesSnapshot()).some((entry) => entry.slug === closedEntry.slug)) {
-    await removeActiveSlug(closedEntry.slug, "tab-closed")
+  if (
+    closedEntry &&
+    !(await getTabPresencesSnapshot()).some(
+      (entry) => entry.slug === closedEntry.slug,
+    )
+  ) {
+    await removeActiveSlug(closedEntry.slug, "tab-closed");
   }
 
-  void broadcastActiveTab()
-  if (closedEntry) void setDebug({ stage: "clear", message: "activity cleared (tab closed)", updatedAt: Date.now() })
-}
+  void broadcastActiveTab();
+  if (closedEntry)
+    void setDebug({
+      stage: "clear",
+      message: "activity cleared (tab closed)",
+      updatedAt: Date.now(),
+    });
+};

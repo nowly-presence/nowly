@@ -1,4 +1,4 @@
-export const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE"
+export const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE";
 
 export const createPresenceRuntime = (
   slug: string,
@@ -10,11 +10,11 @@ export const createPresenceRuntime = (
   cdnBaseUrl?: string,
   options: { mode?: "main" | "iframe"; iframeRegExp?: string } = {},
 ): string => {
-  const mode = options.mode ?? "main"
-  const iframeRegExp = options.iframeRegExp ?? ""
+  const mode = options.mode ?? "main";
+  const iframeRegExp = options.iframeRegExp ?? "";
   const assetsBase = cdnBaseUrl
     ? `${cdnBaseUrl.replace(/\/+$/, "")}/presences/${slug}/assets`
-    : chrome.runtime.getURL(`presences/${slug}/assets`)
+    : chrome.runtime.getURL(`presences/${slug}/assets`);
   return `
 (() => {
   "use strict";
@@ -389,5 +389,5 @@ export const createPresenceRuntime = (
     });
   }
 })();
-`
-}
+`;
+};

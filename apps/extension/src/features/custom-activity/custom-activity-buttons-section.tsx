@@ -1,20 +1,31 @@
-import { RiAddLine, RiCloseLine, RiLink } from "@remixicon/react"
-import { useI18n } from "@/hooks/i18n-provider"
-import { CUSTOM_BUTTON_LABEL_MAX_LENGTH, CUSTOM_BUTTONS_MAX } from "@/shared/custom-activity"
-import type { CustomActivityButton } from "@/shared/types"
-import { Button } from "@/ui/button"
-import { Group } from "@/ui/card"
-import { Input } from "@/ui/input"
-import { Section } from "@/ui/section"
-import { FieldError } from "@/features/custom-activity/custom-field-error"
-import type { CustomActivitySectionProps } from "@/features/custom-activity/custom-activity-section-props"
+import { RiAddLine, RiCloseLine, RiLink } from "@remixicon/react";
+import { useI18n } from "@/hooks/i18n-provider";
+import {
+  CUSTOM_BUTTON_LABEL_MAX_LENGTH,
+  CUSTOM_BUTTONS_MAX,
+} from "@/shared/custom-activity";
+import type { CustomActivityButton } from "@/shared/types";
+import { Button } from "@/ui/button";
+import { Group } from "@/ui/card";
+import { Input } from "@/ui/input";
+import { Section } from "@/ui/section";
+import { FieldError } from "@/features/custom-activity/custom-field-error";
+import type { CustomActivitySectionProps } from "@/features/custom-activity/custom-activity-section-props";
 
-export const CustomActivityButtonsSection = ({ draft, patch, errors }: CustomActivitySectionProps) => {
-  const { t } = useI18n()
-  const { buttons } = draft
+export const CustomActivityButtonsSection = ({
+  draft,
+  patch,
+  errors,
+}: CustomActivitySectionProps) => {
+  const { t } = useI18n();
+  const { buttons } = draft;
 
   const update = (index: number, partial: Partial<CustomActivityButton>) =>
-    patch({ buttons: buttons.map((button, position) => (position === index ? { ...button, ...partial } : button)) })
+    patch({
+      buttons: buttons.map((button, position) =>
+        position === index ? { ...button, ...partial } : button,
+      ),
+    });
 
   return (
     <Section title={t("custom.editor.buttonsSection")}>
@@ -22,13 +33,21 @@ export const CustomActivityButtonsSection = ({ draft, patch, errors }: CustomAct
         {buttons.map((button, index) => (
           <div key={index} className="flex flex-col gap-2 px-4 py-3">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-label-lg font-medium">{t("custom.button.title", { index: index + 1 })}</span>
+              <span className="text-label-lg font-medium">
+                {t("custom.button.title", { index: index + 1 })}
+              </span>
               <Button
                 size="icon-sm"
                 variant="ghost"
                 aria-label={t("custom.button.remove")}
                 title={t("custom.button.remove")}
-                onClick={() => patch({ buttons: buttons.filter((_, position) => position !== index) })}
+                onClick={() =>
+                  patch({
+                    buttons: buttons.filter(
+                      (_, position) => position !== index,
+                    ),
+                  })
+                }
               >
                 <RiCloseLine className="size-4" />
               </Button>
@@ -55,13 +74,22 @@ export const CustomActivityButtonsSection = ({ draft, patch, errors }: CustomAct
         ))}
         {buttons.length < CUSTOM_BUTTONS_MAX && (
           <div className="flex items-center justify-between gap-3 px-4 py-3">
-            <span className="text-label-md text-muted">{t("custom.button.hint", { count: CUSTOM_BUTTONS_MAX })}</span>
-            <Button size="sm" variant="secondary" icon={<RiAddLine className="size-4" />} onClick={() => patch({ buttons: [...buttons, { label: "", url: "" }] })}>
+            <span className="text-label-md text-muted">
+              {t("custom.button.hint", { count: CUSTOM_BUTTONS_MAX })}
+            </span>
+            <Button
+              size="sm"
+              variant="secondary"
+              icon={<RiAddLine className="size-4" />}
+              onClick={() =>
+                patch({ buttons: [...buttons, { label: "", url: "" }] })
+              }
+            >
               {t("custom.button.add")}
             </Button>
           </div>
         )}
       </Group>
     </Section>
-  )
-}
+  );
+};

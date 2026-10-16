@@ -8,7 +8,10 @@ export const presenceThumbnailUrl = (slug: string): string =>
   `${CDN_BASE_URL}/presences/${encodeURIComponent(slug)}/assets/thumbnail.jpg`;
 
 export const presenceApiBaseUrl = (): string =>
-  (process.env.NEXT_PUBLIC_API_BASE_URL ?? PRODUCTION_API_URL).replace(/\/$/, "");
+  (process.env.NEXT_PUBLIC_API_BASE_URL ?? PRODUCTION_API_URL).replace(
+    /\/$/,
+    "",
+  );
 
 export const fetchPresenceRelease = async (slug: string): Promise<unknown> => {
   const response = await fetch(`/api/presences/${encodeURIComponent(slug)}`, {

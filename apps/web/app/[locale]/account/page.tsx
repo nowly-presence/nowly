@@ -4,7 +4,10 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("pages.account")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("pages.account"),
+  ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),

@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
-const basePath = (process.env.NEXT_PUBLIC_DOCS_BASE_PATH ?? "").replace(/\/$/, "");
+const basePath = (process.env.NEXT_PUBLIC_DOCS_BASE_PATH ?? "").replace(
+  /\/$/,
+  "",
+);
 
 const legacyRedirects = [
   {

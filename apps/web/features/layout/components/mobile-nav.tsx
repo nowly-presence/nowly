@@ -6,21 +6,33 @@ import { CANARY_ACCENT, CANARY_INK } from "@/lib/brand";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@nowly/ui/sheet";
 
 type MobileNavProps = {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  links: Array<{ href: string; label: string; external: boolean }>
-  canary: boolean
-  menuLabel: string
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  links: Array<{ href: string; label: string; external: boolean }>;
+  canary: boolean;
+  menuLabel: string;
 };
 
-export const MobileNav = ({ open, onOpenChange, links, canary, menuLabel }: MobileNavProps) => {
+export const MobileNav = ({
+  open,
+  onOpenChange,
+  links,
+  canary,
+  menuLabel,
+}: MobileNavProps) => {
   const storeButtonProps = canary
-    ? { className: "border-transparent hover:brightness-110", style: { backgroundColor: CANARY_ACCENT, color: CANARY_INK } }
+    ? {
+        className: "border-transparent hover:brightness-110",
+        style: { backgroundColor: CANARY_ACCENT, color: CANARY_INK },
+      }
     : {};
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-[min(100%,20rem)] bg-background p-0 lg:hidden">
+      <SheetContent
+        side="right"
+        className="w-[min(100%,20rem)] bg-background p-0 lg:hidden"
+      >
         <SheetHeader>
           <SheetTitle>{menuLabel}</SheetTitle>
         </SheetHeader>

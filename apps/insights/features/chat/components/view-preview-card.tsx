@@ -2,16 +2,31 @@
 
 import { WidgetRenderer } from "@/features/views/components/widget-renderer";
 import { apiFetch } from "@/features/api-target/lib/api-client";
-import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle, toast } from "@nowly/ui";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  toast,
+} from "@nowly/ui";
 import type { WidgetConfig } from "@nowly/analytics";
 import { useState } from "react";
 
-type GenerateViewOutput = { title: string; widget: Omit<WidgetConfig, "id" | "title"> };
+type GenerateViewOutput = {
+  title: string;
+  widget: Omit<WidgetConfig, "id" | "title">;
+};
 
 export const ViewPreviewCard = ({ output }: { output: GenerateViewOutput }) => {
   const [saving, setSaving] = useState(false);
 
-  const widget: WidgetConfig = { ...output.widget, id: crypto.randomUUID(), title: output.title } as WidgetConfig;
+  const widget: WidgetConfig = {
+    ...output.widget,
+    id: crypto.randomUUID(),
+    title: output.title,
+  } as WidgetConfig;
 
   const saveAsView = async () => {
     const name = window.prompt("Name this view", output.title);
@@ -19,7 +34,10 @@ export const ViewPreviewCard = ({ output }: { output: GenerateViewOutput }) => {
 
     setSaving(true);
     try {
-      await apiFetch("/insights/views", { method: "POST", body: JSON.stringify({ name, widgets: [widget] }) });
+      await apiFetch("/insights/views", {
+        method: "POST",
+        body: JSON.stringify({ name, widgets: [widget] }),
+      });
       toast.success(`Saved "${name}"`);
     } catch {
       toast.error("Could not save the view");

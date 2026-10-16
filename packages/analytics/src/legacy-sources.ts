@@ -4,29 +4,34 @@
  * Clients (extension / web) are intentionally not wired to AnalyticsClient yet.
  */
 
-export type LegacySourceStatus = "tracked" | "never-tracked" | "duplicate-risk"
+export type LegacySourceStatus = "tracked" | "never-tracked" | "duplicate-risk";
 
 export type LegacySource = {
-  key: string
-  surface: "extension" | "web" | "api" | "none"
-  status: LegacySourceStatus
-  callSites: string[]
-  notes: string
-}
+  key: string;
+  surface: "extension" | "web" | "api" | "none";
+  status: LegacySourceStatus;
+  callSites: string[];
+  notes: string;
+};
 
 export const legacySources: LegacySource[] = [
   {
     key: "extension_install",
     surface: "extension",
     status: "tracked",
-    callSites: ["apps/extension/src/background/services/lifecycle.ts (onInstalled)"],
-    notes: "Fired with extension_update on the same listener depending on details.reason.",
+    callSites: [
+      "apps/extension/src/background/services/lifecycle.ts (onInstalled)",
+    ],
+    notes:
+      "Fired with extension_update on the same listener depending on details.reason.",
   },
   {
     key: "extension_update",
     surface: "extension",
     status: "tracked",
-    callSites: ["apps/extension/src/background/services/lifecycle.ts (onInstalled)"],
+    callSites: [
+      "apps/extension/src/background/services/lifecycle.ts (onInstalled)",
+    ],
     notes: "Shares the install listener.",
   },
   {
@@ -37,7 +42,8 @@ export const legacySources: LegacySource[] = [
       "apps/extension/src/background/services/message-router.ts GET_PRESENCES/GET_INSTALLED",
       "apps/extension/src/background/services/message-router.ts GET_SETTINGS",
     ],
-    notes: "trackExtensionOpen was debounced to 60s but invoked from two message types.",
+    notes:
+      "trackExtensionOpen was debounced to 60s but invoked from two message types.",
   },
   {
     key: "onboarding_started",
@@ -92,7 +98,9 @@ export const legacySources: LegacySource[] = [
     key: "native_connected",
     surface: "extension",
     status: "tracked",
-    callSites: ["apps/extension/src/background/services/lifecycle.ts native CONNECTED"],
+    callSites: [
+      "apps/extension/src/background/services/lifecycle.ts native CONNECTED",
+    ],
     notes: "",
   },
   {
@@ -106,7 +114,9 @@ export const legacySources: LegacySource[] = [
     key: "native_heartbeat_ok",
     surface: "extension",
     status: "tracked",
-    callSites: ["apps/extension/src/background/services/lifecycle.ts heartbeat"],
+    callSites: [
+      "apps/extension/src/background/services/lifecycle.ts heartbeat",
+    ],
     notes: "",
   },
   {
@@ -141,7 +151,8 @@ export const legacySources: LegacySource[] = [
     surface: "extension",
     status: "tracked",
     callSites: ["apps/extension/src/background/managers/presence-manager.ts"],
-    notes: "Not emitted from marketplace; marketplace used marketplace_conversion.",
+    notes:
+      "Not emitted from marketplace; marketplace used marketplace_conversion.",
   },
   {
     key: "presence_update",
@@ -168,21 +179,27 @@ export const legacySources: LegacySource[] = [
     key: "presence_active_heartbeat",
     surface: "extension",
     status: "tracked",
-    callSites: ["apps/extension/src/background/services/alarms.ts api-heartbeat"],
+    callSites: [
+      "apps/extension/src/background/services/alarms.ts api-heartbeat",
+    ],
     notes: "Orthogonal to POST /presences/active (product stats, kept).",
   },
   {
     key: "presence_session_start",
     surface: "extension",
     status: "tracked",
-    callSites: ["apps/extension/src/background/managers/activity-manager.ts addActiveSlug"],
+    callSites: [
+      "apps/extension/src/background/managers/activity-manager.ts addActiveSlug",
+    ],
     notes: "",
   },
   {
     key: "presence_session_end",
     surface: "extension",
     status: "tracked",
-    callSites: ["apps/extension/src/background/managers/activity-manager.ts removeActiveSlug"],
+    callSites: [
+      "apps/extension/src/background/managers/activity-manager.ts removeActiveSlug",
+    ],
     notes: "",
   },
   {
@@ -207,14 +224,18 @@ export const legacySources: LegacySource[] = [
     key: "marketplace_install_click",
     surface: "web",
     status: "tracked",
-    callSites: ["apps/web/components/library/presence-detail/use-presence-status.ts"],
+    callSites: [
+      "apps/web/components/library/presence-detail/use-presence-status.ts",
+    ],
     notes: "",
   },
   {
     key: "marketplace_conversion",
     surface: "web",
     status: "tracked",
-    callSites: ["apps/web/components/library/presence-detail/use-presence-status.ts"],
+    callSites: [
+      "apps/web/components/library/presence-detail/use-presence-status.ts",
+    ],
     notes: "Web conversion, not presence_install.",
   },
   {
@@ -229,20 +250,24 @@ export const legacySources: LegacySource[] = [
     surface: "web",
     status: "tracked",
     callSites: ["apps/web/components/library/marketplace-client.tsx"],
-    notes: "Shares the filter effect; mutually exclusive with marketplace_filter.",
+    notes:
+      "Shares the filter effect; mutually exclusive with marketplace_filter.",
   },
   {
     key: "search_performed",
     surface: "web",
     status: "tracked",
     callSites: ["apps/web/components/library/library-view.tsx"],
-    notes: "Added alongside the reconnected instrumentation pass; never stores the search text.",
+    notes:
+      "Added alongside the reconnected instrumentation pass; never stores the search text.",
   },
   {
     key: "marketplace_author_page_view",
     surface: "web",
     status: "tracked",
-    callSites: ["apps/web/components/library/author-view.tsx (author-view-tracker.tsx child)"],
+    callSites: [
+      "apps/web/components/library/author-view.tsx (author-view-tracker.tsx child)",
+    ],
     notes: "Added alongside the reconnected instrumentation pass.",
   },
   {
@@ -308,7 +333,9 @@ export const legacySources: LegacySource[] = [
     key: "settings_presence_changed",
     surface: "extension",
     status: "tracked",
-    callSites: ["apps/extension/src/background/services/message-router.ts SET_PRESENCE_SETTINGS"],
+    callSites: [
+      "apps/extension/src/background/services/message-router.ts SET_PRESENCE_SETTINGS",
+    ],
     notes: "",
   },
   {
@@ -325,4 +352,4 @@ export const legacySources: LegacySource[] = [
     callSites: [],
     notes: "Read-model metric, never ingested as an event.",
   },
-]
+];

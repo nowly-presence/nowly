@@ -1,5 +1,12 @@
-import { presenceLogoUrl, presenceThumbnailUrl } from "@/lib/presence-api-client";
-import { FALLBACK_LOCALE, getValidLocale, type LocaleString } from "@nowly/locales";
+import {
+  presenceLogoUrl,
+  presenceThumbnailUrl,
+} from "@/lib/presence-api-client";
+import {
+  FALLBACK_LOCALE,
+  getValidLocale,
+  type LocaleString,
+} from "@nowly/locales";
 
 export const LIBRARY_CATEGORIES = [
   "streaming",
@@ -20,35 +27,38 @@ export type LocalizedCopy = Record<LocaleString, string>;
 export type LocalizedList = Record<LocaleString, string[]>;
 
 export type PresencePerson = {
-  name: string
-  github?: string
+  name: string;
+  github?: string;
 };
 
 export type LibraryPresence = {
-  slug: string
-  name: string
-  category: LibraryCategory
-  color: string
-  description: LocalizedCopy
-  longDescription: LocalizedCopy
-  features: LocalizedList
-  urls: string[]
-  author: PresencePerson
-  contributors: PresencePerson[]
-  version: string | null
-  lastUpdated: string | null
-  discordNative: boolean
-  locales: LocaleString[]
+  slug: string;
+  name: string;
+  category: LibraryCategory;
+  color: string;
+  description: LocalizedCopy;
+  longDescription: LocalizedCopy;
+  features: LocalizedList;
+  urls: string[];
+  author: PresencePerson;
+  contributors: PresencePerson[];
+  version: string | null;
+  lastUpdated: string | null;
+  discordNative: boolean;
+  locales: LocaleString[];
 };
 
 export const libraryLogoUrl = (slug: string): string => presenceLogoUrl(slug);
 
-export const libraryThumbnailUrl = (slug: string): string => presenceThumbnailUrl(slug);
+export const libraryThumbnailUrl = (slug: string): string =>
+  presenceThumbnailUrl(slug);
 
 export const isLibraryCategory = (value: string): value is LibraryCategory =>
   LIBRARY_CATEGORIES.includes(value as LibraryCategory);
 
-export const catalogCategories = (items: LibraryPresence[]): LibraryCategory[] =>
+export const catalogCategories = (
+  items: LibraryPresence[],
+): LibraryCategory[] =>
   LIBRARY_CATEGORIES.filter((category) =>
     items.some((presence) => presence.category === category),
   );
@@ -58,7 +68,9 @@ export const localizedDescription = (
   locale: string,
 ): string => {
   const localeKey = getValidLocale(locale);
-  return presence.description[localeKey] ?? presence.description[FALLBACK_LOCALE];
+  return (
+    presence.description[localeKey] ?? presence.description[FALLBACK_LOCALE]
+  );
 };
 
 export const localizedLongDescription = (
@@ -78,7 +90,9 @@ export const localizedFeatures = (
   locale: string,
 ): string[] => {
   const localeKey = getValidLocale(locale);
-  return presence.features[localeKey] ?? presence.features[FALLBACK_LOCALE] ?? [];
+  return (
+    presence.features[localeKey] ?? presence.features[FALLBACK_LOCALE] ?? []
+  );
 };
 
 export const presenceSearchText = (presence: LibraryPresence): string =>
@@ -88,7 +102,10 @@ export const presenceSearchText = (presence: LibraryPresence): string =>
     presence.category,
     presence.author.name,
     presence.author.github ?? "",
-    ...presence.contributors.flatMap((person) => [person.name, person.github ?? ""]),
+    ...presence.contributors.flatMap((person) => [
+      person.name,
+      person.github ?? "",
+    ]),
     ...presence.urls,
     ...Object.values(presence.description),
     ...Object.values(presence.longDescription),
@@ -102,8 +119,12 @@ export const relatedPresences = (
   limit = 3,
 ): LibraryPresence[] => {
   const others = items.filter((presence) => presence.slug !== current.slug);
-  const sameCategory = others.filter((presence) => presence.category === current.category);
-  const rest = others.filter((presence) => presence.category !== current.category);
+  const sameCategory = others.filter(
+    (presence) => presence.category === current.category,
+  );
+  const rest = others.filter(
+    (presence) => presence.category !== current.category,
+  );
   return [...sameCategory, ...rest].slice(0, limit);
 };
 
@@ -113,20 +134,34 @@ export const presenceSiteHref = (url: string): string =>
 export const normalizeGithub = (value: string): string =>
   value.trim().replace(/^@/, "").toLowerCase();
 
-export const personMatchesGithub = (person: PresencePerson, handle: string): boolean =>
+export const personMatchesGithub = (
+  person: PresencePerson,
+  handle: string,
+): boolean =>
   Boolean(person.github && normalizeGithub(person.github) === handle);
 
-export const presenceMatchesGithub = (presence: LibraryPresence, handle: string): boolean => {
+export const presenceMatchesGithub = (
+  presence: LibraryPresence,
+  handle: string,
+): boolean => {
   const normalized = normalizeGithub(handle);
   if (!normalized) return false;
-  return personMatchesGithub(presence.author, normalized)
-    || presence.contributors.some((person) => personMatchesGithub(person, normalized));
+  return (
+    personMatchesGithub(presence.author, normalized) ||
+    presence.contributors.some((person) =>
+      personMatchesGithub(person, normalized),
+    )
+  );
 };
 
-export const contributorDisplayName = (presence: LibraryPresence, handle: string): string => {
+export const contributorDisplayName = (
+  presence: LibraryPresence,
+  handle: string,
+): string => {
   const normalized = normalizeGithub(handle);
-  const match = [presence.author, ...presence.contributors]
-    .find((person) => personMatchesGithub(person, normalized));
+  const match = [presence.author, ...presence.contributors].find((person) =>
+    personMatchesGithub(person, normalized),
+  );
   return match?.name ?? handle;
 };
 

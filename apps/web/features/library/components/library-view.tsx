@@ -3,10 +3,18 @@
 import { Toaster } from "@nowly/ui";
 import { PaginatedLibraryGrid } from "@/features/library/components/paginated-library-grid";
 import { ButtonLink } from "@/components/button-link";
-import { Button, ButtonAnchor, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, Input, cn } from "@nowly/ui";
-
-
-
+import {
+  Button,
+  ButtonAnchor,
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  Input,
+  cn,
+} from "@nowly/ui";
 
 import {
   catalogCategories,
@@ -36,10 +44,10 @@ const useNavJoin = () => {
     if (!sentinel) return;
 
     const connect = () =>
-      new IntersectionObserver(
-        ([entry]) => setJoined(!entry.isIntersecting),
-        { threshold: 0, rootMargin: `-${navJoinOffset()}px 0px 0px 0px` },
-      );
+      new IntersectionObserver(([entry]) => setJoined(!entry.isIntersecting), {
+        threshold: 0,
+        rootMargin: `-${navJoinOffset()}px 0px 0px 0px`,
+      });
 
     let observer = connect();
     observer.observe(sentinel);
@@ -74,8 +82,13 @@ const useNavJoin = () => {
     }
 
     const apply = () => {
-      const navHeight = window.matchMedia("(min-width: 640px)").matches ? 84 : 68;
-      root.style.setProperty("--nav-join-panel", `${navHeight + toolbar.offsetHeight}px`);
+      const navHeight = window.matchMedia("(min-width: 640px)").matches
+        ? 84
+        : 68;
+      root.style.setProperty(
+        "--nav-join-panel",
+        `${navHeight + toolbar.offsetHeight}px`,
+      );
     };
 
     apply();
@@ -94,8 +107,8 @@ export const LibraryView = ({
   items,
   authorHandle = null,
 }: {
-  items: LibraryPresence[]
-  authorHandle?: string | null
+  items: LibraryPresence[];
+  authorHandle?: string | null;
 }) => {
   const t = useTranslations("libraryPage");
   const locale = useLocale();
@@ -106,7 +119,9 @@ export const LibraryView = ({
   const mentionMatch = /^@(\S+)/.exec(trimmedQuery);
   const typedAuthorHandle = mentionMatch?.[1] ?? null;
   const effectiveAuthorHandle = authorHandle ?? typedAuthorHandle;
-  const normalizedQuery = (mentionMatch ? trimmedQuery.slice(mentionMatch[0].length) : trimmedQuery)
+  const normalizedQuery = (
+    mentionMatch ? trimmedQuery.slice(mentionMatch[0].length) : trimmedQuery
+  )
     .trim()
     .toLowerCase();
   const categories = catalogCategories(items);
@@ -114,7 +129,11 @@ export const LibraryView = ({
 
   const results = useMemo(() => {
     return items.filter((presence) => {
-      if (effectiveAuthorHandle && !presenceMatchesGithub(presence, effectiveAuthorHandle)) return false;
+      if (
+        effectiveAuthorHandle &&
+        !presenceMatchesGithub(presence, effectiveAuthorHandle)
+      )
+        return false;
       if (category !== "all" && presence.category !== category) return false;
       if (!normalizedQuery) return true;
       return presenceSearchText(presence).includes(normalizedQuery);
@@ -124,7 +143,10 @@ export const LibraryView = ({
   const isStale = query !== deferredQuery;
 
   useEffect(() => {
-    trackPublicAnalytics("marketplace_page_view", { source: "web_library", payload: { locale } });
+    trackPublicAnalytics("marketplace_page_view", {
+      source: "web_library",
+      payload: { locale },
+    });
   }, []);
 
   const isFirstFilterRef = useRef(true);
@@ -143,7 +165,10 @@ export const LibraryView = ({
   useEffect(() => {
     const isEmpty = results.length === 0;
     if (isEmpty && !wasEmptyRef.current) {
-      trackPublicAnalytics("marketplace_no_results", { source: "web_library", payload: { locale, category } });
+      trackPublicAnalytics("marketplace_no_results", {
+        source: "web_library",
+        payload: { locale, category },
+      });
     }
     wasEmptyRef.current = isEmpty;
   }, [results.length, locale, category]);
@@ -178,7 +203,12 @@ export const LibraryView = ({
       <div className="h-10" />
       <div ref={sentinelRef} aria-hidden className="h-px" />
 
-      <div className={cn("sticky top-21 px-4 sm:top-29 sm:px-6 lg:px-10", joined ? "z-50" : "z-40")}>
+      <div
+        className={cn(
+          "sticky top-21 px-4 sm:top-29 sm:px-6 lg:px-10",
+          joined ? "z-50" : "z-40",
+        )}
+      >
         <div
           ref={toolbarRef}
           className={cn(
@@ -282,7 +312,12 @@ export const LibraryView = ({
                   {t("clear")}
                 </Button>
               )}
-              <ButtonAnchor href={DISCORD_INVITE_URL} rel="noreferrer" target="_blank" variant="ghost">
+              <ButtonAnchor
+                href={DISCORD_INVITE_URL}
+                rel="noreferrer"
+                target="_blank"
+                variant="ghost"
+              >
                 <RiDiscordFill data-icon="inline-start" />
                 {t("discord-cta")}
               </ButtonAnchor>
@@ -300,9 +335,9 @@ const FilterChip = ({
   onClick,
   children,
 }: {
-  active: boolean
-  onClick: () => void
-  children: string
+  active: boolean;
+  onClick: () => void;
+  children: string;
 }) => (
   <button
     type="button"

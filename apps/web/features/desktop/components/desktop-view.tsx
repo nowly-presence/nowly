@@ -14,9 +14,14 @@ import {
   cn,
 } from "@nowly/ui";
 
-
-import { CHROMEOS_WAITLIST_CAMPAIGN_ID, PROJECT_REPOSITORY_URL } from "@/lib/constants";
-import type { DesktopPlatform, DesktopRelease } from "@/features/desktop/lib/desktop-release";
+import {
+  CHROMEOS_WAITLIST_CAMPAIGN_ID,
+  PROJECT_REPOSITORY_URL,
+} from "@/lib/constants";
+import type {
+  DesktopPlatform,
+  DesktopRelease,
+} from "@/features/desktop/lib/desktop-release";
 
 import {
   RiAppleFill,
@@ -51,7 +56,7 @@ const detectPlatform = (): Platform => {
 };
 
 type DesktopViewProps = {
-  release: DesktopRelease
+  release: DesktopRelease;
 };
 
 export const DesktopView = ({ release }: DesktopViewProps) => {
@@ -59,17 +64,32 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
   const [platform, setPlatform] = useState<Platform>("windows");
   const [detected, setDetected] = useState<Platform | null>(null);
   const Icon = platformIcons[platform];
-  const downloads = platform === "chromeos" ? [] : platformDownloads(release, platform, {
-    windowsInstaller: t("windows-installer"),
-    windowsPortable: t("windows-portable"),
-    macosDmg: t("macos-dmg"),
-    macosArchive: t("macos-archive"),
-    linuxDeb: t("linux-deb"),
-    linuxArchive: t("linux-archive"),
-  });
-  const trustItems = t.raw("trust-items") as Array<{ title: string; text: string }>;
-  const guideItems = t.raw("guide-items") as Array<{ title: string; text: string }>;
-  const requirementKeys = ["os", "arch", "discord", "browser", "storage"] as const;
+  const downloads =
+    platform === "chromeos"
+      ? []
+      : platformDownloads(release, platform, {
+          windowsInstaller: t("windows-installer"),
+          windowsPortable: t("windows-portable"),
+          macosDmg: t("macos-dmg"),
+          macosArchive: t("macos-archive"),
+          linuxDeb: t("linux-deb"),
+          linuxArchive: t("linux-archive"),
+        });
+  const trustItems = t.raw("trust-items") as Array<{
+    title: string;
+    text: string;
+  }>;
+  const guideItems = t.raw("guide-items") as Array<{
+    title: string;
+    text: string;
+  }>;
+  const requirementKeys = [
+    "os",
+    "arch",
+    "discord",
+    "browser",
+    "storage",
+  ] as const;
 
   useLayoutEffect(() => {
     const next = detectPlatform();
@@ -128,7 +148,9 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
             </div>
             <div>
               <CardTitle className="text-xl">
-                {platform === "chromeos" ? t("chromeos-title") : t("card-title", { platform: t(`platforms.${platform}`) })}
+                {platform === "chromeos"
+                  ? t("chromeos-title")
+                  : t("card-title", { platform: t(`platforms.${platform}`) })}
               </CardTitle>
               {platform !== "chromeos" && release.version ? (
                 <CardDescription className="mt-1">
@@ -136,7 +158,9 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
                 </CardDescription>
               ) : null}
               {platform === "chromeos" ? (
-                <CardDescription className="mt-1">{t("chromeos-description")}</CardDescription>
+                <CardDescription className="mt-1">
+                  {t("chromeos-description")}
+                </CardDescription>
               ) : null}
             </div>
 
@@ -189,7 +213,9 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
             ) : null}
             {platform === "macos" ? (
               <p className="text-sm leading-relaxed text-muted-foreground">
-                <span className="font-medium text-foreground">{t("signed-title")}. </span>
+                <span className="font-medium text-foreground">
+                  {t("signed-title")}.{" "}
+                </span>
                 {t("signed-desc")}
               </p>
             ) : null}
@@ -201,7 +227,11 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
                   {t("linux-desc")}
                   <div className="mt-3 min-w-0 overflow-hidden rounded-[10px] bg-code-surface shadow-[0_0_0_1px_var(--border)]">
                     <pre className="max-w-full overflow-x-auto p-3 font-mono text-[12.5px] leading-[1.7] text-foreground">
-                      <code>{"tar -xzf nowly-linux.tar.gz && ./scripts/install-linux.sh nowly-host-linux"}</code>
+                      <code>
+                        {
+                          "tar -xzf nowly-linux.tar.gz && ./scripts/install-linux.sh nowly-host-linux"
+                        }
+                      </code>
                     </pre>
                   </div>
                 </AlertDescription>
@@ -212,18 +242,24 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
 
         <section className="mt-16 grid gap-10 lg:grid-cols-2">
           <div>
-            <h2 className="text-xl font-medium tracking-tight">{t("trust-title")}</h2>
+            <h2 className="text-xl font-medium tracking-tight">
+              {t("trust-title")}
+            </h2>
             <ul className="mt-6 space-y-5">
               {trustItems.map((item) => (
                 <li key={item.title}>
                   <p className="font-medium text-foreground">{item.title}</p>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    {item.text}
+                  </p>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h2 className="text-xl font-medium tracking-tight">{t("guide-title")}</h2>
+            <h2 className="text-xl font-medium tracking-tight">
+              {t("guide-title")}
+            </h2>
             <ol className="mt-6 space-y-5">
               {guideItems.map((item, index) => (
                 <li key={item.title} className="flex gap-4">
@@ -232,9 +268,16 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
                   </span>
                   <div>
                     <p className="font-medium text-foreground">{item.title}</p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                      {item.text}
+                    </p>
                     {index === 2 ? (
-                      <ButtonLink href="/library" variant="link" size="sm" className="mt-2 h-auto px-0">
+                      <ButtonLink
+                        href="/library"
+                        variant="link"
+                        size="sm"
+                        className="mt-2 h-auto px-0"
+                      >
                         {t("guide-library")}
                       </ButtonLink>
                     ) : null}
@@ -247,15 +290,21 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
 
         {platform !== "chromeos" ? (
           <section className="mt-16 max-w-3xl">
-            <h2 className="text-xl font-medium tracking-tight">{t("req-title")}</h2>
+            <h2 className="text-xl font-medium tracking-tight">
+              {t("req-title")}
+            </h2>
             <div className="mt-6 divide-y divide-border overflow-hidden rounded-[16px] border border-border bg-foreground/4">
               {requirementKeys.map((key) => (
                 <div
                   key={key}
                   className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <span className="text-sm text-muted-foreground">{t(`req.${key}`)}</span>
-                  <span className="text-sm font-medium">{t(`req.${key}-${platform}`)}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {t(`req.${key}`)}
+                  </span>
+                  <span className="text-sm font-medium">
+                    {t(`req.${key}-${platform}`)}
+                  </span>
                 </div>
               ))}
             </div>
@@ -270,12 +319,12 @@ const platformDownloads = (
   release: DesktopRelease,
   platform: DesktopPlatform,
   labels: {
-    windowsInstaller: string
-    windowsPortable: string
-    macosDmg: string
-    macosArchive: string
-    linuxDeb: string
-    linuxArchive: string
+    windowsInstaller: string;
+    windowsPortable: string;
+    macosDmg: string;
+    macosArchive: string;
+    linuxDeb: string;
+    linuxArchive: string;
   },
 ) => {
   if (platform === "windows") {
@@ -286,11 +335,13 @@ const platformDownloads = (
   }
   if (platform === "macos") {
     const items = [{ href: release.macos.dmg, label: labels.macosDmg }];
-    if (release.macos.archive) items.push({ href: release.macos.archive, label: labels.macosArchive });
+    if (release.macos.archive)
+      items.push({ href: release.macos.archive, label: labels.macosArchive });
     return items;
   }
   const items = [];
-  if (release.linux.deb) items.push({ href: release.linux.deb, label: labels.linuxDeb });
+  if (release.linux.deb)
+    items.push({ href: release.linux.deb, label: labels.linuxDeb });
   items.push({ href: release.linux.archive, label: labels.linuxArchive });
   return items;
 };

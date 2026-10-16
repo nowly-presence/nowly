@@ -3,7 +3,6 @@ import { PaginatedLibraryGrid } from "@/features/library/components/paginated-li
 import { ButtonLink } from "@/components/button-link";
 import { Avatar, AvatarFallback, AvatarImage, ButtonAnchor } from "@nowly/ui";
 
-
 import {
   contributorDisplayName,
   type LibraryPresence,
@@ -12,8 +11,8 @@ import { RiArrowLeftLine, RiGithubLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
 type AuthorViewProps = {
-  handle: string
-  items: LibraryPresence[]
+  handle: string;
+  items: LibraryPresence[];
 };
 
 export const AuthorView = async ({ handle, items }: AuthorViewProps) => {
@@ -35,7 +34,10 @@ export const AuthorView = async ({ handle, items }: AuthorViewProps) => {
           </p>
           <div className="mt-5 flex items-center gap-4">
             <Avatar size="lg" className="size-16 shrink-0">
-              <AvatarImage src={`https://github.com/${encodeURIComponent(handle)}.png?size=128`} alt={name} />
+              <AvatarImage
+                src={`https://github.com/${encodeURIComponent(handle)}.png?size=128`}
+                alt={name}
+              />
               <AvatarFallback>{name.slice(0, 1).toUpperCase()}</AvatarFallback>
             </Avatar>
             <h1 className="min-w-0 text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
@@ -46,7 +48,11 @@ export const AuthorView = async ({ handle, items }: AuthorViewProps) => {
             {t("description", { count: items.length })}
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
-            <ButtonLink href={`/library?author=${encodeURIComponent(handle)}`} variant="outline" size="sm">
+            <ButtonLink
+              href={`/library?author=${encodeURIComponent(handle)}`}
+              variant="outline"
+              size="sm"
+            >
               {t("view-in-library")}
             </ButtonLink>
             <ButtonAnchor

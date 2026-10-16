@@ -19,7 +19,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@nowly/ui";
-import { ANALYTICS_RANGE_IDS, analyticsRegistry, type InsightsFilters, type WidgetConfig, type WidgetRange } from "@nowly/analytics";
+import {
+  ANALYTICS_RANGE_IDS,
+  analyticsRegistry,
+  type InsightsFilters,
+  type WidgetConfig,
+  type WidgetRange,
+} from "@nowly/analytics";
 import { useState } from "react";
 
 type WidgetKind = WidgetConfig["kind"];
@@ -28,7 +34,8 @@ const CHART_TYPES = ["line", "bar", "area"] as const;
 const RANGE_OPTIONS: WidgetRange[] = [...ANALYTICS_RANGE_IDS, "custom"];
 const metricKeys = analyticsRegistry.map((m) => m.key);
 
-const toLocalInputValue = (iso?: string): string => (iso ? iso.slice(0, 16) : "");
+const toLocalInputValue = (iso?: string): string =>
+  iso ? iso.slice(0, 16) : "";
 
 const emptyWidget = (): WidgetConfig => ({
   id: crypto.randomUUID(),
@@ -53,7 +60,8 @@ export const WidgetEditorDialog = ({
 }) => {
   const [widget, setWidget] = useState<WidgetConfig>(initial ?? emptyWidget());
 
-  const setFilters = (filters: InsightsFilters) => setWidget({ ...widget, filters });
+  const setFilters = (filters: InsightsFilters) =>
+    setWidget({ ...widget, filters });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -65,7 +73,10 @@ export const WidgetEditorDialog = ({
         <div className="space-y-4">
           <Field>
             <FieldLabel>Title</FieldLabel>
-            <Input value={widget.title} onChange={(e) => setWidget({ ...widget, title: e.target.value })} />
+            <Input
+              value={widget.title}
+              onChange={(e) => setWidget({ ...widget, title: e.target.value })}
+            />
           </Field>
 
           <Field>
@@ -76,11 +87,39 @@ export const WidgetEditorDialog = ({
                 if (!value) return;
                 const kind = value as WidgetKind;
                 if (kind === "funnel") {
-                  setWidget({ id: widget.id, title: widget.title, kind, funnelId: FUNNEL_IDS[0], filters: widget.filters, range: widget.range, from: widget.from, to: widget.to });
+                  setWidget({
+                    id: widget.id,
+                    title: widget.title,
+                    kind,
+                    funnelId: FUNNEL_IDS[0],
+                    filters: widget.filters,
+                    range: widget.range,
+                    from: widget.from,
+                    to: widget.to,
+                  });
                 } else if (kind === "metric-total") {
-                  setWidget({ id: widget.id, title: widget.title, kind, metric: metricKeys[0] ?? "", filters: widget.filters, range: widget.range, from: widget.from, to: widget.to });
+                  setWidget({
+                    id: widget.id,
+                    title: widget.title,
+                    kind,
+                    metric: metricKeys[0] ?? "",
+                    filters: widget.filters,
+                    range: widget.range,
+                    from: widget.from,
+                    to: widget.to,
+                  });
                 } else {
-                  setWidget({ id: widget.id, title: widget.title, kind, metric: metricKeys[0] ?? "", filters: widget.filters, range: widget.range, from: widget.from, to: widget.to, chartType: "line" });
+                  setWidget({
+                    id: widget.id,
+                    title: widget.title,
+                    kind,
+                    metric: metricKeys[0] ?? "",
+                    filters: widget.filters,
+                    range: widget.range,
+                    from: widget.from,
+                    to: widget.to,
+                    chartType: "line",
+                  });
                 }
               }}
             >
@@ -100,7 +139,12 @@ export const WidgetEditorDialog = ({
           {widget.kind === "funnel" ? (
             <Field>
               <FieldLabel>Funnel</FieldLabel>
-              <Select value={widget.funnelId} onValueChange={(value) => value && setWidget({ ...widget, funnelId: value })}>
+              <Select
+                value={widget.funnelId}
+                onValueChange={(value) =>
+                  value && setWidget({ ...widget, funnelId: value })
+                }
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
@@ -116,7 +160,12 @@ export const WidgetEditorDialog = ({
           ) : (
             <Field>
               <FieldLabel>Metric</FieldLabel>
-              <Select value={widget.metric} onValueChange={(value) => value && setWidget({ ...widget, metric: value })}>
+              <Select
+                value={widget.metric}
+                onValueChange={(value) =>
+                  value && setWidget({ ...widget, metric: value })
+                }
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
@@ -133,7 +182,12 @@ export const WidgetEditorDialog = ({
 
           <Field>
             <FieldLabel>Range</FieldLabel>
-            <Select value={widget.range} onValueChange={(value) => value && setWidget({ ...widget, range: value as WidgetRange })}>
+            <Select
+              value={widget.range}
+              onValueChange={(value) =>
+                value && setWidget({ ...widget, range: value as WidgetRange })
+              }
+            >
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
@@ -154,7 +208,14 @@ export const WidgetEditorDialog = ({
                 <Input
                   type="datetime-local"
                   value={toLocalInputValue(widget.from)}
-                  onChange={(e) => setWidget({ ...widget, from: e.target.value ? new Date(e.target.value).toISOString() : undefined })}
+                  onChange={(e) =>
+                    setWidget({
+                      ...widget,
+                      from: e.target.value
+                        ? new Date(e.target.value).toISOString()
+                        : undefined,
+                    })
+                  }
                 />
               </Field>
               <Field>
@@ -162,7 +223,14 @@ export const WidgetEditorDialog = ({
                 <Input
                   type="datetime-local"
                   value={toLocalInputValue(widget.to)}
-                  onChange={(e) => setWidget({ ...widget, to: e.target.value ? new Date(e.target.value).toISOString() : undefined })}
+                  onChange={(e) =>
+                    setWidget({
+                      ...widget,
+                      to: e.target.value
+                        ? new Date(e.target.value).toISOString()
+                        : undefined,
+                    })
+                  }
                 />
               </Field>
             </div>
@@ -172,7 +240,16 @@ export const WidgetEditorDialog = ({
             <>
               <Field>
                 <FieldLabel>Chart type</FieldLabel>
-                <Select value={widget.chartType} onValueChange={(value) => value && setWidget({ ...widget, chartType: value as (typeof CHART_TYPES)[number] })}>
+                <Select
+                  value={widget.chartType}
+                  onValueChange={(value) =>
+                    value &&
+                    setWidget({
+                      ...widget,
+                      chartType: value as (typeof CHART_TYPES)[number],
+                    })
+                  }
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
@@ -189,7 +266,9 @@ export const WidgetEditorDialog = ({
               <label className="flex items-center gap-2 text-sm text-foreground">
                 <Checkbox
                   checked={widget.compare ?? false}
-                  onCheckedChange={(checked) => setWidget({ ...widget, compare: checked === true })}
+                  onCheckedChange={(checked) =>
+                    setWidget({ ...widget, compare: checked === true })
+                  }
                 />
                 Compare to previous period
               </label>

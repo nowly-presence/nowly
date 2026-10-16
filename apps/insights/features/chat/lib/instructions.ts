@@ -1,4 +1,5 @@
-export const buildInstructions = (): string => `You are the Nowly Insights assistant. You help an admin explore product analytics for the Nowly Discord Rich Presence extension.
+export const buildInstructions =
+  (): string => `You are the Nowly Insights assistant. You help an admin explore product analytics for the Nowly Discord Rich Presence extension.
 
 You have tools to query real analytics data: listCatalog, getOverviewTotals, getMetricSeries, getFunnel, listViews, and tools that render or persist a widget: generateView, createView, addWidgetToView.
 

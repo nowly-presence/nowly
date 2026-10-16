@@ -1,13 +1,19 @@
-import { RiDiscordLine, RiPlayCircleLine, RiPlugLine, RiPulseLine, RiRefreshLine } from "@remixicon/react"
-import { HOST_DOWNLOAD_URL } from "@/shared/constants"
-import { openUrl } from "@/shared/browser-links"
-import { Button } from "@/ui/button"
-import { Card } from "@/ui/card"
-import { useI18n } from "@/hooks/i18n-provider"
-import { sendMessage } from "@/lib/messages"
-import { useNav } from "@/hooks/navigation-provider"
-import { connectionOf } from "@/lib/presence-status"
-import { useExtensionState } from "@/hooks/extension-state-provider"
+import {
+  RiDiscordLine,
+  RiPlayCircleLine,
+  RiPlugLine,
+  RiPulseLine,
+  RiRefreshLine,
+} from "@remixicon/react";
+import { HOST_DOWNLOAD_URL } from "@/shared/constants";
+import { openUrl } from "@/shared/browser-links";
+import { Button } from "@/ui/button";
+import { Card } from "@/ui/card";
+import { useI18n } from "@/hooks/i18n-provider";
+import { sendMessage } from "@/lib/messages";
+import { useNav } from "@/hooks/navigation-provider";
+import { connectionOf } from "@/lib/presence-status";
+import { useExtensionState } from "@/hooks/extension-state-provider";
 
 export const IdleCard = ({
   connection,
@@ -15,14 +21,14 @@ export const IdleCard = ({
   onResume,
   hasPresences,
 }: {
-  connection: ReturnType<typeof connectionOf>
-  paused: boolean
-  onResume: () => void
-  hasPresences: boolean
+  connection: ReturnType<typeof connectionOf>;
+  paused: boolean;
+  onResume: () => void;
+  hasPresences: boolean;
 }) => {
-  const { t } = useI18n()
-  const { push } = useNav()
-  const { refresh } = useExtensionState()
+  const { t } = useI18n();
+  const { push } = useNav();
+  const { refresh } = useExtensionState();
 
   if (paused) {
     return (
@@ -31,14 +37,18 @@ export const IdleCard = ({
           <RiPlayCircleLine className="size-5" />
         </span>
         <div className="flex min-w-0 flex-1 flex-col">
-          <span className="text-label-lg font-medium">{t("activity.pausedTitle")}</span>
-          <span className="text-label-md text-muted">{t("activity.pausedDescription")}</span>
+          <span className="text-label-lg font-medium">
+            {t("activity.pausedTitle")}
+          </span>
+          <span className="text-label-md text-muted">
+            {t("activity.pausedDescription")}
+          </span>
         </div>
         <Button size="sm" onClick={onResume}>
           {t("action.resume")}
         </Button>
       </Card>
-    )
+    );
   }
 
   if (connection === "no-host") {
@@ -49,8 +59,12 @@ export const IdleCard = ({
             <RiPlugLine className="size-5" />
           </span>
           <div className="flex min-w-0 flex-col gap-0.5">
-            <span className="text-label-lg font-medium">{t("activity.noHostTitle")}</span>
-            <span className="text-body-sm text-muted">{t("activity.noHostDescription")}</span>
+            <span className="text-label-lg font-medium">
+              {t("activity.noHostTitle")}
+            </span>
+            <span className="text-body-sm text-muted">
+              {t("activity.noHostDescription")}
+            </span>
           </div>
         </div>
         <div className="flex gap-2">
@@ -60,13 +74,15 @@ export const IdleCard = ({
           <Button
             variant="secondary"
             icon={<RiRefreshLine className="size-4" />}
-            onClick={() => void sendMessage("CONNECT_NATIVE").then(() => refresh.native())}
+            onClick={() =>
+              void sendMessage("CONNECT_NATIVE").then(() => refresh.native())
+            }
           >
             {t("action.retry")}
           </Button>
         </div>
       </Card>
-    )
+    );
   }
 
   if (connection === "no-discord") {
@@ -76,27 +92,44 @@ export const IdleCard = ({
           <RiDiscordLine className="size-5" />
         </span>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="text-label-lg font-medium">{t("activity.noDiscordTitle")}</span>
-          <span className="text-body-sm text-muted">{t("activity.noDiscordDescription")}</span>
-          <Button variant="link" className="mt-1 self-start" onClick={() => push({ name: "connection" })}>
+          <span className="text-label-lg font-medium">
+            {t("activity.noDiscordTitle")}
+          </span>
+          <span className="text-body-sm text-muted">
+            {t("activity.noDiscordDescription")}
+          </span>
+          <Button
+            variant="link"
+            className="mt-1 self-start"
+            onClick={() => push({ name: "connection" })}
+          >
             {t("activity.checkConnection")}
           </Button>
         </div>
       </Card>
-    )
+    );
   }
 
   return (
     <div className="relative overflow-hidden rounded-lg border border-dashed border-line-strong p-4">
       <div className="flex items-center gap-3">
-        <span className="flex size-16 shrink-0 items-center justify-center rounded-md bg-hover text-muted" aria-hidden>
+        <span
+          className="flex size-16 shrink-0 items-center justify-center rounded-md bg-hover text-muted"
+          aria-hidden
+        >
           <RiPulseLine className="size-7" />
         </span>
         <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <span className="text-label-lg font-medium">{t("activity.idleTitle")}</span>
-          <span className="text-body-sm text-muted">{hasPresences ? t("activity.idleDescription") : t("activity.idleDescriptionEmpty")}</span>
+          <span className="text-label-lg font-medium">
+            {t("activity.idleTitle")}
+          </span>
+          <span className="text-body-sm text-muted">
+            {hasPresences
+              ? t("activity.idleDescription")
+              : t("activity.idleDescriptionEmpty")}
+          </span>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

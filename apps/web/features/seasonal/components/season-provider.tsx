@@ -21,7 +21,13 @@ import {
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
-const SeasonDecor = dynamic(() => import("@/features/seasonal/components/season-decor").then((module) => module.SeasonDecor), { ssr: false });
+const SeasonDecor = dynamic(
+  () =>
+    import("@/features/seasonal/components/season-decor").then(
+      (module) => module.SeasonDecor,
+    ),
+  { ssr: false },
+);
 
 const DECOR_IDLE_TIMEOUT_MS = 1500;
 
@@ -44,7 +50,9 @@ const writeStorage = (season: SiteSeason | null): void => {
 
 const whenIdle = (callback: () => void): (() => void) => {
   if (typeof window.requestIdleCallback === "function") {
-    const handle = window.requestIdleCallback(callback, { timeout: DECOR_IDLE_TIMEOUT_MS });
+    const handle = window.requestIdleCallback(callback, {
+      timeout: DECOR_IDLE_TIMEOUT_MS,
+    });
     return () => window.cancelIdleCallback(handle);
   }
   const timer = window.setTimeout(callback, DECOR_IDLE_TIMEOUT_MS);
@@ -52,7 +60,10 @@ const whenIdle = (callback: () => void): (() => void) => {
 };
 
 const requestSeason = (): void => {
-  window.postMessage({ source: EXT_SOURCE, type: SEASON_REQUEST }, window.location.origin);
+  window.postMessage(
+    { source: EXT_SOURCE, type: SEASON_REQUEST },
+    window.location.origin,
+  );
 };
 
 export const SeasonProvider = ({ allowPreview }: { allowPreview: boolean }) => {
@@ -87,7 +98,9 @@ export const SeasonProvider = ({ allowPreview }: { allowPreview: boolean }) => {
     const fadeOut = () => {
       cancelFade();
       root.classList.add(SEASON_LEAVING_CLASS);
-      fadeFrame = window.requestAnimationFrame(() => applySeasonClass(root.classList, null));
+      fadeFrame = window.requestAnimationFrame(() =>
+        applySeasonClass(root.classList, null),
+      );
       fadeTimer = window.setTimeout(() => {
         root.classList.remove(SEASON_LEAVING_CLASS);
         setSeason(null);
@@ -107,10 +120,14 @@ export const SeasonProvider = ({ allowPreview }: { allowPreview: boolean }) => {
     show(state.season);
     if (state.source === "preview") return cancelFade;
 
-    const timeout = window.setTimeout(() => commit({ type: "timeout" }), SEASON_RESPONSE_TIMEOUT_MS);
+    const timeout = window.setTimeout(
+      () => commit({ type: "timeout" }),
+      SEASON_RESPONSE_TIMEOUT_MS,
+    );
 
     const onMessage = (event: MessageEvent) => {
-      if (event.source !== window || event.origin !== window.location.origin) return;
+      if (event.source !== window || event.origin !== window.location.origin)
+        return;
       const message = parseSeasonMessage(event.data);
       if (!message) return;
       window.clearTimeout(timeout);

@@ -5,7 +5,8 @@ export const brandLockup = (
   ext: "svg" | "png" = "svg",
 ): string => `${CDN_BRAND}/lockup/${variant}.${ext}`;
 
-export const brandFavicon = (file: string): string => `${CDN_BRAND}/favicons/${file}`;
+export const brandFavicon = (file: string): string =>
+  `${CDN_BRAND}/favicons/${file}`;
 
 export const brandIcon = (
   variant: "blue" | "dark" | "white",

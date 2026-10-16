@@ -3,9 +3,9 @@ import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 
 type FaqItem = {
-  category: string
-  question: string
-  answer: string
+  category: string;
+  question: string;
+  answer: string;
 };
 
 export const FaqPageView = async () => {
@@ -46,14 +46,26 @@ export const FaqPageView = async () => {
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
             {t("description")}
           </p>
-          <nav aria-label={t("eyebrow")} className="mt-8 flex flex-wrap gap-3 text-sm">
-            <Link href="/library" className="underline underline-offset-4 hover:text-foreground">
+          <nav
+            aria-label={t("eyebrow")}
+            className="mt-8 flex flex-wrap gap-3 text-sm"
+          >
+            <Link
+              href="/library"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
               {library("title")}
             </Link>
-            <Link href="/desktop" className="underline underline-offset-4 hover:text-foreground">
+            <Link
+              href="/desktop"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
               {desktop("title")}
             </Link>
-            <Link href="/support" className="underline underline-offset-4 hover:text-foreground">
+            <Link
+              href="/support"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
               {support("title")}
             </Link>
           </nav>
@@ -62,12 +74,17 @@ export const FaqPageView = async () => {
         <main className="mx-auto mt-16 w-full max-w-7xl px-5 sm:mt-24 sm:px-10">
           <div className="max-w-4xl space-y-14">
             {categories.map((category) => {
-              const categoryItems = items.filter((item) => item.category === category);
+              const categoryItems = items.filter(
+                (item) => item.category === category,
+              );
               if (categoryItems.length === 0) return null;
 
               return (
                 <section key={category} aria-labelledby={`faq-${category}`}>
-                  <h2 id={`faq-${category}`} className="mb-5 text-2xl font-medium tracking-tight text-foreground sm:text-3xl">
+                  <h2
+                    id={`faq-${category}`}
+                    className="mb-5 text-2xl font-medium tracking-tight text-foreground sm:text-3xl"
+                  >
                     {t(`categories.${category}`)}
                   </h2>
                   <div className="divide-y divide-border rounded-2xl border border-border bg-card">
@@ -79,7 +96,10 @@ export const FaqPageView = async () => {
                       >
                         <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-lg font-medium text-foreground marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent [&::-webkit-details-marker]:hidden">
                           <span>{item.question}</span>
-                          <span aria-hidden className="shrink-0 text-2xl font-normal leading-none text-accent">
+                          <span
+                            aria-hidden
+                            className="shrink-0 text-2xl font-normal leading-none text-accent"
+                          >
                             <span className="group-open:hidden">+</span>
                             <span className="hidden group-open:inline">−</span>
                           </span>

@@ -3,14 +3,34 @@
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { Link } from "@/i18n/navigation";
 import { ButtonAnchor } from "@nowly/ui/button-link";
-import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Field, FieldError, FieldLabel, InputGroup, InputGroupAddon, InputGroupText, InputGroupTextarea, Spinner } from "@nowly/ui";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  Field,
+  FieldError,
+  FieldLabel,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroupTextarea,
+  Spinner,
+} from "@nowly/ui";
 import {
   getExtensionDetected,
   requestExtension,
   subscribeExtensionDetected,
   type ExtensionDiagnostic,
 } from "@/lib/extension-bridge";
-import { RiCheckboxCircleLine, RiDiscordFill, RiFlagLine } from "@nowly/ui/icons";
+import {
+  RiCheckboxCircleLine,
+  RiDiscordFill,
+  RiFlagLine,
+} from "@nowly/ui/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, type FormEvent } from "react";
 
@@ -18,8 +38,8 @@ const REPORT_MAX_LENGTH = 750;
 const PRODUCTION_API_URL = "https://api.nowly.me";
 
 type ReportBrowser = {
-  name: string
-  version: string
+  name: string;
+  version: string;
 };
 
 const getReportBrowser = (): ReportBrowser => {
@@ -40,26 +60,36 @@ const getReportBrowser = (): ReportBrowser => {
   return { name: "Unknown", version: "Unknown" };
 };
 type PresenceReportDialogProps = {
-  slug: string
-  name: string
-  disabled?: boolean
+  slug: string;
+  name: string;
+  disabled?: boolean;
 };
 
 const reportApiUrl = (slug: string): string => {
-  const base = (process.env.NEXT_PUBLIC_API_BASE_URL ?? PRODUCTION_API_URL).replace(/\/$/, "");
+  const base = (
+    process.env.NEXT_PUBLIC_API_BASE_URL ?? PRODUCTION_API_URL
+  ).replace(/\/$/, "");
   return `${base}/presences/${encodeURIComponent(slug)}/report`;
 };
 
 const extensionIsPresent = async (): Promise<boolean> => {
   try {
-    const diagnostic = await requestExtension<ExtensionDiagnostic>("GET_DIAGNOSTIC", undefined, 3000);
+    const diagnostic = await requestExtension<ExtensionDiagnostic>(
+      "GET_DIAGNOSTIC",
+      undefined,
+      3000,
+    );
     return diagnostic?.extensionInstalled === true;
   } catch {
     return false;
   }
 };
 
-export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceReportDialogProps) => {
+export const PresenceReportDialog = ({
+  slug,
+  name,
+  disabled = false,
+}: PresenceReportDialogProps) => {
   const t = useTranslations("presencePage");
   const locale = useLocale();
   const [open, setOpen] = useState(false);
@@ -69,7 +99,8 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
   const [error, setError] = useState(false);
 
   const count = message.length;
-  const canSubmit = message.trim().length > 0 && count <= REPORT_MAX_LENGTH && !busy;
+  const canSubmit =
+    message.trim().length > 0 && count <= REPORT_MAX_LENGTH && !busy;
 
   const reset = () => {
     setMessage("");
@@ -78,12 +109,16 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
     setError(false);
   };
 
-  useEffect(() => subscribeExtensionDetected((value) => {
-    if (!value) {
-      setOpen(false);
-      reset();
-    }
-  }), []);
+  useEffect(
+    () =>
+      subscribeExtensionDetected((value) => {
+        if (!value) {
+          setOpen(false);
+          reset();
+        }
+      }),
+    [],
+  );
 
   useEffect(() => {
     if (!disabled) return;
@@ -159,33 +194,54 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
                   <RiCheckboxCircleLine className="size-5" />
                 </div>
                 <DialogTitle>{t("report-thanks-title")}</DialogTitle>
-                <DialogDescription>{t("report-thanks-description", { name })}</DialogDescription>
+                <DialogDescription>
+                  {t("report-thanks-description", { name })}
+                </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <ButtonAnchor href={DISCORD_INVITE_URL} rel="noreferrer" target="_blank" variant="outline">
+                <ButtonAnchor
+                  href={DISCORD_INVITE_URL}
+                  rel="noreferrer"
+                  target="_blank"
+                  variant="outline"
+                >
                   <RiDiscordFill data-icon="inline-start" />
                   {t("report-discord")}
                 </ButtonAnchor>
-                <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onOpenChange(false)}
+                >
                   {t("report-close")}
                 </Button>
               </DialogFooter>
             </>
           ) : (
-            <form onSubmit={(event) => void onSubmit(event)} className="grid gap-4">
+            <form
+              onSubmit={(event) => void onSubmit(event)}
+              className="grid gap-4"
+            >
               <DialogHeader>
                 <DialogTitle>{t("report-title")}</DialogTitle>
-                <DialogDescription>{t("report-description", { name })}</DialogDescription>
+                <DialogDescription>
+                  {t("report-description", { name })}
+                </DialogDescription>
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {t("report-data-notice")}{" "}
-                  <Link href="/privacy" className="underline underline-offset-4 hover:text-foreground">
+                  <Link
+                    href="/privacy"
+                    className="underline underline-offset-4 hover:text-foreground"
+                  >
                     {t("report-privacy-link")}
                   </Link>
                 </p>
               </DialogHeader>
 
               <Field data-invalid={error || undefined}>
-                <FieldLabel htmlFor="presence-report">{t("report-label")}</FieldLabel>
+                <FieldLabel htmlFor="presence-report">
+                  {t("report-label")}
+                </FieldLabel>
                 <InputGroup>
                   <InputGroupTextarea
                     id="presence-report"
@@ -196,7 +252,9 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
                     disabled={busy}
                     aria-invalid={error || undefined}
                     onChange={(event) => {
-                      setMessage(event.target.value.slice(0, REPORT_MAX_LENGTH));
+                      setMessage(
+                        event.target.value.slice(0, REPORT_MAX_LENGTH),
+                      );
                       if (error) setError(false);
                     }}
                   />
@@ -210,7 +268,12 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
               </Field>
 
               <DialogFooter>
-                <Button type="button" variant="outline" disabled={busy} onClick={() => onOpenChange(false)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={busy}
+                  onClick={() => onOpenChange(false)}
+                >
                   {t("report-cancel")}
                 </Button>
                 <Button type="submit" disabled={!canSubmit}>

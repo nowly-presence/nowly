@@ -3,7 +3,11 @@ import { mdxComponents } from "@/features/docs-content/components/mdx-components
 import { OpenIn } from "@/features/docs-content/components/open-in";
 import { PageNavigation } from "@/features/docs-content/components/page-navigation";
 import { TableOfContents } from "@/features/docs-content/components/table-of-contents";
-import { getAdjacentPages, getCategoryForPath, getDocContent } from "@/features/docs-content/lib/content";
+import {
+  getAdjacentPages,
+  getCategoryForPath,
+  getDocContent,
+} from "@/features/docs-content/lib/content";
 import { docHref } from "@/features/docs-content/lib/href";
 import { extractTocItems } from "@/features/docs-content/lib/types";
 import { createMetadata, docsOgImage } from "@/features/seo/lib/seo";
@@ -17,7 +21,7 @@ import type { ReactElement } from "react";
 
 type Props = {
   params: Promise<{
-    slug: string[]
+    slug: string[];
   }>;
 };
 
@@ -30,7 +34,7 @@ const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
 
   if (!doc) {
     return {
-       title: t("not-found"),
+      title: t("not-found"),
       robots: { index: false, follow: false },
     };
   }
@@ -45,7 +49,7 @@ const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
     image: docsOgImage(doc.path, {
       title: doc.title,
       description,
-       category: getCategoryForPath(pageSlug, locale),
+      category: getCategoryForPath(pageSlug, locale),
     }),
   });
 };
@@ -69,9 +73,7 @@ const Page = async ({ params }: Props): Promise<ReactElement> => {
       <ScrollToTop />
       <article className="py-8">
         <div className="flex items-start justify-between gap-4 mb-2">
-          <h1 className="text-3xl font-semibold font-heading">
-            {doc.title}
-          </h1>
+          <h1 className="text-3xl font-semibold font-heading">{doc.title}</h1>
           <OpenIn slug={doc.sourcePath} locale={locale} />
         </div>
 
@@ -81,7 +83,11 @@ const Page = async ({ params }: Props): Promise<ReactElement> => {
           </p>
         )}
 
-        <MDXRemote source={doc.content} components={mdxComponents} options={{ blockJS: false }} />
+        <MDXRemote
+          source={doc.content}
+          components={mdxComponents}
+          options={{ blockJS: false }}
+        />
 
         <div className="mt-8 flex items-center border-t border-border pt-4">
           <EditOnGitHub slug={doc.sourcePath} locale={locale} />

@@ -1,10 +1,23 @@
 "use client";
 
-import { Field, FieldLabel, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@nowly/ui";
+import {
+  Field,
+  FieldLabel,
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@nowly/ui";
 import { ANALYTICS_SOURCES } from "@nowly/analytics";
 import type { InsightsFilters } from "@nowly/analytics";
 
-const textFields: Array<{ key: keyof InsightsFilters; label: string; placeholder: string }> = [
+const textFields: Array<{
+  key: keyof InsightsFilters;
+  label: string;
+  placeholder: string;
+}> = [
   { key: "slug", label: "Slug", placeholder: "youtube" },
   { key: "country", label: "Country", placeholder: "FR" },
   { key: "browser", label: "Browser", placeholder: "firefox" },

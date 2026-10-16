@@ -1,5 +1,8 @@
 import { SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
-import { getDocContent, getNavigationItems } from "@/features/docs-content/lib/content";
+import {
+  getDocContent,
+  getNavigationItems,
+} from "@/features/docs-content/lib/content";
 import { NextRequest, NextResponse } from "next/server";
 
 type SearchResult = {
@@ -53,7 +56,9 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json([]);
   }
 
-  const validLocale = SUPPORTED_LOCALES.includes(locale as LocaleString) ? locale : "en-US";
+  const validLocale = SUPPORTED_LOCALES.includes(locale as LocaleString)
+    ? locale
+    : "en-US";
   const sections = getNavigationItems(validLocale);
   const results: SearchResult[] = [];
 

@@ -2,7 +2,6 @@
 
 import { Badge, cn } from "@nowly/ui";
 
-
 import type { FC, ReactElement, ReactNode } from "react";
 import { useTranslations } from "next-intl";
 
@@ -43,7 +42,9 @@ const EmptyCell: FC = (): ReactElement => (
   <span className="text-muted-foreground/50">-</span>
 );
 
-const InlineCode: FC<{ children: ReactNode }> = ({ children }): ReactElement => (
+const InlineCode: FC<{ children: ReactNode }> = ({
+  children,
+}): ReactElement => (
   <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-primary">
     {children}
   </code>
@@ -103,8 +104,10 @@ const tableConfigs = {
         </td>
 
         <td className="px-4 py-3">
-            {lang.default ? (
-             <span className="font-medium text-primary">{lang.defaultLabel}</span>
+          {lang.default ? (
+            <span className="font-medium text-primary">
+              {lang.defaultLabel}
+            </span>
           ) : (
             <span className="text-muted-foreground/70">-</span>
           )}
@@ -158,7 +161,10 @@ const tableConfigs = {
   },
 } as const;
 
-export const DataTable: FC<DataTableProps> = ({ variant, data }): ReactElement => {
+export const DataTable: FC<DataTableProps> = ({
+  variant,
+  data,
+}): ReactElement => {
   const t = useTranslations("docsUi");
   const config = tableConfigs[variant];
   const rows = data ?? [];
@@ -178,9 +184,10 @@ export const DataTable: FC<DataTableProps> = ({ variant, data }): ReactElement =
               <th
                 key={header}
                 className={cn(
-                  "px-4 py-3 text-left text-sm font-semibold text-muted-foreground", {
-                     "border-r border-border": index < headers.length - 1
-                  }
+                  "px-4 py-3 text-left text-sm font-semibold text-muted-foreground",
+                  {
+                    "border-r border-border": index < headers.length - 1,
+                  },
                 )}
               >
                 {header}
@@ -191,16 +198,20 @@ export const DataTable: FC<DataTableProps> = ({ variant, data }): ReactElement =
 
         <tbody>
           {rows.length > 0 ? (
-             rows.map((item) => config.renderRow(
-               (variant === "language" ? { ...item, defaultLabel: t("yes") } : item) as never,
-             ))
+            rows.map((item) =>
+              config.renderRow(
+                (variant === "language"
+                  ? { ...item, defaultLabel: t("yes") }
+                  : item) as never,
+              ),
+            )
           ) : (
             <tr>
               <td
-                 colSpan={headers.length}
+                colSpan={headers.length}
                 className="px-4 py-8 text-center text-sm text-muted-foreground"
               >
-                 {t("no-data")}
+                {t("no-data")}
               </td>
             </tr>
           )}

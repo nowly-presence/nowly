@@ -1,6 +1,12 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardTitle, Skeleton } from "@nowly/ui";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+  Skeleton,
+} from "@nowly/ui";
 import { apiFetch } from "@/features/api-target/lib/api-client";
 import type { WidgetConfig } from "@nowly/analytics";
 import { useEffect, useState } from "react";
@@ -19,7 +25,9 @@ type FunnelMeasurement = {
   overallConversion: number | null;
 };
 
-const buildQuery = (widget: Extract<WidgetConfig, { kind: "funnel" }>): string => {
+const buildQuery = (
+  widget: Extract<WidgetConfig, { kind: "funnel" }>,
+): string => {
   const params = new URLSearchParams();
   if (widget.range === "custom" && widget.from && widget.to) {
     params.set("from", widget.from);
@@ -33,8 +41,14 @@ const buildQuery = (widget: Extract<WidgetConfig, { kind: "funnel" }>): string =
   return params.toString();
 };
 
-export const WidgetFunnel = ({ widget }: { widget: Extract<WidgetConfig, { kind: "funnel" }> }) => {
-  const [measurement, setMeasurement] = useState<FunnelMeasurement | null>(null);
+export const WidgetFunnel = ({
+  widget,
+}: {
+  widget: Extract<WidgetConfig, { kind: "funnel" }>;
+}) => {
+  const [measurement, setMeasurement] = useState<FunnelMeasurement | null>(
+    null,
+  );
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -42,7 +56,9 @@ export const WidgetFunnel = ({ widget }: { widget: Extract<WidgetConfig, { kind:
     setMeasurement(null);
     setError(false);
 
-    apiFetch<FunnelMeasurement>(`/insights/funnels/${widget.funnelId}?${buildQuery(widget)}`)
+    apiFetch<FunnelMeasurement>(
+      `/insights/funnels/${widget.funnelId}?${buildQuery(widget)}`,
+    )
       .then((data) => {
         if (!cancelled) setMeasurement(data);
       })
@@ -60,12 +76,15 @@ export const WidgetFunnel = ({ widget }: { widget: Extract<WidgetConfig, { kind:
       <CardContent>
         <div className="flex items-center justify-between">
           <div className="min-w-0">
-            <CardDescription className="truncate">{widget.title}</CardDescription>
+            <CardDescription className="truncate">
+              {widget.title}
+            </CardDescription>
             <CardTitle className="mt-1 truncate text-base font-medium">
               {measurement ? measurement.label : widget.funnelId}
             </CardTitle>
           </div>
-          {measurement?.overallConversion !== null && measurement?.overallConversion !== undefined ? (
+          {measurement?.overallConversion !== null &&
+          measurement?.overallConversion !== undefined ? (
             <span className="rounded-full border border-border px-2.5 py-0.5 text-xs font-semibold text-foreground">
               {measurement.overallConversion}%
             </span>
@@ -85,11 +104,18 @@ export const WidgetFunnel = ({ widget }: { widget: Extract<WidgetConfig, { kind:
         ) : (
           <div className="mt-4 space-y-2">
             {measurement.steps.map((step, index) => (
-              <div key={`${step.label}-${index}`} className="flex items-center justify-between rounded-lg border border-border px-3 py-2 text-sm">
+              <div
+                key={`${step.label}-${index}`}
+                className="flex items-center justify-between rounded-lg border border-border px-3 py-2 text-sm"
+              >
                 <span className="text-foreground">{step.label}</span>
                 <span className="flex items-center gap-3 text-muted-foreground">
-                  <span className="font-medium text-foreground">{step.uniqueDevices.toLocaleString()}</span>
-                  {step.conversionFromPrevious !== null ? <span>{step.conversionFromPrevious}%</span> : null}
+                  <span className="font-medium text-foreground">
+                    {step.uniqueDevices.toLocaleString()}
+                  </span>
+                  {step.conversionFromPrevious !== null ? (
+                    <span>{step.conversionFromPrevious}%</span>
+                  ) : null}
                 </span>
               </div>
             ))}

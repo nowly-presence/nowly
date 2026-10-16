@@ -5,16 +5,16 @@ import { cn } from "@nowly/ui/utils";
 import { getTranslations } from "next-intl/server";
 
 type RoadmapItem = {
-  title: string
-  description: string
+  title: string;
+  description: string;
 };
 
 type RoadmapColumn = {
-  status: string
-  title: string
-  description: string
-  completed?: boolean
-  items: RoadmapItem[]
+  status: string;
+  title: string;
+  description: string;
+  completed?: boolean;
+  items: RoadmapItem[];
 };
 
 export const RoadmapView = async () => {
@@ -60,7 +60,9 @@ export const RoadmapView = async () => {
                         <div
                           className={cn(
                             "h-full",
-                            isCompleted && nextIsCompleted ? "bg-accent" : "bg-border",
+                            isCompleted && nextIsCompleted
+                              ? "bg-accent"
+                              : "bg-border",
                           )}
                         />
                       )}
@@ -77,17 +79,29 @@ export const RoadmapView = async () => {
                   </span>
 
                   <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <p className="text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{column.status}</p>
-                    <h2 className="text-2xl font-medium tracking-tight text-foreground">{column.title}</h2>
+                    <p className="text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
+                      {column.status}
+                    </p>
+                    <h2 className="text-2xl font-medium tracking-tight text-foreground">
+                      {column.title}
+                    </h2>
                   </div>
-                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">{column.description}</p>
+                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                    {column.description}
+                  </p>
 
                   <div className="mt-5 grid gap-3 sm:grid-cols-2">
                     {column.items.map((item) => (
-                      <Card key={item.title} size="sm" className="bg-foreground/[0.035]">
+                      <Card
+                        key={item.title}
+                        size="sm"
+                        className="bg-foreground/[0.035]"
+                      >
                         <CardContent>
                           <CardTitle>{item.title}</CardTitle>
-                          <CardDescription className="mt-2">{item.description}</CardDescription>
+                          <CardDescription className="mt-2">
+                            {item.description}
+                          </CardDescription>
                         </CardContent>
                       </Card>
                     ))}
@@ -99,7 +113,9 @@ export const RoadmapView = async () => {
         </div>
 
         <div className="mt-14 flex flex-col items-start gap-4 rounded-[16px] bg-foreground/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-          <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">{t("note")}</p>
+          <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            {t("note")}
+          </p>
           <ButtonLink href="/support" variant="inverted" className="shrink-0">
             {t("feedback")}
           </ButtonLink>
@@ -108,4 +124,3 @@ export const RoadmapView = async () => {
     </div>
   );
 };
-

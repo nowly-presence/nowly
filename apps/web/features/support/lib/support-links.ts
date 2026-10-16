@@ -1,4 +1,9 @@
-import { GITHUB_SPONSORS_URL, KOFI_URL, PRESENCES_REPOSITORY_URL, PROJECT_REPOSITORY_URL } from "@/lib/constants";
+import {
+  GITHUB_SPONSORS_URL,
+  KOFI_URL,
+  PRESENCES_REPOSITORY_URL,
+  PROJECT_REPOSITORY_URL,
+} from "@/lib/constants";
 
 export const githubIssueUrl = (repo: string, template?: string): string => {
   const base = `${repo.replace(/\/$/, "")}/issues/new`;
@@ -6,7 +11,10 @@ export const githubIssueUrl = (repo: string, template?: string): string => {
 };
 
 export const SUPPORT_LINKS = {
-  brokenPresence: githubIssueUrl(PRESENCES_REPOSITORY_URL, "broken_presence.yml"),
+  brokenPresence: githubIssueUrl(
+    PRESENCES_REPOSITORY_URL,
+    "broken_presence.yml",
+  ),
   newPresence: githubIssueUrl(PRESENCES_REPOSITORY_URL, "new_presence.yml"),
   bugReport: githubIssueUrl(PROJECT_REPOSITORY_URL, "bug_report.yml"),
   featureRequest: githubIssueUrl(PROJECT_REPOSITORY_URL, "feature_request.yml"),

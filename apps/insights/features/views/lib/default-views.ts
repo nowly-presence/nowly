@@ -1,6 +1,11 @@
 import type { ViewConfig } from "@nowly/analytics";
 
-export const DEFAULT_VIEW_SLUGS = ["overview", "installs", "funnels", "errors"] as const;
+export const DEFAULT_VIEW_SLUGS = [
+  "overview",
+  "installs",
+  "funnels",
+  "errors",
+] as const;
 export type DefaultViewSlug = (typeof DEFAULT_VIEW_SLUGS)[number];
 
 export const DEFAULT_VIEW_LABELS: Record<DefaultViewSlug, string> = {
@@ -10,7 +15,10 @@ export const DEFAULT_VIEW_LABELS: Record<DefaultViewSlug, string> = {
   errors: "Errors & Uninstalls",
 };
 
-export const DEFAULT_VIEWS: Record<Exclude<DefaultViewSlug, "overview">, ViewConfig> = {
+export const DEFAULT_VIEWS: Record<
+  Exclude<DefaultViewSlug, "overview">,
+  ViewConfig
+> = {
   installs: {
     name: "Installations",
     widgets: [
@@ -37,9 +45,30 @@ export const DEFAULT_VIEWS: Record<Exclude<DefaultViewSlug, "overview">, ViewCon
   funnels: {
     name: "Funnels",
     widgets: [
-      { id: "acquisition-marketplace", title: "Acquisition (marketplace)", kind: "funnel", funnelId: "acquisition-marketplace", filters: {}, range: "30d" },
-      { id: "activation", title: "Activation", kind: "funnel", funnelId: "activation", filters: {}, range: "30d" },
-      { id: "native", title: "Native", kind: "funnel", funnelId: "native", filters: {}, range: "30d" },
+      {
+        id: "acquisition-marketplace",
+        title: "Acquisition (marketplace)",
+        kind: "funnel",
+        funnelId: "acquisition-marketplace",
+        filters: {},
+        range: "30d",
+      },
+      {
+        id: "activation",
+        title: "Activation",
+        kind: "funnel",
+        funnelId: "activation",
+        filters: {},
+        range: "30d",
+      },
+      {
+        id: "native",
+        title: "Native",
+        kind: "funnel",
+        funnelId: "native",
+        filters: {},
+        range: "30d",
+      },
     ],
   },
   errors: {
@@ -63,7 +92,14 @@ export const DEFAULT_VIEWS: Record<Exclude<DefaultViewSlug, "overview">, ViewCon
         range: "7d",
         chartType: "bar",
       },
-      { id: "uninstall", title: "Uninstall", kind: "funnel", funnelId: "uninstall", filters: {}, range: "30d" },
+      {
+        id: "uninstall",
+        title: "Uninstall",
+        kind: "funnel",
+        funnelId: "uninstall",
+        filters: {},
+        range: "30d",
+      },
     ],
   },
 };

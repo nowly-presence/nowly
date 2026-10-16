@@ -8,17 +8,17 @@ const docsZone = (process.env.DOCS_ZONE_URL ?? "").replace(/\/$/, "");
 const docsRedirects = docsZone
   ? []
   : [
-    {
-      source: "/docs",
-      destination: `${docsBase}/`,
-      permanent: true,
-    },
-    {
-      source: "/docs/:path*",
-      destination: `${docsBase}/:path*`,
-      permanent: true,
-    },
-  ];
+      {
+        source: "/docs",
+        destination: `${docsBase}/`,
+        permanent: true,
+      },
+      {
+        source: "/docs/:path*",
+        destination: `${docsBase}/:path*`,
+        permanent: true,
+      },
+    ];
 
 const nextConfig: NextConfig = {
   compress: true,
@@ -28,9 +28,7 @@ const nextConfig: NextConfig = {
     globalNotFound: true,
   },
   images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "cdn.nowly.me" },
-    ],
+    remotePatterns: [{ protocol: "https", hostname: "cdn.nowly.me" }],
   },
   async rewrites() {
     if (!docsZone) return [];

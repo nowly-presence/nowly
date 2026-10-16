@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, type FC, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  type FC,
+  type ReactNode,
+} from "react";
 
 type SidebarContextValue = {
   open: boolean;
@@ -14,7 +20,9 @@ const SidebarProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <SidebarContext.Provider value={{ open, setOpen, toggle: () => setOpen((v) => !v) }}>
+    <SidebarContext.Provider
+      value={{ open, setOpen, toggle: () => setOpen((v) => !v) }}
+    >
       {children}
     </SidebarContext.Provider>
   );

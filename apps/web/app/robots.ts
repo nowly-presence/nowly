@@ -1,4 +1,8 @@
-import { CANONICAL_ORIGIN, DOCS_ORIGIN, isSeoPreview } from "@/features/seo/lib/seo";
+import {
+  CANONICAL_ORIGIN,
+  DOCS_ORIGIN,
+  isSeoPreview,
+} from "@/features/seo/lib/seo";
 import type { MetadataRoute } from "next";
 
 const robots = (): MetadataRoute.Robots => {

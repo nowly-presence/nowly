@@ -13,27 +13,27 @@ export type ExtensionRequestType =
   | "NOWLY_SESSION";
 
 export type ExtensionDeviceInfo = {
-  deviceId: string | null
-  deviceToken: string | null
+  deviceId: string | null;
+  deviceToken: string | null;
 };
 
 export type ExtensionDiagnostic = {
-  extensionInstalled: boolean
-  userScriptsActive: boolean
-  hostDetected: boolean
-  discordConnected: boolean
-  presenceInstalled: boolean
-  activityDetected: boolean
+  extensionInstalled: boolean;
+  userScriptsActive: boolean;
+  hostDetected: boolean;
+  discordConnected: boolean;
+  presenceInstalled: boolean;
+  activityDetected: boolean;
 };
 
 export type InstalledPresenceInfo = {
-  version: string | null
+  version: string | null;
 };
 
 type PendingRequest = {
-  resolve: (payload: unknown) => void
-  reject: (error: Error) => void
-  type: string
+  resolve: (payload: unknown) => void;
+  reject: (error: Error) => void;
+  type: string;
 };
 
 type DetectedListener = (detected: boolean) => void;
@@ -77,8 +77,14 @@ const stopPing = (): void => {
 const onWindowMessage = (event: MessageEvent): void => {
   const data = event.data;
   if (!data || typeof data !== "object") return;
-  const message = data as { source?: unknown; type?: unknown; messageId?: unknown; payload?: unknown };
-  if (message.source !== EXT_WEB_SOURCE || typeof message.type !== "string") return;
+  const message = data as {
+    source?: unknown;
+    type?: unknown;
+    messageId?: unknown;
+    payload?: unknown;
+  };
+  if (message.source !== EXT_WEB_SOURCE || typeof message.type !== "string")
+    return;
 
   if (message.type === "EXT_DETECTED") {
     stopPing();
@@ -116,7 +122,9 @@ const startDetection = (): void => {
 
 export const getExtensionDetected = (): boolean | null => detected;
 
-export const subscribeExtensionDetected = (listener: DetectedListener): (() => void) => {
+export const subscribeExtensionDetected = (
+  listener: DetectedListener,
+): (() => void) => {
   detectedListeners.add(listener);
   startDetection();
   if (detected !== null) listener(detected);
@@ -128,7 +136,9 @@ export const subscribeExtensionDetected = (listener: DetectedListener): (() => v
 export const requestExtension = async <T>(
   type: Exclude<ExtensionRequestType, "PING">,
   payload?: unknown,
-  timeoutMs = type === "INSTALL_PRESENCE" || type === "UPDATE_PRESENCE" ? 45000 : 8000,
+  timeoutMs = type === "INSTALL_PRESENCE" || type === "UPDATE_PRESENCE"
+    ? 45000
+    : 8000,
 ): Promise<T> => {
   ensureListener();
   startDetection();
@@ -162,14 +172,18 @@ export const requestExtension = async <T>(
 export const parseInstalledMap = (
   payload: unknown,
 ): Record<string, InstalledPresenceInfo> => {
-  if (!payload || typeof payload !== "object" || Array.isArray(payload)) return {};
+  if (!payload || typeof payload !== "object" || Array.isArray(payload))
+    return {};
   const row = payload as Record<string, unknown>;
   if (row.ok === false) return {};
 
   const installed: Record<string, InstalledPresenceInfo> = {};
   for (const [slug, value] of Object.entries(row)) {
     if (!value || typeof value !== "object") continue;
-    const entry = value as { metadata?: { version?: unknown }; release?: { version?: unknown } };
+    const entry = value as {
+      metadata?: { version?: unknown };
+      release?: { version?: unknown };
+    };
     const releaseVersion = normalizePresenceVersion(entry.release?.version);
     const metadataVersion = normalizePresenceVersion(entry.metadata?.version);
     installed[slug] = { version: releaseVersion ?? metadataVersion };
@@ -184,4 +198,6 @@ export const normalizePresenceVersion = (value: unknown): string | null => {
 };
 
 export const isDevPresenceVersion = (version: string | null): boolean =>
-  Boolean(version && (version.startsWith("0.0.0-dev.") || /-dev\./.test(version)));
+  Boolean(
+    version && (version.startsWith("0.0.0-dev.") || /-dev\./.test(version)),
+  );

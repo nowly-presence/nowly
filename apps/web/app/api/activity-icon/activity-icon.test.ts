@@ -1,9 +1,15 @@
 import { describe, expect, it } from "vitest";
 
 import { GET } from "./[icon]/[file]/route";
-import { ACTIVITY_ICON_COLORS, ACTIVITY_ICON_KEYS, ACTIVITY_ICON_PATHS } from "./activity-icons";
+import {
+  ACTIVITY_ICON_COLORS,
+  ACTIVITY_ICON_KEYS,
+  ACTIVITY_ICON_PATHS,
+} from "./activity-icons";
 
-const request = new Request("https://nowly.me/api/activity-icon/test/test.png?v=1");
+const request = new Request(
+  "https://nowly.me/api/activity-icon/test/test.png?v=1",
+);
 
 const render = (icon: string, file: string) =>
   GET(request, { params: Promise.resolve({ icon, file }) });
@@ -27,12 +33,16 @@ describe("activity icon route", () => {
 
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toBe("image/png");
-    expect(response.headers.get("cache-control")).toBe("public, max-age=31536000, immutable");
+    expect(response.headers.get("cache-control")).toBe(
+      "public, max-age=31536000, immutable",
+    );
   });
 
   it("keeps the path table aligned with the 24 icon keys", () => {
     expect(ACTIVITY_ICON_KEYS).toHaveLength(24);
-    expect(Object.keys(ACTIVITY_ICON_PATHS).sort()).toEqual([...ACTIVITY_ICON_KEYS].sort());
+    expect(Object.keys(ACTIVITY_ICON_PATHS).sort()).toEqual(
+      [...ACTIVITY_ICON_KEYS].sort(),
+    );
     expect(ACTIVITY_ICON_COLORS).toHaveLength(10);
   });
 });

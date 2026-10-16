@@ -25,27 +25,36 @@ export const GET = async (_request: Request, { params }: RouteContext) => {
   const colorMatch = COLOR_FILE_PATTERN.exec(file);
   const color = colorMatch?.[1];
 
-  if (!isActivityIconKey(icon) || !color || !ACTIVITY_ICON_COLORS.includes(color as (typeof ACTIVITY_ICON_COLORS)[number])) {
+  if (
+    !isActivityIconKey(icon) ||
+    !color ||
+    !ACTIVITY_ICON_COLORS.includes(
+      color as (typeof ACTIVITY_ICON_COLORS)[number],
+    )
+  ) {
     return notFound();
   }
 
   const response = new ImageResponse(
-    (
-      <div
-        style={{
-          alignItems: "center",
-          backgroundColor: `#${color}`,
-          display: "flex",
-          height: "512px",
-          justifyContent: "center",
-          width: "512px",
-        }}
+    <div
+      style={{
+        alignItems: "center",
+        backgroundColor: `#${color}`,
+        display: "flex",
+        height: "512px",
+        justifyContent: "center",
+        width: "512px",
+      }}
+    >
+      <svg
+        height="236"
+        viewBox="0 0 24 24"
+        width="236"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <svg height="236" viewBox="0 0 24 24" width="236" xmlns="http://www.w3.org/2000/svg">
-          <path d={ACTIVITY_ICON_PATHS[icon]} fill="#ffffff" />
-        </svg>
-      </div>
-    ),
+        <path d={ACTIVITY_ICON_PATHS[icon]} fill="#ffffff" />
+      </svg>
+    </div>,
     { height: 512, width: 512 },
   );
 

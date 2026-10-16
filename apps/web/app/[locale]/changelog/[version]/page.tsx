@@ -1,6 +1,9 @@
 import { ChangelogReleaseView } from "@/features/changelog/components/changelog-view";
 import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
-import { getChangelogRelease, parseChangelogVersion } from "@/features/changelog/lib/changelog-releases";
+import {
+  getChangelogRelease,
+  parseChangelogVersion,
+} from "@/features/changelog/lib/changelog-releases";
 import { createMetadata } from "@/features/seo/lib/seo";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -9,13 +12,18 @@ import { notFound } from "next/navigation";
 export const revalidate = 3600;
 
 type ChangelogVersionPageProps = {
-  params: Promise<{ version: string }>
+  params: Promise<{ version: string }>;
 };
 
-export const generateMetadata = async ({ params }: ChangelogVersionPageProps): Promise<Metadata> => {
+export const generateMetadata = async ({
+  params,
+}: ChangelogVersionPageProps): Promise<Metadata> => {
   const { version: raw } = await params;
   const parsed = parseChangelogVersion(raw);
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("changelogPage")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("changelogPage"),
+  ]);
 
   if (!parsed) {
     return createMetadata({
@@ -45,14 +53,21 @@ const Page = async ({ params }: ChangelogVersionPageProps) => {
   const parsed = parseChangelogVersion(raw);
   if (!parsed) notFound();
 
-  const [t, locale] = await Promise.all([getTranslations("changelogPage"), getLocale()]);
+  const [t, locale] = await Promise.all([
+    getTranslations("changelogPage"),
+    getLocale(),
+  ]);
   const release = getChangelogRelease(parsed.version, locale);
 
   return (
     <>
       <WebPageJsonLd
         name={t("meta-title", { version: parsed.version })}
-        description={release ? t("update-description", { version: parsed.version }) : t("missing")}
+        description={
+          release
+            ? t("update-description", { version: parsed.version })
+            : t("missing")
+        }
         path={`/changelog/${parsed.version}`}
       />
       <ChangelogReleaseView version={parsed.version} release={release} />

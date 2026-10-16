@@ -1,19 +1,24 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ['src/index.ts'],
-  format: ['esm'],
+  entry: ["src/index.ts"],
+  format: ["esm"],
   clean: true,
   splitting: false,
   treeshake: true,
   minify: false,
   sourcemap: false,
-  target: 'node22',
+  target: "node22",
   shims: true,
-  noExternal: ['@nowly/analytics', '@nowly/env', '@nowly/locales', '@nowly/shared'],
+  noExternal: [
+    "@nowly/analytics",
+    "@nowly/env",
+    "@nowly/locales",
+    "@nowly/shared",
+  ],
   esbuildOptions(options) {
     options.alias = {
-      '@': './src',
-    }
+      "@": "./src",
+    };
   },
-})
+});

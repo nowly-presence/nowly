@@ -15,20 +15,31 @@ import type { Metadata, Viewport } from "next";
 import { getTranslations } from "next-intl/server";
 
 type LayoutProps = {
-  params: Promise<{ locale: LocaleString }>
+  params: Promise<{ locale: LocaleString }>;
 };
 
-export const generateMetadata = async ({ params }: LayoutProps): Promise<Metadata> => {
+export const generateMetadata = async ({
+  params,
+}: LayoutProps): Promise<Metadata> => {
   const { locale } = await params;
   const t = await getTranslations("metadata");
   const title = t("title");
   const description = t("description");
-  const imageUrl = absoluteUrl(webOgImage({ title: ogHeadline(title), description }), CANONICAL_ORIGIN);
+  const imageUrl = absoluteUrl(
+    webOgImage({ title: ogHeadline(title), description }),
+    CANONICAL_ORIGIN,
+  );
   const languages: Record<string, string> = {
-    "x-default": absoluteUrl(getPathname({ locale: routing.defaultLocale, href: "/" }), CANONICAL_ORIGIN),
+    "x-default": absoluteUrl(
+      getPathname({ locale: routing.defaultLocale, href: "/" }),
+      CANONICAL_ORIGIN,
+    ),
   };
   for (const target of routing.locales) {
-    languages[target] = absoluteUrl(getPathname({ locale: target, href: "/" }), CANONICAL_ORIGIN);
+    languages[target] = absoluteUrl(
+      getPathname({ locale: target, href: "/" }),
+      CANONICAL_ORIGIN,
+    );
   }
   const adsenseClient = adsenseClientId();
 
@@ -47,7 +58,10 @@ export const generateMetadata = async ({ params }: LayoutProps): Promise<Metadat
     manifest: "/manifest.json",
     icons: BRAND_METADATA_ICONS,
     alternates: {
-      canonical: absoluteUrl(getPathname({ locale, href: "/" }), CANONICAL_ORIGIN),
+      canonical: absoluteUrl(
+        getPathname({ locale, href: "/" }),
+        CANONICAL_ORIGIN,
+      ),
       languages,
     },
     openGraph: {
@@ -66,7 +80,9 @@ export const generateMetadata = async ({ params }: LayoutProps): Promise<Metadat
       images: [imageUrl],
     },
     // Site ownership for AdSense review. A meta tag only: no script, no cookie.
-    ...(adsenseClient ? { other: { "google-adsense-account": adsenseClient } } : {}),
+    ...(adsenseClient
+      ? { other: { "google-adsense-account": adsenseClient } }
+      : {}),
   };
 };
 

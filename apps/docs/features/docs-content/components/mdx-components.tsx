@@ -26,7 +26,10 @@ const createSeparatedComponent = (
   displayName: string,
 ): ComponentType<Record<string, unknown>> => {
   const WrappedComponent: FC<Record<string, unknown>> = (props) => (
-    <div className="mb-2 [&+div[data-component]]:mt-6" data-component={displayName}>
+    <div
+      className="mb-2 [&+div[data-component]]:mt-6"
+      data-component={displayName}
+    >
       <Component {...props} />
     </div>
   );
@@ -37,25 +40,45 @@ const createSeparatedComponent = (
 
 export const mdxComponents: MDXComponents = {
   h1: (({ children, id, ...props }) => (
-    <HeadingAnchor as="h1" id={id} className="text-3xl font-semibold mb-6 mt-0" {...props}>
+    <HeadingAnchor
+      as="h1"
+      id={id}
+      className="text-3xl font-semibold mb-6 mt-0"
+      {...props}
+    >
       {children}
     </HeadingAnchor>
   )) as FC<{ children?: ReactNode; id?: string }>,
 
   h2: (({ children, id, ...props }) => (
-    <HeadingAnchor as="h2" id={id} className="text-2xl font-semibold mt-10 mb-3" {...props}>
+    <HeadingAnchor
+      as="h2"
+      id={id}
+      className="text-2xl font-semibold mt-10 mb-3"
+      {...props}
+    >
       {children}
     </HeadingAnchor>
   )) as FC<{ children?: ReactNode; id?: string }>,
 
   h3: (({ children, id, ...props }) => (
-    <HeadingAnchor as="h3" id={id} className="text-xl font-semibold mt-8 mb-3" {...props}>
+    <HeadingAnchor
+      as="h3"
+      id={id}
+      className="text-xl font-semibold mt-8 mb-3"
+      {...props}
+    >
       {children}
     </HeadingAnchor>
   )) as FC<{ children?: ReactNode; id?: string }>,
 
   h4: (({ children, id, ...props }) => (
-    <HeadingAnchor as="h4" id={id} className="text-lg font-semibold mt-6 mb-2" {...props}>
+    <HeadingAnchor
+      as="h4"
+      id={id}
+      className="text-lg font-semibold mt-6 mb-2"
+      {...props}
+    >
       {children}
     </HeadingAnchor>
   )) as FC<{ children?: ReactNode; id?: string }>,
@@ -65,11 +88,15 @@ export const mdxComponents: MDXComponents = {
   )) as FC<{ children?: ReactNode }>,
 
   ul: (({ children }) => (
-    <ul className="mb-6 list-disc space-y-2 pl-5 text-foreground/85">{children}</ul>
+    <ul className="mb-6 list-disc space-y-2 pl-5 text-foreground/85">
+      {children}
+    </ul>
   )) as FC<{ children?: ReactNode }>,
 
   ol: (({ children }) => (
-    <ol className="mb-4 space-y-1.5 list-decimal list-inside text-foreground/85">{children}</ol>
+    <ol className="mb-4 space-y-1.5 list-decimal list-inside text-foreground/85">
+      {children}
+    </ol>
   )) as FC<{ children?: ReactNode }>,
 
   li: (({ children }) => (
@@ -94,7 +121,10 @@ export const mdxComponents: MDXComponents = {
     }
 
     return (
-      <code className="rounded bg-card-2 px-1.5 py-0.5 text-sm font-mono text-accent" {...props}>
+      <code
+        className="rounded bg-card-2 px-1.5 py-0.5 text-sm font-mono text-accent"
+        {...props}
+      >
         {children}
       </code>
     );
@@ -110,14 +140,26 @@ export const mdxComponents: MDXComponents = {
 
   a: (({ href, children }) => {
     const isExternal = href?.startsWith("http");
-    const className = "text-accent underline underline-offset-2 decoration-accent/30 hover:decoration-accent transition-colors";
+    const className =
+      "text-accent underline underline-offset-2 decoration-accent/30 hover:decoration-accent transition-colors";
 
-    if (href && WEBSITE_PATHS.some((path) => href === path || href.startsWith(`${path}/`))) {
-      return <a href={`${SITE_URL}${href}`} className={className}>{children}</a>;
+    if (
+      href &&
+      WEBSITE_PATHS.some((path) => href === path || href.startsWith(`${path}/`))
+    ) {
+      return (
+        <a href={`${SITE_URL}${href}`} className={className}>
+          {children}
+        </a>
+      );
     }
 
     if (href?.startsWith("/")) {
-      return <Link href={href} className={className}>{children}</Link>;
+      return (
+        <Link href={href} className={className}>
+          {children}
+        </Link>
+      );
     }
 
     return (
@@ -144,7 +186,9 @@ export const mdxComponents: MDXComponents = {
     <thead className="border-b border-border">{children}</thead>
   )) as FC<{ children?: ReactNode }>,
 
-  tbody: (({ children }) => <tbody>{children}</tbody>) as FC<{ children?: ReactNode }>,
+  tbody: (({ children }) => <tbody>{children}</tbody>) as FC<{
+    children?: ReactNode;
+  }>,
 
   tr: (({ children }) => (
     <tr className="border-b border-border/50 last:border-0">{children}</tr>
@@ -160,9 +204,16 @@ export const mdxComponents: MDXComponents = {
     <td className="px-4 py-3 text-foreground/85">{children}</td>
   )) as FC<{ children?: ReactNode }>,
 
-  Callout: (({ type = "info", children }: { type?: "info" | "warning" | "error"; children?: ReactNode }) => (
-    <Callout type={type}>{children}</Callout>
-  )) as FC<{ type?: "info" | "warning" | "error"; children?: ReactNode }>,
+  Callout: (({
+    type = "info",
+    children,
+  }: {
+    type?: "info" | "warning" | "error";
+    children?: ReactNode;
+  }) => <Callout type={type}>{children}</Callout>) as FC<{
+    type?: "info" | "warning" | "error";
+    children?: ReactNode;
+  }>,
 
   CalloutInfo: (({ children }: { children?: ReactNode }) => (
     <Callout type="info">{children}</Callout>
@@ -173,7 +224,10 @@ export const mdxComponents: MDXComponents = {
   )) as FC<{ children?: ReactNode }>,
 
   TypeTable: createSeparatedComponent(TypeTable, "TypeTable"),
-  LanguageTable: createSeparatedComponent(LanguageTable as ComponentType<Record<string, unknown>>, "LanguageTable"),
+  LanguageTable: createSeparatedComponent(
+    LanguageTable as ComponentType<Record<string, unknown>>,
+    "LanguageTable",
+  ),
 
   Steps: Steps as ComponentType<Record<string, unknown>>,
   Step: Step as ComponentType<Record<string, unknown>>,

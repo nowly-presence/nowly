@@ -14,7 +14,9 @@ const HIDE_ARC = STEP * 3.55;
 const DESKTOP_QUERY = "(min-width: 1024px)";
 
 const shortest = (delta: number) => {
-  const wrapped = ((((delta + Math.PI) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) - Math.PI;
+  const wrapped =
+    ((((delta + Math.PI) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) -
+    Math.PI;
   return wrapped;
 };
 
@@ -32,7 +34,9 @@ export const HeroCards = () => {
 
     const items = [...stage.querySelectorAll<HTMLElement>("[data-gondola]")];
     const desktop = window.matchMedia(DESKTOP_QUERY);
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
     let width = 0;
     let height = 0;
@@ -67,8 +71,15 @@ export const HeroCards = () => {
 
         let opacity = 1;
         if (absDelta > HIDE_ARC) opacity = 0;
-        else if (absDelta > GHOST_ARC) opacity = 0.32 * (1 - smoothstep((absDelta - GHOST_ARC) / (HIDE_ARC - GHOST_ARC)));
-        else if (absDelta > OPAQUE_ARC) opacity = 1 - 0.68 * smoothstep((absDelta - OPAQUE_ARC) / (GHOST_ARC - OPAQUE_ARC));
+        else if (absDelta > GHOST_ARC)
+          opacity =
+            0.32 *
+            (1 - smoothstep((absDelta - GHOST_ARC) / (HIDE_ARC - GHOST_ARC)));
+        else if (absDelta > OPAQUE_ARC)
+          opacity =
+            1 -
+            0.68 *
+              smoothstep((absDelta - OPAQUE_ARC) / (GHOST_ARC - OPAQUE_ARC));
 
         const proximity = 1 - Math.min(absDelta / SCALE_ARC, 1);
         const scale = 0.62 + 0.38 * proximity ** 0.85;
@@ -78,13 +89,17 @@ export const HeroCards = () => {
         const left = x - half;
 
         if (left >= roomRight) opacity = 0;
-        else if (x + half > roomRight) opacity *= smoothstep((roomRight - left) / Math.max(half * 2, 1));
+        else if (x + half > roomRight)
+          opacity *= smoothstep((roomRight - left) / Math.max(half * 2, 1));
 
         el.style.width = `${cardW}px`;
         el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${scale})`;
         el.style.opacity = String(opacity);
         el.style.zIndex = String(Math.round(proximity * 100));
-        el.style.filter = absDelta > OPAQUE_ARC && opacity > 0 ? `blur(${((absDelta - OPAQUE_ARC) * 2.4).toFixed(2)}px)` : "none";
+        el.style.filter =
+          absDelta > OPAQUE_ARC && opacity > 0
+            ? `blur(${((absDelta - OPAQUE_ARC) * 2.4).toFixed(2)}px)`
+            : "none";
         el.style.visibility = opacity < 0.01 ? "hidden" : "visible";
       }
     };
@@ -117,7 +132,8 @@ export const HeroCards = () => {
         return;
       }
       stop();
-      origin = performance.now() - ((spin - Math.PI) / (Math.PI * 2)) * PERIOD_MS;
+      origin =
+        performance.now() - ((spin - Math.PI) / (Math.PI * 2)) * PERIOD_MS;
       frame = requestAnimationFrame(tick);
     };
 
@@ -154,7 +170,8 @@ export const HeroCards = () => {
       spin += event.deltaY / 900;
       render();
       if (!reduced) {
-        origin = performance.now() - ((spin - Math.PI) / (Math.PI * 2)) * PERIOD_MS;
+        origin =
+          performance.now() - ((spin - Math.PI) / (Math.PI * 2)) * PERIOD_MS;
         frame = requestAnimationFrame(tick);
       }
     };
@@ -199,9 +216,11 @@ export const HeroCards = () => {
     };
   }, []);
 
-
   return (
-    <div ref={stageRef} className="relative isolate hidden h-[min(58vh,560px)] w-full overflow-visible lg:block">
+    <div
+      ref={stageRef}
+      className="relative isolate hidden h-[min(58vh,560px)] w-full overflow-visible lg:block"
+    >
       <div
         className="pointer-events-none absolute left-[18%] top-1/2 h-[70%] w-[58%] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.24),transparent_68%)] blur-3xl"
         aria-hidden

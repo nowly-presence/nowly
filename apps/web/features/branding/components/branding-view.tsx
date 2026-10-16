@@ -19,23 +19,63 @@ import { Card, CardContent, ButtonAnchor } from "@nowly/ui";
 import { getTranslations } from "next-intl/server";
 
 type ColorVariant = {
-  key: "blue" | "dark" | "white" | "canary"
-  svg: string
-  png: string
-  bg: string
+  key: "blue" | "dark" | "white" | "canary";
+  svg: string;
+  png: string;
+  bg: string;
 };
 
 const logoVariants: ColorVariant[] = [
-  { key: "blue", svg: BRAND_LOCKUP_BLUE, png: BRAND_LOCKUP_BLUE_PNG, bg: "bg-[#07080c]" },
-  { key: "dark", svg: BRAND_LOCKUP_DARK, png: BRAND_LOCKUP_BLUE_PNG, bg: "bg-[#eef5fc]" },
-  { key: "white", svg: BRAND_LOCKUP_WHITE, png: BRAND_LOCKUP_WHITE_PNG, bg: "bg-[#07080c]" },
-  { key: "canary", svg: BRAND_LOCKUP_CANARY, png: BRAND_LOCKUP_CANARY_PNG, bg: "bg-[#07080c]" },
+  {
+    key: "blue",
+    svg: BRAND_LOCKUP_BLUE,
+    png: BRAND_LOCKUP_BLUE_PNG,
+    bg: "bg-[#07080c]",
+  },
+  {
+    key: "dark",
+    svg: BRAND_LOCKUP_DARK,
+    png: BRAND_LOCKUP_BLUE_PNG,
+    bg: "bg-[#eef5fc]",
+  },
+  {
+    key: "white",
+    svg: BRAND_LOCKUP_WHITE,
+    png: BRAND_LOCKUP_WHITE_PNG,
+    bg: "bg-[#07080c]",
+  },
+  {
+    key: "canary",
+    svg: BRAND_LOCKUP_CANARY,
+    png: BRAND_LOCKUP_CANARY_PNG,
+    bg: "bg-[#07080c]",
+  },
 ];
 
-const iconVariants: Array<{ key: "blue" | "dark" | "white"; svg: string; png: string; bg: string }> = [
-  { key: "blue", svg: BRAND_ICON_BLUE, png: BRAND_ICON_BLUE_PNG, bg: "bg-[#07080c]" },
-  { key: "dark", svg: BRAND_ICON_DARK, png: BRAND_ICON_DARK_PNG, bg: "bg-[#eef5fc]" },
-  { key: "white", svg: BRAND_ICON_WHITE, png: BRAND_ICON_WHITE_PNG, bg: "bg-[#07080c]" },
+const iconVariants: Array<{
+  key: "blue" | "dark" | "white";
+  svg: string;
+  png: string;
+  bg: string;
+}> = [
+  {
+    key: "blue",
+    svg: BRAND_ICON_BLUE,
+    png: BRAND_ICON_BLUE_PNG,
+    bg: "bg-[#07080c]",
+  },
+  {
+    key: "dark",
+    svg: BRAND_ICON_DARK,
+    png: BRAND_ICON_DARK_PNG,
+    bg: "bg-[#eef5fc]",
+  },
+  {
+    key: "white",
+    svg: BRAND_ICON_WHITE,
+    png: BRAND_ICON_WHITE_PNG,
+    bg: "bg-[#07080c]",
+  },
 ];
 
 const colorSwatches = [
@@ -73,16 +113,34 @@ export const BrandingView = async () => {
             {logoVariants.map((variant) => (
               <Card key={variant.key}>
                 <CardContent className="flex flex-col gap-4">
-                  <div className={`flex h-44 items-center justify-center rounded-[12px] ${variant.bg}`}>
-                    <img src={variant.svg} alt="Nowly" className="h-16 w-auto" />
+                  <div
+                    className={`flex h-44 items-center justify-center rounded-[12px] ${variant.bg}`}
+                  >
+                    <img
+                      src={variant.svg}
+                      alt="Nowly"
+                      className="h-16 w-auto"
+                    />
                   </div>
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm font-medium text-foreground">{t(`variants.${variant.key}`)}</p>
+                    <p className="text-sm font-medium text-foreground">
+                      {t(`variants.${variant.key}`)}
+                    </p>
                     <div className="flex gap-2">
-                      <ButtonAnchor href={variant.svg} download variant="outline" size="sm">
+                      <ButtonAnchor
+                        href={variant.svg}
+                        download
+                        variant="outline"
+                        size="sm"
+                      >
                         {t("download-svg")}
                       </ButtonAnchor>
-                      <ButtonAnchor href={variant.png} download variant="outline" size="sm">
+                      <ButtonAnchor
+                        href={variant.png}
+                        download
+                        variant="outline"
+                        size="sm"
+                      >
                         {t("download-png")}
                       </ButtonAnchor>
                     </div>
@@ -101,16 +159,30 @@ export const BrandingView = async () => {
             {iconVariants.map((variant) => (
               <Card key={variant.key}>
                 <CardContent className="flex flex-col gap-4">
-                  <div className={`flex h-32 items-center justify-center rounded-[12px] ${variant.bg}`}>
+                  <div
+                    className={`flex h-32 items-center justify-center rounded-[12px] ${variant.bg}`}
+                  >
                     <img src={variant.svg} alt="Nowly" className="size-14" />
                   </div>
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm font-medium text-foreground">{t(`variants.${variant.key}`)}</p>
+                    <p className="text-sm font-medium text-foreground">
+                      {t(`variants.${variant.key}`)}
+                    </p>
                     <div className="flex gap-2">
-                      <ButtonAnchor href={variant.svg} download variant="outline" size="sm">
+                      <ButtonAnchor
+                        href={variant.svg}
+                        download
+                        variant="outline"
+                        size="sm"
+                      >
                         {t("download-svg")}
                       </ButtonAnchor>
-                      <ButtonAnchor href={variant.png} download variant="outline" size="sm">
+                      <ButtonAnchor
+                        href={variant.png}
+                        download
+                        variant="outline"
+                        size="sm"
+                      >
                         {t("download-png")}
                       </ButtonAnchor>
                     </div>
@@ -127,11 +199,18 @@ export const BrandingView = async () => {
           </h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
             {colorSwatches.map((swatch) => (
-              <div key={swatch.key} className="overflow-hidden rounded-[12px] border border-border">
+              <div
+                key={swatch.key}
+                className="overflow-hidden rounded-[12px] border border-border"
+              >
                 <div className="h-20" style={{ backgroundColor: swatch.hex }} />
                 <div className="p-3">
-                  <p className="text-xs font-medium text-foreground">{t(`swatches.${swatch.key}`)}</p>
-                  <p className="mt-0.5 font-mono text-xs text-muted-foreground">{swatch.hex}</p>
+                  <p className="text-xs font-medium text-foreground">
+                    {t(`swatches.${swatch.key}`)}
+                  </p>
+                  <p className="mt-0.5 font-mono text-xs text-muted-foreground">
+                    {swatch.hex}
+                  </p>
                 </div>
               </div>
             ))}

@@ -8,7 +8,14 @@ import { ExpandableContent } from "@/features/content/components/expandable-cont
 import { MarkdownBody } from "@/features/content/components/markdown-body";
 import type { ContentEntry } from "@/features/content/lib/content-files";
 import { formatChangelogDate } from "@/features/changelog/lib/format-changelog-date";
-import { Alert, AlertDescription, AlertTitle, Card, CardContent, CardTitle } from "@nowly/ui";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Card,
+  CardContent,
+  CardTitle,
+} from "@nowly/ui";
 import { FALLBACK_LOCALE, getValidLocale } from "@nowly/locales";
 
 import {
@@ -19,27 +26,45 @@ import {
   type LibraryPresence,
 } from "@/lib/library-catalog";
 import type { PresenceStats, PresenceVersionNote } from "@/lib/presence-api";
-import { RiArrowLeftLine, RiCheckboxCircleLine, RiInformationLine, RiTranslate2 } from "@nowly/ui/icons";
+import {
+  RiArrowLeftLine,
+  RiCheckboxCircleLine,
+  RiInformationLine,
+  RiTranslate2,
+} from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
 type PresenceViewProps = {
-  presence: LibraryPresence
-  catalog: LibraryPresence[]
-  locale: string
-  versions: PresenceVersionNote[]
-  stats: PresenceStats
-  guide?: ContentEntry | null
+  presence: LibraryPresence;
+  catalog: LibraryPresence[];
+  locale: string;
+  versions: PresenceVersionNote[];
+  stats: PresenceStats;
+  guide?: ContentEntry | null;
 };
 
-export const PresenceView = async ({ presence, catalog, locale, versions, stats, guide }: PresenceViewProps) => {
+export const PresenceView = async ({
+  presence,
+  catalog,
+  locale,
+  versions,
+  stats,
+  guide,
+}: PresenceViewProps) => {
   const t = await getTranslations("presencePage");
   const library = await getTranslations("libraryPage");
   const description = localizedDescription(presence, locale);
   const about = localizedLongDescription(presence, locale);
   const features = localizedFeatures(presence, locale);
   const related = relatedPresences(catalog, presence);
-  const currentVersion = versions.find((entry) => entry.version === presence.version) ?? versions[0] ?? null;
-  const currentNote = currentVersion?.note[getValidLocale(locale)] || currentVersion?.note[FALLBACK_LOCALE] || "";
+  const currentVersion =
+    versions.find((entry) => entry.version === presence.version) ??
+    versions[0] ??
+    null;
+  const currentNote =
+    currentVersion?.note[getValidLocale(locale)] ||
+    currentVersion?.note[FALLBACK_LOCALE] ||
+    "";
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
@@ -52,7 +77,11 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats,
         <div className="mt-8 grid items-start gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(17rem,0.8fr)] lg:gap-8">
           <div className="flex flex-col gap-6">
             <Card className="gap-0 py-0">
-              <LibraryMedia slug={presence.slug} name={presence.name} variant="hero" />
+              <LibraryMedia
+                slug={presence.slug}
+                name={presence.name}
+                variant="hero"
+              />
               <CardContent className="pt-6 pb-8 sm:pt-8">
                 <p className="text-[0.7rem] font-medium uppercase tracking-[0.16em] text-accent">
                   {library(`categories.${presence.category}`)}
@@ -81,7 +110,9 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats,
                 {about && about !== description ? (
                   <div className="mt-8 border-t border-foreground/8 pt-8">
                     <CardTitle>{t("about")}</CardTitle>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{about}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                      {about}
+                    </p>
                   </div>
                 ) : null}
               </CardContent>
@@ -89,13 +120,17 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats,
             {guide ? (
               <Card className="gap-0 py-0">
                 <CardContent className="pt-7 pb-8 sm:px-8 sm:pt-8">
-                  <p className="text-[0.7rem] font-medium uppercase tracking-[0.16em] text-accent">{t("guide-eyebrow")}</p>
+                  <p className="text-[0.7rem] font-medium uppercase tracking-[0.16em] text-accent">
+                    {t("guide-eyebrow")}
+                  </p>
                   <h2 className="mt-2 text-pretty text-[1.6rem] font-medium leading-tight tracking-tight text-foreground">
                     {guide.meta.title ?? presence.name}
                   </h2>
                   {guide.meta.updated ? (
                     <p className="mt-2 text-sm text-muted-foreground">
-                      {t("guide-updated", { date: formatChangelogDate(guide.meta.updated, locale) })}
+                      {t("guide-updated", {
+                        date: formatChangelogDate(guide.meta.updated, locale),
+                      })}
                     </p>
                   ) : null}
                   {!guide.translated ? (
@@ -104,7 +139,11 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats,
                       <AlertDescription>{t("guide-fallback")}</AlertDescription>
                     </Alert>
                   ) : null}
-                  <ExpandableContent className="mt-6" openLabel={t("guide-open")} closeLabel={t("guide-close")}>
+                  <ExpandableContent
+                    className="mt-6"
+                    openLabel={t("guide-open")}
+                    closeLabel={t("guide-close")}
+                  >
                     <MarkdownBody blocks={guide.blocks} />
                   </ExpandableContent>
                 </CardContent>
@@ -113,14 +152,22 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats,
           </div>
 
           <div className="flex flex-col gap-4">
-            <PresenceInfo presence={presence} commit={currentVersion?.commit ?? null} changelog={currentNote} stats={stats} />
+            <PresenceInfo
+              presence={presence}
+              commit={currentVersion?.commit ?? null}
+              changelog={currentNote}
+              stats={stats}
+            />
             {features.length > 0 ? (
               <Card size="sm">
                 <CardContent>
                   <CardTitle>{t("features")}</CardTitle>
                   <ul className="mt-4 flex flex-col gap-3">
                     {features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground">
+                      <li
+                        key={feature}
+                        className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground"
+                      >
                         <RiCheckboxCircleLine className="mt-0.5 size-5 shrink-0 text-accent" />
                         <span>{feature}</span>
                       </li>

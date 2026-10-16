@@ -5,8 +5,6 @@ import type { FC, ReactNode } from "react";
 import { useState } from "react";
 import { cn } from "@nowly/ui";
 
-
-
 type FaqItem = {
   question: string;
   answer: string | ReactNode;
@@ -84,7 +82,12 @@ export const Faq: FC<FaqProps> = ({
   };
 
   return (
-    <div className={cn("my-6 overflow-hidden rounded-lg border border-border", className)}>
+    <div
+      className={cn(
+        "my-6 overflow-hidden rounded-lg border border-border",
+        className,
+      )}
+    >
       {title && (
         <div className="bg-muted/50 border-border/50 border-b px-4 py-3">
           <h3 className="text-foreground flex items-center gap-2 text-sm font-semibold">
@@ -92,9 +95,7 @@ export const Faq: FC<FaqProps> = ({
             {title}
           </h3>
           {description && (
-            <p className="text-muted-foreground mt-1 text-xs">
-              {description}
-            </p>
+            <p className="text-muted-foreground mt-1 text-xs">{description}</p>
           )}
         </div>
       )}

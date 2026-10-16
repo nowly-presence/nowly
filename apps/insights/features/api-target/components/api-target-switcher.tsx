@@ -1,7 +1,18 @@
 "use client";
 
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@nowly/ui";
-import { getClientApiTarget, setClientApiTarget, type ApiTarget } from "@/features/api-target/lib/api-target";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@nowly/ui";
+import {
+  getClientApiTarget,
+  setClientApiTarget,
+  type ApiTarget,
+} from "@/features/api-target/lib/api-target";
 import { RiCloudLine } from "@nowly/ui/icons";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

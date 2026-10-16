@@ -1,8 +1,8 @@
-import "dotenv/config"
-import { createEnv } from "@t3-oss/env-core"
-import { z } from "zod"
+import "dotenv/config";
+import { createEnv } from "@t3-oss/env-core";
+import { z } from "zod";
 
-const required = z.string().trim().min(1)
+const required = z.string().trim().min(1);
 
 export const cliEnv = createEnv({
   server: {
@@ -19,4 +19,4 @@ export const cliEnv = createEnv({
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
   skipValidation: process.env.SKIP_ENV_VALIDATION === "true",
-})
+});

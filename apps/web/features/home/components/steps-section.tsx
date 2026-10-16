@@ -1,16 +1,18 @@
 import { ExtensionStoreButton } from "@/components/extension-store-button";
-import { homeSectionAltClass, SectionHeading } from "@/features/home/components/section-heading";
+import {
+  homeSectionAltClass,
+  SectionHeading,
+} from "@/features/home/components/section-heading";
 import { ButtonLink } from "@/components/button-link";
 import { cn } from "@nowly/ui/utils";
-
 
 import { RiBookShelfFill, RiWindow2Fill } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
 type StepItem = {
-  title: string
-  text: string
-  action: string
+  title: string;
+  text: string;
+  action: string;
 };
 
 const actions = [
@@ -44,8 +46,17 @@ export const StepsSection = async () => {
   const items = t.raw("items") as StepItem[];
 
   return (
-    <section className={cn("home-section-deferred px-5 py-28 sm:px-6 sm:py-36", homeSectionAltClass)}>
-      <SectionHeading eyebrow={t("eyebrow")} title={t("title")} description={t("description")} />
+    <section
+      className={cn(
+        "home-section-deferred px-5 py-28 sm:px-6 sm:py-36",
+        homeSectionAltClass,
+      )}
+    >
+      <SectionHeading
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("description")}
+      />
 
       <div className="mx-auto mt-12 grid max-w-[1200px] gap-5 md:grid-cols-3">
         {items.map((item, index) => {
@@ -60,8 +71,12 @@ export const StepsSection = async () => {
               </span>
 
               <div className="relative z-10 flex h-full min-h-[150px] flex-col pl-[84px]">
-                <h3 className="text-[1.05rem] font-semibold leading-tight">{item.title}</h3>
-                <p className="mt-2 max-w-[36ch] flex-1 text-sm leading-snug text-cta-muted">{item.text}</p>
+                <h3 className="text-[1.05rem] font-semibold leading-tight">
+                  {item.title}
+                </h3>
+                <p className="mt-2 max-w-[36ch] flex-1 text-sm leading-snug text-cta-muted">
+                  {item.text}
+                </p>
                 <div className="mt-5">{action?.render(item.action)}</div>
               </div>
             </article>

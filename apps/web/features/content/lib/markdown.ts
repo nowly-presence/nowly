@@ -5,7 +5,13 @@ export type Inline =
   | { kind: "link"; href: string; children: Inline[] };
 
 export type Block =
-  | { kind: "heading"; level: 2 | 3; id: string; text: string; children: Inline[] }
+  | {
+      kind: "heading";
+      level: 2 | 3;
+      id: string;
+      text: string;
+      children: Inline[];
+    }
   | { kind: "paragraph"; children: Inline[] }
   | { kind: "list"; ordered: boolean; items: Inline[][] }
   | { kind: "note"; children: Inline[][] }
@@ -26,7 +32,12 @@ export const parseInline = (source: string): Inline[] => {
       nodes.push({ kind: "code", text: part.slice(1, -1) });
     } else {
       const link = /^\[([^\]]+)\]\(([^)\s]+)\)$/.exec(part);
-      if (link) nodes.push({ kind: "link", href: link[2], children: parseInline(link[1]) });
+      if (link)
+        nodes.push({
+          kind: "link",
+          href: link[2],
+          children: parseInline(link[1]),
+        });
       else nodes.push({ kind: "text", text: part });
     }
   }
@@ -34,7 +45,13 @@ export const parseInline = (source: string): Inline[] => {
 };
 
 export const inlineText = (nodes: Inline[]): string =>
-  nodes.map((node) => (node.kind === "text" || node.kind === "code" ? node.text : inlineText(node.children))).join("");
+  nodes
+    .map((node) =>
+      node.kind === "text" || node.kind === "code"
+        ? node.text
+        : inlineText(node.children),
+    )
+    .join("");
 
 export const slugifyHeading = (text: string): string =>
   text
@@ -48,10 +65,19 @@ const LIST_ITEM = /^(\s*)([-*]|\d+\.)\s+(.*)$/;
 const TABLE_DIVIDER = /^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?$/;
 
 const splitRow = (line: string): string[] =>
-  line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((cell) => cell.trim());
+  line
+    .trim()
+    .replace(/^\|/, "")
+    .replace(/\|$/, "")
+    .split("|")
+    .map((cell) => cell.trim());
 
 const isBlockStart = (line: string): boolean =>
-  /^#{2,3}\s/.test(line) || LIST_ITEM.test(line) || line.startsWith(">") || line.startsWith("```") || line.trim().startsWith("|");
+  /^#{2,3}\s/.test(line) ||
+  LIST_ITEM.test(line) ||
+  line.startsWith(">") ||
+  line.startsWith("```") ||
+  line.trim().startsWith("|");
 
 // Parses the small Markdown subset used by content/ and packages/changelog: ## and ### headings,
 // paragraphs, - and 1. lists (one level), > notes, ``` code blocks, pipe tables, **bold**, `code`
@@ -109,17 +135,24 @@ export const parseMarkdown = (source: string): Block[] => {
       while (index < lines.length && lines[index].trim().startsWith(">")) {
         const content = lines[index].trim().replace(/^>\s?/, "");
         if (content) paragraphs[paragraphs.length - 1].push(content);
-        else if (paragraphs[paragraphs.length - 1].length > 0) paragraphs.push([]);
+        else if (paragraphs[paragraphs.length - 1].length > 0)
+          paragraphs.push([]);
         index += 1;
       }
       blocks.push({
         kind: "note",
-        children: paragraphs.filter((part) => part.length > 0).map((part) => parseInline(part.join(" "))),
+        children: paragraphs
+          .filter((part) => part.length > 0)
+          .map((part) => parseInline(part.join(" "))),
       });
       continue;
     }
 
-    if (trimmed.startsWith("|") && index + 1 < lines.length && TABLE_DIVIDER.test(lines[index + 1].trim())) {
+    if (
+      trimmed.startsWith("|") &&
+      index + 1 < lines.length &&
+      TABLE_DIVIDER.test(lines[index + 1].trim())
+    ) {
       const head = splitRow(trimmed).map(parseInline);
       const rows: Inline[][][] = [];
       index += 2;
@@ -143,7 +176,12 @@ export const parseMarkdown = (source: string): Block[] => {
           continue;
         }
         const continuation = lines[index];
-        if (continuation.trim() && /^\s{2,}/.test(continuation) && items.length > 0 && !isBlockStart(continuation.trim())) {
+        if (
+          continuation.trim() &&
+          /^\s{2,}/.test(continuation) &&
+          items.length > 0 &&
+          !isBlockStart(continuation.trim())
+        ) {
           items[items.length - 1] += ` ${continuation.trim()}`;
           index += 1;
           continue;
@@ -154,17 +192,30 @@ export const parseMarkdown = (source: string): Block[] => {
       continue;
     }
 
-    if (trimmed.startsWith("<") || trimmed.startsWith("import ") || trimmed.startsWith("export ")) {
+    if (
+      trimmed.startsWith("<") ||
+      trimmed.startsWith("import ") ||
+      trimmed.startsWith("export ")
+    ) {
       index += 1;
       continue;
     }
 
     const paragraph: string[] = [];
-    while (index < lines.length && lines[index].trim() && !isBlockStart(lines[index].trim()) && !lines[index].trim().startsWith("<")) {
+    while (
+      index < lines.length &&
+      lines[index].trim() &&
+      !isBlockStart(lines[index].trim()) &&
+      !lines[index].trim().startsWith("<")
+    ) {
       paragraph.push(lines[index].trim());
       index += 1;
     }
-    if (paragraph.length > 0) blocks.push({ kind: "paragraph", children: parseInline(paragraph.join(" ")) });
+    if (paragraph.length > 0)
+      blocks.push({
+        kind: "paragraph",
+        children: parseInline(paragraph.join(" ")),
+      });
     else index += 1;
   }
 
@@ -172,7 +223,11 @@ export const parseMarkdown = (source: string): Block[] => {
 };
 
 export const markdownHeadings = (blocks: Block[]): Heading[] =>
-  blocks.flatMap((block) => (block.kind === "heading" ? [{ id: block.id, text: block.text, level: block.level }] : []));
+  blocks.flatMap((block) =>
+    block.kind === "heading"
+      ? [{ id: block.id, text: block.text, level: block.level }]
+      : [],
+  );
 
 const blockText = (block: Block): string => {
   switch (block.kind) {
@@ -200,29 +255,47 @@ const NBSP = "\u00a0";
 export const frenchSpacing = (text: string): string =>
   text.replace(/ ([?!:;»])/g, `${NBSP}$1`).replace(/« /g, `«${NBSP}`);
 
-const mapInline = (nodes: Inline[], transform: (text: string) => string): Inline[] =>
+const mapInline = (
+  nodes: Inline[],
+  transform: (text: string) => string,
+): Inline[] =>
   nodes.map((node) => {
     if (node.kind === "text") return { ...node, text: transform(node.text) };
     if (node.kind === "code") return node;
     return { ...node, children: mapInline(node.children, transform) };
   });
 
-export const mapBlockText = (blocks: Block[], transform: (text: string) => string): Block[] =>
+export const mapBlockText = (
+  blocks: Block[],
+  transform: (text: string) => string,
+): Block[] =>
   blocks.map((block) => {
     switch (block.kind) {
       case "heading":
-        return { ...block, text: transform(block.text), children: mapInline(block.children, transform) };
+        return {
+          ...block,
+          text: transform(block.text),
+          children: mapInline(block.children, transform),
+        };
       case "paragraph":
         return { ...block, children: mapInline(block.children, transform) };
       case "list":
-        return { ...block, items: block.items.map((item) => mapInline(item, transform)) };
+        return {
+          ...block,
+          items: block.items.map((item) => mapInline(item, transform)),
+        };
       case "note":
-        return { ...block, children: block.children.map((part) => mapInline(part, transform)) };
+        return {
+          ...block,
+          children: block.children.map((part) => mapInline(part, transform)),
+        };
       case "table":
         return {
           ...block,
           head: block.head.map((cell) => mapInline(cell, transform)),
-          rows: block.rows.map((row) => row.map((cell) => mapInline(cell, transform))),
+          rows: block.rows.map((row) =>
+            row.map((cell) => mapInline(cell, transform)),
+          ),
         };
       case "code":
         return block;
