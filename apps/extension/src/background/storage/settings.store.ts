@@ -1,5 +1,5 @@
-import { STORAGE_KEYS } from "@/background/storage/keys"
-import type { ExtensionSettings } from "@/shared/types"
+import { STORAGE_KEYS } from "@/background/storage/keys";
+import type { ExtensionSettings } from "@/shared/types";
 
 export const DEFAULT_SETTINGS: ExtensionSettings = {
   presenceDisplayMode: "category",
@@ -11,49 +11,62 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   presenceLanguage: "per-presence",
   presenceLanguages: {},
   activitySelectionMode: "focused",
-  activityPriorityOrder: [],
-}
+  activityPriorityOrder: []
+};
 
-const LEGACY_SETTINGS_KEYS = ["separateActivePresence", "theme", "canaryTheme", "seasonalThemeMigrated"] as const
-const LEGACY_SEASONAL_APPEARANCE = "seasonal"
+const LEGACY_SETTINGS_KEYS = ["separateActivePresence", "theme", "canaryTheme", "seasonalThemeMigrated"] as const;
+const LEGACY_SEASONAL_APPEARANCE = "seasonal";
 
-const migrateStoredSettings = (stored: Record<string, unknown>): { settings: Partial<ExtensionSettings>; changed: boolean } => {
-  let changed = false
-  const next = { ...stored }
+const migrateStoredSettings = (stored: Record<string, unknown>): {
+  settings: Partial<ExtensionSettings>;
+  changed: boolean;
+} => {
+  let changed = false;
+  const next = { ...stored };
+
   if (next.appearance === LEGACY_SEASONAL_APPEARANCE) {
-    next.appearance = "system"
-    next.seasonalThemes = true
-    changed = true
+    next.appearance = "system";
+    next.seasonalThemes = true;
+    changed = true;
   } else if (typeof next.seasonalThemes !== "boolean") {
-    next.seasonalThemes = next.seasonalThemeMigrated !== true
-    changed = true
+    next.seasonalThemes = next.seasonalThemeMigrated !== true;
+    changed = true;
   }
+
   for (const key of LEGACY_SETTINGS_KEYS) {
     if (key in next) {
-      delete next[key]
-      changed = true
+      delete next[key];
+      changed = true;
     }
   }
-  return { settings: next as Partial<ExtensionSettings>, changed }
-}
+
+  return {
+    settings: next as Partial<ExtensionSettings>,
+    changed
+  };
+};
 
 export const getSettings = async (): Promise<ExtensionSettings> => {
-  const result = await chrome.storage.local.get(STORAGE_KEYS.settings)
-  const stored = (result[STORAGE_KEYS.settings] as Record<string, unknown> | undefined) ?? {}
-  const { settings: migrated, changed } = migrateStoredSettings(stored)
-  const settings = { ...DEFAULT_SETTINGS, ...migrated }
+  const result = await chrome.storage.local.get(STORAGE_KEYS.settings);
 
-  if (changed) void chrome.storage.local.set({ [STORAGE_KEYS.settings]: settings })
+  const stored = (result[STORAGE_KEYS.settings] as Record<string, unknown> | undefined) ?? {};
+  const { settings: migrated, changed } = migrateStoredSettings(stored);
+  const settings = { ...DEFAULT_SETTINGS, ...migrated };
 
-  return settings
-}
+  if (changed) void chrome.storage.local.set({ [STORAGE_KEYS.settings]: settings });
+
+  return settings;
+};
 
 export const setSettings = async (partial: Partial<ExtensionSettings>): Promise<ExtensionSettings> => {
-  const current = await getSettings()
-  const next = { ...current, ...partial } satisfies ExtensionSettings
+  const current = await getSettings();
+
+  const next = { ...current, ...partial } satisfies ExtensionSettings;
+
   for (const key of Object.keys(partial) as Array<keyof ExtensionSettings>) {
-    if (partial[key] === undefined) delete (next as Partial<ExtensionSettings>)[key]
+    if (partial[key] === undefined) delete (next as Partial<ExtensionSettings>)[key];
   }
-  await chrome.storage.local.set({ [STORAGE_KEYS.settings]: next })
-  return next
-}
+
+  await chrome.storage.local.set({ [STORAGE_KEYS.settings]: next });
+  return next;
+};

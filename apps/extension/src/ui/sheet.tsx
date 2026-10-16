@@ -1,36 +1,37 @@
-import { useEffect, useRef, type ReactNode } from "react"
-import { createPortal } from "react-dom"
-import { RiCloseLine } from "@remixicon/react"
-import { cn } from "@/ui/cn"
+import { useEffect, useRef, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+import { RiCloseLine } from "@remixicon/react";
+import { cn } from "@/ui/cn";
 
 type SheetProps = {
-  open: boolean
-  onClose: () => void
-  title: string
-  description?: string
-  children?: ReactNode
-  footer?: ReactNode
-  closeLabel: string
-}
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  description?: string;
+  children?: ReactNode;
+  footer?: ReactNode;
+  closeLabel: string;
+};
 
 export const Sheet = ({ open, onClose, title, description, children, footer, closeLabel }: SheetProps) => {
-  const panelRef = useRef<HTMLDivElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!open) return
-    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    panelRef.current?.focus()
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose()
-    }
-    window.addEventListener("keydown", onKey)
-    return () => {
-      window.removeEventListener("keydown", onKey)
-      previous?.focus()
-    }
-  }, [open, onClose])
+    if (!open) return;
 
-  if (!open) return null
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    panelRef.current?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      previous?.focus();
+    };
+  }, [open, onClose]);
+
+  if (!open) return null;
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center">
@@ -61,6 +62,6 @@ export const Sheet = ({ open, onClose, title, description, children, footer, clo
         {footer && <div className={cn("flex gap-2 border-t border-line px-4 py-3")}>{footer}</div>}
       </div>
     </div>,
-    document.body,
-  )
-}
+    document.body
+  );
+};

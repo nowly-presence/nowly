@@ -28,6 +28,7 @@ export const HeroCards = () => {
 
   useEffect(() => {
     const stage = stageRef.current;
+
     if (!stage) return;
 
     const items = [...stage.querySelectorAll<HTMLElement>("[data-gondola]")];
@@ -103,6 +104,7 @@ export const HeroCards = () => {
         stop();
         return;
       }
+
       spin = Math.PI + ((now - origin) / PERIOD_MS) * Math.PI * 2;
       render();
       frame = requestAnimationFrame(tick);
@@ -110,12 +112,15 @@ export const HeroCards = () => {
 
     const start = () => {
       if (!desktop.matches || dragging) return;
+
       measure();
+
       if (reduced) {
         spin = Math.PI;
         render();
         return;
       }
+
       stop();
       origin = performance.now() - ((spin - Math.PI) / (Math.PI * 2)) * PERIOD_MS;
       frame = requestAnimationFrame(tick);
@@ -123,6 +128,7 @@ export const HeroCards = () => {
 
     const onPointerDown = (event: PointerEvent) => {
       if (!desktop.matches || event.button !== 0) return;
+
       dragging = true;
       pointerId = event.pointerId;
       dragStartY = event.clientY;
@@ -134,12 +140,14 @@ export const HeroCards = () => {
 
     const onPointerMove = (event: PointerEvent) => {
       if (!dragging || event.pointerId !== pointerId) return;
+
       spin = dragStartSpin - (event.clientY - dragStartY) / 300;
       render();
     };
 
     const onPointerUp = (event: PointerEvent) => {
       if (!dragging || event.pointerId !== pointerId) return;
+
       dragging = false;
       pointerId = null;
       stage.releasePointerCapture(event.pointerId);
@@ -149,10 +157,12 @@ export const HeroCards = () => {
 
     const onWheel = (event: WheelEvent) => {
       if (!desktop.matches) return;
+
       event.preventDefault();
       stop();
       spin += event.deltaY / 900;
       render();
+
       if (!reduced) {
         origin = performance.now() - ((spin - Math.PI) / (Math.PI * 2)) * PERIOD_MS;
         frame = requestAnimationFrame(tick);
@@ -179,6 +189,7 @@ export const HeroCards = () => {
         stop();
         return;
       }
+
       start();
     };
 
@@ -199,7 +210,6 @@ export const HeroCards = () => {
     };
   }, []);
 
-
   return (
     <div ref={stageRef} className="relative isolate hidden h-[min(58vh,560px)] w-full overflow-visible lg:block">
       <div
@@ -211,7 +221,10 @@ export const HeroCards = () => {
           key={config.id}
           data-gondola
           className="absolute top-0 left-0 origin-center will-change-transform"
-          style={{ opacity: 0, visibility: "hidden" }}
+          style={{
+            opacity: 0,
+            visibility: "hidden"
+          }}
         >
           <PresenceCard config={config} />
         </div>

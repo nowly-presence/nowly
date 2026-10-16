@@ -5,9 +5,7 @@ const withEnglishFallback = (messages: Record<string, unknown>): Record<string, 
   ...englishMessages,
   ...messages,
   docsUi: { ...englishMessages.docsUi, ...(messages.docsUi as Record<string, unknown> | undefined) },
-  docsMetadata: { ...englishMessages.docsMetadata, ...(messages.docsMetadata as Record<string, unknown> | undefined) },
+  docsMetadata: { ...englishMessages.docsMetadata, ...(messages.docsMetadata as Record<string, unknown> | undefined) }
 });
 
-export default createRequestConfig(
-  async (locale) => withEnglishFallback((await import(`../messages/${locale}.json`)).default),
-);
+export default createRequestConfig(async (locale) => withEnglishFallback((await import(`../messages/${locale}.json`)).default));

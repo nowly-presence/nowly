@@ -20,10 +20,16 @@ const Page = () => {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ provider: "discord", callbackURL: `${window.location.origin}/` }),
+        body: JSON.stringify({
+          provider: "discord",
+          callbackURL: `${window.location.origin}/`
+        })
       });
+
       const data = await res.json();
+
       if (!res.ok || !data?.url) throw new Error("sign-in-failed");
+
       window.location.href = data.url;
     } catch {
       setError("Could not start sign-in. Try again.");

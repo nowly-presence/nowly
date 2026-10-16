@@ -1,19 +1,19 @@
-import type { SanitizedPayload } from "./sanitize"
+import type { SanitizedPayload } from "./sanitize";
 
 export type OutboundAnalyticsEvent = {
-  eventId: string
-  key: string
-  deviceId?: string
-  slug?: string
-  version?: string
-  source?: string
-  payload: SanitizedPayload
-  createdAt: string
-}
+  eventId: string;
+  key: string;
+  deviceId?: string;
+  slug?: string;
+  version?: string;
+  source?: string;
+  payload: SanitizedPayload;
+  createdAt: string;
+};
 
 export type AnalyticsTransport = {
-  send: (events: OutboundAnalyticsEvent[]) => Promise<void>
-}
+  send: (events: OutboundAnalyticsEvent[]) => Promise<void>;
+};
 
 export const createHttpTransport = (baseUrl: string, path = "/insights/events"): AnalyticsTransport => ({
   async send(events) {
@@ -21,10 +21,11 @@ export const createHttpTransport = (baseUrl: string, path = "/insights/events"):
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ events }),
-      keepalive: true,
-    })
+      keepalive: true
+    });
+
     if (!response.ok) {
-      throw new Error(`analytics transport failed: ${response.status}`)
+      throw new Error(`analytics transport failed: ${response.status}`);
     }
-  },
-})
+  }
+});

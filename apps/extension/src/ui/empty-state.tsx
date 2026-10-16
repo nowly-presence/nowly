@@ -1,20 +1,13 @@
-import { type ReactNode } from "react"
-import { cn } from "@/ui/cn"
+import { type ReactNode } from "react";
+import { cn } from "@/ui/cn";
 
-export const EmptyState = ({
-  icon,
-  title,
-  description,
-  action,
-  decoration,
-  className,
-}: {
-  icon?: ReactNode
-  title: string
-  description?: string
-  action?: ReactNode
-  decoration?: ReactNode
-  className?: string
+export const EmptyState = ({ icon, title, description, action, decoration, className }: {
+  icon?: ReactNode;
+  title: string;
+  description?: string;
+  action?: ReactNode;
+  decoration?: ReactNode;
+  className?: string;
 }) => (
   <div className={cn("relative flex flex-col items-center gap-3 px-6 py-8 text-center", className)}>
     {decoration}
@@ -25,4 +18,4 @@ export const EmptyState = ({
     </div>
     {action}
   </div>
-)
+);

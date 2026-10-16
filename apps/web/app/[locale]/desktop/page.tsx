@@ -6,17 +6,23 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("pages.desktop")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("pages.desktop")
+  ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     locale,
-    path: "/desktop",
+    path: "/desktop"
   });
 };
 
 const Page = async () => {
-  const [release, t] = await Promise.all([getDesktopRelease(), getTranslations("pages.desktop")]);
+  const [release, t] = await Promise.all([
+    getDesktopRelease(),
+    getTranslations("pages.desktop")
+  ]);
   return (
     <>
       <WebPageJsonLd name={t("title")} description={t("description")} path="/desktop" />

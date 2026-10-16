@@ -1,28 +1,23 @@
-import { RiDiscordLine, RiPlayCircleLine, RiPlugLine, RiPulseLine, RiRefreshLine } from "@remixicon/react"
-import { HOST_DOWNLOAD_URL } from "@/shared/constants"
-import { openUrl } from "@/shared/browser-links"
-import { Button } from "@/ui/button"
-import { Card } from "@/ui/card"
-import { useI18n } from "@/hooks/i18n-provider"
-import { sendMessage } from "@/lib/messages"
-import { useNav } from "@/hooks/navigation-provider"
-import { connectionOf } from "@/lib/presence-status"
-import { useExtensionState } from "@/hooks/extension-state-provider"
+import { RiDiscordLine, RiPlayCircleLine, RiPlugLine, RiPulseLine, RiRefreshLine } from "@remixicon/react";
+import { HOST_DOWNLOAD_URL } from "@/shared/constants";
+import { openUrl } from "@/shared/browser-links";
+import { Button } from "@/ui/button";
+import { Card } from "@/ui/card";
+import { useI18n } from "@/hooks/i18n-provider";
+import { sendMessage } from "@/lib/messages";
+import { useNav } from "@/hooks/navigation-provider";
+import { connectionOf } from "@/lib/presence-status";
+import { useExtensionState } from "@/hooks/extension-state-provider";
 
-export const IdleCard = ({
-  connection,
-  paused,
-  onResume,
-  hasPresences,
-}: {
-  connection: ReturnType<typeof connectionOf>
-  paused: boolean
-  onResume: () => void
-  hasPresences: boolean
+export const IdleCard = ({ connection, paused, onResume, hasPresences }: {
+  connection: ReturnType<typeof connectionOf>;
+  paused: boolean;
+  onResume: () => void;
+  hasPresences: boolean;
 }) => {
-  const { t } = useI18n()
-  const { push } = useNav()
-  const { refresh } = useExtensionState()
+  const { t } = useI18n();
+  const { push } = useNav();
+  const { refresh } = useExtensionState();
 
   if (paused) {
     return (
@@ -38,7 +33,7 @@ export const IdleCard = ({
           {t("action.resume")}
         </Button>
       </Card>
-    )
+    );
   }
 
   if (connection === "no-host") {
@@ -66,7 +61,7 @@ export const IdleCard = ({
           </Button>
         </div>
       </Card>
-    )
+    );
   }
 
   if (connection === "no-discord") {
@@ -83,7 +78,7 @@ export const IdleCard = ({
           </Button>
         </div>
       </Card>
-    )
+    );
   }
 
   return (
@@ -98,5 +93,5 @@ export const IdleCard = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

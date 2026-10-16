@@ -3,7 +3,7 @@ import { getSession } from "@/lib/session";
 import { NextResponse, type NextRequest } from "next/server";
 
 export const config = {
-  matcher: ["/((?!login|_next|favicon.ico|robots.txt).*)"],
+  matcher: ["/((?!login|_next|favicon.ico|robots.txt).*)"]
 };
 
 const proxy = async (request: NextRequest) => {

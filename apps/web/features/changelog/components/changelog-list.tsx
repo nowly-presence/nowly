@@ -10,14 +10,14 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 type Props = {
-  releases: ChangelogRelease[]
-  latestByStore: Partial<Record<ChangelogStore, string>>
-  locale: string
+  releases: ChangelogRelease[];
+  latestByStore: Partial<Record<ChangelogStore, string>>;
+  locale: string;
 };
 
 const storeIcon: Record<ChangelogStore, typeof RiChromeFill> = {
   chrome: RiChromeFill,
-  firefox: RiFirefoxBrowserFill,
+  firefox: RiFirefoxBrowserFill
 };
 
 export const ChangelogList = ({ releases, latestByStore, locale }: Props) => {
@@ -57,12 +57,8 @@ export const ChangelogList = ({ releases, latestByStore, locale }: Props) => {
                 ) : null}
               </span>
               <div className="min-w-0 flex-1">
-                {release.date ? (
-                  <p className="text-xs text-muted-foreground">{formatChangelogDate(release.date, locale)}</p>
-                ) : null}
-                <p className="mt-1 text-[0.95rem] leading-relaxed text-foreground/75 group-hover:text-foreground">
-                  {release.summary}
-                </p>
+                {release.date ? <p className="text-xs text-muted-foreground">{formatChangelogDate(release.date, locale)}</p> : null}
+                <p className="mt-1 text-[0.95rem] leading-relaxed text-foreground/75 group-hover:text-foreground">{release.summary}</p>
                 <p className="mt-2 text-sm font-medium text-accent">{t("read")}</p>
               </div>
             </Link>

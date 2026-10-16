@@ -1,70 +1,13 @@
-import {
-  handleGetAccount,
-  handleNowlySession,
-  handleResolveSyncChoice,
-  handleSignOutAccount,
-  handleStartAccountConnect,
-  handleStopAccountSync,
-  handleSyncAccount,
-} from "@/background/router/handlers/account.handlers"
-import {
-  handleClearActivityMessage,
-  handleDebug,
-  handleGetCurrentActivity,
-  handleGetDebug,
-  handleActivityUpdateMessage,
-  handleSetPresencePause,
-} from "@/background/router/handlers/activity.handlers"
-import {
-  handleGetAnalyticsConsent,
-  handleSetAnalyticsConsent,
-  handleTrackEvent,
-  handleGetRuntimeLogs,
-  handleClearRuntimeLogs,
-} from "@/background/router/handlers/analytics.handlers"
-import { handleGetDiagnostic } from "@/background/router/handlers/diagnostics.handlers"
-import {
-  handleAcknowledgeDiscordIpcIssue,
-  handleConnectNative,
-  handleGetNativeStatus,
-  handleGetUserScriptsStatus,
-  handleRestartNative,
-} from "@/background/router/handlers/native.handlers"
-import {
-  handleBulkToggle,
-  handleBulkUninstall,
-  handleCheckUpdates,
-  handleClearSnooze,
-  handleFetchCatalog,
-  handleGetInstallQueue,
-  handleGetPresenceEngagement,
-  handleGetPresenceSettings,
-  handleGetPresences,
-  handleInstall,
-  handleInstallFromApi,
-  handleInstallLocalZip,
-  handleRetryInstallQueue,
-  handleSetPresenceLike,
-  handleSetPresenceSettings,
-  handleSetSchedule,
-  handleSnooze,
-  handleToggle,
-  handleUninstall,
-  handleUpdate,
-} from "@/background/router/handlers/presences.handlers"
-import { handleGetSettings, handleResetOnboardingForDev, handleSetSettings } from "@/background/router/handlers/settings.handlers"
-import {
-  handleDeleteDeviceData,
-  handleExportDeviceData,
-  handleGetOnboarding,
-  handleGetTabState,
-  handleReportPresence,
-  handleSetOnboarding,
-  handleSetTabMuted,
-  handleSyncPresenceScripts,
-} from "@/background/router/handlers/extra.handlers"
-import { handleRecordUsageDay, handleSnoozeSupportPrompt } from "@/background/router/handlers/support.handlers"
-import type { HandlerRegistry } from "@/background/router/router"
+import { handleGetAccount, handleNowlySession, handleResolveSyncChoice, handleSignOutAccount, handleStartAccountConnect, handleStopAccountSync, handleSyncAccount } from "@/background/router/handlers/account.handlers";
+import { handleClearActivityMessage, handleDebug, handleGetCurrentActivity, handleGetDebug, handleActivityUpdateMessage, handleSetPresencePause } from "@/background/router/handlers/activity.handlers";
+import { handleGetAnalyticsConsent, handleSetAnalyticsConsent, handleTrackEvent, handleGetRuntimeLogs, handleClearRuntimeLogs } from "@/background/router/handlers/analytics.handlers";
+import { handleGetDiagnostic } from "@/background/router/handlers/diagnostics.handlers";
+import { handleAcknowledgeDiscordIpcIssue, handleConnectNative, handleGetNativeStatus, handleGetUserScriptsStatus, handleRestartNative } from "@/background/router/handlers/native.handlers";
+import { handleBulkToggle, handleBulkUninstall, handleCheckUpdates, handleClearSnooze, handleFetchCatalog, handleGetInstallQueue, handleGetPresenceEngagement, handleGetPresenceSettings, handleGetPresences, handleInstall, handleInstallFromApi, handleInstallLocalZip, handleRetryInstallQueue, handleSetPresenceLike, handleSetPresenceSettings, handleSetSchedule, handleSnooze, handleToggle, handleUninstall, handleUpdate } from "@/background/router/handlers/presences.handlers";
+import { handleGetSettings, handleResetOnboardingForDev, handleSetSettings } from "@/background/router/handlers/settings.handlers";
+import { handleDeleteDeviceData, handleExportDeviceData, handleGetOnboarding, handleGetTabState, handleReportPresence, handleSetOnboarding, handleSetTabMuted, handleSyncPresenceScripts } from "@/background/router/handlers/extra.handlers";
+import { handleRecordUsageDay, handleSnoozeSupportPrompt } from "@/background/router/handlers/support.handlers";
+import type { HandlerRegistry } from "@/background/router/router";
 
 export const buildHandlerRegistry = (): HandlerRegistry => ({
   GET_PRESENCES: handleGetPresences,
@@ -123,5 +66,5 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   SIGN_OUT_ACCOUNT: handleSignOutAccount,
   STOP_ACCOUNT_SYNC: handleStopAccountSync,
   RECORD_USAGE_DAY: handleRecordUsageDay,
-  SNOOZE_SUPPORT_PROMPT: handleSnoozeSupportPrompt,
-})
+  SNOOZE_SUPPORT_PROMPT: handleSnoozeSupportPrompt
+});

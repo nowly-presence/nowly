@@ -10,5 +10,4 @@ export const detectExtensionBrowser = (): ExtensionBrowser => {
   return /(?:Firefox|FxiOS)\//i.test(navigator.userAgent) ? "firefox" : "chrome";
 };
 
-export const getExtensionDownloadUrl = (browser: ExtensionBrowser) =>
-  browser === "firefox" ? FIREFOX_EXTENSION_DOWNLOAD_URL : PROJECT_EXTENSION_DOWNLOAD_URL;
+export const getExtensionDownloadUrl = (browser: ExtensionBrowser) => (browser === "firefox" ? FIREFOX_EXTENSION_DOWNLOAD_URL : PROJECT_EXTENSION_DOWNLOAD_URL);

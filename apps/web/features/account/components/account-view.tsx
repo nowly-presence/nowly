@@ -1,17 +1,7 @@
 "use client";
 
 import { AccountHeader } from "@/features/account/components/account-header";
-import {
-  deleteAccount,
-  downloadAccountExport,
-  fetchAccountDevices,
-  fetchAccountUser,
-  signOutAccount,
-  startDiscordSignIn,
-  unlinkAccountDevice,
-  type AccountDevice,
-  type AccountUser,
-} from "@/features/account/lib/account-api";
+import { deleteAccount, downloadAccountExport, fetchAccountDevices, fetchAccountUser, signOutAccount, startDiscordSignIn, unlinkAccountDevice, type AccountDevice, type AccountUser } from "@/features/account/lib/account-api";
 import { Avatar, AvatarFallback, AvatarImage, Button, Card, CardContent, CardDescription, CardTitle, Separator } from "@nowly/ui";
 import { RiDeleteBinLine, RiDiscordFill, RiDownload2Line, RiLogoutBoxRLine } from "@nowly/ui/icons";
 import { useFormatter, useTranslations } from "next-intl";
@@ -20,7 +10,11 @@ import { useCallback, useEffect, useState } from "react";
 type Status = "checking" | "signed-out" | "ready" | "deleted" | "error";
 type Message = "exported" | "error" | null;
 
-const DeviceRow = ({ device, onUnlink, busy }: { device: AccountDevice; onUnlink: (deviceId: string) => void; busy: boolean }) => {
+const DeviceRow = ({ device, onUnlink, busy }: {
+  device: AccountDevice;
+  onUnlink: (deviceId: string) => void;
+  busy: boolean;
+}) => {
   const t = useTranslations("accountPage");
   const format = useFormatter();
   const name = [device.browser, device.os].filter(Boolean).join(", ") || t("device-unknown");
@@ -51,10 +45,12 @@ export const AccountView = () => {
     try {
       const current = await fetchAccountUser();
       setUser(current);
+
       if (!current) {
         setStatus("signed-out");
         return;
       }
+
       setDevices(await fetchAccountDevices());
       setStatus("ready");
     } catch {
@@ -69,6 +65,7 @@ export const AccountView = () => {
   const run = async (action: () => Promise<void>): Promise<void> => {
     setBusy(true);
     setMessage(null);
+
     try {
       await action();
     } catch {
@@ -82,25 +79,29 @@ export const AccountView = () => {
 
   const onUnlink = (deviceId: string) => {
     if (!window.confirm(t("unlink-confirm"))) return;
+
     void run(async () => {
       await unlinkAccountDevice(deviceId);
       setDevices((current) => current.filter((device) => device.deviceId !== deviceId));
     });
   };
 
-  const onExport = () => run(async () => {
-    await downloadAccountExport();
-    setMessage("exported");
-  });
+  const onExport = () =>
+    run(async () => {
+      await downloadAccountExport();
+      setMessage("exported");
+    });
 
-  const onSignOut = () => run(async () => {
-    await signOutAccount();
-    setUser(null);
-    setStatus("signed-out");
-  });
+  const onSignOut = () =>
+    run(async () => {
+      await signOutAccount();
+      setUser(null);
+      setStatus("signed-out");
+    });
 
   const onDelete = () => {
     if (!window.confirm(t("delete-confirm"))) return;
+
     void run(async () => {
       await deleteAccount();
       await signOutAccount().catch(() => undefined);

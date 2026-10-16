@@ -7,25 +7,29 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("pages.library")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("pages.library")
+  ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     locale,
-    path: "/library",
+    path: "/library"
   });
 };
 
-const Page = async ({
-  searchParams,
-}: {
-  searchParams: Promise<{ author?: string | string[] }>
+const Page = async ({ searchParams }: {
+  searchParams: Promise<{
+    author?: string | string[];
+  }>;
 }) => {
   const [{ author }, items, t] = await Promise.all([
     searchParams,
     getPresenceCatalog(),
-    getTranslations("pages.library"),
+    getTranslations("pages.library")
   ]);
+
   const authorValue = Array.isArray(author) ? author[0] : author;
   const authorHandle = authorValue ? normalizeGithub(authorValue) : null;
 

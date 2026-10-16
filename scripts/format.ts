@@ -1,7 +1,12 @@
 import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
 import * as prettier from "prettier";
+import {
+  createProjectStylePlugin,
+  projectFormattingOptions,
+} from "./format-style.ts";
 
 const isCheckMode = process.argv.includes("--check");
 const isWriteMode = process.argv.includes("--write");
@@ -26,13 +31,14 @@ if (selectedModeCount !== 1) {
   process.exit(1);
 }
 
-const files = (requestedFiles.length > 0
-  ? requestedFiles
-  : execFileSync(
-      "git",
-      ["ls-files", "--cached", "--others", "--exclude-standard", "-z"],
-      { encoding: "utf8" },
-    ).split("\0")
+const files = (
+  requestedFiles.length > 0
+    ? requestedFiles
+    : execFileSync(
+        "git",
+        ["ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+        { encoding: "utf8" },
+      ).split("\0")
 ).filter((file) => {
   const normalizedFile = file.replaceAll("\\", "/");
 
@@ -43,7 +49,8 @@ const files = (requestedFiles.length > 0
   );
 });
 
-const prettierConfig = (await prettier.resolveConfig(process.cwd())) ?? {};
+const prettierConfig =
+  (await prettier.resolveConfig(resolve(process.cwd(), "package.json"))) ?? {};
 const plugins = await Promise.all(
   (prettierConfig.plugins ?? []).map(async (plugin) => {
     if (typeof plugin !== "string") {
@@ -54,7 +61,11 @@ const plugins = await Promise.all(
     return importedPlugin.default ?? importedPlugin;
   }),
 );
-const formattingOptions: prettier.Options = { ...prettierConfig, plugins };
+const formattingOptions: prettier.Options = {
+  ...projectFormattingOptions,
+  ...prettierConfig,
+  plugins: [...plugins, createProjectStylePlugin(plugins)],
+};
 const unformattedFiles: string[] = [];
 let formattedFileCount = 0;
 

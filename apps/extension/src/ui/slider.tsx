@@ -1,7 +1,14 @@
-type SliderProps = { value: number; min: number; max: number; step: number; onChange: (value: number) => void; label: string }
+type SliderProps = {
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  onChange: (value: number) => void;
+  label: string;
+};
 
 export const Slider = ({ value, min, max, step, onChange, label }: SliderProps) => {
-  const percent = max === min ? 0 : ((value - min) / (max - min)) * 100
+  const percent = max === min ? 0 : ((value - min) / (max - min)) * 100;
   return (
     <div className="flex items-center gap-3">
       <input
@@ -17,5 +24,5 @@ export const Slider = ({ value, min, max, step, onChange, label }: SliderProps) 
       />
       <span className="w-9 text-right text-label-md text-muted tabular-nums">{value}</span>
     </div>
-  )
-}
+  );
+};

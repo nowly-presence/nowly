@@ -7,23 +7,28 @@ const legacyRedirects = [
   {
     source: "/docs",
     destination: "/",
-    permanent: true,
+    permanent: true
   },
   {
     source: "/docs/:path*",
     destination: "/:path*",
-    permanent: true,
-  },
+    permanent: true
+  }
 ];
 
 const zoneRedirects = [
   {
     source: "/:path*",
-    has: [{ type: "host" as const, value: "docs.nowly.me" }],
+    has: [
+      {
+        type: "host" as const,
+        value: "docs.nowly.me"
+      }
+    ],
     destination: `https://nowly.me${basePath}/:path*`,
     basePath: false as const,
-    permanent: true,
-  },
+    permanent: true
+  }
 ];
 
 const nextConfig: NextConfig = {
@@ -32,22 +37,27 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   transpilePackages: ["@nowly/ui", "@nowly/locales"],
   experimental: {
-    optimizePackageImports: ["@nowly/ui"],
+    optimizePackageImports: ["@nowly/ui"]
   },
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "cdn.nowly.me" }],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.nowly.me"
+      }
+    ]
   },
   async rewrites() {
     return [
       {
         source: "/favicon.ico",
-        destination: "https://cdn.nowly.me/brand/favicons/favicon-32.png",
-      },
+        destination: "https://cdn.nowly.me/brand/favicons/favicon-32.png"
+      }
     ];
   },
   async redirects() {
     return basePath ? zoneRedirects : legacyRedirects;
-  },
+  }
 };
 
 const withNextIntl = createNextIntlPlugin();

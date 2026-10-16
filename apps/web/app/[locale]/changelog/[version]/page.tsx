@@ -9,13 +9,19 @@ import { notFound } from "next/navigation";
 export const revalidate = 3600;
 
 type ChangelogVersionPageProps = {
-  params: Promise<{ version: string }>
+  params: Promise<{
+    version: string;
+  }>;
 };
 
 export const generateMetadata = async ({ params }: ChangelogVersionPageProps): Promise<Metadata> => {
   const { version: raw } = await params;
+
   const parsed = parseChangelogVersion(raw);
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("changelogPage")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("changelogPage")
+  ]);
 
   if (!parsed) {
     return createMetadata({
@@ -23,29 +29,32 @@ export const generateMetadata = async ({ params }: ChangelogVersionPageProps): P
       description: t("missing"),
       locale,
       path: `/changelog/${raw}`,
-      noIndex: true,
+      noIndex: true
     });
   }
 
   const release = getChangelogRelease(parsed.version, locale);
   return createMetadata({
     title: t("meta-title", { version: parsed.version }),
-    description: release
-      ? t("update-description", { version: parsed.version })
-      : t("missing"),
+    description: release ? t("update-description", { version: parsed.version }) : t("missing"),
     locale,
     path: `/changelog/${parsed.version}`,
     noIndex: !release,
-    image: release?.banner,
+    image: release?.banner
   });
 };
 
 const Page = async ({ params }: ChangelogVersionPageProps) => {
   const { version: raw } = await params;
+
   const parsed = parseChangelogVersion(raw);
   if (!parsed) notFound();
 
-  const [t, locale] = await Promise.all([getTranslations("changelogPage"), getLocale()]);
+  const [t, locale] = await Promise.all([
+    getTranslations("changelogPage"),
+    getLocale()
+  ]);
+
   const release = getChangelogRelease(parsed.version, locale);
 
   return (

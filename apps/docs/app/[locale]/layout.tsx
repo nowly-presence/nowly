@@ -19,55 +19,89 @@ import { satoshi } from "../fonts";
 export const generateStaticParams = () => routing.locales.map((locale) => ({ locale }));
 
 type LayoutProps = PropsWithChildren<{
-  params: Promise<{ locale: LocaleString }>
+  params: Promise<{
+    locale: LocaleString;
+  }>;
 }>;
 
 export const generateMetadata = async ({ params }: LayoutProps): Promise<Metadata> => {
   const { locale } = await params;
+
   const t = await getTranslations("docsMetadata");
+
   const languages: Record<string, string> = {
-    "x-default": absoluteUrl(getPathname({ locale: routing.defaultLocale, href: "/" })),
+    "x-default": absoluteUrl(
+      getPathname({
+        locale: routing.defaultLocale,
+        href: "/"
+      })
+    )
   };
+
   for (const target of routing.locales) {
-    languages[target] = absoluteUrl(getPathname({ locale: target, href: "/" }));
+    languages[target] = absoluteUrl(
+      getPathname({
+        locale: target,
+        href: "/"
+      })
+    );
   }
 
   return {
     title: {
       default: t("title"),
-      template: `%s | ${t("title")}`,
+      template: `%s | ${t("title")}`
     },
     description: t("description"),
     metadataBase: new URL(DOCS_URL),
     alternates: {
-      canonical: absoluteUrl(getPathname({ locale, href: "/" })),
-      languages,
+      canonical: absoluteUrl(
+        getPathname({
+          locale,
+          href: "/"
+        })
+      ),
+      languages
     },
-    robots: isSeoPreview
-      ? { index: false, follow: false, nocache: true }
-      : { index: true, follow: true },
+    robots: isSeoPreview ? { index: false, follow: false, nocache: true } : { index: true, follow: true },
     manifest: `${DOCS_BASE_PATH}/manifest.json`,
     icons: {
       ...BRAND_METADATA_ICONS,
-      shortcut: BRAND_FAVICON_32,
+      shortcut: BRAND_FAVICON_32
     },
     openGraph: {
-      images: [{ url: absoluteUrl(`/api/og/docs?mode=dark&v=${OG_IMAGE_VERSION}`), width: 1200, height: 630, alt: t("title") }],
-    },
+      images: [
+        {
+          url: absoluteUrl(`/api/og/docs?mode=dark&v=${OG_IMAGE_VERSION}`),
+          width: 1200,
+          height: 630,
+          alt: t("title")
+        }
+      ]
+    }
   };
 };
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#eef5fc" },
-    { media: "(prefers-color-scheme: dark)", color: "#07080c" },
+    {
+      media: "(prefers-color-scheme: light)",
+      color: "#eef5fc"
+    },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: "#07080c"
+    }
   ],
   width: "device-width",
-  initialScale: 1,
+  initialScale: 1
 };
 
 const Layout = async ({ children }: PropsWithChildren): Promise<ReactElement> => {
-  const [messages, locale] = await Promise.all([getMessages(), getLocale()]);
+  const [messages, locale] = await Promise.all([
+    getMessages(),
+    getLocale()
+  ]);
 
   return (
     <html lang={LOCALE_SHORT_MAP[locale as LocaleString] ?? "en"} className={satoshi.variable} suppressHydrationWarning>

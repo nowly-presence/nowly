@@ -16,11 +16,16 @@ const ALLOW_SEASON_PREVIEW = process.env.NODE_ENV !== "production";
 export const generateStaticParams = () => routing.locales.map((locale) => ({ locale }));
 
 type LayoutProps = PropsWithChildren<{
-  params: Promise<{ locale: string }>
+  params: Promise<{
+    locale: string;
+  }>;
 }>;
 
 const Layout = async ({ children, params }: LayoutProps) => {
-  const [{ locale }, messages] = await Promise.all([params, getMessages()]);
+  const [{ locale }, messages] = await Promise.all([
+    params,
+    getMessages()
+  ]);
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>

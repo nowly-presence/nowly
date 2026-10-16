@@ -4,8 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { cn } from "@nowly/ui/utils";
 import type { ReactNode } from "react";
 
-const LINK_CLASS =
-  "text-foreground underline decoration-foreground/25 underline-offset-4 transition-colors hover:decoration-foreground/60";
+const LINK_CLASS = "text-foreground underline decoration-foreground/25 underline-offset-4 transition-colors hover:decoration-foreground/60";
 
 const SAFE_EXTERNAL = /^(https?:\/\/|mailto:)/i;
 
@@ -13,13 +12,12 @@ const LEGACY_DOCS_ORIGIN = "https://docs.nowly.me";
 
 // Content links to the docs are written with docs.nowly.me; follow the docs wherever they are served.
 const resolveHref = (href: string): string =>
-  href === LEGACY_DOCS_ORIGIN || href.startsWith(`${LEGACY_DOCS_ORIGIN}/`)
-    ? docsHref(href.slice(LEGACY_DOCS_ORIGIN.length) || "/")
-    : href;
+  href === LEGACY_DOCS_ORIGIN || href.startsWith(`${LEGACY_DOCS_ORIGIN}/`) ? docsHref(href.slice(LEGACY_DOCS_ORIGIN.length) || "/") : href;
 
 const renderInline = (nodes: Inline[], keyPrefix: string): ReactNode[] =>
   nodes.map((node, index) => {
     const key = `${keyPrefix}-${index}`;
+
     switch (node.kind) {
       case "text":
         return node.text;
@@ -57,12 +55,14 @@ const renderInline = (nodes: Inline[], keyPrefix: string): ReactNode[] =>
             </a>
           );
         }
+
         return renderInline(node.children, key);
     }
   });
 
 const renderBlock = (block: Block, index: number): ReactNode => {
   const key = `block-${index}`;
+
   switch (block.kind) {
     case "heading":
       return block.level === 2 ? (
@@ -139,7 +139,5 @@ const renderBlock = (block: Block, index: number): ReactNode => {
 };
 
 export const MarkdownBody = ({ blocks, className }: { blocks: Block[]; className?: string }) => (
-  <div className={cn("text-[1.02rem] leading-relaxed text-foreground/78", className)}>
-    {blocks.map(renderBlock)}
-  </div>
+  <div className={cn("text-[1.02rem] leading-relaxed text-foreground/78", className)}>{blocks.map(renderBlock)}</div>
 );

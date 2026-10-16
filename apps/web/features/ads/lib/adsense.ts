@@ -4,9 +4,7 @@ export type AdPlacement = "guides";
 const CLIENT_ID = (process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ?? "").trim();
 const ENABLED = (process.env.NEXT_PUBLIC_ADSENSE_ENABLED ?? "").trim().toLowerCase() === "true";
 
-const SLOTS: Record<AdPlacement, string> = {
-  guides: (process.env.NEXT_PUBLIC_ADSENSE_GUIDES_SLOT ?? "").trim(),
-};
+const SLOTS: Record<AdPlacement, string> = { guides: (process.env.NEXT_PUBLIC_ADSENSE_GUIDES_SLOT ?? "").trim() };
 
 const CLIENT_PATTERN = /^ca-pub-\d{10,20}$/;
 
@@ -18,5 +16,6 @@ export const adsensePublisherId = (): string | null => adsenseClientId()?.replac
 
 export const adsenseSlot = (placement: AdPlacement): string | null => {
   if (!ENABLED || !adsenseClientId()) return null;
+
   return /^\d{5,20}$/.test(SLOTS[placement]) ? SLOTS[placement] : null;
 };

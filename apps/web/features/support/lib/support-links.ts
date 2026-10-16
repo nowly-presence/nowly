@@ -12,5 +12,5 @@ export const SUPPORT_LINKS = {
   featureRequest: githubIssueUrl(PROJECT_REPOSITORY_URL, "feature_request.yml"),
   blankIssue: githubIssueUrl(PROJECT_REPOSITORY_URL),
   kofi: KOFI_URL,
-  sponsors: GITHUB_SPONSORS_URL,
+  sponsors: GITHUB_SPONSORS_URL
 } as const;

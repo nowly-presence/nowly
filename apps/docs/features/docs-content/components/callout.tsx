@@ -12,22 +12,20 @@ type CalloutProps = {
 const icons: Record<CalloutType, ReactNode> = {
   info: <RiInformationLine size={18} className="shrink-0 mt-0.5 text-accent" />,
   warning: <RiAlertLine size={18} className="shrink-0 mt-0.5 text-warning" />,
-  error: <RiErrorWarningLine size={18} className="shrink-0 mt-0.5 text-destructive" />,
+  error: <RiErrorWarningLine size={18} className="shrink-0 mt-0.5 text-destructive" />
 };
 
 const borders: Record<CalloutType, string> = {
   info: "border-accent/30 bg-accent/5",
   warning: "border-warning/30 bg-warning/5",
-  error: "border-destructive/30 bg-destructive/5",
+  error: "border-destructive/30 bg-destructive/5"
 };
 
 export const Callout: FC<CalloutProps> = ({ type = "info", children }) => {
   return (
     <div className={`flex gap-3 rounded-lg border p-4 my-6 ${borders[type]}`}>
       {icons[type]}
-      <div className="text-sm leading-relaxed text-foreground/90 [&>p]:m-0">
-        {children}
-      </div>
+      <div className="text-sm leading-relaxed text-foreground/90 [&>p]:m-0">{children}</div>
     </div>
   );
 };

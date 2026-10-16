@@ -3,9 +3,15 @@
 import Script from "next/script";
 import { useEffect } from "react";
 
-type AdsByGoogleWindow = Window & { adsbygoogle?: Array<Record<string, never>> };
+type AdsByGoogleWindow = Window & {
+  adsbygoogle?: Array<Record<string, never>>;
+};
 
-export const AdUnit = ({ client, slot, label }: { client: string; slot: string; label: string }) => {
+export const AdUnit = ({ client, slot, label }: {
+  client: string;
+  slot: string;
+  label: string;
+}) => {
   useEffect(() => {
     try {
       const target = window as AdsByGoogleWindow;

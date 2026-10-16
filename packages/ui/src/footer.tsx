@@ -20,46 +20,50 @@ const localizedUrl = (origin: string, locale: LocaleString, path: string): strin
 };
 
 export type FooterLabels = {
-  product: string
-  home: string
-  library: string
-  host: string
-  resources: string
-  docs: string
-  guides: string
-  changelog: string
-  canary: string
-  support: string
-  faq: string
-  status: string
-  branding: string
-  community: string
-  discord: string
-  company: string
-  about: string
-  contact: string
-  github: string
-  twitter: string
-  bluesky: string
-  tiktok: string
-  legalNotice: string
-  cookies: string
-  privacy: string
-  consent: string
-  tos: string
-  tagline: string
-  copyright: string
-  trademark: ReactNode
+  product: string;
+  home: string;
+  library: string;
+  host: string;
+  resources: string;
+  docs: string;
+  guides: string;
+  changelog: string;
+  canary: string;
+  support: string;
+  faq: string;
+  status: string;
+  branding: string;
+  community: string;
+  discord: string;
+  company: string;
+  about: string;
+  contact: string;
+  github: string;
+  twitter: string;
+  bluesky: string;
+  tiktok: string;
+  legalNotice: string;
+  cookies: string;
+  privacy: string;
+  consent: string;
+  tos: string;
+  tagline: string;
+  copyright: string;
+  trademark: ReactNode;
 };
 
 export type FooterProps = {
-  locale: LocaleString
-  brand: ReactNode
-  actions?: ReactNode
-  labels: FooterLabels
+  locale: LocaleString;
+  brand: ReactNode;
+  actions?: ReactNode;
+  labels: FooterLabels;
 };
 
-type Link = { href: string; label: string; external?: boolean };
+type Link = {
+  href: string;
+  label: string;
+  external?: boolean;
+};
 
 const FooterAnchor = ({ link, className }: { link: Link; className: string }) => (
   <a href={link.href} className={className} {...(link.external ? { rel: "noreferrer", target: "_blank" } : {})}>
@@ -71,52 +75,126 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
   const web = (path: string) => localizedUrl(WEB_ORIGIN, locale, path);
   const docs = () => localizedUrl(DOCS_ORIGIN, locale, "/");
 
-  const columns: { title: string; links: Link[] }[] = [
+  const columns: {
+    title: string;
+    links: Link[];
+  }[] = [
     {
       title: labels.product,
       links: [
-        { href: web("/"), label: labels.home },
-        { href: web("/library"), label: labels.library },
-        { href: web("/desktop"), label: labels.host },
-      ],
+        {
+          href: web("/"),
+          label: labels.home
+        },
+        {
+          href: web("/library"),
+          label: labels.library
+        },
+        {
+          href: web("/desktop"),
+          label: labels.host
+        }
+      ]
     },
     {
       title: labels.resources,
       links: [
-        { href: docs(), label: labels.docs },
-        { href: web("/guides"), label: labels.guides },
-        { href: web("/changelog"), label: labels.changelog },
-        { href: web("/support"), label: labels.support },
-        { href: web("/faq"), label: labels.faq },
-        { href: web("/status"), label: labels.status },
-        { href: web("/branding"), label: labels.branding },
-      ],
+        {
+          href: docs(),
+          label: labels.docs
+        },
+        {
+          href: web("/guides"),
+          label: labels.guides
+        },
+        {
+          href: web("/changelog"),
+          label: labels.changelog
+        },
+        {
+          href: web("/support"),
+          label: labels.support
+        },
+        {
+          href: web("/faq"),
+          label: labels.faq
+        },
+        {
+          href: web("/status"),
+          label: labels.status
+        },
+        {
+          href: web("/branding"),
+          label: labels.branding
+        }
+      ]
     },
     {
       title: labels.community,
       links: [
-        { href: DISCORD_INVITE_URL, label: labels.discord, external: true },
-        { href: PROJECT_REPOSITORY_URL, label: labels.github, external: true },
-        { href: TWITTER_URL, label: labels.twitter, external: true },
-        { href: BLUESKY_URL, label: labels.bluesky, external: true },
-        { href: TIKTOK_URL, label: labels.tiktok, external: true },
-      ],
+        {
+          href: DISCORD_INVITE_URL,
+          label: labels.discord,
+          external: true
+        },
+        {
+          href: PROJECT_REPOSITORY_URL,
+          label: labels.github,
+          external: true
+        },
+        {
+          href: TWITTER_URL,
+          label: labels.twitter,
+          external: true
+        },
+        {
+          href: BLUESKY_URL,
+          label: labels.bluesky,
+          external: true
+        },
+        {
+          href: TIKTOK_URL,
+          label: labels.tiktok,
+          external: true
+        }
+      ]
     },
     {
       title: labels.company,
       links: [
-        { href: web("/about"), label: labels.about },
-        { href: web("/support#contact"), label: labels.contact },
-      ],
-    },
+        {
+          href: web("/about"),
+          label: labels.about
+        },
+        {
+          href: web("/support#contact"),
+          label: labels.contact
+        }
+      ]
+    }
   ];
 
   const legalLinks: Link[] = [
-    { href: web("/legal-notice"), label: labels.legalNotice },
-    { href: web("/cookies"), label: labels.cookies },
-    { href: web("/privacy"), label: labels.privacy },
-    { href: web("/consent"), label: labels.consent },
-    { href: web("/tos"), label: labels.tos },
+    {
+      href: web("/legal-notice"),
+      label: labels.legalNotice
+    },
+    {
+      href: web("/cookies"),
+      label: labels.cookies
+    },
+    {
+      href: web("/privacy"),
+      label: labels.privacy
+    },
+    {
+      href: web("/consent"),
+      label: labels.consent
+    },
+    {
+      href: web("/tos"),
+      label: labels.tos
+    }
   ];
 
   return (
@@ -161,4 +239,3 @@ export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
 };
 
 export { DISCORD_SITE_URL as FOOTER_DISCORD_SITE_URL };
-

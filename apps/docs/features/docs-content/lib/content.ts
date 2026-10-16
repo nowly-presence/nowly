@@ -14,11 +14,12 @@ type FolderInfo = {
 
 const parseOrderedFolder = (name: string): FolderInfo | null => {
   const match = /^(\d+)-(.+)$/.exec(name);
+
   if (!match) return null;
 
   return {
     order: Number(match[1]),
-    slug: match[2],
+    slug: match[2]
   };
 };
 
@@ -26,28 +27,41 @@ const readCategoryTitle = (categoryPath: string, slug: string): Record<string, s
   const metaPath = join(categoryPath, "_meta.json");
 
   if (!existsSync(metaPath)) {
-    return { "en-US": slug };
+    return {
+      "en-US": slug
+    };
   }
 
   const meta = JSON.parse(readFileSync(metaPath, "utf-8"));
   return meta.title ?? { "en-US": slug };
 };
 
-const readOrderedDirectories = (root: string): Array<FolderInfo & { path: string }> => {
+const readOrderedDirectories = (root: string): Array<
+  FolderInfo & {
+    path: string;
+  }
+> => {
   if (!existsSync(root)) return [];
 
   return readdirSync(root, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => {
       const parsed = parseOrderedFolder(entry.name);
+
       if (!parsed) return null;
 
       return {
         ...parsed,
-        path: join(root, entry.name),
+        path: join(root, entry.name)
       };
     })
-    .filter((entry): entry is FolderInfo & { path: string } => Boolean(entry))
+    .filter(
+      (
+        entry
+      ): entry is FolderInfo & {
+        path: string;
+      } => Boolean(entry)
+    )
     .sort((a, b) => a.order - b.order);
 };
 
@@ -64,8 +78,8 @@ export const getDocsNav = (): DocSection[] => {
         order: page.order,
         title: { "en-US": page.slug },
         path: page.path,
-        children: [],
-      })),
+        children: []
+      }))
     }))
     .filter((category) => category.children.length > 0);
 };
@@ -78,34 +92,49 @@ const getLocalizedTitle = (title: Record<string, string>, locale: string, fallba
 // content is owned by @nowly/changelog so adding a release never touches this app.
 const CHANGELOG_ROOT = join(DOCS_ROOT, "changelog");
 
-const readMdxFile = (filePath: string): { raw: string } | null => {
+const readMdxFile = (filePath: string): {
+  raw: string;
+} | null => {
   if (!existsSync(filePath)) return null;
 
-  return { raw: readFileSync(filePath, "utf-8") };
+  return {
+    raw: readFileSync(filePath, "utf-8")
+  };
 };
 
-const readDocFile = (page: DocSection, locale: string): { raw: string } | null => {
+const readDocFile = (page: DocSection, locale: string): {
+  raw: string;
+} | null => {
   const validLocale = getValidLocale(locale);
   const localizedPath = join(page.path, `${validLocale}.mdx`);
   const fallbackPath = join(page.path, "en-US.mdx");
 
   if (existsSync(localizedPath)) {
-    return { raw: readFileSync(localizedPath, "utf-8") };
+    return {
+      raw: readFileSync(localizedPath, "utf-8")
+    };
   }
 
   if (existsSync(fallbackPath)) {
-    return { raw: readFileSync(fallbackPath, "utf-8") };
+    return {
+      raw: readFileSync(fallbackPath, "utf-8")
+    };
   }
 
   return null;
 };
 
-const readChangelogIndexFile = (locale: string): { raw: string } | null => {
+const readChangelogIndexFile = (locale: string): {
+  raw: string;
+} | null => {
   const validLocale = getValidLocale(locale);
   return readMdxFile(join(CHANGELOG_ROOT, `${validLocale}.mdx`)) ?? readMdxFile(join(CHANGELOG_ROOT, "en-US.mdx"));
 };
 
-const readChangelogIndexFrontmatter = (locale: string): { title?: string; description?: string } => {
+const readChangelogIndexFrontmatter = (locale: string): {
+  title?: string;
+  description?: string;
+} => {
   const docFile = readChangelogIndexFile(locale);
 
   if (!docFile) return {};
@@ -114,7 +143,7 @@ const readChangelogIndexFrontmatter = (locale: string): { title?: string; descri
 
   return {
     title: typeof data.title === "string" ? data.title : undefined,
-    description: typeof data.description === "string" ? data.description : undefined,
+    description: typeof data.description === "string" ? data.description : undefined
   };
 };
 
@@ -122,8 +151,12 @@ const findCategory = (slug: string): DocSection | null => {
   return getDocsNav().find((section) => section.slug === slug) ?? null;
 };
 
-const findPage = (slug: string): { category: DocSection; page: DocSection } | null => {
+const findPage = (slug: string): {
+  category: DocSection;
+  page: DocSection;
+} | null => {
   const parts = slug.split("/").filter(Boolean);
+
   const categorySlug = parts.length > 1 ? parts[0] : null;
   const pageSlug = parts.at(-1);
 
@@ -133,6 +166,7 @@ const findPage = (slug: string): { category: DocSection; page: DocSection } | nu
     if (categorySlug && category.slug !== categorySlug) continue;
 
     const page = category.children.find((child) => child.slug === pageSlug);
+
     if (page) return { category, page };
   }
 
@@ -167,9 +201,9 @@ export const getNavigationItems = (locale: string): DocNavigationItem[] => {
         description: typeof data.description === "string" ? data.description : "",
         order: page.order,
         path: `${category.slug}/${page.slug}`,
-        children: [],
+        children: []
       };
-    }),
+    })
   }));
 
   const changelogIndex = readChangelogIndexFrontmatter(validLocale);
@@ -187,8 +221,8 @@ export const getNavigationItems = (locale: string): DocNavigationItem[] => {
       description: entry.description,
       order: index + 1,
       path: `changelog/${entry.slug}`,
-      children: [],
-    })),
+      children: []
+    }))
   });
 
   return items;
@@ -197,6 +231,7 @@ export const getNavigationItems = (locale: string): DocNavigationItem[] => {
 export const getDocContent = (slug: string, locale: string): DocContent | null => {
   if (slug === "changelog") {
     const docFile = readChangelogIndexFile(locale);
+
     if (!docFile) return null;
 
     const { data, content } = matter(docFile.raw);
@@ -207,13 +242,14 @@ export const getDocContent = (slug: string, locale: string): DocContent | null =
       title: typeof data.title === "string" ? data.title : "",
       description: typeof data.description === "string" ? data.description : "",
       content,
-      frontmatter: data,
+      frontmatter: data
     };
   }
 
   if (slug.startsWith("changelog/")) {
     const versionSlug = slug.replace(/^changelog\//, "");
     const doc = getChangelogBody(versionSlug, locale);
+
     if (!doc) return null;
 
     return {
@@ -223,14 +259,16 @@ export const getDocContent = (slug: string, locale: string): DocContent | null =
       title: doc.frontmatter.title,
       description: doc.frontmatter.description,
       content: doc.content,
-      frontmatter: doc.frontmatter,
+      frontmatter: doc.frontmatter
     };
   }
 
   const resolved = findPage(slug);
+
   if (!resolved) return null;
 
   const docFile = readDocFile(resolved.page, locale);
+
   if (!docFile) return null;
 
   const { data, content } = matter(docFile.raw);
@@ -243,7 +281,7 @@ export const getDocContent = (slug: string, locale: string): DocContent | null =
     title: typeof data.title === "string" ? data.title : resolved.page.slug,
     description: typeof data.description === "string" ? data.description : "",
     content,
-    frontmatter: data,
+    frontmatter: data
   };
 };
 
@@ -257,26 +295,25 @@ export const getCategoryForPath = (slug: string, locale: string): string => {
 
   const category = categorySlug ? findCategory(categorySlug) : null;
 
-  return category ? getLocalizedTitle(category.title, validLocale, category.slug) : categorySlug ?? "";
+  return category ? getLocalizedTitle(category.title, validLocale, category.slug) : (categorySlug ?? "");
 };
 
-export const getAdjacentPages = (
-  slug: string,
-  locale: string
-): { prev: DocNavigationItem | null; next: DocNavigationItem | null } => {
+export const getAdjacentPages = (slug: string, locale: string): {
+  prev: DocNavigationItem | null;
+  next: DocNavigationItem | null;
+} => {
   const items = getNavigationItems(locale).flatMap((category) =>
     category.children.map((page) => ({
       ...page,
-      slug: page.path,
+      slug: page.path
     }))
   );
-  const normalizedSlug = findPage(slug)
-    ? getDocContent(slug, locale)?.path ?? slug
-    : slug;
+
+  const normalizedSlug = findPage(slug) ? (getDocContent(slug, locale)?.path ?? slug) : slug;
   const index = items.findIndex((item) => item.slug === normalizedSlug);
 
   return {
     prev: index > 0 ? items[index - 1] : null,
-    next: index < items.length - 1 ? items[index + 1] : null,
+    next: index < items.length - 1 ? items[index + 1] : null
   };
 };

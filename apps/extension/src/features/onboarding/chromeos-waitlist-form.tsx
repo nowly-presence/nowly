@@ -1,38 +1,42 @@
-import { useState } from "react"
-import { RiMailLine } from "@remixicon/react"
-import { API_BASE_URL, CHROMEOS_WAITLIST_CAMPAIGN_ID } from "@/shared/constants"
-import { useI18n } from "@/hooks/i18n-provider"
-import { Button } from "@/ui/button"
-import { Card } from "@/ui/card"
-import { Input } from "@/ui/input"
+import { useState } from "react";
+import { RiMailLine } from "@remixicon/react";
+import { API_BASE_URL, CHROMEOS_WAITLIST_CAMPAIGN_ID } from "@/shared/constants";
+import { useI18n } from "@/hooks/i18n-provider";
+import { Button } from "@/ui/button";
+import { Card } from "@/ui/card";
+import { Input } from "@/ui/input";
 
 export const ChromeOsWaitlistForm = (): React.JSX.Element | null => {
-  const { t } = useI18n()
-  const [email, setEmail] = useState("")
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
+  const { t } = useI18n();
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-  if (!CHROMEOS_WAITLIST_CAMPAIGN_ID) return null
+  if (!CHROMEOS_WAITLIST_CAMPAIGN_ID) return null;
 
   const submit = async (): Promise<void> => {
-    const trimmedEmail = email.trim()
-    if (!trimmedEmail || status === "sending") return
-    setStatus("sending")
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail || status === "sending") return;
+
+    setStatus("sending");
 
     try {
       const response = await fetch(`${API_BASE_URL}/campaigns/${CHROMEOS_WAITLIST_CAMPAIGN_ID}/signups`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmedEmail }),
-      })
+        body: JSON.stringify({ email: trimmedEmail })
+      });
+
       if (!response.ok) {
-        setStatus("error")
-        return
+        setStatus("error");
+        return;
       }
-      setStatus("success")
+
+      setStatus("success");
     } catch {
-      setStatus("error")
+      setStatus("error");
     }
-  }
+  };
 
   return (
     <Card className="flex flex-col gap-4 p-4">
@@ -46,8 +50,8 @@ export const ChromeOsWaitlistForm = (): React.JSX.Element | null => {
         <form
           className="flex flex-col gap-2"
           onSubmit={(event) => {
-            event.preventDefault()
-            void submit()
+            event.preventDefault();
+            void submit();
           }}
         >
           <label className="text-label-md text-muted" htmlFor="chromeos-waitlist-email">
@@ -70,5 +74,5 @@ export const ChromeOsWaitlistForm = (): React.JSX.Element | null => {
         </form>
       )}
     </Card>
-  )
-}
+  );
+};

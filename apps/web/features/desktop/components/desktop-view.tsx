@@ -2,32 +2,12 @@
 
 import { ButtonLink } from "@/components/button-link";
 import { CampaignSignupForm } from "@/features/campaigns/components/campaign-signup-form";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-  ButtonAnchor,
-  Card,
-  CardContent,
-  CardDescription,
-  CardTitle,
-  cn,
-} from "@nowly/ui";
-
+import { Alert, AlertDescription, AlertTitle, ButtonAnchor, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
 
 import { CHROMEOS_WAITLIST_CAMPAIGN_ID, PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import type { DesktopPlatform, DesktopRelease } from "@/features/desktop/lib/desktop-release";
 
-import {
-  RiAppleFill,
-  RiCheckLine,
-  RiChromeFill,
-  RiErrorWarningLine,
-  RiGithubLine,
-  RiInformationLine,
-  RiUbuntuFill,
-  RiWindowsFill,
-} from "@nowly/ui/icons";
+import { RiAppleFill, RiCheckLine, RiChromeFill, RiErrorWarningLine, RiGithubLine, RiInformationLine, RiUbuntuFill, RiWindowsFill } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useLayoutEffect, useState } from "react";
 
@@ -37,21 +17,23 @@ const platformIcons = {
   windows: RiWindowsFill,
   macos: RiAppleFill,
   linux: RiUbuntuFill,
-  chromeos: RiChromeFill,
+  chromeos: RiChromeFill
 };
 
 type Platform = DesktopPlatform | "chromeos";
 
 const detectPlatform = (): Platform => {
   const ua = navigator.userAgent;
+
   if (/CrOS/i.test(ua)) return "chromeos";
   if (/Mac/i.test(ua) && !/iPhone|iPad/i.test(ua)) return "macos";
   if (/Linux/i.test(ua) && !/Android/i.test(ua)) return "linux";
+
   return "windows";
 };
 
 type DesktopViewProps = {
-  release: DesktopRelease
+  release: DesktopRelease;
 };
 
 export const DesktopView = ({ release }: DesktopViewProps) => {
@@ -59,16 +41,25 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
   const [platform, setPlatform] = useState<Platform>("windows");
   const [detected, setDetected] = useState<Platform | null>(null);
   const Icon = platformIcons[platform];
-  const downloads = platform === "chromeos" ? [] : platformDownloads(release, platform, {
-    windowsInstaller: t("windows-installer"),
-    windowsPortable: t("windows-portable"),
-    macosDmg: t("macos-dmg"),
-    macosArchive: t("macos-archive"),
-    linuxDeb: t("linux-deb"),
-    linuxArchive: t("linux-archive"),
-  });
-  const trustItems = t.raw("trust-items") as Array<{ title: string; text: string }>;
-  const guideItems = t.raw("guide-items") as Array<{ title: string; text: string }>;
+  const downloads =
+    platform === "chromeos"
+      ? []
+      : platformDownloads(release, platform, {
+          windowsInstaller: t("windows-installer"),
+          windowsPortable: t("windows-portable"),
+          macosDmg: t("macos-dmg"),
+          macosArchive: t("macos-archive"),
+          linuxDeb: t("linux-deb"),
+          linuxArchive: t("linux-archive")
+        });
+  const trustItems = t.raw("trust-items") as Array<{
+    title: string;
+    text: string;
+  }>;
+  const guideItems = t.raw("guide-items") as Array<{
+    title: string;
+    text: string;
+  }>;
   const requirementKeys = ["os", "arch", "discord", "browser", "storage"] as const;
 
   useLayoutEffect(() => {
@@ -81,15 +72,9 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
         <header className="max-w-xl">
-          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
-            {t("eyebrow")}
-          </p>
-          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
-            {t("title")}
-          </h1>
-          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">
-            {t("description")}
-          </p>
+          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
+          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">{t("title")}</h1>
+          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">{t("description")}</p>
         </header>
 
         <div className="mt-10 flex flex-wrap gap-2">
@@ -103,9 +88,7 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
                 onClick={() => setPlatform(key)}
                 className={cn(
                   "flex h-9 items-center gap-2 rounded-full px-3.5 text-sm font-medium transition-colors",
-                  active
-                    ? "bg-foreground text-background"
-                    : "bg-foreground/5 text-foreground/80 hover:bg-foreground/9 hover:text-foreground",
+                  active ? "bg-foreground text-background" : "bg-foreground/5 text-foreground/80 hover:bg-foreground/9 hover:text-foreground"
                 )}
               >
                 <PlatformIcon className="size-4" />
@@ -128,16 +111,14 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
             </div>
             <div>
               <CardTitle className="text-xl">
-                {platform === "chromeos" ? t("chromeos-title") : t("card-title", { platform: t(`platforms.${platform}`) })}
+                {platform === "chromeos"
+                  ? t("chromeos-title")
+                  : t("card-title", { platform: t(`platforms.${platform}`) })}
               </CardTitle>
               {platform !== "chromeos" && release.version ? (
-                <CardDescription className="mt-1">
-                  {t("version", { version: release.version })}
-                </CardDescription>
+                <CardDescription className="mt-1">{t("version", { version: release.version })}</CardDescription>
               ) : null}
-              {platform === "chromeos" ? (
-                <CardDescription className="mt-1">{t("chromeos-description")}</CardDescription>
-              ) : null}
+              {platform === "chromeos" ? <CardDescription className="mt-1">{t("chromeos-description")}</CardDescription> : null}
             </div>
 
             {platform === "chromeos" ? (
@@ -153,13 +134,7 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
             ) : (
               <div className="flex w-full flex-col gap-2">
                 {downloads.map((item, index) => (
-                  <ButtonAnchor
-                    key={item.href}
-                    href={item.href}
-                    variant={index === 0 ? "inverted" : "outline"}
-                    size="lg"
-                    className="w-full"
-                  >
+                  <ButtonAnchor key={item.href} href={item.href} variant={index === 0 ? "inverted" : "outline"} size="lg" className="w-full">
                     {item.label}
                   </ButtonAnchor>
                 ))}
@@ -167,14 +142,7 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
             )}
 
             <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
-              <ButtonAnchor
-                href={PROJECT_REPOSITORY_URL}
-                rel="noreferrer"
-                target="_blank"
-                variant="link"
-                size="sm"
-                className="h-auto px-0"
-              >
+              <ButtonAnchor href={PROJECT_REPOSITORY_URL} rel="noreferrer" target="_blank" variant="link" size="sm" className="h-auto px-0">
                 <RiGithubLine data-icon="inline-start" />
                 {t("open-source")}
               </ButtonAnchor>
@@ -227,9 +195,7 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
             <ol className="mt-6 space-y-5">
               {guideItems.map((item, index) => (
                 <li key={item.title} className="flex gap-4">
-                  <span className="mt-0.5 font-mono text-xs font-medium text-accent">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+                  <span className="mt-0.5 font-mono text-xs font-medium text-accent">{String(index + 1).padStart(2, "0")}</span>
                   <div>
                     <p className="font-medium text-foreground">{item.title}</p>
                     <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
@@ -250,10 +216,7 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
             <h2 className="text-xl font-medium tracking-tight">{t("req-title")}</h2>
             <div className="mt-6 divide-y divide-border overflow-hidden rounded-[16px] border border-border bg-foreground/4">
               {requirementKeys.map((key) => (
-                <div
-                  key={key}
-                  className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
-                >
+                <div key={key} className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
                   <span className="text-sm text-muted-foreground">{t(`req.${key}`)}</span>
                   <span className="text-sm font-medium">{t(`req.${key}-${platform}`)}</span>
                 </div>
@@ -266,31 +229,48 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
   );
 };
 
-const platformDownloads = (
-  release: DesktopRelease,
-  platform: DesktopPlatform,
-  labels: {
-    windowsInstaller: string
-    windowsPortable: string
-    macosDmg: string
-    macosArchive: string
-    linuxDeb: string
-    linuxArchive: string
-  },
-) => {
+const platformDownloads = (release: DesktopRelease, platform: DesktopPlatform, labels: {
+  windowsInstaller: string;
+  windowsPortable: string;
+  macosDmg: string;
+  macosArchive: string;
+  linuxDeb: string;
+  linuxArchive: string;
+}) => {
   if (platform === "windows") {
     return [
-      { href: release.windows.installer, label: labels.windowsInstaller },
-      { href: release.windows.portable, label: labels.windowsPortable },
+      {
+        href: release.windows.installer,
+        label: labels.windowsInstaller
+      },
+      {
+        href: release.windows.portable,
+        label: labels.windowsPortable
+      }
     ];
   }
   if (platform === "macos") {
-    const items = [{ href: release.macos.dmg, label: labels.macosDmg }];
-    if (release.macos.archive) items.push({ href: release.macos.archive, label: labels.macosArchive });
+    const items = [
+      {
+        href: release.macos.dmg,
+        label: labels.macosDmg
+      }
+    ];
+    if (release.macos.archive) items.push({
+      href: release.macos.archive,
+      label: labels.macosArchive
+    });
     return items;
   }
+
   const items = [];
-  if (release.linux.deb) items.push({ href: release.linux.deb, label: labels.linuxDeb });
-  items.push({ href: release.linux.archive, label: labels.linuxArchive });
+  if (release.linux.deb) items.push({
+    href: release.linux.deb,
+    label: labels.linuxDeb
+  });
+  items.push({
+    href: release.linux.archive,
+    label: labels.linuxArchive
+  });
   return items;
 };

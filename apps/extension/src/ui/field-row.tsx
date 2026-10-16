@@ -1,15 +1,15 @@
-import type { ReactNode } from "react"
-import { cn } from "@/ui/cn"
+import type { ReactNode } from "react";
+import { cn } from "@/ui/cn";
 
 type FieldRowProps = {
-  title: ReactNode
-  description?: ReactNode
-  note?: ReactNode
-  children: ReactNode
-  layout?: "inline" | "stacked"
-  spacing?: "tight" | "relaxed"
-  controlClassName?: string
-}
+  title: ReactNode;
+  description?: ReactNode;
+  note?: ReactNode;
+  children: ReactNode;
+  layout?: "inline" | "stacked";
+  spacing?: "tight" | "relaxed";
+  controlClassName?: string;
+};
 
 export const FieldRow = ({ title, description, note, children, layout = "inline", spacing = "tight", controlClassName }: FieldRowProps) => (
   <div className="px-4 py-3">
@@ -22,4 +22,4 @@ export const FieldRow = ({ title, description, note, children, layout = "inline"
     </div>
     {note && <p className="mt-2.5 text-label-sm text-muted italic">{note}</p>}
   </div>
-)
+);

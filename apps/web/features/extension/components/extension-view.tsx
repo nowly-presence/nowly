@@ -4,7 +4,6 @@ import { ButtonLink } from "@/components/button-link";
 import { Link } from "@/i18n/navigation";
 import { ButtonAnchor, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
 
-
 import { detectExtensionBrowser, getExtensionDownloadUrl } from "@/lib/extension-store";
 import type { ExtensionBrowser } from "@/lib/extension-store";
 
@@ -16,7 +15,7 @@ const browsers = ["chrome", "firefox"] as const;
 
 const browserIcons = {
   chrome: RiChromeFill,
-  firefox: RiFirefoxBrowserFill,
+  firefox: RiFirefoxBrowserFill
 };
 
 export const ExtensionView = () => {
@@ -24,8 +23,14 @@ export const ExtensionView = () => {
   const [browser, setBrowser] = useState<ExtensionBrowser>("chrome");
   const [detected, setDetected] = useState<ExtensionBrowser | null>(null);
   const Icon = browserIcons[browser];
-  const trustItems = t.raw("trust-items") as Array<{ title: string; text: string }>;
-  const guideItems = t.raw("guide-items") as Array<{ title: string; text: string }>;
+  const trustItems = t.raw("trust-items") as Array<{
+    title: string;
+    text: string;
+  }>;
+  const guideItems = t.raw("guide-items") as Array<{
+    title: string;
+    text: string;
+  }>;
 
   useLayoutEffect(() => {
     const next = detectExtensionBrowser();
@@ -37,15 +42,9 @@ export const ExtensionView = () => {
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
         <header className="max-w-xl">
-          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
-            {t("eyebrow")}
-          </p>
-          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
-            {t("title")}
-          </h1>
-          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">
-            {t("description")}
-          </p>
+          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
+          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">{t("title")}</h1>
+          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">{t("description")}</p>
         </header>
 
         <div className="mt-10 flex flex-wrap gap-2">
@@ -59,9 +58,7 @@ export const ExtensionView = () => {
                 onClick={() => setBrowser(key)}
                 className={cn(
                   "flex h-9 items-center gap-2 rounded-full px-3.5 text-sm font-medium transition-colors",
-                  active
-                    ? "bg-foreground text-background"
-                    : "bg-foreground/5 text-foreground/80 hover:bg-foreground/9 hover:text-foreground",
+                  active ? "bg-foreground text-background" : "bg-foreground/5 text-foreground/80 hover:bg-foreground/9 hover:text-foreground"
                 )}
               >
                 <BrowserIcon className="size-4" />
@@ -83,20 +80,11 @@ export const ExtensionView = () => {
               <Icon className="size-6" />
             </div>
             <div>
-              <CardTitle className="text-xl">
-                {t("card-title", { browser: t(`browsers.${browser}`) })}
-              </CardTitle>
+              <CardTitle className="text-xl">{t("card-title", { browser: t(`browsers.${browser}`) })}</CardTitle>
               <CardDescription className="mt-1">{t(`card-description.${browser}`)}</CardDescription>
             </div>
             <div className="flex w-full flex-col gap-2">
-              <ButtonAnchor
-                href={getExtensionDownloadUrl(browser)}
-                rel="noreferrer"
-                target="_blank"
-                variant="inverted"
-                size="lg"
-                className="w-full"
-              >
+              <ButtonAnchor href={getExtensionDownloadUrl(browser)} rel="noreferrer" target="_blank" variant="inverted" size="lg" className="w-full">
                 <Icon data-icon="inline-start" />
                 {t("card-title", { browser: t(`browsers.${browser}`) })}
               </ButtonAnchor>
@@ -127,9 +115,7 @@ export const ExtensionView = () => {
             <ol className="mt-6 space-y-5">
               {guideItems.map((item, index) => (
                 <li key={item.title} className="flex gap-4">
-                  <span className="mt-0.5 font-mono text-xs font-medium text-accent">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+                  <span className="mt-0.5 font-mono text-xs font-medium text-accent">{String(index + 1).padStart(2, "0")}</span>
                   <div>
                     <p className="font-medium text-foreground">{item.title}</p>
                     <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.text}</p>

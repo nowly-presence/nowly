@@ -6,7 +6,10 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Nowly Insights",
   description: "Internal analytics dashboard for Nowly.",
-  robots: { index: false, follow: false },
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 const Layout = ({ children }: PropsWithChildren) => (

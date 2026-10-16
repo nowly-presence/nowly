@@ -1,6 +1,6 @@
-import type { ReactNode } from "react"
-import { RiArrowLeftLine } from "@remixicon/react"
-import { cn } from "@/ui/cn"
+import type { ReactNode } from "react";
+import { RiArrowLeftLine } from "@remixicon/react";
+import { cn } from "@/ui/cn";
 
 export const ScreenTitle = ({ title, subtitle, action }: { title: string; subtitle?: ReactNode; action?: ReactNode }) => (
   <div className="flex items-end justify-between gap-3 px-1 pt-2">
@@ -10,7 +10,7 @@ export const ScreenTitle = ({ title, subtitle, action }: { title: string; subtit
     </div>
     {action}
   </div>
-)
+);
 
 export const BackHeader = ({ title, onBack, backLabel, action }: { title?: string; onBack: () => void; backLabel: string; action?: ReactNode }) => (
   <header className="sticky top-0 z-20 flex h-14 items-center gap-2 bg-canvas/90 px-2 backdrop-blur-md">
@@ -26,8 +26,8 @@ export const BackHeader = ({ title, onBack, backLabel, action }: { title?: strin
     {!title && <span className="flex-1" />}
     {action}
   </header>
-)
+);
 
 export const ScreenBody = ({ children, className }: { children: ReactNode; className?: string }) => (
   <div className={cn("flex animate-enter flex-col gap-6 px-4 pt-2 pb-28", className)}>{children}</div>
-)
+);

@@ -2,13 +2,7 @@
 
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { AccountHeader } from "@/features/account/components/account-header";
-import {
-  createExtensionSession,
-  fetchAccountUser,
-  signOutAccount,
-  startDiscordSignIn,
-  type AccountUser,
-} from "@/features/account/lib/account-api";
+import { createExtensionSession, fetchAccountUser, signOutAccount, startDiscordSignIn, type AccountUser } from "@/features/account/lib/account-api";
 import { requestExtension, subscribeExtensionDetected } from "@/lib/extension-bridge";
 import { Button, Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
 import { RiCheckLine, RiDiscordFill, RiPlugLine, RiPuzzleLine } from "@nowly/ui/icons";
@@ -20,7 +14,9 @@ type Status = "checking" | "signed-out" | "no-extension" | "ready" | "connecting
 
 const SESSION_TIMEOUT_MS = 15000;
 
-const StatusIcon = ({ status }: { status: Status }) => {
+const StatusIcon = ({ status }: {
+  status: Status;
+}) => {
   const Icon = status === "done" ? RiCheckLine : status === "no-extension" ? RiPuzzleLine : status === "signed-out" ? RiDiscordFill : RiPlugLine;
   return (
     <div className="flex size-12 items-center justify-center rounded-2xl bg-foreground/6">
@@ -41,9 +37,13 @@ export const ExtensionConnectView = () => {
 
   const connect = useCallback(async (): Promise<void> => {
     setStatus("connecting");
+
     try {
       const session = await createExtensionSession(deviceId);
-      const result = await requestExtension<{ ok?: boolean }>("NOWLY_SESSION", session, SESSION_TIMEOUT_MS);
+
+      const result = await requestExtension<{
+        ok?: boolean;
+      }>("NOWLY_SESSION", session, SESSION_TIMEOUT_MS);
       setStatus(result?.ok === true ? "done" : "error");
     } catch {
       setStatus("error");
@@ -56,11 +56,14 @@ export const ExtensionConnectView = () => {
     void fetchAccountUser()
       .then((current) => {
         if (cancelled) return;
+
         setUser(current);
+
         if (!current) {
           setStatus("signed-out");
           return;
         }
+
         unsubscribe = subscribeExtensionDetected((detected) => {
           if (cancelled) return;
           if (!detected) {
@@ -72,6 +75,7 @@ export const ExtensionConnectView = () => {
             void connect();
             return;
           }
+
           setStatus((previous) => (previous === "checking" || previous === "no-extension" ? "ready" : previous));
         });
       })
@@ -86,6 +90,7 @@ export const ExtensionConnectView = () => {
 
   const onSignIn = async (): Promise<void> => {
     setBusy(true);
+
     try {
       await startDiscordSignIn(window.location.href);
     } catch {
@@ -103,19 +108,29 @@ export const ExtensionConnectView = () => {
   };
 
   const title =
-    status === "done" ? t("done-title")
-      : status === "no-extension" ? t("not-detected-title")
-        : status === "signed-out" ? t("sign-in-title")
-          : status === "error" ? t("error-title")
+    status === "done"
+      ? t("done-title")
+      : status === "no-extension"
+        ? t("not-detected-title")
+        : status === "signed-out"
+          ? t("sign-in-title")
+          : status === "error"
+            ? t("error-title")
             : t("connect-title");
 
   const description =
-    status === "done" ? t("done-description")
-      : status === "no-extension" ? t("not-detected-description")
-        : status === "signed-out" ? t("sign-in-description")
-          : status === "error" ? t("error-description")
-            : status === "checking" ? t("checking")
-              : status === "connecting" ? t("connecting")
+    status === "done"
+      ? t("done-description")
+      : status === "no-extension"
+        ? t("not-detected-description")
+        : status === "signed-out"
+          ? t("sign-in-description")
+          : status === "error"
+            ? t("error-description")
+            : status === "checking"
+              ? t("checking")
+              : status === "connecting"
+                ? t("connecting")
                 : t("connect-description", { name: user?.name ?? "" });
 
   return (

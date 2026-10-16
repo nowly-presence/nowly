@@ -39,7 +39,7 @@ const htmlEntities: Record<string, string> = {
   gt: ">",
   lt: "<",
   nbsp: " ",
-  quot: "\"",
+  quot: '"'
 };
 
 export const normalizeHeadingText = (value: string): string =>
@@ -49,12 +49,14 @@ export const normalizeHeadingText = (value: string): string =>
     .replace(/<[^>]+>/g, "")
     .replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (entity, name: string) => {
       const normalizedName = name.toLowerCase();
+
       if (normalizedName.startsWith("#x")) {
         return String.fromCodePoint(Number.parseInt(normalizedName.slice(2), 16));
       }
       if (normalizedName.startsWith("#")) {
         return String.fromCodePoint(Number.parseInt(normalizedName.slice(1), 10));
       }
+
       return htmlEntities[normalizedName] ?? entity;
     })
     .replace(/\u00a0/g, " ")

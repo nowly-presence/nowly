@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@nowly/analytics", "@nowly/ui"],
   poweredByHeader: false,
   experimental: {
-    optimizePackageImports: ["@nowly/ui"],
-  },
+    optimizePackageImports: ["@nowly/ui"]
+  }
 };
 
 export default nextConfig;

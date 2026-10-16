@@ -10,17 +10,22 @@ import { getTranslations } from "next-intl/server";
 const icons = [RiCustomerService2Line, RiLightbulbLine, RiTeamLine];
 
 export const CommunitySection = async () => {
-  const [t, community] = await Promise.all([getTranslations("community"), getDiscordCommunity()]);
-  const items = t.raw("items") as Array<{ title: string; description: string }>;
+  const [t, community] = await Promise.all([
+    getTranslations("community"),
+    getDiscordCommunity()
+  ]);
+
+  const items = t.raw("items") as Array<{
+    title: string;
+    description: string;
+  }>;
 
   return (
     <section id="community" className={cn("home-section-deferred px-5 py-28 sm:px-10 sm:py-36", homeSectionAltClass)}>
       <div className="mx-auto grid w-full max-w-[1200px] items-center gap-12 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:gap-16">
         <div>
           <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
-          <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[2.15rem]">
-            {t("title")}
-          </h2>
+          <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[2.15rem]">{t("title")}</h2>
           <p className="mt-2 text-base leading-relaxed text-muted-foreground sm:text-lg">{t("description")}</p>
 
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
@@ -47,7 +52,7 @@ export const CommunitySection = async () => {
                 <Link href="/support#donate" className="underline underline-offset-4 transition-colors hover:text-foreground">
                   {chunks}
                 </Link>
-              ),
+              )
             })}
           </p>
         </div>

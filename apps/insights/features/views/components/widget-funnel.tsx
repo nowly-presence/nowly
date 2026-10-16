@@ -19,21 +19,36 @@ type FunnelMeasurement = {
   overallConversion: number | null;
 };
 
-const buildQuery = (widget: Extract<WidgetConfig, { kind: "funnel" }>): string => {
+const buildQuery = (widget: Extract<
+  WidgetConfig,
+  {
+    kind: "funnel";
+  }
+>): string => {
   const params = new URLSearchParams();
+
   if (widget.range === "custom" && widget.from && widget.to) {
     params.set("from", widget.from);
     params.set("to", widget.to);
   } else {
     params.set("range", widget.range);
   }
+
   for (const [key, value] of Object.entries(widget.filters)) {
     if (value) params.set(key, value);
   }
+
   return params.toString();
 };
 
-export const WidgetFunnel = ({ widget }: { widget: Extract<WidgetConfig, { kind: "funnel" }> }) => {
+export const WidgetFunnel = ({ widget }: {
+  widget: Extract<
+    WidgetConfig,
+    {
+      kind: "funnel";
+    }
+  >;
+}) => {
   const [measurement, setMeasurement] = useState<FunnelMeasurement | null>(null);
   const [error, setError] = useState(false);
 
@@ -61,14 +76,10 @@ export const WidgetFunnel = ({ widget }: { widget: Extract<WidgetConfig, { kind:
         <div className="flex items-center justify-between">
           <div className="min-w-0">
             <CardDescription className="truncate">{widget.title}</CardDescription>
-            <CardTitle className="mt-1 truncate text-base font-medium">
-              {measurement ? measurement.label : widget.funnelId}
-            </CardTitle>
+            <CardTitle className="mt-1 truncate text-base font-medium">{measurement ? measurement.label : widget.funnelId}</CardTitle>
           </div>
           {measurement?.overallConversion !== null && measurement?.overallConversion !== undefined ? (
-            <span className="rounded-full border border-border px-2.5 py-0.5 text-xs font-semibold text-foreground">
-              {measurement.overallConversion}%
-            </span>
+            <span className="rounded-full border border-border px-2.5 py-0.5 text-xs font-semibold text-foreground">{measurement.overallConversion}%</span>
           ) : null}
         </div>
 
@@ -79,9 +90,7 @@ export const WidgetFunnel = ({ widget }: { widget: Extract<WidgetConfig, { kind:
             <Skeleton className="h-8 w-full" />
           </div>
         ) : error || !measurement ? (
-          <div className="mt-4 flex h-20 items-center justify-center text-sm text-muted-foreground">
-            Could not load data
-          </div>
+          <div className="mt-4 flex h-20 items-center justify-center text-sm text-muted-foreground">Could not load data</div>
         ) : (
           <div className="mt-4 space-y-2">
             {measurement.steps.map((step, index) => (

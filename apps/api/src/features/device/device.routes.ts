@@ -1,10 +1,10 @@
-import { deviceSyncBodySchema } from "@nowly/shared/schemas"
-import type { FastifyInstance } from "fastify"
-import { accountOf, requireExtensionToken } from "@/features/account/extension-token.middleware"
-import { attachTokenToDevice } from "@/features/account/extension-token.service"
-import { deviceRateLimitKey } from "@/shared/rate-limit"
-import { deriveDeviceToken, requireDeviceAccess } from "./device-token"
-import { deleteDeviceData, exportDeviceData, linkDeviceToUser, syncDevice } from "./device.service"
+import { deviceSyncBodySchema } from "@nowly/shared/schemas";
+import type { FastifyInstance } from "fastify";
+import { accountOf, requireExtensionToken } from "@/features/account/extension-token.middleware";
+import { attachTokenToDevice } from "@/features/account/extension-token.service";
+import { deviceRateLimitKey } from "@/shared/rate-limit";
+import { deriveDeviceToken, requireDeviceAccess } from "./device-token";
+import { deleteDeviceData, exportDeviceData, linkDeviceToUser, syncDevice } from "./device.service";
 
 export const deviceRoutes = async (fastify: FastifyInstance) => {
   fastify.post(
@@ -15,56 +15,83 @@ export const deviceRoutes = async (fastify: FastifyInstance) => {
         // than the global limit so spamming new deviceIds is slow to pay off.
         // Keyed by deviceId (not IP) so a shared NAT with several real users
         // doesn't get capped as if it were one client.
-        rateLimit: { max: 20, timeWindow: "1 minute", hook: "preHandler", keyGenerator: deviceRateLimitKey },
-      },
+        rateLimit: {
+          max: 20,
+          timeWindow: "1 minute",
+          hook: "preHandler",
+          keyGenerator: deviceRateLimitKey
+        }
+      }
     },
     async (request, reply) => {
-      const parsed = deviceSyncBodySchema.safeParse(request.body)
-      if (!parsed.success) return reply.status(400).send({ error: "INVALID_REQUEST_BODY" })
+      const parsed = deviceSyncBodySchema.safeParse(request.body);
 
-      await syncDevice(parsed.data)
-      return { ok: true, deviceToken: deriveDeviceToken(parsed.data.deviceId) }
-    },
-  )
+      if (!parsed.success) return reply.status(400).send({ error: "INVALID_REQUEST_BODY" });
+
+      await syncDevice(parsed.data);
+      return {
+        ok: true,
+        deviceToken: deriveDeviceToken(parsed.data.deviceId)
+      };
+    }
+  );
 
   // Right to access: everything Nowly has stored for this device.
-  fastify.get<{ Params: { deviceId: string }; Querystring: { token?: string } }>(
-    "/:deviceId/export",
-    async (request, reply) => {
-      const deviceId = request.params.deviceId.trim()
-      if (!requireDeviceAccess(request, reply, deviceId)) return
+  fastify.get<{
+    Params: {
+      deviceId: string;
+    };
+    Querystring: {
+      token?: string;
+    };
+  }>("/:deviceId/export", async (request, reply) => {
+    const deviceId = request.params.deviceId.trim();
 
-      const data = await exportDeviceData(deviceId)
-      if (!data) return reply.status(404).send({ error: "DEVICE_NOT_FOUND" })
-      return data
-    },
-  )
+    if (!requireDeviceAccess(request, reply, deviceId)) return;
+
+    const data = await exportDeviceData(deviceId);
+
+    if (!data) return reply.status(404).send({ error: "DEVICE_NOT_FOUND" });
+
+    return data;
+  });
 
   // Right to erasure: wipes the device row, its presences, sessions, and analytics events.
-  fastify.delete<{ Params: { deviceId: string }; Querystring: { token?: string } }>(
-    "/:deviceId",
-    async (request, reply) => {
-      const deviceId = request.params.deviceId.trim()
-      if (!requireDeviceAccess(request, reply, deviceId)) return
+  fastify.delete<{
+    Params: {
+      deviceId: string;
+    };
+    Querystring: {
+      token?: string;
+    };
+  }>("/:deviceId", async (request, reply) => {
+    const deviceId = request.params.deviceId.trim();
 
-      await deleteDeviceData(deviceId)
-      return { ok: true }
-    },
-  )
+    if (!requireDeviceAccess(request, reply, deviceId)) return;
 
-  fastify.post<{ Params: { deviceId: string } }>(
-    "/:deviceId/link",
-    { preHandler: requireExtensionToken("sync") },
-    async (request, reply) => {
-      const deviceId = request.params.deviceId.trim()
-      if (!requireDeviceAccess(request, reply, deviceId)) return
+    await deleteDeviceData(deviceId);
+    return {
+      ok: true
+    };
+  });
 
-      const account = accountOf(request)
-      if (account.deviceId && account.deviceId !== deviceId) return reply.status(403).send({ error: "DEVICE_MISMATCH" })
+  fastify.post<{
+    Params: {
+      deviceId: string;
+    };
+  }>("/:deviceId/link", { preHandler: requireExtensionToken("sync") }, async (request, reply) => {
+    const deviceId = request.params.deviceId.trim();
 
-      await linkDeviceToUser(deviceId, account.userId)
-      if (account.tokenId && !account.deviceId) await attachTokenToDevice(account.tokenId, deviceId)
-      return { ok: true }
-    },
-  )
-}
+    if (!requireDeviceAccess(request, reply, deviceId)) return;
+
+    const account = accountOf(request);
+
+    if (account.deviceId && account.deviceId !== deviceId) return reply.status(403).send({ error: "DEVICE_MISMATCH" });
+
+    await linkDeviceToUser(deviceId, account.userId);
+    if (account.tokenId && !account.deviceId) await attachTokenToDevice(account.tokenId, deviceId);
+    return {
+      ok: true
+    };
+  });
+};

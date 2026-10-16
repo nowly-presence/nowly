@@ -15,5 +15,6 @@ export const getPrisma = (): PrismaClient => {
     const adapter = new PrismaPg({ connectionString: serverEnv.DATABASE_URL });
     prisma = new PrismaClient({ adapter });
   }
+
   return prisma;
 };

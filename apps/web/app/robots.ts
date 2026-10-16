@@ -4,7 +4,12 @@ import type { MetadataRoute } from "next";
 const robots = (): MetadataRoute.Robots => {
   if (isSeoPreview) {
     return {
-      rules: [{ userAgent: "*", disallow: "/" }],
+      rules: [
+        {
+          userAgent: "*",
+          disallow: "/"
+        }
+      ]
     };
   }
 
@@ -13,13 +18,13 @@ const robots = (): MetadataRoute.Robots => {
       {
         userAgent: "*",
         allow: ["/", "/api/og"],
-        disallow: ["/api/", "/host/", "/test/", "/cdn-cgi/"],
-      },
+        disallow: ["/api/", "/host/", "/test/", "/cdn-cgi/"]
+      }
     ],
     sitemap: DOCS_ORIGIN.startsWith(`${CANONICAL_ORIGIN}/`)
       ? [`${CANONICAL_ORIGIN}/sitemap.xml`, `${DOCS_ORIGIN}/sitemap.xml`]
       : `${CANONICAL_ORIGIN}/sitemap.xml`,
-    host: CANONICAL_ORIGIN,
+    host: CANONICAL_ORIGIN
   };
 };
 

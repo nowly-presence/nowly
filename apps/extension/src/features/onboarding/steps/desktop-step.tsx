@@ -1,27 +1,31 @@
-import { RiCheckLine, RiComputerLine, RiDiscordLine } from "@remixicon/react"
-import { openUrl } from "@/shared/browser-links"
-import { HOST_DOWNLOAD_URL } from "@/shared/constants"
-import { Button, Spinner } from "@/ui/button"
-import { LiveDot } from "@/ui/live-dot"
-import { DiscordAvatar } from "@/components/shared/discord-avatar"
-import { Card, Group } from "@/ui/card"
-import { Row } from "@/ui/row"
-import { useI18n } from "@/hooks/i18n-provider"
-import { connectionOf } from "@/lib/presence-status"
-import { useExtensionState } from "@/hooks/extension-state-provider"
-import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout"
-import { PermissionStatus } from "@/features/onboarding/permission-status"
-import { ChromeOsWaitlistForm } from "@/features/onboarding/chromeos-waitlist-form"
-import { useIsChromeOs } from "@/features/onboarding/use-is-chrome-os"
+import { RiCheckLine, RiComputerLine, RiDiscordLine } from "@remixicon/react";
+import { openUrl } from "@/shared/browser-links";
+import { HOST_DOWNLOAD_URL } from "@/shared/constants";
+import { Button, Spinner } from "@/ui/button";
+import { LiveDot } from "@/ui/live-dot";
+import { DiscordAvatar } from "@/components/shared/discord-avatar";
+import { Card, Group } from "@/ui/card";
+import { Row } from "@/ui/row";
+import { useI18n } from "@/hooks/i18n-provider";
+import { connectionOf } from "@/lib/presence-status";
+import { useExtensionState } from "@/hooks/extension-state-provider";
+import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout";
+import { PermissionStatus } from "@/features/onboarding/permission-status";
+import { ChromeOsWaitlistForm } from "@/features/onboarding/chromeos-waitlist-form";
+import { useIsChromeOs } from "@/features/onboarding/use-is-chrome-os";
 
-export const DesktopStep = ({ onNext }: { onNext: () => void }) => {
-  const { t } = useI18n()
-  const { state } = useExtensionState()
-  const connection = connectionOf(state.native)
-  const profile = state.onboarding.nativeProfile
-  const ok = connection === "discord"
-  const versionLabel = state.native.version ? t("connection.version", { version: state.native.version }) : t("connection.detected")
-  const isChromeOs = useIsChromeOs()
+export const DesktopStep = ({ onNext }: {
+  onNext: () => void;
+}) => {
+  const { t } = useI18n();
+  const { state } = useExtensionState();
+  const connection = connectionOf(state.native);
+  const profile = state.onboarding.nativeProfile;
+  const ok = connection === "discord";
+  const versionLabel = state.native.version
+    ? t("connection.version", { version: state.native.version })
+    : t("connection.detected");
+  const isChromeOs = useIsChromeOs();
 
   if (isChromeOs) {
     return (
@@ -37,7 +41,7 @@ export const DesktopStep = ({ onNext }: { onNext: () => void }) => {
       >
         <ChromeOsWaitlistForm />
       </OnboardingStepLayout>
-    )
+    );
   }
 
   return (
@@ -58,7 +62,9 @@ export const DesktopStep = ({ onNext }: { onNext: () => void }) => {
             <span className="truncate text-label-lg font-medium">{profile?.globalName ?? profile?.username ?? t("connection.state.discord")}</span>
             <span className="flex items-center gap-1.5 text-label-md text-success">
               <LiveDot />
-              {profile ? t("connection.connectedAs", { username: profile.username }) : t("connection.state.discord")}
+              {profile
+                ? t("connection.connectedAs", { username: profile.username })
+                : t("connection.state.discord")}
             </span>
           </div>
         </Card>
@@ -88,5 +94,5 @@ export const DesktopStep = ({ onNext }: { onNext: () => void }) => {
       )}
       {!ok && <PermissionStatus ok={false} okLabel="" waitingLabel={t("onboarding.desktopWaiting")} />}
     </OnboardingStepLayout>
-  )
-}
+  );
+};

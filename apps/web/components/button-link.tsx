@@ -6,6 +6,4 @@ import type { ComponentProps } from "react";
 
 // Binds @nowly/ui's ButtonLink to next-intl's locale-aware Link so button-styled
 // internal navigation (/library, /desktop...) stays on the current locale prefix.
-export const ButtonLink = (props: ComponentProps<typeof BaseButtonLink>) => (
-  <BaseButtonLink linkComponent={Link} {...props} />
-);
+export const ButtonLink = (props: ComponentProps<typeof BaseButtonLink>) => <BaseButtonLink linkComponent={Link} {...props} />;

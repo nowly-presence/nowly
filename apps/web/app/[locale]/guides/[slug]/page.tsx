@@ -11,15 +11,28 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 type GuidePageProps = {
-  params: Promise<{ slug: string }>
+  params: Promise<{
+    slug: string;
+  }>;
 };
 
 export const generateMetadata = async ({ params }: GuidePageProps): Promise<Metadata> => {
-  const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+  const [{ slug }, locale] = await Promise.all([
+    params,
+    getLocale()
+  ]);
+
   const guide = getGuide(slug, locale);
+
   if (!guide) {
     const t = await getTranslations("pages.guides");
-    return createMetadata({ title: t("title"), description: t("description"), locale, path: `/guides/${slug}`, noIndex: true });
+    return createMetadata({
+      title: t("title"),
+      description: t("description"),
+      locale,
+      path: `/guides/${slug}`,
+      noIndex: true
+    });
   }
 
   return createMetadata({
@@ -28,18 +41,28 @@ export const generateMetadata = async ({ params }: GuidePageProps): Promise<Meta
     locale,
     path: `/guides/${guide.slug}`,
     alternateLocales: guide.entry.locales,
-    canonicalLocale: guide.entry.translated ? undefined : guide.entry.locale,
+    canonicalLocale: guide.entry.translated ? undefined : guide.entry.locale
   });
 };
 
 const Page = async ({ params }: GuidePageProps) => {
-  const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+  const [{ slug }, locale] = await Promise.all([
+    params,
+    getLocale()
+  ]);
+
   const guide = getGuide(slug, locale);
   if (!guide) notFound();
 
   const t = await getTranslations("pages.guides");
+
   const path = `/guides/${guide.slug}`;
-  const url = seoUrl(getPathname({ locale: locale as LocaleString, href: path }));
+  const url = seoUrl(
+    getPathname({
+      locale: locale as LocaleString,
+      href: path
+    })
+  );
 
   return (
     <>
@@ -48,9 +71,18 @@ const Page = async ({ params }: GuidePageProps) => {
         description={guide.description}
         path={path}
         crumbs={[
-          { name: "Nowly", path: "/" },
-          { name: t("title"), path: "/guides" },
-          { name: guide.title, path },
+          {
+            name: "Nowly",
+            path: "/"
+          },
+          {
+            name: t("title"),
+            path: "/guides"
+          },
+          {
+            name: guide.title,
+            path
+          }
         ]}
       />
       <JsonLd
@@ -64,7 +96,7 @@ const Page = async ({ params }: GuidePageProps) => {
           ...(guide.updated ? { dateModified: guide.updated } : {}),
           author: { "@id": `${CANONICAL_ORIGIN}/#organization` },
           publisher: organizationJsonLd(),
-          wordCount: guide.entry.words,
+          wordCount: guide.entry.words
         }}
       />
       <GuideView guide={guide} beforeRelated={<AdSlot placement="guides" className="mt-16" />} />

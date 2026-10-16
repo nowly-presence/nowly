@@ -6,9 +6,18 @@ import { RiCloudLine } from "@nowly/ui/icons";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const items: Array<{ value: ApiTarget; label: string }> = [
-  { value: "prod", label: "Production" },
-  { value: "dev", label: "Development" },
+const items: Array<{
+  value: ApiTarget;
+  label: string;
+}> = [
+  {
+    value: "prod",
+    label: "Production"
+  },
+  {
+    value: "dev",
+    label: "Development"
+  }
 ];
 
 export const ApiTargetSwitcher = () => {
@@ -25,6 +34,7 @@ export const ApiTargetSwitcher = () => {
       value={target}
       onValueChange={(value) => {
         if (!value) return;
+
         setClientApiTarget(value as ApiTarget);
         setTarget(value as ApiTarget);
         router.refresh();

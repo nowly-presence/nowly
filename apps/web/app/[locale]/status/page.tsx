@@ -5,12 +5,15 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("pages.status")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("pages.status")
+  ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     locale,
-    path: "/status",
+    path: "/status"
   });
 };
 

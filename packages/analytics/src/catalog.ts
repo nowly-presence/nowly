@@ -1,60 +1,47 @@
-export type AnalyticsGroup =
-  | "extension"
-  | "native"
-  | "presence"
-  | "marketplace"
-  | "uninstall"
-  | "settings"
-  | "ratings"
-  | "release"
+export type AnalyticsGroup = "extension" | "native" | "presence" | "marketplace" | "uninstall" | "settings" | "ratings" | "release";
 
 // Always available on every event via a dedicated column (source, country) or
 // a join on Device (browser/os/locale/extensionVersion/nativeVersion are
 // collected once per device by /devices/sync). Never declared per metric
 // below and never expected in an event's payload - see insights.service.ts
 // for how they're actually queried/joined.
-export const UNIVERSAL_DIMENSIONS = [
-  "country",
-  "browser",
-  "os",
-  "locale",
-  "extensionVersion",
-  "nativeVersion",
-] as const
+export const UNIVERSAL_DIMENSIONS = ["country", "browser", "os", "locale", "extensionVersion", "nativeVersion"] as const;
 
 export type AnalyticsMetric = {
-  key: string
-  label: string
-  description: string
-  group: AnalyticsGroup
-  private?: boolean
-  dimensions: string[]
-  allowedPayloadKeys?: string[]
-  retentionDays?: number
-}
+  key: string;
+  label: string;
+  description: string;
+  group: AnalyticsGroup;
+  private?: boolean;
+  dimensions: string[];
+  allowedPayloadKeys?: string[];
+  retentionDays?: number;
+};
 
 export class Analytics {
-  readonly key: string
-  readonly label: string
-  readonly description: string
-  readonly group: AnalyticsGroup
-  readonly private: boolean
-  readonly dimensions: string[]
-  readonly allowedPayloadKeys: string[]
-  readonly retentionDays?: number
+  readonly key: string;
+  readonly label: string;
+  readonly description: string;
+  readonly group: AnalyticsGroup;
+  readonly private: boolean;
+  readonly dimensions: string[];
+  readonly allowedPayloadKeys: string[];
+  readonly retentionDays?: number;
 
   constructor(metric: AnalyticsMetric) {
-    this.key = metric.key
-    this.label = metric.label
-    this.description = metric.description
-    this.group = metric.group
-    this.private = metric.private ?? false
-    this.dimensions = metric.dimensions
-    this.allowedPayloadKeys = metric.allowedPayloadKeys ?? metric.dimensions
-    this.retentionDays = metric.retentionDays
+    this.key = metric.key;
+    this.label = metric.label;
+    this.description = metric.description;
+    this.group = metric.group;
+    this.private = metric.private ?? false;
+    this.dimensions = metric.dimensions;
+    this.allowedPayloadKeys = metric.allowedPayloadKeys ?? metric.dimensions;
+    this.retentionDays = metric.retentionDays;
   }
 
-  toJSON(): AnalyticsMetric & { private: boolean } {
+  toJSON(): AnalyticsMetric & {
+    private: boolean;
+  } {
     return {
       key: this.key,
       label: this.label,
@@ -63,8 +50,8 @@ export class Analytics {
       private: this.private,
       dimensions: this.dimensions,
       allowedPayloadKeys: this.allowedPayloadKeys,
-      retentionDays: this.retentionDays,
-    }
+      retentionDays: this.retentionDays
+    };
   }
 }
 
@@ -74,77 +61,77 @@ export const analyticsRegistry = [
     label: "Extension install",
     description: "Extension installation lifecycle event.",
     group: "extension",
-    dimensions: ["source"],
+    dimensions: ["source"]
   }),
   new Analytics({
     key: "extension_update",
     label: "Extension update",
     description: "Extension update lifecycle event.",
     group: "extension",
-    dimensions: ["source"],
+    dimensions: ["source"]
   }),
   new Analytics({
     key: "extension_open",
     label: "Extension open",
     description: "Extension UI opened.",
     group: "extension",
-    dimensions: ["surface"],
+    dimensions: ["surface"]
   }),
   new Analytics({
     key: "onboarding_started",
     label: "Onboarding started",
     description: "Onboarding flow was shown.",
     group: "extension",
-    dimensions: ["source"],
+    dimensions: ["source"]
   }),
   new Analytics({
     key: "onboarding_completed",
     label: "Onboarding completed",
     description: "Onboarding flow was completed.",
     group: "extension",
-    dimensions: ["source"],
+    dimensions: ["source"]
   }),
   new Analytics({
     key: "onboarding_skipped",
     label: "Onboarding skipped",
     description: "Onboarding flow was skipped.",
     group: "extension",
-    dimensions: ["source"],
+    dimensions: ["source"]
   }),
   new Analytics({
     key: "onboarding_gate_seen",
     label: "Onboarding gate seen",
     description: "Onboarding permission or native gate was displayed.",
     group: "extension",
-    dimensions: ["gate"],
+    dimensions: ["gate"]
   }),
   new Analytics({
     key: "analytics_consent_accepted",
     label: "Analytics consent accepted",
     description: "Optional analytics consent was accepted.",
     group: "extension",
-    dimensions: ["source"],
+    dimensions: ["source"]
   }),
   new Analytics({
     key: "analytics_consent_declined",
     label: "Analytics consent declined",
     description: "Optional analytics consent was declined.",
     group: "extension",
-    dimensions: ["source"],
+    dimensions: ["source"]
   }),
   new Analytics({
     key: "analytics_consent_changed",
     label: "Analytics consent changed",
     description: "Optional analytics consent was changed later in settings.",
     group: "extension",
-    dimensions: ["enabled", "source"],
+    dimensions: ["enabled", "source"]
   }),
   new Analytics({
     key: "native_connected",
     label: "Native connected",
     description: "Native client connection succeeded.",
     group: "native",
-    dimensions: [],
+    dimensions: []
   }),
   new Analytics({
     key: "native_disconnected",
@@ -153,7 +140,7 @@ export const analyticsRegistry = [
     group: "native",
     private: true,
     dimensions: ["reason"],
-    retentionDays: 90,
+    retentionDays: 90
   }),
   new Analytics({
     key: "native_heartbeat_failed",
@@ -162,63 +149,63 @@ export const analyticsRegistry = [
     group: "native",
     private: true,
     dimensions: ["reason"],
-    retentionDays: 90,
+    retentionDays: 90
   }),
   new Analytics({
     key: "native_version_outdated",
     label: "Native version outdated",
     description: "Native client version is older than expected.",
     group: "native",
-    dimensions: [],
+    dimensions: []
   }),
   new Analytics({
     key: "native_reconnect",
     label: "Native reconnect",
     description: "Native client reconnect was requested.",
     group: "native",
-    dimensions: ["source"],
+    dimensions: ["source"]
   }),
   new Analytics({
     key: "presence_install",
     label: "Presence install",
     description: "Presence installation by slug and version.",
     group: "presence",
-    dimensions: ["slug", "version", "source"],
+    dimensions: ["slug", "version", "source"]
   }),
   new Analytics({
     key: "image_proxy_call",
     label: "Image proxy call",
     description: "Image proxy request by the presence (slug) that triggered it.",
     group: "presence",
-    dimensions: ["slug", "service"],
+    dimensions: ["slug", "service"]
   }),
   new Analytics({
     key: "presence_update",
     label: "Presence update",
     description: "Presence update by slug and version.",
     group: "presence",
-    dimensions: ["slug", "version", "source"],
+    dimensions: ["slug", "version", "source"]
   }),
   new Analytics({
     key: "presence_uninstall",
     label: "Presence uninstall",
     description: "Presence uninstall by slug.",
     group: "presence",
-    dimensions: ["slug", "version", "source"],
+    dimensions: ["slug", "version", "source"]
   }),
   new Analytics({
     key: "presence_toggle",
     label: "Presence toggle",
     description: "Presence enabled or disabled.",
     group: "presence",
-    dimensions: ["slug", "version", "enabled"],
+    dimensions: ["slug", "version", "enabled"]
   }),
   new Analytics({
     key: "presence_active_heartbeat",
     label: "Presence active heartbeat",
     description: "Presence active heartbeat by slug.",
     group: "presence",
-    dimensions: ["slug", "version", "source"],
+    dimensions: ["slug", "version", "source"]
   }),
   new Analytics({
     key: "presence_session_start",
@@ -227,7 +214,7 @@ export const analyticsRegistry = [
     group: "presence",
     private: true,
     dimensions: ["slug", "version"],
-    retentionDays: 180,
+    retentionDays: 180
   }),
   new Analytics({
     key: "presence_session_end",
@@ -236,7 +223,7 @@ export const analyticsRegistry = [
     group: "presence",
     private: true,
     dimensions: ["slug", "version", "durationMs", "reason"],
-    retentionDays: 180,
+    retentionDays: 180
   }),
   new Analytics({
     key: "presence_error",
@@ -245,63 +232,63 @@ export const analyticsRegistry = [
     group: "presence",
     private: true,
     dimensions: ["slug", "version", "stage"],
-    retentionDays: 90,
+    retentionDays: 90
   }),
   new Analytics({
     key: "marketplace_page_view",
     label: "Marketplace page view",
     description: "Public marketplace page view without URL, query, or user identity.",
     group: "marketplace",
-    dimensions: ["slug", "source", "locale"],
+    dimensions: ["slug", "source", "locale"]
   }),
   new Analytics({
     key: "marketplace_install_click",
     label: "Marketplace install click",
     description: "Install button clicked from marketplace.",
     group: "marketplace",
-    dimensions: ["slug", "source", "locale"],
+    dimensions: ["slug", "source", "locale"]
   }),
   new Analytics({
     key: "marketplace_conversion",
     label: "Marketplace conversion",
     description: "Install conversion after marketplace interaction.",
     group: "marketplace",
-    dimensions: ["slug", "source", "locale"],
+    dimensions: ["slug", "source", "locale"]
   }),
   new Analytics({
     key: "marketplace_filter",
     label: "Marketplace filter",
     description: "Marketplace filtering usage without search terms.",
     group: "marketplace",
-    dimensions: ["source", "locale", "category", "sort", "resultCount"],
+    dimensions: ["source", "locale", "category", "sort", "resultCount"]
   }),
   new Analytics({
     key: "marketplace_no_results",
     label: "Marketplace no results",
     description: "Marketplace filter/search produced no results, without storing the search query.",
     group: "marketplace",
-    dimensions: ["source", "locale", "category", "sort"],
+    dimensions: ["source", "locale", "category", "sort"]
   }),
   new Analytics({
     key: "search_performed",
     label: "Marketplace search performed",
     description: "A search was performed, without storing the search text.",
     group: "marketplace",
-    dimensions: ["source", "locale", "hasResults"],
+    dimensions: ["source", "locale", "hasResults"]
   }),
   new Analytics({
     key: "marketplace_author_page_view",
     label: "Marketplace author page view",
     description: "An author profile page was viewed.",
     group: "marketplace",
-    dimensions: ["source", "locale"],
+    dimensions: ["source", "locale"]
   }),
   new Analytics({
     key: "uninstall_cleanup_received",
     label: "Uninstall cleanup received",
     description: "Best-effort extension uninstall cleanup page was opened.",
     group: "uninstall",
-    dimensions: ["source"],
+    dimensions: ["source"]
   }),
   new Analytics({
     key: "uninstall_cleanup_success",
@@ -310,7 +297,7 @@ export const analyticsRegistry = [
     group: "uninstall",
     private: true,
     dimensions: ["source"],
-    retentionDays: 90,
+    retentionDays: 90
   }),
   new Analytics({
     key: "uninstall_cleanup_error",
@@ -319,7 +306,7 @@ export const analyticsRegistry = [
     group: "uninstall",
     private: true,
     dimensions: ["source", "stage"],
-    retentionDays: 90,
+    retentionDays: 90
   }),
   new Analytics({
     key: "uninstall_analytics_deleted",
@@ -328,28 +315,28 @@ export const analyticsRegistry = [
     group: "uninstall",
     private: true,
     dimensions: ["source"],
-    retentionDays: 90,
+    retentionDays: 90
   }),
   new Analytics({
     key: "uninstall_analytics_kept",
     label: "Uninstall analytics kept",
     description: "Uninstall flow left anonymous analytics in place.",
     group: "uninstall",
-    dimensions: ["source"],
+    dimensions: ["source"]
   }),
   new Analytics({
     key: "settings_display_changed",
     label: "Display settings changed",
     description: "Display preference changed.",
     group: "settings",
-    dimensions: ["displayMode", "separateActivePresence", "showPlayer"],
+    dimensions: ["displayMode", "separateActivePresence", "showPlayer"]
   }),
   new Analytics({
     key: "settings_language_changed",
     label: "Language settings changed",
     description: "Language preference changed.",
     group: "settings",
-    dimensions: [],
+    dimensions: []
   }),
   new Analytics({
     key: "settings_custom_api_changed",
@@ -358,37 +345,35 @@ export const analyticsRegistry = [
     group: "settings",
     private: true,
     dimensions: ["enabled"],
-    retentionDays: 90,
+    retentionDays: 90
   }),
   new Analytics({
     key: "settings_presence_changed",
     label: "Presence settings changed",
     description: "Per-presence settings changed without storing setting values.",
     group: "settings",
-    dimensions: ["slug", "version", "settingCount"],
+    dimensions: ["slug", "version", "settingCount"]
   }),
   new Analytics({
     key: "ratings",
     label: "Ratings",
     description: "Rating averages, counts, and star distributions.",
     group: "ratings",
-    dimensions: ["slug"],
+    dimensions: ["slug"]
   }),
   new Analytics({
     key: "release_adoption",
     label: "Release adoption",
     description: "Installed device counts by presence version.",
     group: "release",
-    dimensions: ["slug", "version"],
-  }),
-] as const
+    dimensions: ["slug", "version"]
+  })
+] as const;
 
-export type AnalyticsEventKey = (typeof analyticsRegistry)[number]["key"]
+export type AnalyticsEventKey = (typeof analyticsRegistry)[number]["key"];
 
-export const getAnalyticsMetric = (key: string): Analytics | undefined =>
-  analyticsRegistry.find((metric) => metric.key === key)
+export const getAnalyticsMetric = (key: string): Analytics | undefined => analyticsRegistry.find((metric) => metric.key === key);
 
-export const isAnalyticsEventKey = (key: string): key is AnalyticsEventKey =>
-  Boolean(getAnalyticsMetric(key))
+export const isAnalyticsEventKey = (key: string): key is AnalyticsEventKey => Boolean(getAnalyticsMetric(key));
 
-export const catalogPublicJson = () => analyticsRegistry.map((metric) => metric.toJSON())
+export const catalogPublicJson = () => analyticsRegistry.map((metric) => metric.toJSON());

@@ -3,11 +3,11 @@ import { ButtonAnchor, Card, CardContent, CardDescription, CardTitle, cn } from 
 import { RiArrowRightUpLine, RiDiscordFill } from "@nowly/ui/icons";
 
 type DiscordCalloutProps = {
-  title: string
-  description: string
-  cta: string
-  layout?: "stack" | "row"
-  className?: string
+  title: string;
+  description: string;
+  cta: string;
+  layout?: "stack" | "row";
+  className?: string;
 };
 
 // Quiet, inline invitation to the Discord: sits in the page flow next to content the visitor is already reading.
@@ -23,13 +23,7 @@ export const DiscordCallout = ({ title, description, cta, layout = "stack", clas
           <CardDescription className="mt-1">{description}</CardDescription>
         </div>
       </div>
-      <ButtonAnchor
-        href={DISCORD_INVITE_URL}
-        rel="noreferrer"
-        target="_blank"
-        variant="ghost"
-        className="shrink-0 self-start"
-      >
+      <ButtonAnchor href={DISCORD_INVITE_URL} rel="noreferrer" target="_blank" variant="ghost" className="shrink-0 self-start">
         {cta}
         <RiArrowRightUpLine data-icon="inline-end" />
       </ButtonAnchor>

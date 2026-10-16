@@ -1,64 +1,71 @@
-import { useEffect, useRef, useState } from "react"
-import { RiApps2Fill, RiApps2Line, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line } from "@remixicon/react"
-import { FeatureReveal } from "@/components/shared/feature-reveal"
-import { Dock } from "@/features/layout/dock"
-import { useResolvedTheme } from "@/hooks/use-theme"
-import { useI18n } from "@/hooks/i18n-provider"
-import { useNav, type Route, type Tab } from "@/hooks/navigation-provider"
-import { useExtensionState } from "@/hooks/extension-state-provider"
-import { FeatureRevealProvider } from "@/hooks/feature-reveal-provider"
-import { ActivityView } from "@/features/activity/activity-view"
-import { ConnectionView } from "@/features/diagnostics/connection-view"
-import { DiscordIpcPrompt } from "@/features/discord-ipc/discord-ipc-prompt"
-import { DiscordIpcView } from "@/features/discord-ipc/discord-ipc-view"
-import { LibraryView } from "@/features/library/library-view"
-import { RuntimeLogsView } from "@/features/runtime-logs/runtime-logs-view"
-import { OnboardingView } from "@/features/onboarding/onboarding-view"
-import { PresenceDetailView } from "@/features/presence/presence-detail-view"
-import { SettingsView } from "@/features/settings/settings-view"
-import { AccountChoicePrompt } from "@/features/settings/account-choice-sheet"
-import { Header } from "@/features/layout/header"
-import { Layer } from "@/features/layout/layer"
-import { ReviewPrompt } from "@/features/review/review-prompt"
-import { HalloweenPrank } from "@/features/seasonal/halloween-prank"
-import { SeasonMoment } from "@/features/seasonal/season-moment"
+import { useEffect, useRef, useState } from "react";
+import { RiApps2Fill, RiApps2Line, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line } from "@remixicon/react";
+import { FeatureReveal } from "@/components/shared/feature-reveal";
+import { Dock } from "@/features/layout/dock";
+import { useResolvedTheme } from "@/hooks/use-theme";
+import { useI18n } from "@/hooks/i18n-provider";
+import { useNav, type Route, type Tab } from "@/hooks/navigation-provider";
+import { useExtensionState } from "@/hooks/extension-state-provider";
+import { FeatureRevealProvider } from "@/hooks/feature-reveal-provider";
+import { ActivityView } from "@/features/activity/activity-view";
+import { ConnectionView } from "@/features/diagnostics/connection-view";
+import { DiscordIpcPrompt } from "@/features/discord-ipc/discord-ipc-prompt";
+import { DiscordIpcView } from "@/features/discord-ipc/discord-ipc-view";
+import { LibraryView } from "@/features/library/library-view";
+import { RuntimeLogsView } from "@/features/runtime-logs/runtime-logs-view";
+import { OnboardingView } from "@/features/onboarding/onboarding-view";
+import { PresenceDetailView } from "@/features/presence/presence-detail-view";
+import { SettingsView } from "@/features/settings/settings-view";
+import { AccountChoicePrompt } from "@/features/settings/account-choice-sheet";
+import { Header } from "@/features/layout/header";
+import { Layer } from "@/features/layout/layer";
+import { ReviewPrompt } from "@/features/review/review-prompt";
+import { HalloweenPrank } from "@/features/seasonal/halloween-prank";
+import { SeasonMoment } from "@/features/seasonal/season-moment";
 
-const TABS: Tab[] = ["activity", "store", "settings"]
-const ACCOUNT_SYNC_REVEAL = { id: "account-sync", version: "2.3.0" } as const
+const TABS: Tab[] = ["activity", "store", "settings"];
+const ACCOUNT_SYNC_REVEAL = {
+  id: "account-sync",
+  version: "2.3.0"
+} as const;
 
-const routeKey = (route: Route, depth: number) => `${depth}:${JSON.stringify(route)}`
+const routeKey = (route: Route, depth: number) => `${depth}:${JSON.stringify(route)}`;
 
 export const App = () => {
-  const { state } = useExtensionState()
-  const { t } = useI18n()
-  const { tab, stack, setTab } = useNav()
-  const theme = useResolvedTheme(state.settings.appearance)
-  const mainRef = useRef<HTMLElement>(null)
-  const [visited, setVisited] = useState<Set<Tab>>(() => new Set([tab]))
+  const { state } = useExtensionState();
+  const { t } = useI18n();
+  const { tab, stack, setTab } = useNav();
+  const theme = useResolvedTheme(state.settings.appearance);
+  const mainRef = useRef<HTMLElement>(null);
+  const [visited, setVisited] = useState<Set<Tab>>(() => new Set([tab]));
 
   useEffect(() => {
-    setVisited((current) => (current.has(tab) ? current : new Set(current).add(tab)))
-  }, [tab])
+    setVisited((current) => (current.has(tab) ? current : new Set(current).add(tab)));
+  }, [tab]);
 
-  const onboarding = state.ready && (!state.onboarding.onboardingCompleted || state.onboarding.devReplayOnboarding)
+  const onboarding = state.ready && (!state.onboarding.onboardingCompleted || state.onboarding.devReplayOnboarding);
 
   if (onboarding) {
     return (
       <main className="scroll-thin h-full overflow-y-auto">
         <OnboardingView theme={theme} />
       </main>
-    )
+    );
   }
 
-  const live = Boolean(state.activity) && !state.settings.presencePaused
+  const live = Boolean(state.activity) && !state.settings.presencePaused;
 
   const selectTab = (next: Tab) => {
     if (next === tab && stack.length === 0) {
-      mainRef.current?.querySelector<HTMLElement>(`[data-tab="${next}"]`)?.scrollTo({ top: 0, behavior: "smooth" })
-      return
+      mainRef.current?.querySelector<HTMLElement>(`[data-tab="${next}"]`)?.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+      return;
     }
-    setTab(next)
-  }
+
+    setTab(next);
+  };
 
   return (
     <FeatureRevealProvider enabled={state.ready && stack.length === 0}>
@@ -84,8 +91,19 @@ export const App = () => {
           value={tab}
           onChange={selectTab}
           items={[
-            { value: "activity", label: t("nav.activity"), icon: <RiPulseLine className="size-[18px]" />, activeIcon: <RiPulseFill className="size-[18px]" />, badge: live ? "live" : undefined },
-            { value: "store", label: t("nav.library"), icon: <RiApps2Line className="size-[18px]" />, activeIcon: <RiApps2Fill className="size-[18px]" /> },
+            {
+              value: "activity",
+              label: t("nav.activity"),
+              icon: <RiPulseLine className="size-[18px]" />,
+              activeIcon: <RiPulseFill className="size-[18px]" />,
+              badge: live ? "live" : undefined
+            },
+            {
+              value: "store",
+              label: t("nav.library"),
+              icon: <RiApps2Line className="size-[18px]" />,
+              activeIcon: <RiApps2Fill className="size-[18px]" />
+            },
             {
               value: "settings",
               label: t("nav.settings"),
@@ -95,8 +113,8 @@ export const App = () => {
                 <FeatureReveal {...ACCOUNT_SYNC_REVEAL} text={t("reveal.accountSync")} hint={t("reveal.accountSyncHint")}>
                   {button}
                 </FeatureReveal>
-              ),
-            },
+              )
+            }
           ]}
         />
         <ReviewPrompt />
@@ -106,5 +124,5 @@ export const App = () => {
         <AccountChoicePrompt />
       </main>
     </FeatureRevealProvider>
-  )
-}
+  );
+};

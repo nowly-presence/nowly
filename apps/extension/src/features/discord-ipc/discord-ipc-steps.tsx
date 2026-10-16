@@ -1,13 +1,13 @@
-import { RiShieldCheckLine } from "@remixicon/react"
-import type { MessageKey } from "@/hooks/i18n-provider"
-import { useI18n } from "@/hooks/i18n-provider"
-import { Card } from "@/ui/card"
-import { Section } from "@/ui/section"
+import { RiShieldCheckLine } from "@remixicon/react";
+import type { MessageKey } from "@/hooks/i18n-provider";
+import { useI18n } from "@/hooks/i18n-provider";
+import { Card } from "@/ui/card";
+import { Section } from "@/ui/section";
 
-const STEPS: MessageKey[] = ["discordIpc.step1", "discordIpc.step2", "discordIpc.step3"]
+const STEPS: MessageKey[] = ["discordIpc.step1", "discordIpc.step2", "discordIpc.step3"];
 
 export const DiscordIpcSteps = () => {
-  const { t } = useI18n()
+  const { t } = useI18n();
 
   return (
     <Section title={t("discordIpc.stepsTitle")}>
@@ -26,5 +26,5 @@ export const DiscordIpcSteps = () => {
         <p className="text-body-sm">{t("discordIpc.safety")}</p>
       </div>
     </Section>
-  )
-}
+  );
+};

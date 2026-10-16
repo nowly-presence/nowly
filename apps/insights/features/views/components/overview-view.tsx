@@ -5,9 +5,19 @@ import { apiFetch } from "@/features/api-target/lib/api-client";
 import { useEffect, useState } from "react";
 
 type OverviewResponse = {
-  totals: { events: number; uniqueDevices: number };
-  topEvents: Array<{ key: string; count: number }>;
-  funnels: Array<{ id: string; label: string; overallConversion: number | null }>;
+  totals: {
+    events: number;
+    uniqueDevices: number;
+  };
+  topEvents: Array<{
+    key: string;
+    count: number;
+  }>;
+  funnels: Array<{
+    id: string;
+    label: string;
+    overallConversion: number | null;
+  }>;
 };
 
 export const OverviewView = () => {
@@ -29,7 +39,11 @@ export const OverviewView = () => {
   }, []);
 
   if (error) {
-    return <p className="text-sm text-muted-foreground">Could not load the overview.</p>;
+    return (
+      <p className="text-sm text-muted-foreground">
+        Could not load the overview.
+      </p>
+    );
   }
 
   if (!data) {

@@ -1,13 +1,12 @@
 import { JsonLd } from "@/features/seo/components/json-ld";
-import {
-  PROJECT_EXTENSION_DOWNLOAD_URL,
-} from "@/lib/constants";
+import { PROJECT_EXTENSION_DOWNLOAD_URL } from "@/lib/constants";
 import { BRAND_LOCKUP_BLUE } from "@/lib/brand";
 import { CANONICAL_ORIGIN, organizationJsonLd, SITE_NAME } from "@/features/seo/lib/seo";
 import { getTranslations } from "next-intl/server";
 
 export const HomeJsonLd = async () => {
   const meta = await getTranslations("metadata");
+
   const organization = organizationJsonLd();
 
   return (
@@ -22,7 +21,7 @@ export const HomeJsonLd = async () => {
             name: SITE_NAME,
             url: CANONICAL_ORIGIN,
             description: meta("description"),
-            publisher: { "@id": `${CANONICAL_ORIGIN}/#organization` },
+            publisher: { "@id": `${CANONICAL_ORIGIN}/#organization` }
           },
           {
             "@type": "SoftwareApplication",
@@ -37,11 +36,11 @@ export const HomeJsonLd = async () => {
             offers: {
               "@type": "Offer",
               price: "0",
-              priceCurrency: "USD",
+              priceCurrency: "USD"
             },
-            publisher: { "@id": `${CANONICAL_ORIGIN}/#organization` },
-          },
-        ],
+            publisher: { "@id": `${CANONICAL_ORIGIN}/#organization` }
+          }
+        ]
       }}
     />
   );

@@ -7,12 +7,15 @@ import { getLocale, getTranslations } from "next-intl/server";
 export const revalidate = 3600;
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("pages.changelog")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("pages.changelog")
+  ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     locale,
-    path: "/changelog",
+    path: "/changelog"
   });
 };
 

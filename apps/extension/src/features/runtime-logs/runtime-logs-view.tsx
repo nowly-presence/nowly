@@ -1,53 +1,70 @@
-import { useEffect, useMemo, useState } from "react"
-import { RiDeleteBin6Line, RiFileCopyLine } from "@remixicon/react"
-import type { RuntimeLogEntry, RuntimeLogType } from "@/shared/types"
-import { Chip } from "@/ui/chip"
-import { HScroll } from "@/ui/horizontal-scroller"
-import { BackHeader, ScreenBody } from "@/components/shared/screen"
-import { Card } from "@/ui/card"
-import { EmptyState } from "@/ui/empty-state"
-import { useToast } from "@/ui/toast"
-import { cn } from "@/ui/cn"
-import { useI18n } from "@/hooks/i18n-provider"
-import { sendMessage } from "@/lib/messages"
-import { useNav } from "@/hooks/navigation-provider"
-import { LOCALE_LONG_MAP } from "@/shared/locales"
+import { useEffect, useMemo, useState } from "react";
+import { RiDeleteBin6Line, RiFileCopyLine } from "@remixicon/react";
+import type { RuntimeLogEntry, RuntimeLogType } from "@/shared/types";
+import { Chip } from "@/ui/chip";
+import { HScroll } from "@/ui/horizontal-scroller";
+import { BackHeader, ScreenBody } from "@/components/shared/screen";
+import { Card } from "@/ui/card";
+import { EmptyState } from "@/ui/empty-state";
+import { useToast } from "@/ui/toast";
+import { cn } from "@/ui/cn";
+import { useI18n } from "@/hooks/i18n-provider";
+import { sendMessage } from "@/lib/messages";
+import { useNav } from "@/hooks/navigation-provider";
+import { LOCALE_LONG_MAP } from "@/shared/locales";
 
 const levelDot: Record<RuntimeLogEntry["level"], string> = {
   info: "bg-line-strong",
   success: "bg-success",
   warn: "bg-muted",
-  error: "bg-danger",
-}
+  error: "bg-danger"
+};
 
-const MAX_LOGS = 500
+const MAX_LOGS = 500;
 
 export const RuntimeLogsView = () => {
-  const { t, locale } = useI18n()
-  const { pop } = useNav()
-  const { toast } = useToast()
-  const [logs, setLogs] = useState<RuntimeLogEntry[]>([])
-  const [filter, setFilter] = useState<RuntimeLogType | "all">("all")
+  const { t, locale } = useI18n();
+  const { pop } = useNav();
+  const { toast } = useToast();
+  const [logs, setLogs] = useState<RuntimeLogEntry[]>([]);
+  const [filter, setFilter] = useState<RuntimeLogType | "all">("all");
 
   useEffect(() => {
-    void sendMessage("GET_RUNTIME_LOGS").then(setLogs).catch(() => {})
-    const onMessage = (message: { source?: string; type?: string; payload?: RuntimeLogEntry }) => {
-      const entry = message?.payload
-      if (message?.source !== "PRESENCES_BACKGROUND" || message.type !== "RUNTIME_LOGS_ADDED" || !entry) return
-      setLogs((current) => [...current.slice(-(MAX_LOGS - 1)), entry])
-    }
-    chrome.runtime.onMessage.addListener(onMessage)
-    return () => chrome.runtime.onMessage.removeListener(onMessage)
-  }, [])
+    void sendMessage("GET_RUNTIME_LOGS")
+      .then(setLogs)
+      .catch(() => {});
+    const onMessage = (message: {
+      source?: string;
+      type?: string;
+      payload?: RuntimeLogEntry;
+    }) => {
+      const entry = message?.payload;
 
-  const visible = useMemo(() => [...logs].reverse().filter((entry) => filter === "all" || entry.type === filter), [logs, filter])
-  const time = (at: number) => new Intl.DateTimeFormat(LOCALE_LONG_MAP[locale], { hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(at)
+      if (message?.source !== "PRESENCES_BACKGROUND" || message.type !== "RUNTIME_LOGS_ADDED" || !entry) return;
+
+      setLogs((current) => [...current.slice(-(MAX_LOGS - 1)), entry]);
+    };
+    chrome.runtime.onMessage.addListener(onMessage);
+    return () => chrome.runtime.onMessage.removeListener(onMessage);
+  }, []);
+
+  const visible = useMemo(() => [...logs].reverse().filter((entry) => filter === "all" || entry.type === filter), [logs, filter]);
+  const time = (at: number) =>
+    new Intl.DateTimeFormat(LOCALE_LONG_MAP[locale], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    }).format(at);
 
   const copy = async () => {
-    const text = visible.map((entry) => `${new Date(entry.at).toISOString()} [${entry.level}] ${entry.type}: ${entry.message} ${entry.payload ? JSON.stringify(entry.payload) : ""}`).join("\n")
-    await navigator.clipboard.writeText(text)
-    toast(t("toast.copied"))
-  }
+    const text = visible
+      .map(
+        (entry) => `${new Date(entry.at).toISOString()} [${entry.level}] ${entry.type}: ${entry.message} ${entry.payload ? JSON.stringify(entry.payload) : ""}`
+      )
+      .join("\n");
+    await navigator.clipboard.writeText(text);
+    toast(t("toast.copied"));
+  };
 
   return (
     <div className="flex min-h-full flex-col">
@@ -57,7 +74,13 @@ export const RuntimeLogsView = () => {
         backLabel={t("action.back")}
         action={
           <div className="flex">
-            <button type="button" aria-label={t("logs.copy")} title={t("logs.copy")} onClick={() => void copy()} className="flex size-9 items-center justify-center rounded-md text-muted hover:bg-hover hover:text-ink">
+            <button
+              type="button"
+              aria-label={t("logs.copy")}
+              title={t("logs.copy")}
+              onClick={() => void copy()}
+              className="flex size-9 items-center justify-center rounded-md text-muted hover:bg-hover hover:text-ink"
+            >
               <RiFileCopyLine className="size-[18px]" />
             </button>
             <button
@@ -107,5 +130,5 @@ export const RuntimeLogsView = () => {
         )}
       </ScreenBody>
     </div>
-  )
-}
+  );
+};

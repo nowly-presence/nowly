@@ -3,9 +3,9 @@ import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 
 type FaqItem = {
-  category: string
-  question: string
-  answer: string
+  category: string;
+  question: string;
+  answer: string;
 };
 
 export const FaqPageView = async () => {
@@ -13,8 +13,9 @@ export const FaqPageView = async () => {
     getTranslations("faqPage"),
     getTranslations("pages.library"),
     getTranslations("pages.desktop"),
-    getTranslations("pages.support"),
+    getTranslations("pages.support")
   ]);
+
   const items = t.raw("items") as FaqItem[];
   const categories = [...new Set(items.map((item) => item.category))];
 
@@ -29,23 +30,17 @@ export const FaqPageView = async () => {
             name: item.question,
             acceptedAnswer: {
               "@type": "Answer",
-              text: item.answer,
-            },
-          })),
+              text: item.answer
+            }
+          }))
         }}
       />
 
       <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
         <header className="mx-auto w-full max-w-7xl px-5 sm:px-10">
-          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
-            {t("eyebrow")}
-          </p>
-          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[3.5rem]">
-            {t("title")}
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
-            {t("description")}
-          </p>
+          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
+          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[3.5rem]">{t("title")}</h1>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">{t("description")}</p>
           <nav aria-label={t("eyebrow")} className="mt-8 flex flex-wrap gap-3 text-sm">
             <Link href="/library" className="underline underline-offset-4 hover:text-foreground">
               {library("title")}
@@ -63,6 +58,7 @@ export const FaqPageView = async () => {
           <div className="max-w-4xl space-y-14">
             {categories.map((category) => {
               const categoryItems = items.filter((item) => item.category === category);
+
               if (categoryItems.length === 0) return null;
 
               return (
@@ -72,11 +68,7 @@ export const FaqPageView = async () => {
                   </h2>
                   <div className="divide-y divide-border rounded-2xl border border-border bg-card">
                     {categoryItems.map((item) => (
-                      <details
-                        key={item.question}
-                        suppressHydrationWarning
-                        className="group px-5 py-5 first:rounded-t-2xl last:rounded-b-2xl sm:px-7"
-                      >
+                      <details key={item.question} suppressHydrationWarning className="group px-5 py-5 first:rounded-t-2xl last:rounded-b-2xl sm:px-7">
                         <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-lg font-medium text-foreground marker:hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent [&::-webkit-details-marker]:hidden">
                           <span>{item.question}</span>
                           <span aria-hidden className="shrink-0 text-2xl font-normal leading-none text-accent">
@@ -84,9 +76,7 @@ export const FaqPageView = async () => {
                             <span className="hidden group-open:inline">−</span>
                           </span>
                         </summary>
-                        <p className="max-w-3xl pt-4 text-base leading-relaxed text-muted-foreground">
-                          {item.answer}
-                        </p>
+                        <p className="max-w-3xl pt-4 text-base leading-relaxed text-muted-foreground">{item.answer}</p>
                       </details>
                     ))}
                   </div>

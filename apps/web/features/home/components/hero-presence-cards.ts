@@ -1,18 +1,24 @@
-type TimestampConfig =
-  | { kind: "none" }
-  | { kind: "elapsed"; icon?: string; color?: string }
-  | { kind: "progress"; progress: number };
+type TimestampConfig = {
+  kind: "none";
+} | {
+  kind: "elapsed";
+  icon?: string;
+  color?: string;
+} | {
+  kind: "progress";
+  progress: number;
+};
 
 export type PresenceCardConfig = {
-  id: string
-  messageKey: string
-  largeImage: string
-  largeContain?: boolean
-  smallImage?: string
-  hasSubtitle: boolean
-  timestamp: TimestampConfig
-  hasButton: boolean
-  buttonHref?: string
+  id: string;
+  messageKey: string;
+  largeImage: string;
+  largeContain?: boolean;
+  smallImage?: string;
+  hasSubtitle: boolean;
+  timestamp: TimestampConfig;
+  hasButton: boolean;
+  buttonHref?: string;
 };
 
 export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
@@ -22,7 +28,10 @@ export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
     largeImage: "/media/hero/cards/netflix-thumbnail.png",
     smallImage: "/media/hero/cards/play-badge.svg",
     hasSubtitle: true,
-    timestamp: { kind: "progress", progress: 2.6 },
+    timestamp: {
+      kind: "progress",
+      progress: 2.6
+    },
     hasButton: true
   },
   {
@@ -31,7 +40,10 @@ export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
     largeImage: "/media/hero/cards/prime-thumbnail.png",
     smallImage: "/media/hero/cards/play-badge.svg",
     hasSubtitle: true,
-    timestamp: { kind: "progress", progress: 31.4 },
+    timestamp: {
+      kind: "progress",
+      progress: 31.4
+    },
     hasButton: true
   },
   {
@@ -49,7 +61,10 @@ export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
     largeImage: "/media/hero/cards/youtube-thumbnail.jpg",
     smallImage: "/media/hero/cards/play-badge.svg",
     hasSubtitle: true,
-    timestamp: { kind: "progress", progress: 52.9 },
+    timestamp: {
+      kind: "progress",
+      progress: 52.9
+    },
     hasButton: true
   },
   {

@@ -5,16 +5,7 @@ import { PaginatedLibraryGrid } from "@/features/library/components/paginated-li
 import { ButtonLink } from "@/components/button-link";
 import { Button, ButtonAnchor, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, Input, cn } from "@nowly/ui";
 
-
-
-
-import {
-  catalogCategories,
-  presenceMatchesGithub,
-  presenceSearchText,
-  type LibraryCategory,
-  type LibraryPresence,
-} from "@/lib/library-catalog";
+import { catalogCategories, presenceMatchesGithub, presenceSearchText, type LibraryCategory, type LibraryPresence } from "@/lib/library-catalog";
 
 import { trackPublicAnalytics } from "@/lib/analytics";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
@@ -23,8 +14,7 @@ import { RiCloseLine, RiDiscordFill, RiSearchLine } from "@nowly/ui/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
-const navJoinOffset = () =>
-  window.matchMedia("(min-width: 640px)").matches ? 116 : 84;
+const navJoinOffset = () => (window.matchMedia("(min-width: 640px)").matches ? 116 : 84);
 
 const useNavJoin = () => {
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -33,13 +23,14 @@ const useNavJoin = () => {
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
+
     if (!sentinel) return;
 
     const connect = () =>
-      new IntersectionObserver(
-        ([entry]) => setJoined(!entry.isIntersecting),
-        { threshold: 0, rootMargin: `-${navJoinOffset()}px 0px 0px 0px` },
-      );
+      new IntersectionObserver(([entry]) => setJoined(!entry.isIntersecting), {
+        threshold: 0,
+        rootMargin: `-${navJoinOffset()}px 0px 0px 0px`
+      });
 
     let observer = connect();
     observer.observe(sentinel);
@@ -68,6 +59,7 @@ const useNavJoin = () => {
   useEffect(() => {
     const root = document.documentElement;
     const toolbar = toolbarRef.current;
+
     if (!joined || !toolbar) {
       root.style.removeProperty("--nav-join-panel");
       return;
@@ -90,12 +82,9 @@ const useNavJoin = () => {
   return { joined, sentinelRef, toolbarRef };
 };
 
-export const LibraryView = ({
-  items,
-  authorHandle = null,
-}: {
-  items: LibraryPresence[]
-  authorHandle?: string | null
+export const LibraryView = ({ items, authorHandle = null }: {
+  items: LibraryPresence[];
+  authorHandle?: string | null;
 }) => {
   const t = useTranslations("libraryPage");
   const locale = useLocale();
@@ -106,9 +95,7 @@ export const LibraryView = ({
   const mentionMatch = /^@(\S+)/.exec(trimmedQuery);
   const typedAuthorHandle = mentionMatch?.[1] ?? null;
   const effectiveAuthorHandle = authorHandle ?? typedAuthorHandle;
-  const normalizedQuery = (mentionMatch ? trimmedQuery.slice(mentionMatch[0].length) : trimmedQuery)
-    .trim()
-    .toLowerCase();
+  const normalizedQuery = (mentionMatch ? trimmedQuery.slice(mentionMatch[0].length) : trimmedQuery).trim().toLowerCase();
   const categories = catalogCategories(items);
   const { joined, sentinelRef, toolbarRef } = useNavJoin();
 
@@ -117,6 +104,7 @@ export const LibraryView = ({
       if (effectiveAuthorHandle && !presenceMatchesGithub(presence, effectiveAuthorHandle)) return false;
       if (category !== "all" && presence.category !== category) return false;
       if (!normalizedQuery) return true;
+
       return presenceSearchText(presence).includes(normalizedQuery);
     });
   }, [effectiveAuthorHandle, category, items, normalizedQuery]);
@@ -124,7 +112,10 @@ export const LibraryView = ({
   const isStale = query !== deferredQuery;
 
   useEffect(() => {
-    trackPublicAnalytics("marketplace_page_view", { source: "web_library", payload: { locale } });
+    trackPublicAnalytics("marketplace_page_view", {
+      source: "web_library",
+      payload: { locale }
+    });
   }, []);
 
   const isFirstFilterRef = useRef(true);
@@ -133,27 +124,41 @@ export const LibraryView = ({
       isFirstFilterRef.current = false;
       return;
     }
+
     trackPublicAnalytics("marketplace_filter", {
       source: "web_library",
-      payload: { locale, category, resultCount: results.length },
+      payload: {
+        locale,
+        category,
+        resultCount: results.length
+      }
     });
   }, [category, locale, results.length]);
 
   const wasEmptyRef = useRef(false);
   useEffect(() => {
     const isEmpty = results.length === 0;
+
     if (isEmpty && !wasEmptyRef.current) {
-      trackPublicAnalytics("marketplace_no_results", { source: "web_library", payload: { locale, category } });
+      trackPublicAnalytics("marketplace_no_results", {
+        source: "web_library",
+        payload: { locale, category }
+      });
     }
+
     wasEmptyRef.current = isEmpty;
   }, [results.length, locale, category]);
 
   useEffect(() => {
     if (!normalizedQuery) return;
+
     const timer = window.setTimeout(() => {
       trackPublicAnalytics("search_performed", {
         source: "web_library",
-        payload: { locale, hasResults: results.length > 0 },
+        payload: {
+          locale,
+          hasResults: results.length > 0
+        }
       });
     }, 500);
     return () => window.clearTimeout(timer);
@@ -163,15 +168,9 @@ export const LibraryView = ({
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
       <header className="mx-auto w-full max-w-7xl px-5 sm:px-10">
         <div className="max-w-160">
-          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
-            {t("eyebrow")}
-          </p>
-          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
-            {t("title")}
-          </h1>
-          <p className="mt-4 max-w-[42ch] text-[1.05rem] leading-relaxed text-foreground/68">
-            {t("description")}
-          </p>
+          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
+          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">{t("title")}</h1>
+          <p className="mt-4 max-w-[42ch] text-[1.05rem] leading-relaxed text-foreground/68">{t("description")}</p>
         </div>
       </header>
 
@@ -179,13 +178,7 @@ export const LibraryView = ({
       <div ref={sentinelRef} aria-hidden className="h-px" />
 
       <div className={cn("sticky top-21 px-4 sm:top-29 sm:px-6 lg:px-10", joined ? "z-50" : "z-40")}>
-        <div
-          ref={toolbarRef}
-          className={cn(
-            "mx-auto max-w-[1200px] space-y-4 py-3",
-            joined ? "px-3 sm:px-4" : null,
-          )}
-        >
+        <div ref={toolbarRef} className={cn("mx-auto max-w-[1200px] space-y-4 py-3", joined ? "px-3 sm:px-4" : null)}>
           <label className="relative block max-w-xl">
             <span className="sr-only">{t("search-label")}</span>
             <RiSearchLine className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -209,10 +202,7 @@ export const LibraryView = ({
 
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
             {authorHandle ? (
-              <Link
-                href="/library"
-                className="flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-foreground px-3.5 text-sm font-medium text-background"
-              >
+              <Link href="/library" className="flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-foreground px-3.5 text-sm font-medium text-background">
                 @{authorHandle}
                 <RiCloseLine className="size-3.5" />
               </Link>
@@ -226,18 +216,11 @@ export const LibraryView = ({
                 <RiCloseLine className="size-3.5" />
               </button>
             ) : null}
-            <FilterChip
-              active={category === "all"}
-              onClick={() => setCategory("all")}
-            >
+            <FilterChip active={category === "all"} onClick={() => setCategory("all")}>
               {t("all")}
             </FilterChip>
             {categories.map((key) => (
-              <FilterChip
-                key={key}
-                active={category === key}
-                onClick={() => setCategory(key)}
-              >
+              <FilterChip key={key} active={category === key} onClick={() => setCategory(key)}>
                 {t(`categories.${key}`)}
               </FilterChip>
             ))}
@@ -246,9 +229,7 @@ export const LibraryView = ({
       </div>
 
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
-        <p className="mt-2 text-sm text-muted-foreground">
-          {t("count", { count: results.length })}
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("count", { count: results.length })}</p>
 
         {results.length > 0 ? (
           <PaginatedLibraryGrid
@@ -295,24 +276,14 @@ export const LibraryView = ({
   );
 };
 
-const FilterChip = ({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean
-  onClick: () => void
-  children: string
-}) => (
+const FilterChip = ({ active, onClick, children }: { active: boolean; onClick: () => void; children: string }) => (
   <button
     type="button"
     onClick={onClick}
     aria-pressed={active}
     className={cn(
       "h-8 shrink-0 rounded-full px-3.5 text-sm font-medium transition-colors",
-      active
-        ? "bg-foreground text-background"
-        : "bg-foreground/5 text-foreground/80 hover:bg-foreground/9 hover:text-foreground",
+      active ? "bg-foreground text-background" : "bg-foreground/5 text-foreground/80 hover:bg-foreground/9 hover:text-foreground"
     )}
   >
     {children}

@@ -7,12 +7,7 @@ import type { PropsWithChildren } from "react";
 
 export const AppProviders = ({ children }: PropsWithChildren) => (
   <NuqsAdapter>
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
       <ThemeUrlOverride />
       {children}
     </ThemeProvider>

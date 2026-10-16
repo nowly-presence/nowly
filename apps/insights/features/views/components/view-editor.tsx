@@ -9,7 +9,10 @@ import type { ViewConfig, WidgetConfig } from "@nowly/analytics";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export const ViewEditor = ({ viewId, initial }: { viewId?: string; initial: ViewConfig }) => {
+export const ViewEditor = ({ viewId, initial }: {
+  viewId?: string;
+  initial: ViewConfig;
+}) => {
   const router = useRouter();
   const [name, setName] = useState(initial.name);
   const [widgets, setWidgets] = useState<WidgetConfig[]>(initial.widgets);
@@ -26,14 +29,24 @@ export const ViewEditor = ({ viewId, initial }: { viewId?: string; initial: View
     }
 
     setSaving(true);
+
     try {
       if (viewId) {
-        await apiFetch(`/insights/views/${viewId}`, { method: "PATCH", body: JSON.stringify({ name, widgets }) });
+        await apiFetch(`/insights/views/${viewId}`, {
+          method: "PATCH",
+          body: JSON.stringify({ name, widgets })
+        });
       } else {
-        const created = await apiFetch<{ id: string }>("/insights/views", { method: "POST", body: JSON.stringify({ name, widgets }) });
+        const created = await apiFetch<{
+          id: string;
+        }>("/insights/views", {
+          method: "POST",
+          body: JSON.stringify({ name, widgets })
+        });
         router.push(`/views/custom/${created.id}/edit`);
         return;
       }
+
       toast.success("View saved");
       router.refresh();
     } catch {
@@ -59,13 +72,7 @@ export const ViewEditor = ({ viewId, initial }: { viewId?: string; initial: View
         {widgets.map((widget) => (
           <div key={widget.id} className="relative">
             <WidgetRenderer widget={widget} />
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              className="absolute right-2 top-2"
-              onClick={() => removeWidget(widget.id)}
-              aria-label="Remove widget"
-            >
+            <Button variant="ghost" size="icon-sm" className="absolute right-2 top-2" onClick={() => removeWidget(widget.id)} aria-label="Remove widget">
               <RiDeleteBinLine />
             </Button>
           </div>

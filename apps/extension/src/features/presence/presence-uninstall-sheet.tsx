@@ -1,11 +1,17 @@
-import { useI18n } from "@/hooks/i18n-provider"
-import { Button } from "@/ui/button"
-import { Sheet } from "@/ui/sheet"
+import { useI18n } from "@/hooks/i18n-provider";
+import { Button } from "@/ui/button";
+import { Sheet } from "@/ui/sheet";
 
-type PresenceUninstallSheetProps = { name: string; open: boolean; pending: boolean; onClose: () => void; onConfirm: () => void }
+type PresenceUninstallSheetProps = {
+  name: string;
+  open: boolean;
+  pending: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+};
 
 export const PresenceUninstallSheet = ({ name, open, pending, onClose, onConfirm }: PresenceUninstallSheetProps) => {
-  const { t } = useI18n()
+  const { t } = useI18n();
   return (
     <Sheet
       open={open}
@@ -24,5 +30,5 @@ export const PresenceUninstallSheet = ({ name, open, pending, onClose, onConfirm
         </>
       }
     />
-  )
-}
+  );
+};

@@ -1,43 +1,27 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import {
-  MessageScroller as MessageScrollerPrimitive,
-  useMessageScroller,
-  useMessageScrollerScrollable,
-  useMessageScrollerVisibility,
-} from "@shadcn/react/message-scroller"
-import { cn } from "cn"
+import * as React from "react";
+import { MessageScroller as MessageScrollerPrimitive, useMessageScroller, useMessageScrollerScrollable, useMessageScrollerVisibility } from "@shadcn/react/message-scroller";
+import { cn } from "cn";
 
-import { Button } from "./button"
-import { RiArrowDownLine } from "@remixicon/react"
+import { Button } from "./button";
+import { RiArrowDownLine } from "@remixicon/react";
 
-function MessageScrollerProvider(
-  props: React.ComponentProps<typeof MessageScrollerPrimitive.Provider>
-) {
-  return <MessageScrollerPrimitive.Provider {...props} />
+function MessageScrollerProvider(props: React.ComponentProps<typeof MessageScrollerPrimitive.Provider>) {
+  return <MessageScrollerPrimitive.Provider {...props} />;
 }
 
-function MessageScroller({
-  className,
-  ...props
-}: React.ComponentProps<typeof MessageScrollerPrimitive.Root>) {
+function MessageScroller({ className, ...props }: React.ComponentProps<typeof MessageScrollerPrimitive.Root>) {
   return (
     <MessageScrollerPrimitive.Root
       data-slot="message-scroller"
-      className={cn(
-        "group/message-scroller relative flex size-full min-h-0 flex-col overflow-hidden",
-        className
-      )}
+      className={cn("group/message-scroller relative flex size-full min-h-0 flex-col overflow-hidden", className)}
       {...props}
     />
-  )
+  );
 }
 
-function MessageScrollerViewport({
-  className,
-  ...props
-}: React.ComponentProps<typeof MessageScrollerPrimitive.Viewport>) {
+function MessageScrollerViewport({ className, ...props }: React.ComponentProps<typeof MessageScrollerPrimitive.Viewport>) {
   return (
     <MessageScrollerPrimitive.Viewport
       data-slot="message-scroller-viewport"
@@ -47,38 +31,22 @@ function MessageScrollerViewport({
       )}
       {...props}
     />
-  )
+  );
 }
 
-function MessageScrollerContent({
-  className,
-  ...props
-}: React.ComponentProps<typeof MessageScrollerPrimitive.Content>) {
-  return (
-    <MessageScrollerPrimitive.Content
-      data-slot="message-scroller-content"
-      className={cn("flex h-max min-h-full flex-col gap-6", className)}
-      {...props}
-    />
-  )
+function MessageScrollerContent({ className, ...props }: React.ComponentProps<typeof MessageScrollerPrimitive.Content>) {
+  return <MessageScrollerPrimitive.Content data-slot="message-scroller-content" className={cn("flex h-max min-h-full flex-col gap-6", className)} {...props} />;
 }
 
-function MessageScrollerItem({
-  className,
-  scrollAnchor = false,
-  ...props
-}: React.ComponentProps<typeof MessageScrollerPrimitive.Item>) {
+function MessageScrollerItem({ className, scrollAnchor = false, ...props }: React.ComponentProps<typeof MessageScrollerPrimitive.Item>) {
   return (
     <MessageScrollerPrimitive.Item
       data-slot="message-scroller-item"
       scrollAnchor={scrollAnchor}
-      className={cn(
-        "min-w-0 shrink-0 [contain-intrinsic-size:auto_10rem] [content-visibility:auto]",
-        className
-      )}
+      className={cn("min-w-0 shrink-0 [contain-intrinsic-size:auto_10rem] [content-visibility:auto]", className)}
       {...props}
     />
-  )
+  );
 }
 
 function MessageScrollerButton({
@@ -89,8 +57,7 @@ function MessageScrollerButton({
   variant = "secondary",
   size = "icon-sm",
   ...props
-}: React.ComponentProps<typeof MessageScrollerPrimitive.Button> &
-  Pick<React.ComponentProps<typeof Button>, "variant" | "size">) {
+}: React.ComponentProps<typeof MessageScrollerPrimitive.Button> & Pick<React.ComponentProps<typeof Button>, "variant" | "size">) {
   return (
     <MessageScrollerPrimitive.Button
       data-slot="message-scroller-button"
@@ -108,13 +75,11 @@ function MessageScrollerButton({
       {children ?? (
         <>
           <RiArrowDownLine />
-          <span className="sr-only">
-            {direction === "end" ? "Scroll to end" : "Scroll to start"}
-          </span>
+          <span className="sr-only">{direction === "end" ? "Scroll to end" : "Scroll to start"}</span>
         </>
       )}
     </MessageScrollerPrimitive.Button>
-  )
+  );
 }
 
 export {
@@ -126,5 +91,5 @@ export {
   MessageScrollerButton,
   useMessageScroller,
   useMessageScrollerScrollable,
-  useMessageScrollerVisibility,
-}
+  useMessageScrollerVisibility
+};

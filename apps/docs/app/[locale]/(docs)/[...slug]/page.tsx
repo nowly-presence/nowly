@@ -17,21 +17,27 @@ import type { ReactElement } from "react";
 
 type Props = {
   params: Promise<{
-    slug: string[]
+    slug: string[];
   }>;
 };
 
 const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const locale = await getLocale();
+
   const t = await getTranslations("docsMetadata");
+
   const { slug } = await params;
+
   const pageSlug = slug.join("/");
   const doc = getDocContent(pageSlug, locale);
 
   if (!doc) {
     return {
-       title: t("not-found"),
-      robots: { index: false, follow: false },
+      title: t("not-found"),
+      robots: {
+        index: false,
+        follow: false
+      }
     };
   }
 
@@ -45,13 +51,14 @@ const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
     image: docsOgImage(doc.path, {
       title: doc.title,
       description,
-       category: getCategoryForPath(pageSlug, locale),
-    }),
+      category: getCategoryForPath(pageSlug, locale)
+    })
   });
 };
 
 const Page = async ({ params }: Props): Promise<ReactElement> => {
   const locale = await getLocale();
+
   const { slug } = await params;
 
   const pageSlug = slug.join("/");
@@ -69,17 +76,11 @@ const Page = async ({ params }: Props): Promise<ReactElement> => {
       <ScrollToTop />
       <article className="py-8">
         <div className="flex items-start justify-between gap-4 mb-2">
-          <h1 className="text-3xl font-semibold font-heading">
-            {doc.title}
-          </h1>
+          <h1 className="text-3xl font-semibold font-heading">{doc.title}</h1>
           <OpenIn slug={doc.sourcePath} locale={locale} />
         </div>
 
-        {doc.description && (
-          <p className="text-muted-foreground mb-8 text-lg">
-            {doc.description}
-          </p>
-        )}
+        {doc.description && <p className="text-muted-foreground mb-8 text-lg">{doc.description}</p>}
 
         <MDXRemote source={doc.content} components={mdxComponents} options={{ blockJS: false }} />
 

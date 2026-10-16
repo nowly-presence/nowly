@@ -22,6 +22,7 @@ export const GET = async () => {
 
     for (const page of section.children) {
       const doc = getDocContent(page.path, "en-US");
+
       if (!doc) continue;
 
       const body = stripMdx(doc.content);
@@ -30,11 +31,13 @@ export const GET = async () => {
   }
 
   const changelog = sections.find((section) => section.slug === "changelog");
+
   if (changelog) {
     parts.push("", "## Changelog", "");
 
     for (const page of changelog.children) {
       const doc = getDocContent(page.path, "en-US");
+
       if (!doc) continue;
 
       const body = stripMdx(doc.content);
@@ -43,6 +46,6 @@ export const GET = async () => {
   }
 
   return new NextResponse(parts.join("\n---\n\n"), {
-    headers: { "Content-Type": "text/plain; charset=utf-8" },
+    headers: { "Content-Type": "text/plain; charset=utf-8" }
   });
 };

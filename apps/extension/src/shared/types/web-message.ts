@@ -7,11 +7,11 @@ export type WebMessageType =
   | "GET_DEVICE_INFO"
   | "GET_ANALYTICS_CONSENT"
   | "SET_ANALYTICS_CONSENT"
-  | "NOWLY_SESSION"
+  | "NOWLY_SESSION";
 
 export type WebMessage = {
-  source: typeof import("@/shared/constants").EXT_WEB_SOURCE
-  type: WebMessageType | "PING"
-  payload?: unknown
-  messageId?: string
-}
+  source: typeof import("@/shared/constants").EXT_WEB_SOURCE;
+  type: WebMessageType | "PING";
+  payload?: unknown;
+  messageId?: string;
+};

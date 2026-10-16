@@ -1,12 +1,12 @@
-import { RiShieldUserLine } from "@remixicon/react"
-import { useI18n } from "@/hooks/i18n-provider"
-import { useNav } from "@/hooks/navigation-provider"
-import { Group } from "@/ui/card"
-import { Row } from "@/ui/row"
+import { RiShieldUserLine } from "@remixicon/react";
+import { useI18n } from "@/hooks/i18n-provider";
+import { useNav } from "@/hooks/navigation-provider";
+import { Group } from "@/ui/card";
+import { Row } from "@/ui/row";
 
 export const DiscordIpcAlert = () => {
-  const { t } = useI18n()
-  const { push } = useNav()
+  const { t } = useI18n();
+  const { push } = useNav();
 
   return (
     <Group>
@@ -22,5 +22,5 @@ export const DiscordIpcAlert = () => {
         onClick={() => push({ name: "discord-ipc" })}
       />
     </Group>
-  )
-}
+  );
+};

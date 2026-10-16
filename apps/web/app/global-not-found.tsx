@@ -7,7 +7,7 @@ import { satoshi } from "./fonts";
 // must import its own styles/fonts and stay plain English - see not-found.md "Good to know".
 export const metadata: Metadata = {
   title: "Not Found | Nowly",
-  description: "The page you are looking for does not exist.",
+  description: "The page you are looking for does not exist."
 };
 
 const GlobalNotFound = () => (

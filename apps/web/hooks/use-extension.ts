@@ -1,20 +1,10 @@
 "use client";
 
-import {
-  getExtensionDetected,
-  isDevPresenceVersion,
-  normalizePresenceVersion,
-  parseInstalledMap,
-  requestExtension,
-  subscribeExtensionDetected,
-  type ExtensionDiagnostic,
-  type InstalledPresenceInfo,
-} from "@/lib/extension-bridge";
+import { getExtensionDetected, isDevPresenceVersion, normalizePresenceVersion, parseInstalledMap, requestExtension, subscribeExtensionDetected, type ExtensionDiagnostic, type InstalledPresenceInfo } from "@/lib/extension-bridge";
 import { fetchPresenceRelease } from "@/lib/presence-api-client";
 import { useCallback, useEffect, useState } from "react";
 
-const isMobileBrowser = (): boolean =>
-  /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+const isMobileBrowser = (): boolean => /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 
 export const useExtension = () => {
   const [detected, setDetected] = useState<boolean | null>(() => getExtensionDetected());
@@ -49,11 +39,7 @@ export const useExtension = () => {
     };
   }, [detected]);
 
-  return {
-    detected,
-    diagnostic,
-    mobile,
-  };
+  return { detected, diagnostic, mobile };
 };
 
 export const usePresenceExtension = (slug: string, latestVersion?: string | null) => {
@@ -117,24 +103,35 @@ export const usePresenceExtension = (slug: string, latestVersion?: string | null
 
   const install = useCallback(async (): Promise<"ok" | "queued" | "blocked" | false> => {
     if (!detected || mobile || bridgeBlocked) return bridgeBlocked ? "blocked" : false;
+
     setBusy(true);
+
     try {
       const release = await fetchPresenceRelease(slug);
-      const result = await requestExtension<{ ok?: boolean; queued?: boolean; error?: string }>(
-        needsUpdate ? "UPDATE_PRESENCE" : "INSTALL_PRESENCE",
-        { slug, release },
-      );
+
+      const result = await requestExtension<{
+        ok?: boolean;
+        queued?: boolean;
+        error?: string;
+      }>(needsUpdate ? "UPDATE_PRESENCE" : "INSTALL_PRESENCE", { slug, release });
+
       if (result?.ok === true) {
-        const installedRelease = release as { version?: unknown };
+        const installedRelease = release as {
+          version?: unknown;
+        };
         const version = normalizePresenceVersion(installedRelease.version);
         setInstalled({ version });
       }
+
       await refreshInstalled();
+
       if (result?.queued === true) return "queued";
       if (result?.ok === true) return "ok";
+
       return false;
     } catch (error) {
       if (error instanceof Error && error.message.includes("timed out")) return "blocked";
+
       return false;
     } finally {
       setBusy(false);
@@ -143,10 +140,16 @@ export const usePresenceExtension = (slug: string, latestVersion?: string | null
 
   const uninstall = useCallback(async (): Promise<boolean> => {
     if (!detected || bridgeBlocked) return false;
+
     setBusy(true);
+
     try {
-      const result = await requestExtension<{ ok?: boolean }>("UNINSTALL_PRESENCE", { slug });
+      const result = await requestExtension<{
+        ok?: boolean;
+      }>("UNINSTALL_PRESENCE", { slug });
+
       if (result?.ok === false) return false;
+
       setInstalled(null);
       return true;
     } catch {
@@ -156,17 +159,5 @@ export const usePresenceExtension = (slug: string, latestVersion?: string | null
     }
   }, [bridgeBlocked, detected, slug]);
 
-  return {
-    bridgeBlocked,
-    busy,
-    catalogReady,
-    detected,
-    diagnostic,
-    install,
-    installedVersion,
-    isInstalled,
-    mobile,
-    needsUpdate,
-    uninstall,
-  };
+  return { bridgeBlocked, busy, catalogReady, detected, diagnostic, install, installedVersion, isInstalled, mobile, needsUpdate, uninstall };
 };

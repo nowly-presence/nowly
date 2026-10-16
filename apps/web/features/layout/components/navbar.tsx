@@ -10,7 +10,6 @@ import { lazy, Suspense, useState } from "react";
 
 const MobileNav = lazy(() => import("@/features/layout/components/mobile-nav").then(({ MobileNav: Component }) => ({ default: Component })));
 
-
 import { docsHref } from "@/features/seo/lib/seo";
 import { Link, usePathname } from "@/i18n/navigation";
 import { CANARY_ACCENT, CANARY_INK } from "@/lib/brand";
@@ -22,14 +21,36 @@ export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const canary = pathname === "/canary";
   const storeButtonProps = canary
-    ? { className: "border-transparent hover:brightness-110", style: { backgroundColor: CANARY_ACCENT, color: CANARY_INK } }
+    ? {
+        className: "border-transparent hover:brightness-110",
+        style: {
+          backgroundColor: CANARY_ACCENT,
+          color: CANARY_INK
+        }
+      }
     : {};
 
   const links = [
-    { href: "/roadmap", label: t("roadmap"), external: false },
-    { href: docsHref("/"), label: t("docs"), external: true },
-    { href: "/guides", label: t("guides"), external: false },
-    { href: "/library", label: t("library"), external: false },
+    {
+      href: "/roadmap",
+      label: t("roadmap"),
+      external: false
+    },
+    {
+      href: docsHref("/"),
+      label: t("docs"),
+      external: true
+    },
+    {
+      href: "/guides",
+      label: t("guides"),
+      external: false
+    },
+    {
+      href: "/library",
+      label: t("library"),
+      external: false
+    }
   ];
 
   return (
@@ -41,11 +62,7 @@ export const Navbar = () => {
       />
       <div className="pointer-events-auto relative mx-auto flex h-17 max-w-300 items-center justify-between gap-4 rounded-[12px] bg-background/50 px-3 backdrop-blur-xl transition-[background-color,border-radius,backdrop-filter] duration-200 sm:h-21 sm:px-4 in-data-nav-join:rounded-b-none in-data-nav-join:bg-transparent in-data-nav-join:backdrop-blur-none">
         <Link href="/" className="relative flex h-11 w-30 shrink-0 items-center sm:h-15 sm:w-37">
-          <BrandLockup
-            width={148}
-            height={60}
-            className="h-full w-auto object-contain object-left"
-          />
+          <BrandLockup width={148} height={60} className="h-full w-auto object-contain object-left" />
         </Link>
 
         <nav className="hidden items-center gap-5 lg:flex">
@@ -55,7 +72,13 @@ export const Navbar = () => {
 
         <button
           type="button"
-          className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "lg:hidden")}
+          className={cn(
+            buttonVariants({
+              variant: "ghost",
+              size: "icon"
+            }),
+            "lg:hidden"
+          )}
           aria-label={t("open-menu")}
           onClick={() => setOpen(true)}
         >
@@ -63,13 +86,7 @@ export const Navbar = () => {
         </button>
         {open ? (
           <Suspense fallback={null}>
-            <MobileNav
-              open={open}
-              onOpenChange={setOpen}
-              links={links}
-              canary={canary}
-              menuLabel={t("open-menu")}
-            />
+            <MobileNav open={open} onOpenChange={setOpen} links={links} canary={canary} menuLabel={t("open-menu")} />
           </Suspense>
         ) : null}
       </div>

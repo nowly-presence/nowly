@@ -1,20 +1,15 @@
-export const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE"
+export const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE";
 
-export const createPresenceRuntime = (
-  slug: string,
-  name: string,
-  bundle: string,
-  settings: Record<string, unknown> = {},
-  strings: Record<string, string> = {},
-  apiBaseUrl = "https://api.nowly.me",
-  cdnBaseUrl?: string,
-  options: { mode?: "main" | "iframe"; iframeRegExp?: string } = {},
-): string => {
-  const mode = options.mode ?? "main"
-  const iframeRegExp = options.iframeRegExp ?? ""
-  const assetsBase = cdnBaseUrl
-    ? `${cdnBaseUrl.replace(/\/+$/, "")}/presences/${slug}/assets`
-    : chrome.runtime.getURL(`presences/${slug}/assets`)
+export const createPresenceRuntime = (slug: string, name: string, bundle: string, settings: Record<string, unknown> = {}, strings: Record<
+  string,
+  string
+> = {}, apiBaseUrl = "https://api.nowly.me", cdnBaseUrl?: string, options: {
+  mode?: "main" | "iframe";
+  iframeRegExp?: string;
+} = {}): string => {
+  const mode = options.mode ?? "main";
+  const iframeRegExp = options.iframeRegExp ?? "";
+  const assetsBase = cdnBaseUrl ? `${cdnBaseUrl.replace(/\/+$/, "")}/presences/${slug}/assets` : chrome.runtime.getURL(`presences/${slug}/assets`);
   return `
 (() => {
   "use strict";
@@ -389,5 +384,5 @@ export const createPresenceRuntime = (
     });
   }
 })();
-`
-}
+`;
+};

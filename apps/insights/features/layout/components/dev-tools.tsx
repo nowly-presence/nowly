@@ -20,10 +20,14 @@ export const DevTools = () => {
 
   const seed = async () => {
     setLoading("seed");
+
     try {
-      const result = await apiFetch<{ devices: number; events: number }>("/insights/dev/seed", {
+      const result = await apiFetch<{
+        devices: number;
+        events: number;
+      }>("/insights/dev/seed", {
         method: "POST",
-        body: JSON.stringify({ days: 10 }),
+        body: JSON.stringify({ days: 10 })
       });
       toast.success(`Seeded ${result.events} events across ${result.devices} devices`);
       router.refresh();
@@ -36,8 +40,12 @@ export const DevTools = () => {
 
   const clear = async () => {
     setLoading("clear");
+
     try {
-      const result = await apiFetch<{ devices: number; events: number }>("/insights/dev/clear", { method: "POST" });
+      const result = await apiFetch<{
+        devices: number;
+        events: number;
+      }>("/insights/dev/clear", { method: "POST" });
       toast.success(`Cleared ${result.events} events and ${result.devices} devices`);
       router.refresh();
     } catch {

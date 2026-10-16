@@ -18,7 +18,7 @@ const localeLabelKey: Record<LocaleString, string> = {
   "ko-KR": "korean",
   "tr-TR": "turkish",
   "ms-MY": "malay",
-  "el-GR": "greek",
+  "el-GR": "greek"
 };
 
 export const LocaleSelector = () => {
@@ -29,7 +29,7 @@ export const LocaleSelector = () => {
 
   const items = SUPPORTED_LOCALES.map((code) => ({
     value: code,
-    label: t(localeLabelKey[code]),
+    label: t(localeLabelKey[code])
   }));
 
   return (

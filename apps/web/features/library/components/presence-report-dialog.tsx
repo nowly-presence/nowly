@@ -4,12 +4,7 @@ import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { Link } from "@/i18n/navigation";
 import { ButtonAnchor } from "@nowly/ui/button-link";
 import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Field, FieldError, FieldLabel, InputGroup, InputGroupAddon, InputGroupText, InputGroupTextarea, Spinner } from "@nowly/ui";
-import {
-  getExtensionDetected,
-  requestExtension,
-  subscribeExtensionDetected,
-  type ExtensionDiagnostic,
-} from "@/lib/extension-bridge";
+import { getExtensionDetected, requestExtension, subscribeExtensionDetected, type ExtensionDiagnostic } from "@/lib/extension-bridge";
 import { RiCheckboxCircleLine, RiDiscordFill, RiFlagLine } from "@nowly/ui/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, type FormEvent } from "react";
@@ -18,8 +13,8 @@ const REPORT_MAX_LENGTH = 750;
 const PRODUCTION_API_URL = "https://api.nowly.me";
 
 type ReportBrowser = {
-  name: string
-  version: string
+  name: string;
+  version: string;
 };
 
 const getReportBrowser = (): ReportBrowser => {
@@ -29,20 +24,28 @@ const getReportBrowser = (): ReportBrowser => {
     ["Opera", /(?:OPR|Opera Mini)\/([\d.]+)/i],
     ["Firefox", /(?:Firefox|FxiOS)\/([\d.]+)/i],
     ["Chrome", /(?:Chrome|CriOS)\/([\d.]+)/i],
-    ["Safari", /Version\/([\d.]+).*Safari\//i],
+    ["Safari", /Version\/([\d.]+).*Safari\//i]
   ];
 
   for (const [name, matcher] of matchers) {
     const match = userAgent.match(matcher);
-    if (match?.[1]) return { name, version: match[1] };
+
+    if (match?.[1]) return {
+      name,
+      version: match[1]
+    };
   }
 
-  return { name: "Unknown", version: "Unknown" };
+  return {
+    name: "Unknown",
+    version: "Unknown"
+  };
 };
+
 type PresenceReportDialogProps = {
-  slug: string
-  name: string
-  disabled?: boolean
+  slug: string;
+  name: string;
+  disabled?: boolean;
 };
 
 const reportApiUrl = (slug: string): string => {
@@ -78,21 +81,24 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
     setError(false);
   };
 
-  useEffect(() => subscribeExtensionDetected((value) => {
-    if (!value) {
-      setOpen(false);
-      reset();
-    }
-  }), []);
+  useEffect(() =>
+    subscribeExtensionDetected((value) => {
+      if (!value) {
+        setOpen(false);
+        reset();
+      }
+    }), []);
 
   useEffect(() => {
     if (!disabled) return;
+
     setOpen(false);
     reset();
   }, [disabled]);
 
   const onOpenChange = (next: boolean) => {
     if (next && (disabled || getExtensionDetected() !== true)) return;
+
     setOpen(next);
     if (!next) reset();
   };
@@ -100,6 +106,7 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const trimmed = message.trim();
+
     if (!trimmed || trimmed.length > REPORT_MAX_LENGTH) return;
 
     setBusy(true);
@@ -120,8 +127,8 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
           message: trimmed,
           locale,
           browser: browser.name,
-          browserVersion: browser.version,
-        }),
+          browserVersion: browser.version
+        })
       });
 
       if (!response.ok) {
@@ -139,13 +146,7 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
 
   return (
     <>
-      <Button
-        type="button"
-        variant="ghost"
-        size="lg"
-        disabled={disabled}
-        onClick={() => onOpenChange(true)}
-      >
+      <Button type="button" variant="ghost" size="lg" disabled={disabled} onClick={() => onOpenChange(true)}>
         <RiFlagLine data-icon="inline-start" />
         {t("report")}
       </Button>
@@ -202,7 +203,10 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
                   />
                   <InputGroupAddon align="block-end">
                     <InputGroupText className="ml-auto tabular-nums">
-                      {t("report-count", { count, max: REPORT_MAX_LENGTH })}
+                      {t("report-count", {
+                        count,
+                        max: REPORT_MAX_LENGTH
+                      })}
                     </InputGroupText>
                   </InputGroupAddon>
                 </InputGroup>

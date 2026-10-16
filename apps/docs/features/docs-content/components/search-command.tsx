@@ -47,7 +47,9 @@ export const SearchCommand: FC<SearchCommandProps> = ({ open, onOpenChange }) =>
     const timeoutId = setTimeout(async () => {
       try {
         const res = await fetch(`${DOCS_BASE_PATH}/api/search?q=${encodeURIComponent(query)}&locale=${locale}`);
+
         if (!res.ok) throw new Error("Search failed");
+
         const data = await res.json();
         setResults(data);
       } catch {
@@ -68,47 +70,30 @@ export const SearchCommand: FC<SearchCommandProps> = ({ open, onOpenChange }) =>
   const hasQuery = query.trim().length > 0;
   const hasResults = results.length > 0;
 
-
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
-      <CommandInput
-        placeholder={t("search-placeholder")}
-        value={query}
-        onValueChange={setQuery}
-      />
+      <CommandInput placeholder={t("search-placeholder")} value={query} onValueChange={setQuery} />
 
       <CommandList>
         {isSearching && hasQuery ? (
           <CommandEmpty>
             <span className="inline-flex items-center justify-center gap-2">
               <Spinner className="size-4" />
-               {t("searching")}
+              {t("searching")}
             </span>
           </CommandEmpty>
         ) : null}
 
-        {!isSearching && hasQuery && !hasResults ? (
-           <CommandEmpty>{t("no-results")}</CommandEmpty>
-        ) : null}
+        {!isSearching && hasQuery && !hasResults ? <CommandEmpty>{t("no-results")}</CommandEmpty> : null}
 
-        {!isSearching && !hasQuery ? (
-           <CommandEmpty>{t("type-to-search")}</CommandEmpty>
-        ) : null}
+        {!isSearching && !hasQuery ? <CommandEmpty>{t("type-to-search")}</CommandEmpty> : null}
 
         {!isSearching && hasResults ? (
-          <CommandGroup
-             heading={t("results", { count: results.length })}
-          >
+          <CommandGroup heading={t("results", { count: results.length })}>
             {results.map((result) => (
               <CommandItem
                 key={result.href}
-                value={[
-                  result.title,
-                  result.description,
-                  result.matchContext,
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
+                value={[result.title, result.description, result.matchContext].filter(Boolean).join(" ")}
                 onSelect={() => handleSelect(result.href)}
                 className="px-4 py-3 rounded-xl data-[selected=true]:bg-card-2"
               >
@@ -116,13 +101,9 @@ export const SearchCommand: FC<SearchCommandProps> = ({ open, onOpenChange }) =>
                   <p className="truncate font-medium">{result.title}</p>
 
                   {result.matchContext ? (
-                    <p className="line-clamp-1 text-xs text-muted-foreground">
-                      ...{result.matchContext}...
-                    </p>
+                    <p className="line-clamp-1 text-xs text-muted-foreground">...{result.matchContext}...</p>
                   ) : result.description ? (
-                    <p className="line-clamp-1 text-xs text-muted-foreground">
-                      {result.description}
-                    </p>
+                    <p className="line-clamp-1 text-xs text-muted-foreground">{result.description}</p>
                   ) : null}
                 </div>
               </CommandItem>

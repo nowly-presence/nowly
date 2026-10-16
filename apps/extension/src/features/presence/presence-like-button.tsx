@@ -1,9 +1,13 @@
-import { RiHeart3Fill, RiHeart3Line } from "@remixicon/react"
-import { useI18n } from "@/hooks/i18n-provider"
-import { formatCompact } from "@/lib/format"
+import { RiHeart3Fill, RiHeart3Line } from "@remixicon/react";
+import { useI18n } from "@/hooks/i18n-provider";
+import { formatCompact } from "@/lib/format";
 
-export const PresenceLikeButton = ({ liked, likes, onToggle }: { liked: boolean; likes: number; onToggle: () => void }) => {
-  const { t, locale } = useI18n()
+export const PresenceLikeButton = ({ liked, likes, onToggle }: {
+  liked: boolean;
+  likes: number;
+  onToggle: () => void;
+}) => {
+  const { t, locale } = useI18n();
   return (
     <button
       type="button"
@@ -15,5 +19,5 @@ export const PresenceLikeButton = ({ liked, likes, onToggle }: { liked: boolean;
       {liked ? <RiHeart3Fill className="size-[18px] text-danger" /> : <RiHeart3Line className="size-[18px]" />}
       <span className="tabular-nums">{formatCompact(likes, locale)}</span>
     </button>
-  )
-}
+  );
+};

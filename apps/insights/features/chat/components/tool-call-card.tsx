@@ -5,10 +5,13 @@ const toolLabels: Record<string, string> = {
   listCatalog: "Looking up the analytics catalog",
   getOverviewTotals: "Fetching overview totals",
   getMetricSeries: "Fetching metric series",
-  getFunnel: "Fetching funnel data",
+  getFunnel: "Fetching funnel data"
 };
 
-export const ToolCallCard = ({ toolName, state }: { toolName: string; state: string }) => {
+export const ToolCallCard = ({ toolName, state }: {
+  toolName: string;
+  state: string;
+}) => {
   const label = toolLabels[toolName] ?? `Running ${toolName}`;
   const pending = state !== "output-available" && state !== "output-error";
 

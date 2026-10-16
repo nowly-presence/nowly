@@ -1,56 +1,61 @@
-import { addRuntimeLog } from "@/background/runtime-logs"
-import { getCachedDeviceId, setCachedDeviceId } from "@/background/services/background-context"
-import { getEffectiveApiUrl } from "@/background/services/api-state"
-import { browserName, osName } from "@/background/services/device-info"
-import { getDeviceId, getDeviceToken, setDeviceToken } from "@/background/storage/device.store"
-import { getPresences } from "@/background/storage/presences.store"
-import { LOCALE_LONG_MAP, loadLocale } from "@/shared/locales"
-import { WEB_BASE_URL } from "@/shared/constants"
+import { addRuntimeLog } from "@/background/runtime-logs";
+import { getCachedDeviceId, setCachedDeviceId } from "@/background/services/background-context";
+import { getEffectiveApiUrl } from "@/background/services/api-state";
+import { browserName, osName } from "@/background/services/device-info";
+import { getDeviceId, getDeviceToken, setDeviceToken } from "@/background/storage/device.store";
+import { getPresences } from "@/background/storage/presences.store";
+import { LOCALE_LONG_MAP, loadLocale } from "@/shared/locales";
+import { WEB_BASE_URL } from "@/shared/constants";
 
 type SyncPresence = {
-  slug: string
-  version?: string
-  enabled?: boolean
-  installed?: boolean
-}
+  slug: string;
+  version?: string;
+  enabled?: boolean;
+  installed?: boolean;
+};
 
 export const getActiveDeviceId = async (): Promise<string> => {
-  const cachedDeviceId = getCachedDeviceId()
-  if (cachedDeviceId) return cachedDeviceId
-  const deviceId = await getDeviceId()
-  setCachedDeviceId(deviceId)
-  return deviceId
-}
+  const cachedDeviceId = getCachedDeviceId();
+
+  if (cachedDeviceId) return cachedDeviceId;
+
+  const deviceId = await getDeviceId();
+  setCachedDeviceId(deviceId);
+  return deviceId;
+};
 
 export const buildDeviceUrl = async (path: string): Promise<string> => {
-  const deviceId = await getActiveDeviceId()
-  const params = new URLSearchParams({ deviceId })
-  const token = await getDeviceToken()
-  if (token) params.set("token", token)
-  return `${WEB_BASE_URL}${path}?${params.toString()}`
-}
+  const deviceId = await getActiveDeviceId();
+
+  const params = new URLSearchParams({ deviceId });
+  const token = await getDeviceToken();
+  if (token) params.set("token", token);
+  return `${WEB_BASE_URL}${path}?${params.toString()}`;
+};
 
 export const syncUninstallUrl = async (): Promise<void> => {
   try {
-    chrome.runtime.setUninstallURL(await buildDeviceUrl("/uninstall"))
-  } catch {
-  }
-}
+    chrome.runtime.setUninstallURL(await buildDeviceUrl("/uninstall"));
+  } catch {}
+};
 
 export const syncDeviceState = async (extraPresences: SyncPresence[] = []): Promise<void> => {
-  const [deviceId, presences] = await Promise.all([getActiveDeviceId(), getPresences()])
+  const [deviceId, presences] = await Promise.all([
+    getActiveDeviceId(),
+    getPresences()
+  ]);
 
   const syncedPresences = [
     ...Object.entries(presences).map(([slug, presence]) => ({
       slug,
       version: presence.release?.version ?? presence.metadata?.version ?? undefined,
       enabled: presence.enabled,
-      installed: true,
+      installed: true
     })),
-    ...extraPresences,
-  ]
+    ...extraPresences
+  ];
 
-  addRuntimeLog("info", "api", "POST /devices/sync", { presenceCount: syncedPresences.length })
+  addRuntimeLog("info", "api", "POST /devices/sync", { presenceCount: syncedPresences.length });
 
   try {
     const response = await fetch(`${getEffectiveApiUrl()}/devices/sync`, {
@@ -62,24 +67,28 @@ export const syncDeviceState = async (extraPresences: SyncPresence[] = []): Prom
         browser: browserName(),
         os: osName(),
         locale: LOCALE_LONG_MAP[await loadLocale()],
-        presences: syncedPresences,
-      }),
-    })
-    addRuntimeLog(response.ok ? "success" : "warn", "api", "POST /devices/sync result", { status: response.status })
+        presences: syncedPresences
+      })
+    });
+    addRuntimeLog(response.ok ? "success" : "warn", "api", "POST /devices/sync result", { status: response.status });
+
     if (response.ok) {
       try {
-        const data = (await response.json()) as { deviceToken?: unknown }
+        const data = (await response.json()) as {
+          deviceToken?: unknown;
+        };
+
         if (typeof data.deviceToken === "string" && data.deviceToken) {
-          const existing = await getDeviceToken()
+          const existing = await getDeviceToken();
+
           if (existing !== data.deviceToken) {
-            await setDeviceToken(data.deviceToken)
-            await syncUninstallUrl()
+            await setDeviceToken(data.deviceToken);
+            await syncUninstallUrl();
           }
         }
-      } catch {
-      }
+      } catch {}
     }
   } catch (error) {
-    addRuntimeLog("error", "api", "POST /devices/sync failed", { error: error instanceof Error ? error.message : String(error) })
+    addRuntimeLog("error", "api", "POST /devices/sync failed", { error: error instanceof Error ? error.message : String(error) });
   }
-}
+};

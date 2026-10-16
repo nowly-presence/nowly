@@ -5,12 +5,15 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("cookies-page")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("cookies-page")
+  ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     locale,
-    path: "/cookies",
+    path: "/cookies"
   });
 };
 

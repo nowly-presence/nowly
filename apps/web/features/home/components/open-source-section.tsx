@@ -17,17 +17,10 @@ export const OpenSourceSection = async () => {
       <div className="mx-auto grid w-full max-w-[1200px] items-center gap-12 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:gap-16">
         <div>
           <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
-          <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[2.15rem]">
-            {t("title")}
-          </h2>
+          <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[2.15rem]">{t("title")}</h2>
           <p className="mt-2 text-base leading-relaxed text-muted-foreground sm:text-lg">{t("description")}</p>
           <div className="mt-8">
-            <ButtonAnchor
-              href={docsHref("/presence-development/creating-your-first-presence")}
-              rel="noreferrer"
-              target="_blank"
-              variant="inverted"
-            >
+            <ButtonAnchor href={docsHref("/presence-development/creating-your-first-presence")} rel="noreferrer" target="_blank" variant="inverted">
               {t("docs")}
               <RiArrowRightLine data-icon="inline-end" />
             </ButtonAnchor>
@@ -47,7 +40,7 @@ export const OpenSourceSection = async () => {
               <span className={fn}>presence</span>
               <span className={muted}>{" = "}</span>
               <span className={kw}>new</span>
-              <span className={muted}>{" "}</span>
+              <span className={muted}> </span>
               <span className={fn}>Presence</span>
               <span className={muted}>{"()"}</span>
               {"\n\n"}

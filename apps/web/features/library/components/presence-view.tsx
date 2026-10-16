@@ -11,29 +11,25 @@ import { formatChangelogDate } from "@/features/changelog/lib/format-changelog-d
 import { Alert, AlertDescription, AlertTitle, Card, CardContent, CardTitle } from "@nowly/ui";
 import { FALLBACK_LOCALE, getValidLocale } from "@nowly/locales";
 
-import {
-  localizedDescription,
-  localizedFeatures,
-  localizedLongDescription,
-  relatedPresences,
-  type LibraryPresence,
-} from "@/lib/library-catalog";
+import { localizedDescription, localizedFeatures, localizedLongDescription, relatedPresences, type LibraryPresence } from "@/lib/library-catalog";
 import type { PresenceStats, PresenceVersionNote } from "@/lib/presence-api";
 import { RiArrowLeftLine, RiCheckboxCircleLine, RiInformationLine, RiTranslate2 } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
 type PresenceViewProps = {
-  presence: LibraryPresence
-  catalog: LibraryPresence[]
-  locale: string
-  versions: PresenceVersionNote[]
-  stats: PresenceStats
-  guide?: ContentEntry | null
+  presence: LibraryPresence;
+  catalog: LibraryPresence[];
+  locale: string;
+  versions: PresenceVersionNote[];
+  stats: PresenceStats;
+  guide?: ContentEntry | null;
 };
 
 export const PresenceView = async ({ presence, catalog, locale, versions, stats, guide }: PresenceViewProps) => {
   const t = await getTranslations("presencePage");
+
   const library = await getTranslations("libraryPage");
+
   const description = localizedDescription(presence, locale);
   const about = localizedLongDescription(presence, locale);
   const features = localizedFeatures(presence, locale);
@@ -54,30 +50,17 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats,
             <Card className="gap-0 py-0">
               <LibraryMedia slug={presence.slug} name={presence.name} variant="hero" />
               <CardContent className="pt-6 pb-8 sm:pt-8">
-                <p className="text-[0.7rem] font-medium uppercase tracking-[0.16em] text-accent">
-                  {library(`categories.${presence.category}`)}
-                </p>
-                <h1 className="mt-2 text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
-                  {presence.name}
-                </h1>
-                <p className="mt-4 max-w-[46ch] text-[1.05rem] leading-relaxed text-foreground/68">
-                  {description}
-                </p>
+                <p className="text-[0.7rem] font-medium uppercase tracking-[0.16em] text-accent">{library(`categories.${presence.category}`)}</p>
+                <h1 className="mt-2 text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">{presence.name}</h1>
+                <p className="mt-4 max-w-[46ch] text-[1.05rem] leading-relaxed text-foreground/68">{description}</p>
                 {presence.discordNative ? (
                   <Alert className="mt-6 rounded-[16px] border-accent/20 bg-accent/8 px-4 py-3.5">
                     <RiInformationLine className="text-accent" />
                     <AlertTitle>{t("discord-native-title")}</AlertTitle>
-                    <AlertDescription>
-                      {t("discord-native-description", { name: presence.name })}
-                    </AlertDescription>
+                    <AlertDescription>{t("discord-native-description", { name: presence.name })}</AlertDescription>
                   </Alert>
                 ) : null}
-                <PresenceActions
-                  slug={presence.slug}
-                  name={presence.name}
-                  version={presence.version}
-                  likeCount={stats.likes}
-                />
+                <PresenceActions slug={presence.slug} name={presence.name} version={presence.version} likeCount={stats.likes} />
                 {about && about !== description ? (
                   <div className="mt-8 border-t border-foreground/8 pt-8">
                     <CardTitle>{t("about")}</CardTitle>
@@ -94,9 +77,7 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats,
                     {guide.meta.title ?? presence.name}
                   </h2>
                   {guide.meta.updated ? (
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      {t("guide-updated", { date: formatChangelogDate(guide.meta.updated, locale) })}
-                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">{t("guide-updated", { date: formatChangelogDate(guide.meta.updated, locale) })}</p>
                   ) : null}
                   {!guide.translated ? (
                     <Alert className="mt-6 rounded-[16px]">
@@ -129,19 +110,13 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats,
                 </CardContent>
               </Card>
             ) : null}
-            <DiscordCallout
-              title={t("community-title", { name: presence.name })}
-              description={t("community-description")}
-              cta={t("community-cta")}
-            />
+            <DiscordCallout title={t("community-title", { name: presence.name })} description={t("community-description")} cta={t("community-cta")} />
           </div>
         </div>
 
         {related.length > 0 ? (
           <section className="mt-20">
-            <h2 className="text-[1.35rem] font-medium tracking-tight text-foreground">
-              {t("related-title")}
-            </h2>
+            <h2 className="text-[1.35rem] font-medium tracking-tight text-foreground">{t("related-title")}</h2>
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((item) => (
                 <LibraryCard key={item.slug} presence={item} locale={locale} />

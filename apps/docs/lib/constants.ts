@@ -21,9 +21,6 @@ const hostnameOf = (value: string): string => {
   }
 };
 
-const deployDocsHost = hostnameOf(
-  (process.env.NEXT_PUBLIC_DOCS_BASE_URL ?? DOCS_ORIGIN).replace(/\/$/, ""),
-);
+const deployDocsHost = hostnameOf((process.env.NEXT_PUBLIC_DOCS_BASE_URL ?? DOCS_ORIGIN).replace(/\/$/, ""));
 
-export const isSeoPreview =
-  deployDocsHost !== "" && deployDocsHost !== "docs.nowly.me" && deployDocsHost !== "nowly.me";
+export const isSeoPreview = deployDocsHost !== "" && deployDocsHost !== "docs.nowly.me" && deployDocsHost !== "nowly.me";

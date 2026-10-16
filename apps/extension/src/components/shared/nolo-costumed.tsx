@@ -1,24 +1,26 @@
-import { domAnimation, LazyMotion, m, useReducedMotion } from "motion/react"
-import { NoloMascot, type NoloGaze } from "@/components/shared/nolo-mascot"
-import { NOLO_COSTUMES, type NoloCostume } from "@/components/shared/nolo-costume-paths"
-import { NOLO_VIEWBOX } from "@/components/shared/nolo-paths"
-import { cn } from "@/ui/cn"
+import { domAnimation, LazyMotion, m, useReducedMotion } from "motion/react";
+import { NoloMascot, type NoloGaze } from "@/components/shared/nolo-mascot";
+import { NOLO_COSTUMES, type NoloCostume } from "@/components/shared/nolo-costume-paths";
+import { NOLO_VIEWBOX } from "@/components/shared/nolo-paths";
+import { cn } from "@/ui/cn";
 
 type CostumedNoloProps = {
-  costume?: NoloCostume | null
-  size?: number
-  gaze?: NoloGaze
-  talking?: boolean
-  className?: string
-}
+  costume?: NoloCostume | null;
+  size?: number;
+  gaze?: NoloGaze;
+  talking?: boolean;
+  className?: string;
+};
 
-const TALK_SCALE = 1.035
-const TALK_BEAT_S = 0.32
+const TALK_SCALE = 1.035;
+const TALK_BEAT_S = 0.32;
 
 export const CostumedNolo = ({ costume, size = 56, gaze, talking = false, className }: CostumedNoloProps) => {
-  const reduced = useReducedMotion() === true
-  if (!costume) return <NoloMascot size={size} gaze={gaze} talking={talking} className={className} />
-  const art = NOLO_COSTUMES[costume]
+  const reduced = useReducedMotion() === true;
+
+  if (!costume) return <NoloMascot size={size} gaze={gaze} talking={talking} className={className} />;
+
+  const art = NOLO_COSTUMES[costume];
   return (
     <LazyMotion features={domAnimation} strict>
       <span className={cn("relative inline-flex shrink-0", `nolo-costume-${costume}`, className)} style={{ paddingTop: Math.round(size * art.overhang) }}>
@@ -41,5 +43,5 @@ export const CostumedNolo = ({ costume, size = 56, gaze, talking = false, classN
         </m.svg>
       </span>
     </LazyMotion>
-  )
-}
+  );
+};

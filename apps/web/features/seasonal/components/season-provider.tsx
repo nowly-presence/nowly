@@ -1,23 +1,6 @@
 "use client";
 
-import {
-  applySeasonClass,
-  EXT_SOURCE,
-  initialSeasonState,
-  nextSeasonState,
-  parseSeasonMessage,
-  parseSeasonPreview,
-  readStoredSeason,
-  SEASON_FADE_MS,
-  SEASON_LEAVING_CLASS,
-  SEASON_REQUEST,
-  SEASON_RESPONSE_TIMEOUT_MS,
-  SEASON_STORAGE_KEY,
-  seasonToStore,
-  type SeasonEvent,
-  type SeasonState,
-  type SiteSeason,
-} from "@/features/seasonal/lib/site-season";
+import { applySeasonClass, EXT_SOURCE, initialSeasonState, nextSeasonState, parseSeasonMessage, parseSeasonPreview, readStoredSeason, SEASON_FADE_MS, SEASON_LEAVING_CLASS, SEASON_REQUEST, SEASON_RESPONSE_TIMEOUT_MS, SEASON_STORAGE_KEY, seasonToStore, type SeasonEvent, type SeasonState, type SiteSeason } from "@/features/seasonal/lib/site-season";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
@@ -47,15 +30,24 @@ const whenIdle = (callback: () => void): (() => void) => {
     const handle = window.requestIdleCallback(callback, { timeout: DECOR_IDLE_TIMEOUT_MS });
     return () => window.cancelIdleCallback(handle);
   }
+
   const timer = window.setTimeout(callback, DECOR_IDLE_TIMEOUT_MS);
   return () => window.clearTimeout(timer);
 };
 
 const requestSeason = (): void => {
-  window.postMessage({ source: EXT_SOURCE, type: SEASON_REQUEST }, window.location.origin);
+  window.postMessage(
+    {
+      source: EXT_SOURCE,
+      type: SEASON_REQUEST
+    },
+    window.location.origin
+  );
 };
 
-export const SeasonProvider = ({ allowPreview }: { allowPreview: boolean }) => {
+export const SeasonProvider = ({ allowPreview }: {
+  allowPreview: boolean;
+}) => {
   const [season, setSeason] = useState<SiteSeason | null>(null);
   const [ready, setReady] = useState(false);
 
@@ -65,7 +57,7 @@ export const SeasonProvider = ({ allowPreview }: { allowPreview: boolean }) => {
     const root = document.documentElement;
     let state: SeasonState = initialSeasonState({
       stored: readStoredSeason(readStorage()),
-      preview: allowPreview ? parseSeasonPreview(window.location.search) : null,
+      preview: allowPreview ? parseSeasonPreview(window.location.search) : null
     });
     let fadeTimer: number | null = null;
     let fadeFrame: number | null = null;
@@ -100,21 +92,29 @@ export const SeasonProvider = ({ allowPreview }: { allowPreview: boolean }) => {
       const stored = seasonToStore(state);
       if (stored !== undefined) writeStorage(stored);
       if (state.season === previous) return;
+
       if (state.season === null) fadeOut();
       else show(state.season);
     };
 
     show(state.season);
+
     if (state.source === "preview") return cancelFade;
 
     const timeout = window.setTimeout(() => commit({ type: "timeout" }), SEASON_RESPONSE_TIMEOUT_MS);
 
     const onMessage = (event: MessageEvent) => {
       if (event.source !== window || event.origin !== window.location.origin) return;
+
       const message = parseSeasonMessage(event.data);
+
       if (!message) return;
+
       window.clearTimeout(timeout);
-      commit({ type: "extension", season: message.season });
+      commit({
+        type: "extension",
+        season: message.season
+      });
     };
 
     const onVisible = () => {

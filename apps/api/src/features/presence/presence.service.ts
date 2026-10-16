@@ -1,54 +1,67 @@
-import { sha256Base64Url, canonicalJson, signedPayload, signPresenceRelease } from "@/shared/crypto.service"
-import { clearActiveDevicesForDevice, getPresenceMeta, getPresenceStats, setPresenceMeta } from "./presence.repository"
+import { sha256Base64Url, canonicalJson, signedPayload, signPresenceRelease } from "@/shared/crypto.service";
+import { clearActiveDevicesForDevice, getPresenceMeta, getPresenceStats, setPresenceMeta } from "./presence.repository";
 
-export { clearActiveDevicesForDevice }
+export { clearActiveDevicesForDevice };
 
 export const serializeJsonField = (value: unknown): string | undefined => {
-  if (value == null) return undefined
-  if (Array.isArray(value) && value.length === 0) return undefined
-  return JSON.stringify(value)
-}
+  if (value == null) return undefined;
+  if (Array.isArray(value) && value.length === 0) return undefined;
+
+  return JSON.stringify(value);
+};
 
 const fetchText = async (url: string): Promise<string | null> => {
   try {
-    const res = await fetch(url)
-    if (res.ok) return await res.text()
+    const res = await fetch(url);
+
+    if (res.ok) return await res.text();
   } catch {}
 
-  return null
-}
+  return null;
+};
 
 export const buildRelease = async (slug: string, version?: string) => {
-  const storedMeta = await getPresenceMeta(slug)
-  const metadata = storedMeta ?? {} as Record<string, unknown>
-  if (!Object.keys(metadata).length) return null
+  const storedMeta = await getPresenceMeta(slug);
 
-  const stats = await getPresenceStats(slug)
-  const resolvedVersion = version ?? stats.version ?? metadata.version ?? "0.0.0"
+  const metadata = storedMeta ?? ({} as Record<string, unknown>);
 
-  let bundle: string | null = await fetchText(`https://cdn.nowly.me/presences/${slug}/versions/${resolvedVersion}/bundle.js`)
-    ?? await fetchText(`https://cdn.nowly.me/presences/${slug}/bundle.js?v=${encodeURIComponent(String(resolvedVersion))}`)
-    ?? await fetchText(`https://cdn.nowly.me/presences/${slug}/bundle.js`)
+  if (!Object.keys(metadata).length) return null;
 
-  if (!bundle) return null
-  let iframeBundle: string | null = null
+  const stats = await getPresenceStats(slug);
+
+  const resolvedVersion = version ?? stats.version ?? metadata.version ?? "0.0.0";
+
+  let bundle: string | null =
+    (await fetchText(`https://cdn.nowly.me/presences/${slug}/versions/${resolvedVersion}/bundle.js`)) ??
+    (await fetchText(`https://cdn.nowly.me/presences/${slug}/bundle.js?v=${encodeURIComponent(String(resolvedVersion))}`)) ??
+    (await fetchText(`https://cdn.nowly.me/presences/${slug}/bundle.js`));
+
+  if (!bundle) return null;
+
+  let iframeBundle: string | null = null;
+
   if (metadata.iframe === true) {
-    iframeBundle = await fetchText(`https://cdn.nowly.me/presences/${slug}/versions/${resolvedVersion}/iframe.js`)
-      ?? await fetchText(`https://cdn.nowly.me/presences/${slug}/iframe.js?v=${encodeURIComponent(String(resolvedVersion))}`)
-      ?? await fetchText(`https://cdn.nowly.me/presences/${slug}/iframe.js`)
-    if (!iframeBundle?.trim()) return null
+    iframeBundle =
+      (await fetchText(`https://cdn.nowly.me/presences/${slug}/versions/${resolvedVersion}/iframe.js`)) ??
+      (await fetchText(`https://cdn.nowly.me/presences/${slug}/iframe.js?v=${encodeURIComponent(String(resolvedVersion))}`)) ??
+      (await fetchText(`https://cdn.nowly.me/presences/${slug}/iframe.js`));
+
+    if (!iframeBundle?.trim()) return null;
   }
 
   if (!metadata.settings) {
     try {
-      const raw = await fetchText(`https://cdn.nowly.me/presences/${slug}/versions/${resolvedVersion}/settings.json`)
-        ?? await fetchText(`https://cdn.nowly.me/presences/${slug}/settings.json?v=${encodeURIComponent(String(resolvedVersion))}`)
-        ?? await fetchText(`https://cdn.nowly.me/presences/${slug}/settings.json`)
+      const raw =
+        (await fetchText(`https://cdn.nowly.me/presences/${slug}/versions/${resolvedVersion}/settings.json`)) ??
+        (await fetchText(`https://cdn.nowly.me/presences/${slug}/settings.json?v=${encodeURIComponent(String(resolvedVersion))}`)) ??
+        (await fetchText(`https://cdn.nowly.me/presences/${slug}/settings.json`));
+
       if (raw) {
-        const parsed = JSON.parse(raw)
+        const parsed = JSON.parse(raw);
+
         if (parsed && typeof parsed === "object") {
-          metadata.settings = parsed
-          await setPresenceMeta(slug, metadata as Record<string, unknown>)
+          metadata.settings = parsed;
+          await setPresenceMeta(slug, metadata as Record<string, unknown>);
         }
       }
     } catch {}
@@ -58,12 +71,12 @@ export const buildRelease = async (slug: string, version?: string) => {
     ...metadata,
     slug,
     version: resolvedVersion
-  }
+  };
 
-  const sha256 = sha256Base64Url(bundle)
-  const iframeSha256 = iframeBundle ? sha256Base64Url(iframeBundle) : undefined
-  const metadataHash = sha256Base64Url(canonicalJson(releaseMetadata))
-  const signedAt = new Date().toISOString()
+  const sha256 = sha256Base64Url(bundle);
+  const iframeSha256 = iframeBundle ? sha256Base64Url(iframeBundle) : undefined;
+  const metadataHash = sha256Base64Url(canonicalJson(releaseMetadata));
+  const signedAt = new Date().toISOString();
   const payload = signedPayload({
     slug,
     version: String(resolvedVersion),
@@ -71,7 +84,7 @@ export const buildRelease = async (slug: string, version?: string) => {
     metadataHash,
     ...(iframeSha256 ? { iframeSha256 } : {}),
     signedAt
-  })
+  });
 
   return {
     slug,
@@ -86,6 +99,6 @@ export const buildRelease = async (slug: string, version?: string) => {
     totalInstalls: stats.totalInstalls,
     activeUsers: stats.activeUsers,
     addedAt: stats.addedAt,
-    lastUpdated: stats.lastUpdated,
-  }
-}
+    lastUpdated: stats.lastUpdated
+  };
+};

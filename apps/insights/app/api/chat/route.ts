@@ -15,19 +15,22 @@ export const POST = async (request: Request): Promise<Response> => {
 
   const { messages } = await request.json();
 
-  const tools = insightsTools({ apiBaseUrl: apiBaseUrlFor(target), cookie: cookieHeader });
+  const tools = insightsTools({
+    apiBaseUrl: apiBaseUrlFor(target),
+    cookie: cookieHeader
+  });
 
   const agent = new ToolLoopAgent({
     model: openai(process.env.OPENAI_MODEL ?? "gpt-4o-mini"),
     instructions: buildInstructions(),
     tools,
-    stopWhen: stepCountIs(6),
+    stopWhen: stepCountIs(6)
   });
 
-  const uiMessages = await validateUIMessages<InferAgentUIMessage<typeof agent>>({ messages, tools: agent.tools });
-
-  return createAgentUIStreamResponse({
-    agent,
-    uiMessages,
+  const uiMessages = await validateUIMessages<InferAgentUIMessage<typeof agent>>({
+    messages,
+    tools: agent.tools
   });
+
+  return createAgentUIStreamResponse({ agent, uiMessages });
 };

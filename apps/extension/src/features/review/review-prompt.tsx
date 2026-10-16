@@ -1,28 +1,28 @@
-import { RiStarFill } from "@remixicon/react"
-import { useExtensionState } from "@/hooks/extension-state-provider"
-import { useFeatureReveals } from "@/hooks/feature-reveal-provider"
-import { useI18n } from "@/hooks/i18n-provider"
-import { useNav } from "@/hooks/navigation-provider"
-import { openUrl, storeReviews } from "@/shared/browser-links"
-import { Button } from "@/ui/button"
-import { Sheet } from "@/ui/sheet"
-import { useReviewPrompt } from "@/features/review/use-review-prompt"
+import { RiStarFill } from "@remixicon/react";
+import { useExtensionState } from "@/hooks/extension-state-provider";
+import { useFeatureReveals } from "@/hooks/feature-reveal-provider";
+import { useI18n } from "@/hooks/i18n-provider";
+import { useNav } from "@/hooks/navigation-provider";
+import { openUrl, storeReviews } from "@/shared/browser-links";
+import { Button } from "@/ui/button";
+import { Sheet } from "@/ui/sheet";
+import { useReviewPrompt } from "@/features/review/use-review-prompt";
 
-const STARS = 5
+const STARS = 5;
 
 export const ReviewPrompt = () => {
-  const { state } = useExtensionState()
-  const { t } = useI18n()
-  const { stack } = useNav()
-  const { activeId } = useFeatureReveals()
-  const eligible = state.ready && Object.keys(state.presences).length > 0 && stack.length === 0 && activeId === null
-  const { open, dismiss } = useReviewPrompt(eligible)
-  const { store, url } = storeReviews()
+  const { state } = useExtensionState();
+  const { t } = useI18n();
+  const { stack } = useNav();
+  const { activeId } = useFeatureReveals();
+  const eligible = state.ready && Object.keys(state.presences).length > 0 && stack.length === 0 && activeId === null;
+  const { open, dismiss } = useReviewPrompt(eligible);
+  const { store, url } = storeReviews();
 
   const rate = () => {
-    openUrl(url)
-    dismiss()
-  }
+    openUrl(url);
+    dismiss();
+  };
 
   return (
     <Sheet
@@ -48,5 +48,5 @@ export const ReviewPrompt = () => {
         ))}
       </div>
     </Sheet>
-  )
-}
+  );
+};

@@ -6,7 +6,10 @@ import type { LocaleString } from "@nowly/locales";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export const Footer = async () => {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("footer")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("footer")
+  ]);
 
   return (
     <SharedFooter
@@ -58,8 +61,8 @@ export const Footer = async () => {
             >
               {chunks}
             </a>
-          ),
-        }),
+          )
+        })
       }}
     />
   );

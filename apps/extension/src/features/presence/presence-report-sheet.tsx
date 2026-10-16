@@ -1,33 +1,44 @@
-import { useState } from "react"
-import { useI18n } from "@/hooks/i18n-provider"
-import { sendMessage } from "@/lib/messages"
-import { PRESENCE_REPORT_MAX_LENGTH } from "@/shared/constants"
-import { LOCALE_LONG_MAP } from "@/shared/locales"
-import { Button } from "@/ui/button"
-import { Sheet } from "@/ui/sheet"
-import { Textarea } from "@/ui/textarea"
-import { useToast } from "@/ui/toast"
+import { useState } from "react";
+import { useI18n } from "@/hooks/i18n-provider";
+import { sendMessage } from "@/lib/messages";
+import { PRESENCE_REPORT_MAX_LENGTH } from "@/shared/constants";
+import { LOCALE_LONG_MAP } from "@/shared/locales";
+import { Button } from "@/ui/button";
+import { Sheet } from "@/ui/sheet";
+import { Textarea } from "@/ui/textarea";
+import { useToast } from "@/ui/toast";
 
-type PresenceReportSheetProps = { slug: string; name: string; open: boolean; onClose: () => void }
+type PresenceReportSheetProps = {
+  slug: string;
+  name: string;
+  open: boolean;
+  onClose: () => void;
+};
 
 export const PresenceReportSheet = ({ slug, name, open, onClose }: PresenceReportSheetProps) => {
-  const { t, locale } = useI18n()
-  const { toast } = useToast()
-  const [message, setMessage] = useState("")
-  const [sending, setSending] = useState(false)
+  const { t, locale } = useI18n();
+  const { toast } = useToast();
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
 
   const submit = async () => {
-    setSending(true)
-    const result = await sendMessage("REPORT_PRESENCE", { slug, message, locale: LOCALE_LONG_MAP[locale] }).catch(() => ({ ok: false }))
-    setSending(false)
+    setSending(true);
+    const result = await sendMessage("REPORT_PRESENCE", {
+      slug,
+      message,
+      locale: LOCALE_LONG_MAP[locale]
+    }).catch(() => ({ ok: false }));
+    setSending(false);
+
     if (!result.ok) {
-      toast(t("error.report"), "error")
-      return
+      toast(t("error.report"), "error");
+      return;
     }
-    toast(t("toast.reportSent"))
-    setMessage("")
-    onClose()
-  }
+
+    toast(t("toast.reportSent"));
+    setMessage("");
+    onClose();
+  };
 
   return (
     <Sheet
@@ -61,5 +72,5 @@ export const PresenceReportSheet = ({ slug, name, open, onClose }: PresenceRepor
         </span>
       </div>
     </Sheet>
-  )
-}
+  );
+};

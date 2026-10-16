@@ -1,21 +1,18 @@
 import { SectionHeading } from "@/features/home/components/section-heading";
 import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui/card";
 
-import {
-  RiGlobalLine,
-  RiLockLine,
-  RiPuzzleLine,
-  RiRefreshLine,
-  RiShieldCheckLine,
-  RiWindowLine,
-} from "@remixicon/react";
+import { RiGlobalLine, RiLockLine, RiPuzzleLine, RiRefreshLine, RiShieldCheckLine, RiWindowLine } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
 const icons = [RiRefreshLine, RiPuzzleLine, RiLockLine, RiShieldCheckLine, RiGlobalLine, RiWindowLine];
 
 export const FeaturesSection = async () => {
   const t = await getTranslations("features");
-  const items = t.raw("items") as Array<{ title: string; description: string }>;
+
+  const items = t.raw("items") as Array<{
+    title: string;
+    description: string;
+  }>;
 
   return (
     <section className="home-section-deferred px-5 py-28 sm:px-10 sm:py-36">

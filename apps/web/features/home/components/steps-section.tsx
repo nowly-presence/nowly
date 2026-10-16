@@ -3,14 +3,13 @@ import { homeSectionAltClass, SectionHeading } from "@/features/home/components/
 import { ButtonLink } from "@/components/button-link";
 import { cn } from "@nowly/ui/utils";
 
-
 import { RiBookShelfFill, RiWindow2Fill } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
 type StepItem = {
-  title: string
-  text: string
-  action: string
+  title: string;
+  text: string;
+  action: string;
 };
 
 const actions = [
@@ -19,7 +18,7 @@ const actions = [
       <ExtensionStoreButton variant="dark" size="sm">
         {label}
       </ExtensionStoreButton>
-    ),
+    )
   },
   {
     render: (label: string) => (
@@ -27,7 +26,7 @@ const actions = [
         <RiWindow2Fill data-icon="inline-start" />
         {label}
       </ButtonLink>
-    ),
+    )
   },
   {
     render: (label: string) => (
@@ -35,12 +34,13 @@ const actions = [
         <RiBookShelfFill data-icon="inline-start" />
         {label}
       </ButtonLink>
-    ),
-  },
+    )
+  }
 ] as const;
 
 export const StepsSection = async () => {
   const t = await getTranslations("steps");
+
   const items = t.raw("items") as StepItem[];
 
   return (
@@ -51,10 +51,7 @@ export const StepsSection = async () => {
         {items.map((item, index) => {
           const action = actions[index];
           return (
-            <article
-              key={item.title}
-              className="relative min-h-[190px] overflow-hidden rounded-[14px] bg-cta-surface p-5 text-cta-ink"
-            >
+            <article key={item.title} className="relative min-h-[190px] overflow-hidden rounded-[14px] bg-cta-surface p-5 text-cta-ink">
               <span className="pointer-events-none absolute bottom-0 left-0 origin-bottom-left translate-x-[-38px] translate-y-[42px] select-none text-[260px] font-black leading-none lining-nums text-cta-ink/12">
                 {index + 1}
               </span>

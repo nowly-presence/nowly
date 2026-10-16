@@ -1,14 +1,27 @@
-import { useI18n } from "@/hooks/i18n-provider"
-import { formatCompact } from "@/lib/format"
-import { Card } from "@/ui/card"
+import { useI18n } from "@/hooks/i18n-provider";
+import { formatCompact } from "@/lib/format";
+import { Card } from "@/ui/card";
 
-export const PresenceStats = ({ activeUsers, totalInstalls, likes }: { activeUsers: number; totalInstalls: number; likes: number }) => {
-  const { t, locale } = useI18n()
+export const PresenceStats = ({ activeUsers, totalInstalls, likes }: {
+  activeUsers: number;
+  totalInstalls: number;
+  likes: number;
+}) => {
+  const { t, locale } = useI18n();
   const stats = [
-    { label: t("detail.activeNow"), value: activeUsers },
-    { label: t("detail.installs"), value: totalInstalls },
-    { label: t("detail.likes"), value: likes },
-  ]
+    {
+      label: t("detail.activeNow"),
+      value: activeUsers
+    },
+    {
+      label: t("detail.installs"),
+      value: totalInstalls
+    },
+    {
+      label: t("detail.likes"),
+      value: likes
+    }
+  ];
   return (
     <Card className="grid grid-cols-3 divide-x divide-line">
       {stats.map((stat) => (
@@ -18,5 +31,5 @@ export const PresenceStats = ({ activeUsers, totalInstalls, likes }: { activeUse
         </div>
       ))}
     </Card>
-  )
-}
+  );
+};

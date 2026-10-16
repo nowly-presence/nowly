@@ -1,37 +1,50 @@
-import { RiMoonClearLine } from "@remixicon/react"
-import { useI18n } from "@/hooks/i18n-provider"
-import { usePresenceActions } from "@/hooks/use-presence-actions"
-import { formatTime } from "@/lib/format"
-import type { StoredPresence } from "@/shared/types"
-import { Button } from "@/ui/button"
-import { Card } from "@/ui/card"
-import { Chip } from "@/ui/chip"
-import { Section } from "@/ui/section"
-import { useToast } from "@/ui/toast"
+import { RiMoonClearLine } from "@remixicon/react";
+import { useI18n } from "@/hooks/i18n-provider";
+import { usePresenceActions } from "@/hooks/use-presence-actions";
+import { formatTime } from "@/lib/format";
+import type { StoredPresence } from "@/shared/types";
+import { Button } from "@/ui/button";
+import { Card } from "@/ui/card";
+import { Chip } from "@/ui/chip";
+import { Section } from "@/ui/section";
+import { useToast } from "@/ui/toast";
 
-const MINUTE_MS = 60_000
-const TOMORROW_RESUME_HOUR = 8
+const MINUTE_MS = 60_000;
+const TOMORROW_RESUME_HOUR = 8;
 
 const SNOOZE_OPTIONS = [
-  { key: "snooze.30m", durationMs: 30 * MINUTE_MS },
-  { key: "snooze.1h", durationMs: 60 * MINUTE_MS },
-  { key: "snooze.4h", durationMs: 4 * 60 * MINUTE_MS },
-] as const
+  {
+    key: "snooze.30m",
+    durationMs: 30 * MINUTE_MS
+  },
+  {
+    key: "snooze.1h",
+    durationMs: 60 * MINUTE_MS
+  },
+  {
+    key: "snooze.4h",
+    durationMs: 4 * 60 * MINUTE_MS
+  }
+] as const;
 
 const untilTomorrowMorning = (): number => {
-  const next = new Date()
-  next.setDate(next.getDate() + 1)
-  next.setHours(TOMORROW_RESUME_HOUR, 0, 0, 0)
-  return next.getTime() - Date.now()
-}
+  const next = new Date();
+  next.setDate(next.getDate() + 1);
+  next.setHours(TOMORROW_RESUME_HOUR, 0, 0, 0);
+  return next.getTime() - Date.now();
+};
 
-export const PresenceSnoozeSection = ({ slug, name, stored }: { slug: string; name: string; stored: StoredPresence }) => {
-  const { t, locale } = useI18n()
-  const { toast } = useToast()
-  const actions = usePresenceActions()
-  const snoozedUntil = stored.snoozeUntil && stored.snoozeUntil > Date.now() ? stored.snoozeUntil : null
+export const PresenceSnoozeSection = ({ slug, name, stored }: {
+  slug: string;
+  name: string;
+  stored: StoredPresence;
+}) => {
+  const { t, locale } = useI18n();
+  const { toast } = useToast();
+  const actions = usePresenceActions();
+  const snoozedUntil = stored.snoozeUntil && stored.snoozeUntil > Date.now() ? stored.snoozeUntil : null;
 
-  const snooze = (durationMs: number) => void actions.snooze(slug, durationMs).then(() => toast(t("toast.snoozed", { name }), "info"))
+  const snooze = (durationMs: number) => void actions.snooze(slug, durationMs).then(() => toast(t("toast.snoozed", { name }), "info"));
 
   return (
     <Section title={t("detail.takeBreak")}>
@@ -64,5 +77,5 @@ export const PresenceSnoozeSection = ({ slug, name, stored }: { slug: string; na
         )}
       </Card>
     </Section>
-  )
-}
+  );
+};

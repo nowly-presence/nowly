@@ -1,15 +1,15 @@
-export type ConsentState = "granted" | "denied" | "unknown"
+export type ConsentState = "granted" | "denied" | "unknown";
 
 export type ConsentProvider = {
-  get: () => ConsentState | Promise<ConsentState>
-}
+  get: () => ConsentState | Promise<ConsentState>;
+};
 
 export const alwaysGrantedConsent: ConsentProvider = {
-  get: () => "granted",
-}
+  get: () => "granted"
+};
 
 export const alwaysDeniedConsent: ConsentProvider = {
-  get: () => "denied",
-}
+  get: () => "denied"
+};
 
-export const isConsentGranted = (state: ConsentState): boolean => state === "granted"
+export const isConsentGranted = (state: ConsentState): boolean => state === "granted";

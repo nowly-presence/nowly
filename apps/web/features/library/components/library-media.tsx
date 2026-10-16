@@ -8,9 +8,9 @@ import Image from "next/image";
 import { useState } from "react";
 
 type LibraryMediaProps = {
-  slug: string
-  name: string
-  variant?: "card" | "hero"
+  slug: string;
+  name: string;
+  variant?: "card" | "hero";
 };
 
 export const LibraryMedia = ({ slug, name, variant = "card" }: LibraryMediaProps) => {
@@ -31,17 +31,8 @@ export const LibraryMedia = ({ slug, name, variant = "card" }: LibraryMediaProps
           />
         </div>
       )}
-      <div
-        className={cn(
-          bannerFailed ? null : "absolute bottom-0 z-10 translate-y-1/2",
-          bannerFailed ? null : isHero ? "left-6 sm:left-8" : "left-6",
-        )}
-      >
-        <PresenceTile
-          src={libraryLogoUrl(slug)}
-          name={name}
-          className={isHero ? "size-20 sm:size-24" : "size-14"}
-        />
+      <div className={cn(bannerFailed ? null : "absolute bottom-0 z-10 translate-y-1/2", bannerFailed ? null : isHero ? "left-6 sm:left-8" : "left-6")}>
+        <PresenceTile src={libraryLogoUrl(slug)} name={name} className={isHero ? "size-20 sm:size-24" : "size-14"} />
       </div>
     </div>
   );

@@ -18,12 +18,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
         <Script id="plausible-init" strategy="beforeInteractive">
           {`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}}; plausible.init()`}
         </Script>
-        <Script
-          id="plausible-tracker"
-          src="https://stats.nowly.me/js/pa-r-Hjx56OrHZObH3UiiIqy.js"
-          strategy="afterInteractive"
-          async
-        />
+        <Script id="plausible-tracker" src="https://stats.nowly.me/js/pa-r-Hjx56OrHZObH3UiiIqy.js" strategy="afterInteractive" async />
       </body>
     </html>
   );

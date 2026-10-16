@@ -1,36 +1,51 @@
-import type { RouterRequest } from "@/background/router/contracts"
-import packageJson from "../../package.json"
-import { createMockEvent } from "@/preview/mock-events"
-import { createMockRouter } from "@/preview/mock-router"
-import { createMockStorageArea, type StorageChanges } from "@/preview/mock-storage"
-import { buildInstalledPresences, buildLiveActivity, buildRuntimeLogs, loadCatalogFixture, pickInstalledSlugs } from "@/preview/preview-fixtures"
-import { previewParams } from "@/preview/preview-params"
-import { SUPPORT_PROMPT_MIN_USAGE_DAYS } from "@/shared/support-prompt"
-import type { TabActivity } from "@/shared/types"
+import type { RouterRequest } from "@/background/router/contracts";
+import packageJson from "../../package.json";
+import { createMockEvent } from "@/preview/mock-events";
+import { createMockRouter } from "@/preview/mock-router";
+import { createMockStorageArea, type StorageChanges } from "@/preview/mock-storage";
+import { buildInstalledPresences, buildLiveActivity, buildRuntimeLogs, loadCatalogFixture, pickInstalledSlugs } from "@/preview/preview-fixtures";
+import { previewParams } from "@/preview/preview-params";
+import { SUPPORT_PROMPT_MIN_USAGE_DAYS } from "@/shared/support-prompt";
+import type { TabActivity } from "@/shared/types";
 
-const SECOND_TAB_OFFSET_MS = 20_000
+const SECOND_TAB_OFFSET_MS = 20_000;
 
 export const installMockChrome = async (): Promise<void> => {
-  const now = Date.now()
-  const storageChanged = createMockEvent<[StorageChanges, string]>()
-  const runtimeMessage = createMockEvent<[unknown]>()
-  const local = createMockStorageArea("local", storageChanged)
-  const session = createMockStorageArea("session", storageChanged)
+  const now = Date.now();
+  const storageChanged = createMockEvent<[StorageChanges, string]>();
+  const runtimeMessage = createMockEvent<[unknown]>();
+  const local = createMockStorageArea("local", storageChanged);
+  const session = createMockStorageArea("session", storageChanged);
 
-  const catalog = await loadCatalogFixture(now)
-  const installedSlugs = pickInstalledSlugs(catalog, previewParams.scenario)
-  const presences = buildInstalledPresences(catalog, installedSlugs, now)
-  const [firstSlug, secondSlug] = installedSlugs
-  const showsActivity = previewParams.scenario === "live" || previewParams.scenario === "paused"
-  const liveActivity = showsActivity ? buildLiveActivity(firstSlug, presences, now) : null
+  const catalog = await loadCatalogFixture(now);
+
+  const installedSlugs = pickInstalledSlugs(catalog, previewParams.scenario);
+  const presences = buildInstalledPresences(catalog, installedSlugs, now);
+  const [firstSlug, secondSlug] = installedSlugs;
+  const showsActivity = previewParams.scenario === "live" || previewParams.scenario === "paused";
+  const liveActivity = showsActivity ? buildLiveActivity(firstSlug, presences, now) : null;
 
   const tabActivities: TabActivity[] =
     liveActivity && secondSlug && presences[secondSlug]
       ? [
-          { tabId: 11, slug: liveActivity.slug, presence: liveActivity.presence, updatedAt: now },
-          { tabId: 12, slug: secondSlug, presence: { name: presences[secondSlug].metadata.name, details: "Pull request #482", state: "Reviewing code" }, updatedAt: now - SECOND_TAB_OFFSET_MS },
+          {
+            tabId: 11,
+            slug: liveActivity.slug,
+            presence: liveActivity.presence,
+            updatedAt: now
+          },
+          {
+            tabId: 12,
+            slug: secondSlug,
+            presence: {
+              name: presences[secondSlug].metadata.name,
+              details: "Pull request #482",
+              state: "Reviewing code"
+            },
+            updatedAt: now - SECOND_TAB_OFFSET_MS
+          }
         ]
-      : []
+      : [];
 
   await local.set({
     presences,
@@ -47,14 +62,18 @@ export const installMockChrome = async (): Promise<void> => {
       activitySelectionMode: "focused",
       activityPriorityOrder: [],
       presencePaused: previewParams.scenario === "paused",
-      developerMode: previewParams.developer,
+      developerMode: previewParams.developer
     },
     presenceSettings: {},
     onboarding: {
       devReplayOnboarding: false,
       onboardingCompleted: !previewParams.onboarding,
       nativeSeenConnectedOnce: true,
-      nativeProfile: { id: "1", username: "gaetan", globalName: "Gaëtan" },
+      nativeProfile: {
+        id: "1",
+        username: "gaetan",
+        globalName: "Gaëtan"
+      }
     },
     analyticsConsent: false,
     localePreference: previewParams.lang ?? "browser",
@@ -65,8 +84,16 @@ export const installMockChrome = async (): Promise<void> => {
     ...(previewParams.season ? { seasonOverride: previewParams.season } : {}),
     ...(previewParams.prank ? { halloweenPrank: { replay: true } } : {}),
     ...(previewParams.moment ? { seasonMoments: { replay: true } } : {}),
-    ...(previewParams.slug ? { sidepanelPendingNav: { view: previewParams.view, slug: previewParams.slug, at: now } } : {}),
-  })
+    ...(previewParams.slug
+      ? {
+          sidepanelPendingNav: {
+            view: previewParams.view,
+            slug: previewParams.slug,
+            at: now
+          }
+        }
+      : {})
+  });
 
   const router = createMockRouter({
     local,
@@ -75,8 +102,8 @@ export const installMockChrome = async (): Promise<void> => {
     installedSlugs,
     tabActivities,
     logs: buildRuntimeLogs(firstSlug, installedSlugs.length, now),
-    hasLiveActivity: Boolean(liveActivity),
-  })
+    hasLiveActivity: Boolean(liveActivity)
+  });
 
   const mock = {
     runtime: {
@@ -85,25 +112,32 @@ export const installMockChrome = async (): Promise<void> => {
       getManifest: () => ({ version: packageJson.version }),
       getURL: (path: string) => `/${path}`,
       onMessage: runtimeMessage,
-      sendMessage: (message: RouterRequest) => router.dispatch(message.type, message.payload),
+      sendMessage: (message: RouterRequest) => router.dispatch(message.type, message.payload)
     },
-    storage: { local, session, onChanged: storageChanged },
-    i18n: { getUILanguage: () => previewParams.lang ?? navigator.language, getMessage: () => "" },
+    storage: {
+      local,
+      session,
+      onChanged: storageChanged
+    },
+    i18n: {
+      getUILanguage: () => previewParams.lang ?? navigator.language,
+      getMessage: () => ""
+    },
     tabs: {
       create: ({ url }: { url: string }) => window.open(url, "_blank"),
       query: async () => [],
       onActivated: createMockEvent<[unknown]>(),
-      onUpdated: createMockEvent<[number, unknown]>(),
+      onUpdated: createMockEvent<[number, unknown]>()
     },
     windows: { onFocusChanged: createMockEvent<[number]>() },
     permissions: {
       request: async () => {
-        router.grantUserScripts()
-        return true
+        router.grantUserScripts();
+        return true;
       },
-      contains: async () => router.userScriptsEnabled(),
-    },
-  }
+      contains: async () => router.userScriptsEnabled()
+    }
+  };
 
-  Object.assign(globalThis, { chrome: mock })
-}
+  Object.assign(globalThis, { chrome: mock });
+};

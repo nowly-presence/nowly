@@ -5,35 +5,30 @@ import { cn } from "@nowly/ui/utils";
 import { getTranslations } from "next-intl/server";
 
 type RoadmapItem = {
-  title: string
-  description: string
+  title: string;
+  description: string;
 };
 
 type RoadmapColumn = {
-  status: string
-  title: string
-  description: string
-  completed?: boolean
-  items: RoadmapItem[]
+  status: string;
+  title: string;
+  description: string;
+  completed?: boolean;
+  items: RoadmapItem[];
 };
 
 export const RoadmapView = async () => {
   const t = await getTranslations("roadmapPage");
+
   const columns = t.raw("columns") as RoadmapColumn[];
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
         <header className="max-w-2xl">
-          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
-            {t("eyebrow")}
-          </p>
-          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
-            {t("title")}
-          </h1>
-          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">
-            {t("description")}
-          </p>
+          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
+          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">{t("title")}</h1>
+          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">{t("description")}</p>
         </header>
 
         <div className="relative mt-14 max-w-4xl">
@@ -47,29 +42,21 @@ export const RoadmapView = async () => {
               return (
                 <section key={column.title} className="relative pl-9 sm:pl-14">
                   {nextColumn ? (
-                    <div
-                      className="absolute top-4 bottom-[-3rem] left-[11px] w-px sm:left-[15px]"
-                      aria-hidden
-                    >
+                    <div className="absolute top-4 bottom-[-3rem] left-[11px] w-px sm:left-[15px]" aria-hidden>
                       {isBrokenBridge ? (
                         <>
                           <div className="h-1/2 border-l border-dashed border-foreground/30" />
                           <div className="h-1/2 bg-accent" />
                         </>
                       ) : (
-                        <div
-                          className={cn(
-                            "h-full",
-                            isCompleted && nextIsCompleted ? "bg-accent" : "bg-border",
-                          )}
-                        />
+                        <div className={cn("h-full", isCompleted && nextIsCompleted ? "bg-accent" : "bg-border")} />
                       )}
                     </div>
                   ) : null}
                   <span
                     className={cn(
                       "absolute top-1 left-0 z-10 flex size-6 items-center justify-center rounded-full border-4 border-background sm:size-8",
-                      isCompleted ? "bg-accent" : "bg-foreground/35",
+                      isCompleted ? "bg-accent" : "bg-foreground/35"
                     )}
                     aria-hidden
                   >
@@ -108,4 +95,3 @@ export const RoadmapView = async () => {
     </div>
   );
 };
-

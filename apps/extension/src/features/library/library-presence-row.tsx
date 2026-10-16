@@ -1,26 +1,26 @@
-import { PresenceIcon } from "@/components/shared/presence-icon"
-import { useI18n } from "@/hooks/i18n-provider"
-import { formatCompact, formatDate, hostnameOf } from "@/lib/format"
-import { categoryKey } from "@/lib/presence-categories"
-import type { PresenceView } from "@/lib/presence-view"
-import { Badge } from "@/ui/badge"
-import { Button } from "@/ui/button"
-import { DotSeparator } from "@/ui/dot-separator"
-import { LiveDot } from "@/ui/live-dot"
+import { PresenceIcon } from "@/components/shared/presence-icon";
+import { useI18n } from "@/hooks/i18n-provider";
+import { formatCompact, formatDate, hostnameOf } from "@/lib/format";
+import { categoryKey } from "@/lib/presence-categories";
+import type { PresenceView } from "@/lib/presence-view";
+import { Badge } from "@/ui/badge";
+import { Button } from "@/ui/button";
+import { DotSeparator } from "@/ui/dot-separator";
+import { LiveDot } from "@/ui/live-dot";
 
 type LibraryPresenceRowProps = {
-  view: PresenceView
-  isNew: boolean
-  installed: boolean
-  installing: boolean
-  showPublishedDate: boolean
-  onOpen: () => void
-  onInstall: () => void
-}
+  view: PresenceView;
+  isNew: boolean;
+  installed: boolean;
+  installing: boolean;
+  showPublishedDate: boolean;
+  onOpen: () => void;
+  onInstall: () => void;
+};
 
 export const LibraryPresenceRow = ({ view, isNew, installed, installing, showPublishedDate, onOpen, onInstall }: LibraryPresenceRowProps) => {
-  const { t, locale } = useI18n()
-  const publishedDate = showPublishedDate ? formatDate(view.addedAt, locale) : null
+  const { t, locale } = useI18n();
+  const publishedDate = showPublishedDate ? formatDate(view.addedAt, locale) : null;
 
   return (
     <div className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-hover">
@@ -60,5 +60,5 @@ export const LibraryPresenceRow = ({ view, isNew, installed, installing, showPub
         </Button>
       )}
     </div>
-  )
-}
+  );
+};

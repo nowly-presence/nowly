@@ -6,19 +6,18 @@ export const GUIDE_CATEGORIES = ["start", "troubleshooting", "privacy", "discord
 export type GuideCategory = (typeof GUIDE_CATEGORIES)[number];
 
 export type Guide = {
-  slug: string
-  title: string
-  description: string
-  category: GuideCategory
-  updated: string | null
-  order: number
-  minutes: number
-  related: string[]
-  entry: ContentEntry
+  slug: string;
+  title: string;
+  description: string;
+  category: GuideCategory;
+  updated: string | null;
+  order: number;
+  minutes: number;
+  related: string[];
+  entry: ContentEntry;
 };
 
-const isGuideCategory = (value: string | undefined): value is GuideCategory =>
-  GUIDE_CATEGORIES.includes(value as GuideCategory);
+const isGuideCategory = (value: string | undefined): value is GuideCategory => GUIDE_CATEGORIES.includes(value as GuideCategory);
 
 const isIsoDate = (value: string | undefined): value is string => Boolean(value && /^\d{4}-\d{2}-\d{2}$/.test(value));
 
@@ -30,8 +29,11 @@ const toGuide = (entry: ContentEntry): Guide => ({
   updated: isIsoDate(entry.meta.updated) ? entry.meta.updated : null,
   order: Number(entry.meta.order ?? 100),
   minutes: readingMinutes(entry.words),
-  related: (entry.meta.related ?? "").split(",").map((slug) => slug.trim()).filter(Boolean),
-  entry,
+  related: (entry.meta.related ?? "")
+    .split(",")
+    .map((slug) => slug.trim())
+    .filter(Boolean),
+  entry
 });
 
 const byOrder = (a: Guide, b: Guide): number => a.order - b.order || a.title.localeCompare(b.title);
@@ -45,9 +47,7 @@ export const getGuide = (slug: string, locale: string): Guide | null => {
 
 export const relatedGuides = (guide: Guide, all: Guide[], limit = 3): Guide[] => {
   const others = all.filter((item) => item.slug !== guide.slug);
-  const picked = guide.related
-    .map((slug) => others.find((item) => item.slug === slug))
-    .filter((item): item is Guide => Boolean(item));
+  const picked = guide.related.map((slug) => others.find((item) => item.slug === slug)).filter((item): item is Guide => Boolean(item));
   const sameCategory = others.filter((item) => item.category === guide.category && !picked.includes(item));
   const rest = others.filter((item) => !picked.includes(item) && !sameCategory.includes(item));
   return [...picked, ...sameCategory, ...rest].slice(0, limit);

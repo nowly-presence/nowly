@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
 
-import {
-  ACTIVITY_ICON_COLORS,
-  ACTIVITY_ICON_KEYS,
-  type ActivityIconKey,
-} from "../../api/activity-icon/activity-icons";
+import { ACTIVITY_ICON_COLORS, ACTIVITY_ICON_KEYS, type ActivityIconKey } from "../../api/activity-icon/activity-icons";
 
 export const metadata: Metadata = {
-  robots: { index: false, follow: false },
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 const PREVIEW_ICON: ActivityIconKey = "gamepad";
 const PREVIEW_COLOR = "5a6bb0";
 
-const activityIconUrl = (icon: ActivityIconKey, color: string) =>
-  `/api/activity-icon/${icon}/${color}.png?v=1`;
+const activityIconUrl = (icon: ActivityIconKey, color: string) => `/api/activity-icon/${icon}/${color}.png?v=1`;
 
-const ActivityIconPreview = ({ icon, color }: { icon: ActivityIconKey; color: string }) => {
+const ActivityIconPreview = ({ icon, color }: {
+  icon: ActivityIconKey;
+  color: string;
+}) => {
   const src = activityIconUrl(icon, color);
 
   return (
@@ -29,7 +30,9 @@ const ActivityIconPreview = ({ icon, color }: { icon: ActivityIconKey; color: st
         <p className="mb-2 text-xs font-medium uppercase tracking-[0.16em] text-foreground/55">Small</p>
         <img src={src} alt={`${icon} small preview`} className="size-6 rounded-full" />
       </div>
-      <p className="ml-auto font-mono text-xs text-foreground/55">{icon} / {color}</p>
+      <p className="ml-auto font-mono text-xs text-foreground/55">
+        {icon} / {color}
+      </p>
     </div>
   );
 };
@@ -46,14 +49,18 @@ const Page = () => (
       </header>
 
       <section className="mt-10" aria-labelledby="preview-title">
-        <h2 id="preview-title" className="text-xl font-medium">Discord preview</h2>
+        <h2 id="preview-title" className="text-xl font-medium">
+          Discord preview
+        </h2>
         <div className="mt-4 max-w-md">
           <ActivityIconPreview icon={PREVIEW_ICON} color={PREVIEW_COLOR} />
         </div>
       </section>
 
       <section className="mt-12" aria-labelledby="grid-title">
-        <h2 id="grid-title" className="text-xl font-medium">All combinations</h2>
+        <h2 id="grid-title" className="text-xl font-medium">
+          All combinations
+        </h2>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
           {ACTIVITY_ICON_KEYS.flatMap((icon) =>
             ACTIVITY_ICON_COLORS.map((color) => {
@@ -65,7 +72,7 @@ const Page = () => (
                   <p className="mt-2 truncate text-center font-mono text-[10px] text-foreground/55">{icon}</p>
                 </div>
               );
-            }),
+            })
           )}
         </div>
       </section>

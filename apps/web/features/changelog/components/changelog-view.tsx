@@ -2,16 +2,9 @@ import { ButtonLink } from "@/components/button-link";
 import { DiscordCallout } from "@/components/discord-callout";
 import { ButtonAnchor } from "@nowly/ui";
 
-
 import { ChangelogList } from "@/features/changelog/components/changelog-list";
 import { MarkdownBody } from "@/features/content/components/markdown-body";
-import {
-  formatChangelogDate,
-  getChangelogNotes,
-  getChangelogReleases,
-  latestReleaseSlugByStore,
-  type ChangelogRelease,
-} from "@/features/changelog/lib/changelog-releases";
+import { formatChangelogDate, getChangelogNotes, getChangelogReleases, latestReleaseSlugByStore, type ChangelogRelease } from "@/features/changelog/lib/changelog-releases";
 import { docsHref } from "@/features/seo/lib/seo";
 import { RiArrowLeftLine } from "@nowly/ui/icons";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -20,8 +13,9 @@ import Image from "next/image";
 export const ChangelogView = async () => {
   const [t, locale] = await Promise.all([
     getTranslations("changelogPage"),
-    getLocale(),
+    getLocale()
   ]);
+
   const releases = getChangelogReleases(locale);
   const latestByStore = latestReleaseSlugByStore(releases);
 
@@ -29,15 +23,9 @@ export const ChangelogView = async () => {
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
         <header className="max-w-xl">
-          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
-            {t("eyebrow")}
-          </p>
-          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
-            {t("title")}
-          </h1>
-          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">
-            {t("description")}
-          </p>
+          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
+          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">{t("title")}</h1>
+          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">{t("description")}</p>
         </header>
 
         <div className="mt-12 max-w-3xl">
@@ -54,20 +42,16 @@ export const ChangelogView = async () => {
   );
 };
 
-export const ChangelogReleaseView = async ({
-  version,
-  release,
-}: {
-  version: string
-  release: ChangelogRelease | null
+export const ChangelogReleaseView = async ({ version, release }: {
+  version: string;
+  release: ChangelogRelease | null;
 }) => {
   const [t, locale] = await Promise.all([
     getTranslations("changelogPage"),
-    getLocale(),
+    getLocale()
   ]);
-  const notesHref = release
-    ? docsHref(`/changelog/${release.slug}`)
-    : docsHref("/changelog");
+
+  const notesHref = release ? docsHref(`/changelog/${release.slug}`) : docsHref("/changelog");
   const notes = release ? getChangelogNotes(release.slug, locale) : [];
 
   return (
@@ -79,20 +63,12 @@ export const ChangelogReleaseView = async ({
         </ButtonLink>
 
         <header className="mt-10 max-w-xl">
-          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
-            {t("update-eyebrow")}
-          </p>
+          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("update-eyebrow")}</p>
           <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
             {t("update-title", { version })}
           </h1>
-          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">
-            {release ? t("update-description", { version }) : t("missing")}
-          </p>
-          {release?.date ? (
-            <p className="mt-3 text-sm text-muted-foreground">
-              {formatChangelogDate(release.date, locale)}
-            </p>
-          ) : null}
+          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">{release ? t("update-description", { version }) : t("missing")}</p>
+          {release?.date ? <p className="mt-3 text-sm text-muted-foreground">{formatChangelogDate(release.date, locale)}</p> : null}
         </header>
 
         {release?.banner ? (
@@ -108,11 +84,7 @@ export const ChangelogReleaseView = async ({
           </div>
         ) : null}
 
-        {release ? (
-          <p className="mt-8 max-w-2xl text-[1.05rem] leading-relaxed text-foreground/80">
-            {release.summary}
-          </p>
-        ) : null}
+        {release ? <p className="mt-8 max-w-2xl text-[1.05rem] leading-relaxed text-foreground/80">{release.summary}</p> : null}
 
         {notes.length > 0 ? <MarkdownBody blocks={notes} className="mt-10 max-w-3xl" /> : null}
 
@@ -128,13 +100,7 @@ export const ChangelogReleaseView = async ({
         </div>
 
         {release ? (
-          <DiscordCallout
-            layout="row"
-            className="mt-12 max-w-3xl"
-            title={t("discord-title")}
-            description={t("discord-description")}
-            cta={t("discord-cta")}
-          />
+          <DiscordCallout layout="row" className="mt-12 max-w-3xl" title={t("discord-title")} description={t("discord-description")} cta={t("discord-cta")} />
         ) : null}
       </div>
     </div>

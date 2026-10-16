@@ -16,9 +16,11 @@ export const getSession = async (cookieHeader: string | undefined, target?: ApiT
   try {
     const res = await fetch(`${apiBaseUrlFor(resolvedTarget)}/auth/get-session`, {
       headers: cookieHeader ? { cookie: cookieHeader } : {},
-      cache: "no-store",
+      cache: "no-store"
     });
+
     if (!res.ok) return null;
+
     const data = await res.json();
     return data?.user ? data : null;
   } catch {

@@ -5,17 +5,30 @@ import { Avatar, AvatarFallback, AvatarImage, Card, CardContent, CardTitle } fro
 import { RiArrowRightLine, RiGithubLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
-type Section = { title: string; body: string };
+type Section = {
+  title: string;
+  body: string;
+};
 
 const TEAM = [
-  { name: "Gaëtan H", github: "Steellgold" },
-  { name: "KiMi", github: "q-kimi" },
+  {
+    name: "Gaëtan H",
+    github: "Steellgold"
+  },
+  {
+    name: "KiMi",
+    github: "q-kimi"
+  }
 ] as const;
 
 const githubAvatar = (github: string): string => `https://github.com/${encodeURIComponent(github)}.png?size=80`;
 
 export const AboutView = async () => {
-  const [t, catalog] = await Promise.all([getTranslations("aboutPage"), getPresenceCatalog().catch(() => [])]);
+  const [t, catalog] = await Promise.all([
+    getTranslations("aboutPage"),
+    getPresenceCatalog().catch(() => [])
+  ]);
+
   const sections = t.raw("sections") as Section[];
   const facts = [
     ...(catalog.length > 0 ? [t("facts.presences", { count: catalog.length })] : []),
@@ -23,7 +36,7 @@ export const AboutView = async () => {
     t("facts.systems"),
     t("facts.browsers"),
     t("facts.launch"),
-    t("facts.origin"),
+    t("facts.origin")
   ];
 
   return (
@@ -31,9 +44,7 @@ export const AboutView = async () => {
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
         <header className="max-w-2xl">
           <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
-          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
-            {t("title")}
-          </h1>
+          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">{t("title")}</h1>
           <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">{t("description")}</p>
         </header>
 
@@ -50,8 +61,12 @@ export const AboutView = async () => {
                 {t("links.contact")}
                 <RiArrowRightLine data-icon="inline-end" />
               </ButtonLink>
-              <ButtonLink href="/roadmap" variant="outline">{t("links.roadmap")}</ButtonLink>
-              <ButtonLink href="/changelog" variant="outline">{t("links.changelog")}</ButtonLink>
+              <ButtonLink href="/roadmap" variant="outline">
+                {t("links.roadmap")}
+              </ButtonLink>
+              <ButtonLink href="/changelog" variant="outline">
+                {t("links.changelog")}
+              </ButtonLink>
             </div>
           </div>
 
@@ -97,7 +112,7 @@ export const AboutView = async () => {
                       <Link href="/library" className="underline underline-offset-4 transition-colors hover:text-foreground">
                         {chunks}
                       </Link>
-                    ),
+                    )
                   })}
                 </p>
               </CardContent>

@@ -11,10 +11,19 @@ type FormStatus = "idle" | "sending" | "success" | "error";
 export const ContactForm = () => {
   const t = useTranslations("supportPage.contact");
   const [status, setStatus] = useState<FormStatus>("idle");
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "", website: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+    website: ""
+  });
 
   const updateField = (field: keyof typeof form, value: string) => {
-    setForm((current) => ({ ...current, [field]: value }));
+    setForm((current) => ({
+      ...current,
+      [field]: value
+    }));
     if (status !== "idle") setStatus("idle");
   };
 
@@ -26,10 +35,18 @@ export const ContactForm = () => {
       const response = await fetch(`${presenceApiBaseUrl()}/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(form)
       });
+
       if (!response.ok) throw new Error("contact request failed");
-      setForm({ name: "", email: "", subject: "", message: "", website: "" });
+
+      setForm({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+        website: ""
+      });
       setStatus("success");
     } catch {
       setStatus("error");
@@ -68,7 +85,10 @@ export const ContactForm = () => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="contact-email">
-                {t("email")} <span aria-hidden="true" className="text-destructive">*</span>
+                {t("email")}{" "}
+                <span aria-hidden="true" className="text-destructive">
+                  *
+                </span>
               </Label>
               <Input
                 id="contact-email"
@@ -85,7 +105,10 @@ export const ContactForm = () => {
 
           <div className="space-y-2">
             <Label htmlFor="contact-subject">
-              {t("subject")} <span aria-hidden="true" className="text-destructive">*</span>
+              {t("subject")}{" "}
+              <span aria-hidden="true" className="text-destructive">
+                *
+              </span>
             </Label>
             <Input
               id="contact-subject"
@@ -99,7 +122,10 @@ export const ContactForm = () => {
 
           <div className="space-y-2">
             <Label htmlFor="contact-message">
-              {t("message")} <span aria-hidden="true" className="text-destructive">*</span>
+              {t("message")}{" "}
+              <span aria-hidden="true" className="text-destructive">
+                *
+              </span>
             </Label>
             <Textarea
               id="contact-message"
@@ -117,8 +143,16 @@ export const ContactForm = () => {
             <Button type="submit" disabled={status === "sending"}>
               {status === "sending" ? t("sending") : t("submit")}
             </Button>
-            {status === "success" ? <p className="text-sm text-muted-foreground" aria-live="polite">{t("success")}</p> : null}
-            {status === "error" ? <p className="text-sm text-destructive" aria-live="polite">{t("error")}</p> : null}
+            {status === "success" ? (
+              <p className="text-sm text-muted-foreground" aria-live="polite">
+                {t("success")}
+              </p>
+            ) : null}
+            {status === "error" ? (
+              <p className="text-sm text-destructive" aria-live="polite">
+                {t("error")}
+              </p>
+            ) : null}
           </div>
         </form>
       </CardContent>

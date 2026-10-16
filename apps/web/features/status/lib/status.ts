@@ -30,21 +30,37 @@ export const statusBadgeClasses: Record<ServiceStatus, string> = {
   slow: "border-warning/20 bg-warning/10 text-warning",
   degraded: "border-warning/20 bg-warning/10 text-warning",
   down: "border-destructive/20 bg-destructive/10 text-destructive",
-  unknown: "border-border bg-muted text-muted-foreground",
+  unknown: "border-border bg-muted text-muted-foreground"
 };
 
 const emptyServices: StatusServiceReport[] = [
-  { id: "website", current: null, samples: [] },
-  { id: "api", current: null, samples: [] },
-  { id: "library", current: null, samples: [] },
-  { id: "cdn", current: null, samples: [] },
+  {
+    id: "website",
+    current: null,
+    samples: []
+  },
+  {
+    id: "api",
+    current: null,
+    samples: []
+  },
+  {
+    id: "library",
+    current: null,
+    samples: []
+  },
+  {
+    id: "cdn",
+    current: null,
+    samples: []
+  }
 ];
 
 export const getFallbackStatusReport = (): StatusReport => ({
   generatedAt: "",
   checkIntervalHours: 1,
   overallStatus: "unknown",
-  services: emptyServices,
+  services: emptyServices
 });
 
 const isValidStatusReport = (data: unknown): data is StatusReport =>
@@ -52,8 +68,12 @@ const isValidStatusReport = (data: unknown): data is StatusReport =>
 
 export const fetchStatusReport = async (): Promise<StatusReport> => {
   try {
-    const res = await fetch(`${presenceApiBaseUrl()}/status`, { cache: "no-store", signal: AbortSignal.timeout(10000) });
-    const data = await res.json() as StatusReport;
+    const res = await fetch(`${presenceApiBaseUrl()}/status`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(10000)
+    });
+
+    const data = (await res.json()) as StatusReport;
     return isValidStatusReport(data) ? data : getFallbackStatusReport();
   } catch {
     return getFallbackStatusReport();

@@ -9,5 +9,5 @@ export const STORAGE_KEYS = {
   deviceToken: "deviceToken",
   analyticsConsent: "analyticsConsent",
   account: "account",
-  syncState: "syncState",
-} as const
+  syncState: "syncState"
+} as const;

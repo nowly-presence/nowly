@@ -5,11 +5,11 @@ import { Button, Input } from "@nowly/ui";
 import { useState } from "react";
 
 type CampaignSignupFormProps = {
-  campaignId: string
-  placeholder: string
-  submitLabel: string
-  successLabel: string
-  errorLabel: string
+  campaignId: string;
+  placeholder: string;
+  submitLabel: string;
+  successLabel: string;
+  errorLabel: string;
 };
 
 export const CampaignSignupForm = ({ campaignId, placeholder, submitLabel, successLabel, errorLabel }: CampaignSignupFormProps) => {
@@ -18,15 +18,20 @@ export const CampaignSignupForm = ({ campaignId, placeholder, submitLabel, succe
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
     if (!email.trim()) return;
+
     setStatus("sending");
+
     try {
       const response = await fetch(`${presenceApiBaseUrl()}/campaigns/${campaignId}/signups`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ email: email.trim() })
       });
+
       if (!response.ok) throw new Error("signup failed");
+
       setStatus("done");
     } catch {
       setStatus("error");
@@ -34,19 +39,16 @@ export const CampaignSignupForm = ({ campaignId, placeholder, submitLabel, succe
   };
 
   if (status === "done") {
-    return <p className="text-sm text-muted-foreground">{successLabel}</p>;
+    return (
+      <p className="text-sm text-muted-foreground">
+        {successLabel}
+      </p>
+    );
   }
 
   return (
     <form onSubmit={onSubmit} className="flex flex-wrap gap-2">
-      <Input
-        type="email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder={placeholder}
-        className="max-w-xs"
-      />
+      <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder={placeholder} className="max-w-xs" />
       <Button type="submit" variant="outline" disabled={status === "sending"}>
         {submitLabel}
       </Button>

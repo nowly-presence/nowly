@@ -6,8 +6,16 @@ import { getTranslations } from "next-intl/server";
 import { SUPPORT_LINKS } from "@/features/support/lib/support-links";
 
 const donateLinks = [
-  { href: SUPPORT_LINKS.kofi, label: "Ko-fi", icon: RiCupLine },
-  { href: SUPPORT_LINKS.sponsors, label: "GitHub Sponsors", icon: RiGithubLine },
+  {
+    href: SUPPORT_LINKS.kofi,
+    label: "Ko-fi",
+    icon: RiCupLine
+  },
+  {
+    href: SUPPORT_LINKS.sponsors,
+    label: "GitHub Sponsors",
+    icon: RiGithubLine
+  }
 ];
 
 export const DonateCard = async () => {

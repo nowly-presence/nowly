@@ -4,7 +4,11 @@ import { Link } from "@/i18n/navigation";
 import { AnimatePresence, LazyMotion, m, MotionConfig } from "motion/react";
 import { useId, useState, type FocusEvent } from "react";
 
-type NavbarLink = { href: string; label: string; external: boolean };
+type NavbarLink = {
+  href: string;
+  label: string;
+  external: boolean;
+};
 
 // Loaded after hydration so the animation code stays out of every page's critical bundle.
 const loadMotionFeatures = () => import("@/features/layout/lib/motion-features").then((module) => module.default);
@@ -12,7 +16,9 @@ const loadMotionFeatures = () => import("@/features/layout/lib/motion-features")
 const LINK_CLASS = "relative rounded-lg px-3 py-1.5 text-sm text-foreground";
 
 // Desktop-only: one soft pill that glides from link to link while hovering (or tabbing through) the nav.
-export const NavbarLinks = ({ links }: { links: NavbarLink[] }) => {
+export const NavbarLinks = ({ links }: {
+  links: NavbarLink[];
+}) => {
   const pillId = useId();
   const [hovered, setHovered] = useState<string | null>(null);
 
@@ -23,7 +29,7 @@ export const NavbarLinks = ({ links }: { links: NavbarLink[] }) => {
     },
     onBlur: (event: FocusEvent<HTMLElement>) => {
       if (!event.currentTarget.parentElement?.matches(":hover")) setHovered((current) => (current === href ? null : current));
-    },
+    }
   });
 
   const content = (link: NavbarLink) => (
@@ -37,7 +43,11 @@ export const NavbarLinks = ({ links }: { links: NavbarLink[] }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ type: "spring", bounce: 0.1, duration: 0.4 }}
+            transition={{
+              type: "spring",
+              bounce: 0.1,
+              duration: 0.4
+            }}
           />
         ) : null}
       </AnimatePresence>
@@ -58,7 +68,7 @@ export const NavbarLinks = ({ links }: { links: NavbarLink[] }) => {
               <Link key={link.href} href={link.href} className={LINK_CLASS} {...handlers(link.href)}>
                 {content(link)}
               </Link>
-            ),
+            )
           )}
         </div>
       </MotionConfig>

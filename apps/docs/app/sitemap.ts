@@ -7,12 +7,17 @@ import type { MetadataRoute } from "next";
 const absoluteUrl = (locale: string, href: string): string => `${DOCS_URL}${getPathname({ locale, href })}`;
 
 const languageAlternates = (href: string): Record<string, string> =>
-  Object.fromEntries(routing.locales.map((locale) => [locale, absoluteUrl(locale, href)]));
+  Object.fromEntries(
+    routing.locales.map((locale) => [
+      locale,
+      absoluteUrl(locale, href)
+    ])
+  );
 
 type DocPath = {
-  href: string
-  changeFrequency: "monthly"
-  priority: number
+  href: string;
+  changeFrequency: "monthly";
+  priority: number;
 };
 
 const sitemap = (): MetadataRoute.Sitemap => {
@@ -23,14 +28,18 @@ const sitemap = (): MetadataRoute.Sitemap => {
 
   for (const section of docs) {
     if (section.slug === "changelog") {
-      paths.push({ href: "/changelog", changeFrequency: "monthly", priority: 0.7 });
+      paths.push({
+        href: "/changelog",
+        changeFrequency: "monthly",
+        priority: 0.7
+      });
     }
 
     for (const page of section.children) {
       paths.push({
         href: `/${page.path}`,
         changeFrequency: "monthly",
-        priority: section.slug === "changelog" ? 0.65 : 0.8,
+        priority: section.slug === "changelog" ? 0.65 : 0.8
       });
     }
   }
@@ -41,8 +50,8 @@ const sitemap = (): MetadataRoute.Sitemap => {
       lastModified: new Date(),
       changeFrequency,
       priority,
-      alternates: { languages: languageAlternates(href) },
-    })),
+      alternates: { languages: languageAlternates(href) }
+    }))
   );
 };
 

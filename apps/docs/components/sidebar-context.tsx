@@ -10,11 +10,19 @@ type SidebarContextValue = {
 
 const SidebarContext = createContext<SidebarContextValue | null>(null);
 
-const SidebarProvider: FC<{ children: ReactNode }> = ({ children }) => {
+const SidebarProvider: FC<{
+  children: ReactNode;
+}> = ({ children }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <SidebarContext.Provider value={{ open, setOpen, toggle: () => setOpen((v) => !v) }}>
+    <SidebarContext.Provider
+      value={{
+        open,
+        setOpen,
+        toggle: () => setOpen((v) => !v)
+      }}
+    >
       {children}
     </SidebarContext.Provider>
   );
@@ -22,7 +30,9 @@ const SidebarProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
 const useSidebar = (): SidebarContextValue => {
   const ctx = useContext(SidebarContext);
+
   if (!ctx) throw new Error("useSidebar must be used within SidebarProvider");
+
   return ctx;
 };
 

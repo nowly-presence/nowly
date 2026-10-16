@@ -6,13 +6,16 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("pages.canary")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("pages.canary")
+  ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     locale,
     path: "/canary",
-    image: BRAND_LOCKUP_CANARY_PNG,
+    image: BRAND_LOCKUP_CANARY_PNG
   });
 };
 

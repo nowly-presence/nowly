@@ -4,7 +4,6 @@ import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { trackPublicAnalytics } from "@/lib/analytics";
 import { Button, ButtonAnchor, Card, CardContent, CardDescription, CardTitle, Separator } from "@nowly/ui";
 
-
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { RiDiscordFill, RiHeartLine } from "@nowly/ui/icons";
@@ -23,29 +22,50 @@ export const UninstallView = () => {
 
   useEffect(() => {
     if (!deviceId || cleanupTrackedRef.current) return;
+
     cleanupTrackedRef.current = true;
-    trackPublicAnalytics("uninstall_cleanup_received", { deviceId, source: "system" });
-    trackPublicAnalytics("uninstall_cleanup_success", { deviceId, source: "system" });
+    trackPublicAnalytics("uninstall_cleanup_received", {
+      deviceId,
+      source: "system"
+    });
+    trackPublicAnalytics("uninstall_cleanup_success", {
+      deviceId,
+      source: "system"
+    });
   }, [deviceId]);
 
   const onKeep = (): void => {
-    trackPublicAnalytics("uninstall_analytics_kept", { deviceId: deviceId ?? undefined, source: "system" });
+    trackPublicAnalytics("uninstall_analytics_kept", {
+      deviceId: deviceId ?? undefined,
+      source: "system"
+    });
     setChoice("kept");
   };
 
   const onDelete = async (): Promise<void> => {
     if (!deviceId) return;
+
     setBusy(true);
+
     try {
       const response = await fetch(`${presenceApiBaseUrl()}/devices/${encodeURIComponent(deviceId)}`, {
         method: "DELETE",
-        headers: token ? { "X-Device-Token": token } : {},
+        headers: token ? { "X-Device-Token": token } : {}
       });
+
       if (!response.ok) throw new Error("delete failed");
-      trackPublicAnalytics("uninstall_analytics_deleted", { deviceId, source: "system" });
+
+      trackPublicAnalytics("uninstall_analytics_deleted", {
+        deviceId,
+        source: "system"
+      });
       setChoice("deleted");
     } catch {
-      trackPublicAnalytics("uninstall_cleanup_error", { deviceId, source: "system", payload: { stage: "device-delete" } });
+      trackPublicAnalytics("uninstall_cleanup_error", {
+        deviceId,
+        source: "system",
+        payload: { stage: "device-delete" }
+      });
       setChoice("error");
     } finally {
       setBusy(false);
@@ -56,15 +76,9 @@ export const UninstallView = () => {
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
         <header className="max-w-xl">
-          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
-            {t("eyebrow")}
-          </p>
-          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
-            {t("title")}
-          </h1>
-          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">
-            {t("description")}
-          </p>
+          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
+          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">{t("title")}</h1>
+          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">{t("description")}</p>
         </header>
 
         <Card className="mt-14 max-w-xl">

@@ -4,7 +4,9 @@ import { SearchCommand } from "@/features/docs-content/components/search-command
 import { useHotkeys } from "react-hotkeys-hook";
 import { useState, type FC, type ReactNode } from "react";
 
-const SearchProvider: FC<{ children: ReactNode }> = ({ children }) => {
+const SearchProvider: FC<{
+  children: ReactNode;
+}> = ({ children }) => {
   const [open, setOpen] = useState(false);
 
   useHotkeys(
@@ -13,7 +15,9 @@ const SearchProvider: FC<{ children: ReactNode }> = ({ children }) => {
       e.preventDefault();
       setOpen(true);
     },
-    { enableOnFormTags: ["input", "textarea"] },
+    {
+      enableOnFormTags: ["input", "textarea"]
+    }
   );
 
   return (

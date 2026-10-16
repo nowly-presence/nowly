@@ -5,12 +5,15 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("pages.about")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("pages.about")
+  ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     locale,
-    path: "/about",
+    path: "/about"
   });
 };
 
@@ -23,8 +26,14 @@ const Page = async () => {
         description={t("description")}
         path="/about"
         crumbs={[
-          { name: "Nowly", path: "/" },
-          { name: t("title"), path: "/about" },
+          {
+            name: "Nowly",
+            path: "/"
+          },
+          {
+            name: t("title"),
+            path: "/about"
+          }
         ]}
       />
       <AboutView />

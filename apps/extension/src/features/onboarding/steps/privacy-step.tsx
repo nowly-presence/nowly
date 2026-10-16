@@ -1,20 +1,22 @@
-import { useState } from "react"
-import { RiCheckLine, RiShieldCheckLine } from "@remixicon/react"
-import { openUrl, siteUrl } from "@/shared/browser-links"
-import { Button } from "@/ui/button"
-import { useI18n } from "@/hooks/i18n-provider"
-import { sendMessage } from "@/lib/messages"
-import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout"
+import { useState } from "react";
+import { RiCheckLine, RiShieldCheckLine } from "@remixicon/react";
+import { openUrl, siteUrl } from "@/shared/browser-links";
+import { Button } from "@/ui/button";
+import { useI18n } from "@/hooks/i18n-provider";
+import { sendMessage } from "@/lib/messages";
+import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout";
 
-export const PrivacyStep = ({ onDone }: { onDone: () => void }) => {
-  const { t } = useI18n()
-  const [busy, setBusy] = useState<"yes" | "no" | null>(null)
+export const PrivacyStep = ({ onDone }: {
+  onDone: () => void;
+}) => {
+  const { t } = useI18n();
+  const [busy, setBusy] = useState<"yes" | "no" | null>(null);
 
   const choose = async (granted: boolean) => {
-    setBusy(granted ? "yes" : "no")
-    await sendMessage("SET_ANALYTICS_CONSENT", { granted }).catch(() => {})
-    onDone()
-  }
+    setBusy(granted ? "yes" : "no");
+    await sendMessage("SET_ANALYTICS_CONSENT", { granted }).catch(() => {});
+    onDone();
+  };
 
   return (
     <OnboardingStepLayout
@@ -33,7 +35,11 @@ export const PrivacyStep = ({ onDone }: { onDone: () => void }) => {
       }
     >
       <ul className="flex flex-col gap-3">
-        {[t("onboarding.privacyPoint1"), t("onboarding.privacyPoint2"), t("onboarding.privacyPoint3")].map((point) => (
+        {[
+          t("onboarding.privacyPoint1"),
+          t("onboarding.privacyPoint2"),
+          t("onboarding.privacyPoint3")
+        ].map((point) => (
           <li key={point} className="flex items-start gap-2.5 text-body-sm">
             <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
               <RiCheckLine className="size-3" />
@@ -46,5 +52,5 @@ export const PrivacyStep = ({ onDone }: { onDone: () => void }) => {
         {t("onboarding.privacyPolicy")}
       </Button>
     </OnboardingStepLayout>
-  )
-}
+  );
+};

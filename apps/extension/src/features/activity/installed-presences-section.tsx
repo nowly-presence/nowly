@@ -1,41 +1,52 @@
-import { RiApps2AddLine, RiFunctionLine, RiListCheck } from "@remixicon/react"
-import { SeasonalDecor } from "@/components/shared/seasonal-decor"
-import { useExtensionState } from "@/hooks/extension-state-provider"
-import { useI18n } from "@/hooks/i18n-provider"
-import { useNav } from "@/hooks/navigation-provider"
-import { usePresenceActions } from "@/hooks/use-presence-actions"
-import { presenceStatus } from "@/lib/presence-status"
-import type { StoredPresence } from "@/shared/types"
-import { Button } from "@/ui/button"
-import { Card, Group } from "@/ui/card"
-import { EmptyState } from "@/ui/empty-state"
-import { Section } from "@/ui/section"
-import { PresenceGridCard } from "@/features/activity/presence-grid-card"
-import { PresenceListRow } from "@/features/activity/presence-list-row"
-import { statusText } from "@/features/activity/presence-status-text"
+import { RiApps2AddLine, RiFunctionLine, RiListCheck } from "@remixicon/react";
+import { SeasonalDecor } from "@/components/shared/seasonal-decor";
+import { useExtensionState } from "@/hooks/extension-state-provider";
+import { useI18n } from "@/hooks/i18n-provider";
+import { useNav } from "@/hooks/navigation-provider";
+import { usePresenceActions } from "@/hooks/use-presence-actions";
+import { presenceStatus } from "@/lib/presence-status";
+import type { StoredPresence } from "@/shared/types";
+import { Button } from "@/ui/button";
+import { Card, Group } from "@/ui/card";
+import { EmptyState } from "@/ui/empty-state";
+import { Section } from "@/ui/section";
+import { PresenceGridCard } from "@/features/activity/presence-grid-card";
+import { PresenceListRow } from "@/features/activity/presence-list-row";
+import { statusText } from "@/features/activity/presence-status-text";
 
 type InstalledPresencesSectionProps = {
-  presences: [string, StoredPresence][]
-  detectedSlugs: Set<string>
-  now: number
-}
+  presences: [string, StoredPresence][];
+  detectedSlugs: Set<string>;
+  now: number;
+};
 
 export const InstalledPresencesSection = ({ presences, detectedSlugs, now }: InstalledPresencesSectionProps) => {
-  const { state, updateSettings } = useExtensionState()
-  const { t, locale } = useI18n()
-  const { push, setTab } = useNav()
-  const actions = usePresenceActions()
-  const grid = state.settings.presenceDisplayMode === "grid"
-  const viewLabel = grid ? t("activity.viewList") : t("activity.viewGrid")
+  const { state, updateSettings } = useExtensionState();
+  const { t, locale } = useI18n();
+  const { push, setTab } = useNav();
+  const actions = usePresenceActions();
+  const grid = state.settings.presenceDisplayMode === "grid";
+  const viewLabel = grid ? t("activity.viewList") : t("activity.viewGrid");
 
   const describe = (slug: string, stored: StoredPresence) => {
-    const status = presenceStatus(slug, stored, state.settings, { liveSlug: state.activity?.slug, detectedSlugs, now })
-    return { status, line: statusText(status, stored, t, locale) }
-  }
+    const status = presenceStatus(slug, stored, state.settings, {
+      liveSlug: state.activity?.slug,
+      detectedSlugs,
+      now
+    });
+    return {
+      status,
+      line: statusText(status, stored, t, locale)
+    };
+  };
 
   return (
     <Section
-      title={presences.length ? t("activity.yourPresences", { count: presences.length }) : t("activity.yourPresencesEmpty")}
+      title={
+        presences.length
+          ? t("activity.yourPresences", { count: presences.length })
+          : t("activity.yourPresencesEmpty")
+      }
       action={
         presences.length > 0 && (
           <button
@@ -72,7 +83,12 @@ export const InstalledPresencesSection = ({ presences, detectedSlugs, now }: Ins
               slug={slug}
               stored={stored}
               {...describe(slug, stored)}
-              onOpen={() => push({ name: "presence", slug })}
+              onOpen={() =>
+                push({
+                  name: "presence",
+                  slug
+                })
+              }
               onToggle={(enabled) => void actions.toggle(slug, enabled)}
             />
           ))}
@@ -86,12 +102,17 @@ export const InstalledPresencesSection = ({ presences, detectedSlugs, now }: Ins
               stored={stored}
               {...describe(slug, stored)}
               hasUpdate={Boolean(state.updates[slug])}
-              onOpen={() => push({ name: "presence", slug })}
+              onOpen={() =>
+                push({
+                  name: "presence",
+                  slug
+                })
+              }
               onToggle={(enabled) => void actions.toggle(slug, enabled)}
             />
           ))}
         </Group>
       )}
     </Section>
-  )
-}
+  );
+};

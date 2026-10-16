@@ -5,9 +5,13 @@ import { getTranslations } from "next-intl/server";
 
 // Renders nothing until NEXT_PUBLIC_ADSENSE_ENABLED=true and the placement has a slot ID,
 // so the AdSense script (and its cookies) never loads on a build without ads.
-export const AdSlot = async ({ placement, className }: { placement: AdPlacement; className?: string }) => {
+export const AdSlot = async ({ placement, className }: {
+  placement: AdPlacement;
+  className?: string;
+}) => {
   const client = adsenseClientId();
   const slot = adsenseSlot(placement);
+
   if (!client || !slot) return null;
 
   const t = await getTranslations("ads");

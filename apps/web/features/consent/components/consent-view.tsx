@@ -2,13 +2,7 @@
 
 import { Button, Card, CardContent, CardDescription, CardTitle, Switch } from "@nowly/ui";
 
-
-
-import {
-  requestExtension,
-  subscribeExtensionDetected,
-  type ExtensionDeviceInfo,
-} from "@/lib/extension-bridge";
+import { requestExtension, subscribeExtensionDetected, type ExtensionDeviceInfo } from "@/lib/extension-bridge";
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { RiDownload2Line, RiDeleteBinLine, RiShieldCheckLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
@@ -30,38 +24,49 @@ export const ConsentView = () => {
         setStatus("not-detected");
         return;
       }
+
       Promise.all([
         requestExtension<ExtensionDeviceInfo>("GET_DEVICE_INFO"),
-        requestExtension<{ granted?: boolean }>("GET_ANALYTICS_CONSENT"),
-      ]).then(([deviceInfo, consentInfo]) => {
-        setDevice(deviceInfo);
-        setConsent(consentInfo?.granted === true);
-        setStatus("ready");
-      }).catch(() => setStatus("not-detected"));
+        requestExtension<{
+          granted?: boolean;
+        }>("GET_ANALYTICS_CONSENT")
+      ])
+        .then(([deviceInfo, consentInfo]) => {
+          setDevice(deviceInfo);
+          setConsent(consentInfo?.granted === true);
+          setStatus("ready");
+        })
+        .catch(() => setStatus("not-detected"));
     });
     return unsubscribe;
   }, []);
 
   const onToggleConsent = async (granted: boolean): Promise<void> => {
     setConsent(granted);
-    const result = await requestExtension<{ granted?: boolean }>("SET_ANALYTICS_CONSENT", { granted });
+    const result = await requestExtension<{
+      granted?: boolean;
+    }>("SET_ANALYTICS_CONSENT", { granted });
     setConsent(result?.granted === true);
   };
 
-  const authHeaders = (): Record<string, string> =>
-    device?.deviceToken ? { "X-Device-Token": device.deviceToken } : {};
+  const authHeaders = (): Record<string, string> => (device?.deviceToken ? { "X-Device-Token": device.deviceToken } : {});
 
   const onExport = async (): Promise<void> => {
     if (!device?.deviceId) return;
+
     setBusy(true);
     setMessage(null);
+
     try {
       const response = await fetch(`${presenceApiBaseUrl()}/devices/${encodeURIComponent(device.deviceId)}/export`, {
         headers: authHeaders(),
-        cache: "no-store",
+        cache: "no-store"
       });
+
       if (!response.ok) throw new Error("export failed");
+
       const data = await response.json();
+
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
@@ -80,14 +85,18 @@ export const ConsentView = () => {
   const onDelete = async (): Promise<void> => {
     if (!device?.deviceId) return;
     if (!window.confirm(t("delete-confirm"))) return;
+
     setBusy(true);
     setMessage(null);
+
     try {
       const response = await fetch(`${presenceApiBaseUrl()}/devices/${encodeURIComponent(device.deviceId)}`, {
         method: "DELETE",
-        headers: authHeaders(),
+        headers: authHeaders()
       });
+
       if (!response.ok) throw new Error("delete failed");
+
       setMessage("deleted");
     } catch {
       setMessage("error");
@@ -100,15 +109,9 @@ export const ConsentView = () => {
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
         <header className="max-w-xl">
-          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
-            {t("eyebrow")}
-          </p>
-          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">
-            {t("title")}
-          </h1>
-          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">
-            {t("description")}
-          </p>
+          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
+          <h1 className="text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">{t("title")}</h1>
+          <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">{t("description")}</p>
         </header>
 
         {status === "checking" ? (

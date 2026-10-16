@@ -5,15 +5,21 @@ import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
 import type { ViewConfig } from "@nowly/analytics";
 
-const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
+const Page = async ({ params }: {
+  params: Promise<{
+    id: string;
+  }>;
+}) => {
   const { id } = await params;
+
   const cookieStore = await cookies();
+
   const cookieHeader = (await headers()).get("cookie") ?? undefined;
   const target = resolveApiTarget(cookieStore.get(API_TARGET_COOKIE)?.value);
 
   const res = await fetch(`${apiBaseUrlFor(target)}/insights/views/${id}`, {
     headers: cookieHeader ? { cookie: cookieHeader } : {},
-    cache: "no-store",
+    cache: "no-store"
   });
   if (!res.ok) notFound();
   const view: ViewConfig = await res.json();

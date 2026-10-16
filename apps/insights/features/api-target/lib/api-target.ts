@@ -5,11 +5,10 @@ export const DEFAULT_API_TARGET: ApiTarget = "prod";
 
 export const API_TARGETS: Record<ApiTarget, string> = {
   dev: process.env.NEXT_PUBLIC_API_URL_DEV ?? "https://dev.api.nowly.me",
-  prod: process.env.NEXT_PUBLIC_API_URL_PROD ?? "https://api.nowly.me",
+  prod: process.env.NEXT_PUBLIC_API_URL_PROD ?? "https://api.nowly.me"
 };
 
-export const resolveApiTarget = (value: string | undefined | null): ApiTarget =>
-  value === "dev" ? "dev" : DEFAULT_API_TARGET;
+export const resolveApiTarget = (value: string | undefined | null): ApiTarget => (value === "dev" ? "dev" : DEFAULT_API_TARGET);
 
 export const apiBaseUrlFor = (target: ApiTarget): string => API_TARGETS[target];
 

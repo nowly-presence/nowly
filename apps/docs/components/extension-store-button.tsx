@@ -9,7 +9,6 @@ import type { ExtensionBrowser } from "@/lib/extension-store";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type ComponentProps, type ReactNode } from "react";
 
-
 type ExtensionStoreButtonProps = Omit<ComponentProps<"a">, "href"> & ButtonVariantProps;
 
 const useExtensionBrowser = () => {
@@ -22,46 +21,26 @@ const useExtensionBrowser = () => {
   return browser;
 };
 
-export const ExtensionStoreButton = ({
-  children,
-  className,
-  variant,
-  size,
-  ...props
-}: ExtensionStoreButtonProps) => {
+export const ExtensionStoreButton = ({ children, className, variant, size, ...props }: ExtensionStoreButtonProps) => {
   const t = useTranslations("store");
   const browser = useExtensionBrowser();
 
   return (
-    <a
-      href={getExtensionDownloadUrl(browser)}
-      rel="noreferrer"
-      target="_blank"
-      className={cn(buttonVariants({ variant, size }), className)}
-      {...props}
-    >
+    <a href={getExtensionDownloadUrl(browser)} rel="noreferrer" target="_blank" className={cn(buttonVariants({ variant, size }), className)} {...props}>
       <RiDownloadLine data-icon="inline-start" />
       {children ?? t(browser === "firefox" ? "download-firefox" : "download-chrome")}
     </a>
   );
 };
 
-export const ExtensionStoreLink = ({
-  children,
-  className,
-}: {
-  children: ReactNode
-  className?: string
+export const ExtensionStoreLink = ({ children, className }: {
+  children: ReactNode;
+  className?: string;
 }) => {
   const browser = useExtensionBrowser();
 
   return (
-    <a
-      href={getExtensionDownloadUrl(browser)}
-      rel="noreferrer"
-      target="_blank"
-      className={className}
-    >
+    <a href={getExtensionDownloadUrl(browser)} rel="noreferrer" target="_blank" className={className}>
       {children}
     </a>
   );

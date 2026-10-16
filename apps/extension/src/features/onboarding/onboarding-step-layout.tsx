@@ -1,6 +1,12 @@
-import { type ReactNode } from "react"
+import { type ReactNode } from "react";
 
-export const OnboardingStepLayout = ({ icon, title, description, children, footer }: { icon?: ReactNode; title: ReactNode; description: string; children?: ReactNode; footer: ReactNode }) => (
+export const OnboardingStepLayout = ({ icon, title, description, children, footer }: {
+  icon?: ReactNode;
+  title: ReactNode;
+  description: string;
+  children?: ReactNode;
+  footer: ReactNode;
+}) => (
   <>
     <div className="flex flex-1 flex-col gap-6 pt-4">
       <div className="flex flex-col gap-3">
@@ -12,4 +18,4 @@ export const OnboardingStepLayout = ({ icon, title, description, children, foote
     </div>
     <div className="sticky bottom-0 -mx-4 flex flex-col gap-2 bg-canvas px-4 pt-4 pb-1">{footer}</div>
   </>
-)
+);

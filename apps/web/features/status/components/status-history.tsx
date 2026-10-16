@@ -7,19 +7,18 @@ const statusBarClasses: Record<ServiceStatus, string> = {
   slow: "bg-warning",
   degraded: "bg-warning",
   down: "bg-destructive",
-  unknown: "bg-muted-foreground/20",
+  unknown: "bg-muted-foreground/20"
 };
 
 const formatDateTime = (date: string, locale: string): string =>
-  new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(date));
+  new Intl.DateTimeFormat(locale, {
+    dateStyle: "medium",
+    timeStyle: "short"
+  }).format(new Date(date));
 
-const getSampleTitle = (
-  sample: StatusSample | null,
-  locale: string,
-  labels: Record<ServiceStatus, string>,
-  noData: string,
-): string => {
+const getSampleTitle = (sample: StatusSample | null, locale: string, labels: Record<ServiceStatus, string>, noData: string): string => {
   if (!sample) return noData;
+
   const latency = sample.responseMs === null ? noData : `${sample.responseMs} ms`;
   return `${formatDateTime(sample.checkedAt, locale)} · ${labels[sample.status]} · ${latency}`;
 };
@@ -44,14 +43,9 @@ export const StatusHistory: FC<{
 
           return (
             <Tooltip key={`${sample?.checkedAt ?? "empty"}-${index}`}>
-              <TooltipTrigger
-                aria-label={tooltip}
-                className={cn("h-full flex-1 cursor-default rounded-[2px] outline-none", statusBarClasses[status])}
-              />
+              <TooltipTrigger aria-label={tooltip} className={cn("h-full flex-1 cursor-default rounded-[2px] outline-none", statusBarClasses[status])} />
 
-              <TooltipContent side="top">
-                {tooltip}
-              </TooltipContent>
+              <TooltipContent side="top">{tooltip}</TooltipContent>
             </Tooltip>
           );
         })}

@@ -1,18 +1,18 @@
-import { DiscordAvatar } from "@/components/shared/discord-avatar"
-import { useExtensionState } from "@/hooks/extension-state-provider"
-import { useI18n } from "@/hooks/i18n-provider"
-import { useNav } from "@/hooks/navigation-provider"
-import { connectionOf } from "@/lib/presence-status"
-import { Group } from "@/ui/card"
-import { LiveDot } from "@/ui/live-dot"
-import { Row } from "@/ui/row"
+import { DiscordAvatar } from "@/components/shared/discord-avatar";
+import { useExtensionState } from "@/hooks/extension-state-provider";
+import { useI18n } from "@/hooks/i18n-provider";
+import { useNav } from "@/hooks/navigation-provider";
+import { connectionOf } from "@/lib/presence-status";
+import { Group } from "@/ui/card";
+import { LiveDot } from "@/ui/live-dot";
+import { Row } from "@/ui/row";
 
 export const ConnectionSummary = () => {
-  const { state } = useExtensionState()
-  const { t } = useI18n()
-  const { push } = useNav()
-  const connection = connectionOf(state.native)
-  const profile = connection === "discord" ? state.onboarding.nativeProfile : null
+  const { state } = useExtensionState();
+  const { t } = useI18n();
+  const { push } = useNav();
+  const connection = connectionOf(state.native);
+  const profile = connection === "discord" ? state.onboarding.nativeProfile : null;
 
   return (
     <Group>
@@ -29,5 +29,5 @@ export const ConnectionSummary = () => {
         }
       />
     </Group>
-  )
-}
+  );
+};

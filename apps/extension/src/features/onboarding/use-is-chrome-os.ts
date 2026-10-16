@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 export const useIsChromeOs = (): boolean => {
-  const [isChromeOs, setIsChromeOs] = useState(false)
+  const [isChromeOs, setIsChromeOs] = useState(false);
 
   useEffect(() => {
     const detect = async (): Promise<void> => {
       try {
-        const platform = await chrome.runtime.getPlatformInfo()
-        setIsChromeOs(platform.os === "cros")
+        const platform = await chrome.runtime.getPlatformInfo();
+        setIsChromeOs(platform.os === "cros");
       } catch {
-        setIsChromeOs(false)
+        setIsChromeOs(false);
       }
-    }
+    };
 
-    void detect()
-  }, [])
+    void detect();
+  }, []);
 
-  return isChromeOs
-}
+  return isChromeOs;
+};

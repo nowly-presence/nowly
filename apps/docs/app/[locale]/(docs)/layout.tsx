@@ -8,6 +8,7 @@ import type { PropsWithChildren, ReactElement } from "react";
 
 const Layout = async ({ children }: PropsWithChildren): Promise<ReactElement> => {
   const locale = await getLocale();
+
   const navItems = getNavigationItems(locale);
 
   return (

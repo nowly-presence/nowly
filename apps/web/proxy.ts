@@ -7,7 +7,5 @@ export default appProxy;
 // version (/changelog/2.1.2), skipping the proxy and leaving the locale
 // unresolved (getLocale() silently falls back to the default locale) for those.
 export const config = {
-  matcher: [
-    "/((?!api|host|test|docs|_next|_vercel|.*\\.(?:ico|png|jpg|jpeg|gif|svg|webp|css|js|mjs|json|md|txt|xml|webmanifest|woff|woff2|ttf)$).*)",
-  ],
+  matcher: ["/((?!api|host|test|docs|_next|_vercel|.*\\.(?:ico|png|jpg|jpeg|gif|svg|webp|css|js|mjs|json|md|txt|xml|webmanifest|woff|woff2|ttf)$).*)"]
 };

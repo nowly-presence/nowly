@@ -13,13 +13,16 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations("metadata")]);
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("metadata")
+  ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     keywords: t.raw("keywords") as string[],
     locale,
-    path: "/",
+    path: "/"
   });
 };
 

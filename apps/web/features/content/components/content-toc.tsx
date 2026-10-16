@@ -1,8 +1,13 @@
 import type { Heading } from "@/features/content/lib/markdown";
 import { cn } from "@nowly/ui/utils";
 
-export const ContentToc = ({ headings, title, className }: { headings: Heading[]; title: string; className?: string }) => {
+export const ContentToc = ({ headings, title, className }: {
+  headings: Heading[];
+  title: string;
+  className?: string;
+}) => {
   const items = headings.filter((heading) => heading.level === 2);
+
   if (items.length < 2) return null;
 
   return (

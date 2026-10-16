@@ -1,16 +1,16 @@
-import { ScreenBody } from "@/components/shared/screen"
-import { useExtensionState } from "@/hooks/extension-state-provider"
-import { Skeleton } from "@/ui/skeleton"
-import { CurrentTabSection } from "@/features/activity/current-tab-section"
-import { InstalledPresencesSection } from "@/features/activity/installed-presences-section"
-import { LiveActivitySection } from "@/features/activity/live-activity-section"
-import { QueuedActivitiesSection } from "@/features/activity/queued-activities-section"
-import { SupportCard } from "@/features/activity/support-card"
-import { useActivityOverview } from "@/features/activity/use-activity-overview"
+import { ScreenBody } from "@/components/shared/screen";
+import { useExtensionState } from "@/hooks/extension-state-provider";
+import { Skeleton } from "@/ui/skeleton";
+import { CurrentTabSection } from "@/features/activity/current-tab-section";
+import { InstalledPresencesSection } from "@/features/activity/installed-presences-section";
+import { LiveActivitySection } from "@/features/activity/live-activity-section";
+import { QueuedActivitiesSection } from "@/features/activity/queued-activities-section";
+import { SupportCard } from "@/features/activity/support-card";
+import { useActivityOverview } from "@/features/activity/use-activity-overview";
 
 export const ActivityView = () => {
-  const { state } = useExtensionState()
-  const { now, detectedSlugs, sortedPresences, liveTab, otherActivities } = useActivityOverview()
+  const { state } = useExtensionState();
+  const { now, detectedSlugs, sortedPresences, liveTab, otherActivities } = useActivityOverview();
 
   if (!state.ready) {
     return (
@@ -19,7 +19,7 @@ export const ActivityView = () => {
         <Skeleton className="h-14" />
         <Skeleton className="h-48" />
       </ScreenBody>
-    )
+    );
   }
 
   return (
@@ -30,5 +30,5 @@ export const ActivityView = () => {
       <InstalledPresencesSection presences={sortedPresences} detectedSlugs={detectedSlugs} now={now} />
       <SupportCard />
     </ScreenBody>
-  )
-}
+  );
+};

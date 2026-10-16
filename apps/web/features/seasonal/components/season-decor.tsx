@@ -25,7 +25,9 @@ const useHidden = (): boolean => {
   return hidden;
 };
 
-export const SeasonDecor = ({ season }: { season: SiteSeason }) => {
+export const SeasonDecor = ({ season }: {
+  season: SiteSeason;
+}) => {
   const scene = SEASON_SCENES[season];
   const particles = useMemo(() => buildParticles(scene), [scene]);
   const hidden = useHidden();
@@ -50,7 +52,7 @@ export const SeasonDecor = ({ season }: { season: SiteSeason }) => {
               "--delay": `${particle.delay}s`,
               "--sway": `${particle.sway}px`,
               "--spin": `${particle.spin}deg`,
-              "--tone": `var(--season-tone-${particle.tone})`,
+              "--tone": `var(--season-tone-${particle.tone})`
             }}
           >
             <span className="season-particle-sway">

@@ -6,11 +6,22 @@ export type SeasonPreview = SiteSeason | "none";
 
 export type SeasonSource = "preview" | "stored" | "extension" | "none";
 
-export type SeasonState = { season: SiteSeason | null; source: SeasonSource };
+export type SeasonState = {
+  season: SiteSeason | null;
+  source: SeasonSource;
+};
 
-export type SeasonEvent = { type: "extension"; season: SiteSeason | null } | { type: "timeout" };
+export type SeasonEvent = {
+  type: "extension";
+  season: SiteSeason | null;
+} | {
+  type: "timeout";
+};
 
-export type SeasonClassList = { add: (token: string) => void; remove: (token: string) => void };
+export type SeasonClassList = {
+  add: (token: string) => void;
+  remove: (token: string) => void;
+};
 
 export const EXT_SOURCE = "Nowly";
 export const SEASON_MESSAGE = "SEASON";
@@ -25,13 +36,26 @@ export const isSiteSeason = (value: unknown): value is SiteSeason => SITE_SEASON
 
 export const seasonClassName = (season: SiteSeason): string => `season-${season}`;
 
-export const parseSeasonMessage = (data: unknown): { season: SiteSeason | null } | null => {
+export const parseSeasonMessage = (data: unknown): {
+  season: SiteSeason | null;
+} | null => {
   if (!data || typeof data !== "object") return null;
-  const message = data as { source?: unknown; type?: unknown; payload?: unknown };
+
+  const message = data as {
+    source?: unknown;
+    type?: unknown;
+    payload?: unknown;
+  };
+
   if (message.source !== EXT_SOURCE || message.type !== SEASON_MESSAGE) return null;
   if (!message.payload || typeof message.payload !== "object") return null;
-  const { season } = message.payload as { season?: unknown };
+
+  const { season } = message.payload as {
+    season?: unknown;
+  };
+
   if (season === null || isSiteSeason(season)) return { season };
+
   return typeof season === "string" ? { season: null } : null;
 };
 
@@ -42,19 +66,31 @@ export const parseSeasonPreview = (search: string): SeasonPreview | null => {
 
 export const readStoredSeason = (value: string | null): SiteSeason | null => (isSiteSeason(value) ? value : null);
 
-export const initialSeasonState = ({ stored, preview }: { stored: SiteSeason | null; preview: SeasonPreview | null }): SeasonState => {
-  if (preview) return { season: preview === "none" ? null : preview, source: "preview" };
+export const initialSeasonState = ({ stored, preview }: {
+  stored: SiteSeason | null;
+  preview: SeasonPreview | null;
+}): SeasonState => {
+  if (preview) return {
+    season: preview === "none" ? null : preview,
+    source: "preview"
+  };
+
   return stored ? { season: stored, source: "stored" } : { season: null, source: "none" };
 };
 
 export const nextSeasonState = (state: SeasonState, event: SeasonEvent): SeasonState => {
   if (state.source === "preview") return state;
-  if (event.type === "extension") return { season: event.season, source: "extension" };
+  if (event.type === "extension") return {
+    season: event.season,
+    source: "extension"
+  };
+
   return state.source === "extension" ? state : { season: null, source: "none" };
 };
 
 export const seasonToStore = (state: SeasonState): SiteSeason | null | undefined => {
   if (state.source === "preview" || state.source === "stored") return undefined;
+
   return state.season;
 };
 

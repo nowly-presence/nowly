@@ -1,14 +1,17 @@
-import { PresenceIcon } from "@/components/shared/presence-icon"
-import { PresenceThumbnail } from "@/components/shared/presence-thumbnail"
-import { useI18n } from "@/hooks/i18n-provider"
-import { categoryKey } from "@/lib/presence-categories"
-import type { PresenceView } from "@/lib/presence-view"
-import { Badge } from "@/ui/badge"
-import { DotSeparator } from "@/ui/dot-separator"
-import { AuthorLink } from "@/features/presence/author-link"
+import { PresenceIcon } from "@/components/shared/presence-icon";
+import { PresenceThumbnail } from "@/components/shared/presence-thumbnail";
+import { useI18n } from "@/hooks/i18n-provider";
+import { categoryKey } from "@/lib/presence-categories";
+import type { PresenceView } from "@/lib/presence-view";
+import { Badge } from "@/ui/badge";
+import { DotSeparator } from "@/ui/dot-separator";
+import { AuthorLink } from "@/features/presence/author-link";
 
-export const PresenceHero = ({ view, version }: { view: PresenceView; version?: string | null }) => {
-  const { t } = useI18n()
+export const PresenceHero = ({ view, version }: {
+  view: PresenceView;
+  version?: string | null;
+}) => {
+  const { t } = useI18n();
   return (
     <div className="flex flex-col">
       <PresenceThumbnail slug={view.slug} color={view.color} className="aspect-[16/9] w-full rounded-lg" />
@@ -38,5 +41,5 @@ export const PresenceHero = ({ view, version }: { view: PresenceView; version?: 
         {view.discordNative && <Badge tone="outline">{t("detail.discordNative")}</Badge>}
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,23 +1,38 @@
-import { m } from "motion/react"
+import { m } from "motion/react";
 
 type HalloweenDoorProps = {
-  open: boolean
-  reduced: boolean
-  label: string
-  onOpen: () => void
-}
+  open: boolean;
+  reduced: boolean;
+  label: string;
+  onOpen: () => void;
+};
 
-const ARCH = "rounded-t-[124px] rounded-b-lg"
-const SWING = { duration: 0.26, ease: [0.55, 0, 0.9, 0.4] } as const
-const PULSE = { duration: 1.3, repeat: Infinity, ease: "easeOut" } as const
-const GLOW = { duration: 0.9, repeat: Infinity, ease: "easeInOut" } as const
+const ARCH = "rounded-t-[124px] rounded-b-lg";
+const SWING = {
+  duration: 0.26,
+  ease: [0.55, 0, 0.9, 0.4]
+} as const;
+const PULSE = {
+  duration: 1.3,
+  repeat: Infinity,
+  ease: "easeOut"
+} as const;
+const GLOW = {
+  duration: 0.9,
+  repeat: Infinity,
+  ease: "easeInOut"
+} as const;
 
 export const HalloweenDoor = ({ open, reduced, label, onOpen }: HalloweenDoorProps) => (
   <>
     <div className={`absolute inset-0 border-[6px] border-door-edge bg-doorway ${ARCH}`} />
     <m.div
       className={`absolute inset-0 z-10 overflow-hidden border-[6px] border-door-edge bg-door ${ARCH}`}
-      style={{ originX: 0, transformPerspective: 900, backfaceVisibility: "hidden" }}
+      style={{
+        originX: 0,
+        transformPerspective: 900,
+        backfaceVisibility: "hidden"
+      }}
       initial={false}
       animate={reduced ? { opacity: open ? 0 : 1 } : { rotateY: open ? -110 : 0 }}
       transition={reduced ? { duration: 0.2 } : SWING}
@@ -36,7 +51,10 @@ export const HalloweenDoor = ({ open, reduced, label, onOpen }: HalloweenDoorPro
           <m.span
             aria-hidden
             className="absolute inset-1 rounded-full border-2 border-door-handle"
-            animate={{ opacity: [0.9, 0], scale: [0.6, 1.5] }}
+            animate={{
+              opacity: [0.9, 0],
+              scale: [0.6, 1.5]
+            }}
             transition={PULSE}
           />
         )}
@@ -50,4 +68,4 @@ export const HalloweenDoor = ({ open, reduced, label, onOpen }: HalloweenDoorPro
       </button>
     </m.div>
   </>
-)
+);

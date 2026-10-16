@@ -8,17 +8,8 @@ import { cn } from "@nowly/ui/utils";
 
 import { getTranslations } from "next-intl/server";
 
-const LogoTrack = ({
-  platforms,
-  inert,
-}: {
-  platforms: PresencePlatform[]
-  inert?: boolean
-}) => (
-  <div
-    className="flex shrink-0 gap-3.5 pr-3.5"
-    aria-hidden={inert ? true : undefined}
-  >
+const LogoTrack = ({ platforms, inert }: { platforms: PresencePlatform[]; inert?: boolean }) => (
+  <div className="flex shrink-0 gap-3.5 pr-3.5" aria-hidden={inert ? true : undefined}>
     {platforms.map((platform) => (
       <Link
         key={`${inert ? "clone" : "main"}-${platform.slug}`}
@@ -28,17 +19,15 @@ const LogoTrack = ({
         aria-label={inert ? undefined : platform.name}
         className="relative z-0 size-[80px] shrink-0 transition-transform duration-200 ease-out hover:z-10 hover:scale-[1.125] sm:size-[96px] sm:hover:scale-[1.104]"
       >
-        <PresenceTile
-          src={platform.logoUrl}
-          name=""
-          className="size-full"
-        />
+        <PresenceTile src={platform.logoUrl} name="" className="size-full" />
       </Link>
     ))}
   </div>
 );
 
-const PlatformMarquee = async ({ platforms }: { platforms: Promise<PresencePlatform[]> }) => {
+const PlatformMarquee = async ({ platforms }: {
+  platforms: Promise<PresencePlatform[]>;
+}) => {
   const resolvedPlatforms = await platforms;
 
   if (resolvedPlatforms.length === 0) return null;
@@ -48,7 +37,7 @@ const PlatformMarquee = async ({ platforms }: { platforms: Promise<PresencePlatf
       className="marquee-hover relative mt-12 overflow-hidden py-3"
       style={{
         maskImage: "linear-gradient(90deg, transparent, black 8%, black 92%, transparent)",
-        WebkitMaskImage: "linear-gradient(90deg, transparent, black 8%, black 92%, transparent)",
+        WebkitMaskImage: "linear-gradient(90deg, transparent, black 8%, black 92%, transparent)"
       }}
     >
       <div className="animate-marquee flex w-max">
@@ -59,9 +48,9 @@ const PlatformMarquee = async ({ platforms }: { platforms: Promise<PresencePlatf
   );
 };
 
-
 export const PlatformsSection = async () => {
   const t = await getTranslations("platforms");
+
   const platforms = getPresencePlatforms();
 
   return (
