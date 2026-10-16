@@ -8,6 +8,7 @@ import { toStoredPresence, type CatalogFixture } from "@/preview/preview-fixture
 import { discordIpcIssueCode, markDiscordIpcIssuePrompted, NO_DISCORD_IPC_ISSUE, type DiscordIpcIssue } from "@/shared/discord-ipc-prompt";
 import { previewParams } from "@/preview/preview-params";
 import { DEFAULT_SUPPORT_PROMPT, SUPPORT_PROMPT_KEY, withSnooze, type SupportPromptState } from "@/shared/support-prompt";
+import { confirmLegalDocuments, emptyLegalState, normalizeLegalState } from "@nowly/shared/legal";
 
 export type MockHandlers = { [K in RouterMessageType]?: (payload: PayloadOf<K>) => ResponseOf<K> | Promise<ResponseOf<K>> };
 
@@ -153,6 +154,32 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
   };
 
   const handlers: MockHandlers = {
+    GET_LEGAL_STATE: async () => {
+      const stored = await local.get("legalDocuments");
+      if (stored.legalDocuments) return normalizeLegalState(stored.legalDocuments);
+      const initial = emptyLegalState();
+      const receipt = { version: 1, recordedAt: new Date().toISOString() };
+      const mode = new URLSearchParams(window.location.search).get("legal");
+      if (mode !== "first") {
+        initial.tosAcceptance = receipt;
+        initial.privacyAcknowledgement = receipt;
+      }
+      if (mode === "update") {
+        initial.manifest = { schemaVersion: 1, documents: {
+          tos: { ...initial.manifest.documents.tos, version: 2, requiredVersion: 2 },
+          privacy: { ...initial.manifest.documents.privacy, version: 2, requiredVersion: 2 }
+        } };
+      }
+      await local.set({ legalDocuments: initial });
+      return initial;
+    },
+    CHECK_LEGAL_DOCUMENTS: async () => normalizeLegalState((await local.get("legalDocuments")).legalDocuments),
+    ACCEPT_LEGAL_DOCUMENTS: async (input) => {
+      const state = normalizeLegalState((await local.get("legalDocuments")).legalDocuments);
+      const result = confirmLegalDocuments(state, input, new Date().toISOString());
+      if (result.ok) await local.set({ legalDocuments: result.state });
+      return result;
+    },
     GET_PRESENCES: readPresences,
     GET_SETTINGS: readSettings,
     SET_SETTINGS: async (partial) => {

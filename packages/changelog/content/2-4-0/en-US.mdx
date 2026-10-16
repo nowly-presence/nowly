@@ -32,13 +32,19 @@ stores: [chrome, firefox]
 - Each import creates a new activity without activating it or overwriting an existing one. Single imports open the editor for review; multiple imports show a summary.
 - Files over 4 MiB, incompatible formats/versions and invalid activities are rejected. Embedded images are validated and uploaded again; if an image cannot be imported, the activity is kept without it and a warning is shown.
 
+### Terms and privacy
+
+- A first-launch dialog separates acceptance of the Terms of Service from acknowledgement of the Privacy Policy, without enabling optional analytics.
+- Nowly checks document updates automatically and asks for confirmation again only for documents with significant changes. Confirmations are stored on the device; cached versions remain usable offline.
+- Activity sharing and image uploads stay paused until the required confirmations are recorded. Document links and update dates remain available in the dialog.
+
 ## Improvements
 
 - Three illustrated guides in English and French explain creating activities, JSON sharing and image privacy, with responsive screenshots linked to full-size originals.
 - Customize navigation: hold a tab to move it or pull it to either side to create another group. Reset the layout from Settings.
 - Cards and previews follow Discord's type-specific layout: Playing shows the name on its own line; Listening, Watching and Competing place it in the header.
 - Dialogs float above the panel instead of sticking to its bottom edge. The Custom empty state offers examples and access to templates.
-- Features and error messages are translated into all 11 languages, with 178 new keys per language across 2.4.0.
+- Features and error messages, including the legal confirmation dialog, are translated into all 11 languages.
 
 ## Fixes
 

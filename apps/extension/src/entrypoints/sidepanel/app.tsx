@@ -25,6 +25,7 @@ import { Layer } from "@/features/layout/layer";
 import { ReviewPrompt } from "@/features/review/review-prompt";
 import { HalloweenPrank } from "@/features/seasonal/halloween-prank";
 import { SeasonMoment } from "@/features/seasonal/season-moment";
+import { LegalGate } from "@/features/legal/legal-gate";
 
 const TABS: Tab[] = ["activity", "store", "custom", "settings"];
 const CUSTOM_ACTIVITY_REVEAL = {
@@ -38,7 +39,9 @@ const ACCOUNT_SYNC_REVEAL = {
 
 const routeKey = (route: Route, depth: number) => `${depth}:${JSON.stringify(route)}`;
 
-export const App = () => {
+export const App = () => <LegalGate><AppContent /></LegalGate>;
+
+const AppContent = () => {
   const { state, updateSettings } = useExtensionState();
   const { t } = useI18n();
   const { tab, stack, setTab } = useNav();

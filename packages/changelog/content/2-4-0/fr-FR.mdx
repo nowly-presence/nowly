@@ -32,13 +32,19 @@ stores: [chrome, firefox]
 - Chaque import crée une nouvelle activité sans l'activer ni écraser une activité existante. Un import unique ouvre l'éditeur pour vérification ; un import multiple affiche un bilan.
 - Les fichiers de plus de 4 Mio, les formats ou versions incompatibles et les activités invalides sont refusés. Les images embarquées sont validées puis envoyées à nouveau ; si une image ne peut pas être importée, l'activité est conservée sans cette image et un avertissement s'affiche.
 
+### Conditions et confidentialité
+
+- Un dialogue au premier lancement distingue l'acceptation des Conditions d'utilisation de la prise de connaissance de la Politique de confidentialité, sans activer les statistiques facultatives.
+- Nowly vérifie automatiquement les mises à jour et redemande une confirmation uniquement pour les documents modifiés de façon importante. Les confirmations sont conservées sur l'appareil et les versions en cache restent utilisables hors ligne.
+- Le partage d'activité et l'envoi d'images restent en pause jusqu'aux confirmations requises. Les liens vers les documents et leurs dates de mise à jour sont accessibles dans le dialogue.
+
 ## Améliorations
 
 - Trois guides illustrés en français et en anglais expliquent la création d'activités, le partage JSON et la confidentialité des images, avec des captures adaptatives accessibles en taille originale.
 - La barre de navigation est personnalisable : maintenez un onglet pour le déplacer, ou tirez-le sur un côté pour créer un autre groupe. Les réglages permettent de réinitialiser cette disposition.
 - Les cartes et l'aperçu suivent la présentation Discord selon le type : Joue garde le nom sur sa propre ligne ; Écoute, Regarde et Participe l'affichent dans l'en-tête.
 - Les dialogues flottent au-dessus du panneau au lieu de rester collés à son bord inférieur. L'état vide de Perso propose des exemples et un accès aux modèles.
-- Les nouvelles fonctionnalités et leurs messages d'erreur sont traduits dans les 11 langues, avec 178 nouvelles clés par langue sur l'ensemble de la 2.4.0.
+- Les nouvelles fonctionnalités et leurs messages d'erreur, dont le dialogue de confirmation juridique, sont traduits dans les 11 langues.
 
 ## Corrections
 

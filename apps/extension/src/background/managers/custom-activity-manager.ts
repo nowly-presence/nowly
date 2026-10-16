@@ -4,6 +4,7 @@ import { getActiveCustomActivity, getCustomActivities, getCustomImages, setCusto
 import { CUSTOM_ACTIVITIES_MAX, CUSTOM_BUTTONS_MAX, customImageHashes, customImageSync, hasCustomActivityErrors, validateCustomActivity } from "@/shared/custom-activity";
 import { decodeImageDataUrl, sha256Hex } from "@/shared/custom-image";
 import type { CustomActivitiesState, CustomActivity, CustomActivityDraft, CustomImage } from "@/shared/types";
+import { legalDocumentsPending } from "@/background/services/legal-documents";
 
 export type SaveCustomActivityResult = {
   ok: true;
@@ -156,6 +157,7 @@ const syncImage = async (image: CustomImage, now: number): Promise<CustomImage> 
 };
 
 export const syncActiveCustomImages = async (): Promise<void> => {
+  if (await legalDocumentsPending()) return;
   const active = await getActiveCustomActivity();
 
   if (!active) return;
@@ -179,6 +181,7 @@ export const syncActiveCustomImages = async (): Promise<void> => {
 };
 
 export const uploadCustomImage = async (dataUrl: string): Promise<UploadCustomImageResult> => {
+  if (await legalDocumentsPending()) return { ok: false, error: "LEGAL_CONFIRMATION_REQUIRED" };
   const decoded = decodeImageDataUrl(dataUrl);
 
   if (!decoded.ok) return decoded;

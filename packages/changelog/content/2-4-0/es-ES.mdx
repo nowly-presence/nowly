@@ -27,12 +27,18 @@ stores: [chrome, firefox]
 - Cada importación crea una actividad nueva e inactiva, sin sobrescribir las existentes. Una importación abre el editor; varias muestran un resumen.
 - Se rechazan archivos de más de 4 MiB, formatos/versiones incompatibles y actividades inválidas. Las imágenes incrustadas se validan y se vuelven a subir; si una falla, la actividad se conserva sin ella y aparece un aviso.
 
+### Condiciones y privacidad
+
+- Un diálogo al primer inicio distingue la aceptación de las Condiciones de uso de la toma de conocimiento de la Política de privacidad, sin activar las estadísticas opcionales.
+- Nowly comprueba automáticamente las actualizaciones y solo vuelve a pedir confirmación para los documentos con cambios importantes. Las confirmaciones se guardan en el dispositivo y las versiones en caché siguen disponibles sin conexión.
+- El intercambio de actividad y la subida de imágenes quedan en pausa hasta registrar las confirmaciones necesarias. El diálogo incluye enlaces a los documentos y sus fechas de actualización.
+
 ## Mejoras
 
 - Tres guías ilustradas en inglés y francés explican la creación de actividades, el intercambio JSON y la privacidad de las imágenes, con capturas adaptables que enlazan a los originales.
 - Navegación personalizable: mantén pulsada una pestaña para moverla o arrástrala hacia un lado para crear otro grupo. Restablece la distribución desde Ajustes.
 - Tarjetas y vista previa siguen el diseño de Discord: Jugando muestra el nombre aparte; Escuchando, Viendo y Compitiendo lo ponen en el encabezado. Diálogos flotantes y estado vacío con ejemplos y plantillas.
-- Funciones y errores traducidos a los 11 idiomas, con 178 claves nuevas por idioma en toda la 2.4.0.
+- Funciones y errores, incluido el diálogo de confirmación legal, traducidos a los 11 idiomas.
 
 ## Correcciones
 

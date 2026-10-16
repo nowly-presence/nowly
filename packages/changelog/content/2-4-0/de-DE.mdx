@@ -27,12 +27,18 @@ stores: [chrome, firefox]
 - Jeder Import erstellt eine neue, inaktive Aktivität ohne vorhandene zu überschreiben. Ein Einzelimport öffnet den Editor, mehrere zeigen eine Zusammenfassung.
 - Dateien über 4 MiB, inkompatible Formate/Versionen und ungültige Aktivitäten werden abgelehnt. Eingebettete Bilder werden geprüft und erneut hochgeladen; schlägt ein Bild fehl, bleibt die Aktivität ohne dieses Bild erhalten und eine Warnung erscheint.
 
+### Bedingungen und Datenschutz
+
+- Ein Dialog beim ersten Start trennt die Zustimmung zu den Nutzungsbedingungen von der Kenntnisnahme der Datenschutzerklärung, ohne optionale Statistiken zu aktivieren.
+- Nowly prüft Dokumentänderungen automatisch und fordert nur bei wesentlich geänderten Dokumenten eine neue Bestätigung an. Bestätigungen bleiben auf dem Gerät; zwischengespeicherte Versionen sind offline nutzbar.
+- Aktivitätsfreigabe und Bild-Uploads pausieren bis zu den erforderlichen Bestätigungen. Dokumentlinks und Aktualisierungsdaten stehen im Dialog bereit.
+
 ## Verbesserungen
 
 - Drei bebilderte Anleitungen auf Englisch und Französisch erklären das Erstellen von Aktivitäten, JSON-Teilen und den Datenschutz bei Bildern. Responsive Screenshots lassen sich in Originalgröße öffnen.
 - Navigation anpassen: Tab gedrückt halten und verschieben oder seitlich herausziehen, um eine weitere Gruppe anzulegen. Das Layout lässt sich in den Einstellungen zurücksetzen.
 - Karten und Vorschau folgen Discord: Spielen zeigt den Namen separat, Hören, Schauen und Teilnehmen im Kopfbereich. Dialoge schweben über dem Panel; der leere Tab zeigt Beispiele und Vorlagen.
-- Funktionen und Fehlermeldungen in allen 11 Sprachen, mit insgesamt 178 neuen Schlüsseln je Sprache in 2.4.0.
+- Funktionen und Fehlermeldungen einschließlich des rechtlichen Bestätigungsdialogs sind in allen 11 Sprachen verfügbar.
 
 ## Fehlerbehebungen
 

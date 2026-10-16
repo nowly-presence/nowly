@@ -7,6 +7,7 @@ import { getActiveCustomPresence } from "@/background/storage/custom-activities.
 import { getCurrentActivity, getPresences, setCurrentActivity, setDebug } from "@/background/storage/presences.store";
 import { getSettings } from "@/background/storage/settings.store";
 import { recordUsageDay } from "@/background/storage/support.store";
+import { legalDocumentsPending } from "@/background/services/legal-documents";
 import { CDN_BASE_URL } from "@/shared/constants";
 import { customActivityIdOf } from "@/shared/custom-activity";
 import type { ExtensionSettings, PresenceData, StoredPresence } from "@/shared/types";
@@ -161,6 +162,13 @@ export const pickBroadcastEntry = async (settings: ExtensionSettings) => {
 };
 
 export const broadcastActiveTab = async (): Promise<void> => {
+  if (await legalDocumentsPending()) {
+    postNative({ type: "CLEAR_ACTIVITY" });
+    await setCurrentActivity(null);
+    await refreshToolbarBadge();
+    notifyBroadcastStateChanged();
+    return;
+  }
   const settings = await getSettings();
 
   const custom = await getActiveCustomPresence();
@@ -200,6 +208,12 @@ export const broadcastActiveTab = async (): Promise<void> => {
 };
 
 export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
+  if (await legalDocumentsPending()) {
+    postNative({ type: "CLEAR_ACTIVITY" });
+    await setCurrentActivity(null);
+    await refreshToolbarBadge();
+    return;
+  }
   const [current, presences, settings] = await Promise.all([
     getCurrentActivity(),
     getPresences(),
