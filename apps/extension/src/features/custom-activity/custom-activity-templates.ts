@@ -2,7 +2,7 @@ import type { Translate } from "@/hooks/i18n-provider";
 import { emptyCustomActivityDraft } from "@/shared/custom-activity";
 import type { CustomActivityDraft, CustomActivityIcon, CustomActivityType, CustomTimestamp } from "@/shared/types";
 
-export const CUSTOM_ACTIVITY_TEMPLATE_IDS = ["study", "code", "game", "music", "watch", "stream", "sport", "travel", "break", "focus"] as const;
+export const CUSTOM_ACTIVITY_TEMPLATE_IDS = ["study", "code", "game", "music", "watch", "stream", "sport", "travel", "break"] as const;
 
 export type CustomActivityTemplateId = (typeof CUSTOM_ACTIVITY_TEMPLATE_IDS)[number];
 
@@ -77,15 +77,6 @@ export const CUSTOM_ACTIVITY_TEMPLATES: Record<CustomActivityTemplateId, Templat
     timestamp: {
       mode: "countdown",
       minutes: 15
-    }
-  },
-  focus: {
-    icon: "moon",
-    color: "#4a5560",
-    type: 0,
-    timestamp: {
-      mode: "countdown",
-      minutes: 60
     }
   }
 };

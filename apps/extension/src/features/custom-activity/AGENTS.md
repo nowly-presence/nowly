@@ -9,6 +9,8 @@
 
 Templates only prefill the editor (route `custom-activity` with `template`); nothing is saved until the user saves. The "Create" button of the tab header opens the template sheet (with "Blank" first); the empty state has "Create an activity" (blank) and "Use a template".
 
+Keep nine templates plus Blank so the two-column picker has five complete rows. Focus is no longer offered; existing saved activities and its translation keys are preserved.
+
 ## Add a field
 
 1. Add it to `CustomActivity` (`shared/types/custom-activity.ts`) and its default to `emptyCustomActivityDraft`, its rule to `validateCustomActivity` and its mapping to `buildCustomPresence` (`shared/custom-activity.ts`, covered by tests).
