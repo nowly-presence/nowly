@@ -48,6 +48,7 @@ stores: [chrome, firefox]
 
 ## Technik und Datenschutz
 
+- Bedingungen und Datenschutzerklärung erläutern in allen 11 Sprachen hochgeladene Bilder, öffentliche Hosting-URLs, JSON-Weitergabe, Aufbewahrung, authentifizierte Löschung und fortbestehende Drittanbieter-Caches.
 - Gerätegebundene Upload-, Auffrischungs- und Löschrouten mit Geräte-Token, Prüfung von Dateisignatur, MIME-Typ, Größe und SHA-256 sowie 20 Uploads pro Stunde und Gerät.
 - Neue Tabelle `CustomAsset`, PostgreSQL-Migration, S3/R2-Speicher und geschützte Bereinigung ungenutzter Bilder. Speicher und Zeitplan müssen beim Deployment eingerichtet werden.
 - Geräteexporte enthalten URLs und Metadaten gehosteter Bilder. Beim Löschen von Gerätedaten werden entfernte Objekte ebenfalls gelöscht, bei Fehlern erneut versuchbar.

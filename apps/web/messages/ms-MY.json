@@ -918,9 +918,9 @@
     "badge": "Privasi",
     "title": "Dasar Privasi",
     "description": "Cara Nowly mengendalikan data anda, apa yang kekal pada peranti anda, dan apa yang bergantung pada persetujuan anda.",
-    "last-updated": "Kemas kini terakhir: 4 Oktober 2026.",
+    "last-updated": "Kemas kini terakhir: 16 Oktober 2026.",
     "data-region": "Kesatuan Eropah (VPS disediakan oleh Contabo GmbH, Jerman)",
-    "intro": "Dasar ini menerangkan bagaimana <strong>{publisherName}</strong> (\"kami\"), sebagai pengawal data, memproses data peribadi berkaitan Nowly. Aktiviti Rich Presence dihantar daripada pelayar anda ke klien Discord <strong>pada mesin anda</strong>. Ia tidak melalui pelayan kami. Statistik penggunaan pilihan dan beberapa ciri laman web melibatkan API atau pemproses kami, seperti yang diterangkan di bawah.",
+    "intro": "Dasar ini menerangkan pemprosesan data peribadi oleh <strong>{publisherName}</strong> sebagai pengawal. Mesej Rich Presence sampai ke Discord secara setempat melalui aplikasi desktop. Namun tidak semua fungsi di luar talian: penyegerakan, permintaan imej, muat naik yang diminta dan statistik pilihan melibatkan API atau penyedia kami.",
     "sections": [
       {
         "title": "Pengawal",
@@ -932,7 +932,15 @@
       },
       {
         "title": "Data diproses pada peranti anda (sambungan)",
-        "body": "Sambungan menyimpan data dalam API storan setempat pelayar (<code>chrome.storage.local</code> Chrome / setara Firefox). Ia kekal pada peranti itu melainkan anda mengaktifkan analitik pilihan atau menggunakan URL API tersuai:<ul><li>Kehadiran yang dipasang (metadata, bundel yang ditandatangani, status pengaktifan).</li><li>Aktiviti semasa (tajuk, platform, tempoh, URL lakaran kecil).</li><li>Log nyahpepijat (cap masa, tindakan, URL yang dilawati bagi laman yang disokong).</li><li>Status onboarding dan <strong>tangkapan setempat</strong> profil Discord anda (ID, nama pengguna, avatar) yang digunakan hanya untuk memaparkan antara muka sambungan, diambil daripada klien Discord setempat.</li><li>Keutamaan paparan, pintasan, dan tetapan setiap kehadiran.</li><li>Pengecam peranti yang dijana secara setempat (UUID) digunakan jika anda memilih untuk analitik.</li></ul>Anda boleh memadamkan data ini dengan menetapkan semula sambungan atau menyahpasangnya."
+        "body": "Storan setempat mengandungi presence dan pakej bertandatangan, tetapan, pintasan, persediaan awal, aktiviti semasa, log dengan URL laman yang disokong, salinan profil Discord (ID, nama, avatar), aktiviti tersuai dan imej. UUID peranti mengenal pasti pemasangan untuk perkhidmatan API yang diminta termasuk muat naik, tanpa bergantung pada persetujuan statistik. Fungsi rangkaian diterangkan di bawah. Tetapan semula atau nyahpasang memadam data setempat, bukan serta-merta imej jauh atau salinan pihak ketiga."
+      },
+      {
+        "title": "Aktiviti tersuai, imej dan perkongsian",
+        "body": "Teks, butang dan tetapan aktiviti tersuai kekal setempat dan tidak disegerakkan dengan akaun dalam 2.4.0. Muat naik atau import imej terbenam menghantar fail ke API dan Cloudflare R2 apabila perkhidmatan dikonfigurasi. Kami menyimpan UUID peranti, SHA-256, MIME, saiz, kunci storan dan tarikh penciptaan/penggunaan terakhir. Data teknikal termasuk IP boleh diproses untuk keselamatan dan had permintaan. Berfungsi tanpa akaun dan dengan statistik dimatikan. Asas: perkhidmatan diminta (GDPR Perkara 6(1)(b)) dan kepentingan sah keselamatan/pencegahan penyalahgunaan (f).<br/><br/>URL imej boleh diakses sesiapa yang mendapatnya, bukan storan peribadi. Discord dan penyedia penghantaran boleh mengambil dan menyimpan cache imej; pautan HTTPS luar tertakluk pada dasar penyedia masing-masing. Cloudflare mengendalikan storan/penghantaran dan pemindahan antarabangsa diterangkan di bawah. Lokasi VPS di EU tidak menjamin semua pemprosesan imej hanya dalam EU. JSON mengandungi teks, pautan dan imej setempat tersedia, bukan token, ID aktiviti setempat atau status aktif. Penerima boleh mengedar semula fail; import memuat naik imej semula."
+      },
+      {
+        "title": "Pengekalan dan pemadaman imej",
+        "body": "Imej layak dibersihkan selepas 30 hari tanpa penggunaan; pengaktifan dan penyegaran berkala memperbaharui tempoh. Pemadaman sebenar bergantung pada pelaksanaan pembersihan dan akses storan yang berjaya. Sambungan meminta rujukan imej tidak digunakan dibuang. Eksport peranti yang disahkan termasuk URL dan metadata; pemadaman peranti meminta fail jauh dan rekod dipadam, mungkin perlu dicuba semula jika storan gagal. Tetapan semula, nyahpasang, hentikan penyegerakan atau padam akaun bukan penggantinya. Gunakan kawalan data peranti sebelum nyahpasang atau hubungi <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> dengan ID peranti; jangan siarkan token. Cache pelayar/CDN/Discord dan fail dikongsi boleh kekal. Menggunakan semula aktiviti boleh memuat naik imej setempat semula."
       },
       {
         "title": "Kebenaran sambungan pelayar",
@@ -996,7 +1004,7 @@
     "badge": "Undang-undang",
     "title": "Terma Perkhidmatan",
     "description": "Peraturan untuk menggunakan Nowly, sambungan pelayar, aplikasi desktop, dan laman web.",
-    "last-updated": "Kemas kini terakhir: 17 September 2026.",
+    "last-updated": "Kemas kini terakhir: 16 Oktober 2026.",
     "sections": [
       {
         "title": "Penerimaan",
@@ -1017,6 +1025,10 @@
       {
         "title": "Penggunaan yang boleh diterima",
         "body": "Anda mesti mematuhi undang-undang yang terpakai dan <a href=\"https://discord.com/terms\">Terma Perkhidmatan Discord</a>. Anda tidak boleh:<ul><li>Menggunakan Nowly untuk memaparkan kandungan yang menyalahi undang-undang, penuh kebencian, memfitnah, atau melanggar hak.</li><li>Memintas keselamatan sambungan rasmi, aplikasi desktop, atau API.</li><li>Mengedarkan kehadiran yang diubah suai, dipalsukan, atau tidak dibenarkan melalui infrastruktur rasmi Nowly.</li><li>Menyalahgunakan API (termasuk permintaan automatik yang berlebihan).</li></ul>Jika anda mengarahkan sambungan ke <strong>URL API tersuai</strong>, anda bertanggungjawab sepenuhnya untuk pelayan itu. Dasar privasi kami tidak melindunginya."
+      },
+      {
+        "title": "Kandungan pengguna dan pengehosan imej",
+        "body": "Anda mengekalkan hak atas teks, imej dan fail. Muat naik hanya kandungan milik anda atau yang dibenarkan, dengan izin perlu bagi orang yang boleh dikenal pasti. Kebenaran bukan eksklusif kepada Nowly dan penyedia teknikal hanya untuk storan, penyesuaian teknikal, penghantaran dan pemadaman yang diperlukan perkhidmatan, bukan pemindahan milik atau penggunaan pengiklanan.<br/><br/>Kandungan haram, penderaan seksual kanak-kanak, imej intim tanpa persetujuan, ancaman, gangguan, kebencian, pelanggaran hak, perisian hasad dan maklumat peribadi pihak lain tanpa asas sah dilarang. Bukan hos fail umum dan jangan pintas had (PNG/JPEG/WebP/GIF, 1 MiB selepas penyediaan, 20 muat naik/jam/peranti). URL tidak peribadi; elak rahsia dan semak fail import serta destinasi butang.<br/><br/>Kami boleh menolak muat naik, membuang kandungan haram atau mengehadkan hos untuk undang-undang, perlindungan hak dan pencegahan penyalahgunaan dengan perlindungan yang terpakai. Hantar URL dan sebab laporan ke <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Tiada janji penyederhanaan automatik atau menyeluruh. Simpan salinan sendiri; pemadaman tidak menarik balik fail dikongsi atau membuang cache pihak ketiga serta-merta."
       },
       {
         "title": "Derma",

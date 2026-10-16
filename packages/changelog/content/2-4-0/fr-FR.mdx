@@ -54,6 +54,7 @@ stores: [chrome, firefox]
 
 ## Technique et confidentialité
 
+- Les conditions et la politique de confidentialité précisent, dans les 11 langues, le traitement des images envoyées, leurs URLs publiques, la redistribution JSON, la conservation, l'effacement authentifié et la persistance des caches tiers.
 - Ajout d'un stockage d'images lié à l'appareil : routes d'envoi, de rafraîchissement et de suppression protégées par le jeton appareil, validation de la signature du fichier, du type MIME, de la taille et du SHA-256, avec une limite de 20 envois par heure et par appareil.
 - Nouvelle table `CustomAsset`, migration PostgreSQL, stockage compatible S3/R2 et route de nettoyage protégée pour les images inutilisées. Le stockage et la planification du nettoyage doivent être configurés au déploiement.
 - L'export des données de l'appareil inclut les URLs et métadonnées des images hébergées. L'effacement des données supprime également les objets distants, avec possibilité de réessayer en cas d'échec.

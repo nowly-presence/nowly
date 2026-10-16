@@ -54,6 +54,7 @@ stores: [chrome, firefox]
 
 ## Technical and privacy changes
 
+- Terms and privacy disclosures now cover uploaded images, public hosting URLs, JSON redistribution, retention, authenticated erasure and persistent third-party caches in all 11 languages.
 - Device-scoped image storage adds upload, touch and delete routes protected by the device token, file-signature/MIME/size/SHA-256 validation and a limit of 20 uploads per hour per device.
 - Add the `CustomAsset` table, PostgreSQL migration, S3/R2-compatible storage and a protected unused-image cleanup route. Storage and cleanup scheduling require deployment configuration.
 - Device data exports include hosted image URLs and metadata. Device erasure also removes remote objects, with retries possible after failures.

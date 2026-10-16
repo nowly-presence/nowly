@@ -918,9 +918,9 @@
     "badge": "Gizlilik",
     "title": "Gizlilik Politikası",
     "description": "Nowly'nin verilerini nasıl işlediği, cihazında ne kaldığı ve neyin iznine bağlı olduğu.",
-    "last-updated": "Son güncelleme: 4 Ekim 2026.",
+    "last-updated": "Son güncelleme: 16 Ekim 2026.",
     "data-region": "Avrupa Birliği (Contabo GmbH tarafından sağlanan VPS, Almanya)",
-    "intro": "Bu politika, veri sorumlusu olarak <strong>{publisherName}</strong>'in (\"biz\") Nowly ile bağlantılı kişisel verileri nasıl işlediğini açıklar. Rich Presence etkinliği tarayıcından <strong>cihazındaki</strong> Discord istemcisine gönderilir. Sunucularımızdan geçmez. İsteğe bağlı kullanım istatistikleri ve birkaç web sitesi özelliği, aşağıda açıklandığı gibi API'mizi veya işleyicilerimizi içerir.",
+    "intro": "Bu politika, veri sorumlusu <strong>{publisherName}</strong> tarafından kişisel verilerin işlenmesini açıklar. Rich Presence mesajları masaüstü uygulamasıyla cihazdaki Discord'a ulaşır. Ancak tüm özellikler çevrimdışı değildir: eşitleme, görsel istekleri, talep edilen yüklemeler ve isteğe bağlı istatistikler API veya sağlayıcılarımızı kullanır.",
     "sections": [
       {
         "title": "Veri Sorumlusu",
@@ -932,7 +932,15 @@
       },
       {
         "title": "Cihazında işlenen veriler (uzantı)",
-        "body": "Uzantı, verileri tarayıcının yerel depolama API'sinde saklar (Chrome'da <code>chrome.storage.local</code> / Firefox eşdeğeri). İsteğe bağlı analizleri etkinleştirmediğin veya özel bir API URL'si kullanmadığın sürece bu veriler o cihazda kalır:<ul><li>Yüklenen varlıklar (meta veriler, imzalı paketler, etkinleştirme durumu).</li><li>Mevcut etkinlik (başlık, platform, süre, küçük resim URL'si).</li><li>Bir hata ayıklama günlüğü (zaman damgaları, eylemler, desteklenen sitelerin ziyaret edilen URL'leri).</li><li>Kurulum durumu ve yalnızca uzantı arayüzünü göstermek için kullanılan, yerel Discord istemcisinden alınan Discord profilinin (ID, kullanıcı adı, avatar) <strong>yerel bir anlık görüntüsü</strong>.</li><li>Görüntüleme tercihleri, kısayollar ve varlık başına ayarlar.</li><li>Analizleri tercih etmen halinde kullanılan, yerel olarak oluşturulan bir cihaz tanımlayıcısı (UUID).</li></ul>Uzantıyı sıfırlayarak veya kaldırarak bu verileri silebilirsin."
+        "body": "Yerel depolamada presence'lar, imzalı paketler, ayarlar, kısayollar, kurulum durumu, mevcut etkinlik, desteklenen site URL'lerini içeren günlükler, Discord profil kopyası (ID, ad, avatar), özel etkinlikler ve görseller saklanır. Üretilen cihaz UUID'si, istatistik izninden bağımsız olarak yükleme gibi talep edilen API hizmetlerinde kurulumu tanımlar. Ağ özellikleri aşağıda açıklanır. Sıfırlama veya kaldırma yerel verileri siler, uzak görselleri veya üçüncü taraf kopyalarını hemen silmez."
+      },
+      {
+        "title": "Özel etkinlikler, görseller ve paylaşım",
+        "body": "Özel etkinlik metinleri, düğmeleri ve ayarları 2.4.0'da yereldir ve hesapla eşitlenmez. Yükleme veya gömülü görsel içe aktarma, hizmet yapılandırıldığında dosyaları API ve Cloudflare R2'ye gönderir. Cihaz UUID'si, SHA-256, MIME, boyut, depolama anahtarı ve oluşturulma/son kullanım tarihlerini saklarız. IP dahil teknik istek verileri güvenlik ve hız sınırlaması için işlenebilir. Hesapsız ve istatistikler kapalıyken çalışır. Dayanak: talep edilen hizmet (GVKT md. 6(1)(b)) ve güvenlik/kötüye kullanım önlemede meşru menfaat (f).<br/><br/>Görsel URL'leri bunları elde eden herkese açıktır, özel depolama değildir. Discord ve dağıtım sağlayıcıları görselleri alıp önbelleğe koyabilir; harici HTTPS görselleri sağlayıcı politikalarına tabidir. Cloudflare depolama/dağıtımı ve uluslararası aktarımlar aşağıda açıklanır. VPS'nin AB'de olması tüm görsel işlemenin yalnızca AB'de olacağını garanti etmez. JSON, metinleri, bağlantıları ve mevcut yerel görselleri içerir; cihaz belirteci, yerel etkinlik ID'si ve etkinlik durumu içermez. Alıcılar dosyaları yeniden dağıtabilir; içe aktarma görselleri yeniden yükler."
+      },
+      {
+        "title": "Görsellerin saklanması ve silinmesi",
+        "body": "30 gün kullanılmayan görseller temizliğe uygun olur; etkinleştirme ve düzenli yenileme süreyi uzatır. Gerçek silme, temizliğin çalışmasına ve depolamaya başarılı erişime bağlıdır. Uzantı kullanılmayan görsel başvurularının kaldırılmasını ister. Kimliği doğrulanmış cihaz dışa aktarımı URL ve meta verileri içerir; cihaz silme uzak dosya ve kayıtların silinmesini ister, depolama hataları yeniden deneme gerektirebilir. Sıfırlama, kaldırma, eşitlemeyi durdurma veya hesap silme bunun yerine geçmez. Kaldırmadan önce cihaz verisi kontrollerini kullan veya cihaz ID'siyle <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> adresine yaz; belirteci yayımlama. Tarayıcı/CDN/Discord önbellekleri ve paylaşılan dosyalar kalabilir. Etkinliği yeniden kullanmak yerel görselleri yeniden yükleyebilir."
       },
       {
         "title": "Tarayıcı uzantısı izinleri",
@@ -996,7 +1004,7 @@
     "badge": "Yasal",
     "title": "Hizmet Şartları",
     "description": "Nowly'yi, tarayıcı uzantısını, masaüstü uygulamasını ve web sitesini kullanma kuralları.",
-    "last-updated": "Son güncelleme: 17 Eylül 2026.",
+    "last-updated": "Son güncelleme: 16 Ekim 2026.",
     "sections": [
       {
         "title": "Kabul",
@@ -1017,6 +1025,10 @@
       {
         "title": "Kabul edilebilir kullanım",
         "body": "Geçerli yasalara ve <a href=\"https://discord.com/terms\">Discord'un Hizmet Şartlarına</a> uymalısın. Şunları yapmamalısın:<ul><li>Nowly'yi yasa dışı, nefret dolu, iftira niteliğinde veya ihlal edici içerik göstermek için kullanmak.</li><li>Resmi uzantının, masaüstü uygulamasının veya API'nin güvenliğini atlatmak.</li><li>Nowly'nin resmi altyapısı aracılığıyla değiştirilmiş, taklit edilmiş veya yetkisiz varlıklar dağıtmak.</li><li>API'yi kötüye kullanmak (aşırı otomatik istekler dahil).</li></ul>Uzantıyı <strong>özel bir API URL'sine</strong> yönlendirirsen, o sunucudan yalnızca sen sorumlusun. Gizlilik politikamız onu kapsamaz."
+      },
+      {
+        "title": "Kullanıcı içeriği ve görsel barındırma",
+        "body": "Metin, görsel ve dosya hakların sende kalır. Yalnızca sahibi olduğun veya kullanmaya yetkili olduğun içerikleri, tanınabilir kişilere ilişkin gerekli izinlerle yükle. Nowly ve teknik sağlayıcılara yalnızca hizmet için gerekli depolama, teknik uyarlama, dağıtım ve silme için münhasır olmayan izin verirsin; mülkiyet devri veya reklamda yeniden kullanım içermez.<br/><br/>Yasadışı içerik, çocuk cinsel istismarı materyali, rıza dışı mahrem görseller, tehdit, taciz, nefret, hak ihlali, zararlı yazılım ve yasal dayanağı olmayan başkalarına ait özel bilgiler yasaktır. Genel dosya barındırma olarak kullanma veya sınırları aşma (PNG/JPEG/WebP/GIF, hazırlama sonrası 1 MiB, cihaz başına saatte 20 yükleme). URL'ler özel değildir; sırları paylaşma, içe aktarılan dosyaları ve düğme hedeflerini kontrol et.<br/><br/>Yasalara uyum, hakları koruma veya kötüye kullanımı önlemek için geçerli güvencelerle yüklemeleri reddedebilir, yasadışı içeriği kaldırabilir veya barındırmayı sınırlayabiliriz. URL ve bildirim nedenlerini <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> adresine gönder. Otomatik veya kapsamlı denetim sözü verilmez. Kendi kopyalarını sakla; silme paylaşılan dosyaları geri almaz veya üçüncü taraf önbelleklerini hemen kaldırmaz."
       },
       {
         "title": "Bağışlar",

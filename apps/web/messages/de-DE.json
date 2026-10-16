@@ -918,9 +918,9 @@
     "badge": "Datenschutz",
     "title": "Datenschutzerklärung",
     "description": "Wie Nowly deine Daten behandelt, was auf deinem Gerät bleibt und was von deiner Zustimmung abhängt.",
-    "last-updated": "Zuletzt aktualisiert: 4. Oktober 2026.",
+    "last-updated": "Zuletzt aktualisiert: 16. Oktober 2026.",
     "data-region": "Europäische Union (VPS bereitgestellt von Contabo GmbH, Deutschland)",
-    "intro": "Diese Richtlinie beschreibt, wie <strong>{publisherName}</strong> („wir“) als Verantwortlicher personenbezogene Daten im Zusammenhang mit Nowly verarbeitet. Rich-Presence-Aktivität wird von deinem Browser an den Discord-Client <strong>auf deinem Rechner</strong> gesendet. Sie läuft nicht über unsere Server. Optionale Nutzungsstatistiken und einige Website-Funktionen betreffen unsere API oder Auftragsverarbeiter, wie unten beschrieben.",
+    "intro": "Diese Richtlinie beschreibt die Verarbeitung personenbezogener Daten durch <strong>{publisherName}</strong> als Verantwortlichen. Rich-Presence-Nachrichten erreichen Discord lokal über die Desktop-App. Das bedeutet nicht, dass alle Funktionen offline sind: Kontosynchronisierung, Bildabrufe, angeforderte Uploads und optionale Statistiken nutzen unsere API oder Dienstleister.",
     "sections": [
       {
         "title": "Verantwortlicher",
@@ -932,7 +932,15 @@
       },
       {
         "title": "Auf deinem Gerät verarbeitete Daten (Erweiterung)",
-        "body": "Die Erweiterung speichert Daten in der lokalen Storage-API des Browsers (Chrome <code>chrome.storage.local</code> / Firefox-Äquivalent). Sie bleiben auf diesem Gerät, sofern du keine optionalen Analytics aktivierst oder eine eigene API-URL nutzt:<ul><li>Installierte Präsenzen (Metadaten, signierte Pakete, Aktivierungsstatus).</li><li>Aktuelle Aktivität (Titel, Plattform, Dauer, Vorschaubild-URL).</li><li>Ein Debug-Log (Zeitstempel, Aktionen, besuchte URLs unterstützter Seiten).</li><li>Onboarding-Status und ein <strong>lokaler Schnappschuss</strong> deines Discord-Profils (ID, Benutzername, Avatar), nur zur Anzeige der Erweiterungsoberfläche genutzt, entnommen aus dem lokalen Discord-Client.</li><li>Anzeigeeinstellungen, Tastenkürzel und Einstellungen je Präsenz.</li><li>Eine lokal erzeugte Gerätekennung (UUID), genutzt, wenn du dich für Analytics entscheidest.</li></ul>Du kannst diese Daten löschen, indem du die Erweiterung zurücksetzt oder deinstallierst."
+        "body": "Der lokale Browserspeicher enthält Präsenzen, signierte Pakete, Einstellungen, Tastenkürzel, Onboarding, aktuelle Aktivität, Debug-Logs mit unterstützten Website-URLs, eine lokale Discord-Profilkopie (ID, Name, Avatar), eigene Aktivitäten und Bildkopien. Eine erzeugte Geräte-UUID identifiziert die Installation für angeforderte API-Dienste wie Uploads, unabhängig von der Statistik-Einwilligung. Netzwerkfunktionen sind unten beschrieben. Zurücksetzen oder Deinstallieren löscht lokale Daten, nicht sofort entfernte Bilder oder Kopien bei Dritten."
+      },
+      {
+        "title": "Eigene Aktivitäten, Bilder und Teilen",
+        "body": "Texte, Buttons und Einstellungen eigener Aktivitäten bleiben in 2.4.0 lokal und werden nicht mit dem Konto synchronisiert. Uploads und Importe eingebetteter Bilder senden Bilddateien an unsere API und, bei konfiguriertem Dienst, Cloudflare R2. Gespeichert werden Geräte-UUID, SHA-256, MIME-Typ, Größe, Speicherschlüssel sowie Erstellungs- und letzte Nutzungszeit. Technische Anfragedaten einschließlich IP-Adressen können der Sicherheit und Ratenbegrenzung dienen. Dies funktioniert ohne Konto und ohne Statistiken. Rechtsgrundlagen: angeforderter Dienst (DSGVO Art. 6 Abs. 1 lit. b) und berechtigte Interessen an Sicherheit und Missbrauchsschutz (lit. f).<br/><br/>Bild-URLs sind für jeden zugänglich, der sie erhält, kein privater Speicher. Discord und Auslieferungsdienste können Bilder abrufen und zwischenspeichern; externe HTTPS-Links unterliegen den jeweiligen Anbietern. Cloudflare übernimmt Speicherung/Auslieferung; internationale Transfers sind unten beschrieben. Der EU-Standort des VPS garantiert keine ausschließlich europäische Bildverarbeitung. JSON-Exporte enthalten Texte, Links und verfügbare lokale Bilder, aber keine Gerätetokens, lokalen Aktivitäts-IDs oder Aktivierungszustände. Empfänger können Dateien weitergeben; Importe laden Bilder erneut hoch."
+      },
+      {
+        "title": "Aufbewahrung und Löschung von Bildern",
+        "body": "Nach 30 Tagen ohne Nutzung sind Bilder zur Bereinigung vorgesehen; Aktivierung und regelmäßige Aktualisierung verlängern die Frist. Die tatsächliche Löschung hängt von Bereinigungsläufen und erfolgreichem Speicherzugriff ab. Die Erweiterung fordert die Entfernung ungenutzter Bildreferenzen an. Der authentifizierte Gerätedatenexport enthält Bild-URLs und Metadaten; die Gerätelöschung fordert die Entfernung entfernter Dateien und Datensätze an. Speicherfehler können Wiederholungen erfordern. Zurücksetzen, Deinstallieren, Beenden der Synchronisierung oder Kontolöschung ersetzt diese Gerätelöschung nicht. Nutze die Gerätedatenfunktionen vor der Deinstallation oder schreibe mit deiner Geräte-ID an <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>; veröffentliche niemals das Token. Browser/CDN/Discord-Caches und geteilte Dateien können länger bestehen. Eine erneute Nutzung kann lokale Bilder wieder hochladen."
       },
       {
         "title": "Berechtigungen der Browser-Erweiterung",
@@ -996,7 +1004,7 @@
     "badge": "Rechtliches",
     "title": "Nutzungsbedingungen",
     "description": "Die Regeln für die Nutzung von Nowly, der Browser-Erweiterung, Desktop-App und Website.",
-    "last-updated": "Zuletzt aktualisiert: 17. September 2026.",
+    "last-updated": "Zuletzt aktualisiert: 16. Oktober 2026.",
     "sections": [
       {
         "title": "Zustimmung",
@@ -1017,6 +1025,10 @@
       {
         "title": "Zulässige Nutzung",
         "body": "Du musst geltendes Recht und die <a href=\"https://discord.com/terms\">Nutzungsbedingungen von Discord</a> einhalten. Du darfst nicht:<ul><li>Nowly nutzen, um illegale, hasserfüllte, verleumderische oder rechtsverletzende Inhalte anzuzeigen.</li><li>Die Sicherheit der offiziellen Erweiterung, Desktop-App oder API umgehen.</li><li>Veränderte, gefälschte oder nicht autorisierte Präsenzen über Nowlys offizielle Infrastruktur verbreiten.</li><li>Die API missbrauchen (einschließlich übermäßiger automatisierter Anfragen).</li></ul>Richtest du die Erweiterung auf eine <strong>eigene API-URL</strong>, bist du allein für diesen Server verantwortlich. Unsere <a href=\"/privacy\">Datenschutzerklärung</a> deckt ihn nicht ab."
+      },
+      {
+        "title": "Nutzerinhalte und Bildhosting",
+        "body": "Du behältst deine Rechte an Texten, Bildern und geteilten Dateien. Lade nur eigene oder rechtmäßig nutzbare Inhalte hoch, mit erforderlichen Berechtigungen abgebildeter Personen. Du erteilst Nowly und technischen Dienstleistern nur die nicht ausschließliche Erlaubnis zur Speicherung, technischen Anpassung, Auslieferung und Löschung für den Dienst, ohne Eigentumsübertragung oder Werbenutzung.<br/><br/>Verboten sind rechtswidrige Inhalte, Darstellungen sexuellen Kindesmissbrauchs, nicht einvernehmliche intime Bilder, Drohungen, Belästigung, Hass, Rechtsverletzungen, Schadsoftware und private Daten Dritter ohne Rechtsgrundlage. Kein allgemeiner Dateihost und keine Umgehung der Grenzen (PNG/JPEG/WebP/GIF, 1 MiB nach Aufbereitung, 20 Uploads/Stunde/Gerät). URLs sind nicht privat; vermeide Geheimnisse und prüfe importierte Dateien und Buttonziele.<br/><br/>Wir dürfen Uploads ablehnen, rechtswidrige Inhalte entfernen oder Hosting einschränken, soweit Recht, Schutz von Rechten und Missbrauchsprävention dies erfordern und geltende Garantien gewahrt bleiben. Melde Inhalte mit URL und Begründung an <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Dies verspricht keine automatische oder vollständige Moderation. Bewahre eigene Sicherungen auf. Löschung ruft geteilte Dateien nicht zurück und entfernt Drittanbieter-Caches nicht sofort."
       },
       {
         "title": "Spenden",

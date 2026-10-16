@@ -918,9 +918,9 @@
     "badge": "Confidentialité",
     "title": "Politique de confidentialité",
     "description": "Comment Nowly traite vos données, ce qui reste sur votre appareil et ce qui dépend de votre consentement.",
-    "last-updated": "Dernière mise à jour : 4 octobre 2026.",
+    "last-updated": "Dernière mise à jour : 16 octobre 2026.",
     "data-region": "Union européenne (VPS fourni par Contabo GmbH, Allemagne)",
-    "intro": "La présente politique décrit les traitements de données personnelles effectués par <strong>{publisherName}</strong> (« nous »), responsable de traitement, dans le cadre de Nowly. L’activité Rich Presence est transmise du navigateur au client Discord <strong>sur votre machine</strong>. Elle ne transite pas par nos serveurs. Les statistiques d’usage optionnelles et quelques fonctions du site font en revanche appel à notre API ou à des sous-traitants, comme indiqué ci-dessous.",
+    "intro": "La présente politique décrit les traitements de données personnelles effectués par <strong>{publisherName}</strong>, responsable de traitement. Les messages Rich Presence parviennent à Discord via l'application bureau sur votre appareil. Cette transmission locale ne signifie pas que toutes les fonctions restent hors ligne : synchronisation du compte, requêtes d'images, envois demandés par l'utilisateur et statistiques facultatives font appel à notre API ou à des prestataires, comme indiqué ci-dessous.",
     "sections": [
       {
         "title": "Responsable de traitement",
@@ -932,7 +932,15 @@
       },
       {
         "title": "Données traitées sur votre appareil (extension)",
-        "body": "L’extension enregistre des données dans l’API de stockage local du navigateur (<code>chrome.storage.local</code> sous Chromium, équivalent Firefox). Elles restent sur l’appareil sauf si vous activez les statistiques ou une URL d’API personnalisée :<ul><li>Présences installées (métadonnées, paquets signés, activation).</li><li>Activité en cours (titre, plateforme, durée, URL de miniature).</li><li>Journal de débogage (horodatages, actions, URL des sites reconnus).</li><li>État d’accueil et <strong>copie locale</strong> du profil Discord (identifiant, pseudo, avatar) affichée dans l’interface, issue du client Discord local.</li><li>Préférences, raccourcis et réglages par présence.</li><li>Un identifiant d’appareil (UUID) généré localement, utilisé si vous acceptez les statistiques.</li></ul>Vous pouvez les effacer en réinitialisant ou en désinstallant l’extension."
+        "body": "Le stockage local du navigateur contient les présences et paquets signés, réglages, raccourcis, état d'accueil, activité en cours, journaux de débogage (dont les URL des sites reconnus), une copie locale du profil Discord (identifiant, nom, avatar), les activités personnalisées et les copies d'images. Un UUID généré identifie l'installation pour les services API demandés, notamment les envois d'images, indépendamment du consentement aux statistiques. La synchronisation facultative, les envois et les autres fonctions réseau sont décrits séparément ci-dessous. Réinitialiser ou désinstaller efface les données locales, pas immédiatement les images distantes ni les copies détenues par des tiers."
+      },
+      {
+        "title": "Activités personnalisées, images envoyées et partage",
+        "body": "Les textes, boutons et réglages des activités personnalisées restent locaux et ne sont pas synchronisés avec le compte en 2.4.0. Choisir Envoyer ou importer des images embarquées transmet les fichiers à notre API et au stockage Cloudflare R2 lorsque le service d'envoi est configuré. Nous conservons l'UUID d'appareil, l'empreinte SHA-256, le type MIME, la taille, la clé de stockage et les dates de création et de dernière utilisation. Des données techniques de requête, dont l'adresse IP, peuvent être traitées pour la sécurité et la limitation du débit. Cela fonctionne sans compte et avec les statistiques désactivées. Bases légales : fourniture de l'hébergement demandé (art. 6, § 1, b RGPD) et intérêt légitime à la sécurité et à la prévention des abus (art. 6, § 1, f).<br/><br/>Les URL hébergées sont accessibles à quiconque les obtient : ce n'est pas un stockage privé. Discord et les prestataires de diffusion peuvent récupérer et mettre en cache les images. Les liens HTTPS externes relèvent du fournisseur concerné. Cloudflare assure le stockage et la diffusion ; ses garanties de transfert international sont décrites ci-dessous. La localisation européenne du VPS ne garantit pas que tous les traitements d'images restent exclusivement dans l'UE.<br/><br/>L'export JSON d'activité contient les textes, liens saisis et copies locales d'images disponibles, pas le jeton appareil, l'identifiant local de l'activité ni son état d'activation. Les destinataires peuvent conserver et redistribuer ces fichiers ; l'import renvoie les images embarquées. Vérifiez fichiers et liens avant partage ou activation."
+      },
+      {
+        "title": "Conservation et effacement des images",
+        "body": "Les images hébergées deviennent éligibles au nettoyage après 30 jours sans utilisation ; l'activation et les rafraîchissements périodiques peuvent renouveler ce délai. L'effacement effectif dépend de l'exécution du nettoyage et de l'accès au stockage, sans garantie d'une suppression exactement au trentième jour. L'extension demande le retrait des références d'images inutilisées. L'export authentifié des données appareil inclut les URL et métadonnées hébergées ; l'effacement appareil demande la suppression des objets distants et des enregistrements. Un échec du stockage peut nécessiter une nouvelle tentative. Réinitialiser, désinstaller, arrêter la synchronisation ou supprimer le compte ne remplace pas l'effacement des images de l'appareil. Utilisez les commandes de données appareil avant désinstallation ou contactez <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> avec votre identifiant appareil, sans publier son jeton. Les caches navigateur/CDN/Discord et les fichiers des destinataires peuvent subsister après suppression à l'origine. Réutiliser une activité peut renvoyer ses copies locales d'images."
       },
       {
         "title": "Permissions de l’extension",
@@ -996,7 +1004,7 @@
     "badge": "Légal",
     "title": "Conditions d’utilisation",
     "description": "Les règles d'utilisation de Nowly, de l'extension navigateur, de l'application bureau et du site web.",
-    "last-updated": "Dernière mise à jour : 17 septembre 2026.",
+    "last-updated": "Dernière mise à jour : 16 octobre 2026.",
     "sections": [
       {
         "title": "Acceptation",
@@ -1017,6 +1025,10 @@
       {
         "title": "Usage acceptable",
         "body": "Vous devez respecter la loi applicable et les <a href=\"https://discord.com/terms\">conditions d’utilisation de Discord</a>. Il est notamment interdit de :<ul><li>afficher via Nowly des contenus illicites, haineux, diffamatoires ou contrefaisants ;</li><li>contourner la sécurité de l’extension, de l’application bureau ou de l’API officielles ;</li><li>distribuer des présences modifiées, falsifiées ou non autorisées via l’infrastructure Nowly ;</li><li>abuser de l’API (requêtes automatisées excessives).</li></ul>Si vous pointez l’extension vers une <strong>URL d’API personnalisée</strong>, vous êtes seul responsable de ce serveur. Notre <a href=\"/privacy\">politique de confidentialité</a> ne s’y applique pas."
+      },
+      {
+        "title": "Contenus utilisateur et hébergement d'images",
+        "body": "Vous conservez vos droits sur les textes, images et fichiers partagés. N'envoyez que des contenus vous appartenant ou que vous êtes autorisé à utiliser, y compris les autorisations relatives aux personnes identifiables. Vous accordez à Nowly et à ses prestataires techniques une autorisation non exclusive limitée au stockage, à l'adaptation technique, à la diffusion et à l'effacement nécessaires au service, sans transfert de propriété ni autorisation de réutilisation publicitaire.<br/><br/>Il est interdit d'envoyer ou partager des contenus illicites, des contenus d'abus sexuels sur mineurs, des images intimes non consenties, des menaces, du harcèlement, des contenus haineux ou contrefaisants, des logiciels malveillants ou des informations privées de tiers sans base légale. N'utilisez pas ce service comme hébergement général de fichiers et ne contournez pas les limites (actuellement PNG/JPEG/WebP/GIF, 1 Mio après préparation et 20 envois/heure/appareil). Les URL ne sont pas privées : évitez les secrets et documents sensibles. Vérifiez les fichiers importés et les destinations des boutons.<br/><br/>Nous pouvons refuser des envois, retirer des contenus illicites ou restreindre l'hébergement pour respecter la loi, protéger des droits ou prévenir les abus, sous réserve des garanties applicables. Signalez un contenu en envoyant son URL et les motifs à <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Cela ne suppose pas une modération automatique ou exhaustive. L'hébergement n'est pas une sauvegarde : conservez vos copies. L'effacement ne rappelle pas les fichiers partagés et ne garantit pas le retrait immédiat des caches tiers."
       },
       {
         "title": "Dons",

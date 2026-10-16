@@ -48,6 +48,7 @@ stores: [chrome, firefox]
 
 ## Técnica e privacidade
 
+- Os termos e a política de privacidade detalham nos 11 idiomas as imagens enviadas, suas URLs públicas, a redistribuição JSON, a retenção, a exclusão autenticada e a persistência de caches de terceiros.
 - Rotas de envio, atualização e exclusão vinculadas ao dispositivo e protegidas por token. Validação de assinatura, MIME, tamanho e SHA-256; limite de 20 envios por hora e dispositivo.
 - Nova tabela `CustomAsset`, migração PostgreSQL, armazenamento S3/R2 e limpeza protegida de imagens sem uso. Armazenamento e agendamento precisam ser configurados no deploy.
 - Exportações do dispositivo incluem URLs e metadados das imagens hospedadas. A exclusão também remove objetos remotos, permitindo novas tentativas após falhas.

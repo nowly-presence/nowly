@@ -918,9 +918,9 @@
     "badge": "Privacy",
     "title": "Privacy Policy",
     "description": "How Nowly handles your data, what stays on your device, and what depends on your consent.",
-    "last-updated": "Last updated: 4 October 2026.",
+    "last-updated": "Last updated: 16 October 2026.",
     "data-region": "European Union (VPS provided by Contabo GmbH, Germany)",
-    "intro": "This policy describes how <strong>{publisherName}</strong> (“we”), as data controller, processes personal data in connection with Nowly. Rich Presence activity is sent from your browser to the Discord client <strong>on your machine</strong>. It does not pass through our servers. Optional usage statistics and a few website features do involve our API or processors, as described below.",
+    "intro": "This policy describes how <strong>{publisherName}</strong> processes personal data as controller. Rich Presence messages reach Discord through the desktop app on your device. This local transmission does not mean that all features are offline: account sync, image requests, user-requested uploads and optional analytics involve our API or providers as described below.",
     "sections": [
       {
         "title": "Controller",
@@ -932,7 +932,15 @@
       },
       {
         "title": "Data processed on your device (extension)",
-        "body": "The extension stores data in the browser’s local storage API (Chrome <code>chrome.storage.local</code> / Firefox equivalent). It stays on that device unless you enable optional analytics or use a custom API URL:<ul><li>Installed presences (metadata, signed bundles, activation state).</li><li>Current activity (title, platform, duration, thumbnail URL).</li><li>A debug log (timestamps, actions, visited URLs of supported sites).</li><li>Onboarding state and a <strong>local snapshot</strong> of your Discord profile (ID, username, avatar) used only to display the extension UI, taken from the local Discord client.</li><li>Display preferences, shortcuts, and per-presence settings.</li><li>A locally generated device identifier (UUID) used if you opt into analytics.</li></ul>You can erase this data by resetting the extension or uninstalling it."
+        "body": "Browser local storage contains installed presences and signed bundles, settings, shortcuts, onboarding state, current activity, debug logs (including supported-site URLs), a local Discord profile snapshot (ID, name, avatar), custom activities and local image copies. A generated device UUID identifies the installation for requested API services, including uploads, independently of analytics consent. Optional sync, uploads and other network features are described separately below. Resetting or uninstalling removes local data, not an immediate erasure of remote images or copies held by others."
+      },
+      {
+        "title": "Custom activities, uploaded images and sharing",
+        "body": "Custom activity text, buttons and settings remain local and are not account-synced in 2.4.0. Choosing Upload, or importing embedded images, sends image bytes to our API and Cloudflare R2 storage when the upload service is configured. We retain the device UUID, SHA-256, MIME type, size, storage key and creation/last-use dates. Technical request data, including IP addresses, may be processed for security and rate limiting. This works without an account and with analytics off. Legal bases: providing the requested hosting service (GDPR Art. 6(1)(b)) and legitimate interests in security and abuse prevention (Art. 6(1)(f)).<br/><br/>Hosted URLs are public to anyone who obtains them; they are not private storage. Discord and delivery providers can fetch and cache images. External HTTPS image links are fetched under the relevant provider's policy. Cloudflare handles hosting/delivery; its international-transfer safeguards are described below. The VPS's EU location is not a guarantee that all image processing is exclusively in the EU.<br/><br/>JSON activity exports contain user-entered text, links and available local image copies, not device tokens, local activity IDs or activation state. Recipients can retain and redistribute these files; importing uploads embedded images again. Review files and links before sharing or activating them."
+      },
+      {
+        "title": "Image retention and erasure",
+        "body": "Hosted images become eligible for cleanup after 30 days without use; activation and periodic refresh can renew that period. Actual deletion depends on cleanup execution and successful storage access, not an exact 30-day deadline. The extension requests removal of unused image references. Authenticated device-data export includes hosted-image URLs and metadata; device erasure requests removal of remote objects and records. Failed storage deletion can require retry. Resetting, uninstalling, stopping sync or deleting an account is not a substitute for device-image erasure. Use the extension's device-data controls before uninstalling, or contact <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> with your device ID; never send its token publicly. Browser/CDN/Discord caches and recipients' files can outlive origin deletion. Local image copies can cause a new upload if the activity is reused."
       },
       {
         "title": "Browser extension permissions",
@@ -996,7 +1004,7 @@
     "badge": "Legal",
     "title": "Terms of Service",
     "description": "The rules for using Nowly, the browser extension, desktop app, and the website.",
-    "last-updated": "Last updated: 17 September 2026.",
+    "last-updated": "Last updated: 16 October 2026.",
     "sections": [
       {
         "title": "Acceptance",
@@ -1017,6 +1025,10 @@
       {
         "title": "Acceptable use",
         "body": "You must comply with applicable law and <a href=\"https://discord.com/terms\">Discord’s Terms of Service</a>. You must not:<ul><li>Use Nowly to display illegal, hateful, defamatory, or infringing content.</li><li>Bypass security of the official extension, desktop app, or API.</li><li>Distribute modified, forged, or unauthorized presences through Nowly’s official infrastructure.</li><li>Abuse the API (including excessive automated requests).</li></ul>If you point the extension at a <strong>custom API URL</strong>, you are solely responsible for that server. Our <a href=\"/privacy\">privacy policy</a> does not cover it."
+      },
+      {
+        "title": "User content and image hosting",
+        "body": "You retain your rights in activity text, images and shared files. Upload only content you own or are authorized to use, including permissions relating to identifiable people. You grant Nowly and its technical providers a non-exclusive authorization limited to storing, technically adapting, delivering and deleting that content to provide the service; this does not transfer ownership or authorize advertising reuse.<br/><br/>Do not upload or share illegal content, child sexual abuse material, non-consensual intimate images, threats, harassment, hateful or infringing content, malware, or another person's private information without a lawful basis. Do not use image hosting as a general file host or evade limits (currently PNG/JPEG/WebP/GIF, 1 MiB after preparation and 20 uploads/hour/device). URLs are not private; avoid secrets and sensitive documents. Review imported files and button destinations.<br/><br/>We may refuse uploads, remove unlawful content or restrict hosting to comply with law, protect rights or prevent abuse, subject to applicable safeguards. Report content by sending its URL and reasons to <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. This does not imply automatic or exhaustive moderation. Hosting is not a backup: keep your own copies. Deletion does not recall shared files or guarantee immediate removal from third-party caches."
       },
       {
         "title": "Donations",
