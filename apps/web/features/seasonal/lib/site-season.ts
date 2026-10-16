@@ -4,7 +4,7 @@ export type SiteSeason = (typeof SITE_SEASONS)[number];
 
 export type SeasonPreview = SiteSeason | "none";
 
-export type SeasonSource = "preview" | "stored" | "extension" | "none";
+export type SeasonSource = "preview" | "stored" | "pending" | "extension" | "none";
 
 export type SeasonState = {
   season: SiteSeason | null;
@@ -14,6 +14,8 @@ export type SeasonState = {
 export type SeasonEvent = {
   type: "extension";
   season: SiteSeason | null;
+} | {
+  type: "request";
 } | {
   type: "timeout";
 };
@@ -80,6 +82,10 @@ export const initialSeasonState = ({ stored, preview }: {
 
 export const nextSeasonState = (state: SeasonState, event: SeasonEvent): SeasonState => {
   if (state.source === "preview") return state;
+  if (event.type === "request") return {
+    season: state.season,
+    source: "pending"
+  };
   if (event.type === "extension") return {
     season: event.season,
     source: "extension"
@@ -88,8 +94,10 @@ export const nextSeasonState = (state: SeasonState, event: SeasonEvent): SeasonS
   return state.source === "extension" ? state : { season: null, source: "none" };
 };
 
+export const seasonForDecor = (state: SeasonState): SiteSeason | null => (state.source === "extension" || state.source === "preview" ? state.season : null);
+
 export const seasonToStore = (state: SeasonState): SiteSeason | null | undefined => {
-  if (state.source === "preview" || state.source === "stored") return undefined;
+  if (state.source === "preview" || state.source === "stored" || state.source === "pending") return undefined;
 
   return state.season;
 };
