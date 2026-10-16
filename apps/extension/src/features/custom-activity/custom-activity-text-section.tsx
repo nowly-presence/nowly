@@ -1,8 +1,5 @@
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
-import {
-  CUSTOM_ACTIVITY_TYPES,
-  CUSTOM_TEXT_MAX_LENGTH,
-} from "@/shared/custom-activity";
+import { CUSTOM_ACTIVITY_TYPES, CUSTOM_TEXT_MAX_LENGTH } from "@/shared/custom-activity";
 import type { CustomActivityType } from "@/shared/types";
 import { Group } from "@/ui/card";
 import { FieldRow } from "@/ui/field-row";
@@ -16,26 +13,17 @@ const TYPE_LABELS: Record<CustomActivityType, MessageKey> = {
   0: "activity.type.playing",
   2: "activity.type.listening",
   3: "activity.type.watching",
-  5: "activity.type.competing",
+  5: "activity.type.competing"
 };
 
-const isActivityType = (value: number): value is CustomActivityType =>
-  CUSTOM_ACTIVITY_TYPES.some((type) => type === value);
+const isActivityType = (value: number): value is CustomActivityType => CUSTOM_ACTIVITY_TYPES.some((type) => type === value);
 
-export const CustomActivityTextSection = ({
-  draft,
-  patch,
-  errors,
-}: CustomActivitySectionProps) => {
+export const CustomActivityTextSection = ({ draft, patch, errors }: CustomActivitySectionProps) => {
   const { t } = useI18n();
   return (
     <Section title={t("custom.editor.textSection")}>
       <Group>
-        <FieldRow
-          layout="stacked"
-          title={t("custom.field.name")}
-          description={t("custom.field.nameHint")}
-        >
+        <FieldRow layout="stacked" title={t("custom.field.name")} description={t("custom.field.nameHint")}>
           <Input
             value={draft.name}
             maxLength={CUSTOM_TEXT_MAX_LENGTH}
@@ -45,16 +33,13 @@ export const CustomActivityTextSection = ({
           />
           <FieldError error={errors.name} />
         </FieldRow>
-        <FieldRow
-          title={t("custom.field.type")}
-          description={t("custom.field.typeHint")}
-        >
+        <FieldRow title={t("custom.field.type")} description={t("custom.field.typeHint")}>
           <Select
             aria-label={t("custom.field.type")}
             value={String(draft.type)}
             options={CUSTOM_ACTIVITY_TYPES.map((type) => ({
               value: String(type),
-              label: t(TYPE_LABELS[type]),
+              label: t(TYPE_LABELS[type])
             }))}
             onChange={(value) => {
               const type = Number(value);
@@ -62,11 +47,7 @@ export const CustomActivityTextSection = ({
             }}
           />
         </FieldRow>
-        <FieldRow
-          layout="stacked"
-          title={t("custom.field.details")}
-          description={t("custom.field.detailsHint")}
-        >
+        <FieldRow layout="stacked" title={t("custom.field.details")} description={t("custom.field.detailsHint")}>
           <Input
             value={draft.details}
             maxLength={CUSTOM_TEXT_MAX_LENGTH}
@@ -75,11 +56,7 @@ export const CustomActivityTextSection = ({
           />
           <FieldError error={errors.details} />
         </FieldRow>
-        <FieldRow
-          layout="stacked"
-          title={t("custom.field.state")}
-          description={t("custom.field.stateHint")}
-        >
+        <FieldRow layout="stacked" title={t("custom.field.state")} description={t("custom.field.stateHint")}>
           <Input
             value={draft.state}
             maxLength={CUSTOM_TEXT_MAX_LENGTH}

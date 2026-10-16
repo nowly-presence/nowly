@@ -1,33 +1,14 @@
 import { getPrisma, hasDatabase } from "@/db/client";
-import {
-  ANALYTICS_SOURCES,
-  catalogPublicJson,
-  getAnalyticsMetric,
-  getFunnel,
-  ingestEventsBodySchema,
-  listFunnels,
-  MAX_ANALYTICS_EVENTS_PER_BATCH,
-  MAX_ANALYTICS_EVENTS_PER_DEVICE_PER_MINUTE,
-  measureFunnel,
-  previousWindow,
-  resolveGranularity,
-  resolveWindow,
-  sanitizeDeviceId,
-  sanitizeEventId,
-  sanitizeEventKey,
-  sanitizePayload,
-  sanitizeSlug,
-  sanitizeSource,
-  sanitizeVersion,
-  stepKeys,
-  type AnalyticsGranularity,
-  type FunnelEventRow,
-  type IngestEvent,
-} from "@nowly/analytics";
+import { ANALYTICS_SOURCES, catalogPublicJson, getAnalyticsMetric, getFunnel, ingestEventsBodySchema, listFunnels, MAX_ANALYTICS_EVENTS_PER_BATCH, MAX_ANALYTICS_EVENTS_PER_DEVICE_PER_MINUTE, measureFunnel, previousWindow, resolveGranularity, resolveWindow, sanitizeDeviceId, sanitizeEventId, sanitizeEventKey, sanitizePayload, sanitizeSlug, sanitizeSource, sanitizeVersion, stepKeys, type AnalyticsGranularity, type FunnelEventRow, type IngestEvent } from "@nowly/analytics";
 
 // Either a preset range id (e.g. "7d") or an explicit custom from/to pair -
 // from/to win when both are present (see resolveWindow).
-export type InsightsWindow = { range?: unknown; from?: unknown; to?: unknown };
+export type InsightsWindow = {
+  range?: unknown;
+  from?: unknown;
+  to?: unknown;
+};
+
 import { Prisma } from "../../generated/prisma/client";
 
 export type InsightsRecordResult = {
@@ -56,11 +37,18 @@ type LiveEvent = {
 
 const FIVE_MINUTES_MS = 5 * 60_000;
 const MAX_RATE_LIMIT_BUCKETS = 50_000;
-const rateLimitBuckets = new Map<string, { count: number; resetAt: number }>();
+const rateLimitBuckets = new Map<
+  string,
+  {
+    count: number;
+    resetAt: number;
+  }
+>();
 const liveBuffer: LiveEvent[] = [];
 
 const pruneLiveBuffer = (now = Date.now()): void => {
   const cutoff = now - FIVE_MINUTES_MS;
+
   while (liveBuffer.length > 0 && liveBuffer[0]!.createdAt < cutoff) {
     liveBuffer.shift();
   }
@@ -75,21 +63,34 @@ export const getLiveSnapshot = (now = Date.now()) => {
   pruneLiveBuffer(now);
   const last60 = now - 60_000;
   const last5m = now - FIVE_MINUTES_MS;
-  const counts = new Map<string, { last60s: number; last5m: number }>();
+  const counts = new Map<
+    string,
+    {
+      last60s: number;
+      last5m: number;
+    }
+  >();
   let last60s = 0;
   let last5mCount = 0;
+
   for (const event of liveBuffer) {
     if (event.createdAt >= last5m) {
       last5mCount += 1;
-      const entry = counts.get(event.key) ?? { last60s: 0, last5m: 0 };
+      const entry = counts.get(event.key) ?? {
+        last60s: 0,
+        last5m: 0
+      };
       entry.last5m += 1;
+
       if (event.createdAt >= last60) {
         last60s += 1;
         entry.last60s += 1;
       }
+
       counts.set(event.key, entry);
     }
   }
+
   const top = [...counts.entries()]
     .map(([key, value]) => ({ key, ...value }))
     .sort((a, b) => b.last60s - a.last60s || b.last5m - a.last5m)
@@ -98,7 +99,7 @@ export const getLiveSnapshot = (now = Date.now()) => {
     at: new Date(now).toISOString(),
     last60s,
     last5m: last5mCount,
-    top,
+    top
   };
 };
 
@@ -106,6 +107,7 @@ const pruneRateLimitBuckets = (now: number): void => {
   for (const [key, bucket] of rateLimitBuckets) {
     if (bucket.resetAt <= now) rateLimitBuckets.delete(key);
   }
+
   if (rateLimitBuckets.size >= MAX_RATE_LIMIT_BUCKETS) {
     const oldestKey = rateLimitBuckets.keys().next().value;
     if (oldestKey) rateLimitBuckets.delete(oldestKey);
@@ -114,15 +116,20 @@ const pruneRateLimitBuckets = (now: number): void => {
 
 const takeRateLimitSlot = (deviceId: string | undefined): boolean => {
   if (!deviceId) return true;
+
   const now = Date.now();
   const current = rateLimitBuckets.get(deviceId);
+
   if (!current || current.resetAt <= now) {
-    if (rateLimitBuckets.size >= MAX_RATE_LIMIT_BUCKETS)
-      pruneRateLimitBuckets(now);
-    rateLimitBuckets.set(deviceId, { count: 1, resetAt: now + 60_000 });
+    if (rateLimitBuckets.size >= MAX_RATE_LIMIT_BUCKETS) pruneRateLimitBuckets(now);
+    rateLimitBuckets.set(deviceId, {
+      count: 1,
+      resetAt: now + 60_000
+    });
     return true;
   }
   if (current.count >= MAX_ANALYTICS_EVENTS_PER_DEVICE_PER_MINUTE) return false;
+
   current.count += 1;
   return true;
 };
@@ -131,25 +138,23 @@ const normalizeCreatedAt = (value: unknown): Date => {
   if (typeof value === "string") {
     const date = new Date(value);
     const now = Date.now();
-    if (
-      !Number.isNaN(date.getTime()) &&
-      date.getTime() <= now + 5 * 60_000 &&
-      date.getTime() >= now - 7 * 24 * 60 * 60_000
-    ) {
+
+    if (!Number.isNaN(date.getTime()) && date.getTime() <= now + 5 * 60_000 && date.getTime() >= now - 7 * 24 * 60 * 60_000) {
       return date;
     }
   }
+
   return new Date();
 };
 
-export const parseIngestBody = (body: unknown) =>
-  ingestEventsBodySchema.safeParse(body);
+export const parseIngestBody = (body: unknown) => ingestEventsBodySchema.safeParse(body);
 
-export const recordInsightEvents = async (
-  events: IngestEvent[],
-  country?: string,
-): Promise<InsightsRecordResult> => {
-  if (!hasDatabase()) return { inserted: 0, rejected: 0, duplicates: 0 };
+export const recordInsightEvents = async (events: IngestEvent[], country?: string): Promise<InsightsRecordResult> => {
+  if (!hasDatabase()) return {
+    inserted: 0,
+    rejected: 0,
+    duplicates: 0
+  };
 
   const prisma = getPrisma();
   let inserted = 0;
@@ -159,12 +164,14 @@ export const recordInsightEvents = async (
   for (const event of events.slice(0, MAX_ANALYTICS_EVENTS_PER_BATCH)) {
     const key = sanitizeEventKey(event.key);
     const metric = key ? getAnalyticsMetric(key) : undefined;
+
     if (!key || !metric) {
       rejected += 1;
       continue;
     }
 
     const deviceId = sanitizeDeviceId(event.deviceId);
+
     if (!takeRateLimitSlot(deviceId)) {
       rejected += 1;
       continue;
@@ -185,20 +192,23 @@ export const recordInsightEvents = async (
           source: sanitizeSource(event.source),
           country,
           payload: payload as Prisma.InputJsonObject,
-          createdAt,
-        },
+          createdAt
+        }
       });
       inserted += 1;
-      rememberLiveEvent({ eventId, key, createdAt: createdAt.getTime() });
+      rememberLiveEvent({
+        eventId,
+        key,
+        createdAt: createdAt.getTime()
+      });
     } catch (error) {
-      const code =
-        error && typeof error === "object" && "code" in error
-          ? String(error.code)
-          : "";
+      const code = error && typeof error === "object" && "code" in error ? String(error.code) : "";
+
       if (code === "P2002") {
         duplicates += 1;
         continue;
       }
+
       rejected += 1;
     }
   }
@@ -214,150 +224,157 @@ export const getCatalogPayload = () => ({
     label: funnel.label,
     steps: funnel.steps.map((step) => ({
       keys: stepKeys(step),
-      label: step.label ?? stepKeys(step).join(" | "),
-    })),
-  })),
+      label: step.label ?? stepKeys(step).join(" | ")
+    }))
+  }))
 });
 
 // browser/os/locale live on Device, not AnalyticsEvent - resolve them to a
 // deviceId allowlist once, then filter events by that list. Returns
 // undefined when no device-level filter was requested (no restriction).
-const resolveDeviceIds = async (
-  filters: InsightsFilters,
-): Promise<string[] | undefined> => {
+const resolveDeviceIds = async (filters: InsightsFilters): Promise<string[] | undefined> => {
   if (!filters.browser && !filters.os && !filters.locale) return undefined;
 
   const devices = await getPrisma().device.findMany({
     where: {
       browser: filters.browser,
       os: filters.os,
-      locale: filters.locale,
+      locale: filters.locale
     },
-    select: { deviceId: true },
+    select: { deviceId: true }
   });
   return devices.map((device) => device.deviceId);
 };
 
-const eventWhereFromFilters = (
-  filters: InsightsFilters,
-  deviceIds: string[] | undefined,
-): Prisma.AnalyticsEventWhereInput => ({
+const eventWhereFromFilters = (filters: InsightsFilters, deviceIds: string[] | undefined): Prisma.AnalyticsEventWhereInput => ({
   ...(filters.slug && { slug: filters.slug }),
   ...(filters.source && { source: filters.source }),
   ...(filters.country && { country: filters.country }),
-  ...(deviceIds && { deviceId: { in: deviceIds } }),
+  ...(deviceIds && {
+    deviceId: { in: deviceIds }
+  })
 });
 
-export const getOverview = async (
-  windowInput: InsightsWindow,
-  filters: InsightsFilters = {},
-) => {
+export const getOverview = async (windowInput: InsightsWindow, filters: InsightsFilters = {}) => {
   const { range, from, to } = resolveWindow(windowInput);
+
   if (!hasDatabase()) {
     return {
       range,
       from: from.toISOString(),
       to: to.toISOString(),
-      totals: { events: 0, uniqueDevices: 0 },
-      topEvents: [] as Array<{ key: string; count: number }>,
+      totals: {
+        events: 0,
+        uniqueDevices: 0
+      },
+      topEvents: [] as Array<{
+        key: string;
+        count: number;
+      }>,
       funnels: listFunnels().map((funnel) => ({
         id: funnel.id,
         label: funnel.label,
-        overallConversion: null as number | null,
-      })),
+        overallConversion: null as number | null
+      }))
     };
   }
 
   const prisma = getPrisma();
   const deviceIds = await resolveDeviceIds(filters);
+
   const where = {
-    createdAt: { gte: from, lte: to },
-    ...eventWhereFromFilters(filters, deviceIds),
+    createdAt: {
+      gte: from,
+      lte: to
+    },
+    ...eventWhereFromFilters(filters, deviceIds)
   };
 
   const [events, uniqueDevices, grouped] = await Promise.all([
     prisma.analyticsEvent.count({ where }),
     prisma.analyticsEvent.groupBy({
       by: ["deviceId"],
-      where: { ...where, deviceId: { not: null } },
+      where: {
+        ...where,
+        deviceId: { not: null }
+      }
     }),
     prisma.analyticsEvent.groupBy({
       by: ["key"],
       where,
       _count: { _all: true },
-      orderBy: { _count: { key: "desc" } },
-      take: 12,
-    }),
+      orderBy: {
+        _count: { key: "desc" }
+      },
+      take: 12
+    })
   ]);
 
   const funnels = await Promise.all(
     listFunnels().map(async (funnel) => {
-      const measurement = await getFunnelMeasurement(
-        funnel.id,
-        windowInput,
-        filters,
-      );
+      const measurement = await getFunnelMeasurement(funnel.id, windowInput, filters);
       return {
         id: funnel.id,
         label: funnel.label,
-        overallConversion: measurement?.overallConversion ?? null,
+        overallConversion: measurement?.overallConversion ?? null
       };
-    }),
+    })
   );
 
   return {
     range,
     from: from.toISOString(),
     to: to.toISOString(),
-    totals: { events, uniqueDevices: uniqueDevices.length },
-    topEvents: grouped.map((row) => ({ key: row.key, count: row._count._all })),
-    funnels,
+    totals: {
+      events,
+      uniqueDevices: uniqueDevices.length
+    },
+    topEvents: grouped.map((row) => ({
+      key: row.key,
+      count: row._count._all
+    })),
+    funnels
   };
 };
 
 const truncExpr = (granularity: AnalyticsGranularity) => {
-  if (granularity === "second")
-    return Prisma.sql`date_trunc('second', created_at)`;
-  if (granularity === "minute")
-    return Prisma.sql`date_trunc('minute', created_at)`;
+  if (granularity === "second") return Prisma.sql`date_trunc('second', created_at)`;
+  if (granularity === "minute") return Prisma.sql`date_trunc('minute', created_at)`;
   if (granularity === "hour") return Prisma.sql`date_trunc('hour', created_at)`;
+
   return Prisma.sql`date_trunc('day', created_at)`;
 };
 
-export const getSeries = async (
-  metric: string,
-  windowInput: InsightsWindow,
-  granularityValue: string | undefined,
-  filters: InsightsFilters = {},
-  compare = false,
-) => {
+export const getSeries = async (metric: string, windowInput: InsightsWindow, granularityValue:
+  string | undefined, filters: InsightsFilters = {}, compare = false) => {
   const catalogMetric = getAnalyticsMetric(metric);
+
   if (!catalogMetric) return null;
 
   const { range, from, to, defaultGranularity } = resolveWindow(windowInput);
   const granularity =
-    range === "custom"
-      ? ((granularityValue as AnalyticsGranularity | undefined) ??
-        defaultGranularity)
-      : resolveGranularity(range, granularityValue);
+    range === "custom" ? ((granularityValue as AnalyticsGranularity | undefined) ?? defaultGranularity) : resolveGranularity(range, granularityValue);
 
   const bucketize = async (rangeFrom: Date, rangeTo: Date) => {
-    if (!hasDatabase()) return [] as Array<{ bucket: string; count: number }>;
+    if (!hasDatabase()) return [] as Array<{
+      bucket: string;
+      count: number;
+    }>;
 
     const deviceIds = await resolveDeviceIds(filters);
+
     const extraConditions = [
       filters.slug ? Prisma.sql`AND slug = ${filters.slug}` : Prisma.empty,
-      filters.source
-        ? Prisma.sql`AND source = ${filters.source}`
-        : Prisma.empty,
-      filters.country
-        ? Prisma.sql`AND country = ${filters.country}`
-        : Prisma.empty,
-      deviceIds ? Prisma.sql`AND device_id = ANY(${deviceIds})` : Prisma.empty,
+      filters.source ? Prisma.sql`AND source = ${filters.source}` : Prisma.empty,
+      filters.country ? Prisma.sql`AND country = ${filters.country}` : Prisma.empty,
+      deviceIds ? Prisma.sql`AND device_id = ANY(${deviceIds})` : Prisma.empty
     ];
 
     const rows = await getPrisma().$queryRaw<
-      Array<{ bucket: Date; count: number }>
+      Array<{
+        bucket: Date;
+        count: number;
+      }>
     >`
       SELECT ${truncExpr(granularity)} AS bucket, COUNT(*)::int AS count
       FROM analytics_events
@@ -368,14 +385,20 @@ export const getSeries = async (
     `;
     return rows.map((row) => ({
       bucket: row.bucket.toISOString(),
-      count: Number(row.count),
+      count: Number(row.count)
     }));
   };
 
   const points = await bucketize(from, to);
 
-  let comparePoints: Array<{ bucket: string; count: number }> | undefined;
+  let comparePoints:
+    | Array<{
+        bucket: string;
+        count: number;
+      }>
+    | undefined;
   let compareTotal: number | undefined;
+
   if (compare) {
     const previous = previousWindow(from, to);
     comparePoints = await bucketize(previous.from, previous.to);
@@ -390,16 +413,13 @@ export const getSeries = async (
     to: to.toISOString(),
     points,
     total: points.reduce((sum, point) => sum + point.count, 0),
-    ...(comparePoints ? { comparePoints, compareTotal } : {}),
+    ...(comparePoints ? { comparePoints, compareTotal } : {})
   };
 };
 
-export const getFunnelMeasurement = async (
-  id: string,
-  windowInput: InsightsWindow,
-  filters: InsightsFilters = {},
-) => {
+export const getFunnelMeasurement = async (id: string, windowInput: InsightsWindow, filters: InsightsFilters = {}) => {
   const funnel = getFunnel(id);
+
   if (!funnel) return null;
 
   const { range, from, to } = resolveWindow(windowInput);
@@ -410,47 +430,52 @@ export const getFunnelMeasurement = async (
       range,
       from: from.toISOString(),
       to: to.toISOString(),
-      ...measureFunnel(funnel, []),
+      ...measureFunnel(funnel, [])
     };
   }
 
   const deviceIds = await resolveDeviceIds(filters);
+
   const prisma = getPrisma();
   const rows = await prisma.analyticsEvent.findMany({
     where: {
       key: { in: keys },
       deviceId: { not: null },
-      createdAt: { gte: from, lte: to },
-      ...eventWhereFromFilters(filters, deviceIds),
+      createdAt: {
+        gte: from,
+        lte: to
+      },
+      ...eventWhereFromFilters(filters, deviceIds)
     },
-    select: { key: true, deviceId: true, createdAt: true },
-    orderBy: { createdAt: "asc" },
+    select: {
+      key: true,
+      deviceId: true,
+      createdAt: true
+    },
+    orderBy: { createdAt: "asc" }
   });
 
   const funnelRows: FunnelEventRow[] = rows.flatMap((row) =>
     row.deviceId
-      ? [{ key: row.key, deviceId: row.deviceId, createdAt: row.createdAt }]
-      : [],
+      ? [
+          {
+            key: row.key,
+            deviceId: row.deviceId,
+            createdAt: row.createdAt
+          }
+        ]
+      : []
   );
 
   return {
     range,
     from: from.toISOString(),
     to: to.toISOString(),
-    ...measureFunnel(funnel, funnelRows),
+    ...measureFunnel(funnel, funnelRows)
   };
 };
 
-export const listFunnelSummaries = async (
-  windowInput: InsightsWindow,
-  filters: InsightsFilters = {},
-) => {
-  const measurements = await Promise.all(
-    listFunnels().map((funnel) =>
-      getFunnelMeasurement(funnel.id, windowInput, filters),
-    ),
-  );
-  return measurements.filter((item): item is NonNullable<typeof item> =>
-    Boolean(item),
-  );
+export const listFunnelSummaries = async (windowInput: InsightsWindow, filters: InsightsFilters = {}) => {
+  const measurements = await Promise.all(listFunnels().map((funnel) => getFunnelMeasurement(funnel.id, windowInput, filters)));
+  return measurements.filter((item): item is NonNullable<typeof item> => Boolean(item));
 };

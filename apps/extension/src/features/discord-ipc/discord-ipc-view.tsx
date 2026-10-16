@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-  RiArrowLeftLine,
-  RiExternalLinkLine,
-  RiRefreshLine,
-} from "@remixicon/react";
+import { RiArrowLeftLine, RiExternalLinkLine, RiRefreshLine } from "@remixicon/react";
 import { BackHeader, ScreenBody } from "@/components/shared/screen";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
@@ -24,9 +20,7 @@ export const DiscordIpcView = () => {
   const { pop } = useNav();
   const [busy, setBusy] = useState(false);
   const [stillBlocked, setStillBlocked] = useState(false);
-  const resolved =
-    Boolean(state.native.discordConnected) &&
-    !discordIpcIssueOf(state.native).active;
+  const resolved = Boolean(state.native.discordConnected) && !discordIpcIssueOf(state.native).active;
 
   const reconnect = async () => {
     setBusy(true);
@@ -45,9 +39,7 @@ export const DiscordIpcView = () => {
       <ScreenBody className="pt-1">
         <DiscordIpcHero
           resolved={resolved}
-          title={
-            resolved ? t("discordIpc.resolvedTitle") : t("discordIpc.title")
-          }
+          title={resolved ? t("discordIpc.resolvedTitle") : t("discordIpc.title")}
           description={
             resolved
               ? t("discordIpc.resolvedDescription")
@@ -62,28 +54,15 @@ export const DiscordIpcView = () => {
           <>
             <DiscordIpcSteps />
             <div className="flex flex-col gap-2">
-              <Button
-                loading={busy}
-                icon={<RiRefreshLine className="size-4" />}
-                onClick={() => void reconnect()}
-              >
+              <Button loading={busy} icon={<RiRefreshLine className="size-4" />} onClick={() => void reconnect()}>
                 {t("connection.reconnect")}
               </Button>
               {stillBlocked && !busy && (
-                <p
-                  role="status"
-                  className="px-1 text-center text-body-sm text-danger"
-                >
+                <p role="status" className="px-1 text-center text-body-sm text-danger">
                   {t("discordIpc.stillBlocked")}
                 </p>
               )}
-              <Button
-                variant="secondary"
-                icon={<RiExternalLinkLine className="size-4" />}
-                onClick={() =>
-                  openUrl(docsUrl(TROUBLESHOOTING_DOCS_PATH, locale))
-                }
-              >
+              <Button variant="secondary" icon={<RiExternalLinkLine className="size-4" />} onClick={() => openUrl(docsUrl(TROUBLESHOOTING_DOCS_PATH, locale))}>
                 {t("discordIpc.learnMore")}
               </Button>
             </div>

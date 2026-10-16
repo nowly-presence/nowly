@@ -1,27 +1,13 @@
-import {
-  broadcastActiveTab,
-  handleClearActivity,
-  handleRemovedTab,
-  restoreActivityBadge,
-} from "@/background/managers/activity-manager";
-import {
-  drainInstallQueue,
-  installBundledPresences,
-} from "@/background/managers/presence-manager";
+import { broadcastActiveTab, handleClearActivity, handleRemovedTab, restoreActivityBadge } from "@/background/managers/activity-manager";
+import { drainInstallQueue, installBundledPresences } from "@/background/managers/presence-manager";
 import { trackAnalytics } from "@/background/analytics-client";
 import { addRuntimeLog } from "@/background/runtime-logs";
-import {
-  refreshPresenceLanguage,
-  syncPresenceScripts,
-} from "@/background/runtime/presence-scripts";
+import { refreshPresenceLanguage, syncPresenceScripts } from "@/background/runtime/presence-scripts";
 import { runAccountSync } from "@/background/services/account-sync";
 import { initializeCustomApiUrl } from "@/background/services/api-state";
 import { setFocusedTabId } from "@/background/services/background-context";
 import { registerContextMenu } from "@/background/services/context-menu";
-import {
-  syncDeviceState,
-  syncUninstallUrl,
-} from "@/background/services/device-sync";
+import { syncDeviceState, syncUninstallUrl } from "@/background/services/device-sync";
 import { connectNative, onNativeResponse } from "@/background/services/native";
 import { getPresences, setDebug } from "@/background/storage/presences.store";
 import { IS_CANARY } from "@/shared/brand";
@@ -31,14 +17,14 @@ import type { InstalledPresences } from "@/shared/types";
 
 type ChromeWithSidePanel = typeof chrome & {
   sidePanel?: {
-    setPanelBehavior(options: {
-      openPanelOnActionClick: boolean;
-    }): Promise<void>;
+    setPanelBehavior(options: { openPanelOnActionClick: boolean }): Promise<void>;
   };
 };
 
 type ChromeWithSidebarAction = typeof chrome & {
-  sidebarAction?: { toggle(): void };
+  sidebarAction?: {
+    toggle(): void;
+  };
 };
 
 const enableSidePanelAction = (): void => {
@@ -50,11 +36,10 @@ const enableSidePanelAction = (): void => {
   }
 
   const sidePanel = (chrome as ChromeWithSidePanel).sidePanel;
+
   if (!sidePanel) return;
 
-  void sidePanel
-    .setPanelBehavior({ openPanelOnActionClick: true })
-    .catch(() => {});
+  void sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
 };
 
 type HeartbeatLogState = {
@@ -63,10 +48,8 @@ type HeartbeatLogState = {
   version?: string;
   code?: string;
 };
-export const hasHeartbeatLogChanged = (
-  previous: HeartbeatLogState | undefined,
-  current: HeartbeatLogState,
-): boolean =>
+
+export const hasHeartbeatLogChanged = (previous: HeartbeatLogState | undefined, current: HeartbeatLogState): boolean =>
   !previous ||
   previous.connected !== current.connected ||
   previous.status !== current.status ||
@@ -81,26 +64,26 @@ const registerNativeResponseHandler = (): void => {
     if (message.type === "ERROR") {
       addRuntimeLog("error", "native", "native error", {
         code: message.code,
-        reason: message.error,
+        reason: message.error
       });
+
       if (lastHeartbeatConnected !== false) {
         trackAnalytics("native_heartbeat_failed", {
-          payload: { reason: message.error },
+          payload: { reason: message.error }
         });
       }
+
       lastHeartbeatConnected = false;
       void setDebug({
         stage: "native-error",
         message: message.error,
-        updatedAt: Date.now(),
+        updatedAt: Date.now()
       });
       return;
     }
 
     if (message.type === "CONNECTED") {
-      addRuntimeLog("success", "native", "native connected", {
-        nativeVersion: message.version,
-      });
+      addRuntimeLog("success", "native", "native connected", { nativeVersion: message.version });
       trackAnalytics("native_connected");
     }
 
@@ -109,28 +92,25 @@ const registerNativeResponseHandler = (): void => {
         connected: message.connected,
         status: message.status,
         version: message.version,
-        code: message.code,
+        code: message.code
       };
+
       if (hasHeartbeatLogChanged(lastHeartbeatLogState, heartbeatState)) {
-        addRuntimeLog(
-          message.code ? "error" : message.connected ? "success" : "warn",
-          "native",
-          "native heartbeat",
-          {
-            code: message.code,
-            connected: message.connected,
-            status: message.status,
-            nativeVersion: message.version,
-          },
-        );
+        addRuntimeLog(message.code ? "error" : message.connected ? "success" : "warn", "native", "native heartbeat", {
+          code: message.code,
+          connected: message.connected,
+          status: message.status,
+          nativeVersion: message.version
+        });
         lastHeartbeatLogState = heartbeatState;
       }
 
       if (!message.connected && lastHeartbeatConnected !== false) {
         trackAnalytics("native_heartbeat_failed", {
-          payload: { reason: message.status },
+          payload: { reason: message.status }
         });
       }
+
       lastHeartbeatConnected = message.connected;
     }
 
@@ -138,15 +118,13 @@ const registerNativeResponseHandler = (): void => {
       void setDebug({
         stage: "native",
         message: "discord activity accepted",
-        updatedAt: Date.now(),
+        updatedAt: Date.now()
       });
     }
   });
 };
 
-const openChangelogOnUpdate = (
-  details: chrome.runtime.InstalledDetails,
-): void => {
+const openChangelogOnUpdate = (details: chrome.runtime.InstalledDetails): void => {
   if (details.reason !== "update") return;
   if (IS_CANARY) return;
 
@@ -158,7 +136,7 @@ const openChangelogOnUpdate = (
 const detectFocusedTab = async (): Promise<void> => {
   const [tab] = await chrome.tabs.query({
     active: true,
-    lastFocusedWindow: true,
+    lastFocusedWindow: true
   });
   if (tab?.id != null) setFocusedTabId(tab.id);
 };
@@ -184,9 +162,10 @@ const runBootBackground = async (options: {
   return presences;
 };
 
-const bootBackground = (
-  options: { restoreBadge?: boolean; syncScripts?: boolean } = {},
-): Promise<InstalledPresences> => {
+const bootBackground = (options: {
+  restoreBadge?: boolean;
+  syncScripts?: boolean;
+} = {}): Promise<InstalledPresences> => {
   bootPromise ??= runBootBackground(options);
   return bootPromise;
 };
@@ -203,10 +182,8 @@ export const registerLifecycleHandlers = (): void => {
   chrome.runtime.onInstalled.addListener(async (details) => {
     enableSidePanelAction();
     registerContextMenu();
-    if (details.reason === "install")
-      trackAnalytics("extension_install", { source: "system" });
-    if (details.reason === "update")
-      trackAnalytics("extension_update", { source: "system" });
+    if (details.reason === "install") trackAnalytics("extension_install", { source: "system" });
+    if (details.reason === "update") trackAnalytics("extension_update", { source: "system" });
     const presences = await bootBackground({ syncScripts: false });
     openChangelogOnUpdate(details);
     await syncPresenceScripts(presences);
@@ -215,13 +192,13 @@ export const registerLifecycleHandlers = (): void => {
   if (import.meta.env.BROWSER === "firefox") {
     chrome.permissions.onAdded.addListener((permissions) => {
       if (!permissions.permissions?.includes("userScripts")) return;
+
       void getPresences().then((presences) => syncPresenceScripts(presences));
     });
   }
 
   chrome.storage.onChanged.addListener((changes, area) => {
-    if (area === "local" && LOCALE_PREFERENCE_KEY in changes)
-      void refreshPresenceLanguage();
+    if (area === "local" && LOCALE_PREFERENCE_KEY in changes) void refreshPresenceLanguage();
   });
 
   chrome.tabs.onRemoved.addListener(handleRemovedTab);
@@ -233,12 +210,21 @@ export const registerLifecycleHandlers = (): void => {
 
   chrome.windows.onFocusChanged.addListener((windowId) => {
     if (windowId === chrome.windows.WINDOW_ID_NONE) return;
-    chrome.tabs.query({ active: true, windowId }, (tabs) => {
-      const tabId = tabs[0]?.id;
-      if (tabId == null) return;
-      setFocusedTabId(tabId);
-      void broadcastActiveTab();
-    });
+
+    chrome.tabs.query(
+      {
+        active: true,
+        windowId
+      },
+      (tabs) => {
+        const tabId = tabs[0]?.id;
+
+        if (tabId == null) return;
+
+        setFocusedTabId(tabId);
+        void broadcastActiveTab();
+      }
+    );
   });
 };
 

@@ -8,13 +8,13 @@ import { Suspense } from "react";
 export const generateMetadata = async (): Promise<Metadata> => {
   const [locale, t] = await Promise.all([
     getLocale(),
-    getTranslations("pages.uninstall"),
+    getTranslations("pages.uninstall")
   ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     locale,
-    path: "/uninstall",
+    path: "/uninstall"
   });
 };
 
@@ -23,11 +23,7 @@ const Page = async () => {
 
   return (
     <>
-      <WebPageJsonLd
-        name={t("title")}
-        description={t("description")}
-        path="/uninstall"
-      />
+      <WebPageJsonLd name={t("title")} description={t("description")} path="/uninstall" />
       <Suspense>
         <UninstallView />
       </Suspense>

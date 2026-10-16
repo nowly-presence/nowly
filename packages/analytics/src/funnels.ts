@@ -39,21 +39,19 @@ const funnels: FunnelDefinition[] = [];
 export const stepKeys = (step: FunnelStep): string[] => {
   if (step.events?.length) return step.events;
   if (step.event) return [step.event];
+
   return [];
 };
 
-export const defineFunnel = (
-  definition: FunnelDefinition,
-): FunnelDefinition => {
+export const defineFunnel = (definition: FunnelDefinition): FunnelDefinition => {
   for (const step of definition.steps) {
     for (const key of stepKeys(step)) {
       if (!getAnalyticsMetric(key)) {
-        throw new Error(
-          `Funnel "${definition.id}" references unknown event "${key}"`,
-        );
+        throw new Error(`Funnel "${definition.id}" references unknown event "${key}"`);
       }
     }
   }
+
   const existing = funnels.findIndex((funnel) => funnel.id === definition.id);
   if (existing >= 0) funnels.splice(existing, 1);
   funnels.push(definition);
@@ -62,21 +60,20 @@ export const defineFunnel = (
 
 export const listFunnels = (): FunnelDefinition[] => [...funnels];
 
-export const getFunnel = (id: string): FunnelDefinition | undefined =>
-  funnels.find((funnel) => funnel.id === id);
+export const getFunnel = (id: string): FunnelDefinition | undefined => funnels.find((funnel) => funnel.id === id);
 
 const percent = (numerator: number, denominator: number): number | null => {
   if (denominator <= 0) return null;
+
   return Math.round((numerator / denominator) * 10_000) / 100;
 };
 
-export const measureFunnel = (
-  definition: FunnelDefinition,
-  rows: FunnelEventRow[],
-): FunnelMeasurement => {
+export const measureFunnel = (definition: FunnelDefinition, rows: FunnelEventRow[]): FunnelMeasurement => {
   const byDevice = new Map<string, FunnelEventRow[]>();
+
   for (const row of rows) {
     if (!row.deviceId) continue;
+
     const list = byDevice.get(row.deviceId);
     if (list) list.push(row);
     else byDevice.set(row.deviceId, [row]);
@@ -90,12 +87,13 @@ export const measureFunnel = (
 
   for (const events of byDevice.values()) {
     let cursor = 0;
+
     for (let index = 0; index < definition.steps.length; index += 1) {
       const keys = new Set(stepKeys(definition.steps[index]));
-      const match = events.find(
-        (event) => event.createdAt.getTime() >= cursor && keys.has(event.key),
-      );
+      const match = events.find((event) => event.createdAt.getTime() >= cursor && keys.has(event.key));
+
       if (!match) break;
+
       reached[index] += 1;
       cursor = match.createdAt.getTime();
     }
@@ -110,13 +108,9 @@ export const measureFunnel = (
       keys,
       label: step.label ?? keys.join(" | "),
       uniqueDevices,
-      conversionFromPrevious:
-        index === 0 ? 100 : percent(uniqueDevices, previous),
+      conversionFromPrevious: index === 0 ? 100 : percent(uniqueDevices, previous),
       conversionFromStart: percent(uniqueDevices, start),
-      dropOff:
-        index === 0
-          ? null
-          : percent(Math.max(0, previous - uniqueDevices), previous),
+      dropOff: index === 0 ? null : percent(Math.max(0, previous - uniqueDevices), previous)
     };
   });
 
@@ -126,7 +120,7 @@ export const measureFunnel = (
     id: definition.id,
     label: definition.label,
     steps,
-    overallConversion: percent(last, start),
+    overallConversion: percent(last, start)
   };
 };
 
@@ -136,8 +130,8 @@ defineFunnel({
   steps: [
     { event: "marketplace_page_view" },
     { event: "marketplace_install_click" },
-    { event: "marketplace_conversion" },
-  ],
+    { event: "marketplace_conversion" }
+  ]
 });
 
 defineFunnel({
@@ -147,14 +141,17 @@ defineFunnel({
     { event: "extension_install" },
     { event: "onboarding_completed" },
     { event: "presence_install" },
-    { event: "presence_session_start" },
-  ],
+    { event: "presence_session_start" }
+  ]
 });
 
 defineFunnel({
   id: "native",
   label: "Native",
-  steps: [{ event: "native_connected" }, { event: "presence_session_start" }],
+  steps: [
+    { event: "native_connected" },
+    { event: "presence_session_start" }
+  ]
 });
 
 defineFunnel({
@@ -164,7 +161,7 @@ defineFunnel({
     { event: "uninstall_cleanup_received" },
     {
       events: ["uninstall_analytics_deleted", "uninstall_analytics_kept"],
-      label: "Choice recorded",
-    },
-  ],
+      label: "Choice recorded"
+    }
+  ]
 });

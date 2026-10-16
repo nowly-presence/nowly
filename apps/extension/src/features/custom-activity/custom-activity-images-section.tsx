@@ -10,13 +10,7 @@ type CustomActivityImagesSectionProps = CustomActivitySectionProps & {
   uploading: boolean;
 };
 
-export const CustomActivityImagesSection = ({
-  draft,
-  patch,
-  errors,
-  upload,
-  uploading,
-}: CustomActivityImagesSectionProps) => {
+export const CustomActivityImagesSection = ({ draft, patch, errors, upload, uploading }: CustomActivityImagesSectionProps) => {
   const { t } = useI18n();
   return (
     <Section title={t("custom.editor.imagesSection")}>

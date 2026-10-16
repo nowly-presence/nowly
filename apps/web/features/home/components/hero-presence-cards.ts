@@ -1,7 +1,13 @@
-type TimestampConfig =
-  | { kind: "none" }
-  | { kind: "elapsed"; icon?: string; color?: string }
-  | { kind: "progress"; progress: number };
+type TimestampConfig = {
+  kind: "none";
+} | {
+  kind: "elapsed";
+  icon?: string;
+  color?: string;
+} | {
+  kind: "progress";
+  progress: number;
+};
 
 export type PresenceCardConfig = {
   id: string;
@@ -22,8 +28,11 @@ export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
     largeImage: "/media/hero/cards/netflix-thumbnail.png",
     smallImage: "/media/hero/cards/play-badge.svg",
     hasSubtitle: true,
-    timestamp: { kind: "progress", progress: 2.6 },
-    hasButton: true,
+    timestamp: {
+      kind: "progress",
+      progress: 2.6
+    },
+    hasButton: true
   },
   {
     id: "prime",
@@ -31,8 +40,11 @@ export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
     largeImage: "/media/hero/cards/prime-thumbnail.png",
     smallImage: "/media/hero/cards/play-badge.svg",
     hasSubtitle: true,
-    timestamp: { kind: "progress", progress: 31.4 },
-    hasButton: true,
+    timestamp: {
+      kind: "progress",
+      progress: 31.4
+    },
+    hasButton: true
   },
   {
     id: "figma",
@@ -41,7 +53,7 @@ export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
     smallImage: "/media/hero/cards/figma-badge.png",
     hasSubtitle: true,
     timestamp: { kind: "elapsed" },
-    hasButton: false,
+    hasButton: false
   },
   {
     id: "youtube",
@@ -49,8 +61,11 @@ export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
     largeImage: "/media/hero/cards/youtube-thumbnail.jpg",
     smallImage: "/media/hero/cards/play-badge.svg",
     hasSubtitle: true,
-    timestamp: { kind: "progress", progress: 52.9 },
-    hasButton: true,
+    timestamp: {
+      kind: "progress",
+      progress: 52.9
+    },
+    hasButton: true
   },
   {
     id: "twitch",
@@ -58,7 +73,7 @@ export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
     largeImage: "/media/hero/cards/twitch-streamer-avatar.svg",
     hasSubtitle: true,
     timestamp: { kind: "elapsed" },
-    hasButton: true,
+    hasButton: true
   },
   {
     id: "chatgpt",
@@ -67,7 +82,7 @@ export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
     largeContain: true,
     hasSubtitle: false,
     timestamp: { kind: "elapsed" },
-    hasButton: true,
+    hasButton: true
   },
   {
     id: "notion",
@@ -76,7 +91,7 @@ export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
     largeContain: true,
     hasSubtitle: true,
     timestamp: { kind: "elapsed" },
-    hasButton: false,
+    hasButton: false
   },
   {
     id: "steam",
@@ -84,7 +99,7 @@ export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
     largeImage: "/media/hero/cards/steam-minecraft-legends.jpg",
     hasSubtitle: true,
     timestamp: { kind: "elapsed" },
-    hasButton: true,
+    hasButton: true
   },
   {
     id: "github",
@@ -93,6 +108,6 @@ export const HERO_PRESENCE_CARDS: PresenceCardConfig[] = [
     hasSubtitle: true,
     timestamp: { kind: "elapsed" },
     hasButton: true,
-    buttonHref: "https://github.com/nowly-presence/nowly/pull/39",
-  },
+    buttonHref: "https://github.com/nowly-presence/nowly/pull/39"
+  }
 ];

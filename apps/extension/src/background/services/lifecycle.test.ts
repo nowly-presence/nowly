@@ -5,7 +5,7 @@ describe("hasHeartbeatLogChanged", () => {
   const connected = {
     connected: true,
     status: "discord connected",
-    version: "1.4.4",
+    version: "1.4.4"
   };
 
   it("only reports the first heartbeat and state transitions", () => {
@@ -14,23 +14,26 @@ describe("hasHeartbeatLogChanged", () => {
     expect(
       hasHeartbeatLogChanged(connected, {
         ...connected,
-        status: "discord disconnected",
-      }),
-    ).toBe(true);
-    expect(
-      hasHeartbeatLogChanged(connected, { ...connected, version: "1.4.5" }),
+        status: "discord disconnected"
+      })
     ).toBe(true);
     expect(
       hasHeartbeatLogChanged(connected, {
         ...connected,
-        code: "DISCORD_IPC_ACCESS_DENIED",
-      }),
+        version: "1.4.5"
+      })
+    ).toBe(true);
+    expect(
+      hasHeartbeatLogChanged(connected, {
+        ...connected,
+        code: "DISCORD_IPC_ACCESS_DENIED"
+      })
     ).toBe(true);
     expect(
       hasHeartbeatLogChanged(connected, {
         connected: false,
-        status: "discord disconnected",
-      }),
+        status: "discord disconnected"
+      })
     ).toBe(true);
   });
 });

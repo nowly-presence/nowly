@@ -7,9 +7,7 @@ import { Group } from "@/ui/card";
 import { Row } from "@/ui/row";
 import { Section } from "@/ui/section";
 
-export const QueuedActivitiesSection = ({
-  activities,
-}: {
+export const QueuedActivitiesSection = ({ activities }: {
   activities: TabActivity[];
 }) => {
   const { state } = useExtensionState();
@@ -29,21 +27,21 @@ export const QueuedActivitiesSection = ({
       <Group>
         {activities.map((entry) => {
           const stored = state.presences[entry.slug];
+
           if (!stored) return null;
+
           return (
             <Row
               key={entry.tabId}
-              leading={
-                <PresenceIcon
-                  slug={entry.slug}
-                  name={stored.metadata.name}
-                  color={stored.metadata.color}
-                  size={32}
-                />
-              }
+              leading={<PresenceIcon slug={entry.slug} name={stored.metadata.name} color={stored.metadata.color} size={32} />}
               title={entry.presence.details ?? stored.metadata.name}
               description={entry.presence.state ?? stored.metadata.name}
-              onClick={() => push({ name: "presence", slug: entry.slug })}
+              onClick={() =>
+                push({
+                  name: "presence",
+                  slug: entry.slug
+                })
+              }
               chevron
             />
           );

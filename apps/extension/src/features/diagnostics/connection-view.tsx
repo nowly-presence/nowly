@@ -1,14 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  RiCheckboxCircleFill,
-  RiCloseCircleFill,
-  RiComputerLine,
-  RiDownloadLine,
-  RiErrorWarningFill,
-  RiFileList3Line,
-  RiRefreshLine,
-  RiRestartLine,
-} from "@remixicon/react";
+import { RiCheckboxCircleFill, RiCloseCircleFill, RiComputerLine, RiDownloadLine, RiErrorWarningFill, RiFileList3Line, RiRefreshLine, RiRestartLine } from "@remixicon/react";
 import type { DiagnosticSnapshot } from "@/background/router/contracts";
 import { extensionDetailsUrl, openUrl } from "@/shared/browser-links";
 import { HOST_DOWNLOAD_URL } from "@/shared/constants";
@@ -35,29 +26,33 @@ const CHECKS: {
   {
     key: "extensionInstalled",
     label: "check.extension",
-    hint: "check.extensionHint",
+    hint: "check.extensionHint"
   },
   {
     key: "userScriptsActive",
     label: "check.userScripts",
-    hint: "check.userScriptsHint",
+    hint: "check.userScriptsHint"
   },
-  { key: "hostDetected", label: "check.host", hint: "check.hostHint" },
+  {
+    key: "hostDetected",
+    label: "check.host",
+    hint: "check.hostHint"
+  },
   {
     key: "discordConnected",
     label: "check.discord",
-    hint: "check.discordHint",
+    hint: "check.discordHint"
   },
   {
     key: "presenceInstalled",
     label: "check.presence",
-    hint: "check.presenceHint",
+    hint: "check.presenceHint"
   },
   {
     key: "activityDetected",
     label: "check.activity",
-    hint: "check.activityHint",
-  },
+    hint: "check.activityHint"
+  }
 ];
 
 export const ConnectionView = () => {
@@ -84,9 +79,7 @@ export const ConnectionView = () => {
 
   const reconnect = async (kind: "reconnect" | "restart") => {
     setBusy(kind);
-    await sendMessage(
-      kind === "restart" ? "RESTART_NATIVE" : "CONNECT_NATIVE",
-    ).catch(() => {});
+    await sendMessage(kind === "restart" ? "RESTART_NATIVE" : "CONNECT_NATIVE").catch(() => {});
     await new Promise((resolve) => setTimeout(resolve, 900));
     await refresh.native();
     load();
@@ -94,44 +87,27 @@ export const ConnectionView = () => {
   };
 
   const fix = (key: keyof DiagnosticSnapshot) => {
-    if (key === "userScriptsActive")
-      return (
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() =>
-            openUrl(extensionDetailsUrl({ useFirefoxAddonsPage: true }))
-          }
-        >
-          {t("action.open")}
-        </Button>
-      );
-    if (key === "hostDetected")
-      return (
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() => openUrl(HOST_DOWNLOAD_URL)}
-        >
-          {t("action.download")}
-        </Button>
-      );
-    if (key === "discordConnected" && ipcBlocked)
-      return (
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() => push({ name: "discord-ipc" })}
-        >
-          {t("discordIpc.fix")}
-        </Button>
-      );
-    if (key === "presenceInstalled")
-      return (
-        <Button size="sm" variant="secondary" onClick={() => setTab("store")}>
-          {t("action.browse")}
-        </Button>
-      );
+    if (key === "userScriptsActive") return (
+      <Button size="sm" variant="secondary" onClick={() => openUrl(extensionDetailsUrl({ useFirefoxAddonsPage: true }))}>
+        {t("action.open")}
+      </Button>
+    );
+    if (key === "hostDetected") return (
+      <Button size="sm" variant="secondary" onClick={() => openUrl(HOST_DOWNLOAD_URL)}>
+        {t("action.download")}
+      </Button>
+    );
+    if (key === "discordConnected" && ipcBlocked) return (
+      <Button size="sm" variant="secondary" onClick={() => push({ name: "discord-ipc" })}>
+        {t("discordIpc.fix")}
+      </Button>
+    );
+    if (key === "presenceInstalled") return (
+      <Button size="sm" variant="secondary" onClick={() => setTab("store")}>
+        {t("action.browse")}
+      </Button>
+    );
+
     return null;
   };
 
@@ -141,32 +117,21 @@ export const ConnectionView = () => {
 
   return (
     <div className="flex min-h-full flex-col">
-      <BackHeader
-        title={t("connection.title")}
-        onBack={pop}
-        backLabel={t("action.back")}
-      />
+      <BackHeader title={t("connection.title")} onBack={pop} backLabel={t("action.back")} />
       <ScreenBody className="pt-1">
         <Card className="flex flex-col gap-4 p-4">
           <div className="flex items-center gap-3">
-            <DiscordAvatar
-              profile={connection === "discord" ? profile : null}
-              size={44}
-            />
+            <DiscordAvatar profile={connection === "discord" ? profile : null} size={44} />
             <div className="flex min-w-0 flex-1 flex-col">
               <span className="truncate text-label-lg font-medium">
-                {connection === "discord" && profile
-                  ? (profile.globalName ?? profile.username)
-                  : t(`connection.state.${connection}`)}
+                {connection === "discord" && profile ? (profile.globalName ?? profile.username) : t(`connection.state.${connection}`)}
               </span>
               <span className="flex items-center gap-1.5 truncate text-label-md text-muted">
                 {connection === "discord" ? (
                   <>
                     <LiveDot pulse={false} />
                     {profile
-                      ? t("connection.connectedAs", {
-                          username: profile.username,
-                        })
+                      ? t("connection.connectedAs", { username: profile.username })
                       : t("connection.state.discord")}
                   </>
                 ) : (
@@ -202,33 +167,18 @@ export const ConnectionView = () => {
             <Row
               leading={<RiComputerLine className="size-[18px] text-muted" />}
               title={t("connection.desktopApp")}
-              description={
-                state.native.connected
-                  ? versionLabel
-                  : t("connection.notDetected")
-              }
+              description={state.native.connected ? versionLabel : t("connection.notDetected")}
               trailing={
                 state.native.connected ? (
                   <RiCheckboxCircleFill className="size-5 text-success" />
                 ) : (
-                  <Button
-                    size="sm"
-                    icon={<RiDownloadLine className="size-4" />}
-                    onClick={() => openUrl(HOST_DOWNLOAD_URL)}
-                  >
+                  <Button size="sm" icon={<RiDownloadLine className="size-4" />} onClick={() => openUrl(HOST_DOWNLOAD_URL)}>
                     {t("action.download")}
                   </Button>
                 )
               }
             />
-            <Row
-              title={t("connection.status")}
-              trailing={
-                <span className="max-w-48 truncate text-label-md text-muted">
-                  {state.native.status}
-                </span>
-              }
-            />
+            <Row title={t("connection.status")} trailing={<span className="max-w-48 truncate text-label-md text-muted">{state.native.status}</span>} />
           </Group>
         </Section>
 
@@ -251,13 +201,7 @@ export const ConnectionView = () => {
                     )
                   }
                   title={t(check.label)}
-                  description={
-                    ok
-                      ? undefined
-                      : check.key === "discordConnected" && ipcBlocked
-                        ? t("discordIpc.checkHint")
-                        : t(check.hint)
-                  }
+                  description={ok ? undefined : check.key === "discordConnected" && ipcBlocked ? t("discordIpc.checkHint") : t(check.hint)}
                   trailing={!ok && fix(check.key)}
                 />
               );
@@ -265,11 +209,7 @@ export const ConnectionView = () => {
           </Group>
         </Section>
 
-        <Button
-          variant="secondary"
-          icon={<RiFileList3Line className="size-4" />}
-          onClick={() => push({ name: "logs" })}
-        >
+        <Button variant="secondary" icon={<RiFileList3Line className="size-4" />} onClick={() => push({ name: "logs" })}>
           {t("connection.openLogs")}
         </Button>
       </ScreenBody>

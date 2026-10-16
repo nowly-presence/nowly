@@ -1,8 +1,7 @@
 import { getPrisma, hasDatabase } from "@/db/client";
 import { serverEnv } from "@nowly/env/server";
 
-export type ServiceStatus =
-  "operational" | "slow" | "degraded" | "down" | "unknown";
+export type ServiceStatus = "operational" | "slow" | "degraded" | "down" | "unknown";
 
 export type StatusServiceId = "website" | "api" | "library" | "cdn";
 
@@ -46,34 +45,31 @@ const sampleStore = new Map<StatusServiceId, StatusSample[]>();
 const services: StatusService[] = [
   {
     id: "website",
-    url: process.env.NEXT_PUBLIC_BASE_URL || "https://nowly.me",
+    url: process.env.NEXT_PUBLIC_BASE_URL || "https://nowly.me"
   },
   {
     id: "api",
-    url: `${process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.nowly.me"}/health`,
+    url: `${process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.nowly.me"}/health`
   },
   {
     id: "library",
-    url: `${process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.nowly.me"}/presences`,
+    url: `${process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.nowly.me"}/presences`
   },
-  { id: "cdn", url: "https://cdn.nowly.me/installer/latest.json" },
+  {
+    id: "cdn",
+    url: "https://cdn.nowly.me/installer/latest.json"
+  }
 ];
 
-const getCheckIntervalHours = (): number =>
-  serverEnv.STATUS_CHECK_INTERVAL_HOURS;
+const getCheckIntervalHours = (): number => serverEnv.STATUS_CHECK_INTERVAL_HOURS;
 
-const getSampleLimit = (): number =>
-  Math.max(10, serverEnv.STATUS_SAMPLE_LIMIT);
+const getSampleLimit = (): number => Math.max(10, serverEnv.STATUS_SAMPLE_LIMIT);
 
-export const classifyResponse = (
-  ok: boolean,
-  httpStatus: number | null,
-  responseMs: number | null,
-): Exclude<ServiceStatus, "unknown"> => {
-  if (!ok || httpStatus === null || httpStatus >= 500 || responseMs === null)
-    return "down";
+export const classifyResponse = (ok: boolean, httpStatus: number | null, responseMs: number | null): Exclude<ServiceStatus, "unknown"> => {
+  if (!ok || httpStatus === null || httpStatus >= 500 || responseMs === null) return "down";
   if (responseMs <= 750) return "operational";
   if (responseMs <= 2000) return "slow";
+
   return "degraded";
 };
 
@@ -82,20 +78,13 @@ const statusWeight: Record<ServiceStatus, number> = {
   slow: 1,
   degraded: 2,
   down: 3,
-  unknown: 4,
+  unknown: 4
 };
 
 const getWorstStatus = (statuses: ServiceStatus[]): ServiceStatus =>
-  statuses.reduce<ServiceStatus>(
-    (worst, status) =>
-      statusWeight[status] > statusWeight[worst] ? status : worst,
-    "operational",
-  );
+  statuses.reduce<ServiceStatus>((worst, status) => (statusWeight[status] > statusWeight[worst] ? status : worst), "operational");
 
-const measureService = async (
-  id: StatusServiceId,
-  url: string,
-): Promise<StatusSample> => {
+const measureService = async (id: StatusServiceId, url: string): Promise<StatusSample> => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
   const startedAt = performance.now();
@@ -104,8 +93,9 @@ const measureService = async (
     const response = await fetch(url, {
       cache: "no-store",
       redirect: "follow",
-      signal: controller.signal,
+      signal: controller.signal
     });
+
     const responseMs = Math.round(performance.now() - startedAt);
 
     return {
@@ -114,7 +104,7 @@ const measureService = async (
       status: classifyResponse(response.ok, response.status, responseMs),
       responseMs,
       httpStatus: response.status,
-      error: null,
+      error: null
     };
   } catch (error) {
     const responseMs = Math.round(performance.now() - startedAt);
@@ -125,7 +115,7 @@ const measureService = async (
       status: "down",
       responseMs,
       httpStatus: null,
-      error: error instanceof Error ? error.name : "FetchError",
+      error: error instanceof Error ? error.name : "FetchError"
     };
   } finally {
     clearTimeout(timeout);
@@ -139,8 +129,11 @@ export const getStatusReport = async (): Promise<StatusReport> => {
         ? await getPrisma()
             .statusSample.findMany({
               where: { serviceId: svc.id },
-              orderBy: [{ checkedAt: "desc" }, { id: "desc" }],
-              take: RECENT_SAMPLE_COUNT,
+              orderBy: [
+                { checkedAt: "desc" },
+                { id: "desc" }
+              ],
+              take: RECENT_SAMPLE_COUNT
             })
             .then((rows) =>
               rows.map((row): StatusSample => ({
@@ -149,33 +142,29 @@ export const getStatusReport = async (): Promise<StatusReport> => {
                 status: row.status as StatusSample["status"],
                 responseMs: row.responseMs,
                 httpStatus: row.httpStatus,
-                error: row.error,
-              })),
+                error: row.error
+              }))
             )
         : (sampleStore.get(svc.id) ?? []);
 
       return {
         id: svc.id,
         current: samples[0] ?? null,
-        samples: samples.slice(0, RECENT_SAMPLE_COUNT),
+        samples: samples.slice(0, RECENT_SAMPLE_COUNT)
       };
-    }),
+    })
   );
 
   return {
     generatedAt: new Date().toISOString(),
     checkIntervalHours: getCheckIntervalHours(),
-    overallStatus: getWorstStatus(
-      reports.map((s) => s.current?.status ?? "unknown"),
-    ),
-    services: reports,
+    overallStatus: getWorstStatus(reports.map((s) => s.current?.status ?? "unknown")),
+    services: reports
   };
 };
 
 export const runStatusCheck = async (): Promise<StatusCheckResult> => {
-  const samples = await Promise.all(
-    services.map((svc) => measureService(svc.id, svc.url)),
-  );
+  const samples = await Promise.all(services.map((svc) => measureService(svc.id, svc.url)));
 
   if (hasDatabase()) {
     const prisma = getPrisma();
@@ -186,8 +175,8 @@ export const runStatusCheck = async (): Promise<StatusCheckResult> => {
         status: sample.status,
         responseMs: sample.responseMs,
         httpStatus: sample.httpStatus,
-        error: sample.error,
-      })),
+        error: sample.error
+      }))
     });
 
     const sampleLimit = getSampleLimit();
@@ -195,10 +184,16 @@ export const runStatusCheck = async (): Promise<StatusCheckResult> => {
       services.map(async (svc) => {
         const [oldestExcessSample] = await prisma.statusSample.findMany({
           where: { serviceId: svc.id },
-          orderBy: [{ checkedAt: "desc" }, { id: "desc" }],
+          orderBy: [
+            { checkedAt: "desc" },
+            { id: "desc" }
+          ],
           skip: sampleLimit,
           take: 1,
-          select: { id: true, checkedAt: true },
+          select: {
+            id: true,
+            checkedAt: true
+          }
         });
 
         if (oldestExcessSample) {
@@ -206,19 +201,22 @@ export const runStatusCheck = async (): Promise<StatusCheckResult> => {
             where: {
               serviceId: svc.id,
               OR: [
-                { checkedAt: { lt: oldestExcessSample.checkedAt } },
+                {
+                  checkedAt: { lt: oldestExcessSample.checkedAt }
+                },
                 {
                   checkedAt: oldestExcessSample.checkedAt,
-                  id: { lte: oldestExcessSample.id },
-                },
-              ],
-            },
+                  id: { lte: oldestExcessSample.id }
+                }
+              ]
+            }
           });
         }
-      }),
+      })
     );
   } else {
     const sampleLimit = getSampleLimit();
+
     for (const sample of samples) {
       const existing = sampleStore.get(sample.serviceId) ?? [];
       existing.unshift(sample);
@@ -229,6 +227,6 @@ export const runStatusCheck = async (): Promise<StatusCheckResult> => {
 
   return {
     report: await getStatusReport(),
-    skipped: false,
+    skipped: false
   };
 };

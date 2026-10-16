@@ -6,13 +6,7 @@ import { BackHeader, ScreenBody } from "@/components/shared/screen";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav } from "@/hooks/navigation-provider";
-import {
-  buildCustomPresence,
-  customActivitySlug,
-  emptyCustomActivityDraft,
-  hasCustomActivityErrors,
-  validateCustomActivity,
-} from "@/shared/custom-activity";
+import { buildCustomPresence, customActivitySlug, emptyCustomActivityDraft, hasCustomActivityErrors, validateCustomActivity } from "@/shared/custom-activity";
 import type { CustomActivityDraft } from "@/shared/types";
 import { Button } from "@/ui/button";
 import { Group } from "@/ui/card";
@@ -23,16 +17,10 @@ import { CustomActivityDeleteSheet } from "@/features/custom-activity/custom-act
 import { CustomActivityImagesSection } from "@/features/custom-activity/custom-activity-images-section";
 import { CustomActivityTextSection } from "@/features/custom-activity/custom-activity-text-section";
 import { CustomActivityTimeSection } from "@/features/custom-activity/custom-activity-time-section";
-import {
-  draftFromTemplate,
-  isCustomActivityTemplateId,
-} from "@/features/custom-activity/custom-activity-templates";
+import { draftFromTemplate, isCustomActivityTemplateId } from "@/features/custom-activity/custom-activity-templates";
 import { useCustomActivityActions } from "@/features/custom-activity/use-custom-activity-actions";
 
-export const CustomActivityEditorView = ({
-  id,
-  template,
-}: {
+export const CustomActivityEditorView = ({ id, template }: {
   id: string | null;
   template?: string;
 }) => {
@@ -40,46 +28,47 @@ export const CustomActivityEditorView = ({
   const { t } = useI18n();
   const { pop } = useNav();
   const actions = useCustomActivityActions();
-  const existing = id
-    ? state.customActivities.items.find((item) => item.id === id)
-    : undefined;
+  const existing = id ? state.customActivities.items.find((item) => item.id === id) : undefined;
   const [draft, setDraft] = useState<CustomActivityDraft>(
     () =>
       existing ??
       (isCustomActivityTemplateId(template)
         ? draftFromTemplate(template, t)
-        : emptyCustomActivityDraft()),
+        : emptyCustomActivityDraft())
   );
   const [showErrors, setShowErrors] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [previewStart] = useState(() => Date.now());
   const errors = useMemo(() => validateCustomActivity(draft), [draft]);
   const visibleErrors = showErrors ? errors : {};
-  const active =
-    Boolean(draft.id) && state.customActivities.activeId === draft.id;
+  const active = Boolean(draft.id) && state.customActivities.activeId === draft.id;
 
-  const patch = (partial: Partial<CustomActivityDraft>) =>
-    setDraft((current) => ({ ...current, ...partial }));
+  const patch = (partial: Partial<CustomActivityDraft>) => setDraft((current) => ({ ...current, ...partial }));
 
   const save = async () => {
     if (hasCustomActivityErrors(errors)) {
       setShowErrors(true);
       return;
     }
+
     const saved = await actions.save(draft);
     if (saved) pop();
   };
 
   const remove = async () => {
     if (!existing) return;
+
     await actions.remove(existing);
     setDeleteOpen(false);
     pop();
   };
 
   const presence = buildCustomPresence(
-    { ...draft, name: draft.name.trim() || t("custom.field.namePlaceholder") },
-    previewStart,
+    {
+      ...draft,
+      name: draft.name.trim() || t("custom.field.namePlaceholder")
+    },
+    previewStart
   );
 
   return (
@@ -87,15 +76,9 @@ export const CustomActivityEditorView = ({
       <BackHeader
         onBack={pop}
         backLabel={t("action.back")}
-        title={
-          existing ? t("custom.editor.editTitle") : t("custom.editor.newTitle")
-        }
+        title={existing ? t("custom.editor.editTitle") : t("custom.editor.newTitle")}
         action={
-          <Button
-            size="sm"
-            loading={actions.pending === "save"}
-            onClick={() => void save()}
-          >
+          <Button size="sm" loading={actions.pending === "save"} onClick={() => void save()}>
             {t("action.save")}
           </Button>
         }
@@ -108,15 +91,7 @@ export const CustomActivityEditorView = ({
             presence={presence}
             presenceName={presence.name ?? ""}
             t={t}
-            artwork={
-              <CustomActivityArtwork
-                source={draft}
-                size={64}
-                rounded="rounded-md"
-                showSmall
-                ringClassName="border-tertiary bg-tertiary"
-              />
-            }
+            artwork={<CustomActivityArtwork source={draft} size={64} rounded="rounded-md" showSmall ringClassName="border-tertiary bg-tertiary" />}
           />
         </Section>
 
@@ -131,54 +106,23 @@ export const CustomActivityEditorView = ({
               }
               checked={active}
               label={t("custom.list.showOnDiscord")}
-              onChange={(checked) =>
-                void actions.setActive(checked ? existing.id : null)
-              }
+              onChange={(checked) => void actions.setActive(checked ? existing.id : null)}
             />
           </Group>
         )}
 
-        <CustomActivityTextSection
-          draft={draft}
-          patch={patch}
-          errors={visibleErrors}
-        />
-        <CustomActivityImagesSection
-          draft={draft}
-          patch={patch}
-          errors={visibleErrors}
-          upload={actions.upload}
-          uploading={actions.pending === "upload"}
-        />
-        <CustomActivityTimeSection
-          draft={draft}
-          patch={patch}
-          errors={visibleErrors}
-        />
-        <CustomActivityButtonsSection
-          draft={draft}
-          patch={patch}
-          errors={visibleErrors}
-        />
+        <CustomActivityTextSection draft={draft} patch={patch} errors={visibleErrors} />
+        <CustomActivityImagesSection draft={draft} patch={patch} errors={visibleErrors} upload={actions.upload} uploading={actions.pending === "upload"} />
+        <CustomActivityTimeSection draft={draft} patch={patch} errors={visibleErrors} />
+        <CustomActivityButtonsSection draft={draft} patch={patch} errors={visibleErrors} />
 
         <div className="flex flex-col gap-2">
-          {showErrors && hasCustomActivityErrors(errors) && (
-            <p className="text-center text-label-md text-danger">
-              {t("custom.editor.fixErrors")}
-            </p>
-          )}
-          <Button
-            loading={actions.pending === "save"}
-            onClick={() => void save()}
-          >
+          {showErrors && hasCustomActivityErrors(errors) && <p className="text-center text-label-md text-danger">{t("custom.editor.fixErrors")}</p>}
+          <Button loading={actions.pending === "save"} onClick={() => void save()}>
             {existing ? t("action.save") : t("custom.editor.create")}
           </Button>
           {existing && (
-            <Button
-              variant="danger"
-              icon={<RiDeleteBinLine className="size-4" />}
-              onClick={() => setDeleteOpen(true)}
-            >
+            <Button variant="danger" icon={<RiDeleteBinLine className="size-4" />} onClick={() => setDeleteOpen(true)}>
               {t("custom.editor.delete")}
             </Button>
           )}

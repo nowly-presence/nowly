@@ -9,7 +9,7 @@ import { getTranslations } from "next-intl/server";
 export const HeroSection = async () => {
   const [t, community] = await Promise.all([
     getTranslations("hero"),
-    getDiscordCommunity(),
+    getDiscordCommunity()
   ]);
 
   return (
@@ -27,19 +27,14 @@ export const HeroSection = async () => {
             </span>
             <span className="truncate">
               {t("discord")}
-              {community.members ? (
-                <span className="text-muted-foreground">{` · ${t("discord-members", { count: community.members })}`}</span>
-              ) : null}
+              {community.members ? <span className="text-muted-foreground">{` · ${t("discord-members", { count: community.members })}`}</span> : null}
             </span>
             <RiArrowRightLine className="size-3.5 shrink-0 opacity-60 transition-transform group-hover:translate-x-0.5" />
           </a>
           <h1 className="text-pretty text-[2.35rem] font-medium leading-[1.06] tracking-tight text-foreground sm:text-[2.85rem] lg:text-[3.35rem]">
-            {t("title-before")}{" "}
-            <span className="font-bold text-accent">{t("title-accent")}</span>
+            {t("title-before")} <span className="font-bold text-accent">{t("title-accent")}</span>
           </h1>
-          <p className="mt-6 max-w-[38ch] text-[1.05rem] leading-[1.55] text-foreground/68 sm:text-lg">
-            {t("description")}
-          </p>
+          <p className="mt-6 max-w-[38ch] text-[1.05rem] leading-[1.55] text-foreground/68 sm:text-lg">{t("description")}</p>
           <div className="mt-9 flex flex-wrap items-center gap-5">
             <ExtensionStoreButton variant="inverted" size="lg">
               {t("install")}

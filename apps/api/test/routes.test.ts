@@ -28,41 +28,34 @@ const mockPresenceRepo = vi.hoisted(() => ({
   likePresence: vi.fn(),
   unlikePresence: vi.fn(),
   hasLikedPresence: vi.fn(),
-  getLikeCount: vi.fn(),
+  getLikeCount: vi.fn()
 }));
 
-const mockDeviceService = vi.hoisted(() => ({
-  deviceExists: vi.fn().mockResolvedValue(true),
-}));
+const mockDeviceService = vi.hoisted(() => ({ deviceExists: vi.fn().mockResolvedValue(true) }));
 
 vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo);
 vi.mock("@/features/device/device.service", () => mockDeviceService);
 
-const mockPresenceReport = vi.hoisted(() => ({
-  submitPresenceReport: vi.fn(),
-}));
+const mockPresenceReport = vi.hoisted(() => ({ submitPresenceReport: vi.fn() }));
 
 vi.mock("@/features/presence/presence-report", async (importOriginal) => {
-  const actual =
-    await importOriginal<
-      typeof import("@/features/presence/presence-report")
-    >();
+  const actual = await importOriginal<typeof import("@/features/presence/presence-report")>();
   return {
     ...actual,
-    submitPresenceReport: mockPresenceReport.submitPresenceReport,
+    submitPresenceReport: mockPresenceReport.submitPresenceReport
   };
 });
 
 vi.mock("@/db/client", () => ({
   getPrisma: vi.fn(() => ({})),
-  hasDatabase: vi.fn(() => true),
+  hasDatabase: vi.fn(() => true)
 }));
 
 const mockCrypto = vi.hoisted(() => ({
   sha256Base64Url: vi.fn(),
   canonicalJson: vi.fn(),
   signedPayload: vi.fn(),
-  signPresenceRelease: vi.fn(),
+  signPresenceRelease: vi.fn()
 }));
 
 vi.mock("@/shared/crypto.service", () => mockCrypto);
@@ -92,7 +85,10 @@ describe("Registry Routes", () => {
   it("GET /presences returns empty array when no slugs", async () => {
     mockPresenceRepo.getPresenceListData.mockResolvedValue([]);
 
-    const res = await app.inject({ method: "GET", url: "/presences" });
+    const res = await app.inject({
+      method: "GET",
+      url: "/presences"
+    });
 
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.body)).toEqual([]);
@@ -103,7 +99,10 @@ describe("Registry Routes", () => {
       {
         name: "YouTube",
         slug: "youtube",
-        author: { name: "Gaëtan H", github: "steellgold" },
+        author: {
+          name: "Gaëtan H",
+          github: "steellgold"
+        },
         category: "streaming",
         description: { "en-US": "Watch videos" },
         color: "#FF0033",
@@ -111,7 +110,7 @@ describe("Registry Routes", () => {
         assets: {
           logo: "logo.png",
           icon: "icon.png",
-          thumbnail: "thumbnail.jpg",
+          thumbnail: "thumbnail.jpg"
         },
         tags: ["video"],
         version: "1.0.0",
@@ -119,11 +118,14 @@ describe("Registry Routes", () => {
         lastUpdated: "2024-06-01T00:00:00.000Z",
         totalInstalls: 500,
         activeUsers: 42,
-        likes: 0,
-      },
+        likes: 0
+      }
     ]);
 
-    const res = await app.inject({ method: "GET", url: "/presences" });
+    const res = await app.inject({
+      method: "GET",
+      url: "/presences"
+    });
 
     expect(res.statusCode).toBe(200);
     const body = JSON.parse(res.body);
@@ -140,17 +142,20 @@ describe("Registry Routes", () => {
       totalUsers: 1200,
       activeUsers: 84,
       activePresenceCount: 96,
-      installedPresenceCount: 2400,
+      installedPresenceCount: 2400
     });
 
-    const res = await app.inject({ method: "GET", url: "/presences/stats" });
+    const res = await app.inject({
+      method: "GET",
+      url: "/presences/stats"
+    });
 
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.body)).toEqual({
       totalUsers: 1200,
       activeUsers: 84,
       activePresenceCount: 96,
-      installedPresenceCount: 2400,
+      installedPresenceCount: 2400
     });
   });
 });
@@ -174,7 +179,7 @@ describe("Presence Routes", () => {
 
     const res = await app.inject({
       method: "GET",
-      url: "/presences/nonexistent",
+      url: "/presences/nonexistent"
     });
 
     expect(res.statusCode).toBe(404);
@@ -188,12 +193,12 @@ describe("Presence Routes", () => {
       version: "1.0.0",
       archived: true,
       addedAt: null,
-      lastUpdated: null,
+      lastUpdated: null
     });
 
     const res = await app.inject({
       method: "GET",
-      url: "/presences/cinepulse",
+      url: "/presences/cinepulse"
     });
 
     expect(res.statusCode).toBe(404);
@@ -206,8 +211,8 @@ describe("Presence Routes", () => {
     globalThis.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,
-        text: () => Promise.resolve("console.log('hello')"),
-      } as Response),
+        text: () => Promise.resolve("console.log('hello')")
+      } as Response)
     );
 
     mockPresenceRepo.getPresenceMeta.mockResolvedValue({
@@ -220,9 +225,9 @@ describe("Presence Routes", () => {
       assets: {
         logo: "logo.png",
         icon: "icon.png",
-        thumbnail: "thumbnail.jpg",
+        thumbnail: "thumbnail.jpg"
       },
-      settings: {},
+      settings: {}
     });
 
     mockPresenceRepo.getPresenceStats.mockResolvedValue({
@@ -230,7 +235,7 @@ describe("Presence Routes", () => {
       activeUsers: 10,
       version: "1.0.0",
       addedAt: "2024-01-01",
-      lastUpdated: "2024-06-01",
+      lastUpdated: "2024-06-01"
     });
 
     mockCrypto.sha256Base64Url.mockReturnValue("abc123");
@@ -238,7 +243,10 @@ describe("Presence Routes", () => {
     mockCrypto.signedPayload.mockReturnValue("signed-payload");
     mockCrypto.signPresenceRelease.mockReturnValue("signature-value");
 
-    const res = await app.inject({ method: "GET", url: "/presences/youtube" });
+    const res = await app.inject({
+      method: "GET",
+      url: "/presences/youtube"
+    });
 
     expect(res.statusCode).toBe(200);
     const body = JSON.parse(res.body);
@@ -258,24 +266,23 @@ describe("Presence Routes", () => {
     const history = [
       {
         version: "1.0.0",
-        changelog:
-          '{"en-US":"First release","fr-FR":"Première version","es-ES":"Primera versión"}',
+        changelog: '{"en-US":"First release","fr-FR":"Première version","es-ES":"Primera versión"}',
         author: "test",
-        timestamp: 1700000000000,
+        timestamp: 1700000000000
       },
       {
         version: "0.0.1",
         changelog: "",
         author: "test",
-        timestamp: 1690000000000,
-      },
+        timestamp: 1690000000000
+      }
     ];
 
     mockPresenceRepo.getVersionHistory.mockResolvedValue(history);
 
     const res = await app.inject({
       method: "GET",
-      url: "/presences/youtube/versions",
+      url: "/presences/youtube/versions"
     });
 
     expect(res.statusCode).toBe(200);
@@ -288,7 +295,7 @@ describe("Presence Routes", () => {
     const res = await app.inject({
       method: "PUT",
       url: "/presences/youtube",
-      payload: { version: "1.0.0" },
+      payload: { version: "1.0.0" }
     });
 
     expect(res.statusCode).toBe(401);
@@ -311,29 +318,17 @@ describe("Presence Routes", () => {
         authorGithub: "dev-github",
         pr: "42",
         added: "2024-01-01",
-        updated: "2024-06-01",
-      },
+        updated: "2024-06-01"
+      }
     });
 
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.body)).toEqual({ ok: true });
-    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith(
-      "youtube",
-      "2.0.0",
-      expect.any(Date),
-    );
+    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "2.0.0", expect.any(Date));
     const publishedAt = mockPresenceRepo.setVersion.mock.calls[0][2];
-    expect(mockPresenceRepo.addVersion.mock.calls[0][1].timestamp).toBe(
-      publishedAt.getTime(),
-    );
-    expect(mockPresenceRepo.setAdded).toHaveBeenCalledWith(
-      "youtube",
-      "2024-01-01",
-    );
-    expect(mockPresenceRepo.setUpdated).toHaveBeenCalledWith(
-      "youtube",
-      "2024-06-01",
-    );
+    expect(mockPresenceRepo.addVersion.mock.calls[0][1].timestamp).toBe(publishedAt.getTime());
+    expect(mockPresenceRepo.setAdded).toHaveBeenCalledWith("youtube", "2024-01-01");
+    expect(mockPresenceRepo.setUpdated).toHaveBeenCalledWith("youtube", "2024-06-01");
   });
 
   it("POST /presences/sync returns 401 without auth", async () => {
@@ -342,7 +337,9 @@ describe("Presence Routes", () => {
     const res = await app.inject({
       method: "POST",
       url: "/presences/sync",
-      payload: { presences: [] },
+      payload: {
+        presences: []
+      }
     });
 
     expect(res.statusCode).toBe(401);
@@ -354,7 +351,7 @@ describe("Presence Routes", () => {
       activeUsers: 0,
       version: null,
       addedAt: null,
-      lastUpdated: null,
+      lastUpdated: null
     });
     mockPresenceRepo.setVersion.mockResolvedValue(undefined as any);
     mockPresenceRepo.setPresenceMeta.mockResolvedValue(undefined as any);
@@ -372,12 +369,12 @@ describe("Presence Routes", () => {
             name: "YouTube",
             category: "video",
             author: "dev",
-            description: { "en-US": "Watch videos" },
-          },
+            description: { "en-US": "Watch videos" }
+          }
         ],
         pr: "42",
-        prTitle: "Add YouTube presence",
-      },
+        prTitle: "Add YouTube presence"
+      }
     });
 
     expect(res.statusCode).toBe(200);
@@ -387,19 +384,10 @@ describe("Presence Routes", () => {
     expect(body.results[0].slug).toBe("youtube");
     expect(body.results[0].version).toBe("1.0.0");
     expect(body.results[0].changelog).toBeTruthy();
-    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith(
-      "youtube",
-      "1.0.0",
-      expect.any(Date),
-    );
+    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "1.0.0", expect.any(Date));
     const publishedAt = mockPresenceRepo.setVersion.mock.calls[0][2];
-    expect(mockPresenceRepo.setAdded).toHaveBeenCalledWith(
-      "youtube",
-      publishedAt,
-    );
-    expect(mockPresenceRepo.addVersion.mock.calls[0][1].timestamp).toBe(
-      publishedAt.getTime(),
-    );
+    expect(mockPresenceRepo.setAdded).toHaveBeenCalledWith("youtube", publishedAt);
+    expect(mockPresenceRepo.addVersion.mock.calls[0][1].timestamp).toBe(publishedAt.getTime());
     expect(mockPresenceRepo.setUpdated).not.toHaveBeenCalled();
     expect(mockPresenceRepo.setPresenceMeta).toHaveBeenCalledWith(
       "youtube",
@@ -407,8 +395,8 @@ describe("Presence Routes", () => {
         slug: "youtube",
         name: "YouTube",
         author: "dev",
-        category: "video",
-      }),
+        category: "video"
+      })
     );
     expect(mockPresenceRepo.setArchived).toHaveBeenCalledWith("youtube", false);
   });
@@ -419,7 +407,7 @@ describe("Presence Routes", () => {
       activeUsers: 0,
       version: "1.0.0",
       addedAt: "2024-01-01T00:00:00.000Z",
-      lastUpdated: "2024-02-01T00:00:00.000Z",
+      lastUpdated: "2024-02-01T00:00:00.000Z"
     });
     mockPresenceRepo.setVersion.mockResolvedValue(undefined);
     mockPresenceRepo.setPresenceMeta.mockResolvedValue(undefined);
@@ -435,18 +423,14 @@ describe("Presence Routes", () => {
             type: "modified",
             name: "YouTube",
             author: "dev",
-            changelog: "Fix playback status",
-          },
-        ],
-      },
+            changelog: "Fix playback status"
+          }
+        ]
+      }
     });
 
     expect(res.statusCode).toBe(200);
-    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith(
-      "youtube",
-      "1.0.1",
-      expect.any(Date),
-    );
+    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "1.0.1", expect.any(Date));
     expect(mockPresenceRepo.setAdded).not.toHaveBeenCalled();
     expect(mockPresenceRepo.setUpdated).not.toHaveBeenCalled();
   });
@@ -461,8 +445,8 @@ describe("Presence Routes", () => {
       payload: {
         archivedSlugs: ["cinepulse"],
         pr: "11",
-        prTitle: "Remove Cinepulse",
-      },
+        prTitle: "Remove Cinepulse"
+      }
     });
 
     expect(res.statusCode).toBe(200);
@@ -470,10 +454,7 @@ describe("Presence Routes", () => {
     expect(body.ok).toBe(true);
     expect(body.results).toEqual([]);
     expect(body.archived).toEqual(["cinepulse"]);
-    expect(mockPresenceRepo.setArchived).toHaveBeenCalledWith(
-      "cinepulse",
-      true,
-    );
+    expect(mockPresenceRepo.setArchived).toHaveBeenCalledWith("cinepulse", true);
   });
 });
 
@@ -499,21 +480,18 @@ describe("Stats Routes", () => {
       url: "/presences/active",
       payload: {
         presences: ["youtube", "twitch"],
-        deviceId: "22222222-2222-4222-8222-222222222222",
-      },
+        deviceId: "22222222-2222-4222-8222-222222222222"
+      }
     });
 
     expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({ ok: true, count: 2 });
+    expect(JSON.parse(res.body)).toEqual({
+      ok: true,
+      count: 2
+    });
     expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledTimes(2);
-    expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith(
-      "youtube",
-      "22222222-2222-4222-8222-222222222222",
-    );
-    expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith(
-      "twitch",
-      "22222222-2222-4222-8222-222222222222",
-    );
+    expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith("youtube", "22222222-2222-4222-8222-222222222222");
+    expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith("twitch", "22222222-2222-4222-8222-222222222222");
   });
 
   it("DELETE /presences/active/:deviceId/:slug clears one tracked presence", async () => {
@@ -521,37 +499,36 @@ describe("Stats Routes", () => {
 
     const res = await app.inject({
       method: "DELETE",
-      url: "/presences/active/device-123/youtube",
+      url: "/presences/active/device-123/youtube"
     });
 
     expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({ ok: true, removed: 1 });
-    expect(mockPresenceRepo.clearActiveDevice).toHaveBeenCalledWith(
-      "youtube",
-      "device-123",
-    );
+    expect(JSON.parse(res.body)).toEqual({
+      ok: true,
+      removed: 1
+    });
+    expect(mockPresenceRepo.clearActiveDevice).toHaveBeenCalledWith("youtube", "device-123");
   });
 
   it("DELETE /presences/active/:deviceId clears every tracked presence", async () => {
-    mockPresenceRepo.clearActiveDevicesForDevice.mockResolvedValue(
-      undefined as any,
-    );
+    mockPresenceRepo.clearActiveDevicesForDevice.mockResolvedValue(undefined as any);
 
     const res = await app.inject({
       method: "DELETE",
-      url: "/presences/active/device-123",
+      url: "/presences/active/device-123"
     });
 
     expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({ ok: true, removed: null });
-    expect(mockPresenceRepo.clearActiveDevicesForDevice).toHaveBeenCalledWith(
-      "device-123",
-    );
+    expect(JSON.parse(res.body)).toEqual({
+      ok: true,
+      removed: null
+    });
+    expect(mockPresenceRepo.clearActiveDevicesForDevice).toHaveBeenCalledWith("device-123");
   });
 
   it("POST /presences/:slug/report sends a valid report", async () => {
     mockPresenceRepo.getPresenceMeta.mockResolvedValue({
-      name: { "en-US": "YouTube" },
+      name: { "en-US": "YouTube" }
     });
     mockPresenceRepo.getPresenceStats.mockResolvedValue({ archived: false });
     mockPresenceReport.submitPresenceReport.mockResolvedValue("sent");
@@ -563,8 +540,8 @@ describe("Stats Routes", () => {
         message: "The presence stays idle on the watch page.",
         locale: "fr-FR",
         browser: "Firefox",
-        browserVersion: "141.0",
-      },
+        browserVersion: "141.0"
+      }
     });
 
     expect(res.statusCode).toBe(200);
@@ -575,7 +552,7 @@ describe("Stats Routes", () => {
       message: "The presence stays idle on the watch page.",
       locale: "fr-FR",
       browser: "Firefox",
-      browserVersion: "141.0",
+      browserVersion: "141.0"
     });
   });
 
@@ -585,14 +562,14 @@ describe("Stats Routes", () => {
     const empty = await app.inject({
       method: "POST",
       url: "/presences/youtube/report",
-      payload: { message: "   " },
+      payload: { message: "   " }
     });
     expect(empty.statusCode).toBe(400);
 
     const oversized = await app.inject({
       method: "POST",
       url: "/presences/youtube/report",
-      payload: { message: "x".repeat(751) },
+      payload: { message: "x".repeat(751) }
     });
     expect(oversized.statusCode).toBe(400);
     expect(mockPresenceReport.submitPresenceReport).not.toHaveBeenCalled();
@@ -605,7 +582,7 @@ describe("Stats Routes", () => {
     const res = await app.inject({
       method: "POST",
       url: "/presences/missing/report",
-      payload: { message: "Broken" },
+      payload: { message: "Broken" }
     });
 
     expect(res.statusCode).toBe(404);
@@ -620,7 +597,7 @@ describe("Stats Routes", () => {
     const res = await app.inject({
       method: "POST",
       url: "/presences/youtube/report",
-      payload: { message: "Broken timestamps" },
+      payload: { message: "Broken timestamps" }
     });
 
     expect(res.statusCode).toBe(503);
@@ -638,34 +615,29 @@ describe("Image Proxy Routes", () => {
         slug: "tiktok",
         metadata: {
           imageProxy: {
-            hostSuffixes: [
-              "tiktokcdn.com",
-              "tiktokcdn-eu.com",
-              "tiktokcdn-us.com",
-              "tiktokv.com",
-            ],
-            headers: { Referer: "https://www.tiktok.com/" },
-          },
-        },
+            hostSuffixes: ["tiktokcdn.com", "tiktokcdn-eu.com", "tiktokcdn-us.com", "tiktokv.com"],
+            headers: { Referer: "https://www.tiktok.com/" }
+          }
+        }
       },
       {
         slug: "github",
         metadata: {
           imageProxy: {
             hostSuffixes: ["github.com", "githubusercontent.com"],
-            headers: { "User-Agent": "Nowly/1.0" },
-          },
-        },
+            headers: { "User-Agent": "Nowly/1.0" }
+          }
+        }
       },
       {
         slug: "canalplus",
         metadata: {
           imageProxy: {
             hostSuffixes: ["thumb.canalplus.pro"],
-            headers: { Referer: "https://www.canalplus.com/" },
-          },
-        },
-      },
+            headers: { Referer: "https://www.canalplus.com/" }
+          }
+        }
+      }
     ]);
     app = await buildApp();
   });
@@ -678,7 +650,7 @@ describe("Image Proxy Routes", () => {
   it("GET /image-proxy rejects unsupported CDN URLs", async () => {
     const res = await app.inject({
       method: "GET",
-      url: `/image-proxy?url=${encodeURIComponent("https://example.com/image.jpg")}`,
+      url: `/image-proxy?url=${encodeURIComponent("https://example.com/image.jpg")}`
     });
 
     expect(res.statusCode).toBe(400);
@@ -688,35 +660,34 @@ describe("Image Proxy Routes", () => {
   it("GET /image-proxy rejects unencoded nested query parameters", async () => {
     const res = await app.inject({
       method: "GET",
-      url: "/image-proxy?service=tiktok&url=https://p16-common-sign.tiktokcdn-eu.com/image.jpg?dr=1&x-signature=abc",
+      url: "/image-proxy?service=tiktok&url=https://p16-common-sign.tiktokcdn-eu.com/image.jpg?dr=1&x-signature=abc"
     });
 
     expect(res.statusCode).toBe(400);
-    expect(JSON.parse(res.body)).toEqual({
-      error: "IMAGE_URL_NOT_ENCODED",
-    });
+    expect(JSON.parse(res.body)).toEqual({ error: "IMAGE_URL_NOT_ENCODED" });
   });
 
   it("GET /image-proxy returns fetched TikTok CDN images", async () => {
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([1, 2, 3]), {
         status: 200,
-        headers: { "content-type": "image/jpeg", "content-length": "3" },
-      }),
+        headers: {
+          "content-type": "image/jpeg",
+          "content-length": "3"
+        }
+      })
     );
 
     const res = await app.inject({
       method: "GET",
-      url: `/image-proxy?url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg")}`,
+      url: `/image-proxy?url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg")}`
     });
 
     expect(res.statusCode).toBe(200);
     expect(res.headers["content-type"]).toBe("image/jpeg");
     expect(Buffer.from(res.rawPayload)).toEqual(Buffer.from([1, 2, 3]));
     const fetchMock = vi.mocked(globalThis.fetch);
-    expect(fetchMock.mock.calls[0][0]).toBe(
-      "https://p16-common-sign.tiktokcdn-eu.com/image.jpg",
-    );
+    expect(fetchMock.mock.calls[0][0]).toBe("https://p16-common-sign.tiktokcdn-eu.com/image.jpg");
     expect(fetchMock.mock.calls[0][1]).toBeTruthy();
   });
 
@@ -724,22 +695,23 @@ describe("Image Proxy Routes", () => {
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([16, 17, 18]), {
         status: 200,
-        headers: { "content-type": "image/jpeg", "content-length": "3" },
-      }),
+        headers: {
+          "content-type": "image/jpeg",
+          "content-length": "3"
+        }
+      })
     );
 
     const res = await app.inject({
       method: "GET",
-      url: `/i?u=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg?x=1&y=2")}`,
+      url: `/i?u=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg?x=1&y=2")}`
     });
 
     expect(res.statusCode).toBe(200);
     expect(res.headers["content-type"]).toBe("image/jpeg");
     expect(Buffer.from(res.rawPayload)).toEqual(Buffer.from([16, 17, 18]));
     const fetchMock = vi.mocked(globalThis.fetch);
-    expect(fetchMock.mock.calls[0][0]).toBe(
-      "https://p16-common-sign.tiktokcdn-eu.com/image.jpg?x=1&y=2",
-    );
+    expect(fetchMock.mock.calls[0][0]).toBe("https://p16-common-sign.tiktokcdn-eu.com/image.jpg?x=1&y=2");
     expect(fetchMock.mock.calls[0][1]).toBeTruthy();
   });
 
@@ -747,8 +719,11 @@ describe("Image Proxy Routes", () => {
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([21, 22, 23]), {
         status: 200,
-        headers: { "content-type": "image/png", "content-length": "3" },
-      }),
+        headers: {
+          "content-type": "image/png",
+          "content-length": "3"
+        }
+      })
     );
 
     const res = await app.inject({
@@ -756,17 +731,18 @@ describe("Image Proxy Routes", () => {
       url: "/images-proxy",
       payload: {
         service: "tiktok",
-        url: "https://p16-common-sign.tiktokcdn-eu.com/image.png?x=1&y=2",
-      },
+        url: "https://p16-common-sign.tiktokcdn-eu.com/image.png?x=1&y=2"
+      }
     });
 
     expect(res.statusCode).toBe(200);
     expect(res.headers["access-control-allow-origin"]).toBe("*");
 
-    const body = JSON.parse(res.body) as { url: string; expiresIn: number };
-    expect(body.url).toMatch(
-      /^http:\/\/localhost(?::\d+)?\/images-proxy\/[a-zA-Z0-9_-]{32}$/,
-    );
+    const body = JSON.parse(res.body) as {
+      url: string;
+      expiresIn: number;
+    };
+    expect(body.url).toMatch(/^http:\/\/localhost(?::\d+)?\/images-proxy\/[a-zA-Z0-9_-]{32}$/);
     expect(body.expiresIn).toBe(300);
   });
 
@@ -774,8 +750,11 @@ describe("Image Proxy Routes", () => {
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([1, 2, 3]), {
         status: 200,
-        headers: { "content-type": "image/jpeg", "content-length": "3" },
-      }),
+        headers: {
+          "content-type": "image/jpeg",
+          "content-length": "3"
+        }
+      })
     );
 
     const res = await app.inject({
@@ -783,12 +762,14 @@ describe("Image Proxy Routes", () => {
       url: "/images-proxy",
       payload: {
         service: "tiktok",
-        url: "https://p16-common-sign.tiktokcdn-eu.com/image.jpg",
-      },
+        url: "https://p16-common-sign.tiktokcdn-eu.com/image.jpg"
+      }
     });
 
     expect(res.statusCode).toBe(200);
-    const body = JSON.parse(res.body) as { url: string };
+    const body = JSON.parse(res.body) as {
+      url: string;
+    };
     expect(body.url).toContain("/images-proxy/");
 
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
@@ -800,12 +781,14 @@ describe("Image Proxy Routes", () => {
       url: "/images-proxy",
       payload: {
         service: "tiktok",
-        url: "https://p16-common-sign.tiktokcdn-eu.com/image.jpg",
-      },
+        url: "https://p16-common-sign.tiktokcdn-eu.com/image.jpg"
+      }
     });
 
     expect(res2.statusCode).toBe(200);
-    const body2 = JSON.parse(res2.body) as { url: string };
+    const body2 = JSON.parse(res2.body) as {
+      url: string;
+    };
     expect(body2.url).toBe(body.url);
     expect(globalThis.fetch).not.toHaveBeenCalled();
   });
@@ -814,8 +797,11 @@ describe("Image Proxy Routes", () => {
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([31, 32, 33]), {
         status: 200,
-        headers: { "content-type": "image/webp", "content-length": "3" },
-      }),
+        headers: {
+          "content-type": "image/webp",
+          "content-length": "3"
+        }
+      })
     );
 
     const postRes = await app.inject({
@@ -823,15 +809,18 @@ describe("Image Proxy Routes", () => {
       url: "/images-proxy",
       payload: {
         service: "tiktok",
-        url: "https://p16-common-sign.tiktokcdn-eu.com/cached-image.webp",
-      },
+        url: "https://p16-common-sign.tiktokcdn-eu.com/cached-image.webp"
+      }
     });
-    const { url: imageUrl } = JSON.parse(postRes.body) as { url: string };
+
+    const { url: imageUrl } = JSON.parse(postRes.body) as {
+      url: string;
+    };
     const id = imageUrl.split("/").pop()!;
 
     const res = await app.inject({
       method: "GET",
-      url: `/images-proxy/${id}`,
+      url: `/images-proxy/${id}`
     });
 
     expect(res.statusCode).toBe(200);
@@ -842,7 +831,7 @@ describe("Image Proxy Routes", () => {
   it("GET /images-proxy/:id returns 404 when the cached image does not exist", async () => {
     const res = await app.inject({
       method: "GET",
-      url: "/images-proxy/nonexistent_id_1234567890abc",
+      url: "/images-proxy/nonexistent_id_1234567890abc"
     });
 
     expect(res.statusCode).toBe(404);
@@ -853,13 +842,16 @@ describe("Image Proxy Routes", () => {
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([4, 5, 6]), {
         status: 200,
-        headers: { "content-type": "image/webp", "content-length": "3" },
-      }),
+        headers: {
+          "content-type": "image/webp",
+          "content-length": "3"
+        }
+      })
     );
 
     const res = await app.inject({
       method: "GET",
-      url: `/image-proxy?service=tiktok&url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.webp")}`,
+      url: `/image-proxy?service=tiktok&url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.webp")}`
     });
 
     expect(res.statusCode).toBe(200);
@@ -871,15 +863,17 @@ describe("Image Proxy Routes", () => {
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([7, 8, 9]), {
         status: 200,
-        headers: { "content-type": "image/jpeg", "content-length": "3" },
-      }),
+        headers: {
+          "content-type": "image/jpeg",
+          "content-length": "3"
+        }
+      })
     );
 
-    const url =
-      "https://thumb.canalplus.pro/bran/unsafe/512x512/filters:quality(80)/image/02/4/cinema.68024.jpg";
+    const url = "https://thumb.canalplus.pro/bran/unsafe/512x512/filters:quality(80)/image/02/4/cinema.68024.jpg";
     const res = await app.inject({
       method: "GET",
-      url: `/image-proxy?service=canalplus&url=${encodeURIComponent(url)}`,
+      url: `/image-proxy?service=canalplus&url=${encodeURIComponent(url)}`
     });
 
     expect(res.statusCode).toBe(200);
@@ -893,14 +887,17 @@ describe("Image Proxy Routes", () => {
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([10, 11, 12]), {
         status: 200,
-        headers: { "content-type": "image/png", "content-length": "3" },
-      }),
+        headers: {
+          "content-type": "image/png",
+          "content-length": "3"
+        }
+      })
     );
 
     const url = "https://avatars.githubusercontent.com/u/9919?s=512";
     const res = await app.inject({
       method: "GET",
-      url: `/image-proxy?service=github&url=${encodeURIComponent(url)}`,
+      url: `/image-proxy?service=github&url=${encodeURIComponent(url)}`
     });
 
     expect(res.statusCode).toBe(200);
@@ -913,7 +910,7 @@ describe("Image Proxy Routes", () => {
   it("GET /image-proxy rejects URLs that do not match the explicit service", async () => {
     const res = await app.inject({
       method: "GET",
-      url: `/image-proxy?service=unknown&url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg")}`,
+      url: `/image-proxy?service=unknown&url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg")}`
     });
 
     expect(res.statusCode).toBe(400);
@@ -937,7 +934,7 @@ describe("Presence Likes", () => {
     const res = await app.inject({
       method: "POST",
       url: "/presences/youtube/like",
-      payload: {},
+      payload: {}
     });
 
     expect(res.statusCode).toBe(400);
@@ -948,7 +945,7 @@ describe("Presence Likes", () => {
     const res = await app.inject({
       method: "POST",
       url: "/presences/youtube/like",
-      payload: { deviceId: "11111111-1111-4111-8111-111111111111" },
+      payload: { deviceId: "11111111-1111-4111-8111-111111111111" }
     });
 
     expect(res.statusCode).toBe(401);
@@ -962,25 +959,21 @@ describe("Presence Likes", () => {
       method: "POST",
       url: "/presences/youtube/like",
       payload: { deviceId: "11111111-1111-4111-8111-111111111111" },
-      headers: {
-        "x-device-token": deriveDeviceToken(
-          "11111111-1111-4111-8111-111111111111",
-        ),
-      },
+      headers: { "x-device-token": deriveDeviceToken("11111111-1111-4111-8111-111111111111") }
     });
 
     expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({ ok: true, count: 3 });
-    expect(mockPresenceRepo.likePresence).toHaveBeenCalledWith(
-      "youtube",
-      "11111111-1111-4111-8111-111111111111",
-    );
+    expect(JSON.parse(res.body)).toEqual({
+      ok: true,
+      count: 3
+    });
+    expect(mockPresenceRepo.likePresence).toHaveBeenCalledWith("youtube", "11111111-1111-4111-8111-111111111111");
   });
 
   it("DELETE /presences/:slug/like requires a deviceId", async () => {
     const res = await app.inject({
       method: "DELETE",
-      url: "/presences/youtube/like",
+      url: "/presences/youtube/like"
     });
 
     expect(res.statusCode).toBe(400);
@@ -990,7 +983,7 @@ describe("Presence Likes", () => {
   it("DELETE /presences/:slug/like rejects a missing/invalid device token", async () => {
     const res = await app.inject({
       method: "DELETE",
-      url: "/presences/youtube/like?deviceId=11111111-1111-4111-8111-111111111111",
+      url: "/presences/youtube/like?deviceId=11111111-1111-4111-8111-111111111111"
     });
 
     expect(res.statusCode).toBe(401);
@@ -1003,19 +996,15 @@ describe("Presence Likes", () => {
     const res = await app.inject({
       method: "DELETE",
       url: "/presences/youtube/like?deviceId=11111111-1111-4111-8111-111111111111",
-      headers: {
-        "x-device-token": deriveDeviceToken(
-          "11111111-1111-4111-8111-111111111111",
-        ),
-      },
+      headers: { "x-device-token": deriveDeviceToken("11111111-1111-4111-8111-111111111111") }
     });
 
     expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({ ok: true, count: 2 });
-    expect(mockPresenceRepo.unlikePresence).toHaveBeenCalledWith(
-      "youtube",
-      "11111111-1111-4111-8111-111111111111",
-    );
+    expect(JSON.parse(res.body)).toEqual({
+      ok: true,
+      count: 2
+    });
+    expect(mockPresenceRepo.unlikePresence).toHaveBeenCalledWith("youtube", "11111111-1111-4111-8111-111111111111");
   });
 
   it("GET /presences/:slug/like reports whether a device has liked it", async () => {
@@ -1024,21 +1013,21 @@ describe("Presence Likes", () => {
 
     const res = await app.inject({
       method: "GET",
-      url: "/presences/youtube/like?deviceId=11111111-1111-4111-8111-111111111111",
+      url: "/presences/youtube/like?deviceId=11111111-1111-4111-8111-111111111111"
     });
 
     expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({ liked: true, count: 5 });
-    expect(mockPresenceRepo.hasLikedPresence).toHaveBeenCalledWith(
-      "youtube",
-      "11111111-1111-4111-8111-111111111111",
-    );
+    expect(JSON.parse(res.body)).toEqual({
+      liked: true,
+      count: 5
+    });
+    expect(mockPresenceRepo.hasLikedPresence).toHaveBeenCalledWith("youtube", "11111111-1111-4111-8111-111111111111");
   });
 
   it("GET /presences/:slug/like requires a deviceId", async () => {
     const res = await app.inject({
       method: "GET",
-      url: "/presences/youtube/like",
+      url: "/presences/youtube/like"
     });
 
     expect(res.statusCode).toBe(400);

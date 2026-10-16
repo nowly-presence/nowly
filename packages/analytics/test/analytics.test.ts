@@ -12,23 +12,19 @@ import { sanitizePayload } from "../src/sanitize";
 describe("@nowly/analytics", () => {
   it("keeps every catalog key represented in the legacy inventory", () => {
     const inventoried = new Set(legacySources.map((source) => source.key));
+
     for (const metric of analyticsRegistry) {
       expect(inventoried.has(metric.key)).toBe(true);
     }
   });
 
   it("defines the initial funnels on migrated keys", () => {
-    expect(listFunnels().map((funnel) => funnel.id)).toEqual([
-      "acquisition-marketplace",
-      "activation",
-      "native",
-      "uninstall",
-    ]);
+    expect(listFunnels().map((funnel) => funnel.id)).toEqual(["acquisition-marketplace", "activation", "native", "uninstall"]);
     expect(getFunnel("activation")?.steps.map((step) => step.event)).toEqual([
       "extension_install",
       "onboarding_completed",
       "presence_install",
-      "presence_session_start",
+      "presence_session_start"
     ]);
   });
 
@@ -39,23 +35,23 @@ describe("@nowly/analytics", () => {
       {
         key: "native_connected",
         deviceId: "a",
-        createdAt: new Date("2026-01-01T00:00:00Z"),
+        createdAt: new Date("2026-01-01T00:00:00Z")
       },
       {
         key: "presence_session_start",
         deviceId: "a",
-        createdAt: new Date("2026-01-01T00:01:00Z"),
+        createdAt: new Date("2026-01-01T00:01:00Z")
       },
       {
         key: "presence_session_start",
         deviceId: "b",
-        createdAt: new Date("2026-01-01T00:00:00Z"),
+        createdAt: new Date("2026-01-01T00:00:00Z")
       },
       {
         key: "native_connected",
         deviceId: "b",
-        createdAt: new Date("2026-01-01T00:02:00Z"),
-      },
+        createdAt: new Date("2026-01-01T00:02:00Z")
+      }
     ]);
     expect(result.steps[0]?.uniqueDevices).toBe(2);
     expect(result.steps[1]?.uniqueDevices).toBe(1);
@@ -74,7 +70,7 @@ describe("@nowly/analytics", () => {
     const payload = sanitizePayload("presence_error", {
       stage: "security",
       url: "https://example.com",
-      title: "secret",
+      title: "secret"
     });
     expect(payload).toEqual({ stage: "security" });
     expect(FORBIDDEN_PAYLOAD_KEYS_SET.has("url")).toBe(true);
@@ -87,16 +83,25 @@ describe("@nowly/analytics", () => {
       transport: {
         send: async (events) => {
           sent.push(...events);
-        },
+        }
       },
       consent: alwaysGrantedConsent,
       identity: anonymousIdentity,
-      flushAt: 1,
+      flushAt: 1
     });
     await client.track("marketplace_page_view", {
-      payload: { source: "library", locale: "en-US" },
+      payload: {
+        source: "library",
+        locale: "en-US"
+      }
     });
     expect(sent).toHaveLength(1);
-    expect((sent[0] as { key: string }).key).toBe("marketplace_page_view");
+    expect(
+      (
+        sent[0] as {
+          key: string;
+        }
+      ).key
+    ).toBe("marketplace_page_view");
   });
 });

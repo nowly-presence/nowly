@@ -1,14 +1,7 @@
 import type { SVGProps } from "react";
 
 export const GitHubIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    width="24"
-    height="24"
-    fill="currentColor"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path
       fillRule="evenodd"
       clipRule="evenodd"
@@ -18,39 +11,20 @@ export const GitHubIcon = (props: SVGProps<SVGSVGElement>) => (
 );
 
 export const OpenAIIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    width="24"
-    height="24"
-    fill="currentColor"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path d="M9.205 8.658v-2.26c0-.19.072-.333.238-.428l4.543-2.616c.619-.357 1.356-.523 2.117-.523 2.854 0 4.662 2.212 4.662 4.566 0 .167 0 .357-.024.547l-4.71-2.759a.797.797 0 00-.856 0l-5.97 3.473zm10.609 8.8V12.06c0-.333-.143-.57-.429-.737l-5.97-3.473 1.95-1.118a.433.433 0 01.476 0l4.543 2.617c1.309.76 2.189 2.378 2.189 3.948 0 1.808-1.07 3.473-2.76 4.163zM7.802 12.703l-1.95-1.142c-.167-.095-.239-.238-.239-.428V5.899c0-2.545 1.95-4.472 4.591-4.472 1 0 1.927.333 2.712.928L8.23 5.067c-.285.166-.428.404-.428.737v6.898zM12 15.128l-2.795-1.57v-3.33L12 8.658l2.795 1.57v3.33L12 15.128zm1.796 7.23c-1 0-1.927-.332-2.712-.927l4.686-2.712c.285-.166.428-.404.428-.737v-6.898l1.974 1.142c.167.095.238.238.238.428v5.233c0 2.545-1.974 4.472-4.614 4.472zm-5.637-5.303l-4.544-2.617c-1.308-.761-2.188-2.378-2.188-3.948A4.482 4.482 0 014.21 6.327v5.423c0 .333.143.571.428.738l5.947 3.449-1.95 1.118a.432.432 0 01-.476 0zm-.262 3.9c-2.688 0-4.662-2.021-4.662-4.519 0-.19.024-.38.047-.57l4.686 2.71c.286.167.571.167.856 0l5.97-3.448v2.26c0 .19-.07.333-.237.428l-4.543 2.616c-.619.357-1.356.523-2.117.523zm5.899 2.83a5.947 5.947 0 005.827-4.756C22.287 18.339 24 15.84 24 13.296c0-1.665-.713-3.282-1.998-4.448.119-.5.19-.999.19-1.498 0-3.401-2.759-5.947-5.946-5.947-.642 0-1.26.095-1.88.31A5.962 5.962 0 0010.205 0a5.947 5.947 0 00-5.827 4.757C1.713 5.447 0 7.945 0 10.49c0 1.666.713 3.283 1.998 4.448-.119.5-.19 1-.19 1.499 0 3.401 2.759 5.946 5.946 5.946.642 0 1.26-.095 1.88-.309a5.96 5.96 0 004.162 1.713z" />
   </svg>
 );
 
 export const KofiIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    fill="#FF6433"
-    role="img"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <svg fill="#FF6433" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
     <title>Ko-fi</title>
     <path d="M11.351 2.715c-2.7 0-4.986.025-6.83.26C2.078 3.285 0 5.154 0 8.61c0 3.506.182 6.13 1.585 8.493 1.584 2.701 4.233 4.182 7.662 4.182h.83c4.209 0 6.494-2.234 7.637-4a9.5 9.5 0 0 0 1.091-2.338C21.792 14.688 24 12.22 24 9.208v-.415c0-3.247-2.13-5.507-5.792-5.87-1.558-.156-2.65-.208-6.857-.208m0 1.947c4.208 0 5.09.052 6.571.182 2.624.311 4.13 1.584 4.13 4v.39c0 2.156-1.792 3.844-3.87 3.844h-.935l-.156.649c-.208 1.013-.597 1.818-1.039 2.546-.909 1.428-2.545 3.064-5.922 3.064h-.805c-2.571 0-4.831-.883-6.078-3.195-1.09-2-1.298-4.155-1.298-7.506 0-2.181.857-3.402 3.012-3.714 1.533-.233 3.559-.26 6.39-.26m6.547 2.287c-.416 0-.65.234-.65.546v2.935c0 .311.234.545.65.545 1.324 0 2.051-.754 2.051-2s-.727-2.026-2.052-2.026m-10.39.182c-1.818 0-3.013 1.48-3.013 3.142 0 1.533.858 2.857 1.949 3.897.727.701 1.87 1.429 2.649 1.896a1.47 1.47 0 0 0 1.507 0c.78-.467 1.922-1.195 2.623-1.896 1.117-1.039 1.974-2.364 1.974-3.897 0-1.662-1.247-3.142-3.039-3.142-1.065 0-1.792.545-2.338 1.298-.493-.753-1.246-1.298-2.312-1.298" />
   </svg>
 );
 
 export const XIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    fill="currentColor"
-    role="img"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <svg fill="currentColor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
     <title>X</title>
     <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
   </svg>
@@ -77,220 +51,89 @@ export const AppleIcon = (props: SVGProps<SVGSVGElement>) => (
 export const LinuxIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 295" {...props}>
     <defs>
-      <linearGradient
-        id="logosLinuxTux0"
-        x1="48.548%"
-        x2="51.047%"
-        y1="115.276%"
-        y2="41.364%"
-      >
+      <linearGradient id="logosLinuxTux0" x1="48.548%" x2="51.047%" y1="115.276%" y2="41.364%">
         <stop offset="0%" stopColor="#FFEED7" />
         <stop offset="100%" stopColor="#BDBFC2" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTux1"
-        x1="54.407%"
-        x2="46.175%"
-        y1="2.404%"
-        y2="90.542%"
-      >
+      <linearGradient id="logosLinuxTux1" x1="54.407%" x2="46.175%" y1="2.404%" y2="90.542%">
         <stop offset="0%" stopColor="#FFF" stopOpacity=".8" />
         <stop offset="100%" stopColor="#FFF" stopOpacity="0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTux2"
-        x1="51.86%"
-        x2="47.947%"
-        y1="88.248%"
-        y2="9.748%"
-      >
+      <linearGradient id="logosLinuxTux2" x1="51.86%" x2="47.947%" y1="88.248%" y2="9.748%">
         <stop offset="0%" stopColor="#FFEED7" />
         <stop offset="100%" stopColor="#BDBFC2" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTux3"
-        x1="49.925%"
-        x2="49.924%"
-        y1="85.49%"
-        y2="13.811%"
-      >
+      <linearGradient id="logosLinuxTux3" x1="49.925%" x2="49.924%" y1="85.49%" y2="13.811%">
         <stop offset="0%" stopColor="#FFEED7" />
         <stop offset="100%" stopColor="#BDBFC2" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTux4"
-        x1="53.901%"
-        x2="45.956%"
-        y1="3.102%"
-        y2="93.895%"
-      >
+      <linearGradient id="logosLinuxTux4" x1="53.901%" x2="45.956%" y1="3.102%" y2="93.895%">
         <stop offset="0%" stopColor="#FFF" stopOpacity=".65" />
         <stop offset="100%" stopColor="#FFF" stopOpacity="0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTux5"
-        x1="45.593%"
-        x2="54.811%"
-        y1="5.475%"
-        y2="93.524%"
-      >
+      <linearGradient id="logosLinuxTux5" x1="45.593%" x2="54.811%" y1="5.475%" y2="93.524%">
         <stop offset="0%" stopColor="#FFF" stopOpacity=".65" />
         <stop offset="100%" stopColor="#FFF" stopOpacity="0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTux6"
-        x1="49.984%"
-        x2="49.984%"
-        y1="89.845%"
-        y2="40.632%"
-      >
+      <linearGradient id="logosLinuxTux6" x1="49.984%" x2="49.984%" y1="89.845%" y2="40.632%">
         <stop offset="0%" stopColor="#FFEED7" />
         <stop offset="100%" stopColor="#BDBFC2" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTux7"
-        x1="53.505%"
-        x2="42.746%"
-        y1="99.975%"
-        y2="23.545%"
-      >
+      <linearGradient id="logosLinuxTux7" x1="53.505%" x2="42.746%" y1="99.975%" y2="23.545%">
         <stop offset="0%" stopColor="#FFEED7" />
         <stop offset="100%" stopColor="#BDBFC2" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTux8"
-        x1="49.841%"
-        x2="50.241%"
-        y1="13.229%"
-        y2="94.673%"
-      >
+      <linearGradient id="logosLinuxTux8" x1="49.841%" x2="50.241%" y1="13.229%" y2="94.673%">
         <stop offset="0%" stopColor="#FFF" stopOpacity=".8" />
         <stop offset="100%" stopColor="#FFF" stopOpacity="0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTux9"
-        x1="49.927%"
-        x2="50.727%"
-        y1="37.327%"
-        y2="92.782%"
-      >
+      <linearGradient id="logosLinuxTux9" x1="49.927%" x2="50.727%" y1="37.327%" y2="92.782%">
         <stop offset="0%" stopColor="#FFF" stopOpacity=".65" />
         <stop offset="100%" stopColor="#FFF" stopOpacity="0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTuxa"
-        x1="49.876%"
-        x2="49.876%"
-        y1="2.299%"
-        y2="81.204%"
-      >
+      <linearGradient id="logosLinuxTuxa" x1="49.876%" x2="49.876%" y1="2.299%" y2="81.204%">
         <stop offset="0%" stopColor="#FFF" stopOpacity=".65" />
         <stop offset="100%" stopColor="#FFF" stopOpacity="0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTuxb"
-        x1="49.833%"
-        x2="49.824%"
-        y1="2.272%"
-        y2="71.799%"
-      >
+      <linearGradient id="logosLinuxTuxb" x1="49.833%" x2="49.824%" y1="2.272%" y2="71.799%">
         <stop offset="0%" stopColor="#FFF" stopOpacity=".65" />
         <stop offset="100%" stopColor="#FFF" stopOpacity="0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTuxc"
-        x1="53.467%"
-        x2="38.949%"
-        y1="48.921%"
-        y2="98.1%"
-      >
+      <linearGradient id="logosLinuxTuxc" x1="53.467%" x2="38.949%" y1="48.921%" y2="98.1%">
         <stop offset="0%" stopColor="#FFA63F" />
         <stop offset="100%" stopColor="#FF0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTuxd"
-        x1="52.373%"
-        x2="47.579%"
-        y1="143.009%"
-        y2="-64.622%"
-      >
+      <linearGradient id="logosLinuxTuxd" x1="52.373%" x2="47.579%" y1="143.009%" y2="-64.622%">
         <stop offset="0%" stopColor="#FFEED7" />
         <stop offset="100%" stopColor="#BDBFC2" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTuxe"
-        x1="30.581%"
-        x2="65.887%"
-        y1="34.024%"
-        y2="89.175%"
-      >
+      <linearGradient id="logosLinuxTuxe" x1="30.581%" x2="65.887%" y1="34.024%" y2="89.175%">
         <stop offset="0%" stopColor="#FFA63F" />
         <stop offset="100%" stopColor="#FF0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTuxf"
-        x1="59.572%"
-        x2="48.361%"
-        y1="-17.216%"
-        y2="66.118%"
-      >
+      <linearGradient id="logosLinuxTuxf" x1="59.572%" x2="48.361%" y1="-17.216%" y2="66.118%">
         <stop offset="0%" stopColor="#FFF" stopOpacity=".65" />
         <stop offset="100%" stopColor="#FFF" stopOpacity="0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTuxg"
-        x1="47.769%"
-        x2="51.373%"
-        y1="1.565%"
-        y2="104.313%"
-      >
+      <linearGradient id="logosLinuxTuxg" x1="47.769%" x2="51.373%" y1="1.565%" y2="104.313%">
         <stop offset="0%" stopColor="#FFF" stopOpacity=".65" />
         <stop offset="100%" stopColor="#FFF" stopOpacity="0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTuxh"
-        x1="43.55%"
-        x2="57.114%"
-        y1="4.533%"
-        y2="92.827%"
-      >
+      <linearGradient id="logosLinuxTuxh" x1="43.55%" x2="57.114%" y1="4.533%" y2="92.827%">
         <stop offset="0%" stopColor="#FFF" stopOpacity=".65" />
         <stop offset="100%" stopColor="#FFF" stopOpacity="0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTuxi"
-        x1="49.733%"
-        x2="50.558%"
-        y1="17.609%"
-        y2="99.385%"
-      >
+      <linearGradient id="logosLinuxTuxi" x1="49.733%" x2="50.558%" y1="17.609%" y2="99.385%">
         <stop offset="0%" stopColor="#FFA63F" />
         <stop offset="100%" stopColor="#FF0" />
       </linearGradient>
-      <linearGradient
-        id="logosLinuxTuxj"
-        x1="50.17%"
-        x2="49.68%"
-        y1="2.89%"
-        y2="94.17%"
-      >
+      <linearGradient id="logosLinuxTuxj" x1="50.17%" x2="49.68%" y1="2.89%" y2="94.17%">
         <stop offset="0%" stopColor="#FFF" stopOpacity=".65" />
         <stop offset="100%" stopColor="#FFF" stopOpacity="0" />
       </linearGradient>
-      <filter
-        id="logosLinuxTuxk"
-        width="200%"
-        height="200%"
-        x="-50%"
-        y="-50%"
-        filterUnits="objectBoundingBox"
-      >
+      <filter id="logosLinuxTuxk" width="200%" height="200%" x="-50%" y="-50%" filterUnits="objectBoundingBox">
         <feOffset in="SourceAlpha" result="shadowOffsetOuter1" />
-        <feGaussianBlur
-          in="shadowOffsetOuter1"
-          result="shadowBlurOuter1"
-          stdDeviation="6.5"
-        />
+        <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="6.5" />
       </filter>
     </defs>
     <g fill="none">
@@ -426,11 +269,7 @@ export const LinuxIcon = (props: SVGProps<SVGSVGElement>) => (
         d="M97.107 66.344c3.673-3.398 12.58-13.774 29.477-2.939c3.122 2.02 5.693 2.204 11.662 4.775c12.03 4.96 6.336 16.897-6.52 20.937c-5.51 1.745-10.468 8.449-20.386 7.806c-8.54-.46-10.744-6.06-15.978-9.091c-9.275-5.234-10.652-12.305-5.602-16.07c5.051-3.765 6.98-5.143 7.347-5.418z"
         transform="translate(10)"
       />
-      <path
-        stroke="#E68C3F"
-        strokeWidth="2.5"
-        d="M148.43 75.986c-5.05.275-15.979 11.203-27.457 11.203c-11.479 0-18.366-10.652-20.11-10.652"
-      />
+      <path stroke="#E68C3F" strokeWidth="2.5" d="M148.43 75.986c-5.05.275-15.979 11.203-27.457 11.203c-11.479 0-18.366-10.652-20.11-10.652" />
       <path
         fill="url(#logosLinuxTuxj)"
         d="M102.8 65.426c1.837-1.653 7.622-6.153 15.244-1.562c1.653.919 3.306 1.929 5.693 3.306c4.867 2.847 2.48 6.98-3.398 9.55c-2.663 1.102-7.07 3.49-10.376 3.306c-3.673-.367-6.153-2.755-8.54-4.316c-4.5-2.938-4.224-5.418-2.112-7.346c1.56-1.47 3.305-2.847 3.49-2.938"
@@ -441,13 +280,7 @@ export const LinuxIcon = (props: SVGProps<SVGSVGElement>) => (
 );
 
 export const ClaudeIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="256"
-    height="257"
-    preserveAspectRatio="xMidYMid"
-    viewBox="0 0 256 257"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="256" height="257" preserveAspectRatio="xMidYMid" viewBox="0 0 256 257">
     <path
       fill="#D97757"
       d="m50.228 170.321 50.357-28.257.843-2.463-.843-1.361h-2.462l-8.426-.518-28.775-.778-24.952-1.037-24.175-1.296-6.092-1.297L0 125.796l.583-3.759 5.12-3.434 7.324.648 16.202 1.101 24.304 1.685 17.629 1.037 26.118 2.722h4.148l.583-1.685-1.426-1.037-1.101-1.037-25.147-17.045-27.22-18.017-14.258-10.37-7.713-5.25-3.888-4.925-1.685-10.758 7-7.713 9.397.649 2.398.648 9.527 7.323 20.35 15.75L94.817 91.9l3.889 3.24 1.555-1.102.195-.777-1.75-2.917-14.453-26.118-15.425-26.572-6.87-11.018-1.814-6.61c-.648-2.723-1.102-4.991-1.102-7.778l7.972-10.823L71.42 0 82.05 1.426l4.472 3.888 6.61 15.101 10.694 23.786 16.591 32.34 4.861 9.592 2.592 8.879.973 2.722h1.685v-1.556l1.36-18.211 2.528-22.36 2.463-28.776.843-8.1 4.018-9.722 7.971-5.25 6.222 2.981 5.12 7.324-.713 4.73-3.046 19.768-5.962 30.98-3.889 20.739h2.268l2.593-2.593 10.499-13.934 17.628-22.036 7.778-8.749 9.073-9.657 5.833-4.601h11.018l8.1 12.055-3.628 12.443-11.342 14.388-9.398 12.184-13.48 18.147-8.426 14.518.778 1.166 2.01-.194 30.46-6.481 16.462-2.982 19.637-3.37 8.88 4.148.971 4.213-3.5 8.62-20.998 5.184-24.628 4.926-36.682 8.685-.454.324.519.648 16.526 1.555 7.065.389h17.304l32.21 2.398 8.426 5.574 5.055 6.805-.843 5.184-12.962 6.611-17.498-4.148-40.83-9.721-14-3.5h-1.944v1.167l11.666 11.406 21.387 19.314 26.767 24.887 1.36 6.157-3.434 4.86-3.63-.518-23.526-17.693-9.073-7.972-20.545-17.304h-1.36v1.814l4.73 6.935 25.017 37.59 1.296 11.536-1.814 3.76-6.481 2.268-7.13-1.297-14.647-20.544-15.1-23.138-12.185-20.739-1.49.843-7.194 77.448-3.37 3.953-7.778 2.981-6.48-4.925-3.436-7.972 3.435-15.749 4.148-20.544 3.37-16.333 3.046-20.285 1.815-6.74-.13-.454-1.49.194-15.295 20.999-23.267 31.433-18.406 19.702-4.407 1.75-7.648-3.954.713-7.064 4.277-6.286 25.47-32.405 15.36-20.092 9.917-11.6-.065-1.686h-.583L44.07 198.125l-12.055 1.555-5.185-4.86.648-7.972 2.463-2.593 20.35-13.999-.064.065Z"
@@ -457,15 +290,7 @@ export const ClaudeIcon = () => (
 
 export const DiscordIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      viewBox="0 0 256 199"
-      width="256"
-      height="199"
-      fill="#5865F2"
-      xmlns="http://www.w3.org/2000/svg"
-      preserveAspectRatio="xMidYMid"
-      {...props}
-    >
+    <svg viewBox="0 0 256 199" width="256" height="199" fill="#5865F2" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" {...props}>
       <path d="M216.856 16.597A208.502 208.502 0 0 0 164.042 0c-2.275 4.113-4.933 9.645-6.766 14.046-19.692-2.961-39.203-2.961-58.533 0-1.832-4.4-4.55-9.933-6.846-14.046a207.809 207.809 0 0 0-52.855 16.638C5.618 67.147-3.443 116.4 1.087 164.956c22.169 16.555 43.653 26.612 64.775 33.193A161.094 161.094 0 0 0 79.735 175.3a136.413 136.413 0 0 1-21.846-10.632 108.636 108.636 0 0 0 5.356-4.237c42.122 19.702 87.89 19.702 129.51 0a131.66 131.66 0 0 0 5.355 4.237 136.07 136.07 0 0 1-21.886 10.653c4.006 8.02 8.638 15.67 13.873 22.848 21.142-6.58 42.646-16.637 64.815-33.213 5.316-56.288-9.08-105.09-38.056-148.36ZM85.474 135.095c-12.645 0-23.015-11.805-23.015-26.18s10.149-26.2 23.015-26.2c12.867 0 23.236 11.804 23.015 26.2.02 14.375-10.148 26.18-23.015 26.18Zm85.051 0c-12.645 0-23.014-11.805-23.014-26.18s10.148-26.2 23.014-26.2c12.867 0 23.236 11.804 23.015 26.2 0 14.375-10.148 26.18-23.015 26.18Z" />
     </svg>
   );
@@ -473,15 +298,7 @@ export const DiscordIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const LinkedInIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      width="256"
-      height="256"
-      xmlns="http://www.w3.org/2000/svg"
-      preserveAspectRatio="xMidYMid"
-      fill="currentColor"
-      viewBox="0 0 256 256"
-      {...props}
-    >
+    <svg width="256" height="256" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" fill="currentColor" viewBox="0 0 256 256" {...props}>
       <path d="M218.123 218.127h-37.931v-59.403c0-14.165-.253-32.4-19.728-32.4-19.756 0-22.779 15.434-22.779 31.369v60.43h-37.93V95.967h36.413v16.694h.51a39.907 39.907 0 0 1 35.928-19.733c38.445 0 45.533 25.288 45.533 58.186l-.016 67.013ZM56.955 79.27c-12.157.002-22.014-9.852-22.016-22.009-.002-12.157 9.851-22.014 22.008-22.016 12.157-.003 22.014 9.851 22.016 22.008A22.013 22.013 0 0 1 56.955 79.27m18.966 138.858H37.95V95.967h37.97v122.16ZM237.033.018H18.89C8.58-.098.125 8.161-.001 18.471v219.053c.122 10.315 8.576 18.582 18.89 18.474h218.144c10.336.128 18.823-8.139 18.966-18.474V18.454c-.147-10.33-8.635-18.588-18.966-18.453" />
     </svg>
   );

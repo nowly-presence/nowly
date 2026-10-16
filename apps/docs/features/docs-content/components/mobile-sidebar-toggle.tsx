@@ -10,11 +10,7 @@ export const MobileSidebarToggle = () => {
 
   return (
     <div className="lg:hidden mb-4">
-      <button
-        type="button"
-        onClick={toggle}
-        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-      >
+      <button type="button" onClick={toggle} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
         <RiMenuLine className="size-[18px]" />
         <span>{t("menu")}</span>
       </button>

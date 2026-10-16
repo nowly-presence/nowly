@@ -8,12 +8,15 @@ import { cn } from "@nowly/ui/utils";
 import { RiArrowRightLine } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
-const INLINE_LINK =
-  "underline underline-offset-4 transition-colors hover:text-foreground";
+const INLINE_LINK = "underline underline-offset-4 transition-colors hover:text-foreground";
 
 export const FaqSection = async () => {
   const t = await getTranslations("faq");
-  const items = t.raw("items") as Array<{ question: string; answer: string }>;
+
+  const items = t.raw("items") as Array<{
+    question: string;
+    answer: string;
+  }>;
 
   return (
     <>
@@ -26,29 +29,17 @@ export const FaqSection = async () => {
             name: item.question,
             acceptedAnswer: {
               "@type": "Answer",
-              text: item.answer,
-            },
-          })),
+              text: item.answer
+            }
+          }))
         }}
       />
-      <section
-        id="faq"
-        className={cn(
-          "home-section-deferred px-5 py-28 sm:px-10 sm:py-36",
-          homeSectionAltClass,
-        )}
-      >
+      <section id="faq" className={cn("home-section-deferred px-5 py-28 sm:px-10 sm:py-36", homeSectionAltClass)}>
         <div className="mx-auto grid w-full max-w-300 items-start gap-12 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-16">
           <div>
-            <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
-              {t("eyebrow")}
-            </p>
-            <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[2.15rem]">
-              {t("title")}
-            </h2>
-            <p className="mt-2 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              {t("description")}
-            </p>
+            <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
+            <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[2.15rem]">{t("title")}</h2>
+            <p className="mt-2 text-base leading-relaxed text-muted-foreground sm:text-lg">{t("description")}</p>
             <div className="mt-8">
               <ButtonLink href="/faq" variant="inverted">
                 {t("faq")}
@@ -63,15 +54,10 @@ export const FaqSection = async () => {
                   </Link>
                 ),
                 discord: (chunks) => (
-                  <a
-                    href={DISCORD_INVITE_URL}
-                    rel="noreferrer"
-                    target="_blank"
-                    className={INLINE_LINK}
-                  >
+                  <a href={DISCORD_INVITE_URL} rel="noreferrer" target="_blank" className={INLINE_LINK}>
                     {chunks}
                   </a>
-                ),
+                )
               })}
             </p>
           </div>
@@ -80,13 +66,9 @@ export const FaqSection = async () => {
             {items.map((item, index) => (
               <Card key={item.question}>
                 <CardContent>
-                  <span className="mb-3 block font-mono text-sm font-bold text-accent">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+                  <span className="mb-3 block font-mono text-sm font-bold text-accent">{String(index + 1).padStart(2, "0")}</span>
                   <CardTitle className="text-lg">{item.question}</CardTitle>
-                  <CardDescription className="mt-2">
-                    {item.answer}
-                  </CardDescription>
+                  <CardDescription className="mt-2">{item.answer}</CardDescription>
                 </CardContent>
               </Card>
             ))}

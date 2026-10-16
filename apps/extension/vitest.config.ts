@@ -8,8 +8,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(root, "src"),
-      "@messages": resolve(root, "messages"),
-    },
+      "@messages": resolve(root, "messages")
+    }
   },
-  test: { environment: "node" },
+  test: { environment: "node" }
 });

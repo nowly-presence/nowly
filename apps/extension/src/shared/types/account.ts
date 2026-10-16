@@ -20,15 +20,15 @@ export type SyncErrorCode = "NETWORK" | "SERVER";
 
 export type SyncChoice = "account" | "device";
 
-export type AccountSnapshot =
-  | { signedIn: false }
-  | {
-      signedIn: true;
-      user: AccountUser;
-      lastSyncedAt: number | null;
-      error: SyncErrorCode | null;
-      pendingChoice: boolean;
-    };
+export type AccountSnapshot = {
+  signedIn: false;
+} | {
+  signedIn: true;
+  user: AccountUser;
+  lastSyncedAt: number | null;
+  error: SyncErrorCode | null;
+  pendingChoice: boolean;
+};
 
 export type SyncPresenceEntry = {
   slug: string;

@@ -9,6 +9,7 @@ import { SeasonProvider } from "@/hooks/season-provider";
 import "@/entrypoints/sidepanel/styles.css";
 
 const rootElement = document.getElementById("root");
+
 if (!rootElement) throw new Error("Missing #root element");
 
 createRoot(rootElement).render(
@@ -24,5 +25,5 @@ createRoot(rootElement).render(
         </SeasonProvider>
       </ExtensionStateProvider>
     </I18nProvider>
-  </StrictMode>,
+  </StrictMode>
 );

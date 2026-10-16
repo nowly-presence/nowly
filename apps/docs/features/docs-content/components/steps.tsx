@@ -16,39 +16,29 @@ type StepsProps = {
   className?: string;
 };
 
-const StepsContext = createContext<{ getStepNumber: () => number } | null>(
-  null,
-);
+const StepsContext = createContext<{
+  getStepNumber: () => number;
+} | null>(null);
 
 export const Steps: FC<StepsProps> = ({ children, className }) => {
   const stepCountRef = useRef(0);
   stepCountRef.current = 0;
 
-  const contextValue = useMemo(
-    () => ({
-      getStepNumber: () => {
-        stepCountRef.current += 1;
-        return stepCountRef.current;
-      },
-    }),
-    [],
-  );
+  const contextValue = useMemo(() => ({
+    getStepNumber: () => {
+      stepCountRef.current += 1;
+      return stepCountRef.current;
+    }
+  }), []);
 
   return (
     <StepsContext.Provider value={contextValue}>
-      <div className={cn("relative flex flex-col gap-4", className)}>
-        {children}
-      </div>
+      <div className={cn("relative flex flex-col gap-4", className)}>{children}</div>
     </StepsContext.Provider>
   );
 };
 
-export const Step: FC<StepProps> = ({
-  title,
-  description,
-  children,
-  className,
-}) => {
+export const Step: FC<StepProps> = ({ title, description, children, className }) => {
   const context = useContext(StepsContext);
   const stepNumberRef = useRef<number | null>(null);
 
@@ -69,12 +59,8 @@ export const Step: FC<StepProps> = ({
             <h3 className="leading-tight font-semibold">{title}</h3>
           </div>
         </div>
-        {description && (
-          <p className="text-muted-foreground pl-11 text-sm">{description}</p>
-        )}
-        {children && (
-          <div className="w-full overflow-x-auto pt-4">{children}</div>
-        )}
+        {description && <p className="text-muted-foreground pl-11 text-sm">{description}</p>}
+        {children && <div className="w-full overflow-x-auto pt-4">{children}</div>}
       </div>
 
       <div className="hidden gap-4 sm:flex">
@@ -86,9 +72,7 @@ export const Step: FC<StepProps> = ({
         <div className="min-w-0 flex-1 space-y-1.5">
           <div>
             <h3 className="text-base font-semibold">{title}</h3>
-            {description && (
-              <p className="text-muted-foreground text-sm">{description}</p>
-            )}
+            {description && <p className="text-muted-foreground text-sm">{description}</p>}
           </div>
           {children && <div className="w-full overflow-x-auto">{children}</div>}
         </div>

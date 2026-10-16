@@ -1,0 +1,8 @@
+packages/sdk/
+packages/presences/
+packages/cli/
+packages/internal-cli/
+**/next-env.d.ts
+apps/extension/src/components/shared/nolo-mascot.tsx
+apps/extension/src/components/shared/nolo-paths.ts
+apps/extension/src/ui/streaming-text.tsx

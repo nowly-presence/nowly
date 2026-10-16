@@ -16,6 +16,8 @@
   ],
   "description": "Presence monorepo",
   "scripts": {
+    "format": "node --experimental-strip-types scripts/format.ts",
+    "test:format": "node --experimental-strip-types --test scripts/format.test.ts",
     "dev:api": "pnpm --filter @nowly/api dev",
     "dev:web": "pnpm --filter @nowly/web dev",
     "dev:docs": "pnpm --filter @nowly/docs dev",

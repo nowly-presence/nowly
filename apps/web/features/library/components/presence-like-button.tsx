@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  requestExtension,
-  type ExtensionDeviceInfo,
-} from "@/lib/extension-bridge";
+import { requestExtension, type ExtensionDeviceInfo } from "@/lib/extension-bridge";
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { Button } from "@nowly/ui";
 import { RiHeartFill, RiHeartLine } from "@nowly/ui/icons";
@@ -16,11 +13,7 @@ type PresenceLikeButtonProps = {
   disabled: boolean;
 };
 
-export const PresenceLikeButton = ({
-  slug,
-  initialCount,
-  disabled,
-}: PresenceLikeButtonProps) => {
+export const PresenceLikeButton = ({ slug, initialCount, disabled }: PresenceLikeButtonProps) => {
   const t = useTranslations("presencePage");
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(initialCount);
@@ -38,16 +31,21 @@ export const PresenceLikeButton = ({
     void requestExtension<ExtensionDeviceInfo>("GET_DEVICE_INFO")
       .then((info) => {
         if (cancelled || !info?.deviceId) return;
+
         setDevice(info);
-        return fetch(
-          `${presenceApiBaseUrl()}/presences/${encodeURIComponent(slug)}/like?deviceId=${encodeURIComponent(info.deviceId)}`,
-        )
+        return fetch(`${presenceApiBaseUrl()}/presences/${encodeURIComponent(slug)}/like?deviceId=${encodeURIComponent(info.deviceId)}`)
           .then((response) => (response.ok ? response.json() : null))
-          .then((data: { liked?: boolean; count?: number } | null) => {
-            if (cancelled || !data) return;
-            if (typeof data.liked === "boolean") setLiked(data.liked);
-            if (typeof data.count === "number") setCount(data.count);
-          });
+          .then(
+            (data: {
+              liked?: boolean;
+              count?: number;
+            } | null) => {
+              if (cancelled || !data) return;
+
+              if (typeof data.liked === "boolean") setLiked(data.liked);
+              if (typeof data.count === "number") setCount(data.count);
+            }
+          );
       })
       .catch(() => {
         // Extension not detected or bridge timed out - stay disabled.
@@ -63,6 +61,7 @@ export const PresenceLikeButton = ({
 
   const onToggle = async (): Promise<void> => {
     if (!device?.deviceId) return;
+
     const { deviceId, deviceToken } = device;
     const nextLiked = !liked;
     setLiked(nextLiked);
@@ -75,14 +74,15 @@ export const PresenceLikeButton = ({
     try {
       const response = await fetch(url, {
         method: nextLiked ? "POST" : "DELETE",
-        headers: {
-          ...(nextLiked ? { "Content-Type": "application/json" } : {}),
-          ...(deviceToken ? { "X-Device-Token": deviceToken } : {}),
-        },
-        body: nextLiked ? JSON.stringify({ deviceId }) : undefined,
+        headers: { ...(nextLiked ? { "Content-Type": "application/json" } : {}), ...(deviceToken ? { "X-Device-Token": deviceToken } : {}) },
+        body: nextLiked ? JSON.stringify({ deviceId }) : undefined
       });
+
       if (!response.ok) throw new Error("like request failed");
-      const data = (await response.json()) as { count?: number };
+
+      const data = (await response.json()) as {
+        count?: number;
+      };
       if (typeof data.count === "number") setCount(data.count);
     } catch {
       setLiked(!nextLiked);
@@ -100,11 +100,7 @@ export const PresenceLikeButton = ({
       aria-pressed={liked}
       aria-label={liked ? t("unlike") : t("like")}
     >
-      {liked ? (
-        <RiHeartFill data-icon="inline-start" className="text-destructive" />
-      ) : (
-        <RiHeartLine data-icon="inline-start" />
-      )}
+      {liked ? <RiHeartFill data-icon="inline-start" className="text-destructive" /> : <RiHeartLine data-icon="inline-start" />}
       {count}
     </Button>
   );

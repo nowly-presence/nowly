@@ -8,10 +8,7 @@ import { Sheet } from "@/ui/sheet";
 
 const ICON_CLASS = "size-[18px] text-muted";
 
-export const SupportSheet = ({
-  open,
-  onClose,
-}: {
+export const SupportSheet = ({ open, onClose }: {
   open: boolean;
   onClose: () => void;
 }) => {
@@ -19,13 +16,7 @@ export const SupportSheet = ({
   const trailing = <RiExternalLinkLine className="size-4 text-muted" />;
 
   return (
-    <Sheet
-      open={open}
-      onClose={onClose}
-      title={t("support.rowTitle")}
-      description={t("support.sheetDescription")}
-      closeLabel={t("action.close")}
-    >
+    <Sheet open={open} onClose={onClose} title={t("support.rowTitle")} description={t("support.sheetDescription")} closeLabel={t("action.close")}>
       <Group>
         <Row
           leading={<RiCupLine className={ICON_CLASS} />}

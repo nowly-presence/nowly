@@ -1,22 +1,12 @@
 import { JsonLd } from "@/features/seo/components/json-ld";
-import {
-  CANONICAL_ORIGIN,
-  organizationJsonLd,
-  seoUrl,
-  SITE_NAME,
-} from "@/features/seo/lib/seo";
+import { CANONICAL_ORIGIN, organizationJsonLd, seoUrl, SITE_NAME } from "@/features/seo/lib/seo";
 
 type Crumb = {
   name: string;
   path: string;
 };
 
-export const WebPageJsonLd = ({
-  name,
-  description,
-  path,
-  crumbs,
-}: {
+export const WebPageJsonLd = ({ name, description, path, crumbs }: {
   name: string;
   description: string;
   path: string;
@@ -34,9 +24,9 @@ export const WebPageJsonLd = ({
       isPartOf: {
         "@type": "WebSite",
         name: SITE_NAME,
-        url: CANONICAL_ORIGIN,
-      },
-    },
+        url: CANONICAL_ORIGIN
+      }
+    }
   ];
 
   if (crumbs && crumbs.length > 0) {
@@ -46,12 +36,17 @@ export const WebPageJsonLd = ({
         "@type": "ListItem",
         position: index + 1,
         name: crumb.name,
-        item: seoUrl(crumb.path),
-      })),
+        item: seoUrl(crumb.path)
+      }))
     });
   }
 
   return (
-    <JsonLd data={{ "@context": "https://schema.org", "@graph": graph }} />
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@graph": graph
+      }}
+    />
   );
 };

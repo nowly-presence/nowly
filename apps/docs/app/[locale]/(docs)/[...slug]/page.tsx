@@ -3,11 +3,7 @@ import { mdxComponents } from "@/features/docs-content/components/mdx-components
 import { OpenIn } from "@/features/docs-content/components/open-in";
 import { PageNavigation } from "@/features/docs-content/components/page-navigation";
 import { TableOfContents } from "@/features/docs-content/components/table-of-contents";
-import {
-  getAdjacentPages,
-  getCategoryForPath,
-  getDocContent,
-} from "@/features/docs-content/lib/content";
+import { getAdjacentPages, getCategoryForPath, getDocContent } from "@/features/docs-content/lib/content";
 import { docHref } from "@/features/docs-content/lib/href";
 import { extractTocItems } from "@/features/docs-content/lib/types";
 import { createMetadata, docsOgImage } from "@/features/seo/lib/seo";
@@ -27,15 +23,21 @@ type Props = {
 
 const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const locale = await getLocale();
+
   const t = await getTranslations("docsMetadata");
+
   const { slug } = await params;
+
   const pageSlug = slug.join("/");
   const doc = getDocContent(pageSlug, locale);
 
   if (!doc) {
     return {
       title: t("not-found"),
-      robots: { index: false, follow: false },
+      robots: {
+        index: false,
+        follow: false
+      }
     };
   }
 
@@ -49,13 +51,14 @@ const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
     image: docsOgImage(doc.path, {
       title: doc.title,
       description,
-      category: getCategoryForPath(pageSlug, locale),
-    }),
+      category: getCategoryForPath(pageSlug, locale)
+    })
   });
 };
 
 const Page = async ({ params }: Props): Promise<ReactElement> => {
   const locale = await getLocale();
+
   const { slug } = await params;
 
   const pageSlug = slug.join("/");
@@ -77,17 +80,9 @@ const Page = async ({ params }: Props): Promise<ReactElement> => {
           <OpenIn slug={doc.sourcePath} locale={locale} />
         </div>
 
-        {doc.description && (
-          <p className="text-muted-foreground mb-8 text-lg">
-            {doc.description}
-          </p>
-        )}
+        {doc.description && <p className="text-muted-foreground mb-8 text-lg">{doc.description}</p>}
 
-        <MDXRemote
-          source={doc.content}
-          components={mdxComponents}
-          options={{ blockJS: false }}
-        />
+        <MDXRemote source={doc.content} components={mdxComponents} options={{ blockJS: false }} />
 
         <div className="mt-8 flex items-center border-t border-border pt-4">
           <EditOnGitHub slug={doc.sourcePath} locale={locale} />

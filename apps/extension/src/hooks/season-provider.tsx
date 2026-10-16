@@ -1,22 +1,6 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useExtensionState } from "@/hooks/extension-state-provider";
-import {
-  isSeasonOverride,
-  loadSeasonOverride,
-  msUntilNextDay,
-  resolveSeason,
-  SEASON_OVERRIDE_KEY,
-  SEASON_PERIODS,
-  type Season,
-  type SeasonOverride,
-} from "@/shared/seasonal-themes";
+import { isSeasonOverride, loadSeasonOverride, msUntilNextDay, resolveSeason, SEASON_OVERRIDE_KEY, SEASON_PERIODS, type Season, type SeasonOverride } from "@/shared/seasonal-themes";
 
 type SeasonValue = {
   season: Season | null;
@@ -29,15 +13,12 @@ const SeasonContext = createContext<SeasonValue>({
   season: null,
   seasonal: false,
   today: new Date(),
-  override: null,
+  override: null
 });
 
 const MIDNIGHT_MARGIN_MS = 1000;
 
-const sameDay = (a: Date, b: Date): boolean =>
-  a.getFullYear() === b.getFullYear() &&
-  a.getMonth() === b.getMonth() &&
-  a.getDate() === b.getDate();
+const sameDay = (a: Date, b: Date): boolean => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 
 const useToday = (): Date => {
   const [today, setToday] = useState(() => new Date());
@@ -50,10 +31,7 @@ const useToday = (): Date => {
     const onVisible = () => {
       if (document.visibilityState === "visible") refresh();
     };
-    const timer = window.setTimeout(
-      refresh,
-      msUntilNextDay(today) + MIDNIGHT_MARGIN_MS,
-    );
+    const timer = window.setTimeout(refresh, msUntilNextDay(today) + MIDNIGHT_MARGIN_MS);
     document.addEventListener("visibilitychange", onVisible);
     window.addEventListener("focus", refresh);
     return () => {
@@ -70,11 +48,9 @@ const useSeasonOverride = (): SeasonOverride | null => {
   useEffect(() => {
     const load = async () => setOverride(await loadSeasonOverride());
     void load();
-    const onChanged = (
-      changes: Record<string, chrome.storage.StorageChange>,
-      area: string,
-    ) => {
+    const onChanged = (changes: Record<string, chrome.storage.StorageChange>, area: string) => {
       if (area !== "local" || !(SEASON_OVERRIDE_KEY in changes)) return;
+
       const next: unknown = changes[SEASON_OVERRIDE_KEY].newValue;
       setOverride(isSeasonOverride(next) ? next : null);
     };
@@ -84,29 +60,31 @@ const useSeasonOverride = (): SeasonOverride | null => {
   return override;
 };
 
-export const SeasonProvider = ({ children }: { children: ReactNode }) => {
+export const SeasonProvider = ({ children }: {
+  children: ReactNode;
+}) => {
   const { state } = useExtensionState();
   const today = useToday();
   const override = useSeasonOverride();
   const seasonal = state.ready && state.settings.seasonalThemes !== false;
-  const season = resolveSeason({ enabled: seasonal, date: today, override });
+  const season = resolveSeason({
+    enabled: seasonal,
+    date: today,
+    override
+  });
 
   useEffect(() => {
     const root = document.documentElement;
-    for (const period of SEASON_PERIODS)
-      root.classList.toggle(
-        `season-${period.season}`,
-        period.season === season,
-      );
+
+    for (const period of SEASON_PERIODS) root.classList.toggle(`season-${period.season}`, period.season === season);
   }, [season]);
 
-  const value = useMemo(
-    () => ({ season, seasonal, today, override }),
-    [season, seasonal, today, override],
-  );
+  const value = useMemo(() => ({ season, seasonal, today, override }), [season, seasonal, today, override]);
 
   return (
-    <SeasonContext.Provider value={value}>{children}</SeasonContext.Provider>
+    <SeasonContext.Provider value={value}>
+      {children}
+    </SeasonContext.Provider>
   );
 };
 

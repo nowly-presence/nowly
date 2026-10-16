@@ -23,17 +23,10 @@ export type ChromeWithUserScripts = typeof chrome & {
 };
 
 export const userScriptId = (slug: string): string => `nowly-presence-${slug}`;
-export const iframeUserScriptId = (slug: string): string =>
-  `${userScriptId(slug)}-iframe`;
 
-export const visiblePresences = (
-  presences: InstalledPresences,
-): InstalledPresences =>
+export const iframeUserScriptId = (slug: string): string => `${userScriptId(slug)}-iframe`;
+
+export const visiblePresences = (presences: InstalledPresences): InstalledPresences =>
   Object.fromEntries(
-    Object.entries(presences).filter(
-      ([, presence]) =>
-        presence?.metadata?.slug &&
-        presence.metadata.name &&
-        Array.isArray(presence.metadata.url),
-    ),
+    Object.entries(presences).filter(([, presence]) => presence?.metadata?.slug && presence.metadata.name && Array.isArray(presence.metadata.url))
   ) as InstalledPresences;

@@ -12,30 +12,29 @@ export type PresenceData = {
   smallImageKey?: string;
   smallImageText?: string;
   type?: number;
-  buttons?: { label: string; url: string }[];
+  buttons?: {
+    label: string;
+    url: string;
+  }[];
 };
 
 export type PresenceMetadata = {
   slug: string;
   name: string;
-  author: { name: string; github?: string };
-  contributors?: { name: string; github?: string }[];
+  author: {
+    name: string;
+    github?: string;
+  };
+  contributors?: {
+    name: string;
+    github?: string;
+  }[];
   description: Record<string, string>;
   longDescription?: Record<string, string>;
   url: string[];
   regExp?: string;
   color: string;
-  category:
-    | "streaming"
-    | "music"
-    | "video"
-    | "social"
-    | "gaming"
-    | "tools"
-    | "ai"
-    | "learning"
-    | "creator"
-    | "other";
+  category: "streaming" | "music" | "video" | "social" | "gaming" | "tools" | "ai" | "learning" | "creator" | "other";
   tags?: string[];
   features?: Record<string, string[]>;
   version?: string | null;
@@ -46,7 +45,10 @@ export type PresenceMetadata = {
   iframe?: boolean;
   iFrameRegExp?: string;
   discordNative?: boolean;
-  imageProxy?: { hostSuffixes: string[]; headers?: Record<string, string> };
+  imageProxy?: {
+    hostSuffixes: string[];
+    headers?: Record<string, string>;
+  };
 };
 
 export type PresenceRelease = {
@@ -66,7 +68,11 @@ export type PresenceRelease = {
   lastUpdated?: string | null;
 };
 
-export type PresenceSchedule = { start?: string; end?: string; days: number[] };
+export type PresenceSchedule = {
+  start?: string;
+  end?: string;
+  days: number[];
+};
 
 export type StoredPresence = {
   metadata: PresenceMetadata;
@@ -103,8 +109,14 @@ export type PresenceCatalogItem = {
   longDescription?: string | Record<string, string>;
   category?: PresenceMetadata["category"];
   color?: string;
-  author?: { name: string; github?: string };
-  contributors?: { name: string; github?: string }[];
+  author?: {
+    name: string;
+    github?: string;
+  };
+  contributors?: {
+    name: string;
+    github?: string;
+  }[];
   version?: string | null;
   url?: string[];
   features?: Record<string, string[]>;

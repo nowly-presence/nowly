@@ -1,19 +1,7 @@
 "use client";
 
 import { apiFetch } from "@/features/api-target/lib/api-client";
-import {
-  Button,
-  Field,
-  FieldLabel,
-  Input,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  toast,
-} from "@nowly/ui";
+import { Button, Field, FieldLabel, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, toast } from "@nowly/ui";
 import { RiFileCopyLine } from "@nowly/ui/icons";
 import { useEffect, useState } from "react";
 
@@ -32,7 +20,9 @@ export const CampaignsManager = () => {
   const [loading, setLoading] = useState(true);
 
   const load = () => {
-    apiFetch<{ campaigns: Campaign[] }>("/campaigns")
+    apiFetch<{
+      campaigns: Campaign[];
+    }>("/campaigns")
       .then((data) => setCampaigns(data.campaigns))
       .catch(() => toast.error("Could not load campaigns"))
       .finally(() => setLoading(false));
@@ -45,11 +35,13 @@ export const CampaignsManager = () => {
       toast.error("Give this campaign a name");
       return;
     }
+
     setCreating(true);
+
     try {
       await apiFetch("/campaigns", {
         method: "POST",
-        body: JSON.stringify({ name: name.trim() }),
+        body: JSON.stringify({ name: name.trim() })
       });
       setName("");
       load();
@@ -70,21 +62,14 @@ export const CampaignsManager = () => {
       <div className="flex items-end gap-3">
         <Field className="max-w-sm">
           <FieldLabel>Campaign name</FieldLabel>
-          <Input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="ChromeOS waitlist"
-            onKeyDown={(e) => e.key === "Enter" && void create()}
-          />
+          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="ChromeOS waitlist" onKeyDown={(e) => e.key === "Enter" && void create()} />
         </Field>
         <Button onClick={create} disabled={creating}>
           {creating ? "Creating..." : "Create campaign"}
         </Button>
       </div>
 
-      {!loading && campaigns.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No campaigns yet.</p>
-      ) : null}
+      {!loading && campaigns.length === 0 ? <p className="text-sm text-muted-foreground">No campaigns yet.</p> : null}
 
       {campaigns.length > 0 ? (
         <Table>
@@ -111,9 +96,7 @@ export const CampaignsManager = () => {
                   </button>
                 </TableCell>
                 <TableCell>{campaign.signupCount}</TableCell>
-                <TableCell>
-                  {new Date(campaign.createdAt).toLocaleDateString()}
-                </TableCell>
+                <TableCell>{new Date(campaign.createdAt).toLocaleDateString()}</TableCell>
               </TableRow>
             ))}
           </TableBody>

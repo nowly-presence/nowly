@@ -1,18 +1,12 @@
-import {
-  createCacheId,
-  fetchImage,
-  parseProxyUrl,
-} from "@/features/image-proxy/image-proxy.service";
+import { createCacheId, fetchImage, parseProxyUrl } from "@/features/image-proxy/image-proxy.service";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const mockPresenceRepo = vi.hoisted(() => ({
-  getAllPresenceMetas: vi.fn(),
-}));
+const mockPresenceRepo = vi.hoisted(() => ({ getAllPresenceMetas: vi.fn() }));
 
 vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo);
 vi.mock("@/db/client", () => ({
   getPrisma: vi.fn(() => ({})),
-  hasDatabase: vi.fn(() => true),
+  hasDatabase: vi.fn(() => true)
 }));
 
 describe("parseProxyUrl", () => {
@@ -20,12 +14,20 @@ describe("parseProxyUrl", () => {
     mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([
       {
         slug: "tiktok",
-        metadata: { imageProxy: { hostSuffixes: ["tiktokcdn.com"] } },
+        metadata: {
+          imageProxy: {
+            hostSuffixes: ["tiktokcdn.com"]
+          }
+        }
       },
       {
         slug: "canalplus",
-        metadata: { imageProxy: { hostSuffixes: ["thumb.canalplus.pro"] } },
-      },
+        metadata: {
+          imageProxy: {
+            hostSuffixes: ["thumb.canalplus.pro"]
+          }
+        }
+      }
     ]);
   });
 
@@ -39,10 +41,7 @@ describe("parseProxyUrl", () => {
   });
 
   it("honors an explicit serviceId over host matching", async () => {
-    const result = await parseProxyUrl(
-      "https://example.com/foo.jpg",
-      "canalplus",
-    );
+    const result = await parseProxyUrl("https://example.com/foo.jpg", "canalplus");
     expect(result?.service.id).toBe("canalplus");
   });
 
@@ -60,23 +59,17 @@ describe("parseProxyUrl", () => {
   });
 
   it("rejects an unknown serviceId", async () => {
-    expect(
-      await parseProxyUrl("https://example.com/foo.jpg", "some-new-presence"),
-    ).toBeNull();
+    expect(await parseProxyUrl("https://example.com/foo.jpg", "some-new-presence")).toBeNull();
   });
 });
 
 describe("createCacheId", () => {
   it("is deterministic for the same input", () => {
-    expect(createCacheId("generic", "https://a.com/x.png")).toBe(
-      createCacheId("generic", "https://a.com/x.png"),
-    );
+    expect(createCacheId("generic", "https://a.com/x.png")).toBe(createCacheId("generic", "https://a.com/x.png"));
   });
 
   it("differs for different services or urls", () => {
-    expect(createCacheId("generic", "https://a.com/x.png")).not.toBe(
-      createCacheId("twitch", "https://a.com/x.png"),
-    );
+    expect(createCacheId("generic", "https://a.com/x.png")).not.toBe(createCacheId("twitch", "https://a.com/x.png"));
   });
 });
 
@@ -93,14 +86,15 @@ describe("fetchImage", () => {
       ok: true,
       status: 200,
       headers: new Headers({ "Content-Type": "image/png" }),
-      arrayBuffer: async () => new Uint8Array([1, 2, 3]).buffer,
+      arrayBuffer: async () => new Uint8Array([1, 2, 3]).buffer
     }) as unknown as typeof fetch;
 
     const result = await fetchImage(new URL("https://example.com/x.png"), {
       id: "generic",
-      hostSuffixes: [],
+      hostSuffixes: []
     });
     expect(result.ok).toBe(true);
+
     if (result.ok) {
       expect(result.contentType).toBe("image/png");
       expect(result.buffer.byteLength).toBe(3);
@@ -111,17 +105,17 @@ describe("fetchImage", () => {
     global.fetch = vi.fn().mockResolvedValue({
       ok: false,
       status: 404,
-      headers: new Headers(),
+      headers: new Headers()
     }) as unknown as typeof fetch;
 
     const result = await fetchImage(new URL("https://example.com/x.png"), {
       id: "generic",
-      hostSuffixes: [],
+      hostSuffixes: []
     });
     expect(result).toEqual({
       ok: false,
       status: 404,
-      error: "IMAGE_UPSTREAM_ERROR",
+      error: "IMAGE_UPSTREAM_ERROR"
     });
   });
 
@@ -130,13 +124,17 @@ describe("fetchImage", () => {
       ok: true,
       status: 200,
       headers: new Headers(),
-      arrayBuffer: async () => new ArrayBuffer(0),
+      arrayBuffer: async () => new ArrayBuffer(0)
     }) as unknown as typeof fetch;
 
     const result = await fetchImage(new URL("https://example.com/x.png"), {
       id: "generic",
-      hostSuffixes: [],
+      hostSuffixes: []
     });
-    expect(result).toEqual({ ok: false, status: 502, error: "EMPTY_IMAGE" });
+    expect(result).toEqual({
+      ok: false,
+      status: 502,
+      error: "EMPTY_IMAGE"
+    });
   });
 });

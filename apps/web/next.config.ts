@@ -11,92 +11,107 @@ const docsRedirects = docsZone
       {
         source: "/docs",
         destination: `${docsBase}/`,
-        permanent: true,
+        permanent: true
       },
       {
         source: "/docs/:path*",
         destination: `${docsBase}/:path*`,
-        permanent: true,
-      },
+        permanent: true
+      }
     ];
 
 const nextConfig: NextConfig = {
   compress: true,
   transpilePackages: ["@nowly/analytics", "@nowly/ui", "@nowly/locales"],
   poweredByHeader: false,
-  experimental: {
-    globalNotFound: true,
-  },
+  experimental: { globalNotFound: true },
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "cdn.nowly.me" }],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.nowly.me"
+      }
+    ]
   },
   async rewrites() {
     if (!docsZone) return [];
+
     return {
       beforeFiles: [
-        { source: "/docs", destination: `${docsZone}/docs` },
-        { source: "/docs/:path+", destination: `${docsZone}/docs/:path+` },
-      ],
+        {
+          source: "/docs",
+          destination: `${docsZone}/docs`
+        },
+        {
+          source: "/docs/:path+",
+          destination: `${docsZone}/docs/:path+`
+        }
+      ]
     };
   },
   async redirects() {
     return [
       {
         source: "/:path*",
-        has: [{ type: "host", value: "www.nowly.me" }],
+        has: [
+          {
+            type: "host",
+            value: "www.nowly.me"
+          }
+        ],
         destination: "https://nowly.me/:path*",
-        permanent: true,
+        permanent: true
       },
       ...docsRedirects,
       // Crawlers guess these names; without a redirect they hit the catch-all and report a soft 404.
       {
         source: "/sitemap_index.xml",
         destination: "/sitemap.xml",
-        permanent: true,
+        permanent: true
       },
       {
         source: "/sitemap-index.xml",
         destination: "/sitemap.xml",
-        permanent: true,
+        permanent: true
       },
       {
         source: "/:slug-discord-rich-presence",
         destination: "/library/:slug",
-        permanent: true,
+        permanent: true
       },
       {
         source: "/:slug-rich-presence",
         destination: "/library/:slug",
-        permanent: true,
+        permanent: true
       },
       {
         source: "/host",
         destination: "/desktop",
-        permanent: true,
+        permanent: true
       },
       {
         source: "/redem",
         destination: "/support",
-        permanent: true,
+        permanent: true
       },
       {
         source: "/support/redeem",
         destination: "/support",
-        permanent: true,
+        permanent: true
       },
       // Help and contact share one page: /support (the form is #contact).
       {
         source: "/contact",
         destination: "/support",
-        permanent: true,
+        permanent: true
       },
       {
         source: "/:locale(fr|es|de|pt-BR|pl|ja|ko|tr|ms|el)/contact",
         destination: "/:locale/support",
-        permanent: true,
-      },
+        permanent: true
+      }
     ];
-  },
+  }
 };
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");

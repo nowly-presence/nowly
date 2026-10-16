@@ -4,8 +4,7 @@ import { createHash, createPrivateKey, sign } from "crypto";
 
 export { canonicalJson };
 
-export const sha256Base64Url = (input: string): string =>
-  createHash("sha256").update(input, "utf8").digest("base64url");
+export const sha256Base64Url = (input: string): string => createHash("sha256").update(input, "utf8").digest("base64url");
 
 export const signedPayload = (input: {
   slug: string;
@@ -18,6 +17,7 @@ export const signedPayload = (input: {
 
 export const signPresenceRelease = (payload: string): string => {
   let privateKey: string;
+
   try {
     privateKey = serverEnv.PRESENCE_SIGNING_PRIVATE_KEY;
   } catch {
@@ -32,8 +32,8 @@ export const signPresenceRelease = (payload: string): string => {
     key: createPrivateKey({
       key: Buffer.from(privateKey, "base64url"),
       format: "der",
-      type: "pkcs8",
+      type: "pkcs8"
     }),
-    dsaEncoding: "ieee-p1363",
+    dsaEncoding: "ieee-p1363"
   }).toString("base64url");
 };

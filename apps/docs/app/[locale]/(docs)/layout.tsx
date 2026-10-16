@@ -6,10 +6,9 @@ import { getNavigationItems } from "@/features/docs-content/lib/content";
 import { getLocale } from "next-intl/server";
 import type { PropsWithChildren, ReactElement } from "react";
 
-const Layout = async ({
-  children,
-}: PropsWithChildren): Promise<ReactElement> => {
+const Layout = async ({ children }: PropsWithChildren): Promise<ReactElement> => {
   const locale = await getLocale();
+
   const navItems = getNavigationItems(locale);
 
   return (

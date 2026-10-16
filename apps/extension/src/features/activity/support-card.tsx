@@ -23,12 +23,8 @@ export const SupportCard = () => {
           <RiHeart3Line className="size-5" />
         </span>
         <div className="flex min-w-0 flex-1 flex-col">
-          <span className="text-label-lg font-medium">
-            {t("support.cardTitle")}
-          </span>
-          <span className="text-label-md text-muted">
-            {t("support.cardDescription")}
-          </span>
+          <span className="text-label-lg font-medium">{t("support.cardTitle")}</span>
+          <span className="text-label-md text-muted">{t("support.cardDescription")}</span>
         </div>
       </div>
       <div className="flex justify-end gap-2">

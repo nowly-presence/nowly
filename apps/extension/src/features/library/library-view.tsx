@@ -15,13 +15,7 @@ import { DotSeparator } from "@/ui/dot-separator";
 import { EmptyState } from "@/ui/empty-state";
 import { LiveDot } from "@/ui/live-dot";
 import { Skeleton } from "@/ui/skeleton";
-import {
-  filterCatalog,
-  newPresenceSlugs,
-  trendingPresences,
-  type LibraryCategory,
-  type LibrarySort,
-} from "@/features/library/library-catalog";
+import { filterCatalog, newPresenceSlugs, trendingPresences, type LibraryCategory, type LibrarySort } from "@/features/library/library-catalog";
 import { LibraryResultsSection } from "@/features/library/library-results-section";
 import { LibrarySearchBar } from "@/features/library/library-search-bar";
 import { TrendingCarousel } from "@/features/library/trending-carousel";
@@ -40,35 +34,28 @@ export const LibraryView = () => {
     void refresh.catalog();
   }, [refresh]);
 
-  const views = useMemo(
-    () => state.catalog.items.map((item) => fromCatalog(item, locale)),
-    [state.catalog.items, locale],
-  );
-  const categories = useMemo(
-    () =>
-      CATEGORIES.filter((value) =>
-        views.some((view) => view.category === value),
-      ),
-    [views],
-  );
-  const activeNow = useMemo(
-    () => views.reduce((sum, view) => sum + (view.activeUsers ?? 0), 0),
-    [views],
-  );
-  const results = useMemo(
-    () => filterCatalog(views, { category, query: libraryQuery, sort, locale }),
-    [views, category, libraryQuery, sort, locale],
-  );
+  const views = useMemo(() => state.catalog.items.map((item) => fromCatalog(item, locale)), [state.catalog.items, locale]);
+  const categories = useMemo(() => CATEGORIES.filter((value) => views.some((view) => view.category === value)), [views]);
+  const activeNow = useMemo(() => views.reduce((sum, view) => sum + (view.activeUsers ?? 0), 0), [views]);
+  const results = useMemo(() =>
+    filterCatalog(views, {
+      category,
+      query: libraryQuery,
+      sort,
+      locale
+    }), [views, category, libraryQuery, sort, locale]);
   const trending = useMemo(() => trendingPresences(views), [views]);
   const newSlugs = useMemo(() => newPresenceSlugs(views), [views]);
   const hasResults = results.length > 0;
 
   const trackSearch = useDebouncedCallback((query: string, found: boolean) => {
-    if (query.trim().length >= SEARCH_TRACK_MIN_LENGTH)
-      track("search_performed", {
-        source: "extension_library",
-        payload: { locale, hasResults: found },
-      });
+    if (query.trim().length >= SEARCH_TRACK_MIN_LENGTH) track("search_performed", {
+      source: "extension_library",
+      payload: {
+        locale,
+        hasResults: found
+      }
+    });
   }, SEARCH_TRACK_DELAY_MS);
 
   useEffect(() => {
@@ -76,8 +63,7 @@ export const LibraryView = () => {
   }, [libraryQuery, hasResults, trackSearch]);
 
   const browsing = !libraryQuery.trim() && category === "all";
-  const loading =
-    state.catalog.status === "loading" || state.catalog.status === "idle";
+  const loading = state.catalog.status === "loading" || state.catalog.status === "idle";
 
   return (
     <ScreenBody className="gap-5">
@@ -91,9 +77,7 @@ export const LibraryView = () => {
                 <>
                   <DotSeparator />
                   <LiveDot />
-                  {t("library.activeNow", {
-                    count: formatCompact(activeNow, locale),
-                  })}
+                  {t("library.activeNow", { count: formatCompact(activeNow, locale) })}
                 </>
               )}
             </span>
@@ -103,13 +87,7 @@ export const LibraryView = () => {
         }
       />
 
-      <LibrarySearchBar
-        query={libraryQuery}
-        onQueryChange={setLibraryQuery}
-        category={category}
-        onCategoryChange={setCategory}
-        categories={categories}
-      />
+      <LibrarySearchBar query={libraryQuery} onQueryChange={setLibraryQuery} category={category} onCategoryChange={setCategory} categories={categories} />
 
       {state.catalog.status === "error" && views.length === 0 ? (
         <Card>
@@ -118,10 +96,7 @@ export const LibraryView = () => {
             title={t("library.errorTitle")}
             description={t("library.errorDescription")}
             action={
-              <Button
-                variant="secondary"
-                onClick={() => void refresh.catalog(true)}
-              >
+              <Button variant="secondary" onClick={() => void refresh.catalog(true)}>
                 {t("action.retry")}
               </Button>
             }

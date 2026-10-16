@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
-import {
-  configuredPresenceLocale,
-  defaultPresenceLocale,
-} from "@/shared/presence-language";
+import { configuredPresenceLocale, defaultPresenceLocale } from "@/shared/presence-language";
 
-const THREE = { "en-US": {}, "fr-FR": {}, "es-ES": {} };
+const THREE = {
+  "en-US": {},
+  "fr-FR": {},
+  "es-ES": {}
+};
 
 describe("defaultPresenceLocale", () => {
   it("follows the interface language when the presence ships it", () => {
@@ -19,14 +20,7 @@ describe("defaultPresenceLocale", () => {
 
 describe("configuredPresenceLocale", () => {
   it("uses the global language when one is set", () => {
-    expect(
-      configuredPresenceLocale(
-        { presenceLanguage: "es-ES" },
-        "youtube",
-        THREE,
-        "fr",
-      ),
-    ).toBe("es-ES");
+    expect(configuredPresenceLocale({ presenceLanguage: "es-ES" }, "youtube", THREE, "fr")).toBe("es-ES");
   });
 
   it("uses the saved per-presence choice before the default", () => {
@@ -34,24 +28,17 @@ describe("configuredPresenceLocale", () => {
       configuredPresenceLocale(
         {
           presenceLanguage: "per-presence",
-          presenceLanguages: { youtube: "en-US" },
+          presenceLanguages: { youtube: "en-US" }
         },
         "youtube",
         THREE,
-        "fr",
-      ),
+        "fr"
+      )
     ).toBe("en-US");
   });
 
   it("defaults to the interface language per presence", () => {
-    expect(
-      configuredPresenceLocale(
-        { presenceLanguage: "per-presence" },
-        "youtube",
-        THREE,
-        "fr",
-      ),
-    ).toBe("fr-FR");
+    expect(configuredPresenceLocale({ presenceLanguage: "per-presence" }, "youtube", THREE, "fr")).toBe("fr-FR");
     expect(configuredPresenceLocale({}, "youtube", THREE, "fr")).toBe("fr-FR");
   });
 });

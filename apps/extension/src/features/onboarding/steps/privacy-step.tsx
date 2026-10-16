@@ -6,7 +6,9 @@ import { useI18n } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
 import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout";
 
-export const PrivacyStep = ({ onDone }: { onDone: () => void }) => {
+export const PrivacyStep = ({ onDone }: {
+  onDone: () => void;
+}) => {
   const { t } = useI18n();
   const [busy, setBusy] = useState<"yes" | "no" | null>(null);
 
@@ -23,19 +25,10 @@ export const PrivacyStep = ({ onDone }: { onDone: () => void }) => {
       description={t("onboarding.privacyDescription")}
       footer={
         <>
-          <Button
-            onClick={() => void choose(true)}
-            loading={busy === "yes"}
-            className="w-full"
-          >
+          <Button onClick={() => void choose(true)} loading={busy === "yes"} className="w-full">
             {t("onboarding.privacyYes")}
           </Button>
-          <Button
-            variant="ghost"
-            onClick={() => void choose(false)}
-            loading={busy === "no"}
-            className="w-full"
-          >
+          <Button variant="ghost" onClick={() => void choose(false)} loading={busy === "no"} className="w-full">
             {t("onboarding.privacyNo")}
           </Button>
         </>
@@ -45,7 +38,7 @@ export const PrivacyStep = ({ onDone }: { onDone: () => void }) => {
         {[
           t("onboarding.privacyPoint1"),
           t("onboarding.privacyPoint2"),
-          t("onboarding.privacyPoint3"),
+          t("onboarding.privacyPoint3")
         ].map((point) => (
           <li key={point} className="flex items-start gap-2.5 text-body-sm">
             <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
@@ -55,11 +48,7 @@ export const PrivacyStep = ({ onDone }: { onDone: () => void }) => {
           </li>
         ))}
       </ul>
-      <Button
-        variant="link"
-        className="self-start"
-        onClick={() => openUrl(siteUrl("/privacy"))}
-      >
+      <Button variant="link" className="self-start" onClick={() => openUrl(siteUrl("/privacy"))}>
         {t("onboarding.privacyPolicy")}
       </Button>
     </OnboardingStepLayout>

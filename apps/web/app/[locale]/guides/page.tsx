@@ -9,8 +9,9 @@ import { getLocale, getTranslations } from "next-intl/server";
 export const generateMetadata = async (): Promise<Metadata> => {
   const [locale, t] = await Promise.all([
     getLocale(),
-    getTranslations("pages.guides"),
+    getTranslations("pages.guides")
   ]);
+
   const indexLocales = guidesIndexLocales();
   return createMetadata({
     title: t("title"),
@@ -18,9 +19,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
     locale,
     path: "/guides",
     alternateLocales: indexLocales,
-    canonicalLocale: indexLocales.includes(getValidLocale(locale))
-      ? undefined
-      : FALLBACK_LOCALE,
+    canonicalLocale: indexLocales.includes(getValidLocale(locale)) ? undefined : FALLBACK_LOCALE
   });
 };
 
@@ -33,8 +32,14 @@ const Page = async () => {
         description={t("description")}
         path="/guides"
         crumbs={[
-          { name: "Nowly", path: "/" },
-          { name: t("title"), path: "/guides" },
+          {
+            name: "Nowly",
+            path: "/"
+          },
+          {
+            name: t("title"),
+            path: "/guides"
+          }
         ]}
       />
       <GuidesView />

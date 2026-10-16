@@ -25,112 +25,77 @@ export const usePresenceActions = () => {
   const { t, locale } = useI18n();
   const [pending, setPending] = useState<string | null>(null);
 
-  const run = useCallback(
-    async <T>(
-      slug: string,
-      action: () => Promise<T>,
-    ): Promise<T | undefined> => {
-      setPending(slug);
-      try {
-        return await action();
-      } finally {
-        setPending((current) => (current === slug ? null : current));
-      }
-    },
-    [],
-  );
+  const run = useCallback(async <T>(slug: string, action: () => Promise<T>): Promise<T | undefined> => {
+    setPending(slug);
 
-  const install = useCallback(
-    (slug: string, name: string) =>
-      run(slug, async () => {
-        track("marketplace_install_click", {
-          slug,
-          source: "extension_library",
-          payload: { locale },
-        });
-        const result = await sendMessage("INSTALL_PRESENCE_FROM_API", { slug });
-        await refresh.presences();
-        if (result.ok) toast(t("toast.installed", { name }));
-        else if (result.queued) toast(t("toast.queued", { name }), "info");
-        else toast(errorMessage(result.error, t), "error");
-        return result.ok;
-      }),
-    [run, refresh, toast, t, locale],
-  );
+    try {
+      return await action();
+    } finally {
+      setPending((current) => (current === slug ? null : current));
+    }
+  }, []);
 
-  const update = useCallback(
-    (slug: string, name: string) =>
-      run(slug, async () => {
-        const result = await sendMessage("INSTALL_PRESENCE_FROM_API", { slug });
-        await Promise.all([refresh.presences(), refresh.updates()]);
-        toast(
-          result.ok
-            ? t("toast.updated", { name })
-            : errorMessage(result.error, t),
-          result.ok ? "success" : "error",
-        );
-        return result.ok;
-      }),
-    [run, refresh, toast, t],
-  );
-
-  const uninstall = useCallback(
-    (slug: string, name: string) =>
-      run(slug, async () => {
-        await sendMessage("UNINSTALL_PRESENCE", { slug });
-        await refresh.presences();
-        toast(t("toast.uninstalled", { name }), "info");
-      }),
-    [run, refresh, toast, t],
-  );
-
-  const toggle = useCallback(
-    async (slug: string, enabled: boolean) => {
-      const result = await sendMessage("TOGGLE_PRESENCE", { slug, enabled });
+  const install = useCallback((slug: string, name: string) =>
+    run(slug, async () => {
+      track("marketplace_install_click", {
+        slug,
+        source: "extension_library",
+        payload: { locale }
+      });
+      const result = await sendMessage("INSTALL_PRESENCE_FROM_API", { slug });
       await refresh.presences();
-      if (!result.ok)
-        toast(
-          result.error === "PRESENCE_NO_VALID_URL_PATTERNS"
-            ? t("error.generic")
-            : t("error.toggle"),
-          "error",
-        );
-    },
-    [refresh, toast, t],
-  );
+      if (result.ok) toast(t("toast.installed", { name }));
+      else if (result.queued) toast(t("toast.queued", { name }), "info");
+      else toast(errorMessage(result.error, t), "error");
+      return result.ok;
+    }), [run, refresh, toast, t, locale]);
 
-  const snooze = useCallback(
-    async (slug: string, durationMs: number) => {
-      await sendMessage("SNOOZE_PRESENCE", { slug, duration: durationMs });
+  const update = useCallback((slug: string, name: string) =>
+    run(slug, async () => {
+      const result = await sendMessage("INSTALL_PRESENCE_FROM_API", { slug });
+      await Promise.all([
+        refresh.presences(),
+        refresh.updates()
+      ]);
+      toast(result.ok ? t("toast.updated", { name }) : errorMessage(result.error, t), result.ok ? "success" : "error");
+      return result.ok;
+    }), [run, refresh, toast, t]);
+
+  const uninstall = useCallback((slug: string, name: string) =>
+    run(slug, async () => {
+      await sendMessage("UNINSTALL_PRESENCE", { slug });
       await refresh.presences();
-    },
-    [refresh],
-  );
+      toast(t("toast.uninstalled", { name }), "info");
+    }), [run, refresh, toast, t]);
 
-  const clearSnooze = useCallback(
-    async (slug: string) => {
-      await sendMessage("CLEAR_SNOOZE", { slug });
-      await refresh.presences();
-    },
-    [refresh],
-  );
+  const toggle = useCallback(async (slug: string, enabled: boolean) => {
+    const result = await sendMessage("TOGGLE_PRESENCE", { slug, enabled });
+    await refresh.presences();
+    if (!result.ok) toast(
+      result.error === "PRESENCE_NO_VALID_URL_PATTERNS"
+        ? t("error.generic")
+        : t("error.toggle"),
+      "error"
+    );
+  }, [refresh, toast, t]);
 
-  const setSchedule = useCallback(
-    async (slug: string, schedule: PresenceSchedule | undefined) => {
-      await sendMessage("SET_PRESENCE_SCHEDULE", { slug, schedule });
-      await refresh.presences();
-    },
-    [refresh],
-  );
+  const snooze = useCallback(async (slug: string, durationMs: number) => {
+    await sendMessage("SNOOZE_PRESENCE", {
+      slug,
+      duration: durationMs
+    });
+    await refresh.presences();
+  }, [refresh]);
 
-  return {
-    pending,
-    install,
-    update,
-    uninstall,
-    toggle,
-    snooze,
-    clearSnooze,
-    setSchedule,
-  };
+  const clearSnooze = useCallback(async (slug: string) => {
+    await sendMessage("CLEAR_SNOOZE", { slug });
+    await refresh.presences();
+  }, [refresh]);
+
+  const setSchedule = useCallback(async (slug: string, schedule: PresenceSchedule | undefined) => {
+    await sendMessage("SET_PRESENCE_SCHEDULE", { slug, schedule });
+    await refresh.presences();
+  }, [refresh]);
+
+  return { pending, install, update, uninstall, toggle, snooze, clearSnooze, setSchedule };
 };

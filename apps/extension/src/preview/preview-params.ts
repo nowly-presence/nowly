@@ -2,17 +2,9 @@ export type PreviewAccount = "out" | "in" | "choice" | "error";
 
 const ACCOUNTS: readonly PreviewAccount[] = ["out", "in", "choice", "error"];
 
-export type PreviewScenario =
-  "live" | "idle" | "nohost" | "nodiscord" | "paused" | "empty";
+export type PreviewScenario = "live" | "idle" | "nohost" | "nodiscord" | "paused" | "empty";
 
-const SCENARIOS: readonly PreviewScenario[] = [
-  "live",
-  "idle",
-  "nohost",
-  "nodiscord",
-  "paused",
-  "empty",
-];
+const SCENARIOS: readonly PreviewScenario[] = ["live", "idle", "nohost", "nodiscord", "paused", "empty"];
 
 export type PreviewNative = "ok" | "ipc-denied";
 
@@ -29,9 +21,7 @@ const moment = params.get("moment") === "1";
 const support = params.get("support") === "1";
 
 export const previewParams = {
-  scenario:
-    SCENARIOS.find((value) => value === scenarioParam) ??
-    (support ? "idle" : "live"),
+  scenario: SCENARIOS.find((value) => value === scenarioParam) ?? (support ? "idle" : "live"),
   lang: params.get("lang"),
   theme: params.get("theme") ?? "light",
   view: params.get("view") ?? "activity",
@@ -48,5 +38,5 @@ export const previewParams = {
   moment,
   support,
   account: ACCOUNTS.find((value) => value === accountParam) ?? "out",
-  native: NATIVE_STATES.find((value) => value === nativeParam) ?? "ok",
+  native: NATIVE_STATES.find((value) => value === nativeParam) ?? "ok"
 };

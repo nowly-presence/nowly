@@ -11,15 +11,10 @@ export const ingestEventSchema = z.object({
   // from the request (CF-IPCountry) at ingestion time, never trusted as input.
   source: z.enum(ANALYTICS_SOURCES).optional(),
   payload: z.record(z.string(), z.unknown()).optional(),
-  createdAt: z.string().trim().optional(),
+  createdAt: z.string().trim().optional()
 });
 
-export const ingestEventsBodySchema = z.object({
-  events: z
-    .array(ingestEventSchema)
-    .max(MAX_ANALYTICS_EVENTS_PER_BATCH)
-    .default([]),
-});
+export const ingestEventsBodySchema = z.object({ events: z.array(ingestEventSchema).max(MAX_ANALYTICS_EVENTS_PER_BATCH).default([]) });
 
 export type IngestEvent = z.infer<typeof ingestEventSchema>;
 export type IngestEventsBody = z.infer<typeof ingestEventsBodySchema>;

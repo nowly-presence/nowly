@@ -26,85 +26,86 @@ export type AccountDevice = {
 
 const apiUrl = (path: string): string => `${presenceApiBaseUrl()}${path}`;
 
-const request = async (
-  path: string,
-  init: RequestInit = {},
-): Promise<Response> =>
+const request = async (path: string, init: RequestInit = {}): Promise<Response> =>
   fetch(apiUrl(path), {
     ...init,
     credentials: "include",
     cache: "no-store",
-    headers: init.body
-      ? { "Content-Type": "application/json", ...init.headers }
-      : init.headers,
+    headers: init.body ? { "Content-Type": "application/json", ...init.headers } : init.headers
   });
 
-const isObject = (value: unknown): value is Record<string, unknown> =>
-  Boolean(value) && typeof value === "object" && !Array.isArray(value);
+const isObject = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
 export const fetchAccountUser = async (): Promise<AccountUser | null> => {
   const response = await request("/me");
+
   if (response.status === 401) return null;
   if (!response.ok) throw new Error(`HTTP_${response.status}`);
+
   return (await response.json()) as AccountUser;
 };
 
-export const startDiscordSignIn = async (
-  callbackURL: string,
-): Promise<void> => {
+export const startDiscordSignIn = async (callbackURL: string): Promise<void> => {
   const response = await request("/auth/sign-in/social", {
     method: "POST",
     body: JSON.stringify({
       provider: "discord",
       callbackURL,
-      errorCallbackURL: callbackURL,
-    }),
+      errorCallbackURL: callbackURL
+    })
   });
+
   const body: unknown = await response.json().catch(() => null);
-  if (!response.ok || !isObject(body) || typeof body.url !== "string")
-    throw new Error("SIGN_IN_FAILED");
+
+  if (!response.ok || !isObject(body) || typeof body.url !== "string") throw new Error("SIGN_IN_FAILED");
+
   window.location.assign(body.url);
 };
 
 export const signOutAccount = async (): Promise<void> => {
-  await request("/auth/sign-out", { method: "POST", body: "{}" });
+  await request("/auth/sign-out", {
+    method: "POST",
+    body: "{}"
+  });
 };
 
-export const createExtensionSession = async (
-  deviceId: string | null,
-): Promise<ExtensionSessionPayload> => {
+export const createExtensionSession = async (deviceId: string | null): Promise<ExtensionSessionPayload> => {
   const response = await request("/extension/tokens", {
     method: "POST",
     body: JSON.stringify({
       ...(deviceId ? { deviceId } : {}),
-      scopes: ["sync"],
-    }),
+      scopes: ["sync"]
+    })
   });
+
   if (!response.ok) throw new Error(`HTTP_${response.status}`);
+
   return (await response.json()) as ExtensionSessionPayload;
 };
 
 export const fetchAccountDevices = async (): Promise<AccountDevice[]> => {
   const response = await request("/me/devices");
+
   if (!response.ok) throw new Error(`HTTP_${response.status}`);
-  const body = (await response.json()) as { devices: AccountDevice[] };
+
+  const body = (await response.json()) as {
+    devices: AccountDevice[];
+  };
   return body.devices;
 };
 
 export const unlinkAccountDevice = async (deviceId: string): Promise<void> => {
-  const response = await request(
-    `/me/devices/${encodeURIComponent(deviceId)}`,
-    { method: "DELETE" },
-  );
+  const response = await request(`/me/devices/${encodeURIComponent(deviceId)}`, { method: "DELETE" });
+
   if (!response.ok) throw new Error(`HTTP_${response.status}`);
 };
 
 export const downloadAccountExport = async (): Promise<void> => {
   const response = await request("/me/export");
+
   if (!response.ok) throw new Error(`HTTP_${response.status}`);
-  const blob = new Blob([JSON.stringify(await response.json(), null, 2)], {
-    type: "application/json",
-  });
+
+  const blob = new Blob([JSON.stringify(await response.json(), null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
@@ -115,5 +116,6 @@ export const downloadAccountExport = async (): Promise<void> => {
 
 export const deleteAccount = async (): Promise<void> => {
   const response = await request("/me", { method: "DELETE" });
+
   if (!response.ok) throw new Error(`HTTP_${response.status}`);
 };

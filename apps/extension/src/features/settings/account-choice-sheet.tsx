@@ -12,10 +12,7 @@ import { useToast } from "@/ui/toast";
 
 const ICON_CLASS = "size-[18px] text-muted";
 
-export const AccountChoiceSheet = ({
-  open,
-  onClose,
-}: {
+export const AccountChoiceSheet = ({ open, onClose }: {
   open: boolean;
   onClose: () => void;
 }) => {
@@ -26,28 +23,21 @@ export const AccountChoiceSheet = ({
 
   const choose = async (choice: SyncChoice) => {
     setBusy(choice);
-    const account = await sendMessage("RESOLVE_SYNC_CHOICE", { choice }).catch(
-      () => null,
-    );
+    const account = await sendMessage("RESOLVE_SYNC_CHOICE", { choice }).catch(() => null);
     setBusy(null);
+
     if (!account) {
       toast(t("error.generic"), "error");
       return;
     }
+
     patch({ account });
-    if (account.signedIn && !account.pendingChoice && !account.error)
-      toast(t("toast.synced"), "success");
+    if (account.signedIn && !account.pendingChoice && !account.error) toast(t("toast.synced"), "success");
     onClose();
   };
 
   return (
-    <Sheet
-      open={open}
-      onClose={onClose}
-      title={t("account.choiceTitle")}
-      description={t("account.choiceDescription")}
-      closeLabel={t("action.close")}
-    >
+    <Sheet open={open} onClose={onClose} title={t("account.choiceTitle")} description={t("account.choiceDescription")} closeLabel={t("action.close")}>
       <Group>
         <Row
           leading={<RiCloudLine className={ICON_CLASS} />}
@@ -75,12 +65,6 @@ export const AccountChoiceSheet = ({
 export const AccountChoicePrompt = () => {
   const { state } = useExtensionState();
   const [dismissed, setDismissed] = useState(false);
-  const pending =
-    state.ready && state.account.signedIn && state.account.pendingChoice;
-  return (
-    <AccountChoiceSheet
-      open={pending && !dismissed}
-      onClose={() => setDismissed(true)}
-    />
-  );
+  const pending = state.ready && state.account.signedIn && state.account.pendingChoice;
+  return <AccountChoiceSheet open={pending && !dismissed} onClose={() => setDismissed(true)} />;
 };

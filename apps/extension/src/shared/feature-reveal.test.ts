@@ -14,10 +14,6 @@ describe("isRevealVersionCurrent", () => {
 describe("isRevealDue", () => {
   it("never comes back once seen", () => {
     expect(isRevealDue("custom-activity", "2.3.0", "2.3.0", {})).toBe(true);
-    expect(
-      isRevealDue("custom-activity", "2.3.0", "2.3.0", {
-        "custom-activity": 1,
-      }),
-    ).toBe(false);
+    expect(isRevealDue("custom-activity", "2.3.0", "2.3.0", { "custom-activity": 1 })).toBe(false);
   });
 });

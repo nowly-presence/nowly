@@ -12,32 +12,26 @@ type CampaignSignupFormProps = {
   errorLabel: string;
 };
 
-export const CampaignSignupForm = ({
-  campaignId,
-  placeholder,
-  submitLabel,
-  successLabel,
-  errorLabel,
-}: CampaignSignupFormProps) => {
+export const CampaignSignupForm = ({ campaignId, placeholder, submitLabel, successLabel, errorLabel }: CampaignSignupFormProps) => {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">(
-    "idle",
-  );
+  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
     if (!email.trim()) return;
+
     setStatus("sending");
+
     try {
-      const response = await fetch(
-        `${presenceApiBaseUrl()}/campaigns/${campaignId}/signups`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email.trim() }),
-        },
-      );
+      const response = await fetch(`${presenceApiBaseUrl()}/campaigns/${campaignId}/signups`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() })
+      });
+
       if (!response.ok) throw new Error("signup failed");
+
       setStatus("done");
     } catch {
       setStatus("error");
@@ -45,25 +39,20 @@ export const CampaignSignupForm = ({
   };
 
   if (status === "done") {
-    return <p className="text-sm text-muted-foreground">{successLabel}</p>;
+    return (
+      <p className="text-sm text-muted-foreground">
+        {successLabel}
+      </p>
+    );
   }
 
   return (
     <form onSubmit={onSubmit} className="flex flex-wrap gap-2">
-      <Input
-        type="email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder={placeholder}
-        className="max-w-xs"
-      />
+      <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder={placeholder} className="max-w-xs" />
       <Button type="submit" variant="outline" disabled={status === "sending"}>
         {submitLabel}
       </Button>
-      {status === "error" ? (
-        <p className="w-full text-sm text-destructive">{errorLabel}</p>
-      ) : null}
+      {status === "error" ? <p className="w-full text-sm text-destructive">{errorLabel}</p> : null}
     </form>
   );
 };

@@ -10,13 +10,7 @@ type PresenceUninstallSheetProps = {
   onConfirm: () => void;
 };
 
-export const PresenceUninstallSheet = ({
-  name,
-  open,
-  pending,
-  onClose,
-  onConfirm,
-}: PresenceUninstallSheetProps) => {
+export const PresenceUninstallSheet = ({ name, open, pending, onClose, onConfirm }: PresenceUninstallSheetProps) => {
   const { t } = useI18n();
   return (
     <Sheet
@@ -30,12 +24,7 @@ export const PresenceUninstallSheet = ({
           <Button variant="secondary" className="flex-1" onClick={onClose}>
             {t("action.cancel")}
           </Button>
-          <Button
-            variant="destructive"
-            className="flex-1"
-            loading={pending}
-            onClick={onConfirm}
-          >
+          <Button variant="destructive" className="flex-1" loading={pending} onClick={onConfirm}>
             {t("detail.uninstall")}
           </Button>
         </>

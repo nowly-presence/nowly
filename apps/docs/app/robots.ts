@@ -4,7 +4,12 @@ import type { MetadataRoute } from "next";
 const robots = (): MetadataRoute.Robots => {
   if (isSeoPreview) {
     return {
-      rules: [{ userAgent: "*", disallow: "/" }],
+      rules: [
+        {
+          userAgent: "*",
+          disallow: "/"
+        }
+      ]
     };
   }
 
@@ -13,11 +18,11 @@ const robots = (): MetadataRoute.Robots => {
       {
         userAgent: "*",
         allow: ["/", "/api/og/"],
-        disallow: ["/api/"],
-      },
+        disallow: ["/api/"]
+      }
     ],
     sitemap: `${DOCS_URL}/sitemap.xml`,
-    host: DOCS_URL,
+    host: DOCS_URL
   };
 };
 

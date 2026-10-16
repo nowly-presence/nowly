@@ -18,11 +18,19 @@ const CHANGELOG_SLUG = "changelog";
 
 const generateMetadata = async (): Promise<Metadata> => {
   const locale = await getLocale();
+
   const t = await getTranslations("docsMetadata");
+
   const doc = getDocContent(CHANGELOG_SLUG, locale);
 
   if (!doc) {
-    return { title: t("not-found"), robots: { index: false, follow: false } };
+    return {
+      title: t("not-found"),
+      robots: {
+        index: false,
+        follow: false
+      }
+    };
   }
 
   const description = doc.description || t("changelog-description");
@@ -36,13 +44,14 @@ const generateMetadata = async (): Promise<Metadata> => {
     image: docsOgImage("changelog", {
       title: doc.title,
       description,
-      category: t("changelog"),
-    }),
+      category: t("changelog")
+    })
   });
 };
 
 const Page = async (): Promise<ReactElement> => {
   const locale = await getLocale();
+
   const doc = getDocContent(CHANGELOG_SLUG, locale);
 
   if (!doc) {
@@ -60,33 +69,18 @@ const Page = async (): Promise<ReactElement> => {
           <h1 className="text-3xl font-semibold font-heading">{doc.title}</h1>
         </div>
 
-        {doc.description && (
-          <p className="text-muted-foreground mb-8 text-lg">
-            {doc.description}
-          </p>
-        )}
+        {doc.description && <p className="text-muted-foreground mb-8 text-lg">{doc.description}</p>}
 
-        <MDXRemote
-          source={doc.content}
-          components={mdxComponents}
-          options={{ blockJS: false }}
-        />
+        <MDXRemote source={doc.content} components={mdxComponents} options={{ blockJS: false }} />
 
         {releases.map((release) => (
           <div key={release.slug} className="mb-2 [&+div]:mt-6">
             <h2 className="text-2xl font-semibold mt-10 mb-3">
-              <Link
-                href={`/changelog/${release.slug}`}
-                className="hover:underline"
-              >
+              <Link href={`/changelog/${release.slug}`} className="hover:underline">
                 {release.version}
               </Link>
             </h2>
-            {release.description && (
-              <p className="mb-4 leading-relaxed text-foreground/85">
-                {release.description}
-              </p>
-            )}
+            {release.description && <p className="mb-4 leading-relaxed text-foreground/85">{release.description}</p>}
           </div>
         ))}
 

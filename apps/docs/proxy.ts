@@ -6,8 +6,5 @@ export default appProxy;
 // contains a dot" - the latter also matches dotted dynamic segments (e.g. a
 // changelog version like /changelog/2.1.2, reachable through the [...slug]
 export const config = {
-  matcher: [
-    "/",
-    "/((?!api|_next|_vercel|.*\\.(?:ico|png|jpg|jpeg|gif|svg|webp|css|js|mjs|json|md|txt|xml|webmanifest|woff|woff2|ttf)$).*)",
-  ],
+  matcher: ["/", "/((?!api|_next|_vercel|.*\\.(?:ico|png|jpg|jpeg|gif|svg|webp|css|js|mjs|json|md|txt|xml|webmanifest|woff|woff2|ttf)$).*)"]
 };

@@ -7,13 +7,13 @@ import { getLocale, getTranslations } from "next-intl/server";
 export const generateMetadata = async (): Promise<Metadata> => {
   const [locale, t] = await Promise.all([
     getLocale(),
-    getTranslations("cookies-page"),
+    getTranslations("cookies-page")
   ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     locale,
-    path: "/cookies",
+    path: "/cookies"
   });
 };
 
@@ -21,11 +21,7 @@ const Page = async () => {
   const t = await getTranslations("cookies-page");
   return (
     <>
-      <WebPageJsonLd
-        name={t("title")}
-        description={t("description")}
-        path="/cookies"
-      />
+      <WebPageJsonLd name={t("title")} description={t("description")} path="/cookies" />
       <LegalView page="cookies" />
     </>
   );

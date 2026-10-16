@@ -1,7 +1,4 @@
-import {
-  handleActivityUpdate,
-  handleClearActivity,
-} from "@/background/managers/activity-manager";
+import { handleActivityUpdate, handleClearActivity } from "@/background/managers/activity-manager";
 import { USER_SCRIPT_MESSAGE_SOURCE } from "@/background/runtime/presence-runtime";
 import { setDebug } from "@/background/storage/presences.store";
 import type { PresenceData } from "@/shared/types";
@@ -19,6 +16,7 @@ export const registerPresenceRuntimeBridge = (): void => {
         }
       | undefined;
     const slug = payload?.slug;
+
     if (!slug) return false;
 
     if (message.type === "ACTIVITY_UPDATE" && payload.activity) {
@@ -34,7 +32,7 @@ export const registerPresenceRuntimeBridge = (): void => {
         stage: payload.stage ?? "presence",
         message: `[${slug}] ${payload.message ?? "debug"}`,
         url: sender.tab?.url,
-        updatedAt: Date.now(),
+        updatedAt: Date.now()
       });
     }
 

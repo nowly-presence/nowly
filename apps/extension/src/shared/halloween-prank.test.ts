@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  isHalloweenPrankDue,
-  isHalloweenPrankState,
-  markHalloweenPrankShown,
-} from "@/shared/halloween-prank";
+import { isHalloweenPrankDue, isHalloweenPrankState, markHalloweenPrankShown } from "@/shared/halloween-prank";
 
 const halloween = new Date(2026, 9, 31, 9);
 const regularDay = new Date(2026, 9, 12, 9);
@@ -21,24 +17,31 @@ describe("isHalloweenPrankDue", () => {
   it("stays quiet on other days unless replayed", () => {
     expect(isHalloweenPrankDue(null, regularDay)).toBe(false);
     expect(
-      isHalloweenPrankDue({ lastShownYear: 2026, replay: true }, regularDay),
+      isHalloweenPrankDue(
+        {
+          lastShownYear: 2026,
+          replay: true
+        },
+        regularDay
+      )
     ).toBe(true);
   });
 });
 
 describe("markHalloweenPrankShown", () => {
   it("records the year on the day itself", () => {
-    expect(markHalloweenPrankShown({ replay: true }, halloween)).toEqual({
-      lastShownYear: 2026,
-    });
+    expect(markHalloweenPrankShown({ replay: true }, halloween)).toEqual({ lastShownYear: 2026 });
   });
 
   it("keeps the previous year after a replay on another day", () => {
     expect(
       markHalloweenPrankShown(
-        { lastShownYear: 2025, replay: true },
-        regularDay,
-      ),
+        {
+          lastShownYear: 2025,
+          replay: true
+        },
+        regularDay
+      )
     ).toEqual({ lastShownYear: 2025 });
     expect(markHalloweenPrankShown({ replay: true }, regularDay)).toEqual({});
   });

@@ -1,88 +1,47 @@
 import { Link } from "@/i18n/navigation";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  ButtonAnchor,
-  Card,
-  CardContent,
-  CardTitle,
-} from "@nowly/ui";
+import { Avatar, AvatarFallback, AvatarImage, ButtonAnchor, Card, CardContent, CardTitle } from "@nowly/ui";
 
-import {
-  presenceSiteHref,
-  authorHref,
-  type LibraryPresence,
-  type PresencePerson,
-} from "@/lib/library-catalog";
+import { presenceSiteHref, authorHref, type LibraryPresence, type PresencePerson } from "@/lib/library-catalog";
 import type { PresenceCommit, PresenceStats } from "@/lib/presence-api";
 import { RiDownloadLine, RiGithubLine, RiUserLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
-const githubAvatar = (github: string): string =>
-  `https://github.com/${encodeURIComponent(github)}.png?size=80`;
+const githubAvatar = (github: string): string => `https://github.com/${encodeURIComponent(github)}.png?size=80`;
 
-const githubProfile = (github: string): string =>
-  `https://github.com/${encodeURIComponent(github)}`;
+const githubProfile = (github: string): string => `https://github.com/${encodeURIComponent(github)}`;
 
-const PersonRow = ({
-  person,
-  label,
-}: {
-  person: PresencePerson;
-  label: string;
-}) => (
+const PersonRow = ({ person, label }: { person: PresencePerson; label: string }) => (
   <div className="flex items-center gap-3">
     <Avatar size="sm">
-      {person.github ? (
-        <AvatarImage src={githubAvatar(person.github)} alt={person.name} />
-      ) : null}
+      {person.github ? <AvatarImage src={githubAvatar(person.github)} alt={person.name} /> : null}
       <AvatarFallback>{person.name.slice(0, 1).toUpperCase()}</AvatarFallback>
     </Avatar>
     <div className="min-w-0 flex-1">
       {person.github ? (
-        <Link
-          href={authorHref(person.github)}
-          className="block truncate text-sm font-medium text-foreground hover:underline"
-        >
+        <Link href={authorHref(person.github)} className="block truncate text-sm font-medium text-foreground hover:underline">
           {person.name}
         </Link>
       ) : (
-        <p className="truncate text-sm font-medium text-foreground">
-          {person.name}
-        </p>
+        <p className="truncate text-sm font-medium text-foreground">{person.name}</p>
       )}
-      <p className="text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
-        {label}
-      </p>
+      <p className="text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">{label}</p>
     </div>
     {person.github ? (
-      <ButtonAnchor
-        href={githubProfile(person.github)}
-        rel="noreferrer"
-        target="_blank"
-        variant="ghost"
-        size="icon-sm"
-        aria-label={person.github}
-      >
+      <ButtonAnchor href={githubProfile(person.github)} rel="noreferrer" target="_blank" variant="ghost" size="icon-sm" aria-label={person.github}>
         <RiGithubLine />
       </ButtonAnchor>
     ) : null}
   </div>
 );
 
-export const PresenceInfo = async ({
-  presence,
-  commit,
-  changelog,
-  stats,
-}: {
+export const PresenceInfo = async ({ presence, commit, changelog, stats }: {
   presence: LibraryPresence;
   commit: PresenceCommit | null;
   changelog?: string;
   stats: PresenceStats;
 }) => {
   const t = await getTranslations("presencePage");
+
   const people = [presence.author, ...presence.contributors];
 
   return (
@@ -105,11 +64,7 @@ export const PresenceInfo = async ({
         <CardContent className="flex flex-col gap-4">
           <CardTitle>{t("contributors")}</CardTitle>
           {people.map((person, index) => (
-            <PersonRow
-              key={`${person.name}-${person.github ?? index}`}
-              person={person}
-              label={index === 0 ? t("author") : t("contributor")}
-            />
+            <PersonRow key={`${person.name}-${person.github ?? index}`} person={person} label={index === 0 ? t("author") : t("contributor")} />
           ))}
         </CardContent>
       </Card>
@@ -140,9 +95,7 @@ export const PresenceInfo = async ({
           <CardContent>
             <CardTitle>{t("version")}</CardTitle>
             <div className="mt-2 flex items-center justify-between gap-3">
-              <p className="font-mono text-sm text-muted-foreground">
-                {presence.version}
-              </p>
+              <p className="font-mono text-sm text-muted-foreground">{presence.version}</p>
               {commit ? (
                 <ButtonAnchor
                   href={commit.href}
@@ -158,11 +111,7 @@ export const PresenceInfo = async ({
                 </ButtonAnchor>
               ) : null}
             </div>
-            {changelog ? (
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {changelog}
-              </p>
-            ) : null}
+            {changelog ? <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{changelog}</p> : null}
           </CardContent>
         </Card>
       ) : null}

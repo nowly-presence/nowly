@@ -16,13 +16,7 @@ type LibrarySearchBarProps = {
   categories: PresenceMetadata["category"][];
 };
 
-export const LibrarySearchBar = ({
-  query,
-  onQueryChange,
-  category,
-  onCategoryChange,
-  categories,
-}: LibrarySearchBarProps) => {
+export const LibrarySearchBar = ({ query, onQueryChange, category, onCategoryChange, categories }: LibrarySearchBarProps) => {
   const { t } = useI18n();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -49,18 +43,11 @@ export const LibrarySearchBar = ({
         }
       />
       <HScroll className="gap-1.5">
-        <Chip
-          active={category === "all"}
-          onClick={() => onCategoryChange("all")}
-        >
+        <Chip active={category === "all"} onClick={() => onCategoryChange("all")}>
           {t("library.all")}
         </Chip>
         {categories.map((value) => (
-          <Chip
-            key={value}
-            active={category === value}
-            onClick={() => onCategoryChange(category === value ? "all" : value)}
-          >
+          <Chip key={value} active={category === value} onClick={() => onCategoryChange(category === value ? "all" : value)}>
             {t(categoryKey(value))}
           </Chip>
         ))}

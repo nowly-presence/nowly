@@ -7,13 +7,13 @@ import { getLocale, getTranslations } from "next-intl/server";
 export const generateMetadata = async (): Promise<Metadata> => {
   const [locale, t] = await Promise.all([
     getLocale(),
-    getTranslations("pages.roadmap"),
+    getTranslations("pages.roadmap")
   ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     locale,
-    path: "/roadmap",
+    path: "/roadmap"
   });
 };
 
@@ -22,11 +22,7 @@ const Page = async () => {
 
   return (
     <>
-      <WebPageJsonLd
-        name={t("title")}
-        description={t("description")}
-        path="/roadmap"
-      />
+      <WebPageJsonLd name={t("title")} description={t("description")} path="/roadmap" />
       <RoadmapView />
     </>
   );

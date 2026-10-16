@@ -14,29 +14,13 @@ type ButtonLinkProps = ComponentProps<typeof NextLink> &
     linkComponent?: ComponentType<any>;
   };
 
-export const ButtonLink = ({
-  className,
-  variant,
-  size,
-  linkComponent,
-  ...props
-}: ButtonLinkProps) => {
+export const ButtonLink = ({ className, variant, size, linkComponent, ...props }: ButtonLinkProps) => {
   const LinkComponent = linkComponent ?? NextLink;
-  return (
-    <LinkComponent
-      className={cn(buttonVariants({ variant, size }), className)}
-      {...props}
-    />
-  );
+  return <LinkComponent className={cn(buttonVariants({ variant, size }), className)} {...props} />;
 };
 
 type ButtonAnchorProps = ComponentProps<"a"> & ButtonVariantProps;
 
-export const ButtonAnchor = ({
-  className,
-  variant,
-  size,
-  ...props
-}: ButtonAnchorProps) => (
+export const ButtonAnchor = ({ className, variant, size, ...props }: ButtonAnchorProps) => (
   <a className={cn(buttonVariants({ variant, size }), className)} {...props} />
 );

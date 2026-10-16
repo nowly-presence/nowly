@@ -1,4 +1,5 @@
 "use client";
+
 import { RiCheckLine, RiFileCopyLine } from "@nowly/ui/icons";
 
 import { cn } from "@nowly/ui";
@@ -26,10 +27,7 @@ export const CopyButton: FC<CopyButtonProps> = ({ content, className }) => {
     <button
       type="button"
       onClick={handleCopy}
-      className={cn(
-        "text-muted-foreground hover:text-foreground transition-colors",
-        className,
-      )}
+      className={cn("text-muted-foreground hover:text-foreground transition-colors", className)}
       aria-label={copied ? t("copied") : t("copy-code")}
     >
       {copied ? <RiCheckLine size={14} /> : <RiFileCopyLine size={14} />}

@@ -13,10 +13,9 @@ const CATEGORY_KEYS: Record<Category, MessageKey> = {
   ai: "category.ai",
   learning: "category.learning",
   creator: "category.creator",
-  other: "category.other",
+  other: "category.other"
 };
 
 export const CATEGORIES = Object.keys(CATEGORY_KEYS) as Category[];
 
-export const categoryKey = (category: Category): MessageKey =>
-  CATEGORY_KEYS[category];
+export const categoryKey = (category: Category): MessageKey => CATEGORY_KEYS[category];

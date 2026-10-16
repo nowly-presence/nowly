@@ -13,19 +13,12 @@ type EditOnGitHubProps = {
 
 export const EditOnGitHub: FC<EditOnGitHubProps> = async ({ slug, locale }) => {
   // Per-version changelog content lives in the @nowly/changelog package, not in this app.
-  const contentPath = slug.startsWith("changelog/")
-    ? `packages/changelog/content/${slug.replace(/^changelog\//, "")}`
-    : `apps/docs/content/docs/${slug}`;
+  const contentPath = slug.startsWith("changelog/") ? `packages/changelog/content/${slug.replace(/^changelog\//, "")}` : `apps/docs/content/docs/${slug}`;
   const href = `${PROJECT_REPOSITORY_URL}/blob/stable/${contentPath}/${locale}.mdx`;
   const t = await getTranslations("docsUi");
 
   return (
-    <Link
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={buttonVariants({ size: "sm" })}
-    >
+    <Link href={href} target="_blank" rel="noopener noreferrer" className={buttonVariants({ size: "sm" })}>
       <GitHubIcon className="size-4" />
       {t("edit-on-github")}
     </Link>

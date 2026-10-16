@@ -22,11 +22,7 @@ type LiveActivitySectionProps = {
   hasPresences: boolean;
 };
 
-export const LiveActivitySection = ({
-  liveTab,
-  otherActivityCount,
-  hasPresences,
-}: LiveActivitySectionProps) => {
+export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences }: LiveActivitySectionProps) => {
   const { state, updateSettings, refresh } = useExtensionState();
   const { t } = useI18n();
   const { push } = useNav();
@@ -36,12 +32,13 @@ export const LiveActivitySection = ({
   const liveStored = activity ? presences[activity.slug] : undefined;
   const resume = () => void updateSettings({ presencePaused: false });
   const customId = customActivityIdOf(activity?.slug);
-  const custom = customId
-    ? state.customActivities.items.find((item) => item.id === customId)
-    : undefined;
+  const custom = customId ? state.customActivities.items.find((item) => item.id === customId) : undefined;
   const stopCustom = async () => {
     await sendMessage("SET_CUSTOM_ACTIVITY_ACTIVE", { id: null });
-    await Promise.all([refresh.customActivities(), refresh.activity()]);
+    await Promise.all([
+      refresh.customActivities(),
+      refresh.activity()
+    ]);
   };
   const connection = connectionOf(state.native);
   const ipcBlocked = discordIpcIssueOf(state.native).active;
@@ -54,7 +51,12 @@ export const LiveActivitySection = ({
           activity={custom}
           presence={activity.presence}
           paused={paused}
-          onOpen={() => push({ name: "custom-activity", id: custom.id })}
+          onOpen={() =>
+            push({
+              name: "custom-activity",
+              id: custom.id
+            })
+          }
           onStop={stopCustom}
           onResume={resume}
         />
@@ -67,17 +69,16 @@ export const LiveActivitySection = ({
           status={paused ? "paused" : "live"}
           statusLabel={paused ? t("activity.pausedLabel") : undefined}
           stackDepth={otherActivityCount}
-          onOpen={() => push({ name: "presence", slug: activity.slug })}
+          onOpen={() =>
+            push({
+              name: "presence",
+              slug: activity.slug
+            })
+          }
           footer={
             <div className="flex items-center justify-between gap-3">
               <span className="flex min-w-0 items-center gap-2 text-label-md text-on-tertiary-muted">
-                <PresenceIcon
-                  slug={activity.slug}
-                  name={liveStored.metadata.name}
-                  color={liveStored.metadata.color}
-                  size={18}
-                  rounded="rounded-[5px]"
-                />
+                <PresenceIcon slug={activity.slug} name={liveStored.metadata.name} color={liveStored.metadata.color} size={18} rounded="rounded-[5px]" />
                 <span className="truncate">{liveStored.metadata.name}</span>
               </span>
               {paused ? (
@@ -100,12 +101,7 @@ export const LiveActivitySection = ({
           }
         />
       ) : ipcBlocked && !paused && connection === "no-discord" ? null : (
-        <IdleCard
-          connection={connection}
-          paused={paused}
-          onResume={resume}
-          hasPresences={hasPresences}
-        />
+        <IdleCard connection={connection} paused={paused} onResume={resume} hasPresences={hasPresences} />
       )}
     </Section>
   );

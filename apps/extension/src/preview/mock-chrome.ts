@@ -2,22 +2,9 @@ import type { RouterRequest } from "@/background/router/contracts";
 import packageJson from "../../package.json";
 import { createMockEvent } from "@/preview/mock-events";
 import { createMockRouter } from "@/preview/mock-router";
-import {
-  createMockStorageArea,
-  type StorageChanges,
-} from "@/preview/mock-storage";
-import {
-  buildCustomActivities,
-  buildInstalledPresences,
-  buildLiveActivity,
-  buildRuntimeLogs,
-  loadCatalogFixture,
-  pickInstalledSlugs,
-} from "@/preview/preview-fixtures";
-import {
-  buildCustomPresence,
-  customActivitySlug,
-} from "@/shared/custom-activity";
+import { createMockStorageArea, type StorageChanges } from "@/preview/mock-storage";
+import { buildCustomActivities, buildInstalledPresences, buildLiveActivity, buildRuntimeLogs, loadCatalogFixture, pickInstalledSlugs } from "@/preview/preview-fixtures";
+import { buildCustomPresence, customActivitySlug } from "@/shared/custom-activity";
 import { previewParams } from "@/preview/preview-params";
 import { SUPPORT_PROMPT_MIN_USAGE_DAYS } from "@/shared/support-prompt";
 import type { TabActivity } from "@/shared/types";
@@ -32,32 +19,17 @@ export const installMockChrome = async (): Promise<void> => {
   const session = createMockStorageArea("session", storageChanged);
 
   const catalog = await loadCatalogFixture(now);
+
   const installedSlugs = pickInstalledSlugs(catalog, previewParams.scenario);
   const presences = buildInstalledPresences(catalog, installedSlugs, now);
   const [firstSlug, secondSlug] = installedSlugs;
-  const showsActivity =
-    previewParams.scenario === "live" || previewParams.scenario === "paused";
-  const liveActivity = showsActivity
-    ? buildLiveActivity(firstSlug, presences, now)
-    : null;
+  const showsActivity = previewParams.scenario === "live" || previewParams.scenario === "paused";
+  const liveActivity = showsActivity ? buildLiveActivity(firstSlug, presences, now) : null;
 
-  const customActivities = buildCustomActivities(
-    previewParams.scenario,
-    previewParams.customLive,
-    now,
-  );
-  const liveCustom = customActivities.items.find(
-    (item) => item.id === customActivities.activeId,
-  );
+  const customActivities = buildCustomActivities(previewParams.scenario, previewParams.customLive, now);
+  const liveCustom = customActivities.items.find((item) => item.id === customActivities.activeId);
   const currentActivity = liveCustom
-    ? {
-        slug: customActivitySlug(liveCustom.id),
-        presence: buildCustomPresence(
-          liveCustom,
-          customActivities.activatedAt ?? now,
-        ),
-        updatedAt: now,
-      }
+    ? { slug: customActivitySlug(liveCustom.id), presence: buildCustomPresence(liveCustom, customActivities.activatedAt ?? now), updatedAt: now }
     : liveActivity;
 
   const tabActivities: TabActivity[] =
@@ -67,7 +39,7 @@ export const installMockChrome = async (): Promise<void> => {
             tabId: 11,
             slug: liveActivity.slug,
             presence: liveActivity.presence,
-            updatedAt: now,
+            updatedAt: now
           },
           {
             tabId: 12,
@@ -75,10 +47,10 @@ export const installMockChrome = async (): Promise<void> => {
             presence: {
               name: presences[secondSlug].metadata.name,
               details: "Pull request #482",
-              state: "Reviewing code",
+              state: "Reviewing code"
             },
-            updatedAt: now - SECOND_TAB_OFFSET_MS,
-          },
+            updatedAt: now - SECOND_TAB_OFFSET_MS
+          }
         ]
       : [];
 
@@ -86,9 +58,7 @@ export const installMockChrome = async (): Promise<void> => {
     presences,
     currentActivity,
     customActivities,
-    featureReveals: previewParams.reveal
-      ? {}
-      : { "custom-activity": now, "account-sync": now },
+    featureReveals: previewParams.reveal ? {} : { "custom-activity": now, "account-sync": now },
     settings: {
       presenceDisplayMode: "category",
       showPlayer: true,
@@ -101,22 +71,24 @@ export const installMockChrome = async (): Promise<void> => {
       activitySelectionMode: "focused",
       activityPriorityOrder: [],
       presencePaused: previewParams.scenario === "paused",
-      developerMode: previewParams.developer,
+      developerMode: previewParams.developer
     },
     presenceSettings: {},
     onboarding: {
       devReplayOnboarding: false,
       onboardingCompleted: !previewParams.onboarding,
       nativeSeenConnectedOnce: true,
-      nativeProfile: { id: "1", username: "gaetan", globalName: "Gaëtan" },
+      nativeProfile: {
+        id: "1",
+        username: "gaetan",
+        globalName: "Gaëtan"
+      }
     },
     analyticsConsent: false,
     localePreference: previewParams.lang ?? "browser",
     sidepanelActiveView: previewParams.view,
     reviewPrompt: { firstSeenAt: previewParams.review ? 0 : now },
-    supportPrompt: {
-      usageDays: previewParams.support ? SUPPORT_PROMPT_MIN_USAGE_DAYS : 0,
-    },
+    supportPrompt: { usageDays: previewParams.support ? SUPPORT_PROMPT_MIN_USAGE_DAYS : 0 },
     ...(previewParams.season ? { seasonOverride: previewParams.season } : {}),
     ...(previewParams.prank ? { halloweenPrank: { replay: true } } : {}),
     ...(previewParams.moment ? { seasonMoments: { replay: true } } : {}),
@@ -125,10 +97,10 @@ export const installMockChrome = async (): Promise<void> => {
           sidepanelPendingNav: {
             view: previewParams.view,
             slug: previewParams.slug,
-            at: now,
-          },
+            at: now
+          }
         }
-      : {}),
+      : {})
   });
 
   const router = createMockRouter({
@@ -138,7 +110,7 @@ export const installMockChrome = async (): Promise<void> => {
     installedSlugs,
     tabActivities,
     logs: buildRuntimeLogs(firstSlug, installedSlugs.length, now),
-    hasLiveActivity: Boolean(liveActivity),
+    hasLiveActivity: Boolean(liveActivity)
   });
 
   const mock = {
@@ -148,19 +120,22 @@ export const installMockChrome = async (): Promise<void> => {
       getManifest: () => ({ version: packageJson.version }),
       getURL: (path: string) => `/${path}`,
       onMessage: runtimeMessage,
-      sendMessage: (message: RouterRequest) =>
-        router.dispatch(message.type, message.payload),
+      sendMessage: (message: RouterRequest) => router.dispatch(message.type, message.payload)
     },
-    storage: { local, session, onChanged: storageChanged },
+    storage: {
+      local,
+      session,
+      onChanged: storageChanged
+    },
     i18n: {
       getUILanguage: () => previewParams.lang ?? navigator.language,
-      getMessage: () => "",
+      getMessage: () => ""
     },
     tabs: {
       create: ({ url }: { url: string }) => window.open(url, "_blank"),
       query: async () => [],
       onActivated: createMockEvent<[unknown]>(),
-      onUpdated: createMockEvent<[number, unknown]>(),
+      onUpdated: createMockEvent<[number, unknown]>()
     },
     windows: { onFocusChanged: createMockEvent<[number]>() },
     permissions: {
@@ -168,8 +143,8 @@ export const installMockChrome = async (): Promise<void> => {
         router.grantUserScripts();
         return true;
       },
-      contains: async () => router.userScriptsEnabled(),
-    },
+      contains: async () => router.userScriptsEnabled()
+    }
   };
 
   Object.assign(globalThis, { chrome: mock });

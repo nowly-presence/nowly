@@ -9,11 +9,12 @@ type ExtensionImportMetaEnv = {
 };
 
 const metaEnv =
-  (import.meta as ImportMeta & { env?: ExtensionImportMetaEnv }).env ?? {};
-const skipValidation =
-  typeof process !== "undefined" &&
-  (process.env.NODE_ENV === "test" ||
-    process.env.SKIP_ENV_VALIDATION === "true");
+  (
+    import.meta as ImportMeta & {
+      env?: ExtensionImportMetaEnv;
+    }
+  ).env ?? {};
+const skipValidation = typeof process !== "undefined" && (process.env.NODE_ENV === "test" || process.env.SKIP_ENV_VALIDATION === "true");
 
 export const extensionEnv = createEnv({
   clientPrefix: "VITE_",
@@ -21,9 +22,9 @@ export const extensionEnv = createEnv({
     VITE_WEB_BASE_URL: z.string().trim().url().default("https://nowly.me"),
     VITE_API_BASE_URL: z.string().trim().url().default("https://api.nowly.me"),
     VITE_CDN_BASE_URL: z.string().trim().url().optional(),
-    VITE_CHROMEOS_WAITLIST_CAMPAIGN_ID: z.string().trim().optional(),
+    VITE_CHROMEOS_WAITLIST_CAMPAIGN_ID: z.string().trim().optional()
   },
   runtimeEnv: metaEnv,
   emptyStringAsUndefined: true,
-  skipValidation,
+  skipValidation
 });

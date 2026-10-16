@@ -1,31 +1,19 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { OnboardingState } from "@/background/storage/onboarding.store";
 import { sendMessage } from "@/lib/messages";
-import type {
-  AccountSnapshot,
-  CurrentActivity,
-  CustomActivitiesState,
-  ExtensionSettings,
-  InstalledPresences,
-  NativeStatus,
-  PresenceCatalogItem,
-  TabState,
-  UserScriptsStatus,
-} from "@/shared/types";
+import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, TabState, UserScriptsStatus } from "@/shared/types";
 
-export type CatalogState =
-  | { status: "idle" | "loading"; items: PresenceCatalogItem[] }
-  | { status: "ready"; items: PresenceCatalogItem[] }
-  | { status: "error"; items: PresenceCatalogItem[]; error: string };
+export type CatalogState = {
+  status: "idle" | "loading";
+  items: PresenceCatalogItem[];
+} | {
+  status: "ready";
+  items: PresenceCatalogItem[];
+} | {
+  status: "error";
+  items: PresenceCatalogItem[];
+  error: string;
+};
 
 export type ExtensionState = {
   ready: boolean;
@@ -47,29 +35,42 @@ export type ExtensionState = {
 const INITIAL: ExtensionState = {
   ready: false,
   presences: {},
-  settings: { presenceDisplayMode: "category", showPlayer: true },
+  settings: {
+    presenceDisplayMode: "category",
+    showPlayer: true
+  },
   activity: null,
-  native: { connected: false, status: "connecting" },
+  native: {
+    connected: false,
+    status: "connecting"
+  },
   userScripts: { enabled: true },
   onboarding: {
     devReplayOnboarding: false,
     onboardingCompleted: true,
     nativeSeenConnectedOnce: false,
-    nativeProfile: null,
+    nativeProfile: null
   },
   tab: {
     tabId: null,
     hostname: null,
     muted: false,
     installedSlug: null,
-    activities: [],
+    activities: []
   },
   presenceSettings: {},
   analyticsConsent: false,
   updates: {},
-  catalog: { status: "idle", items: [] },
-  customActivities: { items: [], activeId: null, activatedAt: null },
-  account: { signedIn: false },
+  catalog: {
+    status: "idle",
+    items: []
+  },
+  customActivities: {
+    items: [],
+    activeId: null,
+    activatedAt: null
+  },
+  account: { signedIn: false }
 };
 
 type Refreshers = {
@@ -92,28 +93,20 @@ type ExtensionStateValue = {
   state: ExtensionState;
   refresh: Refreshers;
   patch: (partial: Partial<ExtensionState>) => void;
-  updateSettings: (
-    partial: Partial<ExtensionSettings>,
-  ) => Promise<ExtensionSettings>;
+  updateSettings: (partial: Partial<ExtensionSettings>) => Promise<ExtensionSettings>;
 };
 
 const ExtensionStateContext = createContext<ExtensionStateValue | null>(null);
 
 const NATIVE_POLL_MS = 3000;
 
-export const ExtensionStateProvider = ({
-  children,
-}: {
+export const ExtensionStateProvider = ({ children }: {
   children: ReactNode;
 }) => {
   const [state, setState] = useState<ExtensionState>(INITIAL);
   const catalogInFlight = useRef<Promise<void> | null>(null);
 
-  const patch = useCallback(
-    (partial: Partial<ExtensionState>) =>
-      setState((current) => ({ ...current, ...partial })),
-    [],
-  );
+  const patch = useCallback((partial: Partial<ExtensionState>) => setState((current) => ({ ...current, ...partial })), []);
 
   const refresh = useMemo<Refreshers>(() => {
     const safe =
@@ -128,83 +121,83 @@ export const ExtensionStateProvider = ({
     return {
       presences: safe(
         () => sendMessage("GET_PRESENCES"),
-        (presences) => patch({ presences }),
+        (presences) => patch({ presences })
       ),
       settings: safe(
         () => sendMessage("GET_SETTINGS"),
-        (settings) => patch({ settings }),
+        (settings) => patch({ settings })
       ),
       activity: safe(
         () => sendMessage("GET_CURRENT_ACTIVITY"),
-        (activity) => patch({ activity }),
+        (activity) => patch({ activity })
       ),
       native: safe(
         () => sendMessage("GET_NATIVE_STATUS"),
-        (native) => patch({ native }),
+        (native) => patch({ native })
       ),
       userScripts: safe(
         () => sendMessage("GET_USER_SCRIPTS_STATUS"),
         (userScripts) =>
           setState((current) => {
-            if (userScripts.enabled && !current.userScripts.enabled)
-              void sendMessage("SYNC_PRESENCE_SCRIPTS").catch(() => {});
+            if (userScripts.enabled && !current.userScripts.enabled) void sendMessage("SYNC_PRESENCE_SCRIPTS").catch(() => {});
             return { ...current, userScripts };
-          }),
+          })
       ),
       onboarding: safe(
         () => sendMessage("GET_ONBOARDING"),
-        (onboarding) => patch({ onboarding }),
+        (onboarding) => patch({ onboarding })
       ),
       tab: safe(
         () => sendMessage("GET_TAB_STATE"),
-        (tab) => patch({ tab }),
+        (tab) => patch({ tab })
       ),
       presenceSettings: safe(
         () => sendMessage("GET_PRESENCE_SETTINGS"),
-        (presenceSettings) => patch({ presenceSettings }),
+        (presenceSettings) => patch({ presenceSettings })
       ),
       consent: safe(
         () => sendMessage("GET_ANALYTICS_CONSENT"),
-        ({ granted }) => patch({ analyticsConsent: granted }),
+        ({ granted }) => patch({ analyticsConsent: granted })
       ),
       updates: safe(
         () => sendMessage("CHECK_UPDATES"),
-        (updates) => patch({ updates }),
+        (updates) => patch({ updates })
       ),
       customActivities: safe(
         () => sendMessage("GET_CUSTOM_ACTIVITIES"),
-        (customActivities) => patch({ customActivities }),
+        (customActivities) => patch({ customActivities })
       ),
       account: safe(
         () => sendMessage("GET_ACCOUNT"),
-        (account) => patch({ account }),
+        (account) => patch({ account })
       ),
       catalog: async (force = false) => {
         if (catalogInFlight.current) return catalogInFlight.current;
+
         let skip = false;
         setState((current) => {
           if (!force && current.catalog.status === "ready") {
             skip = true;
             return current;
           }
+
           return {
             ...current,
-            catalog: { status: "loading", items: current.catalog.items },
+            catalog: {
+              status: "loading",
+              items: current.catalog.items
+            }
           };
         });
+
         if (skip) return;
+
         catalogInFlight.current = (async () => {
           try {
             const response = await sendMessage("FETCH_PRESENCE_CATALOG");
             setState((current) => ({
               ...current,
-              catalog: response.ok
-                ? { status: "ready", items: response.items }
-                : {
-                    status: "error",
-                    items: current.catalog.items,
-                    error: response.error,
-                  },
+              catalog: response.ok ? { status: "ready", items: response.items } : { status: "error", items: current.catalog.items, error: response.error }
             }));
           } catch (error) {
             setState((current) => ({
@@ -212,18 +205,15 @@ export const ExtensionStateProvider = ({
               catalog: {
                 status: "error",
                 items: current.catalog.items,
-                error:
-                  error instanceof Error
-                    ? error.message
-                    : "CATALOG_REQUEST_FAILED",
-              },
+                error: error instanceof Error ? error.message : "CATALOG_REQUEST_FAILED"
+              }
             }));
           } finally {
             catalogInFlight.current = null;
           }
         })();
         return catalogInFlight.current;
-      },
+      }
     };
   }, [patch]);
 
@@ -241,7 +231,7 @@ export const ExtensionStateProvider = ({
         refresh.presenceSettings(),
         refresh.consent(),
         refresh.customActivities(),
-        refresh.account(),
+        refresh.account()
       ]);
       if (!cancelled) patch({ ready: true });
       void sendMessage("SYNC_ACCOUNT")
@@ -251,7 +241,7 @@ export const ExtensionStateProvider = ({
       void refresh.updates();
       void sendMessage("TRACK_EVENT", {
         key: "extension_open",
-        payload: { surface: "sidepanel" },
+        payload: { surface: "sidepanel" }
       }).catch(() => {});
       void sendMessage("RECORD_USAGE_DAY").catch(() => {});
     })();
@@ -261,48 +251,44 @@ export const ExtensionStateProvider = ({
   }, [patch, refresh]);
 
   useEffect(() => {
-    const onChanged = (
-      changes: Record<string, chrome.storage.StorageChange>,
-      area: string,
-    ) => {
+    const onChanged = (changes: Record<string, chrome.storage.StorageChange>, area: string) => {
       if (area === "session") {
-        if ("tabPresences" in changes || "mutedTabIds" in changes)
-          void refresh.tab();
+        if ("tabPresences" in changes || "mutedTabIds" in changes) void refresh.tab();
         return;
       }
       if (area !== "local") return;
+
       if ("presences" in changes) {
         void refresh.presences();
         void refresh.tab();
       }
+
       if ("settings" in changes) void refresh.settings();
       if ("currentActivity" in changes) void refresh.activity();
       if ("presenceSettings" in changes) void refresh.presenceSettings();
       if ("onboarding" in changes) void refresh.onboarding();
       if ("analyticsConsent" in changes) void refresh.consent();
       if ("customActivities" in changes) void refresh.customActivities();
-      if ("account" in changes || "syncState" in changes)
-        void refresh.account();
+      if ("account" in changes || "syncState" in changes) void refresh.account();
     };
     chrome.storage.onChanged.addListener(onChanged);
     return () => chrome.storage.onChanged.removeListener(onChanged);
   }, [refresh]);
 
   useEffect(() => {
-    const onMessage = (message: { source?: string; type?: string }) => {
-      if (
-        message?.source === "PRESENCES_BACKGROUND" &&
-        message.type === "PRESENCES_CHANGED"
-      )
-        void refresh.presences();
+    const onMessage = (message: {
+      source?: string;
+      type?: string;
+    }) => {
+      if (message?.source === "PRESENCES_BACKGROUND" && message.type === "PRESENCES_CHANGED") void refresh.presences();
     };
     chrome.runtime.onMessage.addListener(onMessage);
 
     const onTab = () => void refresh.tab();
-    const onTabUpdated = (
-      _id: number,
-      info: { url?: string; status?: string },
-    ) => {
+    const onTabUpdated = (_id: number, info: {
+      url?: string;
+      status?: string;
+    }) => {
       if (info.url || info.status === "complete") void refresh.tab();
     };
     chrome.tabs?.onActivated?.addListener(onTab);
@@ -320,6 +306,7 @@ export const ExtensionStateProvider = ({
     let ticks = 0;
     const tick = () => {
       if (document.visibilityState !== "visible") return;
+
       void refresh.native();
       if (ticks++ % 2 === 0) void refresh.userScripts();
     };
@@ -331,23 +318,17 @@ export const ExtensionStateProvider = ({
     };
   }, [refresh]);
 
-  const updateSettings = useCallback(
-    async (partial: Partial<ExtensionSettings>) => {
-      setState((current) => ({
-        ...current,
-        settings: { ...current.settings, ...partial },
-      }));
-      const next = await sendMessage("SET_SETTINGS", partial);
-      patch({ settings: next });
-      return next;
-    },
-    [patch],
-  );
+  const updateSettings = useCallback(async (partial: Partial<ExtensionSettings>) => {
+    setState((current) => ({
+      ...current,
+      settings: { ...current.settings, ...partial }
+    }));
+    const next = await sendMessage("SET_SETTINGS", partial);
+    patch({ settings: next });
+    return next;
+  }, [patch]);
 
-  const value = useMemo(
-    () => ({ state, refresh, patch, updateSettings }),
-    [state, refresh, patch, updateSettings],
-  );
+  const value = useMemo(() => ({ state, refresh, patch, updateSettings }), [state, refresh, patch, updateSettings]);
   return (
     <ExtensionStateContext.Provider value={value}>
       {children}
@@ -357,9 +338,8 @@ export const ExtensionStateProvider = ({
 
 export const useExtensionState = (): ExtensionStateValue => {
   const value = useContext(ExtensionStateContext);
-  if (!value)
-    throw new Error(
-      "useExtensionState must be used inside <ExtensionStateProvider>",
-    );
+
+  if (!value) throw new Error("useExtensionState must be used inside <ExtensionStateProvider>");
+
   return value;
 };

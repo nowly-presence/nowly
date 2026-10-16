@@ -5,64 +5,42 @@ const mockPrisma = vi.hoisted(() => ({
     findUnique: vi.fn(),
     findMany: vi.fn(),
     upsert: vi.fn(),
-    updateMany: vi.fn(),
+    updateMany: vi.fn()
   },
   presenceVersion: {
     findMany: vi.fn(),
-    upsert: vi.fn(),
+    upsert: vi.fn()
   },
   device: {
     upsert: vi.fn(),
-    findUnique: vi.fn(),
+    findUnique: vi.fn()
   },
   devicePresence: {
     upsert: vi.fn(),
     count: vi.fn(),
-    groupBy: vi.fn(),
+    groupBy: vi.fn()
   },
   presenceActiveDevice: {
     upsert: vi.fn(),
     deleteMany: vi.fn(),
     count: vi.fn(),
-    groupBy: vi.fn(),
+    groupBy: vi.fn()
   },
   presenceLike: {
     upsert: vi.fn(),
     deleteMany: vi.fn(),
     findUnique: vi.fn(),
     count: vi.fn(),
-    groupBy: vi.fn(),
-  },
+    groupBy: vi.fn()
+  }
 }));
 
 vi.mock("@/db/client", () => ({
   getPrisma: vi.fn(() => mockPrisma),
-  hasDatabase: vi.fn(() => true),
+  hasDatabase: vi.fn(() => true)
 }));
 
-import {
-  getPresenceStats,
-  getPresenceListData,
-  incrementInstalls,
-  setActiveUsers,
-  markActiveDevice,
-  clearActiveDevice,
-  clearActiveDevicesForDevice,
-  setUpdated,
-  setAdded,
-  setVersion,
-  getVersion,
-  addVersion,
-  setPresenceMeta,
-  getPresenceMeta,
-  getAllPresenceSlugs,
-  getVersionHistory,
-  setArchived,
-  likePresence,
-  unlikePresence,
-  hasLikedPresence,
-  getLikeCount,
-} from "@/features/presence/presence.repository";
+import { getPresenceStats, getPresenceListData, incrementInstalls, setActiveUsers, markActiveDevice, clearActiveDevice, clearActiveDevicesForDevice, setUpdated, setAdded, setVersion, getVersion, addVersion, setPresenceMeta, getPresenceMeta, getAllPresenceSlugs, getVersionHistory, setArchived, likePresence, unlikePresence, hasLikedPresence, getLikeCount } from "@/features/presence/presence.repository";
 
 describe("getPresenceStats", () => {
   beforeEach(() => {
@@ -92,7 +70,7 @@ describe("getPresenceStats", () => {
       version: "1.2.3",
       archived: true,
       addedAt,
-      updatedAt,
+      updatedAt
     });
     mockPrisma.devicePresence.count.mockResolvedValue(100);
     mockPrisma.presenceActiveDevice.deleteMany.mockResolvedValue({ count: 0 });
@@ -117,7 +95,7 @@ describe("getPresenceStats", () => {
     expect(stats.activeUsers).toBe(7);
     expect(mockPrisma.presenceActiveDevice.deleteMany).toHaveBeenCalled();
     expect(mockPrisma.presenceActiveDevice.count).toHaveBeenCalledWith({
-      where: { slug: "youtube" },
+      where: { slug: "youtube" }
     });
   });
 });
@@ -134,8 +112,8 @@ describe("getPresenceListData", () => {
         metadata: { name: "YouTube" },
         version: "1.2.3",
         addedAt,
-        updatedAt,
-      },
+        updatedAt
+      }
     ]);
     mockPrisma.devicePresence.groupBy.mockResolvedValue([]);
     mockPrisma.presenceActiveDevice.groupBy.mockResolvedValue([]);
@@ -147,7 +125,7 @@ describe("getPresenceListData", () => {
       name: "YouTube",
       version: "1.2.3",
       addedAt: addedAt.toISOString(),
-      lastUpdated: updatedAt.toISOString(),
+      lastUpdated: updatedAt.toISOString()
     });
     expect(mockPrisma.presence.findMany).toHaveBeenCalledWith({
       where: { archived: false },
@@ -156,8 +134,8 @@ describe("getPresenceListData", () => {
         metadata: true,
         version: true,
         addedAt: true,
-        updatedAt: true,
-      },
+        updatedAt: true
+      }
     });
     expect(mockPrisma.presence.findUnique).not.toHaveBeenCalled();
     expect(mockPrisma.devicePresence.count).not.toHaveBeenCalled();
@@ -173,7 +151,7 @@ describe("incrementInstalls", () => {
     mockPrisma.device.upsert.mockResolvedValue({ deviceId: "dev-1" });
     mockPrisma.devicePresence.upsert.mockResolvedValue({
       deviceId: "dev-1",
-      slug: "yt",
+      slug: "yt"
     });
     mockPrisma.devicePresence.count.mockResolvedValue(42);
 
@@ -181,7 +159,10 @@ describe("incrementInstalls", () => {
     expect(mockPrisma.device.upsert).toHaveBeenCalled();
     expect(mockPrisma.devicePresence.upsert).toHaveBeenCalled();
     expect(mockPrisma.devicePresence.count).toHaveBeenCalledWith({
-      where: { slug: "yt", installed: true },
+      where: {
+        slug: "yt",
+        installed: true
+      }
     });
   });
 });
@@ -204,17 +185,22 @@ describe("markActiveDevice / clearActiveDevice", () => {
   it("tracks active devices via upsert", async () => {
     mockPrisma.presenceActiveDevice.upsert.mockResolvedValue({
       slug: "yt",
-      deviceId: "device-1",
+      deviceId: "device-1"
     });
     await markActiveDevice("yt", "device-1", 123);
     expect(mockPrisma.presenceActiveDevice.upsert).toHaveBeenCalledWith({
-      where: { slug_deviceId: { slug: "yt", deviceId: "device-1" } },
+      where: {
+        slug_deviceId: {
+          slug: "yt",
+          deviceId: "device-1"
+        }
+      },
       create: {
         slug: "yt",
         deviceId: "device-1",
-        lastSeenAt: expect.any(Date),
+        lastSeenAt: expect.any(Date)
       },
-      update: { lastSeenAt: expect.any(Date) },
+      update: { lastSeenAt: expect.any(Date) }
     });
   });
 
@@ -222,7 +208,10 @@ describe("markActiveDevice / clearActiveDevice", () => {
     mockPrisma.presenceActiveDevice.deleteMany.mockResolvedValue({ count: 1 });
     await clearActiveDevice("yt", "device-1");
     expect(mockPrisma.presenceActiveDevice.deleteMany).toHaveBeenCalledWith({
-      where: { slug: "yt", deviceId: "device-1" },
+      where: {
+        slug: "yt",
+        deviceId: "device-1"
+      }
     });
   });
 
@@ -230,7 +219,7 @@ describe("markActiveDevice / clearActiveDevice", () => {
     mockPrisma.presenceActiveDevice.deleteMany.mockResolvedValue({ count: 2 });
     await clearActiveDevicesForDevice("device-1");
     expect(mockPrisma.presenceActiveDevice.deleteMany).toHaveBeenCalledWith({
-      where: { deviceId: "device-1" },
+      where: { deviceId: "device-1" }
     });
   });
 });
@@ -243,8 +232,11 @@ describe("setUpdated / setAdded", () => {
     await setUpdated("yt", "2024-06-01");
     expect(mockPrisma.presence.upsert).toHaveBeenCalledWith({
       where: { slug: "yt" },
-      create: { slug: "yt", updatedAt: new Date("2024-06-01") },
-      update: { updatedAt: new Date("2024-06-01") },
+      create: {
+        slug: "yt",
+        updatedAt: new Date("2024-06-01")
+      },
+      update: { updatedAt: new Date("2024-06-01") }
     });
   });
 
@@ -263,8 +255,11 @@ describe("setUpdated / setAdded", () => {
     await setAdded("yt", "2024-01-01");
     expect(mockPrisma.presence.upsert).toHaveBeenCalledWith({
       where: { slug: "yt" },
-      create: { slug: "yt", addedAt: new Date("2024-01-01") },
-      update: {},
+      create: {
+        slug: "yt",
+        addedAt: new Date("2024-01-01")
+      },
+      update: {}
     });
   });
 
@@ -272,9 +267,7 @@ describe("setUpdated / setAdded", () => {
     mockPrisma.presence.upsert.mockResolvedValue({});
     const publishedAt = new Date("2024-01-01T00:00:00.000Z");
     await setAdded("yt", publishedAt);
-    expect(mockPrisma.presence.upsert.mock.calls[0][0].create.addedAt).toBe(
-      publishedAt,
-    );
+    expect(mockPrisma.presence.upsert.mock.calls[0][0].create.addedAt).toBe(publishedAt);
   });
 });
 
@@ -286,8 +279,15 @@ describe("setVersion / getVersion", () => {
     await setVersion("yt", "1.0.0");
     expect(mockPrisma.presence.upsert).toHaveBeenCalledWith({
       where: { slug: "yt" },
-      create: { slug: "yt", version: "1.0.0", updatedAt: expect.any(Date) },
-      update: { version: "1.0.0", updatedAt: expect.any(Date) },
+      create: {
+        slug: "yt",
+        version: "1.0.0",
+        updatedAt: expect.any(Date)
+      },
+      update: {
+        version: "1.0.0",
+        updatedAt: expect.any(Date)
+      }
     });
   });
 
@@ -297,8 +297,15 @@ describe("setVersion / getVersion", () => {
     await setVersion("yt", "1.0.0", publishedAt);
     expect(mockPrisma.presence.upsert).toHaveBeenCalledWith({
       where: { slug: "yt" },
-      create: { slug: "yt", version: "1.0.0", updatedAt: publishedAt },
-      update: { version: "1.0.0", updatedAt: publishedAt },
+      create: {
+        slug: "yt",
+        version: "1.0.0",
+        updatedAt: publishedAt
+      },
+      update: {
+        version: "1.0.0",
+        updatedAt: publishedAt
+      }
     });
   });
 
@@ -307,7 +314,7 @@ describe("setVersion / getVersion", () => {
     expect(await getVersion("yt")).toBe("1.0.0");
     expect(mockPrisma.presence.findUnique).toHaveBeenCalledWith({
       where: { slug: "yt" },
-      select: { version: true },
+      select: { version: true }
     });
   });
 
@@ -328,32 +335,40 @@ describe("addVersion", () => {
       version: "1.0.0",
       changelog: "Initial",
       author: "dev",
-      timestamp: 123,
+      timestamp: 123
     };
     await addVersion("yt", entry);
 
     expect(mockPrisma.presence.upsert).toHaveBeenCalledWith({
       where: { slug: "yt" },
-      create: { slug: "yt", version: "1.0.0" },
-      update: {},
+      create: {
+        slug: "yt",
+        version: "1.0.0"
+      },
+      update: {}
     });
 
     expect(mockPrisma.presenceVersion.upsert).toHaveBeenCalledWith({
-      where: { slug_version: { slug: "yt", version: "1.0.0" } },
+      where: {
+        slug_version: {
+          slug: "yt",
+          version: "1.0.0"
+        }
+      },
       create: {
         slug: "yt",
         version: "1.0.0",
         changelog: "Initial",
         author: "dev",
         timestamp: new Date(123),
-        createdAt: new Date(123),
+        createdAt: new Date(123)
       },
       update: {
         changelog: "Initial",
         author: "dev",
         timestamp: new Date(123),
-        createdAt: new Date(123),
-      },
+        createdAt: new Date(123)
+      }
     });
   });
 
@@ -367,12 +382,11 @@ describe("addVersion", () => {
       author: "dev",
       authorGithub: undefined,
       pr: undefined,
-      timestamp: 456,
+      timestamp: 456
     };
     await addVersion("yt", entry);
 
-    const createCall =
-      mockPrisma.presenceVersion.upsert.mock.calls[0][0].create;
+    const createCall = mockPrisma.presenceVersion.upsert.mock.calls[0][0].create;
     expect(createCall.authorGithub).toBeUndefined();
     expect(createCall.pr).toBeUndefined();
   });
@@ -386,19 +400,24 @@ describe("setPresenceMeta / getPresenceMeta", () => {
     await setPresenceMeta("yt", { name: "YT" });
     expect(mockPrisma.presence.upsert).toHaveBeenCalledWith({
       where: { slug: "yt" },
-      create: { slug: "yt", metadata: { name: "YT" } },
-      update: { metadata: { name: "YT" } },
+      create: {
+        slug: "yt",
+        metadata: { name: "YT" }
+      },
+      update: {
+        metadata: { name: "YT" }
+      }
     });
   });
 
   it("retrieves metadata", async () => {
     mockPrisma.presence.findUnique.mockResolvedValue({
-      metadata: { name: "YT" },
+      metadata: { name: "YT" }
     });
     expect(await getPresenceMeta("yt")).toEqual({ name: "YT" });
     expect(mockPrisma.presence.findUnique).toHaveBeenCalledWith({
       where: { slug: "yt" },
-      select: { metadata: true },
+      select: { metadata: true }
     });
   });
 
@@ -414,25 +433,23 @@ describe("getAllPresenceSlugs", () => {
   it("returns slugs from all presences ordered alphabetically", async () => {
     mockPrisma.presence.findMany.mockResolvedValue([
       { slug: "youtube" },
-      { slug: "twitch" },
+      { slug: "twitch" }
     ]);
     expect(await getAllPresenceSlugs()).toEqual(["youtube", "twitch"]);
     expect(mockPrisma.presence.findMany).toHaveBeenCalledWith({
       where: { archived: false },
       select: { slug: true },
-      orderBy: { slug: "asc" },
+      orderBy: { slug: "asc" }
     });
   });
 
   it("includes archived slugs when requested", async () => {
     mockPrisma.presence.findMany.mockResolvedValue([{ slug: "youtube" }]);
-    expect(await getAllPresenceSlugs({ includeArchived: true })).toEqual([
-      "youtube",
-    ]);
+    expect(await getAllPresenceSlugs({ includeArchived: true })).toEqual(["youtube"]);
     expect(mockPrisma.presence.findMany).toHaveBeenCalledWith({
       where: undefined,
       select: { slug: true },
-      orderBy: { slug: "asc" },
+      orderBy: { slug: "asc" }
     });
   });
 
@@ -449,8 +466,11 @@ describe("setArchived", () => {
     mockPrisma.presence.updateMany.mockResolvedValue({ count: 1 });
     expect(await setArchived("cinepulse", true)).toBe(true);
     expect(mockPrisma.presence.updateMany).toHaveBeenCalledWith({
-      where: { slug: "cinepulse", archived: { not: true } },
-      data: { archived: true },
+      where: {
+        slug: "cinepulse",
+        archived: { not: true }
+      },
+      data: { archived: true }
     });
   });
 
@@ -468,7 +488,7 @@ describe("getVersionHistory", () => {
     expect(await getVersionHistory("yt")).toEqual([]);
     expect(mockPrisma.presenceVersion.findMany).toHaveBeenCalledWith({
       where: { slug: "yt" },
-      orderBy: { timestamp: "desc" },
+      orderBy: { timestamp: "desc" }
     });
   });
 
@@ -491,7 +511,7 @@ describe("getVersionHistory", () => {
         bundleSizeLabel: null,
         bundleSha256: null,
         versionType: null,
-        aiGeneratedChangelog: null,
+        aiGeneratedChangelog: null
       },
       {
         version: "0.9.0",
@@ -510,8 +530,8 @@ describe("getVersionHistory", () => {
         bundleSizeLabel: null,
         bundleSha256: null,
         versionType: null,
-        aiGeneratedChangelog: null,
-      },
+        aiGeneratedChangelog: null
+      }
     ]);
     const history = await getVersionHistory("yt");
     expect(history).toHaveLength(2);
@@ -530,9 +550,18 @@ describe("likePresence / unlikePresence / hasLikedPresence / getLikeCount", () =
     await likePresence("youtube", "device-1");
 
     expect(mockPrisma.presenceLike.upsert).toHaveBeenCalledWith({
-      where: { slug_deviceId: { slug: "youtube", deviceId: "device-1" } },
-      create: { slug: "youtube", deviceId: "device-1", userId: null },
-      update: {},
+      where: {
+        slug_deviceId: {
+          slug: "youtube",
+          deviceId: "device-1"
+        }
+      },
+      create: {
+        slug: "youtube",
+        deviceId: "device-1",
+        userId: null
+      },
+      update: {}
     });
   });
 
@@ -540,7 +569,10 @@ describe("likePresence / unlikePresence / hasLikedPresence / getLikeCount", () =
     await unlikePresence("youtube", "device-1");
 
     expect(mockPrisma.presenceLike.deleteMany).toHaveBeenCalledWith({
-      where: { slug: "youtube", deviceId: "device-1" },
+      where: {
+        slug: "youtube",
+        deviceId: "device-1"
+      }
     });
   });
 
@@ -549,7 +581,10 @@ describe("likePresence / unlikePresence / hasLikedPresence / getLikeCount", () =
 
     expect(await hasLikedPresence("youtube", "device-1")).toBe(true);
     expect(mockPrisma.presenceLike.count).toHaveBeenCalledWith({
-      where: { slug: "youtube", deviceId: "device-1" },
+      where: {
+        slug: "youtube",
+        deviceId: "device-1"
+      }
     });
   });
 
@@ -564,7 +599,7 @@ describe("likePresence / unlikePresence / hasLikedPresence / getLikeCount", () =
 
     expect(await getLikeCount("youtube")).toBe(42);
     expect(mockPrisma.presenceLike.count).toHaveBeenCalledWith({
-      where: { slug: "youtube" },
+      where: { slug: "youtube" }
     });
   });
 });

@@ -9,12 +9,7 @@ type PresenceTileProps = {
 };
 
 export const PresenceTile = ({ src, name, className }: PresenceTileProps) => (
-  <div
-    className={cn(
-      "relative shrink-0 overflow-hidden rounded-[19.32%] border border-[#110f0f] bg-[#03080c]",
-      className,
-    )}
-  >
+  <div className={cn("relative shrink-0 overflow-hidden rounded-[19.32%] border border-[#110f0f] bg-[#03080c]", className)}>
     <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[19.32%] blur-[8px]">
       <Image src={src} alt="" fill sizes="96px" className="object-cover" />
     </div>

@@ -1,22 +1,10 @@
 import { FALLBACK_LOCALE } from "@nowly/locales";
 
 import { formatBytes } from "@nowly/shared";
-import {
-  generateChangelog,
-  translateChangelog,
-} from "@/shared/changelog.service";
+import { generateChangelog, translateChangelog } from "@/shared/changelog.service";
 import { sha256Base64Url } from "@/shared/crypto.service";
 import { serializeJsonField } from "./presence.service";
-import {
-  addVersion,
-  getAllPresenceSlugs,
-  getPresenceStats,
-  getVersionHistory,
-  setAdded,
-  setArchived,
-  setPresenceMeta,
-  setVersion,
-} from "./presence.repository";
+import { addVersion, getAllPresenceSlugs, getPresenceStats, getVersionHistory, setAdded, setArchived, setPresenceMeta, setVersion } from "./presence.repository";
 
 type ReleasePerson = {
   name: string;
@@ -78,39 +66,33 @@ const bumpPatch = (version: string): string => {
  * For each presence it resolves the next version, generates/translates the
  * changelog, records the version history entry and upserts metadata.
  */
-export const processPresenceSync = async (
-  body: PresenceSyncBody,
-): Promise<PresenceSyncResponse> => {
+export const processPresenceSync = async (body: PresenceSyncBody): Promise<PresenceSyncResponse> => {
   const results: PresenceSyncResult[] = [];
   const seen = new Set<string>();
 
   for (const p of body.presences ?? []) {
     if (seen.has(p.slug)) continue;
+
     seen.add(p.slug);
 
     const stats = await getPresenceStats(p.slug);
+
     const currentVersion = stats.version;
-    const author =
-      p.author ||
-      (stats.version
-        ? (await getVersionHistory(p.slug))[0]?.author || "unknown"
-        : "unknown");
+    const author = p.author || (stats.version ? (await getVersionHistory(p.slug))[0]?.author || "unknown" : "unknown");
     const changelogs = p.changelog
       ? translateChangelog(p.changelog)
       : await generateChangelog({
           type: p.type,
           name: p.name,
           changedFiles: p.changedFiles,
-          ...(p.type === "new" ? { descriptions: p.description } : {}),
+          ...(p.type === "new" ? { descriptions: p.description } : {})
         });
     const changelog = JSON.stringify(changelogs);
     const displayChangelog = changelogs[FALLBACK_LOCALE] || "";
     const publishedAt = new Date();
     const timestamp = publishedAt.getTime();
     const createdAt = publishedAt.toISOString();
-    const bundleSizeBytes = p.bundle
-      ? Buffer.byteLength(p.bundle, "utf-8")
-      : undefined;
+    const bundleSizeBytes = p.bundle ? Buffer.byteLength(p.bundle, "utf-8") : undefined;
     const bundleSha256 = p.bundle ? sha256Base64Url(p.bundle) : undefined;
     const versionEntryMeta = {
       changelog,
@@ -123,13 +105,12 @@ export const processPresenceSync = async (
       commitSha: p.commitSha,
       changedFiles: serializeJsonField(p.changedFiles),
       bundleSizeBytes,
-      bundleSizeLabel:
-        bundleSizeBytes != null ? formatBytes(bundleSizeBytes) : undefined,
+      bundleSizeLabel: bundleSizeBytes != null ? formatBytes(bundleSizeBytes) : undefined,
       bundleSha256,
       versionType: p.versionType,
       aiGeneratedChangelog: false,
       createdAt,
-      timestamp,
+      timestamp
     };
 
     if (p.type === "new" || !currentVersion) {
@@ -140,10 +121,14 @@ export const processPresenceSync = async (
       await addVersion(p.slug, {
         version,
         ...versionEntryMeta,
-        versionType: p.versionType ?? "new",
+        versionType: p.versionType ?? "new"
       });
 
-      results.push({ slug: p.slug, version, changelog: displayChangelog });
+      results.push({
+        slug: p.slug,
+        version,
+        changelog: displayChangelog
+      });
     } else {
       const nextVersion = p.version ?? bumpPatch(currentVersion);
 
@@ -151,13 +136,13 @@ export const processPresenceSync = async (
       await addVersion(p.slug, {
         version: nextVersion,
         ...versionEntryMeta,
-        versionType: p.versionType ?? "patch",
+        versionType: p.versionType ?? "patch"
       });
 
       results.push({
         slug: p.slug,
         version: nextVersion,
-        changelog: displayChangelog,
+        changelog: displayChangelog
       });
     }
 
@@ -171,22 +156,19 @@ export const processPresenceSync = async (
         category: p.category || "",
         description: p.description || {},
         color: p.color,
-        url: p.url,
+        url: p.url
       });
     }
 
     await setArchived(p.slug, false);
   }
 
-  const toArchive = new Set(
-    (body.archivedSlugs ?? []).map(normalizeSlug).filter(Boolean),
-  );
+  const toArchive = new Set((body.archivedSlugs ?? []).map(normalizeSlug).filter(Boolean));
 
   if (body.catalogSlugs) {
-    const catalog = new Set(
-      body.catalogSlugs.map(normalizeSlug).filter(Boolean),
-    );
+    const catalog = new Set(body.catalogSlugs.map(normalizeSlug).filter(Boolean));
     const known = await getAllPresenceSlugs({ includeArchived: true });
+
     for (const slug of known) {
       if (!catalog.has(slug)) toArchive.add(slug);
     }
@@ -195,6 +177,7 @@ export const processPresenceSync = async (
   for (const slug of seen) toArchive.delete(slug);
 
   const archived: string[] = [];
+
   for (const slug of toArchive) {
     if (await setArchived(slug, true)) archived.push(slug);
   }

@@ -10,11 +10,9 @@ let MARKETPLACE_ORIGIN = new URL(WEB_BASE_URL).origin;
 
 const isAllowedWebOrigin = (origin: string): boolean => {
   if (IS_CANARY) {
-    return (
-      origin === MARKETPLACE_ORIGIN ||
-      /^https?:\/\/(localhost|127\.0\.0\.1):3000$/.test(origin)
-    );
+    return origin === MARKETPLACE_ORIGIN || /^https?:\/\/(localhost|127\.0\.0\.1):3000$/.test(origin);
   }
+
   return origin === MARKETPLACE_ORIGIN;
 };
 
@@ -27,15 +25,12 @@ const WEB_MESSAGE_TYPES = new Set([
   "GET_DEVICE_INFO",
   "GET_ANALYTICS_CONSENT",
   "SET_ANALYTICS_CONSENT",
-  "NOWLY_SESSION",
+  "NOWLY_SESSION"
 ]);
 
-const toRouterMessageType = (type: string): string =>
-  type === "GET_INSTALLED" ? "GET_PRESENCES" : type;
+const toRouterMessageType = (type: string): string => (type === "GET_INSTALLED" ? "GET_PRESENCES" : type);
 
-const sendRuntimeMessage = async <T = unknown>(
-  message: Record<string, unknown>,
-): Promise<T | null> => {
+const sendRuntimeMessage = async <T = unknown>(message: Record<string, unknown>): Promise<T | null> => {
   try {
     return await chrome.runtime.sendMessage(message);
   } catch {
@@ -45,7 +40,9 @@ const sendRuntimeMessage = async <T = unknown>(
 
 const getDeviceId = async (): Promise<string> => {
   const result = await chrome.storage.local.get(DEVICE_KEY);
+
   if (result[DEVICE_KEY]) return result[DEVICE_KEY] as string;
+
   const id = crypto.randomUUID();
   await chrome.storage.local.set({ [DEVICE_KEY]: id });
   return id;
@@ -54,7 +51,13 @@ const getDeviceId = async (): Promise<string> => {
 const broadcastDetected = (): void => {
   let count = 0;
   const interval = window.setInterval(() => {
-    window.postMessage({ source: EXT_WEB_SOURCE, type: "EXT_DETECTED" }, "*");
+    window.postMessage(
+      {
+        source: EXT_WEB_SOURCE,
+        type: "EXT_DETECTED"
+      },
+      "*"
+    );
     count += 1;
     if (count >= 10) window.clearInterval(interval);
   }, 300);
@@ -64,34 +67,39 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
   if (!isAllowedWebOrigin(event.origin)) return;
 
   if (event.data?.source === EXT_WEB_SOURCE && event.data.type === "PING") {
-    window.postMessage({ source: EXT_WEB_SOURCE, type: "EXT_DETECTED" }, "*");
+    window.postMessage(
+      {
+        source: EXT_WEB_SOURCE,
+        type: "EXT_DETECTED"
+      },
+      "*"
+    );
   }
 });
 
 window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
   if (!isAllowedWebOrigin(event.origin)) return;
-  if (event.data?.source !== EXT_WEB_SOURCE || event.data.type === "PING")
-    return;
+  if (event.data?.source !== EXT_WEB_SOURCE || event.data.type === "PING") return;
   if (!WEB_MESSAGE_TYPES.has(event.data.type)) return;
 
   const msg = event.data;
+
   if (!msg.messageId) return;
 
   if (msg.type === "GET_DEVICE_INFO") {
     Promise.all([
       getDeviceId(),
-      chrome.storage.local.get(DEVICE_TOKEN_KEY),
+      chrome.storage.local.get(DEVICE_TOKEN_KEY)
     ]).then(([deviceId, tokenResult]) => {
-      const deviceToken =
-        (tokenResult[DEVICE_TOKEN_KEY] as string | undefined) ?? null;
+      const deviceToken = (tokenResult[DEVICE_TOKEN_KEY] as string | undefined) ?? null;
       window.postMessage(
         {
           source: EXT_WEB_SOURCE,
           type: "DEVICE_INFO",
           payload: { deviceId, deviceToken },
-          messageId: msg.messageId,
+          messageId: msg.messageId
         },
-        "*",
+        "*"
       );
     });
     return;
@@ -100,19 +108,19 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
   sendRuntimeMessage({
     source: "PRESENCES_CONTENT",
     type: toRouterMessageType(msg.type),
-    payload: msg.payload,
+    payload: msg.payload
   }).then((response) => {
     window.postMessage(
       {
         source: EXT_WEB_SOURCE,
-        type:
-          msg.type === "GET_INSTALLED"
-            ? "INSTALLED_PRESENCES"
-            : `${msg.type}_RESULT`,
-        payload: response ?? { ok: false, error: "BACKGROUND_UNAVAILABLE" },
-        messageId: msg.messageId,
+        type: msg.type === "GET_INSTALLED" ? "INSTALLED_PRESENCES" : `${msg.type}_RESULT`,
+        payload: response ?? {
+          ok: false,
+          error: "BACKGROUND_UNAVAILABLE"
+        },
+        messageId: msg.messageId
       },
-      "*",
+      "*"
     );
   });
 });
@@ -123,15 +131,12 @@ window.addEventListener("message", (event: MessageEvent) => {
   void sendRuntimeMessage({
     source: USER_SCRIPT_MESSAGE_SOURCE,
     type: event.data.type,
-    payload: event.data.payload,
+    payload: event.data.payload
   });
 });
 
 chrome.runtime.onMessage.addListener((message) => {
-  if (
-    message?.type === "UPDATE_MARKETPLACE_ORIGIN" &&
-    typeof message.origin === "string"
-  ) {
+  if (message?.type === "UPDATE_MARKETPLACE_ORIGIN" && typeof message.origin === "string") {
     MARKETPLACE_ORIGIN = message.origin;
   }
 
@@ -142,9 +147,9 @@ chrome.runtime.onMessage.addListener((message) => {
         type: "SETTINGS_UPDATED",
         slug: message.slug,
         settings: message.settings,
-        strings: message.strings,
+        strings: message.strings
       },
-      "*",
+      "*"
     );
   }
 });
@@ -154,7 +159,7 @@ startWebSeason({
   target: window,
   storage: {
     get: (keys) => chrome.storage.local.get(keys),
-    onChanged: chrome.storage.onChanged,
+    onChanged: chrome.storage.onChanged
   },
-  isAllowedOrigin: isAllowedWebOrigin,
+  isAllowedOrigin: isAllowedWebOrigin
 });

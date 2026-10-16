@@ -11,7 +11,9 @@ import { HScroll } from "@/ui/horizontal-scroller";
 import { LiveDot } from "@/ui/live-dot";
 import { Section } from "@/ui/section";
 
-export const TrendingCarousel = ({ views }: { views: PresenceView[] }) => {
+export const TrendingCarousel = ({ views }: {
+  views: PresenceView[];
+}) => {
   const { state } = useExtensionState();
   const { t, locale } = useI18n();
   const { push } = useNav();
@@ -25,7 +27,12 @@ export const TrendingCarousel = ({ views }: { views: PresenceView[] }) => {
           <button
             key={view.slug}
             type="button"
-            onClick={() => push({ name: "presence", slug: view.slug })}
+            onClick={() =>
+              push({
+                name: "presence",
+                slug: view.slug
+              })
+            }
             className="group relative flex w-[78%] max-w-72 shrink-0 snap-start flex-col overflow-hidden rounded-lg border border-tertiary-edge bg-tertiary text-left text-on-tertiary"
           >
             <PresenceThumbnail
@@ -35,32 +42,21 @@ export const TrendingCarousel = ({ views }: { views: PresenceView[] }) => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-tertiary via-tertiary/40 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 flex items-center gap-2.5 p-3">
-              <PresenceIcon
-                slug={view.slug}
-                name={view.name}
-                color={view.color}
-                size={32}
-              />
+              <PresenceIcon slug={view.slug} name={view.name} color={view.color} size={32} />
               <span className="flex min-w-0 flex-1 flex-col">
-                <span className="truncate text-label-lg font-medium">
-                  {view.name}
-                </span>
+                <span className="truncate text-label-lg font-medium">{view.name}</span>
                 <span className="flex items-center gap-1.5 text-label-md text-on-tertiary-muted">
                   {(view.activeUsers ?? 0) > 0 ? (
                     <>
                       <LiveDot pulse={false} />
-                      {t("library.usersNow", {
-                        count: formatCompact(view.activeUsers, locale),
-                      })}
+                      {t("library.usersNow", { count: formatCompact(view.activeUsers, locale) })}
                     </>
                   ) : (
                     t(categoryKey(view.category))
                   )}
                 </span>
               </span>
-              {state.presences[view.slug] && (
-                <RiCheckLine className="size-4 text-tertiary-accent" />
-              )}
+              {state.presences[view.slug] && <RiCheckLine className="size-4 text-tertiary-accent" />}
             </div>
           </button>
         ))}

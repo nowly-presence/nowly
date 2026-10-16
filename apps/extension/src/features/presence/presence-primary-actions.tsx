@@ -11,20 +11,12 @@ import { Button } from "@/ui/button";
 import { Group } from "@/ui/card";
 import { SwitchRow } from "@/ui/row";
 
-const enabledDescription = (
-  status: PresenceStatus,
-  stored: StoredPresence,
-  view: PresenceView,
-  t: Translate,
-  locale: Locale,
-): string => {
+const enabledDescription = (status: PresenceStatus, stored: StoredPresence, view: PresenceView, t: Translate, locale: Locale): string => {
   switch (status.kind) {
     case "live":
       return t("status.live");
     case "snoozed":
-      return t("status.snoozedUntil", {
-        time: formatTime(status.until, locale),
-      });
+      return t("status.snoozedUntil", { time: formatTime(status.until, locale) });
     case "schedule":
       return t("status.schedule");
     case "paused":
@@ -36,10 +28,7 @@ const enabledDescription = (
   }
 };
 
-export const PresencePrimaryActions = ({
-  view,
-  stored,
-}: {
+export const PresencePrimaryActions = ({ view, stored }: {
   view: PresenceView;
   stored: StoredPresence | undefined;
 }) => {
@@ -50,11 +39,7 @@ export const PresencePrimaryActions = ({
 
   if (!stored) {
     return (
-      <Button
-        loading={actions.pending === view.slug}
-        onClick={() => void actions.install(view.slug, view.name)}
-        className="w-full"
-      >
+      <Button loading={actions.pending === view.slug} onClick={() => void actions.install(view.slug, view.name)} className="w-full">
         {t("detail.install")}
       </Button>
     );
@@ -62,7 +47,7 @@ export const PresencePrimaryActions = ({
 
   const status = presenceStatus(view.slug, stored, state.settings, {
     liveSlug: state.activity?.slug,
-    detectedSlugs: new Set(state.tab.activities.map((entry) => entry.slug)),
+    detectedSlugs: new Set(state.tab.activities.map((entry) => entry.slug))
   });
 
   return (

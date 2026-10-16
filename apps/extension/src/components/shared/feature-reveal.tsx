@@ -1,18 +1,8 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence } from "motion/react";
 import { useFeatureReveals } from "@/hooks/feature-reveal-provider";
-import {
-  FeatureRevealExplain,
-  FeatureRevealSpotlight,
-  type SpotRect,
-} from "@/components/shared/feature-reveal-overlay";
+import { FeatureRevealExplain, FeatureRevealSpotlight, type SpotRect } from "@/components/shared/feature-reveal-overlay";
 
 type FeatureRevealProps = {
   id: string;
@@ -26,18 +16,19 @@ type Phase = "spotlight" | "explain";
 
 const measure = (host: HTMLElement | null): SpotRect | null => {
   const target = host?.firstElementChild;
+
   if (!(target instanceof HTMLElement)) return null;
+
   const rect = target.getBoundingClientRect();
-  return { x: rect.left, y: rect.top, width: rect.width, height: rect.height };
+  return {
+    x: rect.left,
+    y: rect.top,
+    width: rect.width,
+    height: rect.height
+  };
 };
 
-export const FeatureReveal = ({
-  id,
-  version,
-  text,
-  hint,
-  children,
-}: FeatureRevealProps) => {
+export const FeatureReveal = ({ id, version, text, hint, children }: FeatureRevealProps) => {
   const { activeId, register, complete } = useFeatureReveals();
   const hostRef = useRef<HTMLSpanElement>(null);
   const [phase, setPhase] = useState<Phase>("spotlight");
@@ -48,6 +39,7 @@ export const FeatureReveal = ({
 
   useEffect(() => {
     if (!active) return;
+
     setPhase("spotlight");
     let frame = 0;
     const update = () => {
@@ -68,7 +60,9 @@ export const FeatureReveal = ({
 
   useEffect(() => {
     const target = hostRef.current?.firstElementChild;
+
     if (!active || phase !== "spotlight" || !target) return;
+
     const onClick = () => setPhase("explain");
     target.addEventListener("click", onClick);
     return () => target.removeEventListener("click", onClick);
@@ -78,6 +72,7 @@ export const FeatureReveal = ({
 
   useEffect(() => {
     if (!active) return;
+
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") finish();
     };
@@ -92,19 +87,10 @@ export const FeatureReveal = ({
       </span>
       {createPortal(
         <AnimatePresence>
-          {active && rect && phase === "spotlight" && (
-            <FeatureRevealSpotlight
-              key="spotlight"
-              rect={rect}
-              hint={hint}
-              onSkip={finish}
-            />
-          )}
-          {active && phase === "explain" && (
-            <FeatureRevealExplain key="explain" text={text} onDone={finish} />
-          )}
+          {active && rect && phase === "spotlight" && <FeatureRevealSpotlight key="spotlight" rect={rect} hint={hint} onSkip={finish} />}
+          {active && phase === "explain" && <FeatureRevealExplain key="explain" text={text} onDone={finish} />}
         </AnimatePresence>,
-        document.body,
+        document.body
       )}
     </>
   );

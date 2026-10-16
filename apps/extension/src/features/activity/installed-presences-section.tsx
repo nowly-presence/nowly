@@ -20,11 +20,7 @@ type InstalledPresencesSectionProps = {
   now: number;
 };
 
-export const InstalledPresencesSection = ({
-  presences,
-  detectedSlugs,
-  now,
-}: InstalledPresencesSectionProps) => {
+export const InstalledPresencesSection = ({ presences, detectedSlugs, now }: InstalledPresencesSectionProps) => {
   const { state, updateSettings } = useExtensionState();
   const { t, locale } = useI18n();
   const { push, setTab } = useNav();
@@ -36,9 +32,12 @@ export const InstalledPresencesSection = ({
     const status = presenceStatus(slug, stored, state.settings, {
       liveSlug: state.activity?.slug,
       detectedSlugs,
-      now,
+      now
     });
-    return { status, line: statusText(status, stored, t, locale) };
+    return {
+      status,
+      line: statusText(status, stored, t, locale)
+    };
   };
 
   return (
@@ -52,20 +51,12 @@ export const InstalledPresencesSection = ({
         presences.length > 0 && (
           <button
             type="button"
-            onClick={() =>
-              void updateSettings({
-                presenceDisplayMode: grid ? "category" : "grid",
-              })
-            }
+            onClick={() => void updateSettings({ presenceDisplayMode: grid ? "category" : "grid" })}
             aria-label={viewLabel}
             title={viewLabel}
             className="flex size-7 items-center justify-center rounded-sm text-muted transition-colors hover:bg-hover hover:text-ink"
           >
-            {grid ? (
-              <RiListCheck className="size-4" />
-            ) : (
-              <RiFunctionLine className="size-4" />
-            )}
+            {grid ? <RiListCheck className="size-4" /> : <RiFunctionLine className="size-4" />}
           </button>
         )
       }
@@ -78,10 +69,7 @@ export const InstalledPresencesSection = ({
             title={t("activity.emptyTitle")}
             description={t("activity.emptyDescription")}
             action={
-              <Button
-                onClick={() => setTab("store")}
-                icon={<RiApps2AddLine className="size-4" />}
-              >
+              <Button onClick={() => setTab("store")} icon={<RiApps2AddLine className="size-4" />}>
                 {t("activity.browseLibrary")}
               </Button>
             }
@@ -95,7 +83,12 @@ export const InstalledPresencesSection = ({
               slug={slug}
               stored={stored}
               {...describe(slug, stored)}
-              onOpen={() => push({ name: "presence", slug })}
+              onOpen={() =>
+                push({
+                  name: "presence",
+                  slug
+                })
+              }
               onToggle={(enabled) => void actions.toggle(slug, enabled)}
             />
           ))}
@@ -109,7 +102,12 @@ export const InstalledPresencesSection = ({
               stored={stored}
               {...describe(slug, stored)}
               hasUpdate={Boolean(state.updates[slug])}
-              onOpen={() => push({ name: "presence", slug })}
+              onOpen={() =>
+                push({
+                  name: "presence",
+                  slug
+                })
+              }
               onToggle={(enabled) => void actions.toggle(slug, enabled)}
             />
           ))}

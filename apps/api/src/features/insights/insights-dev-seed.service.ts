@@ -17,48 +17,69 @@ const SEED_METRICS: Array<{
   withSource?: boolean;
   dailyRange: [number, number];
 }> = [
-  { key: "extension_install", withSource: true, dailyRange: [2, 8] },
-  { key: "extension_open", dailyRange: [30, 80] },
-  { key: "onboarding_completed", withSource: true, dailyRange: [2, 6] },
+  {
+    key: "extension_install",
+    withSource: true,
+    dailyRange: [2, 8]
+  },
+  {
+    key: "extension_open",
+    dailyRange: [30, 80]
+  },
+  {
+    key: "onboarding_completed",
+    withSource: true,
+    dailyRange: [2, 6]
+  },
   {
     key: "presence_install",
     withSlug: true,
     withSource: true,
-    dailyRange: [10, 30],
+    dailyRange: [10, 30]
   },
   {
     key: "presence_active_heartbeat",
     withSlug: true,
     withSource: true,
-    dailyRange: [80, 200],
+    dailyRange: [80, 200]
   },
-  { key: "presence_session_start", withSlug: true, dailyRange: [40, 100] },
+  {
+    key: "presence_session_start",
+    withSlug: true,
+    dailyRange: [40, 100]
+  },
   {
     key: "presence_uninstall",
     withSlug: true,
     withSource: true,
-    dailyRange: [1, 6],
+    dailyRange: [1, 6]
   },
-  { key: "presence_error", withSlug: true, dailyRange: [0, 5] },
+  {
+    key: "presence_error",
+    withSlug: true,
+    dailyRange: [0, 5]
+  },
   {
     key: "marketplace_page_view",
     withSlug: true,
     withSource: true,
-    dailyRange: [20, 60],
+    dailyRange: [20, 60]
   },
   {
     key: "marketplace_install_click",
     withSlug: true,
     withSource: true,
-    dailyRange: [5, 20],
+    dailyRange: [5, 20]
   },
-  { key: "native_connected", dailyRange: [15, 40] },
+  {
+    key: "native_connected",
+    dailyRange: [15, 40]
+  }
 ];
 
-const randomInt = (min: number, max: number): number =>
-  Math.floor(Math.random() * (max - min + 1)) + min;
-const pick = <T>(items: readonly T[]): T =>
-  items[randomInt(0, items.length - 1)]!;
+const randomInt = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1)) + min;
+
+const pick = <T>(items: readonly T[]): T => items[randomInt(0, items.length - 1)]!;
 
 const buildFakeDevices = (count: number) =>
   Array.from({ length: count }, () => ({
@@ -66,12 +87,13 @@ const buildFakeDevices = (count: number) =>
     browser: pick(BROWSERS),
     os: pick(OSES),
     locale: pick(LOCALES),
-    extensionVersion: pick(EXTENSION_VERSIONS),
+    extensionVersion: pick(EXTENSION_VERSIONS)
   }));
 
-export const seedFakeAnalytics = async (
-  days = 10,
-): Promise<{ devices: number; events: number }> => {
+export const seedFakeAnalytics = async (days = 10): Promise<{
+  devices: number;
+  events: number;
+}> => {
   const prisma = getPrisma();
   const devices = buildFakeDevices(12);
 
@@ -81,9 +103,9 @@ export const seedFakeAnalytics = async (
       browser: device.browser,
       os: device.os,
       locale: device.locale,
-      extensionVersion: device.extensionVersion,
+      extensionVersion: device.extensionVersion
     })),
-    skipDuplicates: true,
+    skipDuplicates: true
   });
 
   const now = Date.now();
@@ -101,8 +123,10 @@ export const seedFakeAnalytics = async (
 
   for (let dayOffset = days - 1; dayOffset >= 0; dayOffset--) {
     const dayStart = now - dayOffset * dayMs;
+
     for (const metric of SEED_METRICS) {
       const count = randomInt(metric.dailyRange[0], metric.dailyRange[1]);
+
       for (let i = 0; i < count; i++) {
         const device = pick(devices);
         events.push({
@@ -113,7 +137,7 @@ export const seedFakeAnalytics = async (
           source: metric.withSource ? pick(ANALYTICS_SOURCES) : null,
           country: pick(COUNTRIES),
           payload: {},
-          createdAt: new Date(dayStart + Math.random() * dayMs),
+          createdAt: new Date(dayStart + Math.random() * dayMs)
         });
       }
     }
@@ -121,10 +145,13 @@ export const seedFakeAnalytics = async (
 
   await prisma.analyticsEvent.createMany({
     data: events,
-    skipDuplicates: true,
+    skipDuplicates: true
   });
 
-  return { devices: devices.length, events: events.length };
+  return {
+    devices: devices.length,
+    events: events.length
+  };
 };
 
 export const clearFakeAnalytics = async (): Promise<{
@@ -133,10 +160,18 @@ export const clearFakeAnalytics = async (): Promise<{
 }> => {
   const prisma = getPrisma();
   const events = await prisma.analyticsEvent.deleteMany({
-    where: { deviceId: { startsWith: FAKE_DEVICE_PREFIX } },
+    where: {
+      deviceId: { startsWith: FAKE_DEVICE_PREFIX }
+    }
   });
+
   const devices = await prisma.device.deleteMany({
-    where: { deviceId: { startsWith: FAKE_DEVICE_PREFIX } },
+    where: {
+      deviceId: { startsWith: FAKE_DEVICE_PREFIX }
+    }
   });
-  return { devices: devices.count, events: events.count };
+  return {
+    devices: devices.count,
+    events: events.count
+  };
 };

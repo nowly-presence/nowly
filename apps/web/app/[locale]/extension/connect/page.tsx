@@ -7,14 +7,14 @@ import { Suspense } from "react";
 export const generateMetadata = async (): Promise<Metadata> => {
   const [locale, t] = await Promise.all([
     getLocale(),
-    getTranslations("pages.extensionConnect"),
+    getTranslations("pages.extensionConnect")
   ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     locale,
     path: "/extension/connect",
-    noIndex: true,
+    noIndex: true
   });
 };
 

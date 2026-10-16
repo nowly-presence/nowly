@@ -20,27 +20,29 @@ export type AccountDevice = {
   current: boolean;
 };
 
-export const getAccountProfile = async (
-  userId: string,
-): Promise<AccountProfile | null> => {
+export const getAccountProfile = async (userId: string): Promise<AccountProfile | null> => {
   const user = await getPrisma().user.findUnique({
     where: { id: userId },
-    select: { id: true, name: true, image: true, discordId: true },
+    select: {
+      id: true,
+      name: true,
+      image: true,
+      discordId: true
+    }
   });
+
   if (!user) return null;
+
   return {
     id: user.id,
     name: user.name,
     image: user.image,
     discordId: user.discordId,
-    githubLogin: null,
+    githubLogin: null
   };
 };
 
-export const listAccountDevices = async (
-  userId: string,
-  currentDeviceId: string | null,
-): Promise<AccountDevice[]> => {
+export const listAccountDevices = async (userId: string, currentDeviceId: string | null): Promise<AccountDevice[]> => {
   const devices = await getPrisma().device.findMany({
     where: { userId },
     orderBy: { lastSeenAt: "desc" },
@@ -49,8 +51,8 @@ export const listAccountDevices = async (
       browser: true,
       os: true,
       extensionVersion: true,
-      lastSeenAt: true,
-    },
+      lastSeenAt: true
+    }
   });
   return devices.map((device) => ({
     deviceId: device.deviceId,
@@ -58,24 +60,24 @@ export const listAccountDevices = async (
     os: device.os,
     extensionVersion: device.extensionVersion,
     lastSeenAt: device.lastSeenAt.toISOString(),
-    current: device.deviceId === currentDeviceId,
+    current: device.deviceId === currentDeviceId
   }));
 };
 
-export const unlinkAccountDevice = async (
-  userId: string,
-  deviceId: string,
-): Promise<boolean> => {
+export const unlinkAccountDevice = async (userId: string, deviceId: string): Promise<boolean> => {
   const result = await getPrisma().device.updateMany({
     where: { userId, deviceId },
-    data: { userId: null },
+    data: { userId: null }
   });
   await revokeDeviceExtensionTokens(userId, deviceId);
   return result.count > 0;
 };
 
 export type AccountExport = {
-  profile: AccountProfile & { email: string; createdAt: string };
+  profile: AccountProfile & {
+    email: string;
+    createdAt: string;
+  };
   linkedAccounts: Array<{
     providerId: string;
     accountId: string;
@@ -98,37 +100,44 @@ export type AccountExport = {
     updatedAt: string;
     updatedByDeviceId: string | null;
   }>;
-  presenceLikes: Array<{ slug: string; deviceId: string; likedAt: string }>;
+  presenceLikes: Array<{
+    slug: string;
+    deviceId: string;
+    likedAt: string;
+  }>;
 };
 
 const iso = (date: Date | null): string | null => date?.toISOString() ?? null;
 
-export const exportAccountData = async (
-  userId: string,
-): Promise<AccountExport | null> => {
+export const exportAccountData = async (userId: string): Promise<AccountExport | null> => {
   const prisma = getPrisma();
-  const [user, accounts, tokens, documents, likes, devices] = await Promise.all(
-    [
-      prisma.user.findUnique({ where: { id: userId } }),
-      prisma.account.findMany({
-        where: { userId },
-        select: { providerId: true, accountId: true, createdAt: true },
-      }),
-      prisma.extensionToken.findMany({
-        where: { userId },
-        orderBy: { createdAt: "asc" },
-      }),
-      prisma.syncDocument.findMany({
-        where: { userId },
-        orderBy: { key: "asc" },
-      }),
-      prisma.presenceLike.findMany({
-        where: { userId },
-        orderBy: { likedAt: "asc" },
-      }),
-      listAccountDevices(userId, null),
-    ],
-  );
+  const [user, accounts, tokens, documents, likes, devices] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: userId }
+    }),
+    prisma.account.findMany({
+      where: { userId },
+      select: {
+        providerId: true,
+        accountId: true,
+        createdAt: true
+      }
+    }),
+    prisma.extensionToken.findMany({
+      where: { userId },
+      orderBy: { createdAt: "asc" }
+    }),
+    prisma.syncDocument.findMany({
+      where: { userId },
+      orderBy: { key: "asc" }
+    }),
+    prisma.presenceLike.findMany({
+      where: { userId },
+      orderBy: { likedAt: "asc" }
+    }),
+    listAccountDevices(userId, null)
+  ]);
+
   if (!user) return null;
 
   return {
@@ -139,12 +148,12 @@ export const exportAccountData = async (
       image: user.image,
       discordId: user.discordId,
       githubLogin: null,
-      createdAt: user.createdAt.toISOString(),
+      createdAt: user.createdAt.toISOString()
     },
     linkedAccounts: accounts.map((account) => ({
       providerId: account.providerId,
       accountId: account.accountId,
-      createdAt: account.createdAt.toISOString(),
+      createdAt: account.createdAt.toISOString()
     })),
     devices,
     extensionTokens: tokens.map((token) => ({
@@ -154,33 +163,42 @@ export const exportAccountData = async (
       createdAt: token.createdAt.toISOString(),
       expiresAt: token.expiresAt.toISOString(),
       lastUsedAt: iso(token.lastUsedAt),
-      revokedAt: iso(token.revokedAt),
+      revokedAt: iso(token.revokedAt)
     })),
     syncDocuments: documents.map((document) => ({
       key: document.key,
       value: document.value,
       version: document.version,
       updatedAt: document.updatedAt.toISOString(),
-      updatedByDeviceId: document.updatedByDeviceId,
+      updatedByDeviceId: document.updatedByDeviceId
     })),
     presenceLikes: likes.map((like) => ({
       slug: like.slug,
       deviceId: like.deviceId,
-      likedAt: like.likedAt.toISOString(),
-    })),
+      likedAt: like.likedAt.toISOString()
+    }))
   };
 };
 
 export const deleteAccountData = async (userId: string): Promise<void> => {
   const prisma = getPrisma();
   await prisma.$transaction([
-    prisma.device.updateMany({ where: { userId }, data: { userId: null } }),
+    prisma.device.updateMany({
+      where: { userId },
+      data: { userId: null }
+    }),
     prisma.presenceLike.updateMany({
       where: { userId },
-      data: { userId: null },
+      data: { userId: null }
     }),
-    prisma.syncDocument.deleteMany({ where: { userId } }),
-    prisma.extensionToken.deleteMany({ where: { userId } }),
-    prisma.user.deleteMany({ where: { id: userId } }),
+    prisma.syncDocument.deleteMany({
+      where: { userId }
+    }),
+    prisma.extensionToken.deleteMany({
+      where: { userId }
+    }),
+    prisma.user.deleteMany({
+      where: { id: userId }
+    })
   ]);
 };

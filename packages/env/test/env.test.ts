@@ -15,12 +15,10 @@ describe("@nowly/env", () => {
   it("throws clear errors for missing required server secrets", () => {
     expect(() =>
       createEnv({
-        server: {
-          JWT_SECRET: z.string().trim().min(1),
-        },
+        server: { JWT_SECRET: z.string().trim().min(1) },
         runtimeEnv: {},
-        emptyStringAsUndefined: true,
-      }),
+        emptyStringAsUndefined: true
+      })
     ).toThrow();
   });
 

@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardTitle,
-  Input,
-  Label,
-  Textarea,
-} from "@nowly/ui";
+import { Button, Card, CardContent, CardDescription, CardTitle, Input, Label, Textarea } from "@nowly/ui";
 import { useState } from "react";
 
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
@@ -25,11 +16,14 @@ export const ContactForm = () => {
     email: "",
     subject: "",
     message: "",
-    website: "",
+    website: ""
   });
 
   const updateField = (field: keyof typeof form, value: string) => {
-    setForm((current) => ({ ...current, [field]: value }));
+    setForm((current) => ({
+      ...current,
+      [field]: value
+    }));
     if (status !== "idle") setStatus("idle");
   };
 
@@ -41,10 +35,18 @@ export const ContactForm = () => {
       const response = await fetch(`${presenceApiBaseUrl()}/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(form)
       });
+
       if (!response.ok) throw new Error("contact request failed");
-      setForm({ name: "", email: "", subject: "", message: "", website: "" });
+
+      setForm({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+        website: ""
+      });
       setStatus("success");
     } catch {
       setStatus("error");
@@ -56,15 +58,10 @@ export const ContactForm = () => {
       <CardContent>
         <CardTitle>{t("title")}</CardTitle>
         <CardDescription className="mt-2">{t("description")}</CardDescription>
-        <p className="mt-4 text-xs text-muted-foreground">
-          {t("required-note")}
-        </p>
+        <p className="mt-4 text-xs text-muted-foreground">{t("required-note")}</p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <div
-            className="absolute -left-[9999px] h-px w-px overflow-hidden"
-            aria-hidden="true"
-          >
+          <div className="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
             <Input
               id="contact-website"
               tabIndex={-1}

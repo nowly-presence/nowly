@@ -3,10 +3,7 @@ import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useFeatureReveals } from "@/hooks/feature-reveal-provider";
 import { useNav } from "@/hooks/navigation-provider";
 import { sendMessage } from "@/lib/messages";
-import {
-  discordIpcIssueOf,
-  shouldPromptDiscordIpcIssue,
-} from "@/shared/discord-ipc-prompt";
+import { discordIpcIssueOf, shouldPromptDiscordIpcIssue } from "@/shared/discord-ipc-prompt";
 
 const SHOW_DELAY_MS = 1500;
 
@@ -17,10 +14,7 @@ export const DiscordIpcPrompt = () => {
   const [handled, setHandled] = useState(false);
   const issue = discordIpcIssueOf(state.native);
   const onPage = stack.some((route) => route.name === "discord-ipc");
-  const due =
-    state.ready &&
-    !handled &&
-    shouldPromptDiscordIpcIssue(issue, activeId !== null);
+  const due = state.ready && !handled && shouldPromptDiscordIpcIssue(issue, activeId !== null);
 
   useEffect(() => {
     if (!issue.active) setHandled(false);
@@ -28,6 +22,7 @@ export const DiscordIpcPrompt = () => {
 
   useEffect(() => {
     if (!due) return;
+
     const timer = window.setTimeout(() => {
       setHandled(true);
       if (!onPage) push({ name: "discord-ipc" });

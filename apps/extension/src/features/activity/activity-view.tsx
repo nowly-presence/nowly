@@ -10,8 +10,7 @@ import { useActivityOverview } from "@/features/activity/use-activity-overview";
 
 export const ActivityView = () => {
   const { state } = useExtensionState();
-  const { now, detectedSlugs, sortedPresences, liveTab, otherActivities } =
-    useActivityOverview();
+  const { now, detectedSlugs, sortedPresences, liveTab, otherActivities } = useActivityOverview();
 
   if (!state.ready) {
     return (
@@ -25,18 +24,10 @@ export const ActivityView = () => {
 
   return (
     <ScreenBody>
-      <LiveActivitySection
-        liveTab={liveTab}
-        otherActivityCount={otherActivities.length}
-        hasPresences={sortedPresences.length > 0}
-      />
+      <LiveActivitySection liveTab={liveTab} otherActivityCount={otherActivities.length} hasPresences={sortedPresences.length > 0} />
       <CurrentTabSection />
       <QueuedActivitiesSection activities={otherActivities} />
-      <InstalledPresencesSection
-        presences={sortedPresences}
-        detectedSlugs={detectedSlugs}
-        now={now}
-      />
+      <InstalledPresencesSection presences={sortedPresences} detectedSlugs={detectedSlugs} now={now} />
       <SupportCard />
     </ScreenBody>
   );

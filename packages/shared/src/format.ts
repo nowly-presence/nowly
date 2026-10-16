@@ -6,6 +6,7 @@ import { DEFAULT_TEXT_MAX_LENGTH } from "./constants";
  */
 export const formatBytes = (bytes: number): string => {
   if (bytes >= 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+
   return `${(bytes / 1024).toFixed(1)} KB`;
 };
 
@@ -13,12 +14,12 @@ export const formatBytes = (bytes: number): string => {
  * Trim a free-text value and cap its length. Returns `undefined` for non-string
  * or empty input so callers can drop the field entirely.
  */
-export const cleanText = (
-  value: unknown,
-  max = DEFAULT_TEXT_MAX_LENGTH,
-): string | undefined => {
+export const cleanText = (value: unknown, max = DEFAULT_TEXT_MAX_LENGTH): string | undefined => {
   if (typeof value !== "string") return undefined;
+
   const trimmed = value.trim();
+
   if (!trimmed) return undefined;
+
   return trimmed.slice(0, max);
 };

@@ -1,16 +1,5 @@
 import type { SiteSeason } from "@/features/seasonal/lib/site-season";
-import {
-  BLOSSOM_PATH,
-  CONFETTI_PATH,
-  DOT_PATH,
-  LEAF_PATH,
-  MAPLE_PATH,
-  PETAL_PATH,
-  ROUND_LEAF_PATH,
-  SNOWFLAKE_PATH,
-  SPARKLE_PATH,
-  STAR_PATH,
-} from "@/features/seasonal/components/season-shapes";
+import { BLOSSOM_PATH, CONFETTI_PATH, DOT_PATH, LEAF_PATH, MAPLE_PATH, PETAL_PATH, ROUND_LEAF_PATH, SNOWFLAKE_PATH, SPARKLE_PATH, STAR_PATH } from "@/features/seasonal/components/season-shapes";
 
 export type SeasonMotion = "fall" | "rise";
 
@@ -40,7 +29,7 @@ export const SEASON_SCENES: Record<SiteSeason, SeasonScene> = {
     maxDuration: 24,
     sway: 14,
     spin: 160,
-    frost: false,
+    frost: false
   },
   halloween: {
     shapes: LEAVES,
@@ -52,7 +41,7 @@ export const SEASON_SCENES: Record<SiteSeason, SeasonScene> = {
     maxDuration: 24,
     sway: 14,
     spin: 160,
-    frost: false,
+    frost: false
   },
   winter: {
     shapes: [SNOWFLAKE_PATH, DOT_PATH, SNOWFLAKE_PATH],
@@ -64,7 +53,7 @@ export const SEASON_SCENES: Record<SiteSeason, SeasonScene> = {
     maxDuration: 28,
     sway: 10,
     spin: 90,
-    frost: true,
+    frost: true
   },
   spring: {
     shapes: [PETAL_PATH, BLOSSOM_PATH, PETAL_PATH],
@@ -76,7 +65,7 @@ export const SEASON_SCENES: Record<SiteSeason, SeasonScene> = {
     maxDuration: 26,
     sway: 16,
     spin: 200,
-    frost: false,
+    frost: false
   },
   summer: {
     shapes: [DOT_PATH, SPARKLE_PATH, DOT_PATH],
@@ -88,7 +77,7 @@ export const SEASON_SCENES: Record<SiteSeason, SeasonScene> = {
     maxDuration: 30,
     sway: 10,
     spin: 40,
-    frost: false,
+    frost: false
   },
   "new-year": {
     shapes: [CONFETTI_PATH, STAR_PATH, CONFETTI_PATH, SPARKLE_PATH],
@@ -100,8 +89,8 @@ export const SEASON_SCENES: Record<SiteSeason, SeasonScene> = {
     maxDuration: 20,
     sway: 12,
     spin: 320,
-    frost: false,
-  },
+    frost: false
+  }
 };
 
 export type SeasonParticle = {
@@ -129,29 +118,21 @@ const random = (seed: number) => {
   };
 };
 
-export const buildParticles = (
-  scene: SeasonScene,
-  count = PARTICLE_COUNT,
-): SeasonParticle[] => {
+export const buildParticles = (scene: SeasonScene, count = PARTICLE_COUNT): SeasonParticle[] => {
   const next = random(SEED);
   return Array.from({ length: count }, (_, id) => {
-    const duration =
-      scene.minDuration + next() * (scene.maxDuration - scene.minDuration);
+    const duration = scene.minDuration + next() * (scene.maxDuration - scene.minDuration);
     return {
       id,
       path: scene.shapes[id % scene.shapes.length],
       side: id % 2 === 0 ? "left" : "right",
       offset: Math.round(next() * 80) / 100,
-      size: Math.round(
-        scene.minSize + next() * (scene.maxSize - scene.minSize),
-      ),
+      size: Math.round(scene.minSize + next() * (scene.maxSize - scene.minSize)),
       duration: Math.round(duration * 10) / 10,
       delay: -Math.round(next() * duration * 10) / 10,
       sway: Math.round(scene.sway * (0.5 + next() * 0.5)),
-      spin: Math.round(
-        scene.spin * (next() > 0.5 ? 1 : -1) * (0.4 + next() * 0.6),
-      ),
-      tone: (id % TONE_COUNT) + 1,
+      spin: Math.round(scene.spin * (next() > 0.5 ? 1 : -1) * (0.4 + next() * 0.6)),
+      tone: (id % TONE_COUNT) + 1
     };
   });
 };

@@ -10,10 +10,12 @@ const dotClass = {
   discord: "bg-success",
   "no-discord": "bg-muted",
   connecting: "bg-muted animate-pulse",
-  "no-host": "bg-danger",
+  "no-host": "bg-danger"
 };
 
-export const Header = ({ theme }: { theme: "light" | "dark" }) => {
+export const Header = ({ theme }: {
+  theme: "light" | "dark";
+}) => {
   const { state, updateSettings } = useExtensionState();
   const { t } = useI18n();
   const { push } = useNav();
@@ -40,16 +42,10 @@ export const Header = ({ theme }: { theme: "light" | "dark" }) => {
           title={paused ? t("action.resume") : t("header.pause")}
           className={cn(
             "flex size-8 items-center justify-center rounded-full border transition-colors",
-            paused
-              ? "border-ink bg-ink text-canvas"
-              : "border-line bg-surface text-ink hover:border-line-strong",
+            paused ? "border-ink bg-ink text-canvas" : "border-line bg-surface text-ink hover:border-line-strong"
           )}
         >
-          {paused ? (
-            <RiPlayFill className="size-4" />
-          ) : (
-            <RiPauseLine className="size-4" />
-          )}
+          {paused ? <RiPlayFill className="size-4" /> : <RiPauseLine className="size-4" />}
         </button>
       </div>
     </header>

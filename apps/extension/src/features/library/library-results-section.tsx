@@ -13,10 +13,7 @@ import { Card, Group } from "@/ui/card";
 import { EmptyState } from "@/ui/empty-state";
 import { Section } from "@/ui/section";
 import { Segmented } from "@/ui/segmented";
-import type {
-  LibraryCategory,
-  LibrarySort,
-} from "@/features/library/library-catalog";
+import type { LibraryCategory, LibrarySort } from "@/features/library/library-catalog";
 import { LibraryPresenceRow } from "@/features/library/library-presence-row";
 
 type LibraryResultsSectionProps = {
@@ -29,15 +26,7 @@ type LibraryResultsSectionProps = {
   onSortChange: (sort: LibrarySort) => void;
 };
 
-export const LibraryResultsSection = ({
-  results,
-  newSlugs,
-  browsing,
-  query,
-  category,
-  sort,
-  onSortChange,
-}: LibraryResultsSectionProps) => {
+export const LibraryResultsSection = ({ results, newSlugs, browsing, query, category, sort, onSortChange }: LibraryResultsSectionProps) => {
   const { state } = useExtensionState();
   const { t } = useI18n();
   const { push } = useNav();
@@ -57,9 +46,18 @@ export const LibraryResultsSection = ({
           onChange={onSortChange}
           className="w-auto"
           options={[
-            { value: "popular", label: t("library.sortPopular") },
-            { value: "new", label: t("library.sortNew") },
-            { value: "name", label: t("library.sortName") },
+            {
+              value: "popular",
+              label: t("library.sortPopular")
+            },
+            {
+              value: "new",
+              label: t("library.sortNew")
+            },
+            {
+              value: "name",
+              label: t("library.sortName")
+            }
           ]}
         />
       }
@@ -69,18 +67,10 @@ export const LibraryResultsSection = ({
           <EmptyState
             decoration={<SeasonalDecor />}
             icon={<RiSearchLine className="size-5" />}
-            title={t("library.noResults", {
-              query:
-                query.trim() ||
-                t(categoryKey(category === "all" ? "other" : category)),
-            })}
+            title={t("library.noResults", { query: query.trim() || t(categoryKey(category === "all" ? "other" : category)) })}
             description={t("library.noResultsDescription")}
             action={
-              <Button
-                variant="secondary"
-                icon={<RiDiscordLine className="size-4" />}
-                onClick={() => openUrl(DISCORD_INVITE_URL)}
-              >
+              <Button variant="secondary" icon={<RiDiscordLine className="size-4" />} onClick={() => openUrl(DISCORD_INVITE_URL)}>
                 {t("library.request")}
               </Button>
             }
@@ -96,7 +86,12 @@ export const LibraryResultsSection = ({
               installed={Boolean(state.presences[view.slug])}
               installing={actions.pending === view.slug}
               showPublishedDate={sort === "new"}
-              onOpen={() => push({ name: "presence", slug: view.slug })}
+              onOpen={() =>
+                push({
+                  name: "presence",
+                  slug: view.slug
+                })
+              }
               onInstall={() => void actions.install(view.slug, view.name)}
             />
           ))}

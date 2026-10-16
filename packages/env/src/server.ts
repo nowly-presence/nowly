@@ -32,11 +32,9 @@ export const serverEnv = createEnv({
     AWS_SES_CONFIGURATION_SET: required.optional(),
     STATUS_CRON_SECRET: required.optional(),
     STATUS_CHECK_INTERVAL_HOURS: z.coerce.number().int().positive().default(1),
-    STATUS_SAMPLE_LIMIT: z.coerce.number().int().positive().default(168),
+    STATUS_SAMPLE_LIMIT: z.coerce.number().int().positive().default(168)
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
-  skipValidation:
-    process.env.NODE_ENV === "test" ||
-    process.env.SKIP_ENV_VALIDATION === "true",
+  skipValidation: process.env.NODE_ENV === "test" || process.env.SKIP_ENV_VALIDATION === "true"
 });

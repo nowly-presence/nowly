@@ -1,28 +1,12 @@
-import type {
-  CurrentActivity,
-  CustomActivitiesState,
-  CustomActivity,
-  InstalledPresences,
-  PresenceCatalogItem,
-  PresenceMetadata,
-  RuntimeLogEntry,
-  StoredPresence,
-} from "@/shared/types";
+import type { CurrentActivity, CustomActivitiesState, CustomActivity, InstalledPresences, PresenceCatalogItem, PresenceMetadata, RuntimeLogEntry, StoredPresence } from "@/shared/types";
 import type { PreviewScenario } from "@/preview/preview-params";
 
-export type CatalogFixture = PresenceCatalogItem & { likes?: number };
+export type CatalogFixture = PresenceCatalogItem & {
+  likes?: number;
+};
 
 const DAY_MS = 86_400_000;
-const PREFERRED_INSTALLS = [
-  "youtube",
-  "youtube-music",
-  "netflix",
-  "github",
-  "figma",
-  "twitch",
-  "crunchyroll",
-  "chatgpt",
-];
+const PREFERRED_INSTALLS = ["youtube", "youtube-music", "netflix", "github", "figma", "twitch", "crunchyroll", "chatgpt"];
 const INSTALLED_COUNT = 6;
 const FALLBACK_INSTALLED_COUNT = 5;
 const SNOOZED_INDEX = 3;
@@ -34,13 +18,13 @@ const SAMPLE_SETTINGS: Record<string, unknown> = {
     label: {
       "en-US": "Privacy mode",
       "fr-FR": "Mode privé",
-      "es-ES": "Modo privado",
+      "es-ES": "Modo privado"
     },
     description: {
       "en-US": "Hide the title you're watching.",
       "fr-FR": "Masque le titre que vous regardez.",
-      "es-ES": "Oculta el título que estás viendo.",
-    },
+      "es-ES": "Oculta el título que estás viendo."
+    }
   },
   showButtons: {
     type: "boolean",
@@ -48,13 +32,13 @@ const SAMPLE_SETTINGS: Record<string, unknown> = {
     label: {
       "en-US": "Show buttons",
       "fr-FR": "Afficher les boutons",
-      "es-ES": "Mostrar botones",
+      "es-ES": "Mostrar botones"
     },
     description: {
       "en-US": "Show a button to open the current page.",
       "fr-FR": "Affiche un bouton pour ouvrir la page en cours.",
-      "es-ES": "Muestra un botón para abrir la página actual.",
-    },
+      "es-ES": "Muestra un botón para abrir la página actual."
+    }
   },
   display: {
     type: "select",
@@ -62,32 +46,35 @@ const SAMPLE_SETTINGS: Record<string, unknown> = {
     label: {
       "en-US": "Main line",
       "fr-FR": "Ligne principale",
-      "es-ES": "Línea principal",
+      "es-ES": "Línea principal"
     },
     options: [
       {
         value: "title",
-        label: { "en-US": "Title", "fr-FR": "Titre", "es-ES": "Título" },
+        label: {
+          "en-US": "Title",
+          "fr-FR": "Titre",
+          "es-ES": "Título"
+        }
       },
       {
         value: "channel",
-        label: { "en-US": "Channel", "fr-FR": "Chaîne", "es-ES": "Canal" },
-      },
-    ],
-  },
+        label: {
+          "en-US": "Channel",
+          "fr-FR": "Chaîne",
+          "es-ES": "Canal"
+        }
+      }
+    ]
+  }
 };
 
-const stableHash = (value: string): number =>
-  [...value].reduce((acc, char) => (acc * 31 + char.charCodeAt(0)) >>> 0, 7);
+const stableHash = (value: string): number => [...value].reduce((acc, char) => (acc * 31 + char.charCodeAt(0)) >>> 0, 7);
 
-const toLocaleRecord = (
-  value: string | Record<string, string> | undefined,
-): Record<string, string> =>
+const toLocaleRecord = (value: string | Record<string, string> | undefined): Record<string, string> =>
   typeof value === "object" ? value : { "en-US": value ?? "" };
 
-export const loadCatalogFixture = async (
-  now: number,
-): Promise<CatalogFixture[]> => {
+export const loadCatalogFixture = async (now: number): Promise<CatalogFixture[]> => {
   const items: CatalogFixture[] = await fetch("/__fixtures/catalog.json")
     .then((response) => (response.ok ? response.json() : []))
     .catch(() => []);
@@ -95,9 +82,7 @@ export const loadCatalogFixture = async (
     const hash = stableHash(item.slug);
     const addedAt = now - (hash % 400) * DAY_MS;
     const republished = hash % 3 !== 0;
-    const lastUpdated = republished
-      ? Math.min(now, addedAt + (hash % 90) * DAY_MS)
-      : addedAt;
+    const lastUpdated = republished ? Math.min(now, addedAt + (hash % 90) * DAY_MS) : addedAt;
     return {
       ...item,
       version: `1.${item.slug.length % 5}.${item.slug.charCodeAt(0) % 9}`,
@@ -105,35 +90,28 @@ export const loadCatalogFixture = async (
       activeUsers: hash % 4 === 0 ? 0 : hash % 420,
       likes: hash % 800,
       addedAt: new Date(addedAt).toISOString(),
-      lastUpdated: new Date(lastUpdated).toISOString(),
+      lastUpdated: new Date(lastUpdated).toISOString()
     };
   });
 };
 
 export const toMetadata = (item: CatalogFixture): PresenceMetadata => ({
   slug: item.slug,
-  name:
-    typeof item.name === "string"
-      ? item.name
-      : (item.name?.["en-US"] ?? item.slug),
+  name: typeof item.name === "string" ? item.name : (item.name?.["en-US"] ?? item.slug),
   author: item.author ?? { name: "Nowly" },
   contributors: item.contributors,
   description: toLocaleRecord(item.description),
-  longDescription:
-    typeof item.longDescription === "object" ? item.longDescription : undefined,
+  longDescription: typeof item.longDescription === "object" ? item.longDescription : undefined,
   url: item.url ?? [],
   color: item.color ?? "#0891b2",
   category: item.category ?? "other",
   features: item.features,
   version: item.version,
   settings: SAMPLE_SETTINGS,
-  locales: item.locales,
+  locales: item.locales
 });
 
-export const toStoredPresence = (
-  item: CatalogFixture,
-  overrides: Partial<StoredPresence> = {},
-): StoredPresence => {
+export const toStoredPresence = (item: CatalogFixture, overrides: Partial<StoredPresence> = {}): StoredPresence => {
   const metadata = toMetadata(item);
   return {
     metadata,
@@ -145,60 +123,47 @@ export const toStoredPresence = (
       sha256: "",
       metadataHash: "",
       signature: "",
-      signedAt: "",
+      signedAt: ""
     },
     enabled: true,
     installedAt: Date.now(),
-    ...overrides,
+    ...overrides
   };
 };
 
-export const pickInstalledSlugs = (
-  catalog: CatalogFixture[],
-  scenario: PreviewScenario,
-): string[] => {
+export const pickInstalledSlugs = (catalog: CatalogFixture[], scenario: PreviewScenario): string[] => {
   if (scenario === "empty") return [];
+
   const available = new Set(catalog.map((item) => item.slug));
-  const preferred = PREFERRED_INSTALLS.filter((slug) =>
-    available.has(slug),
-  ).slice(0, INSTALLED_COUNT);
-  return preferred.length
-    ? preferred
-    : catalog.slice(0, FALLBACK_INSTALLED_COUNT).map((item) => item.slug);
+  const preferred = PREFERRED_INSTALLS.filter((slug) => available.has(slug)).slice(0, INSTALLED_COUNT);
+  return preferred.length ? preferred : catalog.slice(0, FALLBACK_INSTALLED_COUNT).map((item) => item.slug);
 };
 
-export const buildInstalledPresences = (
-  catalog: CatalogFixture[],
-  slugs: string[],
-  now: number,
-): InstalledPresences => {
+export const buildInstalledPresences = (catalog: CatalogFixture[], slugs: string[], now: number): InstalledPresences => {
   const bySlug = new Map(catalog.map((item) => [item.slug, item]));
   return Object.fromEntries(
     slugs.flatMap((slug, index) => {
       const item = bySlug.get(slug);
+
       if (!item) return [];
+
       return [
         [
           slug,
           toStoredPresence(item, {
             enabled: index !== slugs.length - 1,
             installedAt: now - index * DAY_MS * 3,
-            ...(index === SNOOZED_INDEX
-              ? { snoozeUntil: now + 45 * 60_000 }
-              : {}),
-          }),
-        ],
+            ...(index === SNOOZED_INDEX ? { snoozeUntil: now + 45 * 60_000 } : {})
+          })
+        ]
       ];
-    }),
+    })
   );
 };
 
-export const buildLiveActivity = (
-  slug: string | undefined,
-  presences: InstalledPresences,
-  now: number,
-): CurrentActivity | null => {
+export const buildLiveActivity = (slug: string | undefined, presences: InstalledPresences, now: number): CurrentActivity | null => {
   if (!slug || !presences[slug]) return null;
+
   const nowSeconds = Math.floor(now / 1000);
   return {
     slug,
@@ -211,23 +176,24 @@ export const buildLiveActivity = (
       endTime: nowSeconds + 311,
       largeImage: `/cdn/presences/${slug}/assets/thumbnail.jpg`,
       type: 3,
-      buttons: [{ label: "Watch video", url: "https://nowly.me" }],
-    },
+      buttons: [
+        {
+          label: "Watch video",
+          url: "https://nowly.me"
+        }
+      ]
+    }
   };
 };
 
-export const buildRuntimeLogs = (
-  firstSlug: string | undefined,
-  presenceCount: number,
-  now: number,
-): RuntimeLogEntry[] => [
+export const buildRuntimeLogs = (firstSlug: string | undefined, presenceCount: number, now: number): RuntimeLogEntry[] => [
   {
     id: "1",
     at: now - 60_000,
     level: "success",
     type: "native",
     message: "native connected",
-    payload: { nativeVersion: "1.4.2" },
+    payload: { nativeVersion: "1.4.2" }
   },
   {
     id: "2",
@@ -235,7 +201,7 @@ export const buildRuntimeLogs = (
     level: "info",
     type: "api",
     message: "POST /devices/sync",
-    payload: { presenceCount },
+    payload: { presenceCount }
   },
   {
     id: "3",
@@ -243,7 +209,10 @@ export const buildRuntimeLogs = (
     level: "success",
     type: "presence",
     message: "register presence script",
-    payload: { slug: firstSlug ?? "youtube", version: "1.2.3" },
+    payload: {
+      slug: firstSlug ?? "youtube",
+      version: "1.2.3"
+    }
   },
   {
     id: "4",
@@ -251,19 +220,22 @@ export const buildRuntimeLogs = (
     level: "warn",
     type: "api",
     message: "GET /presences/:slug failed (update check)",
-    payload: { slug: "netflix", status: 503 },
-  },
+    payload: {
+      slug: "netflix",
+      status: 503
+    }
+  }
 ];
 
 const CUSTOM_LIVE_OFFSET_MS = 6 * 60_000;
 
-export const buildCustomActivities = (
-  scenario: PreviewScenario,
-  live: boolean,
-  now: number,
-): CustomActivitiesState => {
-  if (scenario === "empty")
-    return { items: [], activeId: null, activatedAt: null };
+export const buildCustomActivities = (scenario: PreviewScenario, live: boolean, now: number): CustomActivitiesState => {
+  if (scenario === "empty") return {
+    items: [],
+    activeId: null,
+    activatedAt: null
+  };
+
   const items: CustomActivity[] = [
     {
       id: "preview-study",
@@ -271,14 +243,21 @@ export const buildCustomActivities = (
       type: 0,
       details: "Chapter 3: Thermodynamics",
       state: "Pomodoro 2 of 4",
-      largeImage: { kind: "icon", icon: "book", color: "#5a6bb0" },
+      largeImage: {
+        kind: "icon",
+        icon: "book",
+        color: "#5a6bb0"
+      },
       largeText: "",
       smallImage: { kind: "none" },
       smallText: "",
-      timestamp: { mode: "countdown", minutes: 25 },
+      timestamp: {
+        mode: "countdown",
+        minutes: 25
+      },
       buttons: [],
       createdAt: now - 3 * DAY_MS,
-      updatedAt: now - DAY_MS,
+      updatedAt: now - DAY_MS
     },
     {
       id: "preview-code",
@@ -286,21 +265,32 @@ export const buildCustomActivities = (
       type: 0,
       details: "Refactoring the side panel",
       state: "Lo-fi on",
-      largeImage: { kind: "icon", icon: "code", color: "#3f7d6b" },
+      largeImage: {
+        kind: "icon",
+        icon: "code",
+        color: "#3f7d6b"
+      },
       largeText: "",
-      smallImage: { kind: "icon", icon: "headphone", color: "#4a5560" },
+      smallImage: {
+        kind: "icon",
+        icon: "headphone",
+        color: "#4a5560"
+      },
       smallText: "Lo-fi",
       timestamp: { mode: "elapsed" },
       buttons: [
-        { label: "My GitHub", url: "https://github.com/nowly-presence" },
+        {
+          label: "My GitHub",
+          url: "https://github.com/nowly-presence"
+        }
       ],
       createdAt: now - 10 * DAY_MS,
-      updatedAt: now - 10 * DAY_MS,
-    },
+      updatedAt: now - 10 * DAY_MS
+    }
   ];
   return {
     items,
     activeId: live ? items[0].id : null,
-    activatedAt: live ? now - CUSTOM_LIVE_OFFSET_MS : null,
+    activatedAt: live ? now - CUSTOM_LIVE_OFFSET_MS : null
   };
 };

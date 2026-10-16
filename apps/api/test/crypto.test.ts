@@ -1,8 +1,4 @@
-import {
-  canonicalJson,
-  sha256Base64Url,
-  signedPayload,
-} from "@/shared/crypto.service";
+import { canonicalJson, sha256Base64Url, signedPayload } from "@/shared/crypto.service";
 import { describe, expect, it, vi } from "vitest";
 
 describe("canonicalJson", () => {
@@ -14,22 +10,37 @@ describe("canonicalJson", () => {
   });
 
   it("sorts object keys alphabetically", () => {
-    const result = canonicalJson({ c: 3, a: 1, b: 2 });
+    const result = canonicalJson({
+      c: 3,
+      a: 1,
+      b: 2
+    });
     expect(result).toBe('{"a":1,"b":2,"c":3}');
   });
 
   it("skips undefined values", () => {
-    const result = canonicalJson({ a: 1, b: undefined });
+    const result = canonicalJson({
+      a: 1,
+      b: undefined
+    });
     expect(result).toBe('{"a":1}');
   });
 
   it("handles nested objects", () => {
-    const result = canonicalJson({ b: { y: 2, x: 1 }, a: 3 });
+    const result = canonicalJson({
+      b: {
+        y: 2,
+        x: 1
+      },
+      a: 3
+    });
     expect(result).toBe('{"a":3,"b":{"x":1,"y":2}}');
   });
 
   it("serializes arrays", () => {
-    const result = canonicalJson({ items: ["b", "a"] });
+    const result = canonicalJson({
+      items: ["b", "a"]
+    });
     expect(result).toBe('{"items":["b","a"]}');
   });
 
@@ -70,7 +81,7 @@ describe("signedPayload", () => {
       version: "1.0.0",
       sha256: "abc123",
       metadataHash: "def456",
-      signedAt: "2026-01-01T00:00:00Z",
+      signedAt: "2026-01-01T00:00:00Z"
     };
 
     const payload = signedPayload(input);
@@ -89,7 +100,7 @@ describe("signedPayload", () => {
       version: "2.0.0",
       sha256: "x",
       metadataHash: "y",
-      signedAt: "2026-06-01T00:00:00Z",
+      signedAt: "2026-06-01T00:00:00Z"
     };
     const payload = signedPayload(input);
     expect(payload).toMatch(/^{"metadataHash":/);
@@ -102,9 +113,7 @@ describe("signPresenceRelease", () => {
     vi.resetModules();
     const { signPresenceRelease } = await import("@/shared/crypto.service");
 
-    expect(() => signPresenceRelease("{}")).toThrow(
-      "PRESENCE_SIGNING_PRIVATE_KEY is missing",
-    );
+    expect(() => signPresenceRelease("{}")).toThrow("PRESENCE_SIGNING_PRIVATE_KEY is missing");
     vi.unstubAllEnvs();
   });
 });

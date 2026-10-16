@@ -1,4 +1,5 @@
 "use client";
+
 import { RiCloseLine, RiNodeTree } from "@nowly/ui/icons";
 
 import type { TocItem } from "@/features/docs-content/lib/types";
@@ -25,7 +26,10 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
           }
         }
       },
-      { rootMargin: "-64px 0px -60% 0px", threshold: 0.1 },
+      {
+        rootMargin: "-64px 0px -60% 0px",
+        threshold: 0.1
+      }
     );
 
     const headings = document.querySelectorAll("h2, h3");
@@ -42,9 +46,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
         className="docs-sidebar-scroll hidden xl:block fixed top-16 w-56 max-h-[calc(100vh-4rem)] overflow-y-auto pt-8"
         style={{ right: "max(1rem, calc((100vw - 1280px) / 2 + 1rem))" }}
       >
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-          {t("on-this-page")}
-        </p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">{t("on-this-page")}</p>
         <ul className="space-y-1.5">
           {items.map((item) => (
             <li key={item.id}>
@@ -55,7 +57,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
                   item.level === 3 && "pl-6",
                   activeId === item.id
                     ? "text-accent border-accent font-medium"
-                    : "text-muted-foreground border-transparent hover:text-foreground hover:border-border-light",
+                    : "text-muted-foreground border-transparent hover:text-foreground hover:border-border-light"
                 )}
               >
                 {item.text}
@@ -77,20 +79,11 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
 
       {mobileOpen && (
         <div className="xl:hidden fixed inset-0 z-50">
-          <div
-            className="absolute inset-0 bg-background/60 backdrop-blur-sm"
-            onClick={() => setMobileOpen(false)}
-          />
+          <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
           <div className="absolute bottom-0 left-0 right-0 bg-card border-t border-border rounded-t-xl p-6 max-h-[60vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                {t("on-this-page")}
-              </p>
-              <button
-                type="button"
-                onClick={() => setMobileOpen(false)}
-                className="text-muted-foreground hover:text-foreground"
-              >
+              <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t("on-this-page")}</p>
+              <button type="button" onClick={() => setMobileOpen(false)} className="text-muted-foreground hover:text-foreground">
                 <RiCloseLine size={20} />
               </button>
             </div>
@@ -103,9 +96,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
                     className={cn(
                       "block text-sm transition-colors py-1 border-l-2 pl-3",
                       item.level === 3 && "pl-6",
-                      activeId === item.id
-                        ? "text-accent border-accent"
-                        : "text-muted-foreground border-transparent hover:text-foreground",
+                      activeId === item.id ? "text-accent border-accent" : "text-muted-foreground border-transparent hover:text-foreground"
                     )}
                   >
                     {item.text}

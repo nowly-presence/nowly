@@ -3,12 +3,7 @@ import { GuideView } from "@/features/guides/components/guide-view";
 import { getGuide } from "@/features/guides/lib/guides";
 import { JsonLd } from "@/features/seo/components/json-ld";
 import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
-import {
-  CANONICAL_ORIGIN,
-  createMetadata,
-  organizationJsonLd,
-  seoUrl,
-} from "@/features/seo/lib/seo";
+import { CANONICAL_ORIGIN, createMetadata, organizationJsonLd, seoUrl } from "@/features/seo/lib/seo";
 import { getPathname } from "@/i18n/navigation";
 import type { LocaleString } from "@nowly/locales";
 import type { Metadata } from "next";
@@ -16,14 +11,19 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 type GuidePageProps = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{
+    slug: string;
+  }>;
 };
 
-export const generateMetadata = async ({
-  params,
-}: GuidePageProps): Promise<Metadata> => {
-  const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+export const generateMetadata = async ({ params }: GuidePageProps): Promise<Metadata> => {
+  const [{ slug }, locale] = await Promise.all([
+    params,
+    getLocale()
+  ]);
+
   const guide = getGuide(slug, locale);
+
   if (!guide) {
     const t = await getTranslations("pages.guides");
     return createMetadata({
@@ -31,7 +31,7 @@ export const generateMetadata = async ({
       description: t("description"),
       locale,
       path: `/guides/${slug}`,
-      noIndex: true,
+      noIndex: true
     });
   }
 
@@ -41,19 +41,27 @@ export const generateMetadata = async ({
     locale,
     path: `/guides/${guide.slug}`,
     alternateLocales: guide.entry.locales,
-    canonicalLocale: guide.entry.translated ? undefined : guide.entry.locale,
+    canonicalLocale: guide.entry.translated ? undefined : guide.entry.locale
   });
 };
 
 const Page = async ({ params }: GuidePageProps) => {
-  const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+  const [{ slug }, locale] = await Promise.all([
+    params,
+    getLocale()
+  ]);
+
   const guide = getGuide(slug, locale);
   if (!guide) notFound();
 
   const t = await getTranslations("pages.guides");
+
   const path = `/guides/${guide.slug}`;
   const url = seoUrl(
-    getPathname({ locale: locale as LocaleString, href: path }),
+    getPathname({
+      locale: locale as LocaleString,
+      href: path
+    })
   );
 
   return (
@@ -63,9 +71,18 @@ const Page = async ({ params }: GuidePageProps) => {
         description={guide.description}
         path={path}
         crumbs={[
-          { name: "Nowly", path: "/" },
-          { name: t("title"), path: "/guides" },
-          { name: guide.title, path },
+          {
+            name: "Nowly",
+            path: "/"
+          },
+          {
+            name: t("title"),
+            path: "/guides"
+          },
+          {
+            name: guide.title,
+            path
+          }
         ]}
       />
       <JsonLd
@@ -79,13 +96,10 @@ const Page = async ({ params }: GuidePageProps) => {
           ...(guide.updated ? { dateModified: guide.updated } : {}),
           author: { "@id": `${CANONICAL_ORIGIN}/#organization` },
           publisher: organizationJsonLd(),
-          wordCount: guide.entry.words,
+          wordCount: guide.entry.words
         }}
       />
-      <GuideView
-        guide={guide}
-        beforeRelated={<AdSlot placement="guides" className="mt-16" />}
-      />
+      <GuideView guide={guide} beforeRelated={<AdSlot placement="guides" className="mt-16" />} />
     </>
   );
 };

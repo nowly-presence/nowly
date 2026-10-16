@@ -3,6 +3,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client.js";
 
 const DATABASE_URL = process.env.DATABASE_URL;
+
 if (!DATABASE_URL) {
   console.error("DATABASE_URL is required");
   process.exit(1);
@@ -23,7 +24,7 @@ const tables = [
   "supporter_devices",
   "supporter_passes",
   "ratings",
-  "comments",
+  "comments"
 ] as const;
 
 async function main() {

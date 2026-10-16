@@ -5,7 +5,9 @@ import { WidgetChart } from "@/features/views/components/widget-chart";
 import { WidgetFunnel } from "@/features/views/components/widget-funnel";
 import type { WidgetConfig } from "@nowly/analytics";
 
-export const WidgetRenderer = ({ widget }: { widget: WidgetConfig }) => {
+export const WidgetRenderer = ({ widget }: {
+  widget: WidgetConfig;
+}) => {
   switch (widget.kind) {
     case "metric-total":
       return <WidgetCardStat widget={widget} />;

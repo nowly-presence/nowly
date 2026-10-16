@@ -12,10 +12,11 @@ describe("getSettings migration", () => {
       presenceDisplayMode: "grid",
       separateActivePresence: true,
       theme: "donator",
-      canaryTheme: true,
+      canaryTheme: true
     };
 
     const { getSettings } = await import("@/background/storage/settings.store");
+
     const settings = await getSettings();
 
     expect(settings).not.toHaveProperty("separateActivePresence");
@@ -32,6 +33,7 @@ describe("getSettings migration", () => {
     chrome.local.settings = { presenceDisplayMode: "category" };
 
     const { getSettings } = await import("@/background/storage/settings.store");
+
     const settings = await getSettings();
 
     expect(settings.presenceDisplayMode).toBe("category");
@@ -48,18 +50,17 @@ describe("getSettings seasonal themes migration", () => {
     const chrome = installChromeMock();
     chrome.local.settings = {
       presenceDisplayMode: "category",
-      appearance: "dark",
+      appearance: "dark"
     };
 
-    const { getSettings, setSettings } =
-      await import("@/background/storage/settings.store");
+    const { getSettings, setSettings } = await import("@/background/storage/settings.store");
     expect(await getSettings()).toMatchObject({
       appearance: "dark",
-      seasonalThemes: true,
+      seasonalThemes: true
     });
     expect(chrome.local.settings).toMatchObject({
       appearance: "dark",
-      seasonalThemes: true,
+      seasonalThemes: true
     });
 
     await setSettings({ seasonalThemes: false });
@@ -71,14 +72,15 @@ describe("getSettings seasonal themes migration", () => {
     chrome.local.settings = {
       presenceDisplayMode: "category",
       appearance: "seasonal",
-      seasonalThemeMigrated: true,
+      seasonalThemeMigrated: true
     };
 
     const { getSettings } = await import("@/background/storage/settings.store");
+
     const settings = await getSettings();
     expect(settings).toMatchObject({
       appearance: "system",
-      seasonalThemes: true,
+      seasonalThemes: true
     });
     expect(settings).not.toHaveProperty("seasonalThemeMigrated");
     expect(chrome.local.settings).not.toHaveProperty("seasonalThemeMigrated");
@@ -89,13 +91,13 @@ describe("getSettings seasonal themes migration", () => {
     chrome.local.settings = {
       presenceDisplayMode: "category",
       appearance: "light",
-      seasonalThemeMigrated: true,
+      seasonalThemeMigrated: true
     };
 
     const { getSettings } = await import("@/background/storage/settings.store");
     expect(await getSettings()).toMatchObject({
       appearance: "light",
-      seasonalThemes: false,
+      seasonalThemes: false
     });
   });
 
@@ -104,7 +106,7 @@ describe("getSettings seasonal themes migration", () => {
     const { getSettings } = await import("@/background/storage/settings.store");
     expect(await getSettings()).toMatchObject({
       appearance: "system",
-      seasonalThemes: true,
+      seasonalThemes: true
     });
   });
 });

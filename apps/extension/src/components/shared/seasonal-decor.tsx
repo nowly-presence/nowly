@@ -1,8 +1,5 @@
 import { useSeason } from "@/hooks/season-provider";
-import {
-  SEASON_SHAPES,
-  type SeasonShape,
-} from "@/components/shared/season-shapes";
+import { SEASON_SHAPES, type SeasonShape } from "@/components/shared/season-shapes";
 import { cn } from "@/ui/cn";
 
 const BAT =
@@ -14,40 +11,18 @@ const STEM = "M11.3 7.6c-.1-1.6.4-3 1.7-3.9l1 1c-.9.6-1.3 1.6-1.2 2.9z";
 const PLACEMENTS = [
   "top-3 left-4 size-6 -rotate-12",
   "top-7 right-6 size-5 rotate-12 [animation-delay:1.2s]",
-  "bottom-3 left-5 size-7 rotate-6 [animation-delay:2.1s]",
+  "bottom-3 left-5 size-7 rotate-6 [animation-delay:2.1s]"
 ] as const;
 
 const Bat = ({ className }: { className: string }) => (
-  <svg
-    viewBox="0 0 24 24"
-    className={cn(
-      "absolute text-season-accent motion-safe:animate-season-float",
-      className,
-    )}
-    fill="currentColor"
-  >
+  <svg viewBox="0 0 24 24" className={cn("absolute text-season-accent motion-safe:animate-season-float", className)} fill="currentColor">
     <path d={BAT} />
   </svg>
 );
 
-const Shape = ({
-  shape,
-  className,
-}: {
-  shape: SeasonShape;
-  className: string;
-}) => (
-  <svg
-    viewBox="0 0 24 24"
-    className={cn("absolute motion-safe:animate-season-float", className)}
-  >
-    <path
-      d={shape.d}
-      fill={shape.fill}
-      stroke={shape.fill}
-      strokeWidth={1}
-      strokeLinejoin="round"
-    />
+const Shape = ({ shape, className }: { shape: SeasonShape; className: string }) => (
+  <svg viewBox="0 0 24 24" className={cn("absolute motion-safe:animate-season-float", className)}>
+    <path d={shape.d} fill={shape.fill} stroke={shape.fill} strokeWidth={1} strokeLinejoin="round" />
   </svg>
 );
 
@@ -64,22 +39,15 @@ const HalloweenDecor = () => (
 
 export const SeasonalDecor = () => {
   const { season } = useSeason();
+
   if (!season) return null;
+
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 overflow-hidden motion-reduce:hidden"
-    >
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden motion-reduce:hidden">
       {season === "halloween" ? (
         <HalloweenDecor />
       ) : (
-        SEASON_SHAPES[season].map((shape, index) => (
-          <Shape
-            key={shape.d.slice(0, 24)}
-            shape={shape}
-            className={PLACEMENTS[index % PLACEMENTS.length]}
-          />
-        ))
+        SEASON_SHAPES[season].map((shape, index) => <Shape key={shape.d.slice(0, 24)} shape={shape} className={PLACEMENTS[index % PLACEMENTS.length]} />)
       )}
     </div>
   );

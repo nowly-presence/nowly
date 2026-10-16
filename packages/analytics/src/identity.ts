@@ -3,23 +3,24 @@ export type IdentityProvider = {
 };
 
 export const anonymousIdentity: IdentityProvider = {
-  getDeviceId: () => undefined,
+  getDeviceId: () => undefined
 };
 
 export const staticIdentity = (deviceId: string): IdentityProvider => ({
-  getDeviceId: () => deviceId,
+  getDeviceId: () => deviceId
 });
 
 const BROWSER_DEVICE_KEY = "nowly:analytics:v1:deviceId";
 
-export const createBrowserIdentity = (
-  storageKey = BROWSER_DEVICE_KEY,
-): IdentityProvider => ({
+export const createBrowserIdentity = (storageKey = BROWSER_DEVICE_KEY): IdentityProvider => ({
   getDeviceId: () => {
     if (typeof window === "undefined") return undefined;
+
     try {
       const existing = window.localStorage.getItem(storageKey);
+
       if (existing) return existing;
+
       const id =
         typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
           ? crypto.randomUUID()
@@ -29,5 +30,5 @@ export const createBrowserIdentity = (
     } catch {
       return undefined;
     }
-  },
+  }
 });

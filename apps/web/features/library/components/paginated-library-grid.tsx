@@ -1,14 +1,7 @@
 "use client";
 
 import { LibraryCard } from "@/features/library/components/library-card";
-import {
-  Button,
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  cn,
-} from "@nowly/ui";
+import { Button, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, cn } from "@nowly/ui";
 
 import type { LibraryPresence } from "@/lib/library-catalog";
 
@@ -20,43 +13,36 @@ import { useLayoutEffect, useRef, useState } from "react";
 const PAGE_SIZE = 9;
 const DOCK_ROOT_MARGIN = "0px 0px -96px 0px";
 
-const paginationRange = (
-  current: number,
-  total: number,
-): Array<number | "ellipsis"> => {
+const paginationRange = (current: number, total: number): Array<number | "ellipsis"> => {
   if (total <= 7) return Array.from({ length: total }, (_, index) => index + 1);
 
   const pages = new Set([1, total, current - 1, current, current + 1]);
+
   if (current <= 3) {
     pages.add(2);
     pages.add(3);
     pages.add(4);
   }
+
   if (current >= total - 2) {
     pages.add(total - 3);
     pages.add(total - 2);
     pages.add(total - 1);
   }
 
-  const sorted = [...pages]
-    .filter((page) => page >= 1 && page <= total)
-    .toSorted((a, b) => a - b);
+  const sorted = [...pages].filter((page) => page >= 1 && page <= total).toSorted((a, b) => a - b);
   const range: Array<number | "ellipsis"> = [];
+
   for (const page of sorted) {
     const previous = range[range.length - 1];
-    if (typeof previous === "number" && page - previous > 1)
-      range.push("ellipsis");
+    if (typeof previous === "number" && page - previous > 1) range.push("ellipsis");
     range.push(page);
   }
+
   return range;
 };
 
-const LibraryPaginationControls = ({
-  page,
-  totalPages,
-  onPage,
-  docked = false,
-}: {
+const LibraryPaginationControls = ({ page, totalPages, onPage, docked = false }: {
   page: number;
   totalPages: number;
   onPage: (next: number) => void;
@@ -65,14 +51,12 @@ const LibraryPaginationControls = ({
   const t = useTranslations("libraryPage");
 
   return (
-    <div
-      className={cn(
-        "flex items-center justify-center",
-        docked ? "gap-4" : "flex-col gap-3",
-      )}
-    >
+    <div className={cn("flex items-center justify-center", docked ? "gap-4" : "flex-col gap-3")}>
       <p className="shrink-0 whitespace-nowrap text-sm text-muted-foreground">
-        {t("page-status", { page, total: totalPages })}
+        {t("page-status", {
+          page,
+          total: totalPages
+        })}
       </p>
       <Pagination aria-label={t("pagination")} className="mx-0 w-auto">
         <PaginationContent>
@@ -136,18 +120,11 @@ type PaginatedLibraryGridProps = {
   className?: string;
 };
 
-export const PaginatedLibraryGrid = ({
-  items,
-  resetKey,
-  className,
-}: PaginatedLibraryGridProps) => {
+export const PaginatedLibraryGrid = ({ items, resetKey, className }: PaginatedLibraryGridProps) => {
   const locale = useLocale();
   const gridRef = useRef<HTMLElement>(null);
   const anchorRef = useRef<HTMLDivElement>(null);
-  const [page, setPage] = useQueryState(
-    "page",
-    parseAsInteger.withDefault(1).withOptions({ history: "push" }),
-  );
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1).withOptions({ history: "push" }));
   const [docked, setDocked] = useState(false);
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
@@ -160,6 +137,7 @@ export const PaginatedLibraryGrid = ({
 
   useLayoutEffect(() => {
     const anchor = anchorRef.current;
+
     if (!anchor || !showPagination) {
       setDocked(false);
       return;
@@ -168,66 +146,52 @@ export const PaginatedLibraryGrid = ({
     const sync = (intersecting: boolean) => setDocked(!intersecting);
     sync(anchor.getBoundingClientRect().top <= window.innerHeight - 96);
 
-    const observer = new IntersectionObserver(
-      ([entry]) => sync(entry.isIntersecting),
-      { threshold: 0, rootMargin: DOCK_ROOT_MARGIN },
-    );
+    const observer = new IntersectionObserver(([entry]) => sync(entry.isIntersecting), {
+      threshold: 0,
+      rootMargin: DOCK_ROOT_MARGIN
+    });
     observer.observe(anchor);
     return () => observer.disconnect();
   }, [showPagination, slice.length, safePage]);
 
   const goToPage = (next: number) => {
     const clamped = Math.min(totalPages, Math.max(1, next));
+
     if (clamped === safePage) return;
 
     const wasDocked = docked;
+
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
+
     setPage(clamped);
 
     if (wasDocked) return;
-    gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    gridRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   };
 
   return (
     <div className={cn(docked && "pb-16")}>
-      <section
-        ref={gridRef}
-        className={cn(
-          "mt-8 grid scroll-mt-32 gap-4 sm:grid-cols-2 lg:grid-cols-3",
-          className,
-        )}
-      >
+      <section ref={gridRef} className={cn("mt-8 grid scroll-mt-32 gap-4 sm:grid-cols-2 lg:grid-cols-3", className)}>
         {slice.map((presence) => (
-          <LibraryCard
-            key={presence.slug}
-            presence={presence}
-            locale={locale}
-          />
+          <LibraryCard key={presence.slug} presence={presence} locale={locale} />
         ))}
       </section>
 
       {showPagination ? (
         <>
           <div ref={anchorRef} className={cn("mt-12", docked && "h-16")}>
-            {docked ? null : (
-              <LibraryPaginationControls
-                page={safePage}
-                totalPages={totalPages}
-                onPage={goToPage}
-              />
-            )}
+            {docked ? null : <LibraryPaginationControls page={safePage} totalPages={totalPages} onPage={goToPage} />}
           </div>
           {docked ? (
             <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 shadow-lg backdrop-blur-sm">
               <div className="mx-auto flex w-full max-w-300 justify-center px-6 py-3">
-                <LibraryPaginationControls
-                  page={safePage}
-                  totalPages={totalPages}
-                  onPage={goToPage}
-                  docked
-                />
+                <LibraryPaginationControls page={safePage} totalPages={totalPages} onPage={goToPage} docked />
               </div>
             </div>
           ) : null}

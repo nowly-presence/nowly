@@ -12,14 +12,12 @@ describe("fetchAssetFromCdn", () => {
   it("returns the first extension that resolves", async () => {
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      arrayBuffer: async () => new Uint8Array([1, 2]).buffer,
+      arrayBuffer: async () => new Uint8Array([1, 2]).buffer
     }) as unknown as typeof fetch;
 
     const result = await fetchAssetFromCdn("slug", "logo");
     expect(result?.mime).toBe("image/png");
-    expect(global.fetch).toHaveBeenCalledWith(
-      "https://cdn.nowly.me/presences/slug/assets/logo.png",
-    );
+    expect(global.fetch).toHaveBeenCalledWith("https://cdn.nowly.me/presences/slug/assets/logo.png");
   });
 
   it("falls back to jpg then jpeg when png is missing", async () => {
@@ -29,7 +27,7 @@ describe("fetchAssetFromCdn", () => {
       .mockResolvedValueOnce({ ok: false })
       .mockResolvedValueOnce({
         ok: true,
-        arrayBuffer: async () => new Uint8Array([1]).buffer,
+        arrayBuffer: async () => new Uint8Array([1]).buffer
       }) as unknown as typeof fetch;
 
     const result = await fetchAssetFromCdn("slug", "icon");
@@ -38,9 +36,7 @@ describe("fetchAssetFromCdn", () => {
   });
 
   it("returns null when no extension resolves", async () => {
-    global.fetch = vi
-      .fn()
-      .mockResolvedValue({ ok: false }) as unknown as typeof fetch;
+    global.fetch = vi.fn().mockResolvedValue({ ok: false }) as unknown as typeof fetch;
 
     const result = await fetchAssetFromCdn("slug", "thumbnail");
     expect(result).toBeNull();
@@ -52,7 +48,7 @@ describe("fetchAssetFromCdn", () => {
       .mockRejectedValueOnce(new Error("network error"))
       .mockResolvedValueOnce({
         ok: true,
-        arrayBuffer: async () => new Uint8Array([1]).buffer,
+        arrayBuffer: async () => new Uint8Array([1]).buffer
       }) as unknown as typeof fetch;
 
     const result = await fetchAssetFromCdn("slug", "icon");

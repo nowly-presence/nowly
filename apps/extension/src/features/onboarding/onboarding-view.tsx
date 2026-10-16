@@ -11,16 +11,13 @@ import { DesktopStep } from "@/features/onboarding/steps/desktop-step";
 import { PresencesStep } from "@/features/onboarding/steps/presences-step";
 import { PrivacyStep } from "@/features/onboarding/steps/privacy-step";
 
-const STEPS = [
-  "welcome",
-  "scripts",
-  "desktop",
-  "presences",
-  "privacy",
-] as const;
+const STEPS = ["welcome", "scripts", "desktop", "presences", "privacy"] as const;
+
 type Step = (typeof STEPS)[number];
 
-export const OnboardingView = ({ theme }: { theme: "light" | "dark" }) => {
+export const OnboardingView = ({ theme }: {
+  theme: "light" | "dark";
+}) => {
   const { t } = useI18n();
   const { refresh } = useExtensionState();
   const [step, setStep] = useState<Step>("welcome");
@@ -31,8 +28,9 @@ export const OnboardingView = ({ theme }: { theme: "light" | "dark" }) => {
   }, []);
 
   useEffect(() => {
-    if (step !== "welcome")
-      track("onboarding_gate_seen", { payload: { gate: step } });
+    if (step !== "welcome") track("onboarding_gate_seen", {
+      payload: { gate: step }
+    });
   }, [step]);
 
   const next = () => setStep(STEPS[Math.min(STEPS.length - 1, index + 1)]);
@@ -40,7 +38,7 @@ export const OnboardingView = ({ theme }: { theme: "light" | "dark" }) => {
   const finish = async () => {
     await sendMessage("SET_ONBOARDING", {
       onboardingCompleted: true,
-      devReplayOnboarding: false,
+      devReplayOnboarding: false
     });
     await refresh.onboarding();
   };
@@ -64,7 +62,7 @@ export const OnboardingView = ({ theme }: { theme: "light" | "dark" }) => {
           className="flex items-center gap-1"
           aria-label={t("onboarding.progress", {
             step: index + 1,
-            total: STEPS.length,
+            total: STEPS.length
           })}
         >
           {STEPS.map((value, position) => (
@@ -72,11 +70,7 @@ export const OnboardingView = ({ theme }: { theme: "light" | "dark" }) => {
               key={value}
               className={cn(
                 "h-1 rounded-full transition-all duration-300",
-                position === index
-                  ? "w-5 bg-primary"
-                  : position < index
-                    ? "w-2 bg-ink/40"
-                    : "w-2 bg-line-strong",
+                position === index ? "w-5 bg-primary" : position < index ? "w-2 bg-ink/40" : "w-2 bg-line-strong"
               )}
             />
           ))}

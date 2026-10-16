@@ -12,8 +12,7 @@ export const ConnectionSummary = () => {
   const { t } = useI18n();
   const { push } = useNav();
   const connection = connectionOf(state.native);
-  const profile =
-    connection === "discord" ? state.onboarding.nativeProfile : null;
+  const profile = connection === "discord" ? state.onboarding.nativeProfile : null;
 
   return (
     <Group>
@@ -21,11 +20,7 @@ export const ConnectionSummary = () => {
         onClick={() => push({ name: "connection" })}
         chevron
         leading={<DiscordAvatar profile={profile} size={40} />}
-        title={
-          profile
-            ? (profile.globalName ?? profile.username)
-            : t(`connection.state.${connection}`)
-        }
+        title={profile ? (profile.globalName ?? profile.username) : t(`connection.state.${connection}`)}
         description={
           <span className="flex items-center gap-1.5">
             {connection === "discord" && <LiveDot pulse={false} />}

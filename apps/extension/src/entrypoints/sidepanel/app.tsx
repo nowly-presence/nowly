@@ -1,14 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  RiApps2Fill,
-  RiApps2Line,
-  RiQuillPenFill,
-  RiQuillPenLine,
-  RiPulseFill,
-  RiPulseLine,
-  RiSettings3Fill,
-  RiSettings3Line,
-} from "@remixicon/react";
+import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line } from "@remixicon/react";
 import { FeatureReveal } from "@/components/shared/feature-reveal";
 import { Dock } from "@/features/layout/dock";
 import { normalizeDockLayout } from "@/shared/dock-layout";
@@ -38,12 +29,14 @@ import { SeasonMoment } from "@/features/seasonal/season-moment";
 const TABS: Tab[] = ["activity", "store", "custom", "settings"];
 const CUSTOM_ACTIVITY_REVEAL = {
   id: "custom-activity",
-  version: "2.4.0",
+  version: "2.4.0"
 } as const;
-const ACCOUNT_SYNC_REVEAL = { id: "account-sync", version: "2.3.0" } as const;
+const ACCOUNT_SYNC_REVEAL = {
+  id: "account-sync",
+  version: "2.3.0"
+} as const;
 
-const routeKey = (route: Route, depth: number) =>
-  `${depth}:${JSON.stringify(route)}`;
+const routeKey = (route: Route, depth: number) => `${depth}:${JSON.stringify(route)}`;
 
 export const App = () => {
   const { state, updateSettings } = useExtensionState();
@@ -54,15 +47,10 @@ export const App = () => {
   const [visited, setVisited] = useState<Set<Tab>>(() => new Set([tab]));
 
   useEffect(() => {
-    setVisited((current) =>
-      current.has(tab) ? current : new Set(current).add(tab),
-    );
+    setVisited((current) => (current.has(tab) ? current : new Set(current).add(tab)));
   }, [tab]);
 
-  const onboarding =
-    state.ready &&
-    (!state.onboarding.onboardingCompleted ||
-      state.onboarding.devReplayOnboarding);
+  const onboarding = state.ready && (!state.onboarding.onboardingCompleted || state.onboarding.devReplayOnboarding);
 
   if (onboarding) {
     return (
@@ -76,11 +64,13 @@ export const App = () => {
 
   const selectTab = (next: Tab) => {
     if (next === tab && stack.length === 0) {
-      mainRef.current
-        ?.querySelector<HTMLElement>(`[data-tab="${next}"]`)
-        ?.scrollTo({ top: 0, behavior: "smooth" });
+      mainRef.current?.querySelector<HTMLElement>(`[data-tab="${next}"]`)?.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
       return;
     }
+
     setTab(next);
   };
 
@@ -88,11 +78,7 @@ export const App = () => {
     <FeatureRevealProvider enabled={state.ready && stack.length === 0}>
       <main ref={mainRef} className="relative h-full overflow-hidden">
         {TABS.filter((value) => visited.has(value)).map((value) => (
-          <Layer
-            key={value}
-            tab={value}
-            active={stack.length === 0 && value === tab}
-          >
+          <Layer key={value} tab={value} active={stack.length === 0 && value === tab}>
             <Header theme={theme} />
             {value === "activity" && <ActivityView />}
             {value === "store" && <LibraryView />}
@@ -101,22 +87,11 @@ export const App = () => {
           </Layer>
         ))}
         {stack.map((route, depth) => (
-          <Layer
-            key={routeKey(route, depth)}
-            active={depth === stack.length - 1}
-            className="animate-push bg-canvas"
-          >
-            {route.name === "presence" && (
-              <PresenceDetailView slug={route.slug} />
-            )}
+          <Layer key={routeKey(route, depth)} active={depth === stack.length - 1} className="animate-push bg-canvas">
+            {route.name === "presence" && <PresenceDetailView slug={route.slug} />}
             {route.name === "connection" && <ConnectionView />}
             {route.name === "logs" && <RuntimeLogsView />}
-            {route.name === "custom-activity" && (
-              <CustomActivityEditorView
-                id={route.id}
-                template={route.template}
-              />
-            )}
+            {route.name === "custom-activity" && <CustomActivityEditorView id={route.id} template={route.template} />}
             {route.name === "discord-ipc" && <DiscordIpcView />}
           </Layer>
         ))}
@@ -132,13 +107,13 @@ export const App = () => {
               label: t("nav.activity"),
               icon: <RiPulseLine className="size-[18px]" />,
               activeIcon: <RiPulseFill className="size-[18px]" />,
-              badge: live ? "live" : undefined,
+              badge: live ? "live" : undefined
             },
             {
               value: "store",
               label: t("nav.library"),
               icon: <RiApps2Line className="size-[18px]" />,
-              activeIcon: <RiApps2Fill className="size-[18px]" />,
+              activeIcon: <RiApps2Fill className="size-[18px]" />
             },
             {
               value: "custom",
@@ -146,14 +121,10 @@ export const App = () => {
               icon: <RiQuillPenLine className="size-[18px]" />,
               activeIcon: <RiQuillPenFill className="size-[18px]" />,
               wrap: (button) => (
-                <FeatureReveal
-                  {...CUSTOM_ACTIVITY_REVEAL}
-                  text={t("reveal.customActivity")}
-                  hint={t("reveal.customActivityHint")}
-                >
+                <FeatureReveal {...CUSTOM_ACTIVITY_REVEAL} text={t("reveal.customActivity")} hint={t("reveal.customActivityHint")}>
                   {button}
                 </FeatureReveal>
-              ),
+              )
             },
             {
               value: "settings",
@@ -161,15 +132,11 @@ export const App = () => {
               icon: <RiSettings3Line className="size-[18px]" />,
               activeIcon: <RiSettings3Fill className="size-[18px]" />,
               wrap: (button) => (
-                <FeatureReveal
-                  {...ACCOUNT_SYNC_REVEAL}
-                  text={t("reveal.accountSync")}
-                  hint={t("reveal.accountSyncHint")}
-                >
+                <FeatureReveal {...ACCOUNT_SYNC_REVEAL} text={t("reveal.accountSync")} hint={t("reveal.accountSyncHint")}>
                   {button}
                 </FeatureReveal>
-              ),
-            },
+              )
+            }
           ]}
         />
         <ReviewPrompt />

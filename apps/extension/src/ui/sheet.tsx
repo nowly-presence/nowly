@@ -13,23 +13,13 @@ type SheetProps = {
   closeLabel: string;
 };
 
-export const Sheet = ({
-  open,
-  onClose,
-  title,
-  description,
-  children,
-  footer,
-  closeLabel,
-}: SheetProps) => {
+export const Sheet = ({ open, onClose, title, description, children, footer, closeLabel }: SheetProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
-    const previous =
-      document.activeElement instanceof HTMLElement
-        ? document.activeElement
-        : null;
+
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     panelRef.current?.focus();
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
@@ -45,12 +35,7 @@ export const Sheet = ({
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center px-3 pb-3">
-      <button
-        type="button"
-        aria-label={closeLabel}
-        onClick={onClose}
-        className="absolute inset-0 animate-fade bg-overlay/60 backdrop-blur-[2px]"
-      />
+      <button type="button" aria-label={closeLabel} onClick={onClose} className="absolute inset-0 animate-fade bg-overlay/60 backdrop-blur-[2px]" />
       <div
         ref={panelRef}
         role="dialog"
@@ -62,9 +47,7 @@ export const Sheet = ({
         <div className="flex items-start justify-between gap-4 px-4 pt-4 pb-3">
           <div className="flex flex-col gap-1">
             <h2 className="text-body-md font-medium text-ink">{title}</h2>
-            {description && (
-              <p className="text-body-sm text-muted">{description}</p>
-            )}
+            {description && <p className="text-body-sm text-muted">{description}</p>}
           </div>
           <button
             type="button"
@@ -75,18 +58,10 @@ export const Sheet = ({
             <RiCloseLine className="size-5" />
           </button>
         </div>
-        {children && (
-          <div className="scroll-thin overflow-y-auto px-4 pb-4">
-            {children}
-          </div>
-        )}
-        {footer && (
-          <div className={cn("flex gap-2 border-t border-line px-4 py-3")}>
-            {footer}
-          </div>
-        )}
+        {children && <div className="scroll-thin overflow-y-auto px-4 pb-4">{children}</div>}
+        {footer && <div className={cn("flex gap-2 border-t border-line px-4 py-3")}>{footer}</div>}
       </div>
     </div>,
-    document.body,
+    document.body
   );
 };

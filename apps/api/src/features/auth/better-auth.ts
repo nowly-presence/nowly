@@ -8,7 +8,7 @@ const DEV_WEB_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"];
 export const authTrustedOrigins = (): string[] => [
   serverEnv.FRONTEND_URL,
   serverEnv.INSIGHTS_URL,
-  ...(process.env.NODE_ENV === "production" ? [] : DEV_WEB_ORIGINS),
+  ...(process.env.NODE_ENV === "production" ? [] : DEV_WEB_ORIGINS)
 ];
 
 const createAuth = () =>
@@ -21,30 +21,30 @@ const createAuth = () =>
     advanced: {
       crossSubDomainCookies: {
         enabled: true,
-        domain: ".nowly.me",
-      },
+        domain: ".nowly.me"
+      }
     },
     socialProviders: {
       discord: {
         clientId: serverEnv.DISCORD_CLIENT_ID,
         clientSecret: serverEnv.DISCORD_CLIENT_SECRET,
-        mapProfileToUser: (profile) => ({ discordId: profile.id }),
-      },
+        mapProfileToUser: (profile) => ({ discordId: profile.id })
+      }
     },
     user: {
       additionalFields: {
         role: {
           type: "string",
           input: false,
-          defaultValue: "user",
+          defaultValue: "user"
         },
         discordId: {
           type: "string",
           required: false,
-          input: false,
-        },
-      },
-    },
+          input: false
+        }
+      }
+    }
   });
 
 let instance: ReturnType<typeof createAuth> | undefined;

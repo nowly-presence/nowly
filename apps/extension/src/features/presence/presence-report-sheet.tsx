@@ -15,12 +15,7 @@ type PresenceReportSheetProps = {
   onClose: () => void;
 };
 
-export const PresenceReportSheet = ({
-  slug,
-  name,
-  open,
-  onClose,
-}: PresenceReportSheetProps) => {
+export const PresenceReportSheet = ({ slug, name, open, onClose }: PresenceReportSheetProps) => {
   const { t, locale } = useI18n();
   const { toast } = useToast();
   const [message, setMessage] = useState("");
@@ -31,13 +26,15 @@ export const PresenceReportSheet = ({
     const result = await sendMessage("REPORT_PRESENCE", {
       slug,
       message,
-      locale: LOCALE_LONG_MAP[locale],
+      locale: LOCALE_LONG_MAP[locale]
     }).catch(() => ({ ok: false }));
     setSending(false);
+
     if (!result.ok) {
       toast(t("error.report"), "error");
       return;
     }
+
     toast(t("toast.reportSent"));
     setMessage("");
     onClose();
@@ -55,12 +52,7 @@ export const PresenceReportSheet = ({
           <Button variant="secondary" className="flex-1" onClick={onClose}>
             {t("action.cancel")}
           </Button>
-          <Button
-            className="flex-1"
-            disabled={!message.trim()}
-            loading={sending}
-            onClick={() => void submit()}
-          >
+          <Button className="flex-1" disabled={!message.trim()} loading={sending} onClick={() => void submit()}>
             {t("report.send")}
           </Button>
         </>

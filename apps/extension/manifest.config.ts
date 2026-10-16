@@ -6,7 +6,7 @@ const DEV_CHROME_MANIFEST_KEY =
 const icons = {
   16: "icons/icon16.png",
   48: "icons/icon48.png",
-  128: "icons/icon128.png",
+  128: "icons/icon128.png"
 };
 
 export const manifestConfig = {
@@ -15,34 +15,35 @@ export const manifestConfig = {
   minimum_chrome_version: "120",
   description: "__MSG_extensionDescription__",
   default_locale: "en",
-  permissions: [
-    "nativeMessaging",
-    "storage",
-    "alarms",
-    "userScripts",
-    "sidePanel",
-    "contextMenus",
-    "unlimitedStorage",
-  ],
+  permissions: ["nativeMessaging", "storage", "alarms", "userScripts", "sidePanel", "contextMenus", "unlimitedStorage"],
   host_permissions: ["<all_urls>"],
   key: DEV_CHROME_MANIFEST_KEY,
   content_scripts: [
     {
       matches: ["<all_urls>"],
       js: ["content.js"],
-      run_at: "document_idle" as const,
-    },
+      run_at: "document_idle" as const
+    }
   ],
   icons,
-  action: { default_icon: icons, default_title: "__MSG_extensionName__" },
+  action: {
+    default_icon: icons,
+    default_title: "__MSG_extensionName__"
+  },
   commands: {
     "open-side-panel": {
-      suggested_key: { default: "Ctrl+Shift+Y", mac: "Command+Shift+Y" },
-      description: "__MSG_commandOpenPanel__",
+      suggested_key: {
+        default: "Ctrl+Shift+Y",
+        mac: "Command+Shift+Y"
+      },
+      description: "__MSG_commandOpenPanel__"
     },
     "toggle-presence-pause": {
-      suggested_key: { default: "Ctrl+Shift+U", mac: "Command+Shift+U" },
-      description: "__MSG_commandTogglePause__",
-    },
-  },
+      suggested_key: {
+        default: "Ctrl+Shift+U",
+        mac: "Command+Shift+U"
+      },
+      description: "__MSG_commandTogglePause__"
+    }
+  }
 };

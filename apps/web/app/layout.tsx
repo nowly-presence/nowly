@@ -12,25 +12,13 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
   const locale = await getLocale();
 
   return (
-    <html
-      lang={LOCALE_SHORT_MAP[locale as LocaleString] ?? "en"}
-      className={satoshi.variable}
-      suppressHydrationWarning
-    >
-      <body
-        className="min-h-dvh bg-background font-sans antialiased"
-        suppressHydrationWarning
-      >
+    <html lang={LOCALE_SHORT_MAP[locale as LocaleString] ?? "en"} className={satoshi.variable} suppressHydrationWarning>
+      <body className="min-h-dvh bg-background font-sans antialiased" suppressHydrationWarning>
         <AppProviders>{children}</AppProviders>
         <Script id="plausible-init" strategy="beforeInteractive">
           {`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}}; plausible.init()`}
         </Script>
-        <Script
-          id="plausible-tracker"
-          src="https://stats.nowly.me/js/pa-r-Hjx56OrHZObH3UiiIqy.js"
-          strategy="afterInteractive"
-          async
-        />
+        <Script id="plausible-tracker" src="https://stats.nowly.me/js/pa-r-Hjx56OrHZObH3UiiIqy.js" strategy="afterInteractive" async />
       </body>
     </html>
   );

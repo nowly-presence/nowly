@@ -1,24 +1,17 @@
 import type { ViewConfig } from "@nowly/analytics";
 
-export const DEFAULT_VIEW_SLUGS = [
-  "overview",
-  "installs",
-  "funnels",
-  "errors",
-] as const;
+export const DEFAULT_VIEW_SLUGS = ["overview", "installs", "funnels", "errors"] as const;
+
 export type DefaultViewSlug = (typeof DEFAULT_VIEW_SLUGS)[number];
 
 export const DEFAULT_VIEW_LABELS: Record<DefaultViewSlug, string> = {
   overview: "Overview",
   installs: "Installations",
   funnels: "Funnels",
-  errors: "Errors & Uninstalls",
+  errors: "Errors & Uninstalls"
 };
 
-export const DEFAULT_VIEWS: Record<
-  Exclude<DefaultViewSlug, "overview">,
-  ViewConfig
-> = {
+export const DEFAULT_VIEWS: Record<Exclude<DefaultViewSlug, "overview">, ViewConfig> = {
   installs: {
     name: "Installations",
     widgets: [
@@ -29,7 +22,7 @@ export const DEFAULT_VIEWS: Record<
         metric: "extension_install",
         filters: {},
         range: "7d",
-        chartType: "line",
+        chartType: "line"
       },
       {
         id: "presence-install",
@@ -38,9 +31,9 @@ export const DEFAULT_VIEWS: Record<
         metric: "presence_install",
         filters: {},
         range: "7d",
-        chartType: "line",
-      },
-    ],
+        chartType: "line"
+      }
+    ]
   },
   funnels: {
     name: "Funnels",
@@ -51,7 +44,7 @@ export const DEFAULT_VIEWS: Record<
         kind: "funnel",
         funnelId: "acquisition-marketplace",
         filters: {},
-        range: "30d",
+        range: "30d"
       },
       {
         id: "activation",
@@ -59,7 +52,7 @@ export const DEFAULT_VIEWS: Record<
         kind: "funnel",
         funnelId: "activation",
         filters: {},
-        range: "30d",
+        range: "30d"
       },
       {
         id: "native",
@@ -67,9 +60,9 @@ export const DEFAULT_VIEWS: Record<
         kind: "funnel",
         funnelId: "native",
         filters: {},
-        range: "30d",
-      },
-    ],
+        range: "30d"
+      }
+    ]
   },
   errors: {
     name: "Errors & Uninstalls",
@@ -81,7 +74,7 @@ export const DEFAULT_VIEWS: Record<
         metric: "presence_error",
         filters: {},
         range: "7d",
-        chartType: "bar",
+        chartType: "bar"
       },
       {
         id: "native-heartbeat-failed",
@@ -90,7 +83,7 @@ export const DEFAULT_VIEWS: Record<
         metric: "native_heartbeat_failed",
         filters: {},
         range: "7d",
-        chartType: "bar",
+        chartType: "bar"
       },
       {
         id: "uninstall",
@@ -98,11 +91,10 @@ export const DEFAULT_VIEWS: Record<
         kind: "funnel",
         funnelId: "uninstall",
         filters: {},
-        range: "30d",
-      },
-    ],
-  },
+        range: "30d"
+      }
+    ]
+  }
 };
 
-export const isDefaultViewSlug = (value: string): value is DefaultViewSlug =>
-  (DEFAULT_VIEW_SLUGS as readonly string[]).includes(value);
+export const isDefaultViewSlug = (value: string): value is DefaultViewSlug => (DEFAULT_VIEW_SLUGS as readonly string[]).includes(value);

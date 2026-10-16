@@ -1,8 +1,4 @@
-import {
-  presenceDisplayName,
-  sanitizeReportMessage,
-  submitPresenceReport,
-} from "@/features/presence/presence-report";
+import { presenceDisplayName, sanitizeReportMessage, submitPresenceReport } from "@/features/presence/presence-report";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@nowly/env/server", async (importOriginal) => {
@@ -12,8 +8,8 @@ vi.mock("@nowly/env/server", async (importOriginal) => {
     serverEnv: {
       ...actual.serverEnv,
       FRONTEND_URL: "https://nowly.me",
-      DISCORD_WEBHOOK_REPORT_URL: "https://discord.com/api/webhooks/test/token",
-    },
+      DISCORD_WEBHOOK_REPORT_URL: "https://discord.com/api/webhooks/test/token"
+    }
   };
 });
 
@@ -29,19 +25,22 @@ describe("presence reports", () => {
   it("resolves a localized presence name", () => {
     expect(
       presenceDisplayName(
-        { name: { "fr-FR": "YouTube FR", "en-US": "YouTube" } },
+        {
+          name: {
+            "fr-FR": "YouTube FR",
+            "en-US": "YouTube"
+          }
+        },
         "youtube",
-        "fr-FR",
-      ),
+        "fr-FR"
+      )
     ).toBe("YouTube FR");
     expect(presenceDisplayName({ name: "YouTube" }, "youtube")).toBe("YouTube");
     expect(presenceDisplayName(null, "youtube")).toBe("youtube");
   });
 
   it("posts a Discord embed with presence details", async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue(new Response(null, { status: 204 }));
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
     vi.stubGlobal("fetch", fetchMock);
 
     const result = await submitPresenceReport({
@@ -50,7 +49,7 @@ describe("presence reports", () => {
       message: "Idle on /watch",
       locale: "fr-FR",
       browser: "Firefox",
-      browserVersion: "141.0",
+      browserVersion: "141.0"
     });
 
     expect(result).toBe("sent");
@@ -63,14 +62,29 @@ describe("presence reports", () => {
       expect.arrayContaining([
         expect.objectContaining({
           name: "Presence",
-          value: "[YouTube](https://nowly.me/library/youtube)",
+          value: "[YouTube](https://nowly.me/library/youtube)"
         }),
-        expect.objectContaining({ name: "Slug", value: "`youtube`" }),
-        expect.objectContaining({ name: "Problem", value: "Idle on /watch" }),
-        expect.objectContaining({ name: "Locale", value: "fr-FR" }),
-        expect.objectContaining({ name: "Browser", value: "Firefox" }),
-        expect.objectContaining({ name: "Browser version", value: "141.0" }),
-      ]),
+        expect.objectContaining({
+          name: "Slug",
+          value: "`youtube`"
+        }),
+        expect.objectContaining({
+          name: "Problem",
+          value: "Idle on /watch"
+        }),
+        expect.objectContaining({
+          name: "Locale",
+          value: "fr-FR"
+        }),
+        expect.objectContaining({
+          name: "Browser",
+          value: "Firefox"
+        }),
+        expect.objectContaining({
+          name: "Browser version",
+          value: "141.0"
+        })
+      ])
     );
   });
 });

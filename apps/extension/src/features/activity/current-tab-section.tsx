@@ -30,50 +30,38 @@ export const CurrentTabSection = () => {
   const tabPresence = installedSlug ? presences[installedSlug] : undefined;
 
   const suggestion = useMemo(() => {
-    if (!tab.hostname || installedSlug || settings.suggestPresences === false)
-      return undefined;
-    const match = catalog.items.find((item) =>
-      urlMatchesPresence(`https://${tab.hostname}/`, item.url),
-    );
-    if (!match || settings.hiddenSuggestions?.includes(match.slug))
-      return undefined;
+    if (!tab.hostname || installedSlug || settings.suggestPresences === false) return undefined;
+
+    const match = catalog.items.find((item) => urlMatchesPresence(`https://${tab.hostname}/`, item.url));
+
+    if (!match || settings.hiddenSuggestions?.includes(match.slug)) return undefined;
+
     return fromCatalog(match, locale);
-  }, [
-    tab.hostname,
-    installedSlug,
-    settings.suggestPresences,
-    settings.hiddenSuggestions,
-    catalog.items,
-    locale,
-  ]);
+  }, [tab.hostname, installedSlug, settings.suggestPresences, settings.hiddenSuggestions, catalog.items, locale]);
 
   const host = tab.hostname;
   const tabId = tab.tabId;
+
   if (!host || (!tabPresence && !suggestion)) return null;
 
   const setHidden = (slug: string, hidden: boolean) => {
     const current = settings.hiddenSuggestions ?? [];
-    return updateSettings({
-      hiddenSuggestions: hidden
-        ? [...new Set([...current, slug])]
-        : current.filter((entry) => entry !== slug),
-    });
+    return updateSettings({ hiddenSuggestions: hidden ? [...new Set([...current, slug])] : current.filter((entry) => entry !== slug) });
   };
 
   const hideSuggestion = async (slug: string, name: string) => {
     await setHidden(slug, true);
     toast(t("toast.suggestionHidden", { name }), "info", {
       label: t("action.undo"),
-      onClick: () => void setHidden(slug, false),
+      onClick: () => void setHidden(slug, false)
     });
   };
 
   const presenceDescription = () => {
     if (!tabPresence?.enabled) return t("status.off");
     if (settings.presencePaused) return t("status.paused");
-    return tab.muted
-      ? t("activity.tabHidden", { host })
-      : t("activity.tabShared", { host });
+
+    return tab.muted ? t("activity.tabHidden", { host }) : t("activity.tabShared", { host });
   };
 
   return (
@@ -81,35 +69,20 @@ export const CurrentTabSection = () => {
       <Group>
         {tabPresence && installedSlug ? (
           <Row
-            leading={
-              <PresenceIcon
-                slug={installedSlug}
-                name={tabPresence.metadata.name}
-                color={tabPresence.metadata.color}
-                size={32}
-              />
-            }
+            leading={<PresenceIcon slug={installedSlug} name={tabPresence.metadata.name} color={tabPresence.metadata.color} size={32} />}
             title={tabPresence.metadata.name}
             description={presenceDescription()}
-            onClick={() => push({ name: "presence", slug: installedSlug })}
+            onClick={() =>
+              push({
+                name: "presence",
+                slug: installedSlug
+              })
+            }
             trailing={
               tabPresence.enabled ? (
-                tabId != null && (
-                  <Switch
-                    checked={!tab.muted}
-                    label={t("activity.shareThisTab")}
-                    onChange={(checked) => void setTabMuted(tabId, !checked)}
-                  />
-                )
+                tabId != null && <Switch checked={!tab.muted} label={t("activity.shareThisTab")} onChange={(checked) => void setTabMuted(tabId, !checked)} />
               ) : (
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={(event) => (
-                    stop(event),
-                    void actions.toggle(installedSlug, true)
-                  )}
-                >
+                <Button size="sm" variant="secondary" onClick={(event) => (stop(event), void actions.toggle(installedSlug, true))}>
                   {t("action.enable")}
                 </Button>
               )
@@ -119,45 +92,27 @@ export const CurrentTabSection = () => {
           suggestion && (
             <div>
               <Row
-                leading={
-                  <PresenceIcon
-                    slug={suggestion.slug}
-                    name={suggestion.name}
-                    color={suggestion.color}
-                    size={32}
-                  />
-                }
+                leading={<PresenceIcon slug={suggestion.slug} name={suggestion.name} color={suggestion.color} size={32} />}
                 title={t("activity.supported", { host })}
-                description={t("activity.supportedHint", {
-                  name: suggestion.name,
-                })}
+                description={t("activity.supportedHint", { name: suggestion.name })}
                 onClick={() =>
-                  push({ name: "presence", slug: suggestion.slug })
+                  push({
+                    name: "presence",
+                    slug: suggestion.slug
+                  })
                 }
                 trailing={
                   <Button
                     size="sm"
                     loading={actions.pending === suggestion.slug}
-                    onClick={(event) => (
-                      stop(event),
-                      void actions.install(suggestion.slug, suggestion.name)
-                    )}
+                    onClick={(event) => (stop(event), void actions.install(suggestion.slug, suggestion.name))}
                   >
                     {t("action.install")}
                   </Button>
                 }
               />
-              <div
-                className="-mt-1.5 pb-3"
-                style={{ paddingLeft: SUGGESTION_TEXT_INSET }}
-              >
-                <Button
-                  variant="link"
-                  className="text-label-md!"
-                  onClick={() =>
-                    hideSuggestion(suggestion.slug, suggestion.name)
-                  }
-                >
+              <div className="-mt-1.5 pb-3" style={{ paddingLeft: SUGGESTION_TEXT_INSET }}>
+                <Button variant="link" className="text-label-md!" onClick={() => hideSuggestion(suggestion.slug, suggestion.name)}>
                   {t("activity.hideSuggestion")}
                 </Button>
               </div>

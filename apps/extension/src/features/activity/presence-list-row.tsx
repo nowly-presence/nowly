@@ -19,15 +19,7 @@ type PresenceListRowProps = {
   onToggle: (enabled: boolean) => void;
 };
 
-export const PresenceListRow = ({
-  slug,
-  stored,
-  status,
-  line,
-  hasUpdate,
-  onOpen,
-  onToggle,
-}: PresenceListRowProps) => {
+export const PresenceListRow = ({ slug, stored, status, line, hasUpdate, onOpen, onToggle }: PresenceListRowProps) => {
   const { t } = useI18n();
   return (
     <Row
@@ -48,13 +40,7 @@ export const PresenceListRow = ({
         </span>
       }
       description={<PresenceStatusLabel status={status} line={line} />}
-      trailing={
-        <Switch
-          checked={stored.enabled}
-          label={stored.metadata.name}
-          onChange={onToggle}
-        />
-      }
+      trailing={<Switch checked={stored.enabled} label={stored.metadata.name} onChange={onToggle} />}
     />
   );
 };

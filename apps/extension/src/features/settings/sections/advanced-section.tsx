@@ -28,9 +28,7 @@ export const AdvancedSection = () => {
           description={t("settings.developerHint")}
           checked={state.settings.developerMode === true}
           label={t("settings.developer")}
-          onChange={(checked) =>
-            void updateSettings({ developerMode: checked })
-          }
+          onChange={(checked) => void updateSettings({ developerMode: checked })}
         />
         {state.settings.developerMode && <DeveloperTools />}
       </Group>

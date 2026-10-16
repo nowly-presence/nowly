@@ -1,17 +1,28 @@
-import {
-  CUSTOM_IMAGE_MAX_BYTES,
-  isCustomImageMime,
-} from "@/shared/custom-activity";
+import { CUSTOM_IMAGE_MAX_BYTES, isCustomImageMime } from "@/shared/custom-activity";
 import type { CustomImageError } from "@/shared/custom-image";
 
-export type ReadImageResult =
-  { ok: true; dataUrl: string } | { ok: false; error: CustomImageError };
+export type ReadImageResult = {
+  ok: true;
+  dataUrl: string;
+} | {
+  ok: false;
+  error: CustomImageError;
+};
 
 const MAX_DIMENSION = 1024;
 const RESIZE_STEPS = [
-  { dimension: MAX_DIMENSION, quality: 0.9 },
-  { dimension: 768, quality: 0.85 },
-  { dimension: 512, quality: 0.8 },
+  {
+    dimension: MAX_DIMENSION,
+    quality: 0.9
+  },
+  {
+    dimension: 768,
+    quality: 0.85
+  },
+  {
+    dimension: 512,
+    quality: 0.8
+  }
 ] as const;
 const OUTPUT_MIME = "image/webp";
 
@@ -26,11 +37,7 @@ const toDataUrl = (blob: Blob): Promise<string> =>
     reader.readAsDataURL(blob);
   });
 
-const encode = (
-  bitmap: ImageBitmap,
-  dimension: number,
-  quality: number,
-): Promise<Blob | null> => {
+const encode = (bitmap: ImageBitmap, dimension: number, quality: number): Promise<Blob | null> => {
   const scale = Math.min(1, dimension / Math.max(bitmap.width, bitmap.height));
   const canvas = document.createElement("canvas");
   canvas.width = Math.max(1, Math.round(bitmap.width * scale));
@@ -40,27 +47,38 @@ const encode = (
 };
 
 export const readImageFile = async (file: File): Promise<ReadImageResult> => {
-  if (!isCustomImageMime(file.type))
-    return { ok: false, error: "UNSUPPORTED_TYPE" };
-  if (file.type === "image/gif")
-    return file.size > CUSTOM_IMAGE_MAX_BYTES
-      ? { ok: false, error: "TOO_LARGE" }
-      : { ok: true, dataUrl: await toDataUrl(file) };
+  if (!isCustomImageMime(file.type)) return {
+    ok: false,
+    error: "UNSUPPORTED_TYPE"
+  };
+  if (file.type === "image/gif") return file.size > CUSTOM_IMAGE_MAX_BYTES ? { ok: false, error: "TOO_LARGE" } : { ok: true, dataUrl: await toDataUrl(file) };
 
   const bitmap = await createImageBitmap(file).catch(() => null);
-  if (!bitmap) return { ok: false, error: "INVALID_IMAGE" };
+
+  if (!bitmap) return {
+    ok: false,
+    error: "INVALID_IMAGE"
+  };
+
   try {
-    if (
-      file.size <= CUSTOM_IMAGE_MAX_BYTES &&
-      Math.max(bitmap.width, bitmap.height) <= MAX_DIMENSION
-    )
-      return { ok: true, dataUrl: await toDataUrl(file) };
+    if (file.size <= CUSTOM_IMAGE_MAX_BYTES && Math.max(bitmap.width, bitmap.height) <= MAX_DIMENSION) return {
+      ok: true,
+      dataUrl: await toDataUrl(file)
+    };
+
     for (const step of RESIZE_STEPS) {
       const blob = await encode(bitmap, step.dimension, step.quality);
-      if (blob && blob.size <= CUSTOM_IMAGE_MAX_BYTES)
-        return { ok: true, dataUrl: await toDataUrl(blob) };
+
+      if (blob && blob.size <= CUSTOM_IMAGE_MAX_BYTES) return {
+        ok: true,
+        dataUrl: await toDataUrl(blob)
+      };
     }
-    return { ok: false, error: "TOO_LARGE" };
+
+    return {
+      ok: false,
+      error: "TOO_LARGE"
+    };
   } finally {
     bitmap.close();
   }

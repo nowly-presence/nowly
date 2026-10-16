@@ -15,11 +15,7 @@ export const ReviewPrompt = () => {
   const { t } = useI18n();
   const { stack } = useNav();
   const { activeId } = useFeatureReveals();
-  const eligible =
-    state.ready &&
-    Object.keys(state.presences).length > 0 &&
-    stack.length === 0 &&
-    activeId === null;
+  const eligible = state.ready && Object.keys(state.presences).length > 0 && stack.length === 0 && activeId === null;
   const { open, dismiss } = useReviewPrompt(eligible);
   const { store, url } = storeReviews();
 
@@ -40,20 +36,13 @@ export const ReviewPrompt = () => {
           <Button variant="secondary" className="flex-1" onClick={dismiss}>
             {t("review.dismiss")}
           </Button>
-          <Button
-            className="flex-1"
-            icon={<RiStarFill className="size-4" />}
-            onClick={rate}
-          >
+          <Button className="flex-1" icon={<RiStarFill className="size-4" />} onClick={rate}>
             {t("review.rate")}
           </Button>
         </>
       }
     >
-      <div
-        className="flex justify-center gap-1.5 py-3 text-primary"
-        aria-hidden
-      >
+      <div className="flex justify-center gap-1.5 py-3 text-primary" aria-hidden>
         {Array.from({ length: STARS }, (_, index) => (
           <RiStarFill key={index} className="size-8" />
         ))}

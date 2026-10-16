@@ -2,10 +2,7 @@ import { getStatusReport, runStatusCheck } from "./status.service";
 import { serverEnv } from "@nowly/env/server";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
-const requireCronAuth = async (
-  request: FastifyRequest,
-  reply: FastifyReply,
-): Promise<void> => {
+const requireCronAuth = async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
   const secret = serverEnv.STATUS_CRON_SECRET;
 
   if (!secret && process.env.NODE_ENV === "production") {
@@ -16,6 +13,7 @@ const requireCronAuth = async (
   if (!secret) return;
 
   const auth = request.headers.authorization;
+
   if (!auth || auth !== `Bearer ${secret}`) {
     reply.status(401).send({ error: "UNAUTHORIZED" });
   }

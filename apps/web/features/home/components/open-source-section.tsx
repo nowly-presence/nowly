@@ -16,24 +16,11 @@ export const OpenSourceSection = async () => {
     <section className="home-section-deferred px-5 py-28 sm:px-10 sm:py-36">
       <div className="mx-auto grid w-full max-w-[1200px] items-center gap-12 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:gap-16">
         <div>
-          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">
-            {t("eyebrow")}
-          </p>
-          <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[2.15rem]">
-            {t("title")}
-          </h2>
-          <p className="mt-2 text-base leading-relaxed text-muted-foreground sm:text-lg">
-            {t("description")}
-          </p>
+          <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>
+          <h2 className="text-pretty text-[26px] font-normal leading-tight text-foreground sm:text-[2.15rem]">{t("title")}</h2>
+          <p className="mt-2 text-base leading-relaxed text-muted-foreground sm:text-lg">{t("description")}</p>
           <div className="mt-8">
-            <ButtonAnchor
-              href={docsHref(
-                "/presence-development/creating-your-first-presence",
-              )}
-              rel="noreferrer"
-              target="_blank"
-              variant="inverted"
-            >
+            <ButtonAnchor href={docsHref("/presence-development/creating-your-first-presence")} rel="noreferrer" target="_blank" variant="inverted">
               {t("docs")}
               <RiArrowRightLine data-icon="inline-end" />
             </ButtonAnchor>
@@ -45,9 +32,7 @@ export const OpenSourceSection = async () => {
             <span className="size-2 rounded-full bg-foreground/20" />
             <span className="size-2 rounded-full bg-foreground/20" />
             <span className="size-2 rounded-full bg-foreground/20" />
-            <span className="ml-2 font-mono text-[11px] tracking-wide text-muted-foreground">
-              {t("file")}
-            </span>
+            <span className="ml-2 font-mono text-[11px] tracking-wide text-muted-foreground">{t("file")}</span>
           </div>
           <pre className="overflow-x-auto p-5 font-mono text-[13px] leading-[1.7] sm:text-sm">
             <code>

@@ -4,10 +4,7 @@ import { registerPresenceRuntimeBridge } from "@/background/runtime/presence-run
 import { registerAccountSyncListeners } from "@/background/services/account-sync";
 import { registerAlarmHandlers } from "@/background/services/alarms";
 import { registerCommandHandlers } from "@/background/services/commands";
-import {
-  initializeBackground,
-  registerLifecycleHandlers,
-} from "@/background/services/lifecycle";
+import { initializeBackground, registerLifecycleHandlers } from "@/background/services/lifecycle";
 
 registerHandlers(buildHandlerRegistry());
 registerRouter();

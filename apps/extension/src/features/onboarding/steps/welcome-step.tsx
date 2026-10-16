@@ -8,32 +8,26 @@ import { fromCatalog } from "@/lib/presence-view";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout";
 
-export const WelcomeStep = ({ onNext }: { onNext: () => void }) => {
+export const WelcomeStep = ({ onNext }: {
+  onNext: () => void;
+}) => {
   const { t, locale } = useI18n();
   const { state } = useExtensionState();
-  const views = useMemo(
-    () =>
-      [...state.catalog.items]
-        .sort((a, b) => (b.activeUsers ?? 0) - (a.activeUsers ?? 0))
-        .map((item) => fromCatalog(item, locale)),
-    [state.catalog.items, locale],
-  );
+  const views = useMemo(() => [...state.catalog.items].sort((a, b) => (b.activeUsers ?? 0) - (a.activeUsers ?? 0)).map((item) => fromCatalog(item, locale)), [
+    state.catalog.items,
+    locale
+  ]);
 
   return (
     <OnboardingStepLayout
       title={
         <>
-          {t("onboarding.welcomeTitleA")}{" "}
-          <span className="text-primary">{t("onboarding.welcomeTitleB")}</span>
+          {t("onboarding.welcomeTitleA")} <span className="text-primary">{t("onboarding.welcomeTitleB")}</span>
         </>
       }
       description={t("onboarding.welcomeDescription")}
       footer={
-        <Button
-          onClick={onNext}
-          className="w-full"
-          icon={<RiArrowRightLine className="order-last size-4" />}
-        >
+        <Button onClick={onNext} className="w-full" icon={<RiArrowRightLine className="order-last size-4" />}>
           {t("onboarding.getStarted")}
         </Button>
       }
@@ -55,9 +49,7 @@ export const WelcomeStep = ({ onNext }: { onNext: () => void }) => {
                 />
               ))}
             </div>
-            <span className="text-label-md text-muted">
-              {t("onboarding.supported", { count: views.length })}
-            </span>
+            <span className="text-label-md text-muted">{t("onboarding.supported", { count: views.length })}</span>
           </div>
         )}
       </div>

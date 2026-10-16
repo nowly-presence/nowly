@@ -9,13 +9,13 @@ export const revalidate = 3600;
 export const generateMetadata = async (): Promise<Metadata> => {
   const [locale, t] = await Promise.all([
     getLocale(),
-    getTranslations("pages.changelog"),
+    getTranslations("pages.changelog")
   ]);
   return createMetadata({
     title: t("title"),
     description: t("description"),
     locale,
-    path: "/changelog",
+    path: "/changelog"
   });
 };
 
@@ -23,11 +23,7 @@ const Page = async () => {
   const t = await getTranslations("pages.changelog");
   return (
     <>
-      <WebPageJsonLd
-        name={t("title")}
-        description={t("description")}
-        path="/changelog"
-      />
+      <WebPageJsonLd name={t("title")} description={t("description")} path="/changelog" />
       <ChangelogView />
     </>
   );

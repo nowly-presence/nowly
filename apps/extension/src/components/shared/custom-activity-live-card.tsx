@@ -15,14 +15,7 @@ type CustomActivityLiveCardProps = {
   onResume: () => void;
 };
 
-export const CustomActivityLiveCard = ({
-  activity,
-  presence,
-  paused,
-  onOpen,
-  onStop,
-  onResume,
-}: CustomActivityLiveCardProps) => {
+export const CustomActivityLiveCard = ({ activity, presence, paused, onOpen, onStop, onResume }: CustomActivityLiveCardProps) => {
   const { t } = useI18n();
   return (
     <LiveCard
@@ -33,23 +26,11 @@ export const CustomActivityLiveCard = ({
       status={paused ? "paused" : "live"}
       statusLabel={paused ? t("activity.pausedLabel") : undefined}
       onOpen={onOpen}
-      artwork={
-        <CustomActivityArtwork
-          source={activity}
-          size={64}
-          rounded="rounded-md"
-          showSmall
-          ringClassName="border-tertiary bg-tertiary"
-        />
-      }
+      artwork={<CustomActivityArtwork source={activity} size={64} rounded="rounded-md" showSmall ringClassName="border-tertiary bg-tertiary" />}
       footer={
         <div className="flex items-center justify-between gap-3">
           <span className="flex min-w-0 items-center gap-2 text-label-md text-on-tertiary-muted">
-            <CustomActivityArtwork
-              source={activity}
-              size={18}
-              rounded="rounded-[5px]"
-            />
+            <CustomActivityArtwork source={activity} size={18} rounded="rounded-[5px]" />
             <span className="truncate">{t("custom.live.label")}</span>
           </span>
           {paused ? (

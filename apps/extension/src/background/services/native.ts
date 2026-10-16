@@ -1,27 +1,9 @@
 import { trackAnalytics } from "@/background/analytics-client";
-import {
-  getDiscordIpcIssue,
-  setDiscordIpcIssue,
-} from "@/background/storage/discord-ipc-issue.store";
-import {
-  setNativeProfile,
-  setNativeSeenConnectedOnce,
-} from "@/background/storage/onboarding.store";
+import { getDiscordIpcIssue, setDiscordIpcIssue } from "@/background/storage/discord-ipc-issue.store";
+import { setNativeProfile, setNativeSeenConnectedOnce } from "@/background/storage/onboarding.store";
 import { NATIVE_HOST } from "@/shared/constants";
-import {
-  discordIpcIssueCode,
-  markDiscordIpcIssuePrompted,
-  NO_DISCORD_IPC_ISSUE,
-  trackDiscordIpcIssue,
-  type DiscordIpcIssue,
-} from "@/shared/discord-ipc-prompt";
-import type {
-  NativeMessage,
-  NativeResponse,
-  NativeStatus,
-  PresenceData,
-  PresencePayload,
-} from "@/shared/types";
+import { discordIpcIssueCode, markDiscordIpcIssuePrompted, NO_DISCORD_IPC_ISSUE, trackDiscordIpcIssue, type DiscordIpcIssue } from "@/shared/discord-ipc-prompt";
+import type { NativeMessage, NativeResponse, NativeStatus, PresenceData, PresencePayload } from "@/shared/types";
 
 let nativePort: chrome.runtime.Port | null = null;
 let connected = false;
@@ -42,13 +24,13 @@ const hydrateDiscordIpcIssue = (): Promise<void> =>
     })
     .catch(() => {}));
 
-const updateDiscordIpcIssue = (
-  update: (issue: DiscordIpcIssue) => DiscordIpcIssue,
-): Promise<void> => {
+const updateDiscordIpcIssue = (update: (issue: DiscordIpcIssue) => DiscordIpcIssue): Promise<void> => {
   discordIpcIssueQueue = hydrateDiscordIpcIssue()
     .then(async () => {
       const next = update(discordIpcIssue);
+
       if (next === discordIpcIssue) return;
+
       discordIpcIssue = next;
       await setDiscordIpcIssue(next);
     })
@@ -56,16 +38,8 @@ const updateDiscordIpcIssue = (
   return discordIpcIssueQueue;
 };
 
-const discordIpcIssueStatus = (): Pick<
-  NativeStatus,
-  "code" | "codePrompted"
-> =>
-  connected && discordIpcIssue.active
-    ? {
-        code: discordIpcIssueCode(discordIpcIssue),
-        codePrompted: discordIpcIssue.prompted,
-      }
-    : {};
+const discordIpcIssueStatus = (): Pick<NativeStatus, "code" | "codePrompted"> =>
+  connected && discordIpcIssue.active ? { code: discordIpcIssueCode(discordIpcIssue), codePrompted: discordIpcIssue.prompted } : {};
 
 export const mapPresenceData = (data: PresenceData): PresencePayload => ({
   name: data.name,
@@ -78,20 +52,12 @@ export const mapPresenceData = (data: PresenceData): PresencePayload => ({
   smallImage: data.smallImageKey,
   smallText: data.smallImageText,
   type: data.type,
-  buttons: data.buttons?.slice(0, 2),
+  buttons: data.buttons?.slice(0, 2)
 });
 
-export const getNativeStatus = (): NativeStatus => ({
-  connected,
-  status,
-  discordConnected,
-  version,
-  ...discordIpcIssueStatus(),
-});
+export const getNativeStatus = (): NativeStatus => ({ connected, status, discordConnected, version, ...discordIpcIssueStatus() });
 
-export const onNativeResponse = (
-  listener: (message: NativeResponse) => void,
-): (() => void) => {
+export const onNativeResponse = (listener: (message: NativeResponse) => void): (() => void) => {
   responseListeners.add(listener);
   return () => responseListeners.delete(listener);
 };
@@ -103,15 +69,14 @@ export const acknowledgeDiscordIpcIssue = async (): Promise<NativeStatus> => {
 
 export const refreshNativeStatus = (): NativeStatus => {
   void hydrateDiscordIpcIssue();
+
   if (nativePort) {
     postNative({ type: "PING" });
-  } else if (
-    !connecting &&
-    Date.now() - lastAutoConnectAttemptAt >= AUTO_CONNECT_RETRY_MS
-  ) {
+  } else if (!connecting && Date.now() - lastAutoConnectAttemptAt >= AUTO_CONNECT_RETRY_MS) {
     lastAutoConnectAttemptAt = Date.now();
     connectNative({ silent: true });
   }
+
   return getNativeStatus();
 };
 
@@ -154,7 +119,9 @@ export const restartNative = (): NativeStatus => {
   return getNativeStatus();
 };
 
-export const connectNative = (options: { silent?: boolean } = {}): void => {
+export const connectNative = (options: {
+  silent?: boolean;
+} = {}): void => {
   if (nativePort) return;
   if (connecting) return;
 
@@ -172,6 +139,7 @@ export const connectNative = (options: { silent?: boolean } = {}): void => {
 
   nativePort.onMessage.addListener((message: NativeResponse) => {
     for (const listener of responseListeners) listener(message);
+
     void updateDiscordIpcIssue((issue) => trackDiscordIpcIssue(issue, message));
 
     if (message.type === "CONNECTED") {
@@ -206,8 +174,9 @@ export const connectNative = (options: { silent?: boolean } = {}): void => {
     version = undefined;
     status = chrome.runtime.lastError?.message ?? "native disconnected";
     nativePort = null;
-    if (wasConnected)
-      trackAnalytics("native_disconnected", { payload: { reason: status } });
+    if (wasConnected) trackAnalytics("native_disconnected", {
+      payload: { reason: status }
+    });
   });
 
   postNative({ type: "PING" });
@@ -215,6 +184,7 @@ export const connectNative = (options: { silent?: boolean } = {}): void => {
 
 export const postNative = (message: NativeMessage): boolean => {
   connectNative();
+
   if (!nativePort) return false;
 
   try {

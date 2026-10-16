@@ -9,17 +9,11 @@ export class ApiError extends Error {
   }
 }
 
-export const apiFetch = async <T>(
-  path: string,
-  init?: RequestInit,
-): Promise<T> => {
+export const apiFetch = async <T>(path: string, init?: RequestInit): Promise<T> => {
   const res = await fetch(`${getClientApiBaseUrl()}${path}`, {
     ...init,
     credentials: "include",
-    headers: {
-      ...(init?.body ? { "Content-Type": "application/json" } : {}),
-      ...init?.headers,
-    },
+    headers: { ...(init?.body ? { "Content-Type": "application/json" } : {}), ...init?.headers }
   });
 
   if (!res.ok) {

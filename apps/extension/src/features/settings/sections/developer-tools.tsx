@@ -11,12 +11,7 @@ import { API_BASE_URL } from "@/shared/constants";
 import { replayHalloweenPrank } from "@/shared/halloween-prank";
 import { saveReviewPrompt } from "@/shared/review-prompt";
 import { replaySeasonMoment } from "@/shared/season-moments";
-import {
-  ENABLED_SEASONS,
-  isSeasonOverride,
-  saveSeasonOverride,
-  type Season,
-} from "@/shared/seasonal-themes";
+import { ENABLED_SEASONS, isSeasonOverride, saveSeasonOverride, type Season } from "@/shared/seasonal-themes";
 import { bytesToBase64 } from "@/shared/zip-bytes";
 import { Button } from "@/ui/button";
 import { FieldRow } from "@/ui/field-row";
@@ -34,7 +29,7 @@ const SEASON_LABELS: Record<Season, MessageKey> = {
   autumn: "settings.seasonAutumn",
   winter: "settings.seasonWinter",
   halloween: "settings.seasonHalloween",
-  "new-year": "settings.seasonNewYear",
+  "new-year": "settings.seasonNewYear"
 };
 
 export const DeveloperTools = () => {
@@ -44,18 +39,18 @@ export const DeveloperTools = () => {
   const { toast } = useToast();
   const { override } = useSeason();
   const reveals = useFeatureReveals();
-  const [apiDraft, setApiDraft] = useState(
-    state.settings.customApiBaseUrl ?? "",
-  );
+  const [apiDraft, setApiDraft] = useState(state.settings.customApiBaseUrl ?? "");
   const [busy, setBusy] = useState<"zip" | "updates" | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const saveApi = async () => {
     const value = apiDraft.trim();
+
     if (value && !HTTP_URL.test(value)) {
       toast(t("error.invalidUrl"), "error");
       return;
     }
+
     await updateSettings({ customApiBaseUrl: value || undefined });
     toast(t("toast.saved"));
   };
@@ -65,12 +60,11 @@ export const DeveloperTools = () => {
     const bytes = bytesToBase64(new Uint8Array(await file.arrayBuffer()));
     const result = await sendMessage("INSTALL_LOCAL_PRESENCE_ZIP", {
       fileName: file.name,
-      bytes,
+      bytes
     });
     setBusy(null);
     await refresh.presences();
-    if (result.ok)
-      toast(t("toast.installed", { name: result.slug ?? file.name }));
+    if (result.ok) toast(t("toast.installed", { name: result.slug ?? file.name }));
     else toast(`${t("error.generic")} (${result.error})`, "error");
   };
 
@@ -84,16 +78,12 @@ export const DeveloperTools = () => {
   const replayOnboarding = () =>
     void sendMessage("SET_ONBOARDING", {
       onboardingCompleted: false,
-      devReplayOnboarding: true,
+      devReplayOnboarding: true
     }).then(() => refresh.onboarding());
 
   return (
     <>
-      <FieldRow
-        title={t("settings.customApi")}
-        layout="stacked"
-        controlClassName="flex gap-2"
-      >
+      <FieldRow title={t("settings.customApi")} layout="stacked" controlClassName="flex gap-2">
         <div className="flex-1">
           <Input
             value={apiDraft}
@@ -107,20 +97,11 @@ export const DeveloperTools = () => {
           {t("action.save")}
         </Button>
       </FieldRow>
-      <Row
-        title={t("settings.logs")}
-        onClick={() => push({ name: "logs" })}
-        chevron
-      />
+      <Row title={t("settings.logs")} onClick={() => push({ name: "logs" })} chevron />
       <Row
         title={t("settings.checkUpdates")}
         trailing={
-          <Button
-            size="sm"
-            variant="secondary"
-            loading={busy === "updates"}
-            onClick={() => void checkUpdates()}
-          >
+          <Button size="sm" variant="secondary" loading={busy === "updates"} onClick={() => void checkUpdates()}>
             {t("action.check")}
           </Button>
         }
@@ -136,10 +117,7 @@ export const DeveloperTools = () => {
                 type="file"
                 accept=".zip"
                 className="hidden"
-                onChange={(event) =>
-                  event.target.files?.[0] &&
-                  void installZip(event.target.files[0])
-                }
+                onChange={(event) => event.target.files?.[0] && void installZip(event.target.files[0])}
               />
               <Button
                 size="sm"
@@ -160,27 +138,27 @@ export const DeveloperTools = () => {
             <Select
               aria-label={t("settings.forceSeason")}
               value={override ?? SEASON_AUTO}
-              onChange={(value) =>
-                void saveSeasonOverride(isSeasonOverride(value) ? value : null)
-              }
+              onChange={(value) => void saveSeasonOverride(isSeasonOverride(value) ? value : null)}
               options={[
-                { value: SEASON_AUTO, label: t("settings.seasonAuto") },
+                {
+                  value: SEASON_AUTO,
+                  label: t("settings.seasonAuto")
+                },
                 ...ENABLED_SEASONS.map((season) => ({
                   value: season,
-                  label: t(SEASON_LABELS[season]),
+                  label: t(SEASON_LABELS[season])
                 })),
-                { value: "none", label: t("settings.seasonNone") },
+                {
+                  value: "none",
+                  label: t("settings.seasonNone")
+                }
               ]}
             />
           </FieldRow>
           <Row
             title={t("settings.replayPrank")}
             trailing={
-              <Button
-                size="sm"
-                variant="secondary"
-                onClick={() => void replayHalloweenPrank()}
-              >
+              <Button size="sm" variant="secondary" onClick={() => void replayHalloweenPrank()}>
                 {t("action.replay")}
               </Button>
             }
@@ -189,11 +167,7 @@ export const DeveloperTools = () => {
             title={t("settings.replayMoment")}
             description={t("settings.replayMomentHint")}
             trailing={
-              <Button
-                size="sm"
-                variant="secondary"
-                onClick={() => void replaySeasonMoment()}
-              >
+              <Button size="sm" variant="secondary" onClick={() => void replaySeasonMoment()}>
                 {t("action.replay")}
               </Button>
             }
@@ -212,11 +186,7 @@ export const DeveloperTools = () => {
       <Row
         title={t("settings.replayReview")}
         trailing={
-          <Button
-            size="sm"
-            variant="secondary"
-            onClick={() => void saveReviewPrompt({ firstSeenAt: 0 })}
-          >
+          <Button size="sm" variant="secondary" onClick={() => void saveReviewPrompt({ firstSeenAt: 0 })}>
             {t("action.replay")}
           </Button>
         }

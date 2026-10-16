@@ -1,36 +1,22 @@
 import { SectionHeading } from "@/features/home/components/section-heading";
 import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui/card";
 
-import {
-  RiGlobalLine,
-  RiLockLine,
-  RiPuzzleLine,
-  RiRefreshLine,
-  RiShieldCheckLine,
-  RiWindowLine,
-} from "@remixicon/react";
+import { RiGlobalLine, RiLockLine, RiPuzzleLine, RiRefreshLine, RiShieldCheckLine, RiWindowLine } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
-const icons = [
-  RiRefreshLine,
-  RiPuzzleLine,
-  RiLockLine,
-  RiShieldCheckLine,
-  RiGlobalLine,
-  RiWindowLine,
-];
+const icons = [RiRefreshLine, RiPuzzleLine, RiLockLine, RiShieldCheckLine, RiGlobalLine, RiWindowLine];
 
 export const FeaturesSection = async () => {
   const t = await getTranslations("features");
-  const items = t.raw("items") as Array<{ title: string; description: string }>;
+
+  const items = t.raw("items") as Array<{
+    title: string;
+    description: string;
+  }>;
 
   return (
     <section className="home-section-deferred px-5 py-28 sm:px-10 sm:py-36">
-      <SectionHeading
-        eyebrow={t("eyebrow")}
-        title={t("title")}
-        description={t("description")}
-      />
+      <SectionHeading eyebrow={t("eyebrow")} title={t("title")} description={t("description")} />
       <div className="mx-auto mt-12 grid max-w-[1200px] gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item, index) => {
           const Icon = icons[index] ?? RiPuzzleLine;
@@ -41,9 +27,7 @@ export const FeaturesSection = async () => {
                   <Icon className="size-5" />
                 </div>
                 <CardTitle className="mt-4">{item.title}</CardTitle>
-                <CardDescription className="mt-2">
-                  {item.description}
-                </CardDescription>
+                <CardDescription className="mt-2">{item.description}</CardDescription>
               </CardContent>
             </Card>
           );

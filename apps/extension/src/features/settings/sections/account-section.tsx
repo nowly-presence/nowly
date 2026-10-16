@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-  RiDiscordFill,
-  RiExternalLinkLine,
-  RiRefreshLine,
-} from "@remixicon/react";
+import { RiDiscordFill, RiExternalLinkLine, RiRefreshLine } from "@remixicon/react";
 import { DiscordAvatar } from "@/components/shared/discord-avatar";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
@@ -25,9 +21,13 @@ const MINUTE_MS = 60_000;
 
 type Busy = "connect" | "sync" | "signOut" | "stop" | null;
 
-const AccountAvatar = ({ user }: { user: AccountUser }) => {
+const AccountAvatar = ({ user }: {
+  user: AccountUser;
+}) => {
   const [failed, setFailed] = useState(false);
+
   if (!user.image || failed) return <DiscordAvatar size={AVATAR_SIZE} />;
+
   return (
     <img
       src={user.image}
@@ -40,29 +40,16 @@ const AccountAvatar = ({ user }: { user: AccountUser }) => {
   );
 };
 
-const SignedOut = ({
-  busy,
-  onConnect,
-}: {
+const SignedOut = ({ busy, onConnect }: {
   busy: Busy;
   onConnect: () => void;
 }) => {
   const { t } = useI18n();
   return (
     <Group>
-      <Row
-        align="start"
-        title={t("account.signedOutTitle")}
-        description={t("account.signedOutHint")}
-      />
+      <Row align="start" title={t("account.signedOutTitle")} description={t("account.signedOutHint")} />
       <div className="px-4 py-3">
-        <Button
-          variant="secondary"
-          className="w-full"
-          loading={busy === "connect"}
-          icon={<RiDiscordFill className="size-4" />}
-          onClick={onConnect}
-        >
+        <Button variant="secondary" className="w-full" loading={busy === "connect"} icon={<RiDiscordFill className="size-4" />} onClick={onConnect}>
           {t("account.signIn")}
         </Button>
       </div>
@@ -70,24 +57,41 @@ const SignedOut = ({
   );
 };
 
-const SyncStatus = ({
-  account,
-}: {
-  account: Extract<AccountSnapshot, { signedIn: true }>;
+const SyncStatus = ({ account }: {
+  account: Extract<
+    AccountSnapshot,
+    {
+      signedIn: true;
+    }
+  >;
 }) => {
   const { t, locale } = useI18n();
   const now = useNow(MINUTE_MS);
-  if (account.pendingChoice) return <>{t("account.choicePending")}</>;
-  if (account.error)
-    return <span className="text-danger">{t("account.syncError")}</span>;
-  if (!account.lastSyncedAt) return <>{t("account.neverSynced")}</>;
-  if (now - account.lastSyncedAt < MINUTE_MS)
-    return <>{t("account.syncedJustNow")}</>;
+
+  if (account.pendingChoice) return (
+    <>
+      {t("account.choicePending")}
+    </>
+  );
+  if (account.error) return (
+    <span className="text-danger">
+      {t("account.syncError")}
+    </span>
+  );
+  if (!account.lastSyncedAt) return (
+    <>
+      {t("account.neverSynced")}
+    </>
+  );
+  if (now - account.lastSyncedAt < MINUTE_MS) return (
+    <>
+      {t("account.syncedJustNow")}
+    </>
+  );
+
   return (
     <>
-      {t("account.lastSync", {
-        time: formatRelative(account.lastSyncedAt, now, locale),
-      })}
+      {t("account.lastSync", { time: formatRelative(account.lastSyncedAt, now, locale) })}
     </>
   );
 };
@@ -101,11 +105,9 @@ export const AccountSection = () => {
   const [choiceOpen, setChoiceOpen] = useState(false);
   const account = state.account;
 
-  const run = async <T,>(
-    kind: Exclude<Busy, null>,
-    action: () => Promise<T>,
-  ): Promise<T | null> => {
+  const run = async <T,>(kind: Exclude<Busy, null>, action: () => Promise<T>): Promise<T | null> => {
     setBusy(kind);
+
     try {
       return await action();
     } catch {
@@ -117,23 +119,22 @@ export const AccountSection = () => {
   };
 
   const connect = () =>
-    void run("connect", () => sendMessage("START_ACCOUNT_CONNECT")).then(
-      (result) => {
-        if (result?.ok) toast(t("account.signInOpened"), "info");
-      },
-    );
+    void run("connect", () => sendMessage("START_ACCOUNT_CONNECT")).then((result) => {
+      if (result?.ok) toast(t("account.signInOpened"), "info");
+    });
 
   const syncNow = () =>
     void run("sync", () => sendMessage("SYNC_ACCOUNT")).then((next) => {
       if (!next) return;
+
       patch({ account: next });
-      if (next.signedIn && !next.error && !next.pendingChoice)
-        toast(t("toast.synced"), "success");
+      if (next.signedIn && !next.error && !next.pendingChoice) toast(t("toast.synced"), "success");
     });
 
   const signOut = () =>
     void run("signOut", () => sendMessage("SIGN_OUT_ACCOUNT")).then((next) => {
       if (!next) return;
+
       patch({ account: next });
       toast(t("toast.signedOut"));
     });
@@ -141,12 +142,17 @@ export const AccountSection = () => {
   const stopSync = () =>
     void run("stop", () => sendMessage("STOP_ACCOUNT_SYNC")).then((result) => {
       if (!result) return;
+
       setStopOpen(false);
+
       if (!result.ok) {
         toast(t("account.syncError"), "error");
         return;
       }
-      patch({ account: { signedIn: false } });
+
+      patch({
+        account: { signedIn: false }
+      });
       toast(t("toast.syncStopped"));
     });
 
@@ -162,11 +168,7 @@ export const AccountSection = () => {
             description={<SyncStatus account={account} />}
             trailing={
               account.pendingChoice ? (
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={() => setChoiceOpen(true)}
-                >
+                <Button size="sm" variant="secondary" onClick={() => setChoiceOpen(true)}>
                   {t("action.choose")}
                 </Button>
               ) : (
@@ -184,52 +186,30 @@ export const AccountSection = () => {
               )
             }
           />
-          <Row
-            title={t("account.manage")}
-            onClick={() => openUrl(siteUrl("/account"))}
-            trailing={<RiExternalLinkLine className="size-4 text-muted" />}
-          />
+          <Row title={t("account.manage")} onClick={() => openUrl(siteUrl("/account"))} trailing={<RiExternalLinkLine className="size-4 text-muted" />} />
           <Row
             align="start"
-            title={
-              <span className="whitespace-normal">
-                {t("account.signOutTitle")}
-              </span>
-            }
+            title={<span className="whitespace-normal">{t("account.signOutTitle")}</span>}
             description={t("account.signOutHint")}
             trailing={
-              <Button
-                size="sm"
-                variant="secondary"
-                loading={busy === "signOut"}
-                onClick={signOut}
-              >
+              <Button size="sm" variant="secondary" loading={busy === "signOut"} onClick={signOut}>
                 {t("action.signOut")}
               </Button>
             }
           />
           <Row
             align="start"
-            title={
-              <span className="whitespace-normal">{t("account.stop")}</span>
-            }
+            title={<span className="whitespace-normal">{t("account.stop")}</span>}
             description={t("account.stopHint")}
             trailing={
-              <Button
-                size="sm"
-                variant="danger"
-                onClick={() => setStopOpen(true)}
-              >
+              <Button size="sm" variant="danger" onClick={() => setStopOpen(true)}>
                 {t("action.erase")}
               </Button>
             }
           />
         </Group>
       )}
-      <AccountChoiceSheet
-        open={choiceOpen}
-        onClose={() => setChoiceOpen(false)}
-      />
+      <AccountChoiceSheet open={choiceOpen} onClose={() => setChoiceOpen(false)} />
       <Sheet
         open={stopOpen}
         onClose={() => setStopOpen(false)}
@@ -238,19 +218,10 @@ export const AccountSection = () => {
         closeLabel={t("action.close")}
         footer={
           <>
-            <Button
-              variant="secondary"
-              className="flex-1"
-              onClick={() => setStopOpen(false)}
-            >
+            <Button variant="secondary" className="flex-1" onClick={() => setStopOpen(false)}>
               {t("action.cancel")}
             </Button>
-            <Button
-              variant="destructive"
-              className="flex-1"
-              loading={busy === "stop"}
-              onClick={stopSync}
-            >
+            <Button variant="destructive" className="flex-1" loading={busy === "stop"} onClick={stopSync}>
               {t("action.erase")}
             </Button>
           </>

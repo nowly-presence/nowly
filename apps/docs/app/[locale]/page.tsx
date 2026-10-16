@@ -4,7 +4,10 @@ import { getLocale } from "next-intl/server";
 
 const Page = async (): Promise<never> => {
   const locale = await getLocale();
-  return permanentRedirect({ href: `/${getFirstDocPath()}`, locale });
+  return permanentRedirect({
+    href: `/${getFirstDocPath()}`,
+    locale
+  });
 };
 
 export default Page;

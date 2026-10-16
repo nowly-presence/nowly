@@ -7,7 +7,9 @@ import { useExtensionState } from "@/hooks/extension-state-provider";
 import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout";
 import { PermissionStatus } from "@/features/onboarding/permission-status";
 
-export const ScriptsStep = ({ onNext }: { onNext: () => void }) => {
+export const ScriptsStep = ({ onNext }: {
+  onNext: () => void;
+}) => {
   const { t } = useI18n();
   const { state, refresh } = useExtensionState();
   const enabled = state.userScripts.enabled;
@@ -19,11 +21,7 @@ export const ScriptsStep = ({ onNext }: { onNext: () => void }) => {
   }, [refresh]);
 
   const grant = async () => {
-    await chrome.permissions
-      .request({
-        permissions: ["userScripts"] as chrome.runtime.ManifestPermission[],
-      })
-      .catch(() => false);
+    await chrome.permissions.request({ permissions: ["userScripts"] as chrome.runtime.ManifestPermission[] }).catch(() => false);
     await refresh.userScripts();
   };
 
@@ -38,11 +36,7 @@ export const ScriptsStep = ({ onNext }: { onNext: () => void }) => {
       }
       footer={
         <>
-          <Button
-            onClick={onNext}
-            className="w-full"
-            variant={enabled ? "primary" : "secondary"}
-          >
+          <Button onClick={onNext} className="w-full" variant={enabled ? "primary" : "secondary"}>
             {enabled ? t("action.continue") : t("onboarding.later")}
           </Button>
         </>
@@ -53,7 +47,7 @@ export const ScriptsStep = ({ onNext }: { onNext: () => void }) => {
           {[
             t("onboarding.scriptsStep1"),
             t("onboarding.scriptsStep2"),
-            t("onboarding.scriptsStep3"),
+            t("onboarding.scriptsStep3")
           ].map((text, position) => (
             <li key={text} className="flex items-start gap-3 text-body-sm">
               <span className="flex size-6 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-label-md font-medium tabular-nums">
@@ -67,19 +61,11 @@ export const ScriptsStep = ({ onNext }: { onNext: () => void }) => {
       <div className="flex flex-col gap-2">
         {!enabled &&
           (firefox ? (
-            <Button onClick={() => void grant()}>
-              {t("onboarding.grant")}
-            </Button>
+            <Button onClick={() => void grant()}>{t("onboarding.grant")}</Button>
           ) : (
-            <Button onClick={() => openUrl(extensionDetailsUrl())}>
-              {t("onboarding.openDetails")}
-            </Button>
+            <Button onClick={() => openUrl(extensionDetailsUrl())}>{t("onboarding.openDetails")}</Button>
           ))}
-        <PermissionStatus
-          ok={enabled}
-          okLabel={t("onboarding.scriptsOk")}
-          waitingLabel={t("onboarding.scriptsWaiting")}
-        />
+        <PermissionStatus ok={enabled} okLabel={t("onboarding.scriptsOk")} waitingLabel={t("onboarding.scriptsWaiting")} />
       </div>
     </OnboardingStepLayout>
   );

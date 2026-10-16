@@ -1,23 +1,21 @@
 type ChromeWithSidebarAction = typeof chrome & {
-  sidebarAction?: { open(): Promise<void> };
+  sidebarAction?: {
+    open(): Promise<void>;
+  };
 };
 
-const openForWindow = (
-  sidePanel: typeof chrome.sidePanel,
-  windowId: number,
-): void => {
+const openForWindow = (sidePanel: typeof chrome.sidePanel, windowId: number): void => {
   void sidePanel.open({ windowId }).catch(() => {});
 };
 
 export const openNowlyPanel = (tab?: chrome.tabs.Tab): void => {
   if (import.meta.env.BROWSER === "firefox") {
-    void (chrome as ChromeWithSidebarAction).sidebarAction
-      ?.open()
-      ?.catch(() => {});
+    void (chrome as ChromeWithSidebarAction).sidebarAction?.open()?.catch(() => {});
     return;
   }
 
   const sidePanel = chrome.sidePanel;
+
   if (!sidePanel) return;
 
   if (typeof tab?.windowId === "number") {
@@ -30,8 +28,14 @@ export const openNowlyPanel = (tab?: chrome.tabs.Tab): void => {
     return;
   }
 
-  chrome.windows.getLastFocused({ windowTypes: ["normal"] }, (win) => {
-    if (chrome.runtime.lastError) return;
-    if (typeof win?.id === "number") openForWindow(sidePanel, win.id);
-  });
+  chrome.windows.getLastFocused(
+    {
+      windowTypes: ["normal"]
+    },
+    (win) => {
+      if (chrome.runtime.lastError) return;
+
+      if (typeof win?.id === "number") openForWindow(sidePanel, win.id);
+    }
+  );
 };

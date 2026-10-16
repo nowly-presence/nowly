@@ -1,22 +1,21 @@
 import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
 import { ButtonAnchor } from "@nowly/ui/button-link";
-import {
-  RiArrowRightUpLine,
-  RiCupLine,
-  RiGithubLine,
-  RiHeart3Line,
-} from "@nowly/ui/icons";
+import { RiArrowRightUpLine, RiCupLine, RiGithubLine, RiHeart3Line } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
 import { SUPPORT_LINKS } from "@/features/support/lib/support-links";
 
 const donateLinks = [
-  { href: SUPPORT_LINKS.kofi, label: "Ko-fi", icon: RiCupLine },
+  {
+    href: SUPPORT_LINKS.kofi,
+    label: "Ko-fi",
+    icon: RiCupLine
+  },
   {
     href: SUPPORT_LINKS.sponsors,
     label: "GitHub Sponsors",
-    icon: RiGithubLine,
-  },
+    icon: RiGithubLine
+  }
 ];
 
 export const DonateCard = async () => {
@@ -34,14 +33,7 @@ export const DonateCard = async () => {
           {donateLinks.map((link) => {
             const Icon = link.icon;
             return (
-              <ButtonAnchor
-                key={link.label}
-                href={link.href}
-                rel="noreferrer"
-                target="_blank"
-                variant="outline"
-                size="lg"
-              >
+              <ButtonAnchor key={link.label} href={link.href} rel="noreferrer" target="_blank" variant="outline" size="lg">
                 <Icon data-icon="inline-start" />
                 {link.label}
                 <RiArrowRightUpLine data-icon="inline-end" />

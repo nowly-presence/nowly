@@ -2,12 +2,7 @@ import { useLayoutEffect, useRef, type ReactNode } from "react";
 import { cn } from "@/ui/cn";
 import { type Tab } from "@/hooks/navigation-provider";
 
-export const Layer = ({
-  active,
-  children,
-  className,
-  tab,
-}: {
+export const Layer = ({ active, children, className, tab }: {
   active: boolean;
   children: ReactNode;
   className?: string;
@@ -29,14 +24,9 @@ export const Layer = ({
       inert={!active}
       aria-hidden={!active}
       onScroll={() => {
-        if (activeRef.current && ref.current)
-          saved.current = ref.current.scrollTop;
+        if (activeRef.current && ref.current) saved.current = ref.current.scrollTop;
       }}
-      className={cn(
-        "scroll-thin absolute inset-0 overflow-y-auto",
-        active ? "visible z-10" : "invisible z-0",
-        className,
-      )}
+      className={cn("scroll-thin absolute inset-0 overflow-y-auto", active ? "visible z-10" : "invisible z-0", className)}
     >
       {children}
     </div>

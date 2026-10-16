@@ -3,47 +3,18 @@ import { requireDeviceAccess } from "@/features/device/device-token";
 import { deviceExists } from "@/features/device/device.service";
 import { deviceRateLimitKey } from "@/shared/rate-limit";
 import { buildLocaleObject } from "@nowly/locales";
-import {
-  presenceActiveBodySchema,
-  presenceLikeBodySchema,
-  presenceLikeQuerySchema,
-  presencePutBodySchema,
-  presenceReportBodySchema,
-} from "@nowly/shared/schemas";
+import { presenceActiveBodySchema, presenceLikeBodySchema, presenceLikeQuerySchema, presencePutBodySchema, presenceReportBodySchema } from "@nowly/shared/schemas";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import {
-  addVersion,
-  clearActiveDevice,
-  clearActiveDevicesForDevice,
-  getGlobalPresenceStats,
-  getLikeCount,
-  getPresenceListData,
-  getPresenceMeta,
-  getPresenceStats,
-  getVersionHistory,
-  hasLikedPresence,
-  likePresence,
-  markActiveDevice,
-  setAdded,
-  setUpdated,
-  setVersion,
-  unlikePresence,
-} from "./presence.repository";
+import { addVersion, clearActiveDevice, clearActiveDevicesForDevice, getGlobalPresenceStats, getLikeCount, getPresenceListData, getPresenceMeta, getPresenceStats, getVersionHistory, hasLikedPresence, likePresence, markActiveDevice, setAdded, setUpdated, setVersion, unlikePresence } from "./presence.repository";
 import { buildRelease } from "./presence.service";
-import {
-  presenceDisplayName,
-  sanitizeReportMessage,
-  submitPresenceReport,
-} from "./presence-report";
+import { presenceDisplayName, sanitizeReportMessage, submitPresenceReport } from "./presence-report";
 import { processPresenceSync, type PresenceSyncBody } from "./presence.sync";
 
-const sendArchivedNotFound = async (
-  slug: string,
-  request: FastifyRequest,
-  reply: FastifyReply,
-): Promise<boolean> => {
+const sendArchivedNotFound = async (slug: string, request: FastifyRequest, reply: FastifyReply): Promise<boolean> => {
   const stats = await getPresenceStats(slug);
+
   if (!stats?.archived || hasAdminAuth(request)) return false;
+
   reply.status(404).send({ error: "PRESENCE_NOT_FOUND" });
   return true;
 };
@@ -55,65 +26,73 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
 
   fastify.get("/stats", async (_request, reply) => {
     const stats = await getGlobalPresenceStats();
-    return reply
-      .header("Cache-Control", "public, max-age=5, stale-while-revalidate=10")
-      .send(stats);
+    return reply.header("Cache-Control", "public, max-age=5, stale-while-revalidate=10").send(stats);
   });
 
-  fastify.get<{ Params: { slug: string } }>(
-    "/:slug/stats",
-    async (request, reply) => {
-      const slug = request.params.slug.toLowerCase();
-      if (await sendArchivedNotFound(slug, request, reply)) return;
+  fastify.get<{
+    Params: {
+      slug: string;
+    };
+  }>("/:slug/stats", async (request, reply) => {
+    const slug = request.params.slug.toLowerCase();
 
-      const stats = await getPresenceStats(slug);
-      return reply
-        .header("Cache-Control", "public, max-age=5, stale-while-revalidate=10")
-        .send(stats);
-    },
-  );
+    if (await sendArchivedNotFound(slug, request, reply)) return;
 
-  fastify.get<{ Params: { slug: string } }>(
-    "/:slug",
-    async (request, reply) => {
-      const slug = request.params.slug.toLowerCase();
-      if (await sendArchivedNotFound(slug, request, reply)) return;
+    const stats = await getPresenceStats(slug);
+    return reply.header("Cache-Control", "public, max-age=5, stale-while-revalidate=10").send(stats);
+  });
 
-      const release = await buildRelease(slug);
+  fastify.get<{
+    Params: {
+      slug: string;
+    };
+  }>("/:slug", async (request, reply) => {
+    const slug = request.params.slug.toLowerCase();
 
-      if (!release) {
-        return reply.status(404).send({ error: "PRESENCE_NOT_FOUND" });
-      }
+    if (await sendArchivedNotFound(slug, request, reply)) return;
 
-      return reply.header("Cache-Control", "no-store").send(release);
-    },
-  );
+    const release = await buildRelease(slug);
 
-  fastify.post<{ Params: { slug: string } }>(
+    if (!release) {
+      return reply.status(404).send({ error: "PRESENCE_NOT_FOUND" });
+    }
+
+    return reply.header("Cache-Control", "no-store").send(release);
+  });
+
+  fastify.post<{
+    Params: {
+      slug: string;
+    };
+  }>(
     "/:slug/report",
     {
       config: {
         rateLimit: {
           max: 8,
-          timeWindow: "10 minutes",
-        },
-      },
+          timeWindow: "10 minutes"
+        }
+      }
     },
     async (request, reply) => {
       const slug = request.params.slug.toLowerCase();
+
       if (await sendArchivedNotFound(slug, request, reply)) return;
 
       const parsed = presenceReportBodySchema.safeParse(request.body);
+
       if (!parsed.success) {
         return reply.status(400).send({ error: "INVALID_REQUEST_BODY" });
       }
 
       const meta = await getPresenceMeta(slug);
+
       if (!meta) {
         return reply.status(404).send({ error: "PRESENCE_NOT_FOUND" });
       }
 
       const message = sanitizeReportMessage(parsed.data.message);
+
       if (!message) {
         return reply.status(400).send({ error: "INVALID_REQUEST_BODY" });
       }
@@ -124,7 +103,7 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
         message,
         locale: parsed.data.locale,
         browser: parsed.data.browser,
-        browserVersion: parsed.data.browserVersion,
+        browserVersion: parsed.data.browserVersion
       });
 
       if (result === "unconfigured") {
@@ -134,78 +113,90 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
         return reply.status(502).send({ error: "REPORT_SEND_FAILED" });
       }
 
-      return { ok: true };
-    },
+      return {
+        ok: true
+      };
+    }
   );
 
-  fastify.get<{ Params: { slug: string } }>(
-    "/:slug/versions",
-    async (request, reply) => {
-      const slug = request.params.slug.toLowerCase();
-      if (await sendArchivedNotFound(slug, request, reply)) return;
+  fastify.get<{
+    Params: {
+      slug: string;
+    };
+  }>("/:slug/versions", async (request, reply) => {
+    const slug = request.params.slug.toLowerCase();
 
-      const history = await getVersionHistory(slug);
-      return reply.send(history);
-    },
-  );
+    if (await sendArchivedNotFound(slug, request, reply)) return;
 
-  fastify.get<{ Params: { slug: string; version: string } }>(
-    "/:slug/versions/:version",
-    async (request, reply) => {
-      const slug = request.params.slug.toLowerCase();
-      const version = request.params.version;
-      if (await sendArchivedNotFound(slug, request, reply)) return;
+    const history = await getVersionHistory(slug);
+    return reply.send(history);
+  });
 
-      const release = await buildRelease(slug, version);
+  fastify.get<{
+    Params: {
+      slug: string;
+      version: string;
+    };
+  }>("/:slug/versions/:version", async (request, reply) => {
+    const slug = request.params.slug.toLowerCase();
+    const version = request.params.version;
 
-      if (!release) {
-        return reply.status(404).send({ error: "VERSION_NOT_FOUND" });
+    if (await sendArchivedNotFound(slug, request, reply)) return;
+
+    const release = await buildRelease(slug, version);
+
+    if (!release) {
+      return reply.status(404).send({ error: "VERSION_NOT_FOUND" });
+    }
+
+    return reply.header("Cache-Control", "no-store").send(release);
+  });
+
+  fastify.put<{
+    Params: {
+      slug: string;
+    };
+  }>("/:slug", { preHandler: requireAuth }, async (request, reply) => {
+    const slug = request.params.slug.toLowerCase();
+    const parsedBody = presencePutBodySchema.safeParse(request.body);
+
+    if (!parsedBody.success) {
+      return reply.status(400).send({ error: "INVALID_REQUEST_BODY" });
+    }
+
+    const body = parsedBody.data;
+
+    if (body.version) {
+      const publishedAt = new Date();
+      await setVersion(slug, body.version, publishedAt);
+
+      if (body.changelog || body.author) {
+        await addVersion(slug, {
+          version: body.version,
+          changelog: body.changelog ? JSON.stringify(buildLocaleObject(body.changelog)) : "",
+          author: body.author ?? "unknown",
+          authorGithub: body.authorGithub,
+          pr: body.pr,
+          timestamp: publishedAt.getTime()
+        });
       }
+    }
 
-      return reply.header("Cache-Control", "no-store").send(release);
-    },
-  );
+    if (body.added) await setAdded(slug, body.added);
+    if (body.updated) await setUpdated(slug, body.updated);
 
-  fastify.put<{ Params: { slug: string } }>(
-    "/:slug",
-    { preHandler: requireAuth },
-    async (request, reply) => {
-      const slug = request.params.slug.toLowerCase();
-      const parsedBody = presencePutBodySchema.safeParse(request.body);
-      if (!parsedBody.success) {
-        return reply.status(400).send({ error: "INVALID_REQUEST_BODY" });
-      }
-      const body = parsedBody.data;
-
-      if (body.version) {
-        const publishedAt = new Date();
-        await setVersion(slug, body.version, publishedAt);
-        if (body.changelog || body.author) {
-          await addVersion(slug, {
-            version: body.version,
-            changelog: body.changelog
-              ? JSON.stringify(buildLocaleObject(body.changelog))
-              : "",
-            author: body.author ?? "unknown",
-            authorGithub: body.authorGithub,
-            pr: body.pr,
-            timestamp: publishedAt.getTime(),
-          });
-        }
-      }
-
-      if (body.added) await setAdded(slug, body.added);
-      if (body.updated) await setUpdated(slug, body.updated);
-
-      return { ok: true };
-    },
-  );
+    return {
+      ok: true
+    };
+  });
 
   fastify.post("/sync", { preHandler: requireAuth }, async (request, reply) => {
-    const { results, archived } = await processPresenceSync(
-      request.body as PresenceSyncBody,
-    );
-    return { ok: true, results, archived };
+    const { results, archived } = await processPresenceSync(request.body as PresenceSyncBody);
+    return {
+      ok: true,
+      results,
+      archived
+    };
   });
 
   fastify.post(
@@ -218,12 +209,13 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
           max: 30,
           timeWindow: "1 minute",
           hook: "preHandler",
-          keyGenerator: deviceRateLimitKey,
-        },
-      },
+          keyGenerator: deviceRateLimitKey
+        }
+      }
     },
     async (request, reply) => {
       const parsed = presenceActiveBodySchema.safeParse(request.body);
+
       if (!parsed.success || !parsed.data.deviceId) {
         return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" });
       }
@@ -239,73 +231,105 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
         await markActiveDevice(slug.toLowerCase(), deviceId);
       }
 
-      return { ok: true, count: slugs.length };
-    },
-  );
-
-  fastify.delete<{ Params: { deviceId: string; slug?: string } }>(
-    "/active/:deviceId/:slug?",
-    async (request, _reply) => {
-      const deviceId = request.params.deviceId.trim();
-      const slug = request.params.slug?.trim();
-
-      if (!deviceId) {
-        return { ok: false, error: "DEVICE_ID_REQUIRED" };
-      }
-
-      if (slug) {
-        await clearActiveDevice(slug, deviceId);
-        return { ok: true, removed: 1 };
-      }
-
-      await clearActiveDevicesForDevice(deviceId);
-      return { ok: true, removed: null };
-    },
-  );
-
-  fastify.get<{ Params: { slug: string }; Querystring: { deviceId?: string } }>(
-    "/:slug/like",
-    async (request, reply) => {
-      const slug = request.params.slug.toLowerCase();
-      const parsed = presenceLikeQuerySchema.safeParse(request.query);
-      if (!parsed.success) {
-        return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" });
-      }
-
       return {
-        liked: await hasLikedPresence(slug, parsed.data.deviceId),
-        count: await getLikeCount(slug),
+        ok: true,
+        count: slugs.length
       };
-    },
-  );
-
-  fastify.post<{ Params: { slug: string } }>(
-    "/:slug/like",
-    async (request, reply) => {
-      const slug = request.params.slug.toLowerCase();
-      const parsed = presenceLikeBodySchema.safeParse(request.body);
-      if (!parsed.success) {
-        return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" });
-      }
-      if (!requireDeviceAccess(request, reply, parsed.data.deviceId)) return;
-
-      await likePresence(slug, parsed.data.deviceId);
-      return { ok: true, count: await getLikeCount(slug) };
-    },
+    }
   );
 
   fastify.delete<{
-    Params: { slug: string };
-    Querystring: { deviceId?: string };
+    Params: {
+      deviceId: string;
+      slug?: string;
+    };
+  }>("/active/:deviceId/:slug?", async (request, _reply) => {
+    const deviceId = request.params.deviceId.trim();
+    const slug = request.params.slug?.trim();
+
+    if (!deviceId) {
+      return {
+        ok: false,
+        error: "DEVICE_ID_REQUIRED"
+      };
+    }
+
+    if (slug) {
+      await clearActiveDevice(slug, deviceId);
+      return {
+        ok: true,
+        removed: 1
+      };
+    }
+
+    await clearActiveDevicesForDevice(deviceId);
+    return {
+      ok: true,
+      removed: null
+    };
+  });
+
+  fastify.get<{
+    Params: {
+      slug: string;
+    };
+    Querystring: {
+      deviceId?: string;
+    };
   }>("/:slug/like", async (request, reply) => {
     const slug = request.params.slug.toLowerCase();
     const parsed = presenceLikeQuerySchema.safeParse(request.query);
+
+    if (!parsed.success) {
+      return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" });
+    }
+
+    return {
+      liked: await hasLikedPresence(slug, parsed.data.deviceId),
+      count: await getLikeCount(slug)
+    };
+  });
+
+  fastify.post<{
+    Params: {
+      slug: string;
+    };
+  }>("/:slug/like", async (request, reply) => {
+    const slug = request.params.slug.toLowerCase();
+    const parsed = presenceLikeBodySchema.safeParse(request.body);
+
+    if (!parsed.success) {
+      return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" });
+    }
+    if (!requireDeviceAccess(request, reply, parsed.data.deviceId)) return;
+
+    await likePresence(slug, parsed.data.deviceId);
+    return {
+      ok: true,
+      count: await getLikeCount(slug)
+    };
+  });
+
+  fastify.delete<{
+    Params: {
+      slug: string;
+    };
+    Querystring: {
+      deviceId?: string;
+    };
+  }>("/:slug/like", async (request, reply) => {
+    const slug = request.params.slug.toLowerCase();
+    const parsed = presenceLikeQuerySchema.safeParse(request.query);
+
     if (!parsed.success) {
       return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" });
     }
     if (!requireDeviceAccess(request, reply, parsed.data.deviceId)) return;
 
     await unlikePresence(slug, parsed.data.deviceId);
-    return { ok: true, count: await getLikeCount(slug) };
+    return {
+      ok: true,
+      count: await getLikeCount(slug)
+    };
   });
 };

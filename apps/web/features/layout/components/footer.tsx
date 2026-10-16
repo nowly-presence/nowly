@@ -1,16 +1,13 @@
 import { BrandLockup } from "@/features/layout/components/brand-lockup";
 import { FooterActions } from "@/features/layout/components/footer-actions";
-import {
-  Footer as SharedFooter,
-  FOOTER_DISCORD_SITE_URL,
-} from "@nowly/ui/footer";
+import { Footer as SharedFooter, FOOTER_DISCORD_SITE_URL } from "@nowly/ui/footer";
 import type { LocaleString } from "@nowly/locales";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export const Footer = async () => {
   const [locale, t] = await Promise.all([
     getLocale(),
-    getTranslations("footer"),
+    getTranslations("footer")
   ]);
 
   return (
@@ -58,8 +55,8 @@ export const Footer = async () => {
             >
               {chunks}
             </a>
-          ),
-        }),
+          )
+        })
       }}
     />
   );

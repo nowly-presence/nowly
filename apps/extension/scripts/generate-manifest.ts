@@ -12,32 +12,23 @@ const chromeIdToFirefoxUuid = (chromeId: string): string => {
   return `{${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}}`;
 };
 
-export const generateManifest = (
-  browser: Browser,
-  channel: Channel,
-  version: string,
-  distDir: string,
-): void => {
-  const manifest: Record<string, any> = {
-    ...structuredClone(manifestConfig),
-    version,
-  };
+export const generateManifest = (browser: Browser, channel: Channel, version: string, distDir: string): void => {
+  const manifest: Record<string, any> = { ...structuredClone(manifestConfig), version };
 
   if (browser === "firefox") {
-    manifest.background = { scripts: ["background.js"] };
+    manifest.background = {
+      scripts: ["background.js"]
+    };
     delete manifest.minimum_chrome_version;
     delete manifest.key;
-    manifest.permissions = manifest.permissions.filter(
-      (p: string) => p !== "userScripts" && p !== "sidePanel",
-    );
+    manifest.permissions = manifest.permissions.filter((p: string) => p !== "userScripts" && p !== "sidePanel");
     manifest.optional_permissions = ["userScripts"];
     manifest.sidebar_action = {
       default_icon: manifest.icons,
       default_panel: "sidepanel/index.html",
-      default_title: "__MSG_extensionName__",
+      default_title: "__MSG_extensionName__"
     };
-    manifest.commands._execute_sidebar_action =
-      manifest.commands["open-side-panel"];
+    manifest.commands._execute_sidebar_action = manifest.commands["open-side-panel"];
     delete manifest.commands["open-side-panel"];
 
     manifest.browser_specific_settings =
@@ -46,26 +37,30 @@ export const generateManifest = (
             gecko: {
               id: chromeIdToFirefoxUuid(DEV_CHROME_EXTENSION_ID),
               strict_min_version: "136.0",
-              data_collection_permissions: { required: ["none"] },
-            },
+              data_collection_permissions: {
+                required: ["none"]
+              }
+            }
           }
         : {
             gecko: {
               id: "nowly@nowly.me",
               strict_min_version: "140.0",
-              data_collection_permissions: { required: ["none"] },
+              data_collection_permissions: {
+                required: ["none"]
+              }
             },
-            gecko_android: { strict_min_version: "142.0" },
+            gecko_android: { strict_min_version: "142.0" }
           };
   } else {
-    manifest.background = { service_worker: "background.js", type: "module" };
+    manifest.background = {
+      service_worker: "background.js",
+      type: "module"
+    };
     manifest.side_panel = { default_path: "sidepanel/index.html" };
     if (channel !== "canary") delete manifest.key;
   }
 
   mkdirSync(distDir, { recursive: true });
-  writeFileSync(
-    join(distDir, "manifest.json"),
-    `${JSON.stringify(manifest, null, 2)}\n`,
-  );
+  writeFileSync(join(distDir, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
 };

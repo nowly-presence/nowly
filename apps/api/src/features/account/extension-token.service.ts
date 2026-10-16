@@ -1,11 +1,6 @@
 import { getPrisma } from "@/db/client";
 import { sha256Base64Url } from "@/shared/crypto.service";
-import {
-  EXTENSION_TOKEN_PREFIX,
-  EXTENSION_TOKEN_SCOPES,
-  EXTENSION_TOKEN_TTL_MS,
-  type ExtensionTokenScope,
-} from "@nowly/shared";
+import { EXTENSION_TOKEN_PREFIX, EXTENSION_TOKEN_SCOPES, EXTENSION_TOKEN_TTL_MS, type ExtensionTokenScope } from "@nowly/shared";
 import { randomBytes, randomUUID } from "node:crypto";
 
 const TOKEN_BYTES = 32;
@@ -20,21 +15,21 @@ export type ExtensionTokenRecord = {
   lastUsedAt: Date | null;
 };
 
-const isScope = (value: string): value is ExtensionTokenScope =>
-  (EXTENSION_TOKEN_SCOPES as readonly string[]).includes(value);
+const isScope = (value: string): value is ExtensionTokenScope => (EXTENSION_TOKEN_SCOPES as readonly string[]).includes(value);
 
-export const hashExtensionToken = (token: string): string =>
-  sha256Base64Url(token);
+export const hashExtensionToken = (token: string): string => sha256Base64Url(token);
 
-export const generateExtensionToken = (): string =>
-  `${EXTENSION_TOKEN_PREFIX}${randomBytes(TOKEN_BYTES).toString("base64url")}`;
+export const generateExtensionToken = (): string => `${EXTENSION_TOKEN_PREFIX}${randomBytes(TOKEN_BYTES).toString("base64url")}`;
 
 export const createExtensionToken = async (input: {
   userId: string;
   deviceId?: string;
   scopes: ExtensionTokenScope[];
   now?: Date;
-}): Promise<{ token: string; expiresAt: Date }> => {
+}): Promise<{
+  token: string;
+  expiresAt: Date;
+}> => {
   const prisma = getPrisma();
   const now = input.now ?? new Date();
   const token = generateExtensionToken();
@@ -45,9 +40,9 @@ export const createExtensionToken = async (input: {
       where: {
         userId: input.userId,
         deviceId: input.deviceId,
-        revokedAt: null,
+        revokedAt: null
       },
-      data: { revokedAt: now },
+      data: { revokedAt: now }
     });
   }
 
@@ -58,89 +53,79 @@ export const createExtensionToken = async (input: {
       deviceId: input.deviceId ?? null,
       tokenHash: hashExtensionToken(token),
       scopes: [...new Set(input.scopes)],
-      expiresAt,
-    },
+      expiresAt
+    }
   });
 
   return { token, expiresAt };
 };
 
-export const findActiveExtensionToken = async (
-  token: string,
-  now = new Date(),
-): Promise<ExtensionTokenRecord | null> => {
+export const findActiveExtensionToken = async (token: string, now = new Date()): Promise<ExtensionTokenRecord | null> => {
   if (!token.startsWith(EXTENSION_TOKEN_PREFIX)) return null;
+
   const row = await getPrisma().extensionToken.findUnique({
-    where: { tokenHash: hashExtensionToken(token) },
+    where: { tokenHash: hashExtensionToken(token) }
   });
-  if (!row || row.revokedAt || row.expiresAt.getTime() <= now.getTime())
-    return null;
+
+  if (!row || row.revokedAt || row.expiresAt.getTime() <= now.getTime()) return null;
+
   return {
     id: row.id,
     userId: row.userId,
     deviceId: row.deviceId,
     scopes: row.scopes.filter(isScope),
     expiresAt: row.expiresAt,
-    lastUsedAt: row.lastUsedAt,
+    lastUsedAt: row.lastUsedAt
   };
 };
 
-export const touchExtensionToken = async (
-  record: ExtensionTokenRecord,
-  now = new Date(),
-): Promise<void> => {
-  if (
-    record.lastUsedAt &&
-    now.getTime() - record.lastUsedAt.getTime() < TOUCH_INTERVAL_MS
-  )
-    return;
+export const touchExtensionToken = async (record: ExtensionTokenRecord, now = new Date()): Promise<void> => {
+  if (record.lastUsedAt && now.getTime() - record.lastUsedAt.getTime() < TOUCH_INTERVAL_MS) return;
+
   await getPrisma().extensionToken.update({
     where: { id: record.id },
     data: {
       lastUsedAt: now,
-      expiresAt: new Date(now.getTime() + EXTENSION_TOKEN_TTL_MS),
+      expiresAt: new Date(now.getTime() + EXTENSION_TOKEN_TTL_MS)
+    }
+  });
+};
+
+export const revokeExtensionToken = async (id: string, now = new Date()): Promise<void> => {
+  await getPrisma().extensionToken.updateMany({
+    where: {
+      id,
+      revokedAt: null
     },
+    data: { revokedAt: now }
   });
 };
 
-export const revokeExtensionToken = async (
-  id: string,
-  now = new Date(),
-): Promise<void> => {
+export const revokeDeviceExtensionTokens = async (userId: string, deviceId: string, now = new Date()): Promise<void> => {
   await getPrisma().extensionToken.updateMany({
-    where: { id, revokedAt: null },
-    data: { revokedAt: now },
+    where: {
+      userId,
+      deviceId,
+      revokedAt: null
+    },
+    data: { revokedAt: now }
   });
 };
 
-export const revokeDeviceExtensionTokens = async (
-  userId: string,
-  deviceId: string,
-  now = new Date(),
-): Promise<void> => {
-  await getPrisma().extensionToken.updateMany({
-    where: { userId, deviceId, revokedAt: null },
-    data: { revokedAt: now },
-  });
-};
-
-export const revokeUserExtensionTokens = async (
-  userId: string,
-  now = new Date(),
-): Promise<number> => {
+export const revokeUserExtensionTokens = async (userId: string, now = new Date()): Promise<number> => {
   const result = await getPrisma().extensionToken.updateMany({
-    where: { userId, revokedAt: null },
-    data: { revokedAt: now },
+    where: {
+      userId,
+      revokedAt: null
+    },
+    data: { revokedAt: now }
   });
   return result.count;
 };
 
-export const attachTokenToDevice = async (
-  id: string,
-  deviceId: string,
-): Promise<void> => {
+export const attachTokenToDevice = async (id: string, deviceId: string): Promise<void> => {
   await getPrisma().extensionToken.update({
     where: { id },
-    data: { deviceId },
+    data: { deviceId }
   });
 };

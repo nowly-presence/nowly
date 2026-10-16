@@ -10,48 +10,27 @@ const markerVariants = cva(
     variants: {
       variant: {
         default: "",
-        separator:
-          "before:mr-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ml-1 after:h-px after:min-w-0 after:flex-1 after:bg-border",
-        border: "border-b border-border pb-2",
-      },
-    },
-  },
+        separator: "before:mr-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ml-1 after:h-px after:min-w-0 after:flex-1 after:bg-border",
+        border: "border-b border-border pb-2"
+      }
+    }
+  }
 );
 
-function Marker({
-  className,
-  variant = "default",
-  render,
-  ...props
-}: useRender.ComponentProps<"div"> & VariantProps<typeof markerVariants>) {
+function Marker({ className, variant = "default", render, ...props }: useRender.ComponentProps<"div"> & VariantProps<typeof markerVariants>) {
   return useRender({
     defaultTagName: "div",
-    props: mergeProps<"div">(
-      {
-        className: cn(markerVariants({ variant, className })),
-      },
-      props,
-    ),
+    props: mergeProps<"div">({ className: cn(markerVariants({ variant, className })) }, props),
     render,
     state: {
       slot: "marker",
-      variant,
-    },
+      variant
+    }
   });
 }
 
 function MarkerIcon({ className, ...props }: React.ComponentProps<"span">) {
-  return (
-    <span
-      data-slot="marker-icon"
-      aria-hidden="true"
-      className={cn(
-        "size-4 shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className,
-      )}
-      {...props}
-    />
-  );
+  return <span data-slot="marker-icon" aria-hidden="true" className={cn("size-4 shrink-0 [&_svg:not([class*='size-'])]:size-4", className)} {...props} />;
 }
 
 function MarkerContent({ className, ...props }: React.ComponentProps<"span">) {
@@ -60,7 +39,7 @@ function MarkerContent({ className, ...props }: React.ComponentProps<"span">) {
       data-slot="marker-content"
       className={cn(
         "min-w-0 wrap-break-word group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
-        className,
+        className
       )}
       {...props}
     />

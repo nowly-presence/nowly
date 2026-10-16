@@ -29,6 +29,7 @@ export const CookieBanner = () => {
     } catch {
       /* ignore */
     }
+
     setVisible(false);
   };
 
@@ -39,19 +40,12 @@ export const CookieBanner = () => {
       <div className="mx-auto flex w-full max-w-[75rem] flex-col gap-3 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-muted-foreground">
           {t("message")}{" "}
-          <Link
-            href="/cookies"
-            className="underline underline-offset-4 transition-colors hover:text-foreground"
-          >
+          <Link href="/cookies" className="underline underline-offset-4 transition-colors hover:text-foreground">
             {t("learn-more")}
           </Link>
         </p>
 
-        <button
-          type="button"
-          className={cn(buttonVariants({ variant: "inverted" }), "shrink-0")}
-          onClick={dismiss}
-        >
+        <button type="button" className={cn(buttonVariants({ variant: "inverted" }), "shrink-0")} onClick={dismiss}>
           {t("dismiss")}
         </button>
       </div>

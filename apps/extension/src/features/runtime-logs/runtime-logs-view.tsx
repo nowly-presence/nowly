@@ -17,7 +17,7 @@ const levelDot: Record<RuntimeLogEntry["level"], string> = {
   info: "bg-line-strong",
   success: "bg-success",
   warn: "bg-muted",
-  error: "bg-danger",
+  error: "bg-danger"
 };
 
 const MAX_LOGS = 500;
@@ -39,37 +39,27 @@ export const RuntimeLogsView = () => {
       payload?: RuntimeLogEntry;
     }) => {
       const entry = message?.payload;
-      if (
-        message?.source !== "PRESENCES_BACKGROUND" ||
-        message.type !== "RUNTIME_LOGS_ADDED" ||
-        !entry
-      )
-        return;
+
+      if (message?.source !== "PRESENCES_BACKGROUND" || message.type !== "RUNTIME_LOGS_ADDED" || !entry) return;
+
       setLogs((current) => [...current.slice(-(MAX_LOGS - 1)), entry]);
     };
     chrome.runtime.onMessage.addListener(onMessage);
     return () => chrome.runtime.onMessage.removeListener(onMessage);
   }, []);
 
-  const visible = useMemo(
-    () =>
-      [...logs]
-        .reverse()
-        .filter((entry) => filter === "all" || entry.type === filter),
-    [logs, filter],
-  );
+  const visible = useMemo(() => [...logs].reverse().filter((entry) => filter === "all" || entry.type === filter), [logs, filter]);
   const time = (at: number) =>
     new Intl.DateTimeFormat(LOCALE_LONG_MAP[locale], {
       hour: "2-digit",
       minute: "2-digit",
-      second: "2-digit",
+      second: "2-digit"
     }).format(at);
 
   const copy = async () => {
     const text = visible
       .map(
-        (entry) =>
-          `${new Date(entry.at).toISOString()} [${entry.level}] ${entry.type}: ${entry.message} ${entry.payload ? JSON.stringify(entry.payload) : ""}`,
+        (entry) => `${new Date(entry.at).toISOString()} [${entry.level}] ${entry.type}: ${entry.message} ${entry.payload ? JSON.stringify(entry.payload) : ""}`
       )
       .join("\n");
     await navigator.clipboard.writeText(text);
@@ -97,9 +87,7 @@ export const RuntimeLogsView = () => {
               type="button"
               aria-label={t("logs.clear")}
               title={t("logs.clear")}
-              onClick={() =>
-                void sendMessage("CLEAR_RUNTIME_LOGS").then(() => setLogs([]))
-              }
+              onClick={() => void sendMessage("CLEAR_RUNTIME_LOGS").then(() => setLogs([]))}
               className="flex size-9 items-center justify-center rounded-md text-muted hover:bg-hover hover:text-ink"
             >
               <RiDeleteBin6Line className="size-[18px]" />
@@ -109,51 +97,26 @@ export const RuntimeLogsView = () => {
       />
       <ScreenBody className="gap-3 pt-1">
         <HScroll className="gap-1.5">
-          {(["all", "presence", "native", "api", "settings"] as const).map(
-            (value) => (
-              <Chip
-                key={value}
-                active={filter === value}
-                onClick={() => setFilter(value)}
-              >
-                {t(`logs.filter.${value}`)}
-              </Chip>
-            ),
-          )}
+          {(["all", "presence", "native", "api", "settings"] as const).map((value) => (
+            <Chip key={value} active={filter === value} onClick={() => setFilter(value)}>
+              {t(`logs.filter.${value}`)}
+            </Chip>
+          ))}
         </HScroll>
         {visible.length === 0 ? (
           <Card>
-            <EmptyState
-              title={t("logs.empty")}
-              description={t("logs.emptyHint")}
-            />
+            <EmptyState title={t("logs.empty")} description={t("logs.emptyHint")} />
           </Card>
         ) : (
           <Card className="divide-y divide-line overflow-hidden font-mono">
             {visible.map((entry) => (
               <div key={entry.id} className="flex flex-col gap-1 px-3 py-2.5">
                 <div className="flex items-center gap-2 text-label-sm">
-                  <span
-                    className={cn(
-                      "size-1.5 shrink-0 rounded-full",
-                      levelDot[entry.level],
-                    )}
-                  />
-                  <span className="text-muted tabular-nums">
-                    {time(entry.at)}
-                  </span>
-                  <span className="rounded-full bg-hover px-1.5 py-px text-muted">
-                    {entry.type}
-                  </span>
+                  <span className={cn("size-1.5 shrink-0 rounded-full", levelDot[entry.level])} />
+                  <span className="text-muted tabular-nums">{time(entry.at)}</span>
+                  <span className="rounded-full bg-hover px-1.5 py-px text-muted">{entry.type}</span>
                 </div>
-                <span
-                  className={cn(
-                    "font-sans text-label-md",
-                    entry.level === "error" ? "text-danger" : "text-ink",
-                  )}
-                >
-                  {entry.message}
-                </span>
+                <span className={cn("font-sans text-label-md", entry.level === "error" ? "text-danger" : "text-ink")}>{entry.message}</span>
                 {entry.payload && Object.keys(entry.payload).length > 0 && (
                   <span className="text-[11px] leading-4 break-all text-muted">
                     {Object.entries(entry.payload)

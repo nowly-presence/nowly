@@ -10,7 +10,7 @@ export const AuthorViewTracker = () => {
   useEffect(() => {
     trackPublicAnalytics("marketplace_author_page_view", {
       source: "web_library",
-      payload: { locale },
+      payload: { locale }
     });
   }, [locale]);
 

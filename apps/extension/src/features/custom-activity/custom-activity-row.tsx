@@ -15,13 +15,7 @@ type CustomActivityRowProps = {
   onToggle: (active: boolean) => void;
 };
 
-export const CustomActivityRow = ({
-  activity,
-  active,
-  paused,
-  onOpen,
-  onToggle,
-}: CustomActivityRowProps) => {
+export const CustomActivityRow = ({ activity, active, paused, onOpen, onToggle }: CustomActivityRowProps) => {
   const { t } = useI18n();
   const lines = [activity.details, activity.state].filter(Boolean);
   return (
@@ -32,10 +26,7 @@ export const CustomActivityRow = ({
         <span className="flex items-center gap-2">
           <span className="truncate">{activity.name}</span>
           {active && (
-            <Badge
-              tone={paused ? "neutral" : "success"}
-              icon={paused ? undefined : <LiveDot />}
-            >
+            <Badge tone={paused ? "neutral" : "success"} icon={paused ? undefined : <LiveDot />}>
               {paused ? t("custom.list.paused") : t("custom.list.live")}
             </Badge>
           )}
@@ -55,13 +46,7 @@ export const CustomActivityRow = ({
           t("custom.list.noDetails")
         )
       }
-      trailing={
-        <Switch
-          checked={active}
-          label={t("custom.list.showOnDiscord")}
-          onChange={onToggle}
-        />
-      }
+      trailing={<Switch checked={active} label={t("custom.list.showOnDiscord")} onChange={onToggle} />}
     />
   );
 };

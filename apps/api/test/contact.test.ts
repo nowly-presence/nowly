@@ -6,16 +6,15 @@ import Fastify from "fastify";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockSend = vi.hoisted(() =>
-  vi.fn().mockResolvedValue({ adapter: "ses", id: "message-id" }),
+  vi.fn().mockResolvedValue({
+    adapter: "ses",
+    id: "message-id"
+  })
 );
 
-vi.mock("@opencoredev/email-sdk", () => ({
-  createEmailClient: vi.fn(() => ({ send: mockSend })),
-}));
+vi.mock("@opencoredev/email-sdk", () => ({ createEmailClient: vi.fn(() => ({ send: mockSend })) }));
 
-vi.mock("@opencoredev/email-sdk/ses", () => ({
-  ses: vi.fn(() => ({ name: "ses" })),
-}));
+vi.mock("@opencoredev/email-sdk/ses", () => ({ ses: vi.fn(() => ({ name: "ses" })) }));
 
 const { contactRoutes } = await import("@/features/contact/contact.routes");
 
@@ -34,8 +33,8 @@ describe("contact routes", () => {
       payload: {
         email: "not-an-email",
         subject: "Help",
-        message: "This is a message.",
-      },
+        message: "This is a message."
+      }
     });
 
     expect(response.statusCode).toBe(400);
@@ -54,8 +53,8 @@ describe("contact routes", () => {
         name: "Ada",
         email: "ada@example.com",
         subject: "A question",
-        message: "I have a question about the extension.",
-      },
+        message: "I have a question about the extension."
+      }
     });
 
     expect(response.statusCode).toBe(200);
@@ -65,8 +64,8 @@ describe("contact routes", () => {
         from: "Nowly Contact <hello@nowly.me>",
         to: "hello@nowly.me",
         replyTo: "ada@example.com",
-        subject: "[Nowly Contact] A question",
-      }),
+        subject: "[Nowly Contact] A question"
+      })
     );
     await app.close();
   });
@@ -82,8 +81,8 @@ describe("contact routes", () => {
         email: "bot@example.com",
         subject: "Spam",
         message: "This is a message.",
-        website: "https://spam.example",
-      },
+        website: "https://spam.example"
+      }
     });
 
     expect(response.statusCode).toBe(200);

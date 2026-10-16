@@ -11,12 +11,7 @@ type HeadingAnchorProps = {
   className?: string;
 };
 
-export const HeadingAnchor: FC<HeadingAnchorProps> = ({
-  as: Tag,
-  id,
-  children,
-  className,
-}) => {
+export const HeadingAnchor: FC<HeadingAnchorProps> = ({ as: Tag, id, children, className }) => {
   const anchorId = id || createHeadingId(String(children));
 
   return (

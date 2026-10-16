@@ -11,6 +11,6 @@ export const createMockEvent = <Args extends unknown[]>(): MockEvent<Args> => {
     addListener: (listener) => void listeners.add(listener),
     removeListener: (listener) => void listeners.delete(listener),
     hasListener: (listener) => listeners.has(listener),
-    emit: (...args) => listeners.forEach((listener) => listener(...args)),
+    emit: (...args) => listeners.forEach((listener) => listener(...args))
   };
 };

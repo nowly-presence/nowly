@@ -5,32 +5,17 @@ import type { PresenceCatalogItem, PresenceMetadata } from "@/shared/types";
 
 type Localized = string | Partial<Record<string, string>> | undefined | null;
 
-export const localized = (
-  value: Localized,
-  locale: Locale,
-  fallback = "",
-): string => {
+export const localized = (value: Localized, locale: Locale, fallback = ""): string => {
   if (!value) return fallback;
   if (typeof value === "string") return value;
-  return (
-    value[LOCALE_LONG_MAP[locale]] ??
-    value["en-US"] ??
-    Object.values(value).find(Boolean) ??
-    fallback
-  );
+
+  return value[LOCALE_LONG_MAP[locale]] ?? value["en-US"] ?? Object.values(value).find(Boolean) ?? fallback;
 };
 
-export const localizedList = (
-  value: Record<string, string[]> | undefined,
-  locale: Locale,
-): string[] => {
+export const localizedList = (value: Record<string, string[]> | undefined, locale: Locale): string[] => {
   if (!value) return [];
-  return (
-    value[LOCALE_LONG_MAP[locale]] ??
-    value["en-US"] ??
-    Object.values(value)[0] ??
-    []
-  );
+
+  return value[LOCALE_LONG_MAP[locale]] ?? value["en-US"] ?? Object.values(value)[0] ?? [];
 };
 
 export type PresenceView = {
@@ -41,8 +26,14 @@ export type PresenceView = {
   features: string[];
   category: PresenceMetadata["category"];
   color: string;
-  author?: { name: string; github?: string };
-  contributors: { name: string; github?: string }[];
+  author?: {
+    name: string;
+    github?: string;
+  };
+  contributors: {
+    name: string;
+    github?: string;
+  }[];
   version?: string | null;
   urls: string[];
   settings?: Record<string, unknown>;
@@ -55,11 +46,7 @@ export type PresenceView = {
   discordNative?: boolean;
 };
 
-export const fromMetadata = (
-  metadata: PresenceMetadata,
-  locale: Locale,
-  dates: PresencePublicationDates,
-): PresenceView => ({
+export const fromMetadata = (metadata: PresenceMetadata, locale: Locale, dates: PresencePublicationDates): PresenceView => ({
   slug: metadata.slug,
   name: metadata.name,
   description: localized(metadata.description, locale),
@@ -74,13 +61,10 @@ export const fromMetadata = (
   settings: metadata.settings,
   locales: metadata.locales,
   discordNative: metadata.discordNative,
-  ...dates,
+  ...dates
 });
 
-export const fromCatalog = (
-  item: PresenceCatalogItem,
-  locale: Locale,
-): PresenceView => ({
+export const fromCatalog = (item: PresenceCatalogItem, locale: Locale): PresenceView => ({
   slug: item.slug,
   name: localized(item.name, locale, item.slug),
   description: localized(item.description, locale),
@@ -99,5 +83,5 @@ export const fromCatalog = (
   likes: item.likes,
   addedAt: item.addedAt,
   lastUpdated: item.lastUpdated,
-  discordNative: item.discordNative,
+  discordNative: item.discordNative
 });

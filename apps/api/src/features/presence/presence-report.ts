@@ -4,41 +4,32 @@ import type { PresenceMeta } from "./presence.types";
 
 const CONTROL_CHARS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
 
-export const sanitizeReportMessage = (message: string): string =>
-  message.replace(CONTROL_CHARS, "").trim();
+export const sanitizeReportMessage = (message: string): string => message.replace(CONTROL_CHARS, "").trim();
 
-const localizedName = (
-  value: unknown,
-  locale: string | undefined,
-  fallback: string,
-): string => {
+const localizedName = (value: unknown, locale: string | undefined, fallback: string): string => {
   if (typeof value === "string" && value.trim()) return value.trim();
+
   if (value && typeof value === "object") {
     const localized = value as Record<string, unknown>;
-    const candidates = [
-      locale,
-      locale?.replace("_", "-"),
-      FALLBACK_LOCALE,
-      LOCALE_SHORT_MAP[FALLBACK_LOCALE],
-    ];
+    const candidates = [locale, locale?.replace("_", "-"), FALLBACK_LOCALE, LOCALE_SHORT_MAP[FALLBACK_LOCALE]];
+
     for (const key of candidates) {
       if (!key) continue;
+
       const match = localized[key];
+
       if (typeof match === "string" && match.trim()) return match.trim();
     }
-    const first = Object.values(localized).find(
-      (entry) => typeof entry === "string" && entry.trim(),
-    );
+
+    const first = Object.values(localized).find((entry) => typeof entry === "string" && entry.trim());
+
     if (typeof first === "string") return first.trim();
   }
+
   return fallback;
 };
 
-export const presenceDisplayName = (
-  meta: PresenceMeta | null,
-  slug: string,
-  locale?: string,
-): string => localizedName(meta?.name, locale, slug);
+export const presenceDisplayName = (meta: PresenceMeta | null, slug: string, locale?: string): string => localizedName(meta?.name, locale, slug);
 
 export const submitPresenceReport = async (input: {
   slug: string;
@@ -49,6 +40,7 @@ export const submitPresenceReport = async (input: {
   browserVersion?: string;
 }): Promise<"sent" | "unconfigured" | "failed"> => {
   const webhookUrl = serverEnv.DISCORD_WEBHOOK_REPORT_URL;
+
   if (!webhookUrl) return "unconfigured";
 
   const site = serverEnv.FRONTEND_URL.replace(/\/$/, "");
@@ -69,46 +61,59 @@ export const submitPresenceReport = async (input: {
               {
                 name: "Presence",
                 value: `[${input.name}](${pageUrl})`,
-                inline: true,
+                inline: true
               },
               {
                 name: "Slug",
                 value: `\`${input.slug}\``,
-                inline: true,
+                inline: true
               },
               ...(input.locale
-                ? [{ name: "Locale", value: input.locale, inline: true }]
+                ? [
+                    {
+                      name: "Locale",
+                      value: input.locale,
+                      inline: true
+                    }
+                  ]
                 : []),
               ...(input.browser
-                ? [{ name: "Browser", value: input.browser, inline: true }]
+                ? [
+                    {
+                      name: "Browser",
+                      value: input.browser,
+                      inline: true
+                    }
+                  ]
                 : []),
               ...(input.browserVersion
                 ? [
                     {
                       name: "Browser version",
                       value: input.browserVersion,
-                      inline: true,
-                    },
+                      inline: true
+                    }
                   ]
                 : []),
               {
                 name: "Reported at",
                 value: `<t:${Math.floor(Date.parse(reportedAt) / 1000)}:F>`,
-                inline: false,
+                inline: false
               },
               {
                 name: "Problem",
                 value: input.message.slice(0, 1024),
-                inline: false,
-              },
+                inline: false
+              }
             ],
-            footer: { text: "nowly.me library" },
-          },
-        ],
-      }),
+            footer: { text: "nowly.me library" }
+          }
+        ]
+      })
     });
 
     if (!response.ok) return "failed";
+
     return "sent";
   } catch {
     return "failed";

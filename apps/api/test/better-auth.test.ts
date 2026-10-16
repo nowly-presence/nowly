@@ -9,28 +9,26 @@ describe("getAuth", () => {
 
   it("configures without touching the network and registers the discord provider", async () => {
     const { getAuth } = await import("@/features/auth/better-auth");
+
     const auth = getAuth();
 
     expect(auth.options.socialProviders?.discord).toBeDefined();
     expect(auth.options.user?.additionalFields?.role).toMatchObject({
       type: "string",
-      defaultValue: "user",
+      defaultValue: "user"
     });
     expect(auth.options.user?.additionalFields?.discordId).toMatchObject({
       type: "string",
       required: false,
-      input: false,
+      input: false
     });
   });
 
   it("maps the Discord profile id to discordId", async () => {
     const { getAuth } = await import("@/features/auth/better-auth");
+
     const discord = getAuth().options.socialProviders?.discord;
-    const mapped = await discord?.mapProfileToUser?.({
-      id: "1234",
-    } as Parameters<
-      NonNullable<NonNullable<typeof discord>["mapProfileToUser"]>
-    >[0]);
+    const mapped = await discord?.mapProfileToUser?.({ id: "1234" } as Parameters<NonNullable<NonNullable<typeof discord>["mapProfileToUser"]>>[0]);
     expect(mapped).toEqual({ discordId: "1234" });
   });
 

@@ -14,7 +14,9 @@ import { PermissionStatus } from "@/features/onboarding/permission-status";
 import { ChromeOsWaitlistForm } from "@/features/onboarding/chromeos-waitlist-form";
 import { useIsChromeOs } from "@/features/onboarding/use-is-chrome-os";
 
-export const DesktopStep = ({ onNext }: { onNext: () => void }) => {
+export const DesktopStep = ({ onNext }: {
+  onNext: () => void;
+}) => {
   const { t } = useI18n();
   const { state } = useExtensionState();
   const connection = connectionOf(state.native);
@@ -48,11 +50,7 @@ export const DesktopStep = ({ onNext }: { onNext: () => void }) => {
       title={t("onboarding.desktopTitle")}
       description={t("onboarding.desktopDescription")}
       footer={
-        <Button
-          onClick={onNext}
-          className="w-full"
-          variant={ok ? "primary" : "secondary"}
-        >
+        <Button onClick={onNext} className="w-full" variant={ok ? "primary" : "secondary"}>
           {ok ? t("action.continue") : t("onboarding.later")}
         </Button>
       }
@@ -61,11 +59,7 @@ export const DesktopStep = ({ onNext }: { onNext: () => void }) => {
         <Card className="flex items-center gap-3 p-4">
           <DiscordAvatar profile={profile} size={44} />
           <div className="flex min-w-0 flex-1 flex-col">
-            <span className="truncate text-label-lg font-medium">
-              {profile?.globalName ??
-                profile?.username ??
-                t("connection.state.discord")}
-            </span>
+            <span className="truncate text-label-lg font-medium">{profile?.globalName ?? profile?.username ?? t("connection.state.discord")}</span>
             <span className="flex items-center gap-1.5 text-label-md text-success">
               <LiveDot />
               {profile
@@ -79,11 +73,7 @@ export const DesktopStep = ({ onNext }: { onNext: () => void }) => {
           <Row
             leading={<RiComputerLine className="size-5 text-muted" />}
             title={t("connection.desktopApp")}
-            description={
-              state.native.connected
-                ? versionLabel
-                : t("onboarding.desktopMissing")
-            }
+            description={state.native.connected ? versionLabel : t("onboarding.desktopMissing")}
             trailing={
               state.native.connected ? (
                 <RiCheckLine className="size-5 text-success" />
@@ -102,19 +92,11 @@ export const DesktopStep = ({ onNext }: { onNext: () => void }) => {
                 ? t("onboarding.discordOpen")
                 : t("onboarding.discordAfter")
             }
-            trailing={
-              state.native.connected ? <Spinner className="text-muted" /> : null
-            }
+            trailing={state.native.connected ? <Spinner className="text-muted" /> : null}
           />
         </Group>
       )}
-      {!ok && (
-        <PermissionStatus
-          ok={false}
-          okLabel=""
-          waitingLabel={t("onboarding.desktopWaiting")}
-        />
-      )}
+      {!ok && <PermissionStatus ok={false} okLabel="" waitingLabel={t("onboarding.desktopWaiting")} />}
     </OnboardingStepLayout>
   );
 };

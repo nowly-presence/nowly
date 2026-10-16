@@ -10,13 +10,7 @@ type CustomActivityDeleteSheetProps = {
   onConfirm: () => void;
 };
 
-export const CustomActivityDeleteSheet = ({
-  name,
-  open,
-  pending,
-  onClose,
-  onConfirm,
-}: CustomActivityDeleteSheetProps) => {
+export const CustomActivityDeleteSheet = ({ name, open, pending, onClose, onConfirm }: CustomActivityDeleteSheetProps) => {
   const { t } = useI18n();
   return (
     <Sheet
@@ -30,12 +24,7 @@ export const CustomActivityDeleteSheet = ({
           <Button variant="secondary" className="flex-1" onClick={onClose}>
             {t("action.cancel")}
           </Button>
-          <Button
-            variant="destructive"
-            className="flex-1"
-            loading={pending}
-            onClick={onConfirm}
-          >
+          <Button variant="destructive" className="flex-1" loading={pending} onClick={onConfirm}>
             {t("action.delete")}
           </Button>
         </>

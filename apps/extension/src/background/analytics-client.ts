@@ -9,19 +9,19 @@ const client = createAnalyticsClient({
       const response = await fetch(`${getEffectiveApiUrl()}/insights/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ events }),
+        body: JSON.stringify({ events })
       });
-      if (!response.ok)
-        throw new Error(`analytics transport failed: ${response.status}`);
-    },
+
+      if (!response.ok) throw new Error(`analytics transport failed: ${response.status}`);
+    }
   },
   consent: {
-    get: async () => ((await getAnalyticsConsent()) ? "granted" : "denied"),
+    get: async () => ((await getAnalyticsConsent()) ? "granted" : "denied")
   },
   identity: {
-    getDeviceId: () => getActiveDeviceId(),
+    getDeviceId: () => getActiveDeviceId()
   },
-  flushAt: 1,
+  flushAt: 1
 });
 
 export const trackAnalytics = (key: string, input: TrackInput = {}): void => {

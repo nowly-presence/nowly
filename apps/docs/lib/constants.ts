@@ -1,21 +1,15 @@
 export const MARKETING_ORIGIN = "https://nowly.me";
 
-export const DOCS_BASE_PATH = (
-  process.env.NEXT_PUBLIC_DOCS_BASE_PATH ?? ""
-).replace(/\/$/, "");
-export const DOCS_ORIGIN = DOCS_BASE_PATH
-  ? `${MARKETING_ORIGIN}${DOCS_BASE_PATH}`
-  : "https://docs.nowly.me";
+export const DOCS_BASE_PATH = (process.env.NEXT_PUBLIC_DOCS_BASE_PATH ?? "").replace(/\/$/, "");
+export const DOCS_ORIGIN = DOCS_BASE_PATH ? `${MARKETING_ORIGIN}${DOCS_BASE_PATH}` : "https://docs.nowly.me";
 
 export const SITE_URL = MARKETING_ORIGIN;
 export const DOCS_URL = DOCS_ORIGIN;
 export const PROJECT_REPOSITORY_URL = "https://github.com/nowly-presence/nowly";
 
-export const EXTENSION_ID =
-  process.env.NEXT_PUBLIC_EXTENSION_ID || "kmnlnfldimgneaopdihplkebobckcjpf";
+export const EXTENSION_ID = process.env.NEXT_PUBLIC_EXTENSION_ID || "kmnlnfldimgneaopdihplkebobckcjpf";
 export const PROJECT_EXTENSION_DOWNLOAD_URL = `https://chromewebstore.google.com/detail/nowly/${EXTENSION_ID}`;
-export const FIREFOX_EXTENSION_DOWNLOAD_URL =
-  "https://addons.mozilla.org/en-US/firefox/addon/nowly-presence/";
+export const FIREFOX_EXTENSION_DOWNLOAD_URL = "https://addons.mozilla.org/en-US/firefox/addon/nowly-presence/";
 export const DISCORD_INVITE_URL = "https://discord.gg/MnZap7czgB";
 export const DISCORD_SITE_URL = "https://discord.com";
 
@@ -27,11 +21,6 @@ const hostnameOf = (value: string): string => {
   }
 };
 
-const deployDocsHost = hostnameOf(
-  (process.env.NEXT_PUBLIC_DOCS_BASE_URL ?? DOCS_ORIGIN).replace(/\/$/, ""),
-);
+const deployDocsHost = hostnameOf((process.env.NEXT_PUBLIC_DOCS_BASE_URL ?? DOCS_ORIGIN).replace(/\/$/, ""));
 
-export const isSeoPreview =
-  deployDocsHost !== "" &&
-  deployDocsHost !== "docs.nowly.me" &&
-  deployDocsHost !== "nowly.me";
+export const isSeoPreview = deployDocsHost !== "" && deployDocsHost !== "docs.nowly.me" && deployDocsHost !== "nowly.me";

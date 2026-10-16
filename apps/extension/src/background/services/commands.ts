@@ -10,6 +10,7 @@ export const registerCommandHandlers = (): void => {
       void togglePresencePaused();
       return;
     }
+
     if (command === OPEN_PANEL_COMMAND) {
       void openNowlyPanel(tab);
     }

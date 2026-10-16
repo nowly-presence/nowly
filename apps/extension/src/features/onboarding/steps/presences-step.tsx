@@ -11,7 +11,9 @@ import { fromCatalog } from "@/lib/presence-view";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout";
 
-export const PresencesStep = ({ onNext }: { onNext: () => void }) => {
+export const PresencesStep = ({ onNext }: {
+  onNext: () => void;
+}) => {
   const { t, locale } = useI18n();
   const { state, refresh } = useExtensionState();
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -21,28 +23,19 @@ export const PresencesStep = ({ onNext }: { onNext: () => void }) => {
     void refresh.catalog();
   }, [refresh]);
 
-  const popular = useMemo(
-    () =>
-      [...state.catalog.items]
-        .sort(
-          (a, b) =>
-            (b.activeUsers ?? 0) * 10 +
-            (b.totalInstalls ?? 0) -
-            ((a.activeUsers ?? 0) * 10 + (a.totalInstalls ?? 0)),
-        )
-        .slice(0, 9)
-        .map((item) => fromCatalog(item, locale)),
-    [state.catalog.items, locale],
-  );
+  const popular = useMemo(() =>
+    [...state.catalog.items]
+      .sort((a, b) => (b.activeUsers ?? 0) * 10 + (b.totalInstalls ?? 0) - ((a.activeUsers ?? 0) * 10 + (a.totalInstalls ?? 0)))
+      .slice(0, 9)
+      .map((item) => fromCatalog(item, locale)), [state.catalog.items, locale]);
 
   const install = async () => {
     setInstalling(true);
+
     for (const slug of selected) {
-      if (!state.presences[slug])
-        await sendMessage("INSTALL_PRESENCE_FROM_API", { slug }).catch(
-          () => {},
-        );
+      if (!state.presences[slug]) await sendMessage("INSTALL_PRESENCE_FROM_API", { slug }).catch(() => {});
     }
+
     await refresh.presences();
     setInstalling(false);
     onNext();
@@ -56,11 +49,7 @@ export const PresencesStep = ({ onNext }: { onNext: () => void }) => {
       description={t("onboarding.presencesDescription")}
       footer={
         count > 0 ? (
-          <Button
-            onClick={() => void install()}
-            loading={installing}
-            className="w-full"
-          >
+          <Button onClick={() => void install()} loading={installing} className="w-full">
             {t("onboarding.installCount", { count })}
           </Button>
         ) : (
@@ -97,9 +86,7 @@ export const PresencesStep = ({ onNext }: { onNext: () => void }) => {
                 }
                 className={cn(
                   "relative flex flex-col items-center gap-2 rounded-sm border bg-surface px-2 pt-4 pb-3 text-center transition-colors",
-                  active
-                    ? "border-primary"
-                    : "border-line hover:border-line-strong",
+                  active ? "border-primary" : "border-line hover:border-line-strong"
                 )}
               >
                 {active && (
@@ -107,22 +94,11 @@ export const PresencesStep = ({ onNext }: { onNext: () => void }) => {
                     <RiCheckLine className="size-3" />
                   </span>
                 )}
-                <PresenceIcon
-                  slug={view.slug}
-                  name={view.name}
-                  color={view.color}
-                  size={40}
-                />
+                <PresenceIcon slug={view.slug} name={view.name} color={view.color} size={40} />
                 <span className="flex w-full flex-col">
-                  <span className="truncate text-label-md font-medium">
-                    {view.name}
-                  </span>
+                  <span className="truncate text-label-md font-medium">{view.name}</span>
                   <span className="truncate text-label-sm text-muted">
-                    {(view.activeUsers ?? 0) > 0
-                      ? t("library.usersNow", {
-                          count: formatCompact(view.activeUsers, locale),
-                        })
-                      : " "}
+                    {(view.activeUsers ?? 0) > 0 ? t("library.usersNow", { count: formatCompact(view.activeUsers, locale) }) : " "}
                   </span>
                 </span>
               </button>

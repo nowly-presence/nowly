@@ -1,8 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import {
-  getActiveCustomPresence,
-  setCustomActivities,
-} from "@/background/storage/custom-activities.store";
+import { getActiveCustomPresence, setCustomActivities } from "@/background/storage/custom-activities.store";
 import { emptyCustomActivityDraft } from "@/shared/custom-activity";
 import { installChromeMock } from "@/test/chrome-mock";
 import type { CustomActivity } from "@/shared/types";
@@ -15,7 +12,7 @@ const activity: CustomActivity = {
   name: "Reading",
   details: "Dune",
   createdAt: 0,
-  updatedAt: 0,
+  updatedAt: 0
 };
 
 describe("getActiveCustomPresence", () => {
@@ -27,7 +24,7 @@ describe("getActiveCustomPresence", () => {
     await setCustomActivities({
       items: [activity],
       activeId: null,
-      activatedAt: null,
+      activatedAt: null
     });
     expect(await getActiveCustomPresence()).toBeNull();
   });
@@ -36,20 +33,24 @@ describe("getActiveCustomPresence", () => {
     await setCustomActivities({
       items: [activity],
       activeId: "a1",
-      activatedAt,
+      activatedAt
     });
     expect(await getActiveCustomPresence()).toEqual({
       slug: "custom:a1",
       presence: expect.objectContaining({
         name: "Reading",
         details: "Dune",
-        startTime: activatedAt / 1000,
-      }),
+        startTime: activatedAt / 1000
+      })
     });
   });
 
   it("ignores an active id whose activity was deleted", async () => {
-    await setCustomActivities({ items: [], activeId: "a1", activatedAt });
+    await setCustomActivities({
+      items: [],
+      activeId: "a1",
+      activatedAt
+    });
     expect(await getActiveCustomPresence()).toBeNull();
   });
 });

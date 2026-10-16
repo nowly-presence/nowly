@@ -1,7 +1,4 @@
-import {
-  DEFAULT_SCHEDULE,
-  ScheduleEditor,
-} from "@/components/shared/schedule-editor";
+import { DEFAULT_SCHEDULE, ScheduleEditor } from "@/components/shared/schedule-editor";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { Group } from "@/ui/card";
@@ -24,20 +21,13 @@ export const ScheduleSection = () => {
           onChange={(checked) =>
             void updateSettings({
               scheduleEnabled: checked,
-              ...(checked && !globalSchedule
-                ? { globalSchedule: DEFAULT_SCHEDULE }
-                : {}),
+              ...(checked && !globalSchedule ? { globalSchedule: DEFAULT_SCHEDULE } : {})
             })
           }
         />
         {scheduleEnabled === true && (
           <div className="px-4 py-3">
-            <ScheduleEditor
-              value={globalSchedule ?? DEFAULT_SCHEDULE}
-              onChange={(schedule) =>
-                void updateSettings({ globalSchedule: schedule })
-              }
-            />
+            <ScheduleEditor value={globalSchedule ?? DEFAULT_SCHEDULE} onChange={(schedule) => void updateSettings({ globalSchedule: schedule })} />
           </div>
         )}
       </Group>

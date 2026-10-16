@@ -1,47 +1,39 @@
 import { getPrisma } from "@/db/client";
-import type {
-  GlobalPresenceStats,
-  PresenceListItem,
-  PresenceMeta,
-  PresenceStats,
-  VersionEntry,
-} from "./presence.types";
+import type { GlobalPresenceStats, PresenceListItem, PresenceMeta, PresenceStats, VersionEntry } from "./presence.types";
 
 const ACTIVE_DEVICE_STALE_MS = 12 * 60 * 1000;
 
 const iso = (value: Date | string | null | undefined): string | null => {
   if (!value) return null;
-  return value instanceof Date
-    ? value.toISOString()
-    : new Date(value).toISOString();
+
+  return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
 };
 
-export const markActiveDevice = async (
-  slug: string,
-  deviceId: string,
-  timestamp = Date.now(),
-): Promise<void> => {
+export const markActiveDevice = async (slug: string, deviceId: string, timestamp = Date.now()): Promise<void> => {
   const prisma = getPrisma();
   await prisma.presenceActiveDevice.upsert({
-    where: { slug_deviceId: { slug, deviceId } },
-    create: { slug, deviceId, lastSeenAt: new Date(timestamp) },
-    update: { lastSeenAt: new Date(timestamp) },
+    where: {
+      slug_deviceId: { slug, deviceId }
+    },
+    create: {
+      slug,
+      deviceId,
+      lastSeenAt: new Date(timestamp)
+    },
+    update: { lastSeenAt: new Date(timestamp) }
   });
 };
 
-export const clearActiveDevice = async (
-  slug: string,
-  deviceId: string,
-): Promise<void> => {
+export const clearActiveDevice = async (slug: string, deviceId: string): Promise<void> => {
   await getPrisma().presenceActiveDevice.deleteMany({
-    where: { slug, deviceId },
+    where: { slug, deviceId }
   });
 };
 
-export const clearActiveDevicesForDevice = async (
-  deviceId: string,
-): Promise<void> => {
-  await getPrisma().presenceActiveDevice.deleteMany({ where: { deviceId } });
+export const clearActiveDevicesForDevice = async (deviceId: string): Promise<void> => {
+  await getPrisma().presenceActiveDevice.deleteMany({
+    where: { deviceId }
+  });
 };
 
 export const getActiveUsers = async (slug: string): Promise<number> => {
@@ -49,49 +41,53 @@ export const getActiveUsers = async (slug: string): Promise<number> => {
   await prisma.presenceActiveDevice.deleteMany({
     where: {
       slug,
-      lastSeenAt: { lt: new Date(Date.now() - ACTIVE_DEVICE_STALE_MS) },
-    },
+      lastSeenAt: { lt: new Date(Date.now() - ACTIVE_DEVICE_STALE_MS) }
+    }
   });
-  return prisma.presenceActiveDevice.count({ where: { slug } });
+  return prisma.presenceActiveDevice.count({
+    where: { slug }
+  });
 };
 
-export const getGlobalPresenceStats =
-  async (): Promise<GlobalPresenceStats> => {
-    const prisma = getPrisma();
-
-    await prisma.presenceActiveDevice.deleteMany({
-      where: {
-        lastSeenAt: { lt: new Date(Date.now() - ACTIVE_DEVICE_STALE_MS) },
-      },
-    });
-
-    const [
-      totalUsers,
-      activeUsers,
-      activePresenceCount,
-      installedPresenceCount,
-    ] = await Promise.all([
-      prisma.device.count(),
-      prisma.presenceActiveDevice.groupBy({ by: ["deviceId"] }),
-      prisma.presenceActiveDevice.count(),
-      prisma.devicePresence.count({ where: { installed: true } }),
-    ]);
-
-    return {
-      totalUsers,
-      activeUsers: activeUsers.length,
-      activePresenceCount,
-      installedPresenceCount,
-    };
-  };
-
-export const getPresenceStats = async (
-  slug: string,
-): Promise<PresenceStats> => {
+export const getGlobalPresenceStats = async (): Promise<GlobalPresenceStats> => {
   const prisma = getPrisma();
-  const presence = await prisma.presence.findUnique({ where: { slug } });
+
+  await prisma.presenceActiveDevice.deleteMany({
+    where: {
+      lastSeenAt: { lt: new Date(Date.now() - ACTIVE_DEVICE_STALE_MS) }
+    }
+  });
+
+  const [totalUsers, activeUsers, activePresenceCount, installedPresenceCount] = await Promise.all([
+    prisma.device.count(),
+    prisma.presenceActiveDevice.groupBy({
+      by: ["deviceId"]
+    }),
+    prisma.presenceActiveDevice.count(),
+    prisma.devicePresence.count({
+      where: { installed: true }
+    })
+  ]);
+
+  return {
+    totalUsers,
+    activeUsers: activeUsers.length,
+    activePresenceCount,
+    installedPresenceCount
+  };
+};
+
+export const getPresenceStats = async (slug: string): Promise<PresenceStats> => {
+  const prisma = getPrisma();
+  const presence = await prisma.presence.findUnique({
+    where: { slug }
+  });
+
   const totalInstalls = await prisma.devicePresence.count({
-    where: { slug, installed: true },
+    where: {
+      slug,
+      installed: true
+    }
   });
 
   return {
@@ -101,142 +97,150 @@ export const getPresenceStats = async (
     version: presence?.version ?? null,
     archived: presence?.archived ?? false,
     addedAt: iso(presence?.addedAt),
-    lastUpdated: iso(presence?.updatedAt),
+    lastUpdated: iso(presence?.updatedAt)
   };
 };
 
 const linkedUserId = async (deviceId: string): Promise<string | null> => {
   const device = await getPrisma().device.findUnique({
     where: { deviceId },
-    select: { userId: true },
+    select: { userId: true }
   });
   return device?.userId ?? null;
 };
 
-export const likePresence = async (
-  slug: string,
-  deviceId: string,
-): Promise<void> => {
+export const likePresence = async (slug: string, deviceId: string): Promise<void> => {
   const prisma = getPrisma();
   const userId = await linkedUserId(deviceId);
+
   if (
     userId &&
-    (await prisma.presenceLike.count({ where: { slug, userId } })) > 0
-  )
-    return;
+    (await prisma.presenceLike.count({
+      where: { slug, userId }
+    })) > 0
+  ) return;
+
   await prisma.presenceLike.upsert({
-    where: { slug_deviceId: { slug, deviceId } },
+    where: {
+      slug_deviceId: { slug, deviceId }
+    },
     create: { slug, deviceId, userId },
-    update: {},
+    update: {}
   });
 };
 
-export const unlikePresence = async (
-  slug: string,
-  deviceId: string,
-): Promise<void> => {
+export const unlikePresence = async (slug: string, deviceId: string): Promise<void> => {
   const userId = await linkedUserId(deviceId);
   await getPrisma().presenceLike.deleteMany({
     where: userId
-      ? { slug, OR: [{ deviceId }, { userId }] }
-      : { slug, deviceId },
+      ? {
+          slug,
+          OR: [
+            { deviceId },
+            { userId }
+          ]
+        }
+      : { slug, deviceId }
   });
 };
 
-export const hasLikedPresence = async (
-  slug: string,
-  deviceId: string,
-): Promise<boolean> => {
+export const hasLikedPresence = async (slug: string, deviceId: string): Promise<boolean> => {
   const userId = await linkedUserId(deviceId);
+
   const count = await getPrisma().presenceLike.count({
     where: userId
-      ? { slug, OR: [{ deviceId }, { userId }] }
-      : { slug, deviceId },
+      ? {
+          slug,
+          OR: [
+            { deviceId },
+            { userId }
+          ]
+        }
+      : { slug, deviceId }
   });
   return count > 0;
 };
 
 export const getLikeCount = async (slug: string): Promise<number> => {
-  return getPrisma().presenceLike.count({ where: { slug } });
+  return getPrisma().presenceLike.count({
+    where: { slug }
+  });
 };
 
-export const incrementInstalls = async (
-  slug: string,
-  deviceId?: string,
-  version?: string,
-): Promise<number> => {
-  const resolvedDeviceId =
-    deviceId?.trim() || `anonymous-install-${crypto.randomUUID()}`;
+export const incrementInstalls = async (slug: string, deviceId?: string, version?: string): Promise<number> => {
+  const resolvedDeviceId = deviceId?.trim() || `anonymous-install-${crypto.randomUUID()}`;
   const prisma = getPrisma();
   await prisma.device.upsert({
     where: { deviceId: resolvedDeviceId },
     create: { deviceId: resolvedDeviceId },
-    update: { lastSeenAt: new Date() },
+    update: { lastSeenAt: new Date() }
   });
   await prisma.devicePresence.upsert({
-    where: { deviceId_slug: { deviceId: resolvedDeviceId, slug } },
+    where: {
+      deviceId_slug: {
+        deviceId: resolvedDeviceId,
+        slug
+      }
+    },
     create: {
       deviceId: resolvedDeviceId,
       slug,
       installedVersion: version,
       installed: true,
-      enabled: true,
+      enabled: true
     },
     update: {
       installedVersion: version,
       installed: true,
       enabled: true,
       updatedAt: new Date(),
-      uninstalledAt: null,
-    },
+      uninstalledAt: null
+    }
   });
-  return prisma.devicePresence.count({ where: { slug, installed: true } });
+  return prisma.devicePresence.count({
+    where: {
+      slug,
+      installed: true
+    }
+  });
 };
 
-export const setActiveUsers = async (
-  _slug: string,
-  _count: number,
-): Promise<void> => {
+export const setActiveUsers = async (_slug: string, _count: number): Promise<void> => {
   return;
 };
 
-const toDate = (value?: Date | string): Date =>
-  value instanceof Date ? value : value ? new Date(value) : new Date();
+const toDate = (value?: Date | string): Date => (value instanceof Date ? value : value ? new Date(value) : new Date());
 
-export const setUpdated = async (
-  slug: string,
-  date?: Date | string,
-): Promise<void> => {
+export const setUpdated = async (slug: string, date?: Date | string): Promise<void> => {
   const value = toDate(date);
   await getPrisma().presence.upsert({
     where: { slug },
-    create: { slug, updatedAt: value },
-    update: { updatedAt: value },
+    create: {
+      slug,
+      updatedAt: value
+    },
+    update: { updatedAt: value }
   });
 };
 
-export const setAdded = async (
-  slug: string,
-  date?: Date | string,
-): Promise<void> => {
+export const setAdded = async (slug: string, date?: Date | string): Promise<void> => {
   const value = toDate(date);
   await getPrisma().presence.upsert({
     where: { slug },
-    create: { slug, addedAt: value },
-    update: {},
+    create: {
+      slug,
+      addedAt: value
+    },
+    update: {}
   });
 };
 
-export const setVersion = async (
-  slug: string,
-  version: string,
-  publishedAt?: Date,
-): Promise<void> => {
+export const setVersion = async (slug: string, version: string, publishedAt?: Date): Promise<void> => {
   const updatedAt = publishedAt ?? new Date();
   await getPrisma().presence.upsert({
     where: { slug },
     create: { slug, version, updatedAt },
-    update: { version, updatedAt },
+    update: { version, updatedAt }
   });
 };
 
@@ -245,24 +249,29 @@ export const getVersion = async (slug: string): Promise<string | null> => {
     (
       await getPrisma().presence.findUnique({
         where: { slug },
-        select: { version: true },
+        select: { version: true }
       })
     )?.version ?? null
   );
 };
 
-export const addVersion = async (
-  slug: string,
-  entry: VersionEntry,
-): Promise<void> => {
+export const addVersion = async (slug: string, entry: VersionEntry): Promise<void> => {
   const prisma = getPrisma();
   await prisma.presence.upsert({
     where: { slug },
-    create: { slug, version: entry.version },
-    update: {},
+    create: {
+      slug,
+      version: entry.version
+    },
+    update: {}
   });
   await prisma.presenceVersion.upsert({
-    where: { slug_version: { slug, version: entry.version } },
+    where: {
+      slug_version: {
+        slug,
+        version: entry.version
+      }
+    },
     create: {
       slug,
       version: entry.version,
@@ -280,10 +289,8 @@ export const addVersion = async (
       bundleSha256: entry.bundleSha256,
       versionType: entry.versionType,
       aiGeneratedChangelog: entry.aiGeneratedChangelog,
-      createdAt: entry.createdAt
-        ? new Date(entry.createdAt)
-        : new Date(entry.timestamp),
-      timestamp: new Date(entry.timestamp),
+      createdAt: entry.createdAt ? new Date(entry.createdAt) : new Date(entry.timestamp),
+      timestamp: new Date(entry.timestamp)
     },
     update: {
       changelog: entry.changelog,
@@ -300,31 +307,27 @@ export const addVersion = async (
       bundleSha256: entry.bundleSha256,
       versionType: entry.versionType,
       aiGeneratedChangelog: entry.aiGeneratedChangelog,
-      createdAt: entry.createdAt
-        ? new Date(entry.createdAt)
-        : new Date(entry.timestamp),
-      timestamp: new Date(entry.timestamp),
-    },
+      createdAt: entry.createdAt ? new Date(entry.createdAt) : new Date(entry.timestamp),
+      timestamp: new Date(entry.timestamp)
+    }
   });
 };
 
-export const setPresenceMeta = async (
-  slug: string,
-  meta: PresenceMeta,
-): Promise<void> => {
+export const setPresenceMeta = async (slug: string, meta: PresenceMeta): Promise<void> => {
   await getPrisma().presence.upsert({
     where: { slug },
-    create: { slug, metadata: meta },
-    update: { metadata: meta },
+    create: {
+      slug,
+      metadata: meta
+    },
+    update: { metadata: meta }
   });
 };
 
-export const getPresenceMeta = async (
-  slug: string,
-): Promise<PresenceMeta | null> => {
+export const getPresenceMeta = async (slug: string): Promise<PresenceMeta | null> => {
   const row = await getPrisma().presence.findUnique({
     where: { slug },
-    select: { metadata: true },
+    select: { metadata: true }
   });
   return (row?.metadata as PresenceMeta | null) ?? null;
 };
@@ -337,44 +340,55 @@ export const getPresenceListData = async (): Promise<PresenceListItem[]> => {
 
   await prisma.presenceActiveDevice.deleteMany({
     where: {
-      lastSeenAt: { lt: new Date(Date.now() - ACTIVE_DEVICE_STALE_MS) },
-    },
+      lastSeenAt: { lt: new Date(Date.now() - ACTIVE_DEVICE_STALE_MS) }
+    }
   });
 
-  const [presences, installCounts, activeCounts, likeCounts] =
-    await Promise.all([
-      prisma.presence.findMany({
-        where: { archived: false },
-        select: {
-          slug: true,
-          metadata: true,
-          version: true,
-          addedAt: true,
-          updatedAt: true,
-        },
-      }),
-      prisma.devicePresence.groupBy({
-        by: ["slug"],
-        where: { installed: true },
-        _count: { _all: true },
-      }),
-      prisma.presenceActiveDevice.groupBy({
-        by: ["slug"],
-        _count: { _all: true },
-      }),
-      prisma.presenceLike.groupBy({ by: ["slug"], _count: { _all: true } }),
-    ]);
+  const [presences, installCounts, activeCounts, likeCounts] = await Promise.all([
+    prisma.presence.findMany({
+      where: { archived: false },
+      select: {
+        slug: true,
+        metadata: true,
+        version: true,
+        addedAt: true,
+        updatedAt: true
+      }
+    }),
+    prisma.devicePresence.groupBy({
+      by: ["slug"],
+      where: { installed: true },
+      _count: { _all: true }
+    }),
+    prisma.presenceActiveDevice.groupBy({
+      by: ["slug"],
+      _count: { _all: true }
+    }),
+    prisma.presenceLike.groupBy({
+      by: ["slug"],
+      _count: { _all: true }
+    })
+  ]);
 
-  const toMap = (rows: Array<{ slug: string; _count: { _all: number } }>) =>
-    new Map(rows.map((row) => [row.slug, row._count._all]));
+  const toMap = (
+    rows: Array<{
+      slug: string;
+      _count: {
+        _all: number;
+      };
+    }>
+  ) => new Map(rows.map((row) => [row.slug, row._count._all]));
   const installMap = toMap(installCounts);
   const activeMap = toMap(activeCounts);
   const likeMap = toMap(likeCounts);
 
   return presences
     .filter(
-      (presence): presence is typeof presence & { metadata: PresenceMeta } =>
-        Boolean(presence.metadata),
+      (
+        presence
+      ): presence is typeof presence & {
+        metadata: PresenceMeta;
+      } => Boolean(presence.metadata)
     )
     .map((presence) => ({
       ...(presence.metadata as PresenceMeta),
@@ -383,51 +397,55 @@ export const getPresenceListData = async (): Promise<PresenceListItem[]> => {
       lastUpdated: iso(presence.updatedAt),
       totalInstalls: installMap.get(presence.slug) ?? 0,
       activeUsers: activeMap.get(presence.slug) ?? 0,
-      likes: likeMap.get(presence.slug) ?? 0,
+      likes: likeMap.get(presence.slug) ?? 0
     }));
 };
 
-export const getAllPresenceSlugs = async (
-  options: { includeArchived?: boolean } = {},
-): Promise<string[]> => {
+export const getAllPresenceSlugs = async (options: {
+  includeArchived?: boolean;
+} = {}): Promise<string[]> => {
   const rows = await getPrisma().presence.findMany({
     where: options.includeArchived ? undefined : { archived: false },
     select: { slug: true },
-    orderBy: { slug: "asc" },
+    orderBy: { slug: "asc" }
   });
   return rows.map((row) => row.slug);
 };
 
 export const getAllPresenceMetas = async (): Promise<
-  { slug: string; metadata: PresenceMeta }[]
+  {
+    slug: string;
+    metadata: PresenceMeta;
+  }[]
 > => {
   const rows = await getPrisma().presence.findMany({
     where: { archived: false },
-    select: { slug: true, metadata: true },
+    select: {
+      slug: true,
+      metadata: true
+    }
   });
   return rows.map((row) => ({
     slug: row.slug,
-    metadata: row.metadata as PresenceMeta,
+    metadata: row.metadata as PresenceMeta
   }));
 };
 
-export const setArchived = async (
-  slug: string,
-  archived: boolean,
-): Promise<boolean> => {
+export const setArchived = async (slug: string, archived: boolean): Promise<boolean> => {
   const result = await getPrisma().presence.updateMany({
-    where: { slug, archived: { not: archived } },
-    data: { archived },
+    where: {
+      slug,
+      archived: { not: archived }
+    },
+    data: { archived }
   });
   return result.count > 0;
 };
 
-export const getVersionHistory = async (
-  slug: string,
-): Promise<VersionEntry[]> => {
+export const getVersionHistory = async (slug: string): Promise<VersionEntry[]> => {
   const rows = await getPrisma().presenceVersion.findMany({
     where: { slug },
-    orderBy: { timestamp: "desc" },
+    orderBy: { timestamp: "desc" }
   });
   return rows.map((row) => ({
     version: row.version,
@@ -437,8 +455,7 @@ export const getVersionHistory = async (
     releaseAuthor: row.releaseAuthor ?? undefined,
     releaseContributors: row.releaseContributors ?? undefined,
     pr: row.pr ?? undefined,
-    source:
-      row.source === "cli" || row.source === "pr" ? row.source : undefined,
+    source: row.source === "cli" || row.source === "pr" ? row.source : undefined,
     commitSha: row.commitSha ?? undefined,
     changedFiles: row.changedFiles ?? undefined,
     bundleSizeBytes: row.bundleSizeBytes ?? undefined,
@@ -447,6 +464,6 @@ export const getVersionHistory = async (
     versionType: row.versionType ?? undefined,
     aiGeneratedChangelog: row.aiGeneratedChangelog ?? undefined,
     createdAt: row.createdAt.toISOString(),
-    timestamp: row.timestamp.getTime(),
+    timestamp: row.timestamp.getTime()
   }));
 };

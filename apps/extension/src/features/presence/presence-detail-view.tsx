@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-  RiDeleteBinLine,
-  RiExternalLinkLine,
-  RiFlagLine,
-} from "@remixicon/react";
+import { RiDeleteBinLine, RiExternalLinkLine, RiFlagLine } from "@remixicon/react";
 import { LiveCard } from "@/components/shared/live-activity-card";
 import { BackHeader, ScreenBody } from "@/components/shared/screen";
 import { useExtensionState } from "@/hooks/extension-state-provider";
@@ -30,7 +26,9 @@ import { PresenceUninstallSheet } from "@/features/presence/presence-uninstall-s
 import { usePresenceDetails } from "@/features/presence/use-presence-details";
 import { usePresenceEngagement } from "@/features/presence/use-presence-engagement";
 
-export const PresenceDetailView = ({ slug }: { slug: string }) => {
+export const PresenceDetailView = ({ slug }: {
+  slug: string;
+}) => {
   const { state, refresh } = useExtensionState();
   const { t } = useI18n();
   const { pop } = useNav();
@@ -39,7 +37,7 @@ export const PresenceDetailView = ({ slug }: { slug: string }) => {
   const engagement = usePresenceEngagement(slug, {
     likes: view?.likes,
     activeUsers: view?.activeUsers,
-    totalInstalls: view?.totalInstalls,
+    totalInstalls: view?.totalInstalls
   });
   const [reportOpen, setReportOpen] = useState(false);
   const [uninstallOpen, setUninstallOpen] = useState(false);
@@ -55,10 +53,7 @@ export const PresenceDetailView = ({ slug }: { slug: string }) => {
                 title={t("error.notFound")}
                 description={t("library.errorDescription")}
                 action={
-                  <Button
-                    variant="secondary"
-                    onClick={() => void refresh.catalog(true)}
-                  >
+                  <Button variant="secondary" onClick={() => void refresh.catalog(true)}>
                     {t("action.retry")}
                   </Button>
                 }
@@ -89,37 +84,17 @@ export const PresenceDetailView = ({ slug }: { slug: string }) => {
       <BackHeader
         onBack={pop}
         backLabel={t("action.back")}
-        action={
-          <PresenceLikeButton
-            liked={engagement.liked}
-            likes={engagement.likes}
-            onToggle={() => void engagement.toggleLike()}
-          />
-        }
+        action={<PresenceLikeButton liked={engagement.liked} likes={engagement.likes} onToggle={() => void engagement.toggleLike()} />}
       />
 
       <ScreenBody className="gap-6 pt-0">
-        <PresenceHero
-          view={view}
-          version={stored?.release?.version ?? view.version}
-        />
+        <PresenceHero view={view} version={stored?.release?.version ?? view.version} />
         <PresencePrimaryActions view={view} stored={stored} />
-        <PresenceStats
-          activeUsers={engagement.activeUsers}
-          totalInstalls={engagement.totalInstalls}
-          likes={engagement.likes}
-        />
+        <PresenceStats activeUsers={engagement.activeUsers} totalInstalls={engagement.totalInstalls} likes={engagement.likes} />
 
         {live && (
           <Section title={t("activity.now")}>
-            <LiveCard
-              slug={slug}
-              presence={live.presence}
-              presenceName={view.name}
-              t={t}
-              compact
-              status={state.settings.presencePaused ? "paused" : "live"}
-            />
+            <LiveCard slug={slug} presence={live.presence} presenceName={view.name} t={t} compact status={state.settings.presencePaused ? "paused" : "live"} />
           </Section>
         )}
 
@@ -128,11 +103,7 @@ export const PresenceDetailView = ({ slug }: { slug: string }) => {
         {stored && (
           <>
             <PresenceSettingsSection view={view} />
-            <PresenceSnoozeSection
-              slug={slug}
-              name={view.name}
-              stored={stored}
-            />
+            <PresenceSnoozeSection slug={slug} name={view.name} stored={stored} />
             <PresenceScheduleSection slug={slug} stored={stored} />
           </>
         )}
@@ -149,33 +120,19 @@ export const PresenceDetailView = ({ slug }: { slug: string }) => {
             >
               {t("detail.viewOnWeb")}
             </Button>
-            <Button
-              variant="secondary"
-              className="flex-1"
-              icon={<RiFlagLine className="size-4" />}
-              onClick={() => setReportOpen(true)}
-            >
+            <Button variant="secondary" className="flex-1" icon={<RiFlagLine className="size-4" />} onClick={() => setReportOpen(true)}>
               {t("detail.report")}
             </Button>
           </div>
           {stored && (
-            <Button
-              variant="danger"
-              icon={<RiDeleteBinLine className="size-4" />}
-              onClick={() => setUninstallOpen(true)}
-            >
+            <Button variant="danger" icon={<RiDeleteBinLine className="size-4" />} onClick={() => setUninstallOpen(true)}>
               {t("detail.uninstall")}
             </Button>
           )}
         </div>
       </ScreenBody>
 
-      <PresenceReportSheet
-        slug={slug}
-        name={view.name}
-        open={reportOpen}
-        onClose={() => setReportOpen(false)}
-      />
+      <PresenceReportSheet slug={slug} name={view.name} open={reportOpen} onClose={() => setReportOpen(false)} />
       <PresenceUninstallSheet
         name={view.name}
         open={uninstallOpen}

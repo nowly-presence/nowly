@@ -15,40 +15,37 @@ export type ChartType = "line" | "bar" | "area";
 // fixed-length preset id.
 export type WidgetRange = AnalyticsRangeId | "custom";
 
-export type WidgetConfig =
-  | {
-      id: string;
-      title: string;
-      kind: "metric-total";
-      metric: string;
-      filters: InsightsFilters;
-      range: WidgetRange;
-      from?: string;
-      to?: string;
-    }
-  | {
-      id: string;
-      title: string;
-      kind: "metric-series";
-      metric: string;
-      filters: InsightsFilters;
-      range: WidgetRange;
-      from?: string;
-      to?: string;
-      granularity?: AnalyticsGranularity;
-      chartType: ChartType;
-      compare?: boolean;
-    }
-  | {
-      id: string;
-      title: string;
-      kind: "funnel";
-      funnelId: string;
-      filters: InsightsFilters;
-      range: WidgetRange;
-      from?: string;
-      to?: string;
-    };
+export type WidgetConfig = {
+  id: string;
+  title: string;
+  kind: "metric-total";
+  metric: string;
+  filters: InsightsFilters;
+  range: WidgetRange;
+  from?: string;
+  to?: string;
+} | {
+  id: string;
+  title: string;
+  kind: "metric-series";
+  metric: string;
+  filters: InsightsFilters;
+  range: WidgetRange;
+  from?: string;
+  to?: string;
+  granularity?: AnalyticsGranularity;
+  chartType: ChartType;
+  compare?: boolean;
+} | {
+  id: string;
+  title: string;
+  kind: "funnel";
+  funnelId: string;
+  filters: InsightsFilters;
+  range: WidgetRange;
+  from?: string;
+  to?: string;
+};
 
 export type ViewConfig = {
   id?: string;

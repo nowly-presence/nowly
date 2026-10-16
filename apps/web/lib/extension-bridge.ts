@@ -54,11 +54,13 @@ const nextMessageId = (): string => {
 const resultTypeFor = (type: ExtensionRequestType): string => {
   if (type === "GET_INSTALLED") return "INSTALLED_PRESENCES";
   if (type === "GET_DEVICE_INFO") return "DEVICE_INFO";
+
   return `${type}_RESULT`;
 };
 
 const notifyDetected = (value: boolean): void => {
   if (detected === value) return;
+
   detected = value;
   detectedListeners.forEach((listener) => listener(value));
 };
@@ -68,6 +70,7 @@ const stopPing = (): void => {
     window.clearInterval(pingTimer);
     pingTimer = null;
   }
+
   if (pingTimeout !== null) {
     window.clearTimeout(pingTimeout);
     pingTimeout = null;
@@ -76,15 +79,17 @@ const stopPing = (): void => {
 
 const onWindowMessage = (event: MessageEvent): void => {
   const data = event.data;
+
   if (!data || typeof data !== "object") return;
+
   const message = data as {
     source?: unknown;
     type?: unknown;
     messageId?: unknown;
     payload?: unknown;
   };
-  if (message.source !== EXT_WEB_SOURCE || typeof message.type !== "string")
-    return;
+
+  if (message.source !== EXT_WEB_SOURCE || typeof message.type !== "string") return;
 
   if (message.type === "EXT_DETECTED") {
     stopPing();
@@ -93,26 +98,43 @@ const onWindowMessage = (event: MessageEvent): void => {
   }
 
   if (typeof message.messageId !== "string") return;
+
   const request = pending.get(message.messageId);
+
   if (!request) return;
   if (message.type !== request.type) return;
+
   pending.delete(message.messageId);
   request.resolve(message.payload);
 };
 
 const ensureListener = (): void => {
   if (listening || typeof window === "undefined") return;
+
   listening = true;
   window.addEventListener("message", onWindowMessage);
 };
 
 const startDetection = (): void => {
   ensureListener();
+
   if (detected !== null || pingTimer !== null) return;
 
-  window.postMessage({ source: EXT_WEB_SOURCE, type: "PING" }, "*");
+  window.postMessage(
+    {
+      source: EXT_WEB_SOURCE,
+      type: "PING"
+    },
+    "*"
+  );
   pingTimer = window.setInterval(() => {
-    window.postMessage({ source: EXT_WEB_SOURCE, type: "PING" }, "*");
+    window.postMessage(
+      {
+        source: EXT_WEB_SOURCE,
+        type: "PING"
+      },
+      "*"
+    );
   }, 300);
   pingTimeout = window.setTimeout(() => {
     stopPing();
@@ -122,9 +144,7 @@ const startDetection = (): void => {
 
 export const getExtensionDetected = (): boolean | null => detected;
 
-export const subscribeExtensionDetected = (
-  listener: DetectedListener,
-): (() => void) => {
+export const subscribeExtensionDetected = (listener: DetectedListener): (() => void) => {
   detectedListeners.add(listener);
   startDetection();
   if (detected !== null) listener(detected);
@@ -133,13 +153,10 @@ export const subscribeExtensionDetected = (
   };
 };
 
-export const requestExtension = async <T>(
-  type: Exclude<ExtensionRequestType, "PING">,
-  payload?: unknown,
-  timeoutMs = type === "INSTALL_PRESENCE" || type === "UPDATE_PRESENCE"
-    ? 45000
-    : 8000,
-): Promise<T> => {
+export const requestExtension = async <T>(type: Exclude<ExtensionRequestType, "PING">, payload?: unknown, timeoutMs = type === "INSTALL_PRESENCE" ||
+type === "UPDATE_PRESENCE"
+  ? 45000
+  : 8000): Promise<T> => {
   ensureListener();
   startDetection();
 
@@ -159,45 +176,54 @@ export const requestExtension = async <T>(
       reject: (error) => {
         window.clearTimeout(timer);
         reject(error);
-      },
+      }
     });
 
     window.postMessage(
-      { source: EXT_WEB_SOURCE, type, messageId, payload },
-      "*",
+      {
+        source: EXT_WEB_SOURCE,
+        type,
+        messageId,
+        payload
+      },
+      "*"
     );
   });
 };
 
-export const parseInstalledMap = (
-  payload: unknown,
-): Record<string, InstalledPresenceInfo> => {
-  if (!payload || typeof payload !== "object" || Array.isArray(payload))
-    return {};
+export const parseInstalledMap = (payload: unknown): Record<string, InstalledPresenceInfo> => {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) return {};
+
   const row = payload as Record<string, unknown>;
+
   if (row.ok === false) return {};
 
   const installed: Record<string, InstalledPresenceInfo> = {};
+
   for (const [slug, value] of Object.entries(row)) {
     if (!value || typeof value !== "object") continue;
+
     const entry = value as {
-      metadata?: { version?: unknown };
-      release?: { version?: unknown };
+      metadata?: {
+        version?: unknown;
+      };
+      release?: {
+        version?: unknown;
+      };
     };
     const releaseVersion = normalizePresenceVersion(entry.release?.version);
     const metadataVersion = normalizePresenceVersion(entry.metadata?.version);
     installed[slug] = { version: releaseVersion ?? metadataVersion };
   }
+
   return installed;
 };
 
 export const normalizePresenceVersion = (value: unknown): string | null => {
   if (typeof value !== "string") return null;
+
   const version = value.trim().replace(/^v/i, "");
   return version.length > 0 ? version : null;
 };
 
-export const isDevPresenceVersion = (version: string | null): boolean =>
-  Boolean(
-    version && (version.startsWith("0.0.0-dev.") || /-dev\./.test(version)),
-  );
+export const isDevPresenceVersion = (version: string | null): boolean => Boolean(version && (version.startsWith("0.0.0-dev.") || /-dev\./.test(version)));
