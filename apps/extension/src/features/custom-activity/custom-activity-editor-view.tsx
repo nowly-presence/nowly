@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { RiDeleteBinLine } from "@remixicon/react";
+import { RiDeleteBinLine, RiDownload2Line } from "@remixicon/react";
 import { CustomActivityArtwork } from "@/components/shared/custom-activity-artwork";
 import { LiveCard } from "@/components/shared/live-activity-card";
 import { BackHeader, ScreenBody } from "@/components/shared/screen";
@@ -19,6 +19,7 @@ import { CustomActivityTextSection } from "@/features/custom-activity/custom-act
 import { CustomActivityTimeSection } from "@/features/custom-activity/custom-activity-time-section";
 import { draftFromTemplate, isCustomActivityTemplateId } from "@/features/custom-activity/custom-activity-templates";
 import { useCustomActivityActions } from "@/features/custom-activity/use-custom-activity-actions";
+import { useCustomActivityShare } from "@/features/custom-activity/use-custom-activity-share";
 
 export const CustomActivityEditorView = ({ id, template }: {
   id: string | null;
@@ -28,6 +29,7 @@ export const CustomActivityEditorView = ({ id, template }: {
   const { t } = useI18n();
   const { pop } = useNav();
   const actions = useCustomActivityActions();
+  const share = useCustomActivityShare(pop);
   const existing = id ? state.customActivities.items.find((item) => item.id === id) : undefined;
   const [draft, setDraft] = useState<CustomActivityDraft>(
     () =>
@@ -121,6 +123,11 @@ export const CustomActivityEditorView = ({ id, template }: {
           <Button loading={actions.pending === "save"} onClick={() => void save()}>
             {existing ? t("action.save") : t("custom.editor.create")}
           </Button>
+          {existing && (
+            <Button variant="secondary" icon={<RiDownload2Line className="size-4" />} onClick={() => void share.exportActivity(existing)}>
+              {t("custom.export")}
+            </Button>
+          )}
           {existing && (
             <Button variant="danger" icon={<RiDeleteBinLine className="size-4" />} onClick={() => setDeleteOpen(true)}>
               {t("custom.editor.delete")}

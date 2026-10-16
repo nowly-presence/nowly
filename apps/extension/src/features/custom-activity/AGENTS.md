@@ -15,6 +15,13 @@ Templates only prefill the editor (route `custom-activity` with `template`); not
 2. Render it in the matching `custom-activity-*-section.tsx` (each takes `CustomActivitySectionProps`), errors through `FieldError`.
 3. Mirror it in the preview seed (`preview/preview-fixtures.ts`).
 
+## Share (import and export)
+
+- Export from the editor uses the saved activity, not unsaved edits. `shared/custom-activity-share.ts` builds `{ format: "nowly.custom-activity", version: 1, exportedAt, activity }`, with uploaded images embedded from `GET_CUSTOM_IMAGES`. Missing local copies become `none`. Local ids, creation/update dates, active state and upload CDN URLs are excluded; user-entered HTTPS links remain.
+- Import accepts multiple JSON files up to 4 MiB each. The parser validates the format/version, draft and embedded images. Images are uploaded through `UPLOAD_CUSTOM_IMAGE`, then `SAVE_CUSTOM_ACTIVITY` creates a fresh inactive activity. Failed images produce a warning but do not prevent saving; failed files do not stop the batch. One imported activity opens its editor, several show a summary.
+- `use-custom-activity-share.ts` locks concurrent imports and stops at remaining capacity. `use-file-drop.ts` listens only while the Custom tab is visible, with no pushed route or template sheet and no import running. Keep that navigation guard: visited tab views stay mounted when hidden.
+- `lib/download-json-file.ts` is shared with the device-data export. No extra permission or server route is needed for sharing.
+
 ## Gotchas
 
 - Discord lays activities out by type, and `LiveCard` mirrors it: "Playing" shows the header "Playing" then the name, details and state (3 lines); Listening, Watching and Competing put the name in the header ("Listening to {name}", `activity.header.*`) and show only details and state.

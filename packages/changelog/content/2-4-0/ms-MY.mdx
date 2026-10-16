@@ -1,21 +1,53 @@
 ---
 title: 2.4.0
 date: 15 Oktober 2026
-description: Tab Tersuai baharu untuk memaparkan apa-apa aktiviti di Discord tanpa presence, dengan templat, imej, pemasa dan butang, serta bar navigasi yang boleh disesuaikan.
+description: Cipta dan kongsi aktiviti Discord dengan templat, imej, pemasa dan butang. Import dan eksport JSON serta navigasi boleh suai.
 stores: [chrome, firefox]
 ---
 
 ## Baharu
 
-- Aktiviti tersuai: tab Tersuai baharu untuk memaparkan di Discord aktiviti yang anda tulis sendiri, tanpa memasang presence. Tetapkan nama, jenis (Bermain, Mendengar, Menonton, Bertanding), dua baris teks, imej besar dan kecil dengan teks semasa tuding, masa berlalu atau kira detik, serta sehingga dua butang.
-- Simpan seberapa banyak aktiviti tersuai yang anda mahu dan hidupkan satu dengan suis. Semasa ia hidup, ia menggantikan aktiviti daripada tab anda.
-- Imej mengikut cara anda: muat naik fail (diubah saiz secara automatik, maksimum 1 MB), tampal pautan https, pilih ikon berwarna daripada 24, atau kekalkan logo Nowly. Imej yang dimuat naik kekal pada peranti anda dan dihantar semula secara automatik jika tamat tempoh selepas 30 hari tidak digunakan.
-- Sepuluh templat untuk bermula (Belajar, Mengekod, Malam permainan, Senarai main saya, Malam filem, Siaran langsung, Senaman, Dalam perjalanan, Rehat kopi, Fokus).
-- Pratonton langsung dalam editor yang sepadan dengan paparan Discord.
-- Bar navigasi yang boleh disesuaikan: tekan lama pada tab untuk mengalihkannya, atau tariknya keluar ke tepi untuk mencipta bar lain. Boleh ditetapkan semula bila-bila masa dalam Tetapan.
+### Aktiviti tersuai
+
+- Tab Tersuai baharu untuk mencipta, menyunting dan memadam aktiviti Discord tanpa memasang presence laman. Nolo memperkenalkan ciri ini pada penggunaan pertama.
+- Simpan sehingga 50 aktiviti pada peranti. Hanya satu aktif pada satu masa dan mengatasi presence tab sehingga dimatikan.
+- Tetapkan nama, jenis (Bermain, Mendengar, Menonton, Bertanding), dua baris teks, imej besar/kecil dengan teks tuding dan sehingga dua butang HTTPS.
+- Pilih masa berlalu atau kira detik dari 5 minit hingga 24 jam. Pemasa bermula semasa diaktifkan, bukan semasa dicipta.
+- Sepuluh templat: Belajar, Mengekod, Malam permainan, Senarai main, Malam filem, Siaran langsung, Senaman, Perjalanan, Rehat kopi dan Fokus. Mengisi editor tanpa menyimpan sebelum pengesahan.
+- Pratonton langsung dan kad khas untuk membuka, menghentikan atau menyambung aktiviti semasa.
+
+### Imej dan perkongsian
+
+- Muat naik PNG, JPEG, WebP atau GIF, gunakan URL HTTPS atau pilih antara 24 ikon dan 10 warna. Tanpa imej besar, logo Nowly digunakan; tanpa imej kecil, tiada lencana.
+- Imej selain GIF dikecilkan dan ditukar secara automatik. Had 1 MiB setiap imej; GIF tidak ditukar. Salinan setempat digunakan untuk pratonton dan penghantaran semula, manakala Discord menerima URL yang dihoskan.
+- Imej aktif disegarkan berkala. Fail dihoskan yang tidak digunakan selama 30 hari boleh dibersihkan dan dimuat naik semula daripada salinan setempat apabila perlu.
+- Eksport aktiviti tersimpan sebagai `[Nama].json`. Versi tersimpan terakhir digunakan, bukan suntingan belum disimpan, bersama teks, jenis, pemasa, butang dan imej terbenam daripada salinan setempat. Imej tanpa salinan tidak disertakan.
+- ID setempat, tarikh penciptaan/kemas kini, status aktif dan URL hos imej muat naik tidak dieksport. Pautan HTTPS yang dimasukkan kekal: semak sebelum berkongsi.
+- Import satu atau beberapa fail melalui butang ikon Import dengan label kebolehcapaian dan petua, atau seret ke tab Tersuai yang kelihatan. Skrin lain tidak memintas fail.
+- Setiap import mencipta aktiviti baharu yang tidak aktif tanpa menimpa yang sedia ada. Satu import membuka editor; beberapa import memaparkan ringkasan.
+- Fail melebihi 4 MiB, format/versi tidak serasi dan aktiviti tidak sah ditolak. Imej terbenam disahkan lalu dimuat naik semula; jika imej gagal, aktiviti dikekalkan tanpanya dan amaran dipaparkan.
 
 ## Penambahbaikan
 
-- Kad aktiviti kini mengikut susun atur Discord bagi setiap jenis: "Bermain" memaparkan nama pada barisnya sendiri, manakala Mendengar, Menonton dan Bertanding meletakkannya di sebelah kata kerja.
-- Dialog kini terapung di atas panel dan tidak lagi melekat pada tepi bawah.
-- Label tab aktif tidak lagi terpotong.
+- Tahan tab untuk mengalihkannya atau tarik ke tepi untuk mencipta kumpulan lain. Tetapkan semula susun atur dalam Tetapan.
+- Kad dan pratonton mengikut Discord: Bermain memaparkan nama pada baris sendiri, jenis lain dalam pengepala. Dialog terapung di atas panel; keadaan kosong menawarkan contoh dan templat.
+- Ciri dan ralat diterjemahkan ke semua 11 bahasa, dengan 178 kunci baharu setiap bahasa bagi keseluruhan 2.4.0.
+
+## Pembetulan
+
+- Label tab aktif tidak lagi terpotong. Butang Import kekal padat dengan ikon sahaja.
+- Import serentak disekat, kelompok mematuhi had 50 aktiviti dan kegagalan satu fail tidak menyekat fail seterusnya.
+- Muat naik berulang/serentak bagi imej sama bersifat idempoten pada pelayan. Kegagalan pemadaman jauh mengekalkan rujukan untuk percubaan semula.
+
+## Pembuangan dan keserasian
+
+- Tiada ciri pengguna sedia ada dibuang. Tema bermusim, ChromeOS, iframe dan presence terbina dikekalkan.
+- Penghurai nombor tidak digunakan dalam perkhidmatan status dibuang dan pembantu muat turun JSON eksport data dikongsi.
+- Aktiviti kekal setempat dan tidak disegerakkan dengan akaun. Perkongsian menggunakan fail, tanpa acara analitik baharu.
+
+## Teknikal dan privasi
+
+- Laluan muat naik, segar semula dan padam terikat pada peranti serta dilindungi token. Pengesahan tandatangan fail, MIME, saiz dan SHA-256; had 20 muat naik sejam setiap peranti.
+- Jadual `CustomAsset`, migrasi PostgreSQL, storan S3/R2 dan pembersihan imej tidak digunakan yang dilindungi ditambah. Storan dan jadual pembersihan perlu dikonfigurasi semasa penggunaan pelayan.
+- Eksport peranti merangkumi URL dan metadata imej dihoskan. Pemadaman data juga memadam objek jauh dan membolehkan percubaan semula jika gagal.
+- Kebenaran `unlimitedStorage` bagi salinan imej setempat, ujian perkongsian dan integrasi PostgreSQL serta pemformatan TypeScript ruang kerja tanpa mengubah submodul.

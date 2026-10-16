@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { RiAddLine } from "@remixicon/react";
+import { useRef, useState, type ChangeEvent } from "react";
+import { RiAddLine, RiUpload2Line } from "@remixicon/react";
 import { CustomActivityLiveCard } from "@/components/shared/custom-activity-live-card";
 import { ScreenBody, ScreenTitle } from "@/components/shared/screen";
 import { useExtensionState } from "@/hooks/extension-state-provider";
@@ -15,11 +15,14 @@ import { CustomActivityTemplatesSheet } from "@/features/custom-activity/custom-
 import type { CustomActivityTemplateId } from "@/features/custom-activity/custom-activity-templates";
 import { CustomActivityRow } from "@/features/custom-activity/custom-activity-row";
 import { useCustomActivityActions } from "@/features/custom-activity/use-custom-activity-actions";
+import { CustomActivityDropOverlay } from "@/features/custom-activity/custom-activity-drop-overlay";
+import { useCustomActivityShare } from "@/features/custom-activity/use-custom-activity-share";
+import { useFileDrop } from "@/features/custom-activity/use-file-drop";
 
 export const CustomActivityView = () => {
   const { state, updateSettings } = useExtensionState();
   const { t } = useI18n();
-  const { push } = useNav();
+  const { push, tab, stack } = useNav();
   const actions = useCustomActivityActions();
   const { items, activeId } = state.customActivities;
   const paused = state.settings.presencePaused === true;
@@ -40,6 +43,17 @@ export const CustomActivityView = () => {
     });
   };
   const canCreate = items.length < CUSTOM_ACTIVITIES_MAX;
+  const fileRef = useRef<HTMLInputElement>(null);
+  const share = useCustomActivityShare((activity) => open(activity.id));
+  const dragging = useFileDrop(
+    (files) => void share.importFiles(files),
+    state.ready && tab === "custom" && stack.length === 0 && !templatesOpen && !share.importing
+  );
+  const pickFiles = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files ?? []);
+    event.target.value = "";
+    if (files.length > 0) void share.importFiles(files);
+  };
 
   if (!state.ready) {
     return (
@@ -56,12 +70,23 @@ export const CustomActivityView = () => {
         title={t("custom.title")}
         subtitle={t("custom.subtitle")}
         action={
-          items.length > 0 &&
-          canCreate && (
-            <Button size="sm" icon={<RiAddLine className="size-4" />} onClick={() => setTemplatesOpen(true)}>
-              {t("custom.create")}
-            </Button>
-          )
+          <div className="flex items-center gap-2">
+            <Button
+              size="icon-sm"
+              variant="secondary"
+              aria-label={t("custom.import")}
+              title={t("custom.import")}
+              loading={share.importing}
+              disabled={!canCreate}
+              icon={<RiUpload2Line className="size-4" />}
+              onClick={() => fileRef.current?.click()}
+            />
+            {items.length > 0 && canCreate && (
+              <Button size="sm" icon={<RiAddLine className="size-4" />} onClick={() => setTemplatesOpen(true)}>
+                {t("custom.create")}
+              </Button>
+            )}
+          </div>
         }
       />
 
@@ -97,6 +122,8 @@ export const CustomActivityView = () => {
           <p className="px-1 text-label-md text-muted">{t("custom.list.replacesTabs")}</p>
         </Section>
       )}
+      <input ref={fileRef} type="file" accept=".json,application/json" multiple hidden onChange={pickFiles} />
+      {dragging && <CustomActivityDropOverlay />}
       <CustomActivityTemplatesSheet open={templatesOpen} onClose={() => setTemplatesOpen(false)} onPick={pickTemplate} />
     </ScreenBody>
   );

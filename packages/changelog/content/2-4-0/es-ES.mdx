@@ -1,21 +1,53 @@
 ---
 title: 2.4.0
 date: 15 de octubre de 2026
-description: Una nueva pestaña Personal para mostrar cualquier actividad en Discord sin presencia, con plantillas, imágenes, temporizadores y botones, y una barra de navegación personalizable.
+description: Crea y comparte actividades de Discord con plantillas, imágenes, temporizadores y botones. Importación y exportación JSON y navegación personalizable.
 stores: [chrome, firefox]
 ---
 
 ## Novedades
 
-- Actividades personalizadas: una nueva pestaña Personal para mostrar en Discord una actividad escrita por ti, sin instalar ninguna presencia. Elige un nombre, un tipo (Jugando, Escuchando, Viendo, Compitiendo), dos líneas de texto, una imagen grande y una pequeña con texto al pasar el cursor, tiempo transcurrido o cuenta atrás, y hasta dos botones.
-- Guarda tantas actividades personalizadas como quieras y activa una con un interruptor. Mientras está activa, reemplaza la actividad de tus pestañas.
-- Imágenes a tu manera: sube un archivo (redimensionado automáticamente, 1 MB como máximo), pega un enlace https, elige un icono de color entre 24 o mantén el logo de Nowly. Las imágenes subidas se guardan en tu dispositivo y se vuelven a enviar automáticamente si caducaron tras 30 días sin uso.
-- Diez plantillas para empezar (Estudiando, Programando, Noche de juegos, Mi playlist, Noche de cine, En directo, Deporte, De viaje, Pausa para el café, Concentración).
-- Una vista previa en directo en el editor, fiel a lo que muestra Discord.
-- Una barra de navegación personalizable: mantén pulsada una pestaña para moverla o sácala por un lado para crear otra barra. Puedes restablecerla cuando quieras desde Ajustes.
+### Actividades personalizadas
+
+- Nueva pestaña Personal para crear, editar y eliminar actividades de Discord sin instalar una presencia de un sitio. Nolo presenta la función en el primer uso.
+- Guarda hasta 50 actividades en el dispositivo. Solo una puede estar activa; tiene prioridad sobre las presencias de las pestañas hasta desactivarla.
+- Configura nombre, tipo (Jugando, Escuchando, Viendo, Compitiendo), dos líneas de texto, imágenes grande y pequeña con texto al pasar el cursor y hasta dos botones HTTPS.
+- Tiempo transcurrido o cuenta atrás de 5 minutos a 24 horas. El temporizador comienza al activar la actividad, no al crearla.
+- Diez plantillas: Estudiar, Programar, Noche de juegos, Playlist, Noche de cine, Directo, Entrenamiento, Viaje, Pausa para café y Concentración. Rellenan el editor sin guardar hasta que lo confirmes.
+- Vista previa en directo y tarjeta dedicada para abrir, detener o reanudar la actividad actual.
+
+### Imágenes y compartir
+
+- Sube PNG, JPEG, WebP o GIF, usa una URL HTTPS o elige entre 24 iconos y 10 colores. Sin imagen grande se muestra el logo de Nowly; sin imagen pequeña no hay insignia.
+- Las imágenes que no son GIF se redimensionan y convierten automáticamente. Límite de 1 MiB por imagen; los GIF no se convierten. La copia local permite vistas previas y nuevos envíos; Discord recibe la URL alojada.
+- Las imágenes activas se refrescan periódicamente. Los archivos alojados sin uso durante 30 días pueden limpiarse y volver a subirse desde su copia local cuando haga falta.
+- Exporta una actividad guardada como `[Nombre].json`. Se exporta la última versión guardada, no los cambios pendientes, con textos, tipo, temporizador, botones e imágenes subidas incrustadas desde la copia local. Si falta la copia, se omite esa imagen.
+- No se exportan los identificadores locales, fechas de creación/modificación, estado de activación ni URLs de alojamiento de imágenes subidas. Los enlaces HTTPS introducidos sí permanecen: revisa el archivo antes de compartirlo.
+- Importa uno o varios archivos mediante el botón de icono Importar, con etiqueta accesible y descripción emergente, o arrastrándolos a la pestaña Personal visible. No se interceptan otras pantallas.
+- Cada importación crea una actividad nueva e inactiva, sin sobrescribir las existentes. Una importación abre el editor; varias muestran un resumen.
+- Se rechazan archivos de más de 4 MiB, formatos/versiones incompatibles y actividades inválidas. Las imágenes incrustadas se validan y se vuelven a subir; si una falla, la actividad se conserva sin ella y aparece un aviso.
 
 ## Mejoras
 
-- Las tarjetas de actividad siguen el diseño de Discord según el tipo: "Jugando a" muestra el nombre en su propia línea, Escuchando, Viendo y Compitiendo lo colocan junto al verbo.
-- Los diálogos ahora flotan sobre el panel en lugar de pegarse al borde inferior.
-- La etiqueta de la pestaña activa ya no se corta.
+- Navegación personalizable: mantén pulsada una pestaña para moverla o arrástrala hacia un lado para crear otro grupo. Restablece la distribución desde Ajustes.
+- Tarjetas y vista previa siguen el diseño de Discord: Jugando muestra el nombre aparte; Escuchando, Viendo y Compitiendo lo ponen en el encabezado. Diálogos flotantes y estado vacío con ejemplos y plantillas.
+- Funciones y errores traducidos a los 11 idiomas, con 178 claves nuevas por idioma en toda la 2.4.0.
+
+## Correcciones
+
+- La etiqueta de la pestaña activa ya no se corta. El botón Importar es compacto y solo muestra el icono.
+- Se bloquean importaciones simultáneas, los lotes respetan el límite de 50 actividades y un archivo fallido no impide procesar los siguientes.
+- Los envíos repetidos o simultáneos de la misma imagen son idempotentes en el servidor. Si falla el borrado remoto, se conservan las referencias para reintentarlo.
+
+## Eliminaciones y compatibilidad
+
+- No se elimina ninguna función existente. Se mantienen temas estacionales, ChromeOS, iframes y presencias incluidas.
+- Eliminado el analizador numérico sin uso del servicio de estado y unificado el ayudante de descarga JSON del exportador de datos.
+- Las actividades permanecen locales y no se sincronizan con la cuenta. Se comparten mediante archivos y no se añaden eventos de analítica.
+
+## Técnica y privacidad
+
+- Rutas de subida, refresco y borrado vinculadas al dispositivo y protegidas por su token. Validación de firma, MIME, tamaño y SHA-256; límite de 20 subidas por hora y dispositivo.
+- Nueva tabla `CustomAsset`, migración PostgreSQL, almacenamiento S3/R2 y limpieza protegida de imágenes sin uso. El almacenamiento y la programación de limpieza requieren configuración al desplegar.
+- La exportación del dispositivo incluye URLs y metadatos de imágenes alojadas. El borrado también elimina los objetos remotos y permite reintentos tras fallos.
+- Permiso `unlimitedStorage` para copias locales, pruebas de compartir e integración PostgreSQL y formateo TypeScript del workspace sin modificar submódulos.

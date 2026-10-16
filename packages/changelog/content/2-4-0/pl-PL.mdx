@@ -1,21 +1,53 @@
 ---
 title: 2.4.0
 date: 15 października 2026
-description: Nowa karta Własne do pokazywania dowolnej aktywności na Discordzie bez presence, z szablonami, obrazami, licznikami czasu i przyciskami, oraz konfigurowalny pasek nawigacji.
+description: Twórz i udostępniaj aktywności Discorda z szablonami, obrazami, czasem i przyciskami. Import i eksport JSON oraz konfigurowalna nawigacja.
 stores: [chrome, firefox]
 ---
 
 ## Nowości
 
-- Własne aktywności: nowa karta Własne do pokazywania na Discordzie aktywności napisanej przez Ciebie, bez instalowania presence. Ustaw nazwę, typ (Gra, Słucha, Ogląda, Rywalizuje), dwie linijki tekstu, duży i mały obraz z tekstem po najechaniu, upływający czas lub odliczanie oraz maksymalnie dwa przyciski.
-- Zapisuj dowolnie wiele własnych aktywności i włączaj jedną przełącznikiem. Dopóki jest włączona, zastępuje aktywność z Twoich kart.
-- Obrazy po Twojemu: prześlij plik (automatycznie zmniejszany, maks. 1 MB), wklej link https, wybierz jedną z 24 kolorowych ikon lub zostaw logo Nowly. Przesłane obrazy zostają na Twoim urządzeniu i są automatycznie wysyłane ponownie, jeśli wygasły po 30 dniach bez użycia.
-- Dziesięć szablonów na start (Nauka, Programowanie, Wieczór gier, Moja playlista, Wieczór filmowy, Na żywo, Trening, W podróży, Przerwa na kawę, Skupienie).
-- Podgląd na żywo w edytorze, zgodny z tym, co pokazuje Discord.
-- Konfigurowalny pasek nawigacji: przytrzymaj kartę, aby ją przesunąć, albo wyciągnij ją w bok, aby utworzyć kolejny pasek. Możesz go zresetować w Ustawieniach.
+### Własne aktywności
+
+- Nowa karta Własne umożliwia tworzenie, edytowanie i usuwanie aktywności Discorda bez instalowania presence witryny. Nolo przedstawia funkcję przy pierwszym użyciu.
+- Zapisz do 50 aktywności na urządzeniu. Tylko jedna może być aktywna i ma pierwszeństwo przed presence kart przeglądarki do czasu wyłączenia.
+- Ustaw nazwę, typ (Gra, Słucha, Ogląda, Rywalizuje), dwie linie tekstu, duży/mały obraz z tekstem po najechaniu i maksymalnie dwa przyciski HTTPS.
+- Czas od rozpoczęcia lub odliczanie od 5 minut do 24 godzin. Zegar startuje przy aktywacji, nie przy utworzeniu.
+- Dziesięć szablonów: Nauka, Programowanie, Wieczór gier, Playlista, Wieczór filmowy, Na żywo, Trening, Podróż, Przerwa na kawę i Skupienie. Wypełniają edytor, ale zapis wymaga potwierdzenia.
+- Podgląd na żywo i osobna karta do otwierania, zatrzymywania lub wznawiania bieżącej aktywności.
+
+### Obrazy i udostępnianie
+
+- Prześlij PNG, JPEG, WebP lub GIF, użyj URL HTTPS albo wybierz spośród 24 ikon i 10 kolorów. Brak dużego obrazu oznacza logo Nowly, brak małego oznacza brak odznaki.
+- Obrazy poza GIF są automatycznie skalowane i konwertowane. Limit to 1 MiB na obraz; GIF pozostaje bez konwersji. Lokalna kopia służy do podglądu i ponownego wysłania, a Discord otrzymuje hostowany URL.
+- Aktywne obrazy są regularnie odświeżane. Hostowane pliki nieużywane przez 30 dni mogą być usuwane i w razie potrzeby ponownie wysyłane z lokalnej kopii.
+- Eksport zapisanej aktywności do `[Nazwa].json` obejmuje tekst, typ, zegar, przyciski i przesłane obrazy osadzone z kopii lokalnej. Używa ostatniego zapisu, nie niezapisanych zmian. Brakujący lokalnie obraz jest pomijany.
+- Lokalne ID, daty utworzenia/zmiany, stan aktywacji i adresy hostowania przesłanych obrazów nie są eksportowane. Wpisane linki HTTPS pozostają: sprawdź plik przed udostępnieniem.
+- Import jednego lub wielu plików przyciskiem z ikoną, etykietą dostępności i podpowiedzią albo przez upuszczenie na widoczną kartę Własne. Inne ekrany nie przechwytują plików.
+- Import tworzy nową, nieaktywną aktywność bez nadpisywania istniejących. Pojedynczy otwiera edytor do sprawdzenia, wielokrotny pokazuje podsumowanie.
+- Pliki ponad 4 MiB, niezgodne formaty/wersje i nieprawidłowe aktywności są odrzucane. Osadzone obrazy są sprawdzane i ponownie przesyłane; błąd obrazu zachowuje aktywność bez niego i wyświetla ostrzeżenie.
 
 ## Ulepszenia
 
-- Karty aktywności odwzorowują układ Discorda dla każdego typu: „Gra w” pokazuje nazwę w osobnej linii, Słucha, Ogląda i Rywalizuje umieszczają ją obok czasownika.
-- Okna dialogowe unoszą się teraz nad panelem zamiast przylegać do dolnej krawędzi.
-- Nazwa aktywnej karty nie jest już ucinana.
+- Przytrzymaj kartę, aby ją przesunąć, lub wyciągnij na bok, by utworzyć kolejną grupę. Układ można zresetować w Ustawieniach.
+- Karty i podgląd odpowiadają Discordowi: Gra pokazuje nazwę osobno, pozostałe typy w nagłówku. Okna dialogowe unoszą się nad panelem, a pusty ekran oferuje przykłady i szablony.
+- Funkcje i błędy przetłumaczono na wszystkie 11 języków, łącznie dodając 178 kluczy na język w 2.4.0.
+
+## Poprawki
+
+- Etykieta aktywnej karty nie jest już ucinana. Import pozostaje kompaktowym przyciskiem z samą ikoną.
+- Równoczesne importy są blokowane, serie respektują limit 50 aktywności, a błąd pliku nie blokuje kolejnych.
+- Powtórzone i równoczesne wysyłki tego samego obrazu są idempotentne na serwerze. Nieudane zdalne usunięcie zachowuje odniesienia do ponowienia.
+
+## Usunięcia i zgodność
+
+- Nie usunięto istniejących funkcji użytkownika. Zachowano motywy sezonowe, ChromeOS, iframe i dołączone presence.
+- Usunięto nieużywany parser liczbowy usługi statusu i ujednolicono pomocnicze pobieranie JSON dla eksportu danych.
+- Aktywności pozostają lokalne i nie synchronizują się z kontem. Udostępnianie przez pliki, bez nowych zdarzeń analitycznych.
+
+## Technika i prywatność
+
+- Przesyłanie, odświeżanie i usuwanie obrazów powiązane z urządzeniem, chronione tokenem. Weryfikacja sygnatury, MIME, rozmiaru i SHA-256 oraz limit 20 wysyłek na godzinę na urządzenie.
+- Nowa tabela `CustomAsset`, migracja PostgreSQL, magazyn S3/R2 i chronione czyszczenie nieużywanych obrazów. Magazyn i harmonogram wymagają konfiguracji przy wdrożeniu.
+- Eksport urządzenia obejmuje URL i metadane hostowanych obrazów. Usunięcie danych usuwa też zdalne obiekty, z możliwością ponowienia po błędzie.
+- Uprawnienie `unlimitedStorage` dla lokalnych kopii, testy udostępniania i integracji PostgreSQL oraz formatowanie TypeScript bez zmian podmodułów.

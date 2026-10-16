@@ -1,21 +1,53 @@
 ---
 title: 2.4.0
 date: 15. Oktober 2026
-description: Ein neuer Tab Eigene, um jede Aktivität ohne Präsenz auf Discord zu zeigen, mit Vorlagen, Bildern, Timern und Buttons, dazu eine anpassbare Navigationsleiste.
+description: Eigene Discord-Aktivitäten erstellen und teilen, mit Vorlagen, Bildern, Timern, Buttons, JSON-Import und -Export sowie anpassbarer Navigation.
 stores: [chrome, firefox]
 ---
 
 ## Neuigkeiten
 
-- Eigene Aktivitäten: ein neuer Tab Eigene, um auf Discord eine selbst geschriebene Aktivität zu zeigen, ganz ohne Präsenz. Wähle einen Namen, eine Art (Spielt, Hört, Schaut, Nimmt teil), zwei Textzeilen, ein großes und ein kleines Bild mit Text beim Überfahren, vergangene Zeit oder einen Countdown und bis zu zwei Buttons.
-- Speichere beliebig viele eigene Aktivitäten und schalte eine mit einem Schalter ein. Solange sie läuft, ersetzt sie die Aktivität deiner Tabs.
-- Bilder, wie du willst: lade eine Datei hoch (automatisch verkleinert, max. 1 MB), füge einen https-Link ein, wähle eines von 24 farbigen Symbolen oder behalte das Nowly-Logo. Hochgeladene Bilder bleiben auf deinem Gerät und werden automatisch erneut gesendet, wenn sie nach 30 Tagen ohne Nutzung abgelaufen sind.
-- Zehn Vorlagen zum Start (Lernen, Programmieren, Spieleabend, Meine Playlist, Filmabend, Live, Sport, Unterwegs, Kaffeepause, Fokus).
-- Eine Live-Vorschau im Editor, die zeigt, was Discord anzeigt.
-- Eine anpassbare Navigationsleiste: halte einen Tab gedrückt, um ihn zu verschieben, oder zieh ihn seitlich heraus für eine weitere Leiste. Jederzeit in den Einstellungen zurücksetzbar.
+### Eigene Aktivitäten
+
+- Im neuen Tab Eigene kannst du Discord-Aktivitäten erstellen, bearbeiten und löschen, ohne eine Website-Präsenz zu installieren. Nolo stellt die Funktion bei der ersten Nutzung vor.
+- Speichere bis zu 50 Aktivitäten auf deinem Gerät. Es ist immer nur eine aktiv; sie hat bis zum Ausschalten Vorrang vor Tab-Präsenzen.
+- Wähle Name, Typ (Spielt, Hört, Schaut, Nimmt teil), zwei Textzeilen, großes/kleines Bild mit Hover-Text und bis zu zwei HTTPS-Buttons.
+- Verstrichene Zeit oder Countdown von 5 Minuten bis 24 Stunden. Der Timer beginnt beim Aktivieren, nicht beim Erstellen.
+- Zehn Vorlagen für Lernen, Programmieren, Spieleabend, Playlist, Filmabend, Live, Sport, Reisen, Kaffeepause und Fokus füllen den Editor aus. Gespeichert wird erst nach Bestätigung.
+- Live-Vorschau im Editor und eine eigene Karte zum Öffnen, Stoppen oder Fortsetzen der aktuellen Aktivität.
+
+### Bilder und Teilen
+
+- PNG, JPEG, WebP und GIF hochladen, eine HTTPS-URL nutzen oder aus 24 Symbolen und 10 Farben wählen. Ohne großes Bild erscheint das Nowly-Logo, ohne kleines Bild kein Badge.
+- Bilder außer GIF werden automatisch verkleinert und konvertiert; maximal 1 MiB pro Bild. GIFs bleiben unverändert. Lokale Kopien dienen der Vorschau und dem erneuten Upload; Discord erhält die gehostete URL.
+- Aktive Bilder werden regelmäßig aufgefrischt. Nach 30 Tagen ohne Nutzung können gehostete Dateien bereinigt und bei Bedarf aus der lokalen Kopie erneut hochgeladen werden.
+- Gespeicherte Aktivitäten als `[Name].json` exportieren. Exportiert wird der gespeicherte Stand, nicht ungespeicherte Änderungen, mit Texten, Typ, Timer, Buttons und lokal eingebetteten Upload-Bildern. Fehlt eine lokale Kopie, entfällt dieses Bild.
+- Lokale IDs, Erstellungs-/Änderungsdaten, Aktivierungsstatus und Hosting-URLs hochgeladener Bilder werden nicht geteilt. Eingetragene HTTPS-Links bleiben enthalten: vor dem Teilen prüfen.
+- Eine oder mehrere Dateien über den Import-Icon-Button mit zugänglicher Beschriftung und Tooltip oder per Drag-and-drop im sichtbaren Tab Eigene importieren. Andere Ansichten werden nicht abgefangen.
+- Jeder Import erstellt eine neue, inaktive Aktivität ohne vorhandene zu überschreiben. Ein Einzelimport öffnet den Editor, mehrere zeigen eine Zusammenfassung.
+- Dateien über 4 MiB, inkompatible Formate/Versionen und ungültige Aktivitäten werden abgelehnt. Eingebettete Bilder werden geprüft und erneut hochgeladen; schlägt ein Bild fehl, bleibt die Aktivität ohne dieses Bild erhalten und eine Warnung erscheint.
 
 ## Verbesserungen
 
-- Aktivitätskarten folgen je nach Art dem Layout von Discord: „Spielt“ zeigt den Namen in einer eigenen Zeile, Hört, Schaut und Nimmt teil setzen ihn neben das Verb.
-- Dialoge schweben jetzt über dem Panel, statt am unteren Rand zu kleben.
-- Die Beschriftung des aktiven Tabs wird nicht mehr abgeschnitten.
+- Navigation anpassen: Tab gedrückt halten und verschieben oder seitlich herausziehen, um eine weitere Gruppe anzulegen. Das Layout lässt sich in den Einstellungen zurücksetzen.
+- Karten und Vorschau folgen Discord: Spielen zeigt den Namen separat, Hören, Schauen und Teilnehmen im Kopfbereich. Dialoge schweben über dem Panel; der leere Tab zeigt Beispiele und Vorlagen.
+- Funktionen und Fehlermeldungen in allen 11 Sprachen, mit insgesamt 178 neuen Schlüsseln je Sprache in 2.4.0.
+
+## Fehlerbehebungen
+
+- Die Beschriftung des aktiven Tabs wird nicht mehr abgeschnitten. Import bleibt als Icon-Button kompakt.
+- Gleichzeitige Importe werden blockiert, Stapel beachten das Limit von 50 Aktivitäten und eine fehlerhafte Datei blockiert spätere Dateien nicht.
+- Wiederholte/gleichzeitige Uploads desselben Bildes sind serverseitig idempotent. Fehlgeschlagene entfernte Löschungen behalten Referenzen für einen erneuten Versuch.
+
+## Entfernungen und Kompatibilität
+
+- Keine bestehende Nutzerfunktion entfernt. Saisonale Designs, ChromeOS, Iframes und gebündelte Präsenzen bleiben erhalten.
+- Unbenutzten Zahlenparser im Statusdienst entfernt und den JSON-Download des Datenexports in einen gemeinsamen Helfer ausgelagert.
+- Eigene Aktivitäten bleiben lokal und werden nicht mit Konten synchronisiert. Teilen erfolgt per Datei, ohne neue Analytics-Ereignisse.
+
+## Technik und Datenschutz
+
+- Gerätegebundene Upload-, Auffrischungs- und Löschrouten mit Geräte-Token, Prüfung von Dateisignatur, MIME-Typ, Größe und SHA-256 sowie 20 Uploads pro Stunde und Gerät.
+- Neue Tabelle `CustomAsset`, PostgreSQL-Migration, S3/R2-Speicher und geschützte Bereinigung ungenutzter Bilder. Speicher und Zeitplan müssen beim Deployment eingerichtet werden.
+- Geräteexporte enthalten URLs und Metadaten gehosteter Bilder. Beim Löschen von Gerätedaten werden entfernte Objekte ebenfalls gelöscht, bei Fehlern erneut versuchbar.
+- `unlimitedStorage` für lokale Bildkopien, Tests für Teilen und PostgreSQL-Integration sowie Formatierung der TypeScript-Quellen ohne Änderungen an Submodulen.

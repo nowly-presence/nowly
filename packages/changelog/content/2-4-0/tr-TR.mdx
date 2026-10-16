@@ -1,21 +1,53 @@
 ---
 title: 2.4.0
 date: 15 Ekim 2026
-description: Presence olmadan istediğin aktiviteyi Discord'da göstermek için yeni Özel sekmesi: şablonlar, görseller, sayaçlar ve butonlar, ayrıca özelleştirilebilir bir gezinme çubuğu.
+description: Şablonlar, görseller, sayaçlar ve butonlarla Discord aktiviteleri oluştur ve paylaş. JSON içe/dışa aktarma ve özelleştirilebilir gezinme.
 stores: [chrome, firefox]
 ---
 
 ## Yenilikler
 
-- Özel aktiviteler: Kendi yazdığın bir aktiviteyi presence kurmadan Discord'da göstermek için yeni Özel sekmesi. Bir ad, bir tür (Oynuyor, Dinliyor, İzliyor, Yarışıyor), iki satır metin, üzerine gelince metin gösteren büyük ve küçük görsel, geçen süre veya geri sayım ve en fazla iki buton ayarla.
-- İstediğin kadar özel aktivite kaydet ve birini tek bir anahtarla aç. Açıkken sekmelerindeki aktivitenin yerini alır.
-- Görseller senin tercihinle: bir dosya yükle (otomatik küçültülür, en fazla 1 MB), bir https bağlantısı yapıştır, 24 renkli simgeden birini seç ya da Nowly logosunu kullan. Yüklenen görseller cihazında kalır ve 30 gün kullanılmadığı için süresi dolarsa otomatik olarak yeniden gönderilir.
-- Başlamak için on şablon (Ders çalışıyorum, Kod yazıyorum, Oyun gecesi, Çalma listem, Film gecesi, Canlı yayında, Spor, Seyahatteyim, Kahve molası, Odak).
-- Düzenleyicide, Discord'un gösterdiğiyle aynı canlı önizleme.
-- Özelleştirilebilir gezinme çubuğu: bir sekmeyi taşımak için basılı tut ya da yeni bir çubuk için yana çek. Ayarlar'dan istediğin zaman sıfırlayabilirsin.
+### Özel aktiviteler
+
+- Yeni Özel sekmesinde site presence'ı kurmadan Discord aktiviteleri oluştur, düzenle ve sil. Nolo ilk kullanımda özelliği tanıtır.
+- Cihazda en fazla 50 aktivite kaydet. Aynı anda yalnızca biri etkin olabilir; kapatılana kadar sekme presence'larından önceliklidir.
+- Ad, tür (Oynuyor, Dinliyor, İzliyor, Yarışıyor), iki satır metin, üzerine gelince metin gösteren büyük/küçük görseller ve en fazla iki HTTPS butonu ayarla.
+- Geçen süre veya 5 dakika ile 24 saat arasında geri sayım seç. Sayaç oluşturulurken değil etkinleştirilirken başlar.
+- Ders, Kodlama, Oyun gecesi, Çalma listesi, Film gecesi, Canlı, Egzersiz, Seyahat, Kahve molası ve Odaklanma için on şablon. Düzenleyiciyi doldurur, onaydan önce kaydetmez.
+- Canlı önizleme ve mevcut aktiviteyi açma, durdurma veya sürdürme kartı eklendi.
+
+### Görseller ve paylaşım
+
+- PNG, JPEG, WebP veya GIF yükle, HTTPS URL kullan ya da 24 simge ve 10 renk arasından seç. Büyük görsel yoksa Nowly logosu, küçük görsel yoksa rozet gösterilmez.
+- GIF dışındaki görseller otomatik küçültülüp dönüştürülür. Görsel başına sınır 1 MiB, GIF'ler dönüştürülmez. Yerel kopyalar önizleme ve yeniden yükleme içindir; Discord barındırılan URL'yi alır.
+- Etkin görseller düzenli yenilenir. 30 gün kullanılmayan uzak dosyalar temizlenebilir; süresi dolan görseller gerektiğinde yerel kopyadan tekrar yüklenir.
+- Kayıtlı aktiviteyi `[Ad].json` olarak dışa aktar. Kaydedilmemiş değişiklikler değil son kayıt kullanılır; metin, tür, sayaç, butonlar ve yerel kopyadan gömülü görseller içerir. Yerel kopyası olmayan görsel atlanır.
+- Yerel kimlikler, oluşturma/güncelleme tarihleri, etkinlik durumu ve yüklenen görsellerin barındırma URL'leri aktarılmaz. Girilen HTTPS bağlantıları kalır: paylaşmadan önce kontrol et.
+- Erişilebilir etiketli ve ipuçlu simge butonundan birden çok dosya içe aktar veya görünür Özel sekmesine bırak. Diğer ekranlar dosyaları yakalamaz.
+- Her içe aktarma mevcutların üzerine yazmadan yeni ve devre dışı bir aktivite oluşturur. Tek dosya düzenleyiciyi açar, çoklu dosya özet gösterir.
+- 4 MiB üzerindeki dosyalar, uyumsuz biçim/sürümler ve geçersiz aktiviteler reddedilir. Gömülü görseller doğrulanıp yeniden yüklenir; bir görsel başarısızsa aktivite onsuz korunur ve uyarı gösterilir.
 
 ## İyileştirmeler
 
-- Aktivite kartları türe göre Discord düzenini izler: "Oynuyor" adı ayrı bir satırda gösterir, Dinliyor, İzliyor ve Yarışıyor adı fiilin yanına koyar.
-- İletişim kutuları artık panelin alt kenarına yapışmak yerine üzerinde yüzer.
-- Etkin sekmenin adı artık kesilmiyor.
+- Sekmeyi basılı tutup taşı veya yana çekerek yeni grup oluştur. Düzeni Ayarlar'dan sıfırla.
+- Kart ve önizleme Discord düzenini izler: Oynuyor adı ayrı satırda, diğer türler başlıkta gösterir. Diyaloglar panel üzerinde yüzer; boş ekran örnekler ve şablonlar sunar.
+- Özellik ve hatalar 11 dilde çevrildi; 2.4.0 genelinde dil başına 178 yeni anahtar eklendi.
+
+## Düzeltmeler
+
+- Etkin sekmenin etiketi artık kesilmiyor. İçe aktarma butonu yalnızca simge göstererek küçük kalıyor.
+- Eşzamanlı içe aktarmalar engellenir, toplu işlemler 50 aktivite sınırına uyar ve bir dosya hatası sonraki dosyaları durdurmaz.
+- Aynı görselin tekrarlanan/eşzamanlı yüklemeleri sunucuda idempotenttir. Uzak silme hatalarında yeniden denemek için referanslar korunur.
+
+## Kaldırılanlar ve uyumluluk
+
+- Mevcut kullanıcı özelliği kaldırılmadı. Mevsimsel temalar, ChromeOS, iframe ve paketlenmiş presence'lar korundu.
+- Durum servisindeki kullanılmayan sayı ayrıştırıcısı kaldırıldı ve veri dışa aktarmadaki JSON indirme yardımcısı ortaklaştırıldı.
+- Aktiviteler yerel kalır ve hesapla eşitlenmez. Paylaşım dosya üzerinden yapılır, yeni analiz olayı eklenmez.
+
+## Teknik ve gizlilik
+
+- Cihaza bağlı, cihaz belirteciyle korunan görsel yükleme, yenileme ve silme yolları. Dosya imzası, MIME, boyut ve SHA-256 doğrulaması; cihaz başına saatte 20 yükleme sınırı.
+- `CustomAsset` tablosu, PostgreSQL geçişi, S3/R2 depolama ve korumalı kullanılmayan görsel temizliği eklendi. Depolama ve temizlik takvimi dağıtımda yapılandırılmalı.
+- Cihaz dışa aktarması barındırılan görsel URL ve metaverilerini içerir. Veri silme uzak nesneleri de siler, hatadan sonra yeniden denenebilir.
+- Yerel görseller için `unlimitedStorage`, paylaşım ve PostgreSQL entegrasyon testleri, alt modülleri değiştirmeden çalışma alanı TypeScript biçimlendirmesi eklendi.

@@ -1,21 +1,59 @@
 ---
 title: 2.4.0
 date: 15 octobre 2026
-description: Un nouvel onglet Perso pour afficher n'importe quelle activité sur Discord sans présence, avec modèles, images, minuteurs et boutons, et une barre de navigation personnalisable.
+description: Créez et partagez vos activités Discord avec des modèles, images, minuteurs et boutons. Import et export JSON, navigation personnalisable et gestion des images enrichie.
 stores: [chrome, firefox]
 ---
 
 ## Nouveautés
 
-- Activités personnalisées : un nouvel onglet Perso pour afficher sur Discord une activité que vous écrivez vous-même, sans présence à installer. Choisissez un nom, un type (Joue, Écoute, Regarde, Participe), deux lignes de texte, une grande et une petite image avec texte au survol, un temps écoulé ou un compte à rebours, et jusqu'à deux boutons.
-- Enregistrez autant d'activités personnalisées que vous voulez et activez-en une d'un simple interrupteur. Tant qu'elle est active, elle remplace l'activité de vos onglets.
-- Des images à votre façon : envoyez un fichier (redimensionné automatiquement, 1 Mo max), collez un lien https, choisissez une icône colorée parmi 24, ou gardez le logo Nowly. Les images envoyées restent sur votre appareil et sont renvoyées automatiquement si elles ont expiré après 30 jours sans utilisation.
-- Dix modèles pour démarrer (Révisions, Code, Soirée jeux, Ma playlist, Soirée film, En live, Sport, En voyage, Pause café, Concentration).
-- Un aperçu en direct dans l'éditeur, fidèle à ce qu'affiche Discord.
-- Une barre de navigation personnalisable : restez appuyé sur un onglet pour le déplacer, ou sortez-le d'un côté pour créer une autre barre. Réinitialisable à tout moment depuis les Réglages.
+### Activités personnalisées
+
+- Nouvel onglet Perso pour créer, modifier et supprimer vos propres activités Discord, sans présence de site à installer. Nolo présente cette nouveauté à la première utilisation.
+- Enregistrez jusqu'à 50 activités sur votre appareil. Une seule peut être active à la fois : elle prend la priorité sur les présences de vos onglets jusqu'à sa désactivation.
+- Personnalisez le nom, le type (Joue, Écoute, Regarde, Participe), deux lignes de texte, une grande et une petite image avec texte au survol, et jusqu'à deux boutons avec lien HTTPS.
+- Choisissez un temps écoulé ou un compte à rebours de 5 minutes à 24 heures. Le minuteur démarre à l'activation, pas à la création de l'activité.
+- Dix modèles préremplissent l'éditeur : Révisions, Code, Soirée jeux, Playlist, Soirée film, Live, Sport, Voyage, Pause café et Concentration. Rien n'est enregistré avant votre confirmation.
+- Un aperçu en direct permet de vérifier le rendu pendant la modification. Une carte dédiée permet de retrouver, arrêter ou reprendre l'activité en cours.
+
+### Images
+
+- Envoyez un fichier PNG, JPEG, WebP ou GIF, utilisez une URL HTTPS ou choisissez parmi 24 icônes et 10 couleurs. Sans grande image, le logo Nowly est utilisé ; sans petite image, aucun badge n'est affiché.
+- Les images hors GIF sont redimensionnées et converties automatiquement avant l'envoi. La limite est de 1 Mio par image ; les GIF sont conservés sans conversion.
+- Une copie des fichiers envoyés est conservée sur l'appareil pour l'aperçu et le renvoi automatique. Discord utilise leur URL hébergée, pas le fichier local.
+- Les images actives sont rafraîchies régulièrement. Les fichiers hébergés inutilisés depuis 30 jours peuvent être nettoyés ; une image expirée est renvoyée depuis sa copie locale lorsque nécessaire.
+
+### Partage et import
+
+- Exportez une activité enregistrée depuis son éditeur dans un fichier `[Nom].json`. L'export utilise la dernière version enregistrée, pas les modifications non sauvegardées.
+- Le fichier contient les textes, le type, les images, le minuteur et les boutons. Les images envoyées sont embarquées depuis leur copie locale, sans reprendre leur URL d'hébergement ; une copie manquante est exportée sans image.
+- Les identifiants locaux, les dates de création/modification et l'état d'activation ne sont pas exportés. Les liens HTTPS saisis dans l'activité restent présents : vérifiez le contenu avant de partager le fichier.
+- Importez un ou plusieurs fichiers avec le bouton à icône Importer, doté d'un libellé accessible et d'une infobulle, ou déposez-les dans l'onglet Perso. Le glisser-déposer n'intercepte pas les autres écrans.
+- Chaque import crée une nouvelle activité sans l'activer ni écraser une activité existante. Un import unique ouvre l'éditeur pour vérification ; un import multiple affiche un bilan.
+- Les fichiers de plus de 4 Mio, les formats ou versions incompatibles et les activités invalides sont refusés. Les images embarquées sont validées puis envoyées à nouveau ; si une image ne peut pas être importée, l'activité est conservée sans cette image et un avertissement s'affiche.
 
 ## Améliorations
 
-- Les cartes d'activité suivent la présentation de Discord selon le type : « Joue à » affiche le nom sur sa propre ligne, Écoute, Regarde et Participe le placent à côté du verbe.
-- Les fenêtres de dialogue flottent désormais au-dessus du panneau au lieu d'être collées en bas.
-- Le libellé de l'onglet actif n'est plus coupé.
+- La barre de navigation est personnalisable : maintenez un onglet pour le déplacer, ou tirez-le sur un côté pour créer un autre groupe. Les réglages permettent de réinitialiser cette disposition.
+- Les cartes et l'aperçu suivent la présentation Discord selon le type : Joue garde le nom sur sa propre ligne ; Écoute, Regarde et Participe l'affichent dans l'en-tête.
+- Les dialogues flottent au-dessus du panneau au lieu de rester collés à son bord inférieur. L'état vide de Perso propose des exemples et un accès aux modèles.
+- Les nouvelles fonctionnalités et leurs messages d'erreur sont traduits dans les 11 langues, avec 178 nouvelles clés par langue sur l'ensemble de la 2.4.0.
+
+## Corrections
+
+- Le libellé de l'onglet actif n'est plus tronqué. Le bouton Importer reste compact grâce à son affichage sous forme d'icône.
+- Les imports simultanés sont bloqués et les imports multiples respectent la limite de 50 activités. Une erreur sur un fichier n'empêche pas le traitement des suivants.
+- Les envois répétés ou simultanés d'une même image sont idempotents côté serveur. En cas d'échec d'effacement du stockage distant, les références sont conservées pour permettre une nouvelle tentative.
+
+## Suppressions et compatibilité
+
+- Aucune fonctionnalité utilisateur existante n'est supprimée. Les thèmes saisonniers, ChromeOS, les iframes et les présences embarquées restent pris en charge.
+- Suppression du parseur numérique inutilisé du service de statut et mutualisation du téléchargement JSON, auparavant dupliqué dans l'export des données.
+- Les activités personnalisées restent locales et ne sont pas synchronisées avec le compte. Le partage se fait par fichier ; aucun nouvel événement analytics n'est ajouté.
+
+## Technique et confidentialité
+
+- Ajout d'un stockage d'images lié à l'appareil : routes d'envoi, de rafraîchissement et de suppression protégées par le jeton appareil, validation de la signature du fichier, du type MIME, de la taille et du SHA-256, avec une limite de 20 envois par heure et par appareil.
+- Nouvelle table `CustomAsset`, migration PostgreSQL, stockage compatible S3/R2 et route de nettoyage protégée pour les images inutilisées. Le stockage et la planification du nettoyage doivent être configurés au déploiement.
+- L'export des données de l'appareil inclut les URLs et métadonnées des images hébergées. L'effacement des données supprime également les objets distants, avec possibilité de réessayer en cas d'échec.
+- Ajout de la permission `unlimitedStorage` pour les copies locales des images, de tests de partage et d'intégration PostgreSQL, et formatage des sources TypeScript du workspace sans modification des sous-modules.
