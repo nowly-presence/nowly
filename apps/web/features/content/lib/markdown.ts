@@ -14,6 +14,11 @@ export type Inline = {
 };
 
 export type Block = {
+  kind: "image";
+  src: string;
+  alt: string;
+  caption?: string;
+} | {
   kind: "heading";
   level: 2 | 3;
   id: string;
@@ -94,6 +99,16 @@ export const slugifyHeading = (text: string): string =>
 
 const LIST_ITEM = /^(\s*)([-*]|\d+\.)\s+(.*)$/;
 const TABLE_DIVIDER = /^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?$/;
+const IMAGE_PATTERN = /^!\[([^\]]+)\]\(([^\s)]+)(?:\s+"([^"]+)")?\)$/;
+
+const isContentImageUrl = (source: string): boolean => {
+  try {
+    const url = new URL(source);
+    return url.protocol === "https:" && ["cdn.nowly.me", "images.nowly.me"].includes(url.hostname) && !url.username && !url.password && !url.port;
+  } catch {
+    return false;
+  }
+};
 
 const splitRow = (line: string): string[] =>
   line
@@ -104,7 +119,7 @@ const splitRow = (line: string): string[] =>
     .map((cell) => cell.trim());
 
 const isBlockStart = (line: string): boolean =>
-  /^#{2,3}\s/.test(line) || LIST_ITEM.test(line) || line.startsWith(">") || line.startsWith("```") || line.trim().startsWith("|");
+  /^#{2,3}\s/.test(line) || LIST_ITEM.test(line) || IMAGE_PATTERN.test(line) || line.startsWith(">") || line.startsWith("```") || line.trim().startsWith("|");
 
 // Parses the small Markdown subset used by content/ and packages/changelog: ## and ### headings,
 // paragraphs, - and 1. lists (one level), > notes, ``` code blocks, pipe tables, **bold**, `code`
@@ -127,6 +142,30 @@ export const parseMarkdown = (source: string): Block[] => {
     const trimmed = line.trim();
 
     if (!trimmed) {
+      index += 1;
+      continue;
+    }
+
+    const image = IMAGE_PATTERN.exec(trimmed);
+
+    if (image) {
+      if (isContentImageUrl(image[2]))
+        blocks.push({
+          kind: "image",
+          src: image[2],
+          alt: image[1],
+          ...(image[3] ? { caption: image[3] } : {})
+        });
+      else
+        blocks.push({
+          kind: "paragraph",
+          children: [
+            {
+              kind: "text",
+              text: image[1]
+            }
+          ]
+        });
       index += 1;
       continue;
     }
@@ -271,6 +310,8 @@ export const markdownHeadings = (blocks: Block[]): Heading[] =>
 
 const blockText = (block: Block): string => {
   switch (block.kind) {
+    case "image":
+      return block.caption ?? block.alt;
     case "heading":
       return block.text;
     case "paragraph":
@@ -310,6 +351,12 @@ const mapInline = (nodes: Inline[], transform: (text: string) => string): Inline
 export const mapBlockText = (blocks: Block[], transform: (text: string) => string): Block[] =>
   blocks.map((block) => {
     switch (block.kind) {
+      case "image":
+        return {
+          ...block,
+          alt: transform(block.alt),
+          ...(block.caption ? { caption: transform(block.caption) } : {})
+        };
       case "heading":
         return {
           ...block,
