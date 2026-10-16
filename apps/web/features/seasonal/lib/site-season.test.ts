@@ -9,6 +9,7 @@ import {
   parseSeasonPreview,
   readStoredSeason,
   seasonBootScript,
+  seasonForDecor,
   seasonToStore,
   type SeasonState,
 } from "./site-season";
@@ -84,6 +85,7 @@ describe("season state", () => {
 
   it("keeps a preview whatever happens", () => {
     const preview: SeasonState = { season: "spring", source: "preview" };
+    expect(nextSeasonState(preview, { type: "request" })).toBe(preview);
     expect(nextSeasonState(preview, { type: "extension", season: null })).toBe(preview);
     expect(nextSeasonState(preview, { type: "timeout" })).toBe(preview);
   });
@@ -93,7 +95,39 @@ describe("season state", () => {
     expect(seasonToStore({ season: null, source: "extension" })).toBeNull();
     expect(seasonToStore({ season: null, source: "none" })).toBeNull();
     expect(seasonToStore(stored)).toBeUndefined();
+    expect(seasonToStore({ season: "winter", source: "pending" })).toBeUndefined();
     expect(seasonToStore({ season: "winter", source: "preview" })).toBeUndefined();
+  });
+
+  it("waits for a fresh answer when the tab becomes visible again", () => {
+    const confirmed: SeasonState = { season: "winter", source: "extension" };
+    const pending = nextSeasonState(confirmed, { type: "request" });
+    expect(pending).toEqual({ season: "winter", source: "pending" });
+    expect(seasonForDecor(pending)).toBeNull();
+    expect(seasonForDecor(nextSeasonState(pending, { type: "extension", season: "winter" }))).toBe("winter");
+    expect(seasonForDecor(nextSeasonState(pending, { type: "extension", season: null }))).toBeNull();
+  });
+
+  it("clears a previously confirmed season if the extension no longer answers", () => {
+    const pending = nextSeasonState({ season: "winter", source: "extension" }, { type: "request" });
+    const expired = nextSeasonState(pending, { type: "timeout" });
+    expect(expired).toEqual({ season: null, source: "none" });
+    expect(seasonToStore(expired)).toBeNull();
+  });
+});
+
+describe("seasonForDecor", () => {
+  it("never renders a remembered season before the extension confirms it", () => {
+    const remembered = initialSeasonState({ stored: "winter", preview: null });
+    expect(seasonForDecor(remembered)).toBeNull();
+    expect(seasonForDecor(nextSeasonState(remembered, { type: "extension", season: null }))).toBeNull();
+    expect(seasonForDecor(nextSeasonState(remembered, { type: "timeout" }))).toBeNull();
+    expect(seasonForDecor(nextSeasonState(remembered, { type: "extension", season: "winter" }))).toBe("winter");
+  });
+
+  it("allows development previews without the extension", () => {
+    expect(seasonForDecor(initialSeasonState({ stored: null, preview: "winter" }))).toBe("winter");
+    expect(seasonForDecor(initialSeasonState({ stored: "winter", preview: "none" }))).toBeNull();
   });
 });
 

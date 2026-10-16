@@ -13,6 +13,7 @@ import {
   SEASON_REQUEST,
   SEASON_RESPONSE_TIMEOUT_MS,
   SEASON_STORAGE_KEY,
+  seasonForDecor,
   seasonToStore,
   type SeasonEvent,
   type SeasonState,
@@ -78,10 +79,10 @@ export const SeasonProvider = ({ allowPreview }: { allowPreview: boolean }) => {
       root.classList.remove(SEASON_LEAVING_CLASS);
     };
 
-    const show = (next: SiteSeason | null) => {
+    const show = () => {
       cancelFade();
-      applySeasonClass(root.classList, next);
-      setSeason(next);
+      applySeasonClass(root.classList, state.season);
+      setSeason(seasonForDecor(state));
     };
 
     const fadeOut = () => {
@@ -99,36 +100,48 @@ export const SeasonProvider = ({ allowPreview }: { allowPreview: boolean }) => {
       state = nextSeasonState(state, event);
       const stored = seasonToStore(state);
       if (stored !== undefined) writeStorage(stored);
-      if (state.season === previous) return;
+      if (state.season === previous) {
+        setSeason(seasonForDecor(state));
+        return;
+      }
       if (state.season === null) fadeOut();
-      else show(state.season);
+      else show();
     };
 
-    show(state.season);
+    show();
     if (state.source === "preview") return cancelFade;
 
-    const timeout = window.setTimeout(() => commit({ type: "timeout" }), SEASON_RESPONSE_TIMEOUT_MS);
+    let timeout: number | null = null;
+
+    const clearResponseTimeout = () => {
+      if (timeout !== null) window.clearTimeout(timeout);
+      timeout = null;
+    };
+
+    const refreshSeason = () => {
+      clearResponseTimeout();
+      commit({ type: "request" });
+      if (document.visibilityState !== "visible") return;
+      timeout = window.setTimeout(() => commit({ type: "timeout" }), SEASON_RESPONSE_TIMEOUT_MS);
+      requestSeason();
+    };
 
     const onMessage = (event: MessageEvent) => {
       if (event.source !== window || event.origin !== window.location.origin) return;
       const message = parseSeasonMessage(event.data);
       if (!message) return;
-      window.clearTimeout(timeout);
+      clearResponseTimeout();
       commit({ type: "extension", season: message.season });
     };
 
-    const onVisible = () => {
-      if (document.visibilityState === "visible") requestSeason();
-    };
-
     window.addEventListener("message", onMessage);
-    document.addEventListener("visibilitychange", onVisible);
-    requestSeason();
+    document.addEventListener("visibilitychange", refreshSeason);
+    refreshSeason();
 
     return () => {
-      window.clearTimeout(timeout);
+      clearResponseTimeout();
       window.removeEventListener("message", onMessage);
-      document.removeEventListener("visibilitychange", onVisible);
+      document.removeEventListener("visibilitychange", refreshSeason);
       cancelFade();
     };
   }, [allowPreview]);
