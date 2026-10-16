@@ -59,15 +59,6 @@ const services: StatusService[] = [
   { id: "cdn", url: "https://cdn.nowly.me/installer/latest.json" },
 ];
 
-const parsePositiveNumber = (
-  value: string | undefined,
-  fallback: number,
-): number => {
-  if (!value) return fallback;
-  const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
-};
-
 const getCheckIntervalHours = (): number =>
   serverEnv.STATUS_CHECK_INTERVAL_HOURS;
 
