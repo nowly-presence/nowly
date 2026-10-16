@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line } from "@remixicon/react";
 import { FeatureReveal } from "@/components/shared/feature-reveal";
 import { Dock } from "@/features/layout/dock";
@@ -9,16 +9,7 @@ import { useNav, type Route, type Tab } from "@/hooks/navigation-provider";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { FeatureRevealProvider } from "@/hooks/feature-reveal-provider";
 import { ActivityView } from "@/features/activity/activity-view";
-import { CustomActivityEditorView } from "@/features/custom-activity/custom-activity-editor-view";
-import { CustomActivityView } from "@/features/custom-activity/custom-activity-view";
-import { ConnectionView } from "@/features/diagnostics/connection-view";
 import { DiscordIpcPrompt } from "@/features/discord-ipc/discord-ipc-prompt";
-import { DiscordIpcView } from "@/features/discord-ipc/discord-ipc-view";
-import { LibraryView } from "@/features/library/library-view";
-import { RuntimeLogsView } from "@/features/runtime-logs/runtime-logs-view";
-import { OnboardingView } from "@/features/onboarding/onboarding-view";
-import { PresenceDetailView } from "@/features/presence/presence-detail-view";
-import { SettingsView } from "@/features/settings/settings-view";
 import { AccountChoicePrompt } from "@/features/settings/account-choice-sheet";
 import { Header } from "@/features/layout/header";
 import { Layer } from "@/features/layout/layer";
@@ -26,6 +17,27 @@ import { ReviewPrompt } from "@/features/review/review-prompt";
 import { HalloweenPrank } from "@/features/seasonal/halloween-prank";
 import { SeasonMoment } from "@/features/seasonal/season-moment";
 import { LegalGate } from "@/features/legal/legal-gate";
+import { Skeleton } from "@/ui/skeleton";
+
+const CustomActivityEditorView = lazy(async () => ({
+  default: (await import("@/features/custom-activity/custom-activity-editor-view")).CustomActivityEditorView
+}));
+const CustomActivityView = lazy(async () => ({ default: (await import("@/features/custom-activity/custom-activity-view")).CustomActivityView }));
+const ConnectionView = lazy(async () => ({ default: (await import("@/features/diagnostics/connection-view")).ConnectionView }));
+const DiscordIpcView = lazy(async () => ({ default: (await import("@/features/discord-ipc/discord-ipc-view")).DiscordIpcView }));
+const LibraryView = lazy(async () => ({ default: (await import("@/features/library/library-view")).LibraryView }));
+const RuntimeLogsView = lazy(async () => ({ default: (await import("@/features/runtime-logs/runtime-logs-view")).RuntimeLogsView }));
+const OnboardingView = lazy(async () => ({ default: (await import("@/features/onboarding/onboarding-view")).OnboardingView }));
+const PresenceDetailView = lazy(async () => ({ default: (await import("@/features/presence/presence-detail-view")).PresenceDetailView }));
+const SettingsView = lazy(async () => ({ default: (await import("@/features/settings/settings-view")).SettingsView }));
+
+const PanelLoading = () => (
+  <div aria-busy="true" className="flex flex-col gap-4 p-5">
+    <Skeleton className="h-6 w-1/2" />
+    <Skeleton className="h-24 w-full" />
+    <Skeleton className="h-24 w-full" />
+  </div>
+);
 
 const TABS: Tab[] = ["activity", "store", "custom", "settings"];
 const CUSTOM_ACTIVITY_REVEAL = {
@@ -62,7 +74,9 @@ const AppContent = () => {
   if (onboarding) {
     return (
       <main className="scroll-thin h-full overflow-y-auto">
-        <OnboardingView theme={theme} />
+        <Suspense fallback={<PanelLoading />}>
+          <OnboardingView theme={theme} />
+        </Suspense>
       </main>
     );
   }
@@ -87,19 +101,23 @@ const AppContent = () => {
         {TABS.filter((value) => visited.has(value)).map((value) => (
           <Layer key={value} tab={value} active={stack.length === 0 && value === tab}>
             <Header theme={theme} />
-            {value === "activity" && <ActivityView />}
-            {value === "store" && <LibraryView />}
-            {value === "custom" && <CustomActivityView />}
-            {value === "settings" && <SettingsView />}
+            <Suspense fallback={<PanelLoading />}>
+              {value === "activity" && <ActivityView />}
+              {value === "store" && <LibraryView />}
+              {value === "custom" && <CustomActivityView />}
+              {value === "settings" && <SettingsView />}
+            </Suspense>
           </Layer>
         ))}
         {stack.map((route, depth) => (
           <Layer key={routeKey(route, depth)} active={depth === stack.length - 1} className="animate-push bg-canvas">
-            {route.name === "presence" && <PresenceDetailView slug={route.slug} />}
-            {route.name === "connection" && <ConnectionView />}
-            {route.name === "logs" && <RuntimeLogsView />}
-            {route.name === "custom-activity" && <CustomActivityEditorView id={route.id} template={route.template} />}
-            {route.name === "discord-ipc" && <DiscordIpcView />}
+            <Suspense fallback={<PanelLoading />}>
+              {route.name === "presence" && <PresenceDetailView slug={route.slug} />}
+              {route.name === "connection" && <ConnectionView />}
+              {route.name === "logs" && <RuntimeLogsView />}
+              {route.name === "custom-activity" && <CustomActivityEditorView id={route.id} template={route.template} />}
+              {route.name === "discord-ipc" && <DiscordIpcView />}
+            </Suspense>
           </Layer>
         ))}
         <Dock<Tab>
