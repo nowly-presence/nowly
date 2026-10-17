@@ -61,7 +61,11 @@ const Page = async ({ params }: ChangelogVersionPageProps) => {
     <>
       <WebPageJsonLd
         name={t("meta-title", { version: parsed.version })}
-        description={release ? t("update-description", { version: parsed.version }) : t("missing")}
+        description={
+          release
+            ? t("update-description", { version: parsed.version })
+            : t("missing")
+        }
         path={`/changelog/${parsed.version}`}
       />
       <ChangelogReleaseView version={parsed.version} release={release} />

@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { OnboardingState } from "@/background/storage/onboarding.store";
 import { sendMessage } from "@/lib/messages";
-import type { AccountSnapshot, CurrentActivity, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, TabState, UserScriptsStatus } from "@/shared/types";
+import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, TabState, UserScriptsStatus } from "@/shared/types";
 
 export type CatalogState = {
   status: "idle" | "loading";
@@ -28,6 +28,7 @@ export type ExtensionState = {
   analyticsConsent: boolean;
   updates: Record<string, string>;
   catalog: CatalogState;
+  customActivities: CustomActivitiesState;
   account: AccountSnapshot;
 };
 
@@ -64,6 +65,11 @@ const INITIAL: ExtensionState = {
     status: "idle",
     items: []
   },
+  customActivities: {
+    items: [],
+    activeId: null,
+    activatedAt: null
+  },
   account: { signedIn: false }
 };
 
@@ -79,6 +85,7 @@ type Refreshers = {
   consent: () => Promise<void>;
   updates: () => Promise<void>;
   catalog: (force?: boolean) => Promise<void>;
+  customActivities: () => Promise<void>;
   account: () => Promise<void>;
 };
 
@@ -156,6 +163,10 @@ export const ExtensionStateProvider = ({ children }: {
         () => sendMessage("CHECK_UPDATES"),
         (updates) => patch({ updates })
       ),
+      customActivities: safe(
+        () => sendMessage("GET_CUSTOM_ACTIVITIES"),
+        (customActivities) => patch({ customActivities })
+      ),
       account: safe(
         () => sendMessage("GET_ACCOUNT"),
         (account) => patch({ account })
@@ -219,6 +230,7 @@ export const ExtensionStateProvider = ({ children }: {
         refresh.tab(),
         refresh.presenceSettings(),
         refresh.consent(),
+        refresh.customActivities(),
         refresh.account()
       ]);
       if (!cancelled) patch({ ready: true });
@@ -256,6 +268,7 @@ export const ExtensionStateProvider = ({ children }: {
       if ("presenceSettings" in changes) void refresh.presenceSettings();
       if ("onboarding" in changes) void refresh.onboarding();
       if ("analyticsConsent" in changes) void refresh.consent();
+      if ("customActivities" in changes) void refresh.customActivities();
       if ("account" in changes || "syncState" in changes) void refresh.account();
     };
     chrome.storage.onChanged.addListener(onChanged);

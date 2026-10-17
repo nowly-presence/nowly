@@ -1,0 +1,129 @@
+import { describe, expect, it } from "vitest";
+import { isDefaultDockLayout, moveDockTab, normalizeDockLayout } from "@/shared/dock-layout";
+
+const TABS = ["activity", "store", "custom", "settings"] as const;
+
+type Tab = (typeof TABS)[number];
+
+const base: Tab[][] = [["activity", "store", "custom", "settings"]];
+
+describe("normalizeDockLayout", () => {
+  it("falls back to one bar with every tab", () => {
+    expect(normalizeDockLayout(undefined, TABS)).toEqual(base);
+    expect(isDefaultDockLayout(normalizeDockLayout(null, TABS), TABS)).toBe(true);
+  });
+
+  it("drops unknown, duplicated and empty entries and appends missing tabs", () => {
+    expect(
+      normalizeDockLayout(
+        [
+          ["store", "nope", "store"],
+          [],
+          ["activity"]
+        ],
+        TABS
+      )
+    ).toEqual([
+      ["store"],
+      ["activity", "custom", "settings"]
+    ]);
+  });
+});
+
+describe("moveDockTab", () => {
+  it("reorders inside a bar", () => {
+    expect(
+      moveDockTab(base, "settings", {
+        kind: "into",
+        group: 0,
+        index: 0
+      })
+    ).toEqual([["settings", "activity", "store", "custom"]]);
+  });
+
+  it("pulls a tab out into a new bar on either side", () => {
+    expect(
+      moveDockTab(base, "activity", {
+        kind: "new",
+        side: "end"
+      })
+    ).toEqual([
+      ["store", "custom", "settings"],
+      ["activity"]
+    ]);
+    expect(
+      moveDockTab(base, "settings", {
+        kind: "new",
+        side: "start"
+      })
+    ).toEqual([
+      ["settings"],
+      ["activity", "store", "custom"]
+    ]);
+  });
+
+  it("joins another bar and removes the bar left empty", () => {
+    const split: Tab[][] = [
+      ["store", "custom", "settings"],
+      ["activity"]
+    ];
+    expect(
+      moveDockTab(split, "store", {
+        kind: "into",
+        group: 1,
+        index: 1
+      })
+    ).toEqual([
+      ["custom", "settings"],
+      ["activity", "store"]
+    ]);
+    expect(
+      moveDockTab(split, "activity", {
+        kind: "into",
+        group: 0,
+        index: 0
+      })
+    ).toEqual([["activity", "store", "custom", "settings"]]);
+  });
+
+  it("keeps a lone tab in place and caps the number of bars", () => {
+    const split: Tab[][] = [
+      ["activity"],
+      ["store", "custom"],
+      ["settings"]
+    ];
+    expect(
+      moveDockTab(split, "activity", {
+        kind: "new",
+        side: "start"
+      })
+    ).toEqual(split);
+    expect(
+      moveDockTab(split, "store", {
+        kind: "new",
+        side: "end"
+      })
+    ).toEqual([
+      ["activity"],
+      ["custom"],
+      ["settings", "store"]
+    ]);
+    expect(
+      moveDockTab(
+        [
+          ["activity", "store", "custom"],
+          ["settings"]
+        ],
+        "store",
+        {
+          kind: "new",
+          side: "start"
+        }
+      )
+    ).toEqual([
+      ["store"],
+      ["activity", "custom"],
+      ["settings"]
+    ]);
+  });
+});

@@ -1,0 +1,64 @@
+---
+title: 2.4.0
+date: 15 października 2026
+description: Twórz i udostępniaj aktywności Discorda z szablonami, obrazami, czasem i przyciskami. Import i eksport JSON oraz konfigurowalna nawigacja.
+stores: [chrome, firefox]
+---
+
+## Nowości
+
+### Własne aktywności
+
+- Nowa karta Własne umożliwia tworzenie, edytowanie i usuwanie aktywności Discorda bez instalowania presence witryny. Nolo przedstawia funkcję przy pierwszym użyciu.
+- Zapisz do 50 aktywności na urządzeniu. Tylko jedna może być aktywna i ma pierwszeństwo przed presence kart przeglądarki do czasu wyłączenia.
+- Ustaw nazwę, typ (Gra, Słucha, Ogląda, Rywalizuje), dwie linie tekstu, duży/mały obraz z tekstem po najechaniu i maksymalnie dwa przyciski HTTPS.
+- Czas od rozpoczęcia lub odliczanie od 5 minut do 24 godzin. Zegar startuje przy aktywacji, nie przy utworzeniu.
+- Dziewięć szablonów: Nauka, Programowanie, Wieczór gier, Playlista, Wieczór filmowy, Na żywo, Trening, Podróż i Przerwa na kawę. Wypełniają edytor, ale zapis wymaga potwierdzenia.
+- Podgląd na żywo i osobna karta do otwierania, zatrzymywania lub wznawiania bieżącej aktywności.
+
+### Obrazy i udostępnianie
+
+- Prześlij PNG, JPEG, WebP lub GIF, użyj URL HTTPS albo wybierz spośród 24 ikon i 10 kolorów. Brak dużego obrazu oznacza logo Nowly, brak małego oznacza brak odznaki.
+- Obrazy poza GIF są automatycznie skalowane i konwertowane. Limit to 1 MiB na obraz; GIF pozostaje bez konwersji. Lokalna kopia służy do podglądu i ponownego wysłania, a Discord otrzymuje hostowany URL.
+- Aktywne obrazy są regularnie odświeżane. Hostowane pliki nieużywane przez 30 dni mogą być usuwane i w razie potrzeby ponownie wysyłane z lokalnej kopii.
+- Eksport zapisanej aktywności do `[Nazwa].json` obejmuje tekst, typ, zegar, przyciski i przesłane obrazy osadzone z kopii lokalnej. Używa ostatniego zapisu, nie niezapisanych zmian. Brakujący lokalnie obraz jest pomijany.
+- Lokalne ID, daty utworzenia/zmiany, stan aktywacji i adresy hostowania przesłanych obrazów nie są eksportowane. Wpisane linki HTTPS pozostają: sprawdź plik przed udostępnieniem.
+- Import jednego lub wielu plików przyciskiem z ikoną, etykietą dostępności i podpowiedzią albo przez upuszczenie na widoczną kartę Własne. Inne ekrany nie przechwytują plików.
+- Import tworzy nową, nieaktywną aktywność bez nadpisywania istniejących. Pojedynczy otwiera edytor do sprawdzenia, wielokrotny pokazuje podsumowanie.
+- Pliki ponad 4 MiB, niezgodne formaty/wersje i nieprawidłowe aktywności są odrzucane. Osadzone obrazy są sprawdzane i ponownie przesyłane; błąd obrazu zachowuje aktywność bez niego i wyświetla ostrzeżenie.
+
+### Warunki i prywatność
+
+- Okno przy pierwszym uruchomieniu rozdziela akceptację Warunków korzystania od potwierdzenia zapoznania się z Polityką prywatności, bez włączania opcjonalnych statystyk.
+- Nowly automatycznie sprawdza aktualizacje i prosi o ponowne potwierdzenie tylko dokumentów z istotnymi zmianami. Potwierdzenia pozostają na urządzeniu, a zapisane wersje działają offline.
+- Udostępnianie aktywności i przesyłanie obrazów pozostają wstrzymane do wymaganych potwierdzeń. Okno zawiera linki do dokumentów i daty aktualizacji.
+
+## Ulepszenia
+
+- Znacznik na pasku przeglądarki pokazuje teraz emoji odpowiadające wybranemu typowi aktywności (granie, oglądanie, słuchanie lub rywalizacja) na tle w kolorze obecności lub własnej ikony. Pauza zachowuje osobne oznaczenie. Znacznik nie potwierdza dostarczenia aktywności do Discorda.
+- Podgląd pozostaje widoczny podczas przewijania edytora. Kliknij miniaturę, aby wybrać lub zastąpić obraz; wskazówka podaje formaty i limit rozmiaru. W trybie Słuchanie dymek wyjaśnia, że tekst dużego obrazu pojawia się również w trzecim wierszu w Discordzie.
+- Dodatkowe ekrany ładują się dopiero po otwarciu, ograniczając początkowy JavaScript i zachowując odwiedzone karty oraz ich stan. Wszystkie pliki pozostają lokalnie w rozszerzeniu do pracy offline.
+- Trzy ilustrowane poradniki po angielsku i francusku wyjaśniają tworzenie aktywności, udostępnianie JSON i prywatność obrazów. Responsywne zrzuty ekranu można otworzyć w oryginalnym rozmiarze.
+- Przytrzymaj kartę, aby ją przesunąć, lub wyciągnij na bok, by utworzyć kolejną grupę. Układ można zresetować w Ustawieniach.
+- Karty i podgląd odpowiadają Discordowi: Gra pokazuje nazwę osobno, pozostałe typy w nagłówku. Okna dialogowe unoszą się nad panelem, a pusty ekran oferuje przykłady i szablony.
+- Funkcje i błędy, w tym okno potwierdzeń prawnych, przetłumaczono na wszystkie 11 języków.
+
+## Poprawki
+
+- Etykieta aktywnej karty nie jest już ucinana. Import pozostaje kompaktowym przyciskiem z samą ikoną.
+- Równoczesne importy są blokowane, serie respektują limit 50 aktywności, a błąd pliku nie blokuje kolejnych.
+- Powtórzone i równoczesne wysyłki tego samego obrazu są idempotentne na serwerze. Nieudane zdalne usunięcie zachowuje odniesienia do ponowienia.
+
+## Usunięcia i zgodność
+
+- Nie usunięto istniejących funkcji użytkownika. Zachowano motywy sezonowe, ChromeOS, iframe i dołączone presence.
+- Usunięto nieużywany parser liczbowy usługi statusu i ujednolicono pomocnicze pobieranie JSON dla eksportu danych.
+- Aktywności pozostają lokalne i nie synchronizują się z kontem. Udostępnianie przez pliki, bez nowych zdarzeń analitycznych.
+
+## Technika i prywatność
+
+- Warunki i polityka prywatności wyjaśniają we wszystkich 11 językach przesyłanie obrazów, publiczne adresy URL, dalsze udostępnianie JSON, przechowywanie, uwierzytelnione usuwanie i trwałość pamięci podręcznej usług zewnętrznych.
+- Przesyłanie, odświeżanie i usuwanie obrazów powiązane z urządzeniem, chronione tokenem. Weryfikacja sygnatury, MIME, rozmiaru i SHA-256 oraz limit 20 wysyłek na godzinę na urządzenie.
+- Nowa tabela `CustomAsset`, migracja PostgreSQL, magazyn S3/R2 i chronione czyszczenie nieużywanych obrazów. Magazyn i harmonogram wymagają konfiguracji przy wdrożeniu.
+- Eksport urządzenia obejmuje URL i metadane hostowanych obrazów. Usunięcie danych usuwa też zdalne obiekty, z możliwością ponowienia po błędzie.
+- Uprawnienie `unlimitedStorage` dla lokalnych kopii, testy udostępniania i integracji PostgreSQL oraz formatowanie TypeScript bez zmian podmodułów.

@@ -1,6 +1,8 @@
 import type { TrackInput } from "@nowly/analytics";
-import type { AccountSnapshot, CurrentActivity, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, PresenceData, PresenceDebug, PresenceSchedule, RuntimeLogEntry, StoredPresence, SyncChoice, TabState, UserScriptsStatus } from "@/shared/types";
+import type { LegalConfirmation, LegalConfirmationResult, LegalState } from "@nowly/shared/legal";
+import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, CustomActivityDraft, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, PresenceData, PresenceDebug, PresenceSchedule, RuntimeLogEntry, StoredPresence, SyncChoice, TabState, UserScriptsStatus } from "@/shared/types";
 import type { OnboardingState } from "@/background/storage/onboarding.store";
+import type { SaveCustomActivityResult, UploadCustomImageResult } from "@/background/managers/custom-activity-manager";
 import type { SupportPromptAction, SupportPromptState } from "@/shared/support-prompt";
 
 export type DiagnosticSnapshot = {
@@ -48,6 +50,18 @@ export type PresenceEngagement = {
 export type RouterSource = "PRESENCES_POPUP" | "PRESENCES_CONTENT";
 
 export type RouterMessageMap = {
+  GET_LEGAL_STATE: {
+    payload: void;
+    response: LegalState;
+  };
+  CHECK_LEGAL_DOCUMENTS: {
+    payload: void;
+    response: LegalState;
+  };
+  ACCEPT_LEGAL_DOCUMENTS: {
+    payload: LegalConfirmation;
+    response: LegalConfirmationResult;
+  };
   GET_PRESENCES: {
     payload: void;
     response: InstalledPresences;
@@ -330,6 +344,42 @@ export type RouterMessageMap = {
     response: {
       ok: boolean;
     };
+  };
+  GET_CUSTOM_ACTIVITIES: {
+    payload: void;
+    response: CustomActivitiesState;
+  };
+  SAVE_CUSTOM_ACTIVITY: {
+    payload: {
+      draft: CustomActivityDraft;
+    };
+    response: SaveCustomActivityResult;
+  };
+  DELETE_CUSTOM_ACTIVITY: {
+    payload: {
+      id: string;
+    };
+    response: {
+      ok: boolean;
+    };
+  };
+  SET_CUSTOM_ACTIVITY_ACTIVE: {
+    payload: {
+      id: string | null;
+    };
+    response: CustomActivitiesState;
+  };
+  UPLOAD_CUSTOM_IMAGE: {
+    payload: {
+      dataUrl: string;
+    };
+    response: UploadCustomImageResult;
+  };
+  GET_CUSTOM_IMAGES: {
+    payload: {
+      hashes: string[];
+    };
+    response: Record<string, string>;
   };
   GET_ACCOUNT: {
     payload: void;

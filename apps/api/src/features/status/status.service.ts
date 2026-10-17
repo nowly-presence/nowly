@@ -61,13 +61,6 @@ const services: StatusService[] = [
   }
 ];
 
-const parsePositiveNumber = (value: string | undefined, fallback: number): number => {
-  if (!value) return fallback;
-
-  const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
-};
-
 const getCheckIntervalHours = (): number => serverEnv.STATUS_CHECK_INTERVAL_HOURS;
 
 const getSampleLimit = (): number => Math.max(10, serverEnv.STATUS_SAMPLE_LIMIT);

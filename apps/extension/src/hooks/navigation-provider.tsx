@@ -12,6 +12,10 @@ export type Route = {
 } | {
   name: "logs";
 } | {
+  name: "custom-activity";
+  id: string | null;
+  template?: string;
+} | {
   name: "discord-ipc";
 };
 

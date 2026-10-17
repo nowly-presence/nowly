@@ -1,0 +1,70 @@
+---
+title: 2.4.0
+date: 2026-10-15
+description: Create and share Discord activities with templates, images, timers and buttons. JSON import/export, customizable navigation and improved image management.
+stores: [chrome, firefox]
+---
+
+## What's new
+
+### Custom activities
+
+- A new Custom tab lets you create, edit and delete your own Discord activities without installing a website presence. Nolo introduces the feature on first use.
+- Save up to 50 activities on your device. Only one can be active at a time; it takes priority over tab presences until switched off.
+- Set the name, type (Playing, Listening, Watching, Competing), two text lines, large/small images with hover text and up to two HTTPS link buttons.
+- Choose elapsed time or a countdown from 5 minutes to 24 hours. Timers start on activation, not when the activity is created.
+- Nine templates prefill the editor: Studying, Coding, Game night, Playlist, Movie night, Live, Workout, Travelling and Coffee break. Nothing is saved until you confirm.
+- Check the live preview while editing. A dedicated live card lets you reopen, stop or resume the current activity.
+
+### Images
+
+- Upload PNG, JPEG, WebP or GIF files, use an HTTPS URL, or choose from 24 icons and 10 colours. No large image uses the Nowly logo; no small image means no badge.
+- Non-GIF images are resized and converted automatically before upload. Each image is limited to 1 MiB; GIFs are kept without conversion.
+- Uploaded files retain a local copy for previews and automatic re-upload. Discord receives the hosted URL, not the local file.
+- Active images are refreshed regularly. Hosted files unused for 30 days can be cleaned up; expired images are uploaded again from their local copy when needed.
+
+### Sharing and import
+
+- Export a saved activity from its editor as `[Name].json`. Export uses the last saved version, not unsaved edits.
+- Files include text, type, images, timer and buttons. Uploaded images are embedded from local copies without their hosting URLs; missing local copies export without an image.
+- Local IDs, creation/update dates and activation state are excluded. HTTPS links entered in the activity remain in the file: review its contents before sharing.
+- Import one or multiple files using the icon-only Import button, with an accessible label and tooltip, or drop them onto the Custom tab. File drops do not intercept other screens.
+- Each import creates a new activity without activating it or overwriting an existing one. Single imports open the editor for review; multiple imports show a summary.
+- Files over 4 MiB, incompatible formats/versions and invalid activities are rejected. Embedded images are validated and uploaded again; if an image cannot be imported, the activity is kept without it and a warning is shown.
+
+### Terms and privacy
+
+- A first-launch dialog separates acceptance of the Terms of Service from acknowledgement of the Privacy Policy, without enabling optional analytics.
+- Nowly checks document updates automatically and asks for confirmation again only for documents with significant changes. Confirmations are stored on the device; cached versions remain usable offline.
+- Activity sharing and image uploads stay paused until the required confirmations are recorded. Document links and update dates remain available in the dialog.
+
+## Improvements
+
+- The browser toolbar badge now shows an emoji for the selected activity type (Playing, Watching, Listening or Competing) on a colour based on the presence or custom icon. Pause keeps its own indicator. The badge reflects Nowly's selected activity, not confirmed delivery to Discord.
+- The preview stays visible while scrolling through the editor. Click an image thumbnail to choose or replace a file; the hint lists supported formats and the size limit. In Listening mode, a tooltip explains that the large image text also appears on a third line in Discord.
+- Secondary screens load only when opened, reducing startup JavaScript while preserving visited tabs and their state. All screen files remain packaged locally for offline use.
+- Three illustrated guides in English and French explain creating activities, JSON sharing and image privacy, with responsive screenshots linked to full-size originals.
+- Customize navigation: hold a tab to move it or pull it to either side to create another group. Reset the layout from Settings.
+- Cards and previews follow Discord's type-specific layout: Playing shows the name on its own line; Listening, Watching and Competing place it in the header.
+- Dialogs float above the panel instead of sticking to its bottom edge. The Custom empty state offers examples and access to templates.
+- Features and error messages, including the legal confirmation dialog, are translated into all 11 languages.
+
+## Fixes
+
+- The active tab label is no longer cut off. The Import button stays compact with its icon-only appearance.
+- Concurrent imports are blocked and batches respect the 50-activity limit. A failure in one file does not prevent later files from being processed.
+- Repeated/concurrent uploads of the same image are idempotent on the server. Failed remote erasure keeps references available for retry.
+
+## Removals and compatibility
+
+- No existing user feature is removed. Seasonal themes, ChromeOS, iframes and bundled presences remain supported.
+- Remove the unused numeric parser in the status service and share the JSON download helper previously duplicated in device data export.
+- Custom activities remain local and are not synced with accounts. Sharing uses files; no new analytics events are added.
+
+## Technical and privacy changes
+
+- Terms and privacy disclosures now cover uploaded images, public hosting URLs, JSON redistribution, retention, authenticated erasure and persistent third-party caches in all 11 languages.
+- Device-scoped image storage adds upload, touch and delete routes protected by the device token, file-signature/MIME/size/SHA-256 validation and a limit of 20 uploads per hour per device.
+- Add the `CustomAsset` table, PostgreSQL migration, S3/R2-compatible storage and a protected unused-image cleanup route. Storage and cleanup scheduling require deployment configuration.
+- Device data exports include hosted image URLs and metadata. Device erasure also removes remote objects, with retries possible after failures.
+- Add `unlimitedStorage` for local image copies, sharing and PostgreSQL integration tests, and workspace TypeScript formatting without submodule changes.

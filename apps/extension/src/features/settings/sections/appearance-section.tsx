@@ -6,6 +6,7 @@ import { track } from "@/lib/messages";
 import { commonPresenceLocales } from "@/lib/presence-locales";
 import { isLocale, isLongLocale, LOCALE_LONG_MAP, LOCALE_NAMES, longLocaleName, PRESENCE_LOCALES, UI_LOCALES } from "@/shared/locales";
 import type { AppearanceMode } from "@/shared/types";
+import { Button } from "@/ui/button";
 import { Group } from "@/ui/card";
 import { FieldRow } from "@/ui/field-row";
 import { LocaleFlag } from "@/ui/locale-flag";
@@ -107,6 +108,11 @@ export const AppearanceSection = () => {
             }}
             options={presenceLanguageOptions}
           />
+        </FieldRow>
+        <FieldRow title={t("settings.dockLayout")} description={t("settings.dockLayoutHint")}>
+          <Button size="sm" variant="secondary" disabled={!settings.dockLayout} onClick={() => void updateSettings({ dockLayout: undefined })}>
+            {t("action.reset")}
+          </Button>
         </FieldRow>
       </Group>
     </Section>

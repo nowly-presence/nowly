@@ -34,7 +34,11 @@ export const LibraryResultsSection = ({ results, newSlugs, browsing, query, cate
 
   return (
     <Section
-      title={browsing ? t("library.allPresences") : t("library.results", { count: results.length })}
+      title={
+        browsing
+          ? t("library.allPresences")
+          : t("library.results", { count: results.length })
+      }
       action={
         <Segmented
           label={t("library.sort")}

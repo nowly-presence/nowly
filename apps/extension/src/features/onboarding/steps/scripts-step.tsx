@@ -29,7 +29,11 @@ export const ScriptsStep = ({ onNext }: {
     <OnboardingStepLayout
       icon={<RiCodeBoxLine className="size-5" />}
       title={t("onboarding.scriptsTitle")}
-      description={firefox ? t("onboarding.scriptsDescriptionFirefox") : t("onboarding.scriptsDescription")}
+      description={
+        firefox
+          ? t("onboarding.scriptsDescriptionFirefox")
+          : t("onboarding.scriptsDescription")
+      }
       footer={
         <>
           <Button onClick={onNext} className="w-full" variant={enabled ? "primary" : "secondary"}>

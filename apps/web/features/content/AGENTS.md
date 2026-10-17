@@ -15,6 +15,8 @@ Long-form text that lives in files, not in `messages/*.json` (messages are sent 
 
 French files get no-break spaces before `? ! : ; »` and after `«` automatically (`frenchSpacing`), code excluded: write normal spaces.
 
+Guide screenshots use a standalone `![Descriptive alt text](https://images.nowly.me/guides-screenshots/custom-activities/03-editor-preview.png "Optional caption")` line. Only HTTPS images hosted on `images.nowly.me` or `cdn.nowly.me`, without credentials or custom ports, are rendered. Images load lazily in the browser, preserve their natural aspect ratio and link to the full-resolution file. Keep a blank line before and after. Do not publish placeholder CDN URLs; add the image lines only after upload. Custom activity screenshots use the English development preview with stable Nowly branding and simulated data; explain this in the guide, not as proof of a real Discord connection.
+
 ## Writing rules
 
 - Only write what the code or the product really does. Check labels against `apps/extension/messages/*.json` and presence settings against `packages/presences`.

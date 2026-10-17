@@ -40,7 +40,11 @@ export const DiscordIpcView = () => {
         <DiscordIpcHero
           resolved={resolved}
           title={resolved ? t("discordIpc.resolvedTitle") : t("discordIpc.title")}
-          description={resolved ? t("discordIpc.resolvedDescription") : t("discordIpc.description")}
+          description={
+            resolved
+              ? t("discordIpc.resolvedDescription")
+              : t("discordIpc.description")
+          }
         />
         {resolved ? (
           <Button icon={<RiArrowLeftLine className="size-4" />} onClick={pop}>

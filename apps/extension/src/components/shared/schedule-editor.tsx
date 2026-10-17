@@ -35,7 +35,9 @@ export const ScheduleEditor = ({ value, onChange }: {
               onClick={() =>
                 onChange({
                   ...value,
-                  days: active ? value.days.filter((entry) => entry !== day) : [...value.days, day].sort()
+                  days: active
+                    ? value.days.filter((entry) => entry !== day)
+                    : [...value.days, day].sort()
                 })
               }
               className={cn(

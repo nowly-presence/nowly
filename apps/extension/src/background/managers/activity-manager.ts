@@ -3,10 +3,14 @@ import { addActiveSlugToState, clearActiveSlugsFromState, clearTabPresences, get
 import { sendActiveHeartbeat } from "@/background/services/active-heartbeat";
 import { mapPresenceData, postNative } from "@/background/services/native";
 import { verifyPresenceRelease } from "@/background/services/release-security";
+import { getActiveCustomPresence, getCustomActivities } from "@/background/storage/custom-activities.store";
 import { getCurrentActivity, getPresences, setCurrentActivity, setDebug } from "@/background/storage/presences.store";
 import { getSettings } from "@/background/storage/settings.store";
 import { recordUsageDay } from "@/background/storage/support.store";
+import { legalDocumentsPending } from "@/background/services/legal-documents";
 import { CDN_BASE_URL } from "@/shared/constants";
+import { customActivityIdOf } from "@/shared/custom-activity";
+import { readableBadgeColor, toolbarActivityColor, toolbarActivitySymbol } from "@/background/managers/toolbar-badge";
 import type { ExtensionSettings, PresenceData, StoredPresence } from "@/shared/types";
 
 const clampText = (value: string | undefined, maxLength: number): string | undefined => {
@@ -52,16 +56,6 @@ const setPausedBadge = (): void => {
   chrome.action.setBadgeBackgroundColor({ color: "#f59e0b" }).catch(() => {});
 };
 
-const setActivityBadge = (slug?: string): void => {
-  if (!slug) {
-    chrome.action.setBadgeText({ text: "" }).catch(() => {});
-    return;
-  }
-
-  chrome.action.setBadgeText({ text: "•" }).catch(() => {});
-  chrome.action.setBadgeBackgroundColor({ color: "#5865F2" }).catch(() => {});
-};
-
 const clearActivityBadge = (): void => {
   chrome.action.setBadgeText({ text: "" }).catch(() => {});
 };
@@ -77,7 +71,9 @@ export const refreshToolbarBadge = async (): Promise<void> => {
   const activity = await getCurrentActivity();
 
   if (activity) {
-    setActivityBadge(activity.slug);
+    const color = readableBadgeColor(toolbarActivityColor(activity, await getPresences(), await getCustomActivities()));
+    await chrome.action.setBadgeBackgroundColor({ color }).catch(() => {});
+    chrome.action.setBadgeText({ text: toolbarActivitySymbol(activity.presence.type) }).catch(() => {});
     return;
   }
 
@@ -159,7 +155,29 @@ export const pickBroadcastEntry = async (settings: ExtensionSettings) => {
 };
 
 export const broadcastActiveTab = async (): Promise<void> => {
+  if (await legalDocumentsPending()) {
+    postNative({ type: "CLEAR_ACTIVITY" });
+    await setCurrentActivity(null);
+    await refreshToolbarBadge();
+    notifyBroadcastStateChanged();
+    return;
+  }
+
   const settings = await getSettings();
+
+  const custom = await getActiveCustomPresence();
+
+  if (custom) {
+    postNative(settings.presencePaused ? { type: "CLEAR_ACTIVITY" } : { type: "SET_ACTIVITY", presence: custom.presence });
+    await setCurrentActivity({
+      slug: custom.slug,
+      presence: custom.presence,
+      updatedAt: Date.now()
+    });
+    await refreshToolbarBadge();
+    notifyBroadcastStateChanged();
+    return;
+  }
 
   const entry = await pickBroadcastEntry(settings);
 
@@ -184,6 +202,13 @@ export const broadcastActiveTab = async (): Promise<void> => {
 };
 
 export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
+  if (await legalDocumentsPending()) {
+    postNative({ type: "CLEAR_ACTIVITY" });
+    await setCurrentActivity(null);
+    await refreshToolbarBadge();
+    return;
+  }
+
   const [current, presences, settings] = await Promise.all([
     getCurrentActivity(),
     getPresences(),
@@ -193,6 +218,11 @@ export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
   if (settings.presencePaused || !current) {
     if (settings.presencePaused) postNative({ type: "CLEAR_ACTIVITY" });
     await refreshToolbarBadge();
+    return;
+  }
+
+  if (customActivityIdOf(current.slug)) {
+    await broadcastActiveTab();
     return;
   }
 

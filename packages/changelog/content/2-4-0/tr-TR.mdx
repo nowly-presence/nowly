@@ -1,0 +1,64 @@
+---
+title: 2.4.0
+date: 15 Ekim 2026
+description: Şablonlar, görseller, sayaçlar ve butonlarla Discord aktiviteleri oluştur ve paylaş. JSON içe/dışa aktarma ve özelleştirilebilir gezinme.
+stores: [chrome, firefox]
+---
+
+## Yenilikler
+
+### Özel aktiviteler
+
+- Yeni Özel sekmesinde site presence'ı kurmadan Discord aktiviteleri oluştur, düzenle ve sil. Nolo ilk kullanımda özelliği tanıtır.
+- Cihazda en fazla 50 aktivite kaydet. Aynı anda yalnızca biri etkin olabilir; kapatılana kadar sekme presence'larından önceliklidir.
+- Ad, tür (Oynuyor, Dinliyor, İzliyor, Yarışıyor), iki satır metin, üzerine gelince metin gösteren büyük/küçük görseller ve en fazla iki HTTPS butonu ayarla.
+- Geçen süre veya 5 dakika ile 24 saat arasında geri sayım seç. Sayaç oluşturulurken değil etkinleştirilirken başlar.
+- Ders, Kodlama, Oyun gecesi, Çalma listesi, Film gecesi, Canlı, Egzersiz, Seyahat ve Kahve molası için dokuz şablon. Düzenleyiciyi doldurur, onaydan önce kaydetmez.
+- Canlı önizleme ve mevcut aktiviteyi açma, durdurma veya sürdürme kartı eklendi.
+
+### Görseller ve paylaşım
+
+- PNG, JPEG, WebP veya GIF yükle, HTTPS URL kullan ya da 24 simge ve 10 renk arasından seç. Büyük görsel yoksa Nowly logosu, küçük görsel yoksa rozet gösterilmez.
+- GIF dışındaki görseller otomatik küçültülüp dönüştürülür. Görsel başına sınır 1 MiB, GIF'ler dönüştürülmez. Yerel kopyalar önizleme ve yeniden yükleme içindir; Discord barındırılan URL'yi alır.
+- Etkin görseller düzenli yenilenir. 30 gün kullanılmayan uzak dosyalar temizlenebilir; süresi dolan görseller gerektiğinde yerel kopyadan tekrar yüklenir.
+- Kayıtlı aktiviteyi `[Ad].json` olarak dışa aktar. Kaydedilmemiş değişiklikler değil son kayıt kullanılır; metin, tür, sayaç, butonlar ve yerel kopyadan gömülü görseller içerir. Yerel kopyası olmayan görsel atlanır.
+- Yerel kimlikler, oluşturma/güncelleme tarihleri, etkinlik durumu ve yüklenen görsellerin barındırma URL'leri aktarılmaz. Girilen HTTPS bağlantıları kalır: paylaşmadan önce kontrol et.
+- Erişilebilir etiketli ve ipuçlu simge butonundan birden çok dosya içe aktar veya görünür Özel sekmesine bırak. Diğer ekranlar dosyaları yakalamaz.
+- Her içe aktarma mevcutların üzerine yazmadan yeni ve devre dışı bir aktivite oluşturur. Tek dosya düzenleyiciyi açar, çoklu dosya özet gösterir.
+- 4 MiB üzerindeki dosyalar, uyumsuz biçim/sürümler ve geçersiz aktiviteler reddedilir. Gömülü görseller doğrulanıp yeniden yüklenir; bir görsel başarısızsa aktivite onsuz korunur ve uyarı gösterilir.
+
+### Koşullar ve gizlilik
+
+- İlk açılıştaki iletişim kutusu, Kullanım Koşullarının kabulünü Gizlilik Politikası hakkında bilgi edinildiğinin teyidinden ayırır. İsteğe bağlı istatistikler etkinleştirilmez.
+- Nowly belge güncellemelerini otomatik kontrol eder ve yalnızca önemli değişiklik içeren belgeler için yeniden teyit ister. Teyitler cihazda tutulur; önbellekteki sürümler çevrimdışı kullanılabilir.
+- Gerekli teyitler kaydedilene kadar etkinlik paylaşımı ve görsel yükleme duraklatılır. Belge bağlantıları ve güncelleme tarihleri iletişim kutusunda yer alır.
+
+## İyileştirmeler
+
+- Tarayıcı araç çubuğu rozeti artık seçilen etkinlik türü (oynama, izleme, dinleme veya yarışma) için bir emoji gösterir; arka plan rengini varlık durumundan veya özel simgeden alır. Duraklatmanın ayrı göstergesi korunur. Rozet, etkinliğin Discord'a iletildiğini doğrulamaz.
+- Düzenleyicide kaydırırken önizleme görünür kalır. Görsel seçmek veya değiştirmek için küçük resme tıkla; desteklenen biçimler ve boyut sınırı da gösterilir. Dinliyor modunda büyük görselin metninin Discord'da üçüncü satırda da göründüğü açıklanır.
+- İkincil ekranlar yalnızca açıldığında yüklenir; başlangıç JavaScript'i azalırken ziyaret edilen sekmeler ve durumları korunur. Çevrimdışı kullanım için tüm dosyalar uzantıda yerel olarak bulunur.
+- Etkinlik oluşturma, JSON paylaşımı ve görsel gizliliğini açıklayan İngilizce ve Fransızca üç görselli kılavuz eklendi. Ekran görüntüleri ekrana uyum sağlar ve özgün boyutta açılabilir.
+- Sekmeyi basılı tutup taşı veya yana çekerek yeni grup oluştur. Düzeni Ayarlar'dan sıfırla.
+- Kart ve önizleme Discord düzenini izler: Oynuyor adı ayrı satırda, diğer türler başlıkta gösterir. Diyaloglar panel üzerinde yüzer; boş ekran örnekler ve şablonlar sunar.
+- Yasal belge teyit iletişim kutusu dahil özellikler ve hatalar 11 dile çevrildi.
+
+## Düzeltmeler
+
+- Etkin sekmenin etiketi artık kesilmiyor. İçe aktarma butonu yalnızca simge göstererek küçük kalıyor.
+- Eşzamanlı içe aktarmalar engellenir, toplu işlemler 50 aktivite sınırına uyar ve bir dosya hatası sonraki dosyaları durdurmaz.
+- Aynı görselin tekrarlanan/eşzamanlı yüklemeleri sunucuda idempotenttir. Uzak silme hatalarında yeniden denemek için referanslar korunur.
+
+## Kaldırılanlar ve uyumluluk
+
+- Mevcut kullanıcı özelliği kaldırılmadı. Mevsimsel temalar, ChromeOS, iframe ve paketlenmiş presence'lar korundu.
+- Durum servisindeki kullanılmayan sayı ayrıştırıcısı kaldırıldı ve veri dışa aktarmadaki JSON indirme yardımcısı ortaklaştırıldı.
+- Aktiviteler yerel kalır ve hesapla eşitlenmez. Paylaşım dosya üzerinden yapılır, yeni analiz olayı eklenmez.
+
+## Teknik ve gizlilik
+
+- Koşullar ve gizlilik politikası 11 dilde yüklenen görselleri, herkese açık URL'leri, JSON yeniden paylaşımını, saklama sürelerini, kimlik doğrulamalı silmeyi ve üçüncü taraf önbelleklerinin kalıcılığını açıklıyor.
+- Cihaza bağlı, cihaz belirteciyle korunan görsel yükleme, yenileme ve silme yolları. Dosya imzası, MIME, boyut ve SHA-256 doğrulaması; cihaz başına saatte 20 yükleme sınırı.
+- `CustomAsset` tablosu, PostgreSQL geçişi, S3/R2 depolama ve korumalı kullanılmayan görsel temizliği eklendi. Depolama ve temizlik takvimi dağıtımda yapılandırılmalı.
+- Cihaz dışa aktarması barındırılan görsel URL ve metaverilerini içerir. Veri silme uzak nesneleri de siler, hatadan sonra yeniden denenebilir.
+- Yerel görseller için `unlimitedStorage`, paylaşım ve PostgreSQL entegrasyon testleri, alt modülleri değiştirmeden çalışma alanı TypeScript biçimlendirmesi eklendi.

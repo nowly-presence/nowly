@@ -87,7 +87,11 @@ export const DesktopStep = ({ onNext }: {
           <Row
             leading={<RiDiscordLine className="size-5 text-muted" />}
             title="Discord"
-            description={state.native.connected ? t("onboarding.discordOpen") : t("onboarding.discordAfter")}
+            description={
+              state.native.connected
+                ? t("onboarding.discordOpen")
+                : t("onboarding.discordAfter")
+            }
             trailing={state.native.connected ? <Spinner className="text-muted" /> : null}
           />
         </Group>

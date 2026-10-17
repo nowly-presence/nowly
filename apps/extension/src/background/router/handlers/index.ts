@@ -6,10 +6,15 @@ import { handleAcknowledgeDiscordIpcIssue, handleConnectNative, handleGetNativeS
 import { handleBulkToggle, handleBulkUninstall, handleCheckUpdates, handleClearSnooze, handleFetchCatalog, handleGetInstallQueue, handleGetPresenceEngagement, handleGetPresenceSettings, handleGetPresences, handleInstall, handleInstallFromApi, handleInstallLocalZip, handleRetryInstallQueue, handleSetPresenceLike, handleSetPresenceSettings, handleSetSchedule, handleSnooze, handleToggle, handleUninstall, handleUpdate } from "@/background/router/handlers/presences.handlers";
 import { handleGetSettings, handleResetOnboardingForDev, handleSetSettings } from "@/background/router/handlers/settings.handlers";
 import { handleDeleteDeviceData, handleExportDeviceData, handleGetOnboarding, handleGetTabState, handleReportPresence, handleSetOnboarding, handleSetTabMuted, handleSyncPresenceScripts } from "@/background/router/handlers/extra.handlers";
+import { handleDeleteCustomActivity, handleGetCustomActivities, handleGetCustomImages, handleSaveCustomActivity, handleSetCustomActivityActive, handleUploadCustomImage } from "@/background/router/handlers/custom-activity.handlers";
 import { handleRecordUsageDay, handleSnoozeSupportPrompt } from "@/background/router/handlers/support.handlers";
 import type { HandlerRegistry } from "@/background/router/router";
+import { handleAcceptLegalDocuments, handleCheckLegalDocuments, handleGetLegalState } from "@/background/router/handlers/legal.handlers";
 
 export const buildHandlerRegistry = (): HandlerRegistry => ({
+  GET_LEGAL_STATE: handleGetLegalState,
+  CHECK_LEGAL_DOCUMENTS: handleCheckLegalDocuments,
+  ACCEPT_LEGAL_DOCUMENTS: handleAcceptLegalDocuments,
   GET_PRESENCES: handleGetPresences,
   GET_NATIVE_STATUS: handleGetNativeStatus,
   GET_USER_SCRIPTS_STATUS: handleGetUserScriptsStatus,
@@ -58,6 +63,12 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   EXPORT_DEVICE_DATA: handleExportDeviceData,
   DELETE_DEVICE_DATA: handleDeleteDeviceData,
   SYNC_PRESENCE_SCRIPTS: handleSyncPresenceScripts,
+  GET_CUSTOM_ACTIVITIES: handleGetCustomActivities,
+  SAVE_CUSTOM_ACTIVITY: handleSaveCustomActivity,
+  DELETE_CUSTOM_ACTIVITY: handleDeleteCustomActivity,
+  SET_CUSTOM_ACTIVITY_ACTIVE: handleSetCustomActivityActive,
+  UPLOAD_CUSTOM_IMAGE: handleUploadCustomImage,
+  GET_CUSTOM_IMAGES: handleGetCustomImages,
   GET_ACCOUNT: handleGetAccount,
   START_ACCOUNT_CONNECT: handleStartAccountConnect,
   NOWLY_SESSION: handleNowlySession,

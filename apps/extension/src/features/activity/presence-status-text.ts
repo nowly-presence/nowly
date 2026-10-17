@@ -50,7 +50,9 @@ export const statusText = (status: PresenceStatus, stored: StoredPresence, t: Tr
       };
     default:
       return {
-        text: stored.metadata.url?.[0] ? hostnameOf(stored.metadata.url[0]) : t("status.ready"),
+        text: stored.metadata.url?.[0]
+          ? hostnameOf(stored.metadata.url[0])
+          : t("status.ready"),
         tone: "muted"
       };
   }

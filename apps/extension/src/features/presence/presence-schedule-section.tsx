@@ -27,7 +27,11 @@ export const PresenceScheduleSection = ({ slug, stored }: {
         <SwitchRow
           leading={<RiTimeLine className="size-[18px] text-muted" />}
           title={t("detail.customSchedule")}
-          description={stored.schedule ? t("detail.customScheduleOn") : t("detail.customScheduleOff")}
+          description={
+            stored.schedule
+              ? t("detail.customScheduleOn")
+              : t("detail.customScheduleOff")
+          }
           checked={Boolean(stored.schedule)}
           label={t("detail.customSchedule")}
           onChange={toggleSchedule}

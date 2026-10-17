@@ -1,11 +1,14 @@
 import type { PayloadOf, ResponseOf, RouterMessageType } from "@/background/router/contracts";
 import type { OnboardingState } from "@/background/storage/onboarding.store";
-import type { AccountSnapshot, CurrentActivity, ExtensionSettings, InstalledPresences, NativeStatus, RuntimeLogEntry, TabActivity, TabState } from "@/shared/types";
+import { buildCustomPresence, customActivitySlug } from "@/shared/custom-activity";
+import { decodeImageDataUrl, sha256Hex } from "@/shared/custom-image";
+import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, ExtensionSettings, InstalledPresences, NativeStatus, RuntimeLogEntry, StoredCustomImage, TabActivity, TabState } from "@/shared/types";
 import type { MockStorageArea } from "@/preview/mock-storage";
 import { toStoredPresence, type CatalogFixture } from "@/preview/preview-fixtures";
 import { discordIpcIssueCode, markDiscordIpcIssuePrompted, NO_DISCORD_IPC_ISSUE, type DiscordIpcIssue } from "@/shared/discord-ipc-prompt";
 import { previewParams } from "@/preview/preview-params";
 import { DEFAULT_SUPPORT_PROMPT, SUPPORT_PROMPT_KEY, withSnooze, type SupportPromptState } from "@/shared/support-prompt";
+import { confirmLegalDocuments, emptyLegalState, normalizeLegalState } from "@nowly/shared/legal";
 
 export type MockHandlers = { [K in RouterMessageType]?: (payload: PayloadOf<K>) => ResponseOf<K> | Promise<ResponseOf<K>> };
 
@@ -25,6 +28,8 @@ const CATALOG_LATENCY_MS = 250;
 const INSTALL_LATENCY_MS = 600;
 const REPORT_LATENCY_MS = 500;
 const SCRIPTS_GRANT_DELAY_MS = 4000;
+const UPLOAD_LATENCY_MS = 700;
+const PREVIEW_CDN = "https://cdn.nowly.me/custom";
 const SYNC_LATENCY_MS = 700;
 const LAST_SYNC_AGE_MS = 4 * 60_000;
 const IPC_DENIED_RECONNECTS = 2;
@@ -96,6 +101,33 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
       presenceDisplayMode: "category",
       showPlayer: true
     });
+  const readCustom = () =>
+    local.read<CustomActivitiesState>("customActivities", {
+      items: [],
+      activeId: null,
+      activatedAt: null
+    });
+  const readImages = () => local.read<Record<string, StoredCustomImage>>("customActivityImages", {});
+  const writeCustom = async (next: CustomActivitiesState) => {
+    await local.set({ customActivities: next });
+    const active = next.items.find((item) => item.id === next.activeId);
+    const previous = await local.read<CurrentActivity | null>("currentActivity", null);
+
+    if (active) {
+      const presence = buildCustomPresence(active, next.activatedAt ?? Date.now());
+      await local.set({
+        currentActivity: {
+          slug: customActivitySlug(active.id),
+          presence,
+          updatedAt: Date.now()
+        }
+      });
+    } else if (previous?.slug.startsWith("custom:")) {
+      await local.set({ currentActivity: null });
+    }
+
+    return next;
+  };
   const readOnboarding = () =>
     local.read<OnboardingState>("onboarding", {
       devReplayOnboarding: false,
@@ -122,6 +154,51 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
   };
 
   const handlers: MockHandlers = {
+    GET_LEGAL_STATE: async () => {
+      const stored = await local.get("legalDocuments");
+
+      if (stored.legalDocuments) return normalizeLegalState(stored.legalDocuments);
+
+      const initial = emptyLegalState();
+      const receipt = {
+        version: 1,
+        recordedAt: new Date().toISOString()
+      };
+      const mode = new URLSearchParams(window.location.search).get("legal");
+
+      if (mode !== "first") {
+        initial.tosAcceptance = receipt;
+        initial.privacyAcknowledgement = receipt;
+      }
+
+      if (mode === "update") {
+        initial.manifest = {
+          schemaVersion: 1,
+          documents: {
+            tos: {
+              ...initial.manifest.documents.tos,
+              version: 2,
+              requiredVersion: 2
+            },
+            privacy: {
+              ...initial.manifest.documents.privacy,
+              version: 2,
+              requiredVersion: 2
+            }
+          }
+        };
+      }
+
+      await local.set({ legalDocuments: initial });
+      return initial;
+    },
+    CHECK_LEGAL_DOCUMENTS: async () => normalizeLegalState((await local.get("legalDocuments")).legalDocuments),
+    ACCEPT_LEGAL_DOCUMENTS: async (input) => {
+      const state = normalizeLegalState((await local.get("legalDocuments")).legalDocuments);
+      const result = confirmLegalDocuments(state, input, new Date().toISOString());
+      if (result.ok) await local.set({ legalDocuments: result.state });
+      return result;
+    },
     GET_PRESENCES: readPresences,
     GET_SETTINGS: readSettings,
     SET_SETTINGS: async (partial) => {
@@ -281,6 +358,87 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
       ok: false,
       error: "PREVIEW"
     }),
+    GET_CUSTOM_ACTIVITIES: readCustom,
+    SAVE_CUSTOM_ACTIVITY: async ({ draft }) => {
+      const state = await readCustom();
+
+      const existing = draft.id ? state.items.find((item) => item.id === draft.id) : undefined;
+      const now = Date.now();
+      const activity = {
+        ...draft,
+        id: existing?.id ?? crypto.randomUUID(),
+        createdAt: existing?.createdAt ?? now,
+        updatedAt: now
+      };
+      await writeCustom({
+        ...state,
+        items: existing ? state.items.map((item) => (item.id === activity.id ? activity : item)) : [activity, ...state.items]
+      });
+      return {
+        ok: true,
+        activity
+      };
+    },
+    DELETE_CUSTOM_ACTIVITY: async ({ id }) => {
+      const state = await readCustom();
+
+      const active = state.activeId === id;
+      await writeCustom({
+        items: state.items.filter((item) => item.id !== id),
+        activeId: active ? null : state.activeId,
+        activatedAt: active ? null : state.activatedAt
+      });
+      return {
+        ok: true
+      };
+    },
+    SET_CUSTOM_ACTIVITY_ACTIVE: async ({ id }) => {
+      const state = await readCustom();
+
+      const exists = id !== null && state.items.some((item) => item.id === id);
+      return writeCustom({
+        ...state,
+        activeId: exists ? id : null,
+        activatedAt: exists ? Date.now() : null
+      });
+    },
+    UPLOAD_CUSTOM_IMAGE: async ({ dataUrl }) => {
+      await delay(UPLOAD_LATENCY_MS);
+      const decoded = decodeImageDataUrl(dataUrl);
+
+      if (!decoded.ok) return decoded;
+
+      const hash = await sha256Hex(decoded.bytes);
+
+      const images = await readImages();
+      await local.set({
+        customActivityImages: {
+          ...images,
+          [hash]: {
+            dataUrl,
+            mime: decoded.mime,
+            size: decoded.bytes.length,
+            createdAt: Date.now()
+          }
+        }
+      });
+      return {
+        ok: true,
+        image: {
+          kind: "upload",
+          hash,
+          mime: decoded.mime,
+          size: decoded.bytes.length,
+          remoteId: hash,
+          remoteUrl: `${PREVIEW_CDN}/${hash}`,
+          lastUsedAt: Date.now()
+        }
+      };
+    },
+    GET_CUSTOM_IMAGES: async ({ hashes }) => {
+      const images = await readImages();
+      return Object.fromEntries(hashes.flatMap((hash) => (images[hash] ? [[hash, images[hash].dataUrl]] : [])));
+    },
     GET_ACCOUNT: () => account,
     START_ACCOUNT_CONNECT: () => {
       account = {

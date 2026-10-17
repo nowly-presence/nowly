@@ -89,7 +89,11 @@ export const IdleCard = ({ connection, paused, onResume, hasPresences }: {
         </span>
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <span className="text-label-lg font-medium">{t("activity.idleTitle")}</span>
-          <span className="text-body-sm text-muted">{hasPresences ? t("activity.idleDescription") : t("activity.idleDescriptionEmpty")}</span>
+          <span className="text-body-sm text-muted">
+            {hasPresences
+              ? t("activity.idleDescription")
+              : t("activity.idleDescriptionEmpty")}
+          </span>
         </div>
       </div>
     </div>

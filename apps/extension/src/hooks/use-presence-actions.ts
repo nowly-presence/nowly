@@ -71,7 +71,12 @@ export const usePresenceActions = () => {
   const toggle = useCallback(async (slug: string, enabled: boolean) => {
     const result = await sendMessage("TOGGLE_PRESENCE", { slug, enabled });
     await refresh.presences();
-    if (!result.ok) toast(result.error === "PRESENCE_NO_VALID_URL_PATTERNS" ? t("error.generic") : t("error.toggle"), "error");
+    if (!result.ok) toast(
+      result.error === "PRESENCE_NO_VALID_URL_PATTERNS"
+        ? t("error.generic")
+        : t("error.toggle"),
+      "error"
+    );
   }, [refresh, toast, t]);
 
   const snooze = useCallback(async (slug: string, durationMs: number) => {

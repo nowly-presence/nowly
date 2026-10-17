@@ -24,7 +24,9 @@ export const ConnectionSummary = () => {
         description={
           <span className="flex items-center gap-1.5">
             {connection === "discord" && <LiveDot pulse={false} />}
-            {connection === "discord" ? t("settings.connectedDiscord") : t(`connection.hint.${connection}`)}
+            {connection === "discord"
+              ? t("settings.connectedDiscord")
+              : t(`connection.hint.${connection}`)}
           </span>
         }
       />

@@ -14,6 +14,7 @@ import { IS_CANARY } from "@/shared/brand";
 import { WEB_BASE_URL } from "@/shared/constants";
 import { LOCALE_PREFERENCE_KEY } from "@/shared/locales";
 import type { InstalledPresences } from "@/shared/types";
+import { checkLegalDocuments } from "@/background/services/legal-documents";
 
 type ChromeWithSidePanel = typeof chrome & {
   sidePanel?: {
@@ -171,6 +172,12 @@ const bootBackground = (options: {
 };
 
 export const registerLifecycleHandlers = (): void => {
+  void chrome.alarms.create("legal-documents-check", { periodInMinutes: 60 });
+  chrome.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name === "legal-documents-check") void checkLegalDocuments()
+      .then(() => broadcastActiveTab())
+      .catch(() => {});
+  });
   registerNativeResponseHandler();
 
   chrome.runtime.onStartup.addListener(async () => {
@@ -229,6 +236,9 @@ export const registerLifecycleHandlers = (): void => {
 };
 
 export const initializeBackground = (): void => {
+  void checkLegalDocuments()
+    .then(() => broadcastActiveTab())
+    .catch(() => {});
   enableSidePanelAction();
   registerContextMenu();
   void bootBackground();

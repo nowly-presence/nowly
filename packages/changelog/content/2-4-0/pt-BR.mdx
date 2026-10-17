@@ -1,0 +1,64 @@
+---
+title: 2.4.0
+date: 15 de outubro de 2026
+description: Crie e compartilhe atividades do Discord com modelos, imagens, temporizadores e botões. Importação e exportação JSON e navegação personalizável.
+stores: [chrome, firefox]
+---
+
+## Novidades
+
+### Atividades personalizadas
+
+- Nova aba Pessoal para criar, editar e excluir atividades do Discord sem instalar uma presença de site. Nolo apresenta o recurso no primeiro uso.
+- Salve até 50 atividades no dispositivo. Só uma fica ativa por vez e tem prioridade sobre as presenças das abas até ser desativada.
+- Configure nome, tipo (Jogando, Ouvindo, Assistindo, Competindo), duas linhas de texto, imagens grande e pequena com texto ao passar o mouse e até dois botões HTTPS.
+- Tempo decorrido ou contagem regressiva de 5 minutos a 24 horas. O temporizador começa na ativação, não na criação.
+- Nove modelos: Estudos, Programação, Noite de jogos, Playlist, Noite de cinema, Ao vivo, Treino, Viagem e Pausa para café. Preenchem o editor, mas nada é salvo antes da confirmação.
+- Prévia ao vivo e cartão dedicado para abrir, parar ou retomar a atividade atual.
+
+### Imagens e compartilhamento
+
+- Envie PNG, JPEG, WebP ou GIF, use uma URL HTTPS ou escolha entre 24 ícones e 10 cores. Sem imagem grande, aparece o logo do Nowly; sem imagem pequena, não há emblema.
+- Imagens que não são GIF são redimensionadas e convertidas automaticamente. Limite de 1 MiB por imagem; GIFs não são convertidos. Cópias locais servem à prévia e ao reenvio; o Discord recebe a URL hospedada.
+- Imagens ativas são atualizadas regularmente. Arquivos hospedados sem uso por 30 dias podem ser removidos e reenviados da cópia local quando necessário.
+- Exporte uma atividade salva como `[Nome].json`. A exportação usa a última versão salva, não alterações pendentes, incluindo textos, tipo, temporizador, botões e imagens enviadas incorporadas da cópia local. Sem cópia, a imagem é omitida.
+- IDs locais, datas de criação/alteração, estado de ativação e URLs de hospedagem de uploads não são exportados. Links HTTPS inseridos permanecem: confira o arquivo antes de compartilhar.
+- Importe um ou vários arquivos pelo botão de ícone Importar, com rótulo acessível e dica, ou arraste-os para a aba Pessoal visível. Outras telas não interceptam os arquivos.
+- Cada importação cria uma atividade nova e inativa, sem sobrescrever as existentes. Uma importação abre o editor; várias mostram um resumo.
+- Arquivos acima de 4 MiB, formatos/versões incompatíveis e atividades inválidas são rejeitados. Imagens incorporadas são validadas e reenviadas; se uma falhar, a atividade fica sem ela e um aviso é exibido.
+
+### Termos e privacidade
+
+- Um diálogo no primeiro uso separa a aceitação dos Termos de uso da ciência da Política de privacidade, sem ativar as estatísticas opcionais.
+- O Nowly verifica atualizações automaticamente e solicita nova confirmação apenas para documentos com alterações importantes. As confirmações ficam no dispositivo e as versões em cache continuam disponíveis offline.
+- O compartilhamento de atividade e o envio de imagens ficam pausados até as confirmações necessárias. O diálogo inclui links para os documentos e suas datas de atualização.
+
+## Melhorias
+
+- O indicador na barra do navegador agora mostra um emoji para o tipo de atividade selecionada (jogar, assistir, ouvir ou competir), com a cor da presença ou do ícone personalizado. A pausa mantém seu próprio indicador. Isso não confirma que a atividade chegou ao Discord.
+- A prévia permanece visível ao rolar pelo editor. Clique na miniatura para escolher ou substituir uma imagem; a dica mostra os formatos e o tamanho máximo. No modo Ouvindo, uma dica explica que o texto da imagem grande também aparece em uma terceira linha no Discord.
+- As telas secundárias são carregadas ao abrir, reduzindo o JavaScript inicial e preservando as abas visitadas e seu estado. Todos os arquivos continuam incluídos localmente para uso offline.
+- Três guias ilustrados em inglês e francês explicam a criação de atividades, o compartilhamento JSON e a privacidade das imagens, com capturas adaptáveis e links para os originais.
+- Personalize a navegação: segure uma aba para movê-la ou puxe para um lado para criar outro grupo. Restaure a disposição nos Ajustes.
+- Cartões e prévia seguem o Discord: Jogando mostra o nome separado; Ouvindo, Assistindo e Competindo o colocam no cabeçalho. Diálogos flutuantes e estado vazio com exemplos e modelos.
+- Recursos e erros, incluindo o diálogo de confirmação legal, traduzidos nos 11 idiomas.
+
+## Correções
+
+- O rótulo da aba ativa não é mais cortado. O botão Importar fica compacto com apenas o ícone.
+- Importações simultâneas são bloqueadas, lotes respeitam o limite de 50 atividades e a falha de um arquivo não impede os seguintes.
+- Uploads repetidos ou simultâneos da mesma imagem são idempotentes no servidor. Falhas na exclusão remota preservam as referências para uma nova tentativa.
+
+## Remoções e compatibilidade
+
+- Nenhum recurso existente foi removido. Temas sazonais, ChromeOS, iframes e presenças incluídas foram preservados.
+- Removido o analisador numérico sem uso do serviço de status e compartilhado o auxiliar de download JSON usado na exportação de dados.
+- Atividades continuam locais e não são sincronizadas com a conta. Compartilhamento por arquivo, sem novos eventos de analytics.
+
+## Técnica e privacidade
+
+- Os termos e a política de privacidade detalham nos 11 idiomas as imagens enviadas, suas URLs públicas, a redistribuição JSON, a retenção, a exclusão autenticada e a persistência de caches de terceiros.
+- Rotas de envio, atualização e exclusão vinculadas ao dispositivo e protegidas por token. Validação de assinatura, MIME, tamanho e SHA-256; limite de 20 envios por hora e dispositivo.
+- Nova tabela `CustomAsset`, migração PostgreSQL, armazenamento S3/R2 e limpeza protegida de imagens sem uso. Armazenamento e agendamento precisam ser configurados no deploy.
+- Exportações do dispositivo incluem URLs e metadados das imagens hospedadas. A exclusão também remove objetos remotos, permitindo novas tentativas após falhas.
+- Permissão `unlimitedStorage` para cópias locais, testes de compartilhamento e integração PostgreSQL e formatação TypeScript do workspace sem alterar submódulos.

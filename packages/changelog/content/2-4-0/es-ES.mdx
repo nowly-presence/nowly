@@ -1,0 +1,64 @@
+---
+title: 2.4.0
+date: 15 de octubre de 2026
+description: Crea y comparte actividades de Discord con plantillas, imágenes, temporizadores y botones. Importación y exportación JSON y navegación personalizable.
+stores: [chrome, firefox]
+---
+
+## Novedades
+
+### Actividades personalizadas
+
+- Nueva pestaña Personal para crear, editar y eliminar actividades de Discord sin instalar una presencia de un sitio. Nolo presenta la función en el primer uso.
+- Guarda hasta 50 actividades en el dispositivo. Solo una puede estar activa; tiene prioridad sobre las presencias de las pestañas hasta desactivarla.
+- Configura nombre, tipo (Jugando, Escuchando, Viendo, Compitiendo), dos líneas de texto, imágenes grande y pequeña con texto al pasar el cursor y hasta dos botones HTTPS.
+- Tiempo transcurrido o cuenta atrás de 5 minutos a 24 horas. El temporizador comienza al activar la actividad, no al crearla.
+- Nueve plantillas: Estudiar, Programar, Noche de juegos, Playlist, Noche de cine, Directo, Entrenamiento, Viaje y Pausa para café. Rellenan el editor sin guardar hasta que lo confirmes.
+- Vista previa en directo y tarjeta dedicada para abrir, detener o reanudar la actividad actual.
+
+### Imágenes y compartir
+
+- Sube PNG, JPEG, WebP o GIF, usa una URL HTTPS o elige entre 24 iconos y 10 colores. Sin imagen grande se muestra el logo de Nowly; sin imagen pequeña no hay insignia.
+- Las imágenes que no son GIF se redimensionan y convierten automáticamente. Límite de 1 MiB por imagen; los GIF no se convierten. La copia local permite vistas previas y nuevos envíos; Discord recibe la URL alojada.
+- Las imágenes activas se refrescan periódicamente. Los archivos alojados sin uso durante 30 días pueden limpiarse y volver a subirse desde su copia local cuando haga falta.
+- Exporta una actividad guardada como `[Nombre].json`. Se exporta la última versión guardada, no los cambios pendientes, con textos, tipo, temporizador, botones e imágenes subidas incrustadas desde la copia local. Si falta la copia, se omite esa imagen.
+- No se exportan los identificadores locales, fechas de creación/modificación, estado de activación ni URLs de alojamiento de imágenes subidas. Los enlaces HTTPS introducidos sí permanecen: revisa el archivo antes de compartirlo.
+- Importa uno o varios archivos mediante el botón de icono Importar, con etiqueta accesible y descripción emergente, o arrastrándolos a la pestaña Personal visible. No se interceptan otras pantallas.
+- Cada importación crea una actividad nueva e inactiva, sin sobrescribir las existentes. Una importación abre el editor; varias muestran un resumen.
+- Se rechazan archivos de más de 4 MiB, formatos/versiones incompatibles y actividades inválidas. Las imágenes incrustadas se validan y se vuelven a subir; si una falla, la actividad se conserva sin ella y aparece un aviso.
+
+### Condiciones y privacidad
+
+- Un diálogo al primer inicio distingue la aceptación de las Condiciones de uso de la toma de conocimiento de la Política de privacidad, sin activar las estadísticas opcionales.
+- Nowly comprueba automáticamente las actualizaciones y solo vuelve a pedir confirmación para los documentos con cambios importantes. Las confirmaciones se guardan en el dispositivo y las versiones en caché siguen disponibles sin conexión.
+- El intercambio de actividad y la subida de imágenes quedan en pausa hasta registrar las confirmaciones necesarias. El diálogo incluye enlaces a los documentos y sus fechas de actualización.
+
+## Mejoras
+
+- La insignia de la barra del navegador muestra un emoji según el tipo de actividad seleccionada (jugar, ver, escuchar o competir), sobre un color de la presencia o del icono personalizado. La pausa conserva su propio indicador. La insignia no confirma que la actividad haya llegado a Discord.
+- La vista previa permanece visible al desplazarte por el editor. Haz clic en la miniatura para elegir o sustituir una imagen; la ayuda indica los formatos y el tamaño máximo. En el modo Escuchando, una nota explica que el texto de la imagen grande también aparece en una tercera línea en Discord.
+- Las pantallas secundarias se cargan al abrirlas, reduciendo el JavaScript inicial y conservando las pestañas visitadas y su estado. Todos los archivos siguen incluidos localmente para el uso sin conexión.
+- Tres guías ilustradas en inglés y francés explican la creación de actividades, el intercambio JSON y la privacidad de las imágenes, con capturas adaptables que enlazan a los originales.
+- Navegación personalizable: mantén pulsada una pestaña para moverla o arrástrala hacia un lado para crear otro grupo. Restablece la distribución desde Ajustes.
+- Tarjetas y vista previa siguen el diseño de Discord: Jugando muestra el nombre aparte; Escuchando, Viendo y Compitiendo lo ponen en el encabezado. Diálogos flotantes y estado vacío con ejemplos y plantillas.
+- Funciones y errores, incluido el diálogo de confirmación legal, traducidos a los 11 idiomas.
+
+## Correcciones
+
+- La etiqueta de la pestaña activa ya no se corta. El botón Importar es compacto y solo muestra el icono.
+- Se bloquean importaciones simultáneas, los lotes respetan el límite de 50 actividades y un archivo fallido no impide procesar los siguientes.
+- Los envíos repetidos o simultáneos de la misma imagen son idempotentes en el servidor. Si falla el borrado remoto, se conservan las referencias para reintentarlo.
+
+## Eliminaciones y compatibilidad
+
+- No se elimina ninguna función existente. Se mantienen temas estacionales, ChromeOS, iframes y presencias incluidas.
+- Eliminado el analizador numérico sin uso del servicio de estado y unificado el ayudante de descarga JSON del exportador de datos.
+- Las actividades permanecen locales y no se sincronizan con la cuenta. Se comparten mediante archivos y no se añaden eventos de analítica.
+
+## Técnica y privacidad
+
+- Las condiciones y la política de privacidad detallan en los 11 idiomas las imágenes subidas, sus URLs públicas, la redistribución JSON, la conservación, el borrado autenticado y la persistencia de las cachés de terceros.
+- Rutas de subida, refresco y borrado vinculadas al dispositivo y protegidas por su token. Validación de firma, MIME, tamaño y SHA-256; límite de 20 subidas por hora y dispositivo.
+- Nueva tabla `CustomAsset`, migración PostgreSQL, almacenamiento S3/R2 y limpieza protegida de imágenes sin uso. El almacenamiento y la programación de limpieza requieren configuración al desplegar.
+- La exportación del dispositivo incluye URLs y metadatos de imágenes alojadas. El borrado también elimina los objetos remotos y permite reintentos tras fallos.
+- Permiso `unlimitedStorage` para copias locales, pruebas de compartir e integración PostgreSQL y formateo TypeScript del workspace sin modificar submódulos.

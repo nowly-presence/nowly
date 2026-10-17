@@ -918,9 +918,9 @@
     "badge": "Privacidade",
     "title": "Política de Privacidade",
     "description": "Como o Nowly trata seus dados, o que fica no seu dispositivo e o que depende do seu consentimento.",
-    "last-updated": "Última atualização: 4 de outubro de 2026.",
+    "last-updated": "Última atualização: 16 de outubro de 2026.",
     "data-region": "União Europeia (VPS fornecido pela Contabo GmbH, Alemanha)",
-    "intro": "Esta política descreve como <strong>{publisherName}</strong> (\"nós\"), como controlador de dados, processa dados pessoais relacionados ao Nowly. A atividade de Rich Presence é enviada do seu navegador para o cliente Discord <strong>na sua máquina</strong>. Ela não passa pelos nossos servidores. Estatísticas de uso opcionais e alguns recursos do site envolvem nossa API ou processadores, conforme descrito abaixo.",
+    "intro": "Esta política descreve o tratamento de dados pessoais por <strong>{publisherName}</strong>, controlador. As mensagens Rich Presence chegam ao Discord localmente pelo aplicativo desktop. Isso não significa que todos os recursos funcionem offline: sincronização, solicitações de imagens, envios solicitados e estatísticas opcionais usam nossa API ou fornecedores.",
     "sections": [
       {
         "title": "Controlador",
@@ -932,7 +932,15 @@
       },
       {
         "title": "Dados processados no seu dispositivo (extensão)",
-        "body": "A extensão armazena dados na API de armazenamento local do navegador (<code>chrome.storage.local</code> no Chrome / equivalente no Firefox). Eles ficam nesse dispositivo, a menos que você ative analytics opcionais ou use uma URL de API personalizada:<ul><li>Presenças instaladas (metadados, pacotes assinados, estado de ativação).</li><li>Atividade atual (título, plataforma, duração, URL da miniatura).</li><li>Um log de depuração (marcações de tempo, ações, URLs visitadas de sites suportados).</li><li>Estado do onboarding e um <strong>snapshot local</strong> do seu perfil do Discord (ID, nome de usuário, avatar) usado apenas para exibir a interface da extensão, obtido do cliente Discord local.</li><li>Preferências de exibição, atalhos e configurações por presença.</li><li>Um identificador de dispositivo gerado localmente (UUID), usado se você optar por participar de analytics.</li></ul>Você pode apagar esses dados redefinindo a extensão ou desinstalando-a."
+        "body": "O armazenamento local contém presenças, pacotes assinados, configurações, atalhos, integração inicial, atividade atual, logs com URLs de sites compatíveis, cópia local do perfil Discord (ID, nome, avatar), atividades personalizadas e imagens locais. Um UUID identifica a instalação nos serviços API solicitados, inclusive uploads, independentemente do consentimento para estatísticas. Os recursos de rede são descritos abaixo. Redefinir ou desinstalar apaga dados locais, não imediatamente imagens remotas ou cópias de terceiros."
+      },
+      {
+        "title": "Atividades personalizadas, imagens e compartilhamento",
+        "body": "Textos, botões e configurações de atividades personalizadas ficam locais e não são sincronizados com a conta na 2.4.0. Enviar ou importar imagens incorporadas transmite arquivos à API e ao Cloudflare R2 quando o serviço está configurado. Guardamos UUID do dispositivo, SHA-256, MIME, tamanho, chave de armazenamento e datas de criação/último uso. Dados técnicos, inclusive IP, podem servir à segurança e limitação de requisições. Funciona sem conta e com estatísticas desativadas. Bases legais: serviço solicitado (RGPD art. 6(1)(b)) e interesse legítimo na segurança e prevenção de abusos (art. 6(1)(f)).<br/><br/>URLs hospedadas são acessíveis a quem as obtiver, não são armazenamento privado. Discord e fornecedores podem buscar e armazenar imagens em cache; links HTTPS externos seguem as políticas dos respectivos fornecedores. Cloudflare armazena e distribui imagens; transferências são descritas abaixo. A localização do VPS na UE não garante que todo processamento de imagens ocorra apenas na UE. JSON inclui textos, links e cópias locais disponíveis, não tokens, IDs locais de atividade ou ativação. Destinatários podem redistribuir arquivos; importar envia as imagens novamente."
+      },
+      {
+        "title": "Retenção e exclusão de imagens",
+        "body": "Após 30 dias sem uso, imagens ficam elegíveis à limpeza; ativação e atualizações periódicas renovam o prazo. A exclusão efetiva depende da execução da limpeza e do acesso ao armazenamento. A extensão solicita remover referências sem uso. A exportação autenticada do dispositivo inclui URLs e metadados; a exclusão do dispositivo solicita apagar arquivos remotos e registros, podendo exigir nova tentativa em caso de falha. Redefinir, desinstalar, parar a sincronização ou excluir a conta não substitui essa exclusão. Use os controles de dados do dispositivo antes de desinstalar ou contate <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> com seu ID de dispositivo; não publique o token. Caches de navegador/CDN/Discord e arquivos compartilhados podem permanecer. Reutilizar uma atividade pode reenviar suas imagens locais."
       },
       {
         "title": "Permissões da extensão de navegador",
@@ -996,7 +1004,7 @@
     "badge": "Jurídico",
     "title": "Termos de Serviço",
     "description": "As regras para usar o Nowly, a extensão de navegador, o app de desktop e o site.",
-    "last-updated": "Última atualização: 17 de setembro de 2026.",
+    "last-updated": "Última atualização: 16 de outubro de 2026.",
     "sections": [
       {
         "title": "Aceitação",
@@ -1017,6 +1025,10 @@
       {
         "title": "Uso aceitável",
         "body": "Você deve cumprir a lei aplicável e os <a href=\"https://discord.com/terms\">Termos de Serviço do Discord</a>. Você não deve:<ul><li>Usar o Nowly para exibir conteúdo ilegal, odioso, difamatório ou infrator.</li><li>Contornar a segurança da extensão, app de desktop ou API oficiais.</li><li>Distribuir presenças modificadas, forjadas ou não autorizadas através da infraestrutura oficial do Nowly.</li><li>Abusar da API (incluindo solicitações automatizadas excessivas).</li></ul>Se você apontar a extensão para uma <strong>URL de API personalizada</strong>, você é o único responsável por esse servidor. Nossa <a href=\"/privacy\">política de privacidade</a> não o cobre."
+      },
+      {
+        "title": "Conteúdo do usuário e hospedagem de imagens",
+        "body": "Você mantém seus direitos sobre textos, imagens e arquivos. Envie apenas conteúdo próprio ou autorizado, com permissões necessárias de pessoas identificáveis. Você concede a Nowly e fornecedores técnicos autorização não exclusiva limitada a armazenar, adaptar tecnicamente, distribuir e apagar conteúdo para prestar o serviço, sem transferir propriedade ou permitir reutilização publicitária.<br/><br/>São proibidos conteúdo ilegal, abuso sexual infantil, imagens íntimas não consentidas, ameaças, assédio, ódio, violações de direitos, malware e dados privados alheios sem base legal. Não use como hospedagem geral nem contorne limites (PNG/JPEG/WebP/GIF, 1 MiB após preparação, 20 envios/hora/dispositivo). URLs não são privadas: evite segredos e confira arquivos importados e destinos dos botões.<br/><br/>Podemos recusar envios, remover conteúdo ilegal ou restringir hospedagem por exigência legal, proteção de direitos ou prevenção de abusos, respeitando garantias aplicáveis. Envie URL e motivos para <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Isso não promete moderação automática ou completa. Guarde cópias; apagar não recolhe arquivos compartilhados nem remove imediatamente caches de terceiros."
       },
       {
         "title": "Doações",

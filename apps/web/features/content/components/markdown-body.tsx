@@ -64,6 +64,22 @@ const renderBlock = (block: Block, index: number): ReactNode => {
   const key = `block-${index}`;
 
   switch (block.kind) {
+    case "image":
+      return (
+        <figure key={key} className="mt-8 rounded-2xl border border-border bg-foreground/3 p-3 sm:p-5">
+          <a href={block.src} target="_blank" rel="noreferrer">
+            <img
+              src={block.src}
+              alt={block.alt}
+              loading="lazy"
+              decoding="async"
+              referrerPolicy="no-referrer"
+              className="mx-auto block h-auto max-h-[44rem] w-auto max-w-full rounded-xl object-contain"
+            />
+          </a>
+          {block.caption && <figcaption className="mt-3 text-center text-sm text-muted-foreground">{block.caption}</figcaption>}
+        </figure>
+      );
     case "heading":
       return block.level === 2 ? (
         <h2 key={key} id={block.id} className="mt-14 scroll-mt-32 text-[1.45rem] font-medium leading-snug tracking-tight text-foreground first:mt-0">

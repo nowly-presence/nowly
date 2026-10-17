@@ -918,9 +918,9 @@
     "badge": "Prywatność",
     "title": "Polityka prywatności",
     "description": "Jak Nowly traktuje Twoje dane, co zostaje na Twoim urządzeniu, a co zależy od Twojej zgody.",
-    "last-updated": "Ostatnia aktualizacja: 4 października 2026.",
+    "last-updated": "Ostatnia aktualizacja: 16 października 2026.",
     "data-region": "Unia Europejska (VPS dostarczany przez Contabo GmbH, Niemcy)",
-    "intro": "Ta polityka opisuje, jak <strong>{publisherName}</strong> („my”), jako administrator danych, przetwarza dane osobowe w związku z Nowly. Aktywność Rich Presence jest wysyłana z Twojej przeglądarki do klienta Discord <strong>na Twoim urządzeniu</strong>. Nie przechodzi przez nasze serwery. Opcjonalne statystyki użytkowania i kilka funkcji strony wymagają naszego API lub podmiotów przetwarzających, jak opisano poniżej.",
+    "intro": "Polityka opisuje przetwarzanie danych osobowych przez administratora <strong>{publisherName}</strong>. Wiadomości Rich Presence trafiają do Discorda lokalnie przez aplikację komputerową. Nie wszystkie funkcje są jednak lokalne: synchronizacja, żądania obrazów, zlecone przesyłanie plików i opcjonalne statystyki korzystają z API lub dostawców.",
     "sections": [
       {
         "title": "Administrator",
@@ -932,7 +932,15 @@
       },
       {
         "title": "Dane przetwarzane na Twoim urządzeniu (rozszerzenie)",
-        "body": "Rozszerzenie przechowuje dane w lokalnym API pamięci przeglądarki (<code>chrome.storage.local</code> w Chrome / odpowiednik w Firefox). Pozostają one na tym urządzeniu, chyba że włączysz opcjonalną analitykę lub użyjesz niestandardowego adresu URL API:<ul><li>Zainstalowane obecności (metadane, podpisane pakiety, stan aktywacji).</li><li>Aktualna aktywność (tytuł, platforma, czas trwania, URL miniatury).</li><li>Dziennik debugowania (znaczniki czasu, akcje, odwiedzone adresy URL obsługiwanych stron).</li><li>Stan onboardingu i <strong>lokalny zrzut</strong> Twojego profilu Discord (ID, nazwa użytkownika, awatar) używany wyłącznie do wyświetlania interfejsu rozszerzenia, pobrany z lokalnego klienta Discord.</li><li>Preferencje wyświetlania, skróty klawiszowe i ustawienia poszczególnych obecności.</li><li>Lokalnie wygenerowany identyfikator urządzenia (UUID), używany, jeśli zdecydujesz się na analitykę.</li></ul>Możesz usunąć te dane, resetując lub odinstalowując rozszerzenie."
+        "body": "Pamięć lokalna zawiera obecności, podpisane pakiety, ustawienia, skróty, stan konfiguracji, bieżącą aktywność, logi z URL obsługiwanych stron, kopię profilu Discord (ID, nazwa, awatar), własne aktywności i obrazy. Wygenerowany UUID identyfikuje instalację dla żądanych usług API, w tym przesyłania obrazów, niezależnie od zgody na statystyki. Funkcje sieciowe opisano niżej. Reset lub odinstalowanie usuwa dane lokalne, nie od razu zdalne obrazy i kopie osób trzecich."
+      },
+      {
+        "title": "Własne aktywności, obrazy i udostępnianie",
+        "body": "Teksty, przyciski i ustawienia własnych aktywności pozostają lokalne i nie synchronizują się z kontem w 2.4.0. Przesyłanie i import osadzonych obrazów wysyła pliki do API oraz Cloudflare R2, gdy usługa jest skonfigurowana. Przechowujemy UUID urządzenia, SHA-256, MIME, rozmiar, klucz magazynu i daty utworzenia/ostatniego użycia. Dane techniczne, w tym IP, mogą służyć bezpieczeństwu i ograniczaniu żądań. Działa bez konta i przy wyłączonych statystykach. Podstawy: żądana usługa (RODO art. 6 ust. 1 lit. b) i prawnie uzasadniony interes bezpieczeństwa oraz przeciwdziałania nadużyciom (lit. f).<br/><br/>Adresy obrazów są dostępne dla każdego, kto je otrzyma, nie są prywatnym magazynem. Discord i dostawcy mogą pobierać oraz buforować obrazy; zewnętrzne linki HTTPS podlegają politykom dostawców. Cloudflare zapewnia magazyn i dystrybucję, a transfery opisano niżej. Lokalizacja VPS w UE nie gwarantuje wyłącznie unijnego przetwarzania obrazów. JSON zawiera teksty, linki i dostępne lokalne obrazy, nie tokeny, lokalne ID aktywności ani stan aktywacji. Odbiorcy mogą rozpowszechniać pliki; import ponownie przesyła obrazy."
+      },
+      {
+        "title": "Przechowywanie i usuwanie obrazów",
+        "body": "Po 30 dniach bez użycia obrazy kwalifikują się do czyszczenia; aktywacja i okresowe odświeżanie odnawiają termin. Faktyczne usunięcie zależy od uruchomienia czyszczenia i dostępu do magazynu. Rozszerzenie żąda usunięcia nieużywanych odniesień do obrazów. Uwierzytelniony eksport urządzenia zawiera URL i metadane; usunięcie urządzenia żąda usunięcia zdalnych plików i rekordów, a awaria może wymagać ponowienia. Reset, odinstalowanie, zatrzymanie synchronizacji lub usunięcie konta tego nie zastępują. Użyj kontroli danych urządzenia przed odinstalowaniem albo napisz z ID urządzenia do <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>; nie publikuj tokenu. Cache przeglądarki/CDN/Discord i udostępnione pliki mogą pozostać. Ponowne użycie aktywności może ponownie przesłać lokalne obrazy."
       },
       {
         "title": "Uprawnienia rozszerzenia przeglądarki",
@@ -996,7 +1004,7 @@
     "badge": "Prawne",
     "title": "Warunki korzystania",
     "description": "Zasady korzystania z Nowly, rozszerzenia przeglądarki, aplikacji desktopowej i strony internetowej.",
-    "last-updated": "Ostatnia aktualizacja: 17 września 2026.",
+    "last-updated": "Ostatnia aktualizacja: 16 października 2026.",
     "sections": [
       {
         "title": "Akceptacja",
@@ -1017,6 +1025,10 @@
       {
         "title": "Dozwolone użycie",
         "body": "Musisz przestrzegać obowiązującego prawa i <a href=\"https://discord.com/terms\">Warunków korzystania z Discorda</a>. Nie możesz:<ul><li>Używać Nowly do wyświetlania nielegalnych, nienawistnych, zniesławiających lub naruszających treści.</li><li>Omijać zabezpieczeń oficjalnego rozszerzenia, aplikacji desktopowej lub API.</li><li>Dystrybuować zmodyfikowanych, sfałszowanych lub nieautoryzowanych obecności przez oficjalną infrastrukturę Nowly.</li><li>Nadużywać API (w tym poprzez nadmierne automatyczne żądania).</li></ul>Jeśli skierujesz rozszerzenie na <strong>niestandardowy adres URL API</strong>, ponosisz wyłączną odpowiedzialność za ten serwer. Nasza <a href=\"/privacy\">polityka prywatności</a> go nie obejmuje."
+      },
+      {
+        "title": "Treści użytkownika i hosting obrazów",
+        "body": "Zachowujesz prawa do tekstów, obrazów i plików. Przesyłaj tylko własne lub dozwolone treści, z niezbędnymi zgodami rozpoznawalnych osób. Udzielasz Nowly i dostawcom technicznym niewyłącznego upoważnienia jedynie do przechowywania, technicznego dostosowania, dystrybucji i usuwania na potrzeby usługi, bez przeniesienia własności ani wykorzystania reklamowego.<br/><br/>Zakazane są treści bezprawne, materiały seksualnego wykorzystywania dzieci, intymne obrazy bez zgody, groźby, nękanie, nienawiść, naruszenia praw, malware i prywatne informacje innych osób bez podstawy prawnej. Nie używaj jako ogólnego hostingu ani nie obchodź limitów (PNG/JPEG/WebP/GIF, 1 MiB po przygotowaniu, 20 przesłań/godzinę/urządzenie). URL nie są prywatne; unikaj sekretów i sprawdzaj importy oraz cele przycisków.<br/><br/>Możemy odmawiać przesłań, usuwać bezprawne treści lub ograniczać hosting dla zgodności z prawem, ochrony praw i zapobiegania nadużyciom, z zachowaniem wymaganych gwarancji. Zgłoszenia z URL i powodami wysyłaj do <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Nie obiecujemy automatycznej ani pełnej moderacji. Zachowaj kopie; usunięcie nie wycofuje udostępnionych plików ani nie usuwa natychmiast cache stron trzecich."
       },
       {
         "title": "Darowizny",
