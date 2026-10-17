@@ -77,7 +77,7 @@ export const LiveCard =
     const now = useNow(1000, status === "live" && Boolean(start || end));
     const elapsed = start ? (now - start) / 1000 : undefined;
     const total = start && end ? (end - start) / 1000 : undefined;
-    const progress = total && elapsed !== undefined ? Math.min(1, Math.max(0, elapsed / total)) : undefined;
+    const progress = total && elapsed !== undefined ? Math.min(1, Math.max(0, 1 - elapsed / total)) : undefined;
     const remaining = end && !start ? (end - now) / 1000 : undefined;
     const small = presence.smallImage?.startsWith("https://") ? presence.smallImage : undefined;
     const layers = Math.min(2, stackDepth);
