@@ -1,28 +1,30 @@
 import { runInNewContext } from "node:vm";
 import { describe, expect, it } from "vitest";
 
-import { applySeasonClass, initialSeasonState, nextSeasonState, parseSeasonMessage, parseSeasonPreview, readStoredSeason, seasonBootScript, seasonForDecor, seasonToStore, type SeasonState } from "./site-season";
+import { applySeasonClass, initialSeasonState, nextSeasonState, parseSeasonMessage, parseSeasonPreview, seasonBootScript, SEASON_STORAGE_KEY, SITE_SEASONS, type SeasonState } from "./site-season";
 
 const fakeClassList = (initial: string[] = []) => {
   const tokens = new Set(initial);
   return {
     tokens,
     add: (token: string) => tokens.add(token),
-    remove: (token: string) => tokens.delete(token)
+    remove: (...removed: string[]) => removed.forEach((token) => tokens.delete(token))
   };
 };
 
-const runBoot = ({ allowPreview, search = "", stored = null }: {
+const runBoot = ({ allowPreview, search = "", stored = null, initial = ["font"] }: {
   allowPreview: boolean;
   search?: string;
   stored?: string | null;
+  initial?: string[];
 }) => {
-  const classList = fakeClassList(["font"]);
+  const classList = fakeClassList(initial);
   runInNewContext(seasonBootScript(allowPreview), {
     URLSearchParams,
     location: { search },
     localStorage: {
-      getItem: () => stored
+      getItem: () => stored,
+      removeItem: () => undefined
     },
     document: {
       documentElement: { classList }
@@ -90,55 +92,31 @@ describe("parseSeasonMessage", () => {
   });
 });
 
-describe("parseSeasonPreview and readStoredSeason", () => {
+describe("parseSeasonPreview", () => {
   it("only accepts known seasons and none", () => {
     expect(parseSeasonPreview("?season=winter")).toBe("winter");
     expect(parseSeasonPreview("?season=none")).toBe("none");
     expect(parseSeasonPreview("?season=easter")).toBeNull();
     expect(parseSeasonPreview("")).toBeNull();
-    expect(readStoredSeason("spring")).toBe("spring");
-    expect(readStoredSeason("bogus")).toBeNull();
-    expect(readStoredSeason(null)).toBeNull();
   });
 });
 
 describe("season state", () => {
-  const stored: SeasonState = {
-    season: "halloween",
-    source: "stored"
+  const initial: SeasonState = {
+    season: null,
+    source: "none"
   };
 
-  it("starts from the remembered season, or the preview first", () => {
-    expect(
-      initialSeasonState({
-        stored: "halloween",
-        preview: null
-      })
-    ).toEqual(stored);
-    expect(
-      initialSeasonState({
-        stored: null,
-        preview: null
-      })
-    ).toEqual({
+  it("starts without any seasonal colours or decor unless explicitly previewing", () => {
+    expect(initialSeasonState({ preview: null })).toEqual({
       season: null,
       source: "none"
     });
-    expect(
-      initialSeasonState({
-        stored: "halloween",
-        preview: "winter"
-      })
-    ).toEqual({
+    expect(initialSeasonState({ preview: "winter" })).toEqual({
       season: "winter",
       source: "preview"
     });
-    expect(
-      initialSeasonState({
-        stored: "halloween",
-        preview: "none"
-      })
-    ).toEqual({
+    expect(initialSeasonState({ preview: "none" })).toEqual({
       season: null,
       source: "preview"
     });
@@ -146,7 +124,7 @@ describe("season state", () => {
 
   it("is confirmed, changed or removed by the extension", () => {
     expect(
-      nextSeasonState(stored, {
+      nextSeasonState(initial, {
         type: "extension",
         season: "halloween"
       })
@@ -155,7 +133,7 @@ describe("season state", () => {
       source: "extension"
     });
     expect(
-      nextSeasonState(stored, {
+      nextSeasonState(initial, {
         type: "extension",
         season: null
       })
@@ -164,7 +142,7 @@ describe("season state", () => {
       source: "extension"
     });
     expect(
-      nextSeasonState(stored, {
+      nextSeasonState(initial, {
         type: "extension",
         season: "winter"
       })
@@ -175,7 +153,7 @@ describe("season state", () => {
   });
 
   it("is removed when the extension stays silent", () => {
-    expect(nextSeasonState(stored, { type: "timeout" })).toEqual({
+    expect(nextSeasonState(initial, { type: "timeout" })).toEqual({
       season: null,
       source: "none"
     });
@@ -201,40 +179,6 @@ describe("season state", () => {
     expect(nextSeasonState(preview, { type: "timeout" })).toBe(preview);
   });
 
-  it("stores what the extension said and clears it when it is gone", () => {
-    expect(
-      seasonToStore({
-        season: "winter",
-        source: "extension"
-      })
-    ).toBe("winter");
-    expect(
-      seasonToStore({
-        season: null,
-        source: "extension"
-      })
-    ).toBeNull();
-    expect(
-      seasonToStore({
-        season: null,
-        source: "none"
-      })
-    ).toBeNull();
-    expect(seasonToStore(stored)).toBeUndefined();
-    expect(
-      seasonToStore({
-        season: "winter",
-        source: "pending"
-      })
-    ).toBeUndefined();
-    expect(
-      seasonToStore({
-        season: "winter",
-        source: "preview"
-      })
-    ).toBeUndefined();
-  });
-
   it("waits for a fresh answer when the tab becomes visible again", () => {
     const confirmed: SeasonState = {
       season: "winter",
@@ -242,25 +186,20 @@ describe("season state", () => {
     };
     const pending = nextSeasonState(confirmed, { type: "request" });
     expect(pending).toEqual({
-      season: "winter",
+      season: null,
       source: "pending"
     });
-    expect(seasonForDecor(pending)).toBeNull();
     expect(
-      seasonForDecor(
-        nextSeasonState(pending, {
-          type: "extension",
-          season: "winter"
-        })
-      )
+      nextSeasonState(pending, {
+        type: "extension",
+        season: "winter"
+      }).season
     ).toBe("winter");
     expect(
-      seasonForDecor(
-        nextSeasonState(pending, {
-          type: "extension",
-          season: null
-        })
-      )
+      nextSeasonState(pending, {
+        type: "extension",
+        season: null
+      }).season
     ).toBeNull();
   });
 
@@ -277,53 +216,6 @@ describe("season state", () => {
       season: null,
       source: "none"
     });
-    expect(seasonToStore(expired)).toBeNull();
-  });
-});
-
-describe("seasonForDecor", () => {
-  it("never renders a remembered season before the extension confirms it", () => {
-    const remembered = initialSeasonState({
-      stored: "winter",
-      preview: null
-    });
-    expect(seasonForDecor(remembered)).toBeNull();
-    expect(
-      seasonForDecor(
-        nextSeasonState(remembered, {
-          type: "extension",
-          season: null
-        })
-      )
-    ).toBeNull();
-    expect(seasonForDecor(nextSeasonState(remembered, { type: "timeout" }))).toBeNull();
-    expect(
-      seasonForDecor(
-        nextSeasonState(remembered, {
-          type: "extension",
-          season: "winter"
-        })
-      )
-    ).toBe("winter");
-  });
-
-  it("allows development previews without the extension", () => {
-    expect(
-      seasonForDecor(
-        initialSeasonState({
-          stored: null,
-          preview: "winter"
-        })
-      )
-    ).toBe("winter");
-    expect(
-      seasonForDecor(
-        initialSeasonState({
-          stored: "winter",
-          preview: "none"
-        })
-      )
-    ).toBeNull();
   });
 });
 
@@ -338,13 +230,16 @@ describe("applySeasonClass", () => {
 });
 
 describe("seasonBootScript", () => {
-  it("applies the remembered season before the first paint", () => {
-    expect(
-      runBoot({
-        allowPreview: false,
-        stored: "halloween"
-      })
-    ).toEqual(["font", "season-halloween"]);
+  it("never restores any remembered seasonal colours or decor before the first paint", () => {
+    for (const stored of SITE_SEASONS) {
+      expect(
+        runBoot({
+          allowPreview: false,
+          stored
+        })
+      ).toEqual(["font"]);
+    }
+
     expect(
       runBoot({
         allowPreview: false,
@@ -352,6 +247,31 @@ describe("seasonBootScript", () => {
       })
     ).toEqual(["font"]);
     expect(runBoot({ allowPreview: false })).toEqual(["font"]);
+  });
+
+  it("removes stale classes without touching the base theme", () => {
+    expect(
+      runBoot({
+        allowPreview: false,
+        initial: ["font", "dark", "season-winter", "season-spring", "season-leaving"]
+      })
+    ).toEqual(["font", "dark"]);
+  });
+
+  it("clears the obsolete season cache without reading it", () => {
+    const removed: string[] = [];
+    runInNewContext(seasonBootScript(false), {
+      localStorage: {
+        getItem: () => {
+          throw new Error("must not restore the cache");
+        },
+        removeItem: (key: string) => removed.push(key)
+      },
+      document: {
+        documentElement: { classList: fakeClassList() }
+      }
+    });
+    expect(removed).toEqual([SEASON_STORAGE_KEY]);
   });
 
   it("honours the preview parameter only when allowed", () => {
@@ -383,7 +303,7 @@ describe("seasonBootScript", () => {
       URLSearchParams,
       location: { search: "" },
       localStorage: {
-        getItem: () => {
+        removeItem: () => {
           throw new Error("blocked");
         }
       },
@@ -393,5 +313,10 @@ describe("seasonBootScript", () => {
     };
     expect(() => runInNewContext(seasonBootScript(false), context)).not.toThrow();
     expect(classList.tokens.size).toBe(0);
+    runInNewContext(seasonBootScript(true), {
+      ...context,
+      location: { search: "?season=winter" }
+    });
+    expect([...classList.tokens]).toEqual(["season-winter"]);
   });
 });

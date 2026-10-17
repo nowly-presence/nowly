@@ -4,7 +4,7 @@ export type SiteSeason = (typeof SITE_SEASONS)[number];
 
 export type SeasonPreview = SiteSeason | "none";
 
-export type SeasonSource = "preview" | "stored" | "pending" | "extension" | "none";
+export type SeasonSource = "preview" | "pending" | "extension" | "none";
 
 export type SeasonState = {
   season: SiteSeason | null;
@@ -32,7 +32,6 @@ export const SEASON_STORAGE_KEY = "nowly-season";
 export const SEASON_PREVIEW_PARAM = "season";
 export const SEASON_LEAVING_CLASS = "season-leaving";
 export const SEASON_RESPONSE_TIMEOUT_MS = 4000;
-export const SEASON_FADE_MS = 700;
 
 export const isSiteSeason = (value: unknown): value is SiteSeason => SITE_SEASONS.some((season) => season === value);
 
@@ -66,10 +65,7 @@ export const parseSeasonPreview = (search: string): SeasonPreview | null => {
   return value === "none" || isSiteSeason(value) ? value : null;
 };
 
-export const readStoredSeason = (value: string | null): SiteSeason | null => (isSiteSeason(value) ? value : null);
-
-export const initialSeasonState = ({ stored, preview }: {
-  stored: SiteSeason | null;
+export const initialSeasonState = ({ preview }: {
   preview: SeasonPreview | null;
 }): SeasonState => {
   if (preview) return {
@@ -77,13 +73,16 @@ export const initialSeasonState = ({ stored, preview }: {
     source: "preview"
   };
 
-  return stored ? { season: stored, source: "stored" } : { season: null, source: "none" };
+  return {
+    season: null,
+    source: "none"
+  };
 };
 
 export const nextSeasonState = (state: SeasonState, event: SeasonEvent): SeasonState => {
   if (state.source === "preview") return state;
   if (event.type === "request") return {
-    season: state.season,
+    season: null,
     source: "pending"
   };
   if (event.type === "extension") return {
@@ -92,14 +91,6 @@ export const nextSeasonState = (state: SeasonState, event: SeasonEvent): SeasonS
   };
 
   return state.source === "extension" ? state : { season: null, source: "none" };
-};
-
-export const seasonForDecor = (state: SeasonState): SiteSeason | null => (state.source === "extension" || state.source === "preview" ? state.season : null);
-
-export const seasonToStore = (state: SeasonState): SiteSeason | null | undefined => {
-  if (state.source === "preview" || state.source === "stored" || state.source === "pending") return undefined;
-
-  return state.season;
 };
 
 export const applySeasonClass = (classList: SeasonClassList, season: SiteSeason | null): void => {
@@ -112,7 +103,7 @@ export const applySeasonClass = (classList: SeasonClassList, season: SiteSeason 
 export const seasonBootScript = (allowPreview: boolean): string => {
   const seasons = JSON.stringify(SITE_SEASONS);
   const preview = allowPreview
-    ? `const q=new URLSearchParams(location.search).get(${JSON.stringify(SEASON_PREVIEW_PARAM)});if(q==="none")return;if(s.includes(q))v=q;`
+    ? `const q=new URLSearchParams(location.search).get(${JSON.stringify(SEASON_PREVIEW_PARAM)});if(s.includes(q))r.classList.add("season-"+q);`
     : "";
-  return `(()=>{try{const s=${seasons};let v=null;${preview}if(!v)v=localStorage.getItem(${JSON.stringify(SEASON_STORAGE_KEY)});if(s.includes(v))document.documentElement.classList.add("season-"+v)}catch{}})()`;
+  return `(()=>{const r=document.documentElement,s=${seasons};r.classList.remove(${JSON.stringify(SEASON_LEAVING_CLASS)},...s.map(v=>"season-"+v));${preview}try{localStorage.removeItem(${JSON.stringify(SEASON_STORAGE_KEY)})}catch{}})()`;
 };

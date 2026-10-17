@@ -1,4 +1,5 @@
 .season-decor {
+  display: none;
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -8,8 +9,13 @@
   animation: season-decor-in 1.2s ease-out both;
 }
 
-.season-leaving .season-decor {
-  animation: season-decor-out 0.6s ease-in both;
+html.season-spring .season-decor[data-season="spring"],
+html.season-summer .season-decor[data-season="summer"],
+html.season-autumn .season-decor[data-season="autumn"],
+html.season-winter .season-decor[data-season="winter"],
+html.season-halloween .season-decor[data-season="halloween"],
+html.season-new-year .season-decor[data-season="new-year"] {
+  display: block;
 }
 
 .season-glow {
@@ -122,33 +128,12 @@
   animation-play-state: paused;
 }
 
-.season-leaving,
-.season-leaving body,
-.season-leaving *,
-.season-leaving *::before,
-.season-leaving *::after {
-  transition:
-    background-color 0.6s ease,
-    border-color 0.6s ease,
-    color 0.6s ease,
-    fill 0.6s ease !important;
-}
-
 @keyframes season-decor-in {
   from {
     opacity: 0;
   }
   to {
     opacity: 1;
-  }
-}
-
-@keyframes season-decor-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
   }
 }
 
@@ -234,20 +219,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .season-decor,
-  .season-leaving .season-decor {
+  .season-decor {
     animation: none;
   }
 
   .season-sky {
     display: none;
-  }
-
-  .season-leaving,
-  .season-leaving body,
-  .season-leaving *,
-  .season-leaving *::before,
-  .season-leaving *::after {
-    transition: none !important;
   }
 }

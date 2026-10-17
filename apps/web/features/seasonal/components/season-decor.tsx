@@ -33,7 +33,7 @@ export const SeasonDecor = ({ season }: {
   const hidden = useHidden();
 
   return (
-    <div aria-hidden className="season-decor" data-paused={hidden ? "" : undefined}>
+    <div aria-hidden className="season-decor" data-season={season} data-paused={hidden ? "" : undefined}>
       <div className="season-glow season-glow-top" />
       <div className="season-glow season-glow-bottom" />
       {scene.frost ? <div className="season-frost" /> : null}
