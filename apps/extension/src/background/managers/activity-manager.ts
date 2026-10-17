@@ -3,13 +3,14 @@ import { addActiveSlugToState, clearActiveSlugsFromState, clearTabPresences, get
 import { sendActiveHeartbeat } from "@/background/services/active-heartbeat";
 import { mapPresenceData, postNative } from "@/background/services/native";
 import { verifyPresenceRelease } from "@/background/services/release-security";
-import { getActiveCustomPresence } from "@/background/storage/custom-activities.store";
+import { getActiveCustomPresence, getCustomActivities } from "@/background/storage/custom-activities.store";
 import { getCurrentActivity, getPresences, setCurrentActivity, setDebug } from "@/background/storage/presences.store";
 import { getSettings } from "@/background/storage/settings.store";
 import { recordUsageDay } from "@/background/storage/support.store";
 import { legalDocumentsPending } from "@/background/services/legal-documents";
 import { CDN_BASE_URL } from "@/shared/constants";
 import { customActivityIdOf } from "@/shared/custom-activity";
+import { readableBadgeColor, toolbarActivityColor, toolbarActivitySymbol } from "@/background/managers/toolbar-badge";
 import type { ExtensionSettings, PresenceData, StoredPresence } from "@/shared/types";
 
 const clampText = (value: string | undefined, maxLength: number): string | undefined => {
@@ -55,16 +56,6 @@ const setPausedBadge = (): void => {
   chrome.action.setBadgeBackgroundColor({ color: "#f59e0b" }).catch(() => {});
 };
 
-const setActivityBadge = (slug?: string): void => {
-  if (!slug) {
-    chrome.action.setBadgeText({ text: "" }).catch(() => {});
-    return;
-  }
-
-  chrome.action.setBadgeText({ text: "•" }).catch(() => {});
-  chrome.action.setBadgeBackgroundColor({ color: "#5865F2" }).catch(() => {});
-};
-
 const clearActivityBadge = (): void => {
   chrome.action.setBadgeText({ text: "" }).catch(() => {});
 };
@@ -80,7 +71,9 @@ export const refreshToolbarBadge = async (): Promise<void> => {
   const activity = await getCurrentActivity();
 
   if (activity) {
-    setActivityBadge(activity.slug);
+    const color = readableBadgeColor(toolbarActivityColor(activity, await getPresences(), await getCustomActivities()));
+    await chrome.action.setBadgeBackgroundColor({ color }).catch(() => {});
+    chrome.action.setBadgeText({ text: toolbarActivitySymbol(activity.presence.type) }).catch(() => {});
     return;
   }
 
