@@ -1,9 +1,7 @@
-import { homeSectionAltClass } from "@/features/home/components/section-heading";
 import { Link } from "@/i18n/navigation";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { getDiscordCommunity } from "@/lib/discord";
 import { ButtonAnchor } from "@nowly/ui/button-link";
-import { cn } from "@nowly/ui/utils";
 import { RiArrowRightUpLine, RiCustomerService2Line, RiDiscordFill, RiLightbulbLine, RiTeamLine } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 
@@ -21,7 +19,7 @@ export const CommunitySection = async () => {
   }>;
 
   return (
-    <section id="community" className={cn("home-section-deferred px-5 py-28 sm:px-10 sm:py-36", homeSectionAltClass)}>
+    <section id="community" className="home-section-deferred px-5 py-28 sm:px-10 sm:py-36">
       <div className="mx-auto grid w-full max-w-[1200px] items-center gap-12 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:gap-16">
         <div>
           <p className="mb-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-accent">{t("eyebrow")}</p>

@@ -1,4 +1,45 @@
 {
+  "custom-activity-section": {
+    "announcement": "Baharu: cipta aktiviti anda sendiri di Discord",
+    "eyebrow": "Aktiviti tersuai",
+    "title": "Tiada dalam pustaka? Cipta sendiri.",
+    "description": "Projek peribadi, permainan bersama rakan atau senarai lagu anda. Paparkannya pada profil Discord anda.",
+    "cta": "Sesuaikan dengan Nowly",
+    "demo": "Aktiviti anda, butiran anda",
+    "hint": "Cuba sunting.",
+    "examples": "Contoh",
+    "name": "Nama aktiviti",
+    "details": "Butiran",
+    "color": "Warna ikon",
+    "colors": ["Sian", "Ungu", "Jingga"],
+    "preview": "Pratonton Discord",
+    "live": "Pratonton segera",
+    "activity": "Bermain permainan",
+    "elapsed": "Sejak 24 minit lalu",
+    "button": "Lihat projek",
+    "local": "Ini demo sahaja. Cipta aktiviti sebenar dalam sambungan.",
+    "benefits": ["Teks dan imej anda", "Pautan untuk dikongsi", "Tanpa kod"],
+    "presets": [
+      {
+        "label": "Projek",
+        "title": "Projek besar saya yang seterusnya",
+        "details": "Idea mula terbentuk",
+        "state": "Satu commit pada satu masa"
+      },
+      {
+        "label": "Permainan",
+        "title": "Malam bersama rakan",
+        "details": "Membina dunia kecil kami",
+        "state": "Satu blok lagi"
+      },
+      {
+        "label": "Rehat",
+        "title": "Dalam dunia sendiri",
+        "details": "Sedikit muzik, itu sahaja",
+        "state": "Jangan ganggu"
+      }
+    ]
+  },
   "metadata": {
     "title": "Nowly | Discord Rich Presence untuk mana-mana laman web",
     "description": "Nowly mengubah apa yang anda tonton, dengar atau main menjadi kehadiran Discord yang kaya dan langsung.",

@@ -1,4 +1,45 @@
 {
+  "custom-activity-section": {
+    "announcement": "New: create your own activities on Discord",
+    "eyebrow": "Custom activities",
+    "title": "Not in the library? Make it yours.",
+    "description": "A side project, a game with friends, your current playlist. Give what you love a place on your Discord profile.",
+    "cta": "Customize with Nowly",
+    "demo": "Your activity, your details",
+    "hint": "Go ahead, try editing it.",
+    "examples": "Activity examples",
+    "name": "Activity name",
+    "details": "Details",
+    "color": "Icon color",
+    "colors": ["Cyan", "Purple", "Orange"],
+    "preview": "Discord preview",
+    "live": "Instant preview",
+    "activity": "Playing a game",
+    "elapsed": "24 minutes elapsed",
+    "button": "View project",
+    "local": "A demo here. Create your real activity in the extension.",
+    "benefits": ["Your text and images", "Links to share", "No code needed"],
+    "presets": [
+      {
+        "label": "A project",
+        "title": "My next big project",
+        "details": "An idea taking shape",
+        "state": "One commit at a time"
+      },
+      {
+        "label": "A game",
+        "title": "An evening with friends",
+        "details": "Building our little world",
+        "state": "Just one more block"
+      },
+      {
+        "label": "A break",
+        "title": "In my own world",
+        "details": "Some music, nothing else",
+        "state": "Do not disturb"
+      }
+    ]
+  },
   "metadata": {
     "title": "Nowly | Discord Rich Presence for any website",
     "description": "Nowly turns what you watch, listen to, or play into a rich, live Discord presence.",

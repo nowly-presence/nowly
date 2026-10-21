@@ -1,5 +1,6 @@
 import { CommunitySection } from "@/features/home/components/community-section";
 import { CtaSection } from "@/features/home/components/cta-section";
+import { CustomActivitySection } from "@/features/home/components/custom-activity-section";
 import { FaqSection } from "@/features/home/components/faq-section";
 import { FeaturesSection } from "@/features/home/components/features-section";
 import { HeroSection } from "@/features/home/components/hero-section";
@@ -34,9 +35,10 @@ const HomePage = async () => {
       <PlatformsSection />
       <FeaturesSection />
       <StepsSection />
-      <PrivacySection />
+      <CustomActivitySection />
       <FaqSection />
       <OpenSourceSection />
+      <PrivacySection />
       <CommunitySection />
       <CtaSection />
     </>

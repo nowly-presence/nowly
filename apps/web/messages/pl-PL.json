@@ -1,4 +1,49 @@
 {
+  "custom-activity-section": {
+    "announcement": "Nowość: twórz własne aktywności na Discordzie",
+    "eyebrow": "Własne aktywności",
+    "title": "Nie ma w bibliotece? Stwórz własną.",
+    "description": "Własny projekt, gra ze znajomymi lub ulubiona playlista. Pokaż na Discordzie, co cię zajmuje.",
+    "cta": "Personalizuj z Nowly",
+    "demo": "Twoja aktywność, twoje szczegóły",
+    "hint": "Spróbuj coś zmienić.",
+    "examples": "Przykłady",
+    "name": "Nazwa aktywności",
+    "details": "Szczegóły",
+    "color": "Kolor ikony",
+    "colors": ["Cyjan", "Fioletowy", "Pomarańczowy"],
+    "preview": "Podgląd na Discordzie",
+    "live": "Podgląd na żywo",
+    "activity": "Gra w grę",
+    "elapsed": "Od 24 minut",
+    "button": "Zobacz projekt",
+    "local": "To jest demo. Prawdziwą aktywność utworzysz w rozszerzeniu.",
+    "benefits": [
+      "Własne teksty i obrazy",
+      "Linki do udostępnienia",
+      "Bez kodowania"
+    ],
+    "presets": [
+      {
+        "label": "Projekt",
+        "title": "Mój kolejny wielki projekt",
+        "details": "Pomysł nabiera kształtu",
+        "state": "Jeden commit naraz"
+      },
+      {
+        "label": "Gra",
+        "title": "Wieczór ze znajomymi",
+        "details": "Budujemy nasz mały świat",
+        "state": "Jeszcze jeden blok"
+      },
+      {
+        "label": "Przerwa",
+        "title": "W moim świecie",
+        "details": "Trochę muzyki i nic więcej",
+        "state": "Nie przeszkadzać"
+      }
+    ]
+  },
   "metadata": {
     "title": "Nowly | Discord Rich Presence dla każdej strony",
     "description": "Nowly zamienia to, co oglądasz, słuchasz lub w co grasz, w bogatą, żywą obecność na Discordzie.",

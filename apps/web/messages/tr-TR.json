@@ -1,4 +1,49 @@
 {
+  "custom-activity-section": {
+    "announcement": "Yeni: Discord’da kendi etkinliklerini oluştur",
+    "eyebrow": "Özel etkinlikler",
+    "title": "Kütüphanede yok mu? Kendin oluştur.",
+    "description": "Kişisel bir proje, arkadaşlarla oyun veya çalma listen. Yaptıklarını Discord profilinde göster.",
+    "cta": "Nowly ile özelleştir",
+    "demo": "Senin etkinliğin, senin detayların",
+    "hint": "Düzenlemeyi dene.",
+    "examples": "Örnekler",
+    "name": "Etkinlik adı",
+    "details": "Detaylar",
+    "color": "Simge rengi",
+    "colors": ["Camgöbeği", "Mor", "Turuncu"],
+    "preview": "Discord önizlemesi",
+    "live": "Anlık önizleme",
+    "activity": "Oyun oynuyor",
+    "elapsed": "24 dakikadır",
+    "button": "Projeyi gör",
+    "local": "Bu bir demo. Gerçek etkinliğini uzantıda oluştur.",
+    "benefits": [
+      "Kendi metin ve görsellerin",
+      "Paylaşılabilir bağlantılar",
+      "Kod gerekmez"
+    ],
+    "presets": [
+      {
+        "label": "Proje",
+        "title": "Bir sonraki büyük projem",
+        "details": "Bir fikir şekilleniyor",
+        "state": "Her seferinde bir commit"
+      },
+      {
+        "label": "Oyun",
+        "title": "Arkadaşlarla bir akşam",
+        "details": "Küçük dünyamızı kuruyoruz",
+        "state": "Son bir blok daha"
+      },
+      {
+        "label": "Mola",
+        "title": "Kendi dünyamda",
+        "details": "Biraz müzik, başka bir şey yok",
+        "state": "Rahatsız etmeyin"
+      }
+    ]
+  },
   "metadata": {
     "title": "Nowly | Her web sitesi için Discord Rich Presence",
     "description": "Nowly, izlediğin, dinlediğin veya oynadığın şeyi zengin, canlı bir Discord varlığına dönüştürür.",
