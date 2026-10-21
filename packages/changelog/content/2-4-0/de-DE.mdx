@@ -45,6 +45,7 @@ stores: [chrome, firefox]
 
 ## Fehlerbehebungen
 
+- Die neue Einstellung "Verstrichene Zeit pro Website beibehalten" ist standardmäßig deaktiviert. Sie verhindert, dass der Zeitzähler beim Tabwechsel neu startet: Tabs derselben Website teilen sich einen Zähler, bis der Browser geschlossen wird. Der Wiedergabefortschritt von Medien bleibt unverändert. ([@OverStyleFR](https://github.com/nowly-presence/nowly/issues/60))
 - Die Beschriftung des aktiven Tabs wird nicht mehr abgeschnitten. Import bleibt als Icon-Button kompakt.
 - Gleichzeitige Importe werden blockiert, Stapel beachten das Limit von 50 Aktivitäten und eine fehlerhafte Datei blockiert spätere Dateien nicht.
 - Wiederholte/gleichzeitige Uploads desselben Bildes sind serverseitig idempotent. Fehlgeschlagene entfernte Löschungen behalten Referenzen für einen erneuten Versuch.

@@ -45,6 +45,7 @@ stores: [chrome, firefox]
 
 ## Correcciones
 
+- Nuevo ajuste "Conservar el tiempo por sitio", desactivado por defecto. Evita que el contador se reinicie al cambiar de pestaña al compartirlo entre las pestañas del mismo sitio hasta cerrar el navegador. El progreso de reproducción multimedia no cambia. ([@OverStyleFR](https://github.com/nowly-presence/nowly/issues/60))
 - La etiqueta de la pestaña activa ya no se corta. El botón Importar es compacto y solo muestra el icono.
 - Se bloquean importaciones simultáneas, los lotes respetan el límite de 50 actividades y un archivo fallido no impide procesar los siguientes.
 - Los envíos repetidos o simultáneos de la misma imagen son idempotentes en el servidor. Si falla el borrado remoto, se conservan las referencias para reintentarlo.
