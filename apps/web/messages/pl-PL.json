@@ -829,9 +829,9 @@
         ]
       },
       {
-        "status": "Nadchodzące",
+        "status": "Wydane",
         "title": "Październik 2026",
-        "completed": false,
+        "completed": true,
         "description": "Kolejny krok w personalizacji aktywności Discorda.",
         "items": [
           {

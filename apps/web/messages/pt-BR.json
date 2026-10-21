@@ -829,9 +829,9 @@
         ]
       },
       {
-        "status": "Em breve",
+        "status": "Lançado",
         "title": "Outubro de 2026",
-        "completed": false,
+        "completed": true,
         "description": "O próximo passo para personalizar a atividade no Discord.",
         "items": [
           {

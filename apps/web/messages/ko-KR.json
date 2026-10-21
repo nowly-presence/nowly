@@ -829,9 +829,9 @@
         ]
       },
       {
-        "status": "출시 예정",
+        "status": "완료됨",
         "title": "2026년 10월",
-        "completed": false,
+        "completed": true,
         "description": "Discord 활동을 더 세밀하게 개인화하기 위한 다음 단계입니다.",
         "items": [
           {

@@ -829,9 +829,9 @@
         ]
       },
       {
-        "status": "Akan datang",
+        "status": "Telah siap",
         "title": "Oktober 2026",
-        "completed": false,
+        "completed": true,
         "description": "Langkah seterusnya untuk memperibadikan aktiviti Discord.",
         "items": [
           {

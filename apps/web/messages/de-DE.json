@@ -829,9 +829,9 @@
         ]
       },
       {
-        "status": "Als Nächstes",
+        "status": "Bereits umgesetzt",
         "title": "Oktober 2026",
-        "completed": false,
+        "completed": true,
         "description": "Der nächste Schritt für eine persönlichere Discord-Aktivität.",
         "items": [
           {

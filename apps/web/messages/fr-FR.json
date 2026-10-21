@@ -829,9 +829,9 @@
         ]
       },
       {
-        "status": "À venir",
+        "status": "Déjà fait",
         "title": "Octobre 2026",
-        "completed": false,
+        "completed": true,
         "description": "La prochaine étape côté personnalisation de l’activité Discord.",
         "items": [
           {

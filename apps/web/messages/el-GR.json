@@ -829,9 +829,9 @@
         ]
       },
       {
-        "status": "Επερχόμενο",
+        "status": "Ολοκληρώθηκε",
         "title": "Οκτώβριος 2026",
-        "completed": false,
+        "completed": true,
         "description": "Το επόμενο βήμα για πιο προσωπική δραστηριότητα στο Discord.",
         "items": [
           {

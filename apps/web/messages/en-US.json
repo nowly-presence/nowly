@@ -829,9 +829,9 @@
         ]
       },
       {
-        "status": "Coming up",
+        "status": "Shipped",
         "title": "October 2026",
-        "completed": false,
+        "completed": true,
         "description": "The next step for personalising Discord activity.",
         "items": [
           {

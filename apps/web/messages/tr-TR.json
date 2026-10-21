@@ -829,9 +829,9 @@
         ]
       },
       {
-        "status": "Yaklaşan",
+        "status": "Yayınlandı",
         "title": "Ekim 2026",
-        "completed": false,
+        "completed": true,
         "description": "Discord etkinliğini kişiselleştirmek için sıradaki adım.",
         "items": [
           {

@@ -829,9 +829,9 @@
         ]
       },
       {
-        "status": "近日公開",
+        "status": "提供済み",
         "title": "2026年10月",
-        "completed": false,
+        "completed": true,
         "description": "Discordアクティビティをより細かくパーソナライズするための次のステップです。",
         "items": [
           {
