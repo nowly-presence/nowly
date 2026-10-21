@@ -18,7 +18,14 @@ export const CustomActivitySection = async () => {
             alt=""
             fill
             sizes="(min-width: 1280px) 520px, (min-width: 1024px) 44vw, (min-width: 640px) 460px, calc(100vw - 40px)"
-            className="object-cover object-top"
+            className="hidden object-cover object-top dark:block"
+          />
+          <Image
+            src="https://cdn.nowly.me/assets/custom-activity/custom-activity-cropped-dark.png"
+            alt=""
+            fill
+            sizes="(min-width: 1280px) 520px, (min-width: 1024px) 44vw, (min-width: 640px) 460px, calc(100vw - 40px)"
+            className="object-cover object-top dark:hidden"
           />
         </div>
       </div>
