@@ -45,6 +45,7 @@ stores: [chrome, firefox]
 
 ## Correções
 
+- Adicionada a opção "Manter o tempo decorrido por site", desativada por padrão. Ela evita que o contador reinicie ao trocar de aba, compartilhando um contador entre as abas do mesmo site até fechar o navegador. O progresso de reprodução de mídia não é alterado. ([@OverStyleFR](https://github.com/nowly-presence/nowly/issues/60))
 - O rótulo da aba ativa não é mais cortado. O botão Importar fica compacto com apenas o ícone.
 - Importações simultâneas são bloqueadas, lotes respeitam o limite de 50 atividades e a falha de um arquivo não impede os seguintes.
 - Uploads repetidos ou simultâneos da mesma imagem são idempotentes no servidor. Falhas na exclusão remota preservam as referências para uma nova tentativa.

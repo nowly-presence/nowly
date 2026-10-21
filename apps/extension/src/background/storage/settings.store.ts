@@ -11,7 +11,8 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   presenceLanguage: "per-presence",
   presenceLanguages: {},
   activitySelectionMode: "focused",
-  activityPriorityOrder: []
+  activityPriorityOrder: [],
+  preserveSiteTimer: false
 };
 
 const LEGACY_SETTINGS_KEYS = ["separateActivePresence", "theme", "canaryTheme", "seasonalThemeMigrated"] as const;

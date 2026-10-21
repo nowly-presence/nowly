@@ -216,6 +216,8 @@
   "settings.suggestPresences": "Proponuj dostępne obecności",
   "settings.suggestPresencesHint": "Proponuj dodanie obecności odwiedzanej strony",
   "settings.selection": "Przy kilku aktywnych kartach",
+  "settings.preserveSiteTimer": "Zachowaj czas dla każdej witryny",
+  "settings.preserveSiteTimerHint": "Wspólny licznik czasu dla kart tej samej witryny do zamknięcia przeglądarki. Postęp odtwarzania multimediów pozostaje bez zmian.",
   "settings.selectionHint": "Którą aktywność pokazuje Discord",
   "settings.selectionFocused": "Aktywna karta",
   "settings.selectionPriority": "Kolejność priorytetów",

@@ -216,6 +216,8 @@
   "settings.suggestPresences": "Verfügbare Präsenzen vorschlagen",
   "settings.suggestPresencesHint": "Anbieten, die Präsenz der besuchten Website hinzuzufügen",
   "settings.selection": "Bei mehreren aktiven Tabs",
+  "settings.preserveSiteTimer": "Verstrichene Zeit pro Website beibehalten",
+  "settings.preserveSiteTimerHint": "Teile die verstrichene Zeit zwischen Tabs derselben Website, bis der Browser geschlossen wird. Der Medienfortschritt bleibt unverändert.",
   "settings.selectionHint": "Welche Aktivität Discord anzeigt",
   "settings.selectionFocused": "Aktiver Tab",
   "settings.selectionPriority": "Prioritätsreihenfolge",

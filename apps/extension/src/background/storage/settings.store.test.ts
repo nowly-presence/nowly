@@ -38,6 +38,7 @@ describe("getSettings migration", () => {
 
     expect(settings.presenceDisplayMode).toBe("category");
     expect(settings.appearance).toBe("system");
+    expect(settings.preserveSiteTimer).toBe(false);
   });
 });
 

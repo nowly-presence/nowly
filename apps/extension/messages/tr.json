@@ -216,6 +216,8 @@
   "settings.suggestPresences": "Mevcut varlıkları öner",
   "settings.suggestPresencesHint": "Ziyaret ettiğin sitenin varlığını eklemeyi öner",
   "settings.selection": "Birden çok sekme aktifken",
+  "settings.preserveSiteTimer": "Site başına geçen süreyi koru",
+  "settings.preserveSiteTimerHint": "Tarayıcı kapanana kadar aynı sitenin sekmeleri arasında geçen süreyi paylaşır. Medya oynatma ilerlemesi değişmez.",
   "settings.selectionHint": "Discord'un gösterdiği etkinlik",
   "settings.selectionFocused": "Odaktaki sekme",
   "settings.selectionPriority": "Öncelik sırası",

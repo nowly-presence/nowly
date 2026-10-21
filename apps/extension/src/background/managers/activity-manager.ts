@@ -2,6 +2,7 @@ import { trackAnalytics } from "@/background/analytics-client";
 import { addActiveSlugToState, clearActiveSlugsFromState, clearTabPresences, getActiveSessionStartedAt, getActiveSlugsSnapshot, getFocusedTabId, getTabPresence, getTabPresencesSnapshot, hasActiveSession, isTabMuted, notifyBroadcastStateChanged, removeActiveSession, removeActiveSessions, removeActiveSlugFromState, removeActiveSlugsFromState, removeTabPresence, removeTabPresencesBySlug, setActiveSessionStartedAt, setTabMuted, upsertTabPresence } from "@/background/services/background-context";
 import { sendActiveHeartbeat } from "@/background/services/active-heartbeat";
 import { mapPresenceData, postNative } from "@/background/services/native";
+import { applySiteTimer } from "@/background/services/site-timers";
 import { verifyPresenceRelease } from "@/background/services/release-security";
 import { getActiveCustomPresence, getCustomActivities } from "@/background/storage/custom-activities.store";
 import { getCurrentActivity, getPresences, setCurrentActivity, setDebug } from "@/background/storage/presences.store";
@@ -185,13 +186,14 @@ export const broadcastActiveTab = async (): Promise<void> => {
     postNative({ type: "CLEAR_ACTIVITY" });
     await setCurrentActivity(null);
   } else {
+    const presence = await applySiteTimer(entry, settings.preserveSiteTimer === true);
     postNative({
       type: "SET_ACTIVITY",
-      presence: entry.presence
+      presence
     });
     await setCurrentActivity({
       slug: entry.slug,
-      presence: entry.presence,
+      presence,
       updatedAt: entry.updatedAt
     });
     void recordUsageDay().catch(() => {});

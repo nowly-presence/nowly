@@ -51,6 +51,7 @@ stores: [chrome, firefox]
 
 ## Fixes
 
+- Added the "Keep elapsed time per site" setting, off by default. It prevents the elapsed timer from resetting when switching tabs by sharing a timer across tabs of the same site until the browser closes. Media playback progress is unchanged. ([@OverStyleFR](https://github.com/nowly-presence/nowly/issues/60))
 - The active tab label is no longer cut off. The Import button stays compact with its icon-only appearance.
 - Concurrent imports are blocked and batches respect the 50-activity limit. A failure in one file does not prevent later files from being processed.
 - Repeated/concurrent uploads of the same image are idempotent on the server. Failed remote erasure keeps references available for retry.

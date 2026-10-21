@@ -70,6 +70,7 @@ export const installMockChrome = async (): Promise<void> => {
       presenceLanguages: {},
       activitySelectionMode: "focused",
       activityPriorityOrder: [],
+      preserveSiteTimer: false,
       presencePaused: previewParams.scenario === "paused",
       developerMode: previewParams.developer
     },

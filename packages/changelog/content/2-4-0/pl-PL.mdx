@@ -45,6 +45,7 @@ stores: [chrome, firefox]
 
 ## Poprawki
 
+- Dodano domyślnie wyłączone ustawienie "Zachowaj czas dla każdej witryny". Zapobiega zerowaniu licznika przy zmianie kart: karty tej samej witryny korzystają ze wspólnego licznika aż do zamknięcia przeglądarki. Postęp odtwarzania multimediów pozostaje bez zmian. ([@OverStyleFR](https://github.com/nowly-presence/nowly/issues/60))
 - Etykieta aktywnej karty nie jest już ucinana. Import pozostaje kompaktowym przyciskiem z samą ikoną.
 - Równoczesne importy są blokowane, serie respektują limit 50 aktywności, a błąd pliku nie blokuje kolejnych.
 - Powtórzone i równoczesne wysyłki tego samego obrazu są idempotentne na serwerze. Nieudane zdalne usunięcie zachowuje odniesienia do ponowienia.

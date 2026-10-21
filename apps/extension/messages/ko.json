@@ -216,6 +216,8 @@
   "settings.suggestPresences": "사용 가능한 프레즌스 추천",
   "settings.suggestPresencesHint": "방문 중인 사이트의 프레즌스 추가를 제안합니다",
   "settings.selection": "여러 탭이 활성일 때",
+  "settings.preserveSiteTimer": "사이트별 경과 시간 유지",
+  "settings.preserveSiteTimerHint": "브라우저를 닫을 때까지 같은 사이트의 탭 간에 경과 시간을 공유합니다. 미디어 재생 진행 상태는 변경되지 않습니다.",
   "settings.selectionHint": "Discord에 표시할 활동",
   "settings.selectionFocused": "현재 탭",
   "settings.selectionPriority": "우선순위",

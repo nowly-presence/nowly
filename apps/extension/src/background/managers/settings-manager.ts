@@ -4,6 +4,7 @@ import { trackAnalytics } from "@/background/analytics-client";
 import { addRuntimeLog } from "@/background/runtime-logs";
 import { setCustomApiUrl } from "@/background/services/background-context";
 import { syncDeviceState } from "@/background/services/device-sync";
+import { clearSiteTimers } from "@/background/services/site-timers";
 import { setOnboarding } from "@/background/storage/onboarding.store";
 import { getSettings, setSettings } from "@/background/storage/settings.store";
 import type { ExtensionSettings } from "@/shared/types";
@@ -38,8 +39,12 @@ export const updateSettings = async (partial: Partial<ExtensionSettings>): Promi
     await applyPresencePause(partial.presencePaused);
   }
 
-  if ("activitySelectionMode" in partial || "activityPriorityOrder" in partial) {
-    void broadcastActiveTab();
+  if ("preserveSiteTimer" in partial && settings.preserveSiteTimer !== previousSettings.preserveSiteTimer) {
+    await clearSiteTimers();
+  }
+
+  if ("activitySelectionMode" in partial || "activityPriorityOrder" in partial || "preserveSiteTimer" in partial) {
+    await broadcastActiveTab();
   }
 
   return settings;

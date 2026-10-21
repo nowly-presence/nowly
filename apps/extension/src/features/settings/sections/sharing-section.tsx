@@ -60,6 +60,13 @@ export const SharingSection = () => {
             </Button>
           </FieldRow>
         )}
+        <SwitchRow
+          title={t("settings.preserveSiteTimer")}
+          description={t("settings.preserveSiteTimerHint")}
+          checked={settings.preserveSiteTimer === true}
+          label={t("settings.preserveSiteTimer")}
+          onChange={(checked) => void updateSettings({ preserveSiteTimer: checked })}
+        />
         <FieldRow
           title={t("settings.selection")}
           description={t("settings.selectionHint")}

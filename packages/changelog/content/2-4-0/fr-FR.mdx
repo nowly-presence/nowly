@@ -51,6 +51,7 @@ stores: [chrome, firefox]
 
 ## Corrections
 
+- Ajout du réglage "Conserver le temps écoulé par site", désactivé par défaut. Il évite la remise à zéro du compteur lors des changements d'onglet en partageant un compteur entre les onglets d'un même site jusqu'à la fermeture du navigateur. La progression des médias reste inchangée. ([@OverStyleFR](https://github.com/nowly-presence/nowly/issues/60))
 - Le libellé de l'onglet actif n'est plus tronqué. Le bouton Importer reste compact grâce à son affichage sous forme d'icône.
 - Les imports simultanés sont bloqués et les imports multiples respectent la limite de 50 activités. Une erreur sur un fichier n'empêche pas le traitement des suivants.
 - Les envois répétés ou simultanés d'une même image sont idempotents côté serveur. En cas d'échec d'effacement du stockage distant, les références sont conservées pour permettre une nouvelle tentative.

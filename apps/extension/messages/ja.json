@@ -216,6 +216,8 @@
   "settings.suggestPresences": "利用可能なプレゼンスを提案",
   "settings.suggestPresencesHint": "閲覧中のサイトのプレゼンスの追加を提案します",
   "settings.selection": "複数のタブがアクティブなとき",
+  "settings.preserveSiteTimer": "サイトごとの経過時間を保持",
+  "settings.preserveSiteTimerHint": "ブラウザーを閉じるまで、同じサイトのタブ間で経過時間を共有します。メディアの再生位置は変更されません。",
   "settings.selectionHint": "Discord に表示するアクティビティ",
   "settings.selectionFocused": "表示中のタブ",
   "settings.selectionPriority": "優先順位",

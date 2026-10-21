@@ -216,6 +216,8 @@
   "settings.suggestPresences": "Sugerir presencias disponibles",
   "settings.suggestPresencesHint": "Ofrecer añadir la presencia del sitio que visitas",
   "settings.selection": "Con varias pestañas activas",
+  "settings.preserveSiteTimer": "Conservar el tiempo por sitio",
+  "settings.preserveSiteTimerHint": "Comparte el tiempo transcurrido entre pestañas del mismo sitio hasta cerrar el navegador. El progreso multimedia no cambia.",
   "settings.selectionHint": "Qué actividad muestra Discord",
   "settings.selectionFocused": "Pestaña activa",
   "settings.selectionPriority": "Orden de prioridad",

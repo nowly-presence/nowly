@@ -19,7 +19,8 @@ export const SYNCED_SETTINGS_KEYS = [
   "presenceLanguage",
   "presenceLanguages",
   "activitySelectionMode",
-  "activityPriorityOrder"
+  "activityPriorityOrder",
+  "preserveSiteTimer"
 ] as const satisfies readonly (keyof ExtensionSettings)[];
 
 export type SyncedSettings = Pick<ExtensionSettings, (typeof SYNCED_SETTINGS_KEYS)[number]>;
