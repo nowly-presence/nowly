@@ -1,7 +1,6 @@
 "use client";
 
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@nowly/ui";
-
 import { useRouter } from "@/i18n/navigation";
 import { DOCS_BASE_PATH } from "@/lib/constants";
 import { useLocale, useTranslations } from "next-intl";

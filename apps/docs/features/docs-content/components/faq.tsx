@@ -1,7 +1,6 @@
 "use client";
 
 import { RiArrowDownSLine, RiQuestionLine } from "@nowly/ui/icons";
-
 import type { FC, ReactNode } from "react";
 import { useState } from "react";
 import { cn } from "@nowly/ui";

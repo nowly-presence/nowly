@@ -1,7 +1,6 @@
 import { ButtonLink } from "@/components/button-link";
 import { DiscordCallout } from "@/components/discord-callout";
 import { ButtonAnchor } from "@nowly/ui";
-
 import { ChangelogList } from "@/features/changelog/components/changelog-list";
 import { MarkdownBody } from "@/features/content/components/markdown-body";
 import { formatChangelogDate, getChangelogNotes, getChangelogReleases, latestReleaseSlugByStore, type ChangelogRelease } from "@/features/changelog/lib/changelog-releases";

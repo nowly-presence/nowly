@@ -3,7 +3,6 @@
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { trackPublicAnalytics } from "@/lib/analytics";
 import { Button, ButtonAnchor, Card, CardContent, CardDescription, CardTitle, Separator } from "@nowly/ui";
-
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { RiDiscordFill, RiHeartLine } from "@nowly/ui/icons";

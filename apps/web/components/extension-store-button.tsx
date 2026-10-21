@@ -4,10 +4,8 @@ import { RiChromeFill, RiFirefoxBrowserFill } from "@remixicon/react";
 import type { ButtonVariantProps } from "@nowly/ui/button-variants";
 import { buttonVariants } from "@nowly/ui/button-variants";
 import { cn } from "@nowly/ui/utils";
-
 import { detectExtensionBrowser, getExtensionDownloadUrl } from "@/lib/extension-store";
 import type { ExtensionBrowser } from "@/lib/extension-store";
-
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type ComponentProps, type ReactNode } from "react";
 

@@ -1,7 +1,6 @@
 import { BrandLockup } from "@/features/layout/components/brand-lockup";
 import { ThemeToggle } from "@/features/layout/components/theme-toggle";
 import { Footer as SharedFooter, FOOTER_DISCORD_SITE_URL, LocaleSelector } from "@nowly/ui";
-
 import type { LocaleString } from "@nowly/locales";
 import { getLocale, getTranslations } from "next-intl/server";
 

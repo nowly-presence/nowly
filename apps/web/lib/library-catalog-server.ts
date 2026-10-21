@@ -1,5 +1,4 @@
 import "server-only";
-
 import { contentLocales } from "@/features/content/lib/content-files";
 import type { LibraryPresence } from "@/lib/library-catalog";
 import { FALLBACK_LOCALE, SUPPORTED_LOCALES } from "@nowly/locales";

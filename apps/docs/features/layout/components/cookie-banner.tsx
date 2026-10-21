@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@nowly/ui";
-
 import { SITE_URL } from "@/lib/constants";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";

@@ -4,7 +4,6 @@ import { PresenceTile } from "@/components/presence-tile";
 import { libraryLogoUrl, libraryThumbnailUrl } from "@/lib/library-catalog";
 import { cn } from "@nowly/ui";
 import Image from "next/image";
-
 import { useState } from "react";
 
 type LibraryMediaProps = {

@@ -1,9 +1,7 @@
 "use client";
 
 import { RiCheckLine, RiFileCopyLine } from "@nowly/ui/icons";
-
 import { cn } from "@nowly/ui";
-
 import { type FC, useCallback, useState } from "react";
 import { useTranslations } from "next-intl";
 

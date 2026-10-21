@@ -2,7 +2,6 @@ import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
 import { ButtonAnchor } from "@nowly/ui/button-link";
 import { RiArrowRightUpLine, RiCupLine, RiGithubLine, RiHeart3Line } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
-
 import { SUPPORT_LINKS } from "@/features/support/lib/support-links";
 
 const donateLinks = [

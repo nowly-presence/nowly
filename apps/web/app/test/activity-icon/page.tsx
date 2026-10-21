@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-
 import { ACTIVITY_ICON_COLORS, ACTIVITY_ICON_KEYS, type ActivityIconKey } from "../../api/activity-icon/activity-icons";
 
 export const metadata: Metadata = {

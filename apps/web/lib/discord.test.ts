@@ -1,5 +1,4 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-
 import { getDiscordCommunity, MIN_DISPLAYED_MEMBERS, parseDiscordCommunity } from "./discord";
 
 describe("parseDiscordCommunity", () => {

@@ -1,7 +1,6 @@
 "use client";
 
 import { Badge, cn } from "@nowly/ui";
-
 import type { FC, ReactElement, ReactNode } from "react";
 import { useTranslations } from "next-intl";
 

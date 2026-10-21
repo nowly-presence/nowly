@@ -2,7 +2,6 @@ import { AuthorViewTracker } from "@/features/library/components/author-view-tra
 import { PaginatedLibraryGrid } from "@/features/library/components/paginated-library-grid";
 import { ButtonLink } from "@/components/button-link";
 import { Avatar, AvatarFallback, AvatarImage, ButtonAnchor } from "@nowly/ui";
-
 import { contributorDisplayName, type LibraryPresence } from "@/lib/library-catalog";
 import { RiArrowLeftLine, RiGithubLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";

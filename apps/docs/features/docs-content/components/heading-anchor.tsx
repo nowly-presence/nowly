@@ -1,7 +1,6 @@
 import { RiLinksLine } from "@nowly/ui/icons";
 import { createHeadingId } from "@/features/docs-content/lib/types";
 import { cn } from "@nowly/ui";
-
 import type { FC, ReactNode } from "react";
 
 type HeadingAnchorProps = {

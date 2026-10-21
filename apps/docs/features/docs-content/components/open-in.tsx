@@ -1,13 +1,10 @@
 "use client";
 
 import { RiArrowDownSLine, RiExternalLinkLine } from "@nowly/ui/icons";
-
 import { ClaudeIcon, GitHubIcon, OpenAIIcon } from "@/components/icons";
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@nowly/ui";
-
 import { DOCS_URL, PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import { docHref } from "@/features/docs-content/lib/href";
-
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 

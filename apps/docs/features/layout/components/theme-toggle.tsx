@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@nowly/ui";
-
 import { RiMoonLine, RiSunLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";

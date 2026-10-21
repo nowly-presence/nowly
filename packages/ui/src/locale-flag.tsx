@@ -1,5 +1,4 @@
 import { cn } from "./utils";
-
 import type { FC, ReactElement } from "react";
 
 type LocaleFlagProps = {

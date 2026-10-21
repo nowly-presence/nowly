@@ -1,10 +1,8 @@
 "use client";
 
 import { RiArrowLeftSLine, RiArrowRightSLine } from "@nowly/ui/icons";
-
 import type { DocNavigationItem } from "@/features/docs-content/lib/types";
 import { docHref } from "@/features/docs-content/lib/href";
-
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import type { FC } from "react";

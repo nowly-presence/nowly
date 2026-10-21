@@ -1,10 +1,8 @@
 "use client";
 
 import { RiCloseLine, RiNodeTree } from "@nowly/ui/icons";
-
 import type { TocItem } from "@/features/docs-content/lib/types";
 import { cn } from "@nowly/ui";
-
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type FC } from "react";
 

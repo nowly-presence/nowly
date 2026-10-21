@@ -1,5 +1,4 @@
 import { ImageResponse } from "next/og";
-
 import { ACTIVITY_ICON_COLORS, ACTIVITY_ICON_KEYS, ACTIVITY_ICON_PATHS, type ActivityIconKey } from "../../activity-icons";
 
 export const runtime = "nodejs";

@@ -1,5 +1,4 @@
 import { ButtonAnchor } from "@nowly/ui/button-link";
-
 import { docsHref } from "@/features/seo/lib/seo";
 import { RiArrowRightLine } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";

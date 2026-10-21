@@ -1,11 +1,9 @@
 import { Suspense } from "react";
-
 import { homeSectionAltClass, SectionHeading } from "@/features/home/components/section-heading";
 import { PresenceTile } from "@/components/presence-tile";
 import { Link } from "@/i18n/navigation";
 import { getPresencePlatforms, type PresencePlatform } from "@/lib/presence-api";
 import { cn } from "@nowly/ui/utils";
-
 import { getTranslations } from "next-intl/server";
 
 const LogoTrack = ({ platforms, inert }: { platforms: PresencePlatform[]; inert?: boolean }) => (

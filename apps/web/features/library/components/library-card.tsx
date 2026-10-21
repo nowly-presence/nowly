@@ -3,7 +3,6 @@
 import { LibraryMedia } from "@/features/library/components/library-media";
 import { Link } from "@/i18n/navigation";
 import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
-
 import { localizedDescription, type LibraryPresence } from "@/lib/library-catalog";
 import { useTranslations } from "next-intl";
 

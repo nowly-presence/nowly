@@ -1,6 +1,5 @@
 import { Link } from "@/i18n/navigation";
 import { Avatar, AvatarFallback, AvatarImage, ButtonAnchor, Card, CardContent, CardTitle } from "@nowly/ui";
-
 import { presenceSiteHref, authorHref, type LibraryPresence, type PresencePerson } from "@/lib/library-catalog";
 import type { PresenceCommit, PresenceStats } from "@/lib/presence-api";
 import { RiDownloadLine, RiGithubLine, RiUserLine } from "@nowly/ui/icons";

@@ -1,7 +1,6 @@
 import { FALLBACK_LOCALE } from "@nowly/locales";
 import { getTranslations } from "next-intl/server";
 import { NextResponse } from "next/server";
-
 import { getGuides } from "@/features/guides/lib/guides";
 import { getPresenceCatalog } from "@/lib/presence-api";
 import { CANONICAL_ORIGIN, DOCS_ORIGIN } from "@/features/seo/lib/seo";

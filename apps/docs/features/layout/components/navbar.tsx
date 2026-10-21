@@ -4,7 +4,6 @@ import { RiMenuLine } from "@nowly/ui/icons";
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { BrandLockup } from "@/features/layout/components/brand-lockup";
 import { Button, Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@nowly/ui";
-
 import { Link } from "@/i18n/navigation";
 import { SITE_URL } from "@/lib/constants";
 import { useTranslations } from "next-intl";

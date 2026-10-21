@@ -1,5 +1,4 @@
 import { FALLBACK_LOCALE } from "@nowly/locales";
-
 import { formatBytes } from "@nowly/shared";
 import { generateChangelog, translateChangelog } from "@/shared/changelog.service";
 import { sha256Base64Url } from "@/shared/crypto.service";

@@ -2,10 +2,8 @@
 
 import { RiDownloadLine } from "@nowly/ui/icons";
 import { ButtonVariantProps, buttonVariants, cn } from "@nowly/ui";
-
 import { detectExtensionBrowser, getExtensionDownloadUrl } from "@/lib/extension-store";
 import type { ExtensionBrowser } from "@/lib/extension-store";
-
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type ComponentProps, type ReactNode } from "react";
 

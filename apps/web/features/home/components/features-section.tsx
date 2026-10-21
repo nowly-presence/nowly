@@ -1,6 +1,5 @@
 import { SectionHeading } from "@/features/home/components/section-heading";
 import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui/card";
-
 import { RiGlobalLine, RiLockLine, RiPuzzleLine, RiRefreshLine, RiShieldCheckLine, RiWindowLine } from "@remixicon/react";
 import { getTranslations } from "next-intl/server";
 

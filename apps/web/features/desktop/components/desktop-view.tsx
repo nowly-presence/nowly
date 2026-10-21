@@ -3,10 +3,8 @@
 import { ButtonLink } from "@/components/button-link";
 import { CampaignSignupForm } from "@/features/campaigns/components/campaign-signup-form";
 import { Alert, AlertDescription, AlertTitle, ButtonAnchor, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
-
 import { CHROMEOS_WAITLIST_CAMPAIGN_ID, PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import type { DesktopPlatform, DesktopRelease } from "@/features/desktop/lib/desktop-release";
-
 import { RiAppleFill, RiCheckLine, RiChromeFill, RiErrorWarningLine, RiGithubLine, RiInformationLine, RiUbuntuFill, RiWindowsFill } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useLayoutEffect, useState } from "react";

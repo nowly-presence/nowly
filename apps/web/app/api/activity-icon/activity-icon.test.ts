@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-
 import { GET } from "./[icon]/[file]/route";
 import { ACTIVITY_ICON_COLORS, ACTIVITY_ICON_KEYS, ACTIVITY_ICON_PATHS } from "./activity-icons";
 

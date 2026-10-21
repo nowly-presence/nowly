@@ -1,5 +1,4 @@
 import { ButtonLink } from "@/components/button-link";
-
 import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui/card";
 import { cn } from "@nowly/ui/utils";
 import { getTranslations } from "next-intl/server";

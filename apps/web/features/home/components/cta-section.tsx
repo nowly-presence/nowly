@@ -1,6 +1,5 @@
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { Link } from "@/i18n/navigation";
-
 import { getTranslations } from "next-intl/server";
 
 export const CtaSection = async () => {

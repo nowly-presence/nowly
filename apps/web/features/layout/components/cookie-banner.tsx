@@ -3,7 +3,6 @@
 import { Link } from "@/i18n/navigation";
 import { buttonVariants } from "@nowly/ui/button-variants";
 import { cn } from "@nowly/ui/utils";
-
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 

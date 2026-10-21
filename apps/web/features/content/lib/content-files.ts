@@ -1,10 +1,8 @@
 import "server-only";
-
 import { FALLBACK_LOCALE, getValidLocale, type LocaleString } from "@nowly/locales";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { cache } from "react";
-
 import { frenchSpacing, mapBlockText, markdownHeadings, markdownWordCount, parseMarkdown, type Block, type Heading } from "@/features/content/lib/markdown";
 import { parseFrontmatter, type ContentMeta } from "@/features/content/lib/frontmatter";
 

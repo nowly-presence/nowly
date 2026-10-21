@@ -4,9 +4,7 @@ import { Toaster } from "@nowly/ui";
 import { PaginatedLibraryGrid } from "@/features/library/components/paginated-library-grid";
 import { ButtonLink } from "@/components/button-link";
 import { Button, ButtonAnchor, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, Input, cn } from "@nowly/ui";
-
 import { catalogCategories, presenceMatchesGithub, presenceSearchText, type LibraryCategory, type LibraryPresence } from "@/lib/library-catalog";
-
 import { trackPublicAnalytics } from "@/lib/analytics";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { Link } from "@/i18n/navigation";

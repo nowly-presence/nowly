@@ -3,7 +3,6 @@
 import * as React from "react";
 import { MessageScroller as MessageScrollerPrimitive, useMessageScroller, useMessageScrollerScrollable, useMessageScrollerVisibility } from "@shadcn/react/message-scroller";
 import { cn } from "cn";
-
 import { Button } from "./button";
 import { RiArrowDownLine } from "@remixicon/react";
 

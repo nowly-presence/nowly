@@ -1,10 +1,8 @@
 import "server-only";
-
 import { isLibraryCategory, type LibraryPresence, type LocalizedCopy, type LocalizedList, type PresencePerson } from "@/lib/library-catalog";
 import { PRESENCES_REPOSITORY_URL } from "@/lib/constants";
 import { PRODUCTION_API_URL, presenceLogoUrl } from "@/lib/presence-api-client";
 import { FALLBACK_LOCALE, SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
-
 import { cache } from "react";
 
 export { PRODUCTION_API_URL, presenceLogoUrl, presenceThumbnailUrl } from "@/lib/presence-api-client";

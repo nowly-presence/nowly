@@ -10,7 +10,6 @@ import type { ContentEntry } from "@/features/content/lib/content-files";
 import { formatChangelogDate } from "@/features/changelog/lib/format-changelog-date";
 import { Alert, AlertDescription, AlertTitle, Card, CardContent, CardTitle } from "@nowly/ui";
 import { FALLBACK_LOCALE, getValidLocale } from "@nowly/locales";
-
 import { localizedDescription, localizedFeatures, localizedLongDescription, relatedPresences, type LibraryPresence } from "@/lib/library-catalog";
 import type { PresenceStats, PresenceVersionNote } from "@/lib/presence-api";
 import { RiArrowLeftLine, RiCheckboxCircleLine, RiInformationLine, RiTranslate2 } from "@nowly/ui/icons";

@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-
 import { parseFrontmatter } from "./frontmatter";
 import { frenchSpacing, inlineText, mapBlockText, markdownHeadings, markdownWordCount, parseInline, parseMarkdown } from "./markdown";
 

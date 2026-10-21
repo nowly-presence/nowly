@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@nowly/ui";
-
 import { motion } from "motion/react";
 
 type From = "left" | "right" | "top" | "bottom";

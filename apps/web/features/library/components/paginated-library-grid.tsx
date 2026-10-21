@@ -2,9 +2,7 @@
 
 import { LibraryCard } from "@/features/library/components/library-card";
 import { Button, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, cn } from "@nowly/ui";
-
 import type { LibraryPresence } from "@/lib/library-catalog";
-
 import { RiArrowLeftSLine, RiArrowRightSLine } from "@nowly/ui/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { parseAsInteger, useQueryState } from "nuqs";

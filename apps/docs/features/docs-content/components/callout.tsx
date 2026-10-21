@@ -1,5 +1,4 @@
 import { RiAlertLine, RiErrorWarningLine, RiInformationLine } from "@nowly/ui/icons";
-
 import type { FC, ReactNode } from "react";
 
 type CalloutType = "info" | "warning" | "error";

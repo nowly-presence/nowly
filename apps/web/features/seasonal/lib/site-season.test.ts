@@ -1,6 +1,5 @@
 import { runInNewContext } from "node:vm";
 import { describe, expect, it } from "vitest";
-
 import { applySeasonClass, initialSeasonState, nextSeasonState, parseSeasonMessage, parseSeasonPreview, seasonBootScript, SEASON_STORAGE_KEY, SITE_SEASONS, type SeasonState } from "./site-season";
 
 const fakeClassList = (initial: string[] = []) => {
