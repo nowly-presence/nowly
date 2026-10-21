@@ -216,6 +216,8 @@
   "settings.suggestPresences": "Πρόταση διαθέσιμων παρουσιών",
   "settings.suggestPresencesHint": "Πρόταση προσθήκης της παρουσίας του ιστότοπου που επισκέπτεσαι",
   "settings.selection": "Με πολλές ενεργές καρτέλες",
+  "settings.preserveSiteTimer": "Διατήρηση χρόνου ανά ιστότοπο",
+  "settings.preserveSiteTimerHint": "Κοινός χρόνος στις καρτέλες του ίδιου ιστοτόπου μέχρι να κλείσει το πρόγραμμα περιήγησης. Η πρόοδος αναπαραγωγής δεν αλλάζει.",
   "settings.selectionHint": "Ποια δραστηριότητα δείχνει το Discord",
   "settings.selectionFocused": "Ενεργή καρτέλα",
   "settings.selectionPriority": "Σειρά προτεραιότητας",

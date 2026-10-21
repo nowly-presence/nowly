@@ -36,6 +36,20 @@ const stored = (overrides: Partial<StoredPresence>): StoredPresence => ({
 });
 
 describe("projectSettings", () => {
+  it("syncs the timer preference without any browser-session timer state", () => {
+    expect(
+      projectSettings({
+        presenceDisplayMode: "category",
+        showPlayer: true,
+        preserveSiteTimer: true
+      })
+    ).toEqual({
+      presenceDisplayMode: "category",
+      showPlayer: true,
+      preserveSiteTimer: true
+    });
+  });
+
   it("never includes device-only settings", () => {
     const settings: ExtensionSettings = {
       presenceDisplayMode: "grid",

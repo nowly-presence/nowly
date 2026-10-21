@@ -216,6 +216,8 @@
   "settings.suggestPresences": "Cadangkan kehadiran yang tersedia",
   "settings.suggestPresencesHint": "Tawarkan untuk menambah kehadiran laman yang anda lawati",
   "settings.selection": "Dengan beberapa tab aktif",
+  "settings.preserveSiteTimer": "Kekalkan masa berlalu bagi setiap laman",
+  "settings.preserveSiteTimerHint": "Kongsi masa berlalu antara tab laman yang sama sehingga pelayar ditutup. Kemajuan main balik media tidak berubah.",
   "settings.selectionHint": "Aktiviti yang dipaparkan oleh Discord",
   "settings.selectionFocused": "Tab yang difokus",
   "settings.selectionPriority": "Susunan keutamaan",

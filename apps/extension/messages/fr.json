@@ -216,6 +216,8 @@
   "settings.suggestPresences": "Suggérer les présences disponibles",
   "settings.suggestPresencesHint": "Proposer d'ajouter la présence du site que vous visitez",
   "settings.selection": "Avec plusieurs onglets actifs",
+  "settings.preserveSiteTimer": "Conserver le temps écoulé par site",
+  "settings.preserveSiteTimerHint": "Partage le compteur entre les onglets d'un même site jusqu'à la fermeture du navigateur. La progression des médias reste inchangée.",
   "settings.selectionHint": "L'activité affichée sur Discord",
   "settings.selectionFocused": "Onglet actif",
   "settings.selectionPriority": "Ordre de priorité",

@@ -1,4 +1,5 @@
 import type { PresencePayload } from "@/shared/types";
+import { isMediaPlayback } from "@/background/services/site-timers";
 
 const MUTED_TABS_SESSION_KEY = "mutedTabIds";
 const ACTIVE_SLUGS_SESSION_KEY = "activeSlugs";
@@ -9,6 +10,7 @@ export type TabPresenceEntry = {
   slug: string;
   presence: PresencePayload;
   updatedAt: number;
+  mediaPlayback?: boolean;
 };
 export type TabPresenceRecord = TabPresenceEntry & {
   tabId: number;
@@ -45,7 +47,10 @@ const getTabPresencesMap = async (): Promise<Record<number, TabPresenceEntry>> =
 
 export const upsertTabPresence = async (tabId: number, entry: TabPresenceEntry): Promise<void> => {
   const map = await getTabPresencesMap();
-  map[tabId] = entry;
+  map[tabId] = {
+    ...entry,
+    mediaPlayback: isMediaPlayback(entry, map[tabId])
+  };
   await chrome.storage.session.set({ [TAB_PRESENCES_SESSION_KEY]: map });
 };
 

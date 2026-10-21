@@ -216,6 +216,8 @@
   "settings.suggestPresences": "Suggest available presences",
   "settings.suggestPresencesHint": "Offer to add the presence of the site you are visiting",
   "settings.selection": "With several active tabs",
+  "settings.preserveSiteTimer": "Keep elapsed time per site",
+  "settings.preserveSiteTimerHint": "Share elapsed time across tabs of the same site until the browser closes. Media playback progress is unchanged.",
   "settings.selectionHint": "Which activity Discord shows",
   "settings.selectionFocused": "Focused tab",
   "settings.selectionPriority": "Priority order",

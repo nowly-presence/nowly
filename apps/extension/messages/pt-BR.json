@@ -216,6 +216,8 @@
   "settings.suggestPresences": "Sugerir presenças disponíveis",
   "settings.suggestPresencesHint": "Oferecer a presença do site que você está visitando",
   "settings.selection": "Com várias abas ativas",
+  "settings.preserveSiteTimer": "Manter o tempo decorrido por site",
+  "settings.preserveSiteTimerHint": "Compartilha o tempo decorrido entre abas do mesmo site até fechar o navegador. O progresso da reprodução de mídia não muda.",
   "settings.selectionHint": "Qual atividade o Discord mostra",
   "settings.selectionFocused": "Aba em foco",
   "settings.selectionPriority": "Ordem de prioridade",
