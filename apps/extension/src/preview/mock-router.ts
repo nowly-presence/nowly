@@ -2,7 +2,8 @@ import type { PayloadOf, ResponseOf, RouterMessageType } from "@/background/rout
 import type { OnboardingState } from "@/background/storage/onboarding.store";
 import { buildCustomPresence, customActivitySlug } from "@/shared/custom-activity";
 import { decodeImageDataUrl, sha256Hex } from "@/shared/custom-image";
-import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, ExtensionSettings, InstalledPresences, NativeStatus, RuntimeLogEntry, StoredCustomImage, TabActivity, TabState } from "@/shared/types";
+import { CUSTOM_ACTIVITY_DETECTION_KEY } from "@/shared/custom-activity-detection";
+import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, CustomActivityDetection, ExtensionSettings, InstalledPresences, NativeStatus, RuntimeLogEntry, StoredCustomImage, TabActivity, TabState } from "@/shared/types";
 import type { MockStorageArea } from "@/preview/mock-storage";
 import { toStoredPresence, type CatalogFixture } from "@/preview/preview-fixtures";
 import { discordIpcIssueCode, markDiscordIpcIssuePrompted, NO_DISCORD_IPC_ISSUE, type DiscordIpcIssue } from "@/shared/discord-ipc-prompt";
@@ -396,6 +397,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
       const state = await readCustom();
 
       const exists = id !== null && state.items.some((item) => item.id === id);
+      if (id === null) await session.set({ [CUSTOM_ACTIVITY_DETECTION_KEY]: null });
       return writeCustom({
         ...state,
         activeId: exists ? id : null,
@@ -439,6 +441,8 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
       const images = await readImages();
       return Object.fromEntries(hashes.flatMap((hash) => (images[hash] ? [[hash, images[hash].dataUrl]] : [])));
     },
+    GET_CUSTOM_ACTIVITY_DETECTION: () =>
+      session.read<CustomActivityDetection | null>(CUSTOM_ACTIVITY_DETECTION_KEY, null),
     GET_ACCOUNT: () => account,
     START_ACCOUNT_CONNECT: () => {
       account = {

@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { OnboardingState } from "@/background/storage/onboarding.store";
 import { sendMessage } from "@/lib/messages";
-import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, TabState, UserScriptsStatus } from "@/shared/types";
+import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, CustomActivityDetection, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, TabState, UserScriptsStatus } from "@/shared/types";
 
 export type CatalogState = {
   status: "idle" | "loading";
@@ -29,6 +29,7 @@ export type ExtensionState = {
   updates: Record<string, string>;
   catalog: CatalogState;
   customActivities: CustomActivitiesState;
+  detection: CustomActivityDetection | null;
   account: AccountSnapshot;
 };
 
@@ -70,6 +71,7 @@ const INITIAL: ExtensionState = {
     activeId: null,
     activatedAt: null
   },
+  detection: null,
   account: { signedIn: false }
 };
 
@@ -86,6 +88,7 @@ type Refreshers = {
   updates: () => Promise<void>;
   catalog: (force?: boolean) => Promise<void>;
   customActivities: () => Promise<void>;
+  detection: () => Promise<void>;
   account: () => Promise<void>;
 };
 
@@ -167,6 +170,10 @@ export const ExtensionStateProvider = ({ children }: {
         () => sendMessage("GET_CUSTOM_ACTIVITIES"),
         (customActivities) => patch({ customActivities })
       ),
+      detection: safe(
+        () => sendMessage("GET_CUSTOM_ACTIVITY_DETECTION"),
+        (detection) => patch({ detection })
+      ),
       account: safe(
         () => sendMessage("GET_ACCOUNT"),
         (account) => patch({ account })
@@ -231,6 +238,7 @@ export const ExtensionStateProvider = ({ children }: {
         refresh.presenceSettings(),
         refresh.consent(),
         refresh.customActivities(),
+        refresh.detection(),
         refresh.account()
       ]);
       if (!cancelled) patch({ ready: true });
@@ -254,6 +262,7 @@ export const ExtensionStateProvider = ({ children }: {
     const onChanged = (changes: Record<string, chrome.storage.StorageChange>, area: string) => {
       if (area === "session") {
         if ("tabPresences" in changes || "mutedTabIds" in changes) void refresh.tab();
+        if ("customActivityDetection" in changes) void refresh.detection();
         return;
       }
       if (area !== "local") return;

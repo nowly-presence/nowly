@@ -14,6 +14,7 @@ import { SwitchRow } from "@/ui/row";
 import { Section } from "@/ui/section";
 import { CustomActivityButtonsSection } from "@/features/custom-activity/custom-activity-buttons-section";
 import { CustomActivityDeleteSheet } from "@/features/custom-activity/custom-activity-delete-sheet";
+import { CustomActivityDetectionSection } from "@/features/custom-activity/custom-activity-detection-section";
 import { CustomActivityImagesSection } from "@/features/custom-activity/custom-activity-images-section";
 import { CustomActivityTextSection } from "@/features/custom-activity/custom-activity-text-section";
 import { CustomActivityTimeSection } from "@/features/custom-activity/custom-activity-time-section";
@@ -44,6 +45,7 @@ export const CustomActivityEditorView = ({ id, template }: {
   const errors = useMemo(() => validateCustomActivity(draft), [draft]);
   const visibleErrors = showErrors ? errors : {};
   const active = Boolean(draft.id) && state.customActivities.activeId === draft.id;
+  const detectedHost = draft.id && state.detection?.activityId === draft.id ? state.detection.host : undefined;
 
   const patch = (partial: Partial<CustomActivityDraft>) => setDraft((current) => ({ ...current, ...partial }));
 
@@ -102,11 +104,13 @@ export const CustomActivityEditorView = ({ id, template }: {
             <SwitchRow
               title={t("custom.list.showOnDiscord")}
               description={
-                active
-                  ? t("custom.list.activeHint")
-                  : t("custom.list.inactiveHint")
+                detectedHost
+                  ? t("custom.detection.runningHint", { host: detectedHost })
+                  : active
+                    ? t("custom.list.activeHint")
+                    : t("custom.list.inactiveHint")
               }
-              checked={active}
+              checked={active || Boolean(detectedHost)}
               label={t("custom.list.showOnDiscord")}
               onChange={(checked) => void actions.setActive(checked ? existing.id : null)}
             />
@@ -116,6 +120,7 @@ export const CustomActivityEditorView = ({ id, template }: {
         <CustomActivityTextSection draft={draft} patch={patch} errors={visibleErrors} />
         <CustomActivityImagesSection draft={draft} patch={patch} errors={visibleErrors} upload={actions.upload} uploading={actions.pending === "upload"} />
         <CustomActivityTimeSection draft={draft} patch={patch} errors={visibleErrors} />
+        <CustomActivityDetectionSection draft={draft} patch={patch} errors={visibleErrors} detectedHost={detectedHost} />
         <CustomActivityButtonsSection draft={draft} patch={patch} errors={visibleErrors} />
 
         <div className="flex flex-col gap-2">

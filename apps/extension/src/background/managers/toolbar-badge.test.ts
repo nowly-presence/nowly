@@ -88,6 +88,7 @@ const customs: CustomActivitiesState = {
       smallImage: { kind: "none" },
       timestamp: { mode: "elapsed" },
       buttons: [],
+      detectionUrl: "",
       createdAt: 0,
       updatedAt: 0
     }

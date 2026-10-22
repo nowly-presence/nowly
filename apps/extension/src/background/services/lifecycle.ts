@@ -6,6 +6,7 @@ import { refreshPresenceLanguage, syncPresenceScripts } from "@/background/runti
 import { runAccountSync } from "@/background/services/account-sync";
 import { initializeCustomApiUrl } from "@/background/services/api-state";
 import { setFocusedTabId } from "@/background/services/background-context";
+import { refreshCustomActivityDetection } from "@/background/services/custom-activity-detection";
 import { registerContextMenu } from "@/background/services/context-menu";
 import { syncDeviceState, syncUninstallUrl } from "@/background/services/device-sync";
 import { connectNative, onNativeResponse } from "@/background/services/native";
@@ -213,6 +214,12 @@ export const registerLifecycleHandlers = (): void => {
   chrome.tabs.onActivated.addListener(({ tabId }) => {
     setFocusedTabId(tabId);
     void broadcastActiveTab();
+  });
+
+  chrome.tabs.onUpdated.addListener((_tabId, changeInfo) => {
+    if (!changeInfo.url && changeInfo.status !== "complete") return;
+
+    void refreshCustomActivityDetection().then((changed) => (changed ? broadcastActiveTab() : undefined));
   });
 
   chrome.windows.onFocusChanged.addListener((windowId) => {

@@ -6,6 +6,10 @@ export type PreviewScenario = "live" | "idle" | "nohost" | "nodiscord" | "paused
 
 const SCENARIOS: readonly PreviewScenario[] = ["live", "idle", "nohost", "nodiscord", "paused", "empty"];
 
+export type PreviewCustom = "live" | "detected" | "none";
+
+const CUSTOM_MODES: readonly PreviewCustom[] = ["live", "detected", "none"];
+
 export type PreviewNative = "ok" | "ipc-denied";
 
 const NATIVE_STATES: readonly PreviewNative[] = ["ok", "ipc-denied"];
@@ -26,13 +30,14 @@ export const previewParams = {
   theme: params.get("theme") ?? "light",
   view: params.get("view") ?? "activity",
   slug: params.get("slug"),
+  customActivityId: params.get("customActivity"),
   host: params.get("host"),
   onboarding: params.get("onboarding") === "1",
   scriptsDenied: params.get("scripts") === "0",
   developer: params.get("dev") === "1",
   review: params.get("review") === "1",
   reveal: params.get("reveal") === "1",
-  customLive: params.get("custom") === "live",
+  customLive: CUSTOM_MODES.find((value) => value === params.get("custom")) ?? "none",
   season: seasonParam ?? (prank ? "halloween" : moment ? "spring" : null),
   prank,
   moment,

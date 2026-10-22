@@ -71,12 +71,20 @@ export type CustomActivity = {
   smallText: string;
   timestamp: CustomTimestamp;
   buttons: CustomActivityButton[];
+  detectionUrl: string;
   createdAt: number;
   updatedAt: number;
 };
 
 export type CustomActivityDraft = Omit<CustomActivity, "id" | "createdAt" | "updatedAt"> & {
   id?: string;
+};
+
+export type CustomActivityDetection = {
+  activityId: string;
+  host: string;
+  tabId: number;
+  activatedAt: number;
 };
 
 export type CustomActivitiesState = {

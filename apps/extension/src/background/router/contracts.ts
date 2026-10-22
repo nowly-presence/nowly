@@ -1,6 +1,6 @@
 import type { TrackInput } from "@nowly/analytics";
 import type { LegalConfirmation, LegalConfirmationResult, LegalState } from "@nowly/shared/legal";
-import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, CustomActivityDraft, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, PresenceData, PresenceDebug, PresenceSchedule, RuntimeLogEntry, StoredPresence, SyncChoice, TabState, UserScriptsStatus } from "@/shared/types";
+import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, CustomActivityDetection, CustomActivityDraft, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, PresenceData, PresenceDebug, PresenceSchedule, RuntimeLogEntry, StoredPresence, SyncChoice, TabState, UserScriptsStatus } from "@/shared/types";
 import type { OnboardingState } from "@/background/storage/onboarding.store";
 import type { SaveCustomActivityResult, UploadCustomImageResult } from "@/background/managers/custom-activity-manager";
 import type { SupportPromptAction, SupportPromptState } from "@/shared/support-prompt";
@@ -348,6 +348,10 @@ export type RouterMessageMap = {
   GET_CUSTOM_ACTIVITIES: {
     payload: void;
     response: CustomActivitiesState;
+  };
+  GET_CUSTOM_ACTIVITY_DETECTION: {
+    payload: void;
+    response: CustomActivityDetection | null;
   };
   SAVE_CUSTOM_ACTIVITY: {
     payload: {

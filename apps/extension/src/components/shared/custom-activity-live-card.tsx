@@ -10,12 +10,13 @@ type CustomActivityLiveCardProps = {
   activity: CustomActivity;
   presence: PresencePayload;
   paused: boolean;
+  detectedHost?: string;
   onOpen: () => void;
   onStop: () => void;
   onResume: () => void;
 };
 
-export const CustomActivityLiveCard = ({ activity, presence, paused, onOpen, onStop, onResume }: CustomActivityLiveCardProps) => {
+export const CustomActivityLiveCard = ({ activity, presence, paused, detectedHost, onOpen, onStop, onResume }: CustomActivityLiveCardProps) => {
   const { t } = useI18n();
   return (
     <LiveCard
@@ -31,7 +32,7 @@ export const CustomActivityLiveCard = ({ activity, presence, paused, onOpen, onS
         <div className="flex items-center justify-between gap-3">
           <span className="flex min-w-0 items-center gap-2 text-label-md text-on-tertiary-muted">
             <CustomActivityArtwork source={activity} size={18} rounded="rounded-[5px]" />
-            <span className="truncate">{t("custom.live.label")}</span>
+            <span className="truncate">{detectedHost ? t("custom.live.detectedOn", { host: detectedHost }) : t("custom.live.label")}</span>
           </span>
           {paused ? (
             <Button size="sm" variant="inverse" onClick={onResume}>

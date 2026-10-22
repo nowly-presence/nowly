@@ -33,6 +33,7 @@ const activity: CustomActivity = {
       url: "https://nowly.me"
     }
   ],
+  detectionUrl: "",
   createdAt: 1,
   updatedAt: 2
 };

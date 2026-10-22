@@ -4,7 +4,8 @@ import { sendActiveHeartbeat } from "@/background/services/active-heartbeat";
 import { mapPresenceData, postNative } from "@/background/services/native";
 import { applySiteTimer } from "@/background/services/site-timers";
 import { verifyPresenceRelease } from "@/background/services/release-security";
-import { getActiveCustomPresence, getCustomActivities } from "@/background/storage/custom-activities.store";
+import { getCustomActivities } from "@/background/storage/custom-activities.store";
+import { getEffectiveCustomPresence } from "@/background/services/custom-activity-detection";
 import { getCurrentActivity, getPresences, setCurrentActivity, setDebug } from "@/background/storage/presences.store";
 import { getSettings } from "@/background/storage/settings.store";
 import { recordUsageDay } from "@/background/storage/support.store";
@@ -166,7 +167,7 @@ export const broadcastActiveTab = async (): Promise<void> => {
 
   const settings = await getSettings();
 
-  const custom = await getActiveCustomPresence();
+  const custom = await getEffectiveCustomPresence();
 
   if (custom) {
     postNative(settings.presencePaused ? { type: "CLEAR_ACTIVITY" } : { type: "SET_ACTIVITY", presence: custom.presence });

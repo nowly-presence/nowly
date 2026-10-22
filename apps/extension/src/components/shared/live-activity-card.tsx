@@ -83,10 +83,17 @@ export const LiveCard =
     const layers = Math.min(2, stackDepth);
     const displayName = presence.name || presenceName;
     const namedHeader = NAMED_HEADER_TYPES.has(presence.type ?? 0);
-    const lines = (namedHeader ? [presence.details, presence.state] : [displayName, presence.details, presence.state]).filter((line): line is string =>
-      Boolean(line)
-    );
+    const detailsPresent = Boolean(presence.details?.trim());
+    const statePresent = Boolean(presence.state?.trim());
+    const lines = (namedHeader && (detailsPresent || statePresent)
+      ? [presence.details, presence.state]
+      : namedHeader && !detailsPresent && !statePresent
+        ? [displayName]
+        : [displayName, presence.details, presence.state]
+    ).filter((line): line is string => Boolean(line));
     if (lines.length === 0) lines.push(displayName);
+    void detailsPresent;
+    void statePresent;
 
     return (
       <div className={cn("relative", layers === 1 && "pb-2", layers === 2 && "pb-4", className)}>

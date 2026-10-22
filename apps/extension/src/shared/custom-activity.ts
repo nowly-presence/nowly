@@ -1,6 +1,7 @@
 import type { CustomActivity, CustomActivityDraft, CustomActivityIcon, CustomActivityType, CustomImage, CustomImageMime, PresencePayload } from "@/shared/types";
 import { BRAND_ICON_PNG } from "@/shared/brand";
 import { WEB_BASE_URL } from "@/shared/constants";
+import { parseDetectionUrl } from "@/shared/custom-activity-detection";
 
 export const CUSTOM_ACTIVITY_SLUG_PREFIX = "custom:";
 export const CUSTOM_ACTIVITIES_MAX = 50;
@@ -94,13 +95,24 @@ export const emptyCustomActivityDraft = (random: () => number = Math.random): Cu
   smallImage: { kind: "none" },
   smallText: "",
   timestamp: { mode: "elapsed" },
-  buttons: []
+  buttons: [],
+  detectionUrl: ""
 });
 
 export type CustomActivityError = "required" | "tooShort" | "tooLong" | "httpsOnly" | "invalidUrl" | "outOfRange";
 
 export type CustomActivityField =
-  "name" | "details" | "state" | "largeText" | "smallText" | "largeImage" | "smallImage" | "countdown" | `button${number}Label` | `button${number}Url`;
+  | "name"
+  | "details"
+  | "state"
+  | "largeText"
+  | "smallText"
+  | "largeImage"
+  | "smallImage"
+  | "detectionUrl"
+  | "countdown"
+  | `button${number}Label`
+  | `button${number}Url`;
 
 export type CustomActivityErrors = Partial<Record<CustomActivityField, CustomActivityError>>;
 
@@ -166,6 +178,10 @@ export const validateCustomActivity = (draft: CustomActivityDraft): CustomActivi
     [
       "smallImage",
       imageError(draft.smallImage)
+    ],
+    [
+      "detectionUrl",
+      draft.detectionUrl.trim() && !parseDetectionUrl(draft.detectionUrl) ? "invalidUrl" : undefined
     ],
     [
       "countdown",

@@ -1,6 +1,7 @@
 import { broadcastActiveTab } from "@/background/managers/activity-manager";
 import { deleteCustomAsset, touchCustomAsset, uploadCustomAsset } from "@/background/services/custom-assets-api";
-import { getActiveCustomActivity, getCustomActivities, getCustomImages, setCustomImages, updateCustomActivities } from "@/background/storage/custom-activities.store";
+import { dismissCustomActivityDetection, getEffectiveCustomActivity, readCustomActivityDetection } from "@/background/services/custom-activity-detection";
+import { getCustomActivities, getCustomImages, setCustomImages, updateCustomActivities } from "@/background/storage/custom-activities.store";
 import { CUSTOM_ACTIVITIES_MAX, CUSTOM_BUTTONS_MAX, customImageHashes, customImageSync, hasCustomActivityErrors, validateCustomActivity } from "@/shared/custom-activity";
 import { decodeImageDataUrl, sha256Hex } from "@/shared/custom-image";
 import type { CustomActivitiesState, CustomActivity, CustomActivityDraft, CustomImage } from "@/shared/types";
@@ -43,6 +44,7 @@ const normalizeDraft = (draft: CustomActivityDraft): CustomActivityDraft => ({
   state: draft.state.trim(),
   largeText: draft.largeText.trim(),
   smallText: draft.smallText.trim(),
+  detectionUrl: draft.detectionUrl.trim(),
   largeImage: draft.largeImage.kind === "url" ? { kind: "url", url: draft.largeImage.url.trim() } : draft.largeImage,
   smallImage: draft.smallImage.kind === "url" ? { kind: "url", url: draft.smallImage.url.trim() } : draft.smallImage,
   buttons: draft.buttons.slice(0, CUSTOM_BUTTONS_MAX).map((button) => ({
@@ -85,7 +87,10 @@ export const saveCustomActivity = async (input: CustomActivityDraft): Promise<Sa
   }));
   await pruneLocalImages(next);
 
-  if (next.activeId === activity.id) {
+  const detection = await readCustomActivityDetection();
+  const isRunning = next.activeId === activity.id || detection?.activityId === activity.id;
+
+  if (isRunning) {
     await broadcastActiveTab();
     void syncActiveCustomImages();
   }
@@ -112,12 +117,16 @@ export const deleteCustomActivity = async (id: string): Promise<{
 };
 
 export const setActiveCustomActivity = async (id: string | null): Promise<CustomActivitiesState> => {
+  const detection = await readCustomActivityDetection();
+
+  if (id === null) await dismissCustomActivityDetection(null);
+
   const next = await updateCustomActivities((state) => {
     const exists = id !== null && state.items.some((item) => item.id === id);
     return {
       ...state,
       activeId: exists ? id : null,
-      activatedAt: exists ? Date.now() : null
+      activatedAt: exists ? (detection?.activityId === id ? detection.activatedAt : Date.now()) : null
     };
   });
   await broadcastActiveTab();
@@ -159,7 +168,7 @@ const syncImage = async (image: CustomImage, now: number): Promise<CustomImage> 
 export const syncActiveCustomImages = async (): Promise<void> => {
   if (await legalDocumentsPending()) return;
 
-  const active = await getActiveCustomActivity();
+  const active = await getEffectiveCustomActivity();
 
   if (!active) return;
 
