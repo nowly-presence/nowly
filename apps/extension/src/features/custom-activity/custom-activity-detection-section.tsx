@@ -15,26 +15,24 @@ export const CustomActivityDetectionSection = ({ draft, patch, errors, detectedH
   return (
     <Section title={t("custom.editor.detectionSection")}>
       <Group>
-        <div className="px-4 py-3">
-          <FieldRow layout="stacked" spacing="relaxed" title={t("custom.field.detection")} description={t("custom.field.detectionHint")}>
-            <Input
-              type="url"
-              inputMode="url"
-              value={draft.detectionUrl}
-              placeholder={t("custom.field.detectionPlaceholder")}
-              leading={<RiLink className="size-4" />}
-              aria-label={t("custom.field.detection")}
-              onChange={(event) => patch({ detectionUrl: event.target.value })}
-            />
-            <FieldError error={errors.detectionUrl} />
-            {detectedHost && (
-              <span className="mt-2 flex items-center gap-1.5 text-label-md text-success">
-                <LiveDot />
-                {t("custom.live.detectedOn", { host: detectedHost })}
-              </span>
-            )}
-          </FieldRow>
-        </div>
+        <FieldRow layout="stacked" spacing="relaxed" title={t("custom.field.detection")} description={t("custom.field.detectionHint")}>
+          <Input
+            type="url"
+            inputMode="url"
+            value={draft.detectionUrl}
+            placeholder={t("custom.field.detectionPlaceholder")}
+            leading={<RiLink className="size-4" />}
+            aria-label={t("custom.field.detection")}
+            onChange={(event) => patch({ detectionUrl: event.target.value })}
+          />
+          <FieldError error={errors.detectionUrl} />
+          {detectedHost && (
+            <span className="flex items-center gap-1.5 text-label-md text-success">
+              <LiveDot />
+              {t("custom.live.detectedOn", { host: detectedHost })}
+            </span>
+          )}
+        </FieldRow>
       </Group>
     </Section>
   );
