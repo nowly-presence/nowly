@@ -18,9 +18,9 @@ export const CURRENT_LEGAL_MANIFEST: LegalManifest = {
   schemaVersion: 1,
   documents: {
     tos: {
-      version: 1,
+      version: 2,
       requiredVersion: 1,
-      updatedAt: "2026-10-16",
+      updatedAt: "2026-10-24",
       path: "/tos"
     },
     privacy: {

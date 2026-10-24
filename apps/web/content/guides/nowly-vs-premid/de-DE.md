@@ -36,7 +36,7 @@ Wenn die Plattform, die dir wichtig ist, nur im PreMiD-Store existiert, ist PreM
 
 ## Lizenzierung
 
-PreMiDs Code ist Open Source. Nowlys Presences sind unter der MIT-Lizenz Open Source; SDK und CLI sind für Mitwirkende dokumentiert. Der Hauptcode von Nowly ist auf GitHub unter der Business Source License 1.1 öffentlich zugänglich. Das ist eine Lizenz mit einsehbarem Quellcode, aber keine von der OSI anerkannte Open-Source-Lizenz: Du kannst den Code lesen und prüfen. Wenn dir dieser Unterschied wichtig ist, solltest du ihn kennen.
+PreMiD und Nowly sind Open Source. Nowlys öffentliche Repositories (App, Presences, SDK, CLI und Bot) nutzen die MIT-Lizenz. Das private interne Release-CLI und Inhalte Dritter sind ausgenommen.
 
 ## Welche Lösung passt zu dir?
 

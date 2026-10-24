@@ -45,7 +45,7 @@ The [main repository](https://github.com/nowly-presence/nowly) is a pnpm workspa
 | [`packages/presences`](https://github.com/nowly-presence/presences) | Community presence definitions (MIT) |
 | [`packages/sdk`](https://github.com/nowly-presence/sdk) | Public presence APIs and types (MIT) |
 | [`packages/cli`](https://github.com/nowly-presence/cli) | Presence authoring, validation and local testing (MIT) |
-| `packages/internal-cli` | Private release and CDN publishing tools (BUSL-1.1) |
+| `packages/internal-cli` | Private release and CDN publishing tools (separate repository; check its own licence) |
 
 To build a presence, start with the [developer documentation](https://docs.nowly.me) and the [presences repository](https://github.com/nowly-presence/presences). The public [`@nowly/sdk`](https://github.com/nowly-presence/sdk) and [`@nowly/cli`](https://github.com/nowly-presence/cli) have their own usage guides.
 
@@ -83,4 +83,4 @@ Nowly can be used without payment. If you would like to support hosting and deve
 
 ## License
 
-The main Nowly code is **source-available under the [Business Source License 1.1](https://github.com/nowly-presence/nowly/blob/stable/LICENSE)**, not an OSI-approved open-source license. The public presences, SDK and CLI have separate **MIT** licenses in their respective repositories. Check each component's license before reusing or redistributing it.
+The Nowly code in this repository is open source under the [MIT License](https://github.com/nowly-presence/nowly/blob/stable/LICENSE), copyright K.Ring. The public [presences](https://github.com/nowly-presence/presences), [SDK](https://github.com/nowly-presence/sdk), [CLI](https://github.com/nowly-presence/cli), and [Discord bot](https://github.com/nowly-presence/bot) are licensed separately under MIT. The private internal CLI is not covered by this repository's licence. Third-party platform names, logos, and other content remain subject to their owners' rights.

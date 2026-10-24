@@ -20,7 +20,7 @@ Under a section's heading there is at most one button (variant `inverted`). Seco
 
 ## Community section
 
-`community-section.tsx` pitches the Discord and shows member/online counts from `lib/discord.ts` (server-side fetch of the public invite, cached 1h). Counts are hidden below `MIN_DISPLAYED_MEMBERS` or when Discord can't be reached; the hero pill reads the same helper. Under the Discord button, one discreet line (`community.support`) links to `/support#donate`; keep it a line, not a block. It says "free", not "open source": the main code is BUSL-1.1 (source-available), only presences are MIT.
+`community-section.tsx` pitches the Discord and shows member/online counts from `lib/discord.ts` (server-side fetch of the public invite, cached 1h). Counts are hidden below `MIN_DISPLAYED_MEMBERS` or when Discord can't be reached; the hero pill reads the same helper. Under the Discord button, one discreet line (`community.support`) links to `/support#donate`; keep it a line, not a block. The public Nowly repositories are MIT-licensed; the private internal CLI has separate terms.
 
 ## Notable dependencies
 `@nowly/ui`, `components/presence-tile.tsx` and `components/extension-store-button.tsx` (root, shared with other features).

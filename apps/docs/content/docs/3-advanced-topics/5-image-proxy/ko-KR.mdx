@@ -1,37 +1,37 @@
 ---
-title: Image Proxy
-description: Use the Nowly image proxy when Discord cannot load a presence image directly from a supported external CDN.
+title: 이미지 프록시
+description: Discord가 지원되는 외부 CDN의 프레즌스 이미지를 직접 불러오지 못할 때 Nowly 이미지 프록시를 사용하세요.
 ---
 
-## What It Is For
+## 사용 목적
 
-The image proxy is built for a specific case: a presence can see a public image on the page, but Discord cannot reliably load it from the original URL.
+이미지 프록시는 특정 상황을 위한 기능입니다. 프레즌스는 페이지의 공개 이미지를 볼 수 있지만 Discord는 원본 URL에서 이미지를 안정적으로 불러오지 못할 수 있습니다.
 
-This is useful for video thumbnails, avatars, posters, or category images served by an external CDN when:
+외부 CDN의 동영상 썸네일, 아바타, 포스터 또는 카테고리 이미지에 다음 문제가 있을 때 유용합니다.
 
-- the image is public and already visible in the browser;
-- the CDN URL is too long for Discord Rich Presence;
-- Discord rejects, expires, or fails to download the direct image;
-- the presence needs to show content-specific artwork instead of only the service logo.
+- 이미지가 공개되어 있고 브라우저에 이미 표시됩니다.
+- CDN URL이 Discord Rich Presence에서 사용하기에 너무 깁니다.
+- Discord가 원본 이미지를 거부하거나, URL이 만료되거나, 다운로드에 실패합니다.
+- 서비스 로고 대신 콘텐츠에 맞는 이미지를 표시해야 합니다.
 
-This is not a general-purpose image proxy. The API only accepts explicitly allowed services and domains.
+범용 이미지 프록시가 아닙니다. API는 명시적으로 허용된 서비스와 도메인만 받습니다.
 
-## How It Works
+## 작동 방식
 
-The recommended flow uses a temporary short URL:
+권장 흐름에서는 일시적인 짧은 URL을 사용합니다.
 
 ```txt
 POST https://api.nowly.me/images-proxy
 GET  https://api.nowly.me/images-proxy/<id>
 ```
 
-The presence sends the real CDN image URL to the API. The API checks that the service is supported, downloads the image, validates its MIME type and size, then stores it temporarily in cache. It returns a short URL such as:
+프레즌스가 실제 CDN 이미지 URL을 API에 보냅니다. API는 서비스 지원 여부를 확인하고 이미지를 다운로드한 뒤 MIME 유형과 크기를 검증하여 잠시 캐시합니다. 다음과 같은 짧은 URL을 반환합니다.
 
 ```txt
 https://api.nowly.me/images-proxy/abc123...
 ```
 
-That URL directly returns the image bytes with the correct `Content-Type`. It is intended for `largeImageKey` or `smallImageKey`.
+이 URL은 올바른 `Content-Type`과 함께 이미지 데이터를 직접 반환합니다. `largeImageKey` 또는 `smallImageKey`에 사용하도록 설계되었습니다.
 
 ```ts filename="presence.ts"
 import { createCachedImageProxyUrl } from "@nowly/sdk"
@@ -44,22 +44,22 @@ await presence.setActivity({
 })
 ```
 
-The cache is short-lived, currently five minutes. The helper also keeps an in-memory cache inside the presence so it does not call the API on every update.
+캐시는 단기간 유지되며 현재는 5분입니다. 헬퍼는 프레즌스 내부에도 메모리 캐시를 유지해 업데이트할 때마다 API를 호출하지 않습니다.
 
-## Direct Endpoint
+## 직접 엔드포인트
 
-The older direct proxy remains available for manual testing or URLs that are already short enough:
+기존 직접 프록시는 수동 테스트나 이미 충분히 짧은 URL에 계속 사용할 수 있습니다.
 
 ```txt
 https://api.nowly.me/image-proxy?service=<service>&url=<encoded-url>
 https://api.nowly.me/i?u=<encoded-url>
 ```
 
-The `url` and `u` parameters must be encoded with `encodeURIComponent`. For Discord Rich Presence, prefer `createCachedImageProxyUrl` because Discord limits image keys to 300 characters.
+`url`과 `u` 값은 `encodeURIComponent`로 인코딩해야 합니다. Discord는 이미지 키를 300자로 제한하므로 Rich Presence에는 `createCachedImageProxyUrl`을 권장합니다.
 
-## Setting It Up In A Presence
+## 프레즌스에서 설정하기
 
-First, extract the real image URL from the page:
+먼저 페이지에서 실제 이미지 URL을 추출합니다.
 
 ```ts filename="presence.ts"
 const getPoster = (video: HTMLVideoElement): string | undefined => {
@@ -70,7 +70,7 @@ const getPoster = (video: HTMLVideoElement): string | undefined => {
 }
 ```
 
-Then pass that URL through the helper before setting the activity:
+활동을 설정하기 전에 해당 URL을 헬퍼에 전달합니다.
 
 ```ts filename="presence.ts"
 import { createCachedImageProxyUrl } from "@nowly/sdk"
@@ -83,11 +83,11 @@ await presence.setActivity({
 })
 ```
 
-Always keep a fallback asset. If the page has no image, the image is too large, or the origin is not allowed, the presence should continue to work with `Assets.Logo` or a local asset.
+대체 이미지를 항상 준비하세요. 페이지에 이미지가 없거나 너무 크거나 출처가 허용되지 않아도 프레즌스는 `Assets.Logo` 또는 로컬 이미지로 계속 동작해야 합니다.
 
-## Adding A Service
+## 서비스 추가
 
-Allowed domains are checked by the API, not by the presence - a presence cannot proxy an arbitrary domain just by asking for it at runtime. There is no separate approval step or API code change: you declare the hosts your presence needs directly in its own `metadata.json`, using the same `service` value (your presence slug) you already pass to the helper:
+허용 도메인은 프레즌스가 아닌 API에서 확인합니다. 실행 중에 요청하는 것만으로 임의의 도메인을 프록시할 수는 없습니다. 별도 승인 단계나 API 코드 변경 없이, 프레즌스의 `metadata.json`에 필요한 호스트를 직접 선언하세요. 헬퍼에 전달한 것과 동일한 `service` 값(프레즌스 슬러그)을 사용합니다.
 
 ```json filename="metadata.json"
 "imageProxy": {
@@ -96,12 +96,12 @@ Allowed domains are checked by the API, not by the presence - a presence cannot 
 }
 ```
 
-This is published to the API automatically the same way the rest of your `metadata.json` already is. The API only trusts this declaration for your own presence's `service` id, so a presence cannot declare hostnames on another presence's behalf, and a request is only allowed if the target URL's hostname actually matches one of your declared suffixes.
+선언은 나머지 `metadata.json`과 함께 API에 자동으로 게시됩니다. API는 해당 프레즌스 자신의 `service` ID에 대해서만 선언을 신뢰합니다. 다른 프레즌스를 대신해 호스트 이름을 선언할 수 없고, 대상 URL의 호스트 이름이 선언된 접미사 중 하나와 실제로 일치해야 요청이 허용됩니다.
 
-When your PR touches `imageProxy`, the presence preview bot detects it automatically, adds an **Image Proxy Requested** section to its comment listing the declared hostnames, and applies an `image-proxy` label. A reviewer still has to confirm the hostnames are public and safe to proxy before merging - explain in your PR description why Discord can't use the direct image URL and what image the user will see.
+PR에서 `imageProxy`를 변경하면 프레즌스 미리보기 봇이 이를 자동으로 감지하고, 선언된 호스트 이름을 나열한 **Image Proxy Requested** 섹션을 댓글에 추가하며 `image-proxy` 라벨을 적용합니다. 병합 전 검토자가 호스트가 공개되어 있고 프록시에 안전한지 확인해야 합니다. Discord가 원본 이미지 URL을 사용할 수 없는 이유와 사용자에게 표시될 이미지를 PR에 설명하세요.
 
-## Limits And Security
+## 제한 및 보안
 
-The proxy only serves public images from hosts a reviewed presence has declared. It rejects non-HTTPS URLs, hosts that don't match any declared suffix, responses that are not images, and files that are too large.
+프록시는 검토된 프레즌스가 선언한 호스트의 공개 이미지만 제공합니다. HTTPS가 아닌 URL, 선언된 접미사와 일치하지 않는 호스트, 이미지가 아닌 응답, 너무 큰 파일은 거부합니다.
 
-The endpoints themselves are public and unauthenticated (presences call them directly from the browser, so there's no secret to attach) and share the API's global rate limit - there's no per-presence quota. Do not use the proxy for private account content, authenticated resources, tracking URLs, arbitrary user input, or non-image content.
+엔드포인트는 공개되어 있으며 인증이 필요하지 않습니다(프레즌스가 브라우저에서 직접 호출하므로 첨부할 비밀 정보가 없습니다). API의 전체 요청 제한을 공유하며 프레즌스별 할당량은 없습니다. 비공개 계정 콘텐츠, 인증이 필요한 리소스, 추적 URL, 임의의 사용자 입력 또는 이미지가 아닌 콘텐츠에는 프록시를 사용하지 마세요.

@@ -36,7 +36,7 @@ Jeśli interesująca Cię platforma jest dostępna tylko w katalogu PreMiD, PreM
 
 ## Licencje
 
-Kod PreMiD jest otwartoźródłowy. Obecności Nowly są otwartoźródłowe na licencji MIT, a SDK i CLI są udokumentowane dla współtwórców. Główny kod Nowly jest publicznie dostępny na GitHubie na licencji Business Source License 1.1. Pozwala ona czytać i audytować kod źródłowy, ale nie jest licencją otwartoźródłową uznawaną przez OSI. Jeśli to rozróżnienie ma dla Ciebie znaczenie, warto o nim wiedzieć.
+PreMiD i Nowly są otwartoźródłowe. Publiczne repozytoria Nowly (aplikacja, presences, SDK, CLI i bot) są na licencji MIT. Prywatne narzędzie CLI i treści osób trzecich nie są objęte licencją.
 
 ## Co wybrać?
 

@@ -36,7 +36,7 @@ related: discord-connections-vs-nowly, what-nowly-can-see, set-up-nowly
 
 ## ライセンス
 
-PreMiDのコードはオープンソースです。NowlyのプレゼンスもMITライセンスのオープンソースで、SDKとCLIには貢献者向けのドキュメントがあります。Nowlyの本体コードはGitHubでBusiness Source License 1.1の下に公開されています。ソースを閲覧・監査できるライセンスですが、OSIが承認するオープンソースライセンスではありません。この区別を重視する場合は知っておいてください。
+PreMiDとNowlyはオープンソースです。Nowlyの公開アプリ、プレゼンス、SDK、CLI、botのリポジトリはMITライセンスです。非公開の内部リリースCLIと第三者のコンテンツは対象外です。
 
 ## どちらを選ぶべき？
 
