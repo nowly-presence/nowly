@@ -498,6 +498,7 @@
   "custom.button.add": "버튼 추가",
   "custom.button.remove": "버튼 삭제",
   "custom.button.hint": "버튼은 최대 {count}개, https 링크만 가능해요.",
+  "custom.button.remaining": "{count}개 남음",
   "custom.image.modeUpload": "업로드",
   "custom.image.modeUrl": "링크",
   "custom.image.modeNone": "없음",

@@ -498,6 +498,7 @@
   "custom.button.add": "Añadir un botón",
   "custom.button.remove": "Quitar botón",
   "custom.button.hint": "Hasta {count} botones, solo enlaces https.",
+  "custom.button.remaining": "Queda {count}",
   "custom.image.modeUpload": "Subir",
   "custom.image.modeUrl": "Enlace",
   "custom.image.modeNone": "Ninguna",

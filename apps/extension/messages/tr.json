@@ -498,6 +498,7 @@
   "custom.button.add": "Buton ekle",
   "custom.button.remove": "Butonu kaldır",
   "custom.button.hint": "En fazla {count} buton, yalnızca https bağlantıları.",
+  "custom.button.remaining": "{count} kaldı",
   "custom.image.modeUpload": "Yükle",
   "custom.image.modeUrl": "Bağlantı",
   "custom.image.modeNone": "Yok",

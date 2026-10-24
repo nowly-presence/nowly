@@ -498,6 +498,7 @@
   "custom.button.add": "ボタンを追加",
   "custom.button.remove": "ボタンを削除",
   "custom.button.hint": "ボタンは最大 {count} 個、https のリンクのみ。",
+  "custom.button.remaining": "残り{count}個",
   "custom.image.modeUpload": "アップロード",
   "custom.image.modeUrl": "リンク",
   "custom.image.modeNone": "なし",

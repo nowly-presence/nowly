@@ -498,6 +498,7 @@
   "custom.button.add": "Tambah butang",
   "custom.button.remove": "Buang butang",
   "custom.button.hint": "Sehingga {count} butang, pautan https sahaja.",
+  "custom.button.remaining": "Baki {count}",
   "custom.image.modeUpload": "Muat naik",
   "custom.image.modeUrl": "Pautan",
   "custom.image.modeNone": "Tiada",

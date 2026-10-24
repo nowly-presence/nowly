@@ -55,7 +55,11 @@ export const CustomActivityButtonsSection = ({ draft, patch, errors }: CustomAct
         ))}
         {buttons.length < CUSTOM_BUTTONS_MAX && (
           <div className="flex items-center justify-between gap-3 px-4 py-3">
-            <span className="text-label-md text-muted">{t("custom.button.hint", { count: CUSTOM_BUTTONS_MAX })}</span>
+            <span className="text-label-md text-muted">
+              {buttons.length === 0
+                ? t("custom.button.hint", { count: CUSTOM_BUTTONS_MAX })
+                : t("custom.button.remaining", { count: CUSTOM_BUTTONS_MAX - buttons.length })}
+            </span>
             <Button
               size="sm"
               variant="secondary"

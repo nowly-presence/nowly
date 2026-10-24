@@ -498,6 +498,7 @@
   "custom.button.add": "Προσθήκη κουμπιού",
   "custom.button.remove": "Αφαίρεση κουμπιού",
   "custom.button.hint": "Έως {count} κουμπιά, μόνο σύνδεσμοι https.",
+  "custom.button.remaining": "Απομένει {count}",
   "custom.image.modeUpload": "Μεταφόρτωση",
   "custom.image.modeUrl": "Σύνδεσμος",
   "custom.image.modeNone": "Καμία",

@@ -498,6 +498,7 @@
   "custom.button.add": "Dodaj przycisk",
   "custom.button.remove": "Usuń przycisk",
   "custom.button.hint": "Maksymalnie {count} przyciski, tylko linki https.",
+  "custom.button.remaining": "Pozostał {count}",
   "custom.image.modeUpload": "Prześlij",
   "custom.image.modeUrl": "Link",
   "custom.image.modeNone": "Brak",
