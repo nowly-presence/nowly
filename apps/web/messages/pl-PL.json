@@ -77,7 +77,12 @@
     "dark": "Ciemny"
   },
   "hero": {
-    "carousel": { "previous": "Poprzednia karta", "next": "Następna karta", "pause": "Wstrzymaj karty", "play": "Wznów karty" },
+    "carousel": {
+      "previous": "Poprzednia karta",
+      "next": "Następna karta",
+      "pause": "Wstrzymaj karty",
+      "play": "Wznów karty"
+    },
     "title-before": "Dziel się tym, co robisz, w",
     "title-accent": "czasie rzeczywistym",
     "description": "Nowly zamienia Twoją aktywność w bogatą, dynamiczną obecność na Discordzie.",
@@ -1201,7 +1206,7 @@
     "delete-confirm": "To trwale usuwa wszystko, co Nowly zapisało dla tego urządzenia. Tej operacji nie można cofnąć.",
     "keep-success": "Dziękujemy, Twoje anonimowe statystyki zostały zachowane.",
     "delete-success": "Twoje dane zostały usunięte.",
-    "action-error": "Coś poszło nie tak. Spróbuj ponownie."
+    "action-error": "Nie udało się ukończyć tej operacji. Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzać."
   },
   "consentPage": {
     "eyebrow": "Prywatność",
@@ -1219,30 +1224,114 @@
     "delete-confirm": "To trwale usuwa wszystko, co Nowly zapisało dla tego urządzenia. Tej operacji nie można cofnąć.",
     "export-success": "Twoje dane zostały pobrane.",
     "delete-success": "Twoje dane zostały usunięte.",
-    "action-error": "Coś poszło nie tak. Spróbuj ponownie."
+    "action-error": "Nie udało się ukończyć tej operacji. Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzać."
   },
   "faqPage": {
     "eyebrow": "FAQ",
     "title": "Szybkie odpowiedzi na pytania",
     "description": "To, co najważniejsze o instalacji, danych i Discordzie. Dokumentacja i Discord idą dalej.",
     "categories": {
-      "general": "FAQ"
+      "discover": "Poznaj Nowly",
+      "setup": "Konfiguracja",
+      "privacy": "Prywatność",
+      "compare": "Porównanie",
+      "develop": "Tworzenie"
     },
     "items": [
       {
+        "category": "discover",
         "question": "Czym jest Nowly?",
-        "answer": "Nowly pokazuje to, co oglądasz, słuchasz lub w co grasz, jako Discord Rich Presence. To rozszerzenie przeglądarki, aplikacja desktopowa i biblioteka skryptów platform.",
-        "category": "general"
+        "answer": "Nowly pokazuje aktywność z obsługiwanych stron jako Discord Rich Presence: platformę, tytuł, grafikę i postęp odtwarzania, gdy są dostępne. Łączy rozszerzenie przeglądarki, aplikację komputerową i instalowane obecności z biblioteki."
       },
       {
-        "question": "Czy moja aktywność przechodzi przez wasze serwery?",
-        "answer": "Nie. Aktywność zostaje lokalnie i jest wysyłana do Discorda z Twojego urządzenia. Analityka jest opcjonalna i domyślnie wyłączona.",
-        "category": "general"
+        "category": "discover",
+        "question": "Jak działa Nowly?",
+        "answer": "Rozszerzenie wykrywa aktywność na obsługiwanej stronie. Zainstalowana obecność przygotowuje informacje, a aplikacja komputerowa przesyła je lokalnie do Discorda. Nowly nie zastępuje aplikacji Discord."
       },
       {
-        "question": "Jakie platformy są obsługiwane?",
-        "answer": "Aktualna lista to biblioteka. Nowe obecności mogą być dodawane bez aktualizacji rozszerzenia, więc instaluj te, których faktycznie używasz.",
-        "category": "general"
+        "category": "discover",
+        "question": "Dlaczego potrzebuję rozszerzenia i aplikacji komputerowej?",
+        "answer": "Rozszerzenie odczytuje aktywność w karcie przeglądarki. Aplikacja komputerowa tworzy lokalne połączenie, dzięki któremu Discord odbiera aktualizacje statusu."
+      },
+      {
+        "category": "discover",
+        "question": "Czy muszę zainstalować Discorda na komputerze?",
+        "answer": "Tak. Discord Desktop musi być uruchomiony. Wersja przeglądarkowa lub mobilna nie wystarcza do lokalnego połączenia Nowly."
+      },
+      {
+        "category": "discover",
+        "question": "Jakie strony działają z Nowly?",
+        "answer": "Listę obsługiwanych stron znajdziesz w bibliotece. Każda obecność dotyczy konkretnej platformy. Nowe obecności mogą być publikowane bez ponownej instalacji rozszerzenia."
+      },
+      {
+        "category": "discover",
+        "question": "Czy Nowly działa z Netflixem, YouTube, Spotify lub Apple TV+?",
+        "answer": "Tak, jeśli w bibliotece jest odpowiednia obecność. Zgodność zależy od obecności i informacji udostępnianych przez platformę w przeglądarce."
+      },
+      {
+        "category": "setup",
+        "question": "Jak wyświetlić aktywność na Discordzie?",
+        "answer": "Zainstaluj rozszerzenie i aplikację komputerową Nowly, uruchom Discord Desktop, zainstaluj obecność z biblioteki i otwórz obsługiwaną stronę w przeglądarce."
+      },
+      {
+        "category": "setup",
+        "question": "Dlaczego mój status na Discordzie się nie wyświetla?",
+        "answer": "Sprawdź, czy Discord Desktop i Nowly są uruchomione, rozszerzenie jest w używanej przeglądarce, obecność jest włączona, a adres strony obsługiwany. Jeśli przeglądarka prosi o zgodę na skrypty użytkownika, udziel jej i odśwież stronę po instalacji."
+      },
+      {
+        "category": "setup",
+        "question": "Jakie przeglądarki i systemy są obsługiwane?",
+        "answer": "Rozszerzenie działa w Chrome, Firefoksie i przeglądarkach Chromium, takich jak Edge, Brave i Opera. Aplikacja komputerowa jest dostępna dla Windows, macOS i Linux."
+      },
+      {
+        "category": "setup",
+        "question": "Czy Nowly jest darmowy?",
+        "answer": "Tak. Główne funkcje, rozszerzenie, aplikacja komputerowa i biblioteka obecności są bezpłatne. Projekt możesz dobrowolnie wspierać przez linki na stronie."
+      },
+      {
+        "category": "setup",
+        "question": "Czy mogę zainstalować tylko jedną obecność?",
+        "answer": "Obecność nie działa samodzielnie: najpierw potrzebujesz rozszerzenia i aplikacji komputerowej Nowly. Potem instaluj tylko obecności dla używanych platform."
+      },
+      {
+        "category": "privacy",
+        "question": "Czy moja aktywność trafia na serwery Nowly?",
+        "answer": "Nie. Jest przesyłana lokalnie z rozszerzenia do aplikacji komputerowej, a następnie do Discorda. Opcjonalne statystyki użycia są domyślnie wyłączone i można nimi zarządzać w ustawieniach."
+      },
+      {
+        "category": "privacy",
+        "question": "Co Nowly odczytuje w przeglądarce?",
+        "answer": "Obecność odczytuje tylko potrzebne informacje z obsługiwanej strony, np. tytuł filmu, nazwę kanału, stronę lub stan odtwarzania. Działa tylko na stronach, dla których ją zainstalowano. Oficjalne obecności są sprawdzane i podpisywane przed dystrybucją."
+      },
+      {
+        "category": "privacy",
+        "question": "Kto może widzieć moją aktywność na Discordzie?",
+        "answer": "Osoby uprawnione do oglądania Twojej aktywności na Discordzie mogą zobaczyć status. Zależy to od ustawień Discorda i danych podanych przez obecność. Nie pokazuj w publicznym statusie wrażliwych informacji."
+      },
+      {
+        "category": "privacy",
+        "question": "Czy Nowly jest bezpieczny?",
+        "answer": "Nowly przetwarza aktywność lokalnie, domyślnie wyłącza statystyki oraz sprawdza i podpisuje oficjalne obecności. Kod projektu jest publiczny. Instaluj z oficjalnych źródeł i sprawdzaj uprawnienia rozszerzenia."
+      },
+      {
+        "category": "compare",
+        "question": "Czym Nowly różni się od PreMiD?",
+        "answer": "Oba narzędzia pokazują aktywność stron na Discordzie. Nowly używa aplikacji komputerowej jako lokalnego połączenia, instalowanych i podpisanych oficjalnych obecności oraz opcjonalnych statystyk wyłączonych domyślnie. Wybór zależy od potrzebnych platform."
+      },
+      {
+        "category": "compare",
+        "question": "Czy mogę używać Nowly i innego narzędzia Rich Presence jednocześnie?",
+        "answer": "Nie jest to zalecane. Kilka aplikacji może jednocześnie zmieniać Twoją aktywność na Discordzie, powodując zmiany lub zniknięcie statusu. Wyłącz inne narzędzia podczas testowania Nowly."
+      },
+      {
+        "category": "develop",
+        "question": "Czy mogę stworzyć nową obecność dla Nowly?",
+        "answer": "Tak. Obecności to integracje JavaScript dla konkretnych platform. SDK, CLI i dokumentacja wyjaśniają, jak je tworzyć, testować, sprawdzać i proponować. Kod oraz zasady współpracy są na GitHubie."
+      },
+      {
+        "category": "develop",
+        "question": "Czy Nowly jest open source?",
+        "answer": "Kod jest publiczny na GitHubie, ale obecnie objęty licencją BUSL-1.1, która udostępnia kod źródłowy i nie jest licencją open source uznaną przez OSI. Obecności, SDK i narzędzia programistyczne mają osobną dokumentację."
       }
     ]
   },
@@ -1262,8 +1351,8 @@
     "done-description": "Rozszerzenie jest połączone. Możesz zamknąć tę kartę i wrócić do Nowly.",
     "not-detected-title": "Nie wykryto rozszerzenia",
     "not-detected-description": "Otwórz tę stronę w przeglądarce, w której zainstalowano Nowly, albo najpierw zainstaluj rozszerzenie.",
-    "error-title": "Coś poszło nie tak",
-    "error-description": "Nie udało się połączyć rozszerzenia. Spróbuj ponownie albo zacznij od nowa w ustawieniach rozszerzenia.",
+    "error-title": "Nie udało się ukończyć tego kroku",
+    "error-description": "Wybierz Spróbuj ponownie, aby powtórzyć ten krok. Jeśli problem nadal występuje, skontaktuj się z pomocą techniczną.",
     "retry": "Spróbuj ponownie",
     "signed-in-as": "Zalogowano jako {name}.",
     "switch-account": "To nie ty? Zmień konto"
@@ -1293,7 +1382,7 @@
     "delete-confirm": "To trwale usuwa twoje konto Nowly i zsynchronizowaną kopię rozszerzenia. Tej operacji nie można cofnąć.",
     "delete-success": "Twoje konto zostało usunięte.",
     "local-note": "Dane zapisane przez rozszerzenie na twoich urządzeniach pozostają bez zmian. Możesz je usunąć w ustawieniach rozszerzenia.",
-    "action-error": "Coś poszło nie tak. Spróbuj ponownie."
+    "action-error": "Nie udało się ukończyć tej operacji. Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzać."
   },
   "ads": {
     "label": "Reklama"

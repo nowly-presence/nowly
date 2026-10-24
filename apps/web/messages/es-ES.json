@@ -77,7 +77,12 @@
     "dark": "Oscuro"
   },
   "hero": {
-    "carousel": { "previous": "Tarjeta anterior", "next": "Tarjeta siguiente", "pause": "Pausar tarjetas", "play": "Reanudar tarjetas" },
+    "carousel": {
+      "previous": "Tarjeta anterior",
+      "next": "Tarjeta siguiente",
+      "pause": "Pausar tarjetas",
+      "play": "Reanudar tarjetas"
+    },
     "title-before": "Comparte lo que haces, en",
     "title-accent": "tiempo real",
     "description": "Nowly transforma tu actividad en una presencia rica y dinámica de Discord.",
@@ -1201,7 +1206,7 @@
     "delete-confirm": "Esto elimina de forma permanente todo lo que Nowly ha almacenado para este dispositivo. Esta acción no se puede deshacer.",
     "keep-success": "Gracias, tus estadísticas anónimas se conservan.",
     "delete-success": "Tus datos han sido eliminados.",
-    "action-error": "Algo salió mal. Inténtalo de nuevo."
+    "action-error": "No se pudo completar la solicitud. Inténtalo de nuevo o contacta con soporte si el problema persiste."
   },
   "consentPage": {
     "eyebrow": "Privacidad",
@@ -1219,30 +1224,114 @@
     "delete-confirm": "Esta acción elimina permanentemente todo lo que Nowly ha almacenado para este dispositivo. No se puede deshacer.",
     "export-success": "Tus datos se han descargado.",
     "delete-success": "Tus datos han sido eliminados.",
-    "action-error": "Algo salió mal. Inténtalo de nuevo."
+    "action-error": "No se pudo completar la solicitud. Inténtalo de nuevo o contacta con soporte si el problema persiste."
   },
   "faqPage": {
     "eyebrow": "FAQ",
     "title": "Preguntas, sin rodeos",
     "description": "Lo esencial sobre instalación, datos y Discord. La documentación y Discord van más allá.",
     "categories": {
-      "general": "FAQ"
+      "discover": "Descubrir",
+      "setup": "Configuración",
+      "privacy": "Privacidad",
+      "compare": "Comparar",
+      "develop": "Desarrollar"
     },
     "items": [
       {
+        "category": "discover",
         "question": "¿Qué es Nowly?",
-        "answer": "Nowly muestra lo que ves, escuchas o juegas como Rich Presence de Discord. Es una extensión del navegador, una app de escritorio y una biblioteca de scripts por plataforma.",
-        "category": "general"
+        "answer": "Nowly muestra la actividad de sitios compatibles como Rich Presence de Discord: plataforma, título, imagen y progreso, cuando están disponibles. Combina una extensión del navegador, una aplicación de escritorio y presencias instalables desde su biblioteca."
       },
       {
+        "category": "discover",
+        "question": "¿Cómo funciona Nowly?",
+        "answer": "La extensión detecta la actividad en un sitio compatible. La presencia instalada prepara los datos y la aplicación de escritorio los envía localmente a Discord. Nowly no sustituye a la aplicación de Discord."
+      },
+      {
+        "category": "discover",
+        "question": "¿Por qué necesito la extensión y la aplicación de escritorio?",
+        "answer": "La extensión lee la actividad en la pestaña; la aplicación de escritorio sirve de puente local para que Discord reciba las actualizaciones del estado."
+      },
+      {
+        "category": "discover",
+        "question": "¿Debo instalar Discord en mi ordenador?",
+        "answer": "Sí. Discord Desktop debe estar abierto. La versión web o móvil de Discord no basta para usar el puente local de Nowly."
+      },
+      {
+        "category": "discover",
+        "question": "¿Qué sitios funcionan con Nowly?",
+        "answer": "Consulta la biblioteca para ver los sitios compatibles. Cada presencia corresponde a una plataforma. Pueden publicarse nuevas presencias sin reinstalar la extensión."
+      },
+      {
+        "category": "discover",
+        "question": "¿Funciona con Netflix, YouTube, Spotify o Apple TV+?",
+        "answer": "Sí, si hay una presencia específica en la biblioteca. La compatibilidad depende de esa presencia y de los datos que el sitio exponga en el navegador."
+      },
+      {
+        "category": "setup",
+        "question": "¿Cómo muestro mi actividad en Discord?",
+        "answer": "Instala la extensión y la aplicación de escritorio Nowly, abre Discord Desktop, instala una presencia desde la biblioteca y abre el sitio compatible en el navegador."
+      },
+      {
+        "category": "setup",
+        "question": "¿Por qué no aparece mi estado en Discord?",
+        "answer": "Comprueba que Discord Desktop y la aplicación Nowly estén abiertos, que la extensión esté instalada en ese navegador, que la presencia esté activa y que la URL sea compatible. Si se solicita permiso para scripts de usuario, concédelo y recarga la página."
+      },
+      {
+        "category": "setup",
+        "question": "¿Qué navegadores y sistemas son compatibles?",
+        "answer": "La extensión funciona con Chrome, Firefox y navegadores basados en Chromium como Edge, Brave y Opera. La aplicación de escritorio está disponible para Windows, macOS y Linux."
+      },
+      {
+        "category": "setup",
+        "question": "¿Nowly es gratuito?",
+        "answer": "Sí. Las funciones principales, la extensión, la aplicación de escritorio y la biblioteca de presencias son gratuitas. Puedes apoyar el proyecto voluntariamente mediante los enlaces del sitio."
+      },
+      {
+        "category": "setup",
+        "question": "¿Puedo instalar una sola presencia?",
+        "answer": "Una presencia necesita la extensión y la aplicación de escritorio Nowly. Una vez configuradas, instala solo las presencias de los sitios que uses."
+      },
+      {
+        "category": "privacy",
         "question": "¿Mi actividad pasa por los servidores de Nowly?",
-        "answer": "No. La actividad se queda local y se envía a Discord desde tu máquina. Las analytics son opcionales y están desactivadas por defecto.",
-        "category": "general"
+        "answer": "No. La actividad se envía localmente de la extensión a la aplicación de escritorio y después a Discord. Las estadísticas de uso son opcionales, están desactivadas por defecto y se controlan desde los ajustes."
       },
       {
-        "question": "¿Qué plataformas están soportadas?",
-        "answer": "La lista actualizada es la biblioteca. Pueden llegar presencias nuevas sin actualizar la extensión: instala las que uses de verdad.",
-        "category": "general"
+        "category": "privacy",
+        "question": "¿Qué lee Nowly en mi navegador?",
+        "answer": "Cada presencia lee únicamente los datos necesarios del sitio compatible, como un título, una página o el estado de reproducción. Solo funciona en los sitios donde la instalas. Las presencias oficiales se revisan y firman antes de distribuirse."
+      },
+      {
+        "category": "privacy",
+        "question": "¿Quién puede ver mi actividad en Discord?",
+        "answer": "Las personas autorizadas a ver tu actividad en Discord pueden ver tu estado. Depende de tus ajustes de Discord y de lo que muestre la presencia. Evita mostrar datos sensibles en un estado público."
+      },
+      {
+        "category": "privacy",
+        "question": "¿Es seguro Nowly?",
+        "answer": "Nowly procesa la actividad localmente, desactiva las estadísticas por defecto y revisa y firma las presencias oficiales. Su código es público. Instálalo desde fuentes oficiales y comprueba los permisos de la extensión."
+      },
+      {
+        "category": "compare",
+        "question": "¿En qué se diferencia Nowly de PreMiD?",
+        "answer": "Ambos muestran actividad web en Discord. Nowly usa una aplicación de escritorio como puente local, presencias oficiales firmadas y estadísticas opcionales desactivadas por defecto. Elige según los sitios y el flujo que prefieras."
+      },
+      {
+        "category": "compare",
+        "question": "¿Puedo usar Nowly y otra herramienta de Rich Presence a la vez?",
+        "answer": "No es recomendable: varias aplicaciones pueden modificar tu actividad en Discord a la vez y hacer que el estado cambie o desaparezca. Desactiva las otras herramientas mientras pruebas Nowly."
+      },
+      {
+        "category": "develop",
+        "question": "¿Puedo crear una presencia para Nowly?",
+        "answer": "Sí. Las presencias son integraciones JavaScript para cada plataforma. El SDK, la CLI y la documentación explican cómo crearlas, probarlas, validarlas y proponerlas. El proyecto acepta contribuciones en GitHub."
+      },
+      {
+        "category": "develop",
+        "question": "¿Nowly es de código abierto?",
+        "answer": "El código es público en GitHub, pero se distribuye actualmente bajo BUSL-1.1, una licencia de código disponible que no está aprobada como código abierto por la OSI. Las presencias, el SDK y las herramientas de desarrollo se documentan por separado."
       }
     ]
   },
@@ -1262,8 +1351,8 @@
     "done-description": "Tu extensión está conectada. Puedes cerrar esta pestaña y volver a Nowly.",
     "not-detected-title": "Extensión no detectada",
     "not-detected-description": "Abre esta página en el navegador donde está instalado Nowly, o instala primero la extensión.",
-    "error-title": "Algo salió mal",
-    "error-description": "No se pudo conectar la extensión. Inténtalo de nuevo o vuelve a empezar desde los ajustes de la extensión.",
+    "error-title": "No se pudo completar este paso",
+    "error-description": "Selecciona Reintentar para repetir este paso. Si el problema continúa, contacta con el equipo de soporte.",
     "retry": "Reintentar",
     "signed-in-as": "Sesión iniciada como {name}.",
     "switch-account": "¿No eres tú? Cambiar de cuenta"
@@ -1293,7 +1382,7 @@
     "delete-confirm": "Esto elimina de forma permanente tu cuenta de Nowly y la copia sincronizada de tu extensión. No se puede deshacer.",
     "delete-success": "Tu cuenta se ha eliminado.",
     "local-note": "Los datos que la extensión guarda en tus dispositivos no se ven afectados. Puedes borrarlos desde los ajustes de la extensión.",
-    "action-error": "Se ha producido un error. Inténtalo de nuevo."
+    "action-error": "No se pudo completar la solicitud. Inténtalo de nuevo o contacta con soporte si el problema persiste."
   },
   "ads": {
     "label": "Publicidad"
