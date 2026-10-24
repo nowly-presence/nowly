@@ -3,46 +3,7 @@
     "announcement": "Neu: Erstelle deine eigenen Aktivitäten auf Discord",
     "eyebrow": "Eigene Aktivitäten",
     "title": "Nicht in der Bibliothek? Selbst gestalten.",
-    "description": "Ein eigenes Projekt, ein Spiel mit Freunden oder deine Playlist. Zeige auf Discord, was dich beschäftigt.",
-    "cta": "Mit Nowly gestalten",
-    "demo": "Deine Aktivität, deine Details",
-    "hint": "Probiere es aus.",
-    "examples": "Beispiele",
-    "name": "Name der Aktivität",
-    "details": "Details",
-    "color": "Symbolfarbe",
-    "colors": ["Cyan", "Violett", "Orange"],
-    "preview": "Discord-Vorschau",
-    "live": "Live-Vorschau",
-    "activity": "Spielt ein Spiel",
-    "elapsed": "Seit 24 Minuten",
-    "button": "Projekt ansehen",
-    "local": "Dies ist eine Demo. Erstelle deine Aktivität in der Erweiterung.",
-    "benefits": [
-      "Eigene Texte und Bilder",
-      "Links teilen",
-      "Ohne Programmieren"
-    ],
-    "presets": [
-      {
-        "label": "Projekt",
-        "title": "Mein nächstes großes Projekt",
-        "details": "Eine Idee nimmt Gestalt an",
-        "state": "Ein Commit nach dem anderen"
-      },
-      {
-        "label": "Spiel",
-        "title": "Ein Abend mit Freunden",
-        "details": "Wir bauen unsere kleine Welt",
-        "state": "Nur noch ein Block"
-      },
-      {
-        "label": "Pause",
-        "title": "In meiner eigenen Welt",
-        "details": "Ein bisschen Musik, sonst nichts",
-        "state": "Nicht stören"
-      }
-    ]
+    "description": "Ein eigenes Projekt, ein Spiel mit Freunden oder deine Playlist. Zeige auf Discord, was dich beschäftigt."
   },
   "metadata": {
     "title": "Nowly | Discord Rich Presence für jede Website",

@@ -3,42 +3,7 @@
     "announcement": "새 기능: Discord에서 나만의 활동 만들기",
     "eyebrow": "사용자 지정 활동",
     "title": "라이브러리에 없나요? 직접 만들어 보세요.",
-    "description": "개인 프로젝트, 친구들과의 게임, 즐겨 듣는 음악. 지금 하는 일을 Discord 프로필에 담아 보세요.",
-    "cta": "Nowly로 꾸미기",
-    "demo": "나의 활동, 나만의 설명",
-    "hint": "직접 수정해 보세요.",
-    "examples": "활동 예시",
-    "name": "활동 이름",
-    "details": "세부 정보",
-    "color": "아이콘 색상",
-    "colors": ["청록색", "보라색", "주황색"],
-    "preview": "Discord 미리 보기",
-    "live": "실시간 미리 보기",
-    "activity": "게임 하는 중",
-    "elapsed": "24분 경과",
-    "button": "프로젝트 보기",
-    "local": "데모입니다. 실제 활동은 확장 프로그램에서 만들 수 있습니다.",
-    "benefits": ["나만의 텍스트와 이미지", "링크 공유", "코딩 불필요"],
-    "presets": [
-      {
-        "label": "프로젝트",
-        "title": "나의 다음 큰 프로젝트",
-        "details": "아이디어를 현실로",
-        "state": "한 번에 하나씩 커밋"
-      },
-      {
-        "label": "게임",
-        "title": "친구들과 함께하는 저녁",
-        "details": "우리만의 작은 세계 만들기",
-        "state": "블록 하나만 더"
-      },
-      {
-        "label": "휴식",
-        "title": "나만의 세상에서",
-        "details": "음악과 함께하는 시간",
-        "state": "방해 금지"
-      }
-    ]
+    "description": "개인 프로젝트, 친구들과의 게임, 즐겨 듣는 음악. 지금 하는 일을 Discord 프로필에 담아 보세요."
   },
   "metadata": {
     "title": "Nowly | 모든 웹사이트를 위한 Discord Rich Presence",

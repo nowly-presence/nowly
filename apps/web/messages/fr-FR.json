@@ -3,46 +3,7 @@
     "announcement": "Nouveau : créez vos propres activités sur Discord",
     "eyebrow": "Activités personnalisées",
     "title": "Pas dans la bibliothèque ? À vous de créer.",
-    "description": "Un projet perso, une partie entre amis, votre playlist du moment. Faites une place à ce qui vous occupe sur votre profil Discord.",
-    "cta": "Personnaliser avec Nowly",
-    "demo": "Votre activité, vos détails",
-    "hint": "Essayez, c’est modifiable.",
-    "examples": "Exemples d’activités",
-    "name": "Nom de l’activité",
-    "details": "Détails",
-    "color": "Couleur de l’icône",
-    "colors": ["Cyan", "Violet", "Orange"],
-    "preview": "Aperçu sur Discord",
-    "live": "Aperçu instantané",
-    "activity": "Joue à un jeu",
-    "elapsed": "Depuis 24 minutes",
-    "button": "Voir le projet",
-    "local": "Une démo ici. Votre vraie activité se crée dans l’extension.",
-    "benefits": [
-      "Vos textes et vos images",
-      "Des liens à partager",
-      "Aucune ligne de code"
-    ],
-    "presets": [
-      {
-        "label": "Un projet",
-        "title": "Mon prochain grand projet",
-        "details": "Une idée qui prend forme",
-        "state": "Un commit à la fois"
-      },
-      {
-        "label": "Une partie",
-        "title": "Une soirée entre amis",
-        "details": "Construction de notre petit monde",
-        "state": "Encore un dernier bloc"
-      },
-      {
-        "label": "Une pause",
-        "title": "Dans ma bulle",
-        "details": "Un peu de musique, rien d’autre",
-        "state": "Ne pas déranger"
-      }
-    ]
+    "description": "Un projet perso, une partie entre amis, votre playlist du moment. Faites une place à ce qui vous occupe sur votre profil Discord."
   },
   "metadata": {
     "title": "Nowly | Discord Rich Presence pour tous vos sites",
