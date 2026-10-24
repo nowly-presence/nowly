@@ -1,37 +1,37 @@
 ---
-title: Image Proxy
-description: Use the Nowly image proxy when Discord cannot load a presence image directly from a supported external CDN.
+title: Görsel proxy'si
+description: Discord, desteklenen harici bir CDN'deki presence görselini doğrudan yükleyemediğinde Nowly görsel proxy'sini kullan.
 ---
 
-## What It Is For
+## Ne için kullanılır?
 
-The image proxy is built for a specific case: a presence can see a public image on the page, but Discord cannot reliably load it from the original URL.
+Görsel proxy'si belirli bir durum için tasarlanmıştır: Presence, sayfada herkese açık bir görseli görebilir ancak Discord görseli asıl URL'den güvenilir şekilde yükleyemez.
 
-This is useful for video thumbnails, avatars, posters, or category images served by an external CDN when:
+Harici CDN'de sunulan video küçük resimleri, avatarlar, afişler veya kategori görselleri için şu durumlarda işe yarar:
 
-- the image is public and already visible in the browser;
-- the CDN URL is too long for Discord Rich Presence;
-- Discord rejects, expires, or fails to download the direct image;
-- the presence needs to show content-specific artwork instead of only the service logo.
+- görsel herkese açıktır ve tarayıcıda zaten görüntülenir;
+- CDN URL'si Discord Rich Presence için fazla uzundur;
+- Discord doğrudan görseli reddeder, URL'nin süresi dolar veya indirme başarısız olur;
+- presence yalnızca hizmet logosu yerine içerikle ilgili görsel göstermelidir.
 
-This is not a general-purpose image proxy. The API only accepts explicitly allowed services and domains.
+Bu genel amaçlı bir görsel proxy'si değildir. API yalnızca açıkça izin verilmiş hizmetleri ve alan adlarını kabul eder.
 
-## How It Works
+## Nasıl çalışır?
 
-The recommended flow uses a temporary short URL:
+Önerilen akış geçici ve kısa bir URL kullanır:
 
 ```txt
 POST https://api.nowly.me/images-proxy
 GET  https://api.nowly.me/images-proxy/<id>
 ```
 
-The presence sends the real CDN image URL to the API. The API checks that the service is supported, downloads the image, validates its MIME type and size, then stores it temporarily in cache. It returns a short URL such as:
+Presence, gerçek CDN görsel URL'sini API'ye gönderir. API hizmetin desteklendiğini kontrol eder, görseli indirir, MIME türü ile boyutunu doğrular ve geçici olarak önbelleğe alır. Şuna benzer kısa bir URL döndürür:
 
 ```txt
 https://api.nowly.me/images-proxy/abc123...
 ```
 
-That URL directly returns the image bytes with the correct `Content-Type`. It is intended for `largeImageKey` or `smallImageKey`.
+Bu URL görsel baytlarını doğru `Content-Type` ile doğrudan döndürür. `largeImageKey` veya `smallImageKey` için tasarlanmıştır.
 
 ```ts filename="presence.ts"
 import { createCachedImageProxyUrl } from "@nowly/sdk"
@@ -44,22 +44,22 @@ await presence.setActivity({
 })
 ```
 
-The cache is short-lived, currently five minutes. The helper also keeps an in-memory cache inside the presence so it does not call the API on every update.
+Önbellek kısa sürelidir, şu anda beş dakikadır. Yardımcı işlev, API'nin her güncellemede çağrılmaması için presence içinde ayrıca bellek içi önbellek tutar.
 
-## Direct Endpoint
+## Doğrudan uç nokta
 
-The older direct proxy remains available for manual testing or URLs that are already short enough:
+Eski doğrudan proxy, manuel testler veya zaten yeterince kısa olan URL'ler için kullanılabilir:
 
 ```txt
 https://api.nowly.me/image-proxy?service=<service>&url=<encoded-url>
 https://api.nowly.me/i?u=<encoded-url>
 ```
 
-The `url` and `u` parameters must be encoded with `encodeURIComponent`. For Discord Rich Presence, prefer `createCachedImageProxyUrl` because Discord limits image keys to 300 characters.
+`url` ve `u` parametreleri `encodeURIComponent` ile kodlanmalıdır. Discord görsel anahtarlarını 300 karakterle sınırladığı için Rich Presence'da `createCachedImageProxyUrl` tercih edilmelidir.
 
-## Setting It Up In A Presence
+## Presence içinde kurulum
 
-First, extract the real image URL from the page:
+Önce sayfadan gerçek görsel URL'sini al:
 
 ```ts filename="presence.ts"
 const getPoster = (video: HTMLVideoElement): string | undefined => {
@@ -70,7 +70,7 @@ const getPoster = (video: HTMLVideoElement): string | undefined => {
 }
 ```
 
-Then pass that URL through the helper before setting the activity:
+Ardından etkinliği ayarlamadan önce URL'yi yardımcı işlevden geçir:
 
 ```ts filename="presence.ts"
 import { createCachedImageProxyUrl } from "@nowly/sdk"
@@ -83,11 +83,11 @@ await presence.setActivity({
 })
 ```
 
-Always keep a fallback asset. If the page has no image, the image is too large, or the origin is not allowed, the presence should continue to work with `Assets.Logo` or a local asset.
+Her zaman yedek bir görsel tut. Sayfada görsel yoksa, görsel fazla büyükse veya kaynak izinli değilse presence `Assets.Logo` ya da yerel bir görselle çalışmaya devam etmelidir.
 
-## Adding A Service
+## Hizmet ekleme
 
-Allowed domains are checked by the API, not by the presence - a presence cannot proxy an arbitrary domain just by asking for it at runtime. There is no separate approval step or API code change: you declare the hosts your presence needs directly in its own `metadata.json`, using the same `service` value (your presence slug) you already pass to the helper:
+İzin verilen alan adları presence tarafından değil, API tarafından kontrol edilir. Presence, çalışma sırasında istekte bulunarak keyfî bir alan adını proxy üzerinden kullanamaz. Ayrı bir onay adımı veya API kodu değişikliği gerekmez: Presence'ın ihtiyaç duyduğu hostları kendi `metadata.json` dosyasında bildir. Yardımcı işleve verdiğin `service` değeriyle (presence slug'ı) aynı değeri kullan:
 
 ```json filename="metadata.json"
 "imageProxy": {
@@ -96,12 +96,12 @@ Allowed domains are checked by the API, not by the presence - a presence cannot 
 }
 ```
 
-This is published to the API automatically the same way the rest of your `metadata.json` already is. The API only trusts this declaration for your own presence's `service` id, so a presence cannot declare hostnames on another presence's behalf, and a request is only allowed if the target URL's hostname actually matches one of your declared suffixes.
+Bu bildirim, `metadata.json` dosyanın diğer içerikleriyle birlikte otomatik olarak API'ye yayımlanır. API bu bildirime yalnızca kendi presence'ının `service` kimliği için güvenir. Bir presence başka bir presence adına host adı bildiremez; istek ancak hedef URL'nin host adı bildirilen son eklerden biriyle gerçekten eşleşirse kabul edilir.
 
-When your PR touches `imageProxy`, the presence preview bot detects it automatically, adds an **Image Proxy Requested** section to its comment listing the declared hostnames, and applies an `image-proxy` label. A reviewer still has to confirm the hostnames are public and safe to proxy before merging - explain in your PR description why Discord can't use the direct image URL and what image the user will see.
+PR'ında `imageProxy` değiştiğinde presence önizleme botu bunu otomatik algılar, yorumuna bildirilen hostları listeleyen **Image Proxy Requested** bölümünü ekler ve `image-proxy` etiketini uygular. Bir incelemeci, birleştirme öncesinde hostların herkese açık ve proxy için güvenli olduğunu yine de doğrulamalıdır. Discord'un doğrudan görsel URL'sini neden kullanamadığını ve kullanıcının hangi görseli göreceğini PR açıklamasında belirt.
 
-## Limits And Security
+## Sınırlar ve güvenlik
 
-The proxy only serves public images from hosts a reviewed presence has declared. It rejects non-HTTPS URLs, hosts that don't match any declared suffix, responses that are not images, and files that are too large.
+Proxy yalnızca incelenmiş bir presence'ın bildirdiği hostlardan herkese açık görseller sunar. HTTPS olmayan URL'leri, bildirilen son eklerle eşleşmeyen hostları, görsel olmayan yanıtları ve fazla büyük dosyaları reddeder.
 
-The endpoints themselves are public and unauthenticated (presences call them directly from the browser, so there's no secret to attach) and share the API's global rate limit - there's no per-presence quota. Do not use the proxy for private account content, authenticated resources, tracking URLs, arbitrary user input, or non-image content.
+Uç noktalar herkese açıktır ve kimlik doğrulaması gerektirmez (presence'lar bunları doğrudan tarayıcıdan çağırdığı için eklenecek bir gizli bilgi yoktur). API'nin genel hız sınırını paylaşırlar; presence başına ayrı kota yoktur. Proxy'yi özel hesap içerikleri, kimlik doğrulaması gerektiren kaynaklar, takip URL'leri, keyfî kullanıcı girdileri veya görsel olmayan içerikler için kullanma.
