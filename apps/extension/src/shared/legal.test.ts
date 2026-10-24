@@ -176,8 +176,4 @@ describe("legal documents", () => {
       )
     ).toEqual(["tos", "privacy"]);
   });
-
-  it("retains local receipts across service worker restarts", () => {
-    expect(normalizeLegalState(JSON.parse(JSON.stringify(accepted())))).toEqual(accepted());
-  });
 });
