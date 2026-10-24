@@ -36,7 +36,7 @@ Jika platform yang penting bagi anda hanya ada dalam gedung PreMiD, PreMiD semem
 
 ## Pelesenan
 
-Kod PreMiD ialah sumber terbuka. Presence Nowly ialah sumber terbuka di bawah lesen MIT, dan SDK serta CLI-nya didokumenkan untuk penyumbang. Kod utama Nowly tersedia kepada umum di GitHub di bawah Business Source License 1.1, iaitu lesen sumber tersedia: anda boleh membaca dan mengauditnya, tetapi ia bukan lesen sumber terbuka yang diluluskan oleh OSI. Perbezaan itu penting untuk diketahui jika anda mengambil berat mengenainya.
+PreMiD dan Nowly ialah sumber terbuka. Repositori awam Nowly (aplikasi, presence, SDK, CLI dan bot) menggunakan lesen MIT. CLI keluaran dalaman dan kandungan pihak ketiga tidak diliputi.
 
 ## Yang mana patut anda pilih?
 

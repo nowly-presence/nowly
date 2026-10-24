@@ -147,6 +147,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
   }
 
   body {
@@ -166,6 +167,15 @@
     scrollbar-color: color-mix(in oklab, var(--foreground) 18%, transparent) transparent;
   }
 
+  :is(a, button, input, textarea, select, [tabindex]):focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 3px;
+  }
+
+  main:focus {
+    outline: none;
+  }
+
   *::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -179,6 +189,22 @@
     background: color-mix(in oklab, var(--foreground) 18%, transparent);
     border-radius: 999px;
   }
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--background);
+  color: var(--foreground);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
 }
 
 @keyframes marquee {
@@ -195,8 +221,26 @@
   will-change: transform;
 }
 
-.marquee-hover:hover .animate-marquee {
+.marquee-hover:hover .animate-marquee,
+.marquee-hover:focus-within .animate-marquee,
+.marquee-hover[data-paused="true"] .animate-marquee {
   animation-play-state: paused;
+}
+
+.marquee-hover:focus-within,
+.marquee-hover[data-paused="true"] {
+  overflow-x: auto;
+  mask-image: none !important;
+}
+
+.marquee-hover:focus-within .animate-marquee,
+.marquee-hover[data-paused="true"] .animate-marquee {
+  animation: none;
+}
+
+.marquee-hover:focus-within [aria-hidden="true"],
+.marquee-hover[data-paused="true"] [aria-hidden="true"] {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -206,6 +250,15 @@
 
   .animate-marquee {
     animation: none;
+  }
+
+  .marquee-hover {
+    overflow-x: auto;
+    mask-image: none !important;
+  }
+
+  .marquee-hover [aria-hidden="true"] {
+    display: none;
   }
 }
 

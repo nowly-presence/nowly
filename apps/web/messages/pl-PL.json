@@ -3,46 +3,7 @@
     "announcement": "Nowość: twórz własne aktywności na Discordzie",
     "eyebrow": "Własne aktywności",
     "title": "Nie ma w bibliotece? Stwórz własną.",
-    "description": "Własny projekt, gra ze znajomymi lub ulubiona playlista. Pokaż na Discordzie, co cię zajmuje.",
-    "cta": "Personalizuj z Nowly",
-    "demo": "Twoja aktywność, twoje szczegóły",
-    "hint": "Spróbuj coś zmienić.",
-    "examples": "Przykłady",
-    "name": "Nazwa aktywności",
-    "details": "Szczegóły",
-    "color": "Kolor ikony",
-    "colors": ["Cyjan", "Fioletowy", "Pomarańczowy"],
-    "preview": "Podgląd na Discordzie",
-    "live": "Podgląd na żywo",
-    "activity": "Gra w grę",
-    "elapsed": "Od 24 minut",
-    "button": "Zobacz projekt",
-    "local": "To jest demo. Prawdziwą aktywność utworzysz w rozszerzeniu.",
-    "benefits": [
-      "Własne teksty i obrazy",
-      "Linki do udostępnienia",
-      "Bez kodowania"
-    ],
-    "presets": [
-      {
-        "label": "Projekt",
-        "title": "Mój kolejny wielki projekt",
-        "details": "Pomysł nabiera kształtu",
-        "state": "Jeden commit naraz"
-      },
-      {
-        "label": "Gra",
-        "title": "Wieczór ze znajomymi",
-        "details": "Budujemy nasz mały świat",
-        "state": "Jeszcze jeden blok"
-      },
-      {
-        "label": "Przerwa",
-        "title": "W moim świecie",
-        "details": "Trochę muzyki i nic więcej",
-        "state": "Nie przeszkadzać"
-      }
-    ]
+    "description": "Własny projekt, gra ze znajomymi lub ulubiona playlista. Pokaż na Discordzie, co cię zajmuje."
   },
   "metadata": {
     "title": "Nowly | Discord Rich Presence dla każdej strony",
@@ -64,6 +25,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "Przejdź do treści",
     "docs": "Dokumentacja",
     "library": "Biblioteka",
     "roadmap": "Mapa drogowa",
@@ -76,6 +38,12 @@
     "dark": "Ciemny"
   },
   "hero": {
+    "carousel": {
+      "previous": "Poprzednia karta",
+      "next": "Następna karta",
+      "pause": "Wstrzymaj karty",
+      "play": "Wznów karty"
+    },
     "title-before": "Dziel się tym, co robisz, w",
     "title-accent": "czasie rzeczywistym",
     "description": "Nowly zamienia Twoją aktywność w bogatą, dynamiczną obecność na Discordzie.",
@@ -150,6 +118,8 @@
     }
   },
   "platforms": {
+    "pause": "Wstrzymaj platformy",
+    "play": "Wznów platformy",
     "eyebrow": "Platformy",
     "title": "Działa z Twoimi platformami",
     "description": "Nowly pokazuje, co oglądasz, słuchasz lub w co grasz na usługach, z których już korzystasz."
@@ -955,6 +925,7 @@
     "home": "Powrót do strony głównej"
   },
   "cookie-banner": {
+    "title": "Informacje o plikach cookie",
     "message": "Ta strona używa niezbędnego pliku cookie dotyczącego języka. Jeśli reklamy zostaną później włączone, Google może również używać technologii reklamowych.",
     "learn-more": "Przeczytaj politykę cookies",
     "dismiss": "Rozumiem"
@@ -1049,7 +1020,7 @@
     "badge": "Prawne",
     "title": "Warunki korzystania",
     "description": "Zasady korzystania z Nowly, rozszerzenia przeglądarki, aplikacji desktopowej i strony internetowej.",
-    "last-updated": "Ostatnia aktualizacja: 16 października 2026.",
+    "last-updated": "Ostatnia aktualizacja: 24 października 2026.",
     "sections": [
       {
         "title": "Akceptacja",
@@ -1057,7 +1028,7 @@
       },
       {
         "title": "Usługa",
-        "body": "Nowly to <strong>darmowe</strong> narzędzie, które aktualizuje Discord Rich Presence z obsługiwanych stron internetowych, korzystając z lokalnej aplikacji desktopowej. Kod źródłowy jest dostępny na GitHub na licencji BUSL-1.1 (source-available; nie jest to licencja open-source zatwierdzona przez OSI do Change Date). Usługa obejmuje:<ul><li>Rozszerzenie przeglądarki dla Chromium i Firefox.</li><li>Aplikację desktopową, która łączy się z Discordem na Twoim komputerze.</li><li>Stronę nowly.me i docs.nowly.me.</li><li>Publiczne API i SDK dla deweloperów do tworzenia obecności.</li><li>Opcjonalne buildy Canary z naszego CDN, będące wersjami przedpremierowymi, mogącymi być niepodpisanymi.</li></ul>"
+        "body": "Nowly to <strong>darmowe</strong> narzędzie aktualizujące Discord Rich Presence na podstawie obsługiwanych stron za pomocą lokalnej aplikacji. Kod źródłowy jest otwarty na licencji MIT na GitHubie. Usługa obejmuje:<ul><li>Rozszerzenie przeglądarki dla Chromium i Firefox.</li><li>Aplikację desktopową, która łączy się z Discordem na Twoim komputerze.</li><li>Stronę nowly.me i docs.nowly.me.</li><li>Publiczne API i SDK dla deweloperów do tworzenia obecności.</li><li>Opcjonalne buildy Canary z naszego CDN, będące wersjami przedpremierowymi, mogącymi być niepodpisanymi.</li></ul>"
       },
       {
         "title": "Minimalny wiek",
@@ -1065,7 +1036,7 @@
       },
       {
         "title": "Licencja",
-        "body": "Nowly jest licencjonowane na podstawie <strong>Business Source License 1.1</strong>. Możesz używać, kopiować i modyfikować je do celów <strong>osobistych, niekomercyjnych</strong>. Użycie komercyjne (w tym odsprzedaż lub oferowanie Nowly jako płatnej lub hostowanej usługi) wymaga osobnej licencji od publishera. Licencja przechodzi na MIT w Change Date: cztery lata po pierwszej publicznej dystrybucji, w każdym razie nie wcześniej niż <strong>1 czerwca 2028</strong>. Pełny tekst znajduje się w <a href=\"https://github.com/nowly-presence/nowly\">repozytorium GitHub</a>. Nie licencjonuje to treści osób trzecich (YouTube, Twitch itd.), które wyświetlasz przez Nowly."
+        "body": "Kod źródłowy Nowly jest udostępniony na <strong>licencji MIT</strong>, która pozwala go używać, modyfikować i rozpowszechniać także komercyjnie, z zachowaniem jej warunków i informacji o prawach autorskich. Pełny tekst jest na <a href=\"https://github.com/nowly-presence/nowly\">GitHub</a>. Treści, nazwy i znaki towarowe osób trzecich nie są objęte tą licencją."
       },
       {
         "title": "Dozwolone użycie",
@@ -1134,7 +1105,7 @@
       },
       {
         "title": "Własność intelektualna",
-        "body": "Kod źródłowy Nowly jest publikowany na licencji <strong>BUSL-1.1</strong> pod adresem <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>. Znaki towarowe osób trzecich pozostają własnością ich właścicieli. <strong>Nowly nie jest powiązane z Discord Inc. ani obsługiwanymi platformami.</strong>"
+        "body": "Kod źródłowy Nowly jest publikowany na <strong>licencji MIT</strong> na <a href=\"https://github.com/nowly-presence/nowly\">GitHub</a>. Znaki towarowe należą do ich właścicieli. <strong>Nowly nie jest powiązane z Discord Inc. ani obsługiwanymi platformami.</strong>"
       },
       {
         "title": "Nielegalne treści",
@@ -1196,7 +1167,7 @@
     "delete-confirm": "To trwale usuwa wszystko, co Nowly zapisało dla tego urządzenia. Tej operacji nie można cofnąć.",
     "keep-success": "Dziękujemy, Twoje anonimowe statystyki zostały zachowane.",
     "delete-success": "Twoje dane zostały usunięte.",
-    "action-error": "Coś poszło nie tak. Spróbuj ponownie."
+    "action-error": "Nie udało się ukończyć tej operacji. Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzać."
   },
   "consentPage": {
     "eyebrow": "Prywatność",
@@ -1214,30 +1185,114 @@
     "delete-confirm": "To trwale usuwa wszystko, co Nowly zapisało dla tego urządzenia. Tej operacji nie można cofnąć.",
     "export-success": "Twoje dane zostały pobrane.",
     "delete-success": "Twoje dane zostały usunięte.",
-    "action-error": "Coś poszło nie tak. Spróbuj ponownie."
+    "action-error": "Nie udało się ukończyć tej operacji. Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzać."
   },
   "faqPage": {
     "eyebrow": "FAQ",
     "title": "Szybkie odpowiedzi na pytania",
     "description": "To, co najważniejsze o instalacji, danych i Discordzie. Dokumentacja i Discord idą dalej.",
     "categories": {
-      "general": "FAQ"
+      "discover": "Poznaj Nowly",
+      "setup": "Konfiguracja",
+      "privacy": "Prywatność",
+      "compare": "Porównanie",
+      "develop": "Tworzenie"
     },
     "items": [
       {
+        "category": "discover",
         "question": "Czym jest Nowly?",
-        "answer": "Nowly pokazuje to, co oglądasz, słuchasz lub w co grasz, jako Discord Rich Presence. To rozszerzenie przeglądarki, aplikacja desktopowa i biblioteka skryptów platform.",
-        "category": "general"
+        "answer": "Nowly pokazuje aktywność z obsługiwanych stron jako Discord Rich Presence: platformę, tytuł, grafikę i postęp odtwarzania, gdy są dostępne. Łączy rozszerzenie przeglądarki, aplikację komputerową i instalowane obecności z biblioteki."
       },
       {
-        "question": "Czy moja aktywność przechodzi przez wasze serwery?",
-        "answer": "Nie. Aktywność zostaje lokalnie i jest wysyłana do Discorda z Twojego urządzenia. Analityka jest opcjonalna i domyślnie wyłączona.",
-        "category": "general"
+        "category": "discover",
+        "question": "Jak działa Nowly?",
+        "answer": "Rozszerzenie wykrywa aktywność na obsługiwanej stronie. Zainstalowana obecność przygotowuje informacje, a aplikacja komputerowa przesyła je lokalnie do Discorda. Nowly nie zastępuje aplikacji Discord."
       },
       {
-        "question": "Jakie platformy są obsługiwane?",
-        "answer": "Aktualna lista to biblioteka. Nowe obecności mogą być dodawane bez aktualizacji rozszerzenia, więc instaluj te, których faktycznie używasz.",
-        "category": "general"
+        "category": "discover",
+        "question": "Dlaczego potrzebuję rozszerzenia i aplikacji komputerowej?",
+        "answer": "Rozszerzenie odczytuje aktywność w karcie przeglądarki. Aplikacja komputerowa tworzy lokalne połączenie, dzięki któremu Discord odbiera aktualizacje statusu."
+      },
+      {
+        "category": "discover",
+        "question": "Czy muszę zainstalować Discorda na komputerze?",
+        "answer": "Tak. Discord Desktop musi być uruchomiony. Wersja przeglądarkowa lub mobilna nie wystarcza do lokalnego połączenia Nowly."
+      },
+      {
+        "category": "discover",
+        "question": "Jakie strony działają z Nowly?",
+        "answer": "Listę obsługiwanych stron znajdziesz w bibliotece. Każda obecność dotyczy konkretnej platformy. Nowe obecności mogą być publikowane bez ponownej instalacji rozszerzenia."
+      },
+      {
+        "category": "discover",
+        "question": "Czy Nowly działa z Netflixem, YouTube, Spotify lub Apple TV+?",
+        "answer": "Tak, jeśli w bibliotece jest odpowiednia obecność. Zgodność zależy od obecności i informacji udostępnianych przez platformę w przeglądarce."
+      },
+      {
+        "category": "setup",
+        "question": "Jak wyświetlić aktywność na Discordzie?",
+        "answer": "Zainstaluj rozszerzenie i aplikację komputerową Nowly, uruchom Discord Desktop, zainstaluj obecność z biblioteki i otwórz obsługiwaną stronę w przeglądarce."
+      },
+      {
+        "category": "setup",
+        "question": "Dlaczego mój status na Discordzie się nie wyświetla?",
+        "answer": "Sprawdź, czy Discord Desktop i Nowly są uruchomione, rozszerzenie jest w używanej przeglądarce, obecność jest włączona, a adres strony obsługiwany. Jeśli przeglądarka prosi o zgodę na skrypty użytkownika, udziel jej i odśwież stronę po instalacji."
+      },
+      {
+        "category": "setup",
+        "question": "Jakie przeglądarki i systemy są obsługiwane?",
+        "answer": "Rozszerzenie działa w Chrome, Firefoksie i przeglądarkach Chromium, takich jak Edge, Brave i Opera. Aplikacja komputerowa jest dostępna dla Windows, macOS i Linux."
+      },
+      {
+        "category": "setup",
+        "question": "Czy Nowly jest darmowy?",
+        "answer": "Tak. Główne funkcje, rozszerzenie, aplikacja komputerowa i biblioteka obecności są bezpłatne. Projekt możesz dobrowolnie wspierać przez linki na stronie."
+      },
+      {
+        "category": "setup",
+        "question": "Czy mogę zainstalować tylko jedną obecność?",
+        "answer": "Obecność nie działa samodzielnie: najpierw potrzebujesz rozszerzenia i aplikacji komputerowej Nowly. Potem instaluj tylko obecności dla używanych platform."
+      },
+      {
+        "category": "privacy",
+        "question": "Czy moja aktywność trafia na serwery Nowly?",
+        "answer": "Nie. Jest przesyłana lokalnie z rozszerzenia do aplikacji komputerowej, a następnie do Discorda. Opcjonalne statystyki użycia są domyślnie wyłączone i można nimi zarządzać w ustawieniach."
+      },
+      {
+        "category": "privacy",
+        "question": "Co Nowly odczytuje w przeglądarce?",
+        "answer": "Obecność odczytuje tylko potrzebne informacje z obsługiwanej strony, np. tytuł filmu, nazwę kanału, stronę lub stan odtwarzania. Działa tylko na stronach, dla których ją zainstalowano. Oficjalne obecności są sprawdzane i podpisywane przed dystrybucją."
+      },
+      {
+        "category": "privacy",
+        "question": "Kto może widzieć moją aktywność na Discordzie?",
+        "answer": "Osoby uprawnione do oglądania Twojej aktywności na Discordzie mogą zobaczyć status. Zależy to od ustawień Discorda i danych podanych przez obecność. Nie pokazuj w publicznym statusie wrażliwych informacji."
+      },
+      {
+        "category": "privacy",
+        "question": "Czy Nowly jest bezpieczny?",
+        "answer": "Nowly przetwarza aktywność lokalnie, domyślnie wyłącza statystyki oraz sprawdza i podpisuje oficjalne obecności. Kod projektu jest publiczny. Instaluj z oficjalnych źródeł i sprawdzaj uprawnienia rozszerzenia."
+      },
+      {
+        "category": "compare",
+        "question": "Czym Nowly różni się od PreMiD?",
+        "answer": "Oba narzędzia pokazują aktywność stron na Discordzie. Nowly używa aplikacji komputerowej jako lokalnego połączenia, instalowanych i podpisanych oficjalnych obecności oraz opcjonalnych statystyk wyłączonych domyślnie. Wybór zależy od potrzebnych platform."
+      },
+      {
+        "category": "compare",
+        "question": "Czy mogę używać Nowly i innego narzędzia Rich Presence jednocześnie?",
+        "answer": "Nie jest to zalecane. Kilka aplikacji może jednocześnie zmieniać Twoją aktywność na Discordzie, powodując zmiany lub zniknięcie statusu. Wyłącz inne narzędzia podczas testowania Nowly."
+      },
+      {
+        "category": "develop",
+        "question": "Czy mogę stworzyć nową obecność dla Nowly?",
+        "answer": "Tak. Obecności to integracje JavaScript dla konkretnych platform. SDK, CLI i dokumentacja wyjaśniają, jak je tworzyć, testować, sprawdzać i proponować. Kod oraz zasady współpracy są na GitHubie."
+      },
+      {
+        "category": "develop",
+        "question": "Czy Nowly jest open source?",
+        "answer": "Kod jest publiczny na GitHubie, ale obecnie objęty licencją BUSL-1.1, która udostępnia kod źródłowy i nie jest licencją open source uznaną przez OSI. Obecności, SDK i narzędzia programistyczne mają osobną dokumentację."
       }
     ]
   },
@@ -1257,8 +1312,8 @@
     "done-description": "Rozszerzenie jest połączone. Możesz zamknąć tę kartę i wrócić do Nowly.",
     "not-detected-title": "Nie wykryto rozszerzenia",
     "not-detected-description": "Otwórz tę stronę w przeglądarce, w której zainstalowano Nowly, albo najpierw zainstaluj rozszerzenie.",
-    "error-title": "Coś poszło nie tak",
-    "error-description": "Nie udało się połączyć rozszerzenia. Spróbuj ponownie albo zacznij od nowa w ustawieniach rozszerzenia.",
+    "error-title": "Nie udało się ukończyć tego kroku",
+    "error-description": "Wybierz Spróbuj ponownie, aby powtórzyć ten krok. Jeśli problem nadal występuje, skontaktuj się z pomocą techniczną.",
     "retry": "Spróbuj ponownie",
     "signed-in-as": "Zalogowano jako {name}.",
     "switch-account": "To nie ty? Zmień konto"
@@ -1288,7 +1343,7 @@
     "delete-confirm": "To trwale usuwa twoje konto Nowly i zsynchronizowaną kopię rozszerzenia. Tej operacji nie można cofnąć.",
     "delete-success": "Twoje konto zostało usunięte.",
     "local-note": "Dane zapisane przez rozszerzenie na twoich urządzeniach pozostają bez zmian. Możesz je usunąć w ustawieniach rozszerzenia.",
-    "action-error": "Coś poszło nie tak. Spróbuj ponownie."
+    "action-error": "Nie udało się ukończyć tej operacji. Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzać."
   },
   "ads": {
     "label": "Reklama"
@@ -1348,7 +1403,7 @@
       },
       {
         "title": "Open source i licencje",
-        "body": "Integracje są open source na licencji MIT, więc każdy może je czytać, poprawiać albo napisać własną. Rozszerzenie, aplikacja na komputer i strona są publiczne na GitHubie na licencji Business Source License 1.1: możesz przeczytać i sprawdzić każdą linię, ale to licencja typu source-available, a nie licencja open source zatwierdzona przez OSI."
+        "body": "Publiczne repozytoria Nowly (aplikacja, presences, SDK, CLI i bot) są otwarte na licencji MIT. Kod można przeglądać, zmieniać i udostępniać zgodnie z jej warunkami. Oddzielne prywatne narzędzie CLI do wydań i treści osób trzecich są wyłączone."
       }
     ],
     "facts": {

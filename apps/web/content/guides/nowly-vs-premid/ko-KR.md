@@ -36,7 +36,7 @@ related: discord-connections-vs-nowly, what-nowly-can-see, set-up-nowly
 
 ## 라이선스
 
-PreMiD의 코드는 오픈 소스입니다. Nowly 프레즌스는 MIT 라이선스의 오픈 소스이고 기여자를 위한 SDK와 CLI 문서가 있습니다. Nowly의 주요 코드는 GitHub에 Business Source License 1.1로 공개되어 있습니다. 소스를 읽고 검토할 수 있지만 OSI가 승인한 오픈 소스 라이선스는 아닙니다. 이 구분이 중요하다면 알아둘 가치가 있습니다.
+PreMiD와 Nowly는 오픈 소스입니다. Nowly의 공개 앱, 프레즌스, SDK, CLI, 봇 저장소는 MIT 라이선스를 사용합니다. 비공개 내부 릴리스 CLI와 제삼자 콘텐츠는 제외됩니다.
 
 ## 어느 쪽을 고를까요?
 

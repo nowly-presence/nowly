@@ -3,42 +3,7 @@
     "announcement": "新機能：Discordで自分だけのアクティビティを作成",
     "eyebrow": "カスタムアクティビティ",
     "title": "ライブラリにないなら、自分で作ろう。",
-    "description": "個人のプロジェクト、友達とのゲーム、お気に入りの音楽。今していることをDiscordのプロフィールに。",
-    "cta": "Nowlyでカスタマイズ",
-    "demo": "あなたのアクティビティ、あなたの言葉で",
-    "hint": "自由に編集してみてください。",
-    "examples": "アクティビティの例",
-    "name": "アクティビティ名",
-    "details": "詳細",
-    "color": "アイコンの色",
-    "colors": ["シアン", "紫", "オレンジ"],
-    "preview": "Discordでのプレビュー",
-    "live": "リアルタイムプレビュー",
-    "activity": "ゲームをプレイ中",
-    "elapsed": "24分経過",
-    "button": "プロジェクトを見る",
-    "local": "これはデモです。実際のアクティビティは拡張機能で作成できます。",
-    "benefits": ["自分のテキストと画像", "リンクを共有", "コード不要"],
-    "presets": [
-      {
-        "label": "プロジェクト",
-        "title": "次の大きなプロジェクト",
-        "details": "アイデアを形に",
-        "state": "ひとつずつコミット"
-      },
-      {
-        "label": "ゲーム",
-        "title": "友達と過ごす夜",
-        "details": "小さな世界を建築中",
-        "state": "あと1ブロックだけ"
-      },
-      {
-        "label": "休憩",
-        "title": "自分だけの世界で",
-        "details": "音楽だけを楽しむ時間",
-        "state": "取り込み中"
-      }
-    ]
+    "description": "個人のプロジェクト、友達とのゲーム、お気に入りの音楽。今していることをDiscordのプロフィールに。"
   },
   "metadata": {
     "title": "Nowly | あらゆるサイトをDiscord Rich Presenceに",
@@ -60,6 +25,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "本文へ移動",
     "docs": "ドキュメント",
     "library": "ライブラリ",
     "roadmap": "ロードマップ",
@@ -72,6 +38,12 @@
     "dark": "ダーク"
   },
   "hero": {
+    "carousel": {
+      "previous": "前のカード",
+      "next": "次のカード",
+      "pause": "カードを一時停止",
+      "play": "カードを再開"
+    },
     "title-before": "あなたの「今」を",
     "title-accent": "リアルタイム",
     "description": "NowlyはあなたのアクティビティをリッチでダイナミックなDiscordプレゼンスに変えます。",
@@ -146,6 +118,8 @@
     }
   },
   "platforms": {
+    "pause": "プラットフォームを一時停止",
+    "play": "プラットフォームを再開",
     "eyebrow": "プラットフォーム",
     "title": "お使いのプラットフォームに対応",
     "description": "Nowlyは、すでに使っているサービスであなたが見ている、聴いている、プレイしているものを表示します。"
@@ -951,6 +925,7 @@
     "home": "ホームに戻る"
   },
   "cookie-banner": {
+    "title": "Cookieに関するお知らせ",
     "message": "このサイトは必須の言語Cookieを使用しています。将来広告が有効化された場合、Googleが広告技術を使用する可能性もあります。",
     "learn-more": "Cookieポリシーを読む",
     "dismiss": "了解しました"
@@ -1045,7 +1020,7 @@
     "badge": "法律",
     "title": "利用規約",
     "description": "Nowly、ブラウザ拡張機能、デスクトップアプリ、ウェブサイトの利用に関するルール。",
-    "last-updated": "最終更新日：2026年10月16日。",
+    "last-updated": "最終更新日：2026年10月24日。",
     "sections": [
       {
         "title": "同意",
@@ -1053,7 +1028,7 @@
       },
       {
         "title": "サービス",
-        "body": "Nowlyは、ローカルデスクトップアプリを使用して対応ウェブサイトからDiscord Rich Presenceを更新する<strong>無料</strong>のツールです。ソースコードはGitHub上でBUSL-1.1（source-available；Change DateまではOSI承認のオープンソースライセンスではありません）のもとで公開されています。本サービスには以下が含まれます：<ul><li>ChromiumおよびFirefox用のブラウザ拡張機能。</li><li>お使いのコンピュータ上でDiscordと通信するデスクトップアプリ。</li><li>nowly.meウェブサイトとdocs.nowly.me。</li><li>プレゼンスを構築するための公開APIと開発者SDK。</li><li>当社のCDNからの任意のCanaryビルド（プレリリースであり、署名されていない場合があります）。</li></ul>"
+        "body": "Nowlyは、対応サイトのDiscord Rich Presenceをローカルのデスクトップアプリで更新する<strong>無料</strong>のツールです。ソースコードはGitHubでMITライセンスのオープンソースです。サービスには以下が含まれます：<ul><li>ChromiumおよびFirefox用のブラウザ拡張機能。</li><li>お使いのコンピュータ上でDiscordと通信するデスクトップアプリ。</li><li>nowly.meウェブサイトとdocs.nowly.me。</li><li>プレゼンスを構築するための公開APIと開発者SDK。</li><li>当社のCDNからの任意のCanaryビルド（プレリリースであり、署名されていない場合があります）。</li></ul>"
       },
       {
         "title": "最低年齢",
@@ -1061,7 +1036,7 @@
       },
       {
         "title": "ライセンス",
-        "body": "Nowlyは<strong>Business Source License 1.1</strong>のもとでライセンスされています。<strong>個人的、非営利的</strong>な目的での使用、複製、改変が可能です。商業利用（再販やNowlyを有料またはホスティングサービスとして提供する場合を含む）には、発行者からの別途のライセンスが必要です。本ライセンスは、初回の公開配布から4年後、いずれにせよ<strong>2028年6月1日</strong>以降のChange DateにMITライセンスに移行します。全文は<a href=\"https://github.com/nowly-presence/nowly\">GitHubリポジトリ</a>にあります。これは、Nowlyを通じて表示するサードパーティコンテンツ（YouTube、Twitchなど）をライセンスするものではありません。"
+        "body": "Nowlyのソースコードは<strong>MITライセンス</strong>で公開されています。著作権表示と条件を守れば、商用利用を含む使用・改変・再配布が可能です。全文は<a href=\"https://github.com/nowly-presence/nowly\">GitHub</a>にあります。第三者のコンテンツ、名称、商標は対象外です。"
       },
       {
         "title": "許容される使用",
@@ -1130,7 +1105,7 @@
       },
       {
         "title": "知的財産",
-        "body": "Nowlyのソースコードは、<a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>にて<strong>BUSL-1.1</strong>のもとで公開されています。サードパーティの商標はそれぞれの所有者に帰属します。<strong>NowlyはDiscord Inc.または対応プラットフォームと提携していません。</strong>"
+        "body": "Nowlyのソースコードは<a href=\"https://github.com/nowly-presence/nowly\">GitHub</a>で<strong>MITライセンス</strong>のもと公開されています。第三者の商標はそれぞれの所有者に帰属します。<strong>NowlyはDiscord Inc.や対応プラットフォームと提携していません。</strong>"
       },
       {
         "title": "違法なコンテンツ",
@@ -1192,7 +1167,7 @@
     "delete-confirm": "これにより、このデバイスに対してNowlyが保存したすべてが完全に削除されます。この操作は元に戻せません。",
     "keep-success": "ありがとうございます。匿名の統計は保持されます。",
     "delete-success": "データが削除されました。",
-    "action-error": "問題が発生しました。もう一度お試しください。"
+    "action-error": "操作を完了できませんでした。もう一度お試しください。問題が続く場合はサポートにお問い合わせください。"
   },
   "consentPage": {
     "eyebrow": "プライバシー",
@@ -1210,30 +1185,114 @@
     "delete-confirm": "これにより、このデバイスに対してNowlyが保存したすべてが完全に削除されます。この操作は元に戻せません。",
     "export-success": "データがダウンロードされました。",
     "delete-success": "データが削除されました。",
-    "action-error": "問題が発生しました。もう一度お試しください。"
+    "action-error": "操作を完了できませんでした。もう一度お試しください。問題が続く場合はサポートにお問い合わせください。"
   },
   "faqPage": {
     "eyebrow": "よくある質問",
     "title": "すぐわかる質問と回答",
     "description": "インストール、データ、Discordに関する要点。詳細はドキュメントとDiscordで。",
     "categories": {
-      "general": "よくある質問"
+      "discover": "Nowlyについて",
+      "setup": "設定",
+      "privacy": "プライバシー",
+      "compare": "比較",
+      "develop": "開発"
     },
     "items": [
       {
+        "category": "discover",
         "question": "Nowlyとは何ですか？",
-        "answer": "Nowlyは、あなたが見ている、聴いている、プレイしているものをDiscord Rich Presenceとして表示します。ブラウザ拡張機能、デスクトップアプリ、プラットフォームスクリプトのライブラリで構成されています。",
-        "category": "general"
+        "answer": "Nowlyは対応サイトでの視聴・閲覧などをDiscord Rich Presenceとして表示します。利用できる場合はサービス名、タイトル、画像、再生位置も表示します。ブラウザ拡張機能、デスクトップアプリ、ライブラリからインストールできるプレゼンスを組み合わせて使います。"
       },
       {
-        "question": "自分のアクティビティは御社のサーバーを経由しますか？",
-        "answer": "いいえ。アクティビティはローカルに留まり、あなたのマシンからDiscordに送信されます。アナリティクスは任意でデフォルトではオフです。",
-        "category": "general"
+        "category": "discover",
+        "question": "Nowlyはどのように動作しますか？",
+        "answer": "拡張機能が対応サイトのアクティビティを検出し、インストール済みのプレゼンスが表示情報を準備します。デスクトップアプリがその情報をローカルでDiscordに送ります。Discordアプリの代わりにはなりません。"
       },
       {
-        "question": "どのプラットフォームに対応していますか？",
-        "answer": "最新のリストはライブラリにあります。拡張機能を更新せずに新しいプレゼンスを追加できるため、実際に使うものをインストールしてください。",
-        "category": "general"
+        "category": "discover",
+        "question": "なぜ拡張機能とデスクトップアプリの両方が必要ですか？",
+        "answer": "拡張機能はブラウザのタブの情報を読み取ります。デスクトップアプリは、Discordがステータス更新を受け取るためのローカルな橋渡しをします。"
+      },
+      {
+        "category": "discover",
+        "question": "PCにDiscordのインストールが必要ですか？",
+        "answer": "はい。Discord Desktopを起動しておく必要があります。ブラウザ版やモバイル版だけではNowlyのローカル接続を利用できません。"
+      },
+      {
+        "category": "discover",
+        "question": "どのサイトに対応していますか？",
+        "answer": "対応サイトはNowlyのライブラリで確認できます。プレゼンスは各サービス専用です。拡張機能を再インストールせずに新しいプレゼンスを追加できます。"
+      },
+      {
+        "category": "discover",
+        "question": "Netflix、YouTube、Spotify、Apple TV+に対応していますか？",
+        "answer": "各サービス専用のプレゼンスがライブラリにあれば利用できます。対応範囲はプレゼンスと、サイトがブラウザで提供する情報によって異なります。"
+      },
+      {
+        "category": "setup",
+        "question": "Discordにアクティビティを表示するには？",
+        "answer": "Nowlyの拡張機能とデスクトップアプリをインストールし、Discord Desktopを開きます。ライブラリからプレゼンスをインストールして、対応サイトをブラウザで開いてください。"
+      },
+      {
+        "category": "setup",
+        "question": "Discordにステータスが表示されないのはなぜですか？",
+        "answer": "Discord DesktopとNowlyアプリが起動し、使用中のブラウザに拡張機能が入っているか確認してください。プレゼンスの有効化と対応URLも確認します。ユーザースクリプトの許可を求められたら許可し、インストール後にページを再読み込みしてください。"
+      },
+      {
+        "category": "setup",
+        "question": "対応ブラウザとOSは？",
+        "answer": "拡張機能はChrome、Firefox、Edge・Brave・OperaなどのChromium系ブラウザに対応します。デスクトップアプリはWindows、macOS、Linuxで利用できます。"
+      },
+      {
+        "category": "setup",
+        "question": "Nowlyは無料ですか？",
+        "answer": "はい。主な機能、拡張機能、デスクトップアプリ、プレゼンスのライブラリを無料で利用できます。サイトの支援リンクから任意で寄付できます。"
+      },
+      {
+        "category": "setup",
+        "question": "プレゼンスを一つだけインストールできますか？",
+        "answer": "プレゼンス単体では動作しません。まずNowlyの拡張機能とデスクトップアプリが必要です。その後、使うサービスのプレゼンスだけをインストールできます。"
+      },
+      {
+        "category": "privacy",
+        "question": "アクティビティはNowlyのサーバーに送られますか？",
+        "answer": "いいえ。拡張機能からデスクトップアプリへ、さらにDiscordへローカルで送られます。任意の利用統計は初期状態で無効で、設定から管理できます。"
+      },
+      {
+        "category": "privacy",
+        "question": "Nowlyはブラウザで何を読み取りますか？",
+        "answer": "プレゼンスは対応サイトから必要な情報だけを読み取ります。動画のタイトル、ページ、再生状態などです。インストールしたサイトでのみ動作します。公式プレゼンスは配布前に確認・署名されます。"
+      },
+      {
+        "category": "privacy",
+        "question": "Discordのアクティビティは誰に見えますか？",
+        "answer": "Discordであなたのアクティビティを見る権限がある人には、ステータスが見えることがあります。表示内容はDiscordの設定とプレゼンスによって変わります。公開ステータスには機密情報を含めないでください。"
+      },
+      {
+        "category": "privacy",
+        "question": "Nowlyは安全ですか？",
+        "answer": "Nowlyはアクティビティをローカルで処理し、利用統計は初期状態で無効です。公式プレゼンスは確認・署名され、プロジェクトのコードは公開されています。公式の配布元からインストールし、要求される権限を確認してください。"
+      },
+      {
+        "category": "compare",
+        "question": "NowlyとPreMiDの違いは？",
+        "answer": "どちらもWebサイトのアクティビティをDiscordに表示します。Nowlyはデスクトップアプリをローカル接続に使い、インストール可能な署名済み公式プレゼンスを提供します。任意の利用統計は初期状態で無効です。"
+      },
+      {
+        "category": "compare",
+        "question": "他のRich Presenceツールと同時に使えますか？",
+        "answer": "おすすめしません。複数のアプリが同時にDiscordのアクティビティを変更すると、表示が変わったり消えたりします。Nowlyの動作確認中は他のツールを無効にしてください。"
+      },
+      {
+        "category": "develop",
+        "question": "Nowly用のプレゼンスを作れますか？",
+        "answer": "はい。プレゼンスはサービスごとのJavaScript連携です。SDK、CLI、ドキュメントに作成、テスト、検証、提案方法が記載されています。コードとコントリビューション手順はGitHubで公開されています。"
+      },
+      {
+        "category": "develop",
+        "question": "Nowlyはオープンソースですか？",
+        "answer": "コードはGitHubで公開されていますが、現在はBUSL-1.1ライセンスで配布されています。これはソース閲覧可能なライセンスで、OSIが認めるオープンソースライセンスではありません。プレゼンス、SDK、開発ツールについては別途文書化されています。"
       }
     ]
   },
@@ -1253,8 +1312,8 @@
     "done-description": "拡張機能が接続されました。このタブを閉じてNowlyに戻ってください。",
     "not-detected-title": "拡張機能が見つかりません",
     "not-detected-description": "Nowlyがインストールされているブラウザでこのページを開くか、先に拡張機能をインストールしてください。",
-    "error-title": "問題が発生しました",
-    "error-description": "拡張機能を接続できませんでした。もう一度試すか、拡張機能の設定からやり直してください。",
+    "error-title": "この手順を完了できませんでした",
+    "error-description": "「もう一度試す」を選んでこの手順をやり直してください。問題が続く場合はサポートにお問い合わせください。",
     "retry": "もう一度試す",
     "signed-in-as": "{name}としてログイン中です。",
     "switch-account": "別のアカウントを使う"
@@ -1284,7 +1343,7 @@
     "delete-confirm": "Nowlyアカウントと拡張機能の同期データが完全に削除されます。元に戻すことはできません。",
     "delete-success": "アカウントを削除しました。",
     "local-note": "拡張機能がデバイスに保存しているデータには影響しません。拡張機能の設定から消去できます。",
-    "action-error": "問題が発生しました。もう一度お試しください。"
+    "action-error": "操作を完了できませんでした。もう一度お試しください。問題が続く場合はサポートにお問い合わせください。"
   },
   "ads": {
     "label": "広告"
@@ -1344,7 +1403,7 @@
       },
       {
         "title": "オープンソースとライセンス",
-        "body": "プレゼンスは MIT ライセンスのオープンソースなので、誰でも読んだり、修正したり、新しく書いたりできます。拡張機能、デスクトップアプリ、ウェブサイトは Business Source License 1.1 で GitHub に公開されています。すべての行を読んで確認できますが、これはソースアベイラブルのライセンスで、OSI が承認したオープンソースライセンスではありません。"
+        "body": "Nowlyの公開リポジトリ（アプリ、プレゼンス、SDK、CLI、bot）はMITライセンスのオープンソースです。条件に従いコードの閲覧・改変・共有ができます。別の非公開の内部リリースCLIと第三者のコンテンツは対象外です。"
       }
     ],
     "facts": {

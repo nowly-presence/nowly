@@ -139,6 +139,7 @@ export const PresenceCard = ({ config }: PresenceCardProps) => {
               href={config.buttonHref}
               rel="noreferrer"
               target="_blank"
+              aria-label={`${t("cta")} — ${t("title")}`}
               className="absolute flex items-center justify-center bg-[#212121] transition-colors hover:bg-[#2c2c2c]"
               style={{
                 left: qw(193),

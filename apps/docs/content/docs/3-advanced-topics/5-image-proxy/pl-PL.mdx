@@ -1,37 +1,37 @@
 ---
-title: Image Proxy
-description: Use the Nowly image proxy when Discord cannot load a presence image directly from a supported external CDN.
+title: Proxy obrazów
+description: Użyj proxy obrazów Nowly, gdy Discord nie może pobrać obrazu obecności bezpośrednio z obsługiwanego zewnętrznego CDN.
 ---
 
-## What It Is For
+## Do czego służy
 
-The image proxy is built for a specific case: a presence can see a public image on the page, but Discord cannot reliably load it from the original URL.
+Proxy obrazów służy do konkretnego przypadku: obecność widzi publiczny obraz na stronie, ale Discord nie może niezawodnie pobrać go z pierwotnego adresu URL.
 
-This is useful for video thumbnails, avatars, posters, or category images served by an external CDN when:
+Przydaje się w przypadku miniaturek wideo, awatarów, plakatów i obrazów kategorii z zewnętrznego CDN, gdy:
 
-- the image is public and already visible in the browser;
-- the CDN URL is too long for Discord Rich Presence;
-- Discord rejects, expires, or fails to download the direct image;
-- the presence needs to show content-specific artwork instead of only the service logo.
+- obraz jest publiczny i już widoczny w przeglądarce;
+- adres URL CDN jest za długi dla Discord Rich Presence;
+- Discord odrzuca bezpośredni obraz, adres wygasa lub pobieranie się nie udaje;
+- obecność ma wyświetlać grafikę powiązaną z treścią zamiast samego logo usługi.
 
-This is not a general-purpose image proxy. The API only accepts explicitly allowed services and domains.
+To nie jest uniwersalny serwer proxy obrazów. API przyjmuje wyłącznie jawnie dozwolone usługi i domeny.
 
-## How It Works
+## Jak to działa
 
-The recommended flow uses a temporary short URL:
+Zalecany sposób używa tymczasowego krótkiego adresu URL:
 
 ```txt
 POST https://api.nowly.me/images-proxy
 GET  https://api.nowly.me/images-proxy/<id>
 ```
 
-The presence sends the real CDN image URL to the API. The API checks that the service is supported, downloads the image, validates its MIME type and size, then stores it temporarily in cache. It returns a short URL such as:
+Obecność wysyła do API właściwy adres obrazu w CDN. API sprawdza, czy usługa jest obsługiwana, pobiera obraz, weryfikuje typ MIME i rozmiar, a następnie tymczasowo zapisuje go w pamięci podręcznej. Zwraca krótki adres, na przykład:
 
 ```txt
 https://api.nowly.me/images-proxy/abc123...
 ```
 
-That URL directly returns the image bytes with the correct `Content-Type`. It is intended for `largeImageKey` or `smallImageKey`.
+Ten adres zwraca bezpośrednio dane obrazu z poprawnym nagłówkiem `Content-Type`. Jest przeznaczony do `largeImageKey` lub `smallImageKey`.
 
 ```ts filename="presence.ts"
 import { createCachedImageProxyUrl } from "@nowly/sdk"
@@ -44,22 +44,22 @@ await presence.setActivity({
 })
 ```
 
-The cache is short-lived, currently five minutes. The helper also keeps an in-memory cache inside the presence so it does not call the API on every update.
+Pamięć podręczna działa krótko, obecnie przez pięć minut. Funkcja pomocnicza przechowuje też dane w pamięci obecności, aby nie wywoływać API przy każdej aktualizacji.
 
-## Direct Endpoint
+## Bezpośredni punkt końcowy
 
-The older direct proxy remains available for manual testing or URLs that are already short enough:
+Starszy bezpośredni proxy nadal działa na potrzeby testów ręcznych lub adresów URL, które są już wystarczająco krótkie:
 
 ```txt
 https://api.nowly.me/image-proxy?service=<service>&url=<encoded-url>
 https://api.nowly.me/i?u=<encoded-url>
 ```
 
-The `url` and `u` parameters must be encoded with `encodeURIComponent`. For Discord Rich Presence, prefer `createCachedImageProxyUrl` because Discord limits image keys to 300 characters.
+Parametry `url` i `u` muszą być zakodowane przez `encodeURIComponent`. Do Discord Rich Presence wybierz `createCachedImageProxyUrl`, ponieważ Discord ogranicza klucze obrazów do 300 znaków.
 
-## Setting It Up In A Presence
+## Konfiguracja w obecności
 
-First, extract the real image URL from the page:
+Najpierw pobierz właściwy adres obrazu ze strony:
 
 ```ts filename="presence.ts"
 const getPoster = (video: HTMLVideoElement): string | undefined => {
@@ -70,7 +70,7 @@ const getPoster = (video: HTMLVideoElement): string | undefined => {
 }
 ```
 
-Then pass that URL through the helper before setting the activity:
+Następnie przekaż ten adres do funkcji pomocniczej przed ustawieniem aktywności:
 
 ```ts filename="presence.ts"
 import { createCachedImageProxyUrl } from "@nowly/sdk"
@@ -83,11 +83,11 @@ await presence.setActivity({
 })
 ```
 
-Always keep a fallback asset. If the page has no image, the image is too large, or the origin is not allowed, the presence should continue to work with `Assets.Logo` or a local asset.
+Zawsze zachowuj grafikę zastępczą. Jeśli strona nie ma obrazu, obraz jest za duży albo źródło nie jest dozwolone, obecność powinna nadal działać z `Assets.Logo` lub lokalną grafiką.
 
-## Adding A Service
+## Dodawanie usługi
 
-Allowed domains are checked by the API, not by the presence - a presence cannot proxy an arbitrary domain just by asking for it at runtime. There is no separate approval step or API code change: you declare the hosts your presence needs directly in its own `metadata.json`, using the same `service` value (your presence slug) you already pass to the helper:
+Dozwolone domeny sprawdza API, a nie obecność. Obecność nie może używać proxy dla dowolnej domeny przez samo wysłanie żądania podczas działania. Nie ma osobnego etapu zatwierdzania ani konieczności zmiany kodu API: zadeklaruj potrzebne hosty bezpośrednio w pliku `metadata.json` swojej obecności. Użyj tej samej wartości `service` (identyfikatora obecności), którą przekazujesz funkcji pomocniczej:
 
 ```json filename="metadata.json"
 "imageProxy": {
@@ -96,12 +96,12 @@ Allowed domains are checked by the API, not by the presence - a presence cannot 
 }
 ```
 
-This is published to the API automatically the same way the rest of your `metadata.json` already is. The API only trusts this declaration for your own presence's `service` id, so a presence cannot declare hostnames on another presence's behalf, and a request is only allowed if the target URL's hostname actually matches one of your declared suffixes.
+Deklaracja jest automatycznie publikowana w API wraz z pozostałą częścią `metadata.json`. API ufa jej tylko dla identyfikatora `service` Twojej własnej obecności. Obecność nie może deklarować hostów w imieniu innej obecności, a żądanie jest dozwolone tylko wtedy, gdy nazwa hosta docelowego adresu URL naprawdę pasuje do jednego z zadeklarowanych sufiksów.
 
-When your PR touches `imageProxy`, the presence preview bot detects it automatically, adds an **Image Proxy Requested** section to its comment listing the declared hostnames, and applies an `image-proxy` label. A reviewer still has to confirm the hostnames are public and safe to proxy before merging - explain in your PR description why Discord can't use the direct image URL and what image the user will see.
+Gdy PR zmienia `imageProxy`, bot podglądu obecności automatycznie to wykrywa, dodaje w komentarzu sekcję **Image Proxy Requested** z listą hostów i etykietę `image-proxy`. Przed scaleniem osoba recenzująca musi jeszcze potwierdzić, że hosty są publiczne i bezpieczne dla proxy. W opisie PR wyjaśnij, dlaczego Discord nie może użyć bezpośredniego adresu obrazu i jaki obraz zobaczy użytkownik.
 
-## Limits And Security
+## Limity i bezpieczeństwo
 
-The proxy only serves public images from hosts a reviewed presence has declared. It rejects non-HTTPS URLs, hosts that don't match any declared suffix, responses that are not images, and files that are too large.
+Proxy udostępnia tylko publiczne obrazy z hostów zadeklarowanych przez sprawdzoną obecność. Odrzuca adresy inne niż HTTPS, hosty niepasujące do zadeklarowanych sufiksów, odpowiedzi niebędące obrazami i zbyt duże pliki.
 
-The endpoints themselves are public and unauthenticated (presences call them directly from the browser, so there's no secret to attach) and share the API's global rate limit - there's no per-presence quota. Do not use the proxy for private account content, authenticated resources, tracking URLs, arbitrary user input, or non-image content.
+Punkty końcowe są publiczne i nie wymagają uwierzytelnienia (obecności wywołują je bezpośrednio z przeglądarki, więc nie przesyłają sekretów). Dzielą globalny limit żądań API; nie ma osobnego limitu na obecność. Nie używaj proxy do prywatnych treści z kont, zasobów wymagających uwierzytelnienia, adresów śledzących, dowolnych danych wejściowych użytkownika ani treści niebędących obrazami.

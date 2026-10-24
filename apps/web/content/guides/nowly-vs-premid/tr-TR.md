@@ -36,7 +36,7 @@ Her iki proje de hızla değişiyor. Aşağıdaki bilgiler yazıldıkları zaman
 
 ## Lisanslar
 
-PreMiD'in kodu açık kaynaklıdır. Nowly varlıkları MIT lisansıyla açık kaynaklıdır; SDK'sı ve CLI'ı da katkıda bulunanlar için belgelenmiştir. Nowly'nin ana kodu GitHub'da Business Source License 1.1 kapsamında herkese açıktır. Bu, kaynak kodu görülebilen bir lisanstır: kodu okuyup denetleyebilirsin ama OSI onaylı bir açık kaynak lisansı değildir. Bu ayrım senin için önemliyse bilmekte yarar var.
+PreMiD ve Nowly açık kaynaktır. Nowly’nin herkese açık uygulama, presence, SDK, CLI ve bot depoları MIT lisanslıdır. Özel dahili yayın CLI aracı ve üçüncü taraf içerikleri kapsanmaz.
 
 ## Hangisini seçmelisin?
 
