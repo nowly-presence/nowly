@@ -272,6 +272,7 @@ export const HeroCards = () => {
           </div>
         ))}
       </div>
+      {/*
       <div className="relative z-10 mt-4 flex justify-center gap-3">
         <button type="button" className="rounded-lg border border-border bg-background px-4 py-2 text-sm" onClick={() => controlsRef.current?.move(-1)}>
           {t("previous")}
@@ -285,6 +286,7 @@ export const HeroCards = () => {
           </button>
         ) : null}
       </div>
+      */}
     </div>
   );
 };
