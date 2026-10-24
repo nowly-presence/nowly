@@ -60,6 +60,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "Langkau ke kandungan",
     "docs": "Dokumentasi",
     "library": "Perpustakaan",
     "roadmap": "Pelan hala tuju",
@@ -72,6 +73,7 @@
     "dark": "Gelap"
   },
   "hero": {
+    "carousel": { "previous": "Kad sebelumnya", "next": "Kad seterusnya", "pause": "Jeda kad", "play": "Sambung kad" },
     "title-before": "Kongsi apa yang anda lakukan, secara",
     "title-accent": "masa nyata",
     "description": "Nowly mengubah aktiviti anda menjadi kehadiran Discord yang kaya dan dinamik.",
@@ -146,6 +148,8 @@
     }
   },
   "platforms": {
+    "pause": "Jeda platform",
+    "play": "Sambung platform",
     "eyebrow": "Platform",
     "title": "Berfungsi dengan platform anda",
     "description": "Nowly menunjukkan apa yang anda tonton, dengar atau main pada perkhidmatan yang anda sudah gunakan."
@@ -951,6 +955,7 @@
     "home": "Kembali ke laman utama"
   },
   "cookie-banner": {
+    "title": "Maklumat kuki",
     "message": "Laman ini menggunakan kuki bahasa yang benar-benar perlu. Jika iklan diaktifkan kemudian, Google mungkin juga menggunakan teknologi pengiklanan.",
     "learn-more": "Baca dasar kuki",
     "dismiss": "Faham"

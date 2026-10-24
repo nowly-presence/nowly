@@ -7,6 +7,7 @@ import { SeasonProvider } from "@/features/seasonal/components/season-provider";
 import { routing } from "@/i18n/routing";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import type { PropsWithChildren } from "react";
 import { generateMetadata, viewport } from "./metadata";
 
@@ -23,19 +24,21 @@ type LayoutProps = PropsWithChildren<{
 }>;
 
 const Layout = async ({ children, params }: LayoutProps) => {
-  const [{ locale }, messages] = await Promise.all([
+  const [{ locale }, messages, t] = await Promise.all([
     params,
-    getMessages()
+    getMessages(),
+    getTranslations("navbar")
   ]);
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <SeasonBootScript allowPreview={ALLOW_SEASON_PREVIEW} />
       <div className="relative flex min-h-dvh flex-col">
+        <a href="#main-content" className="skip-link">{t("skip-content")}</a>
         <SeasonProvider allowPreview={ALLOW_SEASON_PREVIEW} />
         <AnnouncementBar />
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main id="main-content" tabIndex={-1} className="flex-1">{children}</main>
         <Footer />
       </div>
       <CookieBanner />

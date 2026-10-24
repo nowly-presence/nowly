@@ -64,6 +64,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "Przejdź do treści",
     "docs": "Dokumentacja",
     "library": "Biblioteka",
     "roadmap": "Mapa drogowa",
@@ -76,6 +77,7 @@
     "dark": "Ciemny"
   },
   "hero": {
+    "carousel": { "previous": "Poprzednia karta", "next": "Następna karta", "pause": "Wstrzymaj karty", "play": "Wznów karty" },
     "title-before": "Dziel się tym, co robisz, w",
     "title-accent": "czasie rzeczywistym",
     "description": "Nowly zamienia Twoją aktywność w bogatą, dynamiczną obecność na Discordzie.",
@@ -150,6 +152,8 @@
     }
   },
   "platforms": {
+    "pause": "Wstrzymaj platformy",
+    "play": "Wznów platformy",
     "eyebrow": "Platformy",
     "title": "Działa z Twoimi platformami",
     "description": "Nowly pokazuje, co oglądasz, słuchasz lub w co grasz na usługach, z których już korzystasz."
@@ -955,6 +959,7 @@
     "home": "Powrót do strony głównej"
   },
   "cookie-banner": {
+    "title": "Informacje o plikach cookie",
     "message": "Ta strona używa niezbędnego pliku cookie dotyczącego języka. Jeśli reklamy zostaną później włączone, Google może również używać technologii reklamowych.",
     "learn-more": "Przeczytaj politykę cookies",
     "dismiss": "Rozumiem"

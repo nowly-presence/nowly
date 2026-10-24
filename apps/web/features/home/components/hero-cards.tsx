@@ -2,7 +2,8 @@
 
 import { PresenceCard } from "@/features/home/components/presence-card";
 import { HERO_PRESENCE_CARDS } from "@/features/home/components/hero-presence-cards";
-import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
+import { useEffect, useRef, useState } from "react";
 
 const COUNT = HERO_PRESENCE_CARDS.length;
 const STEP = (Math.PI * 2) / COUNT;
@@ -24,7 +25,11 @@ const smoothstep = (value: number) => {
 };
 
 export const HeroCards = () => {
+  const t = useTranslations("hero.carousel");
   const stageRef = useRef<HTMLDivElement>(null);
+  const controlsRef = useRef<{ move: (direction: number) => void; toggle: () => void } | null>(null);
+  const [paused, setPaused] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -33,7 +38,7 @@ export const HeroCards = () => {
 
     const items = [...stage.querySelectorAll<HTMLElement>("[data-gondola]")];
     const desktop = window.matchMedia(DESKTOP_QUERY);
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     let width = 0;
     let height = 0;
@@ -45,6 +50,8 @@ export const HeroCards = () => {
     let pointerId: number | null = null;
     let dragStartY = 0;
     let dragStartSpin = spin;
+    let isPaused = false;
+    let focusInside = false;
 
     const measure = () => {
       const rect = stage.getBoundingClientRect();
@@ -100,7 +107,7 @@ export const HeroCards = () => {
     };
 
     const tick = (now: number) => {
-      if (!desktop.matches || dragging) {
+      if (!desktop.matches || dragging || isPaused || focusInside || motion.matches || document.hidden) {
         stop();
         return;
       }
@@ -115,8 +122,7 @@ export const HeroCards = () => {
 
       measure();
 
-      if (reduced) {
-        spin = Math.PI;
+      if (motion.matches || isPaused || focusInside || document.hidden) {
         render();
         return;
       }
@@ -127,9 +133,11 @@ export const HeroCards = () => {
     };
 
     const onPointerDown = (event: PointerEvent) => {
-      if (!desktop.matches || event.button !== 0) return;
+      if (!desktop.matches || event.button !== 0 || !(event.target instanceof Element) || event.target.closest("a, button")) return;
 
       dragging = true;
+      isPaused = true;
+      setPaused(true);
       pointerId = event.pointerId;
       dragStartY = event.clientY;
       dragStartSpin = spin;
@@ -158,31 +166,60 @@ export const HeroCards = () => {
     const onWheel = (event: WheelEvent) => {
       if (!desktop.matches) return;
 
-      event.preventDefault();
+      isPaused = true;
+      setPaused(true);
       stop();
       spin += event.deltaY / 900;
       render();
-
-      if (!reduced) {
-        origin = performance.now() - ((spin - Math.PI) / (Math.PI * 2)) * PERIOD_MS;
-        frame = requestAnimationFrame(tick);
-      }
     };
 
     const observer = new ResizeObserver(() => {
       measure();
-      if (desktop.matches && reduced) layout(Math.PI);
+      if (desktop.matches) render();
     });
+    const onMotionChange = () => {
+      setReducedMotion(motion.matches);
+      stop();
+      start();
+    };
+    const onFocusIn = () => {
+      focusInside = true;
+      stop();
+    };
+    const onFocusOut = (event: FocusEvent) => {
+      if (event.relatedTarget instanceof Node && stage.contains(event.relatedTarget)) return;
+      focusInside = false;
+      start();
+    };
+    controlsRef.current = {
+      move: (direction) => {
+        stop();
+        isPaused = true;
+        setPaused(true);
+        spin += direction * STEP;
+        render();
+      },
+      toggle: () => {
+        isPaused = !isPaused;
+        setPaused(isPaused);
+        if (isPaused) stop();
+        else start();
+      }
+    };
+    setReducedMotion(motion.matches);
     stage.addEventListener("pointerdown", onPointerDown);
     stage.addEventListener("pointermove", onPointerMove);
     stage.addEventListener("pointerup", onPointerUp);
     stage.addEventListener("pointercancel", onPointerUp);
-    stage.addEventListener("wheel", onWheel, { passive: false });
+    stage.addEventListener("wheel", onWheel);
+    stage.addEventListener("focusin", onFocusIn);
+    stage.addEventListener("focusout", onFocusOut);
     stage.classList.add("cursor-grab", "touch-none", "select-none");
 
     observer.observe(stage);
     window.addEventListener("resize", measure);
     desktop.addEventListener("change", start);
+    motion.addEventListener("change", onMotionChange);
 
     const onVisibility = () => {
       if (document.hidden) {
@@ -201,34 +238,53 @@ export const HeroCards = () => {
       observer.disconnect();
       window.removeEventListener("resize", measure);
       desktop.removeEventListener("change", start);
+      motion.removeEventListener("change", onMotionChange);
       document.removeEventListener("visibilitychange", onVisibility);
       stage.removeEventListener("pointerdown", onPointerDown);
       stage.removeEventListener("pointermove", onPointerMove);
       stage.removeEventListener("pointerup", onPointerUp);
       stage.removeEventListener("pointercancel", onPointerUp);
       stage.removeEventListener("wheel", onWheel);
+      stage.removeEventListener("focusin", onFocusIn);
+      stage.removeEventListener("focusout", onFocusOut);
+      controlsRef.current = null;
     };
   }, []);
 
   return (
-    <div ref={stageRef} className="relative isolate hidden h-[min(58vh,560px)] w-full overflow-visible lg:block">
-      <div
-        className="pointer-events-none absolute left-[18%] top-1/2 h-[70%] w-[58%] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.24),transparent_68%)] blur-3xl"
-        aria-hidden
-      />
-      {HERO_PRESENCE_CARDS.map((config) => (
+    <div className="hidden lg:block">
+      <div ref={stageRef} className="relative isolate h-[min(58vh,560px)] w-full overflow-visible">
         <div
-          key={config.id}
-          data-gondola
-          className="absolute top-0 left-0 origin-center will-change-transform"
-          style={{
-            opacity: 0,
-            visibility: "hidden"
-          }}
-        >
-          <PresenceCard config={config} />
-        </div>
-      ))}
+          className="pointer-events-none absolute left-[18%] top-1/2 h-[70%] w-[58%] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.24),transparent_68%)] blur-3xl"
+          aria-hidden
+        />
+        {HERO_PRESENCE_CARDS.map((config) => (
+          <div
+            key={config.id}
+            data-gondola
+            className="absolute top-0 left-0 origin-center will-change-transform"
+            style={{
+              opacity: 0,
+              visibility: "hidden"
+            }}
+          >
+            <PresenceCard config={config} />
+          </div>
+        ))}
+      </div>
+      <div className="relative z-10 mt-4 flex justify-center gap-3">
+        <button type="button" className="rounded-lg border border-border bg-background px-4 py-2 text-sm" onClick={() => controlsRef.current?.move(-1)}>
+          {t("previous")}
+        </button>
+        <button type="button" className="rounded-lg border border-border bg-background px-4 py-2 text-sm" onClick={() => controlsRef.current?.move(1)}>
+          {t("next")}
+        </button>
+        {!reducedMotion ? (
+          <button type="button" className="rounded-lg border border-border bg-background px-4 py-2 text-sm" onClick={() => controlsRef.current?.toggle()}>
+            {t(paused ? "play" : "pause")}
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 };

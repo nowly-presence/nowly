@@ -60,6 +60,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "本文へ移動",
     "docs": "ドキュメント",
     "library": "ライブラリ",
     "roadmap": "ロードマップ",
@@ -72,6 +73,7 @@
     "dark": "ダーク"
   },
   "hero": {
+    "carousel": { "previous": "前のカード", "next": "次のカード", "pause": "カードを一時停止", "play": "カードを再開" },
     "title-before": "あなたの「今」を",
     "title-accent": "リアルタイム",
     "description": "NowlyはあなたのアクティビティをリッチでダイナミックなDiscordプレゼンスに変えます。",
@@ -146,6 +148,8 @@
     }
   },
   "platforms": {
+    "pause": "プラットフォームを一時停止",
+    "play": "プラットフォームを再開",
     "eyebrow": "プラットフォーム",
     "title": "お使いのプラットフォームに対応",
     "description": "Nowlyは、すでに使っているサービスであなたが見ている、聴いている、プレイしているものを表示します。"
@@ -951,6 +955,7 @@
     "home": "ホームに戻る"
   },
   "cookie-banner": {
+    "title": "Cookieに関するお知らせ",
     "message": "このサイトは必須の言語Cookieを使用しています。将来広告が有効化された場合、Googleが広告技術を使用する可能性もあります。",
     "learn-more": "Cookieポリシーを読む",
     "dismiss": "了解しました"

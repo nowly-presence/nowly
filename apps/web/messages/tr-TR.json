@@ -64,6 +64,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "İçeriğe geç",
     "docs": "Dokümantasyon",
     "library": "Kitaplık",
     "roadmap": "Yol haritası",
@@ -76,6 +77,7 @@
     "dark": "Koyu"
   },
   "hero": {
+    "carousel": { "previous": "Önceki kart", "next": "Sonraki kart", "pause": "Kartları duraklat", "play": "Kartları sürdür" },
     "title-before": "Yaptığın şeyi",
     "title-accent": "anlık olarak paylaş",
     "description": "Nowly, etkinliğini zengin ve dinamik bir Discord varlığına dönüştürür.",
@@ -150,6 +152,8 @@
     }
   },
   "platforms": {
+    "pause": "Platformları duraklat",
+    "play": "Platformları sürdür",
     "eyebrow": "Platformlar",
     "title": "Kullandığın platformlarla çalışır",
     "description": "Nowly, zaten kullandığın hizmetlerde izlediğin, dinlediğin veya oynadığın şeyi gösterir."
@@ -955,6 +959,7 @@
     "home": "Ana sayfaya dön"
   },
   "cookie-banner": {
+    "title": "Çerez bilgileri",
     "message": "Bu site, kesinlikle gerekli bir dil çerezi kullanır. Reklamlar daha sonra etkinleştirilirse, Google reklam teknolojileri de kullanabilir.",
     "learn-more": "Çerez politikasını okuyun",
     "dismiss": "Anladım"

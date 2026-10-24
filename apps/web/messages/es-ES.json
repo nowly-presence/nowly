@@ -64,6 +64,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "Ir al contenido",
     "docs": "Documentación",
     "library": "Biblioteca",
     "roadmap": "Hoja de ruta",
@@ -76,6 +77,7 @@
     "dark": "Oscuro"
   },
   "hero": {
+    "carousel": { "previous": "Tarjeta anterior", "next": "Tarjeta siguiente", "pause": "Pausar tarjetas", "play": "Reanudar tarjetas" },
     "title-before": "Comparte lo que haces, en",
     "title-accent": "tiempo real",
     "description": "Nowly transforma tu actividad en una presencia rica y dinámica de Discord.",
@@ -150,6 +152,8 @@
     }
   },
   "platforms": {
+    "pause": "Pausar plataformas",
+    "play": "Reanudar plataformas",
     "eyebrow": "Plataformas",
     "title": "Compatible con tus plataformas",
     "description": "Nowly muestra lo que ves, escuchas o juegas en tus servicios habituales."
@@ -955,6 +959,7 @@
     "home": "Volver al inicio"
   },
   "cookie-banner": {
+    "title": "Información sobre cookies",
     "message": "Este sitio usa una cookie de idioma estrictamente necesaria. Si más adelante se activan anuncios, Google también podrá usar tecnologías publicitarias.",
     "learn-more": "Leer la política de cookies",
     "dismiss": "Entendido"

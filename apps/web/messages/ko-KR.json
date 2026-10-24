@@ -60,6 +60,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "본문으로 건너뛰기",
     "docs": "문서",
     "library": "라이브러리",
     "roadmap": "로드맵",
@@ -72,6 +73,7 @@
     "dark": "다크"
   },
   "hero": {
+    "carousel": { "previous": "이전 카드", "next": "다음 카드", "pause": "카드 일시 중지", "play": "카드 다시 시작" },
     "title-before": "지금 하는 일을",
     "title-accent": "실시간으로",
     "description": "Nowly는 당신의 활동을 풍부하고 역동적인 Discord 프레즌스로 바꿔줍니다.",
@@ -146,6 +148,8 @@
     }
   },
   "platforms": {
+    "pause": "플랫폼 일시 중지",
+    "play": "플랫폼 다시 시작",
     "eyebrow": "플랫폼",
     "title": "이미 사용 중인 플랫폼과 함께",
     "description": "Nowly는 이미 사용하고 있는 서비스에서 보고, 듣고, 플레이하는 것을 표시합니다."
@@ -951,6 +955,7 @@
     "home": "홈으로 돌아가기"
   },
   "cookie-banner": {
+    "title": "쿠키 안내",
     "message": "이 사이트는 반드시 필요한 언어 쿠키를 사용합니다. 이후 광고가 활성화되면 Google이 광고 기술을 사용할 수도 있습니다.",
     "learn-more": "쿠키 정책 읽기",
     "dismiss": "확인했습니다"
