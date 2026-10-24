@@ -12,6 +12,7 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   presenceLanguages: {},
   activitySelectionMode: "focused",
   activityPriorityOrder: [],
+  hiddenDockTabs: [],
   preserveSiteTimer: false
 };
 

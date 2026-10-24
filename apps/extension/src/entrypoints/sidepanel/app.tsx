@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line } from "@remixicon/react";
 import { FeatureReveal } from "@/components/shared/feature-reveal";
 import { Dock } from "@/features/layout/dock";
-import { normalizeDockLayout } from "@/shared/dock-layout";
+import { DOCK_TABS, normalizeDockLayout, visibleDockTabs } from "@/shared/dock-layout";
 import { useResolvedTheme } from "@/hooks/use-theme";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav, type Route, type Tab } from "@/hooks/navigation-provider";
@@ -39,7 +39,7 @@ const PanelLoading = () => (
   </div>
 );
 
-const TABS: Tab[] = ["activity", "store", "custom", "settings"];
+const TABS = DOCK_TABS;
 const CUSTOM_ACTIVITY_REVEAL = {
   id: "custom-activity",
   version: "2.4.0"
@@ -122,7 +122,7 @@ const AppContent = () => {
         ))}
         <Dock<Tab>
           label={t("nav.label")}
-          layout={normalizeDockLayout(state.settings.dockLayout, TABS)}
+          layout={normalizeDockLayout(state.settings.dockLayout, visibleDockTabs(state.settings.hiddenDockTabs))}
           onLayoutChange={(dockLayout) => void updateSettings({ dockLayout })}
           value={tab}
           onChange={selectTab}

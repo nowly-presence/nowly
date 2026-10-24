@@ -1,11 +1,26 @@
 import { describe, expect, it } from "vitest";
-import { isDefaultDockLayout, moveDockTab, normalizeDockLayout } from "@/shared/dock-layout";
+import { DOCK_TABS, isDefaultDockLayout, moveDockTab, normalizeDockLayout, visibleDockTabs } from "@/shared/dock-layout";
 
 const TABS = ["activity", "store", "custom", "settings"] as const;
 
 type Tab = (typeof TABS)[number];
 
 const base: Tab[][] = [["activity", "store", "custom", "settings"]];
+
+describe("dock visibility", () => {
+  it("keeps required tabs visible even with invalid stored preferences", () => {
+    expect(visibleDockTabs(["activity", "settings", "custom", "store", "unknown"])).toEqual(["activity", "settings"]);
+  });
+
+  it("removes hidden tabs and empty groups without reordering visible tabs", () => {
+    expect(normalizeDockLayout([["settings", "store"], ["custom"], ["activity"]], visibleDockTabs(["custom", "store"]))).toEqual([["settings"], ["activity"]]);
+  });
+
+  it("restores every tab in its original order with an explicit reset layout", () => {
+    expect(normalizeDockLayout([[...DOCK_TABS]], visibleDockTabs([]))).toEqual(base);
+    expect(isDefaultDockLayout([["settings"], ["activity", "store", "custom"]], DOCK_TABS)).toBe(false);
+  });
+});
 
 describe("normalizeDockLayout", () => {
   it("falls back to one bar with every tab", () => {
