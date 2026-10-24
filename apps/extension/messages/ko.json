@@ -470,6 +470,7 @@
   "custom.editor.fixErrors": "표시된 항목을 확인해 주세요.",
   "custom.field.name": "이름",
   "custom.field.nameHint": "Discord에서 활동 제목으로 표시돼요.",
+  "custom.field.nameTooltip": "첫째 줄이나 둘째 줄에 내용을 입력한 경우에만 이미지 위에 활동 유형과 이름이 함께 표시돼요. 둘 다 비어 있으면 이름은 첫째 줄에 표시돼요.",
   "custom.field.namePlaceholder": "내 활동",
   "custom.field.type": "유형",
   "custom.field.typeHint": "Discord에 표시되는 동사예요.",

@@ -470,6 +470,7 @@
   "custom.editor.fixErrors": "Vérifiez les champs signalés.",
   "custom.field.name": "Nom",
   "custom.field.nameHint": "Affiché comme titre de l'activité sur Discord.",
+  "custom.field.nameTooltip": "Le type et le nom de l'activité apparaissent ensemble au-dessus de l'image seulement si la première ou la deuxième ligne est remplie. Sinon, le nom apparaît sur la première ligne.",
   "custom.field.namePlaceholder": "Mon activité",
   "custom.field.type": "Type",
   "custom.field.typeHint": "Le verbe affiché par Discord.",

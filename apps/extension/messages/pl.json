@@ -470,6 +470,7 @@
   "custom.editor.fixErrors": "Sprawdź zaznaczone pola.",
   "custom.field.name": "Nazwa",
   "custom.field.nameHint": "Wyświetlana na Discordzie jako tytuł aktywności.",
+  "custom.field.nameTooltip": "Typ i nazwa aktywności pojawiają się razem nad obrazem tylko wtedy, gdy wypełniono pierwszą lub drugą linię. W przeciwnym razie nazwa pojawia się w pierwszej linii.",
   "custom.field.namePlaceholder": "Moja aktywność",
   "custom.field.type": "Typ",
   "custom.field.typeHint": "Czasownik wyświetlany przez Discord.",

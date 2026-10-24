@@ -470,6 +470,7 @@
   "custom.editor.fixErrors": "Semak medan yang ditanda.",
   "custom.field.name": "Nama",
   "custom.field.nameHint": "Dipaparkan sebagai tajuk aktiviti di Discord.",
+  "custom.field.nameTooltip": "Jenis dan nama aktiviti dipaparkan bersama di atas imej hanya jika baris pertama atau kedua diisi. Jika kedua-duanya kosong, nama dipaparkan pada baris pertama.",
   "custom.field.namePlaceholder": "Aktiviti saya",
   "custom.field.type": "Jenis",
   "custom.field.typeHint": "Kata kerja yang dipaparkan oleh Discord.",

@@ -470,6 +470,7 @@
   "custom.editor.fixErrors": "Έλεγξε τα επισημασμένα πεδία.",
   "custom.field.name": "Όνομα",
   "custom.field.nameHint": "Εμφανίζεται ως τίτλος της δραστηριότητας στο Discord.",
+  "custom.field.nameTooltip": "Ο τύπος και το όνομα της δραστηριότητας εμφανίζονται μαζί πάνω από την εικόνα μόνο αν έχει συμπληρωθεί η πρώτη ή η δεύτερη γραμμή. Διαφορετικά, το όνομα εμφανίζεται στην πρώτη γραμμή.",
   "custom.field.namePlaceholder": "Η δραστηριότητά μου",
   "custom.field.type": "Τύπος",
   "custom.field.typeHint": "Το ρήμα που δείχνει το Discord.",

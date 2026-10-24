@@ -470,6 +470,7 @@
   "custom.editor.fixErrors": "Check the highlighted fields.",
   "custom.field.name": "Name",
   "custom.field.nameHint": "Shown as the activity title on Discord.",
+  "custom.field.nameTooltip": "The activity type and name appear together above the image only when the first or second line is filled in. Otherwise, the name appears on the first line.",
   "custom.field.namePlaceholder": "My activity",
   "custom.field.type": "Type",
   "custom.field.typeHint": "The verb Discord shows.",

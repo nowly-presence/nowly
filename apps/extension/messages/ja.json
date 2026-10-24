@@ -470,6 +470,7 @@
   "custom.editor.fixErrors": "強調表示された項目を確認してください。",
   "custom.field.name": "名前",
   "custom.field.nameHint": "Discord でアクティビティのタイトルとして表示されます。",
+  "custom.field.nameTooltip": "1 行目か 2 行目に入力がある場合のみ、画像の上にアクティビティの種類と名前が一緒に表示されます。どちらも空欄の場合、名前は 1 行目に表示されます。",
   "custom.field.namePlaceholder": "マイアクティビティ",
   "custom.field.type": "種類",
   "custom.field.typeHint": "Discord に表示される動詞です。",

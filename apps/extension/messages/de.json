@@ -470,6 +470,7 @@
   "custom.editor.fixErrors": "Prüfe die markierten Felder.",
   "custom.field.name": "Name",
   "custom.field.nameHint": "Wird auf Discord als Titel der Aktivität angezeigt.",
+  "custom.field.nameTooltip": "Aktivitätstyp und Name erscheinen nur dann gemeinsam über dem Bild, wenn die erste oder zweite Zeile ausgefüllt ist. Sonst steht der Name in der ersten Zeile.",
   "custom.field.namePlaceholder": "Meine Aktivität",
   "custom.field.type": "Art",
   "custom.field.typeHint": "Das Verb, das Discord anzeigt.",

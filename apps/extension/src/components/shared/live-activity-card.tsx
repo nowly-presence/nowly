@@ -29,6 +29,9 @@ const NAMED_HEADER_TYPES = new Set([2, 3, 5]);
 const headerKey = (type: number | undefined) =>
   type === 2 ? "activity.header.listening" : type === 3 ? "activity.header.watching" : type === 5 ? "activity.header.competing" : "activity.header.playing";
 
+const typeKey = (type: number | undefined) =>
+  type === 2 ? "activity.type.listening" : type === 3 ? "activity.type.watching" : "activity.type.competing";
+
 const imageSrc = (value: string | undefined, slug: string): string => (value && value.startsWith("https://") ? value : assetUrl(slug, "logo"));
 
 const ActivityImage = ({ src, small, slug, name, size }: {
@@ -85,15 +88,14 @@ export const LiveCard =
     const namedHeader = NAMED_HEADER_TYPES.has(presence.type ?? 0);
     const detailsPresent = Boolean(presence.details?.trim());
     const statePresent = Boolean(presence.state?.trim());
-    const lines = (namedHeader && (detailsPresent || statePresent)
+    const hasTextLine = detailsPresent || statePresent;
+    const lines = (namedHeader && hasTextLine
       ? [presence.details, presence.state]
-      : namedHeader && !detailsPresent && !statePresent
+      : namedHeader
         ? [displayName]
         : [displayName, presence.details, presence.state]
     ).filter((line): line is string => Boolean(line));
     if (lines.length === 0) lines.push(displayName);
-    void detailsPresent;
-    void statePresent;
 
     return (
       <div className={cn("relative", layers === 1 && "pb-2", layers === 2 && "pb-4", className)}>
@@ -119,7 +121,7 @@ export const LiveCard =
           <div className="flex items-center justify-between gap-3">
             <span className="flex min-w-0 items-center gap-2 text-label-md font-medium text-on-tertiary-muted">
               {status === "live" ? <LiveDot /> : <RiPauseFill className="size-3.5" />}
-              <span className="truncate">{statusLabel ?? t(headerKey(presence.type), { name: displayName })}</span>
+              <span className="truncate">{statusLabel ?? (namedHeader && !hasTextLine ? t(typeKey(presence.type)) : t(headerKey(presence.type), { name: displayName }))}</span>
             </span>
             {status === "live" && elapsed !== undefined && !total && (
               <span className="text-label-md text-on-tertiary-muted tabular-nums">{formatClock(elapsed)}</span>

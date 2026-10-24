@@ -470,6 +470,7 @@
   "custom.editor.fixErrors": "İşaretli alanları kontrol et.",
   "custom.field.name": "Ad",
   "custom.field.nameHint": "Discord'da aktivite başlığı olarak gösterilir.",
+  "custom.field.nameTooltip": "Etkinlik türü ve adı, yalnızca birinci veya ikinci satır doldurulduğunda görselin üzerinde birlikte görünür. Aksi halde ad birinci satırda görünür.",
   "custom.field.namePlaceholder": "Aktivitem",
   "custom.field.type": "Tür",
   "custom.field.typeHint": "Discord'un gösterdiği fiil.",
