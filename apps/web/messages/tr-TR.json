@@ -3,46 +3,7 @@
     "announcement": "Yeni: Discord’da kendi etkinliklerini oluştur",
     "eyebrow": "Özel etkinlikler",
     "title": "Kütüphanede yok mu? Kendin oluştur.",
-    "description": "Kişisel bir proje, arkadaşlarla oyun veya çalma listen. Yaptıklarını Discord profilinde göster.",
-    "cta": "Nowly ile özelleştir",
-    "demo": "Senin etkinliğin, senin detayların",
-    "hint": "Düzenlemeyi dene.",
-    "examples": "Örnekler",
-    "name": "Etkinlik adı",
-    "details": "Detaylar",
-    "color": "Simge rengi",
-    "colors": ["Camgöbeği", "Mor", "Turuncu"],
-    "preview": "Discord önizlemesi",
-    "live": "Anlık önizleme",
-    "activity": "Oyun oynuyor",
-    "elapsed": "24 dakikadır",
-    "button": "Projeyi gör",
-    "local": "Bu bir demo. Gerçek etkinliğini uzantıda oluştur.",
-    "benefits": [
-      "Kendi metin ve görsellerin",
-      "Paylaşılabilir bağlantılar",
-      "Kod gerekmez"
-    ],
-    "presets": [
-      {
-        "label": "Proje",
-        "title": "Bir sonraki büyük projem",
-        "details": "Bir fikir şekilleniyor",
-        "state": "Her seferinde bir commit"
-      },
-      {
-        "label": "Oyun",
-        "title": "Arkadaşlarla bir akşam",
-        "details": "Küçük dünyamızı kuruyoruz",
-        "state": "Son bir blok daha"
-      },
-      {
-        "label": "Mola",
-        "title": "Kendi dünyamda",
-        "details": "Biraz müzik, başka bir şey yok",
-        "state": "Rahatsız etmeyin"
-      }
-    ]
+    "description": "Kişisel bir proje, arkadaşlarla oyun veya çalma listen. Yaptıklarını Discord profilinde göster."
   },
   "metadata": {
     "title": "Nowly | Her web sitesi için Discord Rich Presence",
@@ -64,6 +25,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "İçeriğe geç",
     "docs": "Dokümantasyon",
     "library": "Kitaplık",
     "roadmap": "Yol haritası",
@@ -76,6 +38,12 @@
     "dark": "Koyu"
   },
   "hero": {
+    "carousel": {
+      "previous": "Önceki kart",
+      "next": "Sonraki kart",
+      "pause": "Kartları duraklat",
+      "play": "Kartları sürdür"
+    },
     "title-before": "Yaptığın şeyi",
     "title-accent": "anlık olarak paylaş",
     "description": "Nowly, etkinliğini zengin ve dinamik bir Discord varlığına dönüştürür.",
@@ -150,6 +118,8 @@
     }
   },
   "platforms": {
+    "pause": "Platformları duraklat",
+    "play": "Platformları sürdür",
     "eyebrow": "Platformlar",
     "title": "Kullandığın platformlarla çalışır",
     "description": "Nowly, zaten kullandığın hizmetlerde izlediğin, dinlediğin veya oynadığın şeyi gösterir."
@@ -955,6 +925,7 @@
     "home": "Ana sayfaya dön"
   },
   "cookie-banner": {
+    "title": "Çerez bilgileri",
     "message": "Bu site, kesinlikle gerekli bir dil çerezi kullanır. Reklamlar daha sonra etkinleştirilirse, Google reklam teknolojileri de kullanabilir.",
     "learn-more": "Çerez politikasını okuyun",
     "dismiss": "Anladım"
@@ -1196,7 +1167,7 @@
     "delete-confirm": "Bu, Nowly'nin bu cihaz için sakladığı her şeyi kalıcı olarak siler. Bu işlem geri alınamaz.",
     "keep-success": "Teşekkürler, anonim istatistiklerin korunuyor.",
     "delete-success": "Verilerin silindi.",
-    "action-error": "Bir şeyler ters gitti. Lütfen tekrar dene."
+    "action-error": "İşlem tamamlanamadı. Tekrar dene; sorun devam ederse destek ekibiyle iletişime geç."
   },
   "consentPage": {
     "eyebrow": "Gizlilik",
@@ -1214,30 +1185,114 @@
     "delete-confirm": "Bu, Nowly'nin bu cihaz için sakladığı her şeyi kalıcı olarak siler. Bu işlem geri alınamaz.",
     "export-success": "Verilerin indirildi.",
     "delete-success": "Verilerin silindi.",
-    "action-error": "Bir şeyler ters gitti. Lütfen tekrar dene."
+    "action-error": "İşlem tamamlanamadı. Tekrar dene; sorun devam ederse destek ekibiyle iletişime geç."
   },
   "faqPage": {
     "eyebrow": "SSS",
     "title": "Hızlıca yanıtlanan sorular",
     "description": "Kurulum, veri ve Discord hakkında temel bilgiler. Dokümantasyon ve Discord daha derine iner.",
     "categories": {
-      "general": "SSS"
+      "discover": "Nowly'yi tanı",
+      "setup": "Kurulum",
+      "privacy": "Gizlilik",
+      "compare": "Karşılaştırma",
+      "develop": "Geliştirme"
     },
     "items": [
       {
+        "category": "discover",
         "question": "Nowly nedir?",
-        "answer": "Nowly, izlediğin, dinlediğin veya oynadığın şeyi Discord Rich Presence olarak gösterir. Bir tarayıcı uzantısı, bir masaüstü uygulaması ve platform betiklerinden oluşan bir kitaplıktır.",
-        "category": "general"
+        "answer": "Nowly, desteklenen sitelerdeki etkinliği Discord Rich Presence olarak gösterir: varsa platformu, başlığı, görseli ve oynatma ilerlemesini. Tarayıcı uzantısını, masaüstü uygulamasını ve kitaplıktan yüklenen presence'ları birleştirir."
       },
       {
-        "question": "Etkinliğim sunucularınızdan geçiyor mu?",
-        "answer": "Hayır. Etkinlik yerel kalır ve cihazından Discord'a gönderilir. Analizler isteğe bağlıdır ve varsayılan olarak kapalıdır.",
-        "category": "general"
+        "category": "discover",
+        "question": "Nowly nasıl çalışır?",
+        "answer": "Uzantı desteklenen sitedeki etkinliği algılar. Yüklü presence gösterilecek bilgileri hazırlar, masaüstü uygulaması bunları yerel olarak Discord'a gönderir. Nowly, Discord uygulamasının yerini almaz."
       },
       {
-        "question": "Hangi platformlar destekleniyor?",
-        "answer": "Güncel liste kitaplıktadır. Uzantıyı güncellemeden yeni varlıklar eklenebilir, bu yüzden gerçekten kullandıklarını yükle.",
-        "category": "general"
+        "category": "discover",
+        "question": "Neden hem uzantı hem masaüstü uygulaması gerekli?",
+        "answer": "Uzantı tarayıcı sekmesindeki etkinliği okur. Masaüstü uygulaması, Discord'un durum güncellemelerini alması için yerel bağlantıyı sağlar."
+      },
+      {
+        "category": "discover",
+        "question": "Bilgisayarımda Discord yüklü olmalı mı?",
+        "answer": "Evet. Discord Desktop açık olmalı. Tarayıcı veya mobil sürüm tek başına Nowly'nin yerel bağlantısı için yeterli değildir."
+      },
+      {
+        "category": "discover",
+        "question": "Nowly hangi sitelerde çalışır?",
+        "answer": "Desteklenen siteler kitaplıkta listelenir. Her presence belirli bir platform içindir. Uzantıyı yeniden yüklemeden yeni presence'lar yayımlanabilir."
+      },
+      {
+        "category": "discover",
+        "question": "Netflix, YouTube, Spotify veya Apple TV+ ile çalışır mı?",
+        "answer": "Kitaplıkta o platforma özel bir presence varsa evet. Uyumluluk, presence'a ve platformun tarayıcıda sunduğu bilgilere bağlıdır."
+      },
+      {
+        "category": "setup",
+        "question": "Etkinliğimi Discord'da nasıl gösteririm?",
+        "answer": "Nowly uzantısını ve masaüstü uygulamasını kur, Discord Desktop'ı aç, kitaplıktan bir presence yükle ve desteklenen siteyi tarayıcıda aç."
+      },
+      {
+        "category": "setup",
+        "question": "Discord durumum neden görünmüyor?",
+        "answer": "Discord Desktop ile Nowly uygulamasının açık, kullandığın tarayıcıda uzantının kurulu, presence'ın etkin ve URL'nin destekleniyor olduğunu kontrol et. Kullanıcı betiği izni istenirse ver ve kurulumdan sonra sayfayı yenile."
+      },
+      {
+        "category": "setup",
+        "question": "Hangi tarayıcılar ve işletim sistemleri destekleniyor?",
+        "answer": "Uzantı Chrome, Firefox ve Edge, Brave, Opera gibi Chromium tabanlı tarayıcılarla çalışır. Masaüstü uygulaması Windows, macOS ve Linux için kullanılabilir."
+      },
+      {
+        "category": "setup",
+        "question": "Nowly ücretsiz mi?",
+        "answer": "Evet. Temel özellikler, uzantı, masaüstü uygulaması ve presence kitaplığı ücretsizdir. Web sitesindeki destek bağlantılarıyla projeye gönüllü katkıda bulunabilirsin."
+      },
+      {
+        "category": "setup",
+        "question": "Yalnızca bir presence yükleyebilir miyim?",
+        "answer": "Presence tek başına çalışmaz; önce Nowly uzantısı ve masaüstü uygulaması gerekir. Sonrasında yalnızca kullandığın platformların presence'larını yükleyebilirsin."
+      },
+      {
+        "category": "privacy",
+        "question": "Etkinliğim Nowly sunucularından geçiyor mu?",
+        "answer": "Hayır. Uzantıdan masaüstü uygulamasına, oradan da Discord'a yerel olarak gönderilir. İsteğe bağlı kullanım istatistikleri varsayılan olarak kapalıdır ve ayarlardan yönetilebilir."
+      },
+      {
+        "category": "privacy",
+        "question": "Nowly tarayıcımda ne okur?",
+        "answer": "Presence, desteklenen siteden yalnızca gereken bilgileri okur; örneğin video başlığı, kanal adı, sayfa veya oynatma durumu. Yalnızca yüklendiği sitelerde çalışır. Resmî presence'lar dağıtımdan önce kontrol edilir ve imzalanır."
+      },
+      {
+        "category": "privacy",
+        "question": "Discord etkinliğimi kim görebilir?",
+        "answer": "Discord'da etkinliğini görme izni olanlar durumunu görebilir. Görünen bilgiler Discord ayarlarına ve presence'a bağlıdır. Herkese açık durumda hassas bilgi gösterme."
+      },
+      {
+        "category": "privacy",
+        "question": "Nowly güvenli mi?",
+        "answer": "Nowly etkinliği yerel işler, istatistikleri varsayılan olarak kapatır ve resmî presence'ları kontrol edip imzalar. Proje kodu herkese açıktır. Resmî kaynaklardan yükle ve uzantının istediği izinleri incele."
+      },
+      {
+        "category": "compare",
+        "question": "Nowly ile PreMiD arasındaki fark nedir?",
+        "answer": "İkisi de web sitesi etkinliğini Discord'da gösterir. Nowly masaüstü uygulamasını yerel bağlantı için kullanır, yüklenebilir imzalı resmî presence'lar sunar ve isteğe bağlı istatistikleri varsayılan olarak kapatır. Seçim kullandığın platformlara bağlıdır."
+      },
+      {
+        "category": "compare",
+        "question": "Nowly ile başka bir Rich Presence aracını aynı anda kullanabilir miyim?",
+        "answer": "Önerilmez. Birkaç uygulama Discord etkinliğini aynı anda değiştirmeye çalışırsa durum beklenmedik şekilde değişebilir veya kaybolabilir. Nowly'yi denerken diğer araçları kapat."
+      },
+      {
+        "category": "develop",
+        "question": "Nowly için yeni bir presence oluşturabilir miyim?",
+        "answer": "Evet. Presence'lar platformlara özel JavaScript entegrasyonlarıdır. SDK, CLI ve belgeler bunların nasıl oluşturulacağını, test edileceğini, doğrulanacağını ve önerileceğini anlatır. Kod ve katkı süreci GitHub'dadır."
+      },
+      {
+        "category": "develop",
+        "question": "Nowly açık kaynak mı?",
+        "answer": "Kod GitHub'da herkese açıktır ancak şu anda BUSL-1.1 lisansıyla dağıtılır. Kaynağı erişilebilir kılan bu lisans, OSI onaylı bir açık kaynak lisansı değildir. Presence'lar, SDK ve geliştirme araçları ayrı belgelenmiştir."
       }
     ]
   },
@@ -1257,8 +1312,8 @@
     "done-description": "Uzantın bağlandı. Bu sekmeyi kapatıp Nowly'ye dönebilirsin.",
     "not-detected-title": "Uzantı algılanmadı",
     "not-detected-description": "Bu sayfayı Nowly'nin kurulu olduğu tarayıcıda aç ya da önce uzantıyı kur.",
-    "error-title": "Bir sorun oluştu",
-    "error-description": "Uzantı bağlanamadı. Tekrar dene ya da uzantı ayarlarından yeniden başla.",
+    "error-title": "Bu adım tamamlanamadı",
+    "error-description": "Bu adımı yeniden başlatmak için Tekrar dene seçeneğini seç. Sorun devam ederse destek ekibiyle iletişime geç.",
     "retry": "Tekrar dene",
     "signed-in-as": "{name} olarak giriş yapıldı.",
     "switch-account": "Sen değil misin? Hesap değiştir"
@@ -1288,7 +1343,7 @@
     "delete-confirm": "Bu işlem Nowly hesabını ve uzantının eşitlenmiş kopyasını kalıcı olarak siler. Geri alınamaz.",
     "delete-success": "Hesabın silindi.",
     "local-note": "Uzantının cihazlarında sakladığı veriler etkilenmez. Bunları uzantı ayarlarından silebilirsin.",
-    "action-error": "Bir sorun oluştu. Lütfen tekrar dene."
+    "action-error": "İşlem tamamlanamadı. Tekrar dene; sorun devam ederse destek ekibiyle iletişime geç."
   },
   "ads": {
     "label": "Reklam"

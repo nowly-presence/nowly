@@ -3,46 +3,7 @@
     "announcement": "Nouveau : créez vos propres activités sur Discord",
     "eyebrow": "Activités personnalisées",
     "title": "Pas dans la bibliothèque ? À vous de créer.",
-    "description": "Un projet perso, une partie entre amis, votre playlist du moment. Faites une place à ce qui vous occupe sur votre profil Discord.",
-    "cta": "Personnaliser avec Nowly",
-    "demo": "Votre activité, vos détails",
-    "hint": "Essayez, c’est modifiable.",
-    "examples": "Exemples d’activités",
-    "name": "Nom de l’activité",
-    "details": "Détails",
-    "color": "Couleur de l’icône",
-    "colors": ["Cyan", "Violet", "Orange"],
-    "preview": "Aperçu sur Discord",
-    "live": "Aperçu instantané",
-    "activity": "Joue à un jeu",
-    "elapsed": "Depuis 24 minutes",
-    "button": "Voir le projet",
-    "local": "Une démo ici. Votre vraie activité se crée dans l’extension.",
-    "benefits": [
-      "Vos textes et vos images",
-      "Des liens à partager",
-      "Aucune ligne de code"
-    ],
-    "presets": [
-      {
-        "label": "Un projet",
-        "title": "Mon prochain grand projet",
-        "details": "Une idée qui prend forme",
-        "state": "Un commit à la fois"
-      },
-      {
-        "label": "Une partie",
-        "title": "Une soirée entre amis",
-        "details": "Construction de notre petit monde",
-        "state": "Encore un dernier bloc"
-      },
-      {
-        "label": "Une pause",
-        "title": "Dans ma bulle",
-        "details": "Un peu de musique, rien d’autre",
-        "state": "Ne pas déranger"
-      }
-    ]
+    "description": "Un projet perso, une partie entre amis, votre playlist du moment. Faites une place à ce qui vous occupe sur votre profil Discord."
   },
   "metadata": {
     "title": "Nowly | Discord Rich Presence pour tous vos sites",
@@ -64,6 +25,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "Aller au contenu",
     "docs": "Documentation",
     "library": "Bibliothèque",
     "roadmap": "Feuille de route",
@@ -76,6 +38,7 @@
     "dark": "Sombre"
   },
   "hero": {
+    "carousel": { "previous": "Carte précédente", "next": "Carte suivante", "pause": "Mettre les cartes en pause", "play": "Relancer les cartes" },
     "title-before": "Partagez ce que vous faites, en",
     "title-accent": "temps réel",
     "description": "Nowly transforme votre activité en présence Discord riche et dynamique.",
@@ -150,14 +113,16 @@
     }
   },
   "platforms": {
+    "pause": "Mettre les plateformes en pause",
+    "play": "Relancer les plateformes",
     "eyebrow": "Plateformes",
     "title": "Compatible avec vos plateformes",
     "description": "Nowly affiche ce que vous regardez, écoutez ou jouez, sur vos services habituels."
   },
   "steps": {
     "eyebrow": "Installation",
-    "title": "Trois étapes, Discord suit",
-    "description": "L’extension lit l’onglet. L’application bureau envoie le statut à Discord.",
+    "title": "Configurez Nowly en trois étapes.",
+    "description": "L’extension lit l’onglet. L’application de bureau envoie le statut à Discord.",
     "items": [
       {
         "title": "L’extension",
@@ -165,9 +130,9 @@
         "action": "Télécharger"
       },
       {
-        "title": "Application bureau",
+        "title": "Application de bureau",
         "text": "Installez le pont local qui parle à Discord.",
-        "action": "Voir l’app"
+        "action": "Voir les téléchargements"
       },
       {
         "title": "Une présence",
@@ -184,11 +149,11 @@
   "features": {
     "eyebrow": "Produit",
     "title": "Un statut vraiment vivant",
-    "description": "Une extension, une application bureau, et une bibliothèque de scripts signés.",
+    "description": "Une extension de navigateur, une application de bureau et une bibliothèque de scripts signés.",
     "items": [
       {
         "title": "Mises à jour automatiques",
-        "description": "Titre, visuel, timestamps et état de lecture se rafraîchissent quand la page change."
+        "description": "Le titre, le visuel, les horodatages et l’état de lecture se mettent à jour quand la page change."
       },
       {
         "title": "Installez ce dont vous avez besoin",
@@ -196,19 +161,19 @@
       },
       {
         "title": "Rien de superflu sur la page",
-        "description": "Les scripts ne tournent que sur les sites que vous installez, rien d’autre ne tourne ailleurs."
+        "description": "Les scripts ne s’exécutent que sur les sites où vous installez une présence."
       },
       {
         "title": "Scripts signés",
-        "description": "Les présences officielles sont vérifiées avant d’être exécutées, pour garder le runtime sous contrôle."
+        "description": "Les présences officielles sont vérifiées avant leur exécution, pour garder leur fonctionnement sous contrôle."
       },
       {
         "title": "Chrome et Firefox",
         "description": "Fonctionne sur les navigateurs Chromium et Firefox. Le bouton de téléchargement suit votre navigateur."
       },
       {
-        "title": "Application bureau",
-        "description": "L’application bureau est le pont local que Discord accepte vraiment. Windows, macOS et Linux."
+        "title": "Application de bureau",
+        "description": "L’application de bureau est le pont local que Discord accepte vraiment. Windows, macOS et Linux."
       }
     ]
   },
@@ -219,7 +184,7 @@
     "items": [
       {
         "title": "Rien ne transite par nos serveurs",
-        "description": "Extension, application bureau, puis Discord. Titre, plateforme et lecture ne quittent pas votre PC."
+        "description": "Extension, application de bureau, puis Discord. Le titre, la plateforme et l’état de lecture restent sur votre ordinateur."
       },
       {
         "title": "Pas d’analytics par défaut",
@@ -240,7 +205,7 @@
     "items": [
       {
         "question": "C’est quoi Nowly ?",
-        "answer": "Nowly affiche ce que vous regardez, écoutez ou jouez en Rich Presence Discord. C’est une extension navigateur, une application bureau, et une bibliothèque de scripts par plateforme."
+        "answer": "Nowly affiche sur Discord ce que vous regardez, écoutez ou jouez sous forme de statut détaillé. Le service comprend une extension de navigateur, une application de bureau et une bibliothèque de présences par plateforme."
       },
       {
         "question": "Mon activité passe par vos serveurs ?",
@@ -306,7 +271,7 @@
     "product": "Produit",
     "home": "Accueil",
     "library": "Bibliothèque",
-    "host": "Application bureau",
+    "host": "Application de bureau",
     "resources": "Ressources",
     "docs": "Documentation",
     "changelog": "Notes de mise à jour",
@@ -387,7 +352,7 @@
     "install-success": "{name} est installée.",
     "update-success": "{name} est à jour.",
     "install-error": "Impossible d’installer {name}.",
-    "install-origin": "L’extension du Chrome Web Store n’accepte que nowly.me. Charge une version décompressée de Nowly pour installer depuis localhost.",
+    "install-origin": "L’extension du Chrome Web Store n’accepte que nowly.me. Chargez une version décompressée de Nowly pour l’installer depuis localhost.",
     "install-queued": "{name} s’installera dès que Nowly pourra joindre le catalogue.",
     "uninstall-success": "{name} a été retirée.",
     "uninstall-error": "Impossible de retirer {name}.",
@@ -403,11 +368,11 @@
     "report-title": "Signaler un problème",
     "report-description": "Décrivez ce qui ne va pas avec {name}. Nous lisons chaque signalement.",
     "report-data-notice": "L’envoi transmet votre message, votre langue, le nom et la version de votre navigateur à Nowly et à notre canal d’assistance Discord.",
-    "report-privacy-link": "En savoir plus dans la politique de confidentialité",
+    "report-privacy-link": "Voir comment les données du signalement sont traitées",
     "report-label": "Description",
     "report-placeholder": "Que s’est-il passé ? Sur quelle page ou action ?",
     "report-count": "{count}/{max}",
-    "report-submit": "Envoyer",
+    "report-submit": "Envoyer le signalement",
     "report-sending": "Envoi...",
     "report-cancel": "Annuler",
     "report-close": "Fermer",
@@ -432,16 +397,16 @@
     "guide-close": "Masquer le guide"
   },
   "desktopPage": {
-    "eyebrow": "Application bureau",
+    "eyebrow": "Application de bureau",
     "title": "Le pont local vers Discord",
-    "description": "L’extension lit l’onglet. L’application bureau envoie votre statut à Discord. Titre, plateforme et lecture ne quittent pas votre PC.",
+    "description": "L’extension lit l’onglet. L’application de bureau transmet votre statut à Discord. Le titre, la plateforme et l’état de lecture restent sur votre ordinateur.",
     "detected": "Détecté",
     "chromeos-title": "ChromeOS n'est pas encore supporté",
     "chromeos-description": "Discord Rich Presence a besoin d'une application native que ChromeOS ne peut pas exécuter aujourd'hui. On regarde comment y remédier - laissez votre email pour être prévenu si ça change.",
     "chromeos-email-placeholder": "vous@exemple.com",
     "chromeos-submit": "Me prévenir",
     "chromeos-success": "Merci, on vous tiendra au courant.",
-    "chromeos-error": "Une erreur est survenue. Veuillez réessayer.",
+    "chromeos-error": "Votre adresse e-mail n’a pas pu être enregistrée. Réessayez dans un instant.",
     "version": "Version {version}",
     "card-title": "Télécharger pour {platform}",
     "platforms": {
@@ -462,13 +427,13 @@
     "unsigned-desc": "Windows peut afficher un avertissement SmartScreen. Ouvrez Plus d’infos, puis Exécuter quand même, uniquement si le fichier vient de cette page.",
     "signed-title": "Notarisé par Apple",
     "signed-desc": "Les builds macOS sont notarisés. Gatekeeper devrait accepter l’image disque.",
-    "linux-title": "Debian/Ubuntu : installe le .deb",
-    "linux-desc": "Sur Debian, Ubuntu ou Mint, utilise le paquet .deb ci-dessus - il s’installe tout seul, sans terminal. Sur les autres distributions, extrais l’archive puis lance le script d’installation :",
+    "linux-title": "Debian/Ubuntu : installez le paquet .deb",
+    "linux-desc": "Sur Debian, Ubuntu ou Mint, utilisez le paquet .deb ci-dessus : il s’installe sans terminal. Sur les autres distributions, extrayez l’archive puis lancez le script d’installation :",
     "trust-title": "Ce qu’elle fait",
     "trust-items": [
       {
         "title": "Reste sur votre machine",
-        "text": "L’extension voit l’onglet. L’application bureau parle à Discord en local. Rien n’est envoyé à nowly.me."
+        "text": "L’extension lit l’onglet. L’application de bureau communique directement avec Discord. Rien n’est envoyé à nowly.me."
       },
       {
         "title": "Le langage que Discord accepte",
@@ -491,7 +456,7 @@
       },
       {
         "title": "Installez une présence",
-        "text": "Depuis la bibliothèque, ajoutez YouTube par exemple pour vérifier que l’extension et l’application bureau communiquent."
+        "text": "Depuis la bibliothèque, ajoutez YouTube, par exemple, pour vérifier que l’extension et l’application de bureau communiquent."
       },
       {
         "title": "Vérifiez Discord",
@@ -524,9 +489,9 @@
     }
   },
   "extensionPage": {
-    "eyebrow": "Extension navigateur",
+    "eyebrow": "Extension de navigateur",
     "title": "L’extension qui lit vos onglets",
-    "description": "Nowly détecte ce que vous regardez, écoutez ou jouez, puis transmet l’activité à l’application bureau pour Discord.",
+    "description": "Nowly détecte ce que vous regardez, écoutez ou jouez, puis transmet l’activité à l’application de bureau pour l’afficher sur Discord.",
     "detected": "Détecté",
     "card-title": "Ajouter à {browser}",
     "browsers": {
@@ -546,7 +511,7 @@
       },
       {
         "title": "Rien ne quitte votre PC",
-        "text": "Le titre et l’activité partent vers l’application bureau, pas vers nowly.me."
+        "text": "Le titre et l’activité sont transmis à l’application de bureau, pas à nowly.me."
       },
       {
         "title": "Scripts signés",
@@ -560,7 +525,7 @@
         "text": "Depuis le store de votre navigateur, en un clic."
       },
       {
-        "title": "Installez l’application bureau",
+        "title": "Installez l’application de bureau",
         "text": "C’est elle qui parle à Discord."
       },
       {
@@ -568,7 +533,7 @@
         "text": "Depuis la bibliothèque, ajoutez YouTube, Netflix ou Twitch."
       }
     ],
-    "guide-desktop": "Voir l’application bureau",
+    "guide-desktop": "Voir l’application de bureau",
     "guide-library": "Ouvrir la bibliothèque"
   },
   "changelogPage": {
@@ -715,7 +680,7 @@
       "submit": "Envoyer le message",
       "sending": "Envoi...",
       "success": "Votre message a été envoyé.",
-      "error": "Impossible d’envoyer votre message. Veuillez réessayer."
+      "error": "Message non envoyé. Réessayez dans un instant ou contactez-nous sur Discord."
     },
     "donate": {
       "title": "Soutenir Nowly",
@@ -732,7 +697,7 @@
     },
     "docs": {
       "title": "Dépannage",
-      "description": "Correctifs pour l’application bureau, Discord Desktop, une activité manquante, et les permissions."
+      "description": "Correctifs pour l’application de bureau, Discord Desktop, une activité manquante et les autorisations."
     },
     "broken": {
       "title": "Présence cassée",
@@ -744,7 +709,7 @@
     },
     "bug": {
       "title": "Signaler un bug",
-      "description": "Signalez un problème sur le site, l’extension, l’API ou l’application bureau."
+      "description": "Signalez un problème sur le site, l’extension, l’API ou l’application de bureau."
     },
     "feature": {
       "title": "Suggérer une amélioration",
@@ -800,11 +765,11 @@
       "description": "Parcourez les plateformes que Nowly peut afficher sur Discord."
     },
     "desktop": {
-      "title": "Application bureau",
-      "description": "Téléchargez l’application bureau pour envoyer votre activité à Discord."
+      "title": "Application de bureau",
+      "description": "Téléchargez l’application de bureau pour envoyer votre activité à Discord."
     },
     "extension": {
-      "title": "Extension navigateur",
+      "title": "Extension de navigateur",
       "description": "Ajoutez l’extension Nowly à Chrome ou Firefox pour détecter ce que vous regardez, écoutez ou jouez."
     },
     "changelog": {
@@ -955,6 +920,7 @@
     "home": "Retour à l’accueil"
   },
   "cookie-banner": {
+    "title": "Informations sur les cookies",
     "message": "Ce site utilise un cookie de langue strictement nécessaire. Si la publicité est activée plus tard, Google pourra aussi utiliser des technologies publicitaires.",
     "learn-more": "Lire la politique relative aux cookies",
     "dismiss": "Compris"
@@ -1196,7 +1162,7 @@
     "delete-confirm": "Cela supprime définitivement tout ce que Nowly a stocké pour cet appareil. Cette action est irréversible.",
     "keep-success": "Merci, vos statistiques anonymes sont conservées.",
     "delete-success": "Vos données ont été supprimées.",
-    "action-error": "Une erreur est survenue. Veuillez réessayer."
+    "action-error": "Impossible de terminer cette opération. Réessayez. Si le problème persiste, contactez l’assistance."
   },
   "consentPage": {
     "eyebrow": "Confidentialité",
@@ -1206,7 +1172,7 @@
     "not-detected-title": "Extension non détectée",
     "not-detected-description": "Ouvrez cette page depuis le navigateur où Nowly est installée pour gérer votre consentement et vos données.",
     "toggle-title": "Partager des données d'usage anonymes",
-    "toggle-description": "Désactivé par défaut. Nous aide à voir quelles présences et fonctionnalités sont réellement utilisées - aucun historique de navigation ni donnée personnelle n'est jamais collecté.",
+    "toggle-description": "Le partage est désactivé par défaut. Ces données nous aident à comprendre quelles présences et fonctionnalités sont utilisées. Nous ne collectons ni historique de navigation ni données personnelles.",
     "data-title": "Vos données",
     "data-description": "Exportez tout ce que Nowly a stocké pour cet appareil, ou supprimez-le entièrement.",
     "export": "Exporter mes données",
@@ -1214,12 +1180,12 @@
     "delete-confirm": "Cette action supprime définitivement tout ce que Nowly a stocké pour cet appareil. C'est irréversible.",
     "export-success": "Vos données ont été téléchargées.",
     "delete-success": "Vos données ont été supprimées.",
-    "action-error": "Une erreur s'est produite. Veuillez réessayer."
+    "action-error": "Impossible de terminer cette opération. Réessayez. Si le problème persiste, contactez l’assistance."
   },
   "faqPage": {
     "eyebrow": "FAQ",
     "title": "On vous dit tout sur Nowly",
-    "description": "Découvrez comment Nowly ajoute une Rich Presence Discord aux sites compatibles, comment l’installer et comment votre activité reste sous votre contrôle.",
+    "description": "Découvrez comment Nowly affiche sur Discord l’activité des sites compatibles, comment l’installer et comment vous en gardez le contrôle.",
     "categories": {
       "discover": "Découvrir Nowly",
       "setup": "Installation et utilisation",
@@ -1231,22 +1197,22 @@
       {
         "category": "discover",
         "question": "Qu’est-ce que Nowly ?",
-        "answer": "Nowly transforme l’activité des sites compatibles en Rich Presence Discord. Il peut afficher ce que vous regardez, écoutez ou consultez, avec la plateforme, le titre, le visuel et la progression lorsque ces informations sont disponibles. Nowly combine une extension navigateur, une application bureau et des présences installables depuis sa bibliothèque."
+        "answer": "Nowly affiche sur Discord l’activité des sites compatibles sous forme de statut détaillé (Rich Presence). Il peut indiquer ce que vous regardez, écoutez ou consultez, ainsi que la plateforme, le titre, le visuel et la progression lorsque ces informations sont disponibles. Nowly combine une extension de navigateur, une application de bureau et des présences à installer depuis sa bibliothèque."
       },
       {
         "category": "discover",
         "question": "Comment fonctionne Nowly ?",
-        "answer": "L’extension navigateur détecte l’activité sur un site compatible. La présence installée prépare les informations à afficher, puis l’application bureau envoie cette activité à Discord localement. Nowly ne remplace pas Discord : il prépare et transmet votre activité à l’application Discord installée sur votre ordinateur."
+        "answer": "L’extension de navigateur détecte l’activité sur un site compatible. La présence installée prépare les informations à afficher, puis l’application de bureau les transmet directement à Discord. Nowly ne remplace pas Discord : il prépare et transmet votre activité à l’application Discord installée sur votre ordinateur."
       },
       {
         "category": "discover",
-        "question": "Pourquoi faut-il installer une extension et une application bureau ?",
-        "answer": "L’extension lit l’activité de votre onglet, tandis que Discord a besoin d’une connexion locale avec son application bureau pour recevoir les mises à jour Rich Presence. L’extension détecte votre activité et l’application bureau sert de pont local vers Discord."
+        "question": "Pourquoi faut-il installer une extension et une application de bureau ?",
+        "answer": "L’extension lit l’activité de votre onglet. Pour recevoir les mises à jour du statut Discord, l’application Discord doit pouvoir communiquer localement avec l’application de bureau Nowly, qui sert de relais."
       },
       {
         "category": "discover",
         "question": "Discord doit-il être installé sur l’ordinateur ?",
-        "answer": "Oui. Nowly nécessite Discord Desktop ouvert pour que le pont local puisse envoyer votre Rich Presence. Discord dans un navigateur ou sur mobile ne suffit pas pour utiliser le pont local de Nowly."
+        "answer": "Oui. Discord Desktop doit être ouvert pour que l’application de bureau Nowly puisse lui transmettre votre statut. Discord dans un navigateur ou sur mobile ne suffit pas pour utiliser ce relais local."
       },
       {
         "category": "discover",
@@ -1261,32 +1227,32 @@
       {
         "category": "setup",
         "question": "Comment afficher mon activité sur Discord avec Nowly ?",
-        "answer": "Installez l’extension Nowly, installez l’application bureau, ouvrez Discord Desktop, installez une présence depuis la bibliothèque, puis ouvrez le site compatible dans votre navigateur. Votre activité peut s’afficher lorsque l’extension, l’application bureau, la présence et Discord sont prêts."
+        "answer": "Installez l’extension Nowly et l’application de bureau, puis ouvrez Discord Desktop. Ajoutez une présence depuis la bibliothèque et ouvrez le site compatible dans votre navigateur. Votre activité peut s’afficher lorsque ces éléments sont prêts."
       },
       {
         "category": "setup",
-        "question": "Pourquoi ma Rich Presence Discord ne s’affiche-t-elle pas ?",
-        "answer": "Vérifiez que Discord Desktop et l’application bureau Nowly sont ouverts, que l’extension est installée dans le navigateur utilisé, que la présence est installée et activée et que la page correspond à une URL compatible. Si le navigateur demande l’autorisation des scripts utilisateur, acceptez-la puis rechargez la page après l’installation."
+        "question": "Pourquoi mon statut Discord ne s’affiche-t-il pas ?",
+        "answer": "Vérifiez que Discord Desktop et l’application de bureau Nowly sont ouverts, que l’extension est installée dans le navigateur utilisé, que la présence est installée et activée et que la page correspond à une URL compatible. Si le navigateur demande l’autorisation des scripts utilisateur, accordez-la puis rechargez la page après l’installation."
       },
       {
         "category": "setup",
         "question": "Quels navigateurs et systèmes sont compatibles ?",
-        "answer": "L’extension fonctionne avec Chrome, Firefox et les navigateurs basés sur Chromium, comme Edge, Brave et Opera. L’application bureau est disponible pour Windows, macOS et Linux."
+        "answer": "L’extension fonctionne avec Chrome, Firefox et les navigateurs basés sur Chromium, comme Edge, Brave et Opera. L’application de bureau est disponible pour Windows, macOS et Linux."
       },
       {
         "category": "setup",
         "question": "Nowly est-il gratuit ?",
-        "answer": "Oui. Les fonctionnalités principales de Nowly, l’extension navigateur, l’application bureau et la bibliothèque de présences sont gratuites. Vous pouvez soutenir volontairement le projet via les liens de financement disponibles sur le site."
+        "answer": "Oui. Les principales fonctionnalités de Nowly, son extension de navigateur, son application de bureau et sa bibliothèque de présences sont gratuites. Vous pouvez soutenir le projet via les liens de financement du site."
       },
       {
         "category": "setup",
         "question": "Puis-je installer une seule présence ?",
-        "answer": "Une présence ne fonctionne pas seule : l’extension Nowly et l’application bureau sont nécessaires. Une fois Nowly configuré, installez uniquement les présences correspondant aux plateformes que vous utilisez."
+        "answer": "Une présence ne fonctionne pas seule : l’extension et l’application de bureau Nowly sont nécessaires. Une fois Nowly configuré, installez uniquement les présences correspondant aux plateformes que vous utilisez."
       },
       {
         "category": "privacy",
         "question": "Mon activité est-elle envoyée aux serveurs Nowly ?",
-        "answer": "L’activité Rich Presence est envoyée localement de l’extension vers l’application bureau, puis vers Discord. Elle ne transite pas par les serveurs Nowly. Les statistiques d’utilisation sont optionnelles, désactivées par défaut et contrôlables depuis les réglages disponibles."
+        "answer": "L’activité est transmise directement de l’extension à l’application de bureau, puis à Discord ; elle ne transite pas par les serveurs Nowly. Les statistiques d’utilisation sont facultatives, désactivées par défaut et contrôlables dans les réglages disponibles."
       },
       {
         "category": "privacy",
@@ -1296,7 +1262,7 @@
       {
         "category": "privacy",
         "question": "Qui peut voir mon activité Discord ?",
-        "answer": "Une Rich Presence peut être visible par les personnes autorisées à voir votre activité sur Discord. Le contenu affiché dépend de vos réglages Discord et des informations fournies par la présence. Évitez d’afficher des informations sensibles dans une activité publique."
+        "answer": "Votre statut Discord peut être visible par les personnes autorisées à voir votre activité. Le contenu affiché dépend de vos réglages Discord et des informations fournies par la présence. Évitez d’afficher des informations sensibles dans une activité publique."
       },
       {
         "category": "privacy",
@@ -1306,12 +1272,12 @@
       {
         "category": "compare",
         "question": "Quelle est la différence entre Nowly et PreMiD ?",
-        "answer": "Nowly et PreMiD ont un objectif similaire : afficher l’activité des sites web dans une Rich Presence Discord. Nowly utilise une application bureau dédiée comme pont local, une bibliothèque de présences installables, des présences officielles signées et des analytics optionnelles désactivées par défaut. Le choix dépend des plateformes dont vous avez besoin et du fonctionnement que vous préférez."
+        "answer": "Nowly et PreMiD ont un objectif similaire : afficher l’activité des sites web sur Discord. Nowly utilise une application de bureau comme relais local et propose une bibliothèque de présences installables et signées. Les statistiques d’utilisation sont facultatives et désactivées par défaut. Le choix dépend des plateformes dont vous avez besoin et du fonctionnement que vous préférez."
       },
       {
         "category": "compare",
-        "question": "Puis-je utiliser Nowly et un autre outil de Rich Presence en même temps ?",
-        "answer": "Ce n’est pas recommandé. Plusieurs applications peuvent essayer de modifier votre activité Discord en même temps et provoquer des changements inattendus ou faire disparaître l’activité. Désactivez les autres outils de Rich Presence pendant vos tests avec Nowly."
+        "question": "Puis-je utiliser Nowly et un autre outil de statut Discord en même temps ?",
+        "answer": "Ce n’est pas recommandé. Plusieurs applications peuvent essayer de modifier votre activité Discord en même temps et provoquer des changements inattendus ou faire disparaître le statut. Désactivez les autres outils de statut Discord pendant vos tests avec Nowly."
       },
       {
         "category": "develop",
@@ -1341,8 +1307,8 @@
     "done-description": "Votre extension est connectée. Vous pouvez fermer cet onglet et revenir à Nowly.",
     "not-detected-title": "Extension non détectée",
     "not-detected-description": "Ouvrez cette page dans le navigateur où Nowly est installée, ou installez d’abord l’extension.",
-    "error-title": "Un problème est survenu",
-    "error-description": "L’extension n’a pas pu être connectée. Réessayez, ou recommencez depuis les réglages de l’extension.",
+    "error-title": "Impossible de terminer cette étape",
+    "error-description": "Sélectionnez Réessayer pour reprendre cette étape. Si le problème persiste, contactez l’assistance.",
     "retry": "Réessayer",
     "signed-in-as": "Connecté en tant que {name}.",
     "switch-account": "Ce n’est pas vous ? Changer de compte"
@@ -1372,7 +1338,7 @@
     "delete-confirm": "Cela supprime définitivement votre compte Nowly et la copie synchronisée de votre extension. Cette action est irréversible.",
     "delete-success": "Votre compte a été supprimé.",
     "local-note": "Les données enregistrées par l’extension sur vos appareils ne sont pas touchées. Vous pouvez les effacer depuis les réglages de l’extension.",
-    "action-error": "Une erreur est survenue. Veuillez réessayer."
+    "action-error": "Impossible de terminer cette opération. Réessayez. Si le problème persiste, contactez l’assistance."
   },
   "ads": {
     "label": "Publicité"

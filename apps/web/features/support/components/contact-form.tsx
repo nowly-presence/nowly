@@ -142,16 +142,12 @@ export const ContactForm = () => {
             <Button type="submit" disabled={status === "sending"}>
               {status === "sending" ? t("sending") : t("submit")}
             </Button>
-            {status === "success" ? (
-              <p className="text-sm text-muted-foreground" aria-live="polite">
-                {t("success")}
-              </p>
-            ) : null}
-            {status === "error" ? (
-              <p className="text-sm text-destructive" aria-live="polite">
-                {t("error")}
-              </p>
-            ) : null}
+            <p className="text-sm text-muted-foreground" role="status" aria-atomic="true">
+              {status === "success" ? t("success") : ""}
+            </p>
+            <p className="text-sm text-destructive" role="alert" aria-atomic="true">
+              {status === "error" ? t("error") : ""}
+            </p>
           </div>
         </form>
       </CardContent>

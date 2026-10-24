@@ -3,46 +3,7 @@
     "announcement": "Novidade: crie suas próprias atividades no Discord",
     "eyebrow": "Atividades personalizadas",
     "title": "Não está na biblioteca? Crie a sua.",
-    "description": "Um projeto pessoal, uma partida com amigos ou sua playlist. Mostre o que você faz no seu perfil do Discord.",
-    "cta": "Personalizar com Nowly",
-    "demo": "Sua atividade, seus detalhes",
-    "hint": "Experimente editar.",
-    "examples": "Exemplos",
-    "name": "Nome da atividade",
-    "details": "Detalhes",
-    "color": "Cor do ícone",
-    "colors": ["Ciano", "Roxo", "Laranja"],
-    "preview": "Prévia no Discord",
-    "live": "Prévia instantânea",
-    "activity": "Jogando um jogo",
-    "elapsed": "Há 24 minutos",
-    "button": "Ver projeto",
-    "local": "Esta é uma demonstração. Crie sua atividade real na extensão.",
-    "benefits": [
-      "Seus textos e imagens",
-      "Links para compartilhar",
-      "Sem código"
-    ],
-    "presets": [
-      {
-        "label": "Um projeto",
-        "title": "Meu próximo grande projeto",
-        "details": "Uma ideia ganhando forma",
-        "state": "Um commit de cada vez"
-      },
-      {
-        "label": "Uma partida",
-        "title": "Uma noite com amigos",
-        "details": "Construindo nosso mundo",
-        "state": "Só mais um bloco"
-      },
-      {
-        "label": "Uma pausa",
-        "title": "No meu mundo",
-        "details": "Um pouco de música, nada mais",
-        "state": "Não perturbe"
-      }
-    ]
+    "description": "Um projeto pessoal, uma partida com amigos ou sua playlist. Mostre o que você faz no seu perfil do Discord."
   },
   "metadata": {
     "title": "Nowly | Discord Rich Presence para qualquer site",
@@ -64,6 +25,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "Ir para o conteúdo",
     "docs": "Documentação",
     "library": "Biblioteca",
     "roadmap": "Roteiro",
@@ -76,6 +38,12 @@
     "dark": "Escuro"
   },
   "hero": {
+    "carousel": {
+      "previous": "Cartão anterior",
+      "next": "Próximo cartão",
+      "pause": "Pausar cartões",
+      "play": "Retomar cartões"
+    },
     "title-before": "Compartilhe o que você faz, em",
     "title-accent": "tempo real",
     "description": "O Nowly transforma sua atividade em uma presença rica e dinâmica no Discord.",
@@ -150,6 +118,8 @@
     }
   },
   "platforms": {
+    "pause": "Pausar plataformas",
+    "play": "Retomar plataformas",
     "eyebrow": "Plataformas",
     "title": "Funciona com suas plataformas",
     "description": "O Nowly mostra o que você assiste, ouve ou joga nos serviços que já usa."
@@ -955,6 +925,7 @@
     "home": "Voltar ao início"
   },
   "cookie-banner": {
+    "title": "Informações sobre cookies",
     "message": "Este site usa um cookie de idioma estritamente necessário. Se a publicidade for ativada no futuro, o Google também pode usar tecnologias de publicidade.",
     "learn-more": "Ler a política de cookies",
     "dismiss": "Entendi"
@@ -1196,7 +1167,7 @@
     "delete-confirm": "Isso apaga permanentemente tudo o que o Nowly armazenou para este dispositivo. Isso não pode ser desfeito.",
     "keep-success": "Obrigado, suas estatísticas anônimas foram mantidas.",
     "delete-success": "Seus dados foram apagados.",
-    "action-error": "Algo deu errado. Tente novamente."
+    "action-error": "Não foi possível concluir esta solicitação. Tente novamente ou entre em contato com o suporte se o problema persistir."
   },
   "consentPage": {
     "eyebrow": "Privacidade",
@@ -1214,30 +1185,114 @@
     "delete-confirm": "Isso apaga permanentemente tudo o que o Nowly armazenou para este dispositivo. Isso não pode ser desfeito.",
     "export-success": "Seus dados foram baixados.",
     "delete-success": "Seus dados foram apagados.",
-    "action-error": "Algo deu errado. Tente novamente."
+    "action-error": "Não foi possível concluir esta solicitação. Tente novamente ou entre em contato com o suporte se o problema persistir."
   },
   "faqPage": {
     "eyebrow": "Perguntas frequentes",
     "title": "Respostas rápidas",
     "description": "O essencial sobre instalação, dados e Discord. Docs e Discord vão mais fundo.",
     "categories": {
-      "general": "Perguntas frequentes"
+      "discover": "Conhecer",
+      "setup": "Configuração",
+      "privacy": "Privacidade",
+      "compare": "Comparação",
+      "develop": "Desenvolvimento"
     },
     "items": [
       {
+        "category": "discover",
         "question": "O que é o Nowly?",
-        "answer": "O Nowly mostra o que você assiste, ouve ou joga como Discord Rich Presence. É uma extensão de navegador, um app de desktop e uma biblioteca de scripts de plataformas.",
-        "category": "general"
+        "answer": "O Nowly mostra atividades de sites compatíveis como Discord Rich Presence: plataforma, título, imagem e progresso de reprodução, quando disponíveis. Ele combina uma extensão de navegador, um aplicativo de desktop e presenças instaláveis da biblioteca."
       },
       {
-        "question": "Minha atividade passa pelos seus servidores?",
-        "answer": "Não. A atividade fica local e é enviada ao Discord a partir da sua máquina. Analytics são opcionais e desativados por padrão.",
-        "category": "general"
+        "category": "discover",
+        "question": "Como o Nowly funciona?",
+        "answer": "A extensão detecta atividades em um site compatível. A presença instalada prepara as informações e o aplicativo de desktop as envia localmente ao Discord. O Nowly não substitui o aplicativo do Discord."
       },
       {
-        "question": "Quais plataformas são suportadas?",
-        "answer": "A lista atualizada é a biblioteca. Novas presenças podem ser adicionadas sem atualizar a extensão, então instale as que você realmente usa.",
-        "category": "general"
+        "category": "discover",
+        "question": "Por que preciso da extensão e do aplicativo de desktop?",
+        "answer": "A extensão lê a atividade da aba do navegador. O aplicativo de desktop cria a conexão local necessária para o Discord receber atualizações de status."
+      },
+      {
+        "category": "discover",
+        "question": "Preciso instalar o Discord no computador?",
+        "answer": "Sim. O Discord Desktop deve estar aberto. A versão para navegador ou celular não basta para a conexão local do Nowly."
+      },
+      {
+        "category": "discover",
+        "question": "Quais sites funcionam com o Nowly?",
+        "answer": "Veja a biblioteca para conhecer os sites compatíveis. Cada presença atende a uma plataforma. Novas presenças podem ser publicadas sem reinstalar a extensão."
+      },
+      {
+        "category": "discover",
+        "question": "Funciona com Netflix, YouTube, Spotify ou Apple TV+?",
+        "answer": "Sim, se houver uma presença específica na biblioteca. A compatibilidade depende da presença e das informações que o site disponibiliza no navegador."
+      },
+      {
+        "category": "setup",
+        "question": "Como mostrar minha atividade no Discord?",
+        "answer": "Instale a extensão e o aplicativo de desktop Nowly, abra o Discord Desktop, instale uma presença da biblioteca e acesse o site compatível no navegador."
+      },
+      {
+        "category": "setup",
+        "question": "Por que meu status não aparece no Discord?",
+        "answer": "Confira se o Discord Desktop e o Nowly estão abertos, a extensão está no navegador usado, a presença está ativa e a URL é compatível. Se o navegador pedir permissão para scripts de usuário, conceda-a e recarregue a página após a instalação."
+      },
+      {
+        "category": "setup",
+        "question": "Quais navegadores e sistemas são compatíveis?",
+        "answer": "A extensão funciona no Chrome, Firefox e em navegadores Chromium como Edge, Brave e Opera. O aplicativo de desktop está disponível para Windows, macOS e Linux."
+      },
+      {
+        "category": "setup",
+        "question": "O Nowly é gratuito?",
+        "answer": "Sim. Os principais recursos, a extensão, o aplicativo de desktop e a biblioteca de presenças são gratuitos. Você pode apoiar o projeto voluntariamente pelos links do site."
+      },
+      {
+        "category": "setup",
+        "question": "Posso instalar apenas uma presença?",
+        "answer": "Uma presença não funciona sozinha: você precisa primeiro da extensão e do aplicativo de desktop Nowly. Depois, instale apenas as presenças das plataformas que usa."
+      },
+      {
+        "category": "privacy",
+        "question": "Minha atividade passa pelos servidores do Nowly?",
+        "answer": "Não. Ela é enviada localmente da extensão ao aplicativo de desktop e depois ao Discord. As estatísticas de uso opcionais ficam desativadas por padrão e podem ser controladas nas configurações."
+      },
+      {
+        "category": "privacy",
+        "question": "O que o Nowly lê no meu navegador?",
+        "answer": "A presença lê apenas dados necessários do site compatível, como título de vídeo, nome de canal, página ou estado de reprodução. Ela só roda nos sites em que foi instalada. Presenças oficiais são verificadas e assinadas antes da distribuição."
+      },
+      {
+        "category": "privacy",
+        "question": "Quem pode ver minha atividade no Discord?",
+        "answer": "Pessoas autorizadas a ver sua atividade no Discord podem ver seu status. O conteúdo depende das suas configurações e dos dados da presença. Evite exibir informações sensíveis em uma atividade pública."
+      },
+      {
+        "category": "privacy",
+        "question": "O Nowly é seguro?",
+        "answer": "O Nowly processa atividades localmente, desativa as estatísticas por padrão e verifica e assina as presenças oficiais. O código do projeto é público. Instale de fontes oficiais e confira as permissões pedidas pela extensão."
+      },
+      {
+        "category": "compare",
+        "question": "Qual é a diferença entre Nowly e PreMiD?",
+        "answer": "Ambos mostram atividades de sites no Discord. O Nowly usa um aplicativo de desktop como conexão local, presenças oficiais instaláveis e assinadas e estatísticas opcionais desativadas por padrão. A escolha depende das plataformas e do fluxo que você prefere."
+      },
+      {
+        "category": "compare",
+        "question": "Posso usar o Nowly com outra ferramenta de Rich Presence?",
+        "answer": "Não é recomendado. Vários aplicativos podem alterar sua atividade no Discord ao mesmo tempo, fazendo o status mudar ou desaparecer. Desative as outras ferramentas ao testar o Nowly."
+      },
+      {
+        "category": "develop",
+        "question": "Posso criar uma presença para o Nowly?",
+        "answer": "Sim. Presenças são integrações JavaScript específicas para cada plataforma. O SDK, a CLI e a documentação explicam como criar, testar, validar e propor uma nova presença. O código e as contribuições estão no GitHub."
+      },
+      {
+        "category": "develop",
+        "question": "O Nowly é de código aberto?",
+        "answer": "O código é público no GitHub, mas atualmente distribuído sob a licença BUSL-1.1, que permite acesso ao código-fonte e não é aprovada como código aberto pela OSI. Presenças, SDK e ferramentas de desenvolvimento são documentados separadamente."
       }
     ]
   },
@@ -1257,8 +1312,8 @@
     "done-description": "Sua extensão está conectada. Você pode fechar esta aba e voltar ao Nowly.",
     "not-detected-title": "Extensão não detectada",
     "not-detected-description": "Abra esta página no navegador em que o Nowly está instalado, ou instale a extensão primeiro.",
-    "error-title": "Algo deu errado",
-    "error-description": "Não foi possível conectar a extensão. Tente de novo ou recomece pelas configurações da extensão.",
+    "error-title": "Não foi possível concluir esta etapa",
+    "error-description": "Selecione Tentar de novo para repetir esta etapa. Se o problema continuar, entre em contato com o suporte.",
     "retry": "Tentar de novo",
     "signed-in-as": "Conectado como {name}.",
     "switch-account": "Não é você? Trocar de conta"
@@ -1288,7 +1343,7 @@
     "delete-confirm": "Isso exclui permanentemente sua conta Nowly e a cópia sincronizada da sua extensão. Não é possível desfazer.",
     "delete-success": "Sua conta foi excluída.",
     "local-note": "Os dados que a extensão guarda nos seus dispositivos não são afetados. Você pode apagá-los nas configurações da extensão.",
-    "action-error": "Algo deu errado. Tente novamente."
+    "action-error": "Não foi possível concluir esta solicitação. Tente novamente ou entre em contato com o suporte se o problema persistir."
   },
   "ads": {
     "label": "Publicidade"

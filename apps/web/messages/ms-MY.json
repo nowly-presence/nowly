@@ -3,42 +3,7 @@
     "announcement": "Baharu: cipta aktiviti anda sendiri di Discord",
     "eyebrow": "Aktiviti tersuai",
     "title": "Tiada dalam pustaka? Cipta sendiri.",
-    "description": "Projek peribadi, permainan bersama rakan atau senarai lagu anda. Paparkannya pada profil Discord anda.",
-    "cta": "Sesuaikan dengan Nowly",
-    "demo": "Aktiviti anda, butiran anda",
-    "hint": "Cuba sunting.",
-    "examples": "Contoh",
-    "name": "Nama aktiviti",
-    "details": "Butiran",
-    "color": "Warna ikon",
-    "colors": ["Sian", "Ungu", "Jingga"],
-    "preview": "Pratonton Discord",
-    "live": "Pratonton segera",
-    "activity": "Bermain permainan",
-    "elapsed": "Sejak 24 minit lalu",
-    "button": "Lihat projek",
-    "local": "Ini demo sahaja. Cipta aktiviti sebenar dalam sambungan.",
-    "benefits": ["Teks dan imej anda", "Pautan untuk dikongsi", "Tanpa kod"],
-    "presets": [
-      {
-        "label": "Projek",
-        "title": "Projek besar saya yang seterusnya",
-        "details": "Idea mula terbentuk",
-        "state": "Satu commit pada satu masa"
-      },
-      {
-        "label": "Permainan",
-        "title": "Malam bersama rakan",
-        "details": "Membina dunia kecil kami",
-        "state": "Satu blok lagi"
-      },
-      {
-        "label": "Rehat",
-        "title": "Dalam dunia sendiri",
-        "details": "Sedikit muzik, itu sahaja",
-        "state": "Jangan ganggu"
-      }
-    ]
+    "description": "Projek peribadi, permainan bersama rakan atau senarai lagu anda. Paparkannya pada profil Discord anda."
   },
   "metadata": {
     "title": "Nowly | Discord Rich Presence untuk mana-mana laman web",
@@ -60,6 +25,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "Langkau ke kandungan",
     "docs": "Dokumentasi",
     "library": "Perpustakaan",
     "roadmap": "Pelan hala tuju",
@@ -72,6 +38,12 @@
     "dark": "Gelap"
   },
   "hero": {
+    "carousel": {
+      "previous": "Kad sebelumnya",
+      "next": "Kad seterusnya",
+      "pause": "Jeda kad",
+      "play": "Sambung kad"
+    },
     "title-before": "Kongsi apa yang anda lakukan, secara",
     "title-accent": "masa nyata",
     "description": "Nowly mengubah aktiviti anda menjadi kehadiran Discord yang kaya dan dinamik.",
@@ -146,6 +118,8 @@
     }
   },
   "platforms": {
+    "pause": "Jeda platform",
+    "play": "Sambung platform",
     "eyebrow": "Platform",
     "title": "Berfungsi dengan platform anda",
     "description": "Nowly menunjukkan apa yang anda tonton, dengar atau main pada perkhidmatan yang anda sudah gunakan."
@@ -951,6 +925,7 @@
     "home": "Kembali ke laman utama"
   },
   "cookie-banner": {
+    "title": "Maklumat kuki",
     "message": "Laman ini menggunakan kuki bahasa yang benar-benar perlu. Jika iklan diaktifkan kemudian, Google mungkin juga menggunakan teknologi pengiklanan.",
     "learn-more": "Baca dasar kuki",
     "dismiss": "Faham"
@@ -1192,7 +1167,7 @@
     "delete-confirm": "Ini akan memadam secara kekal segala yang disimpan Nowly untuk peranti ini. Ini tidak boleh dibuat asal.",
     "keep-success": "Terima kasih, statistik anonim anda dikekalkan.",
     "delete-success": "Data anda telah dipadamkan.",
-    "action-error": "Sesuatu telah tidak kena. Sila cuba lagi."
+    "action-error": "Permintaan ini tidak dapat diselesaikan. Cuba lagi atau hubungi sokongan jika masalah berterusan."
   },
   "consentPage": {
     "eyebrow": "Privasi",
@@ -1210,30 +1185,114 @@
     "delete-confirm": "Ini akan memadam secara kekal segala yang disimpan Nowly untuk peranti ini. Ini tidak boleh dibuat asal.",
     "export-success": "Data anda telah dimuat turun.",
     "delete-success": "Data anda telah dipadamkan.",
-    "action-error": "Sesuatu telah tidak kena. Sila cuba lagi."
+    "action-error": "Permintaan ini tidak dapat diselesaikan. Cuba lagi atau hubungi sokongan jika masalah berterusan."
   },
   "faqPage": {
     "eyebrow": "Soalan Lazim",
     "title": "Soalan, dijawab dengan cepat",
     "description": "Perkara asas tentang pemasangan, data dan Discord. Dokumentasi dan Discord pergi lebih jauh.",
     "categories": {
-      "general": "Soalan Lazim"
+      "discover": "Kenali Nowly",
+      "setup": "Persediaan",
+      "privacy": "Privasi",
+      "compare": "Perbandingan",
+      "develop": "Pembangunan"
     },
     "items": [
       {
+        "category": "discover",
         "question": "Apakah Nowly?",
-        "answer": "Nowly menunjukkan apa yang anda tonton, dengar atau main sebagai Discord Rich Presence. Ia adalah sambungan pelayar, aplikasi desktop, dan perpustakaan skrip platform.",
-        "category": "general"
+        "answer": "Nowly memaparkan aktiviti di laman web yang disokong sebagai Discord Rich Presence, termasuk platform, tajuk, imej dan kemajuan main balik apabila tersedia. Ia menggabungkan sambungan pelayar, aplikasi desktop dan kehadiran yang boleh dipasang daripada perpustakaan."
       },
       {
-        "question": "Adakah aktiviti saya melalui pelayan anda?",
-        "answer": "Tidak. Aktiviti kekal setempat dan dihantar ke Discord daripada mesin anda. Analitik adalah pilihan dan dimatikan secara lalai.",
-        "category": "general"
+        "category": "discover",
+        "question": "Bagaimanakah Nowly berfungsi?",
+        "answer": "Sambungan mengesan aktiviti di laman yang disokong. Kehadiran yang dipasang menyediakan maklumat, kemudian aplikasi desktop menghantarnya ke Discord secara setempat. Nowly tidak menggantikan aplikasi Discord."
       },
       {
-        "question": "Platform apakah yang disokong?",
-        "answer": "Senarai terkini ialah perpustakaan. Kehadiran baharu boleh ditambah tanpa mengemas kini sambungan, jadi pasang yang anda benar-benar gunakan.",
-        "category": "general"
+        "category": "discover",
+        "question": "Mengapakah sambungan dan aplikasi desktop diperlukan?",
+        "answer": "Sambungan membaca aktiviti dalam tab pelayar. Aplikasi desktop menjadi penghubung setempat supaya Discord dapat menerima kemas kini status."
+      },
+      {
+        "category": "discover",
+        "question": "Perlukah Discord dipasang pada komputer saya?",
+        "answer": "Ya. Discord Desktop mesti dibuka. Discord dalam pelayar atau pada telefon sahaja tidak mencukupi untuk sambungan setempat Nowly."
+      },
+      {
+        "category": "discover",
+        "question": "Laman web mana yang berfungsi dengan Nowly?",
+        "answer": "Lihat perpustakaan untuk senarai laman yang disokong. Setiap kehadiran dibuat untuk platform tertentu. Kehadiran baharu boleh diterbitkan tanpa memasang semula sambungan."
+      },
+      {
+        "category": "discover",
+        "question": "Adakah Netflix, YouTube, Spotify atau Apple TV+ disokong?",
+        "answer": "Ya, jika kehadiran khusus tersedia dalam perpustakaan. Keserasian bergantung pada kehadiran tersebut dan maklumat yang tersedia dalam pelayar."
+      },
+      {
+        "category": "setup",
+        "question": "Bagaimanakah saya memaparkan aktiviti di Discord?",
+        "answer": "Pasang sambungan dan aplikasi desktop Nowly, buka Discord Desktop, pasang kehadiran daripada perpustakaan dan buka laman yang disokong dalam pelayar."
+      },
+      {
+        "category": "setup",
+        "question": "Mengapa status Discord saya tidak muncul?",
+        "answer": "Semak sama ada Discord Desktop dan aplikasi Nowly dibuka, sambungan dipasang pada pelayar yang digunakan, kehadiran aktif dan URL disokong. Jika diminta kebenaran skrip pengguna, benarkan dan muat semula halaman selepas pemasangan."
+      },
+      {
+        "category": "setup",
+        "question": "Pelayar dan sistem operasi mana yang disokong?",
+        "answer": "Sambungan berfungsi dengan Chrome, Firefox dan pelayar berasaskan Chromium seperti Edge, Brave dan Opera. Aplikasi desktop tersedia untuk Windows, macOS dan Linux."
+      },
+      {
+        "category": "setup",
+        "question": "Adakah Nowly percuma?",
+        "answer": "Ya. Ciri utama, sambungan, aplikasi desktop dan perpustakaan kehadiran percuma. Anda boleh menyokong projek secara sukarela melalui pautan sumbangan di laman web."
+      },
+      {
+        "category": "setup",
+        "question": "Bolehkah saya memasang satu kehadiran sahaja?",
+        "answer": "Kehadiran tidak berfungsi sendiri: sambungan dan aplikasi desktop Nowly diperlukan dahulu. Selepas persediaan, pasang hanya kehadiran untuk platform yang anda gunakan."
+      },
+      {
+        "category": "privacy",
+        "question": "Adakah aktiviti saya melalui pelayan Nowly?",
+        "answer": "Tidak. Aktiviti dihantar secara setempat daripada sambungan ke aplikasi desktop dan kemudian ke Discord. Statistik penggunaan pilihan dimatikan secara lalai dan boleh dikawal dalam tetapan."
+      },
+      {
+        "category": "privacy",
+        "question": "Apakah yang dibaca Nowly dalam pelayar saya?",
+        "answer": "Kehadiran membaca maklumat yang diperlukan sahaja daripada laman yang disokong, seperti tajuk video, halaman atau keadaan main balik. Ia berjalan hanya pada laman tempat anda memasangnya. Kehadiran rasmi disemak dan ditandatangani sebelum diedarkan."
+      },
+      {
+        "category": "privacy",
+        "question": "Siapa yang boleh melihat aktiviti Discord saya?",
+        "answer": "Orang yang dibenarkan melihat aktiviti anda di Discord mungkin melihat status anda. Paparan bergantung pada tetapan Discord dan maklumat kehadiran. Elakkan maklumat sensitif dalam aktiviti awam."
+      },
+      {
+        "category": "privacy",
+        "question": "Adakah Nowly selamat?",
+        "answer": "Nowly memproses aktiviti secara setempat, mematikan statistik secara lalai dan menyemak serta menandatangani kehadiran rasmi. Kod projek tersedia kepada umum. Pasang daripada sumber rasmi dan semak kebenaran sambungan."
+      },
+      {
+        "category": "compare",
+        "question": "Apakah perbezaan Nowly dan PreMiD?",
+        "answer": "Kedua-duanya memaparkan aktiviti laman web di Discord. Nowly menggunakan aplikasi desktop sebagai penghubung setempat, kehadiran rasmi yang ditandatangani serta statistik pilihan yang dimatikan secara lalai. Pilih mengikut platform dan cara penggunaan anda."
+      },
+      {
+        "category": "compare",
+        "question": "Bolehkah saya menggunakan Nowly bersama alat Rich Presence lain?",
+        "answer": "Tidak digalakkan. Beberapa aplikasi mungkin mengubah aktiviti Discord serentak sehingga status berubah tanpa diduga atau hilang. Matikan alat lain semasa menguji Nowly."
+      },
+      {
+        "category": "develop",
+        "question": "Bolehkah saya mencipta kehadiran untuk Nowly?",
+        "answer": "Ya. Kehadiran ialah integrasi JavaScript khusus untuk sesuatu platform. SDK, CLI dan dokumentasi menerangkan cara mencipta, menguji, mengesahkan dan mencadangkannya. Kod projek tersedia di GitHub."
+      },
+      {
+        "category": "develop",
+        "question": "Adakah Nowly sumber terbuka?",
+        "answer": "Kod projek tersedia kepada umum di GitHub, tetapi kini diedarkan di bawah lesen BUSL-1.1. Lesen ini membenarkan akses kepada kod sumber, namun bukan lesen sumber terbuka yang diluluskan OSI. Kehadiran, SDK dan alat pembangunan didokumentasikan secara berasingan."
       }
     ]
   },
@@ -1253,8 +1312,8 @@
     "done-description": "Sambungan anda telah disambungkan. Anda boleh menutup tab ini dan kembali ke Nowly.",
     "not-detected-title": "Sambungan tidak dikesan",
     "not-detected-description": "Buka halaman ini dalam pelayar yang telah memasang Nowly, atau pasang sambungan terlebih dahulu.",
-    "error-title": "Ada masalah",
-    "error-description": "Sambungan tidak dapat disambungkan. Cuba lagi, atau mula semula dari tetapan sambungan.",
+    "error-title": "Langkah ini tidak dapat diselesaikan",
+    "error-description": "Pilih Cuba lagi untuk mengulangi langkah ini. Jika masalah berterusan, hubungi sokongan.",
     "retry": "Cuba lagi",
     "signed-in-as": "Log masuk sebagai {name}.",
     "switch-account": "Bukan anda? Tukar akaun"
@@ -1284,7 +1343,7 @@
     "delete-confirm": "Ini memadam akaun Nowly anda dan salinan sambungan yang disegerakkan secara kekal. Tindakan ini tidak boleh dibatalkan.",
     "delete-success": "Akaun anda telah dipadam.",
     "local-note": "Data yang disimpan oleh sambungan pada peranti anda tidak terjejas. Anda boleh memadamnya daripada tetapan sambungan.",
-    "action-error": "Ada masalah. Sila cuba lagi."
+    "action-error": "Permintaan ini tidak dapat diselesaikan. Cuba lagi atau hubungi sokongan jika masalah berterusan."
   },
   "ads": {
     "label": "Iklan"

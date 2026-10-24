@@ -3,42 +3,7 @@
     "announcement": "New: create your own activities on Discord",
     "eyebrow": "Custom activities",
     "title": "Not in the library? Make it yours.",
-    "description": "A side project, a game with friends, your current playlist. Give what you love a place on your Discord profile.",
-    "cta": "Customize with Nowly",
-    "demo": "Your activity, your details",
-    "hint": "Go ahead, try editing it.",
-    "examples": "Activity examples",
-    "name": "Activity name",
-    "details": "Details",
-    "color": "Icon color",
-    "colors": ["Cyan", "Purple", "Orange"],
-    "preview": "Discord preview",
-    "live": "Instant preview",
-    "activity": "Playing a game",
-    "elapsed": "24 minutes elapsed",
-    "button": "View project",
-    "local": "A demo here. Create your real activity in the extension.",
-    "benefits": ["Your text and images", "Links to share", "No code needed"],
-    "presets": [
-      {
-        "label": "A project",
-        "title": "My next big project",
-        "details": "An idea taking shape",
-        "state": "One commit at a time"
-      },
-      {
-        "label": "A game",
-        "title": "An evening with friends",
-        "details": "Building our little world",
-        "state": "Just one more block"
-      },
-      {
-        "label": "A break",
-        "title": "In my own world",
-        "details": "Some music, nothing else",
-        "state": "Do not disturb"
-      }
-    ]
+    "description": "A side project, a game with friends, your current playlist. Give what you love a place on your Discord profile."
   },
   "metadata": {
     "title": "Nowly | Discord Rich Presence for any website",
@@ -60,6 +25,7 @@
     "publisher-email": "contact@nowly.me"
   },
   "navbar": {
+    "skip-content": "Skip to content",
     "docs": "Documentation",
     "library": "Library",
     "roadmap": "Roadmap",
@@ -72,6 +38,7 @@
     "dark": "Dark"
   },
   "hero": {
+    "carousel": { "previous": "Previous card", "next": "Next card", "pause": "Pause cards", "play": "Play cards" },
     "title-before": "Share what you do, in",
     "title-accent": "real time",
     "description": "Nowly turns your activity into a rich, dynamic Discord presence.",
@@ -146,13 +113,15 @@
     }
   },
   "platforms": {
+    "pause": "Pause platforms",
+    "play": "Play platforms",
     "eyebrow": "Platforms",
     "title": "Works with your platforms",
     "description": "Nowly shows what you watch, listen to, or play on the services you already use."
   },
   "steps": {
     "eyebrow": "Setup",
-    "title": "Three steps, Discord follows",
+    "title": "Set up Nowly in three steps.",
     "description": "The extension reads the tab. The desktop app sends the status to Discord.",
     "items": [
       {
@@ -192,7 +161,7 @@
       },
       {
         "title": "Nothing extra on the page",
-        "description": "Scripts run only on the sites you install, nothing runs anywhere else."
+        "description": "Scripts run only on sites where you install a presence."
       },
       {
         "title": "Signed scripts",
@@ -399,7 +368,7 @@
     "report-title": "Report a problem",
     "report-description": "Tell us what is wrong with {name}. We read every report.",
     "report-data-notice": "Submitting sends your message, locale, browser name, and browser version to Nowly and our Discord support channel.",
-    "report-privacy-link": "Learn more in the privacy policy",
+    "report-privacy-link": "Read how report data is handled",
     "report-label": "Description",
     "report-placeholder": "What happened? Which page or action failed?",
     "report-count": "{count}/{max}",
@@ -437,7 +406,7 @@
     "chromeos-email-placeholder": "you@example.com",
     "chromeos-submit": "Notify me",
     "chromeos-success": "Thanks, we'll let you know.",
-    "chromeos-error": "Something went wrong. Please try again.",
+    "chromeos-error": "We could not save your email. Try again in a moment.",
     "version": "Version {version}",
     "card-title": "Download for {platform}",
     "platforms": {
@@ -711,7 +680,7 @@
       "submit": "Send message",
       "sending": "Sending...",
       "success": "Your message was sent.",
-      "error": "We could not send your message. Please try again."
+      "error": "Message not sent. Try again in a moment or contact us on Discord."
     },
     "donate": {
       "title": "Support Nowly",
@@ -951,6 +920,7 @@
     "home": "Back home"
   },
   "cookie-banner": {
+    "title": "Cookie information",
     "message": "This site uses a strictly necessary language cookie. If advertising is later enabled, Google may also use advertising technologies.",
     "learn-more": "Read the cookie policy",
     "dismiss": "Got it"
@@ -1192,7 +1162,7 @@
     "delete-confirm": "This permanently deletes everything Nowly has stored for this device. This cannot be undone.",
     "keep-success": "Thanks, your anonymous stats are kept.",
     "delete-success": "Your data has been deleted.",
-    "action-error": "Something went wrong. Please try again."
+    "action-error": "We could not complete this request. Try again, or contact support if the problem continues."
   },
   "consentPage": {
     "eyebrow": "Privacy",
@@ -1202,7 +1172,7 @@
     "not-detected-title": "Extension not detected",
     "not-detected-description": "Open this page from the browser where Nowly is installed to manage your consent and data.",
     "toggle-title": "Share anonymous usage data",
-    "toggle-description": "Off by default. Helps us see which presences and features are actually used - no browsing history or personal data is ever collected.",
+    "toggle-description": "Off by default. Usage data helps us understand which presences and features people use. We never collect browsing history or personal data.",
     "data-title": "Your data",
     "data-description": "Export everything Nowly has stored for this device, or delete it entirely.",
     "export": "Export my data",
@@ -1210,7 +1180,7 @@
     "delete-confirm": "This permanently deletes everything Nowly has stored for this device. This cannot be undone.",
     "export-success": "Your data was downloaded.",
     "delete-success": "Your data has been deleted.",
-    "action-error": "Something went wrong. Please try again."
+    "action-error": "We could not complete this request. Try again, or contact support if the problem continues."
   },
   "faqPage": {
     "eyebrow": "FAQ",
@@ -1337,8 +1307,8 @@
     "done-description": "Your extension is connected. You can close this tab and go back to Nowly.",
     "not-detected-title": "Extension not detected",
     "not-detected-description": "Open this page in the browser where Nowly is installed, or install the extension first.",
-    "error-title": "Something went wrong",
-    "error-description": "The extension could not be connected. Try again, or start again from the extension settings.",
+    "error-title": "Unable to complete this step",
+    "error-description": "Select Try again to restart this step. If the problem continues, contact support.",
     "retry": "Try again",
     "signed-in-as": "Signed in as {name}.",
     "switch-account": "Not you? Switch account"
@@ -1368,7 +1338,7 @@
     "delete-confirm": "This permanently deletes your Nowly account and the synced copy of your extension. This cannot be undone.",
     "delete-success": "Your account was deleted.",
     "local-note": "Data stored by the extension on your devices is not affected. You can erase it from the extension settings.",
-    "action-error": "Something went wrong. Please try again."
+    "action-error": "We could not complete this request. Try again, or contact support if the problem continues."
   },
   "ads": {
     "label": "Advertisement"

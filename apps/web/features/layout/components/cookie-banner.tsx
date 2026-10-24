@@ -35,7 +35,7 @@ export const CookieBanner = () => {
   if (!visible) return null;
 
   return (
-    <div className="fixed right-0 bottom-0 left-0 z-40 border-t border-border bg-background/95 shadow-lg backdrop-blur-sm">
+    <aside aria-label={t("title")} className="fixed right-0 bottom-0 left-0 z-40 border-t border-border bg-background/95 shadow-lg backdrop-blur-sm">
       <div className="mx-auto flex w-full max-w-[75rem] flex-col gap-3 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-muted-foreground">
           {t("message")}{" "}
@@ -48,6 +48,6 @@ export const CookieBanner = () => {
           {t("dismiss")}
         </button>
       </div>
-    </div>
+    </aside>
   );
 };

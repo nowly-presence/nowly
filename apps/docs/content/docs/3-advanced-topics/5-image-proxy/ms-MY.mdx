@@ -1,37 +1,37 @@
 ---
-title: Image Proxy
-description: Use the Nowly image proxy when Discord cannot load a presence image directly from a supported external CDN.
+title: Proksi imej
+description: Gunakan proksi imej Nowly apabila Discord tidak dapat memuatkan imej kehadiran secara terus daripada CDN luaran yang disokong.
 ---
 
-## What It Is For
+## Kegunaan
 
-The image proxy is built for a specific case: a presence can see a public image on the page, but Discord cannot reliably load it from the original URL.
+Proksi imej disediakan untuk keadaan khusus: kehadiran dapat melihat imej awam pada halaman, tetapi Discord tidak dapat memuatkannya dengan boleh dipercayai daripada URL asal.
 
-This is useful for video thumbnails, avatars, posters, or category images served by an external CDN when:
+Ia berguna untuk lakaran kecil video, avatar, poster atau imej kategori yang disajikan oleh CDN luaran apabila:
 
-- the image is public and already visible in the browser;
-- the CDN URL is too long for Discord Rich Presence;
-- Discord rejects, expires, or fails to download the direct image;
-- the presence needs to show content-specific artwork instead of only the service logo.
+- imej itu awam dan sudah kelihatan dalam pelayar;
+- URL CDN terlalu panjang untuk Discord Rich Presence;
+- Discord menolak imej terus, URL tamat tempoh atau muat turun gagal;
+- kehadiran perlu menunjukkan imej khusus kandungan dan bukan hanya logo perkhidmatan.
 
-This is not a general-purpose image proxy. The API only accepts explicitly allowed services and domains.
+Ini bukan proksi imej serba guna. API hanya menerima perkhidmatan dan domain yang dibenarkan secara jelas.
 
-## How It Works
+## Cara ia berfungsi
 
-The recommended flow uses a temporary short URL:
+Aliran yang disyorkan menggunakan URL pendek sementara:
 
 ```txt
 POST https://api.nowly.me/images-proxy
 GET  https://api.nowly.me/images-proxy/<id>
 ```
 
-The presence sends the real CDN image URL to the API. The API checks that the service is supported, downloads the image, validates its MIME type and size, then stores it temporarily in cache. It returns a short URL such as:
+Kehadiran menghantar URL imej CDN sebenar kepada API. API menyemak sama ada perkhidmatan disokong, memuat turun imej, mengesahkan jenis MIME dan saiznya, kemudian menyimpannya sementara dalam cache. API memulangkan URL pendek seperti:
 
 ```txt
 https://api.nowly.me/images-proxy/abc123...
 ```
 
-That URL directly returns the image bytes with the correct `Content-Type`. It is intended for `largeImageKey` or `smallImageKey`.
+URL ini memulangkan bait imej secara terus dengan `Content-Type` yang betul. Ia untuk digunakan sebagai `largeImageKey` atau `smallImageKey`.
 
 ```ts filename="presence.ts"
 import { createCachedImageProxyUrl } from "@nowly/sdk"
@@ -44,22 +44,22 @@ await presence.setActivity({
 })
 ```
 
-The cache is short-lived, currently five minutes. The helper also keeps an in-memory cache inside the presence so it does not call the API on every update.
+Tempoh cache adalah singkat, kini lima minit. Pembantu ini turut menyimpan cache dalam memori kehadiran supaya API tidak dipanggil pada setiap kemas kini.
 
-## Direct Endpoint
+## Titik akhir terus
 
-The older direct proxy remains available for manual testing or URLs that are already short enough:
+Proksi terus yang lebih lama masih tersedia untuk ujian manual atau URL yang sudah cukup pendek:
 
 ```txt
 https://api.nowly.me/image-proxy?service=<service>&url=<encoded-url>
 https://api.nowly.me/i?u=<encoded-url>
 ```
 
-The `url` and `u` parameters must be encoded with `encodeURIComponent`. For Discord Rich Presence, prefer `createCachedImageProxyUrl` because Discord limits image keys to 300 characters.
+Parameter `url` dan `u` mesti dikodkan dengan `encodeURIComponent`. Untuk Discord Rich Presence, utamakan `createCachedImageProxyUrl` kerana Discord mengehadkan kunci imej kepada 300 aksara.
 
-## Setting It Up In A Presence
+## Menyediakannya dalam kehadiran
 
-First, extract the real image URL from the page:
+Mula-mula, dapatkan URL imej sebenar daripada halaman:
 
 ```ts filename="presence.ts"
 const getPoster = (video: HTMLVideoElement): string | undefined => {
@@ -70,7 +70,7 @@ const getPoster = (video: HTMLVideoElement): string | undefined => {
 }
 ```
 
-Then pass that URL through the helper before setting the activity:
+Kemudian, lalukan URL itu melalui pembantu sebelum menetapkan aktiviti:
 
 ```ts filename="presence.ts"
 import { createCachedImageProxyUrl } from "@nowly/sdk"
@@ -83,11 +83,11 @@ await presence.setActivity({
 })
 ```
 
-Always keep a fallback asset. If the page has no image, the image is too large, or the origin is not allowed, the presence should continue to work with `Assets.Logo` or a local asset.
+Sentiasa sediakan imej sandaran. Jika halaman tiada imej, imej terlalu besar atau sumber tidak dibenarkan, kehadiran patut terus berfungsi dengan `Assets.Logo` atau imej setempat.
 
-## Adding A Service
+## Menambah perkhidmatan
 
-Allowed domains are checked by the API, not by the presence - a presence cannot proxy an arbitrary domain just by asking for it at runtime. There is no separate approval step or API code change: you declare the hosts your presence needs directly in its own `metadata.json`, using the same `service` value (your presence slug) you already pass to the helper:
+Domain yang dibenarkan diperiksa oleh API, bukan oleh kehadiran. Kehadiran tidak boleh menggunakan proksi bagi domain sewenang-wenangnya hanya dengan memintanya semasa berjalan. Tiada langkah kelulusan berasingan atau perubahan kod API: isytiharkan hos yang diperlukan terus dalam `metadata.json` kehadiran anda. Gunakan nilai `service` yang sama (slug kehadiran) seperti yang dihantar kepada pembantu:
 
 ```json filename="metadata.json"
 "imageProxy": {
@@ -96,12 +96,12 @@ Allowed domains are checked by the API, not by the presence - a presence cannot 
 }
 ```
 
-This is published to the API automatically the same way the rest of your `metadata.json` already is. The API only trusts this declaration for your own presence's `service` id, so a presence cannot declare hostnames on another presence's behalf, and a request is only allowed if the target URL's hostname actually matches one of your declared suffixes.
+Maklumat ini diterbitkan kepada API secara automatik bersama kandungan `metadata.json` yang lain. API hanya mempercayai pengisytiharan untuk ID `service` kehadiran anda sendiri. Kehadiran tidak boleh mengisytiharkan nama hos bagi pihak kehadiran lain; permintaan hanya dibenarkan jika nama hos URL sasaran benar-benar sepadan dengan salah satu akhiran yang diisytiharkan.
 
-When your PR touches `imageProxy`, the presence preview bot detects it automatically, adds an **Image Proxy Requested** section to its comment listing the declared hostnames, and applies an `image-proxy` label. A reviewer still has to confirm the hostnames are public and safe to proxy before merging - explain in your PR description why Discord can't use the direct image URL and what image the user will see.
+Apabila PR anda mengubah `imageProxy`, bot pratonton kehadiran mengesannya secara automatik, menambah bahagian **Image Proxy Requested** pada komennya yang menyenaraikan nama hos dan meletakkan label `image-proxy`. Penyemak masih perlu mengesahkan bahawa hos itu awam dan selamat untuk proksi sebelum penggabungan. Jelaskan dalam PR mengapa Discord tidak boleh menggunakan URL imej terus dan imej yang akan dilihat pengguna.
 
-## Limits And Security
+## Had dan keselamatan
 
-The proxy only serves public images from hosts a reviewed presence has declared. It rejects non-HTTPS URLs, hosts that don't match any declared suffix, responses that are not images, and files that are too large.
+Proksi hanya menyajikan imej awam daripada hos yang diisytiharkan oleh kehadiran yang telah disemak. Ia menolak URL bukan HTTPS, hos yang tidak sepadan dengan akhiran diisytiharkan, respons yang bukan imej dan fail yang terlalu besar.
 
-The endpoints themselves are public and unauthenticated (presences call them directly from the browser, so there's no secret to attach) and share the API's global rate limit - there's no per-presence quota. Do not use the proxy for private account content, authenticated resources, tracking URLs, arbitrary user input, or non-image content.
+Titik akhir ini awam dan tidak memerlukan pengesahan (kehadiran memanggilnya terus dari pelayar, jadi tiada rahsia untuk dilampirkan) serta berkongsi had kadar global API; tiada kuota bagi setiap kehadiran. Jangan gunakan proksi untuk kandungan akaun peribadi, sumber yang memerlukan pengesahan, URL penjejakan, input pengguna sewenang-wenangnya atau kandungan bukan imej.
