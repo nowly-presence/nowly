@@ -4,7 +4,7 @@
   "description": "Nowly browser extension (side panel) - share your web activity on Discord.",
   "private": true,
   "type": "module",
-  "license": "BUSL-1.1",
+  "license": "MIT",
   "scripts": {
     "dev": "tsx scripts/build.ts chrome --canary --watch",
     "build": "tsx scripts/build.ts chrome && tsx scripts/build.ts firefox",

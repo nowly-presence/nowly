@@ -36,7 +36,7 @@ Se a plataforma que importa para você só existe na loja do PreMiD, ele é simp
 
 ## Licença
 
-O código do PreMiD é aberto. As presenças do Nowly têm código aberto sob a licença MIT, e seu SDK e CLI têm documentação para colaboradores. O código principal do Nowly é público no GitHub sob a Business Source License 1.1, uma licença com código disponível para consulta: você pode ler e auditar o código, mas ela não é uma licença de código aberto aprovada pela OSI. Vale conhecer essa distinção se ela for importante para você.
+PreMiD e Nowly são de código aberto. Os repositórios públicos do Nowly (aplicativo, presenças, SDK, CLI e bot) usam a licença MIT. O CLI interno privado e conteúdo de terceiros não estão cobertos.
 
 ## Qual escolher?
 

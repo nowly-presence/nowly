@@ -36,7 +36,7 @@ If the platform you care about only exists in PreMiD's store, PreMiD is the bett
 
 ## Licensing
 
-PreMiD's code is open source. Nowly's presences are open source under the MIT license, and its SDK and CLI are documented for contributors. The main Nowly code is public on GitHub under the Business Source License 1.1, a source-available license: you can read and audit it, but it is not an OSI-approved open-source license. If that distinction matters to you, it is worth knowing.
+PreMiD and Nowly are open source. Nowly’s public app, presences, SDK, CLI and bot repositories use the MIT License. The private internal release CLI and third-party content are not covered by those licences.
 
 ## Which one should you pick?
 

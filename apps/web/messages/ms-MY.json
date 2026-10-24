@@ -1020,7 +1020,7 @@
     "badge": "Undang-undang",
     "title": "Terma Perkhidmatan",
     "description": "Peraturan untuk menggunakan Nowly, sambungan pelayar, aplikasi desktop, dan laman web.",
-    "last-updated": "Kemas kini terakhir: 16 Oktober 2026.",
+    "last-updated": "Kemas kini terakhir: 24 Oktober 2026.",
     "sections": [
       {
         "title": "Penerimaan",
@@ -1028,7 +1028,7 @@
       },
       {
         "title": "Perkhidmatan",
-        "body": "Nowly ialah alat <strong>percuma</strong> yang mengemas kini Discord Rich Presence daripada laman web yang disokong, menggunakan aplikasi desktop setempat. Kod sumber tersedia di GitHub di bawah BUSL-1.1 (source-available; bukan lesen sumber terbuka yang diluluskan OSI sehingga Tarikh Perubahan). Perkhidmatan ini termasuk:<ul><li>Sambungan pelayar untuk Chromium dan Firefox.</li><li>Aplikasi desktop yang bercakap dengan Discord pada komputer anda.</li><li>Laman web nowly.me dan docs.nowly.me.</li><li>API awam dan SDK pembangun untuk membina kehadiran.</li><li>Pembinaan Canary pilihan daripada CDN kami, yang merupakan pra-keluaran dan mungkin tidak ditandatangani.</li></ul>"
+        "body": "Nowly ialah alat <strong>percuma</strong> yang mengemas kini Discord Rich Presence daripada laman web yang disokong melalui aplikasi desktop setempat. Kod sumbernya sumber terbuka di bawah lesen MIT di GitHub. Perkhidmatan ini termasuk:<ul><li>Sambungan pelayar untuk Chromium dan Firefox.</li><li>Aplikasi desktop yang bercakap dengan Discord pada komputer anda.</li><li>Laman web nowly.me dan docs.nowly.me.</li><li>API awam dan SDK pembangun untuk membina kehadiran.</li><li>Pembinaan Canary pilihan daripada CDN kami, yang merupakan pra-keluaran dan mungkin tidak ditandatangani.</li></ul>"
       },
       {
         "title": "Umur minimum",
@@ -1036,7 +1036,7 @@
       },
       {
         "title": "Lesen",
-        "body": "Nowly dilesenkan di bawah <strong>Business Source License 1.1</strong>. Anda boleh menggunakan, menyalin, dan mengubah suainya untuk tujuan <strong>peribadi, bukan komersial</strong>. Kegunaan komersial (termasuk jualan semula atau menawarkan Nowly sebagai perkhidmatan berbayar atau dihoskan) memerlukan lesen berasingan daripada penerbit. Lesen bertukar kepada MIT pada Tarikh Perubahan: empat tahun selepas pengedaran awam pertama, dan dalam apa jua keadaan tidak lebih awal daripada <strong>1 Jun 2028</strong>. Teks penuh terdapat dalam <a href=\"https://github.com/nowly-presence/nowly\">repositori GitHub</a>. Ini tidak melesenkan kandungan pihak ketiga (YouTube, Twitch, dan sebagainya) yang anda paparkan melalui Nowly."
+        "body": "Kod sumber Nowly dilesenkan di bawah <strong>lesen MIT</strong>, yang membenarkan penggunaan, pengubahsuaian dan pengedaran termasuk secara komersial tertakluk pada syarat dan notis hak ciptanya. Teks penuh terdapat di <a href=\"https://github.com/nowly-presence/nowly\">GitHub</a>. Kandungan, nama dan tanda dagangan pihak ketiga tidak diliputi."
       },
       {
         "title": "Penggunaan yang boleh diterima",
@@ -1105,7 +1105,7 @@
       },
       {
         "title": "Harta intelek",
-        "body": "Kod sumber Nowly diterbitkan di bawah <strong>BUSL-1.1</strong> di <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>. Tanda dagangan pihak ketiga kekal milik pemiliknya. <strong>Nowly tidak bergabung dengan Discord Inc. atau platform yang disokong.</strong>"
+        "body": "Kod sumber Nowly diterbitkan di bawah <strong>lesen MIT</strong> di <a href=\"https://github.com/nowly-presence/nowly\">GitHub</a>. Tanda dagangan pihak ketiga kekal milik pemiliknya. <strong>Nowly tidak bergabung dengan Discord Inc. atau platform yang disokong.</strong>"
       },
       {
         "title": "Kandungan menyalahi undang-undang",
@@ -1403,7 +1403,7 @@
       },
       {
         "title": "Sumber terbuka dan lesen",
-        "body": "Presence ialah sumber terbuka di bawah lesen MIT, jadi sesiapa sahaja boleh membaca, membaiki atau menulisnya. Sambungan, aplikasi desktop dan laman web adalah awam di GitHub di bawah Business Source License 1.1: anda boleh membaca dan mengaudit setiap baris, tetapi ia ialah lesen sumber tersedia, bukan lesen sumber terbuka yang diluluskan oleh OSI."
+        "body": "Repositori awam Nowly (aplikasi, presence, SDK, CLI dan bot) ialah sumber terbuka di bawah lesen MIT. Kod boleh dibaca, diubah dan dikongsi mengikut syaratnya. CLI keluaran dalaman yang berasingan dan kandungan pihak ketiga tidak termasuk."
       }
     ],
     "facts": {

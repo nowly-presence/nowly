@@ -15,14 +15,14 @@ const messagesDirectory = resolve(import.meta.dirname, "../../messages");
 const locales = readdirSync(messagesDirectory).filter((file) => file.endsWith(".json"));
 
 describe.each(locales)("legal content in %s", (file) => {
-  const messages: Record<"privacy-page" | "tos-page", LegalPage> = JSON.parse(readFileSync(resolve(messagesDirectory, file), "utf8"));
+  const messages: Record<"privacy-page" | "tos-page" | "legal-notice-page", LegalPage> = JSON.parse(readFileSync(resolve(messagesDirectory, file), "utf8"));
   const privacy = messages["privacy-page"];
   const terms = messages["tos-page"];
 
-  it("keeps complete localized documents with unique titles and matching update dates", () => {
+  it("keeps complete localized documents with unique titles and separate update dates", () => {
     expect(privacy.sections).toHaveLength(19);
     expect(terms.sections).toHaveLength(13);
-    expect(privacy["last-updated"]).toBe(terms["last-updated"]);
+    expect(privacy["last-updated"]).not.toBe(terms["last-updated"]);
 
     for (const page of [privacy, terms]) {
       expect(new Set(page.sections.map((section) => section.title)).size).toBe(page.sections.length);
@@ -41,6 +41,15 @@ describe.each(locales)("legal content in %s", (file) => {
     for (const detail of ["2.4.0", "UUID", "SHA-256", "MIME", "JSON", "HTTPS"]) expect(upload?.body).toContain(detail);
 
     expect(upload?.body).toMatch(/GDPR|RGPD|DSGVO|ΓΚΠΔ|RODO|GVKT/);
+  });
+
+  it("describes the MIT licence without obsolete non-commercial restrictions", () => {
+    const licence = terms.sections[3].body;
+    expect(licence).toContain("MIT");
+    expect(licence).toContain('href="https://github.com/nowly-presence/nowly"');
+    for (const page of [terms, messages["legal-notice-page"]]) {
+      expect(JSON.stringify(page)).not.toMatch(/BUSL|Business Source License|Change Date|2028/);
+    }
   });
 
   it("explains retention, caches, authenticated erasure and hosting rules", () => {

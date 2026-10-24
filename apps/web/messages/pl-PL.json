@@ -1020,7 +1020,7 @@
     "badge": "Prawne",
     "title": "Warunki korzystania",
     "description": "Zasady korzystania z Nowly, rozszerzenia przeglądarki, aplikacji desktopowej i strony internetowej.",
-    "last-updated": "Ostatnia aktualizacja: 16 października 2026.",
+    "last-updated": "Ostatnia aktualizacja: 24 października 2026.",
     "sections": [
       {
         "title": "Akceptacja",
@@ -1028,7 +1028,7 @@
       },
       {
         "title": "Usługa",
-        "body": "Nowly to <strong>darmowe</strong> narzędzie, które aktualizuje Discord Rich Presence z obsługiwanych stron internetowych, korzystając z lokalnej aplikacji desktopowej. Kod źródłowy jest dostępny na GitHub na licencji BUSL-1.1 (source-available; nie jest to licencja open-source zatwierdzona przez OSI do Change Date). Usługa obejmuje:<ul><li>Rozszerzenie przeglądarki dla Chromium i Firefox.</li><li>Aplikację desktopową, która łączy się z Discordem na Twoim komputerze.</li><li>Stronę nowly.me i docs.nowly.me.</li><li>Publiczne API i SDK dla deweloperów do tworzenia obecności.</li><li>Opcjonalne buildy Canary z naszego CDN, będące wersjami przedpremierowymi, mogącymi być niepodpisanymi.</li></ul>"
+        "body": "Nowly to <strong>darmowe</strong> narzędzie aktualizujące Discord Rich Presence na podstawie obsługiwanych stron za pomocą lokalnej aplikacji. Kod źródłowy jest otwarty na licencji MIT na GitHubie. Usługa obejmuje:<ul><li>Rozszerzenie przeglądarki dla Chromium i Firefox.</li><li>Aplikację desktopową, która łączy się z Discordem na Twoim komputerze.</li><li>Stronę nowly.me i docs.nowly.me.</li><li>Publiczne API i SDK dla deweloperów do tworzenia obecności.</li><li>Opcjonalne buildy Canary z naszego CDN, będące wersjami przedpremierowymi, mogącymi być niepodpisanymi.</li></ul>"
       },
       {
         "title": "Minimalny wiek",
@@ -1036,7 +1036,7 @@
       },
       {
         "title": "Licencja",
-        "body": "Nowly jest licencjonowane na podstawie <strong>Business Source License 1.1</strong>. Możesz używać, kopiować i modyfikować je do celów <strong>osobistych, niekomercyjnych</strong>. Użycie komercyjne (w tym odsprzedaż lub oferowanie Nowly jako płatnej lub hostowanej usługi) wymaga osobnej licencji od publishera. Licencja przechodzi na MIT w Change Date: cztery lata po pierwszej publicznej dystrybucji, w każdym razie nie wcześniej niż <strong>1 czerwca 2028</strong>. Pełny tekst znajduje się w <a href=\"https://github.com/nowly-presence/nowly\">repozytorium GitHub</a>. Nie licencjonuje to treści osób trzecich (YouTube, Twitch itd.), które wyświetlasz przez Nowly."
+        "body": "Kod źródłowy Nowly jest udostępniony na <strong>licencji MIT</strong>, która pozwala go używać, modyfikować i rozpowszechniać także komercyjnie, z zachowaniem jej warunków i informacji o prawach autorskich. Pełny tekst jest na <a href=\"https://github.com/nowly-presence/nowly\">GitHub</a>. Treści, nazwy i znaki towarowe osób trzecich nie są objęte tą licencją."
       },
       {
         "title": "Dozwolone użycie",
@@ -1105,7 +1105,7 @@
       },
       {
         "title": "Własność intelektualna",
-        "body": "Kod źródłowy Nowly jest publikowany na licencji <strong>BUSL-1.1</strong> pod adresem <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>. Znaki towarowe osób trzecich pozostają własnością ich właścicieli. <strong>Nowly nie jest powiązane z Discord Inc. ani obsługiwanymi platformami.</strong>"
+        "body": "Kod źródłowy Nowly jest publikowany na <strong>licencji MIT</strong> na <a href=\"https://github.com/nowly-presence/nowly\">GitHub</a>. Znaki towarowe należą do ich właścicieli. <strong>Nowly nie jest powiązane z Discord Inc. ani obsługiwanymi platformami.</strong>"
       },
       {
         "title": "Nielegalne treści",
@@ -1403,7 +1403,7 @@
       },
       {
         "title": "Open source i licencje",
-        "body": "Integracje są open source na licencji MIT, więc każdy może je czytać, poprawiać albo napisać własną. Rozszerzenie, aplikacja na komputer i strona są publiczne na GitHubie na licencji Business Source License 1.1: możesz przeczytać i sprawdzić każdą linię, ale to licencja typu source-available, a nie licencja open source zatwierdzona przez OSI."
+        "body": "Publiczne repozytoria Nowly (aplikacja, presences, SDK, CLI i bot) są otwarte na licencji MIT. Kod można przeglądać, zmieniać i udostępniać zgodnie z jej warunkami. Oddzielne prywatne narzędzie CLI do wydań i treści osób trzecich są wyłączone."
       }
     ],
     "facts": {

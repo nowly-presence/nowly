@@ -1020,7 +1020,7 @@
     "badge": "Yasal",
     "title": "Hizmet Şartları",
     "description": "Nowly'yi, tarayıcı uzantısını, masaüstü uygulamasını ve web sitesini kullanma kuralları.",
-    "last-updated": "Son güncelleme: 16 Ekim 2026.",
+    "last-updated": "Son güncelleme: 24 Ekim 2026.",
     "sections": [
       {
         "title": "Kabul",
@@ -1028,7 +1028,7 @@
       },
       {
         "title": "Hizmet",
-        "body": "Nowly, yerel bir masaüstü uygulaması kullanarak desteklenen web sitelerinden Discord Rich Presence'ı güncelleyen <strong>ücretsiz</strong> bir araçtır. Kaynak kodu, GitHub'da BUSL-1.1 altında mevcuttur (source-available; Değişiklik Tarihine kadar OSI onaylı açık kaynak lisansı değildir). Hizmet şunları içerir:<ul><li>Chromium ve Firefox için bir tarayıcı uzantısı.</li><li>Bilgisayarında Discord ile konuşan bir masaüstü uygulaması.</li><li>nowly.me web sitesi ve docs.nowly.me.</li><li>Varlık oluşturmak için herkese açık bir API ve geliştirici SDK'sı.</li><li>Ön sürüm niteliğinde olan ve imzasız olabilen, CDN'imizden isteğe bağlı Canary derlemeleri.</li></ul>"
+        "body": "Nowly, desteklenen sitelerden Discord Rich Presence durumunu yerel masaüstü uygulamasıyla güncelleyen <strong>ücretsiz</strong> bir araçtır. Kaynak kodu GitHub’da MIT lisansıyla açık kaynaktır. Hizmet şunları içerir:<ul><li>Chromium ve Firefox için bir tarayıcı uzantısı.</li><li>Bilgisayarında Discord ile konuşan bir masaüstü uygulaması.</li><li>nowly.me web sitesi ve docs.nowly.me.</li><li>Varlık oluşturmak için herkese açık bir API ve geliştirici SDK'sı.</li><li>Ön sürüm niteliğinde olan ve imzasız olabilen, CDN'imizden isteğe bağlı Canary derlemeleri.</li></ul>"
       },
       {
         "title": "Asgari yaş",
@@ -1036,7 +1036,7 @@
       },
       {
         "title": "Lisans",
-        "body": "Nowly, <strong>Business Source License 1.1</strong> altında lisanslanmıştır. <strong>Kişisel, ticari olmayan</strong> amaçlar için kullanabilir, kopyalayabilir ve değiştirebilirsin. Ticari kullanım (Nowly'yi yeniden satmak veya ücretli ya da barındırılan bir hizmet olarak sunmak dahil) yayıncıdan ayrı bir lisans gerektirir. Lisans, ilk kamuya açık dağıtımdan dört yıl sonra ve her halükarda <strong>1 Haziran 2028</strong>'den önce olmamak üzere, Değişiklik Tarihinde MIT'ye dönüşür. Tam metin <a href=\"https://github.com/nowly-presence/nowly\">GitHub deposunda</a> bulunur. Bu, Nowly aracılığıyla görüntülediğin üçüncü taraf içeriğini (YouTube, Twitch vb.) lisanslamaz."
+        "body": "Nowly kaynak kodu, ticari kullanım dahil kullanım, değiştirme ve dağıtıma koşulları ve telif hakkı bildirimi korunduğu sürece izin veren <strong>MIT lisansı</strong> altındadır. Tam metin <a href=\"https://github.com/nowly-presence/nowly\">GitHub</a> deposundadır. Üçüncü taraf içerikleri, adları ve markaları bu lisansa dahil değildir."
       },
       {
         "title": "Kabul edilebilir kullanım",
@@ -1105,7 +1105,7 @@
       },
       {
         "title": "Fikri mülkiyet",
-        "body": "Nowly kaynak kodu, <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a> adresinde <strong>BUSL-1.1</strong> altında yayınlanmıştır. Üçüncü taraf ticari markalar sahiplerine aittir. <strong>Nowly, Discord Inc. veya desteklenen platformlarla bağlantılı değildir.</strong>"
+        "body": "Nowly kaynak kodu <a href=\"https://github.com/nowly-presence/nowly\">GitHub</a> üzerinde <strong>MIT lisansı</strong> ile yayımlanır. Üçüncü taraf markaları sahiplerine aittir. <strong>Nowly, Discord Inc. veya desteklenen platformlarla bağlantılı değildir.</strong>"
       },
       {
         "title": "Yasa dışı içerik",
@@ -1403,7 +1403,7 @@
       },
       {
         "title": "Açık kaynak ve lisanslar",
-        "body": "Presence'lar MIT lisansıyla açık kaynaktır; herkes okuyabilir, düzeltebilir ya da yenisini yazabilir. Uzantı, masaüstü uygulaması ve web sitesi Business Source License 1.1 ile GitHub'da herkese açıktır: her satırı okuyup denetleyebilirsin, ancak bu OSI onaylı bir açık kaynak lisansı değil, kaynağı erişilebilir bir lisanstır."
+        "body": "Nowly’nin herkese açık depoları (uygulama, presence, SDK, CLI ve bot) MIT lisansıyla açık kaynaktır. Kod, lisans koşullarına göre incelenebilir, değiştirilebilir ve paylaşılabilir. Ayrı özel dahili yayın CLI aracı ve üçüncü taraf içerikleri dahil değildir."
       }
     ],
     "facts": {

@@ -1015,7 +1015,7 @@
     "badge": "Légal",
     "title": "Conditions d’utilisation",
     "description": "Les règles d'utilisation de Nowly, de l'extension navigateur, de l'application bureau et du site web.",
-    "last-updated": "Dernière mise à jour : 16 octobre 2026.",
+    "last-updated": "Dernière mise à jour : 24 octobre 2026.",
     "sections": [
       {
         "title": "Acceptation",
@@ -1023,7 +1023,7 @@
       },
       {
         "title": "Service",
-        "body": "Nowly est un outil <strong>gratuit</strong> qui met à jour la Rich Presence Discord à partir de sites pris en charge, via une application bureau locale. Le code source est disponible sur GitHub sous BUSL-1.1 (code source accessible ; ce n’est pas une licence open source OSI tant que la Change Date n’est pas atteinte). Le service comprend :<ul><li>Une extension pour Chromium et Firefox.</li><li>Une application bureau qui dialogue avec Discord sur votre ordinateur.</li><li>Les sites nowly.me et docs.nowly.me.</li><li>Une API publique et un SDK pour créer des présences.</li><li>Des builds Canary facultatives, préversion, éventuellement non signées.</li></ul>"
+        "body": "Nowly est un outil <strong>gratuit</strong> qui met à jour la Rich Presence Discord depuis les sites compatibles via une application bureau locale. Son code source est open source sous licence MIT sur GitHub. Le service comprend :<ul><li>Une extension pour Chromium et Firefox.</li><li>Une application bureau qui dialogue avec Discord sur votre ordinateur.</li><li>Les sites nowly.me et docs.nowly.me.</li><li>Une API publique et un SDK pour créer des présences.</li><li>Des builds Canary facultatives, préversion, éventuellement non signées.</li></ul>"
       },
       {
         "title": "Âge minimum",
@@ -1031,7 +1031,7 @@
       },
       {
         "title": "Licence",
-        "body": "Nowly est distribué sous <strong>Business Source License 1.1</strong>. Vous pouvez l’utiliser, le copier et le modifier à des fins <strong>personnelles et non commerciales</strong>. Tout usage commercial (revente, offre en tant que service payant ou hébergé) nécessite une licence distincte de l’éditeur. La licence bascule en MIT à la Change Date : quatre ans après la première distribution publique, et en tout état de cause pas avant le <strong>1er juin 2028</strong>. Le texte complet figure dans le <a href=\"https://github.com/nowly-presence/nowly\">dépôt GitHub</a>. Cela ne couvre pas les contenus des plateformes tierces que vous affichez via Nowly."
+        "body": "Le code source de Nowly est distribué sous <strong>licence MIT</strong>, qui autorise son utilisation, sa modification et sa redistribution, y compris à des fins commerciales, dans le respect de ses conditions et de la mention de droit d’auteur. Le texte intégral figure dans le dépôt <a href=\"https://github.com/nowly-presence/nowly\">GitHub</a>. Cette licence ne couvre pas les contenus, noms et marques de tiers affichés via Nowly."
       },
       {
         "title": "Usage acceptable",
@@ -1100,7 +1100,7 @@
       },
       {
         "title": "Propriété intellectuelle",
-        "body": "Le code source de Nowly est publié sous <strong>BUSL-1.1</strong> sur <a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>. Les marques des plateformes tierces restent la propriété de leurs titulaires. <strong>Nowly n’est pas affilié à Discord Inc. ni aux plateformes prises en charge.</strong>"
+        "body": "Le code source de Nowly est publié sous <strong>licence MIT</strong> sur <a href=\"https://github.com/nowly-presence/nowly\">GitHub</a>. Les marques de tiers restent la propriété de leurs titulaires. <strong>Nowly n’est pas affilié à Discord Inc. ni aux plateformes prises en charge.</strong>"
       },
       {
         "title": "Signalement de contenus illicites",
@@ -1287,7 +1287,7 @@
       {
         "category": "develop",
         "question": "Nowly est-il open source ?",
-        "answer": "Le code du projet est public et disponible sur GitHub. Il est actuellement distribué sous licence BUSL-1.1, une licence source-available qui n’est pas une licence open source approuvée par l’OSI. Les présences, le SDK et les outils de développement sont documentés séparément."
+        "answer": "Les dépôts publics de Nowly (application, présences, SDK, CLI et bot) sont open source sous licence MIT. Chacun peut consulter, modifier et partager leur code selon ses conditions. Le CLI interne privé de publication et les contenus tiers n’en font pas partie."
       }
     ]
   },
@@ -1398,7 +1398,7 @@
       },
       {
         "title": "Open source et licences",
-        "body": "Les présences sont open source sous licence MIT : tout le monde peut les lire, les corriger ou en écrire une. L'extension, l'application de bureau et le site sont publics sur GitHub sous Business Source License 1.1 : vous pouvez lire et auditer chaque ligne, mais c'est une licence « source disponible », pas une licence open source approuvée par l'OSI."
+        "body": "Les dépôts publics de Nowly (application, présences, SDK, CLI et bot) sont open source sous licence MIT. Chacun peut consulter, modifier et partager leur code selon ses conditions. Le CLI interne privé de publication et les contenus tiers n’en font pas partie."
       }
     ],
     "facts": {

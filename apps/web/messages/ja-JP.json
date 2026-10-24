@@ -1020,7 +1020,7 @@
     "badge": "法律",
     "title": "利用規約",
     "description": "Nowly、ブラウザ拡張機能、デスクトップアプリ、ウェブサイトの利用に関するルール。",
-    "last-updated": "最終更新日：2026年10月16日。",
+    "last-updated": "最終更新日：2026年10月24日。",
     "sections": [
       {
         "title": "同意",
@@ -1028,7 +1028,7 @@
       },
       {
         "title": "サービス",
-        "body": "Nowlyは、ローカルデスクトップアプリを使用して対応ウェブサイトからDiscord Rich Presenceを更新する<strong>無料</strong>のツールです。ソースコードはGitHub上でBUSL-1.1（source-available；Change DateまではOSI承認のオープンソースライセンスではありません）のもとで公開されています。本サービスには以下が含まれます：<ul><li>ChromiumおよびFirefox用のブラウザ拡張機能。</li><li>お使いのコンピュータ上でDiscordと通信するデスクトップアプリ。</li><li>nowly.meウェブサイトとdocs.nowly.me。</li><li>プレゼンスを構築するための公開APIと開発者SDK。</li><li>当社のCDNからの任意のCanaryビルド（プレリリースであり、署名されていない場合があります）。</li></ul>"
+        "body": "Nowlyは、対応サイトのDiscord Rich Presenceをローカルのデスクトップアプリで更新する<strong>無料</strong>のツールです。ソースコードはGitHubでMITライセンスのオープンソースです。サービスには以下が含まれます：<ul><li>ChromiumおよびFirefox用のブラウザ拡張機能。</li><li>お使いのコンピュータ上でDiscordと通信するデスクトップアプリ。</li><li>nowly.meウェブサイトとdocs.nowly.me。</li><li>プレゼンスを構築するための公開APIと開発者SDK。</li><li>当社のCDNからの任意のCanaryビルド（プレリリースであり、署名されていない場合があります）。</li></ul>"
       },
       {
         "title": "最低年齢",
@@ -1036,7 +1036,7 @@
       },
       {
         "title": "ライセンス",
-        "body": "Nowlyは<strong>Business Source License 1.1</strong>のもとでライセンスされています。<strong>個人的、非営利的</strong>な目的での使用、複製、改変が可能です。商業利用（再販やNowlyを有料またはホスティングサービスとして提供する場合を含む）には、発行者からの別途のライセンスが必要です。本ライセンスは、初回の公開配布から4年後、いずれにせよ<strong>2028年6月1日</strong>以降のChange DateにMITライセンスに移行します。全文は<a href=\"https://github.com/nowly-presence/nowly\">GitHubリポジトリ</a>にあります。これは、Nowlyを通じて表示するサードパーティコンテンツ（YouTube、Twitchなど）をライセンスするものではありません。"
+        "body": "Nowlyのソースコードは<strong>MITライセンス</strong>で公開されています。著作権表示と条件を守れば、商用利用を含む使用・改変・再配布が可能です。全文は<a href=\"https://github.com/nowly-presence/nowly\">GitHub</a>にあります。第三者のコンテンツ、名称、商標は対象外です。"
       },
       {
         "title": "許容される使用",
@@ -1105,7 +1105,7 @@
       },
       {
         "title": "知的財産",
-        "body": "Nowlyのソースコードは、<a href=\"https://github.com/nowly-presence/nowly\">github.com/nowly-presence/nowly</a>にて<strong>BUSL-1.1</strong>のもとで公開されています。サードパーティの商標はそれぞれの所有者に帰属します。<strong>NowlyはDiscord Inc.または対応プラットフォームと提携していません。</strong>"
+        "body": "Nowlyのソースコードは<a href=\"https://github.com/nowly-presence/nowly\">GitHub</a>で<strong>MITライセンス</strong>のもと公開されています。第三者の商標はそれぞれの所有者に帰属します。<strong>NowlyはDiscord Inc.や対応プラットフォームと提携していません。</strong>"
       },
       {
         "title": "違法なコンテンツ",
@@ -1403,7 +1403,7 @@
       },
       {
         "title": "オープンソースとライセンス",
-        "body": "プレゼンスは MIT ライセンスのオープンソースなので、誰でも読んだり、修正したり、新しく書いたりできます。拡張機能、デスクトップアプリ、ウェブサイトは Business Source License 1.1 で GitHub に公開されています。すべての行を読んで確認できますが、これはソースアベイラブルのライセンスで、OSI が承認したオープンソースライセンスではありません。"
+        "body": "Nowlyの公開リポジトリ（アプリ、プレゼンス、SDK、CLI、bot）はMITライセンスのオープンソースです。条件に従いコードの閲覧・改変・共有ができます。別の非公開の内部リリースCLIと第三者のコンテンツは対象外です。"
       }
     ],
     "facts": {
