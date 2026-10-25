@@ -31,6 +31,8 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "name", type: "string", description: "Optional activity name. Defaults to the presence name." },
+    { name: "statusDisplayType", type: "0 | 1 | 2", description: "Field shown in Discord's compact status: 0 = name (default), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Primary activity line shown in Discord." },
     { name: "state", type: "string", description: "Secondary activity line shown below details." },
     { name: "startTimestamp", type: "number", description: "Unix timestamp for elapsed activity progress." },
@@ -47,6 +49,27 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord rejects Rich Presence payloads when `largeImageText` or `smallImageText` contains fewer than two characters. Nowly trims these optional tooltips and omits them when the result is shorter than two characters; the image remains available.
 </Callout>
+
+## statusDisplayType
+
+`statusDisplayType` chooses the text shown in Discord's compact status. It does not change the activity card's name, details, or state.
+
+- `0` (default): `name`
+- `1`: `state`
+- `2`: `details`
+
+For example, show the video title in the compact status while keeping the activity name and channel in the card:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  name: "Video service",
+  details: "Video title",
+  state: "Channel name",
+  statusDisplayType: 2,
+})
+```
+
+Use an SDK version that includes this field and update both the Nowly extension and native host. Older runtime versions ignore the field and keep the default status display.
 
 ## clearActivity
 

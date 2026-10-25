@@ -31,6 +31,8 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "name", type: "string", description: "Optionaler Aktivitätsname. Standardmäßig wird der Name der Präsenz verwendet." },
+    { name: "statusDisplayType", type: "0 | 1 | 2", description: "Feld im kompakten Discord-Status: 0 = name (Standard), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Primäre Aktivitätszeile, die in Discord angezeigt wird." },
     { name: "state", type: "string", description: "Sekundäre Aktivitätszeile, angezeigt unter details." },
     { name: "startTimestamp", type: "number", description: "Unix-Zeitstempel für den verstrichenen Aktivitätsfortschritt." },
@@ -47,6 +49,27 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord lehnt Rich-Presence-Payloads ab, wenn `largeImageText` oder `smallImageText` weniger als zwei Zeichen enthält. Nowly bereinigt diese optionalen Tooltips und lässt sie weg, wenn das Ergebnis kürzer als zwei Zeichen ist; das Bild bleibt verfügbar.
 </Callout>
+
+## statusDisplayType
+
+`statusDisplayType` wählt den Text im kompakten Discord-Status. Name, Details und Status der Aktivitätskarte bleiben unverändert.
+
+- `0` (Standard): `name`
+- `1`: `state`
+- `2`: `details`
+
+Zum Beispiel den Videotitel im kompakten Status anzeigen und den Aktivitätsnamen sowie den Kanal in der Karte beibehalten:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  name: "Videodienst",
+  details: "Videotitel",
+  state: "Kanalname",
+  statusDisplayType: 2,
+})
+```
+
+Verwende eine SDK-Version, die dieses Feld enthält, und aktualisiere die Nowly-Erweiterung sowie den nativen Host. Ältere Runtime-Versionen ignorieren das Feld und behalten die Standardanzeige bei.
 
 ## clearActivity
 

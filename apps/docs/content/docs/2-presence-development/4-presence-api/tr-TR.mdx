@@ -31,6 +31,8 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "name", type: "string", description: "İsteğe bağlı etkinlik adı. Varsayılan olarak presence adı kullanılır." },
+    { name: "statusDisplayType", type: "0 | 1 | 2", description: "Discord'un kısa durumunda gösterilen alan: 0 = name (varsayılan), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Discord'da gösterilen birincil etkinlik satırı." },
     { name: "state", type: "string", description: "details'in altında gösterilen ikincil etkinlik satırı." },
     { name: "startTimestamp", type: "number", description: "Geçen etkinlik ilerlemesi için Unix zaman damgası." },
@@ -47,6 +49,27 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord, `largeImageText` veya `smallImageText` iki karakterden az içerdiğinde Rich Presence payload'larını reddeder. Nowly bu isteğe bağlı ipuçlarını temizler ve sonuç iki karakterden kısaysa bunları göndermez; görsel kullanılmaya devam eder.
 </Callout>
+
+## statusDisplayType
+
+`statusDisplayType`, Discord'un kısa durumunda gösterilecek metni seçer. Etkinlik kartının adını, ayrıntılarını veya durumunu değiştirmez.
+
+- `0` (varsayılan): `name`
+- `1`: `state`
+- `2`: `details`
+
+Örneğin, etkinlik adı ve kanal kartta kalırken kısa durumda video başlığını gösterin:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  name: "Video hizmeti",
+  details: "Video başlığı",
+  state: "Kanal adı",
+  statusDisplayType: 2,
+})
+```
+
+Bu alanı içeren bir SDK sürümü kullanın ve hem Nowly uzantısını hem de yerel ana bilgisayarı güncelleyin. Eski çalışma zamanı sürümleri bu alanı yok sayar ve varsayılan durum görünümünü korur.
 
 ## clearActivity
 

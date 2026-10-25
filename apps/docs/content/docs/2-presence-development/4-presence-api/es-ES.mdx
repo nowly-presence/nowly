@@ -31,6 +31,8 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "name", type: "string", description: "Nombre de actividad opcional. Por defecto, usa el nombre de la presencia." },
+    { name: "statusDisplayType", type: "0 | 1 | 2", description: "Campo del estado compacto de Discord: 0 = name (predeterminado), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Línea de actividad principal mostrada en Discord." },
     { name: "state", type: "string", description: "Línea de actividad secundaria mostrada debajo de details." },
     { name: "startTimestamp", type: "number", description: "Marca de tiempo Unix para el progreso de actividad transcurrido." },
@@ -47,6 +49,27 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord rechaza los payloads de Rich Presence cuando `largeImageText` o `smallImageText` contiene menos de dos caracteres. Nowly limpia estos tooltips opcionales y los omite cuando el resultado tiene menos de dos caracteres; la imagen sigue disponible.
 </Callout>
+
+## statusDisplayType
+
+`statusDisplayType` elige el texto del estado compacto de Discord. No cambia el nombre, los detalles ni el estado de la tarjeta de actividad.
+
+- `0` (predeterminado): `name`
+- `1`: `state`
+- `2`: `details`
+
+Por ejemplo, mostrar el título del vídeo en el estado compacto y conservar el nombre de la actividad y el canal en la tarjeta:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  name: "Servicio de vídeo",
+  details: "Título del vídeo",
+  state: "Nombre del canal",
+  statusDisplayType: 2,
+})
+```
+
+Usa una versión del SDK que incluya este campo y actualiza la extensión Nowly y el host nativo. Las versiones anteriores del runtime ignoran el campo y mantienen el estado predeterminado.
 
 ## clearActivity
 

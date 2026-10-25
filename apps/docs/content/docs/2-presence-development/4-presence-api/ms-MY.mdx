@@ -31,6 +31,8 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "name", type: "string", description: "Nama aktiviti pilihan. Nama presence digunakan secara lalai." },
+    { name: "statusDisplayType", type: "0 | 1 | 2", description: "Medan dalam status ringkas Discord: 0 = name (lalai), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Baris aktiviti utama yang dipaparkan dalam Discord." },
     { name: "state", type: "string", description: "Baris aktiviti kedua dipaparkan di bawah details." },
     { name: "startTimestamp", type: "number", description: "Cap masa Unix untuk kemajuan aktiviti yang telah berlalu." },
@@ -47,6 +49,27 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord menolak payload Rich Presence apabila `largeImageText` atau `smallImageText` mengandungi kurang daripada dua aksara. Nowly membersihkan tooltip pilihan ini dan mengabaikannya apabila hasilnya kurang daripada dua aksara; imej masih tersedia.
 </Callout>
+
+## statusDisplayType
+
+`statusDisplayType` memilih teks dalam status ringkas Discord. Ia tidak mengubah nama, butiran atau status pada kad aktiviti.
+
+- `0` (lalai): `name`
+- `1`: `state`
+- `2`: `details`
+
+Contohnya, paparkan tajuk video dalam status ringkas sambil mengekalkan nama aktiviti dan saluran pada kad:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  name: "Perkhidmatan video",
+  details: "Tajuk video",
+  state: "Nama saluran",
+  statusDisplayType: 2,
+})
+```
+
+Gunakan versi SDK yang menyertakan medan ini dan kemas kini sambungan Nowly serta hos natif. Versi runtime yang lebih lama mengabaikan medan ini dan mengekalkan paparan status lalai.
 
 ## clearActivity
 

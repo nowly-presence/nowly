@@ -31,6 +31,8 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "name", type: "string", description: "任意のアクティビティ名。省略時はプレゼンス名を使用します。" },
+    { name: "statusDisplayType", type: "0 | 1 | 2", description: "Discordのコンパクトなステータスに表示するフィールド。0 = name（既定）、1 = state、2 = details。" },
     { name: "details", type: "string", description: "Discordに表示される主要なアクティビティ行。" },
     { name: "state", type: "string", description: "detailsの下に表示される補助的なアクティビティ行。" },
     { name: "startTimestamp", type: "number", description: "経過したアクティビティの進行状況を示すUnixタイムスタンプ。" },
@@ -47,6 +49,27 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord は、`largeImageText` または `smallImageText` が2文字未満の場合、Rich Presence ペイロードを拒否します。Nowly はこれらの任意のツールチップを整形し、結果が2文字未満の場合は省略します。画像自体は引き続き利用できます。
 </Callout>
+
+## statusDisplayType
+
+`statusDisplayType` はDiscordのコンパクトなステータスに表示するテキストを選びます。アクティビティカードの名前、詳細、状態は変更しません。
+
+- `0`（既定）: `name`
+- `1`: `state`
+- `2`: `details`
+
+例えば、カード内のアクティビティ名とチャンネル名をそのまま残し、コンパクトなステータスには動画タイトルを表示できます。
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  name: "動画サービス",
+  details: "動画タイトル",
+  state: "チャンネル名",
+  statusDisplayType: 2,
+})
+```
+
+このフィールドを含むSDKを使用し、Nowly拡張機能とネイティブホストの両方を更新してください。古いランタイムはこのフィールドを無視し、既定のステータス表示を維持します。
 
 ## clearActivity
 
