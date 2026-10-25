@@ -8,13 +8,14 @@ import (
 )
 
 type Activity struct {
-	Name       string      `json:"name,omitempty"`
-	Type       int         `json:"type"`
-	Details    string      `json:"details,omitempty"`
-	State      string      `json:"state,omitempty"`
-	Timestamps *Timestamps `json:"timestamps,omitempty"`
-	Assets     *Assets     `json:"assets,omitempty"`
-	Buttons    []Button    `json:"buttons,omitempty"`
+	Name              string      `json:"name,omitempty"`
+	Type              int         `json:"type"`
+	StatusDisplayType *int        `json:"status_display_type,omitempty"`
+	Details           string      `json:"details,omitempty"`
+	State             string      `json:"state,omitempty"`
+	Timestamps        *Timestamps `json:"timestamps,omitempty"`
+	Assets            *Assets     `json:"assets,omitempty"`
+	Buttons           []Button    `json:"buttons,omitempty"`
 }
 
 type Timestamps struct {
@@ -50,6 +51,10 @@ func ActivityFromPresence(p contract.PresencePayload) Activity {
 		Type:    p.Type,
 		Details: p.Details,
 		State:   p.State,
+	}
+
+	if p.StatusDisplayType != nil && *p.StatusDisplayType >= 0 && *p.StatusDisplayType <= 2 {
+		activity.StatusDisplayType = p.StatusDisplayType
 	}
 
 	if p.StartTime > 0 || p.EndTime > 0 {
