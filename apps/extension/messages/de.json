@@ -1,10 +1,6 @@
 {
   "nav.announcements": "Neuigkeiten",
   "announcements.subtitle": "Ankündigungen, Diensthinweise und Versionshinweise.",
-  "announcements.changelog": "Versionshinweise",
-  "announcements.maintenance": "Wartung",
-  "announcements.warning": "Warnung (Stufe {level})",
-  "announcements.post": "Ankündigung",
   "announcements.pinned": "Angeheftete Ankündigung",
   "announcements.started": "Beginn: {date}",
   "announcements.estimatedEnd": "Voraussichtliches Ende: {date}",
@@ -15,7 +11,6 @@
   "announcements.refresh": "Neuigkeiten aktualisieren",
   "announcements.empty": "Keine Neuigkeiten vorhanden",
   "announcements.emptyHint": "Veröffentlichte Ankündigungen und Versionshinweise erscheinen hier. Zum erneuten Versuch aktualisieren.",
-  "announcements.unread": "Ungelesen",
   "announcements.unavailable": "Dieser Hinweis ist nicht mehr verfügbar",
   "announcements.unavailableHint": "Er ist möglicherweise beendet oder abgelaufen. Aktuelle Hinweise stehen in den Neuigkeiten.",
   "reveal.announcements": "Neuigkeiten vereint Ankündigungen, Wartungshinweise und Versionshinweise in Nowly. Öffne einen Beitrag, um ihn hier zu lesen.",

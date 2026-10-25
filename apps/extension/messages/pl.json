@@ -1,10 +1,6 @@
 {
   "nav.announcements": "Aktualności",
   "announcements.subtitle": "Ogłoszenia, komunikaty o usługach i informacje o wydaniach.",
-  "announcements.changelog": "Informacje o wydaniu",
-  "announcements.maintenance": "Konserwacja",
-  "announcements.warning": "Ostrzeżenie (poziom {level})",
-  "announcements.post": "Ogłoszenie",
   "announcements.pinned": "Przypięte ogłoszenie",
   "announcements.started": "Początek: {date}",
   "announcements.estimatedEnd": "Szacowany koniec: {date}",
@@ -15,7 +11,6 @@
   "announcements.refresh": "Odśwież aktualności",
   "announcements.empty": "Brak aktualności",
   "announcements.emptyHint": "Tutaj pojawią się opublikowane ogłoszenia i informacje o wydaniach. Odśwież, aby spróbować ponownie.",
-  "announcements.unread": "Nieprzeczytane",
   "announcements.unavailable": "Ten komunikat nie jest już dostępny",
   "announcements.unavailableHint": "Mógł się zakończyć lub wygasnąć. Aktualne komunikaty znajdziesz w Aktualnościach.",
   "reveal.announcements": "Aktualności gromadzą ogłoszenia, komunikaty o konserwacji i informacje o wydaniach w Nowly. Otwórz wpis, aby przeczytać go tutaj.",

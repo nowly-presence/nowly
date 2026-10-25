@@ -1,10 +1,6 @@
 {
   "nav.announcements": "Actualités",
   "announcements.subtitle": "Annonces, état des services et notes de version.",
-  "announcements.changelog": "Notes de version",
-  "announcements.maintenance": "Maintenance",
-  "announcements.warning": "Avertissement (niveau {level})",
-  "announcements.post": "Annonce",
   "announcements.pinned": "Annonce épinglée",
   "announcements.started": "Début : {date}",
   "announcements.estimatedEnd": "Fin estimée : {date}",
@@ -15,7 +11,6 @@
   "announcements.refresh": "Actualiser les actualités",
   "announcements.empty": "Aucune actualité à afficher",
   "announcements.emptyHint": "Les annonces et notes de version publiées apparaissent ici. Actualisez pour réessayer.",
-  "announcements.unread": "Non lue",
   "announcements.unavailable": "Cette annonce n’est plus disponible",
   "announcements.unavailableHint": "Elle est peut-être terminée ou expirée. Revenez aux actualités pour les annonces en cours.",
   "reveal.announcements": "Les actualités réunissent les annonces, les maintenances et les notes de version dans Nowly. Ouvrez une publication pour la lire ici.",

@@ -1,10 +1,6 @@
 {
   "nav.announcements": "ニュース",
   "announcements.subtitle": "お知らせ、サービス情報、リリースノート。",
-  "announcements.changelog": "リリースノート",
-  "announcements.maintenance": "メンテナンス",
-  "announcements.warning": "警告（レベル{level}）",
-  "announcements.post": "お知らせ",
   "announcements.pinned": "固定されたお知らせ",
   "announcements.started": "開始：{date}",
   "announcements.estimatedEnd": "終了予定：{date}",
@@ -15,7 +11,6 @@
   "announcements.refresh": "ニュースを更新",
   "announcements.empty": "表示するニュースはありません",
   "announcements.emptyHint": "公開されたお知らせやリリースノートがここに表示されます。更新して再試行してください。",
-  "announcements.unread": "未読",
   "announcements.unavailable": "このお知らせは利用できなくなりました",
   "announcements.unavailableHint": "終了または期限切れの可能性があります。最新のお知らせはニュースをご覧ください。",
   "reveal.announcements": "ニュースではNowlyのお知らせ、メンテナンス情報、リリースノートを確認できます。投稿を開くとここで読めます。",

@@ -1,10 +1,6 @@
 {
   "nav.announcements": "News",
   "announcements.subtitle": "Announcements, service notices and release notes.",
-  "announcements.changelog": "Release notes",
-  "announcements.maintenance": "Maintenance",
-  "announcements.warning": "Warning (level {level})",
-  "announcements.post": "Announcement",
   "announcements.pinned": "Pinned announcement",
   "announcements.started": "Started: {date}",
   "announcements.estimatedEnd": "Estimated end: {date}",
@@ -15,7 +11,6 @@
   "announcements.refresh": "Refresh news",
   "announcements.empty": "No news to show",
   "announcements.emptyHint": "Published announcements and release notes appear here. Refresh to try again.",
-  "announcements.unread": "Unread",
   "announcements.unavailable": "This notice is no longer available",
   "announcements.unavailableHint": "It may have ended or expired. Go back to News for current notices.",
   "reveal.announcements": "News brings announcements, maintenance notices and release notes into Nowly. Open a post to read it here.",

@@ -1,10 +1,6 @@
 {
   "nav.announcements": "Berita",
   "announcements.subtitle": "Pengumuman, notis perkhidmatan dan nota keluaran.",
-  "announcements.changelog": "Nota keluaran",
-  "announcements.maintenance": "Penyelenggaraan",
-  "announcements.warning": "Amaran (tahap {level})",
-  "announcements.post": "Pengumuman",
   "announcements.pinned": "Pengumuman disematkan",
   "announcements.started": "Mula: {date}",
   "announcements.estimatedEnd": "Anggaran tamat: {date}",
@@ -15,7 +11,6 @@
   "announcements.refresh": "Muat semula berita",
   "announcements.empty": "Tiada berita untuk dipaparkan",
   "announcements.emptyHint": "Pengumuman dan nota keluaran yang diterbitkan muncul di sini. Muat semula untuk mencuba lagi.",
-  "announcements.unread": "Belum dibaca",
   "announcements.unavailable": "Notis ini tidak lagi tersedia",
   "announcements.unavailableHint": "Ia mungkin telah tamat atau luput. Kembali ke Berita untuk notis terkini.",
   "reveal.announcements": "Berita membawa pengumuman, notis penyelenggaraan dan nota keluaran ke Nowly. Buka siaran untuk membacanya di sini.",

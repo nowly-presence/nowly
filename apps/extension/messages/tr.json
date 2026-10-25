@@ -1,10 +1,6 @@
 {
   "nav.announcements": "Haberler",
   "announcements.subtitle": "Duyurular, hizmet bildirimleri ve sürüm notları.",
-  "announcements.changelog": "Sürüm notları",
-  "announcements.maintenance": "Bakım",
-  "announcements.warning": "Uyarı (seviye {level})",
-  "announcements.post": "Duyuru",
   "announcements.pinned": "Sabitlenmiş duyuru",
   "announcements.started": "Başlangıç: {date}",
   "announcements.estimatedEnd": "Tahmini bitiş: {date}",
@@ -15,7 +11,6 @@
   "announcements.refresh": "Haberleri yenile",
   "announcements.empty": "Gösterilecek haber yok",
   "announcements.emptyHint": "Yayınlanan duyurular ve sürüm notları burada görünür. Tekrar denemek için yenileyin.",
-  "announcements.unread": "Okunmadı",
   "announcements.unavailable": "Bu bildirim artık kullanılamıyor",
   "announcements.unavailableHint": "Bitmiş veya süresi dolmuş olabilir. Güncel bildirimler için Haberler'e dönün.",
   "reveal.announcements": "Haberler, duyuruları, bakım bildirimlerini ve sürüm notlarını Nowly'ye getirir. Burada okumak için bir gönderi açın.",

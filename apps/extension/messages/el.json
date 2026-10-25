@@ -1,10 +1,6 @@
 {
   "nav.announcements": "Νέα",
   "announcements.subtitle": "Ανακοινώσεις, ειδοποιήσεις υπηρεσιών και σημειώσεις έκδοσης.",
-  "announcements.changelog": "Σημειώσεις έκδοσης",
-  "announcements.maintenance": "Συντήρηση",
-  "announcements.warning": "Προειδοποίηση (επίπεδο {level})",
-  "announcements.post": "Ανακοίνωση",
   "announcements.pinned": "Καρφιτσωμένη ανακοίνωση",
   "announcements.started": "Έναρξη: {date}",
   "announcements.estimatedEnd": "Εκτιμώμενη λήξη: {date}",
@@ -15,7 +11,6 @@
   "announcements.refresh": "Ανανέωση νέων",
   "announcements.empty": "Δεν υπάρχουν νέα για εμφάνιση",
   "announcements.emptyHint": "Οι δημοσιευμένες ανακοινώσεις και σημειώσεις έκδοσης εμφανίζονται εδώ. Ανανεώστε για νέα προσπάθεια.",
-  "announcements.unread": "Μη αναγνωσμένο",
   "announcements.unavailable": "Αυτή η ειδοποίηση δεν είναι πλέον διαθέσιμη",
   "announcements.unavailableHint": "Μπορεί να έχει ολοκληρωθεί ή λήξει. Επιστρέψτε στα Νέα για τις τρέχουσες ειδοποιήσεις.",
   "reveal.announcements": "Τα Νέα συγκεντρώνουν ανακοινώσεις, ειδοποιήσεις συντήρησης και σημειώσεις έκδοσης στο Nowly. Ανοίξτε μια δημοσίευση για να τη διαβάσετε εδώ.",
