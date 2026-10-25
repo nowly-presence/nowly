@@ -1133,7 +1133,7 @@
       },
       {
         "title": "Analytics cookies",
-        "body": "The websites do <strong>not</strong> set third-party analytics cookies. The Nowly site uses self-hosted <strong>Plausible Analytics</strong> at <code>stats.nowly.me</code> to measure aggregate page views without cookies or persistent visitor identifiers. The extension’s optional usage statistics are separate and, if enabled, use a device ID."
+        "body": "The websites do <strong>not</strong> set third-party analytics cookies. The Nowly site uses self-hosted <strong>Umami</strong> at <code>stats.nowly.me</code> to measure aggregate page views without cookies or persistent visitor identifiers. The extension’s optional usage statistics are separate and, if enabled, use a device ID."
       },
       {
         "title": "Advertising",

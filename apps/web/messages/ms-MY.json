@@ -1138,7 +1138,7 @@
       },
       {
         "title": "Kuki analitik",
-        "body": "Laman web <strong>tidak</strong> menetapkan kuki analitik pihak ketiga. Laman Nowly menggunakan <strong>Plausible Analytics</strong> yang dihoskan sendiri di <code>stats.nowly.me</code> untuk mengukur paparan halaman agregat tanpa kuki atau pengecam pelawat yang berterusan. Statistik penggunaan pilihan sambungan adalah berasingan dan menggunakan ID peranti jika anda mengaktifkannya."
+        "body": "Laman web <strong>tidak</strong> menetapkan kuki analitik pihak ketiga. Laman Nowly menggunakan <strong>Umami</strong> yang dihoskan sendiri di <code>stats.nowly.me</code> untuk mengukur paparan halaman agregat tanpa kuki atau pengecam pelawat yang berterusan. Statistik penggunaan pilihan sambungan adalah berasingan dan menggunakan ID peranti jika anda mengaktifkannya."
       },
       {
         "title": "Pengiklanan",

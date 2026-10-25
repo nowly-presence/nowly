@@ -1138,7 +1138,7 @@
       },
       {
         "title": "Analiz çerezleri",
-        "body": "Web siteleri üçüncü taraf analiz çerezleri ayarla<strong>maz</strong>. Nowly sitesi, çerez veya kalıcı ziyaretçi tanımlayıcıları kullanmadan toplu sayfa görüntülemelerini ölçmek için <code>stats.nowly.me</code> adresinde kendi barındırdığı <strong>Plausible Analytics</strong>'i kullanır. Uzantının isteğe bağlı kullanım istatistikleri ayrıdır ve etkinleştirildiğinde cihaz kimliği kullanır."
+        "body": "Web siteleri üçüncü taraf analiz çerezleri ayarla<strong>maz</strong>. Nowly sitesi, çerez veya kalıcı ziyaretçi tanımlayıcıları kullanmadan toplu sayfa görüntülemelerini ölçmek için <code>stats.nowly.me</code> adresinde kendi barındırdığı <strong>Umami</strong>'yi kullanır. Uzantının isteğe bağlı kullanım istatistikleri ayrıdır ve etkinleştirildiğinde cihaz kimliği kullanır."
       },
       {
         "title": "Reklamcılık",

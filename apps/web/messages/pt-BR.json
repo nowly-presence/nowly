@@ -1138,7 +1138,7 @@
       },
       {
         "title": "Cookies de analytics",
-        "body": "Os sites <strong>não</strong> definem cookies de analytics de terceiros. O site do Nowly usa o <strong>Plausible Analytics</strong>, hospedado por nós em <code>stats.nowly.me</code>, para medir visualizações agregadas de páginas sem cookies nem identificadores persistentes de visitantes. As estatísticas opcionais da extensão são separadas e usam um ID de dispositivo se você as ativar."
+        "body": "Os sites <strong>não</strong> definem cookies de analytics de terceiros. O site do Nowly usa o <strong>Umami</strong>, hospedado por nós em <code>stats.nowly.me</code>, para medir visualizações agregadas de páginas sem cookies nem identificadores persistentes de visitantes. As estatísticas opcionais da extensão são separadas e usam um ID de dispositivo se você as ativar."
       },
       {
         "title": "Publicidade",

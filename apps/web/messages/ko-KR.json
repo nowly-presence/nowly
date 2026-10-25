@@ -1138,7 +1138,7 @@
       },
       {
         "title": "분석 쿠키",
-        "body": "웹사이트는 타사 분석 쿠키를 설정하지 <strong>않습니다</strong>. Nowly 사이트는 <code>stats.nowly.me</code>에서 자체 호스팅하는 <strong>Plausible Analytics</strong>를 사용해 쿠키나 지속적인 방문자 식별자 없이 집계된 페이지 조회수를 측정합니다. 확장 프로그램의 선택적 이용 통계는 별도로 수집되며, 활성화하면 기기 ID를 사용합니다."
+        "body": "웹사이트는 타사 분석 쿠키를 설정하지 <strong>않습니다</strong>. Nowly 사이트는 <code>stats.nowly.me</code>에서 자체 호스팅하는 <strong>Umami</strong>를 사용해 쿠키나 지속적인 방문자 식별자 없이 집계된 페이지 조회수를 측정합니다. 확장 프로그램의 선택적 이용 통계는 별도로 수집되며, 활성화하면 기기 ID를 사용합니다."
       },
       {
         "title": "광고",

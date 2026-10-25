@@ -1138,7 +1138,7 @@
       },
       {
         "title": "Pliki cookie analityczne",
-        "body": "Strony <strong>nie</strong> ustawiają analitycznych plików cookie stron trzecich. Witryna Nowly korzysta z samodzielnie hostowanego <strong>Plausible Analytics</strong> pod adresem <code>stats.nowly.me</code>, aby mierzyć łączną liczbę wyświetleń stron bez plików cookie i trwałych identyfikatorów odwiedzających. Opcjonalne statystyki rozszerzenia są oddzielne i po włączeniu wykorzystują identyfikator urządzenia."
+        "body": "Strony <strong>nie</strong> ustawiają analitycznych plików cookie stron trzecich. Witryna Nowly korzysta z samodzielnie hostowanego <strong>Umami</strong> pod adresem <code>stats.nowly.me</code>, aby mierzyć łączną liczbę wyświetleń stron bez plików cookie i trwałych identyfikatorów odwiedzających. Opcjonalne statystyki rozszerzenia są oddzielne i po włączeniu wykorzystują identyfikator urządzenia."
       },
       {
         "title": "Reklamy",

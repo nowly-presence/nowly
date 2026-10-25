@@ -1138,7 +1138,7 @@
       },
       {
         "title": "アナリティクスCookie",
-        "body": "ウェブサイトはサードパーティのアナリティクスCookieを設定<strong>しません</strong>。Nowlyのサイトでは、<code>stats.nowly.me</code>で自社ホストしている<strong>Plausible Analytics</strong>を使用し、Cookieや永続的な訪問者識別子を使わずにページ閲覧数を集計します。拡張機能の任意の利用統計は別個のもので、有効にした場合はデバイスIDを使用します。"
+        "body": "ウェブサイトはサードパーティのアナリティクスCookieを設定<strong>しません</strong>。Nowlyのサイトでは、<code>stats.nowly.me</code>で自社ホストしている<strong>Umami</strong>を使用し、Cookieや永続的な訪問者識別子を使わずにページ閲覧数を集計します。拡張機能の任意の利用統計は別個のもので、有効にした場合はデバイスIDを使用します。"
       },
       {
         "title": "広告",
