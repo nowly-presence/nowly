@@ -31,6 +31,8 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "detailsUrl", type: "string", description: "Optional public HTTPS link for details (SDK 1.7.0+)." },
+    { name: "stateUrl", type: "string", description: "Optional public HTTPS link for state (SDK 1.7.0+)." },
     { name: "name", type: "string", description: "Optional activity name. Defaults to the presence name." },
     { name: "statusDisplayType", type: "0 | 1 | 2", description: "Field shown in Discord's compact status: 0 = name (default), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Primary activity line shown in Discord." },
@@ -49,6 +51,21 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord rejects Rich Presence payloads when `largeImageText` or `smallImageText` contains fewer than two characters. Nowly trims these optional tooltips and omits them when the result is shorter than two characters; the image remains available.
 </Callout>
+
+## detailsUrl / stateUrl
+
+SDK 1.7.0+ adds optional string fields `detailsUrl` and `stateUrl` to make the corresponding activity lines clickable, independently of buttons. Both the extension and native host must support them; older runtimes ignore them. The activity name is not affected.
+
+Use verified public HTTPS URLs, without credentials and no longer than 2048 characters. Links without corresponding text or with invalid URLs are omitted. Keep content identifiers such as YouTube's `v` query parameter, but never expose access tokens, private chats, secret links, or information hidden by privacy settings. Omit a link when its destination is unknown.
+
+```ts
+await presence.setActivity({
+  details: "Video title",
+  detailsUrl: "https://www.youtube.com/watch?v=VIDEO_ID",
+  state: "Channel name",
+  stateUrl: "https://www.youtube.com/@channel",
+})
+```
 
 ## statusDisplayType
 

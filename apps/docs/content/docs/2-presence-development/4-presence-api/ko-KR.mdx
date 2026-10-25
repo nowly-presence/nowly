@@ -31,6 +31,8 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "detailsUrl", type: "string", description: "details의 선택적 공개 HTTPS 링크(SDK 1.7.0+)." },
+    { name: "stateUrl", type: "string", description: "state의 선택적 공개 HTTPS 링크(SDK 1.7.0+)." },
     { name: "name", type: "string", description: "선택적 활동 이름. 생략하면 프레즌스 이름을 사용합니다." },
     { name: "statusDisplayType", type: "0 | 1 | 2", description: "Discord의 간략한 상태에 표시할 필드: 0 = name(기본값), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Discord에 표시되는 주요 활동 줄." },
@@ -49,6 +51,21 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord는 `largeImageText` 또는 `smallImageText`가 2자 미만인 Rich Presence 페이로드를 거부합니다. Nowly는 이러한 선택적 툴팁을 정리하고 결과가 2자 미만이면 생략합니다. 이미지는 계속 사용할 수 있습니다.
 </Callout>
+
+## detailsUrl / stateUrl
+
+SDK 1.7.0+의 선택적 문자열 필드 `detailsUrl`과 `stateUrl`은 버튼과 별개로 해당 활동 줄에 링크를 추가합니다. 확장 프로그램과 네이티브 호스트가 모두 지원해야 하며 이전 버전은 이 필드를 무시합니다. 활동 이름은 바뀌지 않습니다.
+
+인증 정보가 없고 2048자 이하인 검증된 공개 HTTPS URL을 사용하세요. 대응하는 텍스트가 없거나 URL이 잘못된 링크는 생략됩니다. YouTube의 `v` 같은 콘텐츠 식별자는 유지하되 액세스 토큰, 비공개 대화, 비밀 링크 또는 개인정보 설정으로 숨긴 정보는 공유하지 마세요. 대상을 모르면 링크를 생략하세요.
+
+```ts
+await presence.setActivity({
+  details: "동영상 제목",
+  detailsUrl: "https://www.youtube.com/watch?v=VIDEO_ID",
+  state: "채널 이름",
+  stateUrl: "https://www.youtube.com/@channel",
+})
+```
 
 ## statusDisplayType
 

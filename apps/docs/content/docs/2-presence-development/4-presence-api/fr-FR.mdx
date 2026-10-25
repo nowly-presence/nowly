@@ -31,6 +31,8 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "detailsUrl", type: "string", description: "Lien HTTPS public facultatif pour details (SDK 1.7.0+)." },
+    { name: "stateUrl", type: "string", description: "Lien HTTPS public facultatif pour state (SDK 1.7.0+)." },
     { name: "name", type: "string", description: "Nom d'activité facultatif. Utilise le nom de la présence par défaut." },
     { name: "statusDisplayType", type: "0 | 1 | 2", description: "Champ affiché dans le statut compact de Discord : 0 = name (par défaut), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Ligne d'activité principale affichée dans Discord." },
@@ -49,6 +51,21 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord refuse les activités Rich Presence lorsque `largeImageText` ou `smallImageText` contient moins de deux caractères. Nowly nettoie ces infobulles facultatives et les omet si le résultat contient moins de deux caractères&nbsp;; l'image reste disponible.
 </Callout>
+
+## detailsUrl / stateUrl
+
+Le SDK 1.7.0+ ajoute les champs texte facultatifs `detailsUrl` et `stateUrl` pour rendre chaque ligne correspondante cliquable, indépendamment des boutons. L’extension et l’hôte natif doivent les prendre en charge ; les anciennes versions les ignorent. Le nom de l’activité reste inchangé.
+
+Utilisez des URL HTTPS publiques vérifiées, sans identifiants de connexion et de 2048 caractères maximum. Les liens sans texte correspondant ou avec une URL invalide sont omis. Conservez les identifiants de contenu comme le paramètre `v` de YouTube, mais ne partagez jamais de jetons d’accès, de conversations privées, de liens secrets ou d’informations masquées par les réglages de confidentialité. Omettez le lien si sa destination est inconnue.
+
+```ts
+await presence.setActivity({
+  details: "Titre de la vidéo",
+  detailsUrl: "https://www.youtube.com/watch?v=VIDEO_ID",
+  state: "Nom de la chaîne",
+  stateUrl: "https://www.youtube.com/@channel",
+})
+```
 
 ## statusDisplayType
 

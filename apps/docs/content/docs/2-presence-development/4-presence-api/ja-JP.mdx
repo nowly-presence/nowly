@@ -31,6 +31,8 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "detailsUrl", type: "string", description: "details 用の任意の公開 HTTPS リンク（SDK 1.7.0+）。" },
+    { name: "stateUrl", type: "string", description: "state 用の任意の公開 HTTPS リンク（SDK 1.7.0+）。" },
     { name: "name", type: "string", description: "任意のアクティビティ名。省略時はプレゼンス名を使用します。" },
     { name: "statusDisplayType", type: "0 | 1 | 2", description: "Discordのコンパクトなステータスに表示するフィールド。0 = name（既定）、1 = state、2 = details。" },
     { name: "details", type: "string", description: "Discordに表示される主要なアクティビティ行。" },
@@ -49,6 +51,21 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord は、`largeImageText` または `smallImageText` が2文字未満の場合、Rich Presence ペイロードを拒否します。Nowly はこれらの任意のツールチップを整形し、結果が2文字未満の場合は省略します。画像自体は引き続き利用できます。
 </Callout>
+
+## detailsUrl / stateUrl
+
+SDK 1.7.0+ のオプション文字列フィールド `detailsUrl` と `stateUrl` は、ボタンとは独立して対応する活動行にリンクを付けます。拡張機能とネイティブホストの両方の対応が必要です。旧バージョンはこれらを無視し、活動名は変わりません。
+
+認証情報を含まない、2048 文字以内の確認済み公開 HTTPS URL を使ってください。対応するテキストのないリンクや無効な URL は省略されます。YouTube の `v` などのコンテンツ識別子は保持できますが、アクセストークン、非公開チャット、秘密リンク、プライバシー設定で隠された情報は共有しないでください。リンク先が不明な場合は省略します。
+
+```ts
+await presence.setActivity({
+  details: "動画タイトル",
+  detailsUrl: "https://www.youtube.com/watch?v=VIDEO_ID",
+  state: "チャンネル名",
+  stateUrl: "https://www.youtube.com/@channel",
+})
+```
 
 ## statusDisplayType
 

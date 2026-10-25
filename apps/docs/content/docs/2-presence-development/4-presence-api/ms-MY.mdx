@@ -31,6 +31,8 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "detailsUrl", type: "string", description: "Pautan HTTPS awam pilihan untuk details (SDK 1.7.0+)." },
+    { name: "stateUrl", type: "string", description: "Pautan HTTPS awam pilihan untuk state (SDK 1.7.0+)." },
     { name: "name", type: "string", description: "Nama aktiviti pilihan. Nama presence digunakan secara lalai." },
     { name: "statusDisplayType", type: "0 | 1 | 2", description: "Medan dalam status ringkas Discord: 0 = name (lalai), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Baris aktiviti utama yang dipaparkan dalam Discord." },
@@ -49,6 +51,21 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord menolak payload Rich Presence apabila `largeImageText` atau `smallImageText` mengandungi kurang daripada dua aksara. Nowly membersihkan tooltip pilihan ini dan mengabaikannya apabila hasilnya kurang daripada dua aksara; imej masih tersedia.
 </Callout>
+
+## detailsUrl / stateUrl
+
+SDK 1.7.0+ menambah medan teks pilihan `detailsUrl` dan `stateUrl` untuk menjadikan baris aktiviti masing-masing boleh diklik, berasingan daripada butang. Sambungan dan hos natif perlu menyokongnya; versi lama mengabaikannya. Nama aktiviti tidak berubah.
+
+Gunakan URL HTTPS awam yang disahkan, tanpa bukti kelayakan dan tidak melebihi 2048 aksara. Pautan tanpa teks sepadan atau URL yang sah digugurkan. Kekalkan pengecam kandungan seperti parameter YouTube `v`, tetapi jangan kongsi token akses, perbualan peribadi, pautan rahsia atau maklumat yang disembunyikan oleh tetapan privasi. Gugurkan destinasi yang tidak diketahui.
+
+```ts
+await presence.setActivity({
+  details: "Tajuk video",
+  detailsUrl: "https://www.youtube.com/watch?v=VIDEO_ID",
+  state: "Nama saluran",
+  stateUrl: "https://www.youtube.com/@channel",
+})
+```
 
 ## statusDisplayType
 
