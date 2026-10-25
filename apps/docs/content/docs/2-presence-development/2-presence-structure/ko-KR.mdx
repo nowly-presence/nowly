@@ -11,6 +11,7 @@ description: Nowly 프레즌스에 필요한 폴더 구성을 이해하세요.
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 `-- assets/
     |-- logo.png
     |-- icon.png
@@ -25,6 +26,10 @@ src/Y/YouTube/
 
 `presence.ts`에는 런타임 로직이 포함됩니다. 페이지 상태를 감지하고 Presence API를 호출합니다.
 
+## settings.ts
+
+CLI 1.7.0부터 이 파일의 기본 내보내기 객체를 우선합니다. 기존 인라인 정의를 병합하지 않고 대체합니다. 타입, 기본값, 호환성은 [설정](/presence-development/settings)을 참고하세요.
+
 ## utils/
 
 복잡한 프레즌스의 경우, 로직을 `utils/` 폴더 아래의 전용 파일로 분리하세요. 예를 들어 YouTube 프레즌스는 DOM 헬퍼, 채널 파싱, Shorts 판별을 별도 모듈로 구성합니다.
@@ -33,6 +38,7 @@ src/Y/YouTube/
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 |-- assets/
 |   |-- logo.png
 |   |-- icon.png

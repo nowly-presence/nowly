@@ -22,10 +22,12 @@ Nowly supports boolean, input, select, and slider settings.
 
 ## Defining Settings
 
-Use [`Presence.Settings`](/presence-development/presence-api) to define typed settings:
+With CLI 1.7.0 or later, define settings in a default-exported `settings.ts` beside `presence.ts`. It takes complete priority over legacy inline `Presence.Settings({ ... })` definitions: the two sources are not merged. An invalid file fails the build instead of falling back. Without the file, legacy inline definitions still work.
 
-```ts filename="presence.ts"
-const settings = Presence.Settings({
+```ts filename="settings.ts"
+import type { PresenceSetting } from "@nowly/sdk"
+
+export default {
   showButtons: {
     type: "boolean",
     default: true,
@@ -33,8 +35,14 @@ const settings = Presence.Settings({
       "en-US": "Show buttons"
     }
   }
-})
+} satisfies Record<string, PresenceSetting>
 ```
+
+```ts filename="presence.ts"
+const presence = new Presence()
+```
+
+The CLI discovers `settings.ts` and registers defaults automatically: no settings import or `Presence.Settings` call is needed. It still generates `settings.json` for the extension. Saved user values take priority over defaults. Keep the file declarative: use JSON-compatible definitions, not browser or Node APIs. Read `ctx.settings` directly, or use `getSetting<boolean>("showButtons")` for an explicitly typed value.
 
 ## Reading Settings
 

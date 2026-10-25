@@ -11,6 +11,7 @@ Une présence se trouve sous `src`, regroupée par la première lettre de son no
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 `-- assets/
     |-- logo.png
     |-- icon.png
@@ -25,6 +26,10 @@ src/Y/YouTube/
 
 `presence.ts` contient la logique d'exécution. Elle détecte l'état de la page et appelle l'API Presence.
 
+## settings.ts
+
+Le CLI 1.7.0+ privilégie ici un objet exporté par défaut. Il remplace les définitions inline legacy, sans fusion. Voir [Paramètres](/presence-development/settings) pour le typage, les valeurs par défaut et la compatibilité.
+
 ## utils/
 
 Pour les présences complexes, répartissez votre logique dans des fichiers dédiés sous un dossier `utils/`. La présence YouTube, par exemple, organise les helpers DOM, l'analyse des chaînes et la résolution des Shorts dans des modules séparés&nbsp;:
@@ -33,6 +38,7 @@ Pour les présences complexes, répartissez votre logique dans des fichiers déd
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 |-- assets/
 |   |-- logo.png
 |   |-- icon.png

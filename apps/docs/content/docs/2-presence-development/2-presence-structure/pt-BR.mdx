@@ -11,6 +11,7 @@ Uma presença fica em `src`, agrupada pela primeira letra do seu nome:
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 `-- assets/
     |-- logo.png
     |-- icon.png
@@ -25,6 +26,10 @@ src/Y/YouTube/
 
 `presence.ts` contém a lógica de tempo de execução. Ele detecta o estado da página e chama a API de Presence.
 
+## settings.ts
+
+O CLI 1.7.0+ prioriza um objeto exportado por padrão neste arquivo. Ele substitui as definições inline legacy sem mesclá-las. Consulte [Configurações](/presence-development/settings) para tipos, valores padrão e compatibilidade.
+
 ## utils/
 
 Para presenças complexas, separe sua lógica em arquivos dedicados dentro de uma pasta `utils/`. A presença do YouTube, por exemplo, organiza helpers de DOM, parsing de canal e resolução de Shorts em módulos separados:
@@ -33,6 +38,7 @@ Para presenças complexas, separe sua lógica em arquivos dedicados dentro de um
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 |-- assets/
 |   |-- logo.png
 |   |-- icon.png

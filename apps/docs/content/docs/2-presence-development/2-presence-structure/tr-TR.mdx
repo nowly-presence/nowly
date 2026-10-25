@@ -11,6 +11,7 @@ Bir presence, adının ilk harfine göre gruplanarak `src` altında bulunur:
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 `-- assets/
     |-- logo.png
     |-- icon.png
@@ -25,6 +26,10 @@ src/Y/YouTube/
 
 `presence.ts`, çalışma zamanı mantığını içerir. Sayfa durumunu algılar ve Presence API'yi çağırır.
 
+## settings.ts
+
+CLI 1.7.0+ bu dosyadan varsayılan dışa aktarılan nesneyi öncelikli kullanır. Eski satır içi tanımları birleştirmeden değiştirir. Türler, varsayılanlar ve uyumluluk için [Ayarlar](/presence-development/settings) sayfasına bakın.
+
 ## utils/
 
 Karmaşık presence'lar için mantığınızı bir `utils/` klasörü altındaki özel dosyalara bölün. Örneğin, YouTube presence'ı DOM yardımcılarını, kanal ayrıştırmayı ve Shorts çözümlemesini ayrı modüllerde düzenler:
@@ -33,6 +38,7 @@ Karmaşık presence'lar için mantığınızı bir `utils/` klasörü altındaki
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 |-- assets/
 |   |-- logo.png
 |   |-- icon.png

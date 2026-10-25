@@ -24,8 +24,12 @@ Nowly는 boolean, input, select, slider 설정을 지원합니다.
 
 [`Presence.Settings`](/presence-development/presence-api)를 사용해 타입이 지정된 설정을 정의합니다.
 
-```ts filename="presence.ts"
-const settings = Presence.Settings({
+CLI 1.7.0부터는 `presence.ts` 옆에 기본 내보내기가 있는 `settings.ts`를 사용하는 것을 권장합니다. 이 파일은 기존 인라인 `Presence.Settings({ ... })` 정의를 완전히 대체하며 두 소스를 병합하지 않습니다. 파일이 잘못되면 빌드가 실패합니다. 파일이 없으면 legacy 형식도 계속 지원됩니다.
+
+```ts filename="settings.ts"
+import type { PresenceSetting } from "@nowly/sdk"
+
+export default {
   showButtons: {
     type: "boolean",
     default: true,
@@ -33,8 +37,14 @@ const settings = Presence.Settings({
       "en-US": "Show buttons"
     }
   }
-})
+} satisfies Record<string, PresenceSetting>
 ```
+
+```ts filename="presence.ts"
+const presence = new Presence()
+```
+
+CLI가 `settings.ts`를 자동으로 감지하므로 `presence.ts`에서 import하거나 `Presence.Settings`를 호출할 필요가 없습니다. 계속 `settings.json`을 생성하고 기본값을 등록합니다. 사용자가 저장한 값이 우선합니다. 브라우저나 Node API 없이 JSON과 호환되는 선언적 정의만 사용하세요. 명시적인 타입이 필요하면 `getSetting<boolean>("showButtons")`를 사용하세요.
 
 ## 설정 읽기
 

@@ -24,8 +24,12 @@ Nowlyはboolean、input、select、sliderの設定をサポートしています
 
 [`Presence.Settings`](/presence-development/presence-api) を使って型付けされた設定を定義します。
 
-```ts filename="presence.ts"
-const settings = Presence.Settings({
+CLI 1.7.0 以降では、`presence.ts` の隣にデフォルトエクスポートを持つ `settings.ts` を作成する方法を推奨します。このファイルは従来のインライン定義 `Presence.Settings({ ... })` を完全に置き換え、両者は統合されません。ファイルが無効な場合はビルドが失敗します。ファイルがなければ、従来の legacy 形式も利用できます。
+
+```ts filename="settings.ts"
+import type { PresenceSetting } from "@nowly/sdk"
+
+export default {
   showButtons: {
     type: "boolean",
     default: true,
@@ -33,8 +37,14 @@ const settings = Presence.Settings({
       "en-US": "Show buttons"
     }
   }
-})
+} satisfies Record<string, PresenceSetting>
 ```
+
+```ts filename="presence.ts"
+const presence = new Presence()
+```
+
+CLI は `settings.ts` を自動検出します。`presence.ts` でのインポートや `Presence.Settings` の呼び出しは不要です。引き続き `settings.json` を生成し、デフォルト値を登録します。ユーザーが保存した値が優先されます。ブラウザーや Node の API を使わず、JSON 互換の宣言的な定義にしてください。明示的な型が必要な場合は `getSetting<boolean>("showButtons")` を使います。
 
 ## 設定の読み取り
 

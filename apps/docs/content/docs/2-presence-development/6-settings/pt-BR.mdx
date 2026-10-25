@@ -24,8 +24,12 @@ O Nowly suporta configurações booleanas, de entrada, seleção e slider.
 
 Use [`Presence.Settings`](/presence-development/presence-api) para definir configurações tipadas:
 
-```ts filename="presence.ts"
-const settings = Presence.Settings({
+A partir do CLI 1.7.0, prefira um `settings.ts` com exportação padrão ao lado de `presence.ts`. Ele substitui completamente as definições inline legacy `Presence.Settings({ ... })`, sem mesclar as fontes. Um arquivo inválido faz o build falhar. Sem esse arquivo, o formato legacy continua compatível.
+
+```ts filename="settings.ts"
+import type { PresenceSetting } from "@nowly/sdk"
+
+export default {
   showButtons: {
     type: "boolean",
     default: true,
@@ -33,8 +37,14 @@ const settings = Presence.Settings({
       "en-US": "Show buttons"
     }
   }
-})
+} satisfies Record<string, PresenceSetting>
 ```
+
+```ts filename="presence.ts"
+const presence = new Presence()
+```
+
+O CLI detecta `settings.ts` automaticamente, sem importação ou chamada a `Presence.Settings` em `presence.ts`. Continua gerando `settings.json` e registra os valores padrão. Os valores salvos pelo usuário têm prioridade. Use definições declarativas compatíveis com JSON, sem APIs do navegador ou do Node. Para uma leitura explicitamente tipada, use `getSetting<boolean>("showButtons")`.
 
 ## Lendo Configurações
 
