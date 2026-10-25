@@ -13,12 +13,8 @@ const adapter = new PrismaPg({ connectionString: DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 const tables = [
-  "analytics_events",
-  "analytics_daily_rollups",
-  "analytics_admins",
   "device_presences",
   "presence_active_devices",
-  "presence_active_sessions",
   "devices",
   "donation_events",
   "supporter_devices",

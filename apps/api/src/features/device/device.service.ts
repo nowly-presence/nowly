@@ -62,13 +62,6 @@ export type DeviceExport = {
     enabled: boolean;
     installedVersion: string | null;
   }>;
-  analyticsEvents: Array<{
-    key: string;
-    slug: string | null;
-    source: string | null;
-    country: string | null;
-    createdAt: string;
-  }>;
   presenceLikes: Array<{
     slug: string;
     likedAt: string;
@@ -98,14 +91,11 @@ export const exportDeviceData = async (deviceId: string): Promise<DeviceExport |
   if (!hasDatabase()) return null;
 
   const prisma = getPrisma();
-  const [device, presences, analyticsEvents, presenceLikes, customAssets] = await Promise.all([
+  const [device, presences, presenceLikes, customAssets] = await Promise.all([
     prisma.device.findUnique({
       where: { deviceId }
     }),
     prisma.devicePresence.findMany({
-      where: { deviceId }
-    }),
-    prisma.analyticsEvent.findMany({
       where: { deviceId }
     }),
     prisma.presenceLike.findMany({
@@ -134,13 +124,6 @@ export const exportDeviceData = async (deviceId: string): Promise<DeviceExport |
       installed: presence.installed,
       enabled: presence.enabled,
       installedVersion: presence.installedVersion
-    })),
-    analyticsEvents: analyticsEvents.map((event) => ({
-      key: event.key,
-      slug: event.slug,
-      source: event.source,
-      country: event.country,
-      createdAt: event.createdAt.toISOString()
     })),
     presenceLikes: presenceLikes.map((like) => ({
       slug: like.slug,
@@ -174,9 +157,6 @@ export const deleteDeviceData = async (deviceId: string): Promise<void> => {
     prisma.customAsset.deleteMany({
       where: { deviceId }
     }),
-    prisma.analyticsEvent.deleteMany({
-      where: { deviceId }
-    }),
     prisma.presenceLike.deleteMany({
       where: { deviceId }
     }),
@@ -184,9 +164,6 @@ export const deleteDeviceData = async (deviceId: string): Promise<void> => {
       where: { deviceId }
     }),
     prisma.presenceActiveDevice.deleteMany({
-      where: { deviceId }
-    }),
-    prisma.presenceActiveSession.deleteMany({
       where: { deviceId }
     }),
     prisma.device.deleteMany({
