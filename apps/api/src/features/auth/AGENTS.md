@@ -1,10 +1,10 @@
 # Auth
 
-Discord OAuth (better-auth) + a secret-based admin guard, used across the API. Better Auth serves apps/web (Nowly accounts and campaign administration, see `features/account`).
+Discord OAuth (better-auth) + a secret-based admin guard, used across the API. Better Auth serves web and extension accounts (see `features/account`).
 
 ## Protect a new route with the admin guard
 
-1. In the route file, import `requireAuth` (or the `require-admin.ts` hook) from `@/features/auth/auth.middleware`.
+1. In the route file, import `requireAuth` from `@/features/auth/auth.middleware`.
 2. Add it as a `preHandler` on the route:
    ```ts
    fastify.get("/admin-only", { preHandler: requireAuth }, async (request, reply) => { ... })
@@ -14,7 +14,7 @@ Discord OAuth (better-auth) + a secret-based admin guard, used across the API. B
 ## Add a new auth mode (e.g. a second bearer secret for a different caller)
 
 1. Add the new check function to `auth.middleware.ts`, following `requireAuth`'s fail-closed pattern: if the expected secret/config is missing **and** `NODE_ENV === "production"`, return `500` rather than silently allowing the request through.
-2. Export a `preHandler`-compatible wrapper from `require-admin.ts` (or a new file) so routes can opt in the same way as `requireAuth`.
+2. Add a `preHandler`-compatible guard alongside `requireAuth` so routes can opt in explicitly.
 
 ## Better Auth configuration
 

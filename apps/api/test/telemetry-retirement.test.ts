@@ -73,8 +73,7 @@ describe("retired Insights collection", () => {
       "apps/web/.env.example",
       "apps/extension/.env.example",
       "packages/env/src/extension.ts",
-      "packages/env/README.md",
-      "apps/web/features/campaigns/campaigns-manager.tsx"
+      "packages/env/README.md"
     ];
 
     for (const directory of ["apps/web/messages", "apps/extension/messages"]) {
