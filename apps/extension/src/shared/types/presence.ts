@@ -12,6 +12,7 @@ export type PresenceData = {
   smallImageKey?: string;
   smallImageText?: string;
   type?: number;
+  statusDisplayType?: 0 | 1 | 2;
   buttons?: {
     label: string;
     url: string;

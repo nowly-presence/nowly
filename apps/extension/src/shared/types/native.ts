@@ -20,6 +20,7 @@ export type PresencePayload = {
   smallImage?: string;
   smallText?: string;
   type?: number;
+  statusDisplayType?: 0 | 1 | 2;
   buttons?: {
     label: string;
     url: string;

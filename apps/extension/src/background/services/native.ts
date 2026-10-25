@@ -52,6 +52,7 @@ export const mapPresenceData = (data: PresenceData): PresencePayload => ({
   smallImage: data.smallImageKey,
   smallText: data.smallImageText,
   type: data.type,
+  statusDisplayType: data.statusDisplayType,
   buttons: data.buttons?.slice(0, 2)
 });
 

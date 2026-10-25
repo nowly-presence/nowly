@@ -96,6 +96,7 @@ export const normalizeActivity = (activity: PresenceData, fallbackName: string):
     smallImageKey: normalizeImage(activity.smallImageKey),
     smallImageText: normalizeAssetText(activity.smallImageText),
     type: allowedTypes.has(activity.type ?? 0) ? activity.type : 0,
+    statusDisplayType: activity.statusDisplayType === 0 || activity.statusDisplayType === 1 || activity.statusDisplayType === 2 ? activity.statusDisplayType : undefined,
     buttons: activity.buttons
       ?.filter((button) => button.url.startsWith("https://"))
       .slice(0, 2)
