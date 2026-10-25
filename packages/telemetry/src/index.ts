@@ -75,20 +75,24 @@ export const ingestSchema = z.strictObject({
   event: eventSchema
 });
 
-export const umamiPayload = (event: ProductEvent) => ({
-  type: "event",
-  payload: {
-    website: "55bb24f3-93b3-4738-a1f7-7c214027c7e6",
-    hostname: "nowly.me",
-    url: `/product/${event.source === "web" ? "web" : "extension"}`,
-    name: event.name,
-    data: {
-      schema_version: 1,
-      source: event.source,
-      ...event.data
+export const umamiPayload = (event: ProductEvent) => {
+  const channel = event.name === "site_visit" || event.name === "extension_download_click" || event.name === "uninstall_page_opened" ? "web" : "extension";
+
+  return {
+    type: "event",
+    payload: {
+      website: channel === "web" ? "b68279a9-5bcc-454a-9147-37fdef5dbebf" : "55bb24f3-93b3-4738-a1f7-7c214027c7e6",
+      hostname: "nowly.me",
+      url: `/product/${channel}`,
+      name: event.name,
+      data: {
+        schema_version: 1,
+        source: event.source,
+        ...event.data
+      }
     }
-  }
-});
+  };
+};
 
 export type RetentionState = {
   startedAt: number;
