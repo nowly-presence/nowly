@@ -1,115 +1,108 @@
 import { describe, expect, it } from "vitest";
-import { confirmLegalDocuments, CURRENT_LEGAL_MANIFEST, emptyLegalState, mergeLegalManifests, normalizeLegalState, parseLegalManifest, pendingLegalDocuments } from "@nowly/shared/legal";
+import { confirmLegalDocuments, emptyLegalState, normalizeLegalState, parseLegalDates, pendingLegalDocuments } from "@nowly/shared/legal";
 
-const recordedAt = "2026-10-16T12:00:00.000Z";
+const dates = {
+  tos: "2026-10-24",
+  privacy: "2026-10-25"
+};
+const recordedAt = "2026-10-25T12:00:00.000Z";
+
+const current = () => ({
+  ...emptyLegalState(),
+  dates: { ...dates }
+});
 
 const accepted = () =>
   confirmLegalDocuments(
-    emptyLegalState(),
+    current(),
     {
-      versions: {
-        tos: CURRENT_LEGAL_MANIFEST.documents.tos.version,
-        privacy: CURRENT_LEGAL_MANIFEST.documents.privacy.version
-      },
+      dates,
       acceptTos: true,
       acknowledgePrivacy: true
     },
     recordedAt
   ).state;
 
-describe("legal documents", () => {
-  it("requires both documents on first launch", () => {
+describe("legal document dates", () => {
+  it("requires both documents on first launch and cannot confirm unknown dates", () => {
     expect(pendingLegalDocuments(emptyLegalState())).toEqual(["tos", "privacy"]);
+    expect(
+      confirmLegalDocuments(
+        emptyLegalState(),
+        {
+          dates,
+          acceptTos: true,
+          acknowledgePrivacy: true
+        },
+        recordedAt
+      ).ok
+    ).toBe(false);
   });
 
-  it("records separate receipts without analytics consent", () => {
+  it("records separate dated receipts without analytics consent", () => {
     const state = accepted();
     expect(state.tosAcceptance).toEqual({
-      version: CURRENT_LEGAL_MANIFEST.documents.tos.version,
+      date: dates.tos,
       recordedAt
     });
     expect(state.privacyAcknowledgement).toEqual({
-      version: CURRENT_LEGAL_MANIFEST.documents.privacy.version,
+      date: dates.privacy,
       recordedAt
     });
     expect(pendingLegalDocuments(state)).toEqual([]);
     expect(state).not.toHaveProperty("analyticsConsent");
+    expect(state).not.toHaveProperty("manifest");
   });
 
   it("does not accept unchecked confirmations", () => {
-    const state = emptyLegalState();
-
-    for (const input of [
-      {
-        acceptTos: false,
-        acknowledgePrivacy: true
-      },
-      {
-        acceptTos: true,
-        acknowledgePrivacy: false
-      }
-    ]) {
+    for (const id of ["tos", "privacy"]) {
+      const state = current();
       const result = confirmLegalDocuments(
         state,
         {
-          versions: {
-            tos: CURRENT_LEGAL_MANIFEST.documents.tos.version,
-            privacy: CURRENT_LEGAL_MANIFEST.documents.privacy.version
-          },
-          ...input
+          dates,
+          acceptTos: id !== "tos",
+          acknowledgePrivacy: id !== "privacy"
         },
         recordedAt
       );
-      expect(result.ok).toBe(false);
+      expect(result.error).toBe("confirmationRequired");
       expect(result.state).toBe(state);
     }
   });
 
-  it("ignores minor changes for previously accepted versions", () => {
-    const state = accepted();
-    state.manifest = structuredClone(state.manifest);
-    state.manifest.documents.tos.version += 1;
-    expect(pendingLegalDocuments(state)).toEqual([]);
-  });
-
   it.each(["tos", "privacy"] as const)("only requests the changed %s document", (id) => {
     const state = accepted();
-    state.manifest = structuredClone(state.manifest);
-    state.manifest.documents[id] = {
-      ...state.manifest.documents[id],
-      version: CURRENT_LEGAL_MANIFEST.documents[id].version + 1,
-      requiredVersion: CURRENT_LEGAL_MANIFEST.documents[id].version + 1
+    state.dates = {
+      ...dates,
+      [id]: "2026-10-26"
     };
     expect(pendingLegalDocuments(state)).toEqual([id]);
     const result = confirmLegalDocuments(
       state,
       {
-        versions: { [id]: state.manifest.documents[id].version },
+        dates: { [id]: "2026-10-26" },
         acceptTos: id === "tos",
         acknowledgePrivacy: id === "privacy"
       },
-      "2026-10-17T00:00:00.000Z"
+      recordedAt
     );
     expect(result.ok).toBe(true);
     expect(pendingLegalDocuments(result.state)).toEqual([]);
     expect(id === "tos" ? result.state.privacyAcknowledgement : result.state.tosAcceptance).toEqual({
-      version: CURRENT_LEGAL_MANIFEST.documents.tos.version,
+      date: dates[id === "tos" ? "privacy" : "tos"],
       recordedAt
     });
   });
 
   it("rejects a stale confirmation after a remote update", () => {
-    const state = emptyLegalState();
-    state.manifest = structuredClone(state.manifest);
-    state.manifest.documents.tos.version += 1;
+    const state = current();
+    state.dates.privacy = "2026-10-26";
     expect(
       confirmLegalDocuments(
         state,
         {
-          versions: {
-            tos: CURRENT_LEGAL_MANIFEST.documents.tos.version,
-            privacy: CURRENT_LEGAL_MANIFEST.documents.privacy.version
-          },
+          dates,
           acceptTos: true,
           acknowledgePrivacy: true
         },
@@ -118,62 +111,59 @@ describe("legal documents", () => {
     ).toBe("documentsChanged");
   });
 
-  it("never rolls back a known version or required version", () => {
-    const newer = structuredClone(CURRENT_LEGAL_MANIFEST);
-    newer.documents.tos = {
-      ...newer.documents.tos,
-      version: 3,
-      requiredVersion: 2
-    };
-    expect(mergeLegalManifests(newer, CURRENT_LEGAL_MANIFEST)).toEqual(newer);
-    const invalid = structuredClone(newer);
-    invalid.documents.tos.requiredVersion = 1;
-    expect(mergeLegalManifests(newer, invalid)).toEqual(newer);
-  });
-
-  it("rejects malformed manifests and external document URLs", () => {
-    expect(parseLegalManifest(CURRENT_LEGAL_MANIFEST)).toEqual(CURRENT_LEGAL_MANIFEST);
+  it("rejects malformed dates, impossible days and the old numbered manifest", () => {
+    expect(parseLegalDates(dates)).toEqual(dates);
 
     for (const value of [
       null,
       [],
-      { schemaVersion: 2 },
+      {},
+      { tos: dates.tos },
+      {
+        ...dates,
+        tos: "yesterday"
+      },
+      {
+        ...dates,
+        privacy: "2026-02-30"
+      },
+      {
+        ...dates,
+        tos: "https://evil.example/tos"
+      },
       {
         schemaVersion: 1,
         documents: {}
       }
-    ])
-      expect(parseLegalManifest(value)).toBeNull();
-
-    for (const override of [
-      { version: 0 },
-      { version: 1.5 },
-      { requiredVersion: CURRENT_LEGAL_MANIFEST.documents.tos.version + 1 },
-      { path: "https://evil.example/tos" },
-      { updatedAt: "yesterday" }
     ]) {
-      const value = structuredClone(CURRENT_LEGAL_MANIFEST);
-      Object.assign(value.documents.tos, override);
-      expect(parseLegalManifest(value)).toBeNull();
+      expect(parseLegalDates(value)).toBeNull();
     }
   });
 
-  it("recovers safely from corrupt storage", () => {
+  it("recovers safely from corrupt storage and requests confirmation after migration from numbered receipts", () => {
     expect(normalizeLegalState(null)).toEqual(emptyLegalState());
-    expect(
-      pendingLegalDocuments(
-        normalizeLegalState({
-          tosAcceptance: {
-            version: -1,
-            recordedAt
-          },
-          privacyAcknowledgement: {
-            version: 1,
-            recordedAt: "bad"
-          },
-          checkedAt: NaN
-        })
-      )
-    ).toEqual(["tos", "privacy"]);
+    const state = normalizeLegalState({
+      manifest: {
+        schemaVersion: 1,
+        documents: {}
+      },
+      tosAcceptance: {
+        version: 2,
+        recordedAt
+      },
+      privacyAcknowledgement: {
+        date: dates.privacy,
+        recordedAt: "bad"
+      },
+      checkedAt: Date.now()
+    });
+    expect(state.checkedAt).toBe(0);
+    expect(state.tosAcceptance).toBeNull();
+    expect(state.privacyAcknowledgement).toBeNull();
+    expect(pendingLegalDocuments(state)).toEqual(["tos", "privacy"]);
+  });
+
+  it("retains cached dates and receipts across service worker restarts", () => {
+    expect(normalizeLegalState(JSON.parse(JSON.stringify(accepted())))).toEqual(accepted());
   });
 });

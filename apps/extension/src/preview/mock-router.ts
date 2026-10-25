@@ -184,32 +184,29 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
       if (stored.legalDocuments) return normalizeLegalState(stored.legalDocuments);
 
       const initial = emptyLegalState();
-      const receipt = {
-        version: 1,
-        recordedAt: new Date().toISOString()
+      const dates = {
+        tos: "2026-10-24",
+        privacy: "2026-10-25"
       };
+      initial.dates = dates;
+      const recordedAt = new Date().toISOString();
       const mode = new URLSearchParams(window.location.search).get("legal");
 
       if (mode !== "first") {
-        initial.tosAcceptance = receipt;
-        initial.privacyAcknowledgement = receipt;
+        initial.tosAcceptance = {
+          date: dates.tos,
+          recordedAt
+        };
+        initial.privacyAcknowledgement = {
+          date: dates.privacy,
+          recordedAt
+        };
       }
 
       if (mode === "update") {
-        initial.manifest = {
-          schemaVersion: 1,
-          documents: {
-            tos: {
-              ...initial.manifest.documents.tos,
-              version: 2,
-              requiredVersion: 2
-            },
-            privacy: {
-              ...initial.manifest.documents.privacy,
-              version: 2,
-              requiredVersion: 2
-            }
-          }
+        initial.dates = {
+          tos: "2026-10-26",
+          privacy: "2026-10-26"
         };
       }
 

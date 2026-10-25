@@ -1,10 +1,16 @@
-import { CURRENT_LEGAL_MANIFEST } from "@nowly/shared/legal";
+import messages from "../../../../messages/en-US.json";
 
 export const GET = () =>
-  Response.json(CURRENT_LEGAL_MANIFEST, {
-    headers: {
-      "Cache-Control": "public, max-age=300, must-revalidate",
-      "Access-Control-Allow-Origin": "*",
-      "X-Content-Type-Options": "nosniff"
+  Response.json(
+    {
+      tos: messages["tos-page"]["last-updated"],
+      privacy: messages["privacy-page"]["last-updated"]
+    },
+    {
+      headers: {
+        "Cache-Control": "public, max-age=300, must-revalidate",
+        "Access-Control-Allow-Origin": "*",
+        "X-Content-Type-Options": "nosniff"
+      }
     }
-  });
+  );

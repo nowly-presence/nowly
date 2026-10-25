@@ -1,4 +1,4 @@
-import { confirmLegalDocuments, normalizeLegalState, parseLegalManifest, mergeLegalManifests, pendingLegalDocuments, type LegalConfirmation, type LegalConfirmationResult, type LegalState } from "@nowly/shared/legal";
+import { confirmLegalDocuments, normalizeLegalState, parseLegalDates, pendingLegalDocuments, type LegalConfirmation, type LegalConfirmationResult, type LegalState } from "@nowly/shared/legal";
 import { WEB_BASE_URL } from "@/shared/constants";
 import { STORAGE_KEYS } from "@/background/storage/keys";
 
@@ -42,13 +42,16 @@ export const checkLegalDocuments = (): Promise<LegalState> =>
 
       if (!response.ok) throw new Error("LEGAL_REQUEST_FAILED");
 
-      const manifest = parseLegalManifest(await response.json());
+      const dates = parseLegalDates(await response.json());
 
-      if (!manifest) throw new Error("LEGAL_MANIFEST_INVALID");
+      if (!dates) throw new Error("LEGAL_DATES_INVALID");
 
       const next = {
         ...current,
-        manifest: mergeLegalManifests(current.manifest, manifest),
+        dates: {
+          tos: current.dates && current.dates.tos > dates.tos ? current.dates.tos : dates.tos,
+          privacy: current.dates && current.dates.privacy > dates.privacy ? current.dates.privacy : dates.privacy
+        },
         checkedAt: Date.now(),
         checkFailed: false
       };

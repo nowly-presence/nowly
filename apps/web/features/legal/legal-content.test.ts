@@ -13,6 +13,7 @@ type LegalPage = {
 
 const messagesDirectory = resolve(import.meta.dirname, "../../messages");
 const locales = readdirSync(messagesDirectory).filter((file) => file.endsWith(".json"));
+const canonical: Record<"privacy-page" | "tos-page", LegalPage> = JSON.parse(readFileSync(resolve(messagesDirectory, "en-US.json"), "utf8"));
 
 describe.each(locales)("legal content in %s", (file) => {
   const messages: Record<"privacy-page" | "tos-page" | "legal-notice-page", LegalPage> = JSON.parse(readFileSync(resolve(messagesDirectory, file), "utf8"));
@@ -25,6 +26,7 @@ describe.each(locales)("legal content in %s", (file) => {
     expect(privacy["last-updated"]).not.toBe(terms["last-updated"]);
 
     for (const page of [privacy, terms]) {
+      expect(page["last-updated"]).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(new Set(page.sections.map((section) => section.title)).size).toBe(page.sections.length);
 
       for (const section of page.sections) {
@@ -32,6 +34,9 @@ describe.each(locales)("legal content in %s", (file) => {
         expect(section.body.length).toBeGreaterThan(0);
       }
     }
+
+    expect(privacy["last-updated"]).toBe(canonical["privacy-page"]["last-updated"]);
+    expect(terms["last-updated"]).toBe(canonical["tos-page"]["last-updated"]);
   });
 
   it("discloses uploads and device metadata in every locale", () => {
@@ -47,6 +52,7 @@ describe.each(locales)("legal content in %s", (file) => {
     const licence = terms.sections[3].body;
     expect(licence).toContain("MIT");
     expect(licence).toContain('href="https://github.com/nowly-presence/nowly"');
+
     for (const page of [terms, messages["legal-notice-page"]]) {
       expect(JSON.stringify(page)).not.toMatch(/BUSL|Business Source License|Change Date|2028/);
     }

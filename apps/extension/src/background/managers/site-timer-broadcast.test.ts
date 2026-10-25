@@ -1,4 +1,3 @@
-import { CURRENT_LEGAL_MANIFEST } from "@nowly/shared/legal";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { broadcastActiveTab } from "@/background/managers/activity-manager";
 import { updateSettings } from "@/background/managers/settings-manager";
@@ -36,11 +35,18 @@ describe("site timer broadcasts", () => {
     vi.clearAllMocks();
     vi.useFakeTimers();
     vi.setSystemTime(NOW * SECOND_MS);
+    const dates = {
+      tos: "2026-10-24",
+      privacy: "2026-10-25"
+    };
+    await chrome.storage.local.set({
+      [STORAGE_KEYS.legal]: {
+        dates,
+        checkedAt: 0
+      }
+    });
     await acceptLegalDocuments({
-      versions: {
-        tos: CURRENT_LEGAL_MANIFEST.documents.tos.version,
-        privacy: CURRENT_LEGAL_MANIFEST.documents.privacy.version
-      },
+      dates,
       acceptTos: true,
       acknowledgePrivacy: true
     });
