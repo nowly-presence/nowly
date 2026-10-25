@@ -1,0 +1,14 @@
+model Announcement {
+  id          String   @id @default(cuid())
+  translations Json
+  kind        String
+  severity    Int?
+  pinned      Boolean  @default(false)
+  startsAt    DateTime?
+  endsAt      DateTime?
+  expiresAt   DateTime?
+  publishedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([publishedAt])
+}
