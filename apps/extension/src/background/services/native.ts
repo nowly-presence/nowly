@@ -45,6 +45,8 @@ export const mapPresenceData = (data: PresenceData): PresencePayload => ({
   name: data.name,
   details: data.details,
   state: data.state,
+  detailsUrl: data.detailsUrl,
+  stateUrl: data.stateUrl,
   startTime: data.startTimestamp,
   endTime: data.endTimestamp,
   largeImage: data.largeImageKey,
@@ -52,6 +54,7 @@ export const mapPresenceData = (data: PresenceData): PresencePayload => ({
   smallImage: data.smallImageKey,
   smallText: data.smallImageText,
   type: data.type,
+  statusDisplayType: data.statusDisplayType,
   buttons: data.buttons?.slice(0, 2)
 });
 

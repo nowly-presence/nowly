@@ -31,6 +31,10 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "detailsUrl", type: "string", description: "details için isteğe bağlı herkese açık HTTPS bağlantısı (SDK 1.7.0+)." },
+    { name: "stateUrl", type: "string", description: "state için isteğe bağlı herkese açık HTTPS bağlantısı (SDK 1.7.0+)." },
+    { name: "name", type: "string", description: "İsteğe bağlı etkinlik adı. Varsayılan olarak presence adı kullanılır." },
+    { name: "statusDisplayType", type: "0 | 1 | 2", description: "Discord'un kısa durumunda gösterilen alan: 0 = name (varsayılan), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Discord'da gösterilen birincil etkinlik satırı." },
     { name: "state", type: "string", description: "details'in altında gösterilen ikincil etkinlik satırı." },
     { name: "startTimestamp", type: "number", description: "Geçen etkinlik ilerlemesi için Unix zaman damgası." },
@@ -47,6 +51,42 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord, `largeImageText` veya `smallImageText` iki karakterden az içerdiğinde Rich Presence payload'larını reddeder. Nowly bu isteğe bağlı ipuçlarını temizler ve sonuç iki karakterden kısaysa bunları göndermez; görsel kullanılmaya devam eder.
 </Callout>
+
+## detailsUrl / stateUrl
+
+SDK 1.7.0+, düğmelerden bağımsız olarak ilgili etkinlik satırını tıklanabilir yapan isteğe bağlı `detailsUrl` ve `stateUrl` metin alanlarını ekler. Hem eklenti hem yerel ana makine desteklemelidir; eski sürümler alanları yok sayar. Etkinlik adı değişmez.
+
+Kimlik bilgisi içermeyen, en fazla 2048 karakterlik doğrulanmış herkese açık HTTPS URL'leri kullanın. Karşılık gelen metni olmayan veya geçersiz URL içeren bağlantılar atlanır. YouTube'un `v` parametresi gibi içerik kimliklerini koruyun; erişim belirteçlerini, özel sohbetleri, gizli bağlantıları veya gizlilik ayarlarının sakladığı bilgileri paylaşmayın. Bilinmeyen hedefleri atlayın.
+
+```ts
+await presence.setActivity({
+  details: "Video başlığı",
+  detailsUrl: "https://www.youtube.com/watch?v=VIDEO_ID",
+  state: "Kanal adı",
+  stateUrl: "https://www.youtube.com/@channel",
+})
+```
+
+## statusDisplayType
+
+`statusDisplayType`, Discord'un kısa durumunda gösterilecek metni seçer. Etkinlik kartının adını, ayrıntılarını veya durumunu değiştirmez.
+
+- `0` (varsayılan): `name`
+- `1`: `state`
+- `2`: `details`
+
+Örneğin, etkinlik adı ve kanal kartta kalırken kısa durumda video başlığını gösterin:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  name: "Video hizmeti",
+  details: "Video başlığı",
+  state: "Kanal adı",
+  statusDisplayType: 2,
+})
+```
+
+Bu alanı içeren bir SDK sürümü kullanın ve hem Nowly uzantısını hem de yerel ana bilgisayarı güncelleyin. Eski çalışma zamanı sürümleri bu alanı yok sayar ve varsayılan durum görünümünü korur.
 
 ## clearActivity
 

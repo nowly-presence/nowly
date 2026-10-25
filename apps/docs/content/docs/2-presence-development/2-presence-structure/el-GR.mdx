@@ -11,6 +11,7 @@ description: Κατανόησε την απαιτούμενη διάταξη φ�
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 `-- assets/
     |-- logo.png
     |-- icon.png
@@ -25,6 +26,10 @@ src/Y/YouTube/
 
 Το `presence.ts` περιέχει τη λογική εκτέλεσης. Εντοπίζει την κατάσταση της σελίδας και καλεί το Presence API.
 
+## settings.ts
+
+Το CLI 1.7.0+ προτιμά ένα αντικείμενο με προεπιλεγμένη εξαγωγή σε αυτό το αρχείο. Αντικαθιστά τις παλιές inline δηλώσεις χωρίς συγχώνευση. Δείτε τις [Ρυθμίσεις](/presence-development/settings) για τύπους, προεπιλογές και συμβατότητα.
+
 ## utils/
 
 Για σύνθετα presences, χώρισε τη λογική σου σε αποκλειστικά αρχεία μέσα σε έναν φάκελο `utils/`. Το presence του YouTube, για παράδειγμα, οργανώνει βοηθητικές συναρτήσεις DOM, ανάλυση καναλιού και επίλυση Shorts σε ξεχωριστά modules:
@@ -33,6 +38,7 @@ src/Y/YouTube/
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 |-- assets/
 |   |-- logo.png
 |   |-- icon.png

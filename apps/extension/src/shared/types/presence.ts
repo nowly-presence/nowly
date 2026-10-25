@@ -5,6 +5,8 @@ export type PresenceData = {
   appName?: string;
   details?: string;
   state?: string;
+  detailsUrl?: string;
+  stateUrl?: string;
   startTimestamp?: number;
   endTimestamp?: number;
   largeImageKey?: string;
@@ -12,6 +14,7 @@ export type PresenceData = {
   smallImageKey?: string;
   smallImageText?: string;
   type?: number;
+  statusDisplayType?: 0 | 1 | 2;
   buttons?: {
     label: string;
     url: string;

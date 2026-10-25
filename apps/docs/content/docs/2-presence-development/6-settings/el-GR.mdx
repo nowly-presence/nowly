@@ -24,8 +24,12 @@ description: Πρόσθεσε ρυθμίσεις τύπου ανά presence με
 
 Χρησιμοποίησε το [`Presence.Settings`](/presence-development/presence-api) για να ορίσεις ρυθμίσεις τύπου:
 
-```ts filename="presence.ts"
-const settings = Presence.Settings({
+Από το CLI 1.7.0, προτιμήστε ένα `settings.ts` με προεπιλεγμένη εξαγωγή δίπλα στο `presence.ts`. Αντικαθιστά πλήρως τις παλιές inline δηλώσεις `Presence.Settings({ ... })`, χωρίς συγχώνευση. Ένα μη έγκυρο αρχείο αποτυγχάνει στο build. Χωρίς το αρχείο, η μορφή legacy εξακολουθεί να υποστηρίζεται.
+
+```ts filename="settings.ts"
+import type { PresenceSetting } from "@nowly/sdk"
+
+export default {
   showButtons: {
     type: "boolean",
     default: true,
@@ -33,8 +37,14 @@ const settings = Presence.Settings({
       "en-US": "Show buttons"
     }
   }
-})
+} satisfies Record<string, PresenceSetting>
 ```
+
+```ts filename="presence.ts"
+const presence = new Presence()
+```
+
+Το CLI εντοπίζει αυτόματα το `settings.ts`, χωρίς import ή κλήση του `Presence.Settings` στο `presence.ts`. Συνεχίζει να παράγει `settings.json` και να καταχωρίζει τις προεπιλογές. Οι αποθηκευμένες τιμές του χρήστη έχουν προτεραιότητα. Χρησιμοποιήστε δηλωτικούς ορισμούς συμβατούς με JSON, χωρίς API του προγράμματος περιήγησης ή του Node. Για ρητό τύπο χρησιμοποιήστε `getSetting<boolean>("showButtons")`.
 
 ## Ανάγνωση Ρυθμίσεων
 

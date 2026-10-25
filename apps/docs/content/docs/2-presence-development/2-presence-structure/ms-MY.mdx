@@ -11,6 +11,7 @@ Presence berada di bawah `src`, dikumpulkan mengikut huruf pertama namanya:
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 `-- assets/
     |-- logo.png
     |-- icon.png
@@ -25,6 +26,10 @@ src/Y/YouTube/
 
 `presence.ts` mengandungi logik runtime. Ia mengesan keadaan halaman dan memanggil Presence API.
 
+## settings.ts
+
+CLI 1.7.0+ mengutamakan objek eksport lalai dalam fail ini. Ia menggantikan definisi inline legacy tanpa penggabungan. Lihat [Tetapan](/presence-development/settings) untuk jenis, nilai lalai dan keserasian.
+
 ## utils/
 
 Untuk presence yang kompleks, pisahkan logik anda ke dalam fail khusus di bawah folder `utils/`. Presence YouTube, sebagai contoh, menyusun pembantu DOM, penghuraian saluran dan penyelesaian Shorts ke dalam modul berasingan:
@@ -33,6 +38,7 @@ Untuk presence yang kompleks, pisahkan logik anda ke dalam fail khusus di bawah 
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 |-- assets/
 |   |-- logo.png
 |   |-- icon.png

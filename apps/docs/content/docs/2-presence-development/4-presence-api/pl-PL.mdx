@@ -31,6 +31,10 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "detailsUrl", type: "string", description: "Opcjonalny publiczny link HTTPS dla details (SDK 1.7.0+)." },
+    { name: "stateUrl", type: "string", description: "Opcjonalny publiczny link HTTPS dla state (SDK 1.7.0+)." },
+    { name: "name", type: "string", description: "Opcjonalna nazwa aktywności. Domyślnie używana jest nazwa obecności." },
+    { name: "statusDisplayType", type: "0 | 1 | 2", description: "Pole w skróconym statusie Discord: 0 = name (domyślnie), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Główna linia aktywności wyświetlana w Discordzie." },
     { name: "state", type: "string", description: "Druga linia aktywności wyświetlana pod details." },
     { name: "startTimestamp", type: "number", description: "Znacznik czasu Unix dla upływu postępu aktywności." },
@@ -47,6 +51,42 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Discord odrzuca payload Rich Presence, gdy `largeImageText` lub `smallImageText` zawiera mniej niż dwa znaki. Nowly przycina te opcjonalne podpowiedzi i pomija je, gdy wynik ma mniej niż dwa znaki; obraz pozostaje dostępny.
 </Callout>
+
+## detailsUrl / stateUrl
+
+SDK 1.7.0+ dodaje opcjonalne pola tekstowe `detailsUrl` i `stateUrl`, które tworzą odnośniki dla odpowiednich wierszy aktywności, niezależnie od przycisków. Rozszerzenie i host natywny muszą je obsługiwać; starsze wersje je ignorują. Nazwa aktywności się nie zmienia.
+
+Używaj sprawdzonych publicznych adresów HTTPS bez danych logowania, o długości do 2048 znaków. Linki bez odpowiadającego tekstu lub z nieprawidłowym adresem są pomijane. Zachowuj identyfikatory treści, np. parametr YouTube `v`, ale nigdy nie udostępniaj tokenów dostępu, prywatnych rozmów, tajnych linków ani informacji ukrytych przez ustawienia prywatności. Pomijaj nieznane cele.
+
+```ts
+await presence.setActivity({
+  details: "Tytuł filmu",
+  detailsUrl: "https://www.youtube.com/watch?v=VIDEO_ID",
+  state: "Nazwa kanału",
+  stateUrl: "https://www.youtube.com/@channel",
+})
+```
+
+## statusDisplayType
+
+`statusDisplayType` wybiera tekst skróconego statusu Discord. Nie zmienia nazwy, szczegółów ani stanu na karcie aktywności.
+
+- `0` (domyślnie): `name`
+- `1`: `state`
+- `2`: `details`
+
+Na przykład można wyświetlić tytuł filmu w skróconym statusie, zachowując nazwę aktywności i kanał na karcie:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  name: "Serwis wideo",
+  details: "Tytuł filmu",
+  state: "Nazwa kanału",
+  statusDisplayType: 2,
+})
+```
+
+Użyj wersji SDK zawierającej to pole i zaktualizuj rozszerzenie Nowly oraz host natywny. Starsze wersje środowiska uruchomieniowego ignorują to pole i zachowują domyślny widok statusu.
 
 ## clearActivity
 

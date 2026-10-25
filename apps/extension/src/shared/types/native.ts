@@ -13,6 +13,8 @@ export type PresencePayload = {
   name?: string;
   details?: string;
   state?: string;
+  detailsUrl?: string;
+  stateUrl?: string;
   startTime?: number;
   endTime?: number;
   largeImage?: string;
@@ -20,6 +22,7 @@ export type PresencePayload = {
   smallImage?: string;
   smallText?: string;
   type?: number;
+  statusDisplayType?: 0 | 1 | 2;
   buttons?: {
     label: string;
     url: string;

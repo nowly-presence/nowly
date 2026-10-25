@@ -24,8 +24,12 @@ Nowly, boolean, input, select ve slider ayarlarını destekler.
 
 Tipli ayarları tanımlamak için [`Presence.Settings`](/presence-development/presence-api) kullanın:
 
-```ts filename="presence.ts"
-const settings = Presence.Settings({
+CLI 1.7.0 ve sonrasında, `presence.ts` yanında varsayılan dışa aktarımı olan bir `settings.ts` kullanın. Bu dosya eski satır içi `Presence.Settings({ ... })` tanımlarının tamamen yerine geçer; iki kaynak birleştirilmez. Geçersiz dosya derlemeyi durdurur. Dosya yoksa legacy biçimi desteklenmeye devam eder.
+
+```ts filename="settings.ts"
+import type { PresenceSetting } from "@nowly/sdk"
+
+export default {
   showButtons: {
     type: "boolean",
     default: true,
@@ -33,8 +37,14 @@ const settings = Presence.Settings({
       "en-US": "Show buttons"
     }
   }
-})
+} satisfies Record<string, PresenceSetting>
 ```
+
+```ts filename="presence.ts"
+const presence = new Presence()
+```
+
+CLI, `settings.ts` dosyasını otomatik bulur; `presence.ts` içinde import veya `Presence.Settings` çağrısı gerekmez. Hâlâ `settings.json` üretir ve varsayılanları kaydeder. Kullanıcının kaydettiği değerler önceliklidir. Tarayıcı veya Node API'leri olmadan JSON uyumlu bildirimsel tanımlar kullanın. Açık tür belirtmek için `getSetting<boolean>("showButtons")` kullanın.
 
 ## Ayarları Okuma
 

@@ -132,8 +132,9 @@ pnpm --filter @nowly/internal-cli host:publish                # publish native h
 - Each context must be imported explicitly - no cross-context leakage
 
 ### Presence System (@nowly/sdk, @nowly/presences, @nowly/cli — all submodules)
-- Presence source lives in `packages/presences/src/<LETTER>/<name>/`, each with `presence.ts`, `metadata.json`, `locales/`, `assets/`, `utils/`
-- `presence.ts` imports the runtime API from `@nowly/sdk` (`Presence`, `PresenceType`, `createMediaTimestamps`, etc.) plus globals `Presence`, `Settings`, `Assets` injected by the build
+- Presence source lives in `packages/presences/src/<LETTER>/<name>/`, each with `presence.ts`, `metadata.json`, `locales/`, `assets/`, optional `utils/`, and preferably `settings.ts`
+- Import SDK values/types such as `PresenceType` and `createMediaTimestamps`. `Presence` and `Assets` are injected runtime globals, not SDK imports.
+- CLI 1.7.0+ gives the default export of `settings.ts` complete priority over legacy inline `Presence.Settings({ ... })` definitions, without merging. Invalid files fail the build; absent files retain legacy support. Definitions remain JSON-compatible and builds still emit `settings.json`. Do not bulk-migrate existing presences.
 - The `nowly` CLI (packages/cli) validates and bundles presences (esbuild) via `nowly build` / `nowly validate` / `nowly pack`
 - Metadata schema (`Metadata` type in `packages/sdk/src/metadata.ts`, validated against `packages/presences/metadata.schema.json`) — see format below
 
@@ -168,8 +169,8 @@ pnpm --filter @nowly/internal-cli host:publish                # publish native h
 ## Presence SDK API (Global in Scripts)
 
 ```typescript
-const settings = Presence.Settings({ /* ... */ });
-const presence = new Presence(settings);
+
+const presence = new Presence();
 
 presence.on('UpdateData', async (ctx) => {
   // Fires on every tick (page change, user setting update, etc.)
@@ -185,6 +186,8 @@ presence.info(msg) / presence.error(msg); // Log to the extension's runtime log
 ```
 
 Use `createMediaTimestamps(video)` to compute activity duration from `<audio>`/`<video>` elements.
+
+Put new definitions in `settings.ts` as `export default { ... } satisfies Record<string, PresenceSetting>` with a type-only SDK import. The CLI detects the file automatically: use `new Presence()` with no settings import or manual registration. Read `ctx.settings` or use `getSetting<T>` for an explicitly typed value; saved user values override defaults. Keep browser/Node APIs out of the settings file. For streaming playback, offer pause hiding, badge visibility, and compact status selection without replacing the card's media title or bypassing privacy controls.
 
 ## Presence Metadata Format
 

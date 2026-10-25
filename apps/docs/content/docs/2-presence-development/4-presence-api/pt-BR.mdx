@@ -31,6 +31,10 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "detailsUrl", type: "string", description: "Link HTTPS público opcional para details (SDK 1.7.0+)." },
+    { name: "stateUrl", type: "string", description: "Link HTTPS público opcional para state (SDK 1.7.0+)." },
+    { name: "name", type: "string", description: "Nome de atividade opcional. Usa o nome da presença por padrão." },
+    { name: "statusDisplayType", type: "0 | 1 | 2", description: "Campo do status compacto do Discord: 0 = name (padrão), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Linha principal da atividade exibida no Discord." },
     { name: "state", type: "string", description: "Linha secundária da atividade exibida abaixo de details." },
     { name: "startTimestamp", type: "number", description: "Timestamp Unix para o progresso decorrido da atividade." },
@@ -47,6 +51,42 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 O Discord rejeita payloads de Rich Presence quando `largeImageText` ou `smallImageText` contém menos de dois caracteres. O Nowly limpa essas dicas opcionais e as omite quando o resultado tem menos de dois caracteres; a imagem continua disponível.
 </Callout>
+
+## detailsUrl / stateUrl
+
+O SDK 1.7.0+ adiciona os campos de texto opcionais `detailsUrl` e `stateUrl` para tornar cada linha correspondente clicável, independentemente dos botões. A extensão e o host nativo precisam oferecer suporte; versões anteriores ignoram esses campos. O nome da atividade não muda.
+
+Use URLs HTTPS públicas verificadas, sem credenciais e com até 2048 caracteres. Links sem texto correspondente ou com URLs inválidas são omitidos. Preserve identificadores de conteúdo, como o parâmetro `v` do YouTube, mas nunca compartilhe tokens de acesso, conversas privadas, links secretos ou informações ocultadas pelas configurações de privacidade. Omita destinos desconhecidos.
+
+```ts
+await presence.setActivity({
+  details: "Título do vídeo",
+  detailsUrl: "https://www.youtube.com/watch?v=VIDEO_ID",
+  state: "Nome do canal",
+  stateUrl: "https://www.youtube.com/@channel",
+})
+```
+
+## statusDisplayType
+
+`statusDisplayType` escolhe o texto do status compacto do Discord. Não altera o nome, os detalhes nem o estado no cartão de atividade.
+
+- `0` (padrão): `name`
+- `1`: `state`
+- `2`: `details`
+
+Por exemplo, mostrar o título do vídeo no status compacto e manter o nome da atividade e o canal no cartão:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  name: "Serviço de vídeo",
+  details: "Título do vídeo",
+  state: "Nome do canal",
+  statusDisplayType: 2,
+})
+```
+
+Use uma versão do SDK que inclua esse campo e atualize a extensão Nowly e o host nativo. Versões anteriores do runtime ignoram o campo e mantêm a exibição padrão do status.
 
 ## clearActivity
 

@@ -7,7 +7,6 @@ const (
 	InstallFolderName = "NowlyClient"
 	ExtensionID       = "abbegmindbabanjcabnmcjmamaoffbam"
 	DiscordClientID   = "1510223984392671302"
-
 )
 
 var HostVersion = "0.0.0-dev"
@@ -53,23 +52,26 @@ type PresenceButton struct {
 }
 
 type PresencePayload struct {
-	Name       string            `json:"name,omitempty"`
-	Details    string            `json:"details,omitempty"`
-	State      string            `json:"state,omitempty"`
-	StartTime  int64             `json:"startTime,omitempty"`
-	EndTime    int64             `json:"endTime,omitempty"`
-	LargeImage string            `json:"largeImage,omitempty"`
-	LargeText  string            `json:"largeText,omitempty"`
-	SmallImage string            `json:"smallImage,omitempty"`
-	SmallText  string            `json:"smallText,omitempty"`
-	Type       int               `json:"type,omitempty"`
-	Buttons    []PresenceButton  `json:"buttons,omitempty"`
+	Name              string           `json:"name,omitempty"`
+	Details           string           `json:"details,omitempty"`
+	State             string           `json:"state,omitempty"`
+	DetailsURL        string           `json:"detailsUrl,omitempty"`
+	StateURL          string           `json:"stateUrl,omitempty"`
+	StartTime         int64            `json:"startTime,omitempty"`
+	EndTime           int64            `json:"endTime,omitempty"`
+	LargeImage        string           `json:"largeImage,omitempty"`
+	LargeText         string           `json:"largeText,omitempty"`
+	SmallImage        string           `json:"smallImage,omitempty"`
+	SmallText         string           `json:"smallText,omitempty"`
+	Type              int              `json:"type,omitempty"`
+	StatusDisplayType *int             `json:"statusDisplayType,omitempty"`
+	Buttons           []PresenceButton `json:"buttons,omitempty"`
 }
 
 type NativeResponse struct {
 	Type      ResponseType    `json:"type"`
 	Connected bool            `json:"connected,omitempty"`
-	Discord    bool            `json:"discordConnected,omitempty"`
+	Discord   bool            `json:"discordConnected,omitempty"`
 	Status    string          `json:"status,omitempty"`
 	Version   string          `json:"version,omitempty"`
 	Profile   *DiscordProfile `json:"profile,omitempty"`

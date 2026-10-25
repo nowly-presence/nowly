@@ -11,6 +11,7 @@ description: Nowlyプレゼンスに必要なフォルダ構成を理解しま�
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 `-- assets/
     |-- logo.png
     |-- icon.png
@@ -25,6 +26,10 @@ src/Y/YouTube/
 
 `presence.ts` にはランタイムロジックが含まれます。ページの状態を検出し、Presence APIを呼び出します。
 
+## settings.ts
+
+CLI 1.7.0 以降では、このファイルのデフォルトエクスポートを優先します。従来のインライン定義は統合せずに置き換えられます。型、デフォルト値、互換性については[設定](/presence-development/settings)を参照してください。
+
 ## utils/
 
 複雑なプレゼンスの場合、ロジックを `utils/` フォルダ配下の専用ファイルに分割してください。たとえばYouTubeプレゼンスでは、DOMヘルパー、チャンネル解析、Shorts判定を別々のモジュールに整理しています。
@@ -33,6 +38,7 @@ src/Y/YouTube/
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 |-- assets/
 |   |-- logo.png
 |   |-- icon.png

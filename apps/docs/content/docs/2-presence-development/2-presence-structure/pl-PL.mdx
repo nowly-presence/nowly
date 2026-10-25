@@ -11,6 +11,7 @@ Obecność znajduje się w `src`, pogrupowana według pierwszej litery jej nazwy
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 `-- assets/
     |-- logo.png
     |-- icon.png
@@ -25,6 +26,10 @@ src/Y/YouTube/
 
 `presence.ts` zawiera logikę czasu wykonania. Wykrywa stan strony i wywołuje Presence API.
 
+## settings.ts
+
+CLI 1.7.0+ preferuje obiekt eksportowany domyślnie z tego pliku. Zastępuje on starsze definicje inline bez łączenia. Typy, wartości domyślne i zgodność opisano w [Ustawieniach](/presence-development/settings).
+
 ## utils/
 
 W przypadku złożonych obecności podziel swoją logikę na dedykowane pliki w folderze `utils/`. Na przykład obecność YouTube organizuje pomocnicze funkcje DOM, parsowanie kanałów i rozpoznawanie Shorts w oddzielnych modułach:
@@ -33,6 +38,7 @@ W przypadku złożonych obecności podziel swoją logikę na dedykowane pliki w 
 src/Y/YouTube/
 |-- metadata.json
 |-- presence.ts
+|-- settings.ts
 |-- assets/
 |   |-- logo.png
 |   |-- icon.png

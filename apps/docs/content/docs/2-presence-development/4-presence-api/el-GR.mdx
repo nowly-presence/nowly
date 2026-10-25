@@ -31,6 +31,10 @@ presence.on("UpdateData", async () => {
 
 <TypeTable
   properties={[
+    { name: "detailsUrl", type: "string", description: "Προαιρετικός δημόσιος σύνδεσμος HTTPS για details (SDK 1.7.0+)." },
+    { name: "stateUrl", type: "string", description: "Προαιρετικός δημόσιος σύνδεσμος HTTPS για state (SDK 1.7.0+)." },
+    { name: "name", type: "string", description: "Προαιρετικό όνομα δραστηριότητας. Από προεπιλογή χρησιμοποιείται το όνομα της παρουσίας." },
+    { name: "statusDisplayType", type: "0 | 1 | 2", description: "Πεδίο στη συνοπτική κατάσταση Discord: 0 = name (προεπιλογή), 1 = state, 2 = details." },
     { name: "details", type: "string", description: "Κύρια γραμμή δραστηριότητας που εμφανίζεται στο Discord." },
     { name: "state", type: "string", description: "Δευτερεύουσα γραμμή δραστηριότητας που εμφανίζεται κάτω από το details." },
     { name: "startTimestamp", type: "number", description: "Unix timestamp για την παρελθούσα πρόοδο της δραστηριότητας." },
@@ -47,6 +51,42 @@ presence.on("UpdateData", async () => {
 <Callout type="error">
 Το Discord απορρίπτει payloads Rich Presence όταν το `largeImageText` ή το `smallImageText` περιέχει λιγότερους από δύο χαρακτήρες. Το Nowly καθαρίζει αυτά τα προαιρετικά tooltips και τα παραλείπει όταν το αποτέλεσμα είναι μικρότερο από δύο χαρακτήρες· η εικόνα παραμένει διαθέσιμη.
 </Callout>
+
+## detailsUrl / stateUrl
+
+Το SDK 1.7.0+ προσθέτει τα προαιρετικά πεδία κειμένου `detailsUrl` και `stateUrl`, ώστε οι αντίστοιχες γραμμές δραστηριότητας να γίνονται σύνδεσμοι ανεξάρτητα από τα κουμπιά. Χρειάζεται υποστήριξη από την επέκταση και τον εγγενή κεντρικό υπολογιστή· οι παλιότερες εκδόσεις τα αγνοούν. Το όνομα της δραστηριότητας δεν αλλάζει.
+
+Χρησιμοποιήστε επαληθευμένα δημόσια URL HTTPS χωρίς διαπιστευτήρια, έως 2048 χαρακτήρες. Σύνδεσμοι χωρίς αντίστοιχο κείμενο ή με μη έγκυρο URL παραλείπονται. Διατηρήστε αναγνωριστικά περιεχομένου όπως την παράμετρο `v` του YouTube, αλλά ποτέ διακριτικά πρόσβασης, ιδιωτικές συνομιλίες, μυστικούς συνδέσμους ή πληροφορίες που κρύβουν οι ρυθμίσεις απορρήτου. Παραλείψτε άγνωστους προορισμούς.
+
+```ts
+await presence.setActivity({
+  details: "Τίτλος βίντεο",
+  detailsUrl: "https://www.youtube.com/watch?v=VIDEO_ID",
+  state: "Όνομα καναλιού",
+  stateUrl: "https://www.youtube.com/@channel",
+})
+```
+
+## statusDisplayType
+
+Το `statusDisplayType` επιλέγει το κείμενο της συνοπτικής κατάστασης Discord. Δεν αλλάζει το όνομα, τις λεπτομέρειες ή την κατάσταση στην κάρτα δραστηριότητας.
+
+- `0` (προεπιλογή): `name`
+- `1`: `state`
+- `2`: `details`
+
+Για παράδειγμα, εμφάνιση του τίτλου του βίντεο στη συνοπτική κατάσταση, διατηρώντας το όνομα δραστηριότητας και το κανάλι στην κάρτα:
+
+```ts filename="presence.ts"
+await presence.setActivity({
+  name: "Υπηρεσία βίντεο",
+  details: "Τίτλος βίντεο",
+  state: "Όνομα καναλιού",
+  statusDisplayType: 2,
+})
+```
+
+Χρησιμοποιήστε έκδοση του SDK που περιλαμβάνει αυτό το πεδίο και ενημερώστε την επέκταση Nowly και τον εγγενή host. Οι παλαιότερες εκδόσεις του runtime αγνοούν το πεδίο και διατηρούν την προεπιλεγμένη εμφάνιση.
 
 ## clearActivity
 
