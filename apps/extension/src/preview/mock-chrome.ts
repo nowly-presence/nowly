@@ -30,9 +30,7 @@ export const installMockChrome = async (): Promise<void> => {
   const customActivities = buildCustomActivities(previewParams.scenario, previewParams.customLive, now);
   const liveCustom = customActivities.items.find((item) => item.id === customActivities.activeId);
   const detectedCustom = previewParams.customLive === "detected" ? customActivities.items[0] : undefined;
-  const customActivatedAt = detectedCustom
-    ? detectedActivation(now)
-    : (customActivities.activatedAt ?? now);
+  const customActivatedAt = detectedCustom ? detectedActivation(now) : (customActivities.activatedAt ?? now);
   const runningCustom = liveCustom ?? detectedCustom;
   const currentActivity = runningCustom
     ? { slug: customActivitySlug(runningCustom.id), presence: buildCustomPresence(runningCustom, customActivatedAt), updatedAt: now }
@@ -120,12 +118,7 @@ export const installMockChrome = async (): Promise<void> => {
 
   await session.set({
     [CUSTOM_ACTIVITY_DETECTION_KEY]: detectedCustom
-      ? {
-          activityId: detectedCustom.id,
-          host: DETECTED_HOST,
-          tabId: DETECTED_TAB_ID,
-          activatedAt: customActivatedAt
-        }
+      ? { activityId: detectedCustom.id, host: DETECTED_HOST, tabId: DETECTED_TAB_ID, activatedAt: customActivatedAt }
       : null
   });
 

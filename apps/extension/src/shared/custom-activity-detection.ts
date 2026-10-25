@@ -56,7 +56,9 @@ export const parseDetectionUrl = (value: string): CustomDetectionTarget | null =
 };
 
 const hostMatches = (target: string, host: string): boolean =>
-  target.startsWith(WILDCARD_PREFIX) ? host === target.slice(WILDCARD_PREFIX.length) || host.endsWith(`.${target.slice(WILDCARD_PREFIX.length)}`) : host === target;
+  target.startsWith(WILDCARD_PREFIX)
+    ? host === target.slice(WILDCARD_PREFIX.length) || host.endsWith(`.${target.slice(WILDCARD_PREFIX.length)}`)
+    : host === target;
 
 export const matchesDetectionUrl = (value: string, url: string | undefined): boolean => {
   if (!url) return false;

@@ -179,10 +179,7 @@ export const validateCustomActivity = (draft: CustomActivityDraft): CustomActivi
       "smallImage",
       imageError(draft.smallImage)
     ],
-    [
-      "detectionUrl",
-      draft.detectionUrl.trim() && !parseDetectionUrl(draft.detectionUrl) ? "invalidUrl" : undefined
-    ],
+    ["detectionUrl", draft.detectionUrl.trim() && !parseDetectionUrl(draft.detectionUrl) ? "invalidUrl" : undefined],
     [
       "countdown",
       draft.timestamp.mode === "countdown" &&

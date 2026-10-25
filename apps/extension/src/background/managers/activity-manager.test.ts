@@ -7,16 +7,31 @@ describe("status display type", () => {
   it.each([0, 1, 2])("preserves %i through normalization and native mapping", async (statusDisplayType) => {
     installChromeMock();
     const { normalizeActivity } = await import("@/background/managers/activity-manager");
+
     const { mapPresenceData } = await import("@/background/services/native");
-    const input = JSON.parse(JSON.stringify({ details: "Video title", state: "Channel", statusDisplayType })) as PresenceData;
+
+    const input = JSON.parse(
+      JSON.stringify({
+        details: "Video title",
+        state: "Channel",
+        statusDisplayType
+      })
+    ) as PresenceData;
     const payload = mapPresenceData(normalizeActivity(input, "YouTube"));
-    expect(payload).toMatchObject({ name: "YouTube", details: "Video title", state: "Channel", statusDisplayType });
+    expect(payload).toMatchObject({
+      name: "YouTube",
+      details: "Video title",
+      state: "Channel",
+      statusDisplayType
+    });
   });
 
   it.each([undefined, null, -1, 3, 1.5, "2"])("omits unsupported value %s", async (statusDisplayType) => {
     installChromeMock();
     const { normalizeActivity } = await import("@/background/managers/activity-manager");
+
     const { mapPresenceData } = await import("@/background/services/native");
+
     const input = JSON.parse(JSON.stringify({ statusDisplayType })) as PresenceData;
     expect(JSON.parse(JSON.stringify(mapPresenceData(normalizeActivity(input, "YouTube"))))).not.toHaveProperty("statusDisplayType");
   });

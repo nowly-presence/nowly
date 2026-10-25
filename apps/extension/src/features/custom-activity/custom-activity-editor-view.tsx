@@ -105,11 +105,7 @@ export const CustomActivityEditorView = ({ id, template }: {
             <SwitchRow
               title={t("custom.list.showOnDiscord")}
               description={
-                detectedHost
-                  ? t("custom.detection.runningHint", { host: detectedHost })
-                  : active
-                    ? t("custom.list.activeHint")
-                    : t("custom.list.inactiveHint")
+                detectedHost ? t("custom.detection.runningHint", { host: detectedHost }) : active ? t("custom.list.activeHint") : t("custom.list.inactiveHint")
               }
               checked={active || Boolean(detectedHost)}
               label={t("custom.list.showOnDiscord")}

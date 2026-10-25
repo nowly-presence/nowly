@@ -20,12 +20,7 @@ export const getCustomActivities = async (): Promise<CustomActivitiesState> => {
   const result = await chrome.storage.local.get(STORAGE_KEYS.customActivities);
 
   const value = result[STORAGE_KEYS.customActivities];
-  return isState(value)
-    ? {
-        ...value,
-        items: value.items.map(withDefaults)
-      }
-    : EMPTY_STATE;
+  return isState(value) ? { ...value, items: value.items.map(withDefaults) } : EMPTY_STATE;
 };
 
 export const setCustomActivities = (state: CustomActivitiesState): Promise<void> => chrome.storage.local.set({ [STORAGE_KEYS.customActivities]: state });

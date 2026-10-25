@@ -19,6 +19,7 @@ type CustomActivityRowProps = {
 export const CustomActivityRow = ({ activity, active, detectedHost, paused, onOpen, onToggle }: CustomActivityRowProps) => {
   const { t } = useI18n();
   const lines = [activity.details, activity.state].filter(Boolean);
+
   const running = active || Boolean(detectedHost);
   return (
     <Row

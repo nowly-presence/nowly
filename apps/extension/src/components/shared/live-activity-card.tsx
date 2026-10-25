@@ -30,8 +30,7 @@ const NAMED_HEADER_TYPES = new Set([2, 3, 5]);
 const headerKey = (type: number | undefined) =>
   type === 2 ? "activity.header.listening" : type === 3 ? "activity.header.watching" : type === 5 ? "activity.header.competing" : "activity.header.playing";
 
-const typeKey = (type: number | undefined) =>
-  type === 2 ? "activity.type.listening" : type === 3 ? "activity.type.watching" : "activity.type.competing";
+const typeKey = (type: number | undefined) => (type === 2 ? "activity.type.listening" : type === 3 ? "activity.type.watching" : "activity.type.competing");
 
 const imageSrc = (value: string | undefined, slug: string): string => (value && value.startsWith("https://") ? value : assetUrl(slug, "logo"));
 
@@ -81,9 +80,8 @@ export const LiveCard =
     const now = useNow(1000, status === "live" && Boolean(start || end));
     const elapsed = start ? (now - start) / 1000 : undefined;
     const total = start && end ? (end - start) / 1000 : undefined;
-    const progress = total && elapsed !== undefined
-      ? Math.min(1, Math.max(0, timelineMode === "countdown" ? 1 - elapsed / total : elapsed / total))
-      : undefined;
+    const progress =
+      total && elapsed !== undefined ? Math.min(1, Math.max(0, timelineMode === "countdown" ? 1 - elapsed / total : elapsed / total)) : undefined;
     const remaining = end && !start ? (end - now) / 1000 : undefined;
     const small = presence.smallImage?.startsWith("https://") ? presence.smallImage : undefined;
     const layers = Math.min(2, stackDepth);
@@ -92,11 +90,8 @@ export const LiveCard =
     const detailsPresent = Boolean(presence.details?.trim());
     const statePresent = Boolean(presence.state?.trim());
     const hasTextLine = detailsPresent || statePresent;
-    const lines = (namedHeader && hasTextLine
-      ? [presence.details, presence.state]
-      : namedHeader
-        ? [displayName]
-        : [displayName, presence.details, presence.state]
+    const lines = (
+      namedHeader && hasTextLine ? [presence.details, presence.state] : namedHeader ? [displayName] : [displayName, presence.details, presence.state]
     ).filter((line): line is string => Boolean(line));
     if (lines.length === 0) lines.push(displayName);
 
@@ -124,7 +119,12 @@ export const LiveCard =
           <div className="flex items-center justify-between gap-3">
             <span className="flex min-w-0 items-center gap-2 text-label-md font-medium text-on-tertiary-muted">
               {status === "live" ? <LiveDot /> : <RiPauseFill className="size-3.5" />}
-              <span className="truncate">{statusLabel ?? (namedHeader && !hasTextLine ? t(typeKey(presence.type)) : t(headerKey(presence.type), { name: displayName }))}</span>
+              <span className="truncate">
+                {statusLabel ??
+                  (namedHeader && !hasTextLine
+                    ? t(typeKey(presence.type))
+                    : t(headerKey(presence.type), { name: displayName }))}
+              </span>
             </span>
             {status === "live" && elapsed !== undefined && !total && (
               <span className="text-label-md text-on-tertiary-muted tabular-nums">{formatClock(elapsed)}</span>

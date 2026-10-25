@@ -27,7 +27,10 @@ const smoothstep = (value: number) => {
 export const HeroCards = () => {
   const t = useTranslations("hero.carousel");
   const stageRef = useRef<HTMLDivElement>(null);
-  const controlsRef = useRef<{ move: (direction: number) => void; toggle: () => void } | null>(null);
+  const controlsRef = useRef<{
+    move: (direction: number) => void;
+    toggle: () => void;
+  } | null>(null);
   const [paused, setPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -188,6 +191,7 @@ export const HeroCards = () => {
     };
     const onFocusOut = (event: FocusEvent) => {
       if (event.relatedTarget instanceof Node && stage.contains(event.relatedTarget)) return;
+
       focusInside = false;
       start();
     };

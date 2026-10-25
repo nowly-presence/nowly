@@ -25,7 +25,12 @@ const isDetection = (value: unknown): value is CustomActivityDetection => {
   if (!value || typeof value !== "object") return false;
 
   const candidate = value as Partial<CustomActivityDetection>;
-  return typeof candidate.activityId === "string" && typeof candidate.host === "string" && typeof candidate.tabId === "number" && typeof candidate.activatedAt === "number";
+  return (
+    typeof candidate.activityId === "string" &&
+    typeof candidate.host === "string" &&
+    typeof candidate.tabId === "number" &&
+    typeof candidate.activatedAt === "number"
+  );
 };
 
 const isDismissal = (value: unknown): value is DetectionDismissal => {
@@ -38,11 +43,11 @@ const isDismissal = (value: unknown): value is DetectionDismissal => {
 const sameDetection = (first: CustomActivityDetection | null, second: CustomActivityDetection | null): boolean =>
   first?.activityId === second?.activityId && first?.tabId === second?.tabId && first?.host === second?.host;
 
-const writeDetection = (detection: CustomActivityDetection | null): Promise<void> =>
-  chrome.storage.session.set({ [CUSTOM_ACTIVITY_DETECTION_KEY]: detection });
+const writeDetection = (detection: CustomActivityDetection | null): Promise<void> => chrome.storage.session.set({ [CUSTOM_ACTIVITY_DETECTION_KEY]: detection });
 
 const readDismissal = async (): Promise<DetectionDismissal | null> => {
   const result = await chrome.storage.session.get(CUSTOM_ACTIVITY_DETECTION_DISMISSED_KEY);
+
   const value = result[CUSTOM_ACTIVITY_DETECTION_DISMISSED_KEY];
   return isDismissal(value) ? value : null;
 };
@@ -64,12 +69,14 @@ const focusedTab = async (): Promise<chrome.tabs.Tab | undefined> => {
 
 export const readCustomActivityDetection = async (): Promise<CustomActivityDetection | null> => {
   const result = await chrome.storage.session.get(CUSTOM_ACTIVITY_DETECTION_KEY);
+
   const value = result[CUSTOM_ACTIVITY_DETECTION_KEY];
   return isDetection(value) ? value : null;
 };
 
 export const resolveCustomActivityDetection = async (): Promise<CustomActivityDetection | null> => {
   const state = await getCustomActivities();
+
   const previous = await readCustomActivityDetection();
 
   if (state.items.some((item) => item.id === state.activeId)) {
@@ -114,6 +121,7 @@ export const resolveCustomActivityDetection = async (): Promise<CustomActivityDe
 
 export const refreshCustomActivityDetection = async (): Promise<boolean> => {
   const previous = await readCustomActivityDetection();
+
   const next = await resolveCustomActivityDetection();
   return !sameDetection(previous, next);
 };
@@ -133,6 +141,7 @@ export const dismissCustomActivityDetection = async (activityId: string | null):
 
 export const getEffectiveCustomActivity = async (): Promise<EffectiveCustomActivity | null> => {
   const state = await getCustomActivities();
+
   const manual = state.items.find((item) => item.id === state.activeId);
 
   if (manual) {

@@ -15,11 +15,7 @@ export const PlatformMarqueeControls = ({ children, pauseLabel, playLabel }: Pro
   return (
     <div className="mt-12">
       <div className="flex justify-end px-2">
-        <button
-          type="button"
-          className="rounded-lg border border-border bg-background px-4 py-2 text-sm"
-          onClick={() => setPaused((value) => !value)}
-        >
+        <button type="button" className="rounded-lg border border-border bg-background px-4 py-2 text-sm" onClick={() => setPaused((value) => !value)}>
           {paused ? playLabel : pauseLabel}
         </button>
       </div>

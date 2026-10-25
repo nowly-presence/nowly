@@ -23,15 +23,20 @@ const activity = (overrides: Partial<CustomActivity> = {}): CustomActivity => ({
 const storeTabs = (url: string | null): void => {
   (
     globalThis as {
-      chrome: { tabs: unknown };
+      chrome: {
+        tabs: unknown;
+      };
     }
   ).chrome.tabs = {
-    query: async () => (url ? [
-      {
-        id: TAB_ID,
-        url
-      }
-    ] : [])
+    query: async () =>
+      url
+        ? [
+            {
+              id: TAB_ID,
+              url
+            }
+          ]
+        : []
   };
 };
 
@@ -95,9 +100,7 @@ describe("custom activity detection", () => {
     expect(await resolveCustomActivityDetection()).toBeNull();
     expect(storage.session[CUSTOM_ACTIVITY_DETECTION_KEY]).toBeNull();
     expect(await getEffectiveCustomActivity()).toEqual({
-      activity: expect.objectContaining({
-        id: "a1"
-      }),
+      activity: expect.objectContaining({ id: "a1" }),
       activatedAt,
       detected: false,
       host: null
@@ -138,9 +141,7 @@ describe("custom activity detection", () => {
       activatedAt: null
     });
 
-    expect(await resolveCustomActivityDetection()).toEqual(expect.objectContaining({
-      activityId: "new"
-    }));
+    expect(await resolveCustomActivityDetection()).toEqual(expect.objectContaining({ activityId: "new" }));
   });
 
   it("reports a change only when the resolved detection changed", async () => {
@@ -167,8 +168,6 @@ describe("custom activity detection", () => {
       activatedAt
     };
 
-    expect(await resolveCustomActivityDetection()).toEqual(expect.objectContaining({
-      activatedAt
-    }));
+    expect(await resolveCustomActivityDetection()).toEqual(expect.objectContaining({ activatedAt }));
   });
 });

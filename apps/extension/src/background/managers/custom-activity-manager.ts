@@ -88,6 +88,7 @@ export const saveCustomActivity = async (input: CustomActivityDraft): Promise<Sa
   await pruneLocalImages(next);
 
   const detection = await readCustomActivityDetection();
+
   const isRunning = next.activeId === activity.id || detection?.activityId === activity.id;
 
   if (isRunning) {
