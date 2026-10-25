@@ -9,16 +9,36 @@ const base: Tab[][] = [["activity", "store", "custom", "settings"]];
 
 describe("dock visibility", () => {
   it("keeps required tabs visible even with invalid stored preferences", () => {
-    expect(visibleDockTabs(["activity", "settings", "custom", "store", "unknown"])).toEqual(["activity", "settings"]);
+    expect(visibleDockTabs(["activity", "settings", "custom", "store", "announcements", "unknown"])).toEqual(["activity", "settings"]);
   });
 
   it("removes hidden tabs and empty groups without reordering visible tabs", () => {
-    expect(normalizeDockLayout([["settings", "store"], ["custom"], ["activity"]], visibleDockTabs(["custom", "store"]))).toEqual([["settings"], ["activity"]]);
+    expect(
+      normalizeDockLayout(
+        [
+          ["settings", "store"],
+          ["custom"],
+          ["activity"]
+        ],
+        visibleDockTabs(["custom", "store", "announcements"])
+      )
+    ).toEqual([
+      ["settings"],
+      ["activity"]
+    ]);
   });
 
   it("restores every tab in its original order with an explicit reset layout", () => {
-    expect(normalizeDockLayout([[...DOCK_TABS]], visibleDockTabs([]))).toEqual(base);
-    expect(isDefaultDockLayout([["settings"], ["activity", "store", "custom"]], DOCK_TABS)).toBe(false);
+    expect(normalizeDockLayout([[...DOCK_TABS]], visibleDockTabs([]))).toEqual([[...DOCK_TABS]]);
+    expect(
+      isDefaultDockLayout(
+        [
+          ["settings"],
+          ["activity", "store", "custom"]
+        ],
+        DOCK_TABS
+      )
+    ).toBe(false);
   });
 });
 

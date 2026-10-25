@@ -20,6 +20,12 @@
   --overlay: #000000cc;
   --success: #22c55e;
   --error: #ef4444;
+  --announcement-warning-low-soft: rgb(242 201 76 / 0.16);
+  --announcement-warning-low-soft-hover: rgb(242 201 76 / 0.22);
+  --announcement-warning-medium-soft: rgb(251 146 60 / 0.12);
+  --announcement-warning-medium-soft-hover: rgb(251 146 60 / 0.18);
+  --primary-soft-hover: color-mix(in srgb, var(--primary) 18%, transparent);
+  --error-soft-hover: color-mix(in srgb, var(--error) 18%, transparent);
 
   --on-tertiary: #eef5fc;
   --on-tertiary-muted: rgb(238 245 252 / 0.58);
@@ -416,6 +422,12 @@
   --color-success-soft: var(--success-soft);
   --color-danger: var(--error);
   --color-danger-soft: var(--error-soft);
+  --color-announcement-warning-low-soft: var(--announcement-warning-low-soft);
+  --color-announcement-warning-low-soft-hover: var(--announcement-warning-low-soft-hover);
+  --color-announcement-warning-medium-soft: var(--announcement-warning-medium-soft);
+  --color-announcement-warning-medium-soft-hover: var(--announcement-warning-medium-soft-hover);
+  --color-primary-soft-hover: var(--primary-soft-hover);
+  --color-danger-soft-hover: var(--error-soft-hover);
   --color-hover: var(--hover);
   --color-press: var(--press);
   --color-season-accent: var(--season-accent);

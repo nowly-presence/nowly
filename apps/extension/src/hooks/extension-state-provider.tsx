@@ -1,6 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { OnboardingState } from "@/background/storage/onboarding.store";
 import { sendMessage } from "@/lib/messages";
+import { useI18n } from "@/hooks/i18n-provider";
+import { ANNOUNCEMENTS_KEY, emptyAnnouncements, normalizeAnnouncements, type AnnouncementsState } from "@/shared/announcements";
+import { startAnnouncementUpdates } from "@/shared/announcements-live";
 import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, CustomActivityDetection, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, TabState, UserScriptsStatus } from "@/shared/types";
 
 export type CatalogState = {
@@ -16,6 +19,7 @@ export type CatalogState = {
 };
 
 export type ExtensionState = {
+  announcements: AnnouncementsState;
   ready: boolean;
   presences: InstalledPresences;
   settings: ExtensionSettings;
@@ -34,6 +38,7 @@ export type ExtensionState = {
 };
 
 const INITIAL: ExtensionState = {
+  announcements: emptyAnnouncements(),
   ready: false,
   presences: {},
   settings: {
@@ -76,6 +81,7 @@ const INITIAL: ExtensionState = {
 };
 
 type Refreshers = {
+  announcements: () => Promise<void>;
   presences: () => Promise<void>;
   settings: () => Promise<void>;
   activity: () => Promise<void>;
@@ -107,6 +113,7 @@ export const ExtensionStateProvider = ({ children }: {
   children: ReactNode;
 }) => {
   const [state, setState] = useState<ExtensionState>(INITIAL);
+  const { locale } = useI18n();
   const catalogInFlight = useRef<Promise<void> | null>(null);
 
   const patch = useCallback((partial: Partial<ExtensionState>) => setState((current) => ({ ...current, ...partial })), []);
@@ -122,6 +129,10 @@ export const ExtensionStateProvider = ({ children }: {
       };
 
     return {
+      announcements: safe(
+        () => sendMessage("GET_ANNOUNCEMENTS"),
+        (announcements) => patch({ announcements: normalizeAnnouncements(announcements) })
+      ),
       presences: safe(
         () => sendMessage("GET_PRESENCES"),
         (presences) => patch({ presences })
@@ -228,6 +239,7 @@ export const ExtensionStateProvider = ({ children }: {
     let cancelled = false;
     void (async () => {
       await Promise.all([
+        refresh.announcements(),
         refresh.presences(),
         refresh.settings(),
         refresh.activity(),
@@ -273,6 +285,7 @@ export const ExtensionStateProvider = ({ children }: {
       }
 
       if ("settings" in changes) void refresh.settings();
+      if (ANNOUNCEMENTS_KEY in changes) void refresh.announcements();
       if ("currentActivity" in changes) void refresh.activity();
       if ("presenceSettings" in changes) void refresh.presenceSettings();
       if ("onboarding" in changes) void refresh.onboarding();
@@ -283,6 +296,12 @@ export const ExtensionStateProvider = ({ children }: {
     chrome.storage.onChanged.addListener(onChanged);
     return () => chrome.storage.onChanged.removeListener(onChanged);
   }, [refresh]);
+
+  useEffect(() =>
+    startAnnouncementUpdates(state.announcements.apiBaseUrl, async () => {
+      const announcements = await sendMessage("REFRESH_ANNOUNCEMENTS", { locale });
+      patch({ announcements: normalizeAnnouncements(announcements) });
+    }), [state.announcements.apiBaseUrl, locale, patch]);
 
   useEffect(() => {
     const onMessage = (message: {

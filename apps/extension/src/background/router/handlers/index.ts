@@ -9,9 +9,13 @@ import { handleDeleteDeviceData, handleExportDeviceData, handleGetOnboarding, ha
 import { handleDeleteCustomActivity, handleGetCustomActivities, handleGetCustomActivityDetection, handleGetCustomImages, handleSaveCustomActivity, handleSetCustomActivityActive, handleUploadCustomImage } from "@/background/router/handlers/custom-activity.handlers";
 import { handleRecordUsageDay, handleSnoozeSupportPrompt } from "@/background/router/handlers/support.handlers";
 import type { HandlerRegistry } from "@/background/router/router";
+import { handleGetAnnouncements, handleRefreshAnnouncements, handleMarkAnnouncement } from "@/background/router/handlers/announcements.handlers";
 import { handleAcceptLegalDocuments, handleCheckLegalDocuments, handleGetLegalState } from "@/background/router/handlers/legal.handlers";
 
 export const buildHandlerRegistry = (): HandlerRegistry => ({
+  GET_ANNOUNCEMENTS: handleGetAnnouncements,
+  REFRESH_ANNOUNCEMENTS: handleRefreshAnnouncements,
+  MARK_ANNOUNCEMENT: handleMarkAnnouncement,
   GET_LEGAL_STATE: handleGetLegalState,
   CHECK_LEGAL_DOCUMENTS: handleCheckLegalDocuments,
   ACCEPT_LEGAL_DOCUMENTS: handleAcceptLegalDocuments,

@@ -30,7 +30,7 @@ export const AppearanceSection = () => {
   const hiddenDockTabs = settings.hiddenDockTabs ?? [];
   const defaultDock = hiddenDockTabs.length === 0 && isDefaultDockLayout(normalizeDockLayout(settings.dockLayout, DOCK_TABS), DOCK_TABS);
 
-  const setDockTabVisible = (tab: "store" | "custom", visible: boolean) => {
+  const setDockTabVisible = (tab: "store" | "custom" | "announcements", visible: boolean) => {
     const hidden = visible ? hiddenDockTabs.filter((value) => value !== tab) : [...new Set([...hiddenDockTabs, tab])];
     void updateSettings({
       hiddenDockTabs: hidden,
@@ -121,7 +121,17 @@ export const AppearanceSection = () => {
           />
         </FieldRow>
         <FieldRow title={t("settings.dockLayout")} description={t("settings.dockLayoutHint")}>
-          <Button size="sm" variant="secondary" disabled={defaultDock} onClick={() => void updateSettings({ dockLayout: [[...DOCK_TABS]], hiddenDockTabs: [] })}>
+          <Button
+            size="sm"
+            variant="secondary"
+            disabled={defaultDock}
+            onClick={() =>
+              void updateSettings({
+                dockLayout: [[...DOCK_TABS]],
+                hiddenDockTabs: []
+              })
+            }
+          >
             {t("action.reset")}
           </Button>
         </FieldRow>
@@ -136,6 +146,12 @@ export const AppearanceSection = () => {
           label={t("nav.custom")}
           checked={!hiddenDockTabs.includes("custom")}
           onChange={(checked) => setDockTabVisible("custom", checked)}
+        />
+        <SwitchRow
+          title={t("nav.announcements")}
+          label={t("nav.announcements")}
+          checked={!hiddenDockTabs.includes("announcements")}
+          onChange={(checked) => setDockTabVisible("announcements", checked)}
         />
       </Group>
     </Section>

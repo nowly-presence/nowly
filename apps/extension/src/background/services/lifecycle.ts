@@ -4,6 +4,7 @@ import { trackAnalytics } from "@/background/analytics-client";
 import { addRuntimeLog } from "@/background/runtime-logs";
 import { refreshPresenceLanguage, syncPresenceScripts } from "@/background/runtime/presence-scripts";
 import { runAccountSync } from "@/background/services/account-sync";
+import { refreshAnnouncements } from "@/background/services/announcements";
 import { initializeCustomApiUrl } from "@/background/services/api-state";
 import { setFocusedTabId } from "@/background/services/background-context";
 import { refreshCustomActivityDetection } from "@/background/services/custom-activity-detection";
@@ -153,6 +154,7 @@ const runBootBackground = async (options: {
   await handleClearActivity();
   connectNative();
   await initializeCustomApiUrl();
+  void refreshAnnouncements().catch(() => {});
   await syncUninstallUrl();
   await installBundledPresences();
   const presences = await getPresences();

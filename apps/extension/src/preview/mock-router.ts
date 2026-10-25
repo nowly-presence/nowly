@@ -10,6 +10,8 @@ import { discordIpcIssueCode, markDiscordIpcIssuePrompted, NO_DISCORD_IPC_ISSUE,
 import { previewParams } from "@/preview/preview-params";
 import { DEFAULT_SUPPORT_PROMPT, SUPPORT_PROMPT_KEY, withSnooze, type SupportPromptState } from "@/shared/support-prompt";
 import { confirmLegalDocuments, emptyLegalState, normalizeLegalState } from "@nowly/shared/legal";
+import { announcementRevision } from "@nowly/shared/announcements";
+import { previewAnnouncements } from "@/preview/announcements-fixtures";
 
 export type MockHandlers = { [K in RouterMessageType]?: (payload: PayloadOf<K>) => ResponseOf<K> | Promise<ResponseOf<K>> };
 
@@ -66,6 +68,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
   const likes = new Map<string, boolean>();
   let muted = false;
   let account = initialAccount();
+  let announcements = previewAnnouncements();
   let userScriptsEnabled = !previewParams.scriptsDenied;
   const ipcDenied = previewParams.native === "ipc-denied";
   let native: NativeStatus = {
@@ -155,6 +158,26 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
   };
 
   const handlers: MockHandlers = {
+    GET_ANNOUNCEMENTS: () => announcements,
+    REFRESH_ANNOUNCEMENTS: ({ locale }) => ({ ...announcements, locale }),
+    MARK_ANNOUNCEMENT: async ({ id, action }) => {
+      const item = announcements.items.find((item) => item.id === id);
+
+      if (item && action === "read") {
+        announcements = {
+          ...announcements,
+          read: [
+            ...new Set([
+              ...announcements.read,
+              announcementRevision(item)
+            ])
+          ]
+        };
+        await local.set({ announcements });
+      }
+
+      return announcements;
+    },
     GET_LEGAL_STATE: async () => {
       const stored = await local.get("legalDocuments");
 
@@ -441,8 +464,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
       const images = await readImages();
       return Object.fromEntries(hashes.flatMap((hash) => (images[hash] ? [[hash, images[hash].dataUrl]] : [])));
     },
-    GET_CUSTOM_ACTIVITY_DETECTION: () =>
-      session.read<CustomActivityDetection | null>(CUSTOM_ACTIVITY_DETECTION_KEY, null),
+    GET_CUSTOM_ACTIVITY_DETECTION: () => session.read<CustomActivityDetection | null>(CUSTOM_ACTIVITY_DETECTION_KEY, null),
     GET_ACCOUNT: () => account,
     START_ACCOUNT_CONNECT: () => {
       account = {

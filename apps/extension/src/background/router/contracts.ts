@@ -1,4 +1,5 @@
 import type { TrackInput } from "@nowly/analytics";
+import type { AnnouncementsState } from "@/shared/announcements";
 import type { LegalConfirmation, LegalConfirmationResult, LegalState } from "@nowly/shared/legal";
 import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, CustomActivityDetection, CustomActivityDraft, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, PresenceData, PresenceDebug, PresenceSchedule, RuntimeLogEntry, StoredPresence, SyncChoice, TabState, UserScriptsStatus } from "@/shared/types";
 import type { OnboardingState } from "@/background/storage/onboarding.store";
@@ -50,6 +51,23 @@ export type PresenceEngagement = {
 export type RouterSource = "PRESENCES_POPUP" | "PRESENCES_CONTENT";
 
 export type RouterMessageMap = {
+  GET_ANNOUNCEMENTS: {
+    payload: void;
+    response: AnnouncementsState;
+  };
+  REFRESH_ANNOUNCEMENTS: {
+    payload: {
+      locale: string;
+    };
+    response: AnnouncementsState;
+  };
+  MARK_ANNOUNCEMENT: {
+    payload: {
+      id: string;
+      action: "read";
+    };
+    response: AnnouncementsState;
+  };
   GET_LEGAL_STATE: {
     payload: void;
     response: LegalState;
