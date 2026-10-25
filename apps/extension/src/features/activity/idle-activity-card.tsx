@@ -48,13 +48,14 @@ export const IdleCard = ({ connection, paused, onResume, hasPresences }: {
             <span className="text-body-sm text-muted">{t("activity.noHostDescription")}</span>
           </div>
         </div>
-        <div className="flex gap-2">
-          <Button className="flex-1" onClick={() => openUrl(HOST_DOWNLOAD_URL)}>
+        <div className="flex flex-col gap-2">
+          <Button className="h-auto! min-h-9 w-full min-w-0 whitespace-normal! py-2 wrap-break-word" onClick={() => openUrl(HOST_DOWNLOAD_URL)}>
             {t("action.downloadApp")}
           </Button>
           <Button
+            className="h-auto! min-h-9 w-full min-w-0 whitespace-normal! py-2 wrap-break-word"
             variant="secondary"
-            icon={<RiRefreshLine className="size-4" />}
+            icon={<RiRefreshLine className="size-4 shrink-0" />}
             onClick={() => void sendMessage("CONNECT_NATIVE").then(() => refresh.native())}
           >
             {t("action.retry")}
