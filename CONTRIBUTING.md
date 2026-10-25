@@ -34,11 +34,10 @@ The package manager version is pinned in the root `package.json`. Use that versi
 
 - `apps/web` — public website and user dashboard.
 - `apps/docs` — public documentation site.
-- `apps/insights` — internal analytics dashboard.
 - `apps/extension` — browser extension.
 - `apps/api` — Fastify API.
 - `apps/native` — Go native messaging host.
-- `packages/env`, `packages/shared`, `packages/analytics`, `packages/ui`, `packages/locales` — shared workspace packages.
+- `packages/env`, `packages/shared`, `packages/telemetry`, `packages/ui`, `packages/locales` — shared workspace packages.
 - `packages/presences` — presence definitions, maintained as a separate repository.
 - `packages/sdk` — presence SDK, maintained as a separate repository.
 - `packages/cli` — presence CLI, maintained as a separate repository.
@@ -54,7 +53,6 @@ Run commands from the repository root unless noted otherwise:
 pnpm dev:api
 pnpm dev:web
 pnpm dev:docs
-pnpm dev:insights
 pnpm --filter @nowly/extension dev
 ```
 
@@ -64,7 +62,7 @@ Targeted checks:
 pnpm --filter @nowly/api test
 pnpm --filter @nowly/api typecheck
 pnpm --filter @nowly/env test
-pnpm --filter @nowly/analytics test
+pnpm --filter @nowly/telemetry test
 pnpm --filter @nowly/extension test
 pnpm --filter @nowly/web lint
 pnpm --filter @nowly/docs lint

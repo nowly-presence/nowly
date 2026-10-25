@@ -28,7 +28,6 @@ Typed environment access for the Nowly monorepo.
 | `PRESENCE_SIGNING_PRIVATE_KEY` | Yes | - |
 | `API_SECRET_KEY` | Contextual | - |
 | `DEVICE_TOKEN_SECRET` | No | - |
-| `OPENAI_API_KEY` | No | - |
 | `DISCORD_WEBHOOK_REPORT_URL` | No | - |
 | `STATUS_CRON_SECRET` | No | - |
 | `STATUS_CHECK_INTERVAL_HOURS` | No | `1` |

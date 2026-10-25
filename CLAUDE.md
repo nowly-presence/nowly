@@ -7,10 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Nowly** is an open-source Discord Rich Presence manager (alternative to PreMiD). It detects activity on supported websites via a browser extension and updates Discord Rich Presence through a local native host — no activity data is sent to external servers.
 
 Apps:
-- **apps/api** (@nowly/api) - Fastify server: auth, presence registry, assets/CDN, insights ingestion, campaigns, device pairing
+- **apps/api** (@nowly/api) - Fastify server: auth, presence registry, assets/CDN, opt-in Umami relay, device pairing
 - **apps/web** (@nowly/web) - Next.js user dashboard/website (nowly.me)
 - **apps/docs** (@nowly/docs) - Next.js public documentation site
-- **apps/insights** (@nowly/insights) - Next.js internal analytics dashboard (campaigns, usage views, AI chat over analytics data)
 - **apps/extension** (@nowly/extension) - Chromium/Firefox extension that runs presence scripts in the background and talks to the native host
 - **apps/discord** (@nowly/discord) - Community Discord bot (status, presence lookup, support, donator roles)
 - **apps/native** (Go) - Native messaging host bridging the extension to the Discord desktop client via IPC
@@ -18,7 +17,7 @@ Apps:
 Packages:
 - **packages/env** - Typed env vars per context (server, client, extension, cli)
 - **packages/shared** - Cross-app constants/formatting/schemas
-- **packages/analytics** - Shared analytics client/ingestion/consent logic used by extension, web, api, insights
+- **packages/telemetry** - Strict product-event contract and minimal consent-gated transport used by extension, web and API
 - **packages/ui** - Shared React component library (shadcn-style primitives)
 - **packages/locales** - Shared i18n message catalogs
 - **packages/sdk**, **packages/cli**, **packages/presences**, **packages/internal-cli** - **git submodules**, each backed by its own GitHub repo (see below)
@@ -43,7 +42,6 @@ apps/
   api/           # Fastify server (Node.js)
   web/           # Next.js user dashboard
   docs/          # Next.js public docs
-  insights/      # Next.js internal analytics dashboard
   extension/     # Chromium/Firefox extension (Vite-style build via tsx scripts)
   discord/       # Discord bot (Node.js)
   native/        # Native host (Go, cross-platform)
@@ -51,7 +49,7 @@ apps/
 packages/
   env/           # Typed environment variables (t3-oss/env-core)
   shared/        # Shared constants, formatting, zod schemas
-  analytics/     # Shared analytics client/ingestion
+  telemetry/     # Allowlisted aggregate product events
   ui/            # Shared React component library
   locales/       # Shared i18n catalogs
   sdk/           # [submodule] Presence SDK types & runtime helpers
@@ -75,7 +73,6 @@ pnpm install                              # respects pnpm-lock.yaml
 pnpm dev:api                    # Fastify API with tsx watch
 pnpm dev:web                    # Next.js web app
 pnpm dev:docs                   # Next.js docs site
-pnpm dev:insights               # Next.js insights dashboard
 pnpm --filter @nowly/extension dev   # extension dev build (watch, canary)
 ```
 
@@ -96,7 +93,7 @@ pnpm --filter @nowly/cli build   # tsup build (submodule)
 pnpm --filter @nowly/api test          # vitest run
 pnpm --filter @nowly/api test:watch
 pnpm --filter @nowly/env test
-pnpm --filter @nowly/analytics test
+pnpm --filter @nowly/telemetry test
 pnpm --filter @nowly/extension test
 ```
 
@@ -147,15 +144,15 @@ pnpm --filter @nowly/internal-cli host:publish                # publish native h
 - Built via `tsx scripts/build.ts <chrome|firefox> [--canary] [--watch]`, packaged via `scripts/package.ts` and `scripts/package-source.ts`. The `build:chrome` and `build:firefox` scripts build canary extensions. The plain `build` script builds both browsers for production.
 
 ### API Architecture (@nowly/api/src)
-- Organized by **feature**, not by route file: `src/features/{admin,assets,auth,campaigns,custom-presets,device,image-proxy,insights,presence,security,status}`, each typically with its own `*.routes.ts` + `*.service.ts`
+- Organized by **feature**, not by route file: `src/features/{admin,assets,auth,custom-presets,device,image-proxy,telemetry,presence,security,status}`, each typically with its own `*.routes.ts` + `*.service.ts`
 - `src/db/client.ts` - Prisma client
-- `src/shared/` - cross-feature `crypto.service.ts`, `errors.ts`, `openai.service.ts`, `paths.ts`
+- `src/shared/` - cross-feature `crypto.service.ts`, `errors.ts`, `paths.ts`
 - Auth: Discord OAuth flow + JWT; authenticated endpoints require `Authorization: Bearer <JWT>`
 - Uses Upstash Redis for caching where applicable
 
-### Insights (@nowly/insights)
-- Internal Next.js dashboard consuming `packages/analytics` + the API's `insights`/`campaigns` features
-- `app/(auth)`, `app/(dashboard)/{campaigns,views}`, plus an AI chat over analytics data (`app/api/chat`, `ai/`)
+### Product telemetry
+- Independent website/extension opt-ins; `/telemetry/events` validates a closed schema and relays aggregate events to existing Umami, without persistent visitor IDs or custom event storage.
+- Legacy models are removed; their pending drop migrations are irreversible and must not be executed without deployment authorization.
 
 ### Discord Bot (@nowly/discord)
 - Standalone bot (`src/client.ts`) with `commands/` (`donator`, `links`, `presence`, `status`, `support`), `events/`, `services/` - community-facing, separate from the native host's Discord IPC integration
@@ -220,6 +217,9 @@ Based on `packages/sdk/src/metadata.ts` (`Metadata` type):
 - **Button-styled links** (web app): when a control navigates (internal `Link` or external `<a>`), do not wrap it in a `Button` with `render={<Link />}` / `asChild` / `nativeButton={false}`. Put `buttonVariants()` on the real `Link`/`<a>` instead — and only inside a Client Component, since `buttonVariants()` is a client export and breaks in a Server Component. Reserve `<Button>` for true actions (`type="button"`/`submit`) that don't change the URL.
 
 ## Common Workflows
+
+### Published history
+- Never modify a changelog entry once its publication date has passed, including translations, corrections, formatting or references to removed features. Record subsequent changes in a new entry instead. Historical migration files are immutable too.
 
 ### Adding a New Presence
 1. Work inside the `packages/presences` submodule (own repo/branch)
