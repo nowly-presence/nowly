@@ -208,7 +208,7 @@
   "connection.openLogs": "Journaux d'exécution",
   "check.extension": "Extension installée",
   "check.extensionHint": "",
-  "check.userScripts": "Scripts utilisateur autorisés",
+  "check.userScripts": "Autoriser les scripts utilisateur",
   "check.userScriptsHint": "Activez « Autoriser les scripts utilisateur » dans les détails de l'extension.",
   "check.host": "Nowly Desktop détecté",
   "check.hostHint": "Installez puis ouvrez l'application de bureau.",

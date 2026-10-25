@@ -208,7 +208,7 @@
   "connection.openLogs": "Laufzeitprotokolle",
   "check.extension": "Erweiterung installiert",
   "check.extensionHint": "",
-  "check.userScripts": "Benutzerskripte erlaubt",
+  "check.userScripts": "Benutzerskripte erlauben",
   "check.userScriptsHint": "Aktiviere „Benutzerskripte zulassen“ in den Details der Erweiterung.",
   "check.host": "Nowly Desktop gefunden",
   "check.hostHint": "Installiere und öffne die Desktop-App.",

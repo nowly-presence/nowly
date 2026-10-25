@@ -208,7 +208,7 @@
   "connection.openLogs": "実行ログ",
   "check.extension": "拡張機能がインストール済み",
   "check.extensionHint": "",
-  "check.userScripts": "ユーザースクリプトが許可済み",
+  "check.userScripts": "ユーザースクリプトを許可する",
   "check.userScriptsHint": "拡張機能の詳細で「ユーザー スクリプトを許可する」をオンにしてください。",
   "check.host": "Nowly Desktop を検出",
   "check.hostHint": "デスクトップアプリをインストールして起動してください。",

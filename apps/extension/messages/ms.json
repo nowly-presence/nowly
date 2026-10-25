@@ -208,7 +208,7 @@
   "connection.openLogs": "Log masa jalan",
   "check.extension": "Sambungan dipasang",
   "check.extensionHint": "",
-  "check.userScripts": "Skrip pengguna dibenarkan",
+  "check.userScripts": "Benarkan skrip pengguna",
   "check.userScriptsHint": "Hidupkan “Benarkan skrip pengguna” dalam butiran sambungan.",
   "check.host": "Nowly Desktop dikesan",
   "check.hostHint": "Pasang dan buka apl desktop.",

@@ -208,7 +208,7 @@
   "connection.openLogs": "Logi działania",
   "check.extension": "Rozszerzenie zainstalowane",
   "check.extensionHint": "",
-  "check.userScripts": "Skrypty użytkownika dozwolone",
+  "check.userScripts": "Zezwól na skrypty użytkownika",
   "check.userScriptsHint": "Włącz „Zezwalaj na skrypty użytkownika” w szczegółach rozszerzenia.",
   "check.host": "Wykryto Nowly Desktop",
   "check.hostHint": "Zainstaluj i otwórz aplikację desktopową.",

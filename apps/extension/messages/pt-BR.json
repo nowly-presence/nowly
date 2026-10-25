@@ -208,7 +208,7 @@
   "connection.openLogs": "Logs de execução",
   "check.extension": "Extensão instalada",
   "check.extensionHint": "",
-  "check.userScripts": "Scripts de usuário permitidos",
+  "check.userScripts": "Permitir scripts de usuário",
   "check.userScriptsHint": "Ative “Permitir scripts de usuário” nos detalhes da extensão.",
   "check.host": "Nowly Desktop encontrado",
   "check.hostHint": "Instale e abra o app de desktop.",

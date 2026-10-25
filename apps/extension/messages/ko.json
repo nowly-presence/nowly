@@ -208,7 +208,7 @@
   "connection.openLogs": "실행 로그",
   "check.extension": "확장 프로그램 설치됨",
   "check.extensionHint": "",
-  "check.userScripts": "사용자 스크립트 허용됨",
+  "check.userScripts": "사용자 스크립트 허용하기",
   "check.userScriptsHint": "확장 프로그램 세부정보에서 “사용자 스크립트 허용”을 켜세요.",
   "check.host": "Nowly Desktop 감지됨",
   "check.hostHint": "데스크톱 앱을 설치하고 여세요.",

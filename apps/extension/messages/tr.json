@@ -208,7 +208,7 @@
   "connection.openLogs": "Çalışma günlükleri",
   "check.extension": "Uzantı yüklü",
   "check.extensionHint": "",
-  "check.userScripts": "Kullanıcı betiklerine izin verildi",
+  "check.userScripts": "Kullanıcı betiklerine izin ver",
   "check.userScriptsHint": "Uzantı ayrıntılarında “Kullanıcı betiklerine izin ver” seçeneğini aç.",
   "check.host": "Nowly Desktop bulundu",
   "check.hostHint": "Masaüstü uygulamasını yükleyip aç.",

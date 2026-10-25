@@ -208,7 +208,7 @@
   "connection.openLogs": "Αρχεία καταγραφής",
   "check.extension": "Η επέκταση είναι εγκατεστημένη",
   "check.extensionHint": "",
-  "check.userScripts": "Τα σενάρια χρήστη επιτρέπονται",
+  "check.userScripts": "Να επιτρέπονται τα σενάρια χρήστη",
   "check.userScriptsHint": "Ενεργοποίησε το «Να επιτρέπονται σενάρια χρήστη» στις λεπτομέρειες της επέκτασης.",
   "check.host": "Εντοπίστηκε το Nowly Desktop",
   "check.hostHint": "Εγκατάστησε και άνοιξε την εφαρμογή υπολογιστή.",

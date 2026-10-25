@@ -208,7 +208,7 @@
   "connection.openLogs": "Runtime logs",
   "check.extension": "Extension installed",
   "check.extensionHint": "",
-  "check.userScripts": "User scripts allowed",
+  "check.userScripts": "Allow user scripts",
   "check.userScriptsHint": "Turn on “Allow user scripts” in the extension details.",
   "check.host": "Nowly Desktop detected",
   "check.hostHint": "Install and open the desktop app.",
