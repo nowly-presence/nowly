@@ -13,6 +13,8 @@ export type PresencePayload = {
   name?: string;
   details?: string;
   state?: string;
+  detailsUrl?: string;
+  stateUrl?: string;
   startTime?: number;
   endTime?: number;
   largeImage?: string;

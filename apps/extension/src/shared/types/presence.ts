@@ -5,6 +5,8 @@ export type PresenceData = {
   appName?: string;
   details?: string;
   state?: string;
+  detailsUrl?: string;
+  stateUrl?: string;
   startTimestamp?: number;
   endTimestamp?: number;
   largeImageKey?: string;

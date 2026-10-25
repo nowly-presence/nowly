@@ -29,6 +29,18 @@ const normalizeAssetText = (value: string | undefined): string | undefined => {
   return normalized && normalized.length >= 2 ? normalized : undefined;
 };
 
+const normalizeTextUrl = (value: unknown, text: string | undefined): string | undefined => {
+  if (!text?.trim() || typeof value !== "string" || value.length > 2048) return undefined;
+
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" || !url.hostname || url.username || url.password) return undefined;
+    return url.href.length <= 2048 ? url.href : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
 const normalizeTimestamp = (value: number | undefined): number | undefined => {
   if (!Number.isFinite(value)) return undefined;
   if (!value || value <= 0) return undefined;
@@ -89,6 +101,8 @@ export const normalizeActivity = (activity: PresenceData, fallbackName: string):
     name: clampText(activity.name, 128) ?? fallbackName,
     details: clampText(activity.details, 128),
     state: clampText(activity.state, 128),
+    detailsUrl: normalizeTextUrl(activity.detailsUrl, activity.details),
+    stateUrl: normalizeTextUrl(activity.stateUrl, activity.state),
     startTimestamp: normalizeTimestamp(activity.startTimestamp),
     endTimestamp: normalizeTimestamp(activity.endTimestamp),
     largeImageKey: normalizeImage(activity.largeImageKey),
