@@ -2,6 +2,7 @@ node_modules
 dist
 .next
 *.tsbuildinfo
+apps/web/next-env.d.ts
 
 # Native host (Go binaries)
 apps/native/dist/
