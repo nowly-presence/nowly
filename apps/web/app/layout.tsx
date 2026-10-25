@@ -16,6 +16,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
       <body className="min-h-dvh bg-background font-sans antialiased" suppressHydrationWarning>
         <AppProviders>{children}</AppProviders>
         <Script id="umami-tracker" src="https://stats.nowly.me/script.js" data-website-id="b68279a9-5bcc-454a-9147-37fdef5dbebf" strategy="afterInteractive" />
+        <Script id="umami-recorder" defer src="https://stats.nowly.me/recorder.js" data-website-id="b68279a9-5bcc-454a-9147-37fdef5dbebf" strategy="afterInteractive" />
       </body>
     </html>
   );
