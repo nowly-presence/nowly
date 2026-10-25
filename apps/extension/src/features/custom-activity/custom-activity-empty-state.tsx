@@ -128,6 +128,7 @@ export const CustomActivityEmptyState = ({ onCreate, onTemplates }: {
               <LiveCard
                 slug={customActivitySlug(`sample-${sample.id}`)}
                 presence={buildCustomPresence(draft, now - sample.startedAgoMs)}
+                timelineMode={draft.timestamp.mode === "countdown" ? "countdown" : "playback"}
                 presenceName={sample.name}
                 t={t}
                 compact

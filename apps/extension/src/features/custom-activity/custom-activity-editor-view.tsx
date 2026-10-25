@@ -93,6 +93,7 @@ export const CustomActivityEditorView = ({ id, template }: {
           <LiveCard
             slug={customActivitySlug(draft.id ?? "draft")}
             presence={presence}
+            timelineMode={draft.timestamp.mode === "countdown" ? "countdown" : "playback"}
             presenceName={presence.name ?? ""}
             t={t}
             artwork={<CustomActivityArtwork source={draft} size={64} rounded="rounded-md" showSmall ringClassName="border-tertiary bg-tertiary" />}

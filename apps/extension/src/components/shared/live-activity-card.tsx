@@ -22,6 +22,7 @@ type LiveCardProps = {
   compact?: boolean;
   artwork?: ReactNode;
   className?: string;
+  timelineMode?: "playback" | "countdown";
 };
 
 const NAMED_HEADER_TYPES = new Set([2, 3, 5]);
@@ -74,13 +75,15 @@ const ActivityImage = ({ src, small, slug, name, size }: {
 };
 
 export const LiveCard =
-  ({ slug, presence, presenceName, t, status = "live", statusLabel, stackDepth = 0, footer, onOpen, compact, artwork, className }: LiveCardProps) => {
+  ({ slug, presence, presenceName, t, status = "live", statusLabel, stackDepth = 0, footer, onOpen, compact, artwork, className, timelineMode = "playback" }: LiveCardProps) => {
     const start = toMs(presence.startTime);
     const end = toMs(presence.endTime);
     const now = useNow(1000, status === "live" && Boolean(start || end));
     const elapsed = start ? (now - start) / 1000 : undefined;
     const total = start && end ? (end - start) / 1000 : undefined;
-    const progress = total && elapsed !== undefined ? Math.min(1, Math.max(0, 1 - elapsed / total)) : undefined;
+    const progress = total && elapsed !== undefined
+      ? Math.min(1, Math.max(0, timelineMode === "countdown" ? 1 - elapsed / total : elapsed / total))
+      : undefined;
     const remaining = end && !start ? (end - now) / 1000 : undefined;
     const small = presence.smallImage?.startsWith("https://") ? presence.smallImage : undefined;
     const layers = Math.min(2, stackDepth);
@@ -174,7 +177,7 @@ export const LiveCard =
                 />
               </div>
               <div className="flex justify-between text-label-sm text-on-tertiary-muted tabular-nums">
-                <span>{formatClock(Math.min(elapsed, total))}</span>
+                <span>{timelineMode === "countdown" ? `-${formatClock(Math.max(0, total - elapsed))}` : formatClock(Math.min(elapsed, total))}</span>
                 <span>{formatClock(total)}</span>
               </div>
             </div>

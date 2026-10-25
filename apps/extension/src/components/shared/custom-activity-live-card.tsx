@@ -22,6 +22,7 @@ export const CustomActivityLiveCard = ({ activity, presence, paused, detectedHos
     <LiveCard
       slug={customActivitySlug(activity.id)}
       presence={presence}
+      timelineMode={activity.timestamp.mode === "countdown" ? "countdown" : "playback"}
       presenceName={activity.name}
       t={t}
       status={paused ? "paused" : "live"}
