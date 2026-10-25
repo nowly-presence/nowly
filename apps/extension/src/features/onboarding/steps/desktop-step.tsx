@@ -11,8 +11,6 @@ import { connectionOf } from "@/lib/presence-status";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout";
 import { PermissionStatus } from "@/features/onboarding/permission-status";
-import { ChromeOsWaitlistForm } from "@/features/onboarding/chromeos-waitlist-form";
-import { useIsChromeOs } from "@/features/onboarding/use-is-chrome-os";
 
 export const DesktopStep = ({ onNext }: {
   onNext: () => void;
@@ -25,24 +23,6 @@ export const DesktopStep = ({ onNext }: {
   const versionLabel = state.native.version
     ? t("connection.version", { version: state.native.version })
     : t("connection.detected");
-  const isChromeOs = useIsChromeOs();
-
-  if (isChromeOs) {
-    return (
-      <OnboardingStepLayout
-        icon={<RiComputerLine className="size-5" />}
-        title={t("onboarding.chromeOsTitle")}
-        description={t("onboarding.chromeOsDescription")}
-        footer={
-          <Button onClick={onNext} variant="secondary" className="w-full">
-            {t("onboarding.later")}
-          </Button>
-        }
-      >
-        <ChromeOsWaitlistForm />
-      </OnboardingStepLayout>
-    );
-  }
 
   return (
     <OnboardingStepLayout

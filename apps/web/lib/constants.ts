@@ -6,8 +6,6 @@ export const TWITTER_URL = "https://x.com/nowlyme";
 export const KOFI_URL = "https://ko-fi.com/nowly";
 export const GITHUB_SPONSORS_URL = "https://github.com/sponsors/nowly-presence";
 
-export const CHROMEOS_WAITLIST_CAMPAIGN_ID = process.env.NEXT_PUBLIC_CHROMEOS_WAITLIST_CAMPAIGN_ID || "";
-
 export const CDN_INSTALLER_BASE_URL = "https://cdn.nowly.me/installer";
 export const DESKTOP_LATEST_MANIFEST_URL = `${CDN_INSTALLER_BASE_URL}/latest.json`;
 export const CANARY_EXTENSION_ZIP_URL = "https://cdn.nowly.me/extension/nowly-canary.zip";

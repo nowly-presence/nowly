@@ -15,4 +15,3 @@ export const CHROME_REVIEWS_URL = "https://chromewebstore.google.com/detail/nowl
 export const FIREFOX_REVIEWS_URL = "https://addons.mozilla.org/firefox/addon/nowly-presence/reviews/";
 export const HOST_DOWNLOAD_URL = `${WEB_BASE_URL.replace(/\/$/, "")}/desktop`;
 export const PRESENCE_REPORT_MAX_LENGTH = 750;
-export const CHROMEOS_WAITLIST_CAMPAIGN_ID = extensionEnv.VITE_CHROMEOS_WAITLIST_CAMPAIGN_ID ?? "";

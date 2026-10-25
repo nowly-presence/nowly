@@ -406,19 +406,12 @@
     "title": "Discordへのローカルブリッジ",
     "description": "拡張機能がタブを読み取ります。デスクトップアプリがあなたのステータスをDiscordに送信します。タイトル、プラットフォーム、再生状況はあなたのPCから外に出ません。",
     "detected": "検出済み",
-    "chromeos-title": "ChromeOSはまだ対応していません",
-    "chromeos-description": "Discord Rich Presenceには、現在ChromeOSでは実行できないネイティブアプリが必要です。対応を検討中です。変更があった際に通知を受け取るには、メールアドレスをご登録ください。",
-    "chromeos-email-placeholder": "you@example.com",
-    "chromeos-submit": "通知を受け取る",
-    "chromeos-success": "ありがとうございます。お知らせします。",
-    "chromeos-error": "問題が発生しました。もう一度お試しください。",
     "version": "バージョン {version}",
     "card-title": "{platform}用をダウンロード",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux",
-      "chromeos": "ChromeOS"
+      "linux": "Linux"
     },
     "windows-installer": "Windowsインストーラー（.exe）",
     "windows-portable": "ポータブルアーカイブ（.zip）",

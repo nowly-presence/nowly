@@ -62,7 +62,7 @@ export const CampaignsManager = () => {
       <div className="flex items-end gap-3">
         <Field className="max-w-sm">
           <FieldLabel>Campaign name</FieldLabel>
-          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="ChromeOS waitlist" onKeyDown={(e) => e.key === "Enter" && void create()} />
+          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Campaign name" onKeyDown={(e) => e.key === "Enter" && void create()} />
         </Field>
         <Button onClick={create} disabled={creating}>
           {creating ? "Creating..." : "Create campaign"}

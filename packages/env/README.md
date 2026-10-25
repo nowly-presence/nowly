@@ -55,7 +55,6 @@ Typed environment access for the Nowly monorepo.
 | `VITE_WEB_BASE_URL` | No | `https://nowly.me` |
 | `VITE_API_BASE_URL` | No | `https://api.nowly.me` |
 | `VITE_CDN_BASE_URL` | No | - |
-| `VITE_CHROMEOS_WAITLIST_CAMPAIGN_ID` | No | - |
 
 ### cli (internal-cli)
 

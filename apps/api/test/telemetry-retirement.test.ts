@@ -56,4 +56,38 @@ describe("retired Insights collection", () => {
     expect(readFileSync(resolve(root, "apps/api/scripts/reset-dev-data.ts"), "utf8")).not.toMatch(/analytics_|presence_active_sessions|insights_views/);
   });
 
+  it("removes the retired OS onboarding, waitlist, configuration and locale keys without removing supported desktop platforms", () => {
+    for (const path of [
+      "apps/extension/src/features/onboarding/chromeos-waitlist-form.tsx",
+      "apps/extension/src/features/onboarding/use-is-chrome-os.ts",
+      "apps/web/features/campaigns/components/campaign-signup-form.tsx"
+    ])
+      expect(existsSync(resolve(root, path)), path).toBe(false);
+
+    const paths = [
+      "apps/web/features/desktop/components/desktop-view.tsx",
+      "apps/extension/src/features/onboarding/steps/desktop-step.tsx",
+      "apps/extension/src/shared/constants.ts",
+      "apps/web/lib/constants.ts",
+      "apps/web/Dockerfile",
+      "apps/web/.env.example",
+      "apps/extension/.env.example",
+      "packages/env/src/extension.ts",
+      "packages/env/README.md",
+      "apps/web/features/campaigns/campaigns-manager.tsx"
+    ];
+
+    for (const directory of ["apps/web/messages", "apps/extension/messages"]) {
+      paths.push(
+        ...readdirSync(resolve(root, directory))
+          .filter((name) => name.endsWith(".json"))
+          .map((name) => `${directory}/${name}`)
+      );
+    }
+
+    for (const path of paths) expect(readFileSync(resolve(root, path), "utf8"), path).not.toMatch(/chrome[ _-]?os|chromebook|\bcros\b/i);
+
+    const desktop = readFileSync(resolve(root, "apps/web/features/desktop/components/desktop-view.tsx"), "utf8");
+    expect(desktop).toContain('["windows", "macos", "linux"]');
+  });
 });

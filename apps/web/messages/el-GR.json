@@ -406,19 +406,12 @@
     "title": "Η τοπική γέφυρα προς το Discord",
     "description": "Η επέκταση διαβάζει την καρτέλα. Η εφαρμογή desktop στέλνει την κατάστασή σου στο Discord. Ο τίτλος, η πλατφόρμα και η αναπαραγωγή δεν φεύγουν ποτέ από τον υπολογιστή σου.",
     "detected": "Εντοπίστηκε",
-    "chromeos-title": "Το ChromeOS δεν υποστηρίζεται ακόμη",
-    "chromeos-description": "Το Discord Rich Presence χρειάζεται μια εγγενή εφαρμογή που το ChromeOS δεν μπορεί σήμερα να εκτελέσει. Το εξετάζουμε - άφησε το email σου για να ειδοποιηθείς αν αυτό αλλάξει.",
-    "chromeos-email-placeholder": "esy@paradeigma.com",
-    "chromeos-submit": "Ειδοποίησέ με",
-    "chromeos-success": "Ευχαριστούμε, θα σε ενημερώσουμε.",
-    "chromeos-error": "Κάτι πήγε στραβά. Δοκίμασε ξανά.",
     "version": "Έκδοση {version}",
     "card-title": "Λήψη για {platform}",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux",
-      "chromeos": "ChromeOS"
+      "linux": "Linux"
     },
     "windows-installer": "Πρόγραμμα εγκατάστασης Windows (.exe)",
     "windows-portable": "Φορητό αρχείο (.zip)",
