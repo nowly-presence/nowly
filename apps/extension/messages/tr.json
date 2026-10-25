@@ -83,6 +83,7 @@
   "activity.yourPresences": "Varlıkların ({count})",
   "activity.yourPresencesEmpty": "Varlıkların",
   "activity.viewGrid": "Izgara görünümü",
+  "activity.updateAll": "Tümünü güncelle",
   "activity.viewList": "Liste görünümü",
   "activity.emptyTitle": "Henüz varlık yok",
   "activity.emptyDescription": "Kullandığın siteleri ekle, Nowly onları Discord profilinde göstersin.",

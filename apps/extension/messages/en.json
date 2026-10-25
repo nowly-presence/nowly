@@ -83,6 +83,7 @@
   "activity.yourPresences": "Your presences ({count})",
   "activity.yourPresencesEmpty": "Your presences",
   "activity.viewGrid": "Grid view",
+  "activity.updateAll": "Update all",
   "activity.viewList": "List view",
   "activity.emptyTitle": "No presence yet",
   "activity.emptyDescription": "Add the sites you use and Nowly will show them on your Discord profile.",

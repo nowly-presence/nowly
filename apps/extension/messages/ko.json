@@ -83,6 +83,7 @@
   "activity.yourPresences": "내 프레즌스 ({count})",
   "activity.yourPresencesEmpty": "내 프레즌스",
   "activity.viewGrid": "그리드 보기",
+  "activity.updateAll": "모두 업데이트",
   "activity.viewList": "목록 보기",
   "activity.emptyTitle": "아직 프레즌스가 없어요",
   "activity.emptyDescription": "자주 쓰는 사이트를 추가하면 Nowly가 Discord 프로필에 표시해 줘요.",

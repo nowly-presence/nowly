@@ -83,6 +83,7 @@
   "activity.yourPresences": "Deine Präsenzen ({count})",
   "activity.yourPresencesEmpty": "Deine Präsenzen",
   "activity.viewGrid": "Rasteransicht",
+  "activity.updateAll": "Alle aktualisieren",
   "activity.viewList": "Listenansicht",
   "activity.emptyTitle": "Noch keine Präsenz",
   "activity.emptyDescription": "Füge die Websites hinzu, die du nutzt, und Nowly zeigt sie auf deinem Discord-Profil.",

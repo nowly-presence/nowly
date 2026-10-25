@@ -83,6 +83,7 @@
   "activity.yourPresences": "あなたのプレゼンス（{count}）",
   "activity.yourPresencesEmpty": "あなたのプレゼンス",
   "activity.viewGrid": "グリッド表示",
+  "activity.updateAll": "すべて更新",
   "activity.viewList": "リスト表示",
   "activity.emptyTitle": "プレゼンスはまだありません",
   "activity.emptyDescription": "よく使うサイトを追加すると、Nowly が Discord のプロフィールに表示します。",

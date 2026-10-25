@@ -39,7 +39,7 @@ export const PresencePrimaryActions = ({ view, stored }: {
 
   if (!stored) {
     return (
-      <Button loading={actions.pending === view.slug} onClick={() => void actions.install(view.slug, view.name)} className="w-full">
+      <Button loading={actions.isPending(view.slug)} onClick={() => void actions.install(view.slug, view.name)} className="w-full">
         {t("detail.install")}
       </Button>
     );
@@ -55,7 +55,7 @@ export const PresencePrimaryActions = ({ view, stored }: {
       {update && (
         <Button
           icon={<RiArrowUpCircleLine className="size-4" />}
-          loading={actions.pending === view.slug}
+          loading={actions.isPending(view.slug)}
           onClick={() => void actions.update(view.slug, view.name)}
         >
           {t("detail.updateTo", { version: update })}
