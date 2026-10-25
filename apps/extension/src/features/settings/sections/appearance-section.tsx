@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { RiGlobalLine, RiTranslate2 } from "@remixicon/react";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
-import { track } from "@/lib/messages";
 import { commonPresenceLocales } from "@/lib/presence-locales";
 import { DOCK_TABS, isDefaultDockLayout, normalizeDockLayout, visibleDockTabs } from "@/shared/dock-layout";
 import { isLocale, isLongLocale, LOCALE_LONG_MAP, LOCALE_NAMES, longLocaleName, PRESENCE_LOCALES, UI_LOCALES } from "@/shared/locales";
@@ -89,7 +88,6 @@ export const AppearanceSection = () => {
             value={preference}
             onChange={(value) => {
               setPreference(isLocale(value) ? value : "browser");
-              track("settings_language_changed");
             }}
             options={[
               {

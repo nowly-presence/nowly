@@ -36,8 +36,8 @@ describe("legal version checks", () => {
     expect(pendingLegalDocuments(state)).toEqual(["tos", "privacy"]);
     const result = await acceptLegalDocuments({
       versions: {
-        tos: 1,
-        privacy: 1
+        tos: CURRENT_LEGAL_MANIFEST.documents.tos.version,
+        privacy: CURRENT_LEGAL_MANIFEST.documents.privacy.version
       },
       acceptTos: true,
       acknowledgePrivacy: true
@@ -50,8 +50,8 @@ describe("legal version checks", () => {
   it("rejects a malformed remote response without losing local receipts", async () => {
     await acceptLegalDocuments({
       versions: {
-        tos: 1,
-        privacy: 1
+        tos: CURRENT_LEGAL_MANIFEST.documents.tos.version,
+        privacy: CURRENT_LEGAL_MANIFEST.documents.privacy.version
       },
       acceptTos: true,
       acknowledgePrivacy: true
@@ -66,15 +66,15 @@ describe("legal version checks", () => {
     const next = structuredClone(CURRENT_LEGAL_MANIFEST);
     next.documents.privacy = {
       ...next.documents.privacy,
-      version: 2,
-      requiredVersion: 2
+      version: CURRENT_LEGAL_MANIFEST.documents.privacy.version + 1,
+      requiredVersion: CURRENT_LEGAL_MANIFEST.documents.privacy.version + 1
     };
     fetchMock.mockResolvedValue(Response.json(next));
     const check = checkLegalDocuments();
     const confirmation = acceptLegalDocuments({
       versions: {
-        tos: 1,
-        privacy: 1
+        tos: CURRENT_LEGAL_MANIFEST.documents.tos.version,
+        privacy: CURRENT_LEGAL_MANIFEST.documents.privacy.version
       },
       acceptTos: true,
       acknowledgePrivacy: true

@@ -22,7 +22,7 @@ Categories are duplicated in two places that must stay in sync:
 - `presenceSearchText` indexes every localized description and long description returned by the API, so translated copy remains searchable.
 
 ## Notable dependencies
-`lib/library-catalog.ts`, `lib/analytics.ts`, `lib/presence-api.ts` (root, shared), `components/extension-store-button.tsx`, `components/presence-tile.tsx`, `presence` feature of `apps/api`.
+`lib/library-catalog.ts`, `lib/telemetry.ts`, `lib/presence-api.ts` (root, shared), `components/extension-store-button.tsx`, `components/presence-tile.tsx`, `presence` feature of `apps/api`. Presence success events come only from the extension background, never a second web conversion event.
 
 ## Presence pages and indexing
 

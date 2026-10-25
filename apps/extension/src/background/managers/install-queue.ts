@@ -4,6 +4,7 @@ export const INSTALL_QUEUE_ALARM = "install-queue";
 export type InstallQueueItem = {
   queuedAt: number;
   slug: string;
+  source?: "web" | "extension" | "restore" | "system";
 };
 
 export const getInstallQueue = async (): Promise<InstallQueueItem[]> => {
@@ -13,13 +14,18 @@ export const getInstallQueue = async (): Promise<InstallQueueItem[]> => {
 
   if (!Array.isArray(value)) return [];
 
-  return value.filter(
-    (item): item is InstallQueueItem =>
-      Boolean(item) &&
-      typeof item === "object" &&
-      typeof (item as InstallQueueItem).slug === "string" &&
-      typeof (item as InstallQueueItem).queuedAt === "number"
-  );
+  return value
+    .filter(
+      (item): item is InstallQueueItem =>
+        Boolean(item) &&
+        typeof item === "object" &&
+        typeof (item as InstallQueueItem).slug === "string" &&
+        typeof (item as InstallQueueItem).queuedAt === "number"
+    )
+    .map((item) => ({
+      ...item,
+      source: item.source === "web" || item.source === "extension" || item.source === "restore" ? item.source : "system"
+    }));
 };
 
 export const setInstallQueue = async (items: InstallQueueItem[]): Promise<void> => {
@@ -42,12 +48,13 @@ export const isRetriableInstallFailure = (status?: number): boolean => {
   return status >= 500;
 };
 
-export const enqueueInstall = async (slug: string): Promise<InstallQueueItem[]> => {
+export const enqueueInstall = async (slug: string, source: InstallQueueItem["source"] = "system"): Promise<InstallQueueItem[]> => {
   const current = await getInstallQueue();
 
   const next = [
     {
       slug,
+      source,
       queuedAt: Date.now()
     },
     ...current.filter((item) => item.slug !== slug)

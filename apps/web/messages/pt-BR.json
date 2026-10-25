@@ -926,15 +926,17 @@
   },
   "cookie-banner": {
     "title": "Informações sobre cookies",
-    "message": "Este site usa um cookie de idioma estritamente necessário. Se a publicidade for ativada no futuro, o Google também pode usar tecnologias de publicidade.",
+    "message": "As estatísticas agregadas opcionais ficam desativadas até você aceitar. O cookie de idioma continua necessário. Altere a escolha na página Seus dados.",
     "learn-more": "Ler a política de cookies",
-    "dismiss": "Entendi"
+    "dismiss": "Entendi",
+    "accept": "Aceitar estatísticas",
+    "decline": "Recusar estatísticas"
   },
   "privacy-page": {
     "badge": "Privacidade",
     "title": "Política de Privacidade",
     "description": "Como o Nowly trata seus dados, o que fica no seu dispositivo e o que depende do seu consentimento.",
-    "last-updated": "Última atualização: 16 de outubro de 2026.",
+    "last-updated": "2026-10-25",
     "data-region": "União Europeia (VPS fornecido pela Contabo GmbH, Alemanha)",
     "intro": "Esta política descreve o tratamento de dados pessoais por <strong>{publisherName}</strong>, controlador. As mensagens Rich Presence chegam ao Discord localmente pelo aplicativo desktop. Isso não significa que todos os recursos funcionem offline: sincronização, solicitações de imagens, envios solicitados e estatísticas opcionais usam nossa API ou fornecedores.",
     "sections": [
@@ -968,7 +970,7 @@
       },
       {
         "title": "Estatísticas de uso (opcional)",
-        "body": "O analytics fica <strong>desativado por padrão</strong>. Se você o ativar durante o onboarding ou depois nas configurações da extensão, nossa API pode receber:<ul><li>O UUID do seu dispositivo (pseudônimo: não é sua conta do Discord ou do Google, mas ainda é dado pessoal sob o GDPR porque pode identificar sua instalação).</li><li>Navegador, sistema operacional, idioma, versão da extensão e versão do app de desktop.</li><li>Slugs/versões de presenças instaladas e eventos de uso (por exemplo, instalações, heartbeats, avaliações) com payload limitado.</li></ul>Usamos isso para melhorar o Nowly e mostrar quão populares as presenças são. Desativar essa opção <strong>interrompe a coleta futura</strong> e registra que o consentimento foi retirado. Isso <strong>não</strong> apaga automaticamente eventos já armazenados. Para solicitar a exclusão de registros no servidor, envie um e-mail para <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> com o ID do seu dispositivo (visível na extensão) ou outro elemento que nos permita localizar o registro."
+        "body": "Site e extensão exigem consentimentos separados. A API encaminha apenas eventos permitidos ao Umami auto-hospedado (stats.nowly.me): tipo de página, navegador de download, ação, fonte, categoria/origem da presença e dia da coorte/marco de retorno. Não envia ID de conta ou dispositivo, URL real, buscas ou conteúdo de atividade. D1/D7/D30 usam datas e marcas locais de deduplicação, não um identificador transmitido. Revogar o consentimento interrompe envios futuros e apaga essas marcas; nenhum evento de revogação é enviado. Solicitações em andamento não podem ser recolhidas. A API pode tratar IP para segurança, mas não o encaminha. Serviços funcionais do dispositivo são separados."
       },
       {
         "title": "Conta Nowly e sincronização (opcionais)",
@@ -984,7 +986,7 @@
       },
       {
         "title": "Retenção",
-        "body": "<ul><li><strong>Logs locais da extensão e do desktop</strong>: até você apagar, redefinir ou desinstalar.</li><li><strong>Cookie de idioma</strong>: 1 ano, renovado quando você muda de idioma.</li><li><strong>Estatísticas de uso</strong>: mantidas apenas pelo tempo necessário para produzir métricas agregadas. Não há hoje <strong>expurgo automático de 12 meses</strong>. Você pode solicitar exclusão como descrito acima.</li><li><strong>JWT (se você fizer login)</strong>: cerca de 30 dias, a menos que você saia ou nós o revoguemos.</li></ul>"
+        "body": "<ul><li><strong>Logs locais da extensão e do desktop</strong>: até você apagar, redefinir ou desinstalar.</li><li><strong>Cookie de idioma</strong>: 1 ano, renovado quando você muda de idioma.</li><li>As marcas locais ficam até a revogação ou exclusão local. Não há prazo automático de exclusão de agregados Umami implementado aqui; a configuração do servidor não foi verificada. Novos agregados não podem ser localizados pelo ID do dispositivo.</li><li><strong>JWT (se você fizer login)</strong>: cerca de 30 dias, a menos que você saia ou nós o revoguemos.</li></ul>"
       },
       {
         "title": "Processadores e transferências",
@@ -996,7 +998,7 @@
       },
       {
         "title": "Cookies",
-        "body": "nowly.me e docs.nowly.me definem cada um um cookie <code>locale</code> para idioma. Tema e aviso de cookies usam armazenamento local, não cookies. Veja a <a href=\"/cookies\">política de cookies</a>."
+        "body": "O navegador guarda localmente tema e escolha de estatísticas. A extensão guarda consentimento e datas locais de retorno/deduplicação. Não há cookie analítico nem ID persistente de visitante. Apagar a escolha redefine o consentimento; estatísticas ficam desativadas até nova aceitação."
       },
       {
         "title": "Segurança",
@@ -1004,7 +1006,7 @@
       },
       {
         "title": "Seus direitos",
-        "body": "Se o GDPR se aplicar, você pode solicitar acesso, retificação, exclusão, restrição, oposição e portabilidade, e pode retirar o consentimento para analytics. Diagnósticos de desenvolvedor na extensão podem mostrar eventos ainda enfileirados no seu dispositivo; eles não são uma exportação completa dos nossos servidores. Para exercer direitos, envie um e-mail para <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> ou use o <a href=\"https://github.com/nowly-presence/nowly\">repositório do GitHub</a>. Você também pode registrar uma reclamação junto à <a href=\"https://www.cnil.fr\">CNIL</a> (França) ou sua autoridade supervisora local."
+        "body": "Revogue o consentimento em /consent e nas configurações da extensão. Para direitos do GDPR: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Dados de serviço do dispositivo podem ser exportados/apagados com autenticação; novos agregados não são atribuídos ao dispositivo. Você pode reclamar à CNIL ou à autoridade supervisora."
       },
       {
         "title": "Relatos de problemas de presença",
@@ -1121,8 +1123,8 @@
     "badge": "Cookies",
     "title": "Política de Cookies",
     "description": "Cookies e armazenamento local usados em nowly.me e docs.nowly.me.",
-    "last-updated": "Última atualização: 9 de outubro de 2026.",
-    "intro": "Esta página descreve cookies e tecnologias semelhantes em <strong>nowly.me</strong> e <strong>docs.nowly.me</strong>. Definimos um cookie de idioma. Tema e aviso de cookies usam armazenamento local. O Google AdSense não é carregado, a menos que a publicidade esteja ativada.",
+    "last-updated": "2026-10-25",
+    "intro": "O navegador guarda localmente tema e escolha de estatísticas. A extensão guarda consentimento e datas locais de retorno/deduplicação. Não há cookie analítico nem ID persistente de visitante. Apagar a escolha redefine o consentimento; estatísticas ficam desativadas até nova aceitação.",
     "sections": [
       {
         "title": "Estritamente necessário",
@@ -1134,11 +1136,11 @@
       },
       {
         "title": "Armazenamento local",
-        "body": "Os sites armazenam o tema de cores (claro, escuro ou sistema) e se você dispensou o aviso de cookies. Esses valores ficam no seu navegador e não são enviados como cookies ao Nowly."
+        "body": "O navegador guarda localmente tema e escolha de estatísticas. A extensão guarda consentimento e datas locais de retorno/deduplicação. Não há cookie analítico nem ID persistente de visitante. Apagar a escolha redefine o consentimento; estatísticas ficam desativadas até nova aceitação."
       },
       {
         "title": "Cookies de analytics",
-        "body": "Os sites <strong>não</strong> definem cookies de analytics de terceiros. O site do Nowly usa o <strong>Plausible Analytics</strong>, hospedado por nós em <code>stats.nowly.me</code>, para medir visualizações agregadas de páginas sem cookies nem identificadores persistentes de visitantes. As estatísticas opcionais da extensão são separadas e usam um ID de dispositivo se você as ativar."
+        "body": "Site e extensão exigem consentimentos separados. A API encaminha apenas eventos permitidos ao Umami auto-hospedado (stats.nowly.me): tipo de página, navegador de download, ação, fonte, categoria/origem da presença e dia da coorte/marco de retorno. Não envia ID de conta ou dispositivo, URL real, buscas ou conteúdo de atividade. D1/D7/D30 usam datas e marcas locais de deduplicação, não um identificador transmitido. Revogar o consentimento interrompe envios futuros e apaga essas marcas; nenhum evento de revogação é enviado. Solicitações em andamento não podem ser recolhidas. A API pode tratar IP para segurança, mas não o encaminha. Serviços funcionais do dispositivo são separados."
       },
       {
         "title": "Publicidade",
@@ -1172,20 +1174,22 @@
   "consentPage": {
     "eyebrow": "Privacidade",
     "title": "Seus dados",
-    "description": "O Nowly só coleta analytics de uso anônimos se você ativar isso explicitamente abaixo. Esta página também permite ver, exportar ou apagar tudo o que foi armazenado para o seu dispositivo.",
+    "description": "Contagens opcionais de páginas e cliques de download, sem identificador persistente. Escolha independente da extensão. Contagens opcionais de recursos e categorias de presença. As marcas de retorno ficam no dispositivo e são apagadas ao desativar. Nenhum conteúdo navegado é enviado.",
     "checking": "Procurando a extensão do Nowly...",
     "not-detected-title": "Extensão não detectada",
     "not-detected-description": "Abra esta página no navegador onde o Nowly está instalado para gerenciar seu consentimento e dados.",
-    "toggle-title": "Compartilhar dados de uso anônimos",
-    "toggle-description": "Desativado por padrão. Nos ajuda a ver quais presenças e recursos são realmente usados - nenhum histórico de navegação ou dado pessoal é coletado.",
+    "toggle-title": "Estatísticas da extensão",
+    "toggle-description": "Contagens opcionais de recursos e categorias de presença. As marcas de retorno ficam no dispositivo e são apagadas ao desativar. Nenhum conteúdo navegado é enviado.",
     "data-title": "Seus dados",
-    "data-description": "Exporte tudo o que o Nowly armazenou para este dispositivo, ou apague tudo.",
+    "data-description": "Exporte ou apague dados de serviço do dispositivo. Novos agregados Umami não têm ID de dispositivo e não entram na exportação.",
     "export": "Exportar meus dados",
     "delete": "Apagar meus dados",
     "delete-confirm": "Isso apaga permanentemente tudo o que o Nowly armazenou para este dispositivo. Isso não pode ser desfeito.",
     "export-success": "Seus dados foram baixados.",
     "delete-success": "Seus dados foram apagados.",
-    "action-error": "Não foi possível concluir esta solicitação. Tente novamente ou entre em contato com o suporte se o problema persistir."
+    "action-error": "Não foi possível concluir esta solicitação. Tente novamente ou entre em contato com o suporte se o problema persistir.",
+    "site-title": "Estatísticas do site",
+    "site-description": "Contagens opcionais de páginas e cliques de download, sem identificador persistente. Escolha independente da extensão."
   },
   "faqPage": {
     "eyebrow": "Perguntas frequentes",

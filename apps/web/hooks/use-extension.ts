@@ -148,7 +148,7 @@ export const usePresenceExtension = (slug: string, latestVersion?: string | null
         ok?: boolean;
       }>("UNINSTALL_PRESENCE", { slug });
 
-      if (result?.ok === false) return false;
+      if (result?.ok !== true) return false;
 
       setInstalled(null);
       return true;

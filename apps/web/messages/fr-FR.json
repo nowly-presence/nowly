@@ -921,15 +921,17 @@
   },
   "cookie-banner": {
     "title": "Informations sur les cookies",
-    "message": "Ce site utilise un cookie de langue strictement nécessaire. Si la publicité est activée plus tard, Google pourra aussi utiliser des technologies publicitaires.",
+    "message": "Les statistiques produit agrégées sont désactivées sans votre accord. Le cookie de langue reste nécessaire. Modifiez votre choix sur la page Vos données.",
     "learn-more": "Lire la politique relative aux cookies",
-    "dismiss": "Compris"
+    "dismiss": "Compris",
+    "accept": "Accepter les statistiques",
+    "decline": "Refuser les statistiques"
   },
   "privacy-page": {
     "badge": "Confidentialité",
     "title": "Politique de confidentialité",
     "description": "Comment Nowly traite vos données, ce qui reste sur votre appareil et ce qui dépend de votre consentement.",
-    "last-updated": "Dernière mise à jour : 16 octobre 2026.",
+    "last-updated": "2026-10-25",
     "data-region": "Union européenne (VPS fourni par Contabo GmbH, Allemagne)",
     "intro": "La présente politique décrit les traitements de données personnelles effectués par <strong>{publisherName}</strong>, responsable de traitement. Les messages Rich Presence parviennent à Discord via l'application bureau sur votre appareil. Cette transmission locale ne signifie pas que toutes les fonctions restent hors ligne : synchronisation du compte, requêtes d'images, envois demandés par l'utilisateur et statistiques facultatives font appel à notre API ou à des prestataires, comme indiqué ci-dessous.",
     "sections": [
@@ -963,7 +965,7 @@
       },
       {
         "title": "Statistiques d’usage (opt-in)",
-        "body": "Les statistiques sont <strong>désactivées par défaut</strong>. Si vous les activez à l’accueil ou plus tard dans les réglages, notre API peut recevoir :<ul><li>Votre UUID d’appareil (pseudonyme : ce n’est pas votre compte Discord ou Google, mais il s’agit bien d’une donnée personnelle au sens du RGPD, car il identifie votre installation).</li><li>Navigateur, système, langue, versions de l’extension et de l’application bureau.</li><li>Identifiants/versions des présences installées et événements d’usage (installations, battements, notes) avec une charge utile limitée.</li></ul>Nous les utilisons pour améliorer Nowly et indiquer la popularité des présences. Désactiver l’option <strong>arrête la collecte</strong> et enregistre le retrait du consentement. Cela <strong>n’efface pas</strong> à lui seul les événements déjà stockés. Pour une suppression côté serveur, écrivez à <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> en indiquant l’identifiant d’appareil (visible dans l’extension) ou tout autre élément permettant de retrouver l’enregistrement."
+        "body": "Le site et l’extension nécessitent des accords séparés. Notre API relaie vers Umami auto-hébergé (stats.nowly.me) des événements sur liste fermée : type de page, navigateur du téléchargement, action, source, catégorie/origine de présence et jour de cohorte/jalon de retour. Aucun identifiant de compte ou d’appareil, URL réelle, recherche, texte d’activité ou contenu consulté n’est envoyé à Umami. Les retours J1/J7/J30 utilisent des dates et repères de dédoublonnage locaux, pas un identifiant transmis. Le retrait arrête les futurs envois et efface ces repères ; aucun événement de retrait n’est envoyé. Une requête déjà partie ne peut être rappelée. L’API peut traiter l’IP pour sa sécurité, sans la transmettre à Umami. Les services fonctionnels de l’appareil restent distincts."
       },
       {
         "title": "Compte Nowly et synchronisation (facultatifs)",
@@ -979,7 +981,7 @@
       },
       {
         "title": "Durées de conservation",
-        "body": "<ul><li><strong>Données locales</strong> (extension et journaux bureau) : jusqu’à suppression, réinitialisation ou désinstallation.</li><li><strong>Cookie de langue</strong> : 1 an, renouvelé si vous changez de langue.</li><li><strong>Statistiques d’usage</strong> : aussi longtemps que nécessaire pour produire des indicateurs agrégés. <strong>Aucune purge automatique à 12 mois</strong> n’est en place aujourd’hui. Vous pouvez demander l’effacement comme indiqué ci-dessus.</li><li><strong>JWT</strong> (si vous vous connectez) : environ 30 jours, sauf déconnexion ou révocation.</li></ul>"
+        "body": "<ul><li><strong>Données locales</strong> (extension et journaux bureau) : jusqu’à suppression, réinitialisation ou désinstallation.</li><li><strong>Cookie de langue</strong> : 1 an, renouvelé si vous changez de langue.</li><li>Les repères locaux restent jusqu’au retrait ou à leur suppression locale. Aucune échéance de purge automatique des agrégats Umami n’est implémentée ici ; la rétention configurée sur le serveur n’est pas vérifiée. Les nouveaux agrégats ne peuvent pas être retrouvés par identifiant d’appareil.</li><li><strong>JWT</strong> (si vous vous connectez) : environ 30 jours, sauf déconnexion ou révocation.</li></ul>"
       },
       {
         "title": "Sous-traitants et transferts",
@@ -991,7 +993,7 @@
       },
       {
         "title": "Cookies",
-        "body": "nowly.me et docs.nowly.me déposent chacun un cookie <code>locale</code>. Le thème et le bandeau d’information utilisent le stockage local, pas des cookies. Voir la <a href=\"/cookies\">politique de cookies</a>."
+        "body": "Le navigateur conserve localement le thème et le choix oui/non pour les statistiques. L’extension conserve le consentement et les dates locales de retour/dédoublonnage. Aucun cookie analytique ni identifiant persistant de visiteur n’est créé. Effacer le choix réinitialise le consentement ; les statistiques restent désactivées sans nouvel accord."
       },
       {
         "title": "Sécurité",
@@ -999,7 +1001,7 @@
       },
       {
         "title": "Vos droits",
-        "body": "Lorsque le RGPD s’applique, vous disposez des droits d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité, ainsi que du droit de retirer votre consentement aux statistiques. Les journaux développeur de l’extension peuvent afficher des événements encore présents sur l’appareil ; ce n’est pas un export complet de nos serveurs. Pour exercer vos droits, écrivez à <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> ou utilisez le <a href=\"https://github.com/nowly-presence/nowly\">dépôt GitHub</a>. Vous pouvez aussi saisir la <a href=\"https://www.cnil.fr\">CNIL</a> ou l’autorité de contrôle de votre pays."
+        "body": "Retirez votre accord sur /consent et dans les réglages de l’extension. Pour vos droits RGPD, contactez <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Les données de service liées à l’appareil sont exportables ou effaçables après authentification. Les nouveaux agrégats ne peuvent pas être attribués à votre appareil. Vous pouvez saisir la CNIL ou votre autorité de contrôle."
       },
       {
         "title": "Signalements de problèmes",
@@ -1116,8 +1118,8 @@
     "badge": "Cookies",
     "title": "Politique de cookies",
     "description": "Cookies et stockage local utilisés sur nowly.me et docs.nowly.me.",
-    "last-updated": "Dernière mise à jour : 9 octobre 2026.",
-    "intro": "Cette page décrit les cookies et technologies similaires sur <strong>nowly.me</strong> et <strong>docs.nowly.me</strong>. Nous déposons un cookie de langue. Le thème et le bandeau d’information utilisent le stockage local. Google AdSense n’est chargé que si la publicité est activée.",
+    "last-updated": "2026-10-25",
+    "intro": "Le navigateur conserve localement le thème et le choix oui/non pour les statistiques. L’extension conserve le consentement et les dates locales de retour/dédoublonnage. Aucun cookie analytique ni identifiant persistant de visiteur n’est créé. Effacer le choix réinitialise le consentement ; les statistiques restent désactivées sans nouvel accord.",
     "sections": [
       {
         "title": "Cookies strictement nécessaires",
@@ -1129,11 +1131,11 @@
       },
       {
         "title": "Stockage local",
-        "body": "Les sites enregistrent le thème (clair, sombre ou système) et le fait que vous ayez fermé le bandeau. Ces valeurs restent dans le navigateur et ne sont pas envoyées comme cookies à Nowly."
+        "body": "Le navigateur conserve localement le thème et le choix oui/non pour les statistiques. L’extension conserve le consentement et les dates locales de retour/dédoublonnage. Aucun cookie analytique ni identifiant persistant de visiteur n’est créé. Effacer le choix réinitialise le consentement ; les statistiques restent désactivées sans nouvel accord."
       },
       {
         "title": "Cookies analytiques",
-        "body": "Les sites ne déposent <strong>aucun</strong> cookie analytique tiers. Le site Nowly utilise <strong>Plausible Analytics</strong>, auto-hébergé sur <code>stats.nowly.me</code>, pour mesurer l’audience agrégée sans cookie ni identifiant persistant de visiteur. Les statistiques d’usage facultatives de l’extension sont distinctes et utilisent un identifiant d’appareil si vous les activez."
+        "body": "Le site et l’extension nécessitent des accords séparés. Notre API relaie vers Umami auto-hébergé (stats.nowly.me) des événements sur liste fermée : type de page, navigateur du téléchargement, action, source, catégorie/origine de présence et jour de cohorte/jalon de retour. Aucun identifiant de compte ou d’appareil, URL réelle, recherche, texte d’activité ou contenu consulté n’est envoyé à Umami. Les retours J1/J7/J30 utilisent des dates et repères de dédoublonnage locaux, pas un identifiant transmis. Le retrait arrête les futurs envois et efface ces repères ; aucun événement de retrait n’est envoyé. Une requête déjà partie ne peut être rappelée. L’API peut traiter l’IP pour sa sécurité, sans la transmettre à Umami. Les services fonctionnels de l’appareil restent distincts."
       },
       {
         "title": "Publicité",
@@ -1167,20 +1169,22 @@
   "consentPage": {
     "eyebrow": "Confidentialité",
     "title": "Vos données",
-    "description": "Nowly ne collecte des analytics d'usage anonymes que si vous l'activez explicitement ci-dessous. Cette page vous permet aussi de voir, exporter ou supprimer tout ce qui est stocké pour votre appareil.",
+    "description": "Comptages facultatifs de pages et de clics de téléchargement, sans identifiant persistant. Ce choix est distinct de celui de l’extension. Comptages facultatifs des fonctions et catégories de présences. Les repères de retour restent sur cet appareil et sont effacés au retrait. Aucun contenu consulté n’est envoyé.",
     "checking": "Recherche de l'extension Nowly...",
     "not-detected-title": "Extension non détectée",
     "not-detected-description": "Ouvrez cette page depuis le navigateur où Nowly est installée pour gérer votre consentement et vos données.",
-    "toggle-title": "Partager des données d'usage anonymes",
-    "toggle-description": "Le partage est désactivé par défaut. Ces données nous aident à comprendre quelles présences et fonctionnalités sont utilisées. Nous ne collectons ni historique de navigation ni données personnelles.",
+    "toggle-title": "Statistiques de l’extension",
+    "toggle-description": "Comptages facultatifs des fonctions et catégories de présences. Les repères de retour restent sur cet appareil et sont effacés au retrait. Aucun contenu consulté n’est envoyé.",
     "data-title": "Vos données",
-    "data-description": "Exportez tout ce que Nowly a stocké pour cet appareil, ou supprimez-le entièrement.",
+    "data-description": "Exportez ou effacez les données de service liées à l’appareil. Les nouveaux agrégats Umami, sans identifiant d’appareil, ne figurent pas dans cet export.",
     "export": "Exporter mes données",
     "delete": "Supprimer mes données",
     "delete-confirm": "Cette action supprime définitivement tout ce que Nowly a stocké pour cet appareil. C'est irréversible.",
     "export-success": "Vos données ont été téléchargées.",
     "delete-success": "Vos données ont été supprimées.",
-    "action-error": "Impossible de terminer cette opération. Réessayez. Si le problème persiste, contactez l’assistance."
+    "action-error": "Impossible de terminer cette opération. Réessayez. Si le problème persiste, contactez l’assistance.",
+    "site-title": "Statistiques du site",
+    "site-description": "Comptages facultatifs de pages et de clics de téléchargement, sans identifiant persistant. Ce choix est distinct de celui de l’extension."
   },
   "faqPage": {
     "eyebrow": "FAQ",

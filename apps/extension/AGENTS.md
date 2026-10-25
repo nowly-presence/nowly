@@ -14,7 +14,7 @@ src/
   ui/                design system primitives, one component per file, no business logic, no chrome.* calls
   hooks/             app-wide providers and hooks (extension state, i18n, navigation, presence actions)
   lib/               pure UI helpers (formatting, presence view model, status, messages client)
-  shared/            code shared by background, content and UI (types, constants, URL patterns, locales, analytics catalog)
+  shared/            code shared by background, content and UI (types, constants, URL patterns, locales)
   preview/           mocked runtime for `npm run preview`, never bundled in the extension
 messages/<locale>.json   UI strings, 11 locales (same set as nowly.me)
 ```

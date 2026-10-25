@@ -1,4 +1,5 @@
 import { CookieBanner } from "@/features/layout/components/cookie-banner";
+import { ProductTelemetry } from "@/components/product-telemetry";
 import { Footer } from "@/features/layout/components/footer";
 import { Navbar } from "@/features/layout/components/navbar";
 import { AnnouncementBar } from "@/features/layout/components/announcement-bar";
@@ -34,14 +35,19 @@ const Layout = async ({ children, params }: LayoutProps) => {
     <NextIntlClientProvider locale={locale} messages={messages}>
       <SeasonBootScript allowPreview={ALLOW_SEASON_PREVIEW} />
       <div className="relative flex min-h-dvh flex-col">
-        <a href="#main-content" className="skip-link">{t("skip-content")}</a>
+        <a href="#main-content" className="skip-link">
+          {t("skip-content")}
+        </a>
         <SeasonProvider allowPreview={ALLOW_SEASON_PREVIEW} />
         <AnnouncementBar />
         <Navbar />
-        <main id="main-content" tabIndex={-1} className="flex-1">{children}</main>
+        <main id="main-content" tabIndex={-1} className="flex-1">
+          {children}
+        </main>
         <Footer />
       </div>
       <CookieBanner />
+      <ProductTelemetry />
     </NextIntlClientProvider>
   );
 };

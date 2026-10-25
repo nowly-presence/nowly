@@ -10,7 +10,7 @@ export default defineConfig({
   sourcemap: false,
   target: "node22",
   shims: true,
-  noExternal: ["@nowly/analytics", "@nowly/env", "@nowly/locales", "@nowly/shared"],
+  noExternal: ["@nowly/telemetry", "@nowly/env", "@nowly/locales", "@nowly/shared"],
   esbuildOptions(options) {
     options.alias = { "@": "./src" };
   }

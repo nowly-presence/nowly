@@ -5,7 +5,9 @@ import { registerPresenceScript } from "@/background/runtime/presence-scripts";
 import type { Handler } from "@/background/router/router";
 import { getPresenceSettings, getPresences, setPresenceSettings, clearSnooze, snoozePresence, setPresenceSchedule } from "@/background/storage/presences.store";
 import { visiblePresences } from "@/background/runtime/user-scripts";
-import { trackAnalytics } from "@/background/analytics-client";
+import { trackProduct } from "@/background/telemetry";
+import { WEB_BASE_URL } from "@/shared/constants";
+import { IS_CANARY } from "@/shared/brand";
 
 const toError = (
   error: unknown,
@@ -22,18 +24,42 @@ export const handleGetPresences: Handler<"GET_PRESENCES"> = async () => visibleP
 
 export const handleToggle: Handler<"TOGGLE_PRESENCE"> = (payload) => togglePresence(payload);
 
-export const handleUninstall: Handler<"UNINSTALL_PRESENCE"> = (payload) => uninstallPresence(payload);
+export const handleUninstall: Handler<"UNINSTALL_PRESENCE"> = (payload, sender) => uninstallPresence(payload, installSource(sender));
 
 export const handleBulkToggle: Handler<"BULK_TOGGLE_PRESENCE"> = ({ slugs, enabled }) => bulkTogglePresences(slugs, enabled);
 
 export const handleBulkUninstall: Handler<"BULK_UNINSTALL_PRESENCE"> = ({ slugs }) => bulkUninstallPresences(slugs);
 
-export const handleInstall: Handler<"INSTALL_PRESENCE"> = (payload) => installPresence(payload).catch((error) => toError(error, "PRESENCE_INSTALL_FAILED"));
+const installSource = (sender: chrome.runtime.MessageSender): "web" | "extension" => {
+  try {
+    const origin = new URL(sender.tab?.url ?? "").origin;
+    return origin === new URL(WEB_BASE_URL).origin || (IS_CANARY && origin === "http://localhost:3000") ? "web" : "extension";
+  } catch {
+    return "extension";
+  }
+};
 
-export const handleUpdate: Handler<"UPDATE_PRESENCE"> = (payload) => installPresence(payload).catch((error) => toError(error, "PRESENCE_INSTALL_FAILED"));
+export const handleInstall: Handler<"INSTALL_PRESENCE"> = async (payload, sender) => {
+  const source = installSource(sender);
+  void trackProduct({
+    name: "presence_install_requested",
+    source,
+    data: {}
+  });
+  return installPresence(payload, source).catch((error) => toError(error, "PRESENCE_INSTALL_FAILED"));
+};
 
-export const handleInstallFromApi: Handler<"INSTALL_PRESENCE_FROM_API"> = (payload) =>
-  installPresenceFromApi(payload).catch((error) => toError(error, "PRESENCE_INSTALL_FAILED"));
+export const handleUpdate: Handler<"UPDATE_PRESENCE"> = (payload, sender) =>
+  installPresence(payload, installSource(sender)).catch((error) => toError(error, "PRESENCE_INSTALL_FAILED"));
+
+export const handleInstallFromApi: Handler<"INSTALL_PRESENCE_FROM_API"> = async (payload) => {
+  if (!(await getPresences())[payload.slug]) void trackProduct({
+    name: "presence_install_requested",
+    source: "extension",
+    data: {}
+  });
+  return installPresenceFromApi(payload, { source: "extension" }).catch((error) => toError(error, "PRESENCE_INSTALL_FAILED"));
+};
 
 export const handleInstallLocalZip: Handler<"INSTALL_LOCAL_PRESENCE_ZIP"> = (payload) =>
   installLocalPresenceZip(payload).catch((error) => toError(error, "PRESENCE_INSTALL_FAILED"));
@@ -64,11 +90,6 @@ export const handleSetPresenceSettings: Handler<"SET_PRESENCE_SETTINGS"> = async
   const presences = await getPresences();
 
   const stored = presences[slug];
-  trackAnalytics("settings_presence_changed", {
-    slug,
-    version: stored?.release?.version ?? stored?.metadata?.version,
-    payload: { settingCount: Object.keys(partial).length }
-  });
 
   if (stored?.enabled && stored.release?.bundle) {
     void registerPresenceScript(slug, stored);

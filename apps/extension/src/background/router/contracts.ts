@@ -1,4 +1,3 @@
-import type { TrackInput } from "@nowly/analytics";
 import type { AnnouncementsState } from "@/shared/announcements";
 import type { LegalConfirmation, LegalConfirmationResult, LegalState } from "@nowly/shared/legal";
 import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, CustomActivityDetection, CustomActivityDraft, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, PresenceData, PresenceDebug, PresenceSchedule, RuntimeLogEntry, StoredPresence, SyncChoice, TabState, UserScriptsStatus } from "@/shared/types";
@@ -298,10 +297,8 @@ export type RouterMessageMap = {
       ok: boolean;
     };
   };
-  TRACK_EVENT: {
-    payload: {
-      key: string;
-    } & TrackInput;
+  RECORD_EXTENSION_ACTIVE: {
+    payload: void;
     response: {
       ok: boolean;
     };

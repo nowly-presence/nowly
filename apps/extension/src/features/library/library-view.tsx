@@ -2,11 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import { RiSignalWifiErrorLine } from "@remixicon/react";
 import { ScreenBody, ScreenTitle } from "@/components/shared/screen";
 import { useExtensionState } from "@/hooks/extension-state-provider";
-import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav } from "@/hooks/navigation-provider";
 import { formatCompact } from "@/lib/format";
-import { track } from "@/lib/messages";
 import { CATEGORIES } from "@/lib/presence-categories";
 import { fromCatalog } from "@/lib/presence-view";
 import { Button } from "@/ui/button";
@@ -19,9 +17,6 @@ import { filterCatalog, newPresenceSlugs, trendingPresences, type LibraryCategor
 import { LibraryResultsSection } from "@/features/library/library-results-section";
 import { LibrarySearchBar } from "@/features/library/library-search-bar";
 import { TrendingCarousel } from "@/features/library/trending-carousel";
-
-const SEARCH_TRACK_DELAY_MS = 900;
-const SEARCH_TRACK_MIN_LENGTH = 2;
 
 export const LibraryView = () => {
   const { state, refresh } = useExtensionState();
@@ -46,21 +41,6 @@ export const LibraryView = () => {
     }), [views, category, libraryQuery, sort, locale]);
   const trending = useMemo(() => trendingPresences(views), [views]);
   const newSlugs = useMemo(() => newPresenceSlugs(views), [views]);
-  const hasResults = results.length > 0;
-
-  const trackSearch = useDebouncedCallback((query: string, found: boolean) => {
-    if (query.trim().length >= SEARCH_TRACK_MIN_LENGTH) track("search_performed", {
-      source: "extension_library",
-      payload: {
-        locale,
-        hasResults: found
-      }
-    });
-  }, SEARCH_TRACK_DELAY_MS);
-
-  useEffect(() => {
-    trackSearch(libraryQuery, hasResults);
-  }, [libraryQuery, hasResults, trackSearch]);
 
   const browsing = !libraryQuery.trim() && category === "all";
   const loading = state.catalog.status === "loading" || state.catalog.status === "idle";

@@ -1,6 +1,6 @@
 import { handleGetAccount, handleNowlySession, handleResolveSyncChoice, handleSignOutAccount, handleStartAccountConnect, handleStopAccountSync, handleSyncAccount } from "@/background/router/handlers/account.handlers";
 import { handleClearActivityMessage, handleDebug, handleGetCurrentActivity, handleGetDebug, handleActivityUpdateMessage, handleSetPresencePause } from "@/background/router/handlers/activity.handlers";
-import { handleGetAnalyticsConsent, handleSetAnalyticsConsent, handleTrackEvent, handleGetRuntimeLogs, handleClearRuntimeLogs } from "@/background/router/handlers/analytics.handlers";
+import { handleGetAnalyticsConsent, handleSetAnalyticsConsent, handleRecordExtensionActive, handleGetRuntimeLogs, handleClearRuntimeLogs } from "@/background/router/handlers/privacy.handlers";
 import { handleGetDiagnostic } from "@/background/router/handlers/diagnostics.handlers";
 import { handleAcknowledgeDiscordIpcIssue, handleConnectNative, handleGetNativeStatus, handleGetUserScriptsStatus, handleRestartNative } from "@/background/router/handlers/native.handlers";
 import { handleBulkToggle, handleBulkUninstall, handleCheckUpdates, handleClearSnooze, handleFetchCatalog, handleGetInstallQueue, handleGetPresenceEngagement, handleGetPresenceSettings, handleGetPresences, handleInstall, handleInstallFromApi, handleInstallLocalZip, handleRetryInstallQueue, handleSetPresenceLike, handleSetPresenceSettings, handleSetSchedule, handleSnooze, handleToggle, handleUninstall, handleUpdate } from "@/background/router/handlers/presences.handlers";
@@ -57,7 +57,7 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   SET_PRESENCE_SCHEDULE: handleSetSchedule,
   GET_RUNTIME_LOGS: handleGetRuntimeLogs,
   CLEAR_RUNTIME_LOGS: handleClearRuntimeLogs,
-  TRACK_EVENT: handleTrackEvent,
+  RECORD_EXTENSION_ACTIVE: handleRecordExtensionActive,
   DEBUG: handleDebug,
   GET_ONBOARDING: handleGetOnboarding,
   SET_ONBOARDING: handleSetOnboarding,

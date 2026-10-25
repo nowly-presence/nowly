@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { PresenceEngagement } from "@/background/router/contracts";
 import { useI18n } from "@/hooks/i18n-provider";
-import { sendMessage, track } from "@/lib/messages";
+import { sendMessage } from "@/lib/messages";
 
 export const usePresenceEngagement = (slug: string, fallback: {
   likes?: number;
@@ -18,11 +18,6 @@ export const usePresenceEngagement = (slug: string, fallback: {
         if (!cancelled) setEngagement(value);
       })
       .catch(() => setEngagement(null));
-    track("marketplace_page_view", {
-      slug,
-      source: "extension_library",
-      payload: { locale }
-    });
     return () => {
       cancelled = true;
     };

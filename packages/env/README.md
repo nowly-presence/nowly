@@ -19,7 +19,6 @@ Typed environment access for the Nowly monorepo.
 | --- | --- | --- |
 | `PORT` | No | `3001` |
 | `FRONTEND_URL` | No | `http://localhost:3000` |
-| `INSIGHTS_URL` | No | `http://localhost:3002` |
 | `DATABASE_URL` | No | - |
 | `JWT_SECRET` | Yes | - |
 | `DISCORD_CLIENT_ID` | Yes | - |

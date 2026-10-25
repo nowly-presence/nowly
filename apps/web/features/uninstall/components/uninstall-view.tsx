@@ -1,7 +1,7 @@
 "use client";
 
 import { ExtensionStoreButton } from "@/components/extension-store-button";
-import { trackPublicAnalytics } from "@/lib/analytics";
+import { siteConsent, trackProduct } from "@/lib/telemetry";
 import { Button, ButtonAnchor, Card, CardContent, CardDescription, CardTitle, Separator } from "@nowly/ui";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
@@ -17,27 +17,25 @@ export const UninstallView = () => {
   const token = searchParams.get("token");
   const [busy, setBusy] = useState(false);
   const [choice, setChoice] = useState<"kept" | "deleted" | "error" | null>(null);
-  const cleanupTrackedRef = useRef(false);
+  const landingTrackedRef = useRef(false);
 
   useEffect(() => {
-    if (!deviceId || cleanupTrackedRef.current) return;
+    const recordLanding = () => {
+      if (!deviceId || landingTrackedRef.current || siteConsent() !== true) return;
 
-    cleanupTrackedRef.current = true;
-    trackPublicAnalytics("uninstall_cleanup_received", {
-      deviceId,
-      source: "system"
-    });
-    trackPublicAnalytics("uninstall_cleanup_success", {
-      deviceId,
-      source: "system"
-    });
+      landingTrackedRef.current = true;
+      trackProduct({
+        name: "uninstall_page_opened",
+        source: "web",
+        data: {}
+      });
+    };
+    recordLanding();
+    window.addEventListener("nowly:product-consent", recordLanding);
+    return () => window.removeEventListener("nowly:product-consent", recordLanding);
   }, [deviceId]);
 
   const onKeep = (): void => {
-    trackPublicAnalytics("uninstall_analytics_kept", {
-      deviceId: deviceId ?? undefined,
-      source: "system"
-    });
     setChoice("kept");
   };
 
@@ -54,17 +52,8 @@ export const UninstallView = () => {
 
       if (!response.ok) throw new Error("delete failed");
 
-      trackPublicAnalytics("uninstall_analytics_deleted", {
-        deviceId,
-        source: "system"
-      });
       setChoice("deleted");
     } catch {
-      trackPublicAnalytics("uninstall_cleanup_error", {
-        deviceId,
-        source: "system",
-        payload: { stage: "device-delete" }
-      });
       setChoice("error");
     } finally {
       setBusy(false);

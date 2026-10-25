@@ -19,7 +19,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@nowly/analytics": "workspace:*",
+    "@nowly/telemetry": "workspace:*",
     "@nowly/env": "workspace:*",
     "@nowly/locales": "workspace:*",
     "@nowly/shared": "workspace:*",

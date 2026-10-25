@@ -1,6 +1,6 @@
 import { broadcastActiveTab, handleClearActivity, handleRemovedTab, restoreActivityBadge } from "@/background/managers/activity-manager";
 import { drainInstallQueue, installBundledPresences } from "@/background/managers/presence-manager";
-import { trackAnalytics } from "@/background/analytics-client";
+import { trackProduct } from "@/background/telemetry";
 import { addRuntimeLog } from "@/background/runtime-logs";
 import { refreshPresenceLanguage, syncPresenceScripts } from "@/background/runtime/presence-scripts";
 import { runAccountSync } from "@/background/services/account-sync";
@@ -59,7 +59,6 @@ export const hasHeartbeatLogChanged = (previous: HeartbeatLogState | undefined, 
   previous.version !== current.version ||
   previous.code !== current.code;
 
-let lastHeartbeatConnected: boolean | undefined;
 let lastHeartbeatLogState: HeartbeatLogState | undefined;
 
 const registerNativeResponseHandler = (): void => {
@@ -70,13 +69,6 @@ const registerNativeResponseHandler = (): void => {
         reason: message.error
       });
 
-      if (lastHeartbeatConnected !== false) {
-        trackAnalytics("native_heartbeat_failed", {
-          payload: { reason: message.error }
-        });
-      }
-
-      lastHeartbeatConnected = false;
       void setDebug({
         stage: "native-error",
         message: message.error,
@@ -87,7 +79,14 @@ const registerNativeResponseHandler = (): void => {
 
     if (message.type === "CONNECTED") {
       addRuntimeLog("success", "native", "native connected", { nativeVersion: message.version });
-      trackAnalytics("native_connected");
+      void trackProduct(
+        {
+          name: "native_connected",
+          source: "extension",
+          data: {}
+        },
+        { daily: "native" }
+      );
     }
 
     if (message.type === "PONG") {
@@ -107,14 +106,6 @@ const registerNativeResponseHandler = (): void => {
         });
         lastHeartbeatLogState = heartbeatState;
       }
-
-      if (!message.connected && lastHeartbeatConnected !== false) {
-        trackAnalytics("native_heartbeat_failed", {
-          payload: { reason: message.status }
-        });
-      }
-
-      lastHeartbeatConnected = message.connected;
     }
 
     if (message.type === "OK") {
@@ -192,8 +183,6 @@ export const registerLifecycleHandlers = (): void => {
   chrome.runtime.onInstalled.addListener(async (details) => {
     enableSidePanelAction();
     registerContextMenu();
-    if (details.reason === "install") trackAnalytics("extension_install", { source: "system" });
-    if (details.reason === "update") trackAnalytics("extension_update", { source: "system" });
     const presences = await bootBackground({ syncScripts: false });
     openChangelogOnUpdate(details);
     await syncPresenceScripts(presences);

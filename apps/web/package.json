@@ -20,7 +20,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@nowly/analytics": "workspace:*",
+    "@nowly/telemetry": "workspace:*",
     "@nowly/changelog": "workspace:*",
     "@nowly/env": "workspace:*",
     "@nowly/locales": "workspace:*",

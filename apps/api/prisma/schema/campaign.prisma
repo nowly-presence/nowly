@@ -1,6 +1,6 @@
 // Generic waitlist/email-capture campaigns. A campaign's id is the public
 // identifier embedded wherever a signup form is placed (web page, extension
-// onboarding, etc.) - created once from the insights admin UI.
+// onboarding, etc.) - created once from the web campaigns admin UI.
 model Campaign {
   id        String   @id @default(cuid())
   name      String

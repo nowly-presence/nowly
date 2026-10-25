@@ -19,7 +19,7 @@ MV3 service worker: message router, presence lifecycle, native host bridge, pres
 - The Discord IPC access-denied episode (`shared/discord-ipc-prompt.ts`) lives in `chrome.storage.session` (`discordIpcIssue`), not in module memory, so the page is not shown again after a respawn. It is only reported on `NativeStatus` (`code`, `codePrompted`) while the host is connected; a disconnect hides it without ending the episode.
 - Release verification is fail-closed: bundle SHA-256 + metadata hash + ECDSA P-256 signature. Key rotation tries the cached key, then the bundled fallback, then refreshes once. Unsigned releases are accepted on canary builds only (`services/release-security.ts`).
 - `@nowly/shared` provides `canonicalJson`, which must stay byte-identical to the API's, or every hash and signature check fails.
-- Analytics use `@nowly/analytics`. Events are opt-in and dropped until consent is `true`; unknown payload keys are rejected by the API.
+- Product events use `@nowly/telemetry` through `background/telemetry.ts`. Events are opt-in and dropped until consent is `true`; the API rejects unknown properties. Never send device IDs, activity content, slugs or real URLs. Only local dates/markers support aggregate return windows.
 - Runtime logs strip privacy-sensitive payload keys (`url`, `title`, `query`, `discordId`...) before storing (`runtime-logs.ts`).
 - Chrome exposes `chrome.userScripts` only once "Allow user scripts" is on and fires no event when toggled; the side panel sends `SYNC_PRESENCE_SCRIPTS` when it sees the status flip. On Firefox it is an optional permission requested from the onboarding (user gesture required).
 - `chrome.sidePanel.open()` must run in the same user-gesture turn: never `await` before it (`services/open-panel.ts`).
@@ -38,4 +38,4 @@ MV3 service worker: message router, presence lifecycle, native host bridge, pres
 - "Stop syncing" (`STOP_ACCOUNT_SYNC`) calls `DELETE /sync`, which also revokes every token of the account on the server, then signs out locally.
 
 ## Notable dependencies
-`shared/` (types, constants, URL patterns, analytics catalog), Nowly API (`/presences`, `/devices`, `/insights/events`, `/security/public-key`), native host `nowly.client`.
+`shared/` (types, constants, URL patterns), `@nowly/telemetry` (strict event schema), Nowly API (`/presences`, `/devices`, `/telemetry/events`, `/security/public-key`), native host `nowly.client`.

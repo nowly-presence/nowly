@@ -23,4 +23,4 @@ Don't edit `footer.tsx` in this folder — it's a thin wrapper. The actual link 
 - `theme-url-override.tsx` only reads the URL once on mount — it's meant for one-off links (e.g. marketing emails), not a persistent theme switch mechanism.
 
 ## Notable dependencies
-`@nowly/ui` (`Footer`, `LocaleSelector`, `LocaleFlag`), `@nowly/locales`, `packages/analytics` (consent).
+`@nowly/ui` (`Footer`, `LocaleSelector`, `LocaleFlag`), `@nowly/locales`, `lib/telemetry.ts` (website consent).

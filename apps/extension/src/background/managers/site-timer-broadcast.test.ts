@@ -1,5 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CURRENT_LEGAL_MANIFEST } from "@nowly/shared/legal";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { broadcastActiveTab } from "@/background/managers/activity-manager";
 import { updateSettings } from "@/background/managers/settings-manager";
 import { getTabPresence, setFocusedTabId, upsertTabPresence } from "@/background/services/background-context";
@@ -11,11 +11,12 @@ import { getCurrentActivity } from "@/background/storage/presences.store";
 import { DEFAULT_SETTINGS, setSettings } from "@/background/storage/settings.store";
 import { installChromeMock } from "@/test/chrome-mock";
 import { emptyCustomActivityDraft } from "@/shared/custom-activity";
+import { trackProduct } from "@/background/telemetry";
 
 vi.mock("@/background/services/native", () => ({ postNative: vi.fn() }));
 vi.mock("@/background/storage/support.store", () => ({ recordUsageDay: vi.fn(async () => {}) }));
 vi.mock("@/background/services/device-sync", () => ({ syncDeviceState: vi.fn() }));
-vi.mock("@/background/analytics-client", () => ({ trackAnalytics: vi.fn() }));
+vi.mock("@/background/telemetry", () => ({ trackProduct: vi.fn().mockResolvedValue(undefined) }));
 vi.mock("@/background/runtime-logs", () => ({ addRuntimeLog: vi.fn() }));
 
 const NOW = 1_800_000_000;
@@ -26,9 +27,7 @@ describe("site timer broadcasts", () => {
     installChromeMock();
     vi.stubGlobal("chrome", {
       ...globalThis.chrome,
-      tabs: {
-        query: vi.fn(async () => [])
-      },
+      tabs: { query: vi.fn(async () => []) },
       action: {
         setBadgeText: vi.fn(async () => {}),
         setBadgeBackgroundColor: vi.fn(async () => {})
@@ -254,5 +253,41 @@ describe("site timer broadcasts", () => {
         details: "Video"
       }
     });
+  });
+
+  it("counts only a coarse type after native submission, never after a failed submission", async () => {
+    await chrome.storage.local.set({
+      presences: {
+        private_slug: {
+          metadata: { category: "music" },
+          source: "store"
+        }
+      }
+    });
+    await upsertTabPresence(1, {
+      slug: "private_slug",
+      presence: {
+        name: "Private title",
+        details: "Private content"
+      },
+      updatedAt: Date.now()
+    });
+    vi.mocked(postNative).mockReturnValueOnce(false);
+    await broadcastActiveTab();
+    expect(trackProduct).not.toHaveBeenCalled();
+    vi.mocked(postNative).mockReturnValueOnce(true);
+    await broadcastActiveTab();
+    expect(trackProduct).toHaveBeenCalledExactlyOnceWith(
+      {
+        name: "presence_used",
+        source: "extension",
+        data: {
+          category: "music",
+          origin: "store"
+        }
+      },
+      { daily: "use:store:music" }
+    );
+    expect(JSON.stringify(vi.mocked(trackProduct).mock.calls)).not.toMatch(/private_slug|Private title|Private content/);
   });
 });

@@ -8,8 +8,8 @@ const accepted = () =>
     emptyLegalState(),
     {
       versions: {
-        tos: 1,
-        privacy: 1
+        tos: CURRENT_LEGAL_MANIFEST.documents.tos.version,
+        privacy: CURRENT_LEGAL_MANIFEST.documents.privacy.version
       },
       acceptTos: true,
       acknowledgePrivacy: true
@@ -25,11 +25,11 @@ describe("legal documents", () => {
   it("records separate receipts without analytics consent", () => {
     const state = accepted();
     expect(state.tosAcceptance).toEqual({
-      version: 1,
+      version: CURRENT_LEGAL_MANIFEST.documents.tos.version,
       recordedAt
     });
     expect(state.privacyAcknowledgement).toEqual({
-      version: 1,
+      version: CURRENT_LEGAL_MANIFEST.documents.privacy.version,
       recordedAt
     });
     expect(pendingLegalDocuments(state)).toEqual([]);
@@ -53,8 +53,8 @@ describe("legal documents", () => {
         state,
         {
           versions: {
-            tos: 1,
-            privacy: 1
+            tos: CURRENT_LEGAL_MANIFEST.documents.tos.version,
+            privacy: CURRENT_LEGAL_MANIFEST.documents.privacy.version
           },
           ...input
         },
@@ -68,7 +68,7 @@ describe("legal documents", () => {
   it("ignores minor changes for previously accepted versions", () => {
     const state = accepted();
     state.manifest = structuredClone(state.manifest);
-    state.manifest.documents.tos.version = 2;
+    state.manifest.documents.tos.version += 1;
     expect(pendingLegalDocuments(state)).toEqual([]);
   });
 
@@ -77,14 +77,14 @@ describe("legal documents", () => {
     state.manifest = structuredClone(state.manifest);
     state.manifest.documents[id] = {
       ...state.manifest.documents[id],
-      version: 3,
-      requiredVersion: 2
+      version: CURRENT_LEGAL_MANIFEST.documents[id].version + 1,
+      requiredVersion: CURRENT_LEGAL_MANIFEST.documents[id].version + 1
     };
     expect(pendingLegalDocuments(state)).toEqual([id]);
     const result = confirmLegalDocuments(
       state,
       {
-        versions: { [id]: 3 },
+        versions: { [id]: state.manifest.documents[id].version },
         acceptTos: id === "tos",
         acknowledgePrivacy: id === "privacy"
       },
@@ -93,7 +93,7 @@ describe("legal documents", () => {
     expect(result.ok).toBe(true);
     expect(pendingLegalDocuments(result.state)).toEqual([]);
     expect(id === "tos" ? result.state.privacyAcknowledgement : result.state.tosAcceptance).toEqual({
-      version: 1,
+      version: CURRENT_LEGAL_MANIFEST.documents.tos.version,
       recordedAt
     });
   });
@@ -101,14 +101,14 @@ describe("legal documents", () => {
   it("rejects a stale confirmation after a remote update", () => {
     const state = emptyLegalState();
     state.manifest = structuredClone(state.manifest);
-    state.manifest.documents.tos.version = 2;
+    state.manifest.documents.tos.version += 1;
     expect(
       confirmLegalDocuments(
         state,
         {
           versions: {
-            tos: 1,
-            privacy: 1
+            tos: CURRENT_LEGAL_MANIFEST.documents.tos.version,
+            privacy: CURRENT_LEGAL_MANIFEST.documents.privacy.version
           },
           acceptTos: true,
           acknowledgePrivacy: true
@@ -148,7 +148,7 @@ describe("legal documents", () => {
     for (const override of [
       { version: 0 },
       { version: 1.5 },
-      { requiredVersion: 2 },
+      { requiredVersion: CURRENT_LEGAL_MANIFEST.documents.tos.version + 1 },
       { path: "https://evil.example/tos" },
       { updatedAt: "yesterday" }
     ]) {

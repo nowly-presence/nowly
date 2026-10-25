@@ -24,9 +24,9 @@ export const CURRENT_LEGAL_MANIFEST: LegalManifest = {
       path: "/tos"
     },
     privacy: {
-      version: 1,
-      requiredVersion: 1,
-      updatedAt: "2026-10-16",
+      version: 2,
+      requiredVersion: 2,
+      updatedAt: "2026-10-25",
       path: "/privacy"
     }
   }

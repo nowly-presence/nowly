@@ -1,6 +1,6 @@
 # Auth
 
-Discord OAuth (better-auth) + a secret-based admin guard, used across the API. Better Auth serves apps/insights (admin) and apps/web (Nowly accounts, see `features/account`).
+Discord OAuth (better-auth) + a secret-based admin guard, used across the API. Better Auth serves apps/web (Nowly accounts and campaign administration, see `features/account`).
 
 ## Protect a new route with the admin guard
 
@@ -19,7 +19,7 @@ Discord OAuth (better-auth) + a secret-based admin guard, used across the API. B
 ## Better Auth configuration
 
 - Discord only. `mapProfileToUser` copies the Discord user id into `User.discordId` (`input: false`, so clients cannot set it).
-- `authTrustedOrigins()` is the single list of browser origins: `FRONTEND_URL`, `INSIGHTS_URL`, plus `localhost:3000` / `127.0.0.1:3000` outside production. `index.ts` reuses it for CORS.
+- `authTrustedOrigins()` is the single list of browser origins: `FRONTEND_URL`, plus `localhost:3000` / `127.0.0.1:3000` outside production. `index.ts` reuses it for CORS.
 - Cookies are shared on `.nowly.me` (`crossSubDomainCookies`) so nowly.me can call the API with `credentials: "include"`.
 
 ## Gotchas

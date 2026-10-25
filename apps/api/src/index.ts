@@ -7,7 +7,7 @@ import { contactRoutes } from "@/features/contact/contact.routes";
 import { customAssetsCronRoutes, customAssetsRoutes } from "@/features/custom-assets/custom-assets.routes";
 import { deviceRoutes } from "@/features/device/device.routes";
 import { imageProxyRoutes } from "@/features/image-proxy/image-proxy.routes";
-import { insightsRoutes } from "@/features/insights/insights.routes";
+import { telemetryRoutes } from "@/features/telemetry/telemetry.routes";
 import { presenceRoutes } from "@/features/presence/presence.routes";
 import { securityRoutes } from "@/features/security/security.routes";
 import { statusRoutes } from "@/features/status/status.routes";
@@ -84,7 +84,7 @@ await server.register(async (instance) => {
   });
 });
 
-await server.register(insightsRoutes, { prefix: "/insights" });
+await server.register(telemetryRoutes, { prefix: "/telemetry" });
 await server.register(campaignsRoutes, { prefix: "/campaigns" });
 await server.register(contactRoutes, { prefix: "/contact" });
 await server.register(deviceRoutes, { prefix: "/devices" });

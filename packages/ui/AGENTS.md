@@ -1,6 +1,6 @@
 # @nowly/ui
 
-Shared React component library used by `apps/web`, `apps/docs` and `apps/insights`. shadcn-style primitives live directly in `src/*.tsx` (one file per component, all re-exported from `src/index.ts`). A handful of business components that must render *identically* across apps also live here: `footer.tsx`, `locale-flag.tsx`, `locale-selector.tsx`.
+Shared React component library used by `apps/web` and `apps/docs`. shadcn-style primitives live directly in `src/*.tsx` (one file per component, all re-exported from `src/index.ts`). A handful of business components that must render *identically* across apps also live here: `footer.tsx`, `locale-flag.tsx`, `locale-selector.tsx`.
 
 ## Add a link to the footer
 

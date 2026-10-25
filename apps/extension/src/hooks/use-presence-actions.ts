@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { useToast } from "@/ui/toast";
 import { useI18n, type Translate } from "@/hooks/i18n-provider";
-import { sendMessage, track } from "@/lib/messages";
+import { sendMessage } from "@/lib/messages";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import type { PresenceSchedule } from "@/shared/types";
 import { presenceMutations } from "@/hooks/presence-mutations";
@@ -23,7 +23,7 @@ const errorMessage = (error: string | undefined, t: Translate): string => {
 export const usePresenceActions = () => {
   const { state, refresh } = useExtensionState();
   const { toast } = useToast();
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const pendingSlugs = useSyncExternalStore(presenceMutations.subscribe, presenceMutations.getSnapshot, presenceMutations.getSnapshot);
   const pending = pendingSlugs.values().next().value ?? null;
   const [updatingAll, setUpdatingAll] = useState(false);
@@ -35,11 +35,6 @@ export const usePresenceActions = () => {
   const install = useCallback((slug: string, name: string) =>
     presenceMutations.write(slug, async (isCurrent) => {
       try {
-        track("marketplace_install_click", {
-          slug,
-          source: "extension_library",
-          payload: { locale }
-        });
         const result = await sendMessage("INSTALL_PRESENCE_FROM_API", { slug });
         await refresh.presences();
 
@@ -58,7 +53,7 @@ export const usePresenceActions = () => {
         if (isCurrent()) toast(t("error.generic"), "error");
         return false;
       }
-    }), [refresh, toast, t, locale]);
+    }), [refresh, toast, t]);
 
   const update = useCallback((slug: string, name: string, revision = presenceMutations.revision(slug)) =>
     presenceMutations.write(

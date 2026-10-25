@@ -377,7 +377,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
     }),
     DELETE_DEVICE_DATA: () => ({ ok: true }),
     SYNC_PRESENCE_SCRIPTS: () => ({ ok: true }),
-    TRACK_EVENT: () => ({ ok: true }),
+    RECORD_EXTENSION_ACTIVE: () => ({ ok: true }),
     INSTALL_LOCAL_PRESENCE_ZIP: () => ({
       ok: false,
       error: "PREVIEW"
