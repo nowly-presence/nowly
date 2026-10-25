@@ -55,6 +55,8 @@ type PresencePayload struct {
 	Name              string           `json:"name,omitempty"`
 	Details           string           `json:"details,omitempty"`
 	State             string           `json:"state,omitempty"`
+	DetailsURL        string           `json:"detailsUrl,omitempty"`
+	StateURL          string           `json:"stateUrl,omitempty"`
 	StartTime         int64            `json:"startTime,omitempty"`
 	EndTime           int64            `json:"endTime,omitempty"`
 	LargeImage        string           `json:"largeImage,omitempty"`

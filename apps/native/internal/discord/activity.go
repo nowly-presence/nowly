@@ -1,6 +1,7 @@
 package discord
 
 import (
+	"net/url"
 	"strings"
 	"unicode/utf8"
 
@@ -13,6 +14,8 @@ type Activity struct {
 	StatusDisplayType *int        `json:"status_display_type,omitempty"`
 	Details           string      `json:"details,omitempty"`
 	State             string      `json:"state,omitempty"`
+	DetailsURL        string      `json:"details_url,omitempty"`
+	StateURL          string      `json:"state_url,omitempty"`
 	Timestamps        *Timestamps `json:"timestamps,omitempty"`
 	Assets            *Assets     `json:"assets,omitempty"`
 	Buttons           []Button    `json:"buttons,omitempty"`
@@ -43,14 +46,31 @@ func sanitizeAssetText(value string) string {
 	return value
 }
 
+func sanitizeTextURL(value, text string) string {
+	if strings.TrimSpace(text) == "" || len(value) > 2048 {
+		return ""
+	}
+	parsed, err := url.Parse(value)
+	if err != nil || parsed.Scheme != "https" || parsed.Hostname() == "" || parsed.User != nil {
+		return ""
+	}
+	normalized := parsed.String()
+	if len(normalized) > 2048 {
+		return ""
+	}
+	return normalized
+}
+
 func ActivityFromPresence(p contract.PresencePayload) Activity {
 	largeText := sanitizeAssetText(p.LargeText)
 	smallText := sanitizeAssetText(p.SmallText)
 	activity := Activity{
-		Name:    p.Name,
-		Type:    p.Type,
-		Details: p.Details,
-		State:   p.State,
+		Name:       p.Name,
+		Type:       p.Type,
+		Details:    p.Details,
+		State:      p.State,
+		DetailsURL: sanitizeTextURL(p.DetailsURL, p.Details),
+		StateURL:   sanitizeTextURL(p.StateURL, p.State),
 	}
 
 	if p.StatusDisplayType != nil && *p.StatusDisplayType >= 0 && *p.StatusDisplayType <= 2 {
