@@ -1,34 +1,63 @@
 ---
 title: 2.5.0
-date: null
-description: Draft notes for automatic custom activity detection, clearer editor feedback and navigation controls.
+date: 2026-10-28
+description: Custom activity detection, announcements, Discord display and privacy changes.
 ---
 
-> Draft for review. The release date and browser store availability are not confirmed.
+> Release scheduled for October 28, 2026. Browser store availability is not yet confirmed.
 
 ## What's new
 
 ### Automatic custom activity detection
 
 - Add an optional detection link to a custom activity to select it automatically when the active tab in the focused browser window matches. Leaving the matching page ends automatic selection.
-- Match a domain, a specific path or a wildcard pattern. Leave the field empty to keep using the activity manually.
+- Match a domain or path, including subdomains with `*.example.com` and a trailing `*` for paths. Leave the field empty to keep using the activity manually.
 - A manually activated custom activity takes priority over automatic detection.
 - If several custom activities match, the most recently updated matching activity wins.
+- Detection links are included when exporting and importing custom activities. Older files without this field remain supported.
+
+### Announcements and release notes
+
+- Read announcements and published release notes in the News tab, then open an entry for its full details. Published changelog files are included automatically; undated, future or explicitly unpublished drafts stay out of the feed.
+- Announcements use your interface language, with a fallback when a translation is missing. Release notes fall back to English.
+- Pinned notices appear above the Activity header. Warnings use yellow, orange or red according to severity; maintenance uses the theme's primary color. The strip opens News and has no dismissal button.
+- Estimated maintenance end times are shown as dates, not countdowns or promises of recovery. At the estimated end, the banner disappears but the notice stays readable unless it has a separate expiry date.
+- The feed refreshes automatically, keeps the last valid copy available offline and saves read status on your device.
+
+### Discord activity display
+
+- Presences can attach public HTTPS links to their details and state text with `detailsUrl` and `stateUrl`, independently of activity buttons. Invalid links and links without corresponding text are ignored.
+- Presences can choose the text shown in Discord's compact status with `statusDisplayType`: activity name, state or details. This does not change the activity card's contents.
+
+These fields require compatible versions of the SDK, extension and native host. Older runtimes ignore them. They do not add a new display selector to the custom activity editor.
 
 ## Improvements and fixes
 
 - The custom activity editor shows how many link buttons you can still add.
 - Activity previews no longer repeat the name unnecessarily. A tooltip lets you read the full name.
 - The detection section has clearer spacing.
-- Hide the Library or Custom tab from the navigation bar when you do not need it. Activity and Settings stay available. Reset the navigation layout from Settings to restore the default arrangement.
+- Hide the Library, Custom or News tab from the navigation bar when you do not need it. Activity and Settings stay available. Reset the navigation layout from Settings to restore the default arrangement. Hiding News does not hide pinned Activity notices.
 - Video progress, including YouTube playback, now fills as playback advances, while custom activity countdowns continue to show the time remaining.
 - Copy a Bitcoin, Ethereum or Solana address with one click in Support Nowly, with confirmation after copying.
-- Update installed presences with available updates in one action. Updates run one at a time.
+- When at least two installed presences have updates available, update them in one action. Updates run one at a time.
 - Idle activity card actions now fit in narrow side panels.
+- Presence updates, reinstalls and removals are ordered per presence so an older update cannot restore an activity you just removed.
+- Enabling a presence is only saved after its script registers successfully. Failed activations and bulk-operation failures are reported instead of appearing successful.
+- The user scripts permission label explains more clearly what needs to be enabled in the browser.
 
-## Pending verification: announcements
+## Privacy and platform changes
 
-This feature is still in progress. These plans are not confirmed release features and must be checked after integrated tests and review.
+- Optional Umami product events replace the old Insights analytics. Website and extension consent are independent; events are relayed through the API without persistent visitor identifiers or browsing/activity content.
+- The old Insights pages, endpoints, analytics models and campaign functionality have been removed. The former global analytics and session-recorder scripts are not enabled by this release.
+- Legal confirmations now follow the actual update dates of the terms and privacy policy rather than internal version numbers. Existing numeric receipts require a new confirmation; cached document dates remain usable offline.
+- The uninstall page distinguishes keeping or deleting functional device data from optional analytics. Opening it only sends a product event with website analytics consent.
+- ChromeOS waitlist and support interfaces have been removed. Browser extension support remains focused on Chrome and Firefox, with the native host on Windows, macOS and Linux.
 
-- Planned: an announcements tab with changelog and announcement detail views.
-- Planned: pinned notices with yellow, orange and red warning levels, and maintenance notices using the primary theme color. Optional estimated timers and a fallback when a translation is missing are also planned.
+## Website, documentation and maintenance
+
+- The homepage presents custom activities, with artwork contrast and announcement-bar colors adapted to the active theme.
+- Website keyboard navigation, skip links and visible focus have been improved. Animations respect reduced-motion preferences, and moving content can be paused.
+- Localized FAQ, contact and recovery guidance, and cookie-policy links have been updated.
+- Developer documentation now covers automatic `settings.ts` discovery, compact Discord status selection, clickable activity text and the image proxy.
+- The announcements API supports protected publication, scheduling, expiry and live feed updates.
+- Public Nowly code is now under the MIT license. Extension, website and API tests have been consolidated and corrected, including announcement details and display-mode switching.

@@ -1,34 +1,63 @@
 ---
 title: 2.5.0
-date: null
-description: Borrador sobre detección automática de actividades personalizadas, indicaciones más claras en el editor y controles de navegación.
+date: 2026-10-28
+description: Detección de actividades personalizadas, anuncios, visualización en Discord y privacidad.
 ---
 
-> Borrador para revisión. La fecha de lanzamiento y la disponibilidad en las tiendas de los navegadores no están confirmadas.
+> Lanzamiento previsto para el 28 de octubre de 2026. La disponibilidad en las tiendas de los navegadores aún no está confirmada.
 
 ## Novedades
 
 ### Detección automática de actividades personalizadas
 
 - Añade un enlace de detección opcional a una actividad personalizada para seleccionarla automáticamente cuando coincida con la pestaña activa de la ventana del navegador que tiene el foco. Al salir de la página coincidente, termina la selección automática.
-- Usa un dominio, una ruta concreta o un patrón con comodines. Deja el campo vacío para seguir usando la actividad de forma manual.
+- Usa un dominio o una ruta, con `*.example.com` para incluir subdominios y un `*` final para las rutas. Deja el campo vacío para seguir usando la actividad de forma manual.
 - Una actividad personalizada activada manualmente tiene prioridad sobre la detección automática.
 - Si coinciden varias actividades, se selecciona la que se haya actualizado más recientemente.
+- Los enlaces de detección se incluyen al exportar e importar actividades personalizadas. Los archivos antiguos sin este campo siguen siendo compatibles.
+
+### Anuncios y notas de versión
+
+- Consulta anuncios y notas de versiones publicadas en la pestaña Noticias y abre una entrada para leer sus detalles. Los archivos del historial de cambios publicados se incluyen automáticamente; se excluyen los borradores sin fecha, futuros o marcados como no publicados.
+- Los anuncios usan el idioma de la interfaz, con un idioma alternativo si falta una traducción. Las notas de versión recurren al inglés.
+- Los avisos fijados aparecen encima de la cabecera de Actividad. Las advertencias usan amarillo, naranja o rojo según la gravedad; el mantenimiento usa el color principal del tema. La franja abre Noticias y no tiene botón para descartarla.
+- El fin estimado del mantenimiento se muestra como una fecha, sin cuenta atrás ni promesa de recuperación. Al llegar esa hora desaparece la franja, pero el aviso sigue disponible salvo que tenga una fecha de caducidad independiente.
+- El listado se actualiza automáticamente, conserva la última copia válida sin conexión y guarda el estado de lectura en tu dispositivo.
+
+### Visualización de actividades en Discord
+
+- Las presencias pueden asociar enlaces HTTPS públicos a los textos de detalles y estado mediante `detailsUrl` y `stateUrl`, independientemente de los botones. Se ignoran los enlaces no válidos o sin texto correspondiente.
+- Las presencias pueden elegir el texto del estado compacto de Discord con `statusDisplayType`: nombre de la actividad, estado o detalles. El contenido de la tarjeta de actividad no cambia.
+
+Estos campos requieren versiones compatibles del SDK, la extensión y el host nativo. Las versiones anteriores los ignoran. No añaden un selector de visualización al editor de actividades personalizadas.
 
 ## Mejoras y correcciones
 
 - El editor de actividades personalizadas muestra cuántos botones con enlace puedes añadir todavía.
 - La vista previa ya no repite el nombre innecesariamente. Una descripción emergente permite leer el nombre completo.
 - La sección de detección tiene un espaciado más claro.
-- Oculta las pestañas Biblioteca o Personal de la barra de navegación cuando no las necesites. Actividad y Ajustes siguen disponibles. Restablece la disposición predeterminada de la navegación desde Ajustes.
+- Oculta las pestañas Biblioteca, Personal o Noticias cuando no las necesites. Actividad y Ajustes siguen disponibles. Restablece la disposición predeterminada desde Ajustes. Ocultar Noticias no oculta los avisos fijados en Actividad.
 - La barra de progreso de los vídeos, incluidos los de YouTube, ahora avanza con la reproducción, mientras que la cuenta atrás de las actividades personalizadas sigue mostrando el tiempo restante.
 - En «Apoyar a Nowly», copia una dirección de Bitcoin, Ethereum o Solana con un clic y recibe una confirmación tras la copia.
-- Actualiza en una sola acción las presencias instaladas con actualizaciones disponibles. Las actualizaciones se realizan de una en una.
+- Cuando al menos dos presencias instaladas tengan actualizaciones disponibles, actualízalas en una sola acción. Las actualizaciones se realizan de una en una.
 - Los botones de la tarjeta de actividad inactiva ahora caben en paneles laterales estrechos.
+- Las actualizaciones, reinstalaciones y eliminaciones se ordenan por presencia para que una actualización antigua no restaure una actividad recién eliminada.
+- La activación de una presencia solo se guarda después de registrar su script correctamente. Los fallos de activación y de operaciones en grupo se notifican en lugar de aparecer como éxitos.
+- La etiqueta del permiso de scripts de usuario explica con más claridad qué hay que activar en el navegador.
 
-## Pendiente de verificación: anuncios
+## Privacidad y plataformas
 
-Esta función sigue en desarrollo. Los siguientes planes no son características confirmadas de la versión y deben verificarse tras las pruebas del conjunto y la revisión.
+- Los eventos de producto opcionales de Umami sustituyen las antiguas estadísticas de Insights. Los consentimientos del sitio y de la extensión son independientes; los eventos pasan por la API sin identificadores persistentes de visitantes ni contenido de navegación o actividad.
+- Se han retirado las páginas, los endpoints y los modelos de estadísticas de Insights, además de las funciones de campañas. Esta versión no activa los antiguos scripts globales de estadísticas y grabación de sesiones.
+- Las confirmaciones legales siguen las fechas reales de actualización de las condiciones y la política de privacidad, en vez de números de versión internos. Los recibos numéricos antiguos requieren otra confirmación; las fechas guardadas siguen disponibles sin conexión.
+- La página de desinstalación distingue entre conservar o eliminar los datos funcionales del dispositivo y las estadísticas opcionales. Abrirla solo envía un evento de producto con consentimiento para las estadísticas del sitio.
+- Se han retirado las interfaces de lista de espera y asistencia para ChromeOS. La extensión sigue orientada a Chrome y Firefox, con el host nativo en Windows, macOS y Linux.
 
-- Se prevé una pestaña de anuncios con historial de cambios y vistas de detalle de los anuncios.
-- Se prevén avisos fijados con niveles de advertencia amarillo, naranja y rojo, y avisos de mantenimiento con el color principal del tema. También se prevén temporizadores estimados opcionales y un idioma alternativo cuando falte una traducción.
+## Sitio web, documentación y mantenimiento
+
+- La página de inicio presenta las actividades personalizadas, con contraste de las ilustraciones y colores de la barra de anuncios adaptados al tema activo.
+- Se han mejorado la navegación por teclado, los enlaces para saltar contenido y la visibilidad del foco. Las animaciones respetan la preferencia de movimiento reducido y el contenido en movimiento se puede pausar.
+- Se han actualizado las preguntas frecuentes, las indicaciones de contacto y recuperación traducidas y los enlaces de la política de cookies.
+- La documentación para desarrolladores explica la detección automática de `settings.ts`, la selección del estado compacto de Discord, los textos de actividad con enlaces y el proxy de imágenes.
+- La API de anuncios permite la publicación protegida, la programación, la caducidad y las actualizaciones en directo del listado.
+- El código público de Nowly pasa a la licencia MIT. Se han consolidado y corregido las pruebas de la extensión, el sitio y la API, incluidos los detalles de anuncios y el cambio de modo de visualización.
