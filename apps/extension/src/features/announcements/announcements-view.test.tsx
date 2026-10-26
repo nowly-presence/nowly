@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Children, isValidElement, type ComponentProps, type MouseEvent, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { AnnouncementSchema, announcementRevision } from "@nowly/shared/announcements";
+import { AnnouncementSchema } from "@nowly/shared/announcements";
 import messages from "@messages/en.json";
 import { emptyAnnouncements } from "@/shared/announcements";
 import { AnnouncementsBanner } from "./announcements-banner";
@@ -123,6 +123,7 @@ describe("announcement screens", () => {
     // Detail view
     locale = "fr";
     html = renderToStaticMarkup(<AnnouncementsDetailView id="notice" />);
+    expect(html).toContain(messages["announcements.unavailable"]);
     announcements.items = [notice()];
     html = renderToStaticMarkup(<AnnouncementsDetailView id="notice" />);
     expect(html).toContain("Annonce française");

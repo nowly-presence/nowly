@@ -116,6 +116,15 @@ describe("installed presence header bulk action", () => {
     expect(buttons).toHaveLength(1);
   });
 
+  it("switches from grid to category display mode", () => {
+    grid = true;
+    const [toggle] = actionButtons();
+
+    expect(toggle?.props["aria-label"]).toBe(en["activity.viewList"]);
+    toggle?.props.onClick?.({} as Parameters<NonNullable<ComponentProps<typeof Button>["onClick"]>>[0]);
+    expect(updateSettings).toHaveBeenLastCalledWith({ presenceDisplayMode: "category" });
+  });
+
   it("reveals bulk update button and triggers updateAll on click when 2+ updates exist", () => {
     availableUpdates = presences.slice(0, 2);
     const [bulk, toggle] = actionButtons();

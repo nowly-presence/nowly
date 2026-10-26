@@ -8,8 +8,7 @@ import {
   SUPPORT_PROMPT_MIN_USAGE_DAYS,
   withSnooze,
   withUsageDay,
-  type SupportCardContext,
-  type SupportPromptState
+  type SupportCardContext
 } from "@/shared/support-prompt";
 
 const DAY_MS = 24 * 60 * 60 * 1000;

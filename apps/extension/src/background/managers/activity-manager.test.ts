@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { clearTabPresences, setFocusedTabId, upsertTabPresence } from "@/background/services/background-context";
 import { installChromeMock } from "@/test/chrome-mock";
-import type { ExtensionSettings, PresenceData, PresenceSchedule, StoredPresence } from "@/shared/types";
+import type { ExtensionSettings, PresenceData, StoredPresence } from "@/shared/types";
 
 describe("status display type", () => {
   it("preserves supported status display types (0, 1, 2) and omits unsupported/invalid values", async () => {
