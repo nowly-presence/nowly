@@ -1,22 +1,16 @@
 # Insights
 
-Analytics ingestion and querying, consumed by `apps/insights`.
+Analytics ingestion endpoint. Consumes events from `@nowly/analytics` and exposes aggregated query endpoints (admin only).
 
-- `POST /events` — ingest analytics events.
-- `GET /catalog` — list available metrics/dimensions/funnels (what `apps/insights`' chat tool `listCatalog` calls first).
-- `GET /views`, `GET /views/:id`, `DELETE /views/:id` — saved dashboard views.
-- `GET /live` — real-time data.
+- `POST /events`: ingestion (public).
+- `GET /overview`, `/series`, `/funnels`, `/funnels/:id`, `/catalog`, `/views`, `GET|DELETE /views/:id`, `/live` (SSE, rate limit disabled): `requireAdmin`. `POST /dev/clear` and the dev seed are admin-only too.
+- Metrics and dimensions are registry-driven: `packages/analytics` is the single source of truth; `GET /catalog` exposes it for external consumers.
 
-## Add a new metric or dimension
+## Adding a metric or dimension
 
-1. Add it to the analytics schema in `packages/analytics` (`analyticsRegistry`, `ANALYTICS_RANGE_IDS`/`ANALYTICS_SOURCES`, etc. — that package is the single source of truth for what a metric/dimension is).
-2. Add the aggregation/query logic to `insights.service.ts`.
-3. Expose it through `GET /catalog` so `apps/insights`' `lib/catalog.ts` and its chat tools (`listCatalog`) can discover it without a code change on that side.
-4. Whichever client is meant to emit the new metric (`apps/extension`, `apps/web`, `apps/api` itself) needs to actually call `POST /events` with it — adding the schema/aggregation alone won't produce data.
+1. Register it in `packages/analytics`.
+2. Add the aggregation to `insights.service.ts` (saved views go in `insights-views.service.ts`).
+3. Make the emitting client (`apps/extension`, `apps/web`, `apps/api`) send it through `POST /events`.
+4. Update `insights-dev-seed.service.ts` if a new required field would invalidate seeded data.
 
-## Add a new saved-view capability (e.g. sharing a view)
-
-Add it to `insights-views.service.ts` (the saved-views-specific service, separate from `insights.service.ts`'s querying logic) and to the corresponding route in `insights.routes.ts`.
-
-## Notable dependencies
-`packages/analytics` (event schema on the client/extension side). Consumed by `apps/insights` (features `campaigns`, `views`, `chat`). `insights-dev-seed.service.ts` seeds dev/demo data — update it if a new required field would otherwise leave seeded data invalid.
+Quota and live state are process-local; ingested data is sanitized, keep it that way.
