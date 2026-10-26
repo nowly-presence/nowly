@@ -1,7 +1,7 @@
 ---
 title: 2.5.0
 date: 2026-10-28
-description: Détection des activités personnalisées, annonces, affichage Discord et confidentialité.
+description: Détection et partage des activités personnalisées, annonces, affichage Discord et confidentialité.
 ---
 
 > Sortie prévue le 28 octobre 2026. La disponibilité dans les boutiques des navigateurs n'est pas encore confirmée.
@@ -15,6 +15,15 @@ description: Détection des activités personnalisées, annonces, affichage Disc
 - Une activité personnalisée activée manuellement garde la priorité sur la détection automatique.
 - Si plusieurs activités correspondent, celle qui a été modifiée le plus récemment est sélectionnée.
 - Les liens de détection sont inclus dans l'export et l'import des activités personnalisées. Les anciens fichiers sans ce champ restent compatibles.
+
+### Liens publics des activités personnalisées
+
+- Publiez un lien public avec le nom et l'avatar d'auteur de votre compte Discord. La version enregistrée devient publique, jamais le brouillon non sauvegardé.
+- Consultez l'aperçu avant d'ajouter explicitement une copie indépendante. Les nouvelles copies sont inactives, sans détection automatique.
+- Gardez le même lien lors de vos mises à jour ou dépublications explicites. Les copies des destinataires restent installées et ne se mettent jamais à jour automatiquement.
+- Les destinataires peuvent conserver leurs modifications locales ou les remplacer après examen d'une mise à jour. Un éditeur ouvert bloque le remplacement pour protéger le travail non sauvegardé.
+- Avant de supprimer une activité source, retirez explicitement tout lien public ou en cours de publication, puis vérifiez en ligne auprès du serveur d'origine.
+- Après suppression du compte, l'absence confirmée de ses publications permet la suppression locale sans l'ancien compte. Si la vérification est impossible ou non concluante, la source est conservée.
 
 ### Annonces et journal des modifications
 

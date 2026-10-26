@@ -1,7 +1,7 @@
 ---
 title: 2.5.0
 date: 2026-10-28
-description: Custom activity detection, announcements, Discord display and privacy changes.
+description: Custom activity detection and sharing, announcements, Discord display and privacy.
 ---
 
 > Release scheduled for October 28, 2026. Browser store availability is not yet confirmed.
@@ -15,6 +15,15 @@ description: Custom activity detection, announcements, Discord display and priva
 - A manually activated custom activity takes priority over automatic detection.
 - If several custom activities match, the most recently updated matching activity wins.
 - Detection links are included when exporting and importing custom activities. Older files without this field remain supported.
+
+### Public custom activity links
+
+- Publish a public link with your Discord account's author name and avatar. The saved version becomes public, never your unsaved draft.
+- Preview before explicitly adding an independent copy. New copies are inactive with automatic detection disabled.
+- Keep the same link when you explicitly update or unpublish it. Existing recipient copies stay installed and never update automatically.
+- Recipients can keep local changes or replace them after reviewing an update. An open editor blocks replacement to protect unsaved work.
+- Before deleting a source activity, explicitly withdraw any public or unfinished link, then verify online with the original server.
+- After account erasure, confirmed absence of its publications allows local deletion without the old account. If verification is unavailable or inconclusive, the source is preserved.
 
 ### Announcements and release notes
 

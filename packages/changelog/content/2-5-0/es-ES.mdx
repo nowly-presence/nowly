@@ -1,7 +1,7 @@
 ---
 title: 2.5.0
 date: 2026-10-28
-description: Detección de actividades personalizadas, anuncios, visualización en Discord y privacidad.
+description: Detección y uso compartido de actividades personalizadas, anuncios, Discord y privacidad.
 ---
 
 > Lanzamiento previsto para el 28 de octubre de 2026. La disponibilidad en las tiendas de los navegadores aún no está confirmada.
@@ -15,6 +15,15 @@ description: Detección de actividades personalizadas, anuncios, visualización 
 - Una actividad personalizada activada manualmente tiene prioridad sobre la detección automática.
 - Si coinciden varias actividades, se selecciona la que se haya actualizado más recientemente.
 - Los enlaces de detección se incluyen al exportar e importar actividades personalizadas. Los archivos antiguos sin este campo siguen siendo compatibles.
+
+### Enlaces públicos de actividades personalizadas
+
+- Publica un enlace público con el nombre y el avatar de autor de tu cuenta de Discord. Se hace pública la versión guardada, nunca el borrador sin guardar.
+- Consulta la vista previa antes de añadir explícitamente una copia independiente. Las nuevas copias están inactivas y tienen la detección automática desactivada.
+- Conserva el mismo enlace al actualizarlo o retirar su publicación explícitamente. Las copias de los destinatarios siguen instaladas y nunca se actualizan automáticamente.
+- Los destinatarios pueden conservar sus cambios locales o reemplazarlos tras revisar una actualización. Un editor abierto bloquea el reemplazo para proteger el trabajo sin guardar.
+- Antes de eliminar una actividad de origen, retira explícitamente cualquier enlace público o pendiente de publicación y comprueba su estado en línea con el servidor original.
+- Tras eliminar la cuenta, la ausencia confirmada de sus publicaciones permite la eliminación local sin la cuenta anterior. Si la comprobación no está disponible o no es concluyente, se conserva el origen.
 
 ### Anuncios y notas de versión
 

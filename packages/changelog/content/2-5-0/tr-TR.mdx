@@ -1,7 +1,7 @@
 ---
 title: 2.5.0
 date: 2026-10-28
-description: Özel aktivite algılama, duyurular, Discord görünümü ve gizlilik değişiklikleri.
+description: Özel aktivite algılama ve paylaşımı, duyurular, Discord görünümü ve gizlilik.
 ---
 
 > Yayın 28 Ekim 2026 için planlanıyor. Tarayıcı mağazalarındaki kullanılabilirlik henüz doğrulanmadı.
@@ -15,6 +15,15 @@ description: Özel aktivite algılama, duyurular, Discord görünümü ve gizlil
 - Elle etkinleştirilen özel aktivite, otomatik algılamadan önceliklidir.
 - Birden fazla aktivite eşleşirse en son güncellenen eşleşen aktivite seçilir.
 - Özel aktivitelerin dışa ve içe aktarımına algılama bağlantıları da dâhildir. Bu alanı içermeyen eski dosyalar desteklenmeye devam eder.
+
+### Özel aktiviteler için herkese açık bağlantılar
+
+- Discord hesabının yazar adı ve avatarıyla herkese açık bir bağlantı yayımla. Kaydedilmiş sürüm herkese açılır, kaydedilmemiş taslağın değil.
+- Bağımsız bir kopyayı açıkça eklemeden önce önizlemeyi incele. Yeni kopyalar etkin değildir ve otomatik algılama kapalıdır.
+- Açıkça güncellediğinde veya yayından kaldırdığında aynı bağlantı korunur. Alıcıların kopyaları yüklü kalır ve asla otomatik güncellenmez.
+- Alıcılar yerel değişikliklerini koruyabilir veya güncellemeyi inceledikten sonra değiştirebilir. Açık bir düzenleyici, kaydedilmemiş çalışmayı korumak için değiştirmeyi engeller.
+- Kaynak aktiviteyi silmeden önce herkese açık veya yayını tamamlanmamış bağlantıları açıkça geri çek, ardından ilk sunucudan çevrimiçi doğrula.
+- Hesap silindikten sonra yayınlarının bulunmadığı doğrulanırsa eski hesap olmadan yerel silme yapılabilir. Doğrulama kullanılamıyorsa veya kesin değilse kaynak korunur.
 
 ### Duyurular ve sürüm notları
 
