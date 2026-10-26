@@ -7,6 +7,7 @@ const mockPrisma = vi.hoisted(() => ({
     deleteMany: vi.fn()
   },
   account: { findMany: vi.fn() },
+  activityPublication: { findMany: vi.fn<() => Promise<unknown[]>>(async () => []) },
   device: {
     findMany: vi.fn(),
     updateMany: vi.fn()
@@ -271,6 +272,13 @@ describe("account routes", () => {
 
   it("exports the profile, devices, synced documents and likes without token hashes", async () => {
     mockSession.userId = USER.id;
+    const publication = {
+      id: "a".repeat(32),
+      revision: 3,
+      published: false,
+      activity: { name: "Saved publication" }
+    };
+    mockPrisma.activityPublication.findMany.mockResolvedValue([publication]);
     mockPrisma.account.findMany.mockResolvedValue([
       {
         providerId: "discord",
@@ -314,6 +322,11 @@ describe("account routes", () => {
     expect(res.statusCode).toBe(200);
     const body = res.json();
     expect(body.profile.email).toBe(USER.email);
+    expect(body.activityPublications).toEqual([publication]);
+    expect(mockPrisma.activityPublication.findMany).toHaveBeenCalledWith({
+      where: { userId: USER.id },
+      orderBy: { createdAt: "asc" }
+    });
     expect(body.syncDocuments).toEqual([
       {
         key: "settings",

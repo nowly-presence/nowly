@@ -1,0 +1,16 @@
+# Public custom activities
+
+`GET /activity-publications/:id` returns only the opaque public id, monotonic revision, validated portable activity and author name/avatar. Missing rows return structured 404 `NOT_FOUND`; existing unpublished rows return structured 404 `UNPUBLISHED`. This exposes only opaque-link availability, never owner or account existence. Outages return 503 or another failure, never absence. Responses are not cached. Public reads are limited to 60 per minute by the API rate limiter.
+
+Publisher routes require an extension token with the explicit `creator` scope. `sync` alone is rejected. `accountOf(request).userId` is the only owner input. Publication additionally requires a linked Discord OAuth account. The native host's unsigned PONG profile is not authentication and is never used here.
+
+- `GET /me/activity-publications/:key` reads owner-only id/revision/publication state for a saved local UUID. It lets the editor recover after a lost write response without automatically retrying a conflict.
+- `POST /me/activity-publications/:key` takes strict `{ activity }`, validates saved portable content and reserves a server-random id at unpublished revision 0. It is creator/Discord authenticated, quota guarded and serialized by an owner-row lock. Repeating it returns the existing id/revision/state without overwriting content. Callers cannot choose or reclaim an erased URL.
+- `PUT /me/activity-publications/:key` takes strict `{ id, activity, baseRevision }`. It only conditionally updates an existing reserved row matching server-derived owner, local key, id and revision. There is no create/upsert fallback. First publication advances revision 0 to 1. Subsequent writes retain the id. An erased row cannot be recreated by a delayed PUT, including with a newly created account for the same Discord identity.
+- `DELETE /me/activity-publications/:id` takes `{ baseRevision }` and explicitly withdraws with another revision increment, including revision-zero reservations. This invalidates delayed writes at the old revision. The tombstone retains the stable id for explicit republication. Existing recipient copies are independent and remain installed.
+
+Writes and unpublishes are limited to 10 per minute. JSON bodies are bounded to 3 MiB. Each account has at most 20 publication rows, including unpublished tombstones. Creation locks the owner row inside the transaction before checking quota; updates also use a conditional revision write. Do not replace this with a count outside the transaction.
+
+The shared strict runtime schema rejects unknown/private fields, caller-supplied authors, detection URLs, local ids, runtime state and device upload records. Embedded image data is publication-owned JSON, bounded to 1 MiB per image and checked for PNG/JPEG/WebP/GIF MIME and magic bytes. SVG/HTML are not accepted. User HTTPS links remain links; the server never fetches them. There is no dependency on expiring device assets for embedded publication images.
+
+`ActivityPublication.user` cascades on account erasure. Account export includes the owner's publication rows, including unpublished ones. The new migration is deployment work: generating Prisma types does not apply it. Do not run migrations against a live database without separate authorization.

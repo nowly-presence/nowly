@@ -74,6 +74,7 @@ export const unlinkAccountDevice = async (userId: string, deviceId: string): Pro
 };
 
 export type AccountExport = {
+  activityPublications: unknown[];
   profile: AccountProfile & {
     email: string;
     createdAt: string;
@@ -111,7 +112,7 @@ const iso = (date: Date | null): string | null => date?.toISOString() ?? null;
 
 export const exportAccountData = async (userId: string): Promise<AccountExport | null> => {
   const prisma = getPrisma();
-  const [user, accounts, tokens, documents, likes, devices] = await Promise.all([
+  const [user, accounts, tokens, documents, likes, devices, activityPublications] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId }
     }),
@@ -135,7 +136,11 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
       where: { userId },
       orderBy: { likedAt: "asc" }
     }),
-    listAccountDevices(userId, null)
+    listAccountDevices(userId, null),
+    prisma.activityPublication.findMany({
+      where: { userId },
+      orderBy: { createdAt: "asc" }
+    })
   ]);
 
   if (!user) return null;
@@ -150,6 +155,7 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
       githubLogin: null,
       createdAt: user.createdAt.toISOString()
     },
+    activityPublications,
     linkedAccounts: accounts.map((account) => ({
       providerId: account.providerId,
       accountId: account.accountId,

@@ -1,4 +1,5 @@
 import { accountRoutes } from "@/features/account/account.routes";
+import { activitySharingRoutes } from "@/features/activity-sharing/activity-sharing.routes";
 import { announcementsRoutes } from "@/features/announcements/announcements.routes";
 import { assetsRoutes } from "@/features/assets/assets.routes";
 import { authTrustedOrigins, getAuth } from "@/features/auth/better-auth";
@@ -89,6 +90,7 @@ await server.register(deviceRoutes, { prefix: "/devices" });
 await server.register(customAssetsRoutes, { prefix: "/devices" });
 await server.register(customAssetsCronRoutes);
 await server.register(accountRoutes);
+await server.register(activitySharingRoutes);
 await server.register(announcementsRoutes, { prefix: "/announcements" });
 await server.register(syncRoutes, { prefix: "/sync" });
 await server.register(statusRoutes);

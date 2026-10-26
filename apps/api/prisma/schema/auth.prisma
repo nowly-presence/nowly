@@ -17,6 +17,7 @@ model User {
   syncDocuments   SyncDocument[]
   devices         Device[]
   presenceLikes   PresenceLike[]
+  activityPublications ActivityPublication[]
 
   @@map("users")
 }
