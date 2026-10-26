@@ -17,7 +17,8 @@
     ".": "./src/index.ts",
     "./schemas": "./src/schemas.ts",
     "./legal": "./src/legal.ts",
-    "./announcements": "./src/announcements.ts"
+    "./announcements": "./src/announcements.ts",
+    "./activity-publication": "./src/activity-publication.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
