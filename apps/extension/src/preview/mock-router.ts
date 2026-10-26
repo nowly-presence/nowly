@@ -12,6 +12,7 @@ import { DEFAULT_SUPPORT_PROMPT, SUPPORT_PROMPT_KEY, withSnooze, type SupportPro
 import { confirmLegalDocuments, emptyLegalState, normalizeLegalState } from "@nowly/shared/legal";
 import { announcementRevision } from "@nowly/shared/announcements";
 import { previewAnnouncements } from "@/preview/announcements-fixtures";
+import { createPublicationMockHandlers } from "@/preview/activity-publication-mock";
 
 export type MockHandlers = { [K in RouterMessageType]?: (payload: PayloadOf<K>) => ResponseOf<K> | Promise<ResponseOf<K>> };
 
@@ -158,6 +159,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
   };
 
   const handlers: MockHandlers = {
+    ...createPublicationMockHandlers(),
     GET_ANNOUNCEMENTS: () => announcements,
     REFRESH_ANNOUNCEMENTS: ({ locale }) => ({ ...announcements, locale }),
     MARK_ANNOUNCEMENT: async ({ id, action }) => {

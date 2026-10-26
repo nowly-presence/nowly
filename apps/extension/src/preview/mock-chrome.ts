@@ -139,6 +139,16 @@ export const installMockChrome = async (): Promise<void> => {
       getManifest: () => ({ version: packageJson.version }),
       getURL: (path: string) => `/${path}`,
       onMessage: runtimeMessage,
+      connect: () => {
+        const messages = createMockEvent<[unknown]>();
+        const disconnects = createMockEvent<[]>();
+        return {
+          onMessage: messages,
+          onDisconnect: disconnects,
+          postMessage: () => queueMicrotask(() => messages.emit({ ready: true })),
+          disconnect: () => disconnects.emit()
+        };
+      },
       sendMessage: (message: RouterRequest) => router.dispatch(message.type, message.payload)
     },
     storage: {

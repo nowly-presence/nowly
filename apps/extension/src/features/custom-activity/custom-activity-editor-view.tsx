@@ -21,6 +21,8 @@ import { CustomActivityTimeSection } from "@/features/custom-activity/custom-act
 import { draftFromTemplate, isCustomActivityTemplateId } from "@/features/custom-activity/custom-activity-templates";
 import { useCustomActivityActions } from "@/features/custom-activity/use-custom-activity-actions";
 import { useCustomActivityShare } from "@/features/custom-activity/use-custom-activity-share";
+import { CustomActivityPublication } from "@/features/custom-activity/custom-activity-publication";
+import { useCustomActivityEditorLock } from "@/features/custom-activity/use-custom-activity-editor-lock";
 
 export const CustomActivityEditorView = ({ id, template }: {
   id: string | null;
@@ -32,6 +34,8 @@ export const CustomActivityEditorView = ({ id, template }: {
   const actions = useCustomActivityActions();
   const share = useCustomActivityShare(pop);
   const existing = id ? state.customActivities.items.find((item) => item.id === id) : undefined;
+  const editorReady = useCustomActivityEditorLock(id);
+  const [baseUpdatedAt] = useState(existing?.updatedAt);
   const [draft, setDraft] = useState<CustomActivityDraft>(
     () =>
       existing ??
@@ -55,14 +59,19 @@ export const CustomActivityEditorView = ({ id, template }: {
       return;
     }
 
-    const saved = await actions.save(draft);
+    if (!editorReady) return;
+
+    const saved = await actions.save(draft, baseUpdatedAt);
     if (saved) pop();
   };
 
   const remove = async () => {
     if (!existing) return;
 
-    await actions.remove(existing);
+    const removed = await actions.remove(existing);
+
+    if (!removed) return;
+
     setDeleteOpen(false);
     pop();
   };
@@ -82,7 +91,7 @@ export const CustomActivityEditorView = ({ id, template }: {
         backLabel={t("action.back")}
         title={existing ? t("custom.editor.editTitle") : t("custom.editor.newTitle")}
         action={
-          <Button size="sm" loading={actions.pending === "save"} onClick={() => void save()}>
+          <Button size="sm" disabled={!editorReady} loading={actions.pending === "save"} onClick={() => void save()}>
             {t("action.save")}
           </Button>
         }
@@ -114,26 +123,26 @@ export const CustomActivityEditorView = ({ id, template }: {
           </Group>
         )}
 
-        <CustomActivityTextSection draft={draft} patch={patch} errors={visibleErrors} />
-        <CustomActivityImagesSection draft={draft} patch={patch} errors={visibleErrors} upload={actions.upload} uploading={actions.pending === "upload"} />
-        <CustomActivityTimeSection draft={draft} patch={patch} errors={visibleErrors} />
-        <CustomActivityDetectionSection draft={draft} patch={patch} errors={visibleErrors} detectedHost={detectedHost} />
-        <CustomActivityButtonsSection draft={draft} patch={patch} errors={visibleErrors} />
+        <fieldset disabled={!editorReady} className="flex flex-col gap-6">
+          <CustomActivityTextSection draft={draft} patch={patch} errors={visibleErrors} />
+          <CustomActivityImagesSection draft={draft} patch={patch} errors={visibleErrors} upload={actions.upload} uploading={actions.pending === "upload"} />
+          <CustomActivityTimeSection draft={draft} patch={patch} errors={visibleErrors} />
+          <CustomActivityDetectionSection draft={draft} patch={patch} errors={visibleErrors} detectedHost={detectedHost} />
+          <CustomActivityButtonsSection draft={draft} patch={patch} errors={visibleErrors} />
+        </fieldset>
 
         <div className="flex flex-col gap-2">
           {showErrors && hasCustomActivityErrors(errors) && <p className="text-center text-label-md text-danger">{t("custom.editor.fixErrors")}</p>}
-          <Button loading={actions.pending === "save"} onClick={() => void save()}>
-            {existing ? t("action.save") : t("custom.editor.create")}
-          </Button>
+          {existing && <CustomActivityPublication id={existing.id} />}
           {existing && (
-            <Button variant="secondary" icon={<RiDownload2Line className="size-4" />} onClick={() => void share.exportActivity(existing)}>
-              {t("custom.export")}
-            </Button>
-          )}
-          {existing && (
-            <Button variant="danger" icon={<RiDeleteBinLine className="size-4" />} onClick={() => setDeleteOpen(true)}>
-              {t("custom.editor.delete")}
-            </Button>
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="muted" icon={<RiDownload2Line className="size-4" />} onClick={() => void share.exportActivity(existing)}>
+                {t("custom.export")}
+              </Button>
+              <Button variant="muted" icon={<RiDeleteBinLine className="size-4" />} onClick={() => setDeleteOpen(true)}>
+                {t("action.delete")}
+              </Button>
+            </div>
           )}
         </div>
       </ScreenBody>

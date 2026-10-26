@@ -11,6 +11,10 @@ const UPLOAD_ERRORS: Record<string, MessageKey> = {
   UNSUPPORTED_TYPE: "custom.image.errorType",
   INVALID_IMAGE: "custom.image.errorInvalid"
 };
+const SAVE_ERRORS: Record<string, MessageKey> = {
+  LOCAL_CHANGED: "custom.editor.changed",
+  LIMIT_REACHED: "custom.toast.limit"
+};
 
 export const useCustomActivityActions = () => {
   const { refresh } = useExtensionState();
@@ -18,15 +22,15 @@ export const useCustomActivityActions = () => {
   const { t } = useI18n();
   const [pending, setPending] = useState<"save" | "delete" | "upload" | null>(null);
 
-  const save = useCallback(async (draft: CustomActivityDraft): Promise<CustomActivity | null> => {
+  const save = useCallback(async (draft: CustomActivityDraft, expectedUpdatedAt?: number): Promise<CustomActivity | null> => {
     setPending("save");
 
     try {
-      const result = await sendMessage("SAVE_CUSTOM_ACTIVITY", { draft });
+      const result = await sendMessage("SAVE_CUSTOM_ACTIVITY", { draft, expectedUpdatedAt });
       await refresh.customActivities();
 
       if (!result.ok) {
-        toast(t(result.error === "LIMIT_REACHED" ? "custom.toast.limit" : "error.generic"), "error");
+        toast(t(SAVE_ERRORS[result.error] ?? "error.generic"), "error");
         return null;
       }
 
@@ -41,9 +45,16 @@ export const useCustomActivityActions = () => {
     setPending("delete");
 
     try {
-      await sendMessage("DELETE_CUSTOM_ACTIVITY", { id: activity.id });
+      const result = await sendMessage("DELETE_CUSTOM_ACTIVITY", { id: activity.id });
+
+      if (!result.ok) {
+        toast(t(result.error === "PUBLICATION_ACTIVE" ? "custom.delete.published" : "custom.delete.verifyPublication"), "error");
+        return false;
+      }
+
       await refresh.customActivities();
       toast(t("custom.toast.deleted", { name: activity.name }), "info");
+      return true;
     } finally {
       setPending(null);
     }
