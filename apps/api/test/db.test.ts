@@ -40,7 +40,7 @@ vi.mock("@/db/client", () => ({
   hasDatabase: vi.fn(() => true)
 }));
 
-import { getPresenceStats, getPresenceListData, incrementInstalls, setActiveUsers, markActiveDevice, clearActiveDevice, clearActiveDevicesForDevice, setUpdated, setAdded, setVersion, getVersion, addVersion, setPresenceMeta, getPresenceMeta, getAllPresenceSlugs, getVersionHistory, setArchived, likePresence, unlikePresence, hasLikedPresence, getLikeCount } from "@/features/presence/presence.repository";
+import { getPresenceStats, getPresenceListData, markActiveDevice, clearActiveDevice, clearActiveDevicesForDevice, setUpdated, setAdded, setVersion, addVersion, setPresenceMeta, getPresenceMeta, getAllPresenceSlugs, getVersionHistory, setArchived, likePresence, unlikePresence, hasLikedPresence, getLikeCount } from "@/features/presence/presence.repository";
 
 describe("getPresenceStats", () => {
   beforeEach(() => {
@@ -142,41 +142,6 @@ describe("getPresenceListData", () => {
   });
 });
 
-describe("incrementInstalls", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it("increments and returns", async () => {
-    mockPrisma.device.upsert.mockResolvedValue({ deviceId: "dev-1" });
-    mockPrisma.devicePresence.upsert.mockResolvedValue({
-      deviceId: "dev-1",
-      slug: "yt"
-    });
-    mockPrisma.devicePresence.count.mockResolvedValue(42);
-
-    expect(await incrementInstalls("yt", "dev-1")).toBe(42);
-    expect(mockPrisma.device.upsert).toHaveBeenCalled();
-    expect(mockPrisma.devicePresence.upsert).toHaveBeenCalled();
-    expect(mockPrisma.devicePresence.count).toHaveBeenCalledWith({
-      where: {
-        slug: "yt",
-        installed: true
-      }
-    });
-  });
-});
-
-describe("setActiveUsers", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it("is a no-op", async () => {
-    await expect(setActiveUsers("yt", 10)).resolves.toBeUndefined();
-  });
-});
-
 describe("markActiveDevice / clearActiveDevice", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -271,7 +236,7 @@ describe("setUpdated / setAdded", () => {
   });
 });
 
-describe("setVersion / getVersion", () => {
+describe("setVersion", () => {
   beforeEach(() => vi.clearAllMocks());
 
   it("upserts version with an automatic date", async () => {
@@ -307,20 +272,6 @@ describe("setVersion / getVersion", () => {
         updatedAt: publishedAt
       }
     });
-  });
-
-  it("retrieves version", async () => {
-    mockPrisma.presence.findUnique.mockResolvedValue({ version: "1.0.0" });
-    expect(await getVersion("yt")).toBe("1.0.0");
-    expect(mockPrisma.presence.findUnique).toHaveBeenCalledWith({
-      where: { slug: "yt" },
-      select: { version: true }
-    });
-  });
-
-  it("returns null when no version", async () => {
-    mockPrisma.presence.findUnique.mockResolvedValue(null);
-    expect(await getVersion("yt")).toBeNull();
   });
 });
 
@@ -386,9 +337,108 @@ describe("addVersion", () => {
     };
     await addVersion("yt", entry);
 
-    const createCall = mockPrisma.presenceVersion.upsert.mock.calls[0][0].create;
-    expect(createCall.authorGithub).toBeUndefined();
-    expect(createCall.pr).toBeUndefined();
+    const call = mockPrisma.presenceVersion.upsert.mock.calls[0][0];
+
+    for (const payload of [call.create, call.update]) {
+      for (const field of [
+        "authorGithub",
+        "releaseAuthor",
+        "releaseContributors",
+        "pr",
+        "source",
+        "commitSha",
+        "changedFiles",
+        "bundleSizeBytes",
+        "bundleSizeLabel",
+        "bundleSha256",
+        "versionType",
+        "aiGeneratedChangelog"
+      ]) {
+        expect(payload).toHaveProperty(field, undefined);
+      }
+
+      expect(payload.createdAt).toEqual(new Date(456));
+      expect(payload.timestamp).toEqual(new Date(456));
+    }
+  });
+
+  it("preserves complete publication metadata in both upsert branches", async () => {
+    mockPrisma.presence.upsert.mockResolvedValue({});
+    mockPrisma.presenceVersion.upsert.mockResolvedValue({});
+
+    await addVersion("yt", {
+      version: "1.1.0",
+      changelog: "",
+      author: "dev",
+      authorGithub: "dev-github",
+      releaseAuthor: "release-author",
+      releaseContributors: '["contributor"]',
+      pr: "42",
+      source: "pr",
+      commitSha: "commit-sha",
+      changedFiles: '["presence.ts"]',
+      bundleSizeBytes: 0,
+      bundleSizeLabel: "0 B",
+      bundleSha256: "bundle-sha",
+      versionType: "patch",
+      aiGeneratedChangelog: false,
+      createdAt: "2024-01-02T03:04:05.000Z",
+      timestamp: 789
+    });
+
+    const publication = {
+      changelog: "",
+      author: "dev",
+      authorGithub: "dev-github",
+      releaseAuthor: "release-author",
+      releaseContributors: '["contributor"]',
+      pr: "42",
+      source: "pr",
+      commitSha: "commit-sha",
+      changedFiles: '["presence.ts"]',
+      bundleSizeBytes: 0,
+      bundleSizeLabel: "0 B",
+      bundleSha256: "bundle-sha",
+      versionType: "patch",
+      aiGeneratedChangelog: false,
+      createdAt: new Date("2024-01-02T03:04:05.000Z"),
+      timestamp: new Date(789)
+    };
+    expect(mockPrisma.presenceVersion.upsert.mock.calls[0][0]).toStrictEqual({
+      where: {
+        slug_version: {
+          slug: "yt",
+          version: "1.1.0"
+        }
+      },
+      create: {
+        slug: "yt",
+        version: "1.1.0",
+        ...publication
+      },
+      update: publication
+    });
+    expect(mockPrisma.presence.upsert.mock.invocationCallOrder[0]).toBeLessThan(mockPrisma.presenceVersion.upsert.mock.invocationCallOrder[0]);
+  });
+
+  it("uses the release timestamp when createdAt is empty, including the epoch", async () => {
+    mockPrisma.presence.upsert.mockResolvedValue({});
+    mockPrisma.presenceVersion.upsert.mockResolvedValue({});
+
+    await addVersion("yt", {
+      version: "1.0.0",
+      changelog: "Initial",
+      author: "dev",
+      createdAt: "",
+      timestamp: 0
+    });
+
+    const call = mockPrisma.presenceVersion.upsert.mock.calls[0][0];
+
+    for (const payload of [call.create, call.update]) {
+      expect(payload.createdAt).toEqual(new Date(0));
+      expect(payload.timestamp).toEqual(new Date(0));
+    }
   });
 });
 
