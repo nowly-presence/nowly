@@ -1,7 +1,6 @@
 import { accountRoutes } from "@/features/account/account.routes";
 import { assetsRoutes } from "@/features/assets/assets.routes";
 import { authTrustedOrigins, getAuth } from "@/features/auth/better-auth";
-import { campaignsRoutes } from "@/features/campaigns/campaigns.routes";
 import { contactRoutes } from "@/features/contact/contact.routes";
 import { customAssetsCronRoutes, customAssetsRoutes } from "@/features/custom-assets/custom-assets.routes";
 import { deviceRoutes } from "@/features/device/device.routes";
@@ -84,7 +83,6 @@ await server.register(async (instance) => {
 });
 
 await server.register(insightsRoutes, { prefix: "/insights" });
-await server.register(campaignsRoutes, { prefix: "/campaigns" });
 await server.register(contactRoutes, { prefix: "/contact" });
 await server.register(deviceRoutes, { prefix: "/devices" });
 await server.register(customAssetsRoutes, { prefix: "/devices" });
