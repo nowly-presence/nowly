@@ -34,7 +34,9 @@ const normalizeTextUrl = (value: unknown, text: string | undefined): string | un
 
   try {
     const url = new URL(value);
+
     if (url.protocol !== "https:" || !url.hostname || url.username || url.password) return undefined;
+
     return url.href.length <= 2048 ? url.href : undefined;
   } catch {
     return undefined;
@@ -110,7 +112,8 @@ export const normalizeActivity = (activity: PresenceData, fallbackName: string):
     smallImageKey: normalizeImage(activity.smallImageKey),
     smallImageText: normalizeAssetText(activity.smallImageText),
     type: allowedTypes.has(activity.type ?? 0) ? activity.type : 0,
-    statusDisplayType: activity.statusDisplayType === 0 || activity.statusDisplayType === 1 || activity.statusDisplayType === 2 ? activity.statusDisplayType : undefined,
+    statusDisplayType:
+      activity.statusDisplayType === 0 || activity.statusDisplayType === 1 || activity.statusDisplayType === 2 ? activity.statusDisplayType : undefined,
     buttons: activity.buttons
       ?.filter((button) => button.url.startsWith("https://"))
       .slice(0, 2)
@@ -258,7 +261,7 @@ export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
   await refreshToolbarBadge();
 };
 
-export const getPresenceVersion = async (slug: string): Promise<string | undefined> => {
+const getPresenceVersion = async (slug: string): Promise<string | undefined> => {
   const presences = await getPresences();
   return presences[slug]?.release?.version ?? presences[slug]?.metadata?.version ?? undefined;
 };
@@ -316,7 +319,7 @@ export const removeActiveSlugs = async (slugs: string[], reason: string): Promis
   ]);
 };
 
-export const clearActiveSlugs = async (reason: string): Promise<void> => {
+const clearActiveSlugs = async (reason: string): Promise<void> => {
   const slugs = await getActiveSlugsSnapshot();
   await Promise.all(slugs.map((slug) => removeActiveSlug(slug, reason)));
   await clearActiveSlugsFromState();

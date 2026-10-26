@@ -1,9 +1,8 @@
 import { IS_CANARY } from "@/shared/brand";
-import { EXT_WEB_SOURCE, WEB_BASE_URL } from "@/shared/constants";
+import { EXT_WEB_SOURCE, USER_SCRIPT_MESSAGE_SOURCE, WEB_BASE_URL } from "@/shared/constants";
 import type { WebMessage } from "@/shared/types";
 import { startWebSeason } from "@/content/web-season";
 
-const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE";
 const DEVICE_KEY = "deviceId";
 const DEVICE_TOKEN_KEY = "deviceToken";
 let MARKETPLACE_ORIGIN = new URL(WEB_BASE_URL).origin;
