@@ -37,7 +37,10 @@ describe("site timers", () => {
     expect(
       (
         await applySiteTimer(
-          entry("twitch", { startTime: NOW - 600, details: "First title" }),
+          entry("twitch", {
+            startTime: NOW - 600,
+            details: "First title"
+          }),
           true
         )
       ).startTime
@@ -46,7 +49,11 @@ describe("site timers", () => {
     expect(
       (
         await applySiteTimer(
-          entry("twitch", { startTime: NOW + 60, details: "New title", state: "New channel" }),
+          entry("twitch", {
+            startTime: NOW + 60,
+            details: "New title",
+            state: "New channel"
+          }),
           true
         )
       ).startTime

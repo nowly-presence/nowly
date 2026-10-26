@@ -110,7 +110,17 @@ describe("toolbar badge helpers", () => {
     // Fallback for upload, missing presence or invalid hex
     const uploaded: CustomActivitiesState = {
       ...customs,
-      items: [{ ...customs.items[0], largeImage: { kind: "upload", hash: "hash", mime: "image/png", size: 1 } }]
+      items: [
+        {
+          ...customs.items[0],
+          largeImage: {
+            kind: "upload",
+            hash: "hash",
+            mime: "image/png",
+            size: 1
+          }
+        }
+      ]
     };
     expect(toolbarActivityColor(current("custom:one"), {}, uploaded)).toBe("#0891b2");
     expect(toolbarActivityColor(current("missing"), {}, customs)).toBe("#0891b2");

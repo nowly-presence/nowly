@@ -15,7 +15,15 @@ describe("review-prompt", () => {
     expect(isReviewPromptDue({ firstSeenAt: now - REVIEW_PROMPT_DELAY_MS }, now)).toBe(true);
 
     // Once dismissed, never shows again
-    expect(isReviewPromptDue({ firstSeenAt: 0, dismissedAt: now - 1 }, now)).toBe(false);
+    expect(
+      isReviewPromptDue(
+        {
+          firstSeenAt: 0,
+          dismissedAt: now - 1
+        },
+        now
+      )
+    ).toBe(false);
   });
 
   it("validates runtime review prompt state schema", () => {

@@ -68,30 +68,74 @@ describe("projection helpers", () => {
     const presences: InstalledPresences = {
       youtube: stored({
         snoozeUntil: 99,
-        schedule: { days: [1, 2], start: "09:00", end: "17:00" }
+        schedule: {
+          days: [1, 2],
+          start: "09:00",
+          end: "17:00"
+        }
       }),
-      twitch: stored({ enabled: false, installedAt: 2000.4 }),
+      twitch: stored({
+        enabled: false,
+        installedAt: 2000.4
+      }),
       local: stored({ source: "local" }),
       bundled: stored({ source: "bundle" })
     };
     expect(projectPresences(presences)).toEqual([
-      { slug: "twitch", enabled: false, installedAt: 2000 },
-      { slug: "youtube", enabled: true, installedAt: 1000, schedule: { days: [1, 2], start: "09:00", end: "17:00" } }
+      {
+        slug: "twitch",
+        enabled: false,
+        installedAt: 2000
+      },
+      {
+        slug: "youtube",
+        enabled: true,
+        installedAt: 1000,
+        schedule: {
+          days: [1, 2],
+          start: "09:00",
+          end: "17:00"
+        }
+      }
     ]);
 
     expect(
-      projectPresences({}, { spotify: { slug: "spotify", enabled: true, installedAt: 5 } })
-    ).toEqual([{ slug: "spotify", enabled: true, installedAt: 5 }]);
+      projectPresences(
+        {},
+        {
+          spotify: {
+            slug: "spotify",
+            enabled: true,
+            installedAt: 5
+          }
+        }
+      )
+    ).toEqual([
+      {
+        slug: "spotify",
+        enabled: true,
+        installedAt: 5
+      }
+    ]);
   });
 
   it("projects presence settings: drops server-rejected keys and empty records", () => {
     expect(
       projectPresenceSettings({
-        youtube: { lang: "fr", cover: true, list: ["a"] },
-        twitch: { nested: { a: 1 } }
+        youtube: {
+          lang: "fr",
+          cover: true,
+          list: ["a"]
+        },
+        twitch: {
+          nested: { a: 1 }
+        }
       })
     ).toEqual({
-      youtube: { lang: "fr", cover: true }
+      youtube: {
+        lang: "fr",
+        cover: true
+      }
     });
   });
 });
@@ -104,9 +148,18 @@ describe("mergeThreeWay", () => {
     // 2. Disjoint field changes both kept
     expect(
       mergeThreeWay(
-        { appearance: "light", showPlayer: true },
-        { appearance: "dark", showPlayer: true },
-        { appearance: "light", showPlayer: false }
+        {
+          appearance: "light",
+          showPlayer: true
+        },
+        {
+          appearance: "dark",
+          showPlayer: true
+        },
+        {
+          appearance: "light",
+          showPlayer: false
+        }
       )
     ).toEqual({
       appearance: "dark",

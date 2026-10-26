@@ -18,8 +18,20 @@ describe("normalizeCatalogItem", () => {
     });
 
     // Missing or invalid dates fallback to null
-    expect(normalizeCatalogItem({ slug: "youtube" })).toMatchObject({ addedAt: null, lastUpdated: null });
-    expect(normalizeCatalogItem({ slug: "youtube", addedAt: "not a date", lastUpdated: 42 })).toMatchObject({ addedAt: null, lastUpdated: null });
+    expect(normalizeCatalogItem({ slug: "youtube" })).toMatchObject({
+      addedAt: null,
+      lastUpdated: null
+    });
+    expect(
+      normalizeCatalogItem({
+        slug: "youtube",
+        addedAt: "not a date",
+        lastUpdated: 42
+      })
+    ).toMatchObject({
+      addedAt: null,
+      lastUpdated: null
+    });
 
     // Missing slug / null returns null
     expect(normalizeCatalogItem({ name: "No slug" })).toBeNull();

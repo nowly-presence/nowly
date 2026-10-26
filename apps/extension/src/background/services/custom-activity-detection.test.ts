@@ -107,8 +107,14 @@ describe("custom activity detection", () => {
     };
     await setCustomActivities({
       items: [
-        activity({ id: "old", updatedAt: 1 }),
-        activity({ id: "new", updatedAt: 2 })
+        activity({
+          id: "old",
+          updatedAt: 1
+        }),
+        activity({
+          id: "new",
+          updatedAt: 2
+        })
       ],
       activeId: null,
       activatedAt: null

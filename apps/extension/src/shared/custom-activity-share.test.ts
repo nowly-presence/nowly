@@ -59,6 +59,7 @@ describe("custom-activity-share", () => {
 
     const result = parseActivityFile(serializeActivityFile(file));
     expect(result.ok).toBe(true);
+
     if (!result.ok) return;
 
     expect(result.draft.name).toBe("Revision");
@@ -71,9 +72,21 @@ describe("custom-activity-share", () => {
   });
 
   it("validates files and rejects malformed, oversized, or malicious content", () => {
-    expect(parseActivityFile("nope")).toEqual({ ok: false, error: "INVALID_JSON" });
-    expect(roundTrip({ hello: 1 })).toEqual({ ok: false, error: "WRONG_FORMAT" });
-    expect(roundTrip({ format: CUSTOM_ACTIVITY_FILE_FORMAT, version: 99, activity: {} })).toEqual({
+    expect(parseActivityFile("nope")).toEqual({
+      ok: false,
+      error: "INVALID_JSON"
+    });
+    expect(roundTrip({ hello: 1 })).toEqual({
+      ok: false,
+      error: "WRONG_FORMAT"
+    });
+    expect(
+      roundTrip({
+        format: CUSTOM_ACTIVITY_FILE_FORMAT,
+        version: 99,
+        activity: {}
+      })
+    ).toEqual({
       ok: false,
       error: "UNSUPPORTED_VERSION"
     });
@@ -84,19 +97,43 @@ describe("custom-activity-share", () => {
 
     const file = buildActivityFile(activity, {});
     // Rejects invalid activity shapes (e.g. invalid type, bad url protocol)
-    expect(roundTrip({ ...file, activity: { ...file.activity, type: 99 } })).toEqual({
+    expect(
+      roundTrip({
+        ...file,
+        activity: {
+          ...file.activity,
+          type: 99
+        }
+      })
+    ).toEqual({
       ok: false,
       error: "INVALID_ACTIVITY"
     });
     expect(
       roundTrip({
         ...file,
-        activity: { ...file.activity, largeImage: { kind: "url", url: "javascript:alert(1)" } }
+        activity: {
+          ...file.activity,
+          largeImage: {
+            kind: "url",
+            url: "javascript:alert(1)"
+          }
+        }
       })
-    ).toEqual({ ok: false, error: "INVALID_ACTIVITY" });
+    ).toEqual({
+      ok: false,
+      error: "INVALID_ACTIVITY"
+    });
 
     // Ignores unknown identity fields safely
-    const stripped = roundTrip({ ...file, activity: { ...file.activity, id: "evil", extra: true } });
+    const stripped = roundTrip({
+      ...file,
+      activity: {
+        ...file.activity,
+        id: "evil",
+        extra: true
+      }
+    });
     expect(stripped.ok).toBe(true);
     if (stripped.ok) expect(Object.keys(stripped.draft)).not.toContain("id");
   });

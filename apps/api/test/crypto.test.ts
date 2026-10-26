@@ -17,7 +17,11 @@ describe("crypto service", () => {
       const complex = {
         c: 3,
         a: 1,
-        b: { y: 2, x: 1, ignored: undefined },
+        b: {
+          y: 2,
+          x: 1,
+          ignored: undefined
+        },
         items: ["b", "a"],
         missing: undefined
       };

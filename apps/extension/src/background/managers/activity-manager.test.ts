@@ -7,6 +7,7 @@ describe("status display type", () => {
   it("preserves supported status display types (0, 1, 2) and omits unsupported/invalid values", async () => {
     installChromeMock();
     const { normalizeActivity } = await import("@/background/managers/activity-manager");
+
     const { mapPresenceData } = await import("@/background/services/native");
 
     for (const statusDisplayType of [0, 1, 2]) {
@@ -136,7 +137,10 @@ describe("shouldHoldDiscord", () => {
     const { shouldHoldDiscord } = await import("@/background/managers/activity-manager");
 
     // 1. Globally paused
-    chrome.local.settings = { ...baseSettings, presencePaused: true };
+    chrome.local.settings = {
+      ...baseSettings,
+      presencePaused: true
+    };
     expect(await shouldHoldDiscord(storedPresence())).toBe(true);
 
     // 2. Snooze active vs expired
@@ -146,10 +150,32 @@ describe("shouldHoldDiscord", () => {
 
     // 3. Schedule enabled & outside days vs schedule disabled
     const otherDay = (new Date().getDay() + 1) % 7;
-    chrome.local.settings = { ...baseSettings, scheduleEnabled: true };
-    expect(await shouldHoldDiscord(storedPresence({ schedule: { days: [otherDay] } }))).toBe(true);
+    chrome.local.settings = {
+      ...baseSettings,
+      scheduleEnabled: true
+    };
+    expect(
+      await shouldHoldDiscord(
+        storedPresence({
+          schedule: {
+            days: [otherDay]
+          }
+        })
+      )
+    ).toBe(true);
 
-    chrome.local.settings = { ...baseSettings, scheduleEnabled: false };
-    expect(await shouldHoldDiscord(storedPresence({ schedule: { days: [] } }))).toBe(false);
+    chrome.local.settings = {
+      ...baseSettings,
+      scheduleEnabled: false
+    };
+    expect(
+      await shouldHoldDiscord(
+        storedPresence({
+          schedule: {
+            days: []
+          }
+        })
+      )
+    ).toBe(false);
   });
 });

@@ -3,12 +3,30 @@ import { detectionHost, matchesDetectionUrl, parseDetectionUrl } from "@/shared/
 
 describe("parseDetectionUrl", () => {
   it("normalizes hosts, wildcards, ports and paths while dropping query/hash and trailing slashes", () => {
-    expect(parseDetectionUrl("watchparty.netflix.com")).toEqual({ host: "watchparty.netflix.com", path: "" });
-    expect(parseDetectionUrl("https://www.example.com/Movie/Room?invite=1#top")).toEqual({ host: "example.com", path: "/movie/room" });
-    expect(parseDetectionUrl("*.netflix.com")).toEqual({ host: "*.netflix.com", path: "" });
-    expect(parseDetectionUrl("http://localhost:3000/watch")).toEqual({ host: "localhost", path: "/watch" });
-    expect(parseDetectionUrl("https://example.com/watch/")).toEqual({ host: "example.com", path: "/watch" });
-    expect(parseDetectionUrl("https://example.com/watch/*")).toEqual({ host: "example.com", path: "/watch" });
+    expect(parseDetectionUrl("watchparty.netflix.com")).toEqual({
+      host: "watchparty.netflix.com",
+      path: ""
+    });
+    expect(parseDetectionUrl("https://www.example.com/Movie/Room?invite=1#top")).toEqual({
+      host: "example.com",
+      path: "/movie/room"
+    });
+    expect(parseDetectionUrl("*.netflix.com")).toEqual({
+      host: "*.netflix.com",
+      path: ""
+    });
+    expect(parseDetectionUrl("http://localhost:3000/watch")).toEqual({
+      host: "localhost",
+      path: "/watch"
+    });
+    expect(parseDetectionUrl("https://example.com/watch/")).toEqual({
+      host: "example.com",
+      path: "/watch"
+    });
+    expect(parseDetectionUrl("https://example.com/watch/*")).toEqual({
+      host: "example.com",
+      path: "/watch"
+    });
   });
 
   it("rejects non-https schemes, credentials, bare non-dot hosts, and empty inputs", () => {

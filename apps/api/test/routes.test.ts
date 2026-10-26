@@ -484,7 +484,10 @@ describe("Stats Routes", () => {
       }
     });
     expect(postRes.statusCode).toBe(200);
-    expect(JSON.parse(postRes.body)).toEqual({ ok: true, count: 2 });
+    expect(JSON.parse(postRes.body)).toEqual({
+      ok: true,
+      count: 2
+    });
     expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledTimes(2);
     expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith("youtube", "22222222-2222-4222-8222-222222222222");
     expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith("twitch", "22222222-2222-4222-8222-222222222222");
@@ -496,7 +499,10 @@ describe("Stats Routes", () => {
       url: "/presences/active/device-123/youtube"
     });
     expect(deleteSingleRes.statusCode).toBe(200);
-    expect(JSON.parse(deleteSingleRes.body)).toEqual({ ok: true, removed: 1 });
+    expect(JSON.parse(deleteSingleRes.body)).toEqual({
+      ok: true,
+      removed: 1
+    });
     expect(mockPresenceRepo.clearActiveDevice).toHaveBeenCalledWith("youtube", "device-123");
 
     // 3. DELETE /presences/active/:deviceId clears every tracked presence
@@ -506,7 +512,10 @@ describe("Stats Routes", () => {
       url: "/presences/active/device-123"
     });
     expect(deleteAllRes.statusCode).toBe(200);
-    expect(JSON.parse(deleteAllRes.body)).toEqual({ ok: true, removed: null });
+    expect(JSON.parse(deleteAllRes.body)).toEqual({
+      ok: true,
+      removed: null
+    });
     expect(mockPresenceRepo.clearActiveDevicesForDevice).toHaveBeenCalledWith("device-123");
   });
 
@@ -542,17 +551,49 @@ describe("Stats Routes", () => {
 
     // Rejects empty or oversized messages
     mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: "YouTube" });
-    expect((await app.inject({ method: "POST", url: "/presences/youtube/report", payload: { message: "   " } })).statusCode).toBe(400);
-    expect((await app.inject({ method: "POST", url: "/presences/youtube/report", payload: { message: "x".repeat(751) } })).statusCode).toBe(400);
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/presences/youtube/report",
+          payload: { message: "   " }
+        })
+      ).statusCode
+    ).toBe(400);
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/presences/youtube/report",
+          payload: { message: "x".repeat(751) }
+        })
+      ).statusCode
+    ).toBe(400);
 
     // 404 for unknown presences
     mockPresenceRepo.getPresenceMeta.mockResolvedValue(null);
-    expect((await app.inject({ method: "POST", url: "/presences/missing/report", payload: { message: "Broken" } })).statusCode).toBe(404);
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/presences/missing/report",
+          payload: { message: "Broken" }
+        })
+      ).statusCode
+    ).toBe(404);
 
     // 503 when Discord service is unconfigured
     mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: "YouTube" });
     mockPresenceReport.submitPresenceReport.mockResolvedValue("unconfigured");
-    expect((await app.inject({ method: "POST", url: "/presences/youtube/report", payload: { message: "Broken timestamps" } })).statusCode).toBe(503);
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/presences/youtube/report",
+          payload: { message: "Broken timestamps" }
+        })
+      ).statusCode
+    ).toBe(503);
   });
 });
 
@@ -807,7 +848,10 @@ describe("Presence Likes", () => {
       headers: { "x-device-token": deriveDeviceToken(validDeviceId) }
     });
     expect(likeRes.statusCode).toBe(200);
-    expect(JSON.parse(likeRes.body)).toEqual({ ok: true, count: 3 });
+    expect(JSON.parse(likeRes.body)).toEqual({
+      ok: true,
+      count: 3
+    });
     expect(mockPresenceRepo.likePresence).toHaveBeenCalledWith("youtube", validDeviceId);
 
     // Status query
@@ -818,7 +862,10 @@ describe("Presence Likes", () => {
       url: `/presences/youtube/like?deviceId=${validDeviceId}`
     });
     expect(statusRes.statusCode).toBe(200);
-    expect(JSON.parse(statusRes.body)).toEqual({ liked: true, count: 3 });
+    expect(JSON.parse(statusRes.body)).toEqual({
+      liked: true,
+      count: 3
+    });
 
     // Unlike
     mockPresenceRepo.getLikeCount.mockResolvedValueOnce(2);
@@ -828,19 +875,59 @@ describe("Presence Likes", () => {
       headers: { "x-device-token": deriveDeviceToken(validDeviceId) }
     });
     expect(unlikeRes.statusCode).toBe(200);
-    expect(JSON.parse(unlikeRes.body)).toEqual({ ok: true, count: 2 });
+    expect(JSON.parse(unlikeRes.body)).toEqual({
+      ok: true,
+      count: 2
+    });
     expect(mockPresenceRepo.unlikePresence).toHaveBeenCalledWith("youtube", validDeviceId);
   });
 
   it("enforces deviceId requirement and token authorization on all like endpoints", async () => {
     // Missing deviceId -> 400
-    expect((await app.inject({ method: "POST", url: "/presences/youtube/like", payload: {} })).statusCode).toBe(400);
-    expect((await app.inject({ method: "DELETE", url: "/presences/youtube/like" })).statusCode).toBe(400);
-    expect((await app.inject({ method: "GET", url: "/presences/youtube/like" })).statusCode).toBe(400);
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/presences/youtube/like",
+          payload: {}
+        })
+      ).statusCode
+    ).toBe(400);
+    expect(
+      (
+        await app.inject({
+          method: "DELETE",
+          url: "/presences/youtube/like"
+        })
+      ).statusCode
+    ).toBe(400);
+    expect(
+      (
+        await app.inject({
+          method: "GET",
+          url: "/presences/youtube/like"
+        })
+      ).statusCode
+    ).toBe(400);
 
     // Missing / invalid token -> 401
-    expect((await app.inject({ method: "POST", url: "/presences/youtube/like", payload: { deviceId: validDeviceId } })).statusCode).toBe(401);
-    expect((await app.inject({ method: "DELETE", url: `/presences/youtube/like?deviceId=${validDeviceId}` })).statusCode).toBe(401);
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/presences/youtube/like",
+          payload: { deviceId: validDeviceId }
+        })
+      ).statusCode
+    ).toBe(401);
+    expect(
+      (
+        await app.inject({
+          method: "DELETE",
+          url: `/presences/youtube/like?deviceId=${validDeviceId}`
+        })
+      ).statusCode
+    ).toBe(401);
 
     expect(mockPresenceRepo.likePresence).not.toHaveBeenCalled();
     expect(mockPresenceRepo.unlikePresence).not.toHaveBeenCalled();

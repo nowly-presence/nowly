@@ -27,11 +27,39 @@ describe("seasonal-themes", () => {
 
   it("handles settings toggle and overrides", () => {
     const october = local(2026, 10, 12);
-    expect(resolveSeason({ enabled: true, date: october })).toBe("halloween");
-    expect(resolveSeason({ enabled: false, date: october })).toBeNull();
-    expect(resolveSeason({ enabled: true, date: local(2026, 6, 1), override: "halloween" })).toBe("halloween");
-    expect(resolveSeason({ enabled: true, date: october, override: "none" })).toBeNull();
-    expect(resolveSeason({ enabled: false, date: october, override: "halloween" })).toBeNull();
+    expect(
+      resolveSeason({
+        enabled: true,
+        date: october
+      })
+    ).toBe("halloween");
+    expect(
+      resolveSeason({
+        enabled: false,
+        date: october
+      })
+    ).toBeNull();
+    expect(
+      resolveSeason({
+        enabled: true,
+        date: local(2026, 6, 1),
+        override: "halloween"
+      })
+    ).toBe("halloween");
+    expect(
+      resolveSeason({
+        enabled: true,
+        date: october,
+        override: "none"
+      })
+    ).toBeNull();
+    expect(
+      resolveSeason({
+        enabled: false,
+        date: october,
+        override: "halloween"
+      })
+    ).toBeNull();
 
     expect(isSeasonOverride("halloween")).toBe(true);
     expect(isSeasonOverride("none")).toBe(true);

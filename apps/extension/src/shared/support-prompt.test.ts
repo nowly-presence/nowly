@@ -1,15 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { REVIEW_PROMPT_DELAY_MS, type ReviewPromptState } from "@/shared/review-prompt";
-import {
-  isSupportPromptState,
-  localDayKey,
-  shouldShowSupportCard,
-  SUPPORT_PROMPT_AFTER_REVIEW_MS,
-  SUPPORT_PROMPT_MIN_USAGE_DAYS,
-  withSnooze,
-  withUsageDay,
-  type SupportCardContext
-} from "@/shared/support-prompt";
+import { isSupportPromptState, localDayKey, shouldShowSupportCard, SUPPORT_PROMPT_AFTER_REVIEW_MS, SUPPORT_PROMPT_MIN_USAGE_DAYS, withSnooze, withUsageDay, type SupportCardContext } from "@/shared/support-prompt";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const now = new Date(2026, 9, 5, 12).getTime();
@@ -31,17 +22,57 @@ const context = (overrides: Partial<SupportCardContext> = {}): SupportCardContex
 describe("support-prompt", () => {
   it("governs display rules (min usage, snoozes, active states, review prompt precedence)", () => {
     // Requires minimum usage days
-    expect(shouldShowSupportCard(context({ prompt: { usageDays: SUPPORT_PROMPT_MIN_USAGE_DAYS - 1 } }))).toBe(false);
-    expect(shouldShowSupportCard(context({ prompt: { usageDays: SUPPORT_PROMPT_MIN_USAGE_DAYS } }))).toBe(true);
+    expect(
+      shouldShowSupportCard(
+        context({
+          prompt: { usageDays: SUPPORT_PROMPT_MIN_USAGE_DAYS - 1 }
+        })
+      )
+    ).toBe(false);
+    expect(
+      shouldShowSupportCard(
+        context({
+          prompt: { usageDays: SUPPORT_PROMPT_MIN_USAGE_DAYS }
+        })
+      )
+    ).toBe(true);
 
     // Snooze: 90 days after "later", 180 days after "support"
     const laterPrompt = withSnooze({ usageDays: 30 }, "later", now);
-    expect(shouldShowSupportCard(context({ prompt: laterPrompt, now: now + 89 * DAY_MS }))).toBe(false);
-    expect(shouldShowSupportCard(context({ prompt: laterPrompt, now: now + 90 * DAY_MS }))).toBe(true);
+    expect(
+      shouldShowSupportCard(
+        context({
+          prompt: laterPrompt,
+          now: now + 89 * DAY_MS
+        })
+      )
+    ).toBe(false);
+    expect(
+      shouldShowSupportCard(
+        context({
+          prompt: laterPrompt,
+          now: now + 90 * DAY_MS
+        })
+      )
+    ).toBe(true);
 
     const supportPrompt = withSnooze({ usageDays: 30 }, "support", now);
-    expect(shouldShowSupportCard(context({ prompt: supportPrompt, now: now + 179 * DAY_MS }))).toBe(false);
-    expect(shouldShowSupportCard(context({ prompt: supportPrompt, now: now + 180 * DAY_MS }))).toBe(true);
+    expect(
+      shouldShowSupportCard(
+        context({
+          prompt: supportPrompt,
+          now: now + 179 * DAY_MS
+        })
+      )
+    ).toBe(false);
+    expect(
+      shouldShowSupportCard(
+        context({
+          prompt: supportPrompt,
+          now: now + 180 * DAY_MS
+        })
+      )
+    ).toBe(true);
 
     // Suppressed during live activity or onboarding
     expect(shouldShowSupportCard(context({ live: true }))).toBe(false);
@@ -50,11 +81,24 @@ describe("support-prompt", () => {
     // Precedence with review prompt
     const reviewPending: ReviewPromptState = { firstSeenAt: now - REVIEW_PROMPT_DELAY_MS };
     expect(shouldShowSupportCard(context({ review: reviewPending }))).toBe(false);
-    expect(shouldShowSupportCard(context({ review: reviewPending, reviewEligible: false }))).toBe(true);
+    expect(
+      shouldShowSupportCard(
+        context({
+          review: reviewPending,
+          reviewEligible: false
+        })
+      )
+    ).toBe(true);
 
     // Waits 14 days after review prompt dismissal
-    const dismissedRecent = { firstSeenAt: 0, dismissedAt: now - (SUPPORT_PROMPT_AFTER_REVIEW_MS - 1) };
-    const dismissedElapsed = { firstSeenAt: 0, dismissedAt: now - SUPPORT_PROMPT_AFTER_REVIEW_MS };
+    const dismissedRecent = {
+      firstSeenAt: 0,
+      dismissedAt: now - (SUPPORT_PROMPT_AFTER_REVIEW_MS - 1)
+    };
+    const dismissedElapsed = {
+      firstSeenAt: 0,
+      dismissedAt: now - SUPPORT_PROMPT_AFTER_REVIEW_MS
+    };
     expect(shouldShowSupportCard(context({ review: dismissedRecent }))).toBe(false);
     expect(shouldShowSupportCard(context({ review: dismissedElapsed }))).toBe(true);
   });
@@ -69,7 +113,15 @@ describe("support-prompt", () => {
     expect(first && withUsageDay(first, now + 60_000)).toBeNull();
 
     // Next day increments usageDays and preserves snooze
-    const next = first && withUsageDay({ ...first, snoozedUntil: 42 }, now + DAY_MS);
+    const next =
+      first &&
+      withUsageDay(
+        {
+          ...first,
+          snoozedUntil: 42
+        },
+        now + DAY_MS
+      );
     expect(next?.usageDays).toBe(2);
     expect(next?.snoozedUntil).toBe(42);
 

@@ -90,15 +90,28 @@ describe("announcement screens", () => {
     expect(html).not.toContain("Dismiss");
 
     // Warning banner level 3 (danger)
-    announcements.items = [notice({ kind: "warning", severity: 3 })];
+    announcements.items = [
+      notice({
+        kind: "warning",
+        severity: 3
+      })
+    ];
     html = renderToStaticMarkup(<AnnouncementsBanner />);
     expect(html).toContain("bg-danger-soft hover:bg-danger-soft-hover");
 
     // Banner click navigation
     const banner = AnnouncementsBanner();
-    if (!isValidElement<{ children: ReactNode }>(banner)) throw new Error("Missing banner");
+
+    if (
+      !isValidElement<{
+        children: ReactNode;
+      }>(banner)
+    ) throw new Error("Missing banner");
+
     const link = Children.toArray(banner.props.children).find((child) => isValidElement(child) && child.type === "a");
+
     if (!isValidElement<ComponentProps<"a">>(link)) throw new Error("Missing link");
+
     const preventDefault = vi.fn();
     link.props.onClick?.({ preventDefault } as unknown as MouseEvent<HTMLAnchorElement>);
     expect(preventDefault).toHaveBeenCalledOnce();
@@ -112,7 +125,11 @@ describe("announcement screens", () => {
         kind: "warning",
         severity: 2,
         translations: {
-          en: { title: "Incident 2", description: "Public details", content: "Safe content" }
+          en: {
+            title: "Incident 2",
+            description: "Public details",
+            content: "Safe content"
+          }
         }
       })
     ];

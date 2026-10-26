@@ -7,8 +7,24 @@ describe("season-moments", () => {
   it("determines when moments are due, handles replays, and validates state", () => {
     // 1. Due dates and yearly frequency
     expect(isSeasonMomentDue(null, "spring", local(2027, 3, 20))).toBe(true);
-    expect(isSeasonMomentDue({ shown: { spring: 2027 } }, "spring", local(2027, 3, 20))).toBe(false);
-    expect(isSeasonMomentDue({ shown: { spring: 2026 } }, "spring", local(2027, 3, 20))).toBe(true);
+    expect(
+      isSeasonMomentDue(
+        {
+          shown: { spring: 2027 }
+        },
+        "spring",
+        local(2027, 3, 20)
+      )
+    ).toBe(false);
+    expect(
+      isSeasonMomentDue(
+        {
+          shown: { spring: 2026 }
+        },
+        "spring",
+        local(2027, 3, 20)
+      )
+    ).toBe(true);
     expect(isSeasonMomentDue(null, "spring", local(2027, 3, 21))).toBe(false);
     expect(isSeasonMomentDue(null, "new-year", local(2027, 1, 1))).toBe(true);
 
@@ -20,17 +36,51 @@ describe("season-moments", () => {
 
     // 3. Mark as shown
     expect(
-      markSeasonMomentShown({ shown: { winter: 2025 }, replay: true }, "spring", local(2026, 3, 20))
-    ).toEqual({ shown: { winter: 2025, spring: 2026 } });
+      markSeasonMomentShown(
+        {
+          shown: { winter: 2025 },
+          replay: true
+        },
+        "spring",
+        local(2026, 3, 20)
+      )
+    ).toEqual({
+      shown: {
+        winter: 2025,
+        spring: 2026
+      }
+    });
     expect(
-      markSeasonMomentShown({ shown: { spring: 2025 }, replay: true }, "spring", local(2026, 7, 4))
-    ).toEqual({ shown: { spring: 2025 } });
+      markSeasonMomentShown(
+        {
+          shown: { spring: 2025 },
+          replay: true
+        },
+        "spring",
+        local(2026, 7, 4)
+      )
+    ).toEqual({
+      shown: { spring: 2025 }
+    });
 
     // 4. State schema validation
     expect(isSeasonMomentsState({})).toBe(true);
-    expect(isSeasonMomentsState({ shown: { spring: 2026 }, replay: true })).toBe(true);
-    expect(isSeasonMomentsState({ shown: { easter: 2026 } })).toBe(false);
-    expect(isSeasonMomentsState({ shown: { spring: "2026" } })).toBe(false);
+    expect(
+      isSeasonMomentsState({
+        shown: { spring: 2026 },
+        replay: true
+      })
+    ).toBe(true);
+    expect(
+      isSeasonMomentsState({
+        shown: { easter: 2026 }
+      })
+    ).toBe(false);
+    expect(
+      isSeasonMomentsState({
+        shown: { spring: "2026" }
+      })
+    ).toBe(false);
     expect(isSeasonMomentsState({ replay: "yes" })).toBe(false);
     expect(isSeasonMomentsState(null)).toBe(false);
   });

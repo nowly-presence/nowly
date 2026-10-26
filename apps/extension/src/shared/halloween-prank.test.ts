@@ -13,11 +13,27 @@ describe("halloween-prank", () => {
 
     // 2. Quiet on normal days unless replay flag is set
     expect(isHalloweenPrankDue(null, regularDay)).toBe(false);
-    expect(isHalloweenPrankDue({ lastShownYear: 2026, replay: true }, regularDay)).toBe(true);
+    expect(
+      isHalloweenPrankDue(
+        {
+          lastShownYear: 2026,
+          replay: true
+        },
+        regularDay
+      )
+    ).toBe(true);
 
     // 3. Records year on the day, drops replay flag
     expect(markHalloweenPrankShown({ replay: true }, halloween)).toEqual({ lastShownYear: 2026 });
-    expect(markHalloweenPrankShown({ lastShownYear: 2025, replay: true }, regularDay)).toEqual({ lastShownYear: 2025 });
+    expect(
+      markHalloweenPrankShown(
+        {
+          lastShownYear: 2025,
+          replay: true
+        },
+        regularDay
+      )
+    ).toEqual({ lastShownYear: 2025 });
     expect(markHalloweenPrankShown({ replay: true }, regularDay)).toEqual({});
 
     // 4. Schema validation

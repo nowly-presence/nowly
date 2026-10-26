@@ -163,7 +163,12 @@ describe("bulk presence updates with real React hook instances", () => {
     // Filters local/bundle presences
     presences.local = stored("local", "local");
     presences.bundle = stored("bundle", "bundle");
-    updates = { first: "2", second: "2", local: "2", bundle: "2" };
+    updates = {
+      first: "2",
+      second: "2",
+      local: "2",
+      bundle: "2"
+    };
 
     const { activity } = renderHooks();
     expect(activity.availableUpdates.map(([slug]) => slug)).toEqual(["first", "second"]);
@@ -175,7 +180,9 @@ describe("bulk presence updates with real React hook instances", () => {
   });
 
   it("coordinates async mutations, overlapping hooks, and in-flight uninstalls", async () => {
-    const gate = deferred<{ ok: boolean }>();
+    const gate = deferred<{
+      ok: boolean;
+    }>();
     gates.set("first", gate.promise);
 
     const batch = renderHooks().activity.updateAll();
@@ -201,7 +208,9 @@ describe("bulk presence updates with real React hook instances", () => {
         error: "RELEASE_SIGNATURE_INVALID"
       })
     );
-    const rejection = deferred<{ ok: boolean }>();
+    const rejection = deferred<{
+      ok: boolean;
+    }>();
     gates.set("second", rejection.promise);
 
     const batch = renderHooks().activity.updateAll();
