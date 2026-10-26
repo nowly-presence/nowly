@@ -105,65 +105,38 @@ func (c *Client) Connect() error {
 }
 
 func (c *Client) SetActivity(activity Activity) error {
-	if err := c.Connect(); err != nil {
-		return err
-	}
-
-	err := c.writeCommand(map[string]any{
-		"cmd": "SET_ACTIVITY",
-		"args": map[string]any{
-			"pid":      os.Getpid(),
-			"activity": activity,
-		},
-		"nonce": nonce(),
-	})
-	if err == nil {
-		return nil
-	}
-
-	c.Close()
-	if reconnectErr := c.Connect(); reconnectErr != nil {
-		return reconnectErr
-	}
-	return c.writeCommand(map[string]any{
-		"cmd": "SET_ACTIVITY",
-		"args": map[string]any{
-			"pid":      os.Getpid(),
-			"activity": activity,
-		},
-		"nonce": nonce(),
-	})
+	return c.sendActivity(activity)
 }
 
 func (c *Client) ClearActivity() error {
+	return c.sendActivity(nil)
+}
+
+func (c *Client) sendActivity(activity any) error {
 	if err := c.Connect(); err != nil {
 		return err
 	}
 
-	err := c.writeCommand(map[string]any{
-		"cmd": "SET_ACTIVITY",
-		"args": map[string]any{
-			"pid":      os.Getpid(),
-			"activity": nil,
-		},
-		"nonce": nonce(),
-	})
-	if err == nil {
+	write := func() error {
+		return c.writeCommand(map[string]any{
+			"cmd": "SET_ACTIVITY",
+			"args": map[string]any{
+				"pid":      os.Getpid(),
+				"activity": activity,
+			},
+			"nonce": nonce(),
+		})
+	}
+
+	if err := write(); err == nil {
 		return nil
 	}
 
 	c.Close()
-	if reconnectErr := c.Connect(); reconnectErr != nil {
-		return reconnectErr
+	if err := c.Connect(); err != nil {
+		return err
 	}
-	return c.writeCommand(map[string]any{
-		"cmd": "SET_ACTIVITY",
-		"args": map[string]any{
-			"pid":      os.Getpid(),
-			"activity": nil,
-		},
-		"nonce": nonce(),
-	})
+	return write()
 }
 
 func (c *Client) Close() {

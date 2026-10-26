@@ -67,12 +67,6 @@
     "dark": "Koyu"
   },
   "hero": {
-    "carousel": {
-      "previous": "Önceki kart",
-      "next": "Sonraki kart",
-      "pause": "Kartları duraklat",
-      "play": "Kartları sürdür"
-    },
     "title-before": "Yaptığın şeyi",
     "title-accent": "anlık olarak paylaş",
     "description": "Nowly, etkinliğini zengin ve dinamik bir Discord varlığına dönüştürür.",

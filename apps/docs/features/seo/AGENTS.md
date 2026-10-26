@@ -1,27 +1,13 @@
 # SEO
 
-`lib/seo.ts` builds the Next.js `Metadata` object for docs pages.
+`lib/seo.ts` builds the Next.js `Metadata` for docs pages.
 
-## Add SEO metadata to a new page/route
+## Add metadata to a page
 
-1. Export `generateMetadata` from the page:
-   ```ts
-   export const generateMetadata = async (): Promise<Metadata> => {
-     const locale = await getLocale();
-     return createMetadata({
-       title: "Your Title",
-       description: "Your description",
-       locale: locale as LocaleString,
-       path: "/your-path",
-       type: "article", // "website" is the default
-       image: docsOgImage("your-path", { title, description, category }),
-     });
-   };
-   ```
-2. Unlike `apps/web`'s `createMetadata`, this one does **not** auto-generate an OG image if `image` is omitted — `openGraph.images`/`twitter.images` are left `undefined` in that case. Always pass `image: docsOgImage(...)` explicitly (see `features/docs-content/lib/og-metadata.ts` for the wrapper actually used by doc pages).
+Export `generateMetadata` calling `createMetadata({ title, description, locale, path, type?, image })`, with `locale` from `getLocale()` as `LocaleString`. `type` defaults to `"website"`.
+
+Unlike `apps/web`, `createMetadata` does not generate an OG image when `image` is omitted (`openGraph.images`/`twitter.images` stay `undefined`). Always pass `image: docsOgImage(path, { title, description, category })`; doc pages use the wrapper in `features/docs-content/lib/og-metadata.ts`.
 
 ## Gotchas
-- `OG_IMAGE_VERSION` here is `"2"`, independently versioned from `apps/web`'s own `OG_IMAGE_VERSION` (`"1"`) — bump this one specifically if you change `app/api/og/docs/[[...slug]]/route.tsx`'s rendering, to bust any CDN/browser cache of the old images.
 
-## Notable dependencies
-`features/docs-content` (`og-metadata.ts` wraps `docsOgImage`), `lib/brand.ts`/`lib/constants.ts` (root).
+- `OG_IMAGE_VERSION` is `"2"` here, versioned independently of web's (`"1"`). Bump it when changing `app/api/og/docs/[[...slug]]/route.tsx` rendering to bust CDN/browser caches.

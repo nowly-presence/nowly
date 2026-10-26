@@ -67,12 +67,6 @@
     "dark": "ダーク"
   },
   "hero": {
-    "carousel": {
-      "previous": "前のカード",
-      "next": "次のカード",
-      "pause": "カードを一時停止",
-      "play": "カードを再開"
-    },
     "title-before": "あなたの「今」を",
     "title-accent": "リアルタイム",
     "description": "NowlyはあなたのアクティビティをリッチでダイナミックなDiscordプレゼンスに変えます。",

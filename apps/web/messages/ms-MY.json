@@ -67,12 +67,6 @@
     "dark": "Gelap"
   },
   "hero": {
-    "carousel": {
-      "previous": "Kad sebelumnya",
-      "next": "Kad seterusnya",
-      "pause": "Jeda kad",
-      "play": "Sambung kad"
-    },
     "title-before": "Kongsi apa yang anda lakukan, secara",
     "title-accent": "masa nyata",
     "description": "Nowly mengubah aktiviti anda menjadi kehadiran Discord yang kaya dan dinamik.",

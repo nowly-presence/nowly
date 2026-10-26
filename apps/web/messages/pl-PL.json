@@ -67,12 +67,6 @@
     "dark": "Ciemny"
   },
   "hero": {
-    "carousel": {
-      "previous": "Poprzednia karta",
-      "next": "Następna karta",
-      "pause": "Wstrzymaj karty",
-      "play": "Wznów karty"
-    },
     "title-before": "Dziel się tym, co robisz, w",
     "title-accent": "czasie rzeczywistym",
     "description": "Nowly zamienia Twoją aktywność w bogatą, dynamiczną obecność na Discordzie.",

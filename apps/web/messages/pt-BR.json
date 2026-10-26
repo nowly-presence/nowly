@@ -67,12 +67,6 @@
     "dark": "Escuro"
   },
   "hero": {
-    "carousel": {
-      "previous": "Cartão anterior",
-      "next": "Próximo cartão",
-      "pause": "Pausar cartões",
-      "play": "Retomar cartões"
-    },
     "title-before": "Compartilhe o que você faz, em",
     "title-accent": "tempo real",
     "description": "O Nowly transforma sua atividade em uma presença rica e dinâmica no Discord.",

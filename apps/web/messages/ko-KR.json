@@ -67,12 +67,6 @@
     "dark": "다크"
   },
   "hero": {
-    "carousel": {
-      "previous": "이전 카드",
-      "next": "다음 카드",
-      "pause": "카드 일시 중지",
-      "play": "카드 다시 시작"
-    },
     "title-before": "지금 하는 일을",
     "title-accent": "실시간으로",
     "description": "Nowly는 당신의 활동을 풍부하고 역동적인 Discord 프레즌스로 바꿔줍니다.",

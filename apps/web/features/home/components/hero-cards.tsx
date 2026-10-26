@@ -2,8 +2,7 @@
 
 import { PresenceCard } from "@/features/home/components/presence-card";
 import { HERO_PRESENCE_CARDS } from "@/features/home/components/hero-presence-cards";
-import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const COUNT = HERO_PRESENCE_CARDS.length;
 const STEP = (Math.PI * 2) / COUNT;
@@ -25,14 +24,7 @@ const smoothstep = (value: number) => {
 };
 
 export const HeroCards = () => {
-  const t = useTranslations("hero.carousel");
   const stageRef = useRef<HTMLDivElement>(null);
-  const controlsRef = useRef<{
-    move: (direction: number) => void;
-    toggle: () => void;
-  } | null>(null);
-  const [paused, setPaused] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -140,7 +132,6 @@ export const HeroCards = () => {
 
       dragging = true;
       isPaused = true;
-      setPaused(true);
       pointerId = event.pointerId;
       dragStartY = event.clientY;
       dragStartSpin = spin;
@@ -170,7 +161,6 @@ export const HeroCards = () => {
       if (!desktop.matches) return;
 
       isPaused = true;
-      setPaused(true);
       stop();
       spin += event.deltaY / 900;
       render();
@@ -181,7 +171,6 @@ export const HeroCards = () => {
       if (desktop.matches) render();
     });
     const onMotionChange = () => {
-      setReducedMotion(motion.matches);
       stop();
       start();
     };
@@ -195,22 +184,6 @@ export const HeroCards = () => {
       focusInside = false;
       start();
     };
-    controlsRef.current = {
-      move: (direction) => {
-        stop();
-        isPaused = true;
-        setPaused(true);
-        spin += direction * STEP;
-        render();
-      },
-      toggle: () => {
-        isPaused = !isPaused;
-        setPaused(isPaused);
-        if (isPaused) stop();
-        else start();
-      }
-    };
-    setReducedMotion(motion.matches);
     stage.addEventListener("pointerdown", onPointerDown);
     stage.addEventListener("pointermove", onPointerMove);
     stage.addEventListener("pointerup", onPointerUp);
@@ -251,7 +224,6 @@ export const HeroCards = () => {
       stage.removeEventListener("wheel", onWheel);
       stage.removeEventListener("focusin", onFocusIn);
       stage.removeEventListener("focusout", onFocusOut);
-      controlsRef.current = null;
     };
   }, []);
 
@@ -276,21 +248,6 @@ export const HeroCards = () => {
           </div>
         ))}
       </div>
-      {/*
-      <div className="relative z-10 mt-4 flex justify-center gap-3">
-        <button type="button" className="rounded-lg border border-border bg-background px-4 py-2 text-sm" onClick={() => controlsRef.current?.move(-1)}>
-          {t("previous")}
-        </button>
-        <button type="button" className="rounded-lg border border-border bg-background px-4 py-2 text-sm" onClick={() => controlsRef.current?.move(1)}>
-          {t("next")}
-        </button>
-        {!reducedMotion ? (
-          <button type="button" className="rounded-lg border border-border bg-background px-4 py-2 text-sm" onClick={() => controlsRef.current?.toggle()}>
-            {t(paused ? "play" : "pause")}
-          </button>
-        ) : null}
-      </div>
-      */}
     </div>
   );
 };

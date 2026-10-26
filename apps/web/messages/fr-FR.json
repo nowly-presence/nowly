@@ -67,7 +67,6 @@
     "dark": "Sombre"
   },
   "hero": {
-    "carousel": { "previous": "Carte précédente", "next": "Carte suivante", "pause": "Mettre les cartes en pause", "play": "Relancer les cartes" },
     "title-before": "Partagez ce que vous faites, en",
     "title-accent": "temps réel",
     "description": "Nowly transforme votre activité en présence Discord riche et dynamique.",

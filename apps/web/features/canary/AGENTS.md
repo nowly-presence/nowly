@@ -1,15 +1,16 @@
 # Canary
 
-Rendered by `app/[locale]/canary`: `canary-view.tsx` shows canary (dev) extension builds.
+`app/[locale]/canary` renders `components/canary-view.tsx`: canary (dev) extension builds, per browser.
 
-## Add a new canary distribution channel
+## Add a canary distribution channel
 
-1. Same underlying helpers as the `extension` feature: `lib/extension-store.ts` and `lib/brand.ts` (both root, shared between `canary` and `extension`).
-2. If it's a new browser, follow the `extension` feature's "Add a new supported browser" steps first.
-3. `canary-view.tsx` uses `CANARY_ACCENT`/`CANARY_INK` (from `lib/brand.ts`) for its distinct styling — reuse those constants rather than hardcoding new colors, since `navbar.tsx` also reads them to re-skin the extension-store button when the visitor is on `/canary`.
+1. Zip URLs are `CANARY_EXTENSION_ZIP_URL` / `CANARY_FIREFOX_ZIP_URL` in `lib/constants.ts`, mapped per browser by `zipUrl` in `canary-view.tsx`. Add the new URL there.
+2. For a new browser, first follow the `extension` feature's "Add a new supported browser" steps (`lib/extension-store.ts` is shared).
+3. Reuse `CANARY_ACCENT` / `CANARY_INK` and `BRAND_LOCKUP_CANARY` from `lib/brand.ts` rather than hardcoding colors.
 
 ## Gotchas
-- The canary/extension visual distinction (accent color) is driven by the route (`pathname === "/canary"` in `navbar.tsx`), not by a prop passed down from this feature — don't try to theme the navbar from here.
+
+- The canary look of the store button is route-driven: `navbar.tsx` computes `canary = pathname === "/canary"`, applies the accent/ink styling to `ExtensionStoreButton`, and passes `canary` to `mobile-nav.tsx`, which applies the same styling. Another route with a distinct navbar look must update both files; nothing is themed from this feature.
 
 ## Notable dependencies
 `lib/extension-store.ts`, `lib/brand.ts`, `lib/constants.ts` (root, shared).

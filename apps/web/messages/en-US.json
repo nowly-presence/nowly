@@ -67,7 +67,6 @@
     "dark": "Dark"
   },
   "hero": {
-    "carousel": { "previous": "Previous card", "next": "Next card", "pause": "Pause cards", "play": "Play cards" },
     "title-before": "Share what you do, in",
     "title-accent": "real time",
     "description": "Nowly turns your activity into a rich, dynamic Discord presence.",
