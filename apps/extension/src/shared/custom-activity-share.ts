@@ -41,6 +41,7 @@ export type SharedActivityFile = {
       label: string;
       url: string;
     }[];
+    detectionUrl?: string;
   };
 };
 
@@ -110,7 +111,8 @@ export const buildActivityFile = (activity: CustomActivity, imageData: Record<st
     buttons: activity.buttons.map((button) => ({
       label: button.label,
       url: button.url
-    }))
+    })),
+    ...(activity.detectionUrl ? { detectionUrl: activity.detectionUrl } : {})
   }
 });
 
@@ -219,7 +221,8 @@ const parseActivity = (value: unknown): ParsedActivityFile | null => {
     smallImage: small.image,
     smallText: asString(value.smallText),
     timestamp,
-    buttons
+    buttons,
+    detectionUrl: asString(value.detectionUrl)
   };
 
   if (hasCustomActivityErrors(validateCustomActivity(draft))) return null;

@@ -3,8 +3,9 @@ import packageJson from "../../package.json";
 import { createMockEvent } from "@/preview/mock-events";
 import { createMockRouter } from "@/preview/mock-router";
 import { createMockStorageArea, type StorageChanges } from "@/preview/mock-storage";
-import { buildCustomActivities, buildInstalledPresences, buildLiveActivity, buildRuntimeLogs, loadCatalogFixture, pickInstalledSlugs } from "@/preview/preview-fixtures";
+import { buildCustomActivities, buildInstalledPresences, buildLiveActivity, buildRuntimeLogs, detectedActivation, DETECTED_HOST, DETECTED_TAB_ID, loadCatalogFixture, pickInstalledSlugs } from "@/preview/preview-fixtures";
 import { buildCustomPresence, customActivitySlug } from "@/shared/custom-activity";
+import { CUSTOM_ACTIVITY_DETECTION_KEY } from "@/shared/custom-activity-detection";
 import { previewParams } from "@/preview/preview-params";
 import { SUPPORT_PROMPT_MIN_USAGE_DAYS } from "@/shared/support-prompt";
 import type { TabActivity } from "@/shared/types";
@@ -28,8 +29,11 @@ export const installMockChrome = async (): Promise<void> => {
 
   const customActivities = buildCustomActivities(previewParams.scenario, previewParams.customLive, now);
   const liveCustom = customActivities.items.find((item) => item.id === customActivities.activeId);
-  const currentActivity = liveCustom
-    ? { slug: customActivitySlug(liveCustom.id), presence: buildCustomPresence(liveCustom, customActivities.activatedAt ?? now), updatedAt: now }
+  const detectedCustom = previewParams.customLive === "detected" ? customActivities.items[0] : undefined;
+  const customActivatedAt = detectedCustom ? detectedActivation(now) : (customActivities.activatedAt ?? now);
+  const runningCustom = liveCustom ?? detectedCustom;
+  const currentActivity = runningCustom
+    ? { slug: customActivitySlug(runningCustom.id), presence: buildCustomPresence(runningCustom, customActivatedAt), updatedAt: now }
     : liveActivity;
 
   const tabActivities: TabActivity[] =
@@ -93,15 +97,29 @@ export const installMockChrome = async (): Promise<void> => {
     ...(previewParams.season ? { seasonOverride: previewParams.season } : {}),
     ...(previewParams.prank ? { halloweenPrank: { replay: true } } : {}),
     ...(previewParams.moment ? { seasonMoments: { replay: true } } : {}),
-    ...(previewParams.slug
+    ...(previewParams.customActivityId
       ? {
           sidepanelPendingNav: {
             view: previewParams.view,
-            slug: previewParams.slug,
+            template: previewParams.customActivityId,
             at: now
           }
         }
-      : {})
+      : previewParams.slug
+        ? {
+            sidepanelPendingNav: {
+              view: previewParams.view,
+              slug: previewParams.slug,
+              at: now
+            }
+          }
+        : {})
+  });
+
+  await session.set({
+    [CUSTOM_ACTIVITY_DETECTION_KEY]: detectedCustom
+      ? { activityId: detectedCustom.id, host: DETECTED_HOST, tabId: DETECTED_TAB_ID, activatedAt: customActivatedAt }
+      : null
   });
 
   const router = createMockRouter({
@@ -121,6 +139,16 @@ export const installMockChrome = async (): Promise<void> => {
       getManifest: () => ({ version: packageJson.version }),
       getURL: (path: string) => `/${path}`,
       onMessage: runtimeMessage,
+      connect: () => {
+        const messages = createMockEvent<[unknown]>();
+        const disconnects = createMockEvent<[]>();
+        return {
+          onMessage: messages,
+          onDisconnect: disconnects,
+          postMessage: () => queueMicrotask(() => messages.emit({ ready: true })),
+          disconnect: () => disconnects.emit()
+        };
+      },
       sendMessage: (message: RouterRequest) => router.dispatch(message.type, message.payload)
     },
     storage: {

@@ -1,4 +1,3 @@
-import { trackAnalytics } from "@/background/analytics-client";
 import { getDiscordIpcIssue, setDiscordIpcIssue } from "@/background/storage/discord-ipc-issue.store";
 import { setNativeProfile, setNativeSeenConnectedOnce } from "@/background/storage/onboarding.store";
 import { NATIVE_HOST } from "@/shared/constants";
@@ -100,7 +99,6 @@ export const reconnectNative = (): NativeStatus => {
   discordConnected = false;
   version = undefined;
   status = "connecting";
-  trackAnalytics("native_reconnect", { source: "extension_settings" });
   connectNative();
   return getNativeStatus();
 };
@@ -117,7 +115,6 @@ export const restartNative = (): NativeStatus => {
   discordConnected = false;
   version = undefined;
   status = "connecting";
-  trackAnalytics("native_reconnect", { source: "extension_settings" });
   connectNative();
   return getNativeStatus();
 };
@@ -170,16 +167,12 @@ export const connectNative = (options: {
   });
 
   nativePort.onDisconnect.addListener(() => {
-    const wasConnected = connected;
     connecting = false;
     connected = false;
     discordConnected = false;
     version = undefined;
     status = chrome.runtime.lastError?.message ?? "native disconnected";
     nativePort = null;
-    if (wasConnected) trackAnalytics("native_disconnected", {
-      payload: { reason: status }
-    });
   });
 
   postNative({ type: "PING" });

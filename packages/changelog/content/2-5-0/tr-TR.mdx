@@ -1,0 +1,72 @@
+---
+title: 2.5.0
+date: 2026-10-28
+description: Özel aktivite algılama ve paylaşımı, duyurular, Discord görünümü ve gizlilik.
+---
+
+> Yayın 28 Ekim 2026 için planlanıyor. Tarayıcı mağazalarındaki kullanılabilirlik henüz doğrulanmadı.
+
+## Yenilikler
+
+### Özel aktivitelerin otomatik algılanması
+
+- Özel aktiviteye isteğe bağlı bir algılama bağlantısı ekle. Odaktaki tarayıcı penceresinin etkin sekmesi eşleştiğinde aktivite otomatik seçilir. Eşleşen sayfadan ayrılınca otomatik seçim sona erer.
+- Alan adı veya yol kullan; alt alan adları için `*.example.com`, yollar için sonda `*` ekleyebilirsin. Aktiviteyi elle kullanmaya devam etmek için alanı boş bırak.
+- Elle etkinleştirilen özel aktivite, otomatik algılamadan önceliklidir.
+- Birden fazla aktivite eşleşirse en son güncellenen eşleşen aktivite seçilir.
+- Özel aktivitelerin dışa ve içe aktarımına algılama bağlantıları da dâhildir. Bu alanı içermeyen eski dosyalar desteklenmeye devam eder.
+
+### Özel aktiviteler için herkese açık bağlantılar
+
+- Discord hesabının yazar adı ve avatarıyla herkese açık bir bağlantı yayımla. Kaydedilmiş sürüm herkese açılır, kaydedilmemiş taslağın değil.
+- Bağımsız bir kopyayı açıkça eklemeden önce önizlemeyi incele. Yeni kopyalar etkin değildir ve otomatik algılama kapalıdır.
+- Açıkça güncellediğinde veya yayından kaldırdığında aynı bağlantı korunur. Alıcıların kopyaları yüklü kalır ve asla otomatik güncellenmez.
+- Alıcılar yerel değişikliklerini koruyabilir veya güncellemeyi inceledikten sonra değiştirebilir. Açık bir düzenleyici, kaydedilmemiş çalışmayı korumak için değiştirmeyi engeller.
+- Kaynak aktiviteyi silmeden önce herkese açık veya yayını tamamlanmamış bağlantıları açıkça geri çek, ardından ilk sunucudan çevrimiçi doğrula.
+- Hesap silindikten sonra yayınlarının bulunmadığı doğrulanırsa eski hesap olmadan yerel silme yapılabilir. Doğrulama kullanılamıyorsa veya kesin değilse kaynak korunur.
+
+### Duyurular ve sürüm notları
+
+- Haberler sekmesinden duyuruları ve yayımlanmış sürüm notlarını oku; ayrıntılar için bir kaydı aç. Yayımlanmış değişiklik günlüğü dosyaları otomatik eklenir; tarihsiz, gelecek tarihli veya açıkça yayımlanmamış taslaklar akışa alınmaz.
+- Duyurular arayüz dilini kullanır; çeviri yoksa yedek bir dile geçer. Sürüm notları için yedek dil İngilizcedir.
+- Sabitlenmiş bildirimler Etkinlik başlığının üzerinde görünür. Uyarılar önem derecesine göre sarı, turuncu veya kırmızı; bakım bildirimleri temanın birincil rengindedir. Şerit Haberler'i açar ve kapatma düğmesi içermez.
+- Tahmini bakım bitişi, geri sayım veya hizmetin düzeleceği sözü yerine tarih olarak gösterilir. Bu saatte şerit kaybolur; ayrı bir sona erme tarihi yoksa duyuru okunabilir kalır.
+- Akış otomatik yenilenir, son geçerli kopyayı çevrimdışı saklar ve okunma durumunu cihazına kaydeder.
+
+### Discord aktivite görünümü
+
+- Presence'lar, aktivite düğmelerinden bağımsız olarak `detailsUrl` ve `stateUrl` ile ayrıntı ve durum metinlerine herkese açık HTTPS bağlantıları ekleyebilir. Geçersiz veya karşılık gelen metni olmayan bağlantılar yok sayılır.
+- Presence'lar `statusDisplayType` ile Discord'un kısa durumunda aktivite adı, durum veya ayrıntı metnini seçebilir. Aktivite kartının içeriği değişmez.
+
+Bu alanlar uyumlu SDK, eklenti ve yerel ana makine sürümleri gerektirir. Eski sürümler bunları yok sayar. Özel aktivite düzenleyicisine yeni bir görünüm seçicisi eklemezler.
+
+## İyileştirmeler ve düzeltmeler
+
+- Özel aktivite düzenleyicisi, kaç bağlantı butonu daha ekleyebileceğini gösterir.
+- Önizleme artık aktivite adını gereksiz yere tekrarlamaz. İpucu ile adın tamamını okuyabilirsin.
+- Algılama bölümünün aralıkları daha anlaşılır hale getirildi.
+- İhtiyacın olmadığında Kitaplık, Özel veya Haberler sekmesini gizle. Etkinlik ve Ayarlar kullanılabilir kalır. Varsayılan düzeni Ayarlar'dan geri yükle. Haberler'i gizlemek, Etkinlik'teki sabitlenmiş bildirimleri gizlemez.
+- YouTube dâhil videoların ilerleme çubuğu artık oynatma ilerledikçe dolar; özel aktivitelerin geri sayımı ise kalan süreyi göstermeye devam eder.
+- “Nowly'yi Destekle” bölümünde Bitcoin, Ethereum veya Solana adresini tek tıkla kopyala; kopyalama sonrasında bir onay gösterilir.
+- En az iki yüklü presence için güncelleme varsa bunları tek işlemle güncelle. Güncellemeler sırayla yapılır.
+- Boşta etkinlik kartının düğmeleri artık dar yan panellere de sığıyor.
+- Güncellemeler, yeniden yüklemeler ve kaldırmalar her presence için sıraya alınır; böylece eski bir güncelleme yeni kaldırdığın aktiviteyi geri getiremez.
+- Bir presence'ın etkinleştirilmesi yalnızca betiği başarıyla kaydedildikten sonra saklanır. Etkinleştirme ve toplu işlem hataları başarılı görünmek yerine bildirilir.
+- Kullanıcı betikleri izin etiketi, tarayıcıda neyin etkinleştirilmesi gerektiğini daha açık anlatır.
+
+## Gizlilik ve platformlar
+
+- İsteğe bağlı Umami ürün olayları eski Insights istatistiklerinin yerini alır. Site ve eklenti izinleri bağımsızdır; olaylar kalıcı ziyaretçi kimlikleri veya gezinme ve aktivite içeriği olmadan API üzerinden iletilir.
+- Eski Insights sayfaları, uç noktaları, istatistik modelleri ve kampanya işlevleri kaldırıldı. Bu sürüm eski genel istatistik ve oturum kaydı betiklerini etkinleştirmez.
+- Yasal onaylar artık iç sürüm numaraları yerine koşulların ve gizlilik politikasının gerçek güncelleme tarihlerini izler. Eski sayısal kayıtlar yeniden onay gerektirir; önbellekteki belge tarihleri çevrimdışı kullanılabilir.
+- Kaldırma sayfası, cihazın işlevsel verilerini tutma veya silme seçeneğini isteğe bağlı istatistiklerden ayırır. Sayfanın açılması yalnızca site istatistiklerine izin verilmişse bir ürün olayı gönderir.
+- ChromeOS bekleme listesi ve destek arayüzleri kaldırıldı. Eklenti Chrome ve Firefox'a, yerel ana makine ise Windows, macOS ve Linux'a yönelik olmaya devam eder.
+
+## Web sitesi, belgeler ve bakım
+
+- Ana sayfa özel aktiviteleri tanıtır; görsel kontrastı ve duyuru çubuğu renkleri etkin temaya uyarlanır.
+- Sitenin klavye ile gezinmesi, içeriği atlama bağlantıları ve görünür odağı iyileştirildi. Animasyonlar azaltılmış hareket tercihini izler; hareketli içerik duraklatılabilir.
+- Yerelleştirilmiş SSS, iletişim ve kurtarma yönergeleri ile çerez politikası bağlantıları güncellendi.
+- Geliştirici belgeleri otomatik `settings.ts` keşfini, Discord kısa durum seçimini, tıklanabilir aktivite metnini ve görsel proxy'sini açıklar.
+- Duyuru API'si korumalı yayımlama, zamanlama, sona erme ve canlı akış güncellemelerini destekler.
+- Nowly'nin herkese açık kodu artık MIT lisansındadır. Eklenti, site ve API testleri birleştirilip düzeltildi; duyuru ayrıntıları ve görünüm modu değiştirme testleri de buna dâhildir.

@@ -1,10 +1,12 @@
-import { trackAnalytics } from "@/background/analytics-client";
-import { addActiveSlugToState, clearActiveSlugsFromState, clearTabPresences, getActiveSessionStartedAt, getActiveSlugsSnapshot, getFocusedTabId, getTabPresence, getTabPresencesSnapshot, hasActiveSession, isTabMuted, notifyBroadcastStateChanged, removeActiveSession, removeActiveSessions, removeActiveSlugFromState, removeActiveSlugsFromState, removeTabPresence, removeTabPresencesBySlug, setActiveSessionStartedAt, setTabMuted, upsertTabPresence } from "@/background/services/background-context";
+import { categoryOf } from "@nowly/telemetry";
+import { trackProduct } from "@/background/telemetry";
+import { addActiveSlugToState, clearActiveSlugsFromState, clearTabPresences, getActiveSlugsSnapshot, getFocusedTabId, getTabPresence, getTabPresencesSnapshot, hasActiveSession, isTabMuted, notifyBroadcastStateChanged, removeActiveSession, removeActiveSessions, removeActiveSlugFromState, removeActiveSlugsFromState, removeTabPresence, removeTabPresencesBySlug, setActiveSessionStartedAt, setTabMuted, upsertTabPresence } from "@/background/services/background-context";
 import { sendActiveHeartbeat } from "@/background/services/active-heartbeat";
 import { mapPresenceData, postNative } from "@/background/services/native";
 import { applySiteTimer } from "@/background/services/site-timers";
 import { verifyPresenceRelease } from "@/background/services/release-security";
-import { getActiveCustomPresence, getCustomActivities } from "@/background/storage/custom-activities.store";
+import { getCustomActivities } from "@/background/storage/custom-activities.store";
+import { getEffectiveCustomPresence } from "@/background/services/custom-activity-detection";
 import { getCurrentActivity, getPresences, setCurrentActivity, setDebug } from "@/background/storage/presences.store";
 import { getSettings } from "@/background/storage/settings.store";
 import { recordUsageDay } from "@/background/storage/support.store";
@@ -34,7 +36,9 @@ const normalizeTextUrl = (value: unknown, text: string | undefined): string | un
 
   try {
     const url = new URL(value);
+
     if (url.protocol !== "https:" || !url.hostname || url.username || url.password) return undefined;
+
     return url.href.length <= 2048 ? url.href : undefined;
   } catch {
     return undefined;
@@ -110,7 +114,8 @@ export const normalizeActivity = (activity: PresenceData, fallbackName: string):
     smallImageKey: normalizeImage(activity.smallImageKey),
     smallImageText: normalizeAssetText(activity.smallImageText),
     type: allowedTypes.has(activity.type ?? 0) ? activity.type : 0,
-    statusDisplayType: activity.statusDisplayType === 0 || activity.statusDisplayType === 1 || activity.statusDisplayType === 2 ? activity.statusDisplayType : undefined,
+    statusDisplayType:
+      activity.statusDisplayType === 0 || activity.statusDisplayType === 1 || activity.statusDisplayType === 2 ? activity.statusDisplayType : undefined,
     buttons: activity.buttons
       ?.filter((button) => button.url.startsWith("https://"))
       .slice(0, 2)
@@ -181,10 +186,21 @@ export const broadcastActiveTab = async (): Promise<void> => {
 
   const settings = await getSettings();
 
-  const custom = await getActiveCustomPresence();
+  const custom = await getEffectiveCustomPresence();
 
   if (custom) {
-    postNative(settings.presencePaused ? { type: "CLEAR_ACTIVITY" } : { type: "SET_ACTIVITY", presence: custom.presence });
+    const submitted = postNative(settings.presencePaused ? { type: "CLEAR_ACTIVITY" } : { type: "SET_ACTIVITY", presence: custom.presence });
+    if (submitted && !settings.presencePaused) void trackProduct(
+      {
+        name: "presence_used",
+        source: "extension",
+        data: {
+          category: "other",
+          origin: "custom"
+        }
+      },
+      { daily: "use:custom:other" }
+    );
     await setCurrentActivity({
       slug: custom.slug,
       presence: custom.presence,
@@ -202,10 +218,12 @@ export const broadcastActiveTab = async (): Promise<void> => {
     await setCurrentActivity(null);
   } else {
     const presence = await applySiteTimer(entry, settings.preserveSiteTimer === true);
-    postNative({
+
+    const submitted = postNative({
       type: "SET_ACTIVITY",
       presence
     });
+    if (submitted) await recordProductUse(entry.slug);
     await setCurrentActivity({
       slug: entry.slug,
       presence,
@@ -251,16 +269,29 @@ export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
     return;
   }
 
-  postNative({
+  const submitted = postNative({
     type: "SET_ACTIVITY",
     presence: current.presence
   });
+  if (submitted) await recordProductUse(current.slug);
   await refreshToolbarBadge();
 };
 
-export const getPresenceVersion = async (slug: string): Promise<string | undefined> => {
-  const presences = await getPresences();
-  return presences[slug]?.release?.version ?? presences[slug]?.metadata?.version ?? undefined;
+const recordProductUse = async (slug: string): Promise<void> => {
+  const stored = (await getPresences())[slug];
+
+  if (!stored) return;
+
+  const category = categoryOf(stored.metadata.category);
+  const origin = stored.source === "bundle" || stored.source === "local" ? stored.source : "store";
+  void trackProduct(
+    {
+      name: "presence_used",
+      source: "extension",
+      data: { category, origin }
+    },
+    { daily: `use:${origin}:${category}` }
+  );
 };
 
 export const addActiveSlug = async (slug: string): Promise<void> => {
@@ -269,47 +300,15 @@ export const addActiveSlug = async (slug: string): Promise<void> => {
   if (await hasActiveSession(slug)) return;
 
   await setActiveSessionStartedAt(slug, Date.now());
-  trackAnalytics("presence_session_start", {
-    slug,
-    version: await getPresenceVersion(slug)
-  });
   void sendActiveHeartbeat([slug]);
 };
 
-export const removeActiveSlug = async (slug: string, reason: string): Promise<void> => {
+export const removeActiveSlug = async (slug: string, _reason: string): Promise<void> => {
   await removeActiveSlugFromState(slug);
-  const startedAt = await getActiveSessionStartedAt(slug);
   await removeActiveSession(slug);
-
-  if (!startedAt) return;
-
-  trackAnalytics("presence_session_end", {
-    slug,
-    version: await getPresenceVersion(slug),
-    payload: {
-      durationMs: Date.now() - startedAt,
-      reason
-    }
-  });
 };
 
-export const removeActiveSlugs = async (slugs: string[], reason: string): Promise<void> => {
-  await Promise.all(
-    slugs.map(async (slug) => {
-      const startedAt = await getActiveSessionStartedAt(slug);
-
-      if (!startedAt) return;
-
-      trackAnalytics("presence_session_end", {
-        slug,
-        version: await getPresenceVersion(slug),
-        payload: {
-          durationMs: Date.now() - startedAt,
-          reason
-        }
-      });
-    })
-  );
+export const removeActiveSlugs = async (slugs: string[], _reason: string): Promise<void> => {
   await Promise.all([
     removeActiveSlugsFromState(slugs),
     removeActiveSessions(slugs)
@@ -371,11 +370,6 @@ export const handleActivityUpdate = async (slug: string, activity: PresenceData,
       stage: "security",
       message: `[${slug}] ${verified.error ?? "release verification failed"}`,
       updatedAt: Date.now()
-    });
-    trackAnalytics("presence_error", {
-      slug,
-      version: stored.release?.version ?? stored.metadata?.version,
-      payload: { stage: "security" }
     });
     return {
       ok: false

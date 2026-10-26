@@ -5,11 +5,10 @@ import { PaginatedLibraryGrid } from "@/features/library/components/paginated-li
 import { ButtonLink } from "@/components/button-link";
 import { Button, ButtonAnchor, Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle, Input, cn } from "@nowly/ui";
 import { catalogCategories, presenceMatchesGithub, presenceSearchText, type LibraryCategory, type LibraryPresence } from "@/lib/library-catalog";
-import { trackPublicAnalytics } from "@/lib/analytics";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { Link } from "@/i18n/navigation";
 import { RiCloseLine, RiDiscordFill, RiSearchLine } from "@nowly/ui/icons";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
 const navJoinOffset = () => (window.matchMedia("(min-width: 640px)").matches ? 116 : 84);
@@ -85,7 +84,6 @@ export const LibraryView = ({ items, authorHandle = null }: {
   authorHandle?: string | null;
 }) => {
   const t = useTranslations("libraryPage");
-  const locale = useLocale();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<LibraryCategory | "all">("all");
   const deferredQuery = useDeferredValue(query);
@@ -108,59 +106,6 @@ export const LibraryView = ({ items, authorHandle = null }: {
   }, [effectiveAuthorHandle, category, items, normalizedQuery]);
 
   const isStale = query !== deferredQuery;
-
-  useEffect(() => {
-    trackPublicAnalytics("marketplace_page_view", {
-      source: "web_library",
-      payload: { locale }
-    });
-  }, []);
-
-  const isFirstFilterRef = useRef(true);
-  useEffect(() => {
-    if (isFirstFilterRef.current) {
-      isFirstFilterRef.current = false;
-      return;
-    }
-
-    trackPublicAnalytics("marketplace_filter", {
-      source: "web_library",
-      payload: {
-        locale,
-        category,
-        resultCount: results.length
-      }
-    });
-  }, [category, locale, results.length]);
-
-  const wasEmptyRef = useRef(false);
-  useEffect(() => {
-    const isEmpty = results.length === 0;
-
-    if (isEmpty && !wasEmptyRef.current) {
-      trackPublicAnalytics("marketplace_no_results", {
-        source: "web_library",
-        payload: { locale, category }
-      });
-    }
-
-    wasEmptyRef.current = isEmpty;
-  }, [results.length, locale, category]);
-
-  useEffect(() => {
-    if (!normalizedQuery) return;
-
-    const timer = window.setTimeout(() => {
-      trackPublicAnalytics("search_performed", {
-        source: "web_library",
-        payload: {
-          locale,
-          hasResults: results.length > 0
-        }
-      });
-    }, 500);
-    return () => window.clearTimeout(timer);
-  }, [normalizedQuery, locale, results.length]);
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">

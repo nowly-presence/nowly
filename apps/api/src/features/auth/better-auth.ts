@@ -5,11 +5,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 
 const DEV_WEB_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"];
 
-export const authTrustedOrigins = (): string[] => [
-  serverEnv.FRONTEND_URL,
-  serverEnv.INSIGHTS_URL,
-  ...(process.env.NODE_ENV === "production" ? [] : DEV_WEB_ORIGINS)
-];
+export const authTrustedOrigins = (): string[] => [serverEnv.FRONTEND_URL, ...(process.env.NODE_ENV === "production" ? [] : DEV_WEB_ORIGINS)];
 
 const createAuth = () =>
   betterAuth({

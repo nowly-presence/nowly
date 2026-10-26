@@ -1,4 +1,4 @@
-export const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE";
+import { USER_SCRIPT_MESSAGE_SOURCE } from "@/shared/constants";
 
 export const createPresenceRuntime = (slug: string, name: string, bundle: string, settings: Record<string, unknown> = {}, strings: Record<
   string,

@@ -1,4 +1,4 @@
-name: Test API
+name: Test API and telemetry
 
 on:
   push:
@@ -20,3 +20,5 @@ jobs:
         env:
           DATABASE_URL: postgresql://user:password@localhost:5432/nowly
       - run: pnpm --filter @nowly/api test
+      - run: pnpm --filter @nowly/telemetry test
+      - run: pnpm --filter @nowly/telemetry typecheck

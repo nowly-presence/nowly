@@ -30,6 +30,8 @@ export const ExtensionConnectView = () => {
   const searchParams = useSearchParams();
   const deviceId = searchParams.get("device");
   const fromExtension = searchParams.get("source") === "extension";
+  const creator = searchParams.get("permission") === "creator";
+  const sharing = useTranslations("activitySharing");
   const [status, setStatus] = useState<Status>("checking");
   const [user, setUser] = useState<AccountUser | null>(null);
   const [busy, setBusy] = useState(false);
@@ -39,7 +41,7 @@ export const ExtensionConnectView = () => {
     setStatus("connecting");
 
     try {
-      const session = await createExtensionSession(deviceId);
+      const session = await createExtensionSession(deviceId, creator);
 
       const result = await requestExtension<{
         ok?: boolean;
@@ -48,7 +50,7 @@ export const ExtensionConnectView = () => {
     } catch {
       setStatus("error");
     }
-  }, [deviceId]);
+  }, [deviceId, creator]);
 
   useEffect(() => {
     let cancelled = false;
@@ -70,7 +72,7 @@ export const ExtensionConnectView = () => {
             setStatus("no-extension");
             return;
           }
-          if (fromExtension && !autoStarted.current) {
+          if (fromExtension && !creator && !autoStarted.current) {
             autoStarted.current = true;
             void connect();
             return;
@@ -86,7 +88,7 @@ export const ExtensionConnectView = () => {
       cancelled = true;
       unsubscribe?.();
     };
-  }, [connect, fromExtension]);
+  }, [connect, fromExtension, creator]);
 
   const onSignIn = async (): Promise<void> => {
     setBusy(true);
@@ -143,6 +145,7 @@ export const ExtensionConnectView = () => {
             <StatusIcon status={status} />
             <CardTitle className="mt-4 text-lg">{title}</CardTitle>
             <CardDescription className="mt-2">{description}</CardDescription>
+            {creator && status !== "done" && <CardDescription className="mt-2">{sharing("permission")}</CardDescription>}
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
               {status === "signed-out" ? (

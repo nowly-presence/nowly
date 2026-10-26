@@ -1,4 +1,33 @@
 {
+  "activitySharing": {
+    "editorOpen": "Tutup penyunting aktiviti dalam sambungan sebelum menggantikan salinan. Draf belum disimpan dilindungi.",
+    "listeningType": "Mendengar",
+    "watchingType": "Menonton",
+    "competingType": "Bertanding",
+    "title": "Aktiviti tersuai dikongsi",
+    "preview": "Pratonton Discord",
+    "timer": "Kiraan detik",
+    "loading": "Memuatkan aktiviti...",
+    "unavailable": "Aktiviti ini tidak tersedia atau tidak lagi diterbitkan.",
+    "author": "Dikongsi oleh <avatar></avatar><person>{name}</person>",
+    "consent": "Salinan anda kekal bebas. Pengaktifan dan kemas kini manual, pengesanan dimatikan.",
+    "conflict": "Salinan anda mempunyai perubahan setempat. Kekalkan atau gantikan secara nyata dengan pratonton ini.",
+    "install": "Tambah ke Nowly",
+    "keep": "Kekalkan salinan saya",
+    "replace": "Ganti dengan semakan ini",
+    "installed": "Disimpan dalam Nowly, dinyahaktifkan. Aktifkan secara berasingan apabila sedia.",
+    "kept": "Salinan dan asas kemas kini anda tidak berubah.",
+    "changed": "Terbitan atau salinan anda mungkin berubah. Muat semula dan semak sebelum mencuba lagi.",
+    "refresh": "Muat semula dan semak",
+    "upToDate": "Terkini",
+    "update": "Kemas kini",
+    "updateDescription": "Versi baharu tersedia. Kekalkan salinan anda atau gantikannya dengan pratonton yang dipaparkan. Salinan yang diganti kekal dinyahaktifkan.",
+    "permission": "Benarkan Nowly menerbitkan aktiviti tersimpan dengan nama dan avatar Discord anda. Ini juga mengaktifkan penyegerakan akaun. Tiada apa diterbitkan sehingga anda kembali ke sambungan dan memilih Terbitkan.",
+    "playing": "Bermain",
+    "listening": "Mendengar {name}",
+    "watching": "Menonton {name}",
+    "competing": "Bertanding dalam {name}"
+  },
   "custom-activity-section": {
     "announcement": "Baharu: cipta aktiviti anda sendiri di Discord",
     "eyebrow": "Aktiviti tersuai",
@@ -38,12 +67,6 @@
     "dark": "Gelap"
   },
   "hero": {
-    "carousel": {
-      "previous": "Kad sebelumnya",
-      "next": "Kad seterusnya",
-      "pause": "Jeda kad",
-      "play": "Sambung kad"
-    },
     "title-before": "Kongsi apa yang anda lakukan, secara",
     "title-accent": "masa nyata",
     "description": "Nowly mengubah aktiviti anda menjadi kehadiran Discord yang kaya dan dinamik.",
@@ -406,19 +429,12 @@
     "title": "Jambatan tempatan ke Discord",
     "description": "Sambungan membaca tab. Aplikasi desktop menghantar status anda ke Discord. Tajuk, platform dan main balik tidak pernah meninggalkan PC anda.",
     "detected": "Dikesan",
-    "chromeos-title": "ChromeOS belum lagi disokong",
-    "chromeos-description": "Discord Rich Presence memerlukan aplikasi asli yang tidak dapat dijalankan oleh ChromeOS pada masa ini. Kami sedang menyiasatnya - tinggalkan e-mel anda untuk dimaklumkan jika ini berubah.",
-    "chromeos-email-placeholder": "anda@contoh.com",
-    "chromeos-submit": "Maklumkan saya",
-    "chromeos-success": "Terima kasih, kami akan maklumkan anda.",
-    "chromeos-error": "Sesuatu tidak berjaya. Sila cuba lagi.",
     "version": "Versi {version}",
     "card-title": "Muat turun untuk {platform}",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux",
-      "chromeos": "ChromeOS"
+      "linux": "Linux"
     },
     "windows-installer": "Pemasang Windows (.exe)",
     "windows-portable": "Arkib mudah alih (.zip)",
@@ -926,15 +942,16 @@
   },
   "cookie-banner": {
     "title": "Maklumat kuki",
-    "message": "Laman ini menggunakan kuki bahasa yang benar-benar perlu. Jika iklan diaktifkan kemudian, Google mungkin juga menggunakan teknologi pengiklanan.",
+    "message": "Statistik produk agregat pilihan dimatikan sehingga anda bersetuju. Kuki bahasa masih diperlukan. Ubah pilihan pada halaman Data anda.",
     "learn-more": "Baca dasar kuki",
-    "dismiss": "Faham"
+    "accept": "Benarkan statistik",
+    "decline": "Tolak statistik"
   },
   "privacy-page": {
     "badge": "Privasi",
     "title": "Dasar Privasi",
     "description": "Cara Nowly mengendalikan data anda, apa yang kekal pada peranti anda, dan apa yang bergantung pada persetujuan anda.",
-    "last-updated": "Kemas kini terakhir: 16 Oktober 2026.",
+    "last-updated": "2026-10-25",
     "data-region": "Kesatuan Eropah (VPS disediakan oleh Contabo GmbH, Jerman)",
     "intro": "Dasar ini menerangkan pemprosesan data peribadi oleh <strong>{publisherName}</strong> sebagai pengawal. Mesej Rich Presence sampai ke Discord secara setempat melalui aplikasi desktop. Namun tidak semua fungsi di luar talian: penyegerakan, permintaan imej, muat naik yang diminta dan statistik pilihan melibatkan API atau penyedia kami.",
     "sections": [
@@ -968,7 +985,7 @@
       },
       {
         "title": "Statistik penggunaan (pilih masuk)",
-        "body": "Analitik <strong>dimatikan secara lalai</strong>. Jika anda mengaktifkannya semasa onboarding atau kemudian dalam tetapan sambungan, API kami mungkin menerima:<ul><li>UUID peranti anda (nama samaran: bukan akaun Discord atau Google anda, tetapi masih data peribadi di bawah GDPR kerana ia boleh mengenal pasti pemasangan anda).</li><li>Pelayar, OS, bahasa, versi sambungan, dan versi aplikasi desktop.</li><li>Slug/versi kehadiran yang dipasang dan peristiwa penggunaan (contohnya pemasangan, degupan jantung, penilaian) dengan muatan yang terhad.</li></ul>Kami menggunakan ini untuk menambah baik Nowly dan menunjukkan betapa popularnya kehadiran. Mematikan tetapan ini <strong>menghentikan pengumpulan selanjutnya</strong> dan merekodkan penarikan balik persetujuan. Ia <strong>tidak</strong> memadamkan peristiwa yang telah disimpan dengan sendirinya. Untuk meminta rekod sisi pelayan dipadamkan, e-mel <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> dengan ID peranti anda (kelihatan dalam sambungan) atau elemen lain yang membolehkan kami mencari rekod tersebut."
+        "body": "Laman dan sambungan memerlukan persetujuan berasingan. API hanya menghantar peristiwa dibenarkan ke Umami hos sendiri (stats.nowly.me): jenis halaman, pelayar muat turun, tindakan, sumber, kategori/asal kehadiran dan hari kohort/tahap kembali. Tiada ID akaun/peranti, URL sebenar, carian atau kandungan aktiviti dihantar. D1/D7/D30 menggunakan tarikh dan penanda penyahduplikasian setempat, bukan pengecam dihantar. Penarikan persetujuan menghentikan penghantaran baharu dan memadam penanda; tiada peristiwa penarikan dihantar. Permintaan sedang dihantar tidak boleh ditarik balik. API boleh memproses IP untuk keselamatan tetapi tidak memajukannya. Perkhidmatan fungsi peranti adalah berasingan."
       },
       {
         "title": "Akaun Nowly dan penyegerakan (pilihan)",
@@ -984,7 +1001,7 @@
       },
       {
         "title": "Pengekalan",
-        "body": "<ul><li><strong>Log sambungan dan desktop setempat</strong>: sehingga anda memadam, menetapkan semula, atau menyahpasang.</li><li><strong>Kuki bahasa</strong>: 1 tahun, disegarkan semula apabila anda menukar bahasa.</li><li><strong>Statistik penggunaan</strong>: disimpan hanya selama yang diperlukan untuk menghasilkan metrik agregat. Tiada <strong>pemadaman automatik 12 bulan</strong> dilaksanakan hari ini. Anda boleh meminta pemadaman seperti yang diterangkan di atas.</li><li><strong>JWT (jika anda log masuk)</strong>: kira-kira 30 hari melainkan anda log keluar atau kami membatalkannya.</li></ul>"
+        "body": "<ul><li><strong>Log sambungan dan desktop setempat</strong>: sehingga anda memadam, menetapkan semula, atau menyahpasang.</li><li><strong>Kuki bahasa</strong>: 1 tahun, disegarkan semula apabila anda menukar bahasa.</li><li>Penanda setempat kekal sehingga persetujuan ditarik atau dipadam. Tiada tempoh pemadaman automatik Umami dilaksanakan di sini; tetapan pelayan belum disahkan. Agregat baharu tidak boleh dicari dengan ID peranti.</li><li><strong>JWT (jika anda log masuk)</strong>: kira-kira 30 hari melainkan anda log keluar atau kami membatalkannya.</li></ul>"
       },
       {
         "title": "Pemproses dan pemindahan",
@@ -996,7 +1013,7 @@
       },
       {
         "title": "Kuki",
-        "body": "nowly.me dan docs.nowly.me masing-masing menetapkan kuki <code>locale</code> untuk bahasa. Tema dan notis kuki menggunakan storan setempat, bukan kuki. Lihat <a href=\"/cookies\">dasar kuki</a>."
+        "body": "Pelayar menyimpan tema dan pilihan statistik secara setempat. Sambungan menyimpan persetujuan dan tarikh kembali/penyahduplikasian setempat. Tiada kuki analitik atau ID pelawat kekal. Memadam pilihan menetapkan semula persetujuan; statistik kekal dimatikan sehingga persetujuan baharu."
       },
       {
         "title": "Keselamatan",
@@ -1004,7 +1021,7 @@
       },
       {
         "title": "Hak anda",
-        "body": "Jika GDPR terpakai, anda boleh meminta akses, pembetulan, pemadaman, sekatan, bantahan, dan kemudahalihan, dan anda boleh menarik balik persetujuan untuk analitik. Diagnostik pembangun dalam sambungan mungkin menunjukkan peristiwa yang masih beratur pada peranti anda; ia bukan eksport lengkap pelayan kami. Untuk menggunakan hak, e-mel <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> atau gunakan <a href=\"https://github.com/nowly-presence/nowly\">repositori GitHub</a>. Anda juga boleh mengemukakan aduan kepada <a href=\"https://www.cnil.fr\">CNIL</a> (Perancis) atau pihak berkuasa penyeliaan tempatan anda."
+        "body": "Tarik persetujuan di /consent dan tetapan sambungan. Untuk hak GDPR: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Data perkhidmatan peranti boleh dieksport/dipadam dengan pengesahan; agregat baharu tidak dikaitkan dengan peranti anda. Anda boleh mengadu kepada CNIL atau pihak berkuasa penyeliaan."
       },
       {
         "title": "Laporan masalah kehadiran",
@@ -1020,7 +1037,7 @@
     "badge": "Undang-undang",
     "title": "Terma Perkhidmatan",
     "description": "Peraturan untuk menggunakan Nowly, sambungan pelayar, aplikasi desktop, dan laman web.",
-    "last-updated": "Kemas kini terakhir: 24 Oktober 2026.",
+    "last-updated": "2026-10-24",
     "sections": [
       {
         "title": "Penerimaan",
@@ -1121,8 +1138,8 @@
     "badge": "Kuki",
     "title": "Dasar Kuki",
     "description": "Kuki dan storan setempat yang digunakan pada nowly.me dan docs.nowly.me.",
-    "last-updated": "Kemas kini terakhir: 9 Oktober 2026.",
-    "intro": "Halaman ini menerangkan kuki dan teknologi serupa pada <strong>nowly.me</strong> dan <strong>docs.nowly.me</strong>. Kami menetapkan kuki bahasa. Tema dan notis kuki menggunakan storan setempat. Google AdSense tidak dimuatkan melainkan pengiklanan diaktifkan.",
+    "last-updated": "2026-10-25",
+    "intro": "Pelayar menyimpan tema dan pilihan statistik secara setempat. Sambungan menyimpan persetujuan dan tarikh kembali/penyahduplikasian setempat. Tiada kuki analitik atau ID pelawat kekal. Memadam pilihan menetapkan semula persetujuan; statistik kekal dimatikan sehingga persetujuan baharu.",
     "sections": [
       {
         "title": "Benar-benar perlu",
@@ -1134,11 +1151,11 @@
       },
       {
         "title": "Storan setempat",
-        "body": "Laman menyimpan tema warna (cerah, gelap, atau sistem) dan sama ada anda menolak notis kuki. Nilai tersebut kekal dalam pelayar anda dan tidak dihantar sebagai kuki kepada Nowly."
+        "body": "Pelayar menyimpan tema dan pilihan statistik secara setempat. Sambungan menyimpan persetujuan dan tarikh kembali/penyahduplikasian setempat. Tiada kuki analitik atau ID pelawat kekal. Memadam pilihan menetapkan semula persetujuan; statistik kekal dimatikan sehingga persetujuan baharu."
       },
       {
         "title": "Kuki analitik",
-        "body": "Laman web <strong>tidak</strong> menetapkan kuki analitik pihak ketiga. Laman Nowly menggunakan <strong>Umami</strong> yang dihoskan sendiri di <code>stats.nowly.me</code> untuk mengukur paparan halaman agregat tanpa kuki atau pengecam pelawat yang berterusan. Statistik penggunaan pilihan sambungan adalah berasingan dan menggunakan ID peranti jika anda mengaktifkannya."
+        "body": "Laman dan sambungan memerlukan persetujuan berasingan. API hanya menghantar peristiwa dibenarkan ke Umami hos sendiri (stats.nowly.me): jenis halaman, pelayar muat turun, tindakan, sumber, kategori/asal kehadiran dan hari kohort/tahap kembali. Tiada ID akaun/peranti, URL sebenar, carian atau kandungan aktiviti dihantar. D1/D7/D30 menggunakan tarikh dan penanda penyahduplikasian setempat, bukan pengecam dihantar. Penarikan persetujuan menghentikan penghantaran baharu dan memadam penanda; tiada peristiwa penarikan dihantar. Permintaan sedang dihantar tidak boleh ditarik balik. API boleh memproses IP untuk keselamatan tetapi tidak memajukannya. Perkhidmatan fungsi peranti adalah berasingan."
       },
       {
         "title": "Pengiklanan",
@@ -1156,36 +1173,38 @@
   },
   "uninstallPage": {
     "eyebrow": "Selamat tinggal",
-    "title": "Sambungan telah dibuang",
-    "description": "Data setempat anda kekal pada peranti anda. Kami berharap dapat melihat anda lagi tidak lama lagi.",
+    "title": "Terima kasih kerana menggunakan Nowly",
+    "description": "Anda boleh memilih untuk menyimpan atau memadam data yang dikaitkan oleh Nowly dengan peranti ini.",
     "feedback-title": "Ada apa-apa yang anda mahu beritahu kami?",
     "feedback-description": "Pepijat, kehadiran yang hilang, atau sekadar maklum balas: Discord adalah cara paling pantas untuk menghubungi kami.",
     "discord": "Sertai Discord",
-    "data-description": "Anda boleh mengekalkan statistik penggunaan anonim anda untuk membantu kami menambah baik Nowly, atau memadam segala yang disimpan untuk peranti anda.",
-    "keep": "Kekalkan statistik anonim",
-    "delete": "Padam data saya",
-    "delete-confirm": "Ini akan memadam secara kekal segala yang disimpan Nowly untuk peranti ini. Ini tidak boleh dibuat asal.",
-    "keep-success": "Terima kasih, statistik anonim anda dikekalkan.",
-    "delete-success": "Data anda telah dipadamkan.",
+    "data-description": "Data ini merangkumi maklumat peranti, kehadiran, tanda suka dan imej tersuai yang disimpan di Nowly. Statistik agregat tidak terjejas.",
+    "keep": "Simpan data peranti ini",
+    "delete": "Padam data peranti ini",
+    "delete-confirm": "Padam secara kekal data yang dikaitkan dengan peranti ini daripada Nowly? Tindakan ini tidak boleh dibuat asal. Statistik agregat tidak terjejas.",
+    "keep-success": "Data yang dikaitkan dengan peranti ini kekal disimpan di Nowly.",
+    "delete-success": "Data yang dikaitkan dengan peranti ini telah dipadamkan daripada Nowly.",
     "action-error": "Permintaan ini tidak dapat diselesaikan. Cuba lagi atau hubungi sokongan jika masalah berterusan."
   },
   "consentPage": {
     "eyebrow": "Privasi",
     "title": "Data anda",
-    "description": "Nowly hanya mengumpul analitik penggunaan anonim jika anda mengaktifkannya secara eksplisit di bawah. Halaman ini juga membolehkan anda melihat, mengeksport, atau memadam segala yang disimpan untuk peranti anda.",
+    "description": "Kiraan halaman dan klik muat turun pilihan tanpa ID pelawat kekal. Pilihan ini berasingan daripada sambungan. Kiraan fungsi dan kategori kehadiran pilihan. Penanda kembali disimpan pada peranti dan dipadam apabila dimatikan. Kandungan dilayari tidak dihantar.",
     "checking": "Mencari sambungan Nowly...",
     "not-detected-title": "Sambungan tidak dikesan",
     "not-detected-description": "Buka halaman ini pada pelayar di mana Nowly dipasang untuk menguruskan persetujuan dan data anda.",
-    "toggle-title": "Kongsi data penggunaan anonim",
-    "toggle-description": "Dimatikan secara lalai. Membantu kami melihat kehadiran dan ciri mana yang benar-benar digunakan - tiada sejarah pelayaran atau data peribadi dikumpul.",
+    "toggle-title": "Statistik sambungan",
+    "toggle-description": "Kiraan fungsi dan kategori kehadiran pilihan. Penanda kembali disimpan pada peranti dan dipadam apabila dimatikan. Kandungan dilayari tidak dihantar.",
     "data-title": "Data anda",
-    "data-description": "Eksport segala yang disimpan Nowly untuk peranti ini, atau padamkannya sepenuhnya.",
+    "data-description": "Eksport atau padam data perkhidmatan peranti. Agregat Umami baharu tiada ID peranti dan tidak termasuk dalam eksport peranti.",
     "export": "Eksport data saya",
     "delete": "Padam data saya",
     "delete-confirm": "Ini akan memadam secara kekal segala yang disimpan Nowly untuk peranti ini. Ini tidak boleh dibuat asal.",
     "export-success": "Data anda telah dimuat turun.",
     "delete-success": "Data anda telah dipadamkan.",
-    "action-error": "Permintaan ini tidak dapat diselesaikan. Cuba lagi atau hubungi sokongan jika masalah berterusan."
+    "action-error": "Permintaan ini tidak dapat diselesaikan. Cuba lagi atau hubungi sokongan jika masalah berterusan.",
+    "site-title": "Statistik laman",
+    "site-description": "Kiraan halaman dan klik muat turun pilihan tanpa ID pelawat kekal. Pilihan ini berasingan daripada sambungan."
   },
   "faqPage": {
     "eyebrow": "Soalan Lazim",

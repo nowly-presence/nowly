@@ -106,22 +106,7 @@ const readDocFile = (page: DocSection, locale: string): {
   raw: string;
 } | null => {
   const validLocale = getValidLocale(locale);
-  const localizedPath = join(page.path, `${validLocale}.mdx`);
-  const fallbackPath = join(page.path, "en-US.mdx");
-
-  if (existsSync(localizedPath)) {
-    return {
-      raw: readFileSync(localizedPath, "utf-8")
-    };
-  }
-
-  if (existsSync(fallbackPath)) {
-    return {
-      raw: readFileSync(fallbackPath, "utf-8")
-    };
-  }
-
-  return null;
+  return readMdxFile(join(page.path, `${validLocale}.mdx`)) ?? readMdxFile(join(page.path, "en-US.mdx"));
 };
 
 const readChangelogIndexFile = (locale: string): {

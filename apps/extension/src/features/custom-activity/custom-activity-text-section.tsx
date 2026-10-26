@@ -4,6 +4,7 @@ import type { CustomActivityType } from "@/shared/types";
 import { Group } from "@/ui/card";
 import { FieldRow } from "@/ui/field-row";
 import { Input } from "@/ui/input";
+import { InfoTooltip } from "@/ui/info-tooltip";
 import { Section } from "@/ui/section";
 import { Select } from "@/ui/select";
 import { FieldError } from "@/features/custom-activity/custom-field-error";
@@ -23,9 +24,10 @@ export const CustomActivityTextSection = ({ draft, patch, errors }: CustomActivi
   return (
     <Section title={t("custom.editor.textSection")}>
       <Group>
-        <FieldRow layout="stacked" title={t("custom.field.name")} description={t("custom.field.nameHint")}>
+        <FieldRow layout="stacked" title={t("custom.field.name")} description={draft.type === 0 ? t("custom.field.nameHint") : undefined}>
           <Input
             value={draft.name}
+            trailing={draft.type !== 0 ? <InfoTooltip label={t("detail.information")} text={t("custom.field.nameTooltip")} /> : undefined}
             maxLength={CUSTOM_TEXT_MAX_LENGTH}
             placeholder={t("custom.field.namePlaceholder")}
             onChange={(event) => patch({ name: event.target.value })}

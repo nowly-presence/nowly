@@ -1,4 +1,5 @@
 export const STORAGE_KEYS = {
+  announcements: "announcements",
   presences: "presences",
   currentActivity: "currentActivity",
   presenceDebug: "presenceDebug",

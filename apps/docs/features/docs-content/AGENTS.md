@@ -1,30 +1,26 @@
 # Docs Content
 
-The documentation rendering engine: sidebar, search, table of contents, MDX rendering, page navigation. Consumed by `app/[locale]/(docs)/[...slug]/page.tsx` (a docs page) and `app/[locale]/(docs)/changelog/page.tsx` (which reuses this same engine, not a separate feature).
+Rendering engine for docs pages (sidebar, search, TOC, MDX, prev/next). Used by `app/[locale]/(docs)/[...slug]/page.tsx` and, for the changelog, `app/[locale]/(docs)/changelog/page.tsx`.
 
-## Add a new documentation page
+## Add a page
 
-Content lives under `content/docs/<N-category>/<M-page>/`, ordered by number prefix (see `parseOrderedFolder` in `lib/content.ts` — it matches `^(\d+)-(.+)$`, e.g. `1-getting-started`):
+Content lives in `content/docs/<N-category>/<M-page>/<locale>.mdx`, ordered by number prefix (`parseOrderedFolder`, `^(\d+)-(.+)$` in `lib/content.ts`).
 
-1. To add a page to an existing category, create `content/docs/<N-category>/<M-page-slug>/en-US.mdx` (and one file per other locale you're ready to translate — missing locales fall back to `en-US.mdx` automatically, see `readDocFile` in `lib/content.ts`).
-2. `M` controls ordering among sibling pages in that category — pick a number that sorts where you want it (gaps are fine, e.g. `5`, `10`, `15`).
-3. Frontmatter fields read by the app: `title` and `description` (via `gray-matter`, parsed in `getDocContent`/`getNavigationItems`) — add both, they drive the sidebar label, the page `<title>`, and the OG image.
-4. No sidebar registration step: `getDocsNav()` walks the filesystem on every call, so a new folder shows up automatically as long as it's numbered correctly.
+1. Create `en-US.mdx` in the page folder; add other locales as translated. Missing locales fall back to `en-US` (`readDocFile`).
+2. Pick `M` to sort among siblings (gaps are fine).
+3. Frontmatter `title` and `description` are required: they drive the sidebar label, `<title>` and OG image.
+4. No registration: `getDocsNav()` walks the filesystem.
 
-## Add a new documentation category
+## Add a category
 
-1. Create `content/docs/<N-category-slug>/`.
-2. Add a `_meta.json` inside it: `{ "title": { "en-US": "Your Category", "fr-FR": "..." } }` — `getDocsNav()` skips any folder without a `_meta.json` (see the `.filter((category) => existsSync(...))` in `lib/content.ts`), so this file is required, not optional.
-3. Add at least one page inside it (an empty category is filtered out — see the last `.filter((category) => category.children.length > 0)` in `getDocsNav()`).
+1. Create `content/docs/<N-category>/` with a `_meta.json`: `{ "title": { "en-US": "...", "fr-FR": "..." } }`. Folders without it are skipped.
+2. Add at least one page; empty categories are filtered out.
+
+## Links in MDX
+
+Write doc links root-relative without locale (`[Metadata](/presence-development/metadata)`); `mdx-components.tsx` renders them with next-intl's `Link` (locale prefix + base path). Paths listed in `WEBSITE_PATHS` (`/library...`) go to nowly.me. Other external links stay plain.
 
 ## Gotchas
 
-- Known duplicate-id gap: `extractTocItems` (`lib/types.ts`) disambiguates repeated/empty heading text for the table of contents' React keys, but `heading-anchor.tsx` computes each heading's DOM `id` independently and isn't synced with that disambiguation. If you touch heading-id generation, check both files — otherwise two headings with the same text can still end up with duplicate `id` attributes in the rendered DOM even though the TOC list itself no longer warns about duplicate keys.
-- The changelog route (`app/[locale]/(docs)/changelog`) is handled specially inside `getDocContent`/`getNavigationItems` (branches on `slug === "changelog"` / `slug.startsWith("changelog/")`) and reads from `@nowly/changelog`, not from `content/docs/changelog/**` — that folder only holds the changelog's own intro page (`content/docs/changelog/<locale>.mdx`), not per-version content. To publish a new release, see `packages/changelog`'s content folder, not this feature.
-
-## Notable dependencies
-`next-mdx-remote`, `gray-matter`, `@nowly/changelog` (changelog integration), `features/seo` (metadata), `@nowly/ui`.
-
-## Links inside MDX
-
-Write links to other doc pages root-relative and without locale (`[Metadata](/presence-development/metadata)`): `mdx-components.tsx` renders them with next-intl's `Link`, which adds the reader's locale prefix and the docs base path. Links to the presence library (`/library...`, listed in `WEBSITE_PATHS`) go to nowly.me. Anything else external stays a plain link.
+- Duplicate heading ids: `extractTocItems` (`lib/types.ts`) disambiguates TOC keys, but `heading-anchor.tsx` computes DOM ids independently. Change heading-id logic in both or duplicate `id`s remain.
+- Changelog is special-cased in `getDocContent`/`getNavigationItems` (`slug === "changelog"` / `startsWith("changelog/")`) and read from `@nowly/changelog`. `content/docs/changelog/<locale>.mdx` is only the intro page; releases live in `packages/changelog`.

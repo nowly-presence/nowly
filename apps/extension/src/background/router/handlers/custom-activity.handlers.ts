@@ -1,10 +1,13 @@
 import type { Handler } from "@/background/router/router";
 import { deleteCustomActivity, getCustomImageData, saveCustomActivity, setActiveCustomActivity, uploadCustomImage } from "@/background/managers/custom-activity-manager";
+import { resolveCustomActivityDetection } from "@/background/services/custom-activity-detection";
 import { getCustomActivities } from "@/background/storage/custom-activities.store";
 
 export const handleGetCustomActivities: Handler<"GET_CUSTOM_ACTIVITIES"> = () => getCustomActivities();
 
-export const handleSaveCustomActivity: Handler<"SAVE_CUSTOM_ACTIVITY"> = ({ draft }) => saveCustomActivity(draft);
+export const handleGetCustomActivityDetection: Handler<"GET_CUSTOM_ACTIVITY_DETECTION"> = () => resolveCustomActivityDetection();
+
+export const handleSaveCustomActivity: Handler<"SAVE_CUSTOM_ACTIVITY"> = ({ draft, expectedUpdatedAt }) => saveCustomActivity(draft, expectedUpdatedAt);
 
 export const handleDeleteCustomActivity: Handler<"DELETE_CUSTOM_ACTIVITY"> = ({ id }) => deleteCustomActivity(id);
 

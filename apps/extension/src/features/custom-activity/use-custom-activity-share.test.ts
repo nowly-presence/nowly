@@ -114,20 +114,20 @@ describe("custom activity sharing orchestration", () => {
     await first;
   });
 
-  it("stops at remaining capacity without uploading extra images", async () => {
+  it("enforces capacity limits: rejects full list before requests and stops at remaining limit", async () => {
+    // 1. Rejects a full list before any background request
+    mocks.items = Array.from({ length: 50 }, () => activity);
+    await useCustomActivityShare(vi.fn()).importFiles([makeFile()]);
+    expect(mocks.send).not.toHaveBeenCalled();
+    expect(mocks.toast).toHaveBeenCalledWith("custom.toast.limit", "error");
+
+    // 2. Stops at remaining capacity without uploading extra images
     mocks.items = Array.from({ length: 49 }, () => activity);
     await useCustomActivityShare(vi.fn()).importFiles([
       makeFile(),
       makeFile()
     ]);
     expect(mocks.send).toHaveBeenCalledOnce();
-    expect(mocks.toast).toHaveBeenCalledWith("custom.toast.limit", "error");
-  });
-
-  it("rejects a full list before any background request", async () => {
-    mocks.items = Array.from({ length: 50 }, () => activity);
-    await useCustomActivityShare(vi.fn()).importFiles([makeFile()]);
-    expect(mocks.send).not.toHaveBeenCalled();
     expect(mocks.toast).toHaveBeenCalledWith("custom.toast.limit", "error");
   });
 

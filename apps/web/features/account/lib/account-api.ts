@@ -69,12 +69,12 @@ export const signOutAccount = async (): Promise<void> => {
   });
 };
 
-export const createExtensionSession = async (deviceId: string | null): Promise<ExtensionSessionPayload> => {
+export const createExtensionSession = async (deviceId: string | null, creator = false): Promise<ExtensionSessionPayload> => {
   const response = await request("/extension/tokens", {
     method: "POST",
     body: JSON.stringify({
       ...(deviceId ? { deviceId } : {}),
-      scopes: ["sync"]
+      scopes: creator ? ["sync", "creator"] : ["sync"]
     })
   });
 

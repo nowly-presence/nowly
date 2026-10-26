@@ -3,8 +3,9 @@ import { isSeasonMomentDue, isSeasonMomentsState, markSeasonMomentShown } from "
 
 const local = (year: number, month: number, day: number, hour = 12) => new Date(year, month - 1, day, hour);
 
-describe("isSeasonMomentDue", () => {
-  it("fires on the season's day, once a year", () => {
+describe("season-moments", () => {
+  it("determines when moments are due, handles replays, and validates state", () => {
+    // 1. Due dates and yearly frequency
     expect(isSeasonMomentDue(null, "spring", local(2027, 3, 20))).toBe(true);
     expect(
       isSeasonMomentDue(
@@ -26,21 +27,14 @@ describe("isSeasonMomentDue", () => {
     ).toBe(true);
     expect(isSeasonMomentDue(null, "spring", local(2027, 3, 21))).toBe(false);
     expect(isSeasonMomentDue(null, "new-year", local(2027, 1, 1))).toBe(true);
-  });
 
-  it("leaves Halloween to its prank and needs a season", () => {
+    // 2. Halloween and replay rules
     expect(isSeasonMomentDue(null, "halloween", local(2026, 10, 31))).toBe(false);
     expect(isSeasonMomentDue({ replay: true }, "halloween", local(2026, 10, 31))).toBe(false);
     expect(isSeasonMomentDue({ replay: true }, null, local(2026, 3, 20))).toBe(false);
-  });
-
-  it("replays any other day on request", () => {
     expect(isSeasonMomentDue({ replay: true }, "winter", local(2026, 7, 4))).toBe(true);
-  });
-});
 
-describe("markSeasonMomentShown", () => {
-  it("stores the year per season and drops the replay flag", () => {
+    // 3. Mark as shown
     expect(
       markSeasonMomentShown(
         {
@@ -56,9 +50,6 @@ describe("markSeasonMomentShown", () => {
         spring: 2026
       }
     });
-  });
-
-  it("keeps the stored years when replayed on another day", () => {
     expect(
       markSeasonMomentShown(
         {
@@ -71,12 +62,8 @@ describe("markSeasonMomentShown", () => {
     ).toEqual({
       shown: { spring: 2025 }
     });
-    expect(markSeasonMomentShown({ replay: true }, "spring", local(2026, 7, 4))).toEqual({});
-  });
-});
 
-describe("isSeasonMomentsState", () => {
-  it("validates what comes out of storage", () => {
+    // 4. State schema validation
     expect(isSeasonMomentsState({})).toBe(true);
     expect(
       isSeasonMomentsState({

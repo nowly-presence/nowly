@@ -2,7 +2,7 @@ import { useState } from "react";
 import { RiDownload2Line } from "@remixicon/react";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
-import { sendMessage, track } from "@/lib/messages";
+import { sendMessage } from "@/lib/messages";
 import { Button } from "@/ui/button";
 import { Group } from "@/ui/card";
 import { Row, SwitchRow } from "@/ui/row";
@@ -19,13 +19,6 @@ export const PrivacySection = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const setConsent = async (granted: boolean) => {
-    if (!granted) track("analytics_consent_changed", {
-      source: "extension_settings",
-      payload: {
-        enabled: false,
-        source: "extension_settings"
-      }
-    });
     await sendMessage("SET_ANALYTICS_CONSENT", { granted });
     await refresh.consent();
   };

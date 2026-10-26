@@ -1,6 +1,6 @@
 {
   "name": "@nowly/extension",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "Nowly browser extension (side panel) - share your web activity on Discord.",
   "private": true,
   "type": "module",
@@ -19,7 +19,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@nowly/analytics": "workspace:*",
+    "@nowly/telemetry": "workspace:*",
     "@nowly/env": "workspace:*",
     "@nowly/locales": "workspace:*",
     "@nowly/shared": "workspace:*",

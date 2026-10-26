@@ -7,7 +7,7 @@
 - [ ] Presence
 - [ ] Web
 - [ ] Docs site
-- [ ] Insights
+- [ ] Product telemetry (Umami)
 - [ ] Extension
 - [ ] API
 - [ ] Native host

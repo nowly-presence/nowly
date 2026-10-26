@@ -1,6 +1,6 @@
-import { getPrisma, hasDatabase } from "@/db/client";
+import { hasDatabase } from "@/db/client";
 import { getAllPresenceMetas } from "@/features/presence/presence.repository";
-import { createHash, randomUUID } from "crypto";
+import { createHash } from "crypto";
 import type { FastifyReply, FastifyRequest } from "fastify";
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
@@ -84,24 +84,6 @@ export const parseProxyUrl = async (url?: string, serviceId?: string): Promise<{
   } catch {
     return null;
   }
-};
-
-export const logImageProxyCall = (service: ImageProxyService): void => {
-  if (!hasDatabase()) return;
-
-  try {
-    void getPrisma()
-      .analyticsEvent.create({
-        data: {
-          eventId: randomUUID(),
-          key: "image_proxy_call",
-          slug: service.id,
-          payload: {},
-          createdAt: new Date()
-        }
-      })
-      .catch(() => {});
-  } catch {}
 };
 
 export const createCacheId = (serviceId: string, href: string): string => createHash("sha256").update(`${serviceId}:${href}`).digest("base64url").slice(0, 32);
@@ -237,8 +219,6 @@ export const handleImageProxyRequest = async (request: FastifyRequest, reply: Fa
     reply.status(400).send({ error: "INVALID_IMAGE_URL" });
     return;
   }
-
-  logImageProxyCall(parsed.service);
 
   const image = await fetchImage(parsed.url, parsed.service);
 

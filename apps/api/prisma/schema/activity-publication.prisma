@@ -1,0 +1,14 @@
+model ActivityPublication {
+  id        String   @id
+  userId    String   @map("user_id")
+  localKey  String   @map("local_key")
+  activity  Json
+  revision  Int      @default(1)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, localKey])
+  @@map("activity_publications")
+}

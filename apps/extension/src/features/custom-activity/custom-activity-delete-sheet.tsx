@@ -17,7 +17,7 @@ export const CustomActivityDeleteSheet = ({ name, open, pending, onClose, onConf
       open={open}
       onClose={onClose}
       title={t("custom.delete.title", { name })}
-      description={t("custom.delete.description")}
+      description={`${t("custom.delete.description")} ${t("custom.delete.publicationHint")}`}
       closeLabel={t("action.close")}
       footer={
         <>

@@ -1,4 +1,33 @@
 {
+  "activitySharing": {
+    "editorOpen": "Schließe den Aktivitätseditor in der Erweiterung vor dem Ersetzen. Ungespeicherte Entwürfe sind geschützt.",
+    "listeningType": "Hört",
+    "watchingType": "Schaut",
+    "competingType": "Tritt an",
+    "title": "Geteilte eigene Aktivität",
+    "preview": "Discord-Vorschau",
+    "timer": "Countdown",
+    "loading": "Aktivität wird geladen...",
+    "unavailable": "Diese Aktivität ist nicht verfügbar oder nicht mehr veröffentlicht.",
+    "author": "Geteilt von <avatar></avatar><person>{name}</person>",
+    "consent": "Deine Kopie bleibt unabhängig. Aktivierung und Updates manuell, Erkennung aus.",
+    "conflict": "Deine Kopie hat lokale Änderungen. Behalte sie oder ersetze sie ausdrücklich durch diese Vorschau.",
+    "install": "Zu Nowly hinzufügen",
+    "keep": "Meine Kopie behalten",
+    "replace": "Durch diese Revision ersetzen",
+    "installed": "In Nowly gespeichert und deaktiviert. Aktiviere sie später separat.",
+    "kept": "Deine Kopie und ihre Update-Basis bleiben unverändert.",
+    "changed": "Die Veröffentlichung oder deine Kopie könnte sich geändert haben. Lade neu und prüfe sie erneut.",
+    "refresh": "Neu laden und prüfen",
+    "upToDate": "Aktuell",
+    "update": "Aktualisieren",
+    "updateDescription": "Eine neue Version ist verfügbar. Behalte deine Kopie oder ersetze sie durch die angezeigte Vorschau. Die ersetzte Kopie bleibt deaktiviert.",
+    "permission": "Erlaube Nowly, gespeicherte eigene Aktivitäten unter deinem Discord-Namen und Avatar zu veröffentlichen. Dies aktiviert auch die Kontosynchronisierung. Erst nach deiner Rückkehr zur Erweiterung und der Auswahl von Veröffentlichen wird etwas veröffentlicht.",
+    "playing": "Spielt",
+    "listening": "Hört {name}",
+    "watching": "Schaut {name}",
+    "competing": "Tritt in {name} an"
+  },
   "custom-activity-section": {
     "announcement": "Neu: Erstelle deine eigenen Aktivitäten auf Discord",
     "eyebrow": "Eigene Aktivitäten",
@@ -38,12 +67,6 @@
     "dark": "Dunkel"
   },
   "hero": {
-    "carousel": {
-      "previous": "Vorherige Karte",
-      "next": "Nächste Karte",
-      "pause": "Karten anhalten",
-      "play": "Karten fortsetzen"
-    },
     "title-before": "Teile, was du tust, in",
     "title-accent": "Echtzeit",
     "description": "Nowly verwandelt deine Aktivität in eine ausdrucksstarke, dynamische Discord-Präsenz.",
@@ -406,19 +429,12 @@
     "title": "Die lokale Brücke zu Discord",
     "description": "Die Erweiterung liest den Tab. Die Desktop-App sendet deinen Status an Discord. Titel, Plattform und Wiedergabe verlassen deinen PC nie.",
     "detected": "Erkannt",
-    "chromeos-title": "ChromeOS wird noch nicht unterstützt",
-    "chromeos-description": "Discord Rich Presence benötigt eine native App, die ChromeOS heute nicht ausführen kann. Wir prüfen das - hinterlasse deine E-Mail, um benachrichtigt zu werden, falls sich das ändert.",
-    "chromeos-email-placeholder": "du@beispiel.de",
-    "chromeos-submit": "Benachrichtigen",
-    "chromeos-success": "Danke, wir melden uns.",
-    "chromeos-error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     "version": "Version {version}",
     "card-title": "Für {platform} herunterladen",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux",
-      "chromeos": "ChromeOS"
+      "linux": "Linux"
     },
     "windows-installer": "Windows-Installer (.exe)",
     "windows-portable": "Portables Archiv (.zip)",
@@ -926,15 +942,16 @@
   },
   "cookie-banner": {
     "title": "Informationen zu Cookies",
-    "message": "Diese Website verwendet ein unbedingt erforderliches Sprach-Cookie. Falls Werbung später aktiviert wird, kann Google auch Werbetechnologien nutzen.",
+    "message": "Optionale aggregierte Produktstatistiken bleiben ohne Zustimmung aus. Das Sprachcookie bleibt notwendig. Die Auswahl lässt sich unter Ihre Daten ändern.",
     "learn-more": "Cookie-Richtlinie lesen",
-    "dismiss": "Verstanden"
+    "accept": "Statistiken erlauben",
+    "decline": "Statistiken ablehnen"
   },
   "privacy-page": {
     "badge": "Datenschutz",
     "title": "Datenschutzerklärung",
     "description": "Wie Nowly deine Daten behandelt, was auf deinem Gerät bleibt und was von deiner Zustimmung abhängt.",
-    "last-updated": "Zuletzt aktualisiert: 16. Oktober 2026.",
+    "last-updated": "2026-10-25",
     "data-region": "Europäische Union (VPS bereitgestellt von Contabo GmbH, Deutschland)",
     "intro": "Diese Richtlinie beschreibt die Verarbeitung personenbezogener Daten durch <strong>{publisherName}</strong> als Verantwortlichen. Rich-Presence-Nachrichten erreichen Discord lokal über die Desktop-App. Das bedeutet nicht, dass alle Funktionen offline sind: Kontosynchronisierung, Bildabrufe, angeforderte Uploads und optionale Statistiken nutzen unsere API oder Dienstleister.",
     "sections": [
@@ -968,7 +985,7 @@
       },
       {
         "title": "Nutzungsstatistiken (opt-in)",
-        "body": "Analytics sind <strong>standardmäßig deaktiviert</strong>. Wenn du sie beim Onboarding oder später in den Erweiterungseinstellungen aktivierst, kann unsere API Folgendes erhalten:<ul><li>Deine Geräte-UUID (pseudonym: nicht dein Discord- oder Google-Konto, aber dennoch personenbezogene Daten nach der DSGVO, da sie deine Installation identifizieren kann).</li><li>Browser, Betriebssystem, Sprache, Erweiterungsversion und Desktop-App-Version.</li><li>Installierte Präsenz-Slugs/Versionen und Nutzungsereignisse (z. B. Installationen, Heartbeats, Bewertungen) mit begrenzter Nutzlast.</li></ul>Wir nutzen dies, um Nowly zu verbessern und zu zeigen, wie beliebt Präsenzen sind. Das Deaktivieren <strong>stoppt die weitere Erhebung</strong> und dokumentiert den Widerruf der Zustimmung. Es löscht <strong>nicht</strong> automatisch bereits gespeicherte Ereignisse. Um serverseitige Datensätze löschen zu lassen, schreibe an <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> mit deiner Geräte-ID (sichtbar in der Erweiterung) oder einem anderen Element, das uns hilft, den Datensatz zu finden."
+        "body": "Website und Erweiterung benötigen getrennte Einwilligungen. Unsere API leitet nur erlaubte Ereignisse an selbst gehostetes Umami (stats.nowly.me) weiter: Seitentyp, Downloadbrowser, Aktion, Quelle, Präsenzkategorie/Herkunft und Kohortentag/Rückkehrstufe. Keine Konto- oder Gerätekennung, echte URL, Suche oder Aktivitätsinhalte werden an Umami gesendet. D1/D7/D30 verwenden lokale Datums- und Deduplizierungsmarkierungen, keine übertragene Kennung. Widerruf stoppt künftige Sendungen und löscht lokale Markierungen; kein Widerrufsereignis wird gesendet. Laufende Anfragen lassen sich nicht zurückrufen. Die API kann IP-Daten zur Sicherheit verarbeiten, leitet sie aber nicht weiter. Funktionale Gerätedienste bleiben getrennt."
       },
       {
         "title": "Nowly-Konto und Synchronisierung (freiwillig)",
@@ -984,7 +1001,7 @@
       },
       {
         "title": "Aufbewahrung",
-        "body": "<ul><li><strong>Lokale Erweiterungs- und Desktop-Logs</strong>: bis du sie löschst, zurücksetzt oder deinstallierst.</li><li><strong>Sprach-Cookie</strong>: 1 Jahr, aktualisiert bei Sprachwechsel.</li><li><strong>Nutzungsstatistiken</strong>: nur so lange aufbewahrt, wie für aggregierte Kennzahlen nötig. Es gibt derzeit <strong>keine automatische 12-Monats-Löschung</strong>. Du kannst wie oben beschrieben Löschung beantragen.</li><li><strong>JWT (falls du dich anmeldest)</strong>: etwa 30 Tage, sofern du dich nicht abmeldest oder wir es widerrufen.</li></ul>"
+        "body": "<ul><li><strong>Lokale Erweiterungs- und Desktop-Logs</strong>: bis du sie löschst, zurücksetzt oder deinstallierst.</li><li><strong>Sprach-Cookie</strong>: 1 Jahr, aktualisiert bei Sprachwechsel.</li><li>Lokale Markierungen bleiben bis zum Widerruf oder lokalen Löschen. Für Umami-Aggregate ist hier keine automatische Löschfrist implementiert; die Serverkonfiguration ist ungeprüft. Neue Aggregate sind nicht über Gerätekennungen auffindbar.</li><li><strong>JWT (falls du dich anmeldest)</strong>: etwa 30 Tage, sofern du dich nicht abmeldest oder wir es widerrufen.</li></ul>"
       },
       {
         "title": "Auftragsverarbeiter und Übermittlungen",
@@ -996,7 +1013,7 @@
       },
       {
         "title": "Cookies",
-        "body": "nowly.me und docs.nowly.me setzen jeweils ein <code>locale</code>-Cookie für die Sprache. Theme und Cookie-Hinweis nutzen lokalen Speicher, keine Cookies. Siehe <a href=\"/cookies\">Cookie-Richtlinie</a>."
+        "body": "Der Browser speichert Theme und Statistikentscheidung lokal. Die Erweiterung speichert Einwilligung und lokale Rückkehr-/Deduplizierungsdaten. Es gibt kein Analysecookie und keine dauerhafte Besucherkennung. Löschen setzt die Einwilligung zurück; Statistiken bleiben ohne erneute Zustimmung aus."
       },
       {
         "title": "Sicherheit",
@@ -1004,7 +1021,7 @@
       },
       {
         "title": "Deine Rechte",
-        "body": "Sofern die DSGVO gilt, kannst du Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch und Datenübertragbarkeit verlangen und die Einwilligung für Analytics widerrufen. Entwickler-Diagnosen in der Erweiterung können noch auf deinem Gerät wartende Ereignisse zeigen; sie sind kein vollständiger Export unserer Server. Um Rechte auszuüben, schreibe an <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> oder nutze das <a href=\"https://github.com/nowly-presence/nowly\">GitHub-Repository</a>. Du kannst auch Beschwerde bei der <a href=\"https://www.cnil.fr\">CNIL</a> (Frankreich) oder deiner örtlichen Aufsichtsbehörde einreichen."
+        "body": "Einwilligung unter /consent und in den Erweiterungseinstellungen widerrufen. Für DSGVO-Rechte: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Gerätebezogene Dienstdaten lassen sich authentifiziert exportieren oder löschen; neue Aggregate sind keinem Gerät zuordenbar. Beschwerden sind bei der CNIL oder Ihrer Aufsichtsbehörde möglich."
       },
       {
         "title": "Meldungen zu Präsenzproblemen",
@@ -1020,7 +1037,7 @@
     "badge": "Rechtliches",
     "title": "Nutzungsbedingungen",
     "description": "Die Regeln für die Nutzung von Nowly, der Browser-Erweiterung, Desktop-App und Website.",
-    "last-updated": "Zuletzt aktualisiert: 24. Oktober 2026.",
+    "last-updated": "2026-10-24",
     "sections": [
       {
         "title": "Zustimmung",
@@ -1121,8 +1138,8 @@
     "badge": "Cookies",
     "title": "Cookie-Richtlinie",
     "description": "Cookies und lokaler Speicher, genutzt auf nowly.me und docs.nowly.me.",
-    "last-updated": "Zuletzt aktualisiert: 9. Oktober 2026.",
-    "intro": "Diese Seite beschreibt Cookies und ähnliche Technologien auf <strong>nowly.me</strong> und <strong>docs.nowly.me</strong>. Wir setzen ein Sprach-Cookie. Theme und Cookie-Hinweis nutzen lokalen Speicher. Google AdSense wird nicht geladen, sofern Werbung nicht aktiviert ist.",
+    "last-updated": "2026-10-25",
+    "intro": "Der Browser speichert Theme und Statistikentscheidung lokal. Die Erweiterung speichert Einwilligung und lokale Rückkehr-/Deduplizierungsdaten. Es gibt kein Analysecookie und keine dauerhafte Besucherkennung. Löschen setzt die Einwilligung zurück; Statistiken bleiben ohne erneute Zustimmung aus.",
     "sections": [
       {
         "title": "Unbedingt erforderlich",
@@ -1134,11 +1151,11 @@
       },
       {
         "title": "Lokaler Speicher",
-        "body": "Die Websites speichern das Farbthema (hell, dunkel oder System) und ob du den Cookie-Hinweis geschlossen hast. Diese Werte bleiben in deinem Browser und werden nicht als Cookies an Nowly gesendet."
+        "body": "Der Browser speichert Theme und Statistikentscheidung lokal. Die Erweiterung speichert Einwilligung und lokale Rückkehr-/Deduplizierungsdaten. Es gibt kein Analysecookie und keine dauerhafte Besucherkennung. Löschen setzt die Einwilligung zurück; Statistiken bleiben ohne erneute Zustimmung aus."
       },
       {
         "title": "Analytics-Cookies",
-        "body": "Die Websites setzen <strong>keine</strong> Analytics-Cookies von Drittanbietern. Die Nowly-Website nutzt selbst gehostetes <strong>Umami</strong> unter <code>stats.nowly.me</code>, um aggregierte Seitenaufrufe ohne Cookies oder dauerhafte Besucherkennungen zu messen. Die optionalen Nutzungsstatistiken der Erweiterung sind davon getrennt und verwenden bei Aktivierung eine Geräte-ID."
+        "body": "Website und Erweiterung benötigen getrennte Einwilligungen. Unsere API leitet nur erlaubte Ereignisse an selbst gehostetes Umami (stats.nowly.me) weiter: Seitentyp, Downloadbrowser, Aktion, Quelle, Präsenzkategorie/Herkunft und Kohortentag/Rückkehrstufe. Keine Konto- oder Gerätekennung, echte URL, Suche oder Aktivitätsinhalte werden an Umami gesendet. D1/D7/D30 verwenden lokale Datums- und Deduplizierungsmarkierungen, keine übertragene Kennung. Widerruf stoppt künftige Sendungen und löscht lokale Markierungen; kein Widerrufsereignis wird gesendet. Laufende Anfragen lassen sich nicht zurückrufen. Die API kann IP-Daten zur Sicherheit verarbeiten, leitet sie aber nicht weiter. Funktionale Gerätedienste bleiben getrennt."
       },
       {
         "title": "Werbung",
@@ -1156,36 +1173,38 @@
   },
   "uninstallPage": {
     "eyebrow": "Auf Wiedersehen",
-    "title": "Die Erweiterung wurde entfernt",
-    "description": "Deine lokalen Daten bleiben auf deinem Gerät. Wir hoffen, dich bald wiederzusehen.",
+    "title": "Danke, dass du Nowly genutzt hast",
+    "description": "Du kannst wählen, ob du die Daten behalten oder löschen möchtest, die Nowly diesem Gerät zuordnet.",
     "feedback-title": "Möchtest du uns etwas mitteilen?",
     "feedback-description": "Ein Fehler, eine fehlende Präsenz oder einfach Feedback: Discord ist der schnellste Weg, uns zu erreichen.",
     "discord": "Discord beitreten",
-    "data-description": "Du kannst deine anonymen Nutzungsstatistiken behalten, um uns zu helfen, Nowly zu verbessern, oder alles für dein Gerät Gespeicherte löschen.",
-    "keep": "Anonyme Statistiken behalten",
-    "delete": "Meine Daten löschen",
-    "delete-confirm": "Dies löscht dauerhaft alles, was Nowly für dieses Gerät gespeichert hat. Dies kann nicht rückgängig gemacht werden.",
-    "keep-success": "Danke, deine anonymen Statistiken bleiben erhalten.",
-    "delete-success": "Deine Daten wurden gelöscht.",
+    "data-description": "Dazu gehören bei Nowly gespeicherte Geräteinformationen, Präsenzen, Likes und eigene Bilder. Zusammengefasste Statistiken sind davon nicht betroffen.",
+    "keep": "Daten dieses Geräts behalten",
+    "delete": "Daten dieses Geräts löschen",
+    "delete-confirm": "Die diesem Gerät zugeordneten Daten dauerhaft bei Nowly löschen? Dies kann nicht rückgängig gemacht werden. Zusammengefasste Statistiken sind davon nicht betroffen.",
+    "keep-success": "Die diesem Gerät zugeordneten Daten bleiben bei Nowly gespeichert.",
+    "delete-success": "Die diesem Gerät zugeordneten Daten wurden bei Nowly gelöscht.",
     "action-error": "Die Anfrage konnte nicht abgeschlossen werden. Versuche es erneut oder wende dich an den Support, wenn das Problem bestehen bleibt."
   },
   "consentPage": {
     "eyebrow": "Datenschutz",
     "title": "Deine Daten",
-    "description": "Nowly erhebt anonyme Nutzungsanalysen nur, wenn du sie unten ausdrücklich aktivierst. Auf dieser Seite kannst du außerdem alles für dein Gerät Gespeicherte sehen, exportieren oder löschen.",
+    "description": "Optionale Seiten- und Downloadklick-Zählungen ohne dauerhafte Besucherkennung. Unabhängig von der Erweiterung. Optionale Funktions- und Präsenzkategorie-Zählungen. Rückkehrmarkierungen bleiben lokal und werden beim Widerruf gelöscht. Keine besuchten Inhalte werden gesendet.",
     "checking": "Suche nach der Nowly-Erweiterung...",
     "not-detected-title": "Erweiterung nicht erkannt",
     "not-detected-description": "Öffne diese Seite im Browser, in dem Nowly installiert ist, um deine Zustimmung und Daten zu verwalten.",
-    "toggle-title": "Anonyme Nutzungsdaten teilen",
-    "toggle-description": "Standardmäßig deaktiviert. Hilft uns zu sehen, welche Präsenzen und Funktionen tatsächlich genutzt werden - es werden nie Browserverlauf oder personenbezogene Daten erhoben.",
+    "toggle-title": "Erweiterungsstatistiken",
+    "toggle-description": "Optionale Funktions- und Präsenzkategorie-Zählungen. Rückkehrmarkierungen bleiben lokal und werden beim Widerruf gelöscht. Keine besuchten Inhalte werden gesendet.",
     "data-title": "Deine Daten",
-    "data-description": "Exportiere alles, was Nowly für dieses Gerät gespeichert hat, oder lösche es vollständig.",
+    "data-description": "Gerätebezogene Dienstdaten exportieren oder löschen. Neue Umami-Aggregate ohne Gerätekennung sind nicht im Geräteexport enthalten.",
     "export": "Meine Daten exportieren",
     "delete": "Meine Daten löschen",
     "delete-confirm": "Dies löscht dauerhaft alles, was Nowly für dieses Gerät gespeichert hat. Dies kann nicht rückgängig gemacht werden.",
     "export-success": "Deine Daten wurden heruntergeladen.",
     "delete-success": "Deine Daten wurden gelöscht.",
-    "action-error": "Die Anfrage konnte nicht abgeschlossen werden. Versuche es erneut oder wende dich an den Support, wenn das Problem bestehen bleibt."
+    "action-error": "Die Anfrage konnte nicht abgeschlossen werden. Versuche es erneut oder wende dich an den Support, wenn das Problem bestehen bleibt.",
+    "site-title": "Website-Statistiken",
+    "site-description": "Optionale Seiten- und Downloadklick-Zählungen ohne dauerhafte Besucherkennung. Unabhängig von der Erweiterung."
   },
   "faqPage": {
     "eyebrow": "FAQ",

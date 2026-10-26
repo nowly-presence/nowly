@@ -1,24 +1,20 @@
 # Changelog
 
-Rendered by `app/[locale]/changelog` (list) and `app/[locale]/changelog/[version]` (one release).
+`app/[locale]/changelog` (list) and `app/[locale]/changelog/[version]` (one release) render content that lives in `packages/changelog`; this feature only displays it.
 
-## Publish a new release
+## Publish a release
 
-The actual content lives in `packages/changelog/content/<version>/`, not in this feature — this folder only renders it:
+1. Create `packages/changelog/content/<x-y-z>/` (dashes, e.g. `2-4-0/`).
+2. Add one `.mdx` per locale: `en-US`, `fr-FR`, `de-DE`, `el-GR`, `es-ES`, `ja-JP`, `ko-KR`, `ms-MY`, `pl-PL`, `pt-BR`, `tr-TR`. Every existing release has all 11. The release date is read from the `en-US.mdx` frontmatter only (as `YYYY-MM-DD`); translated files' dates are ignored.
+3. No registration in `apps/web`: `lib/changelog-releases.ts` (wrapping `@nowly/changelog`) picks it up, and `app/sitemap.ts` lists it on the next build.
 
-1. Create `packages/changelog/content/<x-y-z>/` (dashes, not dots — e.g. `1-3-0/`).
-2. Add one `.mdx` file per locale inside it: `en-US.mdx`, `fr-FR.mdx`, `de-DE.mdx`, `el-GR.mdx`, `es-ES.mdx`, `ja-JP.mdx`, `ko-KR.mdx`, `ms-MY.mdx`, `pl-PL.mdx`, `pt-BR.mdx`, `tr-TR.mdx` — every existing release has all 11, don't skip locales.
-3. `getChangelogList`/`getChangelogEntry` (from `@nowly/changelog`, wrapped here by `lib/changelog-releases.ts`) pick this up automatically — no registration step in `apps/web`.
-4. `app/sitemap.ts` also calls into `lib/changelog-releases.ts` to list version URLs — a new release shows up there on the next build with no extra step, *provided* the release date parses (see Gotchas).
+## Behavior and gotchas
 
-## Gotchas
-
-- `formatChangelogDate` in `lib/changelog-releases.ts` expects a strict `YYYY-MM-DD` date string; an unparseable date has crashed `app/sitemap.ts`'s build once before. Double check the date in the release's frontmatter/metadata (inside `packages/changelog`) before publishing.
-- Don't add release-listing logic to `changelog-view.tsx` — `getChangelogReleases`/`getChangelogRelease` in `lib/changelog-releases.ts` are the only entry points into `@nowly/changelog`; keep the MDX-parsing details in that package.
+- `lib/changelog-releases.ts` is the only entry point into `@nowly/changelog` (`getChangelogReleases`, `getChangelogRelease`, `getChangelogNotes`, `latestReleaseSlugByStore`). Keep MDX parsing in the package and listing logic out of `changelog-view.tsx`.
+- A release is hidden until its date is a valid `YYYY-MM-DD` that is not in the future (`isChangelogReleasePublished`); `date: null` counts as published. An unparseable date was once able to break `app/sitemap.ts`: check the date before publishing.
+- `formatChangelogDate` lives in `lib/format-changelog-date.ts` (re-exported by `changelog-releases.ts`). Import it from the former in client or shared code: guides and presence pages use it too.
+- `/changelog/<version>` renders the release body through `getChangelogNotes` and the Markdown engine of `features/content`. Only the Markdown subset renders (MDX components are skipped), so write plain Markdown. The docs "Full notes" link shows only when a release has no body.
+- Store badges: only the latest release per store shows its badge (`latestReleaseSlugByStore`).
 
 ## Notable dependencies
-`@nowly/changelog` (content package, `packages/changelog`), `app/sitemap.ts` (root, depends on this feature's `lib/changelog-releases.ts`).
-
-## Full notes on the site
-
-`/changelog/<version>` renders the release's whole body under its summary, through `getChangelogNotes` (`lib/changelog-releases.ts`) and the site's Markdown engine (`features/content`). Only the Markdown subset is rendered: MDX components in a release file are skipped, so keep release notes in plain Markdown. The "Full notes" link to the docs only shows when a release has no body.
+`@nowly/changelog`, `features/content`, `app/sitemap.ts`.

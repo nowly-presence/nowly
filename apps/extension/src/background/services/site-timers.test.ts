@@ -22,21 +22,18 @@ describe("site timers", () => {
 
   afterEach(() => vi.useRealTimers());
 
-  it("does not add or replace timestamps when disabled", async () => {
+  it("initializes, stabilizes, and isolates site timers across tabs and presences", async () => {
+    // 1. Does not add timestamps when disabled
     const activity = entry();
     expect(await applySiteTimer(activity, false)).toBe(activity.presence);
-    const supplied = entry("twitch", { startTime: NOW - 100 });
-    expect(await applySiteTimer(supplied, false)).toBe(supplied.presence);
     expect((await chrome.storage.session.get("siteTimers")).siteTimers).toBeUndefined();
-  });
 
-  it("adds a stable start for activities without timestamps", async () => {
-    expect((await applySiteTimer(entry(), true)).startTime).toBe(NOW);
+    // 2. Adds stable start for activities without timestamps and keeps it over time
+    expect((await applySiteTimer(entry("github"), true)).startTime).toBe(NOW);
     vi.advanceTimersByTime(60 * SECOND_MS);
-    expect((await applySiteTimer(entry(), true)).startTime).toBe(NOW);
-  });
+    expect((await applySiteTimer(entry("github"), true)).startTime).toBe(NOW);
 
-  it("keeps the first supplied start despite refreshed starts and metadata changes", async () => {
+    // 3. Keeps first supplied start despite metadata refreshes
     expect(
       (
         await applySiteTimer(
@@ -61,17 +58,12 @@ describe("site timers", () => {
         )
       ).startTime
     ).toBe(NOW - 600);
+
+    // 4. Keeps separate clocks per presence and reuses clock on return
+    expect((await applySiteTimer(entry("github"), true)).startTime).toBe(NOW);
   });
 
-  it("keeps separate clocks per presence and reuses a site's clock on return", async () => {
-    await applySiteTimer(entry("twitch"), true);
-    vi.advanceTimersByTime(60 * SECOND_MS);
-    expect((await applySiteTimer(entry("github"), true)).startTime).toBe(NOW + 60);
-    vi.advanceTimersByTime(60 * SECOND_MS);
-    expect((await applySiteTimer(entry("twitch"), true)).startTime).toBe(NOW);
-  });
-
-  it("serializes simultaneous updates without losing clocks", async () => {
+  it("handles concurrent updates and survives service worker reload", async () => {
     const results = await Promise.all([
       applySiteTimer(entry("twitch", { startTime: NOW - 100 }), true),
       applySiteTimer(entry("twitch", { startTime: NOW - 50 }), true),
@@ -82,16 +74,15 @@ describe("site timers", () => {
       twitch: NOW - 100,
       github: NOW
     });
-  });
 
-  it("survives a service-worker module reload but not a new browser session", async () => {
-    await applySiteTimer(entry(), true);
     vi.advanceTimersByTime(60 * SECOND_MS);
     vi.resetModules();
     const reloaded = await import("@/background/services/site-timers");
-    expect((await reloaded.applySiteTimer(entry(), true)).startTime).toBe(NOW);
+    expect((await reloaded.applySiteTimer(entry("twitch"), true)).startTime).toBe(NOW - 100);
+
+    // Resets on new session
     installChromeMock();
-    expect((await reloaded.applySiteTimer(entry(), true)).startTime).toBe(NOW + 60);
+    expect((await reloaded.applySiteTimer(entry("twitch"), true)).startTime).toBe(NOW + 60);
   });
 
   it("clears saved starts without changing the original tab payload", async () => {

@@ -2,13 +2,17 @@ import type { PayloadOf, ResponseOf, RouterMessageType } from "@/background/rout
 import type { OnboardingState } from "@/background/storage/onboarding.store";
 import { buildCustomPresence, customActivitySlug } from "@/shared/custom-activity";
 import { decodeImageDataUrl, sha256Hex } from "@/shared/custom-image";
-import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, ExtensionSettings, InstalledPresences, NativeStatus, RuntimeLogEntry, StoredCustomImage, TabActivity, TabState } from "@/shared/types";
+import { CUSTOM_ACTIVITY_DETECTION_KEY } from "@/shared/custom-activity-detection";
+import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, CustomActivityDetection, ExtensionSettings, InstalledPresences, NativeStatus, RuntimeLogEntry, StoredCustomImage, TabActivity, TabState } from "@/shared/types";
 import type { MockStorageArea } from "@/preview/mock-storage";
 import { toStoredPresence, type CatalogFixture } from "@/preview/preview-fixtures";
 import { discordIpcIssueCode, markDiscordIpcIssuePrompted, NO_DISCORD_IPC_ISSUE, type DiscordIpcIssue } from "@/shared/discord-ipc-prompt";
 import { previewParams } from "@/preview/preview-params";
 import { DEFAULT_SUPPORT_PROMPT, SUPPORT_PROMPT_KEY, withSnooze, type SupportPromptState } from "@/shared/support-prompt";
 import { confirmLegalDocuments, emptyLegalState, normalizeLegalState } from "@nowly/shared/legal";
+import { announcementRevision } from "@nowly/shared/announcements";
+import { previewAnnouncements } from "@/preview/announcements-fixtures";
+import { createPublicationMockHandlers } from "@/preview/activity-publication-mock";
 
 export type MockHandlers = { [K in RouterMessageType]?: (payload: PayloadOf<K>) => ResponseOf<K> | Promise<ResponseOf<K>> };
 
@@ -65,6 +69,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
   const likes = new Map<string, boolean>();
   let muted = false;
   let account = initialAccount();
+  let announcements = previewAnnouncements();
   let userScriptsEnabled = !previewParams.scriptsDenied;
   const ipcDenied = previewParams.native === "ipc-denied";
   let native: NativeStatus = {
@@ -154,38 +159,56 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
   };
 
   const handlers: MockHandlers = {
+    ...createPublicationMockHandlers(),
+    GET_ANNOUNCEMENTS: () => announcements,
+    REFRESH_ANNOUNCEMENTS: ({ locale }) => ({ ...announcements, locale }),
+    MARK_ANNOUNCEMENT: async ({ id, action }) => {
+      const item = announcements.items.find((item) => item.id === id);
+
+      if (item && action === "read") {
+        announcements = {
+          ...announcements,
+          read: [
+            ...new Set([
+              ...announcements.read,
+              announcementRevision(item)
+            ])
+          ]
+        };
+        await local.set({ announcements });
+      }
+
+      return announcements;
+    },
     GET_LEGAL_STATE: async () => {
       const stored = await local.get("legalDocuments");
 
       if (stored.legalDocuments) return normalizeLegalState(stored.legalDocuments);
 
       const initial = emptyLegalState();
-      const receipt = {
-        version: 1,
-        recordedAt: new Date().toISOString()
+      const dates = {
+        tos: "2026-10-24",
+        privacy: "2026-10-25"
       };
+      initial.dates = dates;
+      const recordedAt = new Date().toISOString();
       const mode = new URLSearchParams(window.location.search).get("legal");
 
       if (mode !== "first") {
-        initial.tosAcceptance = receipt;
-        initial.privacyAcknowledgement = receipt;
+        initial.tosAcceptance = {
+          date: dates.tos,
+          recordedAt
+        };
+        initial.privacyAcknowledgement = {
+          date: dates.privacy,
+          recordedAt
+        };
       }
 
       if (mode === "update") {
-        initial.manifest = {
-          schemaVersion: 1,
-          documents: {
-            tos: {
-              ...initial.manifest.documents.tos,
-              version: 2,
-              requiredVersion: 2
-            },
-            privacy: {
-              ...initial.manifest.documents.privacy,
-              version: 2,
-              requiredVersion: 2
-            }
-          }
+        initial.dates = {
+          tos: "2026-10-26",
+          privacy: "2026-10-26"
         };
       }
 
@@ -353,7 +376,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
     }),
     DELETE_DEVICE_DATA: () => ({ ok: true }),
     SYNC_PRESENCE_SCRIPTS: () => ({ ok: true }),
-    TRACK_EVENT: () => ({ ok: true }),
+    RECORD_EXTENSION_ACTIVE: () => ({ ok: true }),
     INSTALL_LOCAL_PRESENCE_ZIP: () => ({
       ok: false,
       error: "PREVIEW"
@@ -396,6 +419,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
       const state = await readCustom();
 
       const exists = id !== null && state.items.some((item) => item.id === id);
+      if (id === null) await session.set({ [CUSTOM_ACTIVITY_DETECTION_KEY]: null });
       return writeCustom({
         ...state,
         activeId: exists ? id : null,
@@ -439,6 +463,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
       const images = await readImages();
       return Object.fromEntries(hashes.flatMap((hash) => (images[hash] ? [[hash, images[hash].dataUrl]] : [])));
     },
+    GET_CUSTOM_ACTIVITY_DETECTION: () => session.read<CustomActivityDetection | null>(CUSTOM_ACTIVITY_DETECTION_KEY, null),
     GET_ACCOUNT: () => account,
     START_ACCOUNT_CONNECT: () => {
       account = {

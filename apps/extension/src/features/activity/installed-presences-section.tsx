@@ -9,6 +9,7 @@ import type { StoredPresence } from "@/shared/types";
 import { Button } from "@/ui/button";
 import { Card, Group } from "@/ui/card";
 import { EmptyState } from "@/ui/empty-state";
+import { cn } from "@/ui/cn";
 import { Section } from "@/ui/section";
 import { PresenceGridCard } from "@/features/activity/presence-grid-card";
 import { PresenceListRow } from "@/features/activity/presence-list-row";
@@ -27,6 +28,7 @@ export const InstalledPresencesSection = ({ presences, detectedSlugs, now }: Ins
   const actions = usePresenceActions();
   const grid = state.settings.presenceDisplayMode === "grid";
   const viewLabel = grid ? t("activity.viewList") : t("activity.viewGrid");
+  const showUpdateAll = actions.availableUpdates.length > 1 || actions.updatingAll;
 
   const describe = (slug: string, stored: StoredPresence) => {
     const status = presenceStatus(slug, stored, state.settings, {
@@ -42,22 +44,33 @@ export const InstalledPresencesSection = ({ presences, detectedSlugs, now }: Ins
 
   return (
     <Section
+      className="[&>div:first-child]:flex-wrap"
       title={
         presences.length
           ? t("activity.yourPresences", { count: presences.length })
           : t("activity.yourPresencesEmpty")
       }
       action={
-        presences.length > 0 && (
-          <button
-            type="button"
-            onClick={() => void updateSettings({ presenceDisplayMode: grid ? "category" : "grid" })}
-            aria-label={viewLabel}
-            title={viewLabel}
-            className="flex size-7 items-center justify-center rounded-sm text-muted transition-colors hover:bg-hover hover:text-ink"
-          >
-            {grid ? <RiListCheck className="size-4" /> : <RiFunctionLine className="size-4" />}
-          </button>
+        (presences.length > 0 || actions.updatingAll) && (
+          <div className="ml-auto flex max-w-full items-center gap-2">
+            {showUpdateAll && (
+              <Button size="sm" loading={actions.updatingAll} aria-busy={actions.updatingAll} onClick={() => void actions.updateAll()}>
+                {t("activity.updateAll")}
+              </Button>
+            )}
+            <button
+              type="button"
+              onClick={() => void updateSettings({ presenceDisplayMode: grid ? "category" : "grid" })}
+              aria-label={viewLabel}
+              title={viewLabel}
+              className={cn(
+                "flex shrink-0 items-center justify-center rounded-sm text-muted transition-colors hover:bg-hover hover:text-ink",
+                showUpdateAll ? "size-8 border border-line-strong" : "size-7"
+              )}
+            >
+              {grid ? <RiListCheck className="size-4" /> : <RiFunctionLine className="size-4" />}
+            </button>
+          </div>
         )
       }
     >

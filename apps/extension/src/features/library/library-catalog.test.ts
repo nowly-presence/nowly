@@ -40,7 +40,8 @@ const catalog = [
 ];
 
 describe("filterCatalog", () => {
-  it("filters by category", () => {
+  it("filters and sorts catalog presences accurately", () => {
+    // 1. Filter by category
     expect(
       filterCatalog(catalog, {
         category: "music",
@@ -49,9 +50,8 @@ describe("filterCatalog", () => {
         locale: "en"
       }).map((item) => item.slug)
     ).toEqual(["ade", "deezer"]);
-  });
 
-  it("matches accent-insensitive queries on name and urls", () => {
+    // 2. Matches accent-insensitive queries on name and urls
     expect(
       filterCatalog(catalog, {
         category: "all",
@@ -68,9 +68,8 @@ describe("filterCatalog", () => {
         locale: "en"
       }).map((item) => item.slug)
     ).toEqual(["youtube"]);
-  });
 
-  it("sorts by popularity, weighting active users over installs", () => {
+    // 3. Sorts by popularity (weighting active users over installs) and newest first
     expect(
       filterCatalog(catalog, {
         category: "all",
@@ -79,9 +78,7 @@ describe("filterCatalog", () => {
         locale: "en"
       }).map((item) => item.slug)
     ).toEqual(["deezer", "youtube", "ade"]);
-  });
 
-  it("sorts newest first and puts unknown dates last", () => {
     expect(
       filterCatalog(catalog, {
         category: "all",
@@ -94,11 +91,8 @@ describe("filterCatalog", () => {
 });
 
 describe("catalog helpers", () => {
-  it("normalizes diacritics and case", () => {
+  it("normalizes search text and filters trending presences", () => {
     expect(normalizeSearch("Adé CRÈME")).toBe("ade creme");
-  });
-
-  it("keeps only presences with usage in trending", () => {
     expect(trendingPresences(catalog).map((item) => item.slug)).toEqual(["youtube", "deezer"]);
   });
 });
@@ -107,34 +101,27 @@ describe("newPresenceSlugs", () => {
   const now = Date.parse("2026-09-28T12:00:00.000Z");
   const batch = Array.from({ length: 24 }, (_, index) => view(`batch-${index}`, { addedAt: "2026-09-17T10:00:00.000Z" }));
 
-  it("flags the latest publications and skips a large release batch", () => {
+  it("determines new presences respecting batch caps, calendar windows, and unknown dates", () => {
     const views = [
       view("nowly", { addedAt: "2026-09-27T09:00:00.000Z" }),
       view("product-hunt", { addedAt: "2026-09-27T10:00:00.000Z" }),
       ...batch
     ];
     expect([...newPresenceSlugs(views, now)].sort()).toEqual(["nowly", "product-hunt"]);
-  });
 
-  it("keeps whole publication days while under the limit", () => {
-    const views = [
+    const daysUnderLimit = [
       view("a", { addedAt: "2026-09-27T09:00:00.000Z" }),
       view("b", { addedAt: "2026-09-25T09:00:00.000Z" }),
       view("c", { addedAt: "2026-09-25T11:00:00.000Z" }),
       view("d", { addedAt: "2026-09-20T09:00:00.000Z" })
     ];
-    expect([...newPresenceSlugs(views, now)].sort()).toEqual(["a", "b", "c", "d"]);
-  });
+    expect([...newPresenceSlugs(daysUnderLimit, now)].sort()).toEqual(["a", "b", "c", "d"]);
 
-  it("ignores presences older than the window or without a date", () => {
-    const views = [
+    const expiredOrUndated = [
       view("old", { addedAt: "2026-09-01T00:00:00.000Z" }),
       view("unknown", { addedAt: null })
     ];
-    expect(newPresenceSlugs(views, now).size).toBe(0);
-  });
-
-  it("flags nothing when the only recent day is a large batch", () => {
+    expect(newPresenceSlugs(expiredOrUndated, now).size).toBe(0);
     expect(newPresenceSlugs(batch, now).size).toBe(0);
   });
 });

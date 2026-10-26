@@ -33,6 +33,7 @@ export const accountRoutes = async (fastify: FastifyInstance) => {
       });
       return {
         token,
+        scopes: parsed.data.scopes,
         user,
         providers: [...ACCOUNT_PROVIDERS],
         expiresAt: expiresAt.getTime()

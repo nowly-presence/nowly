@@ -22,7 +22,7 @@ const docsRedirects = docsZone
 
 const nextConfig: NextConfig = {
   compress: true,
-  transpilePackages: ["@nowly/analytics", "@nowly/ui", "@nowly/locales", "@nowly/shared"],
+  transpilePackages: ["@nowly/telemetry", "@nowly/ui", "@nowly/locales", "@nowly/shared"],
   poweredByHeader: false,
   experimental: { globalNotFound: true },
   images: {

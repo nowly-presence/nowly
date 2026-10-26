@@ -1,4 +1,3 @@
-import { AuthorViewTracker } from "@/features/library/components/author-view-tracker";
 import { PaginatedLibraryGrid } from "@/features/library/components/paginated-library-grid";
 import { ButtonLink } from "@/components/button-link";
 import { Avatar, AvatarFallback, AvatarImage, ButtonAnchor } from "@nowly/ui";
@@ -18,7 +17,6 @@ export const AuthorView = async ({ handle, items }: AuthorViewProps) => {
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
-      <AuthorViewTracker />
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
         <ButtonLink href="/library" variant="ghost" size="sm">
           <RiArrowLeftLine data-icon="inline-start" />

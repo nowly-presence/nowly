@@ -25,16 +25,11 @@ export const LegalGate = ({ children }: {
       <header className="flex h-14 items-center px-5">
         <Wordmark theme={theme} />
       </header>
-      {state && extension.ready ? (
-        <LegalPrompt
-          key={pending.map((id) => `${id}:${state.manifest.documents[id].version}`).join(",")}
-          state={state}
-          returning={returning}
-          confirm={confirm}
-        />
+      {state?.dates && extension.ready ? (
+        <LegalPrompt key={pending.map((id) => `${id}:${state.dates?.[id]}`).join(",")} state={state} returning={returning} confirm={confirm} />
       ) : (
         <div role="status" className="flex h-full flex-col items-center justify-center gap-4 px-5 text-body-sm text-muted">
-          {failed ? (
+          {failed || state?.checkFailed ? (
             <>
               <p>{t("legal.error")}</p>
               <Button onClick={() => void retry()}>{t("legal.review")}</Button>

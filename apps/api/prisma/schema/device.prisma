@@ -11,7 +11,6 @@ model Device {
 
   user      User?                   @relation(fields: [userId], references: [id], onDelete: SetNull)
   presences DevicePresence[]
-  sessions  PresenceActiveSession[]
   customAssets CustomAsset[]
 
   @@index([userId])
@@ -43,25 +42,6 @@ model PresenceActiveDevice {
   @@id([slug, deviceId])
   @@index([deviceId])
   @@map("presence_active_devices")
-}
-
-model PresenceActiveSession {
-  id            String    @id
-  slug          String
-  deviceId      String    @map("device_id")
-  version       String?
-  startedAt     DateTime  @default(now()) @map("started_at") @db.Timestamptz(6)
-  endedAt       DateTime? @map("ended_at") @db.Timestamptz(6)
-  durationMs    Int?      @map("duration_ms")
-  endReason     String?   @map("end_reason")
-  lastHeartbeat DateTime  @default(now()) @map("last_heartbeat") @db.Timestamptz(6)
-
-  device Device @relation(fields: [deviceId], references: [deviceId], onDelete: Cascade)
-
-  @@index([slug])
-  @@index([deviceId])
-  @@index([startedAt])
-  @@map("presence_active_sessions")
 }
 
 model CustomAsset {

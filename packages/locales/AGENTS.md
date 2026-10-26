@@ -1,25 +1,21 @@
 # @nowly/locales
 
-Centralized `next-intl` configuration shared by `apps/web` and `apps/docs`: `routing.ts` (locales + URL prefix mode), `navigation.ts` (typed `Link`/`redirect`/`usePathname`/`useRouter`), `proxy.ts` (the middleware), `request.ts` (takes each app's message loader as a parameter).
+Central `next-intl` config. `src/index.ts` holds locale codes and maps (`SUPPORTED_LOCALES` is the source of truth), `routing.ts` (prefixes), `navigation.ts` (typed `Link`/`redirect`/hooks), `proxy.ts` (`appProxy`), `request.ts` (`createRequestConfig(loadMessages)`). Consumed by `apps/web`, `apps/docs`, `apps/api`, `apps/extension` and `packages/ui`. No test script; check with `pnpm --filter @nowly/locales typecheck`.
 
-## Add a new supported locale
+## Add a locale
 
-1. In `src/index.ts`, add the new code to `SUPPORTED_LOCALES` (line 4), and add its short URL prefix to `LOCALE_SHORT_MAP` and `LOCALE_LONG_MAP` (both around line 29-54) — this is the single source of truth `LocaleString` is derived from.
-2. `routing.ts`'s `appRouting` derives its `prefixes` from `LOCALE_SHORT_MAP` automatically — no change needed there.
-3. Add a new `messages/<locale>.json` in **both** `apps/web` and `apps/docs`, with every key from `en-US.json` translated (missing keys throw `next-intl`'s `MISSING_MESSAGE` in dev, or silently fall back to English in docs via its `withEnglishFallback` wrapper — don't rely on that for web, it doesn't have one).
-4. Add the locale's label to `packages/ui/src/locale-selector.tsx`'s `localeLabelKey` map, and to the `footer` namespace's language names (`english`, `french`, ...) in both apps' message files.
-5. If the locale needs a custom flag rendering, add a case in `packages/ui/src/locale-flag.tsx`'s `otherFlags` map — otherwise it falls back to a generic flag.
+1. `src/index.ts`: add the code to `SUPPORTED_LOCALES`, its short code to the hand-written `LocaleShort` union, and entries in `LOCALE_SHORT_MAP` and `LOCALE_LONG_MAP`. The typed records only force compile errors; the list is the truth. `routing.ts` derives prefixes automatically.
+2. Add `messages/<locale>.json` (long code) to `apps/web` and `apps/docs`, with every `en-US.json` key. Web throws `MISSING_MESSAGE` on gaps; docs falls back to English through `withEnglishFallback` in `apps/docs/i18n/request.ts`.
+3. Add `apps/extension/messages/<short>.json` (short code, e.g. `pt-BR`, `ja`) and update `apps/extension/src/shared/locales.ts` (`UI_LOCALES`, `LOCALE_LONG_MAP`).
+4. `packages/ui`: `localeLabelKey` in `locale-selector.tsx`, plus the language name in the `footer` namespace of both apps' messages. Add a case to `otherFlags` in `locale-flag.tsx` if it needs a custom flag.
+5. Optional translated content: `packages/changelog/content/*/<locale>.mdx` and docs `content/**/<locale>.mdx` (both fall back to `en-US`).
 
 ## Gotchas
 
-- `apps/*/i18n/{routing,navigation,request}.ts` and `apps/*/proxy.ts` must stay one-line re-exports from `@nowly/locales/*`. Don't inline config there — that's exactly the duplication this package exists to remove.
-- In `proxy.ts` (both here and in each app's own `proxy.ts`), export the proxy function directly:
+- Each app's `i18n/{routing,navigation}.ts` and `proxy.ts` should stay thin re-exports of `@nowly/locales/*`. `apps/docs/i18n/request.ts` is the exception (it wraps the loader with English fallback), and each `proxy.ts` also exports a `config` matcher.
+- Proxy must import then default-export, never `export { appProxy as default } from ...` (breaks Next's "must export a function" analysis):
   ```ts
   import { appProxy } from "@nowly/locales/proxy";
   export default appProxy;
   ```
-  not `export { appProxy as default } from "..."` — that re-export form has made Next.js's build-time analyzer fail to detect a valid proxy export (`"The file ./proxy.ts must export a function"`), even though the code is otherwise correct.
-- After changing anything imported cross-package here, if either app's dev server reports `Module not found: Can't resolve '@nowly/locales'`, run `pnpm install`, confirm `"@nowly/locales"` is in that app's `next.config.ts` `transpilePackages`, then `rm -rf apps/<app>/.next` and restart — it's a stale Turbopack resolution cache, not a real missing dependency.
-
-## Notable dependencies
-`next-intl`. Consumed by `apps/web` and `apps/docs`.
+- `Module not found: Can't resolve '@nowly/locales'` in dev: `pnpm install`, confirm `@nowly/locales` is in the app's `transpilePackages`, `rm -rf apps/<app>/.next`, restart.

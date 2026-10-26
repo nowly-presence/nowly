@@ -1,24 +1,36 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { clearTabPresences, setFocusedTabId, upsertTabPresence } from "@/background/services/background-context";
 import { installChromeMock } from "@/test/chrome-mock";
-import type { ExtensionSettings, PresenceData, PresenceSchedule, StoredPresence } from "@/shared/types";
+import type { ExtensionSettings, PresenceData, StoredPresence } from "@/shared/types";
 
 describe("status display type", () => {
-  it.each([0, 1, 2])("preserves %i through normalization and native mapping", async (statusDisplayType) => {
+  it("preserves supported status display types (0, 1, 2) and omits unsupported/invalid values", async () => {
     installChromeMock();
     const { normalizeActivity } = await import("@/background/managers/activity-manager");
-    const { mapPresenceData } = await import("@/background/services/native");
-    const input = JSON.parse(JSON.stringify({ details: "Video title", state: "Channel", statusDisplayType })) as PresenceData;
-    const payload = mapPresenceData(normalizeActivity(input, "YouTube"));
-    expect(payload).toMatchObject({ name: "YouTube", details: "Video title", state: "Channel", statusDisplayType });
-  });
 
-  it.each([undefined, null, -1, 3, 1.5, "2"])("omits unsupported value %s", async (statusDisplayType) => {
-    installChromeMock();
-    const { normalizeActivity } = await import("@/background/managers/activity-manager");
     const { mapPresenceData } = await import("@/background/services/native");
-    const input = JSON.parse(JSON.stringify({ statusDisplayType })) as PresenceData;
-    expect(JSON.parse(JSON.stringify(mapPresenceData(normalizeActivity(input, "YouTube"))))).not.toHaveProperty("statusDisplayType");
+
+    for (const statusDisplayType of [0, 1, 2]) {
+      const input = JSON.parse(
+        JSON.stringify({
+          details: "Video title",
+          state: "Channel",
+          statusDisplayType
+        })
+      ) as PresenceData;
+      const payload = mapPresenceData(normalizeActivity(input, "YouTube"));
+      expect(payload).toMatchObject({
+        name: "YouTube",
+        details: "Video title",
+        state: "Channel",
+        statusDisplayType
+      });
+    }
+
+    for (const statusDisplayType of [undefined, null, -1, 3, 1.5, "2"]) {
+      const input = JSON.parse(JSON.stringify({ statusDisplayType })) as PresenceData;
+      expect(JSON.parse(JSON.stringify(mapPresenceData(normalizeActivity(input, "YouTube"))))).not.toHaveProperty("statusDisplayType");
+    }
   });
 });
 
@@ -120,56 +132,50 @@ describe("shouldHoldDiscord", () => {
     ...overrides
   });
 
-  it("holds when presence is globally paused", async () => {
+  it("handles hold rules: global pause, active vs expired snooze, and schedule adherence", async () => {
     const chrome = installChromeMock();
+    const { shouldHoldDiscord } = await import("@/background/managers/activity-manager");
+
+    // 1. Globally paused
     chrome.local.settings = {
       ...baseSettings,
       presencePaused: true
     };
-    const { shouldHoldDiscord } = await import("@/background/managers/activity-manager");
     expect(await shouldHoldDiscord(storedPresence())).toBe(true);
-  });
 
-  it("holds while the presence is snoozed", async () => {
-    const chrome = installChromeMock();
+    // 2. Snooze active vs expired
     chrome.local.settings = baseSettings;
-    const { shouldHoldDiscord } = await import("@/background/managers/activity-manager");
     expect(await shouldHoldDiscord(storedPresence({ snoozeUntil: Date.now() + 60_000 }))).toBe(true);
-  });
-
-  it("does not hold once the snooze has expired", async () => {
-    const chrome = installChromeMock();
-    chrome.local.settings = baseSettings;
-    const { shouldHoldDiscord } = await import("@/background/managers/activity-manager");
     expect(await shouldHoldDiscord(storedPresence({ snoozeUntil: Date.now() - 1 }))).toBe(false);
-  });
 
-  it("holds outside the configured schedule days", async () => {
-    const chrome = installChromeMock();
+    // 3. Schedule enabled & outside days vs schedule disabled
+    const otherDay = (new Date().getDay() + 1) % 7;
     chrome.local.settings = {
       ...baseSettings,
       scheduleEnabled: true
     };
-    const { shouldHoldDiscord } = await import("@/background/managers/activity-manager");
+    expect(
+      await shouldHoldDiscord(
+        storedPresence({
+          schedule: {
+            days: [otherDay]
+          }
+        })
+      )
+    ).toBe(true);
 
-    const otherDay = (new Date().getDay() + 1) % 7;
-    const schedule: PresenceSchedule = {
-      days: [otherDay]
-    };
-    expect(await shouldHoldDiscord(storedPresence({ schedule }))).toBe(true);
-  });
-
-  it("does not hold when scheduling is disabled even with a schedule set", async () => {
-    const chrome = installChromeMock();
     chrome.local.settings = {
       ...baseSettings,
       scheduleEnabled: false
     };
-    const { shouldHoldDiscord } = await import("@/background/managers/activity-manager");
-
-    const schedule: PresenceSchedule = {
-      days: []
-    };
-    expect(await shouldHoldDiscord(storedPresence({ schedule }))).toBe(false);
+    expect(
+      await shouldHoldDiscord(
+        storedPresence({
+          schedule: {
+            days: []
+          }
+        })
+      )
+    ).toBe(false);
   });
 });

@@ -12,11 +12,6 @@ const mockPrisma = vi.hoisted(() => ({
     deleteMany: vi.fn()
   },
   presenceActiveDevice: { deleteMany: vi.fn() },
-  presenceActiveSession: { deleteMany: vi.fn() },
-  analyticsEvent: {
-    findMany: vi.fn(),
-    deleteMany: vi.fn()
-  },
   presenceLike: {
     findMany: vi.fn(),
     deleteMany: vi.fn()
@@ -87,13 +82,12 @@ describe("exportDeviceData / deleteDeviceData", () => {
     const { exportDeviceData } = await import("@/features/device/device.service");
     mockPrisma.device.findUnique.mockResolvedValue(null);
     mockPrisma.devicePresence.findMany.mockResolvedValue([]);
-    mockPrisma.analyticsEvent.findMany.mockResolvedValue([]);
     mockPrisma.presenceLike.findMany.mockResolvedValue([]);
 
     expect(await exportDeviceData("device-1")).toBeNull();
   });
 
-  it("exports the device row, its presences, and its analytics events", async () => {
+  it("exports functional device data without a retired analytics delegate or export field", async () => {
     const { exportDeviceData } = await import("@/features/device/device.service");
     mockPrisma.device.findUnique.mockResolvedValue({
       deviceId: "device-1",
@@ -114,15 +108,6 @@ describe("exportDeviceData / deleteDeviceData", () => {
         installedVersion: "1.0.0"
       }
     ]);
-    mockPrisma.analyticsEvent.findMany.mockResolvedValue([
-      {
-        key: "presence_install",
-        slug: "youtube",
-        source: "web_library",
-        country: "FR",
-        createdAt: new Date("2026-01-01T00:00:00Z")
-      }
-    ]);
     mockPrisma.presenceLike.findMany.mockResolvedValue([
       {
         slug: "youtube",
@@ -141,15 +126,8 @@ describe("exportDeviceData / deleteDeviceData", () => {
         installedVersion: "1.0.0"
       }
     ]);
-    expect(result?.analyticsEvents).toEqual([
-      {
-        key: "presence_install",
-        slug: "youtube",
-        source: "web_library",
-        country: "FR",
-        createdAt: "2026-01-01T00:00:00.000Z"
-      }
-    ]);
+    expect(result).not.toHaveProperty("analyticsEvents");
+    expect(result?.customAssets).toEqual([]);
     expect(result?.presenceLikes).toEqual([
       {
         slug: "youtube",
@@ -164,9 +142,6 @@ describe("exportDeviceData / deleteDeviceData", () => {
 
     await deleteDeviceData("device-1");
 
-    expect(mockPrisma.analyticsEvent.deleteMany).toHaveBeenCalledWith({
-      where: { deviceId: "device-1" }
-    });
     expect(mockPrisma.presenceLike.deleteMany).toHaveBeenCalledWith({
       where: { deviceId: "device-1" }
     });
@@ -174,9 +149,6 @@ describe("exportDeviceData / deleteDeviceData", () => {
       where: { deviceId: "device-1" }
     });
     expect(mockPrisma.presenceActiveDevice.deleteMany).toHaveBeenCalledWith({
-      where: { deviceId: "device-1" }
-    });
-    expect(mockPrisma.presenceActiveSession.deleteMany).toHaveBeenCalledWith({
       where: { deviceId: "device-1" }
     });
     expect(mockPrisma.device.deleteMany).toHaveBeenCalledWith({

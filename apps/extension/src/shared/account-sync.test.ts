@@ -35,8 +35,8 @@ const stored = (overrides: Partial<StoredPresence>): StoredPresence => ({
   ...overrides
 });
 
-describe("projectSettings", () => {
-  it("syncs the timer preference without any browser-session timer state", () => {
+describe("projection helpers", () => {
+  it("projects settings: syncs timer preference, excludes local session timers and device-only keys", () => {
     expect(
       projectSettings({
         presenceDisplayMode: "category",
@@ -48,9 +48,7 @@ describe("projectSettings", () => {
       showPlayer: true,
       preserveSiteTimer: true
     });
-  });
 
-  it("never includes device-only settings", () => {
     const settings: ExtensionSettings = {
       presenceDisplayMode: "grid",
       showPlayer: false,
@@ -65,10 +63,8 @@ describe("projectSettings", () => {
       appearance: "dark"
     });
   });
-});
 
-describe("projectPresences", () => {
-  it("lists store presences without bundles, activity or snooze, and skips local and bundled ones", () => {
+  it("projects presences: keeps store presences without bundle/snooze, filters local/bundled, and preserves cross-device pending", () => {
     const presences: InstalledPresences = {
       youtube: stored({
         snoozeUntil: 99,
@@ -102,9 +98,7 @@ describe("projectPresences", () => {
         }
       }
     ]);
-  });
 
-  it("keeps presences received from another device until they are installed here", () => {
     expect(
       projectPresences(
         {},
@@ -124,10 +118,8 @@ describe("projectPresences", () => {
       }
     ]);
   });
-});
 
-describe("projectPresenceSettings", () => {
-  it("drops values the server would reject and empty entries", () => {
+  it("projects presence settings: drops server-rejected keys and empty records", () => {
     expect(
       projectPresenceSettings({
         youtube: {
@@ -149,11 +141,11 @@ describe("projectPresenceSettings", () => {
 });
 
 describe("mergeThreeWay", () => {
-  it("takes the remote change when nothing changed locally", () => {
+  it("resolves three-way diffs: takes remote on local no-op, merges disjoint field changes, lets local write win on collision, and treats arrays atomically", () => {
+    // 1. Remote change when local unchanged
     expect(mergeThreeWay({ appearance: "light" }, { appearance: "light" }, { appearance: "dark" })).toEqual({ appearance: "dark" });
-  });
 
-  it("keeps local changes and remote changes on different fields", () => {
+    // 2. Disjoint field changes both kept
     expect(
       mergeThreeWay(
         {
@@ -173,13 +165,11 @@ describe("mergeThreeWay", () => {
       appearance: "dark",
       showPlayer: false
     });
-  });
 
-  it("lets the local write win on the same field", () => {
+    // 3. Local write wins on collision
     expect(mergeThreeWay({ appearance: "light" }, { appearance: "dark" }, { appearance: "system" })).toEqual({ appearance: "dark" });
-  });
 
-  it("treats arrays as one value", () => {
+    // 4. Arrays treated as atomic values
     expect(mergeThreeWay(["a"], ["a", "b"], ["c"])).toEqual(["a", "b"]);
   });
 });

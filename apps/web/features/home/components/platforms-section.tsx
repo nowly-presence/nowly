@@ -28,6 +28,7 @@ const PlatformMarquee = async ({ platforms }: {
   platforms: Promise<PresencePlatform[]>;
 }) => {
   const resolvedPlatforms = await platforms;
+
   const t = await getTranslations("platforms");
 
   if (resolvedPlatforms.length === 0) return null;

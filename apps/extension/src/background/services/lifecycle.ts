@@ -1,11 +1,13 @@
 import { broadcastActiveTab, handleClearActivity, handleRemovedTab, restoreActivityBadge } from "@/background/managers/activity-manager";
 import { drainInstallQueue, installBundledPresences } from "@/background/managers/presence-manager";
-import { trackAnalytics } from "@/background/analytics-client";
+import { trackProduct } from "@/background/telemetry";
 import { addRuntimeLog } from "@/background/runtime-logs";
 import { refreshPresenceLanguage, syncPresenceScripts } from "@/background/runtime/presence-scripts";
 import { runAccountSync } from "@/background/services/account-sync";
+import { refreshAnnouncements } from "@/background/services/announcements";
 import { initializeCustomApiUrl } from "@/background/services/api-state";
 import { setFocusedTabId } from "@/background/services/background-context";
+import { refreshCustomActivityDetection } from "@/background/services/custom-activity-detection";
 import { registerContextMenu } from "@/background/services/context-menu";
 import { syncDeviceState, syncUninstallUrl } from "@/background/services/device-sync";
 import { connectNative, onNativeResponse } from "@/background/services/native";
@@ -57,7 +59,6 @@ export const hasHeartbeatLogChanged = (previous: HeartbeatLogState | undefined, 
   previous.version !== current.version ||
   previous.code !== current.code;
 
-let lastHeartbeatConnected: boolean | undefined;
 let lastHeartbeatLogState: HeartbeatLogState | undefined;
 
 const registerNativeResponseHandler = (): void => {
@@ -68,13 +69,6 @@ const registerNativeResponseHandler = (): void => {
         reason: message.error
       });
 
-      if (lastHeartbeatConnected !== false) {
-        trackAnalytics("native_heartbeat_failed", {
-          payload: { reason: message.error }
-        });
-      }
-
-      lastHeartbeatConnected = false;
       void setDebug({
         stage: "native-error",
         message: message.error,
@@ -85,7 +79,14 @@ const registerNativeResponseHandler = (): void => {
 
     if (message.type === "CONNECTED") {
       addRuntimeLog("success", "native", "native connected", { nativeVersion: message.version });
-      trackAnalytics("native_connected");
+      void trackProduct(
+        {
+          name: "native_connected",
+          source: "extension",
+          data: {}
+        },
+        { daily: "native" }
+      );
     }
 
     if (message.type === "PONG") {
@@ -105,14 +106,6 @@ const registerNativeResponseHandler = (): void => {
         });
         lastHeartbeatLogState = heartbeatState;
       }
-
-      if (!message.connected && lastHeartbeatConnected !== false) {
-        trackAnalytics("native_heartbeat_failed", {
-          payload: { reason: message.status }
-        });
-      }
-
-      lastHeartbeatConnected = message.connected;
     }
 
     if (message.type === "OK") {
@@ -152,6 +145,7 @@ const runBootBackground = async (options: {
   await handleClearActivity();
   connectNative();
   await initializeCustomApiUrl();
+  void refreshAnnouncements().catch(() => {});
   await syncUninstallUrl();
   await installBundledPresences();
   const presences = await getPresences();
@@ -189,8 +183,6 @@ export const registerLifecycleHandlers = (): void => {
   chrome.runtime.onInstalled.addListener(async (details) => {
     enableSidePanelAction();
     registerContextMenu();
-    if (details.reason === "install") trackAnalytics("extension_install", { source: "system" });
-    if (details.reason === "update") trackAnalytics("extension_update", { source: "system" });
     const presences = await bootBackground({ syncScripts: false });
     openChangelogOnUpdate(details);
     await syncPresenceScripts(presences);
@@ -213,6 +205,12 @@ export const registerLifecycleHandlers = (): void => {
   chrome.tabs.onActivated.addListener(({ tabId }) => {
     setFocusedTabId(tabId);
     void broadcastActiveTab();
+  });
+
+  chrome.tabs.onUpdated.addListener((_tabId, changeInfo) => {
+    if (!changeInfo.url && changeInfo.status !== "complete") return;
+
+    void refreshCustomActivityDetection().then((changed) => (changed ? broadcastActiveTab() : undefined));
   });
 
   chrome.windows.onFocusChanged.addListener((windowId) => {

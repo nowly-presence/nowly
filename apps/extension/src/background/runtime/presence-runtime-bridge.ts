@@ -1,5 +1,5 @@
 import { handleActivityUpdate, handleClearActivity } from "@/background/managers/activity-manager";
-import { USER_SCRIPT_MESSAGE_SOURCE } from "@/background/runtime/presence-runtime";
+import { USER_SCRIPT_MESSAGE_SOURCE } from "@/shared/constants";
 import { setDebug } from "@/background/storage/presences.store";
 import type { PresenceData } from "@/shared/types";
 

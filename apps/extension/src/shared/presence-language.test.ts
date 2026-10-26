@@ -7,23 +7,18 @@ const THREE = {
   "es-ES": {}
 };
 
-describe("defaultPresenceLocale", () => {
-  it("follows the interface language when the presence ships it", () => {
+describe("presence language resolution", () => {
+  it("determines default presence locale following UI language with en-US fallback", () => {
     expect(defaultPresenceLocale(THREE, "fr")).toBe("fr-FR");
-  });
-
-  it("falls back to en-US otherwise", () => {
     expect(defaultPresenceLocale(THREE, "de")).toBe("en-US");
     expect(defaultPresenceLocale(undefined, "fr")).toBe("en-US");
   });
-});
 
-describe("configuredPresenceLocale", () => {
-  it("uses the global language when one is set", () => {
+  it("determines configured locale with precedence: global setting -> per-presence override -> UI language", () => {
+    // Global override
     expect(configuredPresenceLocale({ presenceLanguage: "es-ES" }, "youtube", THREE, "fr")).toBe("es-ES");
-  });
 
-  it("uses the saved per-presence choice before the default", () => {
+    // Per-presence override
     expect(
       configuredPresenceLocale(
         {
@@ -35,9 +30,8 @@ describe("configuredPresenceLocale", () => {
         "fr"
       )
     ).toBe("en-US");
-  });
 
-  it("defaults to the interface language per presence", () => {
+    // Default per-presence fallback to interface language
     expect(configuredPresenceLocale({ presenceLanguage: "per-presence" }, "youtube", THREE, "fr")).toBe("fr-FR");
     expect(configuredPresenceLocale({}, "youtube", THREE, "fr")).toBe("fr-FR");
   });

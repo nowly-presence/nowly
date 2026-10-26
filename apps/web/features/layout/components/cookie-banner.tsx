@@ -5,31 +5,26 @@ import { buttonVariants } from "@nowly/ui/button-variants";
 import { cn } from "@nowly/ui/utils";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-
-const STORAGE_KEY = "nowly_cookie_dismissed";
+import { setSiteConsent, siteConsent } from "@/lib/telemetry";
 
 export const CookieBanner = () => {
   const t = useTranslations("cookie-banner");
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    try {
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        setVisible(true);
-      }
-    } catch {
-      setVisible(true);
-    }
+    const update = () => setVisible(siteConsent() === null);
+    update();
+    window.addEventListener("nowly:product-consent", update);
+    window.addEventListener("storage", update);
+    return () => {
+      window.removeEventListener("nowly:product-consent", update);
+      window.removeEventListener("storage", update);
+    };
   }, []);
 
-  const dismiss = () => {
-    try {
-      localStorage.setItem(STORAGE_KEY, "true");
-    } catch {
-      /* ignore */
-    }
-
-    setVisible(false);
+  const choose = (granted: boolean) => {
+    setSiteConsent(granted);
+    setVisible(siteConsent() === null);
   };
 
   if (!visible) return null;
@@ -44,9 +39,14 @@ export const CookieBanner = () => {
           </Link>
         </p>
 
-        <button type="button" className={cn(buttonVariants({ variant: "inverted" }), "shrink-0")} onClick={dismiss}>
-          {t("dismiss")}
-        </button>
+        <div className="flex shrink-0 gap-2">
+          <button type="button" className={cn(buttonVariants({ variant: "outline" }))} onClick={() => choose(false)}>
+            {t("decline")}
+          </button>
+          <button type="button" className={cn(buttonVariants({ variant: "outline" }))} onClick={() => choose(true)}>
+            {t("accept")}
+          </button>
+        </div>
       </div>
     </aside>
   );

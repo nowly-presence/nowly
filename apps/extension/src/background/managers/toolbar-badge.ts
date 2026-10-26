@@ -6,8 +6,6 @@ const HEX_COLOR = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
 
 const safeColor = (color: string | undefined): string => (color && HEX_COLOR.test(color) ? color : DEFAULT_BADGE_COLOR);
 
-// Chrome can hide translucent badge backgrounds. Apply a subtle opaque tint
-// instead so the activity hue stays recognizable behind the emoji.
 export const readableBadgeColor = (color: string): string => {
   const hex = color.length === 4 ? `#${[...color.slice(1)].map((digit) => digit.repeat(2)).join("")}` : color;
   const tint = [0, 0, 16];

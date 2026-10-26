@@ -1,7 +1,6 @@
 import { AppProviders } from "@/components/providers";
 import { LOCALE_SHORT_MAP, type LocaleString } from "@nowly/locales";
 import { getLocale } from "next-intl/server";
-import Script from "next/script";
 import type { PropsWithChildren } from "react";
 import "./globals.css";
 import { satoshi } from "./fonts";
@@ -15,8 +14,6 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
     <html lang={LOCALE_SHORT_MAP[locale as LocaleString] ?? "en"} className={satoshi.variable} suppressHydrationWarning>
       <body className="min-h-dvh bg-background font-sans antialiased" suppressHydrationWarning>
         <AppProviders>{children}</AppProviders>
-        <Script id="umami-tracker" src="https://stats.nowly.me/script.js" data-website-id="b68279a9-5bcc-454a-9147-37fdef5dbebf" strategy="afterInteractive" />
-        <Script id="umami-recorder" defer src="https://stats.nowly.me/recorder.js" data-website-id="b68279a9-5bcc-454a-9147-37fdef5dbebf" strategy="afterInteractive" />
       </body>
     </html>
   );

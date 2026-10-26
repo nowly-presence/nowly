@@ -1,4 +1,33 @@
 {
+  "activitySharing": {
+    "editorOpen": "Kopyayı değiştirmeden önce uzantıdaki etkinlik düzenleyicisini kapatın. Kaydedilmemiş taslaklar korunur.",
+    "listeningType": "Dinliyor",
+    "watchingType": "İzliyor",
+    "competingType": "Yarışıyor",
+    "title": "Paylaşılan özel etkinlik",
+    "preview": "Discord önizlemesi",
+    "timer": "Geri sayım",
+    "loading": "Etkinlik yükleniyor...",
+    "unavailable": "Bu etkinlik kullanılamıyor veya artık yayında değil.",
+    "author": "Paylaşan: <avatar></avatar><person>{name}</person>",
+    "consent": "Kopyanız bağımsız kalır. Etkinleştirme ve güncellemeler manuel, algılama kapalıdır.",
+    "conflict": "Kopyanızda yerel değişiklikler var. Koruyun veya açıkça bu önizlemeyle değiştirin.",
+    "install": "Nowly uygulamasına ekle",
+    "keep": "Kopyamı koru",
+    "replace": "Bu sürümle değiştir",
+    "installed": "Nowly içinde devre dışı olarak kaydedildi. Hazır olduğunuzda ayrıca etkinleştirin.",
+    "kept": "Kopyanız ve güncelleme temeli değiştirilmedi.",
+    "changed": "Yayın veya kopyanız değişmiş olabilir. Yeniden denemeden önce yenileyip inceleyin.",
+    "refresh": "Yenile ve incele",
+    "upToDate": "Güncel",
+    "update": "Güncelle",
+    "updateDescription": "Yeni bir sürüm mevcut. Kopyanızı koruyun veya gösterilen önizlemeyle değiştirin. Değiştirilen kopya devre dışı kalır.",
+    "permission": "Nowly uygulamasının kayıtlı özel etkinlikleri Discord adınız ve avatarınızla yayımlamasına izin verin. Bu, hesap eşitlemesini de açar. Uzantıya dönüp Yayımla seçeneğini seçene kadar hiçbir şey yayımlanmaz.",
+    "playing": "Oynuyor",
+    "listening": "{name} dinliyor",
+    "watching": "{name} izliyor",
+    "competing": "{name} yarışmasında"
+  },
   "custom-activity-section": {
     "announcement": "Yeni: Discord’da kendi etkinliklerini oluştur",
     "eyebrow": "Özel etkinlikler",
@@ -38,12 +67,6 @@
     "dark": "Koyu"
   },
   "hero": {
-    "carousel": {
-      "previous": "Önceki kart",
-      "next": "Sonraki kart",
-      "pause": "Kartları duraklat",
-      "play": "Kartları sürdür"
-    },
     "title-before": "Yaptığın şeyi",
     "title-accent": "anlık olarak paylaş",
     "description": "Nowly, etkinliğini zengin ve dinamik bir Discord varlığına dönüştürür.",
@@ -406,19 +429,12 @@
     "title": "Discord'a yerel köprü",
     "description": "Uzantı sekmeyi okur. Masaüstü uygulaması durumunu Discord'a gönderir. Başlık, platform ve oynatma bilgisi PC'nden asla çıkmaz.",
     "detected": "Algılandı",
-    "chromeos-title": "ChromeOS henüz desteklenmiyor",
-    "chromeos-description": "Discord Rich Presence, ChromeOS'un bugün çalıştıramadığı yerel bir uygulama gerektirir. Konuyu inceliyoruz - bu değişirse bildirim almak için e-postanı bırak.",
-    "chromeos-email-placeholder": "sen@ornek.com",
-    "chromeos-submit": "Beni bilgilendir",
-    "chromeos-success": "Teşekkürler, sana haber vereceğiz.",
-    "chromeos-error": "Bir sorun oluştu. Lütfen tekrar deneyin.",
     "version": "Sürüm {version}",
     "card-title": "{platform} için indir",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux",
-      "chromeos": "ChromeOS"
+      "linux": "Linux"
     },
     "windows-installer": "Windows yükleyici (.exe)",
     "windows-portable": "Taşınabilir arşiv (.zip)",
@@ -926,15 +942,16 @@
   },
   "cookie-banner": {
     "title": "Çerez bilgileri",
-    "message": "Bu site, kesinlikle gerekli bir dil çerezi kullanır. Reklamlar daha sonra etkinleştirilirse, Google reklam teknolojileri de kullanabilir.",
+    "message": "İsteğe bağlı toplu istatistikler onayınıza kadar kapalıdır. Dil çerezi gereklidir. Seçiminizi Verileriniz sayfasında değiştirebilirsiniz.",
     "learn-more": "Çerez politikasını okuyun",
-    "dismiss": "Anladım"
+    "accept": "İstatistiklere izin ver",
+    "decline": "İstatistikleri reddet"
   },
   "privacy-page": {
     "badge": "Gizlilik",
     "title": "Gizlilik Politikası",
     "description": "Nowly'nin verilerini nasıl işlediği, cihazında ne kaldığı ve neyin iznine bağlı olduğu.",
-    "last-updated": "Son güncelleme: 16 Ekim 2026.",
+    "last-updated": "2026-10-25",
     "data-region": "Avrupa Birliği (Contabo GmbH tarafından sağlanan VPS, Almanya)",
     "intro": "Bu politika, veri sorumlusu <strong>{publisherName}</strong> tarafından kişisel verilerin işlenmesini açıklar. Rich Presence mesajları masaüstü uygulamasıyla cihazdaki Discord'a ulaşır. Ancak tüm özellikler çevrimdışı değildir: eşitleme, görsel istekleri, talep edilen yüklemeler ve isteğe bağlı istatistikler API veya sağlayıcılarımızı kullanır.",
     "sections": [
@@ -968,7 +985,7 @@
       },
       {
         "title": "Kullanım istatistikleri (isteğe bağlı katılım)",
-        "body": "Analizler <strong>varsayılan olarak kapalıdır</strong>. Kurulum sırasında veya daha sonra uzantı ayarlarında etkinleştirirsen, API'miz şunları alabilir:<ul><li>Cihaz UUID'in (takma ad: Discord veya Google hesabın değil, ancak kurulumunu tanımlayabildiği için GDPR kapsamında yine de kişisel veridir).</li><li>Tarayıcı, işletim sistemi, dil, uzantı sürümü ve masaüstü uygulaması sürümü.</li><li>Yüklenen varlık slug'ları/sürümleri ve sınırlı yükle kullanım olayları (örneğin yüklemeler, kalp atışları, değerlendirmeler).</li></ul>Bunu Nowly'yi geliştirmek ve varlıkların ne kadar popüler olduğunu göstermek için kullanıyoruz. Bu ayarı kapatmak <strong>daha fazla toplamayı durdurur</strong> ve rızanın geri çekildiğini kaydeder. Bu, zaten depolanmış olayları otomatik olarak <strong>silmez</strong>. Sunucu tarafı kayıtların silinmesini istemek için, cihaz kimliğinle (uzantıda görünür) veya kaydı bulmamıza yardımcı olacak başka bir bilgiyle <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> adresine e-posta gönder."
+        "body": "Site ve uzantı ayrı onay gerektirir. API yalnızca izinli olayları kendi barındırdığımız Umami’ye (stats.nowly.me) iletir: sayfa türü, indirme tarayıcısı, işlem, kaynak, etkinlik kategorisi/kökeni ve kohort günü/dönüş aşaması. Hesap veya cihaz kimliği, gerçek URL, aramalar veya etkinlik içeriği gönderilmez. D1/D7/D30 yerel tarihler ve tekilleştirme işaretlerini kullanır, kimlik iletmez. Onayı geri çekmek gelecekteki gönderimleri durdurur ve yerel işaretleri siler; geri çekme olayı gönderilmez. Başlamış istekler geri alınamaz. API güvenlik için IP işleyebilir ancak iletmez. İşlevsel cihaz hizmetleri ayrıdır."
       },
       {
         "title": "Nowly hesabı ve eşitleme (isteğe bağlı)",
@@ -984,7 +1001,7 @@
       },
       {
         "title": "Saklama",
-        "body": "<ul><li><strong>Yerel uzantı ve masaüstü günlükleri</strong>: sen silene, sıfırlayana veya kaldırana kadar.</li><li><strong>Dil çerezi</strong>: 1 yıl, dil değiştirdiğinde yenilenir.</li><li><strong>Kullanım istatistikleri</strong>: yalnızca toplu metrikler üretmek için gereken süre boyunca saklanır. Bugün <strong>otomatik 12 aylık silme</strong> uygulanmamaktadır. Yukarıda açıklandığı gibi silme talep edebilirsin.</li><li><strong>JWT (giriş yaparsan)</strong>: çıkış yapmadığın veya biz iptal etmediğimiz sürece yaklaşık 30 gün.</li></ul>"
+        "body": "<ul><li><strong>Yerel uzantı ve masaüstü günlükleri</strong>: sen silene, sıfırlayana veya kaldırana kadar.</li><li><strong>Dil çerezi</strong>: 1 yıl, dil değiştirdiğinde yenilenir.</li><li>Yerel işaretler onay geri çekilene veya silinene kadar kalır. Burada Umami toplu verileri için otomatik silme süresi uygulanmamıştır; sunucu ayarı doğrulanmamıştır. Yeni toplu veriler cihaz kimliğiyle bulunamaz.</li><li><strong>JWT (giriş yaparsan)</strong>: çıkış yapmadığın veya biz iptal etmediğimiz sürece yaklaşık 30 gün.</li></ul>"
       },
       {
         "title": "İşleyiciler ve aktarımlar",
@@ -996,7 +1013,7 @@
       },
       {
         "title": "Çerezler",
-        "body": "nowly.me ve docs.nowly.me her biri dil için ayrı ayrı bir <code>locale</code> çerezi ayarlar. Tema ve çerez bildirimi çerezler yerine yerel depolama kullanır. <a href=\"/cookies\">Çerez politikasına</a> bakabilirsin."
+        "body": "Tarayıcı tema ve istatistik seçimini yerel kaydeder. Uzantı onay ile yerel dönüş/tekilleştirme tarihlerini saklar. Analitik çerezi veya kalıcı ziyaretçi kimliği oluşturulmaz. Seçimi silmek onayı sıfırlar; yeni onaya kadar istatistikler kapalı kalır."
       },
       {
         "title": "Güvenlik",
@@ -1004,7 +1021,7 @@
       },
       {
         "title": "Haklarınız",
-        "body": "GDPR geçerliyse, erişim, düzeltme, silme, kısıtlama, itiraz ve taşınabilirlik talep edebilir ve analizler için rızanı geri çekebilirsin. Uzantıdaki geliştirici tanılamaları, cihazında hâlâ bekleyen olayları gösterebilir; bunlar sunucularımızın tam bir dışa aktarımı değildir. Haklarını kullanmak için <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> adresine e-posta gönder veya <a href=\"https://github.com/nowly-presence/nowly\">GitHub deposunu</a> kullan. Ayrıca <a href=\"https://www.cnil.fr\">CNIL</a>'e (Fransa) veya yerel denetim makamına şikayette bulunabilirsin."
+        "body": "Onayı /consent ve uzantı ayarlarından geri çekebilirsiniz. GDPR hakları: <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Cihaz hizmet verileri doğrulamayla dışa aktarılır/silinir; yeni toplu veriler cihaza bağlanamaz. CNIL veya denetim makamına şikâyet edebilirsiniz."
       },
       {
         "title": "Varlık sorun bildirimleri",
@@ -1020,7 +1037,7 @@
     "badge": "Yasal",
     "title": "Hizmet Şartları",
     "description": "Nowly'yi, tarayıcı uzantısını, masaüstü uygulamasını ve web sitesini kullanma kuralları.",
-    "last-updated": "Son güncelleme: 24 Ekim 2026.",
+    "last-updated": "2026-10-24",
     "sections": [
       {
         "title": "Kabul",
@@ -1121,8 +1138,8 @@
     "badge": "Çerezler",
     "title": "Çerez Politikası",
     "description": "nowly.me ve docs.nowly.me üzerinde kullanılan çerezler ve yerel depolama.",
-    "last-updated": "Son güncelleme: 9 Ekim 2026.",
-    "intro": "Bu sayfa, <strong>nowly.me</strong> ve <strong>docs.nowly.me</strong> üzerindeki çerezleri ve benzer teknolojileri açıklar. Bir dil çerezi ayarlıyoruz. Tema ve çerez bildirimi yerel depolama kullanır. Reklamlar etkinleştirilmediği sürece Google AdSense yüklenmez.",
+    "last-updated": "2026-10-25",
+    "intro": "Tarayıcı tema ve istatistik seçimini yerel kaydeder. Uzantı onay ile yerel dönüş/tekilleştirme tarihlerini saklar. Analitik çerezi veya kalıcı ziyaretçi kimliği oluşturulmaz. Seçimi silmek onayı sıfırlar; yeni onaya kadar istatistikler kapalı kalır.",
     "sections": [
       {
         "title": "Kesinlikle gerekli",
@@ -1134,11 +1151,11 @@
       },
       {
         "title": "Yerel depolama",
-        "body": "Siteler renk temasını (açık, koyu veya sistem) ve çerez bildirimini kapatıp kapatmadığını saklar. Bu değerler tarayıcında kalır ve çerez olarak Nowly'ye gönderilmez."
+        "body": "Tarayıcı tema ve istatistik seçimini yerel kaydeder. Uzantı onay ile yerel dönüş/tekilleştirme tarihlerini saklar. Analitik çerezi veya kalıcı ziyaretçi kimliği oluşturulmaz. Seçimi silmek onayı sıfırlar; yeni onaya kadar istatistikler kapalı kalır."
       },
       {
         "title": "Analiz çerezleri",
-        "body": "Web siteleri üçüncü taraf analiz çerezleri ayarla<strong>maz</strong>. Nowly sitesi, çerez veya kalıcı ziyaretçi tanımlayıcıları kullanmadan toplu sayfa görüntülemelerini ölçmek için <code>stats.nowly.me</code> adresinde kendi barındırdığı <strong>Umami</strong>'yi kullanır. Uzantının isteğe bağlı kullanım istatistikleri ayrıdır ve etkinleştirildiğinde cihaz kimliği kullanır."
+        "body": "Site ve uzantı ayrı onay gerektirir. API yalnızca izinli olayları kendi barındırdığımız Umami’ye (stats.nowly.me) iletir: sayfa türü, indirme tarayıcısı, işlem, kaynak, etkinlik kategorisi/kökeni ve kohort günü/dönüş aşaması. Hesap veya cihaz kimliği, gerçek URL, aramalar veya etkinlik içeriği gönderilmez. D1/D7/D30 yerel tarihler ve tekilleştirme işaretlerini kullanır, kimlik iletmez. Onayı geri çekmek gelecekteki gönderimleri durdurur ve yerel işaretleri siler; geri çekme olayı gönderilmez. Başlamış istekler geri alınamaz. API güvenlik için IP işleyebilir ancak iletmez. İşlevsel cihaz hizmetleri ayrıdır."
       },
       {
         "title": "Reklamcılık",
@@ -1156,36 +1173,38 @@
   },
   "uninstallPage": {
     "eyebrow": "Hoşça kal",
-    "title": "Uzantı kaldırıldı",
-    "description": "Yerel verilerin cihazında kalır. Seni yakında tekrar görmeyi umuyoruz.",
+    "title": "Nowly’yi kullandığın için teşekkürler",
+    "description": "Nowly’nin bu cihazla ilişkilendirdiği verileri saklamayı veya silmeyi seçebilirsin.",
     "feedback-title": "Bize söylemek istediğin bir şey var mı?",
     "feedback-description": "Bir hata, eksik bir varlık veya sadece geri bildirim: bize ulaşmanın en hızlı yolu Discord'dur.",
     "discord": "Discord'a katıl",
-    "data-description": "Nowly'yi geliştirmemize yardımcı olmak için anonim kullanım istatistiklerini koruyabilir veya cihazın için saklanan her şeyi silebilirsin.",
-    "keep": "Anonim istatistikleri koru",
-    "delete": "Verilerimi sil",
-    "delete-confirm": "Bu, Nowly'nin bu cihaz için sakladığı her şeyi kalıcı olarak siler. Bu işlem geri alınamaz.",
-    "keep-success": "Teşekkürler, anonim istatistiklerin korunuyor.",
-    "delete-success": "Verilerin silindi.",
+    "data-description": "Bu veriler Nowly’de saklanan cihaz bilgilerini, varlıkları, beğenileri ve özel görselleri içerir. Toplu istatistikler etkilenmez.",
+    "keep": "Bu cihazın verilerini sakla",
+    "delete": "Bu cihazın verilerini sil",
+    "delete-confirm": "Bu cihazla ilişkili veriler Nowly’den kalıcı olarak silinsin mi? Bu işlem geri alınamaz. Toplu istatistikler etkilenmez.",
+    "keep-success": "Bu cihazla ilişkili veriler Nowly’de saklanmaya devam ediyor.",
+    "delete-success": "Bu cihazla ilişkili veriler Nowly’den silindi.",
     "action-error": "İşlem tamamlanamadı. Tekrar dene; sorun devam ederse destek ekibiyle iletişime geç."
   },
   "consentPage": {
     "eyebrow": "Gizlilik",
     "title": "Verilerin",
-    "description": "Nowly, yalnızca aşağıda açıkça etkinleştirirsen anonim kullanım analizleri toplar. Bu sayfa ayrıca cihazın için saklanan her şeyi görmene, dışa aktarmana veya silmene olanak tanır.",
+    "description": "Kalıcı ziyaretçi kimliği olmadan isteğe bağlı sayfa ve indirme tıklaması sayımları. Uzantıdan ayrı bir seçimdir. İsteğe bağlı özellik ve etkinlik kategorisi sayımları. Dönüş işaretleri cihazda kalır, kapatıldığında silinir. Gezinilen içerik gönderilmez.",
     "checking": "Nowly uzantısı aranıyor...",
     "not-detected-title": "Uzantı algılanmadı",
     "not-detected-description": "Rızanı ve verilerini yönetmek için bu sayfayı Nowly'nin yüklü olduğu tarayıcıda aç.",
-    "toggle-title": "Anonim kullanım verilerini paylaş",
-    "toggle-description": "Varsayılan olarak kapalıdır. Hangi varlıkların ve özelliklerin gerçekten kullanıldığını görmemize yardımcı olur - tarama geçmişi veya kişisel veri asla toplanmaz.",
+    "toggle-title": "Uzantı istatistikleri",
+    "toggle-description": "İsteğe bağlı özellik ve etkinlik kategorisi sayımları. Dönüş işaretleri cihazda kalır, kapatıldığında silinir. Gezinilen içerik gönderilmez.",
     "data-title": "Verilerin",
-    "data-description": "Bu cihaz için Nowly'nin sakladığı her şeyi dışa aktar veya tamamen sil.",
+    "data-description": "Cihaz hizmet verilerini dışa aktarın veya silin. Yeni Umami toplu verilerinde cihaz kimliği yoktur ve cihaz dışa aktarımına dahil değildir.",
     "export": "Verilerimi dışa aktar",
     "delete": "Verilerimi sil",
     "delete-confirm": "Bu, Nowly'nin bu cihaz için sakladığı her şeyi kalıcı olarak siler. Bu işlem geri alınamaz.",
     "export-success": "Verilerin indirildi.",
     "delete-success": "Verilerin silindi.",
-    "action-error": "İşlem tamamlanamadı. Tekrar dene; sorun devam ederse destek ekibiyle iletişime geç."
+    "action-error": "İşlem tamamlanamadı. Tekrar dene; sorun devam ederse destek ekibiyle iletişime geç.",
+    "site-title": "Site istatistikleri",
+    "site-description": "Kalıcı ziyaretçi kimliği olmadan isteğe bağlı sayfa ve indirme tıklaması sayımları. Uzantıdan ayrı bir seçimdir."
   },
   "faqPage": {
     "eyebrow": "SSS",

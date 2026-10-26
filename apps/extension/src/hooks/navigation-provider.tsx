@@ -5,6 +5,9 @@ import type { PersistedAppView } from "@/shared/types";
 export type Tab = PersistedAppView;
 
 export type Route = {
+  name: "announcement";
+  id: string;
+} | {
   name: "presence";
   slug: string;
 } | {
@@ -45,7 +48,12 @@ export const NavigationProvider = ({ children }: {
     persistAppView(next);
   }, []);
 
-  const push = useCallback((route: Route) => setStack((current) => [...current, route]), []);
+  const push = useCallback((route: Route) =>
+    setStack((current) => {
+      const active = current.at(-1);
+
+      return route.name === "announcement" && active?.name === "announcement" && active.id === route.id ? current : [...current, route];
+    }), []);
   const pop = useCallback(() => setStack((current) => current.slice(0, -1)), []);
 
   useEffect(() => {

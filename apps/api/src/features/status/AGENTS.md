@@ -1,22 +1,12 @@
 # Status
 
-Health checks for Nowly's services: `GET /status` (last known report), `GET /status/check` + `POST /status/check` (trigger/read an on-demand check, cron-guarded).
+Service health: `GET /status` (read the stored report), `GET /status/check` and `POST /status/check` (run a check, both behind `requireCronAuth`, fail-closed like `auth`).
 
-## Add a new monitored service
+- Checks are triggered by an external scheduler. `GET /status` only reads stored samples; never make it run a check. `checkIntervalHours` is metadata for clients, not a scheduler.
+- With `DATABASE_URL`, samples persist in PostgreSQL; otherwise they live in an in-memory `Map` that resets on restart.
+- URLs use `NEXT_PUBLIC_API_BASE_URL` (default `https://api.nowly.me`). The `library` check hits `/presences`; if it slows down, inspect `getPresenceListData`.
+- `classifyResponse`: operational ≤750ms, slow ≤2000ms, degraded above, down on non-2xx/timeout. Change thresholds there only.
 
-1. Add `{ id: "your-id", url: "https://..." }` to the `services` array in `status.service.ts` (around line 45).
-2. Add `"your-id"` to the `StatusServiceId` union at the top of the same file.
-3. Update `apps/web`'s `features/status/lib/status.ts` — add the id to its own `StatusServiceId` type and to `getFallbackStatusReport()`'s `emptyServices` (see that feature's `AGENTS.md`).
-4. That's it — `getStatusReport()`/`runStatusCheck()` iterate over `services` generically, no other branch to add.
+## Adding a service
 
-## Change how a status is classified (thresholds)
-
-Edit `classifyResponse()`: `operational` ≤750ms, `slow` ≤2000ms, `degraded` above that, `down` on non-2xx/timeout/no response. Change the thresholds here, not per-caller.
-
-## Gotchas
-- When `DATABASE_URL` is configured, status samples are stored in PostgreSQL and shared across API restarts/instances. Without a database URL, the service falls back to an in-memory `Map`, which resets on restart.
-- The `"library"` service checks `${API_BASE_URL}/presences` — i.e. the `presence` feature's `GET /` (see that feature's `AGENTS.md`). If this check gets slow, the bug is almost always inside `getPresenceListData` (`presence.repository.ts`), not in this file — that's exactly what caused the "Bibliothèque de présences: 2067ms Dégradé" incident this status page was built to catch.
-- `runStatusCheck` is meant to be called on a schedule (cron) via the guarded `POST /status/check`, not on every `GET /status` — don't make `GET /status` trigger a fresh check itself; it should only read the stored samples.
-
-## Notable dependencies
-`presence` feature (one of the status sources), `auth` feature (shared fail-closed guard pattern used by the cron endpoint).
+Add it to `services` and the `StatusServiceId` union in `status.service.ts`, then to `apps/web/features/status/lib/status.ts` (type and `getFallbackStatusReport()`).

@@ -1,17 +1,34 @@
 import { handleGetAccount, handleNowlySession, handleResolveSyncChoice, handleSignOutAccount, handleStartAccountConnect, handleStopAccountSync, handleSyncAccount } from "@/background/router/handlers/account.handlers";
 import { handleClearActivityMessage, handleDebug, handleGetCurrentActivity, handleGetDebug, handleActivityUpdateMessage, handleSetPresencePause } from "@/background/router/handlers/activity.handlers";
-import { handleGetAnalyticsConsent, handleSetAnalyticsConsent, handleTrackEvent, handleGetRuntimeLogs, handleClearRuntimeLogs } from "@/background/router/handlers/analytics.handlers";
+import { handleGetAnalyticsConsent, handleSetAnalyticsConsent, handleRecordExtensionActive, handleGetRuntimeLogs, handleClearRuntimeLogs } from "@/background/router/handlers/privacy.handlers";
 import { handleGetDiagnostic } from "@/background/router/handlers/diagnostics.handlers";
 import { handleAcknowledgeDiscordIpcIssue, handleConnectNative, handleGetNativeStatus, handleGetUserScriptsStatus, handleRestartNative } from "@/background/router/handlers/native.handlers";
 import { handleBulkToggle, handleBulkUninstall, handleCheckUpdates, handleClearSnooze, handleFetchCatalog, handleGetInstallQueue, handleGetPresenceEngagement, handleGetPresenceSettings, handleGetPresences, handleInstall, handleInstallFromApi, handleInstallLocalZip, handleRetryInstallQueue, handleSetPresenceLike, handleSetPresenceSettings, handleSetSchedule, handleSnooze, handleToggle, handleUninstall, handleUpdate } from "@/background/router/handlers/presences.handlers";
 import { handleGetSettings, handleResetOnboardingForDev, handleSetSettings } from "@/background/router/handlers/settings.handlers";
 import { handleDeleteDeviceData, handleExportDeviceData, handleGetOnboarding, handleGetTabState, handleReportPresence, handleSetOnboarding, handleSetTabMuted, handleSyncPresenceScripts } from "@/background/router/handlers/extra.handlers";
-import { handleDeleteCustomActivity, handleGetCustomActivities, handleGetCustomImages, handleSaveCustomActivity, handleSetCustomActivityActive, handleUploadCustomImage } from "@/background/router/handlers/custom-activity.handlers";
+import { handleDeleteCustomActivity, handleGetCustomActivities, handleGetCustomActivityDetection, handleGetCustomImages, handleSaveCustomActivity, handleSetCustomActivityActive, handleUploadCustomImage } from "@/background/router/handlers/custom-activity.handlers";
 import { handleRecordUsageDay, handleSnoozeSupportPrompt } from "@/background/router/handlers/support.handlers";
 import type { HandlerRegistry } from "@/background/router/router";
+import { handleGetAnnouncements, handleRefreshAnnouncements, handleMarkAnnouncement } from "@/background/router/handlers/announcements.handlers";
 import { handleAcceptLegalDocuments, handleCheckLegalDocuments, handleGetLegalState } from "@/background/router/handlers/legal.handlers";
+import { applyPublication, publicationStatus } from "@/background/services/activity-publications";
+import { getOwnedPublication, publishActivity } from "@/background/services/activity-publication-publisher";
+import { openAccountConnect } from "@/background/services/account-sync";
 
 export const buildHandlerRegistry = (): HandlerRegistry => ({
+  GET_ACTIVITY_PUBLICATION_STATUS: (payload) => publicationStatus(payload),
+  GET_OWN_ACTIVITY_PUBLICATION: ({ id }) => getOwnedPublication(id),
+  APPLY_ACTIVITY_PUBLICATION: (payload) => applyPublication(payload),
+  PUBLISH_CUSTOM_ACTIVITY: ({ id, baseRevision, unpublish }) => publishActivity(id, baseRevision, unpublish),
+  START_CREATOR_CONNECT: async () => {
+    await openAccountConnect(true);
+    return {
+      ok: true
+    };
+  },
+  GET_ANNOUNCEMENTS: handleGetAnnouncements,
+  REFRESH_ANNOUNCEMENTS: handleRefreshAnnouncements,
+  MARK_ANNOUNCEMENT: handleMarkAnnouncement,
   GET_LEGAL_STATE: handleGetLegalState,
   CHECK_LEGAL_DOCUMENTS: handleCheckLegalDocuments,
   ACCEPT_LEGAL_DOCUMENTS: handleAcceptLegalDocuments,
@@ -53,7 +70,7 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   SET_PRESENCE_SCHEDULE: handleSetSchedule,
   GET_RUNTIME_LOGS: handleGetRuntimeLogs,
   CLEAR_RUNTIME_LOGS: handleClearRuntimeLogs,
-  TRACK_EVENT: handleTrackEvent,
+  RECORD_EXTENSION_ACTIVE: handleRecordExtensionActive,
   DEBUG: handleDebug,
   GET_ONBOARDING: handleGetOnboarding,
   SET_ONBOARDING: handleSetOnboarding,
@@ -64,6 +81,7 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   DELETE_DEVICE_DATA: handleDeleteDeviceData,
   SYNC_PRESENCE_SCRIPTS: handleSyncPresenceScripts,
   GET_CUSTOM_ACTIVITIES: handleGetCustomActivities,
+  GET_CUSTOM_ACTIVITY_DETECTION: handleGetCustomActivityDetection,
   SAVE_CUSTOM_ACTIVITY: handleSaveCustomActivity,
   DELETE_CUSTOM_ACTIVITY: handleDeleteCustomActivity,
   SET_CUSTOM_ACTIVITY_ACTIVE: handleSetCustomActivityActive,

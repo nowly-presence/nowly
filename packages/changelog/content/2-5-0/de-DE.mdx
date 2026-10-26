@@ -1,0 +1,72 @@
+---
+title: 2.5.0
+date: 2026-10-28
+description: Eigene Aktivitäten erkennen und teilen, Ankündigungen, Discord-Anzeige und Datenschutz.
+---
+
+> Veröffentlichung für den 28. Oktober 2026 geplant. Die Verfügbarkeit in den Browser-Stores ist noch nicht bestätigt.
+
+## Neuigkeiten
+
+### Automatische Erkennung eigener Aktivitäten
+
+- Füge einer eigenen Aktivität optional einen Erkennungslink hinzu. Sie wird automatisch ausgewählt, wenn der aktive Tab im fokussierten Browserfenster dazu passt. Beim Verlassen der passenden Seite endet die automatische Auswahl.
+- Verwende eine Domain oder einen Pfad, mit `*.example.com` für Subdomains und einem abschließenden `*` für Pfade. Lass das Feld leer, um die Aktivität weiterhin manuell zu nutzen.
+- Eine manuell aktivierte eigene Aktivität hat Vorrang vor der automatischen Erkennung.
+- Passen mehrere eigene Aktivitäten, wird die zuletzt aktualisierte passende Aktivität ausgewählt.
+- Erkennungslinks werden beim Export und Import eigener Aktivitäten übernommen. Ältere Dateien ohne dieses Feld bleiben kompatibel.
+
+### Öffentliche Links für eigene Aktivitäten
+
+- Veröffentliche einen öffentlichen Link mit dem Autorennamen und Avatar deines Discord-Kontos. Öffentlich wird die gespeicherte Version, nie dein ungespeicherter Entwurf.
+- Sieh dir die Vorschau an, bevor du ausdrücklich eine unabhängige Kopie hinzufügst. Neue Kopien sind inaktiv und die automatische Erkennung ist deaktiviert.
+- Der Link bleibt bei ausdrücklichen Aktualisierungen oder beim Zurückziehen erhalten. Bereits installierte Kopien bleiben bestehen und werden nie automatisch aktualisiert.
+- Empfänger können lokale Änderungen behalten oder nach Prüfung eines Updates ersetzen. Ein geöffneter Editor blockiert das Ersetzen, um ungespeicherte Arbeit zu schützen.
+- Bevor du eine Quellaktivität löschst, ziehe öffentliche oder noch nicht fertig veröffentlichte Links ausdrücklich zurück und prüfe den Zustand online beim ursprünglichen Server.
+- Nach dem Löschen des Kontos erlaubt das bestätigte Fehlen seiner Veröffentlichungen das lokale Löschen ohne das alte Konto. Ist die Prüfung nicht möglich oder nicht eindeutig, bleibt die Quelle erhalten.
+
+### Ankündigungen und Versionshinweise
+
+- Lies Ankündigungen und veröffentlichte Versionshinweise im Tab Neuigkeiten und öffne Einträge für weitere Details. Veröffentlichte Changelog-Dateien werden automatisch übernommen; undatierte, zukünftige oder ausdrücklich unveröffentlichte Entwürfe bleiben ausgeschlossen.
+- Ankündigungen verwenden die Sprache der Oberfläche und bei fehlender Übersetzung eine Ersatzsprache. Versionshinweise fallen auf Englisch zurück.
+- Angeheftete Hinweise erscheinen über der Kopfzeile von Aktivität. Warnungen sind je nach Stufe gelb, orange oder rot; Wartungshinweise verwenden die Primärfarbe des Designs. Der Hinweis öffnet Neuigkeiten und hat keine Schließen-Schaltfläche.
+- Das voraussichtliche Wartungsende wird als Datum angezeigt, nicht als Countdown oder Zusage der Wiederherstellung. Zu diesem Zeitpunkt verschwindet der Hinweis auf der Startansicht; die Meldung bleibt ohne gesondertes Ablaufdatum lesbar.
+- Der Feed aktualisiert sich automatisch, hält die letzte gültige Kopie offline bereit und speichert den Lesestatus auf deinem Gerät.
+
+### Aktivitätsanzeige in Discord
+
+- Präsenzen können über `detailsUrl` und `stateUrl` öffentliche HTTPS-Links mit Detail- und Statustexten verknüpfen, unabhängig von den Aktivitätsbuttons. Ungültige Links und Links ohne zugehörigen Text werden ignoriert.
+- Mit `statusDisplayType` können Präsenzen den Text des kompakten Discord-Status auswählen: Aktivitätsname, Status oder Details. Der Inhalt der Aktivitätskarte bleibt unverändert.
+
+Diese Felder benötigen kompatible Versionen von SDK, Erweiterung und nativem Host. Ältere Laufzeitversionen ignorieren sie. Im Editor eigener Aktivitäten entsteht dadurch keine neue Anzeigeauswahl.
+
+## Verbesserungen und Korrekturen
+
+- Der Editor für eigene Aktivitäten zeigt, wie viele Link-Buttons du noch hinzufügen kannst.
+- Die Aktivitätsvorschau wiederholt den Namen nicht mehr unnötig. Ein Tooltip zeigt den vollständigen Namen.
+- Der Bereich zur Erkennung hat übersichtlichere Abstände.
+- Blende die Tabs Bibliothek, Eigene oder Neuigkeiten aus, wenn du sie nicht brauchst. Aktivität und Einstellungen bleiben verfügbar. In den Einstellungen kannst du die Standardanordnung wiederherstellen. Das Ausblenden von Neuigkeiten entfernt keine angehefteten Hinweise auf Aktivität.
+- Der Fortschrittsbalken bei Videos, etwa auf YouTube, füllt sich nun mit der Wiedergabe. Der Countdown eigener Aktivitäten zeigt weiterhin die verbleibende Zeit.
+- Kopiere unter „Nowly unterstützen“ eine Bitcoin-, Ethereum- oder Solana-Adresse mit einem Klick. Nach dem Kopieren erscheint eine Bestätigung.
+- Sind für mindestens zwei installierte Präsenzen Updates verfügbar, kannst du sie gemeinsam aktualisieren. Die Aktualisierungen werden nacheinander ausgeführt.
+- Die Schaltflächen der inaktiven Aktivitätskarte passen nun auch in schmale Seitenleisten.
+- Updates, Neuinstallationen und Entfernungen werden je Präsenz geordnet ausgeführt, damit ein älteres Update keine gerade entfernte Aktivität wiederherstellt.
+- Das Aktivieren einer Präsenz wird erst nach erfolgreicher Registrierung ihres Skripts gespeichert. Fehlgeschlagene Aktivierungen und Sammelaktionen werden gemeldet statt als Erfolg angezeigt.
+- Die Beschriftung der Berechtigung für Nutzerskripte erklärt deutlicher, was im Browser aktiviert werden muss.
+
+## Datenschutz und Plattformen
+
+- Optionale Umami-Produktereignisse ersetzen die bisherige Insights-Analyse. Website und Erweiterung haben getrennte Einwilligungen; Ereignisse werden ohne dauerhafte Besucherkennungen oder Browser- und Aktivitätsinhalte über die API weitergeleitet.
+- Die bisherigen Insights-Seiten, Endpunkte, Analysemodelle und Kampagnenfunktionen wurden entfernt. Die alten globalen Analyse- und Sitzungsaufzeichnungsskripte werden durch diese Version nicht aktiviert.
+- Bestätigungen der Nutzungsbedingungen und Datenschutzerklärung richten sich jetzt nach deren tatsächlichem Änderungsdatum statt nach internen Versionsnummern. Alte numerische Belege erfordern eine erneute Bestätigung; zwischengespeicherte Dokumentdaten bleiben offline nutzbar.
+- Die Deinstallationsseite unterscheidet das Behalten oder Löschen funktionaler Gerätedaten von optionalen Analysen. Ihr Aufruf sendet nur bei Einwilligung in Website-Analysen ein Produktereignis.
+- Die ChromeOS-Wartelisten- und Supportoberflächen wurden entfernt. Die Erweiterung bleibt auf Chrome und Firefox ausgerichtet, mit dem nativen Host für Windows, macOS und Linux.
+
+## Website, Dokumentation und Wartung
+
+- Die Startseite stellt eigene Aktivitäten vor; Bildkontrast und Farben der Ankündigungsleiste passen sich dem aktiven Design an.
+- Tastaturnavigation, Sprunglinks und sichtbarer Fokus der Website wurden verbessert. Animationen beachten die Einstellung für reduzierte Bewegung, und bewegte Inhalte lassen sich pausieren.
+- Übersetzte FAQ-, Kontakt- und Wiederherstellungshinweise sowie Links zur Cookie-Richtlinie wurden aktualisiert.
+- Die Entwicklerdokumentation beschreibt die automatische Erkennung von `settings.ts`, die kompakte Discord-Statusauswahl, anklickbare Aktivitätstexte und den Bildproxy.
+- Die Ankündigungs-API unterstützt geschützte Veröffentlichung, Zeitplanung, Ablaufdaten und Live-Aktualisierungen des Feeds.
+- Der öffentliche Nowly-Code steht jetzt unter der MIT-Lizenz. Tests für Erweiterung, Website und API wurden zusammengeführt und korrigiert, darunter Ankündigungsdetails und das Umschalten des Anzeigemodus.

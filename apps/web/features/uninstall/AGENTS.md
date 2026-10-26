@@ -1,12 +1,12 @@
 # Uninstall
 
-Rendered by `app/[locale]/uninstall`: `uninstall-view.tsx` captures a feedback reason and offers to reinstall.
+Rendered by `app/[locale]/uninstall`: `uninstall-view.tsx` offers authenticated device-data erasure, keeping data, and reinstalling.
 
-## Add a new uninstall reason option
+## Truth and privacy boundaries
 
-1. Add the reason's translation key to the relevant namespace read by `uninstall-view.tsx`.
-2. Add the reason to whatever list/enum `uninstall-view.tsx` maps over to render the option buttons/radio group.
-3. Extend the analytics event sent on selection in `lib/analytics.ts` (root, shared with other features) so the new reason is actually tracked — adding the UI option alone won't show up in `apps/insights` without this.
+1. Opening the page is not cleanup success or proof of browser uninstall. Only a successful authenticated DELETE confirms device-data erasure.
+2. With website opt-in, `uninstall_page_opened` counts an observed landing once per mount. No device ID, token, query, feedback or URL is sent to Umami.
+3. Browser uninstall URLs are best effort; never infer uninstall from silence. Keep device credentials confined to existing functional endpoints.
 
 ## Notable dependencies
-`lib/analytics.ts`, `lib/constants.ts`, `components/extension-store-button.tsx` (root, shared).
+`lib/telemetry.ts`, `lib/constants.ts`, `components/extension-store-button.tsx` (root, shared).

@@ -26,7 +26,6 @@ describe("registerContextMenu", () => {
     };
     vi.stubGlobal("chrome", chromeMock);
 
-    // Load after stubbing Chrome because registration starts at module call time.
     const { registerContextMenu } = await import("@/background/services/context-menu");
     registerContextMenu();
     registerContextMenu();

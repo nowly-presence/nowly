@@ -1,14 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { CURRENT_LEGAL_MANIFEST, parseLegalManifest } from "@nowly/shared/legal";
+import messages from "../../../../messages/en-US.json";
 import { GET } from "./route";
 
-describe("public legal manifest", () => {
-  it("exposes the shared document versions without authentication", async () => {
+describe("public legal dates", () => {
+  it("reads dates directly from the published documents without a separate manifest", async () => {
     const response = GET();
     expect(response.status).toBe(200);
-    const manifest = await response.json();
-    expect(parseLegalManifest(manifest)).toEqual(CURRENT_LEGAL_MANIFEST);
-    expect(Object.keys(manifest.documents)).toEqual(["tos", "privacy"]);
+    expect(await response.json()).toEqual({
+      tos: messages["tos-page"]["last-updated"],
+      privacy: messages["privacy-page"]["last-updated"]
+    });
   });
 
   it("uses a short public cache and allows credential-free extension requests", () => {

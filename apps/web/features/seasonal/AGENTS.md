@@ -1,6 +1,6 @@
 # Seasonal
 
-Seasonal theme of nowly.me, shown only to visitors whose extension is installed with seasonal themes on. Visual only: colours and a light decor, no prank, no Nolo, no sound, nothing that blocks or delays reading. `apps/docs` and `apps/insights` are out of scope.
+Seasonal theme of nowly.me, shown only to visitors whose extension is installed with seasonal themes on. Visual only: colours and a light decor, no prank, no Nolo, no sound, nothing that blocks or delays reading. `apps/docs` is out of scope.
 
 ## How the season arrives
 

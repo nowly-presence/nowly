@@ -59,10 +59,13 @@ const applyPresenceEntry = async (entry: SyncPresenceEntry): Promise<void> => {
   }
 
   if (!syncEqual(local.schedule, entry.schedule)) await setPresenceSchedule(entry.slug, entry.schedule);
-  if (local.enabled !== entry.enabled) await togglePresence({
-    slug: entry.slug,
-    enabled: entry.enabled
-  });
+  if (local.enabled !== entry.enabled) await togglePresence(
+    {
+      slug: entry.slug,
+      enabled: entry.enabled
+    },
+    "restore"
+  );
 };
 
 const applyPresences = async (value: unknown): Promise<Record<string, SyncPresenceEntry>> => {
@@ -73,12 +76,12 @@ const applyPresences = async (value: unknown): Promise<Record<string, SyncPresen
   const pending: Record<string, SyncPresenceEntry> = {};
 
   for (const [slug, presence] of Object.entries(presences)) {
-    if (isSyncedPresence(presence) && !targets.has(slug)) await uninstallPresence({ slug });
+    if (isSyncedPresence(presence) && !targets.has(slug)) await uninstallPresence({ slug }, "restore");
   }
 
   for (const entry of targets.values()) {
     if (!presences[entry.slug]) {
-      const result = await installPresenceFromApi({ slug: entry.slug });
+      const result = await installPresenceFromApi({ slug: entry.slug }, { source: "restore" });
 
       if (!result.ok) {
         pending[entry.slug] = entry;

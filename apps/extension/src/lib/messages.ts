@@ -6,12 +6,3 @@ export const sendMessage = <K extends RouterMessageType>(type: K, payload?: Payl
     type,
     payload
   });
-
-export const track = (key: string, input: {
-  slug?: string;
-  version?: string;
-  source?: string;
-  payload?: Record<string, unknown>;
-} = {}) => {
-  void sendMessage("TRACK_EVENT", { key, ...input }).catch(() => {});
-};

@@ -17,7 +17,9 @@ Nowly accounts for the extension and nowly.me: extension tokens, the current pro
 ## Extension tokens
 
 - Format `nxt_` + 32 random bytes (base64url). Only the SHA-256 (`sha256Base64Url`) is stored in `ExtensionToken.tokenHash`; the raw token is returned once.
-- Scopes come from `EXTENSION_TOKEN_SCOPES` in `@nowly/shared` (`sync`, `assets`, `creator`). Only `sync` is used by the extension today.
+- Scopes come from `EXTENSION_TOKEN_SCOPES` in `@nowly/shared` (`sync`, `assets`, `creator`). Ordinary extension connect remains sync-only.
+- Public custom activity publishing explicitly grants `creator` alongside `sync` through the website. Token creation returns the granted scopes. Publication guards enforce creator scope independently of local scope labels.
+- GDPR export includes `activityPublications`. Their owner relation cascades on erasure, including unpublished tombstones and embedded image data.
 - Expiry is 90 days, sliding: `touchExtensionToken` pushes `expiresAt` and `lastUsedAt` at most once an hour.
 - `requireExtensionToken(scope)` reads `Authorization: Bearer`, rejects missing, unknown, revoked, expired or out-of-scope tokens with `401 { error: "UNAUTHORIZED" }`, and sets `request.account` (`{ userId, deviceId, scopes, tokenId }`). Read it with `accountOf(request)`.
 - Every guard answers `503 DATABASE_UNAVAILABLE` without `DATABASE_URL`: no account route ever runs unauthenticated.

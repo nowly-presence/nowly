@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import { RiGlobalLine, RiTranslate2 } from "@remixicon/react";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
-import { track } from "@/lib/messages";
 import { commonPresenceLocales } from "@/lib/presence-locales";
+import { DOCK_TABS, isDefaultDockLayout, normalizeDockLayout, visibleDockTabs } from "@/shared/dock-layout";
 import { isLocale, isLongLocale, LOCALE_LONG_MAP, LOCALE_NAMES, longLocaleName, PRESENCE_LOCALES, UI_LOCALES } from "@/shared/locales";
 import type { AppearanceMode } from "@/shared/types";
 import { Button } from "@/ui/button";
@@ -26,6 +26,16 @@ export const AppearanceSection = () => {
   const presenceLanguage = settings.presenceLanguage ?? PER_PRESENCE;
   const common = useMemo(() => commonPresenceLocales(state.presences), [state.presences]);
   const restricted = common.length < PRESENCE_LOCALES.length;
+  const hiddenDockTabs = settings.hiddenDockTabs ?? [];
+  const defaultDock = hiddenDockTabs.length === 0 && isDefaultDockLayout(normalizeDockLayout(settings.dockLayout, DOCK_TABS), DOCK_TABS);
+
+  const setDockTabVisible = (tab: "store" | "custom" | "announcements", visible: boolean) => {
+    const hidden = visible ? hiddenDockTabs.filter((value) => value !== tab) : [...new Set([...hiddenDockTabs, tab])];
+    void updateSettings({
+      hiddenDockTabs: hidden,
+      dockLayout: normalizeDockLayout(settings.dockLayout, visibleDockTabs(hidden))
+    });
+  };
 
   const presenceLanguageOptions: SelectOption[] = [
     {
@@ -78,7 +88,6 @@ export const AppearanceSection = () => {
             value={preference}
             onChange={(value) => {
               setPreference(isLocale(value) ? value : "browser");
-              track("settings_language_changed");
             }}
             options={[
               {
@@ -110,10 +119,38 @@ export const AppearanceSection = () => {
           />
         </FieldRow>
         <FieldRow title={t("settings.dockLayout")} description={t("settings.dockLayoutHint")}>
-          <Button size="sm" variant="secondary" disabled={!settings.dockLayout} onClick={() => void updateSettings({ dockLayout: undefined })}>
+          <Button
+            size="sm"
+            variant="secondary"
+            disabled={defaultDock}
+            onClick={() =>
+              void updateSettings({
+                dockLayout: [[...DOCK_TABS]],
+                hiddenDockTabs: []
+              })
+            }
+          >
             {t("action.reset")}
           </Button>
         </FieldRow>
+        <SwitchRow
+          title={t("nav.library")}
+          label={t("nav.library")}
+          checked={!hiddenDockTabs.includes("store")}
+          onChange={(checked) => setDockTabVisible("store", checked)}
+        />
+        <SwitchRow
+          title={t("nav.custom")}
+          label={t("nav.custom")}
+          checked={!hiddenDockTabs.includes("custom")}
+          onChange={(checked) => setDockTabVisible("custom", checked)}
+        />
+        <SwitchRow
+          title={t("nav.announcements")}
+          label={t("nav.announcements")}
+          checked={!hiddenDockTabs.includes("announcements")}
+          onChange={(checked) => setDockTabVisible("announcements", checked)}
+        />
       </Group>
     </Section>
   );

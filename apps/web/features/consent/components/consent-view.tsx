@@ -6,6 +6,7 @@ import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { RiDownload2Line, RiDeleteBinLine, RiShieldCheckLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import { setSiteConsent, siteConsent } from "@/lib/telemetry";
 
 type Status = "checking" | "not-detected" | "ready";
 
@@ -14,10 +15,15 @@ export const ConsentView = () => {
   const [status, setStatus] = useState<Status>("checking");
   const [device, setDevice] = useState<ExtensionDeviceInfo | null>(null);
   const [consent, setConsent] = useState(false);
+  const [webConsent, setWebConsent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<"exported" | "deleted" | "error" | null>(null);
 
   useEffect(() => {
+    const updateWebConsent = () => setWebConsent(siteConsent() === true);
+    updateWebConsent();
+    window.addEventListener("nowly:product-consent", updateWebConsent);
+    window.addEventListener("storage", updateWebConsent);
     const unsubscribe = subscribeExtensionDetected((detected) => {
       if (!detected) {
         setStatus("not-detected");
@@ -37,7 +43,11 @@ export const ConsentView = () => {
         })
         .catch(() => setStatus("not-detected"));
     });
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+      window.removeEventListener("nowly:product-consent", updateWebConsent);
+      window.removeEventListener("storage", updateWebConsent);
+    };
   }, []);
 
   const onToggleConsent = async (granted: boolean): Promise<void> => {
@@ -113,6 +123,23 @@ export const ConsentView = () => {
           <p className="mt-4 text-[1.05rem] leading-relaxed text-foreground/68">{t("description")}</p>
         </header>
 
+        <Card className="mt-8 max-w-xl">
+          <CardContent className="flex items-center justify-between gap-3">
+            <div>
+              <CardTitle>{t("site-title")}</CardTitle>
+              <CardDescription>{t("site-description")}</CardDescription>
+            </div>
+            <Switch
+              aria-label={t("site-title")}
+              checked={webConsent}
+              onCheckedChange={(granted) => {
+                setSiteConsent(granted);
+                setWebConsent(siteConsent() === true);
+              }}
+            />
+          </CardContent>
+        </Card>
+
         {status === "checking" ? (
           <p className="mt-14 text-sm text-muted-foreground">{t("checking")}</p>
         ) : status === "not-detected" ? (
@@ -134,7 +161,7 @@ export const ConsentView = () => {
                     <CardTitle className="text-lg">{t("toggle-title")}</CardTitle>
                     <CardDescription className="mt-2">{t("toggle-description")}</CardDescription>
                   </div>
-                  <Switch checked={consent} onCheckedChange={onToggleConsent} />
+                  <Switch aria-label={t("toggle-title")} checked={consent} onCheckedChange={onToggleConsent} />
                 </div>
               </CardContent>
             </Card>

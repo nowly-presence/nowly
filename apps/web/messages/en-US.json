@@ -1,4 +1,33 @@
 {
+  "activitySharing": {
+    "editorOpen": "Close the activity editor in the extension before replacing this copy. Unsaved drafts are protected.",
+    "listeningType": "Listening",
+    "watchingType": "Watching",
+    "competingType": "Competing",
+    "title": "Shared custom activity",
+    "preview": "Discord preview",
+    "timer": "Countdown",
+    "loading": "Loading activity...",
+    "unavailable": "This activity is unavailable or no longer published.",
+    "author": "Shared by <avatar></avatar><person>{name}</person>",
+    "consent": "Your copy stays independent. Manual activation and updates, detection off.",
+    "conflict": "Your copy has local changes. Keep them or explicitly replace them with this preview.",
+    "install": "Add to Nowly",
+    "keep": "Keep my copy",
+    "replace": "Replace with this revision",
+    "installed": "Saved in Nowly, disabled. Activate it separately when ready.",
+    "kept": "Your copy and its update baseline were kept unchanged.",
+    "changed": "The publication or your copy may have changed. Reload and review before trying again.",
+    "refresh": "Reload and review",
+    "upToDate": "Up to date",
+    "update": "Update",
+    "updateDescription": "A new version is available. Keep your copy or replace it with the preview shown. The replaced copy stays disabled.",
+    "permission": "Allow Nowly to publish saved custom activities under your Discord name and avatar. This also enables account sync. Nothing is published until you return to the extension and choose Publish.",
+    "playing": "Playing",
+    "listening": "Listening to {name}",
+    "watching": "Watching {name}",
+    "competing": "Competing in {name}"
+  },
   "custom-activity-section": {
     "announcement": "New: create your own activities on Discord",
     "eyebrow": "Custom activities",
@@ -38,7 +67,6 @@
     "dark": "Dark"
   },
   "hero": {
-    "carousel": { "previous": "Previous card", "next": "Next card", "pause": "Pause cards", "play": "Play cards" },
     "title-before": "Share what you do, in",
     "title-accent": "real time",
     "description": "Nowly turns your activity into a rich, dynamic Discord presence.",
@@ -401,19 +429,12 @@
     "title": "The local bridge to Discord",
     "description": "The extension reads the tab. The desktop app sends your status to Discord. Title, platform, and playback never leave your PC.",
     "detected": "Detected",
-    "chromeos-title": "ChromeOS isn't supported yet",
-    "chromeos-description": "Discord Rich Presence needs a native app that ChromeOS can't run today. We're looking into it - leave your email to get notified if that changes.",
-    "chromeos-email-placeholder": "you@example.com",
-    "chromeos-submit": "Notify me",
-    "chromeos-success": "Thanks, we'll let you know.",
-    "chromeos-error": "We could not save your email. Try again in a moment.",
     "version": "Version {version}",
     "card-title": "Download for {platform}",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux",
-      "chromeos": "ChromeOS"
+      "linux": "Linux"
     },
     "windows-installer": "Windows installer (.exe)",
     "windows-portable": "Portable archive (.zip)",
@@ -921,15 +942,16 @@
   },
   "cookie-banner": {
     "title": "Cookie information",
-    "message": "This site uses a strictly necessary language cookie. If advertising is later enabled, Google may also use advertising technologies.",
+    "message": "Optional aggregate product statistics are off until you accept. Your language cookie remains necessary. Change your choice on the Your data page.",
     "learn-more": "Read the cookie policy",
-    "dismiss": "Got it"
+    "accept": "Accept statistics",
+    "decline": "Decline statistics"
   },
   "privacy-page": {
     "badge": "Privacy",
     "title": "Privacy Policy",
     "description": "How Nowly handles your data, what stays on your device, and what depends on your consent.",
-    "last-updated": "Last updated: 16 October 2026.",
+    "last-updated": "2026-10-25",
     "data-region": "European Union (VPS provided by Contabo GmbH, Germany)",
     "intro": "This policy describes how <strong>{publisherName}</strong> processes personal data as controller. Rich Presence messages reach Discord through the desktop app on your device. This local transmission does not mean that all features are offline: account sync, image requests, user-requested uploads and optional analytics involve our API or providers as described below.",
     "sections": [
@@ -963,7 +985,7 @@
       },
       {
         "title": "Usage statistics (opt-in)",
-        "body": "Analytics are <strong>off by default</strong>. If you enable them during onboarding or later in extension settings, our API may receive:<ul><li>Your device UUID (pseudonymous: it is not your Discord or Google account, but it is still personal data under the GDPR because it can identify your installation).</li><li>Browser, OS, language, extension version, and desktop app version.</li><li>Installed presence slugs/versions and usage events (for example installs, heartbeats, ratings) with a limited payload.</li></ul>We use this to improve Nowly and to show how popular presences are. Turning the setting off <strong>stops further collection</strong> and records that consent is withdrawn. It does <strong>not</strong> by itself erase events already stored. To have server-side records deleted, email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> with your device ID (visible in the extension) or another element that lets us locate the record."
+        "body": "Website and extension statistics require separate opt-ins. Our API relays allowlisted events to self-hosted Umami (stats.nowly.me): coarse page type, download browser, action, source, presence category/origin and cohort day/return milestone. No account/device ID, real page URL, search, activity text or watched content is sent to Umami. Extension return windows (D1/D7/D30) use local dates and deduplication markers, not a transmitted identifier. Withdrawal stops future dispatch and erases these local markers; no withdrawal event is sent. An in-flight request cannot be recalled. Technical IP data may reach our API for security but is not forwarded. Functional device services remain separate."
       },
       {
         "title": "Nowly account and sync (optional)",
@@ -979,7 +1001,7 @@
       },
       {
         "title": "Retention",
-        "body": "<ul><li><strong>Local extension and desktop logs</strong>: until you delete them, reset, or uninstall.</li><li><strong>Language cookie</strong>: 1 year, refreshed when you change language.</li><li><strong>Usage statistics</strong>: kept only as long as needed to produce aggregated metrics. There is <strong>no automatic 12-month purge</strong> implemented today. You may request erasure as described above.</li><li><strong>JWT (if you log in)</strong>: about 30 days unless you log out or we revoke it.</li></ul>"
+        "body": "<ul><li><strong>Local extension and desktop logs</strong>: until you delete them, reset, or uninstall.</li><li><strong>Language cookie</strong>: 1 year, refreshed when you change language.</li><li>Local return markers remain until withdrawal or local deletion. Aggregate Umami statistics have no automatic deletion deadline implemented here; configured server retention is not verified. New aggregates cannot be located by device ID.</li><li><strong>JWT (if you log in)</strong>: about 30 days unless you log out or we revoke it.</li></ul>"
       },
       {
         "title": "Processors and transfers",
@@ -991,7 +1013,7 @@
       },
       {
         "title": "Cookies",
-        "body": "nowly.me and docs.nowly.me each set a <code>locale</code> cookie for language. Theme and the cookie notice use local storage, not cookies. See the <a href=\"/cookies\">cookie policy</a>."
+        "body": "The browser stores theme and the yes/no statistics choice locally. The extension stores consent and local return/deduplication dates. No analytics cookie or persistent visitor ID is created. Deleting these choices resets consent; statistics remain off until a new opt-in."
       },
       {
         "title": "Security",
@@ -999,7 +1021,7 @@
       },
       {
         "title": "Your rights",
-        "body": "If the GDPR applies, you may request access, rectification, erasure, restriction, objection, and portability, and you may withdraw consent for analytics. Developer diagnostics in the extension may show events still queued on your device; they are not a complete export of our servers. To exercise rights, email <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a> or use the <a href=\"https://github.com/nowly-presence/nowly\">GitHub repository</a>. You may also lodge a complaint with the <a href=\"https://www.cnil.fr\">CNIL</a> (France) or your local supervisory authority."
+        "body": "You may withdraw consent on /consent and in extension settings. For GDPR access, erasure or other rights, contact <a href=\"mailto:{publisherEmail}\">{publisherEmail}</a>. Device-linked service data can be exported or erased with device authentication. New aggregates cannot be attributed to your device. You may complain to the CNIL or your supervisory authority."
       },
       {
         "title": "Presence issue reports",
@@ -1015,7 +1037,7 @@
     "badge": "Legal",
     "title": "Terms of Service",
     "description": "The rules for using Nowly, the browser extension, desktop app, and the website.",
-    "last-updated": "Last updated: 24 October 2026.",
+    "last-updated": "2026-10-24",
     "sections": [
       {
         "title": "Acceptance",
@@ -1116,8 +1138,8 @@
     "badge": "Cookies",
     "title": "Cookie Policy",
     "description": "Cookies and local storage used on nowly.me and docs.nowly.me.",
-    "last-updated": "Last updated: 9 October 2026.",
-    "intro": "This page describes cookies and similar technologies on <strong>nowly.me</strong> and <strong>docs.nowly.me</strong>. We set a language cookie. Theme and the cookie notice use local storage. Google AdSense is not loaded unless advertising is enabled.",
+    "last-updated": "2026-10-25",
+    "intro": "The browser stores theme and the yes/no statistics choice locally. The extension stores consent and local return/deduplication dates. No analytics cookie or persistent visitor ID is created. Deleting these choices resets consent; statistics remain off until a new opt-in.",
     "sections": [
       {
         "title": "Strictly necessary",
@@ -1129,11 +1151,11 @@
       },
       {
         "title": "Local storage",
-        "body": "The sites store the colour theme (light, dark, or system) and whether you dismissed the cookie notice. Those values stay in your browser and are not sent as cookies to Nowly."
+        "body": "The browser stores theme and the yes/no statistics choice locally. The extension stores consent and local return/deduplication dates. No analytics cookie or persistent visitor ID is created. Deleting these choices resets consent; statistics remain off until a new opt-in."
       },
       {
         "title": "Analytics cookies",
-        "body": "The websites do <strong>not</strong> set third-party analytics cookies. The Nowly site uses self-hosted <strong>Umami</strong> at <code>stats.nowly.me</code> to measure aggregate page views without cookies or persistent visitor identifiers. The extension’s optional usage statistics are separate and, if enabled, use a device ID."
+        "body": "Website and extension statistics require separate opt-ins. Our API relays allowlisted events to self-hosted Umami (stats.nowly.me): coarse page type, download browser, action, source, presence category/origin and cohort day/return milestone. No account/device ID, real page URL, search, activity text or watched content is sent to Umami. Extension return windows (D1/D7/D30) use local dates and deduplication markers, not a transmitted identifier. Withdrawal stops future dispatch and erases these local markers; no withdrawal event is sent. An in-flight request cannot be recalled. Technical IP data may reach our API for security but is not forwarded. Functional device services remain separate."
       },
       {
         "title": "Advertising",
@@ -1151,36 +1173,38 @@
   },
   "uninstallPage": {
     "eyebrow": "Goodbye",
-    "title": "The extension was removed",
-    "description": "Your local data stays on your device. We hope to see you again soon.",
+    "title": "Thank you for using Nowly",
+    "description": "You can choose to keep or erase the data Nowly associates with this device.",
     "feedback-title": "Anything you want to tell us?",
     "feedback-description": "A bug, a missing presence, or just feedback: Discord is the fastest way to reach us.",
     "discord": "Join the Discord",
-    "data-description": "You can keep your anonymous usage stats to help us improve Nowly, or delete everything stored for your device.",
-    "keep": "Keep anonymous stats",
-    "delete": "Delete my data",
-    "delete-confirm": "This permanently deletes everything Nowly has stored for this device. This cannot be undone.",
-    "keep-success": "Thanks, your anonymous stats are kept.",
-    "delete-success": "Your data has been deleted.",
+    "data-description": "This data includes device details, presences, likes and custom images stored with Nowly. Aggregate statistics are not affected.",
+    "keep": "Keep this device’s data",
+    "delete": "Erase this device’s data",
+    "delete-confirm": "Permanently erase the data associated with this device from Nowly? This cannot be undone. Aggregate statistics are not affected.",
+    "keep-success": "The data associated with this device is kept with Nowly.",
+    "delete-success": "The data associated with this device has been erased from Nowly.",
     "action-error": "We could not complete this request. Try again, or contact support if the problem continues."
   },
   "consentPage": {
     "eyebrow": "Privacy",
     "title": "Your data",
-    "description": "Nowly only collects anonymous usage analytics if you explicitly turn it on below. This page also lets you see, export, or delete everything stored for your device.",
+    "description": "Optional page and download-click counts, without a persistent visitor ID. This choice is separate from the extension. Optional feature and presence-category counts. Return-day markers stay on this device and are erased when disabled. No browsing content is sent.",
     "checking": "Looking for the Nowly extension...",
     "not-detected-title": "Extension not detected",
     "not-detected-description": "Open this page from the browser where Nowly is installed to manage your consent and data.",
-    "toggle-title": "Share anonymous usage data",
-    "toggle-description": "Off by default. Usage data helps us understand which presences and features people use. We never collect browsing history or personal data.",
+    "toggle-title": "Extension statistics",
+    "toggle-description": "Optional feature and presence-category counts. Return-day markers stay on this device and are erased when disabled. No browsing content is sent.",
     "data-title": "Your data",
-    "data-description": "Export everything Nowly has stored for this device, or delete it entirely.",
+    "data-description": "Export or erase device-linked service data. New Umami aggregates have no device identifier and are not included in a device export.",
     "export": "Export my data",
     "delete": "Delete my data",
     "delete-confirm": "This permanently deletes everything Nowly has stored for this device. This cannot be undone.",
     "export-success": "Your data was downloaded.",
     "delete-success": "Your data has been deleted.",
-    "action-error": "We could not complete this request. Try again, or contact support if the problem continues."
+    "action-error": "We could not complete this request. Try again, or contact support if the problem continues.",
+    "site-title": "Website statistics",
+    "site-description": "Optional page and download-click counts, without a persistent visitor ID. This choice is separate from the extension."
   },
   "faqPage": {
     "eyebrow": "FAQ",

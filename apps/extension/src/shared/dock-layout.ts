@@ -11,6 +11,10 @@ export type DockDropTarget = {
 
 export const DOCK_MAX_GROUPS = 3;
 
+export const DOCK_TABS = ["activity", "store", "custom", "announcements", "settings"] as const;
+
+export const visibleDockTabs = (hidden: readonly string[] = []) => DOCK_TABS.filter((tab) => tab === "activity" || tab === "settings" || !hidden.includes(tab));
+
 export const normalizeDockLayout = <T extends string>(layout: unknown, tabs: readonly T[]): DockLayout<T> => {
   const seen = new Set<T>();
   const isTab = (value: unknown): value is T => typeof value === "string" && tabs.some((tab) => tab === value);

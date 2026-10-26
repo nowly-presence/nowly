@@ -7,7 +7,7 @@ import { clientEnv } from "../src/client";
 describe("@nowly/env", () => {
   it("provides public config", () => {
     expect(clientEnv.NEXT_PUBLIC_API_BASE_URL).toMatch(/^https?:\/\//);
-    expect(clientEnv.NEXT_PUBLIC_BASE_URL).toBe("http://localhost:3000");
+    expect(clientEnv.NEXT_PUBLIC_BASE_URL).toBe("https://nowly.me");
     expect(clientEnv.NEXT_PUBLIC_ADSENSE_ENABLED).toBe(false);
     expect(cliEnv.API_URL).toBe("https://api.nowly.me");
   });

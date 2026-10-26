@@ -1,12 +1,6 @@
 # Assets
 
-Serves a presence's assets (logos, icons...) from the CDN/storage: `GET /:slug/assets/:type`.
+`GET /presences/:slug/assets/:type` serves a presence's assets from CDN/storage. Allowed types are `logo`, `icon` and `thumbnail`, validated in `assets.routes.ts`.
 
-## Add a new asset type
-
-1. Add the type's resolution logic to `assets.service.ts` — it maps `(slug, type)` to a storage path/URL.
-2. No route change needed: `assets.routes.ts`'s `GET /:slug/assets/:type` already accepts any `type` string and passes it through.
-3. The actual asset file must be published for that presence via `packages/internal-cli`'s R2 sync (`pnpm --filter @nowly/internal-cli r2:sync`) — this feature only serves what's already in storage, it doesn't upload anything.
-
-## Notable dependencies
-Presence CDN/storage (`packages/internal-cli`'s R2 commands publish it, `packages/presences` is the source).
+- A new type needs the allow-list entry in the route and the resolution in `assets.service.ts`.
+- This feature only serves what is already stored; assets are published from `packages/presences` through the internal CLI's R2 sync.

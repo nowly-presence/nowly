@@ -1,12 +1,12 @@
 import { RiArrowRightUpLine, RiFileTextLine, RiShieldCheckLine } from "@remixicon/react";
-import type { LegalDocument, LegalDocumentId } from "@nowly/shared/legal";
+import type { LegalDocumentId } from "@nowly/shared/legal";
 import { useI18n } from "@/hooks/i18n-provider";
 import { WEB_BASE_URL } from "@/shared/constants";
 import { Checkbox } from "@/ui/checkbox";
 
-export const LegalDocumentCard = ({ id, document, checked, onChange, disabled }: {
+export const LegalDocumentCard = ({ id, updatedAt, checked, onChange, disabled }: {
   id: LegalDocumentId;
-  document: LegalDocument;
+  updatedAt: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
   disabled: boolean;
@@ -16,11 +16,11 @@ export const LegalDocumentCard = ({ id, document, checked, onChange, disabled }:
   const date = new Intl.DateTimeFormat(locale, {
     dateStyle: "medium",
     timeZone: "UTC"
-  }).format(new Date(`${document.updatedAt}T00:00:00Z`));
+  }).format(new Date(`${updatedAt}T00:00:00Z`));
   return (
     <div className="overflow-hidden rounded-lg border border-line">
       <a
-        href={`${WEB_BASE_URL.replace(/\/$/, "")}${prefix}${document.path}`}
+        href={`${WEB_BASE_URL.replace(/\/$/, "")}${prefix}/${id}`}
         target="_blank"
         rel="noreferrer"
         className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-hover focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"

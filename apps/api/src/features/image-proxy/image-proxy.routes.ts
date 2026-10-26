@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { createCacheId, fetchImage, getCached, getPublicBaseUrl, handleImageProxyRequest, imageResponse, logImageProxyCall, parseProxyUrl, setCached, withPublicCors, CACHED_IMAGE_TTL } from "./image-proxy.service";
+import { createCacheId, fetchImage, getCached, getPublicBaseUrl, handleImageProxyRequest, imageResponse, parseProxyUrl, setCached, withPublicCors, CACHED_IMAGE_TTL } from "./image-proxy.service";
 
 export const imageProxyRoutes = async (fastify: FastifyInstance) => {
   fastify.options("/images-proxy", async (_request, reply) => withPublicCors(reply).status(204).send());
@@ -15,8 +15,6 @@ export const imageProxyRoutes = async (fastify: FastifyInstance) => {
     if (!target) {
       return withPublicCors(reply).status(400).send({ error: "INVALID_IMAGE_URL" });
     }
-
-    logImageProxyCall(target.service);
 
     const id = createCacheId(target.service.id, target.url.href);
     const existing = getCached(id);

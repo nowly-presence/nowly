@@ -7,13 +7,14 @@ type SheetProps = {
   open: boolean;
   onClose: () => void;
   title: string;
+  hideTitle?: boolean;
   description?: string;
   children?: ReactNode;
   footer?: ReactNode;
   closeLabel: string;
 };
 
-export const Sheet = ({ open, onClose, title, description, children, footer, closeLabel }: SheetProps) => {
+export const Sheet = ({ open, onClose, title, hideTitle = false, description, children, footer, closeLabel }: SheetProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,8 +45,8 @@ export const Sheet = ({ open, onClose, title, description, children, footer, clo
         tabIndex={-1}
         className="relative flex max-h-[calc(100vh-24px)] w-full max-w-lg animate-enter-up flex-col overflow-hidden rounded-xl border border-line bg-surface outline-none"
       >
-        <div className="flex items-start justify-between gap-4 px-4 pt-4 pb-3">
-          <div className="flex flex-col gap-1">
+        <div className={cn("flex items-start gap-4 px-4 pt-4 pb-3", hideTitle ? "justify-end" : "justify-between")}>
+          <div className={hideTitle ? "sr-only" : "flex flex-col gap-1"}>
             <h2 className="text-body-md font-medium text-ink">{title}</h2>
             {description && <p className="text-body-sm text-muted">{description}</p>}
           </div>

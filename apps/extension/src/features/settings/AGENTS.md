@@ -22,6 +22,8 @@ Create `sections/<name>-section.tsx` and render it in `settings-view.tsx`.
 - `suggestPresences` (default on) only hides the "supported site" row of the Activity tab's current-tab section; no background behaviour depends on it. `hiddenSuggestions` holds the slugs hidden one by one with the "Don't show again" link under that row (undo in the toast); the sharing section shows a "Hidden suggestions" row with a reset while it is non-empty.
 - `preserveSiteTimer` (default off) shares elapsed time per presence across tabs for the current browser session. The sharing section contains its switch. Changing it clears the session timer cache and rebroadcasts the original tab activity with the new rule immediately. Playback progress and paused media are excluded; the setting syncs, but session timers never do.
 
+- Privacy (`sections/privacy-section.tsx`) holds the analytics consent switch (`SET_ANALYTICS_CONSENT`, default off). It is independent of legal receipts and of the account.
+
 - Account and sync (`sections/account-section.tsx`, between Appearance and Privacy): signed out, one explanatory row and "Sign in with Discord" (`START_ACCOUNT_CONNECT` opens nowly.me). Signed in: avatar, name and last sync (relative time, `formatRelative`), "Sync", "Manage your account on nowly.me" (`/account`), "Sign out" (keeps local data) and "Stop syncing and erase the online copy" behind a confirmation sheet. While the first-sync choice is pending, the first row offers "Choose", which opens `account-choice-sheet.tsx` (also mounted app-wide as `AccountChoicePrompt`).
 
 - About: "Support Nowly" opens `support-sheet.tsx`, a sheet with two rows (Ko-fi and GitHub Sponsors, `KOFI_URL` and `GITHUB_SPONSORS_URL` in `shared/constants.ts`, same URLs as nowly.me).

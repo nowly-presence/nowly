@@ -1,8 +1,9 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line } from "@remixicon/react";
+import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line, RiMegaphoneFill, RiMegaphoneLine } from "@remixicon/react";
+import { AnnouncementsBanner } from "@/features/announcements/announcements-banner";
 import { FeatureReveal } from "@/components/shared/feature-reveal";
 import { Dock } from "@/features/layout/dock";
-import { normalizeDockLayout } from "@/shared/dock-layout";
+import { DOCK_TABS, normalizeDockLayout, visibleDockTabs } from "@/shared/dock-layout";
 import { useResolvedTheme } from "@/hooks/use-theme";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav, type Route, type Tab } from "@/hooks/navigation-provider";
@@ -30,6 +31,8 @@ const RuntimeLogsView = lazy(async () => ({ default: (await import("@/features/r
 const OnboardingView = lazy(async () => ({ default: (await import("@/features/onboarding/onboarding-view")).OnboardingView }));
 const PresenceDetailView = lazy(async () => ({ default: (await import("@/features/presence/presence-detail-view")).PresenceDetailView }));
 const SettingsView = lazy(async () => ({ default: (await import("@/features/settings/settings-view")).SettingsView }));
+const AnnouncementsView = lazy(async () => ({ default: (await import("@/features/announcements/announcements-view")).AnnouncementsView }));
+const AnnouncementsDetailView = lazy(async () => ({ default: (await import("@/features/announcements/announcements-detail-view")).AnnouncementsDetailView }));
 
 const PanelLoading = () => (
   <div aria-busy="true" className="flex flex-col gap-4 p-5">
@@ -39,7 +42,7 @@ const PanelLoading = () => (
   </div>
 );
 
-const TABS: Tab[] = ["activity", "store", "custom", "settings"];
+const TABS = DOCK_TABS;
 const CUSTOM_ACTIVITY_REVEAL = {
   id: "custom-activity",
   version: "2.4.0"
@@ -70,6 +73,7 @@ const AppContent = () => {
   }, [tab]);
 
   const onboarding = state.ready && (!state.onboarding.onboardingCompleted || state.onboarding.devReplayOnboarding);
+  const showAnnouncement = !onboarding && tab === "activity" && stack.length === 0;
 
   if (onboarding) {
     return (
@@ -97,79 +101,95 @@ const AppContent = () => {
 
   return (
     <FeatureRevealProvider enabled={state.ready && stack.length === 0}>
-      <main ref={mainRef} className="relative h-full overflow-hidden">
-        {TABS.filter((value) => visited.has(value)).map((value) => (
-          <Layer key={value} tab={value} active={stack.length === 0 && value === tab}>
-            <Header theme={theme} />
-            <Suspense fallback={<PanelLoading />}>
-              {value === "activity" && <ActivityView />}
-              {value === "store" && <LibraryView />}
-              {value === "custom" && <CustomActivityView />}
-              {value === "settings" && <SettingsView />}
-            </Suspense>
-          </Layer>
-        ))}
-        {stack.map((route, depth) => (
-          <Layer key={routeKey(route, depth)} active={depth === stack.length - 1} className="animate-push bg-canvas">
-            <Suspense fallback={<PanelLoading />}>
-              {route.name === "presence" && <PresenceDetailView slug={route.slug} />}
-              {route.name === "connection" && <ConnectionView />}
-              {route.name === "logs" && <RuntimeLogsView />}
-              {route.name === "custom-activity" && <CustomActivityEditorView id={route.id} template={route.template} />}
-              {route.name === "discord-ipc" && <DiscordIpcView />}
-            </Suspense>
-          </Layer>
-        ))}
-        <Dock<Tab>
-          label={t("nav.label")}
-          layout={normalizeDockLayout(state.settings.dockLayout, TABS)}
-          onLayoutChange={(dockLayout) => void updateSettings({ dockLayout })}
-          value={tab}
-          onChange={selectTab}
-          items={[
-            {
-              value: "activity",
-              label: t("nav.activity"),
-              icon: <RiPulseLine className="size-[18px]" />,
-              activeIcon: <RiPulseFill className="size-[18px]" />,
-              badge: live ? "live" : undefined
-            },
-            {
-              value: "store",
-              label: t("nav.library"),
-              icon: <RiApps2Line className="size-[18px]" />,
-              activeIcon: <RiApps2Fill className="size-[18px]" />
-            },
-            {
-              value: "custom",
-              label: t("nav.custom"),
-              icon: <RiQuillPenLine className="size-[18px]" />,
-              activeIcon: <RiQuillPenFill className="size-[18px]" />,
-              wrap: (button) => (
-                <FeatureReveal {...CUSTOM_ACTIVITY_REVEAL} text={t("reveal.customActivity")} hint={t("reveal.customActivityHint")}>
-                  {button}
-                </FeatureReveal>
-              )
-            },
-            {
-              value: "settings",
-              label: t("nav.settings"),
-              icon: <RiSettings3Line className="size-[18px]" />,
-              activeIcon: <RiSettings3Fill className="size-[18px]" />,
-              wrap: (button) => (
-                <FeatureReveal {...ACCOUNT_SYNC_REVEAL} text={t("reveal.accountSync")} hint={t("reveal.accountSyncHint")}>
-                  {button}
-                </FeatureReveal>
-              )
-            }
-          ]}
-        />
-        <ReviewPrompt />
-        <DiscordIpcPrompt />
-        <HalloweenPrank />
-        <SeasonMoment />
-        <AccountChoicePrompt />
-      </main>
+      <div className="flex h-full flex-col overflow-hidden">
+        {showAnnouncement && <AnnouncementsBanner />}
+        <main ref={mainRef} className="relative min-h-0 flex-1 overflow-hidden">
+          {TABS.filter((value) => visited.has(value)).map((value) => (
+            <Layer key={value} tab={value} active={stack.length === 0 && value === tab}>
+              <Header theme={theme} />
+              <Suspense fallback={<PanelLoading />}>
+                {value === "activity" && <ActivityView />}
+                {value === "announcements" && <AnnouncementsView />}
+                {value === "store" && <LibraryView />}
+                {value === "custom" && <CustomActivityView />}
+                {value === "settings" && <SettingsView />}
+              </Suspense>
+            </Layer>
+          ))}
+          {stack.map((route, depth) => (
+            <Layer key={routeKey(route, depth)} active={depth === stack.length - 1} className="animate-push bg-canvas">
+              <Suspense fallback={<PanelLoading />}>
+                {route.name === "presence" && <PresenceDetailView slug={route.slug} />}
+                {route.name === "announcement" && <AnnouncementsDetailView id={route.id} />}
+                {route.name === "connection" && <ConnectionView />}
+                {route.name === "logs" && <RuntimeLogsView />}
+                {route.name === "custom-activity" && <CustomActivityEditorView id={route.id} template={route.template} />}
+                {route.name === "discord-ipc" && <DiscordIpcView />}
+              </Suspense>
+            </Layer>
+          ))}
+          <Dock<Tab>
+            label={t("nav.label")}
+            layout={normalizeDockLayout(state.settings.dockLayout, visibleDockTabs(state.settings.hiddenDockTabs))}
+            onLayoutChange={(dockLayout) => void updateSettings({ dockLayout })}
+            value={tab}
+            onChange={selectTab}
+            items={[
+              {
+                value: "activity",
+                label: t("nav.activity"),
+                icon: <RiPulseLine className="size-[18px]" />,
+                activeIcon: <RiPulseFill className="size-[18px]" />,
+                badge: live ? "live" : undefined
+              },
+              {
+                value: "store",
+                label: t("nav.library"),
+                icon: <RiApps2Line className="size-[18px]" />,
+                activeIcon: <RiApps2Fill className="size-[18px]" />
+              },
+              {
+                value: "custom",
+                label: t("nav.custom"),
+                icon: <RiQuillPenLine className="size-[18px]" />,
+                activeIcon: <RiQuillPenFill className="size-[18px]" />,
+                wrap: (button) => (
+                  <FeatureReveal {...CUSTOM_ACTIVITY_REVEAL} text={t("reveal.customActivity")} hint={t("reveal.customActivityHint")}>
+                    {button}
+                  </FeatureReveal>
+                )
+              },
+              {
+                value: "announcements",
+                label: t("nav.announcements"),
+                icon: <RiMegaphoneLine className="size-[18px]" />,
+                activeIcon: <RiMegaphoneFill className="size-[18px]" />,
+                wrap: (button) => (
+                  <FeatureReveal id="announcements" version="2.5.0" text={t("reveal.announcements")} hint={t("reveal.announcementsHint")}>
+                    {button}
+                  </FeatureReveal>
+                )
+              },
+              {
+                value: "settings",
+                label: t("nav.settings"),
+                icon: <RiSettings3Line className="size-[18px]" />,
+                activeIcon: <RiSettings3Fill className="size-[18px]" />,
+                wrap: (button) => (
+                  <FeatureReveal {...ACCOUNT_SYNC_REVEAL} text={t("reveal.accountSync")} hint={t("reveal.accountSyncHint")}>
+                    {button}
+                  </FeatureReveal>
+                )
+              }
+            ]}
+          />
+          <ReviewPrompt />
+          <DiscordIpcPrompt />
+          <HalloweenPrank />
+          <SeasonMoment />
+          <AccountChoicePrompt />
+        </main>
+      </div>
     </FeatureRevealProvider>
   );
 };

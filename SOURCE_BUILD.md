@@ -20,7 +20,7 @@ pnpm install --frozen-lockfile
 
 Run this from the repository root (not from `apps/extension`), since this is
 a pnpm workspace monorepo and the extension depends on a few internal
-packages (`@nowly/analytics`, `@nowly/env`, `@nowly/locales`, `@nowly/shared`).
+packages (`@nowly/telemetry`, `@nowly/env`, `@nowly/locales`, `@nowly/shared`).
 
 ## Build script
 

@@ -1,9 +1,8 @@
 import { IS_CANARY } from "@/shared/brand";
-import { EXT_WEB_SOURCE, WEB_BASE_URL } from "@/shared/constants";
+import { EXT_WEB_SOURCE, USER_SCRIPT_MESSAGE_SOURCE, WEB_BASE_URL } from "@/shared/constants";
 import type { WebMessage } from "@/shared/types";
 import { startWebSeason } from "@/content/web-season";
 
-const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE";
 const DEVICE_KEY = "deviceId";
 const DEVICE_TOKEN_KEY = "deviceToken";
 let MARKETPLACE_ORIGIN = new URL(WEB_BASE_URL).origin;
@@ -25,7 +24,9 @@ const WEB_MESSAGE_TYPES = new Set([
   "GET_DEVICE_INFO",
   "GET_ANALYTICS_CONSENT",
   "SET_ANALYTICS_CONSENT",
-  "NOWLY_SESSION"
+  "NOWLY_SESSION",
+  "GET_ACTIVITY_PUBLICATION_STATUS",
+  "APPLY_ACTIVITY_PUBLICATION"
 ]);
 
 const toRouterMessageType = (type: string): string => (type === "GET_INSTALLED" ? "GET_PRESENCES" : type);
@@ -56,7 +57,7 @@ const broadcastDetected = (): void => {
         source: EXT_WEB_SOURCE,
         type: "EXT_DETECTED"
       },
-      "*"
+      window.location.origin
     );
     count += 1;
     if (count >= 10) window.clearInterval(interval);
@@ -64,7 +65,7 @@ const broadcastDetected = (): void => {
 };
 
 window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
-  if (!isAllowedWebOrigin(event.origin)) return;
+  if (event.source !== window || event.origin !== window.location.origin || !isAllowedWebOrigin(event.origin)) return;
 
   if (event.data?.source === EXT_WEB_SOURCE && event.data.type === "PING") {
     window.postMessage(
@@ -72,13 +73,13 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
         source: EXT_WEB_SOURCE,
         type: "EXT_DETECTED"
       },
-      "*"
+      window.location.origin
     );
   }
 });
 
 window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
-  if (!isAllowedWebOrigin(event.origin)) return;
+  if (event.source !== window || event.origin !== window.location.origin || !isAllowedWebOrigin(event.origin)) return;
   if (event.data?.source !== EXT_WEB_SOURCE || event.data.type === "PING") return;
   if (!WEB_MESSAGE_TYPES.has(event.data.type)) return;
 
@@ -99,7 +100,7 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
           payload: { deviceId, deviceToken },
           messageId: msg.messageId
         },
-        "*"
+        window.location.origin
       );
     });
     return;
@@ -120,7 +121,7 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
         },
         messageId: msg.messageId
       },
-      "*"
+      window.location.origin
     );
   });
 });

@@ -1,0 +1,72 @@
+---
+title: 2.5.0
+date: 2026-10-28
+description: Détection et partage des activités personnalisées, annonces, affichage Discord et confidentialité.
+---
+
+> Sortie prévue le 28 octobre 2026. La disponibilité dans les boutiques des navigateurs n'est pas encore confirmée.
+
+## Nouveautés
+
+### Détection automatique des activités personnalisées
+
+- Ajoutez un lien de détection facultatif à une activité personnalisée pour la sélectionner automatiquement lorsque l'onglet actif de la fenêtre de navigateur au premier plan correspond. La sélection automatique s'arrête lorsque vous quittez la page correspondante.
+- Utilisez un domaine ou un chemin, avec `*.example.com` pour inclure les sous-domaines et un `*` final pour les chemins. Laissez le champ vide pour continuer à utiliser l'activité manuellement.
+- Une activité personnalisée activée manuellement garde la priorité sur la détection automatique.
+- Si plusieurs activités correspondent, celle qui a été modifiée le plus récemment est sélectionnée.
+- Les liens de détection sont inclus dans l'export et l'import des activités personnalisées. Les anciens fichiers sans ce champ restent compatibles.
+
+### Liens publics des activités personnalisées
+
+- Publiez un lien public avec le nom et l'avatar d'auteur de votre compte Discord. La version enregistrée devient publique, jamais le brouillon non sauvegardé.
+- Consultez l'aperçu avant d'ajouter explicitement une copie indépendante. Les nouvelles copies sont inactives, sans détection automatique.
+- Gardez le même lien lors de vos mises à jour ou dépublications explicites. Les copies des destinataires restent installées et ne se mettent jamais à jour automatiquement.
+- Les destinataires peuvent conserver leurs modifications locales ou les remplacer après examen d'une mise à jour. Un éditeur ouvert bloque le remplacement pour protéger le travail non sauvegardé.
+- Avant de supprimer une activité source, retirez explicitement tout lien public ou en cours de publication, puis vérifiez en ligne auprès du serveur d'origine.
+- Après suppression du compte, l'absence confirmée de ses publications permet la suppression locale sans l'ancien compte. Si la vérification est impossible ou non concluante, la source est conservée.
+
+### Annonces et journal des modifications
+
+- Consultez les annonces et les notes des versions publiées dans l'onglet Actualités, puis ouvrez une entrée pour lire ses détails. Les fichiers du changelog publiés sont inclus automatiquement ; les brouillons sans date, futurs ou explicitement non publiés restent exclus du fil.
+- Les annonces utilisent la langue de l'interface, avec une langue de repli lorsqu'une traduction manque. Les notes de version se replient sur l'anglais.
+- Les messages épinglés apparaissent au-dessus de l'en-tête Activité. Les avertissements utilisent le jaune, l'orange ou le rouge selon leur gravité ; la maintenance utilise la couleur principale du thème. Le bandeau ouvre Actualités et n'a pas de bouton de fermeture.
+- Les fins de maintenance estimées s'affichent sous forme de dates, sans compte à rebours ni promesse de rétablissement. À l'heure estimée, le bandeau disparaît mais l'annonce reste consultable, sauf si une expiration distincte est définie.
+- Le fil s'actualise automatiquement, conserve la dernière copie valide hors ligne et enregistre les lectures sur votre appareil.
+
+### Affichage des activités dans Discord
+
+- Les présences peuvent associer des liens HTTPS publics aux textes de détails et d'état avec `detailsUrl` et `stateUrl`, indépendamment des boutons de l'activité. Les liens invalides ou sans texte correspondant sont ignorés.
+- Les présences peuvent choisir le texte du statut compact de Discord avec `statusDisplayType` : nom de l'activité, état ou détails. Le contenu de la carte d'activité ne change pas.
+
+Ces champs nécessitent des versions compatibles du SDK, de l'extension et de l'hôte natif. Les anciennes versions les ignorent. Ils n'ajoutent pas de sélecteur d'affichage à l'éditeur d'activités personnalisées.
+
+## Améliorations et corrections
+
+- L'éditeur d'activités personnalisées indique combien de boutons avec lien vous pouvez encore ajouter.
+- L'aperçu ne répète plus inutilement le nom de l'activité. Une infobulle permet de lire le nom complet.
+- L'espacement de la section de détection est plus clair.
+- Masquez les onglets Bibliothèque, Personnalisés ou Actualités dans la barre de navigation lorsque vous n'en avez pas besoin. Activité et Réglages restent accessibles. Réinitialisez la disposition depuis les Réglages pour retrouver l'agencement par défaut. Masquer Actualités ne masque pas les annonces épinglées sur Activité.
+- La progression des vidéos, notamment sur YouTube, avance désormais avec la lecture, tandis que le compte à rebours des activités personnalisées continue d'afficher le temps restant.
+- Dans « Soutenir Nowly », copiez les adresses Bitcoin, Ethereum ou Solana d'un clic, avec une confirmation après la copie.
+- Lorsqu'au moins deux présences installées ont une mise à jour disponible, mettez-les à jour en une seule action. Les mises à jour se font l'une après l'autre.
+- Les boutons de la carte d'activité inactive tiennent désormais dans les panneaux latéraux étroits.
+- Les mises à jour, réinstallations et suppressions sont ordonnées par présence pour qu'une ancienne mise à jour ne rétablisse pas une activité que vous venez de supprimer.
+- L'activation d'une présence n'est enregistrée qu'après l'enregistrement réussi de son script. Les échecs d'activation et d'opérations groupées sont signalés au lieu d'apparaître comme des réussites.
+- Le libellé de permission des scripts utilisateur explique plus clairement ce qui doit être activé dans le navigateur.
+
+## Confidentialité et plateformes
+
+- Des événements produit Umami facultatifs remplacent les anciennes statistiques Insights. Les consentements du site et de l'extension sont indépendants ; les événements transitent par l'API, sans identifiant visiteur persistant ni contenu de navigation ou d'activité.
+- Les anciennes pages Insights, leurs points d'accès, les modèles de données statistiques et les campagnes ont été retirés. Les anciens scripts globaux de statistiques et d'enregistrement de session ne sont pas activés par cette version.
+- Les confirmations légales suivent désormais les dates réelles de modification des conditions et de la politique de confidentialité, au lieu de numéros de version internes. Les anciens reçus numériques nécessitent une nouvelle confirmation ; les dates déjà mises en cache restent utilisables hors ligne.
+- La page de désinstallation distingue la conservation ou la suppression des données fonctionnelles de l'appareil des statistiques facultatives. Son ouverture n'envoie un événement produit qu'avec le consentement aux statistiques du site.
+- Les interfaces de liste d'attente et d'assistance ChromeOS ont été retirées. L'extension reste destinée à Chrome et Firefox, avec l'hôte natif sur Windows, macOS et Linux.
+
+## Site, documentation et maintenance
+
+- La page d'accueil présente les activités personnalisées, avec des contrastes d'illustration et des couleurs de barre d'annonce adaptés au thème actif.
+- La navigation au clavier, les liens d'évitement et la visibilité du focus du site ont été améliorés. Les animations respectent la réduction des mouvements et les contenus défilants peuvent être mis en pause.
+- Les FAQ, les indications de contact et de récupération localisées ainsi que les liens de politique de cookies ont été actualisés.
+- La documentation développeur décrit la découverte automatique de `settings.ts`, le choix du statut compact Discord, les textes d'activité cliquables et le proxy d'images.
+- L'API d'annonces permet la publication protégée, la planification, l'expiration et les mises à jour du fil en direct.
+- Le code public de Nowly passe sous licence MIT. Les tests de l'extension, du site et de l'API ont été regroupés et corrigés, notamment pour les détails d'annonce et le changement de mode d'affichage.

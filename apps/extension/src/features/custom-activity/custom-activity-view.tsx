@@ -26,8 +26,11 @@ export const CustomActivityView = () => {
   const actions = useCustomActivityActions();
   const { items, activeId } = state.customActivities;
   const paused = state.settings.presencePaused === true;
+  const detection = state.detection;
   const active = items.find((item) => item.id === activeId);
-  const livePresence = state.activity && customActivityIdOf(state.activity.slug) === activeId ? state.activity.presence : null;
+  const running = active ?? items.find((item) => item.id === detection?.activityId);
+  const detectedHost = detection && detection.activityId === running?.id ? detection.host : undefined;
+  const livePresence = state.activity && customActivityIdOf(state.activity.slug) === running?.id ? state.activity.presence : null;
   const [templatesOpen, setTemplatesOpen] = useState(false);
   const open = (id: string | null) =>
     push({
@@ -90,13 +93,14 @@ export const CustomActivityView = () => {
         }
       />
 
-      {active && livePresence && (
+      {running && livePresence && (
         <Section title={t("custom.live.section")}>
           <CustomActivityLiveCard
-            activity={active}
+            activity={running}
             presence={livePresence}
             paused={paused}
-            onOpen={() => open(active.id)}
+            detectedHost={detectedHost}
+            onOpen={() => open(running.id)}
             onStop={() => void actions.setActive(null)}
             onResume={() => void updateSettings({ presencePaused: false })}
           />
@@ -113,6 +117,7 @@ export const CustomActivityView = () => {
                 key={activity.id}
                 activity={activity}
                 active={activity.id === activeId}
+                detectedHost={detection?.activityId === activity.id ? detection.host : undefined}
                 paused={paused}
                 onOpen={() => open(activity.id)}
                 onToggle={(checked) => void actions.setActive(checked ? activity.id : null)}

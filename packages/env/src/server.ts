@@ -8,7 +8,6 @@ export const serverEnv = createEnv({
   server: {
     PORT: z.coerce.number().int().positive().default(3001),
     FRONTEND_URL: z.string().trim().url().default("http://localhost:3000"),
-    INSIGHTS_URL: z.string().trim().url().default("http://localhost:3002"),
     DATABASE_URL: required.optional(),
     JWT_SECRET: required,
     DISCORD_CLIENT_ID: required,

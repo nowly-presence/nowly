@@ -1,5 +1,5 @@
 import type { CurrentActivity, CustomActivitiesState, CustomActivity, InstalledPresences, PresenceCatalogItem, PresenceMetadata, RuntimeLogEntry, StoredPresence } from "@/shared/types";
-import type { PreviewScenario } from "@/preview/preview-params";
+import type { PreviewCustom, PreviewScenario } from "@/preview/preview-params";
 
 export type CatalogFixture = PresenceCatalogItem & {
   likes?: number;
@@ -228,8 +228,14 @@ export const buildRuntimeLogs = (firstSlug: string | undefined, presenceCount: n
 ];
 
 const CUSTOM_LIVE_OFFSET_MS = 6 * 60_000;
+const CUSTOM_DETECTED_OFFSET_MS = 4 * 60_000;
 
-export const buildCustomActivities = (scenario: PreviewScenario, live: boolean, now: number): CustomActivitiesState => {
+export const DETECTED_HOST = "watchparty.netflix.com";
+export const DETECTED_TAB_ID = 42;
+
+export const detectedActivation = (now: number): number => now - CUSTOM_DETECTED_OFFSET_MS;
+
+export const buildCustomActivities = (scenario: PreviewScenario, custom: PreviewCustom, now: number): CustomActivitiesState => {
   if (scenario === "empty") return {
     items: [],
     activeId: null,
@@ -256,6 +262,7 @@ export const buildCustomActivities = (scenario: PreviewScenario, live: boolean, 
         minutes: 25
       },
       buttons: [],
+      detectionUrl: DETECTED_HOST,
       createdAt: now - 3 * DAY_MS,
       updatedAt: now - DAY_MS
     },
@@ -284,13 +291,14 @@ export const buildCustomActivities = (scenario: PreviewScenario, live: boolean, 
           url: "https://github.com/nowly-presence"
         }
       ],
+      detectionUrl: "",
       createdAt: now - 10 * DAY_MS,
       updatedAt: now - 10 * DAY_MS
     }
   ];
   return {
     items,
-    activeId: live ? items[0].id : null,
-    activatedAt: live ? now - CUSTOM_LIVE_OFFSET_MS : null
+    activeId: custom === "live" ? items[0].id : null,
+    activatedAt: custom === "live" ? now - CUSTOM_LIVE_OFFSET_MS : null
   };
 };

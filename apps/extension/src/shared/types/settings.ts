@@ -25,5 +25,6 @@ export type ExtensionSettings = {
   activitySelectionMode?: ActivitySelectionMode;
   activityPriorityOrder?: string[];
   dockLayout?: string[][];
+  hiddenDockTabs?: string[];
   preserveSiteTimer?: boolean;
 };

@@ -22,6 +22,10 @@ export const LegalPrompt = ({ state, returning, confirm }: {
   const needsTos = pending.includes("tos");
   const needsPrivacy = pending.includes("privacy");
   const allowed = (!needsTos || tos) && (!needsPrivacy || privacy);
+
+  if (!state.dates) return null;
+
+  const dates = state.dates;
   const submit = async () => {
     if (!allowed || busy) return;
 
@@ -30,7 +34,7 @@ export const LegalPrompt = ({ state, returning, confirm }: {
 
     try {
       const result = await confirm({
-        versions: Object.fromEntries(pending.map((id) => [id, state.manifest.documents[id].version])),
+        dates: Object.fromEntries(pending.map((id) => [id, dates[id]])),
         acceptTos: tos,
         acknowledgePrivacy: privacy
       });
@@ -65,7 +69,7 @@ export const LegalPrompt = ({ state, returning, confirm }: {
             <LegalDocumentCard
               key={id}
               id={id}
-              document={state.manifest.documents[id]}
+              updatedAt={dates[id]}
               checked={id === "tos" ? tos : privacy}
               onChange={id === "tos" ? setTos : setPrivacy}
               disabled={busy}

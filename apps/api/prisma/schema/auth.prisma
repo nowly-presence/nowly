@@ -1,4 +1,4 @@
-// Better Auth core tables, shared by apps/insights, apps/web and the extension
+// Better Auth core tables, shared by apps/web and the extension
 // (through ExtensionToken).
 model User {
   id            String   @id
@@ -17,6 +17,7 @@ model User {
   syncDocuments   SyncDocument[]
   devices         Device[]
   presenceLikes   PresenceLike[]
+  activityPublications ActivityPublication[]
 
   @@map("users")
 }

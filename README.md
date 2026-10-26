@@ -40,8 +40,7 @@ The [main repository](https://github.com/nowly-presence/nowly) is a pnpm workspa
 | `apps/extension` | Browser extension and presence runtime |
 | `apps/native` | Local host that communicates with Discord |
 | `apps/api` | API for the website and optional services |
-| `apps/insights` | Internal analytics dashboard |
-| `packages/ui`, `packages/locales`, `packages/shared`, `packages/env`, `packages/analytics` | Shared workspace code |
+| `packages/ui`, `packages/locales`, `packages/shared`, `packages/env`, `packages/telemetry` | Shared workspace code |
 | [`packages/presences`](https://github.com/nowly-presence/presences) | Community presence definitions (MIT) |
 | [`packages/sdk`](https://github.com/nowly-presence/sdk) | Public presence APIs and types (MIT) |
 | [`packages/cli`](https://github.com/nowly-presence/cli) | Presence authoring, validation and local testing (MIT) |

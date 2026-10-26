@@ -167,48 +167,6 @@ export const getLikeCount = async (slug: string): Promise<number> => {
   });
 };
 
-export const incrementInstalls = async (slug: string, deviceId?: string, version?: string): Promise<number> => {
-  const resolvedDeviceId = deviceId?.trim() || `anonymous-install-${crypto.randomUUID()}`;
-  const prisma = getPrisma();
-  await prisma.device.upsert({
-    where: { deviceId: resolvedDeviceId },
-    create: { deviceId: resolvedDeviceId },
-    update: { lastSeenAt: new Date() }
-  });
-  await prisma.devicePresence.upsert({
-    where: {
-      deviceId_slug: {
-        deviceId: resolvedDeviceId,
-        slug
-      }
-    },
-    create: {
-      deviceId: resolvedDeviceId,
-      slug,
-      installedVersion: version,
-      installed: true,
-      enabled: true
-    },
-    update: {
-      installedVersion: version,
-      installed: true,
-      enabled: true,
-      updatedAt: new Date(),
-      uninstalledAt: null
-    }
-  });
-  return prisma.devicePresence.count({
-    where: {
-      slug,
-      installed: true
-    }
-  });
-};
-
-export const setActiveUsers = async (_slug: string, _count: number): Promise<void> => {
-  return;
-};
-
 const toDate = (value?: Date | string): Date => (value instanceof Date ? value : value ? new Date(value) : new Date());
 
 export const setUpdated = async (slug: string, date?: Date | string): Promise<void> => {
@@ -244,19 +202,26 @@ export const setVersion = async (slug: string, version: string, publishedAt?: Da
   });
 };
 
-export const getVersion = async (slug: string): Promise<string | null> => {
-  return (
-    (
-      await getPrisma().presence.findUnique({
-        where: { slug },
-        select: { version: true }
-      })
-    )?.version ?? null
-  );
-};
-
 export const addVersion = async (slug: string, entry: VersionEntry): Promise<void> => {
   const prisma = getPrisma();
+  const publication = {
+    changelog: entry.changelog,
+    author: entry.author,
+    authorGithub: entry.authorGithub,
+    releaseAuthor: entry.releaseAuthor,
+    releaseContributors: entry.releaseContributors,
+    pr: entry.pr,
+    source: entry.source,
+    commitSha: entry.commitSha,
+    changedFiles: entry.changedFiles,
+    bundleSizeBytes: entry.bundleSizeBytes,
+    bundleSizeLabel: entry.bundleSizeLabel,
+    bundleSha256: entry.bundleSha256,
+    versionType: entry.versionType,
+    aiGeneratedChangelog: entry.aiGeneratedChangelog,
+    createdAt: entry.createdAt ? new Date(entry.createdAt) : new Date(entry.timestamp),
+    timestamp: new Date(entry.timestamp)
+  };
   await prisma.presence.upsert({
     where: { slug },
     create: {
@@ -275,41 +240,9 @@ export const addVersion = async (slug: string, entry: VersionEntry): Promise<voi
     create: {
       slug,
       version: entry.version,
-      changelog: entry.changelog,
-      author: entry.author,
-      authorGithub: entry.authorGithub,
-      releaseAuthor: entry.releaseAuthor,
-      releaseContributors: entry.releaseContributors,
-      pr: entry.pr,
-      source: entry.source,
-      commitSha: entry.commitSha,
-      changedFiles: entry.changedFiles,
-      bundleSizeBytes: entry.bundleSizeBytes,
-      bundleSizeLabel: entry.bundleSizeLabel,
-      bundleSha256: entry.bundleSha256,
-      versionType: entry.versionType,
-      aiGeneratedChangelog: entry.aiGeneratedChangelog,
-      createdAt: entry.createdAt ? new Date(entry.createdAt) : new Date(entry.timestamp),
-      timestamp: new Date(entry.timestamp)
+      ...publication
     },
-    update: {
-      changelog: entry.changelog,
-      author: entry.author,
-      authorGithub: entry.authorGithub,
-      releaseAuthor: entry.releaseAuthor,
-      releaseContributors: entry.releaseContributors,
-      pr: entry.pr,
-      source: entry.source,
-      commitSha: entry.commitSha,
-      changedFiles: entry.changedFiles,
-      bundleSizeBytes: entry.bundleSizeBytes,
-      bundleSizeLabel: entry.bundleSizeLabel,
-      bundleSha256: entry.bundleSha256,
-      versionType: entry.versionType,
-      aiGeneratedChangelog: entry.aiGeneratedChangelog,
-      createdAt: entry.createdAt ? new Date(entry.createdAt) : new Date(entry.timestamp),
-      timestamp: new Date(entry.timestamp)
-    }
+    update: publication
   });
 };
 

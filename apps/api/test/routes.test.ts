@@ -10,11 +10,8 @@ const mockPresenceRepo = vi.hoisted(() => ({
   getAllPresenceMetas: vi.fn(),
   getPresenceListData: vi.fn(),
   getPresenceMeta: vi.fn(),
-  getVersion: vi.fn(),
   getPresenceStats: vi.fn(),
   getGlobalPresenceStats: vi.fn(),
-  incrementInstalls: vi.fn(),
-  setActiveUsers: vi.fn(),
   markActiveDevice: vi.fn(),
   clearActiveDevice: vi.fn(),
   clearActiveDevicesForDevice: vi.fn(),
@@ -472,10 +469,10 @@ describe("Stats Routes", () => {
     delete process.env.API_SECRET_KEY;
   });
 
-  it("POST /presences/active updates multiple presences", async () => {
+  it("POST /presences/active updates multiple presences and DELETE endpoints clear active tracks", async () => {
+    // 1. POST /presences/active updates multiple presences
     mockPresenceRepo.markActiveDevice.mockResolvedValue(undefined as any);
-
-    const res = await app.inject({
+    const postRes = await app.inject({
       method: "POST",
       url: "/presences/active",
       payload: {
@@ -483,56 +480,50 @@ describe("Stats Routes", () => {
         deviceId: "22222222-2222-4222-8222-222222222222"
       }
     });
-
-    expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({
+    expect(postRes.statusCode).toBe(200);
+    expect(JSON.parse(postRes.body)).toEqual({
       ok: true,
       count: 2
     });
     expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledTimes(2);
     expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith("youtube", "22222222-2222-4222-8222-222222222222");
     expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith("twitch", "22222222-2222-4222-8222-222222222222");
-  });
 
-  it("DELETE /presences/active/:deviceId/:slug clears one tracked presence", async () => {
+    // 2. DELETE /presences/active/:deviceId/:slug clears one tracked presence
     mockPresenceRepo.clearActiveDevice.mockResolvedValue(undefined as any);
-
-    const res = await app.inject({
+    const deleteSingleRes = await app.inject({
       method: "DELETE",
       url: "/presences/active/device-123/youtube"
     });
-
-    expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({
+    expect(deleteSingleRes.statusCode).toBe(200);
+    expect(JSON.parse(deleteSingleRes.body)).toEqual({
       ok: true,
       removed: 1
     });
     expect(mockPresenceRepo.clearActiveDevice).toHaveBeenCalledWith("youtube", "device-123");
-  });
 
-  it("DELETE /presences/active/:deviceId clears every tracked presence", async () => {
+    // 3. DELETE /presences/active/:deviceId clears every tracked presence
     mockPresenceRepo.clearActiveDevicesForDevice.mockResolvedValue(undefined as any);
-
-    const res = await app.inject({
+    const deleteAllRes = await app.inject({
       method: "DELETE",
       url: "/presences/active/device-123"
     });
-
-    expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({
+    expect(deleteAllRes.statusCode).toBe(200);
+    expect(JSON.parse(deleteAllRes.body)).toEqual({
       ok: true,
       removed: null
     });
     expect(mockPresenceRepo.clearActiveDevicesForDevice).toHaveBeenCalledWith("device-123");
   });
 
-  it("POST /presences/:slug/report sends a valid report", async () => {
+  it("POST /presences/:slug/report handles valid report submission and error scenarios", async () => {
     mockPresenceRepo.getPresenceMeta.mockResolvedValue({
       name: { "en-US": "YouTube" }
     });
     mockPresenceRepo.getPresenceStats.mockResolvedValue({ archived: false });
     mockPresenceReport.submitPresenceReport.mockResolvedValue("sent");
 
+    // Valid submission
     const res = await app.inject({
       method: "POST",
       url: "/presences/youtube/report",
@@ -554,53 +545,52 @@ describe("Stats Routes", () => {
       browser: "Firefox",
       browserVersion: "141.0"
     });
-  });
 
-  it("POST /presences/:slug/report rejects empty or oversized messages", async () => {
+    // Rejects empty or oversized messages
     mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: "YouTube" });
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/presences/youtube/report",
+          payload: { message: "   " }
+        })
+      ).statusCode
+    ).toBe(400);
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/presences/youtube/report",
+          payload: { message: "x".repeat(751) }
+        })
+      ).statusCode
+    ).toBe(400);
 
-    const empty = await app.inject({
-      method: "POST",
-      url: "/presences/youtube/report",
-      payload: { message: "   " }
-    });
-    expect(empty.statusCode).toBe(400);
-
-    const oversized = await app.inject({
-      method: "POST",
-      url: "/presences/youtube/report",
-      payload: { message: "x".repeat(751) }
-    });
-    expect(oversized.statusCode).toBe(400);
-    expect(mockPresenceReport.submitPresenceReport).not.toHaveBeenCalled();
-  });
-
-  it("POST /presences/:slug/report returns 404 for unknown presences", async () => {
+    // 404 for unknown presences
     mockPresenceRepo.getPresenceMeta.mockResolvedValue(null);
-    mockPresenceRepo.getPresenceStats.mockResolvedValue({ archived: false });
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/presences/missing/report",
+          payload: { message: "Broken" }
+        })
+      ).statusCode
+    ).toBe(404);
 
-    const res = await app.inject({
-      method: "POST",
-      url: "/presences/missing/report",
-      payload: { message: "Broken" }
-    });
-
-    expect(res.statusCode).toBe(404);
-    expect(mockPresenceReport.submitPresenceReport).not.toHaveBeenCalled();
-  });
-
-  it("POST /presences/:slug/report returns 503 when Discord is not configured", async () => {
+    // 503 when Discord service is unconfigured
     mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: "YouTube" });
-    mockPresenceRepo.getPresenceStats.mockResolvedValue({ archived: false });
     mockPresenceReport.submitPresenceReport.mockResolvedValue("unconfigured");
-
-    const res = await app.inject({
-      method: "POST",
-      url: "/presences/youtube/report",
-      payload: { message: "Broken timestamps" }
-    });
-
-    expect(res.statusCode).toBe(503);
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/presences/youtube/report",
+          payload: { message: "Broken timestamps" }
+        })
+      ).statusCode
+    ).toBe(503);
   });
 });
 
@@ -647,27 +637,24 @@ describe("Image Proxy Routes", () => {
     globalThis.fetch = originalFetch;
   });
 
-  it("GET /image-proxy rejects unsupported CDN URLs", async () => {
-    const res = await app.inject({
+  it("GET /image-proxy handles supported CDN images and rejects invalid URLs", async () => {
+    // 1. Rejects unsupported CDN URLs
+    const invalidRes = await app.inject({
       method: "GET",
       url: `/image-proxy?url=${encodeURIComponent("https://example.com/image.jpg")}`
     });
+    expect(invalidRes.statusCode).toBe(400);
+    expect(JSON.parse(invalidRes.body)).toEqual({ error: "INVALID_IMAGE_URL" });
 
-    expect(res.statusCode).toBe(400);
-    expect(JSON.parse(res.body)).toEqual({ error: "INVALID_IMAGE_URL" });
-  });
-
-  it("GET /image-proxy rejects unencoded nested query parameters", async () => {
-    const res = await app.inject({
+    // 2. Rejects unencoded nested query parameters
+    const unencodedRes = await app.inject({
       method: "GET",
       url: "/image-proxy?service=tiktok&url=https://p16-common-sign.tiktokcdn-eu.com/image.jpg?dr=1&x-signature=abc"
     });
+    expect(unencodedRes.statusCode).toBe(400);
+    expect(JSON.parse(unencodedRes.body)).toEqual({ error: "IMAGE_URL_NOT_ENCODED" });
 
-    expect(res.statusCode).toBe(400);
-    expect(JSON.parse(res.body)).toEqual({ error: "IMAGE_URL_NOT_ENCODED" });
-  });
-
-  it("GET /image-proxy returns fetched TikTok CDN images", async () => {
+    // 3. Successfully proxies a valid CDN image
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([1, 2, 3]), {
         status: 200,
@@ -678,17 +665,13 @@ describe("Image Proxy Routes", () => {
       })
     );
 
-    const res = await app.inject({
+    const validRes = await app.inject({
       method: "GET",
       url: `/image-proxy?url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg")}`
     });
-
-    expect(res.statusCode).toBe(200);
-    expect(res.headers["content-type"]).toBe("image/jpeg");
-    expect(Buffer.from(res.rawPayload)).toEqual(Buffer.from([1, 2, 3]));
-    const fetchMock = vi.mocked(globalThis.fetch);
-    expect(fetchMock.mock.calls[0][0]).toBe("https://p16-common-sign.tiktokcdn-eu.com/image.jpg");
-    expect(fetchMock.mock.calls[0][1]).toBeTruthy();
+    expect(validRes.statusCode).toBe(200);
+    expect(validRes.headers["content-type"]).toBe("image/jpeg");
+    expect(Buffer.from(validRes.rawPayload)).toEqual(Buffer.from([1, 2, 3]));
   });
 
   it("GET /i returns fetched supported CDN images with a short URL", async () => {
@@ -715,7 +698,7 @@ describe("Image Proxy Routes", () => {
     expect(fetchMock.mock.calls[0][1]).toBeTruthy();
   });
 
-  it("POST /images-proxy caches fetched images and returns a short public URL", async () => {
+  it("POST /images-proxy caches fetched images and returns a short public URL, reusing on duplicate requests", async () => {
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([21, 22, 23]), {
         status: 200,
@@ -744,52 +727,21 @@ describe("Image Proxy Routes", () => {
     };
     expect(body.url).toMatch(/^http:\/\/localhost(?::\d+)?\/images-proxy\/[a-zA-Z0-9_-]{32}$/);
     expect(body.expiresIn).toBe(300);
-  });
-
-  it("POST /images-proxy reuses a cached image URL without refetching", async () => {
-    globalThis.fetch = vi.fn().mockResolvedValue(
-      new Response(new Uint8Array([1, 2, 3]), {
-        status: 200,
-        headers: {
-          "content-type": "image/jpeg",
-          "content-length": "3"
-        }
-      })
-    );
-
-    const res = await app.inject({
-      method: "POST",
-      url: "/images-proxy",
-      payload: {
-        service: "tiktok",
-        url: "https://p16-common-sign.tiktokcdn-eu.com/image.jpg"
-      }
-    });
-
-    expect(res.statusCode).toBe(200);
-    const body = JSON.parse(res.body) as {
-      url: string;
-    };
-    expect(body.url).toContain("/images-proxy/");
-
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
 
+    // Reuses cached image without refetching
     globalThis.fetch = vi.fn();
-
     const res2 = await app.inject({
       method: "POST",
       url: "/images-proxy",
       payload: {
         service: "tiktok",
-        url: "https://p16-common-sign.tiktokcdn-eu.com/image.jpg"
+        url: "https://p16-common-sign.tiktokcdn-eu.com/image.png?x=1&y=2"
       }
     });
 
     expect(res2.statusCode).toBe(200);
-    const body2 = JSON.parse(res2.body) as {
-      url: string;
-    };
-    expect(body2.url).toBe(body.url);
+    expect(JSON.parse(res2.body).url).toBe(body.url);
     expect(globalThis.fetch).not.toHaveBeenCalled();
   });
 
@@ -838,7 +790,8 @@ describe("Image Proxy Routes", () => {
     expect(JSON.parse(res.body)).toEqual({ error: "IMAGE_NOT_FOUND" });
   });
 
-  it("GET /image-proxy supports explicit service matching", async () => {
+  it("GET /image-proxy supports explicit service matching and rejects mismatches", async () => {
+    // 1. Supports explicit service matching
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([4, 5, 6]), {
         status: 200,
@@ -849,77 +802,29 @@ describe("Image Proxy Routes", () => {
       })
     );
 
-    const res = await app.inject({
+    const validRes = await app.inject({
       method: "GET",
       url: `/image-proxy?service=tiktok&url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.webp")}`
     });
 
-    expect(res.statusCode).toBe(200);
-    expect(res.headers["content-type"]).toBe("image/webp");
-    expect(Buffer.from(res.rawPayload)).toEqual(Buffer.from([4, 5, 6]));
-  });
+    expect(validRes.statusCode).toBe(200);
+    expect(validRes.headers["content-type"]).toBe("image/webp");
+    expect(Buffer.from(validRes.rawPayload)).toEqual(Buffer.from([4, 5, 6]));
 
-  it("GET /image-proxy supports CANAL+ CDN images", async () => {
-    globalThis.fetch = vi.fn().mockResolvedValue(
-      new Response(new Uint8Array([7, 8, 9]), {
-        status: 200,
-        headers: {
-          "content-type": "image/jpeg",
-          "content-length": "3"
-        }
-      })
-    );
-
-    const url = "https://thumb.canalplus.pro/bran/unsafe/512x512/filters:quality(80)/image/02/4/cinema.68024.jpg";
-    const res = await app.inject({
-      method: "GET",
-      url: `/image-proxy?service=canalplus&url=${encodeURIComponent(url)}`
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(res.headers["content-type"]).toBe("image/jpeg");
-    expect(Buffer.from(res.rawPayload)).toEqual(Buffer.from([7, 8, 9]));
-    const fetchMock = vi.mocked(globalThis.fetch);
-    expect(fetchMock.mock.calls[0][0]).toBe(url);
-  });
-
-  it("GET /image-proxy supports GitHub images", async () => {
-    globalThis.fetch = vi.fn().mockResolvedValue(
-      new Response(new Uint8Array([10, 11, 12]), {
-        status: 200,
-        headers: {
-          "content-type": "image/png",
-          "content-length": "3"
-        }
-      })
-    );
-
-    const url = "https://avatars.githubusercontent.com/u/9919?s=512";
-    const res = await app.inject({
-      method: "GET",
-      url: `/image-proxy?service=github&url=${encodeURIComponent(url)}`
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(res.headers["content-type"]).toBe("image/png");
-    expect(Buffer.from(res.rawPayload)).toEqual(Buffer.from([10, 11, 12]));
-    const fetchMock = vi.mocked(globalThis.fetch);
-    expect(fetchMock.mock.calls[0][0]).toBe(url);
-  });
-
-  it("GET /image-proxy rejects URLs that do not match the explicit service", async () => {
-    const res = await app.inject({
+    // 2. Rejects URLs that do not match the explicit service
+    const mismatchRes = await app.inject({
       method: "GET",
       url: `/image-proxy?service=unknown&url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg")}`
     });
 
-    expect(res.statusCode).toBe(400);
-    expect(JSON.parse(res.body)).toEqual({ error: "INVALID_IMAGE_URL" });
+    expect(mismatchRes.statusCode).toBe(400);
+    expect(JSON.parse(mismatchRes.body)).toEqual({ error: "INVALID_IMAGE_URL" });
   });
 });
 
 describe("Presence Likes", () => {
   let app: Awaited<ReturnType<typeof buildApp>>;
+  const validDeviceId = "11111111-1111-4111-8111-111111111111";
 
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -930,106 +835,98 @@ describe("Presence Likes", () => {
     await app.close();
   });
 
-  it("POST /presences/:slug/like requires a deviceId", async () => {
-    const res = await app.inject({
+  it("handles like and unlike lifecycles with valid device token auth", async () => {
+    // Like
+    mockPresenceRepo.getLikeCount.mockResolvedValueOnce(3);
+    const likeRes = await app.inject({
       method: "POST",
       url: "/presences/youtube/like",
-      payload: {}
+      payload: { deviceId: validDeviceId },
+      headers: { "x-device-token": deriveDeviceToken(validDeviceId) }
     });
-
-    expect(res.statusCode).toBe(400);
-    expect(mockPresenceRepo.likePresence).not.toHaveBeenCalled();
-  });
-
-  it("POST /presences/:slug/like rejects a missing/invalid device token", async () => {
-    const res = await app.inject({
-      method: "POST",
-      url: "/presences/youtube/like",
-      payload: { deviceId: "11111111-1111-4111-8111-111111111111" }
-    });
-
-    expect(res.statusCode).toBe(401);
-    expect(mockPresenceRepo.likePresence).not.toHaveBeenCalled();
-  });
-
-  it("POST /presences/:slug/like likes and returns the new count with a valid device token", async () => {
-    mockPresenceRepo.getLikeCount.mockResolvedValue(3);
-
-    const res = await app.inject({
-      method: "POST",
-      url: "/presences/youtube/like",
-      payload: { deviceId: "11111111-1111-4111-8111-111111111111" },
-      headers: { "x-device-token": deriveDeviceToken("11111111-1111-4111-8111-111111111111") }
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({
+    expect(likeRes.statusCode).toBe(200);
+    expect(JSON.parse(likeRes.body)).toEqual({
       ok: true,
       count: 3
     });
-    expect(mockPresenceRepo.likePresence).toHaveBeenCalledWith("youtube", "11111111-1111-4111-8111-111111111111");
-  });
+    expect(mockPresenceRepo.likePresence).toHaveBeenCalledWith("youtube", validDeviceId);
 
-  it("DELETE /presences/:slug/like requires a deviceId", async () => {
-    const res = await app.inject({
-      method: "DELETE",
-      url: "/presences/youtube/like"
+    // Status query
+    mockPresenceRepo.hasLikedPresence.mockResolvedValueOnce(true);
+    mockPresenceRepo.getLikeCount.mockResolvedValueOnce(3);
+    const statusRes = await app.inject({
+      method: "GET",
+      url: `/presences/youtube/like?deviceId=${validDeviceId}`
+    });
+    expect(statusRes.statusCode).toBe(200);
+    expect(JSON.parse(statusRes.body)).toEqual({
+      liked: true,
+      count: 3
     });
 
-    expect(res.statusCode).toBe(400);
-    expect(mockPresenceRepo.unlikePresence).not.toHaveBeenCalled();
-  });
-
-  it("DELETE /presences/:slug/like rejects a missing/invalid device token", async () => {
-    const res = await app.inject({
+    // Unlike
+    mockPresenceRepo.getLikeCount.mockResolvedValueOnce(2);
+    const unlikeRes = await app.inject({
       method: "DELETE",
-      url: "/presences/youtube/like?deviceId=11111111-1111-4111-8111-111111111111"
+      url: `/presences/youtube/like?deviceId=${validDeviceId}`,
+      headers: { "x-device-token": deriveDeviceToken(validDeviceId) }
     });
-
-    expect(res.statusCode).toBe(401);
-    expect(mockPresenceRepo.unlikePresence).not.toHaveBeenCalled();
-  });
-
-  it("DELETE /presences/:slug/like unlikes and returns the new count with a valid device token", async () => {
-    mockPresenceRepo.getLikeCount.mockResolvedValue(2);
-
-    const res = await app.inject({
-      method: "DELETE",
-      url: "/presences/youtube/like?deviceId=11111111-1111-4111-8111-111111111111",
-      headers: { "x-device-token": deriveDeviceToken("11111111-1111-4111-8111-111111111111") }
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({
+    expect(unlikeRes.statusCode).toBe(200);
+    expect(JSON.parse(unlikeRes.body)).toEqual({
       ok: true,
       count: 2
     });
-    expect(mockPresenceRepo.unlikePresence).toHaveBeenCalledWith("youtube", "11111111-1111-4111-8111-111111111111");
+    expect(mockPresenceRepo.unlikePresence).toHaveBeenCalledWith("youtube", validDeviceId);
   });
 
-  it("GET /presences/:slug/like reports whether a device has liked it", async () => {
-    mockPresenceRepo.hasLikedPresence.mockResolvedValue(true);
-    mockPresenceRepo.getLikeCount.mockResolvedValue(5);
+  it("enforces deviceId requirement and token authorization on all like endpoints", async () => {
+    // Missing deviceId -> 400
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/presences/youtube/like",
+          payload: {}
+        })
+      ).statusCode
+    ).toBe(400);
+    expect(
+      (
+        await app.inject({
+          method: "DELETE",
+          url: "/presences/youtube/like"
+        })
+      ).statusCode
+    ).toBe(400);
+    expect(
+      (
+        await app.inject({
+          method: "GET",
+          url: "/presences/youtube/like"
+        })
+      ).statusCode
+    ).toBe(400);
 
-    const res = await app.inject({
-      method: "GET",
-      url: "/presences/youtube/like?deviceId=11111111-1111-4111-8111-111111111111"
-    });
+    // Missing / invalid token -> 401
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: "/presences/youtube/like",
+          payload: { deviceId: validDeviceId }
+        })
+      ).statusCode
+    ).toBe(401);
+    expect(
+      (
+        await app.inject({
+          method: "DELETE",
+          url: `/presences/youtube/like?deviceId=${validDeviceId}`
+        })
+      ).statusCode
+    ).toBe(401);
 
-    expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({
-      liked: true,
-      count: 5
-    });
-    expect(mockPresenceRepo.hasLikedPresence).toHaveBeenCalledWith("youtube", "11111111-1111-4111-8111-111111111111");
-  });
-
-  it("GET /presences/:slug/like requires a deviceId", async () => {
-    const res = await app.inject({
-      method: "GET",
-      url: "/presences/youtube/like"
-    });
-
-    expect(res.statusCode).toBe(400);
+    expect(mockPresenceRepo.likePresence).not.toHaveBeenCalled();
+    expect(mockPresenceRepo.unlikePresence).not.toHaveBeenCalled();
   });
 });

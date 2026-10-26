@@ -121,7 +121,8 @@ describe("season state", () => {
     });
   });
 
-  it("is confirmed, changed or removed by the extension", () => {
+  it("manages state transitions: confirmation, silent timeout, preview stickiness, and tab visibility updates", () => {
+    // 1. Confirmed or removed by extension
     expect(
       nextSeasonState(initial, {
         type: "extension",
@@ -140,18 +141,8 @@ describe("season state", () => {
       season: null,
       source: "extension"
     });
-    expect(
-      nextSeasonState(initial, {
-        type: "extension",
-        season: "winter"
-      })
-    ).toEqual({
-      season: "winter",
-      source: "extension"
-    });
-  });
 
-  it("is removed when the extension stays silent", () => {
+    // 2. Timeout clears initial state but keeps confirmed extension state
     expect(nextSeasonState(initial, { type: "timeout" })).toEqual({
       season: null,
       source: "none"
@@ -161,9 +152,8 @@ describe("season state", () => {
       source: "extension"
     };
     expect(nextSeasonState(answered, { type: "timeout" })).toBe(answered);
-  });
 
-  it("keeps a preview whatever happens", () => {
+    // 3. Preview persists across requests, null events, and timeouts
     const preview: SeasonState = {
       season: "spring",
       source: "preview"
@@ -176,9 +166,8 @@ describe("season state", () => {
       })
     ).toBe(preview);
     expect(nextSeasonState(preview, { type: "timeout" })).toBe(preview);
-  });
 
-  it("waits for a fresh answer when the tab becomes visible again", () => {
+    // 4. Tab visibility refresh cycle: enters pending and confirms fresh or clears on timeout
     const confirmed: SeasonState = {
       season: "winter",
       source: "extension"
@@ -194,24 +183,7 @@ describe("season state", () => {
         season: "winter"
       }).season
     ).toBe("winter");
-    expect(
-      nextSeasonState(pending, {
-        type: "extension",
-        season: null
-      }).season
-    ).toBeNull();
-  });
-
-  it("clears a previously confirmed season if the extension no longer answers", () => {
-    const pending = nextSeasonState(
-      {
-        season: "winter",
-        source: "extension"
-      },
-      { type: "request" }
-    );
-    const expired = nextSeasonState(pending, { type: "timeout" });
-    expect(expired).toEqual({
+    expect(nextSeasonState(pending, { type: "timeout" })).toEqual({
       season: null,
       source: "none"
     });

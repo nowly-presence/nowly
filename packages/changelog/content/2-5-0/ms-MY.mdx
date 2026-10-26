@@ -1,0 +1,72 @@
+---
+title: 2.5.0
+date: 2026-10-28
+description: Pengesanan dan perkongsian aktiviti tersuai, pengumuman, paparan Discord dan privasi.
+---
+
+> Keluaran dijadualkan pada 28 Oktober 2026. Ketersediaan di kedai pelayar belum disahkan.
+
+## Baharu
+
+### Pengesanan aktiviti tersuai secara automatik
+
+- Tambahkan pautan pengesanan pilihan pada aktiviti tersuai untuk memilihnya secara automatik apabila tab aktif dalam tetingkap pelayar yang mendapat fokus sepadan. Pemilihan automatik tamat apabila anda meninggalkan halaman yang sepadan.
+- Gunakan domain atau laluan, dengan `*.example.com` untuk subdomain dan `*` di hujung bagi laluan. Biarkan medan kosong untuk terus menggunakan aktiviti secara manual.
+- Aktiviti tersuai yang diaktifkan secara manual mengatasi pengesanan automatik.
+- Jika beberapa aktiviti sepadan, aktiviti yang paling baru dikemas kini akan dipilih.
+- Pautan pengesanan disertakan apabila aktiviti tersuai dieksport dan diimport. Fail lama tanpa medan ini masih disokong.
+
+### Pautan awam aktiviti tersuai
+
+- Terbitkan pautan awam dengan nama dan avatar pengarang daripada akaun Discord anda. Versi yang disimpan menjadi awam, bukan draf yang belum disimpan.
+- Lihat pratonton sebelum menambah salinan bebas secara jelas. Salinan baharu tidak aktif dan pengesanan automatik dimatikan.
+- Kekalkan pautan yang sama apabila anda mengemas kini atau menarik balik penerbitannya secara jelas. Salinan penerima kekal dipasang dan tidak dikemas kini secara automatik.
+- Penerima boleh mengekalkan perubahan setempat atau menggantikannya selepas menyemak kemas kini. Editor yang terbuka menghalang penggantian untuk melindungi kerja yang belum disimpan.
+- Sebelum memadam aktiviti sumber, tarik balik secara jelas sebarang pautan awam atau penerbitan yang belum selesai, kemudian semak dalam talian dengan pelayan asal.
+- Selepas akaun dipadam, ketiadaan penerbitannya yang disahkan membolehkan pemadaman setempat tanpa akaun lama. Jika semakan tidak tersedia atau tidak muktamad, sumber dikekalkan.
+
+### Pengumuman dan nota keluaran
+
+- Baca pengumuman dan nota keluaran yang diterbitkan dalam tab Berita, kemudian buka entri untuk melihat butiran penuh. Fail log perubahan yang diterbitkan dimasukkan secara automatik; draf tanpa tarikh, bertarikh masa hadapan atau ditandai belum diterbitkan tidak dimasukkan.
+- Pengumuman menggunakan bahasa antara muka, dengan bahasa gantian apabila terjemahan tiada. Nota keluaran menggunakan bahasa Inggeris sebagai gantian.
+- Notis disematkan muncul di atas pengepala Aktiviti. Amaran menggunakan kuning, jingga atau merah mengikut tahap; penyelenggaraan menggunakan warna utama tema. Jalur membuka Berita dan tiada butang untuk menutupnya.
+- Anggaran tamat penyelenggaraan dipaparkan sebagai tarikh, bukan kira detik atau janji pemulihan. Pada waktu itu, jalur hilang tetapi notis masih boleh dibaca melainkan mempunyai tarikh luput berasingan.
+- Suapan dikemas kini secara automatik, menyimpan salinan sah terakhir untuk kegunaan luar talian dan menyimpan status bacaan pada peranti anda.
+
+### Paparan aktiviti Discord
+
+- Presence boleh melampirkan pautan HTTPS awam pada teks butiran dan status melalui `detailsUrl` dan `stateUrl`, berasingan daripada butang aktiviti. Pautan tidak sah atau tanpa teks yang sepadan diabaikan.
+- Presence boleh memilih teks status ringkas Discord melalui `statusDisplayType`: nama aktiviti, status atau butiran. Kandungan kad aktiviti tidak berubah.
+
+Medan ini memerlukan versi SDK, sambungan dan hos natif yang serasi. Versi lama mengabaikannya. Ia tidak menambah pemilih paparan baharu pada editor aktiviti tersuai.
+
+## Penambahbaikan dan pembetulan
+
+- Editor aktiviti tersuai menunjukkan bilangan butang pautan yang masih boleh ditambah.
+- Pratonton tidak lagi mengulang nama aktiviti tanpa perlu. Petua alat membolehkan anda membaca nama penuh.
+- Bahagian pengesanan mempunyai jarak yang lebih jelas.
+- Sembunyikan tab Pustaka, Tersuai atau Berita apabila tidak diperlukan. Aktiviti dan Tetapan kekal tersedia. Pulihkan susunan lalai dalam Tetapan. Menyembunyikan Berita tidak menyembunyikan notis disematkan pada Aktiviti.
+- Bar kemajuan video, termasuk YouTube, kini meningkat mengikut main balik, manakala kira detik aktiviti tersuai terus menunjukkan baki masa.
+- Dalam «Sokong Nowly», salin alamat Bitcoin, Ethereum atau Solana dengan satu klik dan terima pengesahan selepas menyalin.
+- Apabila sekurang-kurangnya dua presence yang dipasang mempunyai kemas kini, kemas kini semuanya dalam satu tindakan. Kemas kini dilakukan satu demi satu.
+- Butang pada kad aktiviti tidak aktif kini muat dalam panel sisi yang sempit.
+- Kemas kini, pemasangan semula dan pengalihan disusun mengikut presence supaya kemas kini lama tidak memulihkan aktiviti yang baru dialih keluar.
+- Pengaktifan presence hanya disimpan selepas skrip berjaya didaftarkan. Kegagalan pengaktifan dan operasi pukal dilaporkan dan tidak dipaparkan sebagai berjaya.
+- Label kebenaran skrip pengguna menerangkan dengan lebih jelas perkara yang perlu didayakan dalam pelayar.
+
+## Privasi dan platform
+
+- Peristiwa produk Umami pilihan menggantikan statistik Insights lama. Persetujuan laman dan sambungan adalah berasingan; peristiwa dihantar melalui API tanpa pengecam pelawat kekal atau kandungan pelayaran dan aktiviti.
+- Halaman, titik akhir dan model statistik Insights lama serta fungsi kempen telah dialih keluar. Keluaran ini tidak mendayakan skrip statistik global dan rakaman sesi lama.
+- Pengesahan undang-undang kini mengikut tarikh kemas kini sebenar terma dan dasar privasi, bukan nombor versi dalaman. Rekod angka lama memerlukan pengesahan semula; tarikh dokumen dalam cache masih boleh digunakan luar talian.
+- Halaman nyahpasang membezakan pilihan menyimpan atau memadam data fungsi peranti daripada statistik pilihan. Membukanya hanya menghantar peristiwa produk dengan persetujuan statistik laman.
+- Antara muka senarai menunggu dan sokongan ChromeOS telah dialih keluar. Sambungan kekal untuk Chrome dan Firefox, dengan hos natif pada Windows, macOS dan Linux.
+
+## Laman, dokumentasi dan penyelenggaraan
+
+- Halaman utama memperkenalkan aktiviti tersuai, dengan kontras imej dan warna bar pengumuman yang mengikut tema aktif.
+- Navigasi papan kekunci, pautan langkau dan fokus yang kelihatan pada laman telah diperbaik. Animasi mengikut pilihan pergerakan terhad dan kandungan bergerak boleh dijeda.
+- Soalan lazim, panduan hubungan dan pemulihan yang diterjemahkan serta pautan dasar kuki telah dikemas kini.
+- Dokumentasi pembangun menerangkan penemuan automatik `settings.ts`, pilihan status ringkas Discord, teks aktiviti boleh klik dan proksi imej.
+- API pengumuman menyokong penerbitan terlindung, penjadualan, tamat tempoh dan kemas kini suapan secara langsung.
+- Kod awam Nowly kini menggunakan lesen MIT. Ujian sambungan, laman dan API telah disatukan dan diperbetulkan, termasuk butiran pengumuman dan pertukaran mod paparan.

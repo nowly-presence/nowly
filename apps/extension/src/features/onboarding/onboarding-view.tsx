@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { RiArrowLeftLine } from "@remixicon/react";
 import { Wordmark } from "@/components/shared/wordmark";
 import { cn } from "@/ui/cn";
 import { useI18n } from "@/hooks/i18n-provider";
-import { sendMessage, track } from "@/lib/messages";
+import { sendMessage } from "@/lib/messages";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { WelcomeStep } from "@/features/onboarding/steps/welcome-step";
 import { ScriptsStep } from "@/features/onboarding/steps/scripts-step";
@@ -22,16 +22,6 @@ export const OnboardingView = ({ theme }: {
   const { refresh } = useExtensionState();
   const [step, setStep] = useState<Step>("welcome");
   const index = STEPS.indexOf(step);
-
-  useEffect(() => {
-    track("onboarding_started", { source: "extension_onboarding" });
-  }, []);
-
-  useEffect(() => {
-    if (step !== "welcome") track("onboarding_gate_seen", {
-      payload: { gate: step }
-    });
-  }, [step]);
 
   const next = () => setStep(STEPS[Math.min(STEPS.length - 1, index + 1)]);
   const back = () => setStep(STEPS[Math.max(0, index - 1)]);

@@ -9,7 +9,7 @@ import { addRuntimeLog } from "@/background/runtime-logs";
 import { getDeviceToken } from "@/background/storage/device.store";
 import { getOnboarding, setOnboarding } from "@/background/storage/onboarding.store";
 import { getPresences } from "@/background/storage/presences.store";
-import { trackAnalytics } from "@/background/analytics-client";
+import { trackProduct } from "@/background/telemetry";
 import { PRESENCE_REPORT_MAX_LENGTH } from "@/shared/constants";
 import type { TabState } from "@/shared/types";
 
@@ -21,7 +21,14 @@ export const handleSetOnboarding: Handler<"SET_ONBOARDING"> = async (partial) =>
   const next = await getOnboarding();
 
   if (partial.onboardingCompleted && !before.onboardingCompleted) {
-    trackAnalytics("onboarding_completed", { source: "extension_onboarding" });
+    void trackProduct(
+      {
+        name: "onboarding_completed",
+        source: "extension",
+        data: {}
+      },
+      { once: "onboarding" }
+    );
     void syncDeviceState();
   }
 
