@@ -2,20 +2,18 @@ import { describe, expect, it } from "vitest";
 import { confirmLegalDocuments, CURRENT_LEGAL_MANIFEST, emptyLegalState, mergeLegalManifests, normalizeLegalState, parseLegalManifest, pendingLegalDocuments } from "@nowly/shared/legal";
 
 const recordedAt = "2026-10-16T12:00:00.000Z";
+const { tos: TOS, privacy: PRIVACY } = CURRENT_LEGAL_MANIFEST.documents;
 
-const accepted = () =>
-  confirmLegalDocuments(
-    emptyLegalState(),
-    {
-      versions: {
-        tos: 1,
-        privacy: 1
-      },
-      acceptTos: true,
-      acknowledgePrivacy: true
-    },
-    recordedAt
-  ).state;
+const currentConfirmation = () => ({
+  versions: {
+    tos: TOS.version,
+    privacy: PRIVACY.version
+  },
+  acceptTos: true,
+  acknowledgePrivacy: true
+});
+
+const accepted = () => confirmLegalDocuments(emptyLegalState(), currentConfirmation(), recordedAt).state;
 
 describe("legal documents", () => {
   it("requires both documents on first launch", () => {
@@ -25,11 +23,11 @@ describe("legal documents", () => {
   it("records separate receipts without analytics consent", () => {
     const state = accepted();
     expect(state.tosAcceptance).toEqual({
-      version: 1,
+      version: TOS.version,
       recordedAt
     });
     expect(state.privacyAcknowledgement).toEqual({
-      version: 1,
+      version: PRIVACY.version,
       recordedAt
     });
     expect(pendingLegalDocuments(state)).toEqual([]);
@@ -49,18 +47,9 @@ describe("legal documents", () => {
         acknowledgePrivacy: false
       }
     ]) {
-      const result = confirmLegalDocuments(
-        state,
-        {
-          versions: {
-            tos: 1,
-            privacy: 1
-          },
-          ...input
-        },
-        recordedAt
-      );
+      const result = confirmLegalDocuments(state, { ...currentConfirmation(), ...input }, recordedAt);
       expect(result.ok).toBe(false);
+      expect(result.error).toBe("confirmationRequired");
       expect(result.state).toBe(state);
     }
   });
@@ -68,23 +57,34 @@ describe("legal documents", () => {
   it("ignores minor changes for previously accepted versions", () => {
     const state = accepted();
     state.manifest = structuredClone(state.manifest);
-    state.manifest.documents.tos.version = 2;
+    state.manifest.documents.tos.version = TOS.version + 1;
+    expect(pendingLegalDocuments(state)).toEqual([]);
+  });
+
+  it("accepts a receipt at the required version without the latest version", () => {
+    const state = accepted();
+    state.tosAcceptance = {
+      version: TOS.requiredVersion,
+      recordedAt
+    };
     expect(pendingLegalDocuments(state)).toEqual([]);
   });
 
   it.each(["tos", "privacy"] as const)("only requests the changed %s document", (id) => {
+    const current = CURRENT_LEGAL_MANIFEST.documents[id].version;
+    const next = current + 1;
     const state = accepted();
     state.manifest = structuredClone(state.manifest);
     state.manifest.documents[id] = {
       ...state.manifest.documents[id],
-      version: 3,
-      requiredVersion: 2
+      version: next,
+      requiredVersion: next
     };
     expect(pendingLegalDocuments(state)).toEqual([id]);
     const result = confirmLegalDocuments(
       state,
       {
-        versions: { [id]: 3 },
+        versions: { [id]: next },
         acceptTos: id === "tos",
         acknowledgePrivacy: id === "privacy"
       },
@@ -92,8 +92,9 @@ describe("legal documents", () => {
     );
     expect(result.ok).toBe(true);
     expect(pendingLegalDocuments(result.state)).toEqual([]);
-    expect(id === "tos" ? result.state.privacyAcknowledgement : result.state.tosAcceptance).toEqual({
-      version: 1,
+    const other = id === "tos" ? result.state.privacyAcknowledgement : result.state.tosAcceptance;
+    expect(other).toEqual({
+      version: id === "tos" ? PRIVACY.version : TOS.version,
       recordedAt
     });
   });
@@ -101,33 +102,20 @@ describe("legal documents", () => {
   it("rejects a stale confirmation after a remote update", () => {
     const state = emptyLegalState();
     state.manifest = structuredClone(state.manifest);
-    state.manifest.documents.tos.version = 2;
-    expect(
-      confirmLegalDocuments(
-        state,
-        {
-          versions: {
-            tos: 1,
-            privacy: 1
-          },
-          acceptTos: true,
-          acknowledgePrivacy: true
-        },
-        recordedAt
-      ).error
-    ).toBe("documentsChanged");
+    state.manifest.documents.tos.version = TOS.version + 1;
+    expect(confirmLegalDocuments(state, currentConfirmation(), recordedAt).error).toBe("documentsChanged");
   });
 
   it("never rolls back a known version or required version", () => {
     const newer = structuredClone(CURRENT_LEGAL_MANIFEST);
     newer.documents.tos = {
       ...newer.documents.tos,
-      version: 3,
-      requiredVersion: 2
+      version: TOS.version + 1,
+      requiredVersion: TOS.requiredVersion + 1
     };
     expect(mergeLegalManifests(newer, CURRENT_LEGAL_MANIFEST)).toEqual(newer);
     const invalid = structuredClone(newer);
-    invalid.documents.tos.requiredVersion = 1;
+    invalid.documents.tos.requiredVersion = TOS.requiredVersion;
     expect(mergeLegalManifests(newer, invalid)).toEqual(newer);
   });
 
@@ -148,7 +136,8 @@ describe("legal documents", () => {
     for (const override of [
       { version: 0 },
       { version: 1.5 },
-      { requiredVersion: 2 },
+      { requiredVersion: TOS.version + 1 },
+      { requiredVersion: 0 },
       { path: "https://evil.example/tos" },
       { updatedAt: "yesterday" }
     ]) {
@@ -156,6 +145,12 @@ describe("legal documents", () => {
       Object.assign(value.documents.tos, override);
       expect(parseLegalManifest(value)).toBeNull();
     }
+  });
+
+  it("accepts a required version equal to the latest version", () => {
+    const value = structuredClone(CURRENT_LEGAL_MANIFEST);
+    value.documents.tos.requiredVersion = value.documents.tos.version;
+    expect(parseLegalManifest(value)).toEqual(value);
   });
 
   it("recovers safely from corrupt storage", () => {
