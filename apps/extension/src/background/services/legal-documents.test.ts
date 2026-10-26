@@ -3,6 +3,15 @@ import { CURRENT_LEGAL_MANIFEST, pendingLegalDocuments } from "@nowly/shared/leg
 import { installChromeMock } from "@/test/chrome-mock";
 import { acceptLegalDocuments, checkLegalDocuments, getLegalState } from "@/background/services/legal-documents";
 
+const confirmation = () => ({
+  versions: {
+    tos: CURRENT_LEGAL_MANIFEST.documents.tos.version,
+    privacy: CURRENT_LEGAL_MANIFEST.documents.privacy.version
+  },
+  acceptTos: true,
+  acknowledgePrivacy: true
+});
+
 describe("legal version checks", () => {
   const fetchMock = vi.fn<typeof fetch>();
   beforeEach(() => {
@@ -34,28 +43,14 @@ describe("legal version checks", () => {
     const state = await checkLegalDocuments();
     expect(state.checkFailed).toBe(true);
     expect(pendingLegalDocuments(state)).toEqual(["tos", "privacy"]);
-    const result = await acceptLegalDocuments({
-      versions: {
-        tos: 1,
-        privacy: 1
-      },
-      acceptTos: true,
-      acknowledgePrivacy: true
-    });
+    const result = await acceptLegalDocuments(confirmation());
     expect(result.ok).toBe(true);
     expect(pendingLegalDocuments(await checkLegalDocuments())).toEqual([]);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
   it("rejects a malformed remote response without losing local receipts", async () => {
-    await acceptLegalDocuments({
-      versions: {
-        tos: 1,
-        privacy: 1
-      },
-      acceptTos: true,
-      acknowledgePrivacy: true
-    });
+    await acceptLegalDocuments(confirmation());
     fetchMock.mockResolvedValue(Response.json({ schemaVersion: 99 }));
     const state = await checkLegalDocuments();
     expect(state.checkFailed).toBe(true);
@@ -64,23 +59,17 @@ describe("legal version checks", () => {
 
   it("serializes a remote update with confirmation to reject stale UI", async () => {
     const next = structuredClone(CURRENT_LEGAL_MANIFEST);
+    const bumped = next.documents.privacy.version + 1;
     next.documents.privacy = {
       ...next.documents.privacy,
-      version: 2,
-      requiredVersion: 2
+      version: bumped,
+      requiredVersion: bumped
     };
     fetchMock.mockResolvedValue(Response.json(next));
     const check = checkLegalDocuments();
-    const confirmation = acceptLegalDocuments({
-      versions: {
-        tos: 1,
-        privacy: 1
-      },
-      acceptTos: true,
-      acknowledgePrivacy: true
-    });
+    const pending = acceptLegalDocuments(confirmation());
     await check;
-    expect((await confirmation).error).toBe("documentsChanged");
+    expect((await pending).error).toBe("documentsChanged");
     expect((await getLegalState()).tosAcceptance).toBeNull();
   });
 });
