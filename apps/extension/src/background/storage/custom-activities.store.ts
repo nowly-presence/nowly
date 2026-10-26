@@ -58,3 +58,14 @@ export const getCustomImages = async (): Promise<Record<string, StoredCustomImag
 
 export const setCustomImages = (images: Record<string, StoredCustomImage>): Promise<void> =>
   chrome.storage.local.set({ [STORAGE_KEYS.customActivityImages]: images });
+
+let imageWrites: Promise<unknown> = Promise.resolve();
+
+export const updateCustomImages = (update: (images: Record<string, StoredCustomImage>) => Record<string, StoredCustomImage>): Promise<void> => {
+  const write = imageWrites.then(async () => {
+    const images = update(await getCustomImages());
+    await setCustomImages(images);
+  });
+  imageWrites = write.catch(() => undefined);
+  return write;
+};

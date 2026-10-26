@@ -306,7 +306,7 @@ export const connectAccount = async (payload: unknown): Promise<{
   await setAccount({
     token: payload.token,
     user: me.data,
-    scopes: ["sync"],
+    scopes: Array.isArray(payload.scopes) && payload.scopes.includes("creator") ? ["sync", "creator"] : ["sync"],
     expiresAt: typeof payload.expiresAt === "number" ? payload.expiresAt : 0,
     connectedAt: Date.now()
   });
@@ -363,13 +363,14 @@ export const getAccountSnapshot = async (): Promise<AccountSnapshot> => {
   };
 };
 
-export const openAccountConnect = async (): Promise<void> => {
+export const openAccountConnect = async (creator = false): Promise<void> => {
   const deviceId = await getActiveDeviceId();
 
   const params = new URLSearchParams({
     source: "extension",
     device: deviceId
   });
+  if (creator) params.set("permission", "creator");
   await chrome.tabs.create({ url: `${getEffectiveWebUrl().replace(/\/$/, "")}/extension/connect?${params.toString()}` });
 };
 

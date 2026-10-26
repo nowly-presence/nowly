@@ -7,7 +7,7 @@ export const handleGetCustomActivities: Handler<"GET_CUSTOM_ACTIVITIES"> = () =>
 
 export const handleGetCustomActivityDetection: Handler<"GET_CUSTOM_ACTIVITY_DETECTION"> = () => resolveCustomActivityDetection();
 
-export const handleSaveCustomActivity: Handler<"SAVE_CUSTOM_ACTIVITY"> = ({ draft }) => saveCustomActivity(draft);
+export const handleSaveCustomActivity: Handler<"SAVE_CUSTOM_ACTIVITY"> = ({ draft, expectedUpdatedAt }) => saveCustomActivity(draft, expectedUpdatedAt);
 
 export const handleDeleteCustomActivity: Handler<"DELETE_CUSTOM_ACTIVITY"> = ({ id }) => deleteCustomActivity(id);
 

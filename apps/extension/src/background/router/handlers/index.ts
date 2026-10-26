@@ -11,8 +11,21 @@ import { handleRecordUsageDay, handleSnoozeSupportPrompt } from "@/background/ro
 import type { HandlerRegistry } from "@/background/router/router";
 import { handleGetAnnouncements, handleRefreshAnnouncements, handleMarkAnnouncement } from "@/background/router/handlers/announcements.handlers";
 import { handleAcceptLegalDocuments, handleCheckLegalDocuments, handleGetLegalState } from "@/background/router/handlers/legal.handlers";
+import { applyPublication, publicationStatus } from "@/background/services/activity-publications";
+import { getOwnedPublication, publishActivity } from "@/background/services/activity-publication-publisher";
+import { openAccountConnect } from "@/background/services/account-sync";
 
 export const buildHandlerRegistry = (): HandlerRegistry => ({
+  GET_ACTIVITY_PUBLICATION_STATUS: (payload) => publicationStatus(payload),
+  GET_OWN_ACTIVITY_PUBLICATION: ({ id }) => getOwnedPublication(id),
+  APPLY_ACTIVITY_PUBLICATION: (payload) => applyPublication(payload),
+  PUBLISH_CUSTOM_ACTIVITY: ({ id, baseRevision, unpublish }) => publishActivity(id, baseRevision, unpublish),
+  START_CREATOR_CONNECT: async () => {
+    await openAccountConnect(true);
+    return {
+      ok: true
+    };
+  },
   GET_ANNOUNCEMENTS: handleGetAnnouncements,
   REFRESH_ANNOUNCEMENTS: handleRefreshAnnouncements,
   MARK_ANNOUNCEMENT: handleMarkAnnouncement,

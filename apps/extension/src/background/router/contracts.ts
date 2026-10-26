@@ -1,9 +1,11 @@
 import type { AnnouncementsState } from "@/shared/announcements";
+import type { PublicationReview, PublicationStatus, PublicationApply, PublicationResult } from "@nowly/shared";
 import type { LegalConfirmation, LegalConfirmationResult, LegalState } from "@nowly/shared/legal";
 import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, CustomActivityDetection, CustomActivityDraft, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, PresenceData, PresenceDebug, PresenceSchedule, RuntimeLogEntry, StoredPresence, SyncChoice, TabState, UserScriptsStatus } from "@/shared/types";
 import type { OnboardingState } from "@/background/storage/onboarding.store";
 import type { SaveCustomActivityResult, UploadCustomImageResult } from "@/background/managers/custom-activity-manager";
 import type { SupportPromptAction, SupportPromptState } from "@/shared/support-prompt";
+import type { PublishResult, OwnedPublicationResult } from "@/background/services/activity-publication-publisher";
 
 export type DiagnosticSnapshot = {
   extensionInstalled: boolean;
@@ -50,6 +52,34 @@ export type PresenceEngagement = {
 export type RouterSource = "PRESENCES_POPUP" | "PRESENCES_CONTENT";
 
 export type RouterMessageMap = {
+  GET_ACTIVITY_PUBLICATION_STATUS: {
+    payload: PublicationReview;
+    response: PublicationStatus;
+  };
+  APPLY_ACTIVITY_PUBLICATION: {
+    payload: PublicationApply;
+    response: PublicationResult;
+  };
+  PUBLISH_CUSTOM_ACTIVITY: {
+    payload: {
+      id: string;
+      baseRevision: number;
+      unpublish?: boolean;
+    };
+    response: PublishResult;
+  };
+  START_CREATOR_CONNECT: {
+    payload: void;
+    response: {
+      ok: boolean;
+    };
+  };
+  GET_OWN_ACTIVITY_PUBLICATION: {
+    payload: {
+      id: string;
+    };
+    response: OwnedPublicationResult;
+  };
   GET_ANNOUNCEMENTS: {
     payload: void;
     response: AnnouncementsState;
@@ -371,6 +401,7 @@ export type RouterMessageMap = {
   SAVE_CUSTOM_ACTIVITY: {
     payload: {
       draft: CustomActivityDraft;
+      expectedUpdatedAt?: number;
     };
     response: SaveCustomActivityResult;
   };
@@ -380,6 +411,7 @@ export type RouterMessageMap = {
     };
     response: {
       ok: boolean;
+      error?: import("@/background/services/activity-publication-deletion").PublicationDeletionError;
     };
   };
   SET_CUSTOM_ACTIVITY_ACTIVE: {

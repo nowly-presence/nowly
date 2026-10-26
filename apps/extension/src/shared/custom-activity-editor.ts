@@ -1,0 +1,1 @@
+export const CUSTOM_ACTIVITY_EDITOR_PORT = "custom-activity-editor";

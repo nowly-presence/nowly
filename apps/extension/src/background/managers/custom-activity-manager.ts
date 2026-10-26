@@ -1,18 +1,20 @@
 import { broadcastActiveTab } from "@/background/managers/activity-manager";
 import { deleteCustomAsset, touchCustomAsset, uploadCustomAsset } from "@/background/services/custom-assets-api";
 import { dismissCustomActivityDetection, getEffectiveCustomActivity, readCustomActivityDetection } from "@/background/services/custom-activity-detection";
-import { getCustomActivities, getCustomImages, setCustomImages, updateCustomActivities } from "@/background/storage/custom-activities.store";
+import { getCustomActivities, getCustomImages, updateCustomImages, updateCustomActivities } from "@/background/storage/custom-activities.store";
 import { CUSTOM_ACTIVITIES_MAX, CUSTOM_BUTTONS_MAX, customImageHashes, customImageSync, hasCustomActivityErrors, validateCustomActivity } from "@/shared/custom-activity";
 import { decodeImageDataUrl, sha256Hex } from "@/shared/custom-image";
 import type { CustomActivitiesState, CustomActivity, CustomActivityDraft, CustomImage } from "@/shared/types";
 import { legalDocumentsPending } from "@/background/services/legal-documents";
+import { withCustomActivityWrite } from "@/background/services/custom-activity-write";
+import { publicationDeletionError, type PublicationDeletionError } from "@/background/services/activity-publication-deletion";
 
 export type SaveCustomActivityResult = {
   ok: true;
   activity: CustomActivity;
 } | {
   ok: false;
-  error: "INVALID" | "LIMIT_REACHED" | "NOT_FOUND";
+  error: "INVALID" | "LIMIT_REACHED" | "NOT_FOUND" | "LOCAL_CHANGED";
 };
 export type UploadCustomImageResult = {
   ok: true;
@@ -26,14 +28,15 @@ const MISSING_ASSET_STATUSES = new Set([404, 410]);
 
 const pruneLocalImages = async (state: CustomActivitiesState): Promise<void> => {
   const used = customImageHashes(state.items);
-  const images = await getCustomImages();
-  const unused = Object.keys(images).filter((hash) => !used.has(hash));
+  let unused: string[] = [];
+  await updateCustomImages((images) => {
+    unused = Object.keys(images).filter((hash) => !used.has(hash));
 
-  if (unused.length === 0) return;
+    for (const hash of unused) delete images[hash];
 
-  for (const hash of unused) delete images[hash];
+    return images;
+  });
 
-  await setCustomImages(images);
   await Promise.all(unused.map(deleteCustomAsset));
 };
 
@@ -53,87 +56,106 @@ const normalizeDraft = (draft: CustomActivityDraft): CustomActivityDraft => ({
   }))
 });
 
-export const saveCustomActivity = async (input: CustomActivityDraft): Promise<SaveCustomActivityResult> => {
-  const draft = normalizeDraft(input);
+export const saveCustomActivity = (input: CustomActivityDraft, expectedUpdatedAt?: number): Promise<SaveCustomActivityResult> =>
+  withCustomActivityWrite(async () => {
+    const draft = normalizeDraft(input);
 
-  if (hasCustomActivityErrors(validateCustomActivity(draft))) return {
-    ok: false,
-    error: "INVALID"
-  };
+    if (hasCustomActivityErrors(validateCustomActivity(draft))) return {
+      ok: false,
+      error: "INVALID"
+    };
 
-  const current = await getCustomActivities();
+    const current = await getCustomActivities();
 
-  const existing = draft.id ? current.items.find((item) => item.id === draft.id) : undefined;
+    const existing = draft.id ? current.items.find((item) => item.id === draft.id) : undefined;
 
-  if (draft.id && !existing) return {
-    ok: false,
-    error: "NOT_FOUND"
-  };
-  if (!existing && current.items.length >= CUSTOM_ACTIVITIES_MAX) return {
-    ok: false,
-    error: "LIMIT_REACHED"
-  };
+    if (existing && expectedUpdatedAt !== undefined && existing.updatedAt !== expectedUpdatedAt) return {
+      ok: false,
+      error: "LOCAL_CHANGED"
+    };
 
-  const now = Date.now();
-  const activity: CustomActivity = {
-    ...draft,
-    id: existing?.id ?? crypto.randomUUID(),
-    createdAt: existing?.createdAt ?? now,
-    updatedAt: now
-  };
-  const next = await updateCustomActivities((state) => ({
-    ...state,
-    items: existing ? state.items.map((item) => (item.id === activity.id ? activity : item)) : [activity, ...state.items]
-  }));
-  await pruneLocalImages(next);
+    if (draft.id && !existing) return {
+      ok: false,
+      error: "NOT_FOUND"
+    };
+    if (!existing && current.items.length >= CUSTOM_ACTIVITIES_MAX) return {
+      ok: false,
+      error: "LIMIT_REACHED"
+    };
 
-  const detection = await readCustomActivityDetection();
-
-  const isRunning = next.activeId === activity.id || detection?.activityId === activity.id;
-
-  if (isRunning) {
-    await broadcastActiveTab();
-    void syncActiveCustomImages();
-  }
-
-  return {
-    ok: true,
-    activity
-  };
-};
-
-export const deleteCustomActivity = async (id: string): Promise<{
-  ok: boolean;
-}> => {
-  const next = await updateCustomActivities((state) => ({
-    items: state.items.filter((item) => item.id !== id),
-    activeId: state.activeId === id ? null : state.activeId,
-    activatedAt: state.activeId === id ? null : state.activatedAt
-  }));
-  await pruneLocalImages(next);
-  await broadcastActiveTab();
-  return {
-    ok: true
-  };
-};
-
-export const setActiveCustomActivity = async (id: string | null): Promise<CustomActivitiesState> => {
-  const detection = await readCustomActivityDetection();
-
-  if (id === null) await dismissCustomActivityDetection(null);
-
-  const next = await updateCustomActivities((state) => {
-    const exists = id !== null && state.items.some((item) => item.id === id);
-    return {
+    const now = Date.now();
+    const activity: CustomActivity = {
+      ...draft,
+      provenance: existing?.provenance,
+      id: existing?.id ?? crypto.randomUUID(),
+      createdAt: existing?.createdAt ?? now,
+      updatedAt: Math.max(now, (existing?.updatedAt ?? 0) + 1)
+    };
+    const next = await updateCustomActivities((state) => ({
       ...state,
-      activeId: exists ? id : null,
-      activatedAt: exists ? (detection?.activityId === id ? detection.activatedAt : Date.now()) : null
+      items: existing ? state.items.map((item) => (item.id === activity.id ? activity : item)) : [activity, ...state.items]
+    }));
+    await pruneLocalImages(next);
+
+    const detection = await readCustomActivityDetection();
+
+    const isRunning = next.activeId === activity.id || detection?.activityId === activity.id;
+
+    if (isRunning) {
+      await broadcastActiveTab();
+      void syncActiveCustomImages();
+    }
+
+    return {
+      ok: true,
+      activity
     };
   });
-  await broadcastActiveTab();
-  if (next.activeId) void syncActiveCustomImages();
-  return next;
-};
+
+export const deleteCustomActivity = async (
+  id: string
+): Promise<{
+  ok: boolean;
+  error?: PublicationDeletionError;
+}> =>
+  withCustomActivityWrite(async () => {
+    const error = await publicationDeletionError(id);
+
+    if (error) return {
+      ok: false,
+      error
+    };
+
+    const next = await updateCustomActivities((state) => ({
+      items: state.items.filter((item) => item.id !== id),
+      activeId: state.activeId === id ? null : state.activeId,
+      activatedAt: state.activeId === id ? null : state.activatedAt
+    }));
+    await pruneLocalImages(next);
+    await broadcastActiveTab();
+    return {
+      ok: true
+    };
+  });
+
+export const setActiveCustomActivity = (id: string | null): Promise<CustomActivitiesState> =>
+  withCustomActivityWrite(async () => {
+    const detection = await readCustomActivityDetection();
+
+    if (id === null) await dismissCustomActivityDetection(null);
+
+    const next = await updateCustomActivities((state) => {
+      const exists = id !== null && state.items.some((item) => item.id === id);
+      return {
+        ...state,
+        activeId: exists ? id : null,
+        activatedAt: exists ? (detection?.activityId === id ? detection.activatedAt : Date.now()) : null
+      };
+    });
+    await broadcastActiveTab();
+    if (next.activeId) void syncActiveCustomImages();
+    return next;
+  });
 
 const syncImage = async (image: CustomImage, now: number): Promise<CustomImage> => {
   if (image.kind !== "upload") return image;
@@ -166,30 +188,31 @@ const syncImage = async (image: CustomImage, now: number): Promise<CustomImage> 
   return uploaded.ok ? { ...image, remoteUrl: uploaded.url, remoteId: uploaded.id || image.remoteId, lastUsedAt: now } : image;
 };
 
-export const syncActiveCustomImages = async (): Promise<void> => {
-  if (await legalDocumentsPending()) return;
+export const syncActiveCustomImages = (): Promise<void> =>
+  withCustomActivityWrite(async () => {
+    if (await legalDocumentsPending()) return;
 
-  const active = await getEffectiveCustomActivity();
+    const active = await getEffectiveCustomActivity();
 
-  if (!active) return;
+    if (!active) return;
 
-  const now = Date.now();
-  const [largeImage, smallImage] = await Promise.all([
-    syncImage(active.activity.largeImage, now),
-    syncImage(active.activity.smallImage, now)
-  ]);
+    const now = Date.now();
+    const [largeImage, smallImage] = await Promise.all([
+      syncImage(active.activity.largeImage, now),
+      syncImage(active.activity.smallImage, now)
+    ]);
 
-  if (largeImage === active.activity.largeImage && smallImage === active.activity.smallImage) return;
+    if (largeImage === active.activity.largeImage && smallImage === active.activity.smallImage) return;
 
-  const changedUrl =
-    JSON.stringify([largeImage, smallImage].map((image) => image.kind === "upload" && image.remoteUrl)) !==
-    JSON.stringify([active.activity.largeImage, active.activity.smallImage].map((image) => image.kind === "upload" && image.remoteUrl));
-  await updateCustomActivities((state) => ({
-    ...state,
-    items: state.items.map((item) => (item.id === active.activity.id ? { ...item, largeImage, smallImage } : item))
-  }));
-  if (changedUrl) await broadcastActiveTab();
-};
+    const changedUrl =
+      JSON.stringify([largeImage, smallImage].map((image) => image.kind === "upload" && image.remoteUrl)) !==
+      JSON.stringify([active.activity.largeImage, active.activity.smallImage].map((image) => image.kind === "upload" && image.remoteUrl));
+    await updateCustomActivities((state) => ({
+      ...state,
+      items: state.items.map((item) => (item.id === active.activity.id ? { ...item, largeImage, smallImage } : item))
+    }));
+    if (changedUrl) await broadcastActiveTab();
+  });
 
 export const uploadCustomImage = async (dataUrl: string): Promise<UploadCustomImageResult> => {
   if (await legalDocumentsPending()) return {
@@ -210,14 +233,15 @@ export const uploadCustomImage = async (dataUrl: string): Promise<UploadCustomIm
     error: uploaded.error
   };
 
-  const images = await getCustomImages();
-  images[hash] = {
-    dataUrl,
-    mime: decoded.mime,
-    size: decoded.bytes.length,
-    createdAt: Date.now()
-  };
-  await setCustomImages(images);
+  await updateCustomImages((images) => ({
+    ...images,
+    [hash]: {
+      dataUrl,
+      mime: decoded.mime,
+      size: decoded.bytes.length,
+      createdAt: Date.now()
+    }
+  }));
   return {
     ok: true,
     image: {

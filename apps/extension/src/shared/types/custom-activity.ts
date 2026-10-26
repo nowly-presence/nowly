@@ -60,6 +60,11 @@ export type CustomActivityButton = {
 };
 
 export type CustomActivity = {
+  provenance?: {
+    publicationId: string;
+    revision: number;
+    baseline: import("@nowly/shared").PortableActivity;
+  };
   id: string;
   name: string;
   type: CustomActivityType;
@@ -76,7 +81,7 @@ export type CustomActivity = {
   updatedAt: number;
 };
 
-export type CustomActivityDraft = Omit<CustomActivity, "id" | "createdAt" | "updatedAt"> & {
+export type CustomActivityDraft = Omit<CustomActivity, "id" | "createdAt" | "updatedAt" | "provenance"> & {
   id?: string;
 };
 
