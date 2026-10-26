@@ -1,18 +1,20 @@
 # Branding
 
-Rendered by `app/[locale]/branding`: `branding-view.tsx` shows the downloadable logo/icon/color kit.
+`app/[locale]/branding` renders `components/branding-view.tsx`: the downloadable logo, icon and color kit.
 
-## Add a new logo/icon variant
+Brand assets are not in `public/`: they are CDN URLs (`https://cdn.nowly.me/brand/...`) built in `lib/brand.ts` by `brandLockup(variant, ext)`, `brandIcon(variant, size, ext)` and `brandFavicon(file)`, and exported as `BRAND_LOCKUP_*` / `BRAND_ICON_*` constants. The files must be uploaded to the CDN separately.
 
-1. Add the SVG and PNG asset files under `public/` (see the `BRAND_LOCKUP_*`/`BRAND_ICON_*` constants in `lib/brand.ts` for the existing naming: `<lockup|icon>-<variant>.svg`/`.png`).
-2. Export the new asset paths as constants from `lib/brand.ts` (root, shared).
-3. Add an entry to `logoVariants` or `iconVariants` in `branding-view.tsx`: `{ key: "your-variant", svg: YOUR_SVG, png: YOUR_PNG, bg: "bg-[#hex]" }`.
-4. Add the translation key `variants.your-variant` to the `brandingPage` namespace in all 11 locale files under `apps/web/messages/*.json`.
+## Add a logo/icon variant
 
-## Add a new color swatch
+1. Upload the SVG and PNG to the CDN following the existing layout (`lockup/<variant>.<ext>`, `icons/<variant>/<size>.<ext>`).
+2. Widen the variant union in `brandLockup`/`brandIcon` and export `BRAND_LOCKUP_<VARIANT>` / `BRAND_ICON_<VARIANT>` (+ `_PNG`) from `lib/brand.ts`.
+3. Add `{ key, svg, png, bg: "bg-[#hex]" }` to `logoVariants` or `iconVariants` in `branding-view.tsx` (widen the `key` type there too).
+4. Add `variants.<key>` to the `brandingPage` namespace in all 11 `messages/*.json`.
 
-1. Add `{ key: "your-color", hex: "#RRGGBB" }` to `colorSwatches` in `branding-view.tsx`.
-2. Add the translation key `swatches.your-color` to the `brandingPage` namespace, same locale files as above.
+## Add a color swatch
+
+1. Add `{ key, hex }` to `colorSwatches` in `branding-view.tsx` (canary swatches reuse `CANARY_ACCENT`/`CANARY_INK`).
+2. Add `swatches.<key>` to `brandingPage` in all 11 locale files.
 
 ## Notable dependencies
-`lib/brand.ts`, `lib/constants.ts` (root, shared).
+`lib/brand.ts` (root, shared).

@@ -1,31 +1,33 @@
 # Library
 
-The presence library: listing (`app/[locale]/library`), presence page (`app/[locale]/library/[slug]`), author page (`app/[locale]/author/[github]`).
+Presence library: listing (`app/[locale]/library`), presence page (`app/[locale]/library/[slug]`), author page (`app/[locale]/author/[github]`).
 
-## Add a new presence category
+## Add a presence category
 
-Categories are duplicated in two places that must stay in sync:
+Categories live in two places that must stay in sync:
 
-1. Add the new value to `LIBRARY_CATEGORIES` in `apps/web/lib/library-catalog.ts` (root — this file backs the library UI, not this feature folder).
-2. Add the matching value to the `category` enum in the presence metadata schema (`packages/presences/metadata.schema.json`, validated against `Metadata` in `packages/sdk/src/metadata.ts`) — a presence declaring a category not in `LIBRARY_CATEGORIES` will still validate at publish time but won't get its own filter/section in the library UI.
-3. Add the category's translated label to whichever namespace `features/library/components/library-view.tsx`/`paginated-library-grid.tsx` reads category labels from.
+1. Add the value to `LIBRARY_CATEGORIES` in `lib/library-catalog.ts` (root; backs the library UI).
+2. Add it to the `category` enum in `packages/presences/metadata.schema.json` (validated against `Metadata` in `packages/sdk/src/metadata.ts`). A presence with a category missing from `LIBRARY_CATEGORIES` still validates at publish time but gets no filter/section in the UI.
+3. Add the translated label to the namespace read by `library-view.tsx` / `paginated-library-grid.tsx`.
 
-## Add a new presence action (like current "report"/"like")
+## Add a presence action (like "report"/"like")
 
-1. Add the UI trigger inside `presence-actions.tsx`, not `presence-view.tsx` — that's the single place presence-level actions are assembled.
-2. If it needs a dialog, follow `presence-report-dialog.tsx`'s pattern (a controlled dialog component taking the presence slug as a prop).
-3. Wire the actual request through `lib/presence-api.ts` (root, shared) rather than calling `fetch` inline — it already knows the API base URL and the `presence` feature's endpoints on `apps/api`.
+1. Put the trigger in `presence-actions.tsx`, not `presence-view.tsx`.
+2. For a dialog, follow `presence-report-dialog.tsx` (controlled dialog taking the presence slug).
+3. Don't call `fetch` inline against a hardcoded URL. Two API helpers exist:
+   - `lib/presence-api-client.ts`: client-safe (`presenceApiBaseUrl()` from `NEXT_PUBLIC_API_BASE_URL`, logo/thumbnail CDN URLs). Use it from client components, as `presence-like-button.tsx` does.
+   - `lib/presence-api.ts`: `server-only` (catalog, stats, version notes; base URL also honors `PRESENCE_API_URL`). Importing it from a client component breaks the build; type-only imports are fine.
 
 ## Gotchas
 
-- `LocalizedCopy`/`LocalizedList` in `library-catalog.ts` cover all 11 supported locales. Presence metadata may still omit translations, so `localizedDescription`/`localizedFeatures` fall back to the shared default locale.
-- `presenceSearchText` indexes every localized description and long description returned by the API, so translated copy remains searchable.
+- `LocalizedCopy`/`LocalizedList` in `library-catalog.ts` cover the 11 locales. Metadata may omit translations; `localizedDescription`/`localizedFeatures` then fall back to the default locale.
+- `presenceSearchText` indexes every localized description and long description from the API, so translated copy is searchable.
+
+## Presence guides and indexing
+
+- No presence guide is published while `content/presences` is absent. To republish the archived ones, copy `presence-guides-backup/apps/web/content/presences` into `apps/web/content/`: `getPresenceGuide` (`lib/presence-guide.ts`) then loads `<slug>/<locale>.md` and `presence-view.tsx` shows them folded in `ExpandableContent`.
+- `LibraryPresence.locales` lists the locales a presence ships a description for. `presenceIndexLocales` adds locales with a translated description or a published guide to hreflang and the sitemap; other locales canonicalize to English.
+- Presence pages and the library listing have no ad placements (ads are guides only).
 
 ## Notable dependencies
-`lib/library-catalog.ts`, `lib/analytics.ts`, `lib/presence-api.ts` (root, shared), `components/extension-store-button.tsx`, `components/presence-tile.tsx`, `presence` feature of `apps/api`.
-
-## Presence pages and indexing
-
-- No presence-specific guide is published while `apps/web/content/presences` is absent. Original Markdown files are preserved at the repository root in `presence-guides-backup/apps/web/content/presences`. To republish them without code changes, copy that archived `presences` folder into `apps/web/content/`; `getPresenceGuide` then loads matching `<slug>/<locale>.md` files and `presence-view.tsx` displays them folded with `ExpandableContent`.
-- `LibraryPresence.locales` lists the locales a presence really ships a description for (`lib/presence-api.ts`). `presenceIndexLocales` includes locales with either a translated description or a published guide in hreflang and the sitemap; the others point their canonical to the English page. With the folder absent, guide locales add nothing.
-- Presence pages and the library listing do not contain ad placements. Ads are limited to general guide articles under `/guides`.
+`lib/library-catalog.ts`, `lib/presence-api.ts`, `lib/presence-api-client.ts`, `lib/analytics.ts`, `components/extension-store-button.tsx`, `components/presence-tile.tsx`, `presence` feature of `apps/api`.

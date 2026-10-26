@@ -1,17 +1,20 @@
 # Support
 
-Rendered by `app/[locale]/support`, the site's single help and contact page (there is no separate `/contact`): `support-view.tsx` (help links as compact lists, the form column, the publisher line), `contact-form.tsx` (posts to `apps/api`'s `contact` feature, anchor `#contact`), `donate-card.tsx` (Ko-fi and GitHub Sponsors, anchor `#donate`).
+`app/[locale]/support` is the single help and contact page (no `/contact`): `support-view.tsx` (help link lists, form column, publisher line), `contact-form.tsx` (`POST /contact` on the API's `contact` feature, anchor `#contact`), `donate-card.tsx` (Ko-fi and GitHub Sponsors, anchor `#donate`).
 
-## Add a new support link (e.g. a new GitHub issue template)
+Redirects in `next.config.ts` send `/redem` and `/support/redeem` to `/support` (the old donation-reward flow is gone). `app/[locale]/redeem` is a `notFound()` placeholder.
 
-1. Add the entry to `SUPPORT_LINKS` in `lib/support-links.ts`. For a GitHub issue-template link, use the existing `githubIssueUrl(repo, template)` helper rather than building the URL by hand.
-2. Reference `SUPPORT_LINKS.yourKey` from `support-view.tsx`.
-3. If it points at a new issue template file, that file must exist in the target repo's `.github/ISSUE_TEMPLATE/` (e.g. `nowly-presence/nowly` or `nowly-presence/presences`, see `PROJECT_REPOSITORY_URL`/`PRESENCES_REPOSITORY_URL` in `lib/constants.ts`) — this feature doesn't create it.
+## Add a support link (e.g. a GitHub issue template)
+
+1. Add the entry to `SUPPORT_LINKS` in `lib/support-links.ts`; for issue templates use `githubIssueUrl(repo, template)`.
+2. Reference `SUPPORT_LINKS.yourKey` in `support-view.tsx`.
+3. The template file must already exist in the target repo's `.github/ISSUE_TEMPLATE/` (`PROJECT_REPOSITORY_URL` or `PRESENCES_REPOSITORY_URL` in `lib/constants.ts`).
 
 ## Gotchas
-- `#donate` and `#contact` are public anchors: the extension's support card and the home community section open `nowly.me/support#donate`, while the footer's "Contact" and the About page open `/support#contact`. The donation card continues to link to Ko-fi and GitHub Sponsors. Keep both ids when reworking the page.
-- The form only needs the API's URL (`NEXT_PUBLIC_API_BASE_URL`). Delivery is configured on the API side (Amazon SES, see `apps/api/src/features/contact`).
-- `githubIssueUrl` doesn't validate the template name — a typo silently produces a working-looking link that lands on GitHub's generic "no such template" state instead of erroring at build time. Double-check the template filename against the target repo.
+
+- `#donate` and `#contact` are public anchors: the extension's support card and the home community section link to `/support#donate`; the footer's "Contact" and the About page link to `/support#contact`. Keep both ids when reworking the page.
+- The form uses `presenceApiBaseUrl()` (`lib/presence-api-client.ts`, `NEXT_PUBLIC_API_BASE_URL`). Delivery (Amazon SES) is configured in `apps/api/src/features/contact`.
+- `githubIssueUrl` doesn't validate the template name: a typo yields a working-looking link to GitHub's generic page. Check the filename.
 
 ## Notable dependencies
-`contact` feature of `apps/api` (`POST /`, used by `contact-form.tsx`). `lib/constants.ts` (root, repo URLs).
+`contact` feature of `apps/api`, `lib/constants.ts` (repo, Ko-fi, Sponsors URLs).
