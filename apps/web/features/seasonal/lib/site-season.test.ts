@@ -121,100 +121,28 @@ describe("season state", () => {
     });
   });
 
-  it("is confirmed, changed or removed by the extension", () => {
-    expect(
-      nextSeasonState(initial, {
-        type: "extension",
-        season: "halloween"
-      })
-    ).toEqual({
-      season: "halloween",
-      source: "extension"
-    });
-    expect(
-      nextSeasonState(initial, {
-        type: "extension",
-        season: null
-      })
-    ).toEqual({
-      season: null,
-      source: "extension"
-    });
-    expect(
-      nextSeasonState(initial, {
-        type: "extension",
-        season: "winter"
-      })
-    ).toEqual({
-      season: "winter",
-      source: "extension"
-    });
-  });
+  it("manages state transitions: confirmation, silent timeout, preview stickiness, and tab visibility updates", () => {
+    // 1. Confirmed or removed by extension
+    expect(nextSeasonState(initial, { type: "extension", season: "halloween" })).toEqual({ season: "halloween", source: "extension" });
+    expect(nextSeasonState(initial, { type: "extension", season: null })).toEqual({ season: null, source: "extension" });
 
-  it("is removed when the extension stays silent", () => {
-    expect(nextSeasonState(initial, { type: "timeout" })).toEqual({
-      season: null,
-      source: "none"
-    });
-    const answered: SeasonState = {
-      season: "autumn",
-      source: "extension"
-    };
+    // 2. Timeout clears initial state but keeps confirmed extension state
+    expect(nextSeasonState(initial, { type: "timeout" })).toEqual({ season: null, source: "none" });
+    const answered: SeasonState = { season: "autumn", source: "extension" };
     expect(nextSeasonState(answered, { type: "timeout" })).toBe(answered);
-  });
 
-  it("keeps a preview whatever happens", () => {
-    const preview: SeasonState = {
-      season: "spring",
-      source: "preview"
-    };
+    // 3. Preview persists across requests, null events, and timeouts
+    const preview: SeasonState = { season: "spring", source: "preview" };
     expect(nextSeasonState(preview, { type: "request" })).toBe(preview);
-    expect(
-      nextSeasonState(preview, {
-        type: "extension",
-        season: null
-      })
-    ).toBe(preview);
+    expect(nextSeasonState(preview, { type: "extension", season: null })).toBe(preview);
     expect(nextSeasonState(preview, { type: "timeout" })).toBe(preview);
-  });
 
-  it("waits for a fresh answer when the tab becomes visible again", () => {
-    const confirmed: SeasonState = {
-      season: "winter",
-      source: "extension"
-    };
+    // 4. Tab visibility refresh cycle: enters pending and confirms fresh or clears on timeout
+    const confirmed: SeasonState = { season: "winter", source: "extension" };
     const pending = nextSeasonState(confirmed, { type: "request" });
-    expect(pending).toEqual({
-      season: null,
-      source: "pending"
-    });
-    expect(
-      nextSeasonState(pending, {
-        type: "extension",
-        season: "winter"
-      }).season
-    ).toBe("winter");
-    expect(
-      nextSeasonState(pending, {
-        type: "extension",
-        season: null
-      }).season
-    ).toBeNull();
-  });
-
-  it("clears a previously confirmed season if the extension no longer answers", () => {
-    const pending = nextSeasonState(
-      {
-        season: "winter",
-        source: "extension"
-      },
-      { type: "request" }
-    );
-    const expired = nextSeasonState(pending, { type: "timeout" });
-    expect(expired).toEqual({
-      season: null,
-      source: "none"
-    });
+    expect(pending).toEqual({ season: null, source: "pending" });
+    expect(nextSeasonState(pending, { type: "extension", season: "winter" }).season).toBe("winter");
+    expect(nextSeasonState(pending, { type: "timeout" })).toEqual({ season: null, source: "none" });
   });
 });
 

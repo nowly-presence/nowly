@@ -139,7 +139,8 @@ describe("site timer broadcasts", () => {
     });
   });
 
-  it("restores raw timestamps immediately on disabling and starts a fresh cache on re-enabling", async () => {
+  it("restores and updates timestamps based on preserveSiteTimer setting toggle", async () => {
+    // 1. Initial timer preservation
     await upsertTabPresence(1, {
       slug: "twitch",
       presence: {},
@@ -148,6 +149,7 @@ describe("site timer broadcasts", () => {
     await broadcastActiveTab();
     expect((await getCurrentActivity())?.presence.startTime).toBe(NOW);
 
+    // 2. Disable timer preservation
     vi.advanceTimersByTime(60 * SECOND_MS);
     await updateSettings({ preserveSiteTimer: false });
     expect(postNative).toHaveBeenLastCalledWith({
@@ -156,11 +158,11 @@ describe("site timer broadcasts", () => {
     });
     expect((await chrome.storage.session.get("siteTimers")).siteTimers).toEqual({});
 
+    // 3. Re-enable timer preservation
     await updateSettings({ preserveSiteTimer: true });
     expect((await getCurrentActivity())?.presence.startTime).toBe(NOW + 60);
-  });
 
-  it("keeps original supplied timestamps available after disabling", async () => {
+    // 4. Raw timestamp fallback when disabled
     await upsertTabPresence(1, {
       slug: "github",
       presence: { startTime: NOW - 600 },

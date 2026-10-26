@@ -85,8 +85,9 @@ describe("validateCustomActivity", () => {
 });
 
 describe("buildCustomPresence", () => {
-  it("maps text, timestamps and https buttons", () => {
-    const presence = buildCustomPresence(
+  it("maps text, timestamps, countdowns, buttons and resolves large/small images", () => {
+    // Text, countdown and buttons
+    const countdownPresence = buildCustomPresence(
       draft({
         details: "Chapter 3",
         timestamp: {
@@ -102,24 +103,23 @@ describe("buildCustomPresence", () => {
       }),
       now
     );
-    expect(presence).toMatchObject({
+    expect(countdownPresence).toMatchObject({
       name: "Studying",
       details: "Chapter 3",
       type: 0,
       startTime: now / 1000,
       endTime: now / 1000 + 25 * 60
     });
-    expect(presence.state).toBeUndefined();
-    expect(presence.buttons).toEqual([
+    expect(countdownPresence.state).toBeUndefined();
+    expect(countdownPresence.buttons).toEqual([
       {
         label: "Notes",
         url: "https://notes.example"
       }
     ]);
-  });
 
-  it("falls back to the Nowly logo when there is no large image", () => {
-    const presence = buildCustomPresence(
+    // Fallback logo when no large image
+    const fallbackPresence = buildCustomPresence(
       draft({
         largeImage: { kind: "none" },
         smallImage: {
@@ -130,13 +130,12 @@ describe("buildCustomPresence", () => {
       }),
       now
     );
-    expect(presence.largeImage).toBe("https://cdn.nowly.me/brand/icons/blue/512.png");
-    expect(presence.smallImage).toBe("https://cdn.example/small.png");
-    expect(presence.smallText).toBe("Hi");
-  });
+    expect(fallbackPresence.largeImage).toBe("https://cdn.nowly.me/brand/icons/blue/512.png");
+    expect(fallbackPresence.smallImage).toBe("https://cdn.example/small.png");
+    expect(fallbackPresence.smallText).toBe("Hi");
 
-  it("sends a generated image for the icon mode", () => {
-    const presence = buildCustomPresence(
+    // Icon mode URL generation
+    const iconPresence = buildCustomPresence(
       draft({
         largeImage: {
           kind: "icon",
@@ -146,12 +145,11 @@ describe("buildCustomPresence", () => {
       }),
       now
     );
-    expect(presence.largeImage).toBe(customIconImageUrl("book", "#5A6BB0"));
-    expect(presence.largeImage).toMatch(/\/api\/activity-icon\/book\/5a6bb0\.png\?v=\d+$/);
-  });
+    expect(iconPresence.largeImage).toBe(customIconImageUrl("book", "#5A6BB0"));
+    expect(iconPresence.largeImage).toMatch(/\/api\/activity-icon\/book\/5a6bb0\.png\?v=\d+$/);
 
-  it("uses the uploaded copy on the CDN", () => {
-    const presence = buildCustomPresence(
+    // Uploaded CDN copy
+    const cdnPresence = buildCustomPresence(
       draft({
         largeImage: {
           kind: "upload",
@@ -164,11 +162,10 @@ describe("buildCustomPresence", () => {
       }),
       now
     );
-    expect(presence.largeImage).toBe("https://cdn.nowly.me/custom/abc.png");
-    expect(presence.largeText).toBe("Cover");
-  });
+    expect(cdnPresence.largeImage).toBe("https://cdn.nowly.me/custom/abc.png");
+    expect(cdnPresence.largeText).toBe("Cover");
 
-  it("always sends a start time, Discord shows elapsed time anyway", () => {
+    // Elapsed timestamp mode
     expect(
       buildCustomPresence(
         draft({

@@ -3,38 +3,25 @@ import { normalizeCatalog, normalizeCatalogItem } from "@/shared/presence-catalo
 import { publicationDates, wasUpdatedAfterPublication } from "@/shared/presence-dates";
 
 describe("normalizeCatalogItem", () => {
-  it("keeps ISO publication dates from the API", () => {
-    const item = normalizeCatalogItem({
+  it("normalizes item attributes, handling valid ISO dates, malformed dates, and missing slugs", () => {
+    // Valid ISO dates
+    const valid = normalizeCatalogItem({
       slug: "youtube",
       version: "1.2.0",
       addedAt: "2026-06-09T08:04:33.097Z",
       lastUpdated: "2026-09-17T18:49:01.000Z"
     });
-    expect(item).toMatchObject({
+    expect(valid).toMatchObject({
       slug: "youtube",
       addedAt: "2026-06-09T08:04:33.097Z",
       lastUpdated: "2026-09-17T18:49:01.000Z"
     });
-  });
 
-  it("turns missing or invalid dates into null", () => {
-    expect(normalizeCatalogItem({ slug: "youtube" })).toMatchObject({
-      addedAt: null,
-      lastUpdated: null
-    });
-    expect(
-      normalizeCatalogItem({
-        slug: "youtube",
-        addedAt: "not a date",
-        lastUpdated: 42
-      })
-    ).toMatchObject({
-      addedAt: null,
-      lastUpdated: null
-    });
-  });
+    // Missing or invalid dates fallback to null
+    expect(normalizeCatalogItem({ slug: "youtube" })).toMatchObject({ addedAt: null, lastUpdated: null });
+    expect(normalizeCatalogItem({ slug: "youtube", addedAt: "not a date", lastUpdated: 42 })).toMatchObject({ addedAt: null, lastUpdated: null });
 
-  it("rejects entries without a slug", () => {
+    // Missing slug / null returns null
     expect(normalizeCatalogItem({ name: "No slug" })).toBeNull();
     expect(normalizeCatalogItem(null)).toBeNull();
   });

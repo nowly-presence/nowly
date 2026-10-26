@@ -42,68 +42,38 @@ const countOpenings = (messages: NativeResponse[], start: DiscordIpcIssue = NO_D
 };
 
 describe("Discord IPC prompt", () => {
-  it("opens when a PONG carries the code", () => {
+  it("tracks prompt lifecycle: opens on code, deduplicates heartbeats, re-opens after recovery, and defers while busy", () => {
+    // 1. Opens for PONG or ERROR with code, but ignores healthy or unrelated responses
     expect(countOpenings([deniedPong]).openings).toBe(1);
-  });
-
-  it("opens when an ERROR carries the code", () => {
     expect(countOpenings([deniedError]).openings).toBe(1);
-  });
+    const nonErrors = countOpenings([healthyPong, plainError, { type: "OK" }, { type: "CONNECTED", version: "1.4.5" }]);
+    expect(nonErrors.openings).toBe(0);
+    expect(nonErrors.issue).toEqual(NO_DISCORD_IPC_ISSUE);
 
-  it("does not open for responses without the code", () => {
-    const { issue, openings } = countOpenings([
-      healthyPong,
-      plainError,
-      { type: "OK" },
-      {
-        type: "CONNECTED",
-        version: "1.4.5"
-      }
-    ]);
-    expect(openings).toBe(0);
-    expect(issue).toEqual(NO_DISCORD_IPC_ISSUE);
-  });
+    // 2. Deduplicates consecutive heartbeats with the code
+    const consecutive = countOpenings([deniedPong, deniedPong, deniedError, deniedPong]);
+    expect(consecutive.openings).toBe(1);
+    expect(consecutive.issue).toEqual({ active: true, prompted: true });
 
-  it("opens once for consecutive heartbeats with the code", () => {
-    const { issue, openings } = countOpenings([deniedPong, deniedPong, deniedError, deniedPong]);
-    expect(openings).toBe(1);
-    expect(issue).toEqual({
-      active: true,
-      prompted: true
-    });
-  });
-
-  it("opens once more after the problem resolves then comes back", () => {
+    // 3. Re-opens after resolving and recurring
     expect(countOpenings([deniedPong, deniedPong, healthyPong, deniedPong, deniedError]).openings).toBe(2);
-  });
 
-  it("keeps the episode on responses that are not heartbeats", () => {
-    const { issue, openings } = countOpenings([
-      deniedPong,
-      plainError,
-      { type: "OK" },
-      deniedPong
-    ]);
-    expect(openings).toBe(1);
-    expect(issue.active).toBe(true);
-  });
+    // 4. Keeps episode on non-heartbeat messages
+    const nonHeartbeat = countOpenings([deniedPong, plainError, { type: "OK" }, deniedPong]);
+    expect(nonHeartbeat.openings).toBe(1);
+    expect(nonHeartbeat.issue.active).toBe(true);
 
-  it("waits while something else is on screen, then opens once", () => {
+    // 5. Defers while busy on screen
     const issue = trackDiscordIpcIssue(NO_DISCORD_IPC_ISSUE, deniedPong);
     expect(shouldPromptDiscordIpcIssue(issue, true)).toBe(false);
     expect(shouldPromptDiscordIpcIssue(issue, false)).toBe(true);
     expect(shouldPromptDiscordIpcIssue(markDiscordIpcIssuePrompted(issue), false)).toBe(false);
   });
 
-  it("does not mark an inactive issue as prompted", () => {
+  it("handles native status mapping and schema validation", () => {
     expect(markDiscordIpcIssuePrompted(NO_DISCORD_IPC_ISSUE)).toBe(NO_DISCORD_IPC_ISSUE);
-  });
 
-  it("maps the issue to and from the native status", () => {
-    const issue = {
-      active: true,
-      prompted: true
-    };
+    const issue = { active: true, prompted: true };
     expect(discordIpcIssueCode(issue)).toBe(NATIVE_ERROR_CODES.discordIpcAccessDenied);
     expect(discordIpcIssueCode(NO_DISCORD_IPC_ISSUE)).toBeUndefined();
     expect(
@@ -114,21 +84,9 @@ describe("Discord IPC prompt", () => {
         codePrompted: true
       })
     ).toEqual(issue);
-    expect(
-      discordIpcIssueOf({
-        connected: true,
-        status: "connected"
-      })
-    ).toEqual(NO_DISCORD_IPC_ISSUE);
-  });
+    expect(discordIpcIssueOf({ connected: true, status: "connected" })).toEqual(NO_DISCORD_IPC_ISSUE);
 
-  it("validates stored values", () => {
-    expect(
-      isDiscordIpcIssue({
-        active: true,
-        prompted: false
-      })
-    ).toBe(true);
+    expect(isDiscordIpcIssue({ active: true, prompted: false })).toBe(true);
     expect(isDiscordIpcIssue({ active: "yes" })).toBe(false);
     expect(isDiscordIpcIssue(null)).toBe(false);
   });

@@ -66,7 +66,7 @@ describe("normalizeDockLayout", () => {
 });
 
 describe("moveDockTab", () => {
-  it("reorders inside a bar", () => {
+  it("reorders inside a bar, creates new bars, merges bars and caps maximum split count", () => {
     expect(
       moveDockTab(base, "settings", {
         kind: "into",
@@ -74,9 +74,7 @@ describe("moveDockTab", () => {
         index: 0
       })
     ).toEqual([["settings", "activity", "store", "custom"]]);
-  });
 
-  it("pulls a tab out into a new bar on either side", () => {
     expect(
       moveDockTab(base, "activity", {
         kind: "new",
@@ -95,9 +93,7 @@ describe("moveDockTab", () => {
       ["settings"],
       ["activity", "store", "custom"]
     ]);
-  });
 
-  it("joins another bar and removes the bar left empty", () => {
     const split: Tab[][] = [
       ["store", "custom", "settings"],
       ["activity"]
@@ -119,22 +115,20 @@ describe("moveDockTab", () => {
         index: 0
       })
     ).toEqual([["activity", "store", "custom", "settings"]]);
-  });
 
-  it("keeps a lone tab in place and caps the number of bars", () => {
-    const split: Tab[][] = [
+    const maxSplit: Tab[][] = [
       ["activity"],
       ["store", "custom"],
       ["settings"]
     ];
     expect(
-      moveDockTab(split, "activity", {
+      moveDockTab(maxSplit, "activity", {
         kind: "new",
         side: "start"
       })
-    ).toEqual(split);
+    ).toEqual(maxSplit);
     expect(
-      moveDockTab(split, "store", {
+      moveDockTab(maxSplit, "store", {
         kind: "new",
         side: "end"
       })

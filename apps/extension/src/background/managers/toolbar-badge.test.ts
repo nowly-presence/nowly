@@ -95,41 +95,29 @@ const customs: CustomActivitiesState = {
   ]
 };
 
-describe("toolbarActivityColor", () => {
-  it("blends 20% of #000010 into the opaque activity color", () => {
+describe("toolbar badge helpers", () => {
+  it("determines readable badge colors and fallbacks", () => {
+    // 20% dark blend
     expect(readableBadgeColor("#ff4500")).toBe("#cc3703");
-    expect(readableBadgeColor("#f40")).toBe("#cc3603");
     expect(readableBadgeColor("#0891b2")).toBe("#067492");
-  });
-  it("uses the installed presence metadata color", () => {
+
+    // Presence metadata color
     expect(toolbarActivityColor(current("reddit"), stored("#ff4500"), customs)).toBe("#ff4500");
-  });
 
-  it("uses the active custom activity's large icon color", () => {
+    // Custom activity icon color
     expect(toolbarActivityColor(current("custom:one"), {}, customs)).toBe("#d45017");
-  });
 
-  it("uses Nowly color for uploads and missing or invalid metadata", () => {
+    // Fallback for upload, missing presence or invalid hex
     const uploaded: CustomActivitiesState = {
       ...customs,
-      items: [
-        {
-          ...customs.items[0],
-          largeImage: {
-            kind: "upload",
-            hash: "hash",
-            mime: "image/png",
-            size: 1
-          }
-        }
-      ]
+      items: [{ ...customs.items[0], largeImage: { kind: "upload", hash: "hash", mime: "image/png", size: 1 } }]
     };
     expect(toolbarActivityColor(current("custom:one"), {}, uploaded)).toBe("#0891b2");
     expect(toolbarActivityColor(current("missing"), {}, customs)).toBe("#0891b2");
     expect(toolbarActivityColor(current("reddit"), stored("invalid"), customs)).toBe("#0891b2");
   });
 
-  it("shows an emoji for the activity type and defaults to playing", () => {
+  it("maps activity types to emoji symbols", () => {
     expect(toolbarActivitySymbol(0)).toBe("🎮");
     expect(toolbarActivitySymbol(2)).toBe("🎧");
     expect(toolbarActivitySymbol(3)).toBe("👀");

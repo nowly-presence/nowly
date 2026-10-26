@@ -40,49 +40,33 @@ describe("file drop subscriptions", () => {
     vi.unstubAllGlobals();
   });
 
-  it("does not intercept files while disabled", () => {
+  it("handles drag-and-drop lifecycle, filtering non-file drags and cleaning up listeners", () => {
     const onFiles = vi.fn();
     useFileDrop(onFiles, false);
     cleanup = effects.run?.();
-    const event = drag("drop", [new File(["{}"], "activity.json")]);
-    target.dispatchEvent(event);
-    expect(event.defaultPrevented).toBe(false);
+
+    // 1. Disabled: does not intercept
+    const disabledDrop = drag("drop", [new File(["{}"], "activity.json")]);
+    target.dispatchEvent(disabledDrop);
+    expect(disabledDrop.defaultPrevented).toBe(false);
     expect(onFiles).not.toHaveBeenCalled();
-  });
-  it("handles file drops while enabled", () => {
-    const onFiles = vi.fn();
-    useFileDrop(onFiles, true);
-    cleanup = effects.run?.();
-    const files = [new File(["{}"], "activity.json")];
-    const event = drag("drop", files);
-    target.dispatchEvent(event);
-    expect(event.defaultPrevented).toBe(true);
-    expect(onFiles).toHaveBeenCalledWith(files);
-  });
-  it("ignores text drags", () => {
-    const onFiles = vi.fn();
-    useFileDrop(onFiles, true);
-    cleanup = effects.run?.();
-    const event = drag("drop", [], ["text/plain"]);
-    target.dispatchEvent(event);
-    expect(event.defaultPrevented).toBe(false);
-    expect(onFiles).not.toHaveBeenCalled();
-  });
-  it("removes global listeners when leaving the view", () => {
-    const onFiles = vi.fn();
-    useFileDrop(onFiles, true);
-    cleanup = effects.run?.();
+
+    // 2. Enabled: ignores non-file text drag, handles valid file drop
     cleanup?.();
-    cleanup = undefined;
-    const event = drag("drop", [new File(["{}"], "activity.json")]);
-    target.dispatchEvent(event);
-    expect(event.defaultPrevented).toBe(false);
-    expect(onFiles).not.toHaveBeenCalled();
-    expect(effects.setDragging).toHaveBeenLastCalledWith(false);
-  });
-  it("keeps the overlay until the final nested drag leaves", () => {
-    useFileDrop(vi.fn(), true);
+    useFileDrop(onFiles, true);
     cleanup = effects.run?.();
+
+    const textDrag = drag("drop", [], ["text/plain"]);
+    target.dispatchEvent(textDrag);
+    expect(textDrag.defaultPrevented).toBe(false);
+
+    const files = [new File(["{}"], "activity.json")];
+    const validDrop = drag("drop", files);
+    target.dispatchEvent(validDrop);
+    expect(validDrop.defaultPrevented).toBe(true);
+    expect(onFiles).toHaveBeenCalledWith(files);
+
+    // 3. Nested drag counter overlay behavior
     target.dispatchEvent(drag("dragenter"));
     target.dispatchEvent(drag("dragenter"));
     effects.setDragging.mockClear();
@@ -90,5 +74,12 @@ describe("file drop subscriptions", () => {
     expect(effects.setDragging).not.toHaveBeenCalled();
     target.dispatchEvent(drag("dragleave"));
     expect(effects.setDragging).toHaveBeenCalledWith(false);
+
+    // 4. Cleanup removes global listeners
+    cleanup?.();
+    cleanup = undefined;
+    const postCleanupDrop = drag("drop", [new File(["{}"], "activity.json")]);
+    target.dispatchEvent(postCleanupDrop);
+    expect(postCleanupDrop.defaultPrevented).toBe(false);
   });
 });

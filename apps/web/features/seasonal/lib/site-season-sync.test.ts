@@ -95,32 +95,36 @@ describe("site season synchronization", () => {
     expect(site.onChange.mock.calls.every(([season]) => season === null)).toBe(true);
   });
 
-  it.each(SITE_SEASONS)("activates %s only after confirmation and removes it immediately when disabled", (season) => {
-    const site = setup();
-    expect(site.seasonalClasses()).toEqual([]);
-    site.receive(season);
-    expect(site.seasonalClasses()).toEqual([`season-${season}`]);
-    expect(site.onChange).toHaveBeenLastCalledWith(season);
-    site.receive(null);
-    expect(site.seasonalClasses()).toEqual([]);
-    expect(site.onChange).toHaveBeenLastCalledWith(null);
-    expect(vi.getTimerCount()).toBe(0);
+  it("activates any valid season after confirmation and removes it immediately when disabled", () => {
+    for (const season of SITE_SEASONS) {
+      const site = setup();
+      expect(site.seasonalClasses()).toEqual([]);
+      site.receive(season);
+      expect(site.seasonalClasses()).toEqual([`season-${season}`]);
+      expect(site.onChange).toHaveBeenLastCalledWith(season);
+      site.receive(null);
+      expect(site.seasonalClasses()).toEqual([]);
+      expect(site.onChange).toHaveBeenLastCalledWith(null);
+      expect(vi.getTimerCount()).toBe(0);
+    }
   });
 
-  it.each(SITE_SEASONS)("removes all %s effects while hidden and until a fresh visible confirmation", (season) => {
-    const site = setup();
-    site.receive(season);
-    site.visibility(false);
-    expect(site.seasonalClasses()).toEqual([]);
-    expect(site.onChange).toHaveBeenLastCalledWith(null);
-    expect(vi.getTimerCount()).toBe(0);
-    site.receive(season);
-    expect(site.seasonalClasses()).toEqual([]);
-    site.visibility(true);
-    expect(site.seasonalClasses()).toEqual([]);
-    site.receive(null);
-    expect(site.seasonalClasses()).toEqual([]);
-    expect(site.onChange).toHaveBeenLastCalledWith(null);
+  it("removes all season effects while hidden and until a fresh visible confirmation", () => {
+    for (const season of SITE_SEASONS) {
+      const site = setup();
+      site.receive(season);
+      site.visibility(false);
+      expect(site.seasonalClasses()).toEqual([]);
+      expect(site.onChange).toHaveBeenLastCalledWith(null);
+      expect(vi.getTimerCount()).toBe(0);
+      site.receive(season);
+      expect(site.seasonalClasses()).toEqual([]);
+      site.visibility(true);
+      expect(site.seasonalClasses()).toEqual([]);
+      site.receive(null);
+      expect(site.seasonalClasses()).toEqual([]);
+      expect(site.onChange).toHaveBeenLastCalledWith(null);
+    }
   });
 
   it("can reactivate the same season after a fresh answer", () => {
