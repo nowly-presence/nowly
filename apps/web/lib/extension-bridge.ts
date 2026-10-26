@@ -10,7 +10,9 @@ export type ExtensionRequestType =
   | "GET_DEVICE_INFO"
   | "GET_ANALYTICS_CONSENT"
   | "SET_ANALYTICS_CONSENT"
-  | "NOWLY_SESSION";
+  | "NOWLY_SESSION"
+  | "GET_ACTIVITY_PUBLICATION_STATUS"
+  | "APPLY_ACTIVITY_PUBLICATION";
 
 export type ExtensionDeviceInfo = {
   deviceId: string | null;
@@ -78,6 +80,8 @@ const stopPing = (): void => {
 };
 
 const onWindowMessage = (event: MessageEvent): void => {
+  if (event.source !== window || event.origin !== window.location.origin) return;
+
   const data = event.data;
 
   if (!data || typeof data !== "object") return;
@@ -125,7 +129,7 @@ const startDetection = (): void => {
       source: EXT_WEB_SOURCE,
       type: "PING"
     },
-    "*"
+    window.location.origin
   );
   pingTimer = window.setInterval(() => {
     window.postMessage(
@@ -133,7 +137,7 @@ const startDetection = (): void => {
         source: EXT_WEB_SOURCE,
         type: "PING"
       },
-      "*"
+      window.location.origin
     );
   }, 300);
   pingTimeout = window.setTimeout(() => {
@@ -186,7 +190,7 @@ type === "UPDATE_PRESENCE"
         messageId,
         payload
       },
-      "*"
+      window.location.origin
     );
   });
 };

@@ -17,6 +17,8 @@ Nowly accounts on nowly.me (Discord only for now). Rendered by `app/[locale]/ext
 
 The session payload is exactly the `POST /extension/tokens` response (`{ token, user, providers, expiresAt }`). Do not reshape it: the extension validates it and then calls `GET /me` with the token.
 
+Public activity publishing adds `?permission=creator`: this mode explains attribution and sync and requires an explicit Connect click even with `source=extension`. It requests `sync` plus `creator`; the normal flow remains sync-only. Token responses additionally include granted scopes. The API independently enforces creator authorization on publication writes.
+
 ## Gotchas
 
 - Account deletion and export use the site session only (cookie), never an extension token. Keep the `window.confirm` before `DELETE /me`.
