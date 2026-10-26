@@ -1,33 +1,28 @@
 # @nowly/ui
 
-Shared React component library used by `apps/web`, `apps/docs` and `apps/insights`. shadcn-style primitives live directly in `src/*.tsx` (one file per component, all re-exported from `src/index.ts`). A handful of business components that must render *identically* across apps also live here: `footer.tsx`, `locale-flag.tsx`, `locale-selector.tsx`.
+Shared React components for `apps/web` and `apps/docs`. shadcn-style primitives are one file each in `src/*.tsx`, re-exported from `src/index.ts`; `src/icons.ts` is not in the barrel and is imported as `@nowly/ui/icons`. `footer.tsx`, `locale-flag.tsx` and `locale-selector.tsx` live here so they render identically across apps. Other subpaths are listed in `package.json` `exports`.
 
-## Add a link to the footer
+## Add a footer link
 
-The footer's link structure is hardcoded in `src/footer.tsx` (not passed as props) so `apps/web` and `apps/docs` can never render different links. To add one:
+Links are hardcoded in `src/footer.tsx` (no props) so web and docs cannot diverge. Never add a link in one app's wrapper; if it only fits one app, it does not belong in the shared footer. Do these together:
 
-1. Open `packages/ui/src/footer.tsx`.
-2. Add the label to the `FooterLabels` type (around line 20) — e.g. `newThing: string`.
-3. Add the link itself inside the `columns` array (one of the three `{ title, links }` objects) or, if it's a legal page, inside `legalLinks` (around line 95). Use the `web(path)` helper for a page on nowly.me, `docs()` for the docs home, or a raw URL + `external: true` for anything off-domain:
-   ```ts
-   { href: web("/new-page"), label: labels.newThing }
-   ```
-4. Add the translation key in **both** apps' `footer` namespace, in all 11 locale files: `apps/web/messages/*.json` and `apps/docs/messages/*.json` (`de-DE`, `el-GR`, `en-US`, `es-ES`, `fr-FR`, `ja-JP`, `ko-KR`, `ms-MY`, `pl-PL`, `pt-BR`, `tr-TR`). Key name in kebab-case, e.g. `"new-thing": "New thing"`.
-5. Wire the label in both apps' footer wrapper — `apps/web/features/layout/components/footer.tsx` and `apps/docs/features/layout/components/footer.tsx` — by adding `newThing: t("new-thing"),` to the `labels={{ ... }}` object passed to `<SharedFooter>`.
-6. Run `pnpm --filter @nowly/web build` and `pnpm --filter @nowly/docs build` (or at least `tsc --noEmit` on both) — a missing label on either side is a type error, not a silent bug.
+1. Add the label to `FooterLabels` (line ~22), e.g. `newThing: string`.
+2. Add the link to one of the four `columns` (product, resources, community, company) or to `legalLinks` (~line 177). Use `web(path)` for nowly.me, `docs()` for the docs home, or a raw URL with `external: true`.
+3. Add the key (kebab-case, e.g. `"new-thing"`) to the `footer` namespace in all 11 locale files of both `apps/web/messages/*.json` and `apps/docs/messages/*.json`.
+4. Add `newThing: t("new-thing")` to the `labels` passed to `<SharedFooter>` in `apps/web/features/layout/components/footer.tsx` and `apps/docs/features/layout/components/footer.tsx`.
+5. Run `tsc --noEmit` (or build) for web and docs: a missing label is a type error.
 
-Never add the link only in one app's footer wrapper — there is nowhere to put an app-specific link, that's the point of this component. If a link genuinely only makes sense on one app, it doesn't belong in the shared footer.
+Do not add `columns`/`links` props to `Footer` or `LocaleSelector`.
 
-## Add a new shared component
+## Add a component
 
-1. Create `src/<name>.tsx`.
-2. Add `export * from "./<name>";` to `src/index.ts`.
-3. If it needs `next-intl` or `@nowly/locales` (like `locale-selector.tsx` does), import directly — both are already declared as dependencies in `package.json`.
+1. Create `src/<name>.tsx` and add `export * from "./<name>";` to `src/index.ts`.
+2. `next-intl` and `@nowly/locales` are already dependencies.
+
+Note: `apps/insights` imports the barrel, which includes `locale-selector` (so `next-intl` and `@nowly/locales`), yet its `transpilePackages` lacks `@nowly/locales`; keep that in mind if resolution errors appear there.
 
 ## Gotchas
 
-- After adding a new dependency to `packages/ui/package.json`, run `pnpm install`, then add `"@nowly/ui"` to the consuming app's `next.config.ts` `transpilePackages` if it isn't already there, then `rm -rf apps/<app>/.next` and restart the dev server — Turbopack caches module resolution and will report a false "Module not found" otherwise.
-- `Footer`/`LocaleSelector` take almost no layout props on purpose. If you're tempted to add a `columns` or `links` prop to `Footer`, don't — that reopens the door to per-app divergence this component exists to close.
-
-## Notable dependencies
-`@nowly/locales` (i18n routing for `LocaleSelector`/`Footer`), `next-intl`, `@base-ui/react`, `class-variance-authority`.
+- After adding a dependency: `pnpm install`, make sure the consuming app's `next.config.ts` `transpilePackages` includes `@nowly/ui`, then `rm -rf apps/<app>/.next` and restart (stale Turbopack resolution gives a false "Module not found").
+- `localizedUrl` in `footer.tsx` duplicates the apps' locale prefix scheme (short codes, default unprefixed) on purpose; keep it in sync with `packages/locales`.
+- Adding a locale also touches `localeLabelKey` (`locale-selector.tsx`) and `otherFlags` (`locale-flag.tsx`); see `packages/locales/AGENTS.md`.

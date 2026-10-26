@@ -8,12 +8,12 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-## Serving the docs from nowly.me/docs
+## Serving from nowly.me/docs
 
-The docs can run under a base path, as a Next.js multi-zone behind `apps/web`:
+Docs can run as a Next.js multi-zone behind `apps/web`:
 
-- Build this app with `NEXT_PUBLIC_DOCS_BASE_PATH=/docs` and `NEXT_PUBLIC_DOCS_BASE_URL=https://nowly.me/docs` (Dockerfile ARGs). `next.config.ts` then sets `basePath`, and requests on the `docs.nowly.me` host get a permanent redirect to `https://nowly.me/docs/...` (`basePath: false`).
-- Build `apps/web` with `DOCS_ZONE_URL` (the internal address of this deployment, never `https://docs.nowly.me`, which now redirects) and the same `NEXT_PUBLIC_DOCS_BASE_URL`. `apps/web` proxies `/docs` and `/docs/*` to it (`beforeFiles` rewrites) and its own proxy skips `/docs`.
-- Without those variables both apps behave as before: docs on docs.nowly.me, `nowly.me/docs` redirecting there.
-- Use `DOCS_URL`/`absoluteUrl` (`lib/constants.ts`, `features/seo/lib/seo.ts`) for absolute URLs and `DOCS_BASE_PATH` for root-relative `fetch` or asset paths that Next does not prefix by itself (the search API call, the manifest). `next/link`, next-intl's `Link` and the proxy handle the base path on their own.
-- `proxy.ts` lists `"/"` in its matcher: under a base path the docs home reaches the proxy as an empty path.
+- Build docs with `NEXT_PUBLIC_DOCS_BASE_PATH=/docs` and `NEXT_PUBLIC_DOCS_BASE_URL=https://nowly.me/docs` (Dockerfile ARGs). `next.config.ts` then sets `basePath` and permanently redirects the `docs.nowly.me` host to `https://nowly.me/docs/...`.
+- Build `apps/web` with `DOCS_ZONE_URL` (the internal address of this deployment, never `https://docs.nowly.me`) and the same `NEXT_PUBLIC_DOCS_BASE_URL`. Web rewrites `/docs` and `/docs/*` to it and its own proxy skips `/docs`.
+- Without those variables docs live on docs.nowly.me and `nowly.me/docs` redirects there.
+- Absolute URLs: `DOCS_URL` / `absoluteUrl` (`lib/constants.ts`, `features/seo/lib/seo.ts`). Root-relative `fetch`/asset paths Next does not prefix (search API, manifest): `DOCS_BASE_PATH`. `next/link`, next-intl `Link` and the proxy handle the base path themselves.
+- `proxy.ts` keeps `"/"` in its matcher: under a base path the docs home reaches the proxy as an empty path.
