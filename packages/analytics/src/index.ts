@@ -4,7 +4,6 @@ export * from "./consent";
 export * from "./funnels";
 export * from "./identity";
 export * from "./ingest";
-export * from "./legacy-sources";
 export * from "./policies";
 export * from "./queue";
 export * from "./ranges";

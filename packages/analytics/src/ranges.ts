@@ -71,7 +71,7 @@ export const ANALYTICS_RANGES: Record<AnalyticsRangeId, AnalyticsRange> = {
   }
 };
 
-export const isAnalyticsRangeId = (value: unknown): value is AnalyticsRangeId => typeof value === "string" && value in ANALYTICS_RANGES;
+export const isAnalyticsRangeId = (value: unknown): value is AnalyticsRangeId => typeof value === "string" && Object.hasOwn(ANALYTICS_RANGES, value);
 
 export const resolveRange = (value: unknown, fallback: AnalyticsRangeId = "7d"): AnalyticsRange => {
   if (isAnalyticsRangeId(value)) return ANALYTICS_RANGES[value];

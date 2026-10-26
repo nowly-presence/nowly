@@ -4,18 +4,15 @@ import { createAnalyticsClient } from "../src/client";
 import { alwaysGrantedConsent } from "../src/consent";
 import { getFunnel, listFunnels, measureFunnel } from "../src/funnels";
 import { anonymousIdentity } from "../src/identity";
-import { legacySources } from "../src/legacy-sources";
 import { FORBIDDEN_PAYLOAD_KEYS_SET } from "../src/policies";
 import { autoGranularity, resolveRange } from "../src/ranges";
 import { sanitizePayload } from "../src/sanitize";
 
 describe("@nowly/analytics", () => {
-  it("keeps every catalog key represented in the legacy inventory", () => {
-    const inventoried = new Set(legacySources.map((source) => source.key));
+  it("keeps catalog keys unique", () => {
+    const keys = analyticsRegistry.map((metric) => metric.key);
 
-    for (const metric of analyticsRegistry) {
-      expect(inventoried.has(metric.key)).toBe(true);
-    }
+    expect(new Set(keys).size).toBe(keys.length);
   });
 
   it("defines the initial funnels on migrated keys", () => {
@@ -64,6 +61,7 @@ describe("@nowly/analytics", () => {
     expect(autoGranularity("7d")).toBe("hour");
     expect(autoGranularity("30d")).toBe("day");
     expect(resolveRange("nope").id).toBe("7d");
+    expect(resolveRange("toString").id).toBe("7d");
   });
 
   it("strips forbidden payload keys", () => {
