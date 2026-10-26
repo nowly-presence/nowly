@@ -34,7 +34,6 @@ The package manager version is pinned in the root `package.json`. Use that versi
 
 - `apps/web` — public website and user dashboard.
 - `apps/docs` — public documentation site.
-- `apps/insights` — internal analytics dashboard.
 - `apps/extension` — browser extension.
 - `apps/api` — Fastify API.
 - `apps/native` — Go native messaging host.
@@ -54,7 +53,6 @@ Run commands from the repository root unless noted otherwise:
 pnpm dev:api
 pnpm dev:web
 pnpm dev:docs
-pnpm dev:insights
 pnpm --filter @nowly/extension dev
 ```
 
