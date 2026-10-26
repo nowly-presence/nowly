@@ -1,12 +1,13 @@
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/ui/cn";
 
-type Variant = "primary" | "secondary" | "solid" | "ghost" | "danger" | "destructive" | "link" | "inverse";
+type Variant = "primary" | "secondary" | "muted" | "solid" | "ghost" | "danger" | "destructive" | "link" | "inverse";
 type Size = "md" | "sm" | "icon" | "icon-sm";
 
 const variants: Record<Variant, string> = {
   primary: "bg-primary text-on-primary hover:brightness-[1.06] active:brightness-95 disabled:opacity-45",
   secondary: "border border-line-strong bg-transparent text-ink hover:bg-hover active:bg-press disabled:opacity-45",
+  muted: "bg-hover text-ink hover:bg-press active:opacity-80 disabled:opacity-45",
   solid: "border border-ink bg-ink text-canvas hover:opacity-90 active:opacity-80 disabled:opacity-45",
   ghost: "bg-transparent text-ink hover:bg-hover active:bg-press disabled:opacity-45",
   danger: "border border-line-strong bg-transparent text-danger hover:bg-danger-soft disabled:opacity-45",
