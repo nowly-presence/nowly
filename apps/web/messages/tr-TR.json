@@ -38,12 +38,6 @@
     "dark": "Koyu"
   },
   "hero": {
-    "carousel": {
-      "previous": "Önceki kart",
-      "next": "Sonraki kart",
-      "pause": "Kartları duraklat",
-      "play": "Kartları sürdür"
-    },
     "title-before": "Yaptığın şeyi",
     "title-accent": "anlık olarak paylaş",
     "description": "Nowly, etkinliğini zengin ve dinamik bir Discord varlığına dönüştürür.",
@@ -406,19 +400,12 @@
     "title": "Discord'a yerel köprü",
     "description": "Uzantı sekmeyi okur. Masaüstü uygulaması durumunu Discord'a gönderir. Başlık, platform ve oynatma bilgisi PC'nden asla çıkmaz.",
     "detected": "Algılandı",
-    "chromeos-title": "ChromeOS henüz desteklenmiyor",
-    "chromeos-description": "Discord Rich Presence, ChromeOS'un bugün çalıştıramadığı yerel bir uygulama gerektirir. Konuyu inceliyoruz - bu değişirse bildirim almak için e-postanı bırak.",
-    "chromeos-email-placeholder": "sen@ornek.com",
-    "chromeos-submit": "Beni bilgilendir",
-    "chromeos-success": "Teşekkürler, sana haber vereceğiz.",
-    "chromeos-error": "Bir sorun oluştu. Lütfen tekrar deneyin.",
     "version": "Sürüm {version}",
     "card-title": "{platform} için indir",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux",
-      "chromeos": "ChromeOS"
+      "linux": "Linux"
     },
     "windows-installer": "Windows yükleyici (.exe)",
     "windows-portable": "Taşınabilir arşiv (.zip)",

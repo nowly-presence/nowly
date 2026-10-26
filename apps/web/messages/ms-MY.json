@@ -38,12 +38,6 @@
     "dark": "Gelap"
   },
   "hero": {
-    "carousel": {
-      "previous": "Kad sebelumnya",
-      "next": "Kad seterusnya",
-      "pause": "Jeda kad",
-      "play": "Sambung kad"
-    },
     "title-before": "Kongsi apa yang anda lakukan, secara",
     "title-accent": "masa nyata",
     "description": "Nowly mengubah aktiviti anda menjadi kehadiran Discord yang kaya dan dinamik.",
@@ -406,19 +400,12 @@
     "title": "Jambatan tempatan ke Discord",
     "description": "Sambungan membaca tab. Aplikasi desktop menghantar status anda ke Discord. Tajuk, platform dan main balik tidak pernah meninggalkan PC anda.",
     "detected": "Dikesan",
-    "chromeos-title": "ChromeOS belum lagi disokong",
-    "chromeos-description": "Discord Rich Presence memerlukan aplikasi asli yang tidak dapat dijalankan oleh ChromeOS pada masa ini. Kami sedang menyiasatnya - tinggalkan e-mel anda untuk dimaklumkan jika ini berubah.",
-    "chromeos-email-placeholder": "anda@contoh.com",
-    "chromeos-submit": "Maklumkan saya",
-    "chromeos-success": "Terima kasih, kami akan maklumkan anda.",
-    "chromeos-error": "Sesuatu tidak berjaya. Sila cuba lagi.",
     "version": "Versi {version}",
     "card-title": "Muat turun untuk {platform}",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux",
-      "chromeos": "ChromeOS"
+      "linux": "Linux"
     },
     "windows-installer": "Pemasang Windows (.exe)",
     "windows-portable": "Arkib mudah alih (.zip)",

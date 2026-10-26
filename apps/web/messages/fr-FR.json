@@ -38,7 +38,6 @@
     "dark": "Sombre"
   },
   "hero": {
-    "carousel": { "previous": "Carte précédente", "next": "Carte suivante", "pause": "Mettre les cartes en pause", "play": "Relancer les cartes" },
     "title-before": "Partagez ce que vous faites, en",
     "title-accent": "temps réel",
     "description": "Nowly transforme votre activité en présence Discord riche et dynamique.",
@@ -401,19 +400,12 @@
     "title": "Le pont local vers Discord",
     "description": "L’extension lit l’onglet. L’application de bureau transmet votre statut à Discord. Le titre, la plateforme et l’état de lecture restent sur votre ordinateur.",
     "detected": "Détecté",
-    "chromeos-title": "ChromeOS n'est pas encore supporté",
-    "chromeos-description": "Discord Rich Presence a besoin d'une application native que ChromeOS ne peut pas exécuter aujourd'hui. On regarde comment y remédier - laissez votre email pour être prévenu si ça change.",
-    "chromeos-email-placeholder": "vous@exemple.com",
-    "chromeos-submit": "Me prévenir",
-    "chromeos-success": "Merci, on vous tiendra au courant.",
-    "chromeos-error": "Votre adresse e-mail n’a pas pu être enregistrée. Réessayez dans un instant.",
     "version": "Version {version}",
     "card-title": "Télécharger pour {platform}",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux",
-      "chromeos": "ChromeOS"
+      "linux": "Linux"
     },
     "windows-installer": "Installateur Windows (.exe)",
     "windows-portable": "Archive portable (.zip)",

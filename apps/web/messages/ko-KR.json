@@ -38,12 +38,6 @@
     "dark": "다크"
   },
   "hero": {
-    "carousel": {
-      "previous": "이전 카드",
-      "next": "다음 카드",
-      "pause": "카드 일시 중지",
-      "play": "카드 다시 시작"
-    },
     "title-before": "지금 하는 일을",
     "title-accent": "실시간으로",
     "description": "Nowly는 당신의 활동을 풍부하고 역동적인 Discord 프레즌스로 바꿔줍니다.",
@@ -406,19 +400,12 @@
     "title": "Discord로의 로컬 브리지",
     "description": "확장 프로그램이 탭을 읽습니다. 데스크톱 앱이 상태를 Discord로 전송합니다. 제목, 플랫폼, 재생 정보는 당신의 PC를 벗어나지 않습니다.",
     "detected": "감지됨",
-    "chromeos-title": "ChromeOS는 아직 지원되지 않습니다",
-    "chromeos-description": "Discord Rich Presence는 현재 ChromeOS에서 실행할 수 없는 네이티브 앱이 필요합니다. 검토 중입니다 - 변경 사항이 있을 때 알림을 받으려면 이메일을 남겨주세요.",
-    "chromeos-email-placeholder": "you@example.com",
-    "chromeos-submit": "알림 받기",
-    "chromeos-success": "감사합니다. 알려드리겠습니다.",
-    "chromeos-error": "문제가 발생했습니다. 다시 시도해 주세요.",
     "version": "버전 {version}",
     "card-title": "{platform}용 다운로드",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux",
-      "chromeos": "ChromeOS"
+      "linux": "Linux"
     },
     "windows-installer": "Windows 설치 프로그램 (.exe)",
     "windows-portable": "휴대용 압축 파일 (.zip)",

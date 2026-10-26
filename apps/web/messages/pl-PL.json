@@ -38,12 +38,6 @@
     "dark": "Ciemny"
   },
   "hero": {
-    "carousel": {
-      "previous": "Poprzednia karta",
-      "next": "Następna karta",
-      "pause": "Wstrzymaj karty",
-      "play": "Wznów karty"
-    },
     "title-before": "Dziel się tym, co robisz, w",
     "title-accent": "czasie rzeczywistym",
     "description": "Nowly zamienia Twoją aktywność w bogatą, dynamiczną obecność na Discordzie.",
@@ -406,19 +400,12 @@
     "title": "Lokalny most do Discorda",
     "description": "Rozszerzenie odczytuje kartę. Aplikacja desktopowa wysyła Twój status do Discorda. Tytuł, platforma i odtwarzanie nigdy nie opuszczają Twojego komputera.",
     "detected": "Wykryto",
-    "chromeos-title": "ChromeOS nie jest jeszcze obsługiwany",
-    "chromeos-description": "Discord Rich Presence wymaga natywnej aplikacji, której ChromeOS obecnie nie może uruchomić. Analizujemy to - zostaw swój e-mail, aby otrzymać powiadomienie, gdy to się zmieni.",
-    "chromeos-email-placeholder": "ty@przyklad.pl",
-    "chromeos-submit": "Powiadom mnie",
-    "chromeos-success": "Dziękujemy, damy znać.",
-    "chromeos-error": "Coś poszło nie tak. Spróbuj ponownie.",
     "version": "Wersja {version}",
     "card-title": "Pobierz dla {platform}",
     "platforms": {
       "windows": "Windows",
       "macos": "macOS",
-      "linux": "Linux",
-      "chromeos": "ChromeOS"
+      "linux": "Linux"
     },
     "windows-installer": "Instalator Windows (.exe)",
     "windows-portable": "Archiwum przenośne (.zip)",
