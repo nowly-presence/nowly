@@ -31,7 +31,7 @@ export const CostumedNolo = ({ costume, size = 56, gaze, talking = false, classN
           height={size}
           aria-hidden
           className="pointer-events-none absolute bottom-0 left-0 overflow-visible"
-          style={{ transformOrigin: "50% 50%" }}
+          style={{ width: size, height: size, transformOrigin: "50% 50%" }}
           animate={!reduced && talking ? { scale: [1, TALK_SCALE, 1] } : { scale: 1 }}
           transition={talking ? { duration: TALK_BEAT_S, repeat: Infinity, ease: "easeInOut" } : { duration: TALK_BEAT_S }}
         >

@@ -108,6 +108,7 @@ export const NoloMascot = ({
         height={size}
         aria-hidden
         className={cn("shrink-0 overflow-visible", className)}
+        style={{ width: size, height: size }}
         animate={
           !reduced && talking ? { scale: [1, TALK_SCALE, 1] } : { scale: 1 }
         }
