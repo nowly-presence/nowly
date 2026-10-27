@@ -13,9 +13,11 @@ import { NavigationSection } from "@/features/settings/sections/navigation-secti
 export const SettingsView = () => {
   const { t } = useI18n();
   return (
-    <ScreenBody>
-      <ScreenTitle title={t("settings.title")} />
-      <ConnectionSummary />
+    <ScreenBody className="[&>section]:snap-start [&>section]:snap-always">
+      <div className="flex flex-col gap-6 snap-start snap-always">
+        <ScreenTitle title={t("settings.title")} />
+        <ConnectionSummary />
+      </div>
       <SharingSection />
       <ScheduleSection />
       <AppearanceSection />
