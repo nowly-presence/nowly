@@ -41,7 +41,7 @@ export const ActivityPreview = ({ activity }: {
   const small = previewImage(activity.smallImage);
   const header = previewHeader(activity);
   return (
-    <article className="rounded-2xl border border-white/20 bg-[#050505] p-4 text-[#e4f2ff] sm:p-5" aria-label={t("preview")}>
+    <article className="rounded-2xl border border-transparent bg-[#050505] p-4 text-[#e4f2ff] dark:border-white/10 sm:p-5" aria-label={t("preview")}>
       <p className="mb-4 text-sm font-medium sm:text-base">{t(header, { name: activity.name })}</p>
       <div className="flex items-start gap-4 sm:gap-6">
         <div className="relative size-20 shrink-0 sm:size-36">
