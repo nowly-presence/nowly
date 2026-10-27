@@ -9,6 +9,13 @@ export default defineConfig({
     globals: true,
     environment: "node",
     include: ["test/**/*.test.ts"],
-    setupFiles: ["test/setup.ts"]
+    setupFiles: ["test/setup.ts"],
+    coverage: {
+      provider: "v8",
+      reporter: ["cobertura"],
+      reportsDirectory: "coverage",
+      include: ["src/**/*.ts"],
+      exclude: ["src/generated/**"]
+    }
   }
 });

@@ -32,6 +32,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest"
   },
   "dependencies": {
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.5.1",
+    "@vitest/coverage-v8": "^4.1.9",
     "typescript": "6.0.3",
     "vitest": "^4.1.9"
   }

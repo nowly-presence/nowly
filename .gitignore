@@ -35,3 +35,6 @@ _tmp/
 # Auto-generated extension source
 apps/extension/src/generated/*
 apps/extension/artifacts/
+
+# Coverage reports
+coverage/
