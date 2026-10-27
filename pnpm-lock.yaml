@@ -42,8 +42,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/telemetry
       '@opencoredev/email-sdk':
-        specifier: ^1.2.0
-        version: 1.2.0(ai@7.0.106(zod@4.6.7))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        specifier: ^3.0.1
+        version: 3.0.1(ai@7.0.106(zod@4.6.7))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@prisma/adapter-pg':
         specifier: ^7.10.1
         version: 7.10.1
@@ -1842,8 +1842,8 @@ packages:
   '@nowly/sdk@1.7.1':
     resolution: {integrity: sha512-wbmPs9ng/rQdJ//VjOn0o4RFvorW+8rgUG39a5CsICuhZOApjdmLOjNjTKtWyU89K4q2B7WvQiHsQUxfDkRvLw==}
 
-  '@opencoredev/email-sdk@1.2.0':
-    resolution: {integrity: sha512-Wad4Ugxiwy5NkgWhuFxGwQpciNnG3PEH6pirhKg1Wf+bvJG1n30QwjzJhCDb9uG76KH6NrA7q9LlR7SjzqyHcQ==}
+  '@opencoredev/email-sdk@3.0.1':
+    resolution: {integrity: sha512-GkMqq0QX3qhyPE1Mqgw3VxBMXJAte8qtXhkVhoNuBB/CfhwsKR9nRZ5TMfWdeXjtP3w3KURWd5G9q9fI0QM3Hw==}
     engines: {bun: '>=1.1.0', node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -4828,6 +4828,10 @@ packages:
     resolution: {integrity: sha512-OmO8+GM1JUZqXET720VrJCwkjUCXmCMQm0Z3UDDRbfNLHS4NEAvY60j5jiFv0tkKw2PNNlqOLhahVmwJIOLDIQ==}
     engines: {node: '>=18'}
 
+  nodemailer@10.2.1:
+    resolution: {integrity: sha512-ZrDNsPFoDMwefNs7sJwrYiEJ/CG4ClJWDZv05iNJsEBWa8GRDry1QJHTJxsuTAY9eDDKjX4k+q3SxslXJOao7w==}
+    engines: {node: '>=20.0.0'}
+
   npm-run-path@4.0.1:
     resolution: {integrity: sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==}
     engines: {node: '>=8'}
@@ -7225,7 +7229,9 @@ snapshots:
 
   '@nowly/sdk@1.7.1': {}
 
-  '@opencoredev/email-sdk@1.2.0(ai@7.0.106(zod@4.6.7))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@opencoredev/email-sdk@3.0.1(ai@7.0.106(zod@4.6.7))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+    dependencies:
+      nodemailer: 10.2.1
     optionalDependencies:
       ai: 7.0.106(zod@4.6.7)
       react: 19.3.1
@@ -10256,6 +10262,8 @@ snapshots:
   node-addon-api@7.1.1: {}
 
   node-releases@2.0.60: {}
+
+  nodemailer@10.2.1: {}
 
   npm-run-path@4.0.1:
     dependencies:
