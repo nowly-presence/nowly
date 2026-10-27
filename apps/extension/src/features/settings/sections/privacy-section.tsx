@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { RiDownload2Line } from "@remixicon/react";
+import { exportDeviceData } from "@/features/settings/export-device-data";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
@@ -9,7 +8,8 @@ import { Row, SwitchRow } from "@/ui/row";
 import { Section } from "@/ui/section";
 import { Sheet } from "@/ui/sheet";
 import { useToast } from "@/ui/toast";
-import { exportDeviceData } from "@/features/settings/export-device-data";
+import { RiDownload2Line } from "@remixicon/react";
+import { useState } from "react";
 
 export const PrivacySection = () => {
   const { state, refresh } = useExtensionState();
@@ -49,15 +49,17 @@ export const PrivacySection = () => {
           label={t("settings.analytics")}
           onChange={(checked) => void setConsent(checked)}
         />
+
         <Row
           title={t("settings.export")}
           description={t("settings.exportHint")}
           trailing={
-            <Button size="sm" variant="secondary" loading={busy === "export"} icon={<RiDownload2Line className="size-4" />} onClick={() => void exportData()}>
+            <Button size="sm" variant="secondary" loading={busy === "export"} icon={<RiDownload2Line />} onClick={() => void exportData()}>
               {t("action.export")}
             </Button>
           }
         />
+
         <Row
           title={t("settings.delete")}
           description={t("settings.deleteHint")}
@@ -68,6 +70,7 @@ export const PrivacySection = () => {
           }
         />
       </Group>
+
       <Sheet
         open={deleteOpen}
         onClose={() => setDeleteOpen(false)}

@@ -279,7 +279,7 @@
   "settings.perPresence": "Varlık başına",
   "settings.privacy": "Gizlilik",
   "settings.analytics": "Uzantı istatistikleri",
-  "settings.analyticsHint": "İsteğe bağlı özellik ve etkinlik kategorisi sayımları. Dönüş işaretleri cihazda kalır, kapatıldığında silinir. Gezinilen içerik gönderilmez.",
+  "settings.analyticsHint": "İsteğe bağlı özellik ve etkinlik sayımları. Dönüş işaretleri cihazda kalır, kapatıldığında silinir. Gezinilen içerik gönderilmez.",
   "settings.export": "Verilerimi dışa aktar",
   "settings.exportHint": "Nowly'nin bu cihaz için sakladıklarını indir",
   "settings.delete": "Verilerimi sil",

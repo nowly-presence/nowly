@@ -279,7 +279,7 @@
   "settings.perPresence": "Dla każdej obecności",
   "settings.privacy": "Prywatność",
   "settings.analytics": "Statystyki rozszerzenia",
-  "settings.analyticsHint": "Opcjonalne zliczanie funkcji i kategorii obecności. Znaczniki powrotu zostają na urządzeniu i są usuwane po wycofaniu zgody. Nie wysyłamy przeglądanych treści.",
+  "settings.analyticsHint": "Opcjonalne zliczanie funkcji i obecności. Znaczniki powrotu zostają na urządzeniu i są usuwane po wycofaniu zgody. Nie wysyłamy przeglądanych treści.",
   "settings.export": "Eksportuj moje dane",
   "settings.exportHint": "Pobierz dane, które Nowly przechowuje dla tego urządzenia",
   "settings.delete": "Usuń moje dane",

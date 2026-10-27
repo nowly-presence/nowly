@@ -279,7 +279,7 @@
   "settings.perPresence": "프레즌스별",
   "settings.privacy": "개인정보",
   "settings.analytics": "확장 프로그램 통계",
-  "settings.analyticsHint": "선택적 기능·프레즌스 분류 집계입니다. 재방문 표시는 기기에만 저장하며 동의 철회 시 삭제합니다. 열람 콘텐츠는 전송하지 않습니다.",
+  "settings.analyticsHint": "선택적 기능·프레즌스 집계입니다. 재방문 표시는 기기에만 저장하며 동의 철회 시 삭제합니다. 열람 콘텐츠는 전송하지 않습니다.",
   "settings.export": "내 데이터 내보내기",
   "settings.exportHint": "Nowly가 이 기기에 대해 저장한 데이터를 다운로드",
   "settings.delete": "내 데이터 삭제",

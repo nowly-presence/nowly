@@ -279,7 +279,7 @@
   "settings.perPresence": "Por presencia",
   "settings.privacy": "Privacidad",
   "settings.analytics": "Estadísticas de la extensión",
-  "settings.analyticsHint": "Recuentos opcionales de funciones y categorías de presencia. Las marcas de retorno permanecen en el dispositivo y se borran al desactivar. No se envía contenido visitado.",
+  "settings.analyticsHint": "Recuentos opcionales de funciones y presencias. Las marcas de retorno permanecen en el dispositivo y se borran al desactivar. No se envía contenido visitado.",
   "settings.export": "Exportar mis datos",
   "settings.exportHint": "Descarga lo que Nowly guarda de este dispositivo",
   "settings.delete": "Eliminar mis datos",

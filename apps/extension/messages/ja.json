@@ -279,7 +279,7 @@
   "settings.perPresence": "プレゼンスごと",
   "settings.privacy": "プライバシー",
   "settings.analytics": "拡張機能の統計",
-  "settings.analyticsHint": "機能とプレゼンス分類の任意集計です。再訪記録は端末内に保存し、無効化時に削除します。閲覧内容は送信しません。",
+  "settings.analyticsHint": "機能とプレゼンスの任意集計です。再訪記録は端末内に保存し、無効化時に削除します。閲覧内容は送信しません。",
   "settings.export": "データをエクスポート",
   "settings.exportHint": "このデバイスについて Nowly が保存しているデータをダウンロード",
   "settings.delete": "データを削除",

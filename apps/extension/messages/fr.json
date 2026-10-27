@@ -279,7 +279,7 @@
   "settings.perPresence": "Par présence",
   "settings.privacy": "Confidentialité",
   "settings.analytics": "Statistiques de l’extension",
-  "settings.analyticsHint": "Comptages facultatifs des fonctions et catégories de présences. Les repères de retour restent sur cet appareil et sont effacés au retrait. Aucun contenu consulté n’est envoyé.",
+  "settings.analyticsHint": "Comptages facultatifs des fonctions et présences. Les repères restent sur l’appareil et sont supprimés au retrait. Aucun contenu consulté n’est envoyé.",
   "settings.export": "Exporter mes données",
   "settings.exportHint": "Télécharger ce que Nowly stocke pour cet appareil",
   "settings.delete": "Supprimer mes données",

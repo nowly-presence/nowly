@@ -279,7 +279,7 @@
   "settings.perPresence": "Per presence",
   "settings.privacy": "Privacy",
   "settings.analytics": "Extension statistics",
-  "settings.analyticsHint": "Optional feature and presence-category counts. Return-day markers stay on this device and are erased when disabled. No browsing content is sent.",
+  "settings.analyticsHint": "Optional feature and presence counts. Return markers stay on this device and are erased when disabled. No browsing content is sent.",
   "settings.export": "Export my data",
   "settings.exportHint": "Download what Nowly stores for this device",
   "settings.delete": "Delete my data",
