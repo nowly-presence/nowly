@@ -92,6 +92,8 @@ messages/<locale>.json   UI strings, 11 locales (same set as nowly.me)
 
 ## Validation
 
+Do not run extension builds unless the user explicitly requests one. The user handles local builds. Use lint and tests for routine verification.
+
 `npm run lint` (tsc), `npm test` (vitest), `npm run build` (Chrome + Firefox store builds). Visual check: `npm run preview` (http://127.0.0.1:5173, query params in README). Real check: load `dist/chrome` unpacked.
 - Canary builds do not bundle the local presence catalog by default. Use `pnpm build:chrome` for a lean canary, or `pnpm build:chrome -- --bundled` when testing bundled presences and their assets.
 - For public guide screenshots, run `NOWLY_PREVIEW_CHANNEL=stable pnpm --filter @nowly/extension preview`, with `?lang=en&season=none`. This uses the real stable branding instead of Nowly Canary while retaining the preview's mock runtime. It does not change store builds or connect to Discord.
