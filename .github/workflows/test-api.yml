@@ -3,6 +3,8 @@ name: Test API and telemetry
 on:
   push:
     branches: [stable]
+  pull_request:
+    branches: [stable]
 
 jobs:
   test:
@@ -11,7 +13,7 @@ jobs:
       - uses: actions/checkout@v7
       - run: git submodule init && git submodule update packages/sdk packages/cli packages/presences
       - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
@@ -19,6 +21,56 @@ jobs:
       - run: pnpm --filter @nowly/api prisma:generate
         env:
           DATABASE_URL: postgresql://user:password@localhost:5432/nowly
-      - run: pnpm --filter @nowly/api test
-      - run: pnpm --filter @nowly/telemetry test
+      - run: pnpm --filter @nowly/api test:coverage
+      - run: pnpm --filter @nowly/telemetry test:coverage
       - run: pnpm --filter @nowly/telemetry typecheck
+
+      - name: Upload API coverage artifact
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report-api
+          path: apps/api/coverage/cobertura-coverage.xml
+
+      - name: Upload telemetry coverage artifact
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report-telemetry
+          path: packages/telemetry/coverage/cobertura-coverage.xml
+
+  upload-coverage-api:
+    needs: test
+    if: ${{ !cancelled() && needs.test.result == 'success' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      code-quality: write
+    steps:
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: coverage-report-api
+      - uses: actions/upload-code-coverage@v1
+        with:
+          file: cobertura-coverage.xml
+          language: TypeScript
+          label: code-coverage-agent
+
+  upload-coverage-telemetry:
+    needs: test
+    if: ${{ !cancelled() && needs.test.result == 'success' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      code-quality: write
+    steps:
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: coverage-report-telemetry
+      - uses: actions/upload-code-coverage@v1
+        with:
+          file: cobertura-coverage.xml
+          language: TypeScript
+          label: code-coverage-agent

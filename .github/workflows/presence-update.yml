@@ -20,7 +20,7 @@ jobs:
       - run: git submodule update --init --recursive packages/sdk packages/cli packages/presences packages/internal-cli
 
       - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: 'pnpm'
