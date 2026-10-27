@@ -18,7 +18,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Configure access to private submodule
         run: git config --global url."https://x-access-token:${{ secrets.INTERNAL_CLI_PAT }}@github.com/".insteadOf "https://github.com/"

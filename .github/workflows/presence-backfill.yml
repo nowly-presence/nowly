@@ -16,7 +16,7 @@ jobs:
       API_URL: ${{ secrets.API_URL || 'https://api.nowly.me' }}
       API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.SUBMODULE_TOKEN || github.token }}
