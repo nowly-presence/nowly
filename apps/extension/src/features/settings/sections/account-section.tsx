@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { RiDiscordFill, RiExternalLinkLine, RiRefreshLine } from "@remixicon/react";
 import { DiscordAvatar } from "@/components/shared/discord-avatar";
+import { AccountChoiceSheet } from "@/features/settings/account-choice-sheet";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNow } from "@/hooks/use-now";
@@ -14,7 +13,8 @@ import { Row } from "@/ui/row";
 import { Section } from "@/ui/section";
 import { Sheet } from "@/ui/sheet";
 import { useToast } from "@/ui/toast";
-import { AccountChoiceSheet } from "@/features/settings/account-choice-sheet";
+import { RiDiscordFill, RiExternalLinkLine, RiRefreshLine } from "@remixicon/react";
+import { useState } from "react";
 
 const AVATAR_SIZE = 36;
 const MINUTE_MS = 60_000;
@@ -46,10 +46,15 @@ const SignedOut = ({ busy, onConnect }: {
 }) => {
   const { t } = useI18n();
   return (
-    <Group>
+    <Group hideSeparator>
       <Row align="start" title={t("account.signedOutTitle")} description={t("account.signedOutHint")} />
-      <div className="px-4 py-3">
-        <Button variant="secondary" className="w-full" loading={busy === "connect"} icon={<RiDiscordFill className="size-4" />} onClick={onConnect}>
+      <div className="px-4 pb-3">
+        <Button
+          className="w-full"
+          loading={busy === "connect"}
+          icon={<RiDiscordFill />}
+          onClick={onConnect}
+        >
           {t("account.signIn")}
         </Button>
       </div>
@@ -178,7 +183,7 @@ export const AccountSection = () => {
                   aria-label={t("account.syncNow")}
                   title={t("account.syncNow")}
                   loading={busy === "sync"}
-                  icon={<RiRefreshLine className="size-4" />}
+                  icon={<RiRefreshLine />}
                   onClick={syncNow}
                 >
                   {t("action.sync")}
@@ -186,7 +191,7 @@ export const AccountSection = () => {
               )
             }
           />
-          <Row title={t("account.manage")} onClick={() => openUrl(siteUrl("/account"))} trailing={<RiExternalLinkLine className="size-4 text-muted" />} />
+          <Row title={t("account.manage")} onClick={() => openUrl(siteUrl("/account"))} trailing={<RiExternalLinkLine className="text-muted" />} />
           <Row
             align="start"
             title={<span className="whitespace-normal">{t("account.signOutTitle")}</span>}
@@ -210,6 +215,7 @@ export const AccountSection = () => {
         </Group>
       )}
       <AccountChoiceSheet open={choiceOpen} onClose={() => setChoiceOpen(false)} />
+
       <Sheet
         open={stopOpen}
         onClose={() => setStopOpen(false)}
