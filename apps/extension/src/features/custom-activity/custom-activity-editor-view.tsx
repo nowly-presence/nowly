@@ -45,6 +45,7 @@ export const CustomActivityEditorView = ({ id, template }: {
   );
   const [showErrors, setShowErrors] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deletePreparing, setDeletePreparing] = useState(false);
   const [previewStart] = useState(() => Date.now());
   const errors = useMemo(() => validateCustomActivity(draft), [draft]);
   const visibleErrors = showErrors ? errors : {};
@@ -66,14 +67,15 @@ export const CustomActivityEditorView = ({ id, template }: {
   };
 
   const remove = async () => {
-    if (!existing) return;
+    if (!existing) return false;
 
     const removed = await actions.remove(existing);
 
-    if (!removed) return;
+    if (!removed) return false;
 
     setDeleteOpen(false);
     pop();
+    return true;
   };
 
   const presence = buildCustomPresence(
@@ -139,7 +141,15 @@ export const CustomActivityEditorView = ({ id, template }: {
               <Button variant="muted" icon={<RiDownload2Line />} onClick={() => void share.exportActivity(existing)}>
                 {t("custom.export")}
               </Button>
-              <Button variant="muted" icon={<RiDeleteBinLine />} onClick={() => setDeleteOpen(true)}>
+              <Button
+                variant="muted"
+                icon={<RiDeleteBinLine />}
+                loading={deletePreparing}
+                onClick={() => {
+                  setDeletePreparing(true);
+                  setDeleteOpen(true);
+                }}
+              >
                 {t("action.delete")}
               </Button>
             </div>
@@ -147,13 +157,14 @@ export const CustomActivityEditorView = ({ id, template }: {
         </div>
       </ScreenBody>
 
-      {existing && (
+      {existing && deleteOpen && (
         <CustomActivityDeleteSheet
+          id={existing.id}
           name={existing.name}
-          open={deleteOpen}
           pending={actions.pending === "delete"}
           onClose={() => setDeleteOpen(false)}
           onConfirm={remove}
+          onPreparingChange={setDeletePreparing}
         />
       )}
     </div>

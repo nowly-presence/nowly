@@ -16,6 +16,13 @@ export const createPublicationMockHandlers = (): MockHandlers => {
   });
   return {
     START_CREATOR_CONNECT: () => ({ ok: true }),
+    GET_CUSTOM_ACTIVITY_DELETION_PLAN: ({ id }) => {
+      const publication = publications.get(id);
+      return {
+        ok: true,
+        withdrawal: publication?.published ? { revision: publication.revision } : null
+      };
+    },
     GET_OWN_ACTIVITY_PUBLICATION: ({ id }) => {
       const publication = publications.get(id);
       return publication ? resultFor(publication) : { ok: true, url: null };

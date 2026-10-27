@@ -5,6 +5,7 @@ import { getCustomActivities, setCustomActivities } from "@/background/storage/c
 import { setAccount } from "@/background/storage/account.store";
 import { emptyCustomActivityDraft } from "@/shared/custom-activity";
 import { installChromeMock } from "@/test/chrome-mock";
+import { getCustomActivityDeletionPlan } from "@/background/services/custom-activity-deletion-plan";
 
 vi.mock("@/background/managers/activity-manager", () => ({ broadcastActiveTab: vi.fn() }));
 vi.mock("@/background/services/custom-assets-api", () => ({
@@ -102,6 +103,83 @@ describe("published local source deletion", () => {
       activeId: null,
       activatedAt: null
     });
+  });
+  it("plans two confirmations without withdrawing or deleting, then permits deletion after withdrawal", async () => {
+    await publishActivity(LOCAL_ID, 0);
+    vi.mocked(fetch).mockClear();
+    expect(await getCustomActivityDeletionPlan(LOCAL_ID)).toEqual({
+      ok: true,
+      withdrawal: { revision: 1 }
+    });
+    expect(vi.mocked(fetch).mock.calls.every(([, init]) => !init?.method)).toBe(true);
+    expect(published).toBe(true);
+    expect((await getCustomActivities()).items).toEqual([activity]);
+    await publishActivity(LOCAL_ID, 1, true);
+    expect(await getCustomActivityDeletionPlan(LOCAL_ID)).toEqual({
+      ok: true,
+      withdrawal: null
+    });
+    expect((await getCustomActivities()).items).toEqual([activity]);
+    expect(await deleteCustomActivity(LOCAL_ID)).toEqual({ ok: true });
+  });
+  it("plans direct deletion offline without a creator account for never-published activities", async () => {
+    await setAccount({
+      ...account,
+      scopes: ["sync"]
+    });
+    vi.mocked(fetch).mockRejectedValue(new Error("offline"));
+    expect(await getCustomActivityDeletionPlan(LOCAL_ID)).toEqual({
+      ok: true,
+      withdrawal: null
+    });
+    expect(fetch).not.toHaveBeenCalled();
+  });
+  it("plans explicit withdrawal of an unfinished reservation", async () => {
+    vi.mocked(fetch).mockImplementationOnce(fixtureFetch).mockRejectedValueOnce(new Error("lost PUT"));
+    await publishActivity(LOCAL_ID, 0);
+    expect(await getCustomActivityDeletionPlan(LOCAL_ID)).toEqual({
+      ok: true,
+      withdrawal: { revision: 0 }
+    });
+    expect(await deleteCustomActivity(LOCAL_ID)).toEqual({
+      ok: false,
+      error: "PUBLICATION_CHECK_REQUIRED"
+    });
+    expect((await publishActivity(LOCAL_ID, 0, true)).ok).toBe(true);
+    expect(await getCustomActivityDeletionPlan(LOCAL_ID)).toEqual({
+      ok: true,
+      withdrawal: null
+    });
+  });
+  it("blocks planning when verification or publishing permission is unavailable", async () => {
+    await publishActivity(LOCAL_ID, 0);
+    vi.mocked(fetch).mockRejectedValue(new Error("offline"));
+    expect((await getCustomActivityDeletionPlan(LOCAL_ID)).ok).toBe(false);
+    await setAccount({
+      ...account,
+      scopes: ["sync"]
+    });
+    expect(await getCustomActivityDeletionPlan(LOCAL_ID)).toEqual({
+      ok: false,
+      error: "CREATOR_REQUIRED"
+    });
+    expect((await getCustomActivities()).items).toEqual([activity]);
+  });
+  it("plans direct deletion after confirmed account erasure without old creator permission", async () => {
+    await publishActivity(LOCAL_ID, 0);
+    await setAccount({
+      ...account,
+      scopes: ["sync"]
+    });
+    vi.mocked(fetch).mockClear();
+    vi.mocked(fetch).mockResolvedValue(Response.json({ error: "NOT_FOUND" }, { status: 404 }));
+    expect(await getCustomActivityDeletionPlan(LOCAL_ID)).toEqual({
+      ok: true,
+      withdrawal: null
+    });
+    expect(fetch).toHaveBeenCalledOnce();
+    expect(vi.mocked(fetch).mock.calls[0]?.[1]?.headers).toBeUndefined();
+    expect((await getCustomActivities()).items).toEqual([activity]);
   });
   it("preserves source and activation offline, after failed unpublish and without creator permission", async () => {
     await publishActivity(LOCAL_ID, 0);

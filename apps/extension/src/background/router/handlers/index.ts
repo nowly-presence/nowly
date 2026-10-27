@@ -14,10 +14,12 @@ import { handleAcceptLegalDocuments, handleCheckLegalDocuments, handleGetLegalSt
 import { applyPublication, publicationStatus } from "@/background/services/activity-publications";
 import { getOwnedPublication, publishActivity } from "@/background/services/activity-publication-publisher";
 import { openAccountConnect } from "@/background/services/account-sync";
+import { getCustomActivityDeletionPlan } from "@/background/services/custom-activity-deletion-plan";
 
 export const buildHandlerRegistry = (): HandlerRegistry => ({
   GET_ACTIVITY_PUBLICATION_STATUS: (payload) => publicationStatus(payload),
   GET_OWN_ACTIVITY_PUBLICATION: ({ id }) => getOwnedPublication(id),
+  GET_CUSTOM_ACTIVITY_DELETION_PLAN: ({ id }) => getCustomActivityDeletionPlan(id),
   APPLY_ACTIVITY_PUBLICATION: (payload) => applyPublication(payload),
   PUBLISH_CUSTOM_ACTIVITY: ({ id, baseRevision, unpublish }) => publishActivity(id, baseRevision, unpublish),
   START_CREATOR_CONNECT: async () => {

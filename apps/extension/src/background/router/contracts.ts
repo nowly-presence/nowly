@@ -6,6 +6,7 @@ import type { OnboardingState } from "@/background/storage/onboarding.store";
 import type { SaveCustomActivityResult, UploadCustomImageResult } from "@/background/managers/custom-activity-manager";
 import type { SupportPromptAction, SupportPromptState } from "@/shared/support-prompt";
 import type { PublishResult, OwnedPublicationResult } from "@/background/services/activity-publication-publisher";
+import type { CustomActivityDeletionPlan } from "@/background/services/custom-activity-deletion-plan";
 
 export type DiagnosticSnapshot = {
   extensionInstalled: boolean;
@@ -79,6 +80,12 @@ export type RouterMessageMap = {
       id: string;
     };
     response: OwnedPublicationResult;
+  };
+  GET_CUSTOM_ACTIVITY_DELETION_PLAN: {
+    payload: {
+      id: string;
+    };
+    response: CustomActivityDeletionPlan;
   };
   GET_ANNOUNCEMENTS: {
     payload: void;
