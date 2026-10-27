@@ -22,7 +22,7 @@ description: Özel aktivite algılama ve paylaşımı, duyurular, Discord görü
 - Bağımsız bir kopyayı açıkça eklemeden önce önizlemeyi incele. Yeni kopyalar etkin değildir ve otomatik algılama kapalıdır.
 - Açıkça güncellediğinde veya yayından kaldırdığında aynı bağlantı korunur. Alıcıların kopyaları yüklü kalır ve asla otomatik güncellenmez.
 - Alıcılar yerel değişikliklerini koruyabilir veya güncellemeyi inceledikten sonra değiştirebilir. Açık bir düzenleyici, kaydedilmemiş çalışmayı korumak için değiştirmeyi engeller.
-- Kaynak aktiviteyi silmeden önce herkese açık veya yayını tamamlanmamış bağlantıları açıkça geri çek, ardından ilk sunucudan çevrimiçi doğrula.
+- Paylaşılan etkinlikleri silmek aynı panelde iki onayla gerçekleşir: önce herkese açık bağlantıyı kapatın, sonra etkinliği silin. Bağlantı yoksa doğrudan silme onayı gösterilir.
 - Hesap silindikten sonra yayınlarının bulunmadığı doğrulanırsa eski hesap olmadan yerel silme yapılabilir. Doğrulama kullanılamıyorsa veya kesin değilse kaynak korunur.
 
 ### Duyurular ve sürüm notları
@@ -42,10 +42,16 @@ Bu alanlar uyumlu SDK, eklenti ve yerel ana makine sürümleri gerektirir. Eski 
 
 ## İyileştirmeler ve düzeltmeler
 
+- Yeniden kullanılabilir çok adımlı panel ilerlemeyi gösterir ve gelecekteki akışlar için serbest içerik ve formları destekler.
+- Bildirim mesajları dar ekranlarda kesilmek yerine alt satıra geçer ve simgeleri sabit boyutta kalır.
+- Koyu temada kırmızı silme onay düğmelerinin metin kontrastı iyileştirildi.
+
 - Özel aktivite düzenleyicisi, kaç bağlantı butonu daha ekleyebileceğini gösterir.
 - Ayarlar'da gezinmek artık daha kolay: kaydırma bölümlere oturur ve Ayarlar başlığıyla bağlantı özetini birlikte tutar. Simgelerin boyutu ve kutu stili tutarlıdır, oturum kapalı hesap kartı sadeleştirilmiştir ve hesap avatarının köşeleri aynı şekilde yuvarlatılmıştır.
 - İhtiyacın olmadığında Kitaplık, Özel veya Haberler sekmesini gizle. Etkinlik ve Ayarlar kullanılabilir kalır. Varsayılan düzeni Ayarlar'dan geri yükle. Haberler'i gizlemek, Etkinlik'teki sabitlenmiş bildirimleri gizlemez.
 - YouTube dâhil videoların ilerleme çubuğu artık oynatma ilerledikçe dolar; özel aktivitelerin geri sayımı ise kalan süreyi göstermeye devam eder.
+- Özel aktivitelerin geri sayımında kalan sürenin önünde artık eksi işareti görünmez.
+- Değerlendirme isteğindeki «Puanla» düğmesi, üstte zaten gösterilen yıldızları tekrarlamaz.
 - “Nowly'yi Destekle” bölümünde Bitcoin, Ethereum veya Solana adresini tek tıkla kopyala; kopyalama sonrasında bir onay gösterilir.
 - En az iki yüklü presence için güncelleme varsa bunları tek işlemle güncelle. Güncellemeler sırayla yapılır.
 - Boşta etkinlik kartının düğmeleri artık dar yan panellere de sığıyor.

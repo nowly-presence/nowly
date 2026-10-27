@@ -22,7 +22,7 @@ description: Détection et partage des activités personnalisées, annonces, aff
 - Consultez l'aperçu avant d'ajouter explicitement une copie indépendante. Les nouvelles copies sont inactives, sans détection automatique.
 - Gardez le même lien lors de vos mises à jour ou dépublications explicites. Les copies des destinataires restent installées et ne se mettent jamais à jour automatiquement.
 - Les destinataires peuvent conserver leurs modifications locales ou les remplacer après examen d'une mise à jour. Un éditeur ouvert bloque le remplacement pour protéger le travail non sauvegardé.
-- Avant de supprimer une activité source, retirez explicitement tout lien public ou en cours de publication, puis vérifiez en ligne auprès du serveur d'origine.
+- La suppression d'une activité partagée se fait avec deux confirmations dans le même panneau : désactiver le lien public, puis supprimer l'activité. Sans lien, la confirmation de suppression s'affiche directement.
 - Après suppression du compte, l'absence confirmée de ses publications permet la suppression locale sans l'ancien compte. Si la vérification est impossible ou non concluante, la source est conservée.
 
 ### Annonces et journal des modifications
@@ -42,10 +42,16 @@ Ces champs nécessitent des versions compatibles du SDK, de l'extension et de l'
 
 ## Améliorations et corrections
 
+- Un panneau multi-étapes réutilisable affiche la progression et peut accueillir du contenu libre et des formulaires pour les prochains parcours.
+- Les messages des toasts passent sur plusieurs lignes sur les petits écrans au lieu d'être tronqués, et leurs icônes gardent une taille constante.
+- Le texte des boutons rouges de confirmation de suppression est plus lisible en thème sombre.
+
 - L'éditeur d'activités personnalisées indique combien de boutons avec lien vous pouvez encore ajouter.
 - Les Réglages sont plus faciles à parcourir : le défilement s'accroche à chaque section en gardant le titre et le résumé de connexion ensemble. Les icônes ont une taille et un habillage cohérents, la carte de compte déconnecté est simplifiée et l'avatar connecté reprend le même arrondi.
 - Masquez les onglets Bibliothèque, Personnalisés ou Actualités dans la barre de navigation lorsque vous n'en avez pas besoin. Activité et Réglages restent accessibles. Réinitialisez la disposition depuis les Réglages pour retrouver l'agencement par défaut. Masquer Actualités ne masque pas les annonces épinglées sur Activité.
 - La progression des vidéos, notamment sur YouTube, avance désormais avec la lecture, tandis que le compte à rebours des activités personnalisées continue d'afficher le temps restant.
+- Le compte à rebours des activités personnalisées n'affiche plus de signe négatif devant le temps restant.
+- Le bouton « Noter » de la demande d'avis n'affiche plus d'icône étoile en plus des étoiles déjà visibles.
 - Dans « Soutenir Nowly », copiez les adresses Bitcoin, Ethereum ou Solana d'un clic, avec une confirmation après la copie.
 - Lorsqu'au moins deux présences installées ont une mise à jour disponible, mettez-les à jour en une seule action. Les mises à jour se font l'une après l'autre.
 - Les boutons de la carte d'activité inactive tiennent désormais dans les panneaux latéraux étroits.

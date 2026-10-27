@@ -22,7 +22,7 @@ description: Detecção e compartilhamento de atividades personalizadas, anúnci
 - Veja a prévia antes de adicionar explicitamente uma cópia independente. As novas cópias ficam inativas e com a detecção automática desativada.
 - Mantenha o mesmo link ao atualizar ou retirar a publicação explicitamente. As cópias dos destinatários continuam instaladas e nunca são atualizadas automaticamente.
 - Os destinatários podem manter suas alterações locais ou substituí-las após revisar uma atualização. Um editor aberto bloqueia a substituição para proteger o trabalho não salvo.
-- Antes de excluir uma atividade de origem, retire explicitamente qualquer link público ou com publicação pendente e verifique online com o servidor original.
+- Excluir uma atividade compartilhada exige duas confirmações no mesmo painel: desativar o link público e depois excluir a atividade. Sem link, a confirmação de exclusão aparece diretamente.
 - Após excluir a conta, a ausência confirmada das publicações permite a exclusão local sem a conta antiga. Se a verificação não estiver disponível ou for inconclusiva, a origem é preservada.
 
 ### Anúncios e notas de versão
@@ -42,10 +42,16 @@ Esses campos exigem versões compatíveis do SDK, da extensão e do host nativo.
 
 ## Melhorias e correções
 
+- Um painel reutilizável com várias etapas mostra o progresso e aceita conteúdo livre e formulários para fluxos futuros.
+- As mensagens dos toasts ocupam várias linhas em telas estreitas em vez de serem cortadas, e seus ícones mantêm um tamanho constante.
+- Os botões vermelhos de confirmação de exclusão têm melhor contraste de texto no tema escuro.
+
 - O editor de atividades personalizadas mostra quantos botões com link você ainda pode adicionar.
 - É mais fácil navegar pelas Configurações: a rolagem encaixa em cada seção, mantendo o título e o resumo da conexão juntos. Os ícones têm tamanho e estilo de bloco consistentes, o cartão de conta desconectada ficou mais simples e o avatar da conta usa cantos arredondados no mesmo estilo.
 - Oculte as abas Biblioteca, Pessoal ou Notícias quando não precisar delas. Atividade e Configurações continuam disponíveis. Restaure a disposição padrão em Configurações. Ocultar Notícias não oculta os avisos fixados em Atividade.
 - A barra de progresso dos vídeos, inclusive no YouTube, agora avança com a reprodução, enquanto a contagem regressiva das atividades personalizadas continua mostrando o tempo restante.
+- A contagem regressiva das atividades personalizadas não exibe mais um sinal de menos antes do tempo restante.
+- O botão «Avaliar» do pedido de avaliação não repete mais as estrelas já exibidas acima.
 - Em «Apoie o Nowly», copie um endereço de Bitcoin, Ethereum ou Solana com um clique e receba uma confirmação após a cópia.
 - Quando pelo menos duas presenças instaladas tiverem atualizações disponíveis, atualize-as de uma só vez. As atualizações são feitas uma por vez.
 - Os botões do cartão de atividade inativa agora cabem em painéis laterais estreitos.

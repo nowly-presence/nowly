@@ -22,7 +22,7 @@ description: Detección y uso compartido de actividades personalizadas, anuncios
 - Consulta la vista previa antes de añadir explícitamente una copia independiente. Las nuevas copias están inactivas y tienen la detección automática desactivada.
 - Conserva el mismo enlace al actualizarlo o retirar su publicación explícitamente. Las copias de los destinatarios siguen instaladas y nunca se actualizan automáticamente.
 - Los destinatarios pueden conservar sus cambios locales o reemplazarlos tras revisar una actualización. Un editor abierto bloquea el reemplazo para proteger el trabajo sin guardar.
-- Antes de eliminar una actividad de origen, retira explícitamente cualquier enlace público o pendiente de publicación y comprueba su estado en línea con el servidor original.
+- Eliminar una actividad compartida requiere dos confirmaciones en el mismo panel: desactivar el enlace público y después eliminar la actividad. Sin enlace, se muestra directamente la confirmación de eliminación.
 - Tras eliminar la cuenta, la ausencia confirmada de sus publicaciones permite la eliminación local sin la cuenta anterior. Si la comprobación no está disponible o no es concluyente, se conserva el origen.
 
 ### Anuncios y notas de versión
@@ -42,10 +42,16 @@ Estos campos requieren versiones compatibles del SDK, la extensión y el host na
 
 ## Mejoras y correcciones
 
+- Un panel reutilizable de varios pasos muestra el progreso y admite contenido libre y formularios para futuros flujos.
+- Los mensajes emergentes ocupan varias líneas en pantallas estrechas en vez de cortarse, y sus iconos mantienen un tamaño constante.
+- Los botones de confirmación de eliminación con fondo rojo tienen mejor contraste de texto en el tema oscuro.
+
 - El editor de actividades personalizadas muestra cuántos botones con enlace puedes añadir todavía.
 - Es más fácil recorrer Ajustes: el desplazamiento se ajusta a cada sección y mantiene juntos el título y el resumen de conexión. Los iconos tienen un tamaño y un estilo de mosaico uniformes, la tarjeta de cuenta desconectada es más sencilla y el avatar de la cuenta tiene esquinas redondeadas a juego.
 - Oculta las pestañas Biblioteca, Personal o Noticias cuando no las necesites. Actividad y Ajustes siguen disponibles. Restablece la disposición predeterminada desde Ajustes. Ocultar Noticias no oculta los avisos fijados en Actividad.
 - La barra de progreso de los vídeos, incluidos los de YouTube, ahora avanza con la reproducción, mientras que la cuenta atrás de las actividades personalizadas sigue mostrando el tiempo restante.
+- La cuenta atrás de las actividades personalizadas ya no muestra un signo menos delante del tiempo restante.
+- El botón «Valorar» ya no repite las estrellas que aparecen sobre él en la solicitud de valoración.
 - En «Apoyar a Nowly», copia una dirección de Bitcoin, Ethereum o Solana con un clic y recibe una confirmación tras la copia.
 - Cuando al menos dos presencias instaladas tengan actualizaciones disponibles, actualízalas en una sola acción. Las actualizaciones se realizan de una en una.
 - Los botones de la tarjeta de actividad inactiva ahora caben en paneles laterales estrechos.

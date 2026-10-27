@@ -22,7 +22,7 @@ description: Custom activity detection and sharing, announcements, Discord displ
 - Preview before explicitly adding an independent copy. New copies are inactive with automatic detection disabled.
 - Keep the same link when you explicitly update or unpublish it. Existing recipient copies stay installed and never update automatically.
 - Recipients can keep local changes or replace them after reviewing an update. An open editor blocks replacement to protect unsaved work.
-- Before deleting a source activity, explicitly withdraw any public or unfinished link, then verify online with the original server.
+- Deleting a shared activity guides you through two confirmations in one sheet: disable its public link, then delete the activity. Activities without a link go straight to deletion.
 - After account erasure, confirmed absence of its publications allows local deletion without the old account. If verification is unavailable or inconclusive, the source is preserved.
 
 ### Announcements and release notes
@@ -42,10 +42,16 @@ These fields require compatible versions of the SDK, extension and native host. 
 
 ## Improvements and fixes
 
+- A reusable multi-step sheet displays progress and supports custom content and forms for future flows.
+- Toast messages wrap on narrow screens instead of being cut off, and their icons keep a consistent size.
+- Filled delete confirmation buttons have improved text contrast in dark mode.
+
 - The custom activity editor shows how many link buttons you can still add.
 - Settings are easier to browse: scrolling snaps section by section while keeping the Settings title and connection summary together. Icons have a consistent size and tile style, the signed-out account card is simpler, and the connected account avatar has matching rounded corners.
 - Hide the Library, Custom or News tab from the navigation bar when you do not need it. Activity and Settings stay available. Reset the navigation layout from Settings to restore the default arrangement. Hiding News does not hide pinned Activity notices.
 - Video progress, including YouTube playback, now fills as playback advances, while custom activity countdowns continue to show the time remaining.
+- Custom activity countdowns no longer show a minus sign before the remaining time.
+- The review prompt's Rate button no longer repeats the stars already shown above it.
 - Copy a Bitcoin, Ethereum or Solana address with one click in Support Nowly, with confirmation after copying.
 - When at least two installed presences have updates available, update them in one action. Updates run one at a time.
 - Idle activity card actions now fit in narrow side panels.

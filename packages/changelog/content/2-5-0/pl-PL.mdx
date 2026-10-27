@@ -22,7 +22,7 @@ description: Wykrywanie i udostępnianie własnych aktywności, ogłoszenia, Dis
 - Obejrzyj podgląd przed jawnym dodaniem niezależnej kopii. Nowe kopie są nieaktywne i mają wyłączone automatyczne wykrywanie.
 - Zachowaj ten sam link przy jawnej aktualizacji lub wycofaniu publikacji. Kopie odbiorców pozostają zainstalowane i nigdy nie aktualizują się automatycznie.
 - Odbiorcy mogą zachować lokalne zmiany lub zastąpić je po przejrzeniu aktualizacji. Otwarty edytor blokuje zastępowanie, aby chronić niezapisaną pracę.
-- Przed usunięciem aktywności źródłowej jawnie wycofaj każdy publiczny link lub niedokończoną publikację, a następnie sprawdź stan online na pierwotnym serwerze.
+- Usuwanie udostępnionej aktywności wymaga dwóch potwierdzeń w tym samym panelu: wyłączenia linku publicznego, a potem usunięcia aktywności. Bez linku od razu pojawia się potwierdzenie usunięcia.
 - Po usunięciu konta potwierdzony brak jego publikacji pozwala usunąć źródło lokalnie bez starego konta. Jeśli sprawdzenie jest niedostępne lub niejednoznaczne, źródło zostaje zachowane.
 
 ### Ogłoszenia i informacje o wydaniach
@@ -42,10 +42,16 @@ Te pola wymagają zgodnych wersji SDK, rozszerzenia i hosta natywnego. Starsze w
 
 ## Ulepszenia i poprawki
 
+- Panel wieloetapowy wielokrotnego użytku pokazuje postęp i obsługuje dowolną treść oraz formularze dla przyszłych procesów.
+- Powiadomienia zawijają tekst na wąskich ekranach zamiast go ucinać, a ich ikony zachowują stały rozmiar.
+- Poprawiono kontrast tekstu na czerwonych przyciskach potwierdzających usunięcie w ciemnym motywie.
+
 - Edytor własnych aktywności pokazuje, ile przycisków z linkiem można jeszcze dodać.
 - Ustawienia łatwiej przeglądać: przewijanie zatrzymuje się na kolejnych sekcjach, a tytuł Ustawień i podsumowanie połączenia pozostają razem. Ikony mają spójny rozmiar i styl kafelków, karta wylogowanego konta jest prostsza, a awatar konta ma pasujące zaokrąglenie.
 - Ukryj karty Biblioteka, Własne lub Aktualności, gdy ich nie potrzebujesz. Aktywność i Ustawienia pozostają dostępne. Przywróć domyślny układ w Ustawieniach. Ukrycie Aktualności nie ukrywa przypiętych komunikatów na karcie Aktywność.
 - Pasek postępu filmów, w tym na YouTube, wypełnia się teraz wraz z odtwarzaniem, a odliczanie własnych aktywności nadal pokazuje pozostały czas.
+- Odliczanie własnych aktywności nie wyświetla już znaku minus przed pozostałym czasem.
+- Przycisk „Oceń” w prośbie o ocenę nie powiela już gwiazdek widocznych nad nim.
 - W sekcji „Wesprzyj Nowly” skopiuj adres Bitcoin, Ethereum lub Solana jednym kliknięciem. Po skopiowaniu pojawi się potwierdzenie.
 - Gdy co najmniej dwie zainstalowane aktywności mają dostępne aktualizacje, zaktualizuj je jednym działaniem. Aktualizacje odbywają się kolejno.
 - Przyciski na karcie nieaktywnej aktywności mieszczą się teraz także w wąskich panelach bocznych.
