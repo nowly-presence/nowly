@@ -26,7 +26,7 @@ const AccountAvatar = ({ user }: {
 }) => {
   const [failed, setFailed] = useState(false);
 
-  if (!user.image || failed) return <DiscordAvatar size={AVATAR_SIZE} />;
+  if (!user.image || failed) return <DiscordAvatar size={AVATAR_SIZE} className="rounded-lg" />;
 
   return (
     <img
@@ -35,7 +35,7 @@ const AccountAvatar = ({ user }: {
       width={AVATAR_SIZE}
       height={AVATAR_SIZE}
       onError={() => setFailed(true)}
-      className="size-9 shrink-0 rounded-full object-cover"
+      className="size-9 shrink-0 rounded-lg object-cover"
     />
   );
 };
