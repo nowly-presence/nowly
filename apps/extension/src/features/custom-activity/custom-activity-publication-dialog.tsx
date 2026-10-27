@@ -5,8 +5,8 @@ import { ButtonGroup } from "@/ui/button-group";
 import { Input } from "@/ui/input";
 import { useToast } from "@/ui/toast";
 import { Sheet } from "@/ui/sheet";
-import { useCustomActivityPublication } from "./custom-activity-publication-hook";
-import { CustomActivityPublicationPreview } from "./custom-activity-publication-preview";
+import { useCustomActivityPublication } from "@/features/custom-activity/custom-activity-publication-hook";
+import { CustomActivityPublicationPreview } from "@/features/custom-activity/custom-activity-publication-preview";
 
 export const CustomActivityPublicationDialog = ({ id, onClose }: {
   id: string;
@@ -15,6 +15,12 @@ export const CustomActivityPublicationDialog = ({ id, onClose }: {
   const { t } = useI18n();
   const { toast } = useToast();
   const { busy, url, error, published, creatorRequired, revision, hasChanges, publish, connect } = useCustomActivityPublication(id);
+  const withdraw = async () => {
+    if (!(await publish(true))) return;
+
+    onClose();
+    toast(t("custom.public.unpublished"));
+  };
   const copy = async () => {
     if (!url || !published) return;
 
@@ -81,7 +87,7 @@ export const CustomActivityPublicationDialog = ({ id, onClose }: {
                 {t(published ? "custom.public.update" : "custom.public.publish")}
               </Button>
               {url && !creatorRequired && (
-                <Button variant="secondary" className="w-full" disabled={revision === null} loading={busy} onClick={() => void publish(true)}>
+                <Button variant="secondary" className="w-full" disabled={revision === null} loading={busy} onClick={() => void withdraw()}>
                   {t("custom.public.unpublish")}
                 </Button>
               )}

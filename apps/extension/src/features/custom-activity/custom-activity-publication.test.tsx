@@ -10,12 +10,14 @@ import { Button } from "@/ui/button";
 import { Sheet } from "@/ui/sheet";
 import { sendMessage } from "@/lib/messages";
 
+const toast = vi.hoisted(() => vi.fn());
+
 vi.mock("./custom-activity-publication-hook", () => ({ useCustomActivityPublication: vi.fn() }));
 vi.mock("./custom-activity-publication-preview", () => ({
   CustomActivityPublicationPreview: () => <div data-testid="saved-preview" />
 }));
 vi.mock("@/ui/toast", () => ({
-  useToast: () => ({ toast: vi.fn() })
+  useToast: () => ({ toast })
 }));
 vi.mock("@/ui/sheet", () => ({
   Sheet: ({ title, description, children }: { title: string; description?: string; children: ReactNode }) => (
@@ -49,10 +51,10 @@ const initialState = () => ({
 
 let state: ReturnType<typeof useCustomActivityPublication>;
 
-const panel = () =>
+const panel = (onClose = vi.fn()) =>
   CustomActivityPublicationDialog({
     id: "saved-id",
-    onClose: vi.fn()
+    onClose
   });
 
 const markup = () => renderToStaticMarkup(panel());
@@ -200,6 +202,46 @@ describe("public activity sharing dialog", () => {
       url: "https://nowly.me/activities/abc"
     };
     expect(buttons().every((button) => button.loading)).toBe(true);
+  });
+  it("closes and confirms successful withdrawal with a toast", async () => {
+    const onClose = vi.fn();
+    state = {
+      ...state,
+      url: "https://nowly.me/activities/abc",
+      revision: 1,
+      published: true
+    };
+    vi.mocked(state.publish).mockResolvedValueOnce(true);
+    const button = elements(panel(onClose)).find(
+      (node) => isValidElement<ComponentProps<typeof Button>>(node) && node.type === Button && node.props.children === en["custom.public.unpublish"]
+    );
+
+    if (!isValidElement<ComponentProps<typeof Button>>(button)) throw new Error("Missing withdrawal button");
+
+    button.props.onClick?.({} as Parameters<NonNullable<typeof button.props.onClick>>[0]);
+    await vi.waitFor(() => expect(onClose).toHaveBeenCalledOnce());
+    expect(state.publish).toHaveBeenCalledExactlyOnceWith(true);
+    expect(toast).toHaveBeenCalledExactlyOnceWith(en["custom.public.unpublished"]);
+  });
+  it("keeps the dialog open without a success toast when withdrawal fails", async () => {
+    const onClose = vi.fn();
+    state = {
+      ...state,
+      url: "https://nowly.me/activities/abc",
+      revision: 1,
+      published: true
+    };
+    vi.mocked(state.publish).mockResolvedValueOnce(false);
+    const button = elements(panel(onClose)).find(
+      (node) => isValidElement<ComponentProps<typeof Button>>(node) && node.type === Button && node.props.children === en["custom.public.unpublish"]
+    );
+
+    if (!isValidElement<ComponentProps<typeof Button>>(button)) throw new Error("Missing withdrawal button");
+
+    button.props.onClick?.({} as Parameters<NonNullable<typeof button.props.onClick>>[0]);
+    await Promise.resolve();
+    expect(onClose).not.toHaveBeenCalled();
+    expect(toast).not.toHaveBeenCalled();
   });
   it("disables unchanged or unverified updates without disabling withdrawal", () => {
     state = {

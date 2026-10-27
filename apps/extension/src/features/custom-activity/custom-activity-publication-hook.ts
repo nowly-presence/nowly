@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
 import { useExtensionState } from "@/hooks/extension-state-provider";
@@ -14,6 +14,7 @@ export const useCustomActivityPublication = (id: string) => {
   const [published, setPublished] = useState(false);
   const [creatorRequired, setCreatorRequired] = useState(false);
   const [revision, setRevision] = useState<number | null>(null);
+  const locked = useRef(false);
 
   const showFailure = (code: string) => {
     if (code === "CREATOR_REQUIRED") setCreatorRequired(true);
@@ -51,9 +52,10 @@ export const useCustomActivityPublication = (id: string) => {
     };
   }, [id, savedActivity, t]);
 
-  const publish = async (unpublish = false) => {
-    if (revision === null || busy || creatorRequired || (!unpublish && published && hasChanges !== true)) return;
+  const publish = async (unpublish = false): Promise<boolean> => {
+    if (revision === null || locked.current || busy || creatorRequired || (!unpublish && published && hasChanges !== true)) return false;
 
+    locked.current = true;
     setBusy(true);
     setError(null);
 
@@ -66,7 +68,11 @@ export const useCustomActivityPublication = (id: string) => {
 
       if (!result.ok) {
         showFailure(result.error);
-        return;
+        return false;
+      }
+      if (unpublish && result.published) {
+        setError(t("error.generic"));
+        return false;
       }
 
       setUrl(result.url);
@@ -74,16 +80,20 @@ export const useCustomActivityPublication = (id: string) => {
       setPublished(result.published);
       setCreatorRequired(false);
       setHasChanges(unpublish);
+      return true;
     } catch {
       setError(t("error.generic"));
+      return false;
     } finally {
+      locked.current = false;
       setBusy(false);
     }
   };
 
   const connect = async () => {
-    if (busy) return;
+    if (busy || locked.current) return;
 
+    locked.current = true;
     setBusy(true);
     setError(null);
 
@@ -93,6 +103,7 @@ export const useCustomActivityPublication = (id: string) => {
     } catch {
       setError(t("error.generic"));
     } finally {
+      locked.current = false;
       setBusy(false);
     }
   };
