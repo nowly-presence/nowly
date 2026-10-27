@@ -81,11 +81,11 @@ export const CustomActivityView = () => {
               title={t("custom.import")}
               loading={share.importing}
               disabled={!canCreate}
-              icon={<RiUpload2Line className="size-4" />}
+              icon={<RiUpload2Line />}
               onClick={() => fileRef.current?.click()}
             />
             {items.length > 0 && canCreate && (
-              <Button size="sm" icon={<RiAddLine className="size-4" />} onClick={() => setTemplatesOpen(true)}>
+              <Button size="sm" icon={<RiAddLine />} onClick={() => setTemplatesOpen(true)}>
                 {t("custom.create")}
               </Button>
             )}

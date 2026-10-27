@@ -48,7 +48,7 @@ export const AnnouncementsBanner = () => {
         )}
       >
         <span className="min-w-0 truncate">{text.title}</span>
-        <RiArrowRightLine aria-hidden className="size-4 shrink-0" />
+        <RiArrowRightLine aria-hidden className="shrink-0" />
       </a>
     </aside>
   );

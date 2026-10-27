@@ -88,7 +88,7 @@ export const LegalPrompt = ({ state, returning, confirm }: {
         )}
       </div>
       <div className="border-t border-line px-5 py-4">
-        <Button className="w-full" disabled={!allowed} loading={busy} onClick={() => void submit()} icon={<RiCheckLine className="size-4" aria-hidden />}>
+        <Button className="w-full" disabled={!allowed} loading={busy} onClick={() => void submit()} icon={<RiCheckLine aria-hidden />}>
           {t(needsTos ? "legal.acceptContinue" : "legal.continue")}
         </Button>
         <p className="mt-2 text-center text-label-sm text-muted">{t("legal.analytics")}</p>

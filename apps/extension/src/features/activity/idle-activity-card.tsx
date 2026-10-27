@@ -55,7 +55,7 @@ export const IdleCard = ({ connection, paused, onResume, hasPresences }: {
           <Button
             className="h-auto! min-h-9 w-full min-w-0 whitespace-normal! py-2 wrap-break-word"
             variant="secondary"
-            icon={<RiRefreshLine className="size-4 shrink-0" />}
+            icon={<RiRefreshLine className="shrink-0" />}
             onClick={() => void sendMessage("CONNECT_NATIVE").then(() => refresh.native())}
           >
             {t("action.retry")}

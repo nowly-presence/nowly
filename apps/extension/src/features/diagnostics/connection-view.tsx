@@ -145,7 +145,7 @@ export const ConnectionView = () => {
               variant="secondary"
               size="sm"
               loading={busy === "reconnect"}
-              icon={<RiRefreshLine className="size-4" />}
+              icon={<RiRefreshLine />}
               onClick={() => void reconnect("reconnect")}
             >
               {t("connection.reconnect")}
@@ -154,7 +154,7 @@ export const ConnectionView = () => {
               variant="secondary"
               size="sm"
               loading={busy === "restart"}
-              icon={<RiRestartLine className="size-4" />}
+              icon={<RiRestartLine />}
               onClick={() => void reconnect("restart")}
             >
               {t("connection.restart")}
@@ -172,7 +172,7 @@ export const ConnectionView = () => {
                 state.native.connected ? (
                   <RiCheckboxCircleFill className="size-5 text-success" />
                 ) : (
-                  <Button size="sm" icon={<RiDownloadLine className="size-4" />} onClick={() => openUrl(HOST_DOWNLOAD_URL)}>
+                  <Button size="sm" icon={<RiDownloadLine />} onClick={() => openUrl(HOST_DOWNLOAD_URL)}>
                     {t("action.download")}
                   </Button>
                 )
@@ -209,7 +209,7 @@ export const ConnectionView = () => {
           </Group>
         </Section>
 
-        <Button variant="secondary" icon={<RiFileList3Line className="size-4" />} onClick={() => push({ name: "logs" })}>
+        <Button variant="secondary" icon={<RiFileList3Line />} onClick={() => push({ name: "logs" })}>
           {t("connection.openLogs")}
         </Button>
       </ScreenBody>

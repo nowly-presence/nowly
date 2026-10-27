@@ -35,7 +35,7 @@ export const CustomActivityTemplatesSheet = ({ open, onClose, onPick }: CustomAc
         <Tile
           icon={
             <span className="flex size-9 shrink-0 items-center justify-center rounded-sm border border-dashed border-line-strong text-muted">
-              <RiAddLine className="size-4" />
+              <RiAddLine />
             </span>
           }
           title={t("custom.templates.blank")}

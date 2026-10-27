@@ -135,7 +135,7 @@ export const SortableList = <T,>({ items, getKey, renderItem, onReorder, label, 
           >
             <span className="w-4 text-center text-label-sm text-muted tabular-nums">{index + 1}</span>
             {renderItem(item, index)}
-            <RiDraggable className={cn("size-4 shrink-0", dragging ? "text-primary" : "text-muted")} aria-hidden />
+            <RiDraggable className={cn("shrink-0", dragging ? "text-primary" : "text-muted")} aria-hidden />
           </li>
         );
       })}

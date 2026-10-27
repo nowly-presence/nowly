@@ -9,7 +9,7 @@ export const PermissionStatus = ({ ok, okLabel, waitingLabel }: { ok: boolean; o
       ok ? "border-transparent bg-success-soft text-success" : "border-line bg-surface text-muted"
     )}
   >
-    {ok ? <RiCheckLine className="size-4" /> : <Spinner className="size-4" />}
+    {ok ? <RiCheckLine /> : <Spinner />}
     {ok ? okLabel : waitingLabel}
   </div>
 );

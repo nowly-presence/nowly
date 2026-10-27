@@ -21,7 +21,7 @@ export const CustomActivityDetectionSection = ({ draft, patch, errors, detectedH
             inputMode="url"
             value={draft.detectionUrl}
             placeholder={t("custom.field.detectionPlaceholder")}
-            leading={<RiLink className="size-4" />}
+            leading={<RiLink />}
             aria-label={t("custom.field.detection")}
             onChange={(event) => patch({ detectionUrl: event.target.value })}
           />

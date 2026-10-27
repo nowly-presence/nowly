@@ -62,7 +62,7 @@ export const CustomActivityTimeSection = ({ draft, patch, errors }: CustomActivi
                   disabled={timestamp.minutes <= CUSTOM_COUNTDOWN_MIN_MINUTES}
                   onClick={() => setMinutes(timestamp.minutes - CUSTOM_COUNTDOWN_STEP_MINUTES)}
                 >
-                  <RiSubtractLine className="size-4" />
+                  <RiSubtractLine />
                 </Button>
                 <span className="text-headline-sm font-medium text-ink tabular-nums" aria-live="polite">
                   {formatDuration(timestamp.minutes, locale)}
@@ -74,7 +74,7 @@ export const CustomActivityTimeSection = ({ draft, patch, errors }: CustomActivi
                   disabled={timestamp.minutes >= CUSTOM_COUNTDOWN_MAX_MINUTES}
                   onClick={() => setMinutes(timestamp.minutes + CUSTOM_COUNTDOWN_STEP_MINUTES)}
                 >
-                  <RiAddLine className="size-4" />
+                  <RiAddLine />
                 </Button>
               </div>
               <div className="flex flex-wrap gap-1.5">

@@ -45,7 +45,7 @@ export const Header = ({ theme }: {
             paused ? "border-ink bg-ink text-canvas" : "border-line bg-surface text-ink hover:border-line-strong"
           )}
         >
-          {paused ? <RiPlayFill className="size-4" /> : <RiPauseLine className="size-4" />}
+          {paused ? <RiPlayFill /> : <RiPauseLine />}
         </button>
       </div>
     </header>

@@ -69,7 +69,7 @@ export const CustomActivityPublicationDialog = ({ id, onClose }: {
                       title={t("custom.public.open")}
                       className="inline-flex size-9 shrink-0 items-center justify-center text-ink transition-colors hover:bg-hover active:bg-press"
                     >
-                      <RiExternalLinkLine className="size-4" aria-hidden="true" />
+                      <RiExternalLinkLine aria-hidden="true" />
                     </a>
                   </ButtonGroup>
                 </div>

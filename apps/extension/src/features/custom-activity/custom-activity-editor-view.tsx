@@ -136,10 +136,10 @@ export const CustomActivityEditorView = ({ id, template }: {
           {existing && <CustomActivityPublication id={existing.id} />}
           {existing && (
             <div className="grid grid-cols-2 gap-2">
-              <Button variant="muted" icon={<RiDownload2Line className="size-4" />} onClick={() => void share.exportActivity(existing)}>
+              <Button variant="muted" icon={<RiDownload2Line />} onClick={() => void share.exportActivity(existing)}>
                 {t("custom.export")}
               </Button>
-              <Button variant="muted" icon={<RiDeleteBinLine className="size-4" />} onClick={() => setDeleteOpen(true)}>
+              <Button variant="muted" icon={<RiDeleteBinLine />} onClick={() => setDeleteOpen(true)}>
                 {t("action.delete")}
               </Button>
             </div>

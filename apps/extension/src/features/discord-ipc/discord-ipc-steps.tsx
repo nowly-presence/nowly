@@ -22,7 +22,7 @@ export const DiscordIpcSteps = () => {
         </ol>
       </Card>
       <div className="flex gap-2.5 px-1 pt-1 text-muted">
-        <RiShieldCheckLine className="mt-0.5 size-4 shrink-0" />
+        <RiShieldCheckLine className="mt-0.5 shrink-0" />
         <p className="text-body-sm">{t("discordIpc.safety")}</p>
       </div>
     </Section>

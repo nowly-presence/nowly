@@ -33,6 +33,11 @@
     cursor: default;
   }
 
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
   input[type="time"]::-webkit-calendar-picker-indicator {
     opacity: 0.5;
     cursor: pointer;

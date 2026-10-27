@@ -15,7 +15,7 @@ import { Select, type SelectOption } from "@/ui/select";
 
 const PER_PRESENCE = "per-presence";
 
-const optionIconClass = "size-4 shrink-0 text-muted";
+const optionIconClass = "shrink-0 text-muted";
 
 export const AppearanceSection = () => {
   const { state, updateSettings } = useExtensionState();

@@ -70,7 +70,7 @@ const UrlThumb = ({ image, round }: {
   const [loaded, setLoaded] = useState<string | null>(null);
   return (
     <span className="relative flex size-5 items-center justify-center">
-      {loaded !== src && <RiLink className="size-4" />}
+      {loaded !== src && <RiLink />}
       {src && (
         <img
           key={src}

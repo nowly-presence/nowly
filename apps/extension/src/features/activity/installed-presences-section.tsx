@@ -68,7 +68,7 @@ export const InstalledPresencesSection = ({ presences, detectedSlugs, now }: Ins
                 showUpdateAll ? "size-8 border border-line-strong" : "size-7"
               )}
             >
-              {grid ? <RiListCheck className="size-4" /> : <RiFunctionLine className="size-4" />}
+              {grid ? <RiListCheck /> : <RiFunctionLine />}
             </button>
           </div>
         )
@@ -82,7 +82,7 @@ export const InstalledPresencesSection = ({ presences, detectedSlugs, now }: Ins
             title={t("activity.emptyTitle")}
             description={t("activity.emptyDescription")}
             action={
-              <Button onClick={() => setTab("store")} icon={<RiApps2AddLine className="size-4" />}>
+              <Button onClick={() => setTab("store")} icon={<RiApps2AddLine />}>
                 {t("activity.browseLibrary")}
               </Button>
             }

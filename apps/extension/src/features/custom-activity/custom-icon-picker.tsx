@@ -26,7 +26,7 @@ export const CustomIconPicker = ({ value, onChange, round }: {
       <div className="flex items-center gap-3">
         <CustomActivityGlyph color={value.color} icon={value.icon} size={PREVIEW_SIZE} rounded={round ? "rounded-full" : "rounded-md"} />
         <div className="flex min-w-0 flex-col items-start gap-1.5">
-          <Button size="sm" variant="secondary" icon={<RiShuffleLine className="size-4" />} onClick={() => onChange(randomIconImage())}>
+          <Button size="sm" variant="secondary" icon={<RiShuffleLine />} onClick={() => onChange(randomIconImage())}>
             {t("custom.appearance.shuffle")}
           </Button>
           <span className="text-label-sm text-muted">{t("custom.image.iconHint")}</span>
@@ -49,7 +49,7 @@ export const CustomIconPicker = ({ value, onChange, round }: {
                 selected && "ring-2 ring-ink ring-offset-2 ring-offset-surface"
               )}
             >
-              {selected && <RiCheckLine className="size-4" />}
+              {selected && <RiCheckLine />}
             </button>
           );
         })}

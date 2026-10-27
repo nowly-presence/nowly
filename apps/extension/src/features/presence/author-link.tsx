@@ -24,7 +24,7 @@ const VARIANT_CLASSES: Record<
   },
   row: {
     link: "flex items-center gap-1.5 text-label-md",
-    icon: "size-4"
+    icon: ""
   }
 };
 

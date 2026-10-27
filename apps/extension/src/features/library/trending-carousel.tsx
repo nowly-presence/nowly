@@ -56,7 +56,7 @@ export const TrendingCarousel = ({ views }: {
                   )}
                 </span>
               </span>
-              {state.presences[view.slug] && <RiCheckLine className="size-4 text-tertiary-accent" />}
+              {state.presences[view.slug] && <RiCheckLine className="text-tertiary-accent" />}
             </div>
           </button>
         ))}

@@ -70,7 +70,7 @@ export const LibraryResultsSection = ({ results, newSlugs, browsing, query, cate
             title={t("library.noResults", { query: query.trim() || t(categoryKey(category === "all" ? "other" : category)) })}
             description={t("library.noResultsDescription")}
             action={
-              <Button variant="secondary" icon={<RiDiscordLine className="size-4" />} onClick={() => openUrl(DISCORD_INVITE_URL)}>
+              <Button variant="secondary" icon={<RiDiscordLine />} onClick={() => openUrl(DISCORD_INVITE_URL)}>
                 {t("library.request")}
               </Button>
             }

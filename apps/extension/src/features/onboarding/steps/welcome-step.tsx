@@ -27,7 +27,7 @@ export const WelcomeStep = ({ onNext }: {
       }
       description={t("onboarding.welcomeDescription")}
       footer={
-        <Button onClick={onNext} className="w-full" icon={<RiArrowRightLine className="order-last size-4" />}>
+        <Button onClick={onNext} className="w-full" icon={<RiArrowRightLine className="order-last" />}>
           {t("onboarding.getStarted")}
         </Button>
       }

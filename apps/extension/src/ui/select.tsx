@@ -177,7 +177,7 @@ export const Select = ({ value, options, onChange, className, disabled, ...props
       >
         {selected?.icon}
         <span className="min-w-0 flex-1 truncate">{selected?.label}</span>
-        <RiArrowDownSLine className={cn("size-4 shrink-0 text-muted transition-transform duration-200", open && "rotate-180")} />
+        <RiArrowDownSLine className={cn("shrink-0 text-muted transition-transform duration-200", open && "rotate-180")} />
       </button>
       {open &&
         position &&
@@ -224,7 +224,7 @@ export const Select = ({ value, options, onChange, className, disabled, ...props
                     <span className="truncate">{option.label}</span>
                     {option.hint && <span className="truncate text-label-sm font-normal text-muted">{option.hint}</span>}
                   </span>
-                  {isSelected && <RiCheckLine className="size-4 shrink-0 text-primary" />}
+                  {isSelected && <RiCheckLine className="shrink-0 text-primary" />}
                 </div>
               );
             })}

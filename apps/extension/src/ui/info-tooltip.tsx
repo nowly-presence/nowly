@@ -47,7 +47,7 @@ export const InfoTooltip = ({ label, text }: {
         aria-label={label}
         aria-describedby={open ? id : undefined}
         onClick={() => setOpen(true)}
-        icon={<RiInformationLine className="size-4 text-muted" />}
+        icon={<RiInformationLine className="text-muted" />}
       />
       {open && (
         <span className="absolute right-0 bottom-full z-50 w-64 max-w-[calc(100vw-4rem)] pb-2">

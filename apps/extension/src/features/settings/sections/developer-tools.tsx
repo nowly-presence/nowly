@@ -123,7 +123,7 @@ export const DeveloperTools = () => {
                 size="sm"
                 variant="secondary"
                 loading={busy === "zip"}
-                icon={<RiUploadCloud2Line className="size-4" />}
+                icon={<RiUploadCloud2Line />}
                 onClick={() => fileRef.current?.click()}
               >
                 {t("action.import")}

@@ -1,7 +1,7 @@
-import { useId, type ReactNode } from "react";
-import { RiArrowRightSLine } from "@remixicon/react";
 import { cn } from "@/ui/cn";
 import { Switch } from "@/ui/switch";
+import { RiArrowRightSLine } from "@remixicon/react";
+import { useId, type ReactNode } from "react";
 
 type RowProps = {
   title: ReactNode;
@@ -23,9 +23,10 @@ export const Row = ({ title, description, leading, trailing, onClick, chevron, c
         {description && <span className="text-label-md font-normal text-muted">{description}</span>}
       </span>
       {trailing && <span className="flex shrink-0 items-center gap-2">{trailing}</span>}
-      {chevron && <RiArrowRightSLine className="size-4 shrink-0 text-muted" />}
+      {chevron && <RiArrowRightSLine className="shrink-0 text-muted" />}
     </>
   );
+
   const base = cn("flex w-full gap-3 px-4 py-3", align === "center" ? "items-center" : "items-start", className);
 
   if (onClick) {

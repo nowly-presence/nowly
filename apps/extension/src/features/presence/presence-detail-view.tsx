@@ -115,17 +115,17 @@ export const PresenceDetailView = ({ slug }: {
             <Button
               variant="secondary"
               className="flex-1"
-              icon={<RiExternalLinkLine className="size-4" />}
+              icon={<RiExternalLinkLine />}
               onClick={() => openUrl(siteUrl(`/library/${slug}`))}
             >
               {t("detail.viewOnWeb")}
             </Button>
-            <Button variant="secondary" className="flex-1" icon={<RiFlagLine className="size-4" />} onClick={() => setReportOpen(true)}>
+            <Button variant="secondary" className="flex-1" icon={<RiFlagLine />} onClick={() => setReportOpen(true)}>
               {t("detail.report")}
             </Button>
           </div>
           {stored && (
-            <Button variant="danger" icon={<RiDeleteBinLine className="size-4" />} onClick={() => setUninstallOpen(true)}>
+            <Button variant="danger" icon={<RiDeleteBinLine />} onClick={() => setUninstallOpen(true)}>
               {t("detail.uninstall")}
             </Button>
           )}

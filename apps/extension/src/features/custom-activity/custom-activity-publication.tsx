@@ -32,7 +32,7 @@ export const CustomActivityPublication = ({ id }: {
   return (
     <>
       <FeatureReveal id="custom-public-sharing" version="2.5.0" text={t("custom.public.description")}>
-        <Button className="w-full" icon={<RiShareForwardLine className="size-4" />} onClick={() => setOpen(true)}>
+        <Button className="w-full" icon={<RiShareForwardLine />} onClick={() => setOpen(true)}>
           {t(published ? "custom.public.updateTitle" : "custom.public.share")}
         </Button>
       </FeatureReveal>

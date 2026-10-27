@@ -20,9 +20,9 @@ type ToastValue = {
 const ToastContext = createContext<ToastValue | null>(null);
 
 const icons = {
-  success: <RiCheckLine className="size-4 text-success" />,
-  error: <RiErrorWarningLine className="size-4 text-danger" />,
-  info: <RiInformationLine className="size-4 text-tertiary-accent" />
+  success: <RiCheckLine className="text-success" />,
+  error: <RiErrorWarningLine className="text-danger" />,
+  info: <RiInformationLine className="text-tertiary-accent" />
 };
 
 export const ToastProvider = ({ children }: {

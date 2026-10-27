@@ -32,7 +32,7 @@ export const LegalDocumentCard = ({ id, updatedAt, checked, onChange, disabled }
           <span className="text-label-lg font-medium text-ink">{t(id === "tos" ? "legal.tos" : "legal.privacy")}</span>
           <span className="text-label-sm text-muted">{t("legal.updated", { date })}</span>
         </span>
-        <RiArrowRightUpLine className="size-4 shrink-0 text-muted" aria-hidden />
+        <RiArrowRightUpLine className="shrink-0 text-muted" aria-hidden />
       </a>
       <div className="border-t border-line bg-neutral/40 px-4 py-3">
         <Checkbox checked={checked} onChange={onChange} disabled={disabled}>

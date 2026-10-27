@@ -28,7 +28,7 @@ export const LibrarySearchBar = ({ query, onQueryChange, category, onCategoryCha
         onChange={(event) => onQueryChange(event.target.value)}
         placeholder={t("library.search")}
         aria-label={t("library.search")}
-        leading={<RiSearchLine className="size-4" />}
+        leading={<RiSearchLine />}
         trailing={
           query && (
             <button
@@ -37,7 +37,7 @@ export const LibrarySearchBar = ({ query, onQueryChange, category, onCategoryCha
               onClick={() => (onQueryChange(""), inputRef.current?.focus())}
               className="flex size-6 items-center justify-center text-muted hover:text-ink"
             >
-              <RiCloseCircleFill className="size-4" />
+              <RiCloseCircleFill />
             </button>
           )
         }

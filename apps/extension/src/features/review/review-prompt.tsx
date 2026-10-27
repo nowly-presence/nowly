@@ -36,7 +36,7 @@ export const ReviewPrompt = () => {
           <Button variant="secondary" className="flex-1" onClick={dismiss}>
             {t("review.dismiss")}
           </Button>
-          <Button className="flex-1" icon={<RiStarFill className="size-4" />} onClick={rate}>
+          <Button className="flex-1" icon={<RiStarFill />} onClick={rate}>
             {t("review.rate")}
           </Button>
         </>

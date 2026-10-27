@@ -47,14 +47,14 @@ export const DiscordIpcView = () => {
           }
         />
         {resolved ? (
-          <Button icon={<RiArrowLeftLine className="size-4" />} onClick={pop}>
+          <Button icon={<RiArrowLeftLine />} onClick={pop}>
             {t("action.back")}
           </Button>
         ) : (
           <>
             <DiscordIpcSteps />
             <div className="flex flex-col gap-2">
-              <Button loading={busy} icon={<RiRefreshLine className="size-4" />} onClick={() => void reconnect()}>
+              <Button loading={busy} icon={<RiRefreshLine />} onClick={() => void reconnect()}>
                 {t("connection.reconnect")}
               </Button>
               {stillBlocked && !busy && (
@@ -62,7 +62,7 @@ export const DiscordIpcView = () => {
                   {t("discordIpc.stillBlocked")}
                 </p>
               )}
-              <Button variant="secondary" icon={<RiExternalLinkLine className="size-4" />} onClick={() => openUrl(docsUrl(TROUBLESHOOTING_DOCS_PATH, locale))}>
+              <Button variant="secondary" icon={<RiExternalLinkLine />} onClick={() => openUrl(docsUrl(TROUBLESHOOTING_DOCS_PATH, locale))}>
                 {t("discordIpc.learnMore")}
               </Button>
             </div>

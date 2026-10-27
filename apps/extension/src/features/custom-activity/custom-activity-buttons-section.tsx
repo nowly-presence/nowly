@@ -30,7 +30,7 @@ export const CustomActivityButtonsSection = ({ draft, patch, errors }: CustomAct
                 title={t("custom.button.remove")}
                 onClick={() => patch({ buttons: buttons.filter((_, position) => position !== index) })}
               >
-                <RiCloseLine className="size-4" />
+                <RiCloseLine />
               </Button>
             </div>
             <Input
@@ -46,7 +46,7 @@ export const CustomActivityButtonsSection = ({ draft, patch, errors }: CustomAct
               inputMode="url"
               value={button.url}
               placeholder="https://"
-              leading={<RiLink className="size-4" />}
+              leading={<RiLink />}
               aria-label={t("custom.button.url")}
               onChange={(event) => update(index, { url: event.target.value })}
             />
@@ -63,7 +63,7 @@ export const CustomActivityButtonsSection = ({ draft, patch, errors }: CustomAct
             <Button
               size="sm"
               variant="secondary"
-              icon={<RiAddLine className="size-4" />}
+              icon={<RiAddLine />}
               onClick={() =>
                 patch({
                   buttons: [

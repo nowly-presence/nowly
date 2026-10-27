@@ -144,10 +144,10 @@ export const CustomActivityEmptyState = ({ onCreate, onTemplates }: {
           <p className="mx-auto max-w-72 text-body-sm text-balance text-muted">{t("custom.empty.description")}</p>
         </div>
         <div className="flex flex-wrap justify-center gap-2">
-          <Button icon={<RiAddLine className="size-4" />} onClick={onCreate}>
+          <Button icon={<RiAddLine />} onClick={onCreate}>
             {t("custom.empty.action")}
           </Button>
-          <Button variant="secondary" icon={<RiLayoutGridLine className="size-4" />} onClick={onTemplates}>
+          <Button variant="secondary" icon={<RiLayoutGridLine />} onClick={onTemplates}>
             {t("custom.empty.templates")}
           </Button>
         </div>
