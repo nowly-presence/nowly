@@ -40,10 +40,10 @@ export const SupportSheet = ({ open, onClose }: {
   const { t } = useI18n();
   const { toast } = useToast();
   const trailing = <RiExternalLinkLine className="size-4 text-muted" />;
-  const copy = async (address: string) => {
+  const copy = async (name: string, address: string) => {
     try {
       await navigator.clipboard.writeText(address);
-      toast(t("toast.copied"));
+      toast(t("support.addressCopied", { name }));
     } catch {
       toast(t("support.copyFailed"), "error");
     }
@@ -75,7 +75,7 @@ export const SupportSheet = ({ open, onClose }: {
             type="button"
             aria-label={t("support.copyAddress", { name })}
             title={t("support.copyAddress", { name })}
-            onClick={() => void copy(address)}
+            onClick={() => void copy(name, address)}
             className="flex min-h-14 flex-col items-center justify-center gap-1 bg-surface text-ink transition-colors hover:bg-hover focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ink"
           >
             <Icon className="size-5" aria-hidden="true" />

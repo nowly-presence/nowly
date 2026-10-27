@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { RiCheckLine, RiErrorWarningLine, RiInformationLine } from "@remixicon/react";
 import { cn } from "@/ui/cn";
 
@@ -29,6 +29,7 @@ export const ToastProvider = ({ children }: {
   children: ReactNode;
 }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [sheetBottom, setSheetBottom] = useState<number | null>(null);
   const nextId = useRef(1);
 
   const toast = useCallback<ToastValue["toast"]>((message, tone = "success", action) => {
@@ -40,12 +41,47 @@ export const ToastProvider = ({ children }: {
     window.setTimeout(() => setToasts((current) => current.filter((item) => item.id !== id)), action ? 5200 : 3200);
   }, []);
 
+  useLayoutEffect(() => {
+    if (toasts.length === 0) {
+      setSheetBottom(null);
+      return;
+    }
+
+    const updatePosition = () => {
+      const dialog = document.querySelector<HTMLElement>('[role="dialog"][aria-modal="true"]');
+
+      if (!dialog) {
+        setSheetBottom(null);
+        return;
+      }
+
+      const top = dialog.getBoundingClientRect().top;
+      setSheetBottom(Math.max(8, window.innerHeight - top + 8));
+    };
+
+    updatePosition();
+    const observer = new MutationObserver(updatePosition);
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [toasts.length]);
+
   const value = useMemo(() => ({ toast }), [toast]);
 
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-[84px] z-40 flex flex-col items-center gap-2 px-4">
+      <div
+        aria-live="polite"
+        style={{ bottom: sheetBottom ?? 84 }}
+        className="pointer-events-none fixed inset-x-0 z-[60] flex flex-col items-center gap-2 px-4"
+      >
         {toasts.map((item) => (
           <div
             key={item.id}
