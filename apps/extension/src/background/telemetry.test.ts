@@ -89,6 +89,7 @@ describe("local consented cohort accounting", () => {
     const { trackProduct } = await import("@/background/telemetry");
     await trackProduct(active, { daily: "panel" });
     expect(events().map((event) => event.name)).toEqual(["extension_first_seen", "extension_active"]);
+    expect(mock.send.mock.calls.every((call) => call[3]?.canary === true)).toBe(true);
     const allowed = mock.send.mock.calls[0][2];
     expect(await allowed()).toBe(true);
     mock.developerMode = false;
@@ -115,6 +116,8 @@ describe("local consented cohort accounting", () => {
     await (await import("./telemetry")).trackProduct(active, { daily: "panel" });
     expect(events().map((event) => event.name)).toEqual(["extension_first_seen", "extension_active"]);
     expect(JSON.stringify(events())).not.toMatch(/deviceId|token|slug|version/);
+    expect(events().every((event) => !("canary" in event.data))).toBe(true);
+    expect(mock.send.mock.calls.every((call) => call[3] === undefined)).toBe(true);
   });
 
   it("counts each exact elapsed D1/D7/D30 window once, without catching up missed days", async () => {

@@ -10,12 +10,12 @@ const empty = z.strictObject({});
 const date = z.iso.date();
 const presence = z.strictObject({ category });
 
-const variant = <N extends string, D extends z.ZodType>(name: N, data: D) =>
+const variant = <N extends string, D extends z.ZodRawShape>(name: N, data: z.ZodObject<D>) =>
   z.strictObject({
     id: z.uuid(),
     name: z.literal(name),
     source,
-    data
+    data: data.extend({ canary: z.literal(true).optional() })
   });
 
 export const eventSchema = z
@@ -128,11 +128,12 @@ export const retentionPlan = (state: RetentionState, now: number): {
   };
 };
 
-export const sendEvent = async (url: string, input: EventInput, consent: () => boolean | Promise<boolean>): Promise<boolean> => {
+export const sendEvent = async (url: string, input: EventInput, consent: () => boolean | Promise<boolean>, options?: { canary: true }): Promise<boolean> => {
   if (!(await consent())) return false;
 
   const event = eventSchema.safeParse({
     ...input,
+    ...(options?.canary ? { data: { ...input.data, canary: true } } : {}),
     id: crypto.randomUUID()
   });
 

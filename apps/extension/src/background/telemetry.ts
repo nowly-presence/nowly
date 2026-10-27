@@ -13,6 +13,9 @@ const canSendTelemetry = async (): Promise<boolean> => {
   return !IS_CANARY || (await getSettings()).developerMode === true;
 };
 
+const sendProductEvent = (input: EventInput): Promise<boolean> =>
+  sendEvent(getEffectiveApiUrl(), input, canSendTelemetry, IS_CANARY ? { canary: true } : undefined);
+
 const serialized = <T>(task: () => Promise<T>): Promise<T> => {
   const next = pending.then(task, task);
   pending = next.catch(() => {});
@@ -38,14 +41,12 @@ export const trackProduct = (
     let state = localStateSchema.safeParse(result[KEY]).data;
 
     if (!state) {
-      const ok = await sendEvent(
-        getEffectiveApiUrl(),
+      const ok = await sendProductEvent(
         {
           name: "extension_first_seen",
           source: "extension",
           data: { cohort_day: day }
-        },
-        canSendTelemetry
+        }
       );
 
       if (!ok || !(await canSendTelemetry())) return;
@@ -63,7 +64,7 @@ export const trackProduct = (
 
     if (dedup?.once && state.once.includes(dedup.once)) return;
 
-    const ok = alreadyDaily || (await sendEvent(getEffectiveApiUrl(), input, canSendTelemetry));
+    const ok = alreadyDaily || (await sendProductEvent(input));
 
     if (!ok || !(await canSendTelemetry())) return;
 
@@ -74,14 +75,12 @@ export const trackProduct = (
       const retention = retentionPlan(state, now);
       if (
         retention &&
-        (await sendEvent(
-          getEffectiveApiUrl(),
+        (await sendProductEvent(
           {
             name: "retention_return",
             source: "extension",
             data: retention
-          },
-          canSendTelemetry
+          }
         ))
       ) state.returned.push(retention.day);
     }
