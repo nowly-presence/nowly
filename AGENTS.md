@@ -22,7 +22,8 @@ Presence flow: author against `@nowly/sdk` in `packages/presences`, build/valida
 - There is no root lint/test aggregator. Run only the touched workspace: `pnpm --filter @nowly/<pkg> lint|typecheck|test`. Native host: `go test ./...` in `apps/native`.
 - Formatting: `pnpm format` (`scripts/format.ts`) and `pnpm test:format`. Do not hand-format or add Prettier overrides.
 - Git pre-commit runs `lint-staged` with `pnpm format --write` on staged TypeScript files in `apps/` and `packages/`, preserving unstaged changes and existing formatter exclusions. `pnpm install` installs the hook through `prepare` (`simple-git-hooks`); run `pnpm prepare` to reinstall it locally.
-- CI on `stable` (`.github/workflows`): `lint.yml` (web, docs, extension only), `test-api.yml`, `i18n-unused.yml` (`scripts/check-i18n-unused.mjs`), `canary-extension.yml`, `production-extension.yml`, `host-release.yml` (tag `native-vX.Y.Z`), `presence-update.yml` / `presence-backfill.yml`. No CI job runs format, analytics/env tests or `go test` outside the release workflow.
+- CI on `stable` (`.github/workflows`): `lint.yml` (web, docs, extension only), `test-api.yml`, `i18n-unused.yml` (`scripts/check-i18n-unused.ts`, run with `node --experimental-strip-types`), `canary-extension.yml`, `production-extension.yml`, `host-release.yml` (tag `native-vX.Y.Z`), `presence-update.yml` / `presence-backfill.yml`. No CI job runs format, analytics/env tests or `go test` outside the release workflow.
+- The i18n checker resolves literal translation keys and namespace bindings, including `Promise.all` destructuring. Dynamic template prefixes cover matching keys; nonliteral calls cover their namespace, and `getMessages()` covers top-level namespaces mentioned in the same file, avoiding false positives for runtime lookup.
 
 ## Cross-app contracts
 
@@ -31,7 +32,7 @@ Presence flow: author against `@nowly/sdk` in `packages/presences`, build/valida
 - Shared footer lives in `packages/ui` and feeds both `apps/web` and `apps/docs` (see `packages/ui/AGENTS.md`).
 - Legal document versions: `packages/shared/src/legal.ts` is the single source, consumed by web (`/api/legal/versions`) and the extension.
 - Extension IDs (prod `kmnlnfldimgneaopdihplkebobckcjpf`, dev `abbegmindbabanjcabnmcjmamaoffbam`) are duplicated in native `main.go`, `install-{linux,macos}.sh`, `build-deb.sh` and `installer.iss`; change all together.
-- Button-styled links: put `buttonVariants()` on the real `Link`/`<a>`, inside a Client Component (see `.cursor/rules/styled-link-buttons.mdc`). Reserve `<Button>` for actions that do not change the URL.
+- Button-styled links: put `buttonVariants()` on the real `Link`/`<a>`, inside a Client Component. Never wrap navigation in `<Button>` with `render`, `asChild` or `nativeButton={false}`, and never call `buttonVariants()` in a Server Component. Reserve `<Button>` for actions that do not change the URL.
 
 ## Admin and release
 
@@ -46,4 +47,4 @@ No activity data leaves the user's machine. Analytics payloads must go through `
 
 ## Vendored skills
 
-`.agents/skills/**` is vendored and hash-tracked in `skills-lock.json`; do not edit it.
+Skills listed in `skills-lock.json` are vendored under `.agents/skills/`; do not edit them. `nowly-web-page` is a local project skill migrated from Cursor and is not part of the vendor lockfile.

@@ -18,7 +18,7 @@ on:
       - "apps/extension/messages/**"
       - "apps/extension/src/**"
       - "packages/ui/src/**"
-      - "scripts/check-i18n-unused.mjs"
+      - "scripts/check-i18n-unused.ts"
 
 jobs:
   check:
@@ -29,4 +29,4 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node scripts/check-i18n-unused.mjs
+      - run: node --experimental-strip-types scripts/check-i18n-unused.ts
