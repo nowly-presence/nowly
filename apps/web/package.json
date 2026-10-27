@@ -57,7 +57,7 @@
     "eslint": "^10.13.0",
     "postcss": "^8.5.31",
     "tailwindcss": "^4.3.3",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "typescript-eslint": "^8.72.0",
     "vitest": "4.1.9"
   }
