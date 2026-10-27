@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx scripts/build.ts chrome --canary --watch",
+    "watch:canary": "tsx scripts/build.ts chrome --canary --watch",
     "build": "tsx scripts/build.ts chrome && tsx scripts/build.ts firefox",
     "build:chrome": "tsx scripts/build.ts chrome --canary",
     "build:firefox": "tsx scripts/build.ts firefox --canary",
