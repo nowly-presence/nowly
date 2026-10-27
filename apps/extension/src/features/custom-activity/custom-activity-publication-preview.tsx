@@ -27,7 +27,7 @@ export const CustomActivityPublicationPreview = ({ id, creatorRequired }: {
         {user ? (
           <>
             {user.image ? (
-              <img src={user.image} alt="" className="size-8 rounded-full object-cover" />
+              <img src={user.image} alt="" className="size-8 shrink-0 rounded-lg object-cover" />
             ) : (
               <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-hover">
                 <RiDiscordFill className="size-5 text-muted" aria-hidden="true" />
