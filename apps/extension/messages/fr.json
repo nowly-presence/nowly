@@ -380,6 +380,7 @@
   "support.sponsorsHint": "Avec votre compte GitHub",
   "support.copyHint": "Cliquez sur une icône pour copier l’adresse",
   "support.copyAddress": "Copier l'adresse {name}",
+  "support.addressCopied": "Adresse {name} copiée !",
   "support.copyFailed": "Impossible de copier l'adresse",
   "settings.seasonalThemes": "Afficher les thèmes de saison",
   "settings.seasonalThemesHint": "Habille le panneau au fil des saisons et pour les grandes fêtes, comme Halloween ou le Nouvel An",
@@ -650,7 +651,8 @@
   "custom.template.focus.name": "Concentration",
   "custom.template.focus.details": "Ne pas déranger",
   "custom.template.focus.state": "Je réponds plus tard",
+  "settings.navigation": "Navigation",
   "settings.dockLayout": "Barre de navigation",
-  "settings.dockLayoutHint": "Restez appuyé sur un onglet puis glissez-le pour le déplacer, ou sortez-le d'un côté pour créer une nouvelle barre.",
+  "settings.dockLayoutHint": "Maintenez un onglet pour le déplacer. Sortez-le par un côté pour créer une nouvelle barre.",
   "action.reset": "Réinitialiser"
 }

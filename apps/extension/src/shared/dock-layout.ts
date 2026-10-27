@@ -11,7 +11,7 @@ export type DockDropTarget = {
 
 export const DOCK_MAX_GROUPS = 3;
 
-export const DOCK_TABS = ["activity", "store", "custom", "announcements", "settings"] as const;
+export const DOCK_TABS = ["activity", "custom", "store", "announcements", "settings"] as const;
 
 export const visibleDockTabs = (hidden: readonly string[] = []) => DOCK_TABS.filter((tab) => tab === "activity" || tab === "settings" || !hidden.includes(tab));
 
@@ -32,6 +32,34 @@ export const normalizeDockLayout = <T extends string>(layout: unknown, tabs: rea
         [...groups[groups.length - 1], ...missing]
       ]
     : groups;
+};
+
+export const restoreDockLayoutTabs = <T extends string>(layout: unknown, tabs: readonly T[]): DockLayout<T> => {
+  const isTab = (value: unknown): value is T => typeof value === "string" && tabs.some((tab) => tab === value);
+  const restored = (Array.isArray(layout) ? layout : []).map((group) => (Array.isArray(group) ? group.filter(isTab) : [])).filter((group) => group.length > 0);
+
+  if (restored.length === 0) return [[...tabs]];
+
+  for (const [tabIndex, tab] of tabs.entries()) {
+    if (restored.some((group) => group.includes(tab))) continue;
+
+    const nextTab = tabs.slice(tabIndex + 1).find((next) => restored.some((group) => group.includes(next)));
+    const previousTab = [...tabs.slice(0, tabIndex)].reverse().find((previous) => restored.some((group) => group.includes(previous)));
+
+    if (nextTab) {
+      const groupIndex = restored.findIndex((group) => group.includes(nextTab));
+      const itemIndex = restored[groupIndex].indexOf(nextTab);
+      restored[groupIndex].splice(itemIndex, 0, tab);
+    } else if (previousTab) {
+      const groupIndex = restored.findIndex((group) => group.includes(previousTab));
+      const itemIndex = restored[groupIndex].indexOf(previousTab);
+      restored[groupIndex].splice(itemIndex + 1, 0, tab);
+    } else {
+      restored.push([tab]);
+    }
+  }
+
+  return restored;
 };
 
 export const isDefaultDockLayout = <T extends string>(layout: DockLayout<T>, tabs: readonly T[]): boolean =>

@@ -380,6 +380,7 @@
   "support.sponsorsHint": "GitHub 계정으로",
   "support.copyHint": "아이콘을 클릭해 주소 복사",
   "support.copyAddress": "{name} 주소 복사",
+  "support.addressCopied": "{name} 주소를 복사했습니다",
   "support.copyFailed": "주소를 복사하지 못했습니다",
   "settings.seasonalThemes": "계절 테마 표시",
   "settings.seasonalThemesHint": "계절마다, 그리고 핼러윈이나 새해 같은 특별한 날에 패널을 꾸며요",
@@ -650,7 +651,8 @@
   "custom.template.focus.name": "집중",
   "custom.template.focus.details": "방해 금지",
   "custom.template.focus.state": "나중에 답할게요",
+  "settings.navigation": "내비게이션",
   "settings.dockLayout": "내비게이션 바",
-  "settings.dockLayoutHint": "탭을 길게 눌러 밀면 순서를 바꿀 수 있고, 양옆 밖으로 빼면 새 바가 생겨요.",
+  "settings.dockLayoutHint": "탭을 길게 눌러 드래그해 이동하세요. 가장자리 밖으로 끌면 새 바가 만들어져요.",
   "action.reset": "초기화"
 }

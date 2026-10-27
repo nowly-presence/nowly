@@ -380,6 +380,7 @@
   "support.sponsorsHint": "GitHub アカウントで",
   "support.copyHint": "アイコンをクリックしてアドレスをコピー",
   "support.copyAddress": "{name}のアドレスをコピー",
+  "support.addressCopied": "{name}のアドレスをコピーしました",
   "support.copyFailed": "アドレスをコピーできませんでした",
   "settings.seasonalThemes": "季節のテーマを表示",
   "settings.seasonalThemesHint": "季節ごとや、ハロウィンや新年などの特別な日に合わせてパネルを飾ります",
@@ -650,7 +651,8 @@
   "custom.template.focus.name": "集中",
   "custom.template.focus.details": "邪魔しないでね",
   "custom.template.focus.state": "あとで返信します",
+  "settings.navigation": "ナビゲーション",
   "settings.dockLayout": "ナビゲーションバー",
-  "settings.dockLayoutHint": "タブを長押ししてスライドすると並べ替えられます。左右の外に出すと新しいバーになります。",
+  "settings.dockLayoutHint": "タブを長押ししてドラッグすると移動できます。端の外へ出すと新しいバーを作成します。",
   "action.reset": "リセット"
 }

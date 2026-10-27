@@ -8,6 +8,7 @@ import { AppearanceSection } from "@/features/settings/sections/appearance-secti
 import { PrivacySection } from "@/features/settings/sections/privacy-section";
 import { ScheduleSection } from "@/features/settings/sections/schedule-section";
 import { SharingSection } from "@/features/settings/sections/sharing-section";
+import { NavigationSection } from "@/features/settings/sections/navigation-section";
 
 export const SettingsView = () => {
   const { t } = useI18n();
@@ -18,6 +19,7 @@ export const SettingsView = () => {
       <SharingSection />
       <ScheduleSection />
       <AppearanceSection />
+      <NavigationSection />
       <AccountSection />
       <PrivacySection />
       <AdvancedSection />

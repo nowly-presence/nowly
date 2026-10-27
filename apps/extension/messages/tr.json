@@ -380,6 +380,7 @@
   "support.sponsorsHint": "GitHub hesabınla",
   "support.copyHint": "Adresi kopyalamak için bir simgeye tıklayın",
   "support.copyAddress": "{name} adresini kopyala",
+  "support.addressCopied": "{name} adresi kopyalandı",
   "support.copyFailed": "Adres kopyalanamadı",
   "settings.seasonalThemes": "Mevsimsel temaları göster",
   "settings.seasonalThemesHint": "Paneli her mevsime ve Cadılar Bayramı ya da Yılbaşı gibi özel günlere göre süsler",
@@ -650,7 +651,8 @@
   "custom.template.focus.name": "Odak",
   "custom.template.focus.details": "Rahatsız etmeyin",
   "custom.template.focus.state": "Sonra cevap veririm",
+  "settings.navigation": "Gezinme",
   "settings.dockLayout": "Gezinme çubuğu",
-  "settings.dockLayoutHint": "Bir sekmeyi basılı tut ve kaydırarak yerini değiştir ya da yeni bir çubuk için yana çek.",
+  "settings.dockLayoutHint": "Taşımak için sekmeyi basılı tutup sürükle. Yeni çubuk oluşturmak için kenarın dışına çek.",
   "action.reset": "Sıfırla"
 }

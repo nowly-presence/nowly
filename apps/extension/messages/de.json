@@ -380,6 +380,7 @@
   "support.sponsorsHint": "Mit deinem GitHub-Konto",
   "support.copyHint": "Auf ein Symbol klicken, um die Adresse zu kopieren",
   "support.copyAddress": "{name}-Adresse kopieren",
+  "support.addressCopied": "{name}-Adresse kopiert",
   "support.copyFailed": "Adresse konnte nicht kopiert werden",
   "settings.seasonalThemes": "Saisonale Designs anzeigen",
   "settings.seasonalThemesHint": "Kleidet das Panel passend zu jeder Jahreszeit und zu besonderen Tagen ein, etwa Halloween oder Neujahr",
@@ -650,7 +651,8 @@
   "custom.template.focus.name": "Fokus",
   "custom.template.focus.details": "Nicht stören",
   "custom.template.focus.state": "Ich antworte später",
+  "settings.navigation": "Navigation",
   "settings.dockLayout": "Navigationsleiste",
-  "settings.dockLayoutHint": "Halte einen Tab gedrückt und schieb ihn, um ihn zu verschieben, oder zieh ihn seitlich heraus für eine neue Leiste.",
+  "settings.dockLayoutHint": "Halte einen Tab gedrückt und zieh ihn zum Verschieben. Zieh ihn über den Rand, um eine neue Leiste zu erstellen.",
   "action.reset": "Zurücksetzen"
 }

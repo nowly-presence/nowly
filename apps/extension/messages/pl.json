@@ -380,6 +380,7 @@
   "support.sponsorsHint": "Przez Twoje konto GitHub",
   "support.copyHint": "Kliknij ikonę, aby skopiować adres",
   "support.copyAddress": "Kopiuj adres {name}",
+  "support.addressCopied": "Skopiowano adres {name}",
   "support.copyFailed": "Nie udało się skopiować adresu",
   "settings.seasonalThemes": "Pokazuj motywy sezonowe",
   "settings.seasonalThemesHint": "Ubiera panel na każdą porę roku i na wyjątkowe dni, takie jak Halloween czy Nowy Rok",
@@ -650,7 +651,8 @@
   "custom.template.focus.name": "Skupienie",
   "custom.template.focus.details": "Nie przeszkadzać",
   "custom.template.focus.state": "Odpiszę później",
+  "settings.navigation": "Nawigacja",
   "settings.dockLayout": "Pasek nawigacji",
-  "settings.dockLayoutHint": "Przytrzymaj kartę i przesuń ją, aby zmienić kolejność, albo wyciągnij ją w bok, aby utworzyć nowy pasek.",
+  "settings.dockLayoutHint": "Przytrzymaj kartę i przeciągnij, aby ją przenieść. Przeciągnij poza krawędź, aby utworzyć nowy pasek.",
   "action.reset": "Resetuj"
 }

@@ -380,6 +380,7 @@
   "support.sponsorsHint": "Dengan akaun GitHub anda",
   "support.copyHint": "Klik ikon untuk menyalin alamat",
   "support.copyAddress": "Salin alamat {name}",
+  "support.addressCopied": "Alamat {name} disalin",
   "support.copyFailed": "Alamat tidak dapat disalin",
   "settings.seasonalThemes": "Tunjukkan tema bermusim",
   "settings.seasonalThemesHint": "Menghias panel mengikut musim dan hari istimewa, seperti Halloween atau Tahun Baharu",
@@ -650,7 +651,8 @@
   "custom.template.focus.name": "Fokus",
   "custom.template.focus.details": "Jangan ganggu",
   "custom.template.focus.state": "Saya balas nanti",
+  "settings.navigation": "Navigasi",
   "settings.dockLayout": "Bar navigasi",
-  "settings.dockLayoutHint": "Tekan lama pada tab dan leretkan untuk mengalihkannya, atau tariknya keluar ke tepi untuk mencipta bar baharu.",
+  "settings.dockLayoutHint": "Tekan lama dan seret tab untuk mengalihkannya. Seret melepasi tepi untuk mencipta bar baharu.",
   "action.reset": "Tetapkan semula"
 }

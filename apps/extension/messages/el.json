@@ -380,6 +380,7 @@
   "support.sponsorsHint": "Με τον λογαριασμό σου στο GitHub",
   "support.copyHint": "Πατήστε ένα εικονίδιο για αντιγραφή της διεύθυνσης",
   "support.copyAddress": "Αντιγραφή διεύθυνσης {name}",
+  "support.addressCopied": "Η διεύθυνση {name} αντιγράφηκε",
   "support.copyFailed": "Δεν ήταν δυνατή η αντιγραφή της διεύθυνσης",
   "settings.seasonalThemes": "Εμφάνιση εποχικών θεμάτων",
   "settings.seasonalThemesHint": "Ντύνει το πάνελ για κάθε εποχή και για ξεχωριστές μέρες, όπως το Halloween ή την Πρωτοχρονιά",
@@ -650,7 +651,8 @@
   "custom.template.focus.name": "Συγκέντρωση",
   "custom.template.focus.details": "Μην ενοχλείτε",
   "custom.template.focus.state": "Απαντώ αργότερα",
+  "settings.navigation": "Πλοήγηση",
   "settings.dockLayout": "Γραμμή πλοήγησης",
-  "settings.dockLayoutHint": "Κράτησε πατημένη μια καρτέλα και σύρε τη για να την μετακινήσεις, ή βγάλ' τη στο πλάι για νέα γραμμή.",
+  "settings.dockLayoutHint": "Κράτησε πατημένη μια καρτέλα και σύρε τη για να την μετακινήσεις. Σύρε τη έξω από την άκρη για νέα γραμμή.",
   "action.reset": "Επαναφορά"
 }

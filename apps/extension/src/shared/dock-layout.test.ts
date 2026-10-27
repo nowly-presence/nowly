@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DOCK_TABS, isDefaultDockLayout, moveDockTab, normalizeDockLayout, visibleDockTabs } from "@/shared/dock-layout";
+import { DOCK_TABS, isDefaultDockLayout, moveDockTab, normalizeDockLayout, restoreDockLayoutTabs, visibleDockTabs } from "@/shared/dock-layout";
 
 const TABS = ["activity", "store", "custom", "settings"] as const;
 
@@ -8,6 +8,10 @@ type Tab = (typeof TABS)[number];
 const base: Tab[][] = [["activity", "store", "custom", "settings"]];
 
 describe("dock visibility", () => {
+  it("uses the intended default tab order", () => {
+    expect(DOCK_TABS).toEqual(["activity", "custom", "store", "announcements", "settings"]);
+  });
+
   it("keeps required tabs visible even with invalid stored preferences", () => {
     expect(visibleDockTabs(["activity", "settings", "custom", "store", "announcements", "unknown"])).toEqual(["activity", "settings"]);
   });
@@ -153,6 +157,29 @@ describe("moveDockTab", () => {
       ["store"],
       ["activity", "custom"],
       ["settings"]
+    ]);
+  });
+});
+
+describe("restoreDockLayoutTabs", () => {
+  it("restores hidden tabs at their previous position in the saved order", () => {
+    expect(restoreDockLayoutTabs([["activity", "store", "announcements", "settings"]], DOCK_TABS)).toEqual([
+      ["activity", "custom", "store", "announcements", "settings"]
+    ]);
+  });
+
+  it("keeps a restored tab with its nearest following navigation tab", () => {
+    expect(
+      restoreDockLayoutTabs(
+        [
+          ["activity"],
+          ["store", "announcements", "settings"]
+        ],
+        DOCK_TABS
+      )
+    ).toEqual([
+      ["activity"],
+      ["custom", "store", "announcements", "settings"]
     ]);
   });
 });

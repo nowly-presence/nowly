@@ -380,6 +380,7 @@
   "support.sponsorsHint": "With your GitHub account",
   "support.copyHint": "Click an icon to copy the address",
   "support.copyAddress": "Copy {name} address",
+  "support.addressCopied": "{name} address copied",
   "support.copyFailed": "Couldn't copy the address",
   "settings.seasonalThemes": "Show seasonal themes",
   "settings.seasonalThemesHint": "Dress the panel for each season and for special days, like Halloween or the new year",
@@ -650,7 +651,8 @@
   "custom.template.focus.name": "Focus",
   "custom.template.focus.details": "Do not disturb",
   "custom.template.focus.state": "I will answer later",
+  "settings.navigation": "Navigation",
   "settings.dockLayout": "Navigation bar",
-  "settings.dockLayoutHint": "Hold a tab, then slide it to reorder it or pull it out on either side to make a new bar.",
+  "settings.dockLayoutHint": "Hold and drag a tab to move it. Pull it past an edge to create a new bar.",
   "action.reset": "Reset"
 }
