@@ -9,6 +9,7 @@ import { Group } from "@/ui/card";
 import { Row } from "@/ui/row";
 import { Sheet } from "@/ui/sheet";
 import { useToast } from "@/ui/toast";
+import { SettingsIcon } from "@/features/settings/settings-icon";
 
 const ICON_CLASS = "size-[18px] text-muted";
 
@@ -40,7 +41,7 @@ export const AccountChoiceSheet = ({ open, onClose }: {
     <Sheet open={open} onClose={onClose} title={t("account.choiceTitle")} description={t("account.choiceDescription")} closeLabel={t("action.close")}>
       <Group>
         <Row
-          leading={<RiCloudLine className={ICON_CLASS} />}
+          leading={<SettingsIcon icon={<RiCloudLine className={ICON_CLASS} />} />}
           align="start"
           title={t("account.keepAccount")}
           description={t("account.keepAccountHint")}
@@ -49,7 +50,7 @@ export const AccountChoiceSheet = ({ open, onClose }: {
           onClick={busy === null ? () => void choose("account") : undefined}
         />
         <Row
-          leading={<RiComputerLine className={ICON_CLASS} />}
+          leading={<SettingsIcon icon={<RiComputerLine className={ICON_CLASS} />} />}
           align="start"
           title={t("account.keepDevice")}
           description={t("account.keepDeviceHint")}

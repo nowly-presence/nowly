@@ -6,6 +6,7 @@ import { Group } from "@/ui/card";
 import { Row } from "@/ui/row";
 import { Sheet } from "@/ui/sheet";
 import { useToast } from "@/ui/toast";
+import { SettingsIcon } from "@/features/settings/settings-icon";
 
 const ICON_CLASS = "size-[18px] text-muted";
 
@@ -39,7 +40,7 @@ export const SupportSheet = ({ open, onClose }: {
 }) => {
   const { t } = useI18n();
   const { toast } = useToast();
-  const trailing = <RiExternalLinkLine className="size-4 text-muted" />;
+  const trailing = <RiExternalLinkLine className="text-muted" />;
   const copy = async (name: string, address: string) => {
     try {
       await navigator.clipboard.writeText(address);
@@ -53,14 +54,14 @@ export const SupportSheet = ({ open, onClose }: {
     <Sheet open={open} onClose={onClose} title={t("support.rowTitle")} description={t("support.sheetDescription")} closeLabel={t("action.close")}>
       <Group>
         <Row
-          leading={<RiCupLine className={ICON_CLASS} />}
+          leading={<SettingsIcon icon={<RiCupLine className={ICON_CLASS} />} />}
           title="Ko-fi"
           description={t("support.kofiHint")}
           onClick={() => openUrl(KOFI_URL)}
           trailing={trailing}
         />
         <Row
-          leading={<RiGithubLine className={ICON_CLASS} />}
+          leading={<SettingsIcon icon={<RiGithubLine className={ICON_CLASS} />} />}
           title="GitHub Sponsors"
           description={t("support.sponsorsHint")}
           onClick={() => openUrl(GITHUB_SPONSORS_URL)}

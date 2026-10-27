@@ -6,6 +6,7 @@ import { Group } from "@/ui/card";
 import { Row, SwitchRow } from "@/ui/row";
 import { Section } from "@/ui/section";
 import { DeveloperTools } from "@/features/settings/sections/developer-tools";
+import { SettingsIcon } from "@/features/settings/settings-icon";
 
 export const AdvancedSection = () => {
   const { state, updateSettings } = useExtensionState();
@@ -16,14 +17,14 @@ export const AdvancedSection = () => {
     <Section title={t("settings.advanced")}>
       <Group>
         <Row
-          leading={<RiPulseLine className="size-[18px] text-muted" />}
+          leading={<SettingsIcon icon={<RiPulseLine className="size-[18px] text-muted" />} />}
           title={t("settings.diagnostics")}
           description={t("settings.diagnosticsHint")}
           onClick={() => push({ name: "connection" })}
           chevron
         />
         <SwitchRow
-          leading={<RiCodeSSlashLine className="size-[18px] text-muted" />}
+          leading={<SettingsIcon icon={<RiCodeSSlashLine className="size-[18px] text-muted" />} />}
           title={t("settings.developer")}
           description={t("settings.developerHint")}
           checked={state.settings.developerMode === true}
