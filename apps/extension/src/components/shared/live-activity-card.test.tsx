@@ -63,7 +63,7 @@ describe("LiveCard timeline", () => {
       "countdown"
     );
     expect(countdownHtml).toContain('style="width:80%"');
-    expect(countdownHtml).toContain(">-4:00</span>");
+    expect(countdownHtml).toContain(">4:00</span>");
     expect(countdownHtml).toContain(">5:00</span>");
   });
 });

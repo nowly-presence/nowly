@@ -177,7 +177,7 @@ export const LiveCard =
                 />
               </div>
               <div className="flex justify-between text-label-sm text-on-tertiary-muted tabular-nums">
-                <span>{timelineMode === "countdown" ? `-${formatClock(Math.max(0, total - elapsed))}` : formatClock(Math.min(elapsed, total))}</span>
+                <span>{timelineMode === "countdown" ? formatClock(Math.max(0, total - elapsed)) : formatClock(Math.min(elapsed, total))}</span>
                 <span>{formatClock(total)}</span>
               </div>
             </div>
