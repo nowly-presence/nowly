@@ -128,12 +128,21 @@ export const retentionPlan = (state: RetentionState, now: number): {
   };
 };
 
-export const sendEvent = async (url: string, input: EventInput, consent: () => boolean | Promise<boolean>, options?: { canary: true }): Promise<boolean> => {
+export const sendEvent = async (url: string, input: EventInput, consent: () => boolean | Promise<boolean>, options?: {
+  canary: true;
+}): Promise<boolean> => {
   if (!(await consent())) return false;
 
   const event = eventSchema.safeParse({
     ...input,
-    ...(options?.canary ? { data: { ...input.data, canary: true } } : {}),
+    ...(options?.canary
+      ? {
+          data: {
+            ...input.data,
+            canary: true
+          }
+        }
+      : {}),
     id: crypto.randomUUID()
   });
 

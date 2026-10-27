@@ -1,21 +1,32 @@
 {
-  "name": "presence",
+  "name": "nowly",
   "private": true,
   "packageManager": "pnpm@11.25.0",
-  "version": "1.2.2",
   "license": "MIT",
-  "author": {
-    "name": "Gaëtan H",
-    "url": "https://github.com/Steellgold"
-  },
   "contributors": [
     {
-      "name": "KiMi",
+      "name": "Gaëtan H",
+      "url": "https://github.com/Steellgold"
+    },
+    {
+      "name": "Anthony (KiMi)",
       "url": "https://github.com/q-kimi"
     }
   ],
-  "description": "Presence monorepo",
+  "description": "Nowly monorepo for managing Discord Rich Presence with a browser extension, desktop host and web services.",
+  "homepage": "https://nowly.me",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nowly-presence/nowly.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nowly-presence/nowly/issues"
+  },
+  "engines": {
+    "node": ">=22.22.1"
+  },
   "scripts": {
+    "prepare": "simple-git-hooks",
     "format": "node --experimental-strip-types scripts/format.ts",
     "test:format": "node --experimental-strip-types --test scripts/format.test.ts",
     "dev:api": "pnpm --filter @nowly/api dev",
@@ -30,7 +41,15 @@
     "admin": "pnpm --filter @nowly/internal-cli cli",
     "internal-cli": "pnpm --filter @nowly/internal-cli cli"
   },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged"
+  },
+  "lint-staged": {
+    "{apps,packages}/**/*.{ts,tsx}": "pnpm format --write"
+  },
   "devDependencies": {
-    "prettier": "^3.9.9"
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.9",
+    "simple-git-hooks": "^2.14.0"
   }
 }

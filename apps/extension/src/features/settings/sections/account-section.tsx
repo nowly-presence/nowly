@@ -29,14 +29,7 @@ const AccountAvatar = ({ user }: {
   if (!user.image || failed) return <DiscordAvatar size={AVATAR_SIZE} className="rounded-lg" />;
 
   return (
-    <img
-      src={user.image}
-      alt=""
-      width={AVATAR_SIZE}
-      height={AVATAR_SIZE}
-      onError={() => setFailed(true)}
-      className="size-9 shrink-0 rounded-lg object-cover"
-    />
+    <img src={user.image} alt="" width={AVATAR_SIZE} height={AVATAR_SIZE} onError={() => setFailed(true)} className="size-9 shrink-0 rounded-lg object-cover" />
   );
 };
 
@@ -49,12 +42,7 @@ const SignedOut = ({ busy, onConnect }: {
     <Group hideSeparator>
       <Row align="start" title={t("account.signedOutTitle")} description={t("account.signedOutHint")} />
       <div className="px-4 pb-3">
-        <Button
-          className="w-full"
-          loading={busy === "connect"}
-          icon={<RiDiscordFill />}
-          onClick={onConnect}
-        >
+        <Button className="w-full" loading={busy === "connect"} icon={<RiDiscordFill />} onClick={onConnect}>
           {t("account.signIn")}
         </Button>
       </div>

@@ -112,12 +112,7 @@ export const PresenceDetailView = ({ slug }: {
 
         <div className="flex flex-col gap-2">
           <div className="flex gap-2">
-            <Button
-              variant="secondary"
-              className="flex-1"
-              icon={<RiExternalLinkLine />}
-              onClick={() => openUrl(siteUrl(`/library/${slug}`))}
-            >
+            <Button variant="secondary" className="flex-1" icon={<RiExternalLinkLine />} onClick={() => openUrl(siteUrl(`/library/${slug}`))}>
               {t("detail.viewOnWeb")}
             </Button>
             <Button variant="secondary" className="flex-1" icon={<RiFlagLine />} onClick={() => setReportOpen(true)}>

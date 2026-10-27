@@ -7,10 +7,21 @@ const id = "22222222-2222-4222-8222-222222222222";
 
 describe("product telemetry privacy contract", () => {
   it("forwards the explicit Canary marker and rejects other marker values", () => {
-    const event = { id, name: "extension_active", source: "extension", data: { canary: true } };
+    const event = {
+      id,
+      name: "extension_active",
+      source: "extension",
+      data: { canary: true }
+    };
     expect(umamiPayload(eventSchema.parse(event)).payload.data).toMatchObject({ canary: true });
+
     for (const canary of [false, "true", 1]) {
-      expect(eventSchema.safeParse({ ...event, data: { canary } }).success).toBe(false);
+      expect(
+        eventSchema.safeParse({
+          ...event,
+          data: { canary }
+        }).success
+      ).toBe(false);
     }
   });
 

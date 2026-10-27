@@ -26,7 +26,12 @@ export const Layer = ({ active, children, className, tab }: {
       onScroll={() => {
         if (activeRef.current && ref.current) saved.current = ref.current.scrollTop;
       }}
-      className={cn("scroll-thin absolute inset-0 overflow-y-auto", tab === "settings" && "snap-y snap-mandatory scroll-pt-14", active ? "visible z-10" : "invisible z-0", className)}
+      className={cn(
+        "scroll-thin absolute inset-0 overflow-y-auto",
+        tab === "settings" && "snap-y snap-mandatory scroll-pt-14",
+        active ? "visible z-10" : "invisible z-0",
+        className
+      )}
     >
       {children}
     </div>

@@ -6,6 +6,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import * as prettier from "prettier";
+import lintStaged from "lint-staged";
 import { parsers } from "prettier/plugins/typescript";
 import { printers } from "prettier/plugins/estree";
 import {
@@ -462,6 +463,30 @@ test("CLI preserves file selection and prettierignore exclusions", async () =>
     }
   }));
 
+test("CLI accepts absolute staged paths without changing exclusions", async () =>
+  withProject(async (directory) => {
+    const file = "apps/example/staged file.ts";
+    const excluded = "packages/ui/src/components/button.tsx";
+    await put(directory, file, "const value={a:1,b:2};");
+    await put(directory, excluded, "const value={a:1,b:2};");
+    const result = runScript(
+      directory,
+      "--write",
+      join(directory, file),
+      join(directory, excluded),
+    );
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /Formatted 1 file/u);
+    assert.equal(
+      runScript(directory, "--check", join(directory, file)).status,
+      0,
+    );
+    assert.equal(
+      await readFile(join(directory, excluded), "utf8"),
+      "const value={a:1,b:2};",
+    );
+  }));
+
 test("CLI reads project configuration and configured plugins", async () =>
   withProject(async (directory) => {
     await put(
@@ -485,6 +510,77 @@ test("CLI reads project configuration and configured plugins", async () =>
     const formatted = await readFile(join(directory, file), "utf8");
     assert.match(formatted, /text: 'after'/u);
     assert.doesNotMatch(formatted, /;/u);
+  }));
+
+test("pre-commit formatting preserves unstaged changes and handles paths with spaces", async () =>
+  withProject(async (directory) => {
+    const git = (...args: string[]) => {
+      const result = spawnSync("git", args, {
+        cwd: directory,
+        encoding: "utf8",
+      });
+      assert.equal(result.status, 0, result.stderr);
+      return result.stdout;
+    };
+    git("init", "--quiet");
+    const file = "apps/example/staged file.ts";
+    const unchanged = Array.from(
+      { length: 12 },
+      (_, index) => `export const keep${index} = ${index};`,
+    ).join("\n");
+    const baseline = `export const staged = { a: 1 };\n\n${unchanged}\n\nexport const unstaged = 1;`;
+    await put(directory, file, baseline);
+    git("add", "--", file);
+    git(
+      "-c",
+      "user.name=Format Test",
+      "-c",
+      "user.email=format@example.test",
+      "commit",
+      "--quiet",
+      "-m",
+      "fixture",
+    );
+    const staged = baseline.replace(
+      "export const staged = { a: 1 };",
+      "export const staged={a:2};",
+    );
+    await put(directory, file, staged);
+    git("add", "--", file);
+    await put(
+      directory,
+      file,
+      staged.replace(
+        "export const unstaged = 1;",
+        "export const unstaged = 2;",
+      ),
+    );
+    const untouched = "apps/example/not-staged.ts";
+    await put(directory, untouched, "const untouched={a:1};");
+    const executable = process.execPath.replaceAll("\\", "/");
+    const formatter = scriptPath.replaceAll("\\", "/");
+    const result = await lintStaged({
+      cwd: directory,
+      config: {
+        "{apps,packages}/**/*.{ts,tsx}": `"${executable}" --experimental-strip-types "${formatter}" --write`,
+      },
+      quiet: true,
+    });
+    assert.equal(result, true);
+    const indexed = git("show", `:${file}`);
+    assert.equal(
+      indexed,
+      (await format(staged, file)).replace(/(?:\r?\n)+$/u, ""),
+    );
+    assert.match(indexed, /export const unstaged = 1;/u);
+    assert.match(
+      await readFile(join(directory, file), "utf8"),
+      /export const unstaged = 2;/u,
+    );
+    assert.equal(
+      await readFile(join(directory, untouched), "utf8"),
+      "const untouched={a:1};",
+    );
   }));
 
 test("CLI excludes project submodules and protected files even when explicitly requested", async () =>

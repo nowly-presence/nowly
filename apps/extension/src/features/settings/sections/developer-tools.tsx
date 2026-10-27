@@ -119,13 +119,7 @@ export const DeveloperTools = () => {
                 className="hidden"
                 onChange={(event) => event.target.files?.[0] && void installZip(event.target.files[0])}
               />
-              <Button
-                size="sm"
-                variant="secondary"
-                loading={busy === "zip"}
-                icon={<RiUploadCloud2Line />}
-                onClick={() => fileRef.current?.click()}
-              >
+              <Button size="sm" variant="secondary" loading={busy === "zip"} icon={<RiUploadCloud2Line />} onClick={() => fileRef.current?.click()}>
                 {t("action.import")}
               </Button>
             </>

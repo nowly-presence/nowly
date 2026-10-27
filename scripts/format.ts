@@ -1,7 +1,8 @@
 import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { isAbsolute, relative, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import * as prettier from "prettier";
 import {
   createProjectStylePlugin,
@@ -40,7 +41,10 @@ const files = (
         { encoding: "utf8" },
       ).split("\0")
 ).filter((file) => {
-  const normalizedFile = file.replaceAll("\\", "/");
+  const normalizedFile = relative(process.cwd(), resolve(file)).replaceAll(
+    "\\",
+    "/",
+  );
 
   return (
     existsSync(file) &&
@@ -57,7 +61,9 @@ const plugins = await Promise.all(
       return plugin;
     }
 
-    const importedPlugin = await import(plugin);
+    const importedPlugin = await import(
+      isAbsolute(plugin) ? pathToFileURL(plugin).href : plugin
+    );
     return importedPlugin.default ?? importedPlugin;
   }),
 );

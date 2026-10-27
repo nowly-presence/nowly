@@ -141,22 +141,10 @@ export const ConnectionView = () => {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2">
-            <Button
-              variant="secondary"
-              size="sm"
-              loading={busy === "reconnect"}
-              icon={<RiRefreshLine />}
-              onClick={() => void reconnect("reconnect")}
-            >
+            <Button variant="secondary" size="sm" loading={busy === "reconnect"} icon={<RiRefreshLine />} onClick={() => void reconnect("reconnect")}>
               {t("connection.reconnect")}
             </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              loading={busy === "restart"}
-              icon={<RiRestartLine />}
-              onClick={() => void reconnect("restart")}
-            >
+            <Button variant="secondary" size="sm" loading={busy === "restart"} icon={<RiRestartLine />} onClick={() => void reconnect("restart")}>
               {t("connection.restart")}
             </Button>
           </div>

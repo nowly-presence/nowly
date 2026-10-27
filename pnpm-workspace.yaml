@@ -9,6 +9,7 @@ allowBuilds:
   esbuild: true
   prisma: true
   sharp: true
+  simple-git-hooks: true
 
 minimumReleaseAge: 0
 

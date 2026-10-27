@@ -41,13 +41,11 @@ export const trackProduct = (
     let state = localStateSchema.safeParse(result[KEY]).data;
 
     if (!state) {
-      const ok = await sendProductEvent(
-        {
-          name: "extension_first_seen",
-          source: "extension",
-          data: { cohort_day: day }
-        }
-      );
+      const ok = await sendProductEvent({
+        name: "extension_first_seen",
+        source: "extension",
+        data: { cohort_day: day }
+      });
 
       if (!ok || !(await canSendTelemetry())) return;
 
@@ -75,13 +73,11 @@ export const trackProduct = (
       const retention = retentionPlan(state, now);
       if (
         retention &&
-        (await sendProductEvent(
-          {
-            name: "retention_return",
-            source: "extension",
-            data: retention
-          }
-        ))
+        (await sendProductEvent({
+          name: "retention_return",
+          source: "extension",
+          data: retention
+        }))
       ) state.returned.push(retention.day);
     }
 

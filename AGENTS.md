@@ -21,6 +21,7 @@ Presence flow: author against `@nowly/sdk` in `packages/presences`, build/valida
 - Dev: `pnpm dev:api|web|docs`, `pnpm --filter @nowly/extension dev`. Build: `pnpm build:extension[:dev]`, `pnpm build:macos`.
 - There is no root lint/test aggregator. Run only the touched workspace: `pnpm --filter @nowly/<pkg> lint|typecheck|test`. Native host: `go test ./...` in `apps/native`.
 - Formatting: `pnpm format` (`scripts/format.ts`) and `pnpm test:format`. Do not hand-format or add Prettier overrides.
+- Git pre-commit runs `lint-staged` with `pnpm format --write` on staged TypeScript files in `apps/` and `packages/`, preserving unstaged changes and existing formatter exclusions. `pnpm install` installs the hook through `prepare` (`simple-git-hooks`); run `pnpm prepare` to reinstall it locally.
 - CI on `stable` (`.github/workflows`): `lint.yml` (web, docs, extension only), `test-api.yml`, `i18n-unused.yml` (`scripts/check-i18n-unused.mjs`), `canary-extension.yml`, `production-extension.yml`, `host-release.yml` (tag `native-vX.Y.Z`), `presence-update.yml` / `presence-backfill.yml`. No CI job runs format, analytics/env tests or `go test` outside the release workflow.
 
 ## Cross-app contracts

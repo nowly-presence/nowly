@@ -53,11 +53,7 @@ export const PresencePrimaryActions = ({ view, stored }: {
   return (
     <div className="flex flex-col gap-2">
       {update && (
-        <Button
-          icon={<RiArrowUpCircleLine />}
-          loading={actions.isPending(view.slug)}
-          onClick={() => void actions.update(view.slug, view.name)}
-        >
+        <Button icon={<RiArrowUpCircleLine />} loading={actions.isPending(view.slug)} onClick={() => void actions.update(view.slug, view.name)}>
           {t("detail.updateTo", { version: update })}
         </Button>
       )}

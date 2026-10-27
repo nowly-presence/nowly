@@ -1,13 +1,26 @@
 {
   "name": "@nowly/ui",
-  "version": "0.0.1",
-  "author": {
-    "name": "Gaëtan H",
-    "url": "https://github.com/Steellgold"
+  "description": "Shared React UI components, navigation and localized footer for the Nowly website and documentation.",
+  "homepage": "https://docs.nowly.me",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nowly-presence/nowly.git",
+    "directory": "packages/ui"
   },
+  "bugs": {
+    "url": "https://github.com/nowly-presence/nowly/issues"
+  },
+  "version": "0.0.1",
   "license": "MIT",
   "contributors": [
-    { "name": "KiMi", "url": "https://github.com/q-kimi" }
+    {
+      "name": "Gaëtan H",
+      "url": "https://github.com/Steellgold"
+    },
+    {
+      "name": "Anthony (KiMi)",
+      "url": "https://github.com/q-kimi"
+    }
   ],
   "private": true,
   "type": "module",
