@@ -46,21 +46,21 @@
     "@remixicon/react": "^4.9.0",
     "fflate": "^0.8.3",
     "motion": "^13.4.6",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
-    "@types/chrome": "^0.2.9",
-    "@types/node": "^26.5.1",
+    "@types/chrome": "^0.3.6",
+    "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.1",
+    "@vitejs/plugin-react": "^6.1.2",
     "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.15",
     "typescript": "6.0.3",
-    "vite": "^8.3.1",
+    "vite": "^8.3.5",
     "vitest": "^4.1.9"
   }
 }

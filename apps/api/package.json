@@ -39,28 +39,28 @@
     "db:reset-dev": "tsx scripts/reset-dev-data.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1131.0",
-    "@fastify/cors": "^11.3.0",
-    "@fastify/rate-limit": "^11.2.0",
+    "@aws-sdk/client-s3": "^3.1156.0",
+    "@fastify/cors": "^11.3.1",
+    "@fastify/rate-limit": "^11.2.1",
     "@nowly/env": "workspace:*",
     "@nowly/locales": "workspace:*",
     "@nowly/shared": "workspace:*",
     "@nowly/telemetry": "workspace:*",
     "@opencoredev/email-sdk": "^1.2.0",
-    "@prisma/adapter-pg": "^7.10.0",
-    "@prisma/client": "^7.10.0",
-    "better-auth": "^1.7.5",
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "better-auth": "^1.7.12",
     "dotenv": "^17.4.2",
-    "fastify": "^5.12.5",
-    "pg": "^8.23.0",
-    "zod": "^4.6.5"
+    "fastify": "^5.12.7",
+    "pg": "^8.23.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@types/node": "^26.6.1",
+    "@types/node": "^26.6.5",
     "@vitest/coverage-v8": "^4.1.9",
-    "prisma": "^7.10.0",
+    "prisma": "^7.10.1",
     "tsup": "^8.5.1",
-    "tsx": "^4.23.13",
+    "tsx": "^4.23.15",
     "typescript": "6.0.3",
     "vitest": "^4.1.9"
   }
