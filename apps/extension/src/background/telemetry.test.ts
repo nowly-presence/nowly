@@ -2,6 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mock = vi.hoisted(() => ({
   consent: false,
+  canary: false,
+  developerMode: false,
   storage: {} as Record<string, unknown>,
   send: vi.fn().mockResolvedValue(true)
 }));
@@ -16,13 +18,22 @@ vi.mock("@/background/services/api-state", () => ({
 vi.mock("@/background/storage/device.store", () => ({
   getAnalyticsConsent: async () => mock.consent
 }));
-vi.mock("@/shared/brand", () => ({ IS_CANARY: false }));
+vi.mock("@/background/storage/settings.store", () => ({
+  getSettings: async () => ({ developerMode: mock.developerMode })
+}));
+vi.mock("@/shared/brand", () => ({
+  get IS_CANARY() {
+    return mock.canary;
+  }
+}));
 
 beforeEach(() => {
   vi.resetModules();
   vi.useFakeTimers();
   vi.setSystemTime(new Date("2026-10-01T12:00:00Z"));
   mock.consent = false;
+  mock.canary = false;
+  mock.developerMode = false;
   mock.storage = {};
   mock.send.mockReset().mockResolvedValue(true);
   vi.stubGlobal("chrome", {
@@ -53,6 +64,39 @@ const active = {
 const events = () => mock.send.mock.calls.map((call) => call[1]);
 
 describe("local consented cohort accounting", () => {
+  it("keeps Canary telemetry disabled without developer mode", async () => {
+    mock.canary = true;
+    mock.consent = true;
+    const { trackProduct } = await import("@/background/telemetry");
+    await trackProduct(active);
+    expect(mock.send).not.toHaveBeenCalled();
+    expect(mock.storage).toEqual({});
+  });
+
+  it("requires consent even in Canary developer mode", async () => {
+    mock.canary = true;
+    mock.developerMode = true;
+    const { trackProduct } = await import("@/background/telemetry");
+    await trackProduct(active);
+    expect(mock.send).not.toHaveBeenCalled();
+    expect(mock.storage).toEqual({});
+  });
+
+  it("allows consented Canary developer events and stops when developer mode is disabled", async () => {
+    mock.canary = true;
+    mock.developerMode = true;
+    mock.consent = true;
+    const { trackProduct } = await import("@/background/telemetry");
+    await trackProduct(active, { daily: "panel" });
+    expect(events().map((event) => event.name)).toEqual(["extension_first_seen", "extension_active"]);
+    const allowed = mock.send.mock.calls[0][2];
+    expect(await allowed()).toBe(true);
+    mock.developerMode = false;
+    expect(await allowed()).toBe(false);
+    await trackProduct(active);
+    expect(mock.send).toHaveBeenCalledTimes(2);
+  });
+
   it("does not create state or events before opt-in", async () => {
     const { trackProduct } = await import("./telemetry");
     await trackProduct(active);

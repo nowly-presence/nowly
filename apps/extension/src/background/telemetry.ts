@@ -1,10 +1,17 @@
 import { sendEvent, retentionPlan, localStateSchema, type EventInput } from "@nowly/telemetry";
 import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { getAnalyticsConsent } from "@/background/storage/device.store";
+import { getSettings } from "@/background/storage/settings.store";
 import { IS_CANARY } from "@/shared/brand";
 
 const KEY = "productTelemetryV1";
 let pending: Promise<unknown> = Promise.resolve();
+
+const canSendTelemetry = async (): Promise<boolean> => {
+  if (!(await getAnalyticsConsent())) return false;
+
+  return !IS_CANARY || (await getSettings()).developerMode === true;
+};
 
 const serialized = <T>(task: () => Promise<T>): Promise<T> => {
   const next = pending.then(task, task);
@@ -22,7 +29,7 @@ export const trackProduct = (
   }
 ): Promise<void> =>
   serialized(async () => {
-    if (IS_CANARY || !(await getAnalyticsConsent())) return;
+    if (!(await canSendTelemetry())) return;
 
     const now = Date.now();
     const day = new Date(now).toISOString().slice(0, 10);
@@ -38,10 +45,10 @@ export const trackProduct = (
           source: "extension",
           data: { cohort_day: day }
         },
-        getAnalyticsConsent
+        canSendTelemetry
       );
 
-      if (!ok || !(await getAnalyticsConsent())) return;
+      if (!ok || !(await canSendTelemetry())) return;
 
       state = {
         startedAt: now,
@@ -56,9 +63,9 @@ export const trackProduct = (
 
     if (dedup?.once && state.once.includes(dedup.once)) return;
 
-    const ok = alreadyDaily || (await sendEvent(getEffectiveApiUrl(), input, getAnalyticsConsent));
+    const ok = alreadyDaily || (await sendEvent(getEffectiveApiUrl(), input, canSendTelemetry));
 
-    if (!ok || !(await getAnalyticsConsent())) return;
+    if (!ok || !(await canSendTelemetry())) return;
 
     if (dedup?.daily) state.daily[dedup.daily] = day;
     if (dedup?.once) state.once.push(dedup.once);
@@ -74,10 +81,10 @@ export const trackProduct = (
             source: "extension",
             data: retention
           },
-          getAnalyticsConsent
+          canSendTelemetry
         ))
       ) state.returned.push(retention.day);
     }
 
-    if (await getAnalyticsConsent()) await chrome.storage.local.set({ [KEY]: state });
+    if (await canSendTelemetry()) await chrome.storage.local.set({ [KEY]: state });
   });
