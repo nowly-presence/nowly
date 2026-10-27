@@ -11,7 +11,7 @@ const variants: Record<Variant, string> = {
   solid: "border border-ink bg-ink text-canvas hover:opacity-90 active:opacity-80 disabled:opacity-45",
   ghost: "bg-transparent text-ink hover:bg-hover active:bg-press disabled:opacity-45",
   danger: "border border-line-strong bg-transparent text-danger hover:bg-danger-soft disabled:opacity-45",
-  destructive: "bg-danger text-white hover:brightness-[1.06] active:brightness-95 disabled:opacity-45",
+  destructive: "bg-danger text-tertiary hover:brightness-[1.06] active:brightness-95 disabled:opacity-45",
   link: "h-auto! p-0! rounded-none! text-muted underline underline-offset-4 decoration-line-strong hover:text-ink font-normal! text-body-sm",
   inverse: "bg-on-tertiary text-tertiary hover:opacity-90 disabled:opacity-45"
 };
