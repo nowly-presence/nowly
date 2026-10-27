@@ -1,6 +1,17 @@
 import { ingestSchema, umamiPayload, type ProductEvent } from "@nowly/telemetry";
 import type { FastifyInstance } from "fastify";
 
+const RESPONSE_BODY_LOG_LIMIT = 500;
+
+class TelemetryRelayError extends Error {
+  constructor(
+    message: string,
+    readonly diagnostic: Record<string, string | number>
+  ) {
+    super(message);
+  }
+}
+
 export const createRelay = (fetcher: typeof fetch = (...args) => fetch(...args)) => {
   const seen = new Map<string, number>();
   const pending = new Map<string, Promise<void>>();
@@ -17,23 +28,47 @@ export const createRelay = (fetcher: typeof fetch = (...args) => fetch(...args))
     if (seen.size + pending.size >= 10000) return Promise.reject(new Error("TELEMETRY_CAPACITY"));
 
     const delivery = (async () => {
-      const response = await fetcher("https://stats.nowly.me/api/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 NowlyProductTelemetry/1.0"
-        },
-        body: JSON.stringify(umamiPayload(event)),
-        signal: AbortSignal.timeout(3000),
-        redirect: "error"
-      });
+      let response: Response;
 
-      if (!response.ok) throw new Error("TELEMETRY_UNAVAILABLE");
+      try {
+        response = await fetcher("https://stats.nowly.me/api/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 NowlyProductTelemetry/1.0"
+          },
+          body: JSON.stringify(umamiPayload(event)),
+          signal: AbortSignal.timeout(3000),
+          redirect: "error"
+        });
+      } catch (error) {
+        throw new TelemetryRelayError("TELEMETRY_UNAVAILABLE", {
+          errorName: error instanceof Error ? error.name : "UnknownError",
+          errorMessage: error instanceof Error ? error.message.slice(0, RESPONSE_BODY_LOG_LIMIT) : "Unknown error"
+        });
+      }
 
-      const receipt: unknown = await response.json();
+      if (!response.ok) {
+        throw new TelemetryRelayError("TELEMETRY_UNAVAILABLE", {
+          upstreamStatus: response.status,
+          upstreamBody: (await response.text()).slice(0, RESPONSE_BODY_LOG_LIMIT)
+        });
+      }
+
+      let receipt: unknown;
+
+      try {
+        receipt = await response.json();
+      } catch (error) {
+        throw new TelemetryRelayError("TELEMETRY_UNAVAILABLE", {
+          upstreamStatus: response.status,
+          errorName: error instanceof Error ? error.name : "UnknownError",
+          errorMessage: error instanceof Error ? error.message.slice(0, RESPONSE_BODY_LOG_LIMIT) : "Invalid JSON"
+        });
+      }
 
       if (!receipt || typeof receipt !== "object" || !("cache" in receipt) || typeof receipt.cache !== "string" || !receipt.cache) {
-        throw new Error("TELEMETRY_UNAVAILABLE");
+        throw new TelemetryRelayError("TELEMETRY_UNAVAILABLE", { upstreamStatus: response.status });
       }
 
       seen.set(event.id, now + 86400000);
@@ -76,7 +111,9 @@ export const telemetryRoutes = async (app: FastifyInstance) => {
         return {
           ok: true
         };
-      } catch {
+      } catch (error) {
+        const diagnostic = error instanceof TelemetryRelayError ? error.diagnostic : { errorName: "UnknownError" };
+        request.log.error(diagnostic, "Telemetry relay to Umami failed");
         return reply.code(503).send({ error: "TELEMETRY_UNAVAILABLE" });
       }
     }
