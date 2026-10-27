@@ -9,12 +9,16 @@ type SheetProps = {
   title: string;
   hideTitle?: boolean;
   description?: string;
+  progress?: {
+    current: number;
+    total: number;
+  };
   children?: ReactNode;
   footer?: ReactNode;
   closeLabel: string;
 };
 
-export const Sheet = ({ open, onClose, title, hideTitle = false, description, children, footer, closeLabel }: SheetProps) => {
+export const Sheet = ({ open, onClose, title, hideTitle = false, description, progress, children, footer, closeLabel }: SheetProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,6 +51,11 @@ export const Sheet = ({ open, onClose, title, hideTitle = false, description, ch
       >
         <div className={cn("flex items-start gap-4 px-4 pt-4 pb-3", hideTitle ? "justify-end" : "justify-between")}>
           <div className={hideTitle ? "sr-only" : "flex flex-col gap-1"}>
+            {progress && (
+              <p aria-live="polite" className="text-label-md tabular-nums text-muted">
+                {progress.current}/{progress.total}
+              </p>
+            )}
             <h2 className="text-body-md font-medium text-ink">{title}</h2>
             {description && <p className="text-body-sm text-muted">{description}</p>}
           </div>
