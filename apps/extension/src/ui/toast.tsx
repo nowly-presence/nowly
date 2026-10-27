@@ -20,9 +20,9 @@ type ToastValue = {
 const ToastContext = createContext<ToastValue | null>(null);
 
 const icons = {
-  success: <RiCheckLine className="text-success" />,
-  error: <RiErrorWarningLine className="text-danger" />,
-  info: <RiInformationLine className="text-tertiary-accent" />
+  success: <RiCheckLine className="size-4 shrink-0 text-success" />,
+  error: <RiErrorWarningLine className="size-4 shrink-0 text-danger" />,
+  info: <RiInformationLine className="size-4 shrink-0 text-tertiary-accent" />
 };
 
 export const ToastProvider = ({ children }: {
@@ -86,16 +86,16 @@ export const ToastProvider = ({ children }: {
           <div
             key={item.id}
             className={cn(
-              "pointer-events-auto flex max-w-full animate-enter-up items-center gap-2.5 rounded-md border border-tertiary-edge bg-tertiary py-2 pr-2 pl-3 text-on-tertiary"
+              "pointer-events-auto flex w-fit max-w-full animate-enter-up items-start gap-2.5 rounded-md border border-tertiary-edge bg-tertiary py-2 pr-2 pl-3 text-on-tertiary"
             )}
           >
             {icons[item.tone]}
-            <span className="truncate text-label-lg font-medium">{item.message}</span>
+            <span className="min-w-0 whitespace-normal break-words text-label-lg font-medium">{item.message}</span>
             {item.action && (
               <button
                 type="button"
                 onClick={item.action.onClick}
-                className="ml-1 rounded-sm px-2 py-1 text-label-md font-medium text-tertiary-accent hover:bg-tertiary-line"
+                className="ml-1 shrink-0 rounded-sm px-2 py-1 text-label-md font-medium text-tertiary-accent hover:bg-tertiary-line"
               >
                 {item.action.label}
               </button>
