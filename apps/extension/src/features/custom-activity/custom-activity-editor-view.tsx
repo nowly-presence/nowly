@@ -1,8 +1,17 @@
-import { useMemo, useState } from "react";
-import { RiDeleteBinLine, RiDownload2Line } from "@remixicon/react";
 import { CustomActivityArtwork } from "@/components/shared/custom-activity-artwork";
 import { LiveCard } from "@/components/shared/live-activity-card";
 import { BackHeader, ScreenBody } from "@/components/shared/screen";
+import { CustomActivityButtonsSection } from "@/features/custom-activity/custom-activity-buttons-section";
+import { CustomActivityDeleteSheet } from "@/features/custom-activity/custom-activity-delete-sheet";
+import { CustomActivityDetectionSection } from "@/features/custom-activity/custom-activity-detection-section";
+import { CustomActivityImagesSection } from "@/features/custom-activity/custom-activity-images-section";
+import { CustomActivityPublication } from "@/features/custom-activity/custom-activity-publication";
+import { draftFromTemplate, isCustomActivityTemplateId } from "@/features/custom-activity/custom-activity-templates";
+import { CustomActivityTextSection } from "@/features/custom-activity/custom-activity-text-section";
+import { CustomActivityTimeSection } from "@/features/custom-activity/custom-activity-time-section";
+import { useCustomActivityActions } from "@/features/custom-activity/use-custom-activity-actions";
+import { useCustomActivityEditorLock } from "@/features/custom-activity/use-custom-activity-editor-lock";
+import { useCustomActivityShare } from "@/features/custom-activity/use-custom-activity-share";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav } from "@/hooks/navigation-provider";
@@ -12,17 +21,8 @@ import { Button } from "@/ui/button";
 import { Group } from "@/ui/card";
 import { SwitchRow } from "@/ui/row";
 import { Section } from "@/ui/section";
-import { CustomActivityButtonsSection } from "@/features/custom-activity/custom-activity-buttons-section";
-import { CustomActivityDeleteSheet } from "@/features/custom-activity/custom-activity-delete-sheet";
-import { CustomActivityDetectionSection } from "@/features/custom-activity/custom-activity-detection-section";
-import { CustomActivityImagesSection } from "@/features/custom-activity/custom-activity-images-section";
-import { CustomActivityTextSection } from "@/features/custom-activity/custom-activity-text-section";
-import { CustomActivityTimeSection } from "@/features/custom-activity/custom-activity-time-section";
-import { draftFromTemplate, isCustomActivityTemplateId } from "@/features/custom-activity/custom-activity-templates";
-import { useCustomActivityActions } from "@/features/custom-activity/use-custom-activity-actions";
-import { useCustomActivityShare } from "@/features/custom-activity/use-custom-activity-share";
-import { CustomActivityPublication } from "@/features/custom-activity/custom-activity-publication";
-import { useCustomActivityEditorLock } from "@/features/custom-activity/use-custom-activity-editor-lock";
+import { RiDeleteBinLine, RiDownload2Line } from "@remixicon/react";
+import { useMemo, useState } from "react";
 
 export const CustomActivityEditorView = ({ id, template }: {
   id: string | null;
@@ -34,14 +34,19 @@ export const CustomActivityEditorView = ({ id, template }: {
   const actions = useCustomActivityActions();
   const share = useCustomActivityShare(pop);
   const existing = id ? state.customActivities.items.find((item) => item.id === id) : undefined;
+  const duplicateSource = template?.startsWith("duplicate:")
+    ? state.customActivities.items.find((item) => item.id === template.slice("duplicate:".length))
+    : undefined;
   const editorReady = useCustomActivityEditorLock(id);
   const [baseUpdatedAt] = useState(existing?.updatedAt);
   const [draft, setDraft] = useState<CustomActivityDraft>(
     () =>
       existing ??
-      (isCustomActivityTemplateId(template)
-        ? draftFromTemplate(template, t)
-        : emptyCustomActivityDraft())
+      (duplicateSource
+        ? (({ id: _id, createdAt: _createdAt, updatedAt: _updatedAt, provenance: _provenance, ...activity }) => activity)(duplicateSource)
+        : isCustomActivityTemplateId(template)
+          ? draftFromTemplate(template, t)
+          : emptyCustomActivityDraft())
   );
   const [showErrors, setShowErrors] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
