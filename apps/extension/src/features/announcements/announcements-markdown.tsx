@@ -82,11 +82,11 @@ export const AnnouncementsMarkdown = ({ content }: {
     if (heading) {
       blocks.push(
         heading[1].length <= 2 ? (
-          <h2 key={key} className="pt-2 text-title-sm font-semibold text-ink">
+          <h2 key={key} className="pt-2 text-title font-semibold text-ink">
             {inline(heading[2])}
           </h2>
         ) : (
-          <h3 key={key} className="pt-1 text-label-lg font-semibold text-ink">
+          <h3 key={key} className="pt-1 text-title-sm font-semibold text-ink">
             {inline(heading[2])}
           </h3>
         )
@@ -94,6 +94,7 @@ export const AnnouncementsMarkdown = ({ content }: {
       index++;
       continue;
     }
+
     if (/^\s*[-*+]\s+/.test(line) || /^\s*\d+\.\s+/.test(line)) {
       const ordered = /^\s*\d+\./.test(line);
       const pattern = ordered ? /^\s*\d+\.\s+/ : /^\s*[-*+]\s+/;
@@ -144,7 +145,7 @@ export const AnnouncementsMarkdown = ({ content }: {
   }
 
   return (
-    <div className="flex flex-col gap-4 break-words text-body-sm leading-relaxed text-ink">
+    <div className="flex flex-col gap-4 break-words text-body leading-relaxed text-ink">
       {blocks}
     </div>
   );

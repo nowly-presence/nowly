@@ -1,5 +1,5 @@
-import type { Announcement } from "@nowly/shared/announcements";
 import { useI18n } from "@/hooks/i18n-provider";
+import type { Announcement } from "@nowly/shared/announcements";
 
 export const AnnouncementsMeta = ({ item, detail = false }: {
   item: Announcement;
@@ -11,8 +11,13 @@ export const AnnouncementsMeta = ({ item, detail = false }: {
       dateStyle: "medium",
       timeStyle: "short"
     });
+
   return (
-    <span className="flex flex-col gap-1 text-label-sm font-normal text-muted" style={detail ? { fontSize: "calc(var(--text-label-sm) - 2px)" } : undefined}>
+    <span
+      className={
+        detail ? "flex flex-col gap-1 text-body font-normal text-muted" : "flex flex-row flex-wrap items-center gap-1 text-label-sm font-normal text-muted"
+      }
+    >
       <time dateTime={item.publishedAt}>{date(item.publishedAt)}</time>
       {item.startsAt && <time dateTime={item.startsAt}>{t("announcements.started", { date: date(item.startsAt) })}</time>}
       {item.endsAt && <time dateTime={item.endsAt}>{t("announcements.estimatedEnd", { date: date(item.endsAt) })}</time>}
