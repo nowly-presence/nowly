@@ -309,6 +309,8 @@
   "settings.localZip": "Εγκατάσταση τοπικής παρουσίας",
   "settings.localZipHint": "Ένα .zip που δημιουργήθηκε με το nowly CLI",
   "settings.replayOnboarding": "Επανάληψη εισαγωγής",
+  "settings.canaryStableBrand": "Χρήση του λογότυπου Nowly",
+  "settings.canaryStableBrandHint": "Εμφάνιση της κανονικής επωνυμίας Nowly αντί για το Nowly Canary.",
   "settings.replayReview": "Επανάληψη αιτήματος κριτικής",
   "settings.about": "Σχετικά",
   "settings.version": "Έκδοση",

@@ -309,6 +309,8 @@
   "settings.localZip": "로컬 프레즌스 설치",
   "settings.localZipHint": "nowly CLI로 빌드한 .zip",
   "settings.replayOnboarding": "시작 안내 다시 보기",
+  "settings.canaryStableBrand": "Nowly 로고 사용",
+  "settings.canaryStableBrandHint": "Nowly Canary 대신 일반 Nowly 브랜드를 표시합니다.",
   "settings.replayReview": "리뷰 요청 다시 보기",
   "settings.about": "정보",
   "settings.version": "버전",

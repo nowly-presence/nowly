@@ -16,7 +16,7 @@ import { bytesToBase64 } from "@/shared/zip-bytes";
 import { Button } from "@/ui/button";
 import { FieldRow } from "@/ui/field-row";
 import { Input } from "@/ui/input";
-import { Row } from "@/ui/row";
+import { Row, SwitchRow } from "@/ui/row";
 import { Select } from "@/ui/select";
 import { useToast } from "@/ui/toast";
 
@@ -128,6 +128,13 @@ export const DeveloperTools = () => {
       )}
       {IS_CANARY && (
         <>
+          <SwitchRow
+            title={t("settings.canaryStableBrand")}
+            description={t("settings.canaryStableBrandHint")}
+            checked={state.settings.canaryShowStableBrand === true}
+            label={t("settings.canaryStableBrand")}
+            onChange={(checked) => void updateSettings({ canaryShowStableBrand: checked })}
+          />
           <FieldRow title={t("settings.forceSeason")} controlClassName="w-44">
             <Select
               aria-label={t("settings.forceSeason")}

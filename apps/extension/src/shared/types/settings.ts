@@ -14,6 +14,7 @@ export type ExtensionSettings = {
   hiddenSuggestions?: string[];
   presencePaused?: boolean;
   developerMode?: boolean;
+  canaryShowStableBrand?: boolean;
   customApiBaseUrl?: string;
   scheduleEnabled?: boolean;
   globalSchedule?: PresenceSchedule;

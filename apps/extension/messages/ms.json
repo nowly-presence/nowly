@@ -309,6 +309,8 @@
   "settings.localZip": "Pasang kehadiran setempat",
   "settings.localZipHint": "Fail .zip yang dibina dengan CLI nowly",
   "settings.replayOnboarding": "Ulang pengenalan",
+  "settings.canaryStableBrand": "Gunakan logo Nowly",
+  "settings.canaryStableBrandHint": "Paparkan penjenamaan Nowly biasa dan bukannya Nowly Canary.",
   "settings.replayReview": "Tunjukkan semula permintaan ulasan",
   "settings.about": "Perihal",
   "settings.version": "Versi",

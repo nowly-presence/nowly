@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { brandLockup, IS_CANARY } from "@/shared/brand";
+import { useExtensionState } from "@/hooks/extension-state-provider";
 import { cn } from "@/ui/cn";
 
 export const Wordmark = ({ theme, className }: {
   theme: "light" | "dark";
   className?: string;
 }) => {
+  const { state } = useExtensionState();
   const [failed, setFailed] = useState(false);
-  const variant = IS_CANARY ? "canary" : theme === "dark" ? "white" : "dark";
+  const showCanaryBrand = IS_CANARY && !(state.settings.developerMode && state.settings.canaryShowStableBrand);
+  const variant = showCanaryBrand ? "canary" : theme === "dark" ? "white" : "dark";
 
   if (failed) {
     return (

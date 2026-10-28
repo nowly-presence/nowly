@@ -309,6 +309,8 @@
   "settings.localZip": "Yerel varlık yükle",
   "settings.localZipHint": "nowly CLI ile oluşturulmuş bir .zip",
   "settings.replayOnboarding": "Tanıtımı yeniden başlat",
+  "settings.canaryStableBrand": "Nowly logosunu kullan",
+  "settings.canaryStableBrandHint": "Nowly Canary yerine normal Nowly markasını göster.",
   "settings.replayReview": "Değerlendirme isteğini yeniden göster",
   "settings.about": "Hakkında",
   "settings.version": "Sürüm",

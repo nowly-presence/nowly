@@ -309,6 +309,8 @@
   "settings.localZip": "ローカルのプレゼンスをインストール",
   "settings.localZipHint": "nowly CLI でビルドした .zip",
   "settings.replayOnboarding": "はじめのガイドをもう一度",
+  "settings.canaryStableBrand": "Nowly のロゴを使う",
+  "settings.canaryStableBrandHint": "Nowly Canary の代わりに通常の Nowly ブランドを表示します。",
   "settings.replayReview": "レビュー依頼を再表示",
   "settings.about": "情報",
   "settings.version": "バージョン",

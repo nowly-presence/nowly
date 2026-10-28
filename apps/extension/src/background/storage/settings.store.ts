@@ -14,7 +14,8 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   activityPriorityOrder: [],
   hiddenDockTabs: [],
   preserveSiteTimer: false,
-  showCustomActivitiesInActivity: true
+  showCustomActivitiesInActivity: true,
+  canaryShowStableBrand: false
 };
 
 const LEGACY_SETTINGS_KEYS = ["separateActivePresence", "theme", "canaryTheme", "seasonalThemeMigrated"] as const;

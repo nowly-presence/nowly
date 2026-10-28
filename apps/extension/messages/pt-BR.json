@@ -309,6 +309,8 @@
   "settings.localZip": "Instalar uma presença local",
   "settings.localZipHint": "Um .zip gerado com a CLI nowly",
   "settings.replayOnboarding": "Refazer a introdução",
+  "settings.canaryStableBrand": "Usar o logo do Nowly",
+  "settings.canaryStableBrandHint": "Mostrar a identidade visual normal do Nowly em vez do Nowly Canary.",
   "settings.replayReview": "Mostrar de novo o pedido de avaliação",
   "settings.about": "Sobre",
   "settings.version": "Versão",
