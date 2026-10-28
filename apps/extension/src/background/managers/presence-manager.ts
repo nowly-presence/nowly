@@ -615,27 +615,11 @@ export const installBundledPresences = async (): Promise<void> => {
 
   const presences = await getPresences();
 
-  const bundledSlugs = new Set(BUNDLED_PRESENCES.map((presence) => presence.slug));
   let changed = false;
 
   const devSlugs = await installDevPresences(presences);
 
-  if (devSlugs.length > 0) {
-    for (const slug of devSlugs) bundledSlugs.add(slug);
-
-    changed = true;
-  }
-
-  if (IS_CANARY) {
-    for (const slug of Object.keys(presences)) {
-      if (bundledSlugs.has(slug) || presences[slug].source === "local") continue;
-
-      delete presences[slug];
-      await unregisterPresenceScript(slug);
-      await removeActiveSlug(slug, "dev-bundle-prune");
-      changed = true;
-    }
-  }
+  if (devSlugs.length > 0) changed = true;
 
   for (const bundled of BUNDLED_PRESENCES) {
     const existing = presences[bundled.slug];
