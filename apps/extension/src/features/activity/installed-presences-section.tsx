@@ -1,4 +1,4 @@
-import { RiApps2AddLine, RiFunctionLine, RiListCheck } from "@remixicon/react";
+import { RiAddLine, RiApps2AddLine, RiFunctionLine, RiListCheck } from "@remixicon/react";
 import { SeasonalDecor } from "@/components/shared/seasonal-decor";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
@@ -45,11 +45,7 @@ export const InstalledPresencesSection = ({ presences, detectedSlugs, now }: Ins
   return (
     <Section
       className="[&>div:first-child]:flex-wrap"
-      title={
-        presences.length
-          ? t("activity.yourPresences", { count: presences.length })
-          : t("activity.yourPresencesEmpty")
-      }
+      title={presences.length ? t("activity.yourPresences") : undefined}
       action={
         (presences.length > 0 || actions.updatingAll) && (
           <div className="ml-auto flex max-w-full items-center gap-2">
@@ -82,9 +78,25 @@ export const InstalledPresencesSection = ({ presences, detectedSlugs, now }: Ins
             title={t("activity.emptyTitle")}
             description={t("activity.emptyDescription")}
             action={
-              <Button onClick={() => setTab("store")} icon={<RiApps2AddLine />}>
-                {t("activity.browseLibrary")}
-              </Button>
+              <div className="flex flex-wrap justify-center gap-2">
+                <Button onClick={() => setTab("store")} icon={<RiApps2AddLine />}>
+                  {t("activity.browseLibrary")}
+                </Button>
+                {state.settings.showCustomActivitiesInActivity !== false && (
+                  <Button
+                    variant="secondary"
+                    icon={<RiAddLine />}
+                    onClick={() =>
+                      push({
+                        name: "custom-activity",
+                        id: null
+                      })
+                    }
+                  >
+                    {t("activity.createCustomActivity")}
+                  </Button>
+                )}
+              </div>
             }
           />
         </Card>
@@ -96,6 +108,7 @@ export const InstalledPresencesSection = ({ presences, detectedSlugs, now }: Ins
               slug={slug}
               stored={stored}
               {...describe(slug, stored)}
+              hasUpdate={Boolean(state.updates[slug])}
               onOpen={() =>
                 push({
                   name: "presence",

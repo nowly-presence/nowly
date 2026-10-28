@@ -15,7 +15,7 @@ export const SettingsView = () => {
   return (
     <ScreenBody className="[&>section]:snap-start [&>section]:snap-always">
       <div className="flex flex-col gap-6 snap-start snap-always">
-        <ScreenTitle title={t("settings.title")} />
+        <ScreenTitle title={t("settings.title")} subtitle={t("settings.description")} />
         <ConnectionSummary />
       </div>
       <SharingSection />

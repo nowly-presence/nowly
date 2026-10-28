@@ -27,4 +27,5 @@ export type ExtensionSettings = {
   dockLayout?: string[][];
   hiddenDockTabs?: string[];
   preserveSiteTimer?: boolean;
+  showCustomActivitiesInActivity?: boolean;
 };

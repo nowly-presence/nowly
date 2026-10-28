@@ -36,6 +36,13 @@ export const SharingSection = () => {
           onChange={(checked) => void updateSettings({ showPlayer: checked })}
         />
         <SwitchRow
+          title={t("settings.showCustomActivitiesInActivity")}
+          description={t("settings.showCustomActivitiesInActivityHint")}
+          checked={settings.showCustomActivitiesInActivity !== false}
+          label={t("settings.showCustomActivitiesInActivity")}
+          onChange={(checked) => void updateSettings({ showCustomActivitiesInActivity: checked })}
+        />
+        <SwitchRow
           title={t("settings.suggestPresences")}
           description={t("settings.suggestPresencesHint")}
           checked={settings.suggestPresences !== false}

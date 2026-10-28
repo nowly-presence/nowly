@@ -43,6 +43,8 @@ export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences 
   const connection = connectionOf(state.native);
   const ipcBlocked = discordIpcIssueOf(state.native).active;
 
+  if (!hasPresences && state.customActivities.items.length === 0) return null;
+
   return (
     <Section title={t("activity.now")}>
       {ipcBlocked && <DiscordIpcAlert />}

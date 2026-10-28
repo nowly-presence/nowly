@@ -13,7 +13,8 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   activitySelectionMode: "focused",
   activityPriorityOrder: [],
   hiddenDockTabs: [],
-  preserveSiteTimer: false
+  preserveSiteTimer: false,
+  showCustomActivitiesInActivity: true
 };
 
 const LEGACY_SETTINGS_KEYS = ["separateActivePresence", "theme", "canaryTheme", "seasonalThemeMigrated"] as const;
