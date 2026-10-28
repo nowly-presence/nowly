@@ -860,7 +860,7 @@
         ]
       },
       {
-        "status": "Shipped",
+        "status": "Publish",
         "title": "October 2026",
         "completed": true,
         "description": "The next step for personalising Discord activity.",
