@@ -147,7 +147,7 @@ export const CustomActivityEditorView = ({ id, template }: {
                 {t("custom.export")}
               </Button>
               <Button
-                variant="muted"
+                variant="destructive"
                 icon={<RiDeleteBinLine />}
                 loading={deletePreparing}
                 onClick={() => {

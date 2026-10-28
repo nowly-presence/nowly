@@ -110,7 +110,7 @@ describe("installed presence header bulk action", () => {
     availableUpdates = [];
   });
 
-  it("shows single display-mode toggle when fewer than 2 updates are available", () => {
+  it("shows only the display-mode toggle when fewer than 2 updates are available", () => {
     availableUpdates = presences.slice(0, 1);
     const buttons = actionButtons();
     expect(buttons).toHaveLength(1);

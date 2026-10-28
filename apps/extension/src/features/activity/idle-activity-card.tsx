@@ -1,4 +1,4 @@
-import { RiDiscordLine, RiPlayCircleLine, RiPlugLine, RiPulseLine, RiRefreshLine } from "@remixicon/react";
+import { RiDiscordLine, RiPlayCircleLine, RiPlugLine, RiRefreshLine } from "@remixicon/react";
 import { HOST_DOWNLOAD_URL } from "@/shared/constants";
 import { openUrl } from "@/shared/browser-links";
 import { Button } from "@/ui/button";
@@ -83,18 +83,11 @@ export const IdleCard = ({ connection, paused, onResume, hasPresences }: {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-lg border border-dashed border-line-strong p-4">
-      <div className="flex items-center gap-3">
-        <span className="flex size-16 shrink-0 items-center justify-center rounded-md bg-hover text-muted" aria-hidden>
-          <RiPulseLine className="size-7" />
-        </span>
+    <div className="relative overflow-hidden rounded-lg border border-line-strong p-4">
+      <div className="flex items-center">
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <span className="text-label-lg font-medium">{t("activity.idleTitle")}</span>
-          <span className="text-body-sm text-muted">
-            {hasPresences
-              ? t("activity.idleDescription")
-              : t("activity.idleDescriptionEmpty")}
-          </span>
+          <span className="text-body-sm text-muted">{hasPresences ? t("activity.idleDescription") : t("activity.idleDescriptionEmpty")}</span>
         </div>
       </div>
     </div>

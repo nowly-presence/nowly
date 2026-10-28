@@ -111,19 +111,19 @@ export const PresenceDetailView = ({ slug }: {
         <PresenceInfoSection view={view} stored={stored} />
 
         <div className="flex flex-col gap-2">
-          <div className="flex gap-2">
-            <Button variant="secondary" className="flex-1" icon={<RiExternalLinkLine />} onClick={() => openUrl(siteUrl(`/library/${slug}`))}>
-              {t("detail.viewOnWeb")}
-            </Button>
-            <Button variant="secondary" className="flex-1" icon={<RiFlagLine />} onClick={() => setReportOpen(true)}>
-              {t("detail.report")}
-            </Button>
-          </div>
           {stored && (
-            <Button variant="danger" icon={<RiDeleteBinLine />} onClick={() => setUninstallOpen(true)}>
+            <Button variant="destructive" className="w-full" icon={<RiDeleteBinLine />} onClick={() => setUninstallOpen(true)}>
               {t("detail.uninstall")}
             </Button>
           )}
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="muted" icon={<RiExternalLinkLine />} onClick={() => openUrl(siteUrl(`/library/${slug}`))}>
+              {t("detail.viewOnWeb")}
+            </Button>
+            <Button variant="muted" icon={<RiFlagLine />} onClick={() => setReportOpen(true)}>
+              {t("detail.report")}
+            </Button>
+          </div>
         </div>
       </ScreenBody>
 

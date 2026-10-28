@@ -13,8 +13,8 @@ export const EmptyState = ({ icon, title, description, action, decoration, class
     {decoration}
     {icon && <span className="flex size-10 items-center justify-center rounded-md bg-hover text-muted">{icon}</span>}
     <div className="flex flex-col gap-1">
-      <p className="text-label-lg font-medium text-ink">{title}</p>
-      {description && <p className="mx-auto max-w-64 text-body-sm text-muted text-balance">{description}</p>}
+      <p className="text-body-lg font-medium text-ink">{title}</p>
+      {description && <p className="mx-auto max-w-80 text-body-sm text-muted text-balance">{description}</p>}
     </div>
     {action}
   </div>

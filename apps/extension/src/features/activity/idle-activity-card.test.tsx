@@ -15,7 +15,10 @@ vi.mock("@/hooks/i18n-provider", () => ({
   })
 }));
 vi.mock("@/hooks/navigation-provider", () => ({
-  useNav: () => ({ push: vi.fn() })
+  useNav: () => ({
+    push: vi.fn(),
+    setTab: vi.fn()
+  })
 }));
 vi.mock("@/hooks/extension-state-provider", () => ({
   useExtensionState: () => ({
