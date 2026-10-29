@@ -74,6 +74,8 @@ type NativeResponse struct {
 	Discord   bool            `json:"discordConnected,omitempty"`
 	Status    string          `json:"status,omitempty"`
 	Version   string          `json:"version,omitempty"`
+	Latest    string          `json:"latestVersion,omitempty"`
+	Update    bool            `json:"updateAvailable,omitempty"`
 	Profile   *DiscordProfile `json:"profile,omitempty"`
 	Code      ErrorCode       `json:"code,omitempty"`
 	Error     string          `json:"error,omitempty"`
