@@ -34,6 +34,7 @@
     "@nowly/changelog": "workspace:*",
     "@nowly/env": "workspace:*",
     "@nowly/locales": "workspace:*",
+    "@nowly/og": "workspace:*",
     "@nowly/shared": "workspace:*",
     "@nowly/ui": "workspace:*",
     "@remixicon/react": "^4.9.0",

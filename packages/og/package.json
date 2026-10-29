@@ -1,0 +1,25 @@
+{
+  "name": "@nowly/og",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Shared Open Graph image rendering for the Nowly website and documentation.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./image-response": "./src/image-response.tsx"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "next": "*",
+    "react": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "next": "16.4.3",
+    "react": "^19.3.1",
+    "typescript": "6.0.3"
+  }
+}

@@ -3,26 +3,25 @@ import { routing } from "@/i18n/routing";
 import { DOCS_URL, isSeoPreview } from "@/lib/constants";
 import type { Metadata } from "next";
 import type { LocaleString } from "@nowly/locales";
+import { ogImageUrl } from "@nowly/og";
 
 export const SITE_NAME = "Nowly";
-export const OG_IMAGE_VERSION = "2";
+
+export { OG_IMAGE_VERSION } from "@nowly/og";
 
 export const docsOgImage = (docPath: string, params: {
   title: string;
   description: string;
   category: string;
 }): string => {
-  const search = new URLSearchParams({
-    title: params.title,
-    description: params.description,
-    category: params.category,
-    mode: "dark",
-    v: OG_IMAGE_VERSION
-  });
   const slug = docPath.replace(/^\/+/, "");
   const prefix = slug ? `/api/og/docs/${slug}` : "/api/og/docs";
 
-  return `${prefix}?${search.toString()}`;
+  return ogImageUrl(prefix, {
+    title: params.title,
+    description: params.description,
+    badge: params.category
+  });
 };
 
 export const absoluteUrl = (path = "/"): string => {

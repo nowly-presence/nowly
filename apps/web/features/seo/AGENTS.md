@@ -29,6 +29,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
 ## Gotchas
 
 - `ogHeadline()` strips a leading or trailing "Nowly |" only from the OG image headline; the `<title>` keeps the full string. If an OG image looks wrong, check it isn't bypassed.
+- The renderer, URL builder and `OG_IMAGE_VERSION` live in `@nowly/og`, shared with docs. Bump the version in `packages/og/src/index.ts` when changing the design. Use `accent`/`badge`/`logo` rather than a static `image` override to customize a page.
 - The OG image URL resolves on the host serving the page (so crawlers work on previews), while canonical/alternate URLs always use `https://nowly.me`.
 - `isSeoPreview` forces `noindex` whenever `NEXT_PUBLIC_BASE_URL` isn't `nowly.me`/`www.nowly.me`, keeping previews out of Google. Don't hardcode `noIndex` for that.
 

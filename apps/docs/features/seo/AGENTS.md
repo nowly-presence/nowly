@@ -10,4 +10,4 @@ Unlike `apps/web`, `createMetadata` does not generate an OG image when `image` i
 
 ## Gotchas
 
-- `OG_IMAGE_VERSION` is `"2"` here, versioned independently of web's (`"1"`). Bump it when changing `app/api/og/docs/[[...slug]]/route.tsx` rendering to bust CDN/browser caches.
+- Rendering and `OG_IMAGE_VERSION` are shared with web through `@nowly/og`. Bump the version in `packages/og/src/index.ts` when changing the shared design. Docs categories are rendered as badges; the legacy `category` query parameter remains supported.

@@ -4,6 +4,7 @@ import { BRAND_LOCKUP_BLUE } from "@/lib/brand";
 import { DISCORD_INVITE_URL, KOFI_URL, PROJECT_REPOSITORY_URL, TWITTER_URL } from "@/lib/constants";
 import type { LocaleString } from "@nowly/locales";
 import type { Metadata } from "next";
+import { ogImageUrl } from "@nowly/og";
 
 export const CANONICAL_ORIGIN = "https://nowly.me";
 export const DOCS_ORIGIN = (process.env.NEXT_PUBLIC_DOCS_BASE_URL || "https://docs.nowly.me").replace(/\/$/, "");
@@ -24,7 +25,8 @@ const forceHttpsOnProduction = (value: string): string => (/^http:\/\/(www\.)?no
 export const SITE_URL = forceHttpsOnProduction(trimOrigin(process.env.NEXT_PUBLIC_BASE_URL ?? CANONICAL_ORIGIN));
 export const DOCS_URL = DOCS_ORIGIN;
 export const SITE_NAME = "Nowly";
-export const OG_IMAGE_VERSION = "1";
+
+export { OG_IMAGE_VERSION } from "@nowly/og";
 
 const seoHost = hostnameOf(SITE_URL);
 export const isSeoPreview = seoHost !== "" && seoHost !== "nowly.me" && seoHost !== "www.nowly.me";
@@ -52,15 +54,7 @@ export const webOgImage = (params: {
   accent?: string;
   logo?: string;
 }): string => {
-  const search = new URLSearchParams({
-    title: params.title,
-    description: params.description,
-    v: OG_IMAGE_VERSION
-  });
-  if (params.badge) search.set("badge", params.badge);
-  if (params.accent) search.set("accent", params.accent);
-  if (params.logo) search.set("logo", params.logo);
-  return `/api/og?${search.toString()}`;
+  return ogImageUrl("/api/og", params);
 };
 
 type SeoOptions = {

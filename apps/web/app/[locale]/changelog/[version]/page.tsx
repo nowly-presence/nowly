@@ -39,8 +39,7 @@ export const generateMetadata = async ({ params }: ChangelogVersionPageProps): P
     description: release ? t("update-description", { version: parsed.version }) : t("missing"),
     locale,
     path: `/changelog/${parsed.version}`,
-    noIndex: !release,
-    image: release?.banner
+    noIndex: !release
   });
 };
 

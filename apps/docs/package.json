@@ -33,6 +33,7 @@
     "@nowly/changelog": "workspace:*",
     "@nowly/env": "workspace:*",
     "@nowly/locales": "workspace:*",
+    "@nowly/og": "workspace:*",
     "@nowly/ui": "workspace:*",
     "@ridemountainpig/svgl-react": "^1.0.18",
     "gray-matter": "^4.0.3",

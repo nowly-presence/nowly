@@ -6,7 +6,7 @@ import { Navbar } from "@/features/layout/components/navbar";
 import { AppProviders } from "@/components/providers";
 import { BRAND_FAVICON_32, BRAND_METADATA_ICONS } from "@/lib/brand";
 import { DOCS_BASE_PATH, DOCS_URL, isSeoPreview } from "@/lib/constants";
-import { absoluteUrl, OG_IMAGE_VERSION } from "@/features/seo/lib/seo";
+import { absoluteUrl, docsOgImage } from "@/features/seo/lib/seo";
 import { LOCALE_SHORT_MAP, type LocaleString } from "@nowly/locales";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -72,7 +72,13 @@ export const generateMetadata = async ({ params }: LayoutProps): Promise<Metadat
     openGraph: {
       images: [
         {
-          url: absoluteUrl(`/api/og/docs?mode=dark&v=${OG_IMAGE_VERSION}`),
+          url: absoluteUrl(
+            docsOgImage("", {
+              title: t("title"),
+              description: t("description"),
+              category: t("documentation")
+            })
+          ),
           width: 1200,
           height: 630,
           alt: t("title")
