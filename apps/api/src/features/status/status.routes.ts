@@ -1,4 +1,4 @@
-import { getStatusReport, runStatusCheck } from "./status.service";
+import { getStatusReport, runStatusCheck } from "@/features/status/status.service";
 import { serverEnv } from "@nowly/env/server";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 

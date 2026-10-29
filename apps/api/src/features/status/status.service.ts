@@ -96,6 +96,7 @@ const measureService = async (id: StatusServiceId, url: string): Promise<StatusS
       signal: controller.signal
     });
 
+    await response.arrayBuffer();
     const responseMs = Math.round(performance.now() - startedAt);
 
     return {

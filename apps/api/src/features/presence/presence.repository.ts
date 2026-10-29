@@ -265,17 +265,8 @@ export const getPresenceMeta = async (slug: string): Promise<PresenceMeta | null
   return (row?.metadata as PresenceMeta | null) ?? null;
 };
 
-// Bulk equivalent of calling getPresenceMeta + getPresenceStats per slug: the list route
-// used to do ~5 queries per presence (meta lookup, then 4 sequential stats queries each),
-// which is what made /presences slow under status-check load. This does 4 queries total.
 export const getPresenceListData = async (): Promise<PresenceListItem[]> => {
   const prisma = getPrisma();
-
-  await prisma.presenceActiveDevice.deleteMany({
-    where: {
-      lastSeenAt: { lt: new Date(Date.now() - ACTIVE_DEVICE_STALE_MS) }
-    }
-  });
 
   const [presences, installCounts, activeCounts, likeCounts] = await Promise.all([
     prisma.presence.findMany({
@@ -295,6 +286,9 @@ export const getPresenceListData = async (): Promise<PresenceListItem[]> => {
     }),
     prisma.presenceActiveDevice.groupBy({
       by: ["slug"],
+      where: {
+        lastSeenAt: { gte: new Date(Date.now() - ACTIVE_DEVICE_STALE_MS) }
+      },
       _count: { _all: true }
     }),
     prisma.presenceLike.groupBy({
