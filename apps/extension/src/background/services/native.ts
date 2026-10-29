@@ -1,5 +1,6 @@
 import { getDiscordIpcIssue, setDiscordIpcIssue } from "@/background/storage/discord-ipc-issue.store";
 import { setNativeProfile, setNativeSeenConnectedOnce } from "@/background/storage/onboarding.store";
+import { getHostUpdateVersion, refreshHostUpdate } from "@/background/services/host-updates";
 import { NATIVE_HOST } from "@/shared/constants";
 import { discordIpcIssueCode, markDiscordIpcIssuePrompted, NO_DISCORD_IPC_ISSUE, trackDiscordIpcIssue, type DiscordIpcIssue } from "@/shared/discord-ipc-prompt";
 import type { NativeMessage, NativeResponse, NativeStatus, PresenceData, PresencePayload } from "@/shared/types";
@@ -63,8 +64,8 @@ export const getNativeStatus = (): NativeStatus => ({
   status,
   discordConnected,
   version,
-  latestVersion,
-  updateAvailable: latestVersion !== undefined,
+  latestVersion: getHostUpdateVersion(version) ?? latestVersion,
+  updateAvailable: (getHostUpdateVersion(version) ?? latestVersion) !== undefined,
   ...discordIpcIssueStatus()
 });
 
@@ -80,6 +81,7 @@ export const acknowledgeDiscordIpcIssue = async (): Promise<NativeStatus> => {
 
 export const refreshNativeStatus = (): NativeStatus => {
   void hydrateDiscordIpcIssue();
+  void refreshHostUpdate();
 
   if (nativePort) {
     postNative({ type: "PING" });
