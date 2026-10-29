@@ -30,13 +30,16 @@ type ChromeWithSidebarAction = typeof chrome & {
   };
 };
 
+const registerSidebarToggle = (): void => {
+  if (import.meta.env.BROWSER !== "firefox") return;
+
+  chrome.action.onClicked.addListener(() => {
+    (chrome as ChromeWithSidebarAction).sidebarAction?.toggle();
+  });
+};
+
 const enableSidePanelAction = (): void => {
-  if (import.meta.env.BROWSER === "firefox") {
-    chrome.action.onClicked.addListener(() => {
-      (chrome as ChromeWithSidebarAction).sidebarAction?.toggle();
-    });
-    return;
-  }
+  if (import.meta.env.BROWSER === "firefox") return;
 
   const sidePanel = (chrome as ChromeWithSidePanel).sidePanel;
 
@@ -173,6 +176,7 @@ export const registerLifecycleHandlers = (): void => {
       .catch(() => {});
   });
   registerNativeResponseHandler();
+  registerSidebarToggle();
 
   chrome.runtime.onStartup.addListener(async () => {
     enableSidePanelAction();
