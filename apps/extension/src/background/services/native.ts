@@ -1,5 +1,6 @@
 import { getDiscordIpcIssue, setDiscordIpcIssue } from "@/background/storage/discord-ipc-issue.store";
 import { setNativeProfile, setNativeSeenConnectedOnce } from "@/background/storage/onboarding.store";
+import { getHostUpdateVersion, refreshHostUpdate } from "@/background/services/host-updates";
 import { NATIVE_HOST } from "@/shared/constants";
 import { discordIpcIssueCode, markDiscordIpcIssuePrompted, NO_DISCORD_IPC_ISSUE, trackDiscordIpcIssue, type DiscordIpcIssue } from "@/shared/discord-ipc-prompt";
 import type { NativeMessage, NativeResponse, NativeStatus, PresenceData, PresencePayload } from "@/shared/types";
@@ -10,6 +11,7 @@ let status = "not connected";
 let connecting = false;
 let discordConnected = false;
 let version: string | undefined;
+let latestVersion: string | undefined;
 let lastAutoConnectAttemptAt = 0;
 const AUTO_CONNECT_RETRY_MS = 5000;
 const responseListeners = new Set<(message: NativeResponse) => void>();
@@ -57,7 +59,15 @@ export const mapPresenceData = (data: PresenceData): PresencePayload => ({
   buttons: data.buttons?.slice(0, 2)
 });
 
-export const getNativeStatus = (): NativeStatus => ({ connected, status, discordConnected, version, ...discordIpcIssueStatus() });
+export const getNativeStatus = (): NativeStatus => ({
+  connected,
+  status,
+  discordConnected,
+  version,
+  latestVersion: getHostUpdateVersion(version) ?? latestVersion,
+  updateAvailable: (getHostUpdateVersion(version) ?? latestVersion) !== undefined,
+  ...discordIpcIssueStatus()
+});
 
 export const onNativeResponse = (listener: (message: NativeResponse) => void): (() => void) => {
   responseListeners.add(listener);
@@ -71,6 +81,7 @@ export const acknowledgeDiscordIpcIssue = async (): Promise<NativeStatus> => {
 
 export const refreshNativeStatus = (): NativeStatus => {
   void hydrateDiscordIpcIssue();
+  void refreshHostUpdate();
 
   if (nativePort) {
     postNative({ type: "PING" });
@@ -98,6 +109,7 @@ export const reconnectNative = (): NativeStatus => {
   connected = false;
   discordConnected = false;
   version = undefined;
+  latestVersion = undefined;
   status = "connecting";
   connectNative();
   return getNativeStatus();
@@ -114,6 +126,7 @@ export const restartNative = (): NativeStatus => {
   connected = false;
   discordConnected = false;
   version = undefined;
+  latestVersion = undefined;
   status = "connecting";
   connectNative();
   return getNativeStatus();
@@ -154,6 +167,7 @@ export const connectNative = (options: {
       connected = message.connected;
       status = message.status;
       version = message.version ?? version;
+      latestVersion = message.updateAvailable ? message.latestVersion : undefined;
 
       discordConnected = Boolean(message.discordConnected);
       if (discordConnected) void setNativeSeenConnectedOnce(true);
@@ -171,6 +185,7 @@ export const connectNative = (options: {
     connected = false;
     discordConnected = false;
     version = undefined;
+    latestVersion = undefined;
     status = chrome.runtime.lastError?.message ?? "native disconnected";
     nativePort = null;
   });

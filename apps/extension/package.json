@@ -1,6 +1,6 @@
 {
   "name": "@nowly/extension",
-  "version": "2.5.0.1",
+  "version": "2.5.1",
   "description": "Nowly browser extension for automatic website activity detection, custom activities and Discord Rich Presence.",
   "contributors": [
     {

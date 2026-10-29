@@ -1,0 +1,14 @@
+---
+title: 2.5.1
+date: 2026-10-29
+description: Firefox sidebar toggle, Discord connection after startup and live preview setting.
+stores: [chrome, firefox]
+---
+
+## Fixes
+
+- Fixed the Firefox sidebar toolbar button so it continues to toggle the sidebar reliably (previously released as 2.5.0.1).
+- When "Live preview" is turned off, the "Now on Discord" section is now hidden entirely instead of showing "Nothing shared right now". Discord connection alerts still appear when needed.
+- Fixed Rich Presence staying stuck after a reboot until Discord was restarted: the desktop app no longer waits forever for a Discord that has not finished starting, and gives up after 5 seconds to retry.
+- On Windows, the desktop app now looks for Discord on all ten IPC pipes (`discord-ipc-0` to `discord-ipc-9`) instead of only the first one.
+- The desktop app now checks every 6 hours whether a newer version is available and reports it to the extension. Development builds never report an update.

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -16,6 +17,7 @@ import (
 	"nowly.client/native/internal/logging"
 	"nowly.client/native/internal/notifications"
 	nativeprotocol "nowly.client/native/internal/native"
+	"nowly.client/native/internal/update"
 )
 
 func installManifests(logger *logging.Logger) {
@@ -238,6 +240,11 @@ func main() {
 	client.SetLogger(logger)
 	defer client.Close()
 
+	updates := update.NewChecker(contract.HostVersion, logger)
+	updateCtx, stopUpdates := context.WithCancel(context.Background())
+	defer stopUpdates()
+	go updates.Run(updateCtx)
+
 	_ = protocol.Write(contract.Connected())
 
 	lastActivityLogKey := ""
@@ -277,6 +284,10 @@ func main() {
 
 			pong := contract.PongWithProfile(true, discordConnected, status, profile)
 			pong.Code = discordErrorCode(connectErr)
+			if latest, newer := updates.Latest(); newer {
+				pong.Latest = latest
+				pong.Update = true
+			}
 			_ = protocol.Write(pong)
 
 		case contract.MessageSetActivity:

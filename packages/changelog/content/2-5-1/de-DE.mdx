@@ -1,0 +1,14 @@
+---
+title: 2.5.1
+date: 2026-10-29
+description: Firefox-Seitenleiste, Discord-Verbindung nach dem Start und Einstellung der Live-Vorschau.
+stores: [chrome, firefox]
+---
+
+## Korrekturen
+
+- Die Firefox-Symbolleistenschaltfläche öffnet und schließt die Seitenleiste jetzt zuverlässig (zuvor als 2.5.0.1 veröffentlicht).
+- Ist „Discord-Vorschau im Tab Aktivität anzeigen“ deaktiviert, wird der Bereich „Gerade auf Discord“ jetzt vollständig ausgeblendet, statt „Noch nichts geteilt“ anzuzeigen. Hinweise zur Discord-Verbindung erscheinen weiterhin, wenn nötig.
+- Rich Presence blieb nach einem Neustart hängen, bis Discord neu gestartet wurde: Die Desktop-App wartet nicht mehr endlos auf ein Discord, das noch nicht fertig gestartet ist, und versucht es nach 5 Sekunden erneut.
+- Unter Windows sucht die Desktop-App Discord jetzt auf allen zehn IPC-Pipes (`discord-ipc-0` bis `discord-ipc-9`) statt nur auf der ersten.
+- Die Desktop-App prüft alle 6 Stunden, ob eine neuere Version verfügbar ist, und meldet dies an die Erweiterung. Entwicklungsversionen melden nie ein Update.

@@ -1,0 +1,14 @@
+---
+title: 2.5.1
+date: 2026-10-29
+description: Firefox kenar çubuğu, açılış sonrası Discord bağlantısı ve canlı önizleme ayarı.
+stores: [chrome, firefox]
+---
+
+## Düzeltmeler
+
+- Firefox araç çubuğu düğmesi artık kenar çubuğunu güvenilir şekilde açıp kapatıyor (daha önce 2.5.0.1 olarak yayımlanmıştı).
+- “Etkinlik sekmesinde Discord önizlemesini göster” kapatıldığında “Şu anda Discord’da” bölümü, “Henüz paylaşılan bir şey yok” yazmak yerine tamamen gizlenir. Discord bağlantı uyarıları gerektiğinde görünmeye devam eder.
+- Bilgisayar yeniden başlatıldıktan sonra Discord yeniden başlatılana kadar takılı kalan Rich Presence düzeltildi: masaüstü uygulaması artık başlatılması bitmemiş bir Discord’u sonsuza kadar beklemiyor, 5 saniye sonra vazgeçip yeniden deniyor.
+- Windows’ta masaüstü uygulaması artık Discord’u yalnızca ilk kanalda değil, on IPC kanalının tamamında (`discord-ipc-0` – `discord-ipc-9`) arıyor.
+- Masaüstü uygulaması 6 saatte bir daha yeni bir sürüm olup olmadığını kontrol eder ve uzantıya bildirir. Geliştirme sürümleri hiçbir zaman güncelleme bildirmez.

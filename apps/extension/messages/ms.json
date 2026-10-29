@@ -227,6 +227,7 @@
   "connection.desktop": "Apl desktop",
   "connection.desktopApp": "Nowly Desktop",
   "connection.version": "Versi {version}",
+  "connection.updateAvailable": "Kemas kini tersedia: versi {version}",
   "connection.detected": "Dikesan",
   "connection.notDetected": "Tidak dikesan",
   "connection.status": "Status",

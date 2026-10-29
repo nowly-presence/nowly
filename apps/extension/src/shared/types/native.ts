@@ -43,6 +43,8 @@ export type NativeResponse = {
   connected: boolean;
   status: string;
   version?: string;
+  latestVersion?: string;
+  updateAvailable?: boolean;
   discordConnected?: boolean;
   code?: NativeErrorCode;
   profile?: DiscordProfileSnapshot | null;
@@ -63,6 +65,8 @@ export type NativeStatus = {
   connected: boolean;
   status: string;
   version?: string;
+  latestVersion?: string;
+  updateAvailable?: boolean;
   discordConnected?: boolean;
   code?: NativeErrorCode;
   codePrompted?: boolean;

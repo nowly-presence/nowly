@@ -1,0 +1,14 @@
+---
+title: 2.5.1
+date: 2026-10-29
+description: Panel boczny Firefoksa, połączenie z Discordem po uruchomieniu i ustawienie podglądu na żywo.
+stores: [chrome, firefox]
+---
+
+## Poprawki
+
+- Przycisk na pasku narzędzi Firefoksa niezawodnie otwiera i zamyka panel boczny (wcześniej wydane jako 2.5.0.1).
+- Po wyłączeniu opcji „Pokaż podgląd Discorda w karcie Aktywność” sekcja „Teraz na Discordzie” jest w całości ukrywana zamiast wyświetlać „Na razie nic nie udostępniono”. Alerty o połączeniu z Discordem nadal pojawiają się, gdy są potrzebne.
+- Naprawiono Rich Presence, które po ponownym uruchomieniu komputera pozostawało zablokowane do czasu restartu Discorda: aplikacja desktopowa nie czeka już w nieskończoność na Discorda, który nie zakończył uruchamiania, i po 5 sekundach próbuje ponownie.
+- W systemie Windows aplikacja desktopowa szuka teraz Discorda na wszystkich dziesięciu potokach IPC (od `discord-ipc-0` do `discord-ipc-9`), a nie tylko na pierwszym.
+- Aplikacja desktopowa co 6 godzin sprawdza, czy jest nowsza wersja, i informuje o tym rozszerzenie. Wersje deweloperskie nigdy nie zgłaszają aktualizacji.

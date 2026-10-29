@@ -227,6 +227,7 @@
   "connection.desktop": "Desktop app",
   "connection.desktopApp": "Nowly Desktop",
   "connection.version": "Version {version}",
+  "connection.updateAvailable": "Update available: version {version}",
   "connection.detected": "Detected",
   "connection.notDetected": "Not detected",
   "connection.status": "Status",

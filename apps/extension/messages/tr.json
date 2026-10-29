@@ -227,6 +227,7 @@
   "connection.desktop": "Masaüstü uygulaması",
   "connection.desktopApp": "Nowly Desktop",
   "connection.version": "Sürüm {version}",
+  "connection.updateAvailable": "Güncelleme mevcut: sürüm {version}",
   "connection.detected": "Bulundu",
   "connection.notDetected": "Bulunamadı",
   "connection.status": "Durum",

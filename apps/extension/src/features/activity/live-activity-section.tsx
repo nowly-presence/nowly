@@ -45,10 +45,18 @@ export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences 
 
   if (!hasPresences && state.customActivities.items.length === 0) return null;
 
+  if (settings.showPlayer === false) {
+    return ipcBlocked ? (
+      <Section title={t("activity.now")}>
+        <DiscordIpcAlert />
+      </Section>
+    ) : null;
+  }
+
   return (
     <Section title={t("activity.now")}>
       {ipcBlocked && <DiscordIpcAlert />}
-      {activity && custom && settings.showPlayer !== false ? (
+      {activity && custom ? (
         <CustomActivityLiveCard
           activity={custom}
           presence={activity.presence}
@@ -62,7 +70,7 @@ export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences 
           onStop={stopCustom}
           onResume={resume}
         />
-      ) : activity && liveStored && settings.showPlayer !== false ? (
+      ) : activity && liveStored ? (
         <LiveCard
           slug={activity.slug}
           presence={activity.presence}

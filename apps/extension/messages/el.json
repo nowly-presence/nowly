@@ -227,6 +227,7 @@
   "connection.desktop": "Εφαρμογή υπολογιστή",
   "connection.desktopApp": "Nowly Desktop",
   "connection.version": "Έκδοση {version}",
+  "connection.updateAvailable": "Διαθέσιμη ενημέρωση: έκδοση {version}",
   "connection.detected": "Εντοπίστηκε",
   "connection.notDetected": "Δεν εντοπίστηκε",
   "connection.status": "Κατάσταση",
