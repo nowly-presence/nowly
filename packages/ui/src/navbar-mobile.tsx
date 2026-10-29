@@ -1,8 +1,7 @@
 "use client";
 
-import { ExtensionStoreButton } from "@/components/extension-store-button";
-import { Link } from "@/i18n/navigation";
-import { CANARY_ACCENT, CANARY_INK } from "@/lib/brand";
+import { Link } from "@nowly/locales/navigation";
+import type { ReactNode } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@nowly/ui/sheet";
 
 type MobileNavProps = {
@@ -13,21 +12,11 @@ type MobileNavProps = {
     label: string;
     external: boolean;
   }>;
-  canary: boolean;
+  storeButton: ReactNode;
   menuLabel: string;
 };
 
-export const MobileNav = ({ open, onOpenChange, links, canary, menuLabel }: MobileNavProps) => {
-  const storeButtonProps = canary
-    ? {
-        className: "border-transparent hover:brightness-110",
-        style: {
-          backgroundColor: CANARY_ACCENT,
-          color: CANARY_INK
-        }
-      }
-    : {};
-
+export const MobileNav = ({ open, onOpenChange, links, storeButton, menuLabel }: MobileNavProps) => {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-[min(100%,20rem)] bg-background p-0 lg:hidden">
@@ -46,7 +35,7 @@ export const MobileNav = ({ open, onOpenChange, links, canary, menuLabel }: Mobi
               </Link>
             )
           )}
-          <ExtensionStoreButton {...storeButtonProps} />
+          {storeButton}
         </nav>
       </SheetContent>
     </Sheet>

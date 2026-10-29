@@ -25,6 +25,7 @@ export * from "./label";
 export * from "./locale-flag";
 export * from "./locale-selector";
 export * from "./marker";
+export * from "@nowly/ui/navbar";
 export * from "./message";
 export * from "./message-scroller";
 export * from "./pagination";

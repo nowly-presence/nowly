@@ -8,7 +8,4 @@ Shell mounted in `app/[locale]/layout.tsx`: `navbar.tsx`, `footer.tsx`, `cookie-
 
 ## Add a navbar link
 
-1. In `components/navbar.tsx`, add an entry to the `links` array: `{ href: "/path", label: t("your-key"), external: false }`. For a link to `apps/web` use `` `${SITE_URL}/path` `` (`lib/constants.ts`) with `external: true`, like `library`.
-2. Add `your-key` to the `navbar` namespace in all 11 `apps/docs/messages/*.json`.
-
-The navbar is intentionally simpler than web's (no canary branding); don't port that logic without a docs need.
+`components/navbar.tsx` is a thin wrapper around `@nowly/ui/navbar`, shared with web. Update links and desktop/mobile presentation in `packages/ui/src/navbar*.tsx`, following `packages/ui/AGENTS.md`. Keep app routing and the download button in the wrapper. Translations are resolved in the shared component from `packages/locales/messages/shared`. Docs links stay local; marketing links and the brand resolve to localized nowly.me URLs.

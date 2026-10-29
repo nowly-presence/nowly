@@ -105,6 +105,9 @@ importers:
       '@nowly/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@remixicon/react':
+        specifier: ^4.9.0
+        version: 4.9.0(react@19.3.1)
       '@ridemountainpig/svgl-react':
         specifier: ^1.0.18
         version: 1.0.18(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -596,6 +599,9 @@ importers:
       cn:
         specifier: ^0.5.0
         version: 0.5.0
+      motion:
+        specifier: ^14.6.0
+        version: 14.6.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       next-intl:
         specifier: ^4.14.9
         version: 4.14.9(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@opentelemetry/api@1.9.0)(@types/node@26.6.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)

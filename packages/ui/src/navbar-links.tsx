@@ -1,7 +1,7 @@
 "use client";
 
-import { Link } from "@/i18n/navigation";
-import { AnimatePresence, LazyMotion, m, MotionConfig } from "motion/react";
+import { Link } from "@nowly/locales/navigation";
+import { AnimatePresence, LazyMotion, m, MotionConfig, domMax } from "motion/react";
 import { useId, useState, type FocusEvent } from "react";
 
 type NavbarLink = {
@@ -9,9 +9,6 @@ type NavbarLink = {
   label: string;
   external: boolean;
 };
-
-// Loaded after hydration so the animation code stays out of every page's critical bundle.
-const loadMotionFeatures = () => import("@/features/layout/lib/motion-features").then((module) => module.default);
 
 const LINK_CLASS = "relative rounded-lg px-3 py-1.5 text-sm text-foreground";
 
@@ -56,7 +53,7 @@ export const NavbarLinks = ({ links }: {
   );
 
   return (
-    <LazyMotion features={loadMotionFeatures}>
+    <LazyMotion features={domMax}>
       <MotionConfig reducedMotion="user">
         <div className="flex items-center gap-2" onMouseLeave={() => setHovered(null)}>
           {links.map((link) =>

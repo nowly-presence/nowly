@@ -8,12 +8,7 @@ Don't edit `footer.tsx` in this folder — it's a thin wrapper. The actual link 
 
 ## Add a link to the navbar
 
-`navbar.tsx` builds its links from a plain array, not a shared component (each app's navbar is free to differ, unlike the footer):
-
-1. Open `apps/web/features/layout/components/navbar.tsx`.
-2. Add an entry to the `links` array (around line 24): `{ href: "/your-path", label: t("your-key"), external: false }` (use `external: true` and a full URL for off-domain links, e.g. `docsHref("/")` for a docs link).
-3. Add the translation key `your-key` to the `navbar` namespace in all 11 files under `apps/web/messages/*.json`.
-4. The array is rendered twice (desktop nav via `navbar-links.tsx`, which owns the sliding hover pill, and the mobile `Sheet`) — no extra step needed, both read the same `links` array.
+`navbar.tsx` is a thin wrapper around `@nowly/ui/navbar`. The shared link list, desktop hover animation and mobile menu live in `packages/ui/src/navbar*.tsx`. Follow `packages/ui/AGENTS.md`; never add app-specific navbar links in this wrapper. The wrapper only supplies routing context, the brand and the download button (including Canary styling and telemetry). Translations live in `packages/locales/messages/shared` and are resolved inside the shared component.
 
 ## Gotchas
 

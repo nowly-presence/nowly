@@ -35,6 +35,9 @@
     "./footer": "./src/footer.tsx",
     "./icons": "./src/icons.ts",
     "./locale-selector": "./src/locale-selector.tsx",
+    "./navbar": "./src/navbar.tsx",
+    "./navbar-links": "./src/navbar-links.tsx",
+    "./navbar-mobile": "./src/navbar-mobile.tsx",
     "./sheet": "./src/sheet.tsx",
     "./utils": "./src/utils.ts"
   },
@@ -55,6 +58,7 @@
     "cmdk": "1.1.1",
     "cn": "^0.5.0",
     "next-intl": "^4.14.9",
+    "motion": "^14.6.0",
     "next-themes": "^0.4.6",
     "recharts": "^3.10.1",
     "sonner": "^2.0.8"

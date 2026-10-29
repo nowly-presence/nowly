@@ -1,6 +1,6 @@
 "use client";
 
-import { RiDownloadLine } from "@nowly/ui/icons";
+import { RiChromeFill, RiFirefoxBrowserFill } from "@remixicon/react";
 import { ButtonVariantProps, buttonVariants, cn } from "@nowly/ui";
 import { detectExtensionBrowser, getExtensionDownloadUrl } from "@/lib/extension-store";
 import type { ExtensionBrowser } from "@/lib/extension-store";
@@ -25,7 +25,7 @@ export const ExtensionStoreButton = ({ children, className, variant, size, ...pr
 
   return (
     <a href={getExtensionDownloadUrl(browser)} rel="noreferrer" target="_blank" className={cn(buttonVariants({ variant, size }), className)} {...props}>
-      <RiDownloadLine data-icon="inline-start" />
+      {browser === "firefox" ? <RiFirefoxBrowserFill data-icon="inline-start" /> : <RiChromeFill data-icon="inline-start" />}
       {children ?? t(browser === "firefox" ? "download-firefox" : "download-chrome")}
     </a>
   );
