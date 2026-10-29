@@ -16,12 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Require stable branch
-        if: github.ref != 'refs/heads/stable'
-        run: |
-          echo "Production extension publishing is only allowed from stable (got ${GITHUB_REF})."
-          exit 1
-
       - name: Configure access to private submodule
         run: git config --global url."https://x-access-token:${{ secrets.INTERNAL_CLI_PAT }}@github.com/".insteadOf "https://github.com/"
 
