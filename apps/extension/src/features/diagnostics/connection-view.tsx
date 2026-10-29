@@ -166,6 +166,16 @@ export const ConnectionView = () => {
                 )
               }
             />
+            {state.native.connected && state.native.updateAvailable && state.native.latestVersion ? (
+              <Row
+                title={t("connection.updateAvailable", { version: state.native.latestVersion })}
+                trailing={
+                  <Button size="sm" icon={<RiDownloadLine className="size-4" />} onClick={() => openUrl(HOST_DOWNLOAD_URL)}>
+                    {t("action.download")}
+                  </Button>
+                }
+              />
+            ) : null}
             <Row title={t("connection.status")} trailing={<span className="max-w-48 truncate text-label-md text-muted">{state.native.status}</span>} />
           </Group>
         </Section>

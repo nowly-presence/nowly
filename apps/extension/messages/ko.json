@@ -227,6 +227,7 @@
   "connection.desktop": "데스크톱 앱",
   "connection.desktopApp": "Nowly Desktop",
   "connection.version": "버전 {version}",
+  "connection.updateAvailable": "업데이트 가능: 버전 {version}",
   "connection.detected": "감지됨",
   "connection.notDetected": "감지되지 않음",
   "connection.status": "상태",

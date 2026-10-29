@@ -227,6 +227,7 @@
   "connection.desktop": "デスクトップアプリ",
   "connection.desktopApp": "Nowly Desktop",
   "connection.version": "バージョン {version}",
+  "connection.updateAvailable": "アップデートあり: バージョン {version}",
   "connection.detected": "検出済み",
   "connection.notDetected": "検出されません",
   "connection.status": "状態",
