@@ -1,4 +1,5 @@
-import { FALLBACK_LOCALE, LOCALE_SHORT_MAP, type LocaleString } from "@nowly/locales";
+import { FALLBACK_LOCALE, LOCALE_SHORT_MAP, getValidLocale, type LocaleString } from "@nowly/locales";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { Separator } from "./separator";
 
@@ -19,44 +20,9 @@ const localizedUrl = (origin: string, locale: LocaleString, path: string): strin
   return `${origin}${prefix}${path}`;
 };
 
-export type FooterLabels = {
-  product: string;
-  home: string;
-  library: string;
-  host: string;
-  resources: string;
-  docs: string;
-  guides: string;
-  changelog: string;
-  canary: string;
-  support: string;
-  faq: string;
-  status: string;
-  branding: string;
-  community: string;
-  discord: string;
-  company: string;
-  about: string;
-  contact: string;
-  github: string;
-  twitter: string;
-  bluesky: string;
-  tiktok: string;
-  legalNotice: string;
-  cookies: string;
-  privacy: string;
-  consent: string;
-  tos: string;
-  tagline: string;
-  copyright: string;
-  trademark: ReactNode;
-};
-
 export type FooterProps = {
-  locale: LocaleString;
   brand: ReactNode;
   actions?: ReactNode;
-  labels: FooterLabels;
 };
 
 type Link = {
@@ -71,7 +37,56 @@ const FooterAnchor = ({ link, className }: { link: Link; className: string }) =>
   </a>
 );
 
-export const Footer = ({ locale, brand, actions, labels }: FooterProps) => {
+export const Footer = async ({ brand, actions }: FooterProps) => {
+  const [requestedLocale, t] = await Promise.all([
+    getLocale(),
+    getTranslations("footer")
+  ]);
+
+  const locale = getValidLocale(requestedLocale);
+  const labels = {
+    product: t("product"),
+    home: t("home"),
+    library: t("library"),
+    host: t("host"),
+    resources: t("resources"),
+    docs: t("docs"),
+    guides: t("guides"),
+    changelog: t("changelog"),
+    canary: t("canary"),
+    faq: t("faq"),
+    support: t("support"),
+    status: t("status"),
+    branding: t("branding"),
+    community: t("community"),
+    discord: t("discord"),
+    company: t("company"),
+    about: t("about"),
+    contact: t("contact"),
+    github: t("github"),
+    twitter: t("twitter"),
+    bluesky: t("bluesky"),
+    tiktok: "TikTok",
+    legalNotice: t("legal-notice"),
+    cookies: t("cookies"),
+    privacy: t("privacy"),
+    consent: t("consent"),
+    tos: t("tos"),
+    tagline: t("tagline"),
+    copyright: t("copyright"),
+    trademark: t.rich("trademark", {
+      inc: (chunks) => (
+        <a
+          href={DISCORD_SITE_URL}
+          rel="noreferrer"
+          target="_blank"
+          className="underline decoration-foreground/15 underline-offset-4 transition-colors hover:text-muted-foreground"
+        >
+          {chunks}
+        </a>
+      )
+    })
+  };
   const web = (path: string) => localizedUrl(WEB_ORIGIN, locale, path);
   const docs = () => localizedUrl(DOCS_ORIGIN, locale, "/");
 
