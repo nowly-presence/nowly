@@ -1,0 +1,14 @@
+---
+title: 2.5.1
+date: 2026-10-29
+description: Bar sisi Firefox, sambungan Discord selepas permulaan dan tetapan pratonton langsung.
+stores: [chrome, firefox]
+---
+
+## Pembetulan
+
+- Butang bar alat Firefox kini membuka dan menutup bar sisi dengan boleh dipercayai (sebelum ini dikeluarkan sebagai 2.5.0.1).
+- Apabila "Papar pratonton Discord dalam tab Aktiviti" dimatikan, bahagian "Sedang berlaku di Discord" kini disembunyikan sepenuhnya dan tidak lagi memaparkan "Belum ada apa-apa dikongsi". Amaran sambungan Discord masih dipaparkan apabila perlu.
+- Dibetulkan: Rich Presence tersekat selepas PC dimulakan semula sehingga Discord dimulakan semula. Aplikasi desktop tidak lagi menunggu tanpa had untuk Discord yang belum selesai bermula dan akan mencuba semula selepas 5 saat.
+- Pada Windows, aplikasi desktop kini mencari Discord pada kesemua sepuluh paip IPC (`discord-ipc-0` hingga `discord-ipc-9`), bukan hanya yang pertama.
+- Aplikasi desktop menyemak setiap 6 jam sama ada versi lebih baharu tersedia dan memaklumkannya kepada sambungan. Binaan pembangunan tidak pernah melaporkan kemas kini.

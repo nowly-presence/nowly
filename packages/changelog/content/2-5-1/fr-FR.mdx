@@ -1,0 +1,14 @@
+---
+title: 2.5.1
+date: 2026-10-29
+description: Barre latérale Firefox, connexion à Discord au démarrage et réglage de l'aperçu en direct.
+stores: [chrome, firefox]
+---
+
+## Corrections
+
+- Le bouton de la barre d'outils Firefox ouvre et ferme désormais la barre latérale de façon fiable (précédemment publié en 2.5.0.1).
+- Lorsque « Afficher l'aperçu Discord dans l'onglet Activité » est désactivé, la section « En ce moment sur Discord » est maintenant entièrement masquée au lieu d'afficher « Rien de partagé pour le moment ». Les alertes de connexion à Discord restent affichées lorsque nécessaire.
+- Correction de la présence Discord qui restait bloquée après un redémarrage du PC jusqu'au redémarrage de Discord : l'application de bureau n'attend plus indéfiniment un Discord qui n'a pas fini de démarrer et abandonne après 5 secondes pour réessayer.
+- Sous Windows, l'application de bureau cherche désormais Discord sur les dix canaux IPC (`discord-ipc-0` à `discord-ipc-9`) au lieu du premier uniquement.
+- L'application de bureau vérifie toutes les 6 heures si une version plus récente est disponible et le signale à l'extension. Les versions de développement ne signalent jamais de mise à jour.

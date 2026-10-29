@@ -1,0 +1,14 @@
+---
+title: 2.5.1
+date: 2026-10-29
+description: Barra lateral de Firefox, conexión con Discord tras el arranque y ajuste de la vista previa en directo.
+stores: [chrome, firefox]
+---
+
+## Correcciones
+
+- El botón de la barra de herramientas de Firefox ahora abre y cierra la barra lateral de forma fiable (publicado antes como 2.5.0.1).
+- Cuando « Mostrar la vista previa de Discord en la pestaña Actividad » está desactivado, la sección « Ahora en Discord » se oculta por completo en lugar de mostrar « Nada compartido por ahora ». Las alertas de conexión con Discord siguen apareciendo cuando hacen falta.
+- Corregido el Rich Presence que se quedaba bloqueado tras reiniciar el PC hasta reiniciar Discord: la aplicación de escritorio ya no espera indefinidamente a un Discord que no ha terminado de arrancar y vuelve a intentarlo tras 5 segundos.
+- En Windows, la aplicación de escritorio busca ahora Discord en los diez canales IPC (`discord-ipc-0` a `discord-ipc-9`) en lugar de solo el primero.
+- La aplicación de escritorio comprueba cada 6 horas si hay una versión más reciente y se lo indica a la extensión. Las compilaciones de desarrollo nunca avisan de actualizaciones.

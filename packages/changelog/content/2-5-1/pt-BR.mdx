@@ -1,0 +1,14 @@
+---
+title: 2.5.1
+date: 2026-10-29
+description: Barra lateral do Firefox, conexão com o Discord após a inicialização e configuração da prévia ao vivo.
+stores: [chrome, firefox]
+---
+
+## Correções
+
+- O botão da barra de ferramentas do Firefox agora abre e fecha a barra lateral de forma confiável (lançado antes como 2.5.0.1).
+- Quando "Mostrar a prévia do Discord na aba Atividade" está desativado, a seção "Agora no Discord" fica totalmente oculta em vez de exibir "Nada compartilhado por enquanto". Os alertas de conexão com o Discord continuam aparecendo quando necessário.
+- Corrigido o Rich Presence que ficava travado após reiniciar o PC até que o Discord fosse reiniciado: o aplicativo desktop não espera mais indefinidamente por um Discord que ainda não terminou de iniciar e tenta de novo após 5 segundos.
+- No Windows, o aplicativo desktop agora procura o Discord nos dez canais IPC (`discord-ipc-0` a `discord-ipc-9`) em vez de apenas no primeiro.
+- O aplicativo desktop verifica a cada 6 horas se há uma versão mais recente e avisa a extensão. Versões de desenvolvimento nunca informam atualização.
