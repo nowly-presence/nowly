@@ -141,8 +141,6 @@
     }
   },
   "platforms": {
-    "pause": "Mettre les plateformes en pause",
-    "play": "Relancer les plateformes",
     "eyebrow": "Plateformes",
     "title": "Compatible avec vos plateformes",
     "description": "Nowly affiche ce que vous regardez, écoutez ou jouez, sur vos services habituels."

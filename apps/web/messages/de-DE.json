@@ -141,8 +141,6 @@
     }
   },
   "platforms": {
-    "pause": "Plattformen anhalten",
-    "play": "Plattformen fortsetzen",
     "eyebrow": "Plattformen",
     "title": "Funktioniert mit deinen Plattformen",
     "description": "Nowly zeigt, was du auf den Diensten, die du bereits nutzt, schaust, hörst oder spielst."

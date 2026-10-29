@@ -141,8 +141,6 @@
     }
   },
   "platforms": {
-    "pause": "Pausar plataformas",
-    "play": "Retomar plataformas",
     "eyebrow": "Plataformas",
     "title": "Funciona com suas plataformas",
     "description": "O Nowly mostra o que você assiste, ouve ou joga nos serviços que já usa."

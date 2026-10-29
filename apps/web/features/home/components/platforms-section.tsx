@@ -34,7 +34,7 @@ const PlatformMarquee = async ({ platforms }: {
   if (resolvedPlatforms.length === 0) return null;
 
   return (
-    <PlatformMarqueeControls pauseLabel={t("pause")} playLabel={t("play")}>
+    <PlatformMarqueeControls>
       <div className="animate-marquee flex w-max">
         <LogoTrack platforms={resolvedPlatforms} />
         <LogoTrack platforms={resolvedPlatforms} inert />

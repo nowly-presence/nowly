@@ -141,8 +141,6 @@
     }
   },
   "platforms": {
-    "pause": "Jeda platform",
-    "play": "Sambung platform",
     "eyebrow": "Platform",
     "title": "Berfungsi dengan platform anda",
     "description": "Nowly menunjukkan apa yang anda tonton, dengar atau main pada perkhidmatan yang anda sudah gunakan."

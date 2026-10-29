@@ -141,8 +141,6 @@
     }
   },
   "platforms": {
-    "pause": "Wstrzymaj platformy",
-    "play": "Wznów platformy",
     "eyebrow": "Platformy",
     "title": "Działa z Twoimi platformami",
     "description": "Nowly pokazuje, co oglądasz, słuchasz lub w co grasz na usługach, z których już korzystasz."

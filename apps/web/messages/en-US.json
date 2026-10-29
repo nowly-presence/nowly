@@ -141,8 +141,6 @@
     }
   },
   "platforms": {
-    "pause": "Pause platforms",
-    "play": "Play platforms",
     "eyebrow": "Platforms",
     "title": "Works with your platforms",
     "description": "Nowly shows what you watch, listen to, or play on the services you already use."

@@ -141,8 +141,6 @@
     }
   },
   "platforms": {
-    "pause": "Platformları duraklat",
-    "play": "Platformları sürdür",
     "eyebrow": "Platformlar",
     "title": "Kullandığın platformlarla çalışır",
     "description": "Nowly, zaten kullandığın hizmetlerde izlediğin, dinlediğin veya oynadığın şeyi gösterir."
