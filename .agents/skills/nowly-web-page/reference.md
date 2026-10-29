@@ -37,7 +37,7 @@ With data: fetch in the page (or in the RSC view) with `Promise.all`, pass props
 
 ## Messages
 
-`apps/web/messages/en-US.json` (mirror in `fr-FR` and `es-ES`):
+`packages/locales/messages/web/en-US.json` (mirror in all 11 locales; shared UI text belongs in `packages/locales/messages/shared`):
 
 ```json
 "pages": {

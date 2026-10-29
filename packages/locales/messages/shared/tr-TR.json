@@ -1,0 +1,62 @@
+{
+  "navbar": {
+    "skip-content": "İçeriğe geç",
+    "docs": "Dokümantasyon",
+    "library": "Kitaplık",
+    "roadmap": "Yol haritası",
+    "open-menu": "Menüyü aç",
+    "guides": "Rehberler"
+  },
+  "store": {
+    "download-chrome": "Chrome için indir",
+    "download-firefox": "Firefox için indir"
+  },
+  "theme": {
+    "toggle": "Renk temasını değiştir",
+    "light": "Açık",
+    "dark": "Koyu"
+  },
+  "footer": {
+    "tagline": "Yaptığın şeyi paylaş.",
+    "copyright": "© 2026 Nowly. Tüm hakları saklıdır.",
+    "trademark": "Discord, <inc>Discord Inc.</inc>'in tescilli ticari markasıdır.",
+    "language-label": "Dil",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "Ürün",
+    "home": "Ana sayfa",
+    "library": "Kitaplık",
+    "host": "Masaüstü uygulaması",
+    "resources": "Kaynaklar",
+    "docs": "Dokümantasyon",
+    "changelog": "Sürüm notları",
+    "canary": "Canary",
+    "support": "Destek",
+    "status": "Durum",
+    "branding": "Marka kimliği",
+    "community": "Topluluk",
+    "discord": "Discord",
+    "github": "GitHub",
+    "twitter": "X / Twitter",
+    "bluesky": "Bluesky",
+    "tos": "Hizmet Şartları",
+    "privacy": "Gizlilik",
+    "consent": "Verilerin",
+    "cookies": "Çerezler",
+    "legal-notice": "Yasal bildirim",
+    "faq": "Sık sorulan sorular",
+    "guides": "Rehberler",
+    "company": "Nowly",
+    "about": "Hakkında",
+    "contact": "İletişim"
+  }
+}

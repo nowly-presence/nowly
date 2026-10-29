@@ -1,3 +1,4 @@
 import { createRequestConfig } from "@nowly/locales/request";
+import { loadWebMessages } from "@nowly/locales/messages/web";
 
-export default createRequestConfig(async (locale) => (await import(`../messages/${locale}.json`)).default);
+export default createRequestConfig(loadWebMessages);

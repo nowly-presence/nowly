@@ -31,6 +31,14 @@
     "./routing": "./src/routing.ts",
     "./navigation": "./src/navigation.ts",
     "./request": "./src/request.ts",
+    "./messages": "./src/messages.ts",
+    "./messages/shared": "./src/messages-shared.ts",
+    "./messages/web": "./src/messages-web.ts",
+    "./messages/docs": "./src/messages-docs.ts",
+    "./messages/*": "./messages/*",
+    "./catalogs/shared": "./src/catalogs-shared.ts",
+    "./catalogs/web": "./src/catalogs-web.ts",
+    "./catalogs/docs": "./src/catalogs-docs.ts",
     "./proxy": "./src/proxy.ts"
   },
   "scripts": {

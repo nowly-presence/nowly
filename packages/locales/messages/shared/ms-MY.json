@@ -1,0 +1,62 @@
+{
+  "navbar": {
+    "skip-content": "Langkau ke kandungan",
+    "docs": "Dokumentasi",
+    "library": "Perpustakaan",
+    "roadmap": "Pelan hala tuju",
+    "open-menu": "Buka menu",
+    "guides": "Panduan"
+  },
+  "store": {
+    "download-chrome": "Muat turun untuk Chrome",
+    "download-firefox": "Muat turun untuk Firefox"
+  },
+  "theme": {
+    "toggle": "Tukar tema warna",
+    "light": "Cerah",
+    "dark": "Gelap"
+  },
+  "footer": {
+    "tagline": "Kongsi apa yang anda lakukan.",
+    "copyright": "© 2026 Nowly. Hak cipta terpelihara.",
+    "trademark": "Discord ialah tanda dagangan berdaftar <inc>Discord Inc.</inc>",
+    "language-label": "Bahasa",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "Produk",
+    "home": "Laman utama",
+    "library": "Perpustakaan",
+    "host": "Aplikasi desktop",
+    "resources": "Sumber",
+    "docs": "Dokumentasi",
+    "changelog": "Nota keluaran",
+    "canary": "Canary",
+    "support": "Sokongan",
+    "status": "Status",
+    "branding": "Penjenamaan",
+    "community": "Komuniti",
+    "discord": "Discord",
+    "github": "GitHub",
+    "twitter": "X / Twitter",
+    "bluesky": "Bluesky",
+    "tos": "Terma Perkhidmatan",
+    "privacy": "Privasi",
+    "consent": "Data anda",
+    "cookies": "Kuki",
+    "legal-notice": "Notis undang-undang",
+    "faq": "Soalan lazim",
+    "guides": "Panduan",
+    "company": "Nowly",
+    "about": "Perihal",
+    "contact": "Hubungi"
+  }
+}

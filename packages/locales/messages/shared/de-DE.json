@@ -1,0 +1,62 @@
+{
+  "navbar": {
+    "skip-content": "Zum Inhalt springen",
+    "docs": "Dokumentation",
+    "library": "Bibliothek",
+    "roadmap": "Roadmap",
+    "open-menu": "Menü öffnen",
+    "guides": "Anleitungen"
+  },
+  "store": {
+    "download-chrome": "Für Chrome herunterladen",
+    "download-firefox": "Für Firefox herunterladen"
+  },
+  "theme": {
+    "toggle": "Farbthema wechseln",
+    "light": "Hell",
+    "dark": "Dunkel"
+  },
+  "footer": {
+    "tagline": "Teile, was du tust.",
+    "copyright": "© 2026 Nowly. Alle Rechte vorbehalten.",
+    "trademark": "Discord ist eine eingetragene Marke von <inc>Discord Inc.</inc>",
+    "language-label": "Sprache",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "Produkt",
+    "home": "Startseite",
+    "library": "Bibliothek",
+    "host": "Desktop-App",
+    "resources": "Ressourcen",
+    "docs": "Dokumentation",
+    "changelog": "Versionshinweise",
+    "canary": "Canary",
+    "support": "Support",
+    "status": "Status",
+    "branding": "Branding",
+    "community": "Community",
+    "discord": "Discord",
+    "github": "GitHub",
+    "twitter": "X / Twitter",
+    "bluesky": "Bluesky",
+    "tos": "Nutzungsbedingungen",
+    "privacy": "Datenschutz",
+    "consent": "Deine Daten",
+    "cookies": "Cookies",
+    "legal-notice": "Impressum",
+    "faq": "FAQ",
+    "guides": "Anleitungen",
+    "company": "Nowly",
+    "about": "Über uns",
+    "contact": "Kontakt"
+  }
+}

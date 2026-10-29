@@ -1,0 +1,62 @@
+{
+  "navbar": {
+    "skip-content": "本文へ移動",
+    "docs": "ドキュメント",
+    "library": "ライブラリ",
+    "roadmap": "ロードマップ",
+    "open-menu": "メニューを開く",
+    "guides": "ガイド"
+  },
+  "store": {
+    "download-chrome": "Chrome版をダウンロード",
+    "download-firefox": "Firefox版をダウンロード"
+  },
+  "theme": {
+    "toggle": "カラーテーマを切り替え",
+    "light": "ライト",
+    "dark": "ダーク"
+  },
+  "footer": {
+    "tagline": "あなたの「今」を共有。",
+    "copyright": "© 2026 Nowly. All rights reserved.",
+    "trademark": "Discordは<inc>Discord Inc.</inc>の登録商標です。",
+    "language-label": "言語",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "プロダクト",
+    "home": "ホーム",
+    "library": "ライブラリ",
+    "host": "デスクトップアプリ",
+    "resources": "リソース",
+    "docs": "ドキュメント",
+    "changelog": "リリースノート",
+    "canary": "Canary",
+    "support": "サポート",
+    "status": "ステータス",
+    "branding": "ブランディング",
+    "community": "コミュニティ",
+    "discord": "Discord",
+    "github": "GitHub",
+    "twitter": "X / Twitter",
+    "bluesky": "Bluesky",
+    "tos": "利用規約",
+    "privacy": "プライバシー",
+    "consent": "あなたのデータ",
+    "cookies": "Cookie",
+    "legal-notice": "法的表示",
+    "faq": "よくある質問",
+    "guides": "ガイド",
+    "company": "Nowly",
+    "about": "Nowly について",
+    "contact": "お問い合わせ"
+  }
+}

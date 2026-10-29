@@ -76,7 +76,7 @@ describe("retired Insights collection", () => {
       "packages/env/README.md"
     ];
 
-    for (const directory of ["apps/web/messages", "apps/extension/messages"]) {
+    for (const directory of ["packages/locales/messages/shared", "packages/locales/messages/web", "apps/extension/messages"]) {
       paths.push(
         ...readdirSync(resolve(root, directory))
           .filter((name) => name.endsWith(".json"))

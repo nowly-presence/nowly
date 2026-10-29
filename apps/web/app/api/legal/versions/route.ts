@@ -1,4 +1,4 @@
-import messages from "../../../../messages/en-US.json";
+import messages from "@nowly/locales/messages/web/en-US.json";
 
 export const GET = () =>
   Response.json(

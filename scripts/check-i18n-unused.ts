@@ -8,6 +8,7 @@ type AppConfig = {
   name: string;
   mode: "nested" | "flat";
   messagesDir: string;
+  sharedMessagesDir?: string;
   base: string;
   srcDirs: string[];
 };
@@ -26,7 +27,8 @@ const APPS: AppConfig[] = [
   {
     name: "web",
     mode: "nested",
-    messagesDir: "apps/web/messages",
+    messagesDir: "packages/locales/messages/web",
+    sharedMessagesDir: "packages/locales/messages/shared",
     base: "en-US.json",
     srcDirs: [
       "apps/web/app",
@@ -40,7 +42,8 @@ const APPS: AppConfig[] = [
   {
     name: "docs",
     mode: "nested",
-    messagesDir: "apps/docs/messages",
+    messagesDir: "packages/locales/messages/docs",
+    sharedMessagesDir: "packages/locales/messages/shared",
     base: "en-US.json",
     srcDirs: [
       "apps/docs/app",
@@ -97,7 +100,12 @@ const readMessages = (app: AppConfig): Record<string, unknown> => {
   );
   if (!isMessageTree(messages))
     throw new Error(`Invalid message tree: ${app.messagesDir}/${app.base}`);
-  return messages;
+  if (!app.sharedMessagesDir) return messages;
+  const shared: unknown = JSON.parse(readFileSync(join(ROOT, app.sharedMessagesDir, app.base), "utf-8"));
+  if (!isMessageTree(shared)) throw new Error(`Invalid shared message tree: ${app.sharedMessagesDir}/${app.base}`);
+  const duplicates = Object.keys(messages).filter((key) => key in shared);
+  if (duplicates.length) throw new Error(`Shared namespaces duplicated in ${app.messagesDir}: ${duplicates.join(", ")}`);
+  return { ...messages, ...shared };
 };
 
 const flatten = (obj: Record<string, unknown>, prefix = ""): string[] => {
@@ -280,9 +288,16 @@ const checkFlatApp = (app: AppConfig): CheckResult => {
 
 let hasFailure = false;
 
+const results = new Map(APPS.map((app) => [app.name, app.mode === "nested" ? checkNestedApp(app) : checkFlatApp(app)]));
+
 for (const app of APPS) {
-  const result =
-    app.mode === "nested" ? checkNestedApp(app) : checkFlatApp(app);
+  const original = results.get(app.name)!;
+  const sharedKeys = app.sharedMessagesDir ? flatten(JSON.parse(readFileSync(join(ROOT, app.sharedMessagesDir, app.base), "utf-8"))) : [];
+  const consumers = APPS.filter((other) => app.sharedMessagesDir && other.sharedMessagesDir === app.sharedMessagesDir);
+  const result = {
+    ...original,
+    unusedKeys: original.unusedKeys.filter((key) => !sharedKeys.includes(key) || consumers.every((other) => results.get(other.name)!.unusedKeys.includes(key)))
+  };
 
   if (
     result.unusedKeys.length === 0 &&

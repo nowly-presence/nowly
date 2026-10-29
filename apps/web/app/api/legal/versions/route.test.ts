@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import messages from "../../../../messages/en-US.json";
-import { GET } from "./route";
+import messages from "@nowly/locales/messages/web/en-US.json";
+import { GET } from "@/app/api/legal/versions/route";
 
 describe("public legal dates", () => {
   it("reads dates directly from the published documents without a separate manifest", async () => {

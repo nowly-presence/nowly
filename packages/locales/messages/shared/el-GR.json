@@ -1,0 +1,62 @@
+{
+  "navbar": {
+    "skip-content": "Μετάβαση στο περιεχόμενο",
+    "docs": "Τεκμηρίωση",
+    "library": "Βιβλιοθήκη",
+    "roadmap": "Οδικός χάρτης",
+    "open-menu": "Άνοιγμα μενού",
+    "guides": "Οδηγοί"
+  },
+  "store": {
+    "download-chrome": "Λήψη για Chrome",
+    "download-firefox": "Λήψη για Firefox"
+  },
+  "theme": {
+    "toggle": "Εναλλαγή θέματος χρωμάτων",
+    "light": "Ανοιχτό",
+    "dark": "Σκούρο"
+  },
+  "footer": {
+    "tagline": "Μοιράσου αυτό που κάνεις.",
+    "copyright": "© 2026 Nowly. Με επιφύλαξη παντός δικαιώματος.",
+    "trademark": "Το Discord είναι σήμα κατατεθέν της <inc>Discord Inc.</inc>",
+    "language-label": "Γλώσσα",
+    "english": "English",
+    "french": "Français",
+    "spanish": "Español",
+    "german": "Deutsch",
+    "portuguese": "Português",
+    "polish": "Polski",
+    "japanese": "日本語",
+    "korean": "한국어",
+    "turkish": "Türkçe",
+    "malay": "Bahasa Melayu",
+    "greek": "Ελληνικά",
+    "product": "Προϊόν",
+    "home": "Αρχική",
+    "library": "Βιβλιοθήκη",
+    "host": "Εφαρμογή desktop",
+    "resources": "Πόροι",
+    "docs": "Τεκμηρίωση",
+    "changelog": "Σημειώσεις έκδοσης",
+    "canary": "Canary",
+    "support": "Υποστήριξη",
+    "status": "Κατάσταση",
+    "branding": "Ταυτότητα",
+    "community": "Κοινότητα",
+    "discord": "Discord",
+    "github": "GitHub",
+    "twitter": "X / Twitter",
+    "bluesky": "Bluesky",
+    "tos": "Όροι Χρήσης",
+    "privacy": "Απόρρητο",
+    "consent": "Τα δεδομένα σου",
+    "cookies": "Cookies",
+    "legal-notice": "Νομική σημείωση",
+    "faq": "Συχνές ερωτήσεις",
+    "guides": "Οδηγοί",
+    "company": "Nowly",
+    "about": "Σχετικά",
+    "contact": "Επικοινωνία"
+  }
+}

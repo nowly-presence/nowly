@@ -28,7 +28,7 @@ Presence flow: author against `@nowly/sdk` in `packages/presences`, build/valida
 ## Cross-app contracts
 
 - Env: read through `@nowly/env/<server|client|extension|cli>`; never import a context from another one.
-- i18n: 11 locales defined in `packages/locales`; user-visible strings must exist in every locale file of the app (see `packages/locales/AGENTS.md`).
+- i18n: 11 locales defined in `packages/locales`; web/docs JSON catalogs live in `packages/locales/messages/{shared,web,docs}`. Shared UI strings are translated once in `shared`; app-specific strings stay in their app catalog. Extension messages remain in `apps/extension/messages`. User-visible strings must exist in every locale (see `packages/locales/AGENTS.md`).
 - Shared footer lives in `packages/ui` and feeds both `apps/web` and `apps/docs` (see `packages/ui/AGENTS.md`).
 - Legal document versions: `packages/shared/src/legal.ts` is the single source, consumed by web (`/api/legal/versions`) and the extension.
 - Extension IDs (prod `kmnlnfldimgneaopdihplkebobckcjpf`, dev `abbegmindbabanjcabnmcjmamaoffbam`) are duplicated in native `main.go`, `install-{linux,macos}.sh`, `build-deb.sh` and `installer.iss`; change all together.
