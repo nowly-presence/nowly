@@ -42,7 +42,8 @@
     "internal-cli": "pnpm --filter @nowly/internal-cli cli"
   },
   "simple-git-hooks": {
-    "pre-commit": "pnpm exec lint-staged"
+    "pre-commit": "pnpm exec lint-staged",
+    "commit-msg": "node scripts/validate-commit-message.ts \"$1\""
   },
   "lint-staged": {
     "{apps,packages}/**/*.{ts,tsx}": "pnpm format --write"

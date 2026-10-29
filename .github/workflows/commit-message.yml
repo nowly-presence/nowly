@@ -1,0 +1,20 @@
+name: Commit message
+
+on:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: |
+          while IFS= read -r message; do
+            printf '%s\n' "$message" > "$RUNNER_TEMP/commit-message"
+            node scripts/validate-commit-message.ts "$RUNNER_TEMP/commit-message"
+          done < <(git log --format=%s "${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}")
