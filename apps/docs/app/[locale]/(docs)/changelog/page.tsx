@@ -3,7 +3,7 @@ import { mdxComponents } from "@/features/docs-content/components/mdx-components
 import { ScrollToTop } from "@/features/docs-content/components/scroll-to-top";
 import { TableOfContents } from "@/features/docs-content/components/table-of-contents";
 import { Link } from "@/i18n/navigation";
-import { getDocContent } from "@/features/docs-content/lib/content";
+import { getDocContent, getDocLocales } from "@/features/docs-content/lib/content";
 import { extractTocItems } from "@/features/docs-content/lib/types";
 import { createMetadata, docsOgImage } from "@/features/seo/lib/seo";
 import { getChangelogList } from "@nowly/changelog";
@@ -40,7 +40,8 @@ const generateMetadata = async (): Promise<Metadata> => {
     description,
     locale: locale as LocaleString,
     path: "/changelog",
-    type: "article",
+    alternateLocales: getDocLocales(CHANGELOG_SLUG),
+    canonicalLocale: getDocLocales(CHANGELOG_SLUG).includes(locale) ? locale : "en-US",
     image: docsOgImage("changelog", {
       title: doc.title,
       description,

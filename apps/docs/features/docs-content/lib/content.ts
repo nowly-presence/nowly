@@ -1,5 +1,6 @@
-import { getChangelogBody, getChangelogList } from "@nowly/changelog";
+import { getChangelogBody, getChangelogList, getChangelogLocales } from "@nowly/changelog";
 import { getValidLocale } from "@nowly/locales";
+import { routing } from "@/i18n/routing";
 import matter from "gray-matter";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -142,6 +143,8 @@ const findPage = (slug: string): {
 } | null => {
   const parts = slug.split("/").filter(Boolean);
 
+  if (parts.length > 2) return null;
+
   const categorySlug = parts.length > 1 ? parts[0] : null;
   const pageSlug = parts.at(-1);
 
@@ -156,6 +159,13 @@ const findPage = (slug: string): {
   }
 
   return null;
+};
+
+export const getDocLocales = (slug: string): string[] => {
+  if (slug.startsWith("changelog/")) return getChangelogLocales(slug.slice("changelog/".length));
+
+  const directory = slug === "changelog" ? CHANGELOG_ROOT : findPage(slug)?.page.path;
+  return directory ? routing.locales.filter((locale) => existsSync(join(directory, `${locale}.mdx`))) : [];
 };
 
 export const getFirstDocPath = (): string => {

@@ -3,7 +3,8 @@ import { mdxComponents } from "@/features/docs-content/components/mdx-components
 import { OpenIn } from "@/features/docs-content/components/open-in";
 import { PageNavigation } from "@/features/docs-content/components/page-navigation";
 import { TableOfContents } from "@/features/docs-content/components/table-of-contents";
-import { getAdjacentPages, getCategoryForPath, getDocContent } from "@/features/docs-content/lib/content";
+import { getAdjacentPages, getCategoryForPath, getDocContent, getDocLocales } from "@/features/docs-content/lib/content";
+import { DocJsonLd } from "@/features/seo/components/doc-json-ld";
 import { docHref } from "@/features/docs-content/lib/href";
 import { extractTocItems } from "@/features/docs-content/lib/types";
 import { createMetadata, docsOgImage } from "@/features/seo/lib/seo";
@@ -48,6 +49,9 @@ const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
     description,
     locale: locale as LocaleString,
     path: docHref(doc.path),
+    alternateLocales: getDocLocales(doc.path),
+    canonicalLocale: getDocLocales(doc.path).includes(locale) ? locale : "en-US",
+    type: "article",
     image: docsOgImage(doc.path, {
       title: doc.title,
       description,
@@ -74,6 +78,13 @@ const Page = async ({ params }: Props): Promise<ReactElement> => {
   return (
     <>
       <ScrollToTop />
+      <DocJsonLd
+        title={doc.title}
+        description={doc.description}
+        path={docHref(doc.path)}
+        locale={getDocLocales(doc.path).includes(locale) ? locale : "en-US"}
+        category={getCategoryForPath(doc.path, locale)}
+      />
       <article className="py-8">
         <div className="flex items-start justify-between gap-4 mb-2">
           <h1 className="text-3xl font-semibold font-heading">{doc.title}</h1>
