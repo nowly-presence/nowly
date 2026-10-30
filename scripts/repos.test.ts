@@ -90,6 +90,36 @@ test("converts a former submodule checkout into a standalone repository", () => 
   }
 });
 
+test("leaves the monorepo index alone when run from a git hook", () => {
+  const { remotes, root, cleanup } = fixture();
+
+  try {
+    const index = git(root, "ls-files", "--stage");
+    const result = run(root, remotes, [], { GIT_DIR: join(root, ".git"), GIT_INDEX_FILE: join(root, ".git", "index"), GIT_WORK_TREE: root });
+    assert.equal(result.status, 0, result.stderr);
+
+    assert.equal(git(root, "ls-files", "--stage"), index);
+    assert.equal(git(join(root, "packages", "presences"), "rev-parse", "--show-toplevel"), join(root, "packages", "presences"));
+  } finally {
+    cleanup();
+  }
+});
+
+test("leaves the monorepo index alone when run from a git hook", () => {
+  const { remotes, root, cleanup } = fixture();
+
+  try {
+    const index = git(root, "ls-files", "--stage");
+    const result = run(root, remotes, [], { GIT_DIR: join(root, ".git"), GIT_INDEX_FILE: join(root, ".git", "index"), GIT_WORK_TREE: root });
+    assert.equal(result.status, 0, result.stderr);
+
+    assert.equal(git(root, "ls-files", "--stage"), index);
+    assert.equal(git(join(root, "packages", "presences"), "rev-parse", "--show-toplevel"), join(root, "packages", "presences"));
+  } finally {
+    cleanup();
+  }
+});
+
 test("--auto does nothing in CI", () => {
   const { remotes, root, cleanup } = fixture();
 
