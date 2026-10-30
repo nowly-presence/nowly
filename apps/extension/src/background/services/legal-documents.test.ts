@@ -50,6 +50,20 @@ describe("legal date checks", () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
+  it("lets a forced check bypass the offline backoff", async () => {
+    fetchMock.mockRejectedValueOnce(new Error("offline")).mockResolvedValueOnce(Response.json(dates));
+    expect((await checkLegalDocuments()).checkFailed).toBe(true);
+
+    const state = await checkLegalDocuments({ force: true });
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(state).toMatchObject({
+      dates,
+      checkFailed: false
+    });
+    expect(await getLegalState()).toEqual(state);
+  });
+
   it("retains cached dates and confirmations offline without reverting to bundled values", async () => {
     await chrome.storage.local.set({
       legalDocuments: {

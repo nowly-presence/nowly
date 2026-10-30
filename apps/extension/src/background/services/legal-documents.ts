@@ -22,14 +22,18 @@ const saveLegalState = async (state: LegalState): Promise<void> => {
   await chrome.storage.local.set({ [STORAGE_KEYS.legal]: state });
 };
 
-export const checkLegalDocuments = (): Promise<LegalState> =>
+export const checkLegalDocuments = ({
+  force = false
+}: {
+  force?: boolean;
+} = {}): Promise<LegalState> =>
   serialize(async () => {
     const current = await getLegalState();
 
     const age = Date.now() - current.checkedAt;
     const interval = current.checkFailed ? LEGAL_RETRY_INTERVAL_MS : LEGAL_CHECK_INTERVAL_MS;
 
-    if (current.checkedAt > 0 && age >= 0 && age < interval) return current;
+    if (!force && current.checkedAt > 0 && age >= 0 && age < interval) return current;
 
     try {
       const response = await fetch(`${WEB_BASE_URL.replace(/\/$/, "")}/api/legal/versions`, {

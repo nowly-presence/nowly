@@ -4,9 +4,9 @@ import { broadcastActiveTab } from "@/background/managers/activity-manager";
 
 export const handleGetLegalState: Handler<"GET_LEGAL_STATE"> = () => getLegalState();
 
-export const handleCheckLegalDocuments: Handler<"CHECK_LEGAL_DOCUMENTS"> = async () => {
-  const state = await checkLegalDocuments();
-  await broadcastActiveTab();
+export const handleCheckLegalDocuments: Handler<"CHECK_LEGAL_DOCUMENTS"> = async (payload) => {
+  const state = await checkLegalDocuments({ force: payload?.force === true });
+  await broadcastActiveTab().catch(() => {});
   return state;
 };
 
@@ -20,6 +20,6 @@ export const handleAcceptLegalDocuments: Handler<"ACCEPT_LEGAL_DOCUMENTS"> = asy
   }
 
   const result = await acceptLegalDocuments(input);
-  if (result.ok) await broadcastActiveTab();
+  if (result.ok) await broadcastActiveTab().catch(() => {});
   return result;
 };
