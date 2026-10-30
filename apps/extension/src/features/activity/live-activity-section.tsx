@@ -18,11 +18,10 @@ import { useTabSharing } from "@/features/activity/use-tab-sharing";
 
 type LiveActivitySectionProps = {
   liveTab: TabActivity | undefined;
-  otherActivityCount: number;
   hasPresences: boolean;
 };
 
-export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences }: LiveActivitySectionProps) => {
+export const LiveActivitySection = ({ liveTab, hasPresences }: LiveActivitySectionProps) => {
   const { state, updateSettings, refresh } = useExtensionState();
   const { t } = useI18n();
   const { push } = useNav();
@@ -78,7 +77,6 @@ export const LiveActivitySection = ({ liveTab, otherActivityCount, hasPresences 
           t={t}
           status={paused ? "paused" : "live"}
           statusLabel={paused ? t("activity.pausedLabel") : undefined}
-          stackDepth={otherActivityCount}
           onOpen={() =>
             push({
               name: "presence",

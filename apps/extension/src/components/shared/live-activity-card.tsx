@@ -16,7 +16,6 @@ type LiveCardProps = {
   t: Translate;
   status?: "live" | "paused" | "held";
   statusLabel?: string;
-  stackDepth?: number;
   footer?: ReactNode;
   onOpen?: () => void;
   compact?: boolean;
@@ -74,7 +73,7 @@ const ActivityImage = ({ src, small, slug, name, size }: {
 };
 
 export const LiveCard =
-  ({ slug, presence, presenceName, t, status = "live", statusLabel, stackDepth = 0, footer, onOpen, compact, artwork, className, timelineMode = "playback" }: LiveCardProps) => {
+  ({ slug, presence, presenceName, t, status = "live", statusLabel, footer, onOpen, compact, artwork, className, timelineMode = "playback" }: LiveCardProps) => {
     const start = toMs(presence.startTime);
     const end = toMs(presence.endTime);
     const now = useNow(1000, status === "live" && Boolean(start || end));
@@ -84,7 +83,6 @@ export const LiveCard =
       total && elapsed !== undefined ? Math.min(1, Math.max(0, timelineMode === "countdown" ? 1 - elapsed / total : elapsed / total)) : undefined;
     const remaining = end && !start ? (end - now) / 1000 : undefined;
     const small = presence.smallImage?.startsWith("https://") ? presence.smallImage : undefined;
-    const layers = Math.min(2, stackDepth);
     const displayName = presence.name || presenceName;
     const namedHeader = NAMED_HEADER_TYPES.has(presence.type ?? 0);
     const detailsPresent = Boolean(presence.details?.trim());
@@ -96,20 +94,7 @@ export const LiveCard =
     if (lines.length === 0) lines.push(displayName);
 
     return (
-      <div className={cn("relative", layers === 1 && "pb-2", layers === 2 && "pb-4", className)}>
-        {Array.from({ length: layers }, (_, index) => layers - 1 - index).map((depth) => (
-          <div
-            key={depth}
-            aria-hidden
-            className="absolute inset-x-0 rounded-lg border border-tertiary-edge bg-tertiary"
-            style={{
-              top: (depth + 1) * 8,
-              bottom: (layers - 1 - depth) * 8,
-              transform: `scale(${1 - (depth + 1) * 0.045})`,
-              opacity: depth === 0 ? 0.42 : 0.18
-            }}
-          />
-        ))}
+      <div className={cn("relative", className)}>
         <article
           className={cn(
             "relative z-10 flex flex-col gap-3 overflow-hidden rounded-lg border border-tertiary-edge bg-tertiary text-on-tertiary",

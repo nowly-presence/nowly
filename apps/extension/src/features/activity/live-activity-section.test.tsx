@@ -11,25 +11,43 @@ vi.mock("@/hooks/i18n-provider", () => ({
     t: (key: keyof typeof en) => en[key]
   })
 }));
-vi.mock("@/hooks/navigation-provider", () => ({ useNav: () => ({ push: vi.fn() }) }));
-vi.mock("@/hooks/extension-state-provider", () => ({ useExtensionState: () => extensionState() }));
-vi.mock("@/features/activity/use-tab-sharing", () => ({ useTabSharing: () => vi.fn() }));
+vi.mock("@/hooks/navigation-provider", () => ({
+  useNav: () => ({ push: vi.fn() })
+}));
+vi.mock("@/hooks/extension-state-provider", () => ({
+  useExtensionState: () => extensionState()
+}));
+vi.mock("@/features/activity/use-tab-sharing", () => ({
+  useTabSharing: () => vi.fn()
+}));
 vi.mock("@/lib/messages", () => ({ sendMessage: vi.fn() }));
-vi.mock("@/shared/discord-ipc-prompt", () => ({ discordIpcIssueOf: (native: unknown) => discordIpcIssueOf(native) }));
+vi.mock("@/shared/discord-ipc-prompt", () => ({
+  discordIpcIssueOf: (native: unknown) => discordIpcIssueOf(native)
+}));
 
 const stateWith = (showPlayer: boolean) => ({
   state: {
     activity: undefined,
     presences: {},
-    native: { connected: false, discordConnected: false, status: "idle" },
-    customActivities: { items: [{ id: "custom" }] },
+    native: {
+      connected: false,
+      discordConnected: false,
+      status: "idle"
+    },
+    customActivities: {
+      items: [{ id: "custom" }]
+    },
     settings: { showPlayer }
   },
   updateSettings: vi.fn(),
   refresh: {}
 });
 
-const section = () => LiveActivitySection({ liveTab: undefined, otherActivityCount: 0, hasPresences: true });
+const section = () =>
+  LiveActivitySection({
+    liveTab: undefined,
+    hasPresences: true
+  });
 
 describe("LiveActivitySection preview toggle", () => {
   beforeEach(() => {
