@@ -8,3 +8,9 @@ dist
 .env
 .env.example
 .env.local
+
+# Local clones of separate repositories (pnpm repos)
+packages/sdk
+packages/cli
+packages/presences
+packages/internal-cli

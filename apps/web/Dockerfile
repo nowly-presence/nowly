@@ -7,11 +7,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN rm -rf packages/sdk && \
-    git clone --depth 1 --branch stable https://github.com/nowly-presence/sdk.git packages/sdk && \
-    rm -rf packages/sdk/.git && \
-    rm -rf packages/cli packages/presences packages/internal-cli
-
 ARG NEXT_PUBLIC_API_BASE_URL=https://api.nowly.me
 ARG NEXT_PUBLIC_BASE_URL=https://nowly.me
 ARG NEXT_PUBLIC_DOCS_BASE_URL=https://docs.nowly.me

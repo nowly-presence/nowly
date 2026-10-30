@@ -13,11 +13,8 @@ const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf-8")) a
 
 const listFiles = (cwd: string): string[] => execSync("git ls-files --cached --others --exclude-standard", { cwd }).toString().split("\n").filter(Boolean);
 
-const submodulePaths = ["packages/sdk", "packages/cli", "packages/presences", "packages/internal-cli"];
-const fileList = [
-  ...listFiles(repoRoot),
-  ...submodulePaths.flatMap((submodulePath) => listFiles(join(repoRoot, submodulePath)).map((relativePath) => join(submodulePath, relativePath)))
-];
+// Local clones of the separate repositories (packages/sdk, cli, presences) are git-ignored and not part of the extension build.
+const fileList = listFiles(repoRoot);
 const entries: Record<string, Uint8Array> = {};
 
 for (const relativePath of fileList) {

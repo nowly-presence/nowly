@@ -92,7 +92,7 @@ zipは `dist/packs/youtube.zip` に書き込まれます。**設定 → 高度�
 
 ### 完全なモノレポがある場合
 
-`nowly` 自体をクローンした場合(`presences` をサブモジュールとして含む)、すべてのプレゼンスを組み込んだ拡張機能を直接ビルドできます:
+`nowly` 自体をクローンして `pnpm repos` を実行した場合(`presences` が `packages/presences` にクローンされます)、すべてのプレゼンスを組み込んだ拡張機能を直接ビルドできます:
 
 ```bash
 pnpm build:extension:dev

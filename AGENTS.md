@@ -11,18 +11,18 @@ pnpm workspace (`apps/*`, `packages/*`; version pinned in root `packageManager`,
 - `apps/extension` Chromium/Firefox extension; `apps/native` Go native-messaging host (`nowly.client`; contract in `internal/contract/messages.go`)
 - `apps/discord` community bot, fully git-ignored: absent from fresh clones
 - `packages/env` typed env per context; `shared` constants/schemas; `analytics` client/ingestion/consent; `ui` shared React components; `locales` i18n; `changelog` release notes
-- Submodules (`packages/{sdk,cli,presences,internal-cli}`) are separate repos, branch `stable`. Commits there belong to their own repo; run `git status` inside them and never mix commits. CI inits only `sdk`, `cli`, `presences`.
+- `packages/{sdk,cli,presences,internal-cli}` are separate repos (branch `stable`), not part of this repo: local clones made by `pnpm repos`, git-ignored and excluded from the pnpm workspace. Commit inside them, never from here; CI does not have them.
 
-Presence flow: author against `@nowly/sdk` in `packages/presences`, build/validate with `nowly` (`packages/cli`), publish with `pnpm admin push <slug>` (`packages/internal-cli`), the extension runs it and the native host relays it to Discord. Presence authoring rules live in `packages/presences/AGENTS.md`.
+Presence flow: author against `@nowly/sdk` in the presences repo, build/validate with `nowly` (cli repo), publish with the private internal CLI's `push <slug>` (run by the presences repo CI), the extension runs it and the native host relays it to Discord. Presence authoring rules live in the presences repo `AGENTS.md`.
 
 ## Commands
 
-- Setup: `git submodule update --init --recursive`, then `pnpm install` (never regenerate `pnpm-lock.yaml` unless dependencies actually changed).
+- Setup: `pnpm install` (never regenerate `pnpm-lock.yaml` unless dependencies actually changed). Locally, `prepare` also runs `scripts/repos.ts --auto` to clone missing `sdk`/`cli`/`presences` (skipped in CI, Docker or with `NOWLY_SKIP_REPOS=1`); `pnpm repos [--pull]` runs it on demand, `pnpm test:repos` tests it.
 - Dev: `pnpm dev:api|web|docs`, `pnpm --filter @nowly/extension dev`. Build: `pnpm build:extension[:dev]`, `pnpm build:macos`.
 - There is no root lint/test aggregator. Run only the touched workspace: `pnpm --filter @nowly/<pkg> lint|typecheck|test`. Native host: `go test ./...` in `apps/native`.
 - Formatting: `pnpm format` (`scripts/format.ts`) and `pnpm test:format`. Do not hand-format or add Prettier overrides.
 - Git pre-commit runs `lint-staged` with `pnpm format --write` on staged TypeScript files in `apps/` and `packages/`, preserving unstaged changes and existing formatter exclusions. `pnpm install` installs the hook through `prepare` (`simple-git-hooks`); run `pnpm prepare` to reinstall it locally.
-- CI on `stable` (`.github/workflows`): `lint.yml` (web, docs, extension only), `test-api.yml`, `i18n-unused.yml` (`scripts/check-i18n-unused.ts`, run with `node --experimental-strip-types`), `canary-extension.yml`, `production-extension.yml`, `host-release.yml` (tag `native-vX.Y.Z`), `presence-update.yml` / `presence-backfill.yml`. No CI job runs format, analytics/env tests or `go test` outside the release workflow.
+- CI on `stable` (`.github/workflows`): `lint.yml` (web, docs, extension only), `test-api.yml`, `i18n-unused.yml` (`scripts/check-i18n-unused.ts`, run with `node --experimental-strip-types`), `canary-extension.yml`, `production-extension.yml`, `host-release.yml` (tag `native-vX.Y.Z`), `presence-backfill.yml` (manual). Workflows that need the private internal CLI check it out at `packages/internal-cli` (its code resolves the monorepo as `../..`) with `INTERNAL_CLI_PAT`. No CI job runs format, analytics/env tests or `go test` outside the release workflow.
 - The i18n checker resolves literal translation keys and namespace bindings, including `Promise.all` destructuring. Dynamic template prefixes cover matching keys; nonliteral calls cover their namespace, and `getMessages()` covers top-level namespaces mentioned in the same file, avoiding false positives for runtime lookup.
 
 ## Cross-app contracts
@@ -36,8 +36,8 @@ Presence flow: author against `@nowly/sdk` in `packages/presences`, build/valida
 
 ## Admin and release
 
-- `pnpm admin` (alias `pnpm internal-cli`) runs `packages/internal-cli`: `push`/`archive` presence commands (CI uses `pnpm admin push <slug> --patch ...`; changelog text is generated from changed files unless `--changelog` is given), `r2:sync`, `r2:minify-version-bundles`, `r2:optimize-assets`, `host:publish`. Pushing requires the presence-signing key.
-- `nowly` CLI (`packages/cli`: `init`, `build`, `pack`, `extension`, `list`, `validate`) has no root script; build it first with `pnpm --filter @nowly/cli build`.
+- The internal CLI (private repo, no root script here) runs from its own checkout with `npx tsx index.ts <command>`: `push`/`archive` presence commands, `r2:*`, `extension:sync`, `host:publish` (`apps/native/scripts/publish-prod.*` call it through `INTERNAL_CLI_DIR`, default `packages/internal-cli`). Pushing requires the presence-signing key.
+- `nowly` CLI (`init`, `build`, `pack`, `extension`, `list`, `validate`): install `@nowly/cli` from npm or run `pnpm build` inside `packages/cli`.
 - Native host messages (`PING`/`PONG`, `SET_ACTIVITY`/`CLEAR_ACTIVITY`, `CONNECTED`, `OK`/`ERROR`) are defined in `apps/native/internal/contract/messages.go`. Release by tagging `native-vX.Y.Z` (or a published GitHub release / manual `workflow_dispatch`) to trigger `host-release.yml`.
 - Local full stack: `pnpm dev:api`, `pnpm dev:web`, then load the extension build output unpacked in Chrome.
 

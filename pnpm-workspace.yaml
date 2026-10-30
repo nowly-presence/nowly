@@ -1,6 +1,11 @@
 packages:
   - apps/*
   - packages/*
+  # Separate repositories cloned locally by `pnpm repos`; each has its own lockfile.
+  - "!packages/sdk"
+  - "!packages/cli"
+  - "!packages/presences"
+  - "!packages/internal-cli"
 
 allowBuilds:
   '@parcel/watcher': true

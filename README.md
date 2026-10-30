@@ -31,37 +31,66 @@ No Nowly account is needed for this setup. For browser-specific steps and the si
 
 ## Project layout
 
-The [main repository](https://github.com/nowly-presence/nowly) is a pnpm workspace. Its separate SDK, CLI, presence catalog and internal publishing tool are tracked as Git submodules under `packages/`.
+This [repository](https://github.com/nowly-presence/nowly) is a pnpm workspace with the website, API, extension and desktop host:
 
 | Path | Responsibility |
 | --- | --- |
 | `apps/web` | Public website, presence library, guides and account UI |
 | `apps/docs` | Developer documentation |
 | `apps/extension` | Browser extension and presence runtime |
-| `apps/native` | Local host that communicates with Discord |
+| `apps/native` | Desktop host that communicates with Discord (Go) |
 | `apps/api` | API for the website and optional services |
-| `packages/ui`, `packages/locales`, `packages/shared`, `packages/env`, `packages/telemetry` | Shared workspace code |
-| [`packages/presences`](https://github.com/nowly-presence/presences) | Community presence definitions (MIT) |
-| [`packages/sdk`](https://github.com/nowly-presence/sdk) | Public presence APIs and types (MIT) |
-| [`packages/cli`](https://github.com/nowly-presence/cli) | Presence authoring, validation and local testing (MIT) |
-| `packages/internal-cli` | Private release and CDN publishing tools (separate repository; check its own licence) |
+| `packages/ui`, `packages/locales`, `packages/shared`, `packages/env`, `packages/telemetry`, `packages/changelog`, `packages/og` | Shared workspace code |
 
-To build a presence, start with the [developer documentation](https://docs.nowly.me) and the [presences repository](https://github.com/nowly-presence/presences). The public [`@nowly/sdk`](https://github.com/nowly-presence/sdk) and [`@nowly/cli`](https://github.com/nowly-presence/cli) have their own usage guides.
+The presence ecosystem lives in **separate repositories**, each with its own history, issues and pull requests:
 
-## Contributing
+| Repository | Local path | Purpose |
+| --- | --- | --- |
+| [`nowly-presence/presences`](https://github.com/nowly-presence/presences) | `packages/presences` | Community presence definitions (MIT) |
+| [`nowly-presence/sdk`](https://github.com/nowly-presence/sdk) | `packages/sdk` | `@nowly/sdk`: public presence APIs and types (MIT) |
+| [`nowly-presence/cli`](https://github.com/nowly-presence/cli) | `packages/cli` | `@nowly/cli`: presence authoring, validation and local testing (MIT) |
+| `nowly-presence/internal-cli` | `packages/internal-cli` | Private release and CDN publishing tools (maintainers only) |
 
-Use **Node.js 22** and the pnpm version pinned in the root `package.json` (currently `pnpm@11.25.0`). The private `packages/internal-cli` submodule requires maintainer access; contributors without it can initialize only the public submodules:
+To build a presence, start with the [developer documentation](https://docs.nowly.me) and the [presences repository](https://github.com/nowly-presence/presences). The SDK and CLI are published on npm and have their own usage guides.
+
+## Development
+
+### Requirements
+
+- **Node.js 22.22.1 or newer** and the pnpm version pinned in the root `package.json` (`corepack enable` selects it).
+- **Git**.
+- For the API: a PostgreSQL database. For the desktop host: Go (see [`apps/native`](https://github.com/nowly-presence/nowly/tree/stable/apps/native)).
+
+### Setup
 
 ```bash
 git clone https://github.com/nowly-presence/nowly.git
 cd nowly
-git submodule update --init packages/sdk packages/cli packages/presences
 corepack enable
 pnpm install
 pnpm dev:web
 ```
 
-Other entry points include `pnpm dev:docs` and `pnpm dev:api`. Run targeted checks for the workspace you change, such as `pnpm --filter @nowly/web lint`. Read [CONTRIBUTING.md](https://github.com/nowly-presence/nowly/blob/stable/CONTRIBUTING.md) before opening a pull request. Changes in a submodule belong in its **own repository**; the main repository records only its pinned revision.
+Copy the `.env.example` of the app you run (`apps/web`, `apps/api`, `apps/extension`) to `.env` when you need non-default values. Other entry points: `pnpm dev:api`, `pnpm dev:docs`, `pnpm --filter @nowly/extension dev`. Run targeted checks for the workspace you change, such as `pnpm --filter @nowly/web lint`, and read [CONTRIBUTING.md](https://github.com/nowly-presence/nowly/blob/stable/CONTRIBUTING.md) before opening a pull request.
+
+### Related repositories in `packages/`
+
+On a local machine, `pnpm install` also clones `sdk`, `cli` and `presences` into `packages/` when they are missing. These folders are ordinary Git repositories: they are git-ignored here and excluded from the pnpm workspace, so commit, install and open pull requests **inside each of them**.
+
+```bash
+pnpm repos          # clone missing repositories and show their branches
+pnpm repos --pull   # also fast-forward the ones without local changes
+```
+
+Set `NOWLY_SKIP_REPOS=1` to skip the automatic clone; it never runs in CI or Docker builds. The private internal CLI is not cloned: maintainers clone it into `packages/internal-cli` and run `npm install` there.
+
+With `packages/presences` cloned and built (`nowly build <slug>` inside it), `pnpm build:extension:dev` bakes the built presences into the development extension.
+
+### Updating a clone that used Git submodules
+
+The `packages/` repositories used to be Git submodules. After pulling, Git may print `unable to rmdir 'packages/…': Directory not empty` once; the folders and their local changes stay in place. Run `pnpm install` (or `pnpm repos`) to turn each former submodule into a standalone repository: its Git data moves from `.git/modules/` into the folder. Do not delete `.git/modules/` before that, or those folders lose their history.
+
+### Security
 
 For a security issue, **do not open a public ticket**. Use [private vulnerability reporting](https://github.com/nowly-presence/nowly/security/advisories/new) or follow [SECURITY.md](https://github.com/nowly-presence/nowly/blob/stable/SECURITY.md).
 

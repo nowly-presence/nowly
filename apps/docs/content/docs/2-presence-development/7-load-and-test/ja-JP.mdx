@@ -44,7 +44,7 @@ nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 
 ### 完全なNowlyモノレポ
 
-`presences` をサブモジュールとして含む `nowly` をクローンしている場合、ビルドしたすべてのプレゼンスを拡張機能に組み込めます。
+`nowly` をクローンして `pnpm repos` を実行した場合(`presences` が `packages/presences` にクローンされます)、ビルドしたすべてのプレゼンスを拡張機能に組み込めます。
 
 ```bash
 nowly build youtube

@@ -2,7 +2,7 @@
 
 Thanks for helping improve Nowly.
 
-Nowly is a monorepo for the website, API, browser extension, native host, and release tooling. The SDK, CLI, presences, and internal CLI are maintained in separate repositories or submodules.
+Nowly is a monorepo for the website, API, browser extension and native host. The SDK, CLI, presences and internal CLI are maintained in separate repositories.
 
 ## Before You Start
 
@@ -13,22 +13,18 @@ Nowly is a monorepo for the website, API, browser extension, native host, and re
 
 ## Development Setup
 
-Clone the repository with its submodules, then install dependencies:
+Clone the repository, then install dependencies:
 
 ```bash
-git clone --recurse-submodules https://github.com/nowly-presence/nowly.git
+git clone https://github.com/nowly-presence/nowly.git
 cd nowly
-pnpm install
-```
-
-If the repository was cloned without submodules:
-
-```bash
-git submodule update --init --recursive
+corepack enable
 pnpm install
 ```
 
 The package manager version is pinned in the root `package.json`. Use that version rather than assuming a global pnpm version.
+
+On a local machine, `pnpm install` also clones the public `sdk`, `cli` and `presences` repositories into `packages/` when they are missing (`pnpm repos` does it on demand, `pnpm repos --pull` updates them). See the [README](./README.md#related-repositories-in-packages) for details and for updating a clone that still has the former submodules.
 
 ## Repository Areas
 
@@ -37,13 +33,16 @@ The package manager version is pinned in the root `package.json`. Use that versi
 - `apps/extension` — browser extension.
 - `apps/api` — Fastify API.
 - `apps/native` — Go native messaging host.
-- `packages/env`, `packages/shared`, `packages/telemetry`, `packages/ui`, `packages/locales` — shared workspace packages.
-- `packages/presences` — presence definitions, maintained as a separate repository.
-- `packages/sdk` — presence SDK, maintained as a separate repository.
-- `packages/cli` — presence CLI, maintained as a separate repository.
-- `packages/internal-cli` — publishing and release tooling, maintained as a separate repository.
+- `packages/env`, `packages/shared`, `packages/telemetry`, `packages/ui`, `packages/locales`, `packages/changelog`, `packages/og` — shared workspace packages.
 
-Changes inside a submodule belong to that submodule's repository. Check `git status` inside the submodule and open its pull request there; the main repository only records the submodule revision.
+Separate repositories, cloned locally into git-ignored folders:
+
+- `packages/presences` — [nowly-presence/presences](https://github.com/nowly-presence/presences), presence definitions.
+- `packages/sdk` — [nowly-presence/sdk](https://github.com/nowly-presence/sdk), presence SDK.
+- `packages/cli` — [nowly-presence/cli](https://github.com/nowly-presence/cli), presence CLI.
+- `packages/internal-cli` — private publishing and release tooling (maintainers only, cloned manually).
+
+Changes inside these folders belong to their own repository: commit and open the pull request from inside the folder. This repository does not track them.
 
 ## Common Commands
 
@@ -73,9 +72,9 @@ Use the narrowest relevant command while developing. A pull request should inclu
 
 ## Adding or Updating a Presence
 
-Presence definitions live in the `packages/presences` submodule:
+Presence definitions live in the [presences repository](https://github.com/nowly-presence/presences), cloned locally at `packages/presences`:
 
-1. Create or update the presence under `packages/presences/src/<LETTER>/<name>/`.
+1. Create or update the presence under `src/<LETTER>/<name>/` in that repository.
 2. Keep metadata, locales, assets, and the presence script consistent.
 3. Validate the metadata and bundle with the presence CLI.
 4. Test the supported pages and the resulting Discord activity.
@@ -88,7 +87,7 @@ Do not commit generated presence bundles or publishing output to the main reposi
 Keep each pull request focused on one related change. Include:
 
 - What changed and why.
-- Which application, package, or submodule is affected.
+- Which application or package is affected.
 - How the change was tested.
 - Screenshots or recordings for visible UI changes when useful.
 - Migration, configuration, or deployment notes when relevant.
@@ -109,7 +108,7 @@ Examples:
 feat(api): add device pairing endpoint
 fix(docs): resolve changelog source links
 docs(cli): document browser-specific extension loading
-chore(cli): update stable submodule revision
+chore(deps): update prettier
 ```
 
 Use a meaningful scope such as `api`, `web`, `docs`, `extension`, `native`, `cli`, `presences`, or `themes`. Keep the subject concise and explain implementation details in the commit body when needed.

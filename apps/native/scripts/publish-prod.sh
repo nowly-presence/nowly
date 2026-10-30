@@ -37,10 +37,17 @@ done
 echo "   ✔ All artifacts found in releases/$VERSION/"
 echo ""
 
-# Publish to CDN via internal CLI
-cd "$MONOREPO_ROOT"
+# Publish to CDN via the private internal CLI (separate repository).
+INTERNAL_CLI_DIR="${INTERNAL_CLI_DIR:-$MONOREPO_ROOT/packages/internal-cli}"
+if [ ! -d "$INTERNAL_CLI_DIR/node_modules" ]; then
+  echo "   ✖ internal-cli not ready at $INTERNAL_CLI_DIR"
+  echo ""
+  echo "Clone nowly-presence/internal-cli there and run npm install, or set INTERNAL_CLI_DIR."
+  exit 1
+fi
+cd "$INTERNAL_CLI_DIR"
 
-pnpm internal-cli host:publish \
+npx tsx index.ts host:publish \
   --release-version "$VERSION" \
   --installer "$RELEASE_DIR/nowly-setup.exe" \
   --portable "$RELEASE_DIR/nowly-windows.zip" \

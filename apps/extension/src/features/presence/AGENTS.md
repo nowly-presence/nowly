@@ -4,7 +4,7 @@ Presence page for both installed and catalog-only presences: hero, primary actio
 
 ## Support a new presence setting type
 
-1. The type must exist in `packages/sdk` settings types and `packages/presences/metadata.schema.json` first.
+1. The type must exist in the SDK repository settings types (`src/types/settings.ts`) and the presences repository `metadata.schema.json` first.
 2. Add it to `Definition` and `normalizeDefinitions` in `presence-settings-fields.tsx`, then render it in `PresenceSettingsList` with a `ui/` control inside a `FieldRow` (or a `SwitchRow` for booleans).
 3. Values are saved with `SET_PRESENCE_SETTINGS`; the background pushes them to the running script.
 

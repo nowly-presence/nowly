@@ -26,9 +26,11 @@
     "node": ">=22.22.1"
   },
   "scripts": {
-    "prepare": "simple-git-hooks",
+    "prepare": "simple-git-hooks && node --experimental-strip-types scripts/repos.ts --auto",
+    "repos": "node --experimental-strip-types scripts/repos.ts",
     "format": "node --experimental-strip-types scripts/format.ts",
     "test:format": "node --experimental-strip-types --test scripts/format.test.ts",
+    "test:repos": "node --experimental-strip-types --test scripts/repos.test.ts",
     "dev:api": "pnpm --filter @nowly/api dev",
     "dev:web": "pnpm --filter @nowly/web dev",
     "dev:docs": "pnpm --filter @nowly/docs dev",
@@ -37,9 +39,7 @@
     "typecheck:api": "pnpm --filter @nowly/api typecheck",
     "build:extension": "pnpm --filter @nowly/extension build",
     "build:extension:dev": "pnpm --filter @nowly/extension build:chrome",
-    "build:macos": "cd apps/native && bash scripts/macos-release.sh",
-    "admin": "pnpm --filter @nowly/internal-cli cli",
-    "internal-cli": "pnpm --filter @nowly/internal-cli cli"
+    "build:macos": "cd apps/native && bash scripts/macos-release.sh"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged",

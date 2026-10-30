@@ -7,7 +7,7 @@ The presence library: listing (`app/[locale]/library`), presence page (`app/[loc
 Categories are duplicated in two places that must stay in sync:
 
 1. Add the new value to `LIBRARY_CATEGORIES` in `apps/web/lib/library-catalog.ts` (root — this file backs the library UI, not this feature folder).
-2. Add the matching value to the `category` enum in the presence metadata schema (`packages/presences/metadata.schema.json`, validated against `Metadata` in `packages/sdk/src/metadata.ts`) — a presence declaring a category not in `LIBRARY_CATEGORIES` will still validate at publish time but won't get its own filter/section in the library UI.
+2. Add the matching value to the `category` enum in the presence metadata schema (`metadata.schema.json` in the presences repository, validated against `Metadata` in the SDK repository's `src/metadata.ts`) — a presence declaring a category not in `LIBRARY_CATEGORIES` will still validate at publish time but won't get its own filter/section in the library UI.
 3. Add the category's translated label to whichever namespace `features/library/components/library-view.tsx`/`paginated-library-grid.tsx` reads category labels from.
 
 ## Add a new presence action (like current "report"/"like")

@@ -19,6 +19,6 @@ Screenshots: a standalone line `![Alt text](https://images.nowly.me/guides-scree
 
 ## Writing rules
 
-- Write only what the code or product really does. Check labels against `apps/extension/messages/*.json` and presence settings against `packages/presences`.
+- Write only what the code or product really does. Check labels against `apps/extension/messages/*.json` and presence settings against the presences repository (`packages/presences` when cloned).
 - Use each language's exact UI labels in bold.
 - No em or en dashes. Keep `updated` (YYYY-MM-DD) current when the text changes.
