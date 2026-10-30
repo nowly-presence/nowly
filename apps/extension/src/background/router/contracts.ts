@@ -109,7 +109,11 @@ export type RouterMessageMap = {
     response: LegalState;
   };
   CHECK_LEGAL_DOCUMENTS: {
-    payload: void;
+    payload:
+      | {
+          force?: boolean;
+        }
+      | undefined;
     response: LegalState;
   };
   ACCEPT_LEGAL_DOCUMENTS: {

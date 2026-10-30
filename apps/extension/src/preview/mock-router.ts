@@ -185,6 +185,16 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
 
       if (stored.legalDocuments) return normalizeLegalState(stored.legalDocuments);
 
+      if (new URLSearchParams(window.location.search).get("legal") === "offline") {
+        const offline = {
+          ...emptyLegalState(),
+          checkedAt: Date.now(),
+          checkFailed: true
+        };
+        await local.set({ legalDocuments: offline });
+        return offline;
+      }
+
       const initial = emptyLegalState();
       const dates = {
         tos: "2026-10-24",

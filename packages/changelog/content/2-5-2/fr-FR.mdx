@@ -1,0 +1,11 @@
+---
+title: 2.5.2
+date: 2026-10-31
+description: L'écran de confirmation des documents ne reste plus bloqué.
+stores: [chrome, firefox]
+---
+
+## Corrections
+
+- Correction de l'extension qui restait parfois bloquée sur « La confirmation n’a pas pu être enregistrée ou les documents ont changé » après sa réouverture : « Consulter les documents » vérifie désormais les documents immédiatement au lieu d'attendre jusqu'à 5 minutes, et une vérification en arrière-plan qui échoue ne bloque plus l'extension lorsque les documents sont déjà connus.
+- Ajout d'un bouton « Fermer » à côté de « Consulter les documents » sur cet écran.
