@@ -93,7 +93,6 @@
   "activity.type.watching": "Schaut",
   "activity.type.competing": "Tritt an",
   "activity.pausedLabel": "Pausiert, auf Discord ausgeblendet",
-  "activity.hideTab": "Diesen Tab ausblenden",
   "activity.thisTab": "Dieser Tab",
   "activity.tabShared": "{host} wird geteilt",
   "activity.tabHidden": "{host} ist ausgeblendet",

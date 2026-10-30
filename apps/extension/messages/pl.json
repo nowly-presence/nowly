@@ -93,7 +93,6 @@
   "activity.type.watching": "Ogląda",
   "activity.type.competing": "Rywalizuje",
   "activity.pausedLabel": "Wstrzymano, ukryte na Discordzie",
-  "activity.hideTab": "Ukryj tę kartę",
   "activity.thisTab": "Ta karta",
   "activity.tabShared": "Udostępniasz {host}",
   "activity.tabHidden": "{host} jest ukryty",

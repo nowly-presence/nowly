@@ -93,7 +93,6 @@
   "activity.type.watching": "Assistindo",
   "activity.type.competing": "Competindo",
   "activity.pausedLabel": "Pausado, oculto no Discord",
-  "activity.hideTab": "Ocultar esta aba",
   "activity.thisTab": "Esta aba",
   "activity.tabShared": "Compartilhando {host}",
   "activity.tabHidden": "{host} está oculto",

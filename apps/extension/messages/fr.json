@@ -93,7 +93,6 @@
   "activity.type.watching": "Regarde",
   "activity.type.competing": "En compétition",
   "activity.pausedLabel": "En pause, masqué sur Discord",
-  "activity.hideTab": "Masquer cet onglet",
   "activity.thisTab": "Cet onglet",
   "activity.tabShared": "{host} est partagé",
   "activity.tabHidden": "{host} est masqué",

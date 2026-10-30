@@ -93,7 +93,6 @@
   "activity.type.watching": "視聴中",
   "activity.type.competing": "参戦中",
   "activity.pausedLabel": "一時停止中、Discord では非表示",
-  "activity.hideTab": "このタブを隠す",
   "activity.thisTab": "このタブ",
   "activity.tabShared": "{host} を共有中",
   "activity.tabHidden": "{host} は非表示",

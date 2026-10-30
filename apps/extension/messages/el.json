@@ -93,7 +93,6 @@
   "activity.type.watching": "Παρακολουθεί",
   "activity.type.competing": "Διαγωνίζεται",
   "activity.pausedLabel": "Σε παύση, κρυφό στο Discord",
-  "activity.hideTab": "Απόκρυψη καρτέλας",
   "activity.thisTab": "Αυτή η καρτέλα",
   "activity.tabShared": "Κοινοποιείται το {host}",
   "activity.tabHidden": "Το {host} είναι κρυφό",
