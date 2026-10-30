@@ -27,8 +27,7 @@
   "exports": {
     "./server": "./src/server.ts",
     "./client": "./src/client.ts",
-    "./extension": "./src/extension.ts",
-    "./cli": "./src/cli.ts"
+    "./extension": "./src/extension.ts"
   },
   "scripts": {
     "test": "vitest run",

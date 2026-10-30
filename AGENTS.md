@@ -26,7 +26,7 @@ Discord Rich Presence manager: the extension runs presence scripts and the nativ
 
 ## Cross-app rules
 
-- Env: import only your context's `@nowly/env/<server|client|extension|cli>`, never another one.
+- Env: import only your context's `@nowly/env/<server|client|extension>`, never another one.
 - i18n: 11 locales. Every user-visible string exists in all of them (see `packages/locales/AGENTS.md`).
 - Navbar and footer come from `packages/ui`; never fork them in an app.
 - Legal document dates come only from `tos-page.last-updated` and `privacy-page.last-updated` in `packages/locales/messages/web/en-US.json` (see `apps/web/features/legal/AGENTS.md`).

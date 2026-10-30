@@ -9,7 +9,6 @@ Typed environment access for the Nowly monorepo.
 | `@nowly/env/server` | API server only | Contains secrets and throws when required values are missing. |
 | `@nowly/env/client` | Next.js app | Public web values and server-side web fetch config. |
 | `@nowly/env/extension` | Browser extension | Public Vite values only. |
-| `@nowly/env/cli` | Admin tooling | API and Cloudflare R2 publishing config. Not imported in this repository: the internal CLI lives in its own repository with its own env loading. |
 
 ## Variables
 
@@ -54,20 +53,6 @@ Typed environment access for the Nowly monorepo.
 | `VITE_WEB_BASE_URL` | No | `https://nowly.me` |
 | `VITE_API_BASE_URL` | No | `https://api.nowly.me` |
 | `VITE_CDN_BASE_URL` | No | - |
-
-### cli
-
-| Variable | Required | Default |
-| --- | --- | --- |
-| `API_URL` | No | `https://api.nowly.me` |
-| `API_SECRET_KEY` | No | - |
-| `R2_BUCKET` | No | `nowly` |
-| `R2_PUBLIC_URL` | No | `https://cdn.nowly.me` |
-| `R2_ACCESS_KEY_ID` | No | - |
-| `R2_SECRET_ACCESS_KEY` | No | - |
-| `R2_ACCOUNT_ID` | No | - |
-| `CLOUDFLARE_API_TOKEN` | No | - |
-| `CLOUDFLARE_ZONE_ID` | No | - |
 
 ## Status check endpoint
 
