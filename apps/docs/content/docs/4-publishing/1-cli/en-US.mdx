@@ -95,14 +95,14 @@ The zip is written to `dist/packs/youtube.zip`. Drop it on **Settings → Advanc
 If you cloned `nowly` itself and ran `pnpm repos` (which clones `presences` into `packages/presences`), you can build the extension with every presence baked in directly:
 
 ```bash
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 Rebuild the changed presence then the extension after each change:
 
 ```bash
 nowly build youtube
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 Reload at `chrome://extensions` - the presence is already installed and ready to use.

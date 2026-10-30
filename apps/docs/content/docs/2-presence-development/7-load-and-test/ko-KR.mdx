@@ -48,7 +48,7 @@ nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 
 ```bash
 nowly build youtube
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 `apps/extension/dist/chrome`를 압축 해제된 상태로 로드하세요. 다시 빌드할 때마다 새로고침하세요.
@@ -86,6 +86,6 @@ nowly pack youtube
 |---|---|
 | 첫 설정이거나 브라우저에 Nowly가 없는 경우 | `nowly extension <slug>` |
 | Nowly가 이미 로드되어 있고, 하나의 프레즌스를 반복 개발하는 경우 | `nowly pack <slug>` 후 zip 드롭 |
-| 전체 `nowly` 모노레포에서 작업하는 경우 | `pnpm build:extension:dev` |
+| 전체 `nowly` 모노레포에서 작업하는 경우 | `pnpm build:extension:dev --bundled` |
 
 [CLI](/publishing/cli#test-a-presence-locally)도 참고하세요.

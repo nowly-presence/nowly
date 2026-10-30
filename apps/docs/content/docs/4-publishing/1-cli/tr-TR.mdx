@@ -95,14 +95,14 @@ Zip, `dist/packs/youtube.zip` konumuna yazılır. **Ayarlar → Gelişmiş → H
 `nowly`'nin kendisini klonlayıp `pnpm repos` komutunu çalıştırdıysanız (`presences`'ı `packages/presences` içine klonlar), tüm presences'ları doğrudan içeren uzantıyı derleyebilirsiniz:
 
 ```bash
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 Her değişiklikten sonra önce değiştirilen presence'ı, ardından uzantıyı yeniden derleyin:
 
 ```bash
 nowly build youtube
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 `chrome://extensions` adresinde yeniden yükleyin - presence zaten kurulu ve kullanıma hazır.

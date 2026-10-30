@@ -48,7 +48,7 @@ nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 
 ```bash
 nowly build youtube
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 Φορτώστε το `apps/extension/dist/chrome` αποσυμπιεσμένο. Κάνετε reload μετά από κάθε rebuild.
@@ -86,6 +86,6 @@ nowly pack youtube
 |---|---|
 | Πρώτη εγκατάσταση ή κανένα Nowly στο πρόγραμμα περιήγησης | `nowly extension <slug>` |
 | Το Nowly είναι ήδη φορτωμένο, επαναλαμβάνετε σε μία presence | `nowly pack <slug>` και μετά απόθεση του zip |
-| Εργάζεστε στο πλήρες `nowly` monorepo | `pnpm build:extension:dev` |
+| Εργάζεστε στο πλήρες `nowly` monorepo | `pnpm build:extension:dev --bundled` |
 
 Δείτε επίσης [CLI](/publishing/cli#test-a-presence-locally).

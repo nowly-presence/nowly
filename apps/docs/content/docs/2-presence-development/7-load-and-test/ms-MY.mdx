@@ -48,7 +48,7 @@ Jika anda menyalin `nowly` dan menjalankan `pnpm repos` (yang menyalin `presence
 
 ```bash
 nowly build youtube
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 Muat `apps/extension/dist/chrome` tanpa zip. Muat semula selepas setiap binaan semula.
@@ -86,6 +86,6 @@ Seret zip baru sekali lagi. Anda tidak perlu memuat semula sambungan tanpa zip m
 |---|---|
 | Persediaan pertama, atau tiada Nowly dalam pelayar | `nowly extension <slug>` |
 | Nowly sudah dimuatkan, ulang pada satu presence | `nowly pack <slug>` kemudian seret zip |
-| Anda bekerja dalam monorepo `nowly` penuh | `pnpm build:extension:dev` |
+| Anda bekerja dalam monorepo `nowly` penuh | `pnpm build:extension:dev --bundled` |
 
 Lihat juga [CLI](/publishing/cli#test-a-presence-locally).

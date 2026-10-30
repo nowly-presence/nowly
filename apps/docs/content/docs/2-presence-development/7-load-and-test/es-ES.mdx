@@ -48,7 +48,7 @@ Si clonaste `nowly` y ejecutaste `pnpm repos` (que clona `presences` en `package
 
 ```bash
 nowly build youtube
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 Carga `apps/extension/dist/chrome` como unpacked. Recarga después de cada rebuild.
@@ -86,6 +86,6 @@ Vuelve a soltar el zip. No hace falta recargar la extensión unpacked salvo que 
 |---|---|
 | Primer setup, o Nowly no está en el navegador | `nowly extension <slug>` |
 | Nowly ya cargada, iterar sobre una presencia | `nowly pack <slug>` y soltar el zip |
-| Trabajas en el monorepo `nowly` | `pnpm build:extension:dev` |
+| Trabajas en el monorepo `nowly` | `pnpm build:extension:dev --bundled` |
 
 Consulta también [CLI](/publishing/cli#probar-una-presence-localmente).

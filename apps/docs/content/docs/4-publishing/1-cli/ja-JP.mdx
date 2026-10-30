@@ -95,14 +95,14 @@ zipは `dist/packs/youtube.zip` に書き込まれます。**設定 → 高度�
 `nowly` 自体をクローンして `pnpm repos` を実行した場合(`presences` が `packages/presences` にクローンされます)、すべてのプレゼンスを組み込んだ拡張機能を直接ビルドできます:
 
 ```bash
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 変更のたびに、変更したプレゼンスを再ビルドしてから拡張機能を再ビルドします:
 
 ```bash
 nowly build youtube
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 `chrome://extensions` で再読み込みします - プレゼンスはすでにインストール済みで、すぐに使用できます。

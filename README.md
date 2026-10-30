@@ -84,7 +84,7 @@ pnpm repos --pull   # also fast-forward the ones without local changes
 
 Set `NOWLY_SKIP_REPOS=1` to skip the automatic clone; it never runs in CI or Docker builds. The private internal CLI is not cloned: maintainers clone it into `packages/internal-cli` and run `npm install` there.
 
-With `packages/presences` cloned and built (`nowly build <slug>` inside it), `pnpm build:extension:dev` bakes the built presences into the development extension.
+With `packages/presences` cloned and built (`nowly build <slug>` inside it), `pnpm build:extension:dev --bundled` bakes the built presences into the development extension (without `--bundled` it builds a lean extension).
 
 ### Updating a clone that used Git submodules
 
