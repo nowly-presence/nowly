@@ -4,7 +4,7 @@ Hand-written activities shown on Discord without a presence script.
 
 ## Recipes
 
-- New template: id in `CUSTOM_ACTIVITY_TEMPLATE_IDS`, entry in `CUSTOM_ACTIVITY_TEMPLATES`, `custom.template.<id>.{name,details,state}` in every locale. Keep nine templates plus Blank (five full picker rows); saved activities and keys of removed templates must stay valid.
+- New template: id in `CUSTOM_ACTIVITY_TEMPLATE_IDS`, entry in `CUSTOM_ACTIVITY_TEMPLATES`, `custom.template.<id>.{name,details,state}` in every locale. Keep an even count (eight today) so the two-column grid under Blank and Duplicate has full rows; saved activities and keys of removed templates (Focus) must stay valid.
 - New field: `CustomActivity` (`shared/types/custom-activity.ts`), `emptyCustomActivityDraft`, `validateCustomActivity` and `buildCustomPresence` (`shared/custom-activity.ts`, tested), the matching `custom-activity-*-section.tsx` (errors through `FieldError`) and the preview seed (`preview/preview-fixtures.ts`).
 
 ## Rules
