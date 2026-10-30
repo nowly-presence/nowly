@@ -1,0 +1,11 @@
+---
+title: 2.5.2
+date: 2026-10-30
+description: Legal confirmation screen no longer gets stuck.
+stores: [chrome, firefox]
+---
+
+## Fixes
+
+- Fixed the extension sometimes staying stuck on "Unable to save your confirmation, or the documents have changed" after being reopened: "Review documents" now checks the documents again right away instead of waiting up to 5 minutes, and a failed background check no longer blocks the extension when the documents are already known.
+- Added a "Close" button next to "Review documents" on that screen.

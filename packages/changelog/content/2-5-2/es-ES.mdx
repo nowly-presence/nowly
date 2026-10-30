@@ -1,0 +1,11 @@
+---
+title: 2.5.2
+date: 2026-10-30
+description: La pantalla de confirmación de los documentos ya no se queda bloqueada.
+stores: [chrome, firefox]
+---
+
+## Correcciones
+
+- Se corrigió que la extensión se quedara a veces bloqueada en «No se pudo guardar la confirmación o los documentos han cambiado» al volver a abrirla: «Consultar documentos» ahora vuelve a comprobar los documentos al instante en lugar de esperar hasta 5 minutos, y una comprobación en segundo plano fallida ya no bloquea la extensión cuando los documentos ya se conocen.
+- Se añadió un botón «Cerrar» junto a «Consultar documentos» en esa pantalla.

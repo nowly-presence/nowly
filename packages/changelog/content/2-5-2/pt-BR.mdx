@@ -1,0 +1,11 @@
+---
+title: 2.5.2
+date: 2026-10-30
+description: A tela de confirmação dos documentos não fica mais travada.
+stores: [chrome, firefox]
+---
+
+## Correções
+
+- Corrigida a extensão que às vezes ficava travada em "Não foi possível salvar a confirmação ou os documentos mudaram" ao ser reaberta: "Consultar documentos" agora verifica os documentos de novo na hora, em vez de esperar até 5 minutos, e uma verificação em segundo plano com falha não bloqueia mais a extensão quando os documentos já são conhecidos.
+- Adicionado um botão "Fechar" ao lado de "Consultar documentos" nessa tela.

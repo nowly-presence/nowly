@@ -1,0 +1,11 @@
+---
+title: 2.5.2
+date: 2026-10-30
+description: Der Bestätigungsbildschirm für die Dokumente bleibt nicht mehr hängen.
+stores: [chrome, firefox]
+---
+
+## Korrekturen
+
+- Die Erweiterung blieb nach dem erneuten Öffnen manchmal bei „Die Bestätigung konnte nicht gespeichert werden oder die Dokumente haben sich geändert“ hängen: „Dokumente lesen“ prüft die Dokumente jetzt sofort erneut, statt bis zu 5 Minuten zu warten, und eine fehlgeschlagene Prüfung im Hintergrund blockiert die Erweiterung nicht mehr, wenn die Dokumente bereits bekannt sind.
+- Neben „Dokumente lesen“ gibt es auf diesem Bildschirm jetzt eine Schaltfläche „Schließen“.
