@@ -1,6 +1,8 @@
 import { createCacheId, fetchImage, parseProxyUrl } from "@/features/image-proxy/image-proxy.service";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
 const mockPresenceRepo = vi.hoisted(() => ({ getAllPresenceMetas: vi.fn() }));
 
 vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo);
@@ -40,13 +42,26 @@ describe("parseProxyUrl", () => {
     expect(await parseProxyUrl("https://example.com/foo.jpg")).toBeNull();
   });
 
-  it("honors an explicit serviceId over host matching", async () => {
-    const result = await parseProxyUrl("https://example.com/foo.jpg", "canalplus");
-    expect(result?.service.id).toBe("canalplus");
+  it("uses an explicit serviceId only for that service's own hosts", async () => {
+    expect((await parseProxyUrl("https://thumb.canalplus.pro/foo.jpg", "canalplus"))?.service.id).toBe("canalplus");
+    expect(await parseProxyUrl("https://example.com/foo.jpg", "canalplus")).toBeNull();
+    expect(await parseProxyUrl("https://p16.tiktokcdn.com/foo.jpg", "canalplus")).toBeNull();
+    expect(await parseProxyUrl("https://169.254.169.254/latest/meta-data/", "tiktok")).toBeNull();
   });
 
-  it("rejects non-http(s) protocols", async () => {
-    expect(await parseProxyUrl("ftp://example.com/foo.jpg")).toBeNull();
+  it.each(["https://eviltiktokcdn.com/foo.jpg", "https://p16.tiktokcdn.com.evil.net/foo.jpg", "https://canalplus.pro/foo.jpg"])(
+    "matches host suffixes only on a label boundary: %s",
+    async (url) => {
+      expect(await parseProxyUrl(url)).toBeNull();
+    }
+  );
+
+  it("accepts the bare suffix host", async () => {
+    expect((await parseProxyUrl("https://tiktokcdn.com/foo.jpg"))?.service.id).toBe("tiktok");
+  });
+
+  it.each(["http://p16.tiktokcdn.com/foo.jpg", "ftp://p16.tiktokcdn.com/foo.jpg"])("rejects non-HTTPS URLs: %s", async (url) => {
+    expect(await parseProxyUrl(url)).toBeNull();
   });
 
   it("rejects an invalid URL", async () => {
@@ -75,6 +90,20 @@ describe("createCacheId", () => {
 
 describe("fetchImage", () => {
   const originalFetch = global.fetch;
+  const service = {
+    id: "generic",
+    hostSuffixes: ["example.com"]
+  };
+  const redirectTo = (location?: string) =>
+    new Response(null, {
+      status: 302,
+      headers: location ? { Location: location } : {}
+    });
+  const png = () =>
+    new Response(new Uint8Array([1, 2, 3]), {
+      status: 200,
+      headers: { "Content-Type": "image/png" }
+    });
 
   afterEach(() => {
     global.fetch = originalFetch;
@@ -82,17 +111,9 @@ describe("fetchImage", () => {
   });
 
   it("returns the image on a successful fetch", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      headers: new Headers({ "Content-Type": "image/png" }),
-      arrayBuffer: async () => new Uint8Array([1, 2, 3]).buffer
-    }) as unknown as typeof fetch;
+    global.fetch = vi.fn().mockResolvedValue(png()) as unknown as typeof fetch;
 
-    const result = await fetchImage(new URL("https://example.com/x.png"), {
-      id: "generic",
-      hostSuffixes: []
-    });
+    const result = await fetchImage(new URL("https://example.com/x.png"), service);
     expect(result.ok).toBe(true);
 
     if (result.ok) {
@@ -108,10 +129,7 @@ describe("fetchImage", () => {
       headers: new Headers()
     }) as unknown as typeof fetch;
 
-    const result = await fetchImage(new URL("https://example.com/x.png"), {
-      id: "generic",
-      hostSuffixes: []
-    });
+    const result = await fetchImage(new URL("https://example.com/x.png"), service);
     expect(result).toEqual({
       ok: false,
       status: 404,
@@ -120,21 +138,183 @@ describe("fetchImage", () => {
   });
 
   it("rejects an empty response body", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      headers: new Headers(),
-      arrayBuffer: async () => new ArrayBuffer(0)
-    }) as unknown as typeof fetch;
+    global.fetch = vi.fn().mockResolvedValue(new Response(new Uint8Array(0), { status: 200 })) as unknown as typeof fetch;
 
-    const result = await fetchImage(new URL("https://example.com/x.png"), {
-      id: "generic",
-      hostSuffixes: []
-    });
+    const result = await fetchImage(new URL("https://example.com/x.png"), service);
     expect(result).toEqual({
       ok: false,
       status: 502,
       error: "EMPTY_IMAGE"
+    });
+  });
+
+  it("refuses a URL outside the service hosts without fetching it", async () => {
+    const fetchMock = vi.fn();
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    expect(await fetchImage(new URL("https://169.254.169.254/latest/meta-data/"), service)).toEqual({
+      ok: false,
+      status: 400,
+      error: "INVALID_IMAGE_URL"
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("follows redirects that stay on the service hosts", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(redirectTo("/moved.png"))
+      .mockResolvedValueOnce(redirectTo("https://cdn.example.com/y.png"))
+      .mockResolvedValueOnce(png());
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    const result = await fetchImage(new URL("https://example.com/x.png"), service);
+
+    expect(result).toMatchObject({
+      ok: true,
+      contentType: "image/png"
+    });
+    expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(["https://example.com/x.png", "https://example.com/moved.png", "https://cdn.example.com/y.png"]);
+    expect(fetchMock.mock.calls.every(([, init]) => init.redirect === "manual")).toBe(true);
+  });
+
+  it.each([
+    ["an internal address", "https://169.254.169.254/latest/meta-data/"],
+    ["plain HTTP on an allowed host", "http://cdn.example.com/y.png"],
+    ["a look-alike host", "https://evilexample.com/x.png"],
+    ["a non-http scheme", "file:///etc/passwd"],
+    ["no location", undefined]
+  ])("refuses a redirect to %s", async (_case, location) => {
+    const fetchMock = vi.fn().mockResolvedValueOnce(redirectTo(location)).mockResolvedValue(png());
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    expect(await fetchImage(new URL("https://example.com/x.png"), service)).toEqual({
+      ok: false,
+      status: 502,
+      error: "IMAGE_REDIRECT_REJECTED"
+    });
+    expect(fetchMock).toHaveBeenCalledOnce();
+  });
+
+  it("gives up after three redirects", async () => {
+    const fetchMock = vi.fn(async () => redirectTo("https://example.com/loop.png"));
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    expect(await fetchImage(new URL("https://example.com/x.png"), service)).toEqual({
+      ok: false,
+      status: 502,
+      error: "IMAGE_REDIRECT_REJECTED"
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(4);
+  });
+
+  it("refuses a declared size above 5 MB without reading the body", async () => {
+    const body = new ReadableStream<Uint8Array>({
+      pull: () => {
+        throw new Error("the body must not be read");
+      }
+    });
+    global.fetch = vi.fn().mockResolvedValue(
+      new Response(body, {
+        status: 200,
+        headers: {
+          "Content-Type": "image/png",
+          "Content-Length": String(MAX_IMAGE_BYTES + 1)
+        }
+      })
+    ) as unknown as typeof fetch;
+
+    expect(await fetchImage(new URL("https://example.com/x.png"), service)).toEqual({
+      ok: false,
+      status: 413,
+      error: "IMAGE_TOO_LARGE"
+    });
+  });
+
+  it("stops reading an undeclared body as soon as it exceeds 5 MB", async () => {
+    const chunk = new Uint8Array(1024 * 1024);
+    let pulled = 0;
+    const body = new ReadableStream<Uint8Array>({
+      pull: (controller) => {
+        pulled += 1;
+        controller.enqueue(chunk);
+      }
+    });
+    global.fetch = vi.fn().mockResolvedValue(
+      new Response(body, {
+        status: 200,
+        headers: { "Content-Type": "image/png" }
+      })
+    ) as unknown as typeof fetch;
+
+    expect(await fetchImage(new URL("https://example.com/x.png"), service)).toEqual({
+      ok: false,
+      status: 413,
+      error: "IMAGE_TOO_LARGE"
+    });
+    expect(pulled).toBeLessThanOrEqual(MAX_IMAGE_BYTES / chunk.byteLength + 2);
+  });
+
+  it("accepts an image of exactly 5 MB", async () => {
+    global.fetch = vi.fn().mockResolvedValue(
+      new Response(new Uint8Array(MAX_IMAGE_BYTES), {
+        status: 200,
+        headers: { "Content-Type": "image/png" }
+      })
+    ) as unknown as typeof fetch;
+
+    const result = await fetchImage(new URL("https://example.com/x.png"), service);
+
+    expect(result).toMatchObject({
+      ok: true,
+      contentType: "image/png"
+    });
+    expect(result.ok && result.buffer.byteLength).toBe(MAX_IMAGE_BYTES);
+  });
+
+  it.each(["text/html; charset=utf-8", "application/json", "application/octet-stream", "image/svg+xml", "IMAGE/SVG+XML; charset=utf-8"])(
+    "refuses a %s response without reading it",
+    async (contentType) => {
+      const body = new ReadableStream<Uint8Array>({
+        pull: () => {
+          throw new Error("the body must not be read");
+        }
+      });
+      global.fetch = vi.fn().mockResolvedValue(
+        new Response(body, {
+          status: 200,
+          headers: { "Content-Type": contentType }
+        })
+      ) as unknown as typeof fetch;
+
+      expect(await fetchImage(new URL("https://example.com/x.png"), service)).toEqual({
+        ok: false,
+        status: 502,
+        error: "IMAGE_UNSUPPORTED_TYPE"
+      });
+    }
+  );
+
+  it("keeps the upstream image type, whatever its case or parameters", async () => {
+    global.fetch = vi.fn().mockResolvedValue(
+      new Response(new Uint8Array([1, 2, 3]), {
+        status: 200,
+        headers: { "Content-Type": "IMAGE/JPEG; quality=high" }
+      })
+    ) as unknown as typeof fetch;
+
+    expect(await fetchImage(new URL("https://example.com/x.jpg"), service)).toMatchObject({
+      ok: true,
+      contentType: "IMAGE/JPEG; quality=high"
+    });
+  });
+
+  it("serves an untyped response as WebP", async () => {
+    global.fetch = vi.fn().mockResolvedValue(new Response(new Uint8Array([1, 2, 3]), { status: 200 })) as unknown as typeof fetch;
+
+    expect(await fetchImage(new URL("https://example.com/x"), service)).toMatchObject({
+      ok: true,
+      contentType: "image/webp"
     });
   });
 });
