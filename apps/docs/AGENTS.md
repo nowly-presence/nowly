@@ -8,12 +8,12 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-## Serving from nowly.me/docs
+## Checks
 
-Docs can run as a Next.js multi-zone behind `apps/web`:
+`pnpm --filter @nowly/docs lint`. There is no typecheck script: run `npx tsc --noEmit` in `apps/docs`.
 
-- Build docs with `NEXT_PUBLIC_DOCS_BASE_PATH=/docs` and `NEXT_PUBLIC_DOCS_BASE_URL=https://nowly.me/docs` (Dockerfile ARGs). `next.config.ts` then sets `basePath` and permanently redirects the `docs.nowly.me` host to `https://nowly.me/docs/...`.
-- Build `apps/web` with `DOCS_ZONE_URL` (the internal address of this deployment, never `https://docs.nowly.me`) and the same `NEXT_PUBLIC_DOCS_BASE_URL`. Web rewrites `/docs` and `/docs/*` to it and its own proxy skips `/docs`.
-- Without those variables docs live on docs.nowly.me and `nowly.me/docs` redirects there.
-- Absolute URLs: `DOCS_URL` / `absoluteUrl` (`lib/constants.ts`, `features/seo/lib/seo.ts`). Root-relative `fetch`/asset paths Next does not prefix (search API, manifest): `DOCS_BASE_PATH`. `next/link`, next-intl `Link` and the proxy handle the base path themselves.
-- `proxy.ts` keeps `"/"` in its matcher: under a base path the docs home reaches the proxy as an empty path.
+## Base path (nowly.me/docs)
+
+- Docs can run as a multi-zone behind `apps/web`: build docs with `NEXT_PUBLIC_DOCS_BASE_PATH=/docs` and `NEXT_PUBLIC_DOCS_BASE_URL=https://nowly.me/docs`, and web with `DOCS_ZONE_URL` (the internal address, never `https://docs.nowly.me`) and the same `NEXT_PUBLIC_DOCS_BASE_URL`. Without them, docs live on docs.nowly.me.
+- Absolute URLs use `DOCS_URL` / `absoluteUrl`. Root-relative `fetch` and asset paths that Next does not prefix (search API, manifest) must use `DOCS_BASE_PATH`. `next/link`, next-intl `Link` and the proxy handle the base path themselves.
+- Keep `"/"` in the `proxy.ts` matcher: under a base path the docs home reaches the proxy as an empty path.

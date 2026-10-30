@@ -8,10 +8,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-## Activity icon image route
+## Checks
 
-The public extension image contract is:
+- `pnpm --filter @nowly/web lint`; tests: `pnpm --filter @nowly/web exec vitest run`. There is no typecheck script: run `npx tsc --noEmit` in `apps/web`.
+- Local dev: bind `localhost`, never `127.0.0.1` (next-intl's localhost rewrite then loops on every page): `pnpm --filter @nowly/web exec next dev --hostname localhost --port 3000`.
 
-`/api/activity-icon/<icon>/<color>.png?v=1`
+## Activity icon route
 
-The route accepts only the keys and colors exported from `app/api/activity-icon/activity-icons.ts`. The `v` query parameter is a cache-busting render version and must remain synchronized with the extension's `CUSTOM_ICON_RENDER_VERSION`; it does not affect validation or drawing. Keep the icon keys and color palette synchronized with `CUSTOM_ACTIVITY_ICONS` and `CUSTOM_ACTIVITY_COLORS` in the extension.
+`/api/activity-icon/<icon>/<color>.png?v=1` is a public contract with the extension. Keys and colors come from `app/api/activity-icon/activity-icons.ts` and must match the extension's `CUSTOM_ACTIVITY_ICONS` and `CUSTOM_ACTIVITY_COLORS`; `v` must match its `CUSTOM_ICON_RENDER_VERSION`.

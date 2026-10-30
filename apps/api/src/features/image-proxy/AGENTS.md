@@ -1,6 +1,7 @@
-# Image Proxy
+# Image proxy
 
-Proxies and caches external images for Discord. Entry points share `image-proxy.service.ts`: `POST /images-proxy` + `GET /images-proxy/:id`, `GET /i?u=`, `GET /image-proxy?url=&service=`.
+Security-sensitive: it fetches caller-supplied URLs.
 
-- Host rules come from presence metadata (`imageProxy.hostSuffixes` in the presences repository, typed by `@nowly/sdk`) and the service selected by the request. Resolution, fetching and caching stay in the service; routes only adapt request shapes. Reuse the service for any new entry point.
-- Security-sensitive: this endpoint fetches caller-supplied URLs. Any change to host matching, redirects, size limits or cache headers needs regression tests (`test/image-proxy.test.ts`) and a deliberate decision, not an incidental refactor.
+- Every entry point goes through `image-proxy.service.ts`; routes only adapt request shapes. Reuse the service for new entry points.
+- Allowed hosts come from presence metadata (`imageProxy.hostSuffixes`) and the requested service.
+- Any change to host matching, redirects, size limits or cache headers needs regression tests in `test/image-proxy.test.ts` and a deliberate decision, never an incidental refactor.

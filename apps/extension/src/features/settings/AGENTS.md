@@ -1,32 +1,8 @@
 # Settings
 
-Settings tab, one file per section under `sections/`.
+One file per section in `sections/`, rendered in `settings-view.tsx`.
 
-## Add a setting
-
-1. Add the field to `ExtensionSettings` (`shared/types/settings.ts`) and its default to `DEFAULT_SETTINGS` (`background/storage/settings.store.ts`).
-2. If changing it must affect the runtime, handle it in `updateSettings` (`background/managers/settings-manager.ts`).
-3. Add the row in the right `sections/*.tsx` with `SwitchRow`, `FieldRow` or `Row`; persist with `updateSettings` from `useExtensionState`, never `chrome.storage` directly.
-
-## Add a section
-
-Create `sections/<name>-section.tsx` and render it in `settings-view.tsx`.
-
-## Gotchas
-
-- Language selects show a `LocaleFlag` per locale with native names (`LOCALE_NAMES` / `longLocaleName`), never translated names.
-- `FieldRow` `note` is the full-width italic line under a row, for constraints the user must know (e.g. the shared-languages rule on "Discord language").
-
-- Theme: System, Light, Dark (`AppearanceMode`), then the "Show seasonal themes" switch (`seasonalThemes`, on by default) that lays the active season on top. See "Seasonal themes" in the root `AGENTS.md` for the migration.
-
-- `suggestPresences` (default on) only hides the "supported site" row of the Activity tab's current-tab section; no background behaviour depends on it. `hiddenSuggestions` holds the slugs hidden one by one with the "Don't show again" link under that row (undo in the toast); the sharing section shows a "Hidden suggestions" row with a reset while it is non-empty.
-- `preserveSiteTimer` (default off) shares elapsed time per presence across tabs for the current browser session. The sharing section contains its switch. Changing it clears the session timer cache and rebroadcasts the original tab activity with the new rule immediately. Playback progress and paused media are excluded; the setting syncs, but session timers never do.
-
-- Privacy (`sections/privacy-section.tsx`) holds the analytics consent switch (`SET_ANALYTICS_CONSENT`, default off). It is independent of legal receipts and of the account.
-
-- Account and sync (`sections/account-section.tsx`, between Appearance and Privacy): signed out, one explanatory row and "Sign in with Discord" (`START_ACCOUNT_CONNECT` opens nowly.me). Signed in: avatar, name and last sync (relative time, `formatRelative`), "Sync", "Manage your account on nowly.me" (`/account`), "Sign out" (keeps local data) and "Stop syncing and erase the online copy" behind a confirmation sheet. While the first-sync choice is pending, the first row offers "Choose", which opens `account-choice-sheet.tsx` (also mounted app-wide as `AccountChoicePrompt`).
-
-- About: "Support Nowly" opens `support-sheet.tsx`, a sheet with two rows (Ko-fi and GitHub Sponsors, `KOFI_URL` and `GITHUB_SPONSORS_URL` in `shared/constants.ts`, same URLs as nowly.me).
-
-## Notable dependencies
-`EXPORT_DEVICE_DATA` / `DELETE_DEVICE_DATA` (`/devices/:deviceId`, need the device token minted by `/devices/sync`), `INSTALL_LOCAL_PRESENCE_ZIP` (canary only), `ui/sortable-list` (priority order), account messages (`GET_ACCOUNT`, `START_ACCOUNT_CONNECT`, `SYNC_ACCOUNT`, `RESOLVE_SYNC_CHOICE`, `SIGN_OUT_ACCOUNT`, `STOP_ACCOUNT_SYNC`). Canary developer tools also have "Replay Nolo" (`useFeatureReveals().replay`).
+- New setting: field in `ExtensionSettings` (`shared/types/settings.ts`), default in `DEFAULT_SETTINGS` (`background/storage/settings.store.ts`), runtime effect in `updateSettings` (`background/managers/settings-manager.ts`) when needed, and a `SwitchRow`, `FieldRow` or `Row`. Persist with `updateSettings` from `useExtensionState`, never `chrome.storage` directly. Only keys in `SYNCED_SETTINGS_KEYS` sync: device-specific settings never belong there.
+- Language selects show `LocaleFlag` and native names (`LOCALE_NAMES`), never translated names.
+- `FieldRow` `note` is reserved for constraints the user must know.
+- The analytics consent switch (privacy section) is independent of legal receipts and of the account.

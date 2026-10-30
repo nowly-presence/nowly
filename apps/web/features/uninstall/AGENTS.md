@@ -1,12 +1,5 @@
 # Uninstall
 
-Rendered by `app/[locale]/uninstall`: `uninstall-view.tsx` offers authenticated device-data erasure, keeping data, and reinstalling.
-
-## Truth and privacy boundaries
-
-1. Opening the page is not cleanup success or proof of browser uninstall. Only a successful authenticated DELETE confirms device-data erasure.
-2. With website opt-in, `uninstall_page_opened` counts an observed landing once per mount. No device ID, token, query, feedback or URL is sent to Umami.
-3. Browser uninstall URLs are best effort; never infer uninstall from silence. Keep device credentials confined to existing functional endpoints.
-
-## Notable dependencies
-`lib/telemetry.ts`, `lib/constants.ts`, `components/extension-store-button.tsx` (root, shared).
+- Opening the page proves nothing: only a successful authenticated DELETE confirms device-data erasure. Never infer uninstall from a landing or from silence.
+- With website consent, `uninstall_page_opened` counts one landing per mount and carries no device ID, token, query, feedback or URL.
+- Device credentials stay confined to the existing functional endpoints.

@@ -1,17 +1,7 @@
 # Legal
 
-Rendered by `app/[locale]/legal-notice`, `/cookies`, `/privacy`, `/tos`, `/consent`: `legal-view.tsx` (shared layout), `legal-html.tsx` (renders each page's static content).
+`/legal-notice`, `/cookies`, `/privacy`, `/tos` and `/consent` share `legal-view.tsx` and `legal-html.tsx`.
 
-## Add a new legal document
-
-1. Create the route under `app/[locale]/<new-slug>/page.tsx`, mirroring an existing one (e.g. `app/[locale]/privacy/page.tsx`).
-2. Have it render `<LegalView>`/`<LegalHtml>` from this feature, passing the page's translated content — don't build a new layout, reuse `legal-view.tsx`.
-3. Add the new page's content/translations to all 11 locale files.
-4. If it should appear in the footer's legal links, follow `packages/ui/AGENTS.md`'s "Add a link to the footer" steps (the legal links live in `legalLinks`, not `columns`).
-
-## Notable dependencies
-
-The extension discovers document dates through `GET /api/legal/versions`. Its only publication source is `tos-page.last-updated` and `privacy-page.last-updated` in `packages/locales/messages/web/en-US.json`, not a separate manifest. Keep those ISO dates (`YYYY-MM-DD`) synchronized across all translations. Advance the edited document's date when publishing a change; never decrease a published date. Every changed date requires a new confirmation of that document. The extension records ToS acceptance separately from privacy acknowledgement, locally on each device and independently from analytics consent. Cached dates work offline; a fresh installation needs its first fetch. The first date-based release changes the endpoint response shape and invalidates older numeric receipts, so coordinate the website and extension releases.
-
-Privacy and terms cover custom activity uploads and JSON sharing in all 11 locales. Keep local RPC transmission distinct from remote image storage. Uploads work without an account or analytics consent, use device authentication and Cloudflare R2, and expose public URLs. Do not promise private storage, EU-only image processing, automatic moderation or exact deletion after 30 days: cleanup must run successfully, active use renews retention, and third-party caches/shared files may persist. Account deletion or uninstall is not device-image erasure. Confirm deployment, transfer safeguards and cleanup scheduling before release, and obtain legal review of the published wording. `legal-content.test.ts` checks localized disclosure coverage.
-`lib/constants.ts`, `lib/brand.ts` (root, shared). `packages/ui`'s `footer.tsx` for the legal-links row.
+- New document: `app/[locale]/<slug>/page.tsx` modelled on `privacy`, rendering `LegalView`/`LegalHtml`, with its content in all 11 locales. Footer legal links live in `legalLinks` (`packages/ui/src/footer.tsx`).
+- `GET /api/legal/versions` serves `tos-page.last-updated` and `privacy-page.last-updated` from `packages/locales/messages/web/en-US.json` to the extension; there is no other manifest. Keep them ISO `YYYY-MM-DD` and identical in every locale. Advance the edited document's date when publishing a change and never decrease it: each new date requires a new confirmation in the extension.
+- Privacy and terms disclose custom activity uploads and JSON sharing in all 11 locales (`legal-content.test.ts` checks the coverage). Keep local RPC transmission distinct from remote image storage. Never promise private storage, EU-only processing, automatic moderation or exact deletion after 30 days, and never present account deletion or uninstall as device-image erasure. Wording changes need legal review.

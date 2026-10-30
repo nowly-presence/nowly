@@ -1,55 +1,36 @@
-# Background
-
-MV3 service worker: message router, presence lifecycle, native host bridge, presence script injection, API sync. Ported from the monorepo's `apps/extension/src/background`; keep it structurally identical so the two stay diffable.
+# Background (service worker)
 
 ## Add a router message
 
-1. Add `NAME: { payload; response }` to `RouterMessageMap` in `router/contracts.ts`.
-2. Implement `handleName: Handler<"NAME">` in the matching `router/handlers/*.handlers.ts` (`extra.handlers.ts` for side-panel-only needs).
-3. Register it in `buildHandlerRegistry` (`router/handlers/index.ts`).
-4. If the preview should support it, add it to `preview/mock-router.ts` (typed against the same map).
+1. `NAME: { payload; response }` in `RouterMessageMap` (`router/contracts.ts`).
+2. `handleName: Handler<"NAME">` in the matching `router/handlers/*.handlers.ts` (`extra.handlers.ts` for side-panel-only needs).
+3. Register it in `buildHandlerRegistry` (`router/handlers/index.ts`); a missing handler is a compile error.
+4. Add it to `preview/mock-router.ts` if the preview needs it.
 
-## Gotchas
+## Rules
 
-- The worker is killed after ~30s idle. Anything that must survive a respawn while tabs stay open (tab presences, active slugs, active sessions, muted tabs) lives in `chrome.storage.session`, never in module memory (`services/background-context.ts`). Multi-key updates are single read-modify-write passes; concurrent per-slug writes race.
-- `preserveSiteTimer` is opt-in. `services/site-timers.ts` stores one elapsed start per presence slug in `chrome.storage.session.siteTimers`, shared across tabs until the browser session ends or the option changes. It only transforms the broadcast payload; tab entries keep original timestamps so disabling restores them immediately. Finite playback timelines and play/pause badges are excluded. A tab remembers a playback timeline for the same content (first button URL, else name/details/state) when paused updates omit timestamps and badges. Timer writes are serialized; the in-memory promise is only a lock, not timer state. No URLs or titles are stored in the timer cache or synced with accounts.
-- `onStartup`, `onInstalled` and module load can fire in the same tick: `bootBackground` memoises its promise so boot runs once (`services/lifecycle.ts`).
-- The router returns `true` from `onMessage` to keep the response channel open while handlers await (`router/router.ts`).
-- Native status is re-validated with a `PING` on every `GET_NATIVE_STATUS` because the worker may have slept; a disconnect resets every connection field together (`services/native.ts`).
-- The Discord IPC access-denied episode (`shared/discord-ipc-prompt.ts`) lives in `chrome.storage.session` (`discordIpcIssue`), not in module memory, so the page is not shown again after a respawn. It is only reported on `NativeStatus` (`code`, `codePrompted`) while the host is connected; a disconnect hides it without ending the episode.
-- Release verification is fail-closed: bundle SHA-256 + metadata hash + ECDSA P-256 signature. Key rotation tries the cached key, then the bundled fallback, then refreshes once. Unsigned releases are accepted on canary builds only (`services/release-security.ts`).
-- `@nowly/shared` provides `canonicalJson`, which must stay byte-identical to the API's, or every hash and signature check fails.
-- Product events use `@nowly/telemetry` through `background/telemetry.ts`. Events are opt-in and dropped until consent is `true`; the API rejects unknown properties. Never send device IDs, activity content, slugs or real URLs. Only local dates/markers support aggregate return windows.
-- Canary product telemetry additionally requires the extension's `settings.developerMode` to be `true`. The consent and developer-mode gates are rechecked before delivery. Daily and once-only deduplication still apply, and events use the effective API URL (a local API must run in production mode to relay to Umami).
-- Runtime logs strip privacy-sensitive payload keys (`url`, `title`, `query`, `discordId`...) before storing (`runtime-logs.ts`).
-- Chrome exposes `chrome.userScripts` only once "Allow user scripts" is on and fires no event when toggled; the side panel sends `SYNC_PRESENCE_SCRIPTS` when it sees the status flip. On Firefox it is an optional permission requested from the onboarding (user gesture required).
-- `chrome.sidePanel.open()` must run in the same user-gesture turn: never `await` before it (`services/open-panel.ts`).
-- The context menu has no "about to show" event, so the mute item is re-synced on every broadcast (`services/context-menu.ts`).
-- Failed installs with 408/429/5xx/network errors are queued and retried every minute (`managers/install-queue.ts`); `DELETE /presences/active` retries once so a blip doesn't leave a device "active" until the server's 12 min TTL.
-- The nowly.me web protocol keeps its own message names; only `GET_INSTALLED` is translated to `GET_PRESENCES` (`content/index.ts`). `NOWLY_SESSION` (from `nowly.me/extension/connect`) answers `NOWLY_SESSION_RESULT`.
+- The worker dies after about 30 s idle: state that must survive (tab presences, active slugs and sessions, muted tabs, site timers, the Discord IPC episode, open editors) lives in `chrome.storage.session`, never in module memory. Multi-key updates are single read-modify-write passes.
+- Boot runs once (`bootBackground` memoises its promise); the router returns `true` from `onMessage` while handlers await.
+- Re-validate native status with a `PING` on every `GET_NATIVE_STATUS`; a disconnect resets every connection field together.
+- Release verification is fail-closed (bundle SHA-256, metadata hash, ECDSA P-256 signature in `services/release-security.ts`); unsigned releases are accepted on canary builds only.
+- Telemetry (`background/telemetry.ts`) is opt-in and dropped until consent is `true` (canary also needs `developerMode`). Never send device IDs, activity content, slugs or real URLs.
+- Runtime logs strip privacy-sensitive keys (`url`, `title`, `query`, `discordId`...) before storing (`runtime-logs.ts`).
+- `chrome.sidePanel.open()` must run in the user-gesture turn: never `await` before it.
+- `chrome.userScripts` exists only once "Allow user scripts" is on and fires no event: the side panel sends `SYNC_PRESENCE_SCRIPTS` when it sees the status flip. Firefox requests the permission from the onboarding (user gesture).
+- The nowly.me web protocol keeps its own message names (only `GET_INSTALLED` maps to `GET_PRESENCES`, `content/index.ts`). Web messages need an allowlisted sender URL and the web-specific message allowlist.
+- Site timers (`preserveSiteTimer`, `services/site-timers.ts`) only transform the broadcast payload; they never store URLs or titles and never sync.
 
-## Account sync
+## Account sync (`services/account-sync.ts`)
 
-- `services/account-sync.ts` orchestrates, `services/account-sync-local.ts` reads and applies local values, `services/account-api.ts` talks to `/me`, `/sync*`, `/devices/:deviceId/link` and `/extension/tokens/current` with `Authorization: Bearer <nxt_ token>`. State: `account` (token, user) and `syncState` (per key: last synced `version` and `base`, `cursor` = previous `serverTime`, `lastSyncedAt`, `error`, `pendingChoice`, `pendingPresences`) in `chrome.storage.local`.
-- Triggers: boot, the `account-sync` alarm (5 min), `SYNC_ACCOUNT` when the panel opens, and any change of `settings`, `presences`, `presenceSettings` or `featureReveals` in storage (3 s debounce, push only). Runs are serialized (`runAccountSync` queues one follow-up run); a push with nothing different from `base` makes no request, so applying a remote value never loops.
-- First sync (`cursor === null`): empty account, or identical data, or a device without presences and presence settings: adopt and upload silently. Otherwise set `pendingChoice` and wait for `RESOLVE_SYNC_CHOICE` (`account`: apply the account's documents, `device`: overwrite them with `baseVersion` = their current version). Nothing syncs while a choice is pending.
-- Pull uses `GET /sync/changes?since=<cursor>` and only takes documents with a higher version. Push uses `PUT /sync/:key` with `baseVersion`; a `409` merges with the returned value, applies the result locally and retries (3 attempts).
-- Presences received from another device go through `installPresenceFromApi` (same verification and install queue as the library). Until they install, they stay in `pendingPresences` so they are not seen as uninstalled here; `reconcilePendingPresences` applies their `enabled`, `schedule` and `installedAt` once installed.
-- `401` from any sync call signs out locally (account and sync state removed, local data kept). Network or server errors only set `error` and the next trigger retries.
-- "Stop syncing" (`STOP_ACCOUNT_SYNC`) calls `DELETE /sync`, which also revokes every token of the account on the server, then signs out locally.
+- Runs are serialized. A push identical to the last synced `base` makes no request, so applying remote values never loops.
+- A first sync with conflicting data sets `pendingChoice` and syncs nothing until `RESOLVE_SYNC_CHOICE`.
+- `409` merges, applies locally and retries (3 attempts). `401` signs out locally and keeps local data; other errors only set `error`.
+- Presences from another device install through `installPresenceFromApi` (same verification as the library) and stay in `pendingPresences` until installed.
 
-## Public activity lifecycle
+## Public activities
 
-- `activity-publication-publisher.ts` owns creator-authenticated writes and local owner metadata. `activity-publication-data.ts` owns trusted-API fetch/validation and canonical fingerprints. `activity-publications.ts` owns recipient status/apply. No background module imports extension UI.
-- Web messages are `GET_ACTIVITY_PUBLICATION_STATUS` and `APPLY_ACTIVITY_PUBLICATION`. The router requires an allowlisted actual sender URL and a web-specific message allowlist. Publisher, editor and storage messages are side-panel-only. The content bridge also checks the exact origin and same window. New responses contain only minimal status, never account/device tokens or native profiles. Legacy device-info messaging is not used by this feature.
-- Apply independently fetches the validated publication id from the configured API, rejects a different revision/fingerprint, checks local content again, then writes under `withCustomActivityWrite`. Save/delete/activation/image-refresh and editor registration share that queue. Repeated install of an already installed revision is a no-op. Capacity is checked inside the same queue.
-- Keep is a no-op, including the baseline. Replace installs the reviewed content, keeps the local copy's id, clears detection, dismisses its detected session and clears manual activation only if that copy was active. Separate activation is always required afterward.
-- `custom-activity-editors.ts` persists editor registrations in session storage, so a sleeping worker cannot lose knowledge of an unsaved editor. Port reconnection re-registers the same editor token. Closing an editor removes its registration. A missed disconnect may conservatively block replacement for the rest of the browser session; it must never permit overwriting an unknown unsaved draft. A stale editor save independently fails its original `updatedAt` check.
-- Publishing first reserves an unpublished revision-zero row using authenticated POST. The extension durably records the server-generated id, normalized original API base and pending state before any PUT. A lost reservation response is safe because POST never publishes. A lost publishing response retains the known reference. Repeated reservation never overwrites content. Neither account switch nor signout clears references.
-- `activity-publication-deletion.ts` runs inside the same activity-write queue as publish/unpublish/delete. All known references must match the current normalized API base before any absence request. A backend change blocks recovery; users must restore the original configuration. Recorded URLs are never used as fetch destinations or token destinations. Legacy boolean attempts, unknown backend and conflicting id mappings fail closed.
-- Deletion checks every known opaque id on the fixed public endpoint with no credentials, no cache and no redirects. Only bounded (256-byte), strict JSON 404 `NOT_FOUND` proves a missing row and allows erased-owner recovery without old credentials. `UNPUBLISHED` is not erasure proof: a reserved row could still receive a delayed PUT. Ordinary withdrawal requires explicit owner CAS (including revision 0), a successfully cleared pending flag, and fresh authenticated matching id/revision/unpublished state. A blocked deletion performs no mutation and preserves content, images and activation. Public 200, outages and malformed absence all block.
-- `GET_CUSTOM_ACTIVITY_DELETION_PLAN` is a side-panel preflight in `custom-activity-deletion-plan.ts`. It reuses deletion verification first, so local-only and confirmed erased-owner sources need no creator session. If withdrawal is required, fresh owner metadata supplies the revision for the explicit first-step action. It never withdraws or deletes, and never replaces the final deletion checks.
-- `custom-activity-editors.test.ts` exercises actual background registration plus the UI transport's readiness, disconnect, stable-identity reconnect and cleanup. Foreign senders, malformed messages and multiple simultaneous editors are covered.
-
-## Notable dependencies
-`shared/` (types, constants, URL patterns), `@nowly/telemetry` (strict event schema), Nowly API (`/presences`, `/devices`, `/telemetry/events`, `/security/public-key`), native host `nowly.client`.
+- Recipient apply re-fetches the publication from the configured API, rejects another revision or fingerprint, re-checks local content, then writes under `withCustomActivityWrite`, the single queue for save, delete, activation, image refresh and editor registration.
+- Keep is a no-op. Replace keeps the local id, clears detection and requires separate activation afterwards. Any open editor blocks replacement: when unsure, block.
+- Publishing first reserves a revision-0 row (POST) and durably records its id and original API base before any PUT. Account switch or sign-out never clears references.
+- Deletion proceeds only when every known reference matches the current API base and is either proven missing (strict 404 `NOT_FOUND` on the public endpoint, no credentials, no redirects) or withdrawn by owner CAS. `UNPUBLISHED`, outages and malformed answers block, and a blocked deletion mutates nothing. Recorded URLs are never fetched or sent tokens.
+- `GET_CUSTOM_ACTIVITY_DELETION_PLAN` is a read-only preflight; it never replaces the final checks.
