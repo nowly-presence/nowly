@@ -16,6 +16,8 @@ export type PresencePerson = {
 
 export type LibraryPresence = {
   slug: string;
+  /** Alternative library URL slugs redirecting to `slug`. */
+  aliases: string[];
   name: string;
   category: LibraryCategory;
   color: string;
@@ -59,6 +61,7 @@ export const presenceSearchText = (presence: LibraryPresence): string =>
   [
     presence.name,
     presence.slug,
+    ...presence.aliases,
     presence.category,
     presence.author.name,
     presence.author.github ?? "",
