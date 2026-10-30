@@ -1,11 +1,18 @@
 ---
 title: 2.5.2
 date: 2026-10-31
-description: Der Bestätigungsbildschirm für die Dokumente bleibt nicht mehr hängen.
+description: Aktivitätskarte im Discord-Stil, gestapelte Benachrichtigungen und eine Korrektur für den hängenden Bestätigungsbildschirm.
 stores: [chrome, firefox]
 ---
+
+## Neuigkeiten
+
+- Die Karte „Gerade auf Discord“ sieht jetzt wie eine Aktivität auf Discord aus: größeres Bild mit dem kleinen Bild in der Ecke, Details daneben, der Fortschrittsbalken in einer Zeile zwischen verstrichener und gesamter Zeit und gefüllte Schaltflächen nebeneinander.
+- Der Dienstname und „Diesen Tab ausblenden“ erscheinen nicht mehr unter der Karte: Blende einen Tab mit dem Schalter unter „Dieser Tab“ direkt darunter aus.
+- Benachrichtigungen werden jetzt gestapelt, statt das Panel zu verdecken, zum Beispiel nach „Alle aktualisieren“: Die neueste bleibt vorne, und wenn du mit der Maus über den Stapel fährst, fächert er sich auf und pausiert.
 
 ## Korrekturen
 
 - Die Erweiterung blieb nach dem erneuten Öffnen manchmal bei „Die Bestätigung konnte nicht gespeichert werden oder die Dokumente haben sich geändert“ hängen: „Dokumente lesen“ prüft die Dokumente jetzt sofort erneut, statt bis zu 5 Minuten zu warten, und eine fehlgeschlagene Prüfung im Hintergrund blockiert die Erweiterung nicht mehr, wenn die Dokumente bereits bekannt sind.
 - Neben „Dokumente lesen“ gibt es auf diesem Bildschirm jetzt eine Schaltfläche „Schließen“.
+- Die graue Linie, die unter der Karte „Gerade auf Discord“ erscheinen konnte, wenn weitere Aktivitäten erkannt wurden, wurde entfernt.

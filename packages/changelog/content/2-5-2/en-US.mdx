@@ -1,11 +1,18 @@
 ---
 title: 2.5.2
 date: 2026-10-31
-description: Legal confirmation screen no longer gets stuck.
+description: Discord-style activity card, stacked notifications and a fix for the stuck legal confirmation screen.
 stores: [chrome, firefox]
 ---
+
+## What's new
+
+- The "Now on Discord" card now looks like an activity on Discord: a larger image with the small image on its corner, the details next to it, the progress bar on one line between the elapsed and total time, and filled buttons side by side.
+- The service name and "Hide this tab" no longer appear under the card: hide a tab with the switch in "This tab", just below.
+- Notifications now stack instead of covering the panel, for example after "Update all": the newest one stays in front, and hovering the stack spreads them out and pauses them.
 
 ## Fixes
 
 - Fixed the extension sometimes staying stuck on "Unable to save your confirmation, or the documents have changed" after being reopened: "Review documents" now checks the documents again right away instead of waiting up to 5 minutes, and a failed background check no longer blocks the extension when the documents are already known.
 - Added a "Close" button next to "Review documents" on that screen.
+- Removed the grey line that could appear under the "Now on Discord" card when other activities were detected.

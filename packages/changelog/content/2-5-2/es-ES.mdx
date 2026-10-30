@@ -1,11 +1,18 @@
 ---
 title: 2.5.2
 date: 2026-10-31
-description: La pantalla de confirmación de los documentos ya no se queda bloqueada.
+description: Tarjeta de actividad al estilo de Discord, notificaciones apiladas y corrección de la pantalla de confirmación bloqueada.
 stores: [chrome, firefox]
 ---
+
+## Novedades
+
+- La tarjeta «Ahora en Discord» ahora se parece a una actividad de Discord: imagen más grande con la imagen pequeña en su esquina, los detalles al lado, la barra de progreso en una línea entre el tiempo transcurrido y el total, y botones rellenos uno al lado del otro.
+- El nombre del servicio y «Ocultar esta pestaña» ya no aparecen bajo la tarjeta: oculta una pestaña con el interruptor de «Esta pestaña», justo debajo.
+- Las notificaciones ahora se apilan en lugar de tapar el panel, por ejemplo tras «Actualizar todo»: la más reciente queda delante y, al pasar el ratón por la pila, se despliegan y se pausan.
 
 ## Correcciones
 
 - Se corrigió que la extensión se quedara a veces bloqueada en «No se pudo guardar la confirmación o los documentos han cambiado» al volver a abrirla: «Consultar documentos» ahora vuelve a comprobar los documentos al instante en lugar de esperar hasta 5 minutos, y una comprobación en segundo plano fallida ya no bloquea la extensión cuando los documentos ya se conocen.
 - Se añadió un botón «Cerrar» junto a «Consultar documentos» en esa pantalla.
+- Se eliminó la línea gris que podía aparecer bajo la tarjeta «Ahora en Discord» cuando se detectaban otras actividades.

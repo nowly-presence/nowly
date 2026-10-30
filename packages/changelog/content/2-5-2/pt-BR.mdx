@@ -1,11 +1,18 @@
 ---
 title: 2.5.2
 date: 2026-10-31
-description: A tela de confirmação dos documentos não fica mais travada.
+description: Cartão de atividade no estilo do Discord, notificações empilhadas e correção da tela de confirmação travada.
 stores: [chrome, firefox]
 ---
+
+## Novidades
+
+- O cartão "Agora no Discord" agora se parece com uma atividade no Discord: imagem maior com a imagem pequena no canto, os detalhes ao lado, a barra de progresso em uma linha entre o tempo decorrido e o total, e botões preenchidos lado a lado.
+- O nome do serviço e "Ocultar esta aba" não aparecem mais abaixo do cartão: oculte uma aba com o botão em "Esta aba", logo abaixo.
+- As notificações agora se empilham em vez de cobrir o painel, por exemplo após "Atualizar tudo": a mais recente fica na frente e, ao passar o mouse sobre a pilha, elas se espalham e pausam.
 
 ## Correções
 
 - Corrigida a extensão que às vezes ficava travada em "Não foi possível salvar a confirmação ou os documentos mudaram" ao ser reaberta: "Consultar documentos" agora verifica os documentos de novo na hora, em vez de esperar até 5 minutos, e uma verificação em segundo plano com falha não bloqueia mais a extensão quando os documentos já são conhecidos.
 - Adicionado um botão "Fechar" ao lado de "Consultar documentos" nessa tela.
+- Removida a linha cinza que podia aparecer abaixo do cartão "Agora no Discord" quando outras atividades eram detectadas.

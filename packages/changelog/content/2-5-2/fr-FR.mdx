@@ -1,11 +1,18 @@
 ---
 title: 2.5.2
 date: 2026-10-31
-description: L'écran de confirmation des documents ne reste plus bloqué.
+description: Carte d'activité façon Discord, notifications empilées et correction de l'écran de confirmation des documents bloqué.
 stores: [chrome, firefox]
 ---
+
+## Nouveautés
+
+- La carte « En ce moment sur Discord » ressemble désormais à une activité sur Discord : image plus grande avec la petite image dans son coin, détails à côté, barre de progression sur une ligne entre le temps écoulé et la durée totale, et boutons pleins côte à côte.
+- Le nom du service et « Masquer cet onglet » n'apparaissent plus sous la carte : masquez un onglet avec l'interrupteur de « Cet onglet », juste en dessous.
+- Les notifications s'empilent au lieu de recouvrir le panneau, par exemple après « Tout mettre à jour » : la plus récente reste devant, et survoler la pile les déploie et les met en pause.
 
 ## Corrections
 
 - Correction de l'extension qui restait parfois bloquée sur « La confirmation n’a pas pu être enregistrée ou les documents ont changé » après sa réouverture : « Consulter les documents » vérifie désormais les documents immédiatement au lieu d'attendre jusqu'à 5 minutes, et une vérification en arrière-plan qui échoue ne bloque plus l'extension lorsque les documents sont déjà connus.
 - Ajout d'un bouton « Fermer » à côté de « Consulter les documents » sur cet écran.
+- Suppression de la ligne grise qui pouvait apparaître sous la carte « En ce moment sur Discord » quand d'autres activités étaient détectées.
