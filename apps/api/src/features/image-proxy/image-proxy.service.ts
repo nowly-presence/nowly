@@ -9,6 +9,8 @@ const CACHED_IMAGE_TTL_SECONDS = 5 * 60;
 const CACHED_IMAGE_STALE_SECONDS = 60;
 const PUBLIC_IMAGE_PROXY_ORIGIN = "*";
 const PRESENCE_SERVICES_TTL_MS = 5 * 60 * 1000;
+const MAX_REDIRECTS = 3;
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 
 export type ImageProxyService = {
   id: string;
@@ -63,6 +65,25 @@ const getPresenceServices = async (): Promise<ImageProxyService[]> => {
   return services;
 };
 
+const matchesHostSuffix = (hostname: string, suffixes: string[]): boolean =>
+  suffixes.some((raw) => {
+    const suffix = typeof raw === "string" ? raw.trim().toLowerCase().replace(/^\.+/, "") : "";
+    return suffix !== "" && (hostname === suffix || hostname.endsWith(`.${suffix}`));
+  });
+
+const isAllowedImageUrl = (url: URL, service: ImageProxyService): boolean =>
+  url.protocol === "https:" && matchesHostSuffix(url.hostname.toLowerCase(), service.hostSuffixes);
+
+const resolveRedirect = (location: string | null, base: URL): URL | null => {
+  if (!location) return null;
+
+  try {
+    return new URL(location, base);
+  } catch {
+    return null;
+  }
+};
+
 export const parseProxyUrl = async (url?: string, serviceId?: string): Promise<{
   url: URL;
   service: ImageProxyService;
@@ -71,16 +92,13 @@ export const parseProxyUrl = async (url?: string, serviceId?: string): Promise<{
 
   try {
     const parsed = new URL(url.trim());
-
-    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return null;
-
     const services = await getPresenceServices();
 
     const matchedService = serviceId
       ? services.find((s) => s.id === serviceId)
-      : services.find((s) => s.hostSuffixes.some((suffix) => parsed.hostname.endsWith(suffix)));
+      : services.find((s) => isAllowedImageUrl(parsed, s));
 
-    return matchedService ? { url: parsed, service: matchedService } : null;
+    return matchedService && isAllowedImageUrl(parsed, matchedService) ? { url: parsed, service: matchedService } : null;
   } catch {
     return null;
   }
@@ -128,6 +146,14 @@ export const imageResponse = (reply: FastifyReply, image: {
   withPublicCors(reply).headers(headers).send(image.buffer);
 };
 
+const requestImage = (url: URL, service: ImageProxyService, signal: AbortSignal): Promise<Response> =>
+  fetch(url.href, {
+    signal,
+    headers: service.headers ?? { "User-Agent": "Nowly/1.0" },
+    redirect: "manual",
+    size: MAX_IMAGE_BYTES
+  } as RequestInit);
+
 export const fetchImage = async (url: URL, service: ImageProxyService): Promise<
   | {
       ok: true;
@@ -141,16 +167,36 @@ export const fetchImage = async (url: URL, service: ImageProxyService): Promise<
       error: string;
     }
 > => {
+  if (!isAllowedImageUrl(url, service)) {
+    return {
+      ok: false,
+      status: 400,
+      error: "INVALID_IMAGE_URL"
+    };
+  }
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
   try {
-    const response = await fetch(url.href, {
-      signal: controller.signal,
-      headers: service.headers ?? { "User-Agent": "Nowly/1.0" },
-      redirect: "follow",
-      size: MAX_IMAGE_BYTES
-    } as RequestInit);
+    let target = url;
+    let response = await requestImage(target, service, controller.signal);
+
+    for (let redirects = 0; REDIRECT_STATUSES.has(response.status); redirects++) {
+      const next = resolveRedirect(response.headers.get("Location"), target);
+      await response.body?.cancel();
+
+      if (!next || redirects >= MAX_REDIRECTS || !isAllowedImageUrl(next, service)) {
+        return {
+          ok: false,
+          status: 502,
+          error: "IMAGE_REDIRECT_REJECTED"
+        };
+      }
+
+      target = next;
+      response = await requestImage(target, service, controller.signal);
+    }
 
     if (!response.ok) {
       return {

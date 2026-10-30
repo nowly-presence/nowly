@@ -244,4 +244,34 @@ describe("image proxy routes", () => {
     expect(mismatchRes.statusCode).toBe(400);
     expect(JSON.parse(mismatchRes.body)).toEqual({ error: "INVALID_IMAGE_URL" });
   });
+
+  it.each([
+    [
+      "GET /image-proxy",
+      {
+        method: "GET" as const,
+        url: `/image-proxy?service=tiktok&url=${encodeURIComponent("https://169.254.169.254/latest/meta-data/")}`
+      }
+    ],
+    [
+      "POST /images-proxy",
+      {
+        method: "POST" as const,
+        url: "/images-proxy",
+        payload: {
+          service: "github",
+          url: "https://example.com/avatar.png"
+        }
+      }
+    ]
+  ])("%s refuses a URL outside the requested service's hosts without fetching it", async (_route, request) => {
+    const fetchMock = vi.fn();
+    globalThis.fetch = fetchMock;
+
+    const res = await app.inject(request);
+
+    expect(res.statusCode).toBe(400);
+    expect(JSON.parse(res.body)).toEqual({ error: "INVALID_IMAGE_URL" });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });
