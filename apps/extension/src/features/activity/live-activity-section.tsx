@@ -1,7 +1,5 @@
-import { RiEyeOffLine } from "@remixicon/react";
 import { CustomActivityLiveCard } from "@/components/shared/custom-activity-live-card";
 import { LiveCard } from "@/components/shared/live-activity-card";
-import { PresenceIcon } from "@/components/shared/presence-icon";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav } from "@/hooks/navigation-provider";
@@ -9,23 +7,18 @@ import { connectionOf } from "@/lib/presence-status";
 import { sendMessage } from "@/lib/messages";
 import { customActivityIdOf } from "@/shared/custom-activity";
 import { discordIpcIssueOf } from "@/shared/discord-ipc-prompt";
-import type { TabActivity } from "@/shared/types";
-import { Button } from "@/ui/button";
 import { Section } from "@/ui/section";
 import { DiscordIpcAlert } from "@/features/activity/discord-ipc-alert";
 import { IdleCard } from "@/features/activity/idle-activity-card";
-import { useTabSharing } from "@/features/activity/use-tab-sharing";
 
 type LiveActivitySectionProps = {
-  liveTab: TabActivity | undefined;
   hasPresences: boolean;
 };
 
-export const LiveActivitySection = ({ liveTab, hasPresences }: LiveActivitySectionProps) => {
+export const LiveActivitySection = ({ hasPresences }: LiveActivitySectionProps) => {
   const { state, updateSettings, refresh } = useExtensionState();
   const { t } = useI18n();
   const { push } = useNav();
-  const setTabMuted = useTabSharing();
   const { activity, presences, settings } = state;
   const paused = settings.presencePaused === true;
   const liveStored = activity ? presences[activity.slug] : undefined;
@@ -82,30 +75,6 @@ export const LiveActivitySection = ({ liveTab, hasPresences }: LiveActivitySecti
               name: "presence",
               slug: activity.slug
             })
-          }
-          footer={
-            <div className="flex items-center justify-between gap-3">
-              <span className="flex min-w-0 items-center gap-2 text-label-md text-on-tertiary-muted">
-                <PresenceIcon slug={activity.slug} name={liveStored.metadata.name} color={liveStored.metadata.color} size={18} rounded="rounded-[5px]" />
-                <span className="truncate">{liveStored.metadata.name}</span>
-              </span>
-              {paused ? (
-                <Button size="sm" variant="inverse" onClick={resume}>
-                  {t("action.resume")}
-                </Button>
-              ) : (
-                liveTab && (
-                  <button
-                    type="button"
-                    onClick={() => void setTabMuted(liveTab.tabId, true)}
-                    className="flex h-7 items-center gap-1.5 rounded-sm px-2 text-label-md font-medium text-on-tertiary-muted transition-colors hover:bg-tertiary-line hover:text-on-tertiary"
-                  >
-                    <RiEyeOffLine className="size-3.5" />
-                    {t("activity.hideTab")}
-                  </button>
-                )
-              )}
-            </div>
           }
         />
       ) : ipcBlocked && !paused && connection === "no-discord" ? null : (

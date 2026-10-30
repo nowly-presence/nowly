@@ -13,7 +13,7 @@ import { useActivityOverview } from "@/features/activity/use-activity-overview";
 export const ActivityView = () => {
   const { state } = useExtensionState();
   const { t } = useI18n();
-  const { now, detectedSlugs, sortedPresences, liveTab, otherActivities } = useActivityOverview();
+  const { now, detectedSlugs, sortedPresences, otherActivities } = useActivityOverview();
 
   if (!state.ready) {
     return (
@@ -28,7 +28,7 @@ export const ActivityView = () => {
   return (
     <ScreenBody>
       <ScreenTitle title={t("activity.pageTitle")} subtitle={t("activity.pageDescription")} />
-      <LiveActivitySection liveTab={liveTab} hasPresences={sortedPresences.length > 0} />
+      <LiveActivitySection hasPresences={sortedPresences.length > 0} />
       <CurrentTabSection />
       <QueuedActivitiesSection activities={otherActivities} />
       <InstalledPresencesSection presences={sortedPresences} detectedSlugs={detectedSlugs} now={now} />

@@ -17,9 +17,6 @@ vi.mock("@/hooks/navigation-provider", () => ({
 vi.mock("@/hooks/extension-state-provider", () => ({
   useExtensionState: () => extensionState()
 }));
-vi.mock("@/features/activity/use-tab-sharing", () => ({
-  useTabSharing: () => vi.fn()
-}));
 vi.mock("@/lib/messages", () => ({ sendMessage: vi.fn() }));
 vi.mock("@/shared/discord-ipc-prompt", () => ({
   discordIpcIssueOf: (native: unknown) => discordIpcIssueOf(native)
@@ -43,11 +40,7 @@ const stateWith = (showPlayer: boolean) => ({
   refresh: {}
 });
 
-const section = () =>
-  LiveActivitySection({
-    liveTab: undefined,
-    hasPresences: true
-  });
+const section = () => LiveActivitySection({ hasPresences: true });
 
 describe("LiveActivitySection preview toggle", () => {
   beforeEach(() => {

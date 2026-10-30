@@ -1,12 +1,11 @@
 import { useState, type ReactNode } from "react";
-import { RiExternalLinkLine, RiPauseFill } from "@remixicon/react";
+import { RiPauseFill } from "@remixicon/react";
 import { assetUrl } from "@/shared/presence-assets";
 import type { PresencePayload } from "@/shared/types";
 import { cn } from "@/ui/cn";
 import { formatClock, toMs } from "@/lib/format";
 import { useNow } from "@/hooks/use-now";
 import type { Translate } from "@/hooks/i18n-provider";
-import { LiveDot } from "@/ui/live-dot";
 import { PresenceIcon } from "@/components/shared/presence-icon";
 
 type LiveCardProps = {
@@ -25,6 +24,9 @@ type LiveCardProps = {
 };
 
 const NAMED_HEADER_TYPES = new Set([2, 3, 5]);
+const SMALL_IMAGE_RATIO = 0.28;
+
+const emphasizedLine = (count: number, namedHeader: boolean): number => (namedHeader ? (count > 1 ? 1 : -1) : 0);
 
 const headerKey = (type: number | undefined) =>
   type === 2 ? "activity.header.listening" : type === 3 ? "activity.header.watching" : type === 5 ? "activity.header.competing" : "activity.header.playing";
@@ -65,7 +67,11 @@ const ActivityImage = ({ src, small, slug, name, size }: {
           alt=""
           draggable={false}
           onError={(event) => (event.currentTarget.style.display = "none")}
-          className="absolute -right-1 -bottom-1 size-5 rounded-full border-2 border-tertiary bg-tertiary object-cover"
+          className="absolute -right-1.5 -bottom-1.5 rounded-full border-[3px] border-tertiary bg-tertiary object-cover"
+          style={{
+            width: Math.round(size * SMALL_IMAGE_RATIO),
+            height: Math.round(size * SMALL_IMAGE_RATIO)
+          }}
         />
       )}
     </div>
@@ -93,6 +99,24 @@ export const LiveCard =
     ).filter((line): line is string => Boolean(line));
     if (lines.length === 0) lines.push(displayName);
 
+    const timeline =
+      progress !== undefined && elapsed !== undefined && total !== undefined ? (
+        <div className="flex items-center gap-2 text-label-md text-on-tertiary tabular-nums">
+          <span>
+            {timelineMode === "countdown"
+              ? formatClock(Math.max(0, total - elapsed))
+              : formatClock(Math.min(elapsed, total))}
+          </span>
+          <div className="h-1 flex-1 overflow-hidden rounded-full bg-tertiary-line">
+            <div
+              className={cn("h-full rounded-full bg-on-tertiary transition-[width] duration-1000 ease-linear", status !== "live" && "opacity-50")}
+              style={{ width: `${progress * 100}%` }}
+            />
+          </div>
+          <span>{formatClock(total)}</span>
+        </div>
+      ) : null;
+
     return (
       <div className={cn("relative", className)}>
         <article
@@ -102,8 +126,8 @@ export const LiveCard =
           )}
         >
           <div className="flex items-center justify-between gap-3">
-            <span className="flex min-w-0 items-center gap-2 text-label-md font-medium text-on-tertiary-muted">
-              {status === "live" ? <LiveDot /> : <RiPauseFill className="size-3.5" />}
+            <span className="flex min-w-0 items-center gap-2 text-label-lg font-medium">
+              {status !== "live" && <RiPauseFill className="size-3.5 shrink-0 text-on-tertiary-muted" />}
               <span className="truncate">
                 {statusLabel ??
                   (namedHeader && !hasTextLine
@@ -119,75 +143,55 @@ export const LiveCard =
             )}
           </div>
 
-          <button
-            type="button"
-            onClick={onOpen}
-            disabled={!onOpen}
-            className="-m-1 flex items-center gap-3 rounded-md p-1 text-left transition-colors enabled:hover:bg-tertiary-line"
-          >
-            {artwork ?? (
-              <ActivityImage
-                src={imageSrc(presence.largeImage, slug)}
-                small={small}
-                slug={slug}
-                name={presence.name || presenceName}
-                size={compact ? 48 : 64}
-              />
-            )}
-            <span className="flex min-w-0 flex-1 flex-col">
-              {lines.map((line, index) => (
-                <span
-                  key={index}
-                  className={cn(
-                    "truncate",
-                    index === 0
-                      ? "text-label-lg font-medium"
-                      : index === 1 && lines.length === 3
-                        ? "text-body-sm text-on-tertiary/90"
-                        : "text-body-sm text-on-tertiary-muted"
-                  )}
-                >
-                  {line}
-                </span>
-              ))}
-            </span>
-          </button>
-
-          {progress !== undefined && elapsed !== undefined && total !== undefined && (
-            <div className="flex flex-col gap-1.5">
-              <div className="h-1 overflow-hidden rounded-full bg-tertiary-line">
-                <div
-                  className={cn("h-full rounded-full bg-tertiary-accent transition-[width] duration-1000 ease-linear", status !== "live" && "opacity-50")}
-                  style={{ width: `${progress * 100}%` }}
+          <div className="flex items-center gap-3">
+            <button type="button" onClick={onOpen} disabled={!onOpen} tabIndex={-1} aria-hidden className="shrink-0 rounded-md enabled:hover:opacity-90">
+              {artwork ?? (
+                <ActivityImage
+                  src={imageSrc(presence.largeImage, slug)}
+                  small={small}
+                  slug={slug}
+                  name={presence.name || presenceName}
+                  size={compact ? 64 : 96}
                 />
-              </div>
-              <div className="flex justify-between text-label-sm text-on-tertiary-muted tabular-nums">
-                <span>
-                  {timelineMode === "countdown"
-                    ? formatClock(Math.max(0, total - elapsed))
-                    : formatClock(Math.min(elapsed, total))}
-                </span>
-                <span>{formatClock(total)}</span>
-              </div>
+              )}
+            </button>
+            <div className="flex min-w-0 flex-1 flex-col gap-2">
+              <button
+                type="button"
+                onClick={onOpen}
+                disabled={!onOpen}
+                className="-m-1 flex flex-col rounded-md p-1 text-left transition-colors enabled:hover:bg-tertiary-line"
+              >
+                {lines.map((line, index) => (
+                  <span
+                    key={index}
+                    className={cn(
+                      "truncate text-body-sm",
+                      emphasizedLine(lines.length, namedHeader) === index ? "font-semibold" : index === 2 ? "text-on-tertiary-muted" : undefined
+                    )}
+                  >
+                    {line}
+                  </span>
+                ))}
+              </button>
+              {timeline}
+              {!compact && presence.buttons && presence.buttons.length > 0 && (
+                <div className="flex gap-2">
+                  {presence.buttons.map((button) => (
+                    <a
+                      key={button.url}
+                      href={button.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex h-9 min-w-0 flex-1 items-center justify-center rounded-md bg-tertiary-line px-2 text-label-lg font-medium text-on-tertiary transition-colors hover:bg-on-tertiary/15"
+                    >
+                      <span className="truncate">{button.label}</span>
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-
-          {!compact && presence.buttons && presence.buttons.length > 0 && (
-            <div className="flex gap-2">
-              {presence.buttons.map((button) => (
-                <a
-                  key={button.url}
-                  href={button.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex h-8 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-md border border-tertiary-line px-3 text-label-md font-medium text-on-tertiary transition-colors hover:bg-tertiary-line"
-                >
-                  <span className="truncate">{button.label}</span>
-                  <RiExternalLinkLine className="size-3.5 shrink-0 opacity-60" />
-                </a>
-              ))}
-            </div>
-          )}
+          </div>
 
           {footer && <div className="-mx-4 -mb-4 border-t border-tertiary-line px-4 py-2.5">{footer}</div>}
         </article>
