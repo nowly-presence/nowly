@@ -28,7 +28,7 @@ export const ActivityView = () => {
   return (
     <ScreenBody>
       <ScreenTitle title={t("activity.pageTitle")} subtitle={t("activity.pageDescription")} />
-      <LiveActivitySection liveTab={liveTab} otherActivityCount={otherActivities.length} hasPresences={sortedPresences.length > 0} />
+      <LiveActivitySection liveTab={liveTab} hasPresences={sortedPresences.length > 0} />
       <CurrentTabSection />
       <QueuedActivitiesSection activities={otherActivities} />
       <InstalledPresencesSection presences={sortedPresences} detectedSlugs={detectedSlugs} now={now} />
