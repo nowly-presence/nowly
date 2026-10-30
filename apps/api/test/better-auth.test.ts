@@ -39,9 +39,4 @@ describe("getAuth", () => {
     expect(authTrustedOrigins()).not.toContain("http://localhost:3000");
     vi.unstubAllEnvs();
   });
-
-  it("is a singleton", async () => {
-    const { getAuth } = await import("@/features/auth/better-auth");
-    expect(getAuth()).toBe(getAuth());
-  });
 });

@@ -1,6 +1,6 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import en from "@messages/en.json";
 import { LiveCard } from "@/components/shared/live-activity-card";
 import type { Translate } from "@/hooks/i18n-provider";
@@ -26,78 +26,90 @@ const render = (presence: PresencePayload, statusLabel?: string, timelineMode?: 
     })
   );
 
-afterEach(() => vi.useRealTimers());
+const NOW = new Date("2026-01-01T12:00:00Z");
+const nowSeconds = NOW.getTime() / 1000;
 
 describe("LiveCard timeline", () => {
-  it("renders playback progress, end-only countdown, and custom countdown draining correctly", () => {
+  beforeEach(() => {
     vi.useFakeTimers();
-    vi.setSystemTime(new Date("2026-01-01T12:00:00Z"));
-    const now = Date.now() / 1000;
+    vi.setSystemTime(NOW);
+  });
 
-    // 1. Elapsed playback time
-    const playbackHtml = render({
+  afterEach(() => vi.useRealTimers());
+
+  it("shows playback progress with elapsed and total time", () => {
+    const html = render({
       name: "YouTube",
-      startTime: now - 87,
-      endTime: now + 1363
+      startTime: nowSeconds - 87,
+      endTime: nowSeconds + 1363
     });
-    expect(playbackHtml).toContain('style="width:6%"');
-    expect(playbackHtml).toContain(">1:27</span>");
-    expect(playbackHtml).toContain(">24:10</span>");
 
-    // 2. End-only countdown (no playback progress bar)
-    const endOnlyHtml = render({
+    expect(html).toContain('style="width:6%"');
+    expect(html).toContain(">1:27</span>");
+    expect(html).toContain(">24:10</span>");
+  });
+
+  it("shows an end-only countdown without a progress bar", () => {
+    const html = render({
       name: "Countdown",
-      endTime: now + 60
+      endTime: nowSeconds + 60
     });
-    expect(endOnlyHtml).toContain(">-1:00</span>");
-    expect(endOnlyHtml).not.toContain("transition-[width]");
 
-    // 3. Custom countdown draining
-    const countdownHtml = render(
+    expect(html).toContain(">-1:00</span>");
+    expect(html).not.toContain("transition-[width]");
+  });
+
+  it("drains a custom countdown from its start", () => {
+    const html = render(
       {
         name: "Custom",
-        startTime: now - 60,
-        endTime: now + 240
+        startTime: nowSeconds - 60,
+        endTime: nowSeconds + 240
       },
       undefined,
       "countdown"
     );
-    expect(countdownHtml).toContain('style="width:80%"');
-    expect(countdownHtml).toContain(">4:00</span>");
-    expect(countdownHtml).toContain(">5:00</span>");
+
+    expect(html).toContain('style="width:80%"');
+    expect(html).toContain(">4:00</span>");
+    expect(html).toContain(">5:00</span>");
   });
 });
 
 describe("LiveCard activity heading", () => {
-  it("adapts activity heading based on presence type, state/details presence, and statusLabel override", () => {
-    // 1. Generic type when both lines are empty
-    const emptyDetails = render({
+  it("shows only the activity type when both text lines are empty", () => {
+    const html = render({
       type: 3,
       name: "My activity",
       details: "  ",
       state: ""
     });
-    expect(emptyDetails).toContain(">Watching</span>");
-    expect(emptyDetails).not.toContain("Watching My activity");
 
-    // 2. Activity name in heading when lines are filled
-    const filledDetails = render({
+    expect(html).toContain(">Watching</span>");
+    expect(html).not.toContain("Watching My activity");
+  });
+
+  it("puts the activity name in the heading when a text line is filled", () => {
+    const html = render({
       type: 3,
       name: "My activity",
       state: "Second line"
     });
-    expect(filledDetails).toContain(">Watching My activity</span>");
-    expect(filledDetails).toContain(">Second line</span>");
 
-    // 3. Explicit statusLabel override
-    const overridden = render(
+    expect(html).toContain(">Watching My activity</span>");
+    expect(html).toContain(">Second line</span>");
+  });
+
+  it("lets an explicit status label replace the heading", () => {
+    const html = render(
       {
         type: 3,
         name: "My activity"
       },
       "Paused"
     );
-    expect(overridden).toContain(">Paused</span>");
-    expect(overridden).not.toContain(">Watching</span>");
+
+    expect(html).toContain(">Paused</span>");
+    expect(html).not.toContain(">Watching</span>");
   });
 });

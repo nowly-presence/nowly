@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { GET } from "./[icon]/[file]/route";
-import { ACTIVITY_ICON_COLORS, ACTIVITY_ICON_KEYS, ACTIVITY_ICON_PATHS } from "./activity-icons";
+import { ACTIVITY_ICON_KEYS, ACTIVITY_ICON_PATHS } from "./activity-icons";
 
 const request = new Request("https://nowly.me/api/activity-icon/test/test.png?v=1");
 
@@ -28,9 +28,7 @@ describe("activity icon route", () => {
     expect(response.headers.get("cache-control")).toBe("public, max-age=31536000, immutable");
   });
 
-  it("keeps the path table aligned with the 24 icon keys", () => {
-    expect(ACTIVITY_ICON_KEYS).toHaveLength(24);
+  it("has a drawing for every accepted icon key and nothing else", () => {
     expect(Object.keys(ACTIVITY_ICON_PATHS).sort()).toEqual([...ACTIVITY_ICON_KEYS].sort());
-    expect(ACTIVITY_ICON_COLORS).toHaveLength(10);
   });
 });

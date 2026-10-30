@@ -141,36 +141,49 @@ describe("projection helpers", () => {
 });
 
 describe("mergeThreeWay", () => {
-  it("resolves three-way diffs: takes remote on local no-op, merges disjoint field changes, lets local write win on collision, and treats arrays atomically", () => {
-    // 1. Remote change when local unchanged
-    expect(mergeThreeWay({ appearance: "light" }, { appearance: "light" }, { appearance: "dark" })).toEqual({ appearance: "dark" });
-
-    // 2. Disjoint field changes both kept
-    expect(
-      mergeThreeWay(
-        {
-          appearance: "light",
-          showPlayer: true
-        },
-        {
-          appearance: "dark",
-          showPlayer: true
-        },
-        {
-          appearance: "light",
-          showPlayer: false
-        }
-      )
-    ).toEqual({
-      appearance: "dark",
-      showPlayer: false
-    });
-
-    // 3. Local write wins on collision
-    expect(mergeThreeWay({ appearance: "light" }, { appearance: "dark" }, { appearance: "system" })).toEqual({ appearance: "dark" });
-
-    // 4. Arrays treated as atomic values
-    expect(mergeThreeWay(["a"], ["a", "b"], ["c"])).toEqual(["a", "b"]);
+  it.each([
+    [
+      "takes the remote value when the local one is unchanged",
+      { appearance: "light" },
+      { appearance: "light" },
+      { appearance: "dark" },
+      { appearance: "dark" }
+    ],
+    [
+      "keeps changes made to different fields on each side",
+      {
+        appearance: "light",
+        showPlayer: true
+      },
+      {
+        appearance: "dark",
+        showPlayer: true
+      },
+      {
+        appearance: "light",
+        showPlayer: false
+      },
+      {
+        appearance: "dark",
+        showPlayer: false
+      }
+    ],
+    [
+      "lets the local write win on the same field",
+      { appearance: "light" },
+      { appearance: "dark" },
+      { appearance: "system" },
+      { appearance: "dark" }
+    ],
+    [
+      "treats arrays as single values",
+      ["a"],
+      ["a", "b"],
+      ["c"],
+      ["a", "b"]
+    ]
+  ])("%s", (_case, base, local, remote, expected) => {
+    expect(mergeThreeWay(base, local, remote)).toEqual(expected);
   });
 });
 

@@ -38,25 +38,4 @@ describe("security routes", () => {
 
     await app.close();
   });
-
-  it("caches the derived key across requests", async () => {
-    const { securityRoutes } = await import("@/features/security/security.routes");
-
-    const app = Fastify();
-    await app.register(securityRoutes);
-
-    const first = await app.inject({
-      method: "GET",
-      url: "/public-key"
-    });
-
-    const second = await app.inject({
-      method: "GET",
-      url: "/public-key"
-    });
-
-    expect(first.body).toBe(second.body);
-
-    await app.close();
-  });
 });

@@ -42,10 +42,10 @@ const countOpenings = (messages: NativeResponse[], start: DiscordIpcIssue = NO_D
 };
 
 describe("Discord IPC prompt", () => {
-  it("tracks prompt lifecycle: opens on code, deduplicates heartbeats, re-opens after recovery, and defers while busy", () => {
-    // 1. Opens for PONG or ERROR with code, but ignores healthy or unrelated responses
+  it("opens once for a heartbeat or an error carrying the code, never for other responses", () => {
     expect(countOpenings([deniedPong]).openings).toBe(1);
     expect(countOpenings([deniedError]).openings).toBe(1);
+
     const nonErrors = countOpenings([
       healthyPong,
       plainError,
@@ -57,36 +57,43 @@ describe("Discord IPC prompt", () => {
     ]);
     expect(nonErrors.openings).toBe(0);
     expect(nonErrors.issue).toEqual(NO_DISCORD_IPC_ISSUE);
+  });
 
-    // 2. Deduplicates consecutive heartbeats with the code
+  it("opens only once while the code keeps coming back", () => {
     const consecutive = countOpenings([deniedPong, deniedPong, deniedError, deniedPong]);
+
     expect(consecutive.openings).toBe(1);
     expect(consecutive.issue).toEqual({
       active: true,
       prompted: true
     });
+  });
 
-    // 3. Re-opens after resolving and recurring
+  it("opens again when the problem comes back after a healthy heartbeat", () => {
     expect(countOpenings([deniedPong, deniedPong, healthyPong, deniedPong, deniedError]).openings).toBe(2);
+  });
 
-    // 4. Keeps episode on non-heartbeat messages
+  it("keeps the episode open across messages that are not heartbeats", () => {
     const nonHeartbeat = countOpenings([
       deniedPong,
       plainError,
       { type: "OK" },
       deniedPong
     ]);
+
     expect(nonHeartbeat.openings).toBe(1);
     expect(nonHeartbeat.issue.active).toBe(true);
+  });
 
-    // 5. Defers while busy on screen
+  it("waits while the screen is busy and never prompts twice for the same episode", () => {
     const issue = trackDiscordIpcIssue(NO_DISCORD_IPC_ISSUE, deniedPong);
+
     expect(shouldPromptDiscordIpcIssue(issue, true)).toBe(false);
     expect(shouldPromptDiscordIpcIssue(issue, false)).toBe(true);
     expect(shouldPromptDiscordIpcIssue(markDiscordIpcIssuePrompted(issue), false)).toBe(false);
   });
 
-  it("handles native status mapping and schema validation", () => {
+  it("maps an episode to and from the native status fields", () => {
     expect(markDiscordIpcIssuePrompted(NO_DISCORD_IPC_ISSUE)).toBe(NO_DISCORD_IPC_ISSUE);
 
     const issue = {
@@ -109,7 +116,9 @@ describe("Discord IPC prompt", () => {
         status: "connected"
       })
     ).toEqual(NO_DISCORD_IPC_ISSUE);
+  });
 
+  it("accepts only well-formed stored episodes", () => {
     expect(
       isDiscordIpcIssue({
         active: true,

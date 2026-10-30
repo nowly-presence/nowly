@@ -51,13 +51,13 @@ describe("custom activity detection", () => {
     storeTabs("https://watchparty.netflix.com/room/42");
   });
 
-  it("resolves matching activities, prioritizes manual selection, and handles edge cases", async () => {
-    // 1. Matches tab URL
+  it("detects the activity whose site matches the active tab", async () => {
     await setCustomActivities({
       items: [activity()],
       activeId: null,
       activatedAt: null
     });
+
     expect(await resolveCustomActivityDetection()).toEqual({
       activityId: "a1",
       host: "watchparty.netflix.com",
@@ -70,14 +70,21 @@ describe("custom activity detection", () => {
         host: "watchparty.netflix.com"
       })
     );
+  });
 
-    // 2. Ignores non-matching site
+  it("detects nothing on a site no activity matches", async () => {
     storeTabs("https://example.com/room");
+    await setCustomActivities({
+      items: [activity()],
+      activeId: null,
+      activatedAt: null
+    });
+
     expect(await resolveCustomActivityDetection()).toBeNull();
     expect(await getEffectiveCustomActivity()).toBeNull();
+  });
 
-    // 3. Manual selection wins and clears detection
-    storeTabs("https://watchparty.netflix.com/room/42");
+  it("lets a manual selection win and clears the stored detection", async () => {
     await setCustomActivities({
       items: [activity()],
       activeId: "a1",
@@ -89,6 +96,7 @@ describe("custom activity detection", () => {
       tabId: TAB_ID,
       activatedAt: activatedAt - 1000
     };
+
     expect(await resolveCustomActivityDetection()).toBeNull();
     expect(storage.session[CUSTOM_ACTIVITY_DETECTION_KEY]).toBeNull();
     expect(await getEffectiveCustomActivity()).toEqual({
@@ -97,14 +105,9 @@ describe("custom activity detection", () => {
       detected: false,
       host: null
     });
+  });
 
-    // 4. Fallback on unreadable tab URL and picks latest updated
-    const detection = {
-      activityId: "new",
-      host: "watchparty.netflix.com",
-      tabId: TAB_ID,
-      activatedAt
-    };
+  it("picks the most recently updated activity when several match", async () => {
     await setCustomActivities({
       items: [
         activity({
@@ -119,16 +122,29 @@ describe("custom activity detection", () => {
       activeId: null,
       activatedAt: null
     });
-    expect(await resolveCustomActivityDetection()).toEqual(expect.objectContaining({ activityId: "new" }));
 
-    // Unreadable tab keeps previous
+    expect(await resolveCustomActivityDetection()).toEqual(expect.objectContaining({ activityId: "new" }));
+  });
+
+  it("keeps the previous detection when the active tab cannot be read", async () => {
+    const detection = {
+      activityId: "a1",
+      host: "watchparty.netflix.com",
+      tabId: TAB_ID,
+      activatedAt
+    };
+    await setCustomActivities({
+      items: [activity()],
+      activeId: null,
+      activatedAt: null
+    });
     storage.session[CUSTOM_ACTIVITY_DETECTION_KEY] = detection;
     storeTabs(null);
+
     expect(await resolveCustomActivityDetection()).toEqual(detection);
   });
 
   it("reports changes and preserves ongoing activation time", async () => {
-    storeTabs("https://watchparty.netflix.com/room/42");
     await setCustomActivities({
       items: [activity()],
       activeId: null,

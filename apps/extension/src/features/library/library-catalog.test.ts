@@ -40,53 +40,30 @@ const catalog = [
 ];
 
 describe("filterCatalog", () => {
-  it("filters and sorts catalog presences accurately", () => {
-    // 1. Filter by category
-    expect(
-      filterCatalog(catalog, {
-        category: "music",
-        query: "",
-        sort: "name",
-        locale: "en"
-      }).map((item) => item.slug)
-    ).toEqual(["ade", "deezer"]);
+  const slugs = (options: Partial<Parameters<typeof filterCatalog>[1]>) =>
+    filterCatalog(catalog, {
+      category: "all",
+      query: "",
+      sort: "name",
+      locale: "en",
+      ...options
+    }).map((item) => item.slug);
 
-    // 2. Matches accent-insensitive queries on name and urls
-    expect(
-      filterCatalog(catalog, {
-        category: "all",
-        query: "creme",
-        sort: "name",
-        locale: "en"
-      }).map((item) => item.slug)
-    ).toEqual(["ade"]);
-    expect(
-      filterCatalog(catalog, {
-        category: "all",
-        query: "youtube.com",
-        sort: "name",
-        locale: "en"
-      }).map((item) => item.slug)
-    ).toEqual(["youtube"]);
+  it("keeps only the selected category", () => {
+    expect(slugs({ category: "music" })).toEqual(["ade", "deezer"]);
+  });
 
-    // 3. Sorts by popularity (weighting active users over installs) and newest first
-    expect(
-      filterCatalog(catalog, {
-        category: "all",
-        query: "",
-        sort: "popular",
-        locale: "en"
-      }).map((item) => item.slug)
-    ).toEqual(["deezer", "youtube", "ade"]);
+  it("matches queries without accents on names and URLs", () => {
+    expect(slugs({ query: "creme" })).toEqual(["ade"]);
+    expect(slugs({ query: "youtube.com" })).toEqual(["youtube"]);
+  });
 
-    expect(
-      filterCatalog(catalog, {
-        category: "all",
-        query: "",
-        sort: "new",
-        locale: "en"
-      }).map((item) => item.slug)
-    ).toEqual(["deezer", "youtube", "ade"]);
+  it("sorts by popularity, weighting active users over installs", () => {
+    expect(slugs({ sort: "popular" })).toEqual(["deezer", "youtube", "ade"]);
+  });
+
+  it("sorts newest publications first", () => {
+    expect(slugs({ sort: "new" })).toEqual(["deezer", "youtube", "ade"]);
   });
 });
 
