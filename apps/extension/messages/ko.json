@@ -93,7 +93,6 @@
   "activity.type.watching": "시청 중",
   "activity.type.competing": "경쟁 중",
   "activity.pausedLabel": "일시정지됨, Discord에서 숨김",
-  "activity.hideTab": "이 탭 숨기기",
   "activity.thisTab": "현재 탭",
   "activity.tabShared": "{host} 공유 중",
   "activity.tabHidden": "{host} 숨김",
