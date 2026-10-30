@@ -23,7 +23,14 @@ const args = new Set(process.argv.slice(2));
 const auto = args.has("--auto");
 const pull = args.has("--pull");
 
-const git = (cwd: string, ...gitArgs: string[]) => spawnSync("git", gitArgs, { cwd, encoding: "utf8" });
+/**
+ * Git hooks export repository-local variables (GIT_DIR, GIT_INDEX_FILE...). When `pnpm install` runs from a hook,
+ * they would point every command below at the monorepo, and a clone would overwrite its index.
+ */
+const LOCAL_GIT_VARIABLES = new Set(spawnSync("git", ["rev-parse", "--local-env-vars"], { encoding: "utf8" }).stdout?.split("\n").filter(Boolean) ?? []);
+const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !LOCAL_GIT_VARIABLES.has(name)));
+
+const git = (cwd: string, ...gitArgs: string[]) => spawnSync("git", gitArgs, { cwd, env, encoding: "utf8" });
 
 const log = (message: string): void => console.log(`[repos] ${message}`);
 
@@ -79,7 +86,7 @@ const syncRepository = (name: string, clone: boolean): void => {
 
   log(`${label}: cloning ${BASE_URL}/${name}.git`);
   // Blobless clone: full history, file contents downloaded on demand (presence assets are large).
-  const result = spawnSync("git", ["clone", "--quiet", "--filter=blob:none", `${BASE_URL}/${name}.git`, dir], { stdio: "inherit" });
+  const result = spawnSync("git", ["clone", "--quiet", "--filter=blob:none", `${BASE_URL}/${name}.git`, dir], { env, stdio: "inherit" });
 
   if (result.status !== 0) throw new Error(`could not clone ${name}`);
 };
