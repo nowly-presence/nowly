@@ -3,9 +3,8 @@ import { isSeasonMomentDue, isSeasonMomentsState, markSeasonMomentShown } from "
 
 const local = (year: number, month: number, day: number, hour = 12) => new Date(year, month - 1, day, hour);
 
-describe("season-moments", () => {
-  it("determines when moments are due, handles replays, and validates state", () => {
-    // 1. Due dates and yearly frequency
+describe("season moments", () => {
+  it("is due on the season's moment day once per year", () => {
     expect(isSeasonMomentDue(null, "spring", local(2027, 3, 20))).toBe(true);
     expect(
       isSeasonMomentDue(
@@ -27,14 +26,16 @@ describe("season-moments", () => {
     ).toBe(true);
     expect(isSeasonMomentDue(null, "spring", local(2027, 3, 21))).toBe(false);
     expect(isSeasonMomentDue(null, "new-year", local(2027, 1, 1))).toBe(true);
+  });
 
-    // 2. Halloween and replay rules
+  it("never covers Halloween, even on replay, and replays other seasons on any day", () => {
     expect(isSeasonMomentDue(null, "halloween", local(2026, 10, 31))).toBe(false);
     expect(isSeasonMomentDue({ replay: true }, "halloween", local(2026, 10, 31))).toBe(false);
     expect(isSeasonMomentDue({ replay: true }, null, local(2026, 3, 20))).toBe(false);
     expect(isSeasonMomentDue({ replay: true }, "winter", local(2026, 7, 4))).toBe(true);
+  });
 
-    // 3. Mark as shown
+  it("records the year only on the moment day, keeps other seasons and clears the replay flag", () => {
     expect(
       markSeasonMomentShown(
         {
@@ -62,8 +63,9 @@ describe("season-moments", () => {
     ).toEqual({
       shown: { spring: 2025 }
     });
+  });
 
-    // 4. State schema validation
+  it("accepts only well-formed stored state", () => {
     expect(isSeasonMomentsState({})).toBe(true);
     expect(
       isSeasonMomentsState({

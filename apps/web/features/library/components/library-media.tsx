@@ -4,15 +4,17 @@ import { PresenceTile } from "@/components/presence-tile";
 import { libraryLogoUrl, libraryThumbnailUrl } from "@/lib/library-catalog";
 import { cn } from "@nowly/ui";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 type LibraryMediaProps = {
   slug: string;
   name: string;
   variant?: "card" | "hero";
+  /** Rendered in the top-right corner of the thumbnail. */
+  action?: ReactNode;
 };
 
-export const LibraryMedia = ({ slug, name, variant = "card" }: LibraryMediaProps) => {
+export const LibraryMedia = ({ slug, name, variant = "card", action }: LibraryMediaProps) => {
   const [bannerFailed, setBannerFailed] = useState(false);
   const isHero = variant === "hero";
 
@@ -33,6 +35,9 @@ export const LibraryMedia = ({ slug, name, variant = "card" }: LibraryMediaProps
       <div className={cn(bannerFailed ? null : "absolute bottom-0 z-10 translate-y-1/2", bannerFailed ? null : isHero ? "left-6 sm:left-8" : "left-6")}>
         <PresenceTile src={libraryLogoUrl(slug)} name={name} className={isHero ? "size-20 sm:size-24" : "size-14"} />
       </div>
+      {action ? (
+        <div className={cn("absolute z-10", bannerFailed ? "top-6 right-6 sm:top-8 sm:right-8" : "top-3 right-3 sm:top-4 sm:right-4")}>{action}</div>
+      ) : null}
     </div>
   );
 };

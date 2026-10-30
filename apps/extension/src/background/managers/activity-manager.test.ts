@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { clearTabPresences, setFocusedTabId, upsertTabPresence } from "@/background/services/background-context";
 import { installChromeMock } from "@/test/chrome-mock";
 import type { ExtensionSettings, PresenceData, StoredPresence } from "@/shared/types";
@@ -132,50 +132,62 @@ describe("shouldHoldDiscord", () => {
     ...overrides
   });
 
-  it("handles hold rules: global pause, active vs expired snooze, and schedule adherence", async () => {
-    const chrome = installChromeMock();
-    const { shouldHoldDiscord } = await import("@/background/managers/activity-manager");
+  describe("hold rules", () => {
+    const now = new Date(2026, 9, 28, 12);
+    const otherDay = (now.getDay() + 1) % 7;
 
-    // 1. Globally paused
-    chrome.local.settings = {
-      ...baseSettings,
-      presencePaused: true
-    };
-    expect(await shouldHoldDiscord(storedPresence())).toBe(true);
+    beforeEach(() => {
+      vi.useFakeTimers({
+        toFake: ["Date"]
+      });
+      vi.setSystemTime(now);
+    });
 
-    // 2. Snooze active vs expired
-    chrome.local.settings = baseSettings;
-    expect(await shouldHoldDiscord(storedPresence({ snoozeUntil: Date.now() + 60_000 }))).toBe(true);
-    expect(await shouldHoldDiscord(storedPresence({ snoozeUntil: Date.now() - 1 }))).toBe(false);
+    afterEach(() => {
+      vi.useRealTimers();
+    });
 
-    // 3. Schedule enabled & outside days vs schedule disabled
-    const otherDay = (new Date().getDay() + 1) % 7;
-    chrome.local.settings = {
-      ...baseSettings,
-      scheduleEnabled: true
-    };
-    expect(
-      await shouldHoldDiscord(
-        storedPresence({
-          schedule: {
-            days: [otherDay]
-          }
-        })
-      )
-    ).toBe(true);
+    it("holds every presence while Nowly is paused", async () => {
+      const chrome = installChromeMock();
+      const { shouldHoldDiscord } = await import("@/background/managers/activity-manager");
 
-    chrome.local.settings = {
-      ...baseSettings,
-      scheduleEnabled: false
-    };
-    expect(
-      await shouldHoldDiscord(
-        storedPresence({
-          schedule: {
-            days: []
-          }
-        })
-      )
-    ).toBe(false);
+      chrome.local.settings = {
+        ...baseSettings,
+        presencePaused: true
+      };
+      expect(await shouldHoldDiscord(storedPresence())).toBe(true);
+    });
+
+    it("holds a presence only until its snooze ends", async () => {
+      const chrome = installChromeMock();
+      const { shouldHoldDiscord } = await import("@/background/managers/activity-manager");
+
+      chrome.local.settings = baseSettings;
+      expect(await shouldHoldDiscord(storedPresence({ snoozeUntil: now.getTime() + 60_000 }))).toBe(true);
+      expect(await shouldHoldDiscord(storedPresence({ snoozeUntil: now.getTime() - 1 }))).toBe(false);
+    });
+
+    it("applies a presence schedule only while the global schedule switch is on", async () => {
+      const chrome = installChromeMock();
+      const { shouldHoldDiscord } = await import("@/background/managers/activity-manager");
+
+      const outsideSchedule = storedPresence({
+        schedule: {
+          days: [otherDay]
+        }
+      });
+
+      chrome.local.settings = {
+        ...baseSettings,
+        scheduleEnabled: true
+      };
+      expect(await shouldHoldDiscord(outsideSchedule)).toBe(true);
+
+      chrome.local.settings = {
+        ...baseSettings,
+        scheduleEnabled: false
+      };
+      expect(await shouldHoldDiscord(outsideSchedule)).toBe(false);
+    });
   });
 });

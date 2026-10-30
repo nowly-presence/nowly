@@ -6,12 +6,19 @@ import { useCallback, useEffect, useState } from "react";
 
 const isMobileBrowser = (): boolean => /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 
-export const useExtension = () => {
+/** Extension presence only (`null` while detecting), without the diagnostic request. */
+export const useExtensionDetected = (): boolean | null => {
   const [detected, setDetected] = useState<boolean | null>(() => getExtensionDetected());
-  const [diagnostic, setDiagnostic] = useState<ExtensionDiagnostic | null>(null);
-  const [mobile, setMobile] = useState(false);
 
   useEffect(() => subscribeExtensionDetected(setDetected), []);
+
+  return detected;
+};
+
+export const useExtension = () => {
+  const detected = useExtensionDetected();
+  const [diagnostic, setDiagnostic] = useState<ExtensionDiagnostic | null>(null);
+  const [mobile, setMobile] = useState(false);
 
   useEffect(() => {
     setMobile(isMobileBrowser());

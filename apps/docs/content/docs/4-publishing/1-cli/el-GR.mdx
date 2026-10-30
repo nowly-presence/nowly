@@ -92,17 +92,17 @@ nowly pack youtube
 
 ### Αν έχεις ολόκληρο το monorepo
 
-Αν κλωνοποίησες το ίδιο το `nowly` (με το `presences` ως υπομονάδα), μπορείς να χτίσεις την επέκταση με κάθε presence ενσωματωμένο απευθείας:
+Αν κλωνοποίησες το ίδιο το `nowly` και εκτέλεσες `pnpm repos` (που κλωνοποιεί το `presences` στο `packages/presences`), μπορείς να χτίσεις την επέκταση με κάθε presence ενσωματωμένο απευθείας:
 
 ```bash
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 Ξαναχτίσε το presence που άλλαξε και μετά την επέκταση μετά από κάθε αλλαγή:
 
 ```bash
 nowly build youtube
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 Φόρτωσε ξανά στο `chrome://extensions` - το presence είναι ήδη εγκατεστημένο και έτοιμο προς χρήση.

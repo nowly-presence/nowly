@@ -4,14 +4,14 @@ import { isHalloweenPrankDue, isHalloweenPrankState, markHalloweenPrankShown } f
 const halloween = new Date(2026, 9, 31, 9);
 const regularDay = new Date(2026, 9, 12, 9);
 
-describe("halloween-prank", () => {
-  it("triggers once a year on Halloween, supports replay, records state, and validates schema", () => {
-    // 1. Triggers on Oct 31st once per year
+describe("halloween prank", () => {
+  it("is due on October 31 once per year", () => {
     expect(isHalloweenPrankDue(null, halloween)).toBe(true);
     expect(isHalloweenPrankDue({ lastShownYear: 2025 }, halloween)).toBe(true);
     expect(isHalloweenPrankDue({ lastShownYear: 2026 }, halloween)).toBe(false);
+  });
 
-    // 2. Quiet on normal days unless replay flag is set
+  it("stays quiet on other days unless a replay is requested", () => {
     expect(isHalloweenPrankDue(null, regularDay)).toBe(false);
     expect(
       isHalloweenPrankDue(
@@ -22,8 +22,9 @@ describe("halloween-prank", () => {
         regularDay
       )
     ).toBe(true);
+  });
 
-    // 3. Records year on the day, drops replay flag
+  it("records the year only when shown on Halloween and always clears the replay flag", () => {
     expect(markHalloweenPrankShown({ replay: true }, halloween)).toEqual({ lastShownYear: 2026 });
     expect(
       markHalloweenPrankShown(
@@ -35,8 +36,9 @@ describe("halloween-prank", () => {
       )
     ).toEqual({ lastShownYear: 2025 });
     expect(markHalloweenPrankShown({ replay: true }, regularDay)).toEqual({});
+  });
 
-    // 4. Schema validation
+  it("accepts only well-formed stored state", () => {
     expect(isHalloweenPrankState({})).toBe(true);
     expect(isHalloweenPrankState({ lastShownYear: 2026 })).toBe(true);
     expect(isHalloweenPrankState({ lastShownYear: "2026" })).toBe(false);

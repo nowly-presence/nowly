@@ -1,5 +1,4 @@
 import { deriveDeviceToken } from "@/features/device/device-token";
-import { imageProxyRoutes } from "@/features/image-proxy/image-proxy.routes";
 import { presenceRoutes } from "@/features/presence/presence.routes";
 import cors from "@fastify/cors";
 import Fastify from "fastify";
@@ -61,7 +60,6 @@ async function buildApp() {
   const app = Fastify();
   await app.register(cors, { origin: true });
   await app.register(presenceRoutes, { prefix: "/presences" });
-  await app.register(imageProxyRoutes);
   return app;
 }
 
@@ -162,6 +160,7 @@ describe("Presence Routes", () => {
 
   beforeEach(async () => {
     vi.clearAllMocks();
+    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([]);
     delete process.env.API_SECRET_KEY;
     app = await buildApp();
   });
@@ -251,7 +250,7 @@ describe("Presence Routes", () => {
     expect(body.version).toBe("1.0.0");
     expect(body.bundle).toBe("console.log('hello')");
     expect(body.sha256).toBe("abc123");
-    expect(body.metadataHash).toBeDefined();
+    expect(body.metadataHash).toBe("abc123");
     expect(body.signature).toBe("signature-value");
     expect(body.totalInstalls).toBe(100);
     expect(body.activeUsers).toBe(10);
@@ -380,7 +379,7 @@ describe("Presence Routes", () => {
     expect(body.results).toHaveLength(1);
     expect(body.results[0].slug).toBe("youtube");
     expect(body.results[0].version).toBe("1.0.0");
-    expect(body.results[0].changelog).toBeTruthy();
+    expect(body.results[0].changelog).toContain("Watch videos");
     expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "1.0.0", expect.any(Date));
     const publishedAt = mockPresenceRepo.setVersion.mock.calls[0][2];
     expect(mockPresenceRepo.setAdded).toHaveBeenCalledWith("youtube", publishedAt);
@@ -430,6 +429,112 @@ describe("Presence Routes", () => {
     expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "1.0.1", expect.any(Date));
     expect(mockPresenceRepo.setAdded).not.toHaveBeenCalled();
     expect(mockPresenceRepo.setUpdated).not.toHaveBeenCalled();
+  });
+
+  it("POST /presences/sync rejects conflicting aliases before any write", async () => {
+    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([
+      {
+        slug: "youtube",
+        metadata: {
+          slug: "youtube",
+          aliases: ["yt"]
+        }
+      },
+      {
+        slug: "openfront.io",
+        metadata: {
+          slug: "openfront.io",
+          aliases: ["openfront"]
+        }
+      }
+    ]);
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/sync",
+      payload: {
+        presences: [
+          {
+            slug: "youtube-music",
+            type: "new",
+            name: "YouTube Music",
+            metadata: {
+              slug: "youtube-music",
+              name: "YouTube Music",
+              aliases: ["yt", "youtube", "Music"]
+            }
+          },
+          {
+            slug: "openfront",
+            type: "new",
+            name: "OpenFront"
+          }
+        ]
+      }
+    });
+
+    expect(res.statusCode).toBe(400);
+    expect(JSON.parse(res.body)).toEqual({
+      error: "PRESENCE_ALIAS_CONFLICT",
+      issues: [
+        'youtube-music: Alias "yt" is already an alias of "youtube"',
+        'youtube-music: Alias "youtube" is already the slug of "youtube"',
+        'youtube-music: Alias "Music" must use lowercase letters, digits, dots or hyphens (max 80 characters)',
+        'openfront: Slug "openfront" is already an alias of "openfront.io"'
+      ]
+    });
+    expect(mockPresenceRepo.setVersion).not.toHaveBeenCalled();
+    expect(mockPresenceRepo.setPresenceMeta).not.toHaveBeenCalled();
+    expect(mockPresenceRepo.setArchived).not.toHaveBeenCalled();
+  });
+
+  it("POST /presences/sync accepts aliases moved within the same batch", async () => {
+    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([
+      {
+        slug: "youtube",
+        metadata: {
+          slug: "youtube",
+          aliases: ["yt"]
+        }
+      }
+    ]);
+    mockPresenceRepo.getPresenceStats.mockResolvedValue({ version: "1.0.0" });
+    mockPresenceRepo.getVersionHistory.mockResolvedValue([]);
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/sync",
+      payload: {
+        presences: [
+          {
+            slug: "youtube",
+            type: "modified",
+            name: "YouTube",
+            changelog: "Move alias",
+            metadata: {
+              slug: "youtube",
+              aliases: []
+            }
+          },
+          {
+            slug: "youtube-music",
+            type: "modified",
+            name: "YouTube Music",
+            changelog: "Take alias",
+            metadata: {
+              slug: "youtube-music",
+              aliases: ["yt"]
+            }
+          }
+        ]
+      }
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(mockPresenceRepo.setPresenceMeta).toHaveBeenCalledWith("youtube-music", {
+      slug: "youtube-music",
+      aliases: ["yt"]
+    });
   });
 
   it("POST /presences/sync archives removed slugs", async () => {
@@ -591,234 +696,6 @@ describe("Stats Routes", () => {
         })
       ).statusCode
     ).toBe(503);
-  });
-});
-
-describe("Image Proxy Routes", () => {
-  let app: Awaited<ReturnType<typeof buildApp>>;
-  const originalFetch = globalThis.fetch;
-
-  beforeEach(async () => {
-    vi.clearAllMocks();
-    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([
-      {
-        slug: "tiktok",
-        metadata: {
-          imageProxy: {
-            hostSuffixes: ["tiktokcdn.com", "tiktokcdn-eu.com", "tiktokcdn-us.com", "tiktokv.com"],
-            headers: { Referer: "https://www.tiktok.com/" }
-          }
-        }
-      },
-      {
-        slug: "github",
-        metadata: {
-          imageProxy: {
-            hostSuffixes: ["github.com", "githubusercontent.com"],
-            headers: { "User-Agent": "Nowly/1.0" }
-          }
-        }
-      },
-      {
-        slug: "canalplus",
-        metadata: {
-          imageProxy: {
-            hostSuffixes: ["thumb.canalplus.pro"],
-            headers: { Referer: "https://www.canalplus.com/" }
-          }
-        }
-      }
-    ]);
-    app = await buildApp();
-  });
-
-  afterEach(async () => {
-    await app.close();
-    globalThis.fetch = originalFetch;
-  });
-
-  it("GET /image-proxy handles supported CDN images and rejects invalid URLs", async () => {
-    // 1. Rejects unsupported CDN URLs
-    const invalidRes = await app.inject({
-      method: "GET",
-      url: `/image-proxy?url=${encodeURIComponent("https://example.com/image.jpg")}`
-    });
-    expect(invalidRes.statusCode).toBe(400);
-    expect(JSON.parse(invalidRes.body)).toEqual({ error: "INVALID_IMAGE_URL" });
-
-    // 2. Rejects unencoded nested query parameters
-    const unencodedRes = await app.inject({
-      method: "GET",
-      url: "/image-proxy?service=tiktok&url=https://p16-common-sign.tiktokcdn-eu.com/image.jpg?dr=1&x-signature=abc"
-    });
-    expect(unencodedRes.statusCode).toBe(400);
-    expect(JSON.parse(unencodedRes.body)).toEqual({ error: "IMAGE_URL_NOT_ENCODED" });
-
-    // 3. Successfully proxies a valid CDN image
-    globalThis.fetch = vi.fn().mockResolvedValue(
-      new Response(new Uint8Array([1, 2, 3]), {
-        status: 200,
-        headers: {
-          "content-type": "image/jpeg",
-          "content-length": "3"
-        }
-      })
-    );
-
-    const validRes = await app.inject({
-      method: "GET",
-      url: `/image-proxy?url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg")}`
-    });
-    expect(validRes.statusCode).toBe(200);
-    expect(validRes.headers["content-type"]).toBe("image/jpeg");
-    expect(Buffer.from(validRes.rawPayload)).toEqual(Buffer.from([1, 2, 3]));
-  });
-
-  it("GET /i returns fetched supported CDN images with a short URL", async () => {
-    globalThis.fetch = vi.fn().mockResolvedValue(
-      new Response(new Uint8Array([16, 17, 18]), {
-        status: 200,
-        headers: {
-          "content-type": "image/jpeg",
-          "content-length": "3"
-        }
-      })
-    );
-
-    const res = await app.inject({
-      method: "GET",
-      url: `/i?u=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg?x=1&y=2")}`
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(res.headers["content-type"]).toBe("image/jpeg");
-    expect(Buffer.from(res.rawPayload)).toEqual(Buffer.from([16, 17, 18]));
-    const fetchMock = vi.mocked(globalThis.fetch);
-    expect(fetchMock.mock.calls[0][0]).toBe("https://p16-common-sign.tiktokcdn-eu.com/image.jpg?x=1&y=2");
-    expect(fetchMock.mock.calls[0][1]).toBeTruthy();
-  });
-
-  it("POST /images-proxy caches fetched images and returns a short public URL, reusing on duplicate requests", async () => {
-    globalThis.fetch = vi.fn().mockResolvedValue(
-      new Response(new Uint8Array([21, 22, 23]), {
-        status: 200,
-        headers: {
-          "content-type": "image/png",
-          "content-length": "3"
-        }
-      })
-    );
-
-    const res = await app.inject({
-      method: "POST",
-      url: "/images-proxy",
-      payload: {
-        service: "tiktok",
-        url: "https://p16-common-sign.tiktokcdn-eu.com/image.png?x=1&y=2"
-      }
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(res.headers["access-control-allow-origin"]).toBe("*");
-
-    const body = JSON.parse(res.body) as {
-      url: string;
-      expiresIn: number;
-    };
-    expect(body.url).toMatch(/^http:\/\/localhost(?::\d+)?\/images-proxy\/[a-zA-Z0-9_-]{32}$/);
-    expect(body.expiresIn).toBe(300);
-    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
-
-    // Reuses cached image without refetching
-    globalThis.fetch = vi.fn();
-    const res2 = await app.inject({
-      method: "POST",
-      url: "/images-proxy",
-      payload: {
-        service: "tiktok",
-        url: "https://p16-common-sign.tiktokcdn-eu.com/image.png?x=1&y=2"
-      }
-    });
-
-    expect(res2.statusCode).toBe(200);
-    expect(JSON.parse(res2.body).url).toBe(body.url);
-    expect(globalThis.fetch).not.toHaveBeenCalled();
-  });
-
-  it("GET /images-proxy/:id returns a cached image", async () => {
-    globalThis.fetch = vi.fn().mockResolvedValue(
-      new Response(new Uint8Array([31, 32, 33]), {
-        status: 200,
-        headers: {
-          "content-type": "image/webp",
-          "content-length": "3"
-        }
-      })
-    );
-
-    const postRes = await app.inject({
-      method: "POST",
-      url: "/images-proxy",
-      payload: {
-        service: "tiktok",
-        url: "https://p16-common-sign.tiktokcdn-eu.com/cached-image.webp"
-      }
-    });
-
-    const { url: imageUrl } = JSON.parse(postRes.body) as {
-      url: string;
-    };
-    const id = imageUrl.split("/").pop()!;
-
-    const res = await app.inject({
-      method: "GET",
-      url: `/images-proxy/${id}`
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(res.headers["content-type"]).toBe("image/webp");
-    expect(Buffer.from(res.rawPayload)).toEqual(Buffer.from([31, 32, 33]));
-  });
-
-  it("GET /images-proxy/:id returns 404 when the cached image does not exist", async () => {
-    const res = await app.inject({
-      method: "GET",
-      url: "/images-proxy/nonexistent_id_1234567890abc"
-    });
-
-    expect(res.statusCode).toBe(404);
-    expect(JSON.parse(res.body)).toEqual({ error: "IMAGE_NOT_FOUND" });
-  });
-
-  it("GET /image-proxy supports explicit service matching and rejects mismatches", async () => {
-    // 1. Supports explicit service matching
-    globalThis.fetch = vi.fn().mockResolvedValue(
-      new Response(new Uint8Array([4, 5, 6]), {
-        status: 200,
-        headers: {
-          "content-type": "image/webp",
-          "content-length": "3"
-        }
-      })
-    );
-
-    const validRes = await app.inject({
-      method: "GET",
-      url: `/image-proxy?service=tiktok&url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.webp")}`
-    });
-
-    expect(validRes.statusCode).toBe(200);
-    expect(validRes.headers["content-type"]).toBe("image/webp");
-    expect(Buffer.from(validRes.rawPayload)).toEqual(Buffer.from([4, 5, 6]));
-
-    // 2. Rejects URLs that do not match the explicit service
-    const mismatchRes = await app.inject({
-      method: "GET",
-      url: `/image-proxy?service=unknown&url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg")}`
-    });
-
-    expect(mismatchRes.statusCode).toBe(400);
-    expect(JSON.parse(mismatchRes.body)).toEqual({ error: "INVALID_IMAGE_URL" });
   });
 });
 

@@ -11,7 +11,7 @@ type LegalPage = {
   }>;
 };
 
-const messagesDirectory = resolve(import.meta.dirname, "../../messages");
+const messagesDirectory = resolve(import.meta.dirname, "../../../../packages/locales/messages/web");
 const locales = readdirSync(messagesDirectory).filter((file) => file.endsWith(".json"));
 const canonical: Record<"privacy-page" | "tos-page", LegalPage> = JSON.parse(readFileSync(resolve(messagesDirectory, "en-US.json"), "utf8"));
 

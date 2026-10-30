@@ -4,6 +4,12 @@ dist
 *.tsbuildinfo
 apps/web/next-env.d.ts
 
+# Separate repositories cloned locally by `pnpm repos` (formerly submodules)
+packages/sdk/
+packages/cli/
+packages/presences/
+packages/internal-cli/
+
 # Native host (Go binaries)
 apps/native/dist/
 

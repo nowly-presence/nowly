@@ -44,11 +44,11 @@ nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 
 ### Monorepo completo do Nowly
 
-Se você clonou o `nowly` (com `presences` como submódulo), pode incorporar cada presença compilada na extensão:
+Se você clonou o `nowly` e executou `pnpm repos` (que clona o `presences` em `packages/presences`), pode incorporar cada presença compilada na extensão:
 
 ```bash
 nowly build youtube
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 Carregue `apps/extension/dist/chrome` sem compactação. Recarregue após cada recompilação.
@@ -86,6 +86,6 @@ Solte o novo zip novamente. Você não precisa recarregar a extensão não compa
 |---|---|
 | Primeira configuração, ou sem Nowly no navegador | `nowly extension <slug>` |
 | Nowly já carregado, iterando em uma presença | `nowly pack <slug>` e depois solte o zip |
-| Você trabalha no monorepo completo do `nowly` | `pnpm build:extension:dev` |
+| Você trabalha no monorepo completo do `nowly` | `pnpm build:extension:dev --bundled` |
 
 Veja também [CLI](/publishing/cli#test-a-presence-locally).

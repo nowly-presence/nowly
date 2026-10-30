@@ -1,21 +1,8 @@
 # Onboarding
 
-First-run flow shown until `onboarding.onboardingCompleted` (or when `devReplayOnboarding` is set from developer settings). It sits behind `LegalGate`.
+Steps are listed in `STEPS` (`onboarding-view.tsx`), one `steps/<name>-step.tsx` each, built on `OnboardingStepLayout`.
 
-## Steps
-
-`STEPS` in `onboarding-view.tsx`: `welcome`, `scripts`, `desktop`, `presences`, `privacy`, each in `steps/<name>-step.tsx`.
-
-- `privacy-step.tsx` is the only place in the onboarding that touches analytics consent (`SET_ANALYTICS_CONSENT`). Consent stays `false` unless the user opts in; legal acceptance never sets it.
-- The account is never mentioned in the onboarding.
-
-## Add a step
-
-1. Add its id to `STEPS` in `onboarding-view.tsx` and render it there.
-2. Create `steps/<name>-step.tsx` using `OnboardingStepLayout` (title, description, sticky footer). Every step offers a way forward even when its check fails ("Skip for now").
-3. Completion goes through `SET_ONBOARDING`; the background tracks `onboarding_completed`.
-
-## Gotchas
-
-- The scripts step polls `GET_USER_SCRIPTS_STATUS`; Firefox needs `chrome.permissions.request` inside the click handler.
-- `hero-stack.tsx` fans three live cards: faded cards sit on an opaque canvas backing so the one behind never bleeds through.
+- Every step offers a way forward even when its check fails ("Skip for now"). Completion goes through `SET_ONBOARDING`.
+- `privacy-step.tsx` is the only onboarding place touching analytics consent, which stays `false` unless the user opts in. Legal acceptance never sets it.
+- Never mention the account in the onboarding.
+- Firefox needs `chrome.permissions.request` inside the click handler (scripts step).

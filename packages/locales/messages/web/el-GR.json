@@ -312,7 +312,6 @@
     "checking": "Αναζήτηση Nowly",
     "install": "Εγκατάσταση",
     "installing": "Εγκατάσταση...",
-    "installed": "Εγκατεστημένη",
     "update": "Ενημέρωση",
     "uninstall": "Κατάργηση",
     "install-success": "Το {name} εγκαταστάθηκε.",

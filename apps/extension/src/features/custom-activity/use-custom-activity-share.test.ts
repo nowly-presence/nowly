@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { emptyCustomActivityDraft } from "@/shared/custom-activity";
+import { CUSTOM_ACTIVITIES_MAX, emptyCustomActivityDraft } from "@/shared/custom-activity";
 import { buildActivityFile } from "@/shared/custom-activity-share";
 import type { CustomActivity } from "@/shared/types";
 import { useCustomActivityShare } from "./use-custom-activity-share";
@@ -114,15 +114,15 @@ describe("custom activity sharing orchestration", () => {
     await first;
   });
 
-  it("enforces capacity limits: rejects full list before requests and stops at remaining limit", async () => {
-    // 1. Rejects a full list before any background request
-    mocks.items = Array.from({ length: 50 }, () => activity);
+  it("rejects an import into a full list before any background request", async () => {
+    mocks.items = Array.from({ length: CUSTOM_ACTIVITIES_MAX }, () => activity);
     await useCustomActivityShare(vi.fn()).importFiles([makeFile()]);
     expect(mocks.send).not.toHaveBeenCalled();
     expect(mocks.toast).toHaveBeenCalledWith("custom.toast.limit", "error");
+  });
 
-    // 2. Stops at remaining capacity without uploading extra images
-    mocks.items = Array.from({ length: 49 }, () => activity);
+  it("imports only up to the remaining capacity", async () => {
+    mocks.items = Array.from({ length: CUSTOM_ACTIVITIES_MAX - 1 }, () => activity);
     await useCustomActivityShare(vi.fn()).importFiles([
       makeFile(),
       makeFile()

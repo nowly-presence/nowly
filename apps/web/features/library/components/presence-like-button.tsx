@@ -1,5 +1,6 @@
 "use client";
 
+import { useExtensionDetected } from "@/hooks/use-extension";
 import { requestExtension, type ExtensionDeviceInfo } from "@/lib/extension-bridge";
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { Button } from "@nowly/ui";
@@ -10,11 +11,12 @@ import { useEffect, useState } from "react";
 type PresenceLikeButtonProps = {
   slug: string;
   initialCount: number;
-  disabled: boolean;
+  className?: string;
 };
 
-export const PresenceLikeButton = ({ slug, initialCount, disabled }: PresenceLikeButtonProps) => {
+export const PresenceLikeButton = ({ slug, initialCount, className }: PresenceLikeButtonProps) => {
   const t = useTranslations("presencePage");
+  const disabled = !useExtensionDetected();
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(initialCount);
   const [device, setDevice] = useState<ExtensionDeviceInfo | null>(null);
@@ -94,7 +96,7 @@ export const PresenceLikeButton = ({ slug, initialCount, disabled }: PresenceLik
     <Button
       type="button"
       variant="outline"
-      size="lg"
+      className={className}
       disabled={disabled || !ready || !device?.deviceId}
       onClick={() => void onToggle()}
       aria-pressed={liked}

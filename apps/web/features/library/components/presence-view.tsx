@@ -2,6 +2,7 @@ import { LibraryCard } from "@/features/library/components/library-card";
 import { LibraryMedia } from "@/features/library/components/library-media";
 import { PresenceActions } from "@/features/library/components/presence-actions";
 import { PresenceInfo } from "@/features/library/components/presence-info";
+import { PresenceLikeButton } from "@/features/library/components/presence-like-button";
 import { ButtonLink } from "@/components/button-link";
 import { DiscordCallout } from "@/components/discord-callout";
 import { ExpandableContent } from "@/features/content/components/expandable-content";
@@ -47,7 +48,18 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats,
         <div className="mt-8 grid items-start gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(17rem,0.8fr)] lg:gap-8">
           <div className="flex flex-col gap-6">
             <Card className="gap-0 py-0">
-              <LibraryMedia slug={presence.slug} name={presence.name} variant="hero" />
+              <LibraryMedia
+                slug={presence.slug}
+                name={presence.name}
+                variant="hero"
+                action={
+                  <PresenceLikeButton
+                    slug={presence.slug}
+                    initialCount={stats.likes}
+                    className="border-white/20 bg-background/85 shadow-sm backdrop-blur-md disabled:opacity-100"
+                  />
+                }
+              />
               <CardContent className="pt-6 pb-8 sm:pt-8">
                 <p className="text-[0.7rem] font-medium uppercase tracking-[0.16em] text-accent">{library(`categories.${presence.category}`)}</p>
                 <h1 className="mt-2 text-pretty text-[2.2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-[2.75rem]">{presence.name}</h1>
@@ -59,7 +71,7 @@ export const PresenceView = async ({ presence, catalog, locale, versions, stats,
                     <AlertDescription>{t("discord-native-description", { name: presence.name })}</AlertDescription>
                   </Alert>
                 ) : null}
-                <PresenceActions slug={presence.slug} name={presence.name} version={presence.version} likeCount={stats.likes} />
+                <PresenceActions slug={presence.slug} name={presence.name} version={presence.version} />
                 {about && about !== description ? (
                   <div className="mt-8 border-t border-foreground/8 pt-8">
                     <CardTitle>{t("about")}</CardTitle>

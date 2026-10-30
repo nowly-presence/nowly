@@ -44,11 +44,11 @@ nowly extension youtube --firefox --from ../nowly/apps/extension/dist/firefox
 
 ### 完全なNowlyモノレポ
 
-`presences` をサブモジュールとして含む `nowly` をクローンしている場合、ビルドしたすべてのプレゼンスを拡張機能に組み込めます。
+`nowly` をクローンして `pnpm repos` を実行した場合(`presences` が `packages/presences` にクローンされます)、ビルドしたすべてのプレゼンスを拡張機能に組み込めます。
 
 ```bash
 nowly build youtube
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 `apps/extension/dist/chrome` をパッケージ化されていない状態で読み込みます。再ビルドのたびに再読み込みしてください。
@@ -86,6 +86,6 @@ nowly pack youtube
 |---|---|
 | 初回セットアップ、またはブラウザにNowlyがない場合 | `nowly extension <slug>` |
 | Nowlyがすでに読み込まれていて、1つのプレゼンスを反復開発する場合 | `nowly pack <slug>` の後、zipをドロップ |
-| 完全な `nowly` モノレポで作業している場合 | `pnpm build:extension:dev` |
+| 完全な `nowly` モノレポで作業している場合 | `pnpm build:extension:dev --bundled` |
 
 [CLI](/publishing/cli#test-a-presence-locally)も参照してください。

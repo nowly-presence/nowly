@@ -312,7 +312,6 @@
     "checking": "Nowlyを検索中",
     "install": "インストール",
     "installing": "インストール中...",
-    "installed": "インストール済み",
     "update": "更新",
     "uninstall": "削除",
     "install-success": "{name}をインストールしました。",

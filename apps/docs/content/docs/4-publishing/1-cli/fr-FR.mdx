@@ -92,17 +92,17 @@ Le zip est écrit dans `dist/packs/youtube.zip`. Déposez-le dans **Réglages �
 
 ### Si vous avez le monorepo complet
 
-Si vous avez cloné `nowly` lui-même (avec `presences` en submodule), vous pouvez compiler l'extension avec toutes les présences intégrées directement&nbsp;:
+Si vous avez cloné `nowly` lui-même et lancé `pnpm repos` (qui clone `presences` dans `packages/presences`), vous pouvez compiler l'extension avec toutes les présences intégrées directement&nbsp;:
 
 ```bash
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 Recompilez la présence modifiée puis l'extension après chaque changement&nbsp;:
 
 ```bash
 nowly build youtube
-pnpm build:extension:dev
+pnpm build:extension:dev --bundled
 ```
 
 Rechargez dans `chrome://extensions` - la présence est déjà installée et prête à l'emploi.

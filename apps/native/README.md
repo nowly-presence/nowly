@@ -136,7 +136,7 @@ make release-prod HOST_VERSION=1.0.0
 This runs `scripts/release.sh` (or `release.ps1` on Windows) then `scripts/publish-prod.sh` (or `publish-prod.ps1`):
 
 1. **Release**: builds all platform binaries, creates the Inno Setup installer (if `iscc` is available), packages archives, generates `latest.json` → `releases/{version}/`
-2. **Publish**: uploads all artifacts to Cloudflare R2 via `pnpm internal-cli host:publish`
+2. **Publish**: uploads all artifacts to Cloudflare R2 with the private internal CLI's `host:publish`. The scripts expect a checkout of `nowly-presence/internal-cli` with installed dependencies at `packages/internal-cli` (git-ignored), or at `INTERNAL_CLI_DIR`.
 
 ### Host releases via git tags
 
@@ -153,8 +153,10 @@ The extension checks `https://cdn.nowly.me/installer/latest.json` for updates. O
 
 ### Manual publish
 
+From the internal CLI checkout, with absolute artifact paths:
+
 ```bash
-pnpm internal-cli host:publish --release-version 1.0.0 --installer releases/1.0.0/nowly-setup.exe --portable releases/1.0.0/nowly-windows.zip --linux releases/1.0.0/nowly-linux.tar.gz --macos releases/1.0.0/nowly-macos.tar.gz
+npx tsx index.ts host:publish --release-version 1.0.0 --installer /path/to/releases/1.0.0/nowly-setup.exe --portable /path/to/releases/1.0.0/nowly-windows.zip --linux /path/to/releases/1.0.0/nowly-linux.tar.gz --macos /path/to/releases/1.0.0/nowly-macos.tar.gz
 ```
 
 ### Linux

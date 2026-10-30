@@ -312,7 +312,6 @@
     "checking": "Nowly 찾는 중",
     "install": "설치",
     "installing": "설치 중...",
-    "installed": "설치됨",
     "update": "업데이트",
     "uninstall": "제거",
     "install-success": "{name}이(가) 설치되었습니다.",

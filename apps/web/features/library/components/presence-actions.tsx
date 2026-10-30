@@ -1,11 +1,10 @@
 "use client";
 
 import { ExtensionStoreButton } from "@/components/extension-store-button";
-import { PresenceLikeButton } from "@/features/library/components/presence-like-button";
 import { PresenceReportDialog } from "@/features/library/components/presence-report-dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, Button, Spinner, toast } from "@nowly/ui";
 import { usePresenceExtension } from "@/hooks/use-extension";
-import { RiCheckboxCircleLine, RiDeleteBinLine, RiDownloadLine, RiRefreshLine } from "@nowly/ui/icons";
+import { RiDeleteBinLine, RiDownloadLine, RiRefreshLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -13,10 +12,9 @@ type PresenceActionsProps = {
   slug: string;
   name: string;
   version: string | null;
-  likeCount: number;
 };
 
-export const PresenceActions = ({ slug, name, version, likeCount }: PresenceActionsProps) => {
+export const PresenceActions = ({ slug, name, version }: PresenceActionsProps) => {
   const t = useTranslations("presencePage");
   const { bridgeBlocked, busy, catalogReady, detected, diagnostic, install, isInstalled, mobile, needsUpdate, uninstall } = usePresenceExtension(slug, version);
   const [confirmUninstall, setConfirmUninstall] = useState(false);
@@ -65,13 +63,6 @@ export const PresenceActions = ({ slug, name, version, likeCount }: PresenceActi
           </Button>
         ) : null}
 
-        {!checking && detected && !bridgeBlocked && isInstalled && !needsUpdate ? (
-          <Button type="button" size="lg" variant="outline" disabled>
-            <RiCheckboxCircleLine data-icon="inline-start" />
-            {t("installed")}
-          </Button>
-        ) : null}
-
         {!checking && detected && !bridgeBlocked && isInstalled ? (
           <Button type="button" size="lg" variant="destructive" disabled={busy} onClick={() => setConfirmUninstall(true)}>
             <RiDeleteBinLine data-icon="inline-start" />
@@ -80,7 +71,6 @@ export const PresenceActions = ({ slug, name, version, likeCount }: PresenceActi
         ) : null}
 
         <PresenceReportDialog slug={slug} name={name} disabled={checking || !detected} />
-        <PresenceLikeButton slug={slug} initialCount={likeCount} disabled={checking || !detected} />
       </div>
 
       {!checking && !detected ? <p className="text-sm text-muted-foreground">{t("ext-missing")}</p> : null}

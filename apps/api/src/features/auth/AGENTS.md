@@ -1,29 +1,5 @@
 # Auth
 
-Discord OAuth (better-auth) + a secret-based admin guard, used across the API. Better Auth serves web and extension accounts (see `features/account`).
-
-## Protect a new route with the admin guard
-
-1. In the route file, import `requireAuth` from `@/features/auth/auth.middleware`.
-2. Add it as a `preHandler` on the route:
-   ```ts
-   fastify.get("/admin-only", { preHandler: requireAuth }, async (request, reply) => { ... })
-   ```
-3. For an inline check instead of a route-level guard (e.g. conditionally within a shared handler), call `hasAdminAuth(request)` and branch on the boolean yourself.
-
-## Add a new auth mode (e.g. a second bearer secret for a different caller)
-
-1. Add the new check function to `auth.middleware.ts`, following `requireAuth`'s fail-closed pattern: if the expected secret/config is missing **and** `NODE_ENV === "production"`, return `500` rather than silently allowing the request through.
-2. Add a `preHandler`-compatible guard alongside `requireAuth` so routes can opt in explicitly.
-
-## Better Auth configuration
-
-- Discord only. `mapProfileToUser` copies the Discord user id into `User.discordId` (`input: false`, so clients cannot set it).
-- `authTrustedOrigins()` is the single list of browser origins: `FRONTEND_URL`, plus `localhost:3000` / `127.0.0.1:3000` outside production. `index.ts` reuses it for CORS.
-- Cookies are shared on `.nowly.me` (`crossSubDomainCookies`) so nowly.me can call the API with `credentials: "include"`.
-
-## Gotchas
-- Never simplify the fail-closed check into "if no secret configured, allow everyone": that pattern exists because a misconfigured `API_SECRET_KEY` in production must lock the route down, not open it up.
-
-## Notable dependencies
-`@nowly/env/server` (`API_SECRET_KEY`). Consumed by `status` (`requireCronAuth` follows the same pattern) and any route requiring admin access.
+- Admin routes: `preHandler: requireAuth` (`auth.middleware.ts`); inline checks use `hasAdminAuth(request)`.
+- Secret guards are fail-closed: when the secret is missing in production they answer `500`, never let the request through. Any new guard follows that pattern (`requireCronAuth` does). Never simplify it to "no secret configured, allow everyone".
+- Better Auth: Discord only. `User.discordId` comes from the Discord profile and is not client-settable (`input: false`). `authTrustedOrigins()` is the single trusted origin list (also used for CORS). Cookies are shared on `.nowly.me`.

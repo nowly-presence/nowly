@@ -5,6 +5,7 @@ import { presenceIndexLocales } from "@/lib/library-catalog-server";
 import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
 import { getPresenceBySlug, getPresenceCatalog, getPresenceStats, getPresenceVersionHistory, presenceLogoUrl } from "@/lib/presence-api";
 import { createMetadata } from "@/features/seo/lib/seo";
+import { permanentRedirect } from "@/i18n/navigation";
 import { FALLBACK_LOCALE, getValidLocale } from "@nowly/locales";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -56,15 +57,26 @@ export const generateMetadata = async ({ params }: PresencePageProps): Promise<M
 const Page = async ({ params }: PresencePageProps) => {
   const { slug } = await params;
 
-  const [presence, catalog, locale, versions, stats] = await Promise.all([
+  const [presence, catalog, locale] = await Promise.all([
     getPresenceBySlug(slug),
     getPresenceCatalog(),
-    getLocale(),
-    getPresenceVersionHistory(slug),
-    getPresenceStats(slug)
+    getLocale()
   ]);
 
   if (!presence) notFound();
+
+  // An alias URL (e.g. /library/openfront) redirects to the presence slug.
+  if (presence.slug !== slug.trim().toLowerCase()) {
+    permanentRedirect({
+      href: `/library/${presence.slug}`,
+      locale
+    });
+  }
+
+  const [versions, stats] = await Promise.all([
+    getPresenceVersionHistory(presence.slug),
+    getPresenceStats(presence.slug)
+  ]);
 
   const library = await getTranslations("pages.library");
 

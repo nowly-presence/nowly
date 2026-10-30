@@ -583,7 +583,7 @@ test("pre-commit formatting preserves unstaged changes and handles paths with sp
     );
   }));
 
-test("CLI excludes project submodules and protected files even when explicitly requested", async () =>
+test("CLI excludes local repository clones and protected files even when explicitly requested", async () =>
   withProject(async (directory) => {
     const ignoredFiles = [
       "packages/sdk/src/source.ts",

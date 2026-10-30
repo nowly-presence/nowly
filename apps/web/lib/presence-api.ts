@@ -3,6 +3,7 @@ import { isLibraryCategory, type LibraryPresence, type LocalizedCopy, type Local
 import { PRESENCES_REPOSITORY_URL } from "@/lib/constants";
 import { PRODUCTION_API_URL, presenceLogoUrl } from "@/lib/presence-api-client";
 import { FALLBACK_LOCALE, SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
+import { presenceAliases } from "@nowly/shared";
 import { cache } from "react";
 
 export { PRODUCTION_API_URL, presenceLogoUrl, presenceThumbnailUrl } from "@/lib/presence-api-client";
@@ -182,6 +183,7 @@ export const getPresenceCatalog = cache(async (): Promise<LibraryPresence[]> => 
         lastUpdated?: unknown;
         totalInstalls?: unknown;
         discordNative?: unknown;
+        aliases?: unknown;
       };
 
       if (typeof item.slug !== "string") return [];
@@ -197,6 +199,7 @@ export const getPresenceCatalog = cache(async (): Promise<LibraryPresence[]> => 
         {
           presence: {
             slug,
+            aliases: presenceAliases(item).filter((alias) => alias !== slug),
             name,
             category: typeof item.category === "string" && isLibraryCategory(item.category) ? item.category : "other",
             color: typeof item.color === "string" && item.color.trim() ? item.color.trim() : "#111111",
@@ -228,11 +231,12 @@ export const getPresencePlatforms = cache(async (): Promise<PresencePlatform[]> 
   }));
 });
 
+/** Resolves a presence by its slug or, failing that, by one of its aliases. */
 export const getPresenceBySlug = cache(async (slug: string): Promise<LibraryPresence | null> => {
   const catalog = await getPresenceCatalog();
 
   const normalized = slug.trim().toLowerCase();
-  return catalog.find((presence) => presence.slug === normalized) ?? null;
+  return catalog.find((presence) => presence.slug === normalized) ?? catalog.find((presence) => presence.aliases.includes(normalized)) ?? null;
 });
 
 const COMMIT_SHA = /^[a-f0-9]{7,40}$/i;

@@ -8,7 +8,7 @@ import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { addVersion, clearActiveDevice, clearActiveDevicesForDevice, getGlobalPresenceStats, getLikeCount, getPresenceListData, getPresenceMeta, getPresenceStats, getVersionHistory, hasLikedPresence, likePresence, markActiveDevice, setAdded, setUpdated, setVersion, unlikePresence } from "./presence.repository";
 import { buildRelease } from "./presence.service";
 import { presenceDisplayName, sanitizeReportMessage, submitPresenceReport } from "./presence-report";
-import { processPresenceSync, type PresenceSyncBody } from "./presence.sync";
+import { PresenceAliasConflictError, processPresenceSync, type PresenceSyncBody } from "./presence.sync";
 
 const sendArchivedNotFound = async (slug: string, request: FastifyRequest, reply: FastifyReply): Promise<boolean> => {
   const stats = await getPresenceStats(slug);
@@ -191,12 +191,23 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
   });
 
   fastify.post("/sync", { preHandler: requireAuth }, async (request, reply) => {
-    const { results, archived } = await processPresenceSync(request.body as PresenceSyncBody);
-    return {
-      ok: true,
-      results,
-      archived
-    };
+    try {
+      const { results, archived } = await processPresenceSync(request.body as PresenceSyncBody);
+      return {
+        ok: true,
+        results,
+        archived
+      };
+    } catch (error) {
+      if (error instanceof PresenceAliasConflictError) {
+        return reply.status(400).send({
+          error: "PRESENCE_ALIAS_CONFLICT",
+          issues: error.issues
+        });
+      }
+
+      throw error;
+    }
   });
 
   fastify.post(

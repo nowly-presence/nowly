@@ -1,9 +1,6 @@
 # Side panel entry
 
-`main.tsx` mounts providers in this order: `I18nProvider` > `ExtensionStateProvider` > `SeasonProvider` > `NavigationProvider` > `ToastProvider` > `App`. `app.tsx` wraps its content in `LegalGate` and owns tabs, pushed routes, the dock and the app-wide overlays.
-
-## Gotchas
-
-- Chrome injects its own unlayered default text stylesheet into extension pages; body typography in `styles.css` is deliberately unlayered with higher specificity or it gets overridden.
+- Provider order in `main.tsx` matters: `I18nProvider` > `ExtensionStateProvider` > `SeasonProvider` > `NavigationProvider` > `ToastProvider` > `App`.
+- Body typography in `styles.css` is deliberately unlayered with higher specificity: Chrome injects its own default text stylesheet into extension pages.
 - Tailwind scans `src/` explicitly (`@source "../../"`) because the Vite root is this folder.
-- Secondary screens use module-scope `React.lazy` declarations and a `Suspense` boundary inside each `Layer`. Keep the header and dock outside those boundaries, and retain visited layers so navigation preserves form state and scroll. Lazy chunks are packaged locally; never fetch executable code from the network. The legal gate and initial Activity screen stay eager.
+- Secondary screens are module-scope `React.lazy` with a `Suspense` inside each `Layer`. Keep the header and dock outside those boundaries, keep visited layers mounted, and keep the legal gate and the Activity screen eager. Never fetch executable code from the network.

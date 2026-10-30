@@ -1,3 +1,4 @@
+# Local clones of the separate repositories (pnpm repos)
 packages/sdk/
 packages/presences/
 packages/cli/

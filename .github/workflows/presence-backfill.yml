@@ -16,31 +16,32 @@ jobs:
       API_URL: ${{ secrets.API_URL || 'https://api.nowly.me' }}
       API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
     steps:
+      # The internal CLI reads presences from ../../packages/presences, so both keep their old paths.
       - uses: actions/checkout@v7
         with:
+          repository: nowly-presence/presences
           fetch-depth: 0
-          token: ${{ secrets.SUBMODULE_TOKEN || github.token }}
+          path: packages/presences
 
-      - name: Initialize private presence submodules
-        env:
-          SUBMODULE_TOKEN: ${{ secrets.SUBMODULE_TOKEN }}
-        run: |
-          set -euo pipefail
-          if [ -z "$SUBMODULE_TOKEN" ]; then
-            echo "::warning::SUBMODULE_TOKEN is not configured; private submodule initialization may fail"
-          fi
-          git submodule update --init --recursive packages/sdk packages/presences packages/internal-cli
+      - uses: actions/checkout@v7
+        with:
+          repository: nowly-presence/internal-cli
+          token: ${{ secrets.INTERNAL_CLI_PAT }}
+          path: packages/internal-cli
 
-      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
           node-version: 20
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+
+      - name: Install internal-cli dependencies
+        working-directory: packages/internal-cli
+        run: npm install
 
       - name: Preview publication dates
-        run: pnpm admin presence backfill-dates --dry-run
+        working-directory: packages/internal-cli
+        run: npx tsx index.ts presence backfill-dates --dry-run
 
       - name: Apply publication dates
         if: inputs.apply == true
-        run: pnpm admin presence backfill-dates
+        working-directory: packages/internal-cli
+        run: npx tsx index.ts presence backfill-dates
