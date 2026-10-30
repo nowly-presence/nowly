@@ -12,14 +12,15 @@ Categories are duplicated in two places that must stay in sync:
 
 ## Add a new presence action (like current "report"/"like")
 
-1. Add the UI trigger inside `presence-actions.tsx`, not `presence-view.tsx` — that's the single place presence-level actions are assembled.
-2. If it needs a dialog, follow `presence-report-dialog.tsx`'s pattern (a controlled dialog component taking the presence slug as a prop).
-3. Wire the actual request through `lib/presence-api.ts` (root, shared) rather than calling `fetch` inline — it already knows the API base URL and the `presence` feature's endpoints on `apps/api`.
+1. Add the UI trigger inside `presence-actions.tsx`, not `presence-view.tsx` — that's the single place presence-level actions are assembled. The only exception is the like button, rendered in the top-right corner of the hero thumbnail through `LibraryMedia`'s `action` slot.
+2. Install state shows one primary action: "Install" when missing, "Remove" when installed and up to date, "Update" + "Remove" when a newer version exists. Do not add a separate "Installed" badge button.
+3. If it needs a dialog, follow `presence-report-dialog.tsx`'s pattern (a controlled dialog component taking the presence slug as a prop).
+4. Wire the actual request through `lib/presence-api.ts` (root, shared) rather than calling `fetch` inline — it already knows the API base URL and the `presence` feature's endpoints on `apps/api`.
 
 ## Gotchas
 
 - `LocalizedCopy`/`LocalizedList` in `library-catalog.ts` cover all 11 supported locales. Presence metadata may still omit translations, so `localizedDescription`/`localizedFeatures` fall back to the shared default locale.
-- `presenceSearchText` indexes every localized description and long description returned by the API, so translated copy remains searchable.
+- `presenceSearchText` indexes every localized description and long description returned by the API, plus metadata `aliases`, so translated copy and alternative names remain searchable. `getPresenceBySlug` also resolves aliases; the presence page then redirects to the canonical slug.
 
 ## Notable dependencies
 `lib/library-catalog.ts`, `lib/telemetry.ts`, `lib/presence-api.ts` (root, shared), `components/extension-store-button.tsx`, `components/presence-tile.tsx`, `presence` feature of `apps/api`. Presence success events come only from the extension background, never a second web conversion event.

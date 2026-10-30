@@ -312,7 +312,6 @@
     "checking": "Nowly aranıyor",
     "install": "Yükle",
     "installing": "Yükleniyor...",
-    "installed": "Yüklendi",
     "update": "Güncelle",
     "uninstall": "Kaldır",
     "install-success": "{name} yüklendi.",

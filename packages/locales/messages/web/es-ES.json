@@ -312,7 +312,6 @@
     "checking": "Buscando Nowly",
     "install": "Instalar",
     "installing": "Instalando...",
-    "installed": "Instalada",
     "update": "Actualizar",
     "uninstall": "Quitar",
     "install-success": "{name} está instalada.",

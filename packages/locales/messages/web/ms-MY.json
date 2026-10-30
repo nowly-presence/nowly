@@ -312,7 +312,6 @@
     "checking": "Mencari Nowly",
     "install": "Pasang",
     "installing": "Memasang...",
-    "installed": "Dipasang",
     "update": "Kemas kini",
     "uninstall": "Buang",
     "install-success": "{name} telah dipasang.",
