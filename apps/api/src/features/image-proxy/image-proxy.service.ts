@@ -150,9 +150,36 @@ const requestImage = (url: URL, service: ImageProxyService, signal: AbortSignal)
   fetch(url.href, {
     signal,
     headers: service.headers ?? { "User-Agent": "Nowly/1.0" },
-    redirect: "manual",
-    size: MAX_IMAGE_BYTES
-  } as RequestInit);
+    redirect: "manual"
+  });
+
+const readImageBody = async (response: Response): Promise<Buffer | null> => {
+  const declaredLength = Number(response.headers.get("Content-Length") ?? 0);
+
+  if (declaredLength > MAX_IMAGE_BYTES) {
+    await response.body?.cancel();
+    return null;
+  }
+
+  if (!response.body) return Buffer.alloc(0);
+
+  const reader = response.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let received = 0;
+
+  for (let chunk = await reader.read(); !chunk.done; chunk = await reader.read()) {
+    received += chunk.value.byteLength;
+
+    if (received > MAX_IMAGE_BYTES) {
+      await reader.cancel();
+      return null;
+    }
+
+    chunks.push(chunk.value);
+  }
+
+  return Buffer.concat(chunks, received);
+};
 
 export const fetchImage = async (url: URL, service: ImageProxyService): Promise<
   | {
@@ -206,10 +233,11 @@ export const fetchImage = async (url: URL, service: ImageProxyService): Promise<
       };
     }
 
-    const buffer = Buffer.from(await response.arrayBuffer());
+    const buffer = await readImageBody(response);
+
     const contentType = response.headers.get("Content-Type") || "image/webp";
 
-    if (response.headers.has("Content-Length") && buffer.byteLength > MAX_IMAGE_BYTES) {
+    if (!buffer) {
       return {
         ok: false,
         status: 413,

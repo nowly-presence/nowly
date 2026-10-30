@@ -1,6 +1,8 @@
 import { createCacheId, fetchImage, parseProxyUrl } from "@/features/image-proxy/image-proxy.service";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
 const mockPresenceRepo = vi.hoisted(() => ({ getAllPresenceMetas: vi.fn() }));
 
 vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo);
@@ -109,12 +111,7 @@ describe("fetchImage", () => {
   });
 
   it("returns the image on a successful fetch", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      headers: new Headers({ "Content-Type": "image/png" }),
-      arrayBuffer: async () => new Uint8Array([1, 2, 3]).buffer
-    }) as unknown as typeof fetch;
+    global.fetch = vi.fn().mockResolvedValue(png()) as unknown as typeof fetch;
 
     const result = await fetchImage(new URL("https://example.com/x.png"), service);
     expect(result.ok).toBe(true);
@@ -141,12 +138,7 @@ describe("fetchImage", () => {
   });
 
   it("rejects an empty response body", async () => {
-    global.fetch = vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      headers: new Headers(),
-      arrayBuffer: async () => new ArrayBuffer(0)
-    }) as unknown as typeof fetch;
+    global.fetch = vi.fn().mockResolvedValue(new Response(new Uint8Array(0), { status: 200 })) as unknown as typeof fetch;
 
     const result = await fetchImage(new URL("https://example.com/x.png"), service);
     expect(result).toEqual({
@@ -214,5 +206,69 @@ describe("fetchImage", () => {
       error: "IMAGE_REDIRECT_REJECTED"
     });
     expect(fetchMock).toHaveBeenCalledTimes(4);
+  });
+
+  it("refuses a declared size above 5 MB without reading the body", async () => {
+    const body = new ReadableStream<Uint8Array>({
+      pull: () => {
+        throw new Error("the body must not be read");
+      }
+    });
+    global.fetch = vi.fn().mockResolvedValue(
+      new Response(body, {
+        status: 200,
+        headers: {
+          "Content-Type": "image/png",
+          "Content-Length": String(MAX_IMAGE_BYTES + 1)
+        }
+      })
+    ) as unknown as typeof fetch;
+
+    expect(await fetchImage(new URL("https://example.com/x.png"), service)).toEqual({
+      ok: false,
+      status: 413,
+      error: "IMAGE_TOO_LARGE"
+    });
+  });
+
+  it("stops reading an undeclared body as soon as it exceeds 5 MB", async () => {
+    const chunk = new Uint8Array(1024 * 1024);
+    let pulled = 0;
+    const body = new ReadableStream<Uint8Array>({
+      pull: (controller) => {
+        pulled += 1;
+        controller.enqueue(chunk);
+      }
+    });
+    global.fetch = vi.fn().mockResolvedValue(
+      new Response(body, {
+        status: 200,
+        headers: { "Content-Type": "image/png" }
+      })
+    ) as unknown as typeof fetch;
+
+    expect(await fetchImage(new URL("https://example.com/x.png"), service)).toEqual({
+      ok: false,
+      status: 413,
+      error: "IMAGE_TOO_LARGE"
+    });
+    expect(pulled).toBeLessThanOrEqual(MAX_IMAGE_BYTES / chunk.byteLength + 2);
+  });
+
+  it("accepts an image of exactly 5 MB", async () => {
+    global.fetch = vi.fn().mockResolvedValue(
+      new Response(new Uint8Array(MAX_IMAGE_BYTES), {
+        status: 200,
+        headers: { "Content-Type": "image/png" }
+      })
+    ) as unknown as typeof fetch;
+
+    const result = await fetchImage(new URL("https://example.com/x.png"), service);
+
+    expect(result).toMatchObject({
+      ok: true,
+      contentType: "image/png"
+    });
+    expect(result.ok && result.buffer.byteLength).toBe(MAX_IMAGE_BYTES);
   });
 });
