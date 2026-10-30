@@ -1,5 +1,6 @@
 import { PresenceView } from "@/features/library/components/presence-view";
 import { getPresenceGuide } from "@/features/library/lib/presence-guide";
+import { presenceSeoKeywords } from "@/features/library/lib/presence-seo";
 import { localizedDescription } from "@/lib/library-catalog";
 import { presenceIndexLocales } from "@/lib/library-catalog-server";
 import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
@@ -45,6 +46,7 @@ export const generateMetadata = async ({ params }: PresencePageProps): Promise<M
     title: seoTitle,
     locale,
     description: guide?.translated && guide.meta.description ? guide.meta.description : localizedDescription(presence, locale),
+    keywords: presenceSeoKeywords(presence),
     path: `/library/${presence.slug}`,
     alternateLocales: indexLocales,
     canonicalLocale: indexLocales.includes(getValidLocale(locale)) ? undefined : FALLBACK_LOCALE,
