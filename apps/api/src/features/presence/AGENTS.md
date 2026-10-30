@@ -7,6 +7,7 @@ Presence registry: metadata, stats, signed releases, published versions, activit
 - Signed release (`buildRelease`, `presence.service.ts`): bundle hash, metadata hash and a signature over the canonical payload. Do not change canonical JSON or payload fields without coordinating with the extension verifier.
 - `POST /:slug/report`: user issue report. `POST /active` and `DELETE /active/:deviceId/:slug?`: device activity heartbeat and removal.
 - Publishing (`PUT /:slug`, `POST /sync`, both `requireAuth`) writes through `addVersion`/`setVersion`; `addedAt`/`updatedAt` come from the release, not from "now".
+- `metadata.aliases` are alternative library URL slugs resolved only by the website (`/library/<alias>` redirects to the slug); API routes keep using the canonical slug. `POST /sync` answers `400 PRESENCE_ALIAS_CONFLICT` before any write when an alias is malformed or already a slug/alias of another non-archived presence (`getPresenceAliasIssues`, `@nowly/shared`).
 
 ## Bulk vs single
 

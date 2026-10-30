@@ -162,6 +162,7 @@ describe("Presence Routes", () => {
 
   beforeEach(async () => {
     vi.clearAllMocks();
+    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([]);
     delete process.env.API_SECRET_KEY;
     app = await buildApp();
   });
@@ -430,6 +431,112 @@ describe("Presence Routes", () => {
     expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "1.0.1", expect.any(Date));
     expect(mockPresenceRepo.setAdded).not.toHaveBeenCalled();
     expect(mockPresenceRepo.setUpdated).not.toHaveBeenCalled();
+  });
+
+  it("POST /presences/sync rejects conflicting aliases before any write", async () => {
+    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([
+      {
+        slug: "youtube",
+        metadata: {
+          slug: "youtube",
+          aliases: ["yt"]
+        }
+      },
+      {
+        slug: "openfront.io",
+        metadata: {
+          slug: "openfront.io",
+          aliases: ["openfront"]
+        }
+      }
+    ]);
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/sync",
+      payload: {
+        presences: [
+          {
+            slug: "youtube-music",
+            type: "new",
+            name: "YouTube Music",
+            metadata: {
+              slug: "youtube-music",
+              name: "YouTube Music",
+              aliases: ["yt", "youtube", "Music"]
+            }
+          },
+          {
+            slug: "openfront",
+            type: "new",
+            name: "OpenFront"
+          }
+        ]
+      }
+    });
+
+    expect(res.statusCode).toBe(400);
+    expect(JSON.parse(res.body)).toEqual({
+      error: "PRESENCE_ALIAS_CONFLICT",
+      issues: [
+        'youtube-music: Alias "yt" is already an alias of "youtube"',
+        'youtube-music: Alias "youtube" is already the slug of "youtube"',
+        'youtube-music: Alias "Music" must use lowercase letters, digits, dots or hyphens (max 80 characters)',
+        'openfront: Slug "openfront" is already an alias of "openfront.io"'
+      ]
+    });
+    expect(mockPresenceRepo.setVersion).not.toHaveBeenCalled();
+    expect(mockPresenceRepo.setPresenceMeta).not.toHaveBeenCalled();
+    expect(mockPresenceRepo.setArchived).not.toHaveBeenCalled();
+  });
+
+  it("POST /presences/sync accepts aliases moved within the same batch", async () => {
+    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([
+      {
+        slug: "youtube",
+        metadata: {
+          slug: "youtube",
+          aliases: ["yt"]
+        }
+      }
+    ]);
+    mockPresenceRepo.getPresenceStats.mockResolvedValue({ version: "1.0.0" });
+    mockPresenceRepo.getVersionHistory.mockResolvedValue([]);
+
+    const res = await app.inject({
+      method: "POST",
+      url: "/presences/sync",
+      payload: {
+        presences: [
+          {
+            slug: "youtube",
+            type: "modified",
+            name: "YouTube",
+            changelog: "Move alias",
+            metadata: {
+              slug: "youtube",
+              aliases: []
+            }
+          },
+          {
+            slug: "youtube-music",
+            type: "modified",
+            name: "YouTube Music",
+            changelog: "Take alias",
+            metadata: {
+              slug: "youtube-music",
+              aliases: ["yt"]
+            }
+          }
+        ]
+      }
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(mockPresenceRepo.setPresenceMeta).toHaveBeenCalledWith("youtube-music", {
+      slug: "youtube-music",
+      aliases: ["yt"]
+    });
   });
 
   it("POST /presences/sync archives removed slugs", async () => {

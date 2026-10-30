@@ -1,9 +1,9 @@
 import { FALLBACK_LOCALE } from "@nowly/locales";
-import { formatBytes } from "@nowly/shared";
+import { formatBytes, getPresenceAliasIssues, type PresenceAliasEntry } from "@nowly/shared";
 import { generateChangelog, translateChangelog } from "@/shared/changelog.service";
 import { sha256Base64Url } from "@/shared/crypto.service";
 import { serializeJsonField } from "./presence.service";
-import { addVersion, getAllPresenceSlugs, getPresenceStats, getVersionHistory, setAdded, setArchived, setPresenceMeta, setVersion } from "./presence.repository";
+import { addVersion, getAllPresenceMetas, getAllPresenceSlugs, getPresenceStats, getVersionHistory, setAdded, setArchived, setPresenceMeta, setVersion } from "./presence.repository";
 
 type ReleasePerson = {
   name: string;
@@ -52,7 +52,36 @@ export type PresenceSyncResponse = {
   archived: string[];
 };
 
+export class PresenceAliasConflictError extends Error {
+  constructor(readonly issues: string[]) {
+    super(`Presence alias conflict: ${issues.join("; ")}`);
+  }
+}
+
 const normalizeSlug = (slug: string): string => slug.trim().toLowerCase();
+
+/**
+ * Rejects the whole batch before any write when an alias is malformed or
+ * already used. Incoming metadata replaces the published one, so an alias
+ * moved between presences of the same batch is accepted; archived presences
+ * are ignored so a renamed presence can keep its old slug as an alias.
+ */
+const assertNoAliasConflicts = async (presences: PresenceSyncEntry[]): Promise<void> => {
+  if (presences.length === 0) return;
+
+  const incoming: PresenceAliasEntry[] = presences.map((p) => ({
+    slug: p.slug,
+    metadata: p.metadata
+  }));
+
+  const incomingSlugs = new Set(incoming.map((p) => p.slug));
+  const published = (await getAllPresenceMetas()).filter((p) => !incomingSlugs.has(p.slug));
+
+  const catalog = [...incoming, ...published];
+  const issues = incoming.flatMap((p) => getPresenceAliasIssues(p, catalog).map((issue) => `${p.slug}: ${issue}`));
+
+  if (issues.length > 0) throw new PresenceAliasConflictError(issues);
+};
 
 const bumpPatch = (version: string): string => {
   const parts = version.split(".").map(Number);
@@ -66,6 +95,8 @@ const bumpPatch = (version: string): string => {
  * changelog, records the version history entry and upserts metadata.
  */
 export const processPresenceSync = async (body: PresenceSyncBody): Promise<PresenceSyncResponse> => {
+  await assertNoAliasConflicts(body.presences ?? []);
+
   const results: PresenceSyncResult[] = [];
   const seen = new Set<string>();
 
