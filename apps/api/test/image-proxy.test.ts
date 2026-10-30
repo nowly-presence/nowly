@@ -271,4 +271,50 @@ describe("fetchImage", () => {
     });
     expect(result.ok && result.buffer.byteLength).toBe(MAX_IMAGE_BYTES);
   });
+
+  it.each(["text/html; charset=utf-8", "application/json", "application/octet-stream", "image/svg+xml", "IMAGE/SVG+XML; charset=utf-8"])(
+    "refuses a %s response without reading it",
+    async (contentType) => {
+      const body = new ReadableStream<Uint8Array>({
+        pull: () => {
+          throw new Error("the body must not be read");
+        }
+      });
+      global.fetch = vi.fn().mockResolvedValue(
+        new Response(body, {
+          status: 200,
+          headers: { "Content-Type": contentType }
+        })
+      ) as unknown as typeof fetch;
+
+      expect(await fetchImage(new URL("https://example.com/x.png"), service)).toEqual({
+        ok: false,
+        status: 502,
+        error: "IMAGE_UNSUPPORTED_TYPE"
+      });
+    }
+  );
+
+  it("keeps the upstream image type, whatever its case or parameters", async () => {
+    global.fetch = vi.fn().mockResolvedValue(
+      new Response(new Uint8Array([1, 2, 3]), {
+        status: 200,
+        headers: { "Content-Type": "IMAGE/JPEG; quality=high" }
+      })
+    ) as unknown as typeof fetch;
+
+    expect(await fetchImage(new URL("https://example.com/x.jpg"), service)).toMatchObject({
+      ok: true,
+      contentType: "IMAGE/JPEG; quality=high"
+    });
+  });
+
+  it("serves an untyped response as WebP", async () => {
+    global.fetch = vi.fn().mockResolvedValue(new Response(new Uint8Array([1, 2, 3]), { status: 200 })) as unknown as typeof fetch;
+
+    expect(await fetchImage(new URL("https://example.com/x"), service)).toMatchObject({
+      ok: true,
+      contentType: "image/webp"
+    });
+  });
 });

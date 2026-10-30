@@ -11,6 +11,8 @@ const PUBLIC_IMAGE_PROXY_ORIGIN = "*";
 const PRESENCE_SERVICES_TTL_MS = 5 * 60 * 1000;
 const MAX_REDIRECTS = 3;
 const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
+const FALLBACK_IMAGE_TYPE = "image/webp";
+const SCRIPTABLE_IMAGE_TYPES = new Set(["image/svg+xml"]);
 
 export type ImageProxyService = {
   id: string;
@@ -153,6 +155,11 @@ const requestImage = (url: URL, service: ImageProxyService, signal: AbortSignal)
     redirect: "manual"
   });
 
+const isServableImageType = (contentType: string): boolean => {
+  const mediaType = contentType.split(";")[0].trim().toLowerCase();
+  return mediaType.startsWith("image/") && !SCRIPTABLE_IMAGE_TYPES.has(mediaType);
+};
+
 const readImageBody = async (response: Response): Promise<Buffer | null> => {
   const declaredLength = Number(response.headers.get("Content-Length") ?? 0);
 
@@ -233,9 +240,18 @@ export const fetchImage = async (url: URL, service: ImageProxyService): Promise<
       };
     }
 
-    const buffer = await readImageBody(response);
+    const contentType = response.headers.get("Content-Type") || FALLBACK_IMAGE_TYPE;
 
-    const contentType = response.headers.get("Content-Type") || "image/webp";
+    if (!isServableImageType(contentType)) {
+      await response.body?.cancel();
+      return {
+        ok: false,
+        status: 502,
+        error: "IMAGE_UNSUPPORTED_TYPE"
+      };
+    }
+
+    const buffer = await readImageBody(response);
 
     if (!buffer) {
       return {
