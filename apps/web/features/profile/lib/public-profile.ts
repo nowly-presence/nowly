@@ -14,6 +14,7 @@ export type PublicProfile = {
   image: string | null;
   banner: string | null;
   bio: string | null;
+  links: string[];
   created: Array<{
     slug: string;
     name: string;
@@ -34,7 +35,11 @@ export const getPublicProfile = cache(async (handle: string): Promise<PublicProf
 
     if (!response.ok) return null;
 
-    return (await response.json()) as PublicProfile;
+    const profile = (await response.json()) as PublicProfile;
+    return {
+      ...profile,
+      links: profile.links ?? []
+    };
   } catch {
     return null;
   }

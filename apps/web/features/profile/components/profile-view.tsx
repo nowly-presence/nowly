@@ -1,3 +1,4 @@
+import { ProfileLinks } from "@/features/profile/components/profile-links";
 import { PresenceCollection } from "@/features/profile/components/presence-collection";
 import type { PublicProfile } from "@/features/profile/lib/public-profile";
 import { Avatar, AvatarFallback, AvatarImage, Badge } from "@nowly/ui";
@@ -43,6 +44,7 @@ export const ProfileView = async ({ profile }: {
               </Badge>
             ) : null}
             {profile.bio ? <p className="mt-4 max-w-2xl whitespace-pre-line text-[0.95rem] leading-relaxed text-foreground/80">{profile.bio}</p> : null}
+            <ProfileLinks links={profile.links} />
           </div>
         </div>
         <div className="mt-10 flex flex-col gap-10">
