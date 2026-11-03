@@ -1,4 +1,5 @@
-import { boolean, foreignKey, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
+import { boolean, foreignKey, jsonb, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { user } from "@nowly/database/schema/auth/user";
 
 export const publicProfile = pgTable(
@@ -10,6 +11,10 @@ export const publicProfile = pgTable(
     bio: text("bio"),
     showCreated: boolean("show_created").default(true).notNull(),
     showLiked: boolean("show_liked").default(true).notNull(),
+    links: jsonb("links")
+      .$type<string[]>()
+      .default(sql`'[]'::jsonb`)
+      .notNull(),
     createdAt: timestamp("created_at", {
       withTimezone: true,
       precision: 6
