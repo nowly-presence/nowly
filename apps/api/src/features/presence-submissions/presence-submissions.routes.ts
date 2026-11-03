@@ -45,7 +45,6 @@ const canRead = async (c: Context, submissionId: string): Promise<"ok" | 401 | 4
 
   if (!authorId) return 404;
   if (authorId === account.userId) return "ok";
-  if (account.tokenId && !account.scopes.includes("admin")) return 404;
 
   return hasCapability(await getUserRole(account.userId), "review") ? "ok" : 404;
 };

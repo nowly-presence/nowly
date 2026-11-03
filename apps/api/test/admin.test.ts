@@ -142,17 +142,27 @@ describe("roles and capabilities", () => {
     ).toBe(403);
   });
 
-  it("requires the admin scope on extension tokens", async () => {
+  it("grants staff access from any extension token but never to regular accounts", async () => {
     const server = await app();
 
-    const syncToken = await bearer(ADMIN, ["sync"]);
+    const staffToken = await bearer(ADMIN, ["sync"]);
+    expect(
+      (
+        await inject(server, {
+          url: "/admin/audit",
+          headers: staffToken
+        })
+      ).statusCode
+    ).toBe(200);
 
-    const res = await inject(server, {
+    const memberToken = await bearer(MEMBER, ["sync", "admin"]);
+
+    const refused = await inject(server, {
       url: "/admin/audit",
-      headers: syncToken
+      headers: memberToken
     });
-    expect(res.statusCode).toBe(403);
-    expect(res.json()).toEqual({ error: "ADMIN_SCOPE_REQUIRED" });
+    expect(refused.statusCode).toBe(403);
+    expect(refused.json()).toEqual({ error: "FORBIDDEN" });
     expect((await inject(server, { url: "/admin/audit" })).statusCode).toBe(401);
   });
 
