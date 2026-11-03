@@ -317,7 +317,10 @@ export const connectAccount = async (payload: unknown): Promise<{
     expiresAt: typeof payload.expiresAt === "number" ? payload.expiresAt : 0,
     connectedAt: Date.now()
   });
-  addRuntimeLog("success", "api", "account connected");
+  addRuntimeLog("success", "api", "account connected", {
+    scopes: grantedScopes(payload.scopes),
+    discordLinked: me.data.discordId !== null
+  });
   void linkThisDevice(payload.token).finally(() => runAccountSync("full"));
   return {
     ok: true

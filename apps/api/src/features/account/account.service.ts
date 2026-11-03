@@ -34,6 +34,15 @@ export type AccountDevice = {
   current: boolean;
 };
 
+const linkedDiscordId = async (userId: string): Promise<string | null> => {
+  const [linked] = await getDb()
+    .select({ accountId: account.accountId })
+    .from(account)
+    .where(and(eq(account.userId, userId), eq(account.providerId, "discord")))
+    .limit(1);
+  return linked?.accountId ?? null;
+};
+
 export const getAccountProfile = async (userId: string): Promise<AccountProfile | null> => {
   const [row] = await getDb()
     .select({
@@ -50,8 +59,11 @@ export const getAccountProfile = async (userId: string): Promise<AccountProfile 
 
   if (!row) return null;
 
+  const discordId = row.discordId ?? (await linkedDiscordId(userId));
+
   return {
     ...row,
+    discordId,
     verified: isVerifiedAccount(row.verified, row.role),
     githubLogin: null,
     capabilities: capabilitiesOf(row.role)
