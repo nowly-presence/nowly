@@ -15,6 +15,13 @@
       "when": 1793699255602,
       "tag": "0001_admin_audit_events",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793701179834,
+      "tag": "0002_presence_submissions",
+      "breakpoints": true
     }
   ]
 }
