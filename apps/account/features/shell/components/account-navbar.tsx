@@ -18,8 +18,7 @@ export const AccountNavbar = ({ capabilities }: {
       site="account"
       docsOrigin={docsBaseUrl()}
       brand={<BrandLockup width={148} height={60} className="h-full w-auto object-contain object-left" />}
-      storeButton={null}
-      leadingAction={
+      storeButton={
         moderationTab ? (
           <Link href={moderationTab.href} className={buttonVariants()}>
             {t("tab-moderation")}

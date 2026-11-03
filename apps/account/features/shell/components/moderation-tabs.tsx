@@ -15,7 +15,6 @@ export const ModerationTabs = ({ capabilities }: {
     <div className="border-b border-border pt-6">
       <PageContainer>
         <nav aria-label={t("tab-moderation")} className="flex items-center gap-1 pb-3">
-          <span className="mr-3 rounded-md bg-accent/15 px-2 py-1 text-xs font-medium text-accent">{t("tab-moderation")}</span>
           {visibleModerationTabs(capabilities).map((tab) => (
             <Link
               key={tab.href}
