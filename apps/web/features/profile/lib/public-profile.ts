@@ -8,7 +8,10 @@ const REVALIDATE_SECONDS = 60;
 export type PublicProfile = {
   handle: string;
   name: string;
+  username: string | null;
+  verified: boolean;
   image: string | null;
+  banner: string | null;
   bio: string | null;
   created: Array<{
     slug: string;
