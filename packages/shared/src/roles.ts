@@ -1,4 +1,4 @@
-export const USER_ROLES = ["user", "admin"] as const;
+export const USER_ROLES = ["user", "moderator", "admin"] as const;
 
 export type UserRole = (typeof USER_ROLES)[number];
 
@@ -8,6 +8,7 @@ export type AdminCapability = (typeof ADMIN_CAPABILITIES)[number];
 
 export const ROLE_CAPABILITIES: Readonly<Record<UserRole, readonly AdminCapability[]>> = {
   user: [],
+  moderator: ["review"],
   admin: ADMIN_CAPABILITIES
 };
 

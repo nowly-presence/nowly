@@ -6,6 +6,8 @@ import { eq, isNull } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createTestDatabase, seedExtensionToken, seedUser, type TestDatabase } from "./database";
 import { inject, mount } from "./http";
+import type { AppEnv } from "@/context";
+import { Hono } from "hono";
 
 const mockSession = vi.hoisted(() => ({ userId: null as string | null }));
 
@@ -238,6 +240,136 @@ describe("roles and capabilities", () => {
       ).statusCode
     ).toBe(403);
     expect(await database.db.select().from(adminAuditEvent)).toEqual([]);
+  });
+});
+
+describe("moderator role", () => {
+  const MODERATOR = "moderator-1";
+
+  const guarded = async () => {
+    const { requireCapability } = await import("@/features/admin/admin.middleware");
+    return mount(
+      "/",
+      new Hono<AppEnv>()
+        .post("/review", requireCapability("review"), (c) => c.json({ ok: true }))
+        .post("/publish", requireCapability("publish"), (c) => c.json({ ok: true }))
+    );
+  };
+
+  beforeEach(async () => {
+    await seedUser(database.db, MODERATOR);
+    await setRole(MODERATOR, "moderator");
+    mockSession.userId = MODERATOR;
+  });
+
+  it("can review but cannot publish, announce or manage roles", async () => {
+    const routes = await guarded();
+    expect(
+      (
+        await inject(routes, {
+          method: "POST",
+          url: "/review"
+        })
+      ).statusCode
+    ).toBe(200);
+    expect(
+      (
+        await inject(routes, {
+          method: "POST",
+          url: "/publish"
+        })
+      ).statusCode
+    ).toBe(403);
+
+    const server = await app();
+    expect((await inject(server, { url: "/me" })).json()).toMatchObject({
+      role: "moderator",
+      capabilities: ["review"]
+    });
+    expect(
+      (
+        await inject(server, {
+          method: "POST",
+          url: "/announcements",
+          payload: ANNOUNCEMENT
+        })
+      ).statusCode
+    ).toBe(403);
+    expect(
+      (
+        await inject(server, {
+          method: "PUT",
+          url: `/admin/users/${MEMBER}/role`,
+          payload: { role: "moderator" }
+        })
+      ).statusCode
+    ).toBe(403);
+    expect((await inject(server, { url: "/admin/audit" })).statusCode).toBe(403);
+  });
+
+  it("gets the admin token scope to review from the extension", async () => {
+    const server = await app();
+
+    const granted = await inject(server, {
+      method: "POST",
+      url: "/extension/tokens",
+      payload: {
+        scopes: ["admin"]
+      }
+    });
+    expect(granted.statusCode).toBe(200);
+
+    const routes = await guarded();
+
+    const headers = { authorization: `Bearer ${granted.json().token}` };
+    mockSession.userId = null;
+    expect(
+      (
+        await inject(routes, {
+          method: "POST",
+          url: "/review",
+          headers
+        })
+      ).statusCode
+    ).toBe(200);
+    expect(
+      (
+        await inject(routes, {
+          method: "POST",
+          url: "/publish",
+          headers
+        })
+      ).statusCode
+    ).toBe(403);
+  });
+
+  it("can be promoted or demoted by an admin", async () => {
+    mockSession.userId = ADMIN;
+    const server = await app();
+    expect(
+      (
+        await inject(server, {
+          method: "PUT",
+          url: `/admin/users/${MEMBER}/role`,
+          payload: { role: "moderator" }
+        })
+      ).json()
+    ).toMatchObject({
+      role: "moderator",
+      changed: true
+    });
+    expect(
+      (
+        await inject(server, {
+          method: "PUT",
+          url: `/admin/users/${MODERATOR}/role`,
+          payload: { role: "user" }
+        })
+      ).json()
+    ).toMatchObject({
+      role: "user",
+      changed: true
+    });
   });
 });
 
