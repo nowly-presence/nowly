@@ -41,7 +41,7 @@ export const deriveHandleBase = (source: string | null | undefined): string => {
 
 export const handleCandidate = (base: string, attempt: number): string => (attempt === 0 ? base : `${base}${attempt + 1}`);
 
-export const PUBLIC_LINKS_MAX = 6;
+export const PUBLIC_LINKS_MAX = 5;
 export const PUBLIC_LINK_MAX_LENGTH = 200;
 
 export const SOCIAL_KINDS = ["github", "x", "bluesky", "youtube", "twitch", "tiktok", "instagram", "reddit", "linkedin", "website"] as const;

@@ -104,7 +104,7 @@ describe("public profile settings", () => {
     ).toBe(400);
   });
 
-  it("saves up to six https links, normalised and without duplicates", async () => {
+  it("saves up to five https links, normalised and without duplicates", async () => {
     const res = await save(OWNER, {
       ...BODY,
       links: ["https://github.com/nolo", "https://github.com/nolo", "https://x.com/nolo"]
@@ -116,7 +116,7 @@ describe("public profile settings", () => {
       ["javascript:alert(1)"],
       ["https://user:pw@example.com"],
       ["not a url"],
-      Array.from({ length: 7 }, (_, index) => `https://example.com/${index}`)
+      Array.from({ length: 6 }, (_, index) => `https://example.com/${index}`)
     ])
       expect((await save(OWNER, { ...BODY, links })).statusCode).toBe(400);
   });
