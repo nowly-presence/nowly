@@ -15,7 +15,13 @@ const COMMIT_PATTERN = /^[a-f0-9]{7,40}$/;
 
 export const SubmitBodySchema = z.object({
   definition: z.unknown(),
-  translate: z.boolean().default(false)
+  translate: z.boolean().default(false),
+  assets: z.object({
+    thumbnail: z.string(),
+    logo: z.string(),
+    icon: z.string(),
+    thumbnailRightsConfirmed: z.literal(true)
+  })
 });
 
 export const SubmissionIdsSchema = z

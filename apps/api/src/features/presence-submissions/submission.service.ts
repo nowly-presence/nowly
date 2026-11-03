@@ -5,12 +5,14 @@ import { presence } from "@nowly/database/schema/presence";
 import { buildTextFiles, diffDefinitions, normalizeDraft, parseCreatorDefinition, presenceSlug, validateDraft, type CreatorDefinition, type CreatorDraft } from "@nowly/presence-creator";
 import { and, desc, eq, inArray } from "drizzle-orm";
 import { randomBytes, randomUUID } from "node:crypto";
+import { hasObjectStorage } from "@/shared/object-storage";
 import { SubmissionError } from "./submission-errors";
+import { checkCreatorImages, type CreatorImage, type CreatorImageKind } from "./submission-images";
 import { EDITABLE_STATUSES, isOneOf, OPEN_STATUSES } from "./submission-status";
+import { removeCreatorImages, storedKeys, storeCreatorImages } from "./submission-storage";
 
 const SUBMISSION_ID_BYTES = 12;
 const ISSUES_IN_MESSAGE = 3;
-const SERVER_CHECKED_LATER_STEP = "visuals";
 
 export type SubmissionSummary = {
   id: string;
@@ -30,11 +32,27 @@ export const toSummary = (row: typeof presenceSubmission.$inferSelect): Submissi
   ...(row.note ? { note: row.note } : {})
 });
 
-const asDraft = (definition: CreatorDefinition): CreatorDraft =>
+const imageName = (images: CreatorImage[], kind: CreatorImageKind): string | undefined => images.find((image) => image.kind === kind)?.fileName;
+
+const asDraft = (definition: CreatorDefinition, images: CreatorImage[]): CreatorDraft =>
   normalizeDraft({
     ...definition,
-    assets: { thumbnailRightsConfirmed: true }
+    assets: {
+      thumbnail: imageName(images, "thumbnail"),
+      logo: imageName(images, "logo"),
+      icon: imageName(images, "icon"),
+      iconTransparent: true,
+      thumbnailRightsConfirmed: true
+    }
   });
+
+const verifiedImages = async (assets: Record<CreatorImageKind, string>): Promise<CreatorImage[]> => {
+  const check = await checkCreatorImages(assets);
+
+  if (!check.ok) throw new SubmissionError("INVALID_IMAGE", `The ${check.kind} image is invalid (${check.reason}).`);
+
+  return check.images;
+};
 
 const assertNoOtherPending = async (slug: string, authorId: string, draftId: string): Promise<void> => {
   const pending = await getDb()
@@ -51,10 +69,18 @@ const assertNoOtherPending = async (slug: string, authorId: string, draftId: str
   }
 };
 
+const assertEditable = (status: string | undefined): void => {
+  if (status !== undefined && !isOneOf(status, EDITABLE_STATUSES)) throw new SubmissionError(
+    "SUBMISSION_LOCKED",
+    "This submission is under review and cannot be changed now."
+  );
+};
+
 export const submitPresence = async (input: {
   userId: string;
   definition: unknown;
   translate: boolean;
+  assets: Record<CreatorImageKind, string>;
 }): Promise<SubmissionSummary> => {
   const db = getDb();
   const [author] = await db
@@ -86,9 +112,11 @@ export const submitPresence = async (input: {
 
   if (catalogEntry) throw new SubmissionError("NOT_CREATOR_PRESENCE", "This presence was not made with the creator and cannot be edited here.");
 
-  const draft = asDraft(definition);
+  const images = await verifiedImages(input.assets);
+
+  const draft = asDraft(definition, images);
   await assertNoOtherPending(slug, input.userId, definition.id);
-  const issues = validateDraft(draft).filter((issue) => issue.step !== SERVER_CHECKED_LATER_STEP);
+  const issues = validateDraft(draft);
 
   if (issues.length) {
     throw new SubmissionError(
@@ -101,78 +129,95 @@ export const submitPresence = async (input: {
   }
 
   const files = buildTextFiles(draft);
+  const ownSubmission = and(eq(presenceSubmission.authorId, input.userId), eq(presenceSubmission.draftId, definition.id));
+  const [current] = await db
+    .select({
+      id: presenceSubmission.id,
+      revision: presenceSubmission.revision,
+      status: presenceSubmission.status
+    })
+    .from(presenceSubmission)
+    .where(ownSubmission)
+    .limit(1);
 
-  return db.transaction(async (tx) => {
-    const now = new Date();
-    const [existing] = await tx
-      .select()
-      .from(presenceSubmission)
-      .where(and(eq(presenceSubmission.authorId, input.userId), eq(presenceSubmission.draftId, definition.id)))
-      .for("update");
+  assertEditable(current?.status);
 
-    if (existing && !isOneOf(existing.status, EDITABLE_STATUSES)) throw new SubmissionError(
-      "SUBMISSION_LOCKED",
-      "This submission is under review and cannot be changed now."
-    );
+  if (!hasObjectStorage()) throw new SubmissionError("STORAGE_UNAVAILABLE", "Image storage is not configured.");
 
-    const [previous] = existing
-      ? await tx
-          .select({ definition: presenceSubmissionRevision.definition })
-          .from(presenceSubmissionRevision)
-          .where(eq(presenceSubmissionRevision.submissionId, existing.id))
-          .orderBy(desc(presenceSubmissionRevision.number))
-          .limit(1)
-      : [];
-    const before = parseCreatorDefinition(previous?.definition ?? base?.definition ?? null);
-    const id = existing?.id ?? randomBytes(SUBMISSION_ID_BYTES).toString("hex");
-    const revision = (existing?.revision ?? 0) + 1;
+  const id = current?.id ?? randomBytes(SUBMISSION_ID_BYTES).toString("hex");
+  const revision = (current?.revision ?? 0) + 1;
+  const assets = await storeCreatorImages(id, revision, images);
 
-    const [row] = existing
-      ? await tx
-          .update(presenceSubmission)
-          .set({
-            status: "submitted",
-            revision,
-            slug,
-            translate: input.translate,
-            note: null,
-            updatedAt: now
-          })
-          .where(eq(presenceSubmission.id, existing.id))
-          .returning()
-      : await tx
-          .insert(presenceSubmission)
-          .values({
-            id,
-            draftId: definition.id,
-            authorId: input.userId,
-            kind: base ? "update" : "create",
-            slug,
-            baseRevision: base?.revision ?? null,
-            status: "submitted",
-            translate: input.translate
-          })
-          .returning();
+  return db
+    .transaction(async (tx) => {
+      const now = new Date();
+      const [existing] = await tx.select().from(presenceSubmission).where(ownSubmission).for("update");
 
-    await tx.insert(presenceSubmissionRevision).values({
-      id: randomUUID(),
-      submissionId: id,
-      number: revision,
-      authorId: input.userId,
-      definition,
-      files,
-      changes: diffDefinitions(before, definition)
+      if (existing?.revision !== current?.revision) throw new SubmissionError("STALE_REVISION", "This submission changed while it was being sent.");
+
+      assertEditable(existing?.status);
+
+      const [previous] = existing
+        ? await tx
+            .select({ definition: presenceSubmissionRevision.definition })
+            .from(presenceSubmissionRevision)
+            .where(eq(presenceSubmissionRevision.submissionId, existing.id))
+            .orderBy(desc(presenceSubmissionRevision.number))
+            .limit(1)
+        : [];
+      const before = parseCreatorDefinition(previous?.definition ?? base?.definition ?? null);
+
+      const [row] = existing
+        ? await tx
+            .update(presenceSubmission)
+            .set({
+              status: "submitted",
+              revision,
+              slug,
+              translate: input.translate,
+              note: null,
+              updatedAt: now
+            })
+            .where(eq(presenceSubmission.id, existing.id))
+            .returning()
+        : await tx
+            .insert(presenceSubmission)
+            .values({
+              id,
+              draftId: definition.id,
+              authorId: input.userId,
+              kind: base ? "update" : "create",
+              slug,
+              baseRevision: base?.revision ?? null,
+              status: "submitted",
+              translate: input.translate
+            })
+            .returning();
+
+      await tx.insert(presenceSubmissionRevision).values({
+        id: randomUUID(),
+        submissionId: id,
+        number: revision,
+        authorId: input.userId,
+        definition,
+        files,
+        changes: diffDefinitions(before, definition),
+        assets
+      });
+      await tx.insert(presenceSubmissionEvent).values({
+        id: randomUUID(),
+        submissionId: id,
+        revision,
+        type: existing ? "resubmitted" : "submitted",
+        status: "submitted",
+        actorId: input.userId
+      });
+      return toSummary(row);
+    })
+    .catch(async (error: unknown) => {
+      await removeCreatorImages(storedKeys(assets)).catch(() => undefined);
+      throw error;
     });
-    await tx.insert(presenceSubmissionEvent).values({
-      id: randomUUID(),
-      submissionId: id,
-      revision,
-      type: existing ? "resubmitted" : "submitted",
-      status: "submitted",
-      actorId: input.userId
-    });
-    return toSummary(row);
-  });
 };
 
 export const listOwnSubmissions = async (userId: string, ids: string[]): Promise<SubmissionSummary[]> => {

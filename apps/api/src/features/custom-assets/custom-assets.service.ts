@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
-import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { objectStorage, publicObjectUrl } from "@/shared/object-storage";
 import { serverEnv } from "@nowly/env/server";
 import { getDb, hasDatabase } from "@/db/client";
 import { customAsset } from "@nowly/database/schema/device";
@@ -74,15 +75,7 @@ export const customAssetKey = (deviceId: string, sha256: string, mime: CustomIma
   return `custom/${deviceHash}/${sha256}.${CUSTOM_IMAGE_MIME_EXTENSIONS[mime]}`;
 };
 
-const storage = (): S3Client =>
-  new S3Client({
-    region: "auto",
-    endpoint: `https://${serverEnv.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-    credentials: {
-      accessKeyId: serverEnv.R2_ACCESS_KEY_ID ?? "",
-      secretAccessKey: serverEnv.R2_SECRET_ACCESS_KEY ?? ""
-    }
-  });
+const storage = objectStorage;
 
 export type CustomAssetView = {
   id: string;
@@ -92,7 +85,7 @@ export type CustomAssetView = {
 
 const toView = (row: { sha256: string; key: string; lastUsedAt: Date }): CustomAssetView => ({
   id: row.sha256,
-  url: `${serverEnv.R2_PUBLIC_URL.replace(/\/$/, "")}/${row.key}`,
+  url: publicObjectUrl(row.key),
   expiresAt: new Date(row.lastUsedAt.getTime() + CUSTOM_IMAGE_RETENTION_MS).toISOString()
 });
 

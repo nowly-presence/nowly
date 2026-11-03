@@ -5,7 +5,7 @@ import { account, user } from "@nowly/database/schema/auth";
 import { device } from "@nowly/database/schema/device";
 import { presenceLike } from "@nowly/database/schema/presence";
 import { and, asc, desc, eq } from "drizzle-orm";
-import { exportAuthoredSubmissions } from "@/features/presence-submissions/submission-detail.service";
+import { eraseAuthoredSubmissionImages, exportAuthoredSubmissions } from "@/features/presence-submissions/submission-detail.service";
 import { listActorActions, type AuditEventView } from "@/features/admin/audit.service";
 import { capabilitiesOf, type AdminCapability } from "@nowly/shared/roles";
 import { revokeDeviceExtensionTokens } from "./extension-token.service";
@@ -193,6 +193,7 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
 };
 
 export const deleteAccountData = async (userId: string): Promise<void> => {
+  await eraseAuthoredSubmissionImages(userId);
   await getDb().transaction(async (tx) => {
     await tx.update(device).set({ userId: null }).where(eq(device.userId, userId));
     await tx.update(presenceLike).set({ userId: null }).where(eq(presenceLike.userId, userId));

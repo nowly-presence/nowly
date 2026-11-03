@@ -66,7 +66,8 @@ export const presenceSubmissionRoutes = new Hono<AppEnv>()
         await submitPresence({
           userId: accountOf(c).userId,
           definition: body.data.definition,
-          translate: body.data.translate
+          translate: body.data.translate,
+          assets: body.data.assets
         }),
         201
       );

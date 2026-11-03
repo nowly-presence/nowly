@@ -3,6 +3,7 @@ import { user } from "@nowly/database/schema/auth";
 import { presenceSubmission, presenceSubmissionEvent, presenceSubmissionReview, presenceSubmissionRevision } from "@nowly/database/schema/creator";
 import { asc, desc, eq, inArray } from "drizzle-orm";
 import { toSummary } from "./submission.service";
+import { assetUrls, removeCreatorImages, storedKeys } from "./submission-storage";
 
 export const QUEUE_LIMIT = 100;
 
@@ -61,6 +62,7 @@ export const getSubmissionDetail = async (id: string) => {
     createdAt: row.createdAt.toISOString(),
     definition: latest?.definition ?? null,
     files: latest?.files ?? [],
+    assets: assetUrls(latest?.assets),
     revisions: revisions.map((item) => ({
       number: item.number,
       author: person(item.authorId, byId),
@@ -109,4 +111,13 @@ export const exportAuthoredSubmissions = async (userId: string) => {
   const db = getDb();
   const rows = await db.select().from(presenceSubmission).where(eq(presenceSubmission.authorId, userId)).orderBy(desc(presenceSubmission.createdAt));
   return Promise.all(rows.map(async (row) => getSubmissionDetail(row.id)));
+};
+
+export const eraseAuthoredSubmissionImages = async (userId: string): Promise<void> => {
+  const rows = await getDb()
+    .select({ assets: presenceSubmissionRevision.assets })
+    .from(presenceSubmissionRevision)
+    .innerJoin(presenceSubmission, eq(presenceSubmission.id, presenceSubmissionRevision.submissionId))
+    .where(eq(presenceSubmission.authorId, userId));
+  await removeCreatorImages(rows.flatMap((row) => storedKeys(row.assets)));
 };
