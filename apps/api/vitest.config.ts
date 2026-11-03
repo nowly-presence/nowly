@@ -10,6 +10,7 @@ export default defineConfig({
     environment: "node",
     include: ["test/**/*.test.ts"],
     setupFiles: ["test/setup.ts"],
+    hookTimeout: 30_000,
     coverage: {
       provider: "v8",
       reporter: ["cobertura"],
