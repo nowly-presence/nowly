@@ -13,6 +13,7 @@ import { confirmLegalDocuments, emptyLegalState, normalizeLegalState } from "@no
 import { announcementRevision } from "@nowly/shared/announcements";
 import { previewAnnouncements } from "@/preview/announcements-fixtures";
 import { createPublicationMockHandlers } from "@/preview/activity-publication-mock";
+import { createMockCreatorHandlers } from "@/preview/mock-creator";
 
 export type MockHandlers = { [K in RouterMessageType]?: (payload: PayloadOf<K>) => ResponseOf<K> | Promise<ResponseOf<K>> };
 
@@ -507,6 +508,18 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
       return account;
     },
     SIGN_OUT_ACCOUNT: () => (account = { signedIn: false }),
+    ...createMockCreatorHandlers({
+      user: () => (account.signedIn ? account.user : null),
+      signIn: () => {
+        if (!account.signedIn) account = {
+          signedIn: true,
+          user: PREVIEW_USER,
+          lastSyncedAt: Date.now(),
+          error: null,
+          pendingChoice: false
+        };
+      }
+    }),
     STOP_ACCOUNT_SYNC: async () => {
       await delay(SYNC_LATENCY_MS);
       account = { signedIn: false };

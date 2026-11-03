@@ -20,6 +20,8 @@ export type Route = {
   template?: string;
 } | {
   name: "discord-ipc";
+} | {
+  name: "creator";
 };
 
 type NavValue = {
