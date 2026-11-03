@@ -18,6 +18,76 @@ importers:
         specifier: ^2.14.0
         version: 2.14.0
 
+  apps/account:
+    dependencies:
+      '@nowly/locales':
+        specifier: workspace:*
+        version: link:../../packages/locales
+      '@nowly/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      '@nowly/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@remixicon/react':
+        specifier: ^4.9.0
+        version: 4.9.0(react@19.3.1)
+      next:
+        specifier: 16.4.3
+        version: 16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@opentelemetry/api@1.9.0)(@types/node@26.6.6)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      next-intl:
+        specifier: ^4.14.9
+        version: 4.14.9(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.4.3(@babel/core@7.29.7(supports-color@7.2.0))(@opentelemetry/api@1.9.0)(@types/node@26.6.6)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
+      next-themes:
+        specifier: ^0.4.6
+        version: 0.4.6(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      react:
+        specifier: ^19.3.1
+        version: 19.3.1
+      react-dom:
+        specifier: ^19.3.1
+        version: 19.3.1(react@19.3.1)
+      shadcn:
+        specifier: ^4.23.0
+        version: 4.23.0(supports-color@7.2.0)
+      tw-animate-css:
+        specifier: 1.4.0
+        version: 1.4.0
+    devDependencies:
+      '@eslint/js':
+        specifier: ^10.0.1
+        version: 10.0.1(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))
+      '@stylistic/eslint-plugin':
+        specifier: ^5.10.0
+        version: 5.10.0(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))
+      '@tailwindcss/postcss':
+        specifier: ^4.3.3
+        version: 4.3.3
+      '@types/node':
+        specifier: ^26.6.6
+        version: 26.6.6
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: ^19.3.0
+        version: 19.3.0(@types/react@19.3.0)
+      eslint:
+        specifier: ^10.14.0
+        version: 10.14.0(jiti@2.7.0)(supports-color@7.2.0)
+      postcss:
+        specifier: ^8.5.31
+        version: 8.5.32
+      tailwindcss:
+        specifier: ^4.3.3
+        version: 4.3.3
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      typescript-eslint:
+        specifier: ^8.72.1
+        version: 8.72.1(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)
+
   apps/api:
     dependencies:
       '@aws-sdk/client-s3':
@@ -2899,10 +2969,6 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: '>=4.8.4 <6.1.0'
-
-  '@typescript-eslint/types@8.72.0':
-    resolution: {integrity: sha512-Adfoy59kxNEjT5E5fnyrp7GpHYuWs8ONbdohu4ez6IU46qDq8LltG90tLmkucZB2uhYL8mqBjtXqGd8yhfjXqQ==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@typescript-eslint/types@8.72.1':
     resolution: {integrity: sha512-LmE5IhQet1BWOWEXqBrVtBPsMAOQ6Nzk35d+WLh3mk4EUF33sqlfxjio1MdYeSvKSG5skactKKuixBIKXhL4Rw==}
@@ -7396,7 +7462,7 @@ snapshots:
   '@stylistic/eslint-plugin@5.10.0(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))':
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.14.0(jiti@2.7.0)(supports-color@7.2.0))
-      '@typescript-eslint/types': 8.72.0
+      '@typescript-eslint/types': 8.72.1
       eslint: 10.14.0(jiti@2.7.0)(supports-color@7.2.0)
       eslint-visitor-keys: 4.2.1
       espree: 10.4.0
@@ -7722,8 +7788,6 @@ snapshots:
       typescript: 6.0.3
     transitivePeerDependencies:
       - supports-color
-
-  '@typescript-eslint/types@8.72.0': {}
 
   '@typescript-eslint/types@8.72.1': {}
 

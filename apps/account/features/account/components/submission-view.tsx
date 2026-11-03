@@ -1,0 +1,164 @@
+"use client";
+
+import { AccountHeader } from "@/features/account/components/account-header";
+import { SubmissionChanges } from "@/features/account/components/submission-changes";
+import { SubmissionFiles } from "@/features/account/components/submission-files";
+import { SubmissionPreview } from "@/features/account/components/submission-preview";
+import { SubmissionReviewForm } from "@/features/account/components/submission-review-form";
+import { SubmissionStatusBadge } from "@/features/account/components/submission-status-badge";
+import { SubmissionThread } from "@/features/account/components/submission-thread";
+import { useSessionUser } from "@/features/account/components/session-provider";
+import { fetchSubmission, publishSubmission, sendReview, SubmissionRequestError, type FieldComment, type ReviewVerdict, type SubmissionDetail } from "@/features/account/lib/submission-api";
+import { allowedVerdicts, PUBLISHABLE_STATUSES } from "@/features/account/lib/submission-text";
+import { ButtonLink } from "@/components/button-link";
+import { Button } from "@nowly/ui";
+import { RiArrowLeftLine, RiExternalLinkLine } from "@nowly/ui/icons";
+import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useState } from "react";
+
+type Status = "checking" | "not-found" | "ready" | "error";
+
+const errorMessageKey = (error: unknown): "error-stale" | "error-forbidden" | "action-error" => {
+  if (error instanceof SubmissionRequestError) {
+    if (error.code === "STALE_REVISION") return "error-stale";
+    if (error.status === 403) return "error-forbidden";
+  }
+
+  return "action-error";
+};
+
+export const SubmissionView = ({ id }: {
+  id: string;
+}) => {
+  const t = useTranslations("submissionPage");
+  const [status, setStatus] = useState<Status>("checking");
+  const user = useSessionUser();
+  const [detail, setDetail] = useState<SubmissionDetail | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async (): Promise<void> => {
+    try {
+      setDetail(await fetchSubmission(id));
+      setStatus("ready");
+    } catch (failure) {
+      setStatus(failure instanceof SubmissionRequestError && failure.status === 404 ? "not-found" : "error");
+    }
+  }, [id]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  const act = async (action: () => Promise<void>): Promise<boolean> => {
+    setBusy(true);
+    setError(null);
+
+    try {
+      await action();
+      setDetail(await fetchSubmission(id));
+      return true;
+    } catch (failure) {
+      setError(t(errorMessageKey(failure)));
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const onReview = (review: {
+    verdict: ReviewVerdict;
+    message: string;
+    comments: FieldComment[];
+  }): Promise<boolean> => {
+    if (!detail) return Promise.resolve(false);
+
+    return act(() =>
+      sendReview(id, {
+        ...review,
+        revision: detail.revision
+      })
+    );
+  };
+
+  const onPublish = (): void => {
+    if (!detail || !window.confirm(t("publish-confirm"))) return;
+
+    void act(() => publishSubmission(id, detail.revision));
+  };
+
+  const isAuthor = detail?.author?.id === user.id;
+  const reviewer = user.capabilities.includes("review") && !isAuthor;
+  const publisher = user.capabilities.includes("publish");
+  const verdicts = detail ? allowedVerdicts(detail.status) : [];
+  const canPublish = publisher && detail !== null && PUBLISHABLE_STATUSES.includes(detail.status);
+
+  return (
+    <div className="pb-24 pt-12 sm:pb-32 sm:pt-16">
+      <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
+        <ButtonLink href="/creations" variant="ghost" size="sm">
+          <RiArrowLeftLine data-icon="inline-start" />
+          {t("back")}
+        </ButtonLink>
+
+        <div className="mt-6">
+          <AccountHeader eyebrow={t("eyebrow")} title={detail?.name ?? t("title")} description={t("description")} />
+        </div>
+
+        {status === "checking" ? <p className="mt-14 text-sm text-muted-foreground">{t("checking")}</p> : null}
+        {status === "error" ? <p className="mt-14 text-sm text-destructive">{t("action-error")}</p> : null}
+        {status === "not-found" ? <p className="mt-14 text-sm text-muted-foreground">{t("not-found")}</p> : null}
+
+        {status === "ready" && detail ? (
+          <div className="mt-10 flex flex-col gap-6">
+            <div className="flex flex-wrap items-center gap-3">
+              <SubmissionStatusBadge status={detail.status} />
+              <span className="text-sm text-muted-foreground">
+                {[
+                  detail.kind === "update" ? t("kind-update") : t("kind-create"),
+                  t("revision-heading", { number: detail.revision }),
+                  detail.author?.name ? t("by-author", { name: detail.author.name }) : null
+                ]
+                  .filter(Boolean)
+                  .join(", ")}
+              </span>
+              {detail.pullRequest.url ? (
+                <a
+                  href={detail.pullRequest.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-foreground underline underline-offset-4"
+                >
+                  {t("pull-request")}
+                  <RiExternalLinkLine className="size-3.5" />
+                </a>
+              ) : null}
+              {canPublish ? (
+                <Button size="sm" disabled={busy} onClick={onPublish}>
+                  {t("publish")}
+                </Button>
+              ) : null}
+            </div>
+            {detail.note ? <p className="max-w-2xl whitespace-pre-wrap rounded-xl bg-muted px-4 py-3 text-sm">{detail.note}</p> : null}
+            {detail.pullRequest.error && reviewer ? <p className="text-sm text-destructive">{t("pull-request-error")}</p> : null}
+
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)]">
+              <div className="flex min-w-0 flex-col gap-6">
+                {detail.definition ? <SubmissionPreview definition={detail.definition} assets={detail.assets} /> : null}
+                <SubmissionChanges revisions={detail.revisions} />
+                {reviewer || publisher ? <SubmissionFiles files={detail.files} /> : null}
+              </div>
+              <div className="flex min-w-0 flex-col gap-6">
+                <SubmissionThread detail={detail} />
+                {reviewer && verdicts.length ? (
+                  <SubmissionReviewForm key={detail.reviews.length} allowedVerdicts={verdicts} busy={busy} error={error} onSubmit={onReview} />
+                ) : null}
+                {!reviewer && error ? <p className="text-sm text-destructive">{error}</p> : null}
+              </div>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+};

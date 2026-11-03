@@ -5,14 +5,14 @@ Discord Rich Presence manager: the extension runs presence scripts and the nativ
 ## Layout
 
 - pnpm workspace (`apps/*`, `packages/*`), Node >= 22.22.1, pnpm version pinned in `packageManager`.
-- Apps: `api` (Hono on Node), `web` (nowly.me), `docs`, `extension` (MV3, Chromium and Firefox), `native` (Go host). `apps/discord` is git-ignored and absent from fresh clones.
+- Apps: `api` (Hono on Node), `web` (nowly.me), `account` (account.nowly.me, private account space), `docs`, `extension` (MV3, Chromium and Firefox), `native` (Go host). `apps/discord` is git-ignored and absent from fresh clones.
 - Shared packages: `database` (Drizzle schema, client, migrations), `auth` (Better Auth configuration), `env`, `shared`, `telemetry`, `ui`, `locales`, `changelog`, `og`, `presence-creator`.
 - `packages/{sdk,cli,presences,internal-cli}` are separate repositories, not part of this one: optional local clones (`pnpm repos`), git-ignored and outside the workspace. Commit and open pull requests from inside them; CI never has them. Presence authoring rules live in the presences repository's `AGENTS.md`.
 
 ## Commands
 
 - `pnpm install`. Never regenerate `pnpm-lock.yaml` unless dependencies changed. Locally, `prepare` also installs the git hooks and clones missing `sdk`, `cli` and `presences` (`scripts/repos.ts`; skipped in CI, Docker or with `NOWLY_SKIP_REPOS=1`).
-- Dev: `pnpm dev:api`, `pnpm dev:web`, `pnpm dev:docs`, `pnpm --filter @nowly/extension dev`.
+- Dev: `pnpm dev:api`, `pnpm dev:web`, `pnpm dev:docs`, `pnpm --filter @nowly/account dev` (port 3003), `pnpm --filter @nowly/extension dev`.
 - Checks: no root aggregator. Run only the touched workspace with `pnpm --filter @nowly/<pkg> <script>`; scripts differ per package, read its `package.json`. API tests run on an in-memory PostgreSQL (PGlite) and need no database; `pnpm --filter @nowly/api test:integration` needs a local `NOWLY_TEST_DATABASE_URL` ending in `_test`. Native host: `go test ./...` in `apps/native`.
 - Formatting: `pnpm format`. Never hand-format or add Prettier overrides. The pre-commit hook formats staged TypeScript in `apps/` and `packages/`.
 - Root script tests: `pnpm test:format`, `pnpm test:repos`. Unused i18n keys: `node --experimental-strip-types scripts/check-i18n-unused.ts`.
