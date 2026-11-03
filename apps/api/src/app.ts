@@ -10,6 +10,7 @@ import { customAssetsCronRoutes, customAssetsRoutes } from "@/features/custom-as
 import { deviceRoutes } from "@/features/device/device.routes";
 import { imageProxyRoutes } from "@/features/image-proxy/image-proxy.routes";
 import { presenceRoutes } from "@/features/presence/presence.routes";
+import { presenceSubmissionRoutes } from "@/features/presence-submissions/presence-submissions.routes";
 import { securityRoutes } from "@/features/security/security.routes";
 import { statusRoutes } from "@/features/status/status.routes";
 import { syncRoutes } from "@/features/sync/sync.routes";
@@ -70,6 +71,7 @@ export const createApp = ({ logRequests = false }: AppOptions = {}) => {
   app.route("/presences", presenceRoutes);
   app.route("/security", securityRoutes);
   app.route("/admin", adminRoutes);
+  app.route("/", presenceSubmissionRoutes);
 
   return app;
 };

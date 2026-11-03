@@ -5,6 +5,7 @@ import { account, user } from "@nowly/database/schema/auth";
 import { device } from "@nowly/database/schema/device";
 import { presenceLike } from "@nowly/database/schema/presence";
 import { and, asc, desc, eq } from "drizzle-orm";
+import { exportAuthoredSubmissions } from "@/features/presence-submissions/submission-detail.service";
 import { listActorActions, type AuditEventView } from "@/features/admin/audit.service";
 import { capabilitiesOf, type AdminCapability } from "@nowly/shared/roles";
 import { revokeDeviceExtensionTokens } from "./extension-token.service";
@@ -87,6 +88,7 @@ export const unlinkAccountDevice = async (userId: string, deviceId: string): Pro
 export type AccountExport = {
   activityPublications: unknown[];
   adminActions: AuditEventView[];
+  presenceSubmissions: unknown[];
   profile: AccountProfile & {
     email: string;
     createdAt: string;
@@ -124,7 +126,7 @@ const iso = (date: Date | null): string | null => date?.toISOString() ?? null;
 
 export const exportAccountData = async (userId: string): Promise<AccountExport | null> => {
   const db = getDb();
-  const [[profile], accounts, tokens, documents, likes, devices, activityPublications, adminActions] = await Promise.all([
+  const [[profile], accounts, tokens, documents, likes, devices, activityPublications, adminActions, presenceSubmissions] = await Promise.all([
     db.select().from(user).where(eq(user.id, userId)).limit(1),
     db
       .select({
@@ -139,7 +141,8 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
     db.select().from(presenceLike).where(eq(presenceLike.userId, userId)).orderBy(asc(presenceLike.likedAt)),
     listAccountDevices(userId, null),
     db.select().from(activityPublication).where(eq(activityPublication.userId, userId)).orderBy(asc(activityPublication.createdAt)),
-    listActorActions(userId)
+    listActorActions(userId),
+    exportAuthoredSubmissions(userId)
   ]);
 
   if (!profile) return null;
@@ -158,6 +161,7 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
     },
     activityPublications,
     adminActions,
+    presenceSubmissions,
     linkedAccounts: accounts.map((account) => ({
       providerId: account.providerId,
       accountId: account.accountId,

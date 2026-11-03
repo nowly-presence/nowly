@@ -3,7 +3,7 @@ import type { MiddlewareHandler } from "hono";
 
 export const DEFAULT_BODY_LIMIT = 1024 * 1024;
 
-const LARGER_BODY_PREFIXES = ["/me/activity-publications/"];
+const LARGER_BODY_PREFIXES = ["/me/activity-publications/", "/me/presence-submissions"];
 
 const defaultLimit = limitBody(DEFAULT_BODY_LIMIT);
 

@@ -45,6 +45,7 @@
     "@nowly/auth": "workspace:*",
     "@nowly/database": "workspace:*",
     "@nowly/env": "workspace:*",
+    "@nowly/presence-creator": "workspace:*",
     "@nowly/locales": "workspace:*",
     "@nowly/shared": "workspace:*",
     "@nowly/telemetry": "workspace:*",

@@ -30,6 +30,7 @@ export const serverEnv = createEnv({
     AWS_SESSION_TOKEN: required.optional(),
     AWS_SES_CONFIGURATION_SET: required.optional(),
     STATUS_CRON_SECRET: required.optional(),
+    CREATOR_WEBHOOK_SECRET: required.optional(),
     STATUS_CHECK_INTERVAL_HOURS: z.coerce.number().int().positive().default(1),
     STATUS_SAMPLE_LIMIT: z.coerce.number().int().positive().default(168)
   },

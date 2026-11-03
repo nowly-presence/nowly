@@ -13,11 +13,11 @@ export type AuditActor = {
   kind: "cli";
 };
 
-export type AuditAction = "announcement.create" | "user.role.update";
+export type AuditAction = "announcement.create" | "user.role.update" | "submission.review" | "submission.publish" | "submission.published";
 
 export type AuditEntry = {
   action: AuditAction;
-  targetType: "announcement" | "user";
+  targetType: "announcement" | "user" | "submission";
   targetId: string | null;
   details?: Record<string, unknown>;
 };
