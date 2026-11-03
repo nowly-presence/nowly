@@ -31,7 +31,7 @@ On a local machine, `pnpm install` also clones the public `sdk`, `cli` and `pres
 - `apps/web` — public website and user dashboard.
 - `apps/docs` — public documentation site.
 - `apps/extension` — browser extension.
-- `apps/api` — Fastify API.
+- `apps/api`: Hono API (database in `packages/database`, auth in `packages/auth`).
 - `apps/native` — Go native messaging host.
 - `packages/env`, `packages/shared`, `packages/telemetry`, `packages/ui`, `packages/locales`, `packages/changelog`, `packages/og` — shared workspace packages.
 

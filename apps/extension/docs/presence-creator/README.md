@@ -44,14 +44,14 @@ Until the routes exist, the extension gets a 404 when sending, shows "Sending is
 
 ### In the monorepo
 
-- Fastify API organised by feature (`apps/api/src/features/<name>/<name>.routes.ts` + `.service.ts`, an `AGENTS.md` per folder), Prisma with a schema split into `apps/api/prisma/schema/*.prisma`.
+- Hono API organised by feature (`apps/api/src/features/<name>/<name>.routes.ts` + `.service.ts`, an `AGENTS.md` per folder). Drizzle schema in `packages/database/src/schema/<domain>/<table>.ts`, Better Auth configuration in `packages/auth`.
 - Better Auth (`features/auth/better-auth.ts`, base `/auth`): **Discord only**, `User.role` and `User.discordId` (filled from the Discord profile, not settable by the client), cookies shared on `.nowly.me`.
-- Extension accounts (`features/account`): `nxt_` tokens (32 random bytes, only the SHA-256 is stored in `ExtensionToken.tokenHash`), 90-day sliding expiry, scopes `sync`, `assets` and `creator` (`EXTENSION_TOKEN_SCOPES` in `@nowly/shared`). Guard `requireExtensionToken(scope)`, user read with `accountOf(request).userId`. The `nowly.me/extension/connect?permission=creator` page grants `creator` explicitly, never automatically.
+- Extension accounts (`features/account`): `nxt_` tokens (32 random bytes, only the SHA-256 is stored in `ExtensionToken.tokenHash`), 90-day sliding expiry, scopes `sync`, `assets` and `creator` (`EXTENSION_TOKEN_SCOPES` in `@nowly/shared`). Guard `requireExtensionToken(scope)`, user read with `accountOf(c).userId`. The `nowly.me/extension/connect?permission=creator` page grants `creator` explicitly, never automatically.
 - Direct precedent: public activities (`features/activity-sharing`, `ActivityPublication` model) already require `requireExtensionToken("creator")` and a `discordId`, under `/me/activity-publications`. The creator follows exactly this model.
 - Any new per-user data must be added to `exportAccountData` and `deleteAccountData` (`account.service.ts`).
 - R2 is already used by the API (`@aws-sdk/client-s3`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_PUBLIC_URL` in `@nowly/env/server`, see `features/custom-assets`).
-- CORS accepts the `chrome-extension://` and `moz-extension://` origins (`apps/api/src/index.ts`). Global limit: `@fastify/rate-limit`, 100 requests per minute.
-- Fastify request bodies are limited to **1 MB by default**: too small for a submission (see section 6).
+- CORS accepts the `chrome-extension://` and `moz-extension://` origins (`apps/api/src/middleware/cors.ts`). Global limit: `rateLimit` (`apps/api/src/middleware/rate-limit.ts`), 100 requests per minute.
+- Request bodies are limited to **1 MiB by default** (`apps/api/src/middleware/default-body-limit.ts`): too small for a submission (see section 6), which needs its own `limitBody` and an entry in `LARGER_BODY_PREFIXES`.
 - The API has no automatic translation client today: to add (section 11).
 - Admin guards: `requireAuth` (`features/auth/auth.middleware.ts`) compares a shared secret, with no notion of account. There is no session-based "moderator" guard yet.
 - The `Presence` model stores `metadata` as JSON; the author lives on `PresenceVersion` (`author`, `authorGithub`).
@@ -115,7 +115,7 @@ Nothing to build: the creator reuses the extension's Nowly account.
 - The extension calls `START_CREATOR_CONNECT`, which opens `nowly.me/extension/connect?source=extension&device=<id>&permission=creator`. The page asks for `sync` and `creator`, explains public attribution and never connects without a click (`apps/web/features/account/AGENTS.md`). The token comes back through the existing `NOWLY_SESSION` message.
 - An account already connected with `sync` only sees "Allow publishing" and goes through the same page again.
 - The background checks `scopes.includes("creator")` and `user.discordId` before any submission, like public activities.
-- Creator routes are protected by `requireExtensionToken("creator")` and read the author with `accountOf(request).userId`, never from the body.
+- Creator routes are protected by `requireExtensionToken("creator")` and read the author with `accountOf(c).userId`, never from the body.
 - 401 or 403: the extension assumes the permission is missing and offers "Allow publishing" again. It does not sign the account out (sync handles its own 401).
 
 ### GitHub later
@@ -258,7 +258,7 @@ The extension already crops and resizes to the exact sizes, but the server must 
 
 ## 9. Data model
 
-New file `apps/api/prisma/schema/presence-creator.prisma`:
+Shape of the new tables. They are written as Drizzle tables in `packages/database/src/schema/creator/` (one file per table, see `packages/database/AGENTS.md`); the Prisma notation below is kept as a compact reference:
 
 ```prisma
 model PresenceSubmission {
