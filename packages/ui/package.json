@@ -37,6 +37,7 @@
     "./locale-selector": "./src/locale-selector.tsx",
     "./navbar": "./src/navbar.tsx",
     "./navbar-links": "./src/navbar-links.tsx",
+    "./social-icon": "./src/social-icon.tsx",
     "./navbar-mobile": "./src/navbar-mobile.tsx",
     "./sheet": "./src/sheet.tsx",
     "./utils": "./src/utils.ts"
