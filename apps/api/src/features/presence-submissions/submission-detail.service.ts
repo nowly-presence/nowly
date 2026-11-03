@@ -1,6 +1,6 @@
 import { getDb } from "@/db/client";
 import { user } from "@nowly/database/schema/auth";
-import { presenceSubmission, presenceSubmissionEvent, presenceSubmissionReview, presenceSubmissionRevision } from "@nowly/database/schema/creator";
+import { creatorPresence, presenceSubmission, presenceSubmissionEvent, presenceSubmissionReview, presenceSubmissionRevision } from "@nowly/database/schema/creator";
 import { asc, desc, eq, inArray } from "drizzle-orm";
 import { toSummary } from "./submission.service";
 import { assetUrls, removeCreatorImages, storedKeys } from "./submission-storage";
@@ -126,4 +126,18 @@ export const eraseAuthoredSubmissionImages = async (userId: string): Promise<voi
     .innerJoin(presenceSubmission, eq(presenceSubmission.id, presenceSubmissionRevision.submissionId))
     .where(eq(presenceSubmission.authorId, userId));
   await removeCreatorImages(rows.flatMap((row) => storedKeys(row.assets)));
+};
+
+export const getCreatorPresence = async (slug: string) => {
+  const [row] = await getDb().select().from(creatorPresence).where(eq(creatorPresence.slug, slug)).limit(1);
+
+  if (!row) return null;
+
+  return {
+    slug: row.slug,
+    revision: row.revision,
+    definition: row.definition,
+    publishedAt: row.publishedAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString()
+  };
 };

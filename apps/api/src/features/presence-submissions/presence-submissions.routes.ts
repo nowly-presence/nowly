@@ -10,7 +10,7 @@ import { serverEnv } from "@nowly/env/server";
 import { hasCapability } from "@nowly/shared/roles";
 import { Hono, type Context } from "hono";
 import { SubmissionError } from "./submission-errors";
-import { getSubmissionAuthorId, getSubmissionDetail, listReviewQueue } from "./submission-detail.service";
+import { getCreatorPresence, getSubmissionAuthorId, getSubmissionDetail, listReviewQueue } from "./submission-detail.service";
 import { openPendingPullRequests, openSubmissionPullRequest } from "./submission-pull-request";
 import { markSubmissionPublished, publishSubmission, reviewSubmission } from "./submission-review.service";
 import { PublishBodySchema, PublishedWebhookSchema, ReviewBodySchema, SubmitBodySchema, SUBMISSION_BODY_LIMIT, SUBMISSIONS_PER_HOUR, SubmissionIdsSchema } from "./submission.schemas";
@@ -86,6 +86,14 @@ export const presenceSubmissionRoutes = new Hono<AppEnv>()
   .get("/presence-submissions/queue", requireCapability("review"), async (c) => {
     c.header("Cache-Control", "no-store");
     return c.json({ items: await listReviewQueue() });
+  })
+  .get("/creator-presences/:slug", requireCapability("review"), async (c) => {
+    const creatorPresence = await getCreatorPresence(c.req.param("slug"));
+
+    if (!creatorPresence) return c.json({ error: "NOT_CREATOR_PRESENCE" }, 404);
+
+    c.header("Cache-Control", "no-store");
+    return c.json(creatorPresence);
   })
   .post("/presence-submissions/published", requireWebhookSecret, async (c) => {
     const body = PublishedWebhookSchema.safeParse(await jsonBody(c));

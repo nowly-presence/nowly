@@ -378,6 +378,23 @@ describe("submission images", () => {
   });
 });
 
+describe("creator presences", () => {
+  it("serves a published definition to staff only", async () => {
+    await database.db.insert(creatorPresence).values({
+      slug,
+      definition: definition(),
+      revision: 3
+    });
+
+    expect((await asSession(MODERATOR, { url: `/creator-presences/${slug}` })).json()).toMatchObject({
+      slug,
+      revision: 3
+    });
+    expect((await asSession(AUTHOR, { url: `/creator-presences/${slug}` })).statusCode).toBe(403);
+    expect((await asSession(MODERATOR, { url: "/creator-presences/unknown" })).statusCode).toBe(404);
+  });
+});
+
 describe("reviewing and publishing", () => {
   it("lets a moderator approve but only an admin publish", async () => {
     const { id } = (await submit()).json();
