@@ -38,7 +38,6 @@ const save = async (userId: string, payload: Record<string, unknown>) => {
 
 const BODY = {
   enabled: true,
-  handle: "nolo",
   bio: "I make presences.",
   showCreated: true,
   showLiked: true
@@ -69,29 +68,30 @@ describe("public profile settings", () => {
     });
   });
 
-  it("saves and normalises the handle", async () => {
-    const res = await save(OWNER, {
-      ...BODY,
-      handle: "  Nolo "
-    });
+  it("derives the handle from the Discord username and keeps it", async () => {
+    await database.db.update(user).set({ discordUsername: "No.Lo é" }).where(eq(user.id, OWNER));
+    const res = await save(OWNER, BODY);
     expect(res.statusCode).toBe(200);
     expect(res.json()).toMatchObject({
-      handle: "nolo",
+      handle: "no_lo_e",
       enabled: true,
       bio: "I make presences."
     });
+
+    await database.db.update(user).set({ discordUsername: "renamed" }).where(eq(user.id, OWNER));
+    expect((await save(OWNER, BODY)).json()).toMatchObject({ handle: "no_lo_e" });
   });
 
-  it("rejects bad or reserved handles and long bios", async () => {
-    for (const handle of [
-      "ab",
-      "has space",
-      "-start",
-      "admin",
-      "x".repeat(31)
-    ])
-      expect((await save(OWNER, { ...BODY, handle })).statusCode).toBe(400);
-
+  it("falls back to the display name and rejects bad bodies", async () => {
+    expect((await save(OWNER, BODY)).json()).toMatchObject({ handle: "owner-1" });
+    expect(
+      (
+        await save(OWNER, {
+          ...BODY,
+          handle: "custom"
+        })
+      ).statusCode
+    ).toBe(400);
     expect(
       (
         await save(OWNER, {
@@ -100,31 +100,21 @@ describe("public profile settings", () => {
         })
       ).statusCode
     ).toBe(400);
-    expect(
-      (
-        await save(OWNER, {
-          ...BODY,
-          extra: true
-        })
-      ).statusCode
-    ).toBe(400);
   });
 
-  it("refuses a handle that is already taken", async () => {
-    await save(OWNER, BODY);
-    expect((await save(OTHER, BODY)).statusCode).toBe(409);
-    expect(
-      (
-        await save(OWNER, {
-          ...BODY,
-          bio: "Updated"
-        })
-      ).statusCode
-    ).toBe(200);
+  it("makes derived handles unique", async () => {
+    await database.db.update(user).set({ discordUsername: "nolo" }).where(eq(user.id, OWNER));
+    await database.db.update(user).set({ discordUsername: "nolo" }).where(eq(user.id, OTHER));
+    expect((await save(OWNER, BODY)).json()).toMatchObject({ handle: "nolo" });
+    expect((await save(OTHER, BODY)).json()).toMatchObject({ handle: "nolo2" });
   });
 });
 
 describe("public profile page data", () => {
+  beforeEach(async () => {
+    await database.db.update(user).set({ discordUsername: "nolo" }).where(eq(user.id, OWNER));
+  });
+
   it("answers 404 until the owner enables it", async () => {
     await save(OWNER, {
       ...BODY,
@@ -180,7 +170,7 @@ describe("public profile page data", () => {
         }
       ]
     });
-    expect(Object.keys(full).sort()).toEqual(["bio", "created", "handle", "image", "liked", "name"]);
+    expect(Object.keys(full).sort()).toEqual(["banner", "bio", "created", "handle", "image", "liked", "name", "username", "verified"]);
 
     await save(OWNER, {
       ...BODY,
@@ -191,6 +181,37 @@ describe("public profile page data", () => {
       created: null,
       liked: null
     });
+  });
+
+  it("shows the verified badge for staff and granted accounts and builds the Discord banner", async () => {
+    await save(OWNER, BODY);
+    expect((await inject(await app(), { url: "/users/nolo" })).json()).toMatchObject({
+      verified: false,
+      banner: null,
+      username: "nolo"
+    });
+
+    await database.db
+      .update(user)
+      .set({
+        verified: true,
+        discordId: "123",
+        discordBanner: "a_abc"
+      })
+      .where(eq(user.id, OWNER));
+    expect((await inject(await app(), { url: "/users/nolo" })).json()).toMatchObject({
+      verified: true,
+      banner: "https://cdn.discordapp.com/banners/123/a_abc.gif?size=1024"
+    });
+
+    await database.db
+      .update(user)
+      .set({
+        verified: false,
+        role: "moderator"
+      })
+      .where(eq(user.id, OWNER));
+    expect((await inject(await app(), { url: "/users/nolo" })).json()).toMatchObject({ verified: true });
   });
 
   it("is erased with the account", async () => {

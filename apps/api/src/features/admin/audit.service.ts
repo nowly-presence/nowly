@@ -13,7 +13,8 @@ export type AuditActor = {
   kind: "cli";
 };
 
-export type AuditAction = "announcement.create" | "user.role.update" | "submission.review" | "submission.publish" | "submission.published";
+export type AuditAction =
+  "announcement.create" | "user.role.update" | "user.verified.update" | "submission.review" | "submission.publish" | "submission.published";
 
 export type AuditEntry = {
   action: AuditAction;

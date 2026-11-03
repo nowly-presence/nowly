@@ -3,11 +3,16 @@ import { publicProfile } from "@nowly/database/schema/account";
 import { user } from "@nowly/database/schema/auth";
 import { creatorPresence, presenceSubmission } from "@nowly/database/schema/creator";
 import { presence, presenceLike } from "@nowly/database/schema/presence";
+import { deriveHandleBase, handleCandidate, isValidPublicHandle } from "@nowly/shared";
+import { isStaffRole } from "@nowly/shared/roles";
 import type { PublicProfileBody } from "@nowly/shared/schemas";
 import { and, asc, desc, eq, inArray } from "drizzle-orm";
 
 const PUBLIC_LIST_LIMIT = 60;
 const UNIQUE_VIOLATION = "23505";
+const HANDLE_ATTEMPTS = 50;
+const DISCORD_CDN = "https://cdn.discordapp.com";
+const DISCORD_BANNER_SIZE = 1024;
 
 export type PublicProfileSettings = {
   enabled: boolean;
@@ -20,7 +25,10 @@ export type PublicProfileSettings = {
 export type PublicProfileView = {
   handle: string;
   name: string;
+  username: string | null;
+  verified: boolean;
   image: string | null;
+  banner: string | null;
   bio: string | null;
   created: Array<{
     slug: string;
@@ -63,9 +71,40 @@ const isUniqueViolation = (error: unknown): boolean => {
   return false;
 };
 
+const resolveHandle = async (userId: string): Promise<string> => {
+  const db = getDb();
+  const [existing] = await db.select({ handle: publicProfile.handle }).from(publicProfile).where(eq(publicProfile.userId, userId)).limit(1);
+
+  if (existing) return existing.handle;
+
+  const [owner] = await db
+    .select({
+      name: user.name,
+      username: user.discordUsername
+    })
+    .from(user)
+    .where(eq(user.id, userId))
+    .limit(1);
+
+  const base = deriveHandleBase(owner?.username ?? owner?.name);
+
+  for (let attempt = 0; attempt < HANDLE_ATTEMPTS; attempt += 1) {
+    const candidate = handleCandidate(base, attempt);
+
+    if (!isValidPublicHandle(candidate)) continue;
+
+    const [taken] = await db.select({ userId: publicProfile.userId }).from(publicProfile).where(eq(publicProfile.handle, candidate)).limit(1);
+
+    if (!taken) return candidate;
+  }
+
+  throw new HandleTakenError();
+};
+
 export const savePublicProfileSettings = async (userId: string, body: PublicProfileBody): Promise<PublicProfileSettings> => {
+  const handle = await resolveHandle(userId);
+
   const values = {
-    handle: body.handle,
     enabled: body.enabled,
     bio: body.bio,
     showCreated: body.showCreated,
@@ -76,7 +115,7 @@ export const savePublicProfileSettings = async (userId: string, body: PublicProf
   try {
     const [row] = await getDb()
       .insert(publicProfile)
-      .values({ userId, ...values })
+      .values({ userId, handle, ...values })
       .onConflictDoUpdate({
         target: publicProfile.userId,
         set: values
@@ -88,6 +127,15 @@ export const savePublicProfileSettings = async (userId: string, body: PublicProf
 
     throw error;
   }
+};
+
+export const isVerifiedAccount = (verified: boolean, role: string): boolean => verified || isStaffRole(role);
+
+const discordBannerUrl = (discordId: string | null, hash: string | null): string | null => {
+  if (!discordId || !hash || !/^[a-z0-9_]+$/i.test(hash)) return null;
+
+  const extension = hash.startsWith("a_") ? "gif" : "png";
+  return `${DISCORD_CDN}/banners/${encodeURIComponent(discordId)}/${hash}.${extension}?size=${DISCORD_BANNER_SIZE}`;
 };
 
 const presenceName = (metadata: unknown, slug: string): string => {
@@ -152,6 +200,11 @@ export const getPublicProfile = async (handle: string): Promise<PublicProfileVie
     .select({
       profile: publicProfile,
       name: user.name,
+      username: user.discordUsername,
+      discordId: user.discordId,
+      banner: user.discordBanner,
+      verified: user.verified,
+      role: user.role,
       image: user.image
     })
     .from(publicProfile)
@@ -168,7 +221,10 @@ export const getPublicProfile = async (handle: string): Promise<PublicProfileVie
   return {
     handle: row.profile.handle,
     name: row.name,
+    username: row.username,
+    verified: isVerifiedAccount(row.verified, row.role),
     image: row.image,
+    banner: discordBannerUrl(row.discordId, row.banner),
     bio: row.profile.bio,
     created,
     liked

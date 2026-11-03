@@ -4,7 +4,7 @@ import { jsonBody } from "@/shared/request-body";
 import { extensionTokenBodySchema } from "@nowly/shared/schemas";
 import { isStaffRole } from "@nowly/shared/roles";
 import { Hono } from "hono";
-import { ACCOUNT_PROVIDERS, deleteAccountData, exportAccountData, getAccountProfile, listAccountDevices, listAccountPresences, unlinkAccountDevice } from "./account.service";
+import { ACCOUNT_PROVIDERS, deleteAccountData, exportAccountData, getAccountProfile, listAccountCustomActivities, listAccountDevices, listAccountPresences, unlinkAccountDevice, unlinkAllAccountDevices } from "./account.service";
 import { accountOf, requireExtensionToken, requireSession, requireTokenOrSession } from "./extension-token.middleware";
 import { createExtensionToken, revokeExtensionToken } from "./extension-token.service";
 
@@ -56,6 +56,11 @@ export const accountRoutes = new Hono<AppEnv>()
     return c.json({ devices: await listAccountDevices(userId, deviceId) });
   })
   .get("/me/presences", requireSession, async (c) => c.json({ presences: await listAccountPresences(accountOf(c).userId) }))
+  .get("/me/custom-activities", requireSession, async (c) => c.json({ activities: await listAccountCustomActivities(accountOf(c).userId) }))
+  .delete("/me/devices", requireSession, async (c) => {
+    const keep = c.req.query("keep")?.trim() || null;
+    return c.json({ unlinked: await unlinkAllAccountDevices(accountOf(c).userId, keep) });
+  })
   .delete("/me/devices/:deviceId", requireSession, async (c) => {
     const unlinked = await unlinkAccountDevice(accountOf(c).userId, c.req.param("deviceId").trim());
 

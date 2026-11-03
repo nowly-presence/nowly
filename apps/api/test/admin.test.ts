@@ -197,6 +197,50 @@ describe("roles and capabilities", () => {
     expect((await inject(server, { url: "/admin/audit" })).json().events).toHaveLength(1);
   });
 
+  it("searches users and grants or removes the verified badge with an audit entry", async () => {
+    await database.db.update(user).set({ discordUsername: "memberhandle" }).where(eq(user.id, MEMBER));
+    mockSession.userId = ADMIN;
+    const server = await app();
+
+    const found = await inject(server, { url: "/admin/users?q=memberhan" });
+    expect(found.json().users).toEqual([
+      expect.objectContaining({
+        id: MEMBER,
+        username: "memberhandle",
+        verified: false
+      })
+    ]);
+    expect((await inject(server, { url: "/admin/users?q=a" })).statusCode).toBe(400);
+
+    const granted = await inject(server, {
+      method: "PUT",
+      url: `/admin/users/${MEMBER}/verified`,
+      payload: { verified: true }
+    });
+    expect(granted.json()).toEqual({
+      verified: true,
+      changed: true
+    });
+    expect((await database.db.select({ verified: user.verified }).from(user).where(eq(user.id, MEMBER)))[0]?.verified).toBe(true);
+    expect((await database.db.select().from(adminAuditEvent))[0]).toMatchObject({
+      action: "user.verified.update",
+      targetId: MEMBER
+    });
+
+    expect(
+      (
+        await inject(server, {
+          method: "PUT",
+          url: "/admin/users/nobody/verified",
+          payload: { verified: true }
+        })
+      ).statusCode
+    ).toBe(404);
+
+    mockSession.userId = MEMBER;
+    expect((await inject(server, { url: "/admin/users?q=memberhan" })).statusCode).toBe(403);
+  });
+
   it("refuses self changes, unknown roles and unknown users", async () => {
     mockSession.userId = ADMIN;
     const server = await app();

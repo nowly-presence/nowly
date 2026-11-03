@@ -115,6 +115,7 @@ describe("account routes", () => {
       discordId: "1234",
       githubLogin: null,
       role: "user",
+      verified: false,
       capabilities: []
     });
     expect(body.providers).toEqual(["discord"]);
@@ -407,6 +408,7 @@ describe("account routes", () => {
       presences: [
         {
           slug: "youtube",
+          name: "youtube",
           enabled: true,
           installedAt: 1_700_000_000_000
         }
@@ -439,6 +441,44 @@ describe("account routes", () => {
     });
     expect(res.statusCode).toBe(200);
     expect(await database.db.select({ userId: device.userId }).from(device)).toEqual([{ userId: null }]);
+    expect(await activeTokens()).toEqual([]);
+  });
+
+  it("unlinks every device at once and can keep one", async () => {
+    mockSession.userId = USER.id;
+    await database.db.insert(device).values([
+      {
+        deviceId: DEVICE_ID,
+        userId: USER.id
+      },
+      {
+        deviceId: "device-keep",
+        userId: USER.id
+      }
+    ]);
+    await seedExtensionToken({
+      userId: USER.id,
+      deviceId: DEVICE_ID,
+      scopes: ["sync"]
+    });
+    await seedExtensionToken({
+      userId: USER.id,
+      deviceId: "device-keep",
+      scopes: ["sync"]
+    });
+
+    const kept = await inject(await buildApp(), {
+      method: "DELETE",
+      url: "/me/devices?keep=device-keep"
+    });
+    expect(kept.json()).toEqual({ unlinked: 1 });
+    expect(await activeTokens()).toHaveLength(1);
+
+    const all = await inject(await buildApp(), {
+      method: "DELETE",
+      url: "/me/devices"
+    });
+    expect(all.json()).toEqual({ unlinked: 1 });
     expect(await activeTokens()).toEqual([]);
   });
 });

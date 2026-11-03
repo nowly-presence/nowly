@@ -3,13 +3,13 @@ import { activityPublication } from "@nowly/database/schema/activity";
 import { extensionToken, syncDocument } from "@nowly/database/schema/account";
 import { account, user } from "@nowly/database/schema/auth";
 import { device } from "@nowly/database/schema/device";
-import { presenceLike } from "@nowly/database/schema/presence";
-import { and, asc, desc, eq } from "drizzle-orm";
+import { presence, presenceLike } from "@nowly/database/schema/presence";
+import { and, asc, desc, eq, inArray, isNull, ne, or } from "drizzle-orm";
 import { eraseAuthoredSubmissionImages, exportAuthoredSubmissions } from "@/features/presence-submissions/submission-detail.service";
 import { listActorActions, type AuditEventView } from "@/features/admin/audit.service";
 import { capabilitiesOf, type AdminCapability } from "@nowly/shared/roles";
-import { syncPresencesSchema } from "@nowly/shared/schemas";
-import { getPublicProfileSettings, type PublicProfileSettings } from "@/features/public-profile/public-profile.service";
+import { syncCustomActivitiesSchema, syncPresencesSchema } from "@nowly/shared/schemas";
+import { getPublicProfileSettings, isVerifiedAccount, type PublicProfileSettings } from "@/features/public-profile/public-profile.service";
 import { revokeDeviceExtensionTokens } from "./extension-token.service";
 
 export const ACCOUNT_PROVIDERS = ["discord"] as const;
@@ -21,6 +21,7 @@ export type AccountProfile = {
   discordId: string | null;
   githubLogin: string | null;
   role: string;
+  verified: boolean;
   capabilities: AdminCapability[];
 };
 
@@ -40,7 +41,8 @@ export const getAccountProfile = async (userId: string): Promise<AccountProfile 
       name: user.name,
       image: user.image,
       discordId: user.discordId,
-      role: user.role
+      role: user.role,
+      verified: user.verified
     })
     .from(user)
     .where(eq(user.id, userId))
@@ -50,6 +52,7 @@ export const getAccountProfile = async (userId: string): Promise<AccountProfile 
 
   return {
     ...row,
+    verified: isVerifiedAccount(row.verified, row.role),
     githubLogin: null,
     capabilities: capabilitiesOf(row.role)
   };
@@ -57,12 +60,20 @@ export const getAccountProfile = async (userId: string): Promise<AccountProfile 
 
 export type AccountPresence = {
   slug: string;
+  name: string;
   enabled: boolean;
   installedAt: number;
 };
 
+const catalogName = (metadata: unknown, slug: string): string => {
+  if (metadata && typeof metadata === "object" && "name" in metadata && typeof metadata.name === "string" && metadata.name) return metadata.name;
+
+  return slug;
+};
+
 export const listAccountPresences = async (userId: string): Promise<AccountPresence[]> => {
-  const [row] = await getDb()
+  const db = getDb();
+  const [row] = await db
     .select({ value: syncDocument.value })
     .from(syncDocument)
     .where(and(eq(syncDocument.userId, userId), eq(syncDocument.key, "presences")))
@@ -70,9 +81,55 @@ export const listAccountPresences = async (userId: string): Promise<AccountPrese
 
   const parsed = syncPresencesSchema.safeParse(row?.value);
 
+  if (!parsed.success || !parsed.data.length) return [];
+
+  const catalog = await db
+    .select({
+      slug: presence.slug,
+      metadata: presence.metadata
+    })
+    .from(presence)
+    .where(
+      inArray(
+        presence.slug,
+        parsed.data.map((entry) => entry.slug)
+      )
+    );
+
+  const names = new Map(
+    catalog.map((entry) => [
+      entry.slug,
+      catalogName(entry.metadata, entry.slug)
+    ])
+  );
+  return parsed.data.map(({ slug, enabled, installedAt }) => ({
+    slug,
+    name: names.get(slug) ?? slug,
+    enabled,
+    installedAt
+  }));
+};
+
+export type AccountCustomActivity = {
+  id: string;
+  name: string;
+  details: string;
+  state: string;
+  updatedAt: number;
+};
+
+export const listAccountCustomActivities = async (userId: string): Promise<AccountCustomActivity[]> => {
+  const [row] = await getDb()
+    .select({ value: syncDocument.value })
+    .from(syncDocument)
+    .where(and(eq(syncDocument.userId, userId), eq(syncDocument.key, "customActivities")))
+    .limit(1);
+
+  const parsed = syncCustomActivitiesSchema.safeParse(row?.value);
+
   if (!parsed.success) return [];
 
-  return parsed.data.map(({ slug, enabled, installedAt }) => ({ slug, enabled, installedAt }));
+  return parsed.data.items.map(({ id, name, details, state, updatedAt }) => ({ id, name, details, state, updatedAt }));
 };
 
 export const listAccountDevices = async (userId: string, currentDeviceId: string | null): Promise<AccountDevice[]> => {
@@ -105,6 +162,20 @@ export const unlinkAccountDevice = async (userId: string, deviceId: string): Pro
     .returning({ deviceId: device.deviceId });
   await revokeDeviceExtensionTokens(userId, deviceId);
   return unlinked.length > 0;
+};
+
+export const unlinkAllAccountDevices = async (userId: string, keepDeviceId: string | null): Promise<number> => {
+  const db = getDb();
+  const scope = keepDeviceId
+    ? and(eq(device.userId, userId), ne(device.deviceId, keepDeviceId))
+    : eq(device.userId, userId);
+  const unlinked = await db.update(device).set({ userId: null }).where(scope).returning({ deviceId: device.deviceId });
+
+  const tokenScope = keepDeviceId
+    ? and(eq(extensionToken.userId, userId), isNull(extensionToken.revokedAt), or(isNull(extensionToken.deviceId), ne(extensionToken.deviceId, keepDeviceId)))
+    : and(eq(extensionToken.userId, userId), isNull(extensionToken.revokedAt));
+  await db.update(extensionToken).set({ revokedAt: new Date() }).where(tokenScope);
+  return unlinked.length;
 };
 
 export type AccountExport = {
@@ -179,6 +250,7 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
       email: profile.email,
       image: profile.image,
       discordId: profile.discordId,
+      verified: isVerifiedAccount(profile.verified, profile.role),
       githubLogin: null,
       role: profile.role,
       capabilities: capabilitiesOf(profile.role),

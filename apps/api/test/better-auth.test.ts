@@ -28,8 +28,16 @@ describe("getAuth", () => {
     const { getAuth } = await import("@/features/auth/better-auth");
 
     const discord = getAuth().options.socialProviders?.discord;
-    const mapped = await discord?.mapProfileToUser?.({ id: "1234" } as Parameters<NonNullable<NonNullable<typeof discord>["mapProfileToUser"]>>[0]);
-    expect(mapped).toEqual({ discordId: "1234" });
+    const mapped = await discord?.mapProfileToUser?.({
+      id: "1234",
+      username: "nolo",
+      banner: "abc"
+    } as Parameters<NonNullable<NonNullable<typeof discord>["mapProfileToUser"]>>[0]);
+    expect(mapped).toEqual({
+      discordId: "1234",
+      discordUsername: "nolo",
+      discordBanner: "abc"
+    });
   });
 
   it("trusts local web origins outside production only", async () => {
