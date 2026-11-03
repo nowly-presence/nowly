@@ -108,8 +108,11 @@ export const SubmitPanel = ({ draft, update, blocked }: {
       update({ submission: result.submission });
       if (publishing) await publishNow(result.submission);
       await thread.reload();
-    } else if (result.error === "CREATOR_REQUIRED" || result.error === "UNAUTHORIZED") void refresh();
-    else setError(result.message ?? t(SUBMIT_ERROR_KEYS[result.error]));
+    } else {
+      if (result.error === "CREATOR_REQUIRED" || result.error === "UNAUTHORIZED") void refresh();
+
+      setError(result.message ?? t(SUBMIT_ERROR_KEYS[result.error]));
+    }
   };
 
   if (!ready && canEditSubmission(submission)) {
