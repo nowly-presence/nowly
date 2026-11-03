@@ -108,6 +108,10 @@ export const Footer = async ({ brand, actions }: FooterProps) => {
         {
           href: web("/desktop"),
           label: labels.host
+        },
+        {
+          href: web("/canary"),
+          label: labels.canary
         }
       ]
     },
