@@ -1,6 +1,6 @@
 import { PresenceCollection } from "@/features/profile/components/presence-collection";
 import type { PublicProfile } from "@/features/profile/lib/public-profile";
-import { Avatar, AvatarFallback, AvatarImage } from "@nowly/ui";
+import { Avatar, AvatarFallback, AvatarImage, Badge } from "@nowly/ui";
 import { RiVerifiedBadgeFill } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
@@ -37,6 +37,11 @@ export const ProfileView = async ({ profile }: {
               {profile.verified ? <RiVerifiedBadgeFill className="size-6 shrink-0 text-accent" aria-label={t("verified")} role="img" /> : null}
             </h1>
             <p className="text-sm text-muted-foreground">@{handle}</p>
+            {profile.role ? (
+              <Badge variant="secondary" className="mt-3">
+                {t(profile.role === "admin" ? "role-admin" : "role-moderator")}
+              </Badge>
+            ) : null}
             {profile.bio ? <p className="mt-4 max-w-2xl whitespace-pre-line text-[0.95rem] leading-relaxed text-foreground/80">{profile.bio}</p> : null}
           </div>
         </div>

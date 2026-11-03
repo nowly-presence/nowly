@@ -1,5 +1,6 @@
 "use client";
 
+import { PageContainer } from "@/features/shell/components/page-container";
 import { AccountHeader } from "@/features/account/components/account-header";
 import { createExtensionSession, fetchAccountUser, signOutAccount, startDiscordSignIn, type AccountUser } from "@/features/account/lib/account-api";
 import { siteBaseUrl } from "@/lib/api-base";
@@ -152,7 +153,7 @@ export const ExtensionConnectView = () => {
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
-      <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
+      <PageContainer>
         <AccountHeader eyebrow={t("eyebrow")} title={t("title")} description={t("description")} />
 
         <Card className="mt-14 max-w-xl">
@@ -194,7 +195,7 @@ export const ExtensionConnectView = () => {
             ) : null}
           </CardContent>
         </Card>
-      </div>
+      </PageContainer>
     </div>
   );
 };

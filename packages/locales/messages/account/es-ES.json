@@ -7,7 +7,6 @@
     "sign-in-title": "Iniciar sesión con Discord",
     "sign-in-description": "La cuenta es opcional. Permite que la extensión sincronice tus presencias y tus ajustes entre tus navegadores.",
     "sign-in": "Continuar con Discord",
-    "provider-discord": "Sesión iniciada con Discord",
     "sign-out": "Cerrar sesión",
     "devices-title": "Dispositivos vinculados",
     "devices-description": "Los navegadores donde la extensión está conectada a esta cuenta.",
@@ -31,7 +30,6 @@
     "tab-creations": "Creaciones",
     "role-admin": "Administrador",
     "role-moderator": "Moderador",
-    "role-description": "Puedes revisar las presencias propuestas.",
     "presences-title": "Tus presencias",
     "presences-description": "Presencias instaladas en las extensiones vinculadas a esta cuenta, según la última sincronización.",
     "presences-empty": "Aún no hay presencias sincronizadas.",
@@ -189,7 +187,6 @@
     "connect-description": "Inicia sesión con Discord para sincronizar Nowly entre tus navegadores."
   },
   "shell": {
-    "back-to-site": "Volver a nowly.me",
-    "nav-label": "Navegación de la cuenta"
+    "back-to-site": "Volver a nowly.me"
   }
 }

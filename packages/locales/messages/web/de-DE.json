@@ -1356,6 +1356,8 @@
     "empty": "Noch nichts anzuzeigen.",
     "meta-title": "{name} auf Nowly",
     "meta-description": "Von {name} erstellte und gemochte Presences auf Nowly.",
-    "verified": "Verifiziertes Konto"
+    "verified": "Verifiziertes Konto",
+    "role-admin": "Administrator",
+    "role-moderator": "Moderator"
   }
 }

@@ -22,31 +22,29 @@ export const AccountProfileTab = ({ user, busy, message, onSignOut, onExport, on
     <div className="flex max-w-xl flex-col gap-6">
       <Card>
         <CardContent>
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex min-w-0 items-center gap-3">
-              <Avatar>
-                {user.image ? <AvatarImage src={user.image} alt="" /> : null}
-                <AvatarFallback>{user.name.slice(0, 1).toUpperCase()}</AvatarFallback>
-              </Avatar>
+          <div className="flex flex-col gap-4">
+            <Avatar className="size-14 shrink-0">
+              {user.image ? <AvatarImage src={user.image} alt="" /> : null}
+              <AvatarFallback>{user.name.slice(0, 1).toUpperCase()}</AvatarFallback>
+            </Avatar>
+            <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <CardTitle className="flex items-center gap-1.5 truncate text-lg">
-                  {user.name}
+                <CardTitle className="flex min-w-0 items-center gap-1.5 text-lg">
+                  <span className="truncate">{user.name}</span>
                   {user.verified ? <VerifiedBadge /> : null}
                 </CardTitle>
-                <CardDescription>{t("provider-discord")}</CardDescription>
               </div>
+              <Button variant="outline" size="sm" className="shrink-0" disabled={busy} onClick={onSignOut}>
+                <RiLogoutBoxRLine data-icon="inline-start" />
+                {t("sign-out")}
+              </Button>
             </div>
-            <Button variant="outline" size="sm" disabled={busy} onClick={onSignOut}>
-              <RiLogoutBoxRLine data-icon="inline-start" />
-              {t("sign-out")}
-            </Button>
+            {staff ? (
+              <div>
+                <Badge variant="secondary">{t(user.role === "admin" ? "role-admin" : "role-moderator")}</Badge>
+              </div>
+            ) : null}
           </div>
-          {staff ? (
-            <div className="mt-5 flex flex-wrap items-center gap-2">
-              <Badge variant="secondary">{t(user.role === "admin" ? "role-admin" : "role-moderator")}</Badge>
-              <p className="text-xs text-muted-foreground">{t("role-description")}</p>
-            </div>
-          ) : null}
         </CardContent>
       </Card>
 

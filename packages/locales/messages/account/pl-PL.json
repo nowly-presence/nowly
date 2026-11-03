@@ -7,7 +7,6 @@
     "sign-in-title": "Zaloguj się przez Discord",
     "sign-in-description": "Konto jest opcjonalne. Pozwala rozszerzeniu synchronizować obecności i ustawienia między przeglądarkami.",
     "sign-in": "Kontynuuj z Discordem",
-    "provider-discord": "Zalogowano przez Discord",
     "sign-out": "Wyloguj się",
     "devices-title": "Połączone urządzenia",
     "devices-description": "Przeglądarki, w których rozszerzenie jest połączone z tym kontem.",
@@ -31,7 +30,6 @@
     "tab-creations": "Kreacje",
     "role-admin": "Administrator",
     "role-moderator": "Moderator",
-    "role-description": "Możesz sprawdzać zgłoszone presence.",
     "presences-title": "Twoje presence",
     "presences-description": "Presence zainstalowane w rozszerzeniach połączonych z tym kontem, według ostatniej synchronizacji.",
     "presences-empty": "Brak zsynchronizowanych presence.",
@@ -189,7 +187,6 @@
     "connect-description": "Zaloguj się przez Discord, aby synchronizować Nowly między przeglądarkami."
   },
   "shell": {
-    "back-to-site": "Wróć do nowly.me",
-    "nav-label": "Nawigacja konta"
+    "back-to-site": "Wróć do nowly.me"
   }
 }

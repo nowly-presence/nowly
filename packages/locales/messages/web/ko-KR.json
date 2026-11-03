@@ -1356,6 +1356,8 @@
     "empty": "아직 표시할 내용이 없습니다.",
     "meta-title": "Nowly의 {name}",
     "meta-description": "Nowly에서 {name}님이 만들고 좋아하는 프레즌스.",
-    "verified": "인증된 계정"
+    "verified": "인증된 계정",
+    "role-admin": "관리자",
+    "role-moderator": "운영자"
   }
 }

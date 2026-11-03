@@ -7,7 +7,6 @@
     "sign-in-title": "Mit Discord anmelden",
     "sign-in-description": "Ein Konto ist freiwillig. Damit synchronisiert die Erweiterung deine Presences und Einstellungen zwischen deinen Browsern.",
     "sign-in": "Weiter mit Discord",
-    "provider-discord": "Mit Discord angemeldet",
     "sign-out": "Abmelden",
     "devices-title": "Verknüpfte Geräte",
     "devices-description": "Browser, in denen die Erweiterung mit diesem Konto verbunden ist.",
@@ -31,7 +30,6 @@
     "tab-creations": "Kreationen",
     "role-admin": "Administrator",
     "role-moderator": "Moderator",
-    "role-description": "Du kannst vorgeschlagene Presences prüfen.",
     "presences-title": "Deine Presences",
     "presences-description": "Presences, die in den mit diesem Konto verknüpften Erweiterungen installiert sind, laut letzter Synchronisierung.",
     "presences-empty": "Noch keine synchronisierte Presence.",
@@ -189,7 +187,6 @@
     "connect-description": "Melde dich mit Discord an, um Nowly zwischen deinen Browsern zu synchronisieren."
   },
   "shell": {
-    "back-to-site": "Zurück zu nowly.me",
-    "nav-label": "Kontonavigation"
+    "back-to-site": "Zurück zu nowly.me"
   }
 }

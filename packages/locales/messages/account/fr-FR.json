@@ -7,7 +7,6 @@
     "sign-in-title": "Se connecter avec Discord",
     "sign-in-description": "Le compte est facultatif. Il permet à l’extension de synchroniser vos présences et vos réglages entre vos navigateurs.",
     "sign-in": "Continuer avec Discord",
-    "provider-discord": "Connecté avec Discord",
     "sign-out": "Se déconnecter",
     "devices-title": "Appareils reliés",
     "devices-description": "Les navigateurs où l’extension est connectée à ce compte.",
@@ -31,7 +30,6 @@
     "tab-creations": "Créations",
     "role-admin": "Administrateur",
     "role-moderator": "Modérateur",
-    "role-description": "Vous pouvez relire les présences proposées.",
     "presences-title": "Vos présences",
     "presences-description": "Présences installées dans les extensions reliées à ce compte, selon la dernière synchronisation.",
     "presences-empty": "Aucune présence synchronisée pour le moment.",
@@ -189,7 +187,6 @@
     "connect-description": "Connectez-vous avec Discord pour synchroniser Nowly entre vos navigateurs."
   },
   "shell": {
-    "back-to-site": "Retour à nowly.me",
-    "nav-label": "Navigation du compte"
+    "back-to-site": "Revenir sur Nowly"
   }
 }

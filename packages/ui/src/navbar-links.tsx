@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@nowly/locales/navigation";
+import { cn } from "./utils";
 import { AnimatePresence, LazyMotion, m, MotionConfig, domMax } from "motion/react";
 import { useId, useState, type FocusEvent } from "react";
 
@@ -8,9 +9,11 @@ type NavbarLink = {
   href: string;
   label: string;
   external: boolean;
+  active?: boolean;
 };
 
 const LINK_CLASS = "relative rounded-lg px-3 py-1.5 text-sm text-foreground";
+const ACTIVE_CLASS = "bg-foreground/8";
 
 // Desktop-only: one soft pill that glides from link to link while hovering (or tabbing through) the nav.
 export const NavbarLinks = ({ links }: {
@@ -62,7 +65,13 @@ export const NavbarLinks = ({ links }: {
                 {content(link)}
               </a>
             ) : (
-              <Link key={link.href} href={link.href} className={LINK_CLASS} {...handlers(link.href)}>
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={link.active ? "page" : undefined}
+                className={cn(LINK_CLASS, link.active && ACTIVE_CLASS)}
+                {...handlers(link.href)}
+              >
                 {content(link)}
               </Link>
             )

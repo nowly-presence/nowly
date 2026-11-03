@@ -1356,6 +1356,8 @@
     "empty": "Henüz gösterilecek bir şey yok.",
     "meta-title": "Nowly'de {name}",
     "meta-description": "{name} kullanıcısının Nowly'de oluşturduğu ve beğendiği presence'lar.",
-    "verified": "Doğrulanmış hesap"
+    "verified": "Doğrulanmış hesap",
+    "role-admin": "Yönetici",
+    "role-moderator": "Moderatör"
   }
 }

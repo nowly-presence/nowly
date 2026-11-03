@@ -50,6 +50,7 @@ export const UsersView = () => {
         <div className="flex max-w-xl flex-col gap-4">
           <form onSubmit={onSearch} className="flex gap-2">
             <Input
+              className="h-9"
               value={query}
               placeholder={t("users-search-placeholder")}
               aria-label={t("users-search-placeholder")}

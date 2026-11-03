@@ -7,7 +7,6 @@
     "sign-in-title": "Discord ile giriş yap",
     "sign-in-description": "Hesap isteğe bağlıdır. Uzantının presence'larını ve ayarlarını tarayıcıların arasında eşitlemesini sağlar.",
     "sign-in": "Discord ile devam et",
-    "provider-discord": "Discord ile giriş yapıldı",
     "sign-out": "Çıkış yap",
     "devices-title": "Bağlı cihazlar",
     "devices-description": "Uzantının bu hesaba bağlı olduğu tarayıcılar.",
@@ -31,7 +30,6 @@
     "tab-creations": "Oluşturduklarım",
     "role-admin": "Yönetici",
     "role-moderator": "Moderatör",
-    "role-description": "Gönderilen presence'ları inceleyebilirsin.",
     "presences-title": "Presence'ların",
     "presences-description": "Bu hesaba bağlı uzantılarda yüklü presence'lar, son eşitlemeye göre.",
     "presences-empty": "Henüz eşitlenmiş presence yok.",
@@ -189,7 +187,6 @@
     "connect-description": "Nowly'yi tarayıcıların arasında eşitlemek için Discord ile giriş yap."
   },
   "shell": {
-    "back-to-site": "nowly.me'ye dön",
-    "nav-label": "Hesap gezinmesi"
+    "back-to-site": "nowly.me'ye dön"
   }
 }

@@ -7,7 +7,6 @@
     "sign-in-title": "Sign in with Discord",
     "sign-in-description": "An account is optional. It lets the extension sync your presences and settings between your browsers.",
     "sign-in": "Continue with Discord",
-    "provider-discord": "Signed in with Discord",
     "sign-out": "Sign out",
     "devices-title": "Linked devices",
     "devices-description": "Browsers where the extension is connected to this account.",
@@ -31,7 +30,6 @@
     "tab-creations": "Creations",
     "role-admin": "Administrator",
     "role-moderator": "Moderator",
-    "role-description": "You can review presence submissions.",
     "presences-title": "Your presences",
     "presences-description": "Presences installed in the extensions linked to this account, as last synced.",
     "presences-empty": "No synced presence yet.",
@@ -189,7 +187,6 @@
     "connect-description": "Sign in with Discord to sync Nowly between your browsers."
   },
   "shell": {
-    "back-to-site": "Back to nowly.me",
-    "nav-label": "Account navigation"
+    "back-to-site": "Back to Nowly"
   }
 }

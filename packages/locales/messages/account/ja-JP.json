@@ -7,7 +7,6 @@
     "sign-in-title": "Discordでログイン",
     "sign-in-description": "アカウントは任意です。拡張機能がプレゼンスと設定をブラウザ間で同期できるようになります。",
     "sign-in": "Discordで続ける",
-    "provider-discord": "Discordでログイン中",
     "sign-out": "ログアウト",
     "devices-title": "連携済みのデバイス",
     "devices-description": "このアカウントに拡張機能が接続されているブラウザです。",
@@ -31,7 +30,6 @@
     "tab-creations": "作成物",
     "role-admin": "管理者",
     "role-moderator": "モデレーター",
-    "role-description": "投稿されたプレゼンスをレビューできます。",
     "presences-title": "あなたのプレゼンス",
     "presences-description": "このアカウントに連携した拡張機能にインストールされているプレゼンス（最後の同期時点）。",
     "presences-empty": "同期されたプレゼンスはまだありません。",
@@ -189,7 +187,6 @@
     "connect-description": "Discordでログインして、ブラウザ間でNowlyを同期します。"
   },
   "shell": {
-    "back-to-site": "nowly.meに戻る",
-    "nav-label": "アカウントのナビゲーション"
+    "back-to-site": "nowly.meに戻る"
   }
 }

@@ -7,7 +7,6 @@
     "sign-in-title": "Log masuk dengan Discord",
     "sign-in-description": "Akaun adalah pilihan. Ia membolehkan sambungan menyegerakkan presence dan tetapan anda antara pelayar anda.",
     "sign-in": "Teruskan dengan Discord",
-    "provider-discord": "Log masuk dengan Discord",
     "sign-out": "Log keluar",
     "devices-title": "Peranti yang dipautkan",
     "devices-description": "Pelayar tempat sambungan disambungkan kepada akaun ini.",
@@ -31,7 +30,6 @@
     "tab-creations": "Ciptaan",
     "role-admin": "Pentadbir",
     "role-moderator": "Penyederhana",
-    "role-description": "Anda boleh menyemak presence yang dihantar.",
     "presences-title": "Presence anda",
     "presences-description": "Presence yang dipasang dalam sambungan yang dipautkan ke akaun ini, mengikut penyegerakan terakhir.",
     "presences-empty": "Belum ada presence yang disegerakkan.",
@@ -189,7 +187,6 @@
     "connect-description": "Log masuk dengan Discord untuk menyegerakkan Nowly antara pelayar anda."
   },
   "shell": {
-    "back-to-site": "Kembali ke nowly.me",
-    "nav-label": "Navigasi akaun"
+    "back-to-site": "Kembali ke nowly.me"
   }
 }

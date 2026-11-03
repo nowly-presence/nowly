@@ -1356,6 +1356,8 @@
     "empty": "Nothing to show yet.",
     "meta-title": "{name} on Nowly",
     "meta-description": "Presences created and liked by {name} on Nowly.",
-    "verified": "Verified account"
+    "verified": "Verified account",
+    "role-admin": "Administrator",
+    "role-moderator": "Moderator"
   }
 }

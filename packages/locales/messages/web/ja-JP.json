@@ -1356,6 +1356,8 @@
     "empty": "まだ表示するものがありません。",
     "meta-title": "Nowly の {name}",
     "meta-description": "Nowly で {name} が作成して気に入ったプレゼンス。",
-    "verified": "認証済みアカウント"
+    "verified": "認証済みアカウント",
+    "role-admin": "管理者",
+    "role-moderator": "モデレーター"
   }
 }

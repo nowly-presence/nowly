@@ -7,16 +7,16 @@ import { RiMenuLine } from "@remixicon/react";
 import { useState, type ReactNode } from "react";
 import { MobileNav } from "@nowly/ui/navbar-mobile";
 
-import { Link } from "@nowly/locales/navigation";
+import { Link, usePathname } from "@nowly/locales/navigation";
 import { FALLBACK_LOCALE, LOCALE_SHORT_MAP, getValidLocale } from "@nowly/locales";
 import { useLocale, useTranslations } from "next-intl";
 
-export const Navbar = ({ site, docsOrigin, brand, storeButton, sectionLinks }: {
+export const Navbar = ({ site, docsOrigin, brand, storeButton, accountLinks }: {
   site: "web" | "docs" | "account";
   docsOrigin: string;
   brand: ReactNode;
   storeButton: ReactNode;
-  sectionLinks?: Array<{
+  accountLinks?: Array<{
     href: string;
     label: string;
   }>;
@@ -27,7 +27,8 @@ export const Navbar = ({ site, docsOrigin, brand, storeButton, sectionLinks }: {
   const prefix = locale === FALLBACK_LOCALE ? "" : `/${LOCALE_SHORT_MAP[locale]}`;
   const webHref = (path: string) => (site === "web" ? path : `https://nowly.me${prefix}${path}`);
 
-  const links = [
+  const pathname = usePathname();
+  const siteLinks = [
     {
       href: webHref("/roadmap"),
       label: t("roadmap"),
@@ -49,6 +50,14 @@ export const Navbar = ({ site, docsOrigin, brand, storeButton, sectionLinks }: {
       external: site !== "web"
     }
   ];
+  const links =
+    site === "account"
+      ? (accountLinks ?? []).map((link) => ({
+          ...link,
+          external: false,
+          active: pathname === link.href || pathname.startsWith(`${link.href}/`)
+        }))
+      : siteLinks;
 
   return (
     <header className="pointer-events-none relative sticky top-0 z-50 px-4 pt-4 sm:px-6 sm:pt-8 lg:px-10">
@@ -87,9 +96,7 @@ export const Navbar = ({ site, docsOrigin, brand, storeButton, sectionLinks }: {
         >
           <RiMenuLine />
         </button>
-        {open ? (
-          <MobileNav open={open} onOpenChange={setOpen} links={links} sectionLinks={sectionLinks ?? []} storeButton={storeButton} menuLabel={t("open-menu")} />
-        ) : null}
+        {open ? <MobileNav open={open} onOpenChange={setOpen} links={links} storeButton={storeButton} menuLabel={t("open-menu")} /> : null}
       </div>
     </header>
   );

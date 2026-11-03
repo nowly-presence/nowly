@@ -7,7 +7,6 @@
     "sign-in-title": "Σύνδεση με το Discord",
     "sign-in-description": "Ο λογαριασμός είναι προαιρετικός. Επιτρέπει στην επέκταση να συγχρονίζει τα presences και τις ρυθμίσεις σας ανάμεσα στους περιηγητές σας.",
     "sign-in": "Συνέχεια με το Discord",
-    "provider-discord": "Συνδεδεμένος με το Discord",
     "sign-out": "Αποσύνδεση",
     "devices-title": "Συνδεδεμένες συσκευές",
     "devices-description": "Οι περιηγητές όπου η επέκταση είναι συνδεδεμένη με αυτόν τον λογαριασμό.",
@@ -31,7 +30,6 @@
     "tab-creations": "Δημιουργίες",
     "role-admin": "Διαχειριστής",
     "role-moderator": "Συντονιστής",
-    "role-description": "Μπορείς να ελέγχεις τα presences που υποβάλλονται.",
     "presences-title": "Τα presences σου",
     "presences-description": "Presences που είναι εγκατεστημένα στις επεκτάσεις που συνδέονται με αυτόν τον λογαριασμό, με βάση τον τελευταίο συγχρονισμό.",
     "presences-empty": "Δεν υπάρχει ακόμη συγχρονισμένο presence.",
@@ -189,7 +187,6 @@
     "connect-description": "Συνδεθείτε με το Discord για να συγχρονίζετε το Nowly ανάμεσα στους περιηγητές σας."
   },
   "shell": {
-    "back-to-site": "Πίσω στο nowly.me",
-    "nav-label": "Πλοήγηση λογαριασμού"
+    "back-to-site": "Πίσω στο nowly.me"
   }
 }

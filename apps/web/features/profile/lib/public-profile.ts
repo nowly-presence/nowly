@@ -10,6 +10,7 @@ export type PublicProfile = {
   name: string;
   username: string | null;
   verified: boolean;
+  role: "admin" | "moderator" | null;
   image: string | null;
   banner: string | null;
   bio: string | null;

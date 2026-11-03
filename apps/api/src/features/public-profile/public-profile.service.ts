@@ -27,6 +27,7 @@ export type PublicProfileView = {
   name: string;
   username: string | null;
   verified: boolean;
+  role: "admin" | "moderator" | null;
   image: string | null;
   banner: string | null;
   bio: string | null;
@@ -129,6 +130,8 @@ export const savePublicProfileSettings = async (userId: string, body: PublicProf
   }
 };
 
+const publicRole = (role: string): "admin" | "moderator" | null => (role === "admin" || role === "moderator" ? role : null);
+
 export const isVerifiedAccount = (verified: boolean, role: string): boolean => verified || isStaffRole(role);
 
 const discordBannerUrl = (discordId: string | null, hash: string | null): string | null => {
@@ -223,6 +226,7 @@ export const getPublicProfile = async (handle: string): Promise<PublicProfileVie
     name: row.name,
     username: row.username,
     verified: isVerifiedAccount(row.verified, row.role),
+    role: publicRole(row.role),
     image: row.image,
     banner: discordBannerUrl(row.discordId, row.banner),
     bio: row.profile.bio,

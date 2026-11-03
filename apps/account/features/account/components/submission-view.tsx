@@ -1,5 +1,6 @@
 "use client";
 
+import { PageContainer } from "@/features/shell/components/page-container";
 import { AccountHeader } from "@/features/account/components/account-header";
 import { SubmissionChanges } from "@/features/account/components/submission-changes";
 import { SubmissionFiles } from "@/features/account/components/submission-files";
@@ -95,7 +96,7 @@ export const SubmissionView = ({ id }: {
 
   return (
     <div className="pb-24 pt-12 sm:pb-32 sm:pt-16">
-      <div className="mx-auto w-full max-w-7xl px-5 sm:px-10">
+      <PageContainer>
         <ButtonLink href="/creations" variant="ghost" size="sm">
           <RiArrowLeftLine data-icon="inline-start" />
           {t("back")}
@@ -158,7 +159,7 @@ export const SubmissionView = ({ id }: {
             </div>
           </div>
         ) : null}
-      </div>
+      </PageContainer>
     </div>
   );
 };

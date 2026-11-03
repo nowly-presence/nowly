@@ -170,7 +170,7 @@ describe("public profile page data", () => {
         }
       ]
     });
-    expect(Object.keys(full).sort()).toEqual(["banner", "bio", "created", "handle", "image", "liked", "name", "username", "verified"]);
+    expect(Object.keys(full).sort()).toEqual(["banner", "bio", "created", "handle", "image", "liked", "name", "role", "username", "verified"]);
 
     await save(OWNER, {
       ...BODY,
@@ -211,7 +211,10 @@ describe("public profile page data", () => {
         role: "moderator"
       })
       .where(eq(user.id, OWNER));
-    expect((await inject(await app(), { url: "/users/nolo" })).json()).toMatchObject({ verified: true });
+    expect((await inject(await app(), { url: "/users/nolo" })).json()).toMatchObject({
+      verified: true,
+      role: "moderator"
+    });
   });
 
   it("is erased with the account", async () => {

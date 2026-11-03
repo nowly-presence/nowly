@@ -3,7 +3,6 @@
 import { AccountDevicesTab } from "@/features/account/components/account-devices-tab";
 import { AccountPageFrame } from "@/features/account/components/account-page-frame";
 import { fetchAccountDevices, unlinkAccountDevice, unlinkAllAccountDevices, type AccountDevice } from "@/features/account/lib/account-api";
-import { Button } from "@nowly/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
@@ -42,20 +41,9 @@ export const DevicesView = () => {
   };
 
   return (
-    <AccountPageFrame
-      eyebrow={t("eyebrow")}
-      title={t("tab-devices")}
-      description={t("devices-description")}
-      action={
-        devices && devices.length > 1 ? (
-          <Button variant="outline" disabled={busy} onClick={onUnlinkAll}>
-            {t("devices-unlink-all")}
-          </Button>
-        ) : null
-      }
-    >
+    <AccountPageFrame eyebrow={t("eyebrow")} title={t("tab-devices")} description={t("devices-description")}>
       {devices ? (
-        <AccountDevicesTab devices={devices} busy={busy} error={failed} onUnlink={onUnlink} />
+        <AccountDevicesTab devices={devices} busy={busy} error={failed} onUnlink={onUnlink} onUnlinkAll={onUnlinkAll} />
       ) : (
         <p className="text-sm text-muted-foreground">{failed ? t("action-error") : t("checking")}</p>
       )}
