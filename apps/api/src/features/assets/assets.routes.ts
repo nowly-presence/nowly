@@ -1,26 +1,20 @@
-import type { FastifyInstance } from "fastify";
+import { Hono } from "hono";
 import { fetchAssetFromCdn } from "./assets.service";
 
-export const assetsRoutes = async (fastify: FastifyInstance) => {
-  fastify.get<{
-    Params: {
-      slug: string;
-      type: string;
-    };
-  }>("/:slug/assets/:type", async (request, reply) => {
-    const { slug: raw, type } = request.params;
-    const slug = raw.toLowerCase();
+const ASSET_TYPES = ["logo", "icon", "thumbnail"];
 
-    if (!["logo", "icon", "thumbnail"].includes(type)) {
-      return reply.status(400).send({ error: "INVALID_ASSET_TYPE" });
-    }
+export const assetsRoutes = new Hono().get("/:slug/assets/:type", async (c) => {
+  const slug = c.req.param("slug").toLowerCase();
+  const type = c.req.param("type");
 
-    const asset = await fetchAssetFromCdn(slug, type);
+  if (!ASSET_TYPES.includes(type)) return c.json({ error: "INVALID_ASSET_TYPE" }, 400);
 
-    if (!asset) {
-      return reply.status(404).send({ error: "ASSET_NOT_FOUND" });
-    }
+  const asset = await fetchAssetFromCdn(slug, type);
 
-    return reply.header("Content-Type", asset.mime).header("Cache-Control", "public, max-age=31536000, immutable").send(asset.buffer);
+  if (!asset) return c.json({ error: "ASSET_NOT_FOUND" }, 404);
+
+  return c.body(new Uint8Array(asset.buffer), 200, {
+    "Content-Type": asset.mime,
+    "Cache-Control": "public, max-age=31536000, immutable"
   });
-};
+});

@@ -1,35 +1,79 @@
-import { afterEach, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, beforeEach, expect, it } from "vitest";
+import { getPresenceListData } from "@/features/presence/presence.repository";
+import { device, devicePresence, presenceActiveDevice } from "@nowly/database/schema/device";
+import { presence, presenceLike } from "@nowly/database/schema/presence";
+import { createTestDatabase, type TestDatabase } from "./database";
 
-const prisma = vi.hoisted(() => ({
-  presence: { findMany: vi.fn().mockResolvedValue([]) },
-  devicePresence: { groupBy: vi.fn().mockResolvedValue([]) },
-  presenceActiveDevice: {
-    groupBy: vi.fn().mockResolvedValue([]),
-    deleteMany: vi.fn()
-  },
-  presenceLike: { groupBy: vi.fn().mockResolvedValue([]) }
-}));
+const STALE_MS = 13 * 60_000;
+let database: TestDatabase;
 
-vi.mock("@/db/client", () => ({
-  getPrisma: () => prisma
-}));
+beforeAll(async () => {
+  database = await createTestDatabase();
+});
+beforeEach(() => database.reset());
+afterAll(() => database.close());
 
-afterEach(() => vi.useRealTimers());
-
-it("lists presences with four bulk reads and excludes stale activity without a blocking delete", async () => {
-  vi.useFakeTimers();
-  vi.setSystemTime(new Date("2026-10-29T12:00:00Z"));
-  const { getPresenceListData } = await import("@/features/presence/presence.repository");
-  expect(await getPresenceListData()).toEqual([]);
-  expect(prisma.presence.findMany).toHaveBeenCalledOnce();
-  expect(prisma.devicePresence.groupBy).toHaveBeenCalledOnce();
-  expect(prisma.presenceLike.groupBy).toHaveBeenCalledOnce();
-  expect(prisma.presenceActiveDevice.groupBy).toHaveBeenCalledExactlyOnceWith({
-    by: ["slug"],
-    where: {
-      lastSeenAt: { gte: new Date("2026-10-29T11:48:00Z") }
+it("lists unarchived presences with installs, fresh activity and likes, without deleting stale activity", async () => {
+  const { db } = database;
+  await db.insert(presence).values([
+    {
+      slug: "youtube",
+      metadata: {
+        slug: "youtube",
+        name: "YouTube"
+      },
+      version: "1.0.0"
     },
-    _count: { _all: true }
+    {
+      slug: "old",
+      metadata: {
+        slug: "old",
+        name: "Old"
+      },
+      archived: true
+    }
+  ]);
+  await db.insert(device).values([
+    { deviceId: "a" },
+    { deviceId: "b" }
+  ]);
+  await db.insert(devicePresence).values([
+    {
+      deviceId: "a",
+      slug: "youtube"
+    },
+    {
+      deviceId: "b",
+      slug: "youtube",
+      installed: false
+    }
+  ]);
+  await db.insert(presenceActiveDevice).values([
+    {
+      slug: "youtube",
+      deviceId: "a"
+    },
+    {
+      slug: "youtube",
+      deviceId: "b",
+      lastSeenAt: new Date(Date.now() - STALE_MS)
+    }
+  ]);
+  await db.insert(presenceLike).values({
+    slug: "youtube",
+    deviceId: "a"
   });
-  expect(prisma.presenceActiveDevice.deleteMany).not.toHaveBeenCalled();
+
+  const list = await getPresenceListData();
+
+  expect(list).toHaveLength(1);
+  expect(list[0]).toMatchObject({
+    slug: "youtube",
+    name: "YouTube",
+    version: "1.0.0",
+    totalInstalls: 1,
+    activeUsers: 1,
+    likes: 1
+  });
+  expect(await db.select().from(presenceActiveDevice)).toHaveLength(2);
 });

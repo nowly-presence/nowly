@@ -1,43 +1,15 @@
-import Fastify from "fastify";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { overrideDatabase } from "@/db/client";
+import { activityPublication } from "@nowly/database/schema/activity";
+import { extensionToken, syncDocument } from "@nowly/database/schema/account";
+import { account, user } from "@nowly/database/schema/auth";
+import { device } from "@nowly/database/schema/device";
+import { presenceLike } from "@nowly/database/schema/presence";
+import { eq, isNull } from "drizzle-orm";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { createTestDatabase, seedExtensionToken, type TestDatabase } from "./database";
+import { inject, mount } from "./http";
 
-const mockPrisma = vi.hoisted(() => ({
-  user: {
-    findUnique: vi.fn(),
-    deleteMany: vi.fn()
-  },
-  account: { findMany: vi.fn() },
-  activityPublication: { findMany: vi.fn<() => Promise<unknown[]>>(async () => []) },
-  device: {
-    findMany: vi.fn(),
-    updateMany: vi.fn()
-  },
-  extensionToken: {
-    create: vi.fn(),
-    updateMany: vi.fn(),
-    findUnique: vi.fn(),
-    update: vi.fn(),
-    findMany: vi.fn(),
-    deleteMany: vi.fn()
-  },
-  syncDocument: {
-    findMany: vi.fn(),
-    deleteMany: vi.fn()
-  },
-  presenceLike: {
-    findMany: vi.fn(),
-    updateMany: vi.fn()
-  },
-  $transaction: vi.fn((operations: unknown[]) => Promise.all(operations))
-}));
-
-const mockDatabase = vi.hoisted(() => ({ available: true }));
 const mockSession = vi.hoisted(() => ({ userId: null as string | null }));
-
-vi.mock("@/db/client", () => ({
-  hasDatabase: vi.fn(() => mockDatabase.available),
-  getPrisma: vi.fn(() => mockPrisma)
-}));
 
 vi.mock("@/features/auth/better-auth", () => ({
   getAuth: () => ({
@@ -54,43 +26,43 @@ const USER = {
   createdAt: new Date("2026-10-01T00:00:00Z")
 };
 const DEVICE_ID = "8b3f2e7c-5a0d-4c1e-9f6b-2d7a1c3e4f50";
+const OTHER_DEVICE_ID = "1f0e2d3c-4b5a-4968-8776-655443322110";
+
+let database: TestDatabase;
 
 const buildApp = async () => {
   const { accountRoutes } = await import("@/features/account/account.routes");
-
-  const app = Fastify();
-  await app.register(accountRoutes);
-  return app;
+  return mount("/", accountRoutes);
 };
 
-const activeToken = (overrides: Record<string, unknown> = {}) => ({
-  id: "token-1",
-  userId: USER.id,
-  deviceId: DEVICE_ID,
-  tokenHash: "hash",
-  scopes: ["sync"],
-  revokedAt: null,
-  expiresAt: new Date(Date.now() + 60_000),
-  lastUsedAt: new Date(),
-  ...overrides
+const bearer = (token: string) => ({ authorization: `Bearer ${token}` });
+
+const activeTokens = () => database.db.select().from(extensionToken).where(isNull(extensionToken.revokedAt));
+
+beforeAll(async () => {
+  database = await createTestDatabase();
 });
+afterAll(() => database.close());
 
 describe("account routes", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    mockDatabase.available = true;
+  beforeEach(async () => {
+    overrideDatabase(database.db);
+    await database.reset();
+    await database.db.insert(user).values(USER);
+    await database.db.insert(account).values({
+      id: "account-1",
+      userId: USER.id,
+      accountId: "1234",
+      providerId: "discord",
+      createdAt: new Date("2026-10-01T00:00:00Z")
+    });
     mockSession.userId = null;
-    mockPrisma.user.findUnique.mockResolvedValue(USER);
-    mockPrisma.extensionToken.create.mockResolvedValue({});
-    mockPrisma.extensionToken.updateMany.mockResolvedValue({ count: 0 });
   });
 
   afterEach(() => vi.unstubAllEnvs());
 
   it("refuses to mint an extension token without a site session", async () => {
-    const app = await buildApp();
-
-    const res = await app.inject({
+    const res = await inject(await buildApp(), {
       method: "POST",
       url: "/extension/tokens",
       payload: {
@@ -99,30 +71,31 @@ describe("account routes", () => {
     });
     expect(res.statusCode).toBe(401);
     expect(res.json()).toEqual({ error: "UNAUTHORIZED" });
-    expect(mockPrisma.extensionToken.create).not.toHaveBeenCalled();
-    await app.close();
+    expect(await database.db.select().from(extensionToken)).toEqual([]);
   });
 
   it("fails closed when the database is unavailable", async () => {
-    mockDatabase.available = false;
+    overrideDatabase(null);
     mockSession.userId = USER.id;
-    const app = await buildApp();
 
-    const res = await app.inject({
+    const res = await inject(await buildApp(), {
       method: "POST",
       url: "/extension/tokens",
       payload: {}
     });
     expect(res.statusCode).toBe(503);
-    await app.close();
   });
 
   it("mints a hashed token, revokes the device's previous ones and returns the contract shape", async () => {
+    const previous = await seedExtensionToken({
+      userId: USER.id,
+      deviceId: DEVICE_ID,
+      scopes: ["sync"]
+    });
     mockSession.userId = USER.id;
-    const app = await buildApp();
-
     const before = Date.now();
-    const res = await app.inject({
+
+    const res = await inject(await buildApp(), {
       method: "POST",
       url: "/extension/tokens",
       payload: {
@@ -134,6 +107,7 @@ describe("account routes", () => {
 
     const body = res.json();
     expect(body.token).toMatch(/^nxt_[A-Za-z0-9_-]{43}$/);
+    expect(body.token).not.toBe(previous);
     expect(body.user).toEqual({
       id: USER.id,
       name: USER.name,
@@ -145,26 +119,17 @@ describe("account routes", () => {
     expect(typeof body.expiresAt).toBe("number");
     expect(body.expiresAt).toBeGreaterThan(before + 89 * 24 * 60 * 60 * 1000);
 
-    expect(mockPrisma.extensionToken.updateMany).toHaveBeenCalledWith({
-      where: {
-        userId: USER.id,
-        deviceId: DEVICE_ID,
-        revokedAt: null
-      },
-      data: { revokedAt: expect.any(Date) }
-    });
-    const created = mockPrisma.extensionToken.create.mock.calls[0][0].data;
-    expect(created.tokenHash).not.toBe(body.token);
-    expect(created.tokenHash).not.toContain("nxt_");
-    expect(created.scopes).toEqual(["sync"]);
-    await app.close();
+    const active = await activeTokens();
+    expect(active).toHaveLength(1);
+    expect(active[0].tokenHash).not.toBe(body.token);
+    expect(active[0].tokenHash).not.toContain("nxt_");
+    expect(active[0].scopes).toEqual(["sync"]);
   });
 
   it("rejects unknown scopes", async () => {
     mockSession.userId = USER.id;
-    const app = await buildApp();
 
-    const res = await app.inject({
+    const res = await inject(await buildApp(), {
       method: "POST",
       url: "/extension/tokens",
       payload: {
@@ -172,102 +137,140 @@ describe("account routes", () => {
       }
     });
     expect(res.statusCode).toBe(400);
-    await app.close();
   });
 
   it("serves /me with a bearer extension token", async () => {
-    mockPrisma.extensionToken.findUnique.mockResolvedValue(activeToken());
-    const app = await buildApp();
+    const token = await seedExtensionToken({
+      userId: USER.id,
+      deviceId: DEVICE_ID,
+      scopes: ["sync"]
+    });
 
-    const res = await app.inject({
+    const res = await inject(await buildApp(), {
       method: "GET",
       url: "/me",
-      headers: { authorization: "Bearer nxt_abc" }
+      headers: bearer(token)
     });
     expect(res.statusCode).toBe(200);
     expect(res.json()).toMatchObject({
       id: USER.id,
       discordId: "1234"
     });
-    await app.close();
   });
 
   it("rejects revoked or expired tokens", async () => {
     const app = await buildApp();
-    mockPrisma.extensionToken.findUnique.mockResolvedValue(activeToken({ revokedAt: new Date() }));
+
+    const revoked = await seedExtensionToken({
+      userId: USER.id,
+      deviceId: DEVICE_ID,
+      scopes: ["sync"]
+    });
+    await database.db.update(extensionToken).set({ revokedAt: new Date() });
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "GET",
           url: "/me",
-          headers: { authorization: "Bearer nxt_abc" }
+          headers: bearer(revoked)
         })
       ).statusCode
     ).toBe(401);
-    mockPrisma.extensionToken.findUnique.mockResolvedValue(activeToken({ expiresAt: new Date(Date.now() - 1) }));
+
+    const expired = await seedExtensionToken({
+      userId: USER.id,
+      deviceId: OTHER_DEVICE_ID,
+      scopes: ["sync"]
+    });
+    await database.db
+      .update(extensionToken)
+      .set({ expiresAt: new Date(Date.now() - 1) })
+      .where(eq(extensionToken.deviceId, OTHER_DEVICE_ID));
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "GET",
           url: "/me",
-          headers: { authorization: "Bearer nxt_abc" }
+          headers: bearer(expired)
         })
       ).statusCode
     ).toBe(401);
-    await app.close();
   });
 
   it("revokes the current token on sign out", async () => {
-    mockPrisma.extensionToken.findUnique.mockResolvedValue(activeToken());
-    const app = await buildApp();
+    const token = await seedExtensionToken({
+      userId: USER.id,
+      deviceId: DEVICE_ID,
+      scopes: ["sync"]
+    });
+    await seedExtensionToken({
+      userId: USER.id,
+      deviceId: OTHER_DEVICE_ID,
+      scopes: ["sync"]
+    });
 
-    const res = await app.inject({
+    const res = await inject(await buildApp(), {
       method: "DELETE",
       url: "/extension/tokens/current",
-      headers: { authorization: "Bearer nxt_abc" }
+      headers: bearer(token)
     });
     expect(res.statusCode).toBe(200);
-    expect(mockPrisma.extensionToken.updateMany).toHaveBeenCalledWith({
-      where: {
-        id: "token-1",
-        revokedAt: null
-      },
-      data: { revokedAt: expect.any(Date) }
-    });
-    await app.close();
+    expect((await activeTokens()).map((row) => row.deviceId)).toEqual([OTHER_DEVICE_ID]);
   });
 
   it("only lets the site session delete the account", async () => {
-    mockPrisma.extensionToken.findUnique.mockResolvedValue(activeToken());
+    const token = await seedExtensionToken({
+      userId: USER.id,
+      deviceId: DEVICE_ID,
+      scopes: ["sync"]
+    });
+    await database.db.insert(device).values({
+      deviceId: DEVICE_ID,
+      userId: USER.id
+    });
+    await database.db.insert(syncDocument).values({
+      userId: USER.id,
+      key: "settings",
+      value: {},
+      version: 1
+    });
     const app = await buildApp();
 
-    const byToken = await app.inject({
-      method: "DELETE",
-      url: "/me",
-      headers: { authorization: "Bearer nxt_abc" }
-    });
-    expect(byToken.statusCode).toBe(401);
+    expect(
+      (
+        await inject(app, {
+          method: "DELETE",
+          url: "/me",
+          headers: bearer(token)
+        })
+      ).statusCode
+    ).toBe(401);
 
     mockSession.userId = USER.id;
-    const bySession = await app.inject({
-      method: "DELETE",
-      url: "/me"
-    });
-    expect(bySession.statusCode).toBe(200);
-    expect(mockPrisma.syncDocument.deleteMany).toHaveBeenCalledWith({
-      where: { userId: USER.id }
-    });
-    expect(mockPrisma.extensionToken.deleteMany).toHaveBeenCalledWith({
-      where: { userId: USER.id }
-    });
-    expect(mockPrisma.device.updateMany).toHaveBeenCalledWith({
-      where: { userId: USER.id },
-      data: { userId: null }
-    });
-    expect(mockPrisma.user.deleteMany).toHaveBeenCalledWith({
-      where: { id: USER.id }
-    });
-    await app.close();
+    expect(
+      (
+        await inject(app, {
+          method: "DELETE",
+          url: "/me"
+        })
+      ).statusCode
+    ).toBe(200);
+    expect(await database.db.select().from(user)).toEqual([]);
+    expect(await database.db.select().from(syncDocument)).toEqual([]);
+    expect(await database.db.select().from(extensionToken)).toEqual([]);
+    expect(
+      await database.db
+        .select({
+          deviceId: device.deviceId,
+          userId: device.userId
+        })
+        .from(device)
+    ).toEqual([
+      {
+        deviceId: DEVICE_ID,
+        userId: null
+      }
+    ]);
   });
 
   it("exports the profile, devices, synced documents and likes without token hashes", async () => {
@@ -278,55 +281,52 @@ describe("account routes", () => {
       published: false,
       activity: { name: "Saved publication" }
     };
-    mockPrisma.activityPublication.findMany.mockResolvedValue([publication]);
-    mockPrisma.account.findMany.mockResolvedValue([
-      {
-        providerId: "discord",
-        accountId: "1234",
-        createdAt: new Date("2026-10-01T00:00:00Z")
-      }
-    ]);
-    mockPrisma.extensionToken.findMany.mockResolvedValue([activeToken({ createdAt: new Date("2026-10-02T00:00:00Z") })]);
-    mockPrisma.syncDocument.findMany.mockResolvedValue([
-      {
-        key: "settings",
-        value: { appearance: "dark" },
-        version: 3,
-        updatedAt: new Date("2026-10-03T00:00:00Z"),
-        updatedByDeviceId: DEVICE_ID
-      }
-    ]);
-    mockPrisma.presenceLike.findMany.mockResolvedValue([
-      {
-        slug: "youtube",
-        deviceId: DEVICE_ID,
-        likedAt: new Date("2026-10-03T00:00:00Z")
-      }
-    ]);
-    mockPrisma.device.findMany.mockResolvedValue([
-      {
-        deviceId: DEVICE_ID,
-        browser: "chrome",
-        os: "windows",
-        extensionVersion: "2.3.0",
-        lastSeenAt: new Date("2026-10-04T00:00:00Z")
-      }
-    ]);
+    await database.db.insert(activityPublication).values({
+      ...publication,
+      userId: USER.id,
+      localKey: "local-1"
+    });
+    await seedExtensionToken({
+      userId: USER.id,
+      deviceId: DEVICE_ID,
+      scopes: ["sync"]
+    });
+    await database.db.insert(syncDocument).values({
+      userId: USER.id,
+      key: "settings",
+      value: { appearance: "dark" },
+      version: 3,
+      updatedAt: new Date("2026-10-03T00:00:00Z"),
+      updatedByDeviceId: DEVICE_ID
+    });
+    await database.db.insert(presenceLike).values({
+      slug: "youtube",
+      deviceId: DEVICE_ID,
+      userId: USER.id,
+      likedAt: new Date("2026-10-03T00:00:00Z")
+    });
+    await database.db.insert(device).values({
+      deviceId: DEVICE_ID,
+      userId: USER.id,
+      browser: "chrome",
+      os: "windows",
+      extensionVersion: "2.3.0",
+      lastSeenAt: new Date("2026-10-04T00:00:00Z")
+    });
 
-    const app = await buildApp();
-
-    const res = await app.inject({
+    const res = await inject(await buildApp(), {
       method: "GET",
       url: "/me/export"
     });
     expect(res.statusCode).toBe(200);
     const body = res.json();
     expect(body.profile.email).toBe(USER.email);
-    expect(body.activityPublications).toEqual([publication]);
-    expect(mockPrisma.activityPublication.findMany).toHaveBeenCalledWith({
-      where: { userId: USER.id },
-      orderBy: { createdAt: "asc" }
-    });
+    expect(body.activityPublications).toEqual([
+      expect.objectContaining({
+        ...publication,
+        localKey: "local-1"
+      })
+    ]);
     expect(body.syncDocuments).toEqual([
       {
         key: "settings",
@@ -348,14 +348,18 @@ describe("account routes", () => {
       browser: "chrome"
     });
     expect(JSON.stringify(body)).not.toContain("tokenHash");
-    await app.close();
   });
 
   it("lists linked devices and flags the current one", async () => {
-    mockPrisma.extensionToken.findUnique.mockResolvedValue(activeToken());
-    mockPrisma.device.findMany.mockResolvedValue([
+    const token = await seedExtensionToken({
+      userId: USER.id,
+      deviceId: DEVICE_ID,
+      scopes: ["sync"]
+    });
+    await database.db.insert(device).values([
       {
         deviceId: DEVICE_ID,
+        userId: USER.id,
         browser: "chrome",
         os: "windows",
         extensionVersion: "2.3.0",
@@ -363,48 +367,40 @@ describe("account routes", () => {
       },
       {
         deviceId: "other",
+        userId: USER.id,
         browser: "firefox",
         os: "linux",
         extensionVersion: "2.3.0",
         lastSeenAt: new Date("2026-10-03T00:00:00Z")
       }
     ]);
-    const app = await buildApp();
 
-    const res = await app.inject({
+    const res = await inject(await buildApp(), {
       method: "GET",
       url: "/me/devices",
-      headers: { authorization: "Bearer nxt_abc" }
+      headers: bearer(token)
     });
-    expect(res.json().devices.map((device: { current: boolean }) => device.current)).toEqual([true, false]);
-    await app.close();
+    expect(res.json().devices.map((entry: { current: boolean }) => entry.current)).toEqual([true, false]);
   });
 
   it("unlinks a device and revokes its tokens", async () => {
     mockSession.userId = USER.id;
-    mockPrisma.device.updateMany.mockResolvedValue({ count: 1 });
-    const app = await buildApp();
+    await database.db.insert(device).values({
+      deviceId: DEVICE_ID,
+      userId: USER.id
+    });
+    await seedExtensionToken({
+      userId: USER.id,
+      deviceId: DEVICE_ID,
+      scopes: ["sync"]
+    });
 
-    const res = await app.inject({
+    const res = await inject(await buildApp(), {
       method: "DELETE",
       url: `/me/devices/${DEVICE_ID}`
     });
     expect(res.statusCode).toBe(200);
-    expect(mockPrisma.device.updateMany).toHaveBeenCalledWith({
-      where: {
-        userId: USER.id,
-        deviceId: DEVICE_ID
-      },
-      data: { userId: null }
-    });
-    expect(mockPrisma.extensionToken.updateMany).toHaveBeenCalledWith({
-      where: {
-        userId: USER.id,
-        deviceId: DEVICE_ID,
-        revokedAt: null
-      },
-      data: { revokedAt: expect.any(Date) }
-    });
-    await app.close();
+    expect(await database.db.select({ userId: device.userId }).from(device)).toEqual([{ userId: null }]);
+    expect(await activeTokens()).toEqual([]);
   });
 });

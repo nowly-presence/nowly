@@ -1,12 +1,15 @@
-import { getPrisma } from "@/db/client";
+import { getDb } from "@/db/client";
+import { announcement } from "@nowly/database/schema/announcement";
+import { and, desc, isNull, lte, gt, or } from "drizzle-orm";
 import { readReleaseAnnouncements } from "@/features/announcements/announcements.changelog";
 import { ANNOUNCEMENT_LIMIT, AnnouncementFeedSchema, AnnouncementSchema, isAnnouncementVisible, type AnnouncementInput, type AnnouncementLocale } from "@nowly/shared/announcements";
 
 const iso = (date: Date | null) => date?.toISOString() ?? null;
 
 export const createAnnouncement = async (input: AnnouncementInput) => {
-  const row = await getPrisma().announcement.create({
-    data: {
+  const [row] = await getDb()
+    .insert(announcement)
+    .values({
       translations: input.translations,
       kind: input.kind,
       severity: input.severity,
@@ -14,8 +17,8 @@ export const createAnnouncement = async (input: AnnouncementInput) => {
       startsAt: input.startsAt ? new Date(input.startsAt) : null,
       endsAt: input.endsAt ? new Date(input.endsAt) : null,
       expiresAt: input.expiresAt ? new Date(input.expiresAt) : null
-    }
-  });
+    })
+    .returning();
   return AnnouncementSchema.parse({
     id: row.id,
     source: "announcement",
@@ -33,46 +36,18 @@ export const createAnnouncement = async (input: AnnouncementInput) => {
 
 export const getAnnouncementFeed = async (locale: AnnouncementLocale) => {
   const now = new Date();
-  const rows = await getPrisma().announcement.findMany({
-    where: {
-      publishedAt: { lte: now },
-      AND: [
-        {
-          OR: [
-            { startsAt: null },
-            {
-              startsAt: { lte: now }
-            }
-          ]
-        },
-        {
-          OR: [
-            { expiresAt: null },
-            {
-              expiresAt: { gt: now }
-            }
-          ]
-        }
-      ]
-    },
-    orderBy: [
-      { pinned: "desc" },
-      { publishedAt: "desc" }
-    ],
-    take: ANNOUNCEMENT_LIMIT,
-    select: {
-      id: true,
-      translations: true,
-      kind: true,
-      severity: true,
-      pinned: true,
-      startsAt: true,
-      endsAt: true,
-      expiresAt: true,
-      publishedAt: true,
-      updatedAt: true
-    }
-  });
+  const rows = await getDb()
+    .select()
+    .from(announcement)
+    .where(
+      and(
+        lte(announcement.publishedAt, now),
+        or(isNull(announcement.startsAt), lte(announcement.startsAt, now)),
+        or(isNull(announcement.expiresAt), gt(announcement.expiresAt, now))
+      )
+    )
+    .orderBy(desc(announcement.pinned), desc(announcement.publishedAt))
+    .limit(ANNOUNCEMENT_LIMIT);
   const posts = rows
     .map((row) =>
       AnnouncementSchema.parse({

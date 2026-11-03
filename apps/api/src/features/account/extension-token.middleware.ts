@@ -1,8 +1,8 @@
 import { hasDatabase } from "@/db/client";
+import type { AppEnv } from "@/context";
 import { getAuth } from "@/features/auth/better-auth";
 import type { ExtensionTokenScope } from "@nowly/shared";
-import { fromNodeHeaders } from "better-auth/node";
-import type { FastifyReply, FastifyRequest } from "fastify";
+import type { Context, MiddlewareHandler } from "hono";
 import { findActiveExtensionToken, touchExtensionToken } from "./extension-token.service";
 
 export type AccountContext = {
@@ -12,16 +12,10 @@ export type AccountContext = {
   tokenId: string | null;
 };
 
-declare module "fastify" {
-  interface FastifyRequest {
-    account?: AccountContext;
-  }
-}
-
 const BEARER_PREFIX = "Bearer ";
 
-const bearerToken = (request: FastifyRequest): string | null => {
-  const header = request.headers.authorization;
+const bearerToken = (c: Context): string | null => {
+  const header = c.req.header("authorization");
 
   if (!header?.startsWith(BEARER_PREFIX)) return null;
 
@@ -29,8 +23,8 @@ const bearerToken = (request: FastifyRequest): string | null => {
   return token || null;
 };
 
-const resolveTokenAccount = async (request: FastifyRequest): Promise<AccountContext | null> => {
-  const token = bearerToken(request);
+const resolveTokenAccount = async (c: Context): Promise<AccountContext | null> => {
+  const token = bearerToken(c);
 
   if (!token) return null;
 
@@ -47,70 +41,57 @@ const resolveTokenAccount = async (request: FastifyRequest): Promise<AccountCont
   };
 };
 
-export const getSessionUserId = async (request: FastifyRequest): Promise<string | null> => {
+export const getSessionUserId = async (c: Context): Promise<string | null> => {
   try {
-    const session = await getAuth().api.getSession({ headers: fromNodeHeaders(request.headers) });
+    const session = await getAuth().api.getSession({ headers: c.req.raw.headers });
     return session?.user.id ?? null;
   } catch {
     return null;
   }
 };
 
-const rejectWithoutDatabase = (reply: FastifyReply): boolean => {
-  if (hasDatabase()) return false;
+const databaseUnavailable = (c: Context) => c.json({ error: "DATABASE_UNAVAILABLE" }, 503);
 
-  reply.status(503).send({ error: "DATABASE_UNAVAILABLE" });
-  return true;
-};
+const unauthorized = (c: Context) => c.json({ error: "UNAUTHORIZED" }, 401);
 
 export const requireExtensionToken =
-  (scope: ExtensionTokenScope) =>
-  async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
-    if (rejectWithoutDatabase(reply)) return;
+  (scope: ExtensionTokenScope): MiddlewareHandler<AppEnv> =>
+  async (c, next) => {
+    if (!hasDatabase()) return databaseUnavailable(c);
 
-    const account = await resolveTokenAccount(request);
+    const account = await resolveTokenAccount(c);
 
-    if (!account || !account.scopes.includes(scope)) {
-      reply.status(401).send({ error: "UNAUTHORIZED" });
-      return;
-    }
+    if (!account || !account.scopes.includes(scope)) return unauthorized(c);
 
-    request.account = account;
+    c.set("account", account);
+    await next();
   };
 
-export const requireSession = async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
-  if (rejectWithoutDatabase(reply)) return;
-
-  const userId = await getSessionUserId(request);
-
-  if (!userId) {
-    reply.status(401).send({ error: "UNAUTHORIZED" });
-    return;
-  }
-
-  request.account = {
-    userId,
-    deviceId: null,
-    scopes: [],
-    tokenId: null
-  };
+const sessionAccount = async (c: Context): Promise<AccountContext | null> => {
+  const userId = await getSessionUserId(c);
+  return userId ? { userId, deviceId: null, scopes: [], tokenId: null } : null;
 };
 
-export const requireTokenOrSession = async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
-  if (rejectWithoutDatabase(reply)) return;
+export const requireSession: MiddlewareHandler<AppEnv> = async (c, next) => {
+  if (!hasDatabase()) return databaseUnavailable(c);
 
-  const account = bearerToken(request) ? await resolveTokenAccount(request) : null;
+  const account = await sessionAccount(c);
 
-  if (account) {
-    request.account = account;
-    return;
-  }
+  if (!account) return unauthorized(c);
 
-  await requireSession(request, reply);
+  c.set("account", account);
+  await next();
 };
 
-export const accountOf = (request: FastifyRequest): AccountContext => {
-  if (!request.account) throw new Error("account guard missing on this route");
+export const requireTokenOrSession: MiddlewareHandler<AppEnv> = async (c, next) => {
+  if (!hasDatabase()) return databaseUnavailable(c);
 
-  return request.account;
+  const account = (bearerToken(c) ? await resolveTokenAccount(c) : null) ?? (await sessionAccount(c));
+
+  if (!account) return unauthorized(c);
+
+  c.set("account", account);
+  await next();
 };
+
+export const accountOf = (c: Context<AppEnv>): AccountContext => c.get("account");

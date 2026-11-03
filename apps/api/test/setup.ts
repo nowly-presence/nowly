@@ -5,3 +5,5 @@ process.env.DISCORD_CLIENT_ID ??= "test-discord-client-id";
 process.env.DISCORD_CLIENT_SECRET ??= "test-discord-client-secret";
 process.env.DISCORD_REDIRECT_URI ??= "http://localhost:3001/auth/discord/callback";
 process.env.PRESENCE_SIGNING_PRIVATE_KEY ??= "test-presence-signing-private-key";
+process.env.STATUS_SAMPLE_LIMIT ??= "168";
+process.env.STATUS_CHECK_INTERVAL_HOURS ??= "1";

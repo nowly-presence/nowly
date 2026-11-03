@@ -1,95 +1,73 @@
+import type { AppEnv } from "@/context";
+import { MINUTE_MS, rateLimit } from "@/middleware/rate-limit";
+import { jsonBody } from "@/shared/request-body";
 import { extensionTokenBodySchema } from "@nowly/shared/schemas";
-import type { FastifyInstance } from "fastify";
+import { Hono } from "hono";
 import { ACCOUNT_PROVIDERS, deleteAccountData, exportAccountData, getAccountProfile, listAccountDevices, unlinkAccountDevice } from "./account.service";
 import { accountOf, requireExtensionToken, requireSession, requireTokenOrSession } from "./extension-token.middleware";
 import { createExtensionToken, revokeExtensionToken } from "./extension-token.service";
 
-const TOKEN_RATE_LIMIT = {
+const TOKEN_RATE_LIMIT = rateLimit({
+  name: "extension-tokens",
   max: 10,
-  timeWindow: "1 minute"
-};
+  windowMs: MINUTE_MS
+});
 
-export const accountRoutes = async (fastify: FastifyInstance) => {
-  fastify.post(
-    "/extension/tokens",
-    {
-      preHandler: requireSession,
-      config: { rateLimit: TOKEN_RATE_LIMIT }
-    },
-    async (request, reply) => {
-      const parsed = extensionTokenBodySchema.safeParse(request.body ?? {});
+export const accountRoutes = new Hono<AppEnv>()
+  .post("/extension/tokens", TOKEN_RATE_LIMIT, requireSession, async (c) => {
+    const parsed = extensionTokenBodySchema.safeParse((await jsonBody(c)) ?? {});
 
-      if (!parsed.success) return reply.status(400).send({ error: "INVALID_REQUEST_BODY" });
+    if (!parsed.success) return c.json({ error: "INVALID_REQUEST_BODY" }, 400);
 
-      const { userId } = accountOf(request);
-      const user = await getAccountProfile(userId);
+    const { userId } = accountOf(c);
+    const user = await getAccountProfile(userId);
 
-      if (!user) return reply.status(401).send({ error: "UNAUTHORIZED" });
+    if (!user) return c.json({ error: "UNAUTHORIZED" }, 401);
 
-      const { token, expiresAt } = await createExtensionToken({
-        userId,
-        deviceId: parsed.data.deviceId,
-        scopes: parsed.data.scopes
-      });
-      return {
-        token,
-        scopes: parsed.data.scopes,
-        user,
-        providers: [...ACCOUNT_PROVIDERS],
-        expiresAt: expiresAt.getTime()
-      };
-    }
-  );
-
-  fastify.delete("/extension/tokens/current", { preHandler: requireExtensionToken("sync") }, async (request) => {
-    const { tokenId } = accountOf(request);
+    const { token, expiresAt } = await createExtensionToken({
+      userId,
+      deviceId: parsed.data.deviceId,
+      scopes: parsed.data.scopes
+    });
+    return c.json({
+      token,
+      scopes: parsed.data.scopes,
+      user,
+      providers: [...ACCOUNT_PROVIDERS],
+      expiresAt: expiresAt.getTime()
+    });
+  })
+  .delete("/extension/tokens/current", requireExtensionToken("sync"), async (c) => {
+    const { tokenId } = accountOf(c);
     if (tokenId) await revokeExtensionToken(tokenId);
-    return {
-      ok: true
-    };
+    return c.json({ ok: true });
+  })
+  .get("/me", requireTokenOrSession, async (c) => {
+    const user = await getAccountProfile(accountOf(c).userId);
+
+    if (!user) return c.json({ error: "UNAUTHORIZED" }, 401);
+
+    return c.json(user);
+  })
+  .get("/me/devices", requireTokenOrSession, async (c) => {
+    const { userId, deviceId } = accountOf(c);
+    return c.json({ devices: await listAccountDevices(userId, deviceId) });
+  })
+  .delete("/me/devices/:deviceId", requireSession, async (c) => {
+    const unlinked = await unlinkAccountDevice(accountOf(c).userId, c.req.param("deviceId").trim());
+
+    if (!unlinked) return c.json({ error: "DEVICE_NOT_FOUND" }, 404);
+
+    return c.json({ ok: true });
+  })
+  .get("/me/export", requireSession, async (c) => {
+    const data = await exportAccountData(accountOf(c).userId);
+
+    if (!data) return c.json({ error: "ACCOUNT_NOT_FOUND" }, 404);
+
+    return c.json(data);
+  })
+  .delete("/me", requireSession, async (c) => {
+    await deleteAccountData(accountOf(c).userId);
+    return c.json({ ok: true });
   });
-
-  fastify.get("/me", { preHandler: requireTokenOrSession }, async (request, reply) => {
-    const user = await getAccountProfile(accountOf(request).userId);
-
-    if (!user) return reply.status(401).send({ error: "UNAUTHORIZED" });
-
-    return user;
-  });
-
-  fastify.get("/me/devices", { preHandler: requireTokenOrSession }, async (request) => {
-    const { userId, deviceId } = accountOf(request);
-    return {
-      devices: await listAccountDevices(userId, deviceId)
-    };
-  });
-
-  fastify.delete<{
-    Params: {
-      deviceId: string;
-    };
-  }>("/me/devices/:deviceId", { preHandler: requireSession }, async (request, reply) => {
-    const unlinked = await unlinkAccountDevice(accountOf(request).userId, request.params.deviceId.trim());
-
-    if (!unlinked) return reply.status(404).send({ error: "DEVICE_NOT_FOUND" });
-
-    return {
-      ok: true
-    };
-  });
-
-  fastify.get("/me/export", { preHandler: requireSession }, async (request, reply) => {
-    const data = await exportAccountData(accountOf(request).userId);
-
-    if (!data) return reply.status(404).send({ error: "ACCOUNT_NOT_FOUND" });
-
-    return data;
-  });
-
-  fastify.delete("/me", { preHandler: requireSession }, async (request) => {
-    await deleteAccountData(accountOf(request).userId);
-    return {
-      ok: true
-    };
-  });
-};

@@ -1,5 +1,8 @@
 import { ingestSchema, umamiPayload, type ProductEvent } from "@nowly/telemetry";
-import type { FastifyInstance } from "fastify";
+import { MINUTE_MS, rateLimit } from "@/middleware/rate-limit";
+import { jsonBody } from "@/shared/request-body";
+import { Hono } from "hono";
+import { bodyLimit } from "hono/body-limit";
 
 const RESPONSE_BODY_LOG_LIMIT = 500;
 
@@ -78,44 +81,37 @@ export const createRelay = (fetcher: typeof fetch = (...args) => fetch(...args))
   };
 };
 
-export const telemetryRoutes = async (app: FastifyInstance) => {
-  const relay = createRelay();
-  app.setErrorHandler((error, _request, reply) => {
-    const statusCode = error && typeof error === "object" && "statusCode" in error ? error.statusCode : null;
-    const status = typeof statusCode === "number" && statusCode >= 400 && statusCode < 500 ? statusCode : 500;
-    return reply
-      .code(status)
-      .header("Cache-Control", "no-store")
-      .send({ error: status === 429 ? "RATE_LIMITED" : "INVALID_TELEMETRY" });
-  });
-  app.post(
-    "/events",
-    {
-      bodyLimit: 1024,
-      config: {
-        rateLimit: {
-          max: 30,
-          timeWindow: "1 minute"
-        }
-      }
-    },
-    async (request, reply) => {
-      reply.header("Cache-Control", "no-store");
-      const parsed = ingestSchema.safeParse(request.body);
+const TELEMETRY_BODY_LIMIT = 1024;
 
-      if (!parsed.success) return reply.code(400).send({ error: "INVALID_TELEMETRY" });
-      if (process.env.NODE_ENV !== "production") return reply.code(503).send({ error: "TELEMETRY_DISABLED" });
+export const createTelemetryRoutes = (relay = createRelay()) =>
+  new Hono().post(
+    "/events",
+    async (c, next) => {
+      c.header("Cache-Control", "no-store");
+      await next();
+    },
+    rateLimit({
+      name: "telemetry",
+      max: 30,
+      windowMs: MINUTE_MS
+    }),
+    bodyLimit({
+      maxSize: TELEMETRY_BODY_LIMIT,
+      onError: (c) => c.json({ error: "INVALID_TELEMETRY" }, 413)
+    }),
+    async (c) => {
+      const parsed = ingestSchema.safeParse(await jsonBody(c));
+
+      if (!parsed.success) return c.json({ error: "INVALID_TELEMETRY" }, 400);
+      if (process.env.NODE_ENV !== "production") return c.json({ error: "TELEMETRY_DISABLED" }, 503);
 
       try {
         await relay(parsed.data.event);
-        return {
-          ok: true
-        };
+        return c.json({ ok: true });
       } catch (error) {
         const diagnostic = error instanceof TelemetryRelayError ? error.diagnostic : { errorName: "UnknownError" };
-        request.log.error(diagnostic, "Telemetry relay to Umami failed");
-        return reply.code(503).send({ error: "TELEMETRY_UNAVAILABLE" });
+        console.error("Telemetry relay to Umami failed", diagnostic);
+        return c.json({ error: "TELEMETRY_UNAVAILABLE" }, 503);
       }
     }
   );
-};

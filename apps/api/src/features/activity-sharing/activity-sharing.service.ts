@@ -1,20 +1,28 @@
 import { randomBytes } from "node:crypto";
-import { getPrisma } from "@/db/client";
+import { getDb } from "@/db/client";
+import { activityPublication } from "@nowly/database/schema/activity";
+import { account, user } from "@nowly/database/schema/auth";
 import { PUBLICATION_QUOTA, portableActivitySchema, publicationSchema, type PortableActivity } from "@nowly/shared/activity-publication";
+import { and, count, eq, sql } from "drizzle-orm";
 import { ApiError } from "@/shared/errors";
 
+const AUTHOR_NAME_MAX_LENGTH = 128;
+const PUBLICATION_ID_BYTES = 16;
+
 export const readPublication = async (id: string) => {
-  const row = await getPrisma().activityPublication.findUnique({
-    where: { id },
-    include: {
-      user: {
-        select: {
-          name: true,
-          image: true
-        }
-      }
-    }
-  });
+  const [row] = await getDb()
+    .select({
+      id: activityPublication.id,
+      revision: activityPublication.revision,
+      published: activityPublication.published,
+      activity: activityPublication.activity,
+      authorName: user.name,
+      authorImage: user.image
+    })
+    .from(activityPublication)
+    .innerJoin(user, eq(user.id, activityPublication.userId))
+    .where(eq(activityPublication.id, id))
+    .limit(1);
 
   if (!row) throw new ApiError(404, "NOT_FOUND");
   if (!row.published) throw new ApiError(404, "UNPUBLISHED");
@@ -24,106 +32,98 @@ export const readPublication = async (id: string) => {
     revision: row.revision,
     activity: row.activity,
     author: {
-      name: row.user.name.slice(0, 128),
-      image: row.user.image
+      name: row.authorName.slice(0, AUTHOR_NAME_MAX_LENGTH),
+      image: row.authorImage
     }
   });
 };
 
-export const ownedPublication = async (userId: string, localKey: string) =>
-  getPrisma().activityPublication.findUnique({
-    where: {
-      userId_localKey: { userId, localKey }
-    },
-    select: {
-      id: true,
-      revision: true,
-      published: true
-    }
-  });
+export const ownedPublication = async (userId: string, localKey: string) => {
+  const [row] = await getDb()
+    .select({
+      id: activityPublication.id,
+      revision: activityPublication.revision,
+      published: activityPublication.published
+    })
+    .from(activityPublication)
+    .where(and(eq(activityPublication.userId, userId), eq(activityPublication.localKey, localKey)))
+    .limit(1);
+  return row ?? null;
+};
 
-export const reservePublication = async (userId: string, localKey: string, activity: PortableActivity) => {
-  const prisma = getPrisma();
-  const verified = await prisma.account.findFirst({
-    where: {
-      userId,
-      providerId: "discord"
-    },
-    select: { id: true }
-  });
+const requireDiscord = async (userId: string): Promise<void> => {
+  const [verified] = await getDb()
+    .select({ id: account.id })
+    .from(account)
+    .where(and(eq(account.userId, userId), eq(account.providerId, "discord")))
+    .limit(1);
 
   if (!verified) throw new ApiError(403, "DISCORD_REQUIRED");
+};
 
-  return prisma.$transaction(async (tx) => {
-    await tx.user.update({
-      where: { id: userId },
-      data: { updatedAt: new Date() }
-    });
-    const existing = await tx.activityPublication.findUnique({
-      where: {
-        userId_localKey: { userId, localKey }
-      }
-    });
+export const reservePublication = async (userId: string, localKey: string, activity: PortableActivity) => {
+  await requireDiscord(userId);
 
-    if (existing) {
-      return {
-        id: existing.id,
-        revision: existing.revision,
-        published: existing.published
-      };
-    }
-    if (
-      (await tx.activityPublication.count({
-        where: { userId }
-      })) >= PUBLICATION_QUOTA
-    ) throw new ApiError(429, "PUBLICATION_LIMIT");
+  return getDb().transaction(async (tx) => {
+    await tx.select({ id: user.id }).from(user).where(eq(user.id, userId)).for("update");
 
-    const row = await tx.activityPublication.create({
-      data: {
-        id: randomBytes(16).toString("hex"),
+    const [existing] = await tx
+      .select({
+        id: activityPublication.id,
+        revision: activityPublication.revision,
+        published: activityPublication.published
+      })
+      .from(activityPublication)
+      .where(and(eq(activityPublication.userId, userId), eq(activityPublication.localKey, localKey)))
+      .limit(1);
+
+    if (existing) return existing;
+
+    const [{ total }] = await tx.select({ total: count() }).from(activityPublication).where(eq(activityPublication.userId, userId));
+
+    if (total >= PUBLICATION_QUOTA) throw new ApiError(429, "PUBLICATION_LIMIT");
+
+    const [row] = await tx
+      .insert(activityPublication)
+      .values({
+        id: randomBytes(PUBLICATION_ID_BYTES).toString("hex"),
         userId,
         localKey,
         revision: 0,
         published: false,
         activity: portableActivitySchema.parse(activity)
-      }
-    });
-    return {
-      id: row.id,
-      revision: row.revision,
-      published: row.published
-    };
+      })
+      .returning({
+        id: activityPublication.id,
+        revision: activityPublication.revision,
+        published: activityPublication.published
+      });
+    return row;
   });
 };
 
 export const writePublication = async (userId: string, localKey: string, activity: PortableActivity, baseRevision: number, id: string) => {
-  const prisma = getPrisma();
-  const verified = await prisma.account.findFirst({
-    where: {
-      userId,
-      providerId: "discord"
-    },
-    select: { id: true }
-  });
+  await requireDiscord(userId);
 
-  if (!verified) throw new ApiError(403, "DISCORD_REQUIRED");
-
-  const result = await prisma.activityPublication.updateMany({
-    where: {
-      id,
-      userId,
-      localKey,
-      revision: baseRevision
-    },
-    data: {
+  const updated = await getDb()
+    .update(activityPublication)
+    .set({
       activity: portableActivitySchema.parse(activity),
-      revision: { increment: 1 },
+      revision: sql`${activityPublication.revision} + 1`,
       published: true,
       updatedAt: new Date()
-    }
-  });
+    })
+    .where(
+      and(
+        eq(activityPublication.id, id),
+        eq(activityPublication.userId, userId),
+        eq(activityPublication.localKey, localKey),
+        eq(activityPublication.revision, baseRevision)
+      )
+    )
+    .returning({ id: activityPublication.id });
 
-  if (!result.count) throw new ApiError(409, "REVISION_CONFLICT");
+  if (!updated.length) throw new ApiError(409, "REVISION_CONFLICT");
 
   return {
     id,
@@ -132,26 +132,26 @@ export const writePublication = async (userId: string, localKey: string, activit
 };
 
 export const unpublishActivity = async (userId: string, id: string, baseRevision: number) => {
-  const row = await getPrisma().activityPublication.findFirst({
-    where: { id, userId }
-  });
+  const db = getDb();
+  const [row] = await db
+    .select({ id: activityPublication.id })
+    .from(activityPublication)
+    .where(and(eq(activityPublication.id, id), eq(activityPublication.userId, userId)))
+    .limit(1);
 
   if (!row) throw new ApiError(404, "NOT_FOUND");
 
-  const result = await getPrisma().activityPublication.updateMany({
-    where: {
-      id,
-      userId,
-      revision: baseRevision
-    },
-    data: {
+  const updated = await db
+    .update(activityPublication)
+    .set({
       published: false,
-      revision: { increment: 1 },
+      revision: sql`${activityPublication.revision} + 1`,
       updatedAt: new Date()
-    }
-  });
+    })
+    .where(and(eq(activityPublication.id, id), eq(activityPublication.userId, userId), eq(activityPublication.revision, baseRevision)))
+    .returning({ id: activityPublication.id });
 
-  if (!result.count) throw new ApiError(409, "REVISION_CONFLICT");
+  if (!updated.length) throw new ApiError(409, "REVISION_CONFLICT");
 
   return {
     id,

@@ -1,39 +1,32 @@
 import { ContactEmailNotConfiguredError, contactMessageSchema, sendContactMessage } from "@/features/contact/contact.service";
-import type { FastifyInstance } from "fastify";
+import { MINUTE_MS, rateLimit } from "@/middleware/rate-limit";
+import { jsonBody } from "@/shared/request-body";
+import { Hono } from "hono";
 
-export const contactRoutes = async (fastify: FastifyInstance): Promise<void> => {
-  fastify.post(
-    "/",
-    {
-      config: {
-        rateLimit: {
-          max: 5,
-          timeWindow: "10 minutes"
-        }
-      }
-    },
-    async (request, reply) => {
-      const parsed = contactMessageSchema.safeParse(request.body);
+const CONTACT_WINDOW_MS = 10 * MINUTE_MS;
 
-      if (!parsed.success) return reply.status(400).send({ error: "INVALID_CONTACT_FORM" });
+export const contactRoutes = new Hono().post(
+  "/",
+  rateLimit({
+    name: "contact",
+    max: 5,
+    windowMs: CONTACT_WINDOW_MS
+  }),
+  async (c) => {
+    const parsed = contactMessageSchema.safeParse(await jsonBody(c));
 
-      if (parsed.data.website) return {
-        ok: true
-      };
+    if (!parsed.success) return c.json({ error: "INVALID_CONTACT_FORM" }, 400);
 
-      try {
-        await sendContactMessage(parsed.data);
-        return {
-          ok: true
-        };
-      } catch (error) {
-        if (error instanceof ContactEmailNotConfiguredError) {
-          return reply.status(503).send({ error: "CONTACT_SERVICE_UNAVAILABLE" });
-        }
+    if (parsed.data.website) return c.json({ ok: true });
 
-        request.log.error("contact email delivery failed");
-        return reply.status(502).send({ error: "CONTACT_SERVICE_UNAVAILABLE" });
-      }
+    try {
+      await sendContactMessage(parsed.data);
+      return c.json({ ok: true });
+    } catch (error) {
+      if (error instanceof ContactEmailNotConfiguredError) return c.json({ error: "CONTACT_SERVICE_UNAVAILABLE" }, 503);
+
+      console.error("contact email delivery failed");
+      return c.json({ error: "CONTACT_SERVICE_UNAVAILABLE" }, 502);
     }
-  );
-};
+  }
+);

@@ -1,29 +1,11 @@
 import { deriveDeviceToken } from "@/features/device/device-token";
-import Fastify from "fastify";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-
-const mockPrisma = vi.hoisted(() => ({
-  extensionToken: {
-    findUnique: vi.fn(),
-    update: vi.fn()
-  },
-  device: {
-    upsert: vi.fn(),
-    findUnique: vi.fn()
-  },
-  presenceLike: {
-    updateMany: vi.fn(),
-    findMany: vi.fn(),
-    deleteMany: vi.fn(),
-    count: vi.fn(),
-    upsert: vi.fn()
-  }
-}));
-
-vi.mock("@/db/client", () => ({
-  hasDatabase: vi.fn(() => true),
-  getPrisma: vi.fn(() => mockPrisma)
-}));
+import { extensionToken } from "@nowly/database/schema/account";
+import { device } from "@nowly/database/schema/device";
+import { presenceLike } from "@nowly/database/schema/presence";
+import { asc, eq } from "drizzle-orm";
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { createTestDatabase, seedExtensionToken, seedUser, type TestDatabase } from "./database";
+import { inject, mount } from "./http";
 
 vi.mock("@/features/auth/better-auth", () => ({
   getAuth: () => ({
@@ -34,72 +16,67 @@ vi.mock("@/features/auth/better-auth", () => ({
 const DEVICE_ID = "8b3f2e7c-5a0d-4c1e-9f6b-2d7a1c3e4f50";
 const OTHER_DEVICE = "1f0e2d3c-4b5a-4968-8776-655443322110";
 
+let database: TestDatabase;
+
 const buildApp = async () => {
   const { deviceRoutes } = await import("@/features/device/device.routes");
-
-  const app = Fastify();
-  await app.register(deviceRoutes, { prefix: "/devices" });
-  return app;
+  return mount("/devices", deviceRoutes);
 };
 
-const token = (deviceId: string | null) => ({
-  id: "token-1",
-  userId: "user-1",
-  deviceId,
-  scopes: ["sync"],
-  revokedAt: null,
-  expiresAt: new Date(Date.now() + 60_000),
-  lastUsedAt: new Date()
+const link = async (bearer: string | null, deviceToken: string | null) => {
+  const headers: Record<string, string> = {};
+  if (bearer) headers.authorization = `Bearer ${bearer}`;
+  if (deviceToken) headers["x-device-token"] = deviceToken;
+  return inject(await buildApp(), {
+    method: "POST",
+    url: `/devices/${DEVICE_ID}/link`,
+    headers
+  });
+};
+
+beforeAll(async () => {
+  database = await createTestDatabase();
 });
+beforeEach(async () => {
+  await database.reset();
+  await seedUser(database.db);
+});
+afterAll(() => database.close());
 
 describe("POST /devices/:deviceId/link", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    mockPrisma.extensionToken.findUnique.mockResolvedValue(token(DEVICE_ID));
-    mockPrisma.presenceLike.findMany.mockResolvedValue([]);
-  });
-
   it("needs both the bearer token and the device token", async () => {
-    const app = await buildApp();
+    const token = await seedExtensionToken({
+      userId: "user-1",
+      deviceId: DEVICE_ID,
+      scopes: ["sync"]
+    });
 
-    const noBearer = await app.inject({
-      method: "POST",
-      url: `/devices/${DEVICE_ID}/link`,
-      headers: { "x-device-token": deriveDeviceToken(DEVICE_ID) }
-    });
-    expect(noBearer.statusCode).toBe(401);
-    const noDeviceToken = await app.inject({
-      method: "POST",
-      url: `/devices/${DEVICE_ID}/link`,
-      headers: { authorization: "Bearer nxt_a" }
-    });
-    expect(noDeviceToken.statusCode).toBe(401);
-    expect(mockPrisma.device.upsert).not.toHaveBeenCalled();
-    await app.close();
+    expect((await link(null, deriveDeviceToken(DEVICE_ID))).statusCode).toBe(401);
+    expect((await link(token, null)).statusCode).toBe(401);
+    expect(await database.db.select().from(device)).toEqual([]);
   });
 
   it("refuses a token issued for another device", async () => {
-    mockPrisma.extensionToken.findUnique.mockResolvedValue(token(OTHER_DEVICE));
-    const app = await buildApp();
-
-    const res = await app.inject({
-      method: "POST",
-      url: `/devices/${DEVICE_ID}/link`,
-      headers: {
-        authorization: "Bearer nxt_a",
-        "x-device-token": deriveDeviceToken(DEVICE_ID)
-      }
+    const token = await seedExtensionToken({
+      userId: "user-1",
+      deviceId: OTHER_DEVICE,
+      scopes: ["sync"]
     });
-    expect(res.statusCode).toBe(403);
-    await app.close();
+
+    expect((await link(token, deriveDeviceToken(DEVICE_ID))).statusCode).toBe(403);
   });
 
   it("links the device, moves its likes to the account and keeps one like per presence", async () => {
-    mockPrisma.extensionToken.findUnique.mockResolvedValue(token(null));
-    mockPrisma.presenceLike.findMany.mockResolvedValue([
+    const token = await seedExtensionToken({
+      userId: "user-1",
+      scopes: ["sync"]
+    });
+    await database.db.insert(presenceLike).values([
       {
         slug: "youtube",
-        deviceId: OTHER_DEVICE
+        deviceId: OTHER_DEVICE,
+        userId: "user-1",
+        likedAt: new Date("2026-01-01T00:00:00Z")
       },
       {
         slug: "twitch",
@@ -110,87 +87,73 @@ describe("POST /devices/:deviceId/link", () => {
         deviceId: DEVICE_ID
       }
     ]);
-    const app = await buildApp();
 
-    const res = await app.inject({
-      method: "POST",
-      url: `/devices/${DEVICE_ID}/link`,
-      headers: {
-        authorization: "Bearer nxt_a",
-        "x-device-token": deriveDeviceToken(DEVICE_ID)
-      }
-    });
+    const res = await link(token, deriveDeviceToken(DEVICE_ID));
     expect(res.statusCode).toBe(200);
-    expect(mockPrisma.device.upsert).toHaveBeenCalledWith({
-      where: { deviceId: DEVICE_ID },
-      create: {
+
+    expect(await database.db.select({ userId: device.userId }).from(device).where(eq(device.deviceId, DEVICE_ID))).toEqual([{ userId: "user-1" }]);
+    expect(
+      await database.db
+        .select({
+          slug: presenceLike.slug,
+          deviceId: presenceLike.deviceId,
+          userId: presenceLike.userId
+        })
+        .from(presenceLike)
+        .orderBy(asc(presenceLike.slug))
+    ).toEqual([
+      {
+        slug: "twitch",
         deviceId: DEVICE_ID,
         userId: "user-1"
       },
-      update: { userId: "user-1" }
-    });
-    expect(mockPrisma.presenceLike.updateMany).toHaveBeenCalledWith({
-      where: { deviceId: DEVICE_ID },
-      data: { userId: "user-1" }
-    });
-    expect(mockPrisma.presenceLike.deleteMany).toHaveBeenCalledWith({
-      where: {
-        OR: [
-          {
-            slug: "youtube",
-            deviceId: DEVICE_ID
-          }
-        ]
+      {
+        slug: "youtube",
+        deviceId: OTHER_DEVICE,
+        userId: "user-1"
       }
-    });
-    expect(mockPrisma.extensionToken.update).toHaveBeenCalledWith({
-      where: { id: "token-1" },
-      data: { deviceId: DEVICE_ID }
-    });
-    await app.close();
+    ]);
+    expect(await database.db.select({ deviceId: extensionToken.deviceId }).from(extensionToken)).toEqual([{ deviceId: DEVICE_ID }]);
   });
 });
 
 describe("likes on a linked device", () => {
-  beforeEach(() => vi.clearAllMocks());
-
   it("does not count a second like from another device of the same account", async () => {
     const { likePresence, hasLikedPresence } = await import("@/features/presence/presence.repository");
-    mockPrisma.device.findUnique.mockResolvedValue({ userId: "user-1" });
-    mockPrisma.presenceLike.count.mockResolvedValue(1);
+    await database.db.insert(device).values({
+      deviceId: DEVICE_ID,
+      userId: "user-1"
+    });
+    await database.db.insert(presenceLike).values({
+      slug: "youtube",
+      deviceId: OTHER_DEVICE,
+      userId: "user-1"
+    });
 
     await likePresence("youtube", DEVICE_ID);
-    expect(mockPrisma.presenceLike.upsert).not.toHaveBeenCalled();
+    expect(await database.db.select().from(presenceLike)).toHaveLength(1);
     expect(await hasLikedPresence("youtube", DEVICE_ID)).toBe(true);
-    expect(mockPrisma.presenceLike.count).toHaveBeenLastCalledWith({
-      where: {
-        slug: "youtube",
-        OR: [
-          { deviceId: DEVICE_ID },
-          { userId: "user-1" }
-        ]
-      }
-    });
   });
 
   it("stores anonymous likes per device as before", async () => {
     const { likePresence } = await import("@/features/presence/presence.repository");
-    mockPrisma.device.findUnique.mockResolvedValue(null);
 
     await likePresence("youtube", DEVICE_ID);
-    expect(mockPrisma.presenceLike.upsert).toHaveBeenCalledWith({
-      where: {
-        slug_deviceId: {
-          slug: "youtube",
-          deviceId: DEVICE_ID
-        }
-      },
-      create: {
+    await likePresence("youtube", DEVICE_ID);
+    expect(
+      await database.db
+        .select({
+          slug: presenceLike.slug,
+          deviceId: presenceLike.deviceId,
+          userId: presenceLike.userId
+        })
+        .from(presenceLike)
+    ).toEqual([
+      {
         slug: "youtube",
         deviceId: DEVICE_ID,
         userId: null
-      },
-      update: {}
-    });
+      }
+    ]);
   });
 });

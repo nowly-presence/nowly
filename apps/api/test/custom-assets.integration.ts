@@ -1,8 +1,11 @@
 import { createHash, randomUUID } from "node:crypto";
-import Fastify from "fastify";
+import { inject, mount } from "./http";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { serverEnv } from "@nowly/env/server";
-import { getPrisma } from "@/db/client";
+import { getDb } from "@/db/client";
+import { customAsset, device } from "@nowly/database/schema/device";
+import { migrateDatabase } from "@nowly/database/migrate";
+import { and, eq, inArray } from "drizzle-orm";
 import { customAssetsCronRoutes, customAssetsRoutes } from "@/features/custom-assets/custom-assets.routes";
 import { CUSTOM_IMAGE_RETENTION_MS } from "@/features/custom-assets/custom-assets.service";
 import { deleteDeviceData, exportDeviceData } from "@/features/device/device.service";
@@ -37,11 +40,22 @@ const deviceId = `custom-assets-test-${randomUUID()}`;
 const otherDeviceId = `${deviceId}-other`;
 const base = `/devices/${deviceId}/custom-assets/${sha256}`;
 const headers = { "x-device-token": deriveDeviceToken(deviceId) };
-const app = Fastify();
-const prisma = getPrisma();
+const app = mount("/devices", customAssetsRoutes).route("/", customAssetsCronRoutes);
+
+const db = () => getDb();
+
+const assetCount = async (id: string) => (await db().select().from(customAsset).where(eq(customAsset.deviceId, id))).length;
+
+const findDevice = async (id: string) => (await db().select().from(device).where(eq(device.deviceId, id)))[0] ?? null;
+
+const setLastUsed = (lastUsedAt: Date) =>
+  db()
+    .update(customAsset)
+    .set({ lastUsedAt })
+    .where(and(eq(customAsset.deviceId, deviceId), eq(customAsset.sha256, sha256)));
 
 const upload = () =>
-  app.inject({
+  inject(app, {
     method: "PUT",
     url: base,
     headers: {
@@ -52,39 +66,27 @@ const upload = () =>
   });
 
 beforeAll(async () => {
-  await app.register(customAssetsRoutes, { prefix: "/devices" });
-  await app.register(customAssetsCronRoutes);
-  await app.ready();
+  await migrateDatabase(serverEnv.DATABASE_URL ?? "");
 });
 
 beforeEach(async () => {
   vi.clearAllMocks();
   objectStorage.send.mockResolvedValue({});
-  await prisma.device.deleteMany({
-    where: {
-      deviceId: {
-        in: [deviceId, otherDeviceId]
-      }
-    }
-  });
-  await prisma.device.createMany({
-    data: [
+  await db()
+    .delete(device)
+    .where(inArray(device.deviceId, [deviceId, otherDeviceId]));
+  await db()
+    .insert(device)
+    .values([
       { deviceId },
       { deviceId: otherDeviceId }
-    ]
-  });
+    ]);
 });
 
 afterAll(async () => {
-  await prisma.device.deleteMany({
-    where: {
-      deviceId: {
-        in: [deviceId, otherDeviceId]
-      }
-    }
-  });
-  await app.close();
-  await prisma.$disconnect();
+  await db()
+    .delete(device)
+    .where(inArray(device.deviceId, [deviceId, otherDeviceId]));
 });
 
 describe("custom assets with PostgreSQL and isolated object storage", () => {
@@ -93,26 +95,16 @@ describe("custom assets with PostgreSQL and isolated object storage", () => {
     expect(first.statusCode).toBe(200);
     expect(first.json().url).toMatch(/^https:\/\/cdn\.nowly\.me\/custom\//);
     const old = new Date(Date.now() - CUSTOM_IMAGE_RETENTION_MS);
-    await prisma.customAsset.update({
-      where: {
-        deviceId_sha256: { deviceId, sha256 }
-      },
-      data: { lastUsedAt: old }
-    });
+    await setLastUsed(old);
     const second = await upload();
     expect(second.statusCode).toBe(200);
     expect(second.json().url).toBe(first.json().url);
-    expect(
-      await prisma.customAsset.count({
-        where: { deviceId }
-      })
-    ).toBe(1);
+    expect(await assetCount(deviceId)).toBe(1);
     expect(objectStorage.send).toHaveBeenCalledTimes(1);
-    const row = await prisma.customAsset.findUniqueOrThrow({
-      where: {
-        deviceId_sha256: { deviceId, sha256 }
-      }
-    });
+    const [row] = await db()
+      .select()
+      .from(customAsset)
+      .where(and(eq(customAsset.deviceId, deviceId), eq(customAsset.sha256, sha256)));
     expect(row.lastUsedAt.getTime()).toBeGreaterThan(old.getTime());
   });
 
@@ -123,16 +115,12 @@ describe("custom assets with PostgreSQL and isolated object storage", () => {
     ]);
     expect(responses.map((response) => response.statusCode)).toEqual([200, 200]);
     expect(responses[0].json().url).toBe(responses[1].json().url);
-    expect(
-      await prisma.customAsset.count({
-        where: { deviceId }
-      })
-    ).toBe(1);
+    expect(await assetCount(deviceId)).toBe(1);
   });
 
   it("returns 404 on touch after deletion and permits re-upload", async () => {
     await upload();
-    const touched = await app.inject({
+    const touched = await inject(app, {
       method: "POST",
       url: `${base}/touch`,
       headers
@@ -140,7 +128,7 @@ describe("custom assets with PostgreSQL and isolated object storage", () => {
     expect(touched.statusCode).toBe(200);
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "DELETE",
           url: base,
           headers
@@ -149,7 +137,7 @@ describe("custom assets with PostgreSQL and isolated object storage", () => {
     ).toBe(204);
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: `${base}/touch`,
           headers
@@ -158,7 +146,7 @@ describe("custom assets with PostgreSQL and isolated object storage", () => {
     ).toBe(404);
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "DELETE",
           url: base,
           headers
@@ -171,7 +159,7 @@ describe("custom assets with PostgreSQL and isolated object storage", () => {
   it("requires the device token and does not allow access to another device", async () => {
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "PUT",
           url: base,
           headers: { "content-type": "image/png" },
@@ -181,30 +169,21 @@ describe("custom assets with PostgreSQL and isolated object storage", () => {
     ).toBe(401);
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: `${base}/touch`,
           headers: { "x-device-token": deriveDeviceToken(otherDeviceId) }
         })
       ).statusCode
     ).toBe(401);
-    expect(
-      await prisma.customAsset.count({
-        where: { deviceId }
-      })
-    ).toBe(0);
+    expect(await assetCount(deviceId)).toBe(0);
   });
 
   it("cleans only expired assets and protects the cleanup endpoint", async () => {
     await upload();
-    await prisma.customAsset.update({
-      where: {
-        deviceId_sha256: { deviceId, sha256 }
-      },
-      data: { lastUsedAt: new Date(Date.now() - CUSTOM_IMAGE_RETENTION_MS - 1000) }
-    });
+    await setLastUsed(new Date(Date.now() - CUSTOM_IMAGE_RETENTION_MS - 1000));
     const otherBase = `/devices/${otherDeviceId}/custom-assets/${sha256}`;
-    await app.inject({
+    await inject(app, {
       method: "PUT",
       url: otherBase,
       headers: {
@@ -215,29 +194,21 @@ describe("custom assets with PostgreSQL and isolated object storage", () => {
     });
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: "/custom-assets/cleanup"
         })
       ).statusCode
     ).toBe(401);
-    const result = await app.inject({
+    const result = await inject(app, {
       method: "POST",
       url: "/custom-assets/cleanup",
       headers: { authorization: `Bearer ${serverEnv.CUSTOM_ASSETS_CRON_SECRET}` }
     });
     expect(result.statusCode).toBe(200);
     expect(result.json()).toEqual({ removed: 1 });
-    expect(
-      await prisma.customAsset.count({
-        where: { deviceId }
-      })
-    ).toBe(0);
-    expect(
-      await prisma.customAsset.count({
-        where: { deviceId: otherDeviceId }
-      })
-    ).toBe(1);
+    expect(await assetCount(deviceId)).toBe(0);
+    expect(await assetCount(otherDeviceId)).toBe(1);
   });
 
   it("exports image URLs and dates and erases the database rows and R2 files", async () => {
@@ -258,31 +229,15 @@ describe("custom assets with PostgreSQL and isolated object storage", () => {
     await deleteDeviceData(deviceId);
     expect(objectStorage.send).toHaveBeenCalledTimes(1);
     expect(objectStorage.send.mock.calls[0]?.[0].input.Key).toMatch(/^custom\//);
-    expect(
-      await prisma.customAsset.count({
-        where: { deviceId }
-      })
-    ).toBe(0);
-    expect(
-      await prisma.device.findUnique({
-        where: { deviceId }
-      })
-    ).toBeNull();
+    expect(await assetCount(deviceId)).toBe(0);
+    expect(await findDevice(deviceId)).toBeNull();
   });
 
   it("retains metadata for a retry when R2 erasure fails", async () => {
     await upload();
     objectStorage.send.mockRejectedValueOnce(new Error("Object storage unavailable"));
     await expect(deleteDeviceData(deviceId)).rejects.toThrow("Object storage unavailable");
-    expect(
-      await prisma.customAsset.count({
-        where: { deviceId }
-      })
-    ).toBe(1);
-    expect(
-      await prisma.device.findUnique({
-        where: { deviceId }
-      })
-    ).not.toBeNull();
+    expect(await assetCount(deviceId)).toBe(1);
+    expect(await findDevice(deviceId)).not.toBeNull();
   });
 });

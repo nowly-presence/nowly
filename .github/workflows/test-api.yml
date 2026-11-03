@@ -17,9 +17,6 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @nowly/api prisma:generate
-        env:
-          DATABASE_URL: postgresql://user:password@localhost:5432/nowly
       - run: pnpm --filter @nowly/api test:coverage
       - run: pnpm --filter @nowly/telemetry test:coverage
       - run: pnpm --filter @nowly/telemetry typecheck

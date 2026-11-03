@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { serverEnv } from "@nowly/env/server";
-import { getPrisma, hasDatabase } from "@/db/client";
+import { getDb, hasDatabase } from "@/db/client";
+import { customAsset } from "@nowly/database/schema/device";
+import { and, eq, lt } from "drizzle-orm";
 
 export const CUSTOM_IMAGE_MAX_BYTES = 1024 * 1024;
 export const CUSTOM_IMAGE_RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
@@ -94,25 +96,22 @@ const toView = (row: { sha256: string; key: string; lastUsedAt: Date }): CustomA
   expiresAt: new Date(row.lastUsedAt.getTime() + CUSTOM_IMAGE_RETENTION_MS).toISOString()
 });
 
+const assetKey = (deviceId: string, sha256: string) => and(eq(customAsset.deviceId, deviceId), eq(customAsset.sha256, sha256));
+
+const findAsset = async (deviceId: string, sha256: string) => {
+  const [row] = await getDb().select().from(customAsset).where(assetKey(deviceId, sha256)).limit(1);
+  return row ?? null;
+};
+
+const markUsed = async (deviceId: string, sha256: string): Promise<CustomAssetView | null> => {
+  const [row] = await getDb().update(customAsset).set({ lastUsedAt: new Date() }).where(assetKey(deviceId, sha256)).returning();
+  return row ? toView(row) : null;
+};
+
 export const putCustomAsset = async (deviceId: string, sha256: string, mime: CustomImageMime, bytes: Uint8Array): Promise<CustomAssetView | null> => {
   if (!hasDatabase()) return null;
 
-  const prisma = getPrisma();
-  const existing = await prisma.customAsset.findUnique({
-    where: {
-      deviceId_sha256: { deviceId, sha256 }
-    }
-  });
-
-  if (existing) {
-    const row = await prisma.customAsset.update({
-      where: {
-        deviceId_sha256: { deviceId, sha256 }
-      },
-      data: { lastUsedAt: new Date() }
-    });
-    return toView(row);
-  }
+  if (await findAsset(deviceId, sha256)) return markUsed(deviceId, sha256);
 
   const key = customAssetKey(deviceId, sha256, mime);
   await storage().send(
@@ -124,41 +123,27 @@ export const putCustomAsset = async (deviceId: string, sha256: string, mime: Cus
       CacheControl: "public, max-age=31536000, immutable"
     })
   );
-  const row = await prisma.customAsset.upsert({
-    where: {
-      deviceId_sha256: { deviceId, sha256 }
-    },
-    create: {
+  const [row] = await getDb()
+    .insert(customAsset)
+    .values({
       deviceId,
       sha256,
       mime,
       size: bytes.length,
       key
-    },
-    update: { lastUsedAt: new Date() }
-  });
+    })
+    .onConflictDoUpdate({
+      target: [customAsset.deviceId, customAsset.sha256],
+      set: { lastUsedAt: new Date() }
+    })
+    .returning();
   return toView(row);
 };
 
 export const touchCustomAsset = async (deviceId: string, sha256: string): Promise<CustomAssetView | null> => {
   if (!hasDatabase()) return null;
 
-  const prisma = getPrisma();
-  const row = await prisma.customAsset.findUnique({
-    where: {
-      deviceId_sha256: { deviceId, sha256 }
-    }
-  });
-
-  if (!row) return null;
-
-  const updated = await prisma.customAsset.update({
-    where: {
-      deviceId_sha256: { deviceId, sha256 }
-    },
-    data: { lastUsedAt: new Date() }
-  });
-  return toView(updated);
+  return markUsed(deviceId, sha256);
 };
 
 export const deleteCustomAssetFile = async (key: string): Promise<void> => {
@@ -173,42 +158,25 @@ export const deleteCustomAssetFile = async (key: string): Promise<void> => {
 export const removeCustomAsset = async (deviceId: string, sha256: string): Promise<void> => {
   if (!hasDatabase()) return;
 
-  const prisma = getPrisma();
-  const row = await prisma.customAsset.findUnique({
-    where: {
-      deviceId_sha256: { deviceId, sha256 }
-    }
-  });
+  const row = await findAsset(deviceId, sha256);
 
   if (!row) return;
 
   await deleteCustomAssetFile(row.key);
-  await prisma.customAsset.delete({
-    where: {
-      deviceId_sha256: { deviceId, sha256 }
-    }
-  });
+  await getDb().delete(customAsset).where(assetKey(deviceId, sha256));
 };
 
 export const cleanupExpiredCustomAssets = async (): Promise<number> => {
   if (!hasDatabase()) return 0;
 
-  const prisma = getPrisma();
+  const db = getDb();
   const cutoff = new Date(Date.now() - CUSTOM_IMAGE_RETENTION_MS);
-  const expired = await prisma.customAsset.findMany({
-    where: {
-      lastUsedAt: { lt: cutoff }
-    }
-  });
+  const expired = await db.select().from(customAsset).where(lt(customAsset.lastUsedAt, cutoff));
 
   for (const row of expired) {
     await deleteCustomAssetFile(row.key);
+    await db.delete(customAsset).where(assetKey(row.deviceId, row.sha256));
   }
 
-  await prisma.customAsset.deleteMany({
-    where: {
-      lastUsedAt: { lt: cutoff }
-    }
-  });
   return expired.length;
 };

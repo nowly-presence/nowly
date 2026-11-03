@@ -1,7 +1,7 @@
 import { hasDatabase } from "@/db/client";
 import { getAllPresenceMetas } from "@/features/presence/presence.repository";
 import { createHash } from "crypto";
-import type { FastifyReply, FastifyRequest } from "fastify";
+import type { Context } from "hono";
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const FETCH_TIMEOUT_MS = 8_000;
@@ -128,25 +128,38 @@ export const setCached = (id: string, image: Omit<CachedImage, "expiresAt">): vo
   }, CACHED_IMAGE_STALE_SECONDS * 1000);
 };
 
-export const withPublicCors = (reply: FastifyReply): FastifyReply =>
-  reply
-    .header("Access-Control-Allow-Origin", PUBLIC_IMAGE_PROXY_ORIGIN)
-    .header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-    .header("Access-Control-Allow-Headers", "Content-Type");
-
-export const imageResponse = (reply: FastifyReply, image: {
-  contentType: string;
-  buffer: Buffer;
-}, maxAge?: number): void => {
-  const headers: Record<string, string> = {
-    "Content-Type": image.contentType,
-    "Content-Length": String(image.buffer.byteLength),
-    "Cache-Control": `public, max-age=${Math.max(0, maxAge ?? CACHED_IMAGE_TTL_SECONDS)}`,
-    "X-Content-Type-Options": "nosniff"
-  };
-
-  withPublicCors(reply).headers(headers).send(image.buffer);
+export const PUBLIC_CORS_HEADERS: Record<string, string> = {
+  "Access-Control-Allow-Origin": PUBLIC_IMAGE_PROXY_ORIGIN,
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type"
 };
+
+export const jsonResponse = (body: unknown, status = 200): Response =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      ...PUBLIC_CORS_HEADERS,
+      "Content-Type": "application/json"
+    }
+  });
+
+export const imageResponse = (
+  image: {
+    contentType: string;
+    buffer: Buffer;
+  },
+  maxAge?: number
+): Response =>
+  new Response(new Uint8Array(image.buffer), {
+    status: 200,
+    headers: {
+      ...PUBLIC_CORS_HEADERS,
+      "Content-Type": image.contentType,
+      "Content-Length": String(image.buffer.byteLength),
+      "Cache-Control": `public, max-age=${Math.max(0, maxAge ?? CACHED_IMAGE_TTL_SECONDS)}`,
+      "X-Content-Type-Options": "nosniff"
+    }
+  });
 
 const requestImage = (url: URL, service: ImageProxyService, signal: AbortSignal): Promise<Response> =>
   fetch(url.href, {
@@ -294,28 +307,21 @@ export const fetchImage = async (url: URL, service: ImageProxyService): Promise<
   }
 };
 
-export const getPublicBaseUrl = (request: FastifyRequest): string =>
-  process.env.PUBLIC_URL || `${request.protocol}://${request.hostname}${request.port ? `:${request.port}` : ""}`;
+export const getPublicBaseUrl = (c: Context): string => process.env.PUBLIC_URL || new URL(c.req.url).origin;
 
 export const CACHED_IMAGE_TTL = CACHED_IMAGE_TTL_SECONDS;
 
-export const handleImageProxyRequest = async (request: FastifyRequest, reply: FastifyReply, target: {
+export const handleImageProxyRequest = async (target: {
   url?: string;
   service?: string;
-}): Promise<void> => {
+}): Promise<Response> => {
   const parsed = await parseProxyUrl(target.url, target.service);
 
-  if (!parsed) {
-    reply.status(400).send({ error: "INVALID_IMAGE_URL" });
-    return;
-  }
+  if (!parsed) return jsonResponse({ error: "INVALID_IMAGE_URL" }, 400);
 
   const image = await fetchImage(parsed.url, parsed.service);
 
-  if (!image.ok) {
-    reply.status(image.status).send({ error: image.error });
-    return;
-  }
+  if (!image.ok) return jsonResponse({ error: image.error }, image.status);
 
-  imageResponse(reply, image);
+  return imageResponse(image);
 };

@@ -1,4 +1,7 @@
-import { getPrisma, hasDatabase } from "@/db/client";
+import { getDb, hasDatabase } from "@/db/client";
+import { customAsset, device, devicePresence, presenceActiveDevice } from "@nowly/database/schema/device";
+import { presenceLike } from "@nowly/database/schema/presence";
+import { and, asc, eq, or } from "drizzle-orm";
 import { cleanText } from "@nowly/shared";
 import { serverEnv } from "@nowly/env/server";
 import { deleteCustomAssetFile } from "@/features/custom-assets/custom-assets.service";
@@ -23,26 +26,26 @@ export type DeviceSyncInput = {
 export const upsertDevice = async (input: DeviceSyncInput): Promise<void> => {
   if (!hasDatabase()) return;
 
-  const prisma = getPrisma();
-  await prisma.device.upsert({
-    where: { deviceId: input.deviceId },
-    create: {
+  const details = {
+    extensionVersion: cleanText(input.extensionVersion),
+    nativeVersion: cleanText(input.nativeVersion),
+    browser: cleanText(input.browser, 60),
+    os: cleanText(input.os, 60),
+    locale: cleanText(input.locale, 20)
+  };
+  await getDb()
+    .insert(device)
+    .values({
       deviceId: input.deviceId,
-      extensionVersion: cleanText(input.extensionVersion),
-      nativeVersion: cleanText(input.nativeVersion),
-      browser: cleanText(input.browser, 60),
-      os: cleanText(input.os, 60),
-      locale: cleanText(input.locale, 20)
-    },
-    update: {
-      extensionVersion: cleanText(input.extensionVersion),
-      nativeVersion: cleanText(input.nativeVersion),
-      browser: cleanText(input.browser, 60),
-      os: cleanText(input.os, 60),
-      locale: cleanText(input.locale, 20),
-      lastSeenAt: new Date()
-    }
-  });
+      ...details
+    })
+    .onConflictDoUpdate({
+      target: device.deviceId,
+      set: {
+        ...details,
+        lastSeenAt: new Date()
+      }
+    });
 };
 
 export type DeviceExport = {
@@ -80,44 +83,33 @@ export type DeviceExport = {
 export const deviceExists = async (deviceId: string): Promise<boolean> => {
   if (!hasDatabase()) return false;
 
-  const device = await getPrisma().device.findUnique({
-    where: { deviceId },
-    select: { deviceId: true }
-  });
-  return device !== null;
+  const [row] = await getDb().select({ deviceId: device.deviceId }).from(device).where(eq(device.deviceId, deviceId)).limit(1);
+  return row !== undefined;
 };
 
 export const exportDeviceData = async (deviceId: string): Promise<DeviceExport | null> => {
   if (!hasDatabase()) return null;
 
-  const prisma = getPrisma();
-  const [device, presences, presenceLikes, customAssets] = await Promise.all([
-    prisma.device.findUnique({
-      where: { deviceId }
-    }),
-    prisma.devicePresence.findMany({
-      where: { deviceId }
-    }),
-    prisma.presenceLike.findMany({
-      where: { deviceId }
-    }),
-    prisma.customAsset.findMany({
-      where: { deviceId }
-    })
+  const db = getDb();
+  const [[row], presences, presenceLikes, customAssets] = await Promise.all([
+    db.select().from(device).where(eq(device.deviceId, deviceId)).limit(1),
+    db.select().from(devicePresence).where(eq(devicePresence.deviceId, deviceId)),
+    db.select().from(presenceLike).where(eq(presenceLike.deviceId, deviceId)),
+    db.select().from(customAsset).where(eq(customAsset.deviceId, deviceId))
   ]);
 
-  if (!device) return null;
+  if (!row) return null;
 
   return {
     device: {
-      deviceId: device.deviceId,
-      extensionVersion: device.extensionVersion,
-      nativeVersion: device.nativeVersion,
-      browser: device.browser,
-      os: device.os,
-      locale: device.locale,
-      firstSeenAt: device.firstSeenAt.toISOString(),
-      lastSeenAt: device.lastSeenAt.toISOString()
+      deviceId: row.deviceId,
+      extensionVersion: row.extensionVersion,
+      nativeVersion: row.nativeVersion,
+      browser: row.browser,
+      os: row.os,
+      locale: row.locale,
+      firstSeenAt: row.firstSeenAt.toISOString(),
+      lastSeenAt: row.lastSeenAt.toISOString()
     },
     presences: presences.map((presence) => ({
       slug: presence.slug,
@@ -137,39 +129,27 @@ export const exportDeviceData = async (deviceId: string): Promise<DeviceExport |
       createdAt: asset.createdAt.toISOString(),
       lastUsedAt: asset.lastUsedAt.toISOString()
     })),
-    linkedToAccount: device.userId !== null
+    linkedToAccount: row.userId !== null
   };
 };
 
 export const deleteDeviceData = async (deviceId: string): Promise<void> => {
   if (!hasDatabase()) return;
 
-  const prisma = getPrisma();
-  const assets = await prisma.customAsset.findMany({
-    where: { deviceId }
-  });
+  const db = getDb();
+  const assets = await db.select().from(customAsset).where(eq(customAsset.deviceId, deviceId));
 
   for (const asset of assets) {
     await deleteCustomAssetFile(asset.key);
   }
 
-  await prisma.$transaction([
-    prisma.customAsset.deleteMany({
-      where: { deviceId }
-    }),
-    prisma.presenceLike.deleteMany({
-      where: { deviceId }
-    }),
-    prisma.devicePresence.deleteMany({
-      where: { deviceId }
-    }),
-    prisma.presenceActiveDevice.deleteMany({
-      where: { deviceId }
-    }),
-    prisma.device.deleteMany({
-      where: { deviceId }
-    })
-  ]);
+  await db.transaction(async (tx) => {
+    await tx.delete(customAsset).where(eq(customAsset.deviceId, deviceId));
+    await tx.delete(presenceLike).where(eq(presenceLike.deviceId, deviceId));
+    await tx.delete(devicePresence).where(eq(devicePresence.deviceId, deviceId));
+    await tx.delete(presenceActiveDevice).where(eq(presenceActiveDevice.deviceId, deviceId));
+    await tx.delete(device).where(eq(device.deviceId, deviceId));
+  });
 };
 
 export const syncDevice = async (input: DeviceSyncInput): Promise<void> => {
@@ -177,7 +157,7 @@ export const syncDevice = async (input: DeviceSyncInput): Promise<void> => {
 
   if (!hasDatabase() || !input.presences?.length) return;
 
-  const prisma = getPrisma();
+  const db = getDb();
 
   for (const presence of input.presences) {
     const slug = cleanText(presence.slug, 80)?.toLowerCase();
@@ -187,53 +167,47 @@ export const syncDevice = async (input: DeviceSyncInput): Promise<void> => {
     const installed = presence.installed !== false;
     const enabled = installed && presence.enabled !== false;
     const uninstalledAt = installed ? null : new Date();
+    const installedVersion = cleanText(presence.version ?? undefined, 60);
 
-    await prisma.devicePresence.upsert({
-      where: {
-        deviceId_slug: {
-          deviceId: input.deviceId,
-          slug
-        }
-      },
-      create: {
+    await db
+      .insert(devicePresence)
+      .values({
         deviceId: input.deviceId,
         slug,
-        installedVersion: cleanText(presence.version ?? undefined, 60),
+        installedVersion,
         installed,
         enabled,
         uninstalledAt
-      },
-      update: {
-        installedVersion: cleanText(presence.version ?? undefined, 60),
-        installed,
-        enabled,
-        updatedAt: new Date(),
-        uninstalledAt
-      }
-    });
+      })
+      .onConflictDoUpdate({
+        target: [devicePresence.deviceId, devicePresence.slug],
+        set: {
+          installedVersion,
+          installed,
+          enabled,
+          updatedAt: new Date(),
+          uninstalledAt
+        }
+      });
   }
 };
 
 export const linkDeviceToUser = async (deviceId: string, userId: string): Promise<void> => {
-  const prisma = getPrisma();
-  await prisma.device.upsert({
-    where: { deviceId },
-    create: { deviceId, userId },
-    update: { userId }
+  const db = getDb();
+  await db.insert(device).values({ deviceId, userId }).onConflictDoUpdate({
+    target: device.deviceId,
+    set: { userId }
   });
-  await prisma.presenceLike.updateMany({
-    where: { deviceId },
-    data: { userId }
-  });
+  await db.update(presenceLike).set({ userId }).where(eq(presenceLike.deviceId, deviceId));
 
-  const likes = await prisma.presenceLike.findMany({
-    where: { userId },
-    orderBy: { likedAt: "asc" },
-    select: {
-      slug: true,
-      deviceId: true
-    }
-  });
+  const likes = await db
+    .select({
+      slug: presenceLike.slug,
+      deviceId: presenceLike.deviceId
+    })
+    .from(presenceLike)
+    .where(eq(presenceLike.userId, userId))
+    .orderBy(asc(presenceLike.likedAt));
 
   const kept = new Set<string>();
   const duplicates = likes.filter((like) => {
@@ -245,12 +219,5 @@ export const linkDeviceToUser = async (deviceId: string, userId: string): Promis
 
   if (duplicates.length === 0) return;
 
-  await prisma.presenceLike.deleteMany({
-    where: {
-      OR: duplicates.map((like) => ({
-        slug: like.slug,
-        deviceId: like.deviceId
-      }))
-    }
-  });
+  await db.delete(presenceLike).where(or(...duplicates.map((like) => and(eq(presenceLike.slug, like.slug), eq(presenceLike.deviceId, like.deviceId)))));
 };

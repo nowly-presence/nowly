@@ -1,12 +1,10 @@
-import { normalizeIP } from "@fastify/rate-limit";
-import type { FastifyRequest } from "fastify";
+import { clientIp } from "@/middleware/client-ip";
+import { jsonBody } from "@/shared/request-body";
+import type { Context } from "hono";
 
-export const deviceRateLimitKey = (request: FastifyRequest): string => {
-  const body = request.body as
-    | {
-        deviceId?: unknown;
-      }
-    | undefined;
-  const deviceId = typeof body?.deviceId === "string" ? body.deviceId.trim() : "";
-  return deviceId || normalizeIP(request.ip);
+export const deviceRateLimitKey = async (c: Context): Promise<string> => {
+  const body = await jsonBody(c);
+
+  const deviceId = body && typeof body === "object" && "deviceId" in body && typeof body.deviceId === "string" ? body.deviceId.trim() : "";
+  return deviceId || clientIp(c);
 };

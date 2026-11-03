@@ -1,10 +1,15 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { LOCAL_KEY, PORTABLE_ACTIVITY, PUBLIC_ID, PUBLISHER_AUTH, publicationDb, publicationTestApp, publisherToken, resetPublicationDb } from "./activity-sharing.fixture";
+import { overrideDatabase } from "@/db/client";
+import { account, user } from "@nowly/database/schema/auth";
+import { eq } from "drizzle-orm";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { createPublicationFixture, LOCAL_KEY, OWNER_ID, PORTABLE_ACTIVITY, PUBLIC_ID, resetPublicationFixture, type PublicationFixture } from "./activity-sharing.fixture";
 
-const writeRequest = (extra: Record<string, unknown> = {}) => ({
+let fixture: PublicationFixture;
+
+const writeRequest = (extra: Record<string, unknown> = {}, headers = fixture.auth) => ({
   method: "PUT" as const,
   url: `/me/activity-publications/${LOCAL_KEY}`,
-  headers: PUBLISHER_AUTH,
+  headers,
   payload: {
     id: PUBLIC_ID,
     activity: PORTABLE_ACTIVITY,
@@ -13,77 +18,68 @@ const writeRequest = (extra: Record<string, unknown> = {}) => ({
   }
 });
 
+beforeAll(async () => {
+  fixture = await createPublicationFixture();
+});
+afterAll(() => fixture.database.close());
+
 describe("activity publication authentication and public projection", () => {
-  beforeEach(resetPublicationDb);
-  it("fails closed without database, authentication or creator scope", async () => {
-    const app = await publicationTestApp();
-    expect(
-      (
-        await app.inject({
-          ...writeRequest(),
-          headers: {}
-        })
-      ).statusCode
-    ).toBe(401);
-    publicationDb.extensionToken.findUnique.mockResolvedValue(publisherToken(["sync"]));
-    expect((await app.inject(writeRequest())).statusCode).toBe(401);
-    publicationDb.available = false;
-    expect((await app.inject(`/activity-publications/${PUBLIC_ID}`)).statusCode).toBe(503);
-    expect((await app.inject(writeRequest())).statusCode).toBe(503);
-    expect(publicationDb.activityPublication.create).not.toHaveBeenCalled();
-    await app.close();
+  beforeEach(async () => {
+    overrideDatabase(fixture.database.db);
+    await resetPublicationFixture(fixture);
   });
+
+  it("fails closed without database, authentication or creator scope", async () => {
+    expect((await fixture.request(writeRequest({}, {}))).statusCode).toBe(401);
+    expect((await fixture.request(writeRequest({}, await fixture.tokenFor(OWNER_ID, ["sync"])))).statusCode).toBe(401);
+    overrideDatabase(null);
+    expect((await fixture.request(`/activity-publications/${PUBLIC_ID}`)).statusCode).toBe(503);
+    expect((await fixture.request(writeRequest())).statusCode).toBe(503);
+    overrideDatabase(fixture.database.db);
+    expect(await fixture.storedPublication()).toBeUndefined();
+  });
+
   it("derives ownership from the account and refuses forged authors", async () => {
-    const app = await publicationTestApp();
+    await fixture.seedPublication({
+      revision: 0,
+      published: false
+    });
     expect(
       (
-        await app.inject(
+        await fixture.request(
           writeRequest({
             author: { name: "forged" }
           })
         )
       ).statusCode
     ).toBe(400);
-    const result = await app.inject(writeRequest());
+
+    const result = await fixture.request(writeRequest());
     expect(result.statusCode).toBe(200);
     expect(result.json().id).toMatch(/^[a-f0-9]{32}$/);
-    expect(publicationDb.activityPublication.updateMany).toHaveBeenCalledWith({
-      where: {
-        id: PUBLIC_ID,
-        userId: "verified-owner",
-        localKey: LOCAL_KEY,
-        revision: 0
-      },
-      data: expect.objectContaining({
-        activity: PORTABLE_ACTIVITY,
-        published: true
-      })
+    expect(await fixture.storedPublication()).toMatchObject({
+      userId: OWNER_ID,
+      activity: PORTABLE_ACTIVITY,
+      published: true,
+      revision: 1
     });
-    publicationDb.account.findFirst.mockResolvedValue(null);
-    expect((await app.inject(writeRequest())).statusCode).toBe(403);
-    await app.close();
+
+    await fixture.database.db.delete(account).where(eq(account.userId, OWNER_ID));
+    expect((await fixture.request(writeRequest({ baseRevision: 1 }))).statusCode).toBe(403);
   });
+
   it("returns only portable content and public author name and avatar", async () => {
     const author = {
       name: "Verified",
       image: "https://cdn.discordapp.com/avatar.png"
     };
-    publicationDb.activityPublication.findUnique.mockResolvedValue({
-      id: PUBLIC_ID,
+    await fixture.database.db.update(user).set(author).where(eq(user.id, OWNER_ID));
+    await fixture.seedPublication({
       revision: 2,
-      published: true,
-      activity: PORTABLE_ACTIVITY,
-      userId: "private",
-      localKey: LOCAL_KEY,
-      user: {
-        ...author,
-        email: "private@example.com",
-        discordId: "private"
-      }
+      published: true
     });
-    const app = await publicationTestApp();
 
-    const result = await app.inject(`/activity-publications/${PUBLIC_ID}`);
+    const result = await fixture.request(`/activity-publications/${PUBLIC_ID}`);
     expect(result.json()).toEqual({
       id: PUBLIC_ID,
       revision: 2,
@@ -91,6 +87,5 @@ describe("activity publication authentication and public projection", () => {
       author
     });
     expect(result.headers["cache-control"]).toBe("no-store");
-    await app.close();
   });
 });
