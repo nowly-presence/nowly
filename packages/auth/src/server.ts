@@ -43,7 +43,12 @@ export const createAuth = (db: Database, options: AuthOptions) =>
       discord: {
         clientId: options.discord.clientId,
         clientSecret: options.discord.clientSecret,
-        mapProfileToUser: (profile) => ({ discordId: profile.id })
+        overrideUserInfoOnSignIn: true,
+        mapProfileToUser: (profile) => ({
+          discordId: profile.id,
+          discordUsername: profile.username,
+          discordBanner: profile.banner ?? null
+        })
       }
     },
     user: {
@@ -57,6 +62,21 @@ export const createAuth = (db: Database, options: AuthOptions) =>
           type: "string",
           required: false,
           input: false
+        },
+        discordUsername: {
+          type: "string",
+          required: false,
+          input: false
+        },
+        discordBanner: {
+          type: "string",
+          required: false,
+          input: false
+        },
+        verified: {
+          type: "boolean",
+          input: false,
+          defaultValue: false
         }
       }
     }
