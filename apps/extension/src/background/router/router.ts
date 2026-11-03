@@ -30,7 +30,10 @@ export const registerRouter = (): void => {
   registerCustomActivityEditors();
   chrome.runtime.onMessage.addListener((message: RouterRequest, sender, sendResponse) => {
     if (message.source !== "PRESENCES_POPUP" && message.source !== "PRESENCES_CONTENT") return false;
-    if (message.source === "PRESENCES_CONTENT" && (!WEB_TYPES.has(message.type) || !isAllowedWebSender(sender.url, getEffectiveWebUrl()))) return false;
+    if (
+      message.source === "PRESENCES_CONTENT" &&
+      (!WEB_TYPES.has(message.type) || !isAllowedWebSender(sender.url, getEffectiveWebUrl(), message.type))
+    ) return false;
     if (message.source === "PRESENCES_POPUP" && (!sender.url || !sender.url.startsWith(chrome.runtime.getURL("")))) return false;
     if (!handlers) return false;
 
