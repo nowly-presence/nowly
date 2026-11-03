@@ -1,9 +1,8 @@
-import { createEmailClient } from "@opencoredev/email-sdk";
-import { ses } from "@opencoredev/email-sdk/ses";
 import { serverEnv } from "@nowly/env/server";
+import { createTransport } from "nodemailer";
 import { z } from "zod";
 
-const CONTACT_EMAIL = "hello@nowly.me";
+const SMTP_TIMEOUT_MS = 10_000;
 
 const singleLine = (max: number) =>
   z
@@ -30,23 +29,20 @@ export class ContactEmailNotConfiguredError extends Error {
   }
 }
 
-const emailClient = () => {
-  const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION } = serverEnv;
+const mailTransport = () => {
+  const { SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, SMTP_PASSWORD } = serverEnv;
 
-  if (!AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY || !AWS_REGION) {
-    throw new ContactEmailNotConfiguredError();
-  }
+  if (!SMTP_HOST) throw new ContactEmailNotConfiguredError();
 
-  return createEmailClient({
-    adapters: [
-      ses({
-        accessKeyId: AWS_ACCESS_KEY_ID,
-        secretAccessKey: AWS_SECRET_ACCESS_KEY,
-        region: AWS_REGION,
-        sessionToken: serverEnv.AWS_SESSION_TOKEN,
-        configurationSetName: serverEnv.AWS_SES_CONFIGURATION_SET
-      })
-    ]
+  return createTransport({
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: SMTP_SECURE,
+    requireTLS: !SMTP_SECURE,
+    auth: SMTP_USER && SMTP_PASSWORD ? { user: SMTP_USER, pass: SMTP_PASSWORD } : undefined,
+    connectionTimeout: SMTP_TIMEOUT_MS,
+    greetingTimeout: SMTP_TIMEOUT_MS,
+    socketTimeout: SMTP_TIMEOUT_MS
   });
 };
 
@@ -63,18 +59,12 @@ export const sendContactMessage = async ({ name, email, subject, message }: Cont
     `<p>${escapeHtml(message).replaceAll("\n", "<br>")}</p>`
   ].join("");
 
-  await emailClient().send({
-    from: `Nowly Contact <${CONTACT_EMAIL}>`,
-    to: CONTACT_EMAIL,
+  await mailTransport().sendMail({
+    from: serverEnv.SMTP_FROM,
+    to: serverEnv.CONTACT_TO,
     replyTo: email,
     subject: `[Nowly Contact] ${subject}`,
     text,
-    html,
-    tags: [
-      {
-        name: "type",
-        value: "contact-form"
-      }
-    ]
+    html
   });
 };

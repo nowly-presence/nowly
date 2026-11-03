@@ -25,11 +25,16 @@ export const serverEnv = createEnv({
     R2_SECRET_ACCESS_KEY: required.optional(),
     R2_PUBLIC_URL: z.string().trim().url().default("https://cdn.nowly.me"),
     CUSTOM_ASSETS_CRON_SECRET: required.optional(),
-    AWS_ACCESS_KEY_ID: required.optional(),
-    AWS_SECRET_ACCESS_KEY: required.optional(),
-    AWS_REGION: required.optional(),
-    AWS_SESSION_TOKEN: required.optional(),
-    AWS_SES_CONFIGURATION_SET: required.optional(),
+    SMTP_HOST: required.optional(),
+    SMTP_PORT: z.coerce.number().int().positive().default(465),
+    SMTP_SECURE: z
+      .enum(["true", "false"])
+      .default("true")
+      .transform((value) => value === "true"),
+    SMTP_USER: required.optional(),
+    SMTP_PASSWORD: required.optional(),
+    SMTP_FROM: required.default("Nowly <hello@nowly.me>"),
+    CONTACT_TO: z.string().trim().email().default("hello@nowly.me"),
     STATUS_CRON_SECRET: required.optional(),
     CREATOR_WEBHOOK_SECRET: required.optional(),
     NOLO_APP_ID: required.optional(),

@@ -1,26 +1,19 @@
-process.env.AWS_ACCESS_KEY_ID = "test-access-key";
-process.env.AWS_SECRET_ACCESS_KEY = "test-secret-key";
-process.env.AWS_REGION = "eu-west-3";
+process.env.SMTP_HOST = "mail.example.com";
+process.env.SMTP_FROM = "Nowly <hello@nowly.me>";
+process.env.CONTACT_TO = "hello@nowly.me";
 
 import { inject, mount } from "./http";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mockSend = vi.hoisted(() =>
-  vi.fn().mockResolvedValue({
-    adapter: "ses",
-    id: "message-id"
-  })
-);
+const mockSendMail = vi.hoisted(() => vi.fn().mockResolvedValue({ messageId: "message-id" }));
 
-vi.mock("@opencoredev/email-sdk", () => ({ createEmailClient: vi.fn(() => ({ send: mockSend })) }));
-
-vi.mock("@opencoredev/email-sdk/ses", () => ({ ses: vi.fn(() => ({ name: "ses" })) }));
+vi.mock("nodemailer", () => ({ createTransport: vi.fn(() => ({ sendMail: mockSendMail })) }));
 
 const { contactRoutes } = await import("@/features/contact/contact.routes");
 
 describe("contact routes", () => {
   beforeEach(() => {
-    mockSend.mockClear();
+    mockSendMail.mockClear();
   });
 
   it("rejects invalid contact messages", async () => {
@@ -37,7 +30,7 @@ describe("contact routes", () => {
     });
 
     expect(response.statusCode).toBe(400);
-    expect(mockSend).not.toHaveBeenCalled();
+    expect(mockSendMail).not.toHaveBeenCalled();
   });
 
   it("sends a valid contact message to the support inbox", async () => {
@@ -56,9 +49,9 @@ describe("contact routes", () => {
 
     expect(response.statusCode).toBe(200);
     expect(JSON.parse(response.body)).toEqual({ ok: true });
-    expect(mockSend).toHaveBeenCalledWith(
+    expect(mockSendMail).toHaveBeenCalledWith(
       expect.objectContaining({
-        from: "Nowly Contact <hello@nowly.me>",
+        from: "Nowly <hello@nowly.me>",
         to: "hello@nowly.me",
         replyTo: "ada@example.com",
         subject: "[Nowly Contact] A question"
@@ -81,6 +74,6 @@ describe("contact routes", () => {
     });
 
     expect(response.statusCode).toBe(200);
-    expect(mockSend).not.toHaveBeenCalled();
+    expect(mockSendMail).not.toHaveBeenCalled();
   });
 });
