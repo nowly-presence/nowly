@@ -40,3 +40,71 @@ export const deriveHandleBase = (source: string | null | undefined): string => {
 };
 
 export const handleCandidate = (base: string, attempt: number): string => (attempt === 0 ? base : `${base}${attempt + 1}`);
+
+export const PUBLIC_LINKS_MAX = 6;
+export const PUBLIC_LINK_MAX_LENGTH = 200;
+
+export const SOCIAL_KINDS = ["github", "x", "bluesky", "youtube", "twitch", "tiktok", "instagram", "reddit", "linkedin", "website"] as const;
+
+export type SocialKind = (typeof SOCIAL_KINDS)[number];
+
+const SOCIAL_HOSTS: ReadonlyArray<readonly [SocialKind, readonly string[]]> = [
+  [
+    "github",
+    ["github.com"]
+  ],
+  [
+    "x",
+    ["x.com", "twitter.com"]
+  ],
+  [
+    "bluesky",
+    ["bsky.app"]
+  ],
+  [
+    "youtube",
+    ["youtube.com", "youtu.be"]
+  ],
+  [
+    "twitch",
+    ["twitch.tv"]
+  ],
+  [
+    "tiktok",
+    ["tiktok.com"]
+  ],
+  [
+    "instagram",
+    ["instagram.com"]
+  ],
+  [
+    "reddit",
+    ["reddit.com"]
+  ],
+  [
+    "linkedin",
+    ["linkedin.com"]
+  ]
+];
+
+export const parsePublicLink = (value: string): URL | null => {
+  const trimmed = value.trim();
+
+  if (!trimmed || trimmed.length > PUBLIC_LINK_MAX_LENGTH) return null;
+
+  try {
+    const url = new URL(trimmed);
+    return url.protocol === "https:" && !url.username && !url.password && url.hostname.includes(".") ? url : null;
+  } catch {
+    return null;
+  }
+};
+
+export const socialKindOf = (value: string): SocialKind => {
+  const host =
+    parsePublicLink(value)
+      ?.hostname.toLowerCase()
+      .replace(/^www\./, "") ?? "";
+  const match = SOCIAL_HOSTS.find(([, hosts]) => hosts.some((entry) => host === entry || host.endsWith(`.${entry}`)));
+  return match?.[0] ?? "website";
+};

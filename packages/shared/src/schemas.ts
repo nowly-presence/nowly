@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { PRESENCE_REPORT_MAX_LENGTH, SLUG_MAX_LENGTH } from "./constants";
-import { PUBLIC_BIO_MAX_LENGTH } from "./public-profile";
+import { parsePublicLink, PUBLIC_BIO_MAX_LENGTH, PUBLIC_LINKS_MAX } from "./public-profile";
 import { EXTENSION_TOKEN_SCOPES } from "./sync";
 
 /**
@@ -237,7 +237,11 @@ export const publicProfileBodySchema = z.strictObject({
     .refine((value) => !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(value), "INVALID_BIO")
     .transform((value) => (value ? value : null)),
   showCreated: z.boolean(),
-  showLiked: z.boolean()
+  showLiked: z.boolean(),
+  links: z
+    .array(z.string().refine((value) => parsePublicLink(value) !== null, "INVALID_LINK"))
+    .max(PUBLIC_LINKS_MAX)
+    .transform((values) => [...new Set(values.map((value) => parsePublicLink(value)?.toString() ?? value))])
 });
 
 export type PublicProfileBody = z.infer<typeof publicProfileBodySchema>;
