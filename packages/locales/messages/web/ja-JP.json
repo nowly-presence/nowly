@@ -766,10 +766,6 @@
       "title": "拡張機能を接続",
       "description": "Discordでログインして、ブラウザ間でNowlyを同期します。"
     },
-    "account": {
-      "title": "Nowlyアカウント",
-      "description": "連携済みのデバイス、データ、ログイン。"
-    },
     "guides": {
       "title": "ガイド",
       "description": "Nowly の設定、Discord Rich Presence のトラブル解決、プライバシーの管理、プレゼンスの作り方を解説するガイドです。"
@@ -1274,33 +1270,6 @@
     "signed-in-as": "{name}としてログイン中です。",
     "switch-account": "別のアカウントを使う"
   },
-  "accountPage": {
-    "eyebrow": "アカウント",
-    "title": "Nowlyアカウント",
-    "description": "アカウントに連携したデバイス、データ、ログインを管理します。",
-    "checking": "アカウントを読み込んでいます...",
-    "sign-in-title": "Discordでログイン",
-    "sign-in-description": "アカウントは任意です。拡張機能がプレゼンスと設定をブラウザ間で同期できるようになります。",
-    "sign-in": "Discordで続ける",
-    "provider-discord": "Discordでログイン中",
-    "sign-out": "ログアウト",
-    "devices-title": "連携済みのデバイス",
-    "devices-description": "このアカウントに拡張機能が接続されているブラウザです。",
-    "devices-empty": "連携済みのデバイスはまだありません。",
-    "device-unknown": "不明なブラウザ",
-    "device-last-seen": "最終確認：{date}",
-    "unlink": "連携を解除",
-    "unlink-confirm": "このブラウザはアカウントと同期しなくなります。ローカルのデータはそのまま残ります。",
-    "data-title": "データ",
-    "data-description": "このアカウントでNowlyが保存しているデータをすべてダウンロードするか、アカウントを削除します。削除すると同期データが消去され、デバイスの連携も解除されます。",
-    "export": "データをダウンロード",
-    "export-success": "データをダウンロードしました。",
-    "delete": "アカウントを削除",
-    "delete-confirm": "Nowlyアカウントと拡張機能の同期データが完全に削除されます。元に戻すことはできません。",
-    "delete-success": "アカウントを削除しました。",
-    "local-note": "拡張機能がデバイスに保存しているデータには影響しません。拡張機能の設定から消去できます。",
-    "action-error": "操作を完了できませんでした。もう一度お試しください。問題が続く場合はサポートにお問い合わせください。"
-  },
   "ads": {
     "label": "広告"
   },
@@ -1380,5 +1349,13 @@
       "roadmap": "ロードマップ",
       "changelog": "リリースノート"
     }
+  },
+  "profilePage": {
+    "eyebrow": "プロフィール",
+    "created-title": "作成したプレゼンス",
+    "liked-title": "気に入ったプレゼンス",
+    "empty": "まだ表示するものがありません。",
+    "meta-title": "Nowly の {name}",
+    "meta-description": "Nowly で {name} が作成して気に入ったプレゼンス。"
   }
 }

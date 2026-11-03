@@ -766,10 +766,6 @@
       "title": "Connecter l’extension",
       "description": "Connectez-vous avec Discord pour synchroniser Nowly entre vos navigateurs."
     },
-    "account": {
-      "title": "Votre compte Nowly",
-      "description": "Appareils reliés, vos données et votre connexion."
-    },
     "guides": {
       "title": "Guides",
       "description": "Des guides pour installer Nowly, réparer Discord Rich Presence, protéger votre vie privée et créer votre propre présence."
@@ -1274,33 +1270,6 @@
     "signed-in-as": "Connecté en tant que {name}.",
     "switch-account": "Ce n’est pas vous ? Changer de compte"
   },
-  "accountPage": {
-    "eyebrow": "Compte",
-    "title": "Votre compte Nowly",
-    "description": "Gérez les appareils reliés à votre compte, vos données et votre connexion.",
-    "checking": "Chargement de votre compte...",
-    "sign-in-title": "Se connecter avec Discord",
-    "sign-in-description": "Le compte est facultatif. Il permet à l’extension de synchroniser vos présences et vos réglages entre vos navigateurs.",
-    "sign-in": "Continuer avec Discord",
-    "provider-discord": "Connecté avec Discord",
-    "sign-out": "Se déconnecter",
-    "devices-title": "Appareils reliés",
-    "devices-description": "Les navigateurs où l’extension est connectée à ce compte.",
-    "devices-empty": "Aucun appareil relié pour l’instant.",
-    "device-unknown": "Navigateur inconnu",
-    "device-last-seen": "Vu pour la dernière fois le {date}",
-    "unlink": "Délier",
-    "unlink-confirm": "Ce navigateur ne se synchronisera plus avec votre compte. Ses données locales restent sur l’appareil.",
-    "data-title": "Vos données",
-    "data-description": "Téléchargez tout ce que Nowly conserve pour ce compte, ou supprimez le compte. La suppression efface la copie synchronisée et délie vos appareils.",
-    "export": "Télécharger mes données",
-    "export-success": "Vos données ont été téléchargées.",
-    "delete": "Supprimer mon compte",
-    "delete-confirm": "Cela supprime définitivement votre compte Nowly et la copie synchronisée de votre extension. Cette action est irréversible.",
-    "delete-success": "Votre compte a été supprimé.",
-    "local-note": "Les données enregistrées par l’extension sur vos appareils ne sont pas touchées. Vous pouvez les effacer depuis les réglages de l’extension.",
-    "action-error": "Impossible de terminer cette opération. Réessayez. Si le problème persiste, contactez l’assistance."
-  },
   "ads": {
     "label": "Publicité"
   },
@@ -1380,5 +1349,13 @@
       "roadmap": "Feuille de route",
       "changelog": "Notes de mise à jour"
     }
+  },
+  "profilePage": {
+    "eyebrow": "Profil",
+    "created-title": "Présences créées",
+    "liked-title": "Présences aimées",
+    "empty": "Rien à afficher pour le moment.",
+    "meta-title": "{name} sur Nowly",
+    "meta-description": "Présences créées et aimées par {name} sur Nowly."
   }
 }

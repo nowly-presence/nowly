@@ -766,10 +766,6 @@
       "title": "Conectar la extensión",
       "description": "Inicia sesión con Discord para sincronizar Nowly entre tus navegadores."
     },
-    "account": {
-      "title": "Tu cuenta de Nowly",
-      "description": "Dispositivos vinculados, tus datos y tu sesión."
-    },
     "guides": {
       "title": "Guías",
       "description": "Guías para configurar Nowly, arreglar Discord Rich Presence, controlar tu privacidad y crear tu propia presencia."
@@ -1274,33 +1270,6 @@
     "signed-in-as": "Sesión iniciada como {name}.",
     "switch-account": "¿No eres tú? Cambiar de cuenta"
   },
-  "accountPage": {
-    "eyebrow": "Cuenta",
-    "title": "Tu cuenta de Nowly",
-    "description": "Gestiona los dispositivos vinculados a tu cuenta, tus datos y tu sesión.",
-    "checking": "Cargando tu cuenta...",
-    "sign-in-title": "Iniciar sesión con Discord",
-    "sign-in-description": "La cuenta es opcional. Permite que la extensión sincronice tus presencias y tus ajustes entre tus navegadores.",
-    "sign-in": "Continuar con Discord",
-    "provider-discord": "Sesión iniciada con Discord",
-    "sign-out": "Cerrar sesión",
-    "devices-title": "Dispositivos vinculados",
-    "devices-description": "Los navegadores donde la extensión está conectada a esta cuenta.",
-    "devices-empty": "Todavía no hay ningún dispositivo vinculado.",
-    "device-unknown": "Navegador desconocido",
-    "device-last-seen": "Visto por última vez el {date}",
-    "unlink": "Desvincular",
-    "unlink-confirm": "Este navegador dejará de sincronizarse con tu cuenta. Sus datos locales se quedan en él.",
-    "data-title": "Tus datos",
-    "data-description": "Descarga todo lo que Nowly guarda para esta cuenta o elimina la cuenta. Al eliminarla se borra la copia sincronizada y se desvinculan tus dispositivos.",
-    "export": "Descargar mis datos",
-    "export-success": "Tus datos se han descargado.",
-    "delete": "Eliminar mi cuenta",
-    "delete-confirm": "Esto elimina de forma permanente tu cuenta de Nowly y la copia sincronizada de tu extensión. No se puede deshacer.",
-    "delete-success": "Tu cuenta se ha eliminado.",
-    "local-note": "Los datos que la extensión guarda en tus dispositivos no se ven afectados. Puedes borrarlos desde los ajustes de la extensión.",
-    "action-error": "No se pudo completar la solicitud. Inténtalo de nuevo o contacta con soporte si el problema persiste."
-  },
   "ads": {
     "label": "Publicidad"
   },
@@ -1380,5 +1349,13 @@
       "roadmap": "Hoja de ruta",
       "changelog": "Notas de versión"
     }
+  },
+  "profilePage": {
+    "eyebrow": "Perfil",
+    "created-title": "Presencias creadas",
+    "liked-title": "Presencias favoritas",
+    "empty": "Nada que mostrar todavía.",
+    "meta-title": "{name} en Nowly",
+    "meta-description": "Presencias creadas y favoritas de {name} en Nowly."
   }
 }

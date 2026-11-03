@@ -766,10 +766,6 @@
       "title": "확장 프로그램 연결",
       "description": "Discord로 로그인해 브라우저 사이에서 Nowly를 동기화하세요."
     },
-    "account": {
-      "title": "Nowly 계정",
-      "description": "연결된 기기, 내 데이터, 로그인."
-    },
     "guides": {
       "title": "가이드",
       "description": "Nowly 설정, Discord Rich Presence 문제 해결, 개인정보 관리, 나만의 프레즌스 만들기 가이드예요."
@@ -1274,33 +1270,6 @@
     "signed-in-as": "{name}(으)로 로그인했습니다.",
     "switch-account": "본인이 아닌가요? 계정 전환"
   },
-  "accountPage": {
-    "eyebrow": "계정",
-    "title": "Nowly 계정",
-    "description": "계정에 연결된 기기, 데이터, 로그인을 관리합니다.",
-    "checking": "계정을 불러오는 중...",
-    "sign-in-title": "Discord로 로그인",
-    "sign-in-description": "계정은 선택 사항입니다. 확장 프로그램이 프레즌스와 설정을 브라우저 사이에서 동기화할 수 있게 해 줍니다.",
-    "sign-in": "Discord로 계속하기",
-    "provider-discord": "Discord로 로그인됨",
-    "sign-out": "로그아웃",
-    "devices-title": "연결된 기기",
-    "devices-description": "이 계정에 확장 프로그램이 연결된 브라우저입니다.",
-    "devices-empty": "아직 연결된 기기가 없습니다.",
-    "device-unknown": "알 수 없는 브라우저",
-    "device-last-seen": "마지막 확인: {date}",
-    "unlink": "연결 해제",
-    "unlink-confirm": "이 브라우저는 더 이상 계정과 동기화되지 않습니다. 로컬 데이터는 그대로 남습니다.",
-    "data-title": "내 데이터",
-    "data-description": "Nowly가 이 계정에 보관하는 모든 데이터를 다운로드하거나 계정을 삭제하세요. 삭제하면 동기화된 사본이 지워지고 기기 연결도 해제됩니다.",
-    "export": "내 데이터 다운로드",
-    "export-success": "데이터를 다운로드했습니다.",
-    "delete": "계정 삭제",
-    "delete-confirm": "Nowly 계정과 확장 프로그램의 동기화된 사본이 영구적으로 삭제됩니다. 되돌릴 수 없습니다.",
-    "delete-success": "계정이 삭제되었습니다.",
-    "local-note": "확장 프로그램이 기기에 저장한 데이터는 영향을 받지 않습니다. 확장 프로그램 설정에서 지울 수 있습니다.",
-    "action-error": "요청을 완료하지 못했습니다. 다시 시도하거나 문제가 계속되면 지원팀에 문의하세요."
-  },
   "ads": {
     "label": "광고"
   },
@@ -1380,5 +1349,13 @@
       "roadmap": "로드맵",
       "changelog": "릴리스 노트"
     }
+  },
+  "profilePage": {
+    "eyebrow": "프로필",
+    "created-title": "만든 프레즌스",
+    "liked-title": "좋아하는 프레즌스",
+    "empty": "아직 표시할 내용이 없습니다.",
+    "meta-title": "Nowly의 {name}",
+    "meta-description": "Nowly에서 {name}님이 만들고 좋아하는 프레즌스."
   }
 }

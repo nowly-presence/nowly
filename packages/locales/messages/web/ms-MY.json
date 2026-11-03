@@ -766,10 +766,6 @@
       "title": "Sambungkan sambungan",
       "description": "Log masuk dengan Discord untuk menyegerakkan Nowly antara pelayar anda."
     },
-    "account": {
-      "title": "Akaun Nowly anda",
-      "description": "Peranti yang dipautkan, data anda dan log masuk anda."
-    },
     "guides": {
       "title": "Panduan",
       "description": "Panduan untuk menyediakan Nowly, membaiki Discord Rich Presence, mengawal privasi anda dan mencipta presence anda sendiri."
@@ -1274,33 +1270,6 @@
     "signed-in-as": "Log masuk sebagai {name}.",
     "switch-account": "Bukan anda? Tukar akaun"
   },
-  "accountPage": {
-    "eyebrow": "Akaun",
-    "title": "Akaun Nowly anda",
-    "description": "Urus peranti yang dipautkan kepada akaun anda, data anda dan log masuk anda.",
-    "checking": "Memuatkan akaun anda...",
-    "sign-in-title": "Log masuk dengan Discord",
-    "sign-in-description": "Akaun adalah pilihan. Ia membolehkan sambungan menyegerakkan presence dan tetapan anda antara pelayar anda.",
-    "sign-in": "Teruskan dengan Discord",
-    "provider-discord": "Log masuk dengan Discord",
-    "sign-out": "Log keluar",
-    "devices-title": "Peranti yang dipautkan",
-    "devices-description": "Pelayar tempat sambungan disambungkan kepada akaun ini.",
-    "devices-empty": "Belum ada peranti yang dipautkan.",
-    "device-unknown": "Pelayar tidak diketahui",
-    "device-last-seen": "Kali terakhir dilihat pada {date}",
-    "unlink": "Nyahpaut",
-    "unlink-confirm": "Pelayar ini tidak lagi akan disegerakkan dengan akaun anda. Data setempatnya kekal padanya.",
-    "data-title": "Data anda",
-    "data-description": "Muat turun semua yang disimpan oleh Nowly untuk akaun ini, atau padam akaun. Pemadaman akan memadam salinan yang disegerakkan dan menyahpaut peranti anda.",
-    "export": "Muat turun data saya",
-    "export-success": "Data anda telah dimuat turun.",
-    "delete": "Padam akaun saya",
-    "delete-confirm": "Ini memadam akaun Nowly anda dan salinan sambungan yang disegerakkan secara kekal. Tindakan ini tidak boleh dibatalkan.",
-    "delete-success": "Akaun anda telah dipadam.",
-    "local-note": "Data yang disimpan oleh sambungan pada peranti anda tidak terjejas. Anda boleh memadamnya daripada tetapan sambungan.",
-    "action-error": "Permintaan ini tidak dapat diselesaikan. Cuba lagi atau hubungi sokongan jika masalah berterusan."
-  },
   "ads": {
     "label": "Iklan"
   },
@@ -1380,5 +1349,13 @@
       "roadmap": "Pelan hala tuju",
       "changelog": "Nota keluaran"
     }
+  },
+  "profilePage": {
+    "eyebrow": "Profil",
+    "created-title": "Presence yang dicipta",
+    "liked-title": "Presence yang disukai",
+    "empty": "Belum ada apa-apa untuk dipaparkan.",
+    "meta-title": "{name} di Nowly",
+    "meta-description": "Presence yang dicipta dan disukai oleh {name} di Nowly."
   }
 }
