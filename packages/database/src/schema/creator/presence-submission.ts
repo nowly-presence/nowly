@@ -16,6 +16,12 @@ export const presenceSubmission = pgTable(
     note: text("note"),
     prNumber: integer("pr_number"),
     prUrl: text("pr_url"),
+    prClaimedAt: timestamp("pr_claimed_at", {
+      withTimezone: true,
+      precision: 6
+    }),
+    prError: text("pr_error"),
+    prRevision: integer("pr_revision"),
     publishedAt: timestamp("published_at", {
       withTimezone: true,
       precision: 6

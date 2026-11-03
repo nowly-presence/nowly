@@ -22,6 +22,20 @@
       "when": 1793701179834,
       "tag": "0002_presence_submissions",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793702085570,
+      "tag": "0003_submission_assets",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793702671825,
+      "tag": "0004_submission_pr_job",
+      "breakpoints": true
     }
   ]
 }

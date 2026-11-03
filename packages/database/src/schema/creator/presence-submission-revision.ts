@@ -17,6 +17,9 @@ export const presenceSubmissionRevision = pgTable(
     changes: jsonb("changes")
       .default(sql`'[]'::jsonb`)
       .notNull(),
+    assets: jsonb("assets")
+      .default(sql`'{}'::jsonb`)
+      .notNull(),
     createdAt: timestamp("created_at", {
       withTimezone: true,
       precision: 6
