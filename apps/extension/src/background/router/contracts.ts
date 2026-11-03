@@ -7,6 +7,9 @@ import type { SaveCustomActivityResult, UploadCustomImageResult } from "@/backgr
 import type { SupportPromptAction, SupportPromptState } from "@/shared/support-prompt";
 import type { PublishResult, OwnedPublicationResult } from "@/background/services/activity-publication-publisher";
 import type { CustomActivityDeletionPlan } from "@/background/services/custom-activity-deletion-plan";
+import type { CreatorTestResult } from "@/background/managers/creator-test";
+import type { CreatorExtraction, CreatorPick, CreatorSubmission, CreatorVariable } from "@/shared/creator/creator-types";
+import type { CreatorAccount, CreatorSubmissionPayload, CreatorSubmitResult } from "@/shared/creator/creator-submission";
 
 export type DiagnosticSnapshot = {
   extensionInstalled: boolean;
@@ -15,6 +18,28 @@ export type DiagnosticSnapshot = {
   discordConnected: boolean;
   presenceInstalled: boolean;
   activityDetected: boolean;
+};
+
+export type CreatorPickerLabels = {
+  hint: string;
+  keys: string;
+  cancel: string;
+  move: string;
+};
+export type CreatorPickResult = {
+  ok: true;
+  pick: CreatorPick;
+} | {
+  ok: false;
+  error: "NO_TAB" | "UNREACHABLE" | "CANCELLED";
+};
+export type CreatorExtractResult = {
+  ok: true;
+  extraction: CreatorExtraction;
+} | {
+  ok: false;
+  error: "NO_TAB" | "UNREACHABLE";
+  url?: string;
 };
 
 export type InstallResult = {
@@ -387,6 +412,52 @@ export type RouterMessageMap = {
       data?: unknown;
       error?: string;
     };
+  };
+  CREATOR_PICK_START: {
+    payload: {
+      labels: CreatorPickerLabels;
+    };
+    response: CreatorPickResult;
+  };
+  CREATOR_PICK_CANCEL: {
+    payload: void;
+    response: {
+      ok: boolean;
+    };
+  };
+  CREATOR_EXTRACT: {
+    payload: {
+      variables: CreatorVariable[];
+    };
+    response: CreatorExtractResult;
+  };
+  CREATOR_HIGHLIGHT: {
+    payload: {
+      selector: string;
+    };
+    response: {
+      ok: boolean;
+    };
+  };
+  CREATOR_TEST_ACTIVITY: {
+    payload: {
+      activity: PresenceData | null;
+    };
+    response: CreatorTestResult;
+  };
+  CREATOR_GET_ACCOUNT: {
+    payload: void;
+    response: CreatorAccount | null;
+  };
+  CREATOR_SUBMIT: {
+    payload: CreatorSubmissionPayload;
+    response: CreatorSubmitResult;
+  };
+  CREATOR_FETCH_SUBMISSIONS: {
+    payload: {
+      ids: string[];
+    };
+    response: CreatorSubmission[];
   };
   DELETE_DEVICE_DATA: {
     payload: void;

@@ -2,6 +2,7 @@ import { IS_CANARY } from "@/shared/brand";
 import { EXT_WEB_SOURCE, USER_SCRIPT_MESSAGE_SOURCE, WEB_BASE_URL } from "@/shared/constants";
 import type { WebMessage } from "@/shared/types";
 import { startWebSeason } from "@/content/web-season";
+import { registerCreatorBridge } from "@/content/creator-picker";
 
 const DEVICE_KEY = "deviceId";
 const DEVICE_TOKEN_KEY = "deviceToken";
@@ -156,6 +157,7 @@ chrome.runtime.onMessage.addListener((message) => {
 });
 
 broadcastDetected();
+registerCreatorBridge();
 startWebSeason({
   target: window,
   storage: {
