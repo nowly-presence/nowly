@@ -30,7 +30,9 @@ export const ExtensionConnectView = () => {
   const searchParams = useSearchParams();
   const deviceId = searchParams.get("device");
   const fromExtension = searchParams.get("source") === "extension";
-  const creator = searchParams.get("permission") === "creator";
+  const requested = searchParams.get("permission");
+  const permission = requested === "admin" ? "admin" : requested === "creator" ? "creator" : null;
+  const creator = permission !== null;
   const sharing = useTranslations("activitySharing");
   const [status, setStatus] = useState<Status>("checking");
   const [user, setUser] = useState<AccountUser | null>(null);
@@ -41,7 +43,7 @@ export const ExtensionConnectView = () => {
     setStatus("connecting");
 
     try {
-      const session = await createExtensionSession(deviceId, creator);
+      const session = await createExtensionSession(deviceId, permission);
 
       const result = await requestExtension<{
         ok?: boolean;
@@ -50,7 +52,7 @@ export const ExtensionConnectView = () => {
     } catch {
       setStatus("error");
     }
-  }, [deviceId, creator]);
+  }, [deviceId, permission]);
 
   useEffect(() => {
     let cancelled = false;
