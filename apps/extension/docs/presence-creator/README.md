@@ -252,9 +252,11 @@ The extension already crops and resizes to the exact sizes, but the server must 
 
 1. Decode the data URL, check the real type from the magic bytes (not from the `data:` prefix).
 2. Open it with `sharp`: exact dimensions, expected format. Max decoded size: 4 MB per image.
-3. Icon: check the edge transparency (same idea as `creator-image.ts`: a significant share of the border pixels with alpha 0).
+3. Icon: check the edge transparency with the same rule as `creator-image.ts` (at least one border pixel with alpha below 250).
 4. Re-encode (strips EXIF metadata and any hidden content).
-5. Store on R2 under `creator/<submissionId>/<revision>/{thumbnail.jpg,logo.png,icon.png}` and keep the keys in the database. Images never go in the database.
+5. Store on R2 under `creator/<submissionId>/<revision>/{thumbnail.jpg,logo.png,icon.png}` and keep the keys in the database (`presence_submission_revisions.assets`). Images never go in the database.
+
+Built in `apps/api/src/features/presence-submissions/submission-images.ts` and `submission-storage.ts` (rules in that folder's `AGENTS.md`). Errors: `422 INVALID_IMAGE`, `503 STORAGE_UNAVAILABLE` when R2 is not configured.
 
 ## 9. Data model
 
@@ -382,6 +384,8 @@ When `translate` is `true` (`translationMode` `auto`), the author only wrote in 
 
 Built-in texts ("Browsing", the "Show buttons" settings) are already translated in `creator-builtin-strings.ts`.
 
+Built with Cloudflare Workers AI (small model, JSON mode) in `apps/api/src/features/presence-submissions/submission-translation.ts`. It runs in the Nolo job before the files are generated and targets `en-US`, `fr-FR` and `es-ES` (rules in that folder's `AGENTS.md`).
+
 ## 12. Nolo bot: opening the PR
 
 An asynchronous job started on approval (a simple database queue or a background task; it must be safely retryable without duplicates):
@@ -398,7 +402,9 @@ An asynchronous job started on approval (a simple database queue or a background
 
 If the folder already exists in the repository (name collision), never overwrite: set `changes_requested` with a note.
 
-Environment variables to add to `packages/env` (server context): `NOLO_APP_ID`, `NOLO_PRIVATE_KEY`, `NOLO_INSTALLATION_ID`, `CREATOR_WEBHOOK_SECRET` (the R2 credentials already exist).
+Environment variables in `packages/env` (server context): `NOLO_APP_ID`, `NOLO_PRIVATE_KEY`, `NOLO_INSTALLATION_ID`, `NOLO_REPOSITORY`, `NOLO_BASE_BRANCH`, `CREATOR_WEBHOOK_SECRET` (the R2 credentials already exist).
+
+Built in `apps/api/src/features/presence-submissions/submission-pull-request.ts`. In this version the job starts on admin publish (status `in_progress`), not on approval, and the PR is tracked by `pr_revision` so a new revision updates the same branch and pull request (rules in that folder's `AGENTS.md`).
 
 ## 13. Publication and CI webhook
 
