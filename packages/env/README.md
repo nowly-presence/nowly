@@ -31,6 +31,15 @@ Typed environment access for the Nowly monorepo.
 | `STATUS_CRON_SECRET` | No | - |
 | `STATUS_CHECK_INTERVAL_HOURS` | No | `1` |
 | `STATUS_SAMPLE_LIMIT` | No | `168` |
+| `CREATOR_WEBHOOK_SECRET` | No | - |
+| `NOLO_APP_ID` | No | - |
+| `NOLO_PRIVATE_KEY` | No | - |
+| `NOLO_INSTALLATION_ID` | No | - |
+| `NOLO_REPOSITORY` | No | `nowly-presence/presences` |
+| `NOLO_BASE_BRANCH` | No | `stable` |
+| `WORKERS_AI_ACCOUNT_ID` | No | `R2_ACCOUNT_ID` |
+| `WORKERS_AI_API_TOKEN` | No | - |
+| `WORKERS_AI_MODEL` | No | `@cf/google/gemma-4-26b-a4b-it` |
 
 ### client (Next.js web)
 
@@ -60,4 +69,12 @@ Typed environment access for the Nowly monorepo.
 
 ```bash
 curl -fsS -H "Authorization: Bearer $STATUS_CRON_SECRET" https://api.nowly.me/status/check
+```
+
+## Creator pull request job
+
+`NOLO_APP_ID`, `NOLO_PRIVATE_KEY` (PEM, newlines may be escaped as `\n`) and `NOLO_INSTALLATION_ID` enable the Nolo GitHub App that opens the pull request of a published submission. A scheduler retries pending ones with `CREATOR_WEBHOOK_SECRET`:
+
+```bash
+curl -fsS -X POST -H "Authorization: Bearer $CREATOR_WEBHOOK_SECRET" https://api.nowly.me/presence-submissions/pull-requests
 ```
