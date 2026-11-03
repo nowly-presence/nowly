@@ -43,28 +43,18 @@ const DeviceRow = ({ device, onUnlink, busy }: {
   );
 };
 
-export const AccountDevicesTab = ({ devices, busy, error, onUnlink, onUnlinkAll }: {
+export const AccountDevicesTab = ({ devices, busy, error, onUnlink }: {
   devices: AccountDevice[];
   busy: boolean;
   error: boolean;
   onUnlink: (deviceId: string) => void;
-  onUnlinkAll: () => void;
 }) => {
   const t = useTranslations("accountPage");
   return (
     <Card className="max-w-xl">
       <CardContent>
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <CardTitle className="text-lg">{t("devices-title")}</CardTitle>
-            <CardDescription className="mt-2">{t("devices-description")}</CardDescription>
-          </div>
-          {devices.length > 1 ? (
-            <Button variant="outline" size="sm" disabled={busy} onClick={onUnlinkAll}>
-              {t("devices-unlink-all")}
-            </Button>
-          ) : null}
-        </div>
+        <CardTitle className="text-lg">{t("devices-title")}</CardTitle>
+        <CardDescription className="mt-2">{t("devices-description")}</CardDescription>
         {devices.length === 0 ? (
           <p className="mt-4 text-sm text-muted-foreground">{t("devices-empty")}</p>
         ) : (
