@@ -40,9 +40,9 @@ export const ProfileView = async ({ profile }: {
             {profile.banner ? <img src={profile.banner} alt="" className="size-full object-cover" /> : null}
           </div>
           <div className="px-5 pb-6 sm:px-8">
-            <Avatar className="-mt-12 size-24 shrink-0 border-4 border-card sm:-mt-16 sm:size-32">
-              {profile.image ? <AvatarImage src={profile.image} alt="" /> : null}
-              <AvatarFallback className="text-3xl">{profile.name.slice(0, 1).toUpperCase()}</AvatarFallback>
+            <Avatar className="-mt-12 size-24 shrink-0 rounded-xl after:rounded-xl border-4 border-card sm:-mt-16 sm:size-32">
+              {profile.image ? <AvatarImage src={profile.image} alt="" className="rounded-lg" /> : null}
+              <AvatarFallback className="rounded-lg text-3xl">{profile.name.slice(0, 1).toUpperCase()}</AvatarFallback>
             </Avatar>
             <h1 className="mt-3 flex items-center gap-2 text-[1.75rem] font-semibold leading-tight tracking-tight text-foreground sm:text-[2.1rem]">
               <span className="truncate">{profile.name}</span>

@@ -45,7 +45,7 @@ export const ProfileLinks = ({ links }: {
             href={item.href}
             rel="noopener noreferrer nofollow ugc"
             target="_blank"
-            className="flex items-center gap-2 rounded-full bg-foreground/[0.06] py-1.5 pr-3.5 pl-3 text-sm font-medium text-foreground outline-none transition-colors hover:bg-foreground/10 focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex items-center gap-2 rounded-xl bg-foreground/[0.06] py-1.5 pr-3.5 pl-3 text-sm font-medium text-foreground outline-none transition-colors hover:bg-foreground/10 focus-visible:ring-2 focus-visible:ring-ring"
           >
             <SocialIcon kind={item.kind} className="size-4" />
             {item.label}
