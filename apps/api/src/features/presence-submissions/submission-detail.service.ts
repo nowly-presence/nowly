@@ -6,6 +6,7 @@ import { toSummary } from "./submission.service";
 import { assetUrls, removeCreatorImages, storedKeys } from "./submission-storage";
 
 export const QUEUE_LIMIT = 100;
+export const CREATIONS_LIMIT = 100;
 
 const QUEUE_STATUSES = ["submitted", "approved"];
 
@@ -22,6 +23,35 @@ const names = async (ids: Array<string | null>): Promise<Map<string, string>> =>
     .from(user)
     .where(inArray(user.id, known));
   return new Map(rows.map((row) => [row.id, row.name]));
+};
+
+const definitionName = (definition: unknown): string | null => {
+  if (!definition || typeof definition !== "object" || !("name" in definition)) return null;
+
+  return typeof definition.name === "string" ? definition.name : null;
+};
+
+const latestNames = async (ids: string[]): Promise<Map<string, string>> => {
+  if (!ids.length) return new Map();
+
+  const rows = await getDb()
+    .select({
+      submissionId: presenceSubmissionRevision.submissionId,
+      definition: presenceSubmissionRevision.definition
+    })
+    .from(presenceSubmissionRevision)
+    .where(inArray(presenceSubmissionRevision.submissionId, ids))
+    .orderBy(asc(presenceSubmissionRevision.number));
+
+  const found = new Map<string, string>();
+
+  for (const row of rows) {
+    const name = definitionName(row.definition);
+
+    if (name) found.set(row.submissionId, name);
+  }
+
+  return found;
 };
 
 const person = (id: string | null, byId: Map<string, string>) => (id ? { id, name: byId.get(id) ?? null } : null);
@@ -58,6 +88,7 @@ export const getSubmissionDetail = async (id: string) => {
     slug: row.slug,
     baseRevision: row.baseRevision,
     translate: row.translate,
+    name: definitionName(latest?.definition) ?? row.slug,
     author: person(row.authorId, byId),
     createdAt: row.createdAt.toISOString(),
     definition: latest?.definition ?? null,
@@ -104,12 +135,34 @@ export const listReviewQueue = async () => {
     .orderBy(asc(presenceSubmission.updatedAt))
     .limit(QUEUE_LIMIT);
 
-  const byId = await names(rows.map((row) => row.authorId));
+  const [byId, titles] = await Promise.all([
+    names(rows.map((row) => row.authorId)),
+    latestNames(rows.map((row) => row.id))
+  ]);
   return rows.map((row) => ({
     ...toSummary(row),
     kind: row.kind,
     slug: row.slug,
+    name: titles.get(row.id) ?? row.slug,
     author: person(row.authorId, byId)
+  }));
+};
+
+export const listOwnCreations = async (userId: string) => {
+  const rows = await getDb()
+    .select()
+    .from(presenceSubmission)
+    .where(eq(presenceSubmission.authorId, userId))
+    .orderBy(desc(presenceSubmission.updatedAt))
+    .limit(CREATIONS_LIMIT);
+
+  const titles = await latestNames(rows.map((row) => row.id));
+  return rows.map((row) => ({
+    ...toSummary(row),
+    kind: row.kind,
+    slug: row.slug,
+    name: titles.get(row.id) ?? row.slug,
+    createdAt: row.createdAt.toISOString()
   }));
 };
 

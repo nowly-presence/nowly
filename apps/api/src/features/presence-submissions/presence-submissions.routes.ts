@@ -1,5 +1,5 @@
 import type { AppEnv } from "@/context";
-import { accountOf, requireExtensionToken, resolveAccount } from "@/features/account/extension-token.middleware";
+import { accountOf, requireExtensionToken, requireSession, resolveAccount } from "@/features/account/extension-token.middleware";
 import { requireCapability } from "@/features/admin/admin.middleware";
 import { getUserRole } from "@/features/admin/roles.service";
 import { requireSecret } from "@/features/auth/auth.middleware";
@@ -10,7 +10,7 @@ import { serverEnv } from "@nowly/env/server";
 import { hasCapability } from "@nowly/shared/roles";
 import { Hono, type Context } from "hono";
 import { SubmissionError } from "./submission-errors";
-import { getCreatorPresence, getSubmissionAuthorId, getSubmissionDetail, listReviewQueue } from "./submission-detail.service";
+import { getCreatorPresence, getSubmissionAuthorId, getSubmissionDetail, listOwnCreations, listReviewQueue } from "./submission-detail.service";
 import { openPendingPullRequests, openSubmissionPullRequest } from "./submission-pull-request";
 import { markSubmissionPublished, publishSubmission, reviewSubmission } from "./submission-review.service";
 import { PublishBodySchema, PublishedWebhookSchema, ReviewBodySchema, SubmitBodySchema, SUBMISSION_BODY_LIMIT, SUBMISSIONS_PER_HOUR, SubmissionIdsSchema } from "./submission.schemas";
@@ -82,6 +82,10 @@ export const presenceSubmissionRoutes = new Hono<AppEnv>()
     if (!ids.success) return c.json({ error: "INVALID_QUERY" }, 400);
 
     return c.json(await listOwnSubmissions(accountOf(c).userId, ids.data));
+  })
+  .get("/me/creations", requireSession, async (c) => {
+    c.header("Cache-Control", "no-store");
+    return c.json({ items: await listOwnCreations(accountOf(c).userId) });
   })
   .get("/presence-submissions/queue", requireCapability("review"), async (c) => {
     c.header("Cache-Control", "no-store");

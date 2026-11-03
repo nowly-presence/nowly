@@ -385,6 +385,42 @@ describe("account routes", () => {
     expect(res.json().devices.map((entry: { current: boolean }) => entry.current)).toEqual([true, false]);
   });
 
+  it("lists the presences synced by the extension for the signed-in account only", async () => {
+    await database.db.insert(syncDocument).values({
+      userId: USER.id,
+      key: "presences",
+      value: [
+        {
+          slug: "youtube",
+          enabled: true,
+          installedAt: 1_700_000_000_000
+        }
+      ],
+      version: 1
+    });
+
+    expect((await inject(await buildApp(), { url: "/me/presences" })).statusCode).toBe(401);
+
+    mockSession.userId = USER.id;
+    const res = await inject(await buildApp(), { url: "/me/presences" });
+    expect(res.json()).toEqual({
+      presences: [
+        {
+          slug: "youtube",
+          enabled: true,
+          installedAt: 1_700_000_000_000
+        }
+      ]
+    });
+  });
+
+  it("returns no presence when nothing was synced", async () => {
+    mockSession.userId = USER.id;
+    expect((await inject(await buildApp(), { url: "/me/presences" })).json()).toEqual({
+      presences: []
+    });
+  });
+
   it("unlinks a device and revokes its tokens", async () => {
     mockSession.userId = USER.id;
     await database.db.insert(device).values({

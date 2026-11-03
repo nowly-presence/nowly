@@ -8,6 +8,8 @@ import { and, asc, desc, eq } from "drizzle-orm";
 import { eraseAuthoredSubmissionImages, exportAuthoredSubmissions } from "@/features/presence-submissions/submission-detail.service";
 import { listActorActions, type AuditEventView } from "@/features/admin/audit.service";
 import { capabilitiesOf, type AdminCapability } from "@nowly/shared/roles";
+import { syncPresencesSchema } from "@nowly/shared/schemas";
+import { getPublicProfileSettings, type PublicProfileSettings } from "@/features/public-profile/public-profile.service";
 import { revokeDeviceExtensionTokens } from "./extension-token.service";
 
 export const ACCOUNT_PROVIDERS = ["discord"] as const;
@@ -53,6 +55,26 @@ export const getAccountProfile = async (userId: string): Promise<AccountProfile 
   };
 };
 
+export type AccountPresence = {
+  slug: string;
+  enabled: boolean;
+  installedAt: number;
+};
+
+export const listAccountPresences = async (userId: string): Promise<AccountPresence[]> => {
+  const [row] = await getDb()
+    .select({ value: syncDocument.value })
+    .from(syncDocument)
+    .where(and(eq(syncDocument.userId, userId), eq(syncDocument.key, "presences")))
+    .limit(1);
+
+  const parsed = syncPresencesSchema.safeParse(row?.value);
+
+  if (!parsed.success) return [];
+
+  return parsed.data.map(({ slug, enabled, installedAt }) => ({ slug, enabled, installedAt }));
+};
+
 export const listAccountDevices = async (userId: string, currentDeviceId: string | null): Promise<AccountDevice[]> => {
   const devices = await getDb()
     .select({
@@ -89,6 +111,7 @@ export type AccountExport = {
   activityPublications: unknown[];
   adminActions: AuditEventView[];
   presenceSubmissions: unknown[];
+  publicProfile: PublicProfileSettings;
   profile: AccountProfile & {
     email: string;
     createdAt: string;
@@ -126,24 +149,26 @@ const iso = (date: Date | null): string | null => date?.toISOString() ?? null;
 
 export const exportAccountData = async (userId: string): Promise<AccountExport | null> => {
   const db = getDb();
-  const [[profile], accounts, tokens, documents, likes, devices, activityPublications, adminActions, presenceSubmissions] = await Promise.all([
-    db.select().from(user).where(eq(user.id, userId)).limit(1),
-    db
-      .select({
-        providerId: account.providerId,
-        accountId: account.accountId,
-        createdAt: account.createdAt
-      })
-      .from(account)
-      .where(eq(account.userId, userId)),
-    db.select().from(extensionToken).where(eq(extensionToken.userId, userId)).orderBy(asc(extensionToken.createdAt)),
-    db.select().from(syncDocument).where(eq(syncDocument.userId, userId)).orderBy(asc(syncDocument.key)),
-    db.select().from(presenceLike).where(eq(presenceLike.userId, userId)).orderBy(asc(presenceLike.likedAt)),
-    listAccountDevices(userId, null),
-    db.select().from(activityPublication).where(eq(activityPublication.userId, userId)).orderBy(asc(activityPublication.createdAt)),
-    listActorActions(userId),
-    exportAuthoredSubmissions(userId)
-  ]);
+  const [[profile], accounts, tokens, documents, likes, devices, activityPublications, adminActions, presenceSubmissions, publicProfileSettings] =
+    await Promise.all([
+      db.select().from(user).where(eq(user.id, userId)).limit(1),
+      db
+        .select({
+          providerId: account.providerId,
+          accountId: account.accountId,
+          createdAt: account.createdAt
+        })
+        .from(account)
+        .where(eq(account.userId, userId)),
+      db.select().from(extensionToken).where(eq(extensionToken.userId, userId)).orderBy(asc(extensionToken.createdAt)),
+      db.select().from(syncDocument).where(eq(syncDocument.userId, userId)).orderBy(asc(syncDocument.key)),
+      db.select().from(presenceLike).where(eq(presenceLike.userId, userId)).orderBy(asc(presenceLike.likedAt)),
+      listAccountDevices(userId, null),
+      db.select().from(activityPublication).where(eq(activityPublication.userId, userId)).orderBy(asc(activityPublication.createdAt)),
+      listActorActions(userId),
+      exportAuthoredSubmissions(userId),
+      getPublicProfileSettings(userId)
+    ]);
 
   if (!profile) return null;
 
@@ -162,6 +187,7 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
     activityPublications,
     adminActions,
     presenceSubmissions,
+    publicProfile: publicProfileSettings,
     linkedAccounts: accounts.map((account) => ({
       providerId: account.providerId,
       accountId: account.accountId,

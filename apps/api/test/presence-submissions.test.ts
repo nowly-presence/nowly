@@ -395,6 +395,33 @@ describe("creator presences", () => {
   });
 });
 
+describe("account creations", () => {
+  it("lists only the signed-in author's creations with their name", async () => {
+    const { id } = (await submit()).json();
+
+    const own = await asSession(AUTHOR, { url: "/me/creations" });
+    expect(own.statusCode).toBe(200);
+    expect(own.json().items).toEqual([
+      expect.objectContaining({
+        id,
+        name: SAMPLE.name,
+        slug,
+        status: "submitted",
+        kind: "create"
+      })
+    ]);
+    expect((await asSession(OTHER, { url: "/me/creations" })).json().items).toEqual([]);
+    expect((await inject(await app(), { url: "/me/creations" })).statusCode).toBe(401);
+  });
+
+  it("names queue items and the detail view", async () => {
+    const { id } = (await submit()).json();
+
+    expect((await asSession(MODERATOR, { url: "/presence-submissions/queue" })).json().items[0]).toMatchObject({ name: SAMPLE.name });
+    expect((await detail(AUTHOR, id)).json()).toMatchObject({ name: SAMPLE.name });
+  });
+});
+
 describe("reviewing and publishing", () => {
   it("lets a moderator approve but only an admin publish", async () => {
     const { id } = (await submit()).json();

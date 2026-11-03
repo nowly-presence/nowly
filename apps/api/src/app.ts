@@ -9,6 +9,7 @@ import { contactRoutes } from "@/features/contact/contact.routes";
 import { customAssetsCronRoutes, customAssetsRoutes } from "@/features/custom-assets/custom-assets.routes";
 import { deviceRoutes } from "@/features/device/device.routes";
 import { imageProxyRoutes } from "@/features/image-proxy/image-proxy.routes";
+import { publicProfileRoutes } from "@/features/public-profile/public-profile.routes";
 import { presenceRoutes } from "@/features/presence/presence.routes";
 import { presenceSubmissionRoutes } from "@/features/presence-submissions/presence-submissions.routes";
 import { securityRoutes } from "@/features/security/security.routes";
@@ -62,6 +63,7 @@ export const createApp = ({ logRequests = false }: AppOptions = {}) => {
   app.route("/devices", customAssetsRoutes);
   app.route("/", customAssetsCronRoutes);
   app.route("/", accountRoutes);
+  app.route("/", publicProfileRoutes);
   app.route("/", activitySharingRoutes);
   app.route("/announcements", createAnnouncementsRoutes());
   app.route("/sync", syncRoutes);
