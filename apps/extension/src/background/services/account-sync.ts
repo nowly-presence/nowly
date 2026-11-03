@@ -36,7 +36,7 @@ const remoteDocuments = (documents: RemoteSyncDocument[]): Map<ExtensionSyncKey,
   return map;
 };
 
-const signOutLocally = async (): Promise<void> => {
+export const signOutLocally = async (): Promise<void> => {
   await clearAccount();
   await clearSyncState();
 };

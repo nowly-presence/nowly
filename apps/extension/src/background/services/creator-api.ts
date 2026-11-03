@@ -1,3 +1,4 @@
+import { signOutLocally } from "@/background/services/account-sync";
 import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { getAccount } from "@/background/storage/account.store";
 import { parseSubmission, type CreatorAccount, type CreatorSubmissionPayload, type CreatorSubmitResult } from "@nowly/presence-creator/creator-submission";
@@ -54,7 +55,15 @@ export const submitPresence = async (payload: CreatorSubmissionPayload): Promise
       body: JSON.stringify(payload)
     });
 
-    if (response.status === HTTP_UNAUTHORIZED || response.status === HTTP_FORBIDDEN) return {
+    if (response.status === HTTP_UNAUTHORIZED) {
+      if ((await getAccount())?.token === account.token) await signOutLocally();
+
+      return {
+        ok: false,
+        error: "UNAUTHORIZED"
+      };
+    }
+    if (response.status === HTTP_FORBIDDEN) return {
       ok: false,
       error: "CREATOR_REQUIRED"
     };

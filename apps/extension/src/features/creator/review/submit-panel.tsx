@@ -110,8 +110,7 @@ export const SubmitPanel = ({ draft, update, blocked }: {
       await thread.reload();
     } else {
       if (result.error === "CREATOR_REQUIRED" || result.error === "UNAUTHORIZED") void refresh();
-
-      setError(result.message ?? t(SUBMIT_ERROR_KEYS[result.error]));
+      if (result.error !== "UNAUTHORIZED") setError(result.message ?? t(SUBMIT_ERROR_KEYS[result.error]));
     }
   };
 
