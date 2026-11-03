@@ -1,7 +1,6 @@
-import Fastify from "fastify";
-import rateLimit from "@fastify/rate-limit";
+import { inject, mount } from "./http";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createRelay, telemetryRoutes } from "@/features/telemetry/telemetry.routes";
+import { createRelay, createTelemetryRoutes } from "@/features/telemetry/telemetry.routes";
 
 const event = {
   id: "22222222-2222-4222-8222-222222222222",
@@ -17,8 +16,7 @@ afterEach(() => {
 
 describe("Umami relay", () => {
   it("fails closed without explicit consent or with private properties", async () => {
-    const app = Fastify();
-    await app.register(telemetryRoutes);
+    const app = mount("/", createTelemetryRoutes());
 
     for (const body of [
       { event },
@@ -36,7 +34,7 @@ describe("Umami relay", () => {
     ]) {
       expect(
         (
-          await app.inject({
+          await inject(app, {
             method: "POST",
             url: "/events",
             payload: body
@@ -44,8 +42,6 @@ describe("Umami relay", () => {
         ).statusCode
       ).toBe(400);
     }
-
-    await app.close();
   });
 
   it("coalesces concurrent replays, does not forward client headers, and retries failed delivery", async () => {
@@ -88,14 +84,12 @@ describe("Umami relay", () => {
 
   it("bounds public ingestion by IP even when event ids change", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({ cache: "accepted" })));
-    const app = Fastify();
-    await app.register(rateLimit, { global: false });
-    await app.register(telemetryRoutes);
+    const app = mount("/", createTelemetryRoutes());
     let status = 0;
 
     for (let i = 0; i < 31; i++)
       status = (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: "/events",
           payload: {
@@ -106,16 +100,14 @@ describe("Umami relay", () => {
       ).statusCode;
 
     expect(status).toBe(429);
-    await app.close();
   });
 
   it("relays the production contract only, without query, cookies or identity", async () => {
     vi.stubEnv("NODE_ENV", "production");
     const fetcher = vi.fn().mockResolvedValue(Response.json({ cache: "accepted" }));
     vi.stubGlobal("fetch", fetcher);
-    const app = Fastify();
-    await app.register(telemetryRoutes, { prefix: "/telemetry" });
-    const response = await app.inject({
+    const app = mount("/telemetry", createTelemetryRoutes());
+    const response = await inject(app, {
       method: "POST",
       url: "/telemetry/events?token=private",
       headers: {
@@ -140,7 +132,7 @@ describe("Umami relay", () => {
     });
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: "/insights/events",
           payload: {
@@ -149,17 +141,15 @@ describe("Umami relay", () => {
         })
       ).statusCode
     ).toBe(404);
-    await app.close();
   });
 
   it("rejects oversized bodies and fails softly on upstream failure or non-production", async () => {
     const fetcher = vi.fn().mockResolvedValue(new Response(null, { status: 503 }));
     vi.stubGlobal("fetch", fetcher);
-    const app = Fastify();
-    await app.register(telemetryRoutes);
+    const app = mount("/", createTelemetryRoutes());
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: "/events",
           payload: {
@@ -173,7 +163,7 @@ describe("Umami relay", () => {
     vi.stubEnv("NODE_ENV", "production");
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: "/events",
           payload: {
@@ -186,7 +176,7 @@ describe("Umami relay", () => {
     expect(fetcher).toHaveBeenCalledTimes(1);
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: "/events",
           payload: {
@@ -198,6 +188,5 @@ describe("Umami relay", () => {
       ).statusCode
     ).toBe(413);
     expect(fetcher).toHaveBeenCalledTimes(1);
-    await app.close();
   });
 });

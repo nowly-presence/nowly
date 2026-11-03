@@ -1,65 +1,17 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { statusSample } from "@nowly/database/schema/status";
+import { createTestDatabase, type TestDatabase } from "./database";
 
-const mockPrisma = vi.hoisted(() => {
-  const samples: Array<{
-    id: number;
-    serviceId: string;
-    checkedAt: Date;
-    status: string;
-    responseMs: number | null;
-    httpStatus: number | null;
-    error: string | null;
-  }> = [];
+let database: TestDatabase;
 
-  const statusSample = {
-    createMany: vi.fn(async ({ data }: {
-      data: Omit<(typeof samples)[number], "id">[];
-    }) => {
-      const nextId = samples.length + 1;
-      samples.push(
-        ...data.map((sample, index) => ({
-          ...sample,
-          id: nextId + index
-        }))
-      );
-      return {
-        count: data.length
-      };
-    }),
-    findMany: vi.fn(
-      async ({ where, skip = 0, take, select }: {
-        where: {
-          serviceId: string;
-        };
-        skip?: number;
-        take?: number;
-        select?: {
-          id?: boolean;
-          checkedAt?: boolean;
-        };
-      }) => {
-        const results = samples
-          .filter((sample) => sample.serviceId === where.serviceId)
-          .sort((a, b) => b.checkedAt.getTime() - a.checkedAt.getTime() || b.id - a.id)
-          .slice(skip, take === undefined ? undefined : skip + take);
-
-        return select ? results.map(({ id, checkedAt }) => ({ id, checkedAt })) : results;
-      }
-    ),
-    deleteMany: vi.fn(async () => ({ count: 0 }))
-  };
-
-  return { samples, statusSample };
+beforeAll(async () => {
+  database = await createTestDatabase();
 });
-
-vi.mock("@/db/client", () => ({
-  getPrisma: vi.fn(() => mockPrisma),
-  hasDatabase: vi.fn(() => true)
-}));
+afterAll(() => database.close());
 
 describe("status service persistence", () => {
-  beforeEach(() => {
-    mockPrisma.samples.length = 0;
+  beforeEach(async () => {
+    await database.reset();
     vi.clearAllMocks();
     vi.stubGlobal(
       "fetch",
@@ -79,12 +31,13 @@ describe("status service persistence", () => {
     const result = await runStatusCheck();
 
     vi.resetModules();
+    const { overrideDatabase } = await import("@/db/client");
+    overrideDatabase(database.db);
     const { getStatusReport } = await import("@/features/status/status.service");
 
     const report = await getStatusReport();
 
-    expect(mockPrisma.statusSample.createMany).toHaveBeenCalledOnce();
-    expect(mockPrisma.samples).toHaveLength(4);
+    expect(await database.db.select().from(statusSample)).toHaveLength(4);
     expect(result.report.services.map((service) => service.current?.status)).toEqual(["operational", "operational", "operational", "operational"]);
     expect(report.services.map((service) => service.current?.serviceId)).toEqual(["website", "api", "library", "cdn"]);
   });

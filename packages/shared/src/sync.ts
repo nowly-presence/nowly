@@ -12,7 +12,7 @@ export const SYNC_DOCUMENT_MAX_BYTES: Record<SyncDocumentKey, number> = {
 
 export const isSyncDocumentKey = (value: string): value is SyncDocumentKey => (SYNC_DOCUMENT_KEYS as readonly string[]).includes(value);
 
-export const EXTENSION_TOKEN_SCOPES = ["sync", "assets", "creator"] as const;
+export const EXTENSION_TOKEN_SCOPES = ["sync", "assets", "creator", "admin"] as const;
 
 export type ExtensionTokenScope = (typeof EXTENSION_TOKEN_SCOPES)[number];
 

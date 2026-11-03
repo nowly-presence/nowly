@@ -1,31 +1,10 @@
-import Fastify from "fastify";
+import { activityPublication } from "@nowly/database/schema/activity";
+import { account } from "@nowly/database/schema/auth";
+import { eq } from "drizzle-orm";
 import { vi } from "vitest";
-import { ApiError } from "@/shared/errors";
+import { createTestDatabase, seedExtensionToken, seedUser, type TestDatabase } from "./database";
+import { inject, mount, type InjectResponse } from "./http";
 
-const publicationDb = vi.hoisted(() => ({
-  available: true,
-  user: { update: vi.fn() },
-  account: { findFirst: vi.fn() },
-  extensionToken: {
-    findUnique: vi.fn(),
-    update: vi.fn()
-  },
-  activityPublication: {
-    findUnique: vi.fn(),
-    findFirst: vi.fn(),
-    count: vi.fn(),
-    create: vi.fn(),
-    updateMany: vi.fn()
-  },
-  $transaction: vi.fn()
-}));
-
-export { publicationDb };
-
-vi.mock("@/db/client", () => ({
-  hasDatabase: () => publicationDb.available,
-  getPrisma: () => publicationDb
-}));
 vi.mock("@/features/auth/better-auth", () => ({
   getAuth: () => ({
     api: {
@@ -34,9 +13,9 @@ vi.mock("@/features/auth/better-auth", () => ({
   })
 }));
 
+export const OWNER_ID = "verified-owner";
 export const PUBLIC_ID = "a".repeat(32);
 export const LOCAL_KEY = "8b3f2e7c-5a0d-4c1e-9f6b-2d7a1c3e4f50";
-export const PUBLISHER_AUTH = { authorization: "Bearer nxt_fixture" };
 export const PORTABLE_ACTIVITY = {
   name: "Study time",
   type: 0 as const,
@@ -50,40 +29,54 @@ export const PORTABLE_ACTIVITY = {
   buttons: []
 };
 
-export const publisherToken = (scopes = ["creator"]) => ({
-  id: "token",
-  userId: "verified-owner",
-  deviceId: null,
-  scopes,
-  revokedAt: null,
-  expiresAt: new Date(Date.now() + 60_000),
-  lastUsedAt: new Date()
-});
-
-export const resetPublicationDb = () => {
-  vi.clearAllMocks();
-  publicationDb.available = true;
-  publicationDb.extensionToken.findUnique.mockResolvedValue(publisherToken());
-  publicationDb.account.findFirst.mockResolvedValue({ id: "discord-account" });
-  publicationDb.activityPublication.findUnique.mockResolvedValue(null);
-  publicationDb.activityPublication.count.mockResolvedValue(0);
-  publicationDb.activityPublication.create.mockImplementation(async ({ data }) => ({
-    ...data,
-    revision: data.revision ?? 1
-  }));
-  publicationDb.activityPublication.updateMany.mockResolvedValue({ count: 1 });
-  publicationDb.$transaction.mockImplementation(async (run) => run(publicationDb));
+export type PublicationFixture = {
+  database: TestDatabase;
+  auth: Record<string, string>;
+  request: (options: Parameters<typeof inject>[1] | string) => Promise<InjectResponse>;
+  seedPublication: (values?: Partial<typeof activityPublication.$inferInsert>) => Promise<void>;
+  storedPublication: () => Promise<typeof activityPublication.$inferSelect | undefined>;
+  tokenFor: (userId: string, scopes?: Array<"sync" | "creator">) => Promise<Record<string, string>>;
 };
 
-export const publicationTestApp = async () => {
+export const createPublicationFixture = async (): Promise<PublicationFixture> => {
+  const database = await createTestDatabase();
+
   const { activitySharingRoutes } = await import("@/features/activity-sharing/activity-sharing.routes");
 
-  const app = Fastify();
-  app.setErrorHandler((error, _request, reply) => {
-    const status = error instanceof ApiError ? error.status : 500;
-    const message = error instanceof Error ? error.message : "INTERNAL_ERROR";
-    return reply.status(status).send({ error: message });
+  const app = mount("/", activitySharingRoutes);
+
+  const tokenFor = async (userId: string, scopes: Array<"sync" | "creator"> = ["creator"]) => ({
+    authorization: `Bearer ${await seedExtensionToken({ userId, scopes })}`
   });
-  await app.register(activitySharingRoutes);
-  return app;
+
+  const fixture: PublicationFixture = {
+    database,
+    auth: {},
+    request: (options) => inject(app, typeof options === "string" ? { url: options } : options),
+    seedPublication: async (values = {}) => {
+      await database.db.insert(activityPublication).values({
+        id: PUBLIC_ID,
+        userId: OWNER_ID,
+        localKey: LOCAL_KEY,
+        activity: PORTABLE_ACTIVITY,
+        ...values
+      });
+    },
+    storedPublication: async () => (await database.db.select().from(activityPublication).where(eq(activityPublication.id, PUBLIC_ID)))[0],
+    tokenFor
+  };
+
+  return fixture;
+};
+
+export const resetPublicationFixture = async (fixture: PublicationFixture) => {
+  await fixture.database.reset();
+  await seedUser(fixture.database.db, OWNER_ID);
+  await fixture.database.db.insert(account).values({
+    id: "discord-account",
+    userId: OWNER_ID,
+    accountId: "1234",
+    providerId: "discord"
+  });
+  fixture.auth = await fixture.tokenFor(OWNER_ID);
 };

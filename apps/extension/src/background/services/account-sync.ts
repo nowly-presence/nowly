@@ -363,14 +363,14 @@ export const getAccountSnapshot = async (): Promise<AccountSnapshot> => {
   };
 };
 
-export const openAccountConnect = async (creator = false): Promise<void> => {
+export const openAccountConnect = async (permission: "creator" | "admin" | null = null): Promise<void> => {
   const deviceId = await getActiveDeviceId();
 
   const params = new URLSearchParams({
     source: "extension",
     device: deviceId
   });
-  if (creator) params.set("permission", "creator");
+  if (permission) params.set("permission", permission);
   await chrome.tabs.create({ url: `${getEffectiveWebUrl().replace(/\/$/, "")}/extension/connect?${params.toString()}` });
 };
 

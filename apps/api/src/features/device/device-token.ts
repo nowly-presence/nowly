@@ -1,5 +1,5 @@
 import { serverEnv } from "@nowly/env/server";
-import type { FastifyReply, FastifyRequest } from "fastify";
+import type { Context } from "hono";
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 // Per-device capability token used to authorize destructive operations keyed
@@ -20,31 +20,20 @@ export const verifyDeviceToken = (deviceId: string, token: string | undefined | 
   return timingSafeEqual(expected, provided);
 };
 
-const extractToken = (request: FastifyRequest): string | undefined => {
-  const header = request.headers["x-device-token"];
+const DEVICE_AUTH_PREFIX = "Device ";
 
-  if (typeof header === "string" && header.trim()) return header.trim();
+const extractToken = (c: Context): string | undefined => {
+  const header = c.req.header("x-device-token")?.trim();
 
-  const auth = request.headers.authorization;
+  if (header) return header;
 
-  if (auth?.startsWith("Device ")) return auth.slice("Device ".length).trim();
+  const auth = c.req.header("authorization");
 
-  const query = (
-    request.query as
-      | {
-          token?: unknown;
-        }
-      | undefined
-  )?.token;
+  if (auth?.startsWith(DEVICE_AUTH_PREFIX)) return auth.slice(DEVICE_AUTH_PREFIX.length).trim();
 
-  if (typeof query === "string" && query.trim()) return query.trim();
-
-  return undefined;
+  return c.req.query("token")?.trim() || undefined;
 };
 
-export const requireDeviceAccess = (request: FastifyRequest, reply: FastifyReply, deviceId: string): boolean => {
-  if (verifyDeviceToken(deviceId, extractToken(request))) return true;
+export const hasDeviceAccess = (c: Context, deviceId: string): boolean => verifyDeviceToken(deviceId, extractToken(c));
 
-  reply.status(401).send({ error: "INVALID_DEVICE_TOKEN" });
-  return false;
-};
+export const invalidDeviceToken = (c: Context) => c.json({ error: "INVALID_DEVICE_TOKEN" }, 401);

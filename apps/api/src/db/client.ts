@@ -1,20 +1,34 @@
+import { createDatabase, type Database } from "@nowly/database/client";
 import { serverEnv } from "@nowly/env/server";
-import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../generated/prisma/client";
 
-let prisma: PrismaClient | null = null;
+type DatabaseOverride = {
+  db: Database | null;
+};
 
-export const hasDatabase = (): boolean => Boolean(serverEnv.DATABASE_URL);
+let database: Database | null = null;
+let override: DatabaseOverride | null = null;
 
-export const getPrisma = (): PrismaClient => {
+export const hasDatabase = (): boolean => (override ? override.db !== null : Boolean(serverEnv.DATABASE_URL));
+
+export const getDb = (): Database => {
+  if (override) {
+    if (!override.db) throw new Error("DATABASE_URL is required for PostgreSQL-backed data operations");
+
+    return override.db;
+  }
+
   if (!serverEnv.DATABASE_URL) {
     throw new Error("DATABASE_URL is required for PostgreSQL-backed data operations");
   }
 
-  if (!prisma) {
-    const adapter = new PrismaPg({ connectionString: serverEnv.DATABASE_URL });
-    prisma = new PrismaClient({ adapter });
-  }
+  database ??= createDatabase(serverEnv.DATABASE_URL).db;
+  return database;
+};
 
-  return prisma;
+export const overrideDatabase = (db: Database | null): void => {
+  override = { db };
+};
+
+export const clearDatabaseOverride = (): void => {
+  override = null;
 };

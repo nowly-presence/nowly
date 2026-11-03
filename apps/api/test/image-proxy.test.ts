@@ -7,7 +7,7 @@ const mockPresenceRepo = vi.hoisted(() => ({ getAllPresenceMetas: vi.fn() }));
 
 vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo);
 vi.mock("@/db/client", () => ({
-  getPrisma: vi.fn(() => ({})),
+  getDb: vi.fn(() => ({})),
   hasDatabase: vi.fn(() => true)
 }));
 

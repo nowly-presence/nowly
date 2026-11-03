@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type 
 import { createPortal } from "react-dom";
 import { RiArrowDownSLine, RiCheckLine } from "@remixicon/react";
 import { cn } from "@/ui/cn";
+import { useFieldIds } from "@/ui/field";
 
 export type SelectOption = {
   value: string;
@@ -17,13 +18,15 @@ type SelectProps = {
   "aria-label": string;
   className?: string;
   disabled?: boolean;
+  bare?: boolean;
 };
 
 const MENU_MAX_HEIGHT = 272;
 const GAP = 6;
 const MENU_MIN_WIDTH = 208;
 
-export const Select = ({ value, options, onChange, className, disabled, ...props }: SelectProps) => {
+export const Select = ({ value, options, onChange, className, disabled, bare = false, ...props }: SelectProps) => {
+  const field = useFieldIds();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const [position, setPosition] = useState<{
@@ -166,17 +169,20 @@ export const Select = ({ value, options, onChange, className, disabled, ...props
         aria-expanded={open}
         aria-controls={open ? listId : undefined}
         aria-label={props["aria-label"]}
+        aria-describedby={field?.hintId}
         disabled={disabled}
         onClick={() => (open ? close() : openMenu())}
         onKeyDown={onTriggerKey}
         className={cn(
-          "flex h-9 w-full items-center gap-2 rounded-md border bg-surface pr-2 pl-3 text-left text-body-sm text-ink transition-colors duration-150 outline-none disabled:opacity-50",
-          open ? "border-primary" : "border-line hover:border-line-strong focus-visible:border-primary",
+          "flex h-9 items-center gap-2 pr-2 pl-3 text-left text-body-sm text-ink transition-colors duration-150 outline-none disabled:opacity-50",
+          bare
+            ? "h-full w-auto shrink-0 border-r border-line bg-hover/60 hover:bg-hover focus-visible:bg-hover"
+            : cn("w-full rounded-md border bg-surface", open ? "border-primary" : "border-line hover:border-line-strong focus-visible:border-primary"),
           className
         )}
       >
         {selected?.icon}
-        <span className="min-w-0 flex-1 truncate">{selected?.label}</span>
+        <span className={cn("min-w-0 truncate", !bare && "flex-1")}>{selected?.label}</span>
         <RiArrowDownSLine className={cn("shrink-0 text-muted transition-transform duration-200", open && "rotate-180")} />
       </button>
       {open &&

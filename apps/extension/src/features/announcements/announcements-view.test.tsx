@@ -19,7 +19,10 @@ const navigation = {
 
 vi.mock("@/hooks/extension-state-provider", () => ({
   useExtensionState: () => ({
-    state: { announcements },
+    state: {
+      announcements,
+      account: { signedIn: false }
+    },
     patch: vi.fn()
   })
 }));

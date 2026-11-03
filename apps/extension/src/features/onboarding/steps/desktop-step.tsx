@@ -9,7 +9,7 @@ import { Row } from "@/ui/row";
 import { useI18n } from "@/hooks/i18n-provider";
 import { connectionOf } from "@/lib/presence-status";
 import { useExtensionState } from "@/hooks/extension-state-provider";
-import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout";
+import { StepLayout } from "@/ui/step-layout";
 import { PermissionStatus } from "@/features/onboarding/permission-status";
 
 export const DesktopStep = ({ onNext }: {
@@ -25,7 +25,7 @@ export const DesktopStep = ({ onNext }: {
     : t("connection.detected");
 
   return (
-    <OnboardingStepLayout
+    <StepLayout
       icon={<RiDiscordLine className="size-5" />}
       title={t("onboarding.desktopTitle")}
       description={t("onboarding.desktopDescription")}
@@ -77,6 +77,6 @@ export const DesktopStep = ({ onNext }: {
         </Group>
       )}
       {!ok && <PermissionStatus ok={false} okLabel="" waitingLabel={t("onboarding.desktopWaiting")} />}
-    </OnboardingStepLayout>
+    </StepLayout>
   );
 };

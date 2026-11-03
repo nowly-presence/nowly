@@ -766,10 +766,6 @@
       "title": "Połącz rozszerzenie",
       "description": "Zaloguj się przez Discord, aby synchronizować Nowly między przeglądarkami."
     },
-    "account": {
-      "title": "Twoje konto Nowly",
-      "description": "Połączone urządzenia, twoje dane i logowanie."
-    },
     "guides": {
       "title": "Poradniki",
       "description": "Poradniki o konfiguracji Nowly, naprawie Discord Rich Presence, kontroli prywatności i tworzeniu własnej integracji."
@@ -1274,33 +1270,6 @@
     "signed-in-as": "Zalogowano jako {name}.",
     "switch-account": "To nie ty? Zmień konto"
   },
-  "accountPage": {
-    "eyebrow": "Konto",
-    "title": "Twoje konto Nowly",
-    "description": "Zarządzaj urządzeniami połączonymi z kontem, swoimi danymi i logowaniem.",
-    "checking": "Wczytywanie konta...",
-    "sign-in-title": "Zaloguj się przez Discord",
-    "sign-in-description": "Konto jest opcjonalne. Pozwala rozszerzeniu synchronizować obecności i ustawienia między przeglądarkami.",
-    "sign-in": "Kontynuuj z Discordem",
-    "provider-discord": "Zalogowano przez Discord",
-    "sign-out": "Wyloguj się",
-    "devices-title": "Połączone urządzenia",
-    "devices-description": "Przeglądarki, w których rozszerzenie jest połączone z tym kontem.",
-    "devices-empty": "Nie połączono jeszcze żadnego urządzenia.",
-    "device-unknown": "Nieznana przeglądarka",
-    "device-last-seen": "Ostatnio widziane {date}",
-    "unlink": "Odłącz",
-    "unlink-confirm": "Ta przeglądarka przestanie synchronizować się z twoim kontem. Jej dane lokalne pozostaną na urządzeniu.",
-    "data-title": "Twoje dane",
-    "data-description": "Pobierz wszystko, co Nowly przechowuje dla tego konta, albo usuń konto. Usunięcie kasuje zsynchronizowaną kopię i odłącza twoje urządzenia.",
-    "export": "Pobierz moje dane",
-    "export-success": "Twoje dane zostały pobrane.",
-    "delete": "Usuń moje konto",
-    "delete-confirm": "To trwale usuwa twoje konto Nowly i zsynchronizowaną kopię rozszerzenia. Tej operacji nie można cofnąć.",
-    "delete-success": "Twoje konto zostało usunięte.",
-    "local-note": "Dane zapisane przez rozszerzenie na twoich urządzeniach pozostają bez zmian. Możesz je usunąć w ustawieniach rozszerzenia.",
-    "action-error": "Nie udało się ukończyć tej operacji. Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzać."
-  },
   "ads": {
     "label": "Reklama"
   },
@@ -1380,5 +1349,13 @@
       "roadmap": "Plan rozwoju",
       "changelog": "Informacje o wersjach"
     }
+  },
+  "profilePage": {
+    "eyebrow": "Profil",
+    "created-title": "Stworzone presence",
+    "liked-title": "Polubione presence",
+    "empty": "Nie ma jeszcze nic do pokazania.",
+    "meta-title": "{name} w Nowly",
+    "meta-description": "Presence stworzone i polubione przez {name} w Nowly."
   }
 }

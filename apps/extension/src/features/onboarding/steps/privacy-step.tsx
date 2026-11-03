@@ -4,7 +4,7 @@ import { openUrl, siteUrl } from "@/shared/browser-links";
 import { Button } from "@/ui/button";
 import { useI18n } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
-import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout";
+import { StepLayout } from "@/ui/step-layout";
 
 export const PrivacyStep = ({ onDone }: {
   onDone: () => void;
@@ -19,7 +19,7 @@ export const PrivacyStep = ({ onDone }: {
   };
 
   return (
-    <OnboardingStepLayout
+    <StepLayout
       icon={<RiShieldCheckLine className="size-5" />}
       title={t("onboarding.privacyTitle")}
       description={t("onboarding.privacyDescription")}
@@ -51,6 +51,6 @@ export const PrivacyStep = ({ onDone }: {
       <Button variant="link" className="self-start" onClick={() => openUrl(siteUrl("/privacy"))}>
         {t("onboarding.privacyPolicy")}
       </Button>
-    </OnboardingStepLayout>
+    </StepLayout>
   );
 };

@@ -18,6 +18,8 @@
 - `chrome.sidePanel.open()` must run in the user-gesture turn: never `await` before it.
 - `chrome.userScripts` exists only once "Allow user scripts" is on and fires no event: the side panel sends `SYNC_PRESENCE_SCRIPTS` when it sees the status flip. Firefox requests the permission from the onboarding (user gesture).
 - The nowly.me web protocol keeps its own message names (only `GET_INSTALLED` maps to `GET_PRESENCES`, `content/index.ts`). Web messages need an allowlisted sender URL and the web-specific message allowlist.
+- Creator messages (`CREATOR_*`, `router/handlers/creator.handlers.ts`) target the focused tab (`services/focused-tab.ts`) and reach the picker in the content script; a tab loaded before the extension has no content script, so they answer `UNREACHABLE`. `CREATOR_TEST_ACTIVITY` posts straight to the native host and `broadcastActiveTab()` restores the real activity when the test stops (`managers/creator-test.ts`).
+- Creator submissions reuse the account token (`services/creator-api.ts`) and need its explicit `creator` scope and a Discord id, like public activities; sign-in goes through `START_CREATOR_CONNECT`.
 - Site timers (`preserveSiteTimer`, `services/site-timers.ts`) only transform the broadcast payload; they never store URLs or titles and never sync.
 
 ## Account sync (`services/account-sync.ts`)

@@ -8,6 +8,7 @@ export const serverEnv = createEnv({
   server: {
     PORT: z.coerce.number().int().positive().default(3001),
     FRONTEND_URL: z.string().trim().url().default("http://localhost:3000"),
+    ACCOUNT_URL: z.string().trim().url().default("http://localhost:3003"),
     DATABASE_URL: required.optional(),
     JWT_SECRET: required,
     DISCORD_CLIENT_ID: required,
@@ -30,6 +31,15 @@ export const serverEnv = createEnv({
     AWS_SESSION_TOKEN: required.optional(),
     AWS_SES_CONFIGURATION_SET: required.optional(),
     STATUS_CRON_SECRET: required.optional(),
+    CREATOR_WEBHOOK_SECRET: required.optional(),
+    NOLO_APP_ID: required.optional(),
+    NOLO_PRIVATE_KEY: required.optional(),
+    NOLO_INSTALLATION_ID: required.optional(),
+    NOLO_REPOSITORY: required.default("nowly-presence/presences"),
+    NOLO_BASE_BRANCH: required.default("stable"),
+    WORKERS_AI_ACCOUNT_ID: required.optional(),
+    WORKERS_AI_API_TOKEN: required.optional(),
+    WORKERS_AI_MODEL: required.default("@cf/google/gemma-4-26b-a4b-it"),
     STATUS_CHECK_INTERVAL_HOURS: z.coerce.number().int().positive().default(1),
     STATUS_SAMPLE_LIMIT: z.coerce.number().int().positive().default(168)
   },

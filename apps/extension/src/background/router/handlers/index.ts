@@ -1,6 +1,7 @@
 import { handleGetAccount, handleNowlySession, handleResolveSyncChoice, handleSignOutAccount, handleStartAccountConnect, handleStopAccountSync, handleSyncAccount } from "@/background/router/handlers/account.handlers";
 import { handleClearActivityMessage, handleDebug, handleGetCurrentActivity, handleGetDebug, handleActivityUpdateMessage, handleSetPresencePause } from "@/background/router/handlers/activity.handlers";
 import { handleGetAnalyticsConsent, handleSetAnalyticsConsent, handleRecordExtensionActive, handleGetRuntimeLogs, handleClearRuntimeLogs } from "@/background/router/handlers/privacy.handlers";
+import { handleCreatorExtract, handleCreatorFetchSubmissions, handleCreatorGetAccount, handleCreatorHighlight, handleCreatorPickCancel, handleCreatorPickStart, handleCreatorSubmit, handleCreatorTestActivity } from "@/background/router/handlers/creator.handlers";
 import { handleGetDiagnostic } from "@/background/router/handlers/diagnostics.handlers";
 import { handleAcknowledgeDiscordIpcIssue, handleConnectNative, handleGetNativeStatus, handleGetUserScriptsStatus, handleRestartNative } from "@/background/router/handlers/native.handlers";
 import { handleBulkToggle, handleBulkUninstall, handleCheckUpdates, handleClearSnooze, handleFetchCatalog, handleGetInstallQueue, handleGetPresenceEngagement, handleGetPresenceSettings, handleGetPresences, handleInstall, handleInstallFromApi, handleInstallLocalZip, handleRetryInstallQueue, handleSetPresenceLike, handleSetPresenceSettings, handleSetSchedule, handleSnooze, handleToggle, handleUninstall, handleUpdate } from "@/background/router/handlers/presences.handlers";
@@ -13,6 +14,7 @@ import { handleGetAnnouncements, handleRefreshAnnouncements, handleMarkAnnouncem
 import { handleAcceptLegalDocuments, handleCheckLegalDocuments, handleGetLegalState } from "@/background/router/handlers/legal.handlers";
 import { applyPublication, publicationStatus } from "@/background/services/activity-publications";
 import { getOwnedPublication, publishActivity } from "@/background/services/activity-publication-publisher";
+import { createAnnouncement, fetchReviewQueue, fetchSubmissionDetail, getStaffAccess, loadCreatorPresenceDraft, probeCreatorPresence, publishSubmission, retryPullRequest, sendReview } from "@/background/services/admin-api";
 import { openAccountConnect } from "@/background/services/account-sync";
 import { getCustomActivityDeletionPlan } from "@/background/services/custom-activity-deletion-plan";
 
@@ -23,11 +25,26 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   APPLY_ACTIVITY_PUBLICATION: (payload) => applyPublication(payload),
   PUBLISH_CUSTOM_ACTIVITY: ({ id, baseRevision, unpublish }) => publishActivity(id, baseRevision, unpublish),
   START_CREATOR_CONNECT: async () => {
-    await openAccountConnect(true);
+    await openAccountConnect("creator");
     return {
       ok: true
     };
   },
+  START_ADMIN_CONNECT: async () => {
+    await openAccountConnect("admin");
+    return {
+      ok: true
+    };
+  },
+  ADMIN_GET_ACCESS: () => getStaffAccess(),
+  ADMIN_FETCH_QUEUE: () => fetchReviewQueue(),
+  SUBMISSION_GET_DETAIL: ({ id }) => fetchSubmissionDetail(id),
+  ADMIN_REVIEW: (payload) => sendReview(payload),
+  ADMIN_PUBLISH: ({ id, revision }) => publishSubmission(id, revision),
+  ADMIN_RETRY_PULL_REQUEST: ({ id }) => retryPullRequest(id),
+  ADMIN_CREATE_ANNOUNCEMENT: ({ announcement }) => createAnnouncement(announcement),
+  ADMIN_PROBE_CREATOR_PRESENCE: ({ slug }) => probeCreatorPresence(slug),
+  ADMIN_LOAD_CREATOR_PRESENCE: ({ slug }) => loadCreatorPresenceDraft(slug),
   GET_ANNOUNCEMENTS: handleGetAnnouncements,
   REFRESH_ANNOUNCEMENTS: handleRefreshAnnouncements,
   MARK_ANNOUNCEMENT: handleMarkAnnouncement,
@@ -80,6 +97,14 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   SET_TAB_MUTED: handleSetTabMuted,
   REPORT_PRESENCE: handleReportPresence,
   EXPORT_DEVICE_DATA: handleExportDeviceData,
+  CREATOR_PICK_START: handleCreatorPickStart,
+  CREATOR_PICK_CANCEL: handleCreatorPickCancel,
+  CREATOR_EXTRACT: handleCreatorExtract,
+  CREATOR_HIGHLIGHT: handleCreatorHighlight,
+  CREATOR_TEST_ACTIVITY: handleCreatorTestActivity,
+  CREATOR_GET_ACCOUNT: handleCreatorGetAccount,
+  CREATOR_SUBMIT: handleCreatorSubmit,
+  CREATOR_FETCH_SUBMISSIONS: handleCreatorFetchSubmissions,
   DELETE_DEVICE_DATA: handleDeleteDeviceData,
   SYNC_PRESENCE_SCRIPTS: handleSyncPresenceScripts,
   GET_CUSTOM_ACTIVITIES: handleGetCustomActivities,

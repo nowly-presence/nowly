@@ -766,10 +766,6 @@
       "title": "Erweiterung verbinden",
       "description": "Melde dich mit Discord an, um Nowly zwischen deinen Browsern zu synchronisieren."
     },
-    "account": {
-      "title": "Dein Nowly-Konto",
-      "description": "Verknüpfte Geräte, deine Daten und deine Anmeldung."
-    },
     "guides": {
       "title": "Anleitungen",
       "description": "Anleitungen, um Nowly einzurichten, Discord Rich Presence zu reparieren, deine Privatsphäre zu steuern und eigene Presences zu bauen."
@@ -1274,33 +1270,6 @@
     "signed-in-as": "Angemeldet als {name}.",
     "switch-account": "Nicht du? Konto wechseln"
   },
-  "accountPage": {
-    "eyebrow": "Konto",
-    "title": "Dein Nowly-Konto",
-    "description": "Verwalte die mit deinem Konto verknüpften Geräte, deine Daten und deine Anmeldung.",
-    "checking": "Dein Konto wird geladen...",
-    "sign-in-title": "Mit Discord anmelden",
-    "sign-in-description": "Ein Konto ist freiwillig. Damit synchronisiert die Erweiterung deine Presences und Einstellungen zwischen deinen Browsern.",
-    "sign-in": "Weiter mit Discord",
-    "provider-discord": "Mit Discord angemeldet",
-    "sign-out": "Abmelden",
-    "devices-title": "Verknüpfte Geräte",
-    "devices-description": "Browser, in denen die Erweiterung mit diesem Konto verbunden ist.",
-    "devices-empty": "Noch kein Gerät verknüpft.",
-    "device-unknown": "Unbekannter Browser",
-    "device-last-seen": "Zuletzt gesehen am {date}",
-    "unlink": "Trennen",
-    "unlink-confirm": "Dieser Browser wird nicht mehr mit deinem Konto synchronisiert. Seine lokalen Daten bleiben erhalten.",
-    "data-title": "Deine Daten",
-    "data-description": "Lade alles herunter, was Nowly für dieses Konto speichert, oder lösche das Konto. Beim Löschen werden die synchronisierte Kopie gelöscht und deine Geräte getrennt.",
-    "export": "Meine Daten herunterladen",
-    "export-success": "Deine Daten wurden heruntergeladen.",
-    "delete": "Mein Konto löschen",
-    "delete-confirm": "Dadurch werden dein Nowly-Konto und die synchronisierte Kopie deiner Erweiterung endgültig gelöscht. Das kann nicht rückgängig gemacht werden.",
-    "delete-success": "Dein Konto wurde gelöscht.",
-    "local-note": "Die Daten, die die Erweiterung auf deinen Geräten speichert, bleiben unberührt. Du kannst sie in den Einstellungen der Erweiterung löschen.",
-    "action-error": "Die Anfrage konnte nicht abgeschlossen werden. Versuche es erneut oder wende dich an den Support, wenn das Problem bestehen bleibt."
-  },
   "ads": {
     "label": "Werbung"
   },
@@ -1380,5 +1349,13 @@
       "roadmap": "Roadmap",
       "changelog": "Versionshinweise"
     }
+  },
+  "profilePage": {
+    "eyebrow": "Profil",
+    "created-title": "Erstellte Presences",
+    "liked-title": "Gefallene Presences",
+    "empty": "Noch nichts anzuzeigen.",
+    "meta-title": "{name} auf Nowly",
+    "meta-description": "Von {name} erstellte und gemochte Presences auf Nowly."
   }
 }

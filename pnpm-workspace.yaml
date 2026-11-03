@@ -9,10 +9,10 @@ packages:
 
 allowBuilds:
   '@parcel/watcher': true
-  '@prisma/engines': true
+  '@prisma/engines': false
   '@swc/core': true
   esbuild: true
-  prisma: true
+  prisma: false
   sharp: true
   simple-git-hooks: true
 

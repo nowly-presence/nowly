@@ -31,7 +31,8 @@
     "./schemas": "./src/schemas.ts",
     "./legal": "./src/legal.ts",
     "./announcements": "./src/announcements.ts",
-    "./activity-publication": "./src/activity-publication.ts"
+    "./activity-publication": "./src/activity-publication.ts",
+    "./roles": "./src/roles.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

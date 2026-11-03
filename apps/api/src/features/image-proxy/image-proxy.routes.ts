@@ -1,107 +1,83 @@
-import type { FastifyInstance } from "fastify";
-import { createCacheId, fetchImage, getCached, getPublicBaseUrl, handleImageProxyRequest, imageResponse, parseProxyUrl, setCached, withPublicCors, CACHED_IMAGE_TTL } from "./image-proxy.service";
+import { jsonBody } from "@/shared/request-body";
+import { Hono } from "hono";
+import { createCacheId, fetchImage, getCached, getPublicBaseUrl, handleImageProxyRequest, imageResponse, jsonResponse, parseProxyUrl, setCached, PUBLIC_CORS_HEADERS, CACHED_IMAGE_TTL } from "./image-proxy.service";
 
-export const imageProxyRoutes = async (fastify: FastifyInstance) => {
-  fastify.options("/images-proxy", async (_request, reply) => withPublicCors(reply).status(204).send());
+const CACHE_ID = /^[a-zA-Z0-9_-]{16,64}$/;
 
-  fastify.post<{
-    Body: {
-      service?: string;
-      url?: string;
-    };
-  }>("/images-proxy", async (request, reply) => {
-    const target = await parseProxyUrl(request.body?.url, request.body?.service);
+const stringField = (body: unknown, key: string): string | undefined => {
+  if (!body || typeof body !== "object" || !(key in body)) return undefined;
 
-    if (!target) {
-      return withPublicCors(reply).status(400).send({ error: "INVALID_IMAGE_URL" });
-    }
+  const value: unknown = Reflect.get(body, key);
+  return typeof value === "string" ? value : undefined;
+};
+
+const hasOnly = (query: Record<string, string>, allowed: string[]): boolean => Object.keys(query).every((key) => allowed.includes(key));
+
+export const imageProxyRoutes = new Hono()
+  .options(
+    "/images-proxy",
+    () =>
+      new Response(null, {
+        status: 204,
+        headers: PUBLIC_CORS_HEADERS
+      })
+  )
+  .post("/images-proxy", async (c) => {
+    const body = await jsonBody(c);
+
+    const target = await parseProxyUrl(stringField(body, "url"), stringField(body, "service"));
+
+    if (!target) return jsonResponse({ error: "INVALID_IMAGE_URL" }, 400);
 
     const id = createCacheId(target.service.id, target.url.href);
-    const existing = getCached(id);
 
-    if (existing) {
-      return withPublicCors(reply).send({
-        url: `${getPublicBaseUrl(request)}/images-proxy/${id}`,
-        expiresIn: CACHED_IMAGE_TTL
+    if (!getCached(id)) {
+      const image = await fetchImage(target.url, target.service);
+
+      if (!image.ok) return jsonResponse({ error: image.error }, image.status);
+
+      setCached(id, {
+        contentType: image.contentType,
+        body: image.buffer.toString("base64")
       });
     }
 
-    const image = await fetchImage(target.url, target.service);
-
-    if (!image.ok) {
-      return withPublicCors(reply).status(image.status).send({ error: image.error });
-    }
-
-    setCached(id, {
-      contentType: image.contentType,
-      body: image.buffer.toString("base64")
-    });
-
-    return withPublicCors(reply).send({
-      url: `${getPublicBaseUrl(request)}/images-proxy/${id}`,
+    return jsonResponse({
+      url: `${getPublicBaseUrl(c)}/images-proxy/${id}`,
       expiresIn: CACHED_IMAGE_TTL
     });
-  });
+  })
+  .get("/images-proxy/:id", (c) => {
+    const id = c.req.param("id");
 
-  fastify.get<{
-    Params: {
-      id: string;
-    };
-  }>("/images-proxy/:id", async (request, reply) => {
-    const { id } = request.params;
-
-    if (!/^[a-zA-Z0-9_-]{16,64}$/.test(id)) {
-      return reply.status(400).send({ error: "INVALID_IMAGE_ID" });
-    }
+    if (!CACHE_ID.test(id)) return c.json({ error: "INVALID_IMAGE_ID" }, 400);
 
     const cached = getCached(id);
 
-    if (!cached) {
-      return reply.status(404).send({ error: "IMAGE_NOT_FOUND" });
-    }
+    if (!cached) return c.json({ error: "IMAGE_NOT_FOUND" }, 404);
 
     return imageResponse(
-      reply,
       {
         contentType: cached.contentType,
         buffer: Buffer.from(cached.body, "base64")
       },
       CACHED_IMAGE_TTL
     );
-  });
+  })
+  .get("/i", async (c) => {
+    const query = c.req.query();
 
-  // /i and /image-proxy are the same fetch+stream behaviour with different query param names, kept as aliases for existing consumers.
-  fastify.get<{
-    Querystring: {
-      u?: string;
-      [key: string]: string | undefined;
-    };
-  }>("/i", async (request, reply) => {
-    const extraParams = Object.keys(request.query).filter((key) => key !== "u");
+    if (!hasOnly(query, ["u"])) return c.json({ error: "IMAGE_URL_NOT_ENCODED" }, 400);
 
-    if (extraParams.length > 0) {
-      return reply.status(400).send({ error: "IMAGE_URL_NOT_ENCODED" });
-    }
+    return handleImageProxyRequest({ url: query.u });
+  })
+  .get("/image-proxy", async (c) => {
+    const query = c.req.query();
 
-    return handleImageProxyRequest(request, reply, { url: request.query.u });
-  });
+    if (!hasOnly(query, ["url", "service"])) return c.json({ error: "IMAGE_URL_NOT_ENCODED" }, 400);
 
-  fastify.get<{
-    Querystring: {
-      url?: string;
-      service?: string;
-      [key: string]: string | undefined;
-    };
-  }>("/image-proxy", async (request, reply) => {
-    const extraParams = Object.keys(request.query).filter((key) => key !== "url" && key !== "service");
-
-    if (extraParams.length > 0) {
-      return reply.status(400).send({ error: "IMAGE_URL_NOT_ENCODED" });
-    }
-
-    return handleImageProxyRequest(request, reply, {
-      url: request.query.url,
-      service: request.query.service
+    return handleImageProxyRequest({
+      url: query.url,
+      service: query.service
     });
   });
-};

@@ -1,18 +1,17 @@
 import { imageProxyRoutes } from "@/features/image-proxy/image-proxy.routes";
-import Fastify from "fastify";
+import { inject, mount } from "./http";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockPresenceRepo = vi.hoisted(() => ({ getAllPresenceMetas: vi.fn() }));
 
 vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo);
 vi.mock("@/db/client", () => ({
-  getPrisma: vi.fn(() => ({})),
+  getDb: vi.fn(() => ({})),
   hasDatabase: vi.fn(() => true)
 }));
 
 const buildApp = async () => {
-  const app = Fastify();
-  await app.register(imageProxyRoutes);
+  const app = mount("/", imageProxyRoutes);
   return app;
 };
 
@@ -55,13 +54,12 @@ describe("image proxy routes", () => {
   });
 
   afterEach(async () => {
-    await app.close();
     globalThis.fetch = originalFetch;
   });
 
   it("GET /image-proxy handles supported CDN images and rejects invalid URLs", async () => {
     // 1. Rejects unsupported CDN URLs
-    const invalidRes = await app.inject({
+    const invalidRes = await inject(app, {
       method: "GET",
       url: `/image-proxy?url=${encodeURIComponent("https://example.com/image.jpg")}`
     });
@@ -69,7 +67,7 @@ describe("image proxy routes", () => {
     expect(JSON.parse(invalidRes.body)).toEqual({ error: "INVALID_IMAGE_URL" });
 
     // 2. Rejects unencoded nested query parameters
-    const unencodedRes = await app.inject({
+    const unencodedRes = await inject(app, {
       method: "GET",
       url: "/image-proxy?service=tiktok&url=https://p16-common-sign.tiktokcdn-eu.com/image.jpg?dr=1&x-signature=abc"
     });
@@ -87,7 +85,7 @@ describe("image proxy routes", () => {
       })
     );
 
-    const validRes = await app.inject({
+    const validRes = await inject(app, {
       method: "GET",
       url: `/image-proxy?url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg")}`
     });
@@ -107,7 +105,7 @@ describe("image proxy routes", () => {
       })
     );
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "GET",
       url: `/i?u=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg?x=1&y=2")}`
     });
@@ -133,7 +131,7 @@ describe("image proxy routes", () => {
       })
     );
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "POST",
       url: "/images-proxy",
       payload: {
@@ -155,7 +153,7 @@ describe("image proxy routes", () => {
 
     // Reuses cached image without refetching
     globalThis.fetch = vi.fn();
-    const res2 = await app.inject({
+    const res2 = await inject(app, {
       method: "POST",
       url: "/images-proxy",
       payload: {
@@ -180,7 +178,7 @@ describe("image proxy routes", () => {
       })
     );
 
-    const postRes = await app.inject({
+    const postRes = await inject(app, {
       method: "POST",
       url: "/images-proxy",
       payload: {
@@ -194,7 +192,7 @@ describe("image proxy routes", () => {
     };
     const id = imageUrl.split("/").pop()!;
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "GET",
       url: `/images-proxy/${id}`
     });
@@ -205,7 +203,7 @@ describe("image proxy routes", () => {
   });
 
   it("GET /images-proxy/:id returns 404 when the cached image does not exist", async () => {
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "GET",
       url: "/images-proxy/nonexistent_id_1234567890abc"
     });
@@ -226,7 +224,7 @@ describe("image proxy routes", () => {
       })
     );
 
-    const validRes = await app.inject({
+    const validRes = await inject(app, {
       method: "GET",
       url: `/image-proxy?service=tiktok&url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.webp")}`
     });
@@ -236,7 +234,7 @@ describe("image proxy routes", () => {
     expect(Buffer.from(validRes.rawPayload)).toEqual(Buffer.from([4, 5, 6]));
 
     // 2. Rejects URLs that do not match the explicit service
-    const mismatchRes = await app.inject({
+    const mismatchRes = await inject(app, {
       method: "GET",
       url: `/image-proxy?service=unknown&url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg")}`
     });
@@ -268,7 +266,7 @@ describe("image proxy routes", () => {
     const fetchMock = vi.fn();
     globalThis.fetch = fetchMock;
 
-    const res = await app.inject(request);
+    const res = await inject(app, request);
 
     expect(res.statusCode).toBe(400);
     expect(JSON.parse(res.body)).toEqual({ error: "INVALID_IMAGE_URL" });

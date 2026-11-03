@@ -3,19 +3,20 @@ import { resolve } from "path";
 
 export default defineConfig({
   resolve: {
-    alias: { "@": resolve(__dirname, "src") }
+    alias: { "@": resolve(import.meta.dirname, "src") }
   },
   test: {
     globals: true,
     environment: "node",
     include: ["test/**/*.test.ts"],
     setupFiles: ["test/setup.ts"],
+    hookTimeout: 30_000,
     coverage: {
       provider: "v8",
       reporter: ["cobertura"],
       reportsDirectory: "coverage",
       include: ["src/**/*.ts"],
-      exclude: ["src/generated/**"]
+      exclude: []
     }
   }
 });

@@ -2,6 +2,7 @@ import { ScreenBody, ScreenTitle } from "@/components/shared/screen";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav } from "@/hooks/navigation-provider";
+import { useStaffAccess } from "@/hooks/use-staff-access";
 import { sendMessage } from "@/lib/messages";
 import { visibleAnnouncements } from "@/shared/announcements";
 import { Button } from "@/ui/button";
@@ -10,13 +11,14 @@ import { cn } from "@/ui/cn";
 import { EmptyState } from "@/ui/empty-state";
 import { Skeleton } from "@/ui/skeleton";
 import { selectAnnouncementTranslation } from "@nowly/shared/announcements";
-import { RiArrowRightSLine, RiMegaphoneLine } from "@remixicon/react";
+import { RiAddLine, RiArrowRightSLine, RiMegaphoneLine } from "@remixicon/react";
 import { useAnnouncementsClock } from "./announcements-clock";
 
 export const AnnouncementsView = () => {
   const { state, patch } = useExtensionState();
   const { t, locale } = useI18n();
   const { push } = useNav();
+  const staff = useStaffAccess();
   const now = useAnnouncementsClock();
   const items = visibleAnnouncements(state.announcements, now);
   const loading = !state.announcements.fetchedAt && !state.announcements.offline;
@@ -35,7 +37,17 @@ export const AnnouncementsView = () => {
 
   return (
     <ScreenBody className="gap-4">
-      <ScreenTitle title={t("nav.announcements")} subtitle={t("announcements.subtitle")} />
+      <ScreenTitle
+        title={t("nav.announcements")}
+        subtitle={t("announcements.subtitle")}
+        action={
+          staff.can("announce") && (
+            <Button size="sm" variant="secondary" icon={<RiAddLine className="size-4" />} onClick={() => push({ name: "admin-announcement" })}>
+              {t("admin.newAnnouncement")}
+            </Button>
+          )
+        }
+      />
       <div className="flex items-center justify-between gap-3">
         <p role={loading || state.announcements.offline ? "status" : undefined} className="text-label-sm text-muted">
           {status}

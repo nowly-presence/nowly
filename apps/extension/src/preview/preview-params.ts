@@ -2,6 +2,10 @@ export type PreviewAccount = "out" | "in" | "choice" | "error";
 
 const ACCOUNTS: readonly PreviewAccount[] = ["out", "in", "choice", "error"];
 
+export type PreviewStaff = "none" | "moderator" | "admin";
+
+const STAFF_ROLES: readonly PreviewStaff[] = ["none", "moderator", "admin"];
+
 export type PreviewScenario = "live" | "idle" | "nohost" | "nodiscord" | "paused" | "empty";
 
 const SCENARIOS: readonly PreviewScenario[] = ["live", "idle", "nohost", "nodiscord", "paused", "empty"];
@@ -36,6 +40,7 @@ export const previewParams = {
   scriptsDenied: params.get("scripts") === "0",
   developer: params.get("dev") === "1",
   review: params.get("review") === "1",
+  staff: STAFF_ROLES.find((value) => value === params.get("staff")) ?? "none",
   reveal: params.get("reveal") === "1",
   customLive: CUSTOM_MODES.find((value) => value === params.get("custom")) ?? "none",
   season: seasonParam ?? (prank ? "halloween" : moment ? "spring" : null),

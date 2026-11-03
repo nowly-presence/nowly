@@ -1,27 +1,28 @@
 import { serverEnv } from "@nowly/env/server";
-import type { FastifyReply, FastifyRequest } from "fastify";
+import type { Context, MiddlewareHandler } from "hono";
 
-export const hasAdminAuth = (request: FastifyRequest): boolean => {
-  const secret = serverEnv.API_SECRET_KEY ?? process.env.API_SECRET_KEY;
+const isProduction = (): boolean => process.env.NODE_ENV === "production";
+
+const adminSecret = (): string | undefined => serverEnv.API_SECRET_KEY ?? process.env.API_SECRET_KEY;
+
+export const hasAdminAuth = (c: Context): boolean => {
+  const secret = adminSecret();
 
   if (!secret) return false;
 
-  return request.headers.authorization === `Bearer ${secret}`;
+  return c.req.header("authorization") === `Bearer ${secret}`;
 };
 
-// Same fail-closed-in-production pattern as status.routes.ts's requireCronAuth:
-// a misconfigured/missing secret must not silently grant admin access.
-export const requireAuth = async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
-  const secret = serverEnv.API_SECRET_KEY ?? process.env.API_SECRET_KEY;
+export const requireSecret =
+  (secretOf: () => string | undefined, missingError: string): MiddlewareHandler =>
+  async (c, next) => {
+    const secret = secretOf();
 
-  if (!secret && process.env.NODE_ENV === "production") {
-    reply.status(500).send({ error: "API_SECRET_MISSING" });
-    return;
-  }
+    if (!secret && isProduction()) return c.json({ error: missingError }, 500);
 
-  if (!secret) return;
+    if (secret && c.req.header("authorization") !== `Bearer ${secret}`) return c.json({ error: "UNAUTHORIZED" }, 401);
 
-  if (request.headers.authorization !== `Bearer ${secret}`) {
-    reply.status(401).send({ error: "UNAUTHORIZED" });
-  }
-};
+    await next();
+  };
+
+export const requireAuth = requireSecret(adminSecret, "API_SECRET_MISSING");

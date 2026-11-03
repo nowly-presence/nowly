@@ -35,8 +35,10 @@ describe("getAuth", () => {
   it("trusts local web origins outside production only", async () => {
     const { authTrustedOrigins } = await import("@/features/auth/better-auth");
     expect(authTrustedOrigins()).toContain("http://localhost:3000");
+    expect(authTrustedOrigins()).toContain("http://localhost:3003");
     vi.stubEnv("NODE_ENV", "production");
     expect(authTrustedOrigins()).not.toContain("http://localhost:3000");
+    expect(authTrustedOrigins()).not.toContain("http://localhost:3003");
     vi.unstubAllEnvs();
   });
 });

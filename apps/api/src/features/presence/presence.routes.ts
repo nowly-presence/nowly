@@ -1,101 +1,148 @@
 import { hasAdminAuth, requireAuth } from "@/features/auth/auth.middleware";
-import { requireDeviceAccess } from "@/features/device/device-token";
+import { hasDeviceAccess, invalidDeviceToken } from "@/features/device/device-token";
 import { deviceExists } from "@/features/device/device.service";
+import { MINUTE_MS, rateLimit } from "@/middleware/rate-limit";
 import { deviceRateLimitKey } from "@/shared/rate-limit";
+import { jsonBody } from "@/shared/request-body";
 import { buildLocaleObject } from "@nowly/locales";
 import { presenceActiveBodySchema, presenceLikeBodySchema, presenceLikeQuerySchema, presencePutBodySchema, presenceReportBodySchema } from "@nowly/shared/schemas";
-import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { Hono, type Context } from "hono";
 import { addVersion, clearActiveDevice, clearActiveDevicesForDevice, getGlobalPresenceStats, getLikeCount, getPresenceListData, getPresenceMeta, getPresenceStats, getVersionHistory, hasLikedPresence, likePresence, markActiveDevice, setAdded, setUpdated, setVersion, unlikePresence } from "./presence.repository";
 import { buildRelease } from "./presence.service";
 import { presenceDisplayName, sanitizeReportMessage, submitPresenceReport } from "./presence-report";
 import { PresenceAliasConflictError, processPresenceSync, type PresenceSyncBody } from "./presence.sync";
 
-const sendArchivedNotFound = async (slug: string, request: FastifyRequest, reply: FastifyReply): Promise<boolean> => {
+const STATS_CACHE = "public, max-age=5, stale-while-revalidate=10";
+const REPORT_WINDOW_MS = 10 * MINUTE_MS;
+
+const isHiddenArchive = async (slug: string, c: Context): Promise<boolean> => {
   const stats = await getPresenceStats(slug);
-
-  if (!stats?.archived || hasAdminAuth(request)) return false;
-
-  reply.status(404).send({ error: "PRESENCE_NOT_FOUND" });
-  return true;
+  return Boolean(stats?.archived) && !hasAdminAuth(c);
 };
 
-export const presenceRoutes = async (fastify: FastifyInstance) => {
-  fastify.get("", async (_request, _reply) => {
-    return getPresenceListData();
-  });
+const presenceNotFound = (c: Context) => c.json({ error: "PRESENCE_NOT_FOUND" }, 404);
 
-  fastify.get("/stats", async (_request, reply) => {
-    const stats = await getGlobalPresenceStats();
-    return reply.header("Cache-Control", "public, max-age=5, stale-while-revalidate=10").send(stats);
-  });
+const slugOf = (c: Context): string => (c.req.param("slug") ?? "").toLowerCase();
 
-  fastify.get<{
-    Params: {
-      slug: string;
-    };
-  }>("/:slug/stats", async (request, reply) => {
-    const slug = request.params.slug.toLowerCase();
+export const presenceRoutes = new Hono()
+  .get("/", async (c) => c.json(await getPresenceListData()))
+  .get("/stats", async (c) => {
+    c.header("Cache-Control", STATS_CACHE);
+    return c.json(await getGlobalPresenceStats());
+  })
+  .post("/sync", requireAuth, async (c) => {
+    try {
+      const body = await jsonBody(c);
 
-    if (await sendArchivedNotFound(slug, request, reply)) return;
+      const { results, archived } = await processPresenceSync(body as PresenceSyncBody);
+      return c.json({
+        ok: true,
+        results,
+        archived
+      });
+    } catch (error) {
+      if (error instanceof PresenceAliasConflictError) return c.json(
+        {
+          error: "PRESENCE_ALIAS_CONFLICT",
+          issues: error.issues
+        },
+        400
+      );
 
-    const stats = await getPresenceStats(slug);
-    return reply.header("Cache-Control", "public, max-age=5, stale-while-revalidate=10").send(stats);
-  });
+      throw error;
+    }
+  })
+  .post(
+    "/active",
+    rateLimit({
+      name: "presence-active",
+      max: 30,
+      windowMs: MINUTE_MS,
+      key: deviceRateLimitKey
+    }),
+    async (c) => {
+      const parsed = presenceActiveBodySchema.safeParse(await jsonBody(c));
 
-  fastify.get<{
-    Params: {
-      slug: string;
-    };
-  }>("/:slug", async (request, reply) => {
-    const slug = request.params.slug.toLowerCase();
+      if (!parsed.success || !parsed.data.deviceId) return c.json({ error: "DEVICE_ID_REQUIRED" }, 400);
 
-    if (await sendArchivedNotFound(slug, request, reply)) return;
+      const { presences: slugs, deviceId } = parsed.data;
+
+      if (!(await deviceExists(deviceId))) return c.json({ error: "DEVICE_NOT_FOUND" }, 404);
+
+      for (const slug of slugs) await markActiveDevice(slug.toLowerCase(), deviceId);
+
+      return c.json({
+        ok: true,
+        count: slugs.length
+      });
+    }
+  )
+  .delete("/active/:deviceId/:slug?", async (c) => {
+    const deviceId = c.req.param("deviceId").trim();
+    const slug = c.req.param("slug")?.trim();
+
+    if (!deviceId) return c.json({
+      ok: false,
+      error: "DEVICE_ID_REQUIRED"
+    });
+
+    if (slug) {
+      await clearActiveDevice(slug, deviceId);
+      return c.json({
+        ok: true,
+        removed: 1
+      });
+    }
+
+    await clearActiveDevicesForDevice(deviceId);
+    return c.json({
+      ok: true,
+      removed: null
+    });
+  })
+  .get("/:slug/stats", async (c) => {
+    const slug = slugOf(c);
+
+    if (await isHiddenArchive(slug, c)) return presenceNotFound(c);
+
+    c.header("Cache-Control", STATS_CACHE);
+    return c.json(await getPresenceStats(slug));
+  })
+  .get("/:slug", async (c) => {
+    const slug = slugOf(c);
+
+    if (await isHiddenArchive(slug, c)) return presenceNotFound(c);
 
     const release = await buildRelease(slug);
 
-    if (!release) {
-      return reply.status(404).send({ error: "PRESENCE_NOT_FOUND" });
-    }
+    if (!release) return presenceNotFound(c);
 
-    return reply.header("Cache-Control", "no-store").send(release);
-  });
-
-  fastify.post<{
-    Params: {
-      slug: string;
-    };
-  }>(
+    c.header("Cache-Control", "no-store");
+    return c.json(release);
+  })
+  .post(
     "/:slug/report",
-    {
-      config: {
-        rateLimit: {
-          max: 8,
-          timeWindow: "10 minutes"
-        }
-      }
-    },
-    async (request, reply) => {
-      const slug = request.params.slug.toLowerCase();
+    rateLimit({
+      name: "presence-report",
+      max: 8,
+      windowMs: REPORT_WINDOW_MS
+    }),
+    async (c) => {
+      const slug = slugOf(c);
 
-      if (await sendArchivedNotFound(slug, request, reply)) return;
+      if (await isHiddenArchive(slug, c)) return presenceNotFound(c);
 
-      const parsed = presenceReportBodySchema.safeParse(request.body);
+      const parsed = presenceReportBodySchema.safeParse(await jsonBody(c));
 
-      if (!parsed.success) {
-        return reply.status(400).send({ error: "INVALID_REQUEST_BODY" });
-      }
+      if (!parsed.success) return c.json({ error: "INVALID_REQUEST_BODY" }, 400);
 
       const meta = await getPresenceMeta(slug);
 
-      if (!meta) {
-        return reply.status(404).send({ error: "PRESENCE_NOT_FOUND" });
-      }
+      if (!meta) return presenceNotFound(c);
 
       const message = sanitizeReportMessage(parsed.data.message);
 
-      if (!message) {
-        return reply.status(400).send({ error: "INVALID_REQUEST_BODY" });
-      }
+      if (!message) return c.json({ error: "INVALID_REQUEST_BODY" }, 400);
 
       const result = await submitPresenceReport({
         slug,
@@ -106,63 +153,36 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
         browserVersion: parsed.data.browserVersion
       });
 
-      if (result === "unconfigured") {
-        return reply.status(503).send({ error: "REPORTS_UNAVAILABLE" });
-      }
-      if (result === "failed") {
-        return reply.status(502).send({ error: "REPORT_SEND_FAILED" });
-      }
+      if (result === "unconfigured") return c.json({ error: "REPORTS_UNAVAILABLE" }, 503);
+      if (result === "failed") return c.json({ error: "REPORT_SEND_FAILED" }, 502);
 
-      return {
-        ok: true
-      };
+      return c.json({ ok: true });
     }
-  );
+  )
+  .get("/:slug/versions", async (c) => {
+    const slug = slugOf(c);
 
-  fastify.get<{
-    Params: {
-      slug: string;
-    };
-  }>("/:slug/versions", async (request, reply) => {
-    const slug = request.params.slug.toLowerCase();
+    if (await isHiddenArchive(slug, c)) return presenceNotFound(c);
 
-    if (await sendArchivedNotFound(slug, request, reply)) return;
+    return c.json(await getVersionHistory(slug));
+  })
+  .get("/:slug/versions/:version", async (c) => {
+    const slug = slugOf(c);
 
-    const history = await getVersionHistory(slug);
-    return reply.send(history);
-  });
+    if (await isHiddenArchive(slug, c)) return presenceNotFound(c);
 
-  fastify.get<{
-    Params: {
-      slug: string;
-      version: string;
-    };
-  }>("/:slug/versions/:version", async (request, reply) => {
-    const slug = request.params.slug.toLowerCase();
-    const version = request.params.version;
+    const release = await buildRelease(slug, c.req.param("version"));
 
-    if (await sendArchivedNotFound(slug, request, reply)) return;
+    if (!release) return c.json({ error: "VERSION_NOT_FOUND" }, 404);
 
-    const release = await buildRelease(slug, version);
+    c.header("Cache-Control", "no-store");
+    return c.json(release);
+  })
+  .put("/:slug", requireAuth, async (c) => {
+    const slug = slugOf(c);
+    const parsedBody = presencePutBodySchema.safeParse(await jsonBody(c));
 
-    if (!release) {
-      return reply.status(404).send({ error: "VERSION_NOT_FOUND" });
-    }
-
-    return reply.header("Cache-Control", "no-store").send(release);
-  });
-
-  fastify.put<{
-    Params: {
-      slug: string;
-    };
-  }>("/:slug", { preHandler: requireAuth }, async (request, reply) => {
-    const slug = request.params.slug.toLowerCase();
-    const parsedBody = presencePutBodySchema.safeParse(request.body);
-
-    if (!parsedBody.success) {
-      return reply.status(400).send({ error: "INVALID_REQUEST_BODY" });
-    }
+    if (!parsedBody.success) return c.json({ error: "INVALID_REQUEST_BODY" }, 400);
 
     const body = parsedBody.data;
 
@@ -185,162 +205,42 @@ export const presenceRoutes = async (fastify: FastifyInstance) => {
     if (body.added) await setAdded(slug, body.added);
     if (body.updated) await setUpdated(slug, body.updated);
 
-    return {
-      ok: true
-    };
-  });
+    return c.json({ ok: true });
+  })
+  .get("/:slug/like", async (c) => {
+    const parsed = presenceLikeQuerySchema.safeParse(c.req.query());
 
-  fastify.post("/sync", { preHandler: requireAuth }, async (request, reply) => {
-    try {
-      const { results, archived } = await processPresenceSync(request.body as PresenceSyncBody);
-      return {
-        ok: true,
-        results,
-        archived
-      };
-    } catch (error) {
-      if (error instanceof PresenceAliasConflictError) {
-        return reply.status(400).send({
-          error: "PRESENCE_ALIAS_CONFLICT",
-          issues: error.issues
-        });
-      }
+    if (!parsed.success) return c.json({ error: "DEVICE_ID_REQUIRED" }, 400);
 
-      throw error;
-    }
-  });
-
-  fastify.post(
-    "/active",
-    // Keyed by deviceId (not IP) so a shared NAT with several real users
-    // doesn't get capped as if it were one client.
-    {
-      config: {
-        rateLimit: {
-          max: 30,
-          timeWindow: "1 minute",
-          hook: "preHandler",
-          keyGenerator: deviceRateLimitKey
-        }
-      }
-    },
-    async (request, reply) => {
-      const parsed = presenceActiveBodySchema.safeParse(request.body);
-
-      if (!parsed.success || !parsed.data.deviceId) {
-        return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" });
-      }
-
-      const { presences: slugs, deviceId } = parsed.data;
-      // Marking active requires an already-registered device (via /devices/sync)
-      // so activeUsers can't be inflated with throwaway deviceIds that never sync.
-      if (!(await deviceExists(deviceId))) {
-        return reply.status(404).send({ error: "DEVICE_NOT_FOUND" });
-      }
-
-      for (const slug of slugs) {
-        await markActiveDevice(slug.toLowerCase(), deviceId);
-      }
-
-      return {
-        ok: true,
-        count: slugs.length
-      };
-    }
-  );
-
-  fastify.delete<{
-    Params: {
-      deviceId: string;
-      slug?: string;
-    };
-  }>("/active/:deviceId/:slug?", async (request, _reply) => {
-    const deviceId = request.params.deviceId.trim();
-    const slug = request.params.slug?.trim();
-
-    if (!deviceId) {
-      return {
-        ok: false,
-        error: "DEVICE_ID_REQUIRED"
-      };
-    }
-
-    if (slug) {
-      await clearActiveDevice(slug, deviceId);
-      return {
-        ok: true,
-        removed: 1
-      };
-    }
-
-    await clearActiveDevicesForDevice(deviceId);
-    return {
-      ok: true,
-      removed: null
-    };
-  });
-
-  fastify.get<{
-    Params: {
-      slug: string;
-    };
-    Querystring: {
-      deviceId?: string;
-    };
-  }>("/:slug/like", async (request, reply) => {
-    const slug = request.params.slug.toLowerCase();
-    const parsed = presenceLikeQuerySchema.safeParse(request.query);
-
-    if (!parsed.success) {
-      return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" });
-    }
-
-    return {
+    const slug = slugOf(c);
+    return c.json({
       liked: await hasLikedPresence(slug, parsed.data.deviceId),
       count: await getLikeCount(slug)
-    };
-  });
+    });
+  })
+  .post("/:slug/like", async (c) => {
+    const parsed = presenceLikeBodySchema.safeParse(await jsonBody(c));
 
-  fastify.post<{
-    Params: {
-      slug: string;
-    };
-  }>("/:slug/like", async (request, reply) => {
-    const slug = request.params.slug.toLowerCase();
-    const parsed = presenceLikeBodySchema.safeParse(request.body);
+    if (!parsed.success) return c.json({ error: "DEVICE_ID_REQUIRED" }, 400);
+    if (!hasDeviceAccess(c, parsed.data.deviceId)) return invalidDeviceToken(c);
 
-    if (!parsed.success) {
-      return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" });
-    }
-    if (!requireDeviceAccess(request, reply, parsed.data.deviceId)) return;
-
+    const slug = slugOf(c);
     await likePresence(slug, parsed.data.deviceId);
-    return {
+    return c.json({
       ok: true,
       count: await getLikeCount(slug)
-    };
-  });
+    });
+  })
+  .delete("/:slug/like", async (c) => {
+    const parsed = presenceLikeQuerySchema.safeParse(c.req.query());
 
-  fastify.delete<{
-    Params: {
-      slug: string;
-    };
-    Querystring: {
-      deviceId?: string;
-    };
-  }>("/:slug/like", async (request, reply) => {
-    const slug = request.params.slug.toLowerCase();
-    const parsed = presenceLikeQuerySchema.safeParse(request.query);
+    if (!parsed.success) return c.json({ error: "DEVICE_ID_REQUIRED" }, 400);
+    if (!hasDeviceAccess(c, parsed.data.deviceId)) return invalidDeviceToken(c);
 
-    if (!parsed.success) {
-      return reply.status(400).send({ error: "DEVICE_ID_REQUIRED" });
-    }
-    if (!requireDeviceAccess(request, reply, parsed.data.deviceId)) return;
-
+    const slug = slugOf(c);
     await unlikePresence(slug, parsed.data.deviceId);
-    return {
+    return c.json({
       ok: true,
       count: await getLikeCount(slug)
-    };
+    });
   });
-};

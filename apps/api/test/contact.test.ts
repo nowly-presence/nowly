@@ -2,7 +2,7 @@ process.env.AWS_ACCESS_KEY_ID = "test-access-key";
 process.env.AWS_SECRET_ACCESS_KEY = "test-secret-key";
 process.env.AWS_REGION = "eu-west-3";
 
-import Fastify from "fastify";
+import { inject, mount } from "./http";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockSend = vi.hoisted(() =>
@@ -24,10 +24,9 @@ describe("contact routes", () => {
   });
 
   it("rejects invalid contact messages", async () => {
-    const app = Fastify();
-    await app.register(contactRoutes, { prefix: "/contact" });
+    const app = mount("/contact", contactRoutes);
 
-    const response = await app.inject({
+    const response = await inject(app, {
       method: "POST",
       url: "/contact",
       payload: {
@@ -39,14 +38,12 @@ describe("contact routes", () => {
 
     expect(response.statusCode).toBe(400);
     expect(mockSend).not.toHaveBeenCalled();
-    await app.close();
   });
 
   it("sends a valid contact message to the support inbox", async () => {
-    const app = Fastify();
-    await app.register(contactRoutes, { prefix: "/contact" });
+    const app = mount("/contact", contactRoutes);
 
-    const response = await app.inject({
+    const response = await inject(app, {
       method: "POST",
       url: "/contact",
       payload: {
@@ -67,14 +64,12 @@ describe("contact routes", () => {
         subject: "[Nowly Contact] A question"
       })
     );
-    await app.close();
   });
 
   it("accepts honeypot submissions without sending email", async () => {
-    const app = Fastify();
-    await app.register(contactRoutes, { prefix: "/contact" });
+    const app = mount("/contact", contactRoutes);
 
-    const response = await app.inject({
+    const response = await inject(app, {
       method: "POST",
       url: "/contact",
       payload: {
@@ -87,6 +82,5 @@ describe("contact routes", () => {
 
     expect(response.statusCode).toBe(200);
     expect(mockSend).not.toHaveBeenCalled();
-    await app.close();
   });
 });

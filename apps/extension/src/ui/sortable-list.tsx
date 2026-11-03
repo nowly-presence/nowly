@@ -9,6 +9,7 @@ type SortableListProps<T> = {
   onReorder: (items: T[]) => void;
   label: string;
   itemLabel: (item: T) => string;
+  onActivate?: (item: T) => void;
 };
 
 type DragState = {
@@ -17,6 +18,9 @@ type DragState = {
   over: number;
 };
 
+const TAP_TOLERANCE_PX = 4;
+const INTERACTIVE = "button, a, input, select, textarea";
+
 const move = <T,>(list: T[], from: number, to: number): T[] => {
   const next = [...list];
   const [item] = next.splice(from, 1);
@@ -24,7 +28,7 @@ const move = <T,>(list: T[], from: number, to: number): T[] => {
   return next;
 };
 
-export const SortableList = <T,>({ items, getKey, renderItem, onReorder, label, itemLabel }: SortableListProps<T>) => {
+export const SortableList = <T,>({ items, getKey, renderItem, onReorder, label, itemLabel, onActivate }: SortableListProps<T>) => {
   const [drag, setDrag] = useState<DragState | null>(null);
   const rows = useRef<(HTMLLIElement | null)[]>([]);
   const geometry = useRef<{
@@ -48,6 +52,7 @@ export const SortableList = <T,>({ items, getKey, renderItem, onReorder, label, 
 
   const onPointerDown = (event: PointerEvent<HTMLLIElement>, index: number) => {
     if (event.button !== 0) return;
+    if (event.target instanceof Element && event.target.closest(INTERACTIVE)) return;
 
     event.currentTarget.setPointerCapture(event.pointerId);
     const rects = rows.current.map((row) => row?.getBoundingClientRect());
@@ -80,10 +85,18 @@ export const SortableList = <T,>({ items, getKey, renderItem, onReorder, label, 
     if (!drag) return;
 
     if (drag.over !== drag.index) onReorder(move(items, drag.index, drag.over));
+    else if (Math.abs(drag.offset) < TAP_TOLERANCE_PX) onActivate?.(items[drag.index]);
     setDrag(null);
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLLIElement>, index: number) => {
+    if (event.target !== event.currentTarget) return;
+    if (event.key === "Enter" && onActivate) {
+      event.preventDefault();
+      onActivate(items[index]);
+      return;
+    }
+
     const target = event.key === "ArrowUp" ? index - 1 : event.key === "ArrowDown" ? index + 1 : null;
 
     if (target === null) return;

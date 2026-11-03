@@ -766,10 +766,6 @@
       "title": "Connect the extension",
       "description": "Sign in with Discord to sync Nowly between your browsers."
     },
-    "account": {
-      "title": "Your Nowly account",
-      "description": "Linked devices, your data and your sign-in."
-    },
     "guides": {
       "title": "Guides",
       "description": "Guides to set up Nowly, fix Discord Rich Presence, control your privacy and create your own presence."
@@ -1274,33 +1270,6 @@
     "signed-in-as": "Signed in as {name}.",
     "switch-account": "Not you? Switch account"
   },
-  "accountPage": {
-    "eyebrow": "Account",
-    "title": "Your Nowly account",
-    "description": "Manage the devices linked to your account, your data and your sign-in.",
-    "checking": "Loading your account...",
-    "sign-in-title": "Sign in with Discord",
-    "sign-in-description": "An account is optional. It lets the extension sync your presences and settings between your browsers.",
-    "sign-in": "Continue with Discord",
-    "provider-discord": "Signed in with Discord",
-    "sign-out": "Sign out",
-    "devices-title": "Linked devices",
-    "devices-description": "Browsers where the extension is connected to this account.",
-    "devices-empty": "No linked device yet.",
-    "device-unknown": "Unknown browser",
-    "device-last-seen": "Last seen on {date}",
-    "unlink": "Unlink",
-    "unlink-confirm": "This browser will stop syncing with your account. Its local data stays on it.",
-    "data-title": "Your data",
-    "data-description": "Download everything Nowly keeps for this account, or delete the account. Deleting it erases the synced copy and unlinks your devices.",
-    "export": "Download my data",
-    "export-success": "Your data was downloaded.",
-    "delete": "Delete my account",
-    "delete-confirm": "This permanently deletes your Nowly account and the synced copy of your extension. This cannot be undone.",
-    "delete-success": "Your account was deleted.",
-    "local-note": "Data stored by the extension on your devices is not affected. You can erase it from the extension settings.",
-    "action-error": "We could not complete this request. Try again, or contact support if the problem continues."
-  },
   "ads": {
     "label": "Advertisement"
   },
@@ -1380,5 +1349,13 @@
       "roadmap": "Roadmap",
       "changelog": "Release notes"
     }
+  },
+  "profilePage": {
+    "eyebrow": "Profile",
+    "created-title": "Presences created",
+    "liked-title": "Presences liked",
+    "empty": "Nothing to show yet.",
+    "meta-title": "{name} on Nowly",
+    "meta-description": "Presences created and liked by {name} on Nowly."
   }
 }

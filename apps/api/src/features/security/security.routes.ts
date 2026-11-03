@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify";
+import { Hono } from "hono";
 import { serverEnv } from "@nowly/env/server";
 import { createPrivateKey, createPublicKey } from "node:crypto";
 
@@ -22,6 +22,4 @@ const getPublicKey = (): string => {
   return cached;
 };
 
-export const securityRoutes = async (app: FastifyInstance): Promise<void> => {
-  app.get("/public-key", async () => ({ publicKey: getPublicKey() }));
-};
+export const securityRoutes = new Hono().get("/public-key", (c) => c.json({ publicKey: getPublicKey() }));

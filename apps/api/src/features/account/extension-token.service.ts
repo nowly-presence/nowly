@@ -1,6 +1,8 @@
-import { getPrisma } from "@/db/client";
+import { getDb } from "@/db/client";
 import { sha256Base64Url } from "@/shared/crypto.service";
+import { extensionToken } from "@nowly/database/schema/account";
 import { EXTENSION_TOKEN_PREFIX, EXTENSION_TOKEN_SCOPES, EXTENSION_TOKEN_TTL_MS, type ExtensionTokenScope } from "@nowly/shared";
+import { and, eq, isNull } from "drizzle-orm";
 import { randomBytes, randomUUID } from "node:crypto";
 
 const TOKEN_BYTES = 32;
@@ -30,31 +32,25 @@ export const createExtensionToken = async (input: {
   token: string;
   expiresAt: Date;
 }> => {
-  const prisma = getPrisma();
+  const db = getDb();
   const now = input.now ?? new Date();
   const token = generateExtensionToken();
   const expiresAt = new Date(now.getTime() + EXTENSION_TOKEN_TTL_MS);
 
   if (input.deviceId) {
-    await prisma.extensionToken.updateMany({
-      where: {
-        userId: input.userId,
-        deviceId: input.deviceId,
-        revokedAt: null
-      },
-      data: { revokedAt: now }
-    });
+    await db
+      .update(extensionToken)
+      .set({ revokedAt: now })
+      .where(and(eq(extensionToken.userId, input.userId), eq(extensionToken.deviceId, input.deviceId), isNull(extensionToken.revokedAt)));
   }
 
-  await prisma.extensionToken.create({
-    data: {
-      id: randomUUID(),
-      userId: input.userId,
-      deviceId: input.deviceId ?? null,
-      tokenHash: hashExtensionToken(token),
-      scopes: [...new Set(input.scopes)],
-      expiresAt
-    }
+  await db.insert(extensionToken).values({
+    id: randomUUID(),
+    userId: input.userId,
+    deviceId: input.deviceId ?? null,
+    tokenHash: hashExtensionToken(token),
+    scopes: [...new Set(input.scopes)],
+    expiresAt
   });
 
   return { token, expiresAt };
@@ -63,9 +59,11 @@ export const createExtensionToken = async (input: {
 export const findActiveExtensionToken = async (token: string, now = new Date()): Promise<ExtensionTokenRecord | null> => {
   if (!token.startsWith(EXTENSION_TOKEN_PREFIX)) return null;
 
-  const row = await getPrisma().extensionToken.findUnique({
-    where: { tokenHash: hashExtensionToken(token) }
-  });
+  const [row] = await getDb()
+    .select()
+    .from(extensionToken)
+    .where(eq(extensionToken.tokenHash, hashExtensionToken(token)))
+    .limit(1);
 
   if (!row || row.revokedAt || row.expiresAt.getTime() <= now.getTime()) return null;
 
@@ -73,7 +71,7 @@ export const findActiveExtensionToken = async (token: string, now = new Date()):
     id: row.id,
     userId: row.userId,
     deviceId: row.deviceId,
-    scopes: row.scopes.filter(isScope),
+    scopes: (row.scopes ?? []).filter(isScope),
     expiresAt: row.expiresAt,
     lastUsedAt: row.lastUsedAt
   };
@@ -82,50 +80,38 @@ export const findActiveExtensionToken = async (token: string, now = new Date()):
 export const touchExtensionToken = async (record: ExtensionTokenRecord, now = new Date()): Promise<void> => {
   if (record.lastUsedAt && now.getTime() - record.lastUsedAt.getTime() < TOUCH_INTERVAL_MS) return;
 
-  await getPrisma().extensionToken.update({
-    where: { id: record.id },
-    data: {
+  await getDb()
+    .update(extensionToken)
+    .set({
       lastUsedAt: now,
       expiresAt: new Date(now.getTime() + EXTENSION_TOKEN_TTL_MS)
-    }
-  });
+    })
+    .where(eq(extensionToken.id, record.id));
 };
 
 export const revokeExtensionToken = async (id: string, now = new Date()): Promise<void> => {
-  await getPrisma().extensionToken.updateMany({
-    where: {
-      id,
-      revokedAt: null
-    },
-    data: { revokedAt: now }
-  });
+  await getDb()
+    .update(extensionToken)
+    .set({ revokedAt: now })
+    .where(and(eq(extensionToken.id, id), isNull(extensionToken.revokedAt)));
 };
 
 export const revokeDeviceExtensionTokens = async (userId: string, deviceId: string, now = new Date()): Promise<void> => {
-  await getPrisma().extensionToken.updateMany({
-    where: {
-      userId,
-      deviceId,
-      revokedAt: null
-    },
-    data: { revokedAt: now }
-  });
+  await getDb()
+    .update(extensionToken)
+    .set({ revokedAt: now })
+    .where(and(eq(extensionToken.userId, userId), eq(extensionToken.deviceId, deviceId), isNull(extensionToken.revokedAt)));
 };
 
 export const revokeUserExtensionTokens = async (userId: string, now = new Date()): Promise<number> => {
-  const result = await getPrisma().extensionToken.updateMany({
-    where: {
-      userId,
-      revokedAt: null
-    },
-    data: { revokedAt: now }
-  });
-  return result.count;
+  const revoked = await getDb()
+    .update(extensionToken)
+    .set({ revokedAt: now })
+    .where(and(eq(extensionToken.userId, userId), isNull(extensionToken.revokedAt)))
+    .returning({ id: extensionToken.id });
+  return revoked.length;
 };
 
 export const attachTokenToDevice = async (id: string, deviceId: string): Promise<void> => {
-  await getPrisma().extensionToken.update({
-    where: { id },
-    data: { deviceId }
-  });
+  await getDb().update(extensionToken).set({ deviceId }).where(eq(extensionToken.id, id));
 };

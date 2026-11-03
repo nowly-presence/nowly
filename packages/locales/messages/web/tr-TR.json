@@ -766,10 +766,6 @@
       "title": "Uzantıyı bağla",
       "description": "Nowly'yi tarayıcıların arasında eşitlemek için Discord ile giriş yap."
     },
-    "account": {
-      "title": "Nowly hesabın",
-      "description": "Bağlı cihazlar, verilerin ve oturumun."
-    },
     "guides": {
       "title": "Rehberler",
       "description": "Nowly'yi kurmak, Discord Rich Presence sorunlarını çözmek, gizliliğini yönetmek ve kendi presence'ını yapmak için rehberler."
@@ -1274,33 +1270,6 @@
     "signed-in-as": "{name} olarak giriş yapıldı.",
     "switch-account": "Sen değil misin? Hesap değiştir"
   },
-  "accountPage": {
-    "eyebrow": "Hesap",
-    "title": "Nowly hesabın",
-    "description": "Hesabına bağlı cihazları, verilerini ve oturumunu yönet.",
-    "checking": "Hesabın yükleniyor...",
-    "sign-in-title": "Discord ile giriş yap",
-    "sign-in-description": "Hesap isteğe bağlıdır. Uzantının presence'larını ve ayarlarını tarayıcıların arasında eşitlemesini sağlar.",
-    "sign-in": "Discord ile devam et",
-    "provider-discord": "Discord ile giriş yapıldı",
-    "sign-out": "Çıkış yap",
-    "devices-title": "Bağlı cihazlar",
-    "devices-description": "Uzantının bu hesaba bağlı olduğu tarayıcılar.",
-    "devices-empty": "Henüz bağlı cihaz yok.",
-    "device-unknown": "Bilinmeyen tarayıcı",
-    "device-last-seen": "Son görülme: {date}",
-    "unlink": "Bağlantıyı kaldır",
-    "unlink-confirm": "Bu tarayıcı artık hesabınla eşitlenmeyecek. Yerel verileri cihazda kalır.",
-    "data-title": "Verilerin",
-    "data-description": "Nowly'nin bu hesap için sakladığı her şeyi indir ya da hesabı sil. Silme işlemi eşitlenmiş kopyayı siler ve cihazlarının bağlantısını kaldırır.",
-    "export": "Verilerimi indir",
-    "export-success": "Verilerin indirildi.",
-    "delete": "Hesabımı sil",
-    "delete-confirm": "Bu işlem Nowly hesabını ve uzantının eşitlenmiş kopyasını kalıcı olarak siler. Geri alınamaz.",
-    "delete-success": "Hesabın silindi.",
-    "local-note": "Uzantının cihazlarında sakladığı veriler etkilenmez. Bunları uzantı ayarlarından silebilirsin.",
-    "action-error": "İşlem tamamlanamadı. Tekrar dene; sorun devam ederse destek ekibiyle iletişime geç."
-  },
   "ads": {
     "label": "Reklam"
   },
@@ -1380,5 +1349,13 @@
       "roadmap": "Yol haritası",
       "changelog": "Sürüm notları"
     }
+  },
+  "profilePage": {
+    "eyebrow": "Profil",
+    "created-title": "Oluşturulan presence'lar",
+    "liked-title": "Beğenilen presence'lar",
+    "empty": "Henüz gösterilecek bir şey yok.",
+    "meta-title": "Nowly'de {name}",
+    "meta-description": "{name} kullanıcısının Nowly'de oluşturduğu ve beğendiği presence'lar."
   }
 }

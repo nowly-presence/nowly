@@ -8,6 +8,9 @@ export * from "./aliases";
 export * from "./constants";
 export * from "./format";
 export * from "./json";
+export * from "./roles";
 export * from "./sync";
 
 export type { PortableActivity, ActivityPublication, PublicationReview, PublicationApply, PublicationStatus, PublicationResult } from "./activity-publication";
+
+export * from "./public-profile";

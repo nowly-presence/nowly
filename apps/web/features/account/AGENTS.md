@@ -1,11 +1,6 @@
-# Account
+# Account (extension sign-in only)
 
-`/extension/connect` and `/account`: both `noIndex` and absent from the navigation.
+`/extension/connect` stays here for extension builds that only trust the `nowly.me` origin. The account space itself moved to `apps/account` (account.nowly.me); `/account` redirects there. Remove this folder once every supported extension build opens `account.nowly.me/connect`.
 
-- No Better Auth client: call the API through `lib/account-api.ts` (`credentials: "include"`, `cache: "no-store"`, base `presenceApiBaseUrl()`). The endpoints live in `apps/api/src/features/account`.
-- The session cookie is shared on `.nowly.me`; locally the API trusts `localhost:3000` outside production.
-- Discord sign-in uses the full current URL as `callbackURL` and `errorCallbackURL`, so the user returns to the same page.
-- Connect flow: `GET /me` (`401` shows sign-in), detect the extension, `POST /extension/tokens` with `{ deviceId?, scopes: ["sync"] }`, pass the response unchanged to `requestExtension("NOWLY_SESSION", ...)` and wait for `NOWLY_SESSION_RESULT`. With `?source=extension` it starts once by itself.
-- `?permission=creator` requests `sync` and `creator`, explains public attribution and never auto-connects: the user must click Connect.
-- Deletion, export and device unlinking use the site cookie only, never an extension token. Keep the `window.confirm` before `DELETE /me` and before unlinking a device.
-- The extension works without an account: never gate a site feature on sign-in without asking first.
+- Same rules as before: no Better Auth client, API calls with `credentials: "include"` through `lib/account-api.ts`, `?permission=creator` never auto-connects, the extension works without an account.
+- Admin scope (`?permission=admin`) exists only in `apps/account`.

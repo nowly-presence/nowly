@@ -1,7 +1,6 @@
 import { deriveDeviceToken } from "@/features/device/device-token";
 import { presenceRoutes } from "@/features/presence/presence.routes";
-import cors from "@fastify/cors";
-import Fastify from "fastify";
+import { inject, mount } from "./http";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockPresenceRepo = vi.hoisted(() => ({
@@ -43,7 +42,7 @@ vi.mock("@/features/presence/presence-report", async (importOriginal) => {
 });
 
 vi.mock("@/db/client", () => ({
-  getPrisma: vi.fn(() => ({})),
+  getDb: vi.fn(() => ({})),
   hasDatabase: vi.fn(() => true)
 }));
 
@@ -56,12 +55,7 @@ const mockCrypto = vi.hoisted(() => ({
 
 vi.mock("@/shared/crypto.service", () => mockCrypto);
 
-async function buildApp() {
-  const app = Fastify();
-  await app.register(cors, { origin: true });
-  await app.register(presenceRoutes, { prefix: "/presences" });
-  return app;
-}
+const buildApp = () => mount("/presences", presenceRoutes);
 
 describe("Registry Routes", () => {
   let app: Awaited<ReturnType<typeof buildApp>>;
@@ -73,14 +67,13 @@ describe("Registry Routes", () => {
   });
 
   afterEach(async () => {
-    await app.close();
     delete process.env.API_SECRET_KEY;
   });
 
   it("GET /presences returns empty array when no slugs", async () => {
     mockPresenceRepo.getPresenceListData.mockResolvedValue([]);
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "GET",
       url: "/presences"
     });
@@ -117,7 +110,7 @@ describe("Registry Routes", () => {
       }
     ]);
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "GET",
       url: "/presences"
     });
@@ -140,7 +133,7 @@ describe("Registry Routes", () => {
       installedPresenceCount: 2400
     });
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "GET",
       url: "/presences/stats"
     });
@@ -166,14 +159,13 @@ describe("Presence Routes", () => {
   });
 
   afterEach(async () => {
-    await app.close();
     delete process.env.API_SECRET_KEY;
   });
 
   it("GET /presences/:slug returns 404 for unknown", async () => {
     mockPresenceRepo.getPresenceMeta.mockResolvedValue(null);
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "GET",
       url: "/presences/nonexistent"
     });
@@ -192,7 +184,7 @@ describe("Presence Routes", () => {
       lastUpdated: null
     });
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "GET",
       url: "/presences/cinepulse"
     });
@@ -239,7 +231,7 @@ describe("Presence Routes", () => {
     mockCrypto.signedPayload.mockReturnValue("signed-payload");
     mockCrypto.signPresenceRelease.mockReturnValue("signature-value");
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "GET",
       url: "/presences/youtube"
     });
@@ -276,7 +268,7 @@ describe("Presence Routes", () => {
 
     mockPresenceRepo.getVersionHistory.mockResolvedValue(history);
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "GET",
       url: "/presences/youtube/versions"
     });
@@ -288,7 +280,7 @@ describe("Presence Routes", () => {
   it("PUT /presences/:slug returns 401 without auth when secret is configured", async () => {
     process.env.API_SECRET_KEY = "test-secret";
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "PUT",
       url: "/presences/youtube",
       payload: { version: "1.0.0" }
@@ -303,7 +295,7 @@ describe("Presence Routes", () => {
     mockPresenceRepo.setVersion.mockResolvedValue(undefined as any);
     mockPresenceRepo.addVersion.mockResolvedValue(undefined as any);
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "PUT",
       url: "/presences/youtube",
       headers: { authorization: "Bearer test-secret" },
@@ -330,7 +322,7 @@ describe("Presence Routes", () => {
   it("POST /presences/sync returns 401 without auth", async () => {
     process.env.API_SECRET_KEY = "test-secret";
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "POST",
       url: "/presences/sync",
       payload: {
@@ -354,7 +346,7 @@ describe("Presence Routes", () => {
     mockPresenceRepo.setAdded.mockResolvedValue(undefined as any);
     mockPresenceRepo.addVersion.mockResolvedValue(undefined as any);
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "POST",
       url: "/presences/sync",
       payload: {
@@ -409,7 +401,7 @@ describe("Presence Routes", () => {
     mockPresenceRepo.setPresenceMeta.mockResolvedValue(undefined);
     mockPresenceRepo.addVersion.mockResolvedValue(undefined);
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "POST",
       url: "/presences/sync",
       payload: {
@@ -449,7 +441,7 @@ describe("Presence Routes", () => {
       }
     ]);
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "POST",
       url: "/presences/sync",
       payload: {
@@ -501,7 +493,7 @@ describe("Presence Routes", () => {
     mockPresenceRepo.getPresenceStats.mockResolvedValue({ version: "1.0.0" });
     mockPresenceRepo.getVersionHistory.mockResolvedValue([]);
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "POST",
       url: "/presences/sync",
       payload: {
@@ -540,7 +532,7 @@ describe("Presence Routes", () => {
   it("POST /presences/sync archives removed slugs", async () => {
     mockPresenceRepo.setArchived.mockResolvedValue(true);
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "POST",
       url: "/presences/sync",
       headers: { authorization: "Bearer test-secret" },
@@ -570,14 +562,13 @@ describe("Stats Routes", () => {
   });
 
   afterEach(async () => {
-    await app.close();
     delete process.env.API_SECRET_KEY;
   });
 
   it("POST /presences/active updates multiple presences and DELETE endpoints clear active tracks", async () => {
     // 1. POST /presences/active updates multiple presences
     mockPresenceRepo.markActiveDevice.mockResolvedValue(undefined as any);
-    const postRes = await app.inject({
+    const postRes = await inject(app, {
       method: "POST",
       url: "/presences/active",
       payload: {
@@ -596,7 +587,7 @@ describe("Stats Routes", () => {
 
     // 2. DELETE /presences/active/:deviceId/:slug clears one tracked presence
     mockPresenceRepo.clearActiveDevice.mockResolvedValue(undefined as any);
-    const deleteSingleRes = await app.inject({
+    const deleteSingleRes = await inject(app, {
       method: "DELETE",
       url: "/presences/active/device-123/youtube"
     });
@@ -609,7 +600,7 @@ describe("Stats Routes", () => {
 
     // 3. DELETE /presences/active/:deviceId clears every tracked presence
     mockPresenceRepo.clearActiveDevicesForDevice.mockResolvedValue(undefined as any);
-    const deleteAllRes = await app.inject({
+    const deleteAllRes = await inject(app, {
       method: "DELETE",
       url: "/presences/active/device-123"
     });
@@ -629,7 +620,7 @@ describe("Stats Routes", () => {
     mockPresenceReport.submitPresenceReport.mockResolvedValue("sent");
 
     // Valid submission
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "POST",
       url: "/presences/youtube/report",
       payload: {
@@ -655,7 +646,7 @@ describe("Stats Routes", () => {
     mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: "YouTube" });
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: "/presences/youtube/report",
           payload: { message: "   " }
@@ -664,7 +655,7 @@ describe("Stats Routes", () => {
     ).toBe(400);
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: "/presences/youtube/report",
           payload: { message: "x".repeat(751) }
@@ -676,7 +667,7 @@ describe("Stats Routes", () => {
     mockPresenceRepo.getPresenceMeta.mockResolvedValue(null);
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: "/presences/missing/report",
           payload: { message: "Broken" }
@@ -689,7 +680,7 @@ describe("Stats Routes", () => {
     mockPresenceReport.submitPresenceReport.mockResolvedValue("unconfigured");
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: "/presences/youtube/report",
           payload: { message: "Broken timestamps" }
@@ -708,14 +699,12 @@ describe("Presence Likes", () => {
     app = await buildApp();
   });
 
-  afterEach(async () => {
-    await app.close();
-  });
+  afterEach(async () => {});
 
   it("handles like and unlike lifecycles with valid device token auth", async () => {
     // Like
     mockPresenceRepo.getLikeCount.mockResolvedValueOnce(3);
-    const likeRes = await app.inject({
+    const likeRes = await inject(app, {
       method: "POST",
       url: "/presences/youtube/like",
       payload: { deviceId: validDeviceId },
@@ -731,7 +720,7 @@ describe("Presence Likes", () => {
     // Status query
     mockPresenceRepo.hasLikedPresence.mockResolvedValueOnce(true);
     mockPresenceRepo.getLikeCount.mockResolvedValueOnce(3);
-    const statusRes = await app.inject({
+    const statusRes = await inject(app, {
       method: "GET",
       url: `/presences/youtube/like?deviceId=${validDeviceId}`
     });
@@ -743,7 +732,7 @@ describe("Presence Likes", () => {
 
     // Unlike
     mockPresenceRepo.getLikeCount.mockResolvedValueOnce(2);
-    const unlikeRes = await app.inject({
+    const unlikeRes = await inject(app, {
       method: "DELETE",
       url: `/presences/youtube/like?deviceId=${validDeviceId}`,
       headers: { "x-device-token": deriveDeviceToken(validDeviceId) }
@@ -760,7 +749,7 @@ describe("Presence Likes", () => {
     // Missing deviceId -> 400
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: "/presences/youtube/like",
           payload: {}
@@ -769,7 +758,7 @@ describe("Presence Likes", () => {
     ).toBe(400);
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "DELETE",
           url: "/presences/youtube/like"
         })
@@ -777,7 +766,7 @@ describe("Presence Likes", () => {
     ).toBe(400);
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "GET",
           url: "/presences/youtube/like"
         })
@@ -787,7 +776,7 @@ describe("Presence Likes", () => {
     // Missing / invalid token -> 401
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "POST",
           url: "/presences/youtube/like",
           payload: { deviceId: validDeviceId }
@@ -796,7 +785,7 @@ describe("Presence Likes", () => {
     ).toBe(401);
     expect(
       (
-        await app.inject({
+        await inject(app, {
           method: "DELETE",
           url: `/presences/youtube/like?deviceId=${validDeviceId}`
         })

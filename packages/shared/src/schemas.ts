@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { PRESENCE_REPORT_MAX_LENGTH, SLUG_MAX_LENGTH } from "./constants";
+import { isValidPublicHandle, PUBLIC_BIO_MAX_LENGTH } from "./public-profile";
 import { EXTENSION_TOKEN_SCOPES } from "./sync";
 
 /**
@@ -226,3 +227,18 @@ export const extensionTokenBodySchema = z.object({
 });
 
 export type ExtensionTokenBody = z.infer<typeof extensionTokenBodySchema>;
+
+export const publicProfileBodySchema = z.strictObject({
+  enabled: z.boolean(),
+  handle: z.string().trim().toLowerCase().refine(isValidPublicHandle, "INVALID_HANDLE"),
+  bio: z
+    .string()
+    .trim()
+    .max(PUBLIC_BIO_MAX_LENGTH)
+    .refine((value) => !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(value), "INVALID_BIO")
+    .transform((value) => (value ? value : null)),
+  showCreated: z.boolean(),
+  showLiked: z.boolean()
+});
+
+export type PublicProfileBody = z.infer<typeof publicProfileBodySchema>;

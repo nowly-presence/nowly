@@ -2,7 +2,8 @@ import { syncPresenceScripts } from "@/background/runtime/presence-scripts";
 import { urlMatchesPresence } from "@/shared/url-patterns";
 import type { Handler } from "@/background/router/router";
 import { getEffectiveApiUrl } from "@/background/services/api-state";
-import { getFocusedTabId, getTabPresencesSnapshot, isTabMuted, setFocusedTabId } from "@/background/services/background-context";
+import { getTabPresencesSnapshot, isTabMuted } from "@/background/services/background-context";
+import { resolveFocusedTab } from "@/background/services/focused-tab";
 import { setTabMuteState } from "@/background/services/context-menu";
 import { getActiveDeviceId, syncDeviceState } from "@/background/services/device-sync";
 import { addRuntimeLog } from "@/background/runtime-logs";
@@ -44,21 +45,6 @@ const hostnameOf = (url: string | undefined): string | null => {
   } catch {
     return null;
   }
-};
-
-const resolveFocusedTab = async (): Promise<chrome.tabs.Tab | undefined> => {
-  const [tab] = await chrome.tabs.query({
-    active: true,
-    lastFocusedWindow: true
-  });
-
-  if (tab?.id != null) {
-    setFocusedTabId(tab.id);
-    return tab;
-  }
-
-  const tabId = getFocusedTabId();
-  return tabId == null ? undefined : chrome.tabs.get(tabId).catch(() => undefined);
 };
 
 const buildTabState = async (): Promise<TabState> => {

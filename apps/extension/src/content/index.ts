@@ -2,6 +2,8 @@ import { IS_CANARY } from "@/shared/brand";
 import { EXT_WEB_SOURCE, USER_SCRIPT_MESSAGE_SOURCE, WEB_BASE_URL } from "@/shared/constants";
 import type { WebMessage } from "@/shared/types";
 import { startWebSeason } from "@/content/web-season";
+import { registerCreatorBridge } from "@/content/creator-picker";
+import { ACCOUNT_ORIGIN_MESSAGE_TYPES, isAllowedAccountOrigin } from "@/shared/web-origin";
 
 const DEVICE_KEY = "deviceId";
 const DEVICE_TOKEN_KEY = "deviceToken";
@@ -65,7 +67,7 @@ const broadcastDetected = (): void => {
 };
 
 window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
-  if (event.source !== window || event.origin !== window.location.origin || !isAllowedWebOrigin(event.origin)) return;
+  if (event.source !== window || event.origin !== window.location.origin || !(isAllowedWebOrigin(event.origin) || isAllowedAccountOrigin(event.origin))) return;
 
   if (event.data?.source === EXT_WEB_SOURCE && event.data.type === "PING") {
     window.postMessage(
@@ -79,9 +81,10 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
 });
 
 window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
-  if (event.source !== window || event.origin !== window.location.origin || !isAllowedWebOrigin(event.origin)) return;
+  if (event.source !== window || event.origin !== window.location.origin) return;
   if (event.data?.source !== EXT_WEB_SOURCE || event.data.type === "PING") return;
   if (!WEB_MESSAGE_TYPES.has(event.data.type)) return;
+  if (!(isAllowedWebOrigin(event.origin) || (isAllowedAccountOrigin(event.origin) && ACCOUNT_ORIGIN_MESSAGE_TYPES.includes(event.data.type)))) return;
 
   const msg = event.data;
 
@@ -156,6 +159,7 @@ chrome.runtime.onMessage.addListener((message) => {
 });
 
 broadcastDetected();
+registerCreatorBridge();
 startWebSeason({
   target: window,
   storage: {

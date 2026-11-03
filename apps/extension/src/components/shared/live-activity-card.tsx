@@ -21,6 +21,7 @@ type LiveCardProps = {
   artwork?: ReactNode;
   className?: string;
   timelineMode?: "playback" | "countdown";
+  fallbackImage?: string;
 };
 
 const NAMED_HEADER_TYPES = new Set([2, 3, 5]);
@@ -33,10 +34,12 @@ const headerKey = (type: number | undefined) =>
 
 const typeKey = (type: number | undefined) => (type === 2 ? "activity.type.listening" : type === 3 ? "activity.type.watching" : "activity.type.competing");
 
-const imageSrc = (value: string | undefined, slug: string): string => (value && value.startsWith("https://") ? value : assetUrl(slug, "logo"));
+const imageSrc = (value: string | undefined, slug: string, fallback?: string): string =>
+  value && value.startsWith("https://") ? value : (fallback ?? assetUrl(slug, "logo"));
 
-const ActivityImage = ({ src, small, slug, name, size }: {
+const ActivityImage = ({ src, small, slug, name, size, fallback }: {
   src: string;
+  fallback?: string;
   small?: string;
   slug: string;
   name: string;
@@ -55,7 +58,7 @@ const ActivityImage = ({ src, small, slug, name, size }: {
       }}
     >
       <img
-        src={failed ? assetUrl(slug, "logo") : src}
+        src={failed ? (fallback ?? assetUrl(slug, "logo")) : src}
         onError={() => setFailed(true)}
         alt=""
         draggable={false}
@@ -79,7 +82,7 @@ const ActivityImage = ({ src, small, slug, name, size }: {
 };
 
 export const LiveCard =
-  ({ slug, presence, presenceName, t, status = "live", statusLabel, footer, onOpen, compact, artwork, className, timelineMode = "playback" }: LiveCardProps) => {
+  ({ slug, presence, presenceName, t, status = "live", statusLabel, footer, onOpen, compact, artwork, className, timelineMode = "playback", fallbackImage }: LiveCardProps) => {
     const start = toMs(presence.startTime);
     const end = toMs(presence.endTime);
     const now = useNow(1000, status === "live" && Boolean(start || end));
@@ -147,7 +150,8 @@ export const LiveCard =
             <button type="button" onClick={onOpen} disabled={!onOpen} tabIndex={-1} aria-hidden className="shrink-0 rounded-md enabled:hover:opacity-90">
               {artwork ?? (
                 <ActivityImage
-                  src={imageSrc(presence.largeImage, slug)}
+                  src={imageSrc(presence.largeImage, slug, fallbackImage)}
+                  fallback={fallbackImage}
                   small={small}
                   slug={slug}
                   name={presence.name || presenceName}

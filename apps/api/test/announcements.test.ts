@@ -1,21 +1,26 @@
-import Fastify, { type FastifyInstance } from "fastify";
+import { announcement } from "@nowly/database/schema/announcement";
 import { ANNOUNCEMENT_LOCALES, AnnouncementSchema, selectAnnouncementTranslation } from "@nowly/shared/announcements";
-import { announcementsRoutes } from "@/features/announcements/announcements.routes";
+import { Hono } from "hono";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { createAnnouncementsRoutes } from "@/features/announcements/announcements.routes";
+import { createTestDatabase, type TestDatabase } from "./database";
+import { inject, mount } from "./http";
 
-const database = vi.hoisted(() => ({
-  create: vi.fn(),
-  findMany: vi.fn()
-}));
-
-vi.mock("@/db/client", () => ({
-  getPrisma: () => ({ announcement: database })
-}));
 vi.mock("@nowly/env/server", () => ({
   serverEnv: {}
 }));
 vi.mock("@/features/announcements/announcements.changelog", () => ({
   readReleaseAnnouncements: async () => []
 }));
+
+let database: TestDatabase;
+
+beforeAll(async () => {
+  database = await createTestDatabase();
+});
+afterAll(() => database.close());
+
+const storedAnnouncements = () => database.db.select().from(announcement);
 
 const input = {
   translations: {
@@ -43,16 +48,14 @@ const row = (overrides: Record<string, unknown> = {}) => ({
 });
 
 describe("announcements API", () => {
-  let server: FastifyInstance;
+  let server: Pick<Hono, "request">;
+  const seed = (...rows: Array<ReturnType<typeof row>>) => database.db.insert(announcement).values(rows);
   beforeEach(async () => {
     vi.stubEnv("API_SECRET_KEY", "announcements-test-placeholder");
-    database.create.mockReset().mockImplementation(async ({ data }) => row(data));
-    database.findMany.mockReset().mockResolvedValue([]);
-    server = Fastify();
-    await server.register(announcementsRoutes, { prefix: "/announcements" });
+    await database.reset();
+    server = mount("/announcements", createAnnouncementsRoutes());
   });
   afterEach(async () => {
-    await server.close();
     vi.unstubAllEnvs();
     vi.useRealTimers();
   });
@@ -62,7 +65,7 @@ describe("announcements API", () => {
     vi.stubEnv("API_SECRET_KEY", "");
 
     for (const authorization of [undefined, "Bearer announcements-test-placeholder", "Bearer "]) {
-      const result = await server.inject({
+      const result = await inject(server, {
         method: "POST",
         url: "/announcements",
         headers: authorization ? { authorization } : {},
@@ -71,7 +74,7 @@ describe("announcements API", () => {
       expect(result.statusCode).toBe(401);
     }
 
-    expect(database.create).not.toHaveBeenCalled();
+    expect(await storedAnnouncements()).toEqual([]);
   });
 
   it.each(["development", "production"])("rejects missing and wrong bearer keys in %s", async (environment) => {
@@ -80,7 +83,7 @@ describe("announcements API", () => {
     for (const authorization of [undefined, "Bearer incorrect", "Basic announcements-test-placeholder"]) {
       expect(
         (
-          await server.inject({
+          await inject(server, {
             method: "POST",
             url: "/announcements",
             headers: authorization ? { authorization } : {},
@@ -92,7 +95,7 @@ describe("announcements API", () => {
   });
 
   const post = (payload: unknown) =>
-    server.inject({
+    inject(server, {
       method: "POST",
       url: "/announcements",
       payload: JSON.stringify(payload),
@@ -112,15 +115,16 @@ describe("announcements API", () => {
         content: ""
       }
     });
-    expect(database.create).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        translations: {
-          fr: {
-            ...input.translations.fr,
-            content: ""
-          }
+    const [stored] = await storedAnnouncements();
+    expect(stored).toMatchObject({
+      kind: "maintenance",
+      pinned: true,
+      translations: {
+        fr: {
+          ...input.translations.fr,
+          content: ""
         }
-      })
+      }
     });
     expect(result.body).not.toContain("announcements-test-placeholder");
   });
@@ -227,7 +231,7 @@ describe("announcements API", () => {
     { privateNote: "not public" }
   ])("rejects invalid input %#", async (override) => {
     expect((await post({ ...input, ...override })).statusCode).toBe(400);
-    expect(database.create).not.toHaveBeenCalled();
+    expect(await storedAnnouncements()).toEqual([]);
   });
 
   it("bounds request bodies", async () => {
@@ -242,7 +246,7 @@ describe("announcements API", () => {
   });
 
   it("preserves parsing and size errors even with a generic parent error handler", async () => {
-    server.setErrorHandler((_error, _request, reply) => reply.code(500).send({ error: "INTERNAL_SERVER_ERROR" }));
+    server = new Hono().onError((_error, c) => c.json({ error: "INTERNAL_SERVER_ERROR" }, 500)).route("/announcements", createAnnouncementsRoutes());
     expect(
       (
         await post({
@@ -251,7 +255,7 @@ describe("announcements API", () => {
         })
       ).statusCode
     ).toBe(413);
-    const invalid = await server.inject({
+    const invalid = await inject(server, {
       method: "POST",
       url: "/announcements",
       headers: {
@@ -264,39 +268,36 @@ describe("announcements API", () => {
   });
 
   it("returns only visible posts and queries with bounded explicit public fields", async () => {
-    database.findMany.mockResolvedValue([
-      row(),
-      row({
-        id: "future",
-        startsAt: new Date("2999-01-01")
-      }),
-      row({
-        id: "unpublished",
-        publishedAt: new Date("2999-01-01")
-      }),
-      row({
-        id: "ended",
-        endsAt: new Date("2000-01-01")
-      }),
-      row({
-        id: "expired",
-        expiresAt: new Date("2000-01-01")
-      })
-    ]);
-    const result = await server.inject("/announcements?locale=fr");
-    expect(result.statusCode).toBe(200);
-    expect(result.json().items.map((item: { id: string }) => item.id)).toEqual(["public-post", "ended"]);
-    expect(database.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        take: 100,
-        where: expect.objectContaining({
-          AND: expect.any(Array),
-          publishedAt: { lte: expect.any(Date) }
+    await seed(
+      ...[
+        row(),
+        row({
+          id: "future",
+          startsAt: new Date("2999-01-01")
         }),
-        select: expect.objectContaining({ translations: true })
-      })
+        row({
+          id: "unpublished",
+          publishedAt: new Date("2999-01-01")
+        }),
+        row({
+          id: "ended",
+          endsAt: new Date("2000-01-01")
+        }),
+        row({
+          id: "expired",
+          expiresAt: new Date("2000-01-01")
+        })
+      ]
     );
-    expect((await server.inject("/announcements?locale=../secret")).statusCode).toBe(400);
+    const result = await inject(server, { url: "/announcements?locale=fr" });
+    expect(result.statusCode).toBe(200);
+    expect(
+      result
+        .json()
+        .items.map((item: { id: string }) => item.id)
+        .sort()
+    ).toEqual(["ended", "public-post"]);
+    expect((await inject(server, { url: "/announcements?locale=../secret" })).statusCode).toBe(400);
   });
 
   it.each([-1, 0, 1])("keeps a notice in fresh public feeds at estimated-end offset %i ms", async (offset) => {
@@ -305,8 +306,8 @@ describe("announcements API", () => {
       toFake: ["Date"]
     });
     vi.setSystemTime(end.getTime() + offset);
-    database.findMany.mockResolvedValue([row({ endsAt: end })]);
-    const response = await server.inject("/announcements?locale=fr");
+    await seed(row({ endsAt: end }));
+    const response = await inject(server, { url: "/announcements?locale=fr" });
     expect(response.statusCode).toBe(200);
     expect(response.json().items.map((item: { id: string }) => item.id)).toEqual(["public-post"]);
     expect(response.json().items[0]).toMatchObject({
@@ -314,10 +315,7 @@ describe("announcements API", () => {
       endsAt: end.toISOString(),
       expiresAt: null
     });
-    const query = database.findMany.mock.calls[0][0];
-    expect(JSON.stringify(query.where)).not.toContain("endsAt");
-    expect(query.where.AND).toHaveLength(2);
-    expect(database.create).not.toHaveBeenCalled();
+    expect(await storedAnnouncements()).toHaveLength(1);
   });
 
   it.each([-1, 0, 1])("still honors explicit feed expiry at offset %i ms independently of estimated end", async (offset) => {
@@ -326,13 +324,13 @@ describe("announcements API", () => {
       toFake: ["Date"]
     });
     vi.setSystemTime(expiry.getTime() + offset);
-    database.findMany.mockResolvedValue([
+    await seed(
       row({
         endsAt: new Date("2026-10-24T12:00:00Z"),
         expiresAt: expiry
       })
-    ]);
-    const response = await server.inject("/announcements?locale=fr");
+    );
+    const response = await inject(server, { url: "/announcements?locale=fr" });
     expect(response.statusCode).toBe(200);
     expect(response.json().items.map((item: { id: string }) => item.id)).toEqual(offset < 0 ? ["public-post"] : []);
   });
@@ -369,12 +367,8 @@ describe("announcements API", () => {
     ).toBe("EN");
   });
 
-  it("streams bounded invalidations and closes live streams during server shutdown", async () => {
-    await server.listen({
-      host: "127.0.0.1",
-      port: 0
-    });
-    const response = await fetch(`${server.listeningOrigin}/announcements/events`);
+  it("streams bounded invalidations and releases the client when the stream is cancelled", async () => {
+    const response = await server.request("http://localhost/announcements/events");
     expect(response.headers.get("content-type")).toBe("text/event-stream");
     const reader = response.body?.getReader();
     expect(reader).toBeDefined();
@@ -383,7 +377,6 @@ describe("announcements API", () => {
     await post(input);
     const next = await reader?.read();
     expect(new TextDecoder().decode(next?.value)).toBe("event: invalidate\ndata: {}\n\n");
-    await server.close();
-    expect((await reader?.read())?.done).toBe(true);
+    await reader?.cancel();
   });
 });

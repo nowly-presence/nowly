@@ -35,10 +35,12 @@
     "./messages/shared": "./src/messages-shared.ts",
     "./messages/web": "./src/messages-web.ts",
     "./messages/docs": "./src/messages-docs.ts",
+    "./messages/account": "./src/messages-account.ts",
     "./messages/*": "./messages/*",
     "./catalogs/shared": "./src/catalogs-shared.ts",
     "./catalogs/web": "./src/catalogs-web.ts",
     "./catalogs/docs": "./src/catalogs-docs.ts",
+    "./catalogs/account": "./src/catalogs-account.ts",
     "./proxy": "./src/proxy.ts"
   },
   "scripts": {

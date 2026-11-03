@@ -1,5 +1,5 @@
 import { generateKeyPairSync } from "node:crypto";
-import Fastify from "fastify";
+import { inject, mount } from "./http";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { privateKey, publicKey } = generateKeyPairSync("ec", { namedCurve: "prime256v1" });
@@ -25,17 +25,14 @@ describe("security routes", () => {
   it("GET /public-key derives the public key from the configured private key", async () => {
     const { securityRoutes } = await import("@/features/security/security.routes");
 
-    const app = Fastify();
-    await app.register(securityRoutes);
+    const app = mount("/", securityRoutes);
 
-    const res = await app.inject({
+    const res = await inject(app, {
       method: "GET",
       url: "/public-key"
     });
 
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.body)).toEqual({ publicKey: expectedPublicKeyBase64Url });
-
-    await app.close();
   });
 });

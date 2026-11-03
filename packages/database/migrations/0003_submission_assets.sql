@@ -1,0 +1,1 @@
+ALTER TABLE "presence_submission_revisions" ADD COLUMN "assets" jsonb DEFAULT '{}'::jsonb NOT NULL;

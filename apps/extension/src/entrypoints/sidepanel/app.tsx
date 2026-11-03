@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line, RiMegaphoneFill, RiMegaphoneLine } from "@remixicon/react";
+import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line, RiMegaphoneFill, RiMegaphoneLine, RiMagicLine } from "@remixicon/react";
 import { AnnouncementsBanner } from "@/features/announcements/announcements-banner";
 import { FeatureReveal } from "@/components/shared/feature-reveal";
 import { Dock } from "@/features/layout/dock";
@@ -24,6 +24,7 @@ const CustomActivityEditorView = lazy(async () => ({
   default: (await import("@/features/custom-activity/custom-activity-editor-view")).CustomActivityEditorView
 }));
 const CustomActivityView = lazy(async () => ({ default: (await import("@/features/custom-activity/custom-activity-view")).CustomActivityView }));
+const CreatorView = lazy(async () => ({ default: (await import("@/features/creator/creator-view")).CreatorView }));
 const ConnectionView = lazy(async () => ({ default: (await import("@/features/diagnostics/connection-view")).ConnectionView }));
 const DiscordIpcView = lazy(async () => ({ default: (await import("@/features/discord-ipc/discord-ipc-view")).DiscordIpcView }));
 const LibraryView = lazy(async () => ({ default: (await import("@/features/library/library-view")).LibraryView }));
@@ -33,6 +34,10 @@ const PresenceDetailView = lazy(async () => ({ default: (await import("@/feature
 const SettingsView = lazy(async () => ({ default: (await import("@/features/settings/settings-view")).SettingsView }));
 const AnnouncementsView = lazy(async () => ({ default: (await import("@/features/announcements/announcements-view")).AnnouncementsView }));
 const AnnouncementsDetailView = lazy(async () => ({ default: (await import("@/features/announcements/announcements-detail-view")).AnnouncementsDetailView }));
+
+const AdminView = lazy(async () => ({ default: (await import("@/features/admin/admin-view")).AdminView }));
+const AdminReviewView = lazy(async () => ({ default: (await import("@/features/admin/admin-review-view")).AdminReviewView }));
+const AdminAnnouncementView = lazy(async () => ({ default: (await import("@/features/admin/admin-announcement-view")).AdminAnnouncementView }));
 
 const PanelLoading = () => (
   <div aria-busy="true" className="flex flex-col gap-4 p-5">
@@ -63,7 +68,7 @@ export const App = () => (
 const AppContent = () => {
   const { state, updateSettings } = useExtensionState();
   const { t } = useI18n();
-  const { tab, stack, setTab } = useNav();
+  const { tab, stack, setTab, push } = useNav();
   const theme = useResolvedTheme(state.settings.appearance);
   const mainRef = useRef<HTMLElement>(null);
   const [visited, setVisited] = useState<Set<Tab>>(() => new Set([tab]));
@@ -86,6 +91,7 @@ const AppContent = () => {
   }
 
   const live = Boolean(state.activity) && !state.settings.presencePaused;
+  const focused = stack.at(-1)?.name === "creator";
 
   const selectTab = (next: Tab) => {
     if (next === tab && stack.length === 0) {
@@ -125,64 +131,75 @@ const AppContent = () => {
                 {route.name === "logs" && <RuntimeLogsView />}
                 {route.name === "custom-activity" && <CustomActivityEditorView id={route.id} template={route.template} />}
                 {route.name === "discord-ipc" && <DiscordIpcView />}
+                {route.name === "creator" && <CreatorView presenceSlug={route.presenceSlug} />}
+                {route.name === "admin" && <AdminView />}
+                {route.name === "admin-review" && <AdminReviewView id={route.id} />}
+                {route.name === "admin-announcement" && <AdminAnnouncementView />}
               </Suspense>
             </Layer>
           ))}
-          <Dock<Tab>
-            label={t("nav.label")}
-            layout={normalizeDockLayout(state.settings.dockLayout, visibleDockTabs(state.settings.hiddenDockTabs))}
-            onLayoutChange={(dockLayout) => void updateSettings({ dockLayout: restoreDockLayoutTabs(dockLayout, DOCK_TABS) })}
-            value={tab}
-            onChange={selectTab}
-            items={[
-              {
-                value: "activity",
-                label: t("nav.activity"),
-                icon: <RiPulseLine className="size-[18px]" />,
-                activeIcon: <RiPulseFill className="size-[18px]" />,
-                badge: live ? "live" : undefined
-              },
-              {
-                value: "store",
-                label: t("nav.library"),
-                icon: <RiApps2Line className="size-[18px]" />,
-                activeIcon: <RiApps2Fill className="size-[18px]" />
-              },
-              {
-                value: "custom",
-                label: t("nav.custom"),
-                icon: <RiQuillPenLine className="size-[18px]" />,
-                activeIcon: <RiQuillPenFill className="size-[18px]" />,
-                wrap: (button) => (
-                  <FeatureReveal {...CUSTOM_ACTIVITY_REVEAL} text={t("reveal.customActivity")} hint={t("reveal.customActivityHint")}>
-                    {button}
-                  </FeatureReveal>
-                )
-              },
-              {
-                value: "announcements",
-                label: t("nav.announcements"),
-                icon: <RiMegaphoneLine className="size-[18px]" />,
-                activeIcon: <RiMegaphoneFill className="size-[18px]" />,
-                wrap: (button) => (
-                  <FeatureReveal id="announcements" version="2.5.0" text={t("reveal.announcements")} hint={t("reveal.announcementsHint")}>
-                    {button}
-                  </FeatureReveal>
-                )
-              },
-              {
-                value: "settings",
-                label: t("nav.settings"),
-                icon: <RiSettings3Line className="size-[18px]" />,
-                activeIcon: <RiSettings3Fill className="size-[18px]" />,
-                wrap: (button) => (
-                  <FeatureReveal {...ACCOUNT_SYNC_REVEAL} text={t("reveal.accountSync")} hint={t("reveal.accountSyncHint")}>
-                    {button}
-                  </FeatureReveal>
-                )
+          {!focused && (
+            <Dock<Tab>
+              label={t("nav.label")}
+              layout={normalizeDockLayout(state.settings.dockLayout, visibleDockTabs(state.settings.hiddenDockTabs))}
+              onLayoutChange={(dockLayout) => void updateSettings({ dockLayout: restoreDockLayoutTabs(dockLayout, DOCK_TABS) })}
+              value={tab}
+              onChange={selectTab}
+              action={
+                stack.length === 0 && tab === "store"
+                  ? { anchor: "store", label: t("creator.title"), icon: <RiMagicLine className="size-4" />, onClick: () => push({ name: "creator" }) }
+                  : undefined
               }
-            ]}
-          />
+              items={[
+                {
+                  value: "activity",
+                  label: t("nav.activity"),
+                  icon: <RiPulseLine className="size-[18px]" />,
+                  activeIcon: <RiPulseFill className="size-[18px]" />,
+                  badge: live ? "live" : undefined
+                },
+                {
+                  value: "store",
+                  label: t("nav.library"),
+                  icon: <RiApps2Line className="size-[18px]" />,
+                  activeIcon: <RiApps2Fill className="size-[18px]" />
+                },
+                {
+                  value: "custom",
+                  label: t("nav.custom"),
+                  icon: <RiQuillPenLine className="size-[18px]" />,
+                  activeIcon: <RiQuillPenFill className="size-[18px]" />,
+                  wrap: (button) => (
+                    <FeatureReveal {...CUSTOM_ACTIVITY_REVEAL} text={t("reveal.customActivity")} hint={t("reveal.customActivityHint")}>
+                      {button}
+                    </FeatureReveal>
+                  )
+                },
+                {
+                  value: "announcements",
+                  label: t("nav.announcements"),
+                  icon: <RiMegaphoneLine className="size-[18px]" />,
+                  activeIcon: <RiMegaphoneFill className="size-[18px]" />,
+                  wrap: (button) => (
+                    <FeatureReveal id="announcements" version="2.5.0" text={t("reveal.announcements")} hint={t("reveal.announcementsHint")}>
+                      {button}
+                    </FeatureReveal>
+                  )
+                },
+                {
+                  value: "settings",
+                  label: t("nav.settings"),
+                  icon: <RiSettings3Line className="size-[18px]" />,
+                  activeIcon: <RiSettings3Fill className="size-[18px]" />,
+                  wrap: (button) => (
+                    <FeatureReveal {...ACCOUNT_SYNC_REVEAL} text={t("reveal.accountSync")} hint={t("reveal.accountSyncHint")}>
+                      {button}
+                    </FeatureReveal>
+                  )
+                }
+              ]}
+            />
+          )}
           <ReviewPrompt />
           <DiscordIpcPrompt />
           <HalloweenPrank />

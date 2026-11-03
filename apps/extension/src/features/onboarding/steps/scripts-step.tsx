@@ -4,7 +4,7 @@ import { extensionDetailsUrl, openUrl } from "@/shared/browser-links";
 import { Button } from "@/ui/button";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useExtensionState } from "@/hooks/extension-state-provider";
-import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout";
+import { StepLayout } from "@/ui/step-layout";
 import { PermissionStatus } from "@/features/onboarding/permission-status";
 
 export const ScriptsStep = ({ onNext }: {
@@ -26,7 +26,7 @@ export const ScriptsStep = ({ onNext }: {
   };
 
   return (
-    <OnboardingStepLayout
+    <StepLayout
       icon={<RiCodeBoxLine className="size-5" />}
       title={t("onboarding.scriptsTitle")}
       description={
@@ -67,6 +67,6 @@ export const ScriptsStep = ({ onNext }: {
           ))}
         <PermissionStatus ok={enabled} okLabel={t("onboarding.scriptsOk")} waitingLabel={t("onboarding.scriptsWaiting")} />
       </div>
-    </OnboardingStepLayout>
+    </StepLayout>
   );
 };

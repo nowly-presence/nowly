@@ -1,4 +1,6 @@
-import { getPrisma, hasDatabase } from "@/db/client";
+import { getDb, hasDatabase } from "@/db/client";
+import { statusSample } from "@nowly/database/schema/status";
+import { and, desc, eq, lt, lte, or } from "drizzle-orm";
 import { serverEnv } from "@nowly/env/server";
 
 export type ServiceStatus = "operational" | "slow" | "degraded" | "down" | "unknown";
@@ -127,15 +129,12 @@ export const getStatusReport = async (): Promise<StatusReport> => {
   const reports = await Promise.all(
     services.map(async (svc) => {
       const samples = hasDatabase()
-        ? await getPrisma()
-            .statusSample.findMany({
-              where: { serviceId: svc.id },
-              orderBy: [
-                { checkedAt: "desc" },
-                { id: "desc" }
-              ],
-              take: RECENT_SAMPLE_COUNT
-            })
+        ? await getDb()
+            .select()
+            .from(statusSample)
+            .where(eq(statusSample.serviceId, svc.id))
+            .orderBy(desc(statusSample.checkedAt), desc(statusSample.id))
+            .limit(RECENT_SAMPLE_COUNT)
             .then((rows) =>
               rows.map((row): StatusSample => ({
                 serviceId: row.serviceId as StatusServiceId,
@@ -168,9 +167,9 @@ export const runStatusCheck = async (): Promise<StatusCheckResult> => {
   const samples = await Promise.all(services.map((svc) => measureService(svc.id, svc.url)));
 
   if (hasDatabase()) {
-    const prisma = getPrisma();
-    await prisma.statusSample.createMany({
-      data: samples.map((sample) => ({
+    const db = getDb();
+    await db.insert(statusSample).values(
+      samples.map((sample) => ({
         serviceId: sample.serviceId,
         checkedAt: new Date(sample.checkedAt),
         status: sample.status,
@@ -178,40 +177,34 @@ export const runStatusCheck = async (): Promise<StatusCheckResult> => {
         httpStatus: sample.httpStatus,
         error: sample.error
       }))
-    });
+    );
 
     const sampleLimit = getSampleLimit();
     await Promise.all(
       services.map(async (svc) => {
-        const [oldestExcessSample] = await prisma.statusSample.findMany({
-          where: { serviceId: svc.id },
-          orderBy: [
-            { checkedAt: "desc" },
-            { id: "desc" }
-          ],
-          skip: sampleLimit,
-          take: 1,
-          select: {
-            id: true,
-            checkedAt: true
-          }
-        });
+        const [oldestExcessSample] = await db
+          .select({
+            id: statusSample.id,
+            checkedAt: statusSample.checkedAt
+          })
+          .from(statusSample)
+          .where(eq(statusSample.serviceId, svc.id))
+          .orderBy(desc(statusSample.checkedAt), desc(statusSample.id))
+          .offset(sampleLimit)
+          .limit(1);
 
         if (oldestExcessSample) {
-          await prisma.statusSample.deleteMany({
-            where: {
-              serviceId: svc.id,
-              OR: [
-                {
-                  checkedAt: { lt: oldestExcessSample.checkedAt }
-                },
-                {
-                  checkedAt: oldestExcessSample.checkedAt,
-                  id: { lte: oldestExcessSample.id }
-                }
-              ]
-            }
-          });
+          await db
+            .delete(statusSample)
+            .where(
+              and(
+                eq(statusSample.serviceId, svc.id),
+                or(
+                  lt(statusSample.checkedAt, oldestExcessSample.checkedAt),
+                  and(eq(statusSample.checkedAt, oldestExcessSample.checkedAt), lte(statusSample.id, oldestExcessSample.id))
+                )
+              )
+            );
         }
       })
     );

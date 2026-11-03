@@ -3,6 +3,8 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const docsBase = "https://docs.nowly.me";
 
+const accountBase = (process.env.NEXT_PUBLIC_ACCOUNT_BASE_URL ?? "https://account.nowly.me").replace(/\/$/, "");
+
 const docsZone = (process.env.DOCS_ZONE_URL ?? "").replace(/\/$/, "");
 
 const docsRedirects = docsZone
@@ -63,6 +65,16 @@ const nextConfig: NextConfig = {
         permanent: true
       },
       ...docsRedirects,
+      {
+        source: "/account",
+        destination: `${accountBase}/`,
+        permanent: false
+      },
+      {
+        source: "/:locale(fr|es|de|pt-BR|pl|ja|ko|tr|ms|el)/account",
+        destination: `${accountBase}/:locale`,
+        permanent: false
+      },
       // Crawlers guess these names; without a redirect they hit the catch-all and report a soft 404.
       {
         source: "/sitemap_index.xml",

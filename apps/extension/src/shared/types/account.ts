@@ -1,4 +1,5 @@
 import type { ExtensionTokenScope } from "@nowly/shared";
+import type { AdminCapability } from "@nowly/shared/roles";
 import type { PresenceSchedule } from "@/shared/types/presence";
 
 export type AccountUser = {
@@ -6,6 +7,7 @@ export type AccountUser = {
   name: string;
   image: string | null;
   discordId: string | null;
+  capabilities?: AdminCapability[];
 };
 
 export type StoredAccount = {

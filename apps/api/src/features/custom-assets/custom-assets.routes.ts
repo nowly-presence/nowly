@@ -1,108 +1,69 @@
+import { hasDeviceAccess, invalidDeviceToken } from "@/features/device/device-token";
+import { limitBody } from "@/middleware/body-limit";
+import { HOUR_MS, rateLimit } from "@/middleware/rate-limit";
 import { serverEnv } from "@nowly/env/server";
-import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { requireDeviceAccess } from "@/features/device/device-token";
+import { Hono, type Context, type MiddlewareHandler } from "hono";
 import { CUSTOM_IMAGE_MAX_BYTES, checkUpload, cleanupExpiredCustomAssets, isCustomImageMime, putCustomAsset, removeCustomAsset, touchCustomAsset } from "./custom-assets.service";
 
-const IMAGE_MIMES = ["image/png", "image/jpeg", "image/webp", "image/gif"] as const;
+const deviceKey = (c: Context): string => (c.req.param("deviceId") ?? "").trim();
 
-type AssetParams = {
-  deviceId: string;
-  sha256: string;
-};
+const UPLOAD_RATE_LIMIT = rateLimit({
+  name: "custom-assets",
+  max: 20,
+  windowMs: HOUR_MS,
+  key: deviceKey
+});
 
-const deviceKey = (request: FastifyRequest): string => (request.params as AssetParams).deviceId.trim();
+export const customAssetsRoutes = new Hono()
+  .put("/:deviceId/custom-assets/:sha256", UPLOAD_RATE_LIMIT, limitBody(CUSTOM_IMAGE_MAX_BYTES), async (c) => {
+    const deviceId = deviceKey(c);
 
-export const customAssetsRoutes = async (fastify: FastifyInstance) => {
-  for (const mime of IMAGE_MIMES) {
-    fastify.addContentTypeParser(
-      mime,
-      {
-        parseAs: "buffer",
-        bodyLimit: CUSTOM_IMAGE_MAX_BYTES
-      },
-      (_request, body, done) => {
-        done(null, body);
-      }
-    );
-  }
+    if (!hasDeviceAccess(c, deviceId)) return invalidDeviceToken(c);
 
-  fastify.put<{
-    Params: AssetParams;
-  }>(
-    "/:deviceId/custom-assets/:sha256",
-    {
-      bodyLimit: CUSTOM_IMAGE_MAX_BYTES,
-      config: {
-        rateLimit: {
-          max: 20,
-          timeWindow: "1 hour",
-          keyGenerator: deviceKey
-        }
-      }
-    },
-    async (request, reply) => {
-      const deviceId = deviceKey(request);
+    const sha256 = c.req.param("sha256").toLowerCase();
+    const mime = (c.req.header("content-type") ?? "").split(";")[0]?.trim() ?? "";
 
-      if (!requireDeviceAccess(request, reply, deviceId)) return;
+    if (!isCustomImageMime(mime)) return c.json({ error: "UNSUPPORTED_IMAGE" }, 415);
 
-      const sha256 = request.params.sha256.toLowerCase();
-      const bytes = request.body;
+    const bytes = new Uint8Array(await c.req.arrayBuffer());
+    const check = checkUpload(bytes, mime, sha256);
 
-      if (!Buffer.isBuffer(bytes)) return reply.status(415).send({ error: "UNSUPPORTED_IMAGE" });
+    if (!check.ok) return c.json({ error: check.error }, check.status);
 
-      const mime = (request.headers["content-type"] ?? "").split(";")[0]?.trim() ?? "";
+    const asset = await putCustomAsset(deviceId, sha256, mime, bytes);
 
-      if (!isCustomImageMime(mime)) return reply.status(415).send({ error: "UNSUPPORTED_IMAGE" });
+    if (!asset) return c.json({ error: "DATABASE_UNAVAILABLE" }, 503);
 
-      const check = checkUpload(bytes, mime, sha256);
+    return c.json(asset);
+  })
+  .post("/:deviceId/custom-assets/:sha256/touch", async (c) => {
+    const deviceId = deviceKey(c);
 
-      if (!check.ok) return reply.status(check.status).send({ error: check.error });
+    if (!hasDeviceAccess(c, deviceId)) return invalidDeviceToken(c);
 
-      const asset = await putCustomAsset(deviceId, sha256, mime, bytes);
+    const asset = await touchCustomAsset(deviceId, c.req.param("sha256").toLowerCase());
 
-      if (!asset) return reply.status(503).send({ error: "DATABASE_UNAVAILABLE" });
+    if (!asset) return c.json({ error: "CUSTOM_ASSET_NOT_FOUND" }, 404);
 
-      return reply.status(200).send(asset);
-    }
-  );
+    return c.json(asset);
+  })
+  .delete("/:deviceId/custom-assets/:sha256", async (c) => {
+    const deviceId = deviceKey(c);
 
-  fastify.post<{
-    Params: AssetParams;
-  }>("/:deviceId/custom-assets/:sha256/touch", async (request, reply) => {
-    const deviceId = deviceKey(request);
+    if (!hasDeviceAccess(c, deviceId)) return invalidDeviceToken(c);
 
-    if (!requireDeviceAccess(request, reply, deviceId)) return;
-
-    const asset = await touchCustomAsset(deviceId, request.params.sha256.toLowerCase());
-
-    if (!asset) return reply.status(404).send({ error: "CUSTOM_ASSET_NOT_FOUND" });
-
-    return asset;
+    await removeCustomAsset(deviceId, c.req.param("sha256").toLowerCase());
+    return c.body(null, 204);
   });
 
-  fastify.delete<{
-    Params: AssetParams;
-  }>("/:deviceId/custom-assets/:sha256", async (request, reply) => {
-    const deviceId = deviceKey(request);
+const requireCleanupAuth: MiddlewareHandler = async (c, next) => {
+  const secret = serverEnv.CUSTOM_ASSETS_CRON_SECRET;
 
-    if (!requireDeviceAccess(request, reply, deviceId)) return;
+  if (!secret || c.req.header("authorization") !== `Bearer ${secret}`) return c.json({ error: "UNAUTHORIZED" }, 401);
 
-    await removeCustomAsset(deviceId, request.params.sha256.toLowerCase());
-    return reply.status(204).send();
-  });
+  await next();
 };
 
-export const customAssetsCronRoutes = async (fastify: FastifyInstance) => {
-  const requireCronAuth = async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
-    const secret = serverEnv.CUSTOM_ASSETS_CRON_SECRET;
-
-    if (!secret || request.headers.authorization !== `Bearer ${secret}`) {
-      reply.status(401).send({ error: "UNAUTHORIZED" });
-    }
-  };
-
-  fastify.post("/custom-assets/cleanup", { preHandler: requireCronAuth }, async () => {
-    const removed = await cleanupExpiredCustomAssets();
-    return { removed };
-  });
-};
+export const customAssetsCronRoutes = new Hono().post("/custom-assets/cleanup", requireCleanupAuth, async (c) =>
+  c.json({ removed: await cleanupExpiredCustomAssets() })
+);

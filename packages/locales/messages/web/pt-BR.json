@@ -766,10 +766,6 @@
       "title": "Conectar a extensão",
       "description": "Entre com o Discord para sincronizar o Nowly entre seus navegadores."
     },
-    "account": {
-      "title": "Sua conta Nowly",
-      "description": "Dispositivos vinculados, seus dados e seu login."
-    },
     "guides": {
       "title": "Guias",
       "description": "Guias para configurar o Nowly, resolver o Discord Rich Presence, controlar sua privacidade e criar sua própria presença."
@@ -1274,33 +1270,6 @@
     "signed-in-as": "Conectado como {name}.",
     "switch-account": "Não é você? Trocar de conta"
   },
-  "accountPage": {
-    "eyebrow": "Conta",
-    "title": "Sua conta Nowly",
-    "description": "Gerencie os dispositivos vinculados à sua conta, seus dados e seu login.",
-    "checking": "Carregando sua conta...",
-    "sign-in-title": "Entrar com o Discord",
-    "sign-in-description": "A conta é opcional. Ela permite que a extensão sincronize suas presenças e configurações entre seus navegadores.",
-    "sign-in": "Continuar com o Discord",
-    "provider-discord": "Conectado com o Discord",
-    "sign-out": "Sair",
-    "devices-title": "Dispositivos vinculados",
-    "devices-description": "Os navegadores em que a extensão está conectada a esta conta.",
-    "devices-empty": "Nenhum dispositivo vinculado ainda.",
-    "device-unknown": "Navegador desconhecido",
-    "device-last-seen": "Visto pela última vez em {date}",
-    "unlink": "Desvincular",
-    "unlink-confirm": "Este navegador deixará de sincronizar com sua conta. Os dados locais continuam nele.",
-    "data-title": "Seus dados",
-    "data-description": "Baixe tudo o que o Nowly guarda para esta conta ou exclua a conta. A exclusão apaga a cópia sincronizada e desvincula seus dispositivos.",
-    "export": "Baixar meus dados",
-    "export-success": "Seus dados foram baixados.",
-    "delete": "Excluir minha conta",
-    "delete-confirm": "Isso exclui permanentemente sua conta Nowly e a cópia sincronizada da sua extensão. Não é possível desfazer.",
-    "delete-success": "Sua conta foi excluída.",
-    "local-note": "Os dados que a extensão guarda nos seus dispositivos não são afetados. Você pode apagá-los nas configurações da extensão.",
-    "action-error": "Não foi possível concluir esta solicitação. Tente novamente ou entre em contato com o suporte se o problema persistir."
-  },
   "ads": {
     "label": "Publicidade"
   },
@@ -1380,5 +1349,13 @@
       "roadmap": "Roteiro",
       "changelog": "Notas de versão"
     }
+  },
+  "profilePage": {
+    "eyebrow": "Perfil",
+    "created-title": "Presences criadas",
+    "liked-title": "Presences curtidas",
+    "empty": "Nada para mostrar ainda.",
+    "meta-title": "{name} no Nowly",
+    "meta-description": "Presences criadas e curtidas por {name} no Nowly."
   }
 }

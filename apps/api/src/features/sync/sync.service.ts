@@ -1,7 +1,8 @@
-import { getPrisma } from "@/db/client";
+import { getDb } from "@/db/client";
+import { syncDocument } from "@nowly/database/schema/account";
+import { and, asc, eq, gte } from "drizzle-orm";
 import { jsonByteLength, SYNC_DOCUMENT_MAX_BYTES, type SyncDocumentKey } from "@nowly/shared";
 import { syncDocumentSchemas } from "@nowly/shared/schemas";
-import { Prisma } from "../../generated/prisma/client";
 
 export type SyncDocumentView = {
   key: string;
@@ -12,7 +13,7 @@ export type SyncDocumentView = {
 
 export type SyncValidation = {
   ok: true;
-  value: Prisma.InputJsonValue;
+  value: unknown;
 } | {
   ok: false;
   status: 400 | 413;
@@ -27,8 +28,6 @@ export type SyncPutResult = {
   ok: false;
   current: SyncDocumentView | null;
 };
-
-const UNIQUE_VIOLATION = "P2002";
 
 const toView = (row: { key: string; value: unknown; version: number; updatedAt: Date }): SyncDocumentView => ({
   key: row.key,
@@ -53,83 +52,65 @@ export const validateSyncValue = (key: SyncDocumentKey, value: unknown): SyncVal
 
   return {
     ok: true,
-    value: parsed.data as Prisma.InputJsonValue
+    value: parsed.data
   };
 };
 
 export const listSyncDocuments = async (userId: string, since?: Date): Promise<SyncDocumentView[]> => {
-  const rows = await getPrisma().syncDocument.findMany({
-    where: { userId, ...(since ? { updatedAt: { gte: since } } : {}) },
-    orderBy: { key: "asc" }
-  });
+  const rows = await getDb()
+    .select()
+    .from(syncDocument)
+    .where(and(eq(syncDocument.userId, userId), since ? gte(syncDocument.updatedAt, since) : undefined))
+    .orderBy(asc(syncDocument.key));
   return rows.map(toView);
 };
 
 const getSyncDocument = async (userId: string, key: SyncDocumentKey): Promise<SyncDocumentView | null> => {
-  const row = await getPrisma().syncDocument.findUnique({
-    where: {
-      userId_key: { userId, key }
-    }
-  });
+  const [row] = await getDb()
+    .select()
+    .from(syncDocument)
+    .where(and(eq(syncDocument.userId, userId), eq(syncDocument.key, key)))
+    .limit(1);
   return row ? toView(row) : null;
 };
-
-const isUniqueViolation = (error: unknown): boolean => error instanceof Prisma.PrismaClientKnownRequestError && error.code === UNIQUE_VIOLATION;
 
 export const putSyncDocument = async (input: {
   userId: string;
   key: SyncDocumentKey;
-  value: Prisma.InputJsonValue;
+  value: unknown;
   baseVersion: number;
   deviceId: string | null;
   now?: Date;
 }): Promise<SyncPutResult> => {
-  const prisma = getPrisma();
+  const db = getDb();
   const updatedAt = input.now ?? new Date();
   const version = input.baseVersion + 1;
+  const written =
+    input.baseVersion === 0
+      ? await db
+          .insert(syncDocument)
+          .values({
+            userId: input.userId,
+            key: input.key,
+            value: input.value,
+            version,
+            updatedAt,
+            updatedByDeviceId: input.deviceId
+          })
+          .onConflictDoNothing()
+          .returning({ version: syncDocument.version })
+      : await db
+          .update(syncDocument)
+          .set({
+            value: input.value,
+            version,
+            updatedAt,
+            updatedByDeviceId: input.deviceId
+          })
+          .where(and(eq(syncDocument.userId, input.userId), eq(syncDocument.key, input.key), eq(syncDocument.version, input.baseVersion)))
+          .returning({ version: syncDocument.version });
 
-  if (input.baseVersion === 0) {
-    try {
-      await prisma.syncDocument.create({
-        data: {
-          userId: input.userId,
-          key: input.key,
-          value: input.value,
-          version,
-          updatedAt,
-          updatedByDeviceId: input.deviceId
-        }
-      });
-      return {
-        ok: true,
-        version,
-        updatedAt: updatedAt.toISOString()
-      };
-    } catch (error) {
-      if (!isUniqueViolation(error)) throw error;
-
-      return {
-        ok: false,
-        current: await getSyncDocument(input.userId, input.key)
-      };
-    }
-  }
-
-  const result = await prisma.syncDocument.updateMany({
-    where: {
-      userId: input.userId,
-      key: input.key,
-      version: input.baseVersion
-    },
-    data: {
-      value: input.value,
-      version,
-      updatedAt,
-      updatedByDeviceId: input.deviceId
-    }
-  });
-
-  if (result.count === 1) return {
+  if (written.length === 1) return {
     ok: true,
     version,
     updatedAt: updatedAt.toISOString()
@@ -142,8 +123,6 @@ export const putSyncDocument = async (input: {
 };
 
 export const deleteSyncDocuments = async (userId: string): Promise<number> => {
-  const result = await getPrisma().syncDocument.deleteMany({
-    where: { userId }
-  });
-  return result.count;
+  const deleted = await getDb().delete(syncDocument).where(eq(syncDocument.userId, userId)).returning({ key: syncDocument.key });
+  return deleted.length;
 };

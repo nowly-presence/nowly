@@ -55,6 +55,20 @@ const APPS: AppConfig[] = [
     ],
   },
   {
+    name: "account",
+    mode: "nested",
+    messagesDir: "packages/locales/messages/account",
+    sharedMessagesDir: "packages/locales/messages/shared",
+    base: "en-US.json",
+    srcDirs: [
+      "apps/account/app",
+      "apps/account/components",
+      "apps/account/features",
+      "apps/account/lib",
+      "packages/ui/src",
+    ],
+  },
+  {
     name: "extension",
     mode: "flat",
     messagesDir: "apps/extension/messages",

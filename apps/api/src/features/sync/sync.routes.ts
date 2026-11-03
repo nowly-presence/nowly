@@ -1,51 +1,46 @@
+import type { AppEnv } from "@/context";
 import { accountOf, requireExtensionToken } from "@/features/account/extension-token.middleware";
 import { revokeUserExtensionTokens } from "@/features/account/extension-token.service";
+import { jsonBody } from "@/shared/request-body";
 import { isSyncDocumentKey } from "@nowly/shared";
 import { syncChangesQuerySchema, syncPutBodySchema } from "@nowly/shared/schemas";
-import type { FastifyInstance } from "fastify";
+import { Hono } from "hono";
 import { deleteSyncDocuments, listSyncDocuments, putSyncDocument, validateSyncValue } from "./sync.service";
 
-export const syncRoutes = async (fastify: FastifyInstance) => {
-  fastify.addHook("preHandler", requireExtensionToken("sync"));
-
-  fastify.get("/", async (request) => {
+export const syncRoutes = new Hono<AppEnv>()
+  .use(requireExtensionToken("sync"))
+  .get("/", async (c) => {
     const serverTime = new Date().toISOString();
-    return {
-      documents: await listSyncDocuments(accountOf(request).userId),
+    return c.json({
+      documents: await listSyncDocuments(accountOf(c).userId),
       serverTime
-    };
-  });
+    });
+  })
+  .get("/changes", async (c) => {
+    const parsed = syncChangesQuerySchema.safeParse(c.req.query());
 
-  fastify.get("/changes", async (request, reply) => {
-    const parsed = syncChangesQuerySchema.safeParse(request.query);
-
-    if (!parsed.success) return reply.status(400).send({ error: "INVALID_SINCE" });
+    if (!parsed.success) return c.json({ error: "INVALID_SINCE" }, 400);
 
     const serverTime = new Date().toISOString();
-    return {
-      documents: await listSyncDocuments(accountOf(request).userId, new Date(parsed.data.since)),
+    return c.json({
+      documents: await listSyncDocuments(accountOf(c).userId, new Date(parsed.data.since)),
       serverTime
-    };
-  });
+    });
+  })
+  .put("/:key", async (c) => {
+    const key = c.req.param("key");
 
-  fastify.put<{
-    Params: {
-      key: string;
-    };
-  }>("/:key", async (request, reply) => {
-    const { key } = request.params;
+    if (!isSyncDocumentKey(key)) return c.json({ error: "UNKNOWN_SYNC_KEY" }, 404);
 
-    if (!isSyncDocumentKey(key)) return reply.status(404).send({ error: "UNKNOWN_SYNC_KEY" });
+    const parsed = syncPutBodySchema.safeParse(await jsonBody(c));
 
-    const parsed = syncPutBodySchema.safeParse(request.body);
-
-    if (!parsed.success) return reply.status(400).send({ error: "INVALID_REQUEST_BODY" });
+    if (!parsed.success) return c.json({ error: "INVALID_REQUEST_BODY" }, 400);
 
     const validation = validateSyncValue(key, parsed.data.value);
 
-    if (!validation.ok) return reply.status(validation.status).send({ error: validation.error });
+    if (!validation.ok) return c.json({ error: validation.error }, validation.status);
 
-    const account = accountOf(request);
+    const account = accountOf(c);
     const result = await putSyncDocument({
       userId: account.userId,
       key,
@@ -54,26 +49,27 @@ export const syncRoutes = async (fastify: FastifyInstance) => {
       deviceId: account.deviceId
     });
 
-    if (result.ok) return {
+    if (result.ok) return c.json({
       version: result.version,
       updatedAt: result.updatedAt
-    };
-
-    return reply.status(409).send({
-      error: "VERSION_CONFLICT",
-      value: result.current?.value ?? null,
-      version: result.current?.version ?? 0,
-      updatedAt: result.current?.updatedAt ?? null
     });
-  });
 
-  fastify.delete("/", async (request) => {
-    const { userId } = accountOf(request);
+    return c.json(
+      {
+        error: "VERSION_CONFLICT",
+        value: result.current?.value ?? null,
+        version: result.current?.version ?? 0,
+        updatedAt: result.current?.updatedAt ?? null
+      },
+      409
+    );
+  })
+  .delete("/", async (c) => {
+    const { userId } = accountOf(c);
     const deleted = await deleteSyncDocuments(userId);
     await revokeUserExtensionTokens(userId);
-    return {
+    return c.json({
       ok: true,
       deleted
-    };
+    });
   });
-};

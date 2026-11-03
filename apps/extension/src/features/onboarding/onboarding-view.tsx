@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { RiArrowLeftLine } from "@remixicon/react";
 import { Wordmark } from "@/components/shared/wordmark";
-import { cn } from "@/ui/cn";
+import { StepProgress } from "@/ui/step-progress";
 import { useI18n } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
 import { useExtensionState } from "@/hooks/extension-state-provider";
@@ -48,26 +48,17 @@ export const OnboardingView = ({ theme }: {
         ) : (
           <Wordmark theme={theme} />
         )}
-        <div
-          className="flex items-center gap-1"
-          aria-label={t("onboarding.progress", {
+        <StepProgress
+          total={STEPS.length}
+          current={index}
+          label={t("onboarding.progress", {
             step: index + 1,
             total: STEPS.length
           })}
-        >
-          {STEPS.map((value, position) => (
-            <span
-              key={value}
-              className={cn(
-                "h-1 rounded-full transition-all duration-300",
-                position === index ? "w-5 bg-primary" : position < index ? "w-2 bg-ink/40" : "w-2 bg-line-strong"
-              )}
-            />
-          ))}
-        </div>
+        />
       </header>
 
-      <div key={step} className="flex flex-1 animate-push flex-col px-4 pb-4">
+      <div key={step} className="flex flex-1 animate-push flex-col px-4">
         {step === "welcome" && <WelcomeStep onNext={next} />}
         {step === "scripts" && <ScriptsStep onNext={next} />}
         {step === "desktop" && <DesktopStep onNext={next} />}

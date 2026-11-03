@@ -2,7 +2,7 @@
 
 ## Deploy
 
-Announcements require PostgreSQL. Apply the additive migration `20261024120000_add_announcements`, generate the Prisma client, then deploy the API and extension. The existing API Docker image includes `packages/changelog/content` and runs `migrate-deploy.sh` before starting. Custom trimmed images must also include that content directory at `/app/packages/changelog/content`; absent content produces no release entries. No migration or database mutation is performed by the unit tests.
+Announcements require PostgreSQL. The `Announcement` table is part of the Drizzle baseline (`packages/database/migrations`). The API Docker image includes `packages/changelog/content` and runs `pnpm --filter @nowly/database migrate` before starting. Custom trimmed images must also include that content directory at `/app/packages/changelog/content`; absent content produces no release entries. No migration or database mutation is performed by the unit tests.
 
 Set `API_SECRET_KEY` on the server using the existing secret-management process. Publication uses the existing `hasAdminAuth`, not the development-bypassing `requireAuth`. Missing configuration, missing credentials and incorrect credentials always receive `401`, including development. Never put the key in an extension build, browser request, screenshot, source file or request log. There is no admin UI.
 
@@ -42,7 +42,7 @@ Kinds: `normal`, `warning`, `maintenance`. Only warnings accept and require `sev
 
 `expiresAt` is a separate, explicit feed expiry. At and after expiry the notice is excluded from the public feed, detail and banner, without deleting its database row. Omit expiry to keep a notice readable after its estimated end, as in the example above. For an indefinite banner omit both end and expiry. `startsAt` still schedules when the notice first becomes public. No edit/delete endpoints are included in this slice.
 
-Limits: 160-character titles, 600-character descriptions, 20,000-character content per translation, 24,000 UTF-8 bytes for the full translation map, 128 KiB request body. Unknown fields, invalid types, date order and severity combinations receive `400`; oversized bodies receive `413` from Fastify. The server returns only explicit validated public fields. Future announcements and future, undated, draft or explicitly unpublished release notes are never included in public reads.
+Limits: 160-character titles, 600-character descriptions, 20,000-character content per translation, 24,000 UTF-8 bytes for the full translation map, 128 KiB request body. Unknown fields, invalid types, date order and severity combinations receive `400`; oversized bodies receive `413 ANNOUNCEMENT_TOO_LARGE`. The server returns only explicit validated public fields. Future announcements and future, undated, draft or explicitly unpublished release notes are never included in public reads.
 
 ## Read and live updates
 
