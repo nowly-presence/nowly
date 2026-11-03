@@ -9,7 +9,8 @@
   },
   "store": {
     "download-chrome": "Chrome版をダウンロード",
-    "download-firefox": "Firefox版をダウンロード"
+    "download-firefox": "Firefox版をダウンロード",
+    "my-account": "マイアカウント"
   },
   "theme": {
     "toggle": "カラーテーマを切り替え",

@@ -9,7 +9,8 @@
   },
   "store": {
     "download-chrome": "Pobierz dla Chrome",
-    "download-firefox": "Pobierz dla Firefox"
+    "download-firefox": "Pobierz dla Firefox",
+    "my-account": "Moje konto"
   },
   "theme": {
     "toggle": "Przełącz motyw kolorystyczny",

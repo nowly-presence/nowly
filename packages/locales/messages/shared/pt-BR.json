@@ -9,7 +9,8 @@
   },
   "store": {
     "download-chrome": "Baixar para Chrome",
-    "download-firefox": "Baixar para Firefox"
+    "download-firefox": "Baixar para Firefox",
+    "my-account": "Minha conta"
   },
   "theme": {
     "toggle": "Alternar tema de cores",

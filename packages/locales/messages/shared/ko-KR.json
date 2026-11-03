@@ -9,7 +9,8 @@
   },
   "store": {
     "download-chrome": "Chrome용 다운로드",
-    "download-firefox": "Firefox용 다운로드"
+    "download-firefox": "Firefox용 다운로드",
+    "my-account": "내 계정"
   },
   "theme": {
     "toggle": "색상 테마 전환",

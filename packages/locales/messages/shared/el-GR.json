@@ -9,7 +9,8 @@
   },
   "store": {
     "download-chrome": "Λήψη για Chrome",
-    "download-firefox": "Λήψη για Firefox"
+    "download-firefox": "Λήψη για Firefox",
+    "my-account": "Ο λογαριασμός μου"
   },
   "theme": {
     "toggle": "Εναλλαγή θέματος χρωμάτων",

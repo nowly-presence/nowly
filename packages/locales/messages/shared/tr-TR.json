@@ -9,7 +9,8 @@
   },
   "store": {
     "download-chrome": "Chrome için indir",
-    "download-firefox": "Firefox için indir"
+    "download-firefox": "Firefox için indir",
+    "my-account": "Hesabım"
   },
   "theme": {
     "toggle": "Renk temasını değiştir",

@@ -1,6 +1,6 @@
 "use client";
 
-import { ExtensionStoreButton } from "@/components/extension-store-button";
+import { NavbarAction } from "@/features/layout/components/navbar-action";
 import { BrandLockup } from "@/features/layout/components/brand-lockup";
 import { DOCS_ORIGIN } from "@/features/seo/lib/seo";
 import { usePathname } from "@/i18n/navigation";
@@ -16,7 +16,7 @@ export const Navbar = () => {
       docsOrigin={DOCS_ORIGIN}
       brand={<BrandLockup width={148} height={60} className="h-full w-auto object-contain object-left" />}
       storeButton={
-        <ExtensionStoreButton
+        <NavbarAction
           {...(canary
             ? {
                 className: "border-transparent hover:brightness-110",
