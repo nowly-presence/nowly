@@ -211,6 +211,7 @@ beforeEach(async () => {
   const { privateKey } = generateKeyPairSync("rsa", { modulusLength: 2048 });
   vi.stubEnv("CREATOR_WEBHOOK_SECRET", SECRET);
   vi.stubEnv("FRONTEND_URL", "https://nowly.me");
+  vi.stubEnv("ACCOUNT_URL", "https://account.nowly.me");
   vi.stubEnv("NOLO_APP_ID", "1");
   vi.stubEnv("NOLO_INSTALLATION_ID", "2");
   vi.stubEnv(

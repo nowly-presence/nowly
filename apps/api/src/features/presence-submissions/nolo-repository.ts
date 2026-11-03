@@ -153,7 +153,7 @@ export const pullRequestBody = (input: {
   const { definition, author } = input;
   const credit = author.discordId ? `${plain(author.name)} ([Discord](https://discord.com/users/${author.discordId}))` : plain(author.name);
   return [
-    `Presence sent from the Nowly creator: ${serverEnv.FRONTEND_URL.replace(/\/$/, "")}/requests/${input.submissionId}`,
+    `Presence sent from the Nowly creator: ${serverEnv.ACCOUNT_URL.replace(/\/$/, "")}/creations/${input.submissionId}`,
     "",
     `Author: ${credit}`,
     `Domains: ${definition.domains.map(plain).join(", ")}`,
