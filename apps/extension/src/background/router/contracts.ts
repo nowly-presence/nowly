@@ -8,7 +8,8 @@ import type { SupportPromptAction, SupportPromptState } from "@/shared/support-p
 import type { PublishResult, OwnedPublicationResult } from "@/background/services/activity-publication-publisher";
 import type { CustomActivityDeletionPlan } from "@/background/services/custom-activity-deletion-plan";
 import type { CreatorTestResult } from "@/background/managers/creator-test";
-import type { CreatorExtraction, CreatorPick, CreatorSubmission, CreatorVariable } from "@nowly/presence-creator/creator-types";
+import type { AdminResult, AnnouncementDraft, FieldComment, QueueItem, ReviewVerdict, StaffAccess, SubmissionDetail } from "@/shared/admin/admin-types";
+import type { CreatorDraft, CreatorExtraction, CreatorPick, CreatorSubmission, CreatorVariable } from "@nowly/presence-creator/creator-types";
 import type { CreatorAccount, CreatorSubmissionPayload, CreatorSubmitResult } from "@nowly/presence-creator/creator-submission";
 
 export type DiagnosticSnapshot = {
@@ -99,6 +100,67 @@ export type RouterMessageMap = {
     response: {
       ok: boolean;
     };
+  };
+  START_ADMIN_CONNECT: {
+    payload: void;
+    response: {
+      ok: boolean;
+    };
+  };
+  ADMIN_GET_ACCESS: {
+    payload: void;
+    response: StaffAccess | null;
+  };
+  ADMIN_FETCH_QUEUE: {
+    payload: void;
+    response: AdminResult<QueueItem[]>;
+  };
+  SUBMISSION_GET_DETAIL: {
+    payload: {
+      id: string;
+    };
+    response: AdminResult<SubmissionDetail>;
+  };
+  ADMIN_REVIEW: {
+    payload: {
+      id: string;
+      revision: number;
+      verdict: ReviewVerdict;
+      message: string;
+      comments: FieldComment[];
+    };
+    response: AdminResult<CreatorSubmission>;
+  };
+  ADMIN_PUBLISH: {
+    payload: {
+      id: string;
+      revision: number;
+    };
+    response: AdminResult<CreatorSubmission>;
+  };
+  ADMIN_RETRY_PULL_REQUEST: {
+    payload: {
+      id: string;
+    };
+    response: AdminResult<true>;
+  };
+  ADMIN_CREATE_ANNOUNCEMENT: {
+    payload: {
+      announcement: AnnouncementDraft;
+    };
+    response: AdminResult<true>;
+  };
+  ADMIN_PROBE_CREATOR_PRESENCE: {
+    payload: {
+      slug: string;
+    };
+    response: AdminResult<number>;
+  };
+  ADMIN_LOAD_CREATOR_PRESENCE: {
+    payload: {
+      slug: string;
+    };
+    response: AdminResult<CreatorDraft>;
   };
   GET_OWN_ACTIVITY_PUBLICATION: {
     payload: {

@@ -1,5 +1,6 @@
 import { EXTENSION_TOKEN_SCOPES, type ExtensionTokenScope } from "@nowly/shared";
 import { STORAGE_KEYS } from "@/background/storage/keys";
+import { isAdminCapability } from "@/shared/admin/admin-types";
 import type { AccountUser, StoredAccount } from "@/shared/types";
 
 const isObject = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
@@ -13,7 +14,8 @@ export const parseAccountUser = (value: unknown): AccountUser | null => {
     id: value.id,
     name: value.name,
     image: typeof value.image === "string" ? value.image : null,
-    discordId: typeof value.discordId === "string" ? value.discordId : null
+    discordId: typeof value.discordId === "string" ? value.discordId : null,
+    ...(Array.isArray(value.capabilities) ? { capabilities: value.capabilities.filter(isAdminCapability) } : {})
   };
 };
 
