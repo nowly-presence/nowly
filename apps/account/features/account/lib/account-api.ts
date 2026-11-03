@@ -199,6 +199,7 @@ export type PublicProfileSettings = {
   bio: string | null;
   showCreated: boolean;
   showLiked: boolean;
+  links: string[];
 };
 
 export class PublicProfileError extends Error {

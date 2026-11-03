@@ -3,7 +3,9 @@
 import { AccountPageFrame } from "@/features/account/components/account-page-frame";
 import { fetchPublicProfileSettings, PublicProfileError, savePublicProfileSettings, type PublicProfileSettings } from "@/features/account/lib/account-api";
 import { siteBaseUrl } from "@/lib/api-base";
-import { Button, Card, CardContent, Checkbox, Field, FieldLabel, Switch, Textarea } from "@nowly/ui";
+import { PUBLIC_LINK_MAX_LENGTH, PUBLIC_LINKS_MAX } from "@nowly/shared";
+import { Button, Card, CardContent, Checkbox, Field, FieldDescription, FieldLabel, Input, Switch, Textarea } from "@nowly/ui";
+import { RiAddLine, RiCloseLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
@@ -18,6 +20,7 @@ export const PublicPageView = () => {
   const [bio, setBio] = useState("");
   const [showCreated, setShowCreated] = useState(true);
   const [showLiked, setShowLiked] = useState(true);
+  const [links, setLinks] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [loadFailed, setLoadFailed] = useState(false);
@@ -28,6 +31,7 @@ export const PublicPageView = () => {
     setBio(settings.bio ?? "");
     setShowCreated(settings.showCreated);
     setShowLiked(settings.showLiked);
+    setLinks(settings.links);
   };
 
   useEffect(() => {
@@ -43,7 +47,8 @@ export const PublicPageView = () => {
       enabled,
       bio: bio.trim() || null,
       showCreated,
-      showLiked
+      showLiked,
+      links: links.map((link) => link.trim()).filter(Boolean)
     })
       .then((settings) => {
         apply(settings);
@@ -79,6 +84,44 @@ export const PublicPageView = () => {
             <Field>
               <FieldLabel htmlFor="public-bio">{t("public-bio")}</FieldLabel>
               <Textarea id="public-bio" value={bio} maxLength={BIO_MAX_LENGTH} disabled={busy} onChange={(event) => setBio(event.target.value)} />
+            </Field>
+
+            <Field>
+              <FieldLabel>{t("public-links")}</FieldLabel>
+              <div className="flex flex-col gap-2">
+                {links.map((link, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <Input
+                      className="h-9"
+                      type="url"
+                      value={link}
+                      maxLength={PUBLIC_LINK_MAX_LENGTH}
+                      placeholder={t("public-link-placeholder")}
+                      aria-label={t("public-links")}
+                      disabled={busy}
+                      onChange={(event) => setLinks((current) => current.map((entry, position) => (position === index ? event.target.value : entry)))}
+                    />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      aria-label={t("public-link-remove")}
+                      disabled={busy}
+                      onClick={() => setLinks((current) => current.filter((_, position) => position !== index))}
+                    >
+                      <RiCloseLine />
+                    </Button>
+                  </div>
+                ))}
+                {links.length < PUBLIC_LINKS_MAX ? (
+                  <div>
+                    <Button variant="outline" size="sm" disabled={busy} onClick={() => setLinks((current) => [...current, ""])}>
+                      <RiAddLine data-icon="inline-start" />
+                      {t("public-links-add")}
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
+              <FieldDescription>{t("public-links-hint", { max: PUBLIC_LINKS_MAX })}</FieldDescription>
             </Field>
 
             <label className="flex items-center gap-3 text-sm text-foreground">
