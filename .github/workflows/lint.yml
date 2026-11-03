@@ -17,4 +17,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @nowly/web lint
       - run: pnpm --filter @nowly/docs lint
+      - run: pnpm --filter @nowly/account lint
+      - run: pnpm --filter @nowly/account typecheck
       - run: pnpm --filter @nowly/extension lint
