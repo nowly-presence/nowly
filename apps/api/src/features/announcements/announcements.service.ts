@@ -1,4 +1,5 @@
 import { getDb } from "@/db/client";
+import { recordAdminAction, type AuditActor } from "@/features/admin/audit.service";
 import { announcement } from "@nowly/database/schema/announcement";
 import { and, desc, isNull, lte, gt, or } from "drizzle-orm";
 import { readReleaseAnnouncements } from "@/features/announcements/announcements.changelog";
@@ -6,19 +7,28 @@ import { ANNOUNCEMENT_LIMIT, AnnouncementFeedSchema, AnnouncementSchema, isAnnou
 
 const iso = (date: Date | null) => date?.toISOString() ?? null;
 
-export const createAnnouncement = async (input: AnnouncementInput) => {
-  const [row] = await getDb()
-    .insert(announcement)
-    .values({
-      translations: input.translations,
-      kind: input.kind,
-      severity: input.severity,
-      pinned: input.pinned,
-      startsAt: input.startsAt ? new Date(input.startsAt) : null,
-      endsAt: input.endsAt ? new Date(input.endsAt) : null,
-      expiresAt: input.expiresAt ? new Date(input.expiresAt) : null
-    })
-    .returning();
+export const createAnnouncement = async (input: AnnouncementInput, actor: AuditActor) => {
+  const row = await getDb().transaction(async (tx) => {
+    const [created] = await tx
+      .insert(announcement)
+      .values({
+        translations: input.translations,
+        kind: input.kind,
+        severity: input.severity,
+        pinned: input.pinned,
+        startsAt: input.startsAt ? new Date(input.startsAt) : null,
+        endsAt: input.endsAt ? new Date(input.endsAt) : null,
+        expiresAt: input.expiresAt ? new Date(input.expiresAt) : null
+      })
+      .returning();
+    await recordAdminAction(tx, actor, {
+      action: "announcement.create",
+      targetType: "announcement",
+      targetId: created.id,
+      details: { kind: created.kind }
+    });
+    return created;
+  });
   return AnnouncementSchema.parse({
     id: row.id,
     source: "announcement",

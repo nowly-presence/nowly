@@ -1,5 +1,6 @@
 import type { AppEnv } from "@/context";
 import { accountRoutes } from "@/features/account/account.routes";
+import { adminRoutes } from "@/features/admin/admin.routes";
 import { activitySharingRoutes } from "@/features/activity-sharing/activity-sharing.routes";
 import { createAnnouncementsRoutes } from "@/features/announcements/announcements.routes";
 import { assetsRoutes } from "@/features/assets/assets.routes";
@@ -68,6 +69,7 @@ export const createApp = ({ logRequests = false }: AppOptions = {}) => {
   app.route("/presences", assetsRoutes);
   app.route("/presences", presenceRoutes);
   app.route("/security", securityRoutes);
+  app.route("/admin", adminRoutes);
 
   return app;
 };

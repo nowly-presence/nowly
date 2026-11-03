@@ -36,7 +36,8 @@
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:watch": "vitest",
     "db:reset-dev": "tsx scripts/reset-dev-data.ts",
-    "db:migrate": "pnpm --filter @nowly/database migrate"
+    "db:migrate": "pnpm --filter @nowly/database migrate",
+    "role:set": "tsx src/cli/set-role.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1160.0",

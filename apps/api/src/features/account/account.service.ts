@@ -5,6 +5,8 @@ import { account, user } from "@nowly/database/schema/auth";
 import { device } from "@nowly/database/schema/device";
 import { presenceLike } from "@nowly/database/schema/presence";
 import { and, asc, desc, eq } from "drizzle-orm";
+import { listActorActions, type AuditEventView } from "@/features/admin/audit.service";
+import { capabilitiesOf, type AdminCapability } from "@nowly/shared/roles";
 import { revokeDeviceExtensionTokens } from "./extension-token.service";
 
 export const ACCOUNT_PROVIDERS = ["discord"] as const;
@@ -15,6 +17,8 @@ export type AccountProfile = {
   image: string | null;
   discordId: string | null;
   githubLogin: string | null;
+  role: string;
+  capabilities: AdminCapability[];
 };
 
 export type AccountDevice = {
@@ -32,7 +36,8 @@ export const getAccountProfile = async (userId: string): Promise<AccountProfile 
       id: user.id,
       name: user.name,
       image: user.image,
-      discordId: user.discordId
+      discordId: user.discordId,
+      role: user.role
     })
     .from(user)
     .where(eq(user.id, userId))
@@ -42,7 +47,8 @@ export const getAccountProfile = async (userId: string): Promise<AccountProfile 
 
   return {
     ...row,
-    githubLogin: null
+    githubLogin: null,
+    capabilities: capabilitiesOf(row.role)
   };
 };
 
@@ -80,6 +86,7 @@ export const unlinkAccountDevice = async (userId: string, deviceId: string): Pro
 
 export type AccountExport = {
   activityPublications: unknown[];
+  adminActions: AuditEventView[];
   profile: AccountProfile & {
     email: string;
     createdAt: string;
@@ -117,7 +124,7 @@ const iso = (date: Date | null): string | null => date?.toISOString() ?? null;
 
 export const exportAccountData = async (userId: string): Promise<AccountExport | null> => {
   const db = getDb();
-  const [[profile], accounts, tokens, documents, likes, devices, activityPublications] = await Promise.all([
+  const [[profile], accounts, tokens, documents, likes, devices, activityPublications, adminActions] = await Promise.all([
     db.select().from(user).where(eq(user.id, userId)).limit(1),
     db
       .select({
@@ -131,7 +138,8 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
     db.select().from(syncDocument).where(eq(syncDocument.userId, userId)).orderBy(asc(syncDocument.key)),
     db.select().from(presenceLike).where(eq(presenceLike.userId, userId)).orderBy(asc(presenceLike.likedAt)),
     listAccountDevices(userId, null),
-    db.select().from(activityPublication).where(eq(activityPublication.userId, userId)).orderBy(asc(activityPublication.createdAt))
+    db.select().from(activityPublication).where(eq(activityPublication.userId, userId)).orderBy(asc(activityPublication.createdAt)),
+    listActorActions(userId)
   ]);
 
   if (!profile) return null;
@@ -144,9 +152,12 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
       image: profile.image,
       discordId: profile.discordId,
       githubLogin: null,
+      role: profile.role,
+      capabilities: capabilitiesOf(profile.role),
       createdAt: profile.createdAt.toISOString()
     },
     activityPublications,
+    adminActions,
     linkedAccounts: accounts.map((account) => ({
       providerId: account.providerId,
       accountId: account.accountId,

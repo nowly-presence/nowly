@@ -83,10 +83,13 @@ export const requireSession: MiddlewareHandler<AppEnv> = async (c, next) => {
   await next();
 };
 
+export const resolveAccount = async (c: Context): Promise<AccountContext | null> =>
+  (bearerToken(c) ? await resolveTokenAccount(c) : null) ?? (await sessionAccount(c));
+
 export const requireTokenOrSession: MiddlewareHandler<AppEnv> = async (c, next) => {
   if (!hasDatabase()) return databaseUnavailable(c);
 
-  const account = (bearerToken(c) ? await resolveTokenAccount(c) : null) ?? (await sessionAccount(c));
+  const account = await resolveAccount(c);
 
   if (!account) return unauthorized(c);
 

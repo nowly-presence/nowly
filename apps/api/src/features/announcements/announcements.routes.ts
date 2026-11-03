@@ -1,4 +1,5 @@
-import { hasAdminAuth } from "@/features/auth/auth.middleware";
+import type { AppEnv } from "@/context";
+import { requireSecretOrCapability } from "@/features/admin/admin.middleware";
 import { createAnnouncement, getAnnouncementFeed } from "@/features/announcements/announcements.service";
 import { jsonBody } from "@/shared/request-body";
 import { ANNOUNCEMENT_BODY_LIMIT, ANNOUNCEMENT_LOCALES, AnnouncementInputSchema } from "@nowly/shared/announcements";
@@ -71,14 +72,10 @@ export const createAnnouncementsRoutes = () => {
     previous = "";
   };
 
-  return new Hono()
+  return new Hono<AppEnv>()
     .post(
       "/",
-      async (c, next) => {
-        if (!hasAdminAuth(c)) return c.json({ error: "UNAUTHORIZED" }, 401);
-
-        await next();
-      },
+      requireSecretOrCapability("announce"),
       bodyLimit({
         maxSize: ANNOUNCEMENT_BODY_LIMIT,
         onError: (c) => c.json({ error: "ANNOUNCEMENT_TOO_LARGE" }, 413)
@@ -88,7 +85,7 @@ export const createAnnouncementsRoutes = () => {
 
         if (!input.success) return c.json({ error: "INVALID_ANNOUNCEMENT" }, 400);
 
-        const item = await createAnnouncement(input.data);
+        const item = await createAnnouncement(input.data, c.get("actor"));
         invalidate();
         return c.json(item, 201);
       }

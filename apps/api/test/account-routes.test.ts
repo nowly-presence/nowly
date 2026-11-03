@@ -113,7 +113,9 @@ describe("account routes", () => {
       name: USER.name,
       image: USER.image,
       discordId: "1234",
-      githubLogin: null
+      githubLogin: null,
+      role: "user",
+      capabilities: []
     });
     expect(body.providers).toEqual(["discord"]);
     expect(typeof body.expiresAt).toBe("number");
@@ -133,7 +135,7 @@ describe("account routes", () => {
       method: "POST",
       url: "/extension/tokens",
       payload: {
-        scopes: ["admin"]
+        scopes: ["root"]
       }
     });
     expect(res.statusCode).toBe(400);

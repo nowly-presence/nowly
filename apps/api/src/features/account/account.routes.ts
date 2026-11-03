@@ -2,6 +2,7 @@ import type { AppEnv } from "@/context";
 import { MINUTE_MS, rateLimit } from "@/middleware/rate-limit";
 import { jsonBody } from "@/shared/request-body";
 import { extensionTokenBodySchema } from "@nowly/shared/schemas";
+import { isStaffRole } from "@nowly/shared/roles";
 import { Hono } from "hono";
 import { ACCOUNT_PROVIDERS, deleteAccountData, exportAccountData, getAccountProfile, listAccountDevices, unlinkAccountDevice } from "./account.service";
 import { accountOf, requireExtensionToken, requireSession, requireTokenOrSession } from "./extension-token.middleware";
@@ -23,6 +24,7 @@ export const accountRoutes = new Hono<AppEnv>()
     const user = await getAccountProfile(userId);
 
     if (!user) return c.json({ error: "UNAUTHORIZED" }, 401);
+    if (parsed.data.scopes.includes("admin") && !isStaffRole(user.role)) return c.json({ error: "ADMIN_REQUIRED" }, 403);
 
     const { token, expiresAt } = await createExtensionToken({
       userId,
