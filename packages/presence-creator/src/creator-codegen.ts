@@ -171,6 +171,23 @@ const settingEntry = (draft: CreatorDraft, key: "showButtons" | "showBrowsing", 
 
 const indent = (lines: string[], depth: number): string[] => lines.map((line) => (line ? `${"  ".repeat(depth)}${line}` : line));
 
+const settingLines = (draft: CreatorDraft, hasButtons: boolean): string[] => [
+  ...(hasButtons ? settingEntry(draft, "showButtons", true) : []),
+  ...(draft.browsingFallback ? settingEntry(draft, "showBrowsing", false) : [])
+];
+
+export const generateSettingsSource = (draft: CreatorDraft): string | null => {
+  const keys = pageStringKeys(draft);
+  const lines = settingLines(
+    draft,
+    keys.some((entry) => Boolean(entry.button))
+  );
+
+  if (lines.length === 0) return null;
+
+  return ['import type { PresenceSetting } from "@nowly/sdk"', "", "export default {", ...lines, "} satisfies Record<string, PresenceSetting>", ""].join("\n");
+};
+
 export const generatePresenceSource = (draft: CreatorDraft): string => {
   const keys = pageStringKeys(draft);
   const sources = draft.pages.flatMap((page) => page.variables.map((variable) => variable.source));
@@ -182,10 +199,7 @@ export const generatePresenceSource = (draft: CreatorDraft): string => {
   const usesPageUrl = draft.pages.some(
     (page, index) => Boolean(keys[index].button) && buttonTarget(page, new Set(page.variables.map((variable) => variable.name))).url === "pageUrl"
   );
-  const settings = [
-    ...(hasButtons ? settingEntry(draft, "showButtons", true) : []),
-    ...(draft.browsingFallback ? settingEntry(draft, "showBrowsing", false) : [])
-  ];
+  const settings = settingLines(draft, hasButtons);
   const sdkImports = [...(usesMedia ? ["createMediaTimestamps"] : []), "PresenceType", "type PresenceData"];
 
   const handler: string[] = [
@@ -217,16 +231,8 @@ export const generatePresenceSource = (draft: CreatorDraft): string => {
     `import { ${sdkImports.join(", ")} } from "@nowly/sdk"`,
     `import type baseStrings from "./locales/${draft.baseLocale}.json"`,
     "",
-    ...(settings.length > 0
-      ? [
-          "const settings = Presence.Settings({",
-          ...settings,
-          "})",
-          "",
-          "const presence = new Presence(settings)",
-          'const isEnabled = (value: unknown): boolean => value === true || value === "true"'
-        ]
-      : ["const presence = new Presence()"]),
+    "const presence = new Presence()",
+    ...(settings.length > 0 ? ['const isEnabled = (value: unknown): boolean => value === true || value === "true"'] : []),
     ...(tracksPageTime ? ['let currentPath = ""', "let pageStartedAt = Math.floor(Date.now() / 1000)"] : []),
     ...helpers.flatMap((helper) => ["", ...HELPER_SOURCES[helper]]),
     "",

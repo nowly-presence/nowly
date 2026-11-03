@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildPreviewActivity, fillTemplate, findPage, matchesPage, mediaTimestamps } from "./creator-activity";
-import { generatePresenceSource } from "./creator-codegen";
+import { generatePresenceSource, generateSettingsSource } from "./creator-codegen";
+import { buildTextFiles } from "./creator-export";
 import { createPage, isValidDomain, normalizeDomain, normalizeDraft, presenceFolder, presenceSlug, toIdentifier } from "./creator-draft";
 import { buildLocaleFiles, buildMetadata, pageKeys } from "./creator-files";
 import { sampleCreatorDraft } from "./creator-fixtures";
@@ -226,6 +227,38 @@ describe("creator files", () => {
     expect(source).toContain("presence.clearActivity()");
     expect(source).not.toMatch(/;\s*$/m);
     expect(source).not.toMatch(/from '/);
+  });
+
+  it("keeps settings in settings.ts and out of presence.ts", () => {
+    const draft = sampleCreatorDraft();
+    const source = generatePresenceSource(draft);
+    const settings = generateSettingsSource(draft);
+    expect(source).toContain("const presence = new Presence()");
+    expect(source).not.toContain("Presence.Settings");
+    expect(source).not.toContain("new Presence(settings)");
+    expect(source).toContain('presence.on("UpdateData", async (ctx) => {');
+    expect(settings).toContain('import type { PresenceSetting } from "@nowly/sdk"');
+    expect(settings).toContain("export default {");
+    expect(settings).toContain("showButtons: {");
+    expect(settings).toContain("} satisfies Record<string, PresenceSetting>");
+    expect(buildTextFiles(draft).some((file) => file.path.endsWith("/settings.ts"))).toBe(true);
+  });
+
+  it("writes no settings.ts when the presence has no setting", () => {
+    const draft = {
+      ...sampleCreatorDraft(),
+      browsingFallback: false,
+      pages: sampleCreatorDraft().pages.map((page) => ({
+        ...page,
+        button: {
+          ...page.button,
+          enabled: false
+        }
+      }))
+    };
+    expect(generateSettingsSource(draft)).toBeNull();
+    expect(buildTextFiles(draft).some((file) => file.path.endsWith("/settings.ts"))).toBe(false);
+    expect(generatePresenceSource(draft)).toContain('presence.on("UpdateData", async () => {');
   });
 });
 
