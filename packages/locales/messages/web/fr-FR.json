@@ -1351,11 +1351,11 @@
     }
   },
   "profilePage": {
-    "eyebrow": "Profil",
     "created-title": "Présences créées",
     "liked-title": "Présences aimées",
     "empty": "Rien à afficher pour le moment.",
     "meta-title": "{name} sur Nowly",
-    "meta-description": "Présences créées et aimées par {name} sur Nowly."
+    "meta-description": "Présences créées et aimées par {name} sur Nowly.",
+    "verified": "Compte vérifié"
   }
 }

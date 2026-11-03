@@ -1351,11 +1351,11 @@
     }
   },
   "profilePage": {
-    "eyebrow": "Profil",
     "created-title": "Presence yang dicipta",
     "liked-title": "Presence yang disukai",
     "empty": "Belum ada apa-apa untuk dipaparkan.",
     "meta-title": "{name} di Nowly",
-    "meta-description": "Presence yang dicipta dan disukai oleh {name} di Nowly."
+    "meta-description": "Presence yang dicipta dan disukai oleh {name} di Nowly.",
+    "verified": "Akaun disahkan"
   }
 }

@@ -1351,11 +1351,11 @@
     }
   },
   "profilePage": {
-    "eyebrow": "Profil",
     "created-title": "Oluşturulan presence'lar",
     "liked-title": "Beğenilen presence'lar",
     "empty": "Henüz gösterilecek bir şey yok.",
     "meta-title": "Nowly'de {name}",
-    "meta-description": "{name} kullanıcısının Nowly'de oluşturduğu ve beğendiği presence'lar."
+    "meta-description": "{name} kullanıcısının Nowly'de oluşturduğu ve beğendiği presence'lar.",
+    "verified": "Doğrulanmış hesap"
   }
 }

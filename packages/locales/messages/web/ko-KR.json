@@ -1351,11 +1351,11 @@
     }
   },
   "profilePage": {
-    "eyebrow": "프로필",
     "created-title": "만든 프레즌스",
     "liked-title": "좋아하는 프레즌스",
     "empty": "아직 표시할 내용이 없습니다.",
     "meta-title": "Nowly의 {name}",
-    "meta-description": "Nowly에서 {name}님이 만들고 좋아하는 프레즌스."
+    "meta-description": "Nowly에서 {name}님이 만들고 좋아하는 프레즌스.",
+    "verified": "인증된 계정"
   }
 }

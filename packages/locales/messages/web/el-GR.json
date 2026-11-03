@@ -1351,11 +1351,11 @@
     }
   },
   "profilePage": {
-    "eyebrow": "Προφίλ",
     "created-title": "Presences που δημιούργησε",
     "liked-title": "Presences που του αρέσουν",
     "empty": "Δεν υπάρχει ακόμη κάτι για εμφάνιση.",
     "meta-title": "{name} στο Nowly",
-    "meta-description": "Presences που δημιούργησε και του αρέσουν, από τον/την {name} στο Nowly."
+    "meta-description": "Presences που δημιούργησε και του αρέσουν, από τον/την {name} στο Nowly.",
+    "verified": "Επαληθευμένος λογαριασμός"
   }
 }

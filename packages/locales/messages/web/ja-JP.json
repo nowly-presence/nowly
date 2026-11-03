@@ -1351,11 +1351,11 @@
     }
   },
   "profilePage": {
-    "eyebrow": "プロフィール",
     "created-title": "作成したプレゼンス",
     "liked-title": "気に入ったプレゼンス",
     "empty": "まだ表示するものがありません。",
     "meta-title": "Nowly の {name}",
-    "meta-description": "Nowly で {name} が作成して気に入ったプレゼンス。"
+    "meta-description": "Nowly で {name} が作成して気に入ったプレゼンス。",
+    "verified": "認証済みアカウント"
   }
 }
