@@ -35,7 +35,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@nowly/locales": "workspace:*"
+    "@nowly/locales": "workspace:*",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "typescript": "6.0.3",

@@ -5,6 +5,8 @@ import { createPage, isValidDomain, normalizeDomain, normalizeDraft, presenceFol
 import { buildLocaleFiles, buildMetadata, pageKeys } from "./creator-files";
 import { sampleCreatorDraft } from "./creator-fixtures";
 import { validateDraft } from "./creator-validation";
+import { diffDefinitions } from "./creator-diff";
+import { parseCreatorDefinition } from "./creator-schema";
 
 describe("creator naming", () => {
   it("derives slug, folder and identifiers like the presences repo", () => {
@@ -305,5 +307,112 @@ describe("creator validation", () => {
       pages: [page, search]
     }).map((issue) => `${issue.code}:${issue.detail ?? ""}`);
     expect(codes).toEqual(expect.arrayContaining(["pageButtonUrlInvalid:", "pageImageUrlInvalid:", "pageUnknownVariable:nope"]));
+  });
+});
+describe("creator definition schema and diff", () => {
+  const definitionOf = () => {
+    const { assets: _assets, submission: _submission, ...definition } = sampleCreatorDraft();
+    return definition;
+  };
+
+  it("accepts the sample definition and strips unknown fields", () => {
+    const parsed = parseCreatorDefinition({
+      ...definitionOf(),
+      code: "alert(1)"
+    });
+    expect(parsed).not.toBeNull();
+    expect(parsed).not.toHaveProperty("code");
+  });
+
+  it("rejects control characters, long selectors and bad variable names", () => {
+    const base = definitionOf();
+    expect(
+      parseCreatorDefinition({
+        ...base,
+        name: "Bad\u0007name"
+      })
+    ).toBeNull();
+    const page = base.pages[0];
+    expect(
+      parseCreatorDefinition({
+        ...base,
+        pages: [
+          {
+            ...page,
+            variables: [
+              {
+                ...page.variables[0],
+                source: {
+                  kind: "element",
+                  selector: "a".repeat(301),
+                  read: "text"
+                }
+              }
+            ]
+          }
+        ]
+      })
+    ).toBeNull();
+    expect(
+      parseCreatorDefinition({
+        ...base,
+        pages: [
+          {
+            ...page,
+            variables: [
+              {
+                ...page.variables[0],
+                name: "Bad-Name"
+              }
+            ]
+          }
+        ]
+      })
+    ).toBeNull();
+  });
+
+  it("lists changed fields and pages by name", () => {
+    const before = definitionOf();
+    const after = {
+      ...before,
+      description: {
+        ...before.description,
+        "en-US": "Changed"
+      },
+      pages: [
+        {
+          ...before.pages[0],
+          details: { "en-US": "New first line" }
+        },
+        ...before.pages.slice(1)
+      ]
+    };
+    expect(diffDefinitions(before, after)).toEqual([
+      {
+        field: "description",
+        kind: "changed"
+      },
+      {
+        field: "page.details",
+        page: before.pages[0].name,
+        kind: "changed"
+      }
+    ]);
+    expect(diffDefinitions(null, after)).toEqual([
+      {
+        field: "definition",
+        kind: "added"
+      }
+    ]);
+    expect(
+      diffDefinitions(before, {
+        ...before,
+        pages: before.pages.slice(1)
+      })[0]
+    ).toEqual({
+      field: "page",
+      page: before.pages[0].name,
+      kind: "removed"
+    });
   });
 });

@@ -12,3 +12,4 @@ Pure model, validation and code generator of the presence creator, shared by the
 ## Checks
 
 `pnpm --filter @nowly/presence-creator typecheck` and `test`, then `pnpm --filter @nowly/extension lint` and `test`.
+- `creator-schema.ts` (`parseCreatorDefinition`) is the strict server-side schema of a definition and `creator-diff.ts` (`diffDefinitions`) the field-by-field diff used for revision history. Change them together with the API (`apps/api/src/features/presence-submissions`).

@@ -7,3 +7,5 @@ export * from "./creator-files";
 export * from "./creator-submission";
 export * from "./creator-types";
 export * from "./creator-validation";
+export * from "./creator-diff";
+export * from "./creator-schema";
