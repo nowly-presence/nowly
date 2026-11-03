@@ -1,10 +1,10 @@
+import { VerifiedBadge } from "@/features/profile/components/verified-badge";
 import { ProfileLinks } from "@/features/profile/components/profile-links";
 import { PresenceCollection } from "@/features/profile/components/presence-collection";
 import type { LibraryPresence } from "@/lib/library-catalog";
 import { getPresenceCatalog } from "@/lib/presence-api";
 import type { PublicProfile } from "@/features/profile/lib/public-profile";
 import { Avatar, AvatarFallback, AvatarImage, Badge } from "@nowly/ui";
-import { RiVerifiedBadgeFill } from "@nowly/ui/icons";
 import { getLocale, getTranslations } from "next-intl/server";
 
 const Section = ({ title, count, children }: { title: string; count: number; children: React.ReactNode }) => (
@@ -31,6 +31,30 @@ export const ProfileView = async ({ profile }: {
   const created = resolve(profile.created);
   const liked = resolve(profile.liked);
 
+  const sections = [
+    {
+      key: "created",
+      title: t("created-title"),
+      items: created
+    },
+    {
+      key: "liked",
+      title: t("liked-title"),
+      items: liked
+    }
+  ]
+    .flatMap((section) =>
+      section.items
+        ? [
+            {
+              ...section,
+              items: section.items
+            }
+          ]
+        : []
+    )
+    .sort((first, second) => second.items.length - first.items.length);
+
   const handle = profile.username ?? profile.handle;
   return (
     <div className="pb-24 pt-24 sm:pb-32 sm:pt-32">
@@ -46,7 +70,7 @@ export const ProfileView = async ({ profile }: {
             </Avatar>
             <h1 className="mt-3 flex items-center gap-2 text-[1.75rem] font-semibold leading-tight tracking-tight text-foreground sm:text-[2.1rem]">
               <span className="truncate">{profile.name}</span>
-              {profile.verified ? <RiVerifiedBadgeFill className="size-6 shrink-0 text-accent" aria-label={t("verified")} role="img" /> : null}
+              {profile.verified ? <VerifiedBadge label={t("verified")} /> : null}
             </h1>
             <p className="text-sm text-muted-foreground">@{handle}</p>
             {profile.role ? (
@@ -59,20 +83,15 @@ export const ProfileView = async ({ profile }: {
           </div>
         </div>
         <div className="mt-10 flex flex-col gap-10">
-          {created ? (
-            <Section title={t("created-title")} count={created.length}>
-              {created.length === 0 ? (
+          {sections.map((section) => (
+            <Section key={section.key} title={section.title} count={section.items.length}>
+              {section.items.length === 0 ? (
                 <p className="text-sm text-muted-foreground">{t("empty")}</p>
               ) : (
-                <PresenceCollection presences={created} locale={locale} />
+                <PresenceCollection presences={section.items} locale={locale} />
               )}
             </Section>
-          ) : null}
-          {liked ? (
-            <Section title={t("liked-title")} count={liked.length}>
-              {liked.length === 0 ? <p className="text-sm text-muted-foreground">{t("empty")}</p> : <PresenceCollection presences={liked} locale={locale} />}
-            </Section>
-          ) : null}
+          ))}
         </div>
       </div>
     </div>
