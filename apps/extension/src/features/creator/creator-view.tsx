@@ -8,9 +8,13 @@ import { urlMatchesPresence } from "@/shared/url-patterns";
 import { CreatorHome } from "@/features/creator/creator-home";
 import { EditLocaleProvider } from "@/features/creator/creator-locale-tabs";
 import { CreatorWizard } from "@/features/creator/creator-wizard";
+import { CreatorLoadingPublished } from "@/features/creator/creator-loading-published";
+import { usePublishedPresenceLoader } from "@/features/creator/use-published-presence-loader";
 import { useCreatorDrafts } from "@/features/creator/use-creator-drafts";
 
-export const CreatorView = () => {
+export const CreatorView = ({ presenceSlug }: {
+  presenceSlug?: string;
+}) => {
   const { state } = useExtensionState();
   const { locale } = useI18n();
   const { pop } = useNav();
@@ -19,6 +23,13 @@ export const CreatorView = () => {
   const active = activeId ? drafts[activeId] : undefined;
   const takenSlugs = useMemo(() => new Set(state.catalog.items.map((item) => item.slug)), [state.catalog.items]);
 
+  const published = usePublishedPresenceLoader({
+    slug: presenceSlug,
+    drafts,
+    ready,
+    save,
+    onLoaded: setActiveId
+  });
   const start = async () => {
     const host = state.tab.hostname;
     const supported = host ? state.catalog.items.some((item) => urlMatchesPresence(`https://${host}/`, item.url)) : true;
@@ -34,6 +45,8 @@ export const CreatorView = () => {
       </EditLocaleProvider>
     );
   }
+
+  if (presenceSlug) return <CreatorLoadingPublished loader={published} onBack={pop} />;
 
   return <CreatorHome drafts={list} ready={ready} onBack={pop} onCreate={() => void start()} onOpen={setActiveId} onDelete={(id) => void remove(id)} />;
 };

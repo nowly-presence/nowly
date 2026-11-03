@@ -22,6 +22,14 @@ export type Route = {
   name: "discord-ipc";
 } | {
   name: "creator";
+  presenceSlug?: string;
+} | {
+  name: "admin";
+} | {
+  name: "admin-review";
+  id: string;
+} | {
+  name: "admin-announcement";
 };
 
 type NavValue = {

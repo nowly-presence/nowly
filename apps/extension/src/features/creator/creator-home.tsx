@@ -12,7 +12,7 @@ import { Row } from "@/ui/row";
 import { Section } from "@/ui/section";
 import { Sheet } from "@/ui/sheet";
 import { Skeleton } from "@/ui/skeleton";
-import { SUBMISSION_TONES, statusKey } from "@/features/creator/creator-status";
+import { SUBMISSION_TONES, statusKey } from "@/lib/submission-status";
 
 type CreatorHomeProps = {
   drafts: CreatorDraft[];

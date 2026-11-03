@@ -14,6 +14,7 @@ import { announcementRevision } from "@nowly/shared/announcements";
 import { previewAnnouncements } from "@/preview/announcements-fixtures";
 import { createPublicationMockHandlers } from "@/preview/activity-publication-mock";
 import { createMockCreatorHandlers } from "@/preview/mock-creator";
+import { createMockAdminHandlers } from "@/preview/mock-admin";
 
 export type MockHandlers = { [K in RouterMessageType]?: (payload: PayloadOf<K>) => ResponseOf<K> | Promise<ResponseOf<K>> };
 
@@ -519,6 +520,9 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
           pendingChoice: false
         };
       }
+    }),
+    ...createMockAdminHandlers({
+      signedIn: () => account.signedIn
     }),
     STOP_ACCOUNT_SYNC: async () => {
       await delay(SYNC_LATENCY_MS);

@@ -4,12 +4,19 @@ import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
 import { openUrl } from "@/shared/browser-links";
 import { buildTextFiles, creatorDefinition } from "@nowly/presence-creator/creator-export";
+import { presenceSlug } from "@nowly/presence-creator/creator-draft";
 import { authorFromAccount, canEditSubmission, sameAuthor, SUBMISSION_TIMELINE, type CreatorSubmitError } from "@nowly/presence-creator/creator-submission";
-import type { CreatorDraft } from "@nowly/presence-creator/creator-types";
+import type { CreatorDraft, CreatorSubmission } from "@nowly/presence-creator/creator-types";
+import { ReviewThread } from "@/components/shared/review-thread";
+import { useCreatorPresenceProbe } from "@/hooks/use-creator-presence-probe";
+import { useStaffAccess } from "@/hooks/use-staff-access";
+import { useSubmissionDetail } from "@/hooks/use-submission-detail";
+import { canPublish } from "@/shared/admin/review-rules";
+import { adminErrorKey } from "@/lib/admin-error";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
 import { cn } from "@/ui/cn";
-import { submissionStatusKey } from "@/features/creator/creator-status";
+import { submissionStatusKey } from "@/lib/submission-status";
 import { useCreatorAccount } from "@/features/creator/use-creator-account";
 import type { DraftUpdate } from "@/features/creator/use-draft-editor";
 
@@ -31,6 +38,10 @@ export const SubmitPanel = ({ draft, update, blocked }: {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const submission = draft.submission;
+  const staff = useStaffAccess();
+  const published = useCreatorPresenceProbe(presenceSlug(draft.name), staff.can("review"));
+  const publishing = published && staff.can("publish");
+  const thread = useSubmissionDetail(submission?.id ?? null);
 
   const ready = Boolean(account?.creator);
 
@@ -48,6 +59,29 @@ export const SubmitPanel = ({ draft, update, blocked }: {
       ids: [submission.id]
     });
     if (latest) update({ submission: latest });
+    await thread.reload();
+  };
+
+  const publishNow = async (target: CreatorSubmission) => {
+    const result = await sendMessage("ADMIN_PUBLISH", {
+      id: target.id,
+      revision: target.revision ?? 1
+    });
+
+    if (result.ok) update({ submission: result.data });
+    else setError(result.message ?? t(adminErrorKey(result.error)));
+
+    return result.ok;
+  };
+
+  const publishExisting = async () => {
+    if (!submission) return;
+
+    setSending(true);
+    setError(null);
+    await publishNow(submission);
+    setSending(false);
+    await thread.reload();
   };
 
   const submit = async () => {
@@ -69,8 +103,12 @@ export const SubmitPanel = ({ draft, update, blocked }: {
       }
     });
     setSending(false);
-    if (result.ok) update({ submission: result.submission });
-    else if (result.error === "CREATOR_REQUIRED" || result.error === "UNAUTHORIZED") void refresh();
+
+    if (result.ok) {
+      update({ submission: result.submission });
+      if (publishing) await publishNow(result.submission);
+      await thread.reload();
+    } else if (result.error === "CREATOR_REQUIRED" || result.error === "UNAUTHORIZED") void refresh();
     else setError(result.message ?? t(SUBMIT_ERROR_KEYS[result.error]));
   };
 
@@ -88,6 +126,13 @@ export const SubmitPanel = ({ draft, update, blocked }: {
     );
   }
 
+  const sendLabel: MessageKey = publishing
+    ? "creator.submit.publish"
+    : published
+      ? "creator.submit.propose"
+      : submission
+        ? "creator.submit.resend"
+        : "creator.submit.send";
   const currentIndex = submission ? SUBMISSION_TIMELINE.indexOf(submission.status) : -1;
 
   return (
@@ -120,10 +165,16 @@ export const SubmitPanel = ({ draft, update, blocked }: {
             </ol>
           )}
           {submission.note && <p className="rounded-md bg-hover p-3 text-label-md">{submission.note}</p>}
+          {thread.detail && thread.detail.reviews.length > 0 && <ReviewThread reviews={thread.detail.reviews} />}
           <div className="flex flex-wrap gap-2">
             <Button size="sm" variant="secondary" icon={<RiRefreshLine className="size-4" />} onClick={() => void refreshStatus()}>
               {t("creator.submit.refresh")}
             </Button>
+            {publishing && canPublish(submission.status) && (
+              <Button size="sm" loading={sending} onClick={() => void publishExisting()}>
+                {t("creator.submit.publishNow")}
+              </Button>
+            )}
             {submission.prUrl && (
               <Button
                 size="sm"
@@ -141,15 +192,15 @@ export const SubmitPanel = ({ draft, update, blocked }: {
       {canEditSubmission(submission) && (
         <>
           {blocked && <p className="text-label-md text-muted">{t("creator.submit.blocked")}</p>}
-          {error && <p className="text-label-md text-danger">{error}</p>}
-          <Button icon={<RiSendPlaneLine className="size-4" />} loading={sending} disabled={blocked} onClick={() => void submit()}>
-            {submission ? t("creator.submit.resend") : t("creator.submit.send")}
-          </Button>
           <p className="text-label-sm text-muted">
             {draft.translationMode === "auto"
               ? t("creator.submit.autoTranslate")
               : t("creator.submit.manualTranslate")}
           </p>
+          {error && <p className="text-label-md text-danger">{error}</p>}
+          <Button icon={<RiSendPlaneLine className="size-4" />} loading={sending} disabled={blocked} onClick={() => void submit()}>
+            {t(sendLabel)}
+          </Button>
         </>
       )}
     </Card>
