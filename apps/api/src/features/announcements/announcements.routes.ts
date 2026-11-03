@@ -1,5 +1,6 @@
 import type { AppEnv } from "@/context";
 import { requireSecretOrCapability } from "@/features/admin/admin.middleware";
+import { canTranslateAnnouncements, EnglishSourceRequiredError, translateAnnouncement } from "@/features/announcements/announcements.translation";
 import { createAnnouncement, getAnnouncementFeed } from "@/features/announcements/announcements.service";
 import { jsonBody } from "@/shared/request-body";
 import { ANNOUNCEMENT_BODY_LIMIT, ANNOUNCEMENT_LOCALES, AnnouncementInputSchema } from "@nowly/shared/announcements";
@@ -81,11 +82,28 @@ export const createAnnouncementsRoutes = () => {
         onError: (c) => c.json({ error: "ANNOUNCEMENT_TOO_LARGE" }, 413)
       }),
       async (c) => {
-        const input = AnnouncementInputSchema.safeParse(await jsonBody(c));
+        const body = await jsonBody(c);
+        const { translate, ...announcement } = body && typeof body === "object" && !Array.isArray(body) ? (body as Record<string, unknown>) : { translate: undefined };
+
+        if (translate !== undefined && typeof translate !== "boolean") return c.json({ error: "INVALID_ANNOUNCEMENT" }, 400);
+
+        const input = AnnouncementInputSchema.safeParse(announcement);
 
         if (!input.success) return c.json({ error: "INVALID_ANNOUNCEMENT" }, 400);
 
-        const item = await createAnnouncement(input.data, c.get("actor"));
+        let prepared = input.data;
+
+        if (translate !== false && canTranslateAnnouncements()) {
+          try {
+            prepared = await translateAnnouncement(input.data);
+          } catch (error) {
+            if (error instanceof EnglishSourceRequiredError) return c.json({ error: "ENGLISH_REQUIRED" }, 400);
+
+            return c.json({ error: "TRANSLATION_FAILED" }, 502);
+          }
+        }
+
+        const item = await createAnnouncement(prepared, c.get("actor"));
         invalidate();
         return c.json(item, 201);
       }
