@@ -397,6 +397,8 @@
   "support.copyFailed": "Alamat tidak dapat disalin",
   "settings.seasonalThemes": "Tunjukkan tema bermusim",
   "settings.seasonalThemesHint": "Menghias panel mengikut musim dan hari istimewa, seperti Halloween atau Tahun Baharu",
+  "settings.toolbarBadge": "Papar lencana ikon",
+  "settings.toolbarBadgeHint": "Memaparkan aktiviti semasa (contohnya YouTube merah dengan mata) atau jeda pada ikon sambungan.",
   "settings.forceSeason": "Paksa musim",
   "settings.seasonAuto": "Automatik (tarikh)",
   "settings.seasonNone": "Tiada",

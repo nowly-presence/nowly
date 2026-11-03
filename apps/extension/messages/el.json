@@ -397,6 +397,8 @@
   "support.copyFailed": "Δεν ήταν δυνατή η αντιγραφή της διεύθυνσης",
   "settings.seasonalThemes": "Εμφάνιση εποχικών θεμάτων",
   "settings.seasonalThemesHint": "Ντύνει το πάνελ για κάθε εποχή και για ξεχωριστές μέρες, όπως το Halloween ή την Πρωτοχρονιά",
+  "settings.toolbarBadge": "Εμφάνιση σήματος εικονιδίου",
+  "settings.toolbarBadgeHint": "Εμφανίζει την τρέχουσα δραστηριότητα (π.χ. κόκκινο YouTube με μάτι) ή την παύση στο εικονίδιο της επέκτασης.",
   "settings.forceSeason": "Επιβολή εποχής",
   "settings.seasonAuto": "Αυτόματα (ημερομηνία)",
   "settings.seasonNone": "Καμία",

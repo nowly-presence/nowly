@@ -1,4 +1,4 @@
-import { DiscordAvatar } from "@/components/shared/discord-avatar";
+import { ConnectionRow } from "@/features/settings/connection-row";
 import { AccountChoiceSheet } from "@/features/settings/account-choice-sheet";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
@@ -6,7 +6,7 @@ import { useNow } from "@/hooks/use-now";
 import { formatRelative } from "@/lib/format";
 import { sendMessage } from "@/lib/messages";
 import { openUrl, siteUrl } from "@/shared/browser-links";
-import type { AccountSnapshot, AccountUser } from "@/shared/types";
+import type { AccountSnapshot } from "@/shared/types";
 import { Button } from "@/ui/button";
 import { Group } from "@/ui/card";
 import { Row } from "@/ui/row";
@@ -16,22 +16,9 @@ import { useToast } from "@/ui/toast";
 import { RiDiscordFill, RiExternalLinkLine, RiRefreshLine } from "@remixicon/react";
 import { useState } from "react";
 
-const AVATAR_SIZE = 36;
 const MINUTE_MS = 60_000;
 
 type Busy = "connect" | "sync" | "signOut" | "stop" | null;
-
-const AccountAvatar = ({ user }: {
-  user: AccountUser;
-}) => {
-  const [failed, setFailed] = useState(false);
-
-  if (!user.image || failed) return <DiscordAvatar size={AVATAR_SIZE} className="rounded-lg" />;
-
-  return (
-    <img src={user.image} alt="" width={AVATAR_SIZE} height={AVATAR_SIZE} onError={() => setFailed(true)} className="size-9 shrink-0 rounded-lg object-cover" />
-  );
-};
 
 const SignedOut = ({ busy, onConnect }: {
   busy: Busy;
@@ -39,7 +26,8 @@ const SignedOut = ({ busy, onConnect }: {
 }) => {
   const { t } = useI18n();
   return (
-    <Group hideSeparator>
+    <Group>
+      <ConnectionRow />
       <Row align="start" title={t("account.signedOutTitle")} description={t("account.signedOutHint")} />
       <div className="px-4 pb-3">
         <Button className="w-full" loading={busy === "connect"} icon={<RiDiscordFill />} onClick={onConnect}>
@@ -155,10 +143,9 @@ export const AccountSection = () => {
         <SignedOut busy={busy} onConnect={connect} />
       ) : (
         <Group>
+          <ConnectionRow />
           <Row
-            leading={<AccountAvatar user={account.user} />}
-            title={account.user.name}
-            description={<SyncStatus account={account} />}
+            title={<SyncStatus account={account} />}
             trailing={
               account.pendingChoice ? (
                 <Button size="sm" variant="secondary" onClick={() => setChoiceOpen(true)}>

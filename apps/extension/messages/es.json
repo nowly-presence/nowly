@@ -397,6 +397,8 @@
   "support.copyFailed": "No se pudo copiar la dirección",
   "settings.seasonalThemes": "Mostrar temas de temporada",
   "settings.seasonalThemesHint": "Viste el panel en cada estación y en los días especiales, como Halloween o Año Nuevo",
+  "settings.toolbarBadge": "Mostrar la insignia del icono",
+  "settings.toolbarBadgeHint": "Muestra la actividad actual (por ejemplo YouTube en rojo con un ojo) o la pausa en el icono de la extensión.",
   "settings.forceSeason": "Forzar la temporada",
   "settings.seasonAuto": "Automática (fecha)",
   "settings.seasonNone": "Ninguna",

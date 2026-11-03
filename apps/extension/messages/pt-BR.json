@@ -397,6 +397,8 @@
   "support.copyFailed": "Não foi possível copiar o endereço",
   "settings.seasonalThemes": "Mostrar temas sazonais",
   "settings.seasonalThemesHint": "Veste o painel a cada estação e em datas especiais, como o Halloween ou o Ano-Novo",
+  "settings.toolbarBadge": "Mostrar o selo do ícone",
+  "settings.toolbarBadgeHint": "Mostra a atividade atual (por exemplo YouTube em vermelho com um olho) ou a pausa no ícone da extensão.",
   "settings.forceSeason": "Forçar a estação",
   "settings.seasonAuto": "Automática (data)",
   "settings.seasonNone": "Nenhuma",

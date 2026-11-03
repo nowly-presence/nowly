@@ -69,6 +69,13 @@ export const AppearanceSection = () => {
           label={t("settings.seasonalThemes")}
           onChange={(checked) => void updateSettings({ seasonalThemes: checked })}
         />
+        <SwitchRow
+          title={t("settings.toolbarBadge")}
+          description={t("settings.toolbarBadgeHint")}
+          checked={settings.toolbarBadge !== false}
+          label={t("settings.toolbarBadge")}
+          onChange={(checked) => void updateSettings({ toolbarBadge: checked })}
+        />
         <FieldRow title={t("settings.language")} controlClassName="w-44">
           <Select
             aria-label={t("settings.language")}

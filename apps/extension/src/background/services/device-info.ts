@@ -3,6 +3,8 @@ export const browserName = (): string => {
 
   if (ua.includes("Edg/")) return "edge";
   if (ua.includes("OPR/")) return "opera";
+  if (ua.includes("Firefox/")) return "firefox";
+  if (ua.includes("Chrome/")) return "chrome";
 
   return "chromium";
 };

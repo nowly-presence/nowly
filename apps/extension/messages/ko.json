@@ -397,6 +397,8 @@
   "support.copyFailed": "주소를 복사하지 못했습니다",
   "settings.seasonalThemes": "계절 테마 표시",
   "settings.seasonalThemesHint": "계절마다, 그리고 핼러윈이나 새해 같은 특별한 날에 패널을 꾸며요",
+  "settings.toolbarBadge": "툴바 배지 표시",
+  "settings.toolbarBadgeHint": "현재 활동(예: 눈 이모지가 있는 빨간 YouTube) 또는 일시 중지를 확장 프로그램 아이콘에 표시합니다.",
   "settings.forceSeason": "계절 고정",
   "settings.seasonAuto": "자동 (날짜)",
   "settings.seasonNone": "없음",

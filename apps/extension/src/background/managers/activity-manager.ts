@@ -80,6 +80,11 @@ const clearActivityBadge = (): void => {
 export const refreshToolbarBadge = async (): Promise<void> => {
   const settings = await getSettings();
 
+  if (settings.toolbarBadge === false) {
+    clearActivityBadge();
+    return;
+  }
+
   if (settings.presencePaused) {
     setPausedBadge();
     return;

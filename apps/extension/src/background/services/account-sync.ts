@@ -1,4 +1,4 @@
-import { EXTENSION_TOKEN_PREFIX } from "@nowly/shared";
+import { EXTENSION_TOKEN_PREFIX, type ExtensionTokenScope } from "@nowly/shared";
 import { addRuntimeLog } from "@/background/runtime-logs";
 import { deleteSyncDocuments, fetchAccountUser, fetchSyncDocuments, linkDevice, putSyncDocument, revokeExtensionToken, type ApiResult, type RemoteSyncDocument } from "@/background/services/account-api";
 import { applyLocalSyncValue, readLocalSyncValues, reconcilePendingPresences } from "@/background/services/account-sync-local";
@@ -277,6 +277,13 @@ const linkThisDevice = async (token: string): Promise<void> => {
   addRuntimeLog(result.status === "ok" ? "success" : "warn", "api", "POST /devices/:deviceId/link result", { status: result.status });
 };
 
+const GRANTABLE_SCOPES: readonly ExtensionTokenScope[] = ["sync", "creator", "admin"];
+
+const grantedScopes = (value: unknown): ExtensionTokenScope[] => {
+  const requested = Array.isArray(value) ? value : [];
+  return GRANTABLE_SCOPES.filter((scope) => scope === "sync" || requested.includes(scope));
+};
+
 export const connectAccount = async (payload: unknown): Promise<{
   ok: boolean;
   error?: string;
@@ -306,7 +313,7 @@ export const connectAccount = async (payload: unknown): Promise<{
   await setAccount({
     token: payload.token,
     user: me.data,
-    scopes: Array.isArray(payload.scopes) && payload.scopes.includes("creator") ? ["sync", "creator"] : ["sync"],
+    scopes: grantedScopes(payload.scopes),
     expiresAt: typeof payload.expiresAt === "number" ? payload.expiresAt : 0,
     connectedAt: Date.now()
   });

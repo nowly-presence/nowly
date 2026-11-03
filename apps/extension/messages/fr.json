@@ -397,6 +397,8 @@
   "support.copyFailed": "Impossible de copier l'adresse",
   "settings.seasonalThemes": "Afficher les thèmes de saison",
   "settings.seasonalThemesHint": "Habille le panneau au fil des saisons et pour les grandes fêtes, comme Halloween ou le Nouvel An",
+  "settings.toolbarBadge": "Afficher le badge de l'icône",
+  "settings.toolbarBadgeHint": "Affiche l'activité en cours (par exemple YouTube en rouge avec un oeil) ou la pause sur l'icône de l'extension.",
   "settings.forceSeason": "Forcer la saison",
   "settings.seasonAuto": "Automatique (date)",
   "settings.seasonNone": "Aucune",

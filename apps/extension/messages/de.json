@@ -397,6 +397,8 @@
   "support.copyFailed": "Adresse konnte nicht kopiert werden",
   "settings.seasonalThemes": "Saisonale Designs anzeigen",
   "settings.seasonalThemesHint": "Kleidet das Panel passend zu jeder Jahreszeit und zu besonderen Tagen ein, etwa Halloween oder Neujahr",
+  "settings.toolbarBadge": "Symbol-Badge anzeigen",
+  "settings.toolbarBadgeHint": "Zeigt die aktuelle Aktivität (z. B. YouTube in Rot mit einem Auge) oder die Pause auf dem Erweiterungssymbol.",
   "settings.forceSeason": "Jahreszeit erzwingen",
   "settings.seasonAuto": "Automatisch (Datum)",
   "settings.seasonNone": "Keine",

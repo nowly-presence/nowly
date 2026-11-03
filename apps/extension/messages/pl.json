@@ -397,6 +397,8 @@
   "support.copyFailed": "Nie udało się skopiować adresu",
   "settings.seasonalThemes": "Pokazuj motywy sezonowe",
   "settings.seasonalThemesHint": "Ubiera panel na każdą porę roku i na wyjątkowe dni, takie jak Halloween czy Nowy Rok",
+  "settings.toolbarBadge": "Pokaż plakietkę na ikonie",
+  "settings.toolbarBadgeHint": "Pokazuje bieżącą aktywność (np. YouTube na czerwono z okiem) lub pauzę na ikonie rozszerzenia.",
   "settings.forceSeason": "Wymuś sezon",
   "settings.seasonAuto": "Automatycznie (data)",
   "settings.seasonNone": "Brak",

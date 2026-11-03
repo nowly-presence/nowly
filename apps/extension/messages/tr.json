@@ -397,6 +397,8 @@
   "support.copyFailed": "Adres kopyalanamadı",
   "settings.seasonalThemes": "Mevsimsel temaları göster",
   "settings.seasonalThemesHint": "Paneli her mevsime ve Cadılar Bayramı ya da Yılbaşı gibi özel günlere göre süsler",
+  "settings.toolbarBadge": "Simge rozetini göster",
+  "settings.toolbarBadgeHint": "Geçerli etkinliği (ör. gözlü kırmızı YouTube) veya duraklatmayı uzantı simgesinde gösterir.",
   "settings.forceSeason": "Mevsimi zorla",
   "settings.seasonAuto": "Otomatik (tarih)",
   "settings.seasonNone": "Yok",

@@ -1,6 +1,5 @@
 import { ScreenBody, ScreenTitle } from "@/components/shared/screen";
 import { useI18n } from "@/hooks/i18n-provider";
-import { ConnectionSummary } from "@/features/settings/connection-summary";
 import { AboutSection } from "@/features/settings/sections/about-section";
 import { AccountSection } from "@/features/settings/sections/account-section";
 import { AdminSection } from "@/features/settings/sections/admin-section";
@@ -17,13 +16,12 @@ export const SettingsView = () => {
     <ScreenBody className="[&>section]:snap-start [&>section]:snap-always">
       <div className="flex flex-col gap-6 snap-start snap-always">
         <ScreenTitle title={t("settings.title")} subtitle={t("settings.description")} />
-        <ConnectionSummary />
+        <AccountSection />
       </div>
       <SharingSection />
       <ScheduleSection />
       <AppearanceSection />
       <NavigationSection />
-      <AccountSection />
       <AdminSection />
       <PrivacySection />
       <AdvancedSection />

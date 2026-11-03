@@ -397,6 +397,8 @@
   "support.copyFailed": "Couldn't copy the address",
   "settings.seasonalThemes": "Show seasonal themes",
   "settings.seasonalThemesHint": "Dress the panel for each season and for special days, like Halloween or the new year",
+  "settings.toolbarBadge": "Show the toolbar badge",
+  "settings.toolbarBadgeHint": "Shows the current activity (such as YouTube in red with an eye) or the pause on the extension icon.",
   "settings.forceSeason": "Force the season",
   "settings.seasonAuto": "Automatic (date)",
   "settings.seasonNone": "None",
