@@ -1,3 +1,4 @@
+import { linkedDiscordId } from "@/features/account/discord-link.service";
 import { getDb } from "@/db/client";
 import { user } from "@nowly/database/schema/auth";
 import { creatorPresence, presenceSubmission, presenceSubmissionEvent, presenceSubmissionRevision } from "@nowly/database/schema/creator";
@@ -92,7 +93,9 @@ export const submitPresence = async (input: {
     .where(eq(user.id, input.userId))
     .limit(1);
 
-  if (!author?.discordId) throw new SubmissionError("CREATOR_REQUIRED", "Link a Discord account to publish presences.");
+  const discordId = author ? (author.discordId ?? (await linkedDiscordId(input.userId))) : null;
+
+  if (!author || !discordId) throw new SubmissionError("CREATOR_REQUIRED", "Link a Discord account to publish presences.");
 
   const parsed = parseCreatorDefinition(input.definition);
 
@@ -102,7 +105,7 @@ export const submitPresence = async (input: {
     ...parsed,
     author: {
       name: author.name,
-      discord: author.discordId
+      discord: discordId
     }
   };
   const slug = presenceSlug(definition.name);

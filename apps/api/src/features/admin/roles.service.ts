@@ -1,8 +1,8 @@
 import { getDb } from "@/db/client";
 import { extensionToken } from "@nowly/database/schema/account";
-import { user } from "@nowly/database/schema/auth";
+import { account, user } from "@nowly/database/schema/auth";
 import type { UserRole } from "@nowly/shared/roles";
-import { and, arrayContains, desc, eq, ilike, isNull, or } from "drizzle-orm";
+import { and, arrayContains, desc, eq, ilike, inArray, isNull, or } from "drizzle-orm";
 import { recordAdminAction, type AuditActor } from "./audit.service";
 
 export type RoleChange = {
@@ -90,7 +90,7 @@ export const searchAdminUsers = async (query: string): Promise<AdminUserView[]> 
       verified: user.verified
     })
     .from(user)
-    .where(or(ilike(user.name, pattern), ilike(user.discordUsername, pattern), eq(user.id, query), eq(user.discordId, query)))
+    .where(or(ilike(user.name, pattern), ilike(user.discordUsername, pattern), eq(user.id, query), eq(user.discordId, query), inArray(user.id, getDb().select({ id: account.userId }).from(account).where(and(eq(account.providerId, "discord"), eq(account.accountId, query))))))
     .orderBy(desc(user.createdAt))
     .limit(ADMIN_USER_SEARCH_LIMIT);
   return rows;

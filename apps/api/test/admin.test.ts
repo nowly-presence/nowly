@@ -1,7 +1,7 @@
 import { adminAuditEvent } from "@nowly/database/schema/admin";
 import { extensionToken } from "@nowly/database/schema/account";
 import { announcement } from "@nowly/database/schema/announcement";
-import { user } from "@nowly/database/schema/auth";
+import { account, user } from "@nowly/database/schema/auth";
 import { eq, isNull } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createTestDatabase, seedExtensionToken, seedUser, type TestDatabase } from "./database";
@@ -15,6 +15,10 @@ vi.mock("@/features/auth/better-auth", () => ({
   getAuth: () => ({
     api: { getSession: vi.fn(async () => (mockSession.userId ? { user: { id: mockSession.userId } } : null)) }
   })
+}));
+vi.mock("@/shared/workers-ai", () => ({
+  hasWorkersAi: () => false,
+  runJsonModel: vi.fn()
 }));
 vi.mock("@/features/announcements/announcements.changelog", () => ({
   readReleaseAnnouncements: async () => []
@@ -205,6 +209,20 @@ describe("roles and capabilities", () => {
       }
     });
     expect((await inject(server, { url: "/admin/audit" })).json().events).toHaveLength(1);
+  });
+
+  it("finds a user by the Discord id of the linked account when the user row has none", async () => {
+    await database.db.insert(account).values({
+      id: "linked-discord",
+      userId: MEMBER,
+      accountId: "927843025567232050",
+      providerId: "discord"
+    });
+    mockSession.userId = ADMIN;
+    const server = await app();
+
+    const found = await inject(server, { url: "/admin/users?q=927843025567232050" });
+    expect(found.json().users).toEqual([expect.objectContaining({ id: MEMBER })]);
   });
 
   it("searches users and grants or removes the verified badge with an audit entry", async () => {

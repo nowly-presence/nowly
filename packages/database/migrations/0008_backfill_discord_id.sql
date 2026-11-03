@@ -1,0 +1,1 @@
+UPDATE "users" SET "discord_id" = "accounts"."account_id" FROM "accounts" WHERE "accounts"."user_id" = "users"."id" AND "accounts"."provider_id" = 'discord' AND "users"."discord_id" IS NULL AND NOT EXISTS (SELECT 1 FROM "users" AS "other" WHERE "other"."discord_id" = "accounts"."account_id");

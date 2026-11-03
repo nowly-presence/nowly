@@ -57,6 +57,13 @@
       "when": 1793728998569,
       "tag": "0007_public_profile_links",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793729998569,
+      "tag": "0008_backfill_discord_id",
+      "breakpoints": true
     }
   ]
 }

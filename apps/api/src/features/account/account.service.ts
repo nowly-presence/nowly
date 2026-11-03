@@ -10,6 +10,7 @@ import { listActorActions, type AuditEventView } from "@/features/admin/audit.se
 import { capabilitiesOf, type AdminCapability } from "@nowly/shared/roles";
 import { syncCustomActivitiesSchema, syncPresencesSchema } from "@nowly/shared/schemas";
 import { getPublicProfileSettings, isVerifiedAccount, type PublicProfileSettings } from "@/features/public-profile/public-profile.service";
+import { linkedDiscordId } from "./discord-link.service";
 import { revokeDeviceExtensionTokens } from "./extension-token.service";
 
 export const ACCOUNT_PROVIDERS = ["discord"] as const;
@@ -32,15 +33,6 @@ export type AccountDevice = {
   extensionVersion: string | null;
   lastSeenAt: string;
   current: boolean;
-};
-
-const linkedDiscordId = async (userId: string): Promise<string | null> => {
-  const [linked] = await getDb()
-    .select({ accountId: account.accountId })
-    .from(account)
-    .where(and(eq(account.userId, userId), eq(account.providerId, "discord")))
-    .limit(1);
-  return linked?.accountId ?? null;
 };
 
 export const getAccountProfile = async (userId: string): Promise<AccountProfile | null> => {
