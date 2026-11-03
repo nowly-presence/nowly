@@ -10,6 +10,9 @@ export const user = pgTable(
     image: text("image"),
     role: text("role").default("user").notNull(),
     discordId: text("discord_id"),
+    discordUsername: text("discord_username"),
+    discordBanner: text("discord_banner"),
+    verified: boolean("verified").default(false).notNull(),
     createdAt: timestamp("created_at", {
       withTimezone: true,
       precision: 6
