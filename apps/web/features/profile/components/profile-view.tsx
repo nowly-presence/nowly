@@ -1,9 +1,11 @@
 import { ProfileLinks } from "@/features/profile/components/profile-links";
 import { PresenceCollection } from "@/features/profile/components/presence-collection";
+import type { LibraryPresence } from "@/lib/library-catalog";
+import { getPresenceCatalog } from "@/lib/presence-api";
 import type { PublicProfile } from "@/features/profile/lib/public-profile";
 import { Avatar, AvatarFallback, AvatarImage, Badge } from "@nowly/ui";
 import { RiVerifiedBadgeFill } from "@nowly/ui/icons";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 const Section = ({ title, count, children }: { title: string; count: number; children: React.ReactNode }) => (
   <section>
@@ -18,7 +20,16 @@ const Section = ({ title, count, children }: { title: string; count: number; chi
 export const ProfileView = async ({ profile }: {
   profile: PublicProfile;
 }) => {
-  const t = await getTranslations("profilePage");
+  const [t, locale, catalog] = await Promise.all([
+    getTranslations("profilePage"),
+    getLocale(),
+    getPresenceCatalog()
+  ]);
+
+  const bySlug = new Map(catalog.map((presence) => [presence.slug, presence]));
+  const resolve = (items: PublicProfile["created"]): LibraryPresence[] | null => (items ? items.flatMap((item) => bySlug.get(item.slug) ?? []) : null);
+  const created = resolve(profile.created);
+  const liked = resolve(profile.liked);
 
   const handle = profile.username ?? profile.handle;
   return (
@@ -48,14 +59,18 @@ export const ProfileView = async ({ profile }: {
           </div>
         </div>
         <div className="mt-10 flex flex-col gap-10">
-          {profile.created ? (
-            <Section title={t("created-title")} count={profile.created.length}>
-              {profile.created.length === 0 ? <p className="text-sm text-muted-foreground">{t("empty")}</p> : <PresenceCollection items={profile.created} />}
+          {created ? (
+            <Section title={t("created-title")} count={created.length}>
+              {created.length === 0 ? (
+                <p className="text-sm text-muted-foreground">{t("empty")}</p>
+              ) : (
+                <PresenceCollection presences={created} locale={locale} />
+              )}
             </Section>
           ) : null}
-          {profile.liked ? (
-            <Section title={t("liked-title")} count={profile.liked.length}>
-              {profile.liked.length === 0 ? <p className="text-sm text-muted-foreground">{t("empty")}</p> : <PresenceCollection items={profile.liked} />}
+          {liked ? (
+            <Section title={t("liked-title")} count={liked.length}>
+              {liked.length === 0 ? <p className="text-sm text-muted-foreground">{t("empty")}</p> : <PresenceCollection presences={liked} locale={locale} />}
             </Section>
           ) : null}
         </div>
