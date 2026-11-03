@@ -77,6 +77,25 @@ const fakeGithub = async (input: string | URL | Request, init?: RequestInit): Pr
   const body = typeof init?.body === "string" ? JSON.parse(init.body) : undefined;
   const path = decodeURIComponent(url.pathname);
 
+  if (url.hostname === "api.cloudflare.com") {
+    const items: Array<{
+      key: string;
+      text: string;
+    }> = JSON.parse(body.messages[1].content);
+    const locale = /to (\w\w-\w\w)/.exec(String(body.messages[0].content))?.[1];
+    return json(200, {
+      success: true,
+      result: {
+        response: {
+          items: items.map((item) => ({
+            key: item.key,
+            text: `[${locale}] ${item.text}`
+          }))
+        }
+      }
+    });
+  }
+
   github.calls.push({
     method,
     path: `${path}${url.search}`,
@@ -375,6 +394,23 @@ describe("Nolo pull request job", () => {
       failed: 0
     });
     expect(github.calls).toEqual([]);
+  });
+
+  it("translates an automatic submission before committing and waits while translation is not configured", async () => {
+    await database.db.update(presenceSubmission).set({ translate: true }).where(eq(presenceSubmission.id, SUBMISSION));
+    expect((await runJob()).failed).toBe(1);
+    expect((await stored()).prError).toBe("Automatic translation is not configured.");
+
+    vi.stubEnv("WORKERS_AI_API_TOKEN", "token");
+    vi.stubEnv("WORKERS_AI_ACCOUNT_ID", "account");
+    expect((await runJob()).opened).toBe(1);
+    const entries = callsTo("POST", "/git/trees")[0].body?.tree as Array<{
+      path: string;
+      content?: string;
+    }>;
+    const french = entries.find((entry) => entry.path === `${folder}/locales/fr-FR.json`);
+    expect(french?.content).toContain("[fr-FR]");
+    expect(entries.map((entry) => entry.path)).toContain(`${folder}/locales/es-ES.json`);
   });
 
   it("lets an admin retry one submission and refuses the job route without the secret", async () => {

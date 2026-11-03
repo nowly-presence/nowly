@@ -1,5 +1,6 @@
 import { getDb } from "@/db/client";
 import { githubInstallationClient, hasGithubApp } from "@/shared/github-app";
+import { hasWorkersAi } from "@/shared/workers-ai";
 import { user } from "@nowly/database/schema/auth";
 import { presenceSubmission, presenceSubmissionEvent, presenceSubmissionRevision } from "@nowly/database/schema/creator";
 import { buildTextFiles, normalizeDraft, parseCreatorDefinition, presenceFolder, validateDraft } from "@nowly/presence-creator";
@@ -9,6 +10,7 @@ import { z } from "zod";
 import { commitOnBase, deletedEntry, fileExists, listFolderFiles, openOrReusePullRequest, pullRequestBody, pushBranch, textEntry, uploadBlob } from "./nolo-repository";
 import { CREATOR_IMAGE_KINDS, IMAGE_SPECS } from "./submission-images";
 import { readCreatorImage } from "./submission-storage";
+import { translateDefinition } from "./submission-translation";
 
 const MINUTE_MS = 60_000;
 export const PR_LEASE_MS = 10 * MINUTE_MS;
@@ -81,9 +83,12 @@ const buildPullRequest = async (row: typeof presenceSubmission.$inferSelect): Pr
   const assets = AssetsSchema.safeParse(revision?.assets);
 
   if (!revision || !definition || !assets.success) throw new Error("The revision has no valid definition or images.");
+  if (row.translate && !hasWorkersAi()) throw new Error("Automatic translation is not configured.");
+
+  const prepared = row.translate ? await translateDefinition(definition) : definition;
 
   const draft = normalizeDraft({
-    ...definition,
+    ...prepared,
     assets: {
       thumbnail: assets.data.thumbnail,
       logo: assets.data.logo,

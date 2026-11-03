@@ -9,3 +9,4 @@ process.env.STATUS_SAMPLE_LIMIT ??= "168";
 process.env.STATUS_CHECK_INTERVAL_HOURS ??= "1";
 process.env.NOLO_REPOSITORY ??= "nowly-presence/presences";
 process.env.NOLO_BASE_BRANCH ??= "stable";
+process.env.WORKERS_AI_MODEL ??= "@cf/google/gemma-4-26b-a4b-it";
