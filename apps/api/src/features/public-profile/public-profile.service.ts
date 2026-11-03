@@ -20,6 +20,7 @@ export type PublicProfileSettings = {
   bio: string | null;
   showCreated: boolean;
   showLiked: boolean;
+  links: string[];
 };
 
 export type PublicProfileView = {
@@ -31,6 +32,7 @@ export type PublicProfileView = {
   image: string | null;
   banner: string | null;
   bio: string | null;
+  links: string[];
   created: Array<{
     slug: string;
     name: string;
@@ -52,7 +54,8 @@ const toSettings = (row: typeof publicProfile.$inferSelect | undefined): PublicP
   handle: row?.handle ?? null,
   bio: row?.bio ?? null,
   showCreated: row?.showCreated ?? true,
-  showLiked: row?.showLiked ?? true
+  showLiked: row?.showLiked ?? true,
+  links: row?.links ?? []
 });
 
 export const getPublicProfileSettings = async (userId: string): Promise<PublicProfileSettings> => {
@@ -110,6 +113,7 @@ export const savePublicProfileSettings = async (userId: string, body: PublicProf
     bio: body.bio,
     showCreated: body.showCreated,
     showLiked: body.showLiked,
+    links: body.links,
     updatedAt: new Date()
   };
 
@@ -230,6 +234,7 @@ export const getPublicProfile = async (handle: string): Promise<PublicProfileVie
     image: row.image,
     banner: discordBannerUrl(row.discordId, row.banner),
     bio: row.profile.bio,
+    links: row.profile.links,
     created,
     liked
   };

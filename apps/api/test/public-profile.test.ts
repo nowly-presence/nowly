@@ -40,7 +40,8 @@ const BODY = {
   enabled: true,
   bio: "I make presences.",
   showCreated: true,
-  showLiked: true
+  showLiked: true,
+  links: []
 };
 
 beforeAll(async () => {
@@ -64,7 +65,8 @@ describe("public profile settings", () => {
       handle: null,
       bio: null,
       showCreated: true,
-      showLiked: true
+      showLiked: true,
+      links: []
     });
   });
 
@@ -100,6 +102,23 @@ describe("public profile settings", () => {
         })
       ).statusCode
     ).toBe(400);
+  });
+
+  it("saves up to six https links, normalised and without duplicates", async () => {
+    const res = await save(OWNER, {
+      ...BODY,
+      links: ["https://github.com/nolo", "https://github.com/nolo", "https://x.com/nolo"]
+    });
+    expect(res.json().links).toEqual(["https://github.com/nolo", "https://x.com/nolo"]);
+
+    for (const links of [
+      ["http://example.com"],
+      ["javascript:alert(1)"],
+      ["https://user:pw@example.com"],
+      ["not a url"],
+      Array.from({ length: 7 }, (_, index) => `https://example.com/${index}`)
+    ])
+      expect((await save(OWNER, { ...BODY, links })).statusCode).toBe(400);
   });
 
   it("makes derived handles unique", async () => {
@@ -170,7 +189,7 @@ describe("public profile page data", () => {
         }
       ]
     });
-    expect(Object.keys(full).sort()).toEqual(["banner", "bio", "created", "handle", "image", "liked", "name", "role", "username", "verified"]);
+    expect(Object.keys(full).sort()).toEqual(["banner", "bio", "created", "handle", "image", "liked", "links", "name", "role", "username", "verified"]);
 
     await save(OWNER, {
       ...BODY,
