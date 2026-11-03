@@ -1,0 +1,1 @@
+export { announcement } from "@nowly/database/schema/announcement/announcement";

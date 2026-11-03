@@ -1,0 +1,1 @@
+export { statusSample } from "@nowly/database/schema/status/status-sample";

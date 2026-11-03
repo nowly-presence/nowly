@@ -1,0 +1,1 @@
+export { activityPublication } from "@nowly/database/schema/activity/activity-publication";

@@ -1,0 +1,66 @@
+{
+  "name": "@nowly/database",
+  "description": "Drizzle schema and PostgreSQL client for Nowly.",
+  "homepage": "https://docs.nowly.me",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nowly-presence/nowly.git",
+    "directory": "packages/database"
+  },
+  "bugs": {
+    "url": "https://github.com/nowly-presence/nowly/issues"
+  },
+  "version": "1.2.2",
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Gaëtan H",
+      "url": "https://github.com/Steellgold"
+    },
+    {
+      "name": "Anthony (KiMi)",
+      "url": "https://github.com/q-kimi"
+    }
+  ],
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./client": "./src/client.ts",
+    "./schema": "./src/schema/index.ts",
+    "./schema/auth": "./src/schema/auth/index.ts",
+    "./schema/auth/*": "./src/schema/auth/*.ts",
+    "./schema/account": "./src/schema/account/index.ts",
+    "./schema/account/*": "./src/schema/account/*.ts",
+    "./schema/device": "./src/schema/device/index.ts",
+    "./schema/device/*": "./src/schema/device/*.ts",
+    "./schema/presence": "./src/schema/presence/index.ts",
+    "./schema/presence/*": "./src/schema/presence/*.ts",
+    "./schema/activity": "./src/schema/activity/index.ts",
+    "./schema/activity/*": "./src/schema/activity/*.ts",
+    "./schema/announcement": "./src/schema/announcement/index.ts",
+    "./schema/announcement/*": "./src/schema/announcement/*.ts",
+    "./schema/status": "./src/schema/status/index.ts",
+    "./schema/status/*": "./src/schema/status/*.ts",
+    "./migrate": "./src/migrate.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "generate": "drizzle-kit generate",
+    "migrate": "tsx src/migrate-cli.ts",
+    "push": "drizzle-kit push",
+    "studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.4.3",
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.15.5",
+    "drizzle-kit": "^0.31.0",
+    "tsx": "^4.23.15",
+    "typescript": "6.0.3"
+  }
+}
