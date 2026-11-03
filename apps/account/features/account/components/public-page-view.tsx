@@ -3,9 +3,10 @@
 import { AccountPageFrame } from "@/features/account/components/account-page-frame";
 import { fetchPublicProfileSettings, PublicProfileError, savePublicProfileSettings, type PublicProfileSettings } from "@/features/account/lib/account-api";
 import { siteBaseUrl } from "@/lib/api-base";
-import { PUBLIC_LINK_MAX_LENGTH, PUBLIC_LINKS_MAX } from "@nowly/shared";
-import { Button, Card, CardContent, Checkbox, Field, FieldDescription, FieldLabel, Input, Switch, Textarea } from "@nowly/ui";
+import { PUBLIC_LINK_MAX_LENGTH, PUBLIC_LINKS_MAX, socialKindOf } from "@nowly/shared";
+import { Button, Card, CardContent, Checkbox, Field, FieldDescription, FieldLabel, InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, Switch, Textarea } from "@nowly/ui";
 import { RiAddLine, RiCloseLine } from "@nowly/ui/icons";
+import { SocialIcon } from "@nowly/ui/social-icon";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
@@ -90,9 +91,11 @@ export const PublicPageView = () => {
               <FieldLabel>{t("public-links")}</FieldLabel>
               <div className="flex flex-col gap-2">
                 {links.map((link, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <Input
-                      className="h-9"
+                  <InputGroup key={index}>
+                    <InputGroupAddon>
+                      <SocialIcon kind={socialKindOf(link)} />
+                    </InputGroupAddon>
+                    <InputGroupInput
                       type="url"
                       value={link}
                       maxLength={PUBLIC_LINK_MAX_LENGTH}
@@ -101,16 +104,17 @@ export const PublicPageView = () => {
                       disabled={busy}
                       onChange={(event) => setLinks((current) => current.map((entry, position) => (position === index ? event.target.value : entry)))}
                     />
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      aria-label={t("public-link-remove")}
-                      disabled={busy}
-                      onClick={() => setLinks((current) => current.filter((_, position) => position !== index))}
-                    >
-                      <RiCloseLine />
-                    </Button>
-                  </div>
+                    <InputGroupAddon align="inline-end">
+                      <InputGroupButton
+                        size="icon-xs"
+                        aria-label={t("public-link-remove")}
+                        disabled={busy}
+                        onClick={() => setLinks((current) => current.filter((_, position) => position !== index))}
+                      >
+                        <RiCloseLine />
+                      </InputGroupButton>
+                    </InputGroupAddon>
+                  </InputGroup>
                 ))}
                 {links.length < PUBLIC_LINKS_MAX ? (
                   <div>
