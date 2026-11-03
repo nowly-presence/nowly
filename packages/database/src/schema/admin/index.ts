@@ -1,0 +1,1 @@
+export { adminAuditEvent } from "@nowly/database/schema/admin/admin-audit-event";

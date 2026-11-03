@@ -8,6 +8,13 @@
       "when": 1793668574569,
       "tag": "0000_misty_exodus",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793699255602,
+      "tag": "0001_admin_audit_events",
+      "breakpoints": true
     }
   ]
 }

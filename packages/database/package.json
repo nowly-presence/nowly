@@ -41,6 +41,8 @@
     "./schema/announcement/*": "./src/schema/announcement/*.ts",
     "./schema/status": "./src/schema/status/index.ts",
     "./schema/status/*": "./src/schema/status/*.ts",
+    "./schema/admin": "./src/schema/admin/index.ts",
+    "./schema/admin/*": "./src/schema/admin/*.ts",
     "./migrate": "./src/migrate.ts"
   },
   "scripts": {

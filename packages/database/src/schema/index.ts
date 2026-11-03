@@ -5,3 +5,4 @@ export * from "@nowly/database/schema/presence";
 export * from "@nowly/database/schema/activity";
 export * from "@nowly/database/schema/announcement";
 export * from "@nowly/database/schema/status";
+export * from "@nowly/database/schema/admin";
