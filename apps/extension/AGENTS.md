@@ -15,6 +15,7 @@ MV3 side-panel extension for Chromium and Firefox.
 - New screen: `features/<name>/<name>-view.tsx`, registered as a tab in `entrypoints/sidepanel/app.tsx` or as a `Route` in `hooks/navigation-provider.tsx`. App-wide overlays mount once at the end of `app.tsx`.
 - New background capability: see `src/background/AGENTS.md`. Logic shared by background and UI goes in `shared/`.
 - Check `ui/` before writing a primitive; never re-create a button, row, select, sheet or chip locally. Split files past about 200 lines or mixed responsibilities.
+- The presence creator (`features/creator`, pure generator in `shared/creator`, picker in `content/creator-picker.ts`) has its own `AGENTS.md`; product design and back-end contract live in `docs/presence-creator/`.
 - Announce a feature to existing users with `<FeatureReveal id version text hint?>` (`components/shared/feature-reveal.tsx`): shown once per id, only on the release line of `version`, after onboarding.
 
 ## Code rules

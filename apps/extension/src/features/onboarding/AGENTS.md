@@ -1,6 +1,6 @@
 # Onboarding
 
-Steps are listed in `STEPS` (`onboarding-view.tsx`), one `steps/<name>-step.tsx` each, built on `OnboardingStepLayout`.
+Steps are listed in `STEPS` (`onboarding-view.tsx`), one `steps/<name>-step.tsx` each, built on `StepLayout` (`ui/step-layout.tsx`, shared with the creator).
 
 - Every step offers a way forward even when its check fails ("Skip for now"). Completion goes through `SET_ONBOARDING`.
 - `privacy-step.tsx` is the only onboarding place touching analytics consent, which stays `false` unless the user opts in. Legal acceptance never sets it.
