@@ -1,7 +1,7 @@
 import { RiErrorWarningLine } from "@remixicon/react";
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
-import { FEATURE_MAX_LENGTH } from "@/shared/creator/creator-draft";
-import { DESCRIPTION_MAX_LENGTH, LONG_DESCRIPTION_MAX_LENGTH, type CreatorIssue, type CreatorIssueCode } from "@/shared/creator/creator-validation";
+import { FEATURE_MAX_LENGTH } from "@nowly/presence-creator/creator-draft";
+import { DESCRIPTION_MAX_LENGTH, LONG_DESCRIPTION_MAX_LENGTH, type CreatorIssue, type CreatorIssueCode } from "@nowly/presence-creator/creator-validation";
 import { longLocaleName } from "@/shared/locales";
 
 const ISSUE_KEYS: Record<CreatorIssueCode, MessageKey> = {

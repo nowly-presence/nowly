@@ -1,9 +1,8 @@
-import type { LongLocale } from "@/shared/locales";
-import type { PresenceMetadata } from "@/shared/types";
+import type { LocaleString as LongLocale } from "@nowly/locales";
 
 export type LocalizedText = Partial<Record<LongLocale, string>>;
 
-export type CreatorCategory = PresenceMetadata["category"];
+export type CreatorCategory = "streaming" | "music" | "video" | "social" | "gaming" | "tools" | "ai" | "learning" | "creator" | "other";
 
 export type CreatorTranslationMode = "manual" | "auto";
 

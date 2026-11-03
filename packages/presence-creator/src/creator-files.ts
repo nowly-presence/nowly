@@ -1,7 +1,7 @@
-import type { LongLocale } from "@/shared/locales";
-import { CREATOR_BUILTIN_STRINGS } from "@/shared/creator/creator-builtin-strings";
-import { pageKey, textIn } from "@/shared/creator/creator-draft";
-import type { CreatorDraft, CreatorPage, LocalizedText } from "@/shared/creator/creator-types";
+import type { LocaleString as LongLocale } from "@nowly/locales";
+import { CREATOR_BUILTIN_STRINGS } from "./creator-builtin-strings";
+import { pageKey, textIn } from "./creator-draft";
+import type { CreatorDraft, CreatorPage, LocalizedText } from "./creator-types";
 
 export const writtenLocales = (draft: CreatorDraft): LongLocale[] => {
   if (draft.translationMode === "auto") return [draft.baseLocale];

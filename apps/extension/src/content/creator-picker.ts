@@ -1,6 +1,6 @@
 import { extractVariables, readElementImage, readElementLink, safeQuery } from "@/shared/creator/creator-dom";
 import { selectorFor } from "@/shared/creator/creator-selector";
-import type { CreatorPick, CreatorVariable } from "@/shared/creator/creator-types";
+import type { CreatorPick, CreatorVariable } from "@nowly/presence-creator/creator-types";
 
 const ACCENT = "#0891b2";
 const HIGHLIGHT_MS = 1600;

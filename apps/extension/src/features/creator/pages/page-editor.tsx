@@ -1,8 +1,8 @@
 import { RiMapPinLine } from "@remixicon/react";
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
-import { isImageVariable } from "@/shared/creator/creator-activity";
-import type { CreatorActivityType, CreatorDraft, CreatorImage, CreatorMatchMode, CreatorPage, CreatorTimestamps } from "@/shared/creator/creator-types";
+import { isImageVariable } from "@nowly/presence-creator/creator-activity";
+import type { CreatorActivityType, CreatorDraft, CreatorImage, CreatorMatchMode, CreatorPage, CreatorTimestamps } from "@nowly/presence-creator/creator-types";
 import { Button } from "@/ui/button";
 import { Field } from "@/ui/field";
 import { Input } from "@/ui/input";

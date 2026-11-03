@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CREATOR_DRAFTS_KEY, deleteDraft, loadDrafts, saveDraft, sortedDrafts, type CreatorDrafts } from "@/shared/creator/creator-storage";
-import type { CreatorDraft } from "@/shared/creator/creator-types";
+import type { CreatorDraft } from "@nowly/presence-creator/creator-types";
 
 export const useCreatorDrafts = () => {
   const [drafts, setDrafts] = useState<CreatorDrafts>({});

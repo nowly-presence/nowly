@@ -1,9 +1,15 @@
-import type { AccountUser } from "@/shared/types";
-import type { CreatorTextFile } from "@/shared/creator/creator-export";
-import type { CreatorAuthor, CreatorDraft, CreatorSubmission, SubmissionStatus } from "@/shared/creator/creator-types";
+import type { CreatorTextFile } from "./creator-export";
+import type { CreatorAuthor, CreatorDraft, CreatorSubmission, SubmissionStatus } from "./creator-types";
+
+export type CreatorAccountUser = {
+  id: string;
+  name: string;
+  image: string | null;
+  discordId: string | null;
+};
 
 export type CreatorAccount = {
-  user: AccountUser;
+  user: CreatorAccountUser;
   creator: boolean;
 };
 

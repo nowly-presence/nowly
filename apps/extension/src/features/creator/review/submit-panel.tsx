@@ -3,9 +3,9 @@ import { RiDiscordFill, RiExternalLinkLine, RiRefreshLine, RiSendPlaneLine } fro
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
 import { openUrl } from "@/shared/browser-links";
-import { buildTextFiles, creatorDefinition } from "@/shared/creator/creator-export";
-import { authorFromAccount, canEditSubmission, sameAuthor, SUBMISSION_TIMELINE, type CreatorSubmitError } from "@/shared/creator/creator-submission";
-import type { CreatorDraft } from "@/shared/creator/creator-types";
+import { buildTextFiles, creatorDefinition } from "@nowly/presence-creator/creator-export";
+import { authorFromAccount, canEditSubmission, sameAuthor, SUBMISSION_TIMELINE, type CreatorSubmitError } from "@nowly/presence-creator/creator-submission";
+import type { CreatorDraft } from "@nowly/presence-creator/creator-types";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
 import { cn } from "@/ui/cn";

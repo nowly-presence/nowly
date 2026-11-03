@@ -1,6 +1,6 @@
 import { useI18n } from "@/hooks/i18n-provider";
-import { CREATOR_DEFAULT_COLOR } from "@/shared/creator/creator-draft";
-import type { CreatorDraft } from "@/shared/creator/creator-types";
+import { CREATOR_DEFAULT_COLOR } from "@nowly/presence-creator/creator-draft";
+import type { CreatorDraft } from "@nowly/presence-creator/creator-types";
 import { Checkbox } from "@/ui/checkbox";
 import { dominantColor } from "@/features/creator/creator-image";
 import { CreatorImageField } from "@/features/creator/creator-image-field";

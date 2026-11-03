@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { RiAddLine, RiCloseLine } from "@remixicon/react";
 import { useI18n } from "@/hooks/i18n-provider";
-import { FEATURE_MAX_LENGTH, FEATURES_MAX, textIn } from "@/shared/creator/creator-draft";
-import { writtenLocales } from "@/shared/creator/creator-files";
-import type { CreatorDraft, LocalizedText } from "@/shared/creator/creator-types";
-import { DESCRIPTION_MAX_LENGTH, issuesForStep, LONG_DESCRIPTION_MAX_LENGTH, validateDraft } from "@/shared/creator/creator-validation";
+import { FEATURE_MAX_LENGTH, FEATURES_MAX, textIn } from "@nowly/presence-creator/creator-draft";
+import { writtenLocales } from "@nowly/presence-creator/creator-files";
+import type { CreatorDraft, LocalizedText } from "@nowly/presence-creator/creator-types";
+import { DESCRIPTION_MAX_LENGTH, issuesForStep, LONG_DESCRIPTION_MAX_LENGTH, validateDraft } from "@nowly/presence-creator/creator-validation";
 import type { LongLocale } from "@/shared/locales";
 import { Button } from "@/ui/button";
 import { Field } from "@/ui/field";

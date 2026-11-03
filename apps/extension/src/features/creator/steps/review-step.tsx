@@ -1,8 +1,8 @@
 import { RiCheckboxCircleFill, RiErrorWarningFill } from "@remixicon/react";
 import { useI18n } from "@/hooks/i18n-provider";
 import { categoryKey } from "@/lib/presence-categories";
-import { CREATOR_STEPS, type CreatorDraft, type CreatorStep } from "@/shared/creator/creator-types";
-import { issuesForStep, type CreatorIssue } from "@/shared/creator/creator-validation";
+import { CREATOR_STEPS, type CreatorDraft, type CreatorStep } from "@nowly/presence-creator/creator-types";
+import { issuesForStep, type CreatorIssue } from "@nowly/presence-creator/creator-validation";
 import { Card, Group } from "@/ui/card";
 import { Row } from "@/ui/row";
 import { Section } from "@/ui/section";

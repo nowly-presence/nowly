@@ -1,7 +1,7 @@
-import { CREATOR_BUILTIN_STRINGS } from "@/shared/creator/creator-builtin-strings";
-import { imageVariableOf, linkVariableOf, templateTokens } from "@/shared/creator/creator-activity";
-import { pageStringKeys, writtenLocales, type StringKeys } from "@/shared/creator/creator-files";
-import type { CreatorActivityType, CreatorDraft, CreatorPage, CreatorSource } from "@/shared/creator/creator-types";
+import { CREATOR_BUILTIN_STRINGS } from "./creator-builtin-strings";
+import { imageVariableOf, linkVariableOf, templateTokens } from "./creator-activity";
+import { pageStringKeys, writtenLocales, type StringKeys } from "./creator-files";
+import type { CreatorActivityType, CreatorDraft, CreatorPage, CreatorSource } from "./creator-types";
 
 type Helper = "text" | "image" | "link" | "meta" | "title";
 

@@ -1,5 +1,5 @@
-import type { LongLocale } from "@/shared/locales";
-import type { CreatorDraft, CreatorPage, CreatorSource, CreatorVariable, LocalizedText } from "@/shared/creator/creator-types";
+import type { LocaleString as LongLocale } from "@nowly/locales";
+import type { CreatorDraft, CreatorPage, CreatorSource, CreatorVariable, LocalizedText } from "./creator-types";
 
 export const CREATOR_DEFAULT_COLOR = "#0891b2";
 const IDENTIFIER_MAX_LENGTH = 32;

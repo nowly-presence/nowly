@@ -1,7 +1,6 @@
-import type { LongLocale } from "@/shared/locales";
-import { textIn } from "@/shared/creator/creator-draft";
-import type { CreatorActivityType, CreatorDraft, CreatorExtraction, CreatorMediaState, CreatorPage, CreatorVariable } from "@/shared/creator/creator-types";
-import type { PresenceData } from "@/shared/types";
+import type { LocaleString as LongLocale } from "@nowly/locales";
+import { textIn } from "./creator-draft";
+import type { CreatorActivityType, CreatorDraft, CreatorExtraction, CreatorMediaState, CreatorPage, CreatorVariable } from "./creator-types";
 
 const TOKEN = /\{([a-zA-Z][a-zA-Z0-9]*)\}/g;
 const SECOND_MS = 1000;
@@ -50,7 +49,10 @@ export const missingVariables = (template: string, variables: CreatorVariable[])
   return templateTokens(template).filter((name) => !known.has(name));
 };
 
-export const mediaTimestamps = (media: CreatorMediaState | undefined, nowMs: number): Pick<PresenceData, "startTimestamp" | "endTimestamp"> => {
+export const mediaTimestamps = (media: CreatorMediaState | undefined, nowMs: number): {
+  startTimestamp?: number;
+  endTimestamp?: number;
+} => {
   if (!media || media.paused) return {};
 
   const now = Math.floor(nowMs / SECOND_MS);
@@ -112,8 +114,22 @@ const previewLink = (page: CreatorPage, values: Record<string, string | undefine
 export const valuesByName = (page: CreatorPage, extraction: CreatorExtraction): Record<string, string | undefined> =>
   Object.fromEntries(page.variables.map((variable) => [variable.name, extraction.values.find((entry) => entry.variableId === variable.id)?.value]));
 
+export type CreatorPreviewActivity = {
+  name: string;
+  details?: string;
+  state?: string;
+  largeImageText: string;
+  type: number;
+  startTimestamp?: number;
+  endTimestamp?: number;
+  buttons?: {
+    label: string;
+    url: string;
+  }[];
+};
+
 export type CreatorPreview = {
-  activity: PresenceData;
+  activity: CreatorPreviewActivity;
   largeImage?: string;
   missing: string[];
 };

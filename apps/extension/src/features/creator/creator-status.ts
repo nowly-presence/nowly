@@ -1,5 +1,5 @@
 import type { MessageKey } from "@/hooks/i18n-provider";
-import type { CreatorDraft, SubmissionStatus } from "@/shared/creator/creator-types";
+import type { CreatorDraft, SubmissionStatus } from "@nowly/presence-creator/creator-types";
 
 type BadgeTone = "neutral" | "primary" | "success" | "danger" | "outline";
 

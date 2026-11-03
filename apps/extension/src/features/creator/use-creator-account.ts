@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { sendMessage } from "@/lib/messages";
-import type { CreatorAccount } from "@/shared/creator/creator-submission";
+import type { CreatorAccount } from "@nowly/presence-creator/creator-submission";
 
 export const useCreatorAccount = () => {
   const { state } = useExtensionState();

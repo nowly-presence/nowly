@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { useI18n } from "@/hooks/i18n-provider";
-import { isImageVariable, isLinkVariable } from "@/shared/creator/creator-activity";
-import { textIn } from "@/shared/creator/creator-draft";
-import { writtenLocales } from "@/shared/creator/creator-files";
-import type { CreatorDraft, CreatorLink, CreatorPage, LocalizedText } from "@/shared/creator/creator-types";
-import { issuesForStep, validateDraft } from "@/shared/creator/creator-validation";
+import { isImageVariable, isLinkVariable } from "@nowly/presence-creator/creator-activity";
+import { textIn } from "@nowly/presence-creator/creator-draft";
+import { writtenLocales } from "@nowly/presence-creator/creator-files";
+import type { CreatorDraft, CreatorLink, CreatorPage, LocalizedText } from "@nowly/presence-creator/creator-types";
+import { issuesForStep, validateDraft } from "@nowly/presence-creator/creator-validation";
 import type { LongLocale } from "@/shared/locales";
 import { Switch } from "@/ui/switch";
 import { CreatorLocaleTabs, useEditLocale } from "@/features/creator/creator-locale-tabs";

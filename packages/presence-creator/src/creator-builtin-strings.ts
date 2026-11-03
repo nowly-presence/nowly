@@ -1,4 +1,4 @@
-import type { LongLocale } from "@/shared/locales";
+import type { LocaleString as LongLocale } from "@nowly/locales";
 
 type BuiltinKey = "browsing" | "showButtonsLabel" | "showButtonsDescription" | "showBrowsingLabel" | "showBrowsingDescription";
 

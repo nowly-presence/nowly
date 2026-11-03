@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
-import type { CreatorPick } from "@/shared/creator/creator-types";
+import type { CreatorPick } from "@nowly/presence-creator/creator-types";
 import { useToast } from "@/ui/toast";
 
 const PICK_ERROR_KEYS: Record<"NO_TAB" | "UNREACHABLE", MessageKey> = {

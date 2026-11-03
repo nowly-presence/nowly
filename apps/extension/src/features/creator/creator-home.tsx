@@ -3,8 +3,8 @@ import { RiAddLine, RiCursorLine, RiDeleteBinLine, RiImageLine, RiMagicLine, RiP
 import { BackHeader, ScreenBody } from "@/components/shared/screen";
 import { useI18n } from "@/hooks/i18n-provider";
 import { formatDate } from "@/lib/format";
-import { canEditSubmission } from "@/shared/creator/creator-submission";
-import type { CreatorDraft } from "@/shared/creator/creator-types";
+import { canEditSubmission } from "@nowly/presence-creator/creator-submission";
+import type { CreatorDraft } from "@nowly/presence-creator/creator-types";
 import { Badge } from "@/ui/badge";
 import { Button } from "@/ui/button";
 import { Card, Group } from "@/ui/card";

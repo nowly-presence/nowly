@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { RiFileList3Line, RiGlobalLine, RiImageLine, RiPagesLine, RiPaletteLine, RiSendPlaneLine } from "@remixicon/react";
 import type { MessageKey } from "@/hooks/i18n-provider";
-import type { CreatorStep } from "@/shared/creator/creator-types";
+import type { CreatorStep } from "@nowly/presence-creator/creator-types";
 
 export const STEP_META: Record<
   CreatorStep,

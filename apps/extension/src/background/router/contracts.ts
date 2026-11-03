@@ -8,8 +8,8 @@ import type { SupportPromptAction, SupportPromptState } from "@/shared/support-p
 import type { PublishResult, OwnedPublicationResult } from "@/background/services/activity-publication-publisher";
 import type { CustomActivityDeletionPlan } from "@/background/services/custom-activity-deletion-plan";
 import type { CreatorTestResult } from "@/background/managers/creator-test";
-import type { CreatorExtraction, CreatorPick, CreatorSubmission, CreatorVariable } from "@/shared/creator/creator-types";
-import type { CreatorAccount, CreatorSubmissionPayload, CreatorSubmitResult } from "@/shared/creator/creator-submission";
+import type { CreatorExtraction, CreatorPick, CreatorSubmission, CreatorVariable } from "@nowly/presence-creator/creator-types";
+import type { CreatorAccount, CreatorSubmissionPayload, CreatorSubmitResult } from "@nowly/presence-creator/creator-submission";
 
 export type DiagnosticSnapshot = {
   extensionInstalled: boolean;

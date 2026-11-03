@@ -1,5 +1,5 @@
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
-import type { CreatorMatchMode, CreatorPage } from "@/shared/creator/creator-types";
+import type { CreatorMatchMode, CreatorPage } from "@nowly/presence-creator/creator-types";
 
 export const MATCH_MODE_KEYS: Record<CreatorMatchMode, MessageKey> = {
   any: "creator.page.matchAny",

@@ -1,7 +1,7 @@
 import { RiAddLine, RiDeleteBinLine, RiPagesLine } from "@remixicon/react";
 import { useI18n } from "@/hooks/i18n-provider";
-import { createPage } from "@/shared/creator/creator-draft";
-import type { CreatorDraft, CreatorPage } from "@/shared/creator/creator-types";
+import { createPage } from "@nowly/presence-creator/creator-draft";
+import type { CreatorDraft, CreatorPage } from "@nowly/presence-creator/creator-types";
 import { Button } from "@/ui/button";
 import { Group } from "@/ui/card";
 import { EmptyState } from "@/ui/empty-state";

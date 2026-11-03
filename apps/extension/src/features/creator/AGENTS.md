@@ -4,19 +4,19 @@ Lets someone who does not code build a presence from the side panel: visuals, id
 
 ## How it fits together
 
-- The draft is declarative data (`shared/creator/creator-types.ts`), saved in `chrome.storage.local` under `creatorDrafts` (`shared/creator/creator-storage.ts`, autosave via `use-draft-editor.ts`). Images are stored as data URLs already cropped to the CI sizes (1920x1080 JPG, 300x300 PNG, 128x128 PNG), so a few drafts fit in the 10 MB local quota.
-- `shared/creator/` is pure and shared: `creator-files.ts` (metadata.json, locales), `creator-codegen.ts` (presence.ts), `creator-validation.ts` (issues per step), `creator-activity.ts` (page matching, templates, preview activity), `creator-export.ts` (zip in the presences repo layout). Keep it free of UI and chrome.* so the API can reuse it to regenerate files server-side.
+- The draft is declarative data (`packages/presence-creator/src/creator-types.ts`), saved in `chrome.storage.local` under `creatorDrafts` (`shared/creator/creator-storage.ts`, autosave via `use-draft-editor.ts`). Images are stored as data URLs already cropped to the CI sizes (1920x1080 JPG, 300x300 PNG, 128x128 PNG), so a few drafts fit in the 10 MB local quota.
+- `@nowly/presence-creator` (`packages/presence-creator`) is pure and shared with the API: `creator-files.ts` (metadata.json, locales), `creator-codegen.ts` (presence.ts), `creator-validation.ts` (issues per step), `creator-activity.ts` (page matching, templates, preview activity), `creator-export.ts` (text files and definition). The zip (`shared/creator/creator-zip.ts`, fflate) and the DOM, selector and storage modules stay in the extension. Keep the package free of UI and chrome.* so the API can reuse it to regenerate files server-side.
 - Page elements are read in the tab by the content script (`content/creator-picker.ts`) through `CREATOR_PICK_START`, `CREATOR_EXTRACT` and `CREATOR_HIGHLIGHT`. `CREATOR_TEST_ACTIVITY` pushes the preview to Discord while testing and restores the normal activity on stop.
 - Sign-in is the Nowly account (Better Auth, Discord only) and is required to submit. The token needs the explicit `creator` scope, granted on nowly.me through `START_CREATOR_CONNECT` (the same grant as public activities); a sync-only account sees "Allow publishing". `CREATOR_GET_ACCOUNT` returns the user and whether the scope is there.
-- The account is the only source of the author (`authorFromAccount`, `shared/creator/creator-submission.ts`): `author.discord` is the Discord id. There is no author field and no sign-out in the creator (the account is managed in Settings). `CreatorAuthor.github` stays in the type for a later GitHub provider.
+- The account is the only source of the author (`authorFromAccount`, `packages/presence-creator/src/creator-submission.ts`): `author.discord` is the Discord id. There is no author field and no sign-out in the creator (the account is managed in Settings). `CreatorAuthor.github` stays in the type for a later GitHub provider.
 - Submissions go through the background (`background/services/creator-api.ts`): `POST /me/presence-submissions` and `GET /me/presence-submissions?ids=`, with the account bearer token. These routes do not exist yet; a 404 shows "not available yet" and the zip export stays available. 401 or 403 means the scope is missing.
 
 - Drafts saved by older builds are upgraded on load by `normalizeDraft` (`creator-draft.ts`); extend it whenever a field changes shape.
 
 ## Change what the generator produces
 
-1. Edit `shared/creator/creator-codegen.ts` (or `creator-files.ts`) and keep `shared/creator/creator-dom.ts` in sync: the live test reads the page with the DOM module, the published presence with the generated helpers, and both must give the same values.
-2. Update `shared/creator/creator.test.ts`.
+1. Edit `packages/presence-creator/src/creator-codegen.ts` (or `creator-files.ts`) and keep `shared/creator/creator-dom.ts` in sync: the live test reads the page with the DOM module, the published presence with the generated helpers, and both must give the same values.
+2. Update `packages/presence-creator/src/creator.test.ts`.
 3. Check the output against the real SDK: generate the sample draft (`creator-fixtures.ts`) into a copy of the presences repo next to `packages/sdk`, then run its `tsc`, `scripts/validate-locales.ts` and `metadata.schema.json`.
 
 ## Add a step or a field

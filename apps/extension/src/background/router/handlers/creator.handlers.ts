@@ -2,7 +2,7 @@ import { publishCreatorTest, stopCreatorTest } from "@/background/managers/creat
 import type { Handler } from "@/background/router/router";
 import { fetchSubmissions, getCreatorAccount, submitPresence } from "@/background/services/creator-api";
 import { resolveFocusedTab } from "@/background/services/focused-tab";
-import type { CreatorExtraction, CreatorPick } from "@/shared/creator/creator-types";
+import type { CreatorExtraction, CreatorPick } from "@nowly/presence-creator/creator-types";
 
 const isHttpTab = (
   tab: chrome.tabs.Tab | undefined

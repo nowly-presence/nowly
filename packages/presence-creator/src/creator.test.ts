@@ -1,12 +1,10 @@
-import { unzipSync, strFromU8 } from "fflate";
 import { describe, expect, it } from "vitest";
-import { buildPreviewActivity, fillTemplate, findPage, matchesPage, mediaTimestamps } from "@/shared/creator/creator-activity";
-import { generatePresenceSource } from "@/shared/creator/creator-codegen";
-import { createPage, isValidDomain, normalizeDomain, normalizeDraft, presenceFolder, presenceSlug, toIdentifier } from "@/shared/creator/creator-draft";
-import { buildCreatorZip } from "@/shared/creator/creator-export";
-import { buildLocaleFiles, buildMetadata, pageKeys } from "@/shared/creator/creator-files";
-import { sampleCreatorDraft } from "@/shared/creator/creator-fixtures";
-import { validateDraft } from "@/shared/creator/creator-validation";
+import { buildPreviewActivity, fillTemplate, findPage, matchesPage, mediaTimestamps } from "./creator-activity";
+import { generatePresenceSource } from "./creator-codegen";
+import { createPage, isValidDomain, normalizeDomain, normalizeDraft, presenceFolder, presenceSlug, toIdentifier } from "./creator-draft";
+import { buildLocaleFiles, buildMetadata, pageKeys } from "./creator-files";
+import { sampleCreatorDraft } from "./creator-fixtures";
+import { validateDraft } from "./creator-validation";
 
 describe("creator naming", () => {
   it("derives slug, folder and identifiers like the presences repo", () => {
@@ -226,21 +224,6 @@ describe("creator files", () => {
     expect(source).toContain("presence.clearActivity()");
     expect(source).not.toMatch(/;\s*$/m);
     expect(source).not.toMatch(/from '/);
-  });
-
-  it("exports a zip with the presences repo layout", () => {
-    const entries = unzipSync(buildCreatorZip(sampleCreatorDraft()));
-    expect(Object.keys(entries).sort()).toEqual([
-      "creator.json",
-      "src/E/Example Tube/assets/icon.png",
-      "src/E/Example Tube/assets/logo.png",
-      "src/E/Example Tube/assets/thumbnail.jpg",
-      "src/E/Example Tube/locales/en-US.json",
-      "src/E/Example Tube/locales/fr-FR.json",
-      "src/E/Example Tube/metadata.json",
-      "src/E/Example Tube/presence.ts"
-    ]);
-    expect(JSON.parse(strFromU8(entries["creator.json"]))).not.toHaveProperty("assets");
   });
 });
 

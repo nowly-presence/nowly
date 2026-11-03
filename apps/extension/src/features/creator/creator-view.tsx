@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav } from "@/hooks/navigation-provider";
-import { createDraft } from "@/shared/creator/creator-draft";
+import { createDraft } from "@nowly/presence-creator/creator-draft";
 import { LOCALE_LONG_MAP } from "@/shared/locales";
 import { urlMatchesPresence } from "@/shared/url-patterns";
 import { CreatorHome } from "@/features/creator/creator-home";

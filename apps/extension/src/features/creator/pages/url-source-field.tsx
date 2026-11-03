@@ -1,7 +1,7 @@
 import { useI18n } from "@/hooks/i18n-provider";
-import { isUrlTemplate } from "@/shared/creator/creator-activity";
-import { addVariable, createVariable } from "@/shared/creator/creator-draft";
-import type { CreatorPage, CreatorVariable } from "@/shared/creator/creator-types";
+import { isUrlTemplate } from "@nowly/presence-creator/creator-activity";
+import { addVariable, createVariable } from "@nowly/presence-creator/creator-draft";
+import type { CreatorPage, CreatorVariable } from "@nowly/presence-creator/creator-types";
 import { Field } from "@/ui/field";
 import { Select } from "@/ui/select";
 import { useToast } from "@/ui/toast";

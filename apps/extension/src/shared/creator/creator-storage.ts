@@ -1,5 +1,5 @@
-import { normalizeDraft } from "@/shared/creator/creator-draft";
-import type { CreatorDraft } from "@/shared/creator/creator-types";
+import { normalizeDraft } from "@nowly/presence-creator/creator-draft";
+import type { CreatorDraft } from "@nowly/presence-creator/creator-types";
 
 export const CREATOR_DRAFTS_KEY = "creatorDrafts";
 

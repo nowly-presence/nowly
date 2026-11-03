@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { sendMessage } from "@/lib/messages";
-import { buildPreviewActivity, matchesPage, type CreatorPreview } from "@/shared/creator/creator-activity";
-import type { CreatorDraft, CreatorPage } from "@/shared/creator/creator-types";
+import { buildPreviewActivity, matchesPage, type CreatorPreview } from "@nowly/presence-creator/creator-activity";
+import type { CreatorDraft, CreatorPage } from "@nowly/presence-creator/creator-types";
 import type { LongLocale } from "@/shared/locales";
 
 const TICK_MS = 3000;

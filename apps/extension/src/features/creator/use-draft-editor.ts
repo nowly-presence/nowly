@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
-import { touch } from "@/shared/creator/creator-draft";
-import type { CreatorDraft } from "@/shared/creator/creator-types";
+import { touch } from "@nowly/presence-creator/creator-draft";
+import type { CreatorDraft } from "@nowly/presence-creator/creator-types";
 
 const AUTOSAVE_DELAY_MS = 500;
 

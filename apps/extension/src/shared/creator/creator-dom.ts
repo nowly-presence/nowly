@@ -1,4 +1,4 @@
-import type { CreatorExtraction, CreatorMediaState, CreatorSource, CreatorVariable } from "@/shared/creator/creator-types";
+import type { CreatorExtraction, CreatorMediaState, CreatorSource, CreatorVariable } from "@nowly/presence-creator/creator-types";
 
 const TEXT_MAX_LENGTH = 200;
 

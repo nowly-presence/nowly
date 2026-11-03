@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { RiBracesLine } from "@remixicon/react";
 import { useI18n } from "@/hooks/i18n-provider";
-import type { CreatorVariable } from "@/shared/creator/creator-types";
+import type { CreatorVariable } from "@nowly/presence-creator/creator-types";
 import { cn } from "@/ui/cn";
 import { Field } from "@/ui/field";
 import { InputGroup, InputGroupInput } from "@/ui/input-group";

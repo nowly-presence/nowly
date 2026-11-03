@@ -1,5 +1,5 @@
-import { createDraft, createPage, createVariable } from "@/shared/creator/creator-draft";
-import type { CreatorDraft } from "@/shared/creator/creator-types";
+import { createDraft, createPage, createVariable } from "./creator-draft";
+import type { CreatorDraft } from "./creator-types";
 
 export const sampleCreatorDraft = (): CreatorDraft => {
   const title = createVariable(

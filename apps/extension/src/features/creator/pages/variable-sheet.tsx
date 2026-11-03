@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
-import { createVariable, toIdentifier } from "@/shared/creator/creator-draft";
-import type { CreatorPick, CreatorReadMode, CreatorVariable } from "@/shared/creator/creator-types";
+import { createVariable, toIdentifier } from "@nowly/presence-creator/creator-draft";
+import type { CreatorPick, CreatorReadMode, CreatorVariable } from "@nowly/presence-creator/creator-types";
 import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
 import { Segmented } from "@/ui/segmented";

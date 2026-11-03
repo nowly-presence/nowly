@@ -1,8 +1,8 @@
-import type { LongLocale } from "@/shared/locales";
-import { imageVariableOf, isUrlTemplate, linkVariableOf, missingVariables } from "@/shared/creator/creator-activity";
-import { FEATURE_MAX_LENGTH, isValidDomain, isValidPresenceName, presenceSlug, textIn } from "@/shared/creator/creator-draft";
-import { writtenLocales } from "@/shared/creator/creator-files";
-import type { CreatorDraft, CreatorStep } from "@/shared/creator/creator-types";
+import type { LocaleString as LongLocale } from "@nowly/locales";
+import { imageVariableOf, isUrlTemplate, linkVariableOf, missingVariables } from "./creator-activity";
+import { FEATURE_MAX_LENGTH, isValidDomain, isValidPresenceName, presenceSlug, textIn } from "./creator-draft";
+import { writtenLocales } from "./creator-files";
+import type { CreatorDraft, CreatorStep } from "./creator-types";
 
 export const DESCRIPTION_MAX_LENGTH = 120;
 export const LONG_DESCRIPTION_MAX_LENGTH = 600;

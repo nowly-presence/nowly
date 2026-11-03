@@ -1,7 +1,7 @@
 import { RiMagicLine, RiTranslate2 } from "@remixicon/react";
 import { useI18n } from "@/hooks/i18n-provider";
 import { isLongLocale, longLocaleName, PRESENCE_LOCALES, type LongLocale } from "@/shared/locales";
-import type { CreatorDraft, CreatorTranslationMode } from "@/shared/creator/creator-types";
+import type { CreatorDraft, CreatorTranslationMode } from "@nowly/presence-creator/creator-types";
 import { ChoiceCard } from "@/ui/choice-card";
 import { Chip } from "@/ui/chip";
 import { LocaleFlag } from "@/ui/locale-flag";

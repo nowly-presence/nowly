@@ -1,8 +1,8 @@
 import { RiErrorWarningLine, RiPlayLine, RiStopLine } from "@remixicon/react";
 import { LiveCard } from "@/components/shared/live-activity-card";
 import { useI18n } from "@/hooks/i18n-provider";
-import { writtenLocales } from "@/shared/creator/creator-files";
-import type { CreatorDraft, CreatorPage } from "@/shared/creator/creator-types";
+import { writtenLocales } from "@nowly/presence-creator/creator-files";
+import type { CreatorDraft, CreatorPage } from "@nowly/presence-creator/creator-types";
 import type { PresencePayload } from "@/shared/types";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";

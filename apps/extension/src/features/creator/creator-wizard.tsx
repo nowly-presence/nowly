@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { RiArrowLeftLine } from "@remixicon/react";
 import { useI18n } from "@/hooks/i18n-provider";
-import { writtenLocales } from "@/shared/creator/creator-files";
-import { CREATOR_STEPS, type CreatorDraft, type CreatorStep } from "@/shared/creator/creator-types";
-import { issuesForStep, validateDraft } from "@/shared/creator/creator-validation";
+import { writtenLocales } from "@nowly/presence-creator/creator-files";
+import { CREATOR_STEPS, type CreatorDraft, type CreatorStep } from "@nowly/presence-creator/creator-types";
+import { issuesForStep, validateDraft } from "@nowly/presence-creator/creator-validation";
 import { Button } from "@/ui/button";
 import { StepLayout } from "@/ui/step-layout";
 import { StepProgress } from "@/ui/step-progress";

@@ -1,7 +1,7 @@
 import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { getAccount } from "@/background/storage/account.store";
-import { parseSubmission, type CreatorAccount, type CreatorSubmissionPayload, type CreatorSubmitResult } from "@/shared/creator/creator-submission";
-import type { CreatorSubmission } from "@/shared/creator/creator-types";
+import { parseSubmission, type CreatorAccount, type CreatorSubmissionPayload, type CreatorSubmitResult } from "@nowly/presence-creator/creator-submission";
+import type { CreatorSubmission } from "@nowly/presence-creator/creator-types";
 import type { StoredAccount } from "@/shared/types";
 
 const HTTP_UNAUTHORIZED = 401;

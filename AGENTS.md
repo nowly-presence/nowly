@@ -6,7 +6,7 @@ Discord Rich Presence manager: the extension runs presence scripts and the nativ
 
 - pnpm workspace (`apps/*`, `packages/*`), Node >= 22.22.1, pnpm version pinned in `packageManager`.
 - Apps: `api` (Fastify), `web` (nowly.me), `docs`, `extension` (MV3, Chromium and Firefox), `native` (Go host). `apps/discord` is git-ignored and absent from fresh clones.
-- Shared packages: `env`, `shared`, `telemetry`, `ui`, `locales`, `changelog`, `og`.
+- Shared packages: `env`, `shared`, `telemetry`, `ui`, `locales`, `changelog`, `og`, `presence-creator`.
 - `packages/{sdk,cli,presences,internal-cli}` are separate repositories, not part of this one: optional local clones (`pnpm repos`), git-ignored and outside the workspace. Commit and open pull requests from inside them; CI never has them. Presence authoring rules live in the presences repository's `AGENTS.md`.
 
 ## Commands
