@@ -30,12 +30,6 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
       ok: true
     };
   },
-  START_ADMIN_CONNECT: async () => {
-    await openAccountConnect("admin");
-    return {
-      ok: true
-    };
-  },
   ADMIN_GET_ACCESS: () => getStaffAccess(),
   ADMIN_FETCH_QUEUE: () => fetchReviewQueue(),
   SUBMISSION_GET_DETAIL: ({ id }) => fetchSubmissionDetail(id),

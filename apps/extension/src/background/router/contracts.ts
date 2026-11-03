@@ -101,12 +101,6 @@ export type RouterMessageMap = {
       ok: boolean;
     };
   };
-  START_ADMIN_CONNECT: {
-    payload: void;
-    response: {
-      ok: boolean;
-    };
-  };
   ADMIN_GET_ACCESS: {
     payload: void;
     response: StaffAccess | null;

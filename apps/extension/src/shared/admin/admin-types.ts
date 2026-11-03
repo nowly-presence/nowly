@@ -3,7 +3,7 @@ import { parseCreatorDefinition, type CreatorDefinition } from "@nowly/presence-
 import { isSubmissionStatus } from "@nowly/presence-creator/creator-submission";
 import type { CreatorFieldChange } from "@nowly/presence-creator/creator-diff";
 import type { SubmissionStatus } from "@nowly/presence-creator/creator-types";
-import { ANNOUNCEMENT_LOCALES, type AnnouncementInput } from "@nowly/shared/announcements";
+import type { AnnouncementInput } from "@nowly/shared/announcements";
 
 export const REVIEW_VERDICTS = ["approve", "comment", "request_changes", "reject"] as const;
 
@@ -11,7 +11,6 @@ export type ReviewVerdict = (typeof REVIEW_VERDICTS)[number];
 
 export type StaffAccess = {
   capabilities: AdminCapability[];
-  granted: boolean;
 };
 
 export type AdminError = "UNAUTHORIZED" | "FORBIDDEN" | "NOT_FOUND" | "CONFLICT" | "INVALID" | "UNAVAILABLE" | "NETWORK";
@@ -95,9 +94,10 @@ export type PublishedCreatorPresence = {
   definition: CreatorDefinition;
 };
 
-export type AnnouncementDraft = AnnouncementInput;
+export type AnnouncementDraft = AnnouncementInput & {
+  translate: boolean;
+};
 
-export const ANNOUNCEMENT_EDIT_LOCALES = ANNOUNCEMENT_LOCALES;
 
 export const isAdminCapability = (value: unknown): value is AdminCapability => (ADMIN_CAPABILITIES as readonly unknown[]).includes(value);
 

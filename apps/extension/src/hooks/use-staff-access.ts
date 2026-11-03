@@ -9,7 +9,6 @@ export const useStaffAccess = () => {
   const signedIn = state.account.signedIn;
   const [access, setAccess] = useState<StaffAccess | null>(null);
   const [ready, setReady] = useState(false);
-  const [connecting, setConnecting] = useState(false);
 
   const refresh = useCallback(async () => {
     setAccess(await sendMessage("ADMIN_GET_ACCESS"));
@@ -28,20 +27,8 @@ export const useStaffAccess = () => {
     return () => window.removeEventListener("focus", refresh);
   }, [signedIn, refresh]);
 
-  const connect = async () => {
-    if (connecting) return;
-
-    setConnecting(true);
-
-    try {
-      await sendMessage("START_ADMIN_CONNECT");
-    } finally {
-      setConnecting(false);
-    }
-  };
-
   const isStaff = Boolean(access && access.capabilities.length > 0);
-  const can = (capability: AdminCapability): boolean => Boolean(access?.granted && access.capabilities.includes(capability));
+  const can = (capability: AdminCapability): boolean => Boolean(access?.capabilities.includes(capability));
 
-  return { access, ready, isStaff, can, connecting, connect, refresh };
+  return { access, ready, isStaff, can, refresh };
 };

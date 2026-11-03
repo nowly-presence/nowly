@@ -1,4 +1,4 @@
-import { RiAddLine, RiRefreshLine, RiShieldCheckLine } from "@remixicon/react";
+import { RiAddLine, RiRefreshLine } from "@remixicon/react";
 import { BackHeader, ScreenBody } from "@/components/shared/screen";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav } from "@/hooks/navigation-provider";
@@ -38,19 +38,6 @@ export const AdminView = () => {
         }
       />
       <ScreenBody className="pt-0">
-        {staff.ready && !staff.access?.granted && (
-          <EmptyState
-            icon={<RiShieldCheckLine className="size-5" />}
-            title={t("admin.allowTitle")}
-            description={t("admin.allowHint")}
-            action={
-              <Button loading={staff.connecting} onClick={() => void staff.connect()}>
-                {t("admin.allow")}
-              </Button>
-            }
-          />
-        )}
-
         {staff.can("announce") && (
           <Button variant="secondary" icon={<RiAddLine className="size-4" />} onClick={() => push({ name: "admin-announcement" })}>
             {t("admin.newAnnouncement")}

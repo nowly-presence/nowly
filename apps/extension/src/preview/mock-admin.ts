@@ -86,15 +86,13 @@ const previewDetail = (): SubmissionDetail => {
 };
 
 export const createMockAdminHandlers = (account: { signedIn: () => boolean }): MockHandlers => ({
-  START_ADMIN_CONNECT: () => ({ ok: true }),
   ADMIN_GET_ACCESS: () => {
     const { staff } = previewParams;
 
     if (!account.signedIn() || staff === "none") return null;
 
     return {
-      capabilities: staff === "admin" ? [...ADMIN_CAPABILITIES] : [...ROLE_CAPABILITIES.moderator],
-      granted: true
+      capabilities: staff === "admin" ? [...ADMIN_CAPABILITIES] : [...ROLE_CAPABILITIES.moderator]
     };
   },
   ADMIN_FETCH_QUEUE: () => ok(previewQueue()),

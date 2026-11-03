@@ -80,10 +80,7 @@ export const getStaffAccess = async (): Promise<StaffAccess | null> => {
 
   if (changed) await updateAccountUser({ ...account.user, capabilities }).catch(() => undefined);
 
-  return {
-    capabilities,
-    granted: account.scopes.includes("admin")
-  };
+  return { capabilities };
 };
 
 export const fetchReviewQueue = (): Promise<AdminResult<QueueItem[]>> =>

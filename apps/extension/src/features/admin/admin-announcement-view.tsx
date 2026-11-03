@@ -5,15 +5,12 @@ import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav } from "@/hooks/navigation-provider";
 import { sendMessage } from "@/lib/messages";
-import { announcementIssues, buildAnnouncementInput, CONTENT_MAX_LENGTH, DESCRIPTION_MAX_LENGTH, EMPTY_TEXTS, emptyAnnouncementForm, TITLE_MAX_LENGTH, type AnnouncementForm, type AnnouncementKind, type AnnouncementSeverity, type AnnouncementTexts } from "@/shared/admin/announcement-draft";
-import { LOCALE_NAMES } from "@/shared/locales";
-import { ANNOUNCEMENT_LOCALES, type AnnouncementLocale } from "@nowly/shared/announcements";
+import { announcementIssues, buildAnnouncementInput, CONTENT_MAX_LENGTH, DESCRIPTION_MAX_LENGTH, emptyAnnouncementForm, TITLE_MAX_LENGTH, type AnnouncementForm, type AnnouncementKind, type AnnouncementSeverity, type AnnouncementTexts } from "@/shared/admin/announcement-draft";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
 import { Field } from "@/ui/field";
 import { Input } from "@/ui/input";
 import { Segmented } from "@/ui/segmented";
-import { Select } from "@/ui/select";
 import { SwitchRow } from "@/ui/row";
 import { Textarea } from "@/ui/textarea";
 import { useToast } from "@/ui/toast";
@@ -27,20 +24,12 @@ export const AdminAnnouncementView = () => {
   const { patch } = useExtensionState();
   const { toast } = useToast();
   const [form, setForm] = useState<AnnouncementForm>(emptyAnnouncementForm);
-  const [editing, setEditing] = useState<AnnouncementLocale>("en");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const texts = form.texts[editing] ?? EMPTY_TEXTS;
+  const { texts } = form;
   const issues = announcementIssues(form);
 
-  const setTexts = (next: Partial<AnnouncementTexts>) =>
-    setForm((current) => ({
-      ...current,
-      texts: {
-        ...current.texts,
-        [editing]: { ...(current.texts[editing] ?? EMPTY_TEXTS), ...next }
-      }
-    }));
+  const setTexts = (next: Partial<AnnouncementTexts>) => setForm((current) => ({ ...current, texts: { ...current.texts, ...next } }));
 
   const send = async () => {
     setSending(true);
@@ -65,17 +54,13 @@ export const AdminAnnouncementView = () => {
       <BackHeader title={t("admin.announcement.title")} onBack={pop} backLabel={t("action.back")} />
       <ScreenBody className="pt-0">
         <Card className="flex flex-col gap-4 p-4">
-          <Field label={t("admin.announcement.language")} hint={t("admin.announcement.languageHint")}>
-            <Select
-              aria-label={t("admin.announcement.language")}
-              value={editing}
-              options={ANNOUNCEMENT_LOCALES.map((value) => ({
-                value,
-                label: `${LOCALE_NAMES[value]}${form.texts[value]?.title.trim() ? " *" : ""}`
-              }))}
-              onChange={(value) => setEditing(ANNOUNCEMENT_LOCALES.find((entry) => entry === value) ?? editing)}
-            />
-          </Field>
+          <SwitchRow
+            title={t("admin.announcement.translate")}
+            description={t("admin.announcement.translateHint")}
+            label={t("admin.announcement.translate")}
+            checked={form.translate}
+            onChange={(translate) => setForm((current) => ({ ...current, translate }))}
+          />
           <Field label={t("admin.announcement.titleLabel")}>
             <Input
               placeholder={t("admin.announcement.titlePlaceholder")}
@@ -178,7 +163,6 @@ export const AdminAnnouncementView = () => {
         </Card>
 
         {issues.includes("TEXTS_MISSING") && <p className="px-1 text-label-md text-muted">{t("admin.announcement.issueTexts")}</p>}
-        {issues.includes("TEXTS_INCOMPLETE") && <p className="px-1 text-label-md text-muted">{t("admin.announcement.issueIncomplete")}</p>}
         {issues.includes("DATES_ORDER") && <p className="px-1 text-label-md text-danger">{t("admin.announcement.issueDates")}</p>}
         {error && <p className="px-1 text-label-md text-danger">{error}</p>}
         <Button icon={<RiSendPlaneLine className="size-4" />} loading={sending} disabled={issues.length > 0} onClick={() => void send()}>

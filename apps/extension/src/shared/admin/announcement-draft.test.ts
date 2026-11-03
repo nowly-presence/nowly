@@ -9,42 +9,33 @@ const filled = {
 };
 
 describe("announcement draft", () => {
-  it("needs at least one complete translation", () => {
+  it("needs a complete English text", () => {
     expect(announcementIssues(emptyAnnouncementForm())).toEqual(["TEXTS_MISSING"]);
     expect(
       announcementIssues({
         ...emptyAnnouncementForm(),
         texts: {
-          en: {
-            ...filled,
-            description: ""
-          }
+          ...filled,
+          description: ""
         }
       })
-    ).toEqual(["TEXTS_MISSING", "TEXTS_INCOMPLETE"]);
+    ).toEqual(["TEXTS_MISSING"]);
   });
 
   it("flags a start after the expiry", () => {
     const form = {
       ...emptyAnnouncementForm(),
-      texts: { en: filled },
+      texts: filled,
       startsAt: "2026-11-05T10:00",
       expiresAt: "2026-11-04T10:00"
     };
     expect(announcementIssues(form)).toEqual(["DATES_ORDER"]);
   });
 
-  it("builds an input the API schema accepts, dropping empty locales and severity outside warnings", () => {
+  it("builds an English only input the API schema accepts, with severity only for warnings and the translation flag", () => {
     const form = {
       ...emptyAnnouncementForm(),
-      texts: {
-        en: filled,
-        fr: {
-          title: "",
-          description: "",
-          content: ""
-        }
-      },
+      texts: filled,
       severity: 3 as const,
       pinned: true
     };
@@ -52,14 +43,14 @@ describe("announcement draft", () => {
 
     expect(Object.keys(input.translations)).toEqual(["en"]);
     expect(input.severity).toBeNull();
-    expect(AnnouncementInputSchema.safeParse(input).success).toBe(true);
-    expect(
-      AnnouncementInputSchema.safeParse(
-        buildAnnouncementInput({
-          ...form,
-          kind: "warning"
-        })
-      ).success
-    ).toBe(true);
+    expect(input.translate).toBe(true);
+    expect(buildAnnouncementInput({ ...form, translate: false }).translate).toBe(false);
+    const { translate, ...announcement } = input;
+    expect(translate).toBe(true);
+    expect(AnnouncementInputSchema.safeParse(announcement).success).toBe(true);
+
+    const { translate: warningFlag, ...warning } = buildAnnouncementInput({ ...form, kind: "warning" });
+    expect(warningFlag).toBe(true);
+    expect(AnnouncementInputSchema.safeParse(warning).success).toBe(true);
   });
 });
