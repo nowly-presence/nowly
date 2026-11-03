@@ -60,6 +60,7 @@ export const parseSubmission = (value: unknown): CreatorSubmission | null => {
   return {
     id: record.id,
     status: record.status,
+    revision: typeof record.revision === "number" ? record.revision : undefined,
     updatedAt: typeof record.updatedAt === "string" ? Date.parse(record.updatedAt) || Date.now() : Date.now(),
     prUrl: typeof record.prUrl === "string" ? record.prUrl : undefined,
     note: typeof record.note === "string" ? record.note : undefined

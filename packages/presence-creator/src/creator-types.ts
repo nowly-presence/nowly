@@ -91,6 +91,7 @@ export type SubmissionStatus = "submitted" | "changes_requested" | "approved" | 
 export type CreatorSubmission = {
   id: string;
   status: SubmissionStatus;
+  revision?: number;
   updatedAt: number;
   prUrl?: string;
   note?: string;
