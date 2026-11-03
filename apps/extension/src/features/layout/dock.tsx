@@ -1,4 +1,4 @@
-import { Fragment, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { domMax, LayoutGroup, LazyMotion, m } from "motion/react";
 import type { DockLayout } from "@/shared/dock-layout";
 import { cn } from "@/ui/cn";
@@ -13,6 +13,13 @@ type DockItem<T extends string> = {
   wrap?: (button: ReactNode) => ReactNode;
 };
 
+export type DockAction<T extends string> = {
+  anchor: T;
+  label: string;
+  icon: ReactNode;
+  onClick: () => void;
+};
+
 type DockProps<T extends string> = {
   items: DockItem<T>[];
   value: T;
@@ -20,6 +27,7 @@ type DockProps<T extends string> = {
   label: string;
   layout: DockLayout<T>;
   onLayoutChange: (layout: DockLayout<T>) => void;
+  action?: DockAction<T>;
 };
 
 const ITEM_CHROME = 18 + 8 + 28;
@@ -33,6 +41,53 @@ const REFLOW = {
   stiffness: 520,
   damping: 40
 } as const;
+
+const HIDE_DELAY_MS = 180;
+const NECK_WIDTH = 44;
+const NECK_HEIGHT = 12;
+const NECK_RADIUS = 10;
+const NECK_PATH = `M0 0Q${NECK_RADIUS} 0 ${NECK_RADIUS} ${NECK_HEIGHT / 2}Q${NECK_RADIUS} ${NECK_HEIGHT} 0 ${NECK_HEIGHT}L${NECK_WIDTH} ${NECK_HEIGHT}Q${NECK_WIDTH - NECK_RADIUS} ${NECK_HEIGHT} ${NECK_WIDTH - NECK_RADIUS} ${NECK_HEIGHT / 2}Q${NECK_WIDTH - NECK_RADIUS} 0 ${NECK_WIDTH} 0Z`;
+const SPRING = "ease-[cubic-bezier(0.34,1.4,0.64,1)]";
+
+const DockDrop = <T extends string>({ action, center, revealed }: { action: DockAction<T>; center: number; revealed: boolean }) => (
+  <>
+    <svg
+      aria-hidden
+      width={NECK_WIDTH}
+      height={NECK_HEIGHT}
+      viewBox={`0 0 ${NECK_WIDTH} ${NECK_HEIGHT}`}
+      className={cn("pointer-events-none absolute bottom-full origin-bottom fill-primary transition-transform duration-300", SPRING)}
+      style={{
+        left: center - NECK_WIDTH / 2,
+        transform: `translateY(1px) scaleY(${revealed ? 1 : 0})`
+      }}
+    >
+      <path d={NECK_PATH} />
+    </svg>
+    <div
+      className={cn(
+        "absolute bottom-full z-10 transition-[transform,opacity] duration-500",
+        SPRING,
+        revealed ? "opacity-100" : "pointer-events-none opacity-0"
+      )}
+      style={{
+        left: center,
+        paddingBottom: NECK_HEIGHT,
+        transform: revealed ? "translate(-50%, 0) scale(1)" : "translate(-50%, 40px) scale(0.6)"
+      }}
+    >
+      <button
+        type="button"
+        tabIndex={revealed ? 0 : -1}
+        onClick={action.onClick}
+        className="flex h-10 items-center gap-2 rounded-full bg-primary px-4 text-label-md font-medium whitespace-nowrap text-on-primary transition-[filter] hover:brightness-[1.06] focus-visible:brightness-[1.06] active:brightness-95"
+      >
+        {action.icon}
+        {action.label}
+      </button>
+    </div>
+  </>
+);
 
 const ItemContent = <T extends string>({ item, active, showLabel }: { item: DockItem<T>; active: boolean; showLabel: boolean }) => (
   <>
@@ -49,7 +104,7 @@ const ItemContent = <T extends string>({ item, active, showLabel }: { item: Dock
   </>
 );
 
-export const Dock = <T extends string>({ items, value, onChange, label, layout, onLayoutChange }: DockProps<T>) => {
+export const Dock = <T extends string>({ items, value, onChange, label, layout, onLayoutChange, action }: DockProps<T>) => {
   const rowRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
   const [compact, setCompact] = useState(false);
@@ -57,6 +112,32 @@ export const Dock = <T extends string>({ items, value, onChange, label, layout, 
   const labels = items.map((item) => item.label).join("|");
   const byValue = new Map(items.map((item) => [item.value, item]));
   const groupCount = preview.length;
+  const hideTimer = useRef<number | null>(null);
+  const [hovered, setHovered] = useState(false);
+  const [center, setCenter] = useState(0);
+  const revealed = Boolean(action) && hovered && !drag;
+
+  useEffect(() => () => {
+    if (hideTimer.current) window.clearTimeout(hideTimer.current);
+  }, []);
+
+  const show = () => {
+    if (hideTimer.current) window.clearTimeout(hideTimer.current);
+    const row = rowRef.current;
+    const anchor = action ? row?.querySelector<HTMLElement>(`[data-dock-tab="${action.anchor}"]`) : null;
+
+    if (!row || !anchor) return;
+
+    const rowRect = row.getBoundingClientRect();
+    const anchorRect = anchor.getBoundingClientRect();
+    setCenter(anchorRect.left + anchorRect.width / 2 - rowRect.left);
+    setHovered(true);
+  };
+
+  const hide = () => {
+    if (hideTimer.current) window.clearTimeout(hideTimer.current);
+    hideTimer.current = window.setTimeout(() => setHovered(false), HIDE_DELAY_MS);
+  };
 
   useLayoutEffect(() => {
     const row = rowRef.current;
@@ -94,7 +175,12 @@ export const Dock = <T extends string>({ items, value, onChange, label, layout, 
             ref={rowRef}
             className={cn("pointer-events-auto relative flex w-full items-center justify-center", groupCount > 1 ? "max-w-[372px]" : "max-w-[340px]")}
             style={{ gap: GROUP_GAP }}
+            onPointerEnter={action ? show : undefined}
+            onPointerLeave={action ? hide : undefined}
+            onFocus={action ? show : undefined}
+            onBlur={action ? (event) => !event.currentTarget.contains(event.relatedTarget) && hide() : undefined}
           >
+            {action && <DockDrop action={action} center={center} revealed={revealed} />}
             {preview.map((group, groupIndex) => (
               <m.div
                 key={groupIndex}

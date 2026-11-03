@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line, RiMegaphoneFill, RiMegaphoneLine } from "@remixicon/react";
+import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line, RiMegaphoneFill, RiMegaphoneLine, RiMagicLine } from "@remixicon/react";
 import { AnnouncementsBanner } from "@/features/announcements/announcements-banner";
 import { FeatureReveal } from "@/components/shared/feature-reveal";
 import { Dock } from "@/features/layout/dock";
@@ -64,7 +64,7 @@ export const App = () => (
 const AppContent = () => {
   const { state, updateSettings } = useExtensionState();
   const { t } = useI18n();
-  const { tab, stack, setTab } = useNav();
+  const { tab, stack, setTab, push } = useNav();
   const theme = useResolvedTheme(state.settings.appearance);
   const mainRef = useRef<HTMLElement>(null);
   const [visited, setVisited] = useState<Set<Tab>>(() => new Set([tab]));
@@ -138,6 +138,11 @@ const AppContent = () => {
               onLayoutChange={(dockLayout) => void updateSettings({ dockLayout: restoreDockLayoutTabs(dockLayout, DOCK_TABS) })}
               value={tab}
               onChange={selectTab}
+              action={
+                stack.length === 0 && tab === "store"
+                  ? { anchor: "store", label: t("creator.title"), icon: <RiMagicLine className="size-4" />, onClick: () => push({ name: "creator" }) }
+                  : undefined
+              }
               items={[
                 {
                   value: "activity",

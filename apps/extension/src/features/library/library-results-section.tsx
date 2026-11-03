@@ -1,4 +1,4 @@
-import { RiDiscordLine, RiSearchLine } from "@remixicon/react";
+import { RiDiscordLine, RiMagicLine, RiSearchLine } from "@remixicon/react";
 import { SeasonalDecor } from "@/components/shared/seasonal-decor";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
@@ -70,9 +70,14 @@ export const LibraryResultsSection = ({ results, newSlugs, browsing, query, cate
             title={t("library.noResults", { query: query.trim() || t(categoryKey(category === "all" ? "other" : category)) })}
             description={t("library.noResultsDescription")}
             action={
-              <Button variant="secondary" icon={<RiDiscordLine />} onClick={() => openUrl(DISCORD_INVITE_URL)}>
-                {t("library.request")}
-              </Button>
+              <div className="flex flex-wrap justify-center gap-2">
+                <Button icon={<RiMagicLine />} onClick={() => push({ name: "creator" })}>
+                  {t("creator.cta.create")}
+                </Button>
+                <Button variant="secondary" icon={<RiDiscordLine />} onClick={() => openUrl(DISCORD_INVITE_URL)}>
+                  {t("library.request")}
+                </Button>
+              </div>
             }
           />
         </Card>
@@ -96,6 +101,20 @@ export const LibraryResultsSection = ({ results, newSlugs, browsing, query, cate
             />
           ))}
         </Group>
+      )}
+      {results.length > 0 && (
+        <Card className="mt-3 flex items-center gap-3 p-4">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-primary-soft text-primary">
+            <RiMagicLine className="size-5" />
+          </span>
+          <div className="flex min-w-0 flex-1 flex-col">
+            <span className="text-label-lg font-medium">{t("creator.cta.title")}</span>
+            <span className="text-label-md text-muted">{t("creator.cta.description")}</span>
+          </div>
+          <Button size="sm" onClick={() => push({ name: "creator" })}>
+            {t("creator.cta.short")}
+          </Button>
+        </Card>
       )}
     </Section>
   );
