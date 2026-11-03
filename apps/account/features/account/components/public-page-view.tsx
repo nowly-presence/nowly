@@ -3,12 +3,11 @@
 import { AccountPageFrame } from "@/features/account/components/account-page-frame";
 import { fetchPublicProfileSettings, PublicProfileError, savePublicProfileSettings, type PublicProfileSettings } from "@/features/account/lib/account-api";
 import { siteBaseUrl } from "@/lib/api-base";
-import { Button, Card, CardContent, Checkbox, Field, FieldDescription, FieldLabel, Input, Switch, Textarea } from "@nowly/ui";
+import { Button, Card, CardContent, Checkbox, Field, FieldLabel, Switch, Textarea } from "@nowly/ui";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 const BIO_MAX_LENGTH = 280;
-const HANDLE_MAX_LENGTH = 30;
 
 type Feedback = "saved" | "taken" | "invalid" | "failed" | null;
 
@@ -16,7 +15,6 @@ export const PublicPageView = () => {
   const t = useTranslations("accountPage");
   const [saved, setSaved] = useState<PublicProfileSettings | null>(null);
   const [enabled, setEnabled] = useState(false);
-  const [handle, setHandle] = useState("");
   const [bio, setBio] = useState("");
   const [showCreated, setShowCreated] = useState(true);
   const [showLiked, setShowLiked] = useState(true);
@@ -27,7 +25,6 @@ export const PublicPageView = () => {
   const apply = (settings: PublicProfileSettings): void => {
     setSaved(settings);
     setEnabled(settings.enabled);
-    setHandle(settings.handle ?? "");
     setBio(settings.bio ?? "");
     setShowCreated(settings.showCreated);
     setShowLiked(settings.showLiked);
@@ -44,7 +41,6 @@ export const PublicPageView = () => {
     setFeedback(null);
     savePublicProfileSettings({
       enabled,
-      handle: handle.trim().toLowerCase(),
       bio: bio.trim() || null,
       showCreated,
       showLiked
@@ -72,20 +68,13 @@ export const PublicPageView = () => {
               <Switch checked={enabled} onCheckedChange={setEnabled} disabled={busy} />
             </label>
 
-            <Field>
-              <FieldLabel htmlFor="public-handle">{t("public-handle")}</FieldLabel>
-              <Input
-                id="public-handle"
-                value={handle}
-                maxLength={HANDLE_MAX_LENGTH}
-                autoComplete="off"
-                spellCheck={false}
-                disabled={busy}
-                aria-invalid={feedback === "taken" || feedback === "invalid"}
-                onChange={(event) => setHandle(event.target.value)}
-              />
-              <FieldDescription>{t("public-handle-hint")}</FieldDescription>
-            </Field>
+            {saved.handle ? (
+              <p className="text-sm text-muted-foreground">
+                {t("public-address")} <span className="font-medium text-foreground">{`nowly.me/u/${saved.handle}`}</span>
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground">{t("public-handle-auto")}</p>
+            )}
 
             <Field>
               <FieldLabel htmlFor="public-bio">{t("public-bio")}</FieldLabel>
@@ -104,7 +93,7 @@ export const PublicPageView = () => {
             <p className="text-xs text-muted-foreground">{t("public-privacy")}</p>
 
             <div className="flex flex-wrap items-center gap-3">
-              <Button disabled={busy || !handle.trim()} onClick={onSave}>
+              <Button disabled={busy} onClick={onSave}>
                 {t("public-save")}
               </Button>
               {saved.enabled && saved.handle ? (

@@ -8,6 +8,7 @@ export type AccountUser = {
   discordId: string | null;
   githubLogin: string | null;
   role: string;
+  verified: boolean;
   capabilities: AdminCapability[];
 };
 
@@ -96,6 +97,7 @@ export const fetchAccountDevices = async (): Promise<AccountDevice[]> => {
 
 export type AccountPresence = {
   slug: string;
+  name: string;
   enabled: boolean;
   installedAt: number;
 };
@@ -109,6 +111,60 @@ export const fetchAccountPresences = async (): Promise<AccountPresence[]> => {
     presences: AccountPresence[];
   };
   return body.presences;
+};
+
+export type AccountCustomActivity = {
+  id: string;
+  name: string;
+  details: string;
+  state: string;
+  updatedAt: number;
+};
+
+export const fetchAccountCustomActivities = async (): Promise<AccountCustomActivity[]> => {
+  const response = await request("/me/custom-activities");
+
+  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+
+  const body = (await response.json()) as {
+    activities: AccountCustomActivity[];
+  };
+  return body.activities;
+};
+
+export const unlinkAllAccountDevices = async (): Promise<void> => {
+  const response = await request("/me/devices", { method: "DELETE" });
+
+  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+};
+
+export type AdminUser = {
+  id: string;
+  name: string;
+  username: string | null;
+  image: string | null;
+  role: string;
+  verified: boolean;
+};
+
+export const searchAdminUsers = async (query: string): Promise<AdminUser[]> => {
+  const response = await request(`/admin/users?q=${encodeURIComponent(query)}`);
+
+  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+
+  const body = (await response.json()) as {
+    users: AdminUser[];
+  };
+  return body.users;
+};
+
+export const setAdminUserVerified = async (userId: string, verified: boolean): Promise<void> => {
+  const response = await request(`/admin/users/${encodeURIComponent(userId)}/verified`, {
+    method: "PUT",
+    body: JSON.stringify({ verified })
+  });
+
+  if (!response.ok) throw new Error(`HTTP_${response.status}`);
 };
 
 export const unlinkAccountDevice = async (deviceId: string): Promise<void> => {
@@ -162,9 +218,7 @@ export const fetchPublicProfileSettings = async (): Promise<PublicProfileSetting
   return (await response.json()) as PublicProfileSettings;
 };
 
-export const savePublicProfileSettings = async (settings: Omit<PublicProfileSettings, "handle"> & {
-  handle: string;
-}): Promise<PublicProfileSettings> => {
+export const savePublicProfileSettings = async (settings: Omit<PublicProfileSettings, "handle">): Promise<PublicProfileSettings> => {
   const response = await request("/me/public-profile", {
     method: "PUT",
     body: JSON.stringify({

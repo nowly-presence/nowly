@@ -4,9 +4,11 @@ import { ThemeProvider } from "next-themes";
 import { getLocale } from "next-intl/server";
 import type { PropsWithChildren } from "react";
 import "./globals.css";
+import { BRAND_METADATA_ICONS } from "@/lib/brand";
 import { satoshi } from "./fonts";
 
 export const metadata: Metadata = {
+  icons: BRAND_METADATA_ICONS,
   robots: {
     index: false,
     follow: false

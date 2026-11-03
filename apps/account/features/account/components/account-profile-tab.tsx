@@ -1,5 +1,6 @@
 "use client";
 
+import { VerifiedBadge } from "@/features/account/components/verified-badge";
 import type { AccountUser } from "@/features/account/lib/account-api";
 import { Avatar, AvatarFallback, AvatarImage, Badge, Button, Card, CardContent, CardDescription, CardTitle, Separator } from "@nowly/ui";
 import { RiDeleteBinLine, RiDownload2Line, RiLogoutBoxRLine } from "@nowly/ui/icons";
@@ -28,7 +29,10 @@ export const AccountProfileTab = ({ user, busy, message, onSignOut, onExport, on
                 <AvatarFallback>{user.name.slice(0, 1).toUpperCase()}</AvatarFallback>
               </Avatar>
               <div className="min-w-0">
-                <CardTitle className="truncate text-lg">{user.name}</CardTitle>
+                <CardTitle className="flex items-center gap-1.5 truncate text-lg">
+                  {user.name}
+                  {user.verified ? <VerifiedBadge /> : null}
+                </CardTitle>
                 <CardDescription>{t("provider-discord")}</CardDescription>
               </div>
             </div>

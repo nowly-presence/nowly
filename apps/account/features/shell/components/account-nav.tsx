@@ -1,51 +1,19 @@
 "use client";
 
 import { Link, usePathname } from "@/i18n/navigation";
+import { visibleTabs } from "@/features/shell/lib/account-tabs";
 import { cn } from "@nowly/ui/utils";
 import { useTranslations } from "next-intl";
 
-const ITEMS = [
-  {
-    href: "/profile",
-    key: "tab-profile",
-    staff: false
-  },
-  {
-    href: "/devices",
-    key: "tab-devices",
-    staff: false
-  },
-  {
-    href: "/presences",
-    key: "tab-presences",
-    staff: false
-  },
-  {
-    href: "/creations",
-    key: "tab-creations",
-    staff: false
-  },
-  {
-    href: "/public-page",
-    key: "tab-public",
-    staff: false
-  },
-  {
-    href: "/review",
-    key: "tab-review",
-    staff: true
-  }
-] as const;
-
-export const AccountNav = ({ staff }: {
-  staff: boolean;
+export const AccountNav = ({ capabilities }: {
+  capabilities: readonly string[];
 }) => {
   const t = useTranslations("accountPage");
   const shell = useTranslations("shell");
   const pathname = usePathname();
   return (
-    <nav aria-label={shell("nav-label")} className="flex flex-wrap gap-1">
-      {ITEMS.filter((item) => staff || !item.staff).map((item) => {
+    <nav aria-label={shell("nav-label")} className="hidden flex-wrap gap-1 lg:flex">
+      {visibleTabs(capabilities).map((item) => {
         const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
         return (
           <Link

@@ -2,7 +2,7 @@
 
 import { AccountDevicesTab } from "@/features/account/components/account-devices-tab";
 import { AccountPageFrame } from "@/features/account/components/account-page-frame";
-import { fetchAccountDevices, unlinkAccountDevice, type AccountDevice } from "@/features/account/lib/account-api";
+import { fetchAccountDevices, unlinkAccountDevice, unlinkAllAccountDevices, type AccountDevice } from "@/features/account/lib/account-api";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
@@ -29,10 +29,21 @@ export const DevicesView = () => {
       .finally(() => setBusy(false));
   };
 
+  const onUnlinkAll = () => {
+    if (!window.confirm(t("devices-unlink-all-confirm"))) return;
+
+    setBusy(true);
+    setFailed(false);
+    unlinkAllAccountDevices()
+      .then(() => setDevices([]))
+      .catch(() => setFailed(true))
+      .finally(() => setBusy(false));
+  };
+
   return (
     <AccountPageFrame eyebrow={t("eyebrow")} title={t("tab-devices")} description={t("devices-description")}>
       {devices ? (
-        <AccountDevicesTab devices={devices} busy={busy} error={failed} onUnlink={onUnlink} />
+        <AccountDevicesTab devices={devices} busy={busy} error={failed} onUnlink={onUnlink} onUnlinkAll={onUnlinkAll} />
       ) : (
         <p className="text-sm text-muted-foreground">{failed ? t("action-error") : t("checking")}</p>
       )}

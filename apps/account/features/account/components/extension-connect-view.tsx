@@ -34,18 +34,21 @@ export const ExtensionConnectView = () => {
   const permission = searchParams.get("permission");
   const creator = permission === "creator";
   const admin = permission === "admin";
-  const scopes: ExtensionTokenScope[] = admin ? ["sync", "admin"] : creator ? ["sync", "creator"] : ["sync"];
-  const scopesKey = scopes.join(",");
+  const scopesFor = useCallback((staff: boolean): ExtensionTokenScope[] => [
+    "sync",
+    ...(creator ? (["creator"] as const) : []),
+    ...(admin || staff ? (["admin"] as const) : [])
+  ], [creator, admin]);
   const [status, setStatus] = useState<Status>("checking");
   const [user, setUser] = useState<AccountUser | null>(null);
   const [busy, setBusy] = useState(false);
   const autoStarted = useRef(false);
 
-  const connect = useCallback(async (): Promise<void> => {
+  const connect = useCallback(async (staff: boolean): Promise<void> => {
     setStatus("connecting");
 
     try {
-      const session = await createExtensionSession(deviceId, scopesKey.split(",") as ExtensionTokenScope[]);
+      const session = await createExtensionSession(deviceId, scopesFor(staff));
 
       const result = await requestExtension<{
         ok?: boolean;
@@ -54,7 +57,7 @@ export const ExtensionConnectView = () => {
     } catch (failure) {
       setStatus(failure instanceof Error && failure.message === "ADMIN_REQUIRED" ? "forbidden" : "error");
     }
-  }, [deviceId, scopesKey]);
+  }, [deviceId, scopesFor]);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,7 +85,7 @@ export const ExtensionConnectView = () => {
           }
           if (fromExtension && !creator && !admin && !autoStarted.current) {
             autoStarted.current = true;
-            void connect();
+            void connect(current.capabilities.length > 0);
             return;
           }
 
@@ -167,7 +170,7 @@ export const ExtensionConnectView = () => {
                   {t("sign-in")}
                 </Button>
               ) : null}
-              {status === "ready" ? <Button onClick={connect}>{t("connect")}</Button> : null}
+              {status === "ready" ? <Button onClick={() => void connect((user?.capabilities.length ?? 0) > 0)}>{t("connect")}</Button> : null}
               {status === "connecting" ? <Button disabled>{t("connect")}</Button> : null}
               {status === "error" ? (
                 <Button variant="outline" onClick={() => window.location.reload()}>
