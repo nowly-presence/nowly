@@ -69,6 +69,7 @@
     "public-address": "Sayfanızın adresi:",
     "public-handle-auto": "Adresiniz, kaydettiğinizde Discord kullanıcı adınızdan oluşturulur.",
     "tab-users": "Kullanıcılar",
+    "tab-moderation": "Moderasyon",
     "users-title": "Kullanıcılar",
     "users-description": "Bir hesap arayın ve doğrulanmış rozetini verin veya kaldırın.",
     "users-search-placeholder": "Ad, Discord kullanıcı adı veya ID",

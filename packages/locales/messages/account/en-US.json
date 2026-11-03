@@ -69,6 +69,7 @@
     "public-address": "Your page address:",
     "public-handle-auto": "Your address is created from your Discord username when you save.",
     "tab-users": "Users",
+    "tab-moderation": "Moderation",
     "users-title": "Users",
     "users-description": "Search an account and grant or remove the verified badge.",
     "users-search-placeholder": "Name, Discord username or ID",

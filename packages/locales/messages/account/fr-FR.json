@@ -69,6 +69,7 @@
     "public-address": "Adresse de votre page :",
     "public-handle-auto": "Votre adresse est créée à partir de votre nom d'utilisateur Discord à l'enregistrement.",
     "tab-users": "Utilisateurs",
+    "tab-moderation": "Modération",
     "users-title": "Utilisateurs",
     "users-description": "Recherchez un compte et attribuez ou retirez le badge vérifié.",
     "users-search-placeholder": "Nom, nom d'utilisateur Discord ou ID",

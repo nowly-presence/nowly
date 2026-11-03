@@ -69,6 +69,7 @@
     "public-address": "Adres Twojej strony:",
     "public-handle-auto": "Adres powstaje z Twojej nazwy użytkownika Discord po zapisaniu.",
     "tab-users": "Użytkownicy",
+    "tab-moderation": "Moderacja",
     "users-title": "Użytkownicy",
     "users-description": "Wyszukaj konto i nadaj lub odbierz odznakę weryfikacji.",
     "users-search-placeholder": "Nazwa, nazwa użytkownika Discord lub ID",

@@ -69,6 +69,7 @@
     "public-address": "Dirección de tu página:",
     "public-handle-auto": "Tu dirección se crea a partir de tu nombre de usuario de Discord al guardar.",
     "tab-users": "Usuarios",
+    "tab-moderation": "Moderación",
     "users-title": "Usuarios",
     "users-description": "Busca una cuenta y concede o retira la insignia de verificado.",
     "users-search-placeholder": "Nombre, usuario de Discord o ID",

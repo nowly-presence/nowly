@@ -11,11 +11,12 @@ import { Link, usePathname } from "@nowly/locales/navigation";
 import { FALLBACK_LOCALE, LOCALE_SHORT_MAP, getValidLocale } from "@nowly/locales";
 import { useLocale, useTranslations } from "next-intl";
 
-export const Navbar = ({ site, docsOrigin, brand, storeButton, accountLinks }: {
+export const Navbar = ({ site, docsOrigin, brand, storeButton, leadingAction, accountLinks }: {
   site: "web" | "docs" | "account";
   docsOrigin: string;
   brand: ReactNode;
   storeButton: ReactNode;
+  leadingAction?: ReactNode;
   accountLinks?: Array<{
     href: string;
     label: string;
@@ -78,6 +79,7 @@ export const Navbar = ({ site, docsOrigin, brand, storeButton, accountLinks }: {
         )}
 
         <nav className="hidden items-center gap-5 lg:flex">
+          {leadingAction}
           <NavbarLinks links={links} />
           {storeButton}
         </nav>
@@ -96,7 +98,7 @@ export const Navbar = ({ site, docsOrigin, brand, storeButton, accountLinks }: {
         >
           <RiMenuLine />
         </button>
-        {open ? <MobileNav open={open} onOpenChange={setOpen} links={links} storeButton={storeButton} menuLabel={t("open-menu")} /> : null}
+        {open ? <MobileNav open={open} onOpenChange={setOpen} links={links} storeButton={storeButton ?? leadingAction} menuLabel={t("open-menu")} /> : null}
       </div>
     </header>
   );

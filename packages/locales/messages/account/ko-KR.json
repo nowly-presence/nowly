@@ -69,6 +69,7 @@
     "public-address": "페이지 주소:",
     "public-handle-auto": "저장하면 Discord 사용자 이름으로 주소가 만들어집니다.",
     "tab-users": "사용자",
+    "tab-moderation": "중재",
     "users-title": "사용자",
     "users-description": "계정을 검색해 인증 배지를 부여하거나 제거하세요.",
     "users-search-placeholder": "이름, Discord 사용자 이름 또는 ID",

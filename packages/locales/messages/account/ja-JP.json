@@ -69,6 +69,7 @@
     "public-address": "ページのアドレス:",
     "public-handle-auto": "アドレスは保存時にDiscordのユーザー名から作成されます。",
     "tab-users": "ユーザー",
+    "tab-moderation": "モデレーション",
     "users-title": "ユーザー",
     "users-description": "アカウントを検索して、認証バッジを付与または削除します。",
     "users-search-placeholder": "名前、Discordユーザー名、またはID",
