@@ -7,3 +7,5 @@ process.env.DISCORD_REDIRECT_URI ??= "http://localhost:3001/auth/discord/callbac
 process.env.PRESENCE_SIGNING_PRIVATE_KEY ??= "test-presence-signing-private-key";
 process.env.STATUS_SAMPLE_LIMIT ??= "168";
 process.env.STATUS_CHECK_INTERVAL_HOURS ??= "1";
+process.env.NOLO_REPOSITORY ??= "nowly-presence/presences";
+process.env.NOLO_BASE_BRANCH ??= "stable";

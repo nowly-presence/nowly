@@ -11,6 +11,7 @@ import { hasCapability } from "@nowly/shared/roles";
 import { Hono, type Context } from "hono";
 import { SubmissionError } from "./submission-errors";
 import { getSubmissionAuthorId, getSubmissionDetail, listReviewQueue } from "./submission-detail.service";
+import { openPendingPullRequests, openSubmissionPullRequest } from "./submission-pull-request";
 import { markSubmissionPublished, publishSubmission, reviewSubmission } from "./submission-review.service";
 import { PublishBodySchema, PublishedWebhookSchema, ReviewBodySchema, SubmitBodySchema, SUBMISSION_BODY_LIMIT, SUBMISSIONS_PER_HOUR, SubmissionIdsSchema } from "./submission.schemas";
 import { listOwnSubmissions, submitPresence } from "./submission.service";
@@ -102,6 +103,7 @@ export const presenceSubmissionRoutes = new Hono<AppEnv>()
       return failure(c, error);
     }
   })
+  .post("/presence-submissions/pull-requests", requireWebhookSecret, async (c) => c.json(await openPendingPullRequests()))
   .get("/presence-submissions/:id", async (c) => {
     const id = c.req.param("id");
     const access = await canRead(c, id);
@@ -135,14 +137,17 @@ export const presenceSubmissionRoutes = new Hono<AppEnv>()
     if (!body.success) return c.json({ error: "INVALID_REQUEST_BODY" }, 400);
 
     try {
-      return c.json(
-        await publishSubmission({
-          adminId: accountOf(c).userId,
-          submissionId: c.req.param("id"),
-          revision: body.data.revision
-        })
-      );
+      const published = await publishSubmission({
+        adminId: accountOf(c).userId,
+        submissionId: c.req.param("id"),
+        revision: body.data.revision
+      });
+      void openSubmissionPullRequest(published.id).catch(() => undefined);
+      return c.json(published);
     } catch (error) {
       return failure(c, error);
     }
-  });
+  })
+  .post("/presence-submissions/:id/pull-request", requireCapability("publish"), async (c) =>
+    c.json({ outcome: await openSubmissionPullRequest(c.req.param("id")) })
+  );

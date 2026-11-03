@@ -63,6 +63,12 @@ export const getSubmissionDetail = async (id: string) => {
     definition: latest?.definition ?? null,
     files: latest?.files ?? [],
     assets: assetUrls(latest?.assets),
+    pullRequest: {
+      number: row.prNumber,
+      url: row.prUrl,
+      revision: row.prRevision,
+      error: row.prError
+    },
     revisions: revisions.map((item) => ({
       number: item.number,
       author: person(item.authorId, byId),
