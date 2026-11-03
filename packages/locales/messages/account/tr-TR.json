@@ -64,7 +64,7 @@
     "public-saved": "Kaydedildi.",
     "public-view": "Herkese açık sayfamı gör",
     "public-error-taken": "Bu kullanıcı adı zaten alınmış.",
-    "public-error-invalid": "Bu kullanıcı adı veya biyografi geçerli değil.",
+    "public-error-invalid": "Biyografi veya bağlantılardan biri geçerli değil.",
     "public-privacy": "Yalnızca bu sayfadakiler herkese açık olur. Etkinliğin, cihazların ve e-postan asla olmaz.",
     "public-address": "Sayfanızın adresi:",
     "public-handle-auto": "Adresiniz, kaydettiğinizde Discord kullanıcı adınızdan oluşturulur.",
@@ -83,7 +83,12 @@
     "custom-activities-empty": "Henüz eşitlenmiş özel etkinlik yok.",
     "devices-unlink-all": "Tüm cihazların bağlantısını kes",
     "devices-unlink-all-confirm": "Bağlı tüm tarayıcılar hesabınızla eşitlemeyi bırakır. Burada oturumunuz açık kalır.",
-    "device-label": "{os} üzerinde {browser}"
+    "device-label": "{os} üzerinde {browser}",
+    "public-links": "Bağlantılar",
+    "public-links-hint": "En fazla {max} https bağlantısı ekleyin (X, GitHub, web siteniz...). Simge siteye göre seçilir.",
+    "public-links-add": "Bağlantı ekle",
+    "public-link-placeholder": "https://github.com/adiniz",
+    "public-link-remove": "Bu bağlantıyı kaldır"
   },
   "extensionConnectPage": {
     "eyebrow": "Uzantı",

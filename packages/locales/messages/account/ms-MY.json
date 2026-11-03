@@ -64,7 +64,7 @@
     "public-saved": "Disimpan.",
     "public-view": "Lihat halaman awam saya",
     "public-error-taken": "Pengendali ini sudah digunakan.",
-    "public-error-invalid": "Pengendali atau bio ini tidak sah.",
+    "public-error-invalid": "Bio atau salah satu pautan tidak sah.",
     "public-privacy": "Hanya yang ada pada halaman ini menjadi awam. Aktiviti, peranti dan e-mel anda tidak pernah.",
     "public-address": "Alamat halaman anda:",
     "public-handle-auto": "Alamat anda dibuat daripada nama pengguna Discord apabila anda menyimpan.",
@@ -83,7 +83,12 @@
     "custom-activities-empty": "Belum ada aktiviti tersuai disegerakkan.",
     "devices-unlink-all": "Nyahpaut semua peranti",
     "devices-unlink-all-confirm": "Semua pelayar berpaut akan berhenti menyegerak dengan akaun anda. Anda kekal log masuk di sini.",
-    "device-label": "{browser} pada {os}"
+    "device-label": "{browser} pada {os}",
+    "public-links": "Pautan",
+    "public-links-hint": "Tambah sehingga {max} pautan https (X, GitHub, laman web anda...). Ikon dipilih mengikut laman.",
+    "public-links-add": "Tambah pautan",
+    "public-link-placeholder": "https://github.com/nama-anda",
+    "public-link-remove": "Buang pautan ini"
   },
   "extensionConnectPage": {
     "eyebrow": "Sambungan",

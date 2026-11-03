@@ -64,7 +64,7 @@
     "public-saved": "저장되었습니다.",
     "public-view": "내 공개 페이지 보기",
     "public-error-taken": "이미 사용 중인 핸들입니다.",
-    "public-error-invalid": "핸들 또는 소개가 올바르지 않습니다.",
+    "public-error-invalid": "소개 또는 링크 중 하나가 올바르지 않습니다.",
     "public-privacy": "이 페이지에 표시된 내용만 공개됩니다. 활동, 기기, 이메일은 공개되지 않습니다.",
     "public-address": "페이지 주소:",
     "public-handle-auto": "저장하면 Discord 사용자 이름으로 주소가 만들어집니다.",
@@ -83,7 +83,12 @@
     "custom-activities-empty": "동기화된 사용자 지정 활동이 아직 없습니다.",
     "devices-unlink-all": "모든 기기 연결 해제",
     "devices-unlink-all-confirm": "연결된 모든 브라우저가 계정과 동기화되지 않습니다. 여기서는 로그인된 상태로 유지됩니다.",
-    "device-label": "{os}의 {browser}"
+    "device-label": "{os}의 {browser}",
+    "public-links": "링크",
+    "public-links-hint": "최대 {max}개의 https 링크를 추가하세요(X, GitHub, 내 웹사이트 등). 아이콘은 사이트에 따라 자동 선택됩니다.",
+    "public-links-add": "링크 추가",
+    "public-link-placeholder": "https://github.com/your-name",
+    "public-link-remove": "이 링크 삭제"
   },
   "extensionConnectPage": {
     "eyebrow": "확장 프로그램",

@@ -64,7 +64,7 @@
     "public-saved": "保存しました。",
     "public-view": "公開ページを見る",
     "public-error-taken": "このハンドルはすでに使われています。",
-    "public-error-invalid": "このハンドルまたは自己紹介は無効です。",
+    "public-error-invalid": "自己紹介またはリンクのいずれかが無効です。",
     "public-privacy": "このページに表示される内容だけが公開されます。アクティビティ、デバイス、メールアドレスは公開されません。",
     "public-address": "ページのアドレス:",
     "public-handle-auto": "アドレスは保存時にDiscordのユーザー名から作成されます。",
@@ -83,7 +83,12 @@
     "custom-activities-empty": "同期されたカスタムアクティビティはまだありません。",
     "devices-unlink-all": "すべてのデバイスの連携を解除",
     "devices-unlink-all-confirm": "連携中のすべてのブラウザがアカウントと同期しなくなります。ここではログインしたままです。",
-    "device-label": "{os}の{browser}"
+    "device-label": "{os}の{browser}",
+    "public-links": "リンク",
+    "public-links-hint": "最大{max}件のhttpsリンクを追加できます(X、GitHub、自分のサイトなど)。アイコンはサイトに応じて自動で選ばれます。",
+    "public-links-add": "リンクを追加",
+    "public-link-placeholder": "https://github.com/your-name",
+    "public-link-remove": "このリンクを削除"
   },
   "extensionConnectPage": {
     "eyebrow": "拡張機能",

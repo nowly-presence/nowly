@@ -64,7 +64,7 @@
     "public-saved": "Zapisano.",
     "public-view": "Zobacz moją stronę publiczną",
     "public-error-taken": "Ta nazwa użytkownika jest już zajęta.",
-    "public-error-invalid": "Ta nazwa użytkownika lub bio jest nieprawidłowa.",
+    "public-error-invalid": "Bio lub jeden z linków jest nieprawidłowy.",
     "public-privacy": "Publiczne staje się tylko to, co jest na tej stronie. Twoja aktywność, urządzenia i e-mail nigdy.",
     "public-address": "Adres Twojej strony:",
     "public-handle-auto": "Adres powstaje z Twojej nazwy użytkownika Discord po zapisaniu.",
@@ -83,7 +83,12 @@
     "custom-activities-empty": "Brak zsynchronizowanych własnych aktywności.",
     "devices-unlink-all": "Odłącz wszystkie urządzenia",
     "devices-unlink-all-confirm": "Wszystkie połączone przeglądarki przestaną synchronizować się z Twoim kontem. Pozostajesz tu zalogowany.",
-    "device-label": "{browser} na {os}"
+    "device-label": "{browser} na {os}",
+    "public-links": "Linki",
+    "public-links-hint": "Dodaj do {max} linków https (X, GitHub, Twoja strona...). Ikona jest dobierana do witryny.",
+    "public-links-add": "Dodaj link",
+    "public-link-placeholder": "https://github.com/twoja-nazwa",
+    "public-link-remove": "Usuń ten link"
   },
   "extensionConnectPage": {
     "eyebrow": "Rozszerzenie",

@@ -64,7 +64,7 @@
     "public-saved": "Enregistré.",
     "public-view": "Voir ma page publique",
     "public-error-taken": "Ce pseudo est déjà pris.",
-    "public-error-invalid": "Ce pseudo ou cette bio n'est pas valide.",
+    "public-error-invalid": "La bio ou l'un des liens n'est pas valide.",
     "public-privacy": "Seul ce qui figure sur cette page devient public. Votre activité, vos appareils et votre email ne le sont jamais.",
     "public-address": "Adresse de votre page :",
     "public-handle-auto": "Votre adresse est créée à partir de votre nom d'utilisateur Discord à l'enregistrement.",
@@ -83,7 +83,12 @@
     "custom-activities-empty": "Aucune activité personnalisée synchronisée.",
     "devices-unlink-all": "Délier tous les appareils",
     "devices-unlink-all-confirm": "Tous les navigateurs liés cesseront de se synchroniser avec votre compte. Vous restez connecté ici.",
-    "device-label": "{browser} sur {os}"
+    "device-label": "{browser} sur {os}",
+    "public-links": "Liens",
+    "public-links-hint": "Ajoutez jusqu'à {max} liens https (X, GitHub, votre site...). L'icône est choisie selon le site.",
+    "public-links-add": "Ajouter un lien",
+    "public-link-placeholder": "https://github.com/votre-nom",
+    "public-link-remove": "Retirer ce lien"
   },
   "extensionConnectPage": {
     "eyebrow": "Extension",

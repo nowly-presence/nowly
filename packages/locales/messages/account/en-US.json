@@ -64,7 +64,7 @@
     "public-saved": "Saved.",
     "public-view": "View my public page",
     "public-error-taken": "This handle is already taken.",
-    "public-error-invalid": "This handle or bio is not valid.",
+    "public-error-invalid": "The bio or one of the links is not valid.",
     "public-privacy": "Only what is on this page becomes public. Your activity, devices and email never are.",
     "public-address": "Your page address:",
     "public-handle-auto": "Your address is created from your Discord username when you save.",
@@ -83,7 +83,12 @@
     "custom-activities-empty": "No synced custom activity yet.",
     "devices-unlink-all": "Unlink all devices",
     "devices-unlink-all-confirm": "Every linked browser will stop syncing with your account. You stay signed in here.",
-    "device-label": "{browser} on {os}"
+    "device-label": "{browser} on {os}",
+    "public-links": "Links",
+    "public-links-hint": "Add up to {max} https links (X, GitHub, your website...). The icon is picked from the site.",
+    "public-links-add": "Add a link",
+    "public-link-placeholder": "https://github.com/your-name",
+    "public-link-remove": "Remove this link"
   },
   "extensionConnectPage": {
     "eyebrow": "Extension",
