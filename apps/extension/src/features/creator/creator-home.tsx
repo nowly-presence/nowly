@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { RiAddLine, RiCursorLine, RiDeleteBinLine, RiImageLine, RiMagicLine, RiPencilLine, RiSendPlaneLine } from "@remixicon/react";
+import { useRef, useState, type ChangeEvent } from "react";
+import { RiAddLine, RiCursorLine, RiDeleteBinLine, RiDownload2Line, RiImageLine, RiMagicLine, RiPencilLine, RiSendPlaneLine, RiUpload2Line } from "@remixicon/react";
 import { BackHeader, ScreenBody } from "@/components/shared/screen";
 import { useI18n } from "@/hooks/i18n-provider";
 import { formatDate } from "@/lib/format";
@@ -21,6 +21,8 @@ type CreatorHomeProps = {
   onCreate: () => void;
   onOpen: (id: string) => void;
   onDelete: (id: string) => void;
+  onImport: (file: File) => void;
+  onExport: (draft: CreatorDraft) => void;
 };
 
 const DraftIcon = ({ draft }: { draft: CreatorDraft }) =>
@@ -32,9 +34,16 @@ const DraftIcon = ({ draft }: { draft: CreatorDraft }) =>
     </span>
   );
 
-export const CreatorHome = ({ drafts, ready, onBack, onCreate, onOpen, onDelete }: CreatorHomeProps) => {
+export const CreatorHome = ({ drafts, ready, onBack, onCreate, onOpen, onDelete, onImport, onExport }: CreatorHomeProps) => {
   const { t, locale } = useI18n();
   const [pendingDelete, setPendingDelete] = useState<CreatorDraft | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const pickFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const [file] = Array.from(event.target.files ?? []);
+    event.target.value = "";
+    if (file) onImport(file);
+  };
   const steps = [
     {
       icon: <RiImageLine className="size-4" />,
@@ -73,6 +82,10 @@ export const CreatorHome = ({ drafts, ready, onBack, onCreate, onOpen, onDelete 
           <Button icon={<RiAddLine className="size-4" />} onClick={onCreate}>
             {t("creator.home.create")}
           </Button>
+          <Button variant="secondary" icon={<RiUpload2Line className="size-4" />} onClick={() => fileRef.current?.click()}>
+            {t("creator.home.import")}
+          </Button>
+          <input ref={fileRef} type="file" accept="application/json,.json" className="hidden" onChange={pickFile} />
         </Card>
 
         {!ready ? (
@@ -107,6 +120,18 @@ export const CreatorHome = ({ drafts, ready, onBack, onCreate, onOpen, onDelete 
                         >
                           {canEditSubmission(draft.submission) ? t("creator.home.edit") : t("creator.home.view")}
                         </Button>
+                        <button
+                          type="button"
+                          aria-label={t("creator.home.export")}
+                          title={t("creator.home.export")}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            onExport(draft);
+                          }}
+                          className="flex size-8 items-center justify-center rounded-md text-muted hover:bg-hover hover:text-foreground"
+                        >
+                          <RiDownload2Line className="size-4" />
+                        </button>
                         {!draft.submission && (
                           <button
                             type="button"

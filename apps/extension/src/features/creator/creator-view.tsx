@@ -11,12 +11,26 @@ import { CreatorWizard } from "@/features/creator/creator-wizard";
 import { CreatorLoadingPublished } from "@/features/creator/creator-loading-published";
 import { usePublishedPresenceLoader } from "@/features/creator/use-published-presence-loader";
 import { useCreatorDrafts } from "@/features/creator/use-creator-drafts";
+import { downloadJsonFile } from "@/lib/download-json-file";
+import { buildCreatorDraftFile, creatorDraftFileName, parseCreatorDraftFile, type DraftFileError } from "@/shared/creator/creator-draft-file";
+import { useToast } from "@/ui/toast";
+import type { CreatorDraft } from "@nowly/presence-creator/creator-types";
+import type { MessageKey } from "@/hooks/i18n-provider";
+
+const IMPORT_ERRORS: Record<DraftFileError, MessageKey> = {
+  TOO_LARGE: "creator.home.importLarge",
+  INVALID_JSON: "creator.home.importInvalid",
+  WRONG_FORMAT: "creator.home.importInvalid",
+  UNSUPPORTED_VERSION: "creator.home.importInvalid",
+  INVALID_DRAFT: "creator.home.importInvalid"
+};
 
 export const CreatorView = ({ presenceSlug }: {
   presenceSlug?: string;
 }) => {
   const { state } = useExtensionState();
-  const { locale } = useI18n();
+  const { locale, t } = useI18n();
+  const { toast } = useToast();
   const { pop } = useNav();
   const { drafts, list, ready, save, remove } = useCreatorDrafts();
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -38,6 +52,27 @@ export const CreatorView = ({ presenceSlug }: {
     setActiveId(draft.id);
   };
 
+  const exportDraft = (draft: CreatorDraft) => {
+    downloadJsonFile(creatorDraftFileName(draft.name), buildCreatorDraftFile(draft));
+    toast(t("creator.home.exported"));
+  };
+
+  const importDraft = async (file: File) => {
+    try {
+      const result = parseCreatorDraftFile(await file.text());
+
+      if (!result.ok) {
+        toast(t(IMPORT_ERRORS[result.error]), "error");
+        return;
+      }
+
+      await save(result.draft);
+      toast(t("creator.home.imported"));
+    } catch {
+      toast(t("error.generic"), "error");
+    }
+  };
+
   if (active) {
     return (
       <EditLocaleProvider key={active.id}>
@@ -48,5 +83,5 @@ export const CreatorView = ({ presenceSlug }: {
 
   if (presenceSlug) return <CreatorLoadingPublished loader={published} onBack={pop} />;
 
-  return <CreatorHome drafts={list} ready={ready} onBack={pop} onCreate={() => void start()} onOpen={setActiveId} onDelete={(id) => void remove(id)} />;
+  return <CreatorHome drafts={list} ready={ready} onBack={pop} onCreate={() => void start()} onOpen={setActiveId} onDelete={(id) => void remove(id)} onImport={(file) => void importDraft(file)} onExport={exportDraft} />;
 };
