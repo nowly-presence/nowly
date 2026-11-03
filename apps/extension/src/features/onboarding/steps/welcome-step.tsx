@@ -6,7 +6,7 @@ import { PresenceIcon } from "@/components/shared/presence-icon";
 import { useI18n } from "@/hooks/i18n-provider";
 import { fromCatalog } from "@/lib/presence-view";
 import { useExtensionState } from "@/hooks/extension-state-provider";
-import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout";
+import { StepLayout } from "@/ui/step-layout";
 
 export const WelcomeStep = ({ onNext }: {
   onNext: () => void;
@@ -19,7 +19,7 @@ export const WelcomeStep = ({ onNext }: {
   ]);
 
   return (
-    <OnboardingStepLayout
+    <StepLayout
       title={
         <>
           {t("onboarding.welcomeTitleA")} <span className="text-primary">{t("onboarding.welcomeTitleB")}</span>
@@ -53,6 +53,6 @@ export const WelcomeStep = ({ onNext }: {
           </div>
         )}
       </div>
-    </OnboardingStepLayout>
+    </StepLayout>
   );
 };

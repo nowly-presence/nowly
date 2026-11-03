@@ -9,7 +9,7 @@ import { useI18n } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
 import { fromCatalog } from "@/lib/presence-view";
 import { useExtensionState } from "@/hooks/extension-state-provider";
-import { OnboardingStepLayout } from "@/features/onboarding/onboarding-step-layout";
+import { StepLayout } from "@/ui/step-layout";
 
 export const PresencesStep = ({ onNext }: {
   onNext: () => void;
@@ -44,7 +44,7 @@ export const PresencesStep = ({ onNext }: {
   const count = [...selected].filter((slug) => !state.presences[slug]).length;
 
   return (
-    <OnboardingStepLayout
+    <StepLayout
       title={t("onboarding.presencesTitle")}
       description={t("onboarding.presencesDescription")}
       footer={
@@ -106,6 +106,6 @@ export const PresencesStep = ({ onNext }: {
           })}
         </div>
       )}
-    </OnboardingStepLayout>
+    </StepLayout>
   );
 };

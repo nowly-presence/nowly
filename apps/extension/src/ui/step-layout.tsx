@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-export const OnboardingStepLayout = ({ icon, title, description, children, footer }: {
+export const StepLayout = ({ icon, title, description, children, footer }: {
   icon?: ReactNode;
   title: ReactNode;
   description: string;
@@ -16,6 +16,6 @@ export const OnboardingStepLayout = ({ icon, title, description, children, foote
       </div>
       {children}
     </div>
-    <div className="sticky bottom-0 -mx-4 flex flex-col gap-2 bg-canvas px-4 pt-4 pb-1">{footer}</div>
+    <div className="sticky bottom-0 z-10 -mx-4 flex flex-col gap-2 bg-canvas px-4 pt-4 pb-4">{footer}</div>
   </>
 );
