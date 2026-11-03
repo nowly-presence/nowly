@@ -20,6 +20,8 @@ type SheetProps = {
 
 export const Sheet = ({ open, onClose, title, hideTitle = false, description, progress, children, footer, closeLabel }: SheetProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
 
   useEffect(() => {
     if (!open) return;
@@ -27,14 +29,14 @@ export const Sheet = ({ open, onClose, title, hideTitle = false, description, pr
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     panelRef.current?.focus();
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") closeRef.current();
     };
     window.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("keydown", onKey);
       previous?.focus();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 
