@@ -182,7 +182,10 @@
     "comment-add": "フィールドにコメントを追加",
     "comment-remove": "このコメントを削除",
     "error-stale": "レビュー中にこの投稿が変更されました。ページを再読み込みしたので、確認してからもう一度お試しください。",
-    "error-forbidden": "この操作を行う権限がありません。"
+    "error-forbidden": "この操作を行う権限がありません。",
+    "about": "概要",
+    "features": "機能",
+    "info": "情報"
   },
   "accountMeta": {
     "submission-title": "投稿",

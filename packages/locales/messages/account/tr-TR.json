@@ -182,7 +182,10 @@
     "comment-add": "Bir alana yorum ekle",
     "comment-remove": "Bu yorumu kaldır",
     "error-stale": "Bu gönderi sen incelerken değişti. Sayfa yeniden yüklendi, kontrol edip tekrar dene.",
-    "error-forbidden": "Bunu yapma iznin yok."
+    "error-forbidden": "Bunu yapma iznin yok.",
+    "about": "Hakkında",
+    "features": "Özellikler",
+    "info": "Bilgiler"
   },
   "accountMeta": {
     "submission-title": "Gönderi",

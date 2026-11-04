@@ -182,7 +182,10 @@
     "comment-add": "Añadir un comentario sobre un campo",
     "comment-remove": "Quitar este comentario",
     "error-stale": "Esta propuesta cambió mientras la revisabas. La página se recargó, compruébala e inténtalo de nuevo.",
-    "error-forbidden": "No tienes permiso para hacer esto."
+    "error-forbidden": "No tienes permiso para hacer esto.",
+    "about": "Acerca de",
+    "features": "Funciones",
+    "info": "Información"
   },
   "accountMeta": {
     "submission-title": "Propuesta",

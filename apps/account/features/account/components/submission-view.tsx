@@ -112,30 +112,36 @@ export const SubmissionView = ({ id }: {
 
         {status === "ready" && detail ? (
           <div className="mt-10 flex flex-col gap-6">
-            <div className="flex flex-wrap items-center gap-3">
-              <SubmissionStatusBadge status={detail.status} />
-              <span className="text-sm text-muted-foreground">
-                {[
-                  detail.kind === "update" ? t("kind-update") : t("kind-create"),
-                  t("revision-heading", { number: detail.revision }),
-                  detail.author?.name ? t("by-author", { name: detail.author.name }) : null
-                ]
-                  .filter(Boolean)
-                  .join(", ")}
-              </span>
-              {detail.pullRequest.url ? (
-                <a
-                  href={detail.pullRequest.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-foreground underline underline-offset-4"
-                >
-                  {t("pull-request")}
-                  <RiExternalLinkLine className="size-3.5" />
-                </a>
-              ) : null}
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="flex min-w-0 flex-col gap-2">
+                <div>
+                  <SubmissionStatusBadge status={detail.status} />
+                </div>
+                <p className="flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground">
+                  <span>
+                    {[
+                      detail.kind === "update" ? t("kind-update") : t("kind-create"),
+                      t("revision-heading", { number: detail.revision }),
+                      detail.author?.name ? t("by-author", { name: detail.author.name }) : null
+                    ]
+                      .filter(Boolean)
+                      .join(", ")}
+                  </span>
+                  {detail.pullRequest.url ? (
+                    <a
+                      href={detail.pullRequest.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-foreground underline underline-offset-4"
+                    >
+                      {t("pull-request")}
+                      <RiExternalLinkLine className="size-3.5" />
+                    </a>
+                  ) : null}
+                </p>
+              </div>
               {canPublish ? (
-                <Button size="sm" disabled={busy} onClick={onPublish}>
+                <Button disabled={busy} onClick={onPublish}>
                   {t("publish")}
                 </Button>
               ) : null}

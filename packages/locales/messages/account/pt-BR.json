@@ -182,7 +182,10 @@
     "comment-add": "Adicionar um comentário em um campo",
     "comment-remove": "Remover este comentário",
     "error-stale": "Este envio mudou durante a sua revisão. A página foi recarregada, confira e tente novamente.",
-    "error-forbidden": "Você não tem permissão para fazer isso."
+    "error-forbidden": "Você não tem permissão para fazer isso.",
+    "about": "Sobre",
+    "features": "Recursos",
+    "info": "Informações"
   },
   "accountMeta": {
     "submission-title": "Envio",

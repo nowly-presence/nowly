@@ -182,7 +182,10 @@
     "comment-add": "Tambah komen pada medan",
     "comment-remove": "Alih keluar komen ini",
     "error-stale": "Penghantaran ini berubah semasa anda menyemak. Halaman telah dimuat semula, semaklah dan cuba lagi.",
-    "error-forbidden": "Anda tidak dibenarkan melakukan ini."
+    "error-forbidden": "Anda tidak dibenarkan melakukan ini.",
+    "about": "Tentang",
+    "features": "Ciri",
+    "info": "Maklumat"
   },
   "accountMeta": {
     "submission-title": "Penghantaran",

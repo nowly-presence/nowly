@@ -182,7 +182,10 @@
     "comment-add": "Dodaj komentarz do pola",
     "comment-remove": "Usuń ten komentarz",
     "error-stale": "To zgłoszenie zmieniło się w trakcie sprawdzania. Strona została wczytana ponownie, sprawdź ją i spróbuj jeszcze raz.",
-    "error-forbidden": "Nie masz uprawnień do tej czynności."
+    "error-forbidden": "Nie masz uprawnień do tej czynności.",
+    "about": "O prezencji",
+    "features": "Funkcje",
+    "info": "Informacje"
   },
   "accountMeta": {
     "submission-title": "Zgłoszenie",

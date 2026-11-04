@@ -182,7 +182,10 @@
     "comment-add": "Add a comment on a field",
     "comment-remove": "Remove this comment",
     "error-stale": "This submission changed while you were reviewing. The page was reloaded, check it and try again.",
-    "error-forbidden": "You are not allowed to do this."
+    "error-forbidden": "You are not allowed to do this.",
+    "about": "About",
+    "features": "Features",
+    "info": "Information"
   },
   "accountMeta": {
     "submission-title": "Submission",

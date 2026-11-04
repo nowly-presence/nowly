@@ -182,7 +182,10 @@
     "comment-add": "Ajouter un commentaire sur un champ",
     "comment-remove": "Supprimer ce commentaire",
     "error-stale": "Cette proposition a changé pendant votre relecture. La page a été rechargée, vérifiez-la puis réessayez.",
-    "error-forbidden": "Vous n'avez pas le droit de faire cela."
+    "error-forbidden": "Vous n'avez pas le droit de faire cela.",
+    "about": "À propos",
+    "features": "Fonctionnalités",
+    "info": "Informations"
   },
   "accountMeta": {
     "submission-title": "Proposition",

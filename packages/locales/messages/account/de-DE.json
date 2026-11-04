@@ -182,7 +182,10 @@
     "comment-add": "Kommentar zu einem Feld hinzufügen",
     "comment-remove": "Diesen Kommentar entfernen",
     "error-stale": "Diese Einsendung hat sich während deiner Prüfung geändert. Die Seite wurde neu geladen, prüfe sie und versuche es erneut.",
-    "error-forbidden": "Dazu hast du keine Berechtigung."
+    "error-forbidden": "Dazu hast du keine Berechtigung.",
+    "about": "Über",
+    "features": "Funktionen",
+    "info": "Informationen"
   },
   "accountMeta": {
     "submission-title": "Einsendung",

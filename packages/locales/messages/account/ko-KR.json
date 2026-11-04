@@ -182,7 +182,10 @@
     "comment-add": "필드에 댓글 추가",
     "comment-remove": "이 댓글 삭제",
     "error-stale": "검토하는 동안 이 제출물이 변경되었습니다. 페이지를 다시 불러왔으니 확인한 뒤 다시 시도하세요.",
-    "error-forbidden": "이 작업을 할 권한이 없습니다."
+    "error-forbidden": "이 작업을 할 권한이 없습니다.",
+    "about": "소개",
+    "features": "기능",
+    "info": "정보"
   },
   "accountMeta": {
     "submission-title": "제출물",

@@ -13,7 +13,10 @@ export type SubmissionPage = {
   details: LocalizedText;
   state: LocalizedText;
   timestamps: string;
-  button: {
+  buttons?: Array<{
+    label: LocalizedText;
+  }>;
+  button?: {
     enabled: boolean;
     label: LocalizedText;
   };
