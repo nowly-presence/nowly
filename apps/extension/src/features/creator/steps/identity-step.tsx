@@ -50,6 +50,25 @@ export const IdentityStep = ({ draft, update }: {
       </Field>
 
       <Field label={t("creator.identity.domains")} hint={t("creator.identity.domainsHint")}>
+        <form
+          className="flex gap-2"
+          onSubmit={(event) => {
+            event.preventDefault();
+            addDomain(domainInput);
+          }}
+        >
+          <div className="flex-1">
+            <Input value={domainInput} onChange={(event) => setDomainInput(event.target.value)} placeholder="example.com" spellCheck={false} />
+          </div>
+          <Button type="submit" variant="secondary" icon={<RiAddLine className="size-4" />} disabled={!domainInput.trim()}>
+            {t("creator.identity.addDomain")}
+          </Button>
+        </form>
+        {suggestHost && !draft.domains.includes(suggestHost) && (
+          <Button variant="link" className="self-start" icon={<RiGlobalLine className="size-3.5" />} onClick={() => addDomain(suggestHost)}>
+            {t("creator.identity.useCurrent", { domain: suggestHost })}
+          </Button>
+        )}
         {draft.domains.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {draft.domains.map((domain) => (
@@ -69,25 +88,6 @@ export const IdentityStep = ({ draft, update }: {
               </Chip>
             ))}
           </div>
-        )}
-        <form
-          className="flex gap-2"
-          onSubmit={(event) => {
-            event.preventDefault();
-            addDomain(domainInput);
-          }}
-        >
-          <div className="flex-1">
-            <Input value={domainInput} onChange={(event) => setDomainInput(event.target.value)} placeholder="example.com" spellCheck={false} />
-          </div>
-          <Button type="submit" variant="secondary" icon={<RiAddLine className="size-4" />} disabled={!domainInput.trim()}>
-            {t("creator.identity.addDomain")}
-          </Button>
-        </form>
-        {suggestHost && !draft.domains.includes(suggestHost) && (
-          <Button variant="link" className="self-start" icon={<RiGlobalLine className="size-3.5" />} onClick={() => addDomain(suggestHost)}>
-            {t("creator.identity.useCurrent", { domain: suggestHost })}
-          </Button>
         )}
       </Field>
 

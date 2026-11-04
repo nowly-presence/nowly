@@ -5,7 +5,7 @@ import { writtenLocales } from "@nowly/presence-creator/creator-files";
 import type { CreatorDraft, CreatorPage } from "@nowly/presence-creator/creator-types";
 import type { PresencePayload } from "@/shared/types";
 import { Button } from "@/ui/button";
-import { Card } from "@/ui/card";
+import { Frame } from "@/ui/frame";
 import { Switch } from "@/ui/switch";
 import { useEditLocale } from "@/features/creator/creator-locale-tabs";
 import { usePageTest } from "@/features/creator/pages/use-page-test";
@@ -41,12 +41,10 @@ export const PagePreview = ({ draft, page }: {
     : null;
 
   return (
-    <Card className="flex flex-col gap-4 p-4">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex flex-col gap-0.5">
-          <span className="text-label-lg font-medium">{t("creator.preview.title")}</span>
-          <span className="text-label-md text-muted">{t("creator.preview.hint")}</span>
-        </div>
+    <Frame
+      title={t("creator.preview.title")}
+      description={t("creator.preview.hint")}
+      action={
         <Button
           size="sm"
           variant={running ? "secondary" : "primary"}
@@ -55,8 +53,9 @@ export const PagePreview = ({ draft, page }: {
         >
           {running ? t("creator.preview.stop") : t("creator.preview.start")}
         </Button>
-      </div>
-
+      }
+    >
+      {!running && <p className="text-label-md text-muted">{t("creator.preview.idle")}</p>}
       {running && state.status === "error" && <Warning>{state.error === "NO_TAB" ? t("creator.variables.noTab") : t("creator.variables.unreachable")}</Warning>}
       {ready && !ready.matches && <Warning>{t("creator.preview.noMatch")}</Warning>}
       {ready && ready.preview.missing.map((name) => <Warning key={name}>{t("creator.preview.missing", { name: `{${name}}` })}</Warning>)}
@@ -81,6 +80,6 @@ export const PagePreview = ({ draft, page }: {
         </div>
       )}
       {discord && discordError && <Warning>{discordError === "PAUSED" ? t("creator.preview.paused") : t("creator.preview.noHost")}</Warning>}
-    </Card>
+    </Frame>
   );
 };

@@ -14,7 +14,8 @@ describe("creator zip", () => {
       "src/E/Example Tube/locales/en-US.json",
       "src/E/Example Tube/locales/fr-FR.json",
       "src/E/Example Tube/metadata.json",
-      "src/E/Example Tube/presence.ts"
+      "src/E/Example Tube/presence.ts",
+      "src/E/Example Tube/settings.ts"
     ]);
     expect(JSON.parse(strFromU8(entries["creator.json"]))).not.toHaveProperty("assets");
   });

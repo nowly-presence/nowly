@@ -1,10 +1,11 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { RiBracesLine } from "@remixicon/react";
+import { readableName } from "@/lib/readable-name";
 import { useI18n } from "@/hooks/i18n-provider";
 import type { CreatorVariable } from "@nowly/presence-creator/creator-types";
 import { cn } from "@/ui/cn";
 import { Field } from "@/ui/field";
-import { InputGroup, InputGroupInput } from "@/ui/input-group";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/ui/input-group";
 import { MenuButton } from "@/ui/menu-button";
 
 export type TemplateField = {
@@ -17,7 +18,31 @@ export type TemplateField = {
   maxLength: number;
   invalid?: boolean;
   spellCheck?: boolean;
+  prefix?: string;
   onChange: (value: string) => void;
+};
+
+const TOKEN_PATTERN = /\{([A-Za-z0-9_]+)\}/g;
+
+const Tokens = ({ value, variables }: {
+  value: string;
+  variables: CreatorVariable[];
+}) => {
+  const parts = value.split(TOKEN_PATTERN);
+
+  return (
+    <>
+      {parts.map((part, index) =>
+        index % 2 === 1 && variables.some((variable) => variable.name === part) ? (
+          <span key={index} className="mx-0.5 inline-flex items-center rounded-md bg-primary-soft px-1.5 py-0.5 text-label-md font-medium text-primary">
+            {readableName(part)}
+          </span>
+        ) : (
+          <span key={index}>{index % 2 === 1 ? `{${part}}` : part}</span>
+        )
+      )}
+    </>
+  );
 };
 
 const TemplateRow = ({ field, variables }: {
@@ -26,13 +51,21 @@ const TemplateRow = ({ field, variables }: {
 }) => {
   const { t } = useI18n();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [focused, setFocused] = useState(false);
+  const hasTokens = variables.some((variable) => field.value.includes(`{${variable.name}}`));
+  const showTokens = hasTokens && !focused;
+
+  const prefix = field.prefix && field.value.startsWith(field.prefix) ? field.prefix : undefined;
+  const shown = prefix ? field.value.slice(prefix.length) : field.value;
+  const change = (next: string) => field.onChange(prefix ? `${prefix}${next.startsWith(prefix) ? next.slice(prefix.length) : next}` : next);
 
   const insert = (name: string) => {
     const input = inputRef.current;
     const token = `{${name}}`;
-    const start = input?.selectionStart ?? field.value.length;
-    const end = input?.selectionEnd ?? field.value.length;
-    field.onChange(`${field.value.slice(0, start)}${token}${field.value.slice(end)}`);
+    setFocused(true);
+    const start = input?.selectionStart ?? shown.length;
+    const end = input?.selectionEnd ?? shown.length;
+    change(`${shown.slice(0, start)}${token}${shown.slice(end)}`);
     requestAnimationFrame(() => {
       input?.focus();
       input?.setSelectionRange(start + token.length, start + token.length);
@@ -42,10 +75,30 @@ const TemplateRow = ({ field, variables }: {
   return (
     <Field label={field.label} hint={field.hint} optional={field.optional ? t("creator.texts.optional") : undefined} invalid={field.invalid}>
       <InputGroup>
+        {prefix && (
+          <InputGroupAddon text className="pr-0">
+            {prefix}
+          </InputGroupAddon>
+        )}
+        {showTokens && (
+          <button
+            type="button"
+            onClick={() => {
+              setFocused(true);
+              requestAnimationFrame(() => inputRef.current?.focus());
+            }}
+            className={cn("flex h-full min-w-0 flex-1 items-center overflow-hidden whitespace-nowrap px-3 text-left text-body-sm text-ink", prefix && "pl-0.5")}
+          >
+            <Tokens value={shown} variables={variables} />
+          </button>
+        )}
         <InputGroupInput
           ref={inputRef}
-          value={field.value}
-          onChange={(event) => field.onChange(event.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          className={showTokens ? "hidden" : prefix ? "pl-0.5" : undefined}
+          value={shown}
+          onChange={(event) => change(event.target.value)}
           placeholder={field.placeholder}
           maxLength={field.maxLength}
           spellCheck={field.spellCheck}
@@ -56,7 +109,7 @@ const TemplateRow = ({ field, variables }: {
             heading={t("creator.texts.insertHeading")}
             items={variables.map((variable) => ({
               value: variable.name,
-              label: `{${variable.name}}`,
+              label: readableName(variable.name),
               hint: variable.sample
             }))}
             onSelect={insert}

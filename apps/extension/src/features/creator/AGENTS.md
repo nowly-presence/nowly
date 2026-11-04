@@ -39,3 +39,12 @@ Lets someone who does not code build a presence from the side panel: visuals, id
 - Variable names are ASCII identifiers (`toIdentifier`), used as `{name}` in templates and as `formatString` params in the generated code. Non-Latin input becomes empty, hence the "letters and numbers only" hint.
 - The content script only exists in tabs loaded after the extension was installed or updated; `UNREACHABLE` asks the user to reload the page.
 - In the preview (signed out unless `?account=in`), picking and extraction are mocked (`preview/mock-creator.ts`), "Allow" grants the scope to the mocked account and each "Refresh status" moves the submission one step forward.
+
+- The page editor is a stack of `ui/frame.tsx` sections (page, elements, texts, image, buttons, duration, test): title and description in the header, adds on the right of the header, a footer only when it really needs an action. Choices with few options use `ui/option-cards.tsx` (activity type, duration, image and link source).
+- A page has up to 2 buttons (`CreatorPage.buttons`, `BUTTONS_MAX`), each edited in a sheet. Older drafts and definitions with the single `button` are upgraded by `normalizeDraft` and `parseCreatorDefinition`.
+- "Send again" stays disabled until the draft differs from what was sent: `draft.sentSignature` (`shared/creator/creator-signature.ts`) is stored on each successful send. Drafts without it can be sent once.
+- The submission panel shows the reviewer comment of the latest round when the draft is rejected or needs changes, the timeline otherwise, and earlier reviews behind "Review history". "Version" is reserved for published presences: reviews say "Submission n", shown only when there is more than one.
+
+## Draft synchronisation
+
+Drafts follow the account across devices (token scope `creator`). The background service `background/services/creator-drafts-sync.ts` merges `chrome.storage.local["creatorDrafts"]` with `/me/creator-drafts` by `updatedAt` (last writer wins, plan in `shared/creator/creator-draft-sync-plan.ts`). Local deletions are kept as tombstones (`creatorDraftTombstones`) until the server confirms them. Submission statuses are refreshed from `/me/presence-submissions` after each merge without touching `updatedAt`. Triggers: opening the creator (`CREATOR_SYNC_DRAFTS`), debounced local changes and the account sync alarm. The server keeps at most 20 live drafts of about 3 MB per account.

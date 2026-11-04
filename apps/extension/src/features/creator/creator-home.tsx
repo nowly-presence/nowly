@@ -7,6 +7,7 @@ import { canEditSubmission } from "@nowly/presence-creator/creator-submission";
 import type { CreatorDraft } from "@nowly/presence-creator/creator-types";
 import { Badge } from "@/ui/badge";
 import { Button } from "@/ui/button";
+import { ButtonGroup } from "@/ui/button-group";
 import { Card, Group } from "@/ui/card";
 import { Row } from "@/ui/row";
 import { Section } from "@/ui/section";
@@ -108,10 +109,10 @@ export const CreatorHome = ({ drafts, ready, onBack, onCreate, onOpen, onDelete,
                     align="start"
                     onClick={() => onOpen(draft.id)}
                     trailing={
-                      <span className="flex items-center gap-1">
+                      <ButtonGroup label={draft.name.trim() || t("creator.untitled")}>
                         <Button
                           size="sm"
-                          variant="secondary"
+                          variant="ghost"
                           icon={<RiPencilLine className="size-3.5" />}
                           onClick={(event) => {
                             event.stopPropagation();
@@ -120,32 +121,34 @@ export const CreatorHome = ({ drafts, ready, onBack, onCreate, onOpen, onDelete,
                         >
                           {canEditSubmission(draft.submission) ? t("creator.home.edit") : t("creator.home.view")}
                         </Button>
-                        <button
-                          type="button"
+                        <Button
+                          size="icon-sm"
+                          variant="ghost"
                           aria-label={t("creator.home.export")}
                           title={t("creator.home.export")}
                           onClick={(event) => {
                             event.stopPropagation();
                             onExport(draft);
                           }}
-                          className="flex size-8 items-center justify-center rounded-md text-muted hover:bg-hover hover:text-foreground"
                         >
                           <RiDownload2Line className="size-4" />
-                        </button>
+                        </Button>
                         {!draft.submission && (
-                          <button
-                            type="button"
+                          <Button
+                            size="icon-sm"
+                            variant="ghost"
                             aria-label={t("creator.home.delete")}
+                            title={t("creator.home.delete")}
+                            className="hover:text-danger"
                             onClick={(event) => {
                               event.stopPropagation();
                               setPendingDelete(draft);
                             }}
-                            className="flex size-8 items-center justify-center rounded-md text-muted hover:bg-hover hover:text-danger"
                           >
                             <RiDeleteBinLine className="size-4" />
-                          </button>
+                          </Button>
                         )}
-                      </span>
+                      </ButtonGroup>
                     }
                   />
                 ))}

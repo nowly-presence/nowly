@@ -8,8 +8,7 @@ import { DESCRIPTION_MAX_LENGTH, issuesForStep, LONG_DESCRIPTION_MAX_LENGTH, val
 import type { LongLocale } from "@/shared/locales";
 import { Button } from "@/ui/button";
 import { Field } from "@/ui/field";
-import { InputGroup, InputGroupCounter, InputGroupInput } from "@/ui/input-group";
-import { Textarea } from "@/ui/textarea";
+import { InputGroup, InputGroupBlock, InputGroupCounter, InputGroupButton, InputGroupFooter, InputGroupInput, InputGroupTextarea } from "@/ui/input-group";
 import { CreatorLocaleTabs, useEditLocale } from "@/features/creator/creator-locale-tabs";
 import type { DraftUpdate } from "@/features/creator/use-draft-editor";
 
@@ -59,27 +58,23 @@ export const TextsStep = ({ draft, update }: {
         hint={t("creator.texts.longDescriptionHint")}
         optional={t("creator.texts.optional")}
         invalid={longDescription.length > LONG_DESCRIPTION_MAX_LENGTH}
-        action={
-          <span
-            className={
-              longDescription.length > LONG_DESCRIPTION_MAX_LENGTH ? "text-label-sm text-danger tabular-nums" : "text-label-sm text-muted tabular-nums"
-            }
-          >
-            {longDescription.length}/{LONG_DESCRIPTION_MAX_LENGTH}
-          </span>
-        }
       >
-        <Textarea
-          rows={4}
-          value={longDescription}
-          onChange={(event) =>
-            update((current) => ({
-              ...current,
-              longDescription: setText(current.longDescription, active, event.target.value)
-            }))
-          }
-          placeholder={hintFor(draft.longDescription, t("creator.texts.longDescriptionPlaceholder", { name }))}
-        />
+        <InputGroupBlock>
+          <InputGroupTextarea
+            rows={4}
+            value={longDescription}
+            onChange={(event) =>
+              update((current) => ({
+                ...current,
+                longDescription: setText(current.longDescription, active, event.target.value)
+              }))
+            }
+            placeholder={hintFor(draft.longDescription, t("creator.texts.longDescriptionPlaceholder", { name }))}
+          />
+          <InputGroupFooter className={longDescription.length > LONG_DESCRIPTION_MAX_LENGTH ? "text-danger" : undefined}>
+            {longDescription.length}/{LONG_DESCRIPTION_MAX_LENGTH}
+          </InputGroupFooter>
+        </InputGroupBlock>
       </Field>
 
       <Field label={t("creator.texts.features")} hint={t("creator.texts.featuresHint", { max: FEATURES_MAX })}>
@@ -87,27 +82,23 @@ export const TextsStep = ({ draft, update }: {
           {draft.features.map((feature, index) => {
             const value = feature[active] ?? "";
             return (
-              <div key={index} className="flex gap-2">
-                <InputGroup className="flex-1">
-                  <InputGroupInput
-                    aria-label={t("creator.texts.featureLabel", { index: index + 1 })}
-                    value={value}
-                    maxLength={FEATURE_MAX_LENGTH}
-                    placeholder={hintFor(feature, t(index === 0 ? "creator.texts.featurePlaceholder" : "creator.texts.featurePlaceholderMore"))}
-                    onChange={(event) =>
-                      update((current) => ({
-                        ...current,
-                        features: current.features.map((item, position) => (position === index ? setText(item, active, event.target.value) : item))
-                      }))
-                    }
-                  />
-                  <InputGroupCounter length={value.length} max={FEATURE_MAX_LENGTH} />
-                </InputGroup>
+              <InputGroup key={index}>
+                <InputGroupInput
+                  aria-label={t("creator.texts.featureLabel", { index: index + 1 })}
+                  value={value}
+                  maxLength={FEATURE_MAX_LENGTH}
+                  placeholder={hintFor(feature, t(index === 0 ? "creator.texts.featurePlaceholder" : "creator.texts.featurePlaceholderMore"))}
+                  onChange={(event) =>
+                    update((current) => ({
+                      ...current,
+                      features: current.features.map((item, position) => (position === index ? setText(item, active, event.target.value) : item))
+                    }))
+                  }
+                />
+                <InputGroupCounter length={value.length} max={FEATURE_MAX_LENGTH} />
                 {draft.features.length > 1 && (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label={t("creator.texts.removeFeature", { index: index + 1 })}
+                  <InputGroupButton
+                    label={t("creator.texts.removeFeature", { index: index + 1 })}
                     onClick={() =>
                       update((current) => ({
                         ...current,
@@ -116,9 +107,9 @@ export const TextsStep = ({ draft, update }: {
                     }
                   >
                     <RiCloseLine className="size-4" />
-                  </Button>
+                  </InputGroupButton>
                 )}
-              </div>
+              </InputGroup>
             );
           })}
           {draft.features.length < FEATURES_MAX && (

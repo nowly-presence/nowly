@@ -24,8 +24,9 @@ const VERDICT_TONES: Record<ReviewVerdict, Tone> = {
 
 export const verdictLabelKey = (verdict: ReviewVerdict): MessageKey => VERDICT_KEYS[verdict];
 
-export const ReviewThread = ({ reviews }: {
+export const ReviewThread = ({ reviews, showRevision = true }: {
   reviews: SubmissionReview[];
+  showRevision?: boolean;
 }) => {
   const { t, locale } = useI18n();
 
@@ -43,7 +44,7 @@ export const ReviewThread = ({ reviews }: {
             <div className="flex flex-wrap items-center gap-2">
               <Badge tone={VERDICT_TONES[review.verdict]}>{t(VERDICT_KEYS[review.verdict])}</Badge>
               <span className="min-w-0 flex-1 truncate text-label-md font-medium">{review.reviewer?.name ?? t("submissionReview.unknownReviewer")}</span>
-              <span className="text-label-sm text-muted">{t("submissionReview.revision", { number: review.revision })}</span>
+              {showRevision && <span className="text-label-sm text-muted">{t("submissionReview.revision", { number: review.revision })}</span>}
             </div>
             {review.message && <p className="text-body-sm whitespace-pre-wrap">{review.message}</p>}
             {review.comments.length > 0 && (

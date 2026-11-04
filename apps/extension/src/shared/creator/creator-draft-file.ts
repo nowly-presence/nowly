@@ -64,7 +64,7 @@ export const creatorDraftFileName = (name: string): string => {
 };
 
 export const buildCreatorDraftFile = (draft: CreatorDraft, now = new Date()) => {
-  const { submission: _submission, ...content } = draft;
+  const { submission: _submission, sentSignature: _signature, ...content } = draft;
   return {
     format: CREATOR_DRAFT_FILE_FORMAT,
     version: CREATOR_DRAFT_FILE_VERSION,
@@ -74,21 +74,44 @@ export const buildCreatorDraftFile = (draft: CreatorDraft, now = new Date()) => 
 };
 
 export const parseCreatorDraftFile = (text: string, now = Date.now()): ParseDraftFileResult => {
-  if (text.length > CREATOR_DRAFT_FILE_MAX_BYTES) return { ok: false, error: "TOO_LARGE" };
+  if (text.length > CREATOR_DRAFT_FILE_MAX_BYTES) return {
+    ok: false,
+    error: "TOO_LARGE"
+  };
 
   let parsed: unknown;
 
   try {
     parsed = JSON.parse(text);
   } catch {
-    return { ok: false, error: "INVALID_JSON" };
+    return {
+      ok: false,
+      error: "INVALID_JSON"
+    };
   }
 
-  if (!isDict(parsed) || parsed.format !== CREATOR_DRAFT_FILE_FORMAT) return { ok: false, error: "WRONG_FORMAT" };
-  if (parsed.version !== CREATOR_DRAFT_FILE_VERSION) return { ok: false, error: "UNSUPPORTED_VERSION" };
-  if (!isDict(parsed.draft) || !hasDraftShape(parsed.draft)) return { ok: false, error: "INVALID_DRAFT" };
+  if (!isDict(parsed) || parsed.format !== CREATOR_DRAFT_FILE_FORMAT) return {
+    ok: false,
+    error: "WRONG_FORMAT"
+  };
+  if (parsed.version !== CREATOR_DRAFT_FILE_VERSION) return {
+    ok: false,
+    error: "UNSUPPORTED_VERSION"
+  };
+  if (!isDict(parsed.draft) || !hasDraftShape(parsed.draft)) return {
+    ok: false,
+    error: "INVALID_DRAFT"
+  };
 
-  const { submission: _ignored, ...content } = parsed.draft;
-  const draft = normalizeDraft({ ...(content as Omit<CreatorDraft, "id" | "createdAt" | "updatedAt">), id: creatorId(), createdAt: now, updatedAt: now });
-  return { ok: true, draft };
+  const { submission: _ignored, sentSignature: _ignoredSignature, ...content } = parsed.draft;
+  const draft = normalizeDraft({
+    ...(content as Omit<CreatorDraft, "id" | "createdAt" | "updatedAt">),
+    id: creatorId(),
+    createdAt: now,
+    updatedAt: now
+  });
+  return {
+    ok: true,
+    draft
+  };
 };

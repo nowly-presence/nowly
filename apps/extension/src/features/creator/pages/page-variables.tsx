@@ -2,11 +2,13 @@ import { useState } from "react";
 import { RiAddLine, RiCursorLine, RiDeleteBinLine, RiEyeLine, RiInformationLine } from "@remixicon/react";
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
+import { readableName } from "@/lib/readable-name";
 import { addVariable, createVariable, removeVariable } from "@nowly/presence-creator/creator-draft";
 import type { CreatorPage, CreatorPick, CreatorSource } from "@nowly/presence-creator/creator-types";
 import { Button } from "@/ui/button";
+import { ButtonGroup } from "@/ui/button-group";
 import { Group } from "@/ui/card";
-import { Field } from "@/ui/field";
+import { Frame } from "@/ui/frame";
 import { Row } from "@/ui/row";
 import { Sheet } from "@/ui/sheet";
 import { usePicker } from "@/features/creator/pages/use-picker";
@@ -78,48 +80,14 @@ export const PageVariables = ({ page, onChange }: {
   const [quickOpen, setQuickOpen] = useState(false);
 
   return (
-    <Field label={t("creator.variables.title")} hint={t("creator.variables.hint")}>
-      {page.variables.length > 0 && (
-        <Group>
-          {page.variables.map((variable) => (
-            <Row
-              key={variable.id}
-              title={<span className="font-mono text-label-md">{`{${variable.name}}`}</span>}
-              description={
-                <span className="flex min-w-0 flex-col">
-                  <span className="truncate font-mono text-label-sm">{sourceLabel(variable.source)}</span>
-                  {variable.sample && <span className="truncate text-label-sm">{t("creator.variables.sample", { value: variable.sample })}</span>}
-                </span>
-              }
-              trailing={
-                <span className="flex items-center">
-                  {variable.source.kind === "element" && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label={t("creator.variables.highlight", { name: variable.name })}
-                      onClick={() => void sendMessage("CREATOR_HIGHLIGHT", { selector: variable.source.kind === "element" ? variable.source.selector : "" })}
-                    >
-                      <RiEyeLine className="size-4" />
-                    </Button>
-                  )}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label={t("creator.variables.remove", { name: variable.name })}
-                    onClick={() => onChange(removeVariable(page, variable.id))}
-                  >
-                    <RiDeleteBinLine className="size-4" />
-                  </Button>
-                </span>
-              }
-            />
-          ))}
-        </Group>
-      )}
-      <div className="flex flex-col gap-2">
+    <Frame
+      title={t("creator.variables.title")}
+      description={t("creator.variables.hint")}
+      padded={false}
+      action={
         <Button
-          icon={<RiCursorLine className="size-4" />}
+          size="sm"
+          icon={<RiCursorLine className="size-3.5" />}
           loading={picking}
           onClick={() =>
             void startPick().then((picked) => {
@@ -127,12 +95,54 @@ export const PageVariables = ({ page, onChange }: {
             })
           }
         >
-          {picking ? t("creator.variables.picking") : t("creator.variables.pick")}
+          <span className="@sm:hidden">{t("creator.variables.add")}</span>
+          <span className="hidden @sm:inline">{t("creator.variables.addLong")}</span>
         </Button>
-        <Button variant="secondary" icon={<RiAddLine className="size-4" />} onClick={() => setQuickOpen(true)}>
-          {t("creator.variables.more")}
-        </Button>
-      </div>
+      }
+      footer={
+        <>
+          <span className="text-label-md text-muted">{t("creator.variables.notFound")}</span>
+          <Button size="sm" variant="link" icon={<RiAddLine className="size-3.5" />} onClick={() => setQuickOpen(true)}>
+            {t("creator.variables.more")}
+          </Button>
+        </>
+      }
+    >
+      {page.variables.length === 0 && <p className="px-4 py-5 text-center text-label-md text-muted">{t("creator.variables.none")}</p>}
+      {page.variables.map((variable) => (
+        <Row
+          key={variable.id}
+          title={<span title={variable.source.kind === "element" ? variable.source.selector : undefined}>{readableName(variable.name)}</span>}
+          description={
+            <span className="block truncate">
+              {variable.sample ? variable.sample : variable.source.kind === "element" ? t("creator.variables.noSample") : sourceLabel(variable.source)}
+            </span>
+          }
+          trailing={
+            <ButtonGroup label={variable.name}>
+              {variable.source.kind === "element" && (
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={t("creator.variables.highlight", { name: variable.name })}
+                  onClick={() => void sendMessage("CREATOR_HIGHLIGHT", { selector: variable.source.kind === "element" ? variable.source.selector : "" })}
+                >
+                  <RiEyeLine className="size-4" />
+                </Button>
+              )}
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="hover:text-danger"
+                aria-label={t("creator.variables.remove", { name: variable.name })}
+                onClick={() => onChange(removeVariable(page, variable.id))}
+              >
+                <RiDeleteBinLine className="size-4" />
+              </Button>
+            </ButtonGroup>
+          }
+        />
+      ))}
       <VariableSheet
         pick={pick}
         onClose={() => setPick(null)}
@@ -170,6 +180,6 @@ export const PageVariables = ({ page, onChange }: {
           </p>
         </div>
       </Sheet>
-    </Field>
+    </Frame>
   );
 };

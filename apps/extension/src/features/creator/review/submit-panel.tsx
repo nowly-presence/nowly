@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { RiDiscordFill, RiExternalLinkLine, RiRefreshLine, RiSendPlaneLine } from "@remixicon/react";
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
 import { openUrl } from "@/shared/browser-links";
 import { buildTextFiles, creatorDefinition } from "@nowly/presence-creator/creator-export";
 import { presenceSlug } from "@nowly/presence-creator/creator-draft";
-import { authorFromAccount, canEditSubmission, sameAuthor, SUBMISSION_TIMELINE, type CreatorSubmitError } from "@nowly/presence-creator/creator-submission";
-import type { CreatorDraft, CreatorSubmission } from "@nowly/presence-creator/creator-types";
-import { ReviewThread } from "@/components/shared/review-thread";
+import { authorFromAccount, canEditSubmission, sameAuthor, type CreatorSubmitError } from "@nowly/presence-creator/creator-submission";
+import type { CreatorDraft, CreatorSubmission, SubmissionStatus } from "@nowly/presence-creator/creator-types";
 import { useCreatorPresenceProbe } from "@/hooks/use-creator-presence-probe";
 import { useStaffAccess } from "@/hooks/use-staff-access";
 import { useSubmissionDetail } from "@/hooks/use-submission-detail";
@@ -15,10 +14,12 @@ import { canPublish } from "@/shared/admin/review-rules";
 import { adminErrorKey } from "@/lib/admin-error";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
-import { cn } from "@/ui/cn";
-import { submissionStatusKey } from "@/lib/submission-status";
+import { creatorSignature } from "@/shared/creator/creator-signature";
+import { SubmissionFeedback } from "@/features/creator/review/submission-feedback";
 import { useCreatorAccount } from "@/features/creator/use-creator-account";
 import type { DraftUpdate } from "@/features/creator/use-draft-editor";
+
+const PENDING_STATUSES: readonly SubmissionStatus[] = ["submitted", "approved", "in_progress"];
 
 const SUBMIT_ERROR_KEYS: Record<CreatorSubmitError, MessageKey> = {
   UNAUTHORIZED: "creator.submit.errorUnauthorized",
@@ -44,6 +45,9 @@ export const SubmitPanel = ({ draft, update, blocked }: {
   const thread = useSubmissionDetail(submission?.id ?? null);
 
   const ready = Boolean(account?.creator);
+  const pending = submission ? PENDING_STATUSES.includes(submission.status) : false;
+  const signature = useMemo(() => (submission ? creatorSignature(draft) : ""), [draft, submission]);
+  const unchanged = Boolean(submission) && draft.sentSignature === signature;
 
   useEffect(() => {
     if (!account?.creator) return;
@@ -105,7 +109,10 @@ export const SubmitPanel = ({ draft, update, blocked }: {
     setSending(false);
 
     if (result.ok) {
-      update({ submission: result.submission });
+      update({
+        submission: result.submission,
+        sentSignature: signature
+      });
       if (publishing) await publishNow(result.submission);
       await thread.reload();
     } else {
@@ -135,7 +142,6 @@ export const SubmitPanel = ({ draft, update, blocked }: {
       : submission
         ? "creator.submit.resend"
         : "creator.submit.send";
-  const currentIndex = submission ? SUBMISSION_TIMELINE.indexOf(submission.status) : -1;
 
   return (
     <Card className="flex flex-col gap-4 p-4">
@@ -155,39 +161,31 @@ export const SubmitPanel = ({ draft, update, blocked }: {
 
       {submission && (
         <div className="flex flex-col gap-3 border-t border-line pt-3">
-          <span className="text-label-lg font-medium">{t(submissionStatusKey(submission.status))}</span>
-          {currentIndex >= 0 && (
-            <ol className="flex flex-col gap-2">
-              {SUBMISSION_TIMELINE.map((status, index) => (
-                <li key={status} className={cn("flex items-center gap-2 text-label-md", index <= currentIndex ? "text-ink" : "text-muted")}>
-                  <span className={cn("size-2 rounded-full", index < currentIndex ? "bg-success" : index === currentIndex ? "bg-primary" : "bg-line-strong")} />
-                  {t(submissionStatusKey(status))}
-                </li>
-              ))}
-            </ol>
+          <SubmissionFeedback submission={submission} reviews={thread.detail?.reviews ?? []} actionable={canEditSubmission(submission)} />
+          {(pending || publishing || submission.prUrl) && (
+            <div className="flex flex-wrap gap-2">
+              {pending && (
+                <Button size="sm" variant="secondary" icon={<RiRefreshLine className="size-4" />} onClick={() => void refreshStatus()}>
+                  {t("creator.submit.refresh")}
+                </Button>
+              )}
+              {publishing && canPublish(submission.status) && (
+                <Button size="sm" loading={sending} onClick={() => void publishExisting()}>
+                  {t("creator.submit.publishNow")}
+                </Button>
+              )}
+              {submission.prUrl && (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  icon={<RiExternalLinkLine className="size-4" />}
+                  onClick={() => submission.prUrl && openUrl(submission.prUrl)}
+                >
+                  {t("creator.submit.pullRequest")}
+                </Button>
+              )}
+            </div>
           )}
-          {submission.note && <p className="rounded-md bg-hover p-3 text-label-md">{submission.note}</p>}
-          {thread.detail && thread.detail.reviews.length > 0 && <ReviewThread reviews={thread.detail.reviews} />}
-          <div className="flex flex-wrap gap-2">
-            <Button size="sm" variant="secondary" icon={<RiRefreshLine className="size-4" />} onClick={() => void refreshStatus()}>
-              {t("creator.submit.refresh")}
-            </Button>
-            {publishing && canPublish(submission.status) && (
-              <Button size="sm" loading={sending} onClick={() => void publishExisting()}>
-                {t("creator.submit.publishNow")}
-              </Button>
-            )}
-            {submission.prUrl && (
-              <Button
-                size="sm"
-                variant="secondary"
-                icon={<RiExternalLinkLine className="size-4" />}
-                onClick={() => submission.prUrl && openUrl(submission.prUrl)}
-              >
-                {t("creator.submit.pullRequest")}
-              </Button>
-            )}
-          </div>
         </div>
       )}
 
@@ -200,7 +198,8 @@ export const SubmitPanel = ({ draft, update, blocked }: {
               : t("creator.submit.manualTranslate")}
           </p>
           {error && <p className="text-label-md text-danger">{error}</p>}
-          <Button icon={<RiSendPlaneLine className="size-4" />} loading={sending} disabled={blocked} onClick={() => void submit()}>
+          {unchanged && !blocked && <p className="text-label-md text-muted">{t("creator.submit.unchanged")}</p>}
+          <Button icon={<RiSendPlaneLine className="size-4" />} loading={sending} disabled={blocked || unchanged} onClick={() => void submit()}>
             {t(sendLabel)}
           </Button>
         </>
