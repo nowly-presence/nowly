@@ -1268,7 +1268,9 @@
     "error-description": "다시 시도를 선택해 이 단계를 다시 진행하세요. 문제가 계속되면 지원팀에 문의하세요.",
     "retry": "다시 시도",
     "signed-in-as": "{name}(으)로 로그인했습니다.",
-    "switch-account": "본인이 아닌가요? 계정 전환"
+    "switch-account": "본인이 아닌가요? 계정 전환",
+    "mismatch-description": "확장 프로그램이 이 세션({name})과 다른 Nowly 계정으로 로그인되어 있습니다. 올바른 계정을 승인하려면 계정을 전환하세요.",
+    "switch-account-action": "계정 전환"
   },
   "ads": {
     "label": "광고"

@@ -8,7 +8,7 @@ import { Button, Card, CardContent, CardDescription, CardTitle } from "@nowly/ui
 import { RiCheckLine, RiDiscordFill, RiPlugLine, RiPuzzleLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Status = "checking" | "signed-out" | "no-extension" | "ready" | "connecting" | "done" | "error";
 
@@ -29,15 +29,14 @@ export const ExtensionConnectView = () => {
   const t = useTranslations("extensionConnectPage");
   const searchParams = useSearchParams();
   const deviceId = searchParams.get("device");
-  const fromExtension = searchParams.get("source") === "extension";
   const requested = searchParams.get("permission");
   const permission = requested === "admin" ? "admin" : requested === "creator" ? "creator" : null;
   const creator = permission !== null;
+  const expectedUser = searchParams.get("user");
   const sharing = useTranslations("activitySharing");
   const [status, setStatus] = useState<Status>("checking");
   const [user, setUser] = useState<AccountUser | null>(null);
   const [busy, setBusy] = useState(false);
-  const autoStarted = useRef(false);
 
   const connect = useCallback(async (): Promise<void> => {
     setStatus("connecting");
@@ -74,11 +73,6 @@ export const ExtensionConnectView = () => {
             setStatus("no-extension");
             return;
           }
-          if (fromExtension && !creator && !autoStarted.current) {
-            autoStarted.current = true;
-            void connect();
-            return;
-          }
 
           setStatus((previous) => (previous === "checking" || previous === "no-extension" ? "ready" : previous));
         });
@@ -90,7 +84,9 @@ export const ExtensionConnectView = () => {
       cancelled = true;
       unsubscribe?.();
     };
-  }, [connect, fromExtension, creator]);
+  }, []);
+
+  const mismatch = status === "ready" && user !== null && expectedUser !== null && user.id !== expectedUser;
 
   const onSignIn = async (): Promise<void> => {
     setBusy(true);
@@ -135,7 +131,9 @@ export const ExtensionConnectView = () => {
               ? t("checking")
               : status === "connecting"
                 ? t("connecting")
-                : t("connect-description", { name: user?.name ?? "" });
+                : mismatch
+                  ? t("mismatch-description", { name: user?.name ?? "" })
+                  : t("connect-description", { name: user?.name ?? "" });
 
   return (
     <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
@@ -156,7 +154,18 @@ export const ExtensionConnectView = () => {
                   {t("sign-in")}
                 </Button>
               ) : null}
-              {status === "ready" ? <Button onClick={connect}>{t("connect")}</Button> : null}
+              {mismatch ? (
+                <>
+                  <Button disabled={busy} onClick={onSwitchAccount}>
+                    {t("switch-account-action")}
+                  </Button>
+                  <Button variant="outline" onClick={connect}>
+                    {t("connect")}
+                  </Button>
+                </>
+              ) : status === "ready" ? (
+                <Button onClick={connect}>{t("connect")}</Button>
+              ) : null}
               {status === "connecting" ? <Button disabled>{t("connect")}</Button> : null}
               {status === "error" ? (
                 <Button variant="outline" onClick={() => window.location.reload()}>

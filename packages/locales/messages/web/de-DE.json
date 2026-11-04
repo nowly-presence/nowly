@@ -1268,7 +1268,9 @@
     "error-description": "Wähle Erneut versuchen, um diesen Schritt neu zu starten. Wenn das Problem bestehen bleibt, wende dich an den Support.",
     "retry": "Erneut versuchen",
     "signed-in-as": "Angemeldet als {name}.",
-    "switch-account": "Nicht du? Konto wechseln"
+    "switch-account": "Nicht du? Konto wechseln",
+    "mismatch-description": "Die Erweiterung ist mit einem anderen Nowly-Konto angemeldet als diese Sitzung ({name}). Wechsle das Konto, um das richtige zu autorisieren.",
+    "switch-account-action": "Konto wechseln"
   },
   "ads": {
     "label": "Werbung"

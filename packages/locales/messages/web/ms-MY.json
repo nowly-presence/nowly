@@ -1268,7 +1268,9 @@
     "error-description": "Pilih Cuba lagi untuk mengulangi langkah ini. Jika masalah berterusan, hubungi sokongan.",
     "retry": "Cuba lagi",
     "signed-in-as": "Log masuk sebagai {name}.",
-    "switch-account": "Bukan anda? Tukar akaun"
+    "switch-account": "Bukan anda? Tukar akaun",
+    "mismatch-description": "Sambungan dilog masuk dengan akaun Nowly yang berbeza daripada sesi ini ({name}). Tukar akaun untuk membenarkan yang betul.",
+    "switch-account-action": "Tukar akaun"
   },
   "ads": {
     "label": "Iklan"

@@ -1268,7 +1268,9 @@
     "error-description": "Select Try again to restart this step. If the problem continues, contact support.",
     "retry": "Try again",
     "signed-in-as": "Signed in as {name}.",
-    "switch-account": "Not you? Switch account"
+    "switch-account": "Not you? Switch account",
+    "mismatch-description": "The extension is signed in with a different Nowly account than this session ({name}). Switch account to authorize the right one.",
+    "switch-account-action": "Switch account"
   },
   "ads": {
     "label": "Advertisement"

@@ -1268,7 +1268,9 @@
     "error-description": "「もう一度試す」を選んでこの手順をやり直してください。問題が続く場合はサポートにお問い合わせください。",
     "retry": "もう一度試す",
     "signed-in-as": "{name}としてログイン中です。",
-    "switch-account": "別のアカウントを使う"
+    "switch-account": "別のアカウントを使う",
+    "mismatch-description": "拡張機能はこのセッション({name})とは別の Nowly アカウントでログインしています。正しいアカウントを承認するにはアカウントを切り替えてください。",
+    "switch-account-action": "アカウントを切り替える"
   },
   "ads": {
     "label": "広告"

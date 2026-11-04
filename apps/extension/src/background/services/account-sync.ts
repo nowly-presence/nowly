@@ -381,6 +381,9 @@ export const openAccountConnect = async (permission: "creator" | "admin" | null 
     device: deviceId
   });
   if (permission) params.set("permission", permission);
+
+  const account = await getAccount();
+  if (account) params.set("user", account.user.id);
   await chrome.tabs.create({ url: `${getEffectiveWebUrl().replace(/\/$/, "")}/extension/connect?${params.toString()}` });
 };
 

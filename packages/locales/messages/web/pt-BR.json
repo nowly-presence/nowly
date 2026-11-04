@@ -1268,7 +1268,9 @@
     "error-description": "Selecione Tentar de novo para repetir esta etapa. Se o problema continuar, entre em contato com o suporte.",
     "retry": "Tentar de novo",
     "signed-in-as": "Conectado como {name}.",
-    "switch-account": "Não é você? Trocar de conta"
+    "switch-account": "Não é você? Trocar de conta",
+    "mismatch-description": "A extensão está conectada com outra conta Nowly além da desta sessão ({name}). Troque de conta para autorizar a correta.",
+    "switch-account-action": "Trocar de conta"
   },
   "ads": {
     "label": "Publicidade"

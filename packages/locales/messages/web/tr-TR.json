@@ -1268,7 +1268,9 @@
     "error-description": "Bu adımı yeniden başlatmak için Tekrar dene seçeneğini seç. Sorun devam ederse destek ekibiyle iletişime geç.",
     "retry": "Tekrar dene",
     "signed-in-as": "{name} olarak giriş yapıldı.",
-    "switch-account": "Sen değil misin? Hesap değiştir"
+    "switch-account": "Sen değil misin? Hesap değiştir",
+    "mismatch-description": "Uzantı, bu oturumdan ({name}) farklı bir Nowly hesabıyla oturum açmış. Doğru hesabı yetkilendirmek için hesabı değiştirin.",
+    "switch-account-action": "Hesap değiştir"
   },
   "ads": {
     "label": "Reklam"

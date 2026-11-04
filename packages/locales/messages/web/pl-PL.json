@@ -1268,7 +1268,9 @@
     "error-description": "Wybierz Spróbuj ponownie, aby powtórzyć ten krok. Jeśli problem nadal występuje, skontaktuj się z pomocą techniczną.",
     "retry": "Spróbuj ponownie",
     "signed-in-as": "Zalogowano jako {name}.",
-    "switch-account": "To nie ty? Zmień konto"
+    "switch-account": "To nie ty? Zmień konto",
+    "mismatch-description": "Rozszerzenie jest zalogowane na inne konto Nowly niż ta sesja ({name}). Zmień konto, aby autoryzować właściwe.",
+    "switch-account-action": "Zmień konto"
   },
   "ads": {
     "label": "Reklama"

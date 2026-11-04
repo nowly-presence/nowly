@@ -1268,7 +1268,9 @@
     "error-description": "Selecciona Reintentar para repetir este paso. Si el problema continúa, contacta con el equipo de soporte.",
     "retry": "Reintentar",
     "signed-in-as": "Sesión iniciada como {name}.",
-    "switch-account": "¿No eres tú? Cambiar de cuenta"
+    "switch-account": "¿No eres tú? Cambiar de cuenta",
+    "mismatch-description": "La extensión tiene una cuenta de Nowly distinta a la de esta sesión ({name}). Cambia de cuenta para autorizar la correcta.",
+    "switch-account-action": "Cambiar de cuenta"
   },
   "ads": {
     "label": "Publicidad"
