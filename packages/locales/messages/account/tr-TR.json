@@ -167,6 +167,7 @@
     "event-published": "Yayın onaylandı",
     "event-pr-collision": "Pull request engellendi",
     "event-pr-opened": "Pull request açıldı",
+    "event-pr-closed": "Pull request kapatıldı",
     "review-title": "İncelemen",
     "review-description": "Kararın burada gördüğün sürüm için geçerlidir.",
     "review-verdict": "Karar",

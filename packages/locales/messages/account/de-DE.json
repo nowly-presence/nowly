@@ -167,6 +167,7 @@
     "event-published": "Veröffentlichung bestätigt",
     "event-pr-collision": "Pull Request blockiert",
     "event-pr-opened": "Pull Request geöffnet",
+    "event-pr-closed": "Pull Request geschlossen",
     "review-title": "Deine Prüfung",
     "review-description": "Deine Entscheidung gilt für die hier angezeigte Revision.",
     "review-verdict": "Entscheidung",

@@ -167,6 +167,7 @@
     "event-published": "게시 확인됨",
     "event-pr-collision": "풀 리퀘스트 차단됨",
     "event-pr-opened": "풀 리퀘스트 열림",
+    "event-pr-closed": "풀 리퀘스트가 닫혔습니다",
     "review-title": "내 검토",
     "review-description": "내 결정은 여기에 표시된 리비전에 적용됩니다.",
     "review-verdict": "결정",

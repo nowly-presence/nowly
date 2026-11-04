@@ -167,6 +167,7 @@
     "event-published": "公開を確認",
     "event-pr-collision": "プルリクエストがブロック",
     "event-pr-opened": "プルリクエストを作成",
+    "event-pr-closed": "プルリクエストがクローズされました",
     "review-title": "あなたのレビュー",
     "review-description": "あなたの判断は、ここに表示されているリビジョンに適用されます。",
     "review-verdict": "判断",

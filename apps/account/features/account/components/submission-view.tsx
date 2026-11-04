@@ -147,7 +147,11 @@ export const SubmissionView = ({ id }: {
               ) : null}
             </div>
             {detail.note ? <p className="max-w-2xl whitespace-pre-wrap rounded-xl bg-muted px-4 py-3 text-sm">{detail.note}</p> : null}
-            {detail.pullRequest.error && reviewer ? <p className="text-sm text-destructive">{t("pull-request-error")}</p> : null}
+            {detail.pullRequest.error && reviewer ? (
+              <p className="text-sm text-destructive">
+                {t("pull-request-error")} <span className="break-words font-mono text-xs">{detail.pullRequest.error}</span>
+              </p>
+            ) : null}
 
             <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)]">
               <div className="flex min-w-0 flex-col gap-6">

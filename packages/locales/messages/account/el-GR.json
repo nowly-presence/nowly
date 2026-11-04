@@ -167,6 +167,7 @@
     "event-published": "Η δημοσίευση επιβεβαιώθηκε",
     "event-pr-collision": "Το pull request μπλοκαρίστηκε",
     "event-pr-opened": "Το pull request άνοιξε",
+    "event-pr-closed": "Το pull request έκλεισε",
     "review-title": "Ο έλεγχός σου",
     "review-description": "Η απόφασή σου ισχύει για την αναθεώρηση που βλέπεις εδώ.",
     "review-verdict": "Απόφαση",

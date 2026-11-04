@@ -167,6 +167,7 @@
     "event-published": "Penerbitan disahkan",
     "event-pr-collision": "Pull request disekat",
     "event-pr-opened": "Pull request dibuka",
+    "event-pr-closed": "Pull request ditutup",
     "review-title": "Semakan anda",
     "review-description": "Keputusan anda terpakai untuk semakan semula yang dipaparkan di sini.",
     "review-verdict": "Keputusan",
