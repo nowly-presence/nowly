@@ -1,10 +1,11 @@
 import type { LocaleString as LongLocale } from "@nowly/locales";
-import type { CreatorDraft, CreatorPage, CreatorSource, CreatorVariable, LocalizedText } from "./creator-types";
+import type { CreatorButton, CreatorDraft, CreatorLink, CreatorPage, CreatorSource, CreatorVariable, LocalizedText } from "./creator-types";
 
 export const CREATOR_DEFAULT_COLOR = "#0891b2";
 const IDENTIFIER_MAX_LENGTH = 32;
 export const FEATURES_MAX = 5;
 export const FEATURE_MAX_LENGTH = 80;
+export const BUTTONS_MAX = 2;
 
 export const creatorId = (): string => crypto.randomUUID().slice(0, 8);
 
@@ -42,21 +43,50 @@ export const createPage = (name: string, path = ""): CreatorPage => ({
   state: {},
   largeImage: { kind: "logo" },
   timestamps: "elapsed",
-  button: {
-    enabled: false,
-    label: {},
-    link: { kind: "page" }
-  }
+  buttons: []
 });
 
-const normalizePage = (page: CreatorPage): CreatorPage => ({
-  ...page,
-  timestamps: page.timestamps === "media" ? "media" : "elapsed",
-  button: {
-    ...page.button,
-    link: page.button.link ?? { kind: "page" }
-  }
+export const createButton = (): CreatorButton => ({
+  id: creatorId(),
+  label: {},
+  link: { kind: "page" }
 });
+
+type LegacyButton = {
+  enabled?: boolean;
+  label?: LocalizedText;
+  link?: CreatorLink;
+};
+
+const upgradeButtons = (buttons: CreatorButton[] | undefined, legacy: LegacyButton | undefined): CreatorButton[] => {
+  if (Array.isArray(buttons)) {
+    return buttons.slice(0, BUTTONS_MAX).map((button) => ({
+      ...button,
+      link: button.link ?? { kind: "page" }
+    }));
+  }
+
+  return legacy?.enabled
+    ? [
+        {
+          id: creatorId(),
+          label: legacy.label ?? {},
+          link: legacy.link ?? { kind: "page" }
+        }
+      ]
+    : [];
+};
+
+const normalizePage = (page: CreatorPage & {
+  button?: LegacyButton;
+}): CreatorPage => {
+  const { button, ...rest } = page;
+  return {
+    ...rest,
+    timestamps: page.timestamps === "media" ? "media" : "elapsed",
+    buttons: upgradeButtons(page.buttons, button)
+  };
+};
 
 export const normalizeDraft = (draft: CreatorDraft): CreatorDraft => ({
   ...draft,
@@ -143,5 +173,5 @@ export const removeVariable = (page: CreatorPage, id: string): CreatorPage => ({
   ...page,
   variables: page.variables.filter((variable) => variable.id !== id),
   largeImage: page.largeImage.kind === "variable" && page.largeImage.variableId === id ? { kind: "logo" } : page.largeImage,
-  button: page.button.link.kind === "variable" && page.button.link.variableId === id ? { ...page.button, link: { kind: "page" } } : page.button
+  buttons: page.buttons.map((button) => (button.link.kind === "variable" && button.link.variableId === id ? { ...button, link: { kind: "page" } } : button))
 });

@@ -1,6 +1,6 @@
 import type { LocaleString as LongLocale } from "@nowly/locales";
 import { textIn } from "./creator-draft";
-import type { CreatorActivityType, CreatorDraft, CreatorExtraction, CreatorMediaState, CreatorPage, CreatorVariable } from "./creator-types";
+import type { CreatorActivityType, CreatorButton, CreatorDraft, CreatorExtraction, CreatorMediaState, CreatorPage, CreatorVariable } from "./creator-types";
 
 const TOKEN = /\{([a-zA-Z][a-zA-Z0-9]*)\}/g;
 const SECOND_MS = 1000;
@@ -69,8 +69,8 @@ export const imageVariableOf = (page: CreatorPage): CreatorVariable | undefined 
   return image.kind === "variable" ? variableById(page, image.variableId) : undefined;
 };
 
-export const linkVariableOf = (page: CreatorPage): CreatorVariable | undefined => {
-  const link = page.button.link;
+export const linkVariableOf = (page: CreatorPage, button: CreatorButton): CreatorVariable | undefined => {
+  const link = button.link;
   return link.kind === "variable" ? variableById(page, link.variableId) : undefined;
 };
 
@@ -99,12 +99,12 @@ const previewImage = (page: CreatorPage, values: Record<string, string | undefin
   return variable ? httpsOnly(values[variable.name]) : undefined;
 };
 
-const previewLink = (page: CreatorPage, values: Record<string, string | undefined>, pageUrl: string): string | undefined => {
-  const link = page.button.link;
+const previewLink = (page: CreatorPage, button: CreatorButton, values: Record<string, string | undefined>, pageUrl: string): string | undefined => {
+  const link = button.link;
 
   if (link.kind === "custom") return fillUrl(link.template, values);
   if (link.kind === "variable") {
-    const variable = linkVariableOf(page);
+    const variable = linkVariableOf(page, button);
     return variable ? values[variable.name] : undefined;
   }
 
@@ -147,8 +147,11 @@ export const buildPreviewActivity = (draft: CreatorDraft, page: CreatorPage, ext
   const state = read(textIn(page.state, locale));
   const timestamps =
     page.timestamps === "media" ? mediaTimestamps(extraction.media, options.nowMs) : { startTimestamp: Math.floor(options.startedAtMs / SECOND_MS) };
-  const buttonLabel = read(textIn(page.button.label, locale));
-  const buttonUrl = page.button.enabled ? previewLink(page, values, options.pageUrl) : undefined;
+  const buttons = page.buttons.flatMap((button) => {
+    const label = read(textIn(button.label, locale));
+    const url = previewLink(page, button, values, options.pageUrl);
+    return label && url ? [{ label, url }] : [];
+  });
   return {
     activity: {
       name: draft.name,
@@ -157,15 +160,7 @@ export const buildPreviewActivity = (draft: CreatorDraft, page: CreatorPage, ext
       largeImageText: draft.name,
       type: ACTIVITY_TYPE_VALUES[page.activityType],
       ...timestamps,
-      buttons:
-        buttonLabel && buttonUrl
-          ? [
-              {
-                label: buttonLabel,
-                url: buttonUrl
-              }
-            ]
-          : undefined
+      buttons: buttons.length > 0 ? buttons : undefined
     },
     largeImage: previewImage(page, values),
     missing

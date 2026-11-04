@@ -63,7 +63,7 @@ const collect = (definition: CreatorDefinition): SourceItem[] => {
     ...definition.pages.flatMap((page) => [
       ...item(`pages.${page.id}.details`, page.details, PAGE_TEXT_MAX_LENGTH),
       ...item(`pages.${page.id}.state`, page.state, PAGE_TEXT_MAX_LENGTH),
-      ...item(`pages.${page.id}.label`, page.button.label, BUTTON_LABEL_MAX_LENGTH)
+      ...page.buttons.flatMap((button) => item(`pages.${page.id}.buttons.${button.id}`, button.label, BUTTON_LABEL_MAX_LENGTH))
     ])
   ];
 };
@@ -150,10 +150,10 @@ export const applyTranslations = (definition: CreatorDefinition, translations: M
         ...page,
         details: withLocale(page.details, locale, values.get(`pages.${page.id}.details`)),
         state: withLocale(page.state, locale, values.get(`pages.${page.id}.state`)),
-        button: {
-          ...page.button,
-          label: withLocale(page.button.label, locale, values.get(`pages.${page.id}.label`))
-        }
+        buttons: page.buttons.map((button) => ({
+          ...button,
+          label: withLocale(button.label, locale, values.get(`pages.${page.id}.buttons.${button.id}`))
+        }))
       }))
     };
   }

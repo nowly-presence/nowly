@@ -10,8 +10,8 @@ export type CreatorTextFile = {
 
 export const json = (value: unknown): string => `${JSON.stringify(value, null, 2)}\n`;
 
-export const creatorDefinition = (draft: CreatorDraft): Omit<CreatorDraft, "assets" | "submission"> => {
-  const { assets: _assets, submission: _submission, ...definition } = draft;
+export const creatorDefinition = (draft: CreatorDraft): Omit<CreatorDraft, "assets" | "submission" | "sentSignature"> => {
+  const { assets: _assets, submission: _submission, sentSignature: _signature, ...definition } = draft;
   return definition;
 };
 

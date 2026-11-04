@@ -1,7 +1,7 @@
 import { CREATOR_BUILTIN_STRINGS } from "./creator-builtin-strings";
 import { imageVariableOf, linkVariableOf, templateTokens } from "./creator-activity";
 import { pageStringKeys, writtenLocales, type StringKeys } from "./creator-files";
-import type { CreatorActivityType, CreatorDraft, CreatorPage, CreatorSource } from "./creator-types";
+import type { CreatorActivityType, CreatorButton, CreatorDraft, CreatorPage, CreatorSource } from "./creator-types";
 
 type Helper = "text" | "image" | "link" | "meta" | "title";
 
@@ -103,18 +103,18 @@ const imageExpression = (page: CreatorPage, names: Set<string>): string => {
   return variable ? `${variable.name} ?? Assets.Logo` : "Assets.Logo";
 };
 
-const buttonTarget = (page: CreatorPage, names: Set<string>): {
+const buttonTarget = (page: CreatorPage, button: CreatorButton, names: Set<string>): {
   conditions: string[];
   url: string;
 } => {
-  const link = page.button.link;
+  const link = button.link;
 
   if (link.kind === "custom") return {
     conditions: urlVariables(link.template, names),
     url: urlLiteral(link.template, names)
   };
 
-  const variable = linkVariableOf(page);
+  const variable = linkVariableOf(page, button);
   return variable ? { conditions: [variable.name], url: variable.name } : { conditions: [], url: "pageUrl" };
 };
 
@@ -145,12 +145,28 @@ const pageBlock = (draft: CreatorDraft, page: CreatorPage, keys: StringKeys, has
     );
   } else lines.push("data.startTimestamp = pageStartedAt");
 
-  if (keys.button && hasButtonSetting) {
-    const target = buttonTarget(page, names);
-    const condition = ["showButtons", ...target.conditions.filter((name) => !requiredSet.has(name))].join(" && ");
-    lines.push(
-      `if (${condition}) data.buttons = [{ label: ${formatCall(keys.button, page.button.label[base] ?? "", names, requiredSet)}, url: ${target.url} }]`
-    );
+  if (page.buttons.length > 0 && hasButtonSetting) {
+    const entries = page.buttons.map((button, position) => {
+      const target = buttonTarget(page, button, names);
+      const conditions = target.conditions.filter((name) => !requiredSet.has(name));
+
+      const entry = `{ label: ${formatCall(keys.buttons[position], button.label[base] ?? "", names, requiredSet)}, url: ${target.url} }`;
+      return { conditions, entry };
+    });
+
+    if (entries.length === 1) {
+      lines.push(`if (${["showButtons", ...entries[0].conditions].join(" && ")}) data.buttons = [${entries[0].entry}]`);
+    } else {
+      lines.push(
+        "if (showButtons) {",
+        '  const buttons: NonNullable<PresenceData["buttons"]> = []',
+        ...entries.map((item) =>
+          item.conditions.length > 0 ? `  if (${item.conditions.join(" && ")}) buttons.push(${item.entry})` : `  buttons.push(${item.entry})`
+        ),
+        "  if (buttons.length > 0) data.buttons = buttons",
+        "}"
+      );
+    }
   }
 
   lines.push("await presence.setActivity(data)", "return");
@@ -180,7 +196,7 @@ export const generateSettingsSource = (draft: CreatorDraft): string | null => {
   const keys = pageStringKeys(draft);
   const lines = settingLines(
     draft,
-    keys.some((entry) => Boolean(entry.button))
+    keys.some((entry) => entry.buttons.length > 0)
   );
 
   if (lines.length === 0) return null;
@@ -195,9 +211,9 @@ export const generatePresenceSource = (draft: CreatorDraft): string => {
 
   const usesMedia = draft.pages.some((page) => page.timestamps === "media");
   const tracksPageTime = draft.pages.length > 0;
-  const hasButtons = keys.some((entry) => Boolean(entry.button));
-  const usesPageUrl = draft.pages.some(
-    (page, index) => Boolean(keys[index].button) && buttonTarget(page, new Set(page.variables.map((variable) => variable.name))).url === "pageUrl"
+  const hasButtons = keys.some((entry) => entry.buttons.length > 0);
+  const usesPageUrl = draft.pages.some((page) =>
+    page.buttons.some((button) => buttonTarget(page, button, new Set(page.variables.map((variable) => variable.name))).url === "pageUrl")
   );
   const settings = settingLines(draft, hasButtons);
   const sdkImports = [...(usesMedia ? ["createMediaTimestamps"] : []), "PresenceType", "type PresenceData"];

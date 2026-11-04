@@ -53,17 +53,19 @@ export const sampleCreatorDraft = (): CreatorDraft => {
       variableId: poster.id
     },
     timestamps: "media" as const,
-    button: {
-      enabled: true,
-      label: {
-        "en-US": "Watch video",
-        "fr-FR": "Voir la vidéo"
-      },
-      link: {
-        kind: "custom" as const,
-        template: "https://example.com/v/{videoId}"
+    buttons: [
+      {
+        id: "b1",
+        label: {
+          "en-US": "Watch video",
+          "fr-FR": "Voir la vidéo"
+        },
+        link: {
+          kind: "custom" as const,
+          template: "https://example.com/v/{videoId}"
+        }
       }
-    }
+    ]
   };
   const search = {
     ...createPage("Search", "/results"),

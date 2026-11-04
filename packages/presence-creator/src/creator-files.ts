@@ -38,7 +38,7 @@ const withFallback = (text: LocalizedText, locale: LongLocale, base: LongLocale)
 export type StringKeys = {
   details: string;
   state?: string;
-  button?: string;
+  buttons: string[];
 };
 
 export const pageStringKeys = (draft: CreatorDraft): StringKeys[] =>
@@ -47,7 +47,7 @@ export const pageStringKeys = (draft: CreatorDraft): StringKeys[] =>
     return {
       details: `${key}Details`,
       state: textIn(page.state, draft.baseLocale) ? `${key}State` : undefined,
-      button: page.button.enabled ? `${key}Button` : undefined
+      buttons: page.buttons.map((_, position) => (position === 0 ? `${key}Button` : `${key}Button${position + 1}`))
     };
   });
 
@@ -68,10 +68,12 @@ export const buildLocaleFiles = (draft: CreatorDraft): Record<string, Record<str
           pageKeysFor.state,
           withFallback(page.state, locale, base)
         ]);
-        if (pageKeysFor.button) rows.push([
-          pageKeysFor.button,
-          withFallback(page.button.label, locale, base)
-        ]);
+        page.buttons.forEach((button, position) => {
+          rows.push([
+            pageKeysFor.buttons[position],
+            withFallback(button.label, locale, base)
+          ]);
+        });
         return rows;
       });
       if (draft.browsingFallback) entries.push(["browsing", CREATOR_BUILTIN_STRINGS[locale].browsing]);

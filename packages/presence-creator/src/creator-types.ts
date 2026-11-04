@@ -52,6 +52,12 @@ export type CreatorLink = {
   template: string;
 };
 
+export type CreatorButton = {
+  id: string;
+  label: LocalizedText;
+  link: CreatorLink;
+};
+
 export type CreatorTimestamps = "media" | "elapsed";
 
 export type CreatorPage = {
@@ -67,11 +73,7 @@ export type CreatorPage = {
   state: LocalizedText;
   largeImage: CreatorImage;
   timestamps: CreatorTimestamps;
-  button: {
-    enabled: boolean;
-    label: LocalizedText;
-    link: CreatorLink;
-  };
+  buttons: CreatorButton[];
 };
 
 export type CreatorAssets = {
@@ -123,6 +125,7 @@ export type CreatorDraft = {
   browsingFallback: boolean;
   author: CreatorAuthor;
   submission?: CreatorSubmission;
+  sentSignature?: string;
 };
 
 export type CreatorExtractedValue = {

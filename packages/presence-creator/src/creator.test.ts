@@ -116,10 +116,12 @@ describe("creator pages", () => {
         kind: "custom" as const,
         template: "https://img.example.com/{videoId}.jpg"
       },
-      button: {
-        ...watch.button,
-        link: { kind: "page" as const }
-      }
+      buttons: [
+        {
+          ...watch.buttons[0],
+          link: { kind: "page" as const }
+        }
+      ]
     };
     const options = {
       nowMs: 0,
@@ -159,9 +161,10 @@ describe("creator pages", () => {
     const legacyPage = {
       ...draft.pages[1],
       timestamps: "none",
+      buttons: undefined,
       button: {
-        enabled: false,
-        label: {}
+        enabled: true,
+        label: { "en-US": "Open" }
       }
     } as unknown as (typeof draft.pages)[number];
     const upgraded = normalizeDraft({
@@ -170,7 +173,9 @@ describe("creator pages", () => {
       features: Array.from({ length: 8 }, () => ({}))
     });
     expect(upgraded.pages[0].timestamps).toBe("elapsed");
-    expect(upgraded.pages[0].button.link).toEqual({ kind: "page" });
+    expect(upgraded.pages[0].buttons).toHaveLength(1);
+    expect(upgraded.pages[0].buttons[0].link).toEqual({ kind: "page" });
+    expect(upgraded.pages[0].buttons[0].label).toEqual({ "en-US": "Open" });
     expect(upgraded.features).toHaveLength(5);
   });
 });
@@ -250,10 +255,7 @@ describe("creator files", () => {
       browsingFallback: false,
       pages: sampleCreatorDraft().pages.map((page) => ({
         ...page,
-        button: {
-          ...page.button,
-          enabled: false
-        }
+        buttons: []
       }))
     };
     expect(generateSettingsSource(draft)).toBeNull();
@@ -327,13 +329,15 @@ describe("creator validation", () => {
         kind: "custom" as const,
         template: "img/{videoId}.jpg"
       },
-      button: {
-        ...watch.button,
-        link: {
-          kind: "custom" as const,
-          template: "http://example.com/{nope}"
+      buttons: [
+        {
+          ...watch.buttons[0],
+          link: {
+            kind: "custom" as const,
+            template: "http://example.com/{nope}"
+          }
         }
-      }
+      ]
     };
     const codes = validateDraft({
       ...draft,
@@ -342,6 +346,84 @@ describe("creator validation", () => {
     expect(codes).toEqual(expect.arrayContaining(["pageButtonUrlInvalid:", "pageImageUrlInvalid:", "pageUnknownVariable:nope"]));
   });
 });
+describe("creator buttons", () => {
+  const twoButtons = () => {
+    const draft = sampleCreatorDraft();
+    const [watch, ...rest] = draft.pages;
+    const second = {
+      id: "b2",
+      label: {
+        "en-US": "Channel",
+        "fr-FR": "Chaîne"
+      },
+      link: { kind: "page" as const }
+    };
+    return {
+      ...draft,
+      pages: [
+        {
+          ...watch,
+          buttons: [...watch.buttons, second]
+        },
+        ...rest
+      ]
+    };
+  };
+
+  it("writes one string per button and generates both in the presence", () => {
+    const draft = twoButtons();
+    const files = buildTextFiles(draft);
+    const locale = files.find((file) => file.path.endsWith("/locales/en-US.json"));
+    expect(locale?.content).toContain("watchButton2");
+    const source = generatePresenceSource(draft);
+    expect(source).toContain("buttons.push({ label: strings.watchButton2, url: pageUrl })");
+    expect(source).toContain("if (buttons.length > 0) data.buttons = buttons");
+  });
+
+  it("previews both buttons", () => {
+    const draft = twoButtons();
+    const [page] = draft.pages;
+    const preview = buildPreviewActivity(
+      draft,
+      page,
+      {
+        url: "https://example.com/watch",
+        values: page.variables.map((variable) => ({
+          variableId: variable.id,
+          value: variable.sample
+        }))
+      },
+      "en-US",
+      {
+        nowMs: 0,
+        startedAtMs: 0,
+        pageUrl: "https://example.com/watch"
+      }
+    );
+    expect(preview.activity.buttons?.map((button) => button.label)).toEqual(["Watch video", "Channel"]);
+  });
+
+  it("accepts definitions sent with the single button shape", () => {
+    const { assets: _assets, submission: _submission, ...definition } = twoButtons();
+    const [page] = definition.pages;
+    const { buttons, ...rest } = page;
+    const legacy = {
+      ...definition,
+      pages: [
+        {
+          ...rest,
+          button: {
+            enabled: true,
+            label: buttons[0].label,
+            link: buttons[0].link
+          }
+        }
+      ]
+    };
+    expect(parseCreatorDefinition(legacy)?.pages[0].buttons).toHaveLength(1);
+  });
+});
+
 describe("creator definition schema and diff", () => {
   const definitionOf = () => {
     const { assets: _assets, submission: _submission, ...definition } = sampleCreatorDraft();

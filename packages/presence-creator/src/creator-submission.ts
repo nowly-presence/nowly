@@ -14,7 +14,7 @@ export type CreatorAccount = {
 };
 
 export type CreatorSubmissionPayload = {
-  definition: Omit<CreatorDraft, "assets" | "submission">;
+  definition: Omit<CreatorDraft, "assets" | "submission" | "sentSignature">;
   translate: boolean;
   files: CreatorTextFile[];
   assets: {

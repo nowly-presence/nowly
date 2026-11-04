@@ -21,7 +21,7 @@ const TOP_LEVEL_FIELDS = [
   "browsingFallback"
 ] as const;
 
-const PAGE_FIELDS = ["name", "match", "activityType", "variables", "details", "state", "largeImage", "timestamps", "button"] as const;
+const PAGE_FIELDS = ["name", "match", "activityType", "variables", "details", "state", "largeImage", "timestamps", "buttons"] as const;
 
 const stable = (value: unknown): string =>
   JSON.stringify(value, (_key, item: unknown) =>
@@ -47,7 +47,7 @@ const pageChanges = (before: CreatorPage | undefined, after: CreatorPage | undef
   ];
 
   return PAGE_FIELDS.filter((field) => !same(before[field], after[field])).map((field) => ({
-    field: `page.${field}`,
+    field: `page.${field === "buttons" ? "button" : field}`,
     page: label,
     kind: "changed"
   }));

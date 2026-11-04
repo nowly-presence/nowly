@@ -167,14 +167,17 @@ const pageIssues = (draft: CreatorDraft): CreatorIssue[] => {
       code: "pageCatchAllNotLast",
       page: page.name
     });
-    const { link } = page.button;
 
-    if (page.button.enabled && (link.kind === "custom" ? !isUrlTemplate(link.template) : link.kind === "variable" && !linkVariableOf(page))) {
-      issues.push({
-        step: "pages",
-        code: "pageButtonUrlInvalid",
-        page: page.name
-      });
+    for (const button of page.buttons) {
+      const { link } = button;
+
+      if (link.kind === "custom" ? !isUrlTemplate(link.template) : link.kind === "variable" && !linkVariableOf(page, button)) {
+        issues.push({
+          step: "pages",
+          code: "pageButtonUrlInvalid",
+          page: page.name
+        });
+      }
     }
 
     const image = page.largeImage;
@@ -187,7 +190,10 @@ const pageIssues = (draft: CreatorDraft): CreatorIssue[] => {
       });
     }
 
-    const urlTemplates = [page.button.enabled && link.kind === "custom" ? link.template : "", image.kind === "custom" ? image.template : ""];
+    const urlTemplates = [
+      ...page.buttons.map((button) => (button.link.kind === "custom" ? button.link.template : "")),
+      image.kind === "custom" ? image.template : ""
+    ];
 
     for (const name of new Set(urlTemplates.flatMap((template) => missingVariables(template, page.variables)))) {
       issues.push({
@@ -206,16 +212,20 @@ const pageIssues = (draft: CreatorDraft): CreatorIssue[] => {
         page: page.name,
         locale
       });
-      if (page.button.enabled && !textIn(page.button.label, locale)) issues.push({
-        step: "pages",
-        code: "pageButtonLabelMissing",
-        page: page.name,
-        locale
-      });
+
+      for (const button of page.buttons) {
+        if (!textIn(button.label, locale)) issues.push({
+          step: "pages",
+          code: "pageButtonLabelMissing",
+          page: page.name,
+          locale
+        });
+      }
+
       const templates = [
         details,
         textIn(page.state, locale),
-        page.button.enabled ? textIn(page.button.label, locale) : ""
+        ...page.buttons.map((button) => textIn(button.label, locale))
       ];
 
       for (const name of new Set(templates.flatMap((template) => missingVariables(template, page.variables)))) {

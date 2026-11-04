@@ -10,6 +10,7 @@ export const SELECTOR_MAX_LENGTH = 300;
 export const TEMPLATE_MAX_LENGTH = 256;
 export const PAGE_TEXT_MAX_LENGTH = 128;
 export const BUTTON_LABEL_MAX_LENGTH = 32;
+export const BUTTONS_LIMIT = 2;
 export const DOMAINS_MAX = 10;
 export const DOMAIN_MAX_LENGTH = 253;
 export const PATH_MAX_LENGTH = 256;
@@ -91,6 +92,12 @@ const linkSchema = z.discriminatedUnion("kind", [
   })
 ]);
 
+const buttonSchema = z.object({
+  id: localId,
+  label: localized(BUTTON_LABEL_MAX_LENGTH),
+  link: linkSchema.default({ kind: "page" })
+});
+
 const pageSchema = z.object({
   id: localId,
   name: plainText(PAGE_NAME_MAX_LENGTH),
@@ -104,11 +111,7 @@ const pageSchema = z.object({
   state: localized(PAGE_TEXT_MAX_LENGTH),
   largeImage: imageSchema,
   timestamps: z.enum(["media", "elapsed"]),
-  button: z.object({
-    enabled: z.boolean(),
-    label: localized(BUTTON_LABEL_MAX_LENGTH),
-    link: linkSchema.default({ kind: "page" })
-  })
+  buttons: z.array(buttonSchema).max(BUTTONS_LIMIT)
 });
 
 export const creatorDefinitionSchema = z.object({
@@ -135,9 +138,35 @@ export const creatorDefinitionSchema = z.object({
   })
 });
 
-export type CreatorDefinition = Omit<CreatorDraft, "assets" | "submission">;
+export type CreatorDefinition = Omit<CreatorDraft, "assets" | "submission" | "sentSignature">;
+
+const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
+
+const upgradeLegacyPage = (page: unknown): unknown => {
+  if (!isRecord(page) || "buttons" in page || !("button" in page)) return page;
+
+  const { button, ...rest } = page;
+  const legacy = isRecord(button) ? button : null;
+
+  return {
+    ...rest,
+    buttons:
+      legacy?.enabled === true
+        ? [
+            {
+              id: "button1",
+              label: legacy.label ?? {},
+              link: legacy.link ?? { kind: "page" }
+            }
+          ]
+        : []
+  };
+};
+
+const upgradeLegacyDefinition = (value: unknown): unknown =>
+  isRecord(value) && Array.isArray(value.pages) ? { ...value, pages: value.pages.map(upgradeLegacyPage) } : value;
 
 export const parseCreatorDefinition = (value: unknown): CreatorDefinition | null => {
-  const parsed = creatorDefinitionSchema.safeParse(value);
+  const parsed = creatorDefinitionSchema.safeParse(upgradeLegacyDefinition(value));
   return parsed.success ? parsed.data : null;
 };

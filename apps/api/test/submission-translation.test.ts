@@ -116,7 +116,7 @@ describe("translateDefinition", () => {
       "fr-FR": "[fr-FR] Watching {title}",
       "es-ES": "[es-ES] Watching {title}"
     });
-    expect(translated.pages[0].button.label["es-ES"]).toBe("[es-ES] Watch video");
+    expect(translated.pages[0].buttons[0].label["es-ES"]).toBe("[es-ES] Watch video");
     expect(
       validateDraft(
         normalizeDraft({
