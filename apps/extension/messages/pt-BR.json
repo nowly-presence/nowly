@@ -788,7 +788,6 @@
   "creator.page.timestampsElapsed": "Tempo na página",
   "creator.variables.title": "Elementos da página",
   "creator.variables.hint": "O que o Nowly lê no site, como um título ou um nome.",
-  "creator.variables.pick": "Escolher na página",
   "creator.variables.picking": "Clique em um elemento da página…",
   "creator.variables.tabTitle": "Título da aba",
   "creator.variables.ogTitle": "Título da prévia do link",
@@ -867,8 +866,6 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}} não é um elemento da página",
   "creator.issue.pageButtonLabelMissing": "{page}: o texto do botão está vazio",
   "creator.issue.pageCatchAllNotLast": "{page} corresponde a todas as páginas: mova para o final",
-  "creator.home.edit": "Editar",
-  "creator.home.view": "Ver",
   "creator.visuals.chooseNamed": "Escolher a imagem: {name}",
   "creator.visuals.replaceNamed": "Substituir a imagem: {name}",
   "creator.texts.translating": "Traduzindo para {language}. O texto em {base} aparece em cinza para guiar você.",
@@ -1043,5 +1040,8 @@
   "creator.submit.unchanged": "Faça uma alteração antes de enviar de novo.",
   "creator.variables.noSample": "Valor lido durante o teste",
   "creator.buttons.addAction": "Adicionar",
-  "creator.source.change": "Alterar"
+  "creator.source.change": "Alterar",
+  "nav.creator": "Criar",
+  "creator.home.subtitle": "Crie sua própria presença no Discord.",
+  "creator.home.importHint": "Abra um rascunho exportado de outro dispositivo."
 }

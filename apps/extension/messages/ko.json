@@ -788,7 +788,6 @@
   "creator.page.timestampsElapsed": "머문 시간",
   "creator.variables.title": "페이지 요소",
   "creator.variables.hint": "Nowly가 사이트에서 읽는 정보예요. 제목이나 이름 같은 것이에요.",
-  "creator.variables.pick": "페이지에서 고르기",
   "creator.variables.picking": "페이지의 요소를 클릭하세요…",
   "creator.variables.tabTitle": "탭 제목",
   "creator.variables.ogTitle": "링크 미리보기 제목",
@@ -867,8 +866,6 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}}은(는) 페이지 요소가 아니에요",
   "creator.issue.pageButtonLabelMissing": "{page}: 버튼 텍스트가 비어 있어요",
   "creator.issue.pageCatchAllNotLast": "{page}은(는) 모든 페이지와 일치해요. 맨 끝으로 옮기세요",
-  "creator.home.edit": "수정",
-  "creator.home.view": "보기",
   "creator.visuals.chooseNamed": "이미지 선택: {name}",
   "creator.visuals.replaceNamed": "이미지 바꾸기: {name}",
   "creator.texts.translating": "{language}로 번역 중이에요. 참고용으로 {base} 텍스트가 회색으로 표시돼요.",
@@ -1043,5 +1040,8 @@
   "creator.submit.unchanged": "다시 보내기 전에 내용을 수정하세요.",
   "creator.variables.noSample": "테스트 중에 읽는 값",
   "creator.buttons.addAction": "추가",
-  "creator.source.change": "변경"
+  "creator.source.change": "변경",
+  "nav.creator": "만들기",
+  "creator.home.subtitle": "나만의 Discord 프레즌스를 만들어 보세요.",
+  "creator.home.importHint": "다른 기기에서 내보낸 초안을 엽니다."
 }

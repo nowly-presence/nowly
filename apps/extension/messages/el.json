@@ -788,7 +788,6 @@
   "creator.page.timestampsElapsed": "Χρόνος στη σελίδα",
   "creator.variables.title": "Στοιχεία σελίδας",
   "creator.variables.hint": "Ό,τι διαβάζει το Nowly στον ιστότοπο, όπως έναν τίτλο ή ένα όνομα.",
-  "creator.variables.pick": "Επιλογή στη σελίδα",
   "creator.variables.picking": "Κάνε κλικ σε ένα στοιχείο της σελίδας…",
   "creator.variables.tabTitle": "Τίτλος καρτέλας",
   "creator.variables.ogTitle": "Τίτλος προεπισκόπησης συνδέσμου",
@@ -867,8 +866,6 @@
   "creator.issue.pageUnknownVariable": "{page}: το {{detail}} δεν είναι στοιχείο της σελίδας",
   "creator.issue.pageButtonLabelMissing": "{page}: το κείμενο του κουμπιού είναι κενό",
   "creator.issue.pageCatchAllNotLast": "Η {page} ταιριάζει με όλες τις σελίδες: μετακίνησέ τη στο τέλος",
-  "creator.home.edit": "Επεξεργασία",
-  "creator.home.view": "Προβολή",
   "creator.visuals.chooseNamed": "Επιλογή εικόνας: {name}",
   "creator.visuals.replaceNamed": "Αντικατάσταση εικόνας: {name}",
   "creator.texts.translating": "Μετάφραση στα {language}. Το κείμενο στα {base} εμφανίζεται με γκρι για καθοδήγηση.",
@@ -1043,5 +1040,8 @@
   "creator.submit.unchanged": "Κάνε μια αλλαγή πριν από τη νέα αποστολή.",
   "creator.variables.noSample": "Τιμή που διαβάζεται κατά τη δοκιμή",
   "creator.buttons.addAction": "Προσθήκη",
-  "creator.source.change": "Αλλαγή"
+  "creator.source.change": "Αλλαγή",
+  "nav.creator": "Δημιουργία",
+  "creator.home.subtitle": "Φτιάξτε τη δική σας παρουσία Discord.",
+  "creator.home.importHint": "Ανοίξτε ένα πρόχειρο που εξαγάγατε από άλλη συσκευή."
 }

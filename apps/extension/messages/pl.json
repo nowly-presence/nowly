@@ -788,7 +788,6 @@
   "creator.page.timestampsElapsed": "Czas na stronie",
   "creator.variables.title": "Elementy strony",
   "creator.variables.hint": "To, co Nowly odczytuje na stronie, na przykład tytuł lub nazwę.",
-  "creator.variables.pick": "Wybierz na stronie",
   "creator.variables.picking": "Kliknij element na stronie…",
   "creator.variables.tabTitle": "Tytuł karty",
   "creator.variables.ogTitle": "Tytuł podglądu linku",
@@ -867,8 +866,6 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}} nie jest elementem strony",
   "creator.issue.pageButtonLabelMissing": "{page}: tekst przycisku jest pusty",
   "creator.issue.pageCatchAllNotLast": "{page} pasuje do wszystkich stron: przenieś ją na koniec",
-  "creator.home.edit": "Edytuj",
-  "creator.home.view": "Zobacz",
   "creator.visuals.chooseNamed": "Wybierz obraz: {name}",
   "creator.visuals.replaceNamed": "Zastąp obraz: {name}",
   "creator.texts.translating": "Tłumaczenie: {language}. Tekst w języku {base} jest wyszarzony jako podpowiedź.",
@@ -1043,5 +1040,8 @@
   "creator.submit.unchanged": "Wprowadź zmianę przed ponownym wysłaniem.",
   "creator.variables.noSample": "Wartość odczytana podczas testu",
   "creator.buttons.addAction": "Dodaj",
-  "creator.source.change": "Zmień"
+  "creator.source.change": "Zmień",
+  "nav.creator": "Twórz",
+  "creator.home.subtitle": "Stwórz własną obecność na Discordzie.",
+  "creator.home.importHint": "Otwórz wersję roboczą wyeksportowaną z innego urządzenia."
 }

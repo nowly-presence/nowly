@@ -29,7 +29,7 @@ type LibraryResultsSectionProps = {
 export const LibraryResultsSection = ({ results, newSlugs, browsing, query, category, sort, onSortChange }: LibraryResultsSectionProps) => {
   const { state } = useExtensionState();
   const { t } = useI18n();
-  const { push } = useNav();
+  const { push, setTab } = useNav();
   const actions = usePresenceActions();
 
   return (
@@ -71,7 +71,7 @@ export const LibraryResultsSection = ({ results, newSlugs, browsing, query, cate
             description={t("library.noResultsDescription")}
             action={
               <div className="flex flex-wrap justify-center gap-2">
-                <Button icon={<RiMagicLine />} onClick={() => push({ name: "creator" })}>
+                <Button icon={<RiMagicLine />} onClick={() => setTab("creator")}>
                   {t("creator.cta.create")}
                 </Button>
                 <Button variant="secondary" icon={<RiDiscordLine />} onClick={() => openUrl(DISCORD_INVITE_URL)}>
@@ -111,7 +111,7 @@ export const LibraryResultsSection = ({ results, newSlugs, browsing, query, cate
             <span className="text-label-lg font-medium">{t("creator.cta.title")}</span>
             <span className="text-label-md text-muted">{t("creator.cta.description")}</span>
           </div>
-          <Button size="sm" onClick={() => push({ name: "creator" })}>
+          <Button size="sm" onClick={() => setTab("creator")}>
             {t("creator.cta.short")}
           </Button>
         </Card>

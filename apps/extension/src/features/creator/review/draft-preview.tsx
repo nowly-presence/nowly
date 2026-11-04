@@ -5,14 +5,14 @@ import { DotSeparator } from "@/ui/dot-separator";
 
 const LOGO_SIZE = 60;
 
-const Banner = ({ draft, className }: { draft: CreatorDraft; className: string }) =>
+export const DraftBanner = ({ draft, className }: { draft: CreatorDraft; className: string }) =>
   draft.assets.thumbnail ? (
     <img src={draft.assets.thumbnail} alt="" className={className} />
   ) : (
     <div className={className} style={{ background: `radial-gradient(120% 90% at 20% 10%, ${draft.color}66 0%, transparent 60%), var(--tertiary)` }} />
   );
 
-const Logo = ({ draft, size, rounded }: {
+export const DraftLogo = ({ draft, size, rounded }: {
   draft: CreatorDraft;
   size: number;
   rounded: string;
@@ -52,10 +52,10 @@ export const DraftHero = ({ draft }: {
 
   return (
     <div className="flex flex-col">
-      <Banner draft={draft} className="aspect-[16/9] w-full rounded-lg bg-tertiary object-cover" />
+      <DraftBanner draft={draft} className="aspect-[16/9] w-full rounded-lg bg-tertiary object-cover" />
       <div className="relative -mt-10 flex items-end gap-1.5 px-3">
         <div className="shrink-0 rounded-[14px] bg-canvas p-1">
-          <Logo draft={draft} size={LOGO_SIZE} rounded="rounded-[10px]" />
+          <DraftLogo draft={draft} size={LOGO_SIZE} rounded="rounded-[10px]" />
         </div>
         <div className="mb-2 min-w-0 rounded-[12px] bg-canvas px-3 py-1.5">
           <h1 className="truncate text-headline-sm font-medium tracking-[-0.3px]">{name}</h1>

@@ -788,7 +788,6 @@
   "creator.page.timestampsElapsed": "Geçirilen süre",
   "creator.variables.title": "Sayfa öğeleri",
   "creator.variables.hint": "Nowly'nin sitede okuduğu bilgiler, örneğin bir başlık veya ad.",
-  "creator.variables.pick": "Sayfada seç",
   "creator.variables.picking": "Sayfada bir öğeye tıkla…",
   "creator.variables.tabTitle": "Sekme başlığı",
   "creator.variables.ogTitle": "Bağlantı önizleme başlığı",
@@ -867,8 +866,6 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}} bir sayfa öğesi değil",
   "creator.issue.pageButtonLabelMissing": "{page}: düğme metni boş",
   "creator.issue.pageCatchAllNotLast": "{page} tüm sayfalarla eşleşiyor: onu sona taşı",
-  "creator.home.edit": "Düzenle",
-  "creator.home.view": "Görüntüle",
   "creator.visuals.chooseNamed": "Görsel seç: {name}",
   "creator.visuals.replaceNamed": "Görseli değiştir: {name}",
   "creator.texts.translating": "{language} çevirisi. Yol göstermesi için {base} metin gri olarak gösterilir.",
@@ -1043,5 +1040,8 @@
   "creator.submit.unchanged": "Tekrar göndermeden önce bir değişiklik yap.",
   "creator.variables.noSample": "Testte okunan değer",
   "creator.buttons.addAction": "Ekle",
-  "creator.source.change": "Değiştir"
+  "creator.source.change": "Değiştir",
+  "nav.creator": "Oluştur",
+  "creator.home.subtitle": "Kendi Discord varlığınızı oluşturun.",
+  "creator.home.importHint": "Başka bir cihazdan dışa aktarılan taslağı açın."
 }

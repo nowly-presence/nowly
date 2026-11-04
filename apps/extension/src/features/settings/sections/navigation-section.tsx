@@ -13,7 +13,7 @@ export const NavigationSection = () => {
   const hiddenDockTabs = state.settings.hiddenDockTabs ?? [];
   const defaultDock = hiddenDockTabs.length === 0 && isDefaultDockLayout(normalizeDockLayout(state.settings.dockLayout, DOCK_TABS), DOCK_TABS);
 
-  const setDockTabVisible = (tab: "store" | "custom" | "announcements", visible: boolean) => {
+  const setDockTabVisible = (tab: "store" | "custom" | "creator" | "announcements", visible: boolean) => {
     const hidden = visible ? hiddenDockTabs.filter((value) => value !== tab) : [...new Set([...hiddenDockTabs, tab])];
     void updateSettings({
       hiddenDockTabs: hidden,
@@ -50,6 +50,12 @@ export const NavigationSection = () => {
           label={t("nav.custom")}
           checked={!hiddenDockTabs.includes("custom")}
           onChange={(checked) => setDockTabVisible("custom", checked)}
+        />
+        <SwitchRow
+          title={t("nav.creator")}
+          label={t("nav.creator")}
+          checked={!hiddenDockTabs.includes("creator")}
+          onChange={(checked) => setDockTabVisible("creator", checked)}
         />
         <SwitchRow
           title={t("nav.announcements")}

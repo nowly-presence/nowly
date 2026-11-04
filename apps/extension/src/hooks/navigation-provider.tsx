@@ -23,6 +23,7 @@ export type Route = {
 } | {
   name: "creator";
   presenceSlug?: string;
+  draftId?: string;
 } | {
   name: "admin";
 } | {

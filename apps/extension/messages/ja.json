@@ -788,7 +788,6 @@
   "creator.page.timestampsElapsed": "滞在時間",
   "creator.variables.title": "ページの要素",
   "creator.variables.hint": "Nowly がサイトから読み取る情報 (タイトルや名前など)。",
-  "creator.variables.pick": "ページ上で選ぶ",
   "creator.variables.picking": "ページの要素をクリックしてください…",
   "creator.variables.tabTitle": "タブのタイトル",
   "creator.variables.ogTitle": "リンクプレビューのタイトル",
@@ -867,8 +866,6 @@
   "creator.issue.pageUnknownVariable": "{page}：{{detail}} はページの要素ではありません",
   "creator.issue.pageButtonLabelMissing": "{page}：ボタンのテキストが空です",
   "creator.issue.pageCatchAllNotLast": "{page} はすべてのページに一致します。最後に移動してください",
-  "creator.home.edit": "編集",
-  "creator.home.view": "表示",
   "creator.visuals.chooseNamed": "画像を選択：{name}",
   "creator.visuals.replaceNamed": "画像を置き換え：{name}",
   "creator.texts.translating": "{language}に翻訳中です。参考として{base}のテキストがグレーで表示されます。",
@@ -1043,5 +1040,8 @@
   "creator.submit.unchanged": "再送信する前に変更を加えてください。",
   "creator.variables.noSample": "テスト中に読み取る値",
   "creator.buttons.addAction": "追加",
-  "creator.source.change": "変更"
+  "creator.source.change": "変更",
+  "nav.creator": "作成",
+  "creator.home.subtitle": "あなた自身のDiscordプレゼンスを作りましょう。",
+  "creator.home.importHint": "別のデバイスから書き出した下書きを開きます。"
 }

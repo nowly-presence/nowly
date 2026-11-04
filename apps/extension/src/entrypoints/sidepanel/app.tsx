@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line, RiMegaphoneFill, RiMegaphoneLine, RiMagicLine } from "@remixicon/react";
+import { RiApps2Fill, RiApps2Line, RiQuillPenFill, RiQuillPenLine, RiPulseFill, RiPulseLine, RiSettings3Fill, RiSettings3Line, RiMegaphoneFill, RiMegaphoneLine, RiMagicFill, RiMagicLine } from "@remixicon/react";
 import { AnnouncementsBanner } from "@/features/announcements/announcements-banner";
 import { FeatureReveal } from "@/components/shared/feature-reveal";
 import { Dock } from "@/features/layout/dock";
@@ -24,6 +24,7 @@ const CustomActivityEditorView = lazy(async () => ({
   default: (await import("@/features/custom-activity/custom-activity-editor-view")).CustomActivityEditorView
 }));
 const CustomActivityView = lazy(async () => ({ default: (await import("@/features/custom-activity/custom-activity-view")).CustomActivityView }));
+const CreatorTab = lazy(async () => ({ default: (await import("@/features/creator/creator-tab")).CreatorTab }));
 const CreatorView = lazy(async () => ({ default: (await import("@/features/creator/creator-view")).CreatorView }));
 const ConnectionView = lazy(async () => ({ default: (await import("@/features/diagnostics/connection-view")).ConnectionView }));
 const DiscordIpcView = lazy(async () => ({ default: (await import("@/features/discord-ipc/discord-ipc-view")).DiscordIpcView }));
@@ -68,7 +69,7 @@ export const App = () => (
 const AppContent = () => {
   const { state, updateSettings } = useExtensionState();
   const { t } = useI18n();
-  const { tab, stack, setTab, push } = useNav();
+  const { tab, stack, setTab } = useNav();
   const theme = useResolvedTheme(state.settings.appearance);
   const mainRef = useRef<HTMLElement>(null);
   const [visited, setVisited] = useState<Set<Tab>>(() => new Set([tab]));
@@ -118,6 +119,7 @@ const AppContent = () => {
                 {value === "announcements" && <AnnouncementsView />}
                 {value === "store" && <LibraryView />}
                 {value === "custom" && <CustomActivityView />}
+                {value === "creator" && <CreatorTab />}
                 {value === "settings" && <SettingsView />}
               </Suspense>
             </Layer>
@@ -131,7 +133,7 @@ const AppContent = () => {
                 {route.name === "logs" && <RuntimeLogsView />}
                 {route.name === "custom-activity" && <CustomActivityEditorView id={route.id} template={route.template} />}
                 {route.name === "discord-ipc" && <DiscordIpcView />}
-                {route.name === "creator" && <CreatorView presenceSlug={route.presenceSlug} />}
+                {route.name === "creator" && <CreatorView presenceSlug={route.presenceSlug} draftId={route.draftId} />}
                 {route.name === "admin" && <AdminView />}
                 {route.name === "admin-review" && <AdminReviewView id={route.id} />}
                 {route.name === "admin-announcement" && <AdminAnnouncementView />}
@@ -145,11 +147,6 @@ const AppContent = () => {
               onLayoutChange={(dockLayout) => void updateSettings({ dockLayout: restoreDockLayoutTabs(dockLayout, DOCK_TABS) })}
               value={tab}
               onChange={selectTab}
-              action={
-                stack.length === 0 && tab === "store"
-                  ? { anchor: "store", label: t("creator.title"), icon: <RiMagicLine className="size-4" />, onClick: () => push({ name: "creator" }) }
-                  : undefined
-              }
               items={[
                 {
                   value: "activity",
@@ -157,6 +154,12 @@ const AppContent = () => {
                   icon: <RiPulseLine className="size-[18px]" />,
                   activeIcon: <RiPulseFill className="size-[18px]" />,
                   badge: live ? "live" : undefined
+                },
+                {
+                  value: "creator",
+                  label: t("nav.creator"),
+                  icon: <RiMagicLine className="size-[18px]" />,
+                  activeIcon: <RiMagicFill className="size-[18px]" />
                 },
                 {
                   value: "store",

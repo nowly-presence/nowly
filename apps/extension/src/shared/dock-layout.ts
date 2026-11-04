@@ -11,7 +11,7 @@ export type DockDropTarget = {
 
 export const DOCK_MAX_GROUPS = 3;
 
-export const DOCK_TABS = ["activity", "custom", "store", "announcements", "settings"] as const;
+export const DOCK_TABS = ["activity", "custom", "creator", "store", "announcements", "settings"] as const;
 
 export const visibleDockTabs = (hidden: readonly string[] = []) => DOCK_TABS.filter((tab) => tab === "activity" || tab === "settings" || !hidden.includes(tab));
 

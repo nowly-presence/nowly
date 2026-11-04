@@ -788,7 +788,6 @@
   "creator.page.timestampsElapsed": "Time spent",
   "creator.variables.title": "Page elements",
   "creator.variables.hint": "What Nowly reads on the site, like a title or a name.",
-  "creator.variables.pick": "Pick on the page",
   "creator.variables.picking": "Click an element on the page…",
   "creator.variables.tabTitle": "Tab title",
   "creator.variables.ogTitle": "Link preview title",
@@ -867,8 +866,6 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}} isn't a page element",
   "creator.issue.pageButtonLabelMissing": "{page}: the button text is empty",
   "creator.issue.pageCatchAllNotLast": "{page} matches every page: move it to the end",
-  "creator.home.edit": "Edit",
-  "creator.home.view": "View",
   "creator.visuals.chooseNamed": "Choose the {name} image",
   "creator.visuals.replaceNamed": "Replace the {name} image",
   "creator.texts.translating": "Translating into {language}. The {base} text is shown in grey to guide you.",
@@ -1043,5 +1040,8 @@
   "creator.submit.unchanged": "Make a change before sending again.",
   "creator.variables.noSample": "Value read during the test",
   "creator.buttons.addAction": "Add",
-  "creator.source.change": "Change"
+  "creator.source.change": "Change",
+  "nav.creator": "Create",
+  "creator.home.subtitle": "Build your own Discord presence.",
+  "creator.home.importHint": "Open a draft exported from another device."
 }

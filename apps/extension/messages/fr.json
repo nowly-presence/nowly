@@ -788,7 +788,6 @@
   "creator.page.timestampsElapsed": "Temps passé",
   "creator.variables.title": "Éléments de la page",
   "creator.variables.hint": "Les informations lues sur le site, comme un titre ou un nom.",
-  "creator.variables.pick": "Choisir sur la page",
   "creator.variables.picking": "Cliquez sur un élément de la page…",
   "creator.variables.tabTitle": "Titre de l'onglet",
   "creator.variables.ogTitle": "Titre de l'aperçu de lien",
@@ -867,8 +866,6 @@
   "creator.issue.pageUnknownVariable": "{page} : {{detail}} n'est pas un élément de la page",
   "creator.issue.pageButtonLabelMissing": "{page} : le texte du bouton est vide",
   "creator.issue.pageCatchAllNotLast": "{page} correspond à toutes les pages : placez-la à la fin",
-  "creator.home.edit": "Modifier",
-  "creator.home.view": "Voir",
   "creator.visuals.chooseNamed": "Choisir l'image : {name}",
   "creator.visuals.replaceNamed": "Remplacer l'image : {name}",
   "creator.texts.translating": "Traduction en {language}. Le texte en {base} est affiché en gris pour vous guider.",
@@ -1043,5 +1040,8 @@
   "creator.submit.unchanged": "Apportez une modification avant de renvoyer.",
   "creator.variables.noSample": "Valeur lue pendant le test",
   "creator.buttons.addAction": "Ajouter",
-  "creator.source.change": "Changer"
+  "creator.source.change": "Changer",
+  "nav.creator": "Créer",
+  "creator.home.subtitle": "Créez votre propre présence Discord.",
+  "creator.home.importHint": "Reprenez un brouillon exporté depuis un autre appareil."
 }

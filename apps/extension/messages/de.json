@@ -788,7 +788,6 @@
   "creator.page.timestampsElapsed": "Verbrachte Zeit",
   "creator.variables.title": "Seitenelemente",
   "creator.variables.hint": "Was Nowly auf der Website liest, etwa einen Titel oder einen Namen.",
-  "creator.variables.pick": "Auf der Seite auswählen",
   "creator.variables.picking": "Klicke auf ein Element der Seite…",
   "creator.variables.tabTitle": "Titel des Tabs",
   "creator.variables.ogTitle": "Titel der Linkvorschau",
@@ -867,8 +866,6 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}} ist kein Element der Seite",
   "creator.issue.pageButtonLabelMissing": "{page}: Der Text der Schaltfläche ist leer",
   "creator.issue.pageCatchAllNotLast": "{page} passt zu allen Seiten: Verschiebe sie ans Ende",
-  "creator.home.edit": "Bearbeiten",
-  "creator.home.view": "Ansehen",
   "creator.visuals.chooseNamed": "Bild auswählen: {name}",
   "creator.visuals.replaceNamed": "Bild ersetzen: {name}",
   "creator.texts.translating": "Übersetzung auf {language}. Der Text auf {base} wird grau angezeigt, als Orientierung.",
@@ -1043,5 +1040,8 @@
   "creator.submit.unchanged": "Ändere etwas, bevor du erneut sendest.",
   "creator.variables.noSample": "Beim Test gelesener Wert",
   "creator.buttons.addAction": "Hinzufügen",
-  "creator.source.change": "Ändern"
+  "creator.source.change": "Ändern",
+  "nav.creator": "Erstellen",
+  "creator.home.subtitle": "Erstelle deine eigene Discord-Präsenz.",
+  "creator.home.importHint": "Öffne ein auf einem anderen Gerät exportiertes Brouillon."
 }

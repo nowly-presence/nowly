@@ -788,7 +788,6 @@
   "creator.page.timestampsElapsed": "Masa dihabiskan",
   "creator.variables.title": "Elemen halaman",
   "creator.variables.hint": "Apa yang Nowly baca di tapak, seperti tajuk atau nama.",
-  "creator.variables.pick": "Pilih pada halaman",
   "creator.variables.picking": "Klik elemen pada halaman…",
   "creator.variables.tabTitle": "Tajuk tab",
   "creator.variables.ogTitle": "Tajuk pratonton pautan",
@@ -867,8 +866,6 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}} bukan elemen halaman",
   "creator.issue.pageButtonLabelMissing": "{page}: teks butang kosong",
   "creator.issue.pageCatchAllNotLast": "{page} sepadan dengan semua halaman: alihkan ke hujung",
-  "creator.home.edit": "Edit",
-  "creator.home.view": "Lihat",
   "creator.visuals.chooseNamed": "Pilih imej: {name}",
   "creator.visuals.replaceNamed": "Ganti imej: {name}",
   "creator.texts.translating": "Menterjemah ke {language}. Teks {base} dipaparkan dalam warna kelabu sebagai panduan.",
@@ -1043,5 +1040,8 @@
   "creator.submit.unchanged": "Buat perubahan sebelum menghantar semula.",
   "creator.variables.noSample": "Nilai dibaca semasa ujian",
   "creator.buttons.addAction": "Tambah",
-  "creator.source.change": "Tukar"
+  "creator.source.change": "Tukar",
+  "nav.creator": "Cipta",
+  "creator.home.subtitle": "Cipta kehadiran Discord anda sendiri.",
+  "creator.home.importHint": "Buka draf yang dieksport dari peranti lain."
 }
