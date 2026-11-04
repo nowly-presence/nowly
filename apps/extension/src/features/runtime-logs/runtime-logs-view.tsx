@@ -118,7 +118,7 @@ export const RuntimeLogsView = () => {
                 </div>
                 <span className={cn("font-sans text-label-md", entry.level === "error" ? "text-danger" : "text-ink")}>{entry.message}</span>
                 {entry.payload && Object.keys(entry.payload).length > 0 && (
-                  <span className="text-[11px] leading-4 break-all text-muted">
+                  <span className="text-label-sm break-all text-muted">
                     {Object.entries(entry.payload)
                       .map(([key, value]) => `${key}=${value}`)
                       .join("  ")}

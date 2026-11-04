@@ -3,6 +3,7 @@ import type { PresenceSchedule } from "@/shared/types/presence";
 
 export type PresenceDisplayMode = "category" | "grid";
 export type AppearanceMode = "system" | "light" | "dark";
+export type TextSize = "normal" | "medium" | "large";
 export type PresenceLocale = LongLocale;
 export type PresenceLanguageMode = "per-presence" | PresenceLocale;
 export type ActivitySelectionMode = "focused" | "priority";
@@ -19,6 +20,7 @@ export type ExtensionSettings = {
   scheduleEnabled?: boolean;
   globalSchedule?: PresenceSchedule;
   appearance?: AppearanceMode;
+  textSize?: TextSize;
   seasonalThemes?: boolean;
   backgroundAnimation?: boolean;
   presenceLanguage?: PresenceLanguageMode;

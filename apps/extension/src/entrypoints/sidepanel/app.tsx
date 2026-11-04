@@ -5,6 +5,7 @@ import { FeatureReveal } from "@/components/shared/feature-reveal";
 import { Dock } from "@/features/layout/dock";
 import { DOCK_TABS, normalizeDockLayout, restoreDockLayoutTabs, visibleDockTabs } from "@/shared/dock-layout";
 import { useResolvedTheme } from "@/hooks/use-theme";
+import { useTextSize } from "@/hooks/use-text-size";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav, type Route, type Tab } from "@/hooks/navigation-provider";
 import { useExtensionState } from "@/hooks/extension-state-provider";
@@ -71,6 +72,7 @@ const AppContent = () => {
   const { t } = useI18n();
   const { tab, stack, setTab } = useNav();
   const theme = useResolvedTheme(state.settings.appearance);
+  useTextSize(state.settings.textSize);
   const mainRef = useRef<HTMLElement>(null);
   const [visited, setVisited] = useState<Set<Tab>>(() => new Set([tab]));
 

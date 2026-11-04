@@ -3,6 +3,7 @@ import { pendingLegalDocuments } from "@nowly/shared/legal";
 import { Wordmark } from "@/components/shared/wordmark";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useResolvedTheme } from "@/hooks/use-theme";
+import { useTextSize } from "@/hooks/use-text-size";
 import { useI18n } from "@/hooks/i18n-provider";
 import { Button, Spinner } from "@/ui/button";
 import { closeSidePanel } from "@/lib/close-side-panel";
@@ -14,6 +15,7 @@ export const LegalGate = ({ children }: {
 }) => {
   const { state: extension } = useExtensionState();
   const theme = useResolvedTheme(extension.settings.appearance);
+  useTextSize(extension.settings.textSize);
   const { t } = useI18n();
   const { state, failed, retry, confirm } = useLegalDocuments();
   const [retrying, setRetrying] = useState(false);

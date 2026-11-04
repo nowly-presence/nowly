@@ -45,7 +45,17 @@
   --door-handle: #f5a524;
   --doorway: #07050a;
 
+  --text-scale: 1;
+
   color-scheme: light;
+}
+
+:root[data-text-size="medium"] {
+  --text-scale: 1.125;
+}
+
+:root[data-text-size="large"] {
+  --text-scale: 1.25;
 }
 
 .dark {
@@ -445,22 +455,22 @@
 
   --text-countdown: 96px;
   --text-countdown--line-height: 1;
-  --text-headline-md: 31px;
-  --text-headline-md--line-height: 37px;
-  --text-headline-sm: 24px;
-  --text-headline-sm--line-height: 29px;
-  --text-body-lg: 18px;
-  --text-body-lg--line-height: 27.9px;
-  --text-body-md: 16px;
-  --text-body-md--line-height: 24px;
-  --text-body-sm: 14px;
-  --text-body-sm--line-height: 21px;
-  --text-label-lg: 14px;
-  --text-label-lg--line-height: 21px;
-  --text-label-md: 12px;
-  --text-label-md--line-height: 16px;
-  --text-label-sm: 11px;
-  --text-label-sm--line-height: 14px;
+  --text-headline-md: calc(31px * var(--text-scale));
+  --text-headline-md--line-height: calc(37px * var(--text-scale));
+  --text-headline-sm: calc(24px * var(--text-scale));
+  --text-headline-sm--line-height: calc(29px * var(--text-scale));
+  --text-body-lg: calc(18px * var(--text-scale));
+  --text-body-lg--line-height: calc(27.9px * var(--text-scale));
+  --text-body-md: calc(16px * var(--text-scale));
+  --text-body-md--line-height: calc(24px * var(--text-scale));
+  --text-body-sm: calc(14px * var(--text-scale));
+  --text-body-sm--line-height: calc(21px * var(--text-scale));
+  --text-label-lg: calc(14px * var(--text-scale));
+  --text-label-lg--line-height: calc(21px * var(--text-scale));
+  --text-label-md: calc(12px * var(--text-scale));
+  --text-label-md--line-height: calc(16px * var(--text-scale));
+  --text-label-sm: calc(11px * var(--text-scale));
+  --text-label-sm--line-height: calc(14px * var(--text-scale));
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 

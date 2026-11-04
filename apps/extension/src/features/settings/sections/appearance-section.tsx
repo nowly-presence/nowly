@@ -4,10 +4,11 @@ import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { commonPresenceLocales } from "@/lib/presence-locales";
 import { isLocale, isLongLocale, LOCALE_LONG_MAP, LOCALE_NAMES, longLocaleName, PRESENCE_LOCALES, UI_LOCALES } from "@/shared/locales";
-import type { AppearanceMode } from "@/shared/types";
+import type { AppearanceMode, TextSize } from "@/shared/types";
 import { Group } from "@/ui/card";
 import { FieldRow } from "@/ui/field-row";
 import { LocaleFlag } from "@/ui/locale-flag";
+import { OptionCards } from "@/ui/option-cards";
 import { SwitchRow } from "@/ui/row";
 import { Section } from "@/ui/section";
 import { Segmented } from "@/ui/segmented";
@@ -58,6 +59,32 @@ export const AppearanceSection = () => {
               {
                 value: "dark",
                 label: t("settings.themeDark")
+              }
+            ]}
+          />
+        </FieldRow>
+        <FieldRow title={t("settings.textSize")} layout="stacked">
+          <OptionCards<TextSize>
+            label={t("settings.textSize")}
+            value={settings.textSize ?? "normal"}
+            onValueChange={(value) => void updateSettings({ textSize: value })}
+            size="sm"
+            columns={3}
+            options={[
+              {
+                value: "normal",
+                label: t("settings.textSizeNormal"),
+                preview: <span className="text-label-md">Aa</span>
+              },
+              {
+                value: "medium",
+                label: t("settings.textSizeMedium"),
+                preview: <span className="text-body-sm">Aa</span>
+              },
+              {
+                value: "large",
+                label: t("settings.textSizeLarge"),
+                preview: <span className="text-body-lg">Aa</span>
               }
             ]}
           />

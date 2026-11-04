@@ -3,6 +3,7 @@ import type { ExtensionSettings } from "@/shared/types";
 
 export const DEFAULT_SETTINGS: ExtensionSettings = {
   presenceDisplayMode: "category",
+  textSize: "normal",
   showPlayer: true,
   suggestPresences: true,
   scheduleEnabled: false,
