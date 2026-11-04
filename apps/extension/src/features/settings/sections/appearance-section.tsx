@@ -66,7 +66,7 @@ export const AppearanceSection = () => {
         <FieldRow title={t("settings.textSize")} layout="stacked">
           <OptionCards<TextSize>
             label={t("settings.textSize")}
-            value={settings.textSize ?? "normal"}
+            value={settings.textSize ?? "medium"}
             onValueChange={(value) => void updateSettings({ textSize: value })}
             size="sm"
             columns={3}

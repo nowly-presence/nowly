@@ -64,7 +64,6 @@ export const AboutSection = () => {
         <LinkRow icon={<SettingsIcon icon={<RiDiscordLine className={ICON_CLASS} />} />} title={t("settings.community")} href={DISCORD_INVITE_URL} />
         <LinkRow icon={<SettingsIcon icon={<RiGithubLine className={ICON_CLASS} />} />} title="GitHub" href={GITHUB_URL} />
       </Group>
-      <p className="px-1 pt-2 text-label-md text-muted text-balance">{t("settings.privacyNote")}</p>
       <SupportSheet open={supportOpen} onClose={() => setSupportOpen(false)} />
     </Section>
   );

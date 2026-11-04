@@ -54,6 +54,10 @@ const CUSTOM_ACTIVITY_REVEAL = {
   id: "custom-activity",
   version: "2.4.0"
 } as const;
+const CREATOR_REVEAL = {
+  id: "creator",
+  version: "2.6.0"
+} as const;
 const ACCOUNT_SYNC_REVEAL = {
   id: "account-sync",
   version: "2.3.0"
@@ -161,7 +165,12 @@ const AppContent = () => {
                   value: "creator",
                   label: t("nav.creator"),
                   icon: <RiMagicLine className="size-[18px]" />,
-                  activeIcon: <RiMagicFill className="size-[18px]" />
+                  activeIcon: <RiMagicFill className="size-[18px]" />,
+                  wrap: (button) => (
+                    <FeatureReveal {...CREATOR_REVEAL} text={t("reveal.creator")} hint={t("reveal.creatorHint")}>
+                      {button}
+                    </FeatureReveal>
+                  )
                 },
                 {
                   value: "store",
