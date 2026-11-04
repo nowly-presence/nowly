@@ -615,7 +615,10 @@ describe("presence moderation", () => {
       url: `/admin/presences/${SLUG}`,
       headers: admin
     });
-    expect(removed.json()).toEqual({ deleted: true });
+    expect(removed.json()).toEqual({
+      deleted: true,
+      repository: "disabled"
+    });
     expect(await database.db.select().from(presence).where(eq(presence.slug, SLUG))).toHaveLength(0);
     expect(await database.db.select().from(presenceLike).where(eq(presenceLike.slug, SLUG))).toHaveLength(0);
 

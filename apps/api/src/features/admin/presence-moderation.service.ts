@@ -1,4 +1,6 @@
 import { getDb } from "@/db/client";
+import { removePresenceFolder } from "@/features/presence-submissions/nolo-repository";
+import { githubInstallationClient, hasGithubApp } from "@/shared/github-app";
 import { removeCreatorImages, storedKeys } from "@/features/presence-submissions/submission-storage";
 import { hasObjectStorage, objectStorage } from "@/shared/object-storage";
 import { ListObjectsV2Command } from "@aws-sdk/client-s3";
@@ -32,13 +34,23 @@ const catalogKeys = async (slug: string): Promise<string[]> => {
   return keys;
 };
 
-export const listHiddenPresences = async (): Promise<Array<{
-  slug: string;
-  name: string;
-}>> => {
-  const rows = await getDb().select({ slug: presence.slug, metadata: presence.metadata }).from(presence).where(eq(presence.archived, true)).orderBy(asc(presence.slug));
+export const listHiddenPresences = async (): Promise<
+  Array<{
+    slug: string;
+    name: string;
+  }>
+> => {
+  const rows = await getDb()
+    .select({
+      slug: presence.slug,
+      metadata: presence.metadata
+    })
+    .from(presence)
+    .where(eq(presence.archived, true))
+    .orderBy(asc(presence.slug));
   return rows.map((row) => {
-    const name = typeof row.metadata === "object" && row.metadata && "name" in row.metadata && typeof row.metadata.name === "string" ? row.metadata.name : row.slug;
+    const name =
+      typeof row.metadata === "object" && row.metadata && "name" in row.metadata && typeof row.metadata.name === "string" ? row.metadata.name : row.slug;
     return {
       slug: row.slug,
       name
@@ -79,8 +91,21 @@ export const setPresenceHidden = async (
     };
   });
 
+export type RepositoryRemoval = "removed" | "missing" | "failed" | "disabled";
+
+const removeFromRepository = async (slug: string): Promise<RepositoryRemoval> => {
+  if (!hasGithubApp()) return "disabled";
+
+  try {
+    return await removePresenceFolder(await githubInstallationClient(), slug);
+  } catch {
+    return "failed";
+  }
+};
+
 export const deletePresenceCompletely = async (actor: AuditActor, slug: string): Promise<{
   found: boolean;
+  repository: RepositoryRemoval;
 }> => {
   const submissionKeys: string[] = [];
   const found = await getDb().transaction(async (tx) => {
@@ -121,5 +146,8 @@ export const deletePresenceCompletely = async (actor: AuditActor, slug: string):
     await removeCreatorImages(keys).catch(() => undefined);
   }
 
-  return { found };
+  return {
+    found,
+    repository: found ? await removeFromRepository(slug) : "missing"
+  };
 };

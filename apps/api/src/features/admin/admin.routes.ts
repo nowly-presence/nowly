@@ -107,7 +107,10 @@ export const adminRoutes = new Hono<AppEnv>()
 
     if (!result.found) return c.json({ error: "PRESENCE_NOT_FOUND" }, 404);
 
-    return c.json({ deleted: true });
+    return c.json({
+      deleted: true,
+      repository: result.repository
+    });
   })
   .put("/users/:userId/role", requireCapability("manage"), async (c) => {
     const body = RoleBodySchema.safeParse(await jsonBody(c));
