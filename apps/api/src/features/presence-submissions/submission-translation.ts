@@ -166,6 +166,20 @@ export const applyTranslations = (definition: CreatorDefinition, translations: M
   };
 };
 
+const TRANSLATION_ATTEMPTS = 2;
+
+const translateWithRetry = async (items: SourceItem[], from: LocaleString, to: LocaleString): Promise<Map<string, string>> => {
+  for (let attempt = 1; attempt <= TRANSLATION_ATTEMPTS; attempt += 1) {
+    try {
+      return await translateTo(items, from, to);
+    } catch {
+      continue;
+    }
+  }
+
+  return new Map(items.map((item) => [item.key, item.text]));
+};
+
 export const translateDefinition = async (definition: CreatorDefinition): Promise<CreatorDefinition> => {
   const items = collect(definition);
   const targets = TRANSLATION_LOCALES.filter((locale) => locale !== definition.baseLocale);
@@ -174,7 +188,7 @@ export const translateDefinition = async (definition: CreatorDefinition): Promis
 
   for (let start = 0; start < targets.length; start += PARALLEL_TRANSLATIONS) {
     const batch = targets.slice(start, start + PARALLEL_TRANSLATIONS);
-    const results = await Promise.all(batch.map((locale) => translateTo(items, definition.baseLocale, locale)));
+    const results = await Promise.all(batch.map((locale) => translateWithRetry(items, definition.baseLocale, locale)));
     batch.forEach((locale, index) => translations.set(locale, results[index]));
   }
 

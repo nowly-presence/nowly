@@ -154,7 +154,9 @@ describe("translateDefinition", () => {
           )
       )
     );
-    await expect(translateDefinition(english())).rejects.toThrow("not valid JSON");
+    const untranslated = await translateDefinition(english());
+    expect(untranslated.description["fr-FR"]).toBe(english().description["en-US"]);
+    expect(untranslated.locales).toContain("fr-FR");
 
     vi.stubGlobal(
       "fetch",
