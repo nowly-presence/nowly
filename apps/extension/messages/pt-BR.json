@@ -675,7 +675,6 @@
   "creator.home.stepPages": "O que o Discord mostra em cada página",
   "creator.home.stepSubmit": "O envio para revisão",
   "creator.home.create": "Nova presença",
-  "creator.home.mine": "Minhas criações",
   "creator.home.edited": "Editada em {date}",
   "creator.home.delete": "Excluir o rascunho",
   "creator.home.import": "Importar um rascunho",
@@ -1053,8 +1052,10 @@
   "admin.presence.shown": "Presença visível novamente",
   "admin.presence.deleted": "Presença excluída",
   "admin.presence.hiddenTitle": "Presenças ocultas",
-  "creator.home.openPullRequest": "Abrir a pull request",
   "admin.presence.edit": "Editar",
   "admin.presence.editHint": "Abre a presença no criador.",
-  "action.edit": "Editar"
+  "action.edit": "Editar",
+  "creator.home.groupOpen": "Para concluir",
+  "creator.home.groupReview": "Em revisão",
+  "creator.home.openLibrary": "Abrir na biblioteca"
 }

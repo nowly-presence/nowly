@@ -675,7 +675,6 @@
   "creator.home.stepPages": "Ce que Discord affiche sur chaque page",
   "creator.home.stepSubmit": "L'envoi en validation",
   "creator.home.create": "Nouvelle présence",
-  "creator.home.mine": "Mes créations",
   "creator.home.edited": "Modifiée le {date}",
   "creator.home.delete": "Supprimer le brouillon",
   "creator.home.import": "Importer un brouillon",
@@ -1053,8 +1052,10 @@
   "admin.presence.shown": "Présence de nouveau visible",
   "admin.presence.deleted": "Présence supprimée",
   "admin.presence.hiddenTitle": "Présences masquées",
-  "creator.home.openPullRequest": "Ouvrir la pull request",
   "admin.presence.edit": "Modifier",
   "admin.presence.editHint": "Ouvre la présence dans le créateur.",
-  "action.edit": "Modifier"
+  "action.edit": "Modifier",
+  "creator.home.groupOpen": "À terminer",
+  "creator.home.groupReview": "En validation",
+  "creator.home.openLibrary": "Ouvrir dans la bibliothèque"
 }

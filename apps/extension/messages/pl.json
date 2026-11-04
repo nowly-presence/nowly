@@ -675,7 +675,6 @@
   "creator.home.stepPages": "Co Discord pokazuje na każdej stronie",
   "creator.home.stepSubmit": "Wysłanie do weryfikacji",
   "creator.home.create": "Nowa obecność",
-  "creator.home.mine": "Moje obecności",
   "creator.home.edited": "Edytowano {date}",
   "creator.home.delete": "Usuń szkic",
   "creator.home.import": "Importuj szkic",
@@ -1053,8 +1052,10 @@
   "admin.presence.shown": "Prezencja znów widoczna",
   "admin.presence.deleted": "Prezencja usunięta",
   "admin.presence.hiddenTitle": "Ukryte prezencje",
-  "creator.home.openPullRequest": "Otwórz pull request",
   "admin.presence.edit": "Edytuj",
   "admin.presence.editHint": "Otwiera obecność w kreatorze.",
-  "action.edit": "Edytuj"
+  "action.edit": "Edytuj",
+  "creator.home.groupOpen": "Do dokończenia",
+  "creator.home.groupReview": "W weryfikacji",
+  "creator.home.openLibrary": "Otwórz w bibliotece"
 }

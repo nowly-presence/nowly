@@ -1,7 +1,7 @@
 import { useRef, useState, type ChangeEvent } from "react";
-import { RiAddLine, RiCursorLine, RiDeleteBinLine, RiDownload2Line, RiGitPullRequestLine, RiImageLine, RiMagicLine, RiSendPlaneLine, RiUpload2Line } from "@remixicon/react";
+import { RiAddLine, RiBookOpenLine, RiCursorLine, RiDeleteBinLine, RiDownload2Line, RiImageLine, RiMagicLine, RiSendPlaneLine, RiUpload2Line } from "@remixicon/react";
 import { ScreenBody, ScreenTitle } from "@/components/shared/screen";
-import { openUrl } from "@/shared/browser-links";
+import { useNav } from "@/hooks/navigation-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { formatDate } from "@/lib/format";
 import type { CreatorDraft } from "@nowly/presence-creator/creator-types";
@@ -15,6 +15,7 @@ import { Section } from "@/ui/section";
 import { Sheet } from "@/ui/sheet";
 import { Skeleton } from "@/ui/skeleton";
 import { SUBMISSION_TONES, statusKey } from "@/lib/submission-status";
+import { presenceSlug } from "@nowly/presence-creator/creator-draft";
 import { DraftLogo } from "@/features/creator/review/draft-preview";
 
 type CreatorHomeProps = {
@@ -29,6 +30,27 @@ type CreatorHomeProps = {
 
 const LOGO_SIZE = 40;
 
+type DraftGroup = "open" | "review" | "published" | "rejected";
+
+const GROUP_ORDER: DraftGroup[] = ["open", "review", "published", "rejected"];
+
+const GROUP_TITLES = {
+  open: "creator.home.groupOpen",
+  review: "creator.home.groupReview",
+  published: "creator.status.published",
+  rejected: "creator.status.rejected"
+} as const;
+
+const groupOf = (draft: CreatorDraft): DraftGroup => {
+  const status = draft.submission?.status;
+
+  if (status === "published") return "published";
+  if (status === "rejected") return "rejected";
+  if (status === "submitted" || status === "approved" || status === "in_progress") return "review";
+
+  return "open";
+};
+
 const DraftRow = ({ draft, onOpen, onExport, onDelete }: {
   draft: CreatorDraft;
   onOpen: () => void;
@@ -36,6 +58,7 @@ const DraftRow = ({ draft, onOpen, onExport, onDelete }: {
   onDelete: () => void;
 }) => {
   const { t, locale } = useI18n();
+  const { push } = useNav();
   const name = draft.name.trim() || t("creator.untitled");
 
   return (
@@ -52,18 +75,21 @@ const DraftRow = ({ draft, onOpen, onExport, onDelete }: {
       onClick={onOpen}
       trailing={
         <ButtonGroup label={name}>
-          {draft.submission?.prUrl && (
+          {draft.submission?.status === "published" && (
             <Button
               size="icon-sm"
               variant="ghost"
-              aria-label={t("creator.home.openPullRequest")}
-              title={t("creator.home.openPullRequest")}
+              aria-label={t("creator.home.openLibrary")}
+              title={t("creator.home.openLibrary")}
               onClick={(event) => {
                 event.stopPropagation();
-                if (draft.submission?.prUrl) openUrl(draft.submission.prUrl);
+                push({
+                  name: "presence",
+                  slug: presenceSlug(draft.name)
+                });
               }}
             >
-              <RiGitPullRequestLine className="size-4" />
+              <RiBookOpenLine className="size-4" />
             </Button>
           )}
           <Button
@@ -174,19 +200,25 @@ export const CreatorHome = ({ drafts, ready, onCreate, onOpen, onDelete, onImpor
         <Welcome onCreate={onCreate} />
       ) : (
         <>
-          <Section title={t("creator.home.mine")}>
-            <Group>
-              {drafts.map((draft) => (
-                <DraftRow
-                  key={draft.id}
-                  draft={draft}
-                  onOpen={() => onOpen(draft.id)}
-                  onExport={() => onExport(draft)}
-                  onDelete={() => setPendingDelete(draft)}
-                />
-              ))}
-            </Group>
-          </Section>
+          {GROUP_ORDER.map((group) => {
+            const items = drafts.filter((draft) => groupOf(draft) === group);
+
+            return items.length === 0 ? null : (
+              <Section key={group} title={t(GROUP_TITLES[group])}>
+                <Group>
+                  {items.map((draft) => (
+                    <DraftRow
+                      key={draft.id}
+                      draft={draft}
+                      onOpen={() => onOpen(draft.id)}
+                      onExport={() => onExport(draft)}
+                      onDelete={() => setPendingDelete(draft)}
+                    />
+                  ))}
+                </Group>
+              </Section>
+            );
+          })}
         </>
       )}
 

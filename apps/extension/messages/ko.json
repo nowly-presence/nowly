@@ -675,7 +675,6 @@
   "creator.home.stepPages": "각 페이지에서 Discord에 보여 줄 내용",
   "creator.home.stepSubmit": "검토 요청 보내기",
   "creator.home.create": "새 프레즌스",
-  "creator.home.mine": "내가 만든 프레즌스",
   "creator.home.edited": "{date}에 수정됨",
   "creator.home.delete": "초안 삭제",
   "creator.home.import": "초안 가져오기",
@@ -1053,8 +1052,10 @@
   "admin.presence.shown": "프레즌스가 다시 표시됩니다",
   "admin.presence.deleted": "프레즌스를 삭제했습니다",
   "admin.presence.hiddenTitle": "숨긴 프레즌스",
-  "creator.home.openPullRequest": "풀 리퀘스트 열기",
   "admin.presence.edit": "편집",
   "admin.presence.editHint": "크리에이터에서 엽니다.",
-  "action.edit": "편집"
+  "action.edit": "편집",
+  "creator.home.groupOpen": "작성 중",
+  "creator.home.groupReview": "검토 중",
+  "creator.home.openLibrary": "라이브러리에서 열기"
 }

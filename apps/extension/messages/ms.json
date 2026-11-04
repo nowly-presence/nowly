@@ -675,7 +675,6 @@
   "creator.home.stepPages": "Apa yang Discord paparkan pada setiap halaman",
   "creator.home.stepSubmit": "Penghantaran untuk semakan",
   "creator.home.create": "Kehadiran baharu",
-  "creator.home.mine": "Ciptaan saya",
   "creator.home.edited": "Disunting pada {date}",
   "creator.home.delete": "Padam draf",
   "creator.home.import": "Import draf",
@@ -1053,8 +1052,10 @@
   "admin.presence.shown": "Presence kelihatan semula",
   "admin.presence.deleted": "Presence dipadam",
   "admin.presence.hiddenTitle": "Presence tersembunyi",
-  "creator.home.openPullRequest": "Buka pull request",
   "admin.presence.edit": "Edit",
   "admin.presence.editHint": "Buka kehadiran dalam pencipta.",
-  "action.edit": "Edit"
+  "action.edit": "Edit",
+  "creator.home.groupOpen": "Untuk disiapkan",
+  "creator.home.groupReview": "Dalam semakan",
+  "creator.home.openLibrary": "Buka dalam pustaka"
 }

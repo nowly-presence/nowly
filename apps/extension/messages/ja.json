@@ -675,7 +675,6 @@
   "creator.home.stepPages": "各ページで Discord に表示する内容",
   "creator.home.stepSubmit": "審査への送信",
   "creator.home.create": "新しいプレゼンス",
-  "creator.home.mine": "作成したプレゼンス",
   "creator.home.edited": "{date} に編集",
   "creator.home.delete": "下書きを削除",
   "creator.home.import": "下書きをインポート",
@@ -1053,8 +1052,10 @@
   "admin.presence.shown": "プレゼンスを再表示しました",
   "admin.presence.deleted": "プレゼンスを削除しました",
   "admin.presence.hiddenTitle": "非表示のプレゼンス",
-  "creator.home.openPullRequest": "プルリクエストを開く",
   "admin.presence.edit": "編集",
   "admin.presence.editHint": "クリエイターで開きます。",
-  "action.edit": "編集"
+  "action.edit": "編集",
+  "creator.home.groupOpen": "作成中",
+  "creator.home.groupReview": "審査中",
+  "creator.home.openLibrary": "ライブラリで開く"
 }

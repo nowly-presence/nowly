@@ -675,7 +675,6 @@
   "creator.home.stepPages": "What Discord shows on each page",
   "creator.home.stepSubmit": "Sending it for review",
   "creator.home.create": "New presence",
-  "creator.home.mine": "My creations",
   "creator.home.edited": "Edited on {date}",
   "creator.home.delete": "Delete the draft",
   "creator.home.import": "Import a draft",
@@ -1053,8 +1052,10 @@
   "admin.presence.shown": "Presence visible again",
   "admin.presence.deleted": "Presence deleted",
   "admin.presence.hiddenTitle": "Hidden presences",
-  "creator.home.openPullRequest": "Open the pull request",
   "admin.presence.edit": "Edit",
   "admin.presence.editHint": "Opens the presence in the creator.",
-  "action.edit": "Edit"
+  "action.edit": "Edit",
+  "creator.home.groupOpen": "To finish",
+  "creator.home.groupReview": "In review",
+  "creator.home.openLibrary": "Open in the library"
 }

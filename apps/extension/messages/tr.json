@@ -675,7 +675,6 @@
   "creator.home.stepPages": "Discord'un her sayfada gösterdikleri",
   "creator.home.stepSubmit": "İncelemeye gönderme",
   "creator.home.create": "Yeni varlık",
-  "creator.home.mine": "Oluşturduklarım",
   "creator.home.edited": "{date} tarihinde düzenlendi",
   "creator.home.delete": "Taslağı sil",
   "creator.home.import": "Taslağı içe aktar",
@@ -1053,8 +1052,10 @@
   "admin.presence.shown": "Presence yeniden görünür",
   "admin.presence.deleted": "Presence silindi",
   "admin.presence.hiddenTitle": "Gizli presence'ler",
-  "creator.home.openPullRequest": "Pull request'i aç",
   "admin.presence.edit": "Düzenle",
   "admin.presence.editHint": "Varlığı oluşturucuda açar.",
-  "action.edit": "Düzenle"
+  "action.edit": "Düzenle",
+  "creator.home.groupOpen": "Tamamlanacaklar",
+  "creator.home.groupReview": "İncelemede",
+  "creator.home.openLibrary": "Kütüphanede aç"
 }

@@ -4,6 +4,7 @@ import { PresenceDeleteSheet } from "@/components/shared/presence-delete-sheet";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav } from "@/hooks/navigation-provider";
 import { useCreatorPresenceProbe } from "@/hooks/use-creator-presence-probe";
+import { useOwnCreatorDraft } from "@/hooks/use-own-creator-draft";
 import { usePresenceModeration } from "@/hooks/use-presence-moderation";
 import { useStaffAccess } from "@/hooks/use-staff-access";
 import { Button } from "@/ui/button";
@@ -20,7 +21,9 @@ export const PresenceModerationActions = ({ slug, name }: {
   const moderation = usePresenceModeration(pop);
   const [confirming, setConfirming] = useState(false);
 
-  const editable = useCreatorPresenceProbe(slug, staff.can("review"));
+  const ownDraftId = useOwnCreatorDraft(slug);
+  const staffEditable = useCreatorPresenceProbe(slug, staff.can("review"));
+  const editable = Boolean(ownDraftId) || staffEditable;
   const admin = staff.can("publish");
 
   if (!admin && !editable) return null;
@@ -38,12 +41,7 @@ export const PresenceModerationActions = ({ slug, name }: {
                 size="sm"
                 variant="secondary"
                 icon={<RiMagicLine className="size-4" />}
-                onClick={() =>
-                  push({
-                    name: "creator",
-                    presenceSlug: slug
-                  })
-                }
+                onClick={() => push(ownDraftId ? { name: "creator", draftId: ownDraftId } : { name: "creator", presenceSlug: slug })}
               >
                 {t("action.edit")}
               </Button>

@@ -675,7 +675,6 @@
   "creator.home.stepPages": "Τι δείχνει το Discord σε κάθε σελίδα",
   "creator.home.stepSubmit": "Η αποστολή για έλεγχο",
   "creator.home.create": "Νέα παρουσία",
-  "creator.home.mine": "Οι δημιουργίες μου",
   "creator.home.edited": "Επεξεργάστηκε στις {date}",
   "creator.home.delete": "Διαγραφή πρόχειρου",
   "creator.home.import": "Εισαγωγή προσχεδίου",
@@ -1053,8 +1052,10 @@
   "admin.presence.shown": "Η παρουσία είναι ξανά ορατή",
   "admin.presence.deleted": "Η παρουσία διαγράφηκε",
   "admin.presence.hiddenTitle": "Κρυφές παρουσίες",
-  "creator.home.openPullRequest": "Άνοιγμα του pull request",
   "admin.presence.edit": "Επεξεργασία",
   "admin.presence.editHint": "Ανοίγει την παρουσία στον δημιουργό.",
-  "action.edit": "Επεξεργασία"
+  "action.edit": "Επεξεργασία",
+  "creator.home.groupOpen": "Προς ολοκλήρωση",
+  "creator.home.groupReview": "Σε έλεγχο",
+  "creator.home.openLibrary": "Άνοιγμα στη βιβλιοθήκη"
 }
