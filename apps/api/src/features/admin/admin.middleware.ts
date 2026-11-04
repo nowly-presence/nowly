@@ -22,6 +22,8 @@ export const requireCapability =
 
     if (!account) return deny(c, 401, "UNAUTHORIZED");
 
+    if (account.tokenId && !account.scopes.includes("admin")) return deny(c, 403, "ADMIN_SCOPE_REQUIRED");
+
     const role = await getUserRole(account.userId);
 
     if (!hasCapability(role, capability)) return deny(c, 403, "FORBIDDEN");

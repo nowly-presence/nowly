@@ -90,11 +90,40 @@ export const searchAdminUsers = async (query: string): Promise<AdminUserView[]> 
       verified: user.verified
     })
     .from(user)
-    .where(or(ilike(user.name, pattern), ilike(user.discordUsername, pattern), eq(user.id, query), eq(user.discordId, query), inArray(user.id, getDb().select({ id: account.userId }).from(account).where(and(eq(account.providerId, "discord"), eq(account.accountId, query))))))
+    .where(
+      or(
+        ilike(user.name, pattern),
+        ilike(user.discordUsername, pattern),
+        eq(user.id, query),
+        eq(user.discordId, query),
+        inArray(
+          user.id,
+          getDb()
+            .select({ id: account.userId })
+            .from(account)
+            .where(and(eq(account.providerId, "discord"), eq(account.accountId, query)))
+        )
+      )
+    )
     .orderBy(desc(user.createdAt))
     .limit(ADMIN_USER_SEARCH_LIMIT);
   return rows;
 };
+
+export const listStaffUsers = async (): Promise<AdminUserView[]> =>
+  getDb()
+    .select({
+      id: user.id,
+      name: user.name,
+      username: user.discordUsername,
+      image: user.image,
+      role: user.role,
+      verified: user.verified
+    })
+    .from(user)
+    .where(inArray(user.role, ["moderator", "admin"]))
+    .orderBy(desc(user.createdAt))
+    .limit(ADMIN_USER_SEARCH_LIMIT);
 
 export const setUserVerified = async (
   actor: AuditActor,

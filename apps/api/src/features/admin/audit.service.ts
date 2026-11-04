@@ -1,6 +1,7 @@
 import { getDb } from "@/db/client";
 import type { Executor } from "@nowly/database/client";
 import { adminAuditEvent } from "@nowly/database/schema/admin";
+import { user } from "@nowly/database/schema/auth";
 import { desc, eq, lt } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 
@@ -35,6 +36,7 @@ export type AuditEventView = {
   id: string;
   actorId: string | null;
   actorKind: string;
+  actorName: string | null;
   action: string;
   targetType: string;
   targetId: string | null;
@@ -56,10 +58,11 @@ export const recordAdminAction = async (executor: Executor, actor: AuditActor, e
   });
 };
 
-const toView = (row: typeof adminAuditEvent.$inferSelect): AuditEventView => ({
+const toView = (row: typeof adminAuditEvent.$inferSelect, actorName: string | null = null): AuditEventView => ({
   id: row.id,
   actorId: row.actorId,
   actorKind: row.actorKind,
+  actorName,
   action: row.action,
   targetType: row.targetType,
   targetId: row.targetId,
@@ -69,15 +72,19 @@ const toView = (row: typeof adminAuditEvent.$inferSelect): AuditEventView => ({
 
 export const listAdminActions = async (before?: Date): Promise<AuditEventView[]> => {
   const rows = await getDb()
-    .select()
+    .select({
+      event: adminAuditEvent,
+      actorName: user.name
+    })
     .from(adminAuditEvent)
+    .leftJoin(user, eq(user.id, adminAuditEvent.actorId))
     .where(before ? lt(adminAuditEvent.createdAt, before) : undefined)
     .orderBy(desc(adminAuditEvent.createdAt), desc(adminAuditEvent.id))
     .limit(AUDIT_PAGE_SIZE);
-  return rows.map(toView);
+  return rows.map((row) => toView(row.event, row.actorName));
 };
 
 export const listActorActions = async (userId: string): Promise<AuditEventView[]> => {
   const rows = await getDb().select().from(adminAuditEvent).where(eq(adminAuditEvent.actorId, userId)).orderBy(desc(adminAuditEvent.createdAt));
-  return rows.map(toView);
+  return rows.map((row) => toView(row));
 };

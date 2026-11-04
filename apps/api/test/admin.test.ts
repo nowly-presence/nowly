@@ -147,18 +147,17 @@ describe("roles and capabilities", () => {
     ).toBe(403);
   });
 
-  it("grants staff access from any extension token but never to regular accounts", async () => {
+  it("requires the admin scope on extension tokens and never grants staff access to regular accounts", async () => {
     const server = await app();
 
-    const staffToken = await bearer(ADMIN, ["sync"]);
-    expect(
-      (
-        await inject(server, {
-          url: "/admin/audit",
-          headers: staffToken
-        })
-      ).statusCode
-    ).toBe(200);
+    const syncToken = await bearer(ADMIN, ["sync"]);
+
+    const scopeRefused = await inject(server, {
+      url: "/admin/audit",
+      headers: syncToken
+    });
+    expect(scopeRefused.statusCode).toBe(403);
+    expect(scopeRefused.json()).toEqual({ error: "ADMIN_SCOPE_REQUIRED" });
 
     const memberToken = await bearer(MEMBER, ["sync", "admin"]);
 
@@ -224,6 +223,20 @@ describe("roles and capabilities", () => {
 
     const found = await inject(server, { url: "/admin/users?q=927843025567232050" });
     expect(found.json().users).toEqual([expect.objectContaining({ id: MEMBER })]);
+  });
+
+  it("lists the staff accounts for the rights matrix", async () => {
+    mockSession.userId = ADMIN;
+    const server = await app();
+
+    const staff = await inject(server, { url: "/admin/users/staff" });
+    expect(staff.statusCode).toBe(200);
+    expect(staff.json().users).toEqual([
+      expect.objectContaining({
+        id: ADMIN,
+        role: "admin"
+      })
+    ]);
   });
 
   it("searches users and grants or removes the verified badge with an audit entry", async () => {

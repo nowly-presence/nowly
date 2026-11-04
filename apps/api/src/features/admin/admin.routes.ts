@@ -8,7 +8,7 @@ import { z } from "zod";
 import { requireCapability } from "./admin.middleware";
 import { listAdminActions } from "./audit.service";
 import { deletePresenceCompletely, listHiddenPresences, setPresenceHidden } from "./presence-moderation.service";
-import { searchAdminUsers, setUserRole, setUserVerified } from "./roles.service";
+import { listStaffUsers, searchAdminUsers, setUserRole, setUserVerified } from "./roles.service";
 
 const ADMIN_RATE_LIMIT = rateLimit({
   name: "admin",
@@ -36,6 +36,10 @@ export const adminRoutes = new Hono<AppEnv>()
 
     c.header("Cache-Control", "no-store");
     return c.json({ events: await listAdminActions(query.data.before ? new Date(query.data.before) : undefined) });
+  })
+  .get("/users/staff", requireCapability("manage"), async (c) => {
+    c.header("Cache-Control", "no-store");
+    return c.json({ users: await listStaffUsers() });
   })
   .get("/users", requireCapability("manage"), async (c) => {
     const query = UserSearchSchema.safeParse(c.req.query());
