@@ -439,7 +439,7 @@
   "settings.replayRevealsHint": "Tüm yenilikleri keşfedilmemiş olarak işaretler ve sürümden bağımsız olarak Nolo'yu yeniden gösterir.",
   "settings.account": "Hesap ve eşitleme",
   "account.signedOutTitle": "Cihazların arasında eşitle",
-  "account.signedOutHint": "Presence'larını ve ayarlarını diğer tarayıcılarında da bulmak için Discord ile giriş yap. Bu isteğe bağlıdır: hesap olmadan her şey eskisi gibi çalışır.",
+  "account.signedOutHint": "Varlıklarınıza ve ayarlarınıza diğer tarayıcılarınızda da ulaşın.",
   "account.signIn": "Discord ile giriş yap",
   "account.signInOpened": "Girişi nowly.me sekmesinde tamamla",
   "account.lastSync": "Son eşitleme {time}",

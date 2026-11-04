@@ -439,7 +439,7 @@
   "settings.replayRevealsHint": "Marca todas as novidades como não descobertas e mostra o Nolo de novo, qualquer que seja a versão.",
   "settings.account": "Conta e sincronização",
   "account.signedOutTitle": "Sincronize entre seus dispositivos",
-  "account.signedOutHint": "Entre com o Discord para encontrar suas presenças e configurações nos seus outros navegadores. É opcional: sem conta, tudo funciona como antes.",
+  "account.signedOutHint": "Recupere suas presenças e configurações em outros navegadores.",
   "account.signIn": "Entrar com o Discord",
   "account.signInOpened": "Termine de entrar na aba do nowly.me",
   "account.lastSync": "Última sincronização {time}",

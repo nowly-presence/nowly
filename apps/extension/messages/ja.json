@@ -439,7 +439,7 @@
   "settings.replayRevealsHint": "すべての新機能を未発見の状態に戻し、バージョンに関係なく Nolo をもう一度表示します。",
   "settings.account": "アカウントと同期",
   "account.signedOutTitle": "デバイス間で同期",
-  "account.signedOutHint": "Discordでログインすると、ほかのブラウザでも同じプレゼンスと設定を使えます。任意の機能で、アカウントがなくてもこれまでどおり使えます。",
+  "account.signedOutHint": "他のブラウザでもプレゼンスと設定を引き継げます。",
   "account.signIn": "Discordでログイン",
   "account.signInOpened": "nowly.meのタブでログインを完了してください",
   "account.lastSync": "最終同期：{time}",

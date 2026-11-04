@@ -439,7 +439,7 @@
   "settings.replayRevealsHint": "Setzt alle neuen Funktionen auf „nicht entdeckt“ zurück und zeigt Nolo erneut, egal in welcher Version.",
   "settings.account": "Konto und Synchronisierung",
   "account.signedOutTitle": "Zwischen deinen Geräten synchronisieren",
-  "account.signedOutHint": "Melde dich mit Discord an, um deine Presences und Einstellungen in deinen anderen Browsern wiederzufinden. Das ist freiwillig: Ohne Konto funktioniert alles wie bisher.",
+  "account.signedOutHint": "Finde deine Präsenzen und Einstellungen in deinen anderen Browsern wieder.",
   "account.signIn": "Mit Discord anmelden",
   "account.signInOpened": "Schließe die Anmeldung im nowly.me-Tab ab",
   "account.lastSync": "Zuletzt synchronisiert {time}",

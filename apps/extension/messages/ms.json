@@ -439,7 +439,7 @@
   "settings.replayRevealsHint": "Menandakan semua ciri baharu sebagai belum ditemui dan memaparkan Nolo semula, tanpa mengira versi.",
   "settings.account": "Akaun dan penyegerakan",
   "account.signedOutTitle": "Segerakkan antara peranti anda",
-  "account.signedOutHint": "Log masuk dengan Discord untuk mendapatkan presence dan tetapan anda pada pelayar lain. Ini pilihan: tanpa akaun, semuanya berfungsi seperti biasa.",
+  "account.signedOutHint": "Dapatkan semula kehadiran dan tetapan anda pada pelayar lain.",
   "account.signIn": "Log masuk dengan Discord",
   "account.signInOpened": "Selesaikan log masuk dalam tab nowly.me",
   "account.lastSync": "Disegerakkan {time}",

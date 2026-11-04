@@ -439,7 +439,7 @@
   "settings.replayRevealsHint": "모든 새 기능을 확인하지 않은 상태로 되돌리고, 버전과 관계없이 Nolo를 다시 보여줘요.",
   "settings.account": "계정 및 동기화",
   "account.signedOutTitle": "기기 간 동기화",
-  "account.signedOutHint": "Discord로 로그인하면 다른 브라우저에서도 프레즌스와 설정을 그대로 사용할 수 있어요. 선택 사항이며, 계정이 없어도 지금처럼 모두 동작해요.",
+  "account.signedOutHint": "다른 브라우저에서도 프레즌스와 설정을 불러올 수 있습니다.",
   "account.signIn": "Discord로 로그인",
   "account.signInOpened": "nowly.me 탭에서 로그인을 완료하세요",
   "account.lastSync": "마지막 동기화 {time}",

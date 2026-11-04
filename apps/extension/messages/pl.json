@@ -439,7 +439,7 @@
   "settings.replayRevealsHint": "Oznacza wszystkie nowości jako nieodkryte i ponownie pokazuje Nolo, niezależnie od wersji.",
   "settings.account": "Konto i synchronizacja",
   "account.signedOutTitle": "Synchronizuj między urządzeniami",
-  "account.signedOutHint": "Zaloguj się przez Discord, aby mieć swoje obecności i ustawienia w innych przeglądarkach. To opcjonalne: bez konta wszystko działa jak wcześniej.",
+  "account.signedOutHint": "Odzyskaj swoje obecności i ustawienia w innych przeglądarkach.",
   "account.signIn": "Zaloguj się przez Discord",
   "account.signInOpened": "Dokończ logowanie na karcie nowly.me",
   "account.lastSync": "Ostatnia synchronizacja {time}",
