@@ -99,7 +99,7 @@ const TemplateRow = ({ field, variables }: {
           className={showTokens ? "hidden" : prefix ? "pl-0.5" : undefined}
           value={shown}
           onChange={(event) => change(event.target.value)}
-          placeholder={field.placeholder}
+          placeholder={prefix && field.placeholder?.startsWith(prefix) ? field.placeholder.slice(prefix.length) : field.placeholder}
           maxLength={field.maxLength}
           spellCheck={field.spellCheck}
         />
