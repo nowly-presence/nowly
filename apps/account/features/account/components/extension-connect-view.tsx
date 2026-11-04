@@ -1,13 +1,14 @@
 "use client";
 
-import { PageContainer } from "@/features/shell/components/page-container";
-import { AccountHeader } from "@/features/account/components/account-header";
+import { AuthCard } from "@/features/auth/components/auth-card";
+import { AuthFrame } from "@/features/auth/components/auth-frame";
+import { NowlyMark } from "@/features/auth/components/nowly-mark";
 import { createExtensionSession, fetchAccountUser, signOutAccount, startDiscordSignIn, type AccountUser } from "@/features/account/lib/account-api";
 import { siteBaseUrl } from "@/lib/api-base";
 import { requestExtension, subscribeExtensionDetected } from "@/lib/extension-bridge";
 import type { ExtensionTokenScope } from "@nowly/shared";
-import { buttonVariants, Button, Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
-import { RiCheckLine, RiDiscordFill, RiPlugLine, RiPuzzleLine } from "@nowly/ui/icons";
+import { buttonVariants, Button } from "@nowly/ui";
+import { RiCheckLine, RiDiscordFill, RiPuzzleLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -15,17 +16,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 type Status = "checking" | "signed-out" | "no-extension" | "ready" | "connecting" | "done" | "error" | "forbidden";
 
 const SESSION_TIMEOUT_MS = 15000;
-
-const StatusIcon = ({ status }: {
-  status: Status;
-}) => {
-  const Icon = status === "done" ? RiCheckLine : status === "no-extension" ? RiPuzzleLine : status === "signed-out" ? RiDiscordFill : RiPlugLine;
-  return (
-    <div className="flex size-12 items-center justify-center rounded-2xl bg-foreground/6">
-      <Icon className="size-6" />
-    </div>
-  );
-};
 
 export const ExtensionConnectView = () => {
   const t = useTranslations("extensionConnectPage");
@@ -151,51 +141,69 @@ export const ExtensionConnectView = () => {
                   ? t("connecting")
                   : t("connect-description", { name: user?.name ?? "" });
 
+  const showPermissions = status === "ready" || status === "connecting";
+  const permissions = showPermissions
+    ? [
+        t("perm-identity"),
+        t("perm-sync"),
+        ...(creator ? [t("perm-creator")] : []),
+        ...(admin ? [t("perm-admin")] : []),
+        t("perm-revoke")
+      ]
+    : status === "signed-out"
+      ? [
+          t("perm-name"),
+          t("perm-private")
+        ]
+      : [];
+  const linked = status === "done" ? <RiCheckLine className="size-6" /> : <RiPuzzleLine className="size-6" />;
+
   return (
-    <div className="pb-24 pt-16 sm:pb-32 sm:pt-24">
-      <PageContainer>
-        <AccountHeader eyebrow={t("eyebrow")} title={t("title")} description={t("description")} />
-
-        <Card className="mt-14 max-w-xl">
-          <CardContent>
-            <StatusIcon status={status} />
-            <CardTitle className="mt-4 text-lg">{title}</CardTitle>
-            <CardDescription className="mt-2">{description}</CardDescription>
-            {creator && status !== "done" && <CardDescription className="mt-2">{t("creator-permission")}</CardDescription>}
-            {admin && status !== "done" && status !== "forbidden" && <CardDescription className="mt-2">{t("admin-permission")}</CardDescription>}
-
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              {status === "signed-out" ? (
-                <Button disabled={busy} onClick={onSignIn}>
-                  <RiDiscordFill data-icon="inline-start" />
-                  {t("sign-in")}
-                </Button>
-              ) : null}
-              {status === "ready" ? <Button onClick={() => void connect((user?.capabilities.length ?? 0) > 0)}>{t("connect")}</Button> : null}
-              {status === "connecting" ? <Button disabled>{t("connect")}</Button> : null}
-              {status === "error" ? (
-                <Button variant="outline" onClick={() => window.location.reload()}>
-                  {t("retry")}
-                </Button>
-              ) : null}
-              {status === "no-extension" ? (
-                <a href={`${siteBaseUrl()}/extension`} className={buttonVariants({ variant: "outline" })}>
-                  {t("get-extension")}
-                </a>
-              ) : null}
+    <AuthFrame>
+      <AuthCard mark={<NowlyMark />} linked={linked} title={title} description={description} permissions={permissions}>
+        <div className="flex flex-col gap-2">
+          {status === "signed-out" ? (
+            <Button size="lg" disabled={busy} onClick={onSignIn}>
+              <RiDiscordFill data-icon="inline-start" />
+              {t("sign-in")}
+            </Button>
+          ) : null}
+          {status === "ready" || status === "connecting" ? (
+            <div className="flex gap-3">
+              <Button size="lg" variant="outline" className="flex-1" disabled={status === "connecting"} onClick={() => window.location.assign(siteBaseUrl())}>
+                {t("deny")}
+              </Button>
+              <Button size="lg" className="flex-1" disabled={status === "connecting"} onClick={() => void connect((user?.capabilities.length ?? 0) > 0)}>
+                {t("connect")}
+              </Button>
             </div>
-
-            {user && (status === "ready" || status === "done" || status === "forbidden") ? (
-              <p className="mt-6 text-xs text-muted-foreground">
-                {t("signed-in-as", { name: user.name })}{" "}
-                <Button variant="link" size="sm" disabled={busy} onClick={onSwitchAccount} className="h-auto p-0 text-xs text-muted-foreground">
-                  {t("switch-account")}
-                </Button>
-              </p>
-            ) : null}
-          </CardContent>
-        </Card>
-      </PageContainer>
-    </div>
+          ) : null}
+          {status === "error" ? (
+            <Button size="lg" variant="outline" onClick={() => window.location.reload()}>
+              {t("retry")}
+            </Button>
+          ) : null}
+          {status === "no-extension" ? (
+            <a
+              href={`${siteBaseUrl()}/extension`}
+              className={buttonVariants({
+                variant: "outline",
+                size: "lg"
+              })}
+            >
+              {t("get-extension")}
+            </a>
+          ) : null}
+        </div>
+        {user && (status === "ready" || status === "done" || status === "forbidden") ? (
+          <p className="text-center text-xs text-muted-foreground">
+            {t("signed-in-as", { name: user.name })}{" "}
+            <Button variant="link" size="sm" disabled={busy} onClick={onSwitchAccount} className="h-auto p-0 text-xs text-muted-foreground">
+              {t("switch-account")}
+            </Button>
+          </p>
+        ) : null}
+      </AuthCard>
+    </AuthFrame>
   );
 };

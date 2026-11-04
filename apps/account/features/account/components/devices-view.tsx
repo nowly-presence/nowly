@@ -41,7 +41,7 @@ export const DevicesView = () => {
   };
 
   return (
-    <AccountPageFrame eyebrow={t("eyebrow")} title={t("tab-devices")} description={t("devices-description")}>
+    <AccountPageFrame title={t("tab-devices")} description={t("devices-description")}>
       {devices ? (
         <AccountDevicesTab devices={devices} busy={busy} error={failed} onUnlink={onUnlink} onUnlinkAll={onUnlinkAll} />
       ) : (

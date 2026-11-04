@@ -27,18 +27,3 @@ export const ACCOUNT_TABS = [
 ] as const;
 
 export const visibleTabs = (capabilities: readonly string[]) => ACCOUNT_TABS.filter((tab) => tab.capability === null || capabilities.includes(tab.capability));
-
-export const MODERATION_TABS = [
-  {
-    href: "/moderation/review",
-    key: "tab-review",
-    capability: "review"
-  },
-  {
-    href: "/moderation/users",
-    key: "tab-users",
-    capability: "manage"
-  }
-] as const;
-
-export const visibleModerationTabs = (capabilities: readonly string[]) => MODERATION_TABS.filter((tab) => capabilities.includes(tab.capability));

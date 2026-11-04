@@ -63,7 +63,7 @@ export const PublicPageView = () => {
   };
 
   return (
-    <AccountPageFrame eyebrow={t("eyebrow")} title={t("public-title")} description={t("public-description")}>
+    <AccountPageFrame title={t("public-title")} description={t("public-description")}>
       {!saved ? (
         <p className="text-sm text-muted-foreground">{loadFailed ? t("action-error") : t("checking")}</p>
       ) : (

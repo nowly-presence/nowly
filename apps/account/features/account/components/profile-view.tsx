@@ -54,7 +54,7 @@ export const ProfileView = () => {
   };
 
   return (
-    <AccountPageFrame eyebrow={t("eyebrow")} title={t("tab-profile")} description={t("description")}>
+    <AccountPageFrame title={t("tab-profile")} description={t("description")}>
       {deleted ? (
         <p className="text-sm text-muted-foreground">{t("delete-success")}</p>
       ) : (

@@ -18,7 +18,7 @@ export const CreationsView = () => {
   }, []);
 
   return (
-    <AccountPageFrame eyebrow={t("eyebrow")} title={t("tab-creations")} description={t("creations-description")}>
+    <AccountPageFrame title={t("tab-creations")} description={t("creations-description")}>
       {creations ? (
         <AccountCreationsTab creations={creations} />
       ) : (

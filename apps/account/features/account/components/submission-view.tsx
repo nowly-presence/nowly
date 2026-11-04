@@ -1,7 +1,6 @@
 "use client";
 
-import { PageContainer } from "@/features/shell/components/page-container";
-import { AccountHeader } from "@/features/account/components/account-header";
+import { PageHeader } from "@/features/shell/components/page-header";
 import { SubmissionChanges } from "@/features/account/components/submission-changes";
 import { SubmissionFiles } from "@/features/account/components/submission-files";
 import { SubmissionPreview } from "@/features/account/components/submission-preview";
@@ -95,81 +94,79 @@ export const SubmissionView = ({ id }: {
   const canPublish = publisher && detail !== null && PUBLISHABLE_STATUSES.includes(detail.status);
 
   return (
-    <div className="pb-24 pt-12 sm:pb-32 sm:pt-16">
-      <PageContainer>
-        <ButtonLink href="/creations" variant="ghost" size="sm">
-          <RiArrowLeftLine data-icon="inline-start" />
-          {t("back")}
-        </ButtonLink>
+    <>
+      <ButtonLink href="/creations" variant="ghost" size="sm">
+        <RiArrowLeftLine data-icon="inline-start" />
+        {t("back")}
+      </ButtonLink>
 
-        <div className="mt-6">
-          <AccountHeader eyebrow={t("eyebrow")} title={detail?.name ?? t("title")} description={t("description")} />
-        </div>
+      <div className="mt-4">
+        <PageHeader title={detail?.name ?? t("title")} description={t("description")} />
+      </div>
 
-        {status === "checking" ? <p className="mt-14 text-sm text-muted-foreground">{t("checking")}</p> : null}
-        {status === "error" ? <p className="mt-14 text-sm text-destructive">{t("action-error")}</p> : null}
-        {status === "not-found" ? <p className="mt-14 text-sm text-muted-foreground">{t("not-found")}</p> : null}
+      {status === "checking" ? <p className="mt-6 text-sm text-muted-foreground">{t("checking")}</p> : null}
+      {status === "error" ? <p className="mt-6 text-sm text-destructive">{t("action-error")}</p> : null}
+      {status === "not-found" ? <p className="mt-6 text-sm text-muted-foreground">{t("not-found")}</p> : null}
 
-        {status === "ready" && detail ? (
-          <div className="mt-10 flex flex-col gap-6">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div className="flex min-w-0 flex-col gap-2">
-                <div>
-                  <SubmissionStatusBadge status={detail.status} />
-                </div>
-                <p className="flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground">
-                  <span>
-                    {[
-                      detail.kind === "update" ? t("kind-update") : t("kind-create"),
-                      t("revision-heading", { number: detail.revision }),
-                      detail.author?.name ? t("by-author", { name: detail.author.name }) : null
-                    ]
-                      .filter(Boolean)
-                      .join(", ")}
-                  </span>
-                  {detail.pullRequest.url ? (
-                    <a
-                      href={detail.pullRequest.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1 text-foreground underline underline-offset-4"
-                    >
-                      {t("pull-request")}
-                      <RiExternalLinkLine className="size-3.5" />
-                    </a>
-                  ) : null}
-                </p>
+      {status === "ready" && detail ? (
+        <div className="mt-2 flex flex-col gap-6">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="flex min-w-0 flex-col gap-2">
+              <div>
+                <SubmissionStatusBadge status={detail.status} />
               </div>
-              {canPublish ? (
-                <Button disabled={busy} onClick={onPublish}>
-                  {t("publish")}
-                </Button>
-              ) : null}
-            </div>
-            {detail.note ? <p className="max-w-2xl whitespace-pre-wrap rounded-xl bg-muted px-4 py-3 text-sm">{detail.note}</p> : null}
-            {detail.pullRequest.error && reviewer ? (
-              <p className="text-sm text-destructive">
-                {t("pull-request-error")} <span className="break-words font-mono text-xs">{detail.pullRequest.error}</span>
-              </p>
-            ) : null}
-
-            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)]">
-              <div className="flex min-w-0 flex-col gap-6">
-                {detail.definition ? <SubmissionPreview definition={detail.definition} assets={detail.assets} /> : null}
-                <SubmissionChanges revisions={detail.revisions} />
-                {reviewer || publisher ? <SubmissionFiles files={detail.files} /> : null}
-              </div>
-              <div className="flex min-w-0 flex-col gap-6">
-                <SubmissionThread detail={detail} />
-                {reviewer && verdicts.length ? (
-                  <SubmissionReviewForm key={detail.reviews.length} allowedVerdicts={verdicts} busy={busy} error={error} onSubmit={onReview} />
+              <p className="flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground">
+                <span>
+                  {[
+                    detail.kind === "update" ? t("kind-update") : t("kind-create"),
+                    t("revision-heading", { number: detail.revision }),
+                    detail.author?.name ? t("by-author", { name: detail.author.name }) : null
+                  ]
+                    .filter(Boolean)
+                    .join(", ")}
+                </span>
+                {detail.pullRequest.url ? (
+                  <a
+                    href={detail.pullRequest.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-foreground underline underline-offset-4"
+                  >
+                    {t("pull-request")}
+                    <RiExternalLinkLine className="size-3.5" />
+                  </a>
                 ) : null}
-                {!reviewer && error ? <p className="text-sm text-destructive">{error}</p> : null}
-              </div>
+              </p>
+            </div>
+            {canPublish ? (
+              <Button disabled={busy} onClick={onPublish}>
+                {t("publish")}
+              </Button>
+            ) : null}
+          </div>
+          {detail.note ? <p className="max-w-2xl whitespace-pre-wrap rounded-xl bg-muted px-4 py-3 text-sm">{detail.note}</p> : null}
+          {detail.pullRequest.error && reviewer ? (
+            <p className="text-sm text-destructive">
+              {t("pull-request-error")} <span className="break-words font-mono text-xs">{detail.pullRequest.error}</span>
+            </p>
+          ) : null}
+
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)]">
+            <div className="flex min-w-0 flex-col gap-6">
+              {detail.definition ? <SubmissionPreview definition={detail.definition} assets={detail.assets} /> : null}
+              <SubmissionChanges revisions={detail.revisions} />
+              {reviewer || publisher ? <SubmissionFiles files={detail.files} /> : null}
+            </div>
+            <div className="flex min-w-0 flex-col gap-6">
+              <SubmissionThread detail={detail} />
+              {reviewer && verdicts.length ? (
+                <SubmissionReviewForm key={detail.reviews.length} allowedVerdicts={verdicts} busy={busy} error={error} onSubmit={onReview} />
+              ) : null}
+              {!reviewer && error ? <p className="text-sm text-destructive">{error}</p> : null}
             </div>
           </div>
-        ) : null}
-      </PageContainer>
-    </div>
+        </div>
+      ) : null}
+    </>
   );
 };

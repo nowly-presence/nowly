@@ -18,7 +18,7 @@ const SecureLayout = async ({ children }: PropsWithChildren) => {
 
   return (
     <SessionProvider user={user}>
-      <AccountShell capabilities={user.capabilities}>{children}</AccountShell>
+      <AccountShell>{children}</AccountShell>
     </SessionProvider>
   );
 };

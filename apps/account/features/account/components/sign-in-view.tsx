@@ -1,16 +1,16 @@
 "use client";
 
-import { AccountPageFrame } from "@/features/account/components/account-page-frame";
+import { AuthCard } from "@/features/auth/components/auth-card";
+import { AuthFrame } from "@/features/auth/components/auth-frame";
 import { startDiscordSignIn } from "@/features/account/lib/account-api";
-import { siteBaseUrl } from "@/lib/api-base";
-import { Button, Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
+import { Button } from "@nowly/ui";
 import { RiDiscordFill } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 export const SignInView = () => {
   const t = useTranslations("accountPage");
-  const shell = useTranslations("shell");
+  const auth = useTranslations("extensionConnectPage");
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -24,21 +24,21 @@ export const SignInView = () => {
   };
 
   return (
-    <AccountPageFrame eyebrow={t("eyebrow")} title={t("title")} description={t("description")}>
-      <Card className="max-w-xl">
-        <CardContent>
-          <CardTitle className="text-lg">{t("sign-in-title")}</CardTitle>
-          <CardDescription className="mt-2">{t("sign-in-description")}</CardDescription>
-          <Button className="mt-6" disabled={busy} onClick={onSignIn}>
-            <RiDiscordFill data-icon="inline-start" />
-            {t("sign-in")}
-          </Button>
-          {failed ? <p className="mt-3 text-sm text-destructive">{t("action-error")}</p> : null}
-          <a href={siteBaseUrl()} className="mt-6 block text-sm text-foreground/60 underline-offset-4 hover:underline">
-            {shell("back-to-site")}
-          </a>
-        </CardContent>
-      </Card>
-    </AccountPageFrame>
+    <AuthFrame>
+      <AuthCard
+        title={t("sign-in-title")}
+        description={t("sign-in-description")}
+        permissions={[
+          auth("perm-name"),
+          auth("perm-private")
+        ]}
+      >
+        <Button size="lg" className="w-full" disabled={busy} onClick={onSignIn}>
+          <RiDiscordFill data-icon="inline-start" />
+          {t("sign-in")}
+        </Button>
+        {failed ? <p className="text-center text-sm text-destructive">{t("action-error")}</p> : null}
+      </AuthCard>
+    </AuthFrame>
   );
 };

@@ -22,7 +22,7 @@ export const PresencesView = () => {
   }, []);
 
   return (
-    <AccountPageFrame eyebrow={t("eyebrow")} title={t("tab-presences")} description={t("presences-description")}>
+    <AccountPageFrame title={t("tab-presences")} description={t("presences-description")}>
       {presences ? (
         <AccountPresencesTab presences={presences} activities={activities} />
       ) : (

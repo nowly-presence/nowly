@@ -28,3 +28,5 @@ export const BRAND_METADATA_ICONS = {
     }
   ]
 };
+
+export const BRAND_MARK = `${CDN_BRAND}/favicons/favicon-192.png`;
