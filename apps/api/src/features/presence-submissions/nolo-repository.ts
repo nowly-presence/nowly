@@ -27,7 +27,8 @@ const ContentListSchema = z.array(
 );
 const PullSchema = z.object({
   number: z.number().int(),
-  html_url: z.string().url()
+  html_url: z.string().url(),
+  merged_at: z.string().nullish()
 });
 const PullListSchema = z.array(PullSchema);
 
@@ -125,9 +126,21 @@ export const openOrReusePullRequest = async (github: GithubClient, input: {
   body: string;
 }) => {
   const [owner] = serverEnv.NOLO_REPOSITORY.split("/");
-  const [open] = PullListSchema.parse(await github("GET", repoPath(`/pulls?state=open&head=${encodeURIComponent(`${owner}:${input.branch}`)}`)));
+  const head = encodeURIComponent(`${owner}:${input.branch}`);
+  const [open] = PullListSchema.parse(await github("GET", repoPath(`/pulls?state=open&head=${head}`)));
 
   if (open) return open;
+
+  const [closed] = PullListSchema.parse(await github("GET", repoPath(`/pulls?state=closed&head=${head}&sort=created&direction=desc&per_page=1`)));
+
+  if (closed && !closed.merged_at) {
+    const reopened = await github("PATCH", repoPath(`/pulls/${closed.number}`), { state: "open" }).then(
+      () => true,
+      () => false
+    );
+
+    if (reopened) return closed;
+  }
 
   const created = PullSchema.parse(
     await github("POST", repoPath("/pulls"), {

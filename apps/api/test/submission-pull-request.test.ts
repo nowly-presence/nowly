@@ -62,6 +62,13 @@ const github = {
   existing: new Set<string>(),
   branches: new Set<string>(),
   openPulls: new Map<string, number>(),
+  closedPulls: new Map<
+    string,
+    {
+      number: number;
+      merged: boolean;
+    }
+  >(),
   failTrees: false
 };
 
@@ -142,6 +149,23 @@ const fakeGithub = async (input: string | URL | Request, init?: RequestInit): Pr
   if (method === "PATCH" && path.startsWith(`${repo}/git/refs/heads/`)) return json(200, {});
   if (method === "GET" && path === `${repo}/pulls`) {
     const head = (url.searchParams.get("head") ?? "").split(":")[1];
+
+    if (url.searchParams.get("state") === "closed") {
+      const closed = github.closedPulls.get(head);
+      return json(
+        200,
+        closed
+          ? [
+              {
+                number: closed.number,
+                html_url: `https://github.com/nowly-presence/presences/pull/${closed.number}`,
+                merged_at: closed.merged ? "2026-11-04T13:00:00Z" : null
+              }
+            ]
+          : []
+      );
+    }
+
     const number = github.openPulls.get(head);
     return json(
       200,
@@ -154,6 +178,18 @@ const fakeGithub = async (input: string | URL | Request, init?: RequestInit): Pr
           ]
         : []
     );
+  }
+  if (method === "PATCH" && path.startsWith(`${repo}/pulls/`)) {
+    const number = Number(path.split("/").at(-1));
+
+    for (const [head, closed] of github.closedPulls) {
+      if (closed.number === number) {
+        github.closedPulls.delete(head);
+        github.openPulls.set(head, number);
+      }
+    }
+
+    return json(200, {});
   }
   if (method === "POST" && path === `${repo}/pulls`) {
     github.openPulls.set(String(body?.head), PR_NUMBER);
@@ -229,6 +265,7 @@ beforeEach(async () => {
     existing: new Set(),
     branches: new Set(),
     openPulls: new Map(),
+    closedPulls: new Map(),
     failTrees: false
   });
   storage.objects.clear();
@@ -363,6 +400,42 @@ describe("Nolo pull request job", () => {
       prNumber: PR_NUMBER,
       prRevision: 2
     });
+  });
+
+  it("reopens the closed pull request of the branch instead of opening another one", async () => {
+    await runJob();
+    const branch = `creator/${slug}-${SUBMISSION.slice(0, 8)}`;
+    github.openPulls.delete(branch);
+    github.closedPulls.set(branch, {
+      number: PR_NUMBER,
+      merged: false
+    });
+    await addRevision(2);
+    github.calls = [];
+
+    expect((await runJob()).opened).toBe(1);
+    expect(callsTo("PATCH", `/pulls/${PR_NUMBER}`)[0].body).toEqual({ state: "open" });
+    expect(callsTo("POST", "/pulls")).toEqual([]);
+    expect(await stored()).toMatchObject({
+      prNumber: PR_NUMBER,
+      prRevision: 2
+    });
+  });
+
+  it("opens a new pull request when the previous one of the branch was merged", async () => {
+    await runJob();
+    const branch = `creator/${slug}-${SUBMISSION.slice(0, 8)}`;
+    github.openPulls.delete(branch);
+    github.closedPulls.set(branch, {
+      number: 7,
+      merged: true
+    });
+    await addRevision(2);
+    github.calls = [];
+
+    expect((await runJob()).opened).toBe(1);
+    expect(callsTo("PATCH", "/pulls/7")).toEqual([]);
+    expect(callsTo("POST", "/pulls")).toHaveLength(1);
   });
 
   it("removes locales dropped from an update of a creator presence", async () => {
