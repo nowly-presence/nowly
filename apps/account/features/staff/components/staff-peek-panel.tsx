@@ -8,10 +8,11 @@ import {
   type ReviewVerdict,
   type SubmissionDetail
 } from "@/features/account/lib/submission-api";
+import { Frame } from "@/features/shell/components/frame";
 import { allowedVerdicts } from "@/features/account/lib/submission-text";
 import { staffSubmissionHref } from "@/features/staff/lib/staff-nav";
 import { Link } from "@/i18n/navigation";
-import { Badge, Button, Card, CardContent, Textarea } from "@nowly/ui";
+import { Badge, Button, Textarea } from "@nowly/ui";
 import { buttonVariants } from "@nowly/ui/button-variants";
 import { cn } from "@nowly/ui/utils";
 import { useTranslations } from "next-intl";
@@ -48,11 +49,9 @@ export const StaffPeekPanel = ({ item, onChanged }: {
   }, [itemId]);
 
   if (!item) return (
-    <Card className="w-full shrink-0 xl:w-88">
-      <CardContent>
-        <p className="text-sm text-muted-foreground">{t("peek-empty")}</p>
-      </CardContent>
-    </Card>
+    <div className="w-full shrink-0 rounded-[16px] bg-foreground/4 p-4 ring-1 ring-foreground/10 xl:w-88">
+      <p className="text-sm text-muted-foreground">{t("peek-empty")}</p>
+    </div>
   );
 
   const verdicts = allowedVerdicts(item.status);
@@ -80,81 +79,71 @@ export const StaffPeekPanel = ({ item, onChanged }: {
   };
 
   return (
-    <Card className="w-full shrink-0 xl:sticky xl:top-6 xl:w-88">
-      <CardContent className="flex flex-col gap-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h2 className="truncate text-base font-medium text-foreground">{item.name}</h2>
-            <p className="truncate text-xs text-muted-foreground">
-              {[item.kind === "update" ? account("kind-update") : account("kind-create"), item.author ? account("by-author", { name: item.author.name ?? "" }) : null, account("revision-label", { number: item.revision })]
-                .filter(Boolean)
-                .join(", ")}
-            </p>
-          </div>
-          <SubmissionStatusBadge status={item.status} />
-        </div>
-        {failed ? <p className="text-sm text-destructive">{t("error")}</p> : null}
-        {!detail && !failed ? <p className="text-sm text-muted-foreground">{t("loading")}</p> : null}
-        {detail ? (
+    <Frame
+      className="w-full shrink-0 xl:sticky xl:top-6 xl:w-88"
+      title={item.name}
+      description={[item.kind === "update" ? account("kind-update") : account("kind-create"), item.author ? account("by-author", { name: item.author.name ?? "" }) : null, account("revision-label", { number: item.revision })].filter(Boolean).join(", ")}
+      action={<SubmissionStatusBadge status={item.status} />}
+      footer={
+        staged ? (
           <>
-            <div className="flex flex-col gap-2">
-              <h3 className="text-xs font-medium text-muted-foreground">{t("peek-changes")}</h3>
-              {!latest || latest.changes.length === 0 ? <p className="text-sm text-muted-foreground">{t("peek-no-changes")}</p> : null}
-              <ul className="flex flex-col gap-1.5">
-                {latest?.changes.slice(0, MAX_CHANGES).map((change) => (
-                  <li key={`${change.page ?? ""}-${change.field}-${change.kind}`} className="flex items-center justify-between gap-2 text-sm">
-                    <span className="truncate text-foreground">{[change.page, change.field].filter(Boolean).join(" / ")}</span>
-                    <Badge variant={change.kind === "removed" ? "destructive" : "secondary"}>{t(`change-${change.kind}`)}</Badge>
-                  </li>
-                ))}
-              </ul>
-              {latest && latest.changes.length > MAX_CHANGES ? <p className="text-xs text-muted-foreground">{t("peek-more", { count: latest.changes.length - MAX_CHANGES })}</p> : null}
-            </div>
-            <div className="flex flex-col gap-2">
-              <h3 className="text-xs font-medium text-muted-foreground">{t("peek-checks")}</h3>
-              <ul className="flex flex-col gap-1.5">
-                {checks.map((check) => (
-                  <li key={check.key} className="flex items-center justify-between text-sm">
-                    <span className="text-foreground">{t(check.key)}</span>
-                    <Badge variant={check.ok ? "secondary" : "destructive"}>{check.ok ? t("check-ok") : t("check-missing")}</Badge>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <Button variant="ghost" disabled={busy} onClick={() => setStaged(null)}>
+              {t("peek-cancel")}
+            </Button>
+            <Button variant={staged === "reject" ? "destructive" : "default"} disabled={busy || message.trim().length === 0} onClick={onConfirm}>
+              {t("peek-confirm")}
+            </Button>
           </>
-        ) : null}
-        {staged ? (
-          <div className="flex flex-col gap-2">
-            <Textarea value={message} placeholder={t("peek-message-placeholder")} aria-label={t("peek-message-placeholder")} onChange={(event) => setMessage(event.target.value)} />
-            <div className="flex gap-2">
-              <Button variant={staged === "reject" ? "destructive" : "default"} disabled={busy || message.trim().length === 0} onClick={onConfirm}>
-                {t("peek-confirm")}
-              </Button>
-              <Button variant="ghost" disabled={busy} onClick={() => setStaged(null)}>
-                {t("peek-cancel")}
-              </Button>
-            </div>
-          </div>
         ) : (
-          <div className="flex flex-col gap-2">
+          <div className="flex w-full flex-wrap gap-2">
             <Link href={staffSubmissionHref(item.id)} className={cn(buttonVariants(), "w-full")}>
               {t("peek-open")}
             </Link>
-            <div className="flex gap-2">
-              {verdicts.includes("request_changes") ? (
-                <Button variant="outline" className="flex-1" onClick={() => setStaged("request_changes")}>
-                  {t("peek-request")}
-                </Button>
-              ) : null}
-              {verdicts.includes("reject") ? (
-                <Button variant="destructive" className="flex-1" onClick={() => setStaged("reject")}>
-                  {t("peek-reject")}
-                </Button>
-              ) : null}
-            </div>
+            {verdicts.includes("request_changes") ? (
+              <Button variant="outline" className="flex-1" onClick={() => setStaged("request_changes")}>
+                {t("peek-request")}
+              </Button>
+            ) : null}
+            {verdicts.includes("reject") ? (
+              <Button variant="destructive" className="flex-1" onClick={() => setStaged("reject")}>
+                {t("peek-reject")}
+              </Button>
+            ) : null}
           </div>
-        )}
-      </CardContent>
-    </Card>
+        )
+      }
+    >
+      {failed ? <p className="text-sm text-destructive">{t("error")}</p> : null}
+      {!detail && !failed ? <p className="text-sm text-muted-foreground">{t("loading")}</p> : null}
+      {detail ? (
+        <>
+          <div className="flex flex-col gap-2">
+            <h3 className="text-xs font-medium text-muted-foreground">{t("peek-changes")}</h3>
+            {!latest || latest.changes.length === 0 ? <p className="text-sm text-muted-foreground">{t("peek-no-changes")}</p> : null}
+            <ul className="flex flex-col gap-1.5">
+              {latest?.changes.slice(0, MAX_CHANGES).map((change) => (
+                <li key={`${change.page ?? ""}-${change.field}-${change.kind}`} className="flex items-center justify-between gap-2 text-sm">
+                  <span className="truncate text-foreground">{[change.page, change.field].filter(Boolean).join(" / ")}</span>
+                  <Badge variant={change.kind === "removed" ? "destructive" : "secondary"}>{t(`change-${change.kind}`)}</Badge>
+                </li>
+              ))}
+            </ul>
+            {latest && latest.changes.length > MAX_CHANGES ? <p className="text-xs text-muted-foreground">{t("peek-more", { count: latest.changes.length - MAX_CHANGES })}</p> : null}
+          </div>
+          <div className="flex flex-col gap-2">
+            <h3 className="text-xs font-medium text-muted-foreground">{t("peek-checks")}</h3>
+            <ul className="flex flex-col gap-1.5">
+              {checks.map((check) => (
+                <li key={check.key} className="flex items-center justify-between text-sm">
+                  <span className="text-foreground">{t(check.key)}</span>
+                  <Badge variant={check.ok ? "secondary" : "destructive"}>{check.ok ? t("check-ok") : t("check-missing")}</Badge>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      ) : null}
+      {staged ? <Textarea value={message} placeholder={t("peek-message-placeholder")} aria-label={t("peek-message-placeholder")} onChange={(event) => setMessage(event.target.value)} /> : null}
+    </Frame>
   );
 };

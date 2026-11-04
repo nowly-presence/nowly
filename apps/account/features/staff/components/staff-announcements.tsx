@@ -1,11 +1,15 @@
 "use client";
 
+import { Frame } from "@/features/shell/components/frame";
+import { OptionCards, type OptionCardsItem } from "@/features/shell/components/option-cards";
 import { PageHeader } from "@/features/shell/components/page-header";
 import { publishAnnouncement, type AnnouncementDraft, type AnnouncementKind } from "@/features/staff/lib/staff-api";
-import { Button, Card, CardContent, Checkbox, Field, FieldLabel, Input, Textarea } from "@nowly/ui";
+import { Button, Checkbox, Field, FieldLabel, Input, Textarea } from "@nowly/ui";
+import { RiAlertLine, RiMegaphoneLine, RiToolsLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
 
+const KIND_ICONS = { normal: RiMegaphoneLine, warning: RiAlertLine, maintenance: RiToolsLine } as const;
 const KINDS: readonly AnnouncementKind[] = ["normal", "warning", "maintenance"];
 const EMPTY: AnnouncementDraft = { title: "", description: "", content: "", kind: "normal", pinned: false };
 
@@ -37,43 +41,46 @@ export const StaffAnnouncements = () => {
   return (
     <>
       <PageHeader title={t("announcements-title")} description={t("announcements-description")} />
-      <Card className="max-w-2xl">
-        <CardContent>
-          <form onSubmit={onSubmit} className="flex flex-col gap-4">
-            <div className="flex flex-wrap gap-1.5" role="group" aria-label={t("announcements-kind")}>
-              {KINDS.map((kind) => (
-                <Button key={kind} type="button" size="sm" variant={draft.kind === kind ? "secondary" : "ghost"} aria-pressed={draft.kind === kind} onClick={() => patch({ kind })}>
-                  {t(`announcements-kind-${kind}`)}
-                </Button>
-              ))}
-            </div>
-            <Field>
-              <FieldLabel>{t("announcements-field-title")}</FieldLabel>
-              <Input value={draft.title} maxLength={160} onChange={(event) => patch({ title: event.target.value })} />
-            </Field>
-            <Field>
-              <FieldLabel>{t("announcements-field-description")}</FieldLabel>
-              <Input value={draft.description} maxLength={600} onChange={(event) => patch({ description: event.target.value })} />
-            </Field>
-            <Field>
-              <FieldLabel>{t("announcements-field-content")}</FieldLabel>
-              <Textarea value={draft.content} onChange={(event) => patch({ content: event.target.value })} />
-            </Field>
-            <label className="flex items-center gap-2 text-sm text-foreground">
-              <Checkbox checked={draft.pinned} onCheckedChange={(checked) => patch({ pinned: checked === true })} />
-              {t("announcements-pinned")}
-            </label>
-            <p className="text-xs text-muted-foreground">{t("announcements-translation-hint")}</p>
-            <div className="flex items-center gap-3">
+      <form onSubmit={onSubmit} className="max-w-2xl">
+        <Frame
+          title={t("announcements-content-title")}
+          description={t("announcements-translation-hint")}
+          footer={
+            <>
+              <span className="text-xs">
+                {state === "sent" ? <span className="text-muted-foreground">{t("announcements-sent")}</span> : null}
+                {state === "failed" ? <span className="text-destructive">{t("error")}</span> : null}
+              </span>
               <Button type="submit" disabled={busy || !valid}>
                 {t("announcements-publish")}
               </Button>
-              {state === "sent" ? <span className="text-sm text-muted-foreground">{t("announcements-sent")}</span> : null}
-              {state === "failed" ? <span className="text-sm text-destructive">{t("error")}</span> : null}
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+            </>
+          }
+        >
+          <OptionCards
+            label={t("announcements-kind")}
+            value={draft.kind}
+            onValueChange={(kind) => patch({ kind })}
+            options={KINDS.map((kind): OptionCardsItem<AnnouncementKind> => ({ value: kind, label: t(`announcements-kind-${kind}`), description: t(`announcements-kind-${kind}-hint`), icon: KIND_ICONS[kind] }))}
+          />
+          <Field>
+            <FieldLabel>{t("announcements-field-title")}</FieldLabel>
+            <Input value={draft.title} maxLength={160} placeholder={t("announcements-placeholder-title")} onChange={(event) => patch({ title: event.target.value })} />
+          </Field>
+          <Field>
+            <FieldLabel>{t("announcements-field-description")}</FieldLabel>
+            <Input value={draft.description} maxLength={600} placeholder={t("announcements-placeholder-description")} onChange={(event) => patch({ description: event.target.value })} />
+          </Field>
+          <Field>
+            <FieldLabel>{t("announcements-field-content")}</FieldLabel>
+            <Textarea value={draft.content} placeholder={t("announcements-placeholder-content")} onChange={(event) => patch({ content: event.target.value })} />
+          </Field>
+          <label className="flex items-center gap-2 text-sm text-foreground">
+            <Checkbox checked={draft.pinned} onCheckedChange={(checked) => patch({ pinned: checked === true })} />
+            {t("announcements-pinned")}
+          </label>
+        </Frame>
+      </form>
     </>
   );
 };

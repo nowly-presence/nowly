@@ -3,9 +3,10 @@
 import { SubmissionStatusBadge } from "@/features/account/components/submission-status-badge";
 import { fetchReviewQueue, type QueueFilter, type ReviewQueue } from "@/features/account/lib/submission-api";
 import { staffSubmissionHref } from "@/features/staff/lib/staff-nav";
+import { Frame } from "@/features/shell/components/frame";
 import { PageHeader } from "@/features/shell/components/page-header";
 import { Link } from "@/i18n/navigation";
-import { Button, Card, CardContent } from "@nowly/ui";
+import { Card, CardContent, Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@nowly/ui";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
@@ -61,36 +62,46 @@ export const StaffOverview = () => {
           </Card>
         ))}
       </div>
-      <Card className="mt-6">
-        <CardContent className="flex flex-col gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-base font-medium text-foreground">{t("latest-title")}</h2>
-            <div className="flex flex-wrap gap-1.5">
-              {FILTERS.map((value) => (
-                <Button key={value} size="sm" variant={filter === value ? "secondary" : "ghost"} aria-pressed={filter === value} onClick={() => setFilter(value)}>
-                  {filterLabel(value)}
-                </Button>
-              ))}
-            </div>
-          </div>
-          {failed ? <p className="text-sm text-destructive">{t("error")}</p> : null}
-          {!queue && !failed ? <p className="text-sm text-muted-foreground">{t("loading")}</p> : null}
-          {queue && queue.items.length === 0 ? <p className="text-sm text-muted-foreground">{t("latest-empty")}</p> : null}
+      <Frame
+        className="mt-6"
+        padded={false}
+        title={t("latest-title")}
+        description={t("latest-description")}
+        action={
+          <Select items={FILTERS.map((value) => ({ value, label: filterLabel(value) }))} value={filter} onValueChange={(value) => value && setFilter(value as QueueFilter)}>
+            <SelectTrigger className="min-w-44" aria-label={t("col-status")}>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent align="end" alignItemWithTrigger={false}>
+              <SelectGroup>
+                {FILTERS.map((value) => (
+                  <SelectItem key={value} value={value}>
+                    {filterLabel(value)}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        }
+      >
+          {failed ? <p className="p-4 text-sm text-destructive">{t("error")}</p> : null}
+          {!queue && !failed ? <p className="p-4 text-sm text-muted-foreground">{t("loading")}</p> : null}
+          {queue && queue.items.length === 0 ? <p className="p-4 text-sm text-muted-foreground">{t("latest-empty")}</p> : null}
           {queue && queue.items.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full min-w-120 text-sm">
                 <thead>
                   <tr className="border-b border-border text-left text-xs text-muted-foreground">
-                    <th className="py-2 pr-4 font-medium">{t("col-presence")}</th>
-                    <th className="py-2 pr-4 font-medium">{t("col-author")}</th>
-                    <th className="py-2 pr-4 font-medium">{t("col-status")}</th>
-                    <th className="py-2 text-right font-medium">{t("col-updated")}</th>
+                    <th className="py-2 pl-4 pr-4 font-medium">{t("col-presence")}</th>
+                    <th className="py-2 pl-4 pr-4 font-medium">{t("col-author")}</th>
+                    <th className="py-2 pl-4 pr-4 font-medium">{t("col-status")}</th>
+                    <th className="py-2 pr-4 text-right font-medium">{t("col-updated")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {queue.items.slice(0, LATEST_LIMIT).map((item) => (
                     <tr key={item.id} className="hover:bg-foreground/4">
-                      <td className="py-2.5 pr-4">
+                      <td className="py-2.5 pl-4 pr-4">
                         <Link href={staffSubmissionHref(item.id)} className="font-medium text-foreground hover:underline">
                           {item.name}
                         </Link>
@@ -99,15 +110,14 @@ export const StaffOverview = () => {
                       <td className="py-2.5 pr-4">
                         <SubmissionStatusBadge status={item.status} />
                       </td>
-                      <td className="py-2.5 text-right text-muted-foreground">{format.dateTime(new Date(item.updatedAt), { dateStyle: "medium" })}</td>
+                      <td className="py-2.5 pr-4 text-right text-muted-foreground">{format.dateTime(new Date(item.updatedAt), { dateStyle: "medium" })}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           ) : null}
-        </CardContent>
-      </Card>
+      </Frame>
     </>
   );
 };

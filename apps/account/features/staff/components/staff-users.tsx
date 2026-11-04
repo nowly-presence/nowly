@@ -3,10 +3,12 @@
 import { useSessionUser } from "@/features/account/components/session-provider";
 import { VerifiedBadge } from "@/features/account/components/verified-badge";
 import { searchAdminUsers, setAdminUserVerified, type AdminUser } from "@/features/account/lib/account-api";
-import { StaffAuditFeed } from "@/features/staff/components/staff-audit-feed";
+import { Frame } from "@/features/shell/components/frame";
+import { StaffAuditRows } from "@/features/staff/components/staff-audit-feed";
 import { PageHeader } from "@/features/shell/components/page-header";
+import { useAuditEvents } from "@/features/staff/lib/use-audit-events";
 import { fetchStaffUsers, setAdminUserRole } from "@/features/staff/lib/staff-api";
-import { Avatar, AvatarFallback, AvatarImage, Badge, Button, Card, CardContent, Input } from "@nowly/ui";
+import { Avatar, AvatarFallback, AvatarImage, Badge, Button, Input } from "@nowly/ui";
 import { RiCheckLine, RiSubtractLine } from "@nowly/ui/icons";
 import { ADMIN_CAPABILITIES, isUserRole, ROLE_CAPABILITIES, USER_ROLES, type UserRole } from "@nowly/shared/roles";
 import { useTranslations } from "next-intl";
@@ -79,29 +81,34 @@ export const StaffUsers = () => {
   return (
     <>
       <PageHeader title={t("users-title")} description={t("users-description")} />
-      <Card>
-        <CardContent className="flex flex-col gap-4">
-          <form onSubmit={onSearch} className="flex max-w-lg gap-2">
-            <Input className="h-9" value={query} placeholder={t("users-search-placeholder")} aria-label={t("users-search-placeholder")} onChange={(event) => setQuery(event.target.value)} />
-            <Button type="submit" disabled={busy || query.trim().length < MIN_QUERY_LENGTH}>
+      <Frame
+        padded={false}
+        title={t("users-staff-title")}
+        description={t("users-staff-description")}
+        action={
+          <form onSubmit={onSearch} className="flex gap-2">
+            <Input className="h-8 w-72" value={query} placeholder={t("users-search-placeholder")} aria-label={t("users-search-placeholder")} onChange={(event) => setQuery(event.target.value)} />
+            <Button type="submit" size="sm" disabled={busy || query.trim().length < MIN_QUERY_LENGTH}>
               {t("users-search")}
             </Button>
           </form>
-          {failed ? <p className="text-sm text-destructive">{t("error")}</p> : null}
-          {!staff && !failed ? <p className="text-sm text-muted-foreground">{t("loading")}</p> : null}
+        }
+      >
+          {failed ? <p className="p-4 text-sm text-destructive">{t("error")}</p> : null}
+          {!staff && !failed ? <p className="p-4 text-sm text-muted-foreground">{t("loading")}</p> : null}
           {staff ? (
             <div className="overflow-x-auto">
               <table className="w-full min-w-170 text-sm">
                 <thead>
                   <tr className="border-b border-border text-left text-xs text-muted-foreground">
-                    <th className="py-2 pr-4 font-medium">{t("users-col-user")}</th>
-                    <th className="py-2 pr-4 font-medium">{t("users-col-role")}</th>
+                    <th className="py-2 pl-4 pr-4 font-medium">{t("users-col-user")}</th>
+                    <th className="py-2 pl-4 pr-4 font-medium">{t("users-col-role")}</th>
                     {ADMIN_CAPABILITIES.map((capability) => (
                       <th key={capability} className="px-2 py-2 text-center font-medium">
                         {t(`cap-${capability}`)}
                       </th>
                     ))}
-                    <th className="py-2 pl-4 text-right font-medium">{t("users-col-actions")}</th>
+                    <th className="py-2 pl-4 pr-4 text-right font-medium">{t("users-col-actions")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
@@ -110,7 +117,7 @@ export const StaffUsers = () => {
                     const own = entry.id === self.id;
                     return (
                       <tr key={entry.id}>
-                        <td className="py-2.5 pr-4">
+                        <td className="py-2.5 pl-4 pr-4">
                           <div className="flex min-w-0 items-center gap-2.5">
                             <Avatar>
                               {entry.image ? <AvatarImage src={entry.image} alt="" /> : null}
@@ -137,7 +144,7 @@ export const StaffUsers = () => {
                             )}
                           </td>
                         ))}
-                        <td className="py-2.5 pl-4">
+                        <td className="py-2.5 pl-4 pr-4">
                           <div className="flex justify-end gap-1">
                             {USER_ROLES.map((value) => (
                               <Button key={value} size="sm" variant={value === role ? "secondary" : "ghost"} disabled={busy || own || value === role} onClick={() => onRole(entry, value)}>
@@ -158,10 +165,19 @@ export const StaffUsers = () => {
               </table>
             </div>
           ) : null}
-        </CardContent>
-      </Card>
-      <h2 className="mt-8 mb-3 text-base font-medium text-foreground">{t("users-recent")}</h2>
-      <StaffAuditFeed key={refresh} actions={RECENT_ACTIONS} limit={RECENT_LIMIT} />
+      </Frame>
+      <RecentChanges key={refresh} />
     </>
+  );
+};
+
+const RecentChanges = () => {
+  const t = useTranslations("staff");
+  const { events, failed } = useAuditEvents();
+  const recent = events ? events.filter((event) => RECENT_ACTIONS.includes(event.action)).slice(0, RECENT_LIMIT) : null;
+  return (
+    <Frame className="mt-6" padded={false} title={t("users-recent")} description={t("users-recent-description")}>
+      <StaffAuditRows events={recent} failed={failed} />
+    </Frame>
   );
 };

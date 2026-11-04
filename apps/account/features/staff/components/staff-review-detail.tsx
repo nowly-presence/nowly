@@ -15,14 +15,20 @@ import {
   type SubmissionDetail
 } from "@/features/account/lib/submission-api";
 import { allowedVerdicts, PUBLISHABLE_STATUSES } from "@/features/account/lib/submission-text";
+import { Frame } from "@/features/shell/components/frame";
 import { StaffReviewSection } from "@/features/staff/components/staff-review-sections";
 import { REVIEW_SECTIONS, SECTION_FIELD, type ReviewSection, type SectionVerdict } from "@/features/staff/lib/review-sections";
 import { Link } from "@/i18n/navigation";
-import { Button, Card, CardContent, Progress, Textarea } from "@nowly/ui";
+import { Button, Progress, RadioGroup, RadioGroupItem, Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Textarea } from "@nowly/ui";
 import { RiArrowLeftLine, RiExternalLinkLine } from "@nowly/ui/icons";
 import { cn } from "@nowly/ui/utils";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
+
+type DecisionVerdict = Extract<ReviewVerdict, "approve" | "request_changes" | "reject">;
+
+const DECISIONS: readonly DecisionVerdict[] = ["approve", "request_changes", "reject"];
+const MARK_OPTIONS = ["pending", "ok", "fix"] as const;
 
 type Load = "checking" | "not-found" | "ready" | "error";
 
@@ -39,6 +45,7 @@ export const StaffReviewDetail = ({ id }: { id: string }) => {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [confirmPublish, setConfirmPublish] = useState(false);
+  const [verdict, setVerdict] = useState<DecisionVerdict | null>(null);
 
   const reload = useCallback(async (): Promise<void> => {
     try {
@@ -69,11 +76,11 @@ export const StaffReviewDetail = ({ id }: { id: string }) => {
     }
   };
 
-  const decide = (verdict: ReviewVerdict): void => {
+  const decide = (value: ReviewVerdict): void => {
     if (!detail) return;
 
     const comments: FieldComment[] = REVIEW_SECTIONS.filter((section) => marks[section] === "fix").map((section) => ({ field: SECTION_FIELD[section], message: t("fix-comment", { section: t(`sec-${section}`) }) }));
-    void act(() => sendReview(id, { revision: detail.revision, verdict, message: message.trim(), comments }));
+    void act(() => sendReview(id, { revision: detail.revision, verdict: value, message: message.trim(), comments }));
   };
 
   const done = REVIEW_SECTIONS.filter((section) => marks[section] === "ok").length;
@@ -81,9 +88,13 @@ export const StaffReviewDetail = ({ id }: { id: string }) => {
   const isAuthor = detail?.author?.id === user.id;
   const reviewer = user.capabilities.includes("review") && !isAuthor;
   const verdicts = detail ? allowedVerdicts(detail.status) : [];
-  const canPublish = user.capabilities.includes("publish") && detail !== null && PUBLISHABLE_STATUSES.includes(detail.status);
+  const decisions = DECISIONS.filter((value) => verdicts.includes(value));
+  const choice = verdict && decisions.includes(verdict) ? verdict : (decisions[0] ?? null);
   const definition = detail?.definition ?? null;
-  const needsMessage = message.trim().length === 0 && flagged === 0;
+  const hasMessage = message.trim().length > 0;
+  const canSubmit = choice === "approve" ? flagged === 0 : choice === "request_changes" ? hasMessage || flagged > 0 : choice === "reject" ? hasMessage : false;
+  const canPublish = user.capabilities.includes("publish") && detail !== null && PUBLISHABLE_STATUSES.includes(detail.status);
+  const markLabel = (value: (typeof MARK_OPTIONS)[number]): string => t(`mark-${value}`);
 
   return (
     <>
@@ -97,104 +108,120 @@ export const StaffReviewDetail = ({ id }: { id: string }) => {
       {load === "ready" && detail ? (
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,24rem)]">
           <div className="flex min-w-0 flex-col gap-4">
-            <header className="flex flex-wrap items-start justify-between gap-3">
-              <div className="min-w-0">
-                <h1 className="truncate text-2xl font-semibold tracking-tight text-foreground">{detail.name}</h1>
-                <p className="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground">
-                  <span>{[detail.kind === "update" ? sub("kind-update") : sub("kind-create"), sub("revision-heading", { number: detail.revision }), detail.author?.name ? sub("by-author", { name: detail.author.name }) : null].filter(Boolean).join(", ")}</span>
+            <Frame
+              title={detail.name}
+              description={[detail.kind === "update" ? sub("kind-update") : sub("kind-create"), sub("revision-heading", { number: detail.revision }), detail.author?.name ? sub("by-author", { name: detail.author.name }) : null].filter(Boolean).join(", ")}
+              action={
+                <>
                   {detail.pullRequest.url ? (
-                    <a href={detail.pullRequest.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-foreground underline underline-offset-4">
+                    <a href={detail.pullRequest.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-foreground underline underline-offset-4">
                       {sub("pull-request")}
                       <RiExternalLinkLine className="size-3.5" />
                     </a>
                   ) : null}
+                  <SubmissionStatusBadge status={detail.status} />
+                </>
+              }
+            >
+              {detail.note ? <p className="whitespace-pre-wrap border-l-2 border-foreground/15 pl-3 text-sm text-muted-foreground">{detail.note}</p> : null}
+              {detail.pullRequest.error ? (
+                <p className="text-sm text-destructive">
+                  {sub("pull-request-error")} <span className="break-words font-mono text-xs">{detail.pullRequest.error}</span>
                 </p>
+              ) : null}
+              <div className="flex items-center gap-3">
+                <Progress value={(done / REVIEW_SECTIONS.length) * PERCENT} className="flex-1" />
+                <span className="text-xs text-muted-foreground">{t("detail-progress", { done, total: REVIEW_SECTIONS.length })}</span>
               </div>
-              <SubmissionStatusBadge status={detail.status} />
-            </header>
-            {detail.pullRequest.error ? <p className="text-sm text-destructive">{sub("pull-request-error")} <span className="break-words font-mono text-xs">{detail.pullRequest.error}</span></p> : null}
-            {detail.note ? <p className="whitespace-pre-wrap rounded-[10px] bg-foreground/4 px-4 py-3 text-sm ring-1 ring-foreground/10">{detail.note}</p> : null}
-            <div className="flex items-center gap-3">
-              <Progress value={(done / REVIEW_SECTIONS.length) * PERCENT} className="flex-1" />
-              <span className="text-xs text-muted-foreground">{t("detail-progress", { done, total: REVIEW_SECTIONS.length })}</span>
-            </div>
+            </Frame>
             {definition
               ? REVIEW_SECTIONS.map((section) => (
-                  <Card key={section}>
-                    <CardContent className="flex flex-col gap-4">
-                      <div className="flex items-center justify-between gap-3">
-                        <h2 className="text-base font-medium text-foreground">{t(`sec-${section}`)}</h2>
-                        {reviewer ? (
-                          <div className="flex gap-1">
-                            <Button size="sm" variant={marks[section] === "ok" ? "default" : "outline"} aria-pressed={marks[section] === "ok"} onClick={() => setMarks((current) => ({ ...current, [section]: current[section] === "ok" ? null : "ok" }))}>
-                              {t("sec-ok")}
-                            </Button>
-                            <Button size="sm" variant={marks[section] === "fix" ? "destructive" : "outline"} aria-pressed={marks[section] === "fix"} onClick={() => setMarks((current) => ({ ...current, [section]: current[section] === "fix" ? null : "fix" }))}>
-                              {t("sec-fix")}
-                            </Button>
-                          </div>
-                        ) : null}
-                      </div>
-                      <div className={cn(marks[section] === "fix" && "rounded-[10px] ring-1 ring-destructive/40")}>
-                        <StaffReviewSection section={section} definition={definition} assets={detail.assets} />
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <Frame
+                    key={section}
+                    title={t(`sec-${section}`)}
+                    description={t(`sec-${section}-desc`)}
+                    action={
+                      reviewer ? (
+                        <Select items={MARK_OPTIONS.map((value) => ({ value, label: markLabel(value) }))} value={marks[section] ?? "pending"} onValueChange={(value) => value && setMarks((current) => ({ ...current, [section]: value === "pending" ? null : (value as SectionVerdict) }))}>
+                          <SelectTrigger className="min-w-36" aria-label={t(`sec-${section}`)}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent align="end" alignItemWithTrigger={false}>
+                            <SelectGroup>
+                              {MARK_OPTIONS.map((value) => (
+                                <SelectItem key={value} value={value}>
+                                  {markLabel(value)}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      ) : undefined
+                    }
+                  >
+                    <div className={cn(marks[section] === "fix" && "rounded-[10px] ring-1 ring-destructive/40")}>
+                      <StaffReviewSection section={section} definition={definition} assets={detail.assets} />
+                    </div>
+                  </Frame>
                 ))
               : null}
             <SubmissionChanges revisions={detail.revisions} />
             <SubmissionFiles files={detail.files} />
           </div>
           <div className="flex min-w-0 flex-col gap-4 xl:sticky xl:top-6 xl:self-start">
-            {reviewer && verdicts.length > 0 ? (
-              <Card>
-                <CardContent className="flex flex-col gap-3">
-                  <h2 className="text-base font-medium text-foreground">{t("detail-decision")}</h2>
-                  <Textarea value={message} disabled={busy} placeholder={t("peek-message-placeholder")} aria-label={t("peek-message-placeholder")} onChange={(event) => setMessage(event.target.value)} />
-                  {flagged > 0 ? <p className="text-xs text-muted-foreground">{t("detail-flagged", { count: flagged })}</p> : null}
-                  {error ? <p className="text-sm text-destructive">{error}</p> : null}
-                  <div className="flex flex-col gap-2">
-                    {verdicts.includes("approve") ? (
-                      <Button disabled={busy || flagged > 0} onClick={() => decide("approve")}>
-                        {sub("verdict-approve")}
-                      </Button>
-                    ) : null}
-                    {verdicts.includes("request_changes") ? (
-                      <Button variant="outline" disabled={busy || needsMessage} onClick={() => decide("request_changes")}>
-                        {t("peek-request")}
-                      </Button>
-                    ) : null}
-                    {verdicts.includes("reject") ? (
-                      <Button variant="destructive" disabled={busy || message.trim().length === 0} onClick={() => decide("reject")}>
-                        {t("peek-reject")}
-                      </Button>
-                    ) : null}
-                  </div>
-                </CardContent>
-              </Card>
+            {reviewer && choice ? (
+              <Frame
+                title={t("detail-decision")}
+                description={t("detail-decision-description")}
+                footer={
+                  <>
+                    <span className="text-xs text-muted-foreground">{flagged > 0 ? t("detail-flagged", { count: flagged }) : error ?? ""}</span>
+                    <Button variant={choice === "reject" ? "destructive" : "default"} disabled={busy || !canSubmit} onClick={() => decide(choice)}>
+                      {t("detail-submit")}
+                    </Button>
+                  </>
+                }
+              >
+                <RadioGroup value={choice} onValueChange={(value) => setVerdict(value as DecisionVerdict)} aria-label={t("detail-decision")}>
+                  {decisions.map((value) => (
+                    <label key={value} className="flex cursor-pointer items-start gap-3 text-sm">
+                      <RadioGroupItem value={value} className="mt-0.5" />
+                      <span className="flex flex-col">
+                        <span className="font-medium text-foreground">{t(`decision-${value}`)}</span>
+                        <span className="text-xs text-muted-foreground">{t(`decision-${value}-hint`)}</span>
+                      </span>
+                    </label>
+                  ))}
+                </RadioGroup>
+                <Textarea value={message} disabled={busy} placeholder={t("peek-message-placeholder")} aria-label={t("peek-message-placeholder")} onChange={(event) => setMessage(event.target.value)} />
+              </Frame>
             ) : null}
             {canPublish ? (
-              <Card>
-                <CardContent className="flex flex-col gap-2">
-                  {confirmPublish ? (
-                    <>
-                      <p className="text-sm text-muted-foreground">{sub("publish-confirm")}</p>
-                      <div className="flex gap-2">
-                        <Button disabled={busy} onClick={() => void act(() => publishSubmission(id, detail.revision))}>
-                          {t("detail-publish-confirm")}
-                        </Button>
-                        <Button variant="ghost" disabled={busy} onClick={() => setConfirmPublish(false)}>
-                          {t("peek-cancel")}
-                        </Button>
-                      </div>
-                    </>
-                  ) : (
+              <Frame
+                title={t("publish-title")}
+                description={t("publish-description")}
+                action={
+                  confirmPublish ? undefined : (
                     <Button variant="secondary" disabled={busy} onClick={() => setConfirmPublish(true)}>
                       {sub("publish")}
                     </Button>
-                  )}
-                </CardContent>
-              </Card>
+                  )
+                }
+              >
+                {confirmPublish ? (
+                  <>
+                    <p className="text-sm text-muted-foreground">{sub("publish-confirm")}</p>
+                    <div className="flex gap-2">
+                      <Button disabled={busy} onClick={() => void act(() => publishSubmission(id, detail.revision))}>
+                        {t("detail-publish-confirm")}
+                      </Button>
+                      <Button variant="ghost" disabled={busy} onClick={() => setConfirmPublish(false)}>
+                        {t("peek-cancel")}
+                      </Button>
+                    </div>
+                  </>
+                ) : null}
+              </Frame>
             ) : null}
             <SubmissionThread detail={detail} />
           </div>

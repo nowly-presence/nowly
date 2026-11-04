@@ -8,4 +8,6 @@ export const siteBaseUrl = (): string => (process.env.NEXT_PUBLIC_BASE_URL ?? PR
 
 export const presenceLogoUrl = (slug: string): string => `${CDN_BASE_URL}/presences/${encodeURIComponent(slug)}/assets/logo.png`;
 
+export const presenceThumbnailUrl = (slug: string): string => `${CDN_BASE_URL}/presences/${encodeURIComponent(slug)}/assets/thumbnail.jpg`;
+
 export const docsBaseUrl = (): string => (process.env.NEXT_PUBLIC_DOCS_BASE_URL ?? "https://docs.nowly.me").replace(/\/$/, "");
