@@ -179,4 +179,24 @@ describe("translateDefinition", () => {
     );
     expect((await translateDefinition(english())).description["fr-FR"]).toBe("Affichez la vidéo");
   });
+
+  it("retries a rate limited model and gives up with an error", async () => {
+    vi.useFakeTimers();
+    let calls = 0;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        calls += 1;
+        return new Response("{}", { status: 429 });
+      })
+    );
+    const outcome = translateDefinition(english()).then(
+      () => "translated",
+      (error: Error) => error.message
+    );
+    await vi.runAllTimersAsync();
+    expect(await outcome).toBe("Workers AI answered 429");
+    expect(calls).toBeGreaterThan(1);
+    vi.useRealTimers();
+  });
 });

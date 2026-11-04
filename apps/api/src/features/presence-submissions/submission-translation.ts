@@ -4,7 +4,7 @@ import { BUTTON_LABEL_MAX_LENGTH, DESCRIPTION_MAX_LENGTH, FEATURE_MAX_LENGTH, LO
 import { z } from "zod";
 
 export const TRANSLATION_LOCALES: readonly LocaleString[] = SUPPORTED_LOCALES;
-const PARALLEL_TRANSLATIONS = 4;
+const PARALLEL_TRANSLATIONS = 2;
 
 const TOKEN = /\{([a-zA-Z][a-zA-Z0-9]*)\}/g;
 const MASK = /\{(\d+)\}/g;
@@ -166,16 +166,26 @@ export const applyTranslations = (definition: CreatorDefinition, translations: M
   };
 };
 
-const TRANSLATION_ATTEMPTS = 2;
+const TRANSLATION_ATTEMPTS = 4;
+const RETRY_DELAY_MS = 2000;
+
+const isRateLimit = (error: unknown): boolean => error instanceof Error && error.message.startsWith("Workers AI answered");
+
+const wait = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
 const translateWithRetry = async (items: SourceItem[], from: LocaleString, to: LocaleString): Promise<Map<string, string>> => {
+  let failure: unknown;
+
   for (let attempt = 1; attempt <= TRANSLATION_ATTEMPTS; attempt += 1) {
     try {
       return await translateTo(items, from, to);
-    } catch {
-      continue;
+    } catch (error) {
+      failure = error;
+      if (attempt < TRANSLATION_ATTEMPTS && isRateLimit(error)) await wait(RETRY_DELAY_MS * attempt);
     }
   }
+
+  if (isRateLimit(failure)) throw failure;
 
   return new Map(items.map((item) => [item.key, item.text]));
 };
