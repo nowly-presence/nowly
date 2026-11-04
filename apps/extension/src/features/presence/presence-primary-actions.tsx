@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { RiArrowUpCircleLine } from "@remixicon/react";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n, type Translate } from "@/hooks/i18n-provider";
@@ -28,9 +29,10 @@ const enabledDescription = (status: PresenceStatus, stored: StoredPresence, view
   }
 };
 
-export const PresencePrimaryActions = ({ view, stored }: {
+export const PresencePrimaryActions = ({ view, stored, footer }: {
   view: PresenceView;
   stored: StoredPresence | undefined;
+  footer?: ReactNode;
 }) => {
   const { state } = useExtensionState();
   const { t, locale } = useI18n();
@@ -65,6 +67,7 @@ export const PresencePrimaryActions = ({ view, stored }: {
           label={t("detail.enabled")}
           onChange={(checked) => void actions.toggle(view.slug, checked)}
         />
+        {footer}
       </Group>
     </div>
   );

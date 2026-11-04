@@ -1,9 +1,14 @@
-import { RiAddLine, RiRefreshLine } from "@remixicon/react";
+import { useState } from "react";
+import { RiAddLine, RiDeleteBinLine, RiEyeLine, RiRefreshLine } from "@remixicon/react";
+import { PresenceDeleteSheet } from "@/components/shared/presence-delete-sheet";
 import { BackHeader, ScreenBody } from "@/components/shared/screen";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav } from "@/hooks/navigation-provider";
+import { useHiddenPresences } from "@/hooks/use-hidden-presences";
+import { usePresenceModeration } from "@/hooks/use-presence-moderation";
 import { useStaffAccess } from "@/hooks/use-staff-access";
 import { formatDateTime } from "@/lib/format";
+import type { HiddenPresence } from "@/shared/admin/admin-types";
 import { Badge } from "@/ui/badge";
 import { Button } from "@/ui/button";
 import { Group } from "@/ui/card";
@@ -22,6 +27,10 @@ export const AdminView = () => {
   const staff = useStaffAccess();
   const reviewing = staff.can("review");
   const { items, error, loading, reload } = useReviewQueue(reviewing);
+  const publishing = staff.can("publish");
+  const hidden = useHiddenPresences(publishing);
+  const moderation = usePresenceModeration(() => void hidden.reload());
+  const [deleting, setDeleting] = useState<HiddenPresence | null>(null);
 
   return (
     <div className="flex min-h-full flex-col">
@@ -82,7 +91,40 @@ export const AdminView = () => {
             )}
           </Section>
         )}
+
+        {publishing && hidden.items && hidden.items.length > 0 && (
+          <Section title={t("admin.presence.hiddenTitle")}>
+            <Group>
+              {hidden.items.map((item) => (
+                <Row
+                  key={item.slug}
+                  title={item.name}
+                  description={item.slug}
+                  trailing={
+                    <span className="flex items-center gap-1.5">
+                      <Button size="sm" variant="secondary" icon={<RiEyeLine className="size-4" />} loading={moderation.busy === "show"} onClick={() => void moderation.show(item.slug)}>
+                        {t("admin.presence.showAction")}
+                      </Button>
+                      <Button size="icon-sm" variant="ghost" className="hover:text-danger" aria-label={t("admin.presence.delete")} onClick={() => setDeleting(item)}>
+                        <RiDeleteBinLine className="size-4" />
+                      </Button>
+                    </span>
+                  }
+                />
+              ))}
+            </Group>
+          </Section>
+        )}
       </ScreenBody>
+      <PresenceDeleteSheet
+        name={deleting?.name ?? ""}
+        open={deleting !== null}
+        pending={moderation.busy === "delete"}
+        onClose={() => setDeleting(null)}
+        onConfirm={() => {
+          if (deleting) void moderation.remove(deleting.slug).then(() => setDeleting(null));
+        }}
+      />
     </div>
   );
 };

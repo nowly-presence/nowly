@@ -22,6 +22,7 @@ import { PresenceReportSheet } from "@/features/presence/presence-report-sheet";
 import { PresenceScheduleSection } from "@/features/presence/presence-schedule-section";
 import { PresenceSettingsSection } from "@/features/presence/presence-settings-section";
 import { PresenceSnoozeSection } from "@/features/presence/presence-snooze-section";
+import { PresenceModerationActions } from "@/features/presence/presence-moderation-actions";
 import { PresenceStats } from "@/features/presence/presence-stats";
 import { PresenceUninstallSheet } from "@/features/presence/presence-uninstall-sheet";
 import { usePresenceDetails } from "@/features/presence/use-presence-details";
@@ -90,9 +91,15 @@ export const PresenceDetailView = ({ slug }: {
 
       <ScreenBody className="gap-6 pt-0">
         <PresenceHero view={view} version={stored?.release?.version ?? view.version} />
-        <PresencePrimaryActions view={view} stored={stored} />
+        <PresencePrimaryActions
+          view={view}
+          stored={stored}
+          footer={
+            stored ? <PresenceStats bare activeUsers={engagement.activeUsers} totalInstalls={engagement.totalInstalls} likes={engagement.likes} /> : undefined
+          }
+        />
         <PresenceStaffActions slug={view.slug} />
-        <PresenceStats activeUsers={engagement.activeUsers} totalInstalls={engagement.totalInstalls} likes={engagement.likes} />
+        {!stored && <PresenceStats activeUsers={engagement.activeUsers} totalInstalls={engagement.totalInstalls} likes={engagement.likes} />}
 
         {live && (
           <Section title={t("activity.now")}>
@@ -101,6 +108,8 @@ export const PresenceDetailView = ({ slug }: {
         )}
 
         <PresenceAboutSection view={view} />
+
+        <PresenceModerationActions slug={view.slug} name={view.name} />
 
         {stored && (
           <>

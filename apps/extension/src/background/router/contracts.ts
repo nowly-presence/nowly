@@ -8,7 +8,7 @@ import type { SupportPromptAction, SupportPromptState } from "@/shared/support-p
 import type { PublishResult, OwnedPublicationResult } from "@/background/services/activity-publication-publisher";
 import type { CustomActivityDeletionPlan } from "@/background/services/custom-activity-deletion-plan";
 import type { CreatorTestResult } from "@/background/managers/creator-test";
-import type { AdminResult, AnnouncementDraft, FieldComment, QueueItem, ReviewVerdict, StaffAccess, SubmissionDetail } from "@/shared/admin/admin-types";
+import type { AdminResult, AnnouncementDraft, FieldComment, HiddenPresence, QueueItem, ReviewVerdict, StaffAccess, SubmissionDetail } from "@/shared/admin/admin-types";
 import type { CreatorDraft, CreatorExtraction, CreatorPick, CreatorSubmission, CreatorVariable } from "@nowly/presence-creator/creator-types";
 import type { CreatorAccount, CreatorSubmissionPayload, CreatorSubmitResult } from "@nowly/presence-creator/creator-submission";
 
@@ -104,6 +104,23 @@ export type RouterMessageMap = {
   ADMIN_GET_ACCESS: {
     payload: void;
     response: StaffAccess | null;
+  };
+  ADMIN_FETCH_HIDDEN_PRESENCES: {
+    payload: void;
+    response: AdminResult<HiddenPresence[]>;
+  };
+  ADMIN_SET_PRESENCE_HIDDEN: {
+    payload: {
+      slug: string;
+      hidden: boolean;
+    };
+    response: AdminResult<true>;
+  };
+  ADMIN_DELETE_PRESENCE: {
+    payload: {
+      slug: string;
+    };
+    response: AdminResult<true>;
   };
   ADMIN_FETCH_QUEUE: {
     payload: void;

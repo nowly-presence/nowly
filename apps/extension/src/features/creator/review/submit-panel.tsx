@@ -56,6 +56,32 @@ export const SubmitPanel = ({ draft, update, blocked }: {
     update((current) => (sameAuthor(current.author, author) ? current : { ...current, author }));
   }, [account, update]);
 
+  const latestDetail = thread.detail;
+  const reloadThread = thread.reload;
+
+  useEffect(() => {
+    if (!latestDetail || !submission || latestDetail.id !== submission.id) return;
+    if (latestDetail.status === submission.status && latestDetail.revision === submission.revision && latestDetail.prUrl === submission.prUrl) return;
+
+    update({
+      submission: {
+        ...submission,
+        status: latestDetail.status,
+        revision: latestDetail.revision,
+        prUrl: latestDetail.prUrl,
+        note: latestDetail.note
+      }
+    });
+  }, [latestDetail, submission, update]);
+
+  useEffect(() => {
+    if (!submission) return;
+
+    const onFocus = () => void reloadThread();
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [submission, reloadThread]);
+
   const refreshStatus = async () => {
     if (!submission) return;
 

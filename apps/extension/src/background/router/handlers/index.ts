@@ -14,7 +14,7 @@ import { handleGetAnnouncements, handleRefreshAnnouncements, handleMarkAnnouncem
 import { handleAcceptLegalDocuments, handleCheckLegalDocuments, handleGetLegalState } from "@/background/router/handlers/legal.handlers";
 import { applyPublication, publicationStatus } from "@/background/services/activity-publications";
 import { getOwnedPublication, publishActivity } from "@/background/services/activity-publication-publisher";
-import { createAnnouncement, fetchReviewQueue, fetchSubmissionDetail, getStaffAccess, loadCreatorPresenceDraft, probeCreatorPresence, publishSubmission, retryPullRequest, sendReview } from "@/background/services/admin-api";
+import { createAnnouncement, deletePresence, fetchHiddenPresences, fetchReviewQueue, fetchSubmissionDetail, getStaffAccess, loadCreatorPresenceDraft, probeCreatorPresence, publishSubmission, retryPullRequest, sendReview, setPresenceHidden } from "@/background/services/admin-api";
 import { openAccountConnect } from "@/background/services/account-sync";
 import { getCustomActivityDeletionPlan } from "@/background/services/custom-activity-deletion-plan";
 
@@ -32,6 +32,9 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   },
   ADMIN_GET_ACCESS: () => getStaffAccess(),
   ADMIN_FETCH_QUEUE: () => fetchReviewQueue(),
+  ADMIN_FETCH_HIDDEN_PRESENCES: () => fetchHiddenPresences(),
+  ADMIN_SET_PRESENCE_HIDDEN: ({ slug, hidden }) => setPresenceHidden(slug, hidden),
+  ADMIN_DELETE_PRESENCE: ({ slug }) => deletePresence(slug),
   SUBMISSION_GET_DETAIL: ({ id }) => fetchSubmissionDetail(id),
   ADMIN_REVIEW: (payload) => sendReview(payload),
   ADMIN_PUBLISH: ({ id, revision }) => publishSubmission(id, revision),

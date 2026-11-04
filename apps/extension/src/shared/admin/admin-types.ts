@@ -255,3 +255,13 @@ export const parsePublishedCreatorPresence = (body: unknown): PublishedCreatorPr
 
 export const parseStaffCapabilities = (body: unknown): AdminCapability[] | null =>
   isRecord(body) && Array.isArray(body.capabilities) ? body.capabilities.filter(isAdminCapability) : null;
+
+export type HiddenPresence = {
+  slug: string;
+  name: string;
+};
+
+export const parseHiddenPresences = (body: unknown): HiddenPresence[] | null =>
+  isRecord(body) && Array.isArray(body.presences)
+    ? body.presences.flatMap((entry) => (isRecord(entry) && typeof entry.slug === "string" ? [{ slug: entry.slug, name: typeof entry.name === "string" ? entry.name : entry.slug }] : []))
+    : null;

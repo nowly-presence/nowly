@@ -1,7 +1,7 @@
 import { getEffectiveApiUrl } from "@/background/services/api-state";
 import { assetUrl } from "@/shared/presence-assets";
 import { getAccount, updateAccountUser } from "@/background/storage/account.store";
-import { parsePublishedCreatorPresence, parseQueue, parseStaffCapabilities, parseSubmissionDetail, type AdminError, type AdminResult, type AnnouncementDraft, type FieldComment, type QueueItem, type ReviewVerdict, type StaffAccess, type SubmissionDetail } from "@/shared/admin/admin-types";
+import { parseHiddenPresences, parsePublishedCreatorPresence, parseQueue, parseStaffCapabilities, parseSubmissionDetail, type AdminError, type AdminResult, type AnnouncementDraft, type FieldComment, type HiddenPresence, type QueueItem, type ReviewVerdict, type StaffAccess, type SubmissionDetail } from "@/shared/admin/admin-types";
 import { parseSubmission } from "@nowly/presence-creator/creator-submission";
 import { normalizeDraft } from "@nowly/presence-creator/creator-draft";
 import type { CreatorDraft, CreatorSubmission } from "@nowly/presence-creator/creator-types";
@@ -16,7 +16,7 @@ const HTTP_UNPROCESSABLE = 422;
 const BASE64_CHUNK = 0x8000;
 const IMAGE_KINDS = ["thumbnail", "logo", "icon"] as const;
 
-type Method = "GET" | "POST";
+type Method = "GET" | "POST" | "PUT" | "DELETE";
 
 const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
@@ -110,6 +110,15 @@ export const publishSubmission = (id: string, revision: number): Promise<AdminRe
 
 export const retryPullRequest = (id: string): Promise<AdminResult<true>> =>
   withAccount((account) => call(account, "POST", `/presence-submissions/${encodeURIComponent(id)}/pull-request`, accept, {}));
+
+export const fetchHiddenPresences = (): Promise<AdminResult<HiddenPresence[]>> =>
+  withAccount((account) => call(account, "GET", "/admin/presences/hidden", parseHiddenPresences));
+
+export const setPresenceHidden = (slug: string, hidden: boolean): Promise<AdminResult<true>> =>
+  withAccount((account) => call(account, "PUT", `/admin/presences/${encodeURIComponent(slug)}/hidden`, accept, { hidden }));
+
+export const deletePresence = (slug: string): Promise<AdminResult<true>> =>
+  withAccount((account) => call(account, "DELETE", `/admin/presences/${encodeURIComponent(slug)}`, accept));
 
 export const createAnnouncement = (input: AnnouncementDraft): Promise<AdminResult<true>> =>
   withAccount((account) => call(account, "POST", "/announcements", accept, input));

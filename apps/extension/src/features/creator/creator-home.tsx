@@ -1,6 +1,7 @@
 import { useRef, useState, type ChangeEvent } from "react";
-import { RiAddLine, RiCursorLine, RiDeleteBinLine, RiDownload2Line, RiImageLine, RiMagicLine, RiSendPlaneLine, RiUpload2Line } from "@remixicon/react";
+import { RiAddLine, RiCursorLine, RiDeleteBinLine, RiDownload2Line, RiGitPullRequestLine, RiImageLine, RiMagicLine, RiSendPlaneLine, RiUpload2Line } from "@remixicon/react";
 import { ScreenBody, ScreenTitle } from "@/components/shared/screen";
+import { openUrl } from "@/shared/browser-links";
 import { useI18n } from "@/hooks/i18n-provider";
 import { formatDate } from "@/lib/format";
 import type { CreatorDraft } from "@nowly/presence-creator/creator-types";
@@ -51,6 +52,20 @@ const DraftRow = ({ draft, onOpen, onExport, onDelete }: {
       onClick={onOpen}
       trailing={
         <ButtonGroup label={name}>
+          {draft.submission?.prUrl && (
+            <Button
+              size="icon-sm"
+              variant="ghost"
+              aria-label={t("creator.home.openPullRequest")}
+              title={t("creator.home.openPullRequest")}
+              onClick={(event) => {
+                event.stopPropagation();
+                if (draft.submission?.prUrl) openUrl(draft.submission.prUrl);
+              }}
+            >
+              <RiGitPullRequestLine className="size-4" />
+            </Button>
+          )}
           <Button
             size="icon-sm"
             variant="ghost"
