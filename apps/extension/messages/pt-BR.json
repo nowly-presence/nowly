@@ -397,8 +397,6 @@
   "support.copyFailed": "Não foi possível copiar o endereço",
   "settings.seasonalThemes": "Mostrar temas sazonais",
   "settings.seasonalThemesHint": "Veste o painel a cada estação e em datas especiais, como o Halloween ou o Ano-Novo",
-  "settings.toolbarBadge": "Marca de atividade no ícone",
-  "settings.toolbarBadgeHint": "Um emoji sobre fundo colorido aparece no ícone da extensão enquanto uma atividade é compartilhada (🎮 jogando, 🎧 ouvindo, 👀 assistindo). A cor é a da presença e um «II» laranja indica pausa.",
   "settings.forceSeason": "Forçar a estação",
   "settings.seasonAuto": "Automática (data)",
   "settings.seasonNone": "Nenhuma",

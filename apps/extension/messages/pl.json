@@ -397,8 +397,6 @@
   "support.copyFailed": "Nie udało się skopiować adresu",
   "settings.seasonalThemes": "Pokazuj motywy sezonowe",
   "settings.seasonalThemesHint": "Ubiera panel na każdą porę roku i na wyjątkowe dni, takie jak Halloween czy Nowy Rok",
-  "settings.toolbarBadge": "Znacznik aktywności na ikonie",
-  "settings.toolbarBadgeHint": "Emoji na kolorowym tle pojawia się na ikonie rozszerzenia, gdy udostępniana jest aktywność (🎮 gra, 🎧 słuchanie, 👀 oglądanie). Kolor odpowiada prezencji, a pomarańczowe „II” oznacza pauzę.",
   "settings.forceSeason": "Wymuś sezon",
   "settings.seasonAuto": "Automatycznie (data)",
   "settings.seasonNone": "Brak",

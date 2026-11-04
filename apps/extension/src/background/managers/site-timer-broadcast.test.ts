@@ -27,10 +27,6 @@ describe("site timer broadcasts", () => {
     vi.stubGlobal("chrome", {
       ...globalThis.chrome,
       tabs: { query: vi.fn(async () => []) },
-      action: {
-        setBadgeText: vi.fn(async () => {}),
-        setBadgeBackgroundColor: vi.fn(async () => {})
-      }
     });
     vi.clearAllMocks();
     vi.useFakeTimers();

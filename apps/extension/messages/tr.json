@@ -397,8 +397,6 @@
   "support.copyFailed": "Adres kopyalanamadı",
   "settings.seasonalThemes": "Mevsimsel temaları göster",
   "settings.seasonalThemesHint": "Paneli her mevsime ve Cadılar Bayramı ya da Yılbaşı gibi özel günlere göre süsler",
-  "settings.toolbarBadge": "Simgede etkinlik işareti",
-  "settings.toolbarBadgeHint": "Bir etkinlik paylaşılırken uzantı simgesinde renkli zeminli bir emoji görünür (🎮 oyun, 🎧 dinleme, 👀 izleme). Renk presence ile aynıdır, turuncu \"II\" duraklatıldığını gösterir.",
   "settings.forceSeason": "Mevsimi zorla",
   "settings.seasonAuto": "Otomatik (tarih)",
   "settings.seasonNone": "Yok",

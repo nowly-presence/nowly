@@ -397,8 +397,6 @@
   "support.copyFailed": "Impossible de copier l'adresse",
   "settings.seasonalThemes": "Afficher les thèmes de saison",
   "settings.seasonalThemesHint": "Habille le panneau au fil des saisons et pour les grandes fêtes, comme Halloween ou le Nouvel An",
-  "settings.toolbarBadge": "Pastille d'activité sur l'icône",
-  "settings.toolbarBadgeHint": "Un emoji sur fond coloré apparaît sur l'icône de l'extension quand une activité est partagée (🎮 jeu, 🎧 écoute, 👀 visionnage). La couleur est celle de la présence, et un « II » orange indique la pause.",
   "settings.forceSeason": "Forcer la saison",
   "settings.seasonAuto": "Automatique (date)",
   "settings.seasonNone": "Aucune",

@@ -397,8 +397,6 @@
   "support.copyFailed": "Couldn't copy the address",
   "settings.seasonalThemes": "Show seasonal themes",
   "settings.seasonalThemesHint": "Dress the panel for each season and for special days, like Halloween or the new year",
-  "settings.toolbarBadge": "Activity dot on the toolbar icon",
-  "settings.toolbarBadgeHint": "An emoji on a colored background appears on the extension icon while an activity is shared (🎮 playing, 🎧 listening, 👀 watching). The color matches the presence, and an orange \"II\" means paused.",
   "settings.forceSeason": "Force the season",
   "settings.seasonAuto": "Automatic (date)",
   "settings.seasonNone": "None",

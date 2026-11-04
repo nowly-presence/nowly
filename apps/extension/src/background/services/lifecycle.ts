@@ -1,4 +1,4 @@
-import { broadcastActiveTab, handleClearActivity, handleRemovedTab, restoreActivityBadge } from "@/background/managers/activity-manager";
+import { broadcastActiveTab, handleClearActivity, handleRemovedTab } from "@/background/managers/activity-manager";
 import { drainInstallQueue, installBundledPresences } from "@/background/managers/presence-manager";
 import { trackProduct } from "@/background/telemetry";
 import { addRuntimeLog } from "@/background/runtime-logs";
@@ -141,7 +141,6 @@ const detectFocusedTab = async (): Promise<void> => {
 let bootPromise: Promise<InstalledPresences> | null = null;
 
 const runBootBackground = async (options: {
-  restoreBadge?: boolean;
   syncScripts?: boolean;
 }): Promise<InstalledPresences> => {
   await detectFocusedTab();
@@ -154,14 +153,12 @@ const runBootBackground = async (options: {
   const presences = await getPresences();
   await syncDeviceState();
   void drainInstallQueue();
-  if (options.restoreBadge) await restoreActivityBadge();
   if (options.syncScripts !== false) await syncPresenceScripts(presences);
   void runAccountSync("full");
   return presences;
 };
 
 const bootBackground = (options: {
-  restoreBadge?: boolean;
   syncScripts?: boolean;
 } = {}): Promise<InstalledPresences> => {
   bootPromise ??= runBootBackground(options);
@@ -181,7 +178,7 @@ export const registerLifecycleHandlers = (): void => {
   chrome.runtime.onStartup.addListener(async () => {
     enableSidePanelAction();
     registerContextMenu();
-    await bootBackground({ restoreBadge: true });
+    await bootBackground();
   });
 
   chrome.runtime.onInstalled.addListener(async (details) => {

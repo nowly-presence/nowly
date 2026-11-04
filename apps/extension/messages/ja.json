@@ -397,8 +397,6 @@
   "support.copyFailed": "アドレスをコピーできませんでした",
   "settings.seasonalThemes": "季節のテーマを表示",
   "settings.seasonalThemesHint": "季節ごとや、ハロウィンや新年などの特別な日に合わせてパネルを飾ります",
-  "settings.toolbarBadge": "ツールバーアイコンの活動マーク",
-  "settings.toolbarBadgeHint": "アクティビティを共有している間、拡張機能のアイコンに色付き背景の絵文字が表示されます(🎮 プレイ中、🎧 聴取中、👀 視聴中)。色はプレゼンスに合わせ、オレンジの「II」は一時停止を示します。",
   "settings.forceSeason": "季節を固定",
   "settings.seasonAuto": "自動（日付）",
   "settings.seasonNone": "なし",

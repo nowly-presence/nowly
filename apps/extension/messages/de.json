@@ -397,8 +397,6 @@
   "support.copyFailed": "Adresse konnte nicht kopiert werden",
   "settings.seasonalThemes": "Saisonale Designs anzeigen",
   "settings.seasonalThemesHint": "Kleidet das Panel passend zu jeder Jahreszeit und zu besonderen Tagen ein, etwa Halloween oder Neujahr",
-  "settings.toolbarBadge": "Aktivitätspunkt auf dem Symbol",
-  "settings.toolbarBadgeHint": "Ein Emoji auf farbigem Grund erscheint auf dem Erweiterungssymbol, solange eine Aktivität geteilt wird (🎮 spielen, 🎧 hören, 👀 ansehen). Die Farbe entspricht der Presence, ein oranges „II“ bedeutet Pause.",
   "settings.forceSeason": "Jahreszeit erzwingen",
   "settings.seasonAuto": "Automatisch (Datum)",
   "settings.seasonNone": "Keine",

@@ -397,8 +397,6 @@
   "support.copyFailed": "Alamat tidak dapat disalin",
   "settings.seasonalThemes": "Tunjukkan tema bermusim",
   "settings.seasonalThemesHint": "Menghias panel mengikut musim dan hari istimewa, seperti Halloween atau Tahun Baharu",
-  "settings.toolbarBadge": "Penanda aktiviti pada ikon",
-  "settings.toolbarBadgeHint": "Emoji pada latar berwarna muncul pada ikon sambungan semasa aktiviti dikongsi (🎮 bermain, 🎧 mendengar, 👀 menonton). Warnanya sama dengan presence, dan \"II\" oren bermaksud dijeda.",
   "settings.forceSeason": "Paksa musim",
   "settings.seasonAuto": "Automatik (tarikh)",
   "settings.seasonNone": "Tiada",

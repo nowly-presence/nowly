@@ -5,7 +5,6 @@ import { sendActiveHeartbeat } from "@/background/services/active-heartbeat";
 import { mapPresenceData, postNative } from "@/background/services/native";
 import { applySiteTimer } from "@/background/services/site-timers";
 import { verifyPresenceRelease } from "@/background/services/release-security";
-import { getCustomActivities } from "@/background/storage/custom-activities.store";
 import { getEffectiveCustomPresence } from "@/background/services/custom-activity-detection";
 import { getCurrentActivity, getPresences, setCurrentActivity, setDebug } from "@/background/storage/presences.store";
 import { getSettings } from "@/background/storage/settings.store";
@@ -13,7 +12,6 @@ import { recordUsageDay } from "@/background/storage/support.store";
 import { legalDocumentsPending } from "@/background/services/legal-documents";
 import { CDN_BASE_URL } from "@/shared/constants";
 import { customActivityIdOf } from "@/shared/custom-activity";
-import { readableBadgeColor, toolbarActivityColor, toolbarActivitySymbol } from "@/background/managers/toolbar-badge";
 import type { ExtensionSettings, PresenceData, StoredPresence } from "@/shared/types";
 
 const clampText = (value: string | undefined, maxLength: number): string | undefined => {
@@ -67,42 +65,6 @@ const normalizeImage = (value: string | undefined): string | undefined => {
 
   return undefined;
 };
-
-const setPausedBadge = (): void => {
-  chrome.action.setBadgeText({ text: "II" }).catch(() => {});
-  chrome.action.setBadgeBackgroundColor({ color: "#f59e0b" }).catch(() => {});
-};
-
-const clearActivityBadge = (): void => {
-  chrome.action.setBadgeText({ text: "" }).catch(() => {});
-};
-
-export const refreshToolbarBadge = async (): Promise<void> => {
-  const settings = await getSettings();
-
-  if (settings.toolbarBadge === false) {
-    clearActivityBadge();
-    return;
-  }
-
-  if (settings.presencePaused) {
-    setPausedBadge();
-    return;
-  }
-
-  const activity = await getCurrentActivity();
-
-  if (activity) {
-    const color = readableBadgeColor(toolbarActivityColor(activity, await getPresences(), await getCustomActivities()));
-    await chrome.action.setBadgeBackgroundColor({ color }).catch(() => {});
-    chrome.action.setBadgeText({ text: toolbarActivitySymbol(activity.presence.type) }).catch(() => {});
-    return;
-  }
-
-  clearActivityBadge();
-};
-
-export const restoreActivityBadge = (): Promise<void> => refreshToolbarBadge();
 
 export const normalizeActivity = (activity: PresenceData, fallbackName: string): PresenceData => {
   const allowedTypes = new Set([0, 1, 2, 3, 5]);
@@ -184,7 +146,6 @@ export const broadcastActiveTab = async (): Promise<void> => {
   if (await legalDocumentsPending()) {
     postNative({ type: "CLEAR_ACTIVITY" });
     await setCurrentActivity(null);
-    await refreshToolbarBadge();
     notifyBroadcastStateChanged();
     return;
   }
@@ -211,7 +172,6 @@ export const broadcastActiveTab = async (): Promise<void> => {
       presence: custom.presence,
       updatedAt: Date.now()
     });
-    await refreshToolbarBadge();
     notifyBroadcastStateChanged();
     return;
   }
@@ -236,8 +196,6 @@ export const broadcastActiveTab = async (): Promise<void> => {
     });
     void recordUsageDay().catch(() => {});
   }
-
-  await refreshToolbarBadge();
   notifyBroadcastStateChanged();
 };
 
@@ -245,7 +203,6 @@ export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
   if (await legalDocumentsPending()) {
     postNative({ type: "CLEAR_ACTIVITY" });
     await setCurrentActivity(null);
-    await refreshToolbarBadge();
     return;
   }
 
@@ -257,7 +214,6 @@ export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
 
   if (settings.presencePaused || !current) {
     if (settings.presencePaused) postNative({ type: "CLEAR_ACTIVITY" });
-    await refreshToolbarBadge();
     return;
   }
 
@@ -270,7 +226,6 @@ export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
 
   if (!stored || (await shouldHoldDiscord(stored))) {
     postNative({ type: "CLEAR_ACTIVITY" });
-    await refreshToolbarBadge();
     return;
   }
 
@@ -279,7 +234,6 @@ export const resumeStoredActivityIfAllowed = async (): Promise<void> => {
     presence: current.presence
   });
   if (submitted) await recordProductUse(current.slug);
-  await refreshToolbarBadge();
 };
 
 const recordProductUse = async (slug: string): Promise<void> => {

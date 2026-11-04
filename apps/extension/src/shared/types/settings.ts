@@ -20,7 +20,6 @@ export type ExtensionSettings = {
   globalSchedule?: PresenceSchedule;
   appearance?: AppearanceMode;
   seasonalThemes?: boolean;
-  toolbarBadge?: boolean;
   backgroundAnimation?: boolean;
   presenceLanguage?: PresenceLanguageMode;
   presenceLanguages?: Record<string, PresenceLocale>;

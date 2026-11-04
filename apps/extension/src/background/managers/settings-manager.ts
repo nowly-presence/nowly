@@ -1,4 +1,4 @@
-import { broadcastActiveTab, refreshToolbarBadge } from "@/background/managers/activity-manager";
+import { broadcastActiveTab } from "@/background/managers/activity-manager";
 import { applyPresencePause } from "@/background/managers/presence-pause";
 import { addRuntimeLog } from "@/background/runtime-logs";
 import { setCustomApiUrl } from "@/background/services/background-context";
@@ -21,10 +21,6 @@ export const updateSettings = async (partial: Partial<ExtensionSettings>): Promi
 
   if (typeof partial.presencePaused === "boolean" && partial.presencePaused !== previousSettings.presencePaused) {
     await applyPresencePause(partial.presencePaused);
-  }
-
-  if ("toolbarBadge" in partial && settings.toolbarBadge !== previousSettings.toolbarBadge) {
-    await refreshToolbarBadge();
   }
 
   if ("preserveSiteTimer" in partial && settings.preserveSiteTimer !== previousSettings.preserveSiteTimer) {

@@ -397,8 +397,6 @@
   "support.copyFailed": "No se pudo copiar la dirección",
   "settings.seasonalThemes": "Mostrar temas de temporada",
   "settings.seasonalThemesHint": "Viste el panel en cada estación y en los días especiales, como Halloween o Año Nuevo",
-  "settings.toolbarBadge": "Marca de actividad en el icono",
-  "settings.toolbarBadgeHint": "Aparece un emoji sobre fondo de color en el icono de la extensión mientras se comparte una actividad (🎮 jugar, 🎧 escuchar, 👀 ver). El color es el de la presencia y un «II» naranja indica pausa.",
   "settings.forceSeason": "Forzar la temporada",
   "settings.seasonAuto": "Automática (fecha)",
   "settings.seasonNone": "Ninguna",
