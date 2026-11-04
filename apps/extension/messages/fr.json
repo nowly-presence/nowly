@@ -26,7 +26,7 @@
   "custom.public.unpublish": "Retirer le lien public",
   "custom.public.unpublished": "Lien dépublié. Les copies existantes restent sur les appareils.",
   "custom.public.conflict": "La publication a changé. Rouvrez cette activité et vérifiez avant de republier.",
-  "nav.announcements": "Actualités",
+  "nav.announcements": "Nouveautés",
   "announcements.subtitle": "Annonces, état des services et notes de version.",
   "announcements.pinned": "Annonce épinglée",
   "announcements.started": "Début : {date}",

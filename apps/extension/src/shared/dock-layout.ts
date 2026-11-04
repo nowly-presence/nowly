@@ -11,7 +11,26 @@ export type DockDropTarget = {
 
 export const DOCK_MAX_GROUPS = 3;
 
-export const DOCK_TABS = ["activity", "custom", "creator", "store", "announcements", "settings"] as const;
+export const DOCK_TABS = ["activity", "store", "announcements", "settings", "custom", "creator"] as const;
+
+const DEFAULT_DOCK_GROUPS: readonly (readonly string[])[] = [
+  ["activity", "store", "announcements", "settings"],
+  ["custom", "creator"]
+];
+
+export const defaultDockLayout = <T extends string>(tabs: readonly T[]): DockLayout<T> => {
+  const groups = DEFAULT_DOCK_GROUPS.map((group) => tabs.filter((tab) => group.includes(tab))).filter((group) => group.length > 0);
+  const extra = tabs.filter((tab) => !DEFAULT_DOCK_GROUPS.some((group) => group.includes(tab)));
+
+  if (groups.length === 0) return [[...extra]];
+
+  return extra.length
+    ? [
+        ...groups.slice(0, -1),
+        [...groups[groups.length - 1], ...extra]
+      ]
+    : groups;
+};
 
 export const visibleDockTabs = (hidden: readonly string[] = []) => DOCK_TABS.filter((tab) => tab === "activity" || tab === "settings" || !hidden.includes(tab));
 
@@ -24,7 +43,7 @@ export const normalizeDockLayout = <T extends string>(layout: unknown, tabs: rea
     .slice(0, DOCK_MAX_GROUPS);
   const missing = tabs.filter((tab) => !groups.some((group) => group.includes(tab)));
 
-  if (groups.length === 0) return [[...missing]];
+  if (groups.length === 0) return defaultDockLayout(tabs);
 
   return missing.length
     ? [
@@ -38,7 +57,7 @@ export const restoreDockLayoutTabs = <T extends string>(layout: unknown, tabs: r
   const isTab = (value: unknown): value is T => typeof value === "string" && tabs.some((tab) => tab === value);
   const restored = (Array.isArray(layout) ? layout : []).map((group) => (Array.isArray(group) ? group.filter(isTab) : [])).filter((group) => group.length > 0);
 
-  if (restored.length === 0) return [[...tabs]];
+  if (restored.length === 0) return defaultDockLayout(tabs);
 
   for (const [tabIndex, tab] of tabs.entries()) {
     if (restored.some((group) => group.includes(tab))) continue;
@@ -62,8 +81,13 @@ export const restoreDockLayoutTabs = <T extends string>(layout: unknown, tabs: r
   return restored;
 };
 
-export const isDefaultDockLayout = <T extends string>(layout: DockLayout<T>, tabs: readonly T[]): boolean =>
-  layout.length === 1 && layout[0].length === tabs.length && layout[0].every((tab, index) => tab === tabs[index]);
+export const isDefaultDockLayout = <T extends string>(layout: DockLayout<T>, tabs: readonly T[]): boolean => {
+  const expected = defaultDockLayout(tabs);
+  return (
+    layout.length === expected.length &&
+    layout.every((group, index) => group.length === expected[index].length && group.every((tab, position) => tab === expected[index][position]))
+  );
+};
 
 export const removeDockTab = <T extends string>(layout: DockLayout<T>, tab: T): DockLayout<T> =>
   layout.map((group) => group.filter((item) => item !== tab)).filter((group) => group.length > 0);

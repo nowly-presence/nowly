@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DOCK_TABS, isDefaultDockLayout, moveDockTab, normalizeDockLayout, restoreDockLayoutTabs, visibleDockTabs } from "@/shared/dock-layout";
+import { DOCK_TABS, defaultDockLayout, isDefaultDockLayout, moveDockTab, normalizeDockLayout, restoreDockLayoutTabs, visibleDockTabs } from "@/shared/dock-layout";
 
 const TABS = ["activity", "store", "custom", "settings"] as const;
 
@@ -9,7 +9,15 @@ const base: Tab[][] = [["activity", "store", "custom", "settings"]];
 
 describe("dock visibility", () => {
   it("uses the intended default tab order", () => {
-    expect(DOCK_TABS).toEqual(["activity", "custom", "creator", "store", "announcements", "settings"]);
+    expect(DOCK_TABS).toEqual(["activity", "store", "announcements", "settings", "custom", "creator"]);
+  });
+
+  it("defaults to two bars: main tabs, then custom and creator", () => {
+    expect(defaultDockLayout(DOCK_TABS)).toEqual([
+      ["activity", "store", "announcements", "settings"],
+      ["custom", "creator"]
+    ]);
+    expect(normalizeDockLayout(undefined, visibleDockTabs(["custom", "creator"]))).toEqual([["activity", "store", "announcements", "settings"]]);
   });
 
   it("keeps required tabs visible even with invalid stored preferences", () => {
@@ -33,7 +41,8 @@ describe("dock visibility", () => {
   });
 
   it("restores every tab in its original order with an explicit reset layout", () => {
-    expect(normalizeDockLayout([[...DOCK_TABS]], visibleDockTabs([]))).toEqual([[...DOCK_TABS]]);
+    expect(normalizeDockLayout(defaultDockLayout(DOCK_TABS), visibleDockTabs([]))).toEqual(defaultDockLayout(DOCK_TABS));
+    expect(isDefaultDockLayout(defaultDockLayout(DOCK_TABS), DOCK_TABS)).toBe(true);
     expect(
       isDefaultDockLayout(
         [
@@ -48,7 +57,10 @@ describe("dock visibility", () => {
 
 describe("normalizeDockLayout", () => {
   it("falls back to one bar with every tab", () => {
-    expect(normalizeDockLayout(undefined, TABS)).toEqual(base);
+    expect(normalizeDockLayout(undefined, TABS)).toEqual([
+      ["activity", "store", "settings"],
+      ["custom"]
+    ]);
     expect(isDefaultDockLayout(normalizeDockLayout(null, TABS), TABS)).toBe(true);
   });
 
@@ -164,7 +176,7 @@ describe("moveDockTab", () => {
 describe("restoreDockLayoutTabs", () => {
   it("restores hidden tabs at their previous position in the saved order", () => {
     expect(restoreDockLayoutTabs([["activity", "store", "announcements", "settings"]], DOCK_TABS)).toEqual([
-      ["activity", "custom", "creator", "store", "announcements", "settings"]
+      ["activity", "store", "announcements", "settings", "custom", "creator"]
     ]);
   });
 
@@ -179,7 +191,7 @@ describe("restoreDockLayoutTabs", () => {
       )
     ).toEqual([
       ["activity"],
-      ["custom", "creator", "store", "announcements", "settings"]
+      ["store", "announcements", "settings", "custom", "creator"]
     ]);
   });
 });

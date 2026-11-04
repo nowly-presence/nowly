@@ -1,6 +1,6 @@
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
-import { DOCK_TABS, isDefaultDockLayout, normalizeDockLayout, restoreDockLayoutTabs } from "@/shared/dock-layout";
+import { DOCK_TABS, defaultDockLayout, isDefaultDockLayout, normalizeDockLayout, restoreDockLayoutTabs } from "@/shared/dock-layout";
 import { Button } from "@/ui/button";
 import { Group } from "@/ui/card";
 import { FieldRow } from "@/ui/field-row";
@@ -31,7 +31,7 @@ export const NavigationSection = () => {
             disabled={defaultDock}
             onClick={() =>
               void updateSettings({
-                dockLayout: [[...DOCK_TABS]],
+                dockLayout: defaultDockLayout(DOCK_TABS),
                 hiddenDockTabs: []
               })
             }
