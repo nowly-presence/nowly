@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CREATOR_DRAFTS_KEY, deleteDraft, loadDrafts, saveDraft, sortedDrafts, type CreatorDrafts } from "@/shared/creator/creator-storage";
+import { sendMessage } from "@/lib/messages";
 import type { CreatorDraft } from "@nowly/presence-creator/creator-types";
 
 export const useCreatorDrafts = () => {
@@ -15,6 +16,7 @@ export const useCreatorDrafts = () => {
       if (area === "local" && CREATOR_DRAFTS_KEY in changes) void loadDrafts().then(setDrafts);
     };
     chrome.storage.onChanged.addListener(onChanged);
+    void sendMessage("CREATOR_SYNC_DRAFTS").catch(() => undefined);
     return () => chrome.storage.onChanged.removeListener(onChanged);
   }, []);
 

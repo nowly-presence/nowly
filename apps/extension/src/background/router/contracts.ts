@@ -515,6 +515,10 @@ export type RouterMessageMap = {
     };
     response: CreatorSubmission[];
   };
+  CREATOR_SYNC_DRAFTS: {
+    payload: void;
+    response: void;
+  };
   DELETE_DEVICE_DATA: {
     payload: void;
     response: {

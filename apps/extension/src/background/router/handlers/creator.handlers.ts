@@ -1,3 +1,4 @@
+import { syncCreatorDrafts } from "@/background/services/creator-drafts-sync";
 import { publishCreatorTest, stopCreatorTest } from "@/background/managers/creator-test";
 import type { Handler } from "@/background/router/router";
 import { fetchSubmissions, getCreatorAccount, submitPresence } from "@/background/services/creator-api";
@@ -94,3 +95,4 @@ export const handleCreatorGetAccount: Handler<"CREATOR_GET_ACCOUNT"> = () => get
 export const handleCreatorSubmit: Handler<"CREATOR_SUBMIT"> = (payload) => submitPresence(payload);
 
 export const handleCreatorFetchSubmissions: Handler<"CREATOR_FETCH_SUBMISSIONS"> = ({ ids }) => fetchSubmissions(ids);
+export const handleCreatorSyncDrafts: Handler<"CREATOR_SYNC_DRAFTS"> = () => syncCreatorDrafts();

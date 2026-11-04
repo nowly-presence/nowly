@@ -64,6 +64,13 @@
       "when": 1793729998569,
       "tag": "0008_backfill_discord_id",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793756045221,
+      "tag": "0009_creator_drafts",
+      "breakpoints": true
     }
   ]
 }

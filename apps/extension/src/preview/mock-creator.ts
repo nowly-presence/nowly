@@ -73,6 +73,7 @@ export const createMockCreatorHandlers = (account: MockCreatorAccount): MockHand
         submission
       };
     },
+    CREATOR_SYNC_DRAFTS: () => undefined,
     CREATOR_FETCH_SUBMISSIONS: ({ ids }) =>
       ids.flatMap((id) => {
         const current = submissions.get(id);

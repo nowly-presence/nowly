@@ -4,6 +4,7 @@ import { drainInstallQueue } from "@/background/managers/presence-manager";
 import { sendActiveHeartbeat } from "@/background/services/active-heartbeat";
 import { getActiveSlugsSnapshot, hasActiveSlugs } from "@/background/services/background-context";
 import { ACCOUNT_SYNC_ALARM, ACCOUNT_SYNC_PERIOD_MINUTES, runAccountSync } from "@/background/services/account-sync";
+import { syncCreatorDrafts } from "@/background/services/creator-drafts-sync";
 import { postNative } from "@/background/services/native";
 import { refreshAnnouncements } from "@/background/services/announcements";
 import { ANNOUNCEMENTS_ALARM } from "@/shared/announcements";
@@ -38,5 +39,6 @@ export const registerAlarmHandlers = (): void => {
     if (alarm.name === INSTALL_QUEUE_ALARM) void drainInstallQueue();
     if (alarm.name === CUSTOM_IMAGES_ALARM) void syncActiveCustomImages();
     if (alarm.name === ACCOUNT_SYNC_ALARM) void runAccountSync("full");
+    if (alarm.name === ACCOUNT_SYNC_ALARM) void syncCreatorDrafts();
   });
 };
