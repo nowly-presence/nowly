@@ -7,7 +7,7 @@ import { buildTextFiles, normalizeDraft, parseCreatorDefinition, presenceFolder,
 import { and, asc, eq, isNull, lt, or } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
-import { commitOnBase, deletedEntry, fileExists, listFolderFiles, openOrReusePullRequest, pullRequestBody, pushBranch, textEntry, uploadBlob } from "./nolo-repository";
+import { commitOnBase, deletedEntry, fileExists, listFolderFiles, createPullRequest, findReusablePullRequest, pullRequestBody, pushBranch, refreshPullRequest, textEntry, uploadBlob } from "./nolo-repository";
 import { CREATOR_IMAGE_KINDS, IMAGE_SPECS } from "./submission-images";
 import { readCreatorImage } from "./submission-storage";
 import { translateDefinition } from "./submission-translation";
@@ -126,10 +126,10 @@ const buildPullRequest = async (row: typeof presenceSubmission.$inferSelect): Pr
   const commitSha = await commitOnBase(github, [...files.map((file) => textEntry(file.path, file.content)), ...images, ...removed.map(deletedEntry)], message);
 
   const branch = `creator/${row.slug}-${row.id.slice(0, SHORT_ID_LENGTH)}`;
+  const reusable = await findReusablePullRequest(github, branch);
   await pushBranch(github, branch, commitSha);
 
-  const pull = await openOrReusePullRequest(github, {
-    branch,
+  const content = {
     title: message,
     body: pullRequestBody({
       submissionId: row.id,
@@ -139,7 +139,11 @@ const buildPullRequest = async (row: typeof presenceSubmission.$inferSelect): Pr
         discordId: author?.discordId ?? null
       }
     })
-  });
+  };
+
+  if (reusable) await refreshPullRequest(github, reusable.number, content);
+
+  const pull = reusable ?? (await createPullRequest(github, { branch, ...content }));
   await db
     .update(presenceSubmission)
     .set({

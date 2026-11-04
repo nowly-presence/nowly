@@ -925,7 +925,6 @@
   "admin.kindCreate": "Yeni presence",
   "admin.kindUpdate": "Güncelleme",
   "admin.newAnnouncement": "Yeni duyuru",
-  "admin.openInCreator": "Oluşturucuda aç",
   "admin.change.added": "Eklendi",
   "admin.change.removed": "Kaldırıldı",
   "admin.change.changed": "Değişti",
@@ -1054,5 +1053,8 @@
   "admin.presence.shown": "Presence yeniden görünür",
   "admin.presence.deleted": "Presence silindi",
   "admin.presence.hiddenTitle": "Gizli presence'ler",
-  "creator.home.openPullRequest": "Pull request'i aç"
+  "creator.home.openPullRequest": "Pull request'i aç",
+  "admin.presence.edit": "Düzenle",
+  "admin.presence.editHint": "Varlığı oluşturucuda açar.",
+  "action.edit": "Düzenle"
 }

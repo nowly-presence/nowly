@@ -925,7 +925,6 @@
   "admin.kindCreate": "새 프레즌스",
   "admin.kindUpdate": "업데이트",
   "admin.newAnnouncement": "새 공지",
-  "admin.openInCreator": "크리에이터에서 열기",
   "admin.change.added": "추가됨",
   "admin.change.removed": "삭제됨",
   "admin.change.changed": "변경됨",
@@ -1054,5 +1053,8 @@
   "admin.presence.shown": "프레즌스가 다시 표시됩니다",
   "admin.presence.deleted": "프레즌스를 삭제했습니다",
   "admin.presence.hiddenTitle": "숨긴 프레즌스",
-  "creator.home.openPullRequest": "풀 리퀘스트 열기"
+  "creator.home.openPullRequest": "풀 리퀘스트 열기",
+  "admin.presence.edit": "편집",
+  "admin.presence.editHint": "크리에이터에서 엽니다.",
+  "action.edit": "편집"
 }

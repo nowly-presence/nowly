@@ -925,7 +925,6 @@
   "admin.kindCreate": "Νέο presence",
   "admin.kindUpdate": "Ενημέρωση",
   "admin.newAnnouncement": "Νέα ανακοίνωση",
-  "admin.openInCreator": "Άνοιγμα στον δημιουργό",
   "admin.change.added": "Προστέθηκε",
   "admin.change.removed": "Αφαιρέθηκε",
   "admin.change.changed": "Άλλαξε",
@@ -1054,5 +1053,8 @@
   "admin.presence.shown": "Η παρουσία είναι ξανά ορατή",
   "admin.presence.deleted": "Η παρουσία διαγράφηκε",
   "admin.presence.hiddenTitle": "Κρυφές παρουσίες",
-  "creator.home.openPullRequest": "Άνοιγμα του pull request"
+  "creator.home.openPullRequest": "Άνοιγμα του pull request",
+  "admin.presence.edit": "Επεξεργασία",
+  "admin.presence.editHint": "Ανοίγει την παρουσία στον δημιουργό.",
+  "action.edit": "Επεξεργασία"
 }

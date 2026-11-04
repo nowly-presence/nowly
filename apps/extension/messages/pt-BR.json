@@ -925,7 +925,6 @@
   "admin.kindCreate": "Nova presence",
   "admin.kindUpdate": "Atualização",
   "admin.newAnnouncement": "Novo anúncio",
-  "admin.openInCreator": "Abrir no criador",
   "admin.change.added": "Adicionado",
   "admin.change.removed": "Removido",
   "admin.change.changed": "Alterado",
@@ -1054,5 +1053,8 @@
   "admin.presence.shown": "Presença visível novamente",
   "admin.presence.deleted": "Presença excluída",
   "admin.presence.hiddenTitle": "Presenças ocultas",
-  "creator.home.openPullRequest": "Abrir a pull request"
+  "creator.home.openPullRequest": "Abrir a pull request",
+  "admin.presence.edit": "Editar",
+  "admin.presence.editHint": "Abre a presença no criador.",
+  "action.edit": "Editar"
 }

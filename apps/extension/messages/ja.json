@@ -925,7 +925,6 @@
   "admin.kindCreate": "新しいプレゼンス",
   "admin.kindUpdate": "更新",
   "admin.newAnnouncement": "新しいお知らせ",
-  "admin.openInCreator": "クリエイターで開く",
   "admin.change.added": "追加",
   "admin.change.removed": "削除",
   "admin.change.changed": "変更",
@@ -1054,5 +1053,8 @@
   "admin.presence.shown": "プレゼンスを再表示しました",
   "admin.presence.deleted": "プレゼンスを削除しました",
   "admin.presence.hiddenTitle": "非表示のプレゼンス",
-  "creator.home.openPullRequest": "プルリクエストを開く"
+  "creator.home.openPullRequest": "プルリクエストを開く",
+  "admin.presence.edit": "編集",
+  "admin.presence.editHint": "クリエイターで開きます。",
+  "action.edit": "編集"
 }

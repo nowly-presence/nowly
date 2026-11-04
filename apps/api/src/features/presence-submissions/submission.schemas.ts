@@ -56,7 +56,9 @@ export const ReviewBodySchema = z
 
 export const PublishBodySchema = z.strictObject({ revision: z.number().int().positive() });
 
-export const QueueFilterSchema = z.strictObject({ status: z.enum(["pending", "in_progress", "changes_requested", "published", "rejected", "all"]).default("pending") });
+export const QueueFilterSchema = z.strictObject({
+  status: z.enum(["pending", "in_progress", "changes_requested", "published", "rejected", "all"]).default("pending")
+});
 
 export const PullRequestClosedWebhookSchema = z.strictObject({
   slug: z.string().regex(SLUG_PATTERN),

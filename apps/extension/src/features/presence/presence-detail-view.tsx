@@ -17,7 +17,6 @@ import { PresenceHero } from "@/features/presence/presence-hero";
 import { PresenceInfoSection } from "@/features/presence/presence-info-section";
 import { PresenceLikeButton } from "@/features/presence/presence-like-button";
 import { PresencePrimaryActions } from "@/features/presence/presence-primary-actions";
-import { PresenceStaffActions } from "@/features/presence/presence-staff-actions";
 import { PresenceReportSheet } from "@/features/presence/presence-report-sheet";
 import { PresenceScheduleSection } from "@/features/presence/presence-schedule-section";
 import { PresenceSettingsSection } from "@/features/presence/presence-settings-section";
@@ -98,7 +97,6 @@ export const PresenceDetailView = ({ slug }: {
             stored ? <PresenceStats bare activeUsers={engagement.activeUsers} totalInstalls={engagement.totalInstalls} likes={engagement.likes} /> : undefined
           }
         />
-        <PresenceStaffActions slug={view.slug} />
         {!stored && <PresenceStats activeUsers={engagement.activeUsers} totalInstalls={engagement.totalInstalls} likes={engagement.likes} />}
 
         {live && (

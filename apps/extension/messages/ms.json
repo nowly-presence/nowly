@@ -925,7 +925,6 @@
   "admin.kindCreate": "Presence baharu",
   "admin.kindUpdate": "Kemas kini",
   "admin.newAnnouncement": "Pengumuman baharu",
-  "admin.openInCreator": "Buka dalam pencipta",
   "admin.change.added": "Ditambah",
   "admin.change.removed": "Dialih keluar",
   "admin.change.changed": "Diubah",
@@ -1054,5 +1053,8 @@
   "admin.presence.shown": "Presence kelihatan semula",
   "admin.presence.deleted": "Presence dipadam",
   "admin.presence.hiddenTitle": "Presence tersembunyi",
-  "creator.home.openPullRequest": "Buka pull request"
+  "creator.home.openPullRequest": "Buka pull request",
+  "admin.presence.edit": "Edit",
+  "admin.presence.editHint": "Buka kehadiran dalam pencipta.",
+  "action.edit": "Edit"
 }

@@ -92,7 +92,10 @@ export const presenceSubmissionRoutes = new Hono<AppEnv>()
     if (!filter.success) return c.json({ error: "INVALID_QUERY" }, 400);
 
     c.header("Cache-Control", "no-store");
-    const [items, counts] = await Promise.all([listReviewQueue(filter.data.status), countReviewQueue()]);
+    const [items, counts] = await Promise.all([
+      listReviewQueue(filter.data.status),
+      countReviewQueue()
+    ]);
     return c.json({ items, counts });
   })
   .get("/creator-presences/:slug", requireCapability("review"), async (c) => {

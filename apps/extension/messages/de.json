@@ -925,7 +925,6 @@
   "admin.kindCreate": "Neue Presence",
   "admin.kindUpdate": "Aktualisierung",
   "admin.newAnnouncement": "Neue Ankündigung",
-  "admin.openInCreator": "Im Creator öffnen",
   "admin.change.added": "Hinzugefügt",
   "admin.change.removed": "Entfernt",
   "admin.change.changed": "Geändert",
@@ -1054,5 +1053,8 @@
   "admin.presence.shown": "Presence wieder sichtbar",
   "admin.presence.deleted": "Presence gelöscht",
   "admin.presence.hiddenTitle": "Ausgeblendete Presences",
-  "creator.home.openPullRequest": "Pull Request öffnen"
+  "creator.home.openPullRequest": "Pull Request öffnen",
+  "admin.presence.edit": "Bearbeiten",
+  "admin.presence.editHint": "Öffnet die Präsenz im Creator.",
+  "action.edit": "Bearbeiten"
 }

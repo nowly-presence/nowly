@@ -120,28 +120,36 @@ export const pushBranch = async (github: GithubClient, branch: string, sha: stri
   });
 };
 
-export const openOrReusePullRequest = async (github: GithubClient, input: {
-  branch: string;
-  title: string;
-  body: string;
-}) => {
+export const findReusablePullRequest = async (github: GithubClient, branch: string) => {
   const [owner] = serverEnv.NOLO_REPOSITORY.split("/");
-  const head = encodeURIComponent(`${owner}:${input.branch}`);
+  const head = encodeURIComponent(`${owner}:${branch}`);
   const [open] = PullListSchema.parse(await github("GET", repoPath(`/pulls?state=open&head=${head}`)));
 
   if (open) return open;
 
   const [closed] = PullListSchema.parse(await github("GET", repoPath(`/pulls?state=closed&head=${head}&sort=created&direction=desc&per_page=1`)));
 
-  if (closed && !closed.merged_at) {
-    const reopened = await github("PATCH", repoPath(`/pulls/${closed.number}`), { state: "open" }).then(
-      () => true,
-      () => false
-    );
+  if (!closed || closed.merged_at) return null;
 
-    if (reopened) return closed;
-  }
+  const reopened = await github("PATCH", repoPath(`/pulls/${closed.number}`), { state: "open" }).then(
+    () => true,
+    () => false
+  );
+  return reopened ? closed : null;
+};
 
+export const refreshPullRequest = async (github: GithubClient, number: number, input: {
+  title: string;
+  body: string;
+}): Promise<void> => {
+  await github("PATCH", repoPath(`/pulls/${number}`), input).catch(() => undefined);
+};
+
+export const createPullRequest = async (github: GithubClient, input: {
+  branch: string;
+  title: string;
+  body: string;
+}) => {
   const created = PullSchema.parse(
     await github("POST", repoPath("/pulls"), {
       title: input.title,

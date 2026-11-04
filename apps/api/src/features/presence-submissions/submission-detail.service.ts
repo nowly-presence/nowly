@@ -10,6 +10,7 @@ export const QUEUE_LIMIT = 100;
 export const CREATIONS_LIMIT = 100;
 
 export const QUEUE_STATUSES = ["submitted", "approved"];
+
 export type QueueFilter = "pending" | "in_progress" | "changes_requested" | "published" | "rejected" | "all";
 
 const statusesOf = (filter: QueueFilter): string[] | null => {
@@ -149,7 +150,14 @@ export const getSubmissionDetail = async (id: string) => {
 };
 
 export const countReviewQueue = async (): Promise<Record<string, number>> => {
-  const rows = await getDb().select({ status: presenceSubmission.status, total: count() }).from(presenceSubmission).groupBy(presenceSubmission.status);
+  const rows = await getDb()
+    .select({
+      status: presenceSubmission.status,
+      total: count()
+    })
+    .from(presenceSubmission)
+    .groupBy(presenceSubmission.status);
+
   const byStatus = new Map(rows.map((row) => [row.status, row.total]));
   const total = rows.reduce((sum, row) => sum + row.total, 0);
 
