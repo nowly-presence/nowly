@@ -10,10 +10,10 @@ import { serverEnv } from "@nowly/env/server";
 import { hasCapability } from "@nowly/shared/roles";
 import { Hono, type Context } from "hono";
 import { SubmissionError } from "./submission-errors";
-import { getCreatorPresence, getSubmissionAuthorId, getSubmissionDetail, listOwnCreations, listReviewQueue } from "./submission-detail.service";
+import { getCreatorPresence, getSubmissionAuthorId, getSubmissionDetail, countReviewQueue, listOwnCreations, listReviewQueue } from "./submission-detail.service";
 import { openPendingPullRequests, openSubmissionPullRequest } from "./submission-pull-request";
 import { markPullRequestClosed, markSubmissionPublished, publishSubmission, reviewSubmission } from "./submission-review.service";
-import { PublishBodySchema, PublishedWebhookSchema, PullRequestClosedWebhookSchema, ReviewBodySchema, SubmitBodySchema, SUBMISSION_BODY_LIMIT, SUBMISSIONS_PER_HOUR, SubmissionIdsSchema } from "./submission.schemas";
+import { PublishBodySchema, PublishedWebhookSchema, QueueFilterSchema, PullRequestClosedWebhookSchema, ReviewBodySchema, SubmitBodySchema, SUBMISSION_BODY_LIMIT, SUBMISSIONS_PER_HOUR, SubmissionIdsSchema } from "./submission.schemas";
 import { listOwnSubmissions, submitPresence } from "./submission.service";
 
 const SUBMIT_RATE_LIMIT = rateLimit({
@@ -87,8 +87,13 @@ export const presenceSubmissionRoutes = new Hono<AppEnv>()
     return c.json({ items: await listOwnCreations(accountOf(c).userId) });
   })
   .get("/presence-submissions/queue", requireCapability("review"), async (c) => {
+    const filter = QueueFilterSchema.safeParse(c.req.query());
+
+    if (!filter.success) return c.json({ error: "INVALID_QUERY" }, 400);
+
     c.header("Cache-Control", "no-store");
-    return c.json({ items: await listReviewQueue() });
+    const [items, counts] = await Promise.all([listReviewQueue(filter.data.status), countReviewQueue()]);
+    return c.json({ items, counts });
   })
   .get("/creator-presences/:slug", requireCapability("review"), async (c) => {
     const creatorPresence = await getCreatorPresence(c.req.param("slug"));

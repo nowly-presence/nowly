@@ -456,6 +456,22 @@ describe("reviewing and publishing", () => {
       status: "in_progress",
       withoutReview: false
     });
+    const queue = async (status?: string) => (await asSession(MODERATOR, { url: `/presence-submissions/queue${status ? `?status=${status}` : ""}` })).json();
+    expect((await queue()).items).toHaveLength(0);
+    expect((await queue("in_progress")).items).toMatchObject([
+      {
+        id,
+        status: "in_progress"
+      }
+    ]);
+    expect((await queue("all")).items).toHaveLength(1);
+    expect((await queue("in_progress")).counts).toMatchObject({
+      pending: 0,
+      in_progress: 1,
+      published: 0,
+      all: 1
+    });
+    expect((await asSession(MODERATOR, { url: "/presence-submissions/queue?status=bogus" })).statusCode).toBe(400);
     expect((await database.db.select().from(adminAuditEvent)).map((event) => event.action)).toEqual(["submission.review", "submission.publish"]);
   });
 

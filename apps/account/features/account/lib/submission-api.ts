@@ -164,12 +164,15 @@ export const fetchCreations = async (): Promise<SubmissionListItem[]> =>
     }>(await request("/me/creations"))
   ).items;
 
-export const fetchReviewQueue = async (): Promise<QueueItem[]> =>
-  (
-    await readJson<{
-      items: QueueItem[];
-    }>(await request("/presence-submissions/queue"))
-  ).items;
+export type QueueFilter = "pending" | "in_progress" | "changes_requested" | "published" | "rejected" | "all";
+
+export type ReviewQueue = {
+  items: QueueItem[];
+  counts: Record<QueueFilter, number>;
+};
+
+export const fetchReviewQueue = async (status: QueueFilter = "pending"): Promise<ReviewQueue> =>
+  readJson<ReviewQueue>(await request(`/presence-submissions/queue?status=${status}`));
 
 export const fetchSubmission = async (id: string): Promise<SubmissionDetail> =>
   readJson<SubmissionDetail>(await request(`/presence-submissions/${encodeURIComponent(id)}`));

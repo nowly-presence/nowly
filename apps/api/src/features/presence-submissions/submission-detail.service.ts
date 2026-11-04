@@ -1,7 +1,7 @@
 import { getDb } from "@/db/client";
 import { user } from "@nowly/database/schema/auth";
 import { creatorPresence, presenceSubmission, presenceSubmissionEvent, presenceSubmissionReview, presenceSubmissionRevision } from "@nowly/database/schema/creator";
-import { asc, desc, eq, inArray } from "drizzle-orm";
+import { asc, count, desc, eq, inArray } from "drizzle-orm";
 import { buildTextFiles, normalizeDraft, parseCreatorDefinition } from "@nowly/presence-creator";
 import { toSummary } from "./submission.service";
 import { assetUrls, removeCreatorImages, storedKeys } from "./submission-storage";
@@ -9,7 +9,14 @@ import { assetUrls, removeCreatorImages, storedKeys } from "./submission-storage
 export const QUEUE_LIMIT = 100;
 export const CREATIONS_LIMIT = 100;
 
-const QUEUE_STATUSES = ["submitted", "approved"];
+export const QUEUE_STATUSES = ["submitted", "approved"];
+export type QueueFilter = "pending" | "in_progress" | "changes_requested" | "published" | "rejected" | "all";
+
+const statusesOf = (filter: QueueFilter): string[] | null => {
+  if (filter === "pending") return QUEUE_STATUSES;
+
+  return filter === "all" ? null : [filter];
+};
 
 const names = async (ids: Array<string | null>): Promise<Map<string, string>> => {
   const known = [...new Set(ids.filter((id): id is string => Boolean(id)))];
@@ -141,12 +148,28 @@ export const getSubmissionDetail = async (id: string) => {
   };
 };
 
-export const listReviewQueue = async () => {
+export const countReviewQueue = async (): Promise<Record<string, number>> => {
+  const rows = await getDb().select({ status: presenceSubmission.status, total: count() }).from(presenceSubmission).groupBy(presenceSubmission.status);
+  const byStatus = new Map(rows.map((row) => [row.status, row.total]));
+  const total = rows.reduce((sum, row) => sum + row.total, 0);
+
+  return {
+    pending: QUEUE_STATUSES.reduce((sum, status) => sum + (byStatus.get(status) ?? 0), 0),
+    in_progress: byStatus.get("in_progress") ?? 0,
+    changes_requested: byStatus.get("changes_requested") ?? 0,
+    published: byStatus.get("published") ?? 0,
+    rejected: byStatus.get("rejected") ?? 0,
+    all: total
+  };
+};
+
+export const listReviewQueue = async (filter: QueueFilter = "pending") => {
+  const statuses = statusesOf(filter);
   const rows = await getDb()
     .select()
     .from(presenceSubmission)
-    .where(inArray(presenceSubmission.status, QUEUE_STATUSES))
-    .orderBy(asc(presenceSubmission.updatedAt))
+    .where(statuses ? inArray(presenceSubmission.status, statuses) : undefined)
+    .orderBy(filter === "pending" ? asc(presenceSubmission.updatedAt) : desc(presenceSubmission.updatedAt))
     .limit(QUEUE_LIMIT);
 
   const [byId, titles] = await Promise.all([
