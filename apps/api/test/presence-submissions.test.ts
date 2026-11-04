@@ -1,6 +1,6 @@
 import { adminAuditEvent } from "@nowly/database/schema/admin";
 import { user } from "@nowly/database/schema/auth";
-import { creatorPresence, presenceSubmission, presenceSubmissionRevision } from "@nowly/database/schema/creator";
+import { creatorPresence, presenceSubmission, presenceSubmissionEvent, presenceSubmissionRevision } from "@nowly/database/schema/creator";
 import { presence } from "@nowly/database/schema/presence";
 import { creatorDefinition, presenceSlug } from "@nowly/presence-creator";
 import { sampleCreatorDraft } from "@nowly/presence-creator/creator-fixtures";
@@ -317,7 +317,9 @@ describe("submitting a presence", () => {
 describe("submission files", () => {
   it("lists the files the current generator produces, even for older revisions", async () => {
     const id = (await submit(creator, { definition: definition() })).json().id;
-    await database.db.update(presenceSubmissionRevision).set({ files: [] });
+    await database.db.update(presenceSubmissionRevision).set({
+      files: []
+    });
 
     const paths = (await detail(AUTHOR, id)).json().files.map((file: { path: string }) => file.path);
     expect(paths.some((path: string) => path.endsWith("/metadata.json"))).toBe(true);
@@ -529,6 +531,36 @@ describe("publication webhook and creator presences", () => {
       headers: { authorization: `Bearer ${secret}` },
       payload
     });
+
+  it("sends a submission back to its author when the pull request is closed without merging", async () => {
+    const { id } = (await submit()).json();
+    await review(MODERATOR, id, {
+      revision: 1,
+      verdict: "approve"
+    });
+    await publish(ADMIN, id, 1);
+    await database.db.update(presenceSubmission).set({ prNumber: 44 }).where(eq(presenceSubmission.id, id));
+    const closed = async (pr: number, secret = WEBHOOK_SECRET) =>
+      inject(await app(), {
+        method: "POST",
+        url: "/presence-submissions/pull-request-closed",
+        headers: { authorization: `Bearer ${secret}` },
+        payload: { slug, pr }
+      });
+
+    expect((await closed(44, "wrong")).statusCode).toBe(401);
+    expect((await closed(45)).json().error).toBe("NOT_PUBLISHING");
+    expect((await closed(44)).json()).toMatchObject({
+      id,
+      status: "changes_requested"
+    });
+    const [row] = await database.db.select().from(presenceSubmission).where(eq(presenceSubmission.id, id));
+    expect(row.note).toContain("closed without being merged");
+    expect((await database.db.select().from(presenceSubmissionEvent).where(eq(presenceSubmissionEvent.submissionId, id))).map((event) => event.type)).toContain(
+      "pr.closed"
+    );
+    expect((await closed(44)).json().error).toBe("NOT_PUBLISHING");
+  });
 
   it("publishes, stores the creator definition and turns the next submission into an update", async () => {
     const { id } = (await submit()).json();

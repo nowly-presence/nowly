@@ -1,9 +1,10 @@
 import { runJsonModel } from "@/shared/workers-ai";
-import type { LocaleString } from "@nowly/locales";
+import { SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
 import { BUTTON_LABEL_MAX_LENGTH, DESCRIPTION_MAX_LENGTH, FEATURE_MAX_LENGTH, LONG_DESCRIPTION_MAX_LENGTH, PAGE_TEXT_MAX_LENGTH, templateTokens, type CreatorDefinition, type LocalizedText } from "@nowly/presence-creator";
 import { z } from "zod";
 
-export const TRANSLATION_LOCALES: readonly LocaleString[] = ["en-US", "fr-FR", "es-ES"];
+export const TRANSLATION_LOCALES: readonly LocaleString[] = SUPPORTED_LOCALES;
+const PARALLEL_TRANSLATIONS = 4;
 
 const TOKEN = /\{([a-zA-Z][a-zA-Z0-9]*)\}/g;
 const MASK = /\{(\d+)\}/g;
@@ -171,7 +172,11 @@ export const translateDefinition = async (definition: CreatorDefinition): Promis
 
   const translations = new Map<LocaleString, Map<string, string>>();
 
-  for (const locale of targets) translations.set(locale, await translateTo(items, definition.baseLocale, locale));
+  for (let start = 0; start < targets.length; start += PARALLEL_TRANSLATIONS) {
+    const batch = targets.slice(start, start + PARALLEL_TRANSLATIONS);
+    const results = await Promise.all(batch.map((locale) => translateTo(items, definition.baseLocale, locale)));
+    batch.forEach((locale, index) => translations.set(locale, results[index]));
+  }
 
   return applyTranslations(definition, translations);
 };

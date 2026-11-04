@@ -1,4 +1,5 @@
 import { maskTokens, restoreTranslation, shorten, translateDefinition } from "@/features/presence-submissions/submission-translation";
+import { SUPPORTED_LOCALES } from "@nowly/locales";
 import { creatorDefinition, normalizeDraft, validateDraft } from "@nowly/presence-creator";
 import { sampleCreatorDraft } from "@nowly/presence-creator/creator-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -102,20 +103,18 @@ describe("translateDefinition", () => {
     );
     const translated = await translateDefinition(english());
 
-    expect(requests.map((request) => request.url)).toEqual([
-      "https://api.cloudflare.com/client/v4/accounts/account/ai/run/@cf/google/gemma-4-26b-a4b-it",
-      "https://api.cloudflare.com/client/v4/accounts/account/ai/run/@cf/google/gemma-4-26b-a4b-it"
-    ]);
+    expect(requests).toHaveLength(SUPPORTED_LOCALES.length - 1);
+    expect(new Set(requests.map((request) => request.url))).toEqual(
+      new Set(["https://api.cloudflare.com/client/v4/accounts/account/ai/run/@cf/google/gemma-4-26b-a4b-it"])
+    );
     expect(requests[0].items.find((item) => item.key.endsWith(".details"))?.text).toBe("Watching {0}");
     expect(translated).toMatchObject({
       translationMode: "manual",
-      locales: ["en-US", "fr-FR", "es-ES"]
+      locales: [...SUPPORTED_LOCALES]
     });
-    expect(translated.pages[0].details).toEqual({
-      "en-US": "Watching {title}",
-      "fr-FR": "[fr-FR] Watching {title}",
-      "es-ES": "[es-ES] Watching {title}"
-    });
+    expect(translated.pages[0].details).toEqual(
+      Object.fromEntries(SUPPORTED_LOCALES.map((locale) => [locale, locale === "en-US" ? "Watching {title}" : `[${locale}] Watching {title}`]))
+    );
     expect(translated.pages[0].buttons[0].label["es-ES"]).toBe("[es-ES] Watch video");
     expect(
       validateDraft(

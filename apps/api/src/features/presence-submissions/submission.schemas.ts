@@ -56,6 +56,11 @@ export const ReviewBodySchema = z
 
 export const PublishBodySchema = z.strictObject({ revision: z.number().int().positive() });
 
+export const PullRequestClosedWebhookSchema = z.strictObject({
+  slug: z.string().regex(SLUG_PATTERN),
+  pr: z.number().int().positive()
+});
+
 export const PublishedWebhookSchema = z.strictObject({
   slug: z.string().regex(SLUG_PATTERN),
   commit: z.string().regex(COMMIT_PATTERN),

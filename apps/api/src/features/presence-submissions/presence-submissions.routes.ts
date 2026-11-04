@@ -12,8 +12,8 @@ import { Hono, type Context } from "hono";
 import { SubmissionError } from "./submission-errors";
 import { getCreatorPresence, getSubmissionAuthorId, getSubmissionDetail, listOwnCreations, listReviewQueue } from "./submission-detail.service";
 import { openPendingPullRequests, openSubmissionPullRequest } from "./submission-pull-request";
-import { markSubmissionPublished, publishSubmission, reviewSubmission } from "./submission-review.service";
-import { PublishBodySchema, PublishedWebhookSchema, ReviewBodySchema, SubmitBodySchema, SUBMISSION_BODY_LIMIT, SUBMISSIONS_PER_HOUR, SubmissionIdsSchema } from "./submission.schemas";
+import { markPullRequestClosed, markSubmissionPublished, publishSubmission, reviewSubmission } from "./submission-review.service";
+import { PublishBodySchema, PublishedWebhookSchema, PullRequestClosedWebhookSchema, ReviewBodySchema, SubmitBodySchema, SUBMISSION_BODY_LIMIT, SUBMISSIONS_PER_HOUR, SubmissionIdsSchema } from "./submission.schemas";
 import { listOwnSubmissions, submitPresence } from "./submission.service";
 
 const SUBMIT_RATE_LIMIT = rateLimit({
@@ -110,6 +110,17 @@ export const presenceSubmissionRoutes = new Hono<AppEnv>()
           actor: { kind: "secret" }
         })
       );
+    } catch (error) {
+      return failure(c, error);
+    }
+  })
+  .post("/presence-submissions/pull-request-closed", requireWebhookSecret, async (c) => {
+    const body = PullRequestClosedWebhookSchema.safeParse(await jsonBody(c));
+
+    if (!body.success) return c.json({ error: "INVALID_REQUEST_BODY" }, 400);
+
+    try {
+      return c.json(await markPullRequestClosed(body.data));
     } catch (error) {
       return failure(c, error);
     }

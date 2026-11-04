@@ -220,3 +220,39 @@ export const markSubmissionPublished = async (input: { slug: string; commit: str
     });
     return toSummary(updated);
   });
+
+export const PULL_REQUEST_CLOSED_NOTE = "The pull request was closed without being merged. Update the presence and send it again.";
+
+export const markPullRequestClosed = async (input: { slug: string; pr: number }): Promise<SubmissionSummary> =>
+  getDb().transaction(async (tx) => {
+    const [row] = await tx
+      .select()
+      .from(presenceSubmission)
+      .where(and(eq(presenceSubmission.slug, input.slug), eq(presenceSubmission.prNumber, input.pr), eq(presenceSubmission.status, "in_progress")))
+      .for("update");
+
+    if (!row) throw new SubmissionError("NOT_PUBLISHING", "No submission is waiting on this pull request.");
+
+    const [updated] = await tx
+      .update(presenceSubmission)
+      .set({
+        status: "changes_requested",
+        note: PULL_REQUEST_CLOSED_NOTE,
+        prClaimedAt: null,
+        prError: null,
+        updatedAt: new Date()
+      })
+      .where(eq(presenceSubmission.id, row.id))
+      .returning();
+
+    await tx.insert(presenceSubmissionEvent).values({
+      id: randomUUID(),
+      submissionId: row.id,
+      revision: row.revision,
+      type: "pr.closed",
+      status: "changes_requested",
+      actorId: null,
+      details: { pr: input.pr }
+    });
+    return toSummary(updated);
+  });

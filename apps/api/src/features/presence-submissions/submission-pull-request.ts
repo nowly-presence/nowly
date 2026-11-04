@@ -160,7 +160,13 @@ const buildPullRequest = async (row: typeof presenceSubmission.$inferSelect): Pr
 };
 
 export const openSubmissionPullRequest = async (submissionId: string): Promise<PullRequestOutcome> => {
-  if (!hasGithubApp()) return "skipped";
+  if (!hasGithubApp()) {
+    await getDb()
+      .update(presenceSubmission)
+      .set({ prError: "The Nolo GitHub App is not configured on this API (NOLO_APP_ID, NOLO_PRIVATE_KEY, NOLO_INSTALLATION_ID)." })
+      .where(and(eq(presenceSubmission.id, submissionId), eq(presenceSubmission.status, "in_progress")));
+    return "skipped";
+  }
 
   const row = await claim(submissionId);
 
