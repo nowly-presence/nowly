@@ -1,10 +1,11 @@
 "use client";
 
+import { Frame } from "@/features/shell/components/frame";
 import { AccountPageFrame } from "@/features/account/components/account-page-frame";
 import { fetchPublicProfileSettings, PublicProfileError, savePublicProfileSettings, type PublicProfileSettings } from "@/features/account/lib/account-api";
 import { siteBaseUrl } from "@/lib/api-base";
 import { PUBLIC_LINK_MAX_LENGTH, PUBLIC_LINKS_MAX, socialKindOf } from "@nowly/shared";
-import { Button, Card, CardContent, Checkbox, Field, FieldDescription, FieldLabel, InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, Switch, Textarea } from "@nowly/ui";
+import { Button, Checkbox, Field, FieldDescription, FieldLabel, InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, Switch, Textarea } from "@nowly/ui";
 import { RiAddLine, RiCloseLine } from "@nowly/ui/icons";
 import { SocialIcon } from "@nowly/ui/social-icon";
 import { useTranslations } from "next-intl";
@@ -67,21 +68,30 @@ export const PublicPageView = () => {
       {!saved ? (
         <p className="text-sm text-muted-foreground">{loadFailed ? t("action-error") : t("checking")}</p>
       ) : (
-        <Card className="max-w-xl">
-          <CardContent className="flex flex-col gap-5">
-            <label className="flex items-center justify-between gap-4 text-sm font-medium text-foreground">
-              {t("public-enabled")}
-              <Switch checked={enabled} onCheckedChange={setEnabled} disabled={busy} />
-            </label>
-
-            {saved.handle ? (
-              <p className="text-sm text-muted-foreground">
-                {t("public-address")} <span className="font-medium text-foreground">{`nowly.me/u/${saved.handle}`}</span>
-              </p>
-            ) : (
-              <p className="text-sm text-muted-foreground">{t("public-handle-auto")}</p>
-            )}
-
+        <Frame
+          className="max-w-xl"
+          title={t("public-enabled")}
+          description={saved.handle ? `${t("public-address")} nowly.me/u/${saved.handle}` : t("public-handle-auto")}
+          action={<Switch checked={enabled} onCheckedChange={setEnabled} disabled={busy} aria-label={t("public-enabled")} />}
+          footer={
+            <>
+              <div className="flex min-w-0 flex-wrap items-center gap-x-3 text-sm">
+                {saved.enabled && saved.handle ? (
+                  <a href={`${siteBaseUrl()}/u/${encodeURIComponent(saved.handle)}`} className="text-foreground underline underline-offset-4">
+                    {t("public-view")}
+                  </a>
+                ) : null}
+                {feedback === "saved" ? <span className="text-muted-foreground">{t("public-saved")}</span> : null}
+                {feedback === "taken" ? <span className="text-destructive">{t("public-error-taken")}</span> : null}
+                {feedback === "invalid" ? <span className="text-destructive">{t("public-error-invalid")}</span> : null}
+                {feedback === "failed" ? <span className="text-destructive">{t("action-error")}</span> : null}
+              </div>
+              <Button disabled={busy} onClick={onSave}>
+                {t("public-save")}
+              </Button>
+            </>
+          }
+        >
             <Field>
               <FieldLabel htmlFor="public-bio">{t("public-bio")}</FieldLabel>
               <Textarea id="public-bio" value={bio} maxLength={BIO_MAX_LENGTH} disabled={busy} onChange={(event) => setBio(event.target.value)} />
@@ -138,23 +148,7 @@ export const PublicPageView = () => {
             </label>
 
             <p className="text-xs text-muted-foreground">{t("public-privacy")}</p>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <Button disabled={busy} onClick={onSave}>
-                {t("public-save")}
-              </Button>
-              {saved.enabled && saved.handle ? (
-                <a href={`${siteBaseUrl()}/u/${encodeURIComponent(saved.handle)}`} className="text-sm text-foreground underline underline-offset-4">
-                  {t("public-view")}
-                </a>
-              ) : null}
-            </div>
-            {feedback === "saved" ? <p className="text-sm text-muted-foreground">{t("public-saved")}</p> : null}
-            {feedback === "taken" ? <p className="text-sm text-destructive">{t("public-error-taken")}</p> : null}
-            {feedback === "invalid" ? <p className="text-sm text-destructive">{t("public-error-invalid")}</p> : null}
-            {feedback === "failed" ? <p className="text-sm text-destructive">{t("action-error")}</p> : null}
-          </CardContent>
-        </Card>
+          </Frame>
       )}
     </AccountPageFrame>
   );

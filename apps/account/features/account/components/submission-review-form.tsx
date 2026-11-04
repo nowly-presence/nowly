@@ -1,7 +1,8 @@
 "use client";
 
+import { Frame } from "@/features/shell/components/frame";
 import type { FieldComment, ReviewVerdict } from "@/features/account/lib/submission-api";
-import { Button, Card, CardContent, CardDescription, CardTitle, Input, Textarea } from "@nowly/ui";
+import { Button, Input, Textarea } from "@nowly/ui";
 import { RiAddLine, RiCloseLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -66,10 +67,7 @@ export const SubmissionReviewForm = ({ allowedVerdicts, busy, error, onSubmit }:
   };
 
   return (
-    <Card>
-      <CardContent>
-        <CardTitle className="text-lg">{t("review-title")}</CardTitle>
-        <CardDescription className="mt-2">{t("review-description")}</CardDescription>
+    <Frame title={t("review-title")} description={t("review-description")}>
 
         <div className="mt-4 flex flex-wrap gap-2" role="group" aria-label={t("review-verdict")}>
           {options.map((option) => (
@@ -169,7 +167,6 @@ export const SubmissionReviewForm = ({ allowedVerdicts, busy, error, onSubmit }:
             {t("review-send")}
           </Button>
         </div>
-      </CardContent>
-    </Card>
+      </Frame>
   );
 };

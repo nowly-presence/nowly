@@ -1,7 +1,8 @@
 "use client";
 
+import { Frame } from "@/features/shell/components/frame";
 import type { SubmissionRevisionSummary } from "@/features/account/lib/submission-api";
-import { Badge, Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
+import { Badge } from "@nowly/ui";
 import { useFormatter, useTranslations } from "next-intl";
 
 export const SubmissionChanges = ({ revisions }: {
@@ -11,11 +12,8 @@ export const SubmissionChanges = ({ revisions }: {
   const format = useFormatter();
   const ordered = [...revisions].reverse();
   return (
-    <Card>
-      <CardContent>
-        <CardTitle className="text-lg">{t("changes-title")}</CardTitle>
-        <CardDescription className="mt-2">{t("changes-description")}</CardDescription>
-        <ol className="mt-4 flex flex-col gap-5">
+    <Frame title={t("changes-title")} description={t("changes-description")}>
+        <ol className="flex flex-col gap-5">
           {ordered.map((revision) => (
             <li key={revision.number}>
               <p className="text-sm font-medium text-foreground">
@@ -45,7 +43,6 @@ export const SubmissionChanges = ({ revisions }: {
             </li>
           ))}
         </ol>
-      </CardContent>
-    </Card>
+      </Frame>
   );
 };

@@ -1,8 +1,9 @@
 "use client";
 
+import { Frame } from "@/features/shell/components/frame";
 import type { AccountDevice } from "@/features/account/lib/account-api";
 import { browserPlatform, systemPlatform } from "@/features/account/lib/device-platform";
-import { Button, Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
+import { Button } from "@nowly/ui";
 import { RiGlobalFill } from "@nowly/ui/icons";
 import { useFormatter, useTranslations } from "next-intl";
 
@@ -52,30 +53,28 @@ export const AccountDevicesTab = ({ devices, busy, error, onUnlink, onUnlinkAll 
 }) => {
   const t = useTranslations("accountPage");
   return (
-    <Card className="max-w-xl">
-      <CardContent>
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <CardTitle className="text-lg">{t("devices-title")}</CardTitle>
-            <CardDescription className="mt-2">{t("devices-description")}</CardDescription>
-          </div>
-          {devices.length > 1 ? (
-            <Button variant="outline" size="sm" className="shrink-0" disabled={busy} onClick={onUnlinkAll}>
-              {t("devices-unlink-all")}
-            </Button>
-          ) : null}
-        </div>
-        {devices.length === 0 ? (
-          <p className="mt-4 text-sm text-muted-foreground">{t("devices-empty")}</p>
-        ) : (
-          <ul className="mt-2 divide-y divide-border">
-            {devices.map((device) => (
-              <DeviceRow key={device.deviceId} device={device} busy={busy} onUnlink={onUnlink} />
-            ))}
-          </ul>
-        )}
-        {error ? <p className="mt-3 text-sm text-destructive">{t("action-error")}</p> : null}
-      </CardContent>
-    </Card>
+    <Frame
+      className="max-w-xl"
+      title={t("devices-title")}
+      description={t("devices-description")}
+      action={
+        devices.length > 1 ? (
+          <Button variant="outline" size="sm" disabled={busy} onClick={onUnlinkAll}>
+            {t("devices-unlink-all")}
+          </Button>
+        ) : undefined
+      }
+      padded={devices.length === 0}
+    >
+      {devices.length === 0 ? <p className="text-sm text-muted-foreground">{t("devices-empty")}</p> : null}
+      {devices.length > 0 ? (
+        <ul className="divide-y divide-border px-4">
+          {devices.map((device) => (
+            <DeviceRow key={device.deviceId} device={device} busy={busy} onUnlink={onUnlink} />
+          ))}
+        </ul>
+      ) : null}
+      {error ? <p className="px-4 py-3 text-sm text-destructive">{t("action-error")}</p> : null}
+    </Frame>
   );
 };

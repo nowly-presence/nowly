@@ -1,7 +1,8 @@
 "use client";
 
+import { Frame } from "@/features/shell/components/frame";
 import type { SubmissionDetail } from "@/features/account/lib/submission-api";
-import { Badge, Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
+import { Badge } from "@nowly/ui";
 import { useFormatter, useTranslations } from "next-intl";
 
 type Entry = {
@@ -53,12 +54,9 @@ export const SubmissionThread = ({ detail }: {
   };
   const entries = buildEntries(detail, labelOf);
   return (
-    <Card>
-      <CardContent>
-        <CardTitle className="text-lg">{t("thread-title")}</CardTitle>
-        <CardDescription className="mt-2">{t("thread-description")}</CardDescription>
-        {entries.length === 0 ? <p className="mt-4 text-sm text-muted-foreground">{t("thread-empty")}</p> : null}
-        <ol className="mt-4 flex flex-col gap-4">
+    <Frame title={t("thread-title")} description={t("thread-description")}>
+        {entries.length === 0 ? <p className="text-sm text-muted-foreground">{t("thread-empty")}</p> : null}
+        <ol className="flex flex-col gap-4">
           {entries.map((entry) => (
             <li key={entry.key} className="border-l-2 border-border pl-4">
               <div className="flex flex-wrap items-center gap-2">
@@ -90,7 +88,6 @@ export const SubmissionThread = ({ detail }: {
             </li>
           ))}
         </ol>
-      </CardContent>
-    </Card>
+      </Frame>
   );
 };

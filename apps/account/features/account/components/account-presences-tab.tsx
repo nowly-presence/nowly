@@ -1,8 +1,9 @@
 "use client";
 
+import { Frame } from "@/features/shell/components/frame";
 import type { AccountCustomActivity, AccountPresence } from "@/features/account/lib/account-api";
 import { presenceLogoUrl, siteBaseUrl } from "@/lib/api-base";
-import { Badge, Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
+import { Badge } from "@nowly/ui";
 import { useFormatter, useTranslations } from "next-intl";
 
 export const AccountPresencesTab = ({ presences, activities }: {
@@ -13,14 +14,11 @@ export const AccountPresencesTab = ({ presences, activities }: {
   const format = useFormatter();
   return (
     <div className="flex max-w-xl flex-col gap-6">
-      <Card>
-        <CardContent>
-          <CardTitle className="text-lg">{t("presences-title")}</CardTitle>
-          <CardDescription className="mt-2">{t("presences-description")}</CardDescription>
+      <Frame title={t("presences-title")} description={t("presences-description")} padded={false}>
           {presences.length === 0 ? (
-            <p className="mt-4 text-sm text-muted-foreground">{t("presences-empty")}</p>
+            <p className="p-4 text-sm text-muted-foreground">{t("presences-empty")}</p>
           ) : (
-            <ul className="mt-2 divide-y divide-border">
+            <ul className="divide-y divide-border px-4">
               {presences.map((presence) => (
                 <li key={presence.slug}>
                   <a
@@ -42,16 +40,12 @@ export const AccountPresencesTab = ({ presences, activities }: {
               ))}
             </ul>
           )}
-        </CardContent>
-      </Card>
-      <Card>
-        <CardContent>
-          <CardTitle className="text-lg">{t("custom-activities-title")}</CardTitle>
-          <CardDescription className="mt-2">{t("custom-activities-description")}</CardDescription>
+        </Frame>
+      <Frame title={t("custom-activities-title")} description={t("custom-activities-description")} padded={false}>
           {activities.length === 0 ? (
-            <p className="mt-4 text-sm text-muted-foreground">{t("custom-activities-empty")}</p>
+            <p className="p-4 text-sm text-muted-foreground">{t("custom-activities-empty")}</p>
           ) : (
-            <ul className="mt-2 divide-y divide-border">
+            <ul className="divide-y divide-border px-4">
               {activities.map((activity) => (
                 <li key={activity.id} className="py-3">
                   <p className="truncate text-sm font-medium text-foreground">{activity.name}</p>
@@ -62,8 +56,7 @@ export const AccountPresencesTab = ({ presences, activities }: {
               ))}
             </ul>
           )}
-        </CardContent>
-      </Card>
+        </Frame>
     </div>
   );
 };

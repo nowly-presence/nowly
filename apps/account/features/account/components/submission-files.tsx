@@ -1,7 +1,7 @@
 "use client";
 
+import { Frame } from "@/features/shell/components/frame";
 import type { SubmissionFile } from "@/features/account/lib/submission-api";
-import { Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
 import { useTranslations } from "next-intl";
 
 export const SubmissionFiles = ({ files }: {
@@ -9,11 +9,8 @@ export const SubmissionFiles = ({ files }: {
 }) => {
   const t = useTranslations("submissionPage");
   return (
-    <Card>
-      <CardContent>
-        <CardTitle className="text-lg">{t("files-title")}</CardTitle>
-        <CardDescription className="mt-2">{t("files-description")}</CardDescription>
-        <div className="mt-4 flex flex-col gap-2">
+    <Frame title={t("files-title")} description={t("files-description")}>
+        <div className="flex flex-col gap-2">
           {files.map((file) => (
             <details key={file.path} className="rounded-lg border border-border">
               <summary className="cursor-pointer break-all px-3 py-2 text-xs font-medium text-foreground">{file.path}</summary>
@@ -21,7 +18,6 @@ export const SubmissionFiles = ({ files }: {
             </details>
           ))}
         </div>
-      </CardContent>
-    </Card>
+      </Frame>
   );
 };
