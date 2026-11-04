@@ -4,12 +4,14 @@ import { FEATURE_REVEALS_KEY, isFeatureRevealsState, isRevealDue, loadFeatureRev
 type RegisteredReveal = {
   id: string;
   version: string;
+  chained?: boolean;
 };
 
 type FeatureRevealValue = {
   activeId: string | null;
   register: (reveal: RegisteredReveal) => () => void;
   complete: (id: string) => void;
+  start: (id: string) => void;
   replay: () => void;
 };
 
@@ -27,6 +29,7 @@ export const FeatureRevealProvider = ({ enabled, children }: {
   const [registered, setRegistered] = useState<RegisteredReveal[]>([]);
   const [settled, setSettled] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [queuedId, setQueuedId] = useState<string | null>(null);
   const [replaying, setReplaying] = useState(false);
 
   useEffect(() => {
@@ -52,12 +55,25 @@ export const FeatureRevealProvider = ({ enabled, children }: {
     if (!seen) return null;
 
     const version = currentVersion();
-    return registered.find((reveal) => (replaying ? !(reveal.id in seen) : isRevealDue(reveal.id, reveal.version, version, seen)))?.id ?? null;
+    return (
+      registered
+        .filter((reveal) => !reveal.chained)
+        .find((reveal) => (replaying ? !(reveal.id in seen) : isRevealDue(reveal.id, reveal.version, version, seen)))?.id ?? null
+    );
   }, [registered, seen, replaying]);
 
   useEffect(() => {
+    if (queuedId) return;
+
     setActiveId((current) => current ?? (settled ? due : null));
-  }, [due, settled]);
+  }, [due, settled, queuedId]);
+
+  useEffect(() => {
+    if (!queuedId || !registered.some((reveal) => reveal.id === queuedId)) return;
+
+    setActiveId(queuedId);
+    setQueuedId(null);
+  }, [queuedId, registered]);
 
   const register = useCallback((reveal: RegisteredReveal) => {
     setRegistered((current) => (current.some((entry) => entry.id === reveal.id) ? current : [...current, reveal]));
@@ -73,13 +89,15 @@ export const FeatureRevealProvider = ({ enabled, children }: {
     void markFeatureRevealSeen(id);
   }, []);
 
+  const start = useCallback((id: string) => setQueuedId(id), []);
+
   const replay = useCallback(() => {
     setActiveId(null);
     setReplaying(true);
     void resetFeatureReveals().then(() => setSeen({}));
   }, []);
 
-  const value = useMemo(() => ({ activeId, register, complete, replay }), [activeId, register, complete, replay]);
+  const value = useMemo(() => ({ activeId, register, complete, start, replay }), [activeId, register, complete, start, replay]);
   return (
     <FeatureRevealContext.Provider value={value}>
       {children}

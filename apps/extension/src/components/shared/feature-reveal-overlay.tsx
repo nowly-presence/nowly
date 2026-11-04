@@ -168,8 +168,10 @@ export const FeatureRevealSpotlight = ({ rect, hint, onSkip }: {
   );
 };
 
-export const FeatureRevealExplain = ({ text, onDone }: {
+export const FeatureRevealExplain = ({ text, actionLabel, onSkip, onDone }: {
   text: string;
+  actionLabel?: string;
+  onSkip?: () => void;
   onDone: () => void;
 }) => {
   const { t } = useI18n();
@@ -216,10 +218,10 @@ export const FeatureRevealExplain = ({ text, onDone }: {
               <div className="mt-3 flex items-center justify-end gap-2">
                 {streamed || complete ? (
                   <Button size="sm" onClick={onDone}>
-                    {t("reveal.gotIt")}
+                    {actionLabel ?? t("reveal.gotIt")}
                   </Button>
                 ) : (
-                  <Button size="sm" variant="ghost" onClick={onDone}>
+                  <Button size="sm" variant="ghost" onClick={onSkip ?? onDone}>
                     {t("reveal.skip")}
                   </Button>
                 )}

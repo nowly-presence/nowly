@@ -1,9 +1,11 @@
 import { useMemo } from "react";
 import { RiGlobalLine, RiTranslate2 } from "@remixicon/react";
+import { FeatureReveal } from "@/components/shared/feature-reveal";
 import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { commonPresenceLocales } from "@/lib/presence-locales";
 import { isLocale, isLongLocale, LOCALE_LONG_MAP, LOCALE_NAMES, longLocaleName, PRESENCE_LOCALES, UI_LOCALES } from "@/shared/locales";
+import { TEXT_SIZE_REVEAL } from "@/shared/feature-reveal";
 import type { AppearanceMode, TextSize } from "@/shared/types";
 import { Group } from "@/ui/card";
 import { FieldRow } from "@/ui/field-row";
@@ -64,30 +66,32 @@ export const AppearanceSection = () => {
           />
         </FieldRow>
         <FieldRow title={t("settings.textSize")} layout="stacked">
-          <OptionCards<TextSize>
-            label={t("settings.textSize")}
-            value={settings.textSize ?? "medium"}
-            onValueChange={(value) => void updateSettings({ textSize: value })}
-            size="sm"
-            columns={3}
-            options={[
-              {
-                value: "normal",
-                label: t("settings.textSizeNormal"),
-                preview: <span className="text-label-md">Aa</span>
-              },
-              {
-                value: "medium",
-                label: t("settings.textSizeMedium"),
-                preview: <span className="text-body-sm">Aa</span>
-              },
-              {
-                value: "large",
-                label: t("settings.textSizeLarge"),
-                preview: <span className="text-body-lg">Aa</span>
-              }
-            ]}
-          />
+          <FeatureReveal {...TEXT_SIZE_REVEAL} chained text={t("reveal.textSize")} hint={t("reveal.textSizeHint")}>
+            <OptionCards<TextSize>
+              label={t("settings.textSize")}
+              value={settings.textSize ?? "medium"}
+              onValueChange={(value) => void updateSettings({ textSize: value })}
+              size="sm"
+              columns={3}
+              options={[
+                {
+                  value: "normal",
+                  label: t("settings.textSizeNormal"),
+                  preview: <span className="text-label-md">Aa</span>
+                },
+                {
+                  value: "medium",
+                  label: t("settings.textSizeMedium"),
+                  preview: <span className="text-body-sm">Aa</span>
+                },
+                {
+                  value: "large",
+                  label: t("settings.textSizeLarge"),
+                  preview: <span className="text-body-lg">Aa</span>
+                }
+              ]}
+            />
+          </FeatureReveal>
         </FieldRow>
         <SwitchRow
           title={t("settings.seasonalThemes")}

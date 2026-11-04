@@ -9,6 +9,7 @@ import { useTextSize } from "@/hooks/use-text-size";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav, type Route, type Tab } from "@/hooks/navigation-provider";
 import { useExtensionState } from "@/hooks/extension-state-provider";
+import { TEXT_SIZE_REVEAL } from "@/shared/feature-reveal";
 import { FeatureRevealProvider } from "@/hooks/feature-reveal-provider";
 import { ActivityView } from "@/features/activity/activity-view";
 import { DiscordIpcPrompt } from "@/features/discord-ipc/discord-ipc-prompt";
@@ -167,7 +168,13 @@ const AppContent = () => {
                   icon: <RiMagicLine className="size-[18px]" />,
                   activeIcon: <RiMagicFill className="size-[18px]" />,
                   wrap: (button) => (
-                    <FeatureReveal {...CREATOR_REVEAL} text={t("reveal.creator")} hint={t("reveal.creatorHint")}>
+                    <FeatureReveal
+                      {...CREATOR_REVEAL}
+                      nextId={TEXT_SIZE_REVEAL.id}
+                      onNext={() => setTab("settings")}
+                      text={t("reveal.creator")}
+                      hint={t("reveal.creatorHint")}
+                    >
                       {button}
                     </FeatureReveal>
                   )

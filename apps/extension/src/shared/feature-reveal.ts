@@ -1,5 +1,10 @@
 export const FEATURE_REVEALS_KEY = "featureReveals";
 
+export const TEXT_SIZE_REVEAL = {
+  id: "text-size",
+  version: "2.6.0"
+} as const;
+
 export type FeatureRevealsState = Record<string, number>;
 
 const parseVersion = (value: string): number[] => value.split(".").map((part) => Number.parseInt(part, 10) || 0);
