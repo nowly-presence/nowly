@@ -2,6 +2,7 @@ import { getDb } from "@/db/client";
 import { user } from "@nowly/database/schema/auth";
 import { creatorPresence, presenceSubmission, presenceSubmissionEvent, presenceSubmissionReview, presenceSubmissionRevision } from "@nowly/database/schema/creator";
 import { asc, desc, eq, inArray } from "drizzle-orm";
+import { buildTextFiles, normalizeDraft, parseCreatorDefinition } from "@nowly/presence-creator";
 import { toSummary } from "./submission.service";
 import { assetUrls, removeCreatorImages, storedKeys } from "./submission-storage";
 
@@ -23,6 +24,19 @@ const names = async (ids: Array<string | null>): Promise<Map<string, string>> =>
     .from(user)
     .where(inArray(user.id, known));
   return new Map(rows.map((row) => [row.id, row.name]));
+};
+
+const currentFiles = (definition: unknown, stored: unknown) => {
+  const parsed = parseCreatorDefinition(definition);
+
+  if (!parsed) return stored;
+
+  return buildTextFiles(
+    normalizeDraft({
+      ...parsed,
+      assets: { thumbnailRightsConfirmed: true }
+    })
+  );
 };
 
 const definitionName = (definition: unknown): string | null => {
@@ -92,7 +106,7 @@ export const getSubmissionDetail = async (id: string) => {
     author: person(row.authorId, byId),
     createdAt: row.createdAt.toISOString(),
     definition: latest?.definition ?? null,
-    files: latest?.files ?? [],
+    files: currentFiles(latest?.definition, latest?.files ?? []),
     assets: assetUrls(latest?.assets),
     pullRequest: {
       number: row.prNumber,

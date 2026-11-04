@@ -314,6 +314,18 @@ describe("submitting a presence", () => {
   });
 });
 
+describe("submission files", () => {
+  it("lists the files the current generator produces, even for older revisions", async () => {
+    const id = (await submit(creator, { definition: definition() })).json().id;
+    await database.db.update(presenceSubmissionRevision).set({ files: [] });
+
+    const paths = (await detail(AUTHOR, id)).json().files.map((file: { path: string }) => file.path);
+    expect(paths.some((path: string) => path.endsWith("/metadata.json"))).toBe(true);
+    expect(paths.some((path: string) => path.endsWith("/presence.ts"))).toBe(true);
+    expect(paths.some((path: string) => path.endsWith("/settings.ts"))).toBe(true);
+  });
+});
+
 describe("submission images", () => {
   it("stores the verified images per revision and exposes their URLs", async () => {
     const { id } = (await submit()).json();
