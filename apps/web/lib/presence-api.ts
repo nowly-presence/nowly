@@ -114,6 +114,8 @@ const parsePerson = (value: unknown, fallbackName: string): PresencePerson => {
     const person = value as {
       name?: unknown;
       github?: unknown;
+      discord?: unknown;
+      avatar?: unknown;
     };
     const name =
       typeof person.name === "string" && person.name.trim()
@@ -122,7 +124,12 @@ const parsePerson = (value: unknown, fallbackName: string): PresencePerson => {
           ? person.github.trim()
           : fallbackName;
     const github = typeof person.github === "string" && person.github.trim() ? person.github.trim().replace(/^@/, "") : undefined;
-    return github ? { name, github } : { name };
+    if (github) return { name, github };
+
+    const discordId = typeof person.discord === "string" && /^\d{5,25}$/.test(person.discord.trim()) ? person.discord.trim() : undefined;
+    const avatar = typeof person.avatar === "string" && person.avatar.startsWith("https://cdn.discordapp.com/") ? person.avatar : undefined;
+
+    return discordId ? { name, discord: avatar ? { id: discordId, avatar } : { id: discordId } } : { name };
   }
 
   return {

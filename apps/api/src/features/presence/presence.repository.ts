@@ -1,7 +1,8 @@
 import { getDb } from "@/db/client";
 import { device, devicePresence, presenceActiveDevice } from "@nowly/database/schema/device";
+import { user } from "@nowly/database/schema/auth";
 import { presence, presenceLike, presenceVersion } from "@nowly/database/schema/presence";
-import { and, asc, count, countDistinct, desc, eq, gte, lt, ne, or } from "drizzle-orm";
+import { and, asc, count, countDistinct, desc, eq, gte, inArray, lt, ne, or } from "drizzle-orm";
 import type { GlobalPresenceStats, PresenceListItem, PresenceMeta, PresenceStats, VersionEntry } from "./presence.types";
 
 const ACTIVE_DEVICE_STALE_MS = 12 * 60 * 1000;
@@ -232,6 +233,32 @@ const countBySlug = (
   }[]
 ) => new Map(rows.map((row) => [row.slug, row.total]));
 
+const discordIdOf = (meta: PresenceMeta): string | null => {
+  const author: unknown = meta.author;
+  return author && typeof author === "object" && "discord" in author && typeof author.discord === "string" && author.discord ? author.discord : null;
+};
+
+const discordAvatars = async (metas: PresenceMeta[]): Promise<Map<string, string>> => {
+  const ids = [...new Set(metas.flatMap((meta) => discordIdOf(meta) ?? []))];
+
+  if (!ids.length) return new Map();
+
+  const rows = await getDb()
+    .select({
+      discordId: user.discordId,
+      image: user.image
+    })
+    .from(user)
+    .where(inArray(user.discordId, ids));
+  return new Map(rows.flatMap((row) => (row.discordId && row.image ? [[row.discordId, row.image] as const] : [])));
+};
+
+const withAuthorAvatar = (meta: PresenceMeta, avatars: Map<string, string>): PresenceMeta => {
+  const id = discordIdOf(meta);
+  const avatar = id ? avatars.get(id) : undefined;
+  return avatar ? { ...meta, author: { ...meta.author, avatar } } : meta;
+};
+
 export const getPresenceListData = async (): Promise<PresenceListItem[]> => {
   const db = getDb();
 
@@ -274,12 +301,13 @@ export const getPresenceListData = async (): Promise<PresenceListItem[]> => {
   const installMap = countBySlug(installCounts);
   const activeMap = countBySlug(activeCounts);
   const likeMap = countBySlug(likeCounts);
+  const avatars = await discordAvatars(presences.flatMap((row) => (isPresenceMeta(row.metadata) ? [row.metadata] : [])));
 
   return presences.flatMap((row) =>
     isPresenceMeta(row.metadata)
       ? [
           {
-            ...row.metadata,
+            ...withAuthorAvatar(row.metadata, avatars),
             version: row.version || "",
             addedAt: iso(row.addedAt),
             lastUpdated: iso(row.updatedAt),

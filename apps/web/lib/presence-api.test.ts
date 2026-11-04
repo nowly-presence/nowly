@@ -63,6 +63,47 @@ describe("getPresenceCatalog", () => {
     expect(presence.description["en-US"]).toBe("Regardez des vidéos");
   });
 
+  it("keeps the Discord author of a creator presence with its avatar, and drops anything unsafe", async () => {
+    serveCatalog([
+      row("made", {
+        author: {
+          name: "Gaëtan",
+          discord: "1234567890",
+          avatar: "https://cdn.discordapp.com/avatars/1/a.png"
+        }
+      }),
+      row("evil", {
+        author: {
+          name: "Evil",
+          discord: "1234567890",
+          avatar: "https://example.com/a.png"
+        }
+      }),
+      row("bad-id", {
+        author: {
+          name: "Bad",
+          discord: "not-an-id"
+        }
+      })
+    ]);
+    const catalog = await getPresenceCatalog();
+
+    const author = (slug: string) => catalog.find((item) => item.slug === slug)?.author;
+
+    expect(author("made")).toEqual({
+      name: "Gaëtan",
+      discord: {
+        id: "1234567890",
+        avatar: "https://cdn.discordapp.com/avatars/1/a.png"
+      }
+    });
+    expect(author("evil")).toEqual({
+      name: "Evil",
+      discord: { id: "1234567890" }
+    });
+    expect(author("bad-id")).toEqual({ name: "Bad" });
+  });
+
   it("orders presences by installs, then by name", async () => {
     serveCatalog([
       row("b", { totalInstalls: 5 }),

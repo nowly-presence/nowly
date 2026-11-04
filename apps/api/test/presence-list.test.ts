@@ -2,7 +2,9 @@ import { afterAll, beforeAll, beforeEach, expect, it } from "vitest";
 import { getPresenceListData } from "@/features/presence/presence.repository";
 import { device, devicePresence, presenceActiveDevice } from "@nowly/database/schema/device";
 import { presence, presenceLike } from "@nowly/database/schema/presence";
-import { createTestDatabase, type TestDatabase } from "./database";
+import { user } from "@nowly/database/schema/auth";
+import { eq } from "drizzle-orm";
+import { createTestDatabase, seedUser, type TestDatabase } from "./database";
 
 const STALE_MS = 13 * 60_000;
 let database: TestDatabase;
@@ -76,4 +78,68 @@ it("lists unarchived presences with installs, fresh activity and likes, without 
     likes: 1
   });
   expect(await db.select().from(presenceActiveDevice)).toHaveLength(2);
+});
+it("adds the Discord avatar of a creator author to the listed presence", async () => {
+  const { db } = database;
+  await seedUser(db, "author-1");
+  await db
+    .update(user)
+    .set({
+      discordId: "1234",
+      image: "https://cdn.discordapp.com/avatars/1234/abc.png"
+    })
+    .where(eq(user.id, "author-1"));
+  await db.insert(presence).values([
+    {
+      slug: "made",
+      metadata: {
+        slug: "made",
+        name: "Made",
+        author: {
+          name: "Gaëtan",
+          discord: "1234"
+        }
+      }
+    },
+    {
+      slug: "unknown",
+      metadata: {
+        slug: "unknown",
+        name: "Unknown",
+        author: {
+          name: "Someone",
+          discord: "9999"
+        }
+      }
+    },
+    {
+      slug: "hand",
+      metadata: {
+        slug: "hand",
+        name: "Hand",
+        author: {
+          name: "Dev",
+          github: "dev"
+        }
+      }
+    }
+  ]);
+
+  const list = await getPresenceListData();
+
+  const author = (slug: string) => list.find((item) => item.slug === slug)?.author;
+
+  expect(author("made")).toEqual({
+    name: "Gaëtan",
+    discord: "1234",
+    avatar: "https://cdn.discordapp.com/avatars/1234/abc.png"
+  });
+  expect(author("unknown")).toEqual({
+    name: "Someone",
+    discord: "9999"
+  });
+  expect(author("hand")).toEqual({
+    name: "Dev",
+    github: "dev"
+  });
 });

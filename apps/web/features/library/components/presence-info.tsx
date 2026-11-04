@@ -2,17 +2,23 @@ import { Link } from "@/i18n/navigation";
 import { Avatar, AvatarFallback, AvatarImage, ButtonAnchor, Card, CardContent, CardTitle } from "@nowly/ui";
 import { presenceSiteHref, authorHref, type LibraryPresence, type PresencePerson } from "@/lib/library-catalog";
 import type { PresenceCommit, PresenceStats } from "@/lib/presence-api";
-import { RiDownloadLine, RiGithubLine, RiUserLine } from "@nowly/ui/icons";
+import { RiDiscordFill, RiDownloadLine, RiGithubLine, RiUserLine } from "@nowly/ui/icons";
 import { getTranslations } from "next-intl/server";
 
 const githubAvatar = (github: string): string => `https://github.com/${encodeURIComponent(github)}.png?size=80`;
 
 const githubProfile = (github: string): string => `https://github.com/${encodeURIComponent(github)}`;
 
+const discordProfile = (id: string): string => `https://discord.com/users/${encodeURIComponent(id)}`;
+
 const PersonRow = ({ person, label }: { person: PresencePerson; label: string }) => (
   <div className="flex items-center gap-3">
     <Avatar size="sm">
-      {person.github ? <AvatarImage src={githubAvatar(person.github)} alt={person.name} /> : null}
+      {person.github ? (
+        <AvatarImage src={githubAvatar(person.github)} alt={person.name} />
+      ) : person.discord?.avatar ? (
+        <AvatarImage src={person.discord.avatar} alt={person.name} />
+      ) : null}
       <AvatarFallback>{person.name.slice(0, 1).toUpperCase()}</AvatarFallback>
     </Avatar>
     <div className="min-w-0 flex-1">
@@ -28,6 +34,17 @@ const PersonRow = ({ person, label }: { person: PresencePerson; label: string })
     {person.github ? (
       <ButtonAnchor href={githubProfile(person.github)} rel="noreferrer" target="_blank" variant="ghost" size="icon-sm" aria-label={person.github}>
         <RiGithubLine />
+      </ButtonAnchor>
+    ) : person.discord ? (
+      <ButtonAnchor
+        href={discordProfile(person.discord.id)}
+        rel="noreferrer"
+        target="_blank"
+        variant="ghost"
+        size="icon-sm"
+        aria-label={person.name}
+      >
+        <RiDiscordFill />
       </ButtonAnchor>
     ) : null}
   </div>
@@ -63,7 +80,11 @@ export const PresenceInfo = async ({ presence, commit, changelog, stats }: {
         <CardContent className="flex flex-col gap-4">
           <CardTitle>{t("contributors")}</CardTitle>
           {people.map((person, index) => (
-            <PersonRow key={`${person.name}-${person.github ?? index}`} person={person} label={index === 0 ? t("author") : t("contributor")} />
+            <PersonRow
+              key={`${person.name}-${person.github ?? person.discord?.id ?? index}`}
+              person={person}
+              label={index === 0 ? t("author") : t("contributor")}
+            />
           ))}
         </CardContent>
       </Card>

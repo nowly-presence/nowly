@@ -12,6 +12,10 @@ export type LocalizedList = Record<LocaleString, string[]>;
 export type PresencePerson = {
   name: string;
   github?: string;
+  discord?: {
+    id: string;
+    avatar?: string;
+  };
 };
 
 export type LibraryPresence = {
