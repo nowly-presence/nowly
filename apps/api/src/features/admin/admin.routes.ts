@@ -7,6 +7,7 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { requireCapability } from "./admin.middleware";
 import { listAdminActions } from "./audit.service";
+import { deletePresenceCompletely, listHiddenPresences, setPresenceHidden } from "./presence-moderation.service";
 import { searchAdminUsers, setUserRole, setUserVerified } from "./roles.service";
 
 const ADMIN_RATE_LIMIT = rateLimit({
@@ -17,6 +18,13 @@ const ADMIN_RATE_LIMIT = rateLimit({
 const RoleBodySchema = z.strictObject({ role: z.enum(USER_ROLES) });
 const VerifiedBodySchema = z.strictObject({ verified: z.boolean() });
 const UserSearchSchema = z.strictObject({ q: z.string().trim().min(2).max(64) });
+const HiddenBodySchema = z.strictObject({ hidden: z.boolean() });
+const SlugSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(96)
+  .regex(/^[a-z0-9][a-z0-9-]*$/);
 const AuditQuerySchema = z.strictObject({ before: z.iso.datetime({ offset: true }).optional() });
 
 export const adminRoutes = new Hono<AppEnv>()
@@ -57,6 +65,49 @@ export const adminRoutes = new Hono<AppEnv>()
       verified: body.data.verified,
       changed: result.changed
     });
+  })
+  .get("/presences/hidden", requireCapability("publish"), async (c) => {
+    c.header("Cache-Control", "no-store");
+    return c.json({ presences: await listHiddenPresences() });
+  })
+  .put("/presences/:slug/hidden", requireCapability("publish"), async (c) => {
+    const slug = SlugSchema.safeParse(c.req.param("slug"));
+    const body = HiddenBodySchema.safeParse(await jsonBody(c));
+
+    if (!slug.success || !body.success) return c.json({ error: "INVALID_REQUEST_BODY" }, 400);
+
+    const result = await setPresenceHidden(
+      {
+        kind: "user",
+        userId: accountOf(c).userId
+      },
+      slug.data,
+      body.data.hidden
+    );
+
+    if (!result.found) return c.json({ error: "PRESENCE_NOT_FOUND" }, 404);
+
+    return c.json({
+      hidden: body.data.hidden,
+      changed: result.changed
+    });
+  })
+  .delete("/presences/:slug", requireCapability("publish"), async (c) => {
+    const slug = SlugSchema.safeParse(c.req.param("slug"));
+
+    if (!slug.success) return c.json({ error: "INVALID_REQUEST_BODY" }, 400);
+
+    const result = await deletePresenceCompletely(
+      {
+        kind: "user",
+        userId: accountOf(c).userId
+      },
+      slug.data
+    );
+
+    if (!result.found) return c.json({ error: "PRESENCE_NOT_FOUND" }, 404);
+
+    return c.json({ deleted: true });
   })
   .put("/users/:userId/role", requireCapability("manage"), async (c) => {
     const body = RoleBodySchema.safeParse(await jsonBody(c));

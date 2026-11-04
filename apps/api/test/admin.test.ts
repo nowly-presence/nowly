@@ -1,5 +1,6 @@
 import { adminAuditEvent } from "@nowly/database/schema/admin";
 import { extensionToken } from "@nowly/database/schema/account";
+import { presence, presenceLike } from "@nowly/database/schema/presence";
 import { announcement } from "@nowly/database/schema/announcement";
 import { account, user } from "@nowly/database/schema/auth";
 import { eq, isNull } from "drizzle-orm";
@@ -515,5 +516,110 @@ describe("announcements by staff", () => {
       actorId: null,
       action: "announcement.create"
     });
+  });
+});
+
+describe("presence moderation", () => {
+  const SLUG = "example-tube";
+
+  it("hides, shows and deletes a presence for admins only, with an audit trail", async () => {
+    await database.db.insert(presence).values({ slug: SLUG });
+    await database.db.insert(presenceLike).values({
+      slug: SLUG,
+      deviceId: DEVICE_ID
+    });
+    await setRole(MEMBER, "moderator");
+    const server = await app();
+
+    const admin = await bearer(ADMIN, ["admin"]);
+
+    const moderator = await bearer(MEMBER, ["admin"]);
+
+    const refused = await inject(server, {
+      method: "PUT",
+      url: `/admin/presences/${SLUG}/hidden`,
+      headers: moderator,
+      payload: { hidden: true }
+    });
+    expect(refused.statusCode).toBe(403);
+    expect(
+      (
+        await inject(server, {
+          method: "DELETE",
+          url: `/admin/presences/${SLUG}`,
+          headers: moderator
+        })
+      ).statusCode
+    ).toBe(403);
+
+    const hidden = await inject(server, {
+      method: "PUT",
+      url: `/admin/presences/${SLUG}/hidden`,
+      headers: admin,
+      payload: { hidden: true }
+    });
+    expect(hidden.json()).toEqual({
+      hidden: true,
+      changed: true
+    });
+    expect((await database.db.select().from(presence).where(eq(presence.slug, SLUG)))[0].archived).toBe(true);
+    expect(
+      (
+        await inject(server, {
+          url: "/admin/presences/hidden",
+          headers: admin
+        })
+      ).json()
+    ).toEqual({
+      presences: [
+        {
+          slug: SLUG,
+          name: SLUG
+        }
+      ]
+    });
+
+    const again = await inject(server, {
+      method: "PUT",
+      url: `/admin/presences/${SLUG}/hidden`,
+      headers: admin,
+      payload: { hidden: true }
+    });
+    expect(again.json()).toEqual({
+      hidden: true,
+      changed: false
+    });
+
+    const shown = await inject(server, {
+      method: "PUT",
+      url: `/admin/presences/${SLUG}/hidden`,
+      headers: admin,
+      payload: { hidden: false }
+    });
+    expect(shown.json()).toEqual({
+      hidden: false,
+      changed: true
+    });
+
+    expect(
+      (
+        await inject(server, {
+          method: "DELETE",
+          url: "/admin/presences/missing",
+          headers: admin
+        })
+      ).statusCode
+    ).toBe(404);
+    const removed = await inject(server, {
+      method: "DELETE",
+      url: `/admin/presences/${SLUG}`,
+      headers: admin
+    });
+    expect(removed.json()).toEqual({ deleted: true });
+    expect(await database.db.select().from(presence).where(eq(presence.slug, SLUG))).toHaveLength(0);
+    expect(await database.db.select().from(presenceLike).where(eq(presenceLike.slug, SLUG))).toHaveLength(0);
+
+    const actions = (await database.db.select().from(adminAuditEvent)).map((event) => event.action).sort();
+    expect(actions).toEqual(["presence.delete", "presence.hide", "presence.show"]);
   });
 });

@@ -14,11 +14,19 @@ export type AuditActor = {
 };
 
 export type AuditAction =
-  "announcement.create" | "user.role.update" | "user.verified.update" | "submission.review" | "submission.publish" | "submission.published";
+  | "announcement.create"
+  | "user.role.update"
+  | "user.verified.update"
+  | "submission.review"
+  | "submission.publish"
+  | "submission.published"
+  | "presence.hide"
+  | "presence.show"
+  | "presence.delete";
 
 export type AuditEntry = {
   action: AuditAction;
-  targetType: "announcement" | "user" | "submission";
+  targetType: "announcement" | "user" | "submission" | "presence";
   targetId: string | null;
   details?: Record<string, unknown>;
 };
