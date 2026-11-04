@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
+import { IconTile } from "@/ui/icon-tile";
 
-export const SettingsIcon = ({ icon }: { icon: ReactNode }) => (
-  <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-hover">{icon}</span>
-);
+export const SettingsIcon = ({ icon }: { icon: ReactNode }) => <IconTile icon={icon} />;
