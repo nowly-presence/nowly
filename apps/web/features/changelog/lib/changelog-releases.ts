@@ -11,7 +11,7 @@ export type ChangelogRelease = {
 };
 
 export const isChangelogReleasePublished = (date: string | null, now = new Date()): boolean => {
-  if (date === null) return true;
+  if (date === null) return false;
 
   const releaseDate = new Date(`${date}T00:00:00.000Z`);
 
