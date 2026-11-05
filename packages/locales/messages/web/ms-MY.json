@@ -10,6 +10,7 @@
     "loading": "Memuatkan aktiviti...",
     "unavailable": "Aktiviti ini tidak tersedia atau tidak lagi diterbitkan.",
     "author": "Dikongsi oleh <avatar></avatar><person>{name}</person>",
+    "meta-description": "Dikongsi oleh {name}",
     "consent": "Salinan anda kekal bebas. Pengaktifan dan kemas kini manual, pengesanan dimatikan.",
     "conflict": "Salinan anda mempunyai perubahan setempat. Kekalkan atau gantikan secara nyata dengan pratonton ini.",
     "install": "Tambah ke Nowly",

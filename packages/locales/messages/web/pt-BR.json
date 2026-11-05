@@ -10,6 +10,7 @@
     "loading": "Carregando atividade...",
     "unavailable": "Esta atividade está indisponível ou não está mais publicada.",
     "author": "Compartilhado por <avatar></avatar><person>{name}</person>",
+    "meta-description": "Compartilhado por {name}",
     "consent": "Sua cópia permanece independente. Ativação e atualizações manuais, detecção desativada.",
     "conflict": "Sua cópia tem alterações locais. Mantenha ou substitua explicitamente por esta prévia.",
     "install": "Adicionar ao Nowly",

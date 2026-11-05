@@ -10,6 +10,7 @@
     "loading": "Aktivität wird geladen...",
     "unavailable": "Diese Aktivität ist nicht verfügbar oder nicht mehr veröffentlicht.",
     "author": "Geteilt von <avatar></avatar><person>{name}</person>",
+    "meta-description": "Geteilt von {name}",
     "consent": "Deine Kopie bleibt unabhängig. Aktivierung und Updates manuell, Erkennung aus.",
     "conflict": "Deine Kopie hat lokale Änderungen. Behalte sie oder ersetze sie ausdrücklich durch diese Vorschau.",
     "install": "Zu Nowly hinzufügen",

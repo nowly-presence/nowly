@@ -10,6 +10,7 @@
     "loading": "Loading activity...",
     "unavailable": "This activity is unavailable or no longer published.",
     "author": "Shared by <avatar></avatar><person>{name}</person>",
+    "meta-description": "Shared by {name}",
     "consent": "Your copy stays independent. Manual activation and updates, detection off.",
     "conflict": "Your copy has local changes. Keep them or explicitly replace them with this preview.",
     "install": "Add to Nowly",

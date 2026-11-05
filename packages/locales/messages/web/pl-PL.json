@@ -10,6 +10,7 @@
     "loading": "Ładowanie aktywności...",
     "unavailable": "Ta aktywność jest niedostępna lub już nie jest opublikowana.",
     "author": "Udostępnione przez <avatar></avatar><person>{name}</person>",
+    "meta-description": "Udostępnione przez {name}",
     "consent": "Twoja kopia pozostaje niezależna. Ręczna aktywacja i aktualizacje, wykrywanie wyłączone.",
     "conflict": "Twoja kopia ma lokalne zmiany. Zachowaj je lub jawnie zastąp tym podglądem.",
     "install": "Dodaj do Nowly",

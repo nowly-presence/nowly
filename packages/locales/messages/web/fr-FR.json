@@ -10,6 +10,7 @@
     "loading": "Chargement de l’activité...",
     "unavailable": "Cette activité est indisponible ou dépubliée.",
     "author": "Partagé par <avatar></avatar><person>{name}</person>",
+    "meta-description": "Partagé par {name}",
     "consent": "Votre copie reste indépendante. Activation et mises à jour manuelles, détection désactivée.",
     "conflict": "Votre copie contient des modifications locales. Gardez-les ou remplacez-les explicitement par cet aperçu.",
     "install": "Ajouter à Nowly",
