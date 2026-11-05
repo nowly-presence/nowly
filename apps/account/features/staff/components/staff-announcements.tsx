@@ -1,23 +1,22 @@
 "use client";
 
 import { Frame } from "@/features/shell/components/frame";
-import { OptionCards, type OptionCardsItem } from "@/features/shell/components/option-cards";
 import { PageHeader } from "@/features/shell/components/page-header";
-import { publishAnnouncement, type AnnouncementDraft, type AnnouncementKind } from "@/features/staff/lib/staff-api";
-import { Button, Checkbox, Field, FieldLabel, Input, Textarea } from "@nowly/ui";
-import { RiAlertLine, RiMegaphoneLine, RiToolsLine } from "@nowly/ui/icons";
+import { StaffAnnouncementFields } from "@/features/staff/components/staff-announcement-fields";
+import { StaffAnnouncementList } from "@/features/staff/components/staff-announcement-list";
+import { buildInput, EMPTY_DRAFT, isDraftValid, translateAll, type AnnouncementDraft, type TranslationProgress } from "@/features/staff/lib/announcement-draft";
+import { createAnnouncement } from "@/features/staff/lib/staff-api";
+import { Button, Spinner } from "@nowly/ui";
 import { useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
 
-const KIND_ICONS = { normal: RiMegaphoneLine, warning: RiAlertLine, maintenance: RiToolsLine } as const;
-const KINDS: readonly AnnouncementKind[] = ["normal", "warning", "maintenance"];
-const EMPTY: AnnouncementDraft = { title: "", description: "", content: "", kind: "normal", pinned: false };
-
 export const StaffAnnouncements = () => {
   const t = useTranslations("staff");
-  const [draft, setDraft] = useState<AnnouncementDraft>(EMPTY);
+  const [draft, setDraft] = useState<AnnouncementDraft>(EMPTY_DRAFT);
+  const [progress, setProgress] = useState<TranslationProgress | null>(null);
   const [busy, setBusy] = useState(false);
   const [state, setState] = useState<"idle" | "sent" | "failed">("idle");
+  const [revision, setRevision] = useState(0);
 
   const patch = (value: Partial<AnnouncementDraft>): void => {
     setState("idle");
@@ -27,60 +26,52 @@ export const StaffAnnouncements = () => {
   const onSubmit = (event: FormEvent): void => {
     event.preventDefault();
     setBusy(true);
-    publishAnnouncement({ ...draft, title: draft.title.trim(), description: draft.description.trim(), content: draft.content.trim() })
+    setState("idle");
+    const source = {
+      title: draft.title.trim(),
+      description: draft.description.trim(),
+      content: draft.content.trim()
+    };
+    translateAll(source, setProgress)
+      .then((translations) => createAnnouncement(buildInput(draft, translations)))
       .then(() => {
-        setDraft(EMPTY);
+        setDraft(EMPTY_DRAFT);
         setState("sent");
+        setRevision((value) => value + 1);
       })
       .catch(() => setState("failed"))
-      .finally(() => setBusy(false));
+      .finally(() => {
+        setBusy(false);
+        setProgress(null);
+      });
   };
-
-  const valid = draft.title.trim().length > 0 && draft.description.trim().length > 0;
 
   return (
     <>
       <PageHeader title={t("announcements-title")} description={t("announcements-description")} />
-      <form onSubmit={onSubmit} className="max-w-2xl">
-        <Frame
-          title={t("announcements-content-title")}
-          description={t("announcements-translation-hint")}
-          footer={
-            <>
-              <span className="text-xs">
-                {state === "sent" ? <span className="text-muted-foreground">{t("announcements-sent")}</span> : null}
-                {state === "failed" ? <span className="text-destructive">{t("error")}</span> : null}
-              </span>
-              <Button type="submit" disabled={busy || !valid}>
-                {t("announcements-publish")}
-              </Button>
-            </>
-          }
-        >
-          <OptionCards
-            label={t("announcements-kind")}
-            value={draft.kind}
-            onValueChange={(kind) => patch({ kind })}
-            options={KINDS.map((kind): OptionCardsItem<AnnouncementKind> => ({ value: kind, label: t(`announcements-kind-${kind}`), description: t(`announcements-kind-${kind}-hint`), icon: KIND_ICONS[kind] }))}
-          />
-          <Field>
-            <FieldLabel>{t("announcements-field-title")}</FieldLabel>
-            <Input value={draft.title} maxLength={160} placeholder={t("announcements-placeholder-title")} onChange={(event) => patch({ title: event.target.value })} />
-          </Field>
-          <Field>
-            <FieldLabel>{t("announcements-field-description")}</FieldLabel>
-            <Input value={draft.description} maxLength={600} placeholder={t("announcements-placeholder-description")} onChange={(event) => patch({ description: event.target.value })} />
-          </Field>
-          <Field>
-            <FieldLabel>{t("announcements-field-content")}</FieldLabel>
-            <Textarea value={draft.content} placeholder={t("announcements-placeholder-content")} onChange={(event) => patch({ content: event.target.value })} />
-          </Field>
-          <label className="flex items-center gap-2 text-sm text-foreground">
-            <Checkbox checked={draft.pinned} onCheckedChange={(checked) => patch({ pinned: checked === true })} />
-            {t("announcements-pinned")}
-          </label>
-        </Frame>
-      </form>
+      <div className="flex flex-col gap-6">
+        <form onSubmit={onSubmit} className="max-w-2xl">
+          <Frame
+            title={t("announcements-content-title")}
+            description={t("announcements-translation-hint")}
+            footer={
+              <>
+                <span className="text-xs" aria-live="polite">
+                  {state === "sent" ? <span className="text-muted-foreground">{t("announcements-sent")}</span> : null}
+                  {state === "failed" ? <span className="text-destructive">{t("error")}</span> : null}
+                </span>
+                <Button type="submit" disabled={busy || !isDraftValid(draft)}>
+                  {busy ? <Spinner /> : null}
+                  {progress ? t("announcements-translating", progress) : t("announcements-publish")}
+                </Button>
+              </>
+            }
+          >
+            <StaffAnnouncementFields draft={draft} onChange={patch} />
+          </Frame>
+        </form>
+        <StaffAnnouncementList revision={revision} />
+      </div>
     </>
   );
 };
