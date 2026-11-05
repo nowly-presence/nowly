@@ -16,6 +16,8 @@ export type AuditActor = {
 
 export type AuditAction =
   | "announcement.create"
+  | "announcement.update"
+  | "announcement.delete"
   | "user.role.update"
   | "user.verified.update"
   | "submission.review"

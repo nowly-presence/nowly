@@ -1,7 +1,7 @@
 import type { AppEnv } from "@/context";
 import { requireSecretOrCapability } from "@/features/admin/admin.middleware";
-import { canTranslateAnnouncements, EnglishSourceRequiredError, translateAnnouncement } from "@/features/announcements/announcements.translation";
-import { createAnnouncement, getAnnouncementFeed } from "@/features/announcements/announcements.service";
+import { canTranslateAnnouncements, EnglishSourceRequiredError, translateAnnouncement, translateAnnouncementLocale } from "@/features/announcements/announcements.translation";
+import { createAnnouncement, deleteAnnouncement, getAnnouncementFeed, listManagedAnnouncements, updateAnnouncement } from "@/features/announcements/announcements.service";
 import { jsonBody } from "@/shared/request-body";
 import { ANNOUNCEMENT_BODY_LIMIT, ANNOUNCEMENT_LOCALES, AnnouncementInputSchema } from "@nowly/shared/announcements";
 import { Hono } from "hono";
@@ -10,6 +10,12 @@ import { streamSSE, type SSEStreamingApi } from "hono/streaming";
 import { createHash } from "node:crypto";
 import { z } from "zod";
 
+const TranslateRequestSchema = z.strictObject({
+  locale: z.enum(ANNOUNCEMENT_LOCALES).exclude(["en"]),
+  title: z.string().trim().min(1).max(160),
+  description: z.string().trim().min(1).max(600),
+  content: z.string().trim().max(20_000).default("")
+});
 const QuerySchema = z.strictObject({ locale: z.enum(ANNOUNCEMENT_LOCALES).default("en") });
 const MAX_CLIENTS = 128;
 const POLL_MS = 2_000;
@@ -73,7 +79,52 @@ export const createAnnouncementsRoutes = () => {
     previous = "";
   };
 
+  const tooLarge = bodyLimit({
+    maxSize: ANNOUNCEMENT_BODY_LIMIT,
+    onError: (c) => c.json({ error: "ANNOUNCEMENT_TOO_LARGE" }, 413)
+  });
+
   return new Hono<AppEnv>()
+    .get("/manage", requireSecretOrCapability("announce"), async (c) => {
+      c.header("Cache-Control", "no-store");
+      return c.json({ items: await listManagedAnnouncements() });
+    })
+    .post("/translate", requireSecretOrCapability("announce"), tooLarge, async (c) => {
+      const request = TranslateRequestSchema.safeParse(await jsonBody(c));
+
+      if (!request.success) return c.json({ error: "INVALID_TRANSLATION_REQUEST" }, 400);
+
+      if (!canTranslateAnnouncements()) return c.json({ error: "TRANSLATION_UNAVAILABLE" }, 503);
+
+      const { locale, ...source } = request.data;
+
+      try {
+        return c.json({
+          locale,
+          translation: await translateAnnouncementLocale(source, locale)
+        });
+      } catch {
+        return c.json({ error: "TRANSLATION_FAILED" }, 502);
+      }
+    })
+    .put("/:id", requireSecretOrCapability("announce"), tooLarge, async (c) => {
+      const input = AnnouncementInputSchema.safeParse(await jsonBody(c));
+
+      if (!input.success) return c.json({ error: "INVALID_ANNOUNCEMENT" }, 400);
+
+      const item = await updateAnnouncement(c.req.param("id"), input.data, c.get("actor"));
+
+      if (!item) return c.json({ error: "NOT_FOUND" }, 404);
+
+      invalidate();
+      return c.json(item);
+    })
+    .delete("/:id", requireSecretOrCapability("announce"), async (c) => {
+      if (!(await deleteAnnouncement(c.req.param("id"), c.get("actor")))) return c.json({ error: "NOT_FOUND" }, 404);
+
+      invalidate();
+      return c.body(null, 204);
+    })
     .post(
       "/",
       requireSecretOrCapability("announce"),
@@ -83,7 +134,9 @@ export const createAnnouncementsRoutes = () => {
       }),
       async (c) => {
         const body = await jsonBody(c);
-        const { translate, ...announcement } = body && typeof body === "object" && !Array.isArray(body) ? (body as Record<string, unknown>) : { translate: undefined };
+
+        const { translate, ...announcement } =
+          body && typeof body === "object" && !Array.isArray(body) ? (body as Record<string, unknown>) : { translate: undefined };
 
         if (translate !== undefined && typeof translate !== "boolean") return c.json({ error: "INVALID_ANNOUNCEMENT" }, 400);
 

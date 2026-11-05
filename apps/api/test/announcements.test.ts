@@ -379,4 +379,116 @@ describe("announcements API", () => {
     expect(new TextDecoder().decode(next?.value)).toBe("event: invalidate\ndata: {}\n\n");
     await reader?.cancel();
   });
+
+  const send = (method: string, url: string, payload?: unknown, authorization = "Bearer announcements-test-placeholder") =>
+    inject(server, {
+      method,
+      url,
+      payload: payload === undefined ? undefined : JSON.stringify(payload),
+      headers: {
+        authorization,
+        "content-type": "application/json"
+      }
+    });
+
+  it("lists every announcement for managers, including scheduled and expired ones", async () => {
+    await seed(
+      row({ id: "live" }),
+      row({
+        id: "later",
+        startsAt: new Date("2999-01-01T00:00:00Z")
+      }),
+      row({
+        id: "gone",
+        expiresAt: new Date("2020-01-01T00:00:00Z")
+      })
+    );
+    expect((await send("GET", "/announcements/manage", undefined, "Bearer incorrect")).statusCode).toBe(401);
+    const result = await send("GET", "/announcements/manage");
+    expect(result.statusCode).toBe(200);
+    expect(
+      result
+        .json()
+        .items.map((item: { id: string }) => item.id)
+        .sort()
+    ).toEqual(["gone", "later", "live"]);
+  });
+
+  it("edits text, pinned state and maintenance window while keeping the publication date", async () => {
+    await seed(
+      row({
+        id: "edit-me",
+        pinned: false
+      })
+    );
+    const result = await send("PUT", "/announcements/edit-me", {
+      ...input,
+      pinned: false,
+      startsAt: "2030-01-01T10:00:00Z",
+      endsAt: "2030-01-01T12:00:00Z",
+      translations: {
+        fr: {
+          title: "Nouveau titre",
+          description: "Nouvelle description"
+        }
+      }
+    });
+    expect(result.statusCode).toBe(200);
+    expect(AnnouncementSchema.safeParse(result.json()).success).toBe(true);
+    const [stored] = await storedAnnouncements();
+    expect(stored.pinned).toBe(false);
+    expect(stored.startsAt?.toISOString()).toBe("2030-01-01T10:00:00.000Z");
+    expect(stored.endsAt?.toISOString()).toBe("2030-01-01T12:00:00.000Z");
+    expect(stored.publishedAt.toISOString()).toBe("2026-01-01T00:00:00.000Z");
+    expect(stored.updatedAt.getTime()).toBeGreaterThan(Date.parse("2026-01-01T00:00:00Z"));
+  });
+
+  it("rejects invalid edits and unknown announcements", async () => {
+    await seed(row({ id: "edit-me" }));
+    expect(
+      (
+        await send("PUT", "/announcements/edit-me", {
+          ...input,
+          startsAt: "2030-01-02T00:00:00Z",
+          endsAt: "2030-01-01T00:00:00Z"
+        })
+      ).statusCode
+    ).toBe(400);
+    expect((await send("PUT", "/announcements/missing", input)).statusCode).toBe(404);
+    expect((await send("PUT", "/announcements/edit-me", input, "Bearer incorrect")).statusCode).toBe(401);
+  });
+
+  it("deletes an announcement", async () => {
+    await seed(row({ id: "delete-me" }));
+    expect((await send("DELETE", "/announcements/delete-me", undefined, "Bearer incorrect")).statusCode).toBe(401);
+    expect((await send("DELETE", "/announcements/delete-me")).statusCode).toBe(204);
+    expect(await storedAnnouncements()).toEqual([]);
+    expect((await send("DELETE", "/announcements/delete-me")).statusCode).toBe(404);
+  });
+
+  it("validates translation requests", async () => {
+    expect(
+      (
+        await send("POST", "/announcements/translate", {
+          locale: "en",
+          title: "A",
+          description: "B"
+        })
+      ).statusCode
+    ).toBe(400);
+    expect(
+      (
+        await send(
+          "POST",
+          "/announcements/translate",
+          {
+            locale: "fr",
+            title: "A",
+            description: "B"
+          },
+          "Bearer incorrect"
+        )
+      ).statusCode
+    ).toBe(401);
+  });
 });

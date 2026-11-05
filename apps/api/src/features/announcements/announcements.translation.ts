@@ -41,7 +41,8 @@ const RESULT_JSON_SCHEMA = {
   required: ["title", "description", "content"]
 };
 
-type Texts = z.infer<typeof ResultSchema>;
+export type AnnouncementTexts = z.infer<typeof ResultSchema>;
+type Texts = AnnouncementTexts;
 
 export class TranslationFailedError extends Error {}
 
@@ -71,7 +72,7 @@ export const restoreUrls = (text: string, urls: string[], max: number): string |
   return shorten(restored, max);
 };
 
-const translateTo = async (source: Texts, locale: AnnouncementLocale): Promise<Texts | null> => {
+export const translateAnnouncementLocale = async (source: Texts, locale: AnnouncementLocale): Promise<Texts | null> => {
   const content = maskUrls(source.content);
   const parsed = ResultSchema.safeParse(
     await runJsonModel(
@@ -120,7 +121,10 @@ export const translateAnnouncement = async (input: AnnouncementInput): Promise<A
   const results = await Promise.all(
     missing.map(async (locale) => {
       try {
-        return [locale, await translateTo(source, locale)] as const;
+        return [
+          locale,
+          await translateAnnouncementLocale(source, locale)
+        ] as const;
       } catch {
         throw new TranslationFailedError();
       }
