@@ -1,6 +1,5 @@
 import { BackHeader, ScreenBody } from "@/components/shared/screen";
 import { ChatPromptInput } from "@/components/shared/chat/chat-prompt-input";
-import { PresenceIcon } from "@/components/shared/presence-icon";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav } from "@/hooks/navigation-provider";
 import { REPORT_MESSAGE_MAX_LENGTH } from "@/shared/reports";
@@ -11,8 +10,6 @@ import { useToast } from "@/ui/toast";
 import { ReportStatusBadge } from "@/components/shared/report-status-badge";
 import { ReportThreadView } from "@/features/reports/report-thread-view";
 import { useReportThread } from "@/features/reports/use-report-thread";
-
-const ICON_SIZE = 28;
 
 export const ReportChatView = ({ id }: {
   id: string;
@@ -45,10 +42,6 @@ export const ReportChatView = ({ id }: {
         {error && !report && <p className="px-1 text-label-md text-danger">{t("report.loadError")}</p>}
         {report && (
           <>
-            <div className="flex items-center gap-2 px-1 text-label-md text-muted">
-              <PresenceIcon slug={report.slug} name={name} size={ICON_SIZE} />
-              <span>{t("report.chatIntro")}</span>
-            </div>
             <ReportThreadView messages={messages} answering={busy} closed={closed} onAnswer={(answer, answerTo) => void send(answer, answerTo)} />
             {closed ? (
               <div className="flex flex-col gap-3 rounded-md bg-hover p-3 text-label-md text-muted">

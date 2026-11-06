@@ -41,7 +41,7 @@ export const ChatMessage = ({ own, name, avatar, meta, continued = false, indent
           {actions && <div className={cn("absolute -top-3", own ? "left-2" : "right-2")}>{actions}</div>}
         </div>
       )}
-      {reactions && <div className={cn("-mt-2 flex flex-col gap-1 px-2", own ? "items-end" : "items-start")}>{reactions}</div>}
+      {reactions && <div className="-mt-2 flex flex-wrap justify-end gap-1 px-2">{reactions}</div>}
     </div>
   </div>
 );

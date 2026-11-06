@@ -86,6 +86,7 @@ export const AdminReportComposer = ({ status, reporterLabel, busy, noteTarget, o
             <Select
               aria-label={t("report.staff.statusLabel")}
               value={target}
+              className="w-44!"
               onChange={(value) => setTarget(REPORT_STATUSES.find((entry) => entry === value) ?? status)}
               options={REPORT_STATUSES.map((entry) => ({
                 value: entry,

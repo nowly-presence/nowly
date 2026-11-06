@@ -1081,7 +1081,6 @@
   "report.notifyNoHint": "답변은 진행 중인 대화에 남습니다.",
   "report.conversations": "진행 중인 대화",
   "report.chatTitle": "{name} 신고",
-  "report.chatIntro": "Nowly 팀과의 대화",
   "report.team": "Nowly 팀",
   "report.you": "나",
   "report.role.admin": "관리자",

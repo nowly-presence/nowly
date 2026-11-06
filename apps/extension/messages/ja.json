@@ -1081,7 +1081,6 @@
   "report.notifyNoHint": "返信は進行中の会話に残ります。",
   "report.conversations": "進行中の会話",
   "report.chatTitle": "{name} の報告",
-  "report.chatIntro": "Nowly チームとの会話",
   "report.team": "Nowly チーム",
   "report.you": "あなた",
   "report.role.admin": "管理者",
