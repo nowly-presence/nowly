@@ -38,6 +38,7 @@ const SettingsView = lazy(async () => ({ default: (await import("@/features/sett
 const AnnouncementsView = lazy(async () => ({ default: (await import("@/features/announcements/announcements-view")).AnnouncementsView }));
 const AnnouncementsDetailView = lazy(async () => ({ default: (await import("@/features/announcements/announcements-detail-view")).AnnouncementsDetailView }));
 
+const ReportChatView = lazy(async () => ({ default: (await import("@/features/reports/report-chat-view")).ReportChatView }));
 const AdminView = lazy(async () => ({ default: (await import("@/features/admin/admin-view")).AdminView }));
 const AdminReviewView = lazy(async () => ({ default: (await import("@/features/admin/admin-review-view")).AdminReviewView }));
 const AdminAnnouncementView = lazy(async () => ({ default: (await import("@/features/admin/admin-announcement-view")).AdminAnnouncementView }));
@@ -141,6 +142,7 @@ const AppContent = () => {
                 {route.name === "custom-activity" && <CustomActivityEditorView id={route.id} template={route.template} />}
                 {route.name === "discord-ipc" && <DiscordIpcView />}
                 {route.name === "creator" && <CreatorView presenceSlug={route.presenceSlug} draftId={route.draftId} />}
+                {route.name === "report" && <ReportChatView id={route.id} />}
                 {route.name === "admin" && <AdminView />}
                 {route.name === "admin-review" && <AdminReviewView id={route.id} />}
                 {route.name === "admin-announcement" && <AdminAnnouncementView />}

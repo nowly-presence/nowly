@@ -10,6 +10,7 @@ import type { CustomActivityDeletionPlan } from "@/background/services/custom-ac
 import type { CreatorTestResult } from "@/background/managers/creator-test";
 import type { AdminResult, AnnouncementDraft, FieldComment, HiddenPresence, QueueItem, ReviewVerdict, StaffAccess, SubmissionDetail } from "@/shared/admin/admin-types";
 import type { CreatorDraft, CreatorExtraction, CreatorPick, CreatorSubmission, CreatorVariable } from "@nowly/presence-creator/creator-types";
+import type { ReportMessage, ReportResult, ReportSummary } from "@/shared/reports";
 import type { CreatorAccount, CreatorSubmissionPayload, CreatorSubmitResult } from "@nowly/presence-creator/creator-submission";
 
 export type DiagnosticSnapshot = {
@@ -477,6 +478,50 @@ export type RouterMessageMap = {
       ok: boolean;
       error?: string;
     };
+  };
+  REPORT_CREATE: {
+    payload: {
+      slug: string;
+      message: string;
+      anonymous: boolean;
+      notify: boolean;
+      locale?: string;
+    };
+    response: ReportResult<{
+      report: ReportSummary;
+    }>;
+  };
+  REPORT_LIST: {
+    payload: void;
+    response: ReportResult<{
+      reports: ReportSummary[];
+    }>;
+  };
+  REPORT_THREAD: {
+    payload: {
+      id: string;
+    };
+    response: ReportResult<{
+      report: ReportSummary;
+      messages: ReportMessage[];
+    }>;
+  };
+  REPORT_REPLY: {
+    payload: {
+      id: string;
+      message: string;
+      answerTo?: string;
+    };
+    response: ReportResult<{
+      messages: ReportMessage[];
+    }>;
+  };
+  REPORT_SET_CLOSED: {
+    payload: {
+      id: string;
+      closed: boolean;
+    };
+    response: ReportResult<ReportSummary>;
   };
   EXPORT_DEVICE_DATA: {
     payload: void;

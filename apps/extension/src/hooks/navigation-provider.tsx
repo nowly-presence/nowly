@@ -25,6 +25,9 @@ export type Route = {
   presenceSlug?: string;
   draftId?: string;
 } | {
+  name: "report";
+  id: string;
+} | {
   name: "admin";
 } | {
   name: "admin-review";
