@@ -11,6 +11,7 @@ import { deviceRoutes } from "@/features/device/device.routes";
 import { imageProxyRoutes } from "@/features/image-proxy/image-proxy.routes";
 import { publicProfileRoutes } from "@/features/public-profile/public-profile.routes";
 import { presenceRoutes } from "@/features/presence/presence.routes";
+import { presenceReportRoutes } from "@/features/presence-reports/presence-reports.routes";
 import { presenceSubmissionRoutes } from "@/features/presence-submissions/presence-submissions.routes";
 import { creatorDraftRoutes } from "@/features/creator-drafts/creator-drafts.routes";
 import { securityRoutes } from "@/features/security/security.routes";
@@ -75,6 +76,7 @@ export const createApp = ({ logRequests = false }: AppOptions = {}) => {
   app.route("/security", securityRoutes);
   app.route("/admin", adminRoutes);
   app.route("/", presenceSubmissionRoutes);
+  app.route("/", presenceReportRoutes);
   app.route("/", creatorDraftRoutes);
 
   return app;
