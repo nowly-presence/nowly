@@ -624,3 +624,63 @@ export const closeStaleReports = async (now: Date = new Date()): Promise<number>
 
     return stale.length;
   });
+
+export type ExportedReport = {
+  id: string;
+  slug: string;
+  status: ReportStatus;
+  anonymous: boolean;
+  createdAt: string;
+  messages: Array<{
+    from: "you" | "team";
+    kind: string;
+    body: string;
+    attachments: string[];
+    createdAt: string;
+  }>;
+};
+
+export const exportReporterReports = async (userId: string): Promise<ExportedReport[]> => {
+  const db = getDb();
+  const reports = await db.select().from(presenceReport).where(eq(presenceReport.reporterId, userId)).orderBy(asc(presenceReport.createdAt));
+
+  const exported: ExportedReport[] = [];
+
+  for (const report of reports) {
+    const messages = await loadMessages(db, report, "reporter");
+    exported.push({
+      id: report.id,
+      slug: report.slug,
+      status: report.status as ReportStatus,
+      anonymous: report.anonymous,
+      createdAt: report.createdAt.toISOString(),
+      messages: messages.map((message) => ({
+        from: message.authorRole === "staff" ? "team" : "you",
+        kind: message.kind,
+        body: message.body,
+        attachments: message.attachments,
+        createdAt: message.createdAt
+      }))
+    });
+  }
+
+  return exported;
+};
+
+export const eraseReporterReports = async (userId: string): Promise<void> => {
+  const db = getDb();
+  const owned = await db.select({ id: presenceReport.id }).from(presenceReport).where(eq(presenceReport.reporterId, userId));
+
+  if (owned.length === 0) return;
+
+  const ids = owned.map((report) => report.id);
+
+  const messages = await db
+    .select({ attachments: presenceReportMessage.attachments })
+    .from(presenceReportMessage)
+    .where(inArray(presenceReportMessage.reportId, ids));
+  await removeReportAttachments(
+    messages.flatMap((message) => (Array.isArray(message.attachments) ? message.attachments.filter((key): key is string => typeof key === "string") : []))
+  ).catch(() => undefined);
+  await db.delete(presenceReport).where(inArray(presenceReport.id, ids));
+};

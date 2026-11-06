@@ -367,4 +367,56 @@ describe("presence reports", () => {
     });
     expect(stranger.statusCode).toBe(404);
   });
+
+  it("exports and erases the threads of an account, including their files", async () => {
+    const png = await sharp({
+      create: {
+        width: 8,
+        height: 8,
+        channels: 3,
+        background: "#123456"
+      }
+    })
+      .png()
+      .toBuffer();
+
+    const owned = await call(
+      "POST",
+      "/presence-reports",
+      { ...reporter(), ...plain },
+      {
+        slug: "youtube",
+        message: "mine",
+        anonymous: false,
+        label: "plain",
+        labelSource: "discord_link",
+        notify: false
+      }
+    );
+
+    const id = owned.json().id as string;
+    await call(
+      "POST",
+      `/presence-reports/${id}/messages`,
+      { ...reporter(), ...plain },
+      {
+        message: "with image",
+        attachments: [`data:image/png;base64,${png.toString("base64")}`]
+      }
+    );
+    await create({ message: "someone else" }, OTHER_KEY);
+
+    const { exportReporterReports } = await import("@/features/presence-reports/report.service");
+
+    const exported = await exportReporterReports(PLAIN);
+    expect(exported).toHaveLength(1);
+    expect(exported[0].messages.map((message) => message.body)).toEqual(["mine", "with image"]);
+
+    const { deleteAccountData } = await import("@/features/account/account.service");
+    await deleteAccountData(PLAIN);
+
+    const remaining = await database.db.select().from(presenceReport);
+    expect(remaining).toHaveLength(1);
+    expect(storage.deletes).toHaveLength(1);
+  });
 });
