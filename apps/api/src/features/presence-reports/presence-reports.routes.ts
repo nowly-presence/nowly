@@ -7,8 +7,9 @@ import { MINUTE_MS, rateLimit } from "@/middleware/rate-limit";
 import { jsonBody } from "@/shared/request-body";
 import { serverEnv } from "@nowly/env/server";
 import { Hono, type Context } from "hono";
-import { REPORT_ATTACHMENTS_BODY_LIMIT, REPORT_KEY_HEADER, REPORT_KEY_MAX_LENGTH, REPORT_KEY_MIN_LENGTH, REPORT_MESSAGES_PER_WINDOW } from "./report.constants";
+import { REPORT_ATTACHMENTS_BODY_LIMIT, REPORT_KEY_HEADER, REPORT_KEY_MAX_LENGTH, REPORT_KEY_MIN_LENGTH, REPORT_IP_PER_WINDOW, REPORT_MESSAGES_PER_WINDOW } from "./report.constants";
 import { removeReportAttachments, storeReportAttachments } from "./report-attachments";
+import { sanitizeReportMessage, submitPresenceReport } from "@/features/presence/presence-report";
 import { ReportError } from "./report-errors";
 import { AssigneeSchema, CreateReportSchema, NotifySchema, ReporterMessageSchema, StaffMessageSchema, StaffQuerySchema, StatusSchema, UpdatesQuerySchema } from "./report.schemas";
 import { assertReporterOwns, closeStaleReports, countStaffReports, createReport, deleteReport, getReporterReport, getStaffReport, hashReporterKey, listReporterReports, listStaffReports, postReporterMessage, postStaffMessage, reporterUpdates, setReporterClosed, setReporterNotify, setStaffAssignee, type Reporter } from "./report.service";
@@ -49,6 +50,12 @@ const REPORTER_WRITE_LIMIT = rateLimit({
   key: (c) => reporterKeyOf(c) ?? "anonymous"
 });
 
+const REPORTER_IP_LIMIT = rateLimit({
+  name: "presence-report-ip",
+  max: REPORT_IP_PER_WINDOW,
+  windowMs: REPORT_WINDOW_MS
+});
+
 const storeAttachments = async (c: Context, dataUrls: string[], guard?: () => Promise<void>): Promise<string[] | Response> => {
   if (dataUrls.length === 0) return [];
 
@@ -65,7 +72,7 @@ const unauthorized = (c: Context) => c.json({ error: "REPORTER_KEY_REQUIRED" }, 
 const invalid = (c: Context) => c.json({ error: "INVALID_REQUEST_BODY" }, 400);
 
 export const presenceReportRoutes = new Hono<AppEnv>()
-  .post("/presence-reports", REPORTER_WRITE_LIMIT, async (c) => {
+  .post("/presence-reports", REPORTER_IP_LIMIT, REPORTER_WRITE_LIMIT, async (c) => {
     const reporter = await reporterOf(c);
 
     if (!reporter) return unauthorized(c);
@@ -82,19 +89,27 @@ export const presenceReportRoutes = new Hono<AppEnv>()
     if (body.data.extensionVersion) context.extensionVersion = body.data.extensionVersion;
 
     try {
-      return c.json(
-        await createReport({
-          reporter,
-          slug: body.data.slug,
-          message: body.data.message,
-          anonymous: body.data.anonymous,
-          label: body.data.label ?? null,
-          labelSource: body.data.labelSource ?? null,
-          notify: body.data.notify,
-          context
-        }),
-        201
-      );
+      const created = await createReport({
+        reporter,
+        slug: body.data.slug,
+        message: body.data.message,
+        anonymous: body.data.anonymous,
+        label: body.data.label ?? null,
+        labelSource: body.data.labelSource ?? null,
+        notify: body.data.notify,
+        context
+      });
+
+      void submitPresenceReport({
+        slug: body.data.slug,
+        name: body.data.slug,
+        message: sanitizeReportMessage(body.data.message),
+        locale: body.data.locale,
+        browser: body.data.browser,
+        browserVersion: body.data.browserVersion
+      });
+
+      return c.json(created, 201);
     } catch (error) {
       return failure(c, error);
     }
@@ -132,7 +147,7 @@ export const presenceReportRoutes = new Hono<AppEnv>()
       return failure(c, error);
     }
   })
-  .post("/presence-reports/:id/messages", REPORTER_WRITE_LIMIT, limitBody(REPORT_ATTACHMENTS_BODY_LIMIT), async (c) => {
+  .post("/presence-reports/:id/messages", REPORTER_IP_LIMIT, REPORTER_WRITE_LIMIT, limitBody(REPORT_ATTACHMENTS_BODY_LIMIT), async (c) => {
     const reporter = await reporterOf(c);
 
     if (!reporter) return unauthorized(c);

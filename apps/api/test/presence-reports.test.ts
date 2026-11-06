@@ -87,6 +87,7 @@ beforeEach(async () => {
   storage.puts = [];
   storage.deletes = [];
   await database.reset();
+  (await import("@/middleware/rate-limit")).resetRateLimits();
 
   for (const id of [MODERATOR, ADMIN, PLAIN]) await seedUser(database.db, id);
 
@@ -175,6 +176,55 @@ describe("presence reports", () => {
 
     const staffView = await call("GET", `/admin/presence-reports/${id}`, moderator);
     expect(JSON.stringify(staffView.json())).toContain("secret theory");
+  });
+
+  it("keeps a signed-in reporter thread away from another account on the same browser", async () => {
+    const { id } = (
+      await call(
+        "POST",
+        "/presence-reports",
+        { ...reporter(), ...plain },
+        {
+          slug: "youtube",
+          message: "Mine",
+          anonymous: true,
+          notify: false
+        }
+      )
+    ).json();
+
+    const sameKeyOtherAccount = await call("GET", `/presence-reports/${id}`, { ...reporter(), ...admin });
+    expect(sameKeyOtherAccount.statusCode).toBe(404);
+    expect((await call("GET", "/presence-reports", { ...reporter(), ...admin })).json().reports).toHaveLength(0);
+
+    expect((await call("GET", `/presence-reports/${id}`, { ...reporter(OTHER_KEY), ...plain })).statusCode).toBe(200);
+    expect((await call("GET", `/presence-reports/${id}`, reporter())).statusCode).toBe(200);
+    expect((await call("GET", `/presence-reports/${id}`, reporter(OTHER_KEY))).statusCode).toBe(404);
+  });
+
+  it("limits report creation per IP even when the reporter key changes", async () => {
+    const statuses: number[] = [];
+    const mounted = await app();
+
+    for (let index = 0; index < 32; index += 1)
+      statuses.push(
+        (
+          await inject(mounted, {
+            method: "POST",
+            url: "/presence-reports",
+            headers: reporter(`${index}`.padStart(40, "x")),
+            payload: {
+              slug: "youtube",
+              message: "Spam",
+              anonymous: true,
+              notify: false
+            }
+          })
+        ).statusCode
+      );
+
+    expect(statuses.slice(0, 30).every((code) => code === 201)).toBe(true);
+    expect(statuses[31]).toBe(429);
   });
 
   it("attaches an internal note to a message and rejects unknown targets", async () => {

@@ -10,6 +10,7 @@ export const REPORT_MESSAGES_PER_THREAD = 60;
 export const REPORT_OPEN_PER_KEY = 5;
 export const REPORT_PAGE_SIZE = 50;
 export const REPORT_MESSAGES_PER_WINDOW = 5;
+export const REPORT_IP_PER_WINDOW = 30;
 export const REPORT_KEY_MIN_LENGTH = 32;
 export const REPORT_KEY_MAX_LENGTH = 128;
 export const REPORT_ATTACHMENTS_MAX = 2;

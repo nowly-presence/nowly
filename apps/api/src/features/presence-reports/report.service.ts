@@ -3,7 +3,7 @@ import { type AuditActor, recordAdminAction } from "@/features/admin/audit.servi
 import type { Executor } from "@nowly/database/client";
 import { user } from "@nowly/database/schema/auth";
 import { presenceReport, presenceReportMessage } from "@nowly/database/schema/report";
-import { and, asc, desc, eq, gt, inArray, lt, ne, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gt, inArray, isNull, lt, ne, or, sql } from "drizzle-orm";
 import { createHash, randomUUID, timingSafeEqual } from "node:crypto";
 import { REPORT_AUTO_CLOSE_DAYS, REPORT_MESSAGES_PER_THREAD, REPORT_OPEN_PER_KEY, REPORT_PAGE_SIZE, REPORT_REOPEN_WINDOW_DAYS, type ReportStatus } from "./report.constants";
 import { removeReportAttachments } from "./report-attachments";
@@ -22,12 +22,20 @@ export const hashReporterKey = (key: string): string => createHash("sha256").upd
 
 const sameHash = (left: string, right: string): boolean => left.length === right.length && timingSafeEqual(Buffer.from(left), Buffer.from(right));
 
-const ownedBy = (report: ReportRow, reporter: Reporter): boolean =>
-  sameHash(report.secretHash, reporter.keyHash) || (reporter.userId !== null && report.reporterId === reporter.userId);
+const ownedBy = (report: ReportRow, reporter: Reporter): boolean => {
+  if (reporter.userId !== null && report.reporterId === reporter.userId) return true;
+
+  if (!sameHash(report.secretHash, reporter.keyHash)) return false;
+
+  return report.reporterId === null || reporter.userId === null || report.reporterId === reporter.userId;
+};
 
 const ownership = (reporter: Reporter) =>
   reporter.userId
-    ? or(eq(presenceReport.secretHash, reporter.keyHash), eq(presenceReport.reporterId, reporter.userId))
+    ? or(
+        and(eq(presenceReport.secretHash, reporter.keyHash), or(isNull(presenceReport.reporterId), eq(presenceReport.reporterId, reporter.userId))),
+        eq(presenceReport.reporterId, reporter.userId)
+      )
     : eq(presenceReport.secretHash, reporter.keyHash);
 
 const lastMessageOf = async (executor: Executor, reportIds: string[]): Promise<
