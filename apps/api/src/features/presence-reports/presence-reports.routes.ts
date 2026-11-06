@@ -2,14 +2,16 @@ import type { AppEnv } from "@/context";
 import { resolveAccount } from "@/features/account/extension-token.middleware";
 import { requireCapability } from "@/features/admin/admin.middleware";
 import { requireSecret } from "@/features/auth/auth.middleware";
+import { limitBody } from "@/middleware/body-limit";
 import { MINUTE_MS, rateLimit } from "@/middleware/rate-limit";
 import { jsonBody } from "@/shared/request-body";
 import { serverEnv } from "@nowly/env/server";
 import { Hono, type Context } from "hono";
-import { REPORT_KEY_HEADER, REPORT_KEY_MAX_LENGTH, REPORT_KEY_MIN_LENGTH, REPORT_MESSAGES_PER_WINDOW } from "./report.constants";
+import { REPORT_ATTACHMENTS_BODY_LIMIT, REPORT_KEY_HEADER, REPORT_KEY_MAX_LENGTH, REPORT_KEY_MIN_LENGTH, REPORT_MESSAGES_PER_WINDOW } from "./report.constants";
+import { removeReportAttachments, storeReportAttachments } from "./report-attachments";
 import { ReportError } from "./report-errors";
 import { AssigneeSchema, CreateReportSchema, NotifySchema, ReporterMessageSchema, StaffMessageSchema, StaffQuerySchema, StatusSchema, UpdatesQuerySchema } from "./report.schemas";
-import { closeStaleReports, countStaffReports, createReport, deleteReport, getReporterReport, getStaffReport, hashReporterKey, listReporterReports, listStaffReports, postReporterMessage, postStaffMessage, reporterUpdates, setReporterClosed, setReporterNotify, setStaffAssignee, type Reporter } from "./report.service";
+import { assertReporterOwns, closeStaleReports, countStaffReports, createReport, deleteReport, getReporterReport, getStaffReport, hashReporterKey, listReporterReports, listStaffReports, postReporterMessage, postStaffMessage, reporterUpdates, setReporterClosed, setReporterNotify, setStaffAssignee, type Reporter } from "./report.service";
 
 const REPORT_WINDOW_MS = 10 * MINUTE_MS;
 const requireSchedulerSecret = requireSecret(() => serverEnv.CREATOR_WEBHOOK_SECRET, "CREATOR_WEBHOOK_SECRET_MISSING");
@@ -46,6 +48,17 @@ const REPORTER_WRITE_LIMIT = rateLimit({
   windowMs: REPORT_WINDOW_MS,
   key: (c) => reporterKeyOf(c) ?? "anonymous"
 });
+
+const storeAttachments = async (c: Context, dataUrls: string[], guard?: () => Promise<void>): Promise<string[] | Response> => {
+  if (dataUrls.length === 0) return [];
+
+  try {
+    await guard?.();
+    return await storeReportAttachments(dataUrls);
+  } catch (error) {
+    return failure(c, error);
+  }
+};
 
 const unauthorized = (c: Context) => c.json({ error: "REPORTER_KEY_REQUIRED" }, 401);
 
@@ -119,7 +132,7 @@ export const presenceReportRoutes = new Hono<AppEnv>()
       return failure(c, error);
     }
   })
-  .post("/presence-reports/:id/messages", REPORTER_WRITE_LIMIT, async (c) => {
+  .post("/presence-reports/:id/messages", REPORTER_WRITE_LIMIT, limitBody(REPORT_ATTACHMENTS_BODY_LIMIT), async (c) => {
     const reporter = await reporterOf(c);
 
     if (!reporter) return unauthorized(c);
@@ -128,9 +141,14 @@ export const presenceReportRoutes = new Hono<AppEnv>()
 
     if (!body.success) return invalid(c);
 
+    const attachments = await storeAttachments(c, body.data.attachments, () => assertReporterOwns(reporter, c.req.param("id")));
+
+    if (attachments instanceof Response) return attachments;
+
     try {
-      return c.json({ messages: await postReporterMessage(reporter, c.req.param("id"), body.data) }, 201);
+      return c.json({ messages: await postReporterMessage(reporter, c.req.param("id"), { ...body.data, attachments }) }, 201);
     } catch (error) {
+      await removeReportAttachments(attachments).catch(() => undefined);
       return failure(c, error);
     }
   })
@@ -199,15 +217,20 @@ export const presenceReportRoutes = new Hono<AppEnv>()
       return failure(c, error);
     }
   })
-  .post("/admin/presence-reports/:id/messages", requireCapability("review"), async (c) => {
+  .post("/admin/presence-reports/:id/messages", requireCapability("review"), limitBody(REPORT_ATTACHMENTS_BODY_LIMIT), async (c) => {
     const body = StaffMessageSchema.safeParse(await jsonBody(c));
     const actor = c.get("actor");
 
     if (!body.success || actor.kind !== "user") return invalid(c);
 
+    const attachments = await storeAttachments(c, body.data.attachments);
+
+    if (attachments instanceof Response) return attachments;
+
     try {
-      return c.json({ messages: await postStaffMessage(actor, c.req.param("id"), body.data) }, 201);
+      return c.json({ messages: await postStaffMessage(actor, c.req.param("id"), { ...body.data, attachments }) }, 201);
     } catch (error) {
+      await removeReportAttachments(attachments).catch(() => undefined);
       return failure(c, error);
     }
   })

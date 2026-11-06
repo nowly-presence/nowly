@@ -2,6 +2,7 @@ import { adminAuditEvent } from "@nowly/database/schema/admin";
 import { user } from "@nowly/database/schema/auth";
 import { presenceReport } from "@nowly/database/schema/report";
 import { eq } from "drizzle-orm";
+import sharp from "sharp";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createTestDatabase, seedExtensionToken, seedUser, type TestDatabase } from "./database";
 import { inject, mount } from "./http";
@@ -9,6 +10,38 @@ import { inject, mount } from "./http";
 vi.mock("@/features/auth/better-auth", () => ({
   getAuth: () => ({
     api: { getSession: vi.fn(async () => null) }
+  })
+}));
+
+const storage = vi.hoisted(() => ({
+  enabled: true,
+  puts: [] as string[],
+  deletes: [] as string[]
+}));
+
+vi.mock("@/shared/object-storage", () => ({
+  hasObjectStorage: () => storage.enabled,
+  publicObjectUrl: (key: string) => `https://cdn.test/${key}`,
+  objectStorage: () => ({
+    send: vi.fn(
+      async (command: {
+        constructor: {
+          name: string;
+        };
+        input: {
+          Key?: string;
+          Delete?: {
+            Objects: Array<{
+              Key: string;
+            }>;
+          };
+        };
+      }) => {
+        if (command.constructor.name === "PutObjectCommand" && command.input.Key) storage.puts.push(command.input.Key);
+        if (command.constructor.name === "DeleteObjectsCommand") storage.deletes.push(...(command.input.Delete?.Objects.map((entry) => entry.Key) ?? []));
+        return {};
+      }
+    )
   })
 }));
 
@@ -50,6 +83,9 @@ afterAll(async () => {
   await database.close();
 });
 beforeEach(async () => {
+  storage.enabled = true;
+  storage.puts = [];
+  storage.deletes = [];
   await database.reset();
 
   for (const id of [MODERATOR, ADMIN, PLAIN]) await seedUser(database.db, id);
@@ -261,5 +297,74 @@ describe("presence reports", () => {
 
     const actions = (await database.db.select().from(adminAuditEvent)).map((event) => event.action);
     expect(actions).toEqual(expect.arrayContaining(["report.status", "report.delete"]));
+  });
+
+  it("stores image attachments for both sides and removes them with the thread", async () => {
+    const png = await sharp({
+      create: {
+        width: 40,
+        height: 30,
+        channels: 3,
+        background: "#336699"
+      }
+    })
+      .png()
+      .toBuffer();
+
+    const dataUrl = `data:image/png;base64,${png.toString("base64")}`;
+    const { id } = (await create()).json();
+
+    const sent = await call("POST", `/presence-reports/${id}/messages`, reporter(), {
+      message: "screenshot",
+      attachments: [dataUrl]
+    });
+    expect(sent.statusCode).toBe(201);
+    const withImage = sent.json().messages.find((message: { attachments: string[] }) => message.attachments.length > 0);
+    expect(withImage.attachments[0]).toMatch(/^https:\/\/cdn\.test\/reports\/.+\.png$/);
+    expect(storage.puts).toHaveLength(1);
+
+    const staff = await call("POST", `/admin/presence-reports/${id}/messages`, moderator, {
+      message: "see this",
+      attachments: [dataUrl]
+    });
+    expect(staff.statusCode).toBe(201);
+    expect(storage.puts).toHaveLength(2);
+
+    await call("DELETE", `/admin/presence-reports/${id}`, admin);
+    expect(storage.deletes.sort()).toEqual([...storage.puts].sort());
+  });
+
+  it("rejects attachments that are not real images or when storage is missing", async () => {
+    const { id } = (await create()).json();
+    const fake = `data:image/png;base64,${Buffer.from("not an image").toString("base64")}`;
+    const bad = await call("POST", `/presence-reports/${id}/messages`, reporter(), {
+      message: "x",
+      attachments: [fake]
+    });
+    expect(bad.statusCode).toBe(422);
+    expect(bad.json().error).toBe("INVALID_ATTACHMENT");
+
+    const png = await sharp({
+      create: {
+        width: 8,
+        height: 8,
+        channels: 3,
+        background: "#000"
+      }
+    })
+      .png()
+      .toBuffer();
+    storage.enabled = false;
+    const noStorage = await call("POST", `/presence-reports/${id}/messages`, reporter(), {
+      message: "x",
+      attachments: [`data:image/png;base64,${png.toString("base64")}`]
+    });
+    expect(noStorage.statusCode).toBe(503);
+
+    const stranger = await call("POST", `/presence-reports/${id}/messages`, reporter(OTHER_KEY), {
+      message: "x",
+      attachments: [fake]
+    });
+    expect(stranger.statusCode).toBe(404);
   });
 });

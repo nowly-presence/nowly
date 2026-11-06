@@ -6,6 +6,7 @@ import { presenceReport, presenceReportMessage } from "@nowly/database/schema/re
 import { and, asc, desc, eq, gt, inArray, lt, ne, or, sql } from "drizzle-orm";
 import { createHash, randomUUID, timingSafeEqual } from "node:crypto";
 import { REPORT_AUTO_CLOSE_DAYS, REPORT_MESSAGES_PER_THREAD, REPORT_OPEN_PER_KEY, REPORT_PAGE_SIZE, REPORT_REOPEN_WINDOW_DAYS, type ReportStatus } from "./report.constants";
+import { removeReportAttachments } from "./report-attachments";
 import { ReportError } from "./report-errors";
 import { reporterLabelOf, toMessageView, type MessageAuthor, type ReportMessageView, type ReportRow, type ReportSummaryView, type StaffReportSummaryView } from "./report.views";
 
@@ -290,6 +291,7 @@ export const postReporterMessage = async (
   input: {
     message: string;
     answerTo?: string;
+    attachments?: string[];
   }
 ): Promise<ReportMessageView[]> =>
   getDb().transaction(async (tx) => {
@@ -330,7 +332,8 @@ export const postReporterMessage = async (
       kind: "message",
       visibility: "public",
       body: input.message,
-      answerTo: input.answerTo ?? null
+      answerTo: input.answerTo ?? null,
+      attachments: input.attachments ?? []
     });
 
     const next: ReportStatus = status === "info_requested" || status === "fixed" ? "in_progress" : status;
@@ -403,6 +406,7 @@ export type StaffMessageInput = {
   visibility: "public" | "internal";
   statusTo?: ReportStatus;
   choices?: string[];
+  attachments?: string[];
 };
 
 export const listStaffReports = async (filter: {
@@ -507,7 +511,7 @@ export const postStaffMessage = async (
 
     if (!internal && current === "closed" && target === "closed") throw new ReportError("REPORT_CLOSED");
 
-    if (input.message.length > 0 || internal) await tx.insert(presenceReportMessage).values({
+    if (input.message.length > 0 || internal || (input.attachments?.length ?? 0) > 0) await tx.insert(presenceReportMessage).values({
       id: randomUUID(),
       reportId: id,
       authorId: actor.userId,
@@ -515,7 +519,8 @@ export const postStaffMessage = async (
       kind: internal ? "note" : input.choices ? "info_request" : "message",
       visibility: input.visibility,
       body: input.message,
-      choices: input.choices ?? null
+      choices: input.choices ?? null,
+      attachments: input.attachments ?? []
     });
 
     if (!internal && target !== current) await statusMarker(tx, id, actor.userId, "staff", current, target);
@@ -566,8 +571,19 @@ export const setStaffAssignee = async (actor: AuditActor, id: string, assigneeId
     });
   });
 
-export const deleteReport = async (actor: AuditActor, id: string): Promise<void> =>
-  getDb().transaction(async (tx) => {
+export const assertReporterOwns = async (reporter: Reporter, id: string): Promise<void> => {
+  const [report] = await getDb().select().from(presenceReport).where(eq(presenceReport.id, id));
+
+  if (!report || !ownedBy(report, reporter)) throw new ReportError("REPORT_NOT_FOUND");
+};
+
+export const deleteReport = async (actor: AuditActor, id: string): Promise<void> => {
+  const keys = await getDb().transaction(async (tx) => {
+    const messages = await tx
+      .select({ attachments: presenceReportMessage.attachments })
+      .from(presenceReportMessage)
+      .where(eq(presenceReportMessage.reportId, id));
+
     const removed = await tx.delete(presenceReport).where(eq(presenceReport.id, id)).returning({ id: presenceReport.id });
 
     if (removed.length === 0) throw new ReportError("REPORT_NOT_FOUND");
@@ -577,7 +593,13 @@ export const deleteReport = async (actor: AuditActor, id: string): Promise<void>
       targetType: "report",
       targetId: id
     });
+    return messages.flatMap((message) =>
+      Array.isArray(message.attachments) ? message.attachments.filter((key): key is string => typeof key === "string") : []
+    );
   });
+
+  await removeReportAttachments(keys).catch(() => undefined);
+};
 
 export const closeStaleReports = async (now: Date = new Date()): Promise<number> =>
   getDb().transaction(async (tx) => {

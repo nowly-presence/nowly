@@ -1,4 +1,5 @@
 import { presenceReport, presenceReportMessage } from "@nowly/database/schema/report";
+import { attachmentUrls } from "./report-attachments";
 import { REPORT_ANONYMOUS_LABEL, type ReportStatus } from "./report.constants";
 
 export type ReportMessageView = {
@@ -13,6 +14,7 @@ export type ReportMessageView = {
   choices: string[] | null;
   answerTo: string | null;
   statusTo: string | null;
+  attachments: string[];
   createdAt: string;
 };
 
@@ -62,5 +64,6 @@ export const toMessageView = (row: ReportMessageRow, report: ReportRow, author: 
   choices: stringChoices(row.choices),
   answerTo: row.answerTo,
   statusTo: row.statusTo,
+  attachments: attachmentUrls(row.attachments),
   createdAt: row.createdAt.toISOString()
 });
