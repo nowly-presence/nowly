@@ -59,7 +59,7 @@ export const AdminReportAskSheet = ({ open, busy, onClose, onSend }: AdminReport
           onChange={(event) => setQuestion(event.target.value)}
           placeholder={t("report.staff.askQuestion")}
           aria-label={t("report.staff.askQuestion")}
-          className="min-h-20"
+          className="min-h-20!"
           autoFocus
         />
         <Textarea
@@ -67,7 +67,7 @@ export const AdminReportAskSheet = ({ open, busy, onClose, onSend }: AdminReport
           onChange={(event) => setChoices(event.target.value)}
           placeholder={t("report.staff.askChoices")}
           aria-label={t("report.staff.askChoices")}
-          className="min-h-24"
+          className="min-h-24!"
         />
       </div>
     </Sheet>

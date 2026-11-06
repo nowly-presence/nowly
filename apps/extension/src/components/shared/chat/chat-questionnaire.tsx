@@ -62,7 +62,7 @@ export const ChatQuestionnaire = ({ title, question, choices, otherLabel, submit
           maxLength={maxLength}
           onChange={(event) => setOther(event.target.value)}
           placeholder={placeholder}
-          className="min-h-20"
+          className="min-h-20!"
           autoFocus
         />
       )}

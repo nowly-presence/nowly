@@ -15,6 +15,7 @@ import { previewAnnouncements } from "@/preview/announcements-fixtures";
 import { createPublicationMockHandlers } from "@/preview/activity-publication-mock";
 import { createMockCreatorHandlers } from "@/preview/mock-creator";
 import { createMockAdminHandlers } from "@/preview/mock-admin";
+import { createMockReportHandlers } from "@/preview/mock-reports";
 
 export type MockHandlers = { [K in RouterMessageType]?: (payload: PayloadOf<K>) => ResponseOf<K> | Promise<ResponseOf<K>> };
 
@@ -521,6 +522,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
         };
       }
     }),
+    ...createMockReportHandlers(),
     ...createMockAdminHandlers({
       signedIn: () => account.signedIn
     }),

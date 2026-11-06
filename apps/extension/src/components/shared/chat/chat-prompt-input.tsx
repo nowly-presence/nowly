@@ -65,7 +65,7 @@ export const ChatPromptInput =
               void send();
             }
           }}
-          className="min-h-12 border-0 bg-transparent px-2 py-1.5"
+          className="min-h-12! border-0 bg-transparent px-2 py-1.5"
         />
         {attachments.length > 0 && (
           <div className="flex gap-2 px-1">
@@ -94,11 +94,16 @@ export const ChatPromptInput =
             onClick={() => fileRef.current?.click()}
             icon={<RiImageAddLine />}
           />
-          {tools}
-          <span className="ml-auto text-label-sm text-muted tabular-nums">
-            {value.length}/{maxLength}
-          </span>
-          <Button size="icon-sm" aria-label={sendLabel} disabled={!canSend} loading={busy} onClick={() => void send()} icon={<RiArrowUpLine />} />
+          <div className="flex min-w-0 flex-1 items-center gap-2 *:min-w-0 *:truncate">{tools}</div>
+          <Button
+            className="ml-auto shrink-0"
+            size="icon-sm"
+            aria-label={sendLabel}
+            disabled={!canSend}
+            loading={busy}
+            onClick={() => void send()}
+            icon={<RiArrowUpLine />}
+          />
         </div>
       </div>
     );
