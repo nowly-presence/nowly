@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { ChatAvatar } from "@/components/shared/chat/chat-avatar";
 import { ChatMarker } from "@/components/shared/chat/chat-marker";
 import { ChatMessage } from "@/components/shared/chat/chat-message";
+import { ChatNote } from "@/components/shared/chat/chat-note";
 import { ChatQuestionnaire } from "@/components/shared/chat/chat-questionnaire";
 import { useI18n } from "@/hooks/i18n-provider";
 import { REPORT_MESSAGE_MAX_LENGTH, type ReportMessage } from "@/shared/reports";
@@ -58,21 +59,20 @@ export const ReportThreadView = ({ messages, audience = "reporter", selfName, an
                 : (message.authorName ?? t("report.anonymous"));
         const role = message.authorStaffRole === "admin" ? t("report.role.admin") : message.authorStaffRole === "moderator" ? t("report.role.moderator") : null;
 
+        if (message.kind === "note") return (
+          <ChatNote key={message.id} label={t("report.staff.noteBadge")} author={name}>
+            {message.body}
+          </ChatNote>
+        );
+
         return (
           <ChatMessage
             key={message.id}
             own={own}
             name={name}
-            tone={message.kind === "note" ? "note" : "default"}
             images={message.attachments}
             avatar={!own && (staff || !reporterView) ? <ChatAvatar name={name} src={message.authorAvatar} /> : undefined}
-            meta={
-              message.kind === "note" ? (
-                <Badge tone="outline">{t("report.staff.noteBadge")}</Badge>
-              ) : staff && role ? (
-                <Badge tone="primary">{role}</Badge>
-              ) : undefined
-            }
+            meta={staff && role ? <Badge tone="primary">{role}</Badge> : undefined}
           >
             {message.body}
           </ChatMessage>
