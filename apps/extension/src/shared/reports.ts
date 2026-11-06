@@ -74,7 +74,7 @@ export type StaffReportCounts = {
   awaitingReporter: number;
 };
 
-export type StaffReportFilter = "todo" | "waiting" | "mine" | "all";
+export type StaffReportFilter = "todo" | "waiting" | "all";
 
 export const REPORT_CHOICES_MIN = 2;
 export const REPORT_CHOICES_MAX = 6;

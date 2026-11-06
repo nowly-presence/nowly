@@ -1,8 +1,9 @@
 import { useRef, useState, type ReactNode } from "react";
-import { RiArrowUpLine, RiCloseLine, RiImageAddLine } from "@remixicon/react";
+import { RiAddLine, RiArrowUpLine, RiCloseLine, RiImageAddLine } from "@remixicon/react";
 import { readImageAttachment } from "@/lib/read-image-attachment";
 import { REPORT_ATTACHMENTS_MAX } from "@/shared/reports";
 import { Button } from "@/ui/button";
+import { MenuButton, type MenuItem } from "@/ui/menu-button";
 import { Textarea } from "@/ui/textarea";
 
 type ChatPromptInputProps = {
@@ -15,12 +16,18 @@ type ChatPromptInputProps = {
   disabled?: boolean;
   allowEmpty?: boolean;
   tools?: ReactNode;
+  extraActions?: MenuItem[];
+  onExtraAction?: (value: string) => void;
   onAttachError: () => void;
   onSend: (message: string, attachments: string[]) => Promise<boolean>;
 };
 
+const ATTACH_ACTION = "attach";
+const OUTLINE_ICON =
+  "flex size-9 shrink-0 items-center justify-center rounded-md border border-line bg-surface text-ink transition-colors hover:border-line-strong disabled:opacity-45";
+
 export const ChatPromptInput =
-  ({ placeholder, sendLabel, attachLabel, removeLabel, maxLength, busy, disabled = false, allowEmpty = false, tools, onAttachError, onSend }: ChatPromptInputProps) => {
+  ({ placeholder, sendLabel, attachLabel, removeLabel, maxLength, busy, disabled = false, allowEmpty = false, tools, extraActions = [], onExtraAction, onAttachError, onSend }: ChatPromptInputProps) => {
     const [value, setValue] = useState("");
     const [attachments, setAttachments] = useState<string[]>([]);
     const fileRef = useRef<HTMLInputElement>(null);
@@ -86,14 +93,32 @@ export const ChatPromptInput =
         )}
         <div className="flex items-center gap-2">
           <input ref={fileRef} type="file" accept="image/png,image/jpeg" multiple hidden onChange={(event) => void pick(event.target.files)} />
-          <Button
-            size="icon-sm"
-            variant="ghost"
-            aria-label={attachLabel}
-            disabled={disabled || attachments.length >= REPORT_ATTACHMENTS_MAX}
-            onClick={() => fileRef.current?.click()}
-            icon={<RiImageAddLine />}
-          />
+          {extraActions.length > 0 ? (
+            <MenuButton
+              label={attachLabel}
+              items={[
+                {
+                  value: ATTACH_ACTION,
+                  label: attachLabel
+                },
+                ...extraActions
+              ]}
+              onSelect={(value) => (value === ATTACH_ACTION ? fileRef.current?.click() : onExtraAction?.(value))}
+              className={OUTLINE_ICON}
+            >
+              <RiAddLine className="size-4" />
+            </MenuButton>
+          ) : (
+            <button
+              type="button"
+              aria-label={attachLabel}
+              disabled={disabled || attachments.length >= REPORT_ATTACHMENTS_MAX}
+              onClick={() => fileRef.current?.click()}
+              className={OUTLINE_ICON}
+            >
+              <RiImageAddLine className="size-4" />
+            </button>
+          )}
           <div className="flex min-w-0 flex-1 items-center gap-2 *:min-w-0 *:truncate">{tools}</div>
           <Button
             className="ml-auto shrink-0"

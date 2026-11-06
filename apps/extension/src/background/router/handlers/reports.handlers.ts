@@ -124,7 +124,6 @@ export const handleReportSetClosed: Handler<"REPORT_SET_CLOSED"> = ({ id, closed
 const REPORT_FILTER_QUERY: Record<StaffReportFilter, string> = {
   todo: "?status=new",
   waiting: "?status=info_requested",
-  mine: "?mine=1",
   all: ""
 };
 
@@ -177,11 +176,3 @@ export const handleAdminReportSend: Handler<"ADMIN_REPORT_SEND"> = async ({ id, 
     }
   });
 };
-
-export const handleAdminReportAssign: Handler<"ADMIN_REPORT_ASSIGN"> = ({ id, assigneeId }) =>
-  requestReports<object>({
-    staff: true,
-    method: "PUT",
-    path: `/admin/presence-reports/${encodeURIComponent(id)}/assignee`,
-    body: { assigneeId }
-  });

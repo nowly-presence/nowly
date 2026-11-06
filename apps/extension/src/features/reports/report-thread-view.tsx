@@ -79,17 +79,19 @@ export const ReportThreadView = ({ messages, audience = "reporter", selfName, an
         );
       })}
       {request?.choices && (
-        <ChatQuestionnaire
-          title={t("report.infoRequest")}
-          question={request.body}
-          choices={request.choices}
-          otherLabel={t("report.otherAnswer")}
-          submitLabel={t("report.answer")}
-          placeholder={t("report.replyPlaceholder")}
-          maxLength={REPORT_MESSAGE_MAX_LENGTH}
-          busy={answering}
-          onSubmit={(answer) => onAnswer?.(answer, request.id)}
-        />
+        <div className="pl-[38px]">
+          <ChatQuestionnaire
+            title={t("report.infoRequest")}
+            question={request.body}
+            choices={request.choices}
+            otherLabel={t("report.otherAnswer")}
+            submitLabel={t("report.answer")}
+            placeholder={t("report.replyPlaceholder")}
+            maxLength={REPORT_MESSAGE_MAX_LENGTH}
+            busy={answering}
+            onSubmit={(answer) => onAnswer?.(answer, request.id)}
+          />
+        </div>
       )}
       <div ref={endRef} />
     </div>

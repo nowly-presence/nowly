@@ -43,16 +43,5 @@ export const useAdminReportThread = (id: string) => {
     return true;
   }, [id, reload]);
 
-  const assign = useCallback(async (assigneeId: string | null): Promise<boolean> => {
-    setBusy(true);
-    const result = await sendMessage("ADMIN_REPORT_ASSIGN", { id, assigneeId }).catch(() => null);
-    setBusy(false);
-
-    if (!result?.ok) return false;
-
-    await reload();
-    return true;
-  }, [id, reload]);
-
-  return { report, error, busy, send, assign };
+  return { report, error, busy, send };
 };

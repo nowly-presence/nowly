@@ -16,12 +16,11 @@ import { Skeleton } from "@/ui/skeleton";
 
 const ICON_SIZE = 36;
 const PREVIEW_MAX = 80;
-const FILTERS: StaffReportFilter[] = ["todo", "waiting", "mine", "all"];
+const FILTERS: StaffReportFilter[] = ["todo", "waiting", "all"];
 
 const FILTER_KEYS = {
   todo: "report.staff.filterTodo",
   waiting: "report.staff.filterWaiting",
-  mine: "report.staff.filterMine",
   all: "report.staff.filterAll"
 } as const;
 

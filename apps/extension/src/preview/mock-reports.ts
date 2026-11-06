@@ -165,7 +165,7 @@ export const createMockReportHandlers = (): MockHandlers => {
         message({
           id: `m${messages.length + 1}`,
           authorRole: "staff",
-          authorName: "Preview",
+          authorName: "Gaëtan",
           authorStaffRole: "moderator",
           body,
           visibility,
@@ -180,7 +180,6 @@ export const createMockReportHandlers = (): MockHandlers => {
         ok: true,
         messages: [...messages]
       };
-    },
-    ADMIN_REPORT_ASSIGN: () => ({ ok: true })
+    }
   };
 };

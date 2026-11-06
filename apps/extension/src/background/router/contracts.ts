@@ -521,13 +521,6 @@ export type RouterMessageMap = {
       messages: ReportMessage[];
     }>;
   };
-  ADMIN_REPORT_ASSIGN: {
-    payload: {
-      id: string;
-      assigneeId: string | null;
-    };
-    response: ReportResult;
-  };
   REPORT_IDENTITY: {
     payload: void;
     response: {

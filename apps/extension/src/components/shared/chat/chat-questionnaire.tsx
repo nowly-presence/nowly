@@ -30,9 +30,9 @@ export const ChatQuestionnaire = ({ title, question, choices, otherLabel, submit
   ];
 
   return (
-    <div className="flex flex-col gap-3 rounded-md border border-line bg-surface p-3">
+    <div className="flex flex-col gap-3 rounded-md border border-line bg-canvas p-3">
       <div className="flex flex-col gap-1">
-        <span className="text-label-sm font-medium text-muted">{title}</span>
+        <span className="text-label-sm font-medium tracking-wide text-muted uppercase">{title}</span>
         {question && <p className="text-label-lg font-medium whitespace-pre-wrap text-ink">{question}</p>}
       </div>
       <div role="radiogroup" aria-label={title} className="flex flex-col gap-2">
@@ -44,8 +44,8 @@ export const ChatQuestionnaire = ({ title, question, choices, otherLabel, submit
             aria-checked={selected === option.index}
             onClick={() => setSelected(option.index)}
             className={cn(
-              "flex items-center gap-2.5 rounded-md px-3 py-2 text-left text-label-md transition-colors",
-              selected === option.index ? "bg-primary-soft text-ink" : "bg-hover text-ink hover:bg-press"
+              "flex items-center gap-2.5 rounded-md border px-3 py-2 text-left text-label-md text-ink transition-colors",
+              selected === option.index ? "border-primary bg-primary-soft" : "border-line hover:border-line-strong"
             )}
           >
             <span

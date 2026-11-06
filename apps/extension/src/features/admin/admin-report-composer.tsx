@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { RiQuestionAnswerLine } from "@remixicon/react";
 import { ChatPromptInput } from "@/components/shared/chat/chat-prompt-input";
 import { REPORT_STATUS_LABELS } from "@/components/shared/report-status-badge";
 import { useI18n } from "@/hooks/i18n-provider";
 import { REPORT_MESSAGE_MAX_LENGTH, REPORT_STATUSES, type ReportStatus } from "@/shared/reports";
-import { Button } from "@/ui/button";
 import { Select } from "@/ui/select";
 import { useToast } from "@/ui/toast";
 import { AdminReportAskSheet } from "@/features/admin/admin-report-ask-sheet";
@@ -16,6 +14,8 @@ type AdminReportComposerProps = {
   busy: boolean;
   onSend: (input: StaffSend) => Promise<boolean>;
 };
+
+const ASK_ACTION = "ask";
 
 export const AdminReportComposer = ({ status, reporterLabel, busy, onSend }: AdminReportComposerProps) => {
   const { t } = useI18n();
@@ -46,6 +46,17 @@ export const AdminReportComposer = ({ status, reporterLabel, busy, onSend }: Adm
         busy={busy}
         allowEmpty={statusChanged}
         onSend={send}
+        extraActions={
+          internal
+            ? []
+            : [
+                {
+                  value: ASK_ACTION,
+                  label: t("report.staff.askInfo")
+                }
+              ]
+        }
+        onExtraAction={() => setAsking(true)}
         tools={
           <>
             <Select
@@ -76,9 +87,6 @@ export const AdminReportComposer = ({ status, reporterLabel, busy, onSend }: Adm
           </>
         }
       />
-      <Button variant="ghost" size="sm" disabled={busy || internal} icon={<RiQuestionAnswerLine className="size-4" />} onClick={() => setAsking(true)}>
-        {t("report.staff.askInfo")}
-      </Button>
       <AdminReportAskSheet
         open={asking}
         busy={busy}

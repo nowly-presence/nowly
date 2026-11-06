@@ -4,7 +4,6 @@ import { useExtensionState } from "@/hooks/extension-state-provider";
 import { useI18n } from "@/hooks/i18n-provider";
 import { useNav } from "@/hooks/navigation-provider";
 import { readableName } from "@/lib/readable-name";
-import { Button } from "@/ui/button";
 import { Skeleton } from "@/ui/skeleton";
 import { useToast } from "@/ui/toast";
 import { AdminReportComposer } from "@/features/admin/admin-report-composer";
@@ -18,9 +17,8 @@ export const AdminReportView = ({ id }: {
   const { pop } = useNav();
   const { toast } = useToast();
   const { state } = useExtensionState();
-  const { report, error, busy, send, assign } = useAdminReportThread(id);
+  const { report, error, busy, send } = useAdminReportThread(id);
   const self = state.account.signedIn ? state.account.user : null;
-  const mine = Boolean(report && self && report.assigneeId === self.id);
 
   const submit = async (input: StaffSend): Promise<boolean> => {
     const sent = await send(input);
@@ -46,11 +44,6 @@ export const AdminReportView = ({ id }: {
             <ReportThreadView messages={report.messages} audience="staff" selfName={self?.name} />
             <div className="sticky bottom-0 mt-auto flex flex-col gap-2 bg-canvas pt-2">
               <AdminReportComposer key={report.status} status={report.status} reporterLabel={report.reporterLabel} busy={busy} onSend={submit} />
-              {self && (
-                <Button variant="link" className="self-center" disabled={busy} onClick={() => void assign(mine ? null : self.id)}>
-                  {mine ? t("report.staff.unassign") : t("report.staff.assignMe")}
-                </Button>
-              )}
             </div>
           </>
         )}
