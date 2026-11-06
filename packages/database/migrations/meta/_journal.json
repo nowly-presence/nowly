@@ -71,6 +71,13 @@
       "when": 1793756045221,
       "tag": "0009_creator_drafts",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793982405265,
+      "tag": "0010_presence_reports",
+      "breakpoints": true
     }
   ]
 }

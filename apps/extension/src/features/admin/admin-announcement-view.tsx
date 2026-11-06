@@ -29,7 +29,11 @@ export const AdminAnnouncementView = () => {
   const { texts } = form;
   const issues = announcementIssues(form);
 
-  const setTexts = (next: Partial<AnnouncementTexts>) => setForm((current) => ({ ...current, texts: { ...current.texts, ...next } }));
+  const setTexts = (next: Partial<AnnouncementTexts>) =>
+    setForm((current) => ({
+      ...current,
+      texts: { ...current.texts, ...next }
+    }));
 
   const send = async () => {
     setSending(true);

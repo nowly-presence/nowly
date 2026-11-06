@@ -38,6 +38,9 @@ const SettingsView = lazy(async () => ({ default: (await import("@/features/sett
 const AnnouncementsView = lazy(async () => ({ default: (await import("@/features/announcements/announcements-view")).AnnouncementsView }));
 const AnnouncementsDetailView = lazy(async () => ({ default: (await import("@/features/announcements/announcements-detail-view")).AnnouncementsDetailView }));
 
+const ReportChatView = lazy(async () => ({ default: (await import("@/features/reports/report-chat-view")).ReportChatView }));
+const AdminReportsView = lazy(async () => ({ default: (await import("@/features/admin/admin-reports-view")).AdminReportsView }));
+const AdminReportView = lazy(async () => ({ default: (await import("@/features/admin/admin-report-view")).AdminReportView }));
 const AdminView = lazy(async () => ({ default: (await import("@/features/admin/admin-view")).AdminView }));
 const AdminReviewView = lazy(async () => ({ default: (await import("@/features/admin/admin-review-view")).AdminReviewView }));
 const AdminAnnouncementView = lazy(async () => ({ default: (await import("@/features/admin/admin-announcement-view")).AdminAnnouncementView }));
@@ -99,7 +102,8 @@ const AppContent = () => {
   }
 
   const live = Boolean(state.activity) && !state.settings.presencePaused;
-  const focused = stack.at(-1)?.name === "creator";
+  const focusedRoute = stack.at(-1)?.name;
+  const focused = focusedRoute === "creator" || focusedRoute === "report" || focusedRoute === "admin-report";
 
   const selectTab = (next: Tab) => {
     if (next === tab && stack.length === 0) {
@@ -141,7 +145,10 @@ const AppContent = () => {
                 {route.name === "custom-activity" && <CustomActivityEditorView id={route.id} template={route.template} />}
                 {route.name === "discord-ipc" && <DiscordIpcView />}
                 {route.name === "creator" && <CreatorView presenceSlug={route.presenceSlug} draftId={route.draftId} />}
+                {route.name === "report" && <ReportChatView id={route.id} />}
                 {route.name === "admin" && <AdminView />}
+                {route.name === "admin-reports" && <AdminReportsView />}
+                {route.name === "admin-report" && <AdminReportView id={route.id} />}
                 {route.name === "admin-review" && <AdminReviewView id={route.id} />}
                 {route.name === "admin-announcement" && <AdminAnnouncementView />}
               </Suspense>

@@ -5,6 +5,7 @@ import { sendActiveHeartbeat } from "@/background/services/active-heartbeat";
 import { getActiveSlugsSnapshot, hasActiveSlugs } from "@/background/services/background-context";
 import { ACCOUNT_SYNC_ALARM, ACCOUNT_SYNC_PERIOD_MINUTES, runAccountSync } from "@/background/services/account-sync";
 import { syncCreatorDrafts } from "@/background/services/creator-drafts-sync";
+import { checkReportUpdates, REPORT_UPDATES_ALARM, REPORT_UPDATES_PERIOD_MINUTES, registerReportNotificationClicks } from "@/background/services/report-notifications";
 import { postNative } from "@/background/services/native";
 import { refreshAnnouncements } from "@/background/services/announcements";
 import { ANNOUNCEMENTS_ALARM } from "@/shared/announcements";
@@ -23,8 +24,11 @@ export const registerAlarmHandlers = (): void => {
   void ensureAlarm("api-heartbeat", 5);
   void ensureAlarm(CUSTOM_IMAGES_ALARM, CUSTOM_IMAGES_PERIOD_MINUTES);
   void ensureAlarm(ACCOUNT_SYNC_ALARM, ACCOUNT_SYNC_PERIOD_MINUTES);
+  void ensureAlarm(REPORT_UPDATES_ALARM, REPORT_UPDATES_PERIOD_MINUTES);
+  registerReportNotificationClicks();
 
   chrome.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name === REPORT_UPDATES_ALARM) void checkReportUpdates().catch(() => {});
     if (alarm.name === ANNOUNCEMENTS_ALARM) void refreshAnnouncements().catch(() => {});
     if (alarm.name === "native-heartbeat") postNative({ type: "PING" });
 

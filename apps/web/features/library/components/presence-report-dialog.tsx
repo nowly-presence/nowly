@@ -4,53 +4,17 @@ import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { Link } from "@/i18n/navigation";
 import { ButtonAnchor } from "@nowly/ui/button-link";
 import { Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Field, FieldError, FieldLabel, InputGroup, InputGroupAddon, InputGroupText, InputGroupTextarea, Spinner } from "@nowly/ui";
-import { getExtensionDetected, requestExtension, subscribeExtensionDetected, type ExtensionDiagnostic } from "@/lib/extension-bridge";
+import { getExtensionDetected, requestExtension, subscribeExtensionDetected, type ExtensionDiagnostic, type ExtensionReportResult } from "@/lib/extension-bridge";
 import { RiCheckboxCircleLine, RiDiscordFill, RiFlagLine } from "@nowly/ui/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, type FormEvent } from "react";
 
-const REPORT_MAX_LENGTH = 750;
-const PRODUCTION_API_URL = "https://api.nowly.me";
-
-type ReportBrowser = {
-  name: string;
-  version: string;
-};
-
-const getReportBrowser = (): ReportBrowser => {
-  const userAgent = navigator.userAgent;
-  const matchers: Array<[string, RegExp]> = [
-    ["Microsoft Edge", /(?:Edg|Edge|EdgA|EdgiOS)\/([\d.]+)/i],
-    ["Opera", /(?:OPR|Opera Mini)\/([\d.]+)/i],
-    ["Firefox", /(?:Firefox|FxiOS)\/([\d.]+)/i],
-    ["Chrome", /(?:Chrome|CriOS)\/([\d.]+)/i],
-    ["Safari", /Version\/([\d.]+).*Safari\//i]
-  ];
-
-  for (const [name, matcher] of matchers) {
-    const match = userAgent.match(matcher);
-
-    if (match?.[1]) return {
-      name,
-      version: match[1]
-    };
-  }
-
-  return {
-    name: "Unknown",
-    version: "Unknown"
-  };
-};
+const REPORT_MAX_LENGTH = 2000;
 
 type PresenceReportDialogProps = {
   slug: string;
   name: string;
   disabled?: boolean;
-};
-
-const reportApiUrl = (slug: string): string => {
-  const base = (process.env.NEXT_PUBLIC_API_BASE_URL ?? PRODUCTION_API_URL).replace(/\/$/, "");
-  return `${base}/presences/${encodeURIComponent(slug)}/report`;
 };
 
 const extensionIsPresent = async (): Promise<boolean> => {
@@ -62,6 +26,26 @@ const extensionIsPresent = async (): Promise<boolean> => {
   }
 };
 
+type ReportChoiceProps = {
+  checked: boolean;
+  disabled?: boolean;
+  label: string;
+  hint?: string;
+  onSelect: () => void;
+};
+
+const ReportChoice = ({ checked, disabled = false, label, hint, onSelect }: ReportChoiceProps) => (
+  <label
+    className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 text-sm ${checked ? "border-primary" : "border-border"} ${disabled ? "cursor-not-allowed opacity-60" : ""}`}
+  >
+    <input type="radio" className="mt-1" checked={checked} disabled={disabled} onChange={onSelect} />
+    <span className="grid gap-0.5">
+      <span className="font-medium">{label}</span>
+      {hint ? <span className="text-muted-foreground">{hint}</span> : null}
+    </span>
+  </label>
+);
+
 export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceReportDialogProps) => {
   const t = useTranslations("presencePage");
   const locale = useLocale();
@@ -69,6 +53,9 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+  const [anonymous, setAnonymous] = useState(true);
+  const [notify, setNotify] = useState(true);
+  const [pseudo, setPseudo] = useState<string | null>(null);
   const [error, setError] = useState(false);
 
   const count = message.length;
@@ -76,6 +63,8 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
 
   const reset = () => {
     setMessage("");
+    setAnonymous(true);
+    setNotify(true);
     setBusy(false);
     setSent(false);
     setError(false);
@@ -101,6 +90,11 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
 
     setOpen(next);
     if (!next) reset();
+    if (next) void requestExtension<{
+      pseudo: string | null;
+    }>("REPORT_IDENTITY")
+      .then((identity) => setPseudo(identity?.pseudo ?? null))
+      .catch(() => setPseudo(null));
   };
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -111,7 +105,6 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
 
     setBusy(true);
     setError(false);
-    const browser = getReportBrowser();
 
     try {
       if (!(await extensionIsPresent())) {
@@ -120,18 +113,15 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
         return;
       }
 
-      const response = await fetch(reportApiUrl(slug), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: trimmed,
-          locale,
-          browser: browser.name,
-          browserVersion: browser.version
-        })
+      const result = await requestExtension<ExtensionReportResult>("REPORT_CREATE", {
+        slug,
+        message: trimmed,
+        anonymous: anonymous || pseudo === null,
+        notify,
+        locale
       });
 
-      if (!response.ok) {
+      if (!result?.ok) {
         setError(true);
         return;
       }
@@ -212,6 +202,29 @@ export const PresenceReportDialog = ({ slug, name, disabled = false }: PresenceR
                 </InputGroup>
                 {error ? <FieldError>{t("report-error")}</FieldError> : null}
               </Field>
+
+              <fieldset className="grid gap-2" disabled={busy}>
+                <legend className="mb-1 text-sm font-medium">{t("report-identity-title")}</legend>
+                <ReportChoice
+                  checked={!anonymous && pseudo !== null}
+                  disabled={pseudo === null}
+                  onSelect={() => setAnonymous(false)}
+                  label={t("report-identity-named")}
+                  hint={pseudo ?? t("report-identity-unavailable")}
+                />
+                <ReportChoice
+                  checked={anonymous || pseudo === null}
+                  onSelect={() => setAnonymous(true)}
+                  label={t("report-identity-anonymous")}
+                  hint={t("report-identity-anonymous-hint")}
+                />
+              </fieldset>
+
+              <fieldset className="grid gap-2" disabled={busy}>
+                <legend className="mb-1 text-sm font-medium">{t("report-notify-title")}</legend>
+                <ReportChoice checked={notify} onSelect={() => setNotify(true)} label={t("report-notify-yes")} />
+                <ReportChoice checked={!notify} onSelect={() => setNotify(false)} label={t("report-notify-no")} />
+              </fieldset>
 
               <DialogFooter>
                 <Button type="button" variant="outline" disabled={busy} onClick={() => onOpenChange(false)}>

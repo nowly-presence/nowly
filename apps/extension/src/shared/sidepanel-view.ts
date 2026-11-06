@@ -7,6 +7,7 @@ export type SidepanelPendingNav = {
   at: number;
   query?: string;
   slug?: string;
+  reportId?: string;
   view: PersistedAppView;
 };
 

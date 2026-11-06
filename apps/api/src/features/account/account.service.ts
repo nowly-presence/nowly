@@ -1,3 +1,4 @@
+import { eraseReporterReports, exportReporterReports, type ExportedReport } from "@/features/presence-reports/report.service";
 import { getDb } from "@/db/client";
 import { activityPublication } from "@nowly/database/schema/activity";
 import { extensionToken, syncDocument } from "@nowly/database/schema/account";
@@ -213,6 +214,7 @@ export type AccountExport = {
     updatedAt: string;
     updatedByDeviceId: string | null;
   }>;
+  presenceReports: ExportedReport[];
   presenceLikes: Array<{
     slug: string;
     deviceId: string;
@@ -224,26 +226,38 @@ const iso = (date: Date | null): string | null => date?.toISOString() ?? null;
 
 export const exportAccountData = async (userId: string): Promise<AccountExport | null> => {
   const db = getDb();
-  const [[profile], accounts, tokens, documents, likes, devices, activityPublications, adminActions, presenceSubmissions, publicProfileSettings] =
-    await Promise.all([
-      db.select().from(user).where(eq(user.id, userId)).limit(1),
-      db
-        .select({
-          providerId: account.providerId,
-          accountId: account.accountId,
-          createdAt: account.createdAt
-        })
-        .from(account)
-        .where(eq(account.userId, userId)),
-      db.select().from(extensionToken).where(eq(extensionToken.userId, userId)).orderBy(asc(extensionToken.createdAt)),
-      db.select().from(syncDocument).where(eq(syncDocument.userId, userId)).orderBy(asc(syncDocument.key)),
-      db.select().from(presenceLike).where(eq(presenceLike.userId, userId)).orderBy(asc(presenceLike.likedAt)),
-      listAccountDevices(userId, null),
-      db.select().from(activityPublication).where(eq(activityPublication.userId, userId)).orderBy(asc(activityPublication.createdAt)),
-      listActorActions(userId),
-      exportAuthoredSubmissions(userId),
-      getPublicProfileSettings(userId)
-    ]);
+  const [
+    [profile],
+    accounts,
+    tokens,
+    documents,
+    likes,
+    devices,
+    activityPublications,
+    adminActions,
+    presenceSubmissions,
+    publicProfileSettings,
+    presenceReports
+  ] = await Promise.all([
+    db.select().from(user).where(eq(user.id, userId)).limit(1),
+    db
+      .select({
+        providerId: account.providerId,
+        accountId: account.accountId,
+        createdAt: account.createdAt
+      })
+      .from(account)
+      .where(eq(account.userId, userId)),
+    db.select().from(extensionToken).where(eq(extensionToken.userId, userId)).orderBy(asc(extensionToken.createdAt)),
+    db.select().from(syncDocument).where(eq(syncDocument.userId, userId)).orderBy(asc(syncDocument.key)),
+    db.select().from(presenceLike).where(eq(presenceLike.userId, userId)).orderBy(asc(presenceLike.likedAt)),
+    listAccountDevices(userId, null),
+    db.select().from(activityPublication).where(eq(activityPublication.userId, userId)).orderBy(asc(activityPublication.createdAt)),
+    listActorActions(userId),
+    exportAuthoredSubmissions(userId),
+    getPublicProfileSettings(userId),
+    exportReporterReports(userId)
+  ]);
 
   if (!profile) return null;
 
@@ -263,6 +277,7 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
     activityPublications,
     adminActions,
     presenceSubmissions,
+    presenceReports,
     publicProfile: publicProfileSettings,
     linkedAccounts: accounts.map((account) => ({
       providerId: account.providerId,
@@ -296,6 +311,7 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
 
 export const deleteAccountData = async (userId: string): Promise<void> => {
   await eraseAuthoredSubmissionImages(userId);
+  await eraseReporterReports(userId);
   await getDb().transaction(async (tx) => {
     await tx.update(device).set({ userId: null }).where(eq(device.userId, userId));
     await tx.update(presenceLike).set({ userId: null }).where(eq(presenceLike.userId, userId));

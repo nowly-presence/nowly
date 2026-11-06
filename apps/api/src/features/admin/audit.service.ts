@@ -25,11 +25,16 @@ export type AuditAction =
   | "submission.published"
   | "presence.hide"
   | "presence.show"
-  | "presence.delete";
+  | "presence.delete"
+  | "report.reply"
+  | "report.note"
+  | "report.status"
+  | "report.assign"
+  | "report.delete";
 
 export type AuditEntry = {
   action: AuditAction;
-  targetType: "announcement" | "user" | "submission" | "presence";
+  targetType: "announcement" | "user" | "submission" | "presence" | "report";
   targetId: string | null;
   details?: Record<string, unknown>;
 };

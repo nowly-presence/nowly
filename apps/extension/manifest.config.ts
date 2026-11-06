@@ -16,6 +16,7 @@ export const manifestConfig = {
   description: "__MSG_extensionDescription__",
   default_locale: "en",
   permissions: ["nativeMessaging", "storage", "alarms", "userScripts", "sidePanel", "contextMenus", "unlimitedStorage"],
+  optional_permissions: ["notifications"],
   host_permissions: ["<all_urls>"],
   key: DEV_CHROME_MANIFEST_KEY,
   content_scripts: [

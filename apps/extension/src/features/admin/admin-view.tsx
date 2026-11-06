@@ -102,10 +102,22 @@ export const AdminView = () => {
                   description={item.slug}
                   trailing={
                     <span className="flex items-center gap-1.5">
-                      <Button size="sm" variant="secondary" icon={<RiEyeLine className="size-4" />} loading={moderation.busy === "show"} onClick={() => void moderation.show(item.slug)}>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        icon={<RiEyeLine className="size-4" />}
+                        loading={moderation.busy === "show"}
+                        onClick={() => void moderation.show(item.slug)}
+                      >
                         {t("admin.presence.showAction")}
                       </Button>
-                      <Button size="icon-sm" variant="ghost" className="hover:text-danger" aria-label={t("admin.presence.delete")} onClick={() => setDeleting(item)}>
+                      <Button
+                        size="icon-sm"
+                        variant="ghost"
+                        className="hover:text-danger"
+                        aria-label={t("admin.presence.delete")}
+                        onClick={() => setDeleting(item)}
+                      >
                         <RiDeleteBinLine className="size-4" />
                       </Button>
                     </span>

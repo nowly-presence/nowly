@@ -25,5 +25,11 @@
   },
   "contextMenuUnmuteTab": {
     "message": "Partager cet onglet"
+  },
+  "reportNotifyReplyTitle": {
+    "message": "Nouvelle réponse de l'équipe Nowly"
+  },
+  "reportNotifyFixedTitle": {
+    "message": "Problème marqué comme corrigé"
   }
 }

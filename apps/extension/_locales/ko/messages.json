@@ -25,5 +25,11 @@
   },
   "contextMenuUnmuteTab": {
     "message": "이 탭 공유"
+  },
+  "reportNotifyReplyTitle": {
+    "message": "Nowly 팀의 새 답변"
+  },
+  "reportNotifyFixedTitle": {
+    "message": "문제가 해결됨으로 표시되었습니다"
   }
 }

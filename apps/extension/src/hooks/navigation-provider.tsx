@@ -25,7 +25,15 @@ export type Route = {
   presenceSlug?: string;
   draftId?: string;
 } | {
+  name: "report";
+  id: string;
+} | {
   name: "admin";
+} | {
+  name: "admin-reports";
+} | {
+  name: "admin-report";
+  id: string;
 } | {
   name: "admin-review";
   id: string;
@@ -77,14 +85,21 @@ export const NavigationProvider = ({ children }: {
       setTabState(pending.view);
       if (pending.query !== undefined) setLibraryQuery(pending.query);
       setStack(
-        pending.slug
+        pending.reportId
           ? [
               {
-                name: "presence",
-                slug: pending.slug
+                name: "report",
+                id: pending.reportId
               }
             ]
-          : []
+          : pending.slug
+            ? [
+                {
+                  name: "presence",
+                  slug: pending.slug
+                }
+              ]
+            : []
       );
     };
     void loadPersistedAppView().then(setTabState).then(applyPending);

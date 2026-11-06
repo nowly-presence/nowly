@@ -10,6 +10,7 @@ import type { CustomActivityDeletionPlan } from "@/background/services/custom-ac
 import type { CreatorTestResult } from "@/background/managers/creator-test";
 import type { AdminResult, AnnouncementDraft, FieldComment, HiddenPresence, QueueItem, ReviewVerdict, StaffAccess, SubmissionDetail } from "@/shared/admin/admin-types";
 import type { CreatorDraft, CreatorExtraction, CreatorPick, CreatorSubmission, CreatorVariable } from "@nowly/presence-creator/creator-types";
+import type { ReportMessage, ReportResult, ReportStatus, ReportSummary, StaffReportCounts, StaffReportDetail, StaffReportFilter, StaffReportSummary } from "@/shared/reports";
 import type { CreatorAccount, CreatorSubmissionPayload, CreatorSubmitResult } from "@nowly/presence-creator/creator-submission";
 
 export type DiagnosticSnapshot = {
@@ -477,6 +478,88 @@ export type RouterMessageMap = {
       ok: boolean;
       error?: string;
     };
+  };
+  REPORT_CREATE: {
+    payload: {
+      slug: string;
+      message: string;
+      anonymous: boolean;
+      notify: boolean;
+      locale?: string;
+    };
+    response: ReportResult<{
+      report: ReportSummary;
+    }>;
+  };
+  ADMIN_REPORT_LIST: {
+    payload: {
+      filter: StaffReportFilter;
+    };
+    response: ReportResult<{
+      reports: StaffReportSummary[];
+      counts: StaffReportCounts;
+    }>;
+  };
+  ADMIN_REPORT_THREAD: {
+    payload: {
+      id: string;
+    };
+    response: ReportResult<{
+      report: StaffReportDetail;
+    }>;
+  };
+  ADMIN_REPORT_SEND: {
+    payload: {
+      id: string;
+      message: string;
+      visibility: "public" | "internal";
+      noteOn?: string;
+      statusTo?: ReportStatus;
+      choices?: string[];
+      attachments?: string[];
+    };
+    response: ReportResult<{
+      messages: ReportMessage[];
+    }>;
+  };
+  REPORT_IDENTITY: {
+    payload: void;
+    response: {
+      pseudo: string | null;
+    };
+  };
+  REPORT_LIST: {
+    payload: void;
+    response: ReportResult<{
+      reports: ReportSummary[];
+    }>;
+  };
+  REPORT_THREAD: {
+    payload: {
+      id: string;
+    };
+    response: ReportResult<{
+      report: ReportSummary;
+      messages: ReportMessage[];
+    }>;
+  };
+  REPORT_REPLY: {
+    payload: {
+      id: string;
+      message: string;
+      answerTo?: string;
+      attachments?: string[];
+    };
+    response: ReportResult<{
+      messages: ReportMessage[];
+    }>;
+  };
+  REPORT_SET_CLOSED: {
+    payload: {
+      id: string;
+      closed: boolean;
+    };
+    response: ReportResult<ReportSummary>;
   };
   EXPORT_DEVICE_DATA: {
     payload: void;

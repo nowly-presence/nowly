@@ -9,6 +9,6 @@ export const isAllowedOrigin = (origin: string | undefined): boolean =>
 export const corsMiddleware = cors({
   origin: (origin) => (origin && isAllowedOrigin(origin) ? origin : null),
   allowMethods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowHeaders: ["Content-Type", "Authorization", "x-user-token", "x-device-token"],
+  allowHeaders: ["Content-Type", "Authorization", "x-user-token", "x-device-token", "x-reporter-key"],
   credentials: true
 });
