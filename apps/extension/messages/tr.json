@@ -1128,5 +1128,8 @@
   "report.staff.askChoices": "Her satıra bir seçenek (2 ile 6 arası)",
   "report.staff.askSend": "Soruyu gönder",
   "report.staff.replyPlaceholder": "{name} kişisine yanıt...",
-  "report.notifyDenied": "Bildirimler engelli. Yanıtlar açık konuşmalarında kalır."
+  "report.notifyDenied": "Bildirimler engelli. Yanıtlar açık konuşmalarında kalır.",
+  "report.attach": "Görsel ekle",
+  "report.attachRemove": "Görseli kaldır",
+  "report.attachHint": "PNG veya JPEG kullan, en fazla 4 MB, mesaj başına 2 görsel. Kişisel bilgi paylaşma."
 }

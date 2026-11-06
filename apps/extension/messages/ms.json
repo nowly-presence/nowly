@@ -1128,5 +1128,8 @@
   "report.staff.askChoices": "Satu pilihan setiap baris (2 hingga 6)",
   "report.staff.askSend": "Hantar soalan",
   "report.staff.replyPlaceholder": "Balas kepada {name}...",
-  "report.notifyDenied": "Pemberitahuan disekat. Balasan kekal dalam perbualan terbuka anda."
+  "report.notifyDenied": "Pemberitahuan disekat. Balasan kekal dalam perbualan terbuka anda.",
+  "report.attach": "Tambah imej",
+  "report.attachRemove": "Buang imej",
+  "report.attachHint": "Gunakan imej PNG atau JPEG, sehingga 4 MB, 2 setiap mesej. Jangan kongsi maklumat peribadi."
 }

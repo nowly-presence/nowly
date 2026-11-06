@@ -1128,5 +1128,8 @@
   "report.staff.askChoices": "Uma opção por linha (2 a 6)",
   "report.staff.askSend": "Enviar pergunta",
   "report.staff.replyPlaceholder": "Responder a {name}...",
-  "report.notifyDenied": "As notificações estão bloqueadas. As respostas ficam nas suas conversas abertas."
+  "report.notifyDenied": "As notificações estão bloqueadas. As respostas ficam nas suas conversas abertas.",
+  "report.attach": "Adicionar imagem",
+  "report.attachRemove": "Remover imagem",
+  "report.attachHint": "Use imagens PNG ou JPEG, até 4 MB, 2 por mensagem. Não compartilhe informações pessoais."
 }

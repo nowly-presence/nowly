@@ -24,8 +24,8 @@ export const ReportChatView = ({ id }: {
   const name = report ? readableName(report.slug) : "";
   const closed = report?.status === "closed";
 
-  const send = async (message: string, answerTo?: string): Promise<boolean> => {
-    const sent = await reply(message, answerTo);
+  const send = async (message: string, answerTo?: string, attachments?: string[]): Promise<boolean> => {
+    const sent = await reply(message, answerTo, attachments);
 
     if (!sent) toast(t("report.sendError"), "error");
 
@@ -62,9 +62,12 @@ export const ReportChatView = ({ id }: {
                 <ChatPromptInput
                   placeholder={t("report.replyPlaceholder")}
                   sendLabel={t("report.sendMessage")}
+                  attachLabel={t("report.attach")}
+                  removeLabel={t("report.attachRemove")}
+                  onAttachError={() => toast(t("report.attachHint"), "error")}
                   maxLength={REPORT_MESSAGE_MAX_LENGTH}
                   busy={busy}
-                  onSend={(message) => send(message)}
+                  onSend={(message, attachments) => send(message, undefined, attachments)}
                 />
                 <Button variant="link" className="self-center" disabled={busy} onClick={() => void setClosed(true)}>
                   {t("report.close")}

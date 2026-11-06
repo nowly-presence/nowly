@@ -1128,5 +1128,8 @@
   "report.staff.askChoices": "한 줄에 선택지 하나(2개에서 6개)",
   "report.staff.askSend": "질문 보내기",
   "report.staff.replyPlaceholder": "{name}에게 답장...",
-  "report.notifyDenied": "알림이 차단되어 있습니다. 답변은 진행 중인 대화에 남습니다."
+  "report.notifyDenied": "알림이 차단되어 있습니다. 답변은 진행 중인 대화에 남습니다.",
+  "report.attach": "이미지 추가",
+  "report.attachRemove": "이미지 삭제",
+  "report.attachHint": "PNG 또는 JPEG, 최대 4MB, 메시지당 2장까지 가능합니다. 개인정보는 공유하지 마세요."
 }

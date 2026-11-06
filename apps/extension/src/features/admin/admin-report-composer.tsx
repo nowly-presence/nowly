@@ -6,6 +6,7 @@ import { useI18n } from "@/hooks/i18n-provider";
 import { REPORT_MESSAGE_MAX_LENGTH, REPORT_STATUSES, type ReportStatus } from "@/shared/reports";
 import { Button } from "@/ui/button";
 import { Select } from "@/ui/select";
+import { useToast } from "@/ui/toast";
 import { AdminReportAskSheet } from "@/features/admin/admin-report-ask-sheet";
 import type { StaffSend } from "@/features/admin/use-admin-report-thread";
 
@@ -18,14 +19,15 @@ type AdminReportComposerProps = {
 
 export const AdminReportComposer = ({ status, reporterLabel, busy, onSend }: AdminReportComposerProps) => {
   const { t } = useI18n();
+  const { toast } = useToast();
   const [target, setTarget] = useState<ReportStatus>(status);
   const [visibility, setVisibility] = useState<"public" | "internal">("public");
   const [asking, setAsking] = useState(false);
   const internal = visibility === "internal";
   const statusChanged = !internal && target !== status;
 
-  const send = async (message: string): Promise<boolean> => {
-    const sent = await onSend({ message, visibility, ...(statusChanged ? { statusTo: target } : {}) });
+  const send = async (message: string, attachments: string[]): Promise<boolean> => {
+    const sent = await onSend({ message, visibility, ...(attachments.length > 0 ? { attachments } : {}), ...(statusChanged ? { statusTo: target } : {}) });
 
     if (sent) setVisibility("public");
 
@@ -37,6 +39,9 @@ export const AdminReportComposer = ({ status, reporterLabel, busy, onSend }: Adm
       <ChatPromptInput
         placeholder={internal ? t("report.staff.noteHint") : t("report.staff.replyPlaceholder", { name: reporterLabel })}
         sendLabel={t("report.sendMessage")}
+        attachLabel={t("report.attach")}
+        removeLabel={t("report.attachRemove")}
+        onAttachError={() => toast(t("report.attachHint"), "error")}
         maxLength={REPORT_MESSAGE_MAX_LENGTH}
         busy={busy}
         allowEmpty={statusChanged}

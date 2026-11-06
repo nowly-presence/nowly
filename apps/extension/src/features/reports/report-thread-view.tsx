@@ -64,6 +64,7 @@ export const ReportThreadView = ({ messages, audience = "reporter", selfName, an
             own={own}
             name={name}
             tone={message.kind === "note" ? "note" : "default"}
+            images={message.attachments}
             avatar={!own && (staff || !reporterView) ? <ChatAvatar name={name} src={message.authorAvatar} /> : undefined}
             meta={
               message.kind === "note" ? (

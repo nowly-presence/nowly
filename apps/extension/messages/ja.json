@@ -1128,5 +1128,8 @@
   "report.staff.askChoices": "1 行に 1 つの選択肢(2 から 6 個)",
   "report.staff.askSend": "質問を送信",
   "report.staff.replyPlaceholder": "{name} に返信...",
-  "report.notifyDenied": "通知がブロックされています。返信は進行中の会話に残ります。"
+  "report.notifyDenied": "通知がブロックされています。返信は進行中の会話に残ります。",
+  "report.attach": "画像を追加",
+  "report.attachRemove": "画像を削除",
+  "report.attachHint": "PNG または JPEG、4 MB まで、1 通につき 2 枚までです。個人情報は共有しないでください。"
 }

@@ -94,10 +94,10 @@ export const handleReportThread: Handler<"REPORT_THREAD"> = ({ id }) =>
     path: `/presence-reports/${encodeURIComponent(id)}`
   });
 
-export const handleReportReply: Handler<"REPORT_REPLY"> = async ({ id, message, answerTo }) => {
+export const handleReportReply: Handler<"REPORT_REPLY"> = async ({ id, message, answerTo, attachments }) => {
   const text = trimmed(message);
 
-  if (!text) return {
+  if (!text && !attachments?.length) return {
     ok: false,
     error: "EMPTY_MESSAGE"
   };
@@ -109,7 +109,8 @@ export const handleReportReply: Handler<"REPORT_REPLY"> = async ({ id, message, 
     path: `/presence-reports/${encodeURIComponent(id)}/messages`,
     body: {
       message: text,
-      ...(answerTo ? { answerTo } : {})
+      ...(answerTo ? { answerTo } : {}),
+      ...(attachments?.length ? { attachments } : {})
     }
   });
 };
@@ -153,10 +154,10 @@ export const handleAdminReportThread: Handler<"ADMIN_REPORT_THREAD"> = async ({ 
   };
 };
 
-export const handleAdminReportSend: Handler<"ADMIN_REPORT_SEND"> = async ({ id, message, visibility, statusTo, choices }) => {
+export const handleAdminReportSend: Handler<"ADMIN_REPORT_SEND"> = async ({ id, message, visibility, statusTo, choices, attachments }) => {
   const text = trimmed(message);
 
-  if (!text && !statusTo) return {
+  if (!text && !statusTo && !attachments?.length) return {
     ok: false,
     error: "EMPTY_MESSAGE"
   };
@@ -171,7 +172,8 @@ export const handleAdminReportSend: Handler<"ADMIN_REPORT_SEND"> = async ({ id, 
       message: text,
       visibility,
       ...(statusTo ? { statusTo } : {}),
-      ...(choices ? { choices } : {})
+      ...(choices ? { choices } : {}),
+      ...(attachments?.length ? { attachments } : {})
     }
   });
 };

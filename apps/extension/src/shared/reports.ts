@@ -5,6 +5,8 @@ export type ReportStatus = (typeof REPORT_STATUSES)[number];
 export const REPORT_MESSAGE_MAX_LENGTH = 2000;
 export const REPORTER_KEY_HEADER = "x-reporter-key";
 export const REPORTER_KEY_BYTES = 32;
+export const REPORT_ATTACHMENTS_MAX = 2;
+export const REPORT_ATTACHMENT_MAX_BYTES = 4 * 1024 * 1024;
 export const REPORT_POLL_MS = 30_000;
 
 export type ReportMessageKind = "message" | "info_request" | "status_change" | "note";
@@ -21,6 +23,7 @@ export type ReportMessage = {
   choices: string[] | null;
   answerTo: string | null;
   statusTo: ReportStatus | null;
+  attachments: string[];
   createdAt: string;
 };
 

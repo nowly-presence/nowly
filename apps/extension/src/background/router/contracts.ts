@@ -515,6 +515,7 @@ export type RouterMessageMap = {
       visibility: "public" | "internal";
       statusTo?: ReportStatus;
       choices?: string[];
+      attachments?: string[];
     };
     response: ReportResult<{
       messages: ReportMessage[];
@@ -553,6 +554,7 @@ export type RouterMessageMap = {
       id: string;
       message: string;
       answerTo?: string;
+      attachments?: string[];
     };
     response: ReportResult<{
       messages: ReportMessage[];

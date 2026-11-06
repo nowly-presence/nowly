@@ -27,9 +27,9 @@ export const useReportThread = (id: string) => {
     return () => window.clearInterval(timer);
   }, [reload]);
 
-  const reply = useCallback(async (message: string, answerTo?: string): Promise<boolean> => {
+  const reply = useCallback(async (message: string, answerTo?: string, attachments?: string[]): Promise<boolean> => {
     setBusy(true);
-    const result = await sendMessage("REPORT_REPLY", { id, message, answerTo }).catch(() => null);
+    const result = await sendMessage("REPORT_REPLY", { id, message, answerTo, attachments }).catch(() => null);
     setBusy(false);
 
     if (!result?.ok) return false;
