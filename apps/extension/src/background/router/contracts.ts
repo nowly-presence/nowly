@@ -513,6 +513,7 @@ export type RouterMessageMap = {
       id: string;
       message: string;
       visibility: "public" | "internal";
+      noteOn?: string;
       statusTo?: ReportStatus;
       choices?: string[];
       attachments?: string[];

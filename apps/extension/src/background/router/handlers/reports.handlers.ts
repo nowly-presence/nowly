@@ -153,7 +153,7 @@ export const handleAdminReportThread: Handler<"ADMIN_REPORT_THREAD"> = async ({ 
   };
 };
 
-export const handleAdminReportSend: Handler<"ADMIN_REPORT_SEND"> = async ({ id, message, visibility, statusTo, choices, attachments }) => {
+export const handleAdminReportSend: Handler<"ADMIN_REPORT_SEND"> = async ({ id, message, visibility, noteOn, statusTo, choices, attachments }) => {
   const text = trimmed(message);
 
   if (!text && !statusTo && !attachments?.length) return {
@@ -170,6 +170,7 @@ export const handleAdminReportSend: Handler<"ADMIN_REPORT_SEND"> = async ({ id, 
     body: {
       message: text,
       visibility,
+      ...(noteOn ? { noteOn } : {}),
       ...(statusTo ? { statusTo } : {}),
       ...(choices ? { choices } : {}),
       ...(attachments?.length ? { attachments } : {})

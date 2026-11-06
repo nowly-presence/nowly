@@ -36,6 +36,7 @@ export const StaffMessageSchema = z
     message: z.string().trim().max(REPORT_MESSAGE_MAX_LENGTH).default(""),
     attachments: attachmentsSchema,
     visibility: z.enum(["public", "internal"]).default("public"),
+    noteOn: z.string().trim().min(1).max(80).optional(),
     statusTo: z.enum(REPORT_STATUSES).optional(),
     choices: z.array(z.string().trim().min(1).max(REPORT_CHOICE_MAX_LENGTH)).min(2).max(REPORT_CHOICES_MAX).optional()
   })
@@ -45,7 +46,8 @@ export const StaffMessageSchema = z
       value.visibility === "public" ||
       (value.statusTo === undefined && value.choices === undefined && value.attachments.length === 0 && value.message.length > 0),
     { message: "INTERNAL_NOTE_ONLY" }
-  );
+  )
+  .refine((value) => value.noteOn === undefined || value.visibility === "internal", { message: "NOTE_TARGET_ONLY" });
 
 export const StatusSchema = z.object({ status: z.enum(REPORT_STATUSES) });
 

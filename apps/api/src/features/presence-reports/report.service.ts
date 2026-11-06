@@ -404,6 +404,7 @@ export const setReporterNotify = async (reporter: Reporter, id: string, notify: 
 export type StaffMessageInput = {
   message: string;
   visibility: "public" | "internal";
+  noteOn?: string;
   statusTo?: ReportStatus;
   choices?: string[];
   attachments?: string[];
@@ -511,6 +512,22 @@ export const postStaffMessage = async (
 
     if (!internal && current === "closed" && target === "closed") throw new ReportError("REPORT_CLOSED");
 
+    if (internal && input.noteOn) {
+      const [noted] = await tx
+        .select({ id: presenceReportMessage.id })
+        .from(presenceReportMessage)
+        .where(
+          and(
+            eq(presenceReportMessage.id, input.noteOn),
+            eq(presenceReportMessage.reportId, id),
+            eq(presenceReportMessage.visibility, "public"),
+            ne(presenceReportMessage.kind, "status_change")
+          )
+        );
+
+      if (!noted) throw new ReportError("INVALID_ANSWER");
+    }
+
     if (input.message.length > 0 || internal || (input.attachments?.length ?? 0) > 0) await tx.insert(presenceReportMessage).values({
       id: randomUUID(),
       reportId: id,
@@ -520,6 +537,7 @@ export const postStaffMessage = async (
       visibility: input.visibility,
       body: input.message,
       choices: input.choices ?? null,
+      answerTo: internal ? (input.noteOn ?? null) : null,
       attachments: input.attachments ?? []
     });
 

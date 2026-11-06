@@ -1,20 +1,16 @@
-import type { ReactNode } from "react";
 import { RiLockLine } from "@remixicon/react";
 
 type ChatNoteProps = {
   label: string;
   author: string;
-  children: ReactNode;
+  body: string;
 };
 
-export const ChatNote = ({ label, author, children }: ChatNoteProps) => (
-  <div className="flex flex-col gap-1 rounded-md border border-dashed border-line-strong px-3 py-2">
-    <div className="flex items-center gap-1.5 text-label-sm text-muted">
-      <RiLockLine className="size-3.5 shrink-0" />
-      <span className="truncate">{label}</span>
-      <span aria-hidden>/</span>
-      <span className="truncate">{author}</span>
-    </div>
-    <p className="text-label-md break-words whitespace-pre-wrap text-muted">{children}</p>
-  </div>
+export const ChatNote = ({ label, author, body }: ChatNoteProps) => (
+  <span title={label} className="flex max-w-full items-start gap-1.5 rounded-md border border-line-strong bg-canvas px-2 py-1 text-label-sm text-muted">
+    <RiLockLine aria-label={label} className="mt-0.5 size-3 shrink-0" />
+    <span className="min-w-0 break-words whitespace-pre-wrap">
+      <span className="text-ink">{author}</span> {body}
+    </span>
+  </span>
 );

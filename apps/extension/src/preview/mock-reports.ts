@@ -46,6 +46,14 @@ export const createMockReportHandlers = (): MockHandlers => {
       createdAt: at(18)
     }),
     message({
+      id: "m3b",
+      authorRole: "staff",
+      authorName: "Marc",
+      authorStaffRole: "moderator",
+      body: "We will keep you posted here.",
+      createdAt: new Date(Date.now() - 18 * HOUR_MS + 60_000).toISOString()
+    }),
+    message({
       id: "m4",
       authorRole: "staff",
       authorName: "Lea",
@@ -62,6 +70,7 @@ export const createMockReportHandlers = (): MockHandlers => {
       authorStaffRole: "moderator",
       kind: "note",
       visibility: "internal",
+      answerTo: "m4",
       body: "Probably the title selector since the player rework.",
       createdAt: at(1)
     })
@@ -160,7 +169,7 @@ export const createMockReportHandlers = (): MockHandlers => {
       ok: true,
       report: staffDetail()
     }),
-    ADMIN_REPORT_SEND: ({ message: body, visibility, statusTo }) => {
+    ADMIN_REPORT_SEND: ({ message: body, visibility, noteOn, statusTo }) => {
       messages.push(
         message({
           id: `m${messages.length + 1}`,
@@ -170,6 +179,7 @@ export const createMockReportHandlers = (): MockHandlers => {
           body,
           visibility,
           kind: visibility === "internal" ? "note" : "message",
+          answerTo: noteOn ?? null,
           createdAt: new Date().toISOString()
         })
       );

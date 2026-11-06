@@ -16,6 +16,7 @@ type ChatPromptInputProps = {
   disabled?: boolean;
   allowEmpty?: boolean;
   tools?: ReactNode;
+  attachable?: boolean;
   extraActions?: MenuItem[];
   onExtraAction?: (value: string) => void;
   onAttachError: () => void;
@@ -27,7 +28,7 @@ const OUTLINE_ICON =
   "flex size-9 shrink-0 items-center justify-center rounded-md border border-line bg-surface text-ink transition-colors hover:border-line-strong disabled:opacity-45";
 
 export const ChatPromptInput =
-  ({ placeholder, sendLabel, attachLabel, removeLabel, maxLength, busy, disabled = false, allowEmpty = false, tools, extraActions = [], onExtraAction, onAttachError, onSend }: ChatPromptInputProps) => {
+  ({ placeholder, sendLabel, attachLabel, removeLabel, maxLength, busy, disabled = false, allowEmpty = false, tools, attachable = true, extraActions = [], onExtraAction, onAttachError, onSend }: ChatPromptInputProps) => {
     const [value, setValue] = useState("");
     const [attachments, setAttachments] = useState<string[]>([]);
     const fileRef = useRef<HTMLInputElement>(null);
@@ -93,7 +94,7 @@ export const ChatPromptInput =
         )}
         <div className="flex items-center gap-2">
           <input ref={fileRef} type="file" accept="image/png,image/jpeg" multiple hidden onChange={(event) => void pick(event.target.files)} />
-          {extraActions.length > 0 ? (
+          {!attachable ? null : extraActions.length > 0 ? (
             <MenuButton
               label={attachLabel}
               items={[

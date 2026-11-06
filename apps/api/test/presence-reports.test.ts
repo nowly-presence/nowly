@@ -177,6 +177,33 @@ describe("presence reports", () => {
     expect(JSON.stringify(staffView.json())).toContain("secret theory");
   });
 
+  it("attaches an internal note to a message and rejects unknown targets", async () => {
+    const { id } = (await create()).json();
+    const detail = (await call("GET", `/admin/presence-reports/${id}`, moderator)).json();
+    const first = detail.messages[0];
+
+    const noted = await call("POST", `/admin/presence-reports/${id}/messages`, moderator, {
+      message: "Likely the player rework",
+      visibility: "internal",
+      noteOn: first.id
+    });
+    expect(noted.statusCode).toBe(201);
+    expect(noted.json().messages.find((message: { kind: string }) => message.kind === "note").answerTo).toBe(first.id);
+
+    const unknown = await call("POST", `/admin/presence-reports/${id}/messages`, moderator, {
+      message: "x",
+      visibility: "internal",
+      noteOn: "missing"
+    });
+    expect(unknown.statusCode).toBe(409);
+
+    const publicTarget = await call("POST", `/admin/presence-reports/${id}/messages`, moderator, {
+      message: "x",
+      noteOn: first.id
+    });
+    expect(publicTarget.statusCode).toBe(400);
+  });
+
   it("moves through info request, answer and fixed, writing status markers", async () => {
     const { id } = (await create()).json();
 

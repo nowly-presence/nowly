@@ -5,6 +5,7 @@ import { REPORT_POLL_MS, type ReportStatus, type StaffReportDetail } from "@/sha
 export type StaffSend = {
   message: string;
   visibility: "public" | "internal";
+  noteOn?: string;
   statusTo?: ReportStatus;
   choices?: string[];
 };
