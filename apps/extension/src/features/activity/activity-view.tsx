@@ -8,6 +8,7 @@ import { InstalledPresencesSection } from "@/features/activity/installed-presenc
 import { LiveActivitySection } from "@/features/activity/live-activity-section";
 import { QueuedActivitiesSection } from "@/features/activity/queued-activities-section";
 import { ReportsSection } from "@/features/activity/reports-section";
+import { StaffReportsSection } from "@/features/activity/staff-reports-section";
 import { SupportCard } from "@/features/activity/support-card";
 import { useActivityOverview } from "@/features/activity/use-activity-overview";
 
@@ -31,6 +32,7 @@ export const ActivityView = () => {
       <ScreenTitle title={t("activity.pageTitle")} subtitle={t("activity.pageDescription")} />
       <LiveActivitySection hasPresences={sortedPresences.length > 0} />
       <ReportsSection />
+      <StaffReportsSection />
       <CurrentTabSection />
       <QueuedActivitiesSection activities={otherActivities} />
       <InstalledPresencesSection presences={sortedPresences} detectedSlugs={detectedSlugs} now={now} />

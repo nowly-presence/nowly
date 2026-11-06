@@ -30,6 +30,11 @@ export type Route = {
 } | {
   name: "admin";
 } | {
+  name: "admin-reports";
+} | {
+  name: "admin-report";
+  id: string;
+} | {
   name: "admin-review";
   id: string;
 } | {

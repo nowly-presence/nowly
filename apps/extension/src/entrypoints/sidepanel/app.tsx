@@ -39,6 +39,8 @@ const AnnouncementsView = lazy(async () => ({ default: (await import("@/features
 const AnnouncementsDetailView = lazy(async () => ({ default: (await import("@/features/announcements/announcements-detail-view")).AnnouncementsDetailView }));
 
 const ReportChatView = lazy(async () => ({ default: (await import("@/features/reports/report-chat-view")).ReportChatView }));
+const AdminReportsView = lazy(async () => ({ default: (await import("@/features/admin/admin-reports-view")).AdminReportsView }));
+const AdminReportView = lazy(async () => ({ default: (await import("@/features/admin/admin-report-view")).AdminReportView }));
 const AdminView = lazy(async () => ({ default: (await import("@/features/admin/admin-view")).AdminView }));
 const AdminReviewView = lazy(async () => ({ default: (await import("@/features/admin/admin-review-view")).AdminReviewView }));
 const AdminAnnouncementView = lazy(async () => ({ default: (await import("@/features/admin/admin-announcement-view")).AdminAnnouncementView }));
@@ -144,6 +146,8 @@ const AppContent = () => {
                 {route.name === "creator" && <CreatorView presenceSlug={route.presenceSlug} draftId={route.draftId} />}
                 {route.name === "report" && <ReportChatView id={route.id} />}
                 {route.name === "admin" && <AdminView />}
+                {route.name === "admin-reports" && <AdminReportsView />}
+                {route.name === "admin-report" && <AdminReportView id={route.id} />}
                 {route.name === "admin-review" && <AdminReviewView id={route.id} />}
                 {route.name === "admin-announcement" && <AdminAnnouncementView />}
               </Suspense>

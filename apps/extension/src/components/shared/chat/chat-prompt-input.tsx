@@ -9,13 +9,14 @@ type ChatPromptInputProps = {
   maxLength: number;
   busy: boolean;
   disabled?: boolean;
+  allowEmpty?: boolean;
   tools?: ReactNode;
   onSend: (message: string) => Promise<boolean>;
 };
 
-export const ChatPromptInput = ({ placeholder, sendLabel, maxLength, busy, disabled = false, tools, onSend }: ChatPromptInputProps) => {
+export const ChatPromptInput = ({ placeholder, sendLabel, maxLength, busy, disabled = false, allowEmpty = false, tools, onSend }: ChatPromptInputProps) => {
   const [value, setValue] = useState("");
-  const canSend = value.trim().length > 0 && !busy && !disabled;
+  const canSend = (allowEmpty || value.trim().length > 0) && !busy && !disabled;
 
   const send = async () => {
     if (!canSend) return;

@@ -10,7 +10,7 @@ import type { CustomActivityDeletionPlan } from "@/background/services/custom-ac
 import type { CreatorTestResult } from "@/background/managers/creator-test";
 import type { AdminResult, AnnouncementDraft, FieldComment, HiddenPresence, QueueItem, ReviewVerdict, StaffAccess, SubmissionDetail } from "@/shared/admin/admin-types";
 import type { CreatorDraft, CreatorExtraction, CreatorPick, CreatorSubmission, CreatorVariable } from "@nowly/presence-creator/creator-types";
-import type { ReportMessage, ReportResult, ReportSummary } from "@/shared/reports";
+import type { ReportMessage, ReportResult, ReportStatus, ReportSummary, StaffReportCounts, StaffReportDetail, StaffReportFilter, StaffReportSummary } from "@/shared/reports";
 import type { CreatorAccount, CreatorSubmissionPayload, CreatorSubmitResult } from "@nowly/presence-creator/creator-submission";
 
 export type DiagnosticSnapshot = {
@@ -490,6 +490,42 @@ export type RouterMessageMap = {
     response: ReportResult<{
       report: ReportSummary;
     }>;
+  };
+  ADMIN_REPORT_LIST: {
+    payload: {
+      filter: StaffReportFilter;
+    };
+    response: ReportResult<{
+      reports: StaffReportSummary[];
+      counts: StaffReportCounts;
+    }>;
+  };
+  ADMIN_REPORT_THREAD: {
+    payload: {
+      id: string;
+    };
+    response: ReportResult<{
+      report: StaffReportDetail;
+    }>;
+  };
+  ADMIN_REPORT_SEND: {
+    payload: {
+      id: string;
+      message: string;
+      visibility: "public" | "internal";
+      statusTo?: ReportStatus;
+      choices?: string[];
+    };
+    response: ReportResult<{
+      messages: ReportMessage[];
+    }>;
+  };
+  ADMIN_REPORT_ASSIGN: {
+    payload: {
+      id: string;
+      assigneeId: string | null;
+    };
+    response: ReportResult;
   };
   REPORT_IDENTITY: {
     payload: void;

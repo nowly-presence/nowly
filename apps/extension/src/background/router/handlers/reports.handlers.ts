@@ -1,7 +1,7 @@
 import type { Handler } from "@/background/router/router";
 import { requestReports } from "@/background/services/reports-api";
 import { getAccount } from "@/background/storage/account.store";
-import { REPORT_MESSAGE_MAX_LENGTH, type ReportMessage, type ReportSummary } from "@/shared/reports";
+import { REPORT_MESSAGE_MAX_LENGTH, type ReportMessage, type ReportSummary, type StaffReportCounts, type StaffReportDetail, type StaffReportFilter, type StaffReportSummary } from "@/shared/reports";
 
 const FIREFOX_PATTERN = /Firefox\/([\d.]+)/;
 const EDGE_PATTERN = /Edg\/([\d.]+)/;
@@ -118,4 +118,68 @@ export const handleReportSetClosed: Handler<"REPORT_SET_CLOSED"> = ({ id, closed
   requestReports<ReportSummary>({
     method: "POST",
     path: `/presence-reports/${encodeURIComponent(id)}/${closed ? "close" : "reopen"}`
+  });
+
+const REPORT_FILTER_QUERY: Record<StaffReportFilter, string> = {
+  todo: "?status=new",
+  waiting: "?status=info_requested",
+  mine: "?mine=1",
+  all: ""
+};
+
+export const handleAdminReportList: Handler<"ADMIN_REPORT_LIST"> = ({ filter }) =>
+  requestReports<{
+    reports: StaffReportSummary[];
+    counts: StaffReportCounts;
+  }>({
+    staff: true,
+    method: "GET",
+    path: `/admin/presence-reports${REPORT_FILTER_QUERY[filter]}`
+  });
+
+export const handleAdminReportThread: Handler<"ADMIN_REPORT_THREAD"> = async ({ id }) => {
+  const result = await requestReports<StaffReportDetail>({
+    staff: true,
+    method: "GET",
+    path: `/admin/presence-reports/${encodeURIComponent(id)}`
+  });
+
+  if (!result.ok) return result;
+
+  const { ok: _ok, ...report } = result;
+  return {
+    ok: true,
+    report
+  };
+};
+
+export const handleAdminReportSend: Handler<"ADMIN_REPORT_SEND"> = async ({ id, message, visibility, statusTo, choices }) => {
+  const text = trimmed(message);
+
+  if (!text && !statusTo) return {
+    ok: false,
+    error: "EMPTY_MESSAGE"
+  };
+
+  return requestReports<{
+    messages: ReportMessage[];
+  }>({
+    staff: true,
+    method: "POST",
+    path: `/admin/presence-reports/${encodeURIComponent(id)}/messages`,
+    body: {
+      message: text,
+      visibility,
+      ...(statusTo ? { statusTo } : {}),
+      ...(choices ? { choices } : {})
+    }
+  });
+};
+
+export const handleAdminReportAssign: Handler<"ADMIN_REPORT_ASSIGN"> = ({ id, assigneeId }) =>
+  requestReports<object>({
+    staff: true,
+    method: "PUT",
+    path: `/admin/presence-reports/${encodeURIComponent(id)}/assignee`,
+    body: { assigneeId }
   });

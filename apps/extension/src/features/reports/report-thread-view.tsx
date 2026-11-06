@@ -10,9 +10,11 @@ import { REPORT_STATUS_LABELS } from "@/components/shared/report-status-badge";
 
 type ReportThreadViewProps = {
   messages: ReportMessage[];
-  answering: boolean;
-  closed: boolean;
-  onAnswer: (answer: string, answerTo: string) => void;
+  audience?: "reporter" | "staff";
+  selfName?: string;
+  answering?: boolean;
+  closed?: boolean;
+  onAnswer?: (answer: string, answerTo: string) => void;
 };
 
 const pendingRequest = (messages: ReportMessage[]): ReportMessage | null => {
@@ -23,10 +25,10 @@ const pendingRequest = (messages: ReportMessage[]): ReportMessage | null => {
   return messages.some((message) => message.answerTo === request.id) ? null : request;
 };
 
-export const ReportThreadView = ({ messages, answering, closed, onAnswer }: ReportThreadViewProps) => {
+export const ReportThreadView = ({ messages, audience = "reporter", selfName, answering = false, closed = false, onAnswer }: ReportThreadViewProps) => {
   const { t } = useI18n();
   const endRef = useRef<HTMLDivElement>(null);
-  const request = closed ? null : pendingRequest(messages);
+  const request = closed || audience === "staff" ? null : pendingRequest(messages);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "end" });
@@ -44,16 +46,32 @@ export const ReportThreadView = ({ messages, answering, closed, onAnswer }: Repo
         if (message.authorRole === "system") return null;
 
         const staff = message.authorRole === "staff";
-        const name = staff ? (message.authorName ?? t("report.team")) : t("report.you");
+        const reporterView = audience === "reporter";
+        const own = reporterView ? !staff : staff && message.authorName === selfName;
+        const name =
+          own && !reporterView
+            ? t("report.you")
+            : staff
+              ? (message.authorName ?? t("report.team"))
+              : reporterView
+                ? t("report.you")
+                : (message.authorName ?? t("report.anonymous"));
         const role = message.authorStaffRole === "admin" ? t("report.role.admin") : message.authorStaffRole === "moderator" ? t("report.role.moderator") : null;
 
         return (
           <ChatMessage
             key={message.id}
-            own={!staff}
+            own={own}
             name={name}
-            avatar={staff ? <ChatAvatar name={name} src={message.authorAvatar} /> : undefined}
-            meta={staff && role ? <Badge tone="primary">{role}</Badge> : undefined}
+            tone={message.kind === "note" ? "note" : "default"}
+            avatar={!own && (staff || !reporterView) ? <ChatAvatar name={name} src={message.authorAvatar} /> : undefined}
+            meta={
+              message.kind === "note" ? (
+                <Badge tone="outline">{t("report.staff.noteBadge")}</Badge>
+              ) : staff && role ? (
+                <Badge tone="primary">{role}</Badge>
+              ) : undefined
+            }
           >
             {message.body}
           </ChatMessage>
@@ -69,7 +87,7 @@ export const ReportThreadView = ({ messages, answering, closed, onAnswer }: Repo
           placeholder={t("report.replyPlaceholder")}
           maxLength={REPORT_MESSAGE_MAX_LENGTH}
           busy={answering}
-          onSubmit={(answer) => onAnswer(answer, request.id)}
+          onSubmit={(answer) => onAnswer?.(answer, request.id)}
         />
       )}
       <div ref={endRef} />

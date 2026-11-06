@@ -39,6 +39,43 @@ export type ReportSummary = {
   } | null;
 };
 
+export type StaffReportSummary = {
+  id: string;
+  slug: string;
+  status: ReportStatus;
+  reporterLabel: string;
+  assigneeId: string | null;
+  lastMessageAt: string;
+  createdAt: string;
+  resolvedAt: string | null;
+  unread: boolean;
+  lastMessage: {
+    authorRole: string;
+    body: string;
+  } | null;
+};
+
+export type StaffReportDetail = {
+  id: string;
+  slug: string;
+  status: ReportStatus;
+  reporterLabel: string;
+  anonymous: boolean;
+  assigneeId: string | null;
+  createdAt: string;
+  messages: ReportMessage[];
+};
+
+export type StaffReportCounts = {
+  new: number;
+  awaitingReporter: number;
+};
+
+export type StaffReportFilter = "todo" | "waiting" | "mine" | "all";
+
+export const REPORT_CHOICES_MIN = 2;
+export const REPORT_CHOICES_MAX = 6;
+
 export type ReportResult<T extends object = object> =
   | ({
       ok: true;

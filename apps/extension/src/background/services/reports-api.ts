@@ -6,6 +6,7 @@ import { REPORTER_KEY_HEADER, type ReportResult } from "@/shared/reports";
 const HTTP_UNAUTHORIZED = 401;
 
 type ReportRequest = {
+  staff?: boolean;
   method: "GET" | "POST" | "PUT";
   path: string;
   body?: unknown;
@@ -26,7 +27,7 @@ const errorCode = (body: unknown, status: number): string =>
       ).error
     : `HTTP_${status}`;
 
-export const requestReports = async <T extends object>({ method, path, body }: ReportRequest): Promise<ReportResult<T>> => {
+export const requestReports = async <T extends object>({ staff = false, method, path, body }: ReportRequest): Promise<ReportResult<T>> => {
   const [key, account] = await Promise.all([
     getReporterKey(),
     getAccount()
