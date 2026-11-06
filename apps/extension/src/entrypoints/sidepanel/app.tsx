@@ -102,7 +102,8 @@ const AppContent = () => {
   }
 
   const live = Boolean(state.activity) && !state.settings.presencePaused;
-  const focused = stack.at(-1)?.name === "creator";
+  const focusedRoute = stack.at(-1)?.name;
+  const focused = focusedRoute === "creator" || focusedRoute === "report" || focusedRoute === "admin-report";
 
   const selectTab = (next: Tab) => {
     if (next === tab && stack.length === 0) {

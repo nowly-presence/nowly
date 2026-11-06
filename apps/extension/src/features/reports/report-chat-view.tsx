@@ -40,7 +40,7 @@ export const ReportChatView = ({ id }: {
         backLabel={t("action.back")}
         action={report && <ReportStatusBadge status={report.status} />}
       />
-      <ScreenBody className="flex-1 pt-2">
+      <ScreenBody className="flex-1 pt-2 pb-4!">
         {!report && !error && <Skeleton className="h-40" />}
         {error && !report && <p className="px-1 text-label-md text-danger">{t("report.loadError")}</p>}
         {report && (
@@ -58,7 +58,7 @@ export const ReportChatView = ({ id }: {
                 </Button>
               </div>
             ) : (
-              <div className="flex flex-col gap-2">
+              <div className="sticky bottom-0 mt-auto flex flex-col gap-2 bg-canvas pt-2">
                 <ChatPromptInput
                   placeholder={t("report.replyPlaceholder")}
                   sendLabel={t("report.sendMessage")}

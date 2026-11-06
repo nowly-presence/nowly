@@ -38,13 +38,13 @@ export const AdminReportView = ({ id }: {
         backLabel={t("action.back")}
         action={report && <ReportStatusBadge status={report.status} />}
       />
-      <ScreenBody className="flex-1 pt-2">
+      <ScreenBody className="flex-1 pt-2 pb-4!">
         {!report && !error && <Skeleton className="h-40" />}
         {error && !report && <p className="px-1 text-label-md text-danger">{t("report.loadError")}</p>}
         {report && (
           <>
             <ReportThreadView messages={report.messages} audience="staff" selfName={self?.name} />
-            <div className="flex flex-col gap-2">
+            <div className="sticky bottom-0 mt-auto flex flex-col gap-2 bg-canvas pt-2">
               <AdminReportComposer key={report.status} status={report.status} reporterLabel={report.reporterLabel} busy={busy} onSend={submit} />
               {self && (
                 <Button variant="link" className="self-center" disabled={busy} onClick={() => void assign(mine ? null : self.id)}>
