@@ -224,6 +224,22 @@ describe("presence reports", () => {
     expect((await call("GET", `/presence-reports/${id}`, reporter())).json().report.status).toBe("closed");
   });
 
+  it("closes stale threads through the scheduler endpoint with the shared secret", async () => {
+    vi.stubEnv("CREATOR_WEBHOOK_SECRET", "scheduler-secret");
+    const { id } = (await create()).json();
+    await call("POST", `/admin/presence-reports/${id}/messages`, moderator, {
+      message: "Details?",
+      choices: ["A", "B"]
+    });
+    await database.db.update(presenceReport).set({ autoCloseAt: new Date(Date.now() - 1000) });
+
+    expect((await call("POST", "/presence-reports/close-stale", {})).statusCode).toBe(401);
+
+    const response = await call("POST", "/presence-reports/close-stale", { authorization: "Bearer scheduler-secret" });
+    expect(response.json().closed).toBe(1);
+    vi.unstubAllEnvs();
+  });
+
   it("reports updates since a date", async () => {
     const { id } = (await create()).json();
     const since = new Date(Date.now() + 1000).toISOString();

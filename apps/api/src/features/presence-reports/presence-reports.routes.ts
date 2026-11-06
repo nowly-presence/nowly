@@ -1,15 +1,18 @@
 import type { AppEnv } from "@/context";
 import { resolveAccount } from "@/features/account/extension-token.middleware";
 import { requireCapability } from "@/features/admin/admin.middleware";
+import { requireSecret } from "@/features/auth/auth.middleware";
 import { MINUTE_MS, rateLimit } from "@/middleware/rate-limit";
 import { jsonBody } from "@/shared/request-body";
+import { serverEnv } from "@nowly/env/server";
 import { Hono, type Context } from "hono";
 import { REPORT_KEY_HEADER, REPORT_KEY_MAX_LENGTH, REPORT_KEY_MIN_LENGTH, REPORT_MESSAGES_PER_WINDOW } from "./report.constants";
 import { ReportError } from "./report-errors";
 import { AssigneeSchema, CreateReportSchema, NotifySchema, ReporterMessageSchema, StaffMessageSchema, StaffQuerySchema, StatusSchema, UpdatesQuerySchema } from "./report.schemas";
-import { countStaffReports, createReport, deleteReport, getReporterReport, getStaffReport, hashReporterKey, listReporterReports, listStaffReports, postReporterMessage, postStaffMessage, reporterUpdates, setReporterClosed, setReporterNotify, setStaffAssignee, type Reporter } from "./report.service";
+import { closeStaleReports, countStaffReports, createReport, deleteReport, getReporterReport, getStaffReport, hashReporterKey, listReporterReports, listStaffReports, postReporterMessage, postStaffMessage, reporterUpdates, setReporterClosed, setReporterNotify, setStaffAssignee, type Reporter } from "./report.service";
 
 const REPORT_WINDOW_MS = 10 * MINUTE_MS;
+const requireSchedulerSecret = requireSecret(() => serverEnv.CREATOR_WEBHOOK_SECRET, "CREATOR_WEBHOOK_SECRET_MISSING");
 
 const reporterKeyOf = (c: Context): string | null => {
   const key = c.req.header(REPORT_KEY_HEADER)?.trim();
@@ -103,6 +106,7 @@ export const presenceReportRoutes = new Hono<AppEnv>()
     c.header("Cache-Control", "no-store");
     return c.json({ reports: await reporterUpdates(reporter, query.data.since) });
   })
+  .post("/presence-reports/close-stale", requireSchedulerSecret, async (c) => c.json({ closed: await closeStaleReports() }))
   .get("/presence-reports/:id", async (c) => {
     const reporter = await reporterOf(c);
 

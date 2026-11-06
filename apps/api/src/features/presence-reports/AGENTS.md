@@ -14,5 +14,5 @@ Conversation attached to each presence report (replaces the one-way Discord webh
 - Anonymity: when `anonymous` is true the team sees `Anonyme` (`reporterLabelOf`). Staff views never carry `secret_hash`, `reporter_id`, `device_id` or the key. Team members are always shown with name, avatar and role.
 - Staff routes are `/admin/presence-reports*` (`review`, delete needs `manage`). A staff message can carry `statusTo`: message, status marker and audit entry happen in one locked transaction. Sending `choices` moves the thread to `info_requested`.
 - A reporter answer moves `info_requested` and `fixed` back to `in_progress`. `closed` rejects writes; the reporter can reopen within 14 days of resolution.
-- `info_requested` gets `auto_close_at` (14 days). `closeStaleReports` closes overdue threads; a scheduler endpoint is still to be added.
+- `info_requested` gets `auto_close_at` (14 days). `closeStaleReports` closes overdue threads, run by `POST /presence-reports/close-stale` (`Authorization: Bearer CREATOR_WEBHOOK_SECRET`, same secret and scheduler as the PR job). Call it at least daily.
 - Limits: 5 open threads per key, 5 writes per 10 minutes, 60 messages per thread, 2000 characters. Attachments are not implemented yet.
