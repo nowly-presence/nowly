@@ -27,14 +27,15 @@ export const Sheet = ({ open, onClose, title, hideTitle = false, description, pr
     if (!open) return;
 
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    panelRef.current?.focus();
+    const panel = panelRef.current;
+    if (panel && !panel.contains(previous)) panel.focus();
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeRef.current();
     };
     window.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("keydown", onKey);
-      previous?.focus();
+      if (previous && previous.isConnected) previous.focus();
     };
   }, [open]);
 
