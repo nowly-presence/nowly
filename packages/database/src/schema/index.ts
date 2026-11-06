@@ -7,3 +7,4 @@ export * from "@nowly/database/schema/announcement";
 export * from "@nowly/database/schema/status";
 export * from "@nowly/database/schema/admin";
 export * from "@nowly/database/schema/creator";
+export * from "@nowly/database/schema/report";

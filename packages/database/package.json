@@ -43,6 +43,8 @@
     "./schema/status/*": "./src/schema/status/*.ts",
     "./schema/admin": "./src/schema/admin/index.ts",
     "./schema/admin/*": "./src/schema/admin/*.ts",
+    "./schema/report": "./src/schema/report/index.ts",
+    "./schema/report/*": "./src/schema/report/*.ts",
     "./schema/creator": "./src/schema/creator/index.ts",
     "./schema/creator/*": "./src/schema/creator/*.ts",
     "./migrate": "./src/migrate.ts"
