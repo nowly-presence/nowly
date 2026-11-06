@@ -35,6 +35,13 @@ const browserOf = (): {
 
 const trimmed = (message: string): string => message.trim().slice(0, REPORT_MESSAGE_MAX_LENGTH);
 
+export const handleReportIdentity: Handler<"REPORT_IDENTITY"> = async () => {
+  const account = await getAccount();
+  return {
+    pseudo: account?.user.discordId ? account.user.name : null
+  };
+};
+
 export const handleReportCreate: Handler<"REPORT_CREATE"> = async ({ slug, message, anonymous, notify, locale }) => {
   const text = trimmed(message);
 

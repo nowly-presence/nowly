@@ -6,7 +6,7 @@ import { handleGetDiagnostic } from "@/background/router/handlers/diagnostics.ha
 import { handleAcknowledgeDiscordIpcIssue, handleConnectNative, handleGetNativeStatus, handleGetUserScriptsStatus, handleRestartNative } from "@/background/router/handlers/native.handlers";
 import { handleBulkToggle, handleBulkUninstall, handleCheckUpdates, handleClearSnooze, handleFetchCatalog, handleGetInstallQueue, handleGetPresenceEngagement, handleGetPresenceSettings, handleGetPresences, handleInstall, handleInstallFromApi, handleInstallLocalZip, handleRetryInstallQueue, handleSetPresenceLike, handleSetPresenceSettings, handleSetSchedule, handleSnooze, handleToggle, handleUninstall, handleUpdate } from "@/background/router/handlers/presences.handlers";
 import { handleGetSettings, handleResetOnboardingForDev, handleSetSettings } from "@/background/router/handlers/settings.handlers";
-import { handleReportCreate, handleReportList, handleReportReply, handleReportSetClosed, handleReportThread } from "@/background/router/handlers/reports.handlers";
+import { handleReportCreate, handleReportIdentity, handleReportList, handleReportReply, handleReportSetClosed, handleReportThread } from "@/background/router/handlers/reports.handlers";
 import { handleDeleteDeviceData, handleExportDeviceData, handleGetOnboarding, handleGetTabState, handleReportPresence, handleSetOnboarding, handleSetTabMuted, handleSyncPresenceScripts } from "@/background/router/handlers/extra.handlers";
 import { handleDeleteCustomActivity, handleGetCustomActivities, handleGetCustomActivityDetection, handleGetCustomImages, handleSaveCustomActivity, handleSetCustomActivityActive, handleUploadCustomImage } from "@/background/router/handlers/custom-activity.handlers";
 import { handleRecordUsageDay, handleSnoozeSupportPrompt } from "@/background/router/handlers/support.handlers";
@@ -95,6 +95,7 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   SET_TAB_MUTED: handleSetTabMuted,
   REPORT_PRESENCE: handleReportPresence,
   REPORT_CREATE: handleReportCreate,
+  REPORT_IDENTITY: handleReportIdentity,
   REPORT_LIST: handleReportList,
   REPORT_THREAD: handleReportThread,
   REPORT_REPLY: handleReportReply,

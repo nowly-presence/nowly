@@ -12,7 +12,9 @@ export type ExtensionRequestType =
   | "SET_ANALYTICS_CONSENT"
   | "NOWLY_SESSION"
   | "GET_ACTIVITY_PUBLICATION_STATUS"
-  | "APPLY_ACTIVITY_PUBLICATION";
+  | "APPLY_ACTIVITY_PUBLICATION"
+  | "REPORT_CREATE"
+  | "REPORT_IDENTITY";
 
 export type ExtensionDeviceInfo = {
   deviceId: string | null;
@@ -26,6 +28,11 @@ export type ExtensionDiagnostic = {
   discordConnected: boolean;
   presenceInstalled: boolean;
   activityDetected: boolean;
+};
+
+export type ExtensionReportResult = {
+  ok: boolean;
+  error?: string;
 };
 
 export type InstalledPresenceInfo = {

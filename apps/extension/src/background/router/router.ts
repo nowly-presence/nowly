@@ -13,7 +13,9 @@ const WEB_TYPES = new Set([
   "GET_DIAGNOSTIC",
   "GET_ANALYTICS_CONSENT",
   "SET_ANALYTICS_CONSENT",
-  "NOWLY_SESSION"
+  "NOWLY_SESSION",
+  "REPORT_CREATE",
+  "REPORT_IDENTITY"
 ]);
 
 export type Handler<K extends RouterMessageType> = (payload: PayloadOf<K>, sender: chrome.runtime.MessageSender) => ResponseOf<K> | Promise<ResponseOf<K>>;

@@ -491,6 +491,12 @@ export type RouterMessageMap = {
       report: ReportSummary;
     }>;
   };
+  REPORT_IDENTITY: {
+    payload: void;
+    response: {
+      pseudo: string | null;
+    };
+  };
   REPORT_LIST: {
     payload: void;
     response: ReportResult<{
