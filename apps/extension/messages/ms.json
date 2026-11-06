@@ -1127,5 +1127,6 @@
   "report.staff.askQuestion": "Soalan",
   "report.staff.askChoices": "Satu pilihan setiap baris (2 hingga 6)",
   "report.staff.askSend": "Hantar soalan",
-  "report.staff.replyPlaceholder": "Balas kepada {name}..."
+  "report.staff.replyPlaceholder": "Balas kepada {name}...",
+  "report.notifyDenied": "Pemberitahuan disekat. Balasan kekal dalam perbualan terbuka anda."
 }

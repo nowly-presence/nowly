@@ -25,5 +25,11 @@
   },
   "contextMenuUnmuteTab": {
     "message": "Udostępnij tę kartę"
+  },
+  "reportNotifyReplyTitle": {
+    "message": "Nowa odpowiedź zespołu Nowly"
+  },
+  "reportNotifyFixedTitle": {
+    "message": "Problem oznaczony jako naprawiony"
   }
 }

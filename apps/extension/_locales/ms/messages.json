@@ -25,5 +25,11 @@
   },
   "contextMenuUnmuteTab": {
     "message": "Kongsi tab ini"
+  },
+  "reportNotifyReplyTitle": {
+    "message": "Balasan baharu daripada pasukan Nowly"
+  },
+  "reportNotifyFixedTitle": {
+    "message": "Masalah ditanda sebagai dibaiki"
   }
 }

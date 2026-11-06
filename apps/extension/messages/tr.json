@@ -1127,5 +1127,6 @@
   "report.staff.askQuestion": "Soru",
   "report.staff.askChoices": "Her satıra bir seçenek (2 ile 6 arası)",
   "report.staff.askSend": "Soruyu gönder",
-  "report.staff.replyPlaceholder": "{name} kişisine yanıt..."
+  "report.staff.replyPlaceholder": "{name} kişisine yanıt...",
+  "report.notifyDenied": "Bildirimler engelli. Yanıtlar açık konuşmalarında kalır."
 }

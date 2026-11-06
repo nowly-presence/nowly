@@ -25,5 +25,11 @@
   },
   "contextMenuUnmuteTab": {
     "message": "Κοινοποίηση αυτής της καρτέλας"
+  },
+  "reportNotifyReplyTitle": {
+    "message": "Νέα απάντηση από την ομάδα του Nowly"
+  },
+  "reportNotifyFixedTitle": {
+    "message": "Το πρόβλημα σημειώθηκε ως διορθωμένο"
   }
 }

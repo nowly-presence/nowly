@@ -1127,5 +1127,6 @@
   "report.staff.askQuestion": "Question",
   "report.staff.askChoices": "One option per line (2 to 6)",
   "report.staff.askSend": "Send question",
-  "report.staff.replyPlaceholder": "Reply to {name}..."
+  "report.staff.replyPlaceholder": "Reply to {name}...",
+  "report.notifyDenied": "Notifications are blocked. Replies stay in your open conversations."
 }

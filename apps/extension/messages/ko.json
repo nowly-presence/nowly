@@ -1127,5 +1127,6 @@
   "report.staff.askQuestion": "질문",
   "report.staff.askChoices": "한 줄에 선택지 하나(2개에서 6개)",
   "report.staff.askSend": "질문 보내기",
-  "report.staff.replyPlaceholder": "{name}에게 답장..."
+  "report.staff.replyPlaceholder": "{name}에게 답장...",
+  "report.notifyDenied": "알림이 차단되어 있습니다. 답변은 진행 중인 대화에 남습니다."
 }

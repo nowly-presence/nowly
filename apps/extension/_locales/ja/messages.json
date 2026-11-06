@@ -25,5 +25,11 @@
   },
   "contextMenuUnmuteTab": {
     "message": "このタブを共有する"
+  },
+  "reportNotifyReplyTitle": {
+    "message": "Nowly チームからの新しい返信"
+  },
+  "reportNotifyFixedTitle": {
+    "message": "問題が修正済みになりました"
   }
 }

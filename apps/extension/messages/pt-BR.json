@@ -1127,5 +1127,6 @@
   "report.staff.askQuestion": "Pergunta",
   "report.staff.askChoices": "Uma opção por linha (2 a 6)",
   "report.staff.askSend": "Enviar pergunta",
-  "report.staff.replyPlaceholder": "Responder a {name}..."
+  "report.staff.replyPlaceholder": "Responder a {name}...",
+  "report.notifyDenied": "As notificações estão bloqueadas. As respostas ficam nas suas conversas abertas."
 }

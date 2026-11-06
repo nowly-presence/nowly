@@ -1127,5 +1127,6 @@
   "report.staff.askQuestion": "Ερώτηση",
   "report.staff.askChoices": "Μία επιλογή ανά γραμμή (2 έως 6)",
   "report.staff.askSend": "Αποστολή ερώτησης",
-  "report.staff.replyPlaceholder": "Απάντηση στον/στην {name}..."
+  "report.staff.replyPlaceholder": "Απάντηση στον/στην {name}...",
+  "report.notifyDenied": "Οι ειδοποιήσεις είναι αποκλεισμένες. Οι απαντήσεις μένουν στις ανοιχτές συζητήσεις σου."
 }

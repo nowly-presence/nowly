@@ -25,5 +25,11 @@
   },
   "contextMenuUnmuteTab": {
     "message": "Bu sekmeyi paylaş"
+  },
+  "reportNotifyReplyTitle": {
+    "message": "Nowly ekibinden yeni yanıt"
+  },
+  "reportNotifyFixedTitle": {
+    "message": "Sorun düzeltildi olarak işaretlendi"
   }
 }

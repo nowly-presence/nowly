@@ -1127,5 +1127,6 @@
   "report.staff.askQuestion": "Frage",
   "report.staff.askChoices": "Eine Option pro Zeile (2 bis 6)",
   "report.staff.askSend": "Frage senden",
-  "report.staff.replyPlaceholder": "Antwort an {name}..."
+  "report.staff.replyPlaceholder": "Antwort an {name}...",
+  "report.notifyDenied": "Benachrichtigungen sind blockiert. Antworten bleiben in deinen offenen Unterhaltungen."
 }

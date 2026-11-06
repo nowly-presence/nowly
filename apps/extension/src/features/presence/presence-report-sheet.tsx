@@ -31,11 +31,18 @@ export const PresenceReportSheet = ({ slug, name, open, onClose }: PresenceRepor
 
   const submit = async () => {
     setSending(true);
+    const granted = notify
+      ? await chrome.permissions
+          .request({
+            permissions: ["notifications"]
+          })
+          .catch(() => false)
+      : false;
     const result = await sendMessage("REPORT_CREATE", {
       slug,
       message,
       anonymous: anonymous || !pseudo,
-      notify,
+      notify: granted,
       locale: LOCALE_LONG_MAP[locale]
     }).catch(() => null);
     setSending(false);
@@ -45,7 +52,7 @@ export const PresenceReportSheet = ({ slug, name, open, onClose }: PresenceRepor
       return;
     }
 
-    toast(t("toast.reportSent"));
+    toast(notify && !granted ? t("report.notifyDenied") : t("toast.reportSent"));
     setMessage("");
     onClose();
     push({

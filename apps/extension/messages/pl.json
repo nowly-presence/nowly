@@ -1127,5 +1127,6 @@
   "report.staff.askQuestion": "Pytanie",
   "report.staff.askChoices": "Jedna opcja w wierszu (od 2 do 6)",
   "report.staff.askSend": "Wyślij pytanie",
-  "report.staff.replyPlaceholder": "Odpowiedz: {name}..."
+  "report.staff.replyPlaceholder": "Odpowiedz: {name}...",
+  "report.notifyDenied": "Powiadomienia są zablokowane. Odpowiedzi zostaną w otwartych rozmowach."
 }

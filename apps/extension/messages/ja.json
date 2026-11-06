@@ -1127,5 +1127,6 @@
   "report.staff.askQuestion": "質問",
   "report.staff.askChoices": "1 行に 1 つの選択肢(2 から 6 個)",
   "report.staff.askSend": "質問を送信",
-  "report.staff.replyPlaceholder": "{name} に返信..."
+  "report.staff.replyPlaceholder": "{name} に返信...",
+  "report.notifyDenied": "通知がブロックされています。返信は進行中の会話に残ります。"
 }
