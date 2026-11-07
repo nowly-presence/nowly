@@ -307,7 +307,17 @@ export const fetchImage = async (url: URL, service: ImageProxyService): Promise<
   }
 };
 
-export const getPublicBaseUrl = (c: Context): string => process.env.PUBLIC_URL || new URL(c.req.url).origin;
+const FORWARDED_PROTOCOLS = new Set(["http", "https"]);
+
+export const getPublicBaseUrl = (c: Context): string => {
+  if (process.env.PUBLIC_URL) return process.env.PUBLIC_URL.replace(/\/$/, "");
+
+  const origin = new URL(c.req.url);
+  const forwarded = c.req.header("x-forwarded-proto")?.split(",")[0]?.trim().toLowerCase();
+  const protocol = forwarded && FORWARDED_PROTOCOLS.has(forwarded) ? forwarded : origin.protocol.replace(":", "");
+
+  return `${protocol}://${origin.host}`;
+};
 
 export const CACHED_IMAGE_TTL = CACHED_IMAGE_TTL_SECONDS;
 
