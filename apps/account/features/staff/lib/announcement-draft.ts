@@ -75,10 +75,12 @@ export const textsChanged = (draft: AnnouncementDraft, item: Announcement): bool
   return draft.title.trim() !== source.title || draft.description.trim() !== source.description || draft.content.trim() !== source.content;
 };
 
-export const announcementStatus = (item: Announcement, now: number): AnnouncementStatus => {
+export const announcementStatus = (item: Announcement, now: number): AnnouncementStatus | null => {
   if ((item.expiresAt && Date.parse(item.expiresAt) <= now) || (item.endsAt && Date.parse(item.endsAt) <= now)) return "ended";
 
-  return item.startsAt && Date.parse(item.startsAt) > now ? "scheduled" : "live";
+  if (item.startsAt && Date.parse(item.startsAt) > now) return "scheduled";
+
+  return item.endsAt || item.expiresAt ? "live" : null;
 };
 
 const byteLength = (value: unknown): number => new TextEncoder().encode(JSON.stringify(value)).byteLength;

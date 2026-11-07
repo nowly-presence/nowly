@@ -19,6 +19,7 @@ export const StaffAnnouncementRow = ({ item, now, busy, onEdit, onTogglePinned, 
   const t = useTranslations("staff");
   const format = useFormatter();
   const texts = sourceTexts(item);
+  const status = announcementStatus(item, now);
   const date = (iso: string): string =>
     format.dateTime(new Date(iso), {
       dateStyle: "medium",
@@ -36,7 +37,7 @@ export const StaffAnnouncementRow = ({ item, now, busy, onEdit, onTogglePinned, 
         <p className="flex flex-wrap items-center gap-2 text-sm font-medium text-foreground">
           <span className="truncate">{texts.title}</span>
           <Badge variant="outline">{t(`announcements-kind-${item.kind}`)}</Badge>
-          <Badge variant="outline">{t(`announcements-status-${announcementStatus(item, now)}`)}</Badge>
+          {status ? <Badge variant="outline">{t(`announcements-status-${status}`)}</Badge> : null}
           {item.pinned ? (
             <Badge variant="outline">
               <RiPushpinLine data-icon="inline-start" />
