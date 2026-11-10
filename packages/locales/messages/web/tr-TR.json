@@ -882,13 +882,6 @@
     "description": "Bu sayfa mevcut değil ya da taşındı.",
     "home": "Ana sayfaya dön"
   },
-  "cookie-banner": {
-    "title": "Çerez bilgileri",
-    "message": "İsteğe bağlı toplu istatistikler onayınıza kadar kapalıdır. Dil çerezi gereklidir. Seçiminizi Verileriniz sayfasında değiştirebilirsiniz.",
-    "learn-more": "Çerez politikasını okuyun",
-    "accept": "İstatistiklere izin ver",
-    "decline": "İstatistikleri reddet"
-  },
   "privacy-page": {
     "badge": "Gizlilik",
     "title": "Gizlilik Politikası",
@@ -926,8 +919,8 @@
         "body": "Masaüstü uygulaması, NowlyClient önbellek dizininde <code>nowly-host.log</code> adlı yerel bir günlük yazabilir, örneğin:<ul><li>Windows: <code>%LOCALAPPDATA%\\NowlyClient\\</code></li><li>macOS: <code>~/Library/Caches/NowlyClient/</code></li><li>Linux: <code>~/.cache/NowlyClient/</code></li></ul>Dosya, Discord'a gönderilen zaman damgalarını ve etkinlik ayrıntılarını içerebilir. Bilgisayarında kalır ve sunucularımıza yüklenmez. İstediğin zaman silebilirsin."
       },
       {
-        "title": "Kullanım istatistikleri (isteğe bağlı katılım)",
-        "body": "Site ve uzantı ayrı onay gerektirir. API yalnızca izinli olayları kendi barındırdığımız Umami’ye (stats.nowly.me) iletir: sayfa türü, indirme tarayıcısı, işlem, kaynak, etkinlik kategorisi/kökeni ve kohort günü/dönüş aşaması. Hesap veya cihaz kimliği, gerçek URL, aramalar veya etkinlik içeriği gönderilmez. D1/D7/D30 yerel tarihler ve tekilleştirme işaretlerini kullanır, kimlik iletmez. Onayı geri çekmek gelecekteki gönderimleri durdurur ve yerel işaretleri siler; geri çekme olayı gönderilmez. Başlamış istekler geri alınamaz. API güvenlik için IP işleyebilir ancak iletmez. İşlevsel cihaz hizmetleri ayrıdır."
+        "title": "Kullanım istatistikleri",
+        "body": "Web sitesi: kendi sunucumuzda barındırılan Umami betiği (stats.nowly.me) sayfa görüntülemelerini, yönlendireni, ülkeyi, tarayıcıyı, cihazı ve dili ölçer; ayrıca birkaç olayı (uzantı indirme tıklaması, kaldırma sayfası) kaydeder. Çerez ayarlamaz; kalıcı ziyaretçi kimliği veya tam IP adresi saklamaz; oturumlar teknik verilerin tek yönlü bir özetinden türetilir. Uzantı: ayrı onay (opt-in); API’miz Umami’ye kapalı bir listedeki olayları aktarır: eylem, kaynak, presence kategorisi/kaynağı ve kohort günü/geri dönüş aşaması. Hesap/cihaz kimliği, gerçek sayfa URL’si, arama, etkinlik metni veya izlenen içerik gönderilmez. Geri dönüş pencereleri (D1/D7/D30) iletilen bir kimlik değil, yerel tarihler ve tekilleştirme işaretleri kullanır. Onayın geri çekilmesi sonraki gönderimleri durdurur ve bu yerel işaretleri siler; geri çekme olayı gönderilmez. Yola çıkmış bir istek geri alınamaz. Teknik IP verileri güvenlik için API’mize ulaşabilir ancak iletilmez. Cihazın işlevsel hizmetleri ayrı kalır."
       },
       {
         "title": "Nowly hesabı ve eşitleme (isteğe bağlı)",
@@ -939,7 +932,7 @@
       },
       {
         "title": "Yasal Dayanaklar (GDPR Madde 6)",
-        "body": "<ul><li><strong>İsteğe bağlı kullanım istatistikleri</strong>: rıza (Madde 6(1)(a)). Uzantıda istediğin zaman geri çekebilirsin, geri çekmeden önceki işlemin hukuka uygunluğunu etkilemez.</li><li><strong>Dil çerezi ve dokümantasyon çerezi</strong>: talep ettiğin hizmet için gerekli ve/veya dilini hatırlamada meşru menfaat (Madde 6(1)(b) ve/veya (f)).</li><li><strong>Tema ve çerez bildirimi bayrakları</strong> (yerel depolama): kullanılabilir bir arayüzde meşru menfaat (Madde 6(1)(f)).</li><li><strong>Görsel proxy</strong>: tarayıcında her üçüncü taraf CDN'sini yüklemeden katalog ve etkinlik görsellerini görüntülemede meşru menfaat (Madde 6(1)(f)).</li><li><strong>İsteğe bağlı Discord girişi</strong>: talep ettiğin hesap özelliğinin yerine getirilmesi (Madde 6(1)(b)) ve gerektiğinde API'yi güvence altına almadaki meşru menfaatimiz (Madde 6(1)(f)).</li><li><strong>GitHub, Discord topluluğu, Ko-fi, GitHub Sponsors</strong>: bu hizmetlere göndermeyi seçtiğin veriler kendi politikalarına göre işlenir; yanıt vermek için bize yönelttiğin herkese açık issue'ları veya mesajları okuruz (Madde 6(1)(b) veya (f))."
+        "body": "<ul><li><strong>Web sitesi kullanım istatistikleri</strong>: siteyi anlamak ve geliştirmek konusunda meşru menfaat (md. 6/1-f); çerez ayarlanmaz. <strong>Uzantı kullanım istatistikleri (opt-in)</strong>: açık rıza (md. 6/1-a); uzantıda istediğiniz zaman geri çekebilirsiniz, geri çekmeden önceki işlemenin hukuka uygunluğu etkilenmez.</li><li><strong>Dil çerezi ve dokümantasyon çerezi</strong>: talep ettiğin hizmet için gerekli ve/veya dilini hatırlamada meşru menfaat (Madde 6(1)(b) ve/veya (f)).</li><li><strong>Tema ve çerez bildirimi bayrakları</strong> (yerel depolama): kullanılabilir bir arayüzde meşru menfaat (Madde 6(1)(f)).</li><li><strong>Görsel proxy</strong>: tarayıcında her üçüncü taraf CDN'sini yüklemeden katalog ve etkinlik görsellerini görüntülemede meşru menfaat (Madde 6(1)(f)).</li><li><strong>İsteğe bağlı Discord girişi</strong>: talep ettiğin hesap özelliğinin yerine getirilmesi (Madde 6(1)(b)) ve gerektiğinde API'yi güvence altına almadaki meşru menfaatimiz (Madde 6(1)(f)).</li><li><strong>GitHub, Discord topluluğu, Ko-fi, GitHub Sponsors</strong>: bu hizmetlere göndermeyi seçtiğin veriler kendi politikalarına göre işlenir; yanıt vermek için bize yönelttiğin herkese açık issue'ları veya mesajları okuruz (Madde 6(1)(b) veya (f))."
       },
       {
         "title": "Saklama",
@@ -955,7 +948,7 @@
       },
       {
         "title": "Çerezler",
-        "body": "Tarayıcı tema ve istatistik seçimini yerel kaydeder. Uzantı onay ile yerel dönüş/tekilleştirme tarihlerini saklar. Analitik çerezi veya kalıcı ziyaretçi kimliği oluşturulmaz. Seçimi silmek onayı sıfırlar; yeni onaya kadar istatistikler kapalı kalır."
+        "body": "Tarayıcı temayı yerel olarak saklar. Uzantı onayı ve yerel geri dönüş/tekilleştirme tarihlerini saklar. Web sitesi istatistikleri (kendi sunucumuzda barındırılan Umami) çerez veya kalıcı ziyaretçi kimliği ayarlamaz. Uzantı onayının geri çekilmesi uzantı istatistiklerini durdurur."
       },
       {
         "title": "Güvenlik",
@@ -1081,7 +1074,7 @@
     "title": "Çerez Politikası",
     "description": "nowly.me ve docs.nowly.me üzerinde kullanılan çerezler ve yerel depolama.",
     "last-updated": "2026-10-25",
-    "intro": "Tarayıcı tema ve istatistik seçimini yerel kaydeder. Uzantı onay ile yerel dönüş/tekilleştirme tarihlerini saklar. Analitik çerezi veya kalıcı ziyaretçi kimliği oluşturulmaz. Seçimi silmek onayı sıfırlar; yeni onaya kadar istatistikler kapalı kalır.",
+    "intro": "Tarayıcı temayı yerel olarak saklar. Uzantı onayı ve yerel geri dönüş/tekilleştirme tarihlerini saklar. Web sitesi istatistikleri (kendi sunucumuzda barındırılan Umami) çerez veya kalıcı ziyaretçi kimliği ayarlamaz. Uzantı onayının geri çekilmesi uzantı istatistiklerini durdurur.",
     "sections": [
       {
         "title": "Kesinlikle gerekli",
@@ -1093,11 +1086,11 @@
       },
       {
         "title": "Yerel depolama",
-        "body": "Tarayıcı tema ve istatistik seçimini yerel kaydeder. Uzantı onay ile yerel dönüş/tekilleştirme tarihlerini saklar. Analitik çerezi veya kalıcı ziyaretçi kimliği oluşturulmaz. Seçimi silmek onayı sıfırlar; yeni onaya kadar istatistikler kapalı kalır."
+        "body": "Tarayıcı temayı yerel olarak saklar. Uzantı onayı ve yerel geri dönüş/tekilleştirme tarihlerini saklar. Web sitesi istatistikleri (kendi sunucumuzda barındırılan Umami) çerez veya kalıcı ziyaretçi kimliği ayarlamaz. Uzantı onayının geri çekilmesi uzantı istatistiklerini durdurur."
       },
       {
-        "title": "Analiz çerezleri",
-        "body": "Site ve uzantı ayrı onay gerektirir. API yalnızca izinli olayları kendi barındırdığımız Umami’ye (stats.nowly.me) iletir: sayfa türü, indirme tarayıcısı, işlem, kaynak, etkinlik kategorisi/kökeni ve kohort günü/dönüş aşaması. Hesap veya cihaz kimliği, gerçek URL, aramalar veya etkinlik içeriği gönderilmez. D1/D7/D30 yerel tarihler ve tekilleştirme işaretlerini kullanır, kimlik iletmez. Onayı geri çekmek gelecekteki gönderimleri durdurur ve yerel işaretleri siler; geri çekme olayı gönderilmez. Başlamış istekler geri alınamaz. API güvenlik için IP işleyebilir ancak iletmez. İşlevsel cihaz hizmetleri ayrıdır."
+        "title": "Kullanım istatistikleri",
+        "body": "Web sitesi: kendi sunucumuzda barındırılan Umami betiği (stats.nowly.me) sayfa görüntülemelerini, yönlendireni, ülkeyi, tarayıcıyı, cihazı ve dili ölçer; ayrıca birkaç olayı (uzantı indirme tıklaması, kaldırma sayfası) kaydeder. Çerez ayarlamaz; kalıcı ziyaretçi kimliği veya tam IP adresi saklamaz; oturumlar teknik verilerin tek yönlü bir özetinden türetilir. Uzantı: ayrı onay (opt-in); API’miz Umami’ye kapalı bir listedeki olayları aktarır: eylem, kaynak, presence kategorisi/kaynağı ve kohort günü/geri dönüş aşaması. Hesap/cihaz kimliği, gerçek sayfa URL’si, arama, etkinlik metni veya izlenen içerik gönderilmez. Geri dönüş pencereleri (D1/D7/D30) iletilen bir kimlik değil, yerel tarihler ve tekilleştirme işaretleri kullanır. Onayın geri çekilmesi sonraki gönderimleri durdurur ve bu yerel işaretleri siler; geri çekme olayı gönderilmez. Yola çıkmış bir istek geri alınamaz. Teknik IP verileri güvenlik için API’mize ulaşabilir ancak iletilmez. Cihazın işlevsel hizmetleri ayrı kalır."
       },
       {
         "title": "Reklamcılık",
@@ -1144,9 +1137,7 @@
     "delete-confirm": "Bu, Nowly'nin bu cihaz için sakladığı her şeyi kalıcı olarak siler. Bu işlem geri alınamaz.",
     "export-success": "Verilerin indirildi.",
     "delete-success": "Verilerin silindi.",
-    "action-error": "İşlem tamamlanamadı. Tekrar dene; sorun devam ederse destek ekibiyle iletişime geç.",
-    "site-title": "Site istatistikleri",
-    "site-description": "Kalıcı ziyaretçi kimliği olmadan isteğe bağlı sayfa ve indirme tıklaması sayımları. Uzantıdan ayrı bir seçimdir."
+    "action-error": "İşlem tamamlanamadı. Tekrar dene; sorun devam ederse destek ekibiyle iletişime geç."
   },
   "faqPage": {
     "eyebrow": "SSS",

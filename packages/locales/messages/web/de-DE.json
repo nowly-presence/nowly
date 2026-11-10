@@ -882,13 +882,6 @@
     "description": "Diese Seite existiert nicht oder wurde verschoben.",
     "home": "Zurück zur Startseite"
   },
-  "cookie-banner": {
-    "title": "Informationen zu Cookies",
-    "message": "Optionale aggregierte Produktstatistiken bleiben ohne Zustimmung aus. Das Sprachcookie bleibt notwendig. Die Auswahl lässt sich unter Ihre Daten ändern.",
-    "learn-more": "Cookie-Richtlinie lesen",
-    "accept": "Statistiken erlauben",
-    "decline": "Statistiken ablehnen"
-  },
   "privacy-page": {
     "badge": "Datenschutz",
     "title": "Datenschutzerklärung",
@@ -926,8 +919,8 @@
         "body": "Die Desktop-App kann ein lokales Log namens <code>nowly-host.log</code> im NowlyClient-Cache-Verzeichnis schreiben, zum Beispiel:<ul><li>Windows: <code>%LOCALAPPDATA%\\NowlyClient\\</code></li><li>macOS: <code>~/Library/Caches/NowlyClient/</code></li><li>Linux: <code>~/.cache/NowlyClient/</code></li></ul>Die Datei kann Zeitstempel und an Discord gesendete Aktivitätsdetails enthalten. Sie bleibt auf deinem Computer und wird nicht auf unsere Server hochgeladen. Du kannst sie jederzeit löschen."
       },
       {
-        "title": "Nutzungsstatistiken (opt-in)",
-        "body": "Website und Erweiterung benötigen getrennte Einwilligungen. Unsere API leitet nur erlaubte Ereignisse an selbst gehostetes Umami (stats.nowly.me) weiter: Seitentyp, Downloadbrowser, Aktion, Quelle, Präsenzkategorie/Herkunft und Kohortentag/Rückkehrstufe. Keine Konto- oder Gerätekennung, echte URL, Suche oder Aktivitätsinhalte werden an Umami gesendet. D1/D7/D30 verwenden lokale Datums- und Deduplizierungsmarkierungen, keine übertragene Kennung. Widerruf stoppt künftige Sendungen und löscht lokale Markierungen; kein Widerrufsereignis wird gesendet. Laufende Anfragen lassen sich nicht zurückrufen. Die API kann IP-Daten zur Sicherheit verarbeiten, leitet sie aber nicht weiter. Funktionale Gerätedienste bleiben getrennt."
+        "title": "Nutzungsstatistiken",
+        "body": "Website: Das selbst gehostete Umami-Skript (stats.nowly.me) misst Seitenaufrufe, Referrer, Land, Browser, Gerät und Sprache sowie einige Ereignisse (Klick auf den Erweiterungs-Download, Deinstallationsseite). Es setzt kein Cookie und speichert weder eine dauerhafte Besucher-ID noch die vollständige IP-Adresse; Sitzungen werden aus einem Einweg-Hash technischer Daten abgeleitet. Erweiterung: separate Einwilligung (Opt-in); unsere API leitet Ereignisse einer festen Liste an Umami weiter: Aktion, Quelle, Presence-Kategorie/-Herkunft sowie Kohortentag/Rückkehr-Meilenstein. Es werden keine Konto-/Geräte-ID, echte Seiten-URL, Suche, Aktivitätstexte oder angesehene Inhalte gesendet. Die Rückkehrfenster (T1/T7/T30) nutzen lokale Daten und Deduplizierungsmarker, keine übertragene Kennung. Ein Widerruf stoppt künftige Übermittlungen und löscht diese lokalen Marker; es wird kein Widerrufsereignis gesendet. Eine bereits laufende Anfrage kann nicht zurückgerufen werden. Technische IP-Daten können zur Sicherheit unsere API erreichen, werden aber nicht weitergeleitet. Funktionale Gerätedienste bleiben getrennt."
       },
       {
         "title": "Nowly-Konto und Synchronisierung (freiwillig)",
@@ -939,7 +932,7 @@
       },
       {
         "title": "Rechtsgrundlagen (DSGVO Art. 6)",
-        "body": "<ul><li><strong>Opt-in-Nutzungsstatistiken</strong>: Einwilligung (Art. 6 Abs. 1 lit. a). Du kannst sie jederzeit in der Erweiterung widerrufen, ohne die Rechtmäßigkeit der Verarbeitung vor dem Widerruf zu berühren.</li><li><strong>Sprach-Cookie und Dokumentations-Cookie</strong>: erforderlich für den angeforderten Dienst und/oder berechtigtes Interesse, deine Sprache zu merken (Art. 6 Abs. 1 lit. b und/oder f).</li><li><strong>Theme- und Cookie-Hinweis-Flags</strong> (lokaler Speicher): berechtigtes Interesse an einer nutzbaren Oberfläche (Art. 6 Abs. 1 lit. f).</li><li><strong>Bild-Proxy</strong>: berechtigtes Interesse, Katalog- und Aktivitäts-Artwork anzuzeigen, ohne jedes Drittanbieter-CDN in deinem Browser zu laden (Art. 6 Abs. 1 lit. f).</li><li><strong>Optionaler Discord-Login</strong>: Erfüllung der von dir angeforderten Kontofunktion (Art. 6 Abs. 1 lit. b) und, wo nötig, unser berechtigtes Interesse an der Absicherung der API (Art. 6 Abs. 1 lit. f).</li><li><strong>GitHub, Discord-Community, Ko-fi, GitHub Sponsors</strong>: Daten, die du an diese Dienste sendest, werden nach deren Richtlinien verarbeitet; wir lesen öffentliche Issues oder Nachrichten, die du an uns richtest, um zu antworten (Art. 6 Abs. 1 lit. b oder f).</li></ul>"
+        "body": "<ul><li><strong>Website-Nutzungsstatistiken</strong>: berechtigtes Interesse am Verständnis und der Verbesserung der Website (Art. 6 Abs. 1 lit. f); es wird kein Cookie gesetzt. <strong>Nutzungsstatistiken der Erweiterung (Opt-in)</strong>: Einwilligung (Art. 6 Abs. 1 lit. a), die Sie jederzeit in der Erweiterung widerrufen können, ohne die Rechtmäßigkeit der bisherigen Verarbeitung zu berühren.</li><li><strong>Sprach-Cookie und Dokumentations-Cookie</strong>: erforderlich für den angeforderten Dienst und/oder berechtigtes Interesse, deine Sprache zu merken (Art. 6 Abs. 1 lit. b und/oder f).</li><li><strong>Theme- und Cookie-Hinweis-Flags</strong> (lokaler Speicher): berechtigtes Interesse an einer nutzbaren Oberfläche (Art. 6 Abs. 1 lit. f).</li><li><strong>Bild-Proxy</strong>: berechtigtes Interesse, Katalog- und Aktivitäts-Artwork anzuzeigen, ohne jedes Drittanbieter-CDN in deinem Browser zu laden (Art. 6 Abs. 1 lit. f).</li><li><strong>Optionaler Discord-Login</strong>: Erfüllung der von dir angeforderten Kontofunktion (Art. 6 Abs. 1 lit. b) und, wo nötig, unser berechtigtes Interesse an der Absicherung der API (Art. 6 Abs. 1 lit. f).</li><li><strong>GitHub, Discord-Community, Ko-fi, GitHub Sponsors</strong>: Daten, die du an diese Dienste sendest, werden nach deren Richtlinien verarbeitet; wir lesen öffentliche Issues oder Nachrichten, die du an uns richtest, um zu antworten (Art. 6 Abs. 1 lit. b oder f).</li></ul>"
       },
       {
         "title": "Aufbewahrung",
@@ -955,7 +948,7 @@
       },
       {
         "title": "Cookies",
-        "body": "Der Browser speichert Theme und Statistikentscheidung lokal. Die Erweiterung speichert Einwilligung und lokale Rückkehr-/Deduplizierungsdaten. Es gibt kein Analysecookie und keine dauerhafte Besucherkennung. Löschen setzt die Einwilligung zurück; Statistiken bleiben ohne erneute Zustimmung aus."
+        "body": "Der Browser speichert das Design lokal. Die Erweiterung speichert die Einwilligung und lokale Rückkehr-/Deduplizierungsdaten. Die Website-Statistiken (selbst gehostetes Umami) setzen kein Cookie und keine dauerhafte Besucher-ID. Der Widerruf der Einwilligung in der Erweiterung beendet deren Statistiken."
       },
       {
         "title": "Sicherheit",
@@ -1081,7 +1074,7 @@
     "title": "Cookie-Richtlinie",
     "description": "Cookies und lokaler Speicher, genutzt auf nowly.me und docs.nowly.me.",
     "last-updated": "2026-10-25",
-    "intro": "Der Browser speichert Theme und Statistikentscheidung lokal. Die Erweiterung speichert Einwilligung und lokale Rückkehr-/Deduplizierungsdaten. Es gibt kein Analysecookie und keine dauerhafte Besucherkennung. Löschen setzt die Einwilligung zurück; Statistiken bleiben ohne erneute Zustimmung aus.",
+    "intro": "Der Browser speichert das Design lokal. Die Erweiterung speichert die Einwilligung und lokale Rückkehr-/Deduplizierungsdaten. Die Website-Statistiken (selbst gehostetes Umami) setzen kein Cookie und keine dauerhafte Besucher-ID. Der Widerruf der Einwilligung in der Erweiterung beendet deren Statistiken.",
     "sections": [
       {
         "title": "Unbedingt erforderlich",
@@ -1093,11 +1086,11 @@
       },
       {
         "title": "Lokaler Speicher",
-        "body": "Der Browser speichert Theme und Statistikentscheidung lokal. Die Erweiterung speichert Einwilligung und lokale Rückkehr-/Deduplizierungsdaten. Es gibt kein Analysecookie und keine dauerhafte Besucherkennung. Löschen setzt die Einwilligung zurück; Statistiken bleiben ohne erneute Zustimmung aus."
+        "body": "Der Browser speichert das Design lokal. Die Erweiterung speichert die Einwilligung und lokale Rückkehr-/Deduplizierungsdaten. Die Website-Statistiken (selbst gehostetes Umami) setzen kein Cookie und keine dauerhafte Besucher-ID. Der Widerruf der Einwilligung in der Erweiterung beendet deren Statistiken."
       },
       {
-        "title": "Analytics-Cookies",
-        "body": "Website und Erweiterung benötigen getrennte Einwilligungen. Unsere API leitet nur erlaubte Ereignisse an selbst gehostetes Umami (stats.nowly.me) weiter: Seitentyp, Downloadbrowser, Aktion, Quelle, Präsenzkategorie/Herkunft und Kohortentag/Rückkehrstufe. Keine Konto- oder Gerätekennung, echte URL, Suche oder Aktivitätsinhalte werden an Umami gesendet. D1/D7/D30 verwenden lokale Datums- und Deduplizierungsmarkierungen, keine übertragene Kennung. Widerruf stoppt künftige Sendungen und löscht lokale Markierungen; kein Widerrufsereignis wird gesendet. Laufende Anfragen lassen sich nicht zurückrufen. Die API kann IP-Daten zur Sicherheit verarbeiten, leitet sie aber nicht weiter. Funktionale Gerätedienste bleiben getrennt."
+        "title": "Nutzungsstatistiken",
+        "body": "Website: Das selbst gehostete Umami-Skript (stats.nowly.me) misst Seitenaufrufe, Referrer, Land, Browser, Gerät und Sprache sowie einige Ereignisse (Klick auf den Erweiterungs-Download, Deinstallationsseite). Es setzt kein Cookie und speichert weder eine dauerhafte Besucher-ID noch die vollständige IP-Adresse; Sitzungen werden aus einem Einweg-Hash technischer Daten abgeleitet. Erweiterung: separate Einwilligung (Opt-in); unsere API leitet Ereignisse einer festen Liste an Umami weiter: Aktion, Quelle, Presence-Kategorie/-Herkunft sowie Kohortentag/Rückkehr-Meilenstein. Es werden keine Konto-/Geräte-ID, echte Seiten-URL, Suche, Aktivitätstexte oder angesehene Inhalte gesendet. Die Rückkehrfenster (T1/T7/T30) nutzen lokale Daten und Deduplizierungsmarker, keine übertragene Kennung. Ein Widerruf stoppt künftige Übermittlungen und löscht diese lokalen Marker; es wird kein Widerrufsereignis gesendet. Eine bereits laufende Anfrage kann nicht zurückgerufen werden. Technische IP-Daten können zur Sicherheit unsere API erreichen, werden aber nicht weitergeleitet. Funktionale Gerätedienste bleiben getrennt."
       },
       {
         "title": "Werbung",
@@ -1144,9 +1137,7 @@
     "delete-confirm": "Dies löscht dauerhaft alles, was Nowly für dieses Gerät gespeichert hat. Dies kann nicht rückgängig gemacht werden.",
     "export-success": "Deine Daten wurden heruntergeladen.",
     "delete-success": "Deine Daten wurden gelöscht.",
-    "action-error": "Die Anfrage konnte nicht abgeschlossen werden. Versuche es erneut oder wende dich an den Support, wenn das Problem bestehen bleibt.",
-    "site-title": "Website-Statistiken",
-    "site-description": "Optionale Seiten- und Downloadklick-Zählungen ohne dauerhafte Besucherkennung. Unabhängig von der Erweiterung."
+    "action-error": "Die Anfrage konnte nicht abgeschlossen werden. Versuche es erneut oder wende dich an den Support, wenn das Problem bestehen bleibt."
   },
   "faqPage": {
     "eyebrow": "FAQ",

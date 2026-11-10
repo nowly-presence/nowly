@@ -882,13 +882,6 @@
     "description": "This page does not exist or has moved.",
     "home": "Back home"
   },
-  "cookie-banner": {
-    "title": "Cookie information",
-    "message": "Optional aggregate product statistics are off until you accept. Your language cookie remains necessary. Change your choice on the Your data page.",
-    "learn-more": "Read the cookie policy",
-    "accept": "Accept statistics",
-    "decline": "Decline statistics"
-  },
   "privacy-page": {
     "badge": "Privacy",
     "title": "Privacy Policy",
@@ -926,8 +919,8 @@
         "body": "The desktop app may write a local log named <code>nowly-host.log</code> under the NowlyClient cache directory, for example:<ul><li>Windows: <code>%LOCALAPPDATA%\\NowlyClient\\</code></li><li>macOS: <code>~/Library/Caches/NowlyClient/</code></li><li>Linux: <code>~/.cache/NowlyClient/</code></li></ul>The file can include timestamps and activity details sent to Discord. It stays on your computer and is not uploaded to our servers. You may delete it at any time."
       },
       {
-        "title": "Usage statistics (opt-in)",
-        "body": "Website and extension statistics require separate opt-ins. Our API relays allowlisted events to self-hosted Umami (stats.nowly.me): coarse page type, download browser, action, source, presence category/origin and cohort day/return milestone. No account/device ID, real page URL, search, activity text or watched content is sent to Umami. Extension return windows (D1/D7/D30) use local dates and deduplication markers, not a transmitted identifier. Withdrawal stops future dispatch and erases these local markers; no withdrawal event is sent. An in-flight request cannot be recalled. Technical IP data may reach our API for security but is not forwarded. Functional device services remain separate."
+        "title": "Usage statistics",
+        "body": "Website: the self-hosted Umami script (stats.nowly.me) measures page views, referrer, country, browser, device and language, plus a few events (extension download click, uninstall page). It sets no cookie and stores no persistent visitor ID or full IP address; sessions are derived from a one-way hash of technical data. Extension: separate opt-in; our API relays allowlisted events to Umami: action, source, presence category/origin and cohort day/return milestone. No account/device ID, real page URL, search, activity text or watched content is sent. Extension return windows (D1/D7/D30) use local dates and deduplication markers, not a transmitted identifier. Withdrawing stops future dispatch and erases these local markers; no withdrawal event is sent. An in-flight request cannot be recalled. Technical IP data may reach our API for security but is not forwarded. Functional device services remain separate."
       },
       {
         "title": "Nowly account and sync (optional)",
@@ -939,7 +932,7 @@
       },
       {
         "title": "Legal bases (GDPR Art. 6)",
-        "body": "<ul><li><strong>Opt-in usage statistics</strong>: consent (Art. 6(1)(a)). You may withdraw it in the extension at any time, without affecting the lawfulness of processing before withdrawal.</li><li><strong>Language cookie and documentation cookie</strong>: necessary for the service you request and/or legitimate interest in remembering your language (Art. 6(1)(b) and/or (f)).</li><li><strong>Theme and cookie-notice flags</strong> (local storage): legitimate interest in a usable interface (Art. 6(1)(f)).</li><li><strong>Image proxy</strong>: legitimate interest in displaying catalogue and activity artwork without loading every third-party CDN in your browser (Art. 6(1)(f)).</li><li><strong>Optional Discord login</strong>: performance of the account feature you request (Art. 6(1)(b)) and, where needed, our legitimate interest in securing the API (Art. 6(1)(f)).</li><li><strong>GitHub, Discord community, Ko-fi, GitHub Sponsors</strong>: data you choose to send to those services is processed under their policies; we read public issues or messages you address to us in order to reply (Art. 6(1)(b) or (f)).</li></ul>"
+        "body": "<ul><li><strong>Website usage statistics</strong>: legitimate interest in understanding and improving the site (Art. 6(1)(f)); no cookie is set. <strong>Extension usage statistics (opt-in)</strong>: consent (Art. 6(1)(a)), which you may withdraw in the extension at any time, without affecting the lawfulness of processing before withdrawal.</li><li><strong>Language cookie and documentation cookie</strong>: necessary for the service you request and/or legitimate interest in remembering your language (Art. 6(1)(b) and/or (f)).</li><li><strong>Theme and cookie-notice flags</strong> (local storage): legitimate interest in a usable interface (Art. 6(1)(f)).</li><li><strong>Image proxy</strong>: legitimate interest in displaying catalogue and activity artwork without loading every third-party CDN in your browser (Art. 6(1)(f)).</li><li><strong>Optional Discord login</strong>: performance of the account feature you request (Art. 6(1)(b)) and, where needed, our legitimate interest in securing the API (Art. 6(1)(f)).</li><li><strong>GitHub, Discord community, Ko-fi, GitHub Sponsors</strong>: data you choose to send to those services is processed under their policies; we read public issues or messages you address to us in order to reply (Art. 6(1)(b) or (f)).</li></ul>"
       },
       {
         "title": "Retention",
@@ -955,7 +948,7 @@
       },
       {
         "title": "Cookies",
-        "body": "The browser stores theme and the yes/no statistics choice locally. The extension stores consent and local return/deduplication dates. No analytics cookie or persistent visitor ID is created. Deleting these choices resets consent; statistics remain off until a new opt-in."
+        "body": "The browser stores the theme locally. The extension stores consent and local return/deduplication dates. Website statistics (self-hosted Umami) set no cookie and no persistent visitor ID. Withdrawing extension consent stops extension statistics."
       },
       {
         "title": "Security",
@@ -1081,7 +1074,7 @@
     "title": "Cookie Policy",
     "description": "Cookies and local storage used on nowly.me and docs.nowly.me.",
     "last-updated": "2026-10-25",
-    "intro": "The browser stores theme and the yes/no statistics choice locally. The extension stores consent and local return/deduplication dates. No analytics cookie or persistent visitor ID is created. Deleting these choices resets consent; statistics remain off until a new opt-in.",
+    "intro": "The browser stores the theme locally. The extension stores consent and local return/deduplication dates. Website statistics (self-hosted Umami) set no cookie and no persistent visitor ID. Withdrawing extension consent stops extension statistics.",
     "sections": [
       {
         "title": "Strictly necessary",
@@ -1093,11 +1086,11 @@
       },
       {
         "title": "Local storage",
-        "body": "The browser stores theme and the yes/no statistics choice locally. The extension stores consent and local return/deduplication dates. No analytics cookie or persistent visitor ID is created. Deleting these choices resets consent; statistics remain off until a new opt-in."
+        "body": "The browser stores the theme locally. The extension stores consent and local return/deduplication dates. Website statistics (self-hosted Umami) set no cookie and no persistent visitor ID. Withdrawing extension consent stops extension statistics."
       },
       {
-        "title": "Analytics cookies",
-        "body": "Website and extension statistics require separate opt-ins. Our API relays allowlisted events to self-hosted Umami (stats.nowly.me): coarse page type, download browser, action, source, presence category/origin and cohort day/return milestone. No account/device ID, real page URL, search, activity text or watched content is sent to Umami. Extension return windows (D1/D7/D30) use local dates and deduplication markers, not a transmitted identifier. Withdrawal stops future dispatch and erases these local markers; no withdrawal event is sent. An in-flight request cannot be recalled. Technical IP data may reach our API for security but is not forwarded. Functional device services remain separate."
+        "title": "Usage statistics",
+        "body": "Website: the self-hosted Umami script (stats.nowly.me) measures page views, referrer, country, browser, device and language, plus a few events (extension download click, uninstall page). It sets no cookie and stores no persistent visitor ID or full IP address; sessions are derived from a one-way hash of technical data. Extension: separate opt-in; our API relays allowlisted events to Umami: action, source, presence category/origin and cohort day/return milestone. No account/device ID, real page URL, search, activity text or watched content is sent. Extension return windows (D1/D7/D30) use local dates and deduplication markers, not a transmitted identifier. Withdrawing stops future dispatch and erases these local markers; no withdrawal event is sent. An in-flight request cannot be recalled. Technical IP data may reach our API for security but is not forwarded. Functional device services remain separate."
       },
       {
         "title": "Advertising",
@@ -1144,9 +1137,7 @@
     "delete-confirm": "This permanently deletes everything Nowly has stored for this device. This cannot be undone.",
     "export-success": "Your data was downloaded.",
     "delete-success": "Your data has been deleted.",
-    "action-error": "We could not complete this request. Try again, or contact support if the problem continues.",
-    "site-title": "Website statistics",
-    "site-description": "Optional page and download-click counts, without a persistent visitor ID. This choice is separate from the extension."
+    "action-error": "We could not complete this request. Try again, or contact support if the problem continues."
   },
   "faqPage": {
     "eyebrow": "FAQ",

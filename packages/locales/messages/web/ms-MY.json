@@ -882,13 +882,6 @@
     "description": "Halaman ini tidak wujud atau telah dipindahkan.",
     "home": "Kembali ke laman utama"
   },
-  "cookie-banner": {
-    "title": "Maklumat kuki",
-    "message": "Statistik produk agregat pilihan dimatikan sehingga anda bersetuju. Kuki bahasa masih diperlukan. Ubah pilihan pada halaman Data anda.",
-    "learn-more": "Baca dasar kuki",
-    "accept": "Benarkan statistik",
-    "decline": "Tolak statistik"
-  },
   "privacy-page": {
     "badge": "Privasi",
     "title": "Dasar Privasi",
@@ -926,8 +919,8 @@
         "body": "Aplikasi desktop mungkin menulis log setempat bernama <code>nowly-host.log</code> di bawah direktori cache NowlyClient, contohnya:<ul><li>Windows: <code>%LOCALAPPDATA%\\NowlyClient\\</code></li><li>macOS: <code>~/Library/Caches/NowlyClient/</code></li><li>Linux: <code>~/.cache/NowlyClient/</code></li></ul>Fail ini boleh mengandungi cap masa dan butiran aktiviti yang dihantar ke Discord. Ia kekal pada komputer anda dan tidak dimuat naik ke pelayan kami. Anda boleh memadamkannya pada bila-bila masa."
       },
       {
-        "title": "Statistik penggunaan (pilih masuk)",
-        "body": "Laman dan sambungan memerlukan persetujuan berasingan. API hanya menghantar peristiwa dibenarkan ke Umami hos sendiri (stats.nowly.me): jenis halaman, pelayar muat turun, tindakan, sumber, kategori/asal kehadiran dan hari kohort/tahap kembali. Tiada ID akaun/peranti, URL sebenar, carian atau kandungan aktiviti dihantar. D1/D7/D30 menggunakan tarikh dan penanda penyahduplikasian setempat, bukan pengecam dihantar. Penarikan persetujuan menghentikan penghantaran baharu dan memadam penanda; tiada peristiwa penarikan dihantar. Permintaan sedang dihantar tidak boleh ditarik balik. API boleh memproses IP untuk keselamatan tetapi tidak memajukannya. Perkhidmatan fungsi peranti adalah berasingan."
+        "title": "Statistik penggunaan",
+        "body": "Laman web: skrip Umami yang dihoskan sendiri (stats.nowly.me) mengukur paparan halaman, perujuk, negara, pelayar, peranti dan bahasa, serta beberapa peristiwa (klik muat turun sambungan, halaman nyahpasang). Ia tidak menetapkan kuki dan tidak menyimpan ID pelawat kekal atau alamat IP penuh; sesi diperoleh daripada cincangan sehala data teknikal. Sambungan: persetujuan berasingan (opt-in); API kami menyampaikan peristiwa daripada senarai tertutup kepada Umami: tindakan, sumber, kategori/asal presence dan hari kohort/pencapaian kembali. Tiada ID akaun/peranti, URL halaman sebenar, carian, teks aktiviti atau kandungan yang ditonton dihantar. Tetingkap kembali (D1/D7/D30) menggunakan tarikh setempat dan penanda penyahduplikasian, bukan pengecam yang dihantar. Penarikan balik menghentikan penghantaran akan datang dan memadam penanda setempat ini; tiada peristiwa penarikan balik dihantar. Permintaan yang sedang dihantar tidak boleh ditarik semula. Data IP teknikal mungkin sampai ke API kami untuk keselamatan tetapi tidak dipanjangkan. Perkhidmatan fungsian peranti kekal berasingan."
       },
       {
         "title": "Akaun Nowly dan penyegerakan (pilihan)",
@@ -939,7 +932,7 @@
       },
       {
         "title": "Asas undang-undang (GDPR Perkara 6)",
-        "body": "<ul><li><strong>Statistik penggunaan pilih masuk</strong>: persetujuan (Perkara 6(1)(a)). Anda boleh menariknya balik dalam sambungan pada bila-bila masa, tanpa menjejaskan keabsahan pemprosesan sebelum penarikan balik.</li><li><strong>Kuki bahasa dan kuki dokumentasi</strong>: perlu untuk perkhidmatan yang anda minta dan/atau kepentingan sah untuk mengingati bahasa anda (Perkara 6(1)(b) dan/atau (f)).</li><li><strong>Bendera tema dan notis kuki</strong> (storan setempat): kepentingan sah dalam antara muka yang boleh digunakan (Perkara 6(1)(f)).</li><li><strong>Proksi imej</strong>: kepentingan sah dalam memaparkan artwork katalog dan aktiviti tanpa memuatkan setiap CDN pihak ketiga dalam pelayar anda (Perkara 6(1)(f)).</li><li><strong>Log masuk Discord pilihan</strong>: pelaksanaan ciri akaun yang anda minta (Perkara 6(1)(b)) dan, apabila diperlukan, kepentingan sah kami dalam mengamankan API (Perkara 6(1)(f)).</li><li><strong>GitHub, komuniti Discord, Ko-fi, GitHub Sponsors</strong>: data yang anda pilih untuk hantar ke perkhidmatan tersebut diproses di bawah dasar mereka sendiri; kami membaca isu awam atau mesej yang anda tujukan kepada kami untuk membalas (Perkara 6(1)(b) atau (f)).</li></ul>"
+        "body": "<ul><li><strong>Statistik penggunaan laman web</strong>: kepentingan sah untuk memahami dan menambah baik laman (Art. 6(1)(f)); tiada kuki ditetapkan. <strong>Statistik penggunaan sambungan (opt-in)</strong>: persetujuan (Art. 6(1)(a)), yang boleh anda tarik balik dalam sambungan pada bila-bila masa, tanpa menjejaskan kesahihan pemprosesan sebelum penarikan balik.</li><li><strong>Kuki bahasa dan kuki dokumentasi</strong>: perlu untuk perkhidmatan yang anda minta dan/atau kepentingan sah untuk mengingati bahasa anda (Perkara 6(1)(b) dan/atau (f)).</li><li><strong>Bendera tema dan notis kuki</strong> (storan setempat): kepentingan sah dalam antara muka yang boleh digunakan (Perkara 6(1)(f)).</li><li><strong>Proksi imej</strong>: kepentingan sah dalam memaparkan artwork katalog dan aktiviti tanpa memuatkan setiap CDN pihak ketiga dalam pelayar anda (Perkara 6(1)(f)).</li><li><strong>Log masuk Discord pilihan</strong>: pelaksanaan ciri akaun yang anda minta (Perkara 6(1)(b)) dan, apabila diperlukan, kepentingan sah kami dalam mengamankan API (Perkara 6(1)(f)).</li><li><strong>GitHub, komuniti Discord, Ko-fi, GitHub Sponsors</strong>: data yang anda pilih untuk hantar ke perkhidmatan tersebut diproses di bawah dasar mereka sendiri; kami membaca isu awam atau mesej yang anda tujukan kepada kami untuk membalas (Perkara 6(1)(b) atau (f)).</li></ul>"
       },
       {
         "title": "Pengekalan",
@@ -955,7 +948,7 @@
       },
       {
         "title": "Kuki",
-        "body": "Pelayar menyimpan tema dan pilihan statistik secara setempat. Sambungan menyimpan persetujuan dan tarikh kembali/penyahduplikasian setempat. Tiada kuki analitik atau ID pelawat kekal. Memadam pilihan menetapkan semula persetujuan; statistik kekal dimatikan sehingga persetujuan baharu."
+        "body": "Pelayar menyimpan tema secara setempat. Sambungan menyimpan persetujuan dan tarikh kembali/penyahduplikasian setempat. Statistik laman web (Umami dihoskan sendiri) tidak menetapkan kuki atau ID pelawat kekal. Menarik balik persetujuan sambungan menghentikan statistik sambungan."
       },
       {
         "title": "Keselamatan",
@@ -1081,7 +1074,7 @@
     "title": "Dasar Kuki",
     "description": "Kuki dan storan setempat yang digunakan pada nowly.me dan docs.nowly.me.",
     "last-updated": "2026-10-25",
-    "intro": "Pelayar menyimpan tema dan pilihan statistik secara setempat. Sambungan menyimpan persetujuan dan tarikh kembali/penyahduplikasian setempat. Tiada kuki analitik atau ID pelawat kekal. Memadam pilihan menetapkan semula persetujuan; statistik kekal dimatikan sehingga persetujuan baharu.",
+    "intro": "Pelayar menyimpan tema secara setempat. Sambungan menyimpan persetujuan dan tarikh kembali/penyahduplikasian setempat. Statistik laman web (Umami dihoskan sendiri) tidak menetapkan kuki atau ID pelawat kekal. Menarik balik persetujuan sambungan menghentikan statistik sambungan.",
     "sections": [
       {
         "title": "Benar-benar perlu",
@@ -1093,11 +1086,11 @@
       },
       {
         "title": "Storan setempat",
-        "body": "Pelayar menyimpan tema dan pilihan statistik secara setempat. Sambungan menyimpan persetujuan dan tarikh kembali/penyahduplikasian setempat. Tiada kuki analitik atau ID pelawat kekal. Memadam pilihan menetapkan semula persetujuan; statistik kekal dimatikan sehingga persetujuan baharu."
+        "body": "Pelayar menyimpan tema secara setempat. Sambungan menyimpan persetujuan dan tarikh kembali/penyahduplikasian setempat. Statistik laman web (Umami dihoskan sendiri) tidak menetapkan kuki atau ID pelawat kekal. Menarik balik persetujuan sambungan menghentikan statistik sambungan."
       },
       {
-        "title": "Kuki analitik",
-        "body": "Laman dan sambungan memerlukan persetujuan berasingan. API hanya menghantar peristiwa dibenarkan ke Umami hos sendiri (stats.nowly.me): jenis halaman, pelayar muat turun, tindakan, sumber, kategori/asal kehadiran dan hari kohort/tahap kembali. Tiada ID akaun/peranti, URL sebenar, carian atau kandungan aktiviti dihantar. D1/D7/D30 menggunakan tarikh dan penanda penyahduplikasian setempat, bukan pengecam dihantar. Penarikan persetujuan menghentikan penghantaran baharu dan memadam penanda; tiada peristiwa penarikan dihantar. Permintaan sedang dihantar tidak boleh ditarik balik. API boleh memproses IP untuk keselamatan tetapi tidak memajukannya. Perkhidmatan fungsi peranti adalah berasingan."
+        "title": "Statistik penggunaan",
+        "body": "Laman web: skrip Umami yang dihoskan sendiri (stats.nowly.me) mengukur paparan halaman, perujuk, negara, pelayar, peranti dan bahasa, serta beberapa peristiwa (klik muat turun sambungan, halaman nyahpasang). Ia tidak menetapkan kuki dan tidak menyimpan ID pelawat kekal atau alamat IP penuh; sesi diperoleh daripada cincangan sehala data teknikal. Sambungan: persetujuan berasingan (opt-in); API kami menyampaikan peristiwa daripada senarai tertutup kepada Umami: tindakan, sumber, kategori/asal presence dan hari kohort/pencapaian kembali. Tiada ID akaun/peranti, URL halaman sebenar, carian, teks aktiviti atau kandungan yang ditonton dihantar. Tetingkap kembali (D1/D7/D30) menggunakan tarikh setempat dan penanda penyahduplikasian, bukan pengecam yang dihantar. Penarikan balik menghentikan penghantaran akan datang dan memadam penanda setempat ini; tiada peristiwa penarikan balik dihantar. Permintaan yang sedang dihantar tidak boleh ditarik semula. Data IP teknikal mungkin sampai ke API kami untuk keselamatan tetapi tidak dipanjangkan. Perkhidmatan fungsian peranti kekal berasingan."
       },
       {
         "title": "Pengiklanan",
@@ -1144,9 +1137,7 @@
     "delete-confirm": "Ini akan memadam secara kekal segala yang disimpan Nowly untuk peranti ini. Ini tidak boleh dibuat asal.",
     "export-success": "Data anda telah dimuat turun.",
     "delete-success": "Data anda telah dipadamkan.",
-    "action-error": "Permintaan ini tidak dapat diselesaikan. Cuba lagi atau hubungi sokongan jika masalah berterusan.",
-    "site-title": "Statistik laman",
-    "site-description": "Kiraan halaman dan klik muat turun pilihan tanpa ID pelawat kekal. Pilihan ini berasingan daripada sambungan."
+    "action-error": "Permintaan ini tidak dapat diselesaikan. Cuba lagi atau hubungi sokongan jika masalah berterusan."
   },
   "faqPage": {
     "eyebrow": "Soalan Lazim",

@@ -882,13 +882,6 @@
     "description": "Esta página no existe o se ha movido.",
     "home": "Volver al inicio"
   },
-  "cookie-banner": {
-    "title": "Información sobre cookies",
-    "message": "Las estadísticas agregadas opcionales están desactivadas hasta que aceptes. La cookie de idioma sigue siendo necesaria. Cambia tu elección en Tus datos.",
-    "learn-more": "Leer la política de cookies",
-    "accept": "Aceptar estadísticas",
-    "decline": "Rechazar estadísticas"
-  },
   "privacy-page": {
     "badge": "Privacidad",
     "title": "Política de privacidad",
@@ -926,8 +919,8 @@
         "body": "La app de escritorio puede escribir un registro local <code>nowly-host.log</code> en el directorio de caché NowlyClient, por ejemplo:<ul><li>Windows: <code>%LOCALAPPDATA%\\NowlyClient\\</code></li><li>macOS: <code>~/Library/Caches/NowlyClient/</code></li><li>Linux: <code>~/.cache/NowlyClient/</code></li></ul>El archivo puede incluir marcas de tiempo y detalles de actividad enviados a Discord. Permanece en tu ordenador y no se sube a nuestros servidores. Puedes eliminarlo cuando quieras."
       },
       {
-        "title": "Estadísticas de uso (opt-in)",
-        "body": "El sitio y la extensión requieren consentimientos separados. La API solo reenvía eventos permitidos a Umami autoalojado (stats.nowly.me): tipo de página, navegador de descarga, acción, origen, categoría/procedencia de presencia y día de cohorte/hito de retorno. No se envían identificadores de cuenta o dispositivo, URL reales, búsquedas ni contenido de actividad. D1/D7/D30 usan fechas y marcas de deduplicación locales, no un identificador transmitido. Retirar el consentimiento detiene futuros envíos y borra esas marcas; no envía un evento de retirada. Las solicitudes en curso no pueden retirarse. La API puede tratar la IP por seguridad, pero no la reenvía. Los servicios funcionales son independientes."
+        "title": "Estadísticas de uso",
+        "body": "Sitio web: el script de Umami autoalojado (stats.nowly.me) mide visitas de página, referente, país, navegador, dispositivo e idioma, además de algunos eventos (clic en la descarga de la extensión, página de desinstalación). No instala ninguna cookie y no guarda un identificador persistente de visitante ni la dirección IP completa; las sesiones se derivan de un hash unidireccional de datos técnicos. Extensión: consentimiento aparte (opt-in); nuestra API reenvía a Umami eventos de una lista cerrada: acción, origen, categoría/origen de presencia y día de cohorte/hito de regreso. No se envía ningún identificador de cuenta o dispositivo, URL real, búsqueda, texto de actividad ni contenido visto. Las ventanas de regreso (D1/D7/D30) usan fechas y marcadores de deduplicación locales, no un identificador transmitido. La retirada detiene los envíos futuros y borra esos marcadores locales; no se envía ningún evento de retirada. Una solicitud ya en curso no puede revocarse. Los datos técnicos de IP pueden llegar a nuestra API por seguridad, pero no se reenvían. Los servicios funcionales del dispositivo siguen separados."
       },
       {
         "title": "Cuenta de Nowly y sincronización (opcionales)",
@@ -939,7 +932,7 @@
       },
       {
         "title": "Bases jurídicas (art. 6 RGPD)",
-        "body": "<ul><li><strong>Estadísticas opt-in</strong>: consentimiento (art. 6.1.a). Puedes retirarlo en la extensión en cualquier momento, sin afectar a la licitud del tratamiento anterior.</li><li><strong>Cookie de idioma</strong> (sitio y documentación): necesaria para el servicio solicitado y/o interés legítimo en recordar el idioma (art. 6.1.b y/o f).</li><li><strong>Tema y aviso de cookies</strong> (almacenamiento local): interés legítimo en una interfaz usable (art. 6.1.f).</li><li><strong>Proxy de imágenes</strong>: interés legítimo en mostrar las miniaturas del catálogo y de la actividad sin consultar cada CDN desde tu navegador (art. 6.1.f).</li><li><strong>Inicio de sesión opcional con Discord</strong>: ejecución de la función de cuenta solicitada (art. 6.1.b) y, si procede, interés legítimo en asegurar la API (art. 6.1.f).</li><li><strong>GitHub, comunidad Discord, Ko-fi, GitHub Sponsors</strong>: los datos que envías a esos servicios se rigen por sus políticas; leemos los mensajes públicos dirigidos a nosotros para responder (art. 6.1.b o f).</li></ul>"
+        "body": "<ul><li><strong>Estadísticas de uso del sitio web</strong>: interés legítimo en comprender y mejorar el sitio (art. 6.1.f); no se instala ninguna cookie. <strong>Estadísticas de uso de la extensión (opt-in)</strong>: consentimiento (art. 6.1.a), que puede retirar en cualquier momento en la extensión, sin afectar a la licitud del tratamiento anterior.</li><li><strong>Cookie de idioma</strong> (sitio y documentación): necesaria para el servicio solicitado y/o interés legítimo en recordar el idioma (art. 6.1.b y/o f).</li><li><strong>Tema y aviso de cookies</strong> (almacenamiento local): interés legítimo en una interfaz usable (art. 6.1.f).</li><li><strong>Proxy de imágenes</strong>: interés legítimo en mostrar las miniaturas del catálogo y de la actividad sin consultar cada CDN desde tu navegador (art. 6.1.f).</li><li><strong>Inicio de sesión opcional con Discord</strong>: ejecución de la función de cuenta solicitada (art. 6.1.b) y, si procede, interés legítimo en asegurar la API (art. 6.1.f).</li><li><strong>GitHub, comunidad Discord, Ko-fi, GitHub Sponsors</strong>: los datos que envías a esos servicios se rigen por sus políticas; leemos los mensajes públicos dirigidos a nosotros para responder (art. 6.1.b o f).</li></ul>"
       },
       {
         "title": "Conservación",
@@ -955,7 +948,7 @@
       },
       {
         "title": "Cookies",
-        "body": "El navegador guarda el tema y la elección estadística localmente. La extensión guarda consentimiento y fechas locales de retorno/deduplicación. No hay cookie analítica ni identificador persistente. Borrar la elección restablece el consentimiento; no hay estadísticas sin una nueva aceptación."
+        "body": "El navegador guarda el tema localmente. La extensión guarda el consentimiento y las fechas locales de regreso/deduplicación. Las estadísticas del sitio (Umami autoalojado) no instalan cookies ni un identificador persistente de visitante. Retirar el consentimiento de la extensión detiene sus estadísticas."
       },
       {
         "title": "Seguridad",
@@ -1081,7 +1074,7 @@
     "title": "Política de cookies",
     "description": "Cookies y almacenamiento local usados en nowly.me y docs.nowly.me.",
     "last-updated": "2026-10-25",
-    "intro": "El navegador guarda el tema y la elección estadística localmente. La extensión guarda consentimiento y fechas locales de retorno/deduplicación. No hay cookie analítica ni identificador persistente. Borrar la elección restablece el consentimiento; no hay estadísticas sin una nueva aceptación.",
+    "intro": "El navegador guarda el tema localmente. La extensión guarda el consentimiento y las fechas locales de regreso/deduplicación. Las estadísticas del sitio (Umami autoalojado) no instalan cookies ni un identificador persistente de visitante. Retirar el consentimiento de la extensión detiene sus estadísticas.",
     "sections": [
       {
         "title": "Estrictamente necesarias",
@@ -1093,11 +1086,11 @@
       },
       {
         "title": "Almacenamiento local",
-        "body": "El navegador guarda el tema y la elección estadística localmente. La extensión guarda consentimiento y fechas locales de retorno/deduplicación. No hay cookie analítica ni identificador persistente. Borrar la elección restablece el consentimiento; no hay estadísticas sin una nueva aceptación."
+        "body": "El navegador guarda el tema localmente. La extensión guarda el consentimiento y las fechas locales de regreso/deduplicación. Las estadísticas del sitio (Umami autoalojado) no instalan cookies ni un identificador persistente de visitante. Retirar el consentimiento de la extensión detiene sus estadísticas."
       },
       {
-        "title": "Cookies analíticas",
-        "body": "El sitio y la extensión requieren consentimientos separados. La API solo reenvía eventos permitidos a Umami autoalojado (stats.nowly.me): tipo de página, navegador de descarga, acción, origen, categoría/procedencia de presencia y día de cohorte/hito de retorno. No se envían identificadores de cuenta o dispositivo, URL reales, búsquedas ni contenido de actividad. D1/D7/D30 usan fechas y marcas de deduplicación locales, no un identificador transmitido. Retirar el consentimiento detiene futuros envíos y borra esas marcas; no envía un evento de retirada. Las solicitudes en curso no pueden retirarse. La API puede tratar la IP por seguridad, pero no la reenvía. Los servicios funcionales son independientes."
+        "title": "Estadísticas de uso",
+        "body": "Sitio web: el script de Umami autoalojado (stats.nowly.me) mide visitas de página, referente, país, navegador, dispositivo e idioma, además de algunos eventos (clic en la descarga de la extensión, página de desinstalación). No instala ninguna cookie y no guarda un identificador persistente de visitante ni la dirección IP completa; las sesiones se derivan de un hash unidireccional de datos técnicos. Extensión: consentimiento aparte (opt-in); nuestra API reenvía a Umami eventos de una lista cerrada: acción, origen, categoría/origen de presencia y día de cohorte/hito de regreso. No se envía ningún identificador de cuenta o dispositivo, URL real, búsqueda, texto de actividad ni contenido visto. Las ventanas de regreso (D1/D7/D30) usan fechas y marcadores de deduplicación locales, no un identificador transmitido. La retirada detiene los envíos futuros y borra esos marcadores locales; no se envía ningún evento de retirada. Una solicitud ya en curso no puede revocarse. Los datos técnicos de IP pueden llegar a nuestra API por seguridad, pero no se reenvían. Los servicios funcionales del dispositivo siguen separados."
       },
       {
         "title": "Publicidad",
@@ -1144,9 +1137,7 @@
     "delete-confirm": "Esta acción elimina permanentemente todo lo que Nowly ha almacenado para este dispositivo. No se puede deshacer.",
     "export-success": "Tus datos se han descargado.",
     "delete-success": "Tus datos han sido eliminados.",
-    "action-error": "No se pudo completar la solicitud. Inténtalo de nuevo o contacta con soporte si el problema persiste.",
-    "site-title": "Estadísticas del sitio",
-    "site-description": "Recuentos opcionales de páginas y clics de descarga, sin identificador persistente. Elección independiente de la extensión."
+    "action-error": "No se pudo completar la solicitud. Inténtalo de nuevo o contacta con soporte si el problema persiste."
   },
   "faqPage": {
     "eyebrow": "FAQ",

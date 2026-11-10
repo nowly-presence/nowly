@@ -882,13 +882,6 @@
     "description": "Ta strona nie istnieje lub została przeniesiona.",
     "home": "Powrót do strony głównej"
   },
-  "cookie-banner": {
-    "title": "Informacje o plikach cookie",
-    "message": "Opcjonalne statystyki zbiorcze są wyłączone do czasu zgody. Ciasteczko języka pozostaje niezbędne. Wybór zmienisz na stronie Twoje dane.",
-    "learn-more": "Przeczytaj politykę cookies",
-    "accept": "Zezwól na statystyki",
-    "decline": "Odrzuć statystyki"
-  },
   "privacy-page": {
     "badge": "Prywatność",
     "title": "Polityka prywatności",
@@ -926,8 +919,8 @@
         "body": "Aplikacja desktopowa może zapisywać lokalny dziennik o nazwie <code>nowly-host.log</code> w katalogu pamięci podręcznej NowlyClient, na przykład:<ul><li>Windows: <code>%LOCALAPPDATA%\\NowlyClient\\</code></li><li>macOS: <code>~/Library/Caches/NowlyClient/</code></li><li>Linux: <code>~/.cache/NowlyClient/</code></li></ul>Plik może zawierać znaczniki czasu i szczegóły aktywności wysłane do Discorda. Pozostaje na Twoim komputerze i nie jest wysyłany na nasze serwery. Możesz go usunąć w dowolnym momencie."
       },
       {
-        "title": "Statystyki użytkowania (opt-in)",
-        "body": "Witryna i rozszerzenie wymagają osobnych zgód. API przekazuje tylko dozwolone zdarzenia do własnego Umami (stats.nowly.me): typ strony, przeglądarkę pobierania, działanie, źródło, kategorię/pochodzenie obecności i dzień kohorty/etap powrotu. Nie wysyła ID konta lub urządzenia, rzeczywistych URL, wyszukiwań ani treści aktywności. D1/D7/D30 korzystają z lokalnych dat i znaczników deduplikacji, nie z przesyłanego identyfikatora. Wycofanie zgody zatrzymuje przyszłe wysyłki i usuwa znaczniki; nie wysyła zdarzenia wycofania. Trwających żądań nie można cofnąć. API może przetwarzać IP dla bezpieczeństwa, ale go nie przekazuje. Usługi funkcjonalne urządzenia są odrębne."
+        "title": "Statystyki użycia",
+        "body": "Strona: samodzielnie hostowany skrypt Umami (stats.nowly.me) mierzy odsłony stron, źródło odesłania, kraj, przeglądarkę, urządzenie i język oraz kilka zdarzeń (kliknięcie pobrania rozszerzenia, strona odinstalowania). Nie ustawia plików cookie i nie przechowuje trwałego identyfikatora odwiedzającego ani pełnego adresu IP; sesje są wyprowadzane z jednokierunkowego skrótu danych technicznych. Rozszerzenie: oddzielna zgoda (opt-in); nasze API przekazuje do Umami zdarzenia z zamkniętej listy: akcję, źródło, kategorię/pochodzenie presence oraz dzień kohorty/etap powrotu. Nie są wysyłane identyfikator konta lub urządzenia, rzeczywisty adres strony, wyszukiwania, tekst aktywności ani oglądane treści. Okna powrotu (D1/D7/D30) używają lokalnych dat i znaczników deduplikacji, a nie przesyłanego identyfikatora. Wycofanie zgody zatrzymuje dalsze wysyłanie i usuwa te lokalne znaczniki; zdarzenie wycofania nie jest wysyłane. Żądania już wysłanego nie można cofnąć. Techniczne dane IP mogą trafić do naszego API ze względów bezpieczeństwa, ale nie są przekazywane dalej. Funkcjonalne usługi urządzenia pozostają oddzielne."
       },
       {
         "title": "Konto Nowly i synchronizacja (opcjonalne)",
@@ -939,7 +932,7 @@
       },
       {
         "title": "Podstawy prawne (RODO art. 6)",
-        "body": "<ul><li><strong>Opcjonalne statystyki użytkowania</strong>: zgoda (art. 6 ust. 1 lit. a). Możesz ją wycofać w rozszerzeniu w każdej chwili, bez wpływu na zgodność z prawem przetwarzania przed wycofaniem.</li><li><strong>Plik cookie języka i dokumentacji</strong>: niezbędny do świadczenia żądanej usługi i/lub uzasadniony interes w zapamiętaniu Twojego języka (art. 6 ust. 1 lit. b i/lub f).</li><li><strong>Flagi motywu i powiadomienia o cookies</strong> (pamięć lokalna): uzasadniony interes w użytecznym interfejsie (art. 6 ust. 1 lit. f).</li><li><strong>Proxy obrazów</strong>: uzasadniony interes w wyświetlaniu grafik katalogu i aktywności bez ładowania każdego CDN strony trzeciej w Twojej przeglądarce (art. 6 ust. 1 lit. f).</li><li><strong>Opcjonalne logowanie przez Discord</strong>: realizacja żądanej funkcji konta (art. 6 ust. 1 lit. b) oraz, w razie potrzeby, nasz uzasadniony interes w zabezpieczeniu API (art. 6 ust. 1 lit. f).</li><li><strong>GitHub, społeczność Discord, Ko-fi, GitHub Sponsors</strong>: dane, które zdecydujesz się wysłać do tych usług, są przetwarzane zgodnie z ich politykami; czytamy publiczne zgłoszenia lub wiadomości skierowane do nas, aby odpowiedzieć (art. 6 ust. 1 lit. b lub f).</li></ul>"
+        "body": "<ul><li><strong>Statystyki użycia strony</strong>: prawnie uzasadniony interes w zrozumieniu i ulepszaniu strony (art. 6 ust. 1 lit. f); nie są ustawiane pliki cookie. <strong>Statystyki użycia rozszerzenia (opt-in)</strong>: zgoda (art. 6 ust. 1 lit. a), którą można w każdej chwili wycofać w rozszerzeniu, bez wpływu na zgodność z prawem wcześniejszego przetwarzania.</li><li><strong>Plik cookie języka i dokumentacji</strong>: niezbędny do świadczenia żądanej usługi i/lub uzasadniony interes w zapamiętaniu Twojego języka (art. 6 ust. 1 lit. b i/lub f).</li><li><strong>Flagi motywu i powiadomienia o cookies</strong> (pamięć lokalna): uzasadniony interes w użytecznym interfejsie (art. 6 ust. 1 lit. f).</li><li><strong>Proxy obrazów</strong>: uzasadniony interes w wyświetlaniu grafik katalogu i aktywności bez ładowania każdego CDN strony trzeciej w Twojej przeglądarce (art. 6 ust. 1 lit. f).</li><li><strong>Opcjonalne logowanie przez Discord</strong>: realizacja żądanej funkcji konta (art. 6 ust. 1 lit. b) oraz, w razie potrzeby, nasz uzasadniony interes w zabezpieczeniu API (art. 6 ust. 1 lit. f).</li><li><strong>GitHub, społeczność Discord, Ko-fi, GitHub Sponsors</strong>: dane, które zdecydujesz się wysłać do tych usług, są przetwarzane zgodnie z ich politykami; czytamy publiczne zgłoszenia lub wiadomości skierowane do nas, aby odpowiedzieć (art. 6 ust. 1 lit. b lub f).</li></ul>"
       },
       {
         "title": "Przechowywanie",
@@ -955,7 +948,7 @@
       },
       {
         "title": "Pliki cookie",
-        "body": "Przeglądarka przechowuje lokalnie motyw i wybór statystyk. Rozszerzenie zapisuje zgodę oraz lokalne daty powrotu/deduplikacji. Nie tworzymy ciasteczka analitycznego ani trwałego ID odwiedzającego. Usunięcie wyboru resetuje zgodę; statystyki pozostają wyłączone do ponownej akceptacji."
+        "body": "Przeglądarka przechowuje lokalnie motyw. Rozszerzenie przechowuje zgodę oraz lokalne daty powrotu/deduplikacji. Statystyki strony (samodzielnie hostowane Umami) nie ustawiają plików cookie ani trwałego identyfikatora odwiedzającego. Wycofanie zgody w rozszerzeniu zatrzymuje jego statystyki."
       },
       {
         "title": "Bezpieczeństwo",
@@ -1081,7 +1074,7 @@
     "title": "Polityka plików cookie",
     "description": "Pliki cookie i pamięć lokalna używane na nowly.me i docs.nowly.me.",
     "last-updated": "2026-10-25",
-    "intro": "Przeglądarka przechowuje lokalnie motyw i wybór statystyk. Rozszerzenie zapisuje zgodę oraz lokalne daty powrotu/deduplikacji. Nie tworzymy ciasteczka analitycznego ani trwałego ID odwiedzającego. Usunięcie wyboru resetuje zgodę; statystyki pozostają wyłączone do ponownej akceptacji.",
+    "intro": "Przeglądarka przechowuje lokalnie motyw. Rozszerzenie przechowuje zgodę oraz lokalne daty powrotu/deduplikacji. Statystyki strony (samodzielnie hostowane Umami) nie ustawiają plików cookie ani trwałego identyfikatora odwiedzającego. Wycofanie zgody w rozszerzeniu zatrzymuje jego statystyki.",
     "sections": [
       {
         "title": "Absolutnie niezbędne",
@@ -1093,11 +1086,11 @@
       },
       {
         "title": "Pamięć lokalna",
-        "body": "Przeglądarka przechowuje lokalnie motyw i wybór statystyk. Rozszerzenie zapisuje zgodę oraz lokalne daty powrotu/deduplikacji. Nie tworzymy ciasteczka analitycznego ani trwałego ID odwiedzającego. Usunięcie wyboru resetuje zgodę; statystyki pozostają wyłączone do ponownej akceptacji."
+        "body": "Przeglądarka przechowuje lokalnie motyw. Rozszerzenie przechowuje zgodę oraz lokalne daty powrotu/deduplikacji. Statystyki strony (samodzielnie hostowane Umami) nie ustawiają plików cookie ani trwałego identyfikatora odwiedzającego. Wycofanie zgody w rozszerzeniu zatrzymuje jego statystyki."
       },
       {
-        "title": "Pliki cookie analityczne",
-        "body": "Witryna i rozszerzenie wymagają osobnych zgód. API przekazuje tylko dozwolone zdarzenia do własnego Umami (stats.nowly.me): typ strony, przeglądarkę pobierania, działanie, źródło, kategorię/pochodzenie obecności i dzień kohorty/etap powrotu. Nie wysyła ID konta lub urządzenia, rzeczywistych URL, wyszukiwań ani treści aktywności. D1/D7/D30 korzystają z lokalnych dat i znaczników deduplikacji, nie z przesyłanego identyfikatora. Wycofanie zgody zatrzymuje przyszłe wysyłki i usuwa znaczniki; nie wysyła zdarzenia wycofania. Trwających żądań nie można cofnąć. API może przetwarzać IP dla bezpieczeństwa, ale go nie przekazuje. Usługi funkcjonalne urządzenia są odrębne."
+        "title": "Statystyki użycia",
+        "body": "Strona: samodzielnie hostowany skrypt Umami (stats.nowly.me) mierzy odsłony stron, źródło odesłania, kraj, przeglądarkę, urządzenie i język oraz kilka zdarzeń (kliknięcie pobrania rozszerzenia, strona odinstalowania). Nie ustawia plików cookie i nie przechowuje trwałego identyfikatora odwiedzającego ani pełnego adresu IP; sesje są wyprowadzane z jednokierunkowego skrótu danych technicznych. Rozszerzenie: oddzielna zgoda (opt-in); nasze API przekazuje do Umami zdarzenia z zamkniętej listy: akcję, źródło, kategorię/pochodzenie presence oraz dzień kohorty/etap powrotu. Nie są wysyłane identyfikator konta lub urządzenia, rzeczywisty adres strony, wyszukiwania, tekst aktywności ani oglądane treści. Okna powrotu (D1/D7/D30) używają lokalnych dat i znaczników deduplikacji, a nie przesyłanego identyfikatora. Wycofanie zgody zatrzymuje dalsze wysyłanie i usuwa te lokalne znaczniki; zdarzenie wycofania nie jest wysyłane. Żądania już wysłanego nie można cofnąć. Techniczne dane IP mogą trafić do naszego API ze względów bezpieczeństwa, ale nie są przekazywane dalej. Funkcjonalne usługi urządzenia pozostają oddzielne."
       },
       {
         "title": "Reklamy",
@@ -1144,9 +1137,7 @@
     "delete-confirm": "To trwale usuwa wszystko, co Nowly zapisało dla tego urządzenia. Tej operacji nie można cofnąć.",
     "export-success": "Twoje dane zostały pobrane.",
     "delete-success": "Twoje dane zostały usunięte.",
-    "action-error": "Nie udało się ukończyć tej operacji. Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzać.",
-    "site-title": "Statystyki witryny",
-    "site-description": "Opcjonalne zliczanie stron i kliknięć pobierania bez trwałego identyfikatora. Wybór niezależny od rozszerzenia."
+    "action-error": "Nie udało się ukończyć tej operacji. Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzać."
   },
   "faqPage": {
     "eyebrow": "FAQ",
