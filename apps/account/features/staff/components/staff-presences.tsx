@@ -23,7 +23,10 @@ export const StaffPresences = () => {
   const [failed, setFailed] = useState(false);
 
   const load = useCallback((): void => {
-    Promise.all([fetchPublicPresences(), fetchHiddenPresences()])
+    Promise.all([
+      fetchPublicPresences(),
+      fetchHiddenPresences()
+    ])
       .then(([shown, concealed]) => {
         setVisible(shown);
         setHidden(concealed);
@@ -49,7 +52,16 @@ export const StaffPresences = () => {
   };
 
   const matches = (entry: StaffPresence): boolean => `${entry.name} ${entry.slug}`.toLowerCase().includes(query.trim().toLowerCase());
-  const all = [...hidden.filter(matches).map((entry) => ({ entry, isHidden: true })), ...(visible ?? []).filter(matches).map((entry) => ({ entry, isHidden: false }))];
+  const all = [
+    ...hidden.filter(matches).map((entry) => ({
+      entry,
+      isHidden: true
+    })),
+    ...(visible ?? []).filter(matches).map((entry) => ({
+      entry,
+      isHidden: false
+    }))
+  ];
   const pages = Math.max(1, Math.ceil(all.length / PAGE_SIZE));
   const current = Math.min(page, pages - 1);
   const rows = all.slice(current * PAGE_SIZE, (current + 1) * PAGE_SIZE);
@@ -78,12 +90,23 @@ export const StaffPresences = () => {
             padded={false}
             footer={
               <>
-                <span className="text-xs text-muted-foreground">{t("presences-page", { page: current + 1, pages })}</span>
+                <span className="text-xs text-muted-foreground">
+                  {t("presences-page", {
+                    page: current + 1,
+                    pages
+                  })}
+                </span>
                 <div className="flex gap-1.5">
                   <Button size="icon-sm" variant="outline" aria-label={t("presences-prev")} disabled={current === 0} onClick={() => setPage(current - 1)}>
                     <RiArrowLeftSLine className="size-4" />
                   </Button>
-                  <Button size="icon-sm" variant="outline" aria-label={t("presences-next")} disabled={current >= pages - 1} onClick={() => setPage(current + 1)}>
+                  <Button
+                    size="icon-sm"
+                    variant="outline"
+                    aria-label={t("presences-next")}
+                    disabled={current >= pages - 1}
+                    onClick={() => setPage(current + 1)}
+                  >
                     <RiArrowRightSLine className="size-4" />
                   </Button>
                 </div>
@@ -94,7 +117,13 @@ export const StaffPresences = () => {
             {rows.map(({ entry, isHidden }) => (
               <div key={entry.slug} className="flex flex-wrap items-center justify-between gap-3 px-4 py-2.5">
                 <div className="flex min-w-0 items-center gap-3">
-                  <img src={presenceLogoUrl(entry.slug)} alt="" width={36} height={36} className="size-9 shrink-0 rounded-[10px] bg-foreground/6 object-cover" />
+                  <img
+                    src={presenceLogoUrl(entry.slug)}
+                    alt=""
+                    width={36}
+                    height={36}
+                    className="size-9 shrink-0 rounded-[10px] bg-foreground/6 object-cover"
+                  />
                   <div className="min-w-0">
                     <p className="flex items-center gap-2 truncate text-sm font-medium text-foreground">
                       {entry.name}

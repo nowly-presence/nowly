@@ -8,7 +8,12 @@ import { RiArrowLeftLine, RiBellLine, RiDashboardLine, RiGroupLine, RiHistoryLin
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type ComponentType, type PropsWithChildren } from "react";
 
-const NAV_ICONS: Record<StaffNavItem["key"], ComponentType<{ className?: string }>> = {
+const NAV_ICONS: Record<
+  StaffNavItem["key"],
+  ComponentType<{
+    className?: string;
+  }>
+> = {
   overview: RiDashboardLine,
   review: RiInboxLine,
   presences: RiShapesLine,
@@ -39,7 +44,18 @@ export const StaffShell = ({ children }: PropsWithChildren) => {
   }));
 
   return (
-    <SidebarShell tag={t("badge")} navLabel={t("nav-label")} items={items} links={[{ href: "/profile", label: t("back-to-account"), icon: RiArrowLeftLine }]}>
+    <SidebarShell
+      tag={t("badge")}
+      navLabel={t("nav-label")}
+      items={items}
+      links={[
+        {
+          href: "/profile",
+          label: t("back-to-account"),
+          icon: RiArrowLeftLine
+        }
+      ]}
+    >
       {children}
     </SidebarShell>
   );

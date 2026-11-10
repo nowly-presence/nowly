@@ -3,7 +3,9 @@
 import { presenceLogoUrl, presenceThumbnailUrl } from "@/lib/api-base";
 import { useState } from "react";
 
-export const StaffPresenceBanner = ({ slug }: { slug: string }) => {
+export const StaffPresenceBanner = ({ slug }: {
+  slug: string;
+}) => {
   const [bannerFailed, setBannerFailed] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
   return (

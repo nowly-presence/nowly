@@ -21,15 +21,15 @@ export const AuthCard = ({ mark, linked, title, description, permissions, childr
     <Card>
       <CardContent className="flex flex-col gap-6">
         {mark ? (
-        <div className="flex items-center justify-center gap-3">
-          <Tile>{mark}</Tile>
-          {linked ? (
-            <>
-              <RiArrowRightLine className="size-4 text-muted-foreground" aria-hidden />
-              <Tile>{linked}</Tile>
-            </>
-          ) : null}
-        </div>
+          <div className="flex items-center justify-center gap-3">
+            <Tile>{mark}</Tile>
+            {linked ? (
+              <>
+                <RiArrowRightLine className="size-4 text-muted-foreground" aria-hidden />
+                <Tile>{linked}</Tile>
+              </>
+            ) : null}
+          </div>
         ) : null}
         <header className="flex flex-col gap-2 text-center">
           <h1 className="text-xl font-semibold tracking-tight text-foreground">{title}</h1>

@@ -37,7 +37,12 @@ export const StaffAudit = () => {
         description={t("audit-list-description")}
         footer={
           <>
-            <span className="text-xs text-muted-foreground">{t("presences-page", { page: page + 1, pages: done ? pages : `${pages}+` })}</span>
+            <span className="text-xs text-muted-foreground">
+              {t("presences-page", {
+                page: page + 1,
+                pages: done ? pages : `${pages}+`
+              })}
+            </span>
             <div className="flex gap-1.5">
               <Button size="icon-sm" variant="outline" aria-label={t("presences-prev")} disabled={page === 0} onClick={() => setPage(page - 1)}>
                 <RiArrowLeftSLine className="size-4" />

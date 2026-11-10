@@ -7,7 +7,9 @@ export type OptionCardsItem<T extends string> = {
   value: T;
   label: string;
   description: string;
-  icon: ComponentType<{ className?: string }>;
+  icon: ComponentType<{
+    className?: string;
+  }>;
 };
 
 export const OptionCards = <T extends string>({ options, value, onValueChange, label, className }: {

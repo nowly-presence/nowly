@@ -10,8 +10,7 @@ export const isAllowedOrigin = (origin: string | undefined): boolean =>
 const PUBLIC_CORS_PATHS = new Set(["/images-proxy", "/image-proxy", "/i"]);
 const PUBLIC_CORS_PREFIXES = ["/images-proxy/", "/image-proxy/"];
 
-const isPublicCorsPath = (path: string): boolean =>
-  PUBLIC_CORS_PATHS.has(path) || PUBLIC_CORS_PREFIXES.some((prefix) => path.startsWith(prefix));
+const isPublicCorsPath = (path: string): boolean => PUBLIC_CORS_PATHS.has(path) || PUBLIC_CORS_PREFIXES.some((prefix) => path.startsWith(prefix));
 
 const restrictedCors = cors({
   origin: (origin) => (origin && isAllowedOrigin(origin) ? origin : null),
@@ -22,5 +21,6 @@ const restrictedCors = cors({
 
 export const corsMiddleware: MiddlewareHandler = async (c, next) => {
   if (isPublicCorsPath(c.req.path)) return next();
+
   return restrictedCors(c, next);
 };

@@ -7,7 +7,10 @@ import { getLocale } from "next-intl/server";
 import type { PropsWithChildren } from "react";
 
 const StaffLayout = async ({ children }: PropsWithChildren) => {
-  const [user, locale] = await Promise.all([readServerSession(), getLocale()]);
+  const [user, locale] = await Promise.all([
+    readServerSession(),
+    getLocale()
+  ]);
 
   if (!user) return redirect({
     href: "/sign-in",

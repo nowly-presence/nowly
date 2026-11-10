@@ -7,12 +7,36 @@ export type StaffNavItem = {
 };
 
 export const STAFF_NAV: readonly StaffNavItem[] = [
-  { href: "/moderation", key: "overview", capability: "review" },
-  { href: "/moderation/review", key: "review", capability: "review" },
-  { href: "/moderation/presences", key: "presences", capability: "publish" },
-  { href: "/moderation/users", key: "users", capability: "manage" },
-  { href: "/moderation/announcements", key: "announcements", capability: "announce" },
-  { href: "/moderation/audit", key: "audit", capability: "manage" }
+  {
+    href: "/moderation",
+    key: "overview",
+    capability: "review"
+  },
+  {
+    href: "/moderation/review",
+    key: "review",
+    capability: "review"
+  },
+  {
+    href: "/moderation/presences",
+    key: "presences",
+    capability: "publish"
+  },
+  {
+    href: "/moderation/users",
+    key: "users",
+    capability: "manage"
+  },
+  {
+    href: "/moderation/announcements",
+    key: "announcements",
+    capability: "announce"
+  },
+  {
+    href: "/moderation/audit",
+    key: "audit",
+    capability: "manage"
+  }
 ];
 
 export const visibleStaffNav = (capabilities: readonly string[]): StaffNavItem[] => STAFF_NAV.filter((item) => capabilities.includes(item.capability));

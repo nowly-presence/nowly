@@ -26,7 +26,7 @@ describe("site timer broadcasts", () => {
     installChromeMock();
     vi.stubGlobal("chrome", {
       ...globalThis.chrome,
-      tabs: { query: vi.fn(async () => []) },
+      tabs: { query: vi.fn(async () => []) }
     });
     vi.clearAllMocks();
     vi.useFakeTimers();

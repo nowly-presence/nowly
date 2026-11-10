@@ -11,10 +11,22 @@ import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 const KPIS = [
-  { filter: "pending", key: "kpi-pending" },
-  { filter: "changes_requested", key: "kpi-changes" },
-  { filter: "in_progress", key: "kpi-progress" },
-  { filter: "published", key: "kpi-published" }
+  {
+    filter: "pending",
+    key: "kpi-pending"
+  },
+  {
+    filter: "changes_requested",
+    key: "kpi-changes"
+  },
+  {
+    filter: "in_progress",
+    key: "kpi-progress"
+  },
+  {
+    filter: "published",
+    key: "kpi-published"
+  }
 ] as const;
 
 const FILTERS: readonly QueueFilter[] = ["all", "pending", "changes_requested", "published", "rejected"];
@@ -48,7 +60,10 @@ export const StaffOverview = () => {
   return (
     <>
       <PageHeader title={t("overview-title")} description={t("overview-description")}>
-        <Link href="/moderation/review" className="inline-flex h-8 items-center rounded-[10px] bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary/80">
+        <Link
+          href="/moderation/review"
+          className="inline-flex h-8 items-center rounded-[10px] bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary/80"
+        >
           {t("open-queue")}
         </Link>
       </PageHeader>
@@ -68,7 +83,14 @@ export const StaffOverview = () => {
         title={t("latest-title")}
         description={t("latest-description")}
         action={
-          <Select items={FILTERS.map((value) => ({ value, label: filterLabel(value) }))} value={filter} onValueChange={(value) => value && setFilter(value as QueueFilter)}>
+          <Select
+            items={FILTERS.map((value) => ({
+              value,
+              label: filterLabel(value)
+            }))}
+            value={filter}
+            onValueChange={(value) => value && setFilter(value as QueueFilter)}
+          >
             <SelectTrigger className="min-w-44" aria-label={t("col-status")}>
               <SelectValue />
             </SelectTrigger>
@@ -84,39 +106,39 @@ export const StaffOverview = () => {
           </Select>
         }
       >
-          {failed ? <p className="p-4 text-sm text-destructive">{t("error")}</p> : null}
-          {!queue && !failed ? <p className="p-4 text-sm text-muted-foreground">{t("loading")}</p> : null}
-          {queue && queue.items.length === 0 ? <p className="p-4 text-sm text-muted-foreground">{t("latest-empty")}</p> : null}
-          {queue && queue.items.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-120 text-sm">
-                <thead>
-                  <tr className="border-b border-border text-left text-xs text-muted-foreground">
-                    <th className="py-2 pl-4 pr-4 font-medium">{t("col-presence")}</th>
-                    <th className="py-2 pl-4 pr-4 font-medium">{t("col-author")}</th>
-                    <th className="py-2 pl-4 pr-4 font-medium">{t("col-status")}</th>
-                    <th className="py-2 pr-4 text-right font-medium">{t("col-updated")}</th>
+        {failed ? <p className="p-4 text-sm text-destructive">{t("error")}</p> : null}
+        {!queue && !failed ? <p className="p-4 text-sm text-muted-foreground">{t("loading")}</p> : null}
+        {queue && queue.items.length === 0 ? <p className="p-4 text-sm text-muted-foreground">{t("latest-empty")}</p> : null}
+        {queue && queue.items.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-120 text-sm">
+              <thead>
+                <tr className="border-b border-border text-left text-xs text-muted-foreground">
+                  <th className="py-2 pl-4 pr-4 font-medium">{t("col-presence")}</th>
+                  <th className="py-2 pl-4 pr-4 font-medium">{t("col-author")}</th>
+                  <th className="py-2 pl-4 pr-4 font-medium">{t("col-status")}</th>
+                  <th className="py-2 pr-4 text-right font-medium">{t("col-updated")}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {queue.items.slice(0, LATEST_LIMIT).map((item) => (
+                  <tr key={item.id} className="hover:bg-foreground/4">
+                    <td className="py-2.5 pl-4 pr-4">
+                      <Link href={staffSubmissionHref(item.id)} className="font-medium text-foreground hover:underline">
+                        {item.name}
+                      </Link>
+                    </td>
+                    <td className="py-2.5 pr-4 text-muted-foreground">{item.author?.name ?? "-"}</td>
+                    <td className="py-2.5 pr-4">
+                      <SubmissionStatusBadge status={item.status} />
+                    </td>
+                    <td className="py-2.5 pr-4 text-right text-muted-foreground">{format.dateTime(new Date(item.updatedAt), { dateStyle: "medium" })}</td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {queue.items.slice(0, LATEST_LIMIT).map((item) => (
-                    <tr key={item.id} className="hover:bg-foreground/4">
-                      <td className="py-2.5 pl-4 pr-4">
-                        <Link href={staffSubmissionHref(item.id)} className="font-medium text-foreground hover:underline">
-                          {item.name}
-                        </Link>
-                      </td>
-                      <td className="py-2.5 pr-4 text-muted-foreground">{item.author?.name ?? "-"}</td>
-                      <td className="py-2.5 pr-4">
-                        <SubmissionStatusBadge status={item.status} />
-                      </td>
-                      <td className="py-2.5 pr-4 text-right text-muted-foreground">{format.dateTime(new Date(item.updatedAt), { dateStyle: "medium" })}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : null}
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : null}
       </Frame>
     </>
   );

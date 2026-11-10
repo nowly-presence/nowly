@@ -55,39 +55,39 @@ export const SubmissionThread = ({ detail }: {
   const entries = buildEntries(detail, labelOf);
   return (
     <Frame title={t("thread-title")} description={t("thread-description")}>
-        {entries.length === 0 ? <p className="text-sm text-muted-foreground">{t("thread-empty")}</p> : null}
-        <ol className="flex flex-col gap-4">
-          {entries.map((entry) => (
-            <li key={entry.key} className="border-l-2 border-border pl-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="secondary">{entry.label}</Badge>
-                {entry.revision ? <span className="text-xs text-muted-foreground">{t("revision-heading", { number: entry.revision })}</span> : null}
-              </div>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {[
-                  entry.who,
-                  format.dateTime(new Date(entry.at), {
-                    dateStyle: "medium",
-                    timeStyle: "short"
-                  })
-                ]
-                  .filter(Boolean)
-                  .join(", ")}
-              </p>
-              {entry.body ? <p className="mt-2 whitespace-pre-wrap text-sm text-foreground/85">{entry.body}</p> : null}
-              {entry.comments.length ? (
-                <ul className="mt-2 flex flex-col gap-1.5">
-                  {entry.comments.map((comment, index) => (
-                    <li key={index} className="rounded-lg bg-muted px-3 py-2 text-sm">
-                      <code className="text-xs text-muted-foreground">{comment.page ? `${comment.field} (${comment.page})` : comment.field}</code>
-                      <p className="mt-0.5 whitespace-pre-wrap text-foreground/85">{comment.message}</p>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </li>
-          ))}
-        </ol>
-      </Frame>
+      {entries.length === 0 ? <p className="text-sm text-muted-foreground">{t("thread-empty")}</p> : null}
+      <ol className="flex flex-col gap-4">
+        {entries.map((entry) => (
+          <li key={entry.key} className="border-l-2 border-border pl-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="secondary">{entry.label}</Badge>
+              {entry.revision ? <span className="text-xs text-muted-foreground">{t("revision-heading", { number: entry.revision })}</span> : null}
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {[
+                entry.who,
+                format.dateTime(new Date(entry.at), {
+                  dateStyle: "medium",
+                  timeStyle: "short"
+                })
+              ]
+                .filter(Boolean)
+                .join(", ")}
+            </p>
+            {entry.body ? <p className="mt-2 whitespace-pre-wrap text-sm text-foreground/85">{entry.body}</p> : null}
+            {entry.comments.length ? (
+              <ul className="mt-2 flex flex-col gap-1.5">
+                {entry.comments.map((comment, index) => (
+                  <li key={index} className="rounded-lg bg-muted px-3 py-2 text-sm">
+                    <code className="text-xs text-muted-foreground">{comment.page ? `${comment.field} (${comment.page})` : comment.field}</code>
+                    <p className="mt-0.5 whitespace-pre-wrap text-foreground/85">{comment.message}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </li>
+        ))}
+      </ol>
+    </Frame>
   );
 };

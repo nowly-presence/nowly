@@ -12,16 +12,16 @@ export const AccountCreationsTab = ({ creations }: {
   return (
     <div className="flex max-w-xl flex-col gap-6">
       <Frame title={t("creations-title")} description={t("creations-description")} padded={false}>
-          {creations.length === 0 ? (
-            <p className="p-4 text-sm text-muted-foreground">{t("creations-empty")}</p>
-          ) : (
-            <ul className="divide-y divide-border px-4">
-              {creations.map((item) => (
-                <AccountSubmissionRow key={item.id} item={item} />
-              ))}
-            </ul>
-          )}
-        </Frame>
+        {creations.length === 0 ? (
+          <p className="p-4 text-sm text-muted-foreground">{t("creations-empty")}</p>
+        ) : (
+          <ul className="divide-y divide-border px-4">
+            {creations.map((item) => (
+              <AccountSubmissionRow key={item.id} item={item} />
+            ))}
+          </ul>
+        )}
+      </Frame>
     </div>
   );
 };

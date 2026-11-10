@@ -17,7 +17,13 @@ export const Frame = ({ title, description, action, footer, padded = true, class
       </div>
       {action ? <div className="flex shrink-0 items-center gap-2">{action}</div> : null}
     </div>
-    {children ? <div className={cn("rounded-[12px] bg-background ring-1 ring-foreground/10", padded ? "flex flex-col gap-4 p-4" : "divide-y divide-border overflow-hidden")}>{children}</div> : null}
+    {children ? (
+      <div
+        className={cn("rounded-[12px] bg-background ring-1 ring-foreground/10", padded ? "flex flex-col gap-4 p-4" : "divide-y divide-border overflow-hidden")}
+      >
+        {children}
+      </div>
+    ) : null}
     {footer ? <div className="flex items-center justify-between gap-3 px-3 py-1.5">{footer}</div> : null}
   </section>
 );
