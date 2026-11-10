@@ -26,11 +26,11 @@ Discord Rich Presence manager: the extension runs presence scripts and the nativ
 
 ## Cross-app rules
 
-- Env: import only your context's `@nowly/env/<server|client|extension>`, never another one.
+- Env: import only your context's `@nowly/env/<server|extension>`, never another one. Web and docs only use the environment-free helpers of `@nowly/env/client/extension-store`; Next.js apps read their `NEXT_PUBLIC_*` values from `process.env` directly.
 - i18n: 11 locales. Every user-visible string exists in all of them (see `packages/locales/AGENTS.md`).
 - Navbar and footer come from `packages/ui`; never fork them in an app.
 - Legal document dates come only from `tos-page.last-updated` and `privacy-page.last-updated` in `packages/locales/messages/web/en-US.json` (see `apps/web/features/legal/AGENTS.md`).
-- Extension IDs are duplicated: change every copy together (`git grep` the ID). Both prod `kmnlnfldimgneaopdihplkebobckcjpf` and dev `abbegmindbabanjcabnmcjmamaoffbam` are allow-listed in `apps/native` (`cmd/host/main.go`, `installer.iss`, `scripts/install-linux.sh`, `scripts/install-macos.sh`, `scripts/build-deb.sh`); the prod ID is also in the extension, web, docs and `packages/env` constants and `apps/web/Dockerfile`, the dev manifest key in `apps/extension/manifest.config.ts`.
+- Extension IDs are duplicated: change every copy together (`git grep` the ID). Both prod `kmnlnfldimgneaopdihplkebobckcjpf` and dev `abbegmindbabanjcabnmcjmamaoffbam` are allow-listed in `apps/native` (`cmd/host/manifests.go`, `README.md`, `installer.iss`, `scripts/install-linux.sh`, `scripts/install-macos.sh`, `scripts/build-deb.sh`); the prod ID is also in the extension, web, docs and `packages/env` constants and `apps/web/Dockerfile`, the dev manifest key in `apps/extension/manifest.config.ts`.
 - `canonicalJson` (`@nowly/shared`) is used by the API to sign releases and by the extension to verify them: it must stay byte-identical.
 - Button-styled links (web, docs, `packages/ui`): put `buttonVariants()` on the real `Link`/`<a>`, inside a Client Component. Never wrap navigation in `<Button>` (`render`, `asChild`, `nativeButton={false}`) and never call `buttonVariants()` in a Server Component. `<Button>` is for actions that do not change the URL.
 

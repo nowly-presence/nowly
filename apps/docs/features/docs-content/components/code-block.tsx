@@ -23,15 +23,12 @@ const getCodeText = (children: ReactNode): string => {
 const normalizeLanguage = (language: string): string => {
   const aliases: Record<string, string> = {
     js: "javascript",
-    jsx: "jsx",
     ts: "typescript",
-    tsx: "tsx",
     sh: "bash",
     shell: "bash",
     zsh: "bash",
     ps: "powershell",
     ps1: "powershell",
-    json: "json",
     txt: "text"
   };
 

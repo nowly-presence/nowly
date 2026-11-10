@@ -2,11 +2,12 @@ import { overrideDatabase } from "@/db/client";
 import { activityPublication } from "@nowly/database/schema/activity";
 import { extensionToken, syncDocument } from "@nowly/database/schema/account";
 import { account, user } from "@nowly/database/schema/auth";
+import { creatorDraft } from "@nowly/database/schema/creator";
 import { device } from "@nowly/database/schema/device";
 import { presenceLike } from "@nowly/database/schema/presence";
 import { eq, isNull } from "drizzle-orm";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { createTestDatabase, seedExtensionToken, type TestDatabase } from "./database";
+import { createTestDatabase, seedExtensionToken, seedUser, type TestDatabase } from "./database";
 import { inject, mount } from "./http";
 
 const mockSession = vi.hoisted(() => ({ userId: null as string | null }));
@@ -384,6 +385,63 @@ describe("account routes", () => {
       headers: bearer(token)
     });
     expect(res.json().devices.map((entry: { current: boolean }) => entry.current)).toEqual([true, false]);
+  });
+
+  it("exports the signed-in account's drafts and sync tombstones only", async () => {
+    const otherId = await seedUser(database.db, "other-user");
+
+    const draft = {
+      id: "abcd1234",
+      name: "Saved presence"
+    };
+    await database.db.insert(creatorDraft).values([
+      {
+        userId: USER.id,
+        draftId: draft.id,
+        value: draft,
+        draftUpdatedAt: 100
+      },
+      {
+        userId: USER.id,
+        draftId: "deleted1",
+        draftUpdatedAt: 200,
+        deleted: true
+      },
+      {
+        userId: otherId,
+        draftId: "another1",
+        value: { name: "Private draft" },
+        draftUpdatedAt: 300
+      }
+    ]);
+    mockSession.userId = USER.id;
+
+    const response = await inject(await buildApp(), { url: "/me/export" });
+    expect(response.statusCode).toBe(200);
+    expect(response.json().creatorDrafts).toEqual([
+      {
+        id: "deleted1",
+        value: null,
+        updatedAt: 200,
+        deleted: true
+      },
+      {
+        id: draft.id,
+        value: draft,
+        updatedAt: 100,
+        deleted: false
+      }
+    ]);
+
+    expect(
+      (
+        await inject(await buildApp(), {
+          method: "DELETE",
+          url: "/me"
+        })
+      ).statusCode
+    ).toBe(200);
+    expect(await database.db.select({ userId: creatorDraft.userId }).from(creatorDraft)).toEqual([{ userId: otherId }]);
   });
 
   it("lists the presences synced by the extension for the signed-in account only", async () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { PresenceTile } from "@/components/presence-tile";
-import { libraryLogoUrl, libraryThumbnailUrl } from "@/lib/library-catalog";
+import { presenceLogoUrl, presenceThumbnailUrl } from "@/lib/presence-api-client";
 import { cn } from "@nowly/ui";
 import Image from "next/image";
 import { useState, type ReactNode } from "react";
@@ -23,7 +23,7 @@ export const LibraryMedia = ({ slug, name, variant = "card", action }: LibraryMe
       {bannerFailed ? null : (
         <div className={cn("relative overflow-hidden", isHero ? "h-52 sm:h-72" : "h-36")}>
           <Image
-            src={libraryThumbnailUrl(slug)}
+            src={presenceThumbnailUrl(slug)}
             alt={name}
             fill
             sizes={isHero ? "(min-width: 640px) 640px, 100vw" : "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
@@ -33,7 +33,7 @@ export const LibraryMedia = ({ slug, name, variant = "card", action }: LibraryMe
         </div>
       )}
       <div className={cn(bannerFailed ? null : "absolute bottom-0 z-10 translate-y-1/2", bannerFailed ? null : isHero ? "left-6 sm:left-8" : "left-6")}>
-        <PresenceTile src={libraryLogoUrl(slug)} name={name} className={isHero ? "size-20 sm:size-24" : "size-14"} />
+        <PresenceTile src={presenceLogoUrl(slug)} name={name} className={isHero ? "size-20 sm:size-24" : "size-14"} />
       </div>
       {action ? (
         <div className={cn("absolute z-10", bannerFailed ? "top-6 right-6 sm:top-8 sm:right-8" : "top-3 right-3 sm:top-4 sm:right-4")}>{action}</div>

@@ -1,3 +1,4 @@
+import { ACTIVITY_ICON_COLORS, ACTIVITY_ICON_KEYS, activityIconPath, isActivityIconKey } from "@nowly/shared/activity-icons";
 import type { CustomActivity, CustomActivityDraft, CustomActivityIcon, CustomActivityType, CustomImage, CustomImageMime, PresencePayload } from "@/shared/types";
 import { BRAND_ICON_PNG } from "@/shared/brand";
 import { WEB_BASE_URL } from "@/shared/constants";
@@ -13,7 +14,6 @@ export const CUSTOM_COUNTDOWN_MIN_MINUTES = 5;
 export const CUSTOM_COUNTDOWN_MAX_MINUTES = 24 * 60;
 export const CUSTOM_COUNTDOWN_STEP_MINUTES = 5;
 export const CUSTOM_COUNTDOWN_PRESETS = [15, 25, 45, 60, 120] as const;
-export const CUSTOM_ICON_RENDER_VERSION = 1;
 export const CUSTOM_IMAGE_MAX_BYTES = 1024 * 1024;
 export const CUSTOM_IMAGE_RETENTION_DAYS = 30;
 export const CUSTOM_IMAGE_MIMES: readonly CustomImageMime[] = ["image/png", "image/jpeg", "image/webp", "image/gif"];
@@ -26,35 +26,6 @@ const IMAGE_EXPIRY_MARGIN_DAYS = 2;
 
 export const CUSTOM_IMAGE_TOUCH_INTERVAL_MS = DAY_MS;
 export const CUSTOM_IMAGE_EXPIRED_MS = (CUSTOM_IMAGE_RETENTION_DAYS - IMAGE_EXPIRY_MARGIN_DAYS) * DAY_MS;
-
-export const CUSTOM_ACTIVITY_COLORS = ["#0891b2", "#4a5560", "#3f7d6b", "#5a6bb0", "#9a6a4a", "#7a5aa6", "#a85a74", "#8a7a3c", "#2f6f8f", "#5f7f3f"] as const;
-
-export const CUSTOM_ACTIVITY_ICONS: readonly CustomActivityIcon[] = [
-  "gamepad",
-  "trophy",
-  "code",
-  "computer",
-  "book",
-  "graduation",
-  "pencil",
-  "brush",
-  "palette",
-  "camera",
-  "film",
-  "tv",
-  "music",
-  "headphone",
-  "mic",
-  "chat",
-  "coffee",
-  "restaurant",
-  "run",
-  "plane",
-  "moon",
-  "rocket",
-  "flask",
-  "sparkling"
-];
 
 export const customActivitySlug = (id: string): string => `${CUSTOM_ACTIVITY_SLUG_PREFIX}${id}`;
 
@@ -74,16 +45,13 @@ export const randomIconImage = (
   }
 > => ({
   kind: "icon",
-  color: pick(CUSTOM_ACTIVITY_COLORS, random),
-  icon: pick(CUSTOM_ACTIVITY_ICONS, random)
+  color: pick(ACTIVITY_ICON_COLORS, random),
+  icon: pick(ACTIVITY_ICON_KEYS, random)
 });
 
 const HEX_COLOR = /^#[0-9a-f]{6}$/i;
 
-export const isCustomActivityIcon = (value: string): value is CustomActivityIcon => CUSTOM_ACTIVITY_ICONS.some((icon) => icon === value);
-
-export const customIconImageUrl = (icon: CustomActivityIcon, color: string): string =>
-  `${WEB_BASE_URL.replace(/\/+$/, "")}/api/activity-icon/${icon}/${color.replace("#", "").toLowerCase()}.png?v=${CUSTOM_ICON_RENDER_VERSION}`;
+export const customIconImageUrl = (icon: CustomActivityIcon, color: string): string => `${WEB_BASE_URL.replace(/\/+$/, "")}${activityIconPath(icon, color)}`;
 
 export const emptyCustomActivityDraft = (random: () => number = Math.random): CustomActivityDraft => ({
   name: "",
@@ -144,7 +112,7 @@ export const httpsUrlError = (value: string): CustomActivityError | undefined =>
 
 const imageError = (image: CustomImage): CustomActivityError | undefined => {
   if (image.kind === "url") return httpsUrlError(image.url);
-  if (image.kind === "icon") return isCustomActivityIcon(image.icon) && HEX_COLOR.test(image.color) ? undefined : "invalidUrl";
+  if (image.kind === "icon") return isActivityIconKey(image.icon) && HEX_COLOR.test(image.color) ? undefined : "invalidUrl";
 
   return undefined;
 };

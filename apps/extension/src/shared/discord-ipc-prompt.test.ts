@@ -7,12 +7,12 @@ const deniedPong: NativeResponse = {
   connected: true,
   status: "connected",
   discordConnected: false,
-  code: NATIVE_ERROR_CODES.discordIpcAccessDenied
+  code: "DISCORD_IPC_ACCESS_DENIED"
 };
 const deniedError: NativeResponse = {
   type: "ERROR",
   error: "open \\\\.\\pipe\\discord-ipc-0: Access is denied.",
-  code: NATIVE_ERROR_CODES.discordIpcAccessDenied
+  code: "DISCORD_IPC_ACCESS_DENIED"
 };
 const healthyPong: NativeResponse = {
   type: "PONG",

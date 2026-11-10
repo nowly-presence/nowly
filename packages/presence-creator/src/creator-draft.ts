@@ -6,6 +6,7 @@ const IDENTIFIER_MAX_LENGTH = 32;
 export const FEATURES_MAX = 5;
 export const FEATURE_MAX_LENGTH = 80;
 export const BUTTONS_MAX = 2;
+export const PRESENCE_NAME_MAX_LENGTH = 40;
 
 export const creatorId = (): string => crypto.randomUUID().slice(0, 8);
 
@@ -127,7 +128,8 @@ export const presenceFolder = (name: string): string => {
   return `src/${trimmed.charAt(0).toUpperCase()}/${trimmed}`;
 };
 
-export const isValidPresenceName = (name: string): boolean => /^[\p{L}\p{N}][\p{L}\p{N} .+!&'-]{0,39}$/u.test(name.trim());
+export const isValidPresenceName = (name: string): boolean =>
+  new RegExp(String.raw`^[\p{L}\p{N}][\p{L}\p{N} .+!&'-]{0,${PRESENCE_NAME_MAX_LENGTH - 1}}$`, "u").test(name.trim());
 
 export const normalizeDomain = (value: string): string =>
   value

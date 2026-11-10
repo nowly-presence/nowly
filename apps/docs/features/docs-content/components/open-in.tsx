@@ -3,8 +3,8 @@
 import { RiArrowDownSLine, RiExternalLinkLine } from "@nowly/ui/icons";
 import { ClaudeIcon, GitHubIcon, OpenAIIcon } from "@/components/icons";
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@nowly/ui";
-import { DOCS_URL, PROJECT_REPOSITORY_URL } from "@/lib/constants";
-import { docHref } from "@/features/docs-content/lib/href";
+import { DOCS_URL } from "@/lib/constants";
+import { docHref, docSourceUrl } from "@/features/docs-content/lib/href";
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
@@ -14,8 +14,6 @@ type OpenInProps = {
 };
 
 export const OpenIn: FC<OpenInProps> = ({ slug, locale }) => {
-  const sourcePath = slug.startsWith("changelog/") ? `packages/changelog/content/${slug.slice("changelog/".length)}` : `apps/docs/content/docs/${slug}`;
-  const githubUrl = `${PROJECT_REPOSITORY_URL}/blob/stable/${sourcePath}/${locale}.mdx`;
   const markdownUrl = `${DOCS_URL}${docHref(slug)}`;
   const t = useTranslations("docsUi");
   const askAbout = t("ask-about", { url: markdownUrl });
@@ -23,7 +21,7 @@ export const OpenIn: FC<OpenInProps> = ({ slug, locale }) => {
   const services = [
     {
       name: "GitHub",
-      url: githubUrl,
+      url: docSourceUrl(slug, locale),
       icon: <GitHubIcon className="size-4" />
     },
     {

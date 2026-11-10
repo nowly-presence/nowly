@@ -5,7 +5,7 @@ import { sampleCreatorDraft } from "@nowly/presence-creator/creator-fixtures";
 import { eq } from "drizzle-orm";
 import { generateKeyPairSync } from "node:crypto";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { createTestDatabase, seedUser, type TestDatabase } from "./database";
+import { createTestDatabase, seedExtensionToken, seedUser, type TestDatabase } from "./database";
 import { inject, mount } from "./http";
 
 const storage = vi.hoisted(() => ({ objects: new Map<string, Buffer>() }));
@@ -240,25 +240,23 @@ const stored = async () => (await database.db.select().from(presenceSubmission).
 
 const callsTo = (method: string, suffix: string) => github.calls.filter((call) => call.method === method && call.path.endsWith(suffix));
 
+const signingKey = generateKeyPairSync("rsa", { modulusLength: 2048 })
+  .privateKey.export({
+    type: "pkcs8",
+    format: "pem"
+  })
+  .toString();
+
 beforeAll(async () => {
   database = await createTestDatabase();
 });
 beforeEach(async () => {
-  const { privateKey } = generateKeyPairSync("rsa", { modulusLength: 2048 });
   vi.stubEnv("CREATOR_WEBHOOK_SECRET", SECRET);
   vi.stubEnv("FRONTEND_URL", "https://nowly.me");
   vi.stubEnv("ACCOUNT_URL", "https://account.nowly.me");
   vi.stubEnv("NOLO_APP_ID", "1");
   vi.stubEnv("NOLO_INSTALLATION_ID", "2");
-  vi.stubEnv(
-    "NOLO_PRIVATE_KEY",
-    privateKey
-      .export({
-        type: "pkcs8",
-        format: "pem"
-      })
-      .toString()
-  );
+  vi.stubEnv("NOLO_PRIVATE_KEY", signingKey);
   vi.stubGlobal("fetch", vi.fn(fakeGithub));
   Object.assign(github, {
     calls: [],
@@ -290,7 +288,7 @@ afterEach(() => {
 });
 afterAll(() => database.close());
 
-describe("Nolo pull request job", () => {
+describe("Nolo pull request job", { timeout: 15_000 }, () => {
   it("commits the regenerated files and images on a creator branch and opens one pull request", async () => {
     expect(await runJob()).toEqual({
       opened: 1,
@@ -497,13 +495,33 @@ describe("Nolo pull request job", () => {
         })
       ).statusCode
     ).toBe(401);
+    const url = `/presence-submissions/${SUBMISSION}/pull-request`;
     expect(
       (
         await inject(server, {
           method: "POST",
-          url: `/presence-submissions/${SUBMISSION}/pull-request`
+          url
         })
       ).statusCode
     ).toBe(401);
+    expect(github.calls).toEqual([]);
+
+    await database.db.update(user).set({ role: "admin" }).where(eq(user.id, ADMIN));
+    const token = await seedExtensionToken({
+      userId: ADMIN,
+      scopes: ["admin"]
+    });
+
+    const response = await inject(server, {
+      method: "POST",
+      url,
+      headers: { authorization: `Bearer ${token}` }
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toEqual({ outcome: "opened" });
+    expect(await stored()).toMatchObject({
+      prNumber: PR_NUMBER,
+      prRevision: 1
+    });
   });
 });

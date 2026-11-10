@@ -12,8 +12,6 @@ import { Button } from "@/ui/button";
 import { DiscordIpcHero } from "@/features/discord-ipc/discord-ipc-hero";
 import { DiscordIpcSteps } from "@/features/discord-ipc/discord-ipc-steps";
 
-const RECONNECT_SETTLE_MS = 900;
-
 export const DiscordIpcView = () => {
   const { state, patch } = useExtensionState();
   const { t, locale } = useI18n();
@@ -25,9 +23,7 @@ export const DiscordIpcView = () => {
   const reconnect = async () => {
     setBusy(true);
     setStillBlocked(false);
-    await sendMessage("CONNECT_NATIVE").catch(() => {});
-    await new Promise((resolve) => setTimeout(resolve, RECONNECT_SETTLE_MS));
-    const native = await sendMessage("GET_NATIVE_STATUS").catch(() => null);
+    const native = await sendMessage("CONNECT_NATIVE").catch(() => null);
     if (native) patch({ native });
     setStillBlocked(!native?.discordConnected);
     setBusy(false);

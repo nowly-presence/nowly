@@ -1,7 +1,6 @@
 import { DEFAULT_TEXT_MAX_LENGTH } from "./constants";
 
 /**
- * Human-readable byte size (e.g. "1.5 MB", "820.0 KB").
  * Shared by the API (release metadata) and any UI that displays bundle sizes.
  */
 export const formatBytes = (bytes: number): string => {
@@ -11,8 +10,7 @@ export const formatBytes = (bytes: number): string => {
 };
 
 /**
- * Trim a free-text value and cap its length. Returns `undefined` for non-string
- * or empty input so callers can drop the field entirely.
+ * Callers can omit the field when there is no usable input.
  */
 export const cleanText = (value: unknown, max = DEFAULT_TEXT_MAX_LENGTH): string | undefined => {
   if (typeof value !== "string") return undefined;

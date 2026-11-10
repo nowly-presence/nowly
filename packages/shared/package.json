@@ -32,6 +32,11 @@
     "./legal": "./src/legal.ts",
     "./announcements": "./src/announcements.ts",
     "./activity-publication": "./src/activity-publication.ts",
+    "./activity-icons": "./src/activity-icons.ts",
+    "./web-bridge": "./src/web-bridge.ts",
+    "./web-bridge-protocol": "./src/web-bridge-protocol.ts",
+    "./seasons": "./src/seasons.ts",
+    "./season-shapes": "./src/season-shapes.ts",
     "./roles": "./src/roles.ts"
   },
   "scripts": {

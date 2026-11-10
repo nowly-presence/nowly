@@ -1,4 +1,4 @@
-import { ANNOUNCEMENT_LOCALES, type Announcement, type AnnouncementInput, type AnnouncementLocale } from "@nowly/shared/announcements";
+import { ANNOUNCEMENT_LOCALES, ANNOUNCEMENT_TRANSLATIONS_MAX_BYTES, type Announcement, type AnnouncementInput, type AnnouncementLocale } from "@nowly/shared/announcements";
 import { translateAnnouncementText, type AnnouncementTexts } from "@/features/staff/lib/staff-api";
 
 export type AnnouncementKind = Announcement["kind"];
@@ -21,7 +21,6 @@ export type TranslationProgress = {
 };
 
 const SOURCE_LOCALE: AnnouncementLocale = "en";
-const TRANSLATIONS_MAX_BYTES = 24_000;
 const TRANSLATION_CONCURRENCY = 4;
 const DEFAULT_SEVERITY = 1;
 const PAD = 2;
@@ -139,7 +138,7 @@ export const translateAll = async (source: AnnouncementTexts, onProgress: (progr
     [SOURCE_LOCALE]: source
   };
 
-  if (byteLength(withContent) <= TRANSLATIONS_MAX_BYTES) return withContent;
+  if (byteLength(withContent) <= ANNOUNCEMENT_TRANSLATIONS_MAX_BYTES) return withContent;
 
   return Object.fromEntries(Object.entries(withContent).map(([locale, texts]) => [locale, locale === SOURCE_LOCALE ? texts : { ...texts, content: "" }]));
 };

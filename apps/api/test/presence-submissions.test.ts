@@ -24,7 +24,7 @@ const storage = vi.hoisted(() => ({
     name: string;
     input: Record<string, unknown>;
   }>,
-  onPut: null as (() => Promise<void>) | null
+  onPut: null as ((key: string) => Promise<void>) | null
 }));
 
 vi.mock("@/shared/object-storage", () => ({
@@ -41,7 +41,7 @@ vi.mock("@/shared/object-storage", () => ({
           name: command.constructor.name,
           input: command.input
         });
-        if (command.constructor.name === "PutObjectCommand" && storage.onPut) await storage.onPut();
+        if (command.constructor.name === "PutObjectCommand" && storage.onPut) await storage.onPut(String(command.input.Key));
         return {};
       }
     )
@@ -329,15 +329,37 @@ describe("submission files", () => {
 });
 
 describe("submission images", () => {
+  const uploadedKeys = () => storage.commands.filter((command) => command.name === "PutObjectCommand").map((command) => String(command.input.Key));
+
+  const deletedKeys = () =>
+    storage.commands
+      .filter((command) => command.name === "DeleteObjectsCommand")
+      .flatMap((command) =>
+        (
+          command.input.Delete as {
+            Objects: {
+              Key: string;
+            }[];
+          }
+        ).Objects.map(({ Key }) => Key)
+      );
+
+  const pauseConcurrentUploads = () => {
+    let finishUploads: (() => void) | undefined;
+    const ready = new Promise<void>((resolve) => {
+      finishUploads = resolve;
+    });
+    storage.onPut = async () => {
+      if (uploadedKeys().length === 6) finishUploads?.();
+      await ready;
+    };
+  };
+
   it("stores the verified images per revision and exposes their URLs", async () => {
     const { id } = (await submit()).json();
-    const puts = storage.commands.filter((command) => command.name === "PutObjectCommand").map((command) => command.input.Key);
-    expect(puts.sort()).toEqual([`creator/${id}/1/icon.png`, `creator/${id}/1/logo.png`, `creator/${id}/1/thumbnail.jpg`]);
-    expect((await detail(AUTHOR, id)).json().assets).toEqual({
-      thumbnail: `https://cdn.test/creator/${id}/1/thumbnail.jpg`,
-      logo: `https://cdn.test/creator/${id}/1/logo.png`,
-      icon: `https://cdn.test/creator/${id}/1/icon.png`
-    });
+    const puts = uploadedKeys();
+    expect(puts.map((key) => key.split("/").at(-1)).sort()).toEqual(["icon.png", "logo.png", "thumbnail.jpg"]);
+    expect(Object.values((await detail(AUTHOR, id)).json().assets).sort()).toEqual(puts.map((key) => `https://cdn.test/${key}`).sort());
   });
 
   it("refuses invalid images, missing rights and missing storage before writing anything", async () => {
@@ -385,10 +407,56 @@ describe("submission images", () => {
     const res = await submit();
     expect(res.statusCode).toBe(409);
     expect(res.json().error).toBe("STALE_REVISION");
-    const removal = storage.commands.find((command) => command.name === "DeleteObjectsCommand");
-    expect(removal?.input).toMatchObject({
-      Delete: { Objects: expect.arrayContaining([{ Key: `creator/${id}/2/logo.png` }]) }
+    expect(deletedKeys().sort()).toEqual(uploadedKeys().sort());
+  });
+
+  it("cleans up an interrupted upload without creating a revision", async () => {
+    storage.onPut = async (key) => {
+      if (key.endsWith("/logo.png")) throw new Error("Storage write failed");
+    };
+
+    expect((await submit()).statusCode).toBe(500);
+    expect(uploadedKeys()).toHaveLength(3);
+    expect(deletedKeys().sort()).toEqual(uploadedKeys().sort());
+    expect(await database.db.select().from(presenceSubmissionRevision)).toEqual([]);
+  });
+
+  it("keeps the winning revision's images when two resubmissions race", async () => {
+    const { id } = (await submit()).json();
+    await review(MODERATOR, id, {
+      revision: 1,
+      verdict: "request_changes",
+      message: "Retry"
     });
+    storage.commands = [];
+    pauseConcurrentUploads();
+
+    const responses = await Promise.all([
+      submit(),
+      submit()
+    ]);
+    expect(responses.map(({ statusCode }) => statusCode).sort()).toEqual([201, 409]);
+    const remainingKeys = uploadedKeys().filter((key) => !deletedKeys().includes(key));
+    expect(remainingKeys).toHaveLength(3);
+    const response = await detail(AUTHOR, id);
+    expect(response.json().revision).toBe(2);
+    expect(Object.values(response.json().assets).sort()).toEqual(remainingKeys.map((key) => `https://cdn.test/${key}`).sort());
+  });
+
+  it("allows only one pending submission for a slug when two authors race", async () => {
+    const otherToken = await seedExtensionToken({
+      userId: OTHER,
+      scopes: ["creator"]
+    });
+    pauseConcurrentUploads();
+
+    const responses = await Promise.all([
+      submit(),
+      submit({ authorization: `Bearer ${otherToken}` })
+    ]);
+    expect(responses.map(({ statusCode }) => statusCode).sort()).toEqual([201, 409]);
+    expect(responses.find(({ statusCode }) => statusCode === 409)?.json().error).toBe("SUBMISSION_PENDING");
+    expect(await database.db.select().from(presenceSubmission)).toHaveLength(1);
   });
 });
 
@@ -657,7 +725,8 @@ describe("publication webhook and creator presences", () => {
   });
 
   it("exports the author's submissions and erases them with the account", async () => {
-    await submit();
+    const { id } = (await submit()).json();
+    const assets = Object.values((await detail(AUTHOR, id)).json().assets) as string[];
     mockSession.userId = AUTHOR;
     const server = await app();
     expect((await inject(server, { url: "/me/export" })).json().presenceSubmissions).toHaveLength(1);
@@ -668,7 +737,7 @@ describe("publication webhook and creator presences", () => {
     expect(await database.db.select().from(presenceSubmissionRevision)).toEqual([]);
     const removal = storage.commands.find((command) => command.name === "DeleteObjectsCommand");
     expect(removal?.input).toMatchObject({
-      Delete: { Objects: expect.arrayContaining([{ Key: expect.stringMatching(/^creator\/[a-f0-9]{24}\/1\/icon\.png$/) }]) }
+      Delete: { Objects: expect.arrayContaining(assets.map((url) => ({ Key: new URL(url).pathname.slice(1) }))) }
     });
   });
 });

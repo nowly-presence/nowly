@@ -4,7 +4,7 @@ import { getLocale } from "next-intl/server";
 import Script from "next/script";
 import type { PropsWithChildren } from "react";
 import "./globals.css";
-import { satoshi } from "./fonts";
+import { satoshi } from "@nowly/ui/fonts";
 
 // Sits above app/[locale] so ThemeProvider (and its FOUC-prevention script tag) stays
 // mounted across locale switches instead of remounting every time [locale] changes.

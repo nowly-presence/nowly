@@ -2,7 +2,7 @@ export const PUBLIC_HANDLE_PATTERN = /^[a-z0-9][a-z0-9_-]{2,29}$/;
 
 export const PUBLIC_BIO_MAX_LENGTH = 280;
 
-export const RESERVED_PUBLIC_HANDLES: readonly string[] = [
+const RESERVED_PUBLIC_HANDLES: readonly string[] = [
   "admin",
   "administrator",
   "api",
@@ -44,7 +44,7 @@ export const handleCandidate = (base: string, attempt: number): string => (attem
 export const PUBLIC_LINKS_MAX = 5;
 export const PUBLIC_LINK_MAX_LENGTH = 200;
 
-export const SOCIAL_KINDS = ["github", "x", "bluesky", "youtube", "twitch", "tiktok", "instagram", "reddit", "linkedin", "website"] as const;
+const SOCIAL_KINDS = ["github", "x", "bluesky", "youtube", "twitch", "tiktok", "instagram", "reddit", "linkedin", "website"] as const;
 
 export type SocialKind = (typeof SOCIAL_KINDS)[number];
 

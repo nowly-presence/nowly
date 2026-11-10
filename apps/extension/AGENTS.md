@@ -30,7 +30,7 @@ MV3 side-panel extension for Chromium and Firefox.
 ## Seasons and Nolo
 
 - `resolveSeason` (`shared/seasonal-themes.ts`, tested) is the single rule: seasonal themes enabled, then the override, then the local date. The calendar only uses fixed worldwide dates (no Easter, lunar dates or national holidays); a period can be disabled (`enabled`) or ended (`lastYear`).
-- Seasons are token overrides only (`.season-<id>` in `ui/tokens.css`), never colours in components. `components/shared/season-shapes.ts` is copied in `apps/web/features/seasonal/components/season-shapes.ts`: change both.
+- Seasons are token overrides only (`.season-<id>` in `ui/tokens.css`), never colours in components. IDs and SVG paths come from `@nowly/shared/seasons` and `@nowly/shared/season-shapes`.
 - nowly.me gets the resolved season only from `content/web-season.ts`: `{ source: "Nowly", type: "SEASON", payload: { season } }`, on start, when `settings` or `seasonOverride` change, and in answer to `GET_SEASON`, on allowed origins only and never with other data. The content script reads storage directly so it answers while the worker sleeps.
 - Never edit the byte-for-byte prototype copies: `components/shared/nolo-mascot.tsx`, `nolo-paths.ts`, `src/assets/nolo/` and `ui/streaming-text.tsx`. Costumes wrap Nolo (`CostumedNolo`, `nolo-costume-paths.ts`) and never cover his eyes (nothing below y 76 above them).
 - Nolo appears only in feature reveals, the Halloween prank and season moments.

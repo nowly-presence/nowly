@@ -1,4 +1,5 @@
-const CDN_BASE_URL = "https://cdn.nowly.me";
+import { CDN_BASE_URL, fetchCdn } from "@/shared/cdn";
+
 const MIME_TYPES: Record<string, string> = {
   png: "image/png",
   jpg: "image/jpeg",
@@ -11,19 +12,18 @@ export const fetchAssetFromCdn = async (slug: string, type: string): Promise<{
   mime: string;
 } | null> => {
   for (const ext of EXTENSIONS) {
-    const url = `${CDN_BASE_URL}/presences/${slug}/assets/${type}.${ext}`;
+    const res = await fetchCdn(`${CDN_BASE_URL}/presences/${slug}/assets/${type}.${ext}`);
+
+    if (!res) continue;
 
     try {
-      const res = await fetch(url);
-
-      if (res.ok) {
-        const buffer = Buffer.from(await res.arrayBuffer());
-        return {
-          buffer,
-          mime: MIME_TYPES[ext] ?? "application/octet-stream"
-        };
-      }
-    } catch {}
+      return {
+        buffer: Buffer.from(await res.arrayBuffer()),
+        mime: MIME_TYPES[ext] ?? "application/octet-stream"
+      };
+    } catch (error) {
+      console.warn(`CDN body read failed for ${slug}/${type}.${ext}`, error);
+    }
   }
 
   return null;

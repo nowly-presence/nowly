@@ -7,7 +7,7 @@ Typed environment access for the Nowly monorepo.
 | Export | Surface | Notes |
 | --- | --- | --- |
 | `@nowly/env/server` | API server only | Contains secrets and throws when required values are missing. |
-| `@nowly/env/client` | Next.js app | Public web values and server-side web fetch config. |
+| `@nowly/env/client/extension-store` | Web and docs | Pure extension store helpers (download URLs, browser detection); reads no environment. |
 | `@nowly/env/extension` | Browser extension | Public Vite values only. |
 
 ## Variables
@@ -41,20 +41,6 @@ Typed environment access for the Nowly monorepo.
 | `WORKERS_AI_ACCOUNT_ID` | No | `R2_ACCOUNT_ID` |
 | `WORKERS_AI_API_TOKEN` | No | - |
 | `WORKERS_AI_MODEL` | No | `@cf/google/gemma-4-26b-a4b-it` |
-
-### client (Next.js web)
-
-| Variable | Required | Default |
-| --- | --- | --- |
-| `PRESENCE_API_URL` | No | `https://api.nowly.me` |
-| `NEXT_PUBLIC_API_BASE_URL` | No | `https://api.nowly.me` |
-| `NEXT_PUBLIC_BASE_URL` | No | `https://nowly.me` |
-| `NEXT_PUBLIC_DOCS_BASE_URL` | No | `https://docs.nowly.me` |
-| `NEXT_PUBLIC_EXTENSION_ID` | No | `kmnlnfldimgneaopdihplkebobckcjpf` |
-| `NEXT_PUBLIC_ADSENSE_ENABLED` | No | `false` |
-| `NEXT_PUBLIC_ADSENSE_CLIENT_ID` | No | - |
-| `NEXT_PUBLIC_ADSENSE_LANDING_SLOT` | No | - |
-| `NEXT_PUBLIC_ADSENSE_LIBRARY_SLOT` | No | - |
 
 ### extension (Vite)
 

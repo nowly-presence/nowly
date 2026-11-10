@@ -2,9 +2,9 @@ import { LegalHtml } from "@/features/legal/components/legal-html";
 import { Link } from "@/i18n/navigation";
 import { getMessages, getTranslations } from "next-intl/server";
 
-export const LEGAL_PAGE_KEYS = ["privacy", "tos", "cookies", "legal-notice"] as const;
+const LEGAL_PAGE_KEYS = ["privacy", "tos", "cookies", "legal-notice"] as const;
 
-export type LegalPageKey = (typeof LEGAL_PAGE_KEYS)[number];
+type LegalPageKey = (typeof LEGAL_PAGE_KEYS)[number];
 
 const MESSAGE_NS: Record<LegalPageKey, string> = {
   privacy: "privacy-page",

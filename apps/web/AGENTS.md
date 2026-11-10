@@ -15,4 +15,4 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Activity icon route
 
-`/api/activity-icon/<icon>/<color>.png?v=1` is a public contract with the extension. Keys and colors come from `app/api/activity-icon/activity-icons.ts` and must match the extension's `CUSTOM_ACTIVITY_ICONS` and `CUSTOM_ACTIVITY_COLORS`; `v` must match its `CUSTOM_ICON_RENDER_VERSION`.
+`/api/activity-icon/<icon>/<color>.png?v=1` is a public contract with the extension. Keys, colors, glyph paths and the cache version come from `@nowly/shared/activity-icons`. Bump `ACTIVITY_ICON_RENDER_VERSION` when a drawing changes.

@@ -28,6 +28,7 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./codes": "./src/codes.ts",
     "./routing": "./src/routing.ts",
     "./navigation": "./src/navigation.ts",
     "./request": "./src/request.ts",

@@ -51,7 +51,7 @@ export type AuditEventView = {
   createdAt: string;
 };
 
-export const AUDIT_PAGE_SIZE = 50;
+const AUDIT_PAGE_SIZE = 50;
 
 export const recordAdminAction = async (executor: Executor, actor: AuditActor, entry: AuditEntry): Promise<void> => {
   await executor.insert(adminAuditEvent).values({

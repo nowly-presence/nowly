@@ -15,6 +15,13 @@ const RunSchema = z.object({
     .optional()
 });
 
+export class WorkersAiHttpError extends Error {
+  constructor(readonly status: number) {
+    super(`Workers AI answered ${status}`);
+    this.name = "WorkersAiHttpError";
+  }
+}
+
 export type ChatMessage = {
   role: "system" | "user";
   content: string;
@@ -50,7 +57,7 @@ export const runJsonModel = async (messages: ChatMessage[], schema: Record<strin
     })
   });
 
-  if (!response.ok) throw new Error(`Workers AI answered ${response.status}`);
+  if (!response.ok) throw new WorkersAiHttpError(response.status);
 
   const body = RunSchema.parse(await response.json());
 

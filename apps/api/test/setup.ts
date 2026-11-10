@@ -1,4 +1,11 @@
+import { devNull } from "node:os";
+
+process.env.DOTENV_CONFIG_PATH = devNull;
 process.env.SKIP_ENV_VALIDATION ??= "true";
+process.env.FRONTEND_URL = "https://nowly.test";
+process.env.ACCOUNT_URL = "https://account.nowly.test";
+process.env.R2_PUBLIC_URL ??= "https://cdn.nowly.me";
+process.env.BETTER_AUTH_URL ??= "http://localhost:3001";
 process.env.JWT_SECRET ??= "test-jwt-secret";
 process.env.ANONYMOUS_HASH_SECRET ??= "test-anonymous-hash-secret";
 process.env.DISCORD_CLIENT_ID ??= "test-discord-client-id";

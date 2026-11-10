@@ -1,3 +1,5 @@
+import type { ActivityIconKey } from "@nowly/shared/activity-icons";
+
 export type CustomActivityType = 0 | 2 | 3 | 5;
 
 export type CustomImageMime = "image/png" | "image/jpeg" | "image/webp" | "image/gif";
@@ -28,31 +30,7 @@ export type CustomTimestamp = {
   minutes: number;
 };
 
-export type CustomActivityIcon =
-  | "gamepad"
-  | "trophy"
-  | "code"
-  | "computer"
-  | "book"
-  | "graduation"
-  | "pencil"
-  | "brush"
-  | "palette"
-  | "camera"
-  | "film"
-  | "tv"
-  | "music"
-  | "headphone"
-  | "mic"
-  | "chat"
-  | "coffee"
-  | "restaurant"
-  | "run"
-  | "plane"
-  | "moon"
-  | "rocket"
-  | "flask"
-  | "sparkling";
+export type CustomActivityIcon = ActivityIconKey;
 
 export type CustomActivityButton = {
   label: string;

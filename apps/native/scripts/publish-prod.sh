@@ -16,7 +16,6 @@ RELEASE_DIR="$ROOT_DIR/releases/$VERSION"
 echo "=== Publishing Nowly Host v$VERSION to CDN ==="
 echo ""
 
-# Check all required files exist
 REQUIRED_FILES=(
   "nowly-setup.exe"
   "nowly-windows.zip"

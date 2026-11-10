@@ -1,798 +1,415 @@
 import { deriveDeviceToken } from "@/features/device/device-token";
 import { presenceRoutes } from "@/features/presence/presence.routes";
+import { device, devicePresence, presenceActiveDevice } from "@nowly/database/schema/device";
+import { presence, presenceLike, presenceVersion } from "@nowly/database/schema/presence";
+import { asc } from "drizzle-orm";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { createTestDatabase, type TestDatabase } from "./database";
 import { inject, mount } from "./http";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const mockPresenceRepo = vi.hoisted(() => ({
-  getAllPresenceSlugs: vi.fn(),
-  getAllPresenceMetas: vi.fn(),
-  getPresenceListData: vi.fn(),
-  getPresenceMeta: vi.fn(),
-  getPresenceStats: vi.fn(),
-  getGlobalPresenceStats: vi.fn(),
-  markActiveDevice: vi.fn(),
-  clearActiveDevice: vi.fn(),
-  clearActiveDevicesForDevice: vi.fn(),
-  setPresenceMeta: vi.fn(),
-  setVersion: vi.fn(),
-  setAdded: vi.fn(),
-  setUpdated: vi.fn(),
-  addVersion: vi.fn(),
-  getVersionHistory: vi.fn(),
-  setArchived: vi.fn(),
-  likePresence: vi.fn(),
-  unlikePresence: vi.fn(),
-  hasLikedPresence: vi.fn(),
-  getLikeCount: vi.fn()
-}));
+const DEVICE = "11111111-1111-4111-8111-111111111111";
+const OTHER_DEVICE = "22222222-2222-4222-8222-222222222222";
+const WEBHOOK = "https://discord.example/webhook";
+let database: TestDatabase;
+let app: ReturnType<typeof mount>;
 
-const mockDeviceService = vi.hoisted(() => ({ deviceExists: vi.fn().mockResolvedValue(true) }));
-
-vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo);
-vi.mock("@/features/device/device.service", () => mockDeviceService);
-
-const mockPresenceReport = vi.hoisted(() => ({ submitPresenceReport: vi.fn() }));
-
-vi.mock("@/features/presence/presence-report", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@/features/presence/presence-report")>();
-  return {
-    ...actual,
-    submitPresenceReport: mockPresenceReport.submitPresenceReport
-  };
+beforeAll(async () => {
+  database = await createTestDatabase();
 });
 
-vi.mock("@/db/client", () => ({
-  getDb: vi.fn(() => ({})),
-  hasDatabase: vi.fn(() => true)
-}));
+beforeEach(async () => {
+  await database.reset();
+  vi.stubEnv("API_SECRET_KEY", "test-secret");
+  app = mount("/presences", presenceRoutes);
+});
 
-const mockCrypto = vi.hoisted(() => ({
-  sha256Base64Url: vi.fn(),
-  canonicalJson: vi.fn(),
-  signedPayload: vi.fn(),
-  signPresenceRelease: vi.fn()
-}));
+afterEach(vi.unstubAllEnvs);
+afterEach(vi.unstubAllGlobals);
+afterAll(() => database.close());
 
-vi.mock("@/shared/crypto.service", () => mockCrypto);
-
-const buildApp = () => mount("/presences", presenceRoutes);
-
-describe("Registry Routes", () => {
-  let app: Awaited<ReturnType<typeof buildApp>>;
-
-  beforeEach(async () => {
-    vi.clearAllMocks();
-    delete process.env.API_SECRET_KEY;
-    app = await buildApp();
+describe("public presence routes", () => {
+  it("returns an empty catalog when no presence exists", async () => {
+    const response = await inject(app, { url: "/presences" });
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toEqual([]);
   });
 
-  afterEach(async () => {
-    delete process.env.API_SECRET_KEY;
-  });
-
-  it("GET /presences returns empty array when no slugs", async () => {
-    mockPresenceRepo.getPresenceListData.mockResolvedValue([]);
-
-    const res = await inject(app, {
-      method: "GET",
-      url: "/presences"
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual([]);
-  });
-
-  it("GET /presences returns registry with metadata and stats", async () => {
-    mockPresenceRepo.getPresenceListData.mockResolvedValue([
+  it("returns global stats from devices, installs and fresh activity", async () => {
+    const { db } = database;
+    await db.insert(device).values([
+      { deviceId: DEVICE },
+      { deviceId: OTHER_DEVICE }
+    ]);
+    await db.insert(devicePresence).values([
       {
-        name: "YouTube",
+        deviceId: DEVICE,
+        slug: "youtube"
+      },
+      {
+        deviceId: OTHER_DEVICE,
         slug: "youtube",
-        author: {
-          name: "Gaëtan H",
-          github: "steellgold"
-        },
-        category: "streaming",
-        description: { "en-US": "Watch videos" },
-        color: "#FF0033",
-        url: ["youtube.com"],
-        assets: {
-          logo: "logo.png",
-          icon: "icon.png",
-          thumbnail: "thumbnail.jpg"
-        },
-        tags: ["video"],
-        version: "1.0.0",
-        addedAt: "2024-01-01T00:00:00.000Z",
-        lastUpdated: "2024-06-01T00:00:00.000Z",
-        totalInstalls: 500,
-        activeUsers: 42,
-        likes: 0
+        installed: false
+      }
+    ]);
+    await db.insert(presenceActiveDevice).values([
+      {
+        deviceId: DEVICE,
+        slug: "youtube"
+      },
+      {
+        deviceId: DEVICE,
+        slug: "twitch"
+      },
+      {
+        deviceId: OTHER_DEVICE,
+        slug: "youtube",
+        lastSeenAt: new Date(0)
       }
     ]);
 
-    const res = await inject(app, {
-      method: "GET",
-      url: "/presences"
-    });
-
-    expect(res.statusCode).toBe(200);
-    const body = JSON.parse(res.body);
-    expect(body).toHaveLength(1);
-    expect(body[0].version).toBe("1.0.0");
-    expect(body[0].addedAt).toBe("2024-01-01T00:00:00.000Z");
-    expect(body[0].lastUpdated).toBe("2024-06-01T00:00:00.000Z");
-    expect(body[0].totalInstalls).toBe(500);
-    expect(body[0].activeUsers).toBe(42);
-  });
-
-  it("GET /presences/stats returns global public stats", async () => {
-    mockPresenceRepo.getGlobalPresenceStats.mockResolvedValue({
-      totalUsers: 1200,
-      activeUsers: 84,
-      activePresenceCount: 96,
-      installedPresenceCount: 2400
-    });
-
-    const res = await inject(app, {
-      method: "GET",
-      url: "/presences/stats"
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({
-      totalUsers: 1200,
-      activeUsers: 84,
-      activePresenceCount: 96,
-      installedPresenceCount: 2400
+    const response = await inject(app, { url: "/presences/stats" });
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toEqual({
+      totalUsers: 2,
+      activeUsers: 1,
+      activePresenceCount: 2,
+      installedPresenceCount: 1
     });
   });
-});
 
-describe("Presence Routes", () => {
-  let app: Awaited<ReturnType<typeof buildApp>>;
-
-  beforeEach(async () => {
-    vi.clearAllMocks();
-    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([]);
-    delete process.env.API_SECRET_KEY;
-    app = await buildApp();
-  });
-
-  afterEach(async () => {
-    delete process.env.API_SECRET_KEY;
-  });
-
-  it("GET /presences/:slug returns 404 for unknown", async () => {
-    mockPresenceRepo.getPresenceMeta.mockResolvedValue(null);
-
-    const res = await inject(app, {
-      method: "GET",
-      url: "/presences/nonexistent"
-    });
-
-    expect(res.statusCode).toBe(404);
-  });
-
-  it("GET /presences/:slug returns 404 when archived", async () => {
-    process.env.API_SECRET_KEY = "test-secret";
-    mockPresenceRepo.getPresenceStats.mockResolvedValue({
-      totalInstalls: 12,
-      activeUsers: 0,
-      version: "1.0.0",
+  it.each(["unknown", "archived"])("returns the same 404 for an %s presence", async (slug) => {
+    await database.db.insert(presence).values({
+      slug: "archived",
       archived: true,
-      addedAt: null,
-      lastUpdated: null
+      metadata: { name: "Hidden" }
     });
+    const fetcher = vi.fn();
+    vi.stubGlobal("fetch", fetcher);
 
-    const res = await inject(app, {
-      method: "GET",
-      url: "/presences/cinepulse"
-    });
-
-    expect(res.statusCode).toBe(404);
-    expect(JSON.parse(res.body)).toEqual({ error: "PRESENCE_NOT_FOUND" });
-    expect(mockPresenceRepo.getPresenceMeta).not.toHaveBeenCalled();
+    const response = await inject(app, { url: "/presences/" + slug });
+    expect(response.statusCode).toBe(404);
+    expect(response.json()).toEqual({ error: "PRESENCE_NOT_FOUND" });
+    expect(fetcher).not.toHaveBeenCalled();
   });
 
-  it("GET /presences/:slug returns 200 with release data", async () => {
-    const originalFetch = globalThis.fetch;
-    globalThis.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: true,
-        text: () => Promise.resolve("console.log('hello')")
-      } as Response)
-    );
-
-    mockPresenceRepo.getPresenceMeta.mockResolvedValue({
-      name: "YouTube",
-      author: { name: "test" },
-      category: "streaming",
-      description: { "en-US": "Watch videos" },
-      url: ["youtube.com"],
-      color: "#FF0033",
-      assets: {
-        logo: "logo.png",
-        icon: "icon.png",
-        thumbnail: "thumbnail.jpg"
+  it("returns saved version history in reverse chronological order", async () => {
+    await database.db.insert(presence).values({
+      slug: "youtube",
+      version: "1.0.0"
+    });
+    await database.db.insert(presenceVersion).values([
+      {
+        slug: "youtube",
+        version: "0.0.1",
+        author: "alice",
+        timestamp: new Date(1_000)
       },
-      settings: {}
-    });
+      {
+        slug: "youtube",
+        version: "1.0.0",
+        author: "bob",
+        changelog: "First release",
+        timestamp: new Date(2_000)
+      }
+    ]);
 
-    mockPresenceRepo.getPresenceStats.mockResolvedValue({
-      totalInstalls: 100,
-      activeUsers: 10,
-      version: "1.0.0",
-      addedAt: "2024-01-01",
-      lastUpdated: "2024-06-01"
-    });
-
-    mockCrypto.sha256Base64Url.mockReturnValue("abc123");
-    mockCrypto.canonicalJson.mockReturnValue('{"name":"YouTube"}');
-    mockCrypto.signedPayload.mockReturnValue("signed-payload");
-    mockCrypto.signPresenceRelease.mockReturnValue("signature-value");
-
-    const res = await inject(app, {
-      method: "GET",
-      url: "/presences/youtube"
-    });
-
-    expect(res.statusCode).toBe(200);
-    const body = JSON.parse(res.body);
-    expect(body.slug).toBe("youtube");
-    expect(body.version).toBe("1.0.0");
-    expect(body.bundle).toBe("console.log('hello')");
-    expect(body.sha256).toBe("abc123");
-    expect(body.metadataHash).toBe("abc123");
-    expect(body.signature).toBe("signature-value");
-    expect(body.totalInstalls).toBe(100);
-    expect(body.activeUsers).toBe(10);
-
-    globalThis.fetch = originalFetch;
-  });
-
-  it("GET /presences/:slug/versions returns version history", async () => {
-    const history = [
+    const response = await inject(app, { url: "/presences/youtube/versions" });
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toMatchObject([
       {
         version: "1.0.0",
-        changelog: '{"en-US":"First release","fr-FR":"Première version","es-ES":"Primera versión"}',
-        author: "test",
-        timestamp: 1700000000000
+        author: "bob",
+        changelog: "First release",
+        timestamp: 2_000
       },
       {
         version: "0.0.1",
+        author: "alice",
         changelog: "",
-        author: "test",
-        timestamp: 1690000000000
+        timestamp: 1_000
       }
-    ];
-
-    mockPresenceRepo.getVersionHistory.mockResolvedValue(history);
-
-    const res = await inject(app, {
-      method: "GET",
-      url: "/presences/youtube/versions"
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual(history);
+    ]);
   });
 
-  it("PUT /presences/:slug returns 401 without auth when secret is configured", async () => {
-    process.env.API_SECRET_KEY = "test-secret";
-
-    const res = await inject(app, {
-      method: "PUT",
-      url: "/presences/youtube",
-      payload: { version: "1.0.0" }
-    });
-
-    expect(res.statusCode).toBe(401);
-  });
-
-  it("PUT /presences/:slug returns 200 with valid auth", async () => {
-    process.env.API_SECRET_KEY = "test-secret";
-
-    mockPresenceRepo.setVersion.mockResolvedValue(undefined as any);
-    mockPresenceRepo.addVersion.mockResolvedValue(undefined as any);
-
-    const res = await inject(app, {
-      method: "PUT",
-      url: "/presences/youtube",
-      headers: { authorization: "Bearer test-secret" },
-      payload: {
-        version: "2.0.0",
-        changelog: "Big update",
-        author: "dev",
-        authorGithub: "dev-github",
-        pr: "42",
-        added: "2024-01-01",
-        updated: "2024-06-01"
-      }
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({ ok: true });
-    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "2.0.0", expect.any(Date));
-    const publishedAt = mockPresenceRepo.setVersion.mock.calls[0][2];
-    expect(mockPresenceRepo.addVersion.mock.calls[0][1].timestamp).toBe(publishedAt.getTime());
-    expect(mockPresenceRepo.setAdded).toHaveBeenCalledWith("youtube", "2024-01-01");
-    expect(mockPresenceRepo.setUpdated).toHaveBeenCalledWith("youtube", "2024-06-01");
-  });
-
-  it("POST /presences/sync returns 401 without auth", async () => {
-    process.env.API_SECRET_KEY = "test-secret";
-
-    const res = await inject(app, {
-      method: "POST",
-      url: "/presences/sync",
-      payload: {
+  it.each([
+    [
+      "PUT",
+      "youtube",
+      { version: "1.0.0" }
+    ],
+    [
+      "POST",
+      "sync",
+      {
         presences: []
       }
+    ]
+  ] as const)("requires the publication secret for %s /presences/%s", async (method, slug, payload) => {
+    const response = await inject(app, {
+      method,
+      url: "/presences/" + slug,
+      payload
     });
-
-    expect(res.statusCode).toBe(401);
-  });
-
-  it("POST /presences/sync processes presences and returns results", async () => {
-    mockPresenceRepo.getPresenceStats.mockResolvedValue({
-      totalInstalls: 0,
-      activeUsers: 0,
-      version: null,
-      addedAt: null,
-      lastUpdated: null
-    });
-    mockPresenceRepo.setVersion.mockResolvedValue(undefined as any);
-    mockPresenceRepo.setPresenceMeta.mockResolvedValue(undefined as any);
-    mockPresenceRepo.setAdded.mockResolvedValue(undefined as any);
-    mockPresenceRepo.addVersion.mockResolvedValue(undefined as any);
-
-    const res = await inject(app, {
-      method: "POST",
-      url: "/presences/sync",
-      payload: {
-        presences: [
-          {
-            slug: "youtube",
-            type: "new",
-            name: "YouTube",
-            category: "video",
-            author: "dev",
-            description: { "en-US": "Watch videos" }
-          }
-        ],
-        pr: "42",
-        prTitle: "Add YouTube presence"
-      }
-    });
-
-    expect(res.statusCode).toBe(200);
-    const body = JSON.parse(res.body);
-    expect(body.ok).toBe(true);
-    expect(body.results).toHaveLength(1);
-    expect(body.results[0].slug).toBe("youtube");
-    expect(body.results[0].version).toBe("1.0.0");
-    expect(body.results[0].changelog).toContain("Watch videos");
-    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "1.0.0", expect.any(Date));
-    const publishedAt = mockPresenceRepo.setVersion.mock.calls[0][2];
-    expect(mockPresenceRepo.setAdded).toHaveBeenCalledWith("youtube", publishedAt);
-    expect(mockPresenceRepo.addVersion.mock.calls[0][1].timestamp).toBe(publishedAt.getTime());
-    expect(mockPresenceRepo.setUpdated).not.toHaveBeenCalled();
-    expect(mockPresenceRepo.setPresenceMeta).toHaveBeenCalledWith(
-      "youtube",
-      expect.objectContaining({
-        slug: "youtube",
-        name: "YouTube",
-        author: "dev",
-        category: "video"
-      })
-    );
-    expect(mockPresenceRepo.setArchived).toHaveBeenCalledWith("youtube", false);
-  });
-
-  it("POST /presences/sync preserves addedAt for modified publications", async () => {
-    mockPresenceRepo.getPresenceStats.mockResolvedValue({
-      totalInstalls: 0,
-      activeUsers: 0,
-      version: "1.0.0",
-      addedAt: "2024-01-01T00:00:00.000Z",
-      lastUpdated: "2024-02-01T00:00:00.000Z"
-    });
-    mockPresenceRepo.setVersion.mockResolvedValue(undefined);
-    mockPresenceRepo.setPresenceMeta.mockResolvedValue(undefined);
-    mockPresenceRepo.addVersion.mockResolvedValue(undefined);
-
-    const res = await inject(app, {
-      method: "POST",
-      url: "/presences/sync",
-      payload: {
-        presences: [
-          {
-            slug: "youtube",
-            type: "modified",
-            name: "YouTube",
-            author: "dev",
-            changelog: "Fix playback status"
-          }
-        ]
-      }
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(mockPresenceRepo.setVersion).toHaveBeenCalledWith("youtube", "1.0.1", expect.any(Date));
-    expect(mockPresenceRepo.setAdded).not.toHaveBeenCalled();
-    expect(mockPresenceRepo.setUpdated).not.toHaveBeenCalled();
-  });
-
-  it("POST /presences/sync rejects conflicting aliases before any write", async () => {
-    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([
-      {
-        slug: "youtube",
-        metadata: {
-          slug: "youtube",
-          aliases: ["yt"]
-        }
-      },
-      {
-        slug: "openfront.io",
-        metadata: {
-          slug: "openfront.io",
-          aliases: ["openfront"]
-        }
-      }
-    ]);
-
-    const res = await inject(app, {
-      method: "POST",
-      url: "/presences/sync",
-      payload: {
-        presences: [
-          {
-            slug: "youtube-music",
-            type: "new",
-            name: "YouTube Music",
-            metadata: {
-              slug: "youtube-music",
-              name: "YouTube Music",
-              aliases: ["yt", "youtube", "Music"]
-            }
-          },
-          {
-            slug: "openfront",
-            type: "new",
-            name: "OpenFront"
-          }
-        ]
-      }
-    });
-
-    expect(res.statusCode).toBe(400);
-    expect(JSON.parse(res.body)).toEqual({
-      error: "PRESENCE_ALIAS_CONFLICT",
-      issues: [
-        'youtube-music: Alias "yt" is already an alias of "youtube"',
-        'youtube-music: Alias "youtube" is already the slug of "youtube"',
-        'youtube-music: Alias "Music" must use lowercase letters, digits, dots or hyphens (max 80 characters)',
-        'openfront: Slug "openfront" is already an alias of "openfront.io"'
-      ]
-    });
-    expect(mockPresenceRepo.setVersion).not.toHaveBeenCalled();
-    expect(mockPresenceRepo.setPresenceMeta).not.toHaveBeenCalled();
-    expect(mockPresenceRepo.setArchived).not.toHaveBeenCalled();
-  });
-
-  it("POST /presences/sync accepts aliases moved within the same batch", async () => {
-    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([
-      {
-        slug: "youtube",
-        metadata: {
-          slug: "youtube",
-          aliases: ["yt"]
-        }
-      }
-    ]);
-    mockPresenceRepo.getPresenceStats.mockResolvedValue({ version: "1.0.0" });
-    mockPresenceRepo.getVersionHistory.mockResolvedValue([]);
-
-    const res = await inject(app, {
-      method: "POST",
-      url: "/presences/sync",
-      payload: {
-        presences: [
-          {
-            slug: "youtube",
-            type: "modified",
-            name: "YouTube",
-            changelog: "Move alias",
-            metadata: {
-              slug: "youtube",
-              aliases: []
-            }
-          },
-          {
-            slug: "youtube-music",
-            type: "modified",
-            name: "YouTube Music",
-            changelog: "Take alias",
-            metadata: {
-              slug: "youtube-music",
-              aliases: ["yt"]
-            }
-          }
-        ]
-      }
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(mockPresenceRepo.setPresenceMeta).toHaveBeenCalledWith("youtube-music", {
-      slug: "youtube-music",
-      aliases: ["yt"]
-    });
-  });
-
-  it("POST /presences/sync archives removed slugs", async () => {
-    mockPresenceRepo.setArchived.mockResolvedValue(true);
-
-    const res = await inject(app, {
-      method: "POST",
-      url: "/presences/sync",
-      headers: { authorization: "Bearer test-secret" },
-      payload: {
-        archivedSlugs: ["cinepulse"],
-        pr: "11",
-        prTitle: "Remove Cinepulse"
-      }
-    });
-
-    expect(res.statusCode).toBe(200);
-    const body = JSON.parse(res.body);
-    expect(body.ok).toBe(true);
-    expect(body.results).toEqual([]);
-    expect(body.archived).toEqual(["cinepulse"]);
-    expect(mockPresenceRepo.setArchived).toHaveBeenCalledWith("cinepulse", true);
+    expect(response.statusCode).toBe(401);
+    expect(await database.db.select().from(presence)).toEqual([]);
   });
 });
 
-describe("Stats Routes", () => {
-  let app: Awaited<ReturnType<typeof buildApp>>;
+it("tracks multiple presences and clears one or all for the requested device", async () => {
+  const { db } = database;
+  await db.insert(device).values([
+    { deviceId: DEVICE },
+    { deviceId: OTHER_DEVICE }
+  ]);
+  await db.insert(presenceActiveDevice).values({
+    deviceId: OTHER_DEVICE,
+    slug: "youtube"
+  });
+  const tracked = () =>
+    db
+      .select({
+        deviceId: presenceActiveDevice.deviceId,
+        slug: presenceActiveDevice.slug
+      })
+      .from(presenceActiveDevice)
+      .orderBy(asc(presenceActiveDevice.deviceId), asc(presenceActiveDevice.slug));
+
+  const started = await inject(app, {
+    method: "POST",
+    url: "/presences/active",
+    payload: {
+      presences: ["YouTube", "twitch"],
+      deviceId: DEVICE
+    }
+  });
+  expect(started.statusCode).toBe(200);
+  expect(started.json()).toEqual({
+    ok: true,
+    count: 2
+  });
+  expect(await tracked()).toEqual([
+    {
+      deviceId: DEVICE,
+      slug: "twitch"
+    },
+    {
+      deviceId: DEVICE,
+      slug: "youtube"
+    },
+    {
+      deviceId: OTHER_DEVICE,
+      slug: "youtube"
+    }
+  ]);
+
+  const path = "/presences/active/" + DEVICE;
+  const single = await inject(app, {
+    method: "DELETE",
+    url: path + "/youtube"
+  });
+  expect(single.statusCode).toBe(200);
+  expect(single.json()).toEqual({
+    ok: true,
+    removed: 1
+  });
+  expect(await tracked()).toEqual([
+    {
+      deviceId: DEVICE,
+      slug: "twitch"
+    },
+    {
+      deviceId: OTHER_DEVICE,
+      slug: "youtube"
+    }
+  ]);
+
+  const all = await inject(app, {
+    method: "DELETE",
+    url: path
+  });
+  expect(all.statusCode).toBe(200);
+  expect(all.json()).toEqual({
+    ok: true,
+    removed: null
+  });
+  expect(await tracked()).toEqual([
+    {
+      deviceId: OTHER_DEVICE,
+      slug: "youtube"
+    }
+  ]);
+});
+
+describe("presence reports", () => {
+  const report = (slug: string, payload: unknown) =>
+    inject(app, {
+      method: "POST",
+      url: "/presences/" + slug + "/report",
+      payload
+    });
 
   beforeEach(async () => {
-    vi.clearAllMocks();
-    delete process.env.API_SECRET_KEY;
-    app = await buildApp();
-  });
-
-  afterEach(async () => {
-    delete process.env.API_SECRET_KEY;
-  });
-
-  it("POST /presences/active updates multiple presences and DELETE endpoints clear active tracks", async () => {
-    // 1. POST /presences/active updates multiple presences
-    mockPresenceRepo.markActiveDevice.mockResolvedValue(undefined as any);
-    const postRes = await inject(app, {
-      method: "POST",
-      url: "/presences/active",
-      payload: {
-        presences: ["youtube", "twitch"],
-        deviceId: "22222222-2222-4222-8222-222222222222"
-      }
-    });
-    expect(postRes.statusCode).toBe(200);
-    expect(JSON.parse(postRes.body)).toEqual({
-      ok: true,
-      count: 2
-    });
-    expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledTimes(2);
-    expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith("youtube", "22222222-2222-4222-8222-222222222222");
-    expect(mockPresenceRepo.markActiveDevice).toHaveBeenCalledWith("twitch", "22222222-2222-4222-8222-222222222222");
-
-    // 2. DELETE /presences/active/:deviceId/:slug clears one tracked presence
-    mockPresenceRepo.clearActiveDevice.mockResolvedValue(undefined as any);
-    const deleteSingleRes = await inject(app, {
-      method: "DELETE",
-      url: "/presences/active/device-123/youtube"
-    });
-    expect(deleteSingleRes.statusCode).toBe(200);
-    expect(JSON.parse(deleteSingleRes.body)).toEqual({
-      ok: true,
-      removed: 1
-    });
-    expect(mockPresenceRepo.clearActiveDevice).toHaveBeenCalledWith("youtube", "device-123");
-
-    // 3. DELETE /presences/active/:deviceId clears every tracked presence
-    mockPresenceRepo.clearActiveDevicesForDevice.mockResolvedValue(undefined as any);
-    const deleteAllRes = await inject(app, {
-      method: "DELETE",
-      url: "/presences/active/device-123"
-    });
-    expect(deleteAllRes.statusCode).toBe(200);
-    expect(JSON.parse(deleteAllRes.body)).toEqual({
-      ok: true,
-      removed: null
-    });
-    expect(mockPresenceRepo.clearActiveDevicesForDevice).toHaveBeenCalledWith("device-123");
-  });
-
-  it("POST /presences/:slug/report handles valid report submission and error scenarios", async () => {
-    mockPresenceRepo.getPresenceMeta.mockResolvedValue({
-      name: { "en-US": "YouTube" }
-    });
-    mockPresenceRepo.getPresenceStats.mockResolvedValue({ archived: false });
-    mockPresenceReport.submitPresenceReport.mockResolvedValue("sent");
-
-    // Valid submission
-    const res = await inject(app, {
-      method: "POST",
-      url: "/presences/youtube/report",
-      payload: {
-        message: "The presence stays idle on the watch page.",
-        locale: "fr-FR",
-        browser: "Firefox",
-        browserVersion: "141.0"
-      }
-    });
-
-    expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res.body)).toEqual({ ok: true });
-    expect(mockPresenceReport.submitPresenceReport).toHaveBeenCalledWith({
+    await database.db.insert(presence).values({
       slug: "youtube",
-      name: "YouTube",
+      metadata: {
+        name: { "en-US": "YouTube" }
+      }
+    });
+  });
+
+  it("forwards an accepted report to Discord with the resolved name and client details", async () => {
+    vi.stubEnv("DISCORD_WEBHOOK_REPORT_URL", WEBHOOK);
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(null, { status: 204 }));
+    vi.stubGlobal("fetch", fetcher);
+    const response = await report("youtube", {
       message: "The presence stays idle on the watch page.",
       locale: "fr-FR",
       browser: "Firefox",
       browserVersion: "141.0"
     });
 
-    // Rejects empty or oversized messages
-    mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: "YouTube" });
-    expect(
-      (
-        await inject(app, {
-          method: "POST",
-          url: "/presences/youtube/report",
-          payload: { message: "   " }
-        })
-      ).statusCode
-    ).toBe(400);
-    expect(
-      (
-        await inject(app, {
-          method: "POST",
-          url: "/presences/youtube/report",
-          payload: { message: "x".repeat(751) }
-        })
-      ).statusCode
-    ).toBe(400);
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toEqual({ ok: true });
+    expect(fetcher).toHaveBeenCalledTimes(1);
+    const [[url, sent]] = fetcher.mock.calls;
+    expect(url).toBe(WEBHOOK);
+    expect(JSON.parse(String(sent?.body)).embeds[0].fields).toEqual(
+      expect.arrayContaining([
+        {
+          name: "Presence",
+          value: "[YouTube](https://nowly.test/library/youtube)",
+          inline: true
+        },
+        {
+          name: "Locale",
+          value: "fr-FR",
+          inline: true
+        },
+        {
+          name: "Browser",
+          value: "Firefox",
+          inline: true
+        },
+        {
+          name: "Browser version",
+          value: "141.0",
+          inline: true
+        },
+        {
+          name: "Problem",
+          value: "The presence stays idle on the watch page.",
+          inline: false
+        }
+      ])
+    );
+  });
 
-    // 404 for unknown presences
-    mockPresenceRepo.getPresenceMeta.mockResolvedValue(null);
-    expect(
-      (
-        await inject(app, {
-          method: "POST",
-          url: "/presences/missing/report",
-          payload: { message: "Broken" }
-        })
-      ).statusCode
-    ).toBe(404);
+  it.each([
+    ["blank text", "youtube", "   ", 400, "INVALID_REQUEST_BODY"],
+    [
+      "oversized text",
+      "youtube",
+      "x".repeat(751),
+      400,
+      "INVALID_REQUEST_BODY"
+    ],
+    ["an unknown presence", "missing", "Broken", 404, "PRESENCE_NOT_FOUND"]
+  ] as const)("rejects %s before contacting Discord", async (_case, slug, message, status, error) => {
+    vi.stubEnv("DISCORD_WEBHOOK_REPORT_URL", WEBHOOK);
+    const fetcher = vi.fn();
+    vi.stubGlobal("fetch", fetcher);
 
-    // 503 when Discord service is unconfigured
-    mockPresenceRepo.getPresenceMeta.mockResolvedValue({ name: "YouTube" });
-    mockPresenceReport.submitPresenceReport.mockResolvedValue("unconfigured");
-    expect(
-      (
-        await inject(app, {
-          method: "POST",
-          url: "/presences/youtube/report",
-          payload: { message: "Broken timestamps" }
-        })
-      ).statusCode
-    ).toBe(503);
+    const response = await report(slug, { message });
+    expect(response.statusCode).toBe(status);
+    expect(response.json()).toEqual({ error });
+    expect(fetcher).not.toHaveBeenCalled();
+  });
+
+  it("returns 503 when the report webhook is unavailable", async () => {
+    vi.stubEnv("DISCORD_WEBHOOK_REPORT_URL", undefined);
+    const response = await report("youtube", { message: "Broken timestamps" });
+    expect(response.statusCode).toBe(503);
+    expect(response.json()).toEqual({ error: "REPORTS_UNAVAILABLE" });
   });
 });
 
-describe("Presence Likes", () => {
-  let app: Awaited<ReturnType<typeof buildApp>>;
-  const validDeviceId = "11111111-1111-4111-8111-111111111111";
+describe("presence likes", () => {
+  const path = "/presences/youtube/like";
+  const withDevice = path + "?deviceId=" + DEVICE;
 
-  beforeEach(async () => {
-    vi.clearAllMocks();
-    app = await buildApp();
-  });
+  it("creates, reads and removes a like with the signed device token", async () => {
+    await database.db.insert(presenceLike).values({
+      slug: "youtube",
+      deviceId: OTHER_DEVICE
+    });
+    const headers = { "x-device-token": deriveDeviceToken(DEVICE) };
 
-  afterEach(async () => {});
-
-  it("handles like and unlike lifecycles with valid device token auth", async () => {
-    // Like
-    mockPresenceRepo.getLikeCount.mockResolvedValueOnce(3);
-    const likeRes = await inject(app, {
+    const added = await inject(app, {
       method: "POST",
-      url: "/presences/youtube/like",
-      payload: { deviceId: validDeviceId },
-      headers: { "x-device-token": deriveDeviceToken(validDeviceId) }
+      url: path,
+      payload: { deviceId: DEVICE },
+      headers
     });
-    expect(likeRes.statusCode).toBe(200);
-    expect(JSON.parse(likeRes.body)).toEqual({
-      ok: true,
-      count: 3
-    });
-    expect(mockPresenceRepo.likePresence).toHaveBeenCalledWith("youtube", validDeviceId);
-
-    // Status query
-    mockPresenceRepo.hasLikedPresence.mockResolvedValueOnce(true);
-    mockPresenceRepo.getLikeCount.mockResolvedValueOnce(3);
-    const statusRes = await inject(app, {
-      method: "GET",
-      url: `/presences/youtube/like?deviceId=${validDeviceId}`
-    });
-    expect(statusRes.statusCode).toBe(200);
-    expect(JSON.parse(statusRes.body)).toEqual({
-      liked: true,
-      count: 3
-    });
-
-    // Unlike
-    mockPresenceRepo.getLikeCount.mockResolvedValueOnce(2);
-    const unlikeRes = await inject(app, {
-      method: "DELETE",
-      url: `/presences/youtube/like?deviceId=${validDeviceId}`,
-      headers: { "x-device-token": deriveDeviceToken(validDeviceId) }
-    });
-    expect(unlikeRes.statusCode).toBe(200);
-    expect(JSON.parse(unlikeRes.body)).toEqual({
+    expect(added.statusCode).toBe(200);
+    expect(added.json()).toEqual({
       ok: true,
       count: 2
     });
-    expect(mockPresenceRepo.unlikePresence).toHaveBeenCalledWith("youtube", validDeviceId);
+    const liked = await inject(app, { url: withDevice });
+    expect(liked.statusCode).toBe(200);
+    expect(liked.json()).toEqual({
+      liked: true,
+      count: 2
+    });
+
+    const removed = await inject(app, {
+      method: "DELETE",
+      url: withDevice,
+      headers
+    });
+    expect(removed.statusCode).toBe(200);
+    expect(removed.json()).toEqual({
+      ok: true,
+      count: 1
+    });
+    const unliked = await inject(app, { url: withDevice });
+    expect(unliked.statusCode).toBe(200);
+    expect(unliked.json()).toEqual({
+      liked: false,
+      count: 1
+    });
   });
 
-  it("enforces deviceId requirement and token authorization on all like endpoints", async () => {
-    // Missing deviceId -> 400
-    expect(
-      (
-        await inject(app, {
-          method: "POST",
-          url: "/presences/youtube/like",
-          payload: {}
-        })
-      ).statusCode
-    ).toBe(400);
-    expect(
-      (
-        await inject(app, {
-          method: "DELETE",
-          url: "/presences/youtube/like"
-        })
-      ).statusCode
-    ).toBe(400);
-    expect(
-      (
-        await inject(app, {
-          method: "GET",
-          url: "/presences/youtube/like"
-        })
-      ).statusCode
-    ).toBe(400);
+  it.each(["POST", "GET", "DELETE"] as const)("requires a device id for %s", async (method) => {
+    const response = await inject(app, {
+      method,
+      url: path,
+      payload: method === "POST" ? {} : undefined
+    });
+    expect(response.statusCode).toBe(400);
+    expect(response.json()).toEqual({ error: "DEVICE_ID_REQUIRED" });
+  });
 
-    // Missing / invalid token -> 401
+  it.each(["POST", "DELETE"] as const)("requires a valid device token to %s a like", async (method) => {
+    const request = {
+      method,
+      url: method === "POST" ? path : withDevice,
+      payload: method === "POST" ? { deviceId: DEVICE } : undefined
+    };
+    if (method === "DELETE") await database.db.insert(presenceLike).values({
+      slug: "youtube",
+      deviceId: DEVICE
+    });
+
+    expect((await inject(app, request)).statusCode).toBe(401);
     expect(
       (
         await inject(app, {
-          method: "POST",
-          url: "/presences/youtube/like",
-          payload: { deviceId: validDeviceId }
+          ...request,
+          headers: { "x-device-token": deriveDeviceToken(OTHER_DEVICE) }
         })
       ).statusCode
     ).toBe(401);
-    expect(
-      (
-        await inject(app, {
-          method: "DELETE",
-          url: `/presences/youtube/like?deviceId=${validDeviceId}`
-        })
-      ).statusCode
-    ).toBe(401);
-
-    expect(mockPresenceRepo.likePresence).not.toHaveBeenCalled();
-    expect(mockPresenceRepo.unlikePresence).not.toHaveBeenCalled();
+    expect(await database.db.select({ deviceId: presenceLike.deviceId }).from(presenceLike)).toEqual(method === "POST" ? [] : [{ deviceId: DEVICE }]);
   });
 });

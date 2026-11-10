@@ -1,4 +1,4 @@
-import type { MockHandlers } from "@/preview/mock-router";
+import type { MockHandlers } from "@/preview/mock-handlers";
 
 type MockPublication = {
   id: string;

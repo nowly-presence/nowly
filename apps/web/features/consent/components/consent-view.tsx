@@ -1,7 +1,8 @@
 "use client";
 
 import { Button, Card, CardContent, CardDescription, CardTitle, Switch } from "@nowly/ui";
-import { requestExtension, subscribeExtensionDetected, type ExtensionDeviceInfo } from "@/lib/extension-bridge";
+import { requestExtension, subscribeExtensionDetected } from "@nowly/shared/web-bridge";
+import type { ExtensionDeviceInfo } from "@nowly/shared/web-bridge-protocol";
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { RiDownload2Line, RiDeleteBinLine, RiShieldCheckLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";

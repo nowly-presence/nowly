@@ -1,29 +1,22 @@
 export const ACCOUNT_TABS = [
   {
     href: "/profile",
-    key: "tab-profile",
-    capability: null
+    key: "tab-profile"
   },
   {
     href: "/devices",
-    key: "tab-devices",
-    capability: null
+    key: "tab-devices"
   },
   {
     href: "/presences",
-    key: "tab-presences",
-    capability: null
+    key: "tab-presences"
   },
   {
     href: "/creations",
-    key: "tab-creations",
-    capability: null
+    key: "tab-creations"
   },
   {
     href: "/public-page",
-    key: "tab-public",
-    capability: null
+    key: "tab-public"
   }
 ] as const;
-
-export const visibleTabs = (capabilities: readonly string[]) => ACCOUNT_TABS.filter((tab) => tab.capability === null || capabilities.includes(tab.capability));

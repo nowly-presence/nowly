@@ -1,7 +1,7 @@
 import { SUBMISSION_TIMELINE, type CreatorAccount } from "@nowly/presence-creator/creator-submission";
 import type { AccountUser } from "@/shared/types";
 import type { CreatorPick, CreatorReadMode, CreatorSubmission } from "@nowly/presence-creator/creator-types";
-import type { MockHandlers } from "@/preview/mock-router";
+import type { MockHandlers } from "@/preview/mock-handlers";
 
 const PICK_LATENCY_MS = 900;
 const PREVIEW_PAGE_URL = "https://www.example-tube.com/watch?v=lofi";

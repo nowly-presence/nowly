@@ -1,6 +1,6 @@
 # Auth
 
-Better Auth configuration shared by the apps. `@nowly/auth/server` exports `createAuth(db, options)` and `authTrustedOrigins(frontendUrl, production)`.
+Better Auth configuration shared by the apps. `@nowly/auth/server` exports `createAuth(db, options)` and `authTrustedOrigins(frontendUrl, accountUrl, production)`.
 
 - Drizzle adapter on `@nowly/database` (`user`, `session`, `account`, `verification` tables). No other table is read by Better Auth.
 - Discord is the only provider. `discordId` comes from the Discord profile and `role` defaults to `user`; neither is client-settable (`input: false`). Never add a provider or a writable field without an explicit decision.

@@ -44,7 +44,7 @@ const RESULT_JSON_SCHEMA = {
 export type AnnouncementTexts = z.infer<typeof ResultSchema>;
 type Texts = AnnouncementTexts;
 
-export class TranslationFailedError extends Error {}
+class TranslationFailedError extends Error {}
 
 export class EnglishSourceRequiredError extends Error {}
 

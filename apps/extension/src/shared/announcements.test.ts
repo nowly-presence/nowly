@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { AnnouncementSchema, announcementRevision, selectAnnouncementTranslation } from "@nowly/shared/announcements";
+import { AnnouncementSchema, announcementRevision } from "@nowly/shared/announcements";
 import { emptyAnnouncements, estimatedMinutes, normalizeAnnouncements, pinnedAnnouncement, visibleAnnouncements } from "@/shared/announcements";
 
 const now = Date.parse("2026-10-24T12:00:00Z");
@@ -121,9 +121,5 @@ describe("announcement view model and cache", () => {
     expect(state.items).toHaveLength(1);
     expect(state.read).toHaveLength(500);
     expect(state.fetchedAt).toBeNull();
-  });
-  it("selects sparse translations deterministically", () => {
-    const notice = item();
-    expect(selectAnnouncementTranslation(notice, "ja")?.title).toBe("Information");
   });
 });

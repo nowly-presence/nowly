@@ -1,9 +1,10 @@
 import { readMigrationFiles } from "drizzle-orm/migrator";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
+import { fileURLToPath } from "node:url";
 import { Pool } from "pg";
 
-export const MIGRATIONS_FOLDER = new URL("../migrations", import.meta.url).pathname;
+export const MIGRATIONS_FOLDER = fileURLToPath(new URL("../migrations", import.meta.url));
 const BASELINE_TABLE = "public.users";
 const HISTORY_TABLE = "drizzle.__drizzle_migrations";
 

@@ -1,7 +1,6 @@
 import { extensionEnv } from "@nowly/env/extension";
 
 export const NATIVE_HOST = "nowly.client";
-export const EXT_WEB_SOURCE = "Nowly";
 export const USER_SCRIPT_MESSAGE_SOURCE = "NOWLY_PRESENCE";
 export const WEB_BASE_URL = extensionEnv.VITE_WEB_BASE_URL ?? "https://nowly.me";
 export const ACCOUNT_BASE_URL = extensionEnv.VITE_ACCOUNT_BASE_URL ?? "https://account.nowly.me";
@@ -13,7 +12,8 @@ export const DISCORD_INVITE_URL = "https://discord.gg/MnZap7czgB";
 export const GITHUB_URL = "https://github.com/nowly-presence";
 export const KOFI_URL = "https://ko-fi.com/nowly";
 export const GITHUB_SPONSORS_URL = "https://github.com/sponsors/nowly-presence";
-export const CHROME_REVIEWS_URL = "https://chromewebstore.google.com/detail/nowly/kmnlnfldimgneaopdihplkebobckcjpf/reviews";
+export const PRODUCTION_EXTENSION_ID = "kmnlnfldimgneaopdihplkebobckcjpf";
+export const CHROME_REVIEWS_URL = `https://chromewebstore.google.com/detail/nowly/${PRODUCTION_EXTENSION_ID}/reviews`;
 export const FIREFOX_REVIEWS_URL = "https://addons.mozilla.org/firefox/addon/nowly-presence/reviews/";
 export const HOST_DOWNLOAD_URL = `${WEB_BASE_URL.replace(/\/$/, "")}/desktop`;
 export const PRESENCE_REPORT_MAX_LENGTH = 750;

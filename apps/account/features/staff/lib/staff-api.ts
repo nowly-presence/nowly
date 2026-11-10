@@ -1,4 +1,4 @@
-import { apiBaseUrl } from "@/lib/api-base";
+import { apiFetch as request, ensureOk, isRecord } from "@/lib/api-client";
 import type { AdminUser } from "@/features/account/lib/account-api";
 import type { UserRole } from "@nowly/shared/roles";
 import type { Announcement, AnnouncementInput, AnnouncementLocale } from "@nowly/shared/announcements";
@@ -21,22 +21,6 @@ export type StaffPresence = {
 };
 
 export type RepositoryRemoval = "removed" | "missing" | "failed" | "disabled";
-
-const request = async (path: string, init: RequestInit = {}): Promise<Response> =>
-  fetch(`${apiBaseUrl()}${path}`, {
-    ...init,
-    credentials: "include",
-    cache: "no-store",
-    headers: init.body ? { "Content-Type": "application/json", ...init.headers } : init.headers
-  });
-
-const ensureOk = async (response: Response): Promise<Response> => {
-  if (!response.ok) throw new Error(`HTTP_${response.status}`);
-
-  return response;
-};
-
-const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
 export const fetchStaffUsers = async (): Promise<AdminUser[]> => {
   const body = (await (await ensureOk(await request("/admin/users/staff"))).json()) as {

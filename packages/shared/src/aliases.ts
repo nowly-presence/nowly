@@ -5,7 +5,6 @@ export type PresenceAliasEntry = {
   metadata: Record<string, unknown> | null | undefined;
 };
 
-/** Valid string aliases declared in presence metadata, lowercased. */
 export const presenceAliases = (metadata: unknown): string[] => {
   if (!metadata || typeof metadata !== "object") return [];
 
@@ -21,8 +20,6 @@ export const presenceAliases = (metadata: unknown): string[] => {
 };
 
 /**
- * Library URL aliases must be lowercase slugs that no other presence already
- * uses as its slug or alias, so `/library/<alias>` resolves to one presence.
  * Same rules as `nowly validate`, the presences Nolo check and `pnpm admin push`.
  */
 export const getPresenceAliasIssues = (presence: PresenceAliasEntry, presences: PresenceAliasEntry[]): string[] => {

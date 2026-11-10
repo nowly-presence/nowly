@@ -1,16 +1,14 @@
 import { EditOnGitHub } from "@/features/docs-content/components/edit-on-github";
-import { mdxComponents } from "@/features/docs-content/components/mdx-components";
 import { ScrollToTop } from "@/features/docs-content/components/scroll-to-top";
 import { TableOfContents } from "@/features/docs-content/components/table-of-contents";
 import { Link } from "@/i18n/navigation";
 import { getDocContent, getDocLocales } from "@/features/docs-content/lib/content";
-import { extractTocItems } from "@/features/docs-content/lib/types";
+import { compileDoc } from "@/features/docs-content/lib/compile-doc";
 import { createMetadata, docsOgImage } from "@/features/seo/lib/seo";
 import { getChangelogList } from "@nowly/changelog";
 import type { LocaleString } from "@nowly/locales";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { MDXRemote } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
 import type { ReactElement } from "react";
 
@@ -60,7 +58,7 @@ const Page = async (): Promise<ReactElement> => {
   }
 
   const releases = getChangelogList(locale);
-  const tocItems = extractTocItems(doc.content);
+  const { content, tocItems } = await compileDoc(doc.content);
 
   return (
     <>
@@ -72,7 +70,7 @@ const Page = async (): Promise<ReactElement> => {
 
         {doc.description && <p className="text-muted-foreground mb-8 text-lg">{doc.description}</p>}
 
-        <MDXRemote source={doc.content} components={mdxComponents} options={{ blockJS: false }} />
+        {content}
 
         {releases.map((release) => (
           <div key={release.slug} className="mb-2 [&+div]:mt-6">

@@ -75,8 +75,6 @@ export const customAssetKey = (deviceId: string, sha256: string, mime: CustomIma
   return `custom/${deviceHash}/${sha256}.${CUSTOM_IMAGE_MIME_EXTENSIONS[mime]}`;
 };
 
-const storage = objectStorage;
-
 export type CustomAssetView = {
   id: string;
   url: string;
@@ -107,7 +105,7 @@ export const putCustomAsset = async (deviceId: string, sha256: string, mime: Cus
   if (await findAsset(deviceId, sha256)) return markUsed(deviceId, sha256);
 
   const key = customAssetKey(deviceId, sha256, mime);
-  await storage().send(
+  await objectStorage().send(
     new PutObjectCommand({
       Bucket: serverEnv.R2_BUCKET,
       Key: key,
@@ -140,7 +138,7 @@ export const touchCustomAsset = async (deviceId: string, sha256: string): Promis
 };
 
 export const deleteCustomAssetFile = async (key: string): Promise<void> => {
-  await storage().send(
+  await objectStorage().send(
     new DeleteObjectCommand({
       Bucket: serverEnv.R2_BUCKET,
       Key: key

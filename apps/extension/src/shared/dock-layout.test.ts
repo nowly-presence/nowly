@@ -8,10 +8,6 @@ type Tab = (typeof TABS)[number];
 const base: Tab[][] = [["activity", "store", "custom", "settings"]];
 
 describe("dock visibility", () => {
-  it("uses the intended default tab order", () => {
-    expect(DOCK_TABS).toEqual(["activity", "store", "announcements", "settings", "custom", "creator"]);
-  });
-
   it("defaults to two bars: main tabs, then custom and creator", () => {
     expect(defaultDockLayout(DOCK_TABS)).toEqual([
       ["activity", "store", "announcements", "settings"],
@@ -40,9 +36,16 @@ describe("dock visibility", () => {
     ]);
   });
 
-  it("restores every tab in its original order with an explicit reset layout", () => {
-    expect(normalizeDockLayout(defaultDockLayout(DOCK_TABS), visibleDockTabs([]))).toEqual(defaultDockLayout(DOCK_TABS));
-    expect(isDefaultDockLayout(defaultDockLayout(DOCK_TABS), DOCK_TABS)).toBe(true);
+  it("recognizes the default layout and distinguishes a customized one", () => {
+    expect(
+      isDefaultDockLayout(
+        [
+          ["activity", "store", "announcements", "settings"],
+          ["custom", "creator"]
+        ],
+        DOCK_TABS
+      )
+    ).toBe(true);
     expect(
       isDefaultDockLayout(
         [

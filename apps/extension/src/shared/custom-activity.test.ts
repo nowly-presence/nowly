@@ -1,5 +1,6 @@
+import { ACTIVITY_ICON_COLORS } from "@nowly/shared/activity-icons";
 import { describe, expect, it } from "vitest";
-import { buildCustomPresence, customActivityIdOf, customActivitySlug, customImageHashes, CUSTOM_IMAGE_EXPIRED_MS, CUSTOM_IMAGE_TOUCH_INTERVAL_MS, emptyCustomActivityDraft, customImageSync, randomIconImage, customIconImageUrl, clampCountdown, validateCustomActivity, CUSTOM_ACTIVITY_COLORS } from "@/shared/custom-activity";
+import { buildCustomPresence, customActivityIdOf, customActivitySlug, customImageHashes, CUSTOM_IMAGE_EXPIRED_MS, CUSTOM_IMAGE_TOUCH_INTERVAL_MS, emptyCustomActivityDraft, customImageSync, randomIconImage, clampCountdown, validateCustomActivity } from "@/shared/custom-activity";
 import type { CustomActivityDraft } from "@/shared/types";
 
 const now = Date.parse("2026-09-29T12:00:00.000Z");
@@ -145,7 +146,6 @@ describe("buildCustomPresence", () => {
       }),
       now
     );
-    expect(iconPresence.largeImage).toBe(customIconImageUrl("book", "#5A6BB0"));
     expect(iconPresence.largeImage).toMatch(/\/api\/activity-icon\/book\/5a6bb0\.png\?v=\d+$/);
 
     // Uploaded CDN copy
@@ -269,7 +269,7 @@ describe("custom activity helpers", () => {
   });
 
   it("picks a colour and icon from the palette", () => {
-    expect(randomIconImage(() => 0.999).color).toBe(CUSTOM_ACTIVITY_COLORS.at(-1));
+    expect(randomIconImage(() => 0.999).color).toBe(ACTIVITY_ICON_COLORS.at(-1));
     expect(emptyCustomActivityDraft(() => 0).largeImage.kind).toBe("icon");
   });
 });

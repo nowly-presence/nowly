@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { publicationImageSchema, publicationHttpsSchema as https } from "./activity-publication-image";
 
-export { publicationImageSchema, publicationColors, publicationIcons, isPublicationImage } from "./activity-publication-image";
+export { publicationImageSchema, isPublicationImage } from "./activity-publication-image";
 
 export const PUBLICATION_MAX_BYTES = 3 * 1024 * 1024;
 export const PUBLICATION_QUOTA = 20;

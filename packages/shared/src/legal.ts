@@ -1,4 +1,6 @@
-export const LEGAL_DOCUMENT_IDS = ["tos", "privacy"] as const;
+import { isRecord } from "./json";
+
+const LEGAL_DOCUMENT_IDS = ["tos", "privacy"] as const;
 
 export type LegalDocumentId = (typeof LEGAL_DOCUMENT_IDS)[number];
 export type LegalDates = Record<LegalDocumentId, string>;
@@ -24,8 +26,7 @@ export type LegalConfirmationResult = {
   error?: "documentsChanged" | "confirmationRequired";
 };
 
-export const objectValue = (value: unknown): Record<string, unknown> | null =>
-  typeof value === "object" && value !== null && !Array.isArray(value) ? (value as Record<string, unknown>) : null;
+const objectValue = (value: unknown): Record<string, unknown> | null => (isRecord(value) ? value : null);
 
 const isDate = (value: unknown): value is string =>
   typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(value)) && new Date(value).toISOString().slice(0, 10) === value;

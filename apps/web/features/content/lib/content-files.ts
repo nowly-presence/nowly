@@ -6,7 +6,7 @@ import { cache } from "react";
 import { frenchSpacing, mapBlockText, markdownHeadings, markdownWordCount, parseMarkdown, type Block, type Heading } from "@/features/content/lib/markdown";
 import { parseFrontmatter, type ContentMeta } from "@/features/content/lib/frontmatter";
 
-export type ContentCollection = "guides" | "presences";
+type ContentCollection = "guides" | "presences";
 
 export type ContentEntry = {
   collection: ContentCollection;

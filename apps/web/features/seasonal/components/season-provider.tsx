@@ -1,6 +1,6 @@
 "use client";
 
-import type { SiteSeason } from "@/features/seasonal/lib/site-season";
+import type { Season } from "@nowly/shared/seasons";
 import { startSiteSeason } from "@/features/seasonal/lib/site-season-sync";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
@@ -22,7 +22,7 @@ const whenIdle = (callback: () => void): (() => void) => {
 export const SeasonProvider = ({ allowPreview }: {
   allowPreview: boolean;
 }) => {
-  const [season, setSeason] = useState<SiteSeason | null>(null);
+  const [season, setSeason] = useState<Season | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => whenIdle(() => setReady(true)), []);

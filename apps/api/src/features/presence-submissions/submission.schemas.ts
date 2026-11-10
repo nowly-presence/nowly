@@ -1,15 +1,11 @@
+import { FIELD_COMMENT_FIELD_MAX_LENGTH, FIELD_COMMENT_MAX_LENGTH, FIELD_COMMENT_PAGE_MAX_LENGTH, QUEUE_FILTERS, REVIEW_MESSAGE_MAX_LENGTH, REVIEW_VERDICTS, reviewIsValid } from "@nowly/presence-creator/creator-submission-policy";
 import { z } from "zod";
-import { REVIEW_VERDICTS } from "./submission-status";
 
 export const SUBMISSION_BODY_LIMIT = 8 * 1024 * 1024;
 export const SUBMISSIONS_PER_HOUR = 5;
-export const REVIEW_MESSAGE_MAX_LENGTH = 2_000;
 export const FIELD_COMMENTS_MAX = 50;
-export const FIELD_COMMENT_MAX_LENGTH = 1_000;
 const IDS_MAX = 50;
 const ID_PATTERN = /^[a-f0-9]{24}$/;
-const FIELD_MAX_LENGTH = 64;
-const PAGE_LABEL_MAX_LENGTH = 40;
 const SLUG_PATTERN = /^[a-z0-9][a-z0-9.+!&'-]{0,63}$/;
 const COMMIT_PATTERN = /^[a-f0-9]{7,40}$/;
 
@@ -35,8 +31,8 @@ export const SubmissionIdsSchema = z
   .pipe(z.array(z.string().regex(ID_PATTERN)).max(IDS_MAX));
 
 const FieldCommentSchema = z.strictObject({
-  field: z.string().min(1).max(FIELD_MAX_LENGTH),
-  page: z.string().min(1).max(PAGE_LABEL_MAX_LENGTH).optional(),
+  field: z.string().min(1).max(FIELD_COMMENT_FIELD_MAX_LENGTH),
+  page: z.string().min(1).max(FIELD_COMMENT_PAGE_MAX_LENGTH).optional(),
   message: z.string().trim().min(1).max(FIELD_COMMENT_MAX_LENGTH)
 });
 
@@ -47,18 +43,11 @@ export const ReviewBodySchema = z
     message: z.string().trim().max(REVIEW_MESSAGE_MAX_LENGTH).default(""),
     comments: z.array(FieldCommentSchema).max(FIELD_COMMENTS_MAX).default([])
   })
-  .refine((review) => {
-    if (review.verdict === "request_changes" || review.verdict === "reject") return review.message.length > 0;
-    if (review.verdict === "comment") return review.message.length > 0 || review.comments.length > 0;
-
-    return true;
-  }, "A message is required");
+  .refine((review) => reviewIsValid(review.verdict, review.message, review.comments.length), "A message is required");
 
 export const PublishBodySchema = z.strictObject({ revision: z.number().int().positive() });
 
-export const QueueFilterSchema = z.strictObject({
-  status: z.enum(["pending", "in_progress", "changes_requested", "published", "rejected", "all"]).default("pending")
-});
+export const QueueFilterSchema = z.strictObject({ status: z.enum(QUEUE_FILTERS).default("pending") });
 
 export const PullRequestClosedWebhookSchema = z.strictObject({
   slug: z.string().regex(SLUG_PATTERN),

@@ -1,47 +1,26 @@
-import { getDocContent, getNavigationItems } from "@/features/docs-content/lib/content";
+import { listDocs } from "@/features/docs-content/lib/content";
+import { stripMdx } from "@/features/docs-content/lib/strip-mdx";
 import { NextResponse } from "next/server";
 
-const stripMdx = (content: string): string => {
-  return content
-    .replace(/---[\s\S]*?---\n/, "")
-    .replace(/>\s*/g, "")
-    .replace(/\*\*/g, "")
-    .replace(/`{1,3}/g, "")
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1")
-    .replace(/^#{1,6}\s+/gm, "")
-    .replace(/<\/?[^>]+(>|$)/g, "")
-    .trim();
-};
-
 export const GET = async () => {
-  const sections = getNavigationItems("en-US");
+  const sections = listDocs("en-US");
   const parts: string[] = ["# Nowly Documentation\n"];
 
-  for (const section of sections) {
+  for (const { section, docs } of sections) {
     if (section.slug === "changelog") continue;
 
-    for (const page of section.children) {
-      const doc = getDocContent(page.path, "en-US");
-
-      if (!doc) continue;
-
-      const body = stripMdx(doc.content);
-      parts.push(`# ${doc.title}\n\n${body}\n`);
+    for (const doc of docs) {
+      parts.push(`# ${doc.title}\n\n${stripMdx(doc.content)}\n`);
     }
   }
 
-  const changelog = sections.find((section) => section.slug === "changelog");
+  const changelog = sections.find(({ section }) => section.slug === "changelog");
 
   if (changelog) {
     parts.push("", "## Changelog", "");
 
-    for (const page of changelog.children) {
-      const doc = getDocContent(page.path, "en-US");
-
-      if (!doc) continue;
-
-      const body = stripMdx(doc.content);
-      parts.push(`### ${doc.title}\n\n${body}\n`);
+    for (const doc of changelog.docs) {
+      parts.push(`### ${doc.title}\n\n${stripMdx(doc.content)}\n`);
     }
   }
 

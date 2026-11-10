@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { getTabPresence, upsertTabPresence, type TabPresenceEntry } from "@/background/services/background-context";
+import { getTabPresence, upsertTabPresence } from "@/background/services/background-context";
+import type { TabPresenceEntry } from "@/background/services/tab-presence";
 import { applySiteTimer, clearSiteTimers } from "@/background/services/site-timers";
 import { installChromeMock } from "@/test/chrome-mock";
 import type { PresencePayload } from "@/shared/types";
@@ -23,17 +24,14 @@ describe("site timers", () => {
   afterEach(() => vi.useRealTimers());
 
   it("initializes, stabilizes, and isolates site timers across tabs and presences", async () => {
-    // 1. Does not add timestamps when disabled
     const activity = entry();
     expect(await applySiteTimer(activity, false)).toBe(activity.presence);
     expect((await chrome.storage.session.get("siteTimers")).siteTimers).toBeUndefined();
 
-    // 2. Adds stable start for activities without timestamps and keeps it over time
     expect((await applySiteTimer(entry("github"), true)).startTime).toBe(NOW);
     vi.advanceTimersByTime(60 * SECOND_MS);
     expect((await applySiteTimer(entry("github"), true)).startTime).toBe(NOW);
 
-    // 3. Keeps first supplied start despite metadata refreshes
     expect(
       (
         await applySiteTimer(
@@ -59,7 +57,6 @@ describe("site timers", () => {
       ).startTime
     ).toBe(NOW - 600);
 
-    // 4. Keeps separate clocks per presence and reuses clock on return
     expect((await applySiteTimer(entry("github"), true)).startTime).toBe(NOW);
   });
 

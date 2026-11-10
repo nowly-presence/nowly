@@ -1,4 +1,3 @@
-import { presenceLogoUrl, presenceThumbnailUrl } from "@/lib/presence-api-client";
 import { FALLBACK_LOCALE, getValidLocale, type LocaleString } from "@nowly/locales";
 
 export const LIBRARY_CATEGORIES = ["streaming", "music", "video", "gaming", "social", "ai", "tools", "learning", "other"] as const;
@@ -36,10 +35,6 @@ export type LibraryPresence = {
   discordNative: boolean;
   locales: LocaleString[];
 };
-
-export const libraryLogoUrl = (slug: string): string => presenceLogoUrl(slug);
-
-export const libraryThumbnailUrl = (slug: string): string => presenceThumbnailUrl(slug);
 
 export const isLibraryCategory = (value: string): value is LibraryCategory => LIBRARY_CATEGORIES.includes(value as LibraryCategory);
 
@@ -88,7 +83,7 @@ export const presenceSiteHref = (url: string): string => (url.includes("://") ? 
 
 export const normalizeGithub = (value: string): string => value.trim().replace(/^@/, "").toLowerCase();
 
-export const personMatchesGithub = (person: PresencePerson, handle: string): boolean => Boolean(person.github && normalizeGithub(person.github) === handle);
+const personMatchesGithub = (person: PresencePerson, handle: string): boolean => Boolean(person.github && normalizeGithub(person.github) === handle);
 
 export const presenceMatchesGithub = (presence: LibraryPresence, handle: string): boolean => {
   const normalized = normalizeGithub(handle);

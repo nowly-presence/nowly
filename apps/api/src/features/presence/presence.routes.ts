@@ -7,7 +7,7 @@ import { jsonBody } from "@/shared/request-body";
 import { buildLocaleObject } from "@nowly/locales";
 import { presenceActiveBodySchema, presenceLikeBodySchema, presenceLikeQuerySchema, presencePutBodySchema, presenceReportBodySchema } from "@nowly/shared/schemas";
 import { Hono, type Context } from "hono";
-import { addVersion, clearActiveDevice, clearActiveDevicesForDevice, getGlobalPresenceStats, getLikeCount, getPresenceListData, getPresenceMeta, getPresenceStats, getVersionHistory, hasLikedPresence, likePresence, markActiveDevice, setAdded, setUpdated, setVersion, unlikePresence } from "./presence.repository";
+import { clearActiveDevice, clearActiveDevicesForDevice, getGlobalPresenceStats, getLikeCount, getPresenceListData, getPresenceMeta, getPresenceStats, getVersionHistory, hasLikedPresence, likePresence, markActiveDevice, savePresenceRelease, unlikePresence } from "./presence.repository";
 import { buildRelease } from "./presence.service";
 import { presenceDisplayName, sanitizeReportMessage, submitPresenceReport } from "./presence-report";
 import { PresenceAliasConflictError, processPresenceSync, type PresenceSyncBody } from "./presence.sync";
@@ -185,25 +185,26 @@ export const presenceRoutes = new Hono()
     if (!parsedBody.success) return c.json({ error: "INVALID_REQUEST_BODY" }, 400);
 
     const body = parsedBody.data;
-
-    if (body.version) {
-      const publishedAt = new Date();
-      await setVersion(slug, body.version, publishedAt);
-
-      if (body.changelog || body.author) {
-        await addVersion(slug, {
-          version: body.version,
-          changelog: body.changelog ? JSON.stringify(buildLocaleObject(body.changelog)) : "",
-          author: body.author ?? "unknown",
-          authorGithub: body.authorGithub,
-          pr: body.pr,
-          timestamp: publishedAt.getTime()
-        });
-      }
-    }
-
-    if (body.added) await setAdded(slug, body.added);
-    if (body.updated) await setUpdated(slug, body.updated);
+    const publishedAt = new Date();
+    await savePresenceRelease(slug, {
+      publication: body.version
+        ? {
+            version: body.version,
+            history:
+              body.changelog || body.author
+                ? {
+                    changelog: body.changelog ? JSON.stringify(buildLocaleObject(body.changelog)) : "",
+                    author: body.author ?? "unknown",
+                    authorGithub: body.authorGithub,
+                    pr: body.pr,
+                    timestamp: publishedAt.getTime()
+                  }
+                : undefined
+          }
+        : undefined,
+      addedAt: body.added ? new Date(body.added) : undefined,
+      updatedAt: body.updated ? new Date(body.updated) : body.version ? publishedAt : undefined
+    });
 
     return c.json({ ok: true });
   })

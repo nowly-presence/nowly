@@ -62,8 +62,10 @@ describe("pickBroadcastEntry", () => {
 
   it("focused mode broadcasts the focused tab's presence when one exists", async () => {
     const { pickBroadcastEntry } = await import("@/background/managers/activity-manager");
-    await upsertTabPresence(1, presence("youtube", 1000));
-    await upsertTabPresence(2, presence("twitch", 2000));
+    await Promise.all([
+      upsertTabPresence(1, presence("youtube", 1000)),
+      upsertTabPresence(2, presence("twitch", 2000))
+    ]);
     setFocusedTabId(1);
 
     expect((await pickBroadcastEntry(baseSettings))?.slug).toBe("youtube");
@@ -94,8 +96,9 @@ describe("pickBroadcastEntry", () => {
 
   it("priority mode puts slugs absent from the order last", async () => {
     const { pickBroadcastEntry } = await import("@/background/managers/activity-manager");
-    await upsertTabPresence(1, presence("unranked", 1000));
-    await upsertTabPresence(2, presence("ranked", 2000));
+    await upsertTabPresence(1, presence("unranked", 2000));
+    await upsertTabPresence(2, presence("ranked", 1000));
+    setFocusedTabId(1);
 
     const settings: ExtensionSettings = {
       ...baseSettings,

@@ -83,23 +83,29 @@ describe("Umami relay", () => {
   });
 
   it("bounds public ingestion by IP even when event ids change", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({ cache: "accepted" })));
+    vi.stubEnv("NODE_ENV", "production");
+    const fetcher = vi.fn(() => Promise.resolve(Response.json({ cache: "accepted" })));
+    vi.stubGlobal("fetch", fetcher);
     const app = mount("/", createTelemetryRoutes());
-    let status = 0;
-
-    for (let i = 0; i < 31; i++)
-      status = (
-        await inject(app, {
-          method: "POST",
-          url: "/events",
-          payload: {
-            consent: true,
-            event
+    const send = (index: number, remoteAddress: string) =>
+      inject(app, {
+        method: "POST",
+        url: "/events",
+        remoteAddress,
+        payload: {
+          consent: true,
+          event: {
+            ...event,
+            id: `22222222-2222-4222-8222-${String(index).padStart(12, "0")}`
           }
-        })
-      ).statusCode;
+        }
+      });
 
-    expect(status).toBe(429);
+    for (let i = 0; i < 30; i++) expect((await send(i, "192.0.2.1")).statusCode).toBe(200);
+
+    expect((await send(30, "192.0.2.1")).statusCode).toBe(429);
+    expect(fetcher).toHaveBeenCalledTimes(30);
+    expect((await send(31, "192.0.2.2")).statusCode).toBe(200);
   });
 
   it("relays the production contract only, without query, cookies or identity", async () => {

@@ -35,7 +35,7 @@ const nextConfig: NextConfig = {
   ...(basePath ? { basePath } : {}),
   compress: true,
   poweredByHeader: false,
-  transpilePackages: ["@nowly/ui", "@nowly/locales", "@nowly/og"],
+  transpilePackages: ["@nowly/env", "@nowly/ui", "@nowly/locales", "@nowly/og"],
   experimental: {
     optimizePackageImports: ["@nowly/ui"]
   },

@@ -1,10 +1,48 @@
+import { createSerialQueue } from "@/background/storage/serial-queue";
 import { STORAGE_KEYS } from "@/background/storage/keys";
 import type { CurrentActivity, PresenceDebug, PresenceSchedule, PresenceSettings, InstalledPresences, StoredPresence } from "@/shared/types";
 
 export const getPresences = (): Promise<InstalledPresences> =>
   chrome.storage.local.get(STORAGE_KEYS.presences).then((result) => (result[STORAGE_KEYS.presences] ?? {}) as InstalledPresences);
 
-export const setPresences = (presences: InstalledPresences): Promise<void> => chrome.storage.local.set({ [STORAGE_KEYS.presences]: presences });
+type PresenceMutation<T> = {
+  changed: boolean;
+  afterWrite?: () => Promise<void>;
+  value: T;
+};
+
+const serializePresenceMutation = createSerialQueue();
+
+export const mutatePresences = <T>(mutate: (presences: InstalledPresences) => PresenceMutation<T> | Promise<PresenceMutation<T>>): Promise<T> =>
+  serializePresenceMutation(async () => {
+    const presences = await getPresences();
+
+    const { changed, afterWrite, value } = await mutate(presences);
+
+    if (changed) {
+      await chrome.storage.local.set({ [STORAGE_KEYS.presences]: presences });
+      await afterWrite?.();
+    }
+
+    return value;
+  });
+
+export const updateStoredPresence = (slug: string, update: (presence: StoredPresence) => StoredPresence): Promise<StoredPresence | null> =>
+  mutatePresences((presences) => {
+    const presence = presences[slug];
+
+    if (!presence) return {
+      changed: false,
+      value: null
+    };
+
+    const value = update(presence);
+    presences[slug] = value;
+    return {
+      changed: value !== presence,
+      value
+    };
+  });
 
 export const getCurrentActivity = (): Promise<CurrentActivity | null> =>
   chrome.storage.local.get(STORAGE_KEYS.currentActivity).then((result) => (result[STORAGE_KEYS.currentActivity] ?? null) as CurrentActivity | null);
@@ -30,42 +68,13 @@ export const setPresenceSettings = async (slug: string, partial: PresenceSetting
   return next;
 };
 
-export const snoozePresence = async (slug: string, durationMs: number): Promise<StoredPresence | null> => {
-  const presences = await getPresences();
-
-  const presence = presences[slug];
-
-  if (!presence) return null;
-
-  presences[slug] = {
+export const snoozePresence = (slug: string, durationMs: number): Promise<StoredPresence | null> =>
+  updateStoredPresence(slug, (presence) => ({
     ...presence,
     snoozeUntil: Date.now() + durationMs
-  };
-  await setPresences(presences);
-  return presences[slug];
-};
+  }));
 
-export const clearSnooze = async (slug: string): Promise<StoredPresence | null> => {
-  const presences = await getPresences();
+export const clearSnooze = (slug: string): Promise<StoredPresence | null> => updateStoredPresence(slug, ({ snoozeUntil: _, ...presence }) => presence);
 
-  const presence = presences[slug];
-
-  if (!presence) return null;
-
-  const { snoozeUntil: _, ...rest } = presence;
-  presences[slug] = rest;
-  await setPresences(presences);
-  return presences[slug];
-};
-
-export const setPresenceSchedule = async (slug: string, schedule: PresenceSchedule | undefined): Promise<StoredPresence | null> => {
-  const presences = await getPresences();
-
-  const presence = presences[slug];
-
-  if (!presence) return null;
-
-  presences[slug] = { ...presence, schedule };
-  await setPresences(presences);
-  return presences[slug];
-};
+export const setPresenceSchedule = (slug: string, schedule: PresenceSchedule | undefined): Promise<StoredPresence | null> =>
+  updateStoredPresence(slug, (presence) => ({ ...presence, schedule }));

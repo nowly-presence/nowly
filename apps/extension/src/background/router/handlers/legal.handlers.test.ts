@@ -34,8 +34,17 @@ describe("legal handlers", () => {
   });
 
   it("still answers with the checked state when broadcasting the active tab fails", async () => {
+    const checked = {
+      ...emptyLegalState(),
+      dates: {
+        tos: "2026-10-24",
+        privacy: "2026-10-25"
+      }
+    };
+    mocks.check.mockResolvedValue(checked);
     mocks.broadcast.mockRejectedValue(new Error("no tab"));
 
-    await expect(handleCheckLegalDocuments(undefined, sender)).resolves.toEqual(emptyLegalState());
+    await expect(handleCheckLegalDocuments(undefined, sender)).resolves.toEqual(checked);
+    expect(mocks.broadcast).toHaveBeenCalledOnce();
   });
 });

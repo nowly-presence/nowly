@@ -44,8 +44,6 @@ func NewChecker(current string, logger Logger) *Checker {
 	}
 }
 
-// Latest returns the newest published version and whether it is newer than the
-// running host. It returns false until a check has succeeded.
 func (c *Checker) Latest() (string, bool) {
 	c.mu.RLock()
 	latest := c.latest
@@ -56,7 +54,6 @@ func (c *Checker) Latest() (string, bool) {
 	return latest, IsNewer(latest, c.current)
 }
 
-// Run checks immediately and then every CheckInterval until ctx is cancelled.
 func (c *Checker) Run(ctx context.Context) {
 	if !Comparable(c.current) {
 		return
@@ -146,14 +143,12 @@ func parse(raw string) (semver, bool) {
 	return v, true
 }
 
-// Comparable reports whether a version can take part in update checks.
-// Unparsable versions and local dev builds (0.0.0-dev) are skipped.
+// The 0.0.0 version is reserved for local builds.
 func Comparable(version string) bool {
 	v, ok := parse(version)
 	return ok && !(v.major == 0 && v.minor == 0 && v.patch == 0)
 }
 
-// IsNewer reports whether candidate is a strictly newer release than current.
 func IsNewer(candidate, current string) bool {
 	if !Comparable(current) {
 		return false

@@ -28,7 +28,7 @@ const asStringArray = (value: unknown): string[] => {
   return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
 };
 
-export const normalizeLocalMetadata = (raw: unknown, slug: string): PresenceMetadata | null => {
+const normalizeLocalMetadata = (raw: unknown, slug: string): PresenceMetadata | null => {
   if (!raw || typeof raw !== "object") return null;
 
   const data = raw as Record<string, unknown>;

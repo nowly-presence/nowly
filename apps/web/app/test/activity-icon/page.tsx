@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ACTIVITY_ICON_COLORS, ACTIVITY_ICON_KEYS, type ActivityIconKey } from "../../api/activity-icon/activity-icons";
+import { ACTIVITY_ICON_COLORS, ACTIVITY_ICON_KEYS, activityIconPath, type ActivityIconKey } from "@nowly/shared/activity-icons";
 
 export const metadata: Metadata = {
   robots: {
@@ -9,15 +9,13 @@ export const metadata: Metadata = {
 };
 
 const PREVIEW_ICON: ActivityIconKey = "gamepad";
-const PREVIEW_COLOR = "5a6bb0";
-
-const activityIconUrl = (icon: ActivityIconKey, color: string) => `/api/activity-icon/${icon}/${color}.png?v=1`;
+const PREVIEW_COLOR = "#5a6bb0";
 
 const ActivityIconPreview = ({ icon, color }: {
   icon: ActivityIconKey;
   color: string;
 }) => {
-  const src = activityIconUrl(icon, color);
+  const src = activityIconPath(icon, color);
 
   return (
     <div className="flex items-center gap-6 rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-5">
@@ -30,7 +28,7 @@ const ActivityIconPreview = ({ icon, color }: {
         <img src={src} alt={`${icon} small preview`} className="size-6 rounded-full" />
       </div>
       <p className="ml-auto font-mono text-xs text-foreground/55">
-        {icon} / {color}
+        {icon} / {color.slice(1)}
       </p>
     </div>
   );
@@ -63,11 +61,11 @@ const Page = () => (
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
           {ACTIVITY_ICON_KEYS.flatMap((icon) =>
             ACTIVITY_ICON_COLORS.map((color) => {
-              const src = activityIconUrl(icon, color);
+              const src = activityIconPath(icon, color);
 
               return (
                 <div key={`${icon}-${color}`} className="rounded-xl border border-foreground/10 bg-foreground/[0.03] p-2">
-                  <img src={src} alt={`${icon} on ${color}`} className="aspect-square w-full rounded-lg" />
+                  <img src={src} alt={`${icon} on ${color.slice(1)}`} className="aspect-square w-full rounded-lg" />
                   <p className="mt-2 truncate text-center font-mono text-[10px] text-foreground/55">{icon}</p>
                 </div>
               );

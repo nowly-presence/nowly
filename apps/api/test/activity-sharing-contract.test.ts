@@ -86,11 +86,16 @@ describe("public custom activity contract", () => {
     expect(portableActivitySchema.safeParse({ ...activity, buttons }).success).toBe(false);
   });
   it("validates embedded image MIME, bytes and bounds and rejects HTML/SVG", () => {
+    const png = (size: number) => {
+      const bytes = Buffer.alloc(size);
+      Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]).copy(bytes);
+      return `data:image/png;base64,${bytes.toString("base64")}`;
+    };
     const invalidImages = [
       "data:image/svg+xml;base64,PHN2Zz4=",
       "data:image/png;base64,PGh0bWw+",
       "data:image/jpeg;base64,iVBORw0KGgo=",
-      `data:image/png;base64,${"A".repeat(1_398_151)}`
+      png(1024 * 1024 + 1)
     ];
 
     for (const dataUrl of invalidImages) {
@@ -110,7 +115,7 @@ describe("public custom activity contract", () => {
         ...activity,
         largeImage: {
           kind: "embedded",
-          dataUrl: "data:image/png;base64,iVBORw0KGgo="
+          dataUrl: png(1024 * 1024)
         }
       }).success
     ).toBe(true);

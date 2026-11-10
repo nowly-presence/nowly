@@ -51,7 +51,7 @@ Until the routes exist, the extension gets a 404 when sending, shows "Sending is
 - Any new per-user data must be added to `exportAccountData` and `deleteAccountData` (`account.service.ts`).
 - R2 is already used by the API (`@aws-sdk/client-s3`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_PUBLIC_URL` in `@nowly/env/server`, see `features/custom-assets`).
 - CORS accepts the `chrome-extension://` and `moz-extension://` origins (`apps/api/src/middleware/cors.ts`). Global limit: `rateLimit` (`apps/api/src/middleware/rate-limit.ts`), 100 requests per minute.
-- Request bodies are limited to **1 MiB by default** (`apps/api/src/middleware/default-body-limit.ts`): too small for a submission (see section 6), which needs its own `limitBody` and an entry in `LARGER_BODY_PREFIXES`.
+- Request bodies are limited to **1 MiB by default** by `apps/api/src/middleware/body-limit.ts`: too small for a submission (see section 6), whose route sets its own larger `limitBody`.
 - The API has no automatic translation client today: to add (section 11).
 - Admin guards: `requireAuth` (`features/auth/auth.middleware.ts`) compares a shared secret, with no notion of account. There is no session-based "moderator" guard yet.
 - The `Presence` model stores `metadata` as JSON; the author lives on `PresenceVersion` (`author`, `authorGithub`).

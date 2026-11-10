@@ -76,8 +76,14 @@ describe("panel announcement connection lifetime", () => {
     expect(vi.getTimerCount()).toBe(0);
   });
   it("continues fetching when EventSource is unavailable and rejects unsafe stream protocols", async () => {
-    vi.stubGlobal("EventSource", undefined);
     const refresh = vi.fn(async () => {});
+    const stopUnsafe = startAnnouncementUpdates("http://api.example.com", refresh);
+    expect(refresh).toHaveBeenCalledOnce();
+    expect(streams).toHaveLength(0);
+    stopUnsafe();
+
+    vi.stubGlobal("EventSource", undefined);
+    refresh.mockClear();
     const stop = startAnnouncementUpdates("https://api.example.com", refresh);
     await vi.advanceTimersByTimeAsync(30_000);
     expect(refresh).toHaveBeenCalledTimes(2);

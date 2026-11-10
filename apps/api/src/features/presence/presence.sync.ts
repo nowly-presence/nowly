@@ -3,7 +3,7 @@ import { formatBytes, getPresenceAliasIssues, type PresenceAliasEntry } from "@n
 import { generateChangelog, translateChangelog } from "@/shared/changelog.service";
 import { sha256Base64Url } from "@/shared/crypto.service";
 import { serializeJsonField } from "./presence.service";
-import { addVersion, getAllPresenceMetas, getAllPresenceSlugs, getPresenceStats, getVersionHistory, setAdded, setArchived, setPresenceMeta, setVersion } from "./presence.repository";
+import { getAllPresenceMetas, getAllPresenceSlugs, getPresenceVersion, getVersionHistory, savePresenceRelease, setArchived } from "./presence.repository";
 
 type ReleasePerson = {
   name: string;
@@ -89,11 +89,6 @@ const bumpPatch = (version: string): string => {
   return parts.join(".");
 };
 
-/**
- * Admin presence publish/update pipeline used by the CLI and the PR workflow.
- * For each presence it resolves the next version, generates/translates the
- * changelog, records the version history entry and upserts metadata.
- */
 export const processPresenceSync = async (body: PresenceSyncBody): Promise<PresenceSyncResponse> => {
   await assertNoAliasConflicts(body.presences ?? []);
 
@@ -105,10 +100,9 @@ export const processPresenceSync = async (body: PresenceSyncBody): Promise<Prese
 
     seen.add(p.slug);
 
-    const stats = await getPresenceStats(p.slug);
+    const currentVersion = await getPresenceVersion(p.slug);
 
-    const currentVersion = stats.version;
-    const author = p.author || (stats.version ? (await getVersionHistory(p.slug))[0]?.author || "unknown" : "unknown");
+    const author = p.author || (currentVersion ? (await getVersionHistory(p.slug))[0]?.author || "unknown" : "unknown");
     const changelogs = p.changelog
       ? translateChangelog(p.changelog)
       : await generateChangelog({
@@ -124,7 +118,9 @@ export const processPresenceSync = async (body: PresenceSyncBody): Promise<Prese
     const createdAt = publishedAt.toISOString();
     const bundleSizeBytes = p.bundle ? Buffer.byteLength(p.bundle, "utf-8") : undefined;
     const bundleSha256 = p.bundle ? sha256Base64Url(p.bundle) : undefined;
-    const versionEntryMeta = {
+    const firstPublication = p.type === "new" || !currentVersion;
+    const version = p.version ?? (firstPublication ? "1.0.0" : bumpPatch(currentVersion));
+    const history = {
       changelog,
       author,
       authorGithub: p.authorGithub,
@@ -137,49 +133,17 @@ export const processPresenceSync = async (body: PresenceSyncBody): Promise<Prese
       bundleSizeBytes,
       bundleSizeLabel: bundleSizeBytes != null ? formatBytes(bundleSizeBytes) : undefined,
       bundleSha256,
-      versionType: p.versionType,
+      versionType: p.versionType ?? (firstPublication ? "new" : "patch"),
       aiGeneratedChangelog: false,
       createdAt,
       timestamp
     };
 
-    if (p.type === "new" || !currentVersion) {
-      const version = p.version ?? "1.0.0";
-
-      await setVersion(p.slug, version, publishedAt);
-      await setAdded(p.slug, publishedAt);
-      await addVersion(p.slug, {
-        version,
-        ...versionEntryMeta,
-        versionType: p.versionType ?? "new"
-      });
-
-      results.push({
-        slug: p.slug,
-        version,
-        changelog: displayChangelog
-      });
-    } else {
-      const nextVersion = p.version ?? bumpPatch(currentVersion);
-
-      await setVersion(p.slug, nextVersion, publishedAt);
-      await addVersion(p.slug, {
-        version: nextVersion,
-        ...versionEntryMeta,
-        versionType: p.versionType ?? "patch"
-      });
-
-      results.push({
-        slug: p.slug,
-        version: nextVersion,
-        changelog: displayChangelog
-      });
-    }
-
-    if (p.metadata) {
-      await setPresenceMeta(p.slug, p.metadata as any);
-    } else {
-      await setPresenceMeta(p.slug, {
+    await savePresenceRelease(p.slug, {
+      publication: { version, history },
+      addedAt: firstPublication ? publishedAt : undefined,
+      updatedAt: publishedAt,
+      metadata: p.metadata || {
         slug: p.slug,
         name: p.name,
         author,
@@ -187,10 +151,14 @@ export const processPresenceSync = async (body: PresenceSyncBody): Promise<Prese
         description: p.description || {},
         color: p.color,
         url: p.url
-      });
-    }
-
-    await setArchived(p.slug, false);
+      },
+      archived: false
+    });
+    results.push({
+      slug: p.slug,
+      version,
+      changelog: displayChangelog
+    });
   }
 
   const toArchive = new Set((body.archivedSlugs ?? []).map(normalizeSlug).filter(Boolean));

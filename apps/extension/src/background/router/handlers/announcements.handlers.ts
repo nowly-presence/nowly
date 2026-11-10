@@ -4,8 +4,6 @@ import { updateAnnouncements } from "@/background/storage/announcements.store";
 import { ANNOUNCEMENTS_HISTORY_LIMIT } from "@/shared/announcements";
 import { ANNOUNCEMENT_LOCALES, announcementRevision } from "@nowly/shared/announcements";
 
-export const handleGetAnnouncements: Handler<"GET_ANNOUNCEMENTS"> = () => getAnnouncementsSnapshot();
-
 export const handleRefreshAnnouncements: Handler<"REFRESH_ANNOUNCEMENTS"> = (payload) => {
   const locale = payload?.locale;
 

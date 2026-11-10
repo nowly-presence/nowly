@@ -19,9 +19,7 @@ export type ExtensionTokenRecord = {
 
 const isScope = (value: string): value is ExtensionTokenScope => (EXTENSION_TOKEN_SCOPES as readonly string[]).includes(value);
 
-export const hashExtensionToken = (token: string): string => sha256Base64Url(token);
-
-export const generateExtensionToken = (): string => `${EXTENSION_TOKEN_PREFIX}${randomBytes(TOKEN_BYTES).toString("base64url")}`;
+const generateExtensionToken = (): string => `${EXTENSION_TOKEN_PREFIX}${randomBytes(TOKEN_BYTES).toString("base64url")}`;
 
 export const createExtensionToken = async (input: {
   userId: string;
@@ -48,7 +46,7 @@ export const createExtensionToken = async (input: {
     id: randomUUID(),
     userId: input.userId,
     deviceId: input.deviceId ?? null,
-    tokenHash: hashExtensionToken(token),
+    tokenHash: sha256Base64Url(token),
     scopes: [...new Set(input.scopes)],
     expiresAt
   });
@@ -62,7 +60,7 @@ export const findActiveExtensionToken = async (token: string, now = new Date()):
   const [row] = await getDb()
     .select()
     .from(extensionToken)
-    .where(eq(extensionToken.tokenHash, hashExtensionToken(token)))
+    .where(eq(extensionToken.tokenHash, sha256Base64Url(token)))
     .limit(1);
 
   if (!row || row.revokedAt || row.expiresAt.getTime() <= now.getTime()) return null;

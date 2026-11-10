@@ -1,19 +1,8 @@
-export type WebMessageType =
-  | "INSTALL_PRESENCE"
-  | "UPDATE_PRESENCE"
-  | "UNINSTALL_PRESENCE"
-  | "GET_INSTALLED"
-  | "GET_DIAGNOSTIC"
-  | "GET_DEVICE_INFO"
-  | "GET_ANALYTICS_CONSENT"
-  | "SET_ANALYTICS_CONSENT"
-  | "NOWLY_SESSION"
-  | "REPORT_CREATE"
-  | "REPORT_IDENTITY";
+import type { EXT_WEB_SOURCE, WEB_BRIDGE_PING, WebBridgeRequest } from "@nowly/shared/web-bridge-protocol";
 
 export type WebMessage = {
-  source: typeof import("@/shared/constants").EXT_WEB_SOURCE;
-  type: WebMessageType | "PING";
+  source: typeof EXT_WEB_SOURCE;
+  type: WebBridgeRequest | typeof WEB_BRIDGE_PING;
   payload?: unknown;
   messageId?: string;
 };

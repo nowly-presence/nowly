@@ -43,14 +43,22 @@ describe("announcement draft", () => {
 
     expect(Object.keys(input.translations)).toEqual(["en"]);
     expect(input.severity).toBeNull();
-    expect(input.translate).toBe(true);
-    expect(buildAnnouncementInput({ ...form, translate: false }).translate).toBe(false);
+    expect(
+      buildAnnouncementInput({
+        ...form,
+        translate: false
+      }).translate
+    ).toBe(false);
     const { translate, ...announcement } = input;
     expect(translate).toBe(true);
     expect(AnnouncementInputSchema.safeParse(announcement).success).toBe(true);
 
-    const { translate: warningFlag, ...warning } = buildAnnouncementInput({ ...form, kind: "warning" });
+    const { translate: warningFlag, ...warning } = buildAnnouncementInput({
+      ...form,
+      kind: "warning"
+    });
     expect(warningFlag).toBe(true);
+    expect(warning.severity).toBe(3);
     expect(AnnouncementInputSchema.safeParse(warning).success).toBe(true);
   });
 });

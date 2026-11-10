@@ -1,6 +1,6 @@
 import { GitHubIcon } from "@/components/icons";
 import { buttonVariants } from "@nowly/ui";
-import { PROJECT_REPOSITORY_URL } from "@/lib/constants";
+import { docSourceUrl } from "@/features/docs-content/lib/href";
 import Link from "next/link";
 import type { FC } from "react";
 import { getTranslations } from "next-intl/server";
@@ -11,9 +11,7 @@ type EditOnGitHubProps = {
 };
 
 export const EditOnGitHub: FC<EditOnGitHubProps> = async ({ slug, locale }) => {
-  // Per-version changelog content lives in the @nowly/changelog package, not in this app.
-  const contentPath = slug.startsWith("changelog/") ? `packages/changelog/content/${slug.replace(/^changelog\//, "")}` : `apps/docs/content/docs/${slug}`;
-  const href = `${PROJECT_REPOSITORY_URL}/blob/stable/${contentPath}/${locale}.mdx`;
+  const href = docSourceUrl(slug, locale);
   const t = await getTranslations("docsUi");
 
   return (

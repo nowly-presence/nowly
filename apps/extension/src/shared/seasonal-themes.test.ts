@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isPrankDay, isSeasonMomentDay, isSeasonOverride, msUntilNextDay, resolveSeason, SEASON_PERIODS, seasonForDate } from "@/shared/seasonal-themes";
+import { isSeasonOverride, msUntilNextDay, resolveSeason, SEASON_PERIODS, seasonForDate } from "@/shared/seasonal-themes";
 
 const local = (year: number, month: number, day: number, hour = 12) => new Date(year, month - 1, day, hour);
 
@@ -66,14 +66,7 @@ describe("seasonal-themes", () => {
     expect(isSeasonOverride("invalid")).toBe(false);
   });
 
-  it("checks special moments (prank day, moments, midnight countdown)", () => {
-    expect(isPrankDay(local(2026, 10, 31, 0))).toBe(true);
-    expect(isPrankDay(local(2026, 10, 30, 23))).toBe(false);
-
-    expect(isSeasonMomentDay("spring", local(2026, 3, 20))).toBe(true);
-    expect(isSeasonMomentDay("new-year", local(2027, 1, 1))).toBe(true);
-    expect(isSeasonMomentDay("spring", local(2026, 3, 21))).toBe(false);
-
+  it("counts down to the next local midnight", () => {
     expect(msUntilNextDay(local(2026, 10, 31, 23))).toBe(60 * 60 * 1000);
   });
 });

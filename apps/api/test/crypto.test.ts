@@ -30,14 +30,8 @@ describe("crypto service", () => {
   });
 
   describe("sha256Base64Url", () => {
-    it("generates deterministic and unique url-safe hashes", () => {
-      const hash1 = sha256Base64Url("hello");
-      const hash2 = sha256Base64Url("hello");
-      const hashDifferent = sha256Base64Url("world");
-
-      expect(hash1).toBe(hash2);
-      expect(hash1).not.toBe(hashDifferent);
-      expect(hash1).toMatch(/^[A-Za-z0-9_-]+$/);
+    it("encodes a known SHA-256 digest as unpadded base64url", () => {
+      expect(sha256Base64Url("hello")).toBe("LPJNul-wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ");
     });
   });
 
@@ -53,7 +47,6 @@ describe("crypto service", () => {
 
       const payload = signedPayload(input);
       expect(payload).toBe('{"metadataHash":"def456","sha256":"abc123","signedAt":"2026-01-01T00:00:00Z","slug":"youtube","version":"1.0.0"}');
-      expect(JSON.parse(payload)).toEqual(input);
     });
 
     it("throws when PRESENCE_SIGNING_PRIVATE_KEY is missing", async () => {

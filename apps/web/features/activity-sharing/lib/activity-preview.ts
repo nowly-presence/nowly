@@ -1,4 +1,5 @@
 import type { PortableActivity } from "@nowly/shared";
+import { activityIconPath } from "@nowly/shared/activity-icons";
 
 const MINUTE_SECONDS = 60;
 const HOUR_SECONDS = 3600;
@@ -15,7 +16,7 @@ export const previewClock = (totalSeconds: number): string => {
 export const previewImage = (image: PortableActivity["largeImage"]): string | null => {
   if (image.kind === "embedded") return image.dataUrl;
   if (image.kind === "url") return image.url;
-  if (image.kind === "icon") return `/api/activity-icon/${image.icon}/${image.color.slice(1).toLowerCase()}.png?v=1`;
+  if (image.kind === "icon") return activityIconPath(image.icon, image.color);
 
   return null;
 };

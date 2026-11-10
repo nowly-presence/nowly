@@ -1,7 +1,7 @@
 "use client";
 
 import { ExtensionStoreButton } from "@/components/extension-store-button";
-import { BrandLockup } from "@/features/layout/components/brand-lockup";
+import { BrandLockup } from "@nowly/ui/brand-lockup";
 import { DOCS_URL } from "@/lib/constants";
 import { Navbar as SharedNavbar } from "@nowly/ui/navbar";
 

@@ -5,7 +5,7 @@ import { AuthFrame } from "@/features/auth/components/auth-frame";
 import { NowlyMark } from "@/features/auth/components/nowly-mark";
 import { createExtensionSession, fetchAccountUser, signOutAccount, startDiscordSignIn, type AccountUser } from "@/features/account/lib/account-api";
 import { siteBaseUrl } from "@/lib/api-base";
-import { requestExtension, subscribeExtensionDetected } from "@/lib/extension-bridge";
+import { requestExtension, subscribeExtensionDetected } from "@nowly/shared/web-bridge";
 import type { ExtensionTokenScope } from "@nowly/shared";
 import { buttonVariants, Button } from "@nowly/ui";
 import { RiCheckLine, RiDiscordFill, RiPuzzleLine } from "@nowly/ui/icons";
@@ -14,8 +14,6 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Status = "checking" | "signed-out" | "no-extension" | "ready" | "connecting" | "done" | "error" | "forbidden";
-
-const SESSION_TIMEOUT_MS = 15000;
 
 export const ExtensionConnectView = () => {
   const t = useTranslations("extensionConnectPage");
@@ -43,7 +41,7 @@ export const ExtensionConnectView = () => {
 
       const result = await requestExtension<{
         ok?: boolean;
-      }>("NOWLY_SESSION", session, SESSION_TIMEOUT_MS);
+      }>("NOWLY_SESSION", session);
       setStatus(result?.ok === true ? "done" : "error");
     } catch (failure) {
       setStatus(failure instanceof Error && failure.message === "ADMIN_REQUIRED" ? "forbidden" : "error");

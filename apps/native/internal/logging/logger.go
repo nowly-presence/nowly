@@ -6,8 +6,6 @@ import (
 	"path/filepath"
 	"sync"
 	"time"
-
-	"nowly.client/native/internal/contract"
 )
 
 type Logger struct {
@@ -17,12 +15,12 @@ type Logger struct {
 
 const maxLogSizeBytes int64 = 1024 * 1024
 
-func New() (*Logger, error) {
+func New(folder string) (*Logger, error) {
 	cacheDir, err := os.UserCacheDir()
 	if err != nil {
 		return nil, err
 	}
-	dir := filepath.Join(cacheDir, contract.InstallFolderName)
+	dir := filepath.Join(cacheDir, folder)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return nil, err
 	}

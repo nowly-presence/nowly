@@ -3,7 +3,7 @@
 import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { AccountHeader } from "@/features/account/components/account-header";
 import { createExtensionSession, fetchAccountUser, signOutAccount, startDiscordSignIn, type AccountUser } from "@/features/account/lib/account-api";
-import { requestExtension, subscribeExtensionDetected } from "@/lib/extension-bridge";
+import { requestExtension, subscribeExtensionDetected } from "@nowly/shared/web-bridge";
 import { Button, Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
 import { RiCheckLine, RiDiscordFill, RiPlugLine, RiPuzzleLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
@@ -11,8 +11,6 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 type Status = "checking" | "signed-out" | "no-extension" | "ready" | "connecting" | "done" | "error";
-
-const SESSION_TIMEOUT_MS = 15000;
 
 const StatusIcon = ({ status }: {
   status: Status;
@@ -46,7 +44,7 @@ export const ExtensionConnectView = () => {
 
       const result = await requestExtension<{
         ok?: boolean;
-      }>("NOWLY_SESSION", session, SESSION_TIMEOUT_MS);
+      }>("NOWLY_SESSION", session);
       setStatus(result?.ok === true ? "done" : "error");
     } catch {
       setStatus("error");

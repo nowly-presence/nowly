@@ -16,8 +16,7 @@ import { createPublicationMockHandlers } from "@/preview/activity-publication-mo
 import { createMockCreatorHandlers } from "@/preview/mock-creator";
 import { createMockAdminHandlers } from "@/preview/mock-admin";
 import { createMockReportHandlers } from "@/preview/mock-reports";
-
-export type MockHandlers = { [K in RouterMessageType]?: (payload: PayloadOf<K>) => ResponseOf<K> | Promise<ResponseOf<K>> };
+import type { MockHandlers } from "@/preview/mock-handlers";
 
 type MockRouterContext = {
   local: MockStorageArea;

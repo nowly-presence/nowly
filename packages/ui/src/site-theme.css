@@ -1,0 +1,14 @@
+@layer base {
+  html {
+    scroll-padding-top: 7rem;
+  }
+
+  :is(a, button, input, textarea, select, [tabindex]):focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 3px;
+  }
+
+  main:focus {
+    outline: none;
+  }
+}

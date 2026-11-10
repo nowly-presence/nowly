@@ -1,5 +1,8 @@
 import { USER_SCRIPT_MESSAGE_SOURCE } from "@/shared/constants";
 
+const MEDIA_TICK_DEBOUNCE_MS = 250;
+const TIMEUPDATE_TICK_DEBOUNCE_MS = 1000;
+
 export const createPresenceRuntime = (slug: string, name: string, bundle: string, settings: Record<string, unknown> = {}, strings: Record<
   string,
   string
@@ -222,7 +225,7 @@ export const createPresenceRuntime = (slug: string, name: string, bundle: string
       let tickDebounce;
       const scheduleTick = () => {
         clearTimeout(tickDebounce);
-        tickDebounce = setTimeout(tick, 250);
+        tickDebounce = setTimeout(tick, ${MEDIA_TICK_DEBOUNCE_MS});
       };
       const boundMedia = new WeakSet();
       const bindMedia = (element) => {
@@ -297,11 +300,11 @@ export const createPresenceRuntime = (slug: string, name: string, bundle: string
     let timeupdateDebounce;
     const scheduleTick = () => {
       clearTimeout(mediaDebounce);
-      mediaDebounce = setTimeout(tick, 250);
+      mediaDebounce = setTimeout(tick, ${MEDIA_TICK_DEBOUNCE_MS});
     };
     const scheduleTimeupdateTick = () => {
       clearTimeout(timeupdateDebounce);
-      timeupdateDebounce = setTimeout(tick, 1000);
+      timeupdateDebounce = setTimeout(tick, ${TIMEUPDATE_TICK_DEBOUNCE_MS});
     };
     const boundMedia = new WeakSet();
     const bindMedia = (el) => {

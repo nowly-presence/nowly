@@ -9,7 +9,7 @@ const tokenSecret = (): string => serverEnv.DEVICE_TOKEN_SECRET ?? serverEnv.JWT
 
 export const deriveDeviceToken = (deviceId: string): string => createHmac("sha256", tokenSecret()).update(`device-token:v1:${deviceId}`).digest("base64url");
 
-export const verifyDeviceToken = (deviceId: string, token: string | undefined | null): boolean => {
+const verifyDeviceToken = (deviceId: string, token: string | undefined | null): boolean => {
   if (!deviceId || !token) return false;
 
   const expected = Buffer.from(deriveDeviceToken(deviceId));

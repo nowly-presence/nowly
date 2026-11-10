@@ -1,6 +1,6 @@
 import { categoryOf, type ProductEvent } from "@nowly/telemetry";
 import { handleClearActivity, removeActiveSlug, removeActiveSlugs } from "@/background/managers/activity-manager";
-import { enqueueInstall, getInstallQueue, isRetriableInstallFailure, setInstallQueue, syncInstallQueueAlarm, type InstallQueueItem } from "@/background/managers/install-queue";
+import { drainQueuedInstalls, enqueueInstall, isRetriableInstallFailure, removeQueuedInstall } from "@/background/managers/install-queue";
 import { parsePresenceZip, toLocalRelease } from "@/background/managers/local-presence-zip";
 import { trackProduct } from "@/background/telemetry";
 import { addRuntimeLog } from "@/background/runtime-logs";
@@ -10,14 +10,14 @@ import { hasActiveSlugs } from "@/background/services/background-context";
 import { getActiveDeviceId, syncDeviceState } from "@/background/services/device-sync";
 import { verifyPresenceRelease } from "@/background/services/release-security";
 import { getDeviceToken } from "@/background/storage/device.store";
-import { getCurrentActivity, getPresences, setPresences } from "@/background/storage/presences.store";
+import { getCurrentActivity, getPresences, mutatePresences } from "@/background/storage/presences.store";
 import { BUNDLED_PRESENCES } from "@/generated/bundled-presences";
 import type { BundledPresence } from "@/generated/bundled-presences";
 import { IS_CANARY } from "@/shared/brand";
 import { normalizeCatalog } from "@/shared/presence-catalog";
-import type { PresenceCatalogItem, PresenceRelease, StoredPresence } from "@/shared/types";
+import type { InstalledPresences, PresenceCatalogItem, PresenceRelease, StoredPresence } from "@/shared/types";
 
-export const broadcastPresencesChanged = (): void => {
+const broadcastPresencesChanged = (): void => {
   chrome.runtime
     .sendMessage({
       source: "PRESENCES_BACKGROUND",
@@ -26,15 +26,16 @@ export const broadcastPresencesChanged = (): void => {
     .catch(() => {});
 };
 
-export const installPresence = async (payload: unknown, source: ProductEvent["source"] = "system"): Promise<{
+type PresenceInstall = {
+  slug: string;
+  release: PresenceRelease;
+  source?: StoredPresence["source"];
+};
+
+const installRelease = async (presence: PresenceInstall, source: ProductEvent["source"]): Promise<{
   ok: boolean;
   error?: string;
 }> => {
-  const presence = payload as {
-    slug: string;
-    release: PresenceRelease;
-    source?: StoredPresence["source"];
-  };
   const verified = await verifyPresenceRelease(presence.release, presence.slug);
 
   if (!verified.ok) {
@@ -51,19 +52,25 @@ export const installPresence = async (payload: unknown, source: ProductEvent["so
     return verified;
   }
 
-  const presences = await getPresences();
+  const installed = await mutatePresences(async (presences) => {
+    const existing = presences[presence.slug];
+    const nextPresence: StoredPresence = {
+      metadata: presence.release.metadata,
+      release: presence.release,
+      enabled: existing?.enabled ?? true,
+      installedAt: existing?.installedAt ?? Date.now(),
+      updatedAt: Date.now(),
+      source: presence.source ?? existing?.source ?? "store"
+    };
+    const registerResult = await registerPresenceScript(presence.slug, nextPresence);
+    if (registerResult.ok) presences[presence.slug] = nextPresence;
+    return {
+      changed: registerResult.ok,
+      value: { existing, registerResult }
+    };
+  });
 
-  const existing = presences[presence.slug];
-  const nextPresence: StoredPresence = {
-    metadata: presence.release.metadata,
-    release: presence.release,
-    enabled: existing?.enabled ?? true,
-    installedAt: existing?.installedAt ?? Date.now(),
-    updatedAt: Date.now(),
-    source: presence.source ?? existing?.source ?? "store"
-  };
-
-  const registerResult = await registerPresenceScript(presence.slug, nextPresence);
+  const { existing, registerResult } = installed;
 
   if (!registerResult.ok) {
     void trackProduct({
@@ -79,8 +86,6 @@ export const installPresence = async (payload: unknown, source: ProductEvent["so
     return registerResult;
   }
 
-  presences[presence.slug] = nextPresence;
-  await setPresences(presences);
   await syncDeviceState();
   addRuntimeLog("success", "presence", existing ? "presence update installed" : "presence installed", {
     slug: presence.slug,
@@ -89,21 +94,29 @@ export const installPresence = async (payload: unknown, source: ProductEvent["so
   if (!existing || existing.release?.version !== presence.release.version) void trackProduct({
     name: existing ? "presence_updated" : "presence_installed",
     source,
-    data: { category: categoryOf(nextPresence.metadata.category) }
+    data: { category: categoryOf(presence.release.metadata.category) }
   });
-  const queued = await getInstallQueue();
-  const remaining = queued.filter((item) => item.slug !== presence.slug);
-
-  if (remaining.length !== queued.length) {
-    await setInstallQueue(remaining);
-    await syncInstallQueueAlarm(remaining);
-  }
-
-  broadcastPresencesChanged();
   return {
     ok: true
   };
 };
+
+export const installPresence = async (payload: unknown, source: ProductEvent["source"] = "system"): Promise<{
+  ok: boolean;
+  error?: string;
+}> => {
+  const presence = payload as PresenceInstall;
+  const result = await installRelease(presence, source);
+
+  if (result.ok) {
+    await removeQueuedInstall(presence.slug);
+    broadcastPresencesChanged();
+  }
+
+  return result;
+};
+
+const DELETE_RETRY_DELAY_MS = 2000;
 
 const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -127,7 +140,7 @@ const deleteActivePresence = async (deviceId: string, slug: string): Promise<voi
       });
     }
 
-    if (attempt === 1) await sleep(2000);
+    if (attempt === 1) await sleep(DELETE_RETRY_DELAY_MS);
   }
 };
 
@@ -146,150 +159,209 @@ export type InstallFromApiResult = {
   status?: number;
 };
 
-export const installPresenceFromApi = async (payload: unknown, options: {
-  skipQueue?: boolean;
-  source?: ProductEvent["source"];
-} = {}): Promise<InstallFromApiResult> => {
-  const slug =
-    typeof payload === "object" && payload !== null
-      ? (
-          payload as {
-            slug?: unknown;
-          }
-        ).slug
-      : undefined;
+type ReleaseDownload = {
+  ok: true;
+  release: PresenceRelease;
+} | {
+  ok: false;
+  error: string;
+  status?: number;
+};
 
-  if (typeof slug !== "string" || slug.length === 0) {
-    return {
-      ok: false,
-      error: "MISSING_SLUG"
-    };
-  }
-
-  const queueIfNeeded = async (status?: number, error?: string): Promise<InstallFromApiResult> => {
-    if (options.skipQueue || !isRetriableInstallFailure(status)) {
-      return {
-        ok: false,
-        error,
-        status
-      };
-    }
-
-    await enqueueInstall(slug, options.source);
-    return {
-      ok: false,
-      queued: true,
-      error,
-      status
-    };
-  };
-
+const downloadPresenceRelease = async (slug: string): Promise<ReleaseDownload> => {
   try {
     const response = await fetch(`${getEffectiveApiUrl()}/presences/${encodeURIComponent(slug)}`, { cache: "no-store" });
 
     if (!response.ok) {
-      if (!options.skipQueue) void trackProduct({
-        name: "presence_install_failed",
-        source: options.source ?? "system",
-        data: { stage: "download" }
-      });
       addRuntimeLog("error", "api", "GET /presences/:slug failed", {
         slug,
         status: response.status
       });
-      return queueIfNeeded(response.status, `release request failed: ${response.status}`);
+      return {
+        ok: false,
+        status: response.status,
+        error: `release request failed: ${response.status}`
+      };
     }
 
-    const release = (await response.json()) as PresenceRelease;
-    return installPresence({ slug, release }, options.source ?? "system");
+    return {
+      ok: true,
+      release: (await response.json()) as PresenceRelease
+    };
   } catch (error) {
-    if (!options.skipQueue) void trackProduct({
-      name: "presence_install_failed",
-      source: options.source ?? "system",
-      data: { stage: "download" }
-    });
     const message = error instanceof Error ? error.message : "presence install failed";
     addRuntimeLog("error", "api", "GET /presences/:slug failed", {
       slug,
       error: message
     });
-    return queueIfNeeded(undefined, message);
+    return {
+      ok: false,
+      error: message
+    };
   }
+};
+
+export const installPresenceFromApi = async (payload: unknown, options: {
+  source?: ProductEvent["source"];
+} = {}): Promise<InstallFromApiResult> => {
+  const slug = typeof payload === "object" && payload !== null && "slug" in payload ? payload.slug : undefined;
+
+  if (typeof slug !== "string" || slug.length === 0) return {
+    ok: false,
+    error: "MISSING_SLUG"
+  };
+
+  const download = await downloadPresenceRelease(slug);
+
+  if (download.ok) return installPresence(
+    {
+      slug,
+      release: download.release
+    },
+    options.source ?? "system"
+  );
+
+  void trackProduct({
+    name: "presence_install_failed",
+    source: options.source ?? "system",
+    data: { stage: "download" }
+  });
+
+  if (!isRetriableInstallFailure(download.status)) return download;
+
+  await enqueueInstall(slug, options.source);
+  return {
+    ...download,
+    queued: true
+  };
 };
 
 export const drainInstallQueue = async (): Promise<{
   slugs: string[];
 }> => {
-  const pending = await getInstallQueue();
+  const remaining = await drainQueuedInstalls(async ({ slug, source }) => {
+    const download = await downloadPresenceRelease(slug);
 
-  if (pending.length === 0) {
-    await syncInstallQueueAlarm([]);
-    return {
-      slugs: []
-    };
-  }
+    if (!download.ok) return download;
 
-  const remaining: InstallQueueItem[] = [];
-
-  for (const item of pending) {
-    const result = await installPresenceFromApi(
-      { slug: item.slug },
+    const result = await installRelease(
       {
-        skipQueue: true,
-        source: item.source ?? "system"
-      }
+        slug,
+        release: download.release
+      },
+      source ?? "system"
     );
-
-    if (result.ok) continue;
-
-    if (isRetriableInstallFailure(result.status)) remaining.push(item);
-  }
-
-  await setInstallQueue(remaining);
-  await syncInstallQueueAlarm(remaining);
+    if (result.ok) broadcastPresencesChanged();
+    return result;
+  });
   return {
-    slugs: remaining.map((item) => item.slug)
+    slugs: remaining.map(({ slug }) => slug)
   };
 };
 
-export const uninstallPresence = async (payload: unknown, source: ProductEvent["source"] = "extension"): Promise<{
+type ToggleResult = {
   ok: boolean;
-}> => {
-  const presences = await getPresences();
+  error?: string;
+};
+type PresenceChange = {
+  slug: string;
+  presence: StoredPresence;
+};
 
-  const { slug } = payload as {
-    slug: string;
-  };
-  const deviceId = await getActiveDeviceId();
+const trackToggle = (presence: StoredPresence, enabled: boolean, source: ProductEvent["source"]): void => {
+  void trackProduct({
+    name: enabled ? "presence_enabled" : "presence_disabled",
+    source,
+    data: { category: categoryOf(presence.metadata.category) }
+  });
+};
 
-  const removedPresence = presences[slug];
+const enablePresenceScript = async ({ slug, presence }: PresenceChange): Promise<ToggleResult> => {
+  const result = await registerPresenceScript(slug, {
+    ...presence,
+    enabled: true
+  });
+  addRuntimeLog(result.ok ? "success" : "error", "presence", "presence enabled", {
+    slug,
+    error: result.error
+  });
+  return result;
+};
 
-  if (!removedPresence) return {
-    ok: true
-  };
+const installedTargets = (presences: InstalledPresences, slugs: string[]): PresenceChange[] =>
+  [...new Set(slugs)].flatMap((slug) =>
+    presences[slug]
+      ? [
+          {
+            slug,
+            presence: presences[slug]
+          }
+        ]
+      : []
+  );
 
-  delete presences[slug];
+const uninstallChanges = (
+  slugs: string[]
+): Promise<{
+  targets: PresenceChange[];
+  unregistrations: PromiseSettledResult<void>[];
+}> =>
+  mutatePresences((presences) => {
+    const targets = installedTargets(presences, slugs);
+    const unregistrations: PromiseSettledResult<void>[] = [];
 
-  await setPresences(presences);
-  await syncDeviceState([
-    {
-      slug,
-      version: removedPresence?.release?.version ?? removedPresence?.metadata?.version ?? undefined,
-      enabled: false,
-      installed: false
-    }
-  ]);
+    for (const { slug } of targets) delete presences[slug];
+
+    return {
+      changed: targets.length > 0,
+      value: { targets, unregistrations },
+      afterWrite: async () => {
+        unregistrations.push(...(await Promise.allSettled(targets.map(({ slug }) => unregisterPresenceScript(slug)))));
+      }
+    };
+  });
+
+const removedDevicePresence = ({ slug, presence }: PresenceChange) => ({
+  slug,
+  version: presence.release?.version ?? presence.metadata?.version ?? undefined,
+  enabled: false,
+  installed: false
+});
+
+const recordRemoval = ({ slug, presence }: PresenceChange, source: ProductEvent["source"]): void => {
   addRuntimeLog("success", "presence", "presence uninstalled", {
     slug,
-    version: removedPresence?.release?.version ?? removedPresence?.metadata?.version
+    version: presence.release?.version ?? presence.metadata?.version
   });
   void trackProduct({
     name: "presence_removed",
     source,
-    data: { category: categoryOf(removedPresence.metadata.category) }
+    data: { category: categoryOf(presence.metadata.category) }
   });
+};
+
+export const uninstallPresence = async ({ slug }: {
+  slug: string;
+}, source: ProductEvent["source"] = "extension"): Promise<{
+  ok: boolean;
+}> => {
+  const deviceId = await getActiveDeviceId();
+
+  const {
+    targets: [removed],
+    unregistrations: [unregistration]
+  } = await uninstallChanges([slug]);
+
+  if (!removed) return {
+    ok: true
+  };
+
+  await syncDeviceState([removedDevicePresence(removed)]);
+  recordRemoval(removed, source);
   broadcastPresencesChanged();
-  await unregisterPresenceScript(slug);
+
+  if (unregistration?.status === "rejected") throw unregistration.reason;
+
   await removeActiveSlug(slug, "uninstall");
   await deleteActivePresence(deviceId, slug);
   if (!(await hasActiveSlugs())) await handleClearActivity();
@@ -298,179 +370,143 @@ export const uninstallPresence = async (payload: unknown, source: ProductEvent["
   };
 };
 
-export const togglePresence = async (payload: unknown, source: ProductEvent["source"] = "extension"): Promise<{
-  ok: boolean;
-  error?: string;
-}> => {
-  const presences = await getPresences();
-
-  const { slug, enabled } = payload as {
-    slug: string;
-    enabled: boolean;
-  };
+export const togglePresence = async ({ slug, enabled }: {
+  slug: string;
+  enabled: boolean;
+}, source: ProductEvent["source"] = "extension"): Promise<ToggleResult> => {
   const deviceId = await getActiveDeviceId();
 
-  if (!presences[slug]) return {
-    ok: false
-  };
+  const toggled = await mutatePresences<{
+    presence?: StoredPresence;
+    result: ToggleResult;
+  }>(async (presences) => {
+    const presence = presences[slug];
 
-  const changed = presences[slug].enabled !== enabled;
-  const nextPresence = { ...presences[slug], enabled };
+    if (!presence) return {
+      changed: false,
+      value: {
+        result: { ok: false }
+      }
+    };
 
-  if (enabled) {
-    const result = await registerPresenceScript(slug, nextPresence);
-    addRuntimeLog(result.ok ? "success" : "error", "presence", "presence enabled", {
-      slug,
-      error: result.error
-    });
+    if (enabled) {
+      const result = await enablePresenceScript({ slug, presence });
 
-    if (!result.ok) return result;
-  }
+      if (!result.ok) return {
+        changed: false,
+        value: { result }
+      };
+    }
 
-  presences[slug] = nextPresence;
-  await setPresences(presences);
+    presences[slug] = { ...presence, enabled };
+    return {
+      changed: true,
+      value: {
+        presence,
+        result: { ok: true }
+      },
+      afterWrite: enabled ? undefined : () => unregisterPresenceScript(slug)
+    };
+  });
+
+  if (!toggled.presence) return toggled.result;
+
   await syncDeviceState();
   broadcastPresencesChanged();
+  if (toggled.presence.enabled !== enabled) trackToggle(toggled.presence, enabled, source);
+  if (enabled) return toggled.result;
 
-  if (enabled) {
-    if (changed) void trackProduct({
-      name: "presence_enabled",
-      source,
-      data: { category: categoryOf(presences[slug].metadata.category) }
-    });
-    return {
-      ok: true
-    };
-  }
-
-  await unregisterPresenceScript(slug);
-  if (changed) void trackProduct({
-    name: "presence_disabled",
-    source,
-    data: { category: categoryOf(presences[slug].metadata.category) }
-  });
   await removeActiveSlug(slug, "disabled");
   const current = await getCurrentActivity();
   if (current?.slug === slug || !(await hasActiveSlugs())) await handleClearActivity(slug);
   addRuntimeLog("info", "presence", "presence disabled", { slug });
   await deleteActivePresence(deviceId, slug);
-  return {
-    ok: true
-  };
+  return toggled.result;
 };
 
 export const bulkTogglePresences = async (slugs: string[], enabled: boolean): Promise<{
   ok: boolean;
 }> => {
-  const presences = await getPresences();
-
   const deviceId = await getActiveDeviceId();
-  const targets = [...new Set(slugs)].filter((slug) => presences[slug] && presences[slug].enabled !== enabled);
 
-  let successful = targets;
+  const { targets, successful, unregistered } = await mutatePresences(async (presences) => {
+    const targets = installedTargets(presences, slugs).filter(({ presence }) => presence.enabled !== enabled);
 
-  if (enabled) {
-    const registrations = await Promise.allSettled(
-      targets.map(async (slug) => {
-        const result = await registerPresenceScript(slug, {
-          ...presences[slug],
-          enabled: true
-        });
-        addRuntimeLog(result.ok ? "success" : "error", "presence", "presence enabled", {
-          slug,
-          error: result.error
-        });
-        return result.ok;
-      })
-    );
-    successful = targets.filter((_, index) => {
-      const result = registrations[index];
-      return result.status === "fulfilled" && result.value;
-    });
-  }
+    let successful = targets;
 
-  for (const slug of successful) presences[slug].enabled = enabled;
+    if (enabled) {
+      const registrations = await Promise.allSettled(targets.map(enablePresenceScript));
+      successful = targets.filter((_, index) => {
+        const result = registrations[index];
+        return result.status === "fulfilled" && result.value.ok;
+      });
+    }
 
-  await setPresences(presences);
+    for (const { slug, presence } of successful) presences[slug] = { ...presence, enabled };
+
+    const unregistered = new Set<string>();
+    return {
+      changed: successful.length > 0,
+      value: { targets, successful, unregistered },
+      afterWrite: enabled
+        ? undefined
+        : async () => {
+            await Promise.allSettled(
+              successful.map(async ({ slug }) => {
+                await unregisterPresenceScript(slug);
+                unregistered.add(slug);
+              })
+            );
+          }
+    };
+  });
+
   await syncDeviceState();
   broadcastPresencesChanged();
 
   const results = await Promise.allSettled(
-    successful.map(async (slug) => {
+    successful.map(async ({ slug, presence }) => {
       if (enabled) {
-        void trackProduct({
-          name: "presence_enabled",
-          source: "extension",
-          data: { category: categoryOf(presences[slug].metadata.category) }
-        });
-        return;
+        trackToggle(presence, true, "extension");
+      } else if (unregistered.has(slug)) {
+        trackToggle(presence, false, "extension");
+        await deleteActivePresence(deviceId, slug);
+        addRuntimeLog("info", "presence", "presence disabled", { slug });
       }
-
-      await unregisterPresenceScript(slug);
-      void trackProduct({
-        name: "presence_disabled",
-        source: "extension",
-        data: { category: categoryOf(presences[slug].metadata.category) }
-      });
-      await deleteActivePresence(deviceId, slug);
-      addRuntimeLog("info", "presence", "presence disabled", { slug });
     })
   );
-  if (!enabled) await removeActiveSlugs(targets, "disabled");
 
   if (!enabled) {
+    const targetSlugs = targets.map(({ slug }) => slug);
+    await removeActiveSlugs(targetSlugs, "disabled");
     const current = await getCurrentActivity();
-    if (!current || targets.includes(current.slug) || !(await hasActiveSlugs())) await handleClearActivity();
+    if (!current || targetSlugs.includes(current.slug) || !(await hasActiveSlugs())) await handleClearActivity();
   }
 
   return {
-    ok: successful.length === targets.length && results.every((result) => result.status === "fulfilled")
+    ok: successful.length === targets.length && (enabled || unregistered.size === successful.length) && results.every((result) => result.status === "fulfilled")
   };
 };
 
 export const bulkUninstallPresences = async (slugs: string[]): Promise<{
   ok: boolean;
 }> => {
-  const presences = await getPresences();
-
   const deviceId = await getActiveDeviceId();
-  const targets = [...new Set(slugs)].filter((slug) => presences[slug]);
 
-  const removed: Record<string, StoredPresence> = {};
-
-  for (const slug of targets) {
-    removed[slug] = presences[slug];
-    delete presences[slug];
-  }
-
-  await setPresences(presences);
-  await syncDeviceState(
-    targets.map((slug) => ({
-      slug,
-      version: removed[slug]?.release?.version ?? removed[slug]?.metadata?.version ?? undefined,
-      enabled: false,
-      installed: false
-    }))
-  );
+  const { targets, unregistrations } = await uninstallChanges(slugs);
+  await syncDeviceState(targets.map(removedDevicePresence));
   broadcastPresencesChanged();
 
   await Promise.allSettled(
-    targets.map(async (slug) => {
-      addRuntimeLog("success", "presence", "presence uninstalled", {
-        slug,
-        version: removed[slug]?.release?.version ?? removed[slug]?.metadata?.version
-      });
-      void trackProduct({
-        name: "presence_removed",
-        source: "extension",
-        data: { category: categoryOf(removed[slug].metadata.category) }
-      });
-      await unregisterPresenceScript(slug);
-      await deleteActivePresence(deviceId, slug);
+    targets.map(async (target, index) => {
+      recordRemoval(target, "extension");
+      if (unregistrations[index]?.status === "fulfilled") await deleteActivePresence(deviceId, target.slug);
     })
   );
-  await removeActiveSlugs(targets, "uninstall");
-
+  await removeActiveSlugs(
+    targets.map(({ slug }) => slug),
+    "uninstall"
+  );
   if (!(await hasActiveSlugs())) await handleClearActivity();
   return {
     ok: true
@@ -577,7 +613,7 @@ export const installLocalPresenceZip = async (payload: unknown): Promise<{
   };
 };
 
-const installDevPresences = async (presences: Record<string, StoredPresence>): Promise<string[]> => {
+const readDevPresences = async (): Promise<BundledPresence[]> => {
   if (!IS_CANARY) return [];
 
   try {
@@ -585,61 +621,52 @@ const installDevPresences = async (presences: Record<string, StoredPresence>): P
 
     if (!response.ok) return [];
 
-    const devPresences: BundledPresence[] = await response.json();
-
-    const slugs: string[] = [];
-
-    for (const devPresence of devPresences) {
-      const existing = presences[devPresence.slug];
-
-      if (existing?.release?.version === devPresence.release.version) continue;
-
-      presences[devPresence.slug] = {
-        metadata: devPresence.release.metadata,
-        release: devPresence.release,
-        enabled: true,
-        installedAt: existing?.installedAt ?? Date.now(),
-        updatedAt: Date.now()
-      };
-      slugs.push(devPresence.slug);
-    }
-
-    return slugs;
+    const releases: unknown = await response.json();
+    return Array.isArray(releases) ? releases.filter((item: BundledPresence | null) => item?.release) : [];
   } catch {
     return [];
   }
 };
 
-export const installBundledPresences = async (): Promise<void> => {
-  if (!BUNDLED_PRESENCES.length && !IS_CANARY) return;
-
-  const presences = await getPresences();
-
+const installPackagedPresences = (presences: InstalledPresences, releases: readonly BundledPresence[], source?: StoredPresence["source"]): boolean => {
   let changed = false;
 
-  const devSlugs = await installDevPresences(presences);
+  for (const { slug, release } of releases) {
+    const existing = presences[slug];
 
-  if (devSlugs.length > 0) changed = true;
+    if (existing?.release?.version === release.version) continue;
 
-  for (const bundled of BUNDLED_PRESENCES) {
-    const existing = presences[bundled.slug];
-
-    if (existing?.release?.version === bundled.release.version) continue;
-
-    presences[bundled.slug] = {
-      metadata: bundled.release.metadata,
-      release: bundled.release,
+    presences[slug] = {
+      metadata: release.metadata,
+      release,
       enabled: true,
       installedAt: existing?.installedAt ?? Date.now(),
       updatedAt: Date.now(),
-      source: "bundle"
+      ...(source ? { source } : {})
     };
     changed = true;
   }
 
+  return changed;
+};
+
+export const installBundledPresences = async (): Promise<void> => {
+  if (!BUNDLED_PRESENCES.length && !IS_CANARY) return;
+
+  const devPresences = await readDevPresences();
+
+  const changed = await mutatePresences((presences) => {
+    const devChanged = installPackagedPresences(presences, devPresences);
+    const bundledChanged = installPackagedPresences(presences, BUNDLED_PRESENCES, "bundle");
+    const changed = devChanged || bundledChanged;
+    return {
+      changed,
+      value: changed
+    };
+  });
+
   if (!changed) return;
 
-  await setPresences(presences);
   await syncDeviceState();
   broadcastPresencesChanged();
 };

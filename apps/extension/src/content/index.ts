@@ -1,6 +1,8 @@
 import { IS_CANARY } from "@/shared/brand";
-import { EXT_WEB_SOURCE, USER_SCRIPT_MESSAGE_SOURCE, WEB_BASE_URL } from "@/shared/constants";
+import { USER_SCRIPT_MESSAGE_SOURCE, WEB_BASE_URL } from "@/shared/constants";
 import type { WebMessage } from "@/shared/types";
+import { EXT_WEB_SOURCE, isWebBridgeRequest, WEB_BRIDGE_DETECTED, WEB_BRIDGE_PING, WEB_BRIDGE_REQUESTS } from "@nowly/shared/web-bridge-protocol";
+import { toRouterMessageType } from "@/shared/web-bridge-routing";
 import { startWebSeason } from "@/content/web-season";
 import { registerCreatorBridge } from "@/content/creator-picker";
 import { ACCOUNT_ORIGIN_MESSAGE_TYPES, isAllowedAccountOrigin } from "@/shared/web-origin";
@@ -16,24 +18,6 @@ const isAllowedWebOrigin = (origin: string): boolean => {
 
   return origin === MARKETPLACE_ORIGIN;
 };
-
-const WEB_MESSAGE_TYPES = new Set([
-  "INSTALL_PRESENCE",
-  "UPDATE_PRESENCE",
-  "UNINSTALL_PRESENCE",
-  "GET_INSTALLED",
-  "GET_DIAGNOSTIC",
-  "GET_DEVICE_INFO",
-  "GET_ANALYTICS_CONSENT",
-  "SET_ANALYTICS_CONSENT",
-  "NOWLY_SESSION",
-  "GET_ACTIVITY_PUBLICATION_STATUS",
-  "APPLY_ACTIVITY_PUBLICATION",
-  "REPORT_CREATE",
-  "REPORT_IDENTITY"
-]);
-
-const toRouterMessageType = (type: string): string => (type === "GET_INSTALLED" ? "GET_PRESENCES" : type);
 
 const sendRuntimeMessage = async <T = unknown>(message: Record<string, unknown>): Promise<T | null> => {
   try {
@@ -59,7 +43,7 @@ const broadcastDetected = (): void => {
     window.postMessage(
       {
         source: EXT_WEB_SOURCE,
-        type: "EXT_DETECTED"
+        type: WEB_BRIDGE_DETECTED
       },
       window.location.origin
     );
@@ -71,11 +55,11 @@ const broadcastDetected = (): void => {
 window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
   if (event.source !== window || event.origin !== window.location.origin || !(isAllowedWebOrigin(event.origin) || isAllowedAccountOrigin(event.origin))) return;
 
-  if (event.data?.source === EXT_WEB_SOURCE && event.data.type === "PING") {
+  if (event.data?.source === EXT_WEB_SOURCE && event.data.type === WEB_BRIDGE_PING) {
     window.postMessage(
       {
         source: EXT_WEB_SOURCE,
-        type: "EXT_DETECTED"
+        type: WEB_BRIDGE_DETECTED
       },
       window.location.origin
     );
@@ -84,15 +68,18 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
 
 window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
   if (event.source !== window || event.origin !== window.location.origin) return;
-  if (event.data?.source !== EXT_WEB_SOURCE || event.data.type === "PING") return;
-  if (!WEB_MESSAGE_TYPES.has(event.data.type)) return;
-  if (!(isAllowedWebOrigin(event.origin) || (isAllowedAccountOrigin(event.origin) && ACCOUNT_ORIGIN_MESSAGE_TYPES.includes(event.data.type)))) return;
 
   const msg = event.data;
 
+  if (msg?.source !== EXT_WEB_SOURCE || !isWebBridgeRequest(msg.type)) return;
+
+  const type = msg.type;
+
+  if (!(isAllowedWebOrigin(event.origin) || (isAllowedAccountOrigin(event.origin) && ACCOUNT_ORIGIN_MESSAGE_TYPES.includes(type)))) return;
+
   if (!msg.messageId) return;
 
-  if (msg.type === "GET_DEVICE_INFO") {
+  if (type === "GET_DEVICE_INFO") {
     Promise.all([
       getDeviceId(),
       chrome.storage.local.get(DEVICE_TOKEN_KEY)
@@ -101,7 +88,7 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
       window.postMessage(
         {
           source: EXT_WEB_SOURCE,
-          type: "DEVICE_INFO",
+          type: WEB_BRIDGE_REQUESTS.GET_DEVICE_INFO,
           payload: { deviceId, deviceToken },
           messageId: msg.messageId
         },
@@ -113,13 +100,13 @@ window.addEventListener("message", (event: MessageEvent<WebMessage>) => {
 
   sendRuntimeMessage({
     source: "PRESENCES_CONTENT",
-    type: toRouterMessageType(msg.type),
+    type: toRouterMessageType(type),
     payload: msg.payload
   }).then((response) => {
     window.postMessage(
       {
         source: EXT_WEB_SOURCE,
-        type: msg.type === "GET_INSTALLED" ? "INSTALLED_PRESENCES" : `${msg.type}_RESULT`,
+        type: WEB_BRIDGE_REQUESTS[type],
         payload: response ?? {
           ok: false,
           error: "BACKGROUND_UNAVAILABLE"

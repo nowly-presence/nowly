@@ -10,7 +10,7 @@ export type ChangelogRelease = {
   stores?: ChangelogStore[];
 };
 
-export const isChangelogReleasePublished = (date: string | null, now = new Date()): boolean => {
+const isChangelogReleasePublished = (date: string | null, now = new Date()): boolean => {
   if (date === null) return false;
 
   const releaseDate = new Date(`${date}T00:00:00.000Z`);
@@ -67,7 +67,7 @@ export const getChangelogRelease = (value: string, locale: string): ChangelogRel
 };
 
 export const getChangelogNotes = (slug: string, locale: string): Block[] => {
-  const body = getChangelogBody(slug, locale) ?? getChangelogBody(slug, "en-US");
+  const body = getChangelogBody(slug, locale);
 
   if (!body) return [];
 

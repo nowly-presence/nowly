@@ -15,3 +15,5 @@ export const canonicalJson = (value: unknown): string => {
     .map((key) => `${JSON.stringify(key)}:${canonicalJson(object[key])}`)
     .join(",")}}`;
 };
+
+export const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);

@@ -1,9 +1,7 @@
-import { EXT_WEB_SOURCE } from "@/shared/constants";
+import { EXT_WEB_SOURCE, SEASON_MESSAGE, SEASON_REQUEST } from "@nowly/shared/web-bridge-protocol";
 import { isSeasonOverride, resolveSeason, SEASON_OVERRIDE_KEY, type Season } from "@/shared/seasonal-themes";
 
 export const SETTINGS_STORAGE_KEY = "settings";
-export const SEASON_MESSAGE = "SEASON";
-export const SEASON_REQUEST = "GET_SEASON";
 
 const LEGACY_SEASONAL_APPEARANCE = "seasonal";
 

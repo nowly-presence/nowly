@@ -1,26 +1,30 @@
-import { createEnv } from "@t3-oss/env-core";
-import { describe, expect, it } from "vitest";
-import { z } from "zod";
-import { clientEnv } from "../src/client";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+beforeEach(() => {
+  vi.resetModules();
+  vi.stubEnv("SKIP_ENV_VALIDATION", "false");
+});
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+});
 
 describe("@nowly/env", () => {
-  it("provides public config", () => {
-    expect(clientEnv.NEXT_PUBLIC_API_BASE_URL).toMatch(/^https?:\/\//);
-    expect(clientEnv.NEXT_PUBLIC_BASE_URL).toBe("https://nowly.me");
-    expect(clientEnv.NEXT_PUBLIC_ADSENSE_ENABLED).toBe(false);
-  });
+  it("rejects server startup without the signing secret", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("JWT_SECRET", "");
+    const report = vi.spyOn(console, "error").mockImplementation(() => {});
 
-  it("throws clear errors for missing required server secrets", () => {
-    expect(() =>
-      createEnv({
-        server: { JWT_SECRET: z.string().trim().min(1) },
-        runtimeEnv: {},
-        emptyStringAsUndefined: true
-      })
-    ).toThrow();
-  });
-
-  it("does not expose server secrets from client env", () => {
-    expect("JWT_SECRET" in clientEnv).toBe(false);
+    await expect(import("../src/server")).rejects.toThrow("Invalid environment variables");
+    expect(report).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.arrayContaining([
+        expect.objectContaining({
+          path: ["JWT_SECRET"]
+        })
+      ])
+    );
   });
 });

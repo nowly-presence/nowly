@@ -8,7 +8,7 @@ const DISCORD_API_URL = "https://discord.com/api/v10";
 const REVALIDATE_SECONDS = 60 * 60;
 const FETCH_TIMEOUT_MS = 4000;
 
-export type DiscordCommunity = {
+type DiscordCommunity = {
   members: number | null;
   online: number | null;
 };
@@ -34,7 +34,6 @@ export const parseDiscordCommunity = (payload: unknown): DiscordCommunity => {
   };
 };
 
-// Server-side only, so visitors' browsers never talk to Discord from the page. Any failure just hides the numbers.
 export const getDiscordCommunity = cache(async (): Promise<DiscordCommunity> => {
   const code = inviteCode();
 

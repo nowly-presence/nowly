@@ -1,4 +1,4 @@
-import { apiBaseUrl } from "@/lib/api-base";
+import { apiFetch as request, ensureOk, isRecord } from "@/lib/api-client";
 import type { AdminCapability, ExtensionTokenScope } from "@nowly/shared";
 
 export type AccountUser = {
@@ -28,23 +28,12 @@ export type AccountDevice = {
   current: boolean;
 };
 
-const apiUrl = (path: string): string => `${apiBaseUrl()}${path}`;
-
-const request = async (path: string, init: RequestInit = {}): Promise<Response> =>
-  fetch(apiUrl(path), {
-    ...init,
-    credentials: "include",
-    cache: "no-store",
-    headers: init.body ? { "Content-Type": "application/json", ...init.headers } : init.headers
-  });
-
-const isObject = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
-
 export const fetchAccountUser = async (): Promise<AccountUser | null> => {
   const response = await request("/me");
 
   if (response.status === 401) return null;
-  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+
+  await ensureOk(response);
 
   return (await response.json()) as AccountUser;
 };
@@ -61,7 +50,7 @@ export const startDiscordSignIn = async (callbackURL: string): Promise<void> => 
 
   const body: unknown = await response.json().catch(() => null);
 
-  if (!response.ok || !isObject(body) || typeof body.url !== "string") throw new Error("SIGN_IN_FAILED");
+  if (!response.ok || !isRecord(body) || typeof body.url !== "string") throw new Error("SIGN_IN_FAILED");
 
   window.location.assign(body.url);
 };
@@ -87,7 +76,7 @@ export const createExtensionSession = async (deviceId: string | null, scopes: Ex
 export const fetchAccountDevices = async (): Promise<AccountDevice[]> => {
   const response = await request("/me/devices");
 
-  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+  await ensureOk(response);
 
   const body = (await response.json()) as {
     devices: AccountDevice[];
@@ -105,7 +94,7 @@ export type AccountPresence = {
 export const fetchAccountPresences = async (): Promise<AccountPresence[]> => {
   const response = await request("/me/presences");
 
-  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+  await ensureOk(response);
 
   const body = (await response.json()) as {
     presences: AccountPresence[];
@@ -124,7 +113,7 @@ export type AccountCustomActivity = {
 export const fetchAccountCustomActivities = async (): Promise<AccountCustomActivity[]> => {
   const response = await request("/me/custom-activities");
 
-  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+  await ensureOk(response);
 
   const body = (await response.json()) as {
     activities: AccountCustomActivity[];
@@ -135,7 +124,7 @@ export const fetchAccountCustomActivities = async (): Promise<AccountCustomActiv
 export const unlinkAllAccountDevices = async (): Promise<void> => {
   const response = await request("/me/devices", { method: "DELETE" });
 
-  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+  await ensureOk(response);
 };
 
 export type AdminUser = {
@@ -150,7 +139,7 @@ export type AdminUser = {
 export const searchAdminUsers = async (query: string): Promise<AdminUser[]> => {
   const response = await request(`/admin/users?q=${encodeURIComponent(query)}`);
 
-  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+  await ensureOk(response);
 
   const body = (await response.json()) as {
     users: AdminUser[];
@@ -164,19 +153,19 @@ export const setAdminUserVerified = async (userId: string, verified: boolean): P
     body: JSON.stringify({ verified })
   });
 
-  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+  await ensureOk(response);
 };
 
 export const unlinkAccountDevice = async (deviceId: string): Promise<void> => {
   const response = await request(`/me/devices/${encodeURIComponent(deviceId)}`, { method: "DELETE" });
 
-  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+  await ensureOk(response);
 };
 
 export const downloadAccountExport = async (): Promise<void> => {
   const response = await request("/me/export");
 
-  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+  await ensureOk(response);
 
   const blob = new Blob([JSON.stringify(await response.json(), null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -190,7 +179,7 @@ export const downloadAccountExport = async (): Promise<void> => {
 export const deleteAccount = async (): Promise<void> => {
   const response = await request("/me", { method: "DELETE" });
 
-  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+  await ensureOk(response);
 };
 
 export type PublicProfileSettings = {
@@ -214,7 +203,7 @@ export class PublicProfileError extends Error {
 export const fetchPublicProfileSettings = async (): Promise<PublicProfileSettings> => {
   const response = await request("/me/public-profile");
 
-  if (!response.ok) throw new Error(`HTTP_${response.status}`);
+  await ensureOk(response);
 
   return (await response.json()) as PublicProfileSettings;
 };

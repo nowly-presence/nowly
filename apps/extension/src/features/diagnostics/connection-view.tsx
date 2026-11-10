@@ -56,7 +56,7 @@ const CHECKS: {
 ];
 
 export const ConnectionView = () => {
-  const { state, refresh } = useExtensionState();
+  const { state, patch } = useExtensionState();
   const { t } = useI18n();
   const { pop, push, setTab } = useNav();
   const [diagnostic, setDiagnostic] = useState<DiagnosticSnapshot | null>(null);
@@ -79,9 +79,8 @@ export const ConnectionView = () => {
 
   const reconnect = async (kind: "reconnect" | "restart") => {
     setBusy(kind);
-    await sendMessage(kind === "restart" ? "RESTART_NATIVE" : "CONNECT_NATIVE").catch(() => {});
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    await refresh.native();
+    const native = await sendMessage(kind === "restart" ? "RESTART_NATIVE" : "CONNECT_NATIVE").catch(() => null);
+    if (native) patch({ native });
     load();
     setBusy(null);
   };

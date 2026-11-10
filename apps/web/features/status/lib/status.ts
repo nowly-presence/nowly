@@ -1,4 +1,4 @@
-import { presenceApiBaseUrl } from "@/lib/presence-api";
+import { serverApiBaseUrl } from "@/lib/presence-api";
 
 export type ServiceStatus = "operational" | "slow" | "degraded" | "down" | "unknown";
 export type StatusServiceId = "website" | "api" | "library" | "cdn";
@@ -18,7 +18,7 @@ export type StatusServiceReport = {
   samples: StatusSample[];
 };
 
-export type StatusReport = {
+type StatusReport = {
   generatedAt: string;
   checkIntervalHours: number;
   overallStatus: ServiceStatus;
@@ -56,7 +56,7 @@ const emptyServices: StatusServiceReport[] = [
   }
 ];
 
-export const getFallbackStatusReport = (): StatusReport => ({
+const getFallbackStatusReport = (): StatusReport => ({
   generatedAt: "",
   checkIntervalHours: 1,
   overallStatus: "unknown",
@@ -68,7 +68,7 @@ const isValidStatusReport = (data: unknown): data is StatusReport =>
 
 export const fetchStatusReport = async (): Promise<StatusReport> => {
   try {
-    const res = await fetch(`${presenceApiBaseUrl()}/status`, {
+    const res = await fetch(`${serverApiBaseUrl()}/status`, {
       cache: "no-store",
       signal: AbortSignal.timeout(10000)
     });

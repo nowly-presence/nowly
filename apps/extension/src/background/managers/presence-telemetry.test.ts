@@ -3,17 +3,12 @@ import { bulkTogglePresences, installPresence, togglePresence, uninstallPresence
 import { registerPresenceScript } from "@/background/runtime/presence-scripts";
 import { verifyPresenceRelease } from "@/background/services/release-security";
 import { trackProduct } from "@/background/telemetry";
+import { STORAGE_KEYS } from "@/background/storage/keys";
+import { setPresenceSchedule } from "@/background/storage/presences.store";
 import type { PresenceRelease, StoredPresence } from "@/shared/types";
 
 const store = vi.hoisted(() => ({ presences: {} as Record<string, StoredPresence> }));
 
-vi.mock("@/background/storage/presences.store", () => ({
-  getPresences: vi.fn(async () => structuredClone(store.presences)),
-  setPresences: vi.fn(async (value: Record<string, StoredPresence>) => {
-    store.presences = structuredClone(value);
-  }),
-  getCurrentActivity: vi.fn(async () => null)
-}));
 vi.mock("@/background/runtime/presence-scripts", () => ({
   registerPresenceScript: vi.fn(),
   unregisterPresenceScript: vi.fn(async () => {})
@@ -32,9 +27,7 @@ vi.mock("@/background/managers/activity-manager", () => ({
   removeActiveSlugs: vi.fn()
 }));
 vi.mock("@/background/managers/install-queue", () => ({
-  getInstallQueue: vi.fn(async () => []),
-  setInstallQueue: vi.fn(),
-  syncInstallQueueAlarm: vi.fn(),
+  removeQueuedInstall: vi.fn(),
   enqueueInstall: vi.fn(),
   isRetriableInstallFailure: vi.fn()
 }));
@@ -72,7 +65,15 @@ beforeEach(() => {
   vi.mocked(verifyPresenceRelease).mockResolvedValue({ ok: true });
   vi.mocked(registerPresenceScript).mockResolvedValue({ ok: true });
   vi.stubGlobal("chrome", {
-    runtime: { sendMessage: vi.fn(async () => {}) }
+    runtime: { sendMessage: vi.fn(async () => {}) },
+    storage: {
+      local: {
+        get: vi.fn(async (key: string) => (key === STORAGE_KEYS.presences ? { [key]: structuredClone(store.presences) } : {})),
+        set: vi.fn(async (values: Record<string, Record<string, StoredPresence>>) => {
+          if (values[STORAGE_KEYS.presences]) store.presences = structuredClone(values[STORAGE_KEYS.presences]);
+        })
+      }
+    }
   });
   vi.stubGlobal(
     "fetch",
@@ -206,4 +207,42 @@ describe("presence event truth", () => {
     await uninstallPresence({ slug: release.slug }, "web");
     expect(trackProduct).not.toHaveBeenCalled();
   });
+});
+
+const deferred = <T>() => {
+  let resolve: (value: T) => void = () => {};
+  const promise = new Promise<T>((done) => {
+    resolve = done;
+  });
+  return { promise, resolve };
+};
+
+it("preserves a schedule update queued while another presence is registering", async () => {
+  store.presences[release.slug] = existing();
+  store.presences.other = existing();
+  const registrationStarted = deferred<void>();
+  const registration = deferred<{
+    ok: boolean;
+  }>();
+  vi.mocked(registerPresenceScript).mockImplementationOnce(() => {
+    registrationStarted.resolve();
+    return registration.promise;
+  });
+
+  const enabled = togglePresence({
+    slug: release.slug,
+    enabled: true
+  });
+  await registrationStarted.promise;
+  const schedule = {
+    days: [1],
+    start: "09:00",
+    end: "17:00"
+  };
+  const scheduled = setPresenceSchedule("other", schedule);
+  registration.resolve({ ok: true });
+  await Promise.all([enabled, scheduled]);
+
+  expect(store.presences[release.slug].enabled).toBe(true);
+  expect(store.presences.other.schedule).toEqual(schedule);
 });

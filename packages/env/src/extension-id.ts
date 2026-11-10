@@ -1,0 +1,1 @@
+export const DEFAULT_EXTENSION_ID = "kmnlnfldimgneaopdihplkebobckcjpf";

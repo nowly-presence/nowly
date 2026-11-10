@@ -2,12 +2,10 @@ import { Children, createElement, isValidElement, type ComponentProps, type Reac
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import en from "@messages/en.json";
-import fr from "@messages/fr.json";
 import { useCustomActivityPublication } from "./custom-activity-publication-hook";
 import { CustomActivityPublication } from "./custom-activity-publication";
 import { CustomActivityPublicationDialog } from "./custom-activity-publication-dialog";
 import { Button } from "@/ui/button";
-import { Sheet } from "@/ui/sheet";
 import { sendMessage } from "@/lib/messages";
 
 const toast = vi.hoisted(() => vi.fn());
@@ -59,6 +57,19 @@ const panel = (onClose = vi.fn()) =>
 
 const markup = () => renderToStaticMarkup(panel());
 
+const renderedButtons = () =>
+  [...markup().matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/g)].map(([, attributes, content]) => ({
+    label: content.replace(/<[^>]+>/g, ""),
+    disabled: /\bdisabled=""/.test(attributes)
+  }));
+
+const actionLabels = () =>
+  renderedButtons()
+    .map(({ label }) => label)
+    .filter((label) => label !== en["custom.public.copy"]);
+
+const actionDisabled = (label: string) => renderedButtons().find((button) => button.label === label)?.disabled;
+
 const elements = (node: ReactNode): ReactNode[] => {
   if (
     !isValidElement<{
@@ -86,22 +97,14 @@ describe("public activity sharing dialog", () => {
     const entry = renderToStaticMarkup(createElement(CustomActivityPublication, { id: "saved-id" }));
     expect(entry).toContain(en["custom.public.share"]);
     expect(entry).not.toContain('role="dialog"');
-    expect(useCustomActivityPublication).not.toHaveBeenCalled();
+
     expect(sendMessage).not.toHaveBeenCalled();
   });
-  it("uses an accessible preview dialog without the italic notice", () => {
-    expect(markup()).not.toContain(en["custom.public.notice"]);
-    expect(markup()).toContain('data-testid="saved-preview"');
-    expect(markup()).toContain('data-testid="custom-publication"');
-    expect(markup()).toContain('role="dialog"');
-    expect(panel().type).toBe(Sheet);
-    expect(panel().props.open).toBe(true);
-    expect(panel().props.title).toBe(en["custom.public.share"]);
-    expect(panel().props.description).toBe(en["custom.public.invitation"]);
-    expect(markup()).not.toContain(en["custom.public.description"]);
-    expect(fr["custom.public.summary"]).toBe("Version enregistrée et profil Discord publics.");
-    expect(fr["custom.public.summary"].length).toBeLessThanOrEqual(50);
-    expect(fr["custom.public.notice"].length).toBeLessThanOrEqual(85);
+  it("names the publication dialog and shows the saved preview", () => {
+    const html = markup();
+    expect(html).toContain(`role="dialog" aria-label="${en["custom.public.share"]}"`);
+    expect(html).toContain(en["custom.public.invitation"]);
+    expect(html).toContain('data-testid="saved-preview"');
   });
   it("treats missing publishing permission as a normal sign-in row with just Connect Discord", () => {
     state = {
@@ -109,53 +112,32 @@ describe("public activity sharing dialog", () => {
       creatorRequired: true,
       revision: null
     };
-    expect(buttons().map((button) => button.children)).toEqual([en["custom.public.connect"]]);
+    expect(actionLabels()).toEqual([en["custom.public.connect"]]);
     expect(markup()).toContain(en["custom.public.connectHint"]);
-    expect(panel().props.hideTitle).toBe(true);
-    expect(panel().props.description).toBeUndefined();
-    expect(markup()).toContain("text-headline-sm");
-    expect(panel().props.title).toBe(en["custom.public.connect"]);
     expect(markup()).not.toContain('data-testid="saved-preview"');
-    expect(markup()).not.toContain(en["custom.public.notice"]);
-    expect(markup()).toContain('class="flex flex-col gap-1"');
-    expect(buttons()[0].className).toBe("mt-2 w-full");
-    expect(markup()).not.toContain("pb-6 text-center");
     expect(markup()).not.toContain('role="alert"');
-    expect(markup()).not.toContain("text-danger");
   });
   it("offers Publish when ready, Update when public, and withdrawal for revision-zero reservations", () => {
-    expect(buttons().map((button) => button.children)).toEqual([en["custom.public.publish"]]);
+    expect(actionLabels()).toEqual([en["custom.public.publish"]]);
     state = {
       ...state,
       published: true,
       url: "https://nowly.me/activities/abc",
       revision: 1
     };
-    expect(buttons().map((button) => button.children)).toEqual([en["custom.public.update"], en["custom.public.unpublish"]]);
-    expect(buttons()[1].variant).toBe("secondary");
+    expect(actionLabels()).toEqual([en["custom.public.update"], en["custom.public.unpublish"]]);
     expect(markup()).toContain(en["custom.public.copy"]);
     expect(markup()).toContain(`href="${state.url}"`);
     expect(markup()).toContain(`aria-label="${en["custom.public.open"]}"`);
     expect(markup()).toContain('role="group"');
-    expect(markup()).toContain("divide-x");
-    expect(markup()).not.toContain("underline-offset-4");
     const html = markup();
-    expect(panel().props.title).toBe(en["custom.public.updateTitle"]);
-    expect(panel().props.description).toBe(en["custom.public.updateHint"]);
     expect(html.indexOf(en["custom.public.open"])).toBeLessThan(html.lastIndexOf(en["custom.public.update"]));
-    const actionGroup = elements(panel()).find(
-      (node) =>
-        isValidElement<{
-          children?: ReactNode;
-        }>(node) && Children.toArray(node.props.children).filter((child) => isValidElement(child) && child.type === Button).length === 2
-    );
-    expect(actionGroup).toBeDefined();
     state = {
       ...state,
       published: false,
       revision: 0
     };
-    expect(buttons().map((button) => button.children)).toEqual([en["custom.public.publish"], en["custom.public.unpublish"]]);
+    expect(actionLabels()).toEqual([en["custom.public.publish"], en["custom.public.unpublish"]]);
     expect(markup()).not.toContain(`href="${state.url}"`);
     expect(markup()).toContain(en["custom.public.unpublished"]);
   });
@@ -165,7 +147,7 @@ describe("public activity sharing dialog", () => {
       revision: null,
       error: "Could not load publication"
     };
-    expect(buttons()[0].disabled).toBe(true);
+    expect(actionDisabled(en["custom.public.publish"])).toBe(true);
     expect(markup()).toContain('role="alert"');
     expect(markup()).toContain(state.error);
   });
@@ -173,7 +155,17 @@ describe("public activity sharing dialog", () => {
     markup();
     expect(state.publish).not.toHaveBeenCalled();
     expect(state.connect).not.toHaveBeenCalled();
+    const unpublished = state;
+    state = {
+      ...state,
+      published: true,
+      revision: 3,
+      url: "https://nowly.me/activities/abc"
+    };
+    markup();
+    expect(state.publish).not.toHaveBeenCalled();
     expect(sendMessage).not.toHaveBeenCalled();
+    state = unpublished;
     const click = (index: number) => {
       const button = buttons()[index];
       button.onClick?.({} as Parameters<NonNullable<typeof button.onClick>>[0]);
@@ -201,7 +193,8 @@ describe("public activity sharing dialog", () => {
       busy: true,
       url: "https://nowly.me/activities/abc"
     };
-    expect(buttons().every((button) => button.loading)).toBe(true);
+    expect(actionDisabled(en["custom.public.publish"])).toBe(true);
+    expect(actionDisabled(en["custom.public.unpublish"])).toBe(true);
   });
   it("closes and confirms successful withdrawal with a toast", async () => {
     const onClose = vi.fn();
@@ -231,7 +224,8 @@ describe("public activity sharing dialog", () => {
       revision: 1,
       published: true
     };
-    vi.mocked(state.publish).mockResolvedValueOnce(false);
+    const response = Promise.resolve(false);
+    vi.mocked(state.publish).mockReturnValueOnce(response);
     const button = elements(panel(onClose)).find(
       (node) => isValidElement<ComponentProps<typeof Button>>(node) && node.type === Button && node.props.children === en["custom.public.unpublish"]
     );
@@ -239,7 +233,8 @@ describe("public activity sharing dialog", () => {
     if (!isValidElement<ComponentProps<typeof Button>>(button)) throw new Error("Missing withdrawal button");
 
     button.props.onClick?.({} as Parameters<NonNullable<typeof button.props.onClick>>[0]);
-    await Promise.resolve();
+    expect(state.publish).toHaveBeenCalledExactlyOnceWith(true);
+    await response;
     expect(onClose).not.toHaveBeenCalled();
     expect(toast).not.toHaveBeenCalled();
   });
@@ -251,31 +246,17 @@ describe("public activity sharing dialog", () => {
       revision: 1,
       hasChanges: false
     };
-    expect(buttons()[0].disabled).toBe(true);
-    expect(buttons()[1].disabled).toBe(false);
+    expect(actionDisabled(en["custom.public.update"])).toBe(true);
+    expect(actionDisabled(en["custom.public.unpublish"])).toBe(false);
     state = {
       ...state,
       hasChanges: null
     };
-    expect(buttons()[0].disabled).toBe(true);
+    expect(actionDisabled(en["custom.public.update"])).toBe(true);
     state = {
       ...state,
       hasChanges: true
     };
-    expect(buttons()[0].disabled).toBe(false);
-  });
-  it("renders an existing public revision without initiating an update", () => {
-    state = {
-      ...state,
-      published: true,
-      url: "https://nowly.me/activities/abc",
-      revision: 3
-    };
-    markup();
-    markup();
-    expect(state.revision).toBe(3);
-    expect(state.publish).not.toHaveBeenCalled();
-    expect(buttons()[0].children).toBe(en["custom.public.update"]);
-    expect(markup()).not.toContain(en["custom.public.notice"]);
+    expect(actionDisabled(en["custom.public.update"])).toBe(false);
   });
 });

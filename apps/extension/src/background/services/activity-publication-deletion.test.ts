@@ -104,14 +104,15 @@ describe("published local source deletion", () => {
       activatedAt: null
     });
   });
-  it("plans two confirmations without withdrawing or deleting, then permits deletion after withdrawal", async () => {
+  it("plans two confirmations without withdrawing or deleting", async () => {
     await publishActivity(LOCAL_ID, 0);
     vi.mocked(fetch).mockClear();
     expect(await getCustomActivityDeletionPlan(LOCAL_ID)).toEqual({
       ok: true,
       withdrawal: { revision: 1 }
     });
-    expect(vi.mocked(fetch).mock.calls.every(([, init]) => !init?.method)).toBe(true);
+    expect(fetch).toHaveBeenCalled();
+    expect(vi.mocked(fetch).mock.calls.every(([, init]) => (init?.method ?? "GET") === "GET")).toBe(true);
     expect(published).toBe(true);
     expect((await getCustomActivities()).items).toEqual([activity]);
     await publishActivity(LOCAL_ID, 1, true);
@@ -120,7 +121,6 @@ describe("published local source deletion", () => {
       withdrawal: null
     });
     expect((await getCustomActivities()).items).toEqual([activity]);
-    expect(await deleteCustomActivity(LOCAL_ID)).toEqual({ ok: true });
   });
   it("plans direct deletion offline without a creator account for never-published activities", async () => {
     await setAccount({

@@ -1,9 +1,9 @@
-import { runJsonModel } from "@/shared/workers-ai";
+import { runJsonModel, WorkersAiHttpError } from "@/shared/workers-ai";
 import { SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
 import { BUTTON_LABEL_MAX_LENGTH, DESCRIPTION_MAX_LENGTH, FEATURE_MAX_LENGTH, LONG_DESCRIPTION_MAX_LENGTH, PAGE_TEXT_MAX_LENGTH, templateTokens, type CreatorDefinition, type LocalizedText } from "@nowly/presence-creator";
 import { z } from "zod";
 
-export const TRANSLATION_LOCALES: readonly LocaleString[] = SUPPORTED_LOCALES;
+const TRANSLATION_LOCALES: readonly LocaleString[] = SUPPORTED_LOCALES;
 const PARALLEL_TRANSLATIONS = 2;
 
 const TOKEN = /\{([a-zA-Z][a-zA-Z0-9]*)\}/g;
@@ -138,7 +138,7 @@ const translateTo = async (items: SourceItem[], from: LocaleString, to: LocaleSt
 const withLocale = (text: LocalizedText, locale: LocaleString, value: string | undefined): LocalizedText =>
   value === undefined ? text : { ...text, [locale]: value };
 
-export const applyTranslations = (definition: CreatorDefinition, translations: Map<LocaleString, Map<string, string>>): CreatorDefinition => {
+const applyTranslations = (definition: CreatorDefinition, translations: Map<LocaleString, Map<string, string>>): CreatorDefinition => {
   let next: CreatorDefinition = definition;
 
   for (const [locale, values] of translations) {
@@ -169,23 +169,22 @@ export const applyTranslations = (definition: CreatorDefinition, translations: M
 const TRANSLATION_ATTEMPTS = 4;
 const RETRY_DELAY_MS = 2000;
 
-const isRateLimit = (error: unknown): boolean => error instanceof Error && error.message.startsWith("Workers AI answered");
+const isRetryableStatus = (status: number): boolean => status === 429 || status >= 500;
 
 const wait = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
 const translateWithRetry = async (items: SourceItem[], from: LocaleString, to: LocaleString): Promise<Map<string, string>> => {
-  let failure: unknown;
-
   for (let attempt = 1; attempt <= TRANSLATION_ATTEMPTS; attempt += 1) {
     try {
       return await translateTo(items, from, to);
     } catch (error) {
-      failure = error;
-      if (attempt < TRANSLATION_ATTEMPTS && isRateLimit(error)) await wait(RETRY_DELAY_MS * attempt);
+      if (error instanceof WorkersAiHttpError) {
+        if (!isRetryableStatus(error.status) || attempt === TRANSLATION_ATTEMPTS) throw error;
+
+        await wait(RETRY_DELAY_MS * attempt);
+      }
     }
   }
-
-  if (isRateLimit(failure)) throw failure;
 
   return new Map(items.map((item) => [item.key, item.text]));
 };

@@ -62,7 +62,6 @@ cat > "$APP_DIR/Contents/Info.plist" <<EOF
 </plist>
 EOF
 
-# Generate .icns if iconutil is available (macOS)
 ICON_SOURCE="${3:-}"
 if [ -z "$ICON_SOURCE" ] || [ ! -f "$ICON_SOURCE" ]; then
   ICON_TMP="$(mktemp "${TMPDIR:-/tmp}/nowly-brand-icon.XXXXXX.png")"
@@ -79,7 +78,6 @@ if command -v iconutil &>/dev/null && [ -f "$ICON_SOURCE" ]; then
   echo "   >> Generating .icns from $ICON_SOURCE..."
   mkdir -p "$ICONSET_DIR"
 
-  # sips is available on macOS — generate all required sizes
   sips -z 16 16   "$ICON_SOURCE" --out "$ICONSET_DIR/icon_16x16.png" &>/dev/null
   sips -z 32 32   "$ICON_SOURCE" --out "$ICONSET_DIR/icon_16x16@2x.png" &>/dev/null
   sips -z 32 32   "$ICON_SOURCE" --out "$ICONSET_DIR/icon_32x32.png" &>/dev/null

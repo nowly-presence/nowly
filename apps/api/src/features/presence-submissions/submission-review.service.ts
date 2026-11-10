@@ -2,11 +2,11 @@ import { getDb } from "@/db/client";
 import { recordAdminAction, type AuditActor } from "@/features/admin/audit.service";
 import type { Transaction } from "@nowly/database/client";
 import { creatorPresence, presenceSubmission, presenceSubmissionEvent, presenceSubmissionReview, presenceSubmissionRevision } from "@nowly/database/schema/creator";
+import { canPublishSubmission, verdictTarget, type ReviewVerdict } from "@nowly/presence-creator/creator-submission-policy";
 import { and, eq } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 import { SubmissionError } from "./submission-errors";
-import { isOneOf, PUBLISHABLE_STATUSES, verdictTarget, type ReviewVerdict } from "./submission-status";
-import { toSummary, type SubmissionSummary } from "./submission.service";
+import { toSummary, type SubmissionSummary } from "./submission-summary";
 
 export type FieldComment = {
   field: string;
@@ -105,10 +105,7 @@ export const publishSubmission = async (input: {
   getDb().transaction(async (tx) => {
     const row = await lockSubmission(tx, input.submissionId, input.revision);
 
-    if (!isOneOf(row.status, PUBLISHABLE_STATUSES)) throw new SubmissionError(
-      "INVALID_TRANSITION",
-      `The submission cannot be published while it is ${row.status}.`
-    );
+    if (!canPublishSubmission(row.status)) throw new SubmissionError("INVALID_TRANSITION", `The submission cannot be published while it is ${row.status}.`);
 
     const withoutReview = row.status === "submitted";
     const [updated] = await tx
@@ -221,7 +218,7 @@ export const markSubmissionPublished = async (input: { slug: string; commit: str
     return toSummary(updated);
   });
 
-export const PULL_REQUEST_CLOSED_NOTE = "The pull request was closed without being merged. Update the presence and send it again.";
+const PULL_REQUEST_CLOSED_NOTE = "The pull request was closed without being merged. Update the presence and send it again.";
 
 export const markPullRequestClosed = async (input: { slug: string; pr: number }): Promise<SubmissionSummary> =>
   getDb().transaction(async (tx) => {

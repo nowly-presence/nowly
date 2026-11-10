@@ -1,9 +1,9 @@
 import { resumeStoredActivityIfAllowed } from "@/background/managers/activity-manager";
-import { bulkTogglePresences, bulkUninstallPresences, checkUpdates, drainInstallQueue, fetchPresenceCatalog, fetchPresenceEngagement, installLocalPresenceZip, installPresence, installPresenceFromApi, setPresenceLike, togglePresence, uninstallPresence } from "@/background/managers/presence-manager";
+import { bulkTogglePresences, bulkUninstallPresences, fetchPresenceCatalog, fetchPresenceEngagement, installLocalPresenceZip, installPresence, installPresenceFromApi, setPresenceLike, togglePresence, uninstallPresence } from "@/background/managers/presence-manager";
 import { getInstallQueue } from "@/background/managers/install-queue";
 import { registerPresenceScript } from "@/background/runtime/presence-scripts";
 import type { Handler } from "@/background/router/router";
-import { getPresenceSettings, getPresences, setPresenceSettings, clearSnooze, snoozePresence, setPresenceSchedule } from "@/background/storage/presences.store";
+import { getPresences, setPresenceSettings, clearSnooze, snoozePresence, setPresenceSchedule } from "@/background/storage/presences.store";
 import { visiblePresences } from "@/background/runtime/user-scripts";
 import { trackProduct } from "@/background/telemetry";
 import { WEB_BASE_URL } from "@/shared/constants";
@@ -77,12 +77,6 @@ export const handleGetPresenceEngagement: Handler<"GET_PRESENCE_ENGAGEMENT"> = (
 export const handleSetPresenceLike: Handler<"SET_PRESENCE_LIKE"> = ({ slug, liked }) => setPresenceLike(slug, liked);
 
 export const handleGetInstallQueue: Handler<"GET_INSTALL_QUEUE"> = async () => ({ items: await getInstallQueue() });
-
-export const handleRetryInstallQueue: Handler<"RETRY_INSTALL_QUEUE"> = () => drainInstallQueue();
-
-export const handleCheckUpdates: Handler<"CHECK_UPDATES"> = () => checkUpdates();
-
-export const handleGetPresenceSettings: Handler<"GET_PRESENCE_SETTINGS"> = () => getPresenceSettings();
 
 export const handleSetPresenceSettings: Handler<"SET_PRESENCE_SETTINGS"> = async ({ slug, partial }) => {
   const settings = await setPresenceSettings(slug, partial);

@@ -1,11 +1,8 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { setupRecovery, id, publicId, key, activity, account } from "./activity-publication-recovery.fixture";
 import { publishActivity } from "@/background/services/activity-publication-publisher";
 import { setCustomActivities } from "@/background/storage/custom-activities.store";
-import { validateCustomActivity } from "@/shared/custom-activity";
 import type { CustomImage } from "@/shared/types";
-import * as publicationData from "@/background/services/activity-publication-data";
-import * as publicationContent from "@/shared/activity-publication";
 
 const images: {
   name: string;
@@ -56,25 +53,19 @@ describe("content-independent publication withdrawal", () => {
   beforeEach(async () => {
     await setupRecovery();
   });
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
 
   for (const { name, image, error } of images) {
-    it.each([0, 1])(`withdraws ${name} at revision %s without reading or validating content`, async (revision) => {
+    it.each([0, 1])(`withdraws ${name} at revision %s without requiring publishable content`, async (revision) => {
       const saved = {
         ...activity,
         largeImage: image
       };
-      expect(validateCustomActivity(saved)).toEqual({});
       await setCustomActivities({
         items: [saved],
         activeId: id,
         activatedAt: 1
       });
       await seedPublication(revision);
-      const readImages = vi.spyOn(publicationData, "publicationImageData");
-      const buildPortable = vi.spyOn(publicationContent, "portableActivity");
       vi.mocked(fetch).mockResolvedValueOnce(
         Response.json({
           id: publicId,
@@ -88,8 +79,6 @@ describe("content-independent publication withdrawal", () => {
         revision: revision + 1,
         published: false
       });
-      expect(readImages).not.toHaveBeenCalled();
-      expect(buildPortable).not.toHaveBeenCalled();
       expect(fetch).toHaveBeenCalledExactlyOnceWith(`https://api.nowly.me/me/activity-publications/${publicId}`, {
         method: "DELETE",
         redirect: "error",

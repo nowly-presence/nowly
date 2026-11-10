@@ -16,7 +16,6 @@ RELEASE_DIR="$ROOT_DIR/releases/$VERSION"
 echo "=== Nowly Host v$VERSION release ==="
 echo ""
 
-# --------------- Build binaries ---------------
 echo ">> Building binaries..."
 mkdir -p "$DIST_DIR"
 
@@ -33,10 +32,8 @@ GOOS=darwin GOARCH=arm64 go build -ldflags "-X nowly.client/native/internal/cont
 echo "   ✔ nowly-host-darwin-arm64 (Apple Silicon)"
 echo ""
 
-# --------------- Create release directory ---------------
 mkdir -p "$RELEASE_DIR"
 
-# --------------- Windows installer (Inno Setup) ---------------
 ISCC=""
 if command -v iscc &>/dev/null; then
   ISCC="iscc"
@@ -60,7 +57,6 @@ else
 fi
 echo ""
 
-# --------------- Windows portable ---------------
 if [ -f "$DIST_DIR/nowly-host.exe" ]; then
   echo ">> Creating Windows portable..."
   cd "$DIST_DIR"
@@ -69,7 +65,6 @@ if [ -f "$DIST_DIR/nowly-host.exe" ]; then
 fi
 echo ""
 
-# --------------- Linux archive ---------------
 if [ -f "$DIST_DIR/nowly-host-linux" ]; then
   echo ">> Creating Linux archive..."
   cd "$DIST_DIR"
@@ -78,7 +73,6 @@ if [ -f "$DIST_DIR/nowly-host-linux" ]; then
 fi
 echo ""
 
-# --------------- macOS archive ---------------
 MACOS_FILES=""
 [ -f "$DIST_DIR/nowly-host-darwin" ] && MACOS_FILES="$MACOS_FILES nowly-host-darwin"
 [ -f "$DIST_DIR/nowly-host-darwin-arm64" ] && MACOS_FILES="$MACOS_FILES nowly-host-darwin-arm64"
@@ -92,7 +86,6 @@ if [ -n "$MACOS_FILES" ]; then
 fi
 echo ""
 
-# --------------- Generate latest.json ---------------
 echo ">> Generating latest.json..."
 
 sha256_file() {
@@ -146,7 +139,6 @@ EOF
 echo "   ✔ latest.json"
 echo ""
 
-# --------------- Summary ---------------
 echo "=== Release v$VERSION ready ==="
 echo "Output: $RELEASE_DIR"
 echo ""

@@ -26,13 +26,18 @@ func TestReadPacketTimeoutWithoutDeadlineSupport(t *testing.T) {
 	conn := newSilentConn()
 	defer conn.Close()
 
-	start := time.Now()
-	_, err := readPacketTimeout(conn, 50*time.Millisecond)
-	if !errors.Is(err, errReadTimeout) {
-		t.Fatalf("err = %v, want errReadTimeout", err)
-	}
-	if elapsed := time.Since(start); elapsed > time.Second {
-		t.Fatalf("read took %v, want ~50ms", elapsed)
+	result := make(chan error, 1)
+	go func() {
+		_, err := readPacketTimeout(conn, 50*time.Millisecond)
+		result <- err
+	}()
+	select {
+	case err := <-result:
+		if !errors.Is(err, errReadTimeout) {
+			t.Fatalf("err = %v, want errReadTimeout", err)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("read did not time out")
 	}
 }
 
@@ -63,8 +68,32 @@ func TestReadPacketTimeoutReturnsPacket(t *testing.T) {
 	}
 }
 
+type blockingCloseConn struct {
+	*silentConn
+	releaseClose chan struct{}
+	closed       chan struct{}
+}
+
+func (c *blockingCloseConn) Close() error {
+	<-c.releaseClose
+	defer close(c.closed)
+	return c.silentConn.Close()
+}
+
 func TestDropAfterTimeoutDoesNotBlockAndResetsClient(t *testing.T) {
-	conn := newSilentConn()
+	conn := &blockingCloseConn{
+		silentConn:   newSilentConn(),
+		releaseClose: make(chan struct{}),
+		closed:       make(chan struct{}),
+	}
+	t.Cleanup(func() {
+		close(conn.releaseClose)
+		select {
+		case <-conn.closed:
+		case <-time.After(time.Second):
+			t.Error("connection was not closed")
+		}
+	})
 	c := &Client{conn: conn, ready: true, profile: &Profile{ID: "1"}}
 
 	done := make(chan struct{})

@@ -1,11 +1,7 @@
 import { handleActivityUpdate, handleClearActivity } from "@/background/managers/activity-manager";
 import { setPresencePaused } from "@/background/managers/presence-pause";
 import type { Handler } from "@/background/router/router";
-import { getCurrentActivity, getDebug, setDebug } from "@/background/storage/presences.store";
-
-export const handleGetCurrentActivity: Handler<"GET_CURRENT_ACTIVITY"> = () => getCurrentActivity();
-
-export const handleGetDebug: Handler<"GET_DEBUG"> = () => getDebug();
+import { setDebug } from "@/background/storage/presences.store";
 
 export const handleDebug: Handler<"DEBUG"> = async (payload) => {
   await setDebug(payload);

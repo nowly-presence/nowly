@@ -1,4 +1,5 @@
 import { canonicalJson } from "@nowly/shared";
+import { addRuntimeLog } from "@/background/runtime-logs";
 import { IS_CANARY } from "@/shared/brand";
 import { API_BASE_URL } from "@/shared/constants";
 import type { PresenceRelease } from "@/shared/types";
@@ -7,6 +8,7 @@ const FALLBACK_PRESENCE_SIGNING_PUBLIC_KEY =
   "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE5ai7_TuIx7BJF-wAGWidRzj8EVf0OxL-QUp8Ta2m-L91HRVljUTwYfF_ijWVyGF3-5gQvQ4GsQGiSVDknDe_LA";
 
 const STORAGE_KEY = "presenceSigningPublicKey";
+const KEY_REQUEST_TIMEOUT_MS = 10_000;
 
 let cachedRemoteKey: string | null = null;
 
@@ -45,7 +47,7 @@ const signedPayload = (release: PresenceRelease): string =>
 
 const fetchPublicKey = async (): Promise<string | null> => {
   try {
-    const res = await fetch(`${API_BASE_URL}/security/public-key`);
+    const res = await fetch(`${API_BASE_URL}/security/public-key`, { signal: AbortSignal.timeout(KEY_REQUEST_TIMEOUT_MS) });
 
     if (!res.ok) return null;
 
@@ -56,7 +58,9 @@ const fetchPublicKey = async (): Promise<string | null> => {
       cachedRemoteKey = data.publicKey;
       return data.publicKey;
     }
-  } catch {}
+  } catch (error) {
+    addRuntimeLog("warn", "api", "Public signing key fetch failed, using the embedded key", { error: error instanceof Error ? error.message : String(error) });
+  }
 
   return null;
 };
@@ -74,7 +78,9 @@ const ensurePublicKey = async (refresh = false): Promise<string> => {
         cachedRemoteKey = value;
         return cachedRemoteKey;
       }
-    } catch {}
+    } catch (error) {
+      addRuntimeLog("warn", "settings", "Cached signing key unreadable", { error: error instanceof Error ? error.message : String(error) });
+    }
   }
 
   const remote = await fetchPublicKey();

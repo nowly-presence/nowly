@@ -19,9 +19,10 @@ import { statusRoutes } from "@/features/status/status.routes";
 import { syncRoutes } from "@/features/sync/sync.routes";
 import { createTelemetryRoutes } from "@/features/telemetry/telemetry.routes";
 import { corsMiddleware } from "@/middleware/cors";
-import { defaultBodyLimit } from "@/middleware/default-body-limit";
+import { defaultBodyLimit } from "@/middleware/body-limit";
 import { MINUTE_MS, rateLimit } from "@/middleware/rate-limit";
 import { handleError, handleNotFound } from "@/shared/error-handler";
+import { AUTH_BASE_PATH } from "@nowly/auth/server";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 
@@ -57,7 +58,7 @@ export const createApp = ({ logRequests = false }: AppOptions = {}) => {
     })
   );
   app.get("/robots.txt", (c) => c.text("User-agent: *\nDisallow: /\n"));
-  app.on(["GET", "POST"], "/auth/*", (c) => getAuth().handler(c.req.raw));
+  app.on(["GET", "POST"], `${AUTH_BASE_PATH}/*`, (c) => getAuth().handler(c.req.raw));
 
   app.route("/telemetry", createTelemetryRoutes());
   app.route("/contact", contactRoutes);

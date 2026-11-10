@@ -30,8 +30,10 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ items }) => {
       }
     );
 
-    const headings = document.querySelectorAll("h2, h3");
-    headings.forEach((h) => observer.observe(h));
+    for (const { id } of items) {
+      const heading = document.getElementById(id);
+      if (heading) observer.observe(heading);
+    }
 
     return () => observer.disconnect();
   }, [items]);

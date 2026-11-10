@@ -23,6 +23,9 @@ importers:
       '@nowly/locales':
         specifier: workspace:*
         version: link:../../packages/locales
+      '@nowly/presence-creator':
+        specifier: workspace:*
+        version: link:../../packages/presence-creator
       '@nowly/shared':
         specifier: workspace:*
         version: link:../../packages/shared

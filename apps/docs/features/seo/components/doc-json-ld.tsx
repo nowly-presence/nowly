@@ -1,5 +1,6 @@
 import { getPathname } from "@/i18n/navigation";
 import { absoluteUrl } from "@/features/seo/lib/seo";
+import { MARKETING_ORIGIN } from "@/lib/constants";
 
 export const DocJsonLd = ({ title, description, path, locale, category }: {
   title: string;
@@ -53,7 +54,7 @@ export const DocJsonLd = ({ title, description, path, locale, category }: {
         publisher: {
           "@type": "Organization",
           name: "Nowly",
-          url: "https://nowly.me"
+          url: MARKETING_ORIGIN
         }
       },
       breadcrumbs

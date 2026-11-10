@@ -1,16 +1,16 @@
-export const SYNC_DOCUMENT_KEYS = ["settings", "presences", "presenceSettings", "featureReveals", "customActivities"] as const;
-
-export type SyncDocumentKey = (typeof SYNC_DOCUMENT_KEYS)[number];
-
-export const SYNC_DOCUMENT_MAX_BYTES: Record<SyncDocumentKey, number> = {
+export const SYNC_DOCUMENT_MAX_BYTES = {
   settings: 32 * 1024,
   presences: 64 * 1024,
   presenceSettings: 128 * 1024,
   featureReveals: 4 * 1024,
   customActivities: 256 * 1024
-};
+} as const satisfies Record<string, number>;
 
-export const isSyncDocumentKey = (value: string): value is SyncDocumentKey => (SYNC_DOCUMENT_KEYS as readonly string[]).includes(value);
+export type SyncDocumentKey = keyof typeof SYNC_DOCUMENT_MAX_BYTES;
+
+export const SYNC_DOCUMENT_KEYS = Object.keys(SYNC_DOCUMENT_MAX_BYTES) as SyncDocumentKey[];
+
+export const isSyncDocumentKey = (value: string): value is SyncDocumentKey => Object.hasOwn(SYNC_DOCUMENT_MAX_BYTES, value);
 
 export const EXTENSION_TOKEN_SCOPES = ["sync", "assets", "creator", "admin"] as const;
 

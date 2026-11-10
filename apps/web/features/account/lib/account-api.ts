@@ -8,7 +8,7 @@ export type AccountUser = {
   githubLogin: string | null;
 };
 
-export type ExtensionSessionPayload = {
+type ExtensionSessionPayload = {
   token: string;
   user: AccountUser;
   providers: string[];

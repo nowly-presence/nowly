@@ -28,11 +28,14 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./brand": "./src/brand.ts",
+    "./brand-lockup": "./src/brand-lockup.tsx",
     "./button": "./src/button.tsx",
     "./button-link": "./src/button-link.tsx",
     "./button-variants": "./src/button-variants.ts",
     "./card": "./src/card.tsx",
     "./footer": "./src/footer.tsx",
+    "./fonts": "./src/fonts.ts",
     "./icons": "./src/icons.ts",
     "./locale-selector": "./src/locale-selector.tsx",
     "./navbar": "./src/navbar.tsx",
@@ -40,6 +43,9 @@
     "./social-icon": "./src/social-icon.tsx",
     "./navbar-mobile": "./src/navbar-mobile.tsx",
     "./sheet": "./src/sheet.tsx",
+    "./site-theme.css": "./src/site-theme.css",
+    "./theme.css": "./src/theme.css",
+    "./theme-toggle": "./src/theme-toggle.tsx",
     "./utils": "./src/utils.ts"
   },
   "scripts": {

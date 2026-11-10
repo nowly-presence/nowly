@@ -1,17 +1,15 @@
 import { EditOnGitHub } from "@/features/docs-content/components/edit-on-github";
-import { mdxComponents } from "@/features/docs-content/components/mdx-components";
 import { OpenIn } from "@/features/docs-content/components/open-in";
 import { PageNavigation } from "@/features/docs-content/components/page-navigation";
 import { TableOfContents } from "@/features/docs-content/components/table-of-contents";
 import { getAdjacentPages, getCategoryForPath, getDocContent, getDocLocales } from "@/features/docs-content/lib/content";
 import { DocJsonLd } from "@/features/seo/components/doc-json-ld";
 import { docHref } from "@/features/docs-content/lib/href";
-import { extractTocItems } from "@/features/docs-content/lib/types";
+import { compileDoc } from "@/features/docs-content/lib/compile-doc";
 import { createMetadata, docsOgImage } from "@/features/seo/lib/seo";
 import type { LocaleString } from "@nowly/locales";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { MDXRemote } from "next-mdx-remote/rsc";
 import { notFound } from "next/navigation";
 import { ScrollToTop } from "@/features/docs-content/components/scroll-to-top";
 import type { ReactElement } from "react";
@@ -72,7 +70,8 @@ const Page = async ({ params }: Props): Promise<ReactElement> => {
     notFound();
   }
 
-  const tocItems = extractTocItems(doc.content);
+  const { content, tocItems } = await compileDoc(doc.content);
+
   const { prev, next } = getAdjacentPages(doc.path, locale);
 
   return (
@@ -93,7 +92,7 @@ const Page = async ({ params }: Props): Promise<ReactElement> => {
 
         {doc.description && <p className="text-muted-foreground mb-8 text-lg">{doc.description}</p>}
 
-        <MDXRemote source={doc.content} components={mdxComponents} options={{ blockJS: false }} />
+        {content}
 
         <div className="mt-8 flex items-center border-t border-border pt-4">
           <EditOnGitHub slug={doc.sourcePath} locale={locale} />

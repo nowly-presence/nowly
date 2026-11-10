@@ -1,22 +1,12 @@
 package contract
 
-import "runtime"
-
 const (
 	HostName          = "nowly.client"
 	InstallFolderName = "NowlyClient"
-	ExtensionID       = "abbegmindbabanjcabnmcjmamaoffbam"
 	DiscordClientID   = "1510223984392671302"
 )
 
 var HostVersion = "0.0.0-dev"
-
-func HostExecutableName() string {
-	if runtime.GOOS == "windows" {
-		return "nowly-host.exe"
-	}
-	return "nowly-host"
-}
 
 type MessageType string
 
@@ -88,11 +78,7 @@ type DiscordProfile struct {
 	Avatar     string `json:"avatar,omitempty"`
 }
 
-func Pong(connected bool, status string) NativeResponse {
-	return NativeResponse{Type: ResponsePong, Connected: connected, Status: status, Version: HostVersion}
-}
-
-func PongWithProfile(connected bool, discordConnected bool, status string, profile *DiscordProfile) NativeResponse {
+func Pong(connected bool, discordConnected bool, status string, profile *DiscordProfile) NativeResponse {
 	return NativeResponse{Type: ResponsePong, Connected: connected, Discord: discordConnected, Status: status, Version: HostVersion, Profile: profile}
 }
 

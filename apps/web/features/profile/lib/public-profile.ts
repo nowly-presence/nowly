@@ -1,5 +1,5 @@
 import "server-only";
-import { presenceApiBaseUrl } from "@/lib/presence-api";
+import { serverApiBaseUrl } from "@/lib/presence-api";
 import { PUBLIC_HANDLE_PATTERN } from "@nowly/shared";
 import { cache } from "react";
 
@@ -29,7 +29,7 @@ export const getPublicProfile = cache(async (handle: string): Promise<PublicProf
   if (!PUBLIC_HANDLE_PATTERN.test(handle)) return null;
 
   try {
-    const response = await fetch(`${presenceApiBaseUrl()}/users/${encodeURIComponent(handle)}`, {
+    const response = await fetch(`${serverApiBaseUrl()}/users/${encodeURIComponent(handle)}`, {
       next: { revalidate: REVALIDATE_SECONDS }
     });
 

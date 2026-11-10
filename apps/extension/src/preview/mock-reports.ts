@@ -1,4 +1,4 @@
-import type { MockHandlers } from "@/preview/mock-router";
+import type { MockHandlers } from "@/preview/mock-handlers";
 import type { ReportMessage, ReportStatus, ReportSummary, StaffReportDetail, StaffReportSummary } from "@/shared/reports";
 
 const HOUR_MS = 3_600_000;

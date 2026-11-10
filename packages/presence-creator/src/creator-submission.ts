@@ -1,4 +1,5 @@
 import type { CreatorTextFile } from "./creator-export";
+import { isEditableSubmissionStatus } from "./creator-submission-policy";
 import type { CreatorAuthor, CreatorDraft, CreatorSubmission, SubmissionStatus } from "./creator-types";
 
 export type CreatorAccountUser = {
@@ -67,5 +68,4 @@ export const parseSubmission = (value: unknown): CreatorSubmission | null => {
   };
 };
 
-export const canEditSubmission = (submission: CreatorSubmission | undefined): boolean =>
-  !submission || submission.status === "changes_requested" || submission.status === "rejected";
+export const canEditSubmission = (submission: CreatorSubmission | undefined): boolean => !submission || isEditableSubmissionStatus(submission.status);

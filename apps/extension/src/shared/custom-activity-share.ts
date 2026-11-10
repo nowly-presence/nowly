@@ -1,4 +1,5 @@
-import { CUSTOM_ACTIVITY_TYPES, CUSTOM_BUTTONS_MAX, hasCustomActivityErrors, isCustomActivityIcon, validateCustomActivity } from "@/shared/custom-activity";
+import { isActivityIconKey } from "@nowly/shared/activity-icons";
+import { CUSTOM_ACTIVITY_TYPES, CUSTOM_BUTTONS_MAX, hasCustomActivityErrors, validateCustomActivity } from "@/shared/custom-activity";
 import { decodeImageDataUrl } from "@/shared/custom-image";
 import type { CustomActivity, CustomActivityDraft, CustomActivityType, CustomImage, CustomTimestamp } from "@/shared/types";
 
@@ -147,7 +148,7 @@ const parseImage = (value: unknown): ImageParse => {
   };
   if (value.kind === "icon") {
     const icon = asString(value.icon);
-    return isCustomActivityIcon(icon)
+    return isActivityIconKey(icon)
       ? {
           ok: true,
           image: {

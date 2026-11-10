@@ -1,6 +1,6 @@
 import type { AdminResult, QueueItem, SubmissionDetail } from "@/shared/admin/admin-types";
 import { previewParams } from "@/preview/preview-params";
-import type { MockHandlers } from "@/preview/mock-router";
+import type { MockHandlers } from "@/preview/mock-handlers";
 import { creatorDefinition } from "@nowly/presence-creator/creator-export";
 import { sampleCreatorDraft } from "@nowly/presence-creator/creator-fixtures";
 import { ADMIN_CAPABILITIES, ROLE_CAPABILITIES } from "@nowly/shared/roles";

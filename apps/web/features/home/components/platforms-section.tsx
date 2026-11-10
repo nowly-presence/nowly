@@ -5,7 +5,6 @@ import { Link } from "@/i18n/navigation";
 import { getPresencePlatforms, type PresencePlatform } from "@/lib/presence-api";
 import { cn } from "@nowly/ui/utils";
 import { getTranslations } from "next-intl/server";
-import { PlatformMarqueeControls } from "@/features/home/components/platform-marquee-controls";
 
 const LogoTrack = ({ platforms, inert }: { platforms: PresencePlatform[]; inert?: boolean }) => (
   <div className="flex shrink-0 gap-3.5 pr-3.5" aria-hidden={inert ? true : undefined}>
@@ -29,17 +28,17 @@ const PlatformMarquee = async ({ platforms }: {
 }) => {
   const resolvedPlatforms = await platforms;
 
-  const t = await getTranslations("platforms");
-
   if (resolvedPlatforms.length === 0) return null;
 
   return (
-    <PlatformMarqueeControls>
-      <div className="animate-marquee flex w-max">
-        <LogoTrack platforms={resolvedPlatforms} />
-        <LogoTrack platforms={resolvedPlatforms} inert />
+    <div className="mt-12">
+      <div className="marquee-hover relative overflow-hidden py-3">
+        <div className="animate-marquee flex w-max">
+          <LogoTrack platforms={resolvedPlatforms} />
+          <LogoTrack platforms={resolvedPlatforms} inert />
+        </div>
       </div>
-    </PlatformMarqueeControls>
+    </div>
   );
 };
 

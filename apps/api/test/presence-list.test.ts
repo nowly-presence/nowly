@@ -1,10 +1,13 @@
 import { afterAll, beforeAll, beforeEach, expect, it } from "vitest";
-import { getPresenceListData } from "@/features/presence/presence.repository";
+import { presenceRoutes } from "@/features/presence/presence.routes";
 import { device, devicePresence, presenceActiveDevice } from "@nowly/database/schema/device";
 import { presence, presenceLike } from "@nowly/database/schema/presence";
 import { user } from "@nowly/database/schema/auth";
 import { eq } from "drizzle-orm";
 import { createTestDatabase, seedUser, type TestDatabase } from "./database";
+import { inject, mount } from "./http";
+
+const getCatalog = () => inject(mount("/presences", presenceRoutes), { url: "/presences" });
 
 const STALE_MS = 13 * 60_000;
 let database: TestDatabase;
@@ -24,7 +27,9 @@ it("lists unarchived presences with installs, fresh activity and likes, without 
         slug: "youtube",
         name: "YouTube"
       },
-      version: "1.0.0"
+      version: "1.0.0",
+      addedAt: new Date("2024-01-01"),
+      updatedAt: new Date("2024-06-01")
     },
     {
       slug: "old",
@@ -66,13 +71,17 @@ it("lists unarchived presences with installs, fresh activity and likes, without 
     deviceId: "a"
   });
 
-  const list = await getPresenceListData();
+  const response = await getCatalog();
+  expect(response.statusCode).toBe(200);
+  const list = response.json();
 
   expect(list).toHaveLength(1);
   expect(list[0]).toMatchObject({
     slug: "youtube",
     name: "YouTube",
     version: "1.0.0",
+    addedAt: "2024-01-01T00:00:00.000Z",
+    lastUpdated: "2024-06-01T00:00:00.000Z",
     totalInstalls: 1,
     activeUsers: 1,
     likes: 1
@@ -125,7 +134,14 @@ it("adds the Discord avatar of a creator author to the listed presence", async (
     }
   ]);
 
-  const list = await getPresenceListData();
+  const response = await getCatalog();
+  expect(response.statusCode).toBe(200);
+  const list = response.json<
+    {
+      slug: string;
+      author: unknown;
+    }[]
+  >();
 
   const author = (slug: string) => list.find((item) => item.slug === slug)?.author;
 

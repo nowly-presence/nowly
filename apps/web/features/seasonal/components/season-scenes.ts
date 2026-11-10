@@ -1,9 +1,9 @@
-import type { SiteSeason } from "@/features/seasonal/lib/site-season";
-import { BLOSSOM_PATH, CONFETTI_PATH, DOT_PATH, LEAF_PATH, MAPLE_PATH, PETAL_PATH, ROUND_LEAF_PATH, SNOWFLAKE_PATH, SPARKLE_PATH, STAR_PATH } from "@/features/seasonal/components/season-shapes";
+import type { Season } from "@nowly/shared/seasons";
+import { BLOSSOM_PATH, CONFETTI_PATH, DOT_PATH, LEAF_PATH, MAPLE_PATH, PETAL_PATH, ROUND_LEAF_PATH, SNOWFLAKE_PATH, SPARKLE_PATH, STAR_PATH } from "@nowly/shared/season-shapes";
 
-export type SeasonMotion = "fall" | "rise";
+type SeasonMotion = "fall" | "rise";
 
-export type SeasonScene = {
+type SeasonScene = {
   shapes: readonly string[];
   rest: readonly string[];
   motion: SeasonMotion;
@@ -18,7 +18,7 @@ export type SeasonScene = {
 
 const LEAVES = [MAPLE_PATH, LEAF_PATH, ROUND_LEAF_PATH] as const;
 
-export const SEASON_SCENES: Record<SiteSeason, SeasonScene> = {
+export const SEASON_SCENES: Record<Season, SeasonScene> = {
   autumn: {
     shapes: LEAVES,
     rest: [MAPLE_PATH, ROUND_LEAF_PATH],
@@ -93,7 +93,7 @@ export const SEASON_SCENES: Record<SiteSeason, SeasonScene> = {
   }
 };
 
-export type SeasonParticle = {
+type SeasonParticle = {
   id: number;
   path: string;
   side: "left" | "right";

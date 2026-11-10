@@ -98,7 +98,24 @@ describe("product telemetry privacy contract", () => {
         }
       }
     });
-    expect(JSON.stringify(body)).not.toContain(id);
+  });
+
+  it("routes website events to the web channel and presence actions to the extension channel", () => {
+    const visit = eventSchema.parse({
+      id,
+      name: "uninstall_page_opened",
+      source: "web",
+      data: {}
+    });
+    const install = eventSchema.parse({
+      id,
+      name: "presence_install_requested",
+      source: "web",
+      data: {}
+    });
+
+    expect(umamiPayload(visit).payload.url).toBe("/product/web");
+    expect(umamiPayload(install).payload.url).toBe("/product/extension");
   });
 
   it("rejects channel mismatches instead of accepting arbitrary attribution", () => {

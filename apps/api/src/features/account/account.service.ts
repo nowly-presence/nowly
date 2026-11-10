@@ -8,6 +8,7 @@ import { presence, presenceLike } from "@nowly/database/schema/presence";
 import { and, asc, desc, eq, inArray, isNull, ne, or } from "drizzle-orm";
 import { eraseAuthoredSubmissionImages, exportAuthoredSubmissions } from "@/features/presence-submissions/submission-detail.service";
 import { listActorActions, type AuditEventView } from "@/features/admin/audit.service";
+import { exportCreatorDrafts } from "@/features/creator-drafts/creator-drafts.service";
 import { capabilitiesOf, type AdminCapability } from "@nowly/shared/roles";
 import { syncCustomActivitiesSchema, syncPresencesSchema } from "@nowly/shared/schemas";
 import { getPublicProfileSettings, isVerifiedAccount, type PublicProfileSettings } from "@/features/public-profile/public-profile.service";
@@ -186,6 +187,7 @@ export const unlinkAllAccountDevices = async (userId: string, keepDeviceId: stri
 export type AccountExport = {
   activityPublications: unknown[];
   adminActions: AuditEventView[];
+  creatorDrafts: Awaited<ReturnType<typeof exportCreatorDrafts>>;
   presenceSubmissions: unknown[];
   publicProfile: PublicProfileSettings;
   profile: AccountProfile & {
@@ -235,6 +237,7 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
     devices,
     activityPublications,
     adminActions,
+    creatorDrafts,
     presenceSubmissions,
     publicProfileSettings,
     presenceReports
@@ -254,6 +257,7 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
     listAccountDevices(userId, null),
     db.select().from(activityPublication).where(eq(activityPublication.userId, userId)).orderBy(asc(activityPublication.createdAt)),
     listActorActions(userId),
+    exportCreatorDrafts(userId),
     exportAuthoredSubmissions(userId),
     getPublicProfileSettings(userId),
     exportReporterReports(userId)
@@ -276,6 +280,7 @@ export const exportAccountData = async (userId: string): Promise<AccountExport |
     },
     activityPublications,
     adminActions,
+    creatorDrafts,
     presenceSubmissions,
     presenceReports,
     publicProfile: publicProfileSettings,

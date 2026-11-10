@@ -1,7 +1,12 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 describe("registerContextMenu", () => {
+  afterEach(() => vi.unstubAllGlobals());
   it("serializes concurrent registrations before creating stable menu ids", async () => {
+    let markUpdated = () => {};
+    const updated = new Promise<void>((resolve) => {
+      markUpdated = resolve;
+    });
     const removeAllCallbacks: Array<() => void> = [];
     const create = vi.fn((_properties: chrome.contextMenus.CreateProperties, callback?: () => void) => callback?.());
     const chromeMock = {
@@ -10,7 +15,7 @@ describe("registerContextMenu", () => {
       contextMenus: {
         removeAll: vi.fn((callback: () => void) => removeAllCallbacks.push(callback)),
         create,
-        update: vi.fn(),
+        update: vi.fn(() => markUpdated()),
         onClicked: { addListener: vi.fn() }
       },
       storage: {
@@ -34,11 +39,12 @@ describe("registerContextMenu", () => {
     expect(create).not.toHaveBeenCalled();
 
     removeAllCallbacks[0]?.();
-    await Promise.resolve();
-    await Promise.resolve();
-    await Promise.resolve();
+    await updated;
+
+    expect(chromeMock.contextMenus.onClicked.addListener).toHaveBeenCalledOnce();
+    expect(chromeMock.contextMenus.update).toHaveBeenCalledWith("nowly-mute-tab", expect.objectContaining({ enabled: false }));
 
     expect(create).toHaveBeenCalledTimes(2);
-    expect(create.mock.calls.map(([properties]) => properties.id)).toEqual(["nowly-page-presence", "nowly-mute-tab"]);
+    expect(create.mock.calls.map(([properties]) => properties.id).sort()).toEqual(["nowly-mute-tab", "nowly-page-presence"]);
   });
 });

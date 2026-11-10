@@ -1,5 +1,4 @@
 import { activityPublication } from "@nowly/database/schema/activity";
-import { extensionToken } from "@nowly/database/schema/account";
 import { account, user } from "@nowly/database/schema/auth";
 import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -58,12 +57,28 @@ describe("server-generated publication reservations", () => {
       revision: 4,
       published: true
     });
-    expect((await reserve()).json()).toEqual({
+    expect(
+      (
+        await reserve({
+          activity: {
+            ...PORTABLE_ACTIVITY,
+            details: "Should not replace the saved content"
+          }
+        })
+      ).json()
+    ).toEqual({
       id: stored.id,
       revision: 4,
       published: true
     });
-    expect(await fixture.database.db.select().from(activityPublication)).toHaveLength(1);
+    expect(await fixture.database.db.select().from(activityPublication)).toMatchObject([
+      {
+        id: stored.id,
+        activity: PORTABLE_ACTIVITY,
+        revision: 4,
+        published: true
+      }
+    ]);
     expect((await reserve({ id: PUBLIC_ID })).statusCode).toBe(400);
     expect(
       (
@@ -77,9 +92,6 @@ describe("server-generated publication reservations", () => {
   it("never creates on PUT, including stale publication after account erasure", async () => {
     expect((await write()).statusCode).toBe(409);
     expect(await fixture.database.db.select().from(activityPublication)).toEqual([]);
-
-    await fixture.database.db.update(extensionToken).set({ revokedAt: new Date() });
-    expect((await write()).statusCode).toBe(401);
 
     await fixture.seedPublication();
     await fixture.database.db.insert(user).values({
@@ -99,6 +111,13 @@ describe("server-generated publication reservations", () => {
     expect((await fixture.request(`/activity-publications/${"c".repeat(32)}`)).json()).toEqual({ error: "NOT_FOUND" });
     await fixture.database.db.update(activityPublication).set({ published: false }).where(eq(activityPublication.id, PUBLIC_ID));
     expect((await fixture.request(`/activity-publications/${PUBLIC_ID}`)).json()).toEqual({ error: "UNPUBLISHED" });
+
+    await fixture.database.db.delete(user).where(eq(user.id, OWNER_ID));
+    expect(await fixture.storedPublication()).toBeUndefined();
+    expect((await write()).statusCode).toBe(401);
+    await fixture.database.db.update(account).set({ accountId: "1234" }).where(eq(account.userId, "recreated-owner"));
+    expect((await write(await fixture.tokenFor("recreated-owner"))).statusCode).toBe(409);
+    expect(await fixture.database.db.select().from(activityPublication)).toEqual([]);
   });
 
   it("explicitly withdraws a revision-zero reservation and invalidates a delayed PUT", async () => {

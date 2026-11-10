@@ -1,17 +1,16 @@
-import type { PresencePayload } from "@/shared/types";
-import { isMediaPlayback } from "@/background/services/site-timers";
+import { isMediaPlayback, type TabPresenceEntry } from "@/background/services/tab-presence";
+import { createSerialQueue } from "@/background/storage/serial-queue";
 
 const MUTED_TABS_SESSION_KEY = "mutedTabIds";
 const ACTIVE_SLUGS_SESSION_KEY = "activeSlugs";
 const ACTIVE_SESSIONS_SESSION_KEY = "activeSessions";
 const TAB_PRESENCES_SESSION_KEY = "tabPresences";
 
-export type TabPresenceEntry = {
-  slug: string;
-  presence: PresencePayload;
-  updatedAt: number;
-  mediaPlayback?: boolean;
-};
+const queueTabPresences = createSerialQueue();
+const queueMutedTabs = createSerialQueue();
+const queueActiveSlugs = createSerialQueue();
+const queueActiveSessions = createSerialQueue();
+
 export type TabPresenceRecord = TabPresenceEntry & {
   tabId: number;
 };
@@ -45,20 +44,22 @@ const getTabPresencesMap = async (): Promise<Record<number, TabPresenceEntry>> =
   return map && typeof map === "object" ? (map as Record<number, TabPresenceEntry>) : {};
 };
 
-export const upsertTabPresence = async (tabId: number, entry: TabPresenceEntry): Promise<void> => {
-  const map = await getTabPresencesMap();
-  map[tabId] = {
-    ...entry,
-    mediaPlayback: isMediaPlayback(entry, map[tabId])
-  };
-  await chrome.storage.session.set({ [TAB_PRESENCES_SESSION_KEY]: map });
-};
+export const upsertTabPresence = (tabId: number, entry: TabPresenceEntry): Promise<void> =>
+  queueTabPresences(async () => {
+    const map = await getTabPresencesMap();
+    map[tabId] = {
+      ...entry,
+      mediaPlayback: isMediaPlayback(entry, map[tabId])
+    };
+    await chrome.storage.session.set({ [TAB_PRESENCES_SESSION_KEY]: map });
+  });
 
-export const removeTabPresence = async (tabId: number): Promise<void> => {
-  const map = await getTabPresencesMap();
-  delete map[tabId];
-  await chrome.storage.session.set({ [TAB_PRESENCES_SESSION_KEY]: map });
-};
+export const removeTabPresence = (tabId: number): Promise<void> =>
+  queueTabPresences(async () => {
+    const map = await getTabPresencesMap();
+    delete map[tabId];
+    await chrome.storage.session.set({ [TAB_PRESENCES_SESSION_KEY]: map });
+  });
 
 export const getTabPresence = async (tabId: number): Promise<TabPresenceEntry | undefined> => (await getTabPresencesMap())[tabId];
 
@@ -68,21 +69,23 @@ export const getTabPresencesSnapshot = async (): Promise<TabPresenceRecord[]> =>
     ...entry
   }));
 
-export const clearTabPresences = async (): Promise<void> => {
-  await chrome.storage.session.set({
-    [TAB_PRESENCES_SESSION_KEY]: {}
+export const clearTabPresences = (): Promise<void> =>
+  queueTabPresences(() =>
+    chrome.storage.session.set({
+      [TAB_PRESENCES_SESSION_KEY]: {}
+    })
+  );
+
+export const removeTabPresencesBySlug = (slug: string): Promise<void> =>
+  queueTabPresences(async () => {
+    const map = await getTabPresencesMap();
+
+    for (const [tabId, entry] of Object.entries(map)) {
+      if (entry.slug === slug) delete map[Number(tabId)];
+    }
+
+    await chrome.storage.session.set({ [TAB_PRESENCES_SESSION_KEY]: map });
   });
-};
-
-export const removeTabPresencesBySlug = async (slug: string): Promise<void> => {
-  const map = await getTabPresencesMap();
-
-  for (const [tabId, entry] of Object.entries(map)) {
-    if (entry.slug === slug) delete map[Number(tabId)];
-  }
-
-  await chrome.storage.session.set({ [TAB_PRESENCES_SESSION_KEY]: map });
-};
 
 const getMutedTabIds = async (): Promise<number[]> => {
   const stored = await chrome.storage.session.get(MUTED_TABS_SESSION_KEY);
@@ -93,12 +96,13 @@ const getMutedTabIds = async (): Promise<number[]> => {
 
 export const isTabMuted = async (tabId: number): Promise<boolean> => (await getMutedTabIds()).includes(tabId);
 
-export const setTabMuted = async (tabId: number, muted: boolean): Promise<void> => {
-  const ids = await getMutedTabIds();
+export const setTabMuted = (tabId: number, muted: boolean): Promise<void> =>
+  queueMutedTabs(async () => {
+    const ids = await getMutedTabIds();
 
-  const next = muted ? [...new Set([...ids, tabId])] : ids.filter((id) => id !== tabId);
-  await chrome.storage.session.set({ [MUTED_TABS_SESSION_KEY]: next });
-};
+    const next = muted ? [...new Set([...ids, tabId])] : ids.filter((id) => id !== tabId);
+    await chrome.storage.session.set({ [MUTED_TABS_SESSION_KEY]: next });
+  });
 
 export const getActiveSlugsSnapshot = async (): Promise<string[]> => {
   const stored = await chrome.storage.session.get(ACTIVE_SLUGS_SESSION_KEY);
@@ -107,33 +111,33 @@ export const getActiveSlugsSnapshot = async (): Promise<string[]> => {
   return Array.isArray(slugs) ? slugs.filter((slug): slug is string => typeof slug === "string") : [];
 };
 
-export const addActiveSlugToState = async (slug: string): Promise<void> => {
-  const slugs = await getActiveSlugsSnapshot();
+export const addActiveSlugToState = (slug: string): Promise<void> =>
+  queueActiveSlugs(async () => {
+    const slugs = await getActiveSlugsSnapshot();
 
-  if (slugs.includes(slug)) return;
+    if (slugs.includes(slug)) return;
 
-  await chrome.storage.session.set({
-    [ACTIVE_SLUGS_SESSION_KEY]: [...slugs, slug]
+    await chrome.storage.session.set({
+      [ACTIVE_SLUGS_SESSION_KEY]: [...slugs, slug]
+    });
   });
-};
 
-export const removeActiveSlugFromState = async (slug: string): Promise<void> => {
-  const slugs = await getActiveSlugsSnapshot();
-  await chrome.storage.session.set({ [ACTIVE_SLUGS_SESSION_KEY]: slugs.filter((entry) => entry !== slug) });
-};
+export const removeActiveSlugFromState = (slug: string): Promise<void> => removeActiveSlugsFromState([slug]);
 
-export const removeActiveSlugsFromState = async (slugsToRemove: string[]): Promise<void> => {
-  const slugs = await getActiveSlugsSnapshot();
+export const removeActiveSlugsFromState = (slugsToRemove: string[]): Promise<void> =>
+  queueActiveSlugs(async () => {
+    const slugs = await getActiveSlugsSnapshot();
 
-  const remaining = new Set(slugsToRemove);
-  await chrome.storage.session.set({ [ACTIVE_SLUGS_SESSION_KEY]: slugs.filter((entry) => !remaining.has(entry)) });
-};
-
-export const clearActiveSlugsFromState = async (): Promise<void> => {
-  await chrome.storage.session.set({
-    [ACTIVE_SLUGS_SESSION_KEY]: []
+    const remaining = new Set(slugsToRemove);
+    await chrome.storage.session.set({ [ACTIVE_SLUGS_SESSION_KEY]: slugs.filter((entry) => !remaining.has(entry)) });
   });
-};
+
+export const clearActiveSlugsFromState = (): Promise<void> =>
+  queueActiveSlugs(() =>
+    chrome.storage.session.set({
+      [ACTIVE_SLUGS_SESSION_KEY]: []
+    })
+  );
 
 export const hasActiveSlugs = async (): Promise<boolean> => (await getActiveSlugsSnapshot()).length > 0;
 
@@ -148,29 +152,27 @@ export const hasActiveSession = async (slug: string): Promise<boolean> => slug i
 
 export const getActiveSessionStartedAt = async (slug: string): Promise<number | undefined> => (await getActiveSessions())[slug];
 
-export const setActiveSessionStartedAt = async (slug: string, startedAt: number): Promise<void> => {
-  const sessions = await getActiveSessions();
-  await chrome.storage.session.set({
-    [ACTIVE_SESSIONS_SESSION_KEY]: {
-      ...sessions,
-      [slug]: startedAt
-    }
+export const setActiveSessionStartedAt = (slug: string, startedAt: number): Promise<void> =>
+  queueActiveSessions(async () => {
+    const sessions = await getActiveSessions();
+    await chrome.storage.session.set({
+      [ACTIVE_SESSIONS_SESSION_KEY]: {
+        ...sessions,
+        [slug]: startedAt
+      }
+    });
   });
-};
 
-export const removeActiveSession = async (slug: string): Promise<void> => {
-  const sessions = await getActiveSessions();
-  delete sessions[slug];
-  await chrome.storage.session.set({ [ACTIVE_SESSIONS_SESSION_KEY]: sessions });
-};
+export const removeActiveSession = (slug: string): Promise<void> => removeActiveSessions([slug]);
 
-export const removeActiveSessions = async (slugs: string[]): Promise<void> => {
-  const sessions = await getActiveSessions();
+export const removeActiveSessions = (slugs: string[]): Promise<void> =>
+  queueActiveSessions(async () => {
+    const sessions = await getActiveSessions();
 
-  for (const slug of slugs) delete sessions[slug];
+    for (const slug of slugs) delete sessions[slug];
 
-  await chrome.storage.session.set({ [ACTIVE_SESSIONS_SESSION_KEY]: sessions });
-};
+    await chrome.storage.session.set({ [ACTIVE_SESSIONS_SESSION_KEY]: sessions });
+  });
 
 const broadcastListeners = new Set<() => void>();
 

@@ -3,8 +3,7 @@
 import { ButtonLink } from "@/components/button-link";
 import { Link } from "@/i18n/navigation";
 import { ButtonAnchor, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
-import { detectExtensionBrowser, getExtensionDownloadUrl } from "@/lib/extension-store";
-import type { ExtensionBrowser } from "@/lib/extension-store";
+import { detectExtensionBrowser, getExtensionDownloadUrl, type ExtensionBrowser } from "@nowly/env/client/extension-store";
 import { RiCheckLine, RiChromeFill, RiFirefoxBrowserFill } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useLayoutEffect, useState } from "react";

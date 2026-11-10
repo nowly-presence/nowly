@@ -1,4 +1,7 @@
-export type Season = "spring" | "summer" | "autumn" | "winter" | "halloween" | "new-year";
+import { isSeason, type Season } from "@nowly/shared/seasons";
+
+export { isSeason, type Season } from "@nowly/shared/seasons";
+
 export type SeasonOverride = Season | "none";
 export type SeasonKind = "season" | "event";
 
@@ -135,8 +138,6 @@ export const SEASON_PERIODS: readonly SeasonPeriod[] = [
 ];
 
 export const ENABLED_SEASONS: readonly Season[] = SEASON_PERIODS.filter((period) => period.enabled).map((period) => period.season);
-
-export const isSeason = (value: unknown): value is Season => SEASON_PERIODS.some((period) => period.season === value);
 
 export const isSeasonOverride = (value: unknown): value is SeasonOverride => value === "none" || isSeason(value);
 

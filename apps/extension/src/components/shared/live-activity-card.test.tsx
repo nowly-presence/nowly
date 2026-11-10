@@ -56,7 +56,7 @@ describe("LiveCard timeline", () => {
     });
 
     expect(html).toContain(">-1:00</span>");
-    expect(html).not.toContain("transition-[width]");
+    expect(html).not.toMatch(/style="width:[\d.]+%"/);
   });
 
   it("drains a custom countdown from its start", () => {

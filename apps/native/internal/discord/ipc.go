@@ -13,8 +13,6 @@ import (
 	"runtime"
 	"strings"
 	"time"
-
-	"nowly.client/native/internal/logging"
 )
 
 const (
@@ -34,7 +32,7 @@ type Client struct {
 	conn     io.ReadWriteCloser
 	ready    bool
 	profile  *Profile
-	logger   *logging.Logger
+	logf     func(string, ...any)
 }
 
 type Profile struct {
@@ -49,12 +47,8 @@ type Packet struct {
 	Data map[string]any
 }
 
-func NewClient(clientID string) *Client {
-	return &Client{clientID: clientID}
-}
-
-func (c *Client) SetLogger(logger *logging.Logger) {
-	c.logger = logger
+func NewClient(clientID string, logf func(string, ...any)) *Client {
+	return &Client{clientID: clientID, logf: logf}
 }
 
 func (c *Client) Connected() bool {
@@ -155,9 +149,8 @@ func (c *Client) Close() {
 	c.profile = nil
 }
 
-// drop discards the connection after a failure. A timed-out read may still be
-// pending on a handle that cannot be interrupted, so closing it must not block
-// the host loop.
+// A timed-out read may still be pending on a handle that cannot be
+// interrupted, so closing it must not block the host loop.
 func (c *Client) drop(err error) {
 	if !errors.Is(err, errReadTimeout) {
 		c.Close()
@@ -223,10 +216,10 @@ func (c *Client) writeCommand(payload map[string]any) error {
 }
 
 func (c *Client) log(format string, args ...any) {
-	if c.logger == nil {
+	if c.logf == nil {
 		return
 	}
-	c.logger.Printf(format, args...)
+	c.logf(format, args...)
 }
 
 // IsAccessDenied reports the Windows named-pipe error produced when Discord
@@ -263,7 +256,6 @@ func dialIPC() (io.ReadWriteCloser, error) {
 	return nil, lastErr
 }
 
-// dialPipe opens the first Discord named pipe that accepts a connection.
 // Discord takes the first free slot in discord-ipc-0..9, so slot 0 is not
 // always the one it owns. An access-denied error wins over the others so the
 // elevated-Discord warning still fires.
@@ -289,9 +281,8 @@ type readDeadliner interface {
 	SetReadDeadline(time.Time) error
 }
 
-// readPacketTimeout reads one packet but gives up after d. Connections that
-// support deadlines use them; Windows pipes opened as plain files do not, so
-// the read runs in a goroutine that is abandoned on timeout.
+// Windows pipes opened as plain files do not support deadlines, so the read
+// runs in a goroutine that is abandoned on timeout.
 func readPacketTimeout(conn io.ReadWriteCloser, d time.Duration) (*Packet, error) {
 	if dl, ok := conn.(readDeadliner); ok {
 		if err := dl.SetReadDeadline(time.Now().Add(d)); err == nil {

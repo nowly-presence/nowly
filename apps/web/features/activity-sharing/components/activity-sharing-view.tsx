@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { publicationIdSchema, type ActivityPublication, type PublicationReview, type PublicationStatus, type PublicationResult } from "@nowly/shared/activity-publication";
-import { requestExtension, subscribeExtensionDetected } from "@/lib/extension-bridge";
+import { requestExtension, subscribeExtensionDetected } from "@nowly/shared/web-bridge";
 import { fetchActivityPublication } from "@/features/activity-sharing/lib/activity-publication";
 import { ActivityPreview } from "@/features/activity-sharing/components/activity-preview";
 import { ActivitySharingActions, type ActivityCopyChoice } from "@/features/activity-sharing/components/activity-sharing-actions";

@@ -89,7 +89,7 @@ export const parseInline = (source: string): Inline[] => {
 export const inlineText = (nodes: Inline[]): string =>
   nodes.map((node) => (node.kind === "text" || node.kind === "code" ? node.text : inlineText(node.children))).join("");
 
-export const slugifyHeading = (text: string): string =>
+const slugifyHeading = (text: string): string =>
   text
     .normalize("NFKD")
     .replace(/[̀-ͯ]/g, "")

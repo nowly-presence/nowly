@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/navigation";
-import { SITE_URL } from "@/lib/constants";
+import { MARKETING_ORIGIN } from "@/lib/constants";
 import type { ComponentType, FC, ReactNode } from "react";
 import { Callout } from "./callout";
 import { CodeBlock } from "./code-block";
@@ -32,42 +32,30 @@ const createSeparatedComponent = (Component: ComponentType<Record<string, unknow
   return WrappedComponent;
 };
 
+const headingComponent = (Tag: "h1" | "h2" | "h3" | "h4", className: string): FC<Record<string, unknown>> => {
+  const Heading: FC<{
+    children?: ReactNode;
+    id?: string;
+    "data-heading-text"?: string;
+  }> = ({ children, id, "data-heading-text": label, ...props }) =>
+    id ? (
+      <HeadingAnchor as={Tag} id={id} label={label} className={className} {...props}>
+        {children}
+      </HeadingAnchor>
+    ) : (
+      <Tag className={className} {...props}>
+        {children}
+      </Tag>
+    );
+
+  return Heading as FC<Record<string, unknown>>;
+};
+
 export const mdxComponents: MDXComponents = {
-  h1: (({ children, id, ...props }) => (
-    <HeadingAnchor as="h1" id={id} className="text-3xl font-semibold mb-6 mt-0" {...props}>
-      {children}
-    </HeadingAnchor>
-  )) as FC<{
-    children?: ReactNode;
-    id?: string;
-  }>,
-
-  h2: (({ children, id, ...props }) => (
-    <HeadingAnchor as="h2" id={id} className="text-2xl font-semibold mt-10 mb-3" {...props}>
-      {children}
-    </HeadingAnchor>
-  )) as FC<{
-    children?: ReactNode;
-    id?: string;
-  }>,
-
-  h3: (({ children, id, ...props }) => (
-    <HeadingAnchor as="h3" id={id} className="text-xl font-semibold mt-8 mb-3" {...props}>
-      {children}
-    </HeadingAnchor>
-  )) as FC<{
-    children?: ReactNode;
-    id?: string;
-  }>,
-
-  h4: (({ children, id, ...props }) => (
-    <HeadingAnchor as="h4" id={id} className="text-lg font-semibold mt-6 mb-2" {...props}>
-      {children}
-    </HeadingAnchor>
-  )) as FC<{
-    children?: ReactNode;
-    id?: string;
-  }>,
+  h1: headingComponent("h1", "text-3xl font-semibold mb-6 mt-0"),
+  h2: headingComponent("h2", "text-2xl font-semibold mt-10 mb-3"),
+  h3: headingComponent("h3", "text-xl font-semibold mt-8 mb-3"),
+  h4: headingComponent("h4", "text-lg font-semibold mt-6 mb-2"),
 
   p: (({ children }) => <p className="mb-4 leading-relaxed text-foreground/85">{children}</p>) as FC<{
     children?: ReactNode;
@@ -123,7 +111,7 @@ export const mdxComponents: MDXComponents = {
 
     if (href && WEBSITE_PATHS.some((path) => href === path || href.startsWith(`${path}/`))) {
       return (
-        <a href={`${SITE_URL}${href}`} className={className}>
+        <a href={`${MARKETING_ORIGIN}${href}`} className={className}>
           {children}
         </a>
       );

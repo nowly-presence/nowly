@@ -4,9 +4,9 @@ Single next-intl config for web, docs, API, extension and `packages/ui`. `SUPPOR
 
 ## Add a locale
 
-1. `src/index.ts`: add it to `SUPPORTED_LOCALES`, its short code to `LocaleShort`, and entries to `LOCALE_SHORT_MAP` and `LOCALE_LONG_MAP`.
+1. `src/codes.ts`: add the long and short codes to `localeCodes`.
 2. Add `<locale>.json` to `messages/{shared,web,docs}` and register its literal `() => import("...")` loader in each `src/catalogs-*.ts`.
-3. Extension: add `apps/extension/messages/<short>.json` and update `UI_LOCALES` and `LOCALE_LONG_MAP` in `apps/extension/src/shared/locales.ts`.
+3. Extension: add `apps/extension/messages/<short>.json` and its display name to `LOCALE_NAMES` in `apps/extension/src/shared/locales.ts`.
 4. `packages/ui`: `localeLabelKey` (`locale-selector.tsx`), the language name in the shared `footer` namespace, and a case in `otherFlags` (`locale-flag.tsx`) if it needs a custom flag.
 5. Optional content (falls back to `en-US`): `packages/changelog/content/*/<locale>.mdx`, docs `content/**/<locale>.mdx`.
 

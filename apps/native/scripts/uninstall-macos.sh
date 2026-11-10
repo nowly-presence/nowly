@@ -14,7 +14,6 @@ MANIFEST_DIRS=(
 
 echo "Uninstalling Nowly Native Host..."
 
-# Remove manifests
 for dir in "${MANIFEST_DIRS[@]}"; do
   manifest="${dir}/${HOST_NAME}.json"
   if [ -f "$manifest" ]; then
@@ -23,13 +22,11 @@ for dir in "${MANIFEST_DIRS[@]}"; do
   fi
 done
 
-# Remove binary
 if [ -f "${INSTALL_DIR}/${BINARY_NAME}" ]; then
   rm -f "${INSTALL_DIR}/${BINARY_NAME}"
   echo "  Removed binary: ${INSTALL_DIR}/${BINARY_NAME}"
 fi
 
-# Remove install dir if empty
 rmdir "$INSTALL_DIR" 2>/dev/null || true
 
 echo "Done!"

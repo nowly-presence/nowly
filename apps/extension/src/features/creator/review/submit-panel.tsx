@@ -10,7 +10,7 @@ import type { CreatorDraft, CreatorSubmission, SubmissionStatus } from "@nowly/p
 import { useCreatorPresenceProbe } from "@/hooks/use-creator-presence-probe";
 import { useStaffAccess } from "@/hooks/use-staff-access";
 import { useSubmissionDetail } from "@/hooks/use-submission-detail";
-import { canPublish } from "@/shared/admin/review-rules";
+import { canPublishSubmission } from "@nowly/presence-creator/creator-submission-policy";
 import { adminErrorKey } from "@/lib/admin-error";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
@@ -195,7 +195,7 @@ export const SubmitPanel = ({ draft, update, blocked }: {
                   {t("creator.submit.refresh")}
                 </Button>
               )}
-              {publishing && canPublish(submission.status) && (
+              {publishing && canPublishSubmission(submission.status) && (
                 <Button size="sm" loading={sending} onClick={() => void publishExisting()}>
                   {t("creator.submit.publishNow")}
                 </Button>

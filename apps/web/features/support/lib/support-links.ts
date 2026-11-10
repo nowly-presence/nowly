@@ -1,6 +1,6 @@
 import { GITHUB_SPONSORS_URL, KOFI_URL, PRESENCES_REPOSITORY_URL, PROJECT_REPOSITORY_URL } from "@/lib/constants";
 
-export const githubIssueUrl = (repo: string, template?: string): string => {
+const githubIssueUrl = (repo: string, template?: string): string => {
   const base = `${repo.replace(/\/$/, "")}/issues/new`;
   return template ? `${base}?template=${template}` : base;
 };

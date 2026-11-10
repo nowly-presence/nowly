@@ -3,8 +3,8 @@ import { customAsset, device, devicePresence, presenceActiveDevice } from "@nowl
 import { presenceLike } from "@nowly/database/schema/presence";
 import { and, asc, eq, or } from "drizzle-orm";
 import { cleanText } from "@nowly/shared";
-import { serverEnv } from "@nowly/env/server";
 import { deleteCustomAssetFile } from "@/features/custom-assets/custom-assets.service";
+import { publicObjectUrl } from "@/shared/object-storage";
 
 type DeviceSyncPresence = {
   slug: string;
@@ -23,7 +23,7 @@ export type DeviceSyncInput = {
   presences?: DeviceSyncPresence[];
 };
 
-export const upsertDevice = async (input: DeviceSyncInput): Promise<void> => {
+const upsertDevice = async (input: DeviceSyncInput): Promise<void> => {
   if (!hasDatabase()) return;
 
   const details = {
@@ -123,7 +123,7 @@ export const exportDeviceData = async (deviceId: string): Promise<DeviceExport |
     })),
     customAssets: customAssets.map((asset) => ({
       sha256: asset.sha256,
-      url: `${serverEnv.R2_PUBLIC_URL.replace(/\/$/, "")}/${asset.key}`,
+      url: publicObjectUrl(asset.key),
       mime: asset.mime,
       size: asset.size,
       createdAt: asset.createdAt.toISOString(),

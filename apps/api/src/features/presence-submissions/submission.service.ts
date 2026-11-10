@@ -1,37 +1,21 @@
 import { linkedDiscordId } from "@/features/account/discord-link.service";
 import { getDb } from "@/db/client";
+import type { Executor } from "@nowly/database/client";
 import { user } from "@nowly/database/schema/auth";
 import { creatorPresence, presenceSubmission, presenceSubmissionEvent, presenceSubmissionRevision } from "@nowly/database/schema/creator";
 import { presence } from "@nowly/database/schema/presence";
 import { buildTextFiles, diffDefinitions, normalizeDraft, parseCreatorDefinition, presenceSlug, validateDraft, type CreatorDefinition, type CreatorDraft } from "@nowly/presence-creator";
-import { and, desc, eq, inArray } from "drizzle-orm";
+import { isEditableSubmissionStatus, OPEN_STATUSES } from "@nowly/presence-creator/creator-submission-policy";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
 import { randomBytes, randomUUID } from "node:crypto";
 import { hasObjectStorage } from "@/shared/object-storage";
 import { SubmissionError } from "./submission-errors";
 import { checkCreatorImages, type CreatorImage, type CreatorImageKind } from "./submission-images";
-import { EDITABLE_STATUSES, isOneOf, OPEN_STATUSES } from "./submission-status";
 import { removeCreatorImages, storedKeys, storeCreatorImages } from "./submission-storage";
+import { toSummary, type SubmissionSummary } from "./submission-summary";
 
 const SUBMISSION_ID_BYTES = 12;
 const ISSUES_IN_MESSAGE = 3;
-
-export type SubmissionSummary = {
-  id: string;
-  status: string;
-  revision: number;
-  updatedAt: string;
-  prUrl?: string;
-  note?: string;
-};
-
-export const toSummary = (row: typeof presenceSubmission.$inferSelect): SubmissionSummary => ({
-  id: row.id,
-  status: row.status,
-  revision: row.revision,
-  updatedAt: row.updatedAt.toISOString(),
-  ...(row.prUrl ? { prUrl: row.prUrl } : {}),
-  ...(row.note ? { note: row.note } : {})
-});
 
 const imageName = (images: CreatorImage[], kind: CreatorImageKind): string | undefined => images.find((image) => image.kind === kind)?.fileName;
 
@@ -55,10 +39,9 @@ const verifiedImages = async (assets: Record<CreatorImageKind, string>): Promise
   return check.images;
 };
 
-const assertNoOtherPending = async (slug: string, authorId: string, draftId: string): Promise<void> => {
-  const pending = await getDb()
+const assertNoOtherPending = async (db: Executor, slug: string, authorId: string, draftId: string): Promise<void> => {
+  const pending = await db
     .select({
-      slug: presenceSubmission.slug,
       authorId: presenceSubmission.authorId,
       draftId: presenceSubmission.draftId
     })
@@ -71,7 +54,7 @@ const assertNoOtherPending = async (slug: string, authorId: string, draftId: str
 };
 
 const assertEditable = (status: string | undefined): void => {
-  if (status !== undefined && !isOneOf(status, EDITABLE_STATUSES)) throw new SubmissionError(
+  if (status !== undefined && !isEditableSubmissionStatus(status)) throw new SubmissionError(
     "SUBMISSION_LOCKED",
     "This submission is under review and cannot be changed now."
   );
@@ -118,7 +101,7 @@ export const submitPresence = async (input: {
   const images = await verifiedImages(input.assets);
 
   const draft = asDraft(definition, images);
-  await assertNoOtherPending(slug, input.userId, definition.id);
+  await assertNoOtherPending(db, slug, input.userId, definition.id);
   const issues = validateDraft(draft);
 
   if (issues.length) {
@@ -154,11 +137,13 @@ export const submitPresence = async (input: {
   return db
     .transaction(async (tx) => {
       const now = new Date();
+      await tx.execute(sql`select pg_advisory_xact_lock(hashtextextended(${`presence-submission:${slug}`}, 0))`);
       const [existing] = await tx.select().from(presenceSubmission).where(ownSubmission).for("update");
 
       if (existing?.revision !== current?.revision) throw new SubmissionError("STALE_REVISION", "This submission changed while it was being sent.");
 
       assertEditable(existing?.status);
+      await assertNoOtherPending(tx, slug, input.userId, definition.id);
 
       const [previous] = existing
         ? await tx

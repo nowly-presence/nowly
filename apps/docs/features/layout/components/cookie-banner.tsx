@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@nowly/ui";
-import { SITE_URL } from "@/lib/constants";
+import { MARKETING_ORIGIN } from "@/lib/constants";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
@@ -40,7 +40,7 @@ export const CookieBanner = () => {
       <div className="mx-auto flex w-full max-w-[75rem] flex-col gap-3 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-muted-foreground">
           {t("message")}{" "}
-          <a href={`${SITE_URL}/cookies`} className="underline underline-offset-4 transition-colors hover:text-foreground">
+          <a href={`${MARKETING_ORIGIN}/cookies`} className="underline underline-offset-4 transition-colors hover:text-foreground">
             {t("learn-more")}
           </a>
         </p>

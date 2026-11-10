@@ -1,6 +1,6 @@
 "use client";
 
-import { BrandLockup } from "@/features/shell/components/brand-lockup";
+import { BrandLockup } from "@nowly/ui/brand-lockup";
 import { siteBaseUrl } from "@/lib/api-base";
 import { useTranslations } from "next-intl";
 import type { PropsWithChildren } from "react";

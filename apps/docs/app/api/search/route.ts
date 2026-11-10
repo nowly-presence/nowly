@@ -1,5 +1,6 @@
 import { SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
-import { getDocContent, getNavigationItems } from "@/features/docs-content/lib/content";
+import { listDocs } from "@/features/docs-content/lib/content";
+import { stripMdx } from "@/features/docs-content/lib/strip-mdx";
 import { NextRequest, NextResponse } from "next/server";
 
 type SearchResult = {
@@ -10,17 +11,6 @@ type SearchResult = {
   matches: number;
   matchContext?: string;
 };
-
-function stripMdx(content: string): string {
-  return content
-    .replace(/^---[\s\S]*?---\n/, "")
-    .replace(/>\s*/g, "")
-    .replace(/\*\*/g, "")
-    .replace(/`{1,3}/g, "")
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1")
-    .replace(/^#{1,6}\s+/gm, "")
-    .trim();
-}
 
 function countMatches(text: string, query: string): number {
   const lowerText = text.toLowerCase();
@@ -58,15 +48,11 @@ export const GET = async (request: NextRequest) => {
   }
 
   const validLocale = SUPPORTED_LOCALES.includes(locale as LocaleString) ? locale : "en-US";
-  const sections = getNavigationItems(validLocale);
+  const sections = listDocs(validLocale);
   const results: SearchResult[] = [];
 
-  for (const section of sections) {
-    for (const page of section.children) {
-      const doc = getDocContent(page.path, validLocale);
-
-      if (!doc) continue;
-
+  for (const { docs } of sections) {
+    for (const doc of docs) {
       const title = doc.title;
       const description = doc.description || "";
       const body = stripMdx(doc.content);

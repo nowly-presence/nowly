@@ -196,6 +196,7 @@ export const broadcastActiveTab = async (): Promise<void> => {
     });
     void recordUsageDay().catch(() => {});
   }
+
   notifyBroadcastStateChanged();
 };
 
@@ -253,7 +254,7 @@ const recordProductUse = async (slug: string): Promise<void> => {
   );
 };
 
-export const addActiveSlug = async (slug: string): Promise<void> => {
+const addActiveSlug = async (slug: string): Promise<void> => {
   await addActiveSlugToState(slug);
 
   if (await hasActiveSession(slug)) return;
@@ -274,7 +275,7 @@ export const removeActiveSlugs = async (slugs: string[], _reason: string): Promi
   ]);
 };
 
-export const clearActiveSlugs = async (reason: string): Promise<void> => {
+const clearActiveSlugs = async (reason: string): Promise<void> => {
   const slugs = await getActiveSlugsSnapshot();
   await Promise.all(slugs.map((slug) => removeActiveSlug(slug, reason)));
   await clearActiveSlugsFromState();

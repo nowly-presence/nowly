@@ -1,7 +1,8 @@
 import { RiCheckLine, RiShuffleLine } from "@remixicon/react";
-import { CUSTOM_ACTIVITY_ICON_COMPONENTS, CustomActivityGlyph } from "@/components/shared/custom-activity-artwork";
+import { CustomActivityIconGlyph, CustomActivityGlyph } from "@/components/shared/custom-activity-artwork";
 import { useI18n } from "@/hooks/i18n-provider";
-import { CUSTOM_ACTIVITY_COLORS, CUSTOM_ACTIVITY_ICONS, randomIconImage } from "@/shared/custom-activity";
+import { ACTIVITY_ICON_COLORS, ACTIVITY_ICON_KEYS } from "@nowly/shared/activity-icons";
+import { randomIconImage } from "@/shared/custom-activity";
 import type { CustomImage } from "@/shared/types";
 import { Button } from "@/ui/button";
 import { cn } from "@/ui/cn";
@@ -33,7 +34,7 @@ export const CustomIconPicker = ({ value, onChange, round }: {
         </div>
       </div>
       <div role="radiogroup" aria-label={t("custom.appearance.color")} className="flex flex-wrap gap-2">
-        {CUSTOM_ACTIVITY_COLORS.map((color) => {
+        {ACTIVITY_ICON_COLORS.map((color) => {
           const selected = value.color === color;
           return (
             <button
@@ -55,8 +56,7 @@ export const CustomIconPicker = ({ value, onChange, round }: {
         })}
       </div>
       <div role="radiogroup" aria-label={t("custom.appearance.icon")} className="grid grid-cols-8 gap-1.5">
-        {CUSTOM_ACTIVITY_ICONS.map((icon) => {
-          const Icon = CUSTOM_ACTIVITY_ICON_COMPONENTS[icon];
+        {ACTIVITY_ICON_KEYS.map((icon) => {
           const selected = value.icon === icon;
           return (
             <button
@@ -73,7 +73,7 @@ export const CustomIconPicker = ({ value, onChange, round }: {
               )}
               style={selected ? { backgroundColor: value.color } : undefined}
             >
-              <Icon className="size-[18px]" />
+              <CustomActivityIconGlyph icon={icon} className="size-[18px]" />
             </button>
           );
         })}

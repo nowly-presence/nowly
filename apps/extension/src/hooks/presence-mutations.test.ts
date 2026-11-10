@@ -20,13 +20,14 @@ describe("shared presence mutation coordination", () => {
     const duplicate = vi.fn(async () => true);
     const next = vi.fn(async () => true);
     const started = coordinator.write("first", first);
-    expect(coordinator.write("first", duplicate)).toBe(started);
+    const joined = coordinator.write("first", duplicate);
     const second = coordinator.write("second", next);
     await Promise.resolve();
     expect(first).toHaveBeenCalledOnce();
     expect(next).not.toHaveBeenCalled();
     gate.resolve();
     expect(await started).toBe(true);
+    expect(await joined).toBe(true);
     expect(await second).toBe(true);
     expect(duplicate).not.toHaveBeenCalled();
     expect(coordinator.getSnapshot().size).toBe(0);
@@ -45,12 +46,13 @@ describe("shared presence mutation coordination", () => {
     const remove = vi.fn(async () => {});
     const removal = coordinator.remove("second", remove);
     const duplicateRemoval = coordinator.remove("second", remove);
-    expect(duplicateRemoval).toBe(removal);
+
     expect(await coordinator.write("second", queuedAction)).toBeUndefined();
     gate.resolve();
     await blocking;
     expect(await queued).toBeUndefined();
     await removal;
+    await duplicateRemoval;
     expect(remove).toHaveBeenCalledOnce();
     expect(await coordinator.write("second", async () => true)).toBe(true);
     expect(await coordinator.write("second", queuedAction, oldRevision)).toBeUndefined();
@@ -101,8 +103,6 @@ describe("shared presence mutation coordination", () => {
     const coordinator = createPresenceMutations();
     const listener = vi.fn();
     const unsubscribe = coordinator.subscribe(listener);
-    const initial = coordinator.getSnapshot();
-    expect(coordinator.getSnapshot()).toBe(initial);
     await expect(
       coordinator.write("first", async () => {
         throw new Error("write failed");

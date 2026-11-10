@@ -21,7 +21,7 @@ export const FooterActions = () => {
         if (!entry?.isIntersecting) return;
 
         observer.disconnect();
-        Promise.all([import("@nowly/ui/locale-selector"), import("@/features/layout/components/theme-toggle")]).then(([localeModule, themeModule]) => {
+        Promise.all([import("@nowly/ui/locale-selector"), import("@nowly/ui/theme-toggle")]).then(([localeModule, themeModule]) => {
           setComponents({
             LocaleSelector: localeModule.LocaleSelector,
             ThemeToggle: themeModule.ThemeToggle

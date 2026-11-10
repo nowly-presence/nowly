@@ -1,6 +1,6 @@
 import { JsonLd } from "@/features/seo/components/json-ld";
-import { PROJECT_EXTENSION_DOWNLOAD_URL } from "@/lib/constants";
-import { BRAND_LOCKUP_BLUE } from "@/lib/brand";
+import { PROJECT_EXTENSION_DOWNLOAD_URL } from "@nowly/env/client/extension-store";
+import { BRAND_LOCKUP_BLUE } from "@nowly/ui/brand";
 import { CANONICAL_ORIGIN, organizationJsonLd, SITE_NAME } from "@/features/seo/lib/seo";
 import { getTranslations } from "next-intl/server";
 

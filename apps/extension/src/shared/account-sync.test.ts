@@ -344,5 +344,13 @@ describe("helpers", () => {
         presenceSettings: {}
       })
     ).toBe(true);
+    expect(
+      hasMeaningfulLocalData({
+        presences: [],
+        presenceSettings: {
+          a: { language: "fr" }
+        }
+      })
+    ).toBe(true);
   });
 });

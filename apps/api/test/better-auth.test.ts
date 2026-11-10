@@ -1,16 +1,19 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+
+let authModule: typeof import("@/features/auth/better-auth");
 
 describe("getAuth", () => {
-  beforeEach(() => {
+  beforeAll(async () => {
     vi.stubEnv("DATABASE_URL", "postgresql://user:pass@localhost:5432/db");
     vi.stubEnv("BETTER_AUTH_SECRET", "test-better-auth-secret");
-    vi.resetModules();
+    authModule = await import("@/features/auth/better-auth");
+    authModule.getAuth();
   });
 
-  it("configures without touching the network and registers the discord provider", async () => {
-    const { getAuth } = await import("@/features/auth/better-auth");
+  afterEach(vi.unstubAllEnvs);
 
-    const auth = getAuth();
+  it("configures without touching the network and registers the discord provider", async () => {
+    const auth = authModule.getAuth();
 
     expect(auth.options.socialProviders?.discord).toBeDefined();
     expect(auth.options.user?.additionalFields?.role).toMatchObject({
@@ -25,9 +28,7 @@ describe("getAuth", () => {
   });
 
   it("maps the Discord profile id to discordId", async () => {
-    const { getAuth } = await import("@/features/auth/better-auth");
-
-    const discord = getAuth().options.socialProviders?.discord;
+    const discord = authModule.getAuth().options.socialProviders?.discord;
     const mapped = await discord?.mapProfileToUser?.({
       id: "1234",
       username: "nolo",
@@ -40,13 +41,13 @@ describe("getAuth", () => {
     });
   });
 
-  it("trusts local web origins outside production only", async () => {
-    const { authTrustedOrigins } = await import("@/features/auth/better-auth");
+  it("trusts local web origins outside production only", () => {
+    const { authTrustedOrigins } = authModule;
+    vi.stubEnv("NODE_ENV", "test");
     expect(authTrustedOrigins()).toContain("http://localhost:3000");
     expect(authTrustedOrigins()).toContain("http://localhost:3003");
     vi.stubEnv("NODE_ENV", "production");
     expect(authTrustedOrigins()).not.toContain("http://localhost:3000");
     expect(authTrustedOrigins()).not.toContain("http://localhost:3003");
-    vi.unstubAllEnvs();
   });
 });

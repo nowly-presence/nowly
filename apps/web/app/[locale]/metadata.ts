@@ -1,6 +1,6 @@
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { BRAND_METADATA_ICONS } from "@/lib/brand";
+import { BRAND_METADATA_ICONS } from "@nowly/ui/brand";
 import { adsenseClientId } from "@/features/ads/lib/adsense";
 import { absoluteUrl, CANONICAL_ORIGIN, isSeoPreview, ogHeadline, SITE_NAME, webOgImage } from "@/features/seo/lib/seo";
 import type { LocaleString } from "@nowly/locales";

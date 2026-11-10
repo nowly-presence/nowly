@@ -41,7 +41,7 @@ const resolveTokenAccount = async (c: Context): Promise<AccountContext | null> =
   };
 };
 
-export const getSessionUserId = async (c: Context): Promise<string | null> => {
+const getSessionUserId = async (c: Context): Promise<string | null> => {
   try {
     const session = await getAuth().api.getSession({ headers: c.req.raw.headers });
     return session?.user.id ?? null;
@@ -83,8 +83,7 @@ export const requireSession: MiddlewareHandler<AppEnv> = async (c, next) => {
   await next();
 };
 
-export const resolveAccount = async (c: Context): Promise<AccountContext | null> =>
-  (bearerToken(c) ? await resolveTokenAccount(c) : null) ?? (await sessionAccount(c));
+export const resolveAccount = async (c: Context): Promise<AccountContext | null> => (await resolveTokenAccount(c)) ?? (await sessionAccount(c));
 
 export const requireTokenOrSession: MiddlewareHandler<AppEnv> = async (c, next) => {
   if (!hasDatabase()) return databaseUnavailable(c);

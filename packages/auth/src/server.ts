@@ -5,7 +5,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
 const DEV_WEB_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3003", "http://127.0.0.1:3003"];
 const COOKIE_DOMAIN = ".nowly.me";
-const AUTH_BASE_PATH = "/auth";
+export const AUTH_BASE_PATH = "/auth";
 
 export type AuthOptions = {
   secret: string;

@@ -78,31 +78,18 @@ describe("announcement screens", () => {
     currentNow = Date.parse("2026-10-24T12:00:00Z");
     vi.clearAllMocks();
   });
-  it("renders banners with soft tone styling, navigation callbacks, and semantic constraints", () => {
-    // Maintenance banner
+  it("links announcements accessibly without a dismissal action", () => {
     announcements.items = [
       notice({
         kind: "maintenance",
         endsAt: "2026-10-24T12:30:00Z"
       })
     ];
-    let html = renderToStaticMarkup(<AnnouncementsBanner />);
+    const html = renderToStaticMarkup(<AnnouncementsBanner />);
     expect(html).toContain('href="#announcements"');
     expect(html).toContain('aria-label="English notice. News"');
-    expect(html).toContain("bg-primary-soft hover:bg-primary-soft-hover");
     expect(html).not.toContain("Dismiss");
 
-    // Warning banner level 3 (danger)
-    announcements.items = [
-      notice({
-        kind: "warning",
-        severity: 3
-      })
-    ];
-    html = renderToStaticMarkup(<AnnouncementsBanner />);
-    expect(html).toContain("bg-danger-soft hover:bg-danger-soft-hover");
-
-    // Banner click navigation
     const banner = AnnouncementsBanner();
 
     if (

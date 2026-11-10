@@ -280,6 +280,20 @@ export const getDocContent = (slug: string, locale: string): DocContent | null =
   };
 };
 
+export const listDocs = (
+  locale: string
+): Array<{
+  section: DocNavigationItem;
+  docs: DocContent[];
+}> =>
+  getNavigationItems(locale).map((section) => ({
+    section,
+    docs: section.children.flatMap((page) => {
+      const doc = getDocContent(page.path, locale);
+      return doc ? [doc] : [];
+    })
+  }));
+
 export const getCategoryForPath = (slug: string, locale: string): string => {
   const validLocale = getValidLocale(locale);
   const categorySlug = slug.split("/").filter(Boolean)[0];

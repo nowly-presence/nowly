@@ -3,7 +3,7 @@ import { RiRocketLine } from "@remixicon/react";
 import { useI18n } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
 import type { AdminResult, SubmissionDetail } from "@/shared/admin/admin-types";
-import { canPublish } from "@/shared/admin/review-rules";
+import { canPublishSubmission } from "@nowly/presence-creator/creator-submission-policy";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
 import { Sheet } from "@/ui/sheet";
@@ -19,7 +19,7 @@ export const AdminPublishPanel = ({ detail, onDone }: {
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const publishable = canPublish(detail.status);
+  const publishable = canPublishSubmission(detail.status);
   const retryable = detail.status === "in_progress";
 
   if (!publishable && !retryable) return null;

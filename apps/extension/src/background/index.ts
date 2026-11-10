@@ -1,14 +1,15 @@
 import { buildHandlerRegistry } from "@/background/router/handlers";
-import { registerHandlers, registerRouter } from "@/background/router/router";
+import { registerRouter } from "@/background/router/router";
 import { registerPresenceRuntimeBridge } from "@/background/runtime/presence-runtime-bridge";
 import { registerAccountSyncListeners } from "@/background/services/account-sync";
 import { registerAlarmHandlers } from "@/background/services/alarms";
 import { registerCreatorDraftSync } from "@/background/services/creator-drafts-sync";
 import { registerCommandHandlers } from "@/background/services/commands";
+import { registerCustomActivityEditors } from "@/background/services/custom-activity-editors";
 import { initializeBackground, registerLifecycleHandlers } from "@/background/services/lifecycle";
 
-registerHandlers(buildHandlerRegistry());
-registerRouter();
+registerCustomActivityEditors();
+registerRouter(buildHandlerRegistry());
 registerPresenceRuntimeBridge();
 registerLifecycleHandlers();
 registerAlarmHandlers();

@@ -1,7 +1,7 @@
 "use client";
 
 import { NavbarAction } from "@/features/layout/components/navbar-action";
-import { BrandLockup } from "@/features/layout/components/brand-lockup";
+import { BrandLockup } from "@nowly/ui/brand-lockup";
 import { DOCS_ORIGIN } from "@/features/seo/lib/seo";
 import { usePathname } from "@/i18n/navigation";
 import { CANARY_ACCENT, CANARY_INK } from "@/lib/brand";

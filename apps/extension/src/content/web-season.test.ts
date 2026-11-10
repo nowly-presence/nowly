@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { readWebSeason, seasonalThemesEnabled, startWebSeason } from "@/content/web-season";
+import { startWebSeason } from "@/content/web-season";
 
 const NOWLY = "https://nowly.me";
 const OCTOBER = new Date(2026, 9, 12, 12);
-const JUNE = new Date(2026, 5, 20, 12);
 
 type Posted = {
   message: unknown;
@@ -86,45 +85,6 @@ const seasonOf = (posted: Posted) =>
     }
   ).payload.season;
 
-describe("seasonalThemesEnabled", () => {
-  it("defaults to on and mirrors the settings migration", () => {
-    expect(seasonalThemesEnabled(undefined)).toBe(true);
-    expect(seasonalThemesEnabled({ seasonalThemes: false })).toBe(false);
-    expect(seasonalThemesEnabled({ seasonalThemes: true })).toBe(true);
-    expect(
-      seasonalThemesEnabled({
-        appearance: "seasonal",
-        seasonalThemeMigrated: true
-      })
-    ).toBe(true);
-    expect(seasonalThemesEnabled({ seasonalThemeMigrated: true })).toBe(false);
-  });
-});
-
-describe("readWebSeason", () => {
-  it("resolves the season with the setting and the override", async () => {
-    const storage = (local: Record<string, unknown>) => ({
-      get: async () => local,
-      onChanged: {
-        addListener: () => undefined
-      }
-    });
-    expect(await readWebSeason(storage({}), OCTOBER)).toBe("halloween");
-    expect(
-      await readWebSeason(
-        storage({
-          settings: { seasonalThemes: false }
-        }),
-        OCTOBER
-      )
-    ).toBeNull();
-    expect(await readWebSeason(storage({ seasonOverride: "winter" }), OCTOBER)).toBe("winter");
-    expect(await readWebSeason(storage({ seasonOverride: "none" }), OCTOBER)).toBeNull();
-    expect(await readWebSeason(storage({ seasonOverride: "bogus" }), JUNE)).toBe("summer");
-    expect(await readWebSeason(storage({}), new Date(2026, 6, 14, 12))).toBeNull();
-  });
-});
-
 describe("startWebSeason", () => {
   it("sends the season on detection, to the page origin only", async () => {
     const { posted } = setup();
@@ -141,14 +101,61 @@ describe("startWebSeason", () => {
     ]);
   });
 
-  it("sends null when seasonal themes are off", async () => {
-    const { posted } = setup({
+  it.each([
+    {
+      name: "an explicit opt-out overrides a season override",
       local: {
-        settings: { seasonalThemes: false }
-      }
-    });
+        settings: { seasonalThemes: false },
+        seasonOverride: "winter"
+      },
+      season: null
+    },
+    {
+      name: "an explicit opt-in overrides the migration marker",
+      local: {
+        settings: {
+          seasonalThemes: true,
+          seasonalThemeMigrated: true
+        }
+      },
+      season: "halloween"
+    },
+    {
+      name: "legacy Seasonal appearance still enables the theme",
+      local: {
+        settings: {
+          appearance: "seasonal",
+          seasonalThemeMigrated: true
+        }
+      },
+      season: "halloween"
+    },
+    {
+      name: "a migrated opt-out stays off",
+      local: {
+        settings: { seasonalThemeMigrated: true }
+      },
+      season: null
+    },
+    {
+      name: "a valid override is applied",
+      local: { seasonOverride: "winter" },
+      season: "winter"
+    },
+    {
+      name: "none suppresses the calendar",
+      local: { seasonOverride: "none" },
+      season: null
+    },
+    {
+      name: "an invalid stored override falls back to the calendar",
+      local: { seasonOverride: "bogus" },
+      season: "halloween"
+    }
+  ])("$name", async ({ local, season }) => {
+    const { posted } = setup({ local });
     await flush();
-    expect(posted.map(seasonOf)).toEqual([null]);
+    expect(posted.map(seasonOf)).toEqual([season]);
   });
 
   it("sends again when the setting or the override changes, and only then", async () => {

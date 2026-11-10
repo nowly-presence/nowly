@@ -14,6 +14,8 @@ let version: string | undefined;
 let latestVersion: string | undefined;
 let lastAutoConnectAttemptAt = 0;
 const AUTO_CONNECT_RETRY_MS = 5000;
+const STATUS_RESPONSE_TIMEOUT_MS = 6000;
+const statusWaiters = new Set<() => void>();
 const responseListeners = new Set<(message: NativeResponse) => void>();
 let discordIpcIssue: DiscordIpcIssue = NO_DISCORD_IPC_ISSUE;
 let discordIpcIssueQueue: Promise<void> | null = null;
@@ -59,15 +61,18 @@ export const mapPresenceData = (data: PresenceData): PresencePayload => ({
   buttons: data.buttons?.slice(0, 2)
 });
 
-export const getNativeStatus = (): NativeStatus => ({
-  connected,
-  status,
-  discordConnected,
-  version,
-  latestVersion: getHostUpdateVersion(version) ?? latestVersion,
-  updateAvailable: (getHostUpdateVersion(version) ?? latestVersion) !== undefined,
-  ...discordIpcIssueStatus()
-});
+export const getNativeStatus = (): NativeStatus => {
+  const updateVersion = getHostUpdateVersion(version) ?? latestVersion;
+  return {
+    connected,
+    status,
+    discordConnected,
+    version,
+    latestVersion: updateVersion,
+    updateAvailable: updateVersion !== undefined,
+    ...discordIpcIssueStatus()
+  };
+};
 
 export const onNativeResponse = (listener: (message: NativeResponse) => void): (() => void) => {
   responseListeners.add(listener);
@@ -93,43 +98,56 @@ export const refreshNativeStatus = (): NativeStatus => {
   return getNativeStatus();
 };
 
-export const reconnectNative = (): NativeStatus => {
-  if (nativePort && (connected || connecting)) {
-    postNative({ type: "PING" });
-    return getNativeStatus();
-  }
-
-  if (nativePort) {
-    try {
-      nativePort.disconnect();
-    } catch {}
-  }
-
-  nativePort = null;
-  connected = false;
-  discordConnected = false;
-  version = undefined;
-  latestVersion = undefined;
-  status = "connecting";
-  connectNative();
-  return getNativeStatus();
+const settleStatusWaiters = (): void => {
+  for (const finish of statusWaiters) finish();
 };
 
-export const restartNative = (): NativeStatus => {
-  if (nativePort) {
-    try {
-      nativePort.disconnect();
-    } catch {}
-  }
-
+const retireNativePort = (nextStatus: string): chrome.runtime.Port | null => {
+  const previous = nativePort;
   nativePort = null;
+  connecting = false;
   connected = false;
   discordConnected = false;
   version = undefined;
   latestVersion = undefined;
-  status = "connecting";
+  status = nextStatus;
+  settleStatusWaiters();
+  return previous;
+};
+
+const closeNativePort = (port: chrome.runtime.Port | null): void => {
+  try {
+    port?.disconnect();
+  } catch {}
+};
+
+const waitForNativeStatus = (): Promise<NativeStatus> => {
+  if (!nativePort) return Promise.resolve(getNativeStatus());
+
+  return new Promise((resolve) => {
+    const finish = () => {
+      clearTimeout(timeout);
+      statusWaiters.delete(finish);
+      resolve(getNativeStatus());
+    };
+    const timeout = setTimeout(finish, STATUS_RESPONSE_TIMEOUT_MS);
+    statusWaiters.add(finish);
+  });
+};
+
+export const restartNative = (): Promise<NativeStatus> => {
+  closeNativePort(retireNativePort("connecting"));
   connectNative();
-  return getNativeStatus();
+  return waitForNativeStatus();
+};
+
+export const reconnectNative = (): Promise<NativeStatus> => {
+  if (nativePort && (connected || connecting)) {
+    postNative({ type: "PING" });
+    return waitForNativeStatus();
+  }
+
+  return restartNative();
 };
 
 export const connectNative = (options: {
@@ -138,22 +156,25 @@ export const connectNative = (options: {
   if (nativePort) return;
   if (connecting) return;
 
+  let port: chrome.runtime.Port;
+
   try {
-    connecting = true;
-    nativePort = chrome.runtime.connectNative(NATIVE_HOST);
-    if (!options.silent) status = "connecting";
+    port = chrome.runtime.connectNative(NATIVE_HOST);
   } catch (error) {
-    nativePort = null;
-    connecting = false;
-    connected = false;
-    status = error instanceof Error ? error.message : "Nowly Host unavailable";
+    retireNativePort(error instanceof Error ? error.message : "Nowly Host unavailable");
     return;
   }
 
-  nativePort.onMessage.addListener((message: NativeResponse) => {
+  nativePort = port;
+  connecting = true;
+  if (!options.silent) status = "connecting";
+
+  port.onMessage.addListener(async (message: NativeResponse) => {
+    if (nativePort !== port) return;
+
     for (const listener of responseListeners) listener(message);
 
-    void updateDiscordIpcIssue((issue) => trackDiscordIpcIssue(issue, message));
+    const issueUpdated = updateDiscordIpcIssue((issue) => (nativePort === port ? trackDiscordIpcIssue(issue, message) : issue));
 
     if (message.type === "CONNECTED") {
       connecting = false;
@@ -172,6 +193,13 @@ export const connectNative = (options: {
       discordConnected = Boolean(message.discordConnected);
       if (discordConnected) void setNativeSeenConnectedOnce(true);
       if (message.profile) void setNativeProfile(message.profile);
+
+      const waiters = [...statusWaiters];
+      await issueUpdated;
+
+      if (nativePort === port) {
+        for (const finish of waiters) finish();
+      }
     }
 
     if (message.type === "ERROR") {
@@ -180,14 +208,9 @@ export const connectNative = (options: {
     }
   });
 
-  nativePort.onDisconnect.addListener(() => {
-    connecting = false;
-    connected = false;
-    discordConnected = false;
-    version = undefined;
-    latestVersion = undefined;
-    status = chrome.runtime.lastError?.message ?? "native disconnected";
-    nativePort = null;
+  port.onDisconnect.addListener(() => {
+    const reason = chrome.runtime.lastError?.message ?? "native disconnected";
+    if (nativePort === port) retireNativePort(reason);
   });
 
   postNative({ type: "PING" });
@@ -202,10 +225,7 @@ export const postNative = (message: NativeMessage): boolean => {
     nativePort.postMessage(message);
     return true;
   } catch (error) {
-    connecting = false;
-    connected = false;
-    status = error instanceof Error ? error.message : "native post failed";
-    nativePort = null;
+    closeNativePort(retireNativePort(error instanceof Error ? error.message : "native post failed"));
     return false;
   }
 };

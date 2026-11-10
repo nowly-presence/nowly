@@ -1,6 +1,6 @@
 const ALLOWED_HREF = /^(https?:\/\/|mailto:|\/)/i;
 
-export const interpolateLegalHtml = (html: string, extras: Record<string, string> = {}): string => {
+const interpolateLegalHtml = (html: string, extras: Record<string, string> = {}): string => {
   let out = html;
 
   for (const [key, value] of Object.entries(extras)) {

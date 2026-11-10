@@ -1,23 +1,31 @@
-import { handleGetAccount, handleNowlySession, handleResolveSyncChoice, handleSignOutAccount, handleStartAccountConnect, handleStopAccountSync, handleSyncAccount } from "@/background/router/handlers/account.handlers";
-import { handleClearActivityMessage, handleDebug, handleGetCurrentActivity, handleGetDebug, handleActivityUpdateMessage, handleSetPresencePause } from "@/background/router/handlers/activity.handlers";
+import { handleNowlySession, handleResolveSyncChoice, handleSignOutAccount, handleStartAccountConnect, handleStopAccountSync, handleSyncAccount } from "@/background/router/handlers/account.handlers";
+import { handleClearActivityMessage, handleDebug, handleActivityUpdateMessage, handleSetPresencePause } from "@/background/router/handlers/activity.handlers";
 import { handleGetAnalyticsConsent, handleSetAnalyticsConsent, handleRecordExtensionActive, handleGetRuntimeLogs, handleClearRuntimeLogs } from "@/background/router/handlers/privacy.handlers";
 import { handleCreatorExtract, handleCreatorFetchSubmissions, handleCreatorGetAccount, handleCreatorHighlight, handleCreatorPickCancel, handleCreatorPickStart, handleCreatorSubmit, handleCreatorSyncDrafts, handleCreatorTestActivity } from "@/background/router/handlers/creator.handlers";
 import { handleGetDiagnostic } from "@/background/router/handlers/diagnostics.handlers";
-import { handleAcknowledgeDiscordIpcIssue, handleConnectNative, handleGetNativeStatus, handleGetUserScriptsStatus, handleRestartNative } from "@/background/router/handlers/native.handlers";
-import { handleBulkToggle, handleBulkUninstall, handleCheckUpdates, handleClearSnooze, handleFetchCatalog, handleGetInstallQueue, handleGetPresenceEngagement, handleGetPresenceSettings, handleGetPresences, handleInstall, handleInstallFromApi, handleInstallLocalZip, handleRetryInstallQueue, handleSetPresenceLike, handleSetPresenceSettings, handleSetSchedule, handleSnooze, handleToggle, handleUninstall, handleUpdate } from "@/background/router/handlers/presences.handlers";
+import { handleGetUserScriptsStatus } from "@/background/router/handlers/native.handlers";
+import { handleBulkToggle, handleBulkUninstall, handleClearSnooze, handleFetchCatalog, handleGetInstallQueue, handleGetPresenceEngagement, handleGetPresences, handleInstall, handleInstallFromApi, handleInstallLocalZip, handleSetPresenceLike, handleSetPresenceSettings, handleSetSchedule, handleSnooze, handleToggle, handleUninstall, handleUpdate } from "@/background/router/handlers/presences.handlers";
 import { handleGetSettings, handleResetOnboardingForDev, handleSetSettings } from "@/background/router/handlers/settings.handlers";
 import { handleAdminReportList, handleAdminReportSend, handleAdminReportThread, handleReportCreate, handleReportIdentity, handleReportList, handleReportReply, handleReportSetClosed, handleReportThread } from "@/background/router/handlers/reports.handlers";
 import { handleDeleteDeviceData, handleExportDeviceData, handleGetOnboarding, handleGetTabState, handleReportPresence, handleSetOnboarding, handleSetTabMuted, handleSyncPresenceScripts } from "@/background/router/handlers/extra.handlers";
-import { handleDeleteCustomActivity, handleGetCustomActivities, handleGetCustomActivityDetection, handleGetCustomImages, handleSaveCustomActivity, handleSetCustomActivityActive, handleUploadCustomImage } from "@/background/router/handlers/custom-activity.handlers";
+import { handleDeleteCustomActivity, handleGetCustomImages, handleSaveCustomActivity, handleSetCustomActivityActive, handleUploadCustomImage } from "@/background/router/handlers/custom-activity.handlers";
 import { handleRecordUsageDay, handleSnoozeSupportPrompt } from "@/background/router/handlers/support.handlers";
 import type { HandlerRegistry } from "@/background/router/router";
-import { handleGetAnnouncements, handleRefreshAnnouncements, handleMarkAnnouncement } from "@/background/router/handlers/announcements.handlers";
+import { handleRefreshAnnouncements, handleMarkAnnouncement } from "@/background/router/handlers/announcements.handlers";
 import { handleAcceptLegalDocuments, handleCheckLegalDocuments, handleGetLegalState } from "@/background/router/handlers/legal.handlers";
 import { applyPublication, publicationStatus } from "@/background/services/activity-publications";
 import { getOwnedPublication, publishActivity } from "@/background/services/activity-publication-publisher";
 import { createAnnouncement, deletePresence, fetchHiddenPresences, fetchReviewQueue, fetchSubmissionDetail, getStaffAccess, loadCreatorPresenceDraft, probeCreatorPresence, publishSubmission, retryPullRequest, sendReview, setPresenceHidden } from "@/background/services/admin-api";
 import { openAccountConnect } from "@/background/services/account-sync";
 import { getCustomActivityDeletionPlan } from "@/background/services/custom-activity-deletion-plan";
+
+import { getAccountSnapshot } from "@/background/services/account-sync";
+import { getCurrentActivity, getDebug, getPresenceSettings } from "@/background/storage/presences.store";
+import { getAnnouncementsSnapshot } from "@/background/services/announcements";
+import { getCustomActivities } from "@/background/storage/custom-activities.store";
+import { resolveCustomActivityDetection } from "@/background/services/custom-activity-detection";
+import { acknowledgeDiscordIpcIssue, reconnectNative, refreshNativeStatus, restartNative } from "@/background/services/native";
+import { checkUpdates, drainInstallQueue } from "@/background/managers/presence-manager";
 
 export const buildHandlerRegistry = (): HandlerRegistry => ({
   GET_ACTIVITY_PUBLICATION_STATUS: (payload) => publicationStatus(payload),
@@ -43,21 +51,21 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   ADMIN_CREATE_ANNOUNCEMENT: ({ announcement }) => createAnnouncement(announcement),
   ADMIN_PROBE_CREATOR_PRESENCE: ({ slug }) => probeCreatorPresence(slug),
   ADMIN_LOAD_CREATOR_PRESENCE: ({ slug }) => loadCreatorPresenceDraft(slug),
-  GET_ANNOUNCEMENTS: handleGetAnnouncements,
+  GET_ANNOUNCEMENTS: getAnnouncementsSnapshot,
   REFRESH_ANNOUNCEMENTS: handleRefreshAnnouncements,
   MARK_ANNOUNCEMENT: handleMarkAnnouncement,
   GET_LEGAL_STATE: handleGetLegalState,
   CHECK_LEGAL_DOCUMENTS: handleCheckLegalDocuments,
   ACCEPT_LEGAL_DOCUMENTS: handleAcceptLegalDocuments,
   GET_PRESENCES: handleGetPresences,
-  GET_NATIVE_STATUS: handleGetNativeStatus,
+  GET_NATIVE_STATUS: refreshNativeStatus,
   GET_USER_SCRIPTS_STATUS: handleGetUserScriptsStatus,
   GET_DIAGNOSTIC: handleGetDiagnostic,
-  CONNECT_NATIVE: handleConnectNative,
-  RESTART_NATIVE: handleRestartNative,
-  ACKNOWLEDGE_DISCORD_IPC_ISSUE: handleAcknowledgeDiscordIpcIssue,
-  GET_CURRENT_ACTIVITY: handleGetCurrentActivity,
-  GET_DEBUG: handleGetDebug,
+  CONNECT_NATIVE: reconnectNative,
+  RESTART_NATIVE: restartNative,
+  ACKNOWLEDGE_DISCORD_IPC_ISSUE: acknowledgeDiscordIpcIssue,
+  GET_CURRENT_ACTIVITY: getCurrentActivity,
+  GET_DEBUG: getDebug,
   TOGGLE_PRESENCE: handleToggle,
   UNINSTALL_PRESENCE: handleUninstall,
   BULK_TOGGLE_PRESENCE: handleBulkToggle,
@@ -73,14 +81,14 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   SET_PRESENCE_LIKE: handleSetPresenceLike,
   SET_PRESENCE_PAUSE: handleSetPresencePause,
   GET_INSTALL_QUEUE: handleGetInstallQueue,
-  RETRY_INSTALL_QUEUE: handleRetryInstallQueue,
-  CHECK_UPDATES: handleCheckUpdates,
+  RETRY_INSTALL_QUEUE: drainInstallQueue,
+  CHECK_UPDATES: checkUpdates,
   GET_SETTINGS: handleGetSettings,
   SET_SETTINGS: handleSetSettings,
   GET_ANALYTICS_CONSENT: handleGetAnalyticsConsent,
   SET_ANALYTICS_CONSENT: handleSetAnalyticsConsent,
   RESET_ONBOARDING_FOR_DEV: handleResetOnboardingForDev,
-  GET_PRESENCE_SETTINGS: handleGetPresenceSettings,
+  GET_PRESENCE_SETTINGS: getPresenceSettings,
   SET_PRESENCE_SETTINGS: handleSetPresenceSettings,
   SNOOZE_PRESENCE: handleSnooze,
   CLEAR_SNOOZE: handleClearSnooze,
@@ -115,14 +123,14 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   CREATOR_SYNC_DRAFTS: handleCreatorSyncDrafts,
   DELETE_DEVICE_DATA: handleDeleteDeviceData,
   SYNC_PRESENCE_SCRIPTS: handleSyncPresenceScripts,
-  GET_CUSTOM_ACTIVITIES: handleGetCustomActivities,
-  GET_CUSTOM_ACTIVITY_DETECTION: handleGetCustomActivityDetection,
+  GET_CUSTOM_ACTIVITIES: getCustomActivities,
+  GET_CUSTOM_ACTIVITY_DETECTION: resolveCustomActivityDetection,
   SAVE_CUSTOM_ACTIVITY: handleSaveCustomActivity,
   DELETE_CUSTOM_ACTIVITY: handleDeleteCustomActivity,
   SET_CUSTOM_ACTIVITY_ACTIVE: handleSetCustomActivityActive,
   UPLOAD_CUSTOM_IMAGE: handleUploadCustomImage,
   GET_CUSTOM_IMAGES: handleGetCustomImages,
-  GET_ACCOUNT: handleGetAccount,
+  GET_ACCOUNT: getAccountSnapshot,
   START_ACCOUNT_CONNECT: handleStartAccountConnect,
   NOWLY_SESSION: handleNowlySession,
   SYNC_ACCOUNT: handleSyncAccount,

@@ -183,6 +183,7 @@ export const createAnnouncementsRoutes = () => {
           data: "{}"
         });
         timer ??= setInterval(() => void check(), POLL_MS);
+        // Closing after MAX_STREAM_MS bounds connection lifetime; the browser reconnects after RETRY_MS.
         await stream.sleep(MAX_STREAM_MS);
         release(stream);
       });

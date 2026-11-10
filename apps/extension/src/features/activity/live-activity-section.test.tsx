@@ -1,4 +1,4 @@
-import { isValidElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import en from "@messages/en.json";
 import { LiveActivitySection } from "./live-activity-section";
@@ -40,7 +40,7 @@ const stateWith = (showPlayer: boolean) => ({
   refresh: {}
 });
 
-const section = () => LiveActivitySection({ hasPresences: true });
+const section = () => renderToStaticMarkup(<LiveActivitySection hasPresences />);
 
 describe("LiveActivitySection preview toggle", () => {
   beforeEach(() => {
@@ -50,17 +50,18 @@ describe("LiveActivitySection preview toggle", () => {
 
   it("renders the idle section while the preview is enabled", () => {
     extensionState.mockReturnValue(stateWith(true));
-    expect(isValidElement(section())).toBe(true);
+    expect(section()).toContain(en["action.downloadApp"]);
   });
 
   it("renders nothing while the preview is disabled", () => {
     extensionState.mockReturnValue(stateWith(false));
-    expect(section()).toBeNull();
+    expect(section()).toBe("");
   });
 
   it("keeps the section for the Discord IPC alert when the preview is disabled", () => {
     extensionState.mockReturnValue(stateWith(false));
     discordIpcIssueOf.mockReturnValue({ active: true });
-    expect(isValidElement(section())).toBe(true);
+    expect(section()).toContain(en["discordIpc.alertDescription"]);
+    expect(section()).not.toContain(en["action.downloadApp"]);
   });
 });

@@ -9,15 +9,17 @@
 
 ## Rules
 
-- The worker dies after about 30 s idle: state that must survive (tab presences, active slugs and sessions, muted tabs, site timers, the Discord IPC episode, open editors) lives in `chrome.storage.session`, never in module memory. Multi-key updates are single read-modify-write passes.
+- The worker dies after about 30 s idle: state that must survive (tab presences, active slugs and sessions, muted tabs, site timers, the Discord IPC episode, open editors) lives in `chrome.storage.session`, never in module memory. Multi-key updates are single read-modify-write passes. Installed-presence writes run through the serialized transaction in `storage/presences.store.ts`; keep external downloads and device sync outside it, and never start another installed-presence mutation from inside a transaction.
+- The install queue serializes storage and alarm changes. A drain can run only once at a time and retires just the generations it completed, so requests made during a download stay queued.
 - Boot runs once (`bootBackground` memoises its promise); the router returns `true` from `onMessage` while handlers await.
-- Re-validate native status with a `PING` on every `GET_NATIVE_STATUS`; a disconnect resets every connection field together.
+- Re-validate native status with a `PING` on every `GET_NATIVE_STATUS`; retiring a port resets every connection field together. Explicit reconnect and restart wait for a `PONG` from the current port or its disconnect, with a timeout slightly above the host's Discord handshake deadline.
+- Empty `catch {}` blocks are kept only where the failure is expected and harmless: unregistering a user script that is not registered, disconnecting an already closed native port, the context menu catalog lookup (falls back to opening the store), the announcements `EventSource` (polling covers it). Anything else logs through `addRuntimeLog`.
 - Release verification is fail-closed (bundle SHA-256, metadata hash, ECDSA P-256 signature in `services/release-security.ts`); unsigned releases are accepted on canary builds only.
 - Telemetry (`background/telemetry.ts`) is opt-in and dropped until consent is `true` (canary also needs `developerMode`). Never send device IDs, activity content, slugs or real URLs.
 - Runtime logs strip privacy-sensitive keys (`url`, `title`, `query`, `discordId`...) before storing (`runtime-logs.ts`).
 - `chrome.sidePanel.open()` must run in the user-gesture turn: never `await` before it.
 - `chrome.userScripts` exists only once "Allow user scripts" is on and fires no event: the side panel sends `SYNC_PRESENCE_SCRIPTS` when it sees the status flip. Firefox requests the permission from the onboarding (user gesture).
-- The nowly.me web protocol keeps its own message names (only `GET_INSTALLED` maps to `GET_PRESENCES`, `content/index.ts`). Web messages need an allowlisted sender URL and the web-specific message allowlist.
+- The nowly.me web protocol defines its own message names in `@nowly/shared/web-bridge-protocol`. The extension derives the background allowlist in `shared/web-bridge-routing.ts`: `GET_INSTALLED` maps to `GET_PRESENCES` and `GET_DEVICE_INFO` is handled by the content script. Web messages also need an allowlisted sender URL.
 - Creator messages (`CREATOR_*`, `router/handlers/creator.handlers.ts`) target the focused tab (`services/focused-tab.ts`) and reach the picker in the content script; a tab loaded before the extension has no content script, so they answer `UNREACHABLE`. `CREATOR_TEST_ACTIVITY` posts straight to the native host and `broadcastActiveTab()` restores the real activity when the test stops (`managers/creator-test.ts`).
 - Creator submissions reuse the account token (`services/creator-api.ts`) and need its explicit `creator` scope and a Discord id, like public activities; sign-in goes through `START_CREATOR_CONNECT`.
 - Site timers (`preserveSiteTimer`, `services/site-timers.ts`) only transform the broadcast payload; they never store URLs or titles and never sync.

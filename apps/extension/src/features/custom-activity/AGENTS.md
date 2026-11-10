@@ -12,7 +12,7 @@ Hand-written activities shown on Discord without a presence script.
 - Local only: never account-synced; only uploaded images reach the API (keyed by SHA-256, device token). Activation and uploads stop while legal confirmations are pending.
 - One active activity at a time; it wins over tab presences and `currentActivity.slug` becomes `custom:<id>`.
 - Discord always shows elapsed time: `startTime` is always sent (from activation) and a countdown adds `endTime` (presets and a 5-minute stepper, never a free input). `LiveCard` mirrors Discord's layout per activity type.
-- Icon images are drawn locally (`CustomActivityGlyph`) and by the web route `/api/activity-icon/...`: keep both identical and bump `CUSTOM_ICON_RENDER_VERSION` when the drawing changes. Palette or icon set changes also change the web route.
+- Icon images are drawn locally (`CustomActivityGlyph`) and by the web route `/api/activity-icon/...`: both use `@nowly/shared/activity-icons` for the palette, key list and drawing. Bump `ACTIVITY_ICON_RENDER_VERSION` when a drawing changes.
 - Uploads are resized in the panel, re-checked in the background (magic bytes, size) and kept locally; the UI always shows the local copy and Discord gets the CDN URL. The background keeps CDN copies alive and re-uploads them when gone.
 - Export and import (`shared/custom-activity-share.ts`) use the saved activity, never unsaved edits, and exclude local ids, dates, active state and CDN URLs. Imports create fresh inactive activities. File drop listens only while the Custom tab is visible with no pushed route, sheet or running import.
 

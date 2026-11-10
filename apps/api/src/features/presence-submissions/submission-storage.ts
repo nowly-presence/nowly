@@ -1,21 +1,24 @@
 import { objectStorage, publicObjectUrl } from "@/shared/object-storage";
 import { DeleteObjectsCommand, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { serverEnv } from "@nowly/env/server";
+import { randomUUID } from "node:crypto";
 import type { CreatorImage, CreatorImageKind } from "./submission-images";
 
 const IMMUTABLE_CACHE = "public, max-age=31536000, immutable";
 
 export type StoredAssets = Partial<Record<CreatorImageKind, string>>;
 
-export const creatorAssetPrefix = (submissionId: string, revision: number): string => `creator/${submissionId}/${revision}`;
-
 export const storeCreatorImages = async (submissionId: string, revision: number, images: CreatorImage[]): Promise<StoredAssets> => {
   const storage = objectStorage();
-  const prefix = creatorAssetPrefix(submissionId, revision);
-  const entries = await Promise.all(
-    images.map(async (image) => {
-      const key = `${prefix}/${image.fileName}`;
-      await storage.send(
+  const prefix = `creator/${submissionId}/${revision}/${randomUUID()}`;
+  const uploads = images.map((image) => ({
+    image,
+    key: `${prefix}/${image.fileName}`
+  }));
+
+  const results = await Promise.allSettled(
+    uploads.map(async ({ image, key }) =>
+      storage.send(
         new PutObjectCommand({
           Bucket: serverEnv.R2_BUCKET,
           Key: key,
@@ -23,11 +26,18 @@ export const storeCreatorImages = async (submissionId: string, revision: number,
           ContentType: image.contentType,
           CacheControl: IMMUTABLE_CACHE
         })
-      );
-      return [image.kind, key] as const;
-    })
+      )
+    )
   );
-  return Object.fromEntries(entries);
+
+  const failure = results.find((result) => result.status === "rejected");
+
+  if (failure) {
+    await removeCreatorImages(uploads.map(({ key }) => key)).catch(() => undefined);
+    throw failure.reason;
+  }
+
+  return Object.fromEntries(uploads.map(({ image, key }) => [image.kind, key]));
 };
 
 const DELETE_BATCH = 1_000;

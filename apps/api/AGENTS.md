@@ -13,7 +13,7 @@ Hono on Node (`@hono/node-server`). `src/app.ts` builds the app (`createApp()`),
 
 - Guards are middlewares placed on the route (`requireAuth`, `requireExtensionToken(scope)`, `requireSession`); never check auth inside a service.
 - Rate limits: `rateLimit({ name, max, windowMs, key })`. The global limit is 100 requests per minute per IP. Limits live in memory, per instance.
-- Bodies: every request is capped at 1 MiB (`default-body-limit.ts`). A route needing more uses `limitBody(bytes)` and adds its prefix to `LARGER_BODY_PREFIXES`. Read JSON with `jsonBody(c)` (`undefined` when invalid) and validate with zod.
+- Bodies: requests default to a 1 MiB cap (`middleware/body-limit.ts`). A route with a different cap registers `limitBody(bytes)` before its handler. Read JSON with `jsonBody(c)` (`undefined` when invalid) and validate with zod.
 - Queries use Drizzle (`drizzle-orm` operators, `.returning()` to know what changed, `onConflictDoNothing`/`onConflictDoUpdate` for upserts, `db.transaction` with `.for("update")` for quota checks). Never build SQL from strings.
 - Schema changes go through `packages/database` (see its `AGENTS.md`), never ad hoc SQL in the API.
 

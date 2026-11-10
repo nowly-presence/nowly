@@ -13,8 +13,8 @@ import { readCreatorImage } from "./submission-storage";
 import { translateDefinition } from "./submission-translation";
 
 const MINUTE_MS = 60_000;
-export const PR_LEASE_MS = 10 * MINUTE_MS;
-export const PENDING_BATCH = 10;
+const PR_LEASE_MS = 10 * MINUTE_MS;
+const PENDING_BATCH = 10;
 const SHORT_ID_LENGTH = 8;
 const ERROR_MAX_LENGTH = 300;
 

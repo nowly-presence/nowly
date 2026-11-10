@@ -1,9 +1,11 @@
 import { user } from "@nowly/database/schema/auth";
 import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { creatorDraftRoutes } from "@/features/creator-drafts/creator-drafts.routes";
+import { createApp } from "@/app";
+import { DEFAULT_BODY_LIMIT } from "@/middleware/body-limit";
+import { resetRateLimits } from "@/middleware/rate-limit";
 import { createTestDatabase, seedExtensionToken, seedUser, type TestDatabase } from "./database";
-import { inject, mount } from "./http";
+import { inject } from "./http";
 
 const AUTHOR = "creator-drafts-author";
 const OTHER = "creator-drafts-other";
@@ -12,7 +14,7 @@ let database: TestDatabase;
 let headers: Record<string, string>;
 let otherHeaders: Record<string, string>;
 
-const app = () => mount("/", creatorDraftRoutes);
+const app = createApp;
 
 const draft = (id: string, updatedAt: number) => ({
   id,
@@ -46,6 +48,7 @@ beforeAll(async () => {
   database = await createTestDatabase();
 });
 beforeEach(async () => {
+  resetRateLimits();
   await database.reset();
 
   for (const id of [AUTHOR, OTHER]) {
@@ -100,6 +103,19 @@ describe("creator draft sync", () => {
       ).statusCode
     ).toBe(404);
     expect(await index(otherHeaders)).toEqual([]);
+  });
+
+  it("accepts drafts larger than the API default cap", async () => {
+    const value = {
+      ...draft("abcd1234", 100),
+      blob: "x".repeat(DEFAULT_BODY_LIMIT)
+    };
+    expect((await put(value.id, value.updatedAt, value)).statusCode).toBe(200);
+    const response = await inject(app(), {
+      url: `/me/creator-drafts/${value.id}`,
+      headers
+    });
+    expect(response.json().value).toEqual(value);
   });
 
   it("keeps the newest version and rejects stale writes", async () => {

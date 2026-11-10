@@ -26,7 +26,7 @@
   "type": "module",
   "exports": {
     "./server": "./src/server.ts",
-    "./client": "./src/client.ts",
+    "./client/extension-store": "./src/extension-store.ts",
     "./extension": "./src/extension.ts"
   },
   "scripts": {

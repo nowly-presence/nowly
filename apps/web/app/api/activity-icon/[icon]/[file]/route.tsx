@@ -1,11 +1,12 @@
 import { ImageResponse } from "next/og";
-import { ACTIVITY_ICON_COLORS, ACTIVITY_ICON_KEYS, ACTIVITY_ICON_PATHS, type ActivityIconKey } from "../../activity-icons";
+import { ACTIVITY_ICON_GLYPH_RATIO, ACTIVITY_ICON_PATHS, isActivityIconColor, isActivityIconKey } from "@nowly/shared/activity-icons";
 
 export const runtime = "nodejs";
 
 const COLOR_FILE_PATTERN = /^([0-9a-f]{6})\.png$/;
 
-const isActivityIconKey = (value: string): value is ActivityIconKey => (ACTIVITY_ICON_KEYS as readonly string[]).includes(value);
+const IMAGE_SIZE = 512;
+const GLYPH_SIZE = Math.round(IMAGE_SIZE * ACTIVITY_ICON_GLYPH_RATIO);
 
 const notFound = () => new Response(null, { status: 404 });
 
@@ -22,7 +23,7 @@ export const GET = async (_request: Request, { params }: RouteContext) => {
   const colorMatch = COLOR_FILE_PATTERN.exec(file);
   const color = colorMatch?.[1];
 
-  if (!isActivityIconKey(icon) || !color || !ACTIVITY_ICON_COLORS.includes(color as (typeof ACTIVITY_ICON_COLORS)[number])) {
+  if (!isActivityIconKey(icon) || !color || !isActivityIconColor(`#${color}`)) {
     return notFound();
   }
 
@@ -32,18 +33,18 @@ export const GET = async (_request: Request, { params }: RouteContext) => {
         alignItems: "center",
         backgroundColor: `#${color}`,
         display: "flex",
-        height: "512px",
+        height: IMAGE_SIZE,
         justifyContent: "center",
-        width: "512px"
+        width: IMAGE_SIZE
       }}
     >
-      <svg height="236" viewBox="0 0 24 24" width="236" xmlns="http://www.w3.org/2000/svg">
+      <svg height={GLYPH_SIZE} viewBox="0 0 24 24" width={GLYPH_SIZE} xmlns="http://www.w3.org/2000/svg">
         <path d={ACTIVITY_ICON_PATHS[icon]} fill="#ffffff" />
       </svg>
     </div>,
     {
-      height: 512,
-      width: 512
+      height: IMAGE_SIZE,
+      width: IMAGE_SIZE
     }
   );
 

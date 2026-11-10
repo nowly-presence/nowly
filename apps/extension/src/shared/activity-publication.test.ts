@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { activityFingerprint, portableActivity } from "@/shared/activity-publication";
-import { CUSTOM_ACTIVITY_COLORS, CUSTOM_ACTIVITY_ICONS, emptyCustomActivityDraft } from "@/shared/custom-activity";
-import { publicationColors, publicationIcons } from "@nowly/shared/activity-publication";
+import { emptyCustomActivityDraft } from "@/shared/custom-activity";
 import type { CustomActivity } from "@/shared/types";
 
 const HASH = "a".repeat(64);
@@ -24,10 +23,6 @@ const activity: CustomActivity = {
 };
 
 describe("canonical portable publication baseline", () => {
-  it("uses the extension's actual image icon and color contract", () => {
-    expect(publicationColors).toEqual(CUSTOM_ACTIVITY_COLORS);
-    expect(publicationIcons).toEqual(CUSTOM_ACTIVITY_ICONS);
-  });
   it("embeds durable images, excludes private/runtime fields and ignores CDN touches and dates", async () => {
     const original = portableActivity(activity, { [HASH]: DATA_URL });
     const touched = {
@@ -44,12 +39,21 @@ describe("canonical portable publication baseline", () => {
     };
     const portable = portableActivity(touched, { [HASH]: DATA_URL });
     expect(portable).toEqual(original);
+
+    for (const field of ["id", "createdAt", "updatedAt", "detectionUrl"]) expect(portable).not.toHaveProperty(field);
+
     expect(portable.largeImage).toEqual({
       kind: "embedded",
       dataUrl: DATA_URL
     });
-    expect(await activityFingerprint(portable)).toBe(await activityFingerprint(original));
-    expect(await activityFingerprint(portable, "private.example.com")).not.toBe(await activityFingerprint(portable));
+    const fingerprint = await activityFingerprint(portable);
+    expect(
+      await activityFingerprint({
+        ...portable,
+        name: "Reading"
+      })
+    ).not.toBe(fingerprint);
+    expect(await activityFingerprint(portable, "private.example.com")).not.toBe(fingerprint);
   });
   it("refuses to publish a missing image rather than silently dropping it", () => {
     expect(() => portableActivity(activity, {})).toThrow("MISSING_IMAGE");

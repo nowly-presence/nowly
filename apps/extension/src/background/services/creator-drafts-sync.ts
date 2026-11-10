@@ -1,5 +1,6 @@
 import { signOutLocally } from "@/background/services/account-sync";
 import { getEffectiveApiUrl } from "@/background/services/api-state";
+import { createDebouncedTask } from "@/background/services/debounced-task";
 import { getAccount } from "@/background/storage/account.store";
 import { planDraftSync, type RemoteDraftEntry } from "@/shared/creator/creator-draft-sync-plan";
 import { CREATOR_DRAFTS_KEY, CREATOR_TOMBSTONES_KEY, loadDrafts, loadTombstones, saveTombstones } from "@/shared/creator/creator-storage";
@@ -12,7 +13,6 @@ const PUSH_DEBOUNCE_MS = 4_000;
 
 let running: Promise<void> | null = null;
 let rerun = false;
-let pushTimer: ReturnType<typeof setTimeout> | null = null;
 
 const isEntry = (value: unknown): value is RemoteDraftEntry => {
   const entry = value as Partial<RemoteDraftEntry> | null;
@@ -183,14 +183,11 @@ export const syncCreatorDrafts = async (): Promise<void> => {
 };
 
 export const registerCreatorDraftSync = (): void => {
+  const schedulePush = createDebouncedTask(() => void syncCreatorDrafts(), PUSH_DEBOUNCE_MS);
+
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== "local" || !(CREATOR_DRAFTS_KEY in changes || CREATOR_TOMBSTONES_KEY in changes)) return;
 
-    if (pushTimer) clearTimeout(pushTimer);
-
-    pushTimer = setTimeout(() => {
-      pushTimer = null;
-      void syncCreatorDrafts();
-    }, PUSH_DEBOUNCE_MS);
+    schedulePush();
   });
 };

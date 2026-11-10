@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+import { apiBaseUrl, CDN_BASE_URL } from "./lib/api-base";
 
-const API_ORIGIN = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://api.nowly.me").replace(/\/$/, "");
-const SUBMISSION_IMAGES_ORIGIN = process.env.NEXT_PUBLIC_SUBMISSION_IMAGES_ORIGIN ?? "https://cdn.nowly.me";
+const API_ORIGIN = apiBaseUrl();
+const SUBMISSION_IMAGES_ORIGIN = process.env.NEXT_PUBLIC_SUBMISSION_IMAGES_ORIGIN ?? CDN_BASE_URL;
 const isDevelopment = process.env.NODE_ENV !== "production";
 const HSTS_MAX_AGE_SECONDS = 63_072_000;
 
@@ -53,7 +54,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
-  transpilePackages: ["@nowly/ui", "@nowly/locales", "@nowly/shared"],
+  transpilePackages: ["@nowly/ui", "@nowly/locales", "@nowly/presence-creator", "@nowly/shared"],
   experimental: {
     optimizePackageImports: ["@nowly/ui"]
   },

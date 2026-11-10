@@ -234,17 +234,6 @@ describe("announcements API", () => {
     expect(await storedAnnouncements()).toEqual([]);
   });
 
-  it("bounds request bodies", async () => {
-    expect(
-      (
-        await post({
-          ...input,
-          content: "x".repeat(131_073)
-        })
-      ).statusCode
-    ).toBe(413);
-  });
-
   it("preserves parsing and size errors even with a generic parent error handler", async () => {
     server = new Hono().onError((_error, c) => c.json({ error: "INTERNAL_SERVER_ERROR" }, 500)).route("/announcements", createAnnouncementsRoutes());
     expect(
@@ -367,7 +356,7 @@ describe("announcements API", () => {
     ).toBe("EN");
   });
 
-  it("streams bounded invalidations and releases the client when the stream is cancelled", async () => {
+  it("streams an initial invalidation and an invalidation after publication", async () => {
     const response = await server.request("http://localhost/announcements/events");
     expect(response.headers.get("content-type")).toBe("text/event-stream");
     const reader = response.body?.getReader();

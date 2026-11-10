@@ -1,8 +1,10 @@
-import { applySeasonClass, EXT_SOURCE, initialSeasonState, nextSeasonState, parseSeasonMessage, parseSeasonPreview, SEASON_LEAVING_CLASS, SEASON_REQUEST, SEASON_RESPONSE_TIMEOUT_MS, type SeasonEvent, type SiteSeason } from "./site-season";
+import { EXT_WEB_SOURCE, SEASON_REQUEST } from "@nowly/shared/web-bridge-protocol";
+import type { Season } from "@nowly/shared/seasons";
+import { applySeasonClass, initialSeasonState, nextSeasonState, parseSeasonMessage, parseSeasonPreview, SEASON_LEAVING_CLASS, SEASON_RESPONSE_TIMEOUT_MS, type SeasonEvent } from "./site-season";
 
 export const startSiteSeason = ({ allowPreview, onChange }: {
   allowPreview: boolean;
-  onChange: (season: SiteSeason | null) => void;
+  onChange: (season: Season | null) => void;
 }): (() => void) => {
   const root = document.documentElement;
   let state = initialSeasonState({ preview: allowPreview ? parseSeasonPreview(window.location.search) : null });
@@ -40,7 +42,7 @@ export const startSiteSeason = ({ allowPreview, onChange }: {
     }, SEASON_RESPONSE_TIMEOUT_MS);
     window.postMessage(
       {
-        source: EXT_SOURCE,
+        source: EXT_WEB_SOURCE,
         type: SEASON_REQUEST
       },
       window.location.origin

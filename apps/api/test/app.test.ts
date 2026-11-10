@@ -1,5 +1,5 @@
 import { createApp } from "@/app";
-import { DEFAULT_BODY_LIMIT } from "@/middleware/default-body-limit";
+import { DEFAULT_BODY_LIMIT } from "@/middleware/body-limit";
 import { resetRateLimits } from "@/middleware/rate-limit";
 import { beforeEach, describe, expect, it } from "vitest";
 import { inject } from "./http";
@@ -26,6 +26,16 @@ describe("app", () => {
       headers: { "content-type": "application/json" },
       payload: "x".repeat(DEFAULT_BODY_LIMIT + 1)
     });
+    expect(res.statusCode).toBe(413);
+  });
+
+  it("keeps the default cap on unknown routes sharing a large upload prefix", async () => {
+    const res = await inject(createApp(), {
+      method: "POST",
+      url: "/me/presence-submissions-extra",
+      payload: "x".repeat(DEFAULT_BODY_LIMIT + 1)
+    });
+    expect(res.json()).toEqual({ error: "PAYLOAD_TOO_LARGE" });
     expect(res.statusCode).toBe(413);
   });
 

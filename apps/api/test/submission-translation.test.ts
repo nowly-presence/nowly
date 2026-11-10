@@ -199,4 +199,17 @@ describe("translateDefinition", () => {
     expect(calls).toBeGreaterThan(1);
     vi.useRealTimers();
   });
+
+  it("does not retry a client error from the model", async () => {
+    let calls = 0;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        calls += 1;
+        return new Response("{}", { status: 400 });
+      })
+    );
+    await expect(translateDefinition(english())).rejects.toThrow("Workers AI answered 400");
+    expect(calls).toBe(2);
+  });
 });

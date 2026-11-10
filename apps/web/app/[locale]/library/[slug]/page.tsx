@@ -1,10 +1,11 @@
 import { PresenceView } from "@/features/library/components/presence-view";
-import { getPresenceGuide } from "@/features/library/lib/presence-guide";
+import { getContentEntry } from "@/features/content/lib/content-files";
 import { presenceSeoKeywords } from "@/features/library/lib/presence-seo";
 import { localizedDescription } from "@/lib/library-catalog";
 import { presenceIndexLocales } from "@/lib/library-catalog-server";
 import { WebPageJsonLd } from "@/features/seo/components/web-page-json-ld";
-import { getPresenceBySlug, getPresenceCatalog, getPresenceStats, getPresenceVersionHistory, presenceLogoUrl } from "@/lib/presence-api";
+import { getPresenceBySlug, getPresenceCatalog, getPresenceStats, getPresenceVersionHistory } from "@/lib/presence-api";
+import { presenceLogoUrl } from "@/lib/presence-api-client";
 import { createMetadata } from "@/features/seo/lib/seo";
 import { permanentRedirect } from "@/i18n/navigation";
 import { FALLBACK_LOCALE, getValidLocale } from "@nowly/locales";
@@ -39,7 +40,7 @@ export const generateMetadata = async ({ params }: PresencePageProps): Promise<M
   }
 
   const seoTitle = `${presence.name} Discord Rich Presence`;
-  const guide = getPresenceGuide(presence.slug, locale);
+  const guide = getContentEntry("presences", presence.slug, locale);
   const indexLocales = presenceIndexLocales(presence);
 
   return createMetadata({
@@ -82,7 +83,7 @@ const Page = async ({ params }: PresencePageProps) => {
 
   const library = await getTranslations("pages.library");
 
-  const guide = getPresenceGuide(presence.slug, locale);
+  const guide = getContentEntry("presences", presence.slug, locale);
   return (
     <>
       <WebPageJsonLd

@@ -9,6 +9,7 @@ import { getDeviceToken } from "@/background/storage/device.store";
 import { clearSyncState, EMPTY_SYNC_STATE, getSyncState, setSyncState, type SyncState } from "@/background/storage/sync.store";
 import { EXTENSION_SYNC_KEYS, hasMeaningfulLocalData, LOCAL_SYNC_STORAGE_KEYS, mergeSyncValue, syncEqual, type ExtensionSyncKey } from "@/shared/account-sync";
 import type { AccountSnapshot, StoredAccount, SyncChoice } from "@/shared/types";
+import { createDebouncedTask } from "@/background/services/debounced-task";
 
 export const ACCOUNT_SYNC_ALARM = "account-sync";
 export const ACCOUNT_SYNC_PERIOD_MINUTES = 5;
@@ -387,15 +388,7 @@ export const openAccountConnect = async (permission: "creator" | "admin" | null 
   await chrome.tabs.create({ url: `${getEffectiveWebUrl().replace(/\/$/, "")}/extension/connect?${params.toString()}` });
 };
 
-let pushTimer: ReturnType<typeof setTimeout> | null = null;
-
-const scheduleLocalPush = (): void => {
-  if (pushTimer) clearTimeout(pushTimer);
-  pushTimer = setTimeout(() => {
-    pushTimer = null;
-    void runAccountSync("push");
-  }, LOCAL_CHANGE_DEBOUNCE_MS);
-};
+const scheduleLocalPush = createDebouncedTask(() => void runAccountSync("push"), LOCAL_CHANGE_DEBOUNCE_MS);
 
 const SYNCED_STORAGE_KEYS = new Set(Object.values(LOCAL_SYNC_STORAGE_KEYS));
 

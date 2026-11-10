@@ -1,7 +1,7 @@
 import { ButtonLink } from "@nowly/ui/button-link";
 import type { Metadata } from "next";
 import "./globals.css";
-import { satoshi } from "./fonts";
+import { satoshi } from "@nowly/ui/fonts";
 
 // Bypasses the app's normal rendering (no access to next-intl / [locale] context), so this
 // must import its own styles/fonts and stay plain English - see not-found.md "Good to know".

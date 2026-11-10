@@ -9,9 +9,13 @@ describe("public activity content protocol", () => {
   });
   it("forwards only exact-origin same-window publication requests", async () => {
     vi.useFakeTimers();
+    let markPosted = () => {};
+    const posted = new Promise<void>((resolve) => {
+      markPosted = resolve;
+    });
     const target = Object.assign(new EventTarget(), {
       location: { origin: "https://nowly.me" },
-      postMessage: vi.fn(),
+      postMessage: vi.fn(() => markPosted()),
       setInterval,
       clearInterval
     });
@@ -44,15 +48,16 @@ describe("public activity content protocol", () => {
     receive("https://nowly.me", {});
     expect(send).not.toHaveBeenCalled();
     receive("https://nowly.me", target);
-    await Promise.resolve();
-    await Promise.resolve();
-    expect(send).toHaveBeenCalledWith({
+    await posted;
+    expect(send).toHaveBeenCalledExactlyOnceWith({
       source: "PRESENCES_CONTENT",
       type: "GET_ACTIVITY_PUBLICATION_STATUS",
       payload: { id: "a".repeat(32) }
     });
-    expect(target.postMessage).toHaveBeenCalledWith(
+    expect(target.postMessage).toHaveBeenCalledExactlyOnceWith(
       expect.objectContaining({
+        source: "Nowly",
+        type: "GET_ACTIVITY_PUBLICATION_STATUS_RESULT",
         payload: { ok: true },
         messageId: "review"
       }),

@@ -14,7 +14,6 @@ $ReleaseDir = Join-Path (Join-Path $RootDir 'releases') $Version
 Write-Host "=== Publishing Nowly Host v$Version to CDN ==="
 Write-Host ""
 
-# Check all required files exist
 $RequiredFiles = @(
   'nowly-setup.exe',
   'nowly-windows.zip',

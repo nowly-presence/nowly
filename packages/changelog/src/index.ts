@@ -46,7 +46,6 @@ const parseSlug = (name: string): ParsedSlug | null => {
 const compareDesc = (a: ParsedSlug, b: ParsedSlug): number =>
   b.parts[0] - a.parts[0] || b.parts[1] - a.parts[1] || b.parts[2] - a.parts[2] || b.parts[3] - a.parts[3];
 
-/** Every version slug found in content/, newest first. Add a version = add a folder here. */
 export const getChangelogSlugs = (): string[] => {
   if (!existsSync(CONTENT_ROOT)) return [];
 
@@ -68,17 +67,9 @@ export const getChangelogLocales = (slug: string): string[] => {
     .map((file) => file.replace(/\.mdx$/, ""));
 };
 
-const readFile = (slug: string, locale: string): {
-  data: Record<string, unknown>;
-  content: string;
-} | null => {
-  const localizedPath = join(CONTENT_ROOT, slug, `${locale}.mdx`);
-  const fallbackPath = join(CONTENT_ROOT, slug, "en-US.mdx");
-  const path = existsSync(localizedPath) ? localizedPath : fallbackPath;
-
-  if (!existsSync(path)) return null;
-
-  return matter(readFileSync(path, "utf-8"));
+const readLocale = (slug: string, locale: string) => {
+  const path = join(CONTENT_ROOT, slug, `${locale}.mdx`);
+  return existsSync(path) ? matter(readFileSync(path, "utf-8")) : null;
 };
 
 // js-yaml parses an unquoted `date: 2026-09-17` into a Date, not a string.
@@ -91,46 +82,32 @@ const toDateString = (value: unknown): string | null => {
 
 const isChangelogStore = (value: unknown): value is ChangelogStore => value === "chrome" || value === "firefox";
 
-const toFrontmatter = (data: Record<string, unknown>, fallbackTitle: string): ChangelogFrontmatter => ({
+const toFrontmatter = (data: Record<string, unknown>, fallbackTitle: string, date: unknown): ChangelogFrontmatter => ({
   title: typeof data.title === "string" ? data.title : fallbackTitle,
-  date: toDateString(data.date),
+  date: toDateString(date),
   description: typeof data.description === "string" ? data.description : "",
   banner: typeof data.banner === "string" ? data.banner : undefined,
   stores: Array.isArray(data.stores) ? data.stores.filter(isChangelogStore) : undefined
 });
 
-// Translated files may carry a human-readable date ("1er octobre 2026"). The release date is data,
-// not copy: always read it from en-US so the publication check and sitemap stay locale-independent.
-const releaseDate = (slug: string, data: Record<string, unknown>): string | null => {
-  const sourcePath = join(CONTENT_ROOT, slug, "en-US.mdx");
-  return toDateString(existsSync(sourcePath) ? matter(readFileSync(sourcePath, "utf-8")).data.date : data.date);
-};
-
-const toLocalizedFrontmatter = (slug: string, data: Record<string, unknown>): ChangelogFrontmatter => ({
-  ...toFrontmatter(data, slug.replace(/-/g, ".")),
-  date: releaseDate(slug, data)
-});
-
-export const getChangelogFrontmatter = (slug: string, locale: string): ChangelogFrontmatter | null => {
-  const file = readFile(slug, locale);
-  return file ? toLocalizedFrontmatter(slug, file.data) : null;
-};
-
 export const getChangelogBody = (slug: string, locale: string): {
   frontmatter: ChangelogFrontmatter;
   content: string;
 } | null => {
-  const file = readFile(slug, locale);
+  const source = readLocale(slug, "en-US");
+  const file = (locale === "en-US" ? source : readLocale(slug, locale)) ?? source;
 
   if (!file) return null;
 
+  // Translations may carry human-readable dates. Publication uses the English release date when that file exists.
   return {
-    frontmatter: toLocalizedFrontmatter(slug, file.data),
+    frontmatter: toFrontmatter(file.data, slug.replace(/-/g, "."), (source ?? file).data.date),
     content: file.content
   };
 };
 
-/** All releases, newest first, with frontmatter resolved for the given locale (falls back to en-US). */
+export const getChangelogFrontmatter = (slug: string, locale: string): ChangelogFrontmatter | null => getChangelogBody(slug, locale)?.frontmatter ?? null;
+
 export const getChangelogList = (locale: string): ChangelogEntry[] =>
   getChangelogSlugs().flatMap((slug) => {
     const frontmatter = getChangelogFrontmatter(slug, locale);
@@ -145,8 +122,6 @@ export const getChangelogList = (locale: string): ChangelogEntry[] =>
       }
     ];
   });
-
-export const getLatestChangelogEntry = (locale: string): ChangelogEntry | null => getChangelogList(locale)[0] ?? null;
 
 export const parseChangelogVersion = (value: string): {
   version: string;

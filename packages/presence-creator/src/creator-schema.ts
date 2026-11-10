@@ -1,6 +1,8 @@
 import { SUPPORTED_LOCALES } from "@nowly/locales";
 import { z } from "zod";
+import { BUTTONS_MAX, FEATURE_MAX_LENGTH, FEATURES_MAX, PRESENCE_NAME_MAX_LENGTH } from "./creator-draft";
 import { CREATOR_STEPS, type CreatorDraft } from "./creator-types";
+import { DESCRIPTION_MAX_LENGTH, LONG_DESCRIPTION_MAX_LENGTH } from "./creator-validation";
 
 export const CREATOR_ID_PATTERN = /^[A-Za-z0-9]{8}$/;
 export const PAGES_MAX = 20;
@@ -10,17 +12,11 @@ export const SELECTOR_MAX_LENGTH = 300;
 export const TEMPLATE_MAX_LENGTH = 256;
 export const PAGE_TEXT_MAX_LENGTH = 128;
 export const BUTTON_LABEL_MAX_LENGTH = 32;
-export const BUTTONS_LIMIT = 2;
 export const DOMAINS_MAX = 10;
 export const DOMAIN_MAX_LENGTH = 253;
 export const PATH_MAX_LENGTH = 256;
 export const SAMPLE_MAX_LENGTH = 512;
 export const AUTHOR_NAME_MAX_LENGTH = 128;
-const NAME_MAX_LENGTH = 40;
-const DESCRIPTION_MAX = 120;
-const LONG_DESCRIPTION_MAX = 600;
-const FEATURES_LIMIT = 5;
-const FEATURE_LENGTH = 80;
 const VARIABLE_NAME = /^[a-z][a-zA-Z0-9]{0,31}$/;
 const CONTROL_CHARACTERS = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/;
 
@@ -111,7 +107,7 @@ const pageSchema = z.object({
   state: localized(PAGE_TEXT_MAX_LENGTH),
   largeImage: imageSchema,
   timestamps: z.enum(["media", "elapsed"]),
-  buttons: z.array(buttonSchema).max(BUTTONS_LIMIT)
+  buttons: z.array(buttonSchema).max(BUTTONS_MAX)
 });
 
 export const creatorDefinitionSchema = z.object({
@@ -119,16 +115,16 @@ export const creatorDefinitionSchema = z.object({
   createdAt: z.number().int().nonnegative(),
   updatedAt: z.number().int().nonnegative(),
   step: z.enum(CREATOR_STEPS),
-  name: plainText(NAME_MAX_LENGTH),
+  name: plainText(PRESENCE_NAME_MAX_LENGTH),
   domains: z.array(z.string().min(1).max(DOMAIN_MAX_LENGTH)).min(1).max(DOMAINS_MAX),
   color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
   category: z.enum(["streaming", "music", "video", "social", "gaming", "tools", "ai", "learning", "creator", "other"]),
   baseLocale: z.enum(SUPPORTED_LOCALES),
   translationMode: z.enum(["manual", "auto"]),
   locales: z.array(z.enum(SUPPORTED_LOCALES)).max(SUPPORTED_LOCALES.length),
-  description: localized(DESCRIPTION_MAX),
-  longDescription: localized(LONG_DESCRIPTION_MAX),
-  features: z.array(localized(FEATURE_LENGTH)).max(FEATURES_LIMIT),
+  description: localized(DESCRIPTION_MAX_LENGTH),
+  longDescription: localized(LONG_DESCRIPTION_MAX_LENGTH),
+  features: z.array(localized(FEATURE_MAX_LENGTH)).max(FEATURES_MAX),
   pages: z.array(pageSchema).min(1).max(PAGES_MAX),
   browsingFallback: z.boolean(),
   author: z.object({

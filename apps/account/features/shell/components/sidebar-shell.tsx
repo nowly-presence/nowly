@@ -2,7 +2,7 @@
 
 import { useSessionUser } from "@/features/account/components/session-provider";
 import { signOutAccount } from "@/features/account/lib/account-api";
-import { BrandLockup } from "@/features/shell/components/brand-lockup";
+import { BrandLockup } from "@nowly/ui/brand-lockup";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Avatar, AvatarFallback, AvatarImage, Badge, Button } from "@nowly/ui";
 import { RiLogoutBoxRLine } from "@nowly/ui/icons";

@@ -95,4 +95,5 @@ export const handleCreatorGetAccount: Handler<"CREATOR_GET_ACCOUNT"> = () => get
 export const handleCreatorSubmit: Handler<"CREATOR_SUBMIT"> = (payload) => submitPresence(payload);
 
 export const handleCreatorFetchSubmissions: Handler<"CREATOR_FETCH_SUBMISSIONS"> = ({ ids }) => fetchSubmissions(ids);
+
 export const handleCreatorSyncDrafts: Handler<"CREATOR_SYNC_DRAFTS"> = () => syncCreatorDrafts();

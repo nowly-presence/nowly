@@ -3,6 +3,7 @@ import { z } from "zod";
 export const ANNOUNCEMENT_LIMIT = 100;
 export const ANNOUNCEMENT_BODY_LIMIT = 131_072;
 export const ANNOUNCEMENT_FEED_LIMIT = 3_000_000;
+export const ANNOUNCEMENT_TRANSLATIONS_MAX_BYTES = 24_000;
 const timestamp = z.iso.datetime({ offset: true });
 export const ANNOUNCEMENT_LOCALES = ["en", "fr", "es", "de", "pt-BR", "pl", "ja", "ko", "tr", "ms", "el"] as const;
 
@@ -16,7 +17,10 @@ const TranslationSchema = z.strictObject({
 const TranslationsSchema = z
   .partialRecord(z.enum(ANNOUNCEMENT_LOCALES), TranslationSchema)
   .refine((value) => Object.keys(value).length > 0, "At least one translation is required")
-  .refine((value) => new TextEncoder().encode(JSON.stringify(value)).byteLength <= 24_000, "Translations exceed 24000 bytes");
+  .refine(
+    (value) => new TextEncoder().encode(JSON.stringify(value)).byteLength <= ANNOUNCEMENT_TRANSLATIONS_MAX_BYTES,
+    `Translations exceed ${ANNOUNCEMENT_TRANSLATIONS_MAX_BYTES} bytes`
+  );
 const fields = {
   translations: TranslationsSchema,
   kind: z.enum(["normal", "warning", "maintenance"]),

@@ -2,7 +2,7 @@ import { canonicalJson } from "@nowly/shared";
 import { publicationSchema, PUBLICATION_MAX_BYTES, type PortableActivity, type PublicationReview } from "@nowly/shared/activity-publication";
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 
-export const publicationFingerprint = async (activity: PortableActivity): Promise<string> => {
+const publicationFingerprint = async (activity: PortableActivity): Promise<string> => {
   const bytes = new TextEncoder().encode(canonicalJson(activity));
   const hash = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes));
   return Array.from(hash, (byte) => byte.toString(16).padStart(2, "0")).join("");

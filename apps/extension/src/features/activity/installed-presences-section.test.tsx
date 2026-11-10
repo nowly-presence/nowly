@@ -129,7 +129,6 @@ describe("installed presence header bulk action", () => {
     availableUpdates = presences.slice(0, 2);
     const [bulk, toggle] = actionButtons();
 
-    expect(bulk?.type).toBe(Button);
     expect(bulk?.props.children).toBe(en["activity.updateAll"]);
 
     bulk?.props.onClick?.({} as Parameters<NonNullable<ComponentProps<typeof Button>["onClick"]>>[0]);

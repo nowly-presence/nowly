@@ -1,4 +1,5 @@
 import { checkCreatorImages } from "@/features/presence-submissions/submission-images";
+import sharp from "sharp";
 import { beforeAll, describe, expect, it } from "vitest";
 import { creatorImages, jpegImage, pngImage } from "./creator-images.fixture";
 
@@ -10,13 +11,28 @@ beforeAll(async () => {
 
 describe("creator image checks", () => {
   it("accepts the three images and re-encodes them", async () => {
-    const check = await checkCreatorImages(valid);
-    expect(check.ok).toBe(true);
-    expect(check.ok && check.images.map((image) => [image.kind, image.fileName, image.contentType])).toEqual([
+    const original = Buffer.from(valid.thumbnail.split(",")[1], "base64");
+    const withMetadata = await sharp(original).withMetadata({ density: 300 }).jpeg().toBuffer();
+    expect((await sharp(withMetadata).metadata()).exif).toBeInstanceOf(Buffer);
+    const check = await checkCreatorImages({
+      ...valid,
+      thumbnail: `data:image/jpeg;base64,${withMetadata.toString("base64")}`
+    });
+
+    if (!check.ok) throw new Error(`Image validation failed for ${check.kind}: ${check.reason}`);
+
+    expect(check.images.map((image) => [image.kind, image.fileName, image.contentType])).toEqual([
       ["thumbnail", "thumbnail.jpg", "image/jpeg"],
       ["logo", "logo.png", "image/png"],
       ["icon", "icon.png", "image/png"]
     ]);
+    const output = await sharp(check.images[0].bytes).metadata();
+    expect(output).toMatchObject({
+      width: 1920,
+      height: 1080,
+      format: "jpeg"
+    });
+    expect(output.exif).toBeUndefined();
   });
 
   it("refuses wrong dimensions", async () => {

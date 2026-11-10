@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@nowly/locales": "workspace:*",
+    "@nowly/presence-creator": "workspace:*",
     "@nowly/shared": "workspace:*",
     "@nowly/ui": "workspace:*",
     "@remixicon/react": "^4.9.0",

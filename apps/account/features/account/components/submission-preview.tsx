@@ -1,12 +1,10 @@
 "use client";
 
-import type { SubmissionAssets, SubmissionDefinition, SubmissionPage } from "@/features/account/lib/submission-api";
-import { pickText } from "@/features/account/lib/submission-text";
-import { Badge, Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
+import type { SubmissionAssets, SubmissionDefinition } from "@/features/account/lib/submission-api";
+import { pageButtons, pickText } from "@/features/account/lib/submission-text";
+import { Badge, Card, CardContent, CardTitle } from "@nowly/ui";
 import { RiCheckboxCircleLine } from "@nowly/ui/icons";
 import { useLocale, useTranslations } from "next-intl";
-
-const pageButtons = (page: SubmissionPage) => page.buttons ?? (page.button?.enabled ? [{ label: page.button.label }] : []);
 
 export const SubmissionPreview = ({ definition, assets }: {
   definition: SubmissionDefinition;

@@ -53,32 +53,8 @@ vi.mock("@/features/layout/dock", () => ({
 vi.mock("@/features/activity/activity-view", () => ({
   ActivityView: () => <div>Activity screen</div>
 }));
-vi.mock("@/features/library/library-view", () => ({
-  LibraryView: () => <div>Library screen</div>
-}));
-vi.mock("@/features/custom-activity/custom-activity-view", () => ({
-  CustomActivityView: () => <div>Custom screen</div>
-}));
-vi.mock("@/features/settings/settings-view", () => ({
-  SettingsView: () => <div>Settings screen</div>
-}));
 vi.mock("@/features/announcements/announcements-view", () => ({
   AnnouncementsView: () => <div>News screen</div>
-}));
-vi.mock("@/features/presence/presence-detail-view", () => ({
-  PresenceDetailView: () => <div>Presence detail</div>
-}));
-vi.mock("@/features/diagnostics/connection-view", () => ({
-  ConnectionView: () => <div>Connection screen</div>
-}));
-vi.mock("@/features/runtime-logs/runtime-logs-view", () => ({
-  RuntimeLogsView: () => <div>Logs screen</div>
-}));
-vi.mock("@/features/custom-activity/custom-activity-editor-view", () => ({
-  CustomActivityEditorView: () => <div>Custom editor</div>
-}));
-vi.mock("@/features/discord-ipc/discord-ipc-view", () => ({
-  DiscordIpcView: () => <div>Discord IPC screen</div>
 }));
 vi.mock("@/features/announcements/announcements-banner", () => ({
   AnnouncementsBanner: () => <aside>Global announcement</aside>
@@ -126,34 +102,12 @@ describe("app announcement layers", () => {
     expect(html).toContain("App dock");
   });
 
-  it.each<Tab>(["store", "custom", "settings", "announcements"])("does not show the banner on the %s tab", async (value) => {
-    tab = value;
+  it("leaves the announcement list visible without duplicating it with a banner", async () => {
+    tab = "announcements";
     const html = await renderApp();
+    expect(html).toContain("News screen");
     expect(html).not.toContain("Global announcement");
     expect(html).toContain("App dock");
-  });
-
-  it.each<Route>([
-    {
-      name: "announcement",
-      id: "notice"
-    },
-    {
-      name: "presence",
-      slug: "nowly"
-    },
-    { name: "connection" },
-    { name: "logs" },
-    {
-      name: "custom-activity",
-      id: null
-    },
-    { name: "discord-ipc" }
-  ])("does not show the banner on pushed route $name", async (route) => {
-    stack = [route];
-    const html = await renderApp();
-    expect(html).not.toContain("Global announcement");
-    expect(html).toContain("Activity screen");
   });
 
   it.each([false, true])("keeps onboarding banner-free, including replay=%s", async (replay) => {

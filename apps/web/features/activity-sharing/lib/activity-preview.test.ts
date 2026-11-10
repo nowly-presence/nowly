@@ -1,8 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { PortableActivity } from "@nowly/shared";
 import { previewClock, previewHeader, previewImage, previewLines } from "./activity-preview";
-import { publicationColors, publicationIcons } from "@nowly/shared/activity-publication";
-import { ACTIVITY_ICON_COLORS, ACTIVITY_ICON_KEYS } from "../../../app/api/activity-icon/activity-icons";
 
 const activity: PortableActivity = {
   name: "Study session",
@@ -26,10 +24,6 @@ const activity: PortableActivity = {
 };
 
 describe("custom activity public preview parity", () => {
-  it("accepts exactly the deployed icon route keys and colors", () => {
-    expect(publicationIcons).toEqual(ACTIVITY_ICON_KEYS);
-    expect(publicationColors.map((color) => color.slice(1))).toEqual(ACTIVITY_ICON_COLORS);
-  });
   it("matches LiveCard name, details and state layouts for all supported types", () => {
     expect(previewHeader(activity)).toBe("playing");
     expect(previewLines(activity)).toEqual([activity.name, activity.details, activity.state]);

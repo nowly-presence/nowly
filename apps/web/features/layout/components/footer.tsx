@@ -1,4 +1,4 @@
-import { BrandLockup } from "@/features/layout/components/brand-lockup";
+import { BrandLockup } from "@nowly/ui/brand-lockup";
 import { FooterActions } from "@/features/layout/components/footer-actions";
 import { Footer as SharedFooter } from "@nowly/ui/footer";
 

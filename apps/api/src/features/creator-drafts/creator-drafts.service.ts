@@ -1,7 +1,7 @@
 import { getDb } from "@/db/client";
 import { creatorDraft } from "@nowly/database/schema/creator";
 import { jsonByteLength } from "@nowly/shared";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { CREATOR_DRAFT_MAX_BYTES, CREATOR_DRAFTS_MAX } from "./creator-drafts.schemas";
 
 export type DraftIndexEntry = {
@@ -34,6 +34,20 @@ export const listDraftIndex = async (userId: string): Promise<DraftIndexEntry[]>
   return rows;
 };
 
+export const exportCreatorDrafts = async (userId: string) => {
+  const rows = await getDb()
+    .select({
+      id: creatorDraft.draftId,
+      value: creatorDraft.value,
+      updatedAt: creatorDraft.draftUpdatedAt,
+      deleted: creatorDraft.deleted
+    })
+    .from(creatorDraft)
+    .where(eq(creatorDraft.userId, userId))
+    .orderBy(desc(creatorDraft.draftUpdatedAt));
+  return rows;
+};
+
 export const getDraft = async (userId: string, draftId: string) => {
   const [row] = await getDb()
     .select({
@@ -47,7 +61,14 @@ export const getDraft = async (userId: string, draftId: string) => {
   return row && !row.deleted ? row : null;
 };
 
-export const putDraft = async (input: { userId: string; draftId: string; updatedAt: number; value: { id: string } }): Promise<DraftPutResult> => {
+export const putDraft = async (input: {
+  userId: string;
+  draftId: string;
+  updatedAt: number;
+  value: {
+    id: string;
+  };
+}): Promise<DraftPutResult> => {
   if (input.value.id !== input.draftId) return {
     ok: false,
     error: "DRAFT_ID_MISMATCH"
@@ -58,6 +79,7 @@ export const putDraft = async (input: { userId: string; draftId: string; updated
   };
 
   const index = await listDraftIndex(input.userId);
+
   const existing = index.find((entry) => entry.id === input.draftId);
 
   if (existing && existing.updatedAt > input.updatedAt) return {

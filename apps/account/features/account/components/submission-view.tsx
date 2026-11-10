@@ -7,64 +7,19 @@ import { SubmissionPreview } from "@/features/account/components/submission-prev
 import { SubmissionReviewForm } from "@/features/account/components/submission-review-form";
 import { SubmissionStatusBadge } from "@/features/account/components/submission-status-badge";
 import { SubmissionThread } from "@/features/account/components/submission-thread";
-import { useSessionUser } from "@/features/account/components/session-provider";
-import { fetchSubmission, publishSubmission, sendReview, SubmissionRequestError, type FieldComment, type ReviewVerdict, type SubmissionDetail } from "@/features/account/lib/submission-api";
-import { allowedVerdicts, PUBLISHABLE_STATUSES } from "@/features/account/lib/submission-text";
+import { publishSubmission, sendReview, type FieldComment, type ReviewVerdict } from "@/features/account/lib/submission-api";
+import { submissionSubtitle } from "@/features/account/lib/submission-text";
+import { useSubmission } from "@/features/account/lib/use-submission";
 import { ButtonLink } from "@/components/button-link";
 import { Button } from "@nowly/ui";
 import { RiArrowLeftLine, RiExternalLinkLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
-
-type Status = "checking" | "not-found" | "ready" | "error";
-
-const errorMessageKey = (error: unknown): "error-stale" | "error-forbidden" | "action-error" => {
-  if (error instanceof SubmissionRequestError) {
-    if (error.code === "STALE_REVISION") return "error-stale";
-    if (error.status === 403) return "error-forbidden";
-  }
-
-  return "action-error";
-};
 
 export const SubmissionView = ({ id }: {
   id: string;
 }) => {
   const t = useTranslations("submissionPage");
-  const [status, setStatus] = useState<Status>("checking");
-  const user = useSessionUser();
-  const [detail, setDetail] = useState<SubmissionDetail | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const load = useCallback(async (): Promise<void> => {
-    try {
-      setDetail(await fetchSubmission(id));
-      setStatus("ready");
-    } catch (failure) {
-      setStatus(failure instanceof SubmissionRequestError && failure.status === 404 ? "not-found" : "error");
-    }
-  }, [id]);
-
-  useEffect(() => {
-    void load();
-  }, [load]);
-
-  const act = async (action: () => Promise<void>): Promise<boolean> => {
-    setBusy(true);
-    setError(null);
-
-    try {
-      await action();
-      setDetail(await fetchSubmission(id));
-      return true;
-    } catch (failure) {
-      setError(t(errorMessageKey(failure)));
-      return false;
-    } finally {
-      setBusy(false);
-    }
-  };
+  const { load, detail, busy, error, act, reviewer, publisher, canPublish, verdicts } = useSubmission(id);
 
   const onReview = (review: {
     verdict: ReviewVerdict;
@@ -87,12 +42,6 @@ export const SubmissionView = ({ id }: {
     void act(() => publishSubmission(id, detail.revision));
   };
 
-  const isAuthor = detail?.author?.id === user.id;
-  const reviewer = user.capabilities.includes("review") && !isAuthor;
-  const publisher = user.capabilities.includes("publish");
-  const verdicts = detail ? allowedVerdicts(detail.status) : [];
-  const canPublish = publisher && detail !== null && PUBLISHABLE_STATUSES.includes(detail.status);
-
   return (
     <>
       <ButtonLink href="/creations" variant="ghost" size="sm">
@@ -104,11 +53,11 @@ export const SubmissionView = ({ id }: {
         <PageHeader title={detail?.name ?? t("title")} description={t("description")} />
       </div>
 
-      {status === "checking" ? <p className="mt-6 text-sm text-muted-foreground">{t("checking")}</p> : null}
-      {status === "error" ? <p className="mt-6 text-sm text-destructive">{t("action-error")}</p> : null}
-      {status === "not-found" ? <p className="mt-6 text-sm text-muted-foreground">{t("not-found")}</p> : null}
+      {load === "checking" ? <p className="mt-6 text-sm text-muted-foreground">{t("checking")}</p> : null}
+      {load === "error" ? <p className="mt-6 text-sm text-destructive">{t("action-error")}</p> : null}
+      {load === "not-found" ? <p className="mt-6 text-sm text-muted-foreground">{t("not-found")}</p> : null}
 
-      {status === "ready" && detail ? (
+      {load === "ready" && detail ? (
         <div className="mt-2 flex flex-col gap-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex min-w-0 flex-col gap-2">
@@ -116,15 +65,7 @@ export const SubmissionView = ({ id }: {
                 <SubmissionStatusBadge status={detail.status} />
               </div>
               <p className="flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground">
-                <span>
-                  {[
-                    detail.kind === "update" ? t("kind-update") : t("kind-create"),
-                    t("revision-heading", { number: detail.revision }),
-                    detail.author?.name ? t("by-author", { name: detail.author.name }) : null
-                  ]
-                    .filter(Boolean)
-                    .join(", ")}
-                </span>
+                <span>{submissionSubtitle(detail, t)}</span>
                 {detail.pullRequest.url ? (
                   <a
                     href={detail.pullRequest.url}

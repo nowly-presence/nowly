@@ -1,37 +1,17 @@
 import { createCacheId, fetchImage, parseProxyUrl } from "@/features/image-proxy/image-proxy.service";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { createImageProxyCatalog } from "./image-proxy.fixture";
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
-const mockPresenceRepo = vi.hoisted(() => ({ getAllPresenceMetas: vi.fn() }));
-
-vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo);
-vi.mock("@/db/client", () => ({
-  getDb: vi.fn(() => ({})),
-  hasDatabase: vi.fn(() => true)
-}));
-
 describe("parseProxyUrl", () => {
-  beforeEach(() => {
-    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([
-      {
-        slug: "tiktok",
-        metadata: {
-          imageProxy: {
-            hostSuffixes: ["tiktokcdn.com"]
-          }
-        }
-      },
-      {
-        slug: "canalplus",
-        metadata: {
-          imageProxy: {
-            hostSuffixes: ["thumb.canalplus.pro"]
-          }
-        }
-      }
-    ]);
+  let database: Awaited<ReturnType<typeof createImageProxyCatalog>>;
+
+  beforeAll(async () => {
+    database = await createImageProxyCatalog();
   });
+
+  afterAll(() => database.close());
 
   it("matches a known service by host suffix", async () => {
     const result = await parseProxyUrl("https://p16.tiktokcdn.com/foo.jpg");
@@ -74,17 +54,15 @@ describe("parseProxyUrl", () => {
   });
 
   it("rejects an unknown serviceId", async () => {
-    expect(await parseProxyUrl("https://example.com/foo.jpg", "some-new-presence")).toBeNull();
+    expect(await parseProxyUrl("https://p16.tiktokcdn.com/foo.jpg", "some-new-presence")).toBeNull();
   });
 });
 
 describe("createCacheId", () => {
-  it("is deterministic for the same input", () => {
-    expect(createCacheId("generic", "https://a.com/x.png")).toBe(createCacheId("generic", "https://a.com/x.png"));
-  });
-
   it("differs for different services or urls", () => {
-    expect(createCacheId("generic", "https://a.com/x.png")).not.toBe(createCacheId("twitch", "https://a.com/x.png"));
+    const key = createCacheId("generic", "https://a.com/x.png");
+    expect(key).not.toBe(createCacheId("twitch", "https://a.com/x.png"));
+    expect(key).not.toBe(createCacheId("generic", "https://a.com/y.png"));
   });
 });
 

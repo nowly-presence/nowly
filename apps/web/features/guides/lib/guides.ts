@@ -3,7 +3,7 @@ import { SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
 
 export const GUIDE_CATEGORIES = ["start", "troubleshooting", "privacy", "discord", "developers"] as const;
 
-export type GuideCategory = (typeof GUIDE_CATEGORIES)[number];
+type GuideCategory = (typeof GUIDE_CATEGORIES)[number];
 
 export type Guide = {
   slug: string;

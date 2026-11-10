@@ -14,7 +14,6 @@ $ReleaseDir = Join-Path (Join-Path $RootDir 'releases') $Version
 Write-Host "=== Nowly Host v$Version release ==="
 Write-Host ""
 
-# Build binaries
 Write-Host ">> Building binaries..."
 New-Item -ItemType Directory -Force -Path $DistDir | Out-Null
 
@@ -46,10 +45,8 @@ python -m pip install --quiet pillow
 python (Join-Path $ScriptDir 'make-installer-ico.py') --png (Join-Path $RootDir 'assets\icon.png') --out (Join-Path $RootDir 'installer.ico')
 Write-Host ""
 
-# Create release directory
 New-Item -ItemType Directory -Force -Path $ReleaseDir | Out-Null
 
-# Windows installer (Inno Setup)
 $Iscc = Get-Command 'iscc' -ErrorAction SilentlyContinue
 if (-not $Iscc) {
   $isccPaths = @(
@@ -75,7 +72,6 @@ if ($Iscc) {
 }
 Write-Host ""
 
-# Windows portable
 $HostExe = Join-Path $DistDir 'nowly-host.exe'
 if (Test-Path $HostExe) {
   Write-Host ">> Creating Windows portable..."
@@ -85,7 +81,6 @@ if (Test-Path $HostExe) {
 }
 Write-Host ""
 
-# Linux archive
 $LinuxBin = Join-Path $DistDir 'nowly-host-linux'
 if (Test-Path $LinuxBin) {
   Write-Host ">> Creating Linux archive..."
@@ -95,7 +90,6 @@ if (Test-Path $LinuxBin) {
 }
 Write-Host ""
 
-# macOS archive
 $MacFiles = @()
 if (Test-Path (Join-Path $DistDir 'nowly-host-darwin')) { $MacFiles += 'nowly-host-darwin' }
 if (Test-Path (Join-Path $DistDir 'nowly-host-darwin-arm64')) { $MacFiles += 'nowly-host-darwin-arm64' }
@@ -107,7 +101,6 @@ if ($MacFiles.Count -gt 0) {
 }
 Write-Host ""
 
-# Generate latest.json
 Write-Host ">> Generating latest.json..."
 
 function Get-Sha256($path) {
@@ -161,7 +154,6 @@ $latest | ConvertTo-Json | Set-Content (Join-Path $ReleaseDir 'latest.json') -En
 Write-Host "   + latest.json"
 Write-Host ""
 
-# Summary
 Write-Host "=== Release v$Version ready ==="
 Write-Host "Output: $ReleaseDir"
 Write-Host ""

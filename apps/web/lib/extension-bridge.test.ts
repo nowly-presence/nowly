@@ -19,7 +19,7 @@ describe("extension bridge window boundary", () => {
       clearTimeout
     });
     vi.stubGlobal("window", target);
-    const { requestExtension, subscribeExtensionDetected } = await import("./extension-bridge");
+    const { requestExtension, subscribeExtensionDetected } = await import("@nowly/shared/web-bridge");
 
     const detected = vi.fn();
     subscribeExtensionDetected(detected);

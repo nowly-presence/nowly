@@ -1,7 +1,8 @@
 "use client";
 
 import { useExtensionDetected } from "@/hooks/use-extension";
-import { requestExtension, type ExtensionDeviceInfo } from "@/lib/extension-bridge";
+import { requestExtension } from "@nowly/shared/web-bridge";
+import type { ExtensionDeviceInfo } from "@nowly/shared/web-bridge-protocol";
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
 import { Button } from "@nowly/ui";
 import { RiHeartFill, RiHeartLine } from "@nowly/ui/icons";

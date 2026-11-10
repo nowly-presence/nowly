@@ -1,4 +1,8 @@
-import { apiBaseUrl } from "@/lib/api-base";
+import { apiFetch as request, isRecord } from "@/lib/api-client";
+import type { QueueFilter, ReviewVerdict } from "@nowly/presence-creator/creator-submission-policy";
+import type { SubmissionStatus } from "@nowly/presence-creator/creator-types";
+
+export type { QueueFilter, ReviewVerdict, SubmissionStatus };
 
 export type LocalizedText = Partial<Record<string, string>>;
 
@@ -46,9 +50,6 @@ export type SubmissionFieldChange = {
   page?: string;
   kind: "added" | "removed" | "changed";
 };
-
-export type SubmissionStatus = "submitted" | "changes_requested" | "approved" | "in_progress" | "published" | "rejected";
-export type ReviewVerdict = "approve" | "comment" | "request_changes" | "reject";
 
 export type SubmissionPerson = {
   id: string;
@@ -140,20 +141,12 @@ export class SubmissionRequestError extends Error {
   }
 }
 
-const request = async (path: string, init: RequestInit = {}): Promise<Response> =>
-  fetch(`${apiBaseUrl()}${path}`, {
-    ...init,
-    credentials: "include",
-    cache: "no-store",
-    headers: init.body ? { "Content-Type": "application/json", ...init.headers } : init.headers
-  });
-
 const readJson = async <T>(response: Response): Promise<T> => {
   if (response.ok) return (await response.json()) as T;
 
   const body: unknown = await response.json().catch(() => null);
 
-  const code = body && typeof body === "object" && "error" in body && typeof body.error === "string" ? body.error : null;
+  const code = isRecord(body) && typeof body.error === "string" ? body.error : null;
   throw new SubmissionRequestError(response.status, code);
 };
 
@@ -163,8 +156,6 @@ export const fetchCreations = async (): Promise<SubmissionListItem[]> =>
       items: SubmissionListItem[];
     }>(await request("/me/creations"))
   ).items;
-
-export type QueueFilter = "pending" | "in_progress" | "changes_requested" | "published" | "rejected" | "all";
 
 export type ReviewQueue = {
   items: QueueItem[];

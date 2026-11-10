@@ -1,6 +1,6 @@
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { BRAND_LOCKUP_BLUE } from "@/lib/brand";
+import { BRAND_LOCKUP_BLUE } from "@nowly/ui/brand";
 import { DISCORD_INVITE_URL, KOFI_URL, PROJECT_REPOSITORY_URL, TWITTER_URL } from "@/lib/constants";
 import type { LocaleString } from "@nowly/locales";
 import type { Metadata } from "next";
@@ -22,8 +22,7 @@ const hostnameOf = (value: string): string => {
 // Production is https-only; a plain-http base URL would leak into og:image / twitter:image and force a redirect.
 const forceHttpsOnProduction = (value: string): string => (/^http:\/\/(www\.)?nowly\.me(?=\/|$)/.test(value) ? value.replace(/^http:/, "https:") : value);
 
-export const SITE_URL = forceHttpsOnProduction(trimOrigin(process.env.NEXT_PUBLIC_BASE_URL ?? CANONICAL_ORIGIN));
-export const DOCS_URL = DOCS_ORIGIN;
+const SITE_URL = forceHttpsOnProduction(trimOrigin(process.env.NEXT_PUBLIC_BASE_URL ?? CANONICAL_ORIGIN));
 export const SITE_NAME = "Nowly";
 
 export { OG_IMAGE_VERSION } from "@nowly/og";

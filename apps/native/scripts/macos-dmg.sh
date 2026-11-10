@@ -31,7 +31,6 @@ rm -f "$DMG_PATH"
 rm -rf "$STAGING_DIR"
 mkdir -p "$STAGING_DIR"
 
-# Create a symlink to /Applications for drag-and-drop install
 cp -R "$APP_DIR" "$STAGING_DIR/"
 ln -s /Applications "$STAGING_DIR/Applications"
 

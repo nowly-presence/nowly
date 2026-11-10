@@ -1,8 +1,50 @@
 "use client";
 
-import { getExtensionDetected, isDevPresenceVersion, normalizePresenceVersion, parseInstalledMap, requestExtension, subscribeExtensionDetected, type ExtensionDiagnostic, type InstalledPresenceInfo } from "@/lib/extension-bridge";
+import { ExtensionRequestTimeoutError, getExtensionDetected, requestExtension, subscribeExtensionDetected } from "@nowly/shared/web-bridge";
+import type { ExtensionDiagnostic } from "@nowly/shared/web-bridge-protocol";
 import { fetchPresenceRelease } from "@/lib/presence-api-client";
 import { useCallback, useEffect, useState } from "react";
+
+type InstalledPresenceInfo = {
+  version: string | null;
+};
+
+const parseInstalledMap = (payload: unknown): Record<string, InstalledPresenceInfo> => {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) return {};
+
+  const row = payload as Record<string, unknown>;
+
+  if (row.ok === false) return {};
+
+  const installed: Record<string, InstalledPresenceInfo> = {};
+
+  for (const [slug, value] of Object.entries(row)) {
+    if (!value || typeof value !== "object") continue;
+
+    const entry = value as {
+      metadata?: {
+        version?: unknown;
+      };
+      release?: {
+        version?: unknown;
+      };
+    };
+    const releaseVersion = normalizePresenceVersion(entry.release?.version);
+    const metadataVersion = normalizePresenceVersion(entry.metadata?.version);
+    installed[slug] = { version: releaseVersion ?? metadataVersion };
+  }
+
+  return installed;
+};
+
+const normalizePresenceVersion = (value: unknown): string | null => {
+  if (typeof value !== "string") return null;
+
+  const version = value.trim().replace(/^v/i, "");
+  return version.length > 0 ? version : null;
+};
+
+const isDevPresenceVersion = (version: string | null): boolean => Boolean(version && /-dev\./.test(version));
 
 const isMobileBrowser = (): boolean => /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 
@@ -137,7 +179,7 @@ export const usePresenceExtension = (slug: string, latestVersion?: string | null
 
       return false;
     } catch (error) {
-      if (error instanceof Error && error.message.includes("timed out")) return "blocked";
+      if (error instanceof ExtensionRequestTimeoutError) return "blocked";
 
       return false;
     } finally {

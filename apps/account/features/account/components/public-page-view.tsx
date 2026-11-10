@@ -4,14 +4,12 @@ import { Frame } from "@/features/shell/components/frame";
 import { AccountPageFrame } from "@/features/account/components/account-page-frame";
 import { fetchPublicProfileSettings, PublicProfileError, savePublicProfileSettings, type PublicProfileSettings } from "@/features/account/lib/account-api";
 import { siteBaseUrl } from "@/lib/api-base";
-import { PUBLIC_LINK_MAX_LENGTH, PUBLIC_LINKS_MAX, socialKindOf } from "@nowly/shared";
+import { PUBLIC_BIO_MAX_LENGTH, PUBLIC_LINK_MAX_LENGTH, PUBLIC_LINKS_MAX, socialKindOf } from "@nowly/shared";
 import { Button, Checkbox, Field, FieldDescription, FieldLabel, InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, Switch, Textarea } from "@nowly/ui";
 import { RiAddLine, RiCloseLine } from "@nowly/ui/icons";
 import { SocialIcon } from "@nowly/ui/social-icon";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-
-const BIO_MAX_LENGTH = 280;
 
 type Feedback = "saved" | "taken" | "invalid" | "failed" | null;
 
@@ -71,7 +69,7 @@ export const PublicPageView = () => {
         <Frame
           className="max-w-xl"
           title={t("public-enabled")}
-          description={saved.handle ? `${t("public-address")} nowly.me/u/${saved.handle}` : t("public-handle-auto")}
+          description={saved.handle ? `${t("public-address")} ${siteBaseUrl().replace(/^https?:\/\//, "")}/u/${saved.handle}` : t("public-handle-auto")}
           action={<Switch checked={enabled} onCheckedChange={setEnabled} disabled={busy} aria-label={t("public-enabled")} />}
           footer={
             <>
@@ -92,63 +90,63 @@ export const PublicPageView = () => {
             </>
           }
         >
-            <Field>
-              <FieldLabel htmlFor="public-bio">{t("public-bio")}</FieldLabel>
-              <Textarea id="public-bio" value={bio} maxLength={BIO_MAX_LENGTH} disabled={busy} onChange={(event) => setBio(event.target.value)} />
-            </Field>
+          <Field>
+            <FieldLabel htmlFor="public-bio">{t("public-bio")}</FieldLabel>
+            <Textarea id="public-bio" value={bio} maxLength={PUBLIC_BIO_MAX_LENGTH} disabled={busy} onChange={(event) => setBio(event.target.value)} />
+          </Field>
 
-            <Field>
-              <FieldLabel>{t("public-links")}</FieldLabel>
-              <div className="flex flex-col gap-2">
-                {links.map((link, index) => (
-                  <InputGroup key={index}>
-                    <InputGroupAddon>
-                      <SocialIcon kind={socialKindOf(link)} />
-                    </InputGroupAddon>
-                    <InputGroupInput
-                      type="url"
-                      value={link}
-                      maxLength={PUBLIC_LINK_MAX_LENGTH}
-                      placeholder={t("public-link-placeholder")}
-                      aria-label={t("public-links")}
+          <Field>
+            <FieldLabel>{t("public-links")}</FieldLabel>
+            <div className="flex flex-col gap-2">
+              {links.map((link, index) => (
+                <InputGroup key={index}>
+                  <InputGroupAddon>
+                    <SocialIcon kind={socialKindOf(link)} />
+                  </InputGroupAddon>
+                  <InputGroupInput
+                    type="url"
+                    value={link}
+                    maxLength={PUBLIC_LINK_MAX_LENGTH}
+                    placeholder={t("public-link-placeholder")}
+                    aria-label={t("public-links")}
+                    disabled={busy}
+                    onChange={(event) => setLinks((current) => current.map((entry, position) => (position === index ? event.target.value : entry)))}
+                  />
+                  <InputGroupAddon align="inline-end">
+                    <InputGroupButton
+                      size="icon-xs"
+                      aria-label={t("public-link-remove")}
                       disabled={busy}
-                      onChange={(event) => setLinks((current) => current.map((entry, position) => (position === index ? event.target.value : entry)))}
-                    />
-                    <InputGroupAddon align="inline-end">
-                      <InputGroupButton
-                        size="icon-xs"
-                        aria-label={t("public-link-remove")}
-                        disabled={busy}
-                        onClick={() => setLinks((current) => current.filter((_, position) => position !== index))}
-                      >
-                        <RiCloseLine />
-                      </InputGroupButton>
-                    </InputGroupAddon>
-                  </InputGroup>
-                ))}
-                {links.length < PUBLIC_LINKS_MAX ? (
-                  <div>
-                    <Button variant="outline" size="sm" disabled={busy} onClick={() => setLinks((current) => [...current, ""])}>
-                      <RiAddLine data-icon="inline-start" />
-                      {t("public-links-add")}
-                    </Button>
-                  </div>
-                ) : null}
-              </div>
-              <FieldDescription>{t("public-links-hint", { max: PUBLIC_LINKS_MAX })}</FieldDescription>
-            </Field>
+                      onClick={() => setLinks((current) => current.filter((_, position) => position !== index))}
+                    >
+                      <RiCloseLine />
+                    </InputGroupButton>
+                  </InputGroupAddon>
+                </InputGroup>
+              ))}
+              {links.length < PUBLIC_LINKS_MAX ? (
+                <div>
+                  <Button variant="outline" size="sm" disabled={busy} onClick={() => setLinks((current) => [...current, ""])}>
+                    <RiAddLine data-icon="inline-start" />
+                    {t("public-links-add")}
+                  </Button>
+                </div>
+              ) : null}
+            </div>
+            <FieldDescription>{t("public-links-hint", { max: PUBLIC_LINKS_MAX })}</FieldDescription>
+          </Field>
 
-            <label className="flex items-center gap-3 text-sm text-foreground">
-              <Checkbox checked={showCreated} onCheckedChange={(value) => setShowCreated(value === true)} disabled={busy} />
-              {t("public-show-created")}
-            </label>
-            <label className="flex items-center gap-3 text-sm text-foreground">
-              <Checkbox checked={showLiked} onCheckedChange={(value) => setShowLiked(value === true)} disabled={busy} />
-              {t("public-show-liked")}
-            </label>
+          <label className="flex items-center gap-3 text-sm text-foreground">
+            <Checkbox checked={showCreated} onCheckedChange={(value) => setShowCreated(value === true)} disabled={busy} />
+            {t("public-show-created")}
+          </label>
+          <label className="flex items-center gap-3 text-sm text-foreground">
+            <Checkbox checked={showLiked} onCheckedChange={(value) => setShowLiked(value === true)} disabled={busy} />
+            {t("public-show-liked")}
+          </label>
 
-            <p className="text-xs text-muted-foreground">{t("public-privacy")}</p>
-          </Frame>
+          <p className="text-xs text-muted-foreground">{t("public-privacy")}</p>
+        </Frame>
       )}
     </AccountPageFrame>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import "@/features/seasonal/season-decor.css";
-import type { SiteSeason } from "@/features/seasonal/lib/site-season";
+import type { Season } from "@nowly/shared/seasons";
 import { buildParticles, SEASON_SCENES } from "@/features/seasonal/components/season-scenes";
 import { useEffect, useMemo, useState } from "react";
 
@@ -26,7 +26,7 @@ const useHidden = (): boolean => {
 };
 
 export const SeasonDecor = ({ season }: {
-  season: SiteSeason;
+  season: Season;
 }) => {
   const scene = SEASON_SCENES[season];
   const particles = useMemo(() => buildParticles(scene), [scene]);

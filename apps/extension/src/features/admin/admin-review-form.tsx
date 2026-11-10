@@ -4,7 +4,7 @@ import { useI18n } from "@/hooks/i18n-provider";
 import { COMMENT_FIELDS, commentTarget, fieldKey, needsPage } from "@/lib/review-fields";
 import { sendMessage } from "@/lib/messages";
 import type { FieldComment, ReviewVerdict, SubmissionDetail } from "@/shared/admin/admin-types";
-import { allowedVerdicts, reviewIsValid } from "@/shared/admin/review-rules";
+import { allowedVerdicts, reviewIsValid } from "@nowly/presence-creator/creator-submission-policy";
 import { verdictLabelKey } from "@/components/shared/review-thread";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";

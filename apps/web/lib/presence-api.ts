@@ -6,15 +6,13 @@ import { FALLBACK_LOCALE, SUPPORTED_LOCALES, type LocaleString } from "@nowly/lo
 import { presenceAliases } from "@nowly/shared";
 import { cache } from "react";
 
-export { PRODUCTION_API_URL, presenceLogoUrl, presenceThumbnailUrl } from "@/lib/presence-api-client";
-
 export type PresencePlatform = {
   slug: string;
   name: string;
   logoUrl: string;
 };
 
-export const presenceApiBaseUrl = (): string => (process.env.PRESENCE_API_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL ?? PRODUCTION_API_URL).replace(/\/$/, "");
+export const serverApiBaseUrl = (): string => (process.env.PRESENCE_API_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL ?? PRODUCTION_API_URL).replace(/\/$/, "");
 
 const displayName = (name: unknown, slug: string): string => {
   if (typeof name === "string" && name.trim()) return name.trim();
@@ -124,6 +122,7 @@ const parsePerson = (value: unknown, fallbackName: string): PresencePerson => {
           ? person.github.trim()
           : fallbackName;
     const github = typeof person.github === "string" && person.github.trim() ? person.github.trim().replace(/^@/, "") : undefined;
+
     if (github) return { name, github };
 
     const discordId = typeof person.discord === "string" && /^\d{5,25}$/.test(person.discord.trim()) ? person.discord.trim() : undefined;
@@ -351,7 +350,7 @@ export const getPresenceStats = cache(async (slug: string): Promise<PresenceStat
   if (!normalized) return fallback;
 
   try {
-    const response = await fetch(`${presenceApiBaseUrl()}/presences/${encodeURIComponent(normalized)}/stats`, {
+    const response = await fetch(`${serverApiBaseUrl()}/presences/${encodeURIComponent(normalized)}/stats`, {
       next: { revalidate: 60 }
     });
 

@@ -1,7 +1,7 @@
 import { installPresenceFromApi, togglePresence, uninstallPresence } from "@/background/managers/presence-manager";
 import { updateSettings } from "@/background/managers/settings-manager";
 import { refreshPresenceLanguage, registerPresenceScript } from "@/background/runtime/presence-scripts";
-import { getPresences, getPresenceSettings, setPresences, setPresenceSchedule } from "@/background/storage/presences.store";
+import { getPresences, getPresenceSettings, updateStoredPresence } from "@/background/storage/presences.store";
 import { getSettings } from "@/background/storage/settings.store";
 import { STORAGE_KEYS } from "@/background/storage/keys";
 import { isSyncableSettingValue, isSyncedPresence, isSyncPresenceEntry, projectFeatureReveals, projectPresences, projectPresenceSettings, projectSettings, SYNCED_SETTINGS_KEYS, syncEqual, type ExtensionSyncKey, type SyncValues } from "@/shared/account-sync";
@@ -44,21 +44,20 @@ const applySettings = async (value: unknown): Promise<void> => {
 };
 
 const applyPresenceEntry = async (entry: SyncPresenceEntry): Promise<void> => {
-  const presences = await getPresences();
+  const local = await updateStoredPresence(entry.slug, (presence) => {
+    const sameSchedule = syncEqual(presence.schedule, entry.schedule);
 
-  const local = presences[entry.slug];
+    if (presence.installedAt === entry.installedAt && sameSchedule) return presence;
+
+    return {
+      ...presence,
+      installedAt: entry.installedAt,
+      ...(sameSchedule ? {} : { schedule: entry.schedule })
+    };
+  });
 
   if (!local) return;
 
-  if (local.installedAt !== entry.installedAt) {
-    presences[entry.slug] = {
-      ...local,
-      installedAt: entry.installedAt
-    };
-    await setPresences(presences);
-  }
-
-  if (!syncEqual(local.schedule, entry.schedule)) await setPresenceSchedule(entry.slug, entry.schedule);
   if (local.enabled !== entry.enabled) await togglePresence(
     {
       slug: entry.slug,

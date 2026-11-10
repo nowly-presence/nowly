@@ -4,7 +4,7 @@ import { CookieBanner } from "@/features/layout/components/cookie-banner";
 import { Footer } from "@/features/layout/components/footer";
 import { Navbar } from "@/features/layout/components/navbar";
 import { AppProviders } from "@/components/providers";
-import { BRAND_FAVICON_32, BRAND_METADATA_ICONS } from "@/lib/brand";
+import { BRAND_FAVICON_32, BRAND_METADATA_ICONS } from "@nowly/ui/brand";
 import { DOCS_BASE_PATH, DOCS_URL, isSeoPreview } from "@/lib/constants";
 import { absoluteUrl, docsOgImage } from "@/features/seo/lib/seo";
 import { LOCALE_SHORT_MAP, type LocaleString } from "@nowly/locales";
@@ -14,7 +14,7 @@ import { getTranslations } from "next-intl/server";
 import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren, ReactElement } from "react";
 import "../globals.css";
-import { satoshi } from "../fonts";
+import { satoshi } from "@nowly/ui/fonts";
 
 export const generateStaticParams = () => routing.locales.map((locale) => ({ locale }));
 

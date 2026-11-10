@@ -1,14 +1,15 @@
 import { describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { MultiStepSheet, type SheetStep } from "@/ui/multi-step-sheet";
-import { Sheet } from "@/ui/sheet";
+
+const onSubmit = vi.fn();
 
 const steps: SheetStep[] = [
   {
     id: "details",
     title: "Details",
     content: (
-      <form id="details-form">
+      <form id="details-form" onSubmit={onSubmit}>
         <input name="name" required />
       </form>
     ),
@@ -36,14 +37,13 @@ describe("multi-step sheet", () => {
       steps,
       currentStep: "details"
     });
-    expect(sheet?.type).toBe(Sheet);
     expect(sheet?.props.progress).toEqual({
       current: 1,
       total: 2
     });
     expect(renderToStaticMarkup(sheet?.props.children)).toContain('id="details-form"');
     expect(renderToStaticMarkup(sheet?.props.footer)).toContain('form="details-form"');
-    expect(onClose).not.toHaveBeenCalled();
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 
   it("selects a step by id and shows its progress", () => {

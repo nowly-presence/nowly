@@ -219,17 +219,9 @@ describe("creator files", () => {
     ).toEqual(["watch", "watch2", "page3"]);
   });
 
-  it("generates a presence script that follows the SDK conventions", () => {
+  it("generates a stable presence script that follows the SDK conventions", () => {
     const source = generatePresenceSource(sampleCreatorDraft());
-    expect(source).toContain('import { createMediaTimestamps, PresenceType, type PresenceData } from "@nowly/sdk"');
-    expect(source).toContain('import type baseStrings from "./locales/en-US.json"');
-    expect(source).toContain('if (pathname.startsWith("/watch")) {');
-    expect(source).toContain("presence.formatString(strings.watchDetails, { title })");
-    expect(source).toContain('presence.formatString(strings.watchState, { channel: channel ?? "" })');
-    expect(source).toContain("largeImageKey: poster ?? Assets.Logo,");
-    expect(source).toContain("if (showButtons && videoId) data.buttons = [{ label: strings.watchButton, url: `https://example.com/v/${videoId}` }]");
-    expect(source).toContain("data.startTimestamp = pageStartedAt");
-    expect(source).toContain("presence.clearActivity()");
+    expect(source).toMatchSnapshot();
     expect(source).not.toMatch(/;\s*$/m);
     expect(source).not.toMatch(/from '/);
   });
@@ -238,14 +230,9 @@ describe("creator files", () => {
     const draft = sampleCreatorDraft();
     const source = generatePresenceSource(draft);
     const settings = generateSettingsSource(draft);
-    expect(source).toContain("const presence = new Presence()");
+    expect(settings).toMatchSnapshot();
     expect(source).not.toContain("Presence.Settings");
     expect(source).not.toContain("new Presence(settings)");
-    expect(source).toContain('presence.on("UpdateData", async (ctx) => {');
-    expect(settings).toContain('import type { PresenceSetting } from "@nowly/sdk"');
-    expect(settings).toContain("export default {");
-    expect(settings).toContain("showButtons: {");
-    expect(settings).toContain("} satisfies Record<string, PresenceSetting>");
     expect(buildTextFiles(draft).some((file) => file.path.endsWith("/settings.ts"))).toBe(true);
   });
 

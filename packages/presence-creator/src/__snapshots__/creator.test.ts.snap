@@ -1,0 +1,102 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`creator files > generates a stable presence script that follows the SDK conventions 1`] = `
+"import { createMediaTimestamps, PresenceType, type PresenceData } from "@nowly/sdk"
+import type baseStrings from "./locales/en-US.json"
+
+const presence = new Presence()
+const isEnabled = (value: unknown): boolean => value === true || value === "true"
+let currentPath = ""
+let pageStartedAt = Math.floor(Date.now() / 1000)
+
+const readText = (selector: string): string | undefined =>
+  document.querySelector(selector)?.textContent?.replace(/\\s+/g, " ").trim() || undefined
+
+const readMeta = (property: string): string | undefined =>
+  document.querySelector<HTMLMetaElement>(\`meta[property="\${property}"]\`)?.content.trim() || undefined
+
+presence.on("UpdateData", async (ctx) => {
+  const strings = await presence.getStrings<typeof baseStrings>()
+  const { pathname } = window.location
+  const showButtons = !("showButtons" in ctx.settings) || isEnabled(ctx.settings.showButtons)
+  if (pathname !== currentPath) {
+    currentPath = pathname
+    pageStartedAt = Math.floor(Date.now() / 1000)
+  }
+
+  if (pathname.startsWith("/watch")) {
+    const title = readText("h1.video-title")
+    const channel = readText("#owner a")
+    const poster = readMeta("og:image")
+    const videoId = readText("#video-id")
+    if (!title) {
+      presence.clearActivity()
+      return
+    }
+    const data: PresenceData = {
+      details: presence.formatString(strings.watchDetails, { title }),
+      state: presence.formatString(strings.watchState, { channel: channel ?? "" }),
+      largeImageKey: poster ?? Assets.Logo,
+      largeImageText: "Example Tube",
+      type: PresenceType.Watching,
+    }
+    const media = document.querySelector<HTMLMediaElement>("video, audio")
+    if (media) Object.assign(data, createMediaTimestamps(media))
+    else data.startTimestamp = pageStartedAt
+    if (showButtons && videoId) data.buttons = [{ label: strings.watchButton, url: \`https://example.com/v/\${videoId}\` }]
+    await presence.setActivity(data)
+    return
+  }
+
+  if (pathname.startsWith("/results")) {
+    const data: PresenceData = {
+      details: strings.searchDetails,
+      largeImageKey: Assets.Logo,
+      largeImageText: "Example Tube",
+      type: PresenceType.Watching,
+    }
+    data.startTimestamp = pageStartedAt
+    await presence.setActivity(data)
+    return
+  }
+
+  if (isEnabled(ctx.settings.showBrowsing)) {
+    await presence.setActivity({ details: "Example Tube", state: strings.browsing, largeImageKey: Assets.Logo, type: PresenceType.Watching })
+    return
+  }
+  presence.clearActivity()
+})
+"
+`;
+
+exports[`creator files > keeps settings in settings.ts and out of presence.ts 1`] = `
+"import type { PresenceSetting } from "@nowly/sdk"
+
+export default {
+  showButtons: {
+    type: "boolean",
+    default: true,
+    label: {
+      "en-US": "Show buttons",
+      "fr-FR": "Afficher les boutons",
+    },
+    description: {
+      "en-US": "Show a button to open the current page.",
+      "fr-FR": "Affiche un bouton pour ouvrir la page en cours.",
+    },
+  },
+  showBrowsing: {
+    type: "boolean",
+    default: false,
+    label: {
+      "en-US": "Show browsing activity",
+      "fr-FR": "Afficher l'activité de navigation",
+    },
+    description: {
+      "en-US": "Show activity on the other pages of the site.",
+      "fr-FR": "Affiche l'activité sur les autres pages du site.",
+    },
+  },
+} satisfies Record<string, PresenceSetting>
+"
+`;

@@ -1,32 +1,27 @@
-const CDN_BRAND = "https://cdn.nowly.me/brand";
-
-export const BRAND_LOCKUP_DARK = `${CDN_BRAND}/lockup/dark.svg`;
-export const BRAND_LOCKUP_WHITE = `${CDN_BRAND}/lockup/white.svg`;
+import { BRAND_FAVICON_16, BRAND_FAVICON_32, BRAND_FAVICON_192, BRAND_FAVICON_SVG } from "@nowly/ui/brand";
 
 export const BRAND_METADATA_ICONS = {
   icon: [
     {
-      url: `${CDN_BRAND}/favicons/favicon.svg`,
+      url: BRAND_FAVICON_SVG,
       type: "image/svg+xml"
     },
     {
-      url: `${CDN_BRAND}/favicons/favicon-32.png`,
+      url: BRAND_FAVICON_32,
       sizes: "32x32",
       type: "image/png"
     },
     {
-      url: `${CDN_BRAND}/favicons/favicon-16.png`,
+      url: BRAND_FAVICON_16,
       sizes: "16x16",
       type: "image/png"
     }
   ],
   apple: [
     {
-      url: `${CDN_BRAND}/favicons/favicon-192.png`,
+      url: BRAND_FAVICON_192,
       sizes: "192x192",
       type: "image/png"
     }
   ]
 };
-
-export const BRAND_MARK = `${CDN_BRAND}/favicons/favicon-192.png`;

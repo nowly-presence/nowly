@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { SEASON_RESPONSE_TIMEOUT_MS, SITE_SEASONS, type SiteSeason } from "./site-season";
+import { SEASONS, type Season } from "@nowly/shared/seasons";
+import { SEASON_RESPONSE_TIMEOUT_MS } from "./site-season";
 import { startSiteSeason } from "./site-season-sync";
 
 const setup = ({
@@ -38,12 +39,12 @@ const setup = ({
   });
   vi.stubGlobal("window", target);
   vi.stubGlobal("document", page);
-  const onChange = vi.fn<(season: SiteSeason | null) => void>();
+  const onChange = vi.fn<(season: Season | null) => void>();
   const stop = startSiteSeason({
     allowPreview: Boolean(preview),
     onChange
   });
-  const receive = (season: SiteSeason | null, {
+  const receive = (season: Season | null, {
     origin = target.location.origin,
     source = target
   }: {
@@ -96,7 +97,7 @@ describe("site season synchronization", () => {
   });
 
   it("activates any valid season after confirmation and removes it immediately when disabled", () => {
-    for (const season of SITE_SEASONS) {
+    for (const season of SEASONS) {
       const site = setup();
       expect(site.seasonalClasses()).toEqual([]);
       site.receive(season);
@@ -110,7 +111,7 @@ describe("site season synchronization", () => {
   });
 
   it("removes all season effects while hidden and until a fresh visible confirmation", () => {
-    for (const season of SITE_SEASONS) {
+    for (const season of SEASONS) {
       const site = setup();
       site.receive(season);
       site.visibility(false);

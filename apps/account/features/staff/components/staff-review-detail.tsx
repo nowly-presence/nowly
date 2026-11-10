@@ -2,19 +2,11 @@
 
 import { SubmissionChanges } from "@/features/account/components/submission-changes";
 import { SubmissionFiles } from "@/features/account/components/submission-files";
-import { useSessionUser } from "@/features/account/components/session-provider";
 import { SubmissionStatusBadge } from "@/features/account/components/submission-status-badge";
 import { SubmissionThread } from "@/features/account/components/submission-thread";
-import {
-  fetchSubmission,
-  publishSubmission,
-  sendReview,
-  SubmissionRequestError,
-  type FieldComment,
-  type ReviewVerdict,
-  type SubmissionDetail
-} from "@/features/account/lib/submission-api";
-import { allowedVerdicts, PUBLISHABLE_STATUSES } from "@/features/account/lib/submission-text";
+import { publishSubmission, sendReview, type FieldComment, type ReviewVerdict } from "@/features/account/lib/submission-api";
+import { submissionSubtitle } from "@/features/account/lib/submission-text";
+import { useSubmission } from "@/features/account/lib/use-submission";
 import { Frame } from "@/features/shell/components/frame";
 import { StaffReviewSection } from "@/features/staff/components/staff-review-sections";
 import { REVIEW_SECTIONS, SECTION_FIELD, type ReviewSection, type SectionVerdict } from "@/features/staff/lib/review-sections";
@@ -23,77 +15,64 @@ import { Button, Progress, RadioGroup, RadioGroupItem, Select, SelectContent, Se
 import { RiArrowLeftLine, RiExternalLinkLine } from "@nowly/ui/icons";
 import { cn } from "@nowly/ui/utils";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 type DecisionVerdict = Extract<ReviewVerdict, "approve" | "request_changes" | "reject">;
 
 const DECISIONS: readonly DecisionVerdict[] = ["approve", "request_changes", "reject"];
 const MARK_OPTIONS = ["pending", "ok", "fix"] as const;
 
-type Load = "checking" | "not-found" | "ready" | "error";
-
 const PERCENT = 100;
 
-export const StaffReviewDetail = ({ id }: { id: string }) => {
+export const StaffReviewDetail = ({ id }: {
+  id: string;
+}) => {
   const t = useTranslations("staff");
   const sub = useTranslations("submissionPage");
-  const user = useSessionUser();
-  const [load, setLoad] = useState<Load>("checking");
-  const [detail, setDetail] = useState<SubmissionDetail | null>(null);
-  const [marks, setMarks] = useState<Record<ReviewSection, SectionVerdict>>({ identity: null, images: null, texts: null, pages: null, domains: null });
+  const { load, detail, busy, error, act: runAction, reviewer, canPublish, verdicts } = useSubmission(id, t("error"));
+  const [marks, setMarks] = useState<Record<ReviewSection, SectionVerdict>>({
+    identity: null,
+    images: null,
+    texts: null,
+    pages: null,
+    domains: null
+  });
   const [message, setMessage] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [confirmPublish, setConfirmPublish] = useState(false);
   const [verdict, setVerdict] = useState<DecisionVerdict | null>(null);
 
-  const reload = useCallback(async (): Promise<void> => {
-    try {
-      setDetail(await fetchSubmission(id));
-      setLoad("ready");
-    } catch (failure) {
-      setLoad(failure instanceof SubmissionRequestError && failure.status === 404 ? "not-found" : "error");
-    }
-  }, [id]);
-
-  useEffect(() => {
-    void reload();
-  }, [reload]);
-
   const act = async (action: () => Promise<void>): Promise<void> => {
-    setBusy(true);
-    setError(null);
+    if (!(await runAction(action))) return;
 
-    try {
-      await action();
-      await reload();
-      setMessage("");
-      setConfirmPublish(false);
-    } catch (failure) {
-      setError(failure instanceof SubmissionRequestError && failure.code === "STALE_REVISION" ? sub("error-stale") : failure instanceof SubmissionRequestError && failure.status === 403 ? sub("error-forbidden") : t("error"));
-    } finally {
-      setBusy(false);
-    }
+    setMessage("");
+    setConfirmPublish(false);
   };
 
   const decide = (value: ReviewVerdict): void => {
     if (!detail) return;
 
-    const comments: FieldComment[] = REVIEW_SECTIONS.filter((section) => marks[section] === "fix").map((section) => ({ field: SECTION_FIELD[section], message: t("fix-comment", { section: t(`sec-${section}`) }) }));
-    void act(() => sendReview(id, { revision: detail.revision, verdict: value, message: message.trim(), comments }));
+    const comments: FieldComment[] = REVIEW_SECTIONS.filter((section) => marks[section] === "fix").map((section) => ({
+      field: SECTION_FIELD[section],
+      message: t("fix-comment", { section: t(`sec-${section}`) })
+    }));
+    void act(() =>
+      sendReview(id, {
+        revision: detail.revision,
+        verdict: value,
+        message: message.trim(),
+        comments
+      })
+    );
   };
 
   const done = REVIEW_SECTIONS.filter((section) => marks[section] === "ok").length;
   const flagged = REVIEW_SECTIONS.filter((section) => marks[section] === "fix").length;
-  const isAuthor = detail?.author?.id === user.id;
-  const reviewer = user.capabilities.includes("review") && !isAuthor;
-  const verdicts = detail ? allowedVerdicts(detail.status) : [];
   const decisions = DECISIONS.filter((value) => verdicts.includes(value));
+
   const choice = verdict && decisions.includes(verdict) ? verdict : (decisions[0] ?? null);
   const definition = detail?.definition ?? null;
   const hasMessage = message.trim().length > 0;
   const canSubmit = choice === "approve" ? flagged === 0 : choice === "request_changes" ? hasMessage || flagged > 0 : choice === "reject" ? hasMessage : false;
-  const canPublish = user.capabilities.includes("publish") && detail !== null && PUBLISHABLE_STATUSES.includes(detail.status);
   const markLabel = (value: (typeof MARK_OPTIONS)[number]): string => t(`mark-${value}`);
 
   return (
@@ -110,11 +89,16 @@ export const StaffReviewDetail = ({ id }: { id: string }) => {
           <div className="flex min-w-0 flex-col gap-4">
             <Frame
               title={detail.name}
-              description={[detail.kind === "update" ? sub("kind-update") : sub("kind-create"), sub("revision-heading", { number: detail.revision }), detail.author?.name ? sub("by-author", { name: detail.author.name }) : null].filter(Boolean).join(", ")}
+              description={submissionSubtitle(detail, sub)}
               action={
                 <>
                   {detail.pullRequest.url ? (
-                    <a href={detail.pullRequest.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-foreground underline underline-offset-4">
+                    <a
+                      href={detail.pullRequest.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-foreground underline underline-offset-4"
+                    >
                       {sub("pull-request")}
                       <RiExternalLinkLine className="size-3.5" />
                     </a>
@@ -131,7 +115,12 @@ export const StaffReviewDetail = ({ id }: { id: string }) => {
               ) : null}
               <div className="flex items-center gap-3">
                 <Progress value={(done / REVIEW_SECTIONS.length) * PERCENT} className="flex-1" />
-                <span className="text-xs text-muted-foreground">{t("detail-progress", { done, total: REVIEW_SECTIONS.length })}</span>
+                <span className="text-xs text-muted-foreground">
+                  {t("detail-progress", {
+                    done,
+                    total: REVIEW_SECTIONS.length
+                  })}
+                </span>
               </div>
             </Frame>
             {definition
@@ -142,7 +131,20 @@ export const StaffReviewDetail = ({ id }: { id: string }) => {
                     description={t(`sec-${section}-desc`)}
                     action={
                       reviewer ? (
-                        <Select items={MARK_OPTIONS.map((value) => ({ value, label: markLabel(value) }))} value={marks[section] ?? "pending"} onValueChange={(value) => value && setMarks((current) => ({ ...current, [section]: value === "pending" ? null : (value as SectionVerdict) }))}>
+                        <Select
+                          items={MARK_OPTIONS.map((value) => ({
+                            value,
+                            label: markLabel(value)
+                          }))}
+                          value={marks[section] ?? "pending"}
+                          onValueChange={(value) =>
+                            value &&
+                            setMarks((current) => ({
+                              ...current,
+                              [section]: value === "pending" ? null : (value as SectionVerdict)
+                            }))
+                          }
+                        >
                           <SelectTrigger className="min-w-36" aria-label={t(`sec-${section}`)}>
                             <SelectValue />
                           </SelectTrigger>
@@ -175,7 +177,7 @@ export const StaffReviewDetail = ({ id }: { id: string }) => {
                 description={t("detail-decision-description")}
                 footer={
                   <>
-                    <span className="text-xs text-muted-foreground">{flagged > 0 ? t("detail-flagged", { count: flagged }) : error ?? ""}</span>
+                    <span className="text-xs text-muted-foreground">{flagged > 0 ? t("detail-flagged", { count: flagged }) : (error ?? "")}</span>
                     <Button variant={choice === "reject" ? "destructive" : "default"} disabled={busy || !canSubmit} onClick={() => decide(choice)}>
                       {t("detail-submit")}
                     </Button>
@@ -193,7 +195,13 @@ export const StaffReviewDetail = ({ id }: { id: string }) => {
                     </label>
                   ))}
                 </RadioGroup>
-                <Textarea value={message} disabled={busy} placeholder={t("peek-message-placeholder")} aria-label={t("peek-message-placeholder")} onChange={(event) => setMessage(event.target.value)} />
+                <Textarea
+                  value={message}
+                  disabled={busy}
+                  placeholder={t("peek-message-placeholder")}
+                  aria-label={t("peek-message-placeholder")}
+                  onChange={(event) => setMessage(event.target.value)}
+                />
               </Frame>
             ) : null}
             {canPublish ? (

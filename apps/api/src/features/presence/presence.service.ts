@@ -1,5 +1,6 @@
+import { fetchCdnFile } from "@/shared/cdn";
 import { sha256Base64Url, canonicalJson, signedPayload, signPresenceRelease } from "@/shared/crypto.service";
-import { getPresenceMeta, getPresenceStats, setPresenceMeta } from "./presence.repository";
+import { backfillPresenceSettings, getPresenceMeta, getPresenceStats } from "./presence.repository";
 
 export const serializeJsonField = (value: unknown): string | undefined => {
   if (value == null) return undefined;
@@ -8,65 +9,59 @@ export const serializeJsonField = (value: unknown): string | undefined => {
   return JSON.stringify(value);
 };
 
-const fetchText = async (url: string): Promise<string | null> => {
+const parseSettings = (raw: string): object | null => {
   try {
-    const res = await fetch(url);
+    const parsed: unknown = JSON.parse(raw);
 
-    if (res.ok) return await res.text();
-  } catch {}
-
-  return null;
+    return parsed && typeof parsed === "object" ? parsed : null;
+  } catch {
+    return null;
+  }
 };
 
 export const buildRelease = async (slug: string, version?: string) => {
   const storedMeta = await getPresenceMeta(slug);
 
-  const metadata = storedMeta ?? ({} as Record<string, unknown>);
-
-  if (!Object.keys(metadata).length) return null;
+  if (!storedMeta || !Object.keys(storedMeta).length) return null;
 
   const stats = await getPresenceStats(slug);
 
-  const resolvedVersion = version ?? stats.version ?? metadata.version ?? "0.0.0";
+  const resolvedVersion = version ?? stats.version ?? storedMeta.version ?? "0.0.0";
+  const versionText = String(resolvedVersion);
 
-  let bundle: string | null =
-    (await fetchText(`https://cdn.nowly.me/presences/${slug}/versions/${resolvedVersion}/bundle.js`)) ??
-    (await fetchText(`https://cdn.nowly.me/presences/${slug}/bundle.js?v=${encodeURIComponent(String(resolvedVersion))}`)) ??
-    (await fetchText(`https://cdn.nowly.me/presences/${slug}/bundle.js`));
+  const bundle = await fetchCdnFile(slug, versionText, "bundle.js");
 
   if (!bundle) return null;
 
   let iframeBundle: string | null = null;
 
-  if (metadata.iframe === true) {
-    iframeBundle =
-      (await fetchText(`https://cdn.nowly.me/presences/${slug}/versions/${resolvedVersion}/iframe.js`)) ??
-      (await fetchText(`https://cdn.nowly.me/presences/${slug}/iframe.js?v=${encodeURIComponent(String(resolvedVersion))}`)) ??
-      (await fetchText(`https://cdn.nowly.me/presences/${slug}/iframe.js`));
+  if (storedMeta.iframe === true) {
+    iframeBundle = await fetchCdnFile(slug, versionText, "iframe.js");
 
     if (!iframeBundle?.trim()) return null;
   }
 
-  if (!metadata.settings) {
-    try {
-      const raw =
-        (await fetchText(`https://cdn.nowly.me/presences/${slug}/versions/${resolvedVersion}/settings.json`)) ??
-        (await fetchText(`https://cdn.nowly.me/presences/${slug}/settings.json?v=${encodeURIComponent(String(resolvedVersion))}`)) ??
-        (await fetchText(`https://cdn.nowly.me/presences/${slug}/settings.json`));
+  let settings = storedMeta.settings;
 
-      if (raw) {
-        const parsed = JSON.parse(raw);
+  if (!settings) {
+    const raw = await fetchCdnFile(slug, versionText, "settings.json");
 
-        if (parsed && typeof parsed === "object") {
-          metadata.settings = parsed;
-          await setPresenceMeta(slug, metadata as Record<string, unknown>);
-        }
+    const parsed = raw ? parseSettings(raw) : null;
+
+    if (parsed) {
+      settings = parsed;
+
+      try {
+        await backfillPresenceSettings(slug, versionText, parsed);
+      } catch (error) {
+        console.warn(`Settings backfill failed for ${slug}@${versionText}`, error);
       }
-    } catch {}
+    }
   }
 
   const releaseMetadata = {
-    ...metadata,
+    ...storedMeta,
+    ...(settings ? { settings } : {}),
     slug,
     version: resolvedVersion
   };

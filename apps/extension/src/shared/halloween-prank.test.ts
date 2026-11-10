@@ -6,6 +6,8 @@ const regularDay = new Date(2026, 9, 12, 9);
 
 describe("halloween prank", () => {
   it("is due on October 31 once per year", () => {
+    expect(isHalloweenPrankDue(null, new Date(2026, 9, 30, 23, 59))).toBe(false);
+    expect(isHalloweenPrankDue(null, new Date(2026, 9, 31))).toBe(true);
     expect(isHalloweenPrankDue(null, halloween)).toBe(true);
     expect(isHalloweenPrankDue({ lastShownYear: 2025 }, halloween)).toBe(true);
     expect(isHalloweenPrankDue({ lastShownYear: 2026 }, halloween)).toBe(false);

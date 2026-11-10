@@ -1,4 +1,4 @@
-import type { LocalizedText, ReviewVerdict, SubmissionStatus } from "@/features/account/lib/submission-api";
+import type { LocalizedText, SubmissionDetail, SubmissionPage, SubmissionStatus } from "@/features/account/lib/submission-api";
 
 export const pickText = (text: LocalizedText | undefined, locale: string, baseLocale: string): string =>
   text?.[locale] ?? text?.[baseLocale] ?? Object.values(text ?? {})[0] ?? "";
@@ -11,16 +11,22 @@ export const statusVariant = (status: SubmissionStatus): "default" | "secondary"
   return "secondary";
 };
 
-const VERDICT_SOURCES: Record<ReviewVerdict, readonly SubmissionStatus[]> = {
-  approve: ["submitted"],
-  comment: ["submitted", "changes_requested", "approved", "in_progress"],
-  request_changes: ["submitted", "approved", "in_progress"],
-  reject: ["submitted", "approved"]
-};
-
-export const allowedVerdicts = (status: SubmissionStatus): ReviewVerdict[] =>
-  (Object.keys(VERDICT_SOURCES) as ReviewVerdict[]).filter((verdict) => VERDICT_SOURCES[verdict].includes(status));
-
-export const PUBLISHABLE_STATUSES: readonly SubmissionStatus[] = ["submitted", "approved"];
-
 export const submissionHref = (id: string): string => `/creations/${encodeURIComponent(id)}`;
+
+export const pageButtons = (
+  page: SubmissionPage
+): Array<{
+  label: LocalizedText;
+}> => page.buttons ?? (page.button?.enabled ? [{ label: page.button.label }] : []);
+
+export const submissionSubtitle = (
+  detail: SubmissionDetail,
+  t: (key: "kind-update" | "kind-create" | "revision-heading" | "by-author", values?: Record<string, string | number>) => string
+): string =>
+  [
+    detail.kind === "update" ? t("kind-update") : t("kind-create"),
+    t("revision-heading", { number: detail.revision }),
+    detail.author?.name ? t("by-author", { name: detail.author.name }) : null
+  ]
+    .filter(Boolean)
+    .join(", ");

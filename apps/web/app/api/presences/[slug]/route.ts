@@ -1,4 +1,5 @@
-import { presenceApiBaseUrl, PRODUCTION_API_URL } from "@/lib/presence-api";
+import { PRODUCTION_API_URL } from "@/lib/presence-api-client";
+import { serverApiBaseUrl } from "@/lib/presence-api";
 
 type RouteContext = {
   params: Promise<{
@@ -30,7 +31,7 @@ export const GET = async (_request: Request, { params }: RouteContext) => {
   const bases = [
     ...new Set([
       PRODUCTION_API_URL,
-      presenceApiBaseUrl()
+      serverApiBaseUrl()
     ])
   ];
 

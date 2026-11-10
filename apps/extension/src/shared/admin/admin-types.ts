@@ -1,13 +1,12 @@
 import { ADMIN_CAPABILITIES, type AdminCapability } from "@nowly/shared/roles";
 import { parseCreatorDefinition, type CreatorDefinition } from "@nowly/presence-creator/creator-schema";
 import { isSubmissionStatus } from "@nowly/presence-creator/creator-submission";
+import { REVIEW_VERDICTS, type ReviewVerdict } from "@nowly/presence-creator/creator-submission-policy";
 import type { CreatorFieldChange } from "@nowly/presence-creator/creator-diff";
 import type { SubmissionStatus } from "@nowly/presence-creator/creator-types";
 import type { AnnouncementInput } from "@nowly/shared/announcements";
 
-export const REVIEW_VERDICTS = ["approve", "comment", "request_changes", "reject"] as const;
-
-export type ReviewVerdict = (typeof REVIEW_VERDICTS)[number];
+export type { ReviewVerdict };
 
 export type StaffAccess = {
   capabilities: AdminCapability[];
@@ -97,7 +96,6 @@ export type PublishedCreatorPresence = {
 export type AnnouncementDraft = AnnouncementInput & {
   translate: boolean;
 };
-
 
 export const isAdminCapability = (value: unknown): value is AdminCapability => (ADMIN_CAPABILITIES as readonly unknown[]).includes(value);
 
@@ -263,5 +261,14 @@ export type HiddenPresence = {
 
 export const parseHiddenPresences = (body: unknown): HiddenPresence[] | null =>
   isRecord(body) && Array.isArray(body.presences)
-    ? body.presences.flatMap((entry) => (isRecord(entry) && typeof entry.slug === "string" ? [{ slug: entry.slug, name: typeof entry.name === "string" ? entry.name : entry.slug }] : []))
+    ? body.presences.flatMap((entry) =>
+        isRecord(entry) && typeof entry.slug === "string"
+          ? [
+              {
+                slug: entry.slug,
+                name: typeof entry.name === "string" ? entry.name : entry.slug
+              }
+            ]
+          : []
+      )
     : null;

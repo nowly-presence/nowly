@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join, normalize } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import test from "node:test";
 
 const script = fileURLToPath(new URL("./repos.ts", import.meta.url));
@@ -22,7 +22,6 @@ const git = (cwd: string, ...args: string[]): string => {
   return result.stdout.trim();
 };
 
-/** Creates bare `sdk`, `cli` and `presences` remotes plus an empty monorepo. */
 const fixture = (): { remotes: string; root: string; cleanup: () => void } => {
   const base = mkdtempSync(join(tmpdir(), "nowly-repos-"));
   const remotes = join(base, "remotes");
@@ -47,7 +46,7 @@ const fixture = (): { remotes: string; root: string; cleanup: () => void } => {
 
 const run = (root: string, remotes: string, args: string[] = [], env: Record<string, string> = {}) =>
   spawnSync(process.execPath, ["--experimental-strip-types", script, ...args], {
-    env: { ...gitEnv, CI: "", NOWLY_SKIP_REPOS: "", NOWLY_REPOS_ROOT: root, NOWLY_REPOS_BASE_URL: `file://${remotes}`, ...env },
+    env: { ...gitEnv, CI: "", NOWLY_SKIP_REPOS: "", NOWLY_REPOS_ROOT: root, NOWLY_REPOS_BASE_URL: pathToFileURL(remotes).href, ...env },
     encoding: "utf8"
   });
 
@@ -71,7 +70,7 @@ test("converts a former submodule checkout into a standalone repository", () => 
   const { remotes, root, cleanup } = fixture();
 
   try {
-    git(root, "submodule", "add", "-q", `file://${remotes}/sdk.git`, "packages/sdk");
+    git(root, "submodule", "add", "-q", pathToFileURL(join(remotes, "sdk.git")).href, "packages/sdk");
     git(root, "commit", "-qm", "add submodule");
     git(root, "rm", "-q", "--cached", "packages/sdk");
     writeFileSync(join(root, "packages", "sdk", "README.md"), "local change");
@@ -83,7 +82,7 @@ test("converts a former submodule checkout into a standalone repository", () => 
     const sdk = join(root, "packages", "sdk");
     assert.equal(statSync(join(sdk, ".git")).isDirectory(), true);
     assert.equal(existsSync(join(root, ".git", "modules", "packages", "sdk")), false);
-    assert.equal(git(sdk, "rev-parse", "--show-toplevel"), sdk);
+    assert.equal(normalize(git(sdk, "rev-parse", "--show-toplevel")), sdk);
     assert.equal(git(sdk, "status", "--porcelain"), "M README.md");
   } finally {
     cleanup();
@@ -99,22 +98,8 @@ test("leaves the monorepo index alone when run from a git hook", () => {
     assert.equal(result.status, 0, result.stderr);
 
     assert.equal(git(root, "ls-files", "--stage"), index);
-    assert.equal(git(join(root, "packages", "presences"), "rev-parse", "--show-toplevel"), join(root, "packages", "presences"));
-  } finally {
-    cleanup();
-  }
-});
-
-test("leaves the monorepo index alone when run from a git hook", () => {
-  const { remotes, root, cleanup } = fixture();
-
-  try {
-    const index = git(root, "ls-files", "--stage");
-    const result = run(root, remotes, [], { GIT_DIR: join(root, ".git"), GIT_INDEX_FILE: join(root, ".git", "index"), GIT_WORK_TREE: root });
-    assert.equal(result.status, 0, result.stderr);
-
-    assert.equal(git(root, "ls-files", "--stage"), index);
-    assert.equal(git(join(root, "packages", "presences"), "rev-parse", "--show-toplevel"), join(root, "packages", "presences"));
+    const presenceClone = join(root, "packages", "presences");
+    assert.equal(normalize(git(presenceClone, "rev-parse", "--show-toplevel")), presenceClone);
   } finally {
     cleanup();
   }

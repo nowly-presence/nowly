@@ -2,7 +2,7 @@ import { getDb } from "@/db/client";
 import { device, devicePresence, presenceActiveDevice } from "@nowly/database/schema/device";
 import { user } from "@nowly/database/schema/auth";
 import { presence, presenceLike, presenceVersion } from "@nowly/database/schema/presence";
-import { and, asc, count, countDistinct, desc, eq, gte, inArray, lt, ne, or } from "drizzle-orm";
+import { and, asc, count, countDistinct, desc, eq, gte, inArray, lt, ne, or, sql } from "drizzle-orm";
 import type { GlobalPresenceStats, PresenceListItem, PresenceMeta, PresenceStats, VersionEntry } from "./presence.types";
 
 const ACTIVE_DEVICE_STALE_MS = 12 * 60 * 1000;
@@ -36,7 +36,7 @@ export const clearActiveDevicesForDevice = async (deviceId: string): Promise<voi
   await getDb().delete(presenceActiveDevice).where(eq(presenceActiveDevice.deviceId, deviceId));
 };
 
-export const getActiveUsers = async (slug: string): Promise<number> => {
+const getActiveUsers = async (slug: string): Promise<number> => {
   const db = getDb();
   await db.delete(presenceActiveDevice).where(and(eq(presenceActiveDevice.slug, slug), lt(presenceActiveDevice.lastSeenAt, staleBefore())));
   const [row] = await db.select({ total: count() }).from(presenceActiveDevice).where(eq(presenceActiveDevice.slug, slug));
@@ -138,85 +138,74 @@ export const getLikeCount = async (slug: string): Promise<number> => {
   return row.total;
 };
 
-const toDate = (value?: Date | string): Date => (value instanceof Date ? value : value ? new Date(value) : new Date());
-
-export const setUpdated = async (slug: string, date?: Date | string): Promise<void> => {
-  const updatedAt = toDate(date);
-  await getDb().insert(presence).values({ slug, updatedAt }).onConflictDoUpdate({
-    target: presence.slug,
-    set: { updatedAt }
-  });
+export const getPresenceVersion = async (slug: string): Promise<string | null> => {
+  const [row] = await getDb().select({ version: presence.version }).from(presence).where(eq(presence.slug, slug));
+  return row?.version ?? null;
 };
 
-export const setAdded = async (slug: string, date?: Date | string): Promise<void> => {
-  await getDb()
-    .insert(presence)
-    .values({
-      slug,
-      addedAt: toDate(date)
-    })
-    .onConflictDoNothing();
-};
-
-export const setVersion = async (slug: string, version: string, publishedAt?: Date): Promise<void> => {
-  const updatedAt = publishedAt ?? new Date();
-  await getDb().insert(presence).values({ slug, version, updatedAt }).onConflictDoUpdate({
-    target: presence.slug,
-    set: { version, updatedAt }
-  });
-};
-
-export const addVersion = async (slug: string, entry: VersionEntry): Promise<void> => {
-  const db = getDb();
-  const publication = {
-    changelog: entry.changelog,
-    author: entry.author,
-    authorGithub: entry.authorGithub,
-    releaseAuthor: entry.releaseAuthor,
-    releaseContributors: entry.releaseContributors,
-    pr: entry.pr,
-    source: entry.source,
-    commitSha: entry.commitSha,
-    changedFiles: entry.changedFiles,
-    bundleSizeBytes: entry.bundleSizeBytes,
-    bundleSizeLabel: entry.bundleSizeLabel,
-    bundleSha256: entry.bundleSha256,
-    versionType: entry.versionType,
-    aiGeneratedChangelog: entry.aiGeneratedChangelog,
-    createdAt: entry.createdAt ? new Date(entry.createdAt) : new Date(entry.timestamp),
-    timestamp: new Date(entry.timestamp)
+type ReleaseChanges = {
+  publication?: {
+    version: string;
+    history?: Omit<VersionEntry, "version">;
   };
-  await db
-    .insert(presence)
-    .values({
-      slug,
-      version: entry.version
-    })
-    .onConflictDoNothing();
-  await db
-    .insert(presenceVersion)
-    .values({
-      slug,
-      version: entry.version,
-      ...publication
-    })
-    .onConflictDoUpdate({
-      target: [presenceVersion.slug, presenceVersion.version],
-      set: publication
-    });
+  addedAt?: Date;
+  updatedAt?: Date;
+  metadata?: PresenceMeta;
+  archived?: boolean;
 };
 
-export const setPresenceMeta = async (slug: string, meta: PresenceMeta): Promise<void> => {
+export const savePresenceRelease = async (slug: string, { publication, addedAt, updatedAt, metadata, archived }: ReleaseChanges): Promise<void> => {
+  const changes = {
+    version: publication?.version,
+    updatedAt,
+    metadata,
+    archived
+  };
+  const hasChanges = Object.values(changes).some((value) => value !== undefined);
+
+  if (!addedAt && !hasChanges) return;
+
+  await getDb().transaction(async (tx) => {
+    const insert = tx.insert(presence).values({ slug, addedAt, ...changes });
+
+    if (hasChanges) {
+      await insert.onConflictDoUpdate({
+        target: presence.slug,
+        set: changes
+      });
+    } else {
+      await insert.onConflictDoNothing();
+    }
+
+    if (!publication?.history) return;
+
+    const { version, history } = publication;
+    const entry = {
+      ...history,
+      createdAt: history.createdAt ? new Date(history.createdAt) : new Date(history.timestamp),
+      timestamp: new Date(history.timestamp)
+    };
+    await tx
+      .insert(presenceVersion)
+      .values({ slug, version, ...entry })
+      .onConflictDoUpdate({
+        target: [presenceVersion.slug, presenceVersion.version],
+        set: entry
+      });
+  });
+};
+
+export const backfillPresenceSettings = async (slug: string, version: string, settings: object): Promise<void> => {
   await getDb()
-    .insert(presence)
-    .values({
-      slug,
-      metadata: meta
-    })
-    .onConflictDoUpdate({
-      target: presence.slug,
-      set: { metadata: meta }
-    });
+    .update(presence)
+    .set({ metadata: sql`jsonb_set(${presence.metadata}, '{settings}', ${JSON.stringify(settings)}::jsonb)` })
+    .where(
+      and(
+        eq(presence.slug, slug),
+        sql`coalesce(${presence.version}, ${presence.metadata}->>'version', '0.0.0') = ${version}`,
+        sql`(${presence.metadata}->'settings' is null or ${presence.metadata}->'settings' = 'null'::jsonb)`
+      )
+    );
 };
 
 const isPresenceMeta = (value: unknown): value is PresenceMeta => Boolean(value) && typeof value === "object";

@@ -1,64 +1,28 @@
 import { imageProxyRoutes } from "@/features/image-proxy/image-proxy.routes";
 import { inject, mount } from "./http";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-
-const mockPresenceRepo = vi.hoisted(() => ({ getAllPresenceMetas: vi.fn() }));
-
-vi.mock("@/features/presence/presence.repository", () => mockPresenceRepo);
-vi.mock("@/db/client", () => ({
-  getDb: vi.fn(() => ({})),
-  hasDatabase: vi.fn(() => true)
-}));
-
-const buildApp = async () => {
-  const app = mount("/", imageProxyRoutes);
-  return app;
-};
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { createImageProxyCatalog } from "./image-proxy.fixture";
 
 describe("image proxy routes", () => {
-  let app: Awaited<ReturnType<typeof buildApp>>;
+  let app: ReturnType<typeof mount>;
+  let database: Awaited<ReturnType<typeof createImageProxyCatalog>>;
   const originalFetch = globalThis.fetch;
 
-  beforeEach(async () => {
-    vi.clearAllMocks();
-    mockPresenceRepo.getAllPresenceMetas.mockResolvedValue([
-      {
-        slug: "tiktok",
-        metadata: {
-          imageProxy: {
-            hostSuffixes: ["tiktokcdn.com", "tiktokcdn-eu.com", "tiktokcdn-us.com", "tiktokv.com"],
-            headers: { Referer: "https://www.tiktok.com/" }
-          }
-        }
-      },
-      {
-        slug: "github",
-        metadata: {
-          imageProxy: {
-            hostSuffixes: ["github.com", "githubusercontent.com"],
-            headers: { "User-Agent": "Nowly/1.0" }
-          }
-        }
-      },
-      {
-        slug: "canalplus",
-        metadata: {
-          imageProxy: {
-            hostSuffixes: ["thumb.canalplus.pro"],
-            headers: { Referer: "https://www.canalplus.com/" }
-          }
-        }
-      }
-    ]);
-    app = await buildApp();
+  beforeAll(async () => {
+    database = await createImageProxyCatalog();
   });
+
+  beforeEach(() => {
+    app = mount("/", imageProxyRoutes);
+  });
+
+  afterAll(() => database.close());
 
   afterEach(async () => {
     globalThis.fetch = originalFetch;
   });
 
   it("GET /image-proxy handles supported CDN images and rejects invalid URLs", async () => {
-    // 1. Rejects unsupported CDN URLs
     const invalidRes = await inject(app, {
       method: "GET",
       url: `/image-proxy?url=${encodeURIComponent("https://example.com/image.jpg")}`
@@ -66,7 +30,6 @@ describe("image proxy routes", () => {
     expect(invalidRes.statusCode).toBe(400);
     expect(JSON.parse(invalidRes.body)).toEqual({ error: "INVALID_IMAGE_URL" });
 
-    // 2. Rejects unencoded nested query parameters
     const unencodedRes = await inject(app, {
       method: "GET",
       url: "/image-proxy?service=tiktok&url=https://p16-common-sign.tiktokcdn-eu.com/image.jpg?dr=1&x-signature=abc"
@@ -74,7 +37,6 @@ describe("image proxy routes", () => {
     expect(unencodedRes.statusCode).toBe(400);
     expect(JSON.parse(unencodedRes.body)).toEqual({ error: "IMAGE_URL_NOT_ENCODED" });
 
-    // 3. Successfully proxies a valid CDN image
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([1, 2, 3]), {
         status: 200,
@@ -151,7 +113,6 @@ describe("image proxy routes", () => {
     expect(body.expiresIn).toBe(300);
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
 
-    // Reuses cached image without refetching
     globalThis.fetch = vi.fn();
     const res2 = await inject(app, {
       method: "POST",
@@ -213,7 +174,6 @@ describe("image proxy routes", () => {
   });
 
   it("GET /image-proxy supports explicit service matching and rejects mismatches", async () => {
-    // 1. Supports explicit service matching
     globalThis.fetch = vi.fn().mockResolvedValue(
       new Response(new Uint8Array([4, 5, 6]), {
         status: 200,
@@ -233,7 +193,6 @@ describe("image proxy routes", () => {
     expect(validRes.headers["content-type"]).toBe("image/webp");
     expect(Buffer.from(validRes.rawPayload)).toEqual(Buffer.from([4, 5, 6]));
 
-    // 2. Rejects URLs that do not match the explicit service
     const mismatchRes = await inject(app, {
       method: "GET",
       url: `/image-proxy?service=unknown&url=${encodeURIComponent("https://p16-common-sign.tiktokcdn-eu.com/image.jpg")}`

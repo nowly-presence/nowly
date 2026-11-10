@@ -1,36 +1,9 @@
 import { z } from "zod";
+import { ACTIVITY_ICON_KEYS, isActivityIconColor } from "./activity-icons";
 
 const IMAGE_MAX_BYTES = 1024 * 1024;
 const IMAGE_MAX_BASE64_LENGTH = 1_398_104;
 const IMAGE_MAX_DATA_URL_LENGTH = 1_398_150;
-export const publicationColors = ["#0891b2", "#4a5560", "#3f7d6b", "#5a6bb0", "#9a6a4a", "#7a5aa6", "#a85a74", "#8a7a3c", "#2f6f8f", "#5f7f3f"] as const;
-export const publicationIcons = [
-  "gamepad",
-  "trophy",
-  "code",
-  "computer",
-  "book",
-  "graduation",
-  "pencil",
-  "brush",
-  "palette",
-  "camera",
-  "film",
-  "tv",
-  "music",
-  "headphone",
-  "mic",
-  "chat",
-  "coffee",
-  "restaurant",
-  "run",
-  "plane",
-  "moon",
-  "rocket",
-  "flask",
-  "sparkling"
-] as const;
-
 export const publicationHttpsSchema = z
   .string()
   .trim()
@@ -77,11 +50,8 @@ export const publicationImageSchema = z.discriminatedUnion("kind", [
   z
     .object({
       kind: z.literal("icon"),
-      icon: z.enum(publicationIcons),
-      color: z
-        .string()
-        .toLowerCase()
-        .refine((value) => publicationColors.some((color) => color === value))
+      icon: z.enum(ACTIVITY_ICON_KEYS),
+      color: z.string().toLowerCase().refine(isActivityIconColor)
     })
     .strict(),
   z

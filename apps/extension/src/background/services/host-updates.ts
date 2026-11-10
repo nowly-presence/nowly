@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { addRuntimeLog } from "@/background/runtime-logs";
 import { CDN_BASE_URL } from "@/shared/constants";
 
 const CACHE_KEY = "hostUpdateCheck";
@@ -67,7 +68,9 @@ export const refreshHostUpdate = (): Promise<void> => {
       if (!response.ok) throw new Error("HOST_UPDATE_REQUEST_FAILED");
 
       version = manifestSchema.parse(await response.json()).version;
-    } catch {}
+    } catch (error) {
+      addRuntimeLog("warn", "api", "Host update check failed", { error: error instanceof Error ? error.message : String(error) });
+    }
 
     cached = {
       url: MANIFEST_URL,
