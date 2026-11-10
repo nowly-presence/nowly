@@ -92,6 +92,24 @@ describe("public presence routes", () => {
     expect(fetcher).not.toHaveBeenCalled();
   });
 
+  it.each(["..%2F..%2F..%2Fcustom%2Fabc%2Fdef.gif%3F", "1.0.0%2F..%2F..", "1.0.0%3Fx", "1.0.0%23x"])(
+    "refuses the version %s without fetching or signing anything",
+    async (version) => {
+      await database.db.insert(presence).values({
+        slug: "youtube",
+        version: "1.0.0",
+        metadata: { name: "YouTube" }
+      });
+      const fetcher = vi.fn();
+      vi.stubGlobal("fetch", fetcher);
+
+      const response = await inject(app, { url: "/presences/youtube/versions/" + version });
+      expect(response.statusCode).toBe(404);
+      expect(response.json()).toEqual({ error: "VERSION_NOT_FOUND" });
+      expect(fetcher).not.toHaveBeenCalled();
+    }
+  );
+
   it("returns saved version history in reverse chronological order", async () => {
     await database.db.insert(presence).values({
       slug: "youtube",

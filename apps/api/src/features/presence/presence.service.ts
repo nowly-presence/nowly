@@ -1,4 +1,4 @@
-import { fetchCdnFile } from "@/shared/cdn";
+import { fetchCdnFile, isCdnPathSegment } from "@/shared/cdn";
 import { sha256Base64Url, canonicalJson, signedPayload, signPresenceRelease } from "@/shared/crypto.service";
 import { backfillPresenceSettings, getPresenceMeta, getPresenceStats } from "./presence.repository";
 
@@ -20,6 +20,8 @@ const parseSettings = (raw: string): object | null => {
 };
 
 export const buildRelease = async (slug: string, version?: string) => {
+  if (version !== undefined && !isCdnPathSegment(version)) return null;
+
   const storedMeta = await getPresenceMeta(slug);
 
   if (!storedMeta || !Object.keys(storedMeta).length) return null;

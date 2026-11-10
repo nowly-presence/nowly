@@ -35,6 +35,13 @@ describe("fetchAssetFromCdn", () => {
     expect(global.fetch).toHaveBeenCalledTimes(3);
   });
 
+  it.each(["../../custom/abc/def.gif?", "a/b", "a%2Fb", "..", "a#b", ""])("refuses the unsafe slug %j without calling the CDN", async (slug) => {
+    global.fetch = vi.fn() as unknown as typeof fetch;
+
+    expect(await fetchAssetFromCdn(slug, "logo")).toBeNull();
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
   it("returns null when no extension resolves", async () => {
     global.fetch = vi.fn().mockResolvedValue({ ok: false }) as unknown as typeof fetch;
 

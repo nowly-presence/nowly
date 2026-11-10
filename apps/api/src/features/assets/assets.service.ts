@@ -1,4 +1,4 @@
-import { CDN_BASE_URL, fetchCdn } from "@/shared/cdn";
+import { CDN_BASE_URL, fetchCdn, isCdnPathSegment } from "@/shared/cdn";
 
 const MIME_TYPES: Record<string, string> = {
   png: "image/png",
@@ -11,6 +11,8 @@ export const fetchAssetFromCdn = async (slug: string, type: string): Promise<{
   buffer: Buffer;
   mime: string;
 } | null> => {
+  if (!isCdnPathSegment(slug) || !isCdnPathSegment(type)) return null;
+
   for (const ext of EXTENSIONS) {
     const res = await fetchCdn(`${CDN_BASE_URL}/presences/${slug}/assets/${type}.${ext}`);
 
