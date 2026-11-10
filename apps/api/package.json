@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1163.0",
-    "@hono/node-server": "^1.19.18",
+    "@hono/node-server": "^2.1.6",
     "@nowly/auth": "workspace:*",
     "@nowly/database": "workspace:*",
     "@nowly/env": "workspace:*",
