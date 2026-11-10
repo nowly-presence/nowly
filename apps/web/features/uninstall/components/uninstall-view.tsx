@@ -1,7 +1,7 @@
 "use client";
 
 import { ExtensionStoreButton } from "@/components/extension-store-button";
-import { siteConsent, trackProduct } from "@/lib/telemetry";
+import { trackProduct } from "@/lib/telemetry";
 import { Button, ButtonAnchor, Card, CardContent, CardDescription, CardTitle, Separator } from "@nowly/ui";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
 import { presenceApiBaseUrl } from "@/lib/presence-api-client";
@@ -21,7 +21,7 @@ export const UninstallView = () => {
 
   useEffect(() => {
     const recordLanding = () => {
-      if (!deviceId || landingTrackedRef.current || siteConsent() !== true) return;
+      if (!deviceId || landingTrackedRef.current) return;
 
       landingTrackedRef.current = true;
       trackProduct({
@@ -31,8 +31,6 @@ export const UninstallView = () => {
       });
     };
     recordLanding();
-    window.addEventListener("nowly:product-consent", recordLanding);
-    return () => window.removeEventListener("nowly:product-consent", recordLanding);
   }, [deviceId]);
 
   const onKeep = (): void => {

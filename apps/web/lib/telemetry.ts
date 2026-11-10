@@ -1,7 +1,8 @@
 "use client";
 
-import { sendEvent, type EventInput } from "@nowly/telemetry";
-import { presenceApiBaseUrl } from "@/lib/presence-api-client";
+import type { EventInput } from "@nowly/telemetry";
+
+type UmamiTracker = { track: (name: string, data?: Record<string, unknown>) => void };
 
 const KEY = "nowly:product-consent:v1";
 
@@ -25,8 +26,12 @@ export const setSiteConsent = (granted: boolean): void => {
   window.dispatchEvent(new Event("nowly:product-consent"));
 };
 
+// Website events go straight to Umami from the browser (the script in app/layout.tsx handles pageviews).
+// Extension events still go through the API relay because the extension has no page to track.
 export const trackProduct = (input: EventInput): void => {
   if (process.env.NODE_ENV !== "production") return;
 
-  void sendEvent(presenceApiBaseUrl(), input, () => siteConsent() === true);
+  const umami = (window as Window & { umami?: UmamiTracker }).umami;
+
+  umami?.track(input.name, input.data as Record<string, unknown>);
 };

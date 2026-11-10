@@ -1,5 +1,4 @@
 import { CookieBanner } from "@/features/layout/components/cookie-banner";
-import { ProductTelemetry } from "@/components/product-telemetry";
 import { Footer } from "@/features/layout/components/footer";
 import { Navbar } from "@/features/layout/components/navbar";
 import { AnnouncementBar } from "@/features/layout/components/announcement-bar";
@@ -47,7 +46,6 @@ const Layout = async ({ children, params }: LayoutProps) => {
         <Footer />
       </div>
       <CookieBanner />
-      <ProductTelemetry />
     </NextIntlClientProvider>
   );
 };

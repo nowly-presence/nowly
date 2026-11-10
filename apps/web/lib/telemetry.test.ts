@@ -1,10 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { setSiteConsent, siteConsent, trackProduct } from "./telemetry";
 
-vi.mock("@/lib/presence-api-client", () => ({
-  presenceApiBaseUrl: () => "https://api.test"
-}));
-
 describe("website consent", () => {
   const storage = new Map<string, string>();
   const dispatchEvent = vi.fn();
@@ -37,21 +33,23 @@ describe("website consent", () => {
     expect(dispatchEvent).toHaveBeenCalledTimes(2);
   });
 
-  it("fails closed if storage is unavailable and never sends from development", () => {
+  it("fails closed if storage is unavailable", () => {
     vi.stubGlobal("localStorage", {
       removeItem: () => {
         throw new Error("blocked");
       }
     });
     expect(siteConsent()).toBeNull();
-    const fetcher = vi.fn();
-    vi.stubGlobal("fetch", fetcher);
+  });
+
+  it("forwards website events to Umami only in production", () => {
+    const track = vi.fn();
+    vi.stubGlobal("window", { dispatchEvent, umami: { track } });
     vi.stubEnv("NODE_ENV", "development");
-    trackProduct({
-      name: "site_visit",
-      source: "web",
-      data: { page: "home" }
-    });
-    expect(fetcher).not.toHaveBeenCalled();
+    trackProduct({ name: "extension_download_click", source: "web", data: { browser: "chrome" } });
+    expect(track).not.toHaveBeenCalled();
+    vi.stubEnv("NODE_ENV", "production");
+    trackProduct({ name: "extension_download_click", source: "web", data: { browser: "chrome" } });
+    expect(track).toHaveBeenCalledWith("extension_download_click", { browser: "chrome" });
   });
 });
