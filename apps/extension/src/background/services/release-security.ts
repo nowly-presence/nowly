@@ -7,6 +7,10 @@ import type { PresenceRelease } from "@/shared/types";
 const FALLBACK_PRESENCE_SIGNING_PUBLIC_KEY =
   "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE5ai7_TuIx7BJF-wAGWidRzj8EVf0OxL-QUp8Ta2m-L91HRVljUTwYfF_ijWVyGF3-5gQvQ4GsQGiSVDknDe_LA";
 
+const PRODUCTION_API_BASE_URL = "https://api.nowly.me";
+
+const TRUSTS_REMOTE_KEY = API_BASE_URL.replace(/\/+$/, "") !== PRODUCTION_API_BASE_URL;
+
 const STORAGE_KEY = "presenceSigningPublicKey";
 const KEY_REQUEST_TIMEOUT_MS = 10_000;
 
@@ -115,6 +119,8 @@ const verifyWithKey = async (keyB64: string, release: PresenceRelease): Promise<
 };
 
 const verifySignature = async (release: PresenceRelease): Promise<boolean> => {
+  if (!TRUSTS_REMOTE_KEY) return verifyWithKey(FALLBACK_PRESENCE_SIGNING_PUBLIC_KEY, release);
+
   const primaryKey = await ensurePublicKey();
 
   if (await verifyWithKey(primaryKey, release)) return true;

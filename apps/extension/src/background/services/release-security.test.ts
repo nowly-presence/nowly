@@ -82,9 +82,17 @@ const buildRelease = async (privateKey: CryptoKey, overrides: Partial<PresenceRe
   };
 };
 
+const useDevelopmentApi = (): void => {
+  vi.doMock("@/shared/constants", async (original) => ({
+    ...(await original<typeof import("@/shared/constants")>()),
+    API_BASE_URL: "http://localhost:3001"
+  }));
+};
+
 describe("verifyPresenceRelease", () => {
   beforeEach(() => {
     vi.resetModules();
+    vi.doUnmock("@/shared/constants");
     vi.unstubAllEnvs();
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("network disabled in tests")));
   });
@@ -183,7 +191,23 @@ describe("verifyPresenceRelease", () => {
     });
   });
 
-  it("accepts a release signed with the cached public key", async () => {
+  it("ignores a cached key on a build that talks to the production API", async () => {
+    const chrome = installChromeMock();
+    const { publicKey, privateKey } = await generateKeyPair();
+    chrome.local.presenceSigningPublicKey = await exportPublicKeyBase64Url(publicKey);
+
+    const { verifyPresenceRelease } = await import("@/background/services/release-security");
+
+    const release = await buildRelease(privateKey);
+    expect(await verifyPresenceRelease(release)).toEqual({
+      ok: false,
+      error: "RELEASE_SIGNATURE_INVALID"
+    });
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("accepts a release signed with the cached public key on a development API", async () => {
+    useDevelopmentApi();
     const chrome = installChromeMock();
     const { publicKey, privateKey } = await generateKeyPair();
     chrome.local.presenceSigningPublicKey = await exportPublicKeyBase64Url(publicKey);
@@ -195,6 +219,7 @@ describe("verifyPresenceRelease", () => {
   });
 
   it("rejects a release signed with a key that doesn't match the cached public key", async () => {
+    useDevelopmentApi();
     const chrome = installChromeMock();
     const { publicKey } = await generateKeyPair();
 
