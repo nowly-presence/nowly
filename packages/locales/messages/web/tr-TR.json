@@ -886,7 +886,7 @@
     "badge": "Gizlilik",
     "title": "Gizlilik Politikası",
     "description": "Nowly'nin verilerini nasıl işlediği, cihazında ne kaldığı ve neyin iznine bağlı olduğu.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "data-region": "Avrupa Birliği (Contabo GmbH tarafından sağlanan VPS, Almanya)",
     "intro": "Bu politika, veri sorumlusu <strong>{publisherName}</strong> tarafından kişisel verilerin işlenmesini açıklar. Rich Presence mesajları masaüstü uygulamasıyla cihazdaki Discord'a ulaşır. Ancak tüm özellikler çevrimdışı değildir: eşitleme, görsel istekleri, talep edilen yüklemeler ve isteğe bağlı istatistikler API veya sağlayıcılarımızı kullanır.",
     "sections": [
@@ -932,7 +932,7 @@
       },
       {
         "title": "Yasal Dayanaklar (GDPR Madde 6)",
-        "body": "<ul><li><strong>Web sitesi kullanım istatistikleri</strong>: siteyi anlamak ve geliştirmek konusunda meşru menfaat (md. 6/1-f); çerez ayarlanmaz. <strong>Uzantı kullanım istatistikleri (opt-in)</strong>: açık rıza (md. 6/1-a); uzantıda istediğiniz zaman geri çekebilirsiniz, geri çekmeden önceki işlemenin hukuka uygunluğu etkilenmez.</li><li><strong>Dil çerezi ve dokümantasyon çerezi</strong>: talep ettiğin hizmet için gerekli ve/veya dilini hatırlamada meşru menfaat (Madde 6(1)(b) ve/veya (f)).</li><li><strong>Tema ve çerez bildirimi bayrakları</strong> (yerel depolama): kullanılabilir bir arayüzde meşru menfaat (Madde 6(1)(f)).</li><li><strong>Görsel proxy</strong>: tarayıcında her üçüncü taraf CDN'sini yüklemeden katalog ve etkinlik görsellerini görüntülemede meşru menfaat (Madde 6(1)(f)).</li><li><strong>İsteğe bağlı Discord girişi</strong>: talep ettiğin hesap özelliğinin yerine getirilmesi (Madde 6(1)(b)) ve gerektiğinde API'yi güvence altına almadaki meşru menfaatimiz (Madde 6(1)(f)).</li><li><strong>GitHub, Discord topluluğu, Ko-fi, GitHub Sponsors</strong>: bu hizmetlere göndermeyi seçtiğin veriler kendi politikalarına göre işlenir; yanıt vermek için bize yönelttiğin herkese açık issue'ları veya mesajları okuruz (Madde 6(1)(b) veya (f))."
+        "body": "<ul><li><strong>Web sitesi kullanım istatistikleri</strong>: siteyi anlamak ve geliştirmek konusunda meşru menfaat (md. 6/1-f); çerez ayarlanmaz. <strong>Uzantı kullanım istatistikleri (opt-in)</strong>: açık rıza (md. 6/1-a); uzantıda istediğiniz zaman geri çekebilirsiniz, geri çekmeden önceki işlemenin hukuka uygunluğu etkilenmez.</li><li><strong>Dil çerezi ve dokümantasyon çerezi</strong>: talep ettiğin hizmet için gerekli ve/veya dilini hatırlamada meşru menfaat (Madde 6(1)(b) ve/veya (f)).</li><li><strong>Tema bayrağı</strong> (yerel depolama): kullanılabilir bir arayüzde meşru menfaat (Madde 6(1)(f)).</li><li><strong>Görsel proxy</strong>: tarayıcında her üçüncü taraf CDN'sini yüklemeden katalog ve etkinlik görsellerini görüntülemede meşru menfaat (Madde 6(1)(f)).</li><li><strong>İsteğe bağlı Discord girişi</strong>: talep ettiğin hesap özelliğinin yerine getirilmesi (Madde 6(1)(b)) ve gerektiğinde API'yi güvence altına almadaki meşru menfaatimiz (Madde 6(1)(f)).</li><li><strong>GitHub, Discord topluluğu, Ko-fi, GitHub Sponsors</strong>: bu hizmetlere göndermeyi seçtiğin veriler kendi politikalarına göre işlenir; yanıt vermek için bize yönelttiğin herkese açık issue'ları veya mesajları okuruz (Madde 6(1)(b) veya (f))."
       },
       {
         "title": "Saklama",
@@ -1073,7 +1073,7 @@
     "badge": "Çerezler",
     "title": "Çerez Politikası",
     "description": "nowly.me ve docs.nowly.me üzerinde kullanılan çerezler ve yerel depolama.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "intro": "Tarayıcı temayı yerel olarak saklar. Uzantı onayı ve yerel geri dönüş/tekilleştirme tarihlerini saklar. Web sitesi istatistikleri (kendi sunucumuzda barındırılan Umami) çerez veya kalıcı ziyaretçi kimliği ayarlamaz. Uzantı onayının geri çekilmesi uzantı istatistiklerini durdurur.",
     "sections": [
       {

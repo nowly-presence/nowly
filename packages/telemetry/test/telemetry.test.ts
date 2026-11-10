@@ -104,9 +104,9 @@ describe("product telemetry privacy contract", () => {
   it("rejects channel mismatches instead of accepting arbitrary attribution", () => {
     for (const [name, source, data] of [
       [
-        "site_visit",
+        "extension_download_click",
         "extension",
-        { page: "home" }
+        { browser: "chrome" }
       ],
       [
         "extension_active",
@@ -224,9 +224,9 @@ describe("product telemetry privacy contract", () => {
       .mockRejectedValueOnce(new Error("offline"));
     vi.stubGlobal("fetch", fetcher);
     const input = {
-      name: "site_visit",
+      name: "extension_download_click",
       source: "web",
-      data: { page: "library" }
+      data: { browser: "firefox" }
     } as const;
     expect(await sendEvent("https://api.test/", input, () => true)).toBe(true);
     const [url, init] = fetcher.mock.calls[0];

@@ -886,7 +886,7 @@
     "badge": "Privasi",
     "title": "Dasar Privasi",
     "description": "Cara Nowly mengendalikan data anda, apa yang kekal pada peranti anda, dan apa yang bergantung pada persetujuan anda.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "data-region": "Kesatuan Eropah (VPS disediakan oleh Contabo GmbH, Jerman)",
     "intro": "Dasar ini menerangkan pemprosesan data peribadi oleh <strong>{publisherName}</strong> sebagai pengawal. Mesej Rich Presence sampai ke Discord secara setempat melalui aplikasi desktop. Namun tidak semua fungsi di luar talian: penyegerakan, permintaan imej, muat naik yang diminta dan statistik pilihan melibatkan API atau penyedia kami.",
     "sections": [
@@ -932,7 +932,7 @@
       },
       {
         "title": "Asas undang-undang (GDPR Perkara 6)",
-        "body": "<ul><li><strong>Statistik penggunaan laman web</strong>: kepentingan sah untuk memahami dan menambah baik laman (Art. 6(1)(f)); tiada kuki ditetapkan. <strong>Statistik penggunaan sambungan (opt-in)</strong>: persetujuan (Art. 6(1)(a)), yang boleh anda tarik balik dalam sambungan pada bila-bila masa, tanpa menjejaskan kesahihan pemprosesan sebelum penarikan balik.</li><li><strong>Kuki bahasa dan kuki dokumentasi</strong>: perlu untuk perkhidmatan yang anda minta dan/atau kepentingan sah untuk mengingati bahasa anda (Perkara 6(1)(b) dan/atau (f)).</li><li><strong>Bendera tema dan notis kuki</strong> (storan setempat): kepentingan sah dalam antara muka yang boleh digunakan (Perkara 6(1)(f)).</li><li><strong>Proksi imej</strong>: kepentingan sah dalam memaparkan artwork katalog dan aktiviti tanpa memuatkan setiap CDN pihak ketiga dalam pelayar anda (Perkara 6(1)(f)).</li><li><strong>Log masuk Discord pilihan</strong>: pelaksanaan ciri akaun yang anda minta (Perkara 6(1)(b)) dan, apabila diperlukan, kepentingan sah kami dalam mengamankan API (Perkara 6(1)(f)).</li><li><strong>GitHub, komuniti Discord, Ko-fi, GitHub Sponsors</strong>: data yang anda pilih untuk hantar ke perkhidmatan tersebut diproses di bawah dasar mereka sendiri; kami membaca isu awam atau mesej yang anda tujukan kepada kami untuk membalas (Perkara 6(1)(b) atau (f)).</li></ul>"
+        "body": "<ul><li><strong>Statistik penggunaan laman web</strong>: kepentingan sah untuk memahami dan menambah baik laman (Art. 6(1)(f)); tiada kuki ditetapkan. <strong>Statistik penggunaan sambungan (opt-in)</strong>: persetujuan (Art. 6(1)(a)), yang boleh anda tarik balik dalam sambungan pada bila-bila masa, tanpa menjejaskan kesahihan pemprosesan sebelum penarikan balik.</li><li><strong>Kuki bahasa dan kuki dokumentasi</strong>: perlu untuk perkhidmatan yang anda minta dan/atau kepentingan sah untuk mengingati bahasa anda (Perkara 6(1)(b) dan/atau (f)).</li><li><strong>Bendera tema</strong> (storan setempat): kepentingan sah dalam antara muka yang boleh digunakan (Perkara 6(1)(f)).</li><li><strong>Proksi imej</strong>: kepentingan sah dalam memaparkan artwork katalog dan aktiviti tanpa memuatkan setiap CDN pihak ketiga dalam pelayar anda (Perkara 6(1)(f)).</li><li><strong>Log masuk Discord pilihan</strong>: pelaksanaan ciri akaun yang anda minta (Perkara 6(1)(b)) dan, apabila diperlukan, kepentingan sah kami dalam mengamankan API (Perkara 6(1)(f)).</li><li><strong>GitHub, komuniti Discord, Ko-fi, GitHub Sponsors</strong>: data yang anda pilih untuk hantar ke perkhidmatan tersebut diproses di bawah dasar mereka sendiri; kami membaca isu awam atau mesej yang anda tujukan kepada kami untuk membalas (Perkara 6(1)(b) atau (f)).</li></ul>"
       },
       {
         "title": "Pengekalan",
@@ -1073,7 +1073,7 @@
     "badge": "Kuki",
     "title": "Dasar Kuki",
     "description": "Kuki dan storan setempat yang digunakan pada nowly.me dan docs.nowly.me.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "intro": "Pelayar menyimpan tema secara setempat. Sambungan menyimpan persetujuan dan tarikh kembali/penyahduplikasian setempat. Statistik laman web (Umami dihoskan sendiri) tidak menetapkan kuki atau ID pelawat kekal. Menarik balik persetujuan sambungan menghentikan statistik sambungan.",
     "sections": [
       {

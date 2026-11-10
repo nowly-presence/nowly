@@ -886,7 +886,7 @@
     "badge": "Datenschutz",
     "title": "Datenschutzerklärung",
     "description": "Wie Nowly deine Daten behandelt, was auf deinem Gerät bleibt und was von deiner Zustimmung abhängt.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "data-region": "Europäische Union (VPS bereitgestellt von Contabo GmbH, Deutschland)",
     "intro": "Diese Richtlinie beschreibt die Verarbeitung personenbezogener Daten durch <strong>{publisherName}</strong> als Verantwortlichen. Rich-Presence-Nachrichten erreichen Discord lokal über die Desktop-App. Das bedeutet nicht, dass alle Funktionen offline sind: Kontosynchronisierung, Bildabrufe, angeforderte Uploads und optionale Statistiken nutzen unsere API oder Dienstleister.",
     "sections": [
@@ -932,7 +932,7 @@
       },
       {
         "title": "Rechtsgrundlagen (DSGVO Art. 6)",
-        "body": "<ul><li><strong>Website-Nutzungsstatistiken</strong>: berechtigtes Interesse am Verständnis und der Verbesserung der Website (Art. 6 Abs. 1 lit. f); es wird kein Cookie gesetzt. <strong>Nutzungsstatistiken der Erweiterung (Opt-in)</strong>: Einwilligung (Art. 6 Abs. 1 lit. a), die Sie jederzeit in der Erweiterung widerrufen können, ohne die Rechtmäßigkeit der bisherigen Verarbeitung zu berühren.</li><li><strong>Sprach-Cookie und Dokumentations-Cookie</strong>: erforderlich für den angeforderten Dienst und/oder berechtigtes Interesse, deine Sprache zu merken (Art. 6 Abs. 1 lit. b und/oder f).</li><li><strong>Theme- und Cookie-Hinweis-Flags</strong> (lokaler Speicher): berechtigtes Interesse an einer nutzbaren Oberfläche (Art. 6 Abs. 1 lit. f).</li><li><strong>Bild-Proxy</strong>: berechtigtes Interesse, Katalog- und Aktivitäts-Artwork anzuzeigen, ohne jedes Drittanbieter-CDN in deinem Browser zu laden (Art. 6 Abs. 1 lit. f).</li><li><strong>Optionaler Discord-Login</strong>: Erfüllung der von dir angeforderten Kontofunktion (Art. 6 Abs. 1 lit. b) und, wo nötig, unser berechtigtes Interesse an der Absicherung der API (Art. 6 Abs. 1 lit. f).</li><li><strong>GitHub, Discord-Community, Ko-fi, GitHub Sponsors</strong>: Daten, die du an diese Dienste sendest, werden nach deren Richtlinien verarbeitet; wir lesen öffentliche Issues oder Nachrichten, die du an uns richtest, um zu antworten (Art. 6 Abs. 1 lit. b oder f).</li></ul>"
+        "body": "<ul><li><strong>Website-Nutzungsstatistiken</strong>: berechtigtes Interesse am Verständnis und der Verbesserung der Website (Art. 6 Abs. 1 lit. f); es wird kein Cookie gesetzt. <strong>Nutzungsstatistiken der Erweiterung (Opt-in)</strong>: Einwilligung (Art. 6 Abs. 1 lit. a), die Sie jederzeit in der Erweiterung widerrufen können, ohne die Rechtmäßigkeit der bisherigen Verarbeitung zu berühren.</li><li><strong>Sprach-Cookie und Dokumentations-Cookie</strong>: erforderlich für den angeforderten Dienst und/oder berechtigtes Interesse, deine Sprache zu merken (Art. 6 Abs. 1 lit. b und/oder f).</li><li><strong>Theme-Flag</strong> (lokaler Speicher): berechtigtes Interesse an einer nutzbaren Oberfläche (Art. 6 Abs. 1 lit. f).</li><li><strong>Bild-Proxy</strong>: berechtigtes Interesse, Katalog- und Aktivitäts-Artwork anzuzeigen, ohne jedes Drittanbieter-CDN in deinem Browser zu laden (Art. 6 Abs. 1 lit. f).</li><li><strong>Optionaler Discord-Login</strong>: Erfüllung der von dir angeforderten Kontofunktion (Art. 6 Abs. 1 lit. b) und, wo nötig, unser berechtigtes Interesse an der Absicherung der API (Art. 6 Abs. 1 lit. f).</li><li><strong>GitHub, Discord-Community, Ko-fi, GitHub Sponsors</strong>: Daten, die du an diese Dienste sendest, werden nach deren Richtlinien verarbeitet; wir lesen öffentliche Issues oder Nachrichten, die du an uns richtest, um zu antworten (Art. 6 Abs. 1 lit. b oder f).</li></ul>"
       },
       {
         "title": "Aufbewahrung",
@@ -1073,7 +1073,7 @@
     "badge": "Cookies",
     "title": "Cookie-Richtlinie",
     "description": "Cookies und lokaler Speicher, genutzt auf nowly.me und docs.nowly.me.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "intro": "Der Browser speichert das Design lokal. Die Erweiterung speichert die Einwilligung und lokale Rückkehr-/Deduplizierungsdaten. Die Website-Statistiken (selbst gehostetes Umami) setzen kein Cookie und keine dauerhafte Besucher-ID. Der Widerruf der Einwilligung in der Erweiterung beendet deren Statistiken.",
     "sections": [
       {

@@ -886,7 +886,7 @@
     "badge": "Prywatność",
     "title": "Polityka prywatności",
     "description": "Jak Nowly traktuje Twoje dane, co zostaje na Twoim urządzeniu, a co zależy od Twojej zgody.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "data-region": "Unia Europejska (VPS dostarczany przez Contabo GmbH, Niemcy)",
     "intro": "Polityka opisuje przetwarzanie danych osobowych przez administratora <strong>{publisherName}</strong>. Wiadomości Rich Presence trafiają do Discorda lokalnie przez aplikację komputerową. Nie wszystkie funkcje są jednak lokalne: synchronizacja, żądania obrazów, zlecone przesyłanie plików i opcjonalne statystyki korzystają z API lub dostawców.",
     "sections": [
@@ -932,7 +932,7 @@
       },
       {
         "title": "Podstawy prawne (RODO art. 6)",
-        "body": "<ul><li><strong>Statystyki użycia strony</strong>: prawnie uzasadniony interes w zrozumieniu i ulepszaniu strony (art. 6 ust. 1 lit. f); nie są ustawiane pliki cookie. <strong>Statystyki użycia rozszerzenia (opt-in)</strong>: zgoda (art. 6 ust. 1 lit. a), którą można w każdej chwili wycofać w rozszerzeniu, bez wpływu na zgodność z prawem wcześniejszego przetwarzania.</li><li><strong>Plik cookie języka i dokumentacji</strong>: niezbędny do świadczenia żądanej usługi i/lub uzasadniony interes w zapamiętaniu Twojego języka (art. 6 ust. 1 lit. b i/lub f).</li><li><strong>Flagi motywu i powiadomienia o cookies</strong> (pamięć lokalna): uzasadniony interes w użytecznym interfejsie (art. 6 ust. 1 lit. f).</li><li><strong>Proxy obrazów</strong>: uzasadniony interes w wyświetlaniu grafik katalogu i aktywności bez ładowania każdego CDN strony trzeciej w Twojej przeglądarce (art. 6 ust. 1 lit. f).</li><li><strong>Opcjonalne logowanie przez Discord</strong>: realizacja żądanej funkcji konta (art. 6 ust. 1 lit. b) oraz, w razie potrzeby, nasz uzasadniony interes w zabezpieczeniu API (art. 6 ust. 1 lit. f).</li><li><strong>GitHub, społeczność Discord, Ko-fi, GitHub Sponsors</strong>: dane, które zdecydujesz się wysłać do tych usług, są przetwarzane zgodnie z ich politykami; czytamy publiczne zgłoszenia lub wiadomości skierowane do nas, aby odpowiedzieć (art. 6 ust. 1 lit. b lub f).</li></ul>"
+        "body": "<ul><li><strong>Statystyki użycia strony</strong>: prawnie uzasadniony interes w zrozumieniu i ulepszaniu strony (art. 6 ust. 1 lit. f); nie są ustawiane pliki cookie. <strong>Statystyki użycia rozszerzenia (opt-in)</strong>: zgoda (art. 6 ust. 1 lit. a), którą można w każdej chwili wycofać w rozszerzeniu, bez wpływu na zgodność z prawem wcześniejszego przetwarzania.</li><li><strong>Plik cookie języka i dokumentacji</strong>: niezbędny do świadczenia żądanej usługi i/lub uzasadniony interes w zapamiętaniu Twojego języka (art. 6 ust. 1 lit. b i/lub f).</li><li><strong>Flaga motywu</strong> (pamięć lokalna): uzasadniony interes w użytecznym interfejsie (art. 6 ust. 1 lit. f).</li><li><strong>Proxy obrazów</strong>: uzasadniony interes w wyświetlaniu grafik katalogu i aktywności bez ładowania każdego CDN strony trzeciej w Twojej przeglądarce (art. 6 ust. 1 lit. f).</li><li><strong>Opcjonalne logowanie przez Discord</strong>: realizacja żądanej funkcji konta (art. 6 ust. 1 lit. b) oraz, w razie potrzeby, nasz uzasadniony interes w zabezpieczeniu API (art. 6 ust. 1 lit. f).</li><li><strong>GitHub, społeczność Discord, Ko-fi, GitHub Sponsors</strong>: dane, które zdecydujesz się wysłać do tych usług, są przetwarzane zgodnie z ich politykami; czytamy publiczne zgłoszenia lub wiadomości skierowane do nas, aby odpowiedzieć (art. 6 ust. 1 lit. b lub f).</li></ul>"
       },
       {
         "title": "Przechowywanie",
@@ -1073,7 +1073,7 @@
     "badge": "Pliki cookie",
     "title": "Polityka plików cookie",
     "description": "Pliki cookie i pamięć lokalna używane na nowly.me i docs.nowly.me.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "intro": "Przeglądarka przechowuje lokalnie motyw. Rozszerzenie przechowuje zgodę oraz lokalne daty powrotu/deduplikacji. Statystyki strony (samodzielnie hostowane Umami) nie ustawiają plików cookie ani trwałego identyfikatora odwiedzającego. Wycofanie zgody w rozszerzeniu zatrzymuje jego statystyki.",
     "sections": [
       {

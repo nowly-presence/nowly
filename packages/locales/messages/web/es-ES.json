@@ -886,7 +886,7 @@
     "badge": "Privacidad",
     "title": "Política de privacidad",
     "description": "Cómo trata Nowly tus datos, qué permanece en tu dispositivo y qué depende de tu consentimiento.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "data-region": "Unión Europea (VPS proporcionado por Contabo GmbH, Alemania)",
     "intro": "Esta política describe el tratamiento de datos personales por <strong>{publisherName}</strong>, responsable del tratamiento. Los mensajes Rich Presence llegan a Discord localmente mediante la aplicación de escritorio. Esto no significa que todas las funciones sean locales: la sincronización, las solicitudes de imágenes, las subidas solicitadas y las estadísticas opcionales utilizan nuestra API o proveedores.",
     "sections": [
@@ -932,7 +932,7 @@
       },
       {
         "title": "Bases jurídicas (art. 6 RGPD)",
-        "body": "<ul><li><strong>Estadísticas de uso del sitio web</strong>: interés legítimo en comprender y mejorar el sitio (art. 6.1.f); no se instala ninguna cookie. <strong>Estadísticas de uso de la extensión (opt-in)</strong>: consentimiento (art. 6.1.a), que puede retirar en cualquier momento en la extensión, sin afectar a la licitud del tratamiento anterior.</li><li><strong>Cookie de idioma</strong> (sitio y documentación): necesaria para el servicio solicitado y/o interés legítimo en recordar el idioma (art. 6.1.b y/o f).</li><li><strong>Tema y aviso de cookies</strong> (almacenamiento local): interés legítimo en una interfaz usable (art. 6.1.f).</li><li><strong>Proxy de imágenes</strong>: interés legítimo en mostrar las miniaturas del catálogo y de la actividad sin consultar cada CDN desde tu navegador (art. 6.1.f).</li><li><strong>Inicio de sesión opcional con Discord</strong>: ejecución de la función de cuenta solicitada (art. 6.1.b) y, si procede, interés legítimo en asegurar la API (art. 6.1.f).</li><li><strong>GitHub, comunidad Discord, Ko-fi, GitHub Sponsors</strong>: los datos que envías a esos servicios se rigen por sus políticas; leemos los mensajes públicos dirigidos a nosotros para responder (art. 6.1.b o f).</li></ul>"
+        "body": "<ul><li><strong>Estadísticas de uso del sitio web</strong>: interés legítimo en comprender y mejorar el sitio (art. 6.1.f); no se instala ninguna cookie. <strong>Estadísticas de uso de la extensión (opt-in)</strong>: consentimiento (art. 6.1.a), que puede retirar en cualquier momento en la extensión, sin afectar a la licitud del tratamiento anterior.</li><li><strong>Cookie de idioma</strong> (sitio y documentación): necesaria para el servicio solicitado y/o interés legítimo en recordar el idioma (art. 6.1.b y/o f).</li><li><strong>Tema</strong> (almacenamiento local): interés legítimo en una interfaz usable (art. 6.1.f).</li><li><strong>Proxy de imágenes</strong>: interés legítimo en mostrar las miniaturas del catálogo y de la actividad sin consultar cada CDN desde tu navegador (art. 6.1.f).</li><li><strong>Inicio de sesión opcional con Discord</strong>: ejecución de la función de cuenta solicitada (art. 6.1.b) y, si procede, interés legítimo en asegurar la API (art. 6.1.f).</li><li><strong>GitHub, comunidad Discord, Ko-fi, GitHub Sponsors</strong>: los datos que envías a esos servicios se rigen por sus políticas; leemos los mensajes públicos dirigidos a nosotros para responder (art. 6.1.b o f).</li></ul>"
       },
       {
         "title": "Conservación",
@@ -1073,7 +1073,7 @@
     "badge": "Cookies",
     "title": "Política de cookies",
     "description": "Cookies y almacenamiento local usados en nowly.me y docs.nowly.me.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "intro": "El navegador guarda el tema localmente. La extensión guarda el consentimiento y las fechas locales de regreso/deduplicación. Las estadísticas del sitio (Umami autoalojado) no instalan cookies ni un identificador persistente de visitante. Retirar el consentimiento de la extensión detiene sus estadísticas.",
     "sections": [
       {

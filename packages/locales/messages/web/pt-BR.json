@@ -886,7 +886,7 @@
     "badge": "Privacidade",
     "title": "Política de Privacidade",
     "description": "Como o Nowly trata seus dados, o que fica no seu dispositivo e o que depende do seu consentimento.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "data-region": "União Europeia (VPS fornecido pela Contabo GmbH, Alemanha)",
     "intro": "Esta política descreve o tratamento de dados pessoais por <strong>{publisherName}</strong>, controlador. As mensagens Rich Presence chegam ao Discord localmente pelo aplicativo desktop. Isso não significa que todos os recursos funcionem offline: sincronização, solicitações de imagens, envios solicitados e estatísticas opcionais usam nossa API ou fornecedores.",
     "sections": [
@@ -932,7 +932,7 @@
       },
       {
         "title": "Bases legais (GDPR Art. 6)",
-        "body": "<ul><li><strong>Estatísticas de uso do site</strong>: legítimo interesse em entender e melhorar o site (art. 7º, IX, LGPD / art. 6(1)(f) RGPD); nenhum cookie é definido. <strong>Estatísticas de uso da extensão (opt-in)</strong>: consentimento (art. 6(1)(a) RGPD), que você pode retirar na extensão a qualquer momento, sem afetar a licitude do tratamento anterior.</li><li><strong>Cookie de idioma e cookie de documentação</strong>: necessário para o serviço que você solicita e/ou interesse legítimo em lembrar seu idioma (Art. 6(1)(b) e/ou (f)).</li><li><strong>Sinalizadores de tema e aviso de cookies</strong> (armazenamento local): interesse legítimo em uma interface utilizável (Art. 6(1)(f)).</li><li><strong>Proxy de imagens</strong>: interesse legítimo em exibir imagens de catálogo e atividade sem carregar todos os CDNs de terceiros no seu navegador (Art. 6(1)(f)).</li><li><strong>Login opcional do Discord</strong>: execução do recurso de conta que você solicita (Art. 6(1)(b)) e, quando necessário, nosso interesse legítimo em proteger a API (Art. 6(1)(f)).</li><li><strong>GitHub, comunidade do Discord, Ko-fi, GitHub Sponsors</strong>: dados que você opta por enviar a esses serviços são processados conforme suas próprias políticas; lemos issues públicas ou mensagens direcionadas a nós para responder (Art. 6(1)(b) ou (f)).</li></ul>"
+        "body": "<ul><li><strong>Estatísticas de uso do site</strong>: legítimo interesse em entender e melhorar o site (art. 7º, IX, LGPD / art. 6(1)(f) RGPD); nenhum cookie é definido. <strong>Estatísticas de uso da extensão (opt-in)</strong>: consentimento (art. 6(1)(a) RGPD), que você pode retirar na extensão a qualquer momento, sem afetar a licitude do tratamento anterior.</li><li><strong>Cookie de idioma e cookie de documentação</strong>: necessário para o serviço que você solicita e/ou interesse legítimo em lembrar seu idioma (Art. 6(1)(b) e/ou (f)).</li><li><strong>Sinalizador de tema</strong> (armazenamento local): interesse legítimo em uma interface utilizável (Art. 6(1)(f)).</li><li><strong>Proxy de imagens</strong>: interesse legítimo em exibir imagens de catálogo e atividade sem carregar todos os CDNs de terceiros no seu navegador (Art. 6(1)(f)).</li><li><strong>Login opcional do Discord</strong>: execução do recurso de conta que você solicita (Art. 6(1)(b)) e, quando necessário, nosso interesse legítimo em proteger a API (Art. 6(1)(f)).</li><li><strong>GitHub, comunidade do Discord, Ko-fi, GitHub Sponsors</strong>: dados que você opta por enviar a esses serviços são processados conforme suas próprias políticas; lemos issues públicas ou mensagens direcionadas a nós para responder (Art. 6(1)(b) ou (f)).</li></ul>"
       },
       {
         "title": "Retenção",
@@ -1073,7 +1073,7 @@
     "badge": "Cookies",
     "title": "Política de Cookies",
     "description": "Cookies e armazenamento local usados em nowly.me e docs.nowly.me.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "intro": "O navegador guarda o tema localmente. A extensão guarda o consentimento e datas locais de retorno/deduplicação. As estatísticas do site (Umami auto-hospedado) não definem cookies nem identificador persistente de visitante. Retirar o consentimento da extensão interrompe as estatísticas dela.",
     "sections": [
       {

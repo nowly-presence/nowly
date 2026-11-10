@@ -886,7 +886,7 @@
     "badge": "Privacy",
     "title": "Privacy Policy",
     "description": "How Nowly handles your data, what stays on your device, and what depends on your consent.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "data-region": "European Union (VPS provided by Contabo GmbH, Germany)",
     "intro": "This policy describes how <strong>{publisherName}</strong> processes personal data as controller. Rich Presence messages reach Discord through the desktop app on your device. This local transmission does not mean that all features are offline: account sync, image requests, user-requested uploads and optional analytics involve our API or providers as described below.",
     "sections": [
@@ -932,7 +932,7 @@
       },
       {
         "title": "Legal bases (GDPR Art. 6)",
-        "body": "<ul><li><strong>Website usage statistics</strong>: legitimate interest in understanding and improving the site (Art. 6(1)(f)); no cookie is set. <strong>Extension usage statistics (opt-in)</strong>: consent (Art. 6(1)(a)), which you may withdraw in the extension at any time, without affecting the lawfulness of processing before withdrawal.</li><li><strong>Language cookie and documentation cookie</strong>: necessary for the service you request and/or legitimate interest in remembering your language (Art. 6(1)(b) and/or (f)).</li><li><strong>Theme and cookie-notice flags</strong> (local storage): legitimate interest in a usable interface (Art. 6(1)(f)).</li><li><strong>Image proxy</strong>: legitimate interest in displaying catalogue and activity artwork without loading every third-party CDN in your browser (Art. 6(1)(f)).</li><li><strong>Optional Discord login</strong>: performance of the account feature you request (Art. 6(1)(b)) and, where needed, our legitimate interest in securing the API (Art. 6(1)(f)).</li><li><strong>GitHub, Discord community, Ko-fi, GitHub Sponsors</strong>: data you choose to send to those services is processed under their policies; we read public issues or messages you address to us in order to reply (Art. 6(1)(b) or (f)).</li></ul>"
+        "body": "<ul><li><strong>Website usage statistics</strong>: legitimate interest in understanding and improving the site (Art. 6(1)(f)); no cookie is set. <strong>Extension usage statistics (opt-in)</strong>: consent (Art. 6(1)(a)), which you may withdraw in the extension at any time, without affecting the lawfulness of processing before withdrawal.</li><li><strong>Language cookie and documentation cookie</strong>: necessary for the service you request and/or legitimate interest in remembering your language (Art. 6(1)(b) and/or (f)).</li><li><strong>Theme flag</strong> (local storage): legitimate interest in a usable interface (Art. 6(1)(f)).</li><li><strong>Image proxy</strong>: legitimate interest in displaying catalogue and activity artwork without loading every third-party CDN in your browser (Art. 6(1)(f)).</li><li><strong>Optional Discord login</strong>: performance of the account feature you request (Art. 6(1)(b)) and, where needed, our legitimate interest in securing the API (Art. 6(1)(f)).</li><li><strong>GitHub, Discord community, Ko-fi, GitHub Sponsors</strong>: data you choose to send to those services is processed under their policies; we read public issues or messages you address to us in order to reply (Art. 6(1)(b) or (f)).</li></ul>"
       },
       {
         "title": "Retention",
@@ -1073,7 +1073,7 @@
     "badge": "Cookies",
     "title": "Cookie Policy",
     "description": "Cookies and local storage used on nowly.me and docs.nowly.me.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "intro": "The browser stores the theme locally. The extension stores consent and local return/deduplication dates. Website statistics (self-hosted Umami) set no cookie and no persistent visitor ID. Withdrawing extension consent stops extension statistics.",
     "sections": [
       {

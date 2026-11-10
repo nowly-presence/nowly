@@ -886,7 +886,7 @@
     "badge": "Confidentialité",
     "title": "Politique de confidentialité",
     "description": "Comment Nowly traite vos données, ce qui reste sur votre appareil et ce qui dépend de votre consentement.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "data-region": "Union européenne (VPS fourni par Contabo GmbH, Allemagne)",
     "intro": "La présente politique décrit les traitements de données personnelles effectués par <strong>{publisherName}</strong>, responsable de traitement. Les messages Rich Presence parviennent à Discord via l'application bureau sur votre appareil. Cette transmission locale ne signifie pas que toutes les fonctions restent hors ligne : synchronisation du compte, requêtes d'images, envois demandés par l'utilisateur et statistiques facultatives font appel à notre API ou à des prestataires, comme indiqué ci-dessous.",
     "sections": [
@@ -932,7 +932,7 @@
       },
       {
         "title": "Bases légales (art. 6 RGPD)",
-        "body": "<ul><li><strong>Statistiques d’usage du site</strong> : intérêt légitime à comprendre et améliorer le site (art. 6, § 1, f) ; aucun cookie n’est déposé. <strong>Statistiques d’usage de l’extension (opt-in)</strong> : consentement (art. 6, § 1, a), que vous pouvez retirer dans l’extension à tout moment, sans remettre en cause la licéité du traitement antérieur.</li><li><strong>Cookie de langue</strong> (site et documentation) : nécessité pour le service demandé et/ou intérêt légitime à mémoriser la langue (art. 6, § 1, b et/ou f).</li><li><strong>Thème et bandeau d’information</strong> (stockage local) : intérêt légitime à une interface utilisable (art. 6, § 1, f).</li><li><strong>Proxy d’images</strong> : intérêt légitime à afficher les visuels du catalogue et de l’activité sans interroger chaque CDN depuis votre navigateur (art. 6, § 1, f).</li><li><strong>Connexion Discord facultative</strong> : exécution de la fonction de compte demandée (art. 6, § 1, b) et, le cas échéant, intérêt légitime à sécuriser l’API (art. 6, § 1, f).</li><li><strong>GitHub, communauté Discord, Ko-fi, GitHub Sponsors</strong> : les données que vous leur adressez relèvent de leurs politiques ; nous lisons les messages publics qui nous sont destinés pour y répondre (art. 6, § 1, b ou f).</li></ul>"
+        "body": "<ul><li><strong>Statistiques d’usage du site</strong> : intérêt légitime à comprendre et améliorer le site (art. 6, § 1, f) ; aucun cookie n’est déposé. <strong>Statistiques d’usage de l’extension (opt-in)</strong> : consentement (art. 6, § 1, a), que vous pouvez retirer dans l’extension à tout moment, sans remettre en cause la licéité du traitement antérieur.</li><li><strong>Cookie de langue</strong> (site et documentation) : nécessité pour le service demandé et/ou intérêt légitime à mémoriser la langue (art. 6, § 1, b et/ou f).</li><li><strong>Thème</strong> (stockage local) : intérêt légitime à une interface utilisable (art. 6, § 1, f).</li><li><strong>Proxy d’images</strong> : intérêt légitime à afficher les visuels du catalogue et de l’activité sans interroger chaque CDN depuis votre navigateur (art. 6, § 1, f).</li><li><strong>Connexion Discord facultative</strong> : exécution de la fonction de compte demandée (art. 6, § 1, b) et, le cas échéant, intérêt légitime à sécuriser l’API (art. 6, § 1, f).</li><li><strong>GitHub, communauté Discord, Ko-fi, GitHub Sponsors</strong> : les données que vous leur adressez relèvent de leurs politiques ; nous lisons les messages publics qui nous sont destinés pour y répondre (art. 6, § 1, b ou f).</li></ul>"
       },
       {
         "title": "Durées de conservation",
@@ -1073,7 +1073,7 @@
     "badge": "Cookies",
     "title": "Politique de cookies",
     "description": "Cookies et stockage local utilisés sur nowly.me et docs.nowly.me.",
-    "last-updated": "2026-10-25",
+    "last-updated": "2026-11-10",
     "intro": "Le navigateur conserve localement le thème. L’extension conserve le consentement et les dates locales de retour/dédoublonnage. Les statistiques du site (Umami auto-hébergé) ne déposent aucun cookie ni identifiant persistant de visiteur. Retirer le consentement de l’extension arrête ses statistiques.",
     "sections": [
       {

@@ -20,7 +20,6 @@ const variant = <N extends string, D extends z.ZodRawShape>(name: N, data: z.Zod
 
 export const eventSchema = z
   .discriminatedUnion("name", [
-    variant("site_visit", z.strictObject({ page: z.enum(["home", "library", "presence"]) })),
     variant("extension_download_click", z.strictObject({ browser: z.enum(["chrome", "firefox"]) })),
     variant("extension_first_seen", z.strictObject({ cohort_day: date })),
     variant("extension_active", empty),
@@ -54,7 +53,7 @@ export const eventSchema = z
     variant("uninstall_page_opened", empty)
   ])
   .refine((event) => {
-    if (event.name === "site_visit" || event.name === "extension_download_click" || event.name === "uninstall_page_opened") return event.source === "web";
+    if (event.name === "extension_download_click" || event.name === "uninstall_page_opened") return event.source === "web";
     if (
       event.name === "extension_first_seen" ||
       event.name === "extension_active" ||
@@ -76,7 +75,7 @@ export const ingestSchema = z.strictObject({
 });
 
 export const umamiPayload = (event: ProductEvent) => {
-  const channel = event.name === "site_visit" || event.name === "extension_download_click" || event.name === "uninstall_page_opened" ? "web" : "extension";
+  const channel = event.name === "extension_download_click" || event.name === "uninstall_page_opened" ? "web" : "extension";
 
   return {
     type: "event",
