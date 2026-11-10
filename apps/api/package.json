@@ -62,7 +62,7 @@
     "@electric-sql/pglite": "^0.5.15",
     "@types/node": "^26.6.6",
     "@types/nodemailer": "^8.0.2",
-    "@vitest/coverage-v8": "^4.1.9",
+    "@vitest/coverage-v8": "^5.1.0",
     "tsup": "^9.0.0",
     "tsx": "^4.23.15",
     "typescript": "6.0.3",
