@@ -57,7 +57,7 @@
     "studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "dotenv": "^17.4.2",
+    "dotenv": "^18.0.9",
     "drizzle-orm": "^0.45.2",
     "pg": "^8.23.1"
   },
