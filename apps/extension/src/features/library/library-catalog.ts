@@ -58,3 +58,12 @@ export const trendingPresences = (views: PresenceView[]): PresenceView[] =>
     .filter((view) => (view.activeUsers ?? 0) > 0 || (view.totalInstalls ?? 0) > 0)
     .sort((a, b) => (b.activeUsers ?? 0) - (a.activeUsers ?? 0) || (b.totalInstalls ?? 0) - (a.totalInstalls ?? 0))
     .slice(0, TRENDING_COUNT);
+
+export const LIBRARY_PAGE_SIZE = 20;
+
+export const pageCount = (total: number, pageSize = LIBRARY_PAGE_SIZE): number => Math.max(1, Math.ceil(total / pageSize));
+
+export const paginate = <T>(items: T[], page: number, pageSize = LIBRARY_PAGE_SIZE): T[] => {
+  const current = Math.min(Math.max(page, 1), pageCount(items.length, pageSize));
+  return items.slice((current - 1) * pageSize, current * pageSize);
+};

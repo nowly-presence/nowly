@@ -49,6 +49,13 @@ export const SharingSection = () => {
           label={t("settings.suggestPresences")}
           onChange={(checked) => void updateSettings({ suggestPresences: checked })}
         />
+        <SwitchRow
+          title={t("settings.showTrending")}
+          description={t("settings.showTrendingHint")}
+          checked={settings.showTrending !== false}
+          label={t("settings.showTrending")}
+          onChange={(checked) => void updateSettings({ showTrending: checked })}
+        />
         {settings.suggestPresences !== false && (settings.hiddenSuggestions?.length ?? 0) > 0 && (
           <FieldRow
             title={t("settings.hiddenSuggestions", { count: settings.hiddenSuggestions?.length ?? 0 })}

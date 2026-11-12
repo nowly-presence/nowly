@@ -7,6 +7,7 @@ import { useNav } from "@/hooks/navigation-provider";
 import { formatCompact } from "@/lib/format";
 import { categoryKey } from "@/lib/presence-categories";
 import type { PresenceView } from "@/lib/presence-view";
+import { Button } from "@/ui/button";
 import { HScroll } from "@/ui/horizontal-scroller";
 import { LiveDot } from "@/ui/live-dot";
 import { Section } from "@/ui/section";
@@ -14,14 +15,21 @@ import { Section } from "@/ui/section";
 export const TrendingCarousel = ({ views }: {
   views: PresenceView[];
 }) => {
-  const { state } = useExtensionState();
+  const { state, updateSettings } = useExtensionState();
   const { t, locale } = useI18n();
   const { push } = useNav();
 
-  if (views.length === 0) return null;
+  if (views.length === 0 || state.settings.showTrending === false) return null;
 
   return (
-    <Section title={t("library.trending")}>
+    <Section
+      title={t("library.trending")}
+      action={
+        <Button variant="link" onClick={() => void updateSettings({ showTrending: false })}>
+          {t("library.trendingHide")}
+        </Button>
+      }
+    >
       <HScroll snap className="gap-3">
         {views.map((view) => (
           <button

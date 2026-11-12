@@ -67,6 +67,7 @@ export const installMockChrome = async (): Promise<void> => {
       presenceDisplayMode: "category",
       showPlayer: true,
       suggestPresences: true,
+      showTrending: true,
       scheduleEnabled: false,
       appearance: previewParams.theme,
       seasonalThemes: true,

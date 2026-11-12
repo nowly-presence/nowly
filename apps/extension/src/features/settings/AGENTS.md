@@ -8,3 +8,4 @@ One file per section in `sections/`, rendered in `settings-view.tsx`.
 - The analytics consent switch (privacy section) is independent of legal receipts and of the account.
 
 - `textSize` (`normal`, `medium`, `large`) is device-local, not synced. It sets `data-text-size` on `<html>` (`hooks/use-text-size.ts`); `ui/tokens.css` multiplies the `--text-*` tokens by `--text-scale` (1, 1.125, 1.25). Use the text tokens, never fixed `text-[Npx]` sizes, or the text will not scale.
+- `showTrending` (default on) shows the Library "Trending" carousel; the "Hide" link on the carousel sets it to false, the Sharing switch brings it back. Device-local, not in the account sync keys.

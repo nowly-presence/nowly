@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { PresenceView } from "@/lib/presence-view";
-import { filterCatalog, newPresenceSlugs, normalizeSearch, trendingPresences } from "@/features/library/library-catalog";
+import { filterCatalog, newPresenceSlugs, normalizeSearch, pageCount, paginate, trendingPresences } from "@/features/library/library-catalog";
 
 const view = (slug: string, overrides: Partial<PresenceView> = {}): PresenceView => ({
   slug,
@@ -100,5 +100,21 @@ describe("newPresenceSlugs", () => {
     ];
     expect(newPresenceSlugs(expiredOrUndated, now).size).toBe(0);
     expect(newPresenceSlugs(batch, now).size).toBe(0);
+  });
+});
+
+describe("pagination", () => {
+  const items = Array.from({ length: 45 }, (_, index) => index);
+
+  it("slices 20 items per page", () => {
+    expect(paginate(items, 1)).toHaveLength(20);
+    expect(paginate(items, 3)).toEqual([40, 41, 42, 43, 44]);
+  });
+
+  it("clamps out of range pages and counts pages", () => {
+    expect(paginate(items, 9)).toEqual([40, 41, 42, 43, 44]);
+    expect(paginate(items, 0)[0]).toBe(0);
+    expect(pageCount(0)).toBe(1);
+    expect(pageCount(45)).toBe(3);
   });
 });

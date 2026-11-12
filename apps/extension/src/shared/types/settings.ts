@@ -12,6 +12,7 @@ export type ExtensionSettings = {
   presenceDisplayMode: PresenceDisplayMode;
   showPlayer: boolean;
   suggestPresences?: boolean;
+  showTrending?: boolean;
   hiddenSuggestions?: string[];
   presencePaused?: boolean;
   developerMode?: boolean;

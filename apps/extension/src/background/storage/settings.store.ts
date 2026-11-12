@@ -6,6 +6,7 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   textSize: "medium",
   showPlayer: true,
   suggestPresences: true,
+  showTrending: true,
   scheduleEnabled: false,
   appearance: "system",
   seasonalThemes: true,

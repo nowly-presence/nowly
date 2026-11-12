@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { RiDiscordLine, RiMagicLine, RiSearchLine } from "@remixicon/react";
 import { SeasonalDecor } from "@/components/shared/seasonal-decor";
 import { useExtensionState } from "@/hooks/extension-state-provider";
@@ -13,7 +14,8 @@ import { Card, Group } from "@/ui/card";
 import { EmptyState } from "@/ui/empty-state";
 import { Section } from "@/ui/section";
 import { Segmented } from "@/ui/segmented";
-import type { LibraryCategory, LibrarySort } from "@/features/library/library-catalog";
+import { pageCount as countPages, paginate, type LibraryCategory, type LibrarySort } from "@/features/library/library-catalog";
+import { LibraryPagination } from "@/features/library/library-pagination";
 import { LibraryPresenceRow } from "@/features/library/library-presence-row";
 
 type LibraryResultsSectionProps = {
@@ -31,6 +33,13 @@ export const LibraryResultsSection = ({ results, newSlugs, browsing, query, cate
   const { t } = useI18n();
   const { push, setTab } = useNav();
   const actions = usePresenceActions();
+  const [page, setPage] = useState(1);
+  const totalPages = countPages(results.length);
+  const currentPage = Math.min(page, totalPages);
+
+  useEffect(() => {
+    setPage(1);
+  }, [query, category, sort]);
 
   return (
     <Section
@@ -83,7 +92,7 @@ export const LibraryResultsSection = ({ results, newSlugs, browsing, query, cate
         </Card>
       ) : (
         <Group>
-          {results.map((view) => (
+          {paginate(results, currentPage).map((view) => (
             <LibraryPresenceRow
               key={view.slug}
               view={view}
@@ -102,6 +111,7 @@ export const LibraryResultsSection = ({ results, newSlugs, browsing, query, cate
           ))}
         </Group>
       )}
+      {totalPages > 1 && <LibraryPagination page={currentPage} pageCount={totalPages} onPageChange={setPage} />}
       {results.length > 0 && (
         <Card className="mt-3 flex items-center gap-3 p-4">
           <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-primary-soft text-primary">
