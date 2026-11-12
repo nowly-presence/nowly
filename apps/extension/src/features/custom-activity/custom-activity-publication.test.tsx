@@ -112,7 +112,7 @@ describe("public activity sharing dialog", () => {
       creatorRequired: true,
       revision: null
     };
-    expect(actionLabels()).toEqual([]);
+    expect(actionLabels()).toEqual([en["account.signIn"]]);
     expect(markup()).toContain(en["custom.public.connect"]);
     expect(markup()).toContain(en["custom.public.connectHint"]);
     expect(markup()).not.toContain('data-testid="saved-preview"');
