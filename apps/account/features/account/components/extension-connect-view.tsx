@@ -20,6 +20,7 @@ export const ExtensionConnectView = () => {
   const searchParams = useSearchParams();
   const deviceId = searchParams.get("device");
   const fromExtension = searchParams.get("source") === "extension";
+  const expectedUser = searchParams.get("user");
   const permission = searchParams.get("permission");
   const creator = permission === "creator";
   const admin = permission === "admin";
@@ -109,6 +110,8 @@ export const ExtensionConnectView = () => {
     setStatus("signed-out");
   };
 
+  const mismatch = status === "ready" && user !== null && expectedUser !== null && user.id !== expectedUser;
+
   const title =
     status === "done"
       ? t("done-title")
@@ -137,7 +140,9 @@ export const ExtensionConnectView = () => {
                 ? t("checking")
                 : status === "connecting"
                   ? t("connecting")
-                  : t("connect-description", { name: user?.name ?? "" });
+                  : mismatch
+                    ? t("mismatch-description", { name: user?.name ?? "" })
+                    : t("connect-description", { name: user?.name ?? "" });
 
   const showPermissions = status === "ready" || status === "connecting";
   const permissions = showPermissions
@@ -164,6 +169,11 @@ export const ExtensionConnectView = () => {
             <Button size="lg" disabled={busy} onClick={onSignIn}>
               <RiDiscordFill data-icon="inline-start" />
               {t("sign-in")}
+            </Button>
+          ) : null}
+          {mismatch ? (
+            <Button size="lg" disabled={busy} onClick={onSwitchAccount}>
+              {t("switch-account-action")}
             </Button>
           ) : null}
           {status === "ready" || status === "connecting" ? (

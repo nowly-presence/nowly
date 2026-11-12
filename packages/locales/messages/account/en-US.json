@@ -97,6 +97,8 @@
     "retry": "Try again",
     "signed-in-as": "Signed in as {name}.",
     "switch-account": "Not you? Switch account",
+    "switch-account-action": "Switch account",
+    "mismatch-description": "The extension is signed in with a different Nowly account than this session ({name}). Switch account to authorize the right one.",
     "forbidden-title": "Admin access not available",
     "forbidden-description": "Only moderators and administrators can connect the extension with admin access. Sign in with another account or go back.",
     "get-extension": "Get the extension",

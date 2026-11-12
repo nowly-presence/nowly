@@ -97,6 +97,8 @@
     "retry": "Spróbuj ponownie",
     "signed-in-as": "Zalogowano jako {name}.",
     "switch-account": "To nie ty? Zmień konto",
+    "switch-account-action": "Zmień konto",
+    "mismatch-description": "Rozszerzenie jest zalogowane na inne konto Nowly niż ta sesja ({name}). Zmień konto, aby autoryzować właściwe.",
     "forbidden-title": "Dostęp administratora niedostępny",
     "forbidden-description": "Tylko moderatorzy i administratorzy mogą połączyć rozszerzenie z dostępem administratora. Zaloguj się na inne konto lub wróć.",
     "get-extension": "Pobierz rozszerzenie",

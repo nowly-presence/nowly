@@ -97,6 +97,8 @@
     "retry": "Tekrar dene",
     "signed-in-as": "{name} olarak giriş yapıldı.",
     "switch-account": "Sen değil misin? Hesap değiştir",
+    "switch-account-action": "Hesap değiştir",
+    "mismatch-description": "Uzantı, bu oturumdan ({name}) farklı bir Nowly hesabıyla oturum açmış. Doğru hesabı yetkilendirmek için hesabı değiştirin.",
     "forbidden-title": "Yönetici erişimi kullanılamıyor",
     "forbidden-description": "Uzantıyı yönetici erişimiyle yalnızca moderatörler ve yöneticiler bağlayabilir. Başka bir hesapla giriş yap veya geri dön.",
     "get-extension": "Uzantıyı edin",

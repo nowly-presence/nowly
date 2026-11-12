@@ -97,6 +97,8 @@
     "retry": "Cuba lagi",
     "signed-in-as": "Log masuk sebagai {name}.",
     "switch-account": "Bukan anda? Tukar akaun",
+    "switch-account-action": "Tukar akaun",
+    "mismatch-description": "Sambungan dilog masuk dengan akaun Nowly yang berbeza daripada sesi ini ({name}). Tukar akaun untuk membenarkan yang betul.",
     "forbidden-title": "Akses pentadbir tidak tersedia",
     "forbidden-description": "Hanya penyederhana dan pentadbir boleh menyambungkan sambungan dengan akses pentadbir. Log masuk dengan akaun lain atau kembali.",
     "get-extension": "Dapatkan sambungan",

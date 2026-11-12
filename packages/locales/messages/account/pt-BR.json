@@ -97,6 +97,8 @@
     "retry": "Tentar de novo",
     "signed-in-as": "Conectado como {name}.",
     "switch-account": "Não é você? Trocar de conta",
+    "switch-account-action": "Trocar de conta",
+    "mismatch-description": "A extensão está conectada com outra conta Nowly além da desta sessão ({name}). Troque de conta para autorizar a correta.",
     "forbidden-title": "Acesso de administrador indisponível",
     "forbidden-description": "Somente moderadores e administradores podem conectar a extensão com acesso de administrador. Entre com outra conta ou volte.",
     "get-extension": "Obter a extensão",
