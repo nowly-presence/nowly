@@ -771,10 +771,6 @@
       "title": "Pelan hala tuju",
       "description": "Lihat perkara seterusnya untuk Nowly dan keutamaan yang sedang kami usahakan."
     },
-    "extensionConnect": {
-      "title": "Sambungkan sambungan",
-      "description": "Log masuk dengan Discord untuk menyegerakkan Nowly antara pelayar anda."
-    },
     "guides": {
       "title": "Panduan",
       "description": "Panduan untuk menyediakan Nowly, membaiki Discord Rich Presence, mengawal privasi anda dan mencipta presence anda sendiri."
@@ -1247,30 +1243,6 @@
         "answer": "Kod projek tersedia kepada umum di GitHub, tetapi kini diedarkan di bawah lesen BUSL-1.1. Lesen ini membenarkan akses kepada kod sumber, namun bukan lesen sumber terbuka yang diluluskan OSI. Kehadiran, SDK dan alat pembangunan didokumentasikan secara berasingan."
       }
     ]
-  },
-  "extensionConnectPage": {
-    "eyebrow": "Sambungan",
-    "title": "Sambungkan sambungan",
-    "description": "Log masuk dengan Discord untuk menyegerakkan presence dan tetapan anda antara pelayar anda. Ini pilihan: tanpa akaun, Nowly berfungsi seperti biasa.",
-    "checking": "Menyemak akaun anda...",
-    "sign-in-title": "Log masuk dengan Discord",
-    "sign-in-description": "Nowly hanya membaca nama, avatar dan alamat e-mel Discord anda. Aktiviti anda tidak pernah melalui pelayan kami.",
-    "sign-in": "Teruskan dengan Discord",
-    "connect-title": "Sambungkan pelayar ini",
-    "connect-description": "Sambungan Nowly anda akan dipautkan kepada akaun {name}.",
-    "connect": "Sambungkan sambungan",
-    "connecting": "Menyambungkan sambungan...",
-    "done-title": "Selesai",
-    "done-description": "Sambungan anda telah disambungkan. Anda boleh menutup tab ini dan kembali ke Nowly.",
-    "not-detected-title": "Sambungan tidak dikesan",
-    "not-detected-description": "Buka halaman ini dalam pelayar yang telah memasang Nowly, atau pasang sambungan terlebih dahulu.",
-    "error-title": "Langkah ini tidak dapat diselesaikan",
-    "error-description": "Pilih Cuba lagi untuk mengulangi langkah ini. Jika masalah berterusan, hubungi sokongan.",
-    "retry": "Cuba lagi",
-    "signed-in-as": "Log masuk sebagai {name}.",
-    "switch-account": "Bukan anda? Tukar akaun",
-    "mismatch-description": "Sambungan dilog masuk dengan akaun Nowly yang berbeza daripada sesi ini ({name}). Tukar akaun untuk membenarkan yang betul.",
-    "switch-account-action": "Tukar akaun"
   },
   "ads": {
     "label": "Iklan"

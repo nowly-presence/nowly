@@ -75,6 +75,16 @@ const nextConfig: NextConfig = {
         destination: `${accountBase}/:locale`,
         permanent: false
       },
+      {
+        source: "/extension/connect",
+        destination: `${accountBase}/connect`,
+        permanent: false
+      },
+      {
+        source: "/:locale(fr|es|de|pt-BR|pl|ja|ko|tr|ms|el)/extension/connect",
+        destination: `${accountBase}/:locale/connect`,
+        permanent: false
+      },
       // Crawlers guess these names; without a redirect they hit the catch-all and report a soft 404.
       {
         source: "/sitemap_index.xml",

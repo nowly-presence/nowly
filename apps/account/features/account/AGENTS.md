@@ -1,6 +1,6 @@
 # Account
 
-`/extension/connect` and `/account`: both `noIndex` and absent from the navigation.
+`/connect` and `/account`: both `noIndex` and absent from the navigation.
 
 - No Better Auth client: call the API through `lib/account-api.ts` (`credentials: "include"`, `cache: "no-store"`, base `presenceApiBaseUrl()`). The endpoints live in `apps/api/src/features/account`.
 - The session cookie is shared on `.nowly.me`; locally the API trusts `localhost:3000` outside production.

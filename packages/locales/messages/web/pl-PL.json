@@ -771,10 +771,6 @@
       "title": "Mapa drogowa",
       "description": "Zobacz, co nadchodzi w Nowly i jakie są nasze priorytety."
     },
-    "extensionConnect": {
-      "title": "Połącz rozszerzenie",
-      "description": "Zaloguj się przez Discord, aby synchronizować Nowly między przeglądarkami."
-    },
     "guides": {
       "title": "Poradniki",
       "description": "Poradniki o konfiguracji Nowly, naprawie Discord Rich Presence, kontroli prywatności i tworzeniu własnej integracji."
@@ -1247,30 +1243,6 @@
         "answer": "Kod jest publiczny na GitHubie, ale obecnie objęty licencją BUSL-1.1, która udostępnia kod źródłowy i nie jest licencją open source uznaną przez OSI. Obecności, SDK i narzędzia programistyczne mają osobną dokumentację."
       }
     ]
-  },
-  "extensionConnectPage": {
-    "eyebrow": "Rozszerzenie",
-    "title": "Połącz rozszerzenie",
-    "description": "Zaloguj się przez Discord, aby synchronizować obecności i ustawienia między przeglądarkami. To opcjonalne: bez konta Nowly działa tak jak wcześniej.",
-    "checking": "Sprawdzanie konta...",
-    "sign-in-title": "Zaloguj się przez Discord",
-    "sign-in-description": "Nowly odczytuje tylko twoją nazwę, awatar i adres e-mail z Discorda. Twoja aktywność nigdy nie przechodzi przez nasze serwery.",
-    "sign-in": "Kontynuuj z Discordem",
-    "connect-title": "Połącz tę przeglądarkę",
-    "connect-description": "Twoje rozszerzenie Nowly zostanie połączone z kontem {name}.",
-    "connect": "Połącz rozszerzenie",
-    "connecting": "Łączenie rozszerzenia...",
-    "done-title": "Gotowe",
-    "done-description": "Rozszerzenie jest połączone. Możesz zamknąć tę kartę i wrócić do Nowly.",
-    "not-detected-title": "Nie wykryto rozszerzenia",
-    "not-detected-description": "Otwórz tę stronę w przeglądarce, w której zainstalowano Nowly, albo najpierw zainstaluj rozszerzenie.",
-    "error-title": "Nie udało się ukończyć tego kroku",
-    "error-description": "Wybierz Spróbuj ponownie, aby powtórzyć ten krok. Jeśli problem nadal występuje, skontaktuj się z pomocą techniczną.",
-    "retry": "Spróbuj ponownie",
-    "signed-in-as": "Zalogowano jako {name}.",
-    "switch-account": "To nie ty? Zmień konto",
-    "mismatch-description": "Rozszerzenie jest zalogowane na inne konto Nowly niż ta sesja ({name}). Zmień konto, aby autoryzować właściwe.",
-    "switch-account-action": "Zmień konto"
   },
   "ads": {
     "label": "Reklama"

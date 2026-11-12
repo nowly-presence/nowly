@@ -771,10 +771,6 @@
       "title": "ロードマップ",
       "description": "Nowlyのこれからと、現在取り組んでいる優先事項をご紹介します。"
     },
-    "extensionConnect": {
-      "title": "拡張機能を接続",
-      "description": "Discordでログインして、ブラウザ間でNowlyを同期します。"
-    },
     "guides": {
       "title": "ガイド",
       "description": "Nowly の設定、Discord Rich Presence のトラブル解決、プライバシーの管理、プレゼンスの作り方を解説するガイドです。"
@@ -1247,30 +1243,6 @@
         "answer": "コードはGitHubで公開されていますが、現在はBUSL-1.1ライセンスで配布されています。これはソース閲覧可能なライセンスで、OSIが認めるオープンソースライセンスではありません。プレゼンス、SDK、開発ツールについては別途文書化されています。"
       }
     ]
-  },
-  "extensionConnectPage": {
-    "eyebrow": "拡張機能",
-    "title": "拡張機能を接続",
-    "description": "Discordでログインすると、プレゼンスと設定をブラウザ間で同期できます。任意の機能です。アカウントがなくても、Nowlyはこれまでどおり使えます。",
-    "checking": "アカウントを確認しています...",
-    "sign-in-title": "Discordでログイン",
-    "sign-in-description": "Nowlyが読み取るのはDiscordの名前、アバター、メールアドレスだけです。アクティビティがNowlyのサーバーを通ることはありません。",
-    "sign-in": "Discordで続ける",
-    "connect-title": "このブラウザを接続",
-    "connect-description": "Nowly拡張機能をアカウント「{name}」に連携します。",
-    "connect": "拡張機能を接続",
-    "connecting": "拡張機能を接続しています...",
-    "done-title": "完了しました",
-    "done-description": "拡張機能が接続されました。このタブを閉じてNowlyに戻ってください。",
-    "not-detected-title": "拡張機能が見つかりません",
-    "not-detected-description": "Nowlyがインストールされているブラウザでこのページを開くか、先に拡張機能をインストールしてください。",
-    "error-title": "この手順を完了できませんでした",
-    "error-description": "「もう一度試す」を選んでこの手順をやり直してください。問題が続く場合はサポートにお問い合わせください。",
-    "retry": "もう一度試す",
-    "signed-in-as": "{name}としてログイン中です。",
-    "switch-account": "別のアカウントを使う",
-    "mismatch-description": "拡張機能はこのセッション({name})とは別の Nowly アカウントでログインしています。正しいアカウントを承認するにはアカウントを切り替えてください。",
-    "switch-account-action": "アカウントを切り替える"
   },
   "ads": {
     "label": "広告"

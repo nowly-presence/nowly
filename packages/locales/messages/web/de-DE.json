@@ -771,10 +771,6 @@
       "title": "Roadmap",
       "description": "Sieh, was als Nächstes für Nowly kommt und woran wir arbeiten."
     },
-    "extensionConnect": {
-      "title": "Erweiterung verbinden",
-      "description": "Melde dich mit Discord an, um Nowly zwischen deinen Browsern zu synchronisieren."
-    },
     "guides": {
       "title": "Anleitungen",
       "description": "Anleitungen, um Nowly einzurichten, Discord Rich Presence zu reparieren, deine Privatsphäre zu steuern und eigene Presences zu bauen."
@@ -1247,30 +1243,6 @@
         "answer": "Der Code ist auf GitHub öffentlich, wird derzeit aber unter BUSL-1.1 veröffentlicht. Diese Source-Available-Lizenz ist keine von der OSI anerkannte Open-Source-Lizenz. Präsenzen, SDK und Entwicklungswerkzeuge sind separat dokumentiert."
       }
     ]
-  },
-  "extensionConnectPage": {
-    "eyebrow": "Erweiterung",
-    "title": "Erweiterung verbinden",
-    "description": "Melde dich mit Discord an, um deine Presences und Einstellungen zwischen deinen Browsern zu synchronisieren. Das ist freiwillig: Ohne Konto funktioniert Nowly wie bisher.",
-    "checking": "Dein Konto wird geprüft...",
-    "sign-in-title": "Mit Discord anmelden",
-    "sign-in-description": "Nowly liest nur deinen Discord-Namen, deinen Avatar und deine E-Mail-Adresse. Deine Aktivität läuft nie über unsere Server.",
-    "sign-in": "Weiter mit Discord",
-    "connect-title": "Diesen Browser verbinden",
-    "connect-description": "Deine Nowly-Erweiterung wird mit dem Konto {name} verknüpft.",
-    "connect": "Erweiterung verbinden",
-    "connecting": "Erweiterung wird verbunden...",
-    "done-title": "Fertig",
-    "done-description": "Deine Erweiterung ist verbunden. Du kannst diesen Tab schließen und zu Nowly zurückkehren.",
-    "not-detected-title": "Erweiterung nicht erkannt",
-    "not-detected-description": "Öffne diese Seite in dem Browser, in dem Nowly installiert ist, oder installiere zuerst die Erweiterung.",
-    "error-title": "Dieser Schritt konnte nicht abgeschlossen werden",
-    "error-description": "Wähle Erneut versuchen, um diesen Schritt neu zu starten. Wenn das Problem bestehen bleibt, wende dich an den Support.",
-    "retry": "Erneut versuchen",
-    "signed-in-as": "Angemeldet als {name}.",
-    "switch-account": "Nicht du? Konto wechseln",
-    "mismatch-description": "Die Erweiterung ist mit einem anderen Nowly-Konto angemeldet als diese Sitzung ({name}). Wechsle das Konto, um das richtige zu autorisieren.",
-    "switch-account-action": "Konto wechseln"
   },
   "ads": {
     "label": "Werbung"

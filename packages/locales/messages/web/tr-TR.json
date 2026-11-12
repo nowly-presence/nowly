@@ -771,10 +771,6 @@
       "title": "Yol haritası",
       "description": "Nowly için sırada ne olduğunu ve önceliklerimizi görün."
     },
-    "extensionConnect": {
-      "title": "Uzantıyı bağla",
-      "description": "Nowly'yi tarayıcıların arasında eşitlemek için Discord ile giriş yap."
-    },
     "guides": {
       "title": "Rehberler",
       "description": "Nowly'yi kurmak, Discord Rich Presence sorunlarını çözmek, gizliliğini yönetmek ve kendi presence'ını yapmak için rehberler."
@@ -1247,30 +1243,6 @@
         "answer": "Kod GitHub'da herkese açıktır ancak şu anda BUSL-1.1 lisansıyla dağıtılır. Kaynağı erişilebilir kılan bu lisans, OSI onaylı bir açık kaynak lisansı değildir. Presence'lar, SDK ve geliştirme araçları ayrı belgelenmiştir."
       }
     ]
-  },
-  "extensionConnectPage": {
-    "eyebrow": "Uzantı",
-    "title": "Uzantıyı bağla",
-    "description": "Presence'larını ve ayarlarını tarayıcıların arasında eşitlemek için Discord ile giriş yap. Bu isteğe bağlıdır: hesap olmadan Nowly eskisi gibi çalışır.",
-    "checking": "Hesabın kontrol ediliyor...",
-    "sign-in-title": "Discord ile giriş yap",
-    "sign-in-description": "Nowly yalnızca Discord adını, avatarını ve e-posta adresini okur. Etkinliğin asla sunucularımızdan geçmez.",
-    "sign-in": "Discord ile devam et",
-    "connect-title": "Bu tarayıcıyı bağla",
-    "connect-description": "Nowly uzantın {name} hesabına bağlanacak.",
-    "connect": "Uzantıyı bağla",
-    "connecting": "Uzantı bağlanıyor...",
-    "done-title": "Hazır",
-    "done-description": "Uzantın bağlandı. Bu sekmeyi kapatıp Nowly'ye dönebilirsin.",
-    "not-detected-title": "Uzantı algılanmadı",
-    "not-detected-description": "Bu sayfayı Nowly'nin kurulu olduğu tarayıcıda aç ya da önce uzantıyı kur.",
-    "error-title": "Bu adım tamamlanamadı",
-    "error-description": "Bu adımı yeniden başlatmak için Tekrar dene seçeneğini seç. Sorun devam ederse destek ekibiyle iletişime geç.",
-    "retry": "Tekrar dene",
-    "signed-in-as": "{name} olarak giriş yapıldı.",
-    "switch-account": "Sen değil misin? Hesap değiştir",
-    "mismatch-description": "Uzantı, bu oturumdan ({name}) farklı bir Nowly hesabıyla oturum açmış. Doğru hesabı yetkilendirmek için hesabı değiştirin.",
-    "switch-account-action": "Hesap değiştir"
   },
   "ads": {
     "label": "Reklam"
