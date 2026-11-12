@@ -1124,5 +1124,8 @@
   "report.notifyDenied": "Pemberitahuan disekat. Balasan kekal dalam perbualan terbuka anda.",
   "report.attach": "Tambah imej",
   "report.attachRemove": "Buang imej",
-  "report.attachHint": "Gunakan imej PNG atau JPEG, sehingga 4 MB, 2 setiap mesej. Jangan kongsi maklumat peribadi."
+  "report.attachHint": "Gunakan imej PNG atau JPEG, sehingga 4 MB, 2 setiap mesej. Jangan kongsi maklumat peribadi.",
+  "unavailable.title": "Belum tersedia pada mudah alih",
+  "unavailable.description": "Nowly memerlukan pelayar desktop untuk berkongsi apa yang anda lakukan di web dengan profil Discord anda. Versi mudah alih belum siap, tetapi ada dalam perancangan kami.",
+  "unavailable.visitSite": "Lawati nowly.me"
 }

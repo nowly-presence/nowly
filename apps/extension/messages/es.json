@@ -1124,5 +1124,8 @@
   "report.notifyDenied": "Las notificaciones están bloqueadas. Las respuestas quedan en tus conversaciones abiertas.",
   "report.attach": "Añadir una imagen",
   "report.attachRemove": "Quitar imagen",
-  "report.attachHint": "Usa imágenes PNG o JPEG, hasta 4 MB, 2 por mensaje. No compartas información personal."
+  "report.attachHint": "Usa imágenes PNG o JPEG, hasta 4 MB, 2 por mensaje. No compartas información personal.",
+  "unavailable.title": "Aún no disponible en móvil",
+  "unavailable.description": "Nowly necesita un navegador de escritorio para compartir lo que haces en la web con tu perfil de Discord. La versión móvil aún no está lista, pero está en nuestros planes.",
+  "unavailable.visitSite": "Visitar nowly.me"
 }

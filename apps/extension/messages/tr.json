@@ -1124,5 +1124,8 @@
   "report.notifyDenied": "Bildirimler engelli. Yanıtlar açık konuşmalarında kalır.",
   "report.attach": "Görsel ekle",
   "report.attachRemove": "Görseli kaldır",
-  "report.attachHint": "PNG veya JPEG kullan, en fazla 4 MB, mesaj başına 2 görsel. Kişisel bilgi paylaşma."
+  "report.attachHint": "PNG veya JPEG kullan, en fazla 4 MB, mesaj başına 2 görsel. Kişisel bilgi paylaşma.",
+  "unavailable.title": "Mobilde henüz kullanılamıyor",
+  "unavailable.description": "Nowly, web'de yaptıklarını Discord profilinle paylaşmak için bir masaüstü tarayıcı gerektirir. Mobil sürüm henüz hazır değil ama planlarımızda.",
+  "unavailable.visitSite": "nowly.me'yi ziyaret et"
 }

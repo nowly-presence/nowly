@@ -1124,5 +1124,8 @@
   "report.notifyDenied": "Powiadomienia są zablokowane. Odpowiedzi zostaną w otwartych rozmowach.",
   "report.attach": "Dodaj obraz",
   "report.attachRemove": "Usuń obraz",
-  "report.attachHint": "Użyj obrazów PNG lub JPEG, do 4 MB, 2 na wiadomość. Nie udostępniaj danych osobowych."
+  "report.attachHint": "Użyj obrazów PNG lub JPEG, do 4 MB, 2 na wiadomość. Nie udostępniaj danych osobowych.",
+  "unavailable.title": "Jeszcze niedostępne na telefonie",
+  "unavailable.description": "Nowly potrzebuje przeglądarki na komputer, aby pokazywać na Twoim profilu Discord, co robisz w sieci. Wersja mobilna nie jest jeszcze gotowa, ale mamy ją w planach.",
+  "unavailable.visitSite": "Odwiedź nowly.me"
 }

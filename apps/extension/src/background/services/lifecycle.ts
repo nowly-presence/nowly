@@ -15,6 +15,7 @@ import { getPresences, setDebug } from "@/background/storage/presences.store";
 import { IS_CANARY } from "@/shared/brand";
 import { WEB_BASE_URL } from "@/shared/constants";
 import { LOCALE_PREFERENCE_KEY } from "@/shared/locales";
+import { isFirefoxMobile } from "@/shared/platform";
 import type { InstalledPresences } from "@/shared/types";
 import { checkLegalDocuments } from "@/background/services/legal-documents";
 
@@ -30,8 +31,16 @@ type ChromeWithSidebarAction = typeof chrome & {
   };
 };
 
+const SIDEPANEL_PAGE = "sidepanel/index.html";
+
 const registerSidebarToggle = (): void => {
   if (import.meta.env.BROWSER !== "firefox") return;
+
+  if (isFirefoxMobile()) {
+    void chrome.action.setPopup({ popup: SIDEPANEL_PAGE }).catch(() => {});
+
+    return;
+  }
 
   chrome.action.onClicked.addListener(() => {
     (chrome as ChromeWithSidebarAction).sidebarAction?.toggle();

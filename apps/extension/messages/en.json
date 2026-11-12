@@ -1124,5 +1124,8 @@
   "report.notifyDenied": "Notifications are blocked. Replies stay in your open conversations.",
   "report.attach": "Add an image",
   "report.attachRemove": "Remove image",
-  "report.attachHint": "Use PNG or JPEG images, up to 4 MB, 2 per message. Do not share personal information."
+  "report.attachHint": "Use PNG or JPEG images, up to 4 MB, 2 per message. Do not share personal information.",
+  "unavailable.title": "Not available on mobile yet",
+  "unavailable.description": "Nowly needs a desktop browser to share what you do on the web with your Discord profile. The mobile version is not ready yet, but it is on our radar.",
+  "unavailable.visitSite": "Visit nowly.me"
 }
