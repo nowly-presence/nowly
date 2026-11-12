@@ -171,11 +171,6 @@ export const ExtensionConnectView = () => {
               {t("sign-in")}
             </Button>
           ) : null}
-          {mismatch ? (
-            <Button size="lg" disabled={busy} onClick={onSwitchAccount}>
-              {t("switch-account-action")}
-            </Button>
-          ) : null}
           {status === "ready" || status === "connecting" ? (
             <div className="flex gap-3">
               <Button size="lg" variant="outline" className="flex-1" disabled={status === "connecting"} onClick={() => window.location.assign(siteBaseUrl())}>

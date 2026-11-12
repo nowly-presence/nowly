@@ -97,7 +97,6 @@
     "retry": "Erneut versuchen",
     "signed-in-as": "Angemeldet als {name}.",
     "switch-account": "Nicht du? Konto wechseln",
-    "switch-account-action": "Konto wechseln",
     "mismatch-description": "Die Erweiterung ist mit einem anderen Nowly-Konto angemeldet als diese Sitzung ({name}). Wechsle das Konto, um das richtige zu autorisieren.",
     "forbidden-title": "Admin-Zugriff nicht verfügbar",
     "forbidden-description": "Nur Moderatoren und Administratoren können die Erweiterung mit Admin-Zugriff verbinden. Melde dich mit einem anderen Konto an oder gehe zurück.",

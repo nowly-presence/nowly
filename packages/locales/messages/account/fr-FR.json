@@ -97,7 +97,6 @@
     "retry": "Réessayer",
     "signed-in-as": "Connecté en tant que {name}.",
     "switch-account": "Ce n’est pas vous ? Changer de compte",
-    "switch-account-action": "Changer de compte",
     "mismatch-description": "L’extension est connectée à un autre compte Nowly que celui de cette session ({name}). Changez de compte pour autoriser le bon.",
     "forbidden-title": "Accès admin indisponible",
     "forbidden-description": "Seuls les modérateurs et les administrateurs peuvent connecter l'extension avec l'accès admin. Connectez-vous avec un autre compte ou revenez en arrière.",

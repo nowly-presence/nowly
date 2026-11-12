@@ -97,7 +97,6 @@
     "retry": "もう一度試す",
     "signed-in-as": "{name}としてログイン中です。",
     "switch-account": "別のアカウントを使う",
-    "switch-account-action": "アカウントを切り替える",
     "mismatch-description": "拡張機能はこのセッション({name})とは別の Nowly アカウントでログインしています。正しいアカウントを承認するにはアカウントを切り替えてください。",
     "forbidden-title": "管理者アクセスを利用できません",
     "forbidden-description": "管理者アクセスで拡張機能を接続できるのはモデレーターと管理者だけです。別のアカウントでログインするか、戻ってください。",
