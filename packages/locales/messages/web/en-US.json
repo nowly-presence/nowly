@@ -771,6 +771,10 @@
       "title": "Roadmap",
       "description": "See what’s next for Nowly and the work we’re prioritising."
     },
+    "extensionConnect": {
+      "title": "Connect the extension",
+      "description": "Sign in with Discord to sync Nowly between your browsers."
+    },
     "guides": {
       "title": "Guides",
       "description": "Guides to set up Nowly, fix Discord Rich Presence, control your privacy and create your own presence."
@@ -1243,6 +1247,30 @@
         "answer": "Nowly’s public repositories (the app, presences, SDK, CLI and bot) are open source under the MIT License. Anyone can inspect, modify and share their code under its terms. The separate private internal release CLI and third-party content are not included."
       }
     ]
+  },
+  "extensionConnectPage": {
+    "eyebrow": "Extension",
+    "title": "Connect the extension",
+    "description": "Sign in with Discord to sync your presences and settings between your browsers. It is optional: without an account, Nowly works just like before.",
+    "checking": "Checking your account...",
+    "sign-in-title": "Sign in with Discord",
+    "sign-in-description": "Nowly only reads your Discord name, avatar and email address. Your activity never goes through our servers.",
+    "sign-in": "Continue with Discord",
+    "connect-title": "Connect this browser",
+    "connect-description": "Your Nowly extension will be linked to the account {name}.",
+    "connect": "Connect the extension",
+    "connecting": "Connecting the extension...",
+    "done-title": "All set",
+    "done-description": "Your extension is connected. You can close this tab and go back to Nowly.",
+    "not-detected-title": "Extension not detected",
+    "not-detected-description": "Open this page in the browser where Nowly is installed, or install the extension first.",
+    "error-title": "Unable to complete this step",
+    "error-description": "Select Try again to restart this step. If the problem continues, contact support.",
+    "retry": "Try again",
+    "signed-in-as": "Signed in as {name}.",
+    "switch-account": "Not you? Switch account",
+    "mismatch-description": "The extension is signed in with a different Nowly account than this session ({name}). Switch account to authorize the right one.",
+    "switch-account-action": "Switch account"
   },
   "ads": {
     "label": "Advertisement"

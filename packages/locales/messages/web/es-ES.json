@@ -771,6 +771,10 @@
       "title": "Hoja de ruta",
       "description": "Descubre lo que viene para Nowly y cuáles son nuestras prioridades."
     },
+    "extensionConnect": {
+      "title": "Conectar la extensión",
+      "description": "Inicia sesión con Discord para sincronizar Nowly entre tus navegadores."
+    },
     "guides": {
       "title": "Guías",
       "description": "Guías para configurar Nowly, arreglar Discord Rich Presence, controlar tu privacidad y crear tu propia presencia."
@@ -1243,6 +1247,30 @@
         "answer": "El código es público en GitHub, pero se distribuye actualmente bajo BUSL-1.1, una licencia de código disponible que no está aprobada como código abierto por la OSI. Las presencias, el SDK y las herramientas de desarrollo se documentan por separado."
       }
     ]
+  },
+  "extensionConnectPage": {
+    "eyebrow": "Extensión",
+    "title": "Conectar la extensión",
+    "description": "Inicia sesión con Discord para sincronizar tus presencias y tus ajustes entre tus navegadores. Es opcional: sin cuenta, Nowly funciona como siempre.",
+    "checking": "Comprobando tu cuenta...",
+    "sign-in-title": "Iniciar sesión con Discord",
+    "sign-in-description": "Nowly solo lee tu nombre, tu avatar y tu correo electrónico de Discord. Tu actividad nunca pasa por nuestros servidores.",
+    "sign-in": "Continuar con Discord",
+    "connect-title": "Conectar este navegador",
+    "connect-description": "Tu extensión de Nowly se vinculará a la cuenta {name}.",
+    "connect": "Conectar la extensión",
+    "connecting": "Conectando la extensión...",
+    "done-title": "Listo",
+    "done-description": "Tu extensión está conectada. Puedes cerrar esta pestaña y volver a Nowly.",
+    "not-detected-title": "Extensión no detectada",
+    "not-detected-description": "Abre esta página en el navegador donde está instalado Nowly, o instala primero la extensión.",
+    "error-title": "No se pudo completar este paso",
+    "error-description": "Selecciona Reintentar para repetir este paso. Si el problema continúa, contacta con el equipo de soporte.",
+    "retry": "Reintentar",
+    "signed-in-as": "Sesión iniciada como {name}.",
+    "switch-account": "¿No eres tú? Cambiar de cuenta",
+    "mismatch-description": "La extensión tiene una cuenta de Nowly distinta a la de esta sesión ({name}). Cambia de cuenta para autorizar la correcta.",
+    "switch-account-action": "Cambiar de cuenta"
   },
   "ads": {
     "label": "Publicidad"

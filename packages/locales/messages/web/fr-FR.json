@@ -771,6 +771,10 @@
       "title": "Feuille de route",
       "description": "Découvrez ce qui arrive pour Nowly et les priorités sur lesquelles nous travaillons."
     },
+    "extensionConnect": {
+      "title": "Connecter l’extension",
+      "description": "Connectez-vous avec Discord pour synchroniser Nowly entre vos navigateurs."
+    },
     "guides": {
       "title": "Guides",
       "description": "Des guides pour installer Nowly, réparer Discord Rich Presence, protéger votre vie privée et créer votre propre présence."
@@ -1243,6 +1247,30 @@
         "answer": "Les dépôts publics de Nowly (application, présences, SDK, CLI et bot) sont open source sous licence MIT. Chacun peut consulter, modifier et partager leur code selon ses conditions. Le CLI interne privé de publication et les contenus tiers n’en font pas partie."
       }
     ]
+  },
+  "extensionConnectPage": {
+    "eyebrow": "Extension",
+    "title": "Connecter l’extension",
+    "description": "Connectez-vous avec Discord pour synchroniser vos présences et vos réglages entre vos navigateurs. C’est facultatif : sans compte, Nowly fonctionne comme avant.",
+    "checking": "Vérification de votre compte...",
+    "sign-in-title": "Se connecter avec Discord",
+    "sign-in-description": "Nowly ne lit que votre nom, votre avatar et votre adresse e-mail Discord. Votre activité ne passe jamais par nos serveurs.",
+    "sign-in": "Continuer avec Discord",
+    "connect-title": "Connecter ce navigateur",
+    "connect-description": "Votre extension Nowly sera reliée au compte {name}.",
+    "connect": "Connecter l’extension",
+    "connecting": "Connexion de l’extension...",
+    "done-title": "C’est fait",
+    "done-description": "Votre extension est connectée. Vous pouvez fermer cet onglet et revenir à Nowly.",
+    "not-detected-title": "Extension non détectée",
+    "not-detected-description": "Ouvrez cette page dans le navigateur où Nowly est installée, ou installez d’abord l’extension.",
+    "error-title": "Impossible de terminer cette étape",
+    "error-description": "Sélectionnez Réessayer pour reprendre cette étape. Si le problème persiste, contactez l’assistance.",
+    "retry": "Réessayer",
+    "signed-in-as": "Connecté en tant que {name}.",
+    "switch-account": "Ce n’est pas vous ? Changer de compte",
+    "mismatch-description": "L’extension est connectée à un autre compte Nowly que celui de cette session ({name}). Changez de compte pour autoriser le bon.",
+    "switch-account-action": "Changer de compte"
   },
   "ads": {
     "label": "Publicité"

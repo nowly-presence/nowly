@@ -36,6 +36,7 @@ export type ExtensionReportResult = {
 
 export type ExtensionDiagnostic = {
   extensionInstalled: boolean;
+  extensionVersion?: string;
   userScriptsActive: boolean;
   hostDetected: boolean;
   discordConnected: boolean;

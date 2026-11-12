@@ -367,6 +367,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
       userScriptsActive: userScriptsEnabled,
       hostDetected: native.connected,
       discordConnected: Boolean(native.discordConnected),
+      extensionVersion: "2.6.0",
       presenceInstalled: installedSlugs.length > 0,
       activityDetected: hasLiveActivity
     }),

@@ -5,7 +5,7 @@ Private, `noindex` Next.js app for signed-in users: profile, devices, synced pre
 ## Layout
 
 - `app/[locale]/(secure)/*`: every route that needs a session. The layout reads `/me` on the server with the request cookie (`lib/server-session.ts`) and redirects to `/sign-in`. The API still re-checks session and role on every call: the guard only avoids rendering for anonymous visitors.
-- `app/[locale]/connect`: extension sign-in (`?permission=creator|admin`, `source=extension`, `device`). Public, handles its own sign-in. `admin` requests scopes `sync` and `admin` and is refused for accounts without a role. `nowly.me/extension/connect` redirects here (temporary redirect, query kept); extension builds that only trust the `nowly.me` origin cannot receive the session from this page.
+- `app/[locale]/connect`: extension sign-in (`?permission=creator|admin`, `source=extension`, `device`). Public, handles its own sign-in. `admin` requests scopes `sync` and `admin` and is refused for accounts without a role. `nowly.me/extension/connect` is the legacy page: it forwards here only for extension versions 2.6.0 or more, older builds stay on it because they only trust the `nowly.me` origin.
 - Shell: the shared `@nowly/ui` navbar (`site="account"`, account tabs in its mobile sheet, tab row on desktop) and footer. Tabs live in `features/shell/lib/account-tabs.ts`, filtered by capability (`review`, `manage` for the Users tab that searches accounts and grants the verified badge).
 - Public page: the handle is created by the API from the Discord username and never typed by the user.
 - `features/account`: views and API clients (`lib/account-api.ts`, `lib/submission-api.ts`). `features/shell`: header and navigation.

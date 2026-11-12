@@ -15,6 +15,7 @@ import type { CreatorAccount, CreatorSubmissionPayload, CreatorSubmitResult } fr
 
 export type DiagnosticSnapshot = {
   extensionInstalled: boolean;
+  extensionVersion: string;
   userScriptsActive: boolean;
   hostDetected: boolean;
   discordConnected: boolean;

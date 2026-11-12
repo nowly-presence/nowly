@@ -771,6 +771,10 @@
       "title": "로드맵",
       "description": "Nowly의 다음 단계와 현재 우선순위를 확인하세요."
     },
+    "extensionConnect": {
+      "title": "확장 프로그램 연결",
+      "description": "Discord로 로그인해 브라우저 사이에서 Nowly를 동기화하세요."
+    },
     "guides": {
       "title": "가이드",
       "description": "Nowly 설정, Discord Rich Presence 문제 해결, 개인정보 관리, 나만의 프레즌스 만들기 가이드예요."
@@ -1243,6 +1247,30 @@
         "answer": "코드는 GitHub에 공개되어 있지만 현재 BUSL-1.1 라이선스로 배포됩니다. 이는 소스 공개 라이선스이며 OSI가 승인한 오픈 소스 라이선스는 아닙니다. 프레즌스, SDK 및 개발 도구는 별도로 문서화되어 있습니다."
       }
     ]
+  },
+  "extensionConnectPage": {
+    "eyebrow": "확장 프로그램",
+    "title": "확장 프로그램 연결",
+    "description": "Discord로 로그인하면 프레즌스와 설정을 브라우저 사이에서 동기화할 수 있습니다. 선택 사항이며, 계정이 없어도 Nowly는 지금처럼 동작합니다.",
+    "checking": "계정을 확인하는 중...",
+    "sign-in-title": "Discord로 로그인",
+    "sign-in-description": "Nowly는 Discord 이름, 아바타, 이메일 주소만 읽습니다. 활동은 절대 Nowly 서버를 거치지 않습니다.",
+    "sign-in": "Discord로 계속하기",
+    "connect-title": "이 브라우저 연결",
+    "connect-description": "Nowly 확장 프로그램이 {name} 계정에 연결됩니다.",
+    "connect": "확장 프로그램 연결",
+    "connecting": "확장 프로그램을 연결하는 중...",
+    "done-title": "완료되었습니다",
+    "done-description": "확장 프로그램이 연결되었습니다. 이 탭을 닫고 Nowly로 돌아가세요.",
+    "not-detected-title": "확장 프로그램을 찾을 수 없음",
+    "not-detected-description": "Nowly가 설치된 브라우저에서 이 페이지를 열거나 먼저 확장 프로그램을 설치하세요.",
+    "error-title": "이 단계를 완료하지 못했습니다",
+    "error-description": "다시 시도를 선택해 이 단계를 다시 진행하세요. 문제가 계속되면 지원팀에 문의하세요.",
+    "retry": "다시 시도",
+    "signed-in-as": "{name}(으)로 로그인했습니다.",
+    "switch-account": "본인이 아닌가요? 계정 전환",
+    "mismatch-description": "확장 프로그램이 이 세션({name})과 다른 Nowly 계정으로 로그인되어 있습니다. 올바른 계정을 승인하려면 계정을 전환하세요.",
+    "switch-account-action": "계정 전환"
   },
   "ads": {
     "label": "광고"

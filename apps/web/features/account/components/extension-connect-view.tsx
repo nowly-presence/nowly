@@ -4,11 +4,24 @@ import { ExtensionStoreButton } from "@/components/extension-store-button";
 import { AccountHeader } from "@/features/account/components/account-header";
 import { createExtensionSession, fetchAccountUser, signOutAccount, startDiscordSignIn, type AccountUser } from "@/features/account/lib/account-api";
 import { requestExtension, subscribeExtensionDetected } from "@nowly/shared/web-bridge";
+import type { ExtensionDiagnostic } from "@nowly/shared/web-bridge-protocol";
+import { isVersionAtLeast } from "@/lib/extension-version";
 import { Button, Card, CardContent, CardDescription, CardTitle } from "@nowly/ui";
 import { RiCheckLine, RiDiscordFill, RiPlugLine, RiPuzzleLine } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+const ACCOUNT_CONNECT_MIN_EXTENSION_VERSION = "2.6.0";
+
+const DIAGNOSTIC_TIMEOUT_MS = 3000;
+
+const ACCOUNT_BASE_URL = (process.env.NEXT_PUBLIC_ACCOUNT_BASE_URL ?? "https://account.nowly.me").replace(/\/$/, "");
+
+const accountConnectUrl = (): string => {
+  const localePrefix = window.location.pathname.replace(/\/extension\/connect\/?$/, "");
+  return `${ACCOUNT_BASE_URL}${localePrefix}/connect${window.location.search}`;
+};
 
 type Status = "checking" | "signed-out" | "no-extension" | "ready" | "connecting" | "done" | "error";
 
@@ -35,6 +48,7 @@ export const ExtensionConnectView = () => {
   const [status, setStatus] = useState<Status>("checking");
   const [user, setUser] = useState<AccountUser | null>(null);
   const [busy, setBusy] = useState(false);
+  const redirecting = useRef(false);
 
   const connect = useCallback(async (): Promise<void> => {
     setStatus("connecting");
@@ -72,6 +86,8 @@ export const ExtensionConnectView = () => {
             return;
           }
 
+          if (redirecting.current) return;
+
           setStatus((previous) => (previous === "checking" || previous === "no-extension" ? "ready" : previous));
         });
       })
@@ -81,6 +97,28 @@ export const ExtensionConnectView = () => {
     return () => {
       cancelled = true;
       unsubscribe?.();
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    let checked = false;
+    const unsubscribe = subscribeExtensionDetected((detected) => {
+      if (cancelled || checked || !detected) return;
+
+      checked = true;
+      void requestExtension<ExtensionDiagnostic>("GET_DIAGNOSTIC", undefined, DIAGNOSTIC_TIMEOUT_MS)
+        .then((diagnostic) => {
+          if (cancelled || !isVersionAtLeast(diagnostic?.extensionVersion, ACCOUNT_CONNECT_MIN_EXTENSION_VERSION)) return;
+
+          redirecting.current = true;
+          window.location.replace(accountConnectUrl());
+        })
+        .catch(() => undefined);
+    });
+    return () => {
+      cancelled = true;
+      unsubscribe();
     };
   }, []);
 

@@ -16,6 +16,7 @@ export const handleGetDiagnostic: Handler<"GET_DIAGNOSTIC"> = async () => {
 
   return {
     extensionInstalled: true,
+    extensionVersion: chrome.runtime.getManifest().version,
     userScriptsActive: userScripts.enabled,
     hostDetected: Boolean(nativeStatus.connected || nativeStatus.discordConnected),
     discordConnected: Boolean(nativeStatus.discordConnected),
