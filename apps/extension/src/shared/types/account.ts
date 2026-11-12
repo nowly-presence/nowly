@@ -18,6 +18,8 @@ export type StoredAccount = {
   connectedAt: number;
 };
 
+export type AccountConnectPermission = "creator" | "admin";
+
 export type SyncErrorCode = "NETWORK" | "SERVER";
 
 export type SyncChoice = "account" | "device";

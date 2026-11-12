@@ -1,3 +1,4 @@
+import { AccountConnectButton } from "@/components/shared/account-connect-button";
 import { RiDiscordFill, RiExternalLinkLine } from "@remixicon/react";
 import { useI18n } from "@/hooks/i18n-provider";
 import { Button } from "@/ui/button";
@@ -14,7 +15,7 @@ export const CustomActivityPublicationDialog = ({ id, onClose }: {
 }) => {
   const { t } = useI18n();
   const { toast } = useToast();
-  const { busy, url, error, published, creatorRequired, revision, hasChanges, publish, connect } = useCustomActivityPublication(id);
+  const { busy, url, error, published, creatorRequired, revision, hasChanges, publish } = useCustomActivityPublication(id);
   const withdraw = async () => {
     if (!(await publish(true))) return;
 
@@ -50,9 +51,7 @@ export const CustomActivityPublicationDialog = ({ id, onClose }: {
               <h2 className="text-headline-sm font-medium text-ink">{t("custom.public.connect")}</h2>
               <p className="text-body-sm text-muted">{t("custom.public.connectHint")}</p>
             </div>
-            <Button className="mt-2 w-full" loading={busy} onClick={() => void connect()}>
-              {t("custom.public.connect")}
-            </Button>
+            <AccountConnectButton className="mt-2 w-full" permission="creator" icon={null} disabled={busy} />
           </div>
         ) : (
           <>

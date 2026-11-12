@@ -2,13 +2,13 @@ import { EXTENSION_TOKEN_PREFIX, type ExtensionTokenScope } from "@nowly/shared"
 import { addRuntimeLog } from "@/background/runtime-logs";
 import { deleteSyncDocuments, fetchAccountUser, fetchSyncDocuments, linkDevice, putSyncDocument, revokeExtensionToken, type ApiResult, type RemoteSyncDocument } from "@/background/services/account-api";
 import { applyLocalSyncValue, readLocalSyncValues, reconcilePendingPresences } from "@/background/services/account-sync-local";
-import { getEffectiveWebUrl } from "@/background/services/api-state";
 import { getActiveDeviceId, syncDeviceState } from "@/background/services/device-sync";
 import { clearAccount, getAccount, parseAccountUser, setAccount } from "@/background/storage/account.store";
 import { getDeviceToken } from "@/background/storage/device.store";
 import { clearSyncState, EMPTY_SYNC_STATE, getSyncState, setSyncState, type SyncState } from "@/background/storage/sync.store";
 import { EXTENSION_SYNC_KEYS, hasMeaningfulLocalData, LOCAL_SYNC_STORAGE_KEYS, mergeSyncValue, syncEqual, type ExtensionSyncKey } from "@/shared/account-sync";
-import type { AccountSnapshot, StoredAccount, SyncChoice } from "@/shared/types";
+import { ACCOUNT_BASE_URL } from "@/shared/constants";
+import type { AccountConnectPermission, AccountSnapshot, StoredAccount, SyncChoice } from "@/shared/types";
 import { createDebouncedTask } from "@/background/services/debounced-task";
 
 export const ACCOUNT_SYNC_ALARM = "account-sync";
@@ -374,7 +374,7 @@ export const getAccountSnapshot = async (): Promise<AccountSnapshot> => {
   };
 };
 
-export const openAccountConnect = async (permission: "creator" | "admin" | null = null): Promise<void> => {
+export const openAccountConnect = async (permission: AccountConnectPermission | null): Promise<void> => {
   const deviceId = await getActiveDeviceId();
 
   const params = new URLSearchParams({
@@ -385,7 +385,7 @@ export const openAccountConnect = async (permission: "creator" | "admin" | null 
 
   const account = await getAccount();
   if (account) params.set("user", account.user.id);
-  await chrome.tabs.create({ url: `${getEffectiveWebUrl().replace(/\/$/, "")}/extension/connect?${params.toString()}` });
+  await chrome.tabs.create({ url: `${ACCOUNT_BASE_URL.replace(/\/$/, "")}/connect?${params.toString()}` });
 };
 
 const scheduleLocalPush = createDebouncedTask(() => void runAccountSync("push"), LOCAL_CHANGE_DEBOUNCE_MS);

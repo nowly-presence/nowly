@@ -71,6 +71,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
   const likes = new Map<string, boolean>();
   let muted = false;
   let account = initialAccount();
+  let creatorGranted = false;
   let announcements = previewAnnouncements();
   let userScriptsEnabled = !previewParams.scriptsDenied;
   const ipcDenied = previewParams.native === "ipc-denied";
@@ -477,7 +478,8 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
     },
     GET_CUSTOM_ACTIVITY_DETECTION: () => session.read<CustomActivityDetection | null>(CUSTOM_ACTIVITY_DETECTION_KEY, null),
     GET_ACCOUNT: () => account,
-    START_ACCOUNT_CONNECT: () => {
+    START_ACCOUNT_CONNECT: ({ permission }) => {
+      if (permission === "creator") creatorGranted = true;
       account = {
         signedIn: true,
         user: PREVIEW_USER,
@@ -511,15 +513,7 @@ export const createMockRouter = ({ local, session, catalog, installedSlugs, tabA
     SIGN_OUT_ACCOUNT: () => (account = { signedIn: false }),
     ...createMockCreatorHandlers({
       user: () => (account.signedIn ? account.user : null),
-      signIn: () => {
-        if (!account.signedIn) account = {
-          signedIn: true,
-          user: PREVIEW_USER,
-          lastSyncedAt: Date.now(),
-          error: null,
-          pendingChoice: false
-        };
-      }
+      creator: () => creatorGranted
     }),
     ...createMockReportHandlers(),
     ...createMockAdminHandlers({

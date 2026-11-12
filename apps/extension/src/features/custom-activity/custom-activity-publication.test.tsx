@@ -5,6 +5,7 @@ import en from "@messages/en.json";
 import { useCustomActivityPublication } from "./custom-activity-publication-hook";
 import { CustomActivityPublication } from "./custom-activity-publication";
 import { CustomActivityPublicationDialog } from "./custom-activity-publication-dialog";
+import { AccountConnectButton } from "@/components/shared/account-connect-button";
 import { Button } from "@/ui/button";
 import { sendMessage } from "@/lib/messages";
 
@@ -43,8 +44,7 @@ const initialState = () => ({
   creatorRequired: false,
   revision: 0,
   hasChanges: true,
-  publish: vi.fn(),
-  connect: vi.fn()
+  publish: vi.fn()
 });
 
 let state: ReturnType<typeof useCustomActivityPublication>;
@@ -112,7 +112,8 @@ describe("public activity sharing dialog", () => {
       creatorRequired: true,
       revision: null
     };
-    expect(actionLabels()).toEqual([en["custom.public.connect"]]);
+    expect(actionLabels()).toEqual([]);
+    expect(markup()).toContain(en["custom.public.connect"]);
     expect(markup()).toContain(en["custom.public.connectHint"]);
     expect(markup()).not.toContain('data-testid="saved-preview"');
     expect(markup()).not.toContain('role="alert"');
@@ -154,7 +155,6 @@ describe("public activity sharing dialog", () => {
   it("does not connect or publish while rendering and wires explicit actions only", () => {
     markup();
     expect(state.publish).not.toHaveBeenCalled();
-    expect(state.connect).not.toHaveBeenCalled();
     const unpublished = state;
     state = {
       ...state,
@@ -183,9 +183,10 @@ describe("public activity sharing dialog", () => {
       ...state,
       creatorRequired: true
     };
-    click(0);
-    expect(state.connect).toHaveBeenCalledExactlyOnceWith();
-    expect(buttons()).toHaveLength(1);
+    const connectButtons = elements(panel()).filter((node) => isValidElement(node) && node.type === AccountConnectButton);
+    expect(connectButtons).toHaveLength(1);
+    expect(isValidElement<ComponentProps<typeof AccountConnectButton>>(connectButtons[0]) && connectButtons[0].props.permission).toBe("creator");
+    expect(buttons()).toHaveLength(0);
   });
   it("keeps actions busy during a request", () => {
     state = {

@@ -6,7 +6,6 @@ import type { CreatorAccount } from "@nowly/presence-creator/creator-submission"
 export const useCreatorAccount = () => {
   const { state } = useExtensionState();
   const [account, setAccount] = useState<CreatorAccount | null>(null);
-  const [connecting, setConnecting] = useState(false);
 
   const refresh = useCallback(async () => setAccount(await sendMessage("CREATOR_GET_ACCOUNT")), []);
 
@@ -16,18 +15,5 @@ export const useCreatorAccount = () => {
     return () => window.removeEventListener("focus", refresh);
   }, [refresh, state.account]);
 
-  const connect = async () => {
-    if (connecting) return;
-
-    setConnecting(true);
-
-    try {
-      await sendMessage("START_CREATOR_CONNECT");
-      await refresh();
-    } finally {
-      setConnecting(false);
-    }
-  };
-
-  return { account, connecting, connect, refresh };
+  return { account, refresh };
 };

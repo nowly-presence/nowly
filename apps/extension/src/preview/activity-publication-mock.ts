@@ -15,7 +15,6 @@ export const createPublicationMockHandlers = (): MockHandlers => {
     published: publication.published
   });
   return {
-    START_CREATOR_CONNECT: () => ({ ok: true }),
     GET_CUSTOM_ACTIVITY_DELETION_PLAN: ({ id }) => {
       const publication = publications.get(id);
       return {

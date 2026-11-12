@@ -1,3 +1,4 @@
+import { AccountConnectButton } from "@/components/shared/account-connect-button";
 import { ConnectionRow } from "@/features/settings/connection-row";
 import { AccountChoiceSheet } from "@/features/settings/account-choice-sheet";
 import { useExtensionState } from "@/hooks/extension-state-provider";
@@ -13,26 +14,21 @@ import { Row } from "@/ui/row";
 import { Section } from "@/ui/section";
 import { Sheet } from "@/ui/sheet";
 import { useToast } from "@/ui/toast";
-import { RiDiscordFill, RiExternalLinkLine, RiRefreshLine } from "@remixicon/react";
+import { RiExternalLinkLine, RiRefreshLine } from "@remixicon/react";
 import { useState } from "react";
 
 const MINUTE_MS = 60_000;
 
-type Busy = "connect" | "sync" | "signOut" | "stop" | null;
+type Busy = "sync" | "signOut" | "stop" | null;
 
-const SignedOut = ({ busy, onConnect }: {
-  busy: Busy;
-  onConnect: () => void;
-}) => {
+const SignedOut = () => {
   const { t } = useI18n();
   return (
     <Group>
       <ConnectionRow />
       <Row align="start" title={t("account.signedOutTitle")} description={t("account.signedOutHint")} />
       <div className="px-4 pb-3">
-        <Button className="w-full" loading={busy === "connect"} icon={<RiDiscordFill />} onClick={onConnect}>
-          {t("account.signIn")}
-        </Button>
+        <AccountConnectButton className="w-full" />
       </div>
     </Group>
   );
@@ -99,11 +95,6 @@ export const AccountSection = () => {
     }
   };
 
-  const connect = () =>
-    void run("connect", () => sendMessage("START_ACCOUNT_CONNECT")).then((result) => {
-      if (result?.ok) toast(t("account.signInOpened"), "info");
-    });
-
   const syncNow = () =>
     void run("sync", () => sendMessage("SYNC_ACCOUNT")).then((next) => {
       if (!next) return;
@@ -140,7 +131,7 @@ export const AccountSection = () => {
   return (
     <Section title={t("settings.account")}>
       {!account.signedIn ? (
-        <SignedOut busy={busy} onConnect={connect} />
+        <SignedOut />
       ) : (
         <Group>
           <ConnectionRow />

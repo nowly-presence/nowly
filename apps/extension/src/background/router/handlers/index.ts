@@ -16,7 +16,6 @@ import { handleAcceptLegalDocuments, handleCheckLegalDocuments, handleGetLegalSt
 import { applyPublication, publicationStatus } from "@/background/services/activity-publications";
 import { getOwnedPublication, publishActivity } from "@/background/services/activity-publication-publisher";
 import { createAnnouncement, deletePresence, fetchHiddenPresences, fetchReviewQueue, fetchSubmissionDetail, getStaffAccess, loadCreatorPresenceDraft, probeCreatorPresence, publishSubmission, retryPullRequest, sendReview, setPresenceHidden } from "@/background/services/admin-api";
-import { openAccountConnect } from "@/background/services/account-sync";
 import { getCustomActivityDeletionPlan } from "@/background/services/custom-activity-deletion-plan";
 
 import { getAccountSnapshot } from "@/background/services/account-sync";
@@ -33,12 +32,6 @@ export const buildHandlerRegistry = (): HandlerRegistry => ({
   GET_CUSTOM_ACTIVITY_DELETION_PLAN: ({ id }) => getCustomActivityDeletionPlan(id),
   APPLY_ACTIVITY_PUBLICATION: (payload) => applyPublication(payload),
   PUBLISH_CUSTOM_ACTIVITY: ({ id, baseRevision, unpublish }) => publishActivity(id, baseRevision, unpublish),
-  START_CREATOR_CONNECT: async () => {
-    await openAccountConnect("creator");
-    return {
-      ok: true
-    };
-  },
   ADMIN_GET_ACCESS: () => getStaffAccess(),
   ADMIN_FETCH_QUEUE: () => fetchReviewQueue(),
   ADMIN_FETCH_HIDDEN_PRESENCES: () => fetchHiddenPresences(),

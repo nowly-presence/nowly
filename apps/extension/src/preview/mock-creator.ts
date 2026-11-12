@@ -35,26 +35,18 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 type MockCreatorAccount = {
   user: () => AccountUser | null;
-  signIn: () => void;
+  creator: () => boolean;
 };
 
 export const createMockCreatorHandlers = (account: MockCreatorAccount): MockHandlers => {
-  let creator = false;
   let pickIndex = 0;
   const submissions = new Map<string, CreatorSubmission>();
   const readAccount = (): CreatorAccount | null => {
     const user = account.user();
-    return user ? { user, creator } : null;
+    return user ? { user, creator: account.creator() } : null;
   };
   return {
     CREATOR_GET_ACCOUNT: readAccount,
-    START_CREATOR_CONNECT: () => {
-      account.signIn();
-      creator = true;
-      return {
-        ok: true
-      };
-    },
     CREATOR_SUBMIT: async () => {
       if (!readAccount()?.creator) return {
         ok: false,

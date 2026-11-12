@@ -1,8 +1,8 @@
 import type { Handler } from "@/background/router/router";
 import { connectAccount, getAccountSnapshot, openAccountConnect, resolveSyncChoice, runAccountSync, signOutAccount, stopAccountSync } from "@/background/services/account-sync";
 
-export const handleStartAccountConnect: Handler<"START_ACCOUNT_CONNECT"> = async () => {
-  await openAccountConnect();
+export const handleStartAccountConnect: Handler<"START_ACCOUNT_CONNECT"> = async ({ permission }) => {
+  await openAccountConnect(permission);
   return {
     ok: true
   };

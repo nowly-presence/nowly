@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { RiDiscordFill, RiExternalLinkLine, RiRefreshLine, RiSendPlaneLine } from "@remixicon/react";
+import { RiExternalLinkLine, RiRefreshLine, RiSendPlaneLine } from "@remixicon/react";
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
 import { sendMessage } from "@/lib/messages";
 import { openUrl } from "@/shared/browser-links";
@@ -16,6 +16,7 @@ import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
 import { creatorSignature } from "@/shared/creator/creator-signature";
 import { SubmissionFeedback } from "@/features/creator/review/submission-feedback";
+import { AccountConnectButton } from "@/components/shared/account-connect-button";
 import { useCreatorAccount } from "@/features/creator/use-creator-account";
 import type { DraftUpdate } from "@/features/creator/use-draft-editor";
 
@@ -35,7 +36,7 @@ export const SubmitPanel = ({ draft, update, blocked }: {
   blocked: boolean;
 }) => {
   const { t } = useI18n();
-  const { account, connecting, connect, refresh } = useCreatorAccount();
+  const { account, refresh } = useCreatorAccount();
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const submission = draft.submission;
@@ -154,9 +155,7 @@ export const SubmitPanel = ({ draft, update, blocked }: {
           <span className="text-label-lg font-medium">{t(account ? "creator.submit.permissionTitle" : "creator.submit.signInTitle")}</span>
           <span className="text-label-md text-muted">{t(account ? "creator.submit.permissionHint" : "creator.submit.signInHint")}</span>
         </div>
-        <Button variant="solid" icon={<RiDiscordFill className="size-4" />} loading={connecting} onClick={() => void connect()}>
-          {t(account ? "creator.submit.allow" : "creator.submit.discord")}
-        </Button>
+        <AccountConnectButton variant="solid" permission="creator" />
       </Card>
     );
   }

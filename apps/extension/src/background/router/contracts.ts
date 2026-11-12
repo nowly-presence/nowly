@@ -1,7 +1,7 @@
 import type { AnnouncementsState } from "@/shared/announcements";
 import type { PublicationReview, PublicationStatus, PublicationApply, PublicationResult } from "@nowly/shared";
 import type { LegalConfirmation, LegalConfirmationResult, LegalState } from "@nowly/shared/legal";
-import type { AccountSnapshot, CurrentActivity, CustomActivitiesState, CustomActivityDetection, CustomActivityDraft, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, PresenceData, PresenceDebug, PresenceSchedule, RuntimeLogEntry, StoredPresence, SyncChoice, TabState, UserScriptsStatus } from "@/shared/types";
+import type { AccountConnectPermission, AccountSnapshot, CurrentActivity, CustomActivitiesState, CustomActivityDetection, CustomActivityDraft, ExtensionSettings, InstalledPresences, NativeStatus, PresenceCatalogItem, PresenceData, PresenceDebug, PresenceSchedule, RuntimeLogEntry, StoredPresence, SyncChoice, TabState, UserScriptsStatus } from "@/shared/types";
 import type { OnboardingState } from "@/background/storage/onboarding.store";
 import type { SaveCustomActivityResult, UploadCustomImageResult } from "@/background/managers/custom-activity-manager";
 import type { SupportPromptAction, SupportPromptState } from "@/shared/support-prompt";
@@ -95,12 +95,6 @@ export type RouterMessageMap = {
       unpublish?: boolean;
     };
     response: PublishResult;
-  };
-  START_CREATOR_CONNECT: {
-    payload: void;
-    response: {
-      ok: boolean;
-    };
   };
   ADMIN_GET_ACCESS: {
     payload: void;
@@ -679,7 +673,9 @@ export type RouterMessageMap = {
     response: AccountSnapshot;
   };
   START_ACCOUNT_CONNECT: {
-    payload: void;
+    payload: {
+      permission: AccountConnectPermission | null;
+    };
     response: {
       ok: boolean;
     };

@@ -90,23 +90,5 @@ export const useCustomActivityPublication = (id: string) => {
     }
   };
 
-  const connect = async () => {
-    if (busy || locked.current) return;
-
-    locked.current = true;
-    setBusy(true);
-    setError(null);
-
-    try {
-      const result = await sendMessage("START_CREATOR_CONNECT");
-      if (!result.ok) setError(t("error.generic"));
-    } catch {
-      setError(t("error.generic"));
-    } finally {
-      locked.current = false;
-      setBusy(false);
-    }
-  };
-
-  return { busy, url, error, published, creatorRequired, revision, hasChanges, publish, connect };
+  return { busy, url, error, published, creatorRequired, revision, hasChanges, publish };
 };

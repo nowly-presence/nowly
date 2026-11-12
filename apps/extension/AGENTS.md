@@ -37,6 +37,7 @@ MV3 side-panel extension for Chromium and Firefox.
 
 ## Account and sync
 
+- One sign-in path: every button that asks the user to connect uses `components/shared/account-connect-button.tsx` (variant, class, label as props, `permission="creator"` for publishing). It sends `START_ACCOUNT_CONNECT`, which opens `account.nowly.me/connect` (`ACCOUNT_BASE_URL`). Never add another connect message, URL or button wired to its own flow; `nowly.me/extension/connect` is legacy and must not be opened by the extension.
 - Optional and discreet: no banner, nothing in the onboarding, nothing blocked without an account. The only entry point is Settings, Account and sync.
 - Synced: `settings` (only `SYNCED_SETTINGS_KEYS`), store `presences` (`{ slug, enabled, schedule?, installedAt }`), `presenceSettings` and `featureReveals`. Never device-specific settings (`customApiBaseUrl`, `developerMode`, `presencePaused`), local zips, bundled presences, current activity, tabs, URLs or history. Merge rules are pure in `shared/account-sync.ts` (tested); the flow is in `src/background/AGENTS.md`.
 

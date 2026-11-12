@@ -37,7 +37,7 @@ This document specifies the server side of the presence creator: submission, sto
 | Export | `src/shared/creator/creator-export.ts` | `creatorDefinition(draft)`, `buildTextFiles(draft)`, zip. |
 | API client | `src/background/services/creator-api.ts` | Calls `POST /me/presence-submissions` and `GET /me/presence-submissions` with the account token. |
 | Contract | `src/shared/creator/creator-submission.ts` | `CreatorAccount`, `CreatorSubmissionPayload`, statuses, `parseSubmission`. |
-| Sign-in | `START_CREATOR_CONNECT` (`background/services/account-sync.ts`) | Opens `nowly.me/extension/connect?permission=creator`, the same flow as public activities. |
+| Sign-in | `START_ACCOUNT_CONNECT` with `permission: "creator"` (`background/services/account-sync.ts`) | Opens `account.nowly.me/connect?permission=creator`, the same flow as public activities. |
 | Preview | `src/preview/mock-creator.ts` | Simulates the server (permission, submission, status progress) to test the UI without a back end. |
 
 Until the routes exist, the extension gets a 404 when sending, shows "Sending isn't available yet" and offers the zip export. Nothing breaks if the back end arrives later.
@@ -46,7 +46,7 @@ Until the routes exist, the extension gets a 404 when sending, shows "Sending is
 
 - Hono API organised by feature (`apps/api/src/features/<name>/<name>.routes.ts` + `.service.ts`, an `AGENTS.md` per folder). Drizzle schema in `packages/database/src/schema/<domain>/<table>.ts`, Better Auth configuration in `packages/auth`.
 - Better Auth (`features/auth/better-auth.ts`, base `/auth`): **Discord only**, `User.role` and `User.discordId` (filled from the Discord profile, not settable by the client), cookies shared on `.nowly.me`.
-- Extension accounts (`features/account`): `nxt_` tokens (32 random bytes, only the SHA-256 is stored in `ExtensionToken.tokenHash`), 90-day sliding expiry, scopes `sync`, `assets` and `creator` (`EXTENSION_TOKEN_SCOPES` in `@nowly/shared`). Guard `requireExtensionToken(scope)`, user read with `accountOf(c).userId`. The `nowly.me/extension/connect?permission=creator` page grants `creator` explicitly, never automatically.
+- Extension accounts (`features/account`): `nxt_` tokens (32 random bytes, only the SHA-256 is stored in `ExtensionToken.tokenHash`), 90-day sliding expiry, scopes `sync`, `assets` and `creator` (`EXTENSION_TOKEN_SCOPES` in `@nowly/shared`). Guard `requireExtensionToken(scope)`, user read with `accountOf(c).userId`. The `account.nowly.me/connect?permission=creator` page grants `creator` explicitly, never automatically.
 - Direct precedent: public activities (`features/activity-sharing`, `ActivityPublication` model) already require `requireExtensionToken("creator")` and a `discordId`, under `/me/activity-publications`. The creator follows exactly this model.
 - Any new per-user data must be added to `exportAccountData` and `deleteAccountData` (`account.service.ts`).
 - R2 is already used by the API (`@aws-sdk/client-s3`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_PUBLIC_URL` in `@nowly/env/server`, see `features/custom-assets`).
@@ -62,7 +62,7 @@ Until the routes exist, the extension gets a 404 when sending, shows "Sending is
 ```
 Extension                    nowly.me                     API                         GitHub
 ─────────                    ────────                     ───                         ──────
-Allow ────────────────────▶ /extension/connect ─────────▶ Better Auth (Discord)
+Allow ────────────────────▶ /connect (account) ──────▶ Better Auth (Discord)
                              ?permission=creator           nxt_ token with creator scope
 account ◀── postMessage ─── NOWLY_SESSION (existing)
 
@@ -112,7 +112,7 @@ The package exposes at least: `normalizeDraft`, `validateDraft`, `buildTextFiles
 
 Nothing to build: the creator reuses the extension's Nowly account.
 
-- The extension calls `START_CREATOR_CONNECT`, which opens `nowly.me/extension/connect?source=extension&device=<id>&permission=creator`. The page asks for `sync` and `creator`, explains public attribution and never connects without a click (`apps/web/features/account/AGENTS.md`). The token comes back through the existing `NOWLY_SESSION` message.
+- The extension calls `START_ACCOUNT_CONNECT` with `permission: "creator"` (through `AccountConnectButton`), which opens `account.nowly.me/connect?source=extension&device=<id>&permission=creator`. The page asks for `sync` and `creator`, explains public attribution and never connects without a click (`apps/account/features/account/AGENTS.md`). The token comes back through the existing `NOWLY_SESSION` message.
 - An account already connected with `sync` only sees "Allow publishing" and goes through the same page again.
 - The background checks `scopes.includes("creator")` and `user.discordId` before any submission, like public activities.
 - Creator routes are protected by `requireExtensionToken("creator")` and read the author with `accountOf(c).userId`, never from the body.
