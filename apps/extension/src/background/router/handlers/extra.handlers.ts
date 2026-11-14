@@ -1,3 +1,4 @@
+import { pruneStaleTabPresences } from "@/background/managers/tab-presence-pruning";
 import { syncPresenceScripts } from "@/background/runtime/presence-scripts";
 import { urlMatchesPresence } from "@/shared/url-patterns";
 import type { Handler } from "@/background/router/router";
@@ -48,6 +49,7 @@ const hostnameOf = (url: string | undefined): string | null => {
 };
 
 const buildTabState = async (): Promise<TabState> => {
+  await pruneStaleTabPresences();
   const [tab, presences, activities] = await Promise.all([
     resolveFocusedTab(),
     getPresences(),

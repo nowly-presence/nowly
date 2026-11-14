@@ -1,3 +1,4 @@
+import { pruneStaleTabPresences } from "@/background/managers/tab-presence-pruning";
 import { broadcastActiveTab, handleClearActivity, handleRemovedTab } from "@/background/managers/activity-manager";
 import { drainInstallQueue, installBundledPresences } from "@/background/managers/presence-manager";
 import { trackProduct } from "@/background/telemetry";
@@ -212,12 +213,18 @@ export const registerLifecycleHandlers = (): void => {
 
   chrome.tabs.onRemoved.addListener(handleRemovedTab);
 
+  chrome.tabs.onReplaced.addListener((_addedTabId, removedTabId) => {
+    void handleRemovedTab(removedTabId);
+  });
+
   chrome.tabs.onActivated.addListener(({ tabId }) => {
     setFocusedTabId(tabId);
     void broadcastActiveTab();
   });
 
   chrome.tabs.onUpdated.addListener((_tabId, changeInfo) => {
+    if (changeInfo.url) void pruneStaleTabPresences();
+
     if (!changeInfo.url && changeInfo.status !== "complete") return;
 
     void refreshCustomActivityDetection().then((changed) => (changed ? broadcastActiveTab() : undefined));
