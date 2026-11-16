@@ -48,6 +48,10 @@ Source: "installer.ico"; DestDir: "{app}"; Flags: ignoreversion
 Root: HKCU; Subkey: "Software\Google\Chrome\NativeMessagingHosts\{#HostName}"; ValueType: string; ValueData: "{app}\{#HostName}.json"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\Microsoft\Edge\NativeMessagingHosts\{#HostName}"; ValueType: string; ValueData: "{app}\{#HostName}.json"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\BraveSoftware\Brave-Browser\NativeMessagingHosts\{#HostName}"; ValueType: string; ValueData: "{app}\{#HostName}.json"; Flags: uninsdeletekey
+; Opera and Opera GX do not read the Chrome key: each reads its own browser-specific key
+Root: HKCU; Subkey: "Software\Opera Software\NativeMessagingHosts\{#HostName}"; ValueType: string; ValueData: "{app}\{#HostName}.json"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\Opera Software\Opera Stable\NativeMessagingHosts\{#HostName}"; ValueType: string; ValueData: "{app}\{#HostName}.json"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\Opera Software\Opera GX Stable\NativeMessagingHosts\{#HostName}"; ValueType: string; ValueData: "{app}\{#HostName}.json"; Flags: uninsdeletekey
 ; Firefox uses a separate registry key and a manifest with allowed_extensions instead of allowed_origins
 Root: HKCU; Subkey: "Software\Mozilla\NativeMessagingHosts\{#HostName}"; ValueType: string; ValueData: "{app}\{#HostName}-firefox.json"; Flags: uninsdeletekey
 
