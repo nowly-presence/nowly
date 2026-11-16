@@ -40,7 +40,7 @@
     "role:set": "tsx src/cli/set-role.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1163.0",
+    "@aws-sdk/client-s3": "^3.1168.0",
     "@hono/node-server": "^2.1.8",
     "@nowly/auth": "workspace:*",
     "@nowly/database": "workspace:*",
@@ -49,17 +49,17 @@
     "@nowly/presence-creator": "workspace:*",
     "@nowly/shared": "workspace:*",
     "@nowly/telemetry": "workspace:*",
-    "better-auth": "^1.7.18",
+    "better-auth": "^1.7.23",
     "dotenv": "^18.0.10",
     "drizzle-orm": "^0.45.2",
-    "hono": "^4.13.16",
-    "nodemailer": "^10.3.1",
+    "hono": "^4.13.18",
+    "nodemailer": "^10.5.0",
     "pg": "^8.23.1",
     "sharp": "^0.35.5",
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "^0.5.15",
+    "@electric-sql/pglite": "^0.5.16",
     "@types/node": "^26.6.6",
     "@types/nodemailer": "^8.0.2",
     "@vitest/coverage-v8": "^4.1.9",
