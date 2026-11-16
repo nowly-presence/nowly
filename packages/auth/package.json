@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@nowly/database": "workspace:*",
-    "better-auth": "^1.7.18"
+    "better-auth": "^1.7.23"
   },
   "devDependencies": {
     "typescript": "6.0.3"
