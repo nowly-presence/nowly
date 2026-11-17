@@ -8,7 +8,7 @@ import { Button } from "@/ui/button";
 import { Field } from "@/ui/field";
 import { Frame } from "@/ui/frame";
 import { Input } from "@/ui/input";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/ui/input-group";
+import { InputGroup, InputGroupInput } from "@/ui/input-group";
 import { OptionCards } from "@/ui/option-cards";
 import { Select } from "@/ui/select";
 import { MATCH_MODE_KEYS } from "@/features/creator/pages/page-match-label";
@@ -174,17 +174,8 @@ export const PageIdentityFrame = ({ draft, page, onChange }: {
             modeSelect(false)
           ) : (
             <InputGroup>
-              <div className="flex shrink-0">{modeSelect(true)}</div>
-              <InputGroupAddon text className="min-w-0 max-w-[35%] pr-0">
-                <span className="truncate">{domain}</span>
-              </InputGroupAddon>
-              <InputGroupInput
-                className="min-w-24 pl-0.5"
-                value={page.match.path}
-                onChange={(event) => changePath(event.target.value)}
-                placeholder="/watch"
-                spellCheck={false}
-              />
+              {modeSelect(true)}
+              <InputGroupInput value={page.match.path} onChange={(event) => changePath(event.target.value)} placeholder="/watch" spellCheck={false} />
             </InputGroup>
           )}
         </Field>
