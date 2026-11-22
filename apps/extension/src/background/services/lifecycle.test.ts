@@ -31,6 +31,7 @@ it("logs the first heartbeat and each independent host transition once", () => {
     storage: { onChanged: event },
     tabs: {
       onRemoved: event,
+      onReplaced: event,
       onActivated: event,
       onUpdated: event
     },
