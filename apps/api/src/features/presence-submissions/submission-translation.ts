@@ -1,6 +1,6 @@
 import { runJsonModel, WorkersAiHttpError } from "@/shared/workers-ai";
 import { SUPPORTED_LOCALES, type LocaleString } from "@nowly/locales";
-import { BUTTON_LABEL_MAX_LENGTH, DESCRIPTION_MAX_LENGTH, FEATURE_MAX_LENGTH, LONG_DESCRIPTION_MAX_LENGTH, PAGE_TEXT_MAX_LENGTH, templateTokens, type CreatorDefinition, type LocalizedText } from "@nowly/presence-creator";
+import { BUTTON_LABEL_MAX_LENGTH, DESCRIPTION_MAX_LENGTH, FEATURE_MAX_LENGTH, LONG_DESCRIPTION_MAX_LENGTH, PAGE_TEXT_MAX_LENGTH, templateTokens, type CreatorConditionAction, type CreatorDefinition, type LocalizedText } from "@nowly/presence-creator";
 import { z } from "zod";
 
 const TRANSLATION_LOCALES: readonly LocaleString[] = SUPPORTED_LOCALES;
@@ -43,6 +43,9 @@ const RESULT_JSON_SCHEMA = {
   required: ["items"]
 };
 
+const conditionActions = (page: CreatorDefinition["pages"][number]): CreatorConditionAction[] =>
+  page.conditions.flatMap((condition) => [...condition.actions, ...condition.elseActions]);
+
 const collect = (definition: CreatorDefinition): SourceItem[] => {
   const base = definition.baseLocale;
   const item = (key: string, text: LocalizedText, max: number): SourceItem[] => {
@@ -64,7 +67,12 @@ const collect = (definition: CreatorDefinition): SourceItem[] => {
     ...definition.pages.flatMap((page) => [
       ...item(`pages.${page.id}.details`, page.details, PAGE_TEXT_MAX_LENGTH),
       ...item(`pages.${page.id}.state`, page.state, PAGE_TEXT_MAX_LENGTH),
-      ...page.buttons.flatMap((button) => item(`pages.${page.id}.buttons.${button.id}`, button.label, BUTTON_LABEL_MAX_LENGTH))
+      ...page.buttons.flatMap((button) => item(`pages.${page.id}.buttons.${button.id}`, button.label, BUTTON_LABEL_MAX_LENGTH)),
+      ...conditionActions(page).flatMap((action) =>
+        "text" in action
+          ? item(`pages.${page.id}.conditions.${action.id}`, action.text, action.kind === "buttonLabel" ? BUTTON_LABEL_MAX_LENGTH : PAGE_TEXT_MAX_LENGTH)
+          : []
+      )
     ])
   ];
 };
@@ -154,7 +162,16 @@ const applyTranslations = (definition: CreatorDefinition, translations: Map<Loca
         buttons: page.buttons.map((button) => ({
           ...button,
           label: withLocale(button.label, locale, values.get(`pages.${page.id}.buttons.${button.id}`))
-        }))
+        })),
+        conditions: page.conditions.map((condition) => {
+          const translate = (action: CreatorConditionAction): CreatorConditionAction =>
+            "text" in action ? { ...action, text: withLocale(action.text, locale, values.get(`pages.${page.id}.conditions.${action.id}`)) } : action;
+          return {
+            ...condition,
+            actions: condition.actions.map(translate),
+            elseActions: condition.elseActions.map(translate)
+          };
+        })
       }))
     };
   }
