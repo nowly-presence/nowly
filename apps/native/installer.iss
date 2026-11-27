@@ -19,7 +19,7 @@ AppVersion={#APP_VERSION}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 DefaultDirName={localappdata}\{#InstallFolder}
-DisableDirPage=yes
+DisableDirPage=no
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=dist
@@ -56,13 +56,24 @@ Root: HKCU; Subkey: "Software\Opera Software\Opera GX Stable\NativeMessagingHost
 Root: HKCU; Subkey: "Software\Mozilla\NativeMessagingHosts\{#HostName}"; ValueType: string; ValueData: "{app}\{#HostName}-firefox.json"; Flags: uninsdeletekey
 
 [Run]
-Filename: "powershell.exe"; Parameters: "-Command ""Add-MpPreference -ExclusionPath '{app}' -ErrorAction SilentlyContinue"""; Flags: runhidden; Description: "Add Defender exclusion"
+Filename: "powershell.exe"; Parameters: "-Command ""Add-MpPreference -ExclusionPath '{app}' -ErrorAction SilentlyContinue"""; Flags: runhidden; Description: "Add Defender exclusion"; Check: IsDefaultDir
+
+; The manifests are written by [Code], so the uninstaller does not track them
+[UninstallDelete]
+Type: files; Name: "{app}\{#HostName}.json"
+Type: files; Name: "{app}\{#HostName}-firefox.json"
 
 [UninstallRun]
 Filename: "taskkill.exe"; Parameters: "/f /im nowly-host.exe"; Flags: runhidden
 Filename: "powershell.exe"; Parameters: "-Command ""Remove-MpPreference -ExclusionPath '{app}' -ErrorAction SilentlyContinue"""; Flags: runhidden
 
 [Code]
+
+// A Defender exclusion must never cover a folder picked by the user
+function IsDefaultDir: Boolean;
+begin
+  Result := CompareText(ExpandConstant('{app}'), ExpandConstant('{localappdata}\{#InstallFolder}')) = 0;
+end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 var
@@ -90,7 +101,7 @@ begin
       '  ]' + #13#10 +
       '}';
 
-    SaveStringToFile(ManifestPath, Manifest, False);
+    SaveStringsToUTF8FileWithoutBOM(ManifestPath, [Manifest], False);
 
     // Firefox manifest — uses allowed_extensions instead of allowed_origins.
     // Dev UUID is derived from the Chrome dev ID; prod ID is the AMO gecko.id.
@@ -107,6 +118,6 @@ begin
       '  ]' + #13#10 +
       '}';
 
-    SaveStringToFile(FirefoxManifestPath, FirefoxManifest, False);
+    SaveStringsToUTF8FileWithoutBOM(FirefoxManifestPath, [FirefoxManifest], False);
   end;
 end;
