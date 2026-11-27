@@ -1,14 +1,26 @@
 "use client";
 
 import { ButtonLink } from "@/components/button-link";
+import { Link } from "@/i18n/navigation";
 import { Alert, AlertDescription, AlertTitle, ButtonAnchor, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
 import { PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import type { DesktopPlatform, DesktopRelease } from "@/features/desktop/lib/desktop-release";
 import { RiAppleFill, RiCheckLine, RiErrorWarningLine, RiGithubLine, RiInformationLine, RiShieldCheckLine, RiUbuntuFill, RiWindowsFill } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState, type ReactNode } from "react";
 
 const platforms = ["windows", "macos", "linux"] as const;
+
+const SIGNING_TEAM = {
+  committers: ["Steellgold", "q-kimi"],
+  approvers: ["Steellgold"]
+};
+
+const externalLink = (href: string) => (chunks: ReactNode) => (
+  <a href={href} rel="noreferrer" target="_blank" className="text-foreground underline underline-offset-4">
+    {chunks}
+  </a>
+);
 
 const platformIcons = {
   windows: RiWindowsFill,
@@ -206,6 +218,50 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
                 <span className="text-sm font-medium">{t(`req.${key}-${platform}`)}</span>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section id="code-signing-policy" className="mt-16 max-w-3xl">
+          <h2 className="text-xl font-medium tracking-tight">{t("signing-title")}</h2>
+          <div className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
+            <p>{t("signing-status")}</p>
+            <p>
+              {t.rich("signing-attribution", {
+                signpath: externalLink("https://about.signpath.io"),
+                foundation: externalLink("https://signpath.org")
+              })}
+            </p>
+            <ul>
+              {[
+                {
+                  label: t("signing-committers"),
+                  logins: SIGNING_TEAM.committers
+                },
+                {
+                  label: t("signing-approvers"),
+                  logins: SIGNING_TEAM.approvers
+                }
+              ].map((role) => (
+                <li key={role.label}>
+                  {role.label}:{" "}
+                  {role.logins.map((login, index) => (
+                    <span key={login}>
+                      {index > 0 ? ", " : null}
+                      {externalLink(`https://github.com/${login}`)(login)}
+                    </span>
+                  ))}
+                </li>
+              ))}
+            </ul>
+            <p>
+              {t.rich("signing-privacy", {
+                privacy: (chunks) => (
+                  <Link href="/privacy" className="text-foreground underline underline-offset-4">
+                    {chunks}
+                  </Link>
+                )
+              })}
+            </p>
           </div>
         </section>
       </div>

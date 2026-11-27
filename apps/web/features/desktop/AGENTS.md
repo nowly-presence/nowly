@@ -1,5 +1,7 @@
 # Desktop
 
+The "Code signing policy" section is a SignPath Foundation requirement: keep that English title and the attribution sentence verbatim. Builds are not signed yet: update `signing-status` once they are.
+
 Shows what the native release manifest contains (`DESKTOP_LATEST_MANIFEST_URL`, published by `host-release.yml`). Artifacts are produced by the release workflow, never here.
 
 - Each artifact may carry a `virustotalUrl`; `app/host/version/route.ts` returns them next to the version, as `virustotal.<platform>.<artifact>`. The Windows unsigned alert links the installer report. A release published without the VirusTotal key, or whose upload failed, has none.
