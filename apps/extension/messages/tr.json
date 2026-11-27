@@ -676,6 +676,7 @@
   "settings.dockLayoutHint": "Taşımak için sekmeyi basılı tutup sürükle. Yeni çubuk oluşturmak için kenarın dışına çek.",
   "action.reset": "Sıfırla",
   "creator.title": "Varlık oluştur",
+  "creator.beta": "Beta",
   "creator.untitled": "Adsız varlık",
   "creator.progress": "Adım {step} / {total}",
   "creator.cta.title": "Siten burada yok mu?",

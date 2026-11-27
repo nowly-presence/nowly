@@ -2,10 +2,13 @@ import type { ReactNode } from "react";
 import { RiArrowLeftLine } from "@remixicon/react";
 import { cn } from "@/ui/cn";
 
-export const ScreenTitle = ({ title, subtitle, action }: { title: string; subtitle?: ReactNode; action?: ReactNode }) => (
+export const ScreenTitle = ({ title, badge, subtitle, action }: { title: string; badge?: ReactNode; subtitle?: ReactNode; action?: ReactNode }) => (
   <div className="flex items-center justify-between gap-3 pt-2">
     <div className="flex min-w-0 flex-col gap-1">
-      <h1 className="text-headline-sm font-medium tracking-[-0.3px] text-ink">{title}</h1>
+      <h1 className="text-headline-sm font-medium tracking-[-0.3px] text-ink">
+        {title}
+        {badge && <span className="ml-2 inline-flex align-middle">{badge}</span>}
+      </h1>
       {subtitle && <p className="text-body-sm text-muted">{subtitle}</p>}
     </div>
     {action}

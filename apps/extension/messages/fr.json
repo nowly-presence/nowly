@@ -676,6 +676,7 @@
   "settings.dockLayoutHint": "Maintenez un onglet pour le déplacer. Sortez-le par un côté pour créer une nouvelle barre.",
   "action.reset": "Réinitialiser",
   "creator.title": "Créer une présence",
+  "creator.beta": "Bêta",
   "creator.untitled": "Présence sans nom",
   "creator.progress": "Étape {step} sur {total}",
   "creator.cta.title": "Votre site n'est pas là ?",

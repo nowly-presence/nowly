@@ -676,6 +676,7 @@
   "settings.dockLayoutHint": "Hold and drag a tab to move it. Pull it past an edge to create a new bar.",
   "action.reset": "Reset",
   "creator.title": "Create a presence",
+  "creator.beta": "Beta",
   "creator.untitled": "Untitled presence",
   "creator.progress": "Step {step} of {total}",
   "creator.cta.title": "Your site isn't here?",

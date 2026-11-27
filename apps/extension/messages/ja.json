@@ -676,6 +676,7 @@
   "settings.dockLayoutHint": "タブを長押ししてドラッグすると移動できます。端の外へ出すと新しいバーを作成します。",
   "action.reset": "リセット",
   "creator.title": "プレゼンスを作成",
+  "creator.beta": "ベータ版",
   "creator.untitled": "名前のないプレゼンス",
   "creator.progress": "ステップ {step}/{total}",
   "creator.cta.title": "お探しのサイトがありませんか？",

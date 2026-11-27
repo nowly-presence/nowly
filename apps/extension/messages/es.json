@@ -676,6 +676,7 @@
   "settings.dockLayoutHint": "Mantén pulsada una pestaña y arrástrala para moverla. Sácala por un borde para crear otra barra.",
   "action.reset": "Restablecer",
   "creator.title": "Crear una presencia",
+  "creator.beta": "Beta",
   "creator.untitled": "Presencia sin nombre",
   "creator.progress": "Paso {step} de {total}",
   "creator.cta.title": "¿Tu sitio no está aquí?",

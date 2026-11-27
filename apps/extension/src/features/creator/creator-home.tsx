@@ -183,6 +183,7 @@ export const CreatorHome = ({ drafts, ready, onCreate, onOpen, onDelete, onImpor
     <ScreenBody className="gap-5">
       <ScreenTitle
         title={t("creator.title")}
+        badge={<Badge tone="primary">{t("creator.beta")}</Badge>}
         subtitle={t("creator.home.subtitle")}
         action={
           drafts.length > 0 ? (

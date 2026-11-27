@@ -676,6 +676,7 @@
   "settings.dockLayoutHint": "Halte einen Tab gedrückt und zieh ihn zum Verschieben. Zieh ihn über den Rand, um eine neue Leiste zu erstellen.",
   "action.reset": "Zurücksetzen",
   "creator.title": "Präsenz erstellen",
+  "creator.beta": "Beta",
   "creator.untitled": "Unbenannte Präsenz",
   "creator.progress": "Schritt {step} von {total}",
   "creator.cta.title": "Deine Website fehlt?",

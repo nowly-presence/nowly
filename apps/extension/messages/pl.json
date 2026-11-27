@@ -676,6 +676,7 @@
   "settings.dockLayoutHint": "Przytrzymaj kartę i przeciągnij, aby ją przenieść. Przeciągnij poza krawędź, aby utworzyć nowy pasek.",
   "action.reset": "Resetuj",
   "creator.title": "Utwórz obecność",
+  "creator.beta": "Beta",
   "creator.untitled": "Obecność bez nazwy",
   "creator.progress": "Krok {step} z {total}",
   "creator.cta.title": "Nie ma tu Twojej strony?",

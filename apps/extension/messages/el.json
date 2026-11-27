@@ -676,6 +676,7 @@
   "settings.dockLayoutHint": "Κράτησε πατημένη μια καρτέλα και σύρε τη για να την μετακινήσεις. Σύρε τη έξω από την άκρη για νέα γραμμή.",
   "action.reset": "Επαναφορά",
   "creator.title": "Δημιουργία παρουσίας",
+  "creator.beta": "Beta",
   "creator.untitled": "Παρουσία χωρίς όνομα",
   "creator.progress": "Βήμα {step} από {total}",
   "creator.cta.title": "Ο ιστότοπός σου δεν είναι εδώ;",

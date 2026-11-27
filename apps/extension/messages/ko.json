@@ -676,6 +676,7 @@
   "settings.dockLayoutHint": "탭을 길게 눌러 드래그해 이동하세요. 가장자리 밖으로 끌면 새 바가 만들어져요.",
   "action.reset": "초기화",
   "creator.title": "프레즌스 만들기",
+  "creator.beta": "베타",
   "creator.untitled": "이름 없는 프레즌스",
   "creator.progress": "{total}단계 중 {step}단계",
   "creator.cta.title": "찾는 사이트가 없나요?",

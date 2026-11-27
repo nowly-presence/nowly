@@ -676,6 +676,7 @@
   "settings.dockLayoutHint": "Segure e arraste uma aba para movê-la. Arraste para fora da borda para criar uma nova barra.",
   "action.reset": "Redefinir",
   "creator.title": "Criar uma presença",
+  "creator.beta": "Beta",
   "creator.untitled": "Presença sem nome",
   "creator.progress": "Etapa {step} de {total}",
   "creator.cta.title": "Seu site não está aqui?",
