@@ -392,6 +392,7 @@
     "lightweight": "Léger",
     "unsigned-title": "Build non signé",
     "unsigned-desc": "Windows peut afficher un avertissement SmartScreen. Ouvrez Plus d’infos, puis Exécuter quand même, uniquement si le fichier vient de cette page.",
+    "virustotal-link": "Voir l’analyse VirusTotal",
     "signed-title": "Notarisé par Apple",
     "signed-desc": "Les builds macOS sont notarisés. Gatekeeper devrait accepter l’image disque.",
     "linux-title": "Debian/Ubuntu : installez le paquet .deb",

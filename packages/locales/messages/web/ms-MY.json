@@ -392,6 +392,7 @@
     "lightweight": "Saiz kecil",
     "unsigned-title": "Pembinaan tidak ditandatangani",
     "unsigned-desc": "Windows mungkin menunjukkan amaran SmartScreen. Buka \"Maklumat lanjut\", kemudian \"Jalankan juga\", hanya jika anda memuat turun fail ini daripada halaman ini.",
+    "virustotal-link": "Lihat analisis VirusTotal",
     "signed-title": "Disahkan notari oleh Apple",
     "signed-desc": "Pembinaan macOS disahkan notari. Gatekeeper sepatutnya menerima imej cakera.",
     "linux-title": "Debian/Ubuntu: pasang .deb",

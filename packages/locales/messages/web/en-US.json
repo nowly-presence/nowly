@@ -392,6 +392,7 @@
     "lightweight": "Small footprint",
     "unsigned-title": "Unsigned build",
     "unsigned-desc": "Windows may show a SmartScreen warning. Open More info, then Run anyway, only if you downloaded the file from this page.",
+    "virustotal-link": "View the VirusTotal analysis",
     "signed-title": "Notarized by Apple",
     "signed-desc": "macOS builds are notarized. Gatekeeper should accept the disk image.",
     "linux-title": "Debian/Ubuntu: install the .deb",

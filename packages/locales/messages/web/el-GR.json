@@ -392,6 +392,7 @@
     "lightweight": "Μικρό μέγεθος",
     "unsigned-title": "Μη υπογεγραμμένο build",
     "unsigned-desc": "Τα Windows ενδέχεται να εμφανίσουν προειδοποίηση SmartScreen. Άνοιξε \"Περισσότερες πληροφορίες\", μετά \"Εκτέλεση ούτως ή άλλως\", μόνο αν κατέβασες το αρχείο από αυτή τη σελίδα.",
+    "virustotal-link": "Δείτε την ανάλυση VirusTotal",
     "signed-title": "Πιστοποιημένο από την Apple",
     "signed-desc": "Τα builds macOS είναι πιστοποιημένα (notarized). Το Gatekeeper θα πρέπει να αποδεχτεί την εικόνα δίσκου.",
     "linux-title": "Debian/Ubuntu: εγκατέστησε το .deb",

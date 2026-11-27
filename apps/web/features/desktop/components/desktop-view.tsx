@@ -4,7 +4,7 @@ import { ButtonLink } from "@/components/button-link";
 import { Alert, AlertDescription, AlertTitle, ButtonAnchor, Card, CardContent, CardDescription, CardTitle, cn } from "@nowly/ui";
 import { PROJECT_REPOSITORY_URL } from "@/lib/constants";
 import type { DesktopPlatform, DesktopRelease } from "@/features/desktop/lib/desktop-release";
-import { RiAppleFill, RiCheckLine, RiErrorWarningLine, RiGithubLine, RiInformationLine, RiUbuntuFill, RiWindowsFill } from "@nowly/ui/icons";
+import { RiAppleFill, RiCheckLine, RiErrorWarningLine, RiGithubLine, RiInformationLine, RiShieldCheckLine, RiUbuntuFill, RiWindowsFill } from "@nowly/ui/icons";
 import { useTranslations } from "next-intl";
 import { useLayoutEffect, useState } from "react";
 
@@ -123,7 +123,22 @@ export const DesktopView = ({ release }: DesktopViewProps) => {
               <Alert variant="destructive" className="w-full min-w-0">
                 <RiErrorWarningLine />
                 <AlertTitle>{t("unsigned-title")}</AlertTitle>
-                <AlertDescription>{t("unsigned-desc")}</AlertDescription>
+                <AlertDescription>
+                  {t("unsigned-desc")}
+                  {release.windows.installerReport ? (
+                    <ButtonAnchor
+                      href={release.windows.installerReport}
+                      rel="noreferrer"
+                      target="_blank"
+                      variant="outline"
+                      size="lg"
+                      className="mt-3 w-full border-destructive/45 bg-transparent text-destructive no-underline! hover:bg-destructive/10 hover:text-destructive! dark:border-destructive/45 dark:bg-transparent dark:hover:bg-destructive/10"
+                    >
+                      <RiShieldCheckLine data-icon="inline-start" />
+                      {t("virustotal-link")}
+                    </ButtonAnchor>
+                  ) : null}
+                </AlertDescription>
               </Alert>
             ) : null}
             {platform === "macos" ? (

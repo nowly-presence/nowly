@@ -7,6 +7,7 @@ export type DesktopRelease = {
   windows: {
     installer: string;
     portable: string;
+    installerReport: string | null;
   };
   macos: {
     dmg: string;
@@ -22,7 +23,8 @@ const fallbackRelease = (): DesktopRelease => ({
   version: null,
   windows: {
     installer: `${CDN_INSTALLER_BASE_URL}/nowly-setup.exe`,
-    portable: `${CDN_INSTALLER_BASE_URL}/nowly-windows.zip`
+    portable: `${CDN_INSTALLER_BASE_URL}/nowly-windows.zip`,
+    installerReport: null
   },
   macos: {
     dmg: `${CDN_INSTALLER_BASE_URL}/nowly-macos.dmg`,
@@ -36,6 +38,7 @@ const fallbackRelease = (): DesktopRelease => ({
 
 type ManifestArtifact = {
   url?: unknown;
+  virustotalUrl?: unknown;
 };
 type Manifest = {
   version?: unknown;
@@ -56,6 +59,10 @@ type Manifest = {
 const artifactUrl = (value: ManifestArtifact | undefined, fallback: string): string =>
   typeof value?.url === "string" && value.url.length > 0 ? value.url : fallback;
 
+const VIRUSTOTAL_REPORT_PREFIX = "https://www.virustotal.com/gui/file/";
+
+export const virustotalReportUrl = (value: unknown): string | null => (typeof value === "string" && value.startsWith(VIRUSTOTAL_REPORT_PREFIX) ? value : null);
+
 export const getDesktopRelease = async (): Promise<DesktopRelease> => {
   const fallback = fallbackRelease();
 
@@ -71,7 +78,8 @@ export const getDesktopRelease = async (): Promise<DesktopRelease> => {
       version: typeof manifest.version === "string" && manifest.version.trim() ? manifest.version.trim() : null,
       windows: {
         installer: artifactUrl(manifest.windows?.installer, fallback.windows.installer),
-        portable: artifactUrl(manifest.windows?.portable, fallback.windows.portable)
+        portable: artifactUrl(manifest.windows?.portable, fallback.windows.portable),
+        installerReport: virustotalReportUrl(manifest.windows?.installer?.virustotalUrl)
       },
       macos: {
         dmg: artifactUrl(manifest.macos?.dmg, fallback.macos.dmg),

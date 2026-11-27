@@ -392,6 +392,7 @@
     "lightweight": "Geringer Speicherbedarf",
     "unsigned-title": "Unsignierter Build",
     "unsigned-desc": "Windows kann eine SmartScreen-Warnung anzeigen. Öffne „Weitere Informationen“, dann „Trotzdem ausführen“ - nur wenn du die Datei von dieser Seite heruntergeladen hast.",
+    "virustotal-link": "VirusTotal-Analyse ansehen",
     "signed-title": "Von Apple notariell beglaubigt",
     "signed-desc": "macOS-Builds sind notariell beglaubigt. Gatekeeper sollte das Disk-Image akzeptieren.",
     "linux-title": "Debian/Ubuntu: die .deb installieren",

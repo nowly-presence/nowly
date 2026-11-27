@@ -392,6 +392,7 @@
     "lightweight": "軽量",
     "unsigned-title": "未署名ビルド",
     "unsigned-desc": "Windowsで SmartScreen の警告が表示される場合があります。このページからファイルをダウンロードした場合に限り、「詳細情報」を開き、「実行」を選んでください。",
+    "virustotal-link": "VirusTotal の分析を見る",
     "signed-title": "Appleによる公証済み",
     "signed-desc": "macOSビルドは公証済みです。Gatekeeperはディスクイメージを許可するはずです。",
     "linux-title": "Debian/Ubuntu: .debをインストール",

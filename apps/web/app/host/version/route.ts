@@ -1,10 +1,10 @@
+import { virustotalReportUrl } from "@/features/desktop/lib/desktop-release";
 import { DESKTOP_LATEST_MANIFEST_URL } from "@/lib/constants";
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
 const PLATFORMS = ["windows", "macos", "linux"] as const;
-const VIRUSTOTAL_REPORT_PREFIX = "https://www.virustotal.com/gui/file/";
 
 type Manifest = {
   version?: unknown;
@@ -24,8 +24,8 @@ const virustotalReports = (manifest: Manifest) =>
   Object.fromEntries(
     PLATFORMS.flatMap((platform) => {
       const reports = Object.entries(manifest[platform] ?? {}).flatMap(([name, artifact]) => {
-        const url = artifact?.virustotalUrl;
-        return typeof url === "string" && url.startsWith(VIRUSTOTAL_REPORT_PREFIX) ? [[name, url]] : [];
+        const url = virustotalReportUrl(artifact?.virustotalUrl);
+        return url ? [[name, url]] : [];
       });
       return reports.length > 0
         ? [

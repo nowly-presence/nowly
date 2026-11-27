@@ -392,6 +392,7 @@
     "lightweight": "Ocupa poco",
     "unsigned-title": "Compilación sin firmar",
     "unsigned-desc": "Windows puede mostrar un aviso de SmartScreen. Abre Más información y luego Ejecutar de todos modos, solo si descargaste el archivo desde esta página.",
+    "virustotal-link": "Ver el análisis de VirusTotal",
     "signed-title": "Notarizado por Apple",
     "signed-desc": "Las compilaciones de macOS están notarizadas. Gatekeeper debería aceptar la imagen de disco.",
     "linux-title": "Debian/Ubuntu: instala el .deb",
