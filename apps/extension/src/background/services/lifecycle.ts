@@ -11,6 +11,7 @@ import { setFocusedTabId } from "@/background/services/background-context";
 import { refreshCustomActivityDetection } from "@/background/services/custom-activity-detection";
 import { registerContextMenu } from "@/background/services/context-menu";
 import { syncDeviceState, syncUninstallUrl } from "@/background/services/device-sync";
+import { resolveFocusedTab } from "@/background/services/focused-tab";
 import { connectNative, onNativeResponse } from "@/background/services/native";
 import { getPresences, setDebug } from "@/background/storage/presences.store";
 import { IS_CANARY } from "@/shared/brand";
@@ -217,9 +218,8 @@ export const registerLifecycleHandlers = (): void => {
     void handleRemovedTab(removedTabId);
   });
 
-  chrome.tabs.onActivated.addListener(({ tabId }) => {
-    setFocusedTabId(tabId);
-    void broadcastActiveTab();
+  chrome.tabs.onActivated.addListener(() => {
+    void resolveFocusedTab().then(() => broadcastActiveTab());
   });
 
   chrome.tabs.onUpdated.addListener((_tabId, changeInfo) => {
