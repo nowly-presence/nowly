@@ -55,9 +55,6 @@ Root: HKCU; Subkey: "Software\Opera Software\Opera GX Stable\NativeMessagingHost
 ; Firefox uses a separate registry key and a manifest with allowed_extensions instead of allowed_origins
 Root: HKCU; Subkey: "Software\Mozilla\NativeMessagingHosts\{#HostName}"; ValueType: string; ValueData: "{app}\{#HostName}-firefox.json"; Flags: uninsdeletekey
 
-[Run]
-Filename: "powershell.exe"; Parameters: "-Command ""Add-MpPreference -ExclusionPath '{app}' -ErrorAction SilentlyContinue"""; Flags: runhidden; Description: "Add Defender exclusion"; Check: IsDefaultDir
-
 ; The manifests are written by [Code], so the uninstaller does not track them
 [UninstallDelete]
 Type: files; Name: "{app}\{#HostName}.json"
@@ -65,15 +62,10 @@ Type: files; Name: "{app}\{#HostName}-firefox.json"
 
 [UninstallRun]
 Filename: "taskkill.exe"; Parameters: "/f /im nowly-host.exe"; Flags: runhidden
+; Cleans up the exclusion that installers up to 1.6.0 added
 Filename: "powershell.exe"; Parameters: "-Command ""Remove-MpPreference -ExclusionPath '{app}' -ErrorAction SilentlyContinue"""; Flags: runhidden
 
 [Code]
-
-// A Defender exclusion must never cover a folder picked by the user
-function IsDefaultDir: Boolean;
-begin
-  Result := CompareText(ExpandConstant('{app}'), ExpandConstant('{localappdata}\{#InstallFolder}')) = 0;
-end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 var
