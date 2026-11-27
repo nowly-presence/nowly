@@ -10,6 +10,7 @@
 ## Rules
 
 - The worker dies after about 30 s idle: state that must survive (tab presences, active slugs and sessions, muted tabs, site timers, the Discord IPC episode, open editors) lives in `chrome.storage.session`, never in module memory. Multi-key updates are single read-modify-write passes. Installed-presence writes run through the serialized transaction in `storage/presences.store.ts`; keep external downloads and device sync outside it, and never start another installed-presence mutation from inside a transaction.
+- Tab choice: the focused tab's presence, else that of the most recently focused tab that had one, and only then the most recently updated: background tabs update constantly and must not take over. Priority mode picks the presence first, then applies the same rule to its tabs. `tabs.onActivated` also fires in unfocused windows, so resolve the focused tab instead of trusting its `tabId`.
 - The install queue serializes storage and alarm changes. A drain can run only once at a time and retires just the generations it completed, so requests made during a download stay queued.
 - Boot runs once (`bootBackground` memoises its promise); the router returns `true` from `onMessage` while handlers await.
 - Re-validate native status with a `PING` on every `GET_NATIVE_STATUS`; retiring a port resets every connection field together. Explicit reconnect and restart wait for a `PONG` from the current port or its disconnect, with a timeout slightly above the host's Discord handshake deadline.

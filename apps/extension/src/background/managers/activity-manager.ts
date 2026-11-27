@@ -1,6 +1,6 @@
 import { categoryOf } from "@nowly/telemetry";
 import { trackProduct } from "@/background/telemetry";
-import { addActiveSlugToState, clearActiveSlugsFromState, clearTabPresences, getActiveSlugsSnapshot, getFocusedTabId, getTabPresence, getTabPresencesSnapshot, hasActiveSession, isTabMuted, notifyBroadcastStateChanged, removeActiveSession, removeActiveSessions, removeActiveSlugFromState, removeActiveSlugsFromState, removeTabPresence, removeTabPresencesBySlug, setActiveSessionStartedAt, setTabMuted, upsertTabPresence } from "@/background/services/background-context";
+import { addActiveSlugToState, clearActiveSlugsFromState, clearTabPresences, getActiveSlugsSnapshot, getFocusedPresenceHistory, getFocusedTabId, getTabPresence, getTabPresencesSnapshot, hasActiveSession, isTabMuted, notifyBroadcastStateChanged, recordFocusedPresence, removeActiveSession, removeActiveSessions, removeActiveSlugFromState, removeActiveSlugsFromState, removeTabPresence, removeTabPresencesBySlug, setActiveSessionStartedAt, setTabMuted, upsertTabPresence } from "@/background/services/background-context";
 import { sendActiveHeartbeat } from "@/background/services/active-heartbeat";
 import { mapPresenceData, postNative } from "@/background/services/native";
 import { applySiteTimer } from "@/background/services/site-timers";
@@ -128,18 +128,26 @@ export const pickBroadcastEntry = async (settings: ExtensionSettings) => {
 
   if (entries.length === 0) return null;
 
+  const focusedTabId = getFocusedTabId();
+
+  if (entries.some((entry) => entry.tabId === focusedTabId) && focusedTabId != null) await recordFocusedPresence(focusedTabId);
+
+  let candidates = entries;
+
   if (settings.activitySelectionMode === "priority") {
     const order = settings.activityPriorityOrder ?? [];
-    return [...entries].sort((a, b) => {
+    const [top] = [...entries].sort((a, b) => {
       const ai = order.indexOf(a.slug);
       const bi = order.indexOf(b.slug);
       return (ai === -1 ? Infinity : ai) - (bi === -1 ? Infinity : bi);
-    })[0];
+    });
+    candidates = entries.filter((entry) => entry.slug === top.slug);
   }
 
-  const focusedTabId = getFocusedTabId();
-  const focused = focusedTabId != null ? await getTabPresence(focusedTabId) : undefined;
-  return focused ?? entries.reduce((latest, entry) => (entry.updatedAt > latest.updatedAt ? entry : latest));
+  const history = await getFocusedPresenceHistory();
+
+  const lastFocused = history.map((tabId) => candidates.find((entry) => entry.tabId === tabId)).find((entry) => entry !== undefined);
+  return lastFocused ?? candidates.reduce((latest, entry) => (entry.updatedAt > latest.updatedAt ? entry : latest));
 };
 
 export const broadcastActiveTab = async (): Promise<void> => {

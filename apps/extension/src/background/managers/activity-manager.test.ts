@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { clearTabPresences, setFocusedTabId, upsertTabPresence } from "@/background/services/background-context";
+import { clearTabPresences, removeTabPresence, setFocusedTabId, upsertTabPresence } from "@/background/services/background-context";
 import { installChromeMock } from "@/test/chrome-mock";
 import type { ExtensionSettings, PresenceData, StoredPresence } from "@/shared/types";
 
@@ -80,6 +80,20 @@ describe("pickBroadcastEntry", () => {
     expect((await pickBroadcastEntry(baseSettings))?.slug).toBe("twitch");
   });
 
+  it("focused mode keeps the last focused presence tab when focus moves to a tab without presence", async () => {
+    const { pickBroadcastEntry } = await import("@/background/managers/activity-manager");
+    await upsertTabPresence(1, presence("youtube-music", 1000));
+    await upsertTabPresence(2, presence("youtube-music", 2000));
+    setFocusedTabId(1);
+    await pickBroadcastEntry(baseSettings);
+    setFocusedTabId(9);
+
+    expect((await pickBroadcastEntry(baseSettings))?.tabId).toBe(1);
+
+    await removeTabPresence(1);
+    expect((await pickBroadcastEntry(baseSettings))?.tabId).toBe(2);
+  });
+
   it("priority mode picks the entry earliest in activityPriorityOrder", async () => {
     const { pickBroadcastEntry } = await import("@/background/managers/activity-manager");
     await upsertTabPresence(1, presence("youtube", 1000));
@@ -92,6 +106,24 @@ describe("pickBroadcastEntry", () => {
       activityPriorityOrder: ["youtube", "twitch"]
     };
     expect((await pickBroadcastEntry(settings))?.slug).toBe("youtube");
+  });
+
+  it("priority mode uses focus to choose between tabs of the top presence", async () => {
+    const { pickBroadcastEntry } = await import("@/background/managers/activity-manager");
+    await upsertTabPresence(1, presence("youtube-music", 3000));
+    await upsertTabPresence(2, presence("youtube-music", 2000));
+    await upsertTabPresence(3, presence("twitch", 1000));
+
+    const settings: ExtensionSettings = {
+      ...baseSettings,
+      activitySelectionMode: "priority",
+      activityPriorityOrder: ["youtube-music", "twitch"]
+    };
+    setFocusedTabId(2);
+    expect((await pickBroadcastEntry(settings))?.tabId).toBe(2);
+
+    setFocusedTabId(3);
+    expect((await pickBroadcastEntry(settings))?.tabId).toBe(2);
   });
 
   it("priority mode puts slugs absent from the order last", async () => {

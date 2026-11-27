@@ -5,6 +5,7 @@ const MUTED_TABS_SESSION_KEY = "mutedTabIds";
 const ACTIVE_SLUGS_SESSION_KEY = "activeSlugs";
 const ACTIVE_SESSIONS_SESSION_KEY = "activeSessions";
 const TAB_PRESENCES_SESSION_KEY = "tabPresences";
+const FOCUSED_PRESENCE_HISTORY_SESSION_KEY = "focusedPresenceHistory";
 
 const queueTabPresences = createSerialQueue();
 const queueMutedTabs = createSerialQueue();
@@ -35,6 +36,23 @@ export const getFocusedTabId = (): number | null => focusedTabId;
 
 export const setFocusedTabId = (value: number | null): void => {
   focusedTabId = value;
+};
+
+export const getFocusedPresenceHistory = async (): Promise<number[]> => {
+  const stored = await chrome.storage.session.get(FOCUSED_PRESENCE_HISTORY_SESSION_KEY);
+
+  const ids = stored[FOCUSED_PRESENCE_HISTORY_SESSION_KEY];
+  return Array.isArray(ids) ? ids.filter((id): id is number => typeof id === "number") : [];
+};
+
+export const recordFocusedPresence = async (tabId: number): Promise<void> => {
+  const history = await getFocusedPresenceHistory();
+
+  if (history[0] === tabId) return;
+
+  await chrome.storage.session.set({
+    [FOCUSED_PRESENCE_HISTORY_SESSION_KEY]: [tabId, ...history.filter((id) => id !== tabId)]
+  });
 };
 
 const getTabPresencesMap = async (): Promise<Record<number, TabPresenceEntry>> => {
