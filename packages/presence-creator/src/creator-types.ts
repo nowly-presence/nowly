@@ -66,6 +66,7 @@ export type CreatorPage = {
   match: {
     mode: CreatorMatchMode;
     path: string;
+    extraPaths: string[];
   };
   activityType: CreatorActivityType;
   variables: CreatorVariable[];

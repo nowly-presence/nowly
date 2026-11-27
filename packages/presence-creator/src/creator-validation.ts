@@ -1,5 +1,5 @@
 import type { LocaleString as LongLocale } from "@nowly/locales";
-import { imageVariableOf, isUrlTemplate, linkVariableOf, missingVariables } from "./creator-activity";
+import { imageVariableOf, isUrlTemplate, linkVariableOf, matchPaths, missingVariables } from "./creator-activity";
 import { FEATURE_MAX_LENGTH, isValidDomain, isValidPresenceName, presenceSlug, textIn } from "./creator-draft";
 import { writtenLocales } from "./creator-files";
 import type { CreatorDraft, CreatorStep } from "./creator-types";
@@ -161,7 +161,7 @@ const pageIssues = (draft: CreatorDraft): CreatorIssue[] => {
   const locales = writtenLocales(draft);
   return draft.pages.flatMap((page, index) => {
     const issues: CreatorIssue[] = [];
-    const isCatchAll = page.match.mode === "any" || !page.match.path.trim();
+    const isCatchAll = matchPaths(page).length === 0;
     if (isCatchAll && index < draft.pages.length - 1) issues.push({
       step: "pages",
       code: "pageCatchAllNotLast",

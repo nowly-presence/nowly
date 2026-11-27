@@ -100,7 +100,9 @@ export const SubmissionPreview = ({ definition, assets }: {
                   <Badge variant="outline">{page.activityType}</Badge>
                 </div>
                 <p className="mt-1 break-all text-xs text-muted-foreground">
-                  {page.match.mode === "any" ? t("match-any") : `${page.match.mode} ${page.match.path}`}
+                  {page.match.mode === "any"
+                    ? t("match-any")
+                    : `${page.match.mode} ${[page.match.path, ...(page.match.extraPaths ?? [])].filter(Boolean).join(", ")}`}
                 </p>
                 <div className="mt-3 rounded-lg bg-muted px-3 py-2 text-sm">
                   <p className="font-medium text-foreground">{text(page.details)}</p>

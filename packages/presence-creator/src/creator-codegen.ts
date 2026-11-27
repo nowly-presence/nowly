@@ -1,5 +1,5 @@
 import { CREATOR_BUILTIN_STRINGS } from "./creator-builtin-strings";
-import { imageVariableOf, linkVariableOf, templateTokens } from "./creator-activity";
+import { imageVariableOf, linkVariableOf, matchPaths, templateTokens, withLeadingSlash, withoutTrailingSlash } from "./creator-activity";
 import { pageStringKeys, writtenLocales, type StringKeys } from "./creator-files";
 import type { CreatorActivityType, CreatorButton, CreatorDraft, CreatorPage, CreatorSource } from "./creator-types";
 
@@ -54,17 +54,18 @@ const sourceExpression = (source: CreatorSource): string => {
   return `${reader}(${quote(source.selector)})`;
 };
 
+const pathCheck = (mode: CreatorPage["match"]["mode"], path: string): string => {
+  if (mode === "contains") return `pathname.includes(${quote(path)})`;
+  if (mode === "startsWith") return `pathname.startsWith(${quote(withLeadingSlash(path))})`;
+
+  const bare = withoutTrailingSlash(withLeadingSlash(path));
+
+  return bare === "/" ? 'pathname === "/"' : `pathname === ${quote(bare)} || pathname === ${quote(`${bare}/`)}`;
+};
+
 const conditionFor = (page: CreatorPage): string | null => {
-  const path = page.match.path.trim();
-
-  if (page.match.mode === "any" || !path) return null;
-
-  const normalized = path.startsWith("/") || page.match.mode === "contains" ? path : `/${path}`;
-
-  if (page.match.mode === "equals") return `pathname === ${quote(normalized)}`;
-  if (page.match.mode === "startsWith") return `pathname.startsWith(${quote(normalized)})`;
-
-  return `pathname.includes(${quote(normalized)})`;
+  const paths = matchPaths(page);
+  return paths.length === 0 ? null : paths.map((path) => pathCheck(page.match.mode, path)).join(" || ");
 };
 
 const formatCall = (key: string, template: string, variableNames: Set<string>, required: Set<string>): string => {

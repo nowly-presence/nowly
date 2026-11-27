@@ -84,7 +84,9 @@ export const StaffReviewSection = ({ section, definition, assets }: {
             <Badge variant="outline">{page.activityType}</Badge>
           </div>
           <p className="mt-1 break-all text-xs text-muted-foreground">
-            {page.match.mode === "any" ? t("f-match-any") : `${page.match.mode} ${page.match.path}`}
+            {page.match.mode === "any"
+              ? t("f-match-any")
+              : `${page.match.mode} ${[page.match.path, ...(page.match.extraPaths ?? [])].filter(Boolean).join(", ")}`}
           </p>
           <p className="mt-2 text-sm text-foreground">{text(page.details)}</p>
           {text(page.state) ? <p className="text-sm text-muted-foreground">{text(page.state)}</p> : null}

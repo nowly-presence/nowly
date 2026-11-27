@@ -38,7 +38,8 @@ describe("creator pages", () => {
           ...page,
           match: {
             mode: "equals",
-            path: "/watch/"
+            path: "/watch/",
+            extraPaths: []
           }
         },
         "/watch"
@@ -50,7 +51,8 @@ describe("creator pages", () => {
           ...page,
           match: {
             mode: "contains",
-            path: "video"
+            path: "video",
+            extraPaths: []
           }
         },
         "/a/video/b"
@@ -272,7 +274,8 @@ describe("creator validation", () => {
           ...draft.pages[1],
           match: {
             mode: "any" as const,
-            path: ""
+            path: "",
+            extraPaths: []
           }
         },
         draft.pages[0]

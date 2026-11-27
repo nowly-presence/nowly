@@ -20,23 +20,23 @@ export const fillTemplate = (template: string, values: Record<string, string | u
     .replace(/\s+/g, " ")
     .trim();
 
-const normalizePath = (path: string): string => {
-  const withSlash = path.startsWith("/") ? path : `/${path}`;
-  return withSlash.length > 1 ? withSlash.replace(/\/+$/, "") : withSlash;
+export const withLeadingSlash = (path: string): string => (path.startsWith("/") ? path : `/${path}`);
+
+export const withoutTrailingSlash = (path: string): string => path.replace(/\/+$/, "") || "/";
+
+export const matchPaths = (page: CreatorPage): string[] =>
+  page.match.mode === "any" ? [] : [page.match.path, ...(page.match.extraPaths ?? [])].map((path) => path.trim()).filter(Boolean);
+
+export const matchesPath = (mode: CreatorPage["match"]["mode"], path: string, pathname: string): boolean => {
+  if (mode === "equals") return withoutTrailingSlash(pathname) === withoutTrailingSlash(withLeadingSlash(path));
+  if (mode === "startsWith") return pathname.startsWith(withLeadingSlash(path));
+
+  return pathname.includes(path);
 };
 
 export const matchesPage = (page: CreatorPage, pathname: string): boolean => {
-  const { mode, path } = page.match;
-
-  if (mode === "any" || !path.trim()) return true;
-
-  const current = normalizePath(pathname);
-  const target = normalizePath(path.trim());
-
-  if (mode === "equals") return current === target;
-  if (mode === "startsWith") return current.startsWith(target);
-
-  return current.includes(path.trim());
+  const paths = matchPaths(page);
+  return paths.length === 0 || paths.some((path) => matchesPath(page.match.mode, path, pathname));
 };
 
 export const findPage = (pages: CreatorPage[], url: string): CreatorPage | undefined => {

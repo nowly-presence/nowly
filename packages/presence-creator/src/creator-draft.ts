@@ -6,6 +6,7 @@ const IDENTIFIER_MAX_LENGTH = 32;
 export const FEATURES_MAX = 5;
 export const FEATURE_MAX_LENGTH = 80;
 export const BUTTONS_MAX = 2;
+export const EXTRA_PATHS_MAX = 9;
 export const PRESENCE_NAME_MAX_LENGTH = 40;
 
 export const creatorId = (): string => crypto.randomUUID().slice(0, 8);
@@ -36,7 +37,8 @@ export const createPage = (name: string, path = ""): CreatorPage => ({
   name,
   match: {
     mode: "startsWith",
-    path
+    path,
+    extraPaths: []
   },
   activityType: "watching",
   variables: [],
@@ -84,6 +86,10 @@ const normalizePage = (page: CreatorPage & {
   const { button, ...rest } = page;
   return {
     ...rest,
+    match: {
+      ...page.match,
+      extraPaths: Array.isArray(page.match.extraPaths) ? page.match.extraPaths : []
+    },
     timestamps: page.timestamps === "media" ? "media" : "elapsed",
     buttons: upgradeButtons(page.buttons, button)
   };

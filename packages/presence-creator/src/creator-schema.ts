@@ -1,6 +1,6 @@
 import { SUPPORTED_LOCALES } from "@nowly/locales";
 import { z } from "zod";
-import { BUTTONS_MAX, FEATURE_MAX_LENGTH, FEATURES_MAX, PRESENCE_NAME_MAX_LENGTH } from "./creator-draft";
+import { BUTTONS_MAX, EXTRA_PATHS_MAX, FEATURE_MAX_LENGTH, FEATURES_MAX, PRESENCE_NAME_MAX_LENGTH } from "./creator-draft";
 import { CREATOR_STEPS, type CreatorDraft } from "./creator-types";
 import { DESCRIPTION_MAX_LENGTH, LONG_DESCRIPTION_MAX_LENGTH } from "./creator-validation";
 
@@ -99,7 +99,8 @@ const pageSchema = z.object({
   name: plainText(PAGE_NAME_MAX_LENGTH),
   match: z.object({
     mode: z.enum(["any", "equals", "startsWith", "contains"]),
-    path: z.string().max(PATH_MAX_LENGTH)
+    path: z.string().max(PATH_MAX_LENGTH),
+    extraPaths: z.array(z.string().max(PATH_MAX_LENGTH)).max(EXTRA_PATHS_MAX).default([])
   }),
   activityType: z.enum(["watching", "listening", "playing", "competing"]),
   variables: z.array(variableSchema).max(VARIABLES_PER_PAGE_MAX),

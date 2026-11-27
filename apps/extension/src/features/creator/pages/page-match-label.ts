@@ -1,4 +1,5 @@
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
+import { matchPaths } from "@nowly/presence-creator/creator-activity";
 import type { CreatorMatchMode, CreatorPage } from "@nowly/presence-creator/creator-types";
 
 export const MATCH_MODE_KEYS: Record<CreatorMatchMode, MessageKey> = {
@@ -11,10 +12,10 @@ export const MATCH_MODE_KEYS: Record<CreatorMatchMode, MessageKey> = {
 export const useMatchLabel = () => {
   const { t } = useI18n();
   return (page: CreatorPage): string => {
-    const path = page.match.path.trim();
+    const paths = matchPaths(page);
 
-    if (page.match.mode === "any" || !path) return t("creator.page.matchAny");
+    if (paths.length === 0) return t("creator.page.matchAny");
 
-    return `${t(MATCH_MODE_KEYS[page.match.mode])} ${path}`;
+    return `${t(MATCH_MODE_KEYS[page.match.mode])} ${paths.join(", ")}`;
   };
 };

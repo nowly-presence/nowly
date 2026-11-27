@@ -12,6 +12,7 @@ export type SubmissionPage = {
   match: {
     mode: string;
     path: string;
+    extraPaths?: string[];
   };
   activityType: string;
   details: LocalizedText;
