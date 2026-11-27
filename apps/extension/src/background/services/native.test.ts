@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NativeResponse } from "@/shared/types/native";
+import type { NativeResponse, PresencePayload } from "@/shared/types/native";
 
 vi.mock("@/background/storage/discord-ipc-issue.store", () => ({
   getDiscordIpcIssue: async () => ({
@@ -137,5 +137,117 @@ describe("native host connection", () => {
       connected: false,
       status: "connecting"
     });
+  });
+});
+
+describe("repeated activities", () => {
+  const presence = {
+    details: "Track",
+    startTime: 1000,
+    endTime: 1200
+  };
+  const setActivity = (changes: Partial<PresencePayload> = {}) => ({
+    type: "SET_ACTIVITY" as const,
+    presence: { ...presence, ...changes }
+  });
+
+  const connect = async () => {
+    const port = mockPort();
+    const nextPort = mockPort();
+    vi.stubGlobal("chrome", {
+      runtime: { connectNative: vi.fn().mockReturnValueOnce(port).mockReturnValueOnce(nextPort) }
+    });
+    const native = await import("./native");
+
+    const sent = (target = port) => target.postMessage.mock.calls.filter(([message]) => message.type === "SET_ACTIVITY").length;
+    return { ...native, port, nextPort, sent };
+  };
+
+  beforeEach(() => {
+    vi.resetModules();
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
+  it("drops an identical activity, even with jittering timestamps", async () => {
+    const { postNative, sent } = await connect();
+
+    expect(postNative(setActivity())).toBe(true);
+    expect(postNative(setActivity())).toBe(true);
+    expect(
+      postNative(
+        setActivity({
+          startTime: 1001,
+          endTime: 1199
+        })
+      )
+    ).toBe(true);
+
+    expect(sent()).toBe(1);
+  });
+
+  it("sends a new track and a seek", async () => {
+    const { postNative, sent } = await connect();
+
+    postNative(setActivity());
+    postNative(setActivity({ details: "Next track" }));
+    postNative(
+      setActivity({
+        details: "Next track",
+        startTime: 970,
+        endTime: 1170
+      })
+    );
+    postNative(
+      setActivity({
+        details: "Next track",
+        startTime: undefined,
+        endTime: undefined
+      })
+    );
+
+    expect(sent()).toBe(4);
+  });
+
+  it("refreshes an unchanged activity so a restarted Discord gets it back", async () => {
+    const { postNative, sent } = await connect();
+
+    postNative(setActivity());
+    vi.advanceTimersByTime(14_999);
+    postNative(setActivity());
+    expect(sent()).toBe(1);
+
+    vi.advanceTimersByTime(1);
+    postNative(setActivity());
+    expect(sent()).toBe(2);
+  });
+
+  it("sends the same activity again after a clear or a host error", async () => {
+    const { postNative, port, sent } = await connect();
+
+    postNative(setActivity());
+    postNative({ type: "CLEAR_ACTIVITY" });
+    postNative(setActivity());
+    expect(sent()).toBe(2);
+
+    await port.receive({
+      type: "ERROR",
+      error: "discord ipc read timed out"
+    });
+    postNative(setActivity());
+    expect(sent()).toBe(3);
+  });
+
+  it("sends the same activity again on a new port", async () => {
+    const { postNative, port, nextPort, sent } = await connect();
+
+    postNative(setActivity());
+    port.drop();
+    postNative(setActivity());
+
+    expect(sent(nextPort)).toBe(1);
   });
 });

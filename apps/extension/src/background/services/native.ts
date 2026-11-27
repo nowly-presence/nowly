@@ -1,3 +1,4 @@
+import { isRepeatedActivity, type SentActivity } from "@/background/services/activity-repeats";
 import { getDiscordIpcIssue, setDiscordIpcIssue } from "@/background/storage/discord-ipc-issue.store";
 import { setNativeProfile, setNativeSeenConnectedOnce } from "@/background/storage/onboarding.store";
 import { getHostUpdateVersion, refreshHostUpdate } from "@/background/services/host-updates";
@@ -6,6 +7,7 @@ import { discordIpcIssueCode, markDiscordIpcIssuePrompted, NO_DISCORD_IPC_ISSUE,
 import type { NativeMessage, NativeResponse, NativeStatus, PresenceData, PresencePayload } from "@/shared/types";
 
 let nativePort: chrome.runtime.Port | null = null;
+let lastActivity: SentActivity | null = null;
 let connected = false;
 let status = "not connected";
 let connecting = false;
@@ -105,6 +107,7 @@ const settleStatusWaiters = (): void => {
 const retireNativePort = (nextStatus: string): chrome.runtime.Port | null => {
   const previous = nativePort;
   nativePort = null;
+  lastActivity = null;
   connecting = false;
   connected = false;
   discordConnected = false;
@@ -203,6 +206,7 @@ export const connectNative = (options: {
     }
 
     if (message.type === "ERROR") {
+      lastActivity = null;
       connecting = false;
       status = message.error;
     }
@@ -221,8 +225,17 @@ export const postNative = (message: NativeMessage): boolean => {
 
   if (!nativePort) return false;
 
+  const now = Date.now();
+
+  if (message.type === "SET_ACTIVITY" && isRepeatedActivity(lastActivity, message.presence, now)) return true;
+
   try {
     nativePort.postMessage(message);
+    if (message.type === "SET_ACTIVITY") lastActivity = {
+      presence: message.presence,
+      sentAt: now
+    };
+    if (message.type === "CLEAR_ACTIVITY") lastActivity = null;
     return true;
   } catch (error) {
     closeNativePort(retireNativePort(error instanceof Error ? error.message : "native post failed"));
