@@ -136,6 +136,8 @@
     "author": "Yazar",
     "pages-title": "Sayfalar ({count})",
     "match-any": "Tüm adresler",
+    "conditions": "Koşullar",
+    "conditions-else": "Aksi halde",
     "changes-title": "Değişiklikler",
     "changes-description": "Her sürümün bir öncekine göre neyi değiştirdiği.",
     "changes-none": "Kayıtlı değişiklik yok.",

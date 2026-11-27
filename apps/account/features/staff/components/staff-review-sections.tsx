@@ -1,5 +1,6 @@
 "use client";
 
+import { SubmissionConditions } from "@/features/account/components/submission-conditions";
 import type { SubmissionAssets, SubmissionDefinition } from "@/features/account/lib/submission-api";
 import { pageButtons, pickText } from "@/features/account/lib/submission-text";
 import type { ReviewSection } from "@/features/staff/lib/review-sections";
@@ -99,6 +100,7 @@ export const StaffReviewSection = ({ section, definition, assets }: {
               ))}
             </div>
           ) : null}
+          <SubmissionConditions page={page} text={text} />
         </li>
       ))}
     </ul>

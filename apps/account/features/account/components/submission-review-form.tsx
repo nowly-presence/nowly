@@ -21,6 +21,7 @@ const FIELD_SUGGESTIONS = [
   "page.state",
   "page.button",
   "page.match",
+  "page.conditions",
   "images"
 ];
 

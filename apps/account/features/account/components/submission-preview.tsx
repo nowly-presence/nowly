@@ -1,5 +1,6 @@
 "use client";
 
+import { SubmissionConditions } from "@/features/account/components/submission-conditions";
 import type { SubmissionAssets, SubmissionDefinition } from "@/features/account/lib/submission-api";
 import { pageButtons, pickText } from "@/features/account/lib/submission-text";
 import { Badge, Card, CardContent, CardTitle } from "@nowly/ui";
@@ -117,6 +118,7 @@ export const SubmissionPreview = ({ definition, assets }: {
                     </div>
                   ) : null}
                 </div>
+                <SubmissionConditions page={page} text={text} />
               </li>
             ))}
           </ul>

@@ -136,6 +136,8 @@
     "author": "Autor",
     "pages-title": "Páginas ({count})",
     "match-any": "Todos os endereços",
+    "conditions": "Condições",
+    "conditions-else": "Senão",
     "changes-title": "Alterações",
     "changes-description": "O que cada revisão mudou em relação à anterior.",
     "changes-none": "Nenhuma alteração registrada.",

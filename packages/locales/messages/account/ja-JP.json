@@ -136,6 +136,8 @@
     "author": "作者",
     "pages-title": "ページ（{count}）",
     "match-any": "すべてのアドレス",
+    "conditions": "条件",
+    "conditions-else": "それ以外",
     "changes-title": "変更点",
     "changes-description": "各リビジョンが前のリビジョンから変更した内容。",
     "changes-none": "記録された変更はありません。",

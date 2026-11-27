@@ -136,6 +136,8 @@
     "author": "Συντάκτης",
     "pages-title": "Σελίδες ({count})",
     "match-any": "Όλες οι διευθύνσεις",
+    "conditions": "Συνθήκες",
+    "conditions-else": "Διαφορετικά",
     "changes-title": "Αλλαγές",
     "changes-description": "Τι άλλαξε κάθε αναθεώρηση σε σχέση με την προηγούμενη.",
     "changes-none": "Δεν καταγράφηκε καμία αλλαγή.",

@@ -1,6 +1,6 @@
 import { apiFetch as request, isRecord } from "@/lib/api-client";
 import type { QueueFilter, ReviewVerdict } from "@nowly/presence-creator/creator-submission-policy";
-import type { SubmissionStatus } from "@nowly/presence-creator/creator-types";
+import type { CreatorCondition, CreatorVariable, SubmissionStatus } from "@nowly/presence-creator/creator-types";
 
 export type { QueueFilter, ReviewVerdict, SubmissionStatus };
 
@@ -18,7 +18,10 @@ export type SubmissionPage = {
   details: LocalizedText;
   state: LocalizedText;
   timestamps: string;
+  variables?: CreatorVariable[];
+  conditions?: CreatorCondition[];
   buttons?: Array<{
+    id?: string;
     label: LocalizedText;
   }>;
   button?: {

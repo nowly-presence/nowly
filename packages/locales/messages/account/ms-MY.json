@@ -136,6 +136,8 @@
     "author": "Pengarang",
     "pages-title": "Halaman ({count})",
     "match-any": "Semua alamat",
+    "conditions": "Syarat",
+    "conditions-else": "Jika tidak",
     "changes-title": "Perubahan",
     "changes-description": "Apa yang diubah oleh setiap semakan semula berbanding yang sebelumnya.",
     "changes-none": "Tiada perubahan direkodkan.",
