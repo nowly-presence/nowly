@@ -3,9 +3,40 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
+const PLATFORMS = ["windows", "macos", "linux"] as const;
+const VIRUSTOTAL_REPORT_PREFIX = "https://www.virustotal.com/gui/file/";
+
 type Manifest = {
   version?: unknown;
-};
+} & Partial<
+  Record<
+    (typeof PLATFORMS)[number],
+    Record<
+      string,
+      {
+        virustotalUrl?: unknown;
+      }
+    >
+  >
+>;
+
+const virustotalReports = (manifest: Manifest) =>
+  Object.fromEntries(
+    PLATFORMS.flatMap((platform) => {
+      const reports = Object.entries(manifest[platform] ?? {}).flatMap(([name, artifact]) => {
+        const url = artifact?.virustotalUrl;
+        return typeof url === "string" && url.startsWith(VIRUSTOTAL_REPORT_PREFIX) ? [[name, url]] : [];
+      });
+      return reports.length > 0
+        ? [
+            [
+              platform,
+              Object.fromEntries(reports)
+            ]
+          ]
+        : [];
+    })
+  );
 
 export const GET = async (): Promise<NextResponse> => {
   try {
@@ -20,7 +51,10 @@ export const GET = async (): Promise<NextResponse> => {
     }
 
     return NextResponse.json(
-      { version: manifest.version },
+      {
+        version: manifest.version,
+        virustotal: virustotalReports(manifest)
+      },
       {
         headers: { "Cache-Control": "no-store" }
       }
