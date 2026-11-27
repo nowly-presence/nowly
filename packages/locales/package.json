@@ -51,7 +51,7 @@
     "next": "*"
   },
   "dependencies": {
-    "next-intl": "^4.15.1",
+    "next-intl": "^4.15.3",
     "zod": "^4.6.7"
   },
   "devDependencies": {
