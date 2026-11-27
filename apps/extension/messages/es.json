@@ -885,6 +885,8 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}} no es un elemento de la página",
   "creator.issue.pageButtonLabelMissing": "{page}: el texto del botón está vacío",
   "creator.issue.pageCatchAllNotLast": "{page} coincide con todas las páginas: muévela al final",
+  "creator.issue.pageConditionInvalid": "{page}: la condición {detail} está incompleta",
+  "creator.issue.pageConditionTextMissing": "{page}: un texto de la condición {detail} está vacío",
   "creator.visuals.chooseNamed": "Elegir la imagen: {name}",
   "creator.visuals.replaceNamed": "Reemplazar la imagen: {name}",
   "creator.texts.translating": "Traducción al {language}. El texto en {base} aparece en gris para guiarte.",

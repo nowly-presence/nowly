@@ -21,7 +21,7 @@ const TOP_LEVEL_FIELDS = [
   "browsingFallback"
 ] as const;
 
-const PAGE_FIELDS = ["name", "match", "activityType", "variables", "details", "state", "largeImage", "timestamps", "buttons"] as const;
+const PAGE_FIELDS = ["name", "match", "activityType", "variables", "details", "state", "largeImage", "timestamps", "buttons", "conditions"] as const;
 
 const stable = (value: unknown): string =>
   JSON.stringify(value, (_key, item: unknown) =>

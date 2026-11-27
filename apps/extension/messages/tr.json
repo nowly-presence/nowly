@@ -885,6 +885,8 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}} bir sayfa öğesi değil",
   "creator.issue.pageButtonLabelMissing": "{page}: düğme metni boş",
   "creator.issue.pageCatchAllNotLast": "{page} tüm sayfalarla eşleşiyor: onu sona taşı",
+  "creator.issue.pageConditionInvalid": "{page}: {detail}. koşul eksik",
+  "creator.issue.pageConditionTextMissing": "{page}: {detail}. koşuldaki bir metin boş",
   "creator.visuals.chooseNamed": "Görsel seç: {name}",
   "creator.visuals.replaceNamed": "Görseli değiştir: {name}",
   "creator.texts.translating": "{language} çevirisi. Yol göstermesi için {base} metin gri olarak gösterilir.",

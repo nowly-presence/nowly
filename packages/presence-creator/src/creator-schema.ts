@@ -1,7 +1,8 @@
 import { SUPPORTED_LOCALES } from "@nowly/locales";
 import { z } from "zod";
+import { CONDITION_ACTIONS_MAX, CONDITION_VALUE_MAX_LENGTH, CONDITIONS_PER_PAGE_MAX } from "./creator-conditions";
 import { BUTTONS_MAX, EXTRA_PATHS_MAX, FEATURE_MAX_LENGTH, FEATURES_MAX, PRESENCE_NAME_MAX_LENGTH } from "./creator-draft";
-import { CREATOR_STEPS, type CreatorDraft } from "./creator-types";
+import { CREATOR_CONDITION_OPERATORS, CREATOR_STEPS, type CreatorDraft } from "./creator-types";
 import { DESCRIPTION_MAX_LENGTH, LONG_DESCRIPTION_MAX_LENGTH } from "./creator-validation";
 
 export const CREATOR_ID_PATTERN = /^[A-Za-z0-9]{8}$/;
@@ -94,6 +95,82 @@ const buttonSchema = z.object({
   link: linkSchema.default({ kind: "page" })
 });
 
+const smallImageSchema = z.discriminatedUnion("kind", [
+  z.object({ kind: z.literal("icon") }),
+  z.object({
+    kind: z.literal("variable"),
+    variableId: localId
+  }),
+  z.object({
+    kind: z.literal("custom"),
+    template: customTemplate
+  })
+]);
+
+const activityTypeSchema = z.enum(["watching", "listening", "playing", "competing"]);
+
+const conditionActionSchema = z.union([
+  z.object({
+    id: localId,
+    kind: z.enum(["details", "state", "activityName", "imageText"]),
+    text: localized(PAGE_TEXT_MAX_LENGTH)
+  }),
+  z.object({
+    id: localId,
+    kind: z.literal("largeImage"),
+    image: imageSchema
+  }),
+  z.object({
+    id: localId,
+    kind: z.literal("smallImage"),
+    image: smallImageSchema
+  }),
+  z.object({
+    id: localId,
+    kind: z.literal("activityType"),
+    activityType: activityTypeSchema
+  }),
+  z.object({
+    id: localId,
+    kind: z.literal("timestamps"),
+    timestamps: z.enum(["media", "elapsed"])
+  }),
+  z.object({
+    id: localId,
+    kind: z.literal("hideButton"),
+    buttonId: localId
+  }),
+  z.object({
+    id: localId,
+    kind: z.literal("buttonLabel"),
+    buttonId: localId,
+    text: localized(BUTTON_LABEL_MAX_LENGTH)
+  }),
+  z.object({
+    id: localId,
+    kind: z.literal("buttonLink"),
+    buttonId: localId,
+    link: linkSchema
+  }),
+  z.object({
+    id: localId,
+    kind: z.literal("hidePresence")
+  })
+]);
+
+const conditionValue = plainText(CONDITION_VALUE_MAX_LENGTH);
+
+const conditionSchema = z.object({
+  id: localId,
+  variableId: localId,
+  type: z.enum(["text", "number", "boolean"]),
+  operator: z.enum([...CREATOR_CONDITION_OPERATORS.text, ...CREATOR_CONDITION_OPERATORS.number, ...CREATOR_CONDITION_OPERATORS.boolean]),
+  value: conditionValue,
+  valueMax: conditionValue.default(""),
+  actions: z.array(conditionActionSchema).max(CONDITION_ACTIONS_MAX),
+  elseActions: z.array(conditionActionSchema).max(CONDITION_ACTIONS_MAX)
+});
+
 const pageSchema = z.object({
   id: localId,
   name: plainText(PAGE_NAME_MAX_LENGTH),
@@ -102,13 +179,14 @@ const pageSchema = z.object({
     path: z.string().max(PATH_MAX_LENGTH),
     extraPaths: z.array(z.string().max(PATH_MAX_LENGTH)).max(EXTRA_PATHS_MAX).default([])
   }),
-  activityType: z.enum(["watching", "listening", "playing", "competing"]),
+  activityType: activityTypeSchema,
   variables: z.array(variableSchema).max(VARIABLES_PER_PAGE_MAX),
   details: localized(PAGE_TEXT_MAX_LENGTH),
   state: localized(PAGE_TEXT_MAX_LENGTH),
   largeImage: imageSchema,
   timestamps: z.enum(["media", "elapsed"]),
-  buttons: z.array(buttonSchema).max(BUTTONS_MAX)
+  buttons: z.array(buttonSchema).max(BUTTONS_MAX),
+  conditions: z.array(conditionSchema).max(CONDITIONS_PER_PAGE_MAX).default([])
 });
 
 export const creatorDefinitionSchema = z.object({

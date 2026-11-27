@@ -885,6 +885,8 @@
   "creator.issue.pageUnknownVariable": "{page}: το {{detail}} δεν είναι στοιχείο της σελίδας",
   "creator.issue.pageButtonLabelMissing": "{page}: το κείμενο του κουμπιού είναι κενό",
   "creator.issue.pageCatchAllNotLast": "Η {page} ταιριάζει με όλες τις σελίδες: μετακίνησέ τη στο τέλος",
+  "creator.issue.pageConditionInvalid": "{page}: η συνθήκη {detail} είναι ελλιπής",
+  "creator.issue.pageConditionTextMissing": "{page}: ένα κείμενο της συνθήκης {detail} είναι κενό",
   "creator.visuals.chooseNamed": "Επιλογή εικόνας: {name}",
   "creator.visuals.replaceNamed": "Αντικατάσταση εικόνας: {name}",
   "creator.texts.translating": "Μετάφραση στα {language}. Το κείμενο στα {base} εμφανίζεται με γκρι για καθοδήγηση.",

@@ -885,6 +885,8 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}} isn't a page element",
   "creator.issue.pageButtonLabelMissing": "{page}: the button text is empty",
   "creator.issue.pageCatchAllNotLast": "{page} matches every page: move it to the end",
+  "creator.issue.pageConditionInvalid": "{page}: condition {detail} is incomplete",
+  "creator.issue.pageConditionTextMissing": "{page}: a text in condition {detail} is empty",
   "creator.visuals.chooseNamed": "Choose the {name} image",
   "creator.visuals.replaceNamed": "Replace the {name} image",
   "creator.texts.translating": "Translating into {language}. The {base} text is shown in grey to guide you.",

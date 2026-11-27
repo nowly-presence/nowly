@@ -1,6 +1,7 @@
 import type { LocaleString as LongLocale } from "@nowly/locales";
+import { firedActions } from "./creator-conditions";
 import { textIn } from "./creator-draft";
-import type { CreatorActivityType, CreatorButton, CreatorDraft, CreatorExtraction, CreatorMediaState, CreatorPage, CreatorVariable } from "./creator-types";
+import type { CreatorActivityType, CreatorButton, CreatorConditionAction, CreatorDraft, CreatorExtraction, CreatorImage, CreatorLink, CreatorMediaState, CreatorPage, CreatorSmallImage, CreatorTimestamps, CreatorVariable, LocalizedText } from "./creator-types";
 
 const TOKEN = /\{([a-zA-Z][a-zA-Z0-9]*)\}/g;
 const SECOND_MS = 1000;
@@ -131,7 +132,120 @@ export type CreatorPreviewActivity = {
 export type CreatorPreview = {
   activity: CreatorPreviewActivity;
   largeImage?: string;
+  smallImage?: string;
+  hidden: boolean;
   missing: string[];
+};
+
+type PreviewState = {
+  name?: string;
+  details: string;
+  state: string;
+  largeImage?: string;
+  largeImageText: string;
+  smallImage?: string;
+  type: CreatorActivityType;
+  timestamps: CreatorTimestamps;
+  buttons: {
+    id: string;
+    label: string;
+    url?: string;
+    hidden: boolean;
+  }[];
+};
+
+type ActionContext = {
+  page: CreatorPage;
+  values: Record<string, string | undefined>;
+  read: (text: LocalizedText) => string;
+  pageUrl: string;
+};
+
+const overrideImage = (context: ActionContext, image: CreatorImage | CreatorSmallImage, fallback: string | undefined): string | undefined => {
+  if (image.kind === "custom") return fillUrl(image.template, context.values) ?? fallback;
+  if (image.kind === "variable") {
+    const variable = variableById(context.page, image.variableId);
+    return httpsOnly(variable ? context.values[variable.name] : undefined) ?? fallback;
+  }
+
+  return undefined;
+};
+
+const overrideLink = (context: ActionContext, link: CreatorLink, fallback: string | undefined): string | undefined => {
+  if (link.kind === "custom") return fillUrl(link.template, context.values) ?? fallback;
+  if (link.kind === "variable") {
+    const variable = variableById(context.page, link.variableId);
+    return (variable ? context.values[variable.name] : undefined) || fallback;
+  }
+
+  return context.pageUrl;
+};
+
+const applyAction = (state: PreviewState, action: CreatorConditionAction, context: ActionContext): PreviewState => {
+  const updateButton = (id: string, change: (button: PreviewState["buttons"][number]) => PreviewState["buttons"][number]) => ({
+    ...state,
+    buttons: state.buttons.map((button) => (button.id === id ? change(button) : button))
+  });
+
+  switch (action.kind) {
+    case "details":
+      return {
+        ...state,
+        details: context.read(action.text)
+      };
+    case "state":
+      return {
+        ...state,
+        state: context.read(action.text)
+      };
+    case "activityName":
+      return {
+        ...state,
+        name: context.read(action.text)
+      };
+    case "imageText":
+      return {
+        ...state,
+        largeImageText: context.read(action.text)
+      };
+    case "largeImage":
+      return {
+        ...state,
+        largeImage: overrideImage(context, action.image, state.largeImage)
+      };
+    case "smallImage":
+      return {
+        ...state,
+        smallImage: overrideImage(context, action.image, state.smallImage)
+      };
+    case "activityType":
+      return {
+        ...state,
+        type: action.activityType
+      };
+    case "timestamps":
+      return {
+        ...state,
+        timestamps: action.timestamps
+      };
+    case "hideButton":
+      return updateButton(action.buttonId, (button) => ({
+        ...button,
+        hidden: true
+      }));
+    case "buttonLabel":
+      return updateButton(action.buttonId, (button) => ({
+        ...button,
+        label: context.read(action.text)
+      }));
+    case "buttonLink":
+      return updateButton(action.buttonId, (button) => ({
+        ...button,
+        url: overrideLink(context, action.link, button.url)
+      }));
+    case "hidePresence":
+      return state;
+  }
 };
 
 export const buildPreviewActivity = (draft: CreatorDraft, page: CreatorPage, extraction: CreatorExtraction, locale: LongLocale, options: {
@@ -140,29 +254,58 @@ export const buildPreviewActivity = (draft: CreatorDraft, page: CreatorPage, ext
   pageUrl: string;
 }): CreatorPreview => {
   const values = valuesByName(page, extraction);
-  const read = (template: string) => fillTemplate(template, values);
+  const read = (text: LocalizedText) => fillTemplate(textIn(text, locale), values);
   const missing = page.variables.filter((variable) => !values[variable.name]).map((variable) => variable.name);
 
-  const details = read(textIn(page.details, locale));
-  const state = read(textIn(page.state, locale));
+  const actions = firedActions(page, values);
+  const context: ActionContext = {
+    page,
+    values,
+    read,
+    pageUrl: options.pageUrl
+  };
+
+  const base: PreviewState = {
+    details: read(page.details),
+    state: read(page.state),
+    largeImage: previewImage(page, values),
+    largeImageText: draft.name,
+    type: page.activityType,
+    timestamps: page.timestamps,
+    buttons: page.buttons.map((button) => ({
+      id: button.id,
+      label: read(button.label),
+      url: previewLink(page, button, values, options.pageUrl),
+      hidden: false
+    }))
+  };
+  const result = actions.reduce((state, action) => applyAction(state, action, context), base);
+
   const timestamps =
-    page.timestamps === "media" ? mediaTimestamps(extraction.media, options.nowMs) : { startTimestamp: Math.floor(options.startedAtMs / SECOND_MS) };
-  const buttons = page.buttons.flatMap((button) => {
-    const label = read(textIn(button.label, locale));
-    const url = previewLink(page, button, values, options.pageUrl);
-    return label && url ? [{ label, url }] : [];
-  });
+    result.timestamps === "media" ? mediaTimestamps(extraction.media, options.nowMs) : { startTimestamp: Math.floor(options.startedAtMs / SECOND_MS) };
+  const buttons = result.buttons.flatMap((button) =>
+    !button.hidden && button.label && button.url
+      ? [
+          {
+            label: button.label,
+            url: button.url
+          }
+        ]
+      : []
+  );
   return {
     activity: {
-      name: draft.name,
-      details: details || undefined,
-      state: state || undefined,
-      largeImageText: draft.name,
-      type: ACTIVITY_TYPE_VALUES[page.activityType],
+      name: result.name || draft.name,
+      details: result.details || undefined,
+      state: result.state || undefined,
+      largeImageText: result.largeImageText,
+      type: ACTIVITY_TYPE_VALUES[result.type],
       ...timestamps,
       buttons: buttons.length > 0 ? buttons : undefined
     },
-    largeImage: previewImage(page, values),
+    largeImage: result.largeImage,
+    smallImage: result.smallImage,
+    hidden: actions.some((action) => action.kind === "hidePresence"),
     missing
   };
 };

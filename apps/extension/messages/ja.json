@@ -885,6 +885,8 @@
   "creator.issue.pageUnknownVariable": "{page}：{{detail}} はページの要素ではありません",
   "creator.issue.pageButtonLabelMissing": "{page}：ボタンのテキストが空です",
   "creator.issue.pageCatchAllNotLast": "{page} はすべてのページに一致します。最後に移動してください",
+  "creator.issue.pageConditionInvalid": "{page}：条件 {detail} が未完成です",
+  "creator.issue.pageConditionTextMissing": "{page}：条件 {detail} のテキストが空です",
   "creator.visuals.chooseNamed": "画像を選択：{name}",
   "creator.visuals.replaceNamed": "画像を置き換え：{name}",
   "creator.texts.translating": "{language}に翻訳中です。参考として{base}のテキストがグレーで表示されます。",

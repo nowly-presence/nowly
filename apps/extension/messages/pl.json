@@ -885,6 +885,8 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}} nie jest elementem strony",
   "creator.issue.pageButtonLabelMissing": "{page}: tekst przycisku jest pusty",
   "creator.issue.pageCatchAllNotLast": "{page} pasuje do wszystkich stron: przenieś ją na koniec",
+  "creator.issue.pageConditionInvalid": "{page}: warunek {detail} jest niekompletny",
+  "creator.issue.pageConditionTextMissing": "{page}: tekst w warunku {detail} jest pusty",
   "creator.visuals.chooseNamed": "Wybierz obraz: {name}",
   "creator.visuals.replaceNamed": "Zastąp obraz: {name}",
   "creator.texts.translating": "Tłumaczenie: {language}. Tekst w języku {base} jest wyszarzony jako podpowiedź.",

@@ -1,5 +1,6 @@
 import type { LocaleString as LongLocale } from "@nowly/locales";
 import { CREATOR_BUILTIN_STRINGS } from "./creator-builtin-strings";
+import { conditionTexts, usableConditions } from "./creator-conditions";
 import { pageKey, textIn } from "./creator-draft";
 import type { CreatorDraft, CreatorPage, LocalizedText } from "./creator-types";
 
@@ -39,7 +40,28 @@ export type StringKeys = {
   details: string;
   state?: string;
   buttons: string[];
+  conditions: Record<string, string>;
 };
+
+export const conditionTextActions = (page: CreatorPage) =>
+  usableConditions(page).map((condition) =>
+    [...condition.actions, ...condition.elseActions].flatMap((action) => {
+      const text = conditionTexts(action);
+      return text
+        ? [
+            {
+              id: action.id,
+              text
+            }
+          ]
+        : [];
+    })
+  );
+
+const conditionKeys = (page: CreatorPage, key: string): Record<string, string> =>
+  Object.fromEntries(
+    conditionTextActions(page).flatMap((actions, rule) => actions.map((action, position) => [action.id, `${key}Rule${rule + 1}Text${position + 1}`]))
+  );
 
 export const pageStringKeys = (draft: CreatorDraft): StringKeys[] =>
   pageKeys(draft.pages).map((key, index) => {
@@ -47,7 +69,8 @@ export const pageStringKeys = (draft: CreatorDraft): StringKeys[] =>
     return {
       details: `${key}Details`,
       state: textIn(page.state, draft.baseLocale) ? `${key}State` : undefined,
-      buttons: page.buttons.map((_, position) => (position === 0 ? `${key}Button` : `${key}Button${position + 1}`))
+      buttons: page.buttons.map((_, position) => (position === 0 ? `${key}Button` : `${key}Button${position + 1}`)),
+      conditions: conditionKeys(page, key)
     };
   });
 
@@ -74,6 +97,13 @@ export const buildLocaleFiles = (draft: CreatorDraft): Record<string, Record<str
             withFallback(button.label, locale, base)
           ]);
         });
+
+        for (const action of conditionTextActions(page).flat())
+          rows.push([
+            pageKeysFor.conditions[action.id],
+            withFallback(action.text, locale, base)
+          ]);
+
         return rows;
       });
       if (draft.browsingFallback) entries.push(["browsing", CREATOR_BUILTIN_STRINGS[locale].browsing]);

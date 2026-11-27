@@ -60,6 +60,80 @@ export type CreatorButton = {
 
 export type CreatorTimestamps = "media" | "elapsed";
 
+export const CREATOR_CONDITION_OPERATORS = {
+  text: ["contains", "notContains", "equals", "notEquals", "startsWith", "endsWith", "matches", "empty", "notEmpty"],
+  number: ["gt", "gte", "lt", "lte", "eq", "neq", "between"],
+  boolean: ["exists", "missing"]
+} as const;
+
+export type CreatorConditionType = keyof typeof CREATOR_CONDITION_OPERATORS;
+
+export type CreatorConditionOperator = (typeof CREATOR_CONDITION_OPERATORS)[CreatorConditionType][number];
+
+export type CreatorSmallImage = {
+  kind: "icon";
+} | {
+  kind: "variable";
+  variableId: string;
+} | {
+  kind: "custom";
+  template: string;
+};
+
+export type CreatorTextActionKind = "details" | "state" | "activityName" | "imageText";
+
+export type CreatorConditionAction = {
+  id: string;
+  kind: CreatorTextActionKind;
+  text: LocalizedText;
+} | {
+  id: string;
+  kind: "largeImage";
+  image: CreatorImage;
+} | {
+  id: string;
+  kind: "smallImage";
+  image: CreatorSmallImage;
+} | {
+  id: string;
+  kind: "activityType";
+  activityType: CreatorActivityType;
+} | {
+  id: string;
+  kind: "timestamps";
+  timestamps: CreatorTimestamps;
+} | {
+  id: string;
+  kind: "hideButton";
+  buttonId: string;
+} | {
+  id: string;
+  kind: "buttonLabel";
+  buttonId: string;
+  text: LocalizedText;
+} | {
+  id: string;
+  kind: "buttonLink";
+  buttonId: string;
+  link: CreatorLink;
+} | {
+  id: string;
+  kind: "hidePresence";
+};
+
+export type CreatorConditionActionKind = CreatorConditionAction["kind"];
+
+export type CreatorCondition = {
+  id: string;
+  variableId: string;
+  type: CreatorConditionType;
+  operator: CreatorConditionOperator;
+  value: string;
+  valueMax: string;
+  actions: CreatorConditionAction[];
+  elseActions: CreatorConditionAction[];
+};
+
 export type CreatorPage = {
   id: string;
   name: string;
@@ -75,6 +149,7 @@ export type CreatorPage = {
   largeImage: CreatorImage;
   timestamps: CreatorTimestamps;
   buttons: CreatorButton[];
+  conditions: CreatorCondition[];
 };
 
 export type CreatorAssets = {

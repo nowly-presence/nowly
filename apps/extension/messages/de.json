@@ -885,6 +885,8 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}} ist kein Element der Seite",
   "creator.issue.pageButtonLabelMissing": "{page}: Der Text der Schaltfläche ist leer",
   "creator.issue.pageCatchAllNotLast": "{page} passt zu allen Seiten: Verschiebe sie ans Ende",
+  "creator.issue.pageConditionInvalid": "{page}: Bedingung {detail} ist unvollständig",
+  "creator.issue.pageConditionTextMissing": "{page}: Ein Text in Bedingung {detail} ist leer",
   "creator.visuals.chooseNamed": "Bild auswählen: {name}",
   "creator.visuals.replaceNamed": "Bild ersetzen: {name}",
   "creator.texts.translating": "Übersetzung auf {language}. Der Text auf {base} wird grau angezeigt, als Orientierung.",

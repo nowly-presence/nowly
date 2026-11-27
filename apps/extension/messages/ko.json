@@ -885,6 +885,8 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}}은(는) 페이지 요소가 아니에요",
   "creator.issue.pageButtonLabelMissing": "{page}: 버튼 텍스트가 비어 있어요",
   "creator.issue.pageCatchAllNotLast": "{page}은(는) 모든 페이지와 일치해요. 맨 끝으로 옮기세요",
+  "creator.issue.pageConditionInvalid": "{page}: 조건 {detail}이 완성되지 않았어요",
+  "creator.issue.pageConditionTextMissing": "{page}: 조건 {detail}의 텍스트가 비어 있어요",
   "creator.visuals.chooseNamed": "이미지 선택: {name}",
   "creator.visuals.replaceNamed": "이미지 바꾸기: {name}",
   "creator.texts.translating": "{language}로 번역 중이에요. 참고용으로 {base} 텍스트가 회색으로 표시돼요.",

@@ -28,7 +28,9 @@ const ISSUE_KEYS: Record<CreatorIssueCode, MessageKey> = {
   pageButtonLabelMissing: "creator.issue.pageButtonLabelMissing",
   pageButtonUrlInvalid: "creator.issue.pageButtonUrlInvalid",
   pageImageUrlInvalid: "creator.issue.pageImageUrlInvalid",
-  pageCatchAllNotLast: "creator.issue.pageCatchAllNotLast"
+  pageCatchAllNotLast: "creator.issue.pageCatchAllNotLast",
+  pageConditionInvalid: "creator.issue.pageConditionInvalid",
+  pageConditionTextMissing: "creator.issue.pageConditionTextMissing"
 };
 
 const MAX_LENGTHS: Partial<Record<CreatorIssueCode, number>> = {

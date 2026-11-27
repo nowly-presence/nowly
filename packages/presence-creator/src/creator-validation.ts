@@ -1,5 +1,6 @@
 import type { LocaleString as LongLocale } from "@nowly/locales";
 import { imageVariableOf, isUrlTemplate, linkVariableOf, matchPaths, missingVariables } from "./creator-activity";
+import { conditionActionValid, conditionTexts, conditionValueValid, conditionVariable } from "./creator-conditions";
 import { FEATURE_MAX_LENGTH, isValidDomain, isValidPresenceName, presenceSlug, textIn } from "./creator-draft";
 import { writtenLocales } from "./creator-files";
 import type { CreatorDraft, CreatorStep } from "./creator-types";
@@ -31,7 +32,9 @@ export type CreatorIssueCode =
   | "pageButtonLabelMissing"
   | "pageButtonUrlInvalid"
   | "pageImageUrlInvalid"
-  | "pageCatchAllNotLast";
+  | "pageCatchAllNotLast"
+  | "pageConditionInvalid"
+  | "pageConditionTextMissing";
 
 export type CreatorIssue = {
   step: CreatorStep;
@@ -204,7 +207,61 @@ const pageIssues = (draft: CreatorDraft): CreatorIssue[] => {
       });
     }
 
+    page.conditions.forEach((condition, position) => {
+      const actions = [...condition.actions, ...condition.elseActions];
+      const invalid =
+        !conditionVariable(page, condition) ||
+        !conditionValueValid(condition) ||
+        actions.length === 0 ||
+        actions.some((action) => !conditionActionValid(page, action));
+      if (invalid) issues.push({
+        step: "pages",
+        code: "pageConditionInvalid",
+        page: page.name,
+        detail: String(position + 1)
+      });
+    });
+
+    const conditionActions = page.conditions.flatMap((condition) => [...condition.actions, ...condition.elseActions]);
+    const conditionUrls = conditionActions.flatMap((action) => {
+      const source = action.kind === "largeImage" || action.kind === "smallImage" ? action.image : action.kind === "buttonLink" ? action.link : null;
+      return source?.kind === "custom" ? [source.template] : [];
+    });
+
+    for (const name of new Set(conditionUrls.flatMap((template) => missingVariables(template, page.variables)))) {
+      issues.push({
+        step: "pages",
+        code: "pageUnknownVariable",
+        page: page.name,
+        detail: name
+      });
+    }
+
     for (const locale of locales) {
+      page.conditions.forEach((condition, position) => {
+        const texts = [...condition.actions, ...condition.elseActions].flatMap((action) => {
+          const text = conditionTexts(action);
+          return text ? [textIn(text, locale)] : [];
+        });
+        if (texts.some((text) => !text)) issues.push({
+          step: "pages",
+          code: "pageConditionTextMissing",
+          page: page.name,
+          locale,
+          detail: String(position + 1)
+        });
+
+        for (const name of new Set(texts.flatMap((text) => missingVariables(text, page.variables)))) {
+          issues.push({
+            step: "pages",
+            code: "pageUnknownVariable",
+            page: page.name,
+            locale,
+            detail: name
+          });
+        }
+      });
+
       const details = textIn(page.details, locale);
       if (!details) issues.push({
         step: "pages",

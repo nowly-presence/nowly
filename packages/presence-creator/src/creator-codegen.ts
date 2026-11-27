@@ -1,7 +1,8 @@
 import { CREATOR_BUILTIN_STRINGS } from "./creator-builtin-strings";
 import { imageVariableOf, linkVariableOf, matchPaths, templateTokens, withLeadingSlash, withoutTrailingSlash } from "./creator-activity";
+import { CONDITION_HELPER_SOURCES, conditionExpression, conditionHelper, conditionVariable, usableConditions } from "./creator-conditions";
 import { pageStringKeys, writtenLocales, type StringKeys } from "./creator-files";
-import type { CreatorActivityType, CreatorButton, CreatorDraft, CreatorPage, CreatorSource } from "./creator-types";
+import type { CreatorActivityType, CreatorButton, CreatorConditionAction, CreatorDraft, CreatorImage, CreatorLink, CreatorPage, CreatorSmallImage, CreatorSource, CreatorTimestamps } from "./creator-types";
 
 type Helper = "text" | "image" | "link" | "meta" | "title";
 
@@ -119,56 +120,241 @@ const buttonTarget = (page: CreatorPage, button: CreatorButton, names: Set<strin
   return variable ? { conditions: [variable.name], url: variable.name } : { conditions: [], url: "pageUrl" };
 };
 
+type Override = {
+  guard: string;
+  action: CreatorConditionAction;
+};
+
+type Guarded = {
+  guards: string[];
+  expression: string;
+};
+
+const pageOverrides = (page: CreatorPage): Override[] =>
+  usableConditions(page).flatMap((condition, index) => {
+    const name = `rule${index + 1}Matches`;
+    return [
+      ...condition.actions.map((action) => ({
+        guard: name,
+        action
+      })),
+      ...condition.elseActions.map((action) => ({
+        guard: `!${name}`,
+        action
+      }))
+    ];
+  });
+
+const conditionLines = (page: CreatorPage): string[] =>
+  usableConditions(page).flatMap((condition, index) => {
+    const variable = conditionVariable(page, condition);
+    return variable ? [`const rule${index + 1}Matches = ${conditionExpression(condition, variable.name)}`] : [];
+  });
+
+const fold = (base: string, entries: Guarded[]): string =>
+  entries.reduce((current, entry) => `${entry.guards.join(" && ")} ? ${entry.expression} : ${current}`, base);
+
+const sourceOverride = (page: CreatorPage, guard: string, source:
+  CreatorImage | CreatorSmallImage | CreatorLink, names: Set<string>, fixed: string): Guarded => {
+  if (source.kind === "custom") return {
+    guards: [guard, ...urlVariables(source.template, names)],
+    expression: urlLiteral(source.template, names)
+  };
+
+  if (source.kind === "variable") {
+    const variable = page.variables.find((entry) => entry.id === source.variableId);
+
+    if (variable) return {
+      guards: [guard, variable.name],
+      expression: variable.name
+    };
+  }
+
+  return {
+    guards: [guard],
+    expression: fixed
+  };
+};
+
+const timestampLines = (page: CreatorPage, overrides: Override[]): string[] => {
+  const mediaLines = [
+    'const media = document.querySelector<HTMLMediaElement>("video, audio")',
+    "if (media) Object.assign(data, createMediaTimestamps(media))",
+    "else data.startTimestamp = pageStartedAt"
+  ];
+  const entries = overrides.flatMap((override) =>
+    override.action.kind === "timestamps"
+      ? [
+          {
+            guard: override.guard,
+            mode: override.action.timestamps
+          }
+        ]
+      : []
+  );
+
+  const modes = new Set<CreatorTimestamps>([page.timestamps, ...entries.map((entry) => entry.mode)]);
+
+  if (modes.size === 1) return page.timestamps === "media" ? mediaLines : ["data.startTimestamp = pageStartedAt"];
+
+  return [
+    `const timestamps = ${fold(
+      quote(page.timestamps),
+      entries.map((entry) => ({
+        guards: [entry.guard],
+        expression: quote(entry.mode)
+      }))
+    )}`,
+    'if (timestamps === "media") {',
+    ...indent(mediaLines, 1),
+    "} else data.startTimestamp = pageStartedAt"
+  ];
+};
+
+const negate = (guards: string[]): string => (guards.length === 1 && !guards[0].startsWith("!") ? `!${guards[0]}` : `!(${guards.join(" || ")})`);
+
+type BlockContext = {
+  draft: CreatorDraft;
+  page: CreatorPage;
+  keys: StringKeys;
+  names: Set<string>;
+  required: Set<string>;
+  overrides: Override[];
+};
+
+const actionText = (context: BlockContext, override: Override): string =>
+  "text" in override.action
+    ? formatCall(context.keys.conditions[override.action.id], override.action.text[context.draft.baseLocale] ?? "", context.names, context.required)
+    : "";
+
+const textOverrides = (context: BlockContext, kind: CreatorConditionAction["kind"]): Guarded[] =>
+  context.overrides
+    .filter((override) => override.action.kind === kind)
+    .map((override) => ({
+      guards: [override.guard],
+      expression: actionText(context, override)
+    }));
+
+const buttonLines = (context: BlockContext): string[] => {
+  const { draft, page, keys, names, required, overrides } = context;
+  const base = draft.baseLocale;
+  const buttonOverrides = overrides.filter((override) => "buttonId" in override.action);
+
+  if (buttonOverrides.length === 0) {
+    const entries = page.buttons.map((button, position) => {
+      const target = buttonTarget(page, button, names);
+      const conditions = target.conditions.filter((name) => !required.has(name));
+
+      const entry = `{ label: ${formatCall(keys.buttons[position], button.label[base] ?? "", names, required)}, url: ${target.url} }`;
+      return { conditions, entry };
+    });
+
+    if (entries.length === 1) return [`if (${["showButtons", ...entries[0].conditions].join(" && ")}) data.buttons = [${entries[0].entry}]`];
+
+    return [
+      "if (showButtons) {",
+      '  const buttons: NonNullable<PresenceData["buttons"]> = []',
+      ...entries.map((item) =>
+        item.conditions.length > 0 ? `  if (${item.conditions.join(" && ")}) buttons.push(${item.entry})` : `  buttons.push(${item.entry})`
+      ),
+      "  if (buttons.length > 0) data.buttons = buttons",
+      "}"
+    ];
+  }
+
+  const blocks = page.buttons.flatMap((button, position) => {
+    const mine = buttonOverrides.filter((override) => "buttonId" in override.action && override.action.buttonId === button.id);
+
+    const target = buttonTarget(page, button, names);
+    const baseUrl = target.conditions.length > 0 ? `${target.conditions.join(" && ")} ? ${target.url} : undefined` : target.url;
+    const url = fold(
+      baseUrl,
+      mine.flatMap((override) => (override.action.kind === "buttonLink" ? [sourceOverride(page, override.guard, override.action.link, names, "pageUrl")] : []))
+    );
+    const label = fold(
+      formatCall(keys.buttons[position], button.label[base] ?? "", names, required),
+      mine
+        .filter((override) => override.action.kind === "buttonLabel")
+        .map((override) => ({
+          guards: [override.guard],
+          expression: actionText(context, override)
+        }))
+    );
+    const hidden = mine.filter((override) => override.action.kind === "hideButton").map((override) => override.guard);
+
+    const variable = `buttonUrl${position + 1}`;
+    return [
+      `  const ${variable} = ${url}`,
+      `  if (${[...(hidden.length > 0 ? [negate(hidden)] : []), variable].join(" && ")}) buttons.push({ label: ${label}, url: ${variable} })`
+    ];
+  });
+
+  return [
+    "if (showButtons) {",
+    '  const buttons: NonNullable<PresenceData["buttons"]> = []',
+    ...blocks,
+    "  if (buttons.length > 0) data.buttons = buttons",
+    "}"
+  ];
+};
+
 const pageBlock = (draft: CreatorDraft, page: CreatorPage, keys: StringKeys, hasButtonSetting: boolean): string[] => {
   const base = draft.baseLocale;
   const names = new Set(page.variables.map((variable) => variable.name));
   const detailsTemplate = page.details[base] ?? "";
-  const required = [...new Set(templateTokens(detailsTemplate))].filter((name) => names.has(name));
+  const detailsVariables = urlVariables(detailsTemplate, names);
+  const overrides = pageOverrides(page);
+  const detailsGuards = overrides.filter((override) => override.action.kind === "details").map((override) => override.guard);
 
-  const requiredSet = new Set(required);
+  const required = new Set(detailsGuards.length > 0 ? [] : detailsVariables);
+  const context: BlockContext = { draft, page, keys, names, required, overrides };
+
   const lines = page.variables.map((variable) => `const ${variable.name} = ${sourceExpression(variable.source)}`);
-  if (required.length > 0) lines.push(`if (${required.map((name) => `!${name}`).join(" || ")}) {`, "  presence.clearActivity()", "  return", "}");
+  lines.push(...conditionLines(page));
+  const hiding = overrides.filter((override) => override.action.kind === "hidePresence").map((override) => override.guard);
+  if (hiding.length > 0) lines.push(`if (${hiding.join(" || ")}) {`, "  presence.clearActivity()", "  return", "}");
+
+  if (detailsVariables.length > 0) {
+    const absent = detailsVariables.map((name) => `!${name}`).join(" || ");
+    const check = detailsGuards.length > 0 ? `${negate(detailsGuards)} && (${absent})` : absent;
+    lines.push(`if (${check}) {`, "  presence.clearActivity()", "  return", "}");
+  }
+
+  const stateOverrides = textOverrides(context, "state");
+  const nameOverrides = textOverrides(context, "activityName");
+  const largeImages = overrides.flatMap((override) =>
+    override.action.kind === "largeImage" ? [sourceOverride(page, override.guard, override.action.image, names, "Assets.Logo")] : []
+  );
+  const smallImages = overrides.flatMap((override) =>
+    override.action.kind === "smallImage" ? [sourceOverride(page, override.guard, override.action.image, names, "Assets.Icon")] : []
+  );
+  const types = overrides.flatMap((override) =>
+    override.action.kind === "activityType"
+      ? [
+          {
+            guards: [override.guard],
+            expression: `PresenceType.${ACTIVITY_TYPE_NAMES[override.action.activityType]}`
+          }
+        ]
+      : []
+  );
   lines.push(
     "const data: PresenceData = {",
-    `  details: ${formatCall(keys.details, detailsTemplate, names, requiredSet)},`,
-    ...(keys.state ? [`  state: ${formatCall(keys.state, page.state[base] ?? "", names, requiredSet)},`] : []),
-    `  largeImageKey: ${imageExpression(page, names)},`,
-    `  largeImageText: ${quote(draft.name.trim())},`,
-    `  type: PresenceType.${ACTIVITY_TYPE_NAMES[page.activityType]},`,
+    ...(nameOverrides.length > 0 ? [`  name: ${fold("undefined", nameOverrides)},`] : []),
+    `  details: ${fold(formatCall(keys.details, detailsTemplate, names, required), textOverrides(context, "details"))},`,
+    ...(keys.state || stateOverrides.length > 0
+      ? [`  state: ${fold(keys.state ? formatCall(keys.state, page.state[base] ?? "", names, required) : "undefined", stateOverrides)},`]
+      : []),
+    `  largeImageKey: ${fold(imageExpression(page, names), largeImages)},`,
+    `  largeImageText: ${fold(quote(draft.name.trim()), textOverrides(context, "imageText"))},`,
+    ...(smallImages.length > 0 ? [`  smallImageKey: ${fold("undefined", smallImages)},`] : []),
+    `  type: ${fold(`PresenceType.${ACTIVITY_TYPE_NAMES[page.activityType]}`, types)},`,
     "}"
   );
 
-  if (page.timestamps === "media") {
-    lines.push(
-      'const media = document.querySelector<HTMLMediaElement>("video, audio")',
-      "if (media) Object.assign(data, createMediaTimestamps(media))",
-      "else data.startTimestamp = pageStartedAt"
-    );
-  } else lines.push("data.startTimestamp = pageStartedAt");
+  lines.push(...timestampLines(page, overrides));
 
-  if (page.buttons.length > 0 && hasButtonSetting) {
-    const entries = page.buttons.map((button, position) => {
-      const target = buttonTarget(page, button, names);
-      const conditions = target.conditions.filter((name) => !requiredSet.has(name));
-
-      const entry = `{ label: ${formatCall(keys.buttons[position], button.label[base] ?? "", names, requiredSet)}, url: ${target.url} }`;
-      return { conditions, entry };
-    });
-
-    if (entries.length === 1) {
-      lines.push(`if (${["showButtons", ...entries[0].conditions].join(" && ")}) data.buttons = [${entries[0].entry}]`);
-    } else {
-      lines.push(
-        "if (showButtons) {",
-        '  const buttons: NonNullable<PresenceData["buttons"]> = []',
-        ...entries.map((item) =>
-          item.conditions.length > 0 ? `  if (${item.conditions.join(" && ")}) buttons.push(${item.entry})` : `  buttons.push(${item.entry})`
-        ),
-        "  if (buttons.length > 0) data.buttons = buttons",
-        "}"
-      );
-    }
-  }
+  if (page.buttons.length > 0 && hasButtonSetting) lines.push(...buttonLines(context));
 
   lines.push("await presence.setActivity(data)", "return");
   return lines;
@@ -210,11 +396,20 @@ export const generatePresenceSource = (draft: CreatorDraft): string => {
   const sources = draft.pages.flatMap((page) => page.variables.map((variable) => variable.source));
   const helpers = (Object.keys(HELPER_SOURCES) as Helper[]).filter((helper) => sources.some((source) => helperFor(source) === helper));
 
-  const usesMedia = draft.pages.some((page) => page.timestamps === "media");
+  const usesMedia = draft.pages.some(
+    (page) =>
+      page.timestamps === "media" || pageOverrides(page).some((override) => override.action.kind === "timestamps" && override.action.timestamps === "media")
+  );
+  const conditionHelpers = (Object.keys(CONDITION_HELPER_SOURCES) as (keyof typeof CONDITION_HELPER_SOURCES)[]).filter((helper) =>
+    draft.pages.some((page) => usableConditions(page).some((condition) => conditionHelper(condition) === helper))
+  );
+
   const tracksPageTime = draft.pages.length > 0;
   const hasButtons = keys.some((entry) => entry.buttons.length > 0);
-  const usesPageUrl = draft.pages.some((page) =>
-    page.buttons.some((button) => buttonTarget(page, button, new Set(page.variables.map((variable) => variable.name))).url === "pageUrl")
+  const usesPageUrl = draft.pages.some(
+    (page) =>
+      page.buttons.some((button) => buttonTarget(page, button, new Set(page.variables.map((variable) => variable.name))).url === "pageUrl") ||
+      pageOverrides(page).some((override) => override.action.kind === "buttonLink" && override.action.link.kind === "page")
   );
   const settings = settingLines(draft, hasButtons);
   const sdkImports = [...(usesMedia ? ["createMediaTimestamps"] : []), "PresenceType", "type PresenceData"];
@@ -252,6 +447,7 @@ export const generatePresenceSource = (draft: CreatorDraft): string => {
     ...(settings.length > 0 ? ['const isEnabled = (value: unknown): boolean => value === true || value === "true"'] : []),
     ...(tracksPageTime ? ['let currentPath = ""', "let pageStartedAt = Math.floor(Date.now() / 1000)"] : []),
     ...helpers.flatMap((helper) => ["", ...HELPER_SOURCES[helper]]),
+    ...conditionHelpers.flatMap((helper) => ["", ...CONDITION_HELPER_SOURCES[helper]]),
     "",
     `presence.on("UpdateData", async (${settings.length > 0 ? "ctx" : ""}) => {`,
     ...indent(handler, 1),

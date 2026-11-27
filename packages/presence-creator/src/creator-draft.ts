@@ -46,7 +46,8 @@ export const createPage = (name: string, path = ""): CreatorPage => ({
   state: {},
   largeImage: { kind: "logo" },
   timestamps: "elapsed",
-  buttons: []
+  buttons: [],
+  conditions: []
 });
 
 export const createButton = (): CreatorButton => ({
@@ -91,7 +92,8 @@ const normalizePage = (page: CreatorPage & {
       extraPaths: Array.isArray(page.match.extraPaths) ? page.match.extraPaths : []
     },
     timestamps: page.timestamps === "media" ? "media" : "elapsed",
-    buttons: upgradeButtons(page.buttons, button)
+    buttons: upgradeButtons(page.buttons, button),
+    conditions: Array.isArray(page.conditions) ? page.conditions : []
   };
 };
 
@@ -157,6 +159,22 @@ export const touch = (draft: CreatorDraft, now = Date.now()): CreatorDraft => ({
   updatedAt: now
 });
 
+const RESERVED_NAMES: ReadonlySet<string> = new Set(
+  [
+    "arguments await break case catch class const continue debugger default delete do else enum eval export extends false finally for function",
+    "if implements import in instanceof interface let new null package private protected public return static super switch this throw true try",
+    "typeof undefined var void while with yield",
+    "baseStrings buttons createMediaTimestamps ctx currentPath data document isEnabled media numberOf pageStartedAt pageUrl pathname presence",
+    "readImage readLink readMeta readTabTitle readText showButtons strings textOf timestamps window"
+  ]
+    .join(" ")
+    .split(" ")
+);
+
+const GENERATED_NAME = /^(rule\d+Matches|buttonUrl\d+)$/;
+
+const isReservedName = (name: string): boolean => RESERVED_NAMES.has(name) || GENERATED_NAME.test(name);
+
 export const addVariable = (page: CreatorPage, variable: CreatorVariable): {
   page: CreatorPage;
   variable: CreatorVariable;
@@ -165,7 +183,7 @@ export const addVariable = (page: CreatorPage, variable: CreatorVariable): {
   const base = variable.name || "value";
   let name = base;
 
-  for (let index = 2; taken.has(name); index++) name = `${base}${index}`;
+  for (let index = 2; taken.has(name) || isReservedName(name); index++) name = `${base}${index}`;
 
   const added = { ...variable, name };
   return {

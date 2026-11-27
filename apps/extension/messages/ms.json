@@ -885,6 +885,8 @@
   "creator.issue.pageUnknownVariable": "{page}: {{detail}} bukan elemen halaman",
   "creator.issue.pageButtonLabelMissing": "{page}: teks butang kosong",
   "creator.issue.pageCatchAllNotLast": "{page} sepadan dengan semua halaman: alihkan ke hujung",
+  "creator.issue.pageConditionInvalid": "{page}: syarat {detail} tidak lengkap",
+  "creator.issue.pageConditionTextMissing": "{page}: satu teks dalam syarat {detail} kosong",
   "creator.visuals.chooseNamed": "Pilih imej: {name}",
   "creator.visuals.replaceNamed": "Ganti imej: {name}",
   "creator.texts.translating": "Menterjemah ke {language}. Teks {base} dipaparkan dalam warna kelabu sebagai panduan.",
