@@ -36,6 +36,7 @@ export const saveDraft = async (draft: CreatorDraft): Promise<void> => {
 
 export const loadTombstones = async (): Promise<CreatorTombstones> => {
   const value: unknown = (await chrome.storage.local.get(CREATOR_TOMBSTONES_KEY))[CREATOR_TOMBSTONES_KEY];
+
   if (!value || typeof value !== "object" || Array.isArray(value)) return {};
 
   return Object.fromEntries(Object.entries(value).filter((entry): entry is [string, number] => typeof entry[1] === "number"));
@@ -47,6 +48,7 @@ export const saveTombstones = async (tombstones: CreatorTombstones): Promise<voi
 
 export const deleteDraft = async (id: string): Promise<void> => {
   const { [id]: _removed, ...rest } = await loadDrafts();
+
   const tombstones = await loadTombstones();
   await chrome.storage.local.set({
     [CREATOR_DRAFTS_KEY]: rest,

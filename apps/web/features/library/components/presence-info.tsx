@@ -36,14 +36,7 @@ const PersonRow = ({ person, label }: { person: PresencePerson; label: string })
         <RiGithubLine />
       </ButtonAnchor>
     ) : person.discord ? (
-      <ButtonAnchor
-        href={discordProfile(person.discord.id)}
-        rel="noreferrer"
-        target="_blank"
-        variant="ghost"
-        size="icon-sm"
-        aria-label={person.name}
-      >
+      <ButtonAnchor href={discordProfile(person.discord.id)} rel="noreferrer" target="_blank" variant="ghost" size="icon-sm" aria-label={person.name}>
         <RiDiscordFill />
       </ButtonAnchor>
     ) : null}

@@ -36,16 +36,64 @@ describe("creator draft file", () => {
 
   it("rejects other files, other versions and broken drafts", () => {
     const file = buildCreatorDraftFile(sample());
-    expect(parseCreatorDraftFile("nope")).toEqual({ ok: false, error: "INVALID_JSON" });
-    expect(parseCreatorDraftFile(JSON.stringify({ ...file, format: "other" }))).toEqual({ ok: false, error: "WRONG_FORMAT" });
-    expect(parseCreatorDraftFile(JSON.stringify({ ...file, version: 2 }))).toEqual({ ok: false, error: "UNSUPPORTED_VERSION" });
-    expect(parseCreatorDraftFile(JSON.stringify({ ...file, draft: { ...file.draft, pages: "x" } }))).toEqual({ ok: false, error: "INVALID_DRAFT" });
+    expect(parseCreatorDraftFile("nope")).toEqual({
+      ok: false,
+      error: "INVALID_JSON"
+    });
+    expect(
+      parseCreatorDraftFile(
+        JSON.stringify({
+          ...file,
+          format: "other"
+        })
+      )
+    ).toEqual({
+      ok: false,
+      error: "WRONG_FORMAT"
+    });
+    expect(
+      parseCreatorDraftFile(
+        JSON.stringify({
+          ...file,
+          version: 2
+        })
+      )
+    ).toEqual({
+      ok: false,
+      error: "UNSUPPORTED_VERSION"
+    });
+    expect(
+      parseCreatorDraftFile(
+        JSON.stringify({
+          ...file,
+          draft: {
+            ...file.draft,
+            pages: "x"
+          }
+        })
+      )
+    ).toEqual({
+      ok: false,
+      error: "INVALID_DRAFT"
+    });
   });
 
   it("refuses images that are not inline raster data", () => {
     const file = buildCreatorDraftFile(sample());
-    const hostile = { ...file, draft: { ...file.draft, assets: { icon: "https://evil.example/x.png", thumbnailRightsConfirmed: true } } };
-    expect(parseCreatorDraftFile(JSON.stringify(hostile))).toEqual({ ok: false, error: "INVALID_DRAFT" });
+    const hostile = {
+      ...file,
+      draft: {
+        ...file.draft,
+        assets: {
+          icon: "https://evil.example/x.png",
+          thumbnailRightsConfirmed: true
+        }
+      }
+    };
+    expect(parseCreatorDraftFile(JSON.stringify(hostile))).toEqual({
+      ok: false,
+      error: "INVALID_DRAFT"
+    });
   });
 
   it("names the file after the presence", () => {

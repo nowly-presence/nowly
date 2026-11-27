@@ -123,7 +123,11 @@ export const UrlSourceField = ({ read, label, defaultLabel, value, page, candida
       {mode === "variable" && candidates.length > 0 && (
         <div className="flex items-center gap-3 rounded-md bg-hover px-3 py-2">
           <div className="min-w-0 flex-1">
-            <p className="truncate text-label-lg font-medium text-ink">{selected ? readableName(selected.name) : t(isImage ? "creator.source.pickImage" : "creator.source.pickLink")}</p>
+            <p className="truncate text-label-lg font-medium text-ink">
+              {selected
+                ? readableName(selected.name)
+                : t(isImage ? "creator.source.pickImage" : "creator.source.pickLink")}
+            </p>
             {selected?.sample && <p className="truncate text-label-md text-muted">{selected.sample}</p>}
           </div>
           <MenuButton

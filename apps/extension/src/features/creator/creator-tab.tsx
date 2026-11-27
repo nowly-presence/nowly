@@ -37,5 +37,15 @@ export const CreatorTab = () => {
       draftId
     });
 
-  return <CreatorHome drafts={list} ready={ready} onCreate={() => void start().then(open)} onOpen={open} onDelete={(id) => void remove(id)} onImport={(file) => void importDraft(file)} onExport={exportDraft} />;
+  return (
+    <CreatorHome
+      drafts={list}
+      ready={ready}
+      onCreate={() => void start().then(open)}
+      onOpen={open}
+      onDelete={(id) => void remove(id)}
+      onImport={(file) => void importDraft(file)}
+      onExport={exportDraft}
+    />
+  );
 };
