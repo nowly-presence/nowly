@@ -35,6 +35,7 @@ export const PagePreview = ({ draft, page }: {
         startTime: ready.preview.activity.startTimestamp,
         endTime: ready.preview.activity.endTimestamp,
         largeImage: ready.preview.largeImage,
+        smallImage: ready.preview.smallImage,
         type: ready.preview.activity.type,
         buttons: ready.preview.activity.buttons
       }
@@ -59,7 +60,8 @@ export const PagePreview = ({ draft, page }: {
       {running && state.status === "error" && <Warning>{state.error === "NO_TAB" ? t("creator.variables.noTab") : t("creator.variables.unreachable")}</Warning>}
       {ready && !ready.matches && <Warning>{t("creator.preview.noMatch")}</Warning>}
       {ready && ready.preview.missing.map((name) => <Warning key={name}>{t("creator.preview.missing", { name: `{${name}}` })}</Warning>)}
-      {running && payload && (
+      {ready?.preview.hidden && <p className="text-label-md text-muted">{t("creator.conditions.hidden")}</p>}
+      {running && payload && !ready?.preview.hidden && (
         <LiveCard
           slug={PREVIEW_SLUG}
           presence={payload}

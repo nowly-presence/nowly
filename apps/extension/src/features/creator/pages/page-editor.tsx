@@ -1,5 +1,6 @@
 import type { CreatorDraft, CreatorPage } from "@nowly/presence-creator/creator-types";
 import { PageButtons } from "@/features/creator/pages/page-buttons";
+import { PageConditions } from "@/features/creator/pages/conditions/page-conditions";
 import { PageIdentityFrame } from "@/features/creator/pages/page-identity-frame";
 import { PageImageFrame } from "@/features/creator/pages/page-image-frame";
 import { PagePreview } from "@/features/creator/pages/page-preview";
@@ -21,6 +22,7 @@ export const PageEditor = ({ draft, page, onChange }: PageEditorProps) => (
     <PageImageFrame page={page} onChange={onChange} />
     <PageButtons draft={draft} page={page} onChange={onChange} />
     <PageTimestampsFrame page={page} onChange={onChange} />
+    <PageConditions draft={draft} page={page} onChange={onChange} />
     <PagePreview draft={draft} page={page} />
   </div>
 );

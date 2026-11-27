@@ -54,10 +54,7 @@ export const usePageTest = (draft: CreatorDraft, page: CreatorPage, locale: Long
     if (!discord) return;
 
     const result = await sendMessage("CREATOR_TEST_ACTIVITY", {
-      activity: {
-        ...preview.activity,
-        largeImageKey: preview.largeImage
-      }
+      activity: preview.hidden ? null : { ...preview.activity, largeImageKey: preview.largeImage, smallImageKey: preview.smallImage }
     });
     setDiscordError(result.ok ? null : (result.error ?? null));
   }, [draft, page, locale, discord]);

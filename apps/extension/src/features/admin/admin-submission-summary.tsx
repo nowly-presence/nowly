@@ -1,5 +1,6 @@
 import { RiChat3Line, RiExternalLinkLine } from "@remixicon/react";
 import { useI18n, type MessageKey } from "@/hooks/i18n-provider";
+import { RuleBlock } from "@/components/shared/condition-rule-block";
 import type { CreatorFieldChange } from "@nowly/presence-creator/creator-diff";
 import { commentTarget } from "@/lib/review-fields";
 import { openUrl } from "@/shared/browser-links";
@@ -55,6 +56,11 @@ export const AdminSubmissionSummary = ({ detail, onComment }: {
               <div key={page.id}>
                 <dt className="text-muted">{page.name}</dt>
                 <dd>{textIn(page.details, definition.baseLocale)}</dd>
+                {page.conditions.map((condition, index) => (
+                  <dd key={condition.id} className="mt-2">
+                    <RuleBlock page={page} condition={condition} index={index} base={definition.baseLocale} />
+                  </dd>
+                ))}
               </div>
             ))}
           </dl>

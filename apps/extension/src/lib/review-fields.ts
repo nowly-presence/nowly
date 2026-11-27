@@ -23,7 +23,8 @@ const FIELD_KEYS: Record<string, MessageKey> = {
   "page.state": "submissionReview.field.pageState",
   "page.largeImage": "submissionReview.field.pageImage",
   "page.timestamps": "submissionReview.field.pageTimestamps",
-  "page.button": "submissionReview.field.pageButton"
+  "page.button": "submissionReview.field.pageButton",
+  "page.conditions": "submissionReview.field.pageConditions"
 };
 
 export const COMMENT_FIELDS: readonly string[] = [
@@ -43,7 +44,8 @@ export const COMMENT_FIELDS: readonly string[] = [
   "page.state",
   "page.largeImage",
   "page.timestamps",
-  "page.button"
+  "page.button",
+  "page.conditions"
 ];
 
 export const PAGE_COMMENT_PREFIX = "page.";
