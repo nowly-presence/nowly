@@ -7,8 +7,16 @@ import json
 import os
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
+
+VIRUSTOTAL_API = "https://www.virustotal.com/api/v3"
+VIRUSTOTAL_DIRECT_UPLOAD_LIMIT = 32_000_000
+# The public API allows 4 requests per minute
+VIRUSTOTAL_REQUEST_INTERVAL = 16
+
+last_virustotal_request = 0.0
 
 
 def sha256_file(path: Path) -> str:
@@ -19,8 +27,40 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def virustotal_request(api_key: str, arguments: list[str]) -> dict:
+    global last_virustotal_request
+    time.sleep(max(0.0, last_virustotal_request + VIRUSTOTAL_REQUEST_INTERVAL - time.monotonic()))
+    last_virustotal_request = time.monotonic()
+    # The key goes through stdin so it never shows up in the process list or in errors
+    output = subprocess.check_output(
+        ["curl", "--config", "-", "--fail", "--silent", "--show-error", "--max-time", "300", *arguments],
+        input=f'header = "x-apikey: {api_key}"\n'.encode("utf-8"),
+    )
+    return json.loads(output)
+
+
+def virustotal_report(path: Path, sha256: str) -> str | None:
+    """Upload the file to VirusTotal and return its report page. Never blocks a release."""
+    api_key = os.environ.get("VIRUSTOTAL_API_KEY")
+    if not api_key:
+        return None
+    try:
+        endpoint = f"{VIRUSTOTAL_API}/files"
+        if path.stat().st_size > VIRUSTOTAL_DIRECT_UPLOAD_LIMIT:
+            endpoint = virustotal_request(api_key, [f"{VIRUSTOTAL_API}/files/upload_url"])["data"]
+        virustotal_request(api_key, ["--form", f'file=@"{path.as_posix()}"', endpoint])
+    except (OSError, subprocess.CalledProcessError, ValueError, KeyError) as error:
+        print(f"::warning::VirusTotal upload failed for {path.name}: {error}", file=sys.stderr)
+        return None
+    return f"https://www.virustotal.com/gui/file/{sha256}"
+
+
 def artifact(path: Path, url: str) -> dict[str, str | int]:
-    return {"url": url, "sha256": sha256_file(path), "size": path.stat().st_size}
+    entry: dict[str, str | int] = {"url": url, "sha256": sha256_file(path), "size": path.stat().st_size}
+    report = virustotal_report(path, str(entry["sha256"]))
+    if report:
+        entry["virustotalUrl"] = report
+    return entry
 
 
 def put_object(key: str, path: Path, content_type: str, cache_control: str) -> str:
@@ -92,6 +132,9 @@ def main() -> int:
     for name in ("R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY", "R2_ACCOUNT_ID"):
         if not os.environ.get(name):
             raise SystemExit(f"missing {name}")
+
+    if not os.environ.get("VIRUSTOTAL_API_KEY"):
+        print("::warning::VIRUSTOTAL_API_KEY is not set, publishing without VirusTotal reports", file=sys.stderr)
 
     manifest: dict = {
         "version": version,

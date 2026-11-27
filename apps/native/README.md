@@ -149,6 +149,8 @@ git push origin native-v1.0.0
 
 The `Host Release` GitHub Action then builds and publishes automatically.
 
+With the `VIRUSTOTAL_API_KEY` repository secret, the workflow also uploads each artifact to VirusTotal and adds its report as `virustotalUrl` in `latest.json`. Without the key, or if an upload fails, the release still publishes, without the link.
+
 The extension checks `https://cdn.nowly.me/installer/latest.json` for updates. Once the workflow updates `latest.json`, users with an older Nowly Host version see the update prompt.
 
 ### Manual publish
