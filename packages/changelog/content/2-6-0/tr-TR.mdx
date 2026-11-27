@@ -11,6 +11,11 @@ stores: [chrome, firefox]
 - Varlığını incelemeye gönder ve durumunu, ekibin alan alan geri bildirimleriyle birlikte takip et. Yayımlanana kadar düzenleyip yeniden gönderebilirsin.
 - Varlıkların Nowly'nin tüm dillerine otomatik olarak çevrilir.
 - Kütüphane'de oluşturduklarının durumuna göre gruplanır ve sayfalarından düzenlenebilir.
+- Varlık oluşturucu beta sürümünde.
+- Algılanan bir sayfa birden fazla adresle eşleşebilir, örneğin `/movie/` ve `/tv/`.
+- Koşullar, durumu sayfanın içeriğine göre değiştirir: metinler, görseller, etkinlik türü, süre, düğmeler veya durumu tamamen gizleme. Ekip bunları inceleme sırasında görür.
+- Adım seçiciyle istediğin adıma veya sayfaya doğrudan geçebilirsin. Sayfa değişiklikleri açıkça kaydedilir; ayrılırken kaydetmeyi veya vazgeçmeyi seçersin.
+- Adres alanı hataları açıklar: tam adres yalnızca yol kısmına indirilir, başka bir site ise belirtilir.
 
 ## Bildirimler
 
@@ -33,5 +38,11 @@ stores: [chrome, firefox]
 - Duyurular tüm dillere otomatik olarak çevrilir.
 - Araç çubuğu rozeti ayarı ve "Hakkında" altındaki gizlilik notu kaldırıldı.
 - "Senkronizasyonu durdur" düğmesi kısaldı ve senkronizasyon ipucu kısaltıldı.
-- Kitaplık artık sayfalandırılıyor, sayfa başına 20 presence gösteriliyor.
+- Kitaplık artık sayfalandırılıyor, sayfa başına 20 presence gösteriliyor. Şu an popüler şeridi gizlenebilir ve ayarlardan yeniden gösterilebilir.
 - Nowly artık eklentinin çalışamadığı mobil Firefox'ta bir "kullanılamıyor" ekranı gösteriyor.
+
+## Düzeltmeler
+
+- Sekme başka bir sayfaya geçtikten veya değiştirildikten sonra uzantı artık başka bir sekmede algılama göstermiyor.
+- Tüm giriş düğmeleri aynı hesap sayfasını açar; uzantı başka bir hesaba bağlıysa bu sayfa seni uyarır.
+- Windows'ta masaüstü uygulaması artık Opera ve Opera GX ile çalışıyor.

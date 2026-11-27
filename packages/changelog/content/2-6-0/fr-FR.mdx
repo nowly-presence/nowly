@@ -11,6 +11,11 @@ stores: [chrome, firefox]
 - Envoyez votre présence pour relecture et suivez son statut, avec les retours de l'équipe champ par champ. Modifiez-la et renvoyez-la tant qu'elle n'est pas publiée.
 - Vos présences sont traduites automatiquement dans toutes les langues de Nowly.
 - Dans la Bibliothèque, vos créations sont regroupées par statut et se modifient depuis leur page.
+- Le créateur de présence est en version bêta.
+- Une page détectée peut correspondre à plusieurs adresses, par exemple `/movie/` et `/tv/`.
+- Les conditions modifient le statut selon le contenu de la page : textes, images, type d'activité, durée, boutons, ou masquage complet de la présence. L'équipe les voit lors de la relecture.
+- Un sélecteur permet d'aller directement à n'importe quelle étape ou page. Les modifications d'une page s'enregistrent explicitement, et la quitter propose de les enregistrer ou de les abandonner.
+- Le champ d'adresse explique les erreurs : une adresse complète est réduite à son chemin, et un autre site est signalé.
 
 ## Signalements
 
@@ -33,5 +38,11 @@ stores: [chrome, firefox]
 - Les annonces sont traduites automatiquement dans toutes les langues.
 - Le réglage du badge de la barre d'outils est supprimé, ainsi que la note de confidentialité sous « À propos ».
 - Le bouton « Ne plus synchroniser » est plus court et l'indication de synchronisation est raccourcie.
-- La Bibliothèque est désormais paginée, avec 20 présences par page.
+- La Bibliothèque est désormais paginée, avec 20 présences par page. Le carrousel Tendances peut être masqué, puis réaffiché depuis les réglages.
 - Nowly affiche désormais un écran « indisponible » sur Firefox mobile, où l'extension ne peut pas fonctionner.
+
+## Corrections
+
+- L'extension n'affiche plus une détection dans un autre onglet après que cet onglet a changé de page ou a été remplacé.
+- Tous les boutons de connexion ouvrent la même page du compte, qui avertit si l'extension est liée à un autre compte.
+- Sous Windows, l'application de bureau fonctionne désormais avec Opera et Opera GX.

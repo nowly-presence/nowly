@@ -11,6 +11,11 @@ stores: [chrome, firefox]
 - Envía tu presencia para su revisión y sigue su estado, con los comentarios del equipo campo por campo. Edítala y vuelve a enviarla mientras no esté publicada.
 - Tus presencias se traducen automáticamente a todos los idiomas de Nowly.
 - En la Biblioteca, tus creaciones se agrupan por estado y se editan desde su página.
+- El creador de presencias está en versión beta.
+- Una página detectada puede corresponder a varias direcciones, por ejemplo `/movie/` y `/tv/`.
+- Las condiciones cambian el estado según lo que muestra la página: textos, imágenes, tipo de actividad, tiempo, botones o la ocultación total de la presencia. El equipo las ve durante la revisión.
+- Un selector de pasos lleva directamente a cualquier paso o página. Los cambios de una página se guardan de forma explícita y, al salir, puedes guardarlos o descartarlos.
+- El campo de dirección explica los errores: una dirección completa se reduce a su ruta y se avisa si es de otro sitio.
 
 ## Reportes
 
@@ -33,5 +38,11 @@ stores: [chrome, firefox]
 - Los anuncios se traducen automáticamente a todos los idiomas.
 - Se elimina el ajuste de la insignia de la barra de herramientas y la nota de privacidad bajo «Acerca de».
 - El botón «Dejar de sincronizar» es más corto y la indicación de sincronización se ha acortado.
-- La Biblioteca ahora está paginada, con 20 presencias por página.
+- La Biblioteca ahora está paginada, con 20 presencias por página. El carrusel de tendencias se puede ocultar y volver a mostrar desde los ajustes.
 - Nowly ahora muestra una pantalla de «no disponible» en Firefox para móvil, donde la extensión no puede funcionar.
+
+## Correcciones
+
+- La extensión ya no indica una detección en otra pestaña cuando esa pestaña ha cambiado de página o ha sido reemplazada.
+- Todos los botones de inicio de sesión abren la misma página de la cuenta, que avisa si la extensión está vinculada a otra cuenta.
+- En Windows, la aplicación de escritorio ahora funciona con Opera y Opera GX.

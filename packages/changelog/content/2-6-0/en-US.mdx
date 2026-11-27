@@ -11,6 +11,11 @@ stores: [chrome, firefox]
 - Send your presence for review and follow its status, with the team's feedback field by field. Edit and resend it until it is published.
 - Your presences are automatically translated into every Nowly language.
 - In the Library, your creations are grouped by status and can be edited from their page.
+- The presence creator is in beta.
+- A detected page can match several addresses, for example `/movie/` and `/tv/`.
+- Conditions change the status depending on what the page shows: texts, images, activity type, time, buttons, or hiding the presence altogether. The team sees them during review.
+- A step selector jumps straight to any step or page. Page edits are saved explicitly, and leaving a page asks whether to save or discard them.
+- The address field explains mistakes: a full address is reduced to its path, and another website is flagged.
 
 ## Reports
 
@@ -33,5 +38,11 @@ stores: [chrome, firefox]
 - Announcements are automatically translated into every language.
 - The toolbar badge setting is removed, along with the privacy note under "About".
 - The "Stop syncing" button is shorter and the sync hint is trimmed.
-- The Library is now paginated, with 20 presences per page.
+- The Library is now paginated, with 20 presences per page. The Trending carousel can be hidden, then shown again from Settings.
 - Nowly now shows an "unavailable" screen on Firefox for mobile, where the extension cannot run.
+
+## Fixes
+
+- The extension no longer reports a detection in another tab after that tab navigated away or was replaced.
+- Every sign-in button opens the same account page, which warns you if the extension is linked to another account.
+- On Windows, the desktop app now works with Opera and Opera GX.
